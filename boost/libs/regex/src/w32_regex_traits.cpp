@@ -35,9 +35,10 @@
 #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
 
 //
-// VC6 needs to link to user32.lib:
+// VC6 needs to link to user32.lib, as do all compilers that
+// claim to be VC6/7 compatible:
 //
-#ifdef BOOST_MSVC
+#if defined(_MSC_VER) && !defined(__BORLANDC__)
 #pragma comment(lib, "user32.lib")
 #endif
 

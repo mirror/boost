@@ -26,7 +26,7 @@
       // Strictly speaking this may catch platforms with a
       // non-functioning stub <pthreads.h>, but such occurrences should
       // occur very rarely if at all.
-#     if defined(_POSIX_THREADS) && (_POSIX_THREADS+0 >= 0)
+#     if defined(_POSIX_THREADS) && (_POSIX_THREADS+0 >= 0) && !defined(BOOST_HAS_WINTHREADS)
 #        define BOOST_HAS_PTHREADS
 #     endif
 

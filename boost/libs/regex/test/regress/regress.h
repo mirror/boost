@@ -162,10 +162,10 @@ public:
    { return size_t(-1) / sizeof(value_type); }
 
    void construct(pointer p, const T& val) const
-   { allocator_construct(p, val); }
+   { boost::detail::allocator_construct(p, val); }
 
-   void destroy(pointer __p) const
-   { allocator_destroy(p); }
+   void destroy(pointer p) const
+   { boost::detail::allocator_destroy(p); }
 
 #ifndef BOOST_NO_MEMBER_TEMPLATES
    template <class U>
@@ -229,12 +229,10 @@ public:
    }
 
    static void construct(pointer , const char& )
-   {
-   }
+   { boost::detail::allocator_construct(p, val); }
 
    static void destroy(pointer )
-   {
-   }
+   { boost::detail::allocator_destroy(p); }
 };
 
 #ifdef __BORLANDC__

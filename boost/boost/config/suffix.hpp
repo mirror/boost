@@ -147,6 +147,14 @@
 #endif
 
 //
+// Turn threading support off if we don't recognise the threading API:
+//
+#if defined(BOOST_HAS_THREADS) && !defined(BOOST_HAS_PTHREADS)\
+      && !defined(BOOST_HAS_WINTHREADS) && !defined(BOOST_HAS_BETHREADS)
+#  undef BOOST_HAS_THREADS
+#endif
+
+//
 // If the compiler claims to be C99 conformant, then it had better
 // have a <stdint.h>:
 //

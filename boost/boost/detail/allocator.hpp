@@ -22,6 +22,18 @@ using ::size_t;
 }
 #endif
 
+namespace boost{ namespace detail{
+
+template <class T>
+void allocator_construct(T* p, const T& t)
+{ new (p) T(t); }
+
+template <class T>
+void allocator_destroy(T* p)
+{ p->~T(); }
+
+} }
+
 #if !defined(BOOST_NO_STD_ALLOCATOR)
 
 #include <memory>
@@ -48,14 +60,6 @@ struct rebind_allocator
 #define BOOST_DEFAULT_ALLOCATOR(T) ::boost::detail::allocator<T>
 
 namespace boost{ namespace detail{
-
-template <class T>
-void allocator_construct(T* p, const T& t)
-{ new (p) T(t); }
-
-template <class T>
-void allocator_destroy(T* p)
-{ p->~T(); }
 
 template <class T>
 class allocator
@@ -136,14 +140,6 @@ struct rebind_allocator
 #define BOOST_DEFAULT_ALLOCATOR(T) ::boost::detail::allocator_adapter<T, ::boost::detail::simple_alloc>
 
 namespace boost{ namespace detail{
-
-template <class T>
-void allocator_construct(T* p, const T& t)
-{ new (p) T(t); }
-
-template <class T>
-void allocator_destroy(T* p)
-{ p->~T(); }
 
 class simple_alloc
 {
