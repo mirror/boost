@@ -12,6 +12,8 @@
 //
 // Revision History:
 
+// 01 Feb 2002   Jeremy Siek
+//      Added more comments in default_iterator_policies.
 // 08 Jan 2001   David Abrahams
 //      Moved concept checks into a separate class, which makes MSVC
 //      better at dealing with them.
@@ -231,9 +233,15 @@ struct RandomAccessIteratorPoliciesConcept
 // class if you want to customize particular policies.
 struct default_iterator_policies
 {
-    // Some of these members were defined static, but Borland got confused
-    // and thought they were non-const. Also, Sun C++ does not like static
-    // function templates.
+    // Some of the member functions were defined static, but Borland
+    // got confused and thought they were non-const. Also, Sun C++
+    // does not like static function templates. 
+    //
+    // The reason some members were defined static is because there is
+    // not state (data members) needed by those members of the
+    // default_iterator_policies class. If your policies class member
+    // functions need to access state stored in the policies object,
+    // then the member functions should not be static (they can't be).
 
     template <class Base>
     void initialize(Base&)
