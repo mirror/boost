@@ -50,7 +50,9 @@
                   BOOST_IOSTREAMS_PUSH_ARGS() ); \
     /**/
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && \
+    !BOOST_WORKAROUND(__BORLANDC__, < 0x600) \
+    /**/
 # define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
     template<typename CharType, typename TraitsType> \
     BOOST_PP_EXPR_IF(has_return, result) \

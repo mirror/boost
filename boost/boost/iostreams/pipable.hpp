@@ -57,7 +57,9 @@
 
 namespace boost { namespace iostreams { namespace detail {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
+    BOOST_WORKAROUND(__BORLANDC__, < 0x600) \
+    /**/
 struct piper_base { };
 
 template<typename T>
@@ -68,7 +70,9 @@ struct is_piper
 
 template<typename Concept>
 struct concept_piper 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
+    BOOST_WORKAROUND(__BORLANDC__, < 0x600) \
+    /**/
     : piper_base 
 #endif 
 {
