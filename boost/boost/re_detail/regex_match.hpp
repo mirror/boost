@@ -1113,6 +1113,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
          ++cmatches;
          if(foo(m) == false)
             return cmatches;
+         if(m[0].second == last)
+            return cmatches;
          // update to end of what matched
          // trying to match again with match_not_null set if this 
          // is a null match...
@@ -1201,6 +1203,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                pd.temp_match.init_fail(next_base, last);
                m.init_fail(next_base, last);
                j = 0;
+               if(m[0].second == last)
+                  return cmatches;
             }
             else
             {
@@ -1212,6 +1216,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                   m.set_line(clines, last_line);
                   ++cmatches;
                   if(foo(m) == false)
+                     return cmatches;
+                  if(m[0].second == last)
                      return cmatches;
                   // update to end of what matched
                  _skip_and_inc(clines, last_line, first, m[0].second);
@@ -1246,6 +1252,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                m.set_line(clines, last_line);
                ++cmatches;
                if(foo(m) == false)
+                  return cmatches;
+               if(m[0].second == last)
                   return cmatches;
                // update to end of what matched
                // trying to match again with match_not_null set if this 
@@ -1336,6 +1344,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                ++cmatches;
                if(foo(m) == false)
                   return cmatches;
+               if(m[0].second == last)
+                  return cmatches;
                // update to end of what matched
                // trying to match again with match_not_null set if this
                // is a null match...
@@ -1412,6 +1422,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                ++cmatches;
                if(foo(m) == false)
                   return cmatches;
+               if(m[0].second == last)
+                  return cmatches;
                // update to end of what matched
                // trying to match again with match_not_null set if this
                // is a null match...
@@ -1471,6 +1483,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                m.set_line(clines, last_line);
                ++cmatches;
                if(foo(m) == false)
+                  return cmatches;
+               if(m[0].second == last)
                   return cmatches;
                // update to end of what matched
                // trying to match again with match_not_null set if this

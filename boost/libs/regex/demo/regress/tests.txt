@@ -762,6 +762,8 @@ a+ "...aaa,,," $0 aaa
 a+ "...aaa,,," $1 ""
 a+ "...aaa,,," $15 ""
 (a+)b+ "...aaabbb,,," $1 aaa
+[[:digit:]]* 123ab <$0> <123><><><>
+[[:digit:]]* 123ab1 <$0> <123><><><1>
 
 ; and now escapes:
 a+ "...aaa,,," $x "$x" 
@@ -857,6 +859,7 @@ a+(?#b+)b+ xaaabbba 1 7
 (xyz)(.*)abc xyzaaab -1 -1 0 3 3 7
 (xyz)(.*)abc xyz -1 -1 0 3 3 3
 (xyz)(.*)abc xy -1 -1 -1 -1 -1 -1
+
 
 
 
