@@ -38,6 +38,13 @@
 //
 #define BOOST_NO_CTYPE_FUNCTIONS
 
+//
+// thread API's not auto detected:
+//
+#define BOOST_HAS_SCHED_YIELD
+#define BOOST_HAS_NANOSLEEP
+#define BOOST_HAS_GETTIMEOFDAY
+
 // boilerplate code:
 #include <boost/config/posix_features.hpp>
 
