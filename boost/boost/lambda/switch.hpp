@@ -287,10 +287,10 @@ public:
 // BOOST_LAMBDA_A_I_LIST(N, X) is a list of form X0, X1, ..., XN
 // BOOST_LAMBDA_A_I_B_LIST(N, X, Y) is a list of form X0 Y, X1 Y, ..., XN Y
 
-#define BOOST_LAMBDA_A_I(i, A) \
+#define BOOST_LAMBDA_A_I(z, i, A) \
 BOOST_PP_COMMA_IF(i) BOOST_PP_CAT(A,i)
 
-#define BOOST_LAMBDA_A_I_B(i, T) \
+#define BOOST_LAMBDA_A_I_B(z, i, T) \
 BOOST_PP_COMMA_IF(i) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,T),i) BOOST_PP_TUPLE_ELEM(2,1,T)
 
 #define BOOST_LAMBDA_A_I_LIST(i, A) \
@@ -301,7 +301,7 @@ BOOST_PP_REPEAT(i,BOOST_LAMBDA_A_I_B, (A,B))
 
 
 // Switch related macros -------------------------------------------
-#define BOOST_LAMBDA_SWITCH_CASE_BLOCK(N, A) \
+#define BOOST_LAMBDA_SWITCH_CASE_BLOCK(z, N, A) \
   case Case##N: \
   detail::select(::boost::tuples::get<BOOST_PP_INC(N)>(args), CALL_ACTUAL_ARGS); \
   break;
@@ -414,7 +414,7 @@ switch_statement(const lambda_functor<TestArg>& a1) {
 }
 
 
-#define HELPER(N, FOO)                                         \
+#define HELPER(z, N, FOO)                                      \
 BOOST_PP_COMMA_IF(N)                                           \
 BOOST_PP_CAT(                                                  \
   const tagged_lambda_functor<detail::switch_case_tag<TagData, \
@@ -463,11 +463,11 @@ BOOST_LAMBDA_SWITCH_NO_DEFAULT_CASE(N)   \
 BOOST_LAMBDA_SWITCH_WITH_DEFAULT_CASE(N)        
 
 // Use this to avoid case 0, these macros work only from case 1 upwards
-#define BOOST_LAMBDA_SWITCH_HELPER(N, A) \
+#define BOOST_LAMBDA_SWITCH_HELPER(z, N, A) \
 BOOST_LAMBDA_SWITCH( BOOST_PP_INC(N) )
 
 // Use this to avoid cases 0 and 1, these macros work only from case 2 upwards
-#define BOOST_LAMBDA_SWITCH_STATEMENT_HELPER(N, A) \
+#define BOOST_LAMBDA_SWITCH_STATEMENT_HELPER(z, N, A) \
 BOOST_LAMBDA_SWITCH_STATEMENT(BOOST_PP_INC(N))
 
 

@@ -43,9 +43,9 @@
 // Now we only have one version of is_instance_of templates, which delagate
 // all the nasty compiler tricks to is_convertible. 
 
-#define BOOST_LAMBDA_CLASS(N,A) BOOST_PP_COMMA_IF(N) class
-#define BOOST_LAMBDA_CLASS_ARG(N,A) BOOST_PP_COMMA_IF(N) class A##N 
-#define BOOST_LAMBDA_ARG(N,A) BOOST_PP_COMMA_IF(N) A##N 
+#define BOOST_LAMBDA_CLASS(z, N,A) BOOST_PP_COMMA_IF(N) class
+#define BOOST_LAMBDA_CLASS_ARG(z, N,A) BOOST_PP_COMMA_IF(N) class A##N 
+#define BOOST_LAMBDA_ARG(z, N,A) BOOST_PP_COMMA_IF(N) A##N 
 
 #define BOOST_LAMBDA_CLASS_LIST(n, NAME) BOOST_PP_REPEAT(n, BOOST_LAMBDA_CLASS, NAME)
 
@@ -83,7 +83,7 @@ public:                                                                     \
 };
 
 
-#define BOOST_LAMBDA_HELPER(N, A) BOOST_LAMBDA_IS_INSTANCE_OF_TEMPLATE( BOOST_PP_INC(N) )
+#define BOOST_LAMBDA_HELPER(z, N, A) BOOST_LAMBDA_IS_INSTANCE_OF_TEMPLATE( BOOST_PP_INC(N) )
 
 // Generate the traits for 1-4 argument templates
 
