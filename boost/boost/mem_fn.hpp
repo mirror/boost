@@ -8,7 +8,7 @@
 //
 //  mem_fn.hpp - a generalization of std::mem_fun[_ref]
 //
-//  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
 //  Copyright (c) 2001 David Abrahams
 //
 //  Permission to copy, use, modify, sell and distribute this software
@@ -186,6 +186,79 @@ namespace _mfi
 #undef BOOST_MEM_FN_CC
 
 #endif
+
+// data member support
+
+namespace _mfi
+{
+
+template<class R, class T> class dm
+{
+public:
+
+    typedef R const & result_type;
+    typedef T const * argument_type;
+
+private:
+    
+    typedef R (T::*F);
+    F f_;
+
+    template<class U> R const & call(U & u, T const *) const
+    {
+        return (u.*f_);
+    }
+
+    template<class U> R & call(U & u, T *) const
+    {
+        return (u.*f_);
+    }
+
+    template<class U> R const & call(U & u, void const *) const
+    {
+        return (get_pointer(u)->*f_);
+    }
+
+public:
+    
+    explicit dm(F f): f_(f) {}
+
+    R & operator()(T * p) const
+    {
+        return (p->*f_);
+    }
+
+    R const & operator()(T const * p) const
+    {
+        return (p->*f_);
+    }
+
+    template<class U> R const & operator()(U & u) const
+    {
+        return call(u, &u);
+    }
+
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1300)
+
+    R & operator()(T & t) const
+    {
+        return (t.*f_);
+    }
+
+#endif
+
+    R const & operator()(T const & t) const
+    {
+        return (t.*f_);
+    }
+};
+
+} // namespace _mfi
+
+template<class R, class T> _mfi::dm<R, T> mem_fn(R T::*f)
+{
+    return _mfi::dm<R, T>(f);
+}
 
 } // namespace boost
 

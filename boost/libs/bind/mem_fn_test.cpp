@@ -8,7 +8,7 @@
 //
 //  mem_fn_test.cpp - a test for mem_fn.hpp
 //
-//  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -179,5 +179,5 @@ int main()
     mem_fn(&X::g8)(pcx, 1, 2, 3, 4, 5, 6, 7, 8);
     mem_fn(&X::g8)(sp, 1, 2, 3, 4, 5, 6, 7, 8);
 
-    return detect_errors(x.hash == 17610 && sp->hash == 2155);
+    return detect_errors(mem_fn(&X::hash)(x) == 17610 && mem_fn(&X::hash)(sp) == 2155);
 }

@@ -8,7 +8,7 @@
 //
 //  bind_test.cpp - monolithic test for bind.hpp
 //
-//  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
 //  Copyright (c) 2001 David Abrahams
 //
 //  Permission to copy, use, modify, sell and distribute this software
@@ -372,7 +372,7 @@ void member_function_test()
     bind(&X::g8, x, 1, 2, 3, 4, 5, 6, 7, 8)();
     bind(&X::g8, ref(x), 1, 2, 3, 4, 5, 6, 7, 8)();
 
-    BOOST_TEST( x.hash == 23558 );
+    BOOST_TEST( bind(&X::hash, _1)(x) == 23558 );
 }
 
 void member_function_void_test()
@@ -462,7 +462,7 @@ void member_function_void_test()
     bind(&V::g8, v, 1, 2, 3, 4, 5, 6, 7, 8)();
     bind(&V::g8, ref(v), 1, 2, 3, 4, 5, 6, 7, 8)();
 
-    BOOST_TEST( v.hash == 23558 );
+    BOOST_TEST( bind(&V::hash, _1)(v) == 23558 );
 }
 
 void nested_bind_test()
