@@ -271,10 +271,13 @@ public:
    //
    unsigned int Position(int i = 0)const;
    unsigned int Length(int i = 0)const;
+   bool Matched(int i = 0)const;
    unsigned int Line()const;
    unsigned int Marks()const;
    std::string What(int i = 0)const;
    std::string operator[](int i)const { return What(i); }
+
+   static const unsigned int npos;
 
    friend struct re_detail::pred1;
    friend struct re_detail::pred2;
