@@ -92,16 +92,17 @@ struct is_volatile_impl
 { 
 };
 
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_volatile,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_volatile,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_volatile,void volatile,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_volatile,void const volatile,true)
+#endif
+
 } // namespace detail
 
 //* is a type T declared volatile - is_volatile<T>
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_volatile,T,::boost::detail::is_volatile_impl<T>::value)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_volatile,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_volatile,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_volatile,void volatile,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_volatile,void const volatile,true)
-#endif
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

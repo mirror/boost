@@ -59,8 +59,7 @@ BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_volatile
 
 #else
 
-// doesn't work
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_volatile,T,T)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_volatile,T,typename detail::remove_volatile_impl<T>::type)
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

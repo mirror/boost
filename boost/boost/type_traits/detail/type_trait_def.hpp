@@ -37,6 +37,13 @@ template<> struct trait<spec> \
 }; \
 /**/
 
+#define BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(trait,spec,result) \
+template<> struct trait##_impl<spec> \
+{ \
+    typedef result type; \
+}; \
+/**/
+
 #define BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(param,trait,spec,result) \
 template< param > struct trait<spec> \
 { \

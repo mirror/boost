@@ -55,17 +55,20 @@ struct add_reference_impl
     typedef typename result::type type;
 };
 
+// these full specialisations are always required:
+BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(add_reference,void,void)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(add_reference,void const,void const)
+BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(add_reference,void volatile,void volatile)
+BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(add_reference,void const volatile,void const volatile)
+#endif
+
 } // namespace detail
 
 BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,typename detail::add_reference_impl<T>::type)
 
 #else
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,T&)
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-//
 // these full specialisations are always required:
 BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void,void)
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
@@ -73,6 +76,11 @@ BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void const,void const)
 BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void volatile,void volatile)
 BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void const volatile,void const volatile)
 #endif
+
+BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,T&)
+
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 
 } // namespace boost
 

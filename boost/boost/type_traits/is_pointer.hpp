@@ -70,14 +70,10 @@ struct is_pointer_impl
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pointer,T,::boost::detail::is_pointer_impl<T>::value)
 
 #if defined(__BORLANDC__) && !defined(__COMO__)
-template <class T> struct is_pointer<T&>
-{ BOOST_STATIC_CONSTANT(bool, value = false); };
-template <class T> struct is_pointer<T&const>
-{ BOOST_STATIC_CONSTANT(bool, value = false); };
-template <class T> struct is_pointer<T&volatile>
-{ BOOST_STATIC_CONSTANT(bool, value = false); };
-template <class T> struct is_pointer<T&const volatile>
-{ BOOST_STATIC_CONSTANT(bool, value = false); };
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T&,false)
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& const,false)
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& const volatile,false)
 #endif
 
 #else // no partial template specialization
@@ -123,16 +119,16 @@ struct is_pointer_impl
 {
 };
 
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pointer,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pointer,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pointer,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pointer,void const volatile,false)
+#endif
+
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pointer,T,::boost::detail::is_pointer_impl<T>::value)
-
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pointer,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pointer,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pointer,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pointer,void const volatile,false)
-#endif
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

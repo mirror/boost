@@ -102,16 +102,17 @@ struct is_const_impl
 { 
 };
 
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void const,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void const volatile,true)
+#endif
+
 } // namespace detail
 
 //* is a type T  declared const - is_const<T>
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_const,T,::boost::detail::is_const_impl<T>::value)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_const,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_const,void const,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_const,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_const,void const volatile,true)
-#endif
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

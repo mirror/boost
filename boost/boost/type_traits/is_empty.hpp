@@ -188,17 +188,17 @@ template <typename T> struct is_empty_impl
 
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
+// these help when the compiler has no partial specialization support:
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_empty,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_empty,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_empty,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_empty,void const volatile,false)
+#endif
+
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_empty,T,::boost::detail::is_empty_impl<T>::value)
-// these help when the compiler has no partial specialization support:
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_empty,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_empty,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_empty,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_empty,void const volatile,false)
-#endif
-
 
 } // namespace boost
 

@@ -23,14 +23,14 @@
 
 namespace boost {
 
-// forward declaration, needed by 'is_POD_array_helper' template below
+// forward declaration, needed by 'is_pod_array_helper' template below
 template< typename T > struct is_POD;
 
 namespace detail {
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-template <typename T> struct is_POD_impl
+template <typename T> struct is_pod_impl
 { 
     BOOST_STATIC_CONSTANT(
         bool, value =
@@ -42,15 +42,15 @@ template <typename T> struct is_POD_impl
 };
 
 template <typename T, std::size_t sz>
-struct is_POD_impl<T[sz]>
-    : is_POD_impl<T>
+struct is_pod_impl<T[sz]>
+    : is_pod_impl<T>
 {
 };
 
 #else
 
 template <bool is_array = false>
-struct is_POD_helper
+struct is_pod_helper
 {
     template <typename T> struct result_
     {
@@ -77,7 +77,7 @@ struct bool_to_yes_no_type<true>
 };
 
 template <typename ArrayType>
-struct is_POD_array_helper
+struct is_pod_array_helper
 {
     enum { is_pod = ::boost::is_POD<ArrayType>::value }; // MSVC workaround
     typedef typename bool_to_yes_no_type<is_pod>::type type;
@@ -85,10 +85,10 @@ struct is_POD_array_helper
 };
 
 template <typename T>
-is_POD_array_helper<T> is_POD_array(T*);
+is_pod_array_helper<T> is_POD_array(T*);
 
 template <>
-struct is_POD_helper<true>
+struct is_pod_helper<true>
 {
     template <typename T> struct result_
     {
@@ -100,11 +100,11 @@ struct is_POD_helper<true>
 };
 
 
-template <typename T> struct is_POD_impl
+template <typename T> struct is_pod_impl
 { 
    BOOST_STATIC_CONSTANT(
        bool, value = (
-           ::boost::detail::is_POD_helper<
+           ::boost::detail::is_pod_helper<
               ::boost::is_array<T>::value
            >::template result_<T>::value
            )
@@ -113,19 +113,19 @@ template <typename T> struct is_POD_impl
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-} // namespace detail
-
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_POD,T,::boost::detail::is_POD_impl<T>::value)
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pod,T,::boost::is_POD<T>::value)
-
 // the following help compilers without partial specialization support:
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void,true)
 
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void const,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void volatile,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void const volatile,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void const,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void volatile,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void const volatile,true)
 #endif
+
+} // namespace detail
+
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_POD,T,::boost::detail::is_pod_impl<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pod,T,::boost::is_POD<T>::value)
 
 } // namespace boost
 

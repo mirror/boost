@@ -39,18 +39,18 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(
 
 #else
 
-#ifndef __BORLANDC__
-
 namespace detail {
 
+#ifndef __BORLANDC__
+
 template <bool>
-struct is_member_function_pointer_select
+struct is_mem_fun_pointer_select
     : ::boost::type_traits::false_result
 {
 };
 
 template <>
-struct is_member_function_pointer_select<false>
+struct is_mem_fun_pointer_select<false>
 {
     template <typename T> struct result_
     {
@@ -65,8 +65,8 @@ struct is_member_function_pointer_select<false>
 };
 
 template <typename T>
-struct is_mem_fun_pointer_impl
-    : is_member_function_pointer_select<
+struct is_member_function_pointer_impl
+    : is_mem_fun_pointer_select<
           ::boost::type_traits::ice_or<
               ::boost::is_reference<T>::value
             , ::boost::is_array<T>::value
@@ -75,14 +75,10 @@ struct is_mem_fun_pointer_impl
 {
 };
 
-} // namespace detail
-
 #else // Borland C++
 
-namespace detail {
-
 template <typename T>
-struct is_mem_fun_pointer_impl
+struct is_member_function_pointer_impl
 {
    static T& m_t;
    BOOST_STATIC_CONSTANT(
@@ -91,22 +87,23 @@ struct is_mem_fun_pointer_impl
 };
 
 template <typename T>
-struct is_mem_fun_pointer_impl<T&>
+struct is_member_function_pointer_impl<T&>
 {
    BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
+#endif
+
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_member_function_pointer,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_member_function_pointer,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_member_function_pointer,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_member_function_pointer,void const volatile,false)
+#endif
+
 } // namespace detail
 
-#endif
-
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_member_function_pointer,T,::boost::detail::is_mem_fun_pointer_impl<T>::value)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_member_function_pointer,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_member_function_pointer,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_member_function_pointer,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_member_function_pointer,void const volatile,false)
-#endif
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_member_function_pointer,T,::boost::detail::is_member_function_pointer_impl<T>::value)
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

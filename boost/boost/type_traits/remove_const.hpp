@@ -60,7 +60,7 @@ BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_const,T 
 
 #else
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_const,T,T)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_const,T,typename detail::remove_const_impl<T>::type)
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

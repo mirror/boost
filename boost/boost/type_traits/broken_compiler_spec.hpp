@@ -8,6 +8,7 @@
 #ifndef BOOST_TT_BROKEN_COMPILER_SPEC_HPP_INCLUDED
 #define BOOST_TT_BROKEN_COMPILER_SPEC_HPP_INCLUDED
 
+#include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/config.hpp"
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -16,19 +17,17 @@
 
 #else
 
-namespace boost {
-// forward declarations
-template< typename T > struct remove_const;
-template< typename T > struct remove_volatile;
-template< typename T > struct remove_cv;
-template< typename T > struct remove_pointer;
-template< typename T > struct remove_reference;
-}
+namespace boost { namespace detail {
+template< typename T > struct remove_const_impl     { typedef T type; };
+template< typename T > struct remove_volatile_impl  { typedef T type; };
+template< typename T > struct remove_pointer_impl   { typedef T type; };
+template< typename T > struct remove_reference_impl { typedef T type; };
+}}
 
-// same as BOOST_TT_AUX_BROKEN_TYPE_TRAIT_SPEC1 macro, except that it
+// same as BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1 macro, except that it
 // never gets #undef-ined
 #   define BOOST_TT_AUX_BROKEN_TYPE_TRAIT_SPEC1(trait,spec,result) \
-template<> struct trait<spec> \
+template<> struct trait##_impl<spec> \
 { \
     typedef result type; \
 }; \
@@ -39,9 +38,6 @@ template<> struct trait<spec> \
     BOOST_TT_AUX_BROKEN_TYPE_TRAIT_SPEC1(remove_const,T const volatile,T volatile)  \
     BOOST_TT_AUX_BROKEN_TYPE_TRAIT_SPEC1(remove_volatile,T volatile,T)              \
     BOOST_TT_AUX_BROKEN_TYPE_TRAIT_SPEC1(remove_volatile,T const volatile,T const)  \
-    BOOST_TT_AUX_BROKEN_TYPE_TRAIT_SPEC1(remove_cv,T const,T)                       \
-    BOOST_TT_AUX_BROKEN_TYPE_TRAIT_SPEC1(remove_cv,T volatile,T)                    \
-    BOOST_TT_AUX_BROKEN_TYPE_TRAIT_SPEC1(remove_cv,T const volatile,T)              \
     /**/
 
 #   define BOOST_TT_AUX_REMOVE_PTR_REF_RANK_1_SPEC(T)                               \
@@ -69,14 +65,14 @@ template<> struct trait<spec> \
     /**/
 
 #   define BOOST_TT_BROKEN_COMPILER_SPEC(T)                                         \
-    namespace boost {                                                               \
+    namespace boost { namespace detail {                                            \
     BOOST_TT_AUX_REMOVE_ALL_RANK_1_SPEC(T)                                          \
     BOOST_TT_AUX_REMOVE_ALL_RANK_2_SPEC(T)                                          \
     BOOST_TT_AUX_REMOVE_ALL_RANK_2_SPEC(T*)                                         \
     BOOST_TT_AUX_REMOVE_ALL_RANK_2_SPEC(T const*)                                   \
     BOOST_TT_AUX_REMOVE_ALL_RANK_2_SPEC(T volatile*)                                \
     BOOST_TT_AUX_REMOVE_ALL_RANK_2_SPEC(T const volatile*)                          \
-    }                                                                               \
+    }}                                                                              \
     /**/
 
 #   include "boost/type_traits/detail/type_trait_undef.hpp"
@@ -98,7 +94,7 @@ BOOST_TT_BROKEN_COMPILER_SPEC(signed long)
 BOOST_TT_BROKEN_COMPILER_SPEC(unsigned long)
 BOOST_TT_BROKEN_COMPILER_SPEC(float)
 BOOST_TT_BROKEN_COMPILER_SPEC(double)
-BOOST_TT_BROKEN_COMPILER_SPEC(long double)
+//BOOST_TT_BROKEN_COMPILER_SPEC(long double)
 
 // for backward compatibility
 #define BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(T) \

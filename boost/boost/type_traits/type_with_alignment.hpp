@@ -80,17 +80,16 @@ struct is_aligned
         );
 };
 
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::max_align,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<1> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<2> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<4> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<8> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<10> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<16> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<32> ,true)
+
 } // namespace detail
-
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::detail::max_align,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,detail::lower_alignment<1> ,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::detail::lower_alignment<2> ,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::detail::lower_alignment<4> ,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::detail::lower_alignment<8> ,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::detail::lower_alignment<10> ,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::detail::lower_alignment<16> ,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::detail::lower_alignment<32> ,true)
-
 
 // This alignment method originally due to Brian Parker, implemented by David
 // Abrahams, and then ported here by Doug Gregor. 
@@ -134,10 +133,13 @@ struct a8{ double s; };
 struct a16{ long double s; };
 #pragma option pop
 }
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::align::a2,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::align::a4,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::align::a8,true)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_pod,::boost::align::a16,true)
+
+namespace detail {
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a2,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a4,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a8,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::align::a16,true)
+}
 
 template <std::size_t N> struct type_with_alignment
 {

@@ -77,15 +77,16 @@ struct is_member_pointer_impl
 {
 };
 
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_member_pointer,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_member_pointer,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_member_pointer,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_member_pointer,void const volatile,false)
+#endif
+
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_member_pointer,T,::boost::detail::is_member_pointer_impl<T>::value)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_member_pointer,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_member_pointer,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_member_pointer,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_member_pointer,void const volatile,false)
-#endif
 
 #endif // __BORLANDC__
 

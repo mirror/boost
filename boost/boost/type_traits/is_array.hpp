@@ -59,15 +59,16 @@ struct is_array_impl
     );
 };
 
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_array,void,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_array,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_array,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_array,void const volatile,false)
+#endif
+
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_array,T,::boost::detail::is_array_impl<T>::value)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_array,void,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_array,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_array,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_array,void const volatile,false)
-#endif
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

@@ -87,6 +87,20 @@ template<> struct trait< sp1,sp2 > \
 }; \
 /**/
 
+#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(trait,sp,C) \
+template<> struct trait##_impl< sp > \
+{ \
+    BOOST_STATIC_CONSTANT(bool, value = (C)); \
+}; \
+/**/
+
+#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2(trait,sp1,sp2,C) \
+template<> struct trait##_impl< sp1,sp2 > \
+{ \
+    BOOST_STATIC_CONSTANT(bool, value = (C)); \
+}; \
+/**/
+
 #define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(param,trait,sp,C) \
 template< param > struct trait< sp > \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
@@ -117,6 +131,13 @@ template< param1, param2 > struct trait< sp1,sp2 > \
     BOOST_TT_AUX_BOOL_C_BASE(C) \
 { \
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
+}; \
+/**/
+
+#define BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(param,trait,sp1,sp2,C) \
+template< param > struct trait##_impl< sp1,sp2 > \
+{ \
+    BOOST_STATIC_CONSTANT(bool, value = (C)); \
 }; \
 /**/
 

@@ -86,15 +86,16 @@ struct is_reference_impl
         );
 };
 
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_reference,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_reference,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_reference,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_reference,void const volatile,false)
+#endif
+
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_reference,T,::boost::detail::is_reference_impl<T>::value)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_reference,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_reference,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_reference,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_reference,void const volatile,false)
-#endif
 
 #ifdef BOOST_MSVC
 #   pragma warning(pop)

@@ -75,7 +75,7 @@ struct does_conversion_exist<void>
 };
 
 template <typename From, typename To>
-struct is_convertible_impl
+struct is_convertible_basic_impl
     : does_conversion_exist<From>::template result_<To>
 {
 };
@@ -121,7 +121,7 @@ template <typename T> struct checker
 };
 
 template <typename From, typename To>
-struct is_convertible_impl
+struct is_convertible_basic_impl
 {
     static From _m_from;
     static bool const value = sizeof( detail::checker<To>::_m_check(_m_from, 0) ) 
@@ -145,7 +145,7 @@ struct any_conversion
 };
 
 template <typename From, typename To>
-struct is_convertible_impl
+struct is_convertible_basic_impl
 {
     static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(any_conversion ...);
     static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To, int);
@@ -163,7 +163,7 @@ struct is_convertible_impl
 // however it does rely on undefined behaviour by passing UDT's through (...).
 //
 template <typename From, typename To>
-struct is_convertible_impl
+struct is_convertible_basic_impl
 {
     static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(...);
     static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To);
@@ -176,26 +176,20 @@ struct is_convertible_impl
 
 #endif // is_convertible_impl
 
+#if !defined(__BORLANDC__) || __BORLANDC__ > 0x551
 template <typename From, typename To>
-struct is_convertible_forwarder
+struct is_convertible_impl
 {
     typedef typename add_reference<From>::type ref_type;
     BOOST_STATIC_CONSTANT(bool, value =
         (::boost::type_traits::ice_and<
-            ::boost::detail::is_convertible_impl<ref_type,To>::value,
+            ::boost::detail::is_convertible_basic_impl<ref_type,To>::value,
             ::boost::type_traits::ice_not<
                ::boost::is_array<To>::value
             >::value
         >::value)
         );
 };
-
-} // namespace detail
-
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
-BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_impl<From,To>::value))
-#else
-BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_forwarder<From,To>::value))
 #endif
 
 //
@@ -203,25 +197,12 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convert
 // for void types, these are common to all the
 // implementation above:
 //
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename To,is_convertible,void,To,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename From,is_convertible,From,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename To,is_convertible,void const,To,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename To,is_convertible,void volatile,To,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename To,is_convertible,void const volatile,To,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename From,is_convertible,From,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename From,is_convertible,From,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename From,is_convertible,From,void const volatile,false)
-#endif
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 #   define TT_AUX_BOOL_CV_VOID_TRAIT_SPEC2_PART1(trait,spec1,spec2,value) \
-    BOOST_TT_AUX_BOOL_TRAIT_SPEC2(trait,spec1,spec2,value) \
-    BOOST_TT_AUX_BOOL_TRAIT_SPEC2(trait,spec1,spec2 const,value) \
-    BOOST_TT_AUX_BOOL_TRAIT_SPEC2(trait,spec1,spec2 volatile,value) \
-    BOOST_TT_AUX_BOOL_TRAIT_SPEC2(trait,spec1,spec2 const volatile,value) \
+    BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2(trait,spec1,spec2,value) \
+    BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2(trait,spec1,spec2 const,value) \
+    BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2(trait,spec1,spec2 volatile,value) \
+    BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2(trait,spec1,spec2 const volatile,value) \
     /**/
 
 #   define TT_AUX_BOOL_CV_VOID_TRAIT_SPEC2(trait,spec1,spec2,value) \
@@ -237,8 +218,25 @@ BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename From,is_convertible,From,void c
 #   undef TT_AUX_BOOL_CV_VOID_TRAIT_SPEC2_PART1
 
 #else
-    BOOST_TT_AUX_BOOL_TRAIT_SPEC2(is_convertible,void,void,true)
+    BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2(is_convertible,void,void,true)
 #endif // BOOST_NO_CV_VOID_SPECIALIZATIONS
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename To,is_convertible,void,To,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename To,is_convertible,void const,To,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename To,is_convertible,void volatile,To,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename To,is_convertible,void const volatile,To,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void const volatile,false)
+#endif
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+} // namespace detail
+
+BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convertible_impl<From,To>::value))
 
 
 #if defined(__GNUC__)
@@ -287,5 +285,3 @@ TT_AUX_IS_CONVERTIBLE_FROM_FLOAT_CV_SPEC(long double)
 #include "boost/type_traits/detail/bool_trait_undef.hpp"
 
 #endif // BOOST_TT_IS_CONVERTIBLE_HPP_INCLUDED
-
-
