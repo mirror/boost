@@ -27,7 +27,7 @@
 #if !defined(AUX_WRAPPER_NAME)
 #   define AUX_WRAPPER_NAME BOOST_PP_CAT(AUX_WRAPPER_VALUE_TYPE,_)
 #   define AUX_WRAPPER_PARAMS(N) BOOST_MPL_AUX_NTTP_DECL(AUX_WRAPPER_VALUE_TYPE, N)
-#   define AUX_WRAPPER_INST(value) AUX_WRAPPER_NAME< value >
+#   define AUX_WRAPPER_INST(value) mpl::AUX_WRAPPER_NAME< value >
 #endif
 
 namespace boost { namespace mpl {
@@ -36,7 +36,7 @@ template< AUX_WRAPPER_PARAMS(N) >
 struct AUX_WRAPPER_NAME
 {
     BOOST_STATIC_CONSTANT(AUX_WRAPPER_VALUE_TYPE, value = N);
-    typedef AUX_WRAPPER_NAME type;
+    typedef struct AUX_WRAPPER_NAME type;
     typedef AUX_WRAPPER_VALUE_TYPE value_type;
 
     // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),

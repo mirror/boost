@@ -124,7 +124,7 @@ template<> struct lambda_impl<i,true>
     template< typename F > struct result_
     {
         typedef typename F::rebind f_;
-        typedef protect< BOOST_PP_CAT(bind,i)<
+        typedef mpl::protect< BOOST_PP_CAT(bind,i)<
               f_
             BOOST_MPL_PP_REPEAT(i, AUX_LAMBDA_INVOCATION, T)
             > > type;

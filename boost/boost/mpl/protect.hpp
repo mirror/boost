@@ -29,7 +29,7 @@ template<
     >
 struct protect : T
 {
-    typedef protect type;
+    typedef struct protect type;
 };
 
 #if defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
