@@ -23,8 +23,8 @@ void run_test_cases()
   typedef bitset_test< boost::dynamic_bitset<Block> > Tests;
 
   std::string long_string(101, '0');
-  for (std::size_t i = 0; i < long_string.size(); ++i)
-    long_string[i] = '0' + (i % 2);
+  for (std::size_t j = 0; j < long_string.size(); ++j)
+    long_string[j] = '0' + (j % 2);
 
   std::size_t N, ul_size = CHAR_BIT * sizeof(unsigned long), 
     block_size = CHAR_BIT * sizeof(Block);

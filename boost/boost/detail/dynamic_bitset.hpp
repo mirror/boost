@@ -12,6 +12,7 @@
 #define BOOST_DETAIL_DYNAMIC_BITSET_HPP
 
 #include "boost/config.hpp"
+#include "boost/detail/iterator.hpp"
 
 namespace boost {
 
@@ -59,8 +60,13 @@ namespace boost {
 
       dynamic_bitset_base(size_type num_bits, const Allocator& alloc)
         : dynamic_bitset_alloc_base<Allocator>(alloc),
+#if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || !defined(_CPPLIB_VER) || (_CPPLIB_VER < 306) // Dinkumware for VC6/7
+          m_bits(dynamic_bitset_alloc_base<Allocator>::
+                 m_alloc.allocate(num_blocks(num_bits), 0)),
+#else
           m_bits(dynamic_bitset_alloc_base<Allocator>::
                  m_alloc.allocate(num_blocks(num_bits))),
+#endif
           m_num_bits(num_bits),
           m_num_blocks(num_blocks(num_bits))
       {
@@ -158,7 +164,7 @@ namespace boost {
     std::size_t initial_num_blocks(BlockInputIterator first,
 				   BlockInputIterator last)
     {
-      typename std::iterator_traits<BlockInputIterator>::iterator_category cat;
+      typename detail::iterator_traits<BlockInputIterator>::iterator_category cat;
       return initial_num_blocks(first, last, cat);
     }
 

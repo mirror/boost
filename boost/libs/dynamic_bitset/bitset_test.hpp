@@ -18,8 +18,9 @@ inline bool nth_bit(Block num, std::size_t n)
   return (num >> n) & 1;           
 }
 inline unsigned long max_num(std::size_t num_bits)
-{  
-  return (unsigned long)(std::pow((double)2, (double)num_bits)); 
+{
+  using namespace std; // for std::pow, VC++ workaround -JGS
+  return (unsigned long)(pow((double)2, (double)num_bits)); 
 }
 
 
@@ -174,8 +175,8 @@ struct bitset_test {
     BOOST_CHECK(b.size() == lhs.size() + 2);
     BOOST_CHECK(b[b.size() - 1] == false);
     BOOST_CHECK(b[b.size() - 2] == true);
-    for (std::size_t i = 0; i < lhs.size(); ++i)
-      BOOST_CHECK(b[i] == lhs[i]);
+    for (std::size_t j = 0; j < lhs.size(); ++j)
+      BOOST_CHECK(b[j] == lhs[j]);
   }
 
   static void append_block(const Bitset& lhs)

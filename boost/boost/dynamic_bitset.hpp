@@ -496,7 +496,11 @@ resize(size_type num_bits, bool value)
   if (num_bits == size())
     return;
   size_type new_nblocks = this->num_blocks(num_bits);
+#if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || !defined(_CPPLIB_VER) || (_CPPLIB_VER < 306) // Dinkumware for VC6/7
+  Block* d = this->m_alloc.allocate(new_nblocks, 0);
+#else
   Block* d = this->m_alloc.allocate(new_nblocks);
+#endif
   if (num_bits < size()) { // shrink
     std::copy(this->m_bits, this->m_bits + new_nblocks, d);
     std::swap(d, this->m_bits);
@@ -1008,9 +1012,9 @@ to_ulong() const
       throw overflow;
     size_type N = std::min(sizeof(unsigned long) * CHAR_BIT, this->size());
     unsigned long num = 0;
-    for (size_type i = 0; i < N; ++i)
-      if (this->test(i))
-        num |= (1 << i);
+    for (size_type j = 0; j < N; ++j)
+      if (this->test(j))
+        num |= (1 << j);
     return num;
   }
   else { // sizeof(Block) < sizeof(unsigned long).
@@ -1257,7 +1261,7 @@ operator>>(std::basic_istream<CharT, Traits>& in_stream,
           char c  = in_stream.narrow(c2, '*');
           
           if (c == '0' || c == '1')
-            tmp.push_back(c);
+            tmp += c; // old dinkumware basic_string missing push_back
           else if (Traits::eq_int_type(read_buf->sputbackc(c2), Traits::eof()))
           {
             in_stream.setstate(std::ios_base::failbit);
