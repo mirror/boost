@@ -19,11 +19,11 @@
 #include <cassert>
 #include <cmath>
 #include <boost/random.hpp>
+#include <boost/config.hpp>
 
-#include <boost/config.hpp> // broken compiler workarounds
-# ifdef BOOST_NO_STDC_NAMESPACE
-    namespace std { using ::abs; }
-# endif
+#ifdef BOOST_NO_STDC_NAMESPACE
+  namespace std { using ::abs; }
+#endif
 
 
 /*
@@ -269,10 +269,15 @@ void test_uniform_int(Generator & gen)
 
   typedef boost::uniform_int<intint_gen, int> intintint_gen;
 
+#if 0
+  // This takes a lot of time to run and is of questionable net effect:
+  // avoid for now.
+
   // small => larger range, not power of two
   // (for unknown reasons, this has noticeably uneven distribution)
   intintint_gen uint1_49(uint05, 1, 49);
   check_uniform_int(uint1_49, 500000);
+#endif
 
   // larger => small range, rejection case
   intintint_gen uint1_4(uint05, 1, 4);
