@@ -31,6 +31,8 @@
 #include "boost/mpl/bool.hpp"
 #include "boost/mpl/not.hpp"
 #include "boost/detail/reference_content.hpp"
+#include "boost/detail/none_t.hpp"
+#include "boost/utility/compare_pointees.hpp"
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
 // VC6.0 has the following bug:
@@ -41,7 +43,7 @@
 //   However, optional's ctor is _explicit_ and the assignemt shouldn't compile.
 //   Therefore, for VC6.0 templated assignment is disabled.
 //
-#define BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
+#define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
 #endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
@@ -51,6 +53,7 @@
 //   given to the non-templated version, making the class non-implicitely-copyable.
 //
 #define BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
+#define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
 #endif
 
 namespace boost {
@@ -60,6 +63,10 @@ class TypedInPlaceFactoryBase ;
 
 namespace optional_detail {
 
+// This local class is used instead of that in "aligned_storage.hpp"
+// because I've found the 'official' class to ICE BCB5.5 
+// when some types are used with optional<> 
+// (due to sizeof() passed down as a non-type template parameter)
 template <class T>
 class aligned_storage
 {
@@ -135,6 +142,12 @@ class optional_base
       :
       m_initialized(false) {}
 
+    // Creates an optional<T> uninitialized.
+    // No-throw
+    optional_base ( detail::none_t const& )
+      :
+      m_initialized(false) {}
+
     // Creates an optional<T> initialized with 'val'.
     // Can throw if T::T(T const&) does
     optional_base ( argument_type val )
@@ -154,6 +167,9 @@ class optional_base
         construct(rhs.get_impl());
     }
 
+    // This is used for both converting and in-place constructions.
+    // Derived classes use the 'tag' to select the appropriate 
+    // implementation (the correct 'construct()' overload)
     template<class Expr>
     explicit optional_base ( Expr const& expr, Expr const* tag )
       :
@@ -163,19 +179,19 @@ class optional_base
     }
     
     // No-throw (assuming T::~T() doesn't)
-    ~optional_base() { destroy(is_reference_predicate()) ; }
+    ~optional_base() { destroy() ; }
 
     // Assigns from another optional<T> (deep-copies the rhs value)
     // Basic Guarantee: If T::T( T const& ) throws, this is left UNINITIALIZED
     optional_base& operator= ( optional_base const& rhs )
       {
-        destroy(is_reference_predicate()); // no-throw
+        destroy(); // no-throw
 
         if ( rhs.is_initialized() )
         {
           // An exception can be thrown here.
-          // It it happens, THIS will be left uninitialized.
-          assign(rhs.get_impl(), is_reference_predicate() );
+          // If it happens, THIS will be left uninitialized.
+          construct(rhs.get_impl());
         }
         return *this ;
       }
@@ -184,30 +200,50 @@ class optional_base
     // Basic Guarantee: If T::( T const& ) throws, this is left UNINITIALIZED
     optional_base& operator= ( argument_type val )
       {
-        destroy(is_reference_predicate()); // no-throw
+        destroy(); // no-throw
 
         // An exception can be thrown here.
-        // It it happens, THIS will be left uninitialized.
-        assign(val, is_reference_predicate() );
+        // If it happens, THIS will be left uninitialized.
+        construct(val);
 
         return *this ;
       }
 
+    // Assigns from "none", destroying the current value, if any, leaving this UNINITIALIZED
+    // No-throw (assuming T::~T() doesn't)
+    optional_base& operator= ( detail::none_t const& )
+      {
+        reset();
+        return *this ;
+      }
+
+#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+    template<class Expr>
+    void assign_expr ( Expr const& expr, Expr const* tag )
+    {
+      destroy(); // no-throw
+
+      // An exception can be thrown here.
+      // If it happens, THIS will be left uninitialized.
+      construct(expr,tag);
+    }
+#endif
+    
   public :
 
     // Destroys the current value, if any, leaving this UNINITIALIZED
     // No-throw (assuming T::~T() doesn't)
     void reset()
       {
-        destroy(is_reference_predicate());
+        destroy();
       }
 
     // Replaces the current value -if any- with 'val'
     // Basic Guarantee: If T::T( T const& ) throws this is left UNINITIALIZED.
     void reset ( argument_type val )
       {
-        destroy(is_reference_predicate());
-        assign(val, is_reference_predicate() );
+        destroy();
+        construct(val);
       }
 
     // Returns a pointer to the value if this is initialized, otherwise,
@@ -225,14 +261,9 @@ class optional_base
        new (m_storage.address()) internal_type(val) ;
        m_initialized = true ;
      }
-
-    template<class Expr>
-    void construct ( Expr const& expr, void const* )
-     {
-       new (m_storage.address()) internal_type(expr) ;
-       m_initialized = true ;
-     }
-
+     
+#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+    // Constructs in-place using the given factory
     template<class Expr>
     void construct ( Expr const& factory, InPlaceFactoryBase const* )
      {
@@ -241,37 +272,32 @@ class optional_base
        m_initialized = true ;
      }
 
+    // Constructs in-place using the given typed factory
     template<class Expr>
     void construct ( Expr const& factory, TypedInPlaceFactoryBase const* )
      {
        BOOST_STATIC_ASSERT ( ::boost::mpl::not_<is_reference_predicate>::value ) ;
-
        factory.apply(m_storage.address()) ;
        m_initialized = true ;
      }
-
-
-    // NOTE: If T is of reference type, assignment must be disallowed, but optional's assignment uses T's copy-ctor
-    // so the following overload is needed to filter out the case of T being a reference and issue an error.
-    void assign ( argument_type val, is_not_reference_tag )
+#endif
+    
+    // Constructs using any expression implicitely convertible to the single argument
+    // of a one-argument T constructor. 
+    // Converting constructions of optional<T> from optional<U> uses this function with
+    // 'Expr' being of type 'U' and relying on a converting constructor of T from U.  
+    template<class Expr>
+    void construct ( Expr const& expr, void const* )
      {
-       new (m_storage.address()) internal_type(val) ;
+       new (m_storage.address()) internal_type(expr) ;
        m_initialized = true ;
      }
 
-    void destroy( is_not_reference_tag )
-     {
-       if ( m_initialized )
-       {
-         get_impl().~T() ;
-         m_initialized = false ;
-       }
-     }
-
-    void destroy( is_reference_tag )
-     {
-       m_initialized = false ;
-     }
+    void destroy() 
+    {
+      if ( m_initialized )
+        destroy_impl(is_reference_predicate()) ; 
+    }
 
     unspecified_bool_type safe_bool() const { return m_initialized ? &this_type::is_initialized : 0 ; }
     
@@ -292,6 +318,10 @@ class optional_base
     reference_type       dereference( internal_type*       p, is_not_reference_tag )       { return *p ; }
     reference_const_type dereference( internal_type const* p, is_reference_tag     ) const { return p->get() ; }
     reference_type       dereference( internal_type*       p, is_reference_tag     )       { return p->get() ; }
+
+    // BCC564 complains about get_object()->~internal_type(), so the following dispatch is neccesary.
+    void destroy_impl ( is_not_reference_tag ) { get_impl().~T() ; m_initialized = false ; }
+    void destroy_impl ( is_reference_tag     ) { m_initialized = false ; }
 
     // If T is of reference type, trying to get a pointer to the held value must result in a compile-time error.
     // Decent compilers should disallow conversions from reference_content<T>* to T*, but just in case,
@@ -323,12 +353,14 @@ class optional : public optional_detail::optional_base<T>
     typedef BOOST_DEDUCED_TYPENAME base::pointer_type         pointer_type ;
     typedef BOOST_DEDUCED_TYPENAME base::pointer_const_type   pointer_const_type ;
     typedef BOOST_DEDUCED_TYPENAME base::argument_type        argument_type ;
-    
-    typedef BOOST_DEDUCED_TYPENAME base::is_reference_predicate is_reference_predicate ;
 
     // Creates an optional<T> uninitialized.
     // No-throw
     optional() : base() {}
+
+    // Creates an optional<T> uninitialized.
+    // No-throw
+    optional( detail::none_t const& none_ ) : base(none_) {}
 
     // Creates an optional<T> initialized with 'val'.
     // Can throw if T::T(T const&) does
@@ -345,43 +377,46 @@ class optional : public optional_detail::optional_base<T>
       :
       base()
     {
-      BOOST_STATIC_ASSERT ( mpl::not_<is_reference_predicate>::value ) ;
-
       if ( rhs.is_initialized() )
         construct(rhs.get());
     }
+#endif
+    
+#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+    // Creates an optional<T> with an expression which can be either
+    //  (a) An instance of InPlaceFactory (i.e. in_place(a,b,...,n);
+    //  (b) An instance of TypedInPlaceFactory ( i.e. in_place<T>(a,b,...,n);
+    //  (c) Any expression implicitely convertible to the single type
+    //      of a one-argument T's constructor.
+    // Depending on the above some T ctor is called.
+    // Can throw is the resolved T ctor throws.
+    template<class Expr>
+    explicit optional ( Expr const& expr ) : base(expr,&expr) {}
 #endif
 
     // Creates a deep copy of another optional<T>
     // Can throw if T::T(T const&) does
     optional ( optional const& rhs ) : base(rhs) {}
 
-    template<class Expr>
-    explicit optional ( Expr const& expr ) : base(expr,&expr) {}
-
     // No-throw (assuming T::~T() doesn't)
     ~optional() {}
 
-#ifndef BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
     // Assigns from another convertible optional<U> (converts && deep-copies the rhs value)
     // Requires a valid conversion from U to T.
     // Basic Guarantee: If T::T( U const& ) throws, this is left UNINITIALIZED
     template<class U>
     optional& operator= ( optional<U> const& rhs )
       {
-        BOOST_STATIC_ASSERT ( mpl::not_<is_reference_predicate>::value ) ;
-
-        destroy(is_reference_predicate()); // no-throw
+        destroy(); // no-throw
 
         if ( rhs.is_initialized() )
         {
           // An exception can be thrown here.
           // It it happens, THIS will be left uninitialized.
-          assign(rhs.get(), is_reference_predicate() );
+          construct(rhs.get());
         }
         return *this ;
       }
-#endif
 
     // Assigns from another optional<T> (deep-copies the rhs value)
     // Basic Guarantee: If T::T( T const& ) throws, this is left UNINITIALIZED
@@ -399,6 +434,26 @@ class optional : public optional_detail::optional_base<T>
         return *this ;
       }
 
+    // Assigns from a "none"
+    // Which destroys the current value, if any, leaving this UNINITIALIZED
+    // No-throw (assuming T::~T() doesn't)
+    optional& operator= ( detail::none_t const& none_ )
+      {
+        this->base::operator= ( none_ ) ;
+        return *this ;
+      }
+
+#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
+    // Assigns from an expression. See corresponding constructor.
+    // Basic Guarantee: If the resolved T ctor throws, this is left UNINITIALIZED
+    template<class Expr>
+    optional& operator= ( Expr expr )
+      {
+        this->base::assign_expr(expr,&expr);
+        return *this ;
+      }
+#endif
+      
     // Returns a reference to the value if this is initialized, otherwise,
     // the behaviour is UNDEFINED
     // No-throw
@@ -480,37 +535,6 @@ get_pointer ( optional<T>& opt )
   return opt.get_ptr() ;
 }
 
-
-// template<class OP> bool equal_pointees(OP const& x, OP const& y);
-//
-// Being OP a model of OptionalPointee (either a pointer or an optional):
-//
-// If both x and y have valid pointees, returns the result of (*x == *y)
-// If only one has a valid pointee, returns false.
-// If none have valid pointees, returns true.
-// No-throw
-template<class OptionalPointee>
-inline
-bool equal_pointees ( OptionalPointee const& x, OptionalPointee const& y )
-{
-  return (!x) != (!y) ? false : ( !x ? true : (*x) == (*y) ) ;
-}
-
-// template<class OP> bool less_pointees(OP const& x, OP const& y);
-//
-// Being OP a model of OptionalPointee (either a pointer or an optional):
-//
-// If y has not a valid pointee, returns false.
-// ElseIf x has not a valid pointee, returns true.
-// ElseIf both x and y have valid pointees, returns the result of (*x < *y)
-// No-throw
-template<class OptionalPointee>
-inline
-bool less_pointees ( OptionalPointee const& x, OptionalPointee const& y )
-{
-  return !y ? false : ( !x ? true : (*x) < (*y) ) ;
-}
-
 // optional's relational operators ( ==, !=, <, >, <=, >= ) have deep-semantics (compare values).
 // WARNING: This is UNLIKE pointers. Use equal_pointees()/less_pointess() in generic code instead.
 
@@ -542,6 +566,66 @@ bool operator <= ( optional<T> const& x, optional<T> const& y )
 template<class T>
 inline
 bool operator >= ( optional<T> const& x, optional<T> const& y )
+{ return !( x < y ) ; }
+
+template<class T>
+inline
+bool operator == ( optional<T> const& x, detail::none_t const& y )
+{ return equal_pointees(x, optional<T>() ); }
+
+template<class T>
+inline
+bool operator < ( optional<T> const& x, detail::none_t const& y )
+{ return less_pointees(x,optional<T>() ); }
+
+template<class T>
+inline
+bool operator != ( optional<T> const& x, detail::none_t const& y )
+{ return !( x == y ) ; }
+
+template<class T>
+inline
+bool operator > ( optional<T> const& x, detail::none_t const& y )
+{ return y < x ; }
+
+template<class T>
+inline
+bool operator <= ( optional<T> const& x, detail::none_t const& y )
+{ return !( y < x ) ; }
+
+template<class T>
+inline
+bool operator >= ( optional<T> const& x, detail::none_t const& y )
+{ return !( x < y ) ; }
+
+template<class T>
+inline
+bool operator == ( detail::none_t const& x, optional<T> const& y )
+{ return equal_pointees(optional<T>() ,y); }
+
+template<class T>
+inline
+bool operator < ( detail::none_t const& x, optional<T> const& y )
+{ return less_pointees(optional<T>() ,y); }
+
+template<class T>
+inline
+bool operator != ( detail::none_t const& x, optional<T> const& y )
+{ return !( x == y ) ; }
+
+template<class T>
+inline
+bool operator > ( detail::none_t const& x, optional<T> const& y )
+{ return y < x ; }
+
+template<class T>
+inline
+bool operator <= ( detail::none_t const& x, optional<T> const& y )
+{ return !( y < x ) ; }
+
+template<class T>
+inline
+bool operator >= ( detail::none_t const& x, optional<T> const& y )
 { return !( x < y ) ; }
 
 //
