@@ -61,17 +61,16 @@ template<>          struct assert<false> { typedef AUX778076_ASSERT_ARG(assert) 
 template< bool C >
 int assertion_failed( typename assert<C>::type );
 
-template <bool C>
+template< bool C >
 struct assertion
 {
-    static int failed(assert<false>);
+    static int failed( assert<false> );
 };
 
-template <>
+template<>
 struct assertion<true>
 {
-    template <class T>
-    static int failed(T);
+    static int failed( void* );
 };
 
 struct assert_
@@ -303,7 +302,6 @@ enum { \
     typedef struct BOOST_PP_CAT(msg,__LINE__) : boost::mpl::assert_ \
     { \
         using boost::mpl::assert_::types; \
-        enum { msg }; \
         static boost::mpl::failed ************ (msg::************ assert_arg()) types_ \
         { return 0; } \
     } BOOST_PP_CAT(mpl_assert_arg,__LINE__); \
