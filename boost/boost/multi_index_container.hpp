@@ -199,7 +199,9 @@ public:
     node_count(0)
   {
     copy_map_type map(bfm_allocator::member,x.size(),x.header(),header());
-    for(const_iterator it=x.begin();it!=x.end();++it)map.clone(it.get_node());
+    for(const_iterator it=x.begin(),it_end=x.end();it!=it_end;++it){
+      map.clone(it.get_node());
+    }
     super::copy_(x,map);
     map.release();
     node_count=x.size();
@@ -520,7 +522,9 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 private:
   void clean_up()
   {
-    for(iterator it=super::begin();it!=super::end();)erase_(it++.get_node());
+    for(iterator it=super::begin(),it_end=super::end();it!=it_end;){
+      erase_(it++.get_node());
+    }
   }
 
   std::size_t node_count;

@@ -600,7 +600,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     }
     else{
       size_type s=0;
-      for(const_iterator it=begin();it!=end();++it,++s){
+      for(const_iterator it=begin(),it_end=end();it!=it_end;++it,++s){
         if(it.get_node()->next()->prior()!=it.get_node()->impl())return false;
         if(it.get_node()->prior()->next()!=it.get_node()->impl())return false;
       }

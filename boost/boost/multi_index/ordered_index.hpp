@@ -517,7 +517,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
       header()->right()=rightmost_cpy->impl();
 
       typedef typename copy_map_type::const_iterator copy_map_iterator;
-      for(copy_map_iterator it=map.begin();it!=map.end();++it){
+      for(copy_map_iterator it=map.begin(),it_end=map.end();it!=it_end;++it){
         node_type* org=it->first;
         node_type* cpy=it->second;
 
@@ -737,7 +737,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
       std::size_t len=ordered_index_node_impl::black_count(
         leftmost()->impl(),root()->impl());
-      for(const_iterator it=begin();it!=end();++it){
+      for(const_iterator it=begin(),it_end=end();it!=it_end;++it){
         node_type* x=it.get_node();
         node_type* left_x=node_type::from_impl(x->left());
         node_type* right_x=node_type::from_impl(x->right());
