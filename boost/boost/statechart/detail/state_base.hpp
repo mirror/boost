@@ -56,12 +56,14 @@ typedef unsigned char orthogonal_position_type;
 
 //////////////////////////////////////////////////////////////////////////////
 template< class Allocator, class RttiPolicy >
-class state_base : private noncopyable, public RttiPolicy::rtti_base_type<
-  // Derived class objects will be created, handled and destroyed by one and
-  // the same thread --> locking is not necessary
-  counted_base< orthogonal_position_type, false > >
+class state_base :
+  noncopyable,
+  public RttiPolicy::template rtti_base_type<
+    // Derived class objects will be created, handled and destroyed by exactly
+    // one thread --> locking is not necessary
+    counted_base< orthogonal_position_type, false > >
 {
-  typedef typename RttiPolicy::rtti_base_type<
+  typedef typename RttiPolicy::template rtti_base_type<
     counted_base< orthogonal_position_type, false > > base_type;
 
   public:
@@ -139,10 +141,11 @@ class state_base : private noncopyable, public RttiPolicy::rtti_base_type<
       const event_base & evt,
       typename RttiPolicy::id_type eventType ) = 0;
 
-    typedef intrusive_ptr< state_base > state_base_ptr_type;
+    typedef intrusive_ptr< state_base< Allocator, RttiPolicy > >
+      state_base_ptr_type;
     typedef std::list<
       state_base_ptr_type,
-      typename Allocator::rebind< state_base_ptr_type >::other
+      typename Allocator::template rebind< state_base_ptr_type >::other
     > state_list_type;
 
     virtual void remove_from_state_list(

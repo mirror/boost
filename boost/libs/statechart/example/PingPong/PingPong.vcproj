@@ -19,11 +19,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost-1.30.2&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost_1_31_0&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				BufferSecurityCheck="TRUE"
 				DisableLanguageExtensions="FALSE"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -38,7 +38,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="boost_threadd.lib"
 				OutputFile="$(OutDir)/PingPong.exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
@@ -77,10 +76,10 @@
 				Optimization="3"
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost-1.30.2&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost_1_31_0&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				DisableLanguageExtensions="FALSE"
@@ -95,7 +94,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="boost_thread.lib"
 				OutputFile="$(OutDir)/PingPong.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="FALSE"
@@ -156,6 +154,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\event_base.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\event_processor.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">

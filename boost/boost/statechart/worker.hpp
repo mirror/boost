@@ -9,23 +9,25 @@
 
 
 
+#include <boost/fsm/event_base.hpp>
 #include <boost/fsm/event.hpp>
-#include <boost/fsm/detail/rtti_policy.hpp>
-#include <boost/fsm/detail/event_processor.hpp>
+#include <boost/fsm/event_processor.hpp>
 
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/intrusive_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 #ifdef BOOST_HAS_THREADS
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 #include <boost/thread/condition.hpp>
 #endif
 
-#include <memory>   // std::allocator
+#include <set>
+#include <memory>   // std::allocator, std::auto_ptr
 #include <utility>  // std::pair
-#include <list>
 
 
 
@@ -33,150 +35,366 @@ namespace boost
 {
 namespace fsm
 {
-namespace detail
-{
 
 
 
-template< class Worker >
-class event_processor;
-
-
-
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////////
 template< class Allocator = std::allocator< void > >
 class worker : noncopyable
 {
+    typedef event_processor< worker > processor_type;
+    typedef std::auto_ptr< processor_type > processor_holder_type;
+    typedef shared_ptr< processor_holder_type > processor_holder_ptr_type;
   public:
     //////////////////////////////////////////////////////////////////////////
-    worker() : noOfTerminatedProcessors_( 0 ) {}
-
-    ~worker()
+    #ifdef BOOST_HAS_THREADS
+    worker( bool waitOnEmptyQueue = true ) :
+    #else
+    worker() :
+    #endif
+      pProcessorContainer_( new processor_holder_type() ),
+      processorHolderHandle_( pProcessorContainer_ ),
+      #ifdef BOOST_HAS_THREADS
+      waitOnEmptyQueue_( waitOnEmptyQueue ),
+      #endif
+      terminated_( false )
     {
-      BOOST_ASSERT( terminated() && processorList_.empty() );
+      pProcessorContainer_->reset(
+        new processor_container( *this, processorHolderHandle_ ) );
     }
 
-    void operator()()
+    typedef weak_ptr< processor_holder_type > processor_handle;
+
+    template< class Processor >
+    processor_handle create_processor()
     {
-      // The only two functions that can throw in this function are initiate()
-      // and process_event(). When an exception is thrown, we must terminate
-      // all registered processors before returning to the caller.
-      scope_guard guard( *this );
+      // We must lock during the addition to the queue as well as throughout
+      // the construction because the event needs to be modified *after*
+      // being added to the queue (see below why).
+      #ifdef BOOST_HAS_THREADS
+      recursive_mutex::scoped_lock lock( mutex_ );
+      #endif
 
-      if ( terminated() )
-      {
-        noOfTerminatedProcessors_ = 0;
-
-        for (
-          typename processor_list_type::iterator pProcessor = processorList_.begin();
-          pProcessor != processorList_.end(); ++pProcessor )
-        {
-          noOfTerminatedProcessors_ +=
-            ( *pProcessor )->initiate() ? 1 : 0;
-        }
-      }
-      else
-      {
-        #ifdef BOOST_HAS_THREADS
-        // Since operator() will never return before all machines are
-        // terminated in multithreaded builds, getting here means that
-        // operator() was erroneously called from two different threads.
-        guard.dismiss();
-        BOOST_ASSERT( false );
-        #endif
-      }
-
-      while ( !terminated() )
-      {
-        queue_element element = get_element();
-
-        if ( element.first != 0 )
-        {
-          noOfTerminatedProcessors_ +=
-            element.first->process_event( element.second ) ? 1 : 0;
-        }
-        else
-        {
-          guard.dismiss();
-          return;
-        }
-      }
-
-      guard.dismiss();
+      // The processor constructor might call destroy_processor with its own
+      // handle (a bit strange but legal). For this case we must queue the
+      // event *before* constructing the processor.
+      processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
+      pProcessor->reset( new Processor( *this, pProcessor ) );
+      return pProcessor;
     }
 
+    template< class Processor, typename Param1 >
+    processor_handle create_processor( Param1 param1 )
+    {
+      #ifdef BOOST_HAS_THREADS
+      recursive_mutex::scoped_lock lock( mutex_ );
+      #endif
+      processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
+      pProcessor->reset( new Processor( *this, pProcessor, param1 ) );
+      return pProcessor;
+    }
+
+    template< class Processor, typename Param1, typename Param2 >
+    processor_handle create_processor( Param1 param1, Param2 param2 )
+    {
+      #ifdef BOOST_HAS_THREADS
+      recursive_mutex::scoped_lock lock( mutex_ );
+      #endif
+      processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
+      pProcessor->reset( new Processor( *this, pProcessor, param1, param2 ) );
+      return pProcessor;
+    }
+
+    template<
+      class Processor, typename Param1, typename Param2, typename Param3 >
+    processor_handle create_processor(
+      Param1 param1, Param2 param2, Param3 param3 )
+    {
+      #ifdef BOOST_HAS_THREADS
+      recursive_mutex::scoped_lock lock( mutex_ );
+      #endif
+      processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
+      pProcessor->reset( new Processor(
+        *this, pProcessor, param1, param2, param3 ) );
+      return pProcessor;
+    }
+
+    template<
+      class Processor, typename Param1, typename Param2,
+      typename Param3, typename Param4 >
+    processor_handle create_processor(
+      Param1 param1, Param2 param2, Param3 param3, Param4 param4 )
+    {
+      #ifdef BOOST_HAS_THREADS
+      recursive_mutex::scoped_lock lock( mutex_ );
+      #endif
+      processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
+      pProcessor->reset( new Processor(
+        *this, pProcessor, param1, param2, param3, param4 ) );
+      return pProcessor;
+    }
+
+    template<
+      class Processor, typename Param1, typename Param2,
+      typename Param3, typename Param4, typename Param5 >
+    processor_handle create_processor(
+      Param1 param1, Param2 param2,
+      Param3 param3, Param4 param4, Param5 param5 )
+    {
+      #ifdef BOOST_HAS_THREADS
+      recursive_mutex::scoped_lock lock( mutex_ );
+      #endif
+      processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
+      pProcessor->reset( new Processor(
+        *this, pProcessor, param1, param2, param3, param4, param5 ) );
+      return pProcessor;
+    }
+
+    template<
+      class Processor, typename Param1, typename Param2,
+      typename Param3, typename Param4, typename Param5, typename Param6 >
+    processor_handle create_processor(
+      Param1 param1, Param2 param2, Param3 param3,
+      Param4 param4, Param5 param5, Param6 param6 )
+    {
+      #ifdef BOOST_HAS_THREADS
+      recursive_mutex::scoped_lock lock( mutex_ );
+      #endif
+      processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
+      pProcessor->reset( new Processor(
+        *this, pProcessor, param1, param2, param3, param4, param5, param6 ) );
+      return pProcessor;
+    }
+
+    void destroy_processor( processor_handle processor )
+    {
+      queue_event( processorHolderHandle_, make_event( new internal_event(
+        processor, internal_event::destroy_processor ) ) );
+    }
+
+    void initiate_processor( processor_handle processor )
+    {
+      queue_event( processorHolderHandle_, make_event( new internal_event(
+        processor, internal_event::initiate_processor ) ) );
+    }
+
+    void terminate_processor( processor_handle processor )
+    {
+      queue_event( processorHolderHandle_, make_event( new internal_event(
+        processor, internal_event::terminate_processor ) ) );
+    }
+
+    typedef intrusive_ptr< const event_base > event_ptr_type;
+
+    void queue_event(
+      const processor_handle & processor, const event_ptr_type & pEvent )
+    {
+      BOOST_ASSERT( pEvent.get() != 0 );
+
+      #ifdef BOOST_HAS_THREADS
+      recursive_mutex::scoped_lock lock( mutex_ );
+      #endif
+
+      queue_event_unlocked( processor, pEvent );
+    }
+
+    void terminate()
+    {
+      queue_event( 
+        processorHolderHandle_, make_event( new internal_event() ) );
+    }
+
+    // Is not mutex-protected! Must only be called from the thread that also
+    // calls operator().
     bool terminated() const
     {
-      return noOfTerminatedProcessors_ == processorList_.size();
+      return terminated_;
+    }
+
+    unsigned long operator()( unsigned long maxEventCount = 0 )
+    {
+      unsigned long eventCount = 0;
+
+      while ( !terminated() &&
+        ( ( maxEventCount == 0 ) || ( eventCount < maxEventCount ) ) )
+      {
+        queue_element element = dequeue_event();
+
+        if ( element.second.get() == 0 )
+        {
+          // element.second can only be null when the queue is empty, which
+          // only happens in ST builds or when users pass false to the worker
+          // constructor
+          return eventCount;
+        }
+
+        // If we get here element.first can be only null because the processor
+        // referred to by the handle has been destroyed.
+        processor_holder_ptr_type pProcessorHolder = element.first.lock();
+        ++eventCount;
+
+        if ( pProcessorHolder != 0 )
+        {
+          BOOST_ASSERT( &( ( *pProcessorHolder )->my_worker() ) == this );
+          ( *pProcessorHolder )->process_event( *element.second );
+        }
+      }
+
+      return eventCount;
     }
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    friend class detail::event_processor< worker >;
-
-    typedef detail::event_processor< worker > processor_type;
-    typedef std::list< processor_type *, Allocator > processor_list_type;
-    typedef intrusive_ptr< const event_base > event_ptr_type;
-    typedef std::pair< processor_type *, event_ptr_type > queue_element;
-    typedef std::list< queue_element, Allocator > event_queue_type;
-
-    class scope_guard
+    struct internal_event : event< internal_event >
     {
-      public:
-        scope_guard( worker & theWorker ) :
-          worker_( theWorker ), dismissed_( false ) {}
-        ~scope_guard() { if ( !dismissed_ ) worker_.terminate(); }
-        void dismiss() { dismissed_ = true; }
-      private:
-        worker & worker_;
-        bool dismissed_;
+      enum action_type
+      {
+        create_processor,
+        destroy_processor,
+        initiate_processor,
+        terminate_processor,
+        terminate_worker
+      };
+
+      internal_event() : action_( terminate_worker ) {}
+
+      internal_event( const processor_holder_ptr_type & pProcessorHolder ) :
+        pProcessorHolder_( pProcessorHolder ),
+        action_( create_processor )
+      {
+      }
+
+      internal_event( processor_handle processor, action_type action ) :
+        processor_( processor ),
+        action_( action )
+      {
+        BOOST_ASSERT( 
+          ( action != create_processor ) && ( action != terminate_worker ) );
+      }
+
+      const processor_holder_ptr_type pProcessorHolder_;
+      const processor_handle processor_;
+      const action_type action_;
     };
 
-    friend class scope_guard;
-
-
-    void add_processor( processor_type & processor )
+    class processor_container : public processor_type
     {
-      // A worker may not run when a processor is added
-      BOOST_ASSERT( terminated() );
-      processorList_.push_back( &processor );
-      ++noOfTerminatedProcessors_;
+      public:
+        processor_container(
+          worker & myWorker,
+          const typename worker::processor_handle & myHandle
+        ) :
+          processor_type( myWorker, myHandle )
+        {
+        }
+
+      private:
+        virtual void initiate_impl() {}
+
+        virtual void process_event_impl( const event_base & eventBase )
+        {
+          const internal_event & evt =
+            *polymorphic_downcast< const internal_event * >( &eventBase );
+
+          switch ( evt.action_ )
+          {
+            case internal_event::create_processor:
+            {
+              processorSet_.insert( evt.pProcessorHolder_ );
+            }
+            break;
+
+            case internal_event::destroy_processor:
+            {
+              const processor_holder_ptr_type pProcessorHolder =
+                evt.processor_.lock();
+
+              if ( pProcessorHolder != 0 )
+              {
+                processorSet_.erase( pProcessorHolder );
+              }
+            }
+            break;
+
+            case internal_event::initiate_processor:
+            {
+              const processor_holder_ptr_type pProcessorHolder =
+                evt.processor_.lock();
+
+              if ( pProcessorHolder != 0 )
+              {
+                ( *pProcessorHolder )->initiate();
+              }
+            }
+            break;
+            case internal_event::terminate_processor:
+            {
+              const processor_holder_ptr_type pProcessorHolder =
+                evt.processor_.lock();
+
+              if ( pProcessorHolder != 0 )
+              {
+                ( *pProcessorHolder )->terminate();
+              }
+            }
+            break;
+            case internal_event::terminate_worker:
+            {
+              my_worker().terminated_ = true;
+            }
+            break;
+            default:
+            {
+              BOOST_ASSERT( false );
+            }
+            break;
+          }
+        }
+
+        virtual void terminate_impl() {}
+
+        typedef std::set< 
+          processor_holder_ptr_type, 
+          std::less< processor_holder_ptr_type >, Allocator
+        > event_processor_set_type;
+        event_processor_set_type processorSet_;
+    };
+
+    friend class processor_container;
+
+    processor_holder_ptr_type queue_empty_event_unlocked()
+    {
+      processor_holder_ptr_type pProcessorHolder(
+        new processor_holder_type() );
+      queue_event_unlocked(
+        processorHolderHandle_,
+        make_event( new internal_event( pProcessorHolder ) ) );
+      return pProcessorHolder;
     }
 
-    void remove_processor( processor_type & processor )
+    void queue_event_unlocked(
+      const processor_handle & processor, const event_ptr_type & pEvent )
     {
-      // It is the users responsibility to ensure that an event_processor
-      // object is not destructed before worker<>::operator()() returns
-      BOOST_ASSERT( terminated() );
-      processorList_.remove( &processor );
-      --noOfTerminatedProcessors_;
-    }
-
-    void queue_event(
-      processor_type & processor, const event_ptr_type & pEvent )
-    {
-      #ifdef BOOST_HAS_THREADS
-      mutex::scoped_lock lock( mutex_ );
-      #endif
-
-      queue_.push_back( std::make_pair( &processor, pEvent ) );
+      BOOST_ASSERT( &( ( *processor.lock() )->my_worker() ) == this );
+      eventQueue_.push_back( std::make_pair( processor, pEvent ) );
 
       #ifdef BOOST_HAS_THREADS
       queueNotEmpty_.notify_one();
       #endif
     }
 
+    typedef std::pair< processor_handle, event_ptr_type > queue_element;
 
-    queue_element get_element()
+    queue_element dequeue_event()
     {
       #ifdef BOOST_HAS_THREADS
-      mutex::scoped_lock lock( mutex_ );
+      recursive_mutex::scoped_lock lock( mutex_ );
 
-      while ( queue_.empty() )
+      if ( !waitOnEmptyQueue_ && eventQueue_.empty() )
+      {
+        return queue_element( processor_handle(), 0 );
+      }
+
+      while ( eventQueue_.empty() )
       {
         queueNotEmpty_.wait( lock );
       }
@@ -185,40 +403,41 @@ class worker : noncopyable
       // waiting for new events (which means to loop indefinitely!) is
       // pointless as there is no way that new events could find their way
       // into the queue. The only sensible thing is to exit the loop and
-      // return to the caller in this case, although the state machines
-      // might not yet have terminated.
+      // return to the caller in this case.
       // Users can then queue new events before calling operator() again.
-      if ( queue_.empty() )
+      if ( eventQueue_.empty() )
       {
-        return queue_element( 0, 0 );
+        return queue_element( processor_handle(), 0 );
       }
       #endif
 
-      queue_element result = queue_.front();
-      queue_.pop_front();
+      queue_element result = eventQueue_.front();
+      eventQueue_.pop_front();
       return result;
     }
 
-
-    void terminate()
+    static event_ptr_type make_event( const event_base * pEvent )
     {
-      for ( typename processor_list_type::iterator pProcessor = processorList_.begin();
-            pProcessor != processorList_.end(); ++pProcessor )
-      {
-        ( *pProcessor )->terminate();
-      }
-
-      noOfTerminatedProcessors_ = processorList_.size();
+      return event_ptr_type( pEvent );
     }
 
-    size_t noOfTerminatedProcessors_;
-    processor_list_type processorList_;
-    event_queue_type queue_;
+    const processor_holder_ptr_type pProcessorContainer_;
+    const processor_handle processorHolderHandle_;
+
+    typedef std::list< queue_element, Allocator > event_queue_type;
+    event_queue_type eventQueue_;
 
     #ifdef BOOST_HAS_THREADS
-    mutex mutex_;
+    // We need a recursive_mutex because we must call external code while
+    // mutex_ is in locked state. The external code might in turn call
+    // queue_event, which also needs to lock (see create_processor for
+    // details).
+    recursive_mutex mutex_;
     condition queueNotEmpty_;
+    const bool waitOnEmptyQueue_;
     #endif
+
+    bool terminated_;
 };
 
 

@@ -8,7 +8,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-const bool useTwoWorkerThreads = true; // ignored for single-threaded builds
+// #define USE_TWO_WORKER_THREADS // ignored for single-threaded builds
 //////////////////////////////////////////////////////////////////////////////
 // The following example program demonstrates the use of asynchronous state
 // machines. First, it creates two objects of the same simple state machine
@@ -19,12 +19,12 @@ const bool useTwoWorkerThreads = true; // ignored for single-threaded builds
 // until one machine "has enough" and aborts the game. The two players don't
 // "know" each other, they can only pass the ball back and forth because the
 // event representing the ball also carries two boost::function objects.
-// Both reference the asynchronous_state_machine<>::queue_event() function of
-// the opponent. One can be used to return the ball to the opponent and the
-// other can be used to abort the game.
+// Both reference the worker<>::queue_event() function, binding the worker and
+// the handle of the opponent. One can be used to return the ball to the
+// opponent and the other can be used to abort the game.
 // Depending on whether the program is compiled single-threaded or
-// multi-threaded and the useTwoWorkerThreads constant above, the two machines
-// either run in the same thread without/with mutex locking or in two
+// multi-threaded and the USE_TWO_WORKER_THREADS define above, the two
+// machines either run in the same thread without/with mutex locking or in two
 // different threads with mutex locking.
 //////////////////////////////////////////////////////////////////////////////
 
@@ -34,7 +34,7 @@ const bool useTwoWorkerThreads = true; // ignored for single-threaded builds
 #include <boost/fsm/asynchronous_state_machine.hpp>
 #include <boost/fsm/simple_state.hpp>
 #include <boost/fsm/transition.hpp>
-#include <boost/fsm/termination.hpp>
+#include <boost/fsm/custom_reaction.hpp>
 #include <boost/fsm/worker.hpp>
 
 #include <boost/mpl/list.hpp>
@@ -53,7 +53,6 @@ const bool useTwoWorkerThreads = true; // ignored for single-threaded builds
 
 namespace fsm = boost::fsm;
 namespace mpl = boost::mpl;
-
 
 
 const unsigned int noOfEvents = 1000000;
@@ -80,18 +79,24 @@ struct Player : fsm::asynchronous_state_machine< Player, Waiting >
 {
   typedef fsm::asynchronous_state_machine< Player, Waiting > BaseType;
   public:
-    Player( fsm::worker<> & myWorker, unsigned int maxNoOfReturns ) :
-      BaseType( myWorker ),
+    Player( 
+      fsm::worker<> & myWorker,
+      const processor_handle & myHandle,
+      unsigned int maxNoOfReturns
+    ) :
+      BaseType( myWorker, myHandle ),
       maxNoOfReturns_( maxNoOfReturns ),
       noOfReturns_( 0 ),
       pBallReturned_( new BallReturned() )
     {
       // as we will always return the same event to the opponent, we construct
       // and fill it here so that we can reuse it over and over
-      pBallReturned_->returnToOpponent =
-        boost::bind( &Player::queue_event, &context< Player >(), _1 );
-      pBallReturned_->abortGame = boost::bind( &Player::queue_event, 
-        &context< Player >(), MakeIntrusive( new GameAborted() ) );
+      pBallReturned_->returnToOpponent = boost::bind(
+        &fsm::worker<>::queue_event, &myWorker, myHandle, _1 );
+      pBallReturned_->abortGame = boost::bind(
+        &fsm::worker<>::queue_event,
+        &myWorker, myHandle,  MakeIntrusive( new GameAborted() ) );
+      myWorker.initiate_processor( myHandle );
     }
 
     void ReturnToOpponent( const BallReturned & ballReturned )
@@ -127,8 +132,15 @@ unsigned int Player::totalNoOfProcessedEvents_ = 0;
 
 struct Waiting : fsm::simple_state< Waiting, Player, mpl::list<
   fsm::transition< BallReturned, Waiting, Player, &Player::ReturnToOpponent >,
-  fsm::termination< GameAborted > > >
+  fsm::custom_reaction< GameAborted > > >
 {
+  fsm::result react( const GameAborted & )
+  {
+    outermost_context_type & machine = outermost_context();
+    machine.my_worker().destroy_processor( machine.my_handle() );
+    machine.my_worker().terminate();
+    return terminate();
+  }
 };
 
 
@@ -145,8 +157,13 @@ int main()
   std::cout << "boost::fsm PingPong example\n\n";
   std::cout << "Threading configuration:\n";
   #ifdef BOOST_HAS_THREADS
-  std::cout << "Multi-threaded build with " <<
-    ( useTwoWorkerThreads ? 2 : 1 ) << " worker thread(s).\n";
+  std::cout << "Multi-threaded build with ";
+  #ifdef USE_TWO_WORKER_THREADS
+  std::cout << 2;
+  #else
+  std::cout << 1;
+  #endif
+  std::cout << " worker thread(s).\n";
   #else
   std::cout << "Single-threaded build\n";
   #endif
@@ -163,42 +180,31 @@ int main()
       case 'p':
       {
         fsm::worker<> worker1;
-        fsm::worker<> worker2;
+        fsm::worker<> workerObj2;
 
-        Player player1( worker1, noOfEvents / 2 );
-        boost::shared_ptr< Player > pPlayer2;
-
-        #ifdef BOOST_MSVC
-        #pragma warning( push )
-        #pragma warning( disable: 4127 )
+        #ifdef USE_TWO_WORKER_THREADS
+        #ifdef BOOST_HAS_THREADS
+        fsm::worker<> & worker2 = workerObj2;
+        #else
+        fsm::worker<> & worker2 = worker1;
+        #endif
+        #else
+        fsm::worker<> & worker2 = worker1;
         #endif
 
-        if ( useTwoWorkerThreads )
-        {
-          #ifdef BOOST_HAS_THREADS
-          pPlayer2 = boost::shared_ptr< Player >(
-            new Player( worker2, noOfEvents / 2 ) );
-          #else
-          pPlayer2 = boost::shared_ptr< Player >(
-            new Player( worker1, noOfEvents / 2 ) );
-          #endif
-        }
-        else
-        {
-          pPlayer2 = boost::shared_ptr< Player >(
-            new Player( worker1, noOfEvents / 2 ) );
-        }
-
-        #ifdef BOOST_MSVC
-        #pragma warning( pop )
-        #endif
+        fsm::worker<>::processor_handle player1 = 
+          worker1.create_processor< Player >( noOfEvents / 2 );
+        fsm::worker<>::processor_handle player2 = 
+          worker2.create_processor< Player >( noOfEvents / 2 );
 
         boost::intrusive_ptr< BallReturned > pInitialBall = new BallReturned();
-        pInitialBall->returnToOpponent =
-          boost::bind( &Player::queue_event, &player1, _1 );
-        pInitialBall->abortGame = boost::bind( &Player::queue_event, 
-          &player1, MakeIntrusive( new GameAborted() ) );
-        pPlayer2->queue_event( pInitialBall );
+        pInitialBall->returnToOpponent = boost::bind( 
+          &fsm::worker<>::queue_event, &worker1, player1, _1 );
+        pInitialBall->abortGame = boost::bind(
+          &fsm::worker<>::queue_event, 
+          &worker1, player1, MakeIntrusive( new GameAborted() ) );
+
+        worker2.queue_event( player2, pInitialBall );
 
         std::cout << "\nHaving players return the ball " <<
           noOfEvents << " times. Please wait...\n";
@@ -206,36 +212,25 @@ int main()
         const unsigned int prevCount = Player::GetTotalNoOfProcessedEvents();
         const std::clock_t startTime = std::clock();
 
-        #ifdef BOOST_MSVC
-        #pragma warning( push )
-        #pragma warning( disable: 4127 )
+        #ifdef USE_TWO_WORKER_THREADS
+        #ifdef BOOST_HAS_THREADS
+        boost::thread otherThread(
+          boost::bind( &fsm::worker<>::operator(), &worker2, 0 ) );
+        worker1();
+        otherThread.join();
+        #else
+        worker1();
         #endif
-
-        if ( useTwoWorkerThreads )
-        {
-          #ifdef BOOST_HAS_THREADS
-          boost::thread otherThread(
-            boost::bind( &fsm::worker<>::operator(), &worker2 ) );
-          worker1();
-          otherThread.join();
-          #else
-          worker1();
-          #endif
-        }
-        else
-        {
-          worker1();
-        }
-
-        #ifdef BOOST_MSVC
-        #pragma warning( pop )
+        #else
+        worker1();
         #endif
 
         const std::clock_t elapsedTime = std::clock() - startTime;
         std::cout << "Time to send and dispatch one event and\n" <<
                      "perform the resulting transition: ";
-        std::cout << elapsedTime * 1000.0 /
-          ( Player::GetTotalNoOfProcessedEvents() - prevCount ) << " microseconds\n\n";
+        std::cout << elapsedTime / static_cast< double >( CLOCKS_PER_SEC ) *
+          1000000.0 / ( Player::GetTotalNoOfProcessedEvents() - prevCount )
+          << " microseconds\n\n";
       }
       break;
 

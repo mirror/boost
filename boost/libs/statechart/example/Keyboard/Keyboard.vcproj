@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost-1.30.2&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost_1_31_0&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="TRUE"
@@ -77,7 +77,7 @@
 				Optimization="3"
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost-1.30.2&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost_1_31_0&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				ExceptionHandling="TRUE"
@@ -157,6 +157,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\event_base.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\event_processor.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">

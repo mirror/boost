@@ -29,9 +29,7 @@ class leaf_state : public state_base< Allocator, RttiPolicy >
   typedef state_base< Allocator, RttiPolicy > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    leaf_state(
-      typename RttiPolicy::id_provider_type idProvider
-    ) :
+    leaf_state( typename RttiPolicy::id_provider_type idProvider ) :
       base_type( idProvider )
     {
     }
@@ -43,12 +41,12 @@ class leaf_state : public state_base< Allocator, RttiPolicy >
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
+    typedef typename base_type::state_list_type state_list_type;
+
     void set_list_position( typename state_list_type::iterator listPosition )
     {
       listPosition_ = listPosition;
     }
-
-    typedef typename base_type::state_list_type state_list_type;
 
     virtual void remove_from_state_list(
       state_list_type & states, typename state_list_type::iterator & )

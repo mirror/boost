@@ -331,7 +331,8 @@ int main( int argc, char * argv[] )
           const unsigned int eventsSent2 = eventsSentTotal - startEvents2;
           std::cout << "Time to dispatch one event and\n" <<
                        "perform the resulting transition: ";
-          std::cout << elapsedTime2 * 1000.0 / eventsSent2 << " microseconds\n\n";
+          std::cout << elapsedTime2 / static_cast< double >( CLOCKS_PER_SEC ) *
+            1000000.0 / eventsSent2 << " microseconds\n\n";
         }
         break;
 

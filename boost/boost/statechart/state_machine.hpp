@@ -240,7 +240,7 @@ class state_machine : noncopyable
     typedef event_base event_base_type;
     typedef intrusive_ptr< const event_base_type > event_base_ptr_type;
 
-    bool initiate()
+    void initiate()
     {
       terminate();
       translator_(
@@ -248,8 +248,6 @@ class state_machine : noncopyable
         exception_event_handler( *this ),
         do_discard_event );
       process_queued_events();
-
-      return terminated();
     }
 
     void terminate()
@@ -262,12 +260,10 @@ class state_machine : noncopyable
       return currentStates_.size() == 0;
     }
 
-    bool process_event( const event_base_type & evt )
+    void process_event( const event_base_type & evt )
     {
-      const bool running = !terminated();
       send_event( evt );
       process_queued_events();
-      return terminated() && running;
     }
 
     template< class Target >
@@ -717,11 +713,11 @@ class state_machine : noncopyable
 
       if ( reactionResult == do_defer_event )
       {
-        // For clone() to work, the exception event must have been allocated
-        // with new. Out of the box this is not the case, so users will have
-        // to replace the exception_translator should they ever need to do so.
-        // Deferring exception events makes sense only in very rare cases and
-        // is dangerous unless operator new never throws.
+        // For intrusive_from_this() to work, the exception event must have
+        // been allocated with new. Out of the box this is not the case, so
+        // users will have to replace the exception_translator should they
+        // ever need to do so. Deferring exception events makes sense only in
+        // very rare cases and is dangerous unless operator new never throws.
         defer_event( exceptionEvent, pHandlingState );
       }
 
@@ -810,7 +806,7 @@ class state_machine : noncopyable
       const event_base_type & evt,
       const state_base_type * pForState )
     {
-      deferredMap_[ pForState ].push_back( evt.clone() );
+      deferredMap_[ pForState ].push_back( evt.intrusive_from_this() );
     }
 
 

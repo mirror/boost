@@ -11,9 +11,7 @@
 
 #include <boost/fsm/state_machine.hpp>
 #include <boost/fsm/worker.hpp>
-
-#include <boost/fsm/detail/event_processor.hpp>
-#include <boost/fsm/detail/state_base.hpp>
+#include <boost/fsm/event_processor.hpp>
 
 
 
@@ -21,6 +19,10 @@ namespace boost
 {
 namespace fsm
 {
+
+
+
+class event_base;
 
 
 
@@ -32,15 +34,17 @@ template< class MostDerived,
           class ExceptionTranslator = exception_translator<> >
 class asynchronous_state_machine : public state_machine<
   MostDerived, InitialState, Allocator, ExceptionTranslator >,
-  public detail::event_processor< Worker >
+  public event_processor< Worker >
 {
   typedef state_machine< MostDerived,
     InitialState, Allocator, ExceptionTranslator > machine_base;
-  typedef detail::event_processor< Worker > processor_base;
+  typedef event_processor< Worker > processor_base;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    asynchronous_state_machine( Worker & myWorker ) :
-      processor_base( myWorker )
+    asynchronous_state_machine(
+      Worker & myWorker, const processor_handle & myHandle
+    ) :
+      processor_base( myWorker, myHandle )
     {
     }
 
@@ -68,21 +72,19 @@ class asynchronous_state_machine : public state_machine<
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    typedef typename processor_base::event_ptr_type event_ptr_type;
-
-    virtual bool initiate_impl()
+    virtual void initiate_impl()
     {
-      return machine_base::initiate();
+      machine_base::initiate();
     }
 
-    virtual bool process_event_impl( const event_ptr_type & pEvent )
+    virtual void process_event_impl( const event_base & evt )
     {
-      return machine_base::process_event( *pEvent );
+      machine_base::process_event( evt );
     }
 
     virtual void terminate_impl()
     {
-      return machine_base::terminate();
+      machine_base::terminate();
     }
 };
 

@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_DETAIL_EVENT_PROCESSOR_INCLUDED
-#define BOOST_FSM_DETAIL_EVENT_PROCESSOR_INCLUDED
+#ifndef BOOST_FSM_EVENT_PROCESSOR_INCLUDED
+#define BOOST_FSM_EVENT_PROCESSOR_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) Andreas Huber Doenni 2002-2004.
 // Use, modification and distribution are subject to the Boost Software
@@ -13,8 +13,10 @@ namespace boost
 {
 namespace fsm
 {
-namespace detail
-{
+
+
+  
+class event_base;
 
 
 
@@ -24,23 +26,26 @@ class event_processor
 {
   public:
     //////////////////////////////////////////////////////////////////////////
-    typedef typename Worker::event_ptr_type event_ptr_type;
+    virtual ~event_processor() {}
 
-    void queue_event( const event_ptr_type & pEvent )
+    Worker & my_worker() const
     {
-      myWorker_.queue_event( *this, pEvent );
+      return myWorker_;
+    }
+
+    typedef typename Worker::processor_handle processor_handle;
+
+    processor_handle my_handle() const
+    {
+      return myHandle_;
     }
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    event_processor( Worker & myWorker ) : myWorker_( myWorker )
+    event_processor( Worker & myWorker, const processor_handle & myHandle ) :
+      myWorker_( myWorker ),
+      myHandle_( myHandle )
     {
-      myWorker_.add_processor( *this );
-    }
-
-    ~event_processor()
-    {
-      myWorker_.remove_processor( *this );
     }
 
   public:
@@ -48,14 +53,14 @@ class event_processor
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    bool initiate()
+    void initiate()
     {
-      return initiate_impl();
+      initiate_impl();
     }
 
-    bool process_event( const event_ptr_type & pEvent )
+    void process_event( const event_base & evt )
     {
-      return process_event_impl( pEvent );
+      process_event_impl( evt );
     }
 
     void terminate()
@@ -64,17 +69,16 @@ class event_processor
     }
 
   private:
-    //////////////////////////////////////////////////////////////////////////
-    virtual bool initiate_impl() = 0;
-    virtual bool process_event_impl( const event_ptr_type & pEvent ) = 0;
+    virtual void initiate_impl() = 0;
+    virtual void process_event_impl( const event_base & evt ) = 0;
     virtual void terminate_impl() = 0;
 
     Worker & myWorker_;
+    const processor_handle myHandle_;
 };
 
 
 
-} // namespace detail
 } // namespace fsm
 } // namespace boost
 
