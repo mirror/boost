@@ -24,6 +24,8 @@
 #pragma hdrstop
 #endif
 
+#include "boost/utility/none.hpp"
+
 #include "boost/test/minimal.hpp"
 
 #include "optional_test_common.cpp"
@@ -106,7 +108,7 @@ void test_basics( T const* )
   T z(0);
 
   T a(1);
-  
+
   T& aref = a ;
 
   // Default construction.
@@ -133,13 +135,63 @@ void test_basics( T const* )
   check_ref_value_const(oa2,a,z);
 
   T b(2);
+  optional<T&> ob ;
+
+  // Value-Assignment upon Uninitialized optional.
+  // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
+  set_pending_copy( ARG(T) ) ;
+  ob = a ;
+  check_is_pending_copy( ARG(T) ) ;
+  check_ref_initialized(ob);
+  check_ref_value(ob,a,z);
+
+  // Value-Assignment upon Initialized optional.
+  // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
+  set_pending_dtor( ARG(T) ) ;
+  set_pending_copy( ARG(T) ) ;
+  ob = b ;
+  check_is_pending_dtor( ARG(T) ) ;
+  check_is_pending_copy( ARG(T) ) ;
+  check_ref_initialized(ob);
+  check_ref_value(ob,b,z);
+
   // Assignment initialization.
   // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
   set_pending_copy( ARG(T) ) ;
-  optional<T&> ob = b ;
+  optional<T&> const oa3 = b ;
   check_is_pending_copy( ARG(T) ) ;
-  check_ref_initialized_const(ob);
-  check_ref_value_const(ob,b,z);
+  check_ref_initialized_const(oa3);
+  check_ref_value_const(oa3,b,z);
+
+
+  // Assignment
+  // T::~T() is used to destroy previous value in ob.
+  // T::T ( T const& x ) is NOT used becasue the optional holds a reference.
+  set_pending_dtor( ARG(T) ) ;
+  set_pending_copy( ARG(T) ) ;
+  oa = ob ;
+  check_is_pending_dtor( ARG(T) ) ;
+  check_is_pending_copy( ARG(T) ) ;
+  check_ref_initialized(oa);
+  check_ref_value(oa,b,z);
+
+  // Uninitializing Assignment upon Initialized Optional
+  // T::~T() is NOT used becasue the optional holds a reference.
+  set_pending_dtor( ARG(T) ) ;
+  set_pending_copy( ARG(T) ) ;
+  oa = def ;
+  check_is_pending_dtor( ARG(T) ) ;
+  check_is_pending_copy( ARG(T) ) ;
+  check_ref_uninitialized(oa);
+
+  // Uninitializing Assignment upon Uninitialized Optional
+  // (Dtor is not called this time)
+  set_pending_dtor( ARG(T) ) ;
+  set_pending_copy( ARG(T) ) ;
+  oa = def ;
+  check_is_pending_dtor( ARG(T) ) ;
+  check_is_pending_copy( ARG(T) ) ;
+  check_ref_uninitialized(oa);
 
   // Deinitialization of Initialized Optional
   // T::~T() is NOT used becasue the optional holds a reference.
@@ -215,12 +267,34 @@ void test_relops( T const* )
   BOOST_CHECK ( opt1 >= opt0 ) ;
 }
 
+template<class T>
+void test_none( T const* )
+{
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
+  using boost::none ;
+  
+  T a(1234);
+
+  optional<T&> def0 ;
+  optional<T&> def1(none) ;
+  optional<T&> non_def(a) ;
+
+  BOOST_CHECK ( def0    == none ) ;
+  BOOST_CHECK ( non_def != none ) ;
+  BOOST_CHECK ( !def1           ) ;
+
+  non_def = none ;
+  BOOST_CHECK ( !non_def ) ;
+}
+
 void test_with_builtin_types()
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
   test_basics( ARG(double) );
   test_relops( ARG(double) ) ;
+  test_none  ( ARG(double) ) ;
 }
 
 void test_with_class_type()
@@ -229,6 +303,7 @@ void test_with_class_type()
 
   test_basics( ARG(X) );
   test_relops( ARG(X) ) ;
+  test_none  ( ARG(X) ) ;
 
   BOOST_CHECK ( X::count == 0 ) ;
 }

@@ -24,9 +24,11 @@
 #pragma hdrstop
 #endif
 
+#include "boost/utility/none.hpp"
+
 #include "boost/test/minimal.hpp"
 
-#include "optional_test_common.cpp"
+#include "optional_test_common.cpp"       
 
 void test_implicit_construction ( optional<double> opt, double v, double z )
 {
@@ -35,7 +37,17 @@ void test_implicit_construction ( optional<double> opt, double v, double z )
 
 void test_implicit_construction ( optional<X> opt, X const& v, X const& z )
 {
-  check_value(opt,v,z);        
+  check_value(opt,v,z);
+}
+
+void test_default_implicit_construction ( double, optional<double> opt )
+{
+  BOOST_CHECK(!opt);
+}
+
+void test_default_implicit_construction ( X const&, optional<X> opt )
+{
+  BOOST_CHECK(!opt);
 }
 
 //
@@ -619,7 +631,7 @@ void test_relops( T const* )
   // Check when both are uininitalized.
   BOOST_CHECK (   def0 == def1  ) ; // both uninitialized compare equal
   BOOST_CHECK ( !(def0 <  def1) ) ; // uninitialized is never less    than uninitialized 
-  BOOST_CHECK ( !(def0 >  def1) ) ; // uninitialized is never greater than uninitialized  
+  BOOST_CHECK ( !(def0 >  def1) ) ; // uninitialized is never greater than uninitialized
   BOOST_CHECK ( !(def0 != def1) ) ;
   BOOST_CHECK (   def0 <= def1  ) ; 
   BOOST_CHECK (   def0 >= def1  ) ; 
@@ -639,7 +651,7 @@ void test_relops( T const* )
   BOOST_CHECK (   opt0 >  def0  ) ;
   BOOST_CHECK ( !(opt0 <= def0) ) ;
   BOOST_CHECK (   opt0 >= opt0  ) ;
-  
+
   // If both are initialized, values are compared
   BOOST_CHECK ( opt0 != opt1 ) ;
   BOOST_CHECK ( opt1 == opt2 ) ;
@@ -647,6 +659,27 @@ void test_relops( T const* )
   BOOST_CHECK ( opt1 >  opt0 ) ;
   BOOST_CHECK ( opt1 <= opt2 ) ;
   BOOST_CHECK ( opt1 >= opt0 ) ;
+}
+
+template<class T>
+void test_none( T const* )
+{
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
+
+  using boost::none ;
+  
+  optional<T> def0 ;
+  optional<T> def1(none) ;
+  optional<T> non_def( T(1234) ) ;
+
+  BOOST_CHECK ( def0    == none ) ;
+  BOOST_CHECK ( non_def != none ) ;
+  BOOST_CHECK ( !def1           ) ;
+
+  non_def = none ;
+  BOOST_CHECK ( !non_def ) ;
+
+  test_default_implicit_construction(T(1),none);
 }
 
 void test_with_builtin_types()
@@ -657,6 +690,7 @@ void test_with_builtin_types()
   test_uninitialized_access( ARG(double) );
   test_no_throwing_swap( ARG(double) );
   test_relops( ARG(double) ) ;
+  test_none( ARG(double) ) ;
 }
 
 void test_with_class_type()
@@ -675,9 +709,11 @@ void test_with_class_type()
   test_no_throwing_swap( ARG(X) );
   test_throwing_swap( ARG(X) );
   test_relops( ARG(X) ) ;
+  test_none( ARG(X) ) ;
   BOOST_CHECK ( X::count == 0 ) ;
 }
 
+int eat ( bool ) { return 1 ; }
 int eat ( char ) { return 1 ; }
 int eat ( int  ) { return 1 ; }
 int eat ( void const* ) { return 1 ; }
@@ -700,10 +736,12 @@ void test_no_implicit_conversions()
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
+  bool b = false ;
   char c = 0 ;
   int i = 0 ;
   void const* p = 0 ;
 
+  test_no_implicit_conversions_impl(b);
   test_no_implicit_conversions_impl(c);
   test_no_implicit_conversions_impl(i);
   test_no_implicit_conversions_impl(p);

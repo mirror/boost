@@ -43,21 +43,28 @@ struct A
 
 int test_main( int, char* [] )
 {
-  double a0 = 3.14 ;
-  std::string a1("pi");
+  double a00 = 3.14, a10 = 6.02e-23;
+  std::string a01("pi"), a11("mol");
 
-  A a(a0,a1);
+  A a0(a00,a01);
+  A a1(a10,a11);
+  
+  boost::optional<A> opt1(a0);
 
-  boost::optional<A> opt1(a);
+  boost::optional<A> opt2 ( boost::in_place(a00,a01) ) ;
 
-  boost::optional<A> opt2 ( boost::in_place(a0,a1) ) ;
-
-  boost::optional<A> opt3 ( boost::in_place<A>(a0,a1) ) ;
+  boost::optional<A> opt3 ( boost::in_place<A>(a00,a01) ) ;
 
   BOOST_CHECK( opt1 == opt2 ) ;
   BOOST_CHECK( opt2 == opt2 ) ;
-  BOOST_CHECK( *opt2 == a ) ;
+  BOOST_CHECK( *opt2 == a0 ) ;
 
+  opt2 = boost::in_place(a10,a11);
+  BOOST_CHECK( *opt2 == a1 ) ;
+  
+  opt3 = boost::in_place<A>(a10,a11);
+  BOOST_CHECK( *opt3 == a1 ) ;
+  
   return 0;
 }
 
