@@ -391,6 +391,28 @@ namespace boost {
       }
     }
     
+    template<typename FunctionObj>
+    void assign_to(const reference_wrapper<FunctionObj>& f, 
+		   detail::function::function_obj_ref_tag)
+    {
+      if (!detail::function::has_empty_target(&f.get())) {
+        typedef 
+          typename detail::function::BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
+                                       FunctionObj,
+                                       R BOOST_FUNCTION_COMMA
+                                       BOOST_FUNCTION_TEMPLATE_ARGS
+                                     >::type
+          invoker_type;
+    
+        invoker = &invoker_type::invoke;
+        manager = &detail::function::trivial_manager;
+        functor = 
+          manager(detail::function::any_pointer(
+		    const_cast<FunctionObj*>(&f.get())),
+                  detail::function::clone_functor_tag);
+      }
+    }
+    
     typedef result_type (*invoker_type)(detail::function::any_pointer
                                         BOOST_FUNCTION_COMMA
                                         BOOST_FUNCTION_TEMPLATE_ARGS);

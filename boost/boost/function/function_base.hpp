@@ -23,6 +23,7 @@
 #include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/ref.hpp>
 
 namespace boost {
   namespace detail {
@@ -69,6 +70,37 @@ namespace boost {
         typedef typename intimate::Selector<Condition>::type select;
         typedef typename select::template Result<Then,Else>::type type;
       };
+
+      // Determine if the incoming argument is a reference_wrapper
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+      template<typename T>
+      struct is_ref
+      {
+	BOOST_STATIC_CONSTANT(bool, value = false); 
+      };
+
+      template<typename T>
+      struct is_ref<reference_wrapper<T> >
+      {
+	BOOST_STATIC_CONSTANT(bool, value = true);
+      };
+#else // no partial specialization
+      typedef char yes_type;
+      typedef double no_type;
+      
+      no_type is_ref_tester(...);
+
+      template<typename T>
+      yes_type is_ref_tester(reference_wrapper<T>*);
+
+      template<typename T>
+      struct is_ref
+      {
+	static T* t;
+	BOOST_STATIC_CONSTANT(bool, 
+	  value = (sizeof(is_ref_tester(t)) == sizeof(yes_type)));
+      };
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
       /**
        * A union of a function pointer and a void pointer. This is necessary
@@ -122,6 +154,7 @@ namespace boost {
       struct function_ptr_tag {};
       struct function_obj_tag {};
       struct member_ptr_tag {};
+      struct function_obj_ref_tag {};
 
       template<typename F>
       class get_function_tag
@@ -130,11 +163,25 @@ namespace boost {
                             function_ptr_tag,
                             function_obj_tag>::type ptr_or_obj_tag;
 
-      public:
 	typedef typename IF<(is_member_pointer<F>::value),
 			    member_ptr_tag,
-			    ptr_or_obj_tag>::type type;
+			    ptr_or_obj_tag>::type ptr_or_obj_or_mem_tag;
+      public:
+	typedef typename IF<(is_ref<F>::value),
+			     function_obj_ref_tag,
+			     ptr_or_obj_or_mem_tag>::type type;
       };
+
+      // The trivial manager does nothing but return the same pointer (if we
+      // are cloning) or return the null pointer (if we are deleting).
+      any_pointer trivial_manager(any_pointer f, 
+				  functor_manager_operation_type op)
+      {
+	if (op == clone_functor_tag)
+	  return f;
+	else
+	  return any_pointer(reinterpret_cast<void*>(0));
+      }
 
       /**
        * The functor_manager class contains a static function "manage" which
