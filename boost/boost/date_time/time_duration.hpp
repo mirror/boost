@@ -12,6 +12,7 @@
 #include "boost/operators.hpp"
 #include "boost/date_time/time_defs.hpp"
 #include "boost/date_time/special_defs.hpp"
+#include "boost/date_time/compiler_config.hpp"
 
 namespace boost {
 namespace date_time {
@@ -259,12 +260,12 @@ namespace date_time {
   /* These templates are designed to work with multiples of
    * 10 for frac_of_second and resoultion adjustment 
    */
-  template<class base_duration, long frac_of_second>
+   template<class base_duration, boost::int64_t frac_of_second>
   class subsecond_duration : public base_duration
   {
   public:
     typedef typename base_duration::traits_type traits_type;
-    explicit subsecond_duration(long ss) :
+    explicit subsecond_duration(boost::int64_t ss) :
       base_duration(0,0,0,ss*traits_type::res_adjust()/frac_of_second)
     {}
   };
