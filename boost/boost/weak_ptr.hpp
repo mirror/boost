@@ -92,7 +92,13 @@ public:
         pn.swap(other.pn);
     }
 
-    bool less(this_type const & rhs) const // implementation detail, never throws
+    void _internal_assign(T * px2, detail::shared_count const & pn2) // implementation detail
+    {
+        px = px2;
+        pn = pn2;
+    }
+
+    bool _internal_less(this_type const & rhs) const // implementation detail, never throws
     {
         return pn < rhs.pn;
     }
@@ -116,7 +122,7 @@ private:
 
 template<class T> inline bool operator<(weak_ptr<T> const & a, weak_ptr<T> const & b)
 {
-    return a.less(b);
+    return a._internal_less(b);
 }
 
 template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)

@@ -39,6 +39,9 @@
 namespace boost
 {
 
+template<class T> class weak_ptr;
+template<class T> class enable_shared_from_this;
+
 namespace detail
 {
 
@@ -65,6 +68,17 @@ template<> struct shared_ptr_traits<void const>
 
 #endif
 
+// enable_shared_from_this support
+
+template<class T, class Y> void sp_enable_shared_from_this(boost::enable_shared_from_this<T> * pe, Y * px, shared_count const & pn)
+{
+    pe->_internal_weak_this._internal_assign(px, pn);
+}
+
+void sp_enable_shared_from_this(void const *, void const *, shared_count const &)
+{
+}
+
 } // namespace detail
 
 
@@ -76,26 +90,12 @@ template<> struct shared_ptr_traits<void const>
 //  is destroyed or reset.
 //
 
-template<class T> class weak_ptr;
-template<class T> class enable_shared_from_this;
-
 template<class T> class shared_ptr
 {
 private:
 
     // Borland 5.5.1 specific workaround
     typedef shared_ptr<T> this_type;
-
-    // enable_shared_from_this support
-
-    template<class Y> void sp_enable_shared_from_this(boost::enable_shared_from_this<Y> * q)
-    {
-        q->weak_this = *this;
-    }
-
-    void sp_enable_shared_from_this(void *)
-    {
-    }
 
 public:
 
@@ -111,7 +111,7 @@ public:
     template<class Y>
     explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>()) // Y must be complete
     {
-        sp_enable_shared_from_this(p);
+        detail::sp_enable_shared_from_this(p, p, pn);
     }
 
     //
@@ -122,7 +122,7 @@ public:
 
     template<class Y, class D> shared_ptr(Y * p, D d): px(p), pn(p, d)
     {
-        sp_enable_shared_from_this(p);
+        detail::sp_enable_shared_from_this(p, p, pn);
     }
 
 //  generated copy constructor, assignment, destructor are fine...
@@ -179,7 +179,7 @@ public:
     {
         Y * tmp = r.get();
         pn = detail::shared_count(r);
-        sp_enable_shared_from_this(tmp);
+        detail::sp_enable_shared_from_this(tmp, tmp, pn);
     }
 
 #endif
@@ -270,7 +270,7 @@ public:
         pn.swap(other.pn);
     }
 
-    bool less(this_type const & rhs) const // implementation detail, never throws
+    bool _internal_less(this_type const & rhs) const // implementation detail, never throws
     {
         return pn < rhs.pn;
     }
@@ -316,7 +316,7 @@ template<class T> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<T> 
 
 template<class T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T> const & b)
 {
-    return a.less(b);
+    return a._internal_less(b);
 }
 
 template<class T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b)

@@ -28,28 +28,20 @@ public:
 
     shared_ptr<T> shared_from_this()
     {
-        shared_ptr<T> p(weak_this);
+        shared_ptr<T> p(_internal_weak_this);
         BOOST_ASSERT(p.get() == this);
         return p;
     }
 
     shared_ptr<T const> shared_from_this() const
     {
-        shared_ptr<T const> p(weak_this);
+        shared_ptr<T const> p(_internal_weak_this);
         BOOST_ASSERT(p.get() == this);
         return p;
     }
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-
-private:
-
-    template<class Y> friend class shared_ptr;
-
-#endif
-
-    typedef T element_type; // for bcc 5.5.1
-    weak_ptr<element_type> weak_this;
+    typedef T _internal_element_type; // for bcc 5.5.1
+    weak_ptr<_internal_element_type> _internal_weak_this;
 };
 
 } // namespace boost

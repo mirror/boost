@@ -72,7 +72,10 @@ int main()
     return boost::report_errors();
 }
 
-class impl: public X, public Y, public boost::enable_shared_from_this<impl>
+// virtual inheritance from Y to stress the implementation
+// (prevents Y* -> impl* casts)
+
+class impl: public X, public virtual Y, public boost::enable_shared_from_this<impl>
 {
 public:
 
@@ -88,8 +91,14 @@ public:
     }
 };
 
+// intermediate impl2 to stress the implementation
+
+class impl2: public impl
+{
+};
+
 boost::shared_ptr<Y> createY()
 {
-    boost::shared_ptr<impl> pi(new impl);
+    boost::shared_ptr<Y> pi(new impl2);
     return pi;
 }
