@@ -267,7 +267,7 @@ namespace boost{ typedef wchar_t regex_wchar_type; }
  *
  ****************************************************************************/
 
-// backwards compatibility:
+/* backwards compatibility: */
 #ifdef BOOST_RE_LOCALE_C
 #  define BOOST_REGEX_USE_C_LOCALE
 #endif
@@ -276,11 +276,11 @@ namespace boost{ typedef wchar_t regex_wchar_type; }
 #  define BOOST_REGEX_USE_CPP_LOCALE
 #endif
 
-// Win32 defaults to native Win32 locale:
+/* Win32 defaults to native Win32 locale: */
 #if defined(_WIN32) && !defined(BOOST_REGEX_USE_WIN32_LOCALE) && !defined(BOOST_REGEX_USE_C_LOCALE) && !defined(BOOST_REGEX_USE_CPP_LOCALE) && !defined(BOOST_REGEX_NO_W32)
 #  define BOOST_REGEX_USE_WIN32_LOCALE
 #endif
-// otherwise use C locale:
+/* otherwise use C locale: */
 #if !defined(BOOST_REGEX_USE_WIN32_LOCALE) && !defined(BOOST_REGEX_USE_C_LOCALE) && !defined(BOOST_REGEX_USE_CPP_LOCALE)
 #  define BOOST_REGEX_USE_C_LOCALE
 #endif
@@ -311,10 +311,10 @@ namespace boost{ typedef wchar_t regex_wchar_type; }
  ****************************************************************************/
 
 #ifdef BOOST_NO_EXCEPTIONS
-//
-// If there are no exceptions then we must report critical-errors
-// the only way we know how; by terminating.
-//
+/*
+*  If there are no exceptions then we must report critical-errors
+*  the only way we know how; by terminating.
+*/
 #  define BOOST_REGEX_NOEH_ASSERT(x)\
 if(0 == (x))\
 {\
@@ -324,10 +324,10 @@ if(0 == (x))\
    boost::throw_exception(e);\
 }
 #else
-//
-// With exceptions then error handling is taken care of and
-// there is no need for these checks:
-//
+/*
+*  With exceptions then error handling is taken care of and
+*  there is no need for these checks:
+*/
 #  define BOOST_REGEX_NOEH_ASSERT(x)
 #endif
 
