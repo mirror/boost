@@ -404,81 +404,80 @@ struct indirect_iterator_policies : public default_iterator_policies
         { return **x; }
 };
 
-template <class IndirectIterator,
+template <class OuterIterator, class InnerIterator,
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class IndirectTraits,
-          class Traits
+          class OuterTraits,
+          class InnerTraits
 #else
-          class IndirectTraits = std::iterator_traits<IndirectIterator>,
-          class Traits = 
-            std::iterator_traits<typename IndirectTraits::value_type>
+          class OuterTraits = std::iterator_traits<OuterIterator>,
+          class InnerTraits = std::iterator_traits<InnerIterator>
 #endif
        >
 struct indirect_traits
 {
-    typedef typename IndirectTraits::difference_type difference_type;
-    typedef typename Traits::value_type value_type;
-    typedef typename Traits::pointer pointer;
-    typedef typename Traits::reference reference;
-    typedef typename IndirectTraits::iterator_category iterator_category;
+    typedef typename OuterTraits::difference_type difference_type;
+    typedef typename InnerTraits::value_type value_type;
+    typedef typename InnerTraits::pointer pointer;
+    typedef typename InnerTraits::reference reference;
+    typedef typename OuterTraits::iterator_category iterator_category;
 };
 
-template <class IndirectIterator, class Iterator,
+template <class OuterIterator, class InnerIterator,
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class IndirectTraits,
-          class Traits
+          class OuterTraits,
+          class InnerTraits
 #else
-          class IndirectTraits = 
-              std::iterator_traits<IndirectIterator>,
-          class Traits = std::iterator_traits<Iterator>
+          class OuterTraits = std::iterator_traits<OuterIterator>,
+          class InnerTraits = std::iterator_traits<InnerIterator>
 #endif
            >
 struct indirect_iterator
 {
-    typedef typename Traits::value_type ValueType;
-    typedef iterator_adaptor<IndirectIterator,
+    typedef iterator_adaptor<OuterIterator,
         indirect_iterator_policies,
-        indirect_traits<IndirectIterator, IndirectTraits, Traits>
+        indirect_traits<OuterIterator, InnerIterator,
+                        OuterTraits, InnerTraits>
     > type;
 };
 
-template <class IndirectIterator, class ConstIterator,
+template <class OuterIterator, class ConstInnerIterator,
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class IndirectTraits,
-          class ConstTraits
+          class OuterTraits,
+          class ConstInnerTraits
 #else
-          class IndirectTraits = 
-              std::iterator_traits<IndirectIterator>,
-          class ConstTraits = std::iterator_traits<ConstIterator>
+          class OuterTraits = std::iterator_traits<OuterIterator>,
+          class ConstInnerTraits = std::iterator_traits<ConstInnerIterator>
 #endif
            >
 struct const_indirect_iterator
 {
-    typedef iterator_adaptor<IndirectIterator,
+    typedef iterator_adaptor<OuterIterator,
         indirect_iterator_policies,
-        indirect_traits<IndirectIterator, IndirectTraits, ConstTraits>
+        indirect_traits<OuterIterator, ConstInnerIterator,
+                        OuterTraits, ConstInnerTraits>
     > type;
 };
 
-template <class IndirectIterator,
-          class Iterator,      // Mutable
-          class ConstIterator, // Immutable
+template <class OuterIterator,      // Mutable or Immutable, does not matter
+          class InnerIterator,      // Mutable
+          class ConstInnerIterator, // Immutable
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-          class IndirectTraits,
-          class Traits,
-          class ConstTraits
+          class OuterTraits,
+          class InnerTraits,
+          class ConstInnerTraits
 #else
-          class IndirectTraits = std::iterator_traits<IndirectIterator>,
-          class Traits = std::iterator_traits<Iterator>,
-          class ConstTraits = std::iterator_traits<ConstIterator>
+          class OuterTraits = std::iterator_traits<OuterIterator>,
+          class InnerTraits = std::iterator_traits<InnerIterator>,
+          class ConstInnerTraits = std::iterator_traits<ConstInnerIterator>
 #endif
            >
 struct indirect_iterators
 {
-    typedef typename Traits::value_type ValueType;
-    typedef iterator_adaptors<IndirectIterator, IndirectIterator,
-        indirect_traits<IndirectIterator, IndirectTraits, Traits>,
-        indirect_traits<IndirectIterator, IndirectTraits, ConstTraits>,
+    typedef iterator_adaptors<OuterIterator, OuterIterator,
+        indirect_traits<OuterIterator, InnerIterator,
+                        OuterTraits, InnerTraits>,
+        indirect_traits<OuterIterator, ConstInnerIterator,
+                        OuterTraits, ConstInnerTraits>,
         indirect_iterator_policies
         > Adaptors;
     typedef typename Adaptors::iterator iterator;
