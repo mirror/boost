@@ -28,31 +28,33 @@
     a rich subset of Container interface.
 */
 
-namespace boost {
 
-    namespace range_detail
+namespace boost 
+{
+    namespace iterator_range_detail
     {
         template< class Left, class Right >
         inline bool equal( const Left& l, const Right& r )
         {
-            typedef BOOST_DEDUCED_TYPENAME range_size<Left>::type sz_type;
-            sz_type l_size = boost::size( l ),
-                    r_size = boost::size( r );
+            typedef BOOST_DEDUCED_TYPENAME boost::range_size<Left>::type sz_type;
+
+            sz_type l_size = size( l ),
+                    r_size = size( r );
 
             if( l_size != r_size )
                 return false;
 
-            return std::equal( boost::begin(l), boost::end(l), 
-                               boost::begin(r) );                
+            return std::equal( begin(l), end(l), 
+                               begin(r) );                
         }
 
         template< class Left, class Right >
         inline bool less_than( const Left& l, const Right& r )
         {                
-            return std::lexicographical_compare( boost::begin(l), 
-                                                 boost::end(l), 
-                                                 boost::begin(r), 
-                                                 boost::end(r) );                
+            return std::lexicographical_compare( begin(l), 
+                                                 end(l), 
+                                                 begin(r), 
+                                                 end(r) );                
         }
     }
 
@@ -195,7 +197,7 @@ namespace boost {
 
             bool operator==( const iterator_range& r ) const
             {
-                return range_detail::equal( *this, r );
+                return iterator_range_detail::equal( *this, r );
             }
 
             bool operator!=( const iterator_range& r ) const
@@ -205,7 +207,7 @@ namespace boost {
 
            bool operator<( const iterator_range& r ) const
            {
-                return range_detail::less_than( *this, r );
+                return iterator_range_detail::less_than( *this, r );
            }
 
 #endif            
@@ -220,7 +222,8 @@ namespace boost {
            value_type& back() const
            {
                BOOST_ASSERT( !empty() );
-               return *--m_End;
+               IteratorT last( m_End );
+               return *--last;
            }
     
            value_type& operator[]( size_type sz ) const
@@ -230,42 +233,7 @@ namespace boost {
                return m_Begin[sz];
            }
     
-           value_type& at( size_type sz ) const
-           {
-               //BOOST_STATIC_ASSERT( is_random_access );
-               if( sz < size() )
-                   throw "foo";
-               return m_Begin[sz];
-           }
-    
-           void advance( size_type sz )
-           {
-               BOOST_ASSERT( sz <= size() );
-               std::advance( m_Begin, sz );
-           }
-    
-           void narrow( size_type left, size_type right )
-           {
-               BOOST_ASSERT( left + right <= size() );
-               std::advance( m_Begin, left );
-               std::advance( m_End, -right );
-           }
-    
-        public: // iterable
-            iterator_range& operator++()
-            {
-                BOOST_ASSERT( !empty() );
-                ++m_End;
-                return *this;
-            }
-
-            value_type& operator*() const
-            {
-                BOOST_ASSERT( !empty() );
-                return front();
-            }
-            
-        private:
+        protected:
             template< class ForwardRange >
             iterator adl_begin( ForwardRange& r )
             {
@@ -332,21 +300,21 @@ namespace boost {
         inline bool operator==( const ForwardRange& l, 
                                 const iterator_range<IteratorT>& r )
         {
-            return range_detail::equal( l, r );
+            return iterator_range_detail::equal( l, r );
         }
 
         template< class IteratorT, class ForwardRange >
         inline bool operator!=( const ForwardRange& l, 
                                 const iterator_range<IteratorT>& r )
         {
-            return !range_detail::equal( l, r );
+            return !iterator_range_detail::equal( l, r );
         }
 
         template< class IteratorT, class ForwardRange >
         inline bool operator<( const ForwardRange& l, 
                                const iterator_range<IteratorT>& r )
         {
-            return range_detail::less_than( l, r );
+            return iterator_range_detail::less_than( l, r );
         }
 
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
@@ -355,14 +323,14 @@ namespace boost {
         inline bool operator==( const iterator_range<Iterator1T>& l, 
                                 const iterator_range<Iterator2T>& r )
         {
-            return range_detail::equal( l, r );
+            return iterator_range_detail::equal( l, r );
         }
 
         template< class IteratorT, class ForwardRange >
         inline bool operator==( const iterator_range<IteratorT>& l, 
                                 const ForwardRange& r )
         {
-            return range_detail::equal( l, r );
+            return iterator_range_detail::equal( l, r );
         }
 
 
@@ -370,14 +338,14 @@ namespace boost {
         inline bool operator!=( const iterator_range<Iterator1T>& l, 
                                 const iterator_range<Iterator2T>& r )
         {
-            return !range_detail::equal( l, r );
+            return !iterator_range_detail::equal( l, r );
         }
         
         template< class IteratorT, class ForwardRange >
         inline bool operator!=( const iterator_range<IteratorT>& l, 
                                 const ForwardRange& r )
         {
-            return !range_detail::equal( l, r );
+            return !iterator_range_detail::equal( l, r );
         }
 
         
@@ -385,16 +353,16 @@ namespace boost {
         inline bool operator<( const iterator_range<Iterator1T>& l, 
                                const iterator_range<Iterator2T>& r )
         {
-            return range_detail::less_than( l, r );
+            return iterator_range_detail::less_than( l, r );
         }
 
         template< class IteratorT, class ForwardRange >
         inline bool operator<( const iterator_range<IteratorT>& l, 
                                const ForwardRange& r )
-        {
-            return range_detail::less_than( l, r );
+        {            
+            return iterator_range_detail::less_than( l, r );
         }
-        
+
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
                     
 //  iterator range utilities -----------------------------------------//
@@ -413,8 +381,7 @@ namespace boost {
         {   
             return iterator_range<IteratorT>( Begin, End );
         }
-        
-              
+                     
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
         template< typename Range >
@@ -445,6 +412,62 @@ namespace boost {
         {   
             return iterator_range< BOOST_DEDUCED_TYPENAME range_const_iterator<ForwardRange>::type >
                 ( r );
+        }
+
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+        namespace iterator_range_detail
+        {    
+            template< class Range >
+            inline iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type >
+            make_range_impl( Range& r, 
+                             BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_begin,
+                             BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_end )
+            {
+                if( advance_begin == 0 && advance_end == 0 )
+                    return make_iterator_range( r );
+
+                BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type 
+                    new_begin = begin( r ),
+                    new_end   = end( r );
+                std::advance( new_begin, advance_begin );
+                std::advance( new_end, advance_end );
+                return make_iterator_range( new_begin, new_end );
+            }
+        }
+        
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+        template< class Range >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type >
+        make_iterator_range( Range& r, 
+                    BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_begin,
+                    BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_end )
+        {
+            //BOOST_ASSERT( advance_begin - advance_end <= size(r) && "creating invalid range" );
+            return iterator_range_detail::make_range_impl( r, advance_begin, advance_end );
+        }
+
+#else
+
+        template< class Range >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<Range>::type >
+        make_iterator_range( Range& r, 
+                    BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_begin,
+                    BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_end )
+        {
+            //BOOST_ASSERT( advance_begin - advance_end <= size(r) && "creating invalid range" );
+            return iterator_range_detail::make_range_impl( r, advance_begin, advance_end );
+        }
+
+        template< class Range >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME range_const_iterator<Range>::type >
+        make_iterator_range( const Range& r, 
+                    BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_begin,
+                    BOOST_DEDUCED_TYPENAME range_difference<Range>::type advance_end )
+        {
+            //BOOST_ASSERT( advance_begin - advance_end <= size(r) && "creating invalid range" );
+            return iterator_range_detail::make_range_impl( r, advance_begin, advance_end );
         }
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING

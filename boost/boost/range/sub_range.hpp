@@ -43,7 +43,7 @@ namespace boost
         sub_range( ForwardRange2& r ) : 
             
 #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
-            base( boost::begin( r ), boost::end( r ) )
+            base( this->adl_begin( r ), this->adl_end( r ) )
 #else
             base( r )
 #endif        
@@ -53,7 +53,7 @@ namespace boost
         sub_range( const ForwardRange2& r ) : 
 
 #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
-            base( boost::begin( r ), boost::end( r ) )
+            base( this->adl_begin( r ), this->adl_end( r ) )
 #else
             base( r )
 #endif                
@@ -90,91 +90,55 @@ namespace boost
     public: // convenience
         value_type& front()
         {
-            BOOST_ASSERT( !empty() );
-            return *m_Begin;
+            return base::front();
         }
 
         const value_type& front() const
         {
-            BOOST_ASSERT( !empty() );
-            return *m_Begin;
+            return base::front();
         }
 
         value_type& back()
         {
-            BOOST_ASSERT( !empty() );
-            return *--m_End;
+            return base::back();
         }
 
         const value_type& back() const
         {
-            BOOST_ASSERT( !empty() );
-            return *--m_End;
+            return base::back();
         }
 
         value_type& operator[]( size_type sz )
         {
-            //BOOST_STATIC_ASSERT( is_random_access );
-            BOOST_ASSERT( sz < size() );
-            return m_Begin[sz];
+            return base::operator[](sz);
         }
 
         const value_type& operator[]( size_type sz ) const
         {
-            //BOOST_STATIC_ASSERT( is_random_access );
-            BOOST_ASSERT( sz < size() );
-            return m_Begin[sz];
+            return base::operator[](sz);
         }
 
-        value_type& at( size_type sz )
-        {
-            //BOOST_STATIC_ASSERT( is_random_access );
-            if( sz < size() )
-                   throw "foo";
-            return m_Begin[sz];
-        }
-
-        const value_type& at( size_type sz ) const
-        {
-            //BOOST_STATIC_ASSERT( is_random_access );
-            if( sz < size() )
-                   throw "foo";
-            return m_Begin[sz];
-        }
-
-    public: // iterable
-        value_type& operator*()
-        {
-            BOOST_ASSERT( !empty() );
-            return front();
-        }
-
-        const value_type& operator*() const
-        {
-            BOOST_ASSERT( !empty() );
-            return front();
-        }
     };
 
     template< class ForwardRange, class ForwardRange2 >
     inline bool operator==( const sub_range<ForwardRange>& l,
                             const sub_range<ForwardRange2>& r )
     {
-        return range_detail::equal( l, r );
+        return iterator_range_detail::equal( l, r );
     }
 
     template< class ForwardRange, class ForwardRange2 >
     inline bool operator!=( const sub_range<ForwardRange>& l,
                             const sub_range<ForwardRange2>& r )
     {
-        return !range_detail::equal( l, r );
+        return !iterator_range_detail::equal( l, r );
     }
 
     template< class ForwardRange, class ForwardRange2 >
     inline bool operator<( const sub_range<ForwardRange>& l,
                            const sub_range<ForwardRange2>& r )
     {
-        return range_detail::less_than( l, r );
+        return iterator_range_detail::less_than( l, r );
     }
 
 

@@ -17,12 +17,8 @@
 #endif
 
 #include <boost/range.hpp>
+#include <boost/test/test_tools.hpp>
 #include <string>
-
-// This should be included before "using namespace boost",
-// otherwise gcc headers will be confused with boost::iterator
-// namespace.
-#include <boost/test/included/unit_test_framework.hpp> 
 
 using namespace boost;
 using namespace std;
@@ -52,7 +48,8 @@ void check_const_ranges()
 
 
 
-using boost::unit_test_framework::test_suite;
+#include <boost/test/unit_test.hpp>
+using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )
 {

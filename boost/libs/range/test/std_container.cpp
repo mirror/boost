@@ -20,7 +20,6 @@
 #include <boost/range/metafunctions.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
-#include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
 #include <vector>
 
@@ -61,11 +60,8 @@ void check_std_container()
 }
 
 
-
-
-#include <boost/test/included/unit_test_framework.hpp> 
-
-using boost::unit_test_framework::test_suite;
+#include <boost/test/unit_test.hpp>
+using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )
 {

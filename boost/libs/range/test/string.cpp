@@ -22,7 +22,6 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/test/test_tools.hpp>
-#include <boost/test/unit_test.hpp>
 #include <boost/config.hpp>
 #include <vector>
 #include <fstream>
@@ -184,11 +183,9 @@ void check_string()
 }
 
 
+#include <boost/test/unit_test.hpp>
+using boost::unit_test::test_suite;
 
-
-#include <boost/test/included/unit_test_framework.hpp> 
-
-using boost::unit_test_framework::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
