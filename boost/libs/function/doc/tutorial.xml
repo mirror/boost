@@ -274,7 +274,7 @@ f(&amp;x, 5);</programlisting>
 </section>
 
 <section>
-  <title>References to Functions</title> <para> In some cases it is
+  <title>References to Function Objects</title> <para> In some cases it is
   expensive (or semantically incorrect) to have Boost.Function clone a
   function object. In such cases, it is possible to request that
   Boost.Function keep only a reference to the actual function
@@ -321,5 +321,37 @@ using references to function objects, Boost.Function will not throw
 exceptions during assignment or construction.
 </para>
 </section>
+
+<section>
+  <title>Comparing Boost.Function function objects</title>
+
+  <para>Function object wrappers can be compared via <code>==</code>
+  or <code>!=</code> against any function object that can be stored
+  within the wrapper. If the function object wrapper contains a
+  function object of that type, it will be compared against the given
+  function object (which must be
+  <conceptname>EqualityComparable</conceptname>). For instance:</para>
+  
+  <programlisting name="function.tutorial.compare">int compute_with_X(X*, int);
+
+f = &amp;X::foo;
+assert(f == &amp;X::foo);
+assert(&amp;compute_with_X != f);</programlisting>
+
+   <para>When comparing against an instance of
+   <code><classname>reference_wrapper</classname></code>, the address
+   of the object in the
+   <code><classname>reference_wrapper</classname></code> is compared
+   against the address of the object stored by the function object
+   wrapper:</para>
+
+  <programlisting name="function.tutorial.compare-ref">a_stateful_object so1, so2;
+f = <functionname>boost::ref</functionname>(so1);
+assert(f == <functionname>boost::ref</functionname>(so1));
+assert(f == so1); <emphasis>// Only if a_stateful_object is <conceptname>EqualityComparable</conceptname></emphasis>
+assert(f != <functionname>boost::ref</functionname>(so2));</programlisting>
+
+</section>
+
 </section>
 
