@@ -70,7 +70,7 @@ namespace date_time {
      * "days_ += days_" may not work. If instantiated with
      * an int_adapter, shortcut operators are not present,
      * so this will not compile */
-
+    
     //! Subtract another duration -- result is signed
     date_duration operator-=(const date_duration& rhs)
     {
@@ -88,7 +88,7 @@ namespace date_time {
     //! unary- Allows for dd = -date_duration(2); -> dd == -2
     date_duration operator-()const
     {
-      return date_duration(get_rep() * (-1));
+      return date_duration<duration_rep_traits>(get_rep() * (-1));
     }
     //! Division operations on a duration with an integer.
     date_duration<duration_rep_traits> operator/=(int divisor)
