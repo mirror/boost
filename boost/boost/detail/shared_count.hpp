@@ -30,6 +30,7 @@
 #include <exception>        // for std::exception
 #include <new>              // for std::bad_alloc
 #include <typeinfo>         // for std::type_info in get_deleter
+#include <cstddef>          // for std::size_t
 
 #ifdef __BORLANDC__
 # pragma warn -8026     // Functions with excep. spec. are not expanded inline
@@ -43,10 +44,10 @@ namespace boost
 
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
 
-void sp_scalar_constructor_hook(void * p);
-void sp_array_constructor_hook(void * p);
-void sp_scalar_destructor_hook(void * p);
-void sp_array_destructor_hook(void * p);
+void sp_scalar_constructor_hook(void * px, std::size_t size, void * pn);
+void sp_array_constructor_hook(void * px);
+void sp_scalar_destructor_hook(void * px, std::size_t size, void * pn);
+void sp_array_destructor_hook(void * px);
 
 #endif
 
@@ -188,31 +189,31 @@ private:
 
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
 
-template<class T> void cbi_call_constructor_hook(T * p, checked_deleter<T> const &, int)
+template<class T> void cbi_call_constructor_hook(counted_base * pn, T * px, checked_deleter<T> const &, int)
 {
-    boost::sp_scalar_constructor_hook(p);
+    boost::sp_scalar_constructor_hook(px, sizeof(T), pn);
 }
 
-template<class T> void cbi_call_constructor_hook(T * p, checked_array_deleter<T> const &, int)
+template<class T> void cbi_call_constructor_hook(counted_base *, T * px, checked_array_deleter<T> const &, int)
 {
-    boost::sp_array_constructor_hook(p);
+    boost::sp_array_constructor_hook(px);
 }
 
-template<class P, class D> void cbi_call_constructor_hook(P const &, D const &, long)
+template<class P, class D> void cbi_call_constructor_hook(counted_base *, P const &, D const &, long)
 {
 }
 
-template<class T> void cbi_call_destructor_hook(T * p, checked_deleter<T> const &, int)
+template<class T> void cbi_call_destructor_hook(counted_base * pn, T * px, checked_deleter<T> const &, int)
 {
-    boost::sp_scalar_destructor_hook(p);
+    boost::sp_scalar_destructor_hook(px, sizeof(T), pn);
 }
 
-template<class T> void cbi_call_destructor_hook(T * p, checked_array_deleter<T> const &, int)
+template<class T> void cbi_call_destructor_hook(counted_base *, T * px, checked_array_deleter<T> const &, int)
 {
-    boost::sp_array_destructor_hook(p);
+    boost::sp_array_destructor_hook(px);
 }
 
-template<class P, class D> void cbi_call_destructor_hook(P const &, D const &, long)
+template<class P, class D> void cbi_call_destructor_hook(counted_base *, P const &, D const &, long)
 {
 }
 
@@ -244,14 +245,14 @@ public:
     counted_base_impl(P p, D d): ptr(p), del(d)
     {
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
-        detail::cbi_call_constructor_hook(p, d, 0);
+        detail::cbi_call_constructor_hook(this, p, d, 0);
 #endif
     }
 
     virtual void dispose() // nothrow
     {
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
-        detail::cbi_call_destructor_hook(ptr, del, 0);
+        detail::cbi_call_destructor_hook(this, ptr, del, 0);
 #endif
         del(ptr);
     }
@@ -276,6 +277,13 @@ public:
 #endif
 };
 
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+
+int const shared_count_id = 0x2C35F101;
+int const   weak_count_id = 0x298C38A4;
+
+#endif
+
 class weak_count;
 
 class shared_count
@@ -284,15 +292,25 @@ private:
 
     counted_base * pi_;
 
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+    int id_;
+#endif
+
     friend class weak_count;
 
 public:
 
     shared_count(): pi_(0) // nothrow
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
     {
     }
 
     template<class P, class D> shared_count(P p, D d): pi_(0)
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
     {
 #ifndef BOOST_NO_EXCEPTIONS
 
@@ -325,6 +343,9 @@ public:
 
     template<class Y>
     explicit shared_count(std::auto_ptr<Y> & r): pi_(new counted_base_impl< Y *, checked_deleter<Y> >(r.get(), checked_deleter<Y>()))
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
     {
         r.release();
     }
@@ -337,6 +358,9 @@ public:
     }
 
     shared_count(shared_count const & r): pi_(r.pi_) // nothrow
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
     {
         if(pi_ != 0) pi_->add_ref();
     }
@@ -397,20 +421,33 @@ private:
 
     counted_base * pi_;
 
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+    int id_;
+#endif
+
     friend class shared_count;
 
 public:
 
     weak_count(): pi_(0) // nothrow
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        , id_(weak_count_id)
+#endif
     {
     }
 
     weak_count(shared_count const & r): pi_(r.pi_) // nothrow
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
     {
         if(pi_ != 0) pi_->weak_add_ref();
     }
 
     weak_count(weak_count const & r): pi_(r.pi_) // nothrow
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
     {
         if(pi_ != 0) pi_->weak_add_ref();
     }
@@ -464,6 +501,9 @@ public:
 };
 
 inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
 {
     if(pi_ != 0)
     {
