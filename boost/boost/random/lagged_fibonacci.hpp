@@ -16,6 +16,7 @@
 #ifndef BOOST_RANDOM_LAGGED_FIBONACCI_HPP
 #define BOOST_RANDOM_LAGGED_FIBONACCI_HPP
 
+#include <cmath>
 #include <iostream>
 #include <algorithm>     // std::max
 #include <iterator>

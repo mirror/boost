@@ -16,6 +16,7 @@
 #ifndef BOOST_RANDOM_SUBTRACT_WITH_CARRY_HPP
 #define BOOST_RANDOM_SUBTRACT_WITH_CARRY_HPP
 
+#include <cmath>
 #include <iostream>
 #include <algorithm>     // std::equal
 #include <stdexcept>
