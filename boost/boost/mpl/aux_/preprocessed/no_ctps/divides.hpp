@@ -100,11 +100,7 @@ struct divides2
         , typename divides_tag<N2>::type
         >::template apply< N1,N2 >::type
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(
-          5
-        , divides
-        , ( N1, N2, na, na, na )
-        )
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, divides2, (N1, N2))
 
 };
 

@@ -101,11 +101,7 @@ struct bitand_2
         , typename bitand_tag<N2>::type
         >::template apply< N1,N2 >::type
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(
-          5
-        , bitand_
-        , ( N1, N2, na, na, na )
-        )
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, bitand_2, (N1, N2))
 
 };
 

@@ -105,11 +105,7 @@ struct plus2
         >::type >::type
 
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(
-          5
-        , plus
-        , ( N1, N2, na, na, na )
-        )
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, plus2, (N1, N2))
 
 };
 
