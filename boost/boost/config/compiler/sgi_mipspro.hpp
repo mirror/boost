@@ -12,5 +12,12 @@
 #include "boost/config/compiler/common_edg.hpp"
 
 //
+// Threading support:
+// Turn this on unconditionally here, it will get turned off again later
+// if no threading API is detected.
+//
+#define BOOST_HAS_THREADS
+//
 // version check:
 // probably nothing to do here?
+
