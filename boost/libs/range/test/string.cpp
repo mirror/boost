@@ -87,8 +87,8 @@ void check_char()
     BOOST_CHECK_EQUAL( sz, std::char_traits<char>::length( char_s ) );
     
     BOOST_CHECK_EQUAL( begin( my_string ), my_string );
-    range_iterator<char[15]>::type end2 = begin( my_string ) + size( my_string );
-    range_iterator<char[15]>::type end3 = end( my_string );
+    range_iterator<char_array_t>::type end2 = begin( my_string ) + size( my_string );
+    range_iterator<char_array_t>::type end3 = end( my_string );
     BOOST_CHECK_EQUAL( end3, end2 );
     BOOST_CHECK_EQUAL( empty( my_string ), (my_string == 0 || my_string[0] == char()) );
     BOOST_CHECK_EQUAL( size( my_string ), my_string_length );
