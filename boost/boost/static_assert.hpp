@@ -72,6 +72,15 @@ template<int x> struct static_assert_test{};
 # define BOOST_STATIC_ASSERT( B ) \
     typedef char BOOST_JOIN(boost_static_assert_typedef_, __LINE__) \
         [ ::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >::value ]
+#elif defined(__sgi)
+// special version for SGI MIPSpro compiler
+#define BOOST_STATIC_ASSERT( B ) \
+   BOOST_STATIC_CONSTANT(bool, \
+     BOOST_JOIN(boost_static_assert_test_, __LINE__) = ( B )); \
+   typedef ::boost::static_assert_test<\
+     sizeof(::boost::STATIC_ASSERTION_FAILURE< \
+       BOOST_JOIN(boost_static_assert_test_, __LINE__) >)>\
+         BOOST_JOIN(boost_static_assert_typedef_, __LINE__)
 #else
 // generic version
 #define BOOST_STATIC_ASSERT( B ) \
