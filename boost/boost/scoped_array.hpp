@@ -15,6 +15,9 @@
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/config.hpp>   // in case ptrdiff_t not in std
+
+#include <boost/detail/workaround.hpp>
+
 #include <cstddef>            // for std::ptrdiff_t
 
 namespace boost
@@ -83,12 +86,29 @@ public:
 
     // implicit conversion to "bool"
 
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
+
+    operator bool () const
+    {
+        return ptr != 0;
+    }
+
+private:
+
+    operator int () const;
+
+public:
+
+#else
+
     typedef T * (this_type::*unspecified_bool_type)() const;
 
     operator unspecified_bool_type() const // never throws
     {
         return ptr == 0? 0: &this_type::get;
     }
+
+#endif
 
     bool operator! () const // never throws
     {

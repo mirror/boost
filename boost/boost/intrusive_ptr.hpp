@@ -119,12 +119,29 @@ public:
         return p_;
     }
 
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
+
+    operator bool () const
+    {
+        return p_ != 0;
+    }
+
+private:
+
+    operator int () const;
+
+public:
+
+#else
+
     typedef T * (intrusive_ptr::*unspecified_bool_type) () const;
 
     operator unspecified_bool_type () const
     {
         return p_ == 0? 0: &intrusive_ptr::get;
     }
+
+#endif
 
     // operator! is a Borland-specific workaround
     bool operator! () const

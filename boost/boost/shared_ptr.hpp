@@ -246,12 +246,29 @@ public:
 
     // implicit conversion to "bool"
 
+#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
+
+    operator bool () const
+    {
+        return px != 0;
+    }
+
+private:
+
+    operator int () const;
+
+public:
+
+#else
+
     typedef T * (this_type::*unspecified_bool_type)() const;
 
     operator unspecified_bool_type() const // never throws
     {
         return px == 0? 0: &this_type::get;
     }
+
+#endif
 
     // operator! is redundant, but some compilers need it
 
