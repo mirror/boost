@@ -1,6 +1,6 @@
 // Boost.Signals library
 //
-// Copyright (C) 2001-2 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001, 2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -15,6 +15,10 @@
 
 #ifndef BOOST_SIGNALS_SIGNAL_BASE_HEADER
 #define BOOST_SIGNALS_SIGNAL_BASE_HEADER
+
+#ifdef BOOST_SIGNALS_IN_LIBRARY_SOURCE
+#  define BOOST_FUNCTION_SILENT_DEPRECATED
+#endif
 
 #include <boost/signals/detail/signals_common.hpp>
 #include <boost/signals/connection.hpp>
