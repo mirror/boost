@@ -214,25 +214,27 @@ namespace boost {
 <pre>
 #include &lt;<a href="../../boost/random/uniform_smallint.hpp">boost/random/uniform_smallint.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator, class IntType = int&gt;
+template&lt;class IntType = int&gt;
 class uniform_smallint
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef IntType input_type;
   typedef IntType result_type;
   static const bool has_fixed_range = false;
-  uniform_smallint(base_type & rng, IntType min, IntType max);
-  result_type operator()();
+  uniform_smallint(IntType min, IntType max);
   result_type min() const;
   result_type max() const;
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
 
 <h3>Description</h3>
 
 The distribution function <code>uniform_smallint</code> models a
-<a href="random-concepts.html#uniform-rng">uniform random number
-generator</a>.  On each invocation, it returns a random integer value
+<a href="random-concepts.html#random-dist">random distribution</a>.
+On each invocation, it returns a random integer value
 uniformly distributed in the set of integer numbers {min, min+1,
 min+2, ..., max}.  It assumes that the desired range (max-min+1) is
 small compared to the range of the underlying source of random
@@ -254,11 +256,8 @@ r<sub>out</sub>)(r<sub>out</sub> - r<sub>base</sub> mod
 r<sub>out</sub>).
 <p>
 
-The template parameter <code>UniformRandomNumberGenerator</code> shall
-denote a class which models a uniform random number generator.
-Additionally, <code>UniformRandomNumberGenerator::result_type</code>
-shall denote an integral type.  The template parameter
-<code>IntType</code> shall denote an integer-like value type.
+The template parameter <code>IntType</code> shall denote an
+integer-like value type.
 
 <p>
 <em>Note:</em> The property above is the square sum of the relative
@@ -286,13 +285,11 @@ ensure that r<sub>base</sub> is divisible by r<sub>out</sub>.
 
 <h3>Members</h3>
 
-<pre>uniform_smallint(base_type & rng, IntType min, IntType max)</pre>
+<pre>uniform_smallint(IntType min, IntType max)</pre>
 
 <strong>Effects:</strong> Constructs a <code>uniform_smallint</code>
-functor with the uniform random number generator <code>rng</code> as
-the underlying source of random numbers. <code>min</code> and
-<code>max</code> are the lower and upper bounds of the output range,
-respectively.
+functor. <code>min</code> and <code>max</code> are the lower and upper
+bounds of the output range, respectively.
 
 
 <h2><a name="uniform_int">Class template <code>uniform_int</code></a></h2>
@@ -302,25 +299,29 @@ respectively.
 <pre>
 #include &lt;<a href="../../boost/random/uniform_int.hpp">boost/random/uniform_int.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator, class IntType = int&gt;
+template&lt;class IntType = int&gt;
 class uniform_int
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef IntType input_type;
   typedef IntType result_type;
   static const bool has_fixed_range = false;
-  uniform_int(base_type & rng, IntType min, IntType max);
-  IntType operator()();
+  explicit uniform_int(IntType min = 0, IntType max = 9);
   result_type min() const;
   result_type max() const;
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng, result_type n);
 };
 </pre>
 
 <h3>Description</h3>
 
 The distribution function <code>uniform_int</code> models a
-<a href="random-concepts.html#uniform-rng">uniform random number
-generator</a>.  On each invocation, it returns a random integer
+<a href="random-concepts.html#random-dist">random distribution</a>.
+On each invocation, it returns a random integer
 value uniformly distributed in the set of integer numbers
 {min, min+1, min+2, ..., max}.
 <p>
@@ -330,20 +331,27 @@ integer-like value type.
 
 <h3>Members</h3>
 
-<pre>uniform_int(base_type & rng, IntType min, IntType max)</pre>
+<pre>    uniform_int(IntType min = 0, IntType max = 9)</pre>
+<strong>Requires:</strong> min &lt;= max
+<br>
+<strong>Effects:</strong> Constructs a <code>uniform_int</code>
+object.  <code>min</code> and <code>max</code> are the parameters of
+the distribution.
 
-<strong>Effects:</strong> Constructs a <code>uniform_int</code> functor
-with the uniform random number generator <code>rng</code> as the
-underlying source of random numbers. <code>min</code> and
-<code>max</code> are the lower and upper bounds of the output range,
-respectively.
+<pre>    result_type min() const</pre>
+<strong>Returns:</strong> The "min" parameter of the distribution.
 
-<p>
-<em>Note:</em> Invocations of <code>operator()</code> may call the
-underlying generator several times and concatenate the result to build
-the required range.  Thus, using this distribution with generators
-such as linear congruential ones which tend to produce non-random bits
-in some positions is strongly discouraged.
+<pre>    result_type max() const</pre>
+<strong>Returns:</strong> The "max" parameter of the distribution.
+
+<pre>    result_type operator()(UniformRandomNumberGenerator& urng, result_type 
+n)</pre>
+<strong>Returns:</strong> A uniform random number x in the range 0
+&lt;= x &lt; n.  <em>[Note: This allows a
+<code>variate_generator</code> object with a <code>uniform_int</code>
+distribution to be used with std::random_shuffe, see
+[lib.alg.random.shuffle]. ]</em>
+
 
 <h2><a name="uniform_01">Class template <code>uniform_01</code></a></h2>
 
@@ -369,9 +377,9 @@ public:
 <h3>Description</h3>
 
 The distribution function <code>uniform_01</code> models a
-<a href="random-concepts.html#uniform-rng">uniform random number
-generator</a>.  On each invocation, it returns a random floating-point
-value uniformly distributed in the range [0..1).
+<a href="random-concepts.html#random-dist">random distribution</a>.
+On each invocation, it returns a random floating-point value uniformly
+distributed in the range [0..1).
 
 The value is computed using
 <code>std::numeric_limits&lt;RealType&gt;::digits</code> random binary
@@ -411,25 +419,27 @@ source of random numbers.
 <pre>
 #include &lt;<a href="../../boost/random/uniform_real.hpp">boost/random/uniform_real.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+template&lt;class RealType = double&gt;
 class uniform_real
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef RealType result_type;
   static const bool has_fixed_range = false;
-  uniform_real(base_type & rng, RealType min, RealType max);
-  result_type operator()();
+  uniform_real(RealType min = RealType(0), RealType max = RealType(1));
   result_type min() const;
   result_type max() const;
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
 
 <h3>Description</h3>
 
 The distribution function <code>uniform_real</code> models a
-<a href="random-concepts.html#uniform-rng">uniform random number
-generator</a>.  On each invocation, it returns a random floating-point
+<a href="random-concepts.html#random-dist">random distribution</a>.
+On each invocation, it returns a random floating-point
 value uniformly distributed in the range [min..max). The value is
 computed using
 <code>std::numeric_limits&lt;RealType&gt;::digits</code> random binary
@@ -443,13 +453,18 @@ fill all of the mantissa with random bits.
 
 <h3>Members</h3>
 
-<pre>explicit uniform_real(base_type & rng, RealType min, RealType max)</pre>
+<pre>    uniform_real(RealType min = RealType(0), RealType max = RealType(1))</pre>
+<strong>Requires:</strong> min &lt;= max
+<br>
+<strong>Effects:</strong> Constructs a
+<code>uniform_real</code> object; <code>min</code> and
+<code>max</code> are the parameters of the distribution.
 
-<strong>Effects:</strong> Constructs a <code>uniform_real</code>
-functor.  <code>rng</code> specifies the uniform random number
-generator to be used as the underlying source of random numbers,
-<code>min</code> and <code>max</code> are the lower and upper bounds of
-the output range.
+<pre>    result_type min() const</pre>
+<strong>Returns:</strong> The "min" parameter of the distribution.
+
+<pre>    result_type max() const</pre>
+<strong>Returns:</strong> The "max" parameter of the distribution.
 
 
 <h2><a name="bernoulli_distribution">Class template
@@ -460,37 +475,41 @@ the output range.
 <pre>
 #include &lt;<a href="../../boost/random/bernoulli_distribution.hpp">boost/random/bernoulli_distribution.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator&gt;
+template&lt;class RealType = double>
 class bernoulli_distribution
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef int input_type;
   typedef bool result_type;
-  bernoulli_distribution(base_type & rng, double q);
-  result_type operator()();
+
+  explicit bernoulli_distribution(const RealType& p = RealType(0.5));
+  RealType p() const;
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
 
 <h3>Description</h3>
 
 Instantiations of class template <code>bernoulli_distribution</code>
-model a <a href="random-concepts.html#number_generator">number
-generator</a>.  It transforms a uniform distribution into a Bernoulli
-one.
+model a <a href="random-concepts.html#random-dist">random
+distribution</a>.  Such a random distribution produces
+<code>bool</code> values distributed with probabilities P(true) = p
+and P(false) = 1-p.  p is the parameter of the distribution.
 
 <h3>Members</h3>
 
-<pre>bernoulli_distribution(base_type & rng, double q)</pre>
+<pre>    bernoulli_distribution(const RealType& p = RealType(0.5))</pre>
 
+<strong>Requires:</strong> 0 &lt;= p &lt;= 1
+<br>
 <strong>Effects:</strong> Constructs a
-<code>bernoulli_distribution</code> functor with the uniform random
-number generator <code>rng</code> as the underlying source of random
-numbers. <code>q</code> is the parameter for the distribution.
+<code>bernoulli_distribution</code> object.  <code>p</code> is the
+parameter of the distribution.
 
-<pre>result_type operator()()</pre>
-<strong>Returns:</strong> A random boolean value with p(true) = q and
-p(false) = 1-q.  For example, with q = 1/2 this can be interpreted as
-tossing a coin.
+<pre>    RealType p() const</pre>
+<strong>Returns:</strong> The "p" parameter of the distribution.
 
 
 <h2><a name="geometric_distribution">Class template
@@ -504,10 +523,14 @@ template&lt;class UniformRandomNumberGenerator, class IntType = int&gt;
 class geometric_distribution
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef IntType result_type;
-  geometric_distribution(base_type& rng, double q);
-  result_type operator()();
+
+  explicit geometric_distribution(const RealType& p = RealType(0.5));
+  RealType p() const;
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
 
@@ -515,27 +538,25 @@ public:
 <h3>Description</h3>
 
 Instantiations of class template <code>geometric_distribution</code>
-model a <a href="random-concepts.html#number_generator">number
-generator</a>.  It transforms a uniform distribution into a geometric
-one.
+model a
+<a href="random-concepts.html#random-dist">random distribution</a>.
+A <code>geometric_distribution</code> random distribution produces
+integer values <em>i</em> &gt;= 1 with p(i) = (1-p) * p<sup>i-1</sup>.
+p is the parameter of the distribution.
 
 
 <h3>Members</h3>
 
-<pre>geometric_distribution(base_type& rng, const result_type& q)</pre>
+<pre>    geometric_distribution(const RealType& p = RealType(0.5))</pre>
 
+<strong>Requires:</strong> 0 &lt; p &lt; 1
+<br>
 <strong>Effects:</strong> Constructs a
-<code>geometric_distribution</code> functor with the uniform random
-number generator <code>rng</code> as the underlying source of random
-numbers. <code>q</code> is the parameter for the distribution.
-<p>
+<code>geometric_distribution</code> object; <code>p</code> is the
+parameter of the distribution.
 
-<pre>result_type operator()()</pre>
-
-<strong>Returns:</strong> A random integer value <em>i</em> >= 1 with
-p(i) = (1-q) * q<sup>i-1</sup>.  For example, with q = 5/6 this can be
-interpreted as the number of times one has to roll a die until a given
-number shows up.
+<pre>   RealType p() const</pre>
+<strong>Returns:</strong> The "p" parameter of the distribution.
 
 
 <h2><a name="triangle_distribution">Class template
@@ -545,42 +566,39 @@ number shows up.
 <pre>
 #include &lt;<a href="../../boost/random/triangle_distribution.hpp">boost/random/triangle_distribution.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+template&lt;class RealType = double&gt;
 class triangle_distribution
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef RealType result_type;
-  triangle_distribution(base_type& rng, result_type a, result_type b, result_type c);
-  result_type operator()();
+  triangle_distribution(result_type a, result_type b, result_type c);
+  result_type a() const;
+  result_type b() const;
+  result_type c() const;
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
-
 
 <h3>Description</h3>
 
 Instantiations of class template <code>triangle_distribution</code>
-model a <a href="random-concepts.html#number_generator">number
-generator</a>.  It transforms a uniform distribution into a triangle
-one.
-
+model a <a href="random-concepts.html#random-dist">random
+distribution</a>.  The returned floating-point values <code>x</code>
+satisfy <code>a <= x <= c</code>; <code>x</code> has a triangle
+distribution, where <code>b</code> is the most probable value for
+<code>x</code>.
 
 <h3>Members</h3>
 
-<pre>triangle_distribution(base_type& rng, result_type a, result_type b, result_type c)</pre>
+<pre>triangle_distribution(result_type a, result_type b, result_type c)</pre>
 
 <strong>Effects:</strong> Constructs a
-<code>triangle_distribution</code> functor with the uniform random
-number generator <code>rng</code> as the underlying source of random
-numbers. <code>a, b, c</code> are the parameters for the distribution.
+<code>triangle_distribution</code> functor. <code>a, b, c</code> are
+the parameters for the distribution.
 <p>
-
-<pre>result_type operator()()</pre>
-
-<strong>Returns:</strong> A random floating-point value <code>x</code>
-where <code>a <= x <= c</code>; <code>x</code> has a triangle
-distribution, where <code>b</code> is the most probable value for
-<code>x</code>.
 
 
 <h2><a name="exponential_distribution">Class template
@@ -590,39 +608,40 @@ distribution, where <code>b</code> is the most probable value for
 <pre>
 #include &lt;<a href="../../boost/random/exponential_distribution.hpp">boost/random/exponential_distribution.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+template&lt;class RealType = double&gt;
 class exponential_distribution
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef RealType result_type;
-  exponential_distribution(base_type& rng, const result_type& lambda);
-  result_type operator()();
+  explicit exponential_distribution(const result_type& lambda);
+  RealType lambda() const;
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
 
 <h3>Description</h3>
 
 Instantiations of class template <code>exponential_distribution</code>
-model a <a href="random-concepts.html#number_generator">number
-generator</a>.  It transforms a uniform distribution into an
-exponential one.
+model a <a href="random-concepts.html#random-dist">random
+distribution</a>.  Such a distribution produces random numbers x &gt;
+0 distributed with probability density function p(x) = lambda *
+exp(-lambda * x), where lambda is the parameter of the distribution.
 
 <h3>Members</h3>
 
-<pre>exponential_distribution(base_type& rng, const result_type& lambda)</pre>
-
+<pre>    exponential_distribution(const result_type& lambda = result_type(1))</pre>
+<strong>Requires:</strong> lambda &gt; 0
+<br>
 <strong>Effects:</strong> Constructs an
-<code>exponential_distribution</code> functor with the uniform random
-number generator <code>rng</code> as the underlying source of random
+<code>exponential_distribution</code> object with <code>rng</code> as
+the reference to the underlying source of random
 numbers. <code>lambda</code> is the parameter for the distribution.
-<p>
 
-<pre>result_type operator()()</pre>
-
-<strong>Returns:</strong> A random floating-point value <em>x</em>
-&gt; 0 with p(x) = <code>lambda</code> * exp(-<code>lambda</code> *
-x).
+<pre>    RealType lambda() const</pre>
+<strong>Returns:</strong> The "lambda" parameter of the distribution.
 
 
 <h2><a name="normal_distribution">Class template
@@ -633,42 +652,51 @@ x).
 <pre>
 #include &lt;<a href="../../boost/random/normal_distribution.hpp">boost/random/normal_distribution.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+template&lt;class RealType = double&gt;
 class normal_distribution
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef RealType result_type;
-  explicit normal_distribution(base_type& rng, const result_type& mean = 0,
+  explicit normal_distribution(const result_type& mean = 0,
 			       const result_type& sigma = 1);
-  result_type operator()();
+  RealType mean() const;
+  RealType sigma() const;
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
 
 <h3>Description</h3>
 
 Instantiations of class template <code>normal_distribution</code>
-model a <a href="random-concepts.html#number_generator">number
-generator</a>.  It transforms a uniform distribution into a
-normal (Gaussian) one.
+model a <a href="random-concepts.html#random-dist">random
+distribution</a>.  Such a distribution produces random numbers x
+distributed with probability density function p(x) =
+1/sqrt(2*pi*sigma) * exp(- (x-mean)<sup>2</sup> /
+(2*sigma<sup>2</sup>) ), where mean and sigma are the parameters of
+the distribution.
+
 
 <h3>Members</h3>
 
-<pre>normal_distribution(base_type& rng, const result_type& mean = 0,
-		     const result_type& sigma = 1)</pre>
+<pre>
+    explicit normal_distribution(const result_type& mean = 0,
+                                 const result_type& sigma = 1);
+</pre>
 
+<strong>Requires:</strong> sigma &gt; 0
+<br>
 <strong>Effects:</strong> Constructs a
-<code>normal_distribution</code> functor with the uniform random
-number generator <code>rng</code> as the underlying source of random
-numbers. <code>mean</code> and <code>sigma</code> are the parameters for
-the distribution.
-<p>
+<code>normal_distribution</code> object; <code>mean</code> and
+<code>sigma</code> are the parameters for the distribution.
 
-<pre>result_type operator()()</pre>
+<pre>    RealType mean() const</pre>
+<strong>Returns:</strong> The "mean" parameter of the distribution.
 
-<strong>Returns:</strong> A random floating-point value <em>x</em>
-with p(x) = 1/sqrt(2*pi*sigma) * exp(- (x-mean)<sup>2</sup> /
-(2*sigma<sup>2</sup>) ).
+<pre>    RealType sigma() const</pre>
+<strong>Returns:</strong> The "sigma" parameter of the distribution.
 
 
 <h2><a name="lognormal_distribution">Class template
@@ -679,50 +707,45 @@ with p(x) = 1/sqrt(2*pi*sigma) * exp(- (x-mean)<sup>2</sup> /
 <pre>
 #include &lt;<a href="../../boost/random/lognormal_distribution.hpp">boost/random/lognormal_distribution.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator, class RealType = double&gt;
+template&lt;class RealType = double&gt;
 class lognormal_distribution
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef typename normal_distribution&lt;RealType&gt;::input_type
   typedef RealType result_type;
-  explicit lognormal_distribution(base_type& rng, const result_type& mean,
-			          const result_type& sigma);
-  result_type operator()();
+  explicit lognormal_distribution(const result_type& mean = 1.0,
+			          const result_type& sigma = 1.0);
+  RealType& mean() const;
+  RealType& sigma() const;                                 
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  result_type operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
 
 <h3>Description</h3>
 
 Instantiations of class template <code>lognormal_distribution</code>
-model a <a href="random-concepts.html#number_generator">number
-generator</a>.  It transforms a uniform distribution into a
-lognormal one.
-
-<h3>Members</h3>
-
-<pre>lognormal_distribution(base_type& rng, const result_type& mean,
-	   	       const result_type& sigma)</pre>
-
-<strong>Effects:</strong> Constructs a
-<code>lognormal_distribution</code> functor with the uniform random
-number generator <code>rng</code> as the underlying source of random
-numbers. <code>mean</code> and <code>sigma</code> are the mean and
-standard deviation of the lognormal distribution.
-<p>
-
-<pre>result_type operator()()</pre>
-
-<!-- <strong>Returns:</strong> A random floating-point value <em>x</em>
-with p(x) = 1/(x * sigma * sqrt(2*pi)) * exp(-
-(log(x)-mean)<sup>2</sup> / (2*sigma<sup>2</sup>) ) for x > 0.
-<p> -->
-<strong>Returns:</strong> A random floating-point value <em>x</em>
+model a <a href="random-concepts.html#random-dist">random
+distribution</a>.  Such a distribution produces random numbers
 with p(x) = 1/(x * normal_sigma * sqrt(2*pi)) * exp(
 -(log(x)-normal_mean)<sup>2</sup> / (2*normal_sigma<sup>2</sup>) )
 for x > 0,
 where normal_mean = log(mean<sup>2</sup>/sqrt(sigma<sup>2</sup>
 + mean<sup>2</sup>))
 and normal_sigma = sqrt(log(1 + sigma<sup>2</sup>/mean<sup>2</sup>)).
+
+
+<h3>Members</h3>
+
+<pre>lognormal_distribution(const result_type& mean,
+	   	       const result_type& sigma)</pre>
+
+<strong>Effects:</strong> Constructs a
+<code>lognormal_distribution</code> functor. <code>mean</code> and
+<code>sigma</code> are the mean and standard deviation of the
+lognormal distribution.
+<p>
 
 
 <h2><a name="uniform_on_sphere">Class template
@@ -733,49 +756,41 @@ and normal_sigma = sqrt(log(1 + sigma<sup>2</sup>/mean<sup>2</sup>)).
 <pre>
 #include &lt;<a href="../../boost/random/uniform_on_sphere.hpp">boost/random/uniform_on_sphere.hpp</a>&gt;
 
-template&lt;class UniformRandomNumberGenerator, class RealType = double,
+template&lt;class RealType = double,
   class Cont = std::vector&lt;RealType&gt; &gt;
 class uniform_on_sphere
 {
 public:
-  typedef UniformRandomNumberGenerator base_type;
+  typedef RealType input_type;
   typedef Cont result_type;
-  explicit uniform_on_sphere(base_type & rng, int dim = 2);
-  const result_type & operator()();
+  explicit uniform_on_sphere(int dim = 2);
+  void reset();
+  template&lt;class UniformRandomNumberGenerator&gt;
+  const result_type & operator()(UniformRandomNumberGenerator& urng);
 };
 </pre>
 
 <h3>Description</h3>
 
 Instantiations of class template <code>uniform_on_sphere</code> model a
-Generator (std:25.2.6 [lib.alg.generate]).  It transforms a uniform
-distribution into a uniform distribution on the unit sphere of
-arbitrary dimension.  The <code>Cont</code> template parameter must be
-a STL-like container type with <code>begin</code> and <code>end</code>
-operations returning non-const ForwardIterators of type
-<code>Cont::iterator</code>.
+<a href="random-concepts.html#random-dist">random distribution</a>.
+Such a distribution produces random numbers uniformly distributed on
+the unit sphere of arbitrary dimension <code>dim</code>.  The
+<code>Cont</code> template parameter must be a STL-like container type
+with <code>begin</code> and <code>end</code> operations returning
+non-const ForwardIterators of type <code>Cont::iterator</code>.
 
 <h3>Members</h3>
 
-<pre>explicit uniform_on_sphere(base_type & rng, int dim = 2)</pre>
+<pre>explicit uniform_on_sphere(int dim = 2)</pre>
 
 <strong>Effects:</strong> Constructs a <code>uniform_on_sphere</code>
-functor with the uniform random number generator <code>rng</code> as
-the underlying source of random numbers. <code>dim</code> is the
-dimension of the sphere.
+functor. <code>dim</code> is the dimension of the sphere.
 <p>
-
-<pre>result_type operator()()</pre>
-
-<strong>Returns:</strong> A position on the unit sphere of
-<code>dim</code> dimensions in cartesian coordinates.  The positions
-are uniformly distributed on the unit sphere.
-<p>
-<strong>Complexity:</strong> Proportional to the number of dimensions.
 
 <p>
 <hr>
-Jens Maurer, 2001-04-15
+Jens Maurer, 2003-10-25
 
 </body>
 </html>

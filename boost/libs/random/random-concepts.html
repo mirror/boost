@@ -318,6 +318,91 @@ for debugging Monte-Carlo algorithms and analyzing particular test
 scenarios.  The Streamable concept allows to save/restore the state of
 the generator, for example to re-run a test suite at a later time.
 
+<h2><a name="random-dist">Random Distribution</a></h2>
+
+A radom distribution produces random numbers distributed according to
+some distribution, given uniformly distributed random values as input.
+
+In the following table, <code>X</code> denotes a random distribution
+class returning objects of type <code>T</code>, <code>u</code> is a
+value of <code>X</code>, <code>x</code> is a (possibly const)
+value of <code>X</code>, and <code>e</code> is an lvalue of an
+arbitrary type that meets the requirements of a uniform random number
+generator, returning values of type <code>U</code>.
+<p>
+
+
+<table border=1>
+<tr>
+<th colspan=4 align=center>Random distribution requirements
+(in addition to number generator,
+<code>CopyConstructible</code>, and <code>Assignable</code>)</th>
+<tr><td>expression</td><td>return&nbsp;type</td>
+<td>pre/post-condition</td>
+<td>complexity</td>
+</tr>
+
+<tr>
+<td><code>X::input_type</code></td>
+<td>U</td>
+<td>-</td>
+<td>compile-time</td>
+</tr>
+
+<tr>
+<td><code>u.reset()</code></td>
+<td><code>void</code></td>
+<td>subsequent uses of <code>u</code> do not depend on values
+produced by <code>e</code> prior to invoking <code>reset</code>.</td>
+<td>constant</td>
+</tr>
+
+<tr>
+<td><code>u(e)</code></td>
+<td><code>T</code></td>
+<td>the sequence of numbers returned by successive invocations with
+the same object <code>e</code> is randomly distributed with some
+probability density function p(x)</td>
+<td>amortized constant number of invocations of <code>e</code></td>
+</tr>
+
+<tr>
+<td><code>os &lt;&lt; x</code></td>
+<td><code>std::ostream&</code></td>
+<td>writes a textual representation for the parameters and additional
+internal data of the distribution <code>x</code> to <code>os</code>.
+<br>
+post: The <code>os.<em>fmtflags</em></code> and fill character are
+unchanged.</td>
+<td>O(size of state)</td>
+</tr>
+
+<tr>
+<td><code>is &gt;&gt; u</code></td>
+<td><code>std::istream&</code></td>
+<td>restores the parameters and additional internal data of the
+distribution <code>u</code>.
+<br>
+pre: <code>is</code> provides a textual representation that was
+previously written by <code>operator&lt;&lt;</code>
+<br>
+post: The <code>is.<em>fmtflags</em></code> are unchanged.</td>
+<td>O(size of state)</td>
+</tr>
+
+</table>
+<p>
+
+Additional requirements:   The sequence of numbers produced by
+repeated invocations of <code>x(e)</code> does not change whether or
+not <code>os &lt;&lt; x</code> is invoked between any of the
+invocations <code>x(e)</code>.   If a textual representation
+is written using <code>os &lt;&lt; x</code> and that representation
+is restored into the same or a different object <code>y</code> of the
+same type using <code>is &gt;&gt; y</code>, repeated invocations of
+<code>y(e)</code> produce the same sequence of random numbers as would
+repeated invocations of <code>x(e)</code>.
+<p>
 
 <h2><a name="quasi-rng">Quasi-Random Number Generators</a></h2>
 
