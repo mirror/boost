@@ -27,16 +27,25 @@ main()
         gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,28))==4);
   check("Day of week 2000-09-29 == 5 (Fri)", 
         gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,29))==5);
-  check("Day of week 2000-09-30 == 6 (Sat)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,30))==6);
+  check("Day of week 2000-09-30 == 6 (Sat)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2000,9,30))==6);
   //see calendar FAQ 2.2 for reference
-  check("Day of week 1953-08-02 == 0 (Sun)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,2))==0);
-  check("Day of week 1953-08-03 == 1 (Mon)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,3))==1);
-  check("Day of week 1953-08-04 == 2 (Tue)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,4))==2);
-  check("Day of week 1953-08-05 == 3 (Wed)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,5))==3);
-  check("Day of week 1953-08-06 == 4 (Thu)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,6))==4);
-  check("Day of week 1953-08-07 == 5 (Fri)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,7))==5);
-  check("Day of week 1953-08-08 == 6 (Sat)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,8))==6);
-  check("Day of week 2001-08-31 == 5 (Fri)", gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2001,8,31))==5);
+  check("Day of week 1953-08-02 == 0 (Sun)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,2))==0);
+  check("Day of week 1953-08-03 == 1 (Mon)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,3))==1);
+  check("Day of week 1953-08-04 == 2 (Tue)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,4))==2);
+  check("Day of week 1953-08-05 == 3 (Wed)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,5))==3);
+  check("Day of week 1953-08-06 == 4 (Thu)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,6))==4);
+  check("Day of week 1953-08-07 == 5 (Fri)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,7))==5);
+  check("Day of week 1953-08-08 == 6 (Sat)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(1953,8,8))==6);
+  check("Day of week 2001-08-31 == 5 (Fri)", 
+        gregorian_calendar::day_of_week(gregorian_calendar::ymd_type(2001,8,31))==5);
   
   //Checked against Caledrical Calc M. Edition p 396 and www site
   check("Day of week 1400-01-01 == 3 (Wed)", 
@@ -83,6 +92,54 @@ main()
   check("2100 is NOT a leap year", !gregorian_calendar::is_leap_year(2100));
   check("1999 is NOT a leap year", !gregorian_calendar::is_leap_year(1999));
   check("5000 is NOT a leap year", !gregorian_calendar::is_leap_year(5000));
+
+  int weeknum1 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(2004,10,18));
+  check("ToWeekNumber 2004-10-18 is week 43", weeknum1 == 43);
+  
+  int weeknum2 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(2002,1,1));
+  check("ToWeekNumber 2002-1-1 is week 1", weeknum2 == 1);
+  
+  int weeknum3 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(2000,12,31));
+  check("ToWeekNumber 2000-12-31 is week 52", weeknum3 == 52);
+
+  //check for week when week==0.
+  int weeknum4 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(2000,1,1));
+  check("ToWeekNumber 2000-1-1 is week 52", weeknum4 == 52);
+  
+  //check for week when week==53 and day==6.
+  int weeknum5 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(1998,12,31));
+  check("ToWeekNumber 1998-12-31 is week 53", weeknum5 == 53);
+  
+  //check for week when week==53 day==5 and the year is a leap year.
+  int weeknum6 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(1992,12,31));
+  check("ToWeekNumber 1992-12-31 is week 53", weeknum6 == 53);
+
+  //check for week when week==53 1993-Jan-1
+  int weeknum7 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(1993,1,1));
+  check("ToWeekNumber 1993-1-1 is week 53", weeknum7 == 53);
+
+  //check for week when week==53 1993-Jan-2
+  int weeknum8 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(1993,1,2));
+  check("ToWeekNumber 1993-Jan-2 is week 53", weeknum8 == 53);
+
+  //check for week when week==53 1993-Jan-3
+  int weeknum9 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(1993,1,3));
+  check("ToWeekNumber 1993-Jan-3 is week 53", weeknum9 == 53);
+
+  //check for week when week==1 1993-Jan-4
+  int weeknum10 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(1993,1,4));
+  check("ToWeekNumber 1993-Jan-4 is week 1", weeknum10 == 1);
+  
+  //check for week when week=53 and day != 6 and != 5.
+  int weeknum11 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(2001,12,31));
+  check("ToWeekNumber 2001-12-31 is week 1", weeknum11 == 1);
+
+  //test the boundaries of week_number
+  int weeknum12 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(1400,1,1));
+  check("ToWeekNumber 1400-1-1 is week 1", weeknum12 == 1);
+
+  int weeknum13 = gregorian_calendar::week_number(gregorian_calendar::ymd_type(9999,12,31));
+  check("ToWeekNumber 9999-12-31 is week 52", weeknum13 == 52);
 
 
   unsigned long jday1 = gregorian_calendar::day_number(gregorian_calendar::ymd_type(2000,1,1));
