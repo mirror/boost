@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   16 Mar 01  Added BOOST_VERSION (Jens Maurer)
 //   06 Mar 01  Refactored EDG checks for Intel C++ (Dave Abrahams)
 //   04 Mar 01  Factored EDG checks, added BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 //              for Intel C++ 5.0 (Dave Abrahams)
@@ -56,6 +57,13 @@
 
 #ifndef BOOST_CONFIG_HPP
 #define BOOST_CONFIG_HPP
+
+#define BOOST_VERSION 102102
+
+//  BOOST_VERSION % 100 is the sub-minor version
+//  BOOST_VERSION / 100 % 1000 is the minor version
+//  BOOST_VERSION / 100000 is the major version
+
 
 //  Conformance Flag Macros  -------------------------------------------------//
 //
