@@ -305,7 +305,7 @@ namespace boost { namespace date_time {
                                                                        fill_char, 
                                                                        &tm_value,
                                                                        &*a_format.begin(), 
-                                                                       &*a_format.end());
+                                                                       &*a_format.begin()+a_format.size());
     }
   protected:
     string_type                   m_format;
