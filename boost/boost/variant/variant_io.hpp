@@ -20,6 +20,7 @@
 #include <iosfwd> // for std::basic_ostream forward declare
 
 #include "boost/variant/variant_fwd.hpp"
+#include "boost/variant/static_visitor.hpp"
 
 namespace boost {
 
