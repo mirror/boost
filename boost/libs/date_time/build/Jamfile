@@ -24,7 +24,7 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ;
 
 # Base names of the source files for libboost_date_time
 CPP_SOURCES =
-    greg_month greg_weekday ;
+    greg_month greg_weekday date_generators ;
 
 dll boost_date_time : ../src/gregorian/$(CPP_SOURCES).cpp
     : <sysinclude>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
