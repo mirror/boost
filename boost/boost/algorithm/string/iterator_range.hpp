@@ -74,7 +74,7 @@ namespace boost {
             typedef IteratorT iterator;
 
             //! Default constructor
-            iterator_range() {}
+            iterator_range() : m_Begin(), m_End() {}
             
             //! Constructor from a pair of iterators
             iterator_range( iterator Begin, iterator End ) : 

@@ -88,6 +88,7 @@ namespace boost {
                 make_transform_iterator( 
                     find_iterator_type( begin(Input), InputEnd, Finder ),
                     copy_range_type());
+            
             transform_iter_type itEnd=
                 make_transform_iterator( 
                     find_iterator_type(),
