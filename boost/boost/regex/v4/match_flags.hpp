@@ -72,7 +72,7 @@ typedef enum _match_flags
 
 } match_flags;
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) || defined(__SUNPRO_CC)
 typedef unsigned long match_flag_type;
 #else
 typedef match_flags match_flag_type;

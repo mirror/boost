@@ -54,7 +54,7 @@ perl_matcher<BidiIterator, Allocator, traits, Allocator2>::perl_matcher(BidiIter
    estimate_max_state_count(static_cast<category*>(0));
    if(!(m_match_flags & (match_perl|match_posix)))
    {
-      if(re.flags() & regex_constants::perlex)
+      if((re.flags() & regex_constants::perlex) || (re.flags() & regex_constants::literal))
          m_match_flags |= match_perl;
       else
          m_match_flags |= match_posix;
