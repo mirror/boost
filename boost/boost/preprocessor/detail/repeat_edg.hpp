@@ -16,7 +16,7 @@
 #define BOOST_PP_R1_2(M,D) M(0,D) M(1,D)
 #define BOOST_PP_R1_3(M,D) M(0,D) M(1,D) M(2,D)
 #define BOOST_PP_R1_4(M,D) M(0,D) M(1,D) M(2,D) M(3,D)
-#define BOOST_cvPP_R1_5(M,D) M(0,D) M(1,D) M(2,D) M(3,D) M(4,D)
+#define BOOST_PP_R1_5(M,D) M(0,D) M(1,D) M(2,D) M(3,D) M(4,D)
 #define BOOST_PP_R1_6(M,D) M(0,D) M(1,D) M(2,D) M(3,D) M(4,D) M(5,D)
 #define BOOST_PP_R1_7(M,D) M(0,D) M(1,D) M(2,D) M(3,D) M(4,D) M(5,D) M(6,D)
 #define BOOST_PP_R1_8(M,D) M(0,D) M(1,D) M(2,D) M(3,D) M(4,D) M(5,D) M(6,D) M(7,D)
