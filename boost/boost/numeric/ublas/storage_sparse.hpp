@@ -123,8 +123,8 @@ namespace boost { namespace numeric { namespace ublas {
         // typedef const data_value_type &data_const_reference;
         typedef typename type_traits<data_value_type>::const_reference data_const_reference;
         typedef data_value_type &data_reference;
-        typedef std::pair<index_type, data_value_type> value_type;
-        typedef std::pair<index_type, data_value_type> *pointer;
+        typedef typename A::value_type value_type;
+        typedef value_type *pointer;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -243,8 +243,9 @@ namespace boost { namespace numeric { namespace ublas {
 
 
     // Default map type is simply forwarded to std::map
+    // FIXME should use ALLOC for map but std::pair<const I, T> fails
     template<class I, class T, class ALLOC>
-    class map_std : public std::map<I, T, ALLOC> {
+    class map_std : public std::map<I, T> {
     };
 
 
@@ -262,7 +263,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         typedef sparse_storage_element<map_array> data_reference;
 #endif
-        typedef std::pair<I, T> value_type;
+        typedef typename ALLOC::value_type value_type;
         typedef const value_type &const_reference;
         typedef value_type &reference;
         typedef const value_type *const_pointer;
@@ -550,8 +551,8 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         // Provide destroy as a non member function
         BOOST_UBLAS_INLINE
-        void static static_destroy (pointer p) {
-            p -> ~value_type();
+        void static static_destroy (reference p) {
+            (&p) -> ~value_type ();
         }
         ALLOC alloc_;
         size_type capacity_;
@@ -566,44 +567,44 @@ namespace boost { namespace numeric { namespace ublas {
         template<class A>
         struct map_traits {};
 
-        template<class I, class T>
-        struct map_traits<map_array<I, T> > {
-            typedef typename map_array<I, T>::data_reference reference;
+        template<class I, class T, class ALLOC>
+        struct map_traits<map_array<I, T, ALLOC> > {
+            typedef typename map_array<I, T, ALLOC>::data_reference reference;
         };
 
-        template<class I, class T>
-        struct map_traits<std::map<I, T> > {
-            typedef typename std::map<I, T>::mapped_type &reference;
+        template<class I, class T, class ALLOC>
+        struct map_traits<std::map<I, T, ALLOC> > {
+            typedef typename std::map<I, T, ALLOC>::mapped_type &reference;
 
         };
 #endif
 
         // Some helpers for map_array
 
-        template<class I, class T>
+        template<class I, class T, class ALLOC>
         BOOST_UBLAS_INLINE
-        void reserve (map_array<I, T> &a, typename map_array<I, T>::size_type capacity) {
-            a.reserve (capacity);
+        void reserve (map_array<I, T, ALLOC> &m, typename map_array<I, T, ALLOC>::size_type capacity) {
+            m.reserve (capacity);
         }
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        template<class I, class T>
+        template<class I, class T, class ALLOC>
         BOOST_UBLAS_INLINE
-        typename map_array<I, T>::data_reference make_reference (map_array<I, T> &a, typename map_array<I, T>::iterator it) {
+        typename map_array<I, T, ALLOC>::data_reference make_reference (map_array<I, T, ALLOC> &a, typename map_array<I, T, ALLOC>::iterator it) {
             return reference (a, it);
         }
 #endif
 
         // Some helpers for std::map
 
-        template<class I, class T>
+        template<class I, class T, class ALLOC>
         BOOST_UBLAS_INLINE
-        void reserve (std::map<I, T> &/* a */, typename std::map<I, T>::size_type /* capacity */) {}
+        void reserve (std::map<I, T, ALLOC> &/* m */, typename std::map<I, T, ALLOC>::size_type /* capacity */) {}
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        template<class I, class T>
+        template<class I, class T, class ALLOC>
         BOOST_UBLAS_INLINE
-        typename std::map<I, T>::mapped_type &make_reference (std::map<I, T> &/* a */, typename std::map<I, T>::iterator it) {
+        typename std::map<I, T, ALLOC>::mapped_type &make_reference (std::map<I, T, ALLOC> &/* a */, typename std::map<I, T, ALLOC>::iterator it) {
             return (*it).second;
         }
 #endif
@@ -611,9 +612,9 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
     // This specialization is missing in Dinkumware's STL?!
-    template<class I, class T, class F>
+    template<class I, class T, class F, class ALLOC>
     BOOST_UBLAS_INLINE
-    void swap (std::map<I, T, F> &a1, std::map<I, T, F> &a2) {
+    void swap (std::map<I, T, F, ALLOC> &a1, std::map<I, T, F, ALLOC> &a2) {
         if (&a1 != &a2)
             a1.swap (a2);
     }
@@ -625,7 +626,7 @@ namespace boost { namespace numeric { namespace ublas {
 //  inconsitent value_type zero init
 
     // Set array
-    template<class I>
+    template<class I, class ALLOC>
     class set_array {
     public:
         typedef std::size_t size_type;
@@ -879,9 +880,9 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // This specialization is missing in Dinkumware's STL?!
-    template<class I, class F>
+    template<class I, class F, class ALLOC>
     BOOST_UBLAS_INLINE
-    void swap (std::set<I, F> &a1, std::set<I, F> &a2) {
+    void swap (std::set<I, F, ALLOC> &a1, std::set<I, F> &a2) {
         if (&a1 != &a2)
             a1.swap (a2);
     }
