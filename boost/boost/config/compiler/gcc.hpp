@@ -37,6 +37,13 @@
 #endif
 
 //
+// Bug specific to gcc 3.1 and 3.2:
+//
+#if (__GNUC__ == 3) && ((__GNUC_MINOR__ == 1) || (__GNUC_MINOR__ == 2))
+#  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+#endif
+
+//
 // Threading support: Turn this on unconditionally here (except for
 // those platforms where we can know for sure). It will get turned off again
 // later if no threading API is detected.
