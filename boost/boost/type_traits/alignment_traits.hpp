@@ -185,7 +185,7 @@ class type_with_alignment
   typedef type_with_alignment<Align> this_type;
 
   typedef typename detail::ct_if<
-              detail::is_aligned<alignment_of<t1>::value, Align>::value
+              (detail::is_aligned<(alignment_of<t1>::value), Align>::value)
             , t1
             , detail::max_align
           >::type align_t;

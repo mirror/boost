@@ -200,11 +200,12 @@ struct test_align<T&>
 template<class T>
 struct test_type_with_align 
 {
+  typedef typename boost::type_with_alignment<
+                     (boost::alignment_of<T>::value)>::type 
+    align_t;
+
   static void do_it()
   {
-    typedef typename boost::type_with_alignment<
-                       boost::alignment_of<T>::value>::type 
-      align_t;
     int align = boost::alignment_of<T>::value;
     int new_align = boost::alignment_of<align_t>::value;
     ++test_count;
