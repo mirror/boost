@@ -19,7 +19,10 @@
 #define BOOST_ENABLE_ASSERT_HANDLER
 
 #include "boost/optional.hpp"
+
+#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
 #include "boost/utility/typed_in_place_factory.hpp"
+#endif
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -29,6 +32,7 @@
 
 #include "optional_test_common.cpp"
 
+#ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
 struct A
 {
   A ( double a0, std::string a1 ) : m_a0(a0), m_a1(a1) {}
@@ -44,10 +48,18 @@ int test_main( int, char* [] )
 {
   // This must fail to compile.
   // The first template argument to in_place<> is the target-type,
-  // not the first constructor parameter type. 
+  // not the first constructor parameter type.
   boost::optional<A> opt2 ( boost::in_place<int>(3.14,"pi") ) ;
 
   return 0;
 }
+#else
+int test_main( int, char* [] )
+{
+  boost::optional<A> opt2 ( int(3.14) ) ;
+
+  return 0;
+}
+#endif
 
 
