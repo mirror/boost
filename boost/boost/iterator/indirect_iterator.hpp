@@ -150,10 +150,10 @@ namespace boost
 #else
       template <class D>
       struct get_from_iter {
-	typedef typename mpl::apply_if<
+	typedef typename mpl::if_<
             iterator_is_mutable<Dereferenceable>
-            , iterator_value<Dereferenceable>
-            , iterator_value<Dereferenceable> const
+	, typename iterator_value<Dereferenceable>::type
+	, typename iterator_value<Dereferenceable>::type const
 	>::type type;
       };
 
