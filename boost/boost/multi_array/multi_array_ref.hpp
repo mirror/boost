@@ -37,15 +37,6 @@
 
 namespace boost {
 
-namespace detail {
-namespace multi_array {
-  // This structure is used to specially overload const_multi_array_ref's
-  // constructor for cases where a multi_array is constructed from a
-  // const_multi_array_ref. 
-  struct deep_copy_marker { };
-} 
-} 
-    
 template <typename T, std::size_t NumDims,
   typename TPtr = const T*
 >
@@ -324,7 +315,8 @@ public:
   void set_base_ptr(TPtr new_base) { base_ = new_base; }
 
 
-  // This is only supplied to support multi_array's default constructor
+  // This constructor supports multi_array's default constructor
+  // and constructors from multi_array_ref, subarray, and array_view
   explicit
   const_multi_array_ref(TPtr base,
                         const storage_order_type& so,
@@ -347,47 +339,6 @@ public:
      init_multi_array_ref(extent_list.begin());
    }
  }
-
-
-  // RG - const_multi_array should be PUBLICLy constructible from:
-  // const_multi_array_ref
-  // multi_array_ref
-  // 
-  // storage order doesn't carry over to sub_array or array_view.
-
-  // Special constructors for constructing a multi_array object from another
-  // array type defined by the library.  The new multi_array can specify its 
-  // own new storage order. 
-
-  // RG! - these go away!
-
-  template <typename OPtr>
-  const_multi_array_ref(
-      const detail::multi_array::const_sub_array<T,NumDims,OPtr>& rhs,
-      const general_storage_order<NumDims>& so)
-    : base_(0), // playing it "safe"; so we learn of errors
-      storage_(so),
-      origin_offset_(0), directional_offset_(0),
-      num_elements_(rhs.num_elements())
-  {
-    using boost::copy_n;
-    copy_n(rhs.index_bases(),rhs.num_dimensions(),index_base_list_.begin());
-    init_multi_array_ref(rhs.shape());
-  }
-
-  template <typename OPtr>
-  const_multi_array_ref(
-      const detail::multi_array::const_multi_array_view<T,NumDims,OPtr>& rhs,
-      const general_storage_order<NumDims>& so)
-    : base_(0), 
-      storage_(so),
-      origin_offset_(0), directional_offset_(0),
-      num_elements_(rhs.num_elements())
-  {
-    using boost::copy_n;
-    copy_n(rhs.index_bases(),rhs.num_dimensions(),index_base_list_.begin());
-    init_multi_array_ref(rhs.shape());
-  }
 
 
   TPtr base_;
@@ -663,24 +614,6 @@ protected:
                            const index* index_bases,
                            const size_type* extents) :
     super_type(base,so,index_bases,extents) { }
-
-
-  //
-  // These are meant to support multi_array's construction from other
-  // array types
-  //
-
-  template <typename OPtr>
-  multi_array_ref(const detail::multi_array::
-                  const_sub_array<T,NumDims,OPtr>& rhs,
-                  const general_storage_order<NumDims>& so)
-    : super_type(rhs,so) {} 
-
-  template <typename OPtr>
-  multi_array_ref(const detail::multi_array::
-                  const_multi_array_view<T,NumDims,OPtr>& rhs,
-                  const general_storage_order<NumDims>& so)
-    : super_type(rhs,so) {} 
 
 };
 

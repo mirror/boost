@@ -38,6 +38,7 @@
 namespace boost {
   namespace detail {
     namespace multi_array {
+
       struct populate_index_ranges {
         multi_array_types::index_range
         operator()(multi_array_types::index base,
@@ -45,12 +46,7 @@ namespace boost {
           return multi_array_types::index_range(base,base+extent);
         }
       };
-      template <typename T, std::size_t N>
-      boost::array<T,N> make_default_array() {
-        boost::array<T,N> A;
-        A.assign(T());
-        return A;
-      }
+
     } //namespace multi_array
   } // namespace detail
 
@@ -85,17 +81,9 @@ public:
     typedef boost::detail::multi_array::multi_array_view<T,NDims> type;
   };
 
-
   explicit multi_array() :
-    super_type((T*)initial_base_,
-               c_storage_order(),
-#if 0
-               detail::multi_array::make_default_array<index,NumDims>(),
-               detail::multi_array::make_default_array<size_type,NumDims>()
-#else
-               0,0
-#endif
-) {
+    super_type((T*)initial_base_,c_storage_order(),
+               /*index_bases=*/0, /*extents=*/0) {
     allocate_space(); 
   }
     
@@ -190,48 +178,48 @@ public:
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
 
+
   template <typename OPtr>
   multi_array(const detail::multi_array::
               const_sub_array<T,NumDims,OPtr>& rhs,
-              const general_storage_order<NumDims>& so = c_storage_order()) :
-    super_type(rhs,so) {
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
 
-  // For some reason, gcc 2.95.2 doesn't pick the above template
-  // member function when passed a subarray, so i was forced to
-  // duplicate the functionality here...
+  // This constructor is necessary because of more exact template matches.
+  // enable-if?
   multi_array(const detail::multi_array::
               sub_array<T,NumDims>& rhs,
-              const general_storage_order<NumDims>& so = c_storage_order()) :
-    super_type(rhs,so) {
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
 
-
-  // Support construction of a multi_array from an array_view as is done above
-  // for subarrays.
   template <typename OPtr>
   multi_array(const detail::multi_array::
               const_multi_array_view<T,NumDims,OPtr>& rhs,
-              const general_storage_order<NumDims>& so = c_storage_order()) :
-    super_type(rhs,so) {
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
 
-  // I'm guessing that gcc 2.95.2 would share the same problem with array_view
-  // as it does for subarray, hence the following constructor:
+  // This constructor is necessary because of more exact template matches.
+  // enable-if?
   multi_array(const detail::multi_array::
               multi_array_view<T,NumDims>& rhs,
-              const general_storage_order<NumDims>& so = c_storage_order()) :
-    super_type(rhs,so) {
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
-
     
   // Since assignment is a deep copy, multi_array_ref
   // contains all the necessary code.
