@@ -46,13 +46,7 @@
       // Updated Dinkum library defines this, and provides
       // its own min and max definitions.
 #     define BOOST_NO_STD_MIN_MAX
-#     undef min
-#     undef max
 #     define BOOST_NO_MS_INT64_NUMERIC_LIMITS
-#  endif
-#  ifndef NOMINMAX
-      // avoid spurious NOMINMAX redefinition warning
-#     define NOMINMAX
 #  endif
 #endif
 

@@ -37,3 +37,16 @@
 #define BOOST_HAS_FTIME
 
 #endif
+
+//
+// disable min/max macros:
+//
+#ifdef min
+#  undef min
+#endif
+#ifdef max
+#  undef max
+#endif
+#ifndef NOMINMAX
+#  define NOMINMAX
+#endif

@@ -19,9 +19,6 @@
 #  define BOOST_NO_VOID_RETURNS
    // disable min/max macro defines on vc6:
    //
-#  ifndef NOMINMAX
-#     define NOMINMAX
-#  endif
 #endif
 
 #if (_MSC_VER <= 1300) // || !defined(BOOST_STRICT_CONFIG) // VC7 Beta 2 or later
@@ -50,15 +47,6 @@
 #  define BOOST_NO_TEMPLATE_TEMPLATES
 #  if (_MSC_VER > 1200)
 #     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
-#  endif
-   //
-   // disable min/max macros if defined:
-   //
-#  ifdef min
-#     undef min
-#  endif
-#  ifdef max
-#     undef max
 #  endif
 
 #endif
