@@ -8,7 +8,6 @@ exe timer : timer/regex_timer.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe jgrep : jgrep/jgrep.cpp jgrep/main.cpp
@@ -18,7 +17,6 @@ exe jgrep : jgrep/jgrep.cpp jgrep/main.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe credit_card_example : snippets/credit_card_example.cpp
@@ -28,7 +26,6 @@ exe credit_card_example : snippets/credit_card_example.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 
@@ -39,7 +36,6 @@ exe partial_regex_grep : snippets/partial_regex_grep.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe partial_regex_match : snippets/partial_regex_match.cpp
@@ -49,7 +45,6 @@ exe partial_regex_match : snippets/partial_regex_match.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_grep_example_1 : snippets/regex_grep_example_1.cpp
@@ -59,7 +54,6 @@ exe regex_grep_example_1 : snippets/regex_grep_example_1.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_grep_example_2 : snippets/regex_grep_example_2.cpp
@@ -69,7 +63,6 @@ exe regex_grep_example_2 : snippets/regex_grep_example_2.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_grep_example_3 : snippets/regex_grep_example_3.cpp
@@ -79,7 +72,6 @@ exe regex_grep_example_3 : snippets/regex_grep_example_3.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_grep_example_4 : snippets/regex_grep_example_4.cpp
@@ -89,7 +81,6 @@ exe regex_grep_example_4 : snippets/regex_grep_example_4.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_match_example : snippets/regex_match_example.cpp
@@ -99,7 +90,6 @@ exe regex_match_example : snippets/regex_match_example.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_merge_example : snippets/regex_merge_example.cpp
@@ -109,7 +99,6 @@ exe regex_merge_example : snippets/regex_merge_example.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_search_example : snippets/regex_search_example.cpp
@@ -119,7 +108,6 @@ exe regex_search_example : snippets/regex_search_example.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_split_example_1 : snippets/regex_split_example_1.cpp
@@ -129,7 +117,6 @@ exe regex_split_example_1 : snippets/regex_split_example_1.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
 
 exe regex_split_example_2 : snippets/regex_split_example_2.cpp
@@ -139,8 +126,8 @@ exe regex_split_example_2 : snippets/regex_split_example_2.cpp
 		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
-      <runtime-link>dynamic
 	;
+
 
 
 
