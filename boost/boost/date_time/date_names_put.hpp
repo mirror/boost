@@ -31,8 +31,8 @@ namespace date_time {
      * 
      */
     template<class Config,
-	     class charT = char, 
-	     class OutputIterator = std::ostreambuf_iterator<charT> >
+             class charT = char, 
+             class OutputIterator = std::ostreambuf_iterator<charT> >
     class date_names_put : public std::locale::facet
     {
     public:
@@ -48,77 +48,78 @@ namespace date_time {
       static std::locale::id id;
       void put_special_value(iter_type& oitr, special_value_enum sv) const
       {
-	do_put_special_value(oitr, sv);
+        do_put_special_value(oitr, sv);
       }
       void put_month_short(iter_type& oitr, month_enum moy) const
       {
-	do_put_month_short(oitr, moy);
+        do_put_month_short(oitr, moy);
       }
       void put_month_long(iter_type& oitr, month_enum moy) const
       {
-	do_put_month_long(oitr, moy);
+        do_put_month_long(oitr, moy);
       }
       void put_weekday_short(iter_type& oitr, weekday_enum wd) const
       {
-	do_put_weekday_short(oitr, wd);
+        do_put_weekday_short(oitr, wd);
       }
       void put_weekday_long(iter_type& oitr, weekday_enum wd) const
       {
-	do_put_weekday_long(oitr, wd);
+        do_put_weekday_long(oitr, wd);
       }
       bool has_date_sep_chars() const
       {
-	return do_has_date_sep_chars();
+        return do_has_date_sep_chars();
       }
       void year_sep_char(iter_type& oitr) const
       {
-	do_year_sep_char(oitr);
+        do_year_sep_char(oitr);
       }
       //! char between year-month
       void month_sep_char(iter_type& oitr) const
       {
-	do_month_sep_char(oitr);
+        do_month_sep_char(oitr);
       }
       //! Char to separate month-day
       void day_sep_char(iter_type& oitr) const
       {
-	do_day_sep_char(oitr);
+        do_day_sep_char(oitr);
       }
 
     protected:
       //! Default facet implementation uses month_type defaults
       virtual void do_put_month_short(iter_type& oitr, month_enum moy) const
       {
-	month_type gm(moy);
-	put_string(oitr, gm.as_short_string());
+        month_type gm(moy);
+        put_string(oitr, gm.as_short_string());
       }
       //! Default facet implementation uses month_type defaults
       virtual void do_put_month_long(iter_type& oitr, 
-				     month_enum moy) const
+                                     month_enum moy) const
       {
-	month_type gm(moy);
-	put_string(oitr, gm.as_long_string());
+        month_type gm(moy);
+        put_string(oitr, gm.as_long_string());
       }
       //! Default facet implementation for special value types
       virtual void do_put_special_value(iter_type& oitr, special_value_enum sv) const
       {
-	switch (sv) {
-	  case not_a_date_time: 
-	  { 
-	    put_string(oitr, "not-a-date-time");
+        switch (sv) {
+          case not_a_date_time: 
+          { 
+            put_string(oitr, "not-a-date-time");
             break;
           }
           case pos_infin: 
           { 
-	    put_string(oitr, "+infinity");
+            put_string(oitr, "+infinity");
             break;
           }
           case neg_infin: 
           { 
-	    put_string(oitr, "-infinity");
+            put_string(oitr, "-infinity");
             break;
           }
-	}
+          default: {} //quiet compilers that want all cases covered here (eg: gcc 3.1)
+        }
       }
       virtual void do_put_weekday_short(iter_type& oitr, weekday_enum wd) const
       {
@@ -128,52 +129,57 @@ namespace date_time {
       }
       virtual bool do_has_date_sep_chars() const
       {
-	return true;
+        return true;
       }
       virtual void do_year_sep_char(iter_type& oitr) const
       {
-	put_string(oitr, "-");
+        put_string(oitr, "-");
       }
       //! char between year-month
       virtual void do_month_sep_char(iter_type& oitr) const
       {
-	put_string(oitr, "-");
+        put_string(oitr, "-");
       }
       //! Char to separate month-day
       virtual void do_day_sep_char(iter_type& oitr) const
       {
-	put_string(oitr, "-");
+        put_string(oitr, "-");
       }
 
       void put_string(iter_type& oi, const char* const s) const
       {
-	string_type s1(s);
-	typename string_type::iterator si,end;
-	for (si=s1.begin(), end=s1.end(); si!=end; si++, oi++) {
-	  *oi = *si;
-	}
+        string_type s1(s);
+        typename string_type::iterator si,end;
+        for (si=s1.begin(), end=s1.end(); si!=end; si++, oi++) {
+          *oi = *si;
+        }
       }
     };
 
 
     //! An date name output facet that takes an array of char* to define strings
     template<class Config,
-	     class charT = char, 
-	     class OutputIterator = std::ostreambuf_iterator<charT> >
+             class charT = char, 
+             class OutputIterator = std::ostreambuf_iterator<charT> >
     class all_date_names_put : public date_names_put<Config, charT, OutputIterator>
     {
     public:
-      all_date_names_put(const charT* const month_short_names[],
-			 const charT* const month_long_names[],
-			 const charT* const special_value_names[],
-			 const charT* const weekday_short_names[],
-			 const charT* const weekday_long_names[]) :
-	month_short_names_(month_short_names),
-	month_long_names_(month_long_names),
-	special_value_names_(special_value_names),
-	weekday_short_names_(weekday_short_names),
-	weekday_long_names_(weekday_long_names)
-      {};
+      all_date_names_put(const char* const month_short_names[],
+                         const char* const month_long_names[],
+                         const char* const special_value_names[],
+                         const char* const weekday_short_names[],
+                         const char* const weekday_long_names[],
+                         char separator_char = '-') :
+        month_short_names_(month_short_names),
+        month_long_names_(month_long_names),
+        special_value_names_(special_value_names),
+        weekday_short_names_(weekday_short_names),
+        weekday_long_names_(weekday_long_names)
+      {
+        separator_char_[0] = separator_char;
+        separator_char_[1] = '\0';
+
+      };
       typedef OutputIterator iter_type;
       typedef typename Config::month_enum month_enum;
       typedef typename Config::weekday_enum weekday_enum;
@@ -183,32 +189,45 @@ namespace date_time {
       //! Generic facet that takes array of chars
       virtual void do_put_month_short(iter_type& oitr, month_enum moy) const
       {
-	put_string(oitr, month_short_names_[moy-1]);
+        put_string(oitr, month_short_names_[moy-1]);
       }
       //! Long month names 
       virtual void do_put_month_long(iter_type& oitr, month_enum moy) const
       {
-	put_string(oitr, month_long_names_[moy-1]);
+        put_string(oitr, month_long_names_[moy-1]);
       }
       //! Special values names
       virtual void do_put_special_value(iter_type& oitr, special_value_enum sv) const
       {
-	put_string(oitr, special_value_names_[sv]);
+        put_string(oitr, special_value_names_[sv]);
       }
       virtual void do_put_weekday_short(iter_type& oitr, weekday_enum wd) const
       {
-	put_string(oitr, weekday_short_names_[wd]);
+        put_string(oitr, weekday_short_names_[wd]);
       }
       virtual void do_put_weekday_long(iter_type& oitr, weekday_enum wd) const
       {
-	put_string(oitr, weekday_long_names_[wd]);
+        put_string(oitr, weekday_long_names_[wd]);
       }
+      //! char between year-month
+      virtual void do_month_sep_char(iter_type& oitr) const
+      {
+        put_string(oitr, separator_char_);
+      }
+      //! Char to separate month-day
+      virtual void do_day_sep_char(iter_type& oitr) const
+      {
+        put_string(oitr, separator_char_);
+      }
+
     private:
       const char* const* month_short_names_;
       const char* const* month_long_names_;
       const char* const* special_value_names_;
       const char* const* weekday_short_names_;
       const char* const* weekday_long_names_;
+      char separator_char_[2];
+      
     };
 
 } } //namespace boost::date_time

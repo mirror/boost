@@ -56,22 +56,21 @@ namespace CV {
       //adding 1 below gets rid of a compiler warning which occurs when the 
       //min_value is 0 and the type is unsigned....
       if (value+1 < min()+1) {
-	value_policies::on_error(value_, value, min_violation);
-	return;
+        value_policies::on_error(value_, value, min_violation);
+        return;
       }
       if (value > max()) {
-	value_policies::on_error(value_, value, max_violation);
-	return;
+        value_policies::on_error(value_, value, max_violation);
+        return;
       }
       value_ = value;
 
     }
-		      
 };
 
   //! Template to shortcut the constrained_value policy creation process
   template<typename rep_type, rep_type min_value, 
-	   rep_type max_value, class exception_type>
+           rep_type max_value, class exception_type>
   class simple_exception_policy
   {
   public:

@@ -1,4 +1,3 @@
-
 #ifndef DATE_TIME_TIME_RESOLUTION_TRAITS_HPP
 #define DATE_TIME_TIME_RESOLUTION_TRAITS_HPP
 
@@ -15,10 +14,10 @@ namespace boost {
 namespace date_time {
 
    template<typename frac_sec_type, 
-	   time_resolutions res, 
-	   frac_sec_type resolution_adjust,
-	   unsigned short frac_digits,
-	   typename v_type = boost::int32_t >
+            time_resolutions res, 
+            frac_sec_type resolution_adjust,
+            unsigned short frac_digits,
+            typename v_type = boost::int32_t >
   class time_resolution_traits {
   public:
     typedef frac_sec_type fractional_seconds_type;
@@ -45,9 +44,9 @@ namespace date_time {
       return resolution_adjust;
     }
     static tick_type to_tick_count(hour_type hours,
-				   min_type  minutes,
-				   sec_type  seconds,
-				   fractional_seconds_type  fs)
+                                   min_type  minutes,
+                                   sec_type  seconds,
+                                   fractional_seconds_type  fs)
     {
       return (((hours*3600) + (minutes*60) + seconds)*res_adjust()) + fs;
     }

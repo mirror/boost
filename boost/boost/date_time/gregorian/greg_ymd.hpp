@@ -15,13 +15,13 @@ namespace boost {
 namespace gregorian {
   
   typedef date_time::year_month_day_base<greg_year, 
-				    greg_month, 
-				    greg_day> greg_year_month_day;
-
-
+                                         greg_month, 
+                                         greg_day> greg_year_month_day;
+  
+  
   
 } } //namespace gregorian
-  
+
 
 /* Copyright (c) 2002
  * CrystalClear Software, Inc.

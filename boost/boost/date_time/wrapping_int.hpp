@@ -44,10 +44,10 @@ public:
     int_type underflow = v / wrap_val;
     
 //     std::cout << "wi :" << value_ << "|"
-// 	      << v << "|"
-// 	      << underflow << "|" 
-// 	      << remainder << "|" 
-// 	      << wrap_val  << std::endl;
+//               << v << "|"
+//               << underflow << "|" 
+//               << remainder << "|" 
+//               << wrap_val  << std::endl;
     if (remainder > value_) {
       underflow++;
       //      value_ = remainder - value_;
@@ -59,7 +59,7 @@ public:
       //      value_ = wrap_val -(value_-remainder);
     }
 //     std::cout << "wi final uf: " << underflow 
-// 	      << " value: "  << value_ << std::endl;
+//               << " value: "  << value_ << std::endl;
     return underflow;
   }
 		    

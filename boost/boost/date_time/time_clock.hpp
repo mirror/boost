@@ -1,4 +1,3 @@
-
 #ifndef DATE_TIME_TIME_CLOCK_HPP___
 #define DATE_TIME_TIME_CLOCK_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
@@ -48,10 +47,10 @@ namespace date_time {
     static time_type create_time(::std::tm* current)
     {
       date_type d(current->tm_year + 1900, 
-		  current->tm_mon + 1, 
-		  current->tm_mday);
+                  current->tm_mon + 1, 
+                  current->tm_mday);
       time_duration_type td(current->tm_hour,
-			    current->tm_min,
+                            current->tm_min,
                             current->tm_sec);
       return time_type(d,td);
     }

@@ -34,7 +34,7 @@ namespace posix_time {
 #endif
     if (frac_sec != 0) {
       ss  << "." << std::setw(time_duration::num_fractional_digits())
- 	  << std::setfill('0')
+          << std::setfill('0')
 
 // JDG [7/6/02 VC++ compatibility]
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
@@ -65,7 +65,7 @@ namespace posix_time {
 #endif
     if (frac_sec != 0) {
       ss  << "." << std::setw(time_duration::num_fractional_digits())
- 	  << std::setfill('0')
+          << std::setfill('0')
 
 // JDG [7/6/02 VC++ compatibility]
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0

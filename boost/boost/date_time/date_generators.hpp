@@ -75,8 +75,8 @@ namespace date_time {
     typedef typename date_type::duration_type        duration_type;
     enum week_num {first=1, second, third, fourth, fifth};
     nth_kday_of_month(week_num week_no,
-		      day_of_week_type dow,
-		      month_type m) :
+                      day_of_week_type dow,
+                      month_type m) :
       month_(m),
       wn_(week_no),
       dow_(dow)
@@ -88,12 +88,12 @@ namespace date_time {
       duration_type one_day(1);
       duration_type one_week(7);
       while (dow_ != d.day_of_week()) {
-	d = d + one_day;
+        d = d + one_day;
       }
       int week = 1;
       while (week < wn_) {
-	d = d + one_week;
-	week++;
+        d = d + one_week;
+        week++;
       }
       return d;
     }
@@ -129,7 +129,7 @@ namespace date_time {
       date_type d(year, month_,1);
       duration_type one_day(1);
       while (dow_ != d.day_of_week()) {
-	d = d + one_day;
+        d = d + one_day;
       }
       return d;
     }
@@ -168,7 +168,7 @@ namespace date_time {
       date_type d(year, month_, calendar_type::end_of_month_day(year,month_));
       duration_type one_day(1);
       while (dow_ != d.day_of_week()) {
-	d = d - one_day;
+        d = d - one_day;
       }
       return d;
     }
@@ -202,7 +202,7 @@ namespace date_time {
       duration_type one_day(1);
       date_type d = start_day + one_day;
       while (dow_ != d.day_of_week()) {
-	d = d + one_day;
+        d = d + one_day;
       }
       return d;
     }
@@ -235,7 +235,7 @@ namespace date_time {
       duration_type one_day(1);
       date_type d = start_day - one_day;
       while (dow_ != d.day_of_week()) {
-	d = d - one_day;
+        d = d - one_day;
       }
       return d;
     }

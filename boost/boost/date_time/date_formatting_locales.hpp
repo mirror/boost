@@ -23,7 +23,7 @@ namespace date_time {
 
   //! Formats a month as as string into an ostream
   template<class facet_type,
-	   class charT = char>
+           class charT = char>
   class ostream_month_formatter
   {
   public:
@@ -32,28 +32,28 @@ namespace date_time {
 
     //! Formats a month as as string into an output iterator
     static void format_month(const month_type& month,
-			     ostream_type& os,
-			     const facet_type& f,
-			     month_format_spec fs)
+                             ostream_type& os,
+                             const facet_type& f,
+                             month_format_spec fs)
     {
 
       switch (fs) 
       {
         case month_as_short_string: 
         { 
-	  std::ostreambuf_iterator<charT> oitr(os);
-	  f.put_month_short(oitr, month.as_enum());
+          std::ostreambuf_iterator<charT> oitr(os);
+          f.put_month_short(oitr, month.as_enum());
           break;
         }
         case month_as_long_string: 
         { 
-	  std::ostreambuf_iterator<charT> oitr(os);
-	  f.put_month_long(oitr, month.as_enum());
+          std::ostreambuf_iterator<charT> oitr(os);
+          f.put_month_long(oitr, month.as_enum());
           break;
         }
         case month_as_integer: 
         { 
-	  os << std::setw(2) << std::setfill('0') << month;
+          os << std::setw(2) << std::setfill('0') << month.as_number();
           break;
         }
      
@@ -63,10 +63,40 @@ namespace date_time {
   };
 
 
+  //! Formats a weekday 
+  template<class weekday_type,
+           class facet_type,
+           class charT = char>
+  class ostream_weekday_formatter
+  {
+  public:
+    typedef typename facet_type::month_type month_type;
+    typedef std::basic_ostream<charT> ostream_type;
+
+    //! Formats a month as as string into an output iterator
+    static void format_weekday(const weekday_type& wd,
+                               ostream_type& os,
+                               const facet_type& f,
+                               bool  as_long_string)
+    {
+
+      std::ostreambuf_iterator<charT> oitr(os);
+      if (as_long_string) {
+        f.put_weekday_long(oitr, wd.as_enum());
+      }
+      else {
+        f.put_weekday_short(oitr, wd.as_enum());
+      }
+     
+    } // format_weekday
+
+  };
+
+
   //! Convert ymd to a standard string formatting policies
   template<class ymd_type,
-	   class facet_type,
-	   class charT = char>
+           class facet_type,
+           class charT = char>
   class ostream_ymd_formatter
   {
   public:
@@ -94,23 +124,23 @@ namespace date_time {
 
     // Put ymd to ostream -- part of ostream refactor
     static void ymd_put(ymd_type ymd, 
-			ostream_type& os,
-			const facet_type& f)
+                        ostream_type& os,
+                        const facet_type& f)
     {
       os << ymd.year;
       std::ostreambuf_iterator<charT> oitr(os);
       if (f.has_date_sep_chars()) {
-	f.month_sep_char(oitr);
+        f.month_sep_char(oitr);
       }
       month_formatter::format_month(ymd.month, os, 
- 				    f, month_as_short_string);
+                                    f, month_as_short_string);
 
 
       if (f.has_date_sep_chars()) {
-	f.day_sep_char(oitr);
+        f.day_sep_char(oitr);
       }
       os  << std::setw(2) << std::setfill('0') 
-	  << ymd.day;
+          << ymd.day;
     }
 
   };
@@ -118,8 +148,8 @@ namespace date_time {
 
   //! Convert a date to string using format policies
   template<class date_type,
-	   class facet_type,
-	   class charT = char>
+           class facet_type,
+           class charT = char>
   class ostream_date_formatter
   {
   public:
@@ -128,36 +158,35 @@ namespace date_time {
 
     //! Put date into an ostream 
     static void date_put(const date_type& d, 
-			 ostream_type& os,
-			 const facet_type& f)
+                         ostream_type& os,
+                         const facet_type& f)
     {
       special_values sv = d.as_special();
       if (sv == not_special) {
-	ymd_type ymd = d.year_month_day();
-	ostream_ymd_formatter<ymd_type, facet_type, charT>::ymd_put(ymd, os, f);
+        ymd_type ymd = d.year_month_day();
+        ostream_ymd_formatter<ymd_type, facet_type, charT>::ymd_put(ymd, os, f);
       }
       else { // output a special value
-	std::ostreambuf_iterator<charT> coi(os);
-	f.put_special_value(coi, sv);
+        std::ostreambuf_iterator<charT> coi(os);
+        f.put_special_value(coi, sv);
       }
     }    
  
 
     //! Put date into an ostream 
     static void date_put(const date_type& d, 
-			 ostream_type& os)
+                         ostream_type& os)
     {
       //retrieve the local from the ostream
       std::locale locale = os.getloc();
       if (std::has_facet<facet_type>(locale)) {
-	//	std::cout << "Good Deal Dude" << std::endl;
-	const facet_type& f = std::use_facet<facet_type>(locale);
-	date_put(d, os, f);
+        const facet_type& f = std::use_facet<facet_type>(locale);
+        date_put(d, os, f);
       }
       else {
-	//default to something sensible if no facet installed
-	facet_type default_facet;
-	date_put(d, os, default_facet);
+        //default to something sensible if no facet installed
+        facet_type default_facet;
+        date_put(d, os, default_facet);
       }
     } // date_to_ostream    
   }; //class date_formatter

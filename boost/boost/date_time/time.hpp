@@ -52,8 +52,8 @@ namespace date_time {
     //typedef typename time_system::hms_type hms_type;
     
     base_time(const date_type& day, 
-	      const time_duration_type& td, 
-	      dst_flags dst=not_dst) :
+              const time_duration_type& td, 
+              dst_flags dst=not_dst) :
       time_(time_system::get_time_rep(day, td, dst))
     {}
     base_time(const time_rep_type& rhs) :

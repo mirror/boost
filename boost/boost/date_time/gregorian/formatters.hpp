@@ -64,7 +64,7 @@ namespace gregorian {
     std::ostringstream ss;
     ss << ymd.year << "-"
        << std::setw(2) << std::setfill('0') 
-       << ymd.month 
+       << ymd.month.as_number() //solves problem with gcc 3.1 hanging
        << "-"
        << std::setw(2) << std::setfill('0') 
        << ymd.day;

@@ -6,24 +6,8 @@
  */
 
 #include "boost/operators.hpp"
+#include "boost/date_time/compiler_config.hpp"
 #include "boost/date_time/time_defs.hpp"
-
-//Work around compilers that don't have std::abs
-#if (__GNUC__ <= 3)|| (defined(BOOST_MSVC) && _MSC_VER <= 1200)
-#  define BOOST_NO_LONG_LONG_ABS
-#endif
-
-#if defined(BOOST_NO_LONG_LONG_ABS)
-namespace std
-{
-    template <typename T> // JDG [7/6/02 made a template]
-    inline T abs(T x)
-    {
-      return x < 0 ? -x : x;
-    }
-}
-#endif
-
 
 namespace boost {
 namespace date_time {
@@ -49,9 +33,9 @@ namespace date_time {
 
     time_duration() : ticks_(0) {} 
     time_duration(hour_type hours, 
-		  min_type minutes, 
-		  sec_type seconds=0,
-		  fractional_seconds_type frac_sec = 0) :
+                  min_type minutes, 
+                  sec_type seconds=0,
+                  fractional_seconds_type frac_sec = 0) :
       ticks_(rep_type::to_tick_count(hours,minutes,seconds,frac_sec)) 
     {}
     
@@ -129,7 +113,6 @@ namespace date_time {
       base_duration(0,0,0,ss*adjustment)
     {}
   };
-
   
   
 } } //namespace date_time

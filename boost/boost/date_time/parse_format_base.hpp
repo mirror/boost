@@ -1,4 +1,3 @@
-
 #ifndef DATE_TIME_PARSE_FORMAT_BASE_HPP___
 #define DATE_TIME_PARSE_FORMAT_BASE_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
@@ -11,11 +10,11 @@ namespace date_time {
 
   //! Enum for distinguishing parsing and formatting options
   enum month_format_spec {month_as_integer, month_as_short_string, 
-			  month_as_long_string};
+                          month_as_long_string};
 
   enum ymd_order_spec {ymd_order_iso,  //order is year-month-day
-		       ymd_order_dmy,  //day-month-year
-		       ymd_order_us};  //order is month-day-year
+                       ymd_order_dmy,  //day-month-year
+                       ymd_order_us};  //order is month-day-year
 
 
 } }//namespace date_time

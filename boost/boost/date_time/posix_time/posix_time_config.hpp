@@ -35,21 +35,21 @@ namespace posix_time {
 #define BOOST_DATE_TIME_HAS_MICROSECONDS
 #define BOOST_DATE_TIME_HAS_NANOSECONDS
   typedef date_time::time_resolution_traits<boost::int64_t, boost::date_time::nano, 
-				       1000000000, 9 > time_res_traits;
+                                            1000000000, 9 > time_res_traits;
 #else
   // set up conditional test compilations
 #define BOOST_DATE_TIME_HAS_MILLISECONDS
 #define BOOST_DATE_TIME_HAS_MICROSECONDS
 #undef  BOOST_DATE_TIME_HAS_NANOSECONDS
   typedef date_time::time_resolution_traits<boost::int64_t, boost::date_time::micro, 
-				       1000000, 6 > time_res_traits;
+                                            1000000, 6 > time_res_traits;
 
 
 // #undef BOOST_DATE_TIME_HAS_MILLISECONDS
 // #undef BOOST_DATE_TIME_HAS_MICROSECONDS
 // #undef BOOST_DATE_TIME_HAS_NANOSECONDS
 //   typedef date_time::time_resolution_traits<boost::int64_t, boost::date_time::tenth, 
-// 				       10, 0 > time_res_traits;
+//                                              10, 0 > time_res_traits;
 
 #endif
 
@@ -69,9 +69,9 @@ namespace posix_time {
     typedef time_res_traits::fractional_seconds_type fractional_seconds_type;
     typedef time_res_traits::tick_type tick_type;
     time_duration(hour_type hour,
-		  min_type min,
-		  sec_type sec,
-		  fractional_seconds_type fs=0) :
+                  min_type min,
+                  sec_type sec,
+                  fractional_seconds_type fs=0) :
       date_time::time_duration<time_duration, time_res_traits>(hour,min,sec,fs)
     {}
     time_duration() :

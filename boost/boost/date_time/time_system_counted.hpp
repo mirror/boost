@@ -75,8 +75,8 @@ namespace date_time {
     typedef typename time_rep_type::date_duration_type date_duration_type;
 
     static time_rep_type get_time_rep(const date_type& day,
-				      const time_duration_type& tod,
-				      date_time::dst_flags)
+                                      const time_duration_type& tod,
+                                      date_time::dst_flags)
     {
       return time_rep_type(day, tod);
     }
@@ -101,27 +101,27 @@ namespace date_time {
       return (lhs.time_count() < rhs.time_count());
     }
     static time_rep_type add_days(const time_rep_type& base,
-				  const date_duration_type& dd)
+                                  const date_duration_type& dd)
     {
       return time_rep_type(base.time_count() + (dd.days() * time_rep_type::frac_sec_per_day()));
     }
     static time_rep_type subtract_days(const time_rep_type& base,
-				       const date_duration_type& dd)
+                                       const date_duration_type& dd)
     {
       return time_rep_type(base.time_count() - (dd.days() * time_rep_type::frac_sec_per_day()));
     }
     static time_rep_type subtract_time_duration(const time_rep_type& base,
-						const time_duration_type& td)
+                                                const time_duration_type& td)
     {
       return time_rep_type(base.time_count() - td.ticks());
     }
     static time_rep_type add_time_duration(const time_rep_type& base,
-					   time_duration_type td)
+                                           time_duration_type td)
     {
       return time_rep_type(base.time_count() + td.ticks());
     }
     static time_duration_type subtract_times(const time_rep_type& lhs,
-					     const time_rep_type& rhs)
+                                             const time_rep_type& rhs)
     {
       fractional_seconds_type fs = lhs.time_count() - rhs.time_count();
       return time_duration_type(0,0,0,fs); 

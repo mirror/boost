@@ -1,5 +1,5 @@
 #ifndef DATE_TIME_COMPILER_CONFIG_HPP___
-#define DATE_TIME_COMPILER_CONFIG_HPP____
+#define DATE_TIME_COMPILER_CONFIG_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
  * Author: Jeff Garland 
@@ -16,6 +16,22 @@
 //Define INT64_C for some Metrowerks compilers
 #if (defined(__MWERKS__) && (!defined(INT64_C)))
 #define INT64_C(value)  long long(value)
+#endif
+
+//Work around compilers that don't have std::abs
+#if (__GNUC__ <= 3)|| (defined(BOOST_MSVC) && _MSC_VER <= 1200)
+#  define BOOST_NO_LONG_LONG_ABS
+#endif
+
+#if defined(BOOST_NO_LONG_LONG_ABS)
+namespace std
+{
+    template <typename T> // JDG [7/6/02 made a template]
+    inline T abs(T x)
+    {
+      return x < 0 ? -x : x;
+    }
+}
 #endif
 
 /* Copyright (c) 2002

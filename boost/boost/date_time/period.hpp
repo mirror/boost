@@ -1,6 +1,5 @@
-
-#ifndef PERIOD_HPP___
-#define PERIOD_HPP___
+#ifndef DATE_TIME_PERIOD_HPP___
+#define DATE_TIME_PERIOD_HPP___
 /* Copyright (c) 2000 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
  * Author: Jeff Garland 
@@ -85,7 +84,7 @@ namespace date_time {
   template<class point_rep, class duration_rep>
   inline
   period<point_rep,duration_rep>::period(point_rep begin, 
-					 point_rep end) : 
+                                         point_rep end) : 
     begin_(begin), 
     last_(end - duration_rep::unit())
   {}
@@ -139,7 +138,7 @@ namespace date_time {
   bool period<point_rep,duration_rep>::operator==(const period& rhs) const 
   {
     return  ((begin_ == rhs.begin_) && 
-	     (last_ == rhs.last_));
+             (last_ == rhs.last_));
   }
 
   //! Strict as defined by rhs.last <= lhs.last
@@ -166,7 +165,7 @@ namespace date_time {
   bool period<point_rep,duration_rep>::contains(const point_rep& point) const 
   {
     return ((point >= begin_) &&
-	    (point <= last_));
+            (point <= last_));
   }
 
 
@@ -185,10 +184,8 @@ namespace date_time {
   bool period<point_rep,duration_rep>::intersects(const period<point_rep,duration_rep>& other) const 
   { 
     return ( contains(other.begin_) ||
-	     other.contains(begin_) ||
-	     ((other.begin_ < begin_) && (other.last_ >= begin_)));// ||
-	     //	     ((begin_ < other.begin_) && (last_ <= other.last_)));
-    
+             other.contains(begin_) ||
+             ((other.begin_ < begin_) && (other.last_ >= begin_)));
   }
 
   //! Returns the period of intersection or invalid range no intersection
@@ -199,15 +196,14 @@ namespace date_time {
   {
     if (begin_ > other.begin_) {
       if (last_ <= other.last_) { //case2
-	return *this;  
+        return *this;  
       }
       //case 1
       return period<point_rep,duration_rep>(begin_, other.end());
-	
     }
     else {
       if (last_ <= other.last_) { //case3
-	return period<point_rep,duration_rep>(other.begin_, this->end());
+        return period<point_rep,duration_rep>(other.begin_, this->end());
       }
       //case4
       return other;
@@ -225,7 +221,7 @@ namespace date_time {
   {
     if (this->intersects(other)) {      
       if (begin_ < other.begin_) {
-	return period<point_rep,duration_rep>(begin_, last_ > other.last_ ? this->end() : other.end());
+        return period<point_rep,duration_rep>(begin_, last_ > other.last_ ? this->end() : other.end());
       }
       
       return period<point_rep,duration_rep>(other.begin_, last_ > other.last_ ? this->end() : other.end());

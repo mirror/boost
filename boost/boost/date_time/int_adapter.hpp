@@ -64,7 +64,7 @@ public:
   static bool is_inf(int_type v)
   {
     return (v == neg_infinity().as_number() ||
-	    v == pos_infinity().as_number());
+            v == pos_infinity().as_number());
   }
   static bool is_neg_infinity(int_type v)
   {
@@ -96,7 +96,7 @@ public:
   bool is_infinity() const
   {
     return (value_ == neg_infinity().as_number() ||
-	    value_ == pos_infinity().as_number());
+            value_ == pos_infinity().as_number());
   }
   bool is_nan() const
   {

@@ -1,4 +1,3 @@
-
 #ifndef _DATE_TIME_TIME_PARSING_HPP___
 #define _DATE_TIME_TIME_PARSING_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
@@ -28,26 +27,26 @@ namespace date_time {
     for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg){
       switch(pos) {
       case 0: {
-	hour = boost::lexical_cast<unsigned short>(*beg);
-	break;
+        hour = boost::lexical_cast<unsigned short>(*beg);
+        break;
       }
       case 1: {
-	min = boost::lexical_cast<unsigned short>(*beg);
-	break;
+        min = boost::lexical_cast<unsigned short>(*beg);
+        break;
       }
       case 2: {
-	sec = boost::lexical_cast<unsigned short>(*beg);
-	break;
+        sec = boost::lexical_cast<unsigned short>(*beg);
+        break;
       };
       case 3: {
-	//Works around a bug in MSVC 6 library that does not support
-	//operator>> thus meaning lexical_cast will fail to compile.
+        //Works around a bug in MSVC 6 library that does not support
+        //operator>> thus meaning lexical_cast will fail to compile.
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-	fs = _atoi64(beg->c_str());
+        fs = _atoi64(beg->c_str());
 #else
-	fs = boost::lexical_cast<boost::int64_t>(*beg);
+        fs = boost::lexical_cast<boost::int64_t>(*beg);
 #endif
-	break;
+        break;
       }
       }//switch
       pos++;
@@ -59,9 +58,9 @@ namespace date_time {
   inline
   bool 
   split(const std::string& s,
-	     char sep,
-	     std::string& first,
-	     std::string& second)
+        char sep,
+        std::string& first,
+        std::string& second)
   {
     int sep_pos = s.find(sep);
     first = s.substr(0,sep_pos);

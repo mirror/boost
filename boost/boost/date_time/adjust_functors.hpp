@@ -50,12 +50,12 @@ namespace date_time {
     duration_type get_offset(const date_type& d) const 
     {
       ymd_type ymd(d.year_month_day());
-      if (origDayOfMonth_ == 0) { 
-	origDayOfMonth_ = ymd.day; 
-	day_type endOfMonthDay(cal_type::end_of_month_day(ymd.year,ymd.month));
-	if (endOfMonthDay == ymd.day) {
-	  origDayOfMonth_ = -1; //force the value to the end of month
-	}
+      if (origDayOfMonth_ == 0) {
+        origDayOfMonth_ = ymd.day;
+        day_type endOfMonthDay(cal_type::end_of_month_day(ymd.year,ymd.month));
+        if (endOfMonthDay == ymd.day) {
+          origDayOfMonth_ = -1; //force the value to the end of month
+        }
       }
       date_time::wrapping_int2<short,1,12> wi(ymd.month);
       unsigned long year = wi.add(f_); //calc the year wrap around
@@ -66,11 +66,11 @@ namespace date_time {
       day_type resultingEndOfMonthDay(cal_type::end_of_month_day(year, wi.as_int()));
       //original was the end of month -- force to last day of month
       if (origDayOfMonth_ == -1) {
-	return date_type(year, wi.as_int(), resultingEndOfMonthDay) - d;
+        return date_type(year, wi.as_int(), resultingEndOfMonthDay) - d;
       }
       day_type dayOfMonth = origDayOfMonth_;
       if (dayOfMonth > resultingEndOfMonthDay) {
-	dayOfMonth = resultingEndOfMonthDay;
+        dayOfMonth = resultingEndOfMonthDay;
       }
       return date_type(year, wi.as_int(), dayOfMonth) - d;
     }

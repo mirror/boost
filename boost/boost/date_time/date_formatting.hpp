@@ -41,7 +41,7 @@ namespace date_time {
         }
         case month_as_integer: 
         { 
-          os << std::setw(2) << std::setfill('0') << month;
+          os << std::setw(2) << std::setfill('0') << month.as_number();
           break;
         }
      

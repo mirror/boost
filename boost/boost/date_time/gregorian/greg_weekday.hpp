@@ -34,6 +34,7 @@ namespace gregorian {
   //! Represent a day within a week (range 0==Sun to 6==Sat)
   class greg_weekday : public greg_weekday_rep {
   public:
+    typedef boost::date_time::weekdays weekday_enum;
     greg_weekday(unsigned short day_of_week_num) :
       greg_weekday_rep(day_of_week_num)
     {}
@@ -41,6 +42,8 @@ namespace gregorian {
     unsigned short as_number() const {return value_;}
     const char* as_short_string() const;
     const char* as_long_string()  const;
+    weekday_enum as_enum() const {return static_cast<weekday_enum>(value_);}
+
 
   };
 

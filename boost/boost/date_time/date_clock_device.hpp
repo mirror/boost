@@ -33,16 +33,16 @@ namespace date_time {
     {
       ::std::tm* curr = get_local_time();
       return ymd_type(curr->tm_year + 1900, 
-		      curr->tm_mon + 1, 
-		      curr->tm_mday);
+                      curr->tm_mon + 1, 
+                      curr->tm_mday);
     }
     //! Get the current day in universal date as a ymd_type
     static typename date_type::ymd_type universal_day_ymd() 
     {
       ::std::tm* curr = get_universal_time();
       return ymd_type(curr->tm_year + 1900, 
-		      curr->tm_mon + 1, 
-		      curr->tm_mday);
+                      curr->tm_mon + 1, 
+                      curr->tm_mday);
     }
     //! Get the UTC day as a date type
     static date_type universal_day() 

@@ -48,17 +48,17 @@ namespace gregorian {
   /*!\ingroup date_basics
    */
   typedef date_time::date_itr<date_time::day_functor<date>,
-			 date> day_iterator;
+                              date> day_iterator;
   //! A week level iterator
   /*!\ingroup date_basics
    */
   typedef date_time::date_itr<date_time::week_functor<date>,
-			 date> week_iterator;
+                              date> week_iterator;
   //! A month level iterator
   /*!\ingroup date_basics
    */
   typedef date_time::date_itr<date_time::month_functor<date>,
-			 date> month_iterator;
+                              date> month_iterator;
 } } //namespace gregorian
 
 

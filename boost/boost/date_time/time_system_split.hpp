@@ -1,4 +1,3 @@
-
 #ifndef DATE_TIME_TIME_SYSTEM_SPLIT_HPP
 #define DATE_TIME_TIME_SYSTEM_SPLIT_HPP
 
@@ -37,8 +36,8 @@ namespace date_time {
 #endif
 
     static time_rep_type get_time_rep(const date_type& day,
-				      const time_duration_type& tod,
-				      date_time::dst_flags)
+                                      const time_duration_type& tod,
+                                      date_time::dst_flags)
     {
       return time_rep_type(day, tod);
     }
@@ -66,32 +65,32 @@ namespace date_time {
       return (lhs.time_of_day < rhs.time_of_day);
     }
     static time_rep_type add_days(const time_rep_type& base,
-				  const date_duration_type& dd)
+                                  const date_duration_type& dd)
     {
       return time_rep_type(base.day+dd, base.time_of_day);
     }
     static time_rep_type subtract_days(const time_rep_type& base,
-				       const date_duration_type& dd)
+                                       const date_duration_type& dd)
     {
       return time_rep_type(base.day-dd, base.time_of_day);
     }
     static time_rep_type subtract_time_duration(const time_rep_type& base,
-						const time_duration_type& td)
+                                                const time_duration_type& td)
     {
       wrap_int_type  day_offset(base.time_of_day.ticks());
       date_duration_type day_overflow(day_offset.subtract(td.ticks()));
 //       std::cout << "sub: " << base.time_of_day.ticks() << "|"
-//  		<< day_offset.as_int() << "|"
-//  		<< day_overflow.days() << std::endl;
+//                 << day_offset.as_int() << "|"
+//                 << day_overflow.days() << std::endl;
       return time_rep_type(base.day-day_overflow,
-			   time_duration_type(0,0,0,day_offset.as_int()));
+                           time_duration_type(0,0,0,day_offset.as_int()));
     }
     static time_rep_type add_time_duration(const time_rep_type& base,
-					   time_duration_type td)
+                                           time_duration_type td)
     {
       if (td.is_negative()) {
-	time_duration_type td1 = td.invert_sign();
-	return subtract_time_duration(base,td1);
+        time_duration_type td1 = td.invert_sign();
+        return subtract_time_duration(base,td1);
       }
       wrap_int_type day_offset(base.time_of_day.ticks());      
       int_type doff = day_offset.add(td.ticks());
@@ -101,10 +100,10 @@ namespace date_time {
 //       std::cout << "base: " << to_simple_string(base.day) << std::endl;
 //       std::cout << "overflow " << day_overflow.days() << std::endl;
       return time_rep_type(base.day+day_overflow,
-			   time_duration_type(0,0,0,day_offset.as_int()));
+                           time_duration_type(0,0,0,day_offset.as_int()));
     }
     static time_duration_type subtract_times(const time_rep_type& lhs,
-					     const time_rep_type& rhs)
+                                             const time_rep_type& rhs)
     {
       date_duration_type dd = lhs.day - rhs.day;
       time_duration_type td(dd.days()*24,0,0); //days * 24 hours

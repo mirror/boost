@@ -29,7 +29,7 @@ namespace date_time {
   class date_itr_base {
   // works, but benefit unclear at the moment
   //   class date_itr_base : public std::iterator<std::input_iterator_tag, 
-  // 					     date_type, void, void, void>{
+  //                                             date_type, void, void, void>{
   public:
     typedef typename date_type::duration_type duration_type;
     typedef date_type value_type;
