@@ -37,6 +37,7 @@ struct function_traits_helper<R (*)(T1)>
   BOOST_STATIC_CONSTANT(int, arity = 1);
   typedef R result_type;
   typedef T1 arg1_type;
+  typedef T1 argument_type;
 };
 
 template<typename R, typename T1, typename T2>
@@ -46,6 +47,8 @@ struct function_traits_helper<R (*)(T1, T2)>
   typedef R result_type;
   typedef T1 arg1_type;
   typedef T2 arg2_type;
+  typedef T1 first_argument_type;
+  typedef T2 second_argument_type;
 };
 
 template<typename R, typename T1, typename T2, typename T3>
