@@ -15,30 +15,30 @@
 <li><a href="#intro">Introduction</a>
 <li><a href="#synopsis">Synopsis</a>
 <li><a href="#const_mod">Class template
-<code>detail::const_mod</code></a>
+<code>random::const_mod</code></a>
 <li><a href="#linear_congruential">Class template
-<code>detail::linear_congruential</code></a>
+<code>random::linear_congruential</code></a>
 <li><a href="#rand48">Class <code>rand48</code></a>
 <li><a href="#additive_combine">Class template
-<code>detail::additive_combined</code></a>
+<code>random::additive_combined</code></a>
 <li><a href="#shuffle_output">Class template
-<code>detail::shuffle_output</code></a>
+<code>random::shuffle_output</code></a>
 <li><a href="#inversive_congruential">Class template
-<code>detail::inversive_congruential</code></a>
+<code>random::inversive_congruential</code></a>
 <li><a href="#mersenne_twister">Class template
-<code>detail::mersenne_twister</code></a>
+<code>random::mersenne_twister</code></a>
 <li><a href="#performance">Performance</a>
 </ul>
 
 <h2><a name="intro">Introduction</a></h2>
 
-This library provides several pseudo-random number generators.
-The quality of a pseudo-random number generator crucially depends on
-both the algorithm and its parameters.  This library implements the
+This library provides several pseudo-random number generators.  The
+quality of a pseudo-random number generator crucially depends on both
+the algorithm and its parameters.  This library implements the
 algorithms as class templates with template value parameters, hidden
-in namespace <code>detail</code>.  Any particular choice of parameters
-is represented as the appropriately specializing <code>typedef</code>
-in namespace <code>boost</code>.
+in namespace <code>boost::random</code>.  Any particular choice of
+parameters is represented as the appropriately specializing
+<code>typedef</code> in namespace <code>boost</code>.
 
 <p>
 
@@ -49,8 +49,13 @@ measure, higher numbers mean faster random number generation.
 
 <p>
 <table border="1">
-<tr><th>generator</th><th>length of cycle</th><th>memory
-requirements</th><th>approximate relative speed</th><th>comment</th></tr>
+<tr>
+<th>generator</th>
+<th>length of cycle</th>
+<th>memory requirements</th>
+<th>approximate relative speed</th>
+<th>comment</th>
+</tr>
 
 <tr>
 <td><a href="#minstd_rand"><code>minstd_rand</code></a></td>
@@ -145,35 +150,35 @@ in detail which are already defined in the
 
 <pre>
 namespace boost {
-  namespace detail {
+  namespace random {
     template&lt;class IntType, IntType m&gt;
     class const_mod;
     template&lt;class IntType, IntType a, IntType c, IntType m, IntType val&gt;
     class linear_congruential;
   }
   class rand48;
-  typedef detail::linear_congruential&lt; /* ... */ &gt minstd_rand0;
-  typedef detail::linear_congruential&lt; /* ... */ &gt minstd_rand;
+  typedef random::linear_congruential&lt; /* ... */ &gt; minstd_rand0;
+  typedef random::linear_congruential&lt; /* ... */ &gt; minstd_rand;
 
-  namespace detail {
+  namespace random {
     template&lt;class DataType, int n, int m, int r, DataType a, int u,
         int s, DataType b, int t, DataType c, int l, IntType val&gt;
   class mersenne_twister;
   }
-  typedef detail::mersenne_twister&lt; /* ... */ &gt; mt11213b;
-  typedef detail::mersenne_twister&lt; /* ... */ &gt; mt19937;
+  typedef random::mersenne_twister&lt; /* ... */ &gt; mt11213b;
+  typedef random::mersenne_twister&lt; /* ... */ &gt; mt19937;
 } // namespace boost
 </pre>
 
 
 <h2><a name="const_mod">Class template
-<code>detail::const_mod</code></a></h2>
+<code>random::const_mod</code></a></h2>
 
 <h3>Synopsis</h3>
 
 <pre>
 template&lt;class IntType, IntType m&gt;
-class detail::const_mod
+class random::const_mod
 {
 public:
   template&lt;IntType c&gt;
@@ -234,7 +239,7 @@ mult_add(IntType x)</pre>
 
 
 <h2><a name="linear_congruential">Class template
-<code>detail::linear_congruential</code></a></h2>
+<code>random::linear_congruential</code></a></h2>
 
 <h3>Synopsis</h3>
 
@@ -256,9 +261,9 @@ public:
   IntType operator()();
 };
 
-typedef detail::linear_congruential&lt;long, 16807L, 0, 2147483647L,
+typedef random::linear_congruential&lt;long, 16807L, 0, 2147483647L,
      1043618065L&gt; minstd_rand0;
-typedef detail::linear_congruential&lt;long, 48271L, 0, 2147483647L,
+typedef random::linear_congruential&lt;long, 48271L, 0, 2147483647L,
      399268537L&gt; minstd_rand;
 </pre>
 
@@ -269,7 +274,7 @@ model a <a href="random-concepts.html#pseudo-rng">pseudo-random number
 generator</a>.  Linear congruential pseudo-random number generators
 are described in:
 <blockquote>
-"Mathematical methods in large-scale computing units", D. H. Lehmer,
+&quot;Mathematical methods in large-scale computing units&quot;, D. H. Lehmer,
 Proc. 2nd Symposium on Large-Scale Digital Calculating Machines,
 Harvard University Press, 1951, pp. 141-146 
 </blockquote>
@@ -324,7 +329,7 @@ No. 10, October 1988, pp. 1192-1201
 </blockquote>
 
 
-<h2><a name="rand48">Class <code>rand48</code></code></h2>
+<h2><a name="rand48">Class <code>rand48</code></h2>
 
 <h3>Synopsis</h3>
 <pre>
@@ -381,13 +386,13 @@ generator to <code>x0</code>.
 
 
 <h2><a name="additive_combine">Class template
-<code>detail::additive_combine</code></a></h2>
+<code>random::additive_combine</code></a></h2>
 
 <h3>Synopsis</h3>
 
 <pre>
 template&lt;class MLCG1, class MLCG2, typename MLCG1::result_type val&gt;
-class detail::additive_combine
+class random::additive_combine
 {
 public:
   typedef MLCG1 first_base;
@@ -403,9 +408,9 @@ public:
   bool validation(result_type x) const;
 };
 
-typedef detail::additive_combine&lt;
-    detail::linear_congruential&lt;int32_t, 40014, 0, 2147483563, 0&gt;,
-    detail::linear_congruential&lt;int32_t, 40692, 0, 2147483399, 0&gt;,
+typedef random::additive_combine&lt;
+    random::linear_congruential&lt;int32_t, 40014, 0, 2147483563, 0&gt;,
+    random::linear_congruential&lt;int32_t, 40692, 0, 2147483399, 0&gt;,
   /* unknown */ 0&gt; ecuyer1988;
 
 </pre>
@@ -456,7 +461,7 @@ paper.
 
 
 <h2><a name="shuffle_output">Class template
-<code>detail::shuffle_output</code></a></h2>
+<code>random::shuffle_output</code></a></h2>
 
 <h3>Synopsis</h3>
 
@@ -464,7 +469,7 @@ paper.
 template&lt;class UniformRandomNumberGenerator, int k, 
   class IntType = typename UniformRandomNumberGenerator::result_type,
   typename UniformRandomNumberGenerator::result_type val = 0&gt;
-class detail::shuffle_output
+class random::shuffle_output
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
@@ -565,13 +570,13 @@ Computer Science Series)", Wolfgang Kreutzer, Addison-Wesley, December
 
 
 <h2><a name="inversive_congruential">Class template
-<code>detail::inversive_congruential</code></a></h2> 
+<code>random::inversive_congruential</code></a></h2> 
 
 <h3>Synopsis</h3>
 
 <pre>
 template&lt;class IntType, IntType a, IntType b, IntType p&gt;
-class detail::inversive_congruential
+class random::inversive_congruential
 {
 public:
   typedef IntType result_type;
@@ -586,7 +591,7 @@ public:
   IntType operator()();
 };
 
-typedef detail::inversive_congruential&lt;int32_t, 9102, 2147483647-36884165, 2147483647&gt; hellekalek1995;
+typedef random::inversive_congruential&lt;int32_t, 9102, 2147483647-36884165, 2147483647&gt; hellekalek1995;
 </pre>
 
 <h3>Description</h3>
@@ -643,14 +648,14 @@ above paper.
 
 
 <h2><a name="mersenne_twister">Class template
-<code>detail::mersenne_twister</code></a></h2>
+<code>random::mersenne_twister</code></a></h2>
 
 <h3>Synopsis</h3>
 
 <pre>
 template&lt;class DataType, int n, int m, int r, DataType a, int u,
 int s, DataType b, int t, DataType c, int l, IntType val&gt;
-class detail::mersenne_twister
+class random::mersenne_twister
 {
 public:
   typedef DataType result_type;
@@ -659,11 +664,11 @@ public:
   static const result_type max_value;
   mersenne_twister();
   explicit mersenne_twister(DataType value);
-  template&lt;class Generator&gt; explicit mersenne_twister(Generator & gen);
+  template&lt;class Generator&gt; explicit mersenne_twister(Generator &amp; gen);
   // compiler-generated copy ctor and assignment operator are fine
   void seed();
   void seed(DataType value);
-  template&lt;class Generator&gt; void seed(Generator & gen);
+  template&lt;class Generator&gt; void seed(Generator &amp; gen);
   result_type operator()();
   bool validation(result_type) const;
 };
@@ -687,7 +692,7 @@ pp. 3-30.
 <a href="http://www.math.keio.ac.jp/matumoto/emt.html">http://www.math.keio.ac.jp/matumoto/emt.html</a>
 </blockquote>
 
-<em>Note: </em> The boost variant has been implemented from scratch
+<em>Note:</em> The boost variant has been implemented from scratch
 and does not derive from or use mt19937.c provided on the above WWW
 site. However, it was verified that both produce identical output.
 <br>
@@ -711,7 +716,7 @@ and calls <code>seed()</code>.
 <strong>Effects:</strong> Constructs a <code>mersenne_twister</code>
 and calls <code>seed(value)</code>.
 
-<pre>template&lt;class Generator&gt; explicit mersenne_twister(Generator & gen)</pre>
+<pre>template&lt;class Generator&gt; explicit mersenne_twister(Generator &amp; gen)</pre>
 
 <strong>Effects:</strong> Constructs a <code>mersenne_twister</code>
 and calls <code>seed(gen)</code>.
@@ -729,7 +734,7 @@ and calls <code>seed(gen)</code>.
 generator with the constructor parameter
 <code>value</code> and calls <code>seed</code> with it.
 
-<pre>template&lt;class Generator&gt; void seed(Generator & gen)</pre>
+<pre>template&lt;class Generator&gt; void seed(Generator &amp; gen)</pre>
 
 <strong>Effects:</strong> Sets the state of this
 <code>mersenne_twister</code> to the values returned by <code>n</code>

@@ -40,6 +40,8 @@ public:
   static const bool has_fixed_range = true;
   static const result_type min_value = /* implementation defined */;
   static const result_type max_value = /* implementation defined */;
+  result_type min() const;
+  result_type max() const;
   explicit random_device(const std::string& token = default_token);
   ~random_device();
   unsigned int operator()();
@@ -58,7 +60,7 @@ number generator is not available, class <code>random_device</code>
 must not be implemented.  See
 <blockquote>
 "Randomness Recommendations for Security", D. Eastlake, S.
-Crocker, J. Schiller, Network Working Group, RFC1750, December 1994
+Crocker, J. Schiller, Network Working Group, RFC 1750, December 1994
 </blockquote>
 for further discussions.
 
@@ -112,7 +114,7 @@ The measurement error is estimated at +/- 1 usec.
 
 <p>
 <hr>
-Jens Maurer, 2000-03-05
+Jens Maurer, 2000-06-19
 
 
 </body>
