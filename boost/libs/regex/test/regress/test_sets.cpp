@@ -137,6 +137,7 @@ void test_sets()
    TEST_REGEX_SEARCH("[[:lower:][:alpha:]]", perl, "a", match_default, make_array(0, 1, -2, -2));
 }
 
+void test_sets2b();
 void test_sets2()
 {
    using namespace boost::regex_constants;
@@ -305,6 +306,12 @@ void test_sets2()
    TEST_INVALID_REGEX("\\N{}", perl);
    TEST_INVALID_REGEX("\\N{invalid-name}", perl);
    TEST_INVALID_REGEX("\\N{zero", perl);
+   test_sets2b();
+}
+
+void test_sets2b()
+{
+   using namespace boost::regex_constants;
 
    // and repeat with POSIX-extended syntax:
    TEST_REGEX_SEARCH("\\pl+", extended, "ABabcAB", match_default, make_array(2, 5, -2, -2));
