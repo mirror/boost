@@ -23,7 +23,8 @@ for constructing commonly used iterator adaptors.</p>
   <li><a href="#iterator_adaptors"><tt>iterator_adaptors</tt></a>.
   <li><a href="#iterator_adaptor"><tt>iterator_adaptor</tt></a>.
   <li><a href="#transform_iterator"><tt>transform_iterator</tt></a>
-  <li><a href="#indirect_iterators"><tt>indirect_iterators</tt></a>
+  <li><a href="#indirect_iterators"><tt>Indirect Iterator Adaptors</tt></a>
+  <li><a href="#projection_iterators"><tt>Projection Iterator Adaptors</tt></a>
   <li><a href="#reverse_iterators"><tt>reverse_iterators</tt></a>
   <li><a href="#integer_range"><tt>integer_range</tt></a>
 </ul>
@@ -39,7 +40,11 @@ interactions. He also contributed the <tt>indirect_iterators</tt> and
 
 <a href="http://www.boost.org/people/jeremy_siek.htm">Jeremy Siek</a>
 contributed <tt>transform_iterator</tt>, <tt>integer_range</tt>,
-and this documentation.
+and this documentation.<br>
+
+<a href="http://www.boost.org/people/john_potter.htm">John Potter</a>
+contributed <tt>indirect_iterator</tt> and <tt>projection_iterator</tt>
+and made some simplifications to <tt>iterator_adaptor</tt>.
 
 <h3><a name="iterator_adaptors">The Iterator Adaptors Class</a></h3>
 
@@ -60,10 +65,10 @@ follows:
 <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
 <TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
 <PRE>
-template &lt;class Iterator, 
-          class ConstIterator, 
+template &lt;class Iterator,
+          class ConstIterator,
           class Traits = std::iterator_traits&lt;Iterator&gt;,
-          class ConstTraits = std::iterator_traits&lt;ConstIterator&gt;, 
+          class ConstTraits = std::iterator_traits&lt;ConstIterator&gt;,
           class Policies = default_iterator_policies&gt;
 struct iterator_adaptors
 {
@@ -119,7 +124,7 @@ struct default_iterator_policies
     { return *x; }
 
   template &lt;class Iterator&gt;
-  void increment(Iterator& x) const
+  static void increment(Iterator& x)
     { ++x; }
 
   template &lt;class Iterator1, class Iterator2&gt;
@@ -128,12 +133,12 @@ struct default_iterator_policies
 
   // required for a BidirectionalIterator
   template &lt;class Iterator&gt;
-  void decrement(Iterator& x) const
+  static void decrement(Iterator& x)
     { --x; }
 
   // required for a RandomAccessIterator
   template &lt;class Iterator, class DifferenceType&gt;
-  void advance(Iterator& x, DifferenceType n) const
+  static void advance(Iterator& x, DifferenceType n)
     { x += n; }
 
   template &lt;class Difference, class Iterator1, class Iterator2&gt;
@@ -174,9 +179,8 @@ arguments.
 <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
 <TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
 <PRE>
-template &lt;class Iterator, 
+template &lt;class Iterator,
           class Policies = default_iterator_policies,
-          class NonconstIterator = Iterator,         
           class Traits = std::iterator_traits&lt;Iterator&gt; &gt;
 struct iterator_adaptor;
 </PRE></TD></TABLE>
@@ -319,66 +323,106 @@ main(int, char*[])
 </PRE></TD></TABLE>
 
 
-<h3><a name="indirect_iterators">The Indirect Iterators Class</a></h3>
+<h3><a name="indirect_iterators">The Indirect Iterator Adaptors</a></h3>
 
 It is not all that uncommon to create data structures that consist of
 pointers to pointers. For such a structure it might be nice to have an
 iterator that applies a double-dereference inside the
 <tt>operator*()</tt>. The implementation of this is similar to the
-<tt>transform_iterators</tt><a href="#3">[3]</a>. We first create a
-policies class which does a double-dereference in the
-<tt>dereference()</tt> method. We then create a traits class, this
-time also including a template parameter for the traits of the second
-level iterators as well as the first. Lastly we wrap this up in the
-type generator <tt>indirect_iterators</tt>, using
-<tt>iterator_adaptors</tt> to do most of the work.
+<tt>transform_iterators</tt><a href="#3">[3]</a>. When talking about a
+data structure of pointers to pointers (or more generally, iterators
+to iterators), we call the first level iterators the <i>outer</i>
+iterators and the second level iterators the <i>inner</i>
+iterators. For example, if the outer iterator type is <tt>T**</tt>
+then the inner iterator type is <tt>T*</tt>.
+
+To implement the indirect adaptors, we first create a policies class
+which does a double-dereference in the <tt>dereference()</tt> method.
 
 <p>
 <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
 <TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
 <PRE>
-  struct indirect_iterator_policies : public default_iterator_policies
-  {
+struct indirect_iterator_policies : public default_iterator_policies
+{
     template &lt;class Reference, class Iterator&gt;
     Reference dereference(type&lt;Reference&gt;, const Iterator& x) const
-      { return **x; }
-  };
+        { return **x; }
+};
+</PRE></TD></TABLE>
 
-  template &lt;class IndirectIterator,
-	    class IndirectTraits = std::iterator_traits&lt;IndirectIterator&gt;,
-	    class Traits = 
-	      std::iterator_traits&lt;typename IndirectTraits::value_type&gt;
-	   &gt;
-  struct indirect_traits
-  {
-    typedef typename IndirectTraits::difference_type difference_type;
-    typedef typename Traits::value_type value_type;
-    typedef typename Traits::pointer pointer;
-    typedef typename Traits::reference reference;
-    typedef typename IndirectTraits::iterator_category iterator_category;
-  };
+We then create a traits class, including a template parameter for both
+the inner and outer iterators and traits classes. The
+<tt>difference_type</tt> and <tt>iterator_category</tt> come from the
+outer iterator, while the <tt>value_type</tt>, <tt>pointer</tt>, and
+<tt>reference</tt> types come from the inner iterator.
 
-  template &lt;class IndirectIterator, class ConstIndirectIterator,
-            class IndirectTraits = 
-              std::iterator_traits&lt;IndirectIterator&gt;,
-            class ConstIndirectTraits = 
-              std::iterator_traits&lt;ConstIndirectIterator&gt;,
-            class Traits =
-              std::iterator_traits&lt;typename IndirectTraits::value_type&gt;
-           &gt;
-  struct indirect_iterators
-  {
-    typedef typename IndirectTraits::value_type Iterator;
-    typedef typename Traits::value_type ValueType;
-    typedef iterator_adaptors&lt;IndirectIterator, ConstIndirectIterator,
-      indirect_traits&lt;IndirectIterator, IndirectTraits, Traits&gt;,
-      indirect_traits&lt;ConstIndirectIterator, ConstIndirectTraits, Traits&gt;,
-      indirect_iterator_policies
-      &gt; Adaptors;
+<p>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+template &lt;class OuterIterator, class InnerIterator,
+          class OuterTraits = std::iterator_traits&lt;OuterIterator&gt;,
+          class InnerTraits = std::iterator_traits&lt;InnerIterator&gt;
+         &gt;
+struct indirect_traits
+{
+    typedef typename OuterTraits::difference_type difference_type;
+    typedef typename InnerTraits::value_type value_type;
+    typedef typename InnerTraits::pointer pointer;
+    typedef typename InnerTraits::reference reference;
+    typedef typename OuterTraits::iterator_category iterator_category;
+};
+</PRE></TD></TABLE>
+
+Lastly we wrap this up in two type generators:
+<tt>indirect_iterator</tt> for creating a single indirect iterator
+type, and <tt>indirect_iterators</tt> for creating an const/non-const
+pair of indirect iterator types. We use the <tt>iterator_adaptor</tt>
+and <tt>iterator_adaptors</tt> classes here to do most of the work.
+
+<p>
+<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+template &lt;class OuterIterator, class InnerIterator,
+          class OuterTraits = std::iterator_traits&lt;OuterIterator&gt;,
+          class InnerTraits = std::iterator_traits&lt;InnerIterator&gt;
+         &gt;
+struct indirect_iterator
+{
+    typedef iterator_adaptor&lt;OuterIterator,
+        indirect_iterator_policies,
+        indirect_traits&lt;OuterIterator, InnerIterator,
+                        OuterTraits, InnerTraits&gt;
+    &gt; type;
+};
+
+template &lt;class OuterIterator,      // Mutable or Immutable, does not matter
+          class InnerIterator,      // Mutable
+          class ConstInnerIterator, // Immutable
+          class OuterTraits = std::iterator_traits&lt;OuterIterator&gt;,
+          class InnerTraits = std::iterator_traits&lt;InnerIterator&gt;,
+          class ConstInnerTraits = std::iterator_traits&lt;ConstInnerIterator&gt;
+         &gt;
+struct indirect_iterators
+{
+    typedef iterator_adaptors&lt;OuterIterator, OuterIterator,
+        indirect_traits&lt;OuterIterator, InnerIterator,
+                        OuterTraits, InnerTraits&gt;,
+        indirect_traits&lt;OuterIterator, ConstInnerIterator,
+                        OuterTraits, ConstInnerTraits&gt;,
+        indirect_iterator_policies
+        &gt; Adaptors;
     typedef typename Adaptors::iterator iterator;
     typedef typename Adaptors::const_iterator const_iterator;
-  };
+};
 </PRE></TD></TABLE>
+
+
+<h3><a name="projection_iterators">The Projection Iterator Adaptors</a></h3>
+
+
 
 <h3><a name="reverse_iterators">The Reverse Iterators Class</a></h3>
 
