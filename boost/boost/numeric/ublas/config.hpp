@@ -96,6 +96,16 @@
 // BCC allows to implement free function as friends.
 #define BOOST_UBLAS_FRIEND_FUNCTION
 
+// BCC's <complex> broken.
+// Thanks to John Maddock for providing a workaround.
+#if defined(_STLPORT_VERSION) && defined(_STLP_USE_OWN_NAMESPACE) && ! defined(std)
+#include <complex>
+namespace std {
+    using stlport::abs;
+    using stlport::sqrt;
+}
+#endif
+
 #endif
 
 
@@ -130,6 +140,9 @@
 #ifdef __COMO__
 
 // Comeau 4.2.45 seems to have problems with BOOST_UBLAS_FRIEND_FUNCTION (this seems to be arguable).
+#if (__COMO_VERSION__ >= 4300)
+#define BOOST_UBLAS_FRIEND_FUNCTION
+#endif
 // Comeau allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
 
@@ -168,7 +181,7 @@
 // Enable different sparse element proxies
 // These fix a [1] = a [0] = 1, but probably won't work on broken compilers.
 // Thanks to Marc Duflot for spotting this.
-#ifndef BOOST_MSVC
+#if ! defined (BOOST_MSVC) && ! defined (__BORLANDC__)
 // #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
 #define BOOST_UBLAS_STRICT_VECTOR_SPARSE
 #define BOOST_UBLAS_STRICT_MATRIX_SPARSE
@@ -233,7 +246,7 @@
 
 
 // Use invariant hoisting.
-#define BOOST_UBLAS_USE_INVARIANT_HOISTING
+// #define BOOST_UBLAS_USE_INVARIANT_HOISTING
 
 // Use Duff's device
 // #define BOOST_UBLAS_USE_DUFF_DEVICE

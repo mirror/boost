@@ -50,7 +50,7 @@ namespace boost { namespace numeric { namespace ublas {
     void restart (const vector_expression<E> &e, typename E::size_type index,
                   typename E::const_iterator &ite, typename E::const_iterator &ite_end) {
         ite = e ().find_first (index);
-        ite_end = e ().find_last (e ().size ());
+        ite_end = e ().find_first (e ().size ());
         if (ite != ite_end && ite.index () == index)
             ++ ite;
     }
@@ -59,7 +59,7 @@ namespace boost { namespace numeric { namespace ublas {
     void restart (vector_expression<E> &e, typename E::size_type index,
                   typename E::iterator &ite, typename E::iterator &ite_end) {
         ite = e ().find_first (index);
-        ite_end = e ().find_last (e ().size ());
+        ite_end = e ().find_first (e ().size ());
         if (ite != ite_end && ite.index () == index)
             ++ ite;
     }
@@ -282,7 +282,7 @@ namespace boost { namespace numeric { namespace ublas {
     void vector_assign (const F &f, V &v, const vector_expression<E> &e, packed_proxy_tag) {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F functor_type;
-        typedef typename V::size_type size_type;
+        typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
@@ -293,20 +293,31 @@ namespace boost { namespace numeric { namespace ublas {
         typename V::iterator it_end (v.end ());
         typename E::const_iterator ite (e ().begin ());
         typename E::const_iterator ite_end (e ().end ());
-        if (ite != ite_end && ite.index () < it.index ())
-            ite += std::min (it.index () - ite.index (), size_type (ite_end - ite));
-        while (it != it_end && ite != ite_end && it.index () < ite.index ()) {
-            functor_type () (*it, value_type ());
-            ++ it;
+        difference_type it_size (it_end - it);
+        difference_type ite_size (ite_end - ite);
+        if (it_size > 0 && ite_size > 0) {
+            difference_type size (std::min (difference_type (it.index () - ite.index ()), ite_size));
+            if (size > 0) {
+                ite += size;
+                ite_size -= size;
+            }
         }
-        while (it != it_end && ite != ite_end) {
-            functor_type () (*it, *ite);
-            ++ it, ++ ite;
+        if (it_size > 0 && ite_size > 0) {
+            difference_type size (std::min (difference_type (ite.index () - it.index ()), it_size));
+            if (size > 0) {
+                it_size -= size;
+                while (-- size >= 0)
+                    functor_type () (*it, value_type ()), ++ it;
+            }
         }
-        while (it != it_end) {
-            functor_type () (*it, value_type ());
-            ++ it;
-        }
+        difference_type size (std::min (it_size, ite_size));
+        it_size -= size;
+        ite_size -= size;
+        while (-- size >= 0)
+            functor_type () (*it, *ite), ++ it, ++ ite;
+        size = it_size;
+        while (-- size >= 0)
+            functor_type () (*it, value_type ()), ++ it;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
 #endif

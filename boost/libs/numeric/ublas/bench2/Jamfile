@@ -6,5 +6,6 @@ exe bench2
     : $(SOURCES).cpp
     : <include>$(BOOST_ROOT)
       <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
+      <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 

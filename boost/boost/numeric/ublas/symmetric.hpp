@@ -305,8 +305,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<self_type, packed_random_access_iterator_tag> iterator1;
         typedef indexed_iterator2<self_type, packed_random_access_iterator_tag> iterator2;
-        typedef indexed_const_iterator1<self_type, packed_random_access_iterator_tag> const_iterator1;
-        typedef indexed_const_iterator2<self_type, packed_random_access_iterator_tag> const_iterator2;
+        typedef indexed_const_iterator1<self_type, dense_random_access_iterator_tag> const_iterator1;
+        typedef indexed_const_iterator2<self_type, dense_random_access_iterator_tag> const_iterator2;
 #else
         class const_iterator1;
         class iterator1;
@@ -372,10 +372,10 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
             public container_const_reference<symmetric_matrix>,
-            public random_access_iterator_base<packed_random_access_iterator_tag,
+            public random_access_iterator_base<dense_random_access_iterator_tag,
                                                const_iterator1, value_type> {
         public:
-            typedef packed_random_access_iterator_tag iterator_category;
+            typedef dense_random_access_iterator_tag iterator_category;
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
@@ -390,13 +390,13 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator1 ():
-                container_const_reference<symmetric_matrix> (), it1_ (), it2_ () {}
+                container_const_reference<self_type> (), it1_ (), it2_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator1 (const symmetric_matrix &m, size_type it1, size_type it2):
-                container_const_reference<symmetric_matrix> (m), it1_ (it1), it2_ (it2) {}
+            const_iterator1 (const self_type &m, size_type it1, size_type it2):
+                container_const_reference<self_type> (m), it1_ (it1), it2_ (it2) {}
             BOOST_UBLAS_INLINE
             const_iterator1 (const iterator1 &it):
-                container_const_reference<symmetric_matrix> (it ()), it1_ (it.it1_), it2_ (it.it2_) {}
+                container_const_reference<self_type> (it ()), it1_ (it.it1_), it2_ (it.it2_) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -421,6 +421,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator1 &it) const {
+                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
                 return it1_ - it.it1_;
             }
 
@@ -436,7 +438,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator2 end () const {
-                return (*this) ().find_last2 (1, it1_, (*this) ().size2 ());
+                return (*this) ().find_first2 (1, it1_, (*this) ().size2 ());
             }
             BOOST_UBLAS_INLINE
             const_reverse_iterator2 rbegin () const {
@@ -460,7 +462,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
-                container_const_reference<symmetric_matrix>::assign (&it ());
+                container_const_reference<self_type>::assign (&it ());
                 it1_ = it.it1_;
                 it2_ = it.it2_;
                 return *this;
@@ -470,12 +472,14 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ == it.it2_;
+                BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
+                return it1_ == it.it1_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ < it.it1_ && it2_ == it.it2_;
+                BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
+                return it1_ < it.it1_;
             }
 
         private:
@@ -490,7 +494,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_iterator1 end1 () const {
-            return find_last1 (0, size_, 0);
+            return find_first1 (0, size_, 0);
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -512,10 +516,10 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             iterator1 ():
-                container_reference<symmetric_matrix> (), it1_ (), it2_ () {}
+                container_reference<self_type> (), it1_ (), it2_ () {}
             BOOST_UBLAS_INLINE
-            iterator1 (symmetric_matrix &m, size_type it1, size_type it2):
-                container_reference<symmetric_matrix> (m), it1_ (it1), it2_ (it2) {}
+            iterator1 (self_type &m, size_type it1, size_type it2):
+                container_reference<self_type> (m), it1_ (it1), it2_ (it2) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -540,6 +544,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator1 &it) const {
+                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
                 return it1_ - it.it1_;
             }
 
@@ -555,7 +561,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             iterator2 end () const {
-                return (*this) ().find_last2 (1, it1_, (*this) ().size2 ());
+                return (*this) ().find_first2 (1, it1_, (*this) ().size2 ());
             }
             BOOST_UBLAS_INLINE
             reverse_iterator2 rbegin () const {
@@ -579,7 +585,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment 
             BOOST_UBLAS_INLINE
             iterator1 &operator = (const iterator1 &it) {
-                container_reference<symmetric_matrix>::assign (&it ());
+                container_reference<self_type>::assign (&it ());
                 it1_ = it.it1_;
                 it2_ = it.it2_;
                 return *this;
@@ -589,12 +595,14 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ == it.it2_;
+                BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
+                return it1_ == it.it1_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ < it.it1_ && it2_ == it.it2_;
+                BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
+                return it1_ < it.it1_;
             }
 
         private:
@@ -611,16 +619,16 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 end1 () {
-            return find_last1 (0, size_, 0);
+            return find_first1 (0, size_, 0);
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator2:
             public container_const_reference<symmetric_matrix>,
-            public random_access_iterator_base<packed_random_access_iterator_tag,
+            public random_access_iterator_base<dense_random_access_iterator_tag,
                                                const_iterator2, value_type> {
         public:
-            typedef packed_random_access_iterator_tag iterator_category;
+            typedef dense_random_access_iterator_tag iterator_category;
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
@@ -635,13 +643,13 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator2 ():
-                container_const_reference<symmetric_matrix> (), it1_ (), it2_ () {}
+                container_const_reference<self_type> (), it1_ (), it2_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator2 (const symmetric_matrix &m, size_type it1, size_type it2):
-                container_const_reference<symmetric_matrix> (m), it1_ (it1), it2_ (it2) {}
+            const_iterator2 (const self_type &m, size_type it1, size_type it2):
+                container_const_reference<self_type> (m), it1_ (it1), it2_ (it2) {}
             BOOST_UBLAS_INLINE
             const_iterator2 (const iterator2 &it):
-                container_const_reference<symmetric_matrix> (it ()), it1_ (it.it1_), it2_ (it.it2_) {}
+                container_const_reference<self_type> (it ()), it1_ (it.it1_), it2_ (it.it2_) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -666,6 +674,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator2 &it) const {
+                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
                 return it2_ - it.it2_;
             }
 
@@ -681,7 +691,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator1 end () const {
-                return (*this) ().find_last1 (1, (*this) ().size1 (), it2_);
+                return (*this) ().find_first1 (1, (*this) ().size1 (), it2_);
             }
             BOOST_UBLAS_INLINE
             const_reverse_iterator1 rbegin () const {
@@ -705,7 +715,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment 
             BOOST_UBLAS_INLINE
             const_iterator2 &operator = (const const_iterator2 &it) {
-                container_const_reference<symmetric_matrix>::assign (&it ());
+                container_const_reference<self_type>::assign (&it ());
                 it1_ = it.it1_;
                 it2_ = it.it2_;
                 return *this;
@@ -715,12 +725,14 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ == it.it2_;
+                BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
+                return it2_ == it.it2_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ < it.it2_;
+                BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
+                return it2_ < it.it2_;
             }
 
         private:
@@ -735,7 +747,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_iterator2 end2 () const {
-            return find_last2 (0, 0, size_);
+            return find_first2 (0, 0, size_);
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -757,10 +769,10 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             iterator2 ():
-                container_reference<symmetric_matrix> (), it1_ (), it2_ () {}
+                container_reference<self_type> (), it1_ (), it2_ () {}
             BOOST_UBLAS_INLINE
-            iterator2 (symmetric_matrix &m, size_type it1, size_type it2):
-                container_reference<symmetric_matrix> (m), it1_ (it1), it2_ (it2) {}
+            iterator2 (self_type &m, size_type it1, size_type it2):
+                container_reference<self_type> (m), it1_ (it1), it2_ (it2) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -785,6 +797,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator2 &it) const {
+                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
                 return it2_ - it.it2_;
             }
 
@@ -800,7 +814,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             iterator1 end () const {
-                return (*this) ().find_last1 (1, (*this) ().size1 (), it2_);
+                return (*this) ().find_first1 (1, (*this) ().size1 (), it2_);
             }
             BOOST_UBLAS_INLINE
             reverse_iterator1 rbegin () const {
@@ -824,7 +838,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment 
             BOOST_UBLAS_INLINE
             iterator2 &operator = (const iterator2 &it) {
-                container_reference<symmetric_matrix>::assign (&it ());
+                container_reference<self_type>::assign (&it ());
                 it1_ = it.it1_;
                 it2_ = it.it2_;
                 return *this;
@@ -834,12 +848,14 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ == it.it2_;
+                BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
+                return it2_ == it.it2_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ < it.it2_;
+                BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
+                return it2_ < it.it2_;
             }
 
         private:
@@ -856,7 +872,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator2 end2 () {
-            return find_last2 (0, 0, size_);
+            return find_first2 (0, 0, size_);
         }
 
         // Reverse iterators
@@ -942,6 +958,21 @@ namespace boost { namespace numeric { namespace ublas {
         typedef symmetric_adaptor<M, F> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+        typedef typename M::const_iterator1 const_iterator1_type;
+        typedef typename M::iterator1 iterator1_type;
+        typedef typename M::const_iterator2 const_iterator2_type;
+        typedef typename M::iterator2 iterator2_type;
+#else
+        typedef typename M::const_iterator1 const_iterator1_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_iterator1,
+                                          typename M::iterator1>::type iterator1_type;
+        typedef typename M::const_iterator2 const_iterator2_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_iterator2,
+                                          typename M::iterator2>::type iterator2_type;
+#endif
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  packed_proxy_tag>::storage_category storage_category;
         typedef typename F::packed_category packed_category;
@@ -1092,7 +1123,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Too unusual semantic
             // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) 
-                matrix_swap (scalar_swap<value_type, value_type> (), *this, m); 
+                matrix_swap (scalar_swap<value_type, value_type> (), *this, m);
         }
 #ifdef BOOST_UBLAS_FRIEND_FUNCTION
         BOOST_UBLAS_INLINE
@@ -1104,8 +1135,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<self_type, packed_random_access_iterator_tag> iterator1;
         typedef indexed_iterator2<self_type, packed_random_access_iterator_tag> iterator2;
-        typedef indexed_const_iterator1<self_type, packed_random_access_iterator_tag> const_iterator1;
-        typedef indexed_const_iterator2<self_type, packed_random_access_iterator_tag> const_iterator2;
+        typedef indexed_const_iterator1<self_type, dense_random_access_iterator_tag> const_iterator1;
+        typedef indexed_const_iterator2<self_type, dense_random_access_iterator_tag> const_iterator2;
 #else
         class const_iterator1;
         class iterator1;
@@ -1127,43 +1158,123 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator1 find_first1 (int rank, size_type i, size_type j) const {
-            return const_iterator1 (*this, i, j);
+            if (functor_type::other (i, j)) {
+                if (functor_type::other (size1 (), j)) {
+                    return const_iterator1 (*this, 0, 0,
+                                            data ().find_first1 (rank, i, j), data ().find_first1 (rank, size1 (), j),
+                                            data ().find_first2 (rank, size2 (), size1 ()), data ().find_first2 (rank, size2 (), size1 ()));
+                } else {
+                    return const_iterator1 (*this, 0, 1,
+                                            data ().find_first1 (rank, i, j), data ().find_first1 (rank, j, j),
+                                            data ().find_first2 (rank, j, j), data ().find_first2 (rank, j, size1 ()));
+                }
+            } else {
+                if (functor_type::other (size1 (), j)) {
+                    return const_iterator1 (*this, 1, 0,
+                                            data ().find_first1 (rank, j, j), data ().find_first1 (rank, size1 (), j),
+                                            data ().find_first2 (rank, j, i), data ().find_first2 (rank, j, j));
+                } else {
+                    return const_iterator1 (*this, 1, 1,
+                                            data ().find_first1 (rank, size1 (), size2 ()), data ().find_first1 (rank, size1 (), size2 ()),
+                                            data ().find_first2 (rank, j, i), data ().find_first2 (rank, j, size1 ()));
+                }
+            }
         }
         BOOST_UBLAS_INLINE
         iterator1 find_first1 (int rank, size_type i, size_type j) {
             if (rank == 1)
                 i = functor_type::restrict1 (i, j);
-            return iterator1 (*this, i, j);
+            return iterator1 (*this, data ().find_first1 (rank, i, j));
         }
         BOOST_UBLAS_INLINE
         const_iterator1 find_last1 (int rank, size_type i, size_type j) const {
-            return const_iterator1 (*this, i, j);
+            if (functor_type::other (i, j)) {
+                if (functor_type::other (size1 (), j)) {
+                    return const_iterator1 (*this, 0, 0,
+                                            data ().find_last1 (rank, i, j), data ().find_last1 (rank, size1 (), j),
+                                            data ().find_last2 (rank, size2 (), size1 ()), data ().find_last2 (rank, size2 (), size1 ()));
+                } else {
+                    return const_iterator1 (*this, 0, 1,
+                                            data ().find_last1 (rank, i, j), data ().find_last1 (rank, j, j),
+                                            data ().find_last2 (rank, j, j), data ().find_last2 (rank, j, size1 ()));
+                }
+            } else {
+                if (functor_type::other (size1 (), j)) {
+                    return const_iterator1 (*this, 1, 0,
+                                            data ().find_last1 (rank, j, j), data ().find_last1 (rank, size1 (), j),
+                                            data ().find_last2 (rank, j, i), data ().find_last2 (rank, j, j));
+                } else {
+                    return const_iterator1 (*this, 1, 1,
+                                            data ().find_last1 (rank, size1 (), size2 ()), data ().find_last1 (rank, size1 (), size2 ()),
+                                            data ().find_last2 (rank, j, i), data ().find_last2 (rank, j, size1 ()));
+                }
+            }
         }
         BOOST_UBLAS_INLINE
         iterator1 find_last1 (int rank, size_type i, size_type j) {
             if (rank == 1)
                 i = functor_type::restrict1 (i, j);
-            return iterator1 (*this, i, j);
+            return iterator1 (*this, data ().find_last1 (rank, i, j));
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find_first2 (int rank, size_type i, size_type j) const {
-            return const_iterator2 (*this, i, j);
+            if (functor_type::other (i, j)) {
+                if (functor_type::other (i, size2 ())) {
+                    return const_iterator2 (*this, 1, 1,
+                                            data ().find_first1 (rank, size2 (), size1 ()), data ().find_first1 (rank, size2 (), size1 ()),
+                                            data ().find_first2 (rank, i, j), data ().find_first2 (rank, i, size2 ()));
+                } else {
+                    return const_iterator2 (*this, 1, 0,
+                                            data ().find_first1 (rank, i, i), data ().find_first1 (rank, size2 (), i),
+                                            data ().find_first2 (rank, i, j), data ().find_first2 (rank, i, i));
+                }
+            } else {
+                if (functor_type::other (i, size2 ())) {
+                    return const_iterator2 (*this, 0, 1,
+                                            data ().find_first1 (rank, j, i), data ().find_first1 (rank, i, i),
+                                            data ().find_first2 (rank, i, i), data ().find_first2 (rank, i, size2 ()));
+                } else {
+                    return const_iterator2 (*this, 0, 0,
+                                            data ().find_first1 (rank, j, i), data ().find_first1 (rank, size2 (), i),
+                                            data ().find_first2 (rank, size1 (), size2 ()), data ().find_first2 (rank, size2 (), size2 ()));
+                }
+            }
         }
         BOOST_UBLAS_INLINE
         iterator2 find_first2 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 j = functor_type::restrict2 (i, j);
-            return iterator2 (*this, i, j);
+            return iterator2 (*this, data ().find_first2 (rank, i, j));
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find_last2 (int rank, size_type i, size_type j) const {
-            return const_iterator2 (*this, i, j);
+            if (functor_type::other (i, j)) {
+                if (functor_type::other (i, size2 ())) {
+                    return const_iterator2 (*this, 1, 1,
+                                            data ().find_last1 (rank, size2 (), size1 ()), data ().find_last1 (rank, size2 (), size1 ()),
+                                            data ().find_last2 (rank, i, j), data ().find_last2 (rank, i, size2 ()));
+                } else {
+                    return const_iterator2 (*this, 1, 0,
+                                            data ().find_last1 (rank, i, i), data ().find_last1 (rank, size2 (), i),
+                                            data ().find_last2 (rank, i, j), data ().find_last2 (rank, i, i));
+                }
+            } else {
+                if (functor_type::other (i, size2 ())) {
+                    return const_iterator2 (*this, 0, 1,
+                                            data ().find_last1 (rank, j, i), data ().find_last1 (rank, i, i),
+                                            data ().find_last2 (rank, i, i), data ().find_last2 (rank, i, size2 ()));
+                } else {
+                    return const_iterator2 (*this, 0, 0,
+                                            data ().find_last1 (rank, j, i), data ().find_last1 (rank, size2 (), i),
+                                            data ().find_last2 (rank, size1 (), size2 ()), data ().find_last2 (rank, size2 (), size2 ()));
+                }
+            }
         }
         BOOST_UBLAS_INLINE
         iterator2 find_last2 (int rank, size_type i, size_type j) {
-            if (rank == 1) 
+            if (rank == 1)
                 j = functor_type::restrict2 (i, j);
-            return iterator2 (*this, i, j);
+            return iterator2 (*this, data ().find_last2 (rank, i, j));
         }
 
         // Iterators simply are indices.
@@ -1171,71 +1282,204 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator1:
             public container_const_reference<symmetric_adaptor>,
-            public random_access_iterator_base<packed_random_access_iterator_tag,
+            public random_access_iterator_base<dense_random_access_iterator_tag,
                                                const_iterator1, value_type> {
         public:
-            typedef packed_random_access_iterator_tag iterator_category;
-#ifdef BOOST_MSVC_STD_ITERATOR
-            typedef const_reference reference;
-#else
-            typedef typename symmetric_adaptor::difference_type difference_type;
-            typedef typename symmetric_adaptor::value_type value_type;
-            typedef typename symmetric_adaptor::const_reference reference;
-            typedef typename symmetric_adaptor::const_pointer pointer;
-#endif
+            typedef typename iterator_restrict_traits<typename const_iterator1_type::iterator_category,
+                                                      dense_random_access_iterator_tag>::iterator_category iterator_category;
+            typedef typename const_iterator1_type::difference_type difference_type;
+            typedef typename const_iterator1_type::value_type value_type;
+            typedef typename const_iterator1_type::reference reference;
+            typedef typename const_iterator1_type::pointer pointer;
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
 
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator1 ():
-                container_const_reference<symmetric_adaptor> (), it1_ (), it2_ () {}
+                container_const_reference<self_type> (),
+                begin_ (-1), end_ (-1), current_ (-1),
+                it1_begin_ (), it1_end_ (), it1_ (),
+                it2_begin_ (), it2_end_ (), it2_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator1 (const symmetric_adaptor &m, size_type it1, size_type it2):
-                container_const_reference<symmetric_adaptor> (m), it1_ (it1), it2_ (it2) {}
+            const_iterator1 (const self_type &m, int begin, int end,
+                             const const_iterator1_type &it1_begin, const const_iterator1_type &it1_end,
+                             const const_iterator2_type &it2_begin, const const_iterator2_type &it2_end):
+                container_const_reference<self_type> (m),
+                begin_ (begin), end_ (end), current_ (begin),
+                it1_begin_ (it1_begin), it1_end_ (it1_end), it1_ (it1_begin_),
+                it2_begin_ (it2_begin), it2_end_ (it2_end), it2_ (it2_begin_) {
+                if (current_ == 0 && it1_ == it1_end_)
+                    current_ = 1;
+                if (current_ == 1 && it2_ == it2_end_)
+                    current_ = 0;
+                if ((current_ == 0 && it1_ == it1_end_) ||
+                    (current_ == 1 && it2_ == it2_end_))
+                    current_ = end_;
+                BOOST_UBLAS_CHECK (current_ == end_ ||
+                                   (current_ == 0 && it1_ != it1_end_) ||
+                                   (current_ == 1 && it2_ != it2_end_), internal_logic ());
+            }
             BOOST_UBLAS_INLINE
             const_iterator1 (const iterator1 &it):
-                container_const_reference<symmetric_adaptor> (it ()), it1_ (it.it1_), it2_ (it.it2_) {}
+                container_const_reference<self_type> (it ()),
+                begin_ (it.begin_), end_ (it.end_), current_ (it.current_),
+                it1_begin_ (it.it1_begin_), it1_end_ (it.it1_end_), it1_ (it.it1_),
+                it2_begin_ (it.it2_begin_), it2_end_ (it.it2_end_), it2_ (it.it2_) {
+                BOOST_UBLAS_CHECK (current_ == end_ ||
+                                   (current_ == 0 && it1_ != it1_end_) ||
+                                   (current_ == 1 && it2_ != it2_end_), internal_logic ());
+            }
 
             // Arithmetic
             BOOST_UBLAS_INLINE
             const_iterator1 &operator ++ () {
-                ++ it1_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    BOOST_UBLAS_CHECK (it1_ != it1_end_, internal_logic ());
+                    ++ it1_;
+                    if (it1_ == it1_end_ && end_ == 1) {
+                        it2_ = it2_begin_;
+                        current_ = 1;
+                    }
+                } else /* if (current_ == 1) */ {
+                    BOOST_UBLAS_CHECK (it2_ != it2_end_, internal_logic ());
+                    ++ it2_;
+                    if (it2_ == it2_end_ && end_ == 0) {
+                        it1_ = it1_begin_;
+                        current_ = 0;
+                    }
+                }
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator -- () {
-                -- it1_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    if (it1_ == it1_begin_ && begin_ == 1) {
+                        it2_ = it2_end_;
+                        BOOST_UBLAS_CHECK (it2_ != it2_begin_, internal_logic ());
+                        -- it2_;
+                        current_ = 1;
+                    } else {
+                        -- it1_;
+                    }
+                } else /* if (current_ == 1) */ {
+                    if (it2_ == it2_begin_ && begin_ == 0) {
+                        it1_ = it1_end_;
+                        BOOST_UBLAS_CHECK (it1_ != it1_begin_, internal_logic ());
+                        -- it1_;
+                        current_ = 0;
+                    } else {
+                        -- it2_;
+                    }
+                }
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator += (difference_type n) {
-                it1_ += n;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    size_type d = std::min (n, it1_end_ - it1_);
+                    it1_ += d;
+                    n -= d;
+                    if (n > 0 || (end_ == 1 && it1_ == it1_end_)) {
+                        BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
+                        d = std::min (n, it2_end_ - it2_begin_);
+                        it2_ = it2_begin_ + d;
+                        n -= d;
+                        current_ = 1;
+                    }
+                } else /* if (current_ == 1) */ {
+                    size_type d = std::min (n, it2_end_ - it2_);
+                    it2_ += d;
+                    n -= d;
+                    if (n > 0 || (end_ == 0 && it2_ == it2_end_)) {
+                        BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
+                        d = std::min (n, it1_end_ - it1_begin_);
+                        it1_ = it1_begin_ + d;
+                        n -= d;
+                        current_ = 0;
+                    }
+                }
+                BOOST_UBLAS_CHECK (n == 0, external_logic ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator -= (difference_type n) {
-                it1_ -= n;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    size_type d = std::min (n, it1_ - it1_begin_);
+                    it1_ -= d;
+                    n -= d;
+                    if (n > 0) {
+                        BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
+                        d = std::min (n, it2_end_ - it2_begin_);
+                        it2_ = it2_end_ - d;
+                        n -= d;
+                        current_ = 1;
+                    }
+                } else /* if (current_ == 1) */ {
+                    size_type d = std::min (n, it2_ - it2_begin_);
+                    it2_ -= d;
+                    n -= d;
+                    if (n > 0) {
+                        BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
+                        d = std::min (n, it1_end_ - it1_begin_);
+                        it1_ = it1_end_ - d;
+                        n -= d;
+                        current_ = 0;
+                    }
+                }
+                BOOST_UBLAS_CHECK (n == 0, external_logic ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator1 &it) const {
-                return it1_ - it.it1_;
+                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                BOOST_UBLAS_CHECK (it.current_ == 0 || it.current_ == 1, internal_logic ());
+                BOOST_UBLAS_CHECK (/* begin_ == it.begin_ && */ end_ == it.end_, internal_logic ());
+                if (current_ == 0 && it.current_ == 0) {
+                    return it1_ - it.it1_;
+                } else if (current_ == 0 && it.current_ == 1) {
+                    if (end_ == 1 && it.end_ == 1) {
+                        return (it1_ - it.it1_end_) + (it.it2_begin_ - it.it2_);
+                    } else /* if (end_ == 0 && it.end_ == 0) */ {
+                        return (it1_ - it.it1_begin_) + (it.it2_end_ - it.it2_);
+                    }
+
+                } else if (current_ == 1 && it.current_ == 0) {
+                    if (end_ == 1 && it.end_ == 1) {
+                        return (it2_ - it.it2_begin_) + (it.it1_end_ - it.it1_);
+                    } else /* if (end_ == 0 && it.end_ == 0) */ {
+                        return (it2_ - it.it2_end_) + (it.it1_begin_ - it.it1_);
+                    }
+                } else /* if (current_ == 1 && it.current_ == 1) */ {
+                    return it2_ - it.it2_;
+                }
             }
 
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_);
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    BOOST_UBLAS_CHECK (it1_ != it1_end_, internal_logic ());
+                    return *it1_;
+                } else /* if (current_ == 1) */ {
+                    BOOST_UBLAS_CHECK (it2_ != it2_end_, internal_logic ());
+                    return *it2_;
+                }
             }
 
             BOOST_UBLAS_INLINE
             const_iterator2 begin () const {
-                return (*this) ().find_first2 (1, it1_, 0);
+                return (*this) ().find_first2 (1, index1 (), 0);
             }
             BOOST_UBLAS_INLINE
             const_iterator2 end () const {
-                return (*this) ().find_last2 (1, it1_, (*this) ().size2 ());
+                return (*this) ().find_first2 (1, index1 (), (*this) ().size2 ());
             }
             BOOST_UBLAS_INLINE
             const_reverse_iterator2 rbegin () const {
@@ -1249,18 +1493,39 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                return it1_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    BOOST_UBLAS_CHECK (it1_ != it1_end_, internal_logic ());
+                    return it1_.index1 ();
+                } else /* if (current_ == 1) */ {
+                    BOOST_UBLAS_CHECK (it2_ != it2_end_, internal_logic ());
+                    return it2_.index2 ();
+                }
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                return it2_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    BOOST_UBLAS_CHECK (it1_ != it1_end_, internal_logic ());
+                    return it1_.index2 ();
+                } else /* if (current_ == 1) */ {
+                    BOOST_UBLAS_CHECK (it2_ != it2_end_, internal_logic ());
+                    return it2_.index1 ();
+                }
             }
 
             // Assignment
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
-                container_const_reference<symmetric_adaptor>::assign (&it ());
+                container_const_reference<self_type>::assign (&it ());
+                begin_ = it.begin_;
+                end_ = it.end_;
+                current_ = it.current_;
+                it1_begin_ = it.it1_begin_;
+                it1_end_ = it.it1_end_;
                 it1_ = it.it1_;
+                it2_begin_ = it.it2_begin_;
+                it2_end_ = it.it2_end_;
                 it2_ = it.it2_;
                 return *this;
             }
@@ -1269,17 +1534,28 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ == it.it2_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                BOOST_UBLAS_CHECK (it.current_ == 0 || it.current_ == 1, internal_logic ());
+                BOOST_UBLAS_CHECK (/* begin_ == it.begin_ && */ end_ == it.end_, internal_logic ());
+                return (current_ == 0 && it.current_ == 0 && it1_ == it.it1_) ||
+                       (current_ == 1 && it.current_ == 1 && it2_ == it.it2_);
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ < it.it1_ && it2_ == it.it2_;
+                return it - *this > 0;
             }
 
         private:
-            size_type it1_;
-            size_type it2_;
+            int begin_;
+            int end_;
+            int current_;
+            const_iterator1_type it1_begin_;
+            const_iterator1_type it1_end_;
+            const_iterator1_type it1_;
+            const_iterator2_type it2_begin_;
+            const_iterator2_type it2_end_;
+            const_iterator2_type it2_;
         };
 #endif
 
@@ -1289,7 +1565,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_iterator1 end1 () const {
-            return find_last1 (0, size1 (), 0);
+            return find_first1 (0, size1 (), 0);
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1298,23 +1574,22 @@ namespace boost { namespace numeric { namespace ublas {
             public random_access_iterator_base<packed_random_access_iterator_tag,
                                                iterator1, value_type> {
         public:
-            typedef packed_random_access_iterator_tag iterator_category;
-#ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename symmetric_adaptor::difference_type difference_type;
-            typedef typename symmetric_adaptor::value_type value_type;
-            typedef typename symmetric_adaptor::reference reference;
-            typedef typename symmetric_adaptor::pointer pointer;
-#endif
+            typedef typename iterator_restrict_traits<typename iterator1_type::iterator_category,
+                                                      packed_random_access_iterator_tag>::iterator_category iterator_category;
+            typedef typename iterator1_type::difference_type difference_type;
+            typedef typename iterator1_type::value_type value_type;
+            typedef typename iterator1_type::reference reference;
+            typedef typename iterator1_type::pointer pointer;
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
 
             // Construction and destruction
             BOOST_UBLAS_INLINE
             iterator1 ():
-                container_reference<symmetric_adaptor> (), it1_ (), it2_ () {}
+                container_reference<self_type> (), it1_ () {}
             BOOST_UBLAS_INLINE
-            iterator1 (symmetric_adaptor &m, size_type it1, size_type it2):
-                container_reference<symmetric_adaptor> (m), it1_ (it1), it2_ (it2) {}
+            iterator1 (self_type &m, const iterator1_type &it1):
+                container_reference<self_type> (m), it1_ (it1) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -1339,22 +1614,23 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator1 &it) const {
+                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
                 return it1_ - it.it1_;
             }
 
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return *it1_;
             }
 
             BOOST_UBLAS_INLINE
             iterator2 begin () const {
-                return (*this) ().find_first2 (1, it1_, 0);
+                return (*this) ().find_first2 (1, index1 (), 0);
             }
             BOOST_UBLAS_INLINE
             iterator2 end () const {
-                return (*this) ().find_last2 (1, it1_, (*this) ().size2 ());
+                return (*this) ().find_first2 (1, index1 (), (*this) ().size2 ());
             }
             BOOST_UBLAS_INLINE
             reverse_iterator2 rbegin () const {
@@ -1368,19 +1644,18 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                return it1_;
+                return it1_.index1 ();
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                return it2_;
+                return it1_.index2 ();
             }
 
             // Assignment
             BOOST_UBLAS_INLINE
             iterator1 &operator = (const iterator1 &it) {
-                container_reference<symmetric_adaptor>::assign (&it ());
+                container_reference<self_type>::assign (&it ());
                 it1_ = it.it1_;
-                it2_ = it.it2_;
                 return *this;
             }
 
@@ -1388,17 +1663,16 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ == it.it2_;
+                return it1_ == it.it1_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ < it.it1_ && it2_ == it.it2_;
+                return it1_ < it.it1_;
             }
 
         private:
-            size_type it1_;
-            size_type it2_;
+            iterator1_type it1_;
 
             friend class const_iterator1;
         };
@@ -1410,77 +1684,210 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator1 end1 () {
-            return find_last1 (0, size1 (), 0);
+            return find_first1 (0, size1 (), 0);
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator2:
             public container_const_reference<symmetric_adaptor>,
-            public random_access_iterator_base<packed_random_access_iterator_tag,
+            public random_access_iterator_base<dense_random_access_iterator_tag,
                                                const_iterator2, value_type> {
         public:
-            typedef packed_random_access_iterator_tag iterator_category;
-#ifdef BOOST_MSVC_STD_ITERATOR
-            typedef const_reference reference;
-#else
-            typedef typename symmetric_adaptor::difference_type difference_type;
-            typedef typename symmetric_adaptor::value_type value_type;
-            typedef typename symmetric_adaptor::const_reference reference;
-            typedef typename symmetric_adaptor::const_pointer pointer;
-#endif
+            typedef typename iterator_restrict_traits<typename const_iterator2_type::iterator_category,
+                                                      dense_random_access_iterator_tag>::iterator_category iterator_category;
+            typedef typename const_iterator2_type::difference_type difference_type;
+            typedef typename const_iterator2_type::value_type value_type;
+            typedef typename const_iterator2_type::reference reference;
+            typedef typename const_iterator2_type::pointer pointer;
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
 
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator2 ():
-                container_const_reference<symmetric_adaptor> (), it1_ (), it2_ () {}
+                container_const_reference<self_type> (),
+                begin_ (-1), end_ (-1), current_ (-1),
+                it1_begin_ (), it1_end_ (), it1_ (),
+                it2_begin_ (), it2_end_ (), it2_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator2 (const symmetric_adaptor &m, size_type it1, size_type it2):
-                container_const_reference<symmetric_adaptor> (m), it1_ (it1), it2_ (it2) {}
+            const_iterator2 (const self_type &m, int begin, int end,
+                             const const_iterator1_type &it1_begin, const const_iterator1_type &it1_end,
+                             const const_iterator2_type &it2_begin, const const_iterator2_type &it2_end):
+                container_const_reference<self_type> (m),
+                begin_ (begin), end_ (end), current_ (begin),
+                it1_begin_ (it1_begin), it1_end_ (it1_end), it1_ (it1_begin_),
+                it2_begin_ (it2_begin), it2_end_ (it2_end), it2_ (it2_begin_) {
+                if (current_ == 0 && it1_ == it1_end_)
+                    current_ = 1;
+                if (current_ == 1 && it2_ == it2_end_)
+                    current_ = 0;
+                if ((current_ == 0 && it1_ == it1_end_) ||
+                    (current_ == 1 && it2_ == it2_end_))
+                    current_ = end_;
+                BOOST_UBLAS_CHECK (current_ == end_ ||
+                                   (current_ == 0 && it1_ != it1_end_) ||
+                                   (current_ == 1 && it2_ != it2_end_), internal_logic ());
+            }
             BOOST_UBLAS_INLINE
             const_iterator2 (const iterator2 &it):
-                container_const_reference<symmetric_adaptor> (it ()), it1_ (it.it1_), it2_ (it.it2_) {}
+                container_const_reference<self_type> (it ()),
+                begin_ (it.begin_), end_ (it.end_), current_ (it.current_),
+                it1_begin_ (it.it1_begin_), it1_end_ (it.it1_end_), it1_ (it.it1_),
+                it2_begin_ (it.it2_begin_), it2_end_ (it.it2_end_), it2_ (it.it2_) {
+                BOOST_UBLAS_CHECK (current_ == end_ ||
+                                   (current_ == 0 && it1_ != it1_end_) ||
+                                   (current_ == 1 && it2_ != it2_end_), internal_logic ());
+            }
 
             // Arithmetic
             BOOST_UBLAS_INLINE
             const_iterator2 &operator ++ () {
-                ++ it2_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    BOOST_UBLAS_CHECK (it1_ != it1_end_, internal_logic ());
+                    ++ it1_;
+                    if (it1_ == it1_end_ && end_ == 1) {
+                        it2_ = it2_begin_;
+                        current_ = 1;
+                    }
+                } else /* if (current_ == 1) */ {
+                    BOOST_UBLAS_CHECK (it2_ != it2_end_, internal_logic ());
+                    ++ it2_;
+                    if (it2_ == it2_end_ && end_ == 0) {
+                        it1_ = it1_begin_;
+                        current_ = 0;
+                    }
+                }
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator -- () {
-                -- it2_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    if (it1_ == it1_begin_ && begin_ == 1) {
+                        it2_ = it2_end_;
+                        BOOST_UBLAS_CHECK (it2_ != it2_begin_, internal_logic ());
+                        -- it2_;
+                        current_ = 1;
+                    } else {
+                        -- it1_;
+                    }
+                } else /* if (current_ == 1) */ {
+                    if (it2_ == it2_begin_ && begin_ == 0) {
+                        it1_ = it1_end_;
+                        BOOST_UBLAS_CHECK (it1_ != it1_begin_, internal_logic ());
+                        -- it1_;
+                        current_ = 0;
+                    } else {
+                        -- it2_;
+                    }
+                }
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator += (difference_type n) {
-                it2_ += n;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    size_type d = std::min (n, it1_end_ - it1_);
+                    it1_ += d;
+                    n -= d;
+                    if (n > 0 || (end_ == 1 && it1_ == it1_end_)) {
+                        BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
+                        d = std::min (n, it2_end_ - it2_begin_);
+                        it2_ = it2_begin_ + d;
+                        n -= d;
+                        current_ = 1;
+                    }
+                } else /* if (current_ == 1) */ {
+                    size_type d = std::min (n, it2_end_ - it2_);
+                    it2_ += d;
+                    n -= d;
+                    if (n > 0 || (end_ == 0 && it2_ == it2_end_)) {
+                        BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
+                        d = std::min (n, it1_end_ - it1_begin_);
+                        it1_ = it1_begin_ + d;
+                        n -= d;
+                        current_ = 0;
+                    }
+                }
+                BOOST_UBLAS_CHECK (n == 0, external_logic ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator -= (difference_type n) {
-                it2_ -= n;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    size_type d = std::min (n, it1_ - it1_begin_);
+                    it1_ -= d;
+                    n -= d;
+                    if (n > 0) {
+                        BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
+                        d = std::min (n, it2_end_ - it2_begin_);
+                        it2_ = it2_end_ - d;
+                        n -= d;
+                        current_ = 1;
+                    }
+                } else /* if (current_ == 1) */ {
+                    size_type d = std::min (n, it2_ - it2_begin_);
+                    it2_ -= d;
+                    n -= d;
+                    if (n > 0) {
+                        BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
+                        d = std::min (n, it1_end_ - it1_begin_);
+                        it1_ = it1_end_ - d;
+                        n -= d;
+                        current_ = 0;
+                    }
+                }
+                BOOST_UBLAS_CHECK (n == 0, external_logic ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator2 &it) const {
-                return it2_ - it.it2_;
+                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                BOOST_UBLAS_CHECK (it.current_ == 0 || it.current_ == 1, internal_logic ());
+                BOOST_UBLAS_CHECK (/* begin_ == it.begin_ && */ end_ == it.end_, internal_logic ());
+                if (current_ == 0 && it.current_ == 0) {
+                    return it1_ - it.it1_;
+                } else if (current_ == 0 && it.current_ == 1) {
+                    if (end_ == 1 && it.end_ == 1) {
+                        return (it1_ - it.it1_end_) + (it.it2_begin_ - it.it2_);
+                    } else /* if (end_ == 0 && it.end_ == 0) */ {
+                        return (it1_ - it.it1_begin_) + (it.it2_end_ - it.it2_);
+                    }
+
+                } else if (current_ == 1 && it.current_ == 0) {
+                    if (end_ == 1 && it.end_ == 1) {
+                        return (it2_ - it.it2_begin_) + (it.it1_end_ - it.it1_);
+                    } else /* if (end_ == 0 && it.end_ == 0) */ {
+                        return (it2_ - it.it2_end_) + (it.it1_begin_ - it.it1_);
+                    }
+                } else /* if (current_ == 1 && it.current_ == 1) */ {
+                    return it2_ - it.it2_;
+                }
             }
 
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_);
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    BOOST_UBLAS_CHECK (it1_ != it1_end_, internal_logic ());
+                    return *it1_;
+                } else /* if (current_ == 1) */ {
+                    BOOST_UBLAS_CHECK (it2_ != it2_end_, internal_logic ());
+                    return *it2_;
+                }
             }
 
             BOOST_UBLAS_INLINE
             const_iterator1 begin () const {
-                return (*this) ().find_first1 (1, 0, it2_);
+                return (*this) ().find_first1 (1, 0, index2 ());
             }
             BOOST_UBLAS_INLINE
             const_iterator1 end () const {
-                return (*this) ().find_last1 (1, (*this) ().size1 (), it2_);
+                return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ());
             }
             BOOST_UBLAS_INLINE
             const_reverse_iterator1 rbegin () const {
@@ -1494,18 +1901,39 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                return it1_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    BOOST_UBLAS_CHECK (it1_ != it1_end_, internal_logic ());
+                    return it1_.index2 ();
+                } else /* if (current_ == 1) */ {
+                    BOOST_UBLAS_CHECK (it2_ != it2_end_, internal_logic ());
+                    return it2_.index1 ();
+                }
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                return it2_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                if (current_ == 0) {
+                    BOOST_UBLAS_CHECK (it1_ != it1_end_, internal_logic ());
+                    return it1_.index1 ();
+                } else /* if (current_ == 1) */ {
+                    BOOST_UBLAS_CHECK (it2_ != it2_end_, internal_logic ());
+                    return it2_.index2 ();
+                }
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator2 &operator = (const const_iterator2 &it) {
-                container_const_reference<symmetric_adaptor>::assign (&it ());
+                container_const_reference<self_type>::assign (&it ());
+                begin_ = it.begin_;
+                end_ = it.end_;
+                current_ = it.current_;
+                it1_begin_ = it.it1_begin_;
+                it1_end_ = it.it1_end_;
                 it1_ = it.it1_;
+                it2_begin_ = it.it2_begin_;
+                it2_end_ = it.it2_end_;
                 it2_ = it.it2_;
                 return *this;
             }
@@ -1514,17 +1942,28 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ == it.it2_;
+                BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
+                BOOST_UBLAS_CHECK (it.current_ == 0 || it.current_ == 1, internal_logic ());
+                BOOST_UBLAS_CHECK (/* begin_ == it.begin_ && */ end_ == it.end_, internal_logic ());
+                return (current_ == 0 && it.current_ == 0 && it1_ == it.it1_) ||
+                       (current_ == 1 && it.current_ == 1 && it2_ == it.it2_);
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ < it.it2_;
+                return it - *this > 0;
             }
 
         private:
-            size_type it1_;
-            size_type it2_;
+            int begin_;
+            int end_;
+            int current_;
+            const_iterator1_type it1_begin_;
+            const_iterator1_type it1_end_;
+            const_iterator1_type it1_;
+            const_iterator2_type it2_begin_;
+            const_iterator2_type it2_end_;
+            const_iterator2_type it2_;
         };
 #endif
 
@@ -1534,7 +1973,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_iterator2 end2 () const {
-            return find_last2 (0, 0, size2 ());
+            return find_first2 (0, 0, size2 ());
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1543,23 +1982,22 @@ namespace boost { namespace numeric { namespace ublas {
             public random_access_iterator_base<packed_random_access_iterator_tag,
                                                iterator2, value_type> {
         public:
-            typedef packed_random_access_iterator_tag iterator_category;
-#ifndef BOOST_MSVC_STD_ITERATOR
-            typedef typename symmetric_adaptor::difference_type difference_type;
-            typedef typename symmetric_adaptor::value_type value_type;
-            typedef typename symmetric_adaptor::reference reference;
-            typedef typename symmetric_adaptor::pointer pointer;
-#endif
+            typedef typename iterator_restrict_traits<typename iterator2_type::iterator_category,
+                                                      packed_random_access_iterator_tag>::iterator_category iterator_category;
+            typedef typename iterator2_type::difference_type difference_type;
+            typedef typename iterator2_type::value_type value_type;
+            typedef typename iterator2_type::reference reference;
+            typedef typename iterator2_type::pointer pointer;
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;
 
             // Construction and destruction
             BOOST_UBLAS_INLINE
             iterator2 ():
-                container_reference<symmetric_adaptor> (), it1_ (), it2_ () {}
+                container_reference<self_type> (), it2_ () {}
             BOOST_UBLAS_INLINE
-            iterator2 (symmetric_adaptor &m, size_type it1, size_type it2):
-                container_reference<symmetric_adaptor> (m), it1_ (it1), it2_ (it2) {}
+            iterator2 (self_type &m, const iterator2_type &it2):
+                container_reference<self_type> (m), it2_ (it2) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -1584,22 +2022,23 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator2 &it) const {
+                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
                 return it2_ - it.it2_;
             }
 
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) () (it1_, it2_); 
+                return *it2_;
             }
 
             BOOST_UBLAS_INLINE
             iterator1 begin () const {
-                return (*this) ().find_first1 (1, 0, it2_);
+                return (*this) ().find_first1 (1, 0, index2 ());
             }
             BOOST_UBLAS_INLINE
             iterator1 end () const {
-                return (*this) ().find_last1 (1, (*this) ().size1 (), it2_);
+                return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ());
             }
             BOOST_UBLAS_INLINE
             reverse_iterator1 rbegin () const {
@@ -1613,18 +2052,17 @@ namespace boost { namespace numeric { namespace ublas {
             // Indices
             BOOST_UBLAS_INLINE
             size_type index1 () const {
-                return it1_;
+                return it2_.index1 ();
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
-                return it2_;
+                return it2_.index2 ();
             }
 
             // Assignment
             BOOST_UBLAS_INLINE
             iterator2 &operator = (const iterator2 &it) {
-                container_reference<symmetric_adaptor>::assign (&it ());
-                it1_ = it.it1_;
+                container_reference<self_type>::assign (&it ());
                 it2_ = it.it2_;
                 return *this;
             }
@@ -1633,17 +2071,16 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ == it.it2_;
+                return it2_ == it.it2_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return it1_ == it.it1_ && it2_ < it.it2_;
+                return it2_ < it.it2_;
             }
 
         private:
-            size_type it1_;
-            size_type it2_;
+            iterator2_type it2_;
 
             friend class const_iterator2;
         };
@@ -1655,7 +2092,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator2 end2 () {
-            return find_last2 (0, 0, size2 ());
+            return find_first2 (0, 0, size2 ());
         }
 
         // Reverse iterators

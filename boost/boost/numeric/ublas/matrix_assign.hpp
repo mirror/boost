@@ -51,9 +51,9 @@ namespace boost { namespace numeric { namespace ublas {
                   typename E::const_iterator1 &it1e, typename E::const_iterator1 &it1e_end,
                   typename E::const_iterator2 &it2e, typename E::const_iterator2 &it2e_end, row_major_tag) {
         it1e = e ().find_first1 (0, index1, 0);
-        it1e_end = e ().find_last1 (0, e ().size1 (), 0);
+        it1e_end = e ().find_first1 (0, e ().size1 (), 0);
         it2e = e ().find_first2 (1, index1, index2);
-        it2e_end = e ().find_last2 (1, index1, e ().size2 ());
+        it2e_end = e ().find_first2 (1, index1, e ().size2 ());
         if (it2e != it2e_end && it2e.index2 () == index2)
             ++ it2e;
     }
@@ -63,9 +63,9 @@ namespace boost { namespace numeric { namespace ublas {
                   typename E::const_iterator2 &it2e, typename E::const_iterator2 &it2e_end,
                   typename E::const_iterator1 &it1e, typename E::const_iterator1 &it1e_end, column_major_tag) {
         it2e = e ().find_first2 (0, 0, index2);
-        it2e_end = e ().find_last2 (0, 0, e ().size2 ());
+        it2e_end = e ().find_first2 (0, 0, e ().size2 ());
         it1e = e ().find_first1 (1, index1, index2);
-        it1e_end = e ().find_last1 (1, e ().size1 (), index2);
+        it1e_end = e ().find_first1 (1, e ().size1 (), index2);
         if (it1e != it1e_end && it1e.index1 () == index1)
             ++ it1e;
     }
@@ -75,9 +75,9 @@ namespace boost { namespace numeric { namespace ublas {
                   typename E::iterator1 &it1e, typename E::iterator1 &it1e_end,
                   typename E::iterator2 &it2e, typename E::iterator2 &it2e_end, row_major_tag) {
         it1e = e ().find_first1 (0, index1, 0);
-        it1e_end = e ().find_last1 (0, e ().size1 (), 0);
+        it1e_end = e ().find_first1 (0, e ().size1 (), 0);
         it2e = e ().find_first2 (1, index1, index2);
-        it2e_end = e ().find_last2 (1, index1, e ().size2 ());
+        it2e_end = e ().find_first2 (1, index1, e ().size2 ());
         if (it2e != it2e_end && it2e.index2 () == index2)
             ++ it2e;
     }
@@ -87,9 +87,9 @@ namespace boost { namespace numeric { namespace ublas {
                   typename E::iterator2 &it2e, typename E::iterator2 &it2e_end,
                   typename E::iterator1 &it1e, typename E::iterator1 &it1e_end, column_major_tag) {
         it2e = e ().find_first2 (0, 0, index2);
-        it2e_end = e ().find_last2 (0, 0, e ().size2 ());
+        it2e_end = e ().find_first2 (0, 0, e ().size2 ());
         it1e = e ().find_first1 (1, index1, index2);
-        it1e_end = e ().find_last1 (1, e ().size1 (), index2);
+        it1e_end = e ().find_first1 (1, e ().size1 (), index2);
         if (it1e != it1e_end && it1e.index1 () == index1)
             ++ it1e;
     }
@@ -475,7 +475,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         typedef F functor_type;
-        typedef typename M::size_type size_type;
+        typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
@@ -486,45 +486,76 @@ namespace boost { namespace numeric { namespace ublas {
         typename M::iterator1 it1_end (m.end1 ());
         typename E::const_iterator1 it1e (e ().begin1 ());
         typename E::const_iterator1 it1e_end (e ().end1 ());
-        if (it1e != it1e_end && it1e.index1 () < it1.index1 ())
-            it1e += std::min (it1.index1 () - it1e.index1 (), size_type (it1e_end - it1e));
-        while (it1 != it1_end && it1e != it1e_end && it1.index1 () < it1e.index1 ()) {
-            typename M::iterator2 it2 (it1.begin ());
-            typename M::iterator2 it2_end (it1.end ());
-            while (it2 != it2_end) {
-                functor_type () (*it2, value_type ());
-                ++ it2;
+        difference_type it1_size (it1_end - it1);
+        difference_type it1e_size (it1e_end - it1e);
+        difference_type diff1 (0);
+        if (it1_size > 0 && it1e_size > 0)
+            diff1 = it1.index1 () - it1e.index1 ();
+        if (diff1 != 0) {
+            difference_type size1 = std::min (diff1, it1e_size);
+            if (size1 > 0) {
+                it1e += size1;
+                it1e_size -= size1;
+                diff1 -= size1;
             }
-            ++ it1;
+            size1 = std::min (- diff1, it1_size);
+            if (size1 > 0) {
+                it1_size -= size1;
+                while (-- size1 >= 0) {
+                    typename M::iterator2 it2 (it1.begin ());
+                    typename M::iterator2 it2_end (it1.end ());
+                    difference_type size2 (it2_end - it2);
+                    while (-- size2 >= 0)
+                        functor_type () (*it2, value_type ()), ++ it2;
+                    ++ it1;
+                }
+                diff1 += size1;
+            }
         }
-        while (it1 != it1_end && it1e != it1e_end) {
+        difference_type size1 (std::min (it1_size, it1e_size));
+        it1_size -= size1;
+        it1e_size -= size1;
+        while (-- size1 >= 0) {
             typename M::iterator2 it2 (it1.begin ());
             typename M::iterator2 it2_end (it1.end ());
             typename E::const_iterator2 it2e (it1e.begin ());
             typename E::const_iterator2 it2e_end (it1e.end ());
-            if (it2e != it2e_end && it2e.index2 () < it2.index2 ())
-                it2e += std::min (it2.index2 () - it2e.index2 (), size_type (it2e_end - it2e));
-            while (it2 != it2_end && it2e != it2e_end && it2.index2 () < it2e.index2 ()) {
-                functor_type () (*it2, value_type ());
-                ++ it2;
+            difference_type it2_size (it2_end - it2);
+            difference_type it2e_size (it2e_end - it2e);
+            difference_type diff2 (0);
+            if (it2_size > 0 && it2e_size > 0) {
+                diff2 = it2.index2 () - it2e.index2 ();
+                difference_type size2 = std::min (diff2, it2e_size);
+                if (size2 > 0) {
+                    it2e += size2;
+                    it2e_size -= size2;
+                    diff2 -= size2;
+                }
+                size2 = std::min (- diff2, it2_size);
+                if (size2 > 0) {
+                    it2_size -= size2;
+                    while (-- size2 >= 0)
+                        functor_type () (*it2, value_type ()), ++ it2;
+                    diff2 += size2;
+                }
             }
-            while (it2 != it2_end && it2e != it2e_end) {
-                functor_type () (*it2, *it2e);
-                ++ it2, ++ it2e;
-            }
-            while (it2 != it2_end) {
-                functor_type () (*it2, value_type ());
-                ++ it2;
-            }
+            difference_type size2 (std::min (it2_size, it2e_size));
+            it2_size -= size2;
+            it2e_size -= size2;
+            while (-- size2 >= 0)
+                functor_type () (*it2, *it2e), ++ it2, ++ it2e;
+            size2 = it2_size;
+            while (-- size2 >= 0)
+                functor_type () (*it2, value_type ()), ++ it2;
             ++ it1, ++ it1e;
         }
-        while (it1 != it1_end) {
+        size1 = it1_size;
+        while (-- size1 >= 0) {
             typename M::iterator2 it2 (it1.begin ());
             typename M::iterator2 it2_end (it1.end ());
-            while (it2 != it2_end) {
-                functor_type () (*it2, value_type ());
-                ++ it2;
-            }
+            difference_type size2 (it2_end - it2);
+            while (-- size2 >= 0)
+                functor_type () (*it2, value_type ()), ++ it2;
             ++ it1;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -539,7 +570,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         typedef F functor_type;
-        typedef typename M::size_type size_type;
+        typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
 #ifdef BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
@@ -550,45 +581,76 @@ namespace boost { namespace numeric { namespace ublas {
         typename M::iterator2 it2_end (m.end2 ());
         typename E::const_iterator2 it2e (e ().begin2 ());
         typename E::const_iterator2 it2e_end (e ().end2 ());
-        if (it2e != it2e_end && it2e.index2 () < it2.index2 ())
-            it2e += std::min (it2.index2 () - it2e.index2 (), size_type (it2e_end - it2e));
-        while (it2 != it2_end && it2e != it2e_end && it2.index2 () < it2e.index2 ()) {
-            typename M::iterator1 it1 (it2.begin ());
-            typename M::iterator1 it1_end (it2.end ());
-            while (it1 != it1_end) {
-                functor_type () (*it1, value_type ());
-                ++ it1;
+        difference_type it2_size (it2_end - it2);
+        difference_type it2e_size (it2e_end - it2e);
+        difference_type diff2 (0);
+        if (it2_size > 0 && it2e_size > 0)
+            diff2 = it2.index2 () - it2e.index2 ();
+        if (diff2 != 0) {
+            difference_type size2 = std::min (diff2, it2e_size);
+            if (size2 > 0) {
+                it2e += size2;
+                it2e_size -= size2;
+                diff2 -= size2;
             }
-            ++ it2;
+            size2 = std::min (- diff2, it2_size);
+            if (size2 > 0) {
+                it2_size -= size2;
+                while (-- size2 >= 0) {
+                    typename M::iterator1 it1 (it2.begin ());
+                    typename M::iterator1 it1_end (it2.end ());
+                    difference_type size1 (it1_end - it1);
+                    while (-- size1 >= 0)
+                        functor_type () (*it1, value_type ()), ++ it1;
+                    ++ it2;
+                }
+                diff2 += size2;
+            }
         }
-        while (it2 != it2_end && it2e != it2e_end) {
+        difference_type size2 (std::min (it2_size, it2e_size));
+        it2_size -= size2;
+        it2e_size -= size2;
+        while (-- size2 >= 0) {
             typename M::iterator1 it1 (it2.begin ());
             typename M::iterator1 it1_end (it2.end ());
             typename E::const_iterator1 it1e (it2e.begin ());
             typename E::const_iterator1 it1e_end (it2e.end ());
-            if (it1e != it1e_end && it1e.index1 () < it1.index1 ())
-                it1e += std::min (it1.index1 () - it1e.index1 (), size_type (it1e_end - it1e));
-            while (it1 != it1_end && it1e != it1e_end && it1.index1 () < it1e.index1 ()) {
-                functor_type () (*it1, value_type ());
-                ++ it1;
+            difference_type it1_size (it1_end - it1);
+            difference_type it1e_size (it1e_end - it1e);
+            difference_type diff1 (0);
+            if (it1_size > 0 && it1e_size > 0) {
+                diff1 = it1.index1 () - it1e.index1 ();
+                difference_type size1 = std::min (diff1, it1e_size);
+                if (size1 > 0) {
+                    it1e += size1;
+                    it1e_size -= size1;
+                    diff1 -= size1;
+                }
+                size1 = std::min (- diff1, it1_size);
+                if (size1 > 0) {
+                    it1_size -= size1;
+                    while (-- size1 >= 0)
+                        functor_type () (*it1, value_type ()), ++ it1;
+                    diff1 += size1;
+                }
             }
-            while (it1 != it1_end && it1e != it1e_end) {
-                functor_type () (*it1, *it1e);
-                ++ it1, ++ it1e;
-            }
-            while (it1 != it1_end) {
-                functor_type () (*it1, value_type ());
-                ++ it1;
-            }
+            difference_type size1 (std::min (it1_size, it1e_size));
+            it1_size -= size1;
+            it1e_size -= size1;
+            while (-- size1 >= 0)
+                functor_type () (*it1, *it1e), ++ it1, ++ it1e;
+            size1 = it1_size;
+            while (-- size1 >= 0)
+                functor_type () (*it1, value_type ()), ++ it1;
             ++ it2, ++ it2e;
         }
-        while (it2 != it2_end) {
+        size2 = it2_size;
+        while (-- size2 >= 0) {
             typename M::iterator1 it1 (it2.begin ());
             typename M::iterator1 it1_end (it2.end ());
-            while (it1 != it1_end) {
-                functor_type () (*it1, value_type ());
-                ++ it1;
-            }
+            difference_type size1 (it1_end - it1);
+            while (-- size1 >= 0)
+                functor_type () (*it1, value_type ()), ++ it1;
             ++ it2;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK

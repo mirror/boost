@@ -41,6 +41,12 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
+        sparse_vector_element (const value_type &d):
+            container_reference<vector_type> (), it_ (), i_ (), d_ (d) {
+            // This constructor is only needed to enable compiling adaptors of sparse vectors.
+            external_logic ().raise ();
+        }
+        BOOST_UBLAS_INLINE
         sparse_vector_element (vector_type &v, pointer it, size_type i):
             container_reference<vector_type> (v), it_ (it), i_ (i), d_ (*it) {}
         BOOST_UBLAS_INLINE
@@ -247,6 +253,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, size_type non_zeros = 0) {
             size_ = size;
             non_zeros_ = std::max (non_zeros, size_type (1));
+            non_zeros_ = std::min (non_zeros_, size_);
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
             map_traits<array_type>::reserve (data (), non_zeros_);
 #endif
@@ -257,6 +264,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0) {
             non_zeros_ = std::max (non_zeros, size_type (1));
+            non_zeros_ = std::min (non_zeros_, size_);
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
             map_traits<array_type>::reserve (data (), non_zeros_);
 #endif
@@ -275,6 +283,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
+            BOOST_UBLAS_CHECK (i < size_, bad_index ());
             const_iterator_type it (data ().find (i));
             if (it == data ().end () || (*it).first != i)
                 return zero_;
@@ -282,6 +291,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
+            BOOST_UBLAS_CHECK (i < size_, bad_index ());
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
             return data () [i];
 #else
@@ -291,7 +301,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
-            return (*this) (i);
+                rn (*this) (i);
         }
         BOOST_UBLAS_INLINE
         reference operator [] (size_type i) {
@@ -478,18 +488,18 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator ():
-                container_const_reference<sparse_vector> (), it_ () {}
+                container_const_reference<self_type> (), it_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator (const sparse_vector &v, const const_iterator_type &it):
-                container_const_reference<sparse_vector> (v), it_ (it) {}
+            const_iterator (const self_type &v, const const_iterator_type &it):
+                container_const_reference<self_type> (v), it_ (it) {}
 #ifndef BOOST_UBLAS_QUALIFIED_TYPENAME
             BOOST_UBLAS_INLINE
             const_iterator (const iterator &it):
-                container_const_reference<sparse_vector> (it ()), it_ (it.it_) {}
+                container_const_reference<self_type> (it ()), it_ (it.it_) {}
 #else
             BOOST_UBLAS_INLINE
-            const_iterator (const typename sparse_vector::iterator &it):
-                container_const_reference<sparse_vector> (it ()), it_ (it.it_) {}
+            const_iterator (const typename self_type::iterator &it):
+                container_const_reference<self_type> (it ()), it_ (it.it_) {}
 #endif
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -519,7 +529,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
-                container_const_reference<sparse_vector>::assign (&it ());
+                container_const_reference<self_type>::assign (&it ());
                 it_ = it.it_;
                 return *this;
             }
@@ -541,7 +551,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_last (size_);
+            return find_first (size_);
         }
 
         class iterator:
@@ -560,10 +570,10 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             iterator ():
-                container_reference<sparse_vector> (), it_ () {}
+                container_reference<self_type> (), it_ () {}
             BOOST_UBLAS_INLINE
-            iterator (sparse_vector &v, const iterator_type &it):
-                container_reference<sparse_vector> (v), it_ (it) {}
+            iterator (self_type &v, const iterator_type &it):
+                container_reference<self_type> (v), it_ (it) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -599,7 +609,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment
             BOOST_UBLAS_INLINE
             iterator &operator = (const iterator &it) {
-                container_reference<sparse_vector>::assign (&it ());
+                container_reference<self_type>::assign (&it ());
                 it_ = it.it_;
                 return *this;
             }
@@ -623,7 +633,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator end () {
-            return find_last (size_);
+            return find_first (size_);
         }
 
         // Reverse iterator
@@ -766,6 +776,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, size_type non_zeros = 0) {
             size_ = size;
             non_zeros_ = std::max (non_zeros, size_type (1));
+            non_zeros_ = std::min (non_zeros_, size_);
             filled_ = 0;
             index_data ().resize (non_zeros_);
             value_data ().resize (non_zeros_);
@@ -775,6 +786,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = false) {
             non_zeros_ = std::max (non_zeros, size_type (1));
+            non_zeros_ = std::min (non_zeros_, size_);
             index_data ().resize (non_zeros_, preserve);
             value_data ().resize (non_zeros_, preserve);
         }
@@ -792,6 +804,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
+            BOOST_UBLAS_CHECK (i < size_, bad_index ());
             const_iterator_type it (detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
             if (it == index_data ().begin () + filled_ || *it != k_based (i))
                 return zero_;
@@ -799,6 +812,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
+            BOOST_UBLAS_CHECK (i < size_, bad_index ());
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
             iterator_type it (detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
             if (it == index_data ().begin () + filled_ || *it != k_based (i)) {
@@ -1037,18 +1051,18 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator ():
-                container_const_reference<compressed_vector> (), it_ () {}
+                container_const_reference<self_type> (), it_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator (const compressed_vector &v, const const_iterator_type &it):
-                container_const_reference<compressed_vector> (v), it_ (it) {}
+            const_iterator (const self_type &v, const const_iterator_type &it):
+                container_const_reference<self_type> (v), it_ (it) {}
 #ifndef BOOST_UBLAS_QUALIFIED_TYPENAME
             BOOST_UBLAS_INLINE
             const_iterator (const iterator &it):
-                container_const_reference<compressed_vector> (it ()), it_ (it.it_) {}
+                container_const_reference<self_type> (it ()), it_ (it.it_) {}
 #else
             BOOST_UBLAS_INLINE
-            const_iterator (const typename compressed_vector::iterator &it):
-                container_const_reference<compressed_vector> (it ()), it_ (it.it_) {}
+            const_iterator (const typename self_type::iterator &it):
+                container_const_reference<self_type> (it ()), it_ (it.it_) {}
 #endif
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -1078,7 +1092,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
-                container_const_reference<compressed_vector>::assign (&it ());
+                container_const_reference<self_type>::assign (&it ());
                 it_ = it.it_;
                 return *this;
             }
@@ -1100,7 +1114,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_last (size_);
+            return find_first (size_);
         }
 
         class iterator:
@@ -1119,10 +1133,10 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             iterator ():
-                container_reference<compressed_vector> (), it_ () {}
+                container_reference<self_type> (), it_ () {}
             BOOST_UBLAS_INLINE
-            iterator (compressed_vector &v, const iterator_type &it):
-                container_reference<compressed_vector> (v), it_ (it) {}
+            iterator (self_type &v, const iterator_type &it):
+                container_reference<self_type> (v), it_ (it) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -1156,7 +1170,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment
             BOOST_UBLAS_INLINE
             iterator &operator = (const iterator &it) {
-                container_reference<compressed_vector>::assign (&it ());
+                container_reference<self_type>::assign (&it ());
                 it_ = it.it_;
                 return *this;
             }
@@ -1180,7 +1194,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator end () {
-            return find_last (size_);
+            return find_first (size_);
         }
 
         // Reverse iterator
@@ -1338,6 +1352,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, size_type non_zeros = 0) {
             size_ = size;
             non_zeros_ = std::max (non_zeros, size_type (1));
+            non_zeros_ = std::min (non_zeros_, size_);
             filled_ = 0;
             index_data ().resize (non_zeros_);
             value_data ().resize (non_zeros_);
@@ -1347,6 +1362,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void reserve (size_type non_zeros = 0, bool preserve = false) {
             non_zeros_ = std::max (non_zeros, size_type (1));
+            non_zeros_ = std::min (non_zeros_, size_);
             index_data ().resize (non_zeros_, preserve);
             value_data ().resize (non_zeros_, preserve);
         }
@@ -1365,6 +1381,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
+            BOOST_UBLAS_CHECK (i < size_, bad_index ());
             sort ();
             const_iterator_type it (detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
             if (it == index_data ().begin () + filled_ || *it != k_based (i))
@@ -1373,6 +1390,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
+            BOOST_UBLAS_CHECK (i < size_, bad_index ());
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
             sort ();
             iterator_type it (detail::lower_bound (index_data ().begin (), index_data ().begin () + filled_, k_based (i), std::less<size_type> ()));
@@ -1631,18 +1649,18 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator ():
-                container_const_reference<coordinate_vector> (), it_ () {}
+                container_const_reference<self_type> (), it_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator (const coordinate_vector &v, const const_iterator_type &it):
-                container_const_reference<coordinate_vector> (v), it_ (it) {}
+            const_iterator (const self_type &v, const const_iterator_type &it):
+                container_const_reference<self_type> (v), it_ (it) {}
 #ifndef BOOST_UBLAS_QUALIFIED_TYPENAME
             BOOST_UBLAS_INLINE
             const_iterator (const iterator &it):
-                container_const_reference<coordinate_vector> (it ()), it_ (it.it_) {}
+                container_const_reference<self_type> (it ()), it_ (it.it_) {}
 #else
             BOOST_UBLAS_INLINE
-            const_iterator (const typename coordinate_vector::iterator &it):
-                container_const_reference<coordinate_vector> (it ()), it_ (it.it_) {}
+            const_iterator (const typename self_type::iterator &it):
+                container_const_reference<self_type> (it ()), it_ (it.it_) {}
 #endif
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -1672,7 +1690,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
-                container_const_reference<coordinate_vector>::assign (&it ());
+                container_const_reference<self_type>::assign (&it ());
                 it_ = it.it_;
                 return *this;
             }
@@ -1694,7 +1712,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find_last (size_);
+            return find_first (size_);
         }
 
         class iterator:
@@ -1713,10 +1731,10 @@ namespace boost { namespace numeric { namespace ublas {
             // Construction and destruction
             BOOST_UBLAS_INLINE
             iterator ():
-                container_reference<coordinate_vector> (), it_ () {}
+                container_reference<self_type> (), it_ () {}
             BOOST_UBLAS_INLINE
-            iterator (coordinate_vector &v, const iterator_type &it):
-                container_reference<coordinate_vector> (v), it_ (it) {}
+            iterator (self_type &v, const iterator_type &it):
+                container_reference<self_type> (v), it_ (it) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -1750,7 +1768,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Assignment
             BOOST_UBLAS_INLINE
             iterator &operator = (const iterator &it) {
-                container_reference<coordinate_vector>::assign (&it ());
+                container_reference<self_type>::assign (&it ());
                 it_ = it.it_;
                 return *this;
             }
@@ -1774,7 +1792,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator end () {
-            return find_last (size_);
+            return find_first (size_);
         }
 
         // Reverse iterator

@@ -39,6 +39,6 @@ void test_matrix ();
 #define USE_MATRIX
 // #define USE_VECTOR_OF_VECTOR
 
-#endif 
+#endif
 
 

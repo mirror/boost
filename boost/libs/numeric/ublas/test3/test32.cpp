@@ -27,7 +27,6 @@ struct test_my_matrix_vector {
         try {
             // Rows and columns
             initialize_matrix (m1);
-            std::cout << "m1 = " << m1 << std::endl;
             for (int i = 0; i < N; ++ i) {
                 v1 = ublas::row (m1, i);
                 std::cout << "row (m, " << i << ") = " << v1 << std::endl;
