@@ -1,0 +1,27 @@
+
+UML diagram?
+
+src/cmdline.cpp: function strncmp_nocase():
+>     maybe it can be replaced by something from string_algorithms
+>     library. AFAIK the library should be in 1.32.
+
+> 24. the documentation may contain info what source files are needed
+>     for which feature or whether they need to be included always all.
+
+The program_options.reference.html may contain one-liner
+   overview for every header and every class/typedef/function
+   listed here - just for quick browsing and overview.
+
+
+> > > 5. Maybe more overcommented code examples can be added into
+> > >    docs, each exploring single feature of library.
+> > >
+> > >    Some people learn mostly from such examples.
+> > >
+> > >    Later note: definitely would be useful, IMO.
+> >
+> > Maybe. Do you have specific ideas what the examples can be about?
+>
+> One tiny example concentrating on one feature as short/long options,
+> multiple sources, hidden options, positional options, INI handling etc.
+> Something what user can skim over and cut/paste into app.
