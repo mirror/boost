@@ -19,6 +19,8 @@
 #ifndef BOOST_SIGNALS_CONFIG_HPP
 #define BOOST_SIGNALS_CONFIG_HPP
 
+#include <boost/config.hpp>
+
 #ifdef BOOST_HAS_DECLSPEC
 #  if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_SIGNALS_DYN_LINK)
 #    ifdef BOOST_SIGNALS_SOURCE
