@@ -29,7 +29,7 @@
 
 namespace boost{
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -54,7 +54,7 @@ public:
    ~bad_expression() throw();
 };
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

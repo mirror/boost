@@ -26,7 +26,7 @@
 
 namespace boost{
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -137,7 +137,7 @@ inline unsigned int regex_grep(bool (*foo)(const match_results<std::basic_string
 #endif
 #endif
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

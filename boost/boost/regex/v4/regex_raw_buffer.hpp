@@ -32,7 +32,7 @@
 namespace boost{
    namespace re_detail{
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -241,7 +241,7 @@ void* BOOST_REGEX_CALL raw_storage<Allocator>::insert(size_type pos, size_type n
    return result;
 }
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

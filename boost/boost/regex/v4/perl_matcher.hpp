@@ -19,7 +19,7 @@
 #include <boost/regex/v4/iterator_category.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -426,7 +426,7 @@ private:
 
 } // namespace re_detail
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

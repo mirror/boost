@@ -28,7 +28,7 @@
 
 namespace boost{
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -81,7 +81,7 @@ std::basic_string<charT> regex_replace(const std::basic_string<charT>& s,
    return result;
 }
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

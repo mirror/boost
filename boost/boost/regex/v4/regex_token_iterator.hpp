@@ -40,7 +40,7 @@
 
 namespace boost{
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 #if BOOST_WORKAROUND(BOOST_MSVC, > 1300)
@@ -259,7 +259,7 @@ private:
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
 #  pragma warning(pop)
 #endif
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

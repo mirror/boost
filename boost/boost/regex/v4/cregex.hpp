@@ -29,7 +29,7 @@
 #endif
 #include <boost/regex/v4/match_flags.hpp>
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -160,7 +160,7 @@ typedef enum
   REG_E_UNKNOWN = 18 /* unknown error */
 } reg_errcode_t;
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 
@@ -177,7 +177,7 @@ typedef enum
 #include <vector>
 namespace boost{
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -264,7 +264,7 @@ public:
    friend struct re_detail::pred4;
 };
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

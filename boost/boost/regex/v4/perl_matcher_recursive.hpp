@@ -24,7 +24,7 @@
 #ifndef BOOST_REGEX_V4_PERL_MATCHER_RECURSIVE_HPP
 #define BOOST_REGEX_V4_PERL_MATCHER_RECURSIVE_HPP
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 #ifdef __BORLANDC__
@@ -689,7 +689,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::backtrack_till_m
 #ifdef __BORLANDC__
 #pragma option pop
 #endif
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

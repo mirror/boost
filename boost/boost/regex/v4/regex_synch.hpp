@@ -46,7 +46,7 @@
 namespace boost{
    namespace re_detail{
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -197,7 +197,7 @@ BOOST_REGEX_DECL extern unsigned int re_lock_count;
 
 #endif // BOOST_HAS_THREADS
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 

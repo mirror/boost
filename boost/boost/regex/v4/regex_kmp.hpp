@@ -33,7 +33,7 @@
 namespace boost{
    namespace re_detail{
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
 
@@ -98,7 +98,7 @@ kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans transla
    return pinfo;
 }
 
-#ifdef BOST_HAS_ABI_HEADERS
+#ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif
 
