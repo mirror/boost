@@ -111,7 +111,7 @@ struct archive_input_map
         stack_construct<Archive, type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        std::pair<Container::const_iterator, bool> result = 
+        std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result = 
             s.insert(t.reference());
         assert(result.second); // make sure we inserted a new element
         ar.reset_object_address(& (* result.first), & t);
@@ -128,7 +128,7 @@ struct archive_input_set
         stack_construct<Archive, type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        std::pair<Container::const_iterator, bool> result = 
+        std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result = 
             s.insert(t.reference());
         assert(result.second); // make sure we inserted a new element
         ar.reset_object_address(& (* result.first), & t);
@@ -155,7 +155,8 @@ struct archive_input_multimap
         stack_construct<Archive, type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        Container::const_iterator result = s.insert(t.reference());
+        BOOST_DEDUCED_TYPENAME Container::const_iterator result 
+            = s.insert(t.reference());
         ar.reset_object_address(& (* result), & t);
     }
 };
@@ -170,7 +171,8 @@ struct archive_input_multiset
         stack_construct<Archive, type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        Container::const_iterator result = s.insert(t.reference());
+        BOOST_DEDUCED_TYPENAME Container::const_iterator result 
+            = s.insert(t.reference());
         ar.reset_object_address(& (* result), & t);
     }
 };
