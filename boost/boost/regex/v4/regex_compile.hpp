@@ -1350,6 +1350,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
    data.clear();
    _flags = f;
    fail(REG_NOERROR);  // clear any error
+   _leading_len = 0; // set this to non-zero if there are any backrefs, we'll refer to it later...
 
    if(arg_first >= arg_last)
    {
@@ -1600,6 +1601,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expr
                dat = add_simple(dat, re_detail::syntax_element_backref, sizeof(re_detail::re_brace));
                static_cast<re_detail::re_brace*>(dat)->index = i;
                ++ptr;
+               _leading_len = 1;
                continue;
             }
             break;
@@ -2141,7 +2143,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_le
       case re_detail::syntax_element_char_rep:
       case re_detail::syntax_element_short_set_rep: 
       case re_detail::syntax_element_long_set_rep:
-         if((len == 0) && (1 == fixup_leading_rep(dat->next.p, static_cast<re_detail::re_repeat*>(dat)->alt.p) ))
+         if((len == 0) && (_leading_len == 0) && (1 == fixup_leading_rep(dat->next.p, static_cast<re_detail::re_repeat*>(dat)->alt.p) ))
          {
             static_cast<re_detail::re_repeat*>(dat)->leading = leading_lit;
             return len;
