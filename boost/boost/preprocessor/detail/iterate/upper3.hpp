@@ -8,7 +8,7 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
-# line 1 ""
+# line BOOST_PP_DETAIL_LINE()
 #
 # ifndef BOOST_PP_ITERATION_BOUND
 #   error BOOST_PP:  BOOST_PP_ITERATION_BOUND must be set prior to including BOOST_PP_SET_UBOUND()

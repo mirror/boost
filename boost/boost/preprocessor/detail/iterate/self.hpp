@@ -8,7 +8,7 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
-# line 1 ""
+# line BOOST_PP_DETAIL_LINE()
 #
 # if !defined(BOOST_PP_INDIRECT_FILE)
 #   error BOOST_PP:  no file to indirect file to include defined

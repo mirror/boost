@@ -8,7 +8,7 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
-# line 1 ""
+# line BOOST_PP_DETAIL_LINE()
 #
 # ifdef BOOST_PP_ITERATION_LIMITS
 #   ifndef BOOST_PP_FILENAME_5
