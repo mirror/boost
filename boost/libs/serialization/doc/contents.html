@@ -59,6 +59,11 @@ function initialize() {
     document.onclick = clickHandlerIE;
     collapse_all();
   }
+  else
+  if (navigator.appnName.indexOf("Konqueror") >= 0){
+    document.onclick = clickHandlerIE;
+    collapse_all();
+  }
 }
 
 //-->
