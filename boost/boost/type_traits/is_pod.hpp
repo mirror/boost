@@ -125,7 +125,7 @@ BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,void const volatile,true)
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_POD,T,::boost::detail::is_pod_impl<T>::value)
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pod,T,::boost::is_POD<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pod,T,::boost::detail::is_pod_impl<T>::value)
 
 } // namespace boost
 
