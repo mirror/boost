@@ -1,6 +1,6 @@
 BOOST 		= ../../..
  
-CXX		= gcc3
+CXX		= gcc
 EXTRAFLAGS 	= -pedantic -Wno-long-long -ftemplate-depth-50 
 LIBS		= -lstdc++
 
@@ -31,11 +31,11 @@ bind_tests_simple.cpp \
 bind_tests_advanced.cpp \
 bll_and_function.cpp \
 constructor_tests.cpp \
-extending_return_type_traits.cpp \
-bind_tests_simple_function_references.cpp \
-exception_test.cpp \
+extending_rt_traits.cpp \
+bind_tests_simple_f_refs.cpp \
 cast_test.cpp \
-phoenix_control_structures_test.cpp \
+phoenix_control_structures.cpp \
+exception_test.cpp \
 
 
 # Create lists of object files from the source file lists.
@@ -70,15 +70,15 @@ run:
 	./operator_tests_simple.exe 
 	./control_structures.exe 
 	./switch_construct.exe 
-	./extending_return_type_traits.exe 
+	./extending_rt_traits.exe 
 	./constructor_tests.exe 
 	./cast_test.exe 
 	./bind_tests_simple.exe 
 	./bind_tests_advanced.exe 
 	./bll_and_function.exe
-	./bind_tests_simple_function_references.exe
+	./bind_tests_simple_f_refs.exe
+	./phoenix_control_structures.exe
 	./exception_test.exe
-	./phoenix_control_structures_test.exe
 
 
 
