@@ -8,9 +8,9 @@
 #ifndef BOOST_CONCEPT_CHECKS_HPP
 #define BOOST_CONCEPT_CHECKS_HPP
 
-#include <iterator>
-#include <utility>
 #include <boost/config.hpp>
+#include <boost/iterator.hpp>
+#include <utility>
 #include <boost/pending/limits.hpp>
 
 #if (__GNUC__) || defined(__KCC) || defined(__ghs) || defined(__MWERKS__)

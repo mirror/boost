@@ -8,7 +8,8 @@
 #ifndef BOOST_CONCEPT_ARCHETYPES_HPP
 #define BOOST_CONCEPT_ARCHETYPES_HPP
 
-#include <iterator>
+#include <boost/config.hpp>
+#include <boost/iterator.hpp>
 #include <functional>
 
 namespace boost {
