@@ -1,0 +1,46 @@
+
+#include "test.hpp"
+#include "check_integral_constant.hpp"
+#include TYPE_TRAITS(is_union)
+
+TT_TEST_BEGIN(is_union)
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<int>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<const int>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<volatile int>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<int*>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<int* const>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<int[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<int&>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<mf4>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<f1>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<enum_UDT>::value, false);
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<union_UDT>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<POD_union_UDT>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<empty_union_UDT>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<empty_POD_union_UDT>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<union_UDT const>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<POD_union_UDT volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<empty_union_UDT const volatile>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<empty_POD_union_UDT const>::value, true);
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<UDT>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<UDT const>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<UDT volatile>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<empty_UDT>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<std::iostream>::value, false);
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<UDT*>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<UDT[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<UDT&>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_union<void>::value, false);
+
+TT_TEST_END
+
+
+
+
+
+
+
