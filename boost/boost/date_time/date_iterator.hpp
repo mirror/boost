@@ -2,7 +2,7 @@
 #define DATE_ITERATOR_HPP___
 /* Copyright (c) 2000 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include <iterator>
@@ -41,8 +41,14 @@ namespace date_time {
     {
       current_ = current_ + get_offset(current_);
       return *this;
-    };
+    }
+    date_itr_base& operator--() 
+    {
+      current_ = current_ + get_neg_offset(current_);
+      return *this;
+    }
     virtual duration_type get_offset(const date_type& current) const=0;
+    virtual duration_type get_neg_offset(const date_type& current) const=0;
     date_type operator*() {return current_;};
     date_type* operator->() {return &current_;};
     bool operator<  (const date_type& d) {return current_ < d;}
@@ -71,11 +77,15 @@ namespace date_time {
       date_itr_base<date_type>(d), 
       of_(factor) 
     {}
+  private:
     virtual duration_type get_offset(const date_type& current) const
     {
       return of_.get_offset(current);
     }
-  private:
+    virtual duration_type get_neg_offset(const date_type& current) const
+    {
+      return of_.get_neg_offset(current);
+    }
     offset_functor of_;
   };
   
