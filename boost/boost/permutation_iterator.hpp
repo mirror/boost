@@ -9,12 +9,12 @@
 
 namespace boost {
 
-  template < typename OrderIt >
+  template < typename IndexIterator >
   struct permutation_iterator_policies : public default_iterator_policies
   {
     permutation_iterator_policies() {}
 
-    permutation_iterator_policies(OrderIt order_it) 
+    permutation_iterator_policies(IndexIterator order_it) 
       : order_it_( order_it ) 
     {}
 
@@ -23,11 +23,11 @@ namespace boost {
     { return *(x.base() + *order_it_); }
 
     template <class IteratorAdaptor>
-    void increment(IteratorAdaptor& x)
+    void increment(IteratorAdaptor&)
     { ++order_it_; }
 
     template <class IteratorAdaptor>
-    void decrement(IteratorAdaptor& x)
+    void decrement(IteratorAdaptor&)
     { --order_it_; }
 
     template <class IteratorAdaptor, class DifferenceType>
@@ -43,28 +43,23 @@ namespace boost {
     bool equal(const IteratorAdaptor1& x, const IteratorAdaptor2& y) const
     { return x.policies().order_it_ == y.policies().order_it_; }
   
-    OrderIt order_it_;
+    IndexIterator order_it_;
   };
 
-  /// generate an iterator that will access the elements
-  /// behind the random-access iterator RAIt in the
-  /// order specified by the OrderIt iterator.
-  /// preconditions:
-  /// The OrderIt::value_type will be used in iterator arithmetic
-  template < typename RAIt, typename OrderIt >
+  template < typename ElementIterator, typename IndexIterator >
   struct permutation_iterator_generator
   {
     typedef boost::iterator_adaptor
-    < RAIt,
-      permutation_iterator_policies< OrderIt > 
+    < ElementIterator,
+      permutation_iterator_policies< IndexIterator > 
     > type;
   };
 
-  template < class OrderIt, class RAIt >
-  inline typename permutation_iterator_generator< RAIt, OrderIt >::type
-  make_permutation_iterator(RAIt base, OrderIt order)
+  template < class IndexIterator, class ElementIterator >
+  inline typename permutation_iterator_generator< ElementIterator, IndexIterator >::type
+  make_permutation_iterator(ElementIterator base, IndexIterator order)
   {
-    typedef typename permutation_iterator_generator< RAIt, OrderIt >::type result_t;
+    typedef typename permutation_iterator_generator< ElementIterator, IndexIterator >::type result_t;
     return result_t( base, order );
   }
 
