@@ -29,7 +29,7 @@
 // and searches for all the C++ class definitions, storing
 // their locations in a map of strings/int's
 
-typedef std::map<std::string, int, std::less<std::string> > map_type;
+typedef std::map<std::string, std::string::difference_type, std::less<std::string> > map_type;
 
 const char* re = 
    // possibly leading whitespace:   
@@ -62,7 +62,7 @@ void IndexClasses(map_type& m, const std::string& file)
    start = file.begin();
    end = file.end();   
    boost::match_results<std::string::const_iterator> what;
-   unsigned int flags = boost::match_default;
+   boost::match_flag_type flags = boost::match_default;
    while(boost::regex_search(start, end, what, expression, flags))   
    {
       // what[0] contains the whole string

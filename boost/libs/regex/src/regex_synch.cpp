@@ -24,7 +24,12 @@
 
 #define BOOST_REGEX_SOURCE
 
+#include <boost/regex/config.hpp>
+#ifdef BOOST_REGEX_V3
 #include <boost/regex/v3/regex_synch.hpp>
+#else
+#include <boost/regex/v4/regex_synch.hpp>
+#endif
 
 namespace boost{
    namespace re_detail{
@@ -65,6 +70,8 @@ BOOST_REGEX_DECL unsigned int re_lock_count = 0;
 
    } // namespace re_detail
 } // namespace boost
+
+
 
 
 

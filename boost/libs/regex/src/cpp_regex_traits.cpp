@@ -25,7 +25,7 @@
 
 #include <boost/regex/config.hpp>
 
-#if !defined(BOOST_NO_STD_LOCALE) && !defined(BOOST_NO_STD_WSTREAMBUF)
+#if !defined(BOOST_NO_STD_LOCALE)
 
 # ifdef BOOST_MSVC
 #  pragma warning(disable:4786 4702 4127 4244)
@@ -254,8 +254,9 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
    // STLport users as well (gcc3.1+STLport5), so enable the
    // workaround for all STLport users...
    //
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && !defined(BOOST_MSVC)
    using namespace std;
+   using stlport::isspace;
 #  define BOOST_REGEX_STD
 #else
 #  define BOOST_REGEX_STD std::
@@ -345,6 +346,18 @@ cpp_regex_traits<char>::cpp_regex_traits()
    pctype->tolower(&lower_map[0], &lower_map[char_set_size]);
    pcollate = &BOOST_USE_FACET(std::collate<char>, locale_inst);
    sort_type = re_detail::find_sort_syntax(this, &(this->sort_delim));
+}
+
+void cpp_regex_traits<char>::swap(cpp_regex_traits<char>& that)
+{
+   std::swap(locale_inst, that.locale_inst); // this one goes first
+   std::swap(pmd, that.pmd);
+   std::swap(psyntax, that.psyntax);
+   std::swap(lower_map, that.lower_map);
+   std::swap(pctype, that.pctype);
+   std::swap(pcollate, that.pcollate);
+   std::swap(sort_type, that.sort_type);
+   std::swap(sort_delim, that.sort_delim);
 }
 
 cpp_regex_traits<char>::~cpp_regex_traits()
@@ -464,7 +477,7 @@ cpp_regex_traits<char>::locale_type BOOST_REGEX_CALL cpp_regex_traits<char>::imb
    return old_l;
 }
 
-#ifndef BOOST_NO_WREGEX
+#if !defined(BOOST_NO_WREGEX) && !defined(BOOST_NO_STD_WSTREAMBUF)
 
 namespace re_detail{
 
@@ -870,11 +883,25 @@ std::size_t BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, st
    return ws.size()+1;
 }
 
+void cpp_regex_traits<wchar_t>::swap(cpp_regex_traits<wchar_t>& that)
+{
+   std::swap(locale_inst, that.locale_inst); // this one must go first
+   std::swap(pmd, that.pmd);
+   std::swap(psyntax, that.psyntax);
+   std::swap(lower_map, that.lower_map);
+   std::swap(pctype, that.pctype);
+   std::swap(pcollate, that.pcollate);
+   std::swap(pcdv, that.pcdv);
+   std::swap(sort_type, that.sort_type);
+   std::swap(sort_delim, that.sort_delim);
+}
+
 #endif // BOOST_NO_WREGEX
 
 
 } // namespace boost
 
 #endif
+
 
 

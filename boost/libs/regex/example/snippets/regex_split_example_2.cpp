@@ -28,7 +28,7 @@
 #include <boost/regex.hpp>
 
 boost::regex e("<\\s*A\\s+[^>]*href\\s*=\\s*\"([^\"]*)\"",
-               boost::regbase::normal | boost::regbase::icase);
+               boost::regex::normal | boost::regbase::icase);
 
 void load_file(std::string& s, std::istream& is)
 {

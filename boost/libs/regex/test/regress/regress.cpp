@@ -81,10 +81,10 @@ int cpp_main(int argc, char * argv[])
 {
 #if defined(BOOST_MSVC) && defined(_DEBUG)
    // turn on heap reporting at program exit:
-   int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
-   tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
-   tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;
-   _CrtSetDbgFlag( tmpFlag );
+   //int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+   //tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
+   //tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;
+   //_CrtSetDbgFlag( tmpFlag );
 #endif
 #ifdef TIME_TEST
    boost::timer tim;

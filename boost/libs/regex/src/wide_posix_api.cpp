@@ -66,24 +66,31 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompW(regex_tW* expression, const wcha
 #endif
    }
    // set default flags:
-   boost::uint_fast32_t flags = (f & REG_EXTENDED) ? regbase::extended : regbase::basic;
-   expression->eflags = (f & REG_NEWLINE) ? match_not_dot_newline : 0;
+   boost::uint_fast32_t flags = (f & REG_EXTENDED) ? wregex::extended : wregex::basic;
+   expression->eflags = (f & REG_NEWLINE) ? match_not_dot_newline : match_default;
 
    // and translate those that are actually set:
    if(f & REG_NOCOLLATE)
-      flags |= regbase::nocollate;
+   {
+      flags |= wregex::nocollate;
+      flags &= ~wregex::collate;
+   }
 
    if(f & REG_NOSUB)
       expression->eflags |= match_any;
 
    if(f & REG_NOSPEC)
-      flags |= regbase::literal;
+      flags |= wregex::literal;
    if(f & REG_ICASE)
-      flags |= regbase::icase;
+      flags |= wregex::icase;
    if(f & REG_ESCAPE_IN_LISTS)
-      flags |= regbase::escape_in_lists;
+      flags |= wregex::escape_in_lists;
    if(f & REG_NEWLINE_ALT)
-      flags |= regbase::newline_alt;
+      flags |= wregex::newline_alt;
+#ifndef BOOST_REGEX_V3
+   if(f & REG_PERLEX)
+      flags |= wregex::perlex;
+#endif
 
    const wchar_t* p2;
    if(f & REG_PEND)
@@ -173,7 +180,7 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecW(const regex_tW* expression, cons
 {
    BOOST_RE_GUARD_STACK
    bool result = false;
-   boost::uint_fast32_t flags = match_default | expression->eflags;
+   match_flag_type flags = match_default | expression->eflags;
    const wchar_t* end;
    const wchar_t* start;
    wcmatch m;

@@ -28,7 +28,13 @@
 #if !defined(BOOST_NO_STD_STRING)
 #include <map>
 #include <list>
+#ifdef BOOST_REGEX_V3
 #include <boost/regex/v3/fileiter.hpp>
+typedef unsigned match_flag_type;
+#else
+#include <boost/regex/v4/fileiter.hpp>
+typedef boost::match_flag_type match_flag_type;
+#endif
 #include <cstdio>
 
 namespace boost{
@@ -79,11 +85,10 @@ public:
    regex e;
    cmatch m;
 #ifndef BOOST_REGEX_NO_FILEITER
-   match_results<mapfile::iterator, regex::allocator_type> fm;
+   match_results<mapfile::iterator> fm;
 #endif
    type t;
    const char* pbase;
-   unsigned line;
 #ifndef BOOST_REGEX_NO_FILEITER
    mapfile::iterator fbase;
 #endif
@@ -95,7 +100,7 @@ public:
 #ifndef BOOST_REGEX_NO_FILEITER
    fm(),
 #endif
-   t(type_copy), pbase(0), line(0),
+   t(type_copy), pbase(0),
 #ifndef BOOST_REGEX_NO_FILEITER
    fbase(),
 #endif
@@ -114,7 +119,6 @@ void RegExData::update()
          if(m[i].matched) strings[i] = std::string(m[i].first, m[i].second);
          positions[i] = m[i].matched ? m[i].first - pbase : -1;
       }
-      line = m.line();
    }
 #ifndef BOOST_REGEX_NO_FILEITER
    else
@@ -124,7 +128,6 @@ void RegExData::update()
          if(fm[i].matched) strings[i] = to_string(fm[i].first, fm[i].second);
          positions[i] = fm[i].matched ? fm[i].first - fbase : -1;
       }
-      line = fm.line();
    }
 #endif
    t = type_copy;
@@ -135,7 +138,7 @@ void RegExData::clean()
    BOOST_RE_GUARD_STACK
 #ifndef BOOST_REGEX_NO_FILEITER
    fbase = mapfile::iterator();
-   fm = match_results<mapfile::iterator, regex::allocator_type>();
+   fm = match_results<mapfile::iterator>();
 #endif
 }
 
@@ -190,7 +193,7 @@ RegEx& RegEx::operator=(const char* p)
 unsigned int RegEx::SetExpression(const char* p, bool icase)
 {
    BOOST_RE_GUARD_STACK
-   boost::uint_fast32_t f = icase ? regbase::normal | regbase::use_except | regbase::icase : regbase::normal | regbase::use_except;
+   boost::uint_fast32_t f = icase ? regex::normal | regex::use_except | regex::icase : regex::normal | regex::use_except;
    return pdata->e.set_expression(p, f);
 }
 
@@ -209,7 +212,7 @@ std::string RegEx::Expression()const
 //
 // now matching operators:
 //
-bool RegEx::Match(const char* p, unsigned int flags)
+bool RegEx::Match(const char* p, match_flag_type flags)
 {
    BOOST_RE_GUARD_STACK
    pdata->t = re_detail::RegExData::type_pc;
@@ -225,7 +228,7 @@ bool RegEx::Match(const char* p, unsigned int flags)
    return false;
 }
 
-bool RegEx::Search(const char* p, unsigned int flags)
+bool RegEx::Search(const char* p, match_flag_type flags)
 {
    BOOST_RE_GUARD_STACK
    pdata->t = re_detail::RegExData::type_pc;
@@ -253,7 +256,7 @@ struct pred1
    }
 };
 }
-unsigned int RegEx::Grep(GrepCallback cb, const char* p, unsigned int flags)
+unsigned int RegEx::Grep(GrepCallback cb, const char* p, match_flag_type flags)
 {
    BOOST_RE_GUARD_STACK
    pdata->t = re_detail::RegExData::type_pc;
@@ -283,7 +286,7 @@ private:
 };
 }
 
-unsigned int RegEx::Grep(std::vector<std::string>& v, const char* p, unsigned int flags)
+unsigned int RegEx::Grep(std::vector<std::string>& v, const char* p, match_flag_type flags)
 {
    BOOST_RE_GUARD_STACK
    pdata->t = re_detail::RegExData::type_pc;
@@ -313,7 +316,7 @@ private:
    pred3& operator=(const pred3&);
 };
 }
-unsigned int RegEx::Grep(std::vector<std::size_t>& v, const char* p, unsigned int flags)
+unsigned int RegEx::Grep(std::vector<std::size_t>& v, const char* p, match_flag_type flags)
 {
    BOOST_RE_GUARD_STACK
    pdata->t = re_detail::RegExData::type_pc;
@@ -335,7 +338,7 @@ struct pred4
    const char* file;
    bool ok;
    pred4(GrepFileCallback c, RegEx* i, const char* f) : cb(c), pe(i), file(f), ok(true) {}
-   bool operator()(const match_results<mapfile::iterator, regex::allocator_type>& m)
+   bool operator()(const match_results<mapfile::iterator>& m)
    {
       pe->pdata->t = RegExData::type_pf;
       pe->pdata->fm = m;
@@ -391,7 +394,7 @@ void BuildFileList(std::list<std::string>* pl, const char* files, bool recurse)
 }
 }
 
-unsigned int RegEx::GrepFiles(GrepFileCallback cb, const char* files, bool recurse, unsigned int flags)
+unsigned int RegEx::GrepFiles(GrepFileCallback cb, const char* files, bool recurse, match_flag_type flags)
 {
    BOOST_RE_GUARD_STACK
    unsigned int result = 0;
@@ -419,7 +422,7 @@ unsigned int RegEx::GrepFiles(GrepFileCallback cb, const char* files, bool recur
 }
 
 
-unsigned int RegEx::FindFiles(FindFilesCallback cb, const char* files, bool recurse, unsigned int flags)
+unsigned int RegEx::FindFiles(FindFilesCallback cb, const char* files, bool recurse, match_flag_type flags)
 {
    BOOST_RE_GUARD_STACK
    unsigned int result = 0;
@@ -451,28 +454,28 @@ unsigned int RegEx::FindFiles(FindFilesCallback cb, const char* files, bool recu
 #endif
 
 std::string RegEx::Merge(const std::string& in, const std::string& fmt,
-                    bool copy, unsigned int flags)
+                    bool copy, match_flag_type flags)
 {
    std::string result;
    re_detail::string_out_iterator<std::string> i(result);
    if(!copy) flags |= format_no_copy;
-   regex_merge(i, in.begin(), in.end(), pdata->e, fmt.c_str(), flags);
+   regex_replace(i, in.begin(), in.end(), pdata->e, fmt.c_str(), flags);
    return result;
 }
 
 std::string RegEx::Merge(const char* in, const char* fmt,
-                    bool copy, unsigned int flags)
+                    bool copy, match_flag_type flags)
 {
    std::string result;
    if(!copy) flags |= format_no_copy;
    re_detail::string_out_iterator<std::string> i(result);
-   regex_merge(i, in, in + std::strlen(in), pdata->e, fmt, flags);
+   regex_replace(i, in, in + std::strlen(in), pdata->e, fmt, flags);
    return result;
 }
 
 std::size_t RegEx::Split(std::vector<std::string>& v, 
                       std::string& s,
-                      unsigned flags,
+                      match_flag_type flags,
                       unsigned max_count)
 {
    return regex_split(std::back_inserter(v), s, pdata->e, flags, max_count);
@@ -500,25 +503,6 @@ std::size_t RegEx::Position(int i)const
       if(pos == pdata->positions.end())
          return RegEx::npos;
       return (*pos).second;
-      }
-   }
-   return RegEx::npos;
-}
-
-unsigned int RegEx::Line()const
-{
-   BOOST_RE_GUARD_STACK
-   switch(pdata->t)
-   {
-   case re_detail::RegExData::type_pc:
-      return pdata->m[0].matched ? pdata->m.line() : RegEx::npos;
-#ifndef BOOST_REGEX_NO_FILEITER
-   case re_detail::RegExData::type_pf:
-      return pdata->fm[0].matched ? pdata->fm.line() : RegEx::npos;
-#endif
-   case re_detail::RegExData::type_copy:
-      {
-         return pdata->line;
       }
    }
    return RegEx::npos;
@@ -643,6 +627,7 @@ basic_string<char>::replace<const char*>(char* f1, char* f2, const char* i1, con
 #endif
 
 #endif
+
 
 
 

@@ -362,11 +362,33 @@ out="vc7.mak"
 no_single="no"
 subdir="vc7"
 vc6_gen
+#
+# generate vc7-stlport makefile:
+is_stlport="yes"
+out="vc7-stlport.mak"
+no_single="yes"
+subdir="vc7-stlport"
+vc6_stlp_gen
+#
+# generate vc71 makefile:
+is_stlport="no"
+out="vc71.mak"
+no_single="no"
+subdir="vc71"
+vc6_gen
+#
+# generate vc71-stlport makefile:
+is_stlport="yes"
+out="vc71-stlport.mak"
+no_single="yes"
+subdir="vc71-stlport"
+vc6_stlp_gen
 
 
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

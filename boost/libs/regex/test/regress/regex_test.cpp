@@ -55,16 +55,16 @@ typedef bool (*pred1_type)(const match_results<ra_it>&);
 typedef bool (*pred2_type)(const match_results<test_string_type::const_iterator>&);
 
 //check that all the defined flags are available:
-regbase::flag_type f = regbase::escape_in_lists | regbase::char_classes | regbase::intervals | regbase::limited_ops
-                       | regbase::newline_alt | regbase::bk_plus_qm | regbase::bk_braces
-                       | regbase::bk_parens | regbase::bk_refs | regbase::bk_vbar | regbase::use_except
-                       | regbase::failbit | regbase::literal | regbase::icase | regbase::nocollate | regbase::basic
-                       | regbase::extended | regbase::normal | regbase::emacs | regbase::awk | regbase::grep | regbase::egrep | regbase::sed;
+regex::flag_type f = regex::escape_in_lists | regex::char_classes | regex::intervals | regex::limited_ops
+                       | regex::newline_alt | regex::bk_plus_qm | regex::bk_braces
+                       | regex::bk_parens | regex::bk_refs | regex::bk_vbar | regex::use_except
+                       | regex::failbit | regex::literal | regex::icase | regex::nocollate | regex::basic
+                       | regex::extended | regex::normal | regex::emacs | regex::awk | regex::grep | regex::egrep | regex::sed;
 
 template class reg_expression<test_char_type>;
 template struct sub_match<ra_it>;
 template class match_results<ra_it>;
-
+#if 0
 template bool regex_match(ra_it,
                  ra_it,
                  match_results<ra_it>& m,
@@ -92,13 +92,13 @@ template test_char_type* regex_format(test_char_type*,
                             const match_results<ra_it>& m,
                             const test_string_type& fmt,
                             unsigned flags);
-template test_char_type* regex_merge(test_char_type*,
+template test_char_type* regex_replace(test_char_type*,
                           ra_it,
                           ra_it,
                           const reg_expression<test_char_type>&,
                           const test_char_type*,
                           unsigned int flags);
-template test_char_type* regex_merge(test_char_type*,
+template test_char_type* regex_replace(test_char_type*,
                            ra_it,
                            ra_it,
                            const reg_expression<test_char_type>& e,
@@ -159,17 +159,17 @@ template test_string_type regex_format
                                  (const match_results<test_string_type::const_iterator>&,
                                   const test_string_type&,
                                   unsigned flags);
-template test_string_type regex_merge(const test_string_type&,
+template test_string_type regex_replace(const test_string_type&,
                                      const reg_expression<test_char_type>&,
                                      const test_char_type*,
                                      unsigned int flags);
-template test_string_type regex_merge(const test_string_type&,
+template test_string_type regex_replace(const test_string_type&,
                                      const reg_expression<test_char_type>&,
                                      const test_string_type&,
                                      unsigned int flags);
 
 #endif
-
+#endif
 } // namespace boost
 
 //

@@ -30,7 +30,7 @@
 // and searches for all the C++ class definitions, storing
 // their locations in a map of strings/int's
 
-typedef std::map<std::string, int, std::less<std::string> > map_type;
+typedef std::map<std::string, std::string::difference_type, std::less<std::string> > map_type;
 
 const char* re = 
    // possibly leading whitespace:   
@@ -59,7 +59,7 @@ boost::regex expression(re);
 map_type class_index;
 std::string::const_iterator base;
 
-bool grep_callback(const boost::match_results<std::string::const_iterator, boost::regex::allocator_type>& what)
+bool grep_callback(const boost::match_results<std::string::const_iterator>& what)
 {
    // what[0] contains the whole string
    // what[5] contains the class name.

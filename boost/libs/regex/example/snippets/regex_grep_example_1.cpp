@@ -29,7 +29,7 @@
 // and searches for all the C++ class definitions, storing
 // their locations in a map of strings/int's
 
-typedef std::map<std::string, int, std::less<std::string> > map_type;
+typedef std::map<std::string, std::string::difference_type, std::less<std::string> > map_type;
 
 const char* re = 
    // possibly leading whitespace:   
@@ -61,7 +61,7 @@ class IndexClassesPred
    std::string::const_iterator base;
 public:
    IndexClassesPred(map_type& a, std::string::const_iterator b) : m(a), base(b) {}
-   bool operator()(const boost::match_results<std::string::const_iterator, boost::regex::allocator_type>& what)
+   bool operator()(const boost::match_results<std::string::const_iterator>& what)
    {
       // what[0] contains the whole string
       // what[5] contains the class name.

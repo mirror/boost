@@ -63,9 +63,9 @@ class class_index
    boost::regex expression;
    map_type index;
    std::string::const_iterator base;
-   typedef boost::match_results<std::string::const_iterator, boost::regex::allocator_type> arg_type;
+   typedef boost::match_results<std::string::const_iterator> arg_type;
 
-   bool grep_callback(const boost::match_results<std::string::const_iterator, boost::regex::allocator_type>& what);
+   bool grep_callback(const boost::match_results<std::string::const_iterator>& what);
 public:
    map_type& get_map() { return index; }
    typedef bool (__closure* grep_callback_type)(const arg_type&);
@@ -76,7 +76,7 @@ public:
         {}
 };
 
-bool class_index::grep_callback(const boost::match_results<std::string::const_iterator, boost::regex::allocator_type>& what)
+bool class_index::grep_callback(const boost::match_results<std::string::const_iterator>& what)
 {
    // what[0] contains the whole string
    // what[5] contains the class name.

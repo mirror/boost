@@ -63,11 +63,11 @@ typedef bool (*pred1_type)(const match_results<ra_it>&);
 typedef bool (*pred2_type)(const match_results<test_string_type::const_iterator>&);
 
 //check that all the defined flags are available:
-regbase::flag_type f = regbase::escape_in_lists | regbase::char_classes | regbase::intervals | regbase::limited_ops
-                       | regbase::newline_alt | regbase::bk_plus_qm | regbase::bk_braces
-                       | regbase::bk_parens | regbase::bk_refs | regbase::bk_vbar | regbase::use_except
-                       | regbase::failbit | regbase::literal | regbase::icase | regbase::nocollate | regbase::basic
-                       | regbase::extended | regbase::normal | regbase::emacs | regbase::awk | regbase::grep | regbase::egrep | regbase::sed;
+wregex::flag_type f = wregex::escape_in_lists | wregex::char_classes | wregex::intervals | wregex::limited_ops
+                       | wregex::newline_alt | wregex::bk_plus_qm | wregex::bk_braces
+                       | wregex::bk_parens | wregex::bk_refs | wregex::bk_vbar | wregex::use_except
+                       | wregex::failbit | wregex::literal | wregex::icase | wregex::nocollate | wregex::basic
+                       | wregex::extended | wregex::normal | wregex::emacs | wregex::awk | wregex::grep | wregex::egrep | wregex::sed;
 
 template class reg_expression<char_type>;
 template struct sub_match<ra_it>;
@@ -100,13 +100,13 @@ template char_type* regex_format(char_type*,
                             const match_results<ra_it>& m,
                             const test_string_type& fmt,
                             unsigned flags);
-template char_type* regex_merge(char_type*,
+template char_type* regex_replace(char_type*,
                           ra_it,
                           ra_it,
                           const reg_expression<char_type>&,
                           const char_type*,
                           unsigned int flags);
-template char_type* regex_merge(char_type*,
+template char_type* regex_replace(char_type*,
                            ra_it,
                            ra_it,
                            const reg_expression<char_type>& e,
@@ -167,11 +167,11 @@ template test_string_type regex_format
                                  (const match_results<test_string_type::const_iterator>&,
                                   const test_string_type&,
                                   unsigned flags);
-template test_string_type regex_merge(const test_string_type&,
+template test_string_type regex_replace(const test_string_type&,
                                      const reg_expression<char_type>&,
                                      const char_type*,
                                      unsigned int flags);
-template test_string_type regex_merge(const test_string_type&,
+template test_string_type regex_replace(const test_string_type&,
                                      const reg_expression<char_type>&,
                                      const test_string_type&,
                                      unsigned int flags);

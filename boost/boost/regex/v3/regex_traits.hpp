@@ -626,6 +626,8 @@ public:
    cpp_regex_traits();
    ~cpp_regex_traits();
 
+   void swap(cpp_regex_traits&);
+
    static std::size_t BOOST_REGEX_CALL length(const char_type* p)
    {
       return std::strlen(p);
@@ -764,6 +766,7 @@ public:
    locale_type BOOST_REGEX_CALL imbue(locale_type l);
    locale_type BOOST_REGEX_CALL getloc()const{ return locale_inst; }
    std::size_t BOOST_REGEX_CALL strwiden(wchar_t *s1, std::size_t len, const char *s2)const;
+   void swap(cpp_regex_traits&);
 
    struct sentry
    {

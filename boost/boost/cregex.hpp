@@ -24,7 +24,15 @@
 #ifndef BOOST_RE_CREGEX_HPP
 #define BOOST_RE_CREGEX_HPP
 
+#ifndef BOOST_REGEX_CONFIG_HPP
+#include <boost/regex/config.hpp>
+#endif
+
+#ifdef BOOST_REGEX_V3
 #include <boost/regex/v3/cregex.hpp>
+#else
+#include <boost/regex/v4/cregex.hpp>
+#endif
 
 #endif // include guard
 

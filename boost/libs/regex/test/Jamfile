@@ -58,6 +58,18 @@ test-suite regex
             c_compiler_checks/wide_posix_api_check.cpp
       ]
 
+      [ regex-test bad_expression_test
+          : <template>test                      # sources
+            pathology/bad_expression_test.cpp
+            <lib>../../test/build/boost_test_exec_monitor
+      ]
+
+      [ regex-test recursion_test
+          : <template>test                      # sources
+            pathology/recursion_test.cpp
+            <lib>../../test/build/boost_test_exec_monitor
+      ]
 ;
+
 
 

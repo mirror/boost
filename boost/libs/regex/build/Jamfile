@@ -9,6 +9,8 @@ lib boost_regex : ../src/$(SOURCES).cpp
         <sysinclude>$(BOOST_ROOT)
         <define>BOOST_REGEX_NO_LIB=1
         <define>BOOST_REGEX_STATIC_LINK=1
+        <msvc><release><runtime-link-dynamic><threading>multi
+        <msvc><debug><runtime-link-dynamic><threading>multi
     : 
         debug release
     ;
@@ -93,6 +95,7 @@ stage bin-stage : <lib>boost_regex <dll>boost_regex
     :
         debug release
     ;
+
 
 
 

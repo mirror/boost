@@ -19,6 +19,7 @@
   */
 
 #include <stdio.h>
+#include <algorithm>
 #include <boost/regex.hpp>
 #ifdef JM_OLD_IOSTREAM
 #include <iostream.h>
@@ -33,7 +34,11 @@ using std::endl;
 #  pragma hrdstop
 #endif
 
+#ifdef BOOST_REGEX_V3
 #include <boost/regex/v3/fileiter.hpp>
+#else
+#include <boost/regex/v4/fileiter.hpp>
+#endif
 
 #include "jgrep.h"
 
@@ -47,10 +52,10 @@ class ogrep_predicate
    unsigned int& lines;
    const char* filename;
    unsigned int last_line;
-   iterator end_of_storage;
+   iterator end_of_storage, last_line_start;
 public:
-   ogrep_predicate(unsigned int& i, const char* p, iterator e) : lines(i), filename(p), last_line(-1), end_of_storage(e) {}
-   ogrep_predicate(const ogrep_predicate& o) : lines(o.lines), filename(o.filename), last_line(o.last_line), end_of_storage(o.end_of_storage) {}
+   ogrep_predicate(unsigned int& i, const char* p, iterator start, iterator end) : lines(i), filename(p), last_line(-1), end_of_storage(end), last_line_start(start) {}
+   ogrep_predicate(const ogrep_predicate& o) : lines(o.lines), filename(o.filename), last_line(o.last_line), end_of_storage(o.end_of_storage), last_line_start(o.last_line_start) {}
    bool operator () (const boost::match_results<iterator, Allocator>& i);
 };
 
@@ -63,42 +68,54 @@ public:
 template <class iterator, class Allocator>
 bool ogrep_predicate<iterator, Allocator>::operator()(const boost::match_results<iterator, Allocator>& i)
 {
+   // if we haven't printed the filename yet, then do it now:
    if(last_line == (unsigned int)-1)
+   {
       cout << "File " << filename << ":" << endl;
-   if(last_line != i.line())
+      last_line = 0;
+   }
+   // calculate which line we are on, by adding the number of newlines 
+   // we've skipped in the last search:
+   int current_line = last_line + std::count(last_line_start, end_of_storage, '\n');
+   // if we haven't already printed this line out, then do it now:
+   if(last_line != current_line)
    {
       ++lines;
-      last_line = i.line();
+      last_line = current_line;
       if(count_only == 0)
       {
          if(show_lines)
-            cout << i.line() << "\t";
-         iterator ptr = i.line_start();
-         while((ptr != end_of_storage) && (*ptr != '\n'))++ptr;
-         iterator pos = i.line_start();
-         while(pos != ptr)
+            cout << current_line << "\t";
+         const char* nls = "\n";
+         iterator ptr = std::find_end(last_line_start, i[0].first, nls, nls+1);
+         ++ptr;
+         iterator ptr2 = ptr;
+         while((ptr2 != end_of_storage) && (*ptr2 != '\n'))++ptr2;
+         while(ptr != ptr2)
          {
-            cout.put(*pos);
-            ++pos;
+            cout.put(*ptr);
+            ++ptr;
          }
          cout << endl;
       }
    }
+   // set the last line seen to the start of the current match:
+   last_line_start = i[0].first;
    return true;
 }
 
+using namespace boost;
 
 void process_grep(const char* file)
 {
    try{
-   using namespace boost;
    mapfile f(file);
    unsigned int count = 0;
-   ogrep_predicate<mapfile::iterator, allocator_type> oi(count, file, f.end());
+   ogrep_predicate<mapfile::iterator, boost::match_results<mapfile::iterator>::allocator_type> oi(count, file, f.begin(), f.end());
    if(files_only)
    {
       bool ok;
-      boost::match_results<mapfile::iterator, allocator_type> m;
+      boost::match_results<mapfile::iterator> m;
          ok = regex_search(f.begin(), f.end(), m, e, match_not_dot_newline | match_not_dot_null);
       if(ok)
          cout << "File " << file << endl;

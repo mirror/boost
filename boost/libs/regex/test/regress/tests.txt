@@ -293,7 +293,7 @@ ab$ abxx -1 -1
 ab$ ab\nzz 0 2
 
 ; back references
-- match_default normal REG_EXTENDED
+- match_default normal REG_PERL
 a(b)\2c	!
 a(b\1)c	!
 a(b*)c\1d abbcbbd 0 7 1 3
@@ -307,7 +307,8 @@ a(([bc])\2)*d abbccd 0 6 3 5 3 4
 
 a(([bc])\2)*d abbcbd -1 -1
 a((b)*\2)*d abbbd 0 5 1 4 2 3
-(ab*)[ab]*\1 ababaaa 0 7 0 1
+; perl only:
+(ab*)[ab]*\1 ababaaa 0 4 0 2
 (a)\1bcd aabcd 0 5 0 1
 (a)\1bc*d aabcd 0 5 0 1
 (a)\1bc*d aabd 0 4 0 1
@@ -315,9 +316,13 @@ a((b)*\2)*d abbbd 0 5 1 4 2 3
 (a)\1bc*[ce]d aabcccd 0 7 0 1
 ^(a)\1b(c)*cd$ aabcccd 0 7 0 1 4 5
 
+; posix only: 
+- match_default extended REG_EXTENDED
+(ab*)[ab]*\1 ababaaa 0 7 0 1
+
 ;
 ; characters by code:
-- match_default normal REG_EXTENDED REG_STARTEND
+- match_default normal REG_PERL REG_STARTEND
 \0101 A 0 1
 \00 \0 0 1
 \0 \0 0 1
@@ -443,6 +448,7 @@ a(bbb+|bb+|b)b abbb 0 4 1 3
 a(bbb+|bb+|b)bb abbb 0 4 1 2
 (.*).* abcdef 0 6 0 6
 (a*)* bc 0 0 0 0
+xyx*xz xyxxxxyxxxz 5 11
 
 ; do we get the right subexpression when it is used more than once?
 a(b|c)*d ad 0 2 -1 -1
@@ -450,7 +456,6 @@ a(b|c)*d abcd 0 4 2 3
 a(b|c)+d abd 0 3 1 2
 a(b|c)+d abcd 0 4 2 3
 a(b|c?)+d ad 0 2 1 1
-a(b|c?)+d abcd 0 4 2 3
 a(b|c){0,0}d ad 0 2 -1 -1
 a(b|c){0,1}d ad 0 2 -1 -1
 a(b|c){0,1}d abd 0 3 1 2
@@ -470,13 +475,23 @@ a(b|c){2,4}d abcbd 0 5 3 4
 a(b|c){2,4}d abcbcd 0 6 4 5
 a(b|c){2,}d abcd 0 4 2 3
 a(b|c){2,}d abcbd 0 5 3 4
+; perl only:
+a(b|c?)+d abcd 0 4 3 3
+a(b+|((c)*))+d abd 0 3 2 2 2 2 -1 -1
+a(b+|((c)*))+d abcd 0 4 3 3 3 3 2 3
+
+; posix only:
+- match_default extended REG_EXTENDED REG_STARTEND
+a(b|c?)+d abcd 0 4 2 3
+a(b|((c)*))+d abcd 0 4 2 3 2 3 2 3
 a(b+|((c)*))+d abd 0 3 1 2 -1 -1 -1 -1
 a(b+|((c)*))+d abcd 0 4 2 3 2 3 2 3
+
 
 - match_default normal REG_EXTENDED REG_STARTEND REG_NOSPEC literal
 \**?/{} \\**?/{} 0 7
 
-- match_default normal REG_EXTENDED REG_NO_POSIX_TEST ; we disable POSIX testing because it can't handle escapes in sets
+- match_default normal REG_PERL
 ; try to match C++ syntax elements:
 ; line comment:
 //[^\n]* "++i //here is a line comment\n" 4 28
@@ -490,7 +505,8 @@ a(b+|((c)*))+d abcd 0 4 2 3 2 3 2 3
 ; preprossor directives:
 ^[[:blank:]]*#([^\n]*\\[[:space:]]+)*[^\n]* "#define some_symbol" 0 19 -1 -1
 ^[[:blank:]]*#([^\n]*\\[[:space:]]+)*[^\n]* "#define some_symbol(x) #x" 0 25 -1 -1
-^[[:blank:]]*#([^\n]*\\[[:space:]]+)*[^\n]* "#define some_symbol(x) \\  \r\n  foo();\\\r\n   printf(#x);" 0 53 28 42
+; perl only:
+^[[:blank:]]*#([^\n]*\\[[:space:]]+)*[^\n]* "#define some_symbol(x) \\  \r\n  foo();\\\r\n   printf(#x);" 0 53 30 42
 ; literals:
 ((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)? 0xFF         						0 4		0 4		0 4 	-1 -1 	-1 -1 	-1 -1 	-1 -1
 ((0x[[:xdigit:]]+)|([[:digit:]]+))u?((int(8|16|32|64))|L)? 35 									0 2 	0 2		-1 -1 	0 2 	-1 -1 	-1 -1 	-1 -1
@@ -501,6 +517,11 @@ a(b+|((c)*))+d abcd 0 4 2 3 2 3 2 3
 '([^\\']|\\.)*' '\\x3A' 0 6 4 5
 '([^\\']|\\.)*' '\\'' 0 4 1 3
 '([^\\']|\\.)*' '\\n' 0 4 1 3
+
+; posix only:
+- match_default extended escape_in_lists REG_EXTENDED REG_NO_POSIX_TEST ; we disable POSIX testing because it can't handle escapes in sets
+^[[:blank:]]*#([^\n]*\\[[:space:]]+)*[^\n]* "#define some_symbol(x) \\  \r\n  foo();\\\r\n   printf(#x);" 0 53 28 42
+
 
 ; now try and test some unicode specific characters:
 - match_default normal REG_PERL REG_UNICODE_ONLY
@@ -781,7 +802,6 @@ a+ "...aaa,,," \x{21} "!"
 a+ "...aaa,,," \c@ \0
 a+ "...aaa,,," \e \27
 a+ "...aaa,,," \0101 A
-a+ "...aaa,,," (\0101) A
 
 - match_default normal REG_EXTENDED REG_STARTEND REG_MERGE format_sed format_no_copy
 (a+)(b+) ...aabb,, \0 aabb
@@ -803,8 +823,9 @@ a+ "...aaa,,," (\0101) A
 (a+)(b+) ...aabb,, & &
 (a+)(b+) ...aabb,, \0 \0
 (a+)(b+) ...aabb,, ()?: ()?:
+a+ "...aaa,,," \0101 A
 
-- match_default normal REG_EXTENDED REG_STARTEND REG_MERGE
+- match_default format_all normal REG_EXTENDED REG_STARTEND REG_MERGE
 ; move to copying unmatched data:
 a+ "...aaa,,," bbb "...bbb,,," 
 a+(b+) "...aaabb,,," $1 "...bb,,," 
@@ -815,7 +836,7 @@ a+(b+) "...aaabb,,,ab*abbb?" $1 "...bb,,,b*bbb?"
 (a+)|(b+) "...aaabb,,,ab*abbb?" (?1A:B)C "...ACBC,,,ACBC*ACBC?" 
 (a+)|(b+) "...aaabb,,,ab*abbb?" ?1:B "...B,,,B*B?" 
 
-- match_default normal REG_EXTENDED REG_STARTEND REG_MERGE format_first_only
+- match_default format_all normal REG_EXTENDED REG_STARTEND REG_MERGE format_first_only
 ; move to copying unmatched data, but replace first occurance only:
 a+ "...aaa,,," bbb "...bbb,,," 
 a+(b+) "...aaabb,,," $1 "...bb,,," 
@@ -837,7 +858,7 @@ a+(b+) "...aaabb,,,ab*abbb?" $1 "...bb,,,ab*abbb?"
 
 ;
 ; non-greedy repeats added 21/04/00
-- match_default normal REG_EXTENDED
+- match_default normal REG_EXTENDED REG_PERL
 a** !
 a*? aa 0 0
 a?? aa 0 0
@@ -854,7 +875,7 @@ abc|\w+? abcd 0 3
 
 ;
 ; non-marking parenthesis added 25/04/00
-- match_default normal REG_EXTENDED
+- match_default normal REG_EXTENDED REG_PERL
 (?:abc)+ xxabcabcxx 2 8
 (?:a+)(b+) xaaabbbx 1 7 4 7
 (a+)(?:b+) xaaabbba 1 7 1 4
@@ -867,14 +888,19 @@ a+(?#b+)b+ xaaabbba 1 7
 
 ;
 ; try some partial matches:
-- match_partial match_default normal REG_EXTENDED REG_NO_POSIX_TEST
-(xyz)(.*)abc xyzaaab -1 -1 0 3 3 7
-(xyz)(.*)abc xyz -1 -1 0 3 3 3
-(xyz)(.*)abc xy -1 -1 -1 -1 -1 -1
+- match_partial match_default normal REG_EXTENDED REG_NO_POSIX_TEST REG_PARTIAL_MATCH REG_PERL
+(xyz)(.*)abc xyzaaab 0 7
+(xyz)(.*)abc xyz 0 3
+(xyz)(.*)abc xy 0 2
+(xyz)(.*)abc x 0 1
+(xyz)(.*)abc "" -1 -1
+(xyz)(.*)abc aaaa -1 -1
+.abc aaab 1 4
+a[_] xxa 2 3
 
 ;
 ; forward lookahead asserts added 21/01/02
-- match_default normal REG_EXTENDED REG_NO_POSIX_TEST
+- match_default normal REG_EXTENDED REG_NO_POSIX_TEST REG_PERL
 ((?:(?!a|b)\w)+)(\w+) "  xxxabaxxx  " 2 11 2 5 5 11
 
 /\*(?:(?!\*/).)*\*/ "  /**/  " 2 6
@@ -901,6 +927,183 @@ a+(?#b+)b+ xaaabbba 1 7
 ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$ abc3 -1 -1
 ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$ abC3 0 4
 ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$ ABCD3 -1 -1
+
+; extended repeat checking to exercise new algorithms:
+ab.*xy abxy_ 0 4
+ab.*xy ab_xy_ 0 5
+ab.*xy abxy 0 4
+ab.*xy ab_xy 0 5
+ab.* ab 0 2
+ab.* ab__ 0 4
+
+ab.{2,5}xy ab__xy_ 0 6
+ab.{2,5}xy ab____xy_ 0 8
+ab.{2,5}xy ab_____xy_ 0 9
+ab.{2,5}xy ab__xy 0 6
+ab.{2,5}xy ab_____xy 0 9
+ab.{2,5} ab__ 0 4
+ab.{2,5} ab_______ 0 7
+ab.{2,5}xy ab______xy -1 -1
+ab.{2,5}xy ab_xy -1 -1
+
+ab.*?xy abxy_ 0 4
+ab.*?xy ab_xy_ 0 5
+ab.*?xy abxy 0 4
+ab.*?xy ab_xy 0 5
+ab.*? ab 0 2
+ab.*? ab__ 0 2
+
+ab.{2,5}?xy ab__xy_ 0 6
+ab.{2,5}?xy ab____xy_ 0 8
+ab.{2,5}?xy ab_____xy_ 0 9
+ab.{2,5}?xy ab__xy 0 6
+ab.{2,5}?xy ab_____xy 0 9
+ab.{2,5}? ab__ 0 4
+ab.{2,5}? ab_______ 0 4
+ab.{2,5}?xy ab______xy -1 -1
+ab.{2,5}xy ab_xy -1 -1
+
+; again but with slower algorithm variant:
+- match_default normal REG_PERL REG_NO_POSIX_TEST match_not_dot_newline match_not_dot_null
+ab.*xy abxy_ 0 4
+ab.*xy ab_xy_ 0 5
+ab.*xy abxy 0 4
+ab.*xy ab_xy 0 5
+ab.* ab 0 2
+ab.* ab__ 0 4
+
+ab.{2,5}xy ab__xy_ 0 6
+ab.{2,5}xy ab____xy_ 0 8
+ab.{2,5}xy ab_____xy_ 0 9
+ab.{2,5}xy ab__xy 0 6
+ab.{2,5}xy ab_____xy 0 9
+ab.{2,5} ab__ 0 4
+ab.{2,5} ab_______ 0 7
+ab.{2,5}xy ab______xy -1 -1
+ab.{2,5}xy ab_xy -1 -1
+
+ab.*?xy abxy_ 0 4
+ab.*?xy ab_xy_ 0 5
+ab.*?xy abxy 0 4
+ab.*?xy ab_xy 0 5
+ab.*? ab 0 2
+ab.*? ab__ 0 2
+
+ab.{2,5}?xy ab__xy_ 0 6
+ab.{2,5}?xy ab____xy_ 0 8
+ab.{2,5}?xy ab_____xy_ 0 9
+ab.{2,5}?xy ab__xy 0 6
+ab.{2,5}?xy ab_____xy 0 9
+ab.{2,5}? ab__ 0 4
+ab.{2,5}? ab_______ 0 4
+ab.{2,5}?xy ab______xy -1 -1
+ab.{2,5}xy ab_xy -1 -1
+
+; now again for single character repeats:
+
+ab_*xy abxy_ 0 4
+ab_*xy ab_xy_ 0 5
+ab_*xy abxy 0 4
+ab_*xy ab_xy 0 5
+ab_* ab 0 2
+ab_* ab__ 0 4
+
+ab_{2,5}xy ab__xy_ 0 6
+ab_{2,5}xy ab____xy_ 0 8
+ab_{2,5}xy ab_____xy_ 0 9
+ab_{2,5}xy ab__xy 0 6
+ab_{2,5}xy ab_____xy 0 9
+ab_{2,5} ab__ 0 4
+ab_{2,5} ab_______ 0 7
+ab_{2,5}xy ab______xy -1 -1
+ab_{2,5}xy ab_xy -1 -1
+
+ab_*?xy abxy_ 0 4
+ab_*?xy ab_xy_ 0 5
+ab_*?xy abxy 0 4
+ab_*?xy ab_xy 0 5
+ab_*? ab 0 2
+ab_*? ab__ 0 2
+
+ab_{2,5}?xy ab__xy_ 0 6
+ab_{2,5}?xy ab____xy_ 0 8
+ab_{2,5}?xy ab_____xy_ 0 9
+ab_{2,5}?xy ab__xy 0 6
+ab_{2,5}?xy ab_____xy 0 9
+ab_{2,5}? ab__ 0 4
+ab_{2,5}? ab_______ 0 4
+ab_{2,5}?xy ab______xy -1 -1
+ab_{2,5}xy ab_xy -1 -1
+
+; and again for sets:
+ab[_,;]*xy abxy_ 0 4
+ab[_,;]*xy ab_xy_ 0 5
+ab[_,;]*xy abxy 0 4
+ab[_,;]*xy ab_xy 0 5
+ab[_,;]* ab 0 2
+ab[_,;]* ab__ 0 4
+
+ab[_,;]{2,5}xy ab__xy_ 0 6
+ab[_,;]{2,5}xy ab____xy_ 0 8
+ab[_,;]{2,5}xy ab_____xy_ 0 9
+ab[_,;]{2,5}xy ab__xy 0 6
+ab[_,;]{2,5}xy ab_____xy 0 9
+ab[_,;]{2,5} ab__ 0 4
+ab[_,;]{2,5} ab_______ 0 7
+ab[_,;]{2,5}xy ab______xy -1 -1
+ab[_,;]{2,5}xy ab_xy -1 -1
+
+ab[_,;]*?xy abxy_ 0 4
+ab[_,;]*?xy ab_xy_ 0 5
+ab[_,;]*?xy abxy 0 4
+ab[_,;]*?xy ab_xy 0 5
+ab[_,;]*? ab 0 2
+ab[_,;]*? ab__ 0 2
+
+ab[_,;]{2,5}?xy ab__xy_ 0 6
+ab[_,;]{2,5}?xy ab____xy_ 0 8
+ab[_,;]{2,5}?xy ab_____xy_ 0 9
+ab[_,;]{2,5}?xy ab__xy 0 6
+ab[_,;]{2,5}?xy ab_____xy 0 9
+ab[_,;]{2,5}? ab__ 0 4
+ab[_,;]{2,5}? ab_______ 0 4
+ab[_,;]{2,5}?xy ab______xy -1 -1
+ab[_,;]{2,5}xy ab_xy -1 -1
+
+; and again for tricky sets with digraphs:
+ab[_[.ae.]]*xy abxy_ 0 4
+ab[_[.ae.]]*xy ab_xy_ 0 5
+ab[_[.ae.]]*xy abxy 0 4
+ab[_[.ae.]]*xy ab_xy 0 5
+ab[_[.ae.]]* ab 0 2
+ab[_[.ae.]]* ab__ 0 4
+
+ab[_[.ae.]]{2,5}xy ab__xy_ 0 6
+ab[_[.ae.]]{2,5}xy ab____xy_ 0 8
+ab[_[.ae.]]{2,5}xy ab_____xy_ 0 9
+ab[_[.ae.]]{2,5}xy ab__xy 0 6
+ab[_[.ae.]]{2,5}xy ab_____xy 0 9
+ab[_[.ae.]]{2,5} ab__ 0 4
+ab[_[.ae.]]{2,5} ab_______ 0 7
+ab[_[.ae.]]{2,5}xy ab______xy -1 -1
+ab[_[.ae.]]{2,5}xy ab_xy -1 -1
+
+ab[_[.ae.]]*?xy abxy_ 0 4
+ab[_[.ae.]]*?xy ab_xy_ 0 5
+ab[_[.ae.]]*?xy abxy 0 4
+ab[_[.ae.]]*?xy ab_xy 0 5
+ab[_[.ae.]]*? ab 0 2
+ab[_[.ae.]]*? ab__ 0 2
+
+ab[_[.ae.]]{2,5}?xy ab__xy_ 0 6
+ab[_[.ae.]]{2,5}?xy ab____xy_ 0 8
+ab[_[.ae.]]{2,5}?xy ab_____xy_ 0 9
+ab[_[.ae.]]{2,5}?xy ab__xy 0 6
+ab[_[.ae.]]{2,5}?xy ab_____xy 0 9
+ab[_[.ae.]]{2,5}? ab__ 0 4
+ab[_[.ae.]]{2,5}? ab_______ 0 4
+ab[_[.ae.]]{2,5}?xy ab______xy -1 -1
+ab[_[.ae.]]{2,5}xy ab_xy -1 -1
 
 ; new bugs detected in spring 2003:
 - normal match_continuous REG_NO_POSIX_TEST
@@ -930,4 +1133,99 @@ a()b\1 ab 0 2 1 1
 
 "(.*\r\n){3}.* abcdefghijklmnopqrstuvwxyz.*\r\n" "00001 01 \r\n00002 02 1         2         3         4         5         6         7         8         9         0\r\n00003 03 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\r\n00004 04 \r\n00005 05 \r\n00006 06                                                             Seite: 0001\r\n00007 07                                                             StartSeitEEnde: 0001\r\n00008 08                                                             StartSeiTe Ende: 0001\r\n00009 09                                                             Start seiteEnde: 0001\r\n00010 10                                                             28.2.03\r\n00011 11                                                             Page: 0001\r\n00012 12                                                             Juhu die Erste: 0001\r\n00013 13                                                             Es war einmal! 0001\r\n00014 14                               ABCDEFGHIJKLMNOPQRSTUVWXYZ0001\r\n00015 15                               abcdefghijklmnopqrstuvwxyz0001\r\n00016 16                               lars.schmeiser@gft.com\r\n00017 17 \r\n00018 18 \r\n00019 19 \r\n00020 20 \r\n00021 21 1         2         3         4         5         6         7         8         9         0\r\n00022 22 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\r\n00023 01 \r\n00024 02 1         2         3         4         5         6         7         8         9         0\r\n00025 03 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\r\n00026 04 \r\n00027 05 \r\n00028 06                                                             Seite: 0002\r\n00029 07                                                             StartSeitEEnde: 0002\r\n00030 08                                                             StartSeiTe Ende: 0002\r\n00031 09                                                             Start seiteEnde: 0002\r\n00032 10                                                             28.02.2003\r\n00033 11                                                             Page: 0002\r\n00034 12                                                             Juhu die Erste: 0002\r\n00035 13                                                             Es war einmal! 0002\r\n00036 14                               ABCDEFGHIJKLMNOPQRSTUVWXYZ0002\r\n00037 15                               abcdefghijklmnopqrstuvwxyz0002\r\n00038 16                               lars.schmeiser@194.1.12.111\r\n00039 17 \r\n00040 18 \r\n00041 19 \r\n00042 20 \r\n00043 21 1         2         3         4         5         6         7         8         9         0\r\n" 753 1076 934 1005
 
+- normal REG_PERL
+
+; new (?: construct )
+(?>^abc) abc 0 3
+(?>^abc) def\nabc 4 7
+(?>^abc) defabc -1 -1
+(?>.*/)foo /this/is/a/very/long/line/in/deed/with/very/many/slashes/in/it/you/see/ -1 -1
+(?>.*/)foo /this/is/a/very/long/line/in/deed/with/very/many/slashes/in/and/foo 0 67
+(?>(\.\d\d[1-9]?))\d+ 1.230003938 1 11 1 4
+(?>(\.\d\d[1-9]?))\d+ 1.875000282 1 11 1 5
+(?>(\.\d\d[1-9]?))\d+ 1.235 -1 -1
+^((?>\w+)|(?>\s+))*$ "now is the time for all good men to come to the aid of the party" 0 64 59 64
+^((?>\w+)|(?>\s+))*$ "this is not a line with only words and spaces!" -1 -1
+((?>\d+))(\w) 12345a 0 6 0 5 5 6
+((?>\d+))(\w) 12345+ -1 -1
+((?>\d+))(\d) 12345 -1 -1
+(?>a+)b aaab 0 4
+((?>a+)b) aaab 0 4 0 4
+(?>(a+))b aaab 0 4 0 3
+(?>b)+ aaabbbccc 3 6
+(?>a+|b+|c+)*c aaabbbbccccd 0 8
+((?>[^()]+)|\([^()]*\))+ ((abc(ade)ufh()()x 2 18 17 18
+\(((?>[^()]+)|\([^()]+\))+\) (abc) 0 5 1 4
+\(((?>[^()]+)|\([^()]+\))+\) (abc(def)xyz) 0 13 9 12
+\(((?>[^()]+)|\([^()]+\))+\) ((()aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -1 -1
+(?>a*)* a 0 1
+(?>a*)* aa 0 2
+(?>a*)* aaaa 0 4
+(?>a*)* a 0 1
+(?>a*)* aaabcde 0 3
+((?>a*))* aaaaa 0 5 5 5
+((?>a*))* aabbaa 0 2 2 2
+((?>a*?))* aaaaa 0 0 0 0
+((?>a*?))*    aabbaa 0 0 0 0
+"word (?>(?:(?!otherword)[a-zA-Z0-9]+ ){0,30})otherword" "word cat dog elephant mussel cow horse canary baboon snake shark otherword" 0 74
+"word (?>(?:(?!otherword)[a-zA-Z0-9]+ ){0,30})otherword" "word cat dog elephant mussel cow horse canary baboon snake shark" -1 -1
+"word (?>[a-zA-Z0-9]+ ){0,30}otherword" "word cat dog elephant mussel cow horse canary baboon snake shark the quick brown fox and the lazy dog and several other words getting close to thirty by now I hope" -1 -1
+"word (?>[a-zA-Z0-9]+ ){0,30}otherword" "word cat dog elephant mussel cow horse canary baboon snake shark the quick brown fox and the lazy dog and several other words getting close to thirty by now I really really hope otherword" -1 -1
+((?>Z)+|A)* ZABCDEFG 0 2 1 2
+((?>)+|A)* !
+
+; subtleties of matching with no sub-expressions marked
+- normal match_nosubs REG_NO_POSIX_TEST
+a(b?c)+d accd 0 4 
+(wee|week)(knights|night) weeknights 0 10 
+.* abc 0 3
+a(b|(c))d abd 0 3 
+a(b|(c))d acd 0 3
+a(b*|c|e)d abbd 0 4
+a(b*|c|e)d acd 0 3 
+a(b*|c|e)d ad 0 2
+a(b?)c abc 0 3
+a(b?)c ac 0 2
+a(b+)c abc 0 3
+a(b+)c abbbc 0 5
+a(b*)c ac 0 2
+(a|ab)(bc([de]+)f|cde) abcdef 0 6
+a([bc]?)c abc 0 3
+a([bc]?)c ac 0 2
+a([bc]+)c abc 0 3
+a([bc]+)c abcc 0 4
+a([bc]+)bc abcbc 0 5
+a(bb+|b)b abb 0 3
+a(bbb+|bb+|b)b abb 0 3
+a(bbb+|bb+|b)b abbb 0 4
+a(bbb+|bb+|b)bb abbb 0 4
+(.*).* abcdef 0 6
+(a*)* bc 0 0
+
+- normal nosubs REG_NO_POSIX_TEST
+a(b?c)+d accd 0 4 
+(wee|week)(knights|night) weeknights 0 10 
+.* abc 0 3
+a(b|(c))d abd 0 3 
+a(b|(c))d acd 0 3
+a(b*|c|e)d abbd 0 4
+a(b*|c|e)d acd 0 3 
+a(b*|c|e)d ad 0 2
+a(b?)c abc 0 3
+a(b?)c ac 0 2
+a(b+)c abc 0 3
+a(b+)c abbbc 0 5
+a(b*)c ac 0 2
+(a|ab)(bc([de]+)f|cde) abcdef 0 6
+a([bc]?)c abc 0 3
+a([bc]?)c ac 0 2
+a([bc]+)c abc 0 3
+a([bc]+)c abcc 0 4
+a([bc]+)bc abcbc 0 5
+a(bb+|b)b abb 0 3
+a(bbb+|bb+|b)b abb 0 3
+a(bbb+|bb+|b)b abbb 0 4
+a(bbb+|bb+|b)bb abbb 0 4
+(.*).* abcdef 0 6
+(a*)* bc 0 0
 

@@ -418,20 +418,22 @@ __iterator_category(const debug_iterator<T>&) {
 #define BOOST_RE_TEST_LOCALE_W32
 #endif
 
-
-#ifdef BOOST_RE_TEST_LOCALE_W32
-typedef boost::reg_expression<char_t, boost::w32_regex_traits<char_t>, jm_debug_alloc> re_type;
-#elif defined(BOOST_RE_TEST_LOCALE_CPP)
-typedef boost::reg_expression<char_t, boost::cpp_regex_traits<char_t>, jm_debug_alloc> re_type;
-#else
-typedef boost::reg_expression<char_t, boost::c_regex_traits<char_t>, jm_debug_alloc> re_type;
+#ifdef BOOST_REGEX_V3
+#  define basic_regex reg_expression
 #endif
-
+#ifdef BOOST_RE_TEST_LOCALE_W32
+typedef boost::basic_regex<char_t, boost::w32_regex_traits<char_t>, jm_debug_alloc> re_type;
+#elif defined(BOOST_RE_TEST_LOCALE_CPP)
+typedef boost::basic_regex<char_t, boost::cpp_regex_traits<char_t>, jm_debug_alloc> re_type;
+#else
+typedef boost::basic_regex<char_t, boost::c_regex_traits<char_t>, jm_debug_alloc> re_type;
+#endif
 #define REG_NO_POSIX_TEST 1
 #define REG_UNICODE_ONLY 2
 #define REG_GREP 4
 #define REG_MERGE 8
 #define REG_MERGE_COPY 16
+#define REG_PARTIAL_MATCH 32
 
 #endif
 

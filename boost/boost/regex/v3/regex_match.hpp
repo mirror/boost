@@ -215,11 +215,7 @@ public:
    }
    void estimate_max_state_count(iterator a, iterator b, std::size_t states, std::random_access_iterator_tag*)
    {
-#ifndef BOOST_NO_STD_DISTANCE
-      difference_type dist = std::distance(a,b);
-#else
-      difference_type dist = b - a;
-#endif
+      difference_type dist = boost::re_detail::distance(a,b);
       states *= states;
       difference_type lim = std::numeric_limits<difference_type>::max() - 1000 - states;
       if(dist > (difference_type)(lim / states))

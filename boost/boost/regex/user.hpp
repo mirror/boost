@@ -28,9 +28,9 @@
 // locale:
 // #define BOOST_REGEX_USE_CPP_LOCALE
 
-// define this if you want to statically link to regex,
-// even when the runtime is a dll (Probably Win32 specific):
-// #define BOOST_REGEX_STATIC_LINK
+// define this if you want to dynamically link to regex,
+// if the runtime library is also a dll (Probably Win32 specific):
+// #define BOOST_REGEX_DYN_LINK
 
 // define this if you don't want the lib to automatically
 // select its link libraries:
@@ -53,5 +53,32 @@
 // cause more problems than they are worth:
 // #define BOOST_REGEX_NO_FWD
 
+// define this if your compiler can't cope with the new 
+// version 4 regex code.
+// #define BOOST_REGEX_V3
 
+// define this if your compiler supports MS Windows structured
+// exception handling.
+// #define BOOST_REGEX_HAS_MS_STACK_GUARD
 
+// define this if you want to use the recursive algorithm
+// even if BOOST_REGEX_HAS_MS_STACK_GUARD is not defined.
+// #define BOOST_REGEX_RECURSIVE
+
+// define this if you want to use the non-recursive
+// algorithm, even if the recursive version would be the default.
+// #define BOOST_REGEX_NON_RECURSIVE
+
+// define this if you want to set the size of the memory blocks
+// used by the non-recursive algorithm.
+// #define BOOST_REGEX_BLOCKSIZE 4096
+
+// define this if you want to set the maximum number of memory blocks
+// used by the non-recursive algorithm.
+// #define BOOST_REGEX_MAX_BLOCKS 1024
+
+// define this if you want to set the maximum number of memory blocks
+// cached by the non-recursive algorithm: Normally this is 16, but can be 
+// higher if you have multiple threads all using boost.regex, or lower 
+// if you don't want boost.regex to cache memory.
+// #define BOOST_REGEX_MAX_CACHE_BLOCKS 16

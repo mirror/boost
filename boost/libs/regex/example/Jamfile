@@ -38,11 +38,14 @@ test-suite regex-examples :
 [ regex-test-run snippets/regex_grep_example_4.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ regex-test-run snippets/regex_match_example.cpp : -auto ]
 [ regex-test-run snippets/regex_merge_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
+[ regex-test-run snippets/regex_replace_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ regex-test-run snippets/regex_search_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 [ regex-test-run snippets/regex_split_example_1.cpp : -auto ]
-[ regex-test-run snippets/regex_split_example_2.cpp : $(BOOST_ROOT)/libs/regex/index.htm ]
+[ regex-test-run snippets/regex_split_example_2.cpp : $(BOOST_ROOT)/libs/regex/doc/index.html ]
 
 ;
+
+
 
 
 

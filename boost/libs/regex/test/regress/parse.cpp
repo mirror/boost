@@ -52,22 +52,28 @@ flag_info flag_data[] = {
                           { BOOST_RE_STR("REG_NOTEOL"), 10, REG_NOTEOL, 1 },
                           { BOOST_RE_STR("REG_STARTEND"), 12, REG_STARTEND, 1 },
 
-                          { BOOST_RE_STR("basic"), 5, regbase::basic, 2 },
-                          { BOOST_RE_STR("escape_in_lists"), 15, regbase::escape_in_lists, 2 },
-                          { BOOST_RE_STR("char_classes"), 12, regbase::char_classes, 2 },
-                          { BOOST_RE_STR("intervals"), 9, regbase::intervals, 2 },
-                          { BOOST_RE_STR("limited_ops"), 11, regbase::limited_ops, 2 },
-                          { BOOST_RE_STR("newline_alt"), 11, regbase::newline_alt, 2 },
-                          { BOOST_RE_STR("bk_plus_qm"), 10, regbase::bk_plus_qm, 2 },
-                          { BOOST_RE_STR("bk_braces"), 9, regbase::bk_braces, 2 },
-                          { BOOST_RE_STR("bk_parens"), 9, regbase::bk_parens, 2 },
-                          { BOOST_RE_STR("bk_refs"), 7, regbase::bk_refs, 2 },
-                          { BOOST_RE_STR("bk_vbar"), 7, regbase::bk_vbar, 2 },
-                          { BOOST_RE_STR("use_except"), 10, regbase::use_except, 2 },
-                          { BOOST_RE_STR("literal"), 7, regbase::literal, 2 },
-                          { BOOST_RE_STR("normal"), 6, regbase::normal, 2 },
-                          { BOOST_RE_STR("basic"), 5, regbase::basic, 2 },
-                          { BOOST_RE_STR("extended"), 8, regbase::extended, 2 },
+                          { BOOST_RE_STR("basic"), 5, regex_constants::basic, 2 },
+                          { BOOST_RE_STR("escape_in_lists"), 15, regex_constants::escape_in_lists, 2 },
+                          { BOOST_RE_STR("char_classes"), 12, regex_constants::char_classes, 2 },
+                          { BOOST_RE_STR("intervals"), 9, regex_constants::intervals, 2 },
+                          { BOOST_RE_STR("limited_ops"), 11, regex_constants::limited_ops, 2 },
+                          { BOOST_RE_STR("newline_alt"), 11, regex_constants::newline_alt, 2 },
+                          { BOOST_RE_STR("bk_plus_qm"), 10, regex_constants::bk_plus_qm, 2 },
+                          { BOOST_RE_STR("bk_braces"), 9, regex_constants::bk_braces, 2 },
+                          { BOOST_RE_STR("bk_parens"), 9, regex_constants::bk_parens, 2 },
+                          { BOOST_RE_STR("bk_refs"), 7, regex_constants::bk_refs, 2 },
+                          { BOOST_RE_STR("bk_vbar"), 7, regex_constants::bk_vbar, 2 },
+                          { BOOST_RE_STR("use_except"), 10, regex_constants::use_except, 2 },
+                          { BOOST_RE_STR("literal"), 7, regex_constants::literal, 2 },
+                          { BOOST_RE_STR("nosubs"), 6, regex_constants::nosubs, 2 },
+                          { BOOST_RE_STR("optimize"), 8, regex_constants::optimize, 2 },
+#ifndef BOOST_REGEX_V3
+                          { BOOST_RE_STR("perlex"), 6, regex_constants::perlex, 2 },
+#endif
+                          { BOOST_RE_STR("normal"), 6, regex_constants::normal, 2 },
+                          { BOOST_RE_STR("basic"), 5, regex_constants::basic, 2 },
+                          { BOOST_RE_STR("extended"), 8, regex_constants::extended, 2 },
+                          { BOOST_RE_STR("perl"), 6, regex_constants::perl, 2 },
 
                           { BOOST_RE_STR("match_default"), 13, match_default, 3 },
                           { BOOST_RE_STR("match_not_bol"), 13, match_not_bol, 3 },
@@ -83,7 +89,9 @@ flag_info flag_data[] = {
                           { BOOST_RE_STR("match_not_null"), 14, match_not_null, 3 },
                           { BOOST_RE_STR("match_continuous"), 16, match_continuous, 3 },
                           { BOOST_RE_STR("match_partial"), 13, match_partial, 3 },
+                          { BOOST_RE_STR("match_nosubs"), 12, match_nosubs, 3 },
 
+                          { BOOST_RE_STR("format_all"), 10, format_all, 3 },
                           { BOOST_RE_STR("format_sed"), 10, format_sed, 3 },
                           { BOOST_RE_STR("format_perl"), 11, format_perl, 3 },
                           { BOOST_RE_STR("format_no_copy"), 14, format_no_copy, 3 },
@@ -94,6 +102,7 @@ flag_info flag_data[] = {
                           { BOOST_RE_STR("REG_GREP"), 8, REG_GREP, 4 },
                           { BOOST_RE_STR("REG_MERGE"), 9, REG_MERGE, 4 },
                           { BOOST_RE_STR("REG_MERGE_COPY"), 14, REG_MERGE_COPY, 4 },
+                          { BOOST_RE_STR("REG_PARTIAL_MATCH"), 17, REG_PARTIAL_MATCH, 4 },
 
                           { BOOST_RE_STR(""), 0, 0, 0 },
                         };
@@ -104,15 +113,14 @@ flag_info flag_data[] = {
 const char_t* expression_text =        BOOST_RE_STR("(;.*)|")                            // comment
                                        BOOST_RE_STR("(^[[:blank:]]*-)|")                 // -
                                        BOOST_RE_STR("([^\"[:space:]][^[:space:]]*)|")    // token
-                                       BOOST_RE_STR("(\"(([^\"]|\\\\\")*)\")")             // "token"   
+                                       BOOST_RE_STR("(\"((\\\\\"|[^\"])*)\")")             // "token"   
                                       ;
 
-typedef reg_expression<char_t> re_parse_t;
-typedef re_parse_t::allocator_type parse_alloc;
-typedef match_results<string_type::const_iterator, parse_alloc>  parse_grep;
+typedef basic_regex<char_t> re_parse_t;
+typedef match_results<string_type::const_iterator>  parse_grep;
 typedef string_type::const_iterator parse_iterator;
 
-re_parse_t parse_expression(expression_text, regbase::normal);
+re_parse_t parse_expression(expression_text, regex_constants::normal);
 
 //
 // now define our grep predicate function object:

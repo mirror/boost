@@ -25,7 +25,11 @@
 
 #include <climits>
 #include <stdexcept>
+#ifdef BOOST_REGEX_V3
 #include <boost/regex/v3/fileiter.hpp>
+#else
+#include <boost/regex/v4/fileiter.hpp>
+#endif
 
 #ifndef BOOST_REGEX_NO_FILEITER
 
@@ -891,6 +895,7 @@ bool _fi_FindClose(_fi_find_handle dat)
 } // namspace boost
 
 #endif    // BOOST_REGEX_NO_FILEITER
+
 
 
 

@@ -30,8 +30,13 @@
 #include <boost/regex/regex_traits.hpp>
 #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
 #include <boost/cregex.hpp>
+#ifdef BOOST_REGEX_V3
 #include <boost/regex/v3/regex_synch.hpp>
 #include <boost/regex/v3/regex_cstring.hpp>
+#else
+#include <boost/regex/v4/regex_synch.hpp>
+#include <boost/regex/v4/regex_cstring.hpp>
+#endif
 #include <boost/scoped_array.hpp>
 
 
@@ -1098,6 +1103,7 @@ unsigned short w32_regex_traits<wchar_t>::wide_unicode_classes[] = {
 } // namespace boost
 
 #endif // #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+
 
 
 

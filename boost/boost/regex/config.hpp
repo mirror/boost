@@ -27,44 +27,7 @@
 // this has to go *before* we include any std lib headers:
 //
 #if defined(__BORLANDC__)
-#  if (__BORLANDC__ == 0x550) || (__BORLANDC__ == 0x551)
-      // problems with std::basic_string and dll RTL:
-#     if defined(_RTLDLL) && defined(_RWSTD_COMPILE_INSTANTIATE)
-#        ifdef BOOST_REGEX_BUILD_DLL
-#           error _RWSTD_COMPILE_INSTANTIATE must not be defined when building regex++ as a DLL
-#        else
-#           pragma message("Defining _RWSTD_COMPILE_INSTANTIATE when linking to the DLL version of the RTL may produce memory corruption problems in std::basic_string, as a result of separate versions of basic_string's static data in the RTL and you're exe/dll: be warned!!")
-#        endif
-#     endif
-#     ifndef _RTLDLL
-         // this is harmless for a staic link:
-#        define _RWSTD_COMPILE_INSTANTIATE
-#     endif
-#  endif
-#  if (__BORLANDC__ <= 0x540) && !defined(BOOST_REGEX_NO_LIB) && !defined(_NO_VCL)
-      // C++ Builder 4 and earlier, we can't tell whether we should be using
-      // the VCL runtime or not, do a static link instead:
-#     define BOOST_REGEX_STATIC_LINK
-#  endif
-   //
-   // VCL support:
-   // if we're building a console app then there can't be any VCL (can there?)
-#  if !defined(__CONSOLE__) && !defined(_NO_VCL)
-#     define BOOST_REGEX_USE_VCL
-#  endif
-   //
-   // if this isn't Win32 then don't automatically select link
-   // libraries:
-   //
-#  ifndef _Windows
-#     ifndef BOOST_REGEX_NO_LIB
-#        define BOOST_REGEX_NO_LIB
-#     endif
-#     ifndef BOOST_REGEX_STATIC_LINK
-#        define BOOST_REGEX_STATIC_LINK
-#     endif
-#  endif
-
+#  include <boost/regex/config/borland.hpp>
 #endif
 
 /*****************************************************************************
@@ -83,17 +46,18 @@
 
 #  include <cstdlib>
 #  include <cstddef>
-#  include <cstring>
-#  include <cctype>
 #  include <cstdio>
 #  include <clocale>
 #  include <cassert>
 #  include <string>
 #  include <stdexcept>
 #  include <iterator>
+#  include <iosfwd>
+#  include <vector>
 #  include <boost/config.hpp>
 #  include <boost/cstdint.hpp>
 #  include <boost/detail/allocator.hpp>
+#  include <boost/regex/config/cstring.hpp>
 #else
    //
    // C build,
@@ -130,7 +94,7 @@
 #     define BOOST_NO_WREGEX
 #  endif
 #else
-#  if defined(__sgi) && defined(__SGI_STL_PORT)
+#  if defined(__sgi) && (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
       // STLPort on IRIX is misconfigured: <cwctype> does not compile
       // as a temporary fix include <wctype.h> instead and prevent inclusion
       // of STLPort version of <cwctype>
@@ -140,8 +104,7 @@
 #  endif
 
 #ifdef __cplusplus
-#  include <cwchar>
-#  include <cwctype>
+#  include <boost/regex/config/cwchar.hpp>
 #endif
 
 #endif
@@ -259,7 +222,7 @@ using std::distance;
 #endif
  
 #if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE)
-#  include <boost/regex/v3/regex_library_include.hpp>
+#  include <boost/regex/config/regex_library_include.hpp>
 #endif
 
 /*****************************************************************************
@@ -327,6 +290,9 @@ using std::distance;
 #  define BOOST_REGEX_MAX_PATH 200
 #endif
 
+#ifndef BOOST_REGEX_MAX_STATE_COUNT
+#  define BOOST_REGEX_MAX_STATE_COUNT 100000000
+#endif
 
 
 /*****************************************************************************
@@ -340,15 +306,13 @@ using std::distance;
 // If there are no exceptions then we must report critical-errors
 // the only way we know how; by terminating.
 //
-#ifdef __BORLANDC__
-// <cstdio> seems not to make stderr usable with Borland:
-#include <stdio.h>
-#endif
 #  define BOOST_REGEX_NOEH_ASSERT(x)\
 if(0 == (x))\
 {\
-   std::fprintf(stderr, "Error: critical regex++ failure in \"%s\"", #x);\
-   std::abort();\
+   std::string s("Error: critical regex++ failure in: ");\
+   s.append(#x);\
+   std::runtime_error e(s);\
+   boost::throw_exception(e);\
 }
 #else
 //
@@ -418,126 +382,110 @@ public:
 
 /*****************************************************************************
  *
+ *  Stack protection under MS Windows:
+ *
+ ****************************************************************************/
+
+#if !defined(BOOST_REGEX_NO_W32) && !defined(BOOST_REGEX_V3)
+#  if(defined(_WIN32) || defined(_WIN64) || defined(_WINCE)) && !defined(__GNUC__)
+#     define BOOST_REGEX_HAS_MS_STACK_GUARD
+#  endif
+#elif defined(BOOST_REGEX_HAS_MS_STACK_GUARD)
+#  undef BOOST_REGEX_HAS_MS_STACK_GUARD
+#endif
+
+#if defined(__cplusplus) && defined(BOOST_REGEX_HAS_MS_STACK_GUARD)
+
+namespace boost{ 
+namespace re_detail{
+
+BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page();
+
+}
+}
+
+#endif
+
+
+/*****************************************************************************
+ *
+ *  Error handling:
+ *
+ ****************************************************************************/
+
+#if defined(__cplusplus)
+
+namespace boost{ 
+namespace re_detail{
+
+BOOST_REGEX_DECL void BOOST_REGEX_CALL raise_regex_exception(const std::string& s);
+
+template <class traits>
+void raise_error(const traits& t, unsigned code)
+{ 
+   (void)t;  // warning suppression
+   raise_regex_exception(t.error_string(code)); 
+}
+
+}
+}
+
+#endif
+
+/*****************************************************************************
+ *
+ *  Algorithm selection and configuration:
+ *
+ ****************************************************************************/
+
+#if !defined(BOOST_REGEX_RECURSIVE) && !defined(BOOST_REGEX_NON_RECURSIVE)
+#  if defined(BOOST_REGEX_HAS_MS_STACK_GUARD) && !defined(_STLP_DEBUG) && !defined(__STL_DEBUG)
+#     define BOOST_REGEX_RECURSIVE
+#  else
+#     define BOOST_REGEX_NON_RECURSIVE
+#  endif
+#endif
+
+#ifdef BOOST_REGEX_NON_RECURSIVE
+#  ifdef BOOST_REGEX_RECURSIVE
+#     error "Can't set both BOOST_REGEX_RECURSIVE and BOOST_REGEX_NON_RECURSIVE"
+#  endif
+#  ifndef BOOST_REGEX_BLOCKSIZE
+#     define BOOST_REGEX_BLOCKSIZE 4096
+#  endif
+#  if BOOST_REGEX_BLOCKSIZE < 512
+#     error "BOOST_REGEX_BLOCKSIZE must be at least 512"
+#  endif
+#  ifndef BOOST_REGEX_MAX_BLOCKS
+#     define BOOST_REGEX_MAX_BLOCKS 1024
+#  endif
+#  ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+#     undef BOOST_REGEX_HAS_MS_STACK_GUARD
+#  endif
+#  ifndef BOOST_REGEX_MAX_CACHE_BLOCKS
+#     define BOOST_REGEX_MAX_CACHE_BLOCKS 16
+#  endif
+#endif
+
+
+/*****************************************************************************
+ *
  *  Fix broken compilers that wrongly #define some symbols:
  *
  ****************************************************************************/
 
 #ifdef __cplusplus
 
-#ifdef BOOST_NO_CTYPE_FUNCTIONS
-
-// Make functions out of the macros.
-// Use parentheses so the macros don't screw us up.
-inline int (isalpha)(int c) { return isalpha(c); }
-inline int (iscntrl)(int c) { return iscntrl(c); }
-inline int (isdigit)(int c) { return isdigit(c); }
-inline int (islower)(int c) { return islower(c); }
-inline int (ispunct)(int c) { return ispunct(c); }
-inline int (isspace)(int c) { return isspace(c); }
-inline int (isupper)(int c) { return isupper(c); }
-inline int (isxdigit)(int c) { return isxdigit(c); }
-
-#endif
-
 // the following may be defined as macros; this is
 // incompatable with std::something syntax, we have
 // no choice but to undef them?
 
-#ifdef memcpy
-#undef memcpy
-#endif
-#ifdef memmove
-#undef memmove
-#endif
-#ifdef memset
-#undef memset
-#endif
 #ifdef sprintf
 #undef sprintf
-#endif
-#ifdef strcat
-#undef strcat
-#endif
-#ifdef strcmp
-#undef strcmp
-#endif
-#ifdef strcpy
-#undef strcpy
-#endif
-#ifdef strlen
-#undef strlen
 #endif
 #ifdef swprintf
 #undef swprintf
 #endif
-#ifdef wcslen
-#undef wcslen
-#endif
-#ifdef wcscpy
-#undef wcscpy
-#endif
-#ifdef wcscmp
-#undef wcscmp
-#endif
-#ifdef isalpha
-#undef isalpha
-#endif
-#ifdef iscntrl
-#undef iscntrl
-#endif
-#ifdef isdigit
-#undef isdigit
-#endif
-#ifdef islower
-#undef islower
-#endif
-#ifdef isupper
-#undef isupper
-#endif
-#ifdef ispunct
-#undef ispunct
-#endif
-#ifdef isspace
-#undef isspace
-#endif
-#ifdef isxdigit
-#undef isxdigit
-#endif
-
-#ifdef tolower
-#undef tolower
-#endif
-#ifdef iswalpha
-#undef iswalpha
-#endif
-#ifdef iswcntrl
-#undef iswcntrl
-#endif
-#ifdef iswdigit
-#undef iswdigit
-#endif
-#ifdef iswlower
-#undef iswlower
-#endif
-#ifdef iswpunct
-#undef iswpunct
-#endif
-#ifdef iswspace
-#undef iswspace
-#endif
-#ifdef iswupper
-#undef iswupper
-#endif
-#ifdef iswxdigit
-#undef iswxdigit
-#endif
-#ifdef towlower
-#undef towlower
-#endif
-#ifdef wcsxfrm
-#undef wcsxfrm
-#endif
-
 #endif
 
 /*****************************************************************************
@@ -551,44 +499,13 @@ inline int (isxdigit)(int c) { return isxdigit(c); }
 namespace std{
    using ::ptrdiff_t;
    using ::size_t;
-   using ::memcpy;
-   using ::memmove;
-   using ::memset;
-   using ::memcmp;
    using ::sprintf;
-   using ::strcat;
-   using ::strcmp;
-   using ::strcpy;
-   using ::strlen;
-   using ::strxfrm;
-   using ::isalpha;
-   using ::iscntrl;
-   using ::isdigit;
-   using ::islower;
-   using ::isupper;
-   using ::ispunct;
-   using ::isspace;
-   using ::isxdigit;
-   using ::tolower;
    using ::abs;
    using ::setlocale;
 #  ifndef BOOST_NO_WREGEX
 #     ifndef BOOST_NO_SWPRINTF
    using ::swprintf;
 #     endif
-   using ::wcslen;
-   using ::wcscpy;
-   using ::wcscmp;
-   using ::iswalpha;
-   using ::iswcntrl;
-   using ::iswdigit;
-   using ::iswlower;
-   using ::iswpunct;
-   using ::iswspace;
-   using ::iswupper;
-   using ::iswxdigit;
-   using ::towlower;
-   using ::wcsxfrm;
    using ::wcstombs;
    using ::mbstowcs;
 #     if !defined(BOOST_NO_STD_LOCALE) && !defined (__STL_NO_NATIVE_MBSTATE_T) && !defined(_STLP_NO_NATIVE_MBSTATE_T)
@@ -639,12 +556,4 @@ inline void pointer_construct(T* p, const T& t)
 #endif
 
 #endif
-
-
-
-
-
-
-
-
 
