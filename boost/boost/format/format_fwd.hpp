@@ -46,12 +46,6 @@ namespace boost {
     template<class Ch, class Tr, class Alloc> 
     std::basic_string<Ch, Tr, Alloc> str (const basic_format<Ch, Tr, Alloc>& ) ;
 
-    template< class Ch, class Tr, class Alloc> 
-    typename io::CompatOStream< BOOST_IO_STD basic_ostream<Ch, Tr> >::type_for_string & 
-    operator<<( typename io::CompatOStream< BOOST_IO_STD basic_ostream<Ch, Tr> >::type_for_string& ,
-                const basic_format<Ch, Tr, Alloc>&);
-
-
 } // namespace boost
 
 #endif // BOOST_FORMAT_FWD_HPP
