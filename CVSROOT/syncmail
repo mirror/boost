@@ -1,7 +1,5 @@
 #! /usr/bin/python
-
-# NOTE: Until SourceForge installs a modern version of Python on the cvs
-# servers, this script MUST be compatible with Python 1.5.2.
+#  -*- Python -*-
 
 """Complicated notification for CVS checkins.
 
@@ -37,7 +35,8 @@ Where options is:
     	Use <path> as the environment variable CVSROOT.  Otherwise this
     	variable must exist in the environment.
 
-    --help / -h
+    --help
+    -h
         Print this text.
 
     --context=#
@@ -48,10 +47,7 @@ Where options is:
         Produce a context diff (default).
 
     -u
-        Produce a unified diff (smaller).
-
-    --quiet/-q
-        Don't print as much status to stdout.
+        Produce a unified diff (smaller, but harder to read).
 
     <%%S>
         CVS %%s loginfo expansion.  When invoked by CVS, this will be a single
@@ -62,31 +58,22 @@ Where options is:
 
     email-addrs
         At least one email address.
+
 """
+
 import os
 import sys
-import time
 import string
+import time
 import getopt
-import smtplib
-import pwd
-import socket
 
-from cStringIO import StringIO
-
-# Which SMTP server to do we connect to?  Empty string means localhost.
-MAILHOST = ''
-MAILPORT = 25
+# Notification command
+MAILCMD = '/bin/mail -s "CVS: %(SUBJECT)s" %(PEOPLE)s 2>&1 > /dev/null'
 
 # Diff trimming stuff
 DIFF_HEAD_LINES = 20
 DIFF_TAIL_LINES = 20
 DIFF_TRUNCATE_IF_LARGER = 1000
-
-EMPTYSTRING = ''
-SPACE = ' '
-DOT = '.'
-COMMASPACE = ', '
 
 PROGRAM = sys.argv[0]
 
@@ -122,8 +109,6 @@ def calculate_diff(filespec, contextlines):
             # lines to figure it out:
             for line in lines[:5]:
                 for c in string.rstrip(line):
-                    if c in string.whitespace:
-                        continue
                     if c < ' ' or c > chr(127):
                         lines = BINARY_EXPLANATION_LINES[:]
                         break
@@ -157,74 +142,36 @@ def calculate_diff(filespec, contextlines):
 
 
 
-def getdomain():
-    try:
-        fqdn = socket.getfqdn()
-    except AttributeError:
-        # Python 1.5.2 :(
-        hostname = socket.gethostname()
-        byaddr = socket.gethostbyaddr(socket.gethostbyname(hostname))
-        aliases = byaddr[1]
-        aliases.insert(0, byaddr[0])
-        aliases.insert(0, hostname)
-        for fqdn in aliases:
-            if '.' in fqdn:
-                break
-        else:
-            fqdn = 'localhost.localdomain'
-    parts = string.split(fqdn, DOT)
-    return string.join(parts[1:], DOT)
-
-
-
-def blast_mail(subject, people, filestodiff, contextlines):
+def blast_mail(mailcmd, filestodiff, contextlines):
     # cannot wait for child process or that will cause parent to retain cvs
     # lock for too long.  Urg!
     if not os.fork():
         # in the child
         # give up the lock you cvs thang!
         time.sleep(2)
-        # Create the smtp connection to the localhost
-        conn = smtplib.SMTP()
-        conn.connect(MAILHOST, MAILPORT)
-        user = pwd.getpwuid(os.getuid())[0]
-        domain = getdomain()
-        author = '%s@%s' % (user, domain)
-        s = StringIO()
-        sys.stdout = s
-        try:
-            print '''\
-From: %(author)s
-To: %(people)s
-Subject: %(subject)s
-''' % {'author' : author,
-       'people' : string.join(people, COMMASPACE),
-       'subject': subject,
-       }
-            s.write(sys.stdin.read())
-            # append the diffs if available
-            print
-            for file in filestodiff:
-                print calculate_diff(file, contextlines)
-        finally:
-            sys.stdout = sys.__stdout__
-        resp = conn.sendmail(author, people, s.getvalue())
-        conn.close()
+        fp = os.popen(mailcmd, 'w')
+        fp.write(sys.stdin.read())
+        fp.write('\n')
+        # append the diffs if available
+        for file in filestodiff:
+            fp.write(calculate_diff(file, contextlines))
+            fp.write('\n')
+        fp.close()
+        # doesn't matter what code we return, it isn't waited on
         os._exit(0)
 
 
 
 # scan args for options
 def main():
+    contextlines = 2
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'hC:cuq',
-                                   ['context=', 'cvsroot=', 'help', 'quiet'])
+        opts, args = getopt.getopt(sys.argv[1:], 'hC:cu',
+                                   ['context=', 'cvsroot=', 'help'])
     except getopt.error, msg:
         usage(1, msg)
 
     # parse the options
-    contextlines = 2
-    verbose = 1
     for opt, arg in opts:
         if opt in ('-h', '--help'):
             usage(0)
@@ -237,8 +184,6 @@ def main():
                 contextlines = 2
         elif opt == '-u':
             contextlines = 0
-        elif opt in ('-q', '--quiet'):
-            verbose = 0
 
     # What follows is the specification containing the files that were
     # modified.  The argument actually must be split, with the first component
@@ -246,7 +191,7 @@ def main():
     # $CVSROOT, followed by the list of files that are changing.
     if not args:
         usage(1, 'No CVS module specified')
-    subject = args[0]
+    SUBJECT = args[0]
     specs = string.split(args[0])
     del args[0]
 
@@ -255,11 +200,10 @@ def main():
         usage(1, 'No recipients specified')
 
     # Now do the mail command
-    people = args
+    PEOPLE = string.join(args)
+    mailcmd = MAILCMD % vars()
 
-    if verbose:
-        print 'Mailing %s...' % string.join(people, COMMASPACE)
-
+    print 'Mailing %s...' % PEOPLE
     if specs == ['-', 'Imported', 'sources']:
         return
     if specs[-3:] == ['-', 'New', 'directory']:
@@ -268,17 +212,14 @@ def main():
         L = specs[:2]
         for s in specs[2:]:
             prev = L[-1]
-            if string.count(prev, ',') < 2:
+            if string.count(prev, ",") < 2:
                 L[-1] = "%s %s" % (prev, s)
             else:
                 L.append(s)
         specs = L
-
-    if verbose:
-        print 'Generating notification message...'
-    blast_mail(subject, people, specs[1:], contextlines)
-    if verbose:
-        print 'Generating notification message... done.'
+    print 'Generating notification message...'
+    blast_mail(mailcmd, specs[1:], contextlines)
+    print 'Generating notification message... done.'
 
 
 
