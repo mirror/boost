@@ -18,6 +18,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/bind.hpp>
+#include <boost/config.hpp>
 
 #include <set>
 #include <memory>   // std::allocator, std::auto_ptr
@@ -54,7 +55,7 @@ class processor_container : noncopyable
         {
         }
 
-      #ifdef BOOST_INTEL
+      #if BOOST_WORKAROUND( BOOST_INTEL, BOOST_TESTED_AT( 800 ) )
       public:
       // for some reason Intel 8.0 seems to think that the following functions
       // are inaccessible from event_processor<>::event_processor
@@ -63,7 +64,7 @@ class processor_container : noncopyable
         Scheduler & my_scheduler() const { return scheduler_; }
         const processor_handle & my_handle() const { return handle_; }
 
-      #ifdef BOOST_INTEL
+      #if BOOST_WORKAROUND( BOOST_INTEL, BOOST_TESTED_AT( 800 ) )
       private:
       #endif
 
