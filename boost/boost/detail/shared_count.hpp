@@ -247,7 +247,7 @@ private:
 
 public:
 
-    // pre: initial_use_count <= initial_weak_count, d(p) must not throw
+    // pre: d(p) must not throw
 
     sp_counted_base_impl(P p, D d): ptr(p), del(d)
     {
