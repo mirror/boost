@@ -390,27 +390,23 @@ namespace boost {
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   template <class RAIter, class ID>
   inline iterator_property_map<
-    RAIter,
+    RAIter, ID,
     typename std::iterator_traits<RAIter>::value_type,
-    typename std::iterator_traits<RAIter>::reference,
-    ID >
+    typename std::iterator_traits<RAIter>::reference>
   make_iterator_property_map(RAIter iter, ID id) {
     function_requires< RandomAccessIteratorConcept<RAIter> >();
     typedef iterator_property_map<
-    RAIter,
-    typename std::iterator_traits<RAIter>::value_type,
-    typename std::iterator_traits<RAIter>::reference,
-    ID >    PA;
+      RAIter, ID,
+      typename std::iterator_traits<RAIter>::value_type,
+      typename std::iterator_traits<RAIter>::reference> PA;
     return PA(iter, id);
   }
 #endif
   template <class RAIter, class Value, class ID>
-  inline iterator_property_map<
-    RAIter, Value, Value&, ID>
+  inline iterator_property_map<RAIter, ID, Value, Value&>
   make_iterator_property_map(RAIter iter, ID id, Value) {
     function_requires< RandomAccessIteratorConcept<RAIter> >();
-    typedef iterator_property_map<
-      RAIter, Value, Value&, ID> PMap;
+    typedef iterator_property_map<RAIter, ID, Value, Value&> PMap;
     return PMap(iter, id);
   }
 
