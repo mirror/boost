@@ -162,6 +162,12 @@ int test_arithmetic_32[0+(BOOST_PREPROCESSOR_MIN(1,2)==1)];
 int test_arithmetic_33[0+(BOOST_PREPROCESSOR_MAX(3,2)==3)];
 int test_arithmetic_34[0+(BOOST_PREPROCESSOR_MAX(4,5)==5)];
 
+int test_arithmetic_35[0+(BOOST_PREPROCESSOR_MUL(50,50)==BOOST_PREPROCESSOR_LIMIT_MAG)];
+
+int test_arithmetic_36[0+(BOOST_PREPROCESSOR_MOD(50,50)==0)];
+int test_arithmetic_37[0+(BOOST_PREPROCESSOR_MOD(34,5)==4)];
+int test_arithmetic_38[0+(BOOST_PREPROCESSOR_MOD(31,4)==3)];
+
 // ***
 
 int
