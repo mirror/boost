@@ -39,7 +39,7 @@
 #include "boost/type_traits/is_member_function_pointer.hpp"
 #include "boost/type_traits/is_member_pointer.hpp"
 #include "boost/type_traits/is_object.hpp"
-#include "boost/type_traits/is_POD.hpp"
+#include "boost/type_traits/is_pod.hpp"
 #include "boost/type_traits/is_polymorphic.hpp"
 #include "boost/type_traits/is_pointer.hpp"
 #include "boost/type_traits/is_reference.hpp"
@@ -57,7 +57,10 @@
 #include "boost/type_traits/remove_volatile.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
 
+#include "boost/type_traits/ice.hpp"
+
 #endif // BOOST_TYPE_TRAITS_HPP
+
 
 
 
