@@ -117,7 +117,7 @@ struct template_arity
             ) >::value
         ));
         
-    typedef int_<value> type;
+    typedef mpl::int_<value> type;
 };
 
 #   undef AUX778076_TEMPLATE_ARITY_IMPL_INVOCATION
@@ -137,7 +137,7 @@ template< bool >
 struct template_arity_impl
 {
     template< typename F > struct result_
-        : int_<-1>
+        : mpl::int_<-1>
     {
     };
 };
@@ -161,7 +161,7 @@ struct template_arity
 #if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
 template<>
 struct template_arity<int>
-    : int_<-1>
+    : mpl::int_<-1>
 {
 };
 #endif

@@ -175,7 +175,7 @@ template<> struct lambda_impl< int_<i_> >
 
         typedef typename if_<
               is_le
-            , if_< Protect, protect<bind_>, bind_ >
+            , if_< Protect, mpl::protect<bind_>, bind_ >
             , identity<F>
             >::type type_;
     

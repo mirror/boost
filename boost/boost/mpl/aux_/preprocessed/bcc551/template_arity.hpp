@@ -15,7 +15,7 @@ template< bool >
 struct template_arity_impl
 {
     template< typename F > struct result_
-        : int_< -1 >
+        : mpl::int_< -1 >
     {
     };
 };

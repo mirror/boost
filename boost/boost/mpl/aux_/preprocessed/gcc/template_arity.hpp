@@ -95,7 +95,7 @@ struct template_arity
 
         ));
 
-    typedef int_<value> type;
+    typedef mpl::int_<value> type;
 };
 
 }}}

@@ -54,7 +54,7 @@ template<> struct lambda_impl< int_<1> >
 
         typedef typename if_<
               is_le
-            , if_< Protect, protect<bind_>, bind_ >
+            , if_< Protect, mpl::protect<bind_>, bind_ >
             , identity<F>
             >::type type_;
 
@@ -84,7 +84,7 @@ template<> struct lambda_impl< int_<2> >
 
         typedef typename if_<
               is_le
-            , if_< Protect, protect<bind_>, bind_ >
+            , if_< Protect, mpl::protect<bind_>, bind_ >
             , identity<F>
             >::type type_;
 
@@ -116,7 +116,7 @@ template<> struct lambda_impl< int_<3> >
 
         typedef typename if_<
               is_le
-            , if_< Protect, protect<bind_>, bind_ >
+            , if_< Protect, mpl::protect<bind_>, bind_ >
             , identity<F>
             >::type type_;
 
@@ -151,7 +151,7 @@ template<> struct lambda_impl< int_<4> >
 
         typedef typename if_<
               is_le
-            , if_< Protect, protect<bind_>, bind_ >
+            , if_< Protect, mpl::protect<bind_>, bind_ >
             , identity<F>
             >::type type_;
 
@@ -188,7 +188,7 @@ template<> struct lambda_impl< int_<5> >
 
         typedef typename if_<
               is_le
-            , if_< Protect, protect<bind_>, bind_ >
+            , if_< Protect, mpl::protect<bind_>, bind_ >
             , identity<F>
             >::type type_;
 
