@@ -24,44 +24,9 @@
 #ifndef BOOST_REGEX_FWD_HPP
 #define BOOST_REGEX_FWD_HPP
 
-#include <boost/config.hpp>
-#include <boost/detail/allocator.hpp>
-
-//
-// define BOOST_REGEX_NO_FWD if this
-// header doesn't work!
-//
-#ifdef BOOST_REGEX_NO_FWD
-#  ifndef BOOST_RE_REGEX_HPP
-#     include <boost/regex.hpp>
-#  endif
-#else
-
-//
-// If there isn't good enough wide character support then there will
-// be no wide character regular expressions:
-//
-#if (defined(BOOST_NO_CWCHAR) || defined(BOOST_NO_CWCTYPE) || defined(BOOST_NO_STD_WSTRING)) && !defined(BOOST_NO_WREGEX)
-#  define BOOST_NO_WREGEX
-#endif
-
-namespace boost{
-
-template <class charT>
-class regex_traits;
-
-template <class charT, class traits = regex_traits<charT>, class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
-class reg_expression;
-
-typedef reg_expression<char, regex_traits<char>, BOOST_DEFAULT_ALLOCATOR(char) > regex;
-#ifndef BOOST_NO_WREGEX
-typedef reg_expression<wchar_t, regex_traits<wchar_t>, BOOST_DEFAULT_ALLOCATOR(wchar_t) > wregex;
-#endif
-
-} // namespace boost
-
-#endif  // BOOST_REGEX_NO_FWD
+#include <boost/regex/v3/regex_fwd.hpp>
 
 #endif
+
 
 

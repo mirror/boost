@@ -22,10 +22,12 @@
   *                the form of class map_file.
   */
 
-#ifndef BOOST_RE_FILEITER_HPP
-#define BOOST_RE_FILEITER_HPP
+#ifndef BOOST_RE_FILEITER_HPP_INCLUDED
+#define BOOST_RE_FILEITER_HPP_INCLUDED
 
+#ifndef BOOST_REGEX_CONFIG_HPP
 #include <boost/regex/config.hpp>
+#endif
 
 #ifndef BOOST_REGEX_NO_FILEITER
 
@@ -435,6 +437,7 @@ using boost::re_detail::mapfile;
 
 #endif     // BOOST_REGEX_NO_FILEITER
 #endif     // BOOST_RE_FILEITER_HPP
+
 
 
 

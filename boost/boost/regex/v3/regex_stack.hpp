@@ -29,7 +29,7 @@
 #include <boost/regex/config.hpp>
 #endif
 #ifndef BOOST_REGEX_RAW_BUFFER_HPP
-#include <boost/regex/detail/regex_raw_buffer.hpp>
+#include <boost/regex/v3/regex_raw_buffer.hpp>
 #endif
 
 namespace boost{
@@ -215,6 +215,7 @@ jstack<T, Allocator>::~jstack()
 } // namespace boost
 
 #endif
+
 
 
 

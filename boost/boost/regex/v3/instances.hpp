@@ -21,6 +21,9 @@
   *                library rather than in the users object files.
   */
 
+//
+// note no include guard, we may include this multiple times:
+//
 #ifndef BOOST_REGEX_NO_EXTERNAL_TEMPLATES
 
 namespace boost{
@@ -161,4 +164,5 @@ template void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::cow();
 
 #endif // BOOST_REGEX_NO_EXTERNAL_TEMPLATES
  
+
 
