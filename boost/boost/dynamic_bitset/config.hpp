@@ -56,5 +56,26 @@ namespace boost { namespace detail {
 #define BOOST_DYNAMIC_BITSET_PRIVATE private
 #endif
 
+// A couple of macros to cope with libraries without locale
+// support. The first macro must be used to declare a reference
+// to a ctype facet. The second one to widen a char by using
+// that ctype object. If facets and locales aren't available
+// the first macro is a no-op and the second one just expands
+// to its parameter c.
+//
+#if defined (BOOST_USE_FACET)
+
+#define BOOST_DYNAMIC_BITSET_CTYPE_FACET(ch, name, loc)     \
+            const std::ctype<ch> & name =                   \
+            BOOST_USE_FACET(std::ctype<ch>, loc)         /**/
+
+#define BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, c)             \
+           (fac.widen(c))
+#else
+
+#define BOOST_DYNAMIC_BITSET_CTYPE_FACET(ch, name, loc) /**/
+#define BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, c)          c
+
+#endif
 
 #endif // include guard

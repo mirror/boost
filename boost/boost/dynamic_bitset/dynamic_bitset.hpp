@@ -45,22 +45,6 @@
 #include "boost/pending/lowest_bit.hpp" // used by find_first/next
 
 
-
-// Helps getting a generic '0' or '1' character. When
-// both '0' and '1' are asked for this macro forces
-// inefficiency, especially in multithreaded environments,
-// because a) the locale must be either constructed twice or
-// retrieved twice from a stream b) two lock operations, rather
-// than one, will be performed :(
-//
-#if defined (BOOST_USE_FACET)
-# define BOOST_BITSET_CHAR(type, c, loc) \
-           (BOOST_USE_FACET(std::ctype< type >, loc).widen(c))
-#else
-# define BOOST_BITSET_CHAR(type, c, loc)  (c)
-#endif
-
-
 namespace boost {
 
 template
@@ -176,16 +160,17 @@ public:
         m_num_bits = sz;
 
 
-        const size_type m = num_bits < rlen ? num_bits : rlen; // [gps]
-        const CharT one = BOOST_BITSET_CHAR(CharT, '1', std::locale());
+        BOOST_DYNAMIC_BITSET_CTYPE_FACET(CharT, fac, std::locale());
+        const CharT one = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '1');
 
+        const size_type m = num_bits < rlen ? num_bits : rlen; // [gps]
         typename StrT::size_type i = 0;
         for( ; i < m; ++i) {
 
             const CharT c = s[(pos + m - 1) - i];
 
             assert( Tr::eq(c, one)
-                    || Tr::eq(c, BOOST_BITSET_CHAR(CharT, '0', std::locale())) );
+                    || Tr::eq(c, BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '0')) );
 
             if (Tr::eq(c, one))
                 set(i);
@@ -1014,8 +999,9 @@ void to_string_helper(const dynamic_bitset<B, A> & b, stringT & s,
     typedef typename stringT::traits_type Tr;
     typedef typename stringT::value_type  Ch;
 
-    const Ch zero = BOOST_BITSET_CHAR(Ch, '0', std::locale());
-    const Ch one  = BOOST_BITSET_CHAR(Ch, '1', std::locale());
+    BOOST_DYNAMIC_BITSET_CTYPE_FACET(Ch, fac, std::locale());
+    const Ch zero = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '0');
+    const Ch one  = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '1');
 
     // Note that this function may access (when
     // dump_all == true) bits beyond position size() - 1
@@ -1424,9 +1410,9 @@ operator<<(std::basic_ostream<Ch, Tr>& os,
     typename basic_ostream<Ch, Tr>::sentry cerberos(os);
     if (cerberos) {
 
-        //const ctype<Ch> & fac = BOOST_USE_FACET(ctype<Ch>, os.getloc());
-        const Ch zero = BOOST_BITSET_CHAR(Ch, '0', os.getloc());
-        const Ch one  = BOOST_BITSET_CHAR(Ch, '1', os.getloc()); // gps
+        BOOST_DYNAMIC_BITSET_CTYPE_FACET(Ch, fac, os.getloc());
+        const Ch zero = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '0');
+        const Ch one  = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '1');
 
         try {
 
@@ -1582,8 +1568,9 @@ operator>>(std::basic_istream<Ch, Tr>& is, dynamic_bitset<Block, Alloc>& b)
     if(cerberos) {
 
         // in accordance with prop. resol. of lib DR 303 [last checked 4 Feb 2004]
-        const Ch zero = BOOST_BITSET_CHAR(Ch, '0', is.getloc());
-        const Ch one  = BOOST_BITSET_CHAR(Ch, '1', is.getloc());
+        BOOST_DYNAMIC_BITSET_CTYPE_FACET(Ch, fac, is.getloc());
+        const Ch zero = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '0');
+        const Ch one  = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '1');
 
         b.clear();
         try {
