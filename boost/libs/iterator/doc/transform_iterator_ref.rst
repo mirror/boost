@@ -9,11 +9,11 @@
   class transform_iterator
   {
   public:
-      typedef /* see below */ value_type;
-      typedef /* see below */ reference;
-      typedef /* see below */ pointer;
-      typedef iterator_traits<Iterator>::difference_type difference_type;
-      typedef /* see below */ iterator_category;
+    typedef /* see below */ value_type;
+    typedef /* see below */ reference;
+    typedef /* see below */ pointer;
+    typedef iterator_traits<Iterator>::difference_type difference_type;
+    typedef /* see below */ iterator_category;
 
     transform_iterator();
     transform_iterator(Iterator const& x, UnaryFunction f);
