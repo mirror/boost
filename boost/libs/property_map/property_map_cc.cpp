@@ -94,7 +94,7 @@ main()
   }
   {
     typedef dummy_property_map PMap;
-    function_requires<LvaluePropertyMapConcept<PMap, int> >();
+    function_requires<ReadWritePropertyMapConcept<PMap, int> >();
   }
   return 0;
 }
