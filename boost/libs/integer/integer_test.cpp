@@ -9,13 +9,14 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   10 Mar 01  Boost Test Library now used for tests (Beman Dawes)
 //   31 Aug 99  Initial version
-
-//  This program is misnamed in that it is really a demonstration rather than
-//  a test.  It doesn't detect failure, so isn't worthy of the name "test".
 
 #include <iostream>
 #include <boost/integer.hpp>
+
+#define BOOST_INCLUDE_MAIN
+#include <boost/test/test_tools.hpp>
 
 namespace
 {
@@ -35,10 +36,12 @@ namespace boost
     template<> struct int_fast_t<short> { typedef long fast; };
 }
 
-int main()
+int test_main(int,char**)
 {
      using boost::int_t;
      using boost::uint_t;
+
+#ifdef BOOST_SHOW_TYPES
      std::cout << 32 << ' '; test( int_t<32>::least() ); 
      std::cout << 31 << ' '; test( int_t<31>::least() ); 
      std::cout << 30 << ' '; test( int_t<30>::least() ); 
@@ -170,7 +173,145 @@ int main()
      std::cout << 3 << ' '; test( uint_t<3>::fast() ); 
      std::cout << 2 << ' '; test( uint_t<2>::fast() ); 
      std::cout << 1 << ' '; test( uint_t<1>::fast() ); 
-     std::cout << 0 << ' '; test( uint_t<0>::fast() ); 
-
+     std::cout << 0 << ' '; test( uint_t<0>::fast() );
+#endif
+     
+    long v = 0x7FFFFFFF;
+    BOOST_TEST( int_t<32>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<31>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<30>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<29>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<28>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<27>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<26>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<25>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<24>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<23>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<22>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<21>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<20>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<19>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<18>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<17>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<16>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<15>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<14>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<13>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<12>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<11>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<10>::least(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<9>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<8>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<7>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<6>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<5>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<4>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<3>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<2>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<1>::least(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<0>::least(v) == v );
+    v = 0x7FFFFFFF;
+    BOOST_TEST( int_t<32>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<31>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<30>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<29>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<28>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<27>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<26>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<25>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<24>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<23>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<22>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<21>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<20>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<19>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<18>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<17>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<16>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<15>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<14>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<13>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<12>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<11>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<10>::fast(v) == v );    v >>= 1;
+    BOOST_TEST( int_t<9>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<8>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<7>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<6>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<5>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<4>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<3>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<2>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<1>::fast(v) == v );     v >>= 1;
+    BOOST_TEST( int_t<0>::fast(v) == v );
+    unsigned long u = 0xFFFFFFFF;
+    BOOST_TEST( uint_t<32>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<31>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<30>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<29>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<28>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<27>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<26>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<25>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<24>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<23>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<22>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<21>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<20>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<19>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<18>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<17>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<16>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<15>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<14>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<13>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<11>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<12>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<10>::least(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<9>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<8>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<7>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<6>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<5>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<4>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<3>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<2>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<1>::least(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<0>::least(u) == u );
+    u = 0xFFFFFFFF;
+    BOOST_TEST( uint_t<32>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<31>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<30>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<29>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<28>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<27>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<26>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<25>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<24>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<23>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<22>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<21>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<20>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<19>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<18>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<17>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<16>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<15>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<14>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<13>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<12>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<11>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<10>::fast(u) == u );    u >>= 1;
+    BOOST_TEST( uint_t<9>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<8>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<7>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<6>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<5>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<4>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<3>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<2>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<1>::fast(u) == u );     u >>= 1;
+    BOOST_TEST( uint_t<0>::fast(u) == u );
+        
     return 0;
 }
