@@ -192,24 +192,19 @@ is a type which satisfies the following conditions:
              && C is convertible to forward_traversal_tag)
          {
              if (C is convertible to random_access_traversal_tag)
-                 return random_access_iterator_tag
+                 random_access_iterator_tag
              else if (C is convertible to bidirectional_traversal_tag)
-                 return bidirectional_iterator_tag
+                 bidirectional_iterator_tag
              else
-                 return forward_traversal_tag
+                 forward_iterator_tag
          }
          else
          {
              if (C is convertible to single_pass_traversal_tag
                  && R is convertible to V)
-             {
-                 if (V is const)
-                     return input_iterator_tag
-                 else
-                     return input_iterator_tag and output_iterator_tag
-             }
+                 input_iterator_tag
              else
-                 return output_iterator_tag
+                 C
          }
 
      - ``iterator_traversal<X>::type`` is convertible to the most
