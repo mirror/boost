@@ -128,6 +128,16 @@ template<class F> inline F & unwrap(reference_wrapper<F> const * f, int)
     return f->get();
 }
 
+template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* * pm, int)
+{
+    return _mfi::dm<R, T>(*pm);
+}
+
+template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* const * pm, int)
+{
+    return _mfi::dm<R, T>(*pm);
+}
+
 // listN
 
 class list0
