@@ -531,7 +531,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_char_repea
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
       BidiIterator end = position;
-      end += std::min((unsigned)re_detail::distance(position, last), desired);
+      std::advance(end, std::min((unsigned)re_detail::distance(position, last), desired));
       BidiIterator origin(position);
       while((position != end) && (traits_inst.translate(*position, icase) == what))
       {
@@ -592,7 +592,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_set_repeat
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
       BidiIterator end = position;
-      end += std::min((unsigned)re_detail::distance(position, last), desired);
+      std::advance(end, std::min((unsigned)re_detail::distance(position, last), desired));
       BidiIterator origin(position);
       while((position != end) && map[(traits_uchar_type)traits_inst.translate(*position, icase)])
       {
@@ -653,7 +653,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_long_set_r
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
       BidiIterator end = position;
-      end += std::min((unsigned)re_detail::distance(position, last), desired);
+      std::advance(end, std::min((unsigned)re_detail::distance(position, last), desired));
       BidiIterator origin(position);
       while((position != end) && (position != re_is_set_member(position, last, set, re)))
       {

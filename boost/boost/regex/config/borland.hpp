@@ -35,6 +35,8 @@
          // this is harmless for a staic link:
 #        define _RWSTD_COMPILE_INSTANTIATE
 #     endif
+      // external templates cause problems for some reason:
+#     define BOOST_REGEX_NO_EXTERNAL_TEMPLATES
 #  endif
 #  if (__BORLANDC__ <= 0x540) && !defined(BOOST_REGEX_NO_LIB) && !defined(_NO_VCL)
       // C++ Builder 4 and earlier, we can't tell whether we should be using

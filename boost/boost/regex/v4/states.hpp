@@ -109,7 +109,7 @@ enum syntax_element_type
    syntax_element_dot_rep = syntax_element_restart_continue + 1,
    syntax_element_char_rep = syntax_element_dot_rep + 1,
    syntax_element_short_set_rep = syntax_element_char_rep + 1,
-   syntax_element_long_set_rep = syntax_element_short_set_rep + 1, 
+   syntax_element_long_set_rep = syntax_element_short_set_rep + 1
 };
 
 #ifdef BOOST_REGEX_DEBUG
@@ -231,3 +231,4 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
 #endif
 
 #endif
+

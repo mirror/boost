@@ -271,8 +271,8 @@ void BOOST_REGEX_CALL match_results<RandomAccessIterator, Allocator>::maybe_assi
       if(base1 < base2) return;
       if(base2 < base1) break;
 
-      len1 = boost::re_detail::distance(p1->first, p1->second);
-      len2 = boost::re_detail::distance(p2->first, p2->second);
+      len1 = boost::re_detail::distance((RandomAccessIterator)p1->first, (RandomAccessIterator)p1->second);
+      len2 = boost::re_detail::distance((RandomAccessIterator)p2->first, (RandomAccessIterator)p2->second);
       if((len1 != len2) || ((p1->matched == false) && (p2->matched == true)))
          break;
       if((p1->matched == true) && (p2->matched == false))
