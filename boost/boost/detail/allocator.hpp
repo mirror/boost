@@ -15,6 +15,7 @@
 #include <boost/config.hpp>
 #include <cstdlib>
 #include <new>
+#include <assert.h>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
 using ::ptrdiff_t;
