@@ -74,7 +74,7 @@
 #include "boost/mpl/void.hpp"
 
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // BOOST_VARIANT_MINIMIZE_SIZE
 //
 // When #defined, implementation employs all known means to minimize the
@@ -89,7 +89,7 @@
 #   include "boost/mpl/O1_size.hpp"
 #endif
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 //
 // Defined if variant does not support variant<Types> syntax (see below). 
@@ -102,7 +102,7 @@ namespace boost {
 
 namespace detail { namespace variant {
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction max_value
 //
 // Finds the maximum value of the unary metafunction F over Sequence.
@@ -123,7 +123,7 @@ public: // metafunction result
 
 };
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction make_storage
 //
 // Provides an aligned storage type capable of holding any of the types
@@ -174,7 +174,7 @@ struct make_storage<int>
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class null_storage
 //
 // Simulates aligned_storage's interface, but with nothing underneath.
@@ -215,7 +215,7 @@ const void* null_storage::address() const
 
 #endif // MSVC6 workaround
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class destroyer
 //
 // Generic static visitor that destroys the value it visits.
@@ -240,7 +240,7 @@ public: // visitor interfaces
 
 };
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class copy_into
 //
 // Generic static visitor that copies the value it visits into the given buffer.
@@ -271,7 +271,7 @@ public: // visitor interfaces
 
 };
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class swap_with
 //
 // Generic static visitor that swaps the value it visits with the given value.
@@ -302,7 +302,7 @@ public: // visitor interfaces
 
 };
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class reflect
 //
 // Generic static visitor that performs a typeid on the value it visits.
@@ -320,7 +320,7 @@ public: // visitor interfaces
 
 };
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class template invoke_visitor
 //
 // Generic static visitor that invokes the given visitor using:
@@ -457,7 +457,7 @@ public: // visitor interfaces
 
 };
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction make_variant_list
 //
 // Provides a MPL-compatible sequence with the specified non-void types
@@ -500,7 +500,77 @@ public: // metafunction result
 
 };
 
-//////////////////////////////////////////////////////////////////////////
+#if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
+
+///////////////////////////////////////////////////////////////////////////////
+// (detail) support for MPL-Sequence initializer
+//
+// The generated inheritance hierarchy allows variant to follow standard
+// overload resolution rules on any specified set of bounded types.
+//
+
+// (detail) quoted metafunction make_initializer_node
+//
+// Exposes a pair whose first type is a node in the initializer hierarchy.
+//
+struct make_initializer_node
+{
+    template <typename BaseIndexPair, typename Iterator>
+    struct apply
+    {
+    private: // helpers, for metafunction result (below)
+
+        typedef typename BaseIndexPair::first
+            base;
+        typedef typename BaseIndexPair::second
+            index;
+
+        class initializer_node
+            : public base
+        {
+        private: // helpers, for static functions (below)
+
+            typedef typename BOOST_MPL_AUX_DEREF_WNKD(Iterator)
+                T;
+
+        public: // static functions
+
+            using base::initialize;
+
+            static int initialize(void* dest, const T& operand)
+            {
+                new(dest) T(operand);
+                return BOOST_MPL_AUX_VALUE_WKND(index)::value;
+            }
+
+        };
+
+    public: // metafunction result
+
+        typedef mpl::pair<
+              initializer_node
+            , typename mpl::next< index >::type
+            > type;
+
+    };
+};
+
+// (detail) class initializer_root
+//
+// Every level of the initializer hierarchy must expose the name
+// "initialize," so initializer_root provides a dummy function:
+//
+class initializer_root
+{
+public: // static functions
+
+    static void initialize();
+
+};
+
+#endif // !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) function template cast_storage
 //
 // Casts the given storage to the specified type, but with qualification.
@@ -518,7 +588,7 @@ inline const T& cast_storage(const void* storage, T* = 0)
     return *static_cast<const T*>(storage);
 }
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // (detail) function template apply_visitor_impl
 //
 // Invokes the given visitor on the type in the given variant storage.
@@ -585,7 +655,7 @@ apply_visitor_impl(
 
 }} // namespace detail::variant
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // class template variant (concept inspired by Andrei Alexandrescu)
 //
 // See docs and boost/variant/variant_fwd.hpp for more information.
@@ -831,63 +901,10 @@ private: // helpers, for structors (below)
 
     // [...use an optimal converting initializer based on the variant typelist:]
 
-    struct initializer_root
-    {
-    public: // static functions
-
-        // Root type must expose name "initialize," so
-        // the following dummy function is provided:
-
-        static void initialize();
-
-    };
-
-    struct make_initializer_node
-    {
-        template <typename BaseIndexPair, typename Iterator>
-        struct apply
-        {
-        private: // helpers, for metafunction result (below)
-
-            typedef typename BaseIndexPair::first
-                base;
-            typedef typename BaseIndexPair::second
-                index;
-
-            struct initializer_node
-                : base
-            {
-            private: // helpers, for static functions (below)
-
-                typedef typename BOOST_MPL_AUX_DEREF_WNKD(Iterator)
-                    T;
-
-            public: // static functions
-
-                using base::initialize;
-
-                static int initialize(void* dest, const T& operand)
-                {
-                    new(dest) T(operand);
-                    return BOOST_MPL_AUX_VALUE_WKND(index)::value;
-                }
-
-            };
-
-        public: // metafunction result
-
-            typedef mpl::pair<
-                  initializer_node
-                , typename mpl::next< index >::type
-                > type;
-
-        };
-    };
-
     typedef typename mpl::iter_fold<
           types
-        , mpl::pair< initializer_root, mpl::int_<0> >
-        , mpl::protect< make_initializer_node >
+        , mpl::pair< detail::variant::initializer_root, mpl::int_<0> >
+        , mpl::protect< detail::variant::make_initializer_node >
         >::type initializer_pair;
 
     typedef typename initializer_pair::first
@@ -1489,7 +1506,7 @@ variant<
 
 #endif // MSVC6 workaround
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // function template swap
 //
 // Swaps two variants of the same type (i.e., identical specification).
@@ -1503,7 +1520,7 @@ inline void swap(
     lhs.swap(rhs);
 }
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // function template operator<<
 //
 // Outputs the content of the given variant to the given ostream.
