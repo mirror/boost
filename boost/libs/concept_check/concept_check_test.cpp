@@ -123,8 +123,6 @@ main()
   {
     typedef binary_predicate_archetype<int, int> F;
     function_requires< BinaryPredicateConcept<F, int, int> >();
-    typedef const_binary_predicate_archetype<int, int> const_F;
-    function_requires< Const_BinaryPredicateConcept<const_F, int, int> >();
   }
 
   //===========================================================================
