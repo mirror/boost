@@ -60,14 +60,14 @@ rule run-invoke ( test-name : sources * : defn * )
          : # name
             $(test-name)
          : # default-build
-            debug  
+            debug
     ] ;
-    
+        
     if [ MATCH (.*load.*.run) : $(tests) ] {
-	    DEPENDS $(tests) : [ SUBST $(tests) (.*)(load)(.*) $1save$3 ] ;
-	    ECHO DEPENDS $(tests) ":" [ SUBST $(tests) (.*)(load)(.*) $1save$3 ] ;
-	}
-	
+        DEPENDS $(tests) : [ SUBST $(tests) (.*)(load)(.*) $1save$3 ] ;
+        ECHO DEPENDS $(tests) ":" [ SUBST $(tests) (.*)(load)(.*) $1save$3 ] ;
+    }
+    
     # release mode tests are only run if this environment variable is set
     # "_release" is appended to the name of the test if its a realease mode 
     # test.  This permits them to appear in the same table built by
@@ -95,15 +95,15 @@ rule run-invoke ( test-name : sources * : defn * )
             : # default-build
                 release
         ] ;
-        
+
         if [ MATCH (.*load.*.run) : $(releasetest) ] {
-	        DEPENDS $(releasetest) : [ SUBST $(releasetest) (.*)(load)(.*) $1save$3 ] ;
-	    }
-	    
-	    tests += releasetest ;
-	    
+            DEPENDS $(releasetest) : [ SUBST $(releasetest) (.*)(load)(.*) $1save$3 ] ;
+        }
+
+        tests += releasetest ;
+          
     }
-    
+
     return  ;
 }
 
@@ -238,7 +238,6 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ test-bsl-run test_demo_xml_save ]
         [ test-bsl-run test_demo_portable_archive ]
         [ test-bsl-run test_demo_fast_archive ]
-        [ test-bsl-run test_demo_xml_save ]
         [ test-bsl-run test_demo_pimpl : ../example/demo_pimpl_A ]
         [ test-bsl-run test_demo_polymorphic : ../example/demo_polymorphic_A ]
 
@@ -250,7 +249,5 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ compile test_const.cpp : std::locale-support ]
     ;
 }
-
-
 
 
