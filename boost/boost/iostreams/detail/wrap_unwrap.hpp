@@ -13,8 +13,7 @@
 
 #include <boost/config.hpp>                             // SFINAE.
 #include <boost/iostreams/detail/enable_if_stream.hpp>
-#include <boost/iostreams/detail/ios_traits.hpp>
-#include <boost/iostreams/traits.hpp>                   // is_std_io.
+#include <boost/iostreams/traits_fwd.hpp>               // is_std_io.
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/eval_if.hpp>

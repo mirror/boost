@@ -23,10 +23,10 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/bool_trait_def.hpp> 
 #include <boost/iostreams/detail/is_iterator_range.hpp>    
-#include <boost/iostreams/detail/ios_traits.hpp>   
 #include <boost/iostreams/detail/select.hpp>        
 #include <boost/iostreams/detail/select_by_size.hpp>      
-#include <boost/iostreams/detail/wrap_unwrap.hpp> 
+#include <boost/iostreams/detail/wrap_unwrap.hpp>       
+#include <boost/iostreams/traits_fwd.hpp> 
 #include <boost/mpl/bool.hpp>   
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>      
@@ -36,8 +36,22 @@
 #include <boost/range/value_type.hpp>
 #include <boost/type_traits/is_convertible.hpp>     
 
-namespace boost { namespace iostreams {          
+namespace boost { namespace iostreams {        
 
+//------------------Definitions of predicates for streams and stream buffers--//
+
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_istream, std::basic_istream, 2)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_ostream, std::basic_ostream, 2)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iostream, std::basic_iostream, 2)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_streambuf, std::basic_streambuf, 2)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringstream, std::basic_stringstream, 3)
+BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringbuf, std::basic_stringbuf, 3)
+
+template<typename T>
+struct is_std_io
+    : mpl::or_< is_istream<T>, is_ostream<T>, is_streambuf<T> >
+    { };
+                    
 //------------------Definitions of io_char------------------------------------//
 
 namespace detail {
@@ -81,7 +95,7 @@ struct io_char {
 
 #endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
 
-//------------------Definitions of io_char, io_category-----------------------//
+//------------------Definitions of io_category--------------------------------//
 
 namespace detail {
 
@@ -143,7 +157,7 @@ template<typename T>
 inline typename io_category<T>::type get_category(const T&) 
 { typedef typename io_category<T>::type category; return category(); }
 
-//----------Definition of io_int----------------------------------------------//
+//------------------Definition of io_int--------------------------------------//
 
 template<typename T>
 struct io_int { 
@@ -184,8 +198,8 @@ struct io_mode_id {
 
 template<typename T> // Borland 5.6.4 requires this circumlocution.
 struct io_mode : detail::io_mode_impl< detail::io_mode_id<T>::value > { };
-
-//----------Definition of is_device, is_filter and is_direct------------------//
+                    
+//------------------Definition of is_device, is_filter and is_direct----------//
 
 namespace detail {
 
@@ -210,8 +224,8 @@ struct is_filter : detail::has_trait<T, filter_tag> { };
 
 template<typename T>
 struct is_direct : detail::has_trait<T, direct_tag> { };
-
-//----------Definition of BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS------------------//
+                    
+//------------------Definition of BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS----------//
 
 #define BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr) \
     typedef Tr traits_type; \

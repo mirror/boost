@@ -20,7 +20,6 @@
 #include <boost/iostreams/detail/adapter/range_adapter.hpp>
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
-#include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/iostreams/detail/is_dereferenceable.hpp>
 #include <boost/iostreams/detail/is_iterator_range.hpp>
 #include <boost/iostreams/detail/select.hpp>
@@ -33,6 +32,8 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_const.hpp>
+
+#include <boost/iostreams/detail/config/disable_warnings.hpp> // VC7.1 4224.
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -175,5 +176,7 @@ resolve(T& t BOOST_IOSTREAMS_ENABLE_IF_STREAM(T))
 #endif // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //---------------//
 
 } } } // End namespaces detail, iostreams, boost.
+
+#include <boost/iostreams/detail/config/enable_warnings.hpp> // VC7.1 4224.
 
 #endif // BOOST_IOSTREAMS_DETAIL_RESOLVE_HPP_INCLUDED
