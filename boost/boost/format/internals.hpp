@@ -73,7 +73,7 @@ namespace detail {
         };
         typedef BOOST_IO_STD basic_ios<Ch, Tr>                    basic_ios;
         typedef detail::stream_format_state<Ch, Tr>               stream_format_state;
-        typedef typename basic_format<Ch, Tr, Alloc>::string_type string_type;
+        typedef ::std::basic_string<Ch, Tr, Alloc>                string_type;
 
         format_item(Ch fill) :argN_(argN_no_posit), fmtstate_(fill), 
                               truncate_(max_streamsize()), pad_scheme_(0)  {}
