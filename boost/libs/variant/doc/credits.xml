@@ -8,8 +8,8 @@
 <section id="variant.ack">
   <title>Acknowledgments</title>
 
-<para>Eric Friedman and Itay Maman designed and implemented the initial
-submission.</para>
+<para>Eric Friedman and Itay Maman designed the initial submission. Eric
+was the primary implementer and is the library maintainer.</para>
 
 <para>Andrei Alexandrescu's work in
     [<link linkend="variant.biblio.ale01a">Ale01A</link>]
@@ -17,14 +17,15 @@ and
     [<link linkend="variant.biblio.ale02">Ale02</link>]
 inspired the library's design.</para>
 
-<para>Anthony Williams suggested the method
-    [<link linkend="variant.biblio.wil02">Wil02</link>]
-by which the current <code>variant</code> implementation generally guarantees
-its &quot;never empty&quot; invariant.</para>
-
-<para>Douglas Gregor, Dave Abrahams, Fernando Cacciola, Brad King, Giovanni
-Bajo, and others provided helpful feedback and suggestions to refine the
-semantics, interface, and implementation of the library.</para>
+<para>Douglas Gregor,
+Dave Abrahams,
+Anthony Williams,
+Fernando Cacciola,
+Joel de Guzman,
+Brad King,
+Giovanni Bajo,
+and others provided helpful feedback and suggestions to refine the semantics,
+interface, and implementation of the library.</para>
 
 </section>
 
