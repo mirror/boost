@@ -925,7 +925,7 @@ iterator_adaptor. That seems like overspecification, and we ought to
 look at specifying these things in terms of what the various templates
 provide rather than how they're implemented.
 
-:Proposed resolution:   **Needs work**
+:Proposed resolution:   **Needs work** (Dave)
 
 Remove the specfication of inheritance, and explicit specification of
 all the functionality that was inherited. In iterator_adaptor, that
@@ -936,8 +936,8 @@ Interoperable Iterators concept is added to the new iterator concepts,
 and this concept is used in the specification of the iterator
 adaptors.
 
-I'll start on the work of changing the specification for the
-specialized adaptors. -Jeremy
+.. The specialized adaptors have been updated. iterator facade and
+  adaptor still need to be updated. -JGS
 
 
 Problem with specification of a->m in Readable Iterator
