@@ -509,6 +509,7 @@ struct iterator_adaptor :
  public:
     iterator_adaptor() { }
 
+    explicit
     iterator_adaptor(const Base& it, const Policies& p = Policies())
         : m_iter_p(it, p) {
       policies().initialize(iter());

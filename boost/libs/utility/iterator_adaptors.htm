@@ -339,11 +339,13 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
 
     <table border="1" summary="additional iterator_adaptor members">
       <tr>
-        <td><tt>iterator_adaptor(const Base&amp;, const Policies&amp; =
+        <td><tt>explicit iterator_adaptor(const Base&amp;, const Policies&amp; =
         Policies())</tt>
          <br><br>
          Construct an adapted iterator from a base object and a policies
-        object.
+         object. As this constructor is <tt>explicit</tt>, it does not
+         provide for implicit conversions from the <tt>Base</tt> type to
+         the iterator adaptor.
 
       <tr>
         <td><tt>template &lt;class B, class V, class R, class P&gt;<br>
@@ -619,12 +621,12 @@ struct iterator_adaptor
     typedef Policies policies_type;
 
     iterator_adaptor();
-    iterator_adaptor(const Base&amp;, const Policies&amp; = Policies());
+    explicit iterator_adaptor(const Base&amp;, const Policies&amp; = Policies());
 
     base_type base() const;
 
     template &lt;class B, class V, class R, class P&gt;
-    iterator_adaptor (
+    iterator_adaptor(
         const iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;);
 
     reference operator*() const;
