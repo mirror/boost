@@ -2068,7 +2068,7 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_le
       case re_detail::syntax_element_rep:
          if((len == 0) && (1 == fixup_leading_rep(dat->next.p, static_cast<re_detail::re_repeat*>(dat)->alt.p) ))
          {
-            static_cast<re_detail::re_repeat*>(dat)->leading = true;
+            static_cast<re_detail::re_repeat*>(dat)->leading = leading_lit;
             return len;
          }
          return len;
