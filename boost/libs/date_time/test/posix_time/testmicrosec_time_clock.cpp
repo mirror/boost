@@ -21,7 +21,8 @@ main()
   ptime last = microsec_clock::local_time();
 
   int max = 30;
-  for (int i = 0; i<max; i++)
+  int i = 0;
+  for (i = 0; i<max; i++)
   {
     for (int j=0; j<100000; j++)
     {
