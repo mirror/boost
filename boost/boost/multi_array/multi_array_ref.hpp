@@ -76,7 +76,7 @@ public:
 
   template <typename OPtr>
   const_multi_array_ref(const const_multi_array_ref<T,NumDims,
-			OPtr>& other)
+                        OPtr>& other)
     : base_(other.base_), storage_(other.storage_),
       extent_list_(other.extent_list_),
       stride_list_(other.stride_list_),
@@ -97,7 +97,7 @@ public:
   
   template <typename ExtentList>
   explicit const_multi_array_ref(TPtr base, const ExtentList& extents,
-		       const general_storage_order<NumDims>& so) : 
+                       const general_storage_order<NumDims>& so) : 
     base_(base), storage_(so) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<ExtentList> >();
@@ -107,17 +107,17 @@ public:
   }
   
   explicit const_multi_array_ref(TPtr base,
-			 const detail::multi_array::
-			 extent_gen<NumDims>& ranges) :
+                         const detail::multi_array::
+                         extent_gen<NumDims>& ranges) :
     base_(base), storage_(c_storage_order()) {
 
     init_from_extent_gen(ranges);
   }
   
   explicit const_multi_array_ref(TPtr base,
-			   const detail::multi_array::
-			   extent_gen<NumDims>& ranges,
-			   const general_storage_order<NumDims>& so) :
+                           const detail::multi_array::
+                           extent_gen<NumDims>& ranges,
+                           const general_storage_order<NumDims>& so) :
     base_(base), storage_(so) {
 
     init_from_extent_gen(ranges);
@@ -143,14 +143,14 @@ public:
     boost::copy_n(values.begin(),num_dimensions(),index_base_list_.begin());
     origin_offset_ =
       calculate_origin_offset(stride_list_,extent_list_,
-			      storage_,index_base_list_);
+                              storage_,index_base_list_);
   }
 
   void reindex(index value) {
     index_base_list_.assign(value);
     origin_offset_ =
       calculate_origin_offset(stride_list_,extent_list_,
-			      storage_,index_base_list_);
+                              storage_,index_base_list_);
   }
 
   template <typename SizeList>
@@ -158,15 +158,15 @@ public:
     boost::function_requires<
       detail::multi_array::CollectionConcept<SizeList> >();
     assert(num_elements_ ==
-	   std::accumulate(extents.begin(),extents.end(),
-			    size_type(1),std::multiplies<size_type>()));
+           std::accumulate(extents.begin(),extents.end(),
+                            size_type(1),std::multiplies<size_type>()));
 
     std::copy(extents.begin(),extents.end(),extent_list_.begin());
     compute_strides(stride_list_,extent_list_,storage_);
 
     origin_offset_ =
       calculate_origin_offset(stride_list_,extent_list_,
-			      storage_,index_base_list_);
+                              storage_,index_base_list_);
   }
 
   size_type num_dimensions() const { return NumDims; }
@@ -200,15 +200,15 @@ public:
     boost::function_requires<
       detail::multi_array::CollectionConcept<IndexList> >();
     return super_type::access_element(boost::type<const element&>(),
-				      origin(),
-				      indices,strides());
+                                      origin(),
+                                      indices,strides());
   }
 
   // Only allow const element access
   const_reference operator[](index idx) const {
     return super_type::access(boost::type<const_reference>(),
-			      idx,origin(),
-			      shape(),strides(),index_bases());
+                              idx,origin(),
+                              shape(),strides(),index_bases());
   }
 
   // see generate_array_view in base.hpp
@@ -219,26 +219,26 @@ public:
 #endif // BOOST_MSVC
   typename const_array_view<NDims>::type 
   operator[](const detail::multi_array::
-	     index_gen<NumDims,NDims>& indices)
+             index_gen<NumDims,NDims>& indices)
     const {
     typedef const_array_view<NDims>::type return_type;
     return
       super_type::generate_array_view(boost::type<return_type>(),
-				      indices,
-				      shape(),
-				      strides(),
-				      index_bases(),
-				      origin());
+                                      indices,
+                                      shape(),
+                                      strides(),
+                                      index_bases(),
+                                      origin());
   }
   
   const_iterator begin() const {
     return const_iterator(const_iter_base(*index_bases(),origin(),
-				   shape(),strides(),index_bases()));
+                                   shape(),strides(),index_bases()));
   }
 
   const_iterator end() const {
     return const_iterator(const_iter_base(*index_bases()+*shape(),origin(),
-				   shape(),strides(),index_bases()));
+                                   shape(),strides(),index_bases()));
   }
 
   const_reverse_iterator rbegin() const {
@@ -252,46 +252,46 @@ public:
 
   template <typename OPtr>
   bool operator==(const
-		  const_multi_array_ref<T,NumDims,OPtr>& rhs)
+                  const_multi_array_ref<T,NumDims,OPtr>& rhs)
     const {
     if(std::equal(extent_list_.begin(),
-		  extent_list_.end(),
-		  rhs.extent_list_.begin()))
+                  extent_list_.end(),
+                  rhs.extent_list_.begin()))
       return std::equal(begin(),end(),rhs.begin());
     else return false;
   }
 
   template <typename OPtr>
   bool operator<(const
-		 const_multi_array_ref<T,NumDims,OPtr>& rhs)
+                 const_multi_array_ref<T,NumDims,OPtr>& rhs)
     const {
     return std::lexicographical_compare(begin(),end(),rhs.begin(),rhs.end());
   }
 
   template <typename OPtr>
   bool operator!=(const
-		  const_multi_array_ref<T,NumDims,OPtr>& rhs)
+                  const_multi_array_ref<T,NumDims,OPtr>& rhs)
     const {
     return !(*this == rhs);
   }
 
   template <typename OPtr>
   bool operator>(const
-		 const_multi_array_ref<T,NumDims,OPtr>& rhs)
+                 const_multi_array_ref<T,NumDims,OPtr>& rhs)
     const {
     return rhs < *this;
   }
 
   template <typename OPtr>
   bool operator<=(const
-		 const_multi_array_ref<T,NumDims,OPtr>& rhs)
+                 const_multi_array_ref<T,NumDims,OPtr>& rhs)
     const {
     return !(*this > rhs);
   }
 
   template <typename OPtr>
   bool operator>=(const
-		 const_multi_array_ref<T,NumDims,OPtr>& rhs)
+                 const_multi_array_ref<T,NumDims,OPtr>& rhs)
     const {
     return !(*this < rhs);
   }
@@ -308,7 +308,7 @@ public:
 
   template <typename OPtr>
   const_multi_array_ref(const detail::multi_array::
-		  const_sub_array<T,NumDims,OPtr>& rhs)
+                  const_sub_array<T,NumDims,OPtr>& rhs)
     : base_(rhs.origin()),
       storage_(c_storage_order()),
       origin_offset_(0), directional_offset_(0),
@@ -337,21 +337,21 @@ private:
   const_multi_array_ref& operator=(const const_multi_array_ref& other);
 
   void init_from_extent_gen(const
-			detail::multi_array::
-			extent_gen<NumDims>& ranges) { 
+                        detail::multi_array::
+                        extent_gen<NumDims>& ranges) { 
     
     typedef boost::array<index,NumDims> extent_list;
 
     // get the index_base values
     std::transform(ranges.ranges_.begin(),ranges.ranges_.end(),
-	      index_base_list_.begin(),
-	      boost::mem_fun_ref(&extent_range::start));
+              index_base_list_.begin(),
+              boost::mem_fun_ref(&extent_range::start));
 
     // calculate the extents
     extent_list extents;
     std::transform(ranges.ranges_.begin(),ranges.ranges_.end(),
-	      extents.begin(),
-	      boost::mem_fun_ref(&extent_range::size));
+              extents.begin(),
+              boost::mem_fun_ref(&extent_range::size));
 
     init_multi_array_ref(extents.begin());
   }
@@ -365,17 +365,17 @@ private:
 
     // Calculate the array size
     num_elements_ = std::accumulate(extent_list_.begin(),extent_list_.end(),
-			    1,std::multiplies<index>());
+                            1,std::multiplies<index>());
     assert(num_elements_ != 0);
 
     compute_strides(stride_list_,extent_list_,storage_);
 
     origin_offset_ =
       calculate_origin_offset(stride_list_,extent_list_,
-			      storage_,index_base_list_);
+                              storage_,index_base_list_);
     directional_offset_ =
       calculate_descending_dimension_offset(stride_list_,extent_list_,
-					    storage_);
+                                            storage_);
   }
 };
 
@@ -422,7 +422,7 @@ public:
 
   template <class ExtentList>
   explicit multi_array_ref(T* base, const ExtentList& extents,
-			   const general_storage_order<NumDims>& so) :
+                           const general_storage_order<NumDims>& so) :
     super_type(base,extents,so) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<ExtentList> >();
@@ -430,21 +430,21 @@ public:
 
 
   explicit multi_array_ref(T* base,
-			   const detail::multi_array::
-			   extent_gen<NumDims>& ranges) :
+                           const detail::multi_array::
+                           extent_gen<NumDims>& ranges) :
     super_type(base,ranges) { }
 
 
   explicit multi_array_ref(T* base,
-			   const detail::multi_array::
-			   extent_gen<NumDims>&
-			     ranges,
-			   const general_storage_order<NumDims>& so) :
+                           const detail::multi_array::
+                           extent_gen<NumDims>&
+                             ranges,
+                           const general_storage_order<NumDims>& so) :
     super_type(base,ranges,so) { }
 
   template <typename OPtr>
   multi_array_ref(const detail::multi_array::
-		  const_sub_array<T,NumDims,OPtr>& rhs)
+                  const_sub_array<T,NumDims,OPtr>& rhs)
     : super_type(rhs) {} 
 
   // Assignment from other ConstMultiArray types.
@@ -457,7 +457,7 @@ public:
     // make sure the dimensions agree
     assert(other.num_dimensions() == num_dimensions());
     assert(std::equal(other.shape(),other.shape()+num_dimensions(),
-		      shape()));
+                      shape()));
     // iterator-based copy
     std::copy(other.begin(),other.end(),begin());
     return *this;
@@ -469,7 +469,7 @@ public:
       
       assert(other.num_dimensions() == num_dimensions());
       assert(std::equal(other.shape(),other.shape()+num_dimensions(),
-			shape()));
+                        shape()));
       // iterator-based copy
       std::copy(other.begin(),other.end(),begin());
     }
@@ -485,16 +485,16 @@ public:
   boost::function_requires<
     detail::multi_array::CollectionConcept<IndexList> >();
   return super_type::access_element(boost::type<element&>(),
-				      origin(),
-				      indices,strides());
+                                      origin(),
+                                      indices,strides());
   }
 
 
   reference operator[](index idx) {
     return super_type::access(boost::type<reference>(),
-			      idx,origin(),
-			      shape(),strides(),
-			      index_bases());
+                              idx,origin(),
+                              shape(),strides(),
+                              index_bases());
   }
 
 
@@ -506,26 +506,26 @@ public:
 #endif // BOOST_MSVC
   typename array_view<NDims>::type 
   operator[](const detail::multi_array::
-	     index_gen<NumDims,NDims>& indices) {
+             index_gen<NumDims,NDims>& indices) {
     typedef array_view<NDims>::type return_type;
     return
       super_type::generate_array_view(boost::type<return_type>(),
-				      indices,
-				      shape(),
-				      strides(),
-				      index_bases(),
-				      origin());
+                                      indices,
+                                      shape(),
+                                      strides(),
+                                      index_bases(),
+                                      origin());
   }
   
   
   iterator begin() {
     return iterator(iter_base(*index_bases(),origin(),shape(),
-			      strides(),index_bases()));
+                              strides(),index_bases()));
   }
 
   iterator end() {
     return iterator(iter_base(*index_bases()+*shape(),origin(),
-			      shape(),strides(),index_bases()));
+                              shape(),strides(),index_bases()));
   }
 
   // RG - rbegin() and rend() written naively to thwart MSVC ICE.
@@ -554,8 +554,8 @@ public:
 
   const_reference operator[](index idx) const {
     return super_type::access(boost::type<const_reference>(),
-			      idx,origin(),
-			      shape(),strides(),index_bases());
+                              idx,origin(),
+                              shape(),strides(),index_bases());
   }
 
   // See note attached to generate_array_view in base.hpp
@@ -566,7 +566,7 @@ public:
 #endif // BOOST_MSVC
   typename const_array_view<NDims>::type 
   operator[](const detail::multi_array::
-	     index_gen<NumDims,NDims>& indices)
+             index_gen<NumDims,NDims>& indices)
     const {
     return super_type::operator[](indices);
   }

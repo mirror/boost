@@ -44,7 +44,7 @@ public:
 
   // Used by operator[] to expand extent_gens
   extent_gen(const extent_gen<NumRanges-1>& rhs,
-	    const range& a_range)
+            const range& a_range)
   {
     std::copy(rhs.ranges_.begin(),rhs.ranges_.end(),ranges_.begin());
     *ranges_.rbegin() = a_range;

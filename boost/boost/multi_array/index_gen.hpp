@@ -44,7 +44,7 @@ public:
 
   template <int ND>
   explicit index_gen(const index_gen<NumRanges-1,ND>& rhs,
-	    const index_range<Index,SizeType>& range)
+            const index_range<Index,SizeType>& range)
   {
     std::copy(rhs.ranges_.begin(),rhs.ranges_.end(),ranges_.begin());
     *ranges_.rbegin() = range;

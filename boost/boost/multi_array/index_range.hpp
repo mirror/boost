@@ -53,7 +53,7 @@ namespace multi_array {
 
     explicit index_range(index start, index finish, index stride=1)
       : start_(start), finish_(finish), stride_(stride),
-	degenerate_(start_ == finish_)
+        degenerate_(start_ == finish_)
     { }
 
 
@@ -80,7 +80,7 @@ namespace multi_array {
     index get_start(index low_index_range = 0) const
     { 
       if (start_ == from_start())
-	return low_index_range;
+        return low_index_range;
       return start_; 
     }
 
@@ -92,16 +92,16 @@ namespace multi_array {
     index get_finish(index high_index_range = 0) const
     {
       if (finish_ == to_end())
-	return high_index_range;
+        return high_index_range;
       return finish_;
     }
 
     size_type size(index recommended_length = 0) const
     {
       if ((start_ == from_start()) || (finish_ == to_end()))
-	return recommended_length;
+        return recommended_length;
       else 
-	return (finish_ - start_) / stride_;
+        return (finish_ - start_) / stride_;
     }
 
     index stride() const { return stride_; }

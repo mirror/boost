@@ -30,7 +30,7 @@ class copy_dispatch {
 public:
   template <typename SourceIterator, typename DestIterator>
   static void copy_array (SourceIterator first, SourceIterator last,
-		   DestIterator result) {
+                   DestIterator result) {
     while (first != last) {
       copy_array(*first++,*result++);
     }
@@ -53,7 +53,7 @@ private:
 template <typename Array1, typename Array2>
 void copy_array (Array1& source, Array2& dest) {
   assert(std::equal(source.shape(),source.shape()+source.num_dimensions(),
-		    dest.shape()));
+                    dest.shape()));
   // Dispatch to the proper function
   typedef typename Array1::element element_type;
   copy_dispatch<element_type>::

@@ -49,7 +49,7 @@ namespace boost {
 
 template <class InputIter, class Size, class OutputIter>
 OutputIter copy_n(InputIter first, Size count,
-		  OutputIter result) {
+                  OutputIter result) {
   for ( ; count > 0; --count) {
     *result = *first;
     ++first;

@@ -78,7 +78,7 @@ public:
 
   template <class ExtentList>
   explicit multi_array(ExtentList const& extents,
-		       const general_storage_order<NumDims>& so) : 
+                       const general_storage_order<NumDims>& so) : 
     super_type((T*)initial_base_,extents,so) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<ExtentList> >();
@@ -88,7 +88,7 @@ public:
   template <class ExtentList>
   explicit multi_array(ExtentList const& extents,
 		       const general_storage_order<NumDims>& so,
-		       Allocator const& alloc) :
+                       Allocator const& alloc) :
     super_type((T*)initial_base_,extents,so), allocator_(alloc) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<ExtentList> >();
@@ -97,7 +97,7 @@ public:
 
 
   explicit multi_array(const detail::multi_array
-		       ::extent_gen<NumDims>& ranges) :
+                       ::extent_gen<NumDims>& ranges) :
     super_type((T*)initial_base_,ranges) {
 
     allocate_space();
@@ -105,8 +105,8 @@ public:
 
 
   explicit multi_array(const detail::multi_array
-		       ::extent_gen<NumDims>& ranges,
-		       const general_storage_order<NumDims>& so) :
+                       ::extent_gen<NumDims>& ranges,
+                       const general_storage_order<NumDims>& so) :
     super_type((T*)initial_base_,ranges,so) {
 
     allocate_space();
@@ -114,9 +114,9 @@ public:
 
 
   explicit multi_array(const detail::multi_array
-		       ::extent_gen<NumDims>& ranges,
-		       const general_storage_order<NumDims>& so,
-		       Allocator const& alloc) :
+                       ::extent_gen<NumDims>& ranges,
+                       const general_storage_order<NumDims>& so,
+                       Allocator const& alloc) :
     super_type((T*)initial_base_,ranges,so), allocator_(alloc) {
 
     allocate_space();
@@ -130,7 +130,7 @@ public:
 
   template <typename OPtr>
   multi_array(const detail::multi_array::
-	      const_sub_array<T,NumDims,OPtr>& rhs) :
+              const_sub_array<T,NumDims,OPtr>& rhs) :
     super_type(rhs) {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),begin());
@@ -140,7 +140,7 @@ public:
   // member function when passed a subarray, so i was forced to
   // duplicate the functionality here...
   multi_array(const detail::multi_array::
-	      sub_array<T,NumDims>& rhs) :
+              sub_array<T,NumDims>& rhs) :
     super_type(rhs) {
     allocate_space();
     std::copy(rhs.begin(),rhs.end(),begin());
@@ -178,7 +178,7 @@ private:
   void deallocate_space() {
     if(base_) {
       for(T* i = base_; i != base_+allocated_elements_; ++i)
-	allocator_.destroy(i);
+        allocator_.destroy(i);
       allocator_.deallocate(base_,allocated_elements_);
     }
   }    

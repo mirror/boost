@@ -35,7 +35,7 @@ namespace boost {
     typedef detail::multi_array::size_type size_type;
     template <typename OrderingIter, typename AscendingIter>
     general_storage_order(OrderingIter ordering,
-			  AscendingIter ascending) {
+                          AscendingIter ascending) {
       boost::copy_n(ordering,NumDims,ordering_.begin());
       boost::copy_n(ascending,NumDims,ascending_.begin());
     }
@@ -46,14 +46,14 @@ namespace boost {
     // storage_order objects, I sacrifice that feature for compiler support.
     general_storage_order(const c_storage_order&) {
       for (size_type i=0; i != NumDims; ++i) {
-	ordering_[i] = NumDims - 1 - i;
+        ordering_[i] = NumDims - 1 - i;
       }
       ascending_.assign(true);
     }
 
     general_storage_order(const fortran_storage_order&) {
       for (size_type i=0; i != NumDims; ++i) {
-	ordering_[i] = i;
+        ordering_[i] = i;
       }
       ascending_.assign(true);
     }
@@ -63,12 +63,12 @@ namespace boost {
 
     bool all_dims_ascending() const {
       return std::accumulate(ascending_.begin(),ascending_.end(),true,
-		      std::logical_and<bool>());
+                      std::logical_and<bool>());
     }
 
     bool operator==(general_storage_order const& rhs) const {
       return (ordering_ == rhs.ordering_) &&
-	(ascending_ == rhs.ascending_);
+        (ascending_ == rhs.ascending_);
     }
 
   protected:
@@ -89,11 +89,11 @@ namespace boost {
       boost::array<bool,NumDims> ascending;
 
       for (size_type i=0; i != NumDims; ++i) {
-	ordering[i] = NumDims - 1 - i;
-	ascending[i] = true;
+        ordering[i] = NumDims - 1 - i;
+        ascending[i] = true;
       }
       return general_storage_order<NumDims>(ordering.begin(),
-					    ascending.begin());
+                                            ascending.begin());
     }
 #endif
   };
@@ -111,11 +111,11 @@ namespace boost {
       boost::array<bool,NumDims> ascending;
 
       for (size_type i=0; i != NumDims; ++i) {
-	ordering[i] = i;
-	ascending[i] = true;
+        ordering[i] = i;
+        ascending[i] = true;
       }
       return general_storage_order<NumDims>(ordering.begin(),
-					    ascending.begin());
+                                            ascending.begin());
     }
 #endif
   };
