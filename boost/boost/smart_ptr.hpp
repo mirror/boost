@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  21 Jan 01  Suppress some useless warnings with MSVC (David Abrahams)
 //  19 Oct 00  Make shared_ptr ctor from auto_ptr explicit. (Robert Vugts) 
 //  24 Jul 00  Change throw() to // never throws.  See lib guidelines
 //             Exception-specification rationale. (Beman Dawes)
@@ -75,7 +76,14 @@ template<typename T> class scoped_ptr : noncopyable {
 
   void reset( T* p=0 )          { if ( ptr != p ) { delete ptr; ptr = p; } }
   T& operator*() const          { return *ptr; }  // never throws
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable:4284) // return type for 'identifier::operator->' is not a UDT or reference to a UDT. Will produce errors if applied using infix notation
+#endif    
   T* operator->() const         { return ptr; }  // never throws
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif    
   T* get() const                { return ptr; }  // never throws
 #ifdef BOOST_SMART_PTR_CONVERSION
   // get() is safer! Define BOOST_SMART_PTR_CONVERSION at your own risk!
@@ -204,7 +212,14 @@ template<typename T> class shared_ptr {
    } // reset
 
    T& operator*() const          { return *px; }  // never throws
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable:4284) // return type for 'identifier::operator->' is not a UDT or reference to a UDT. Will produce errors if applied using infix notation
+#endif    
    T* operator->() const         { return px; }  // never throws
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif    
    T* get() const                { return px; }  // never throws
  #ifdef BOOST_SMART_PTR_CONVERSION
    // get() is safer! Define BOOST_SMART_PTR_CONVERSION at your own risk!
