@@ -13,10 +13,6 @@
 // all these tests should fail:
 //
 
-#ifdef BOOST_MSVC
-#error "VC6 not supported in this test (buggy compiler problem)"
-#endif
-
 
 struct Bob
 {
@@ -27,7 +23,7 @@ struct Bob
   char c;
   int f()
   {
-#ifndef _MSC_VER // broken sizeof in VC6
+#ifndef BOOST_MSVC // broken sizeof in VC6
     BOOST_STATIC_ASSERT(sizeof(x) == 4);
     BOOST_STATIC_ASSERT(sizeof(c) == 1);
     BOOST_STATIC_ASSERT((sizeof(x) == sizeof(c))); // should not compile
