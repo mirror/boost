@@ -12,7 +12,7 @@
 // <header_name> in order to prevent macro expansion within the header
 // name (for example "linux" is a macro on linux systems).
 
-#if defined(linux) || defined(__linux)
+#if defined(linux) || defined(__linux) || defined(__linux__)
 // linux:
 #  define BOOST_PLATFORM_CONFIG "boost/config/platform/linux.hpp"
 
