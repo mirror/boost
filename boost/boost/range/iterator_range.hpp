@@ -152,28 +152,16 @@ namespace boost {
                 return *this;
             }
 
-            //! begin access
-            /*! 
-                Retrieve the begin iterator
-            */
             IteratorT begin() const 
             { 
                 return m_Begin; 
             }
 
-            //! end access
-            /*!
-                Retrieve the end iterator
-            */
             IteratorT end() const 
             { 
                 return m_End; 
             } 
 
-            //! Size of the range
-            /*!
-                Retrieve the size of the range
-            */
             size_type size() const
             { 
                 if( singular )
@@ -190,18 +178,6 @@ namespace boost {
                 return m_Begin == m_End;
             }
 
-            //! Safe bool conversion
-            /*!
-                Check whenever the range is empty.
-                Allows to use construction like this:
-                \code
-                    iterator_range r;
-                    if (!r)
-                    {
-                    ...
-                    }
-                \endcode
-            */
             typedef iterator (iterator_range::*unspecified_bool_type) () const;
             operator unspecified_bool_type() const
             {
@@ -212,6 +188,7 @@ namespace boost {
             {
                 return singular == r.singular && m_Begin == r.m_Begin && m_End == r.m_End;
             }
+
 
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
@@ -231,6 +208,61 @@ namespace boost {
            }
 
 #endif            
+
+        public: // convenience
+           value_type& front() const
+           {
+               BOOST_ASSERT( !empty() );
+               return *m_Begin;
+           }
+    
+           value_type& back() const
+           {
+               BOOST_ASSERT( !empty() );
+               return *--m_End;
+           }
+    
+           value_type& operator[]( size_type sz ) const
+           {
+               //BOOST_STATIC_ASSERT( is_random_access );
+               BOOST_ASSERT( sz < size() );
+               return m_Begin[sz];
+           }
+    
+           value_type& at( size_type sz ) const
+           {
+               //BOOST_STATIC_ASSERT( is_random_access );
+               if( sz < size() )
+                   throw "foo";
+               return m_Begin[sz];
+           }
+    
+           void advance( size_type sz )
+           {
+               BOOST_ASSERT( sz <= size() );
+               std::advance( m_Begin, sz );
+           }
+    
+           void narrow( size_type left, size_type right )
+           {
+               BOOST_ASSERT( left + right <= size() );
+               std::advance( m_Begin, left );
+               std::advance( m_End, -right );
+           }
+    
+        public: // iterable
+            iterator_range& operator++()
+            {
+                BOOST_ASSERT( !empty() );
+                ++m_End;
+                return *this;
+            }
+
+            value_type& operator*() const
+            {
+                BOOST_ASSERT( !empty() );
+                return front();
+            }
             
         private:
             template< class ForwardRange >

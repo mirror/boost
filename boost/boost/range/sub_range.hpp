@@ -85,6 +85,74 @@ namespace boost
         const_iterator  end() const      { return base::end();   }
         size_type       size() const     { return base::size();  }   
 
+        
+    public: // convenience
+        value_type& front()
+        {
+            BOOST_ASSERT( !empty() );
+            return *m_Begin;
+        }
+
+        const value_type& front() const
+        {
+            BOOST_ASSERT( !empty() );
+            return *m_Begin;
+        }
+
+        value_type& back()
+        {
+            BOOST_ASSERT( !empty() );
+            return *--m_End;
+        }
+
+        const value_type& back() const
+        {
+            BOOST_ASSERT( !empty() );
+            return *--m_End;
+        }
+
+        value_type& operator[]( size_type sz )
+        {
+            //BOOST_STATIC_ASSERT( is_random_access );
+            BOOST_ASSERT( sz < size() );
+            return m_Begin[sz];
+        }
+
+        const value_type& operator[]( size_type sz ) const
+        {
+            //BOOST_STATIC_ASSERT( is_random_access );
+            BOOST_ASSERT( sz < size() );
+            return m_Begin[sz];
+        }
+
+        value_type& at( size_type sz )
+        {
+            //BOOST_STATIC_ASSERT( is_random_access );
+            if( sz < size() )
+                   throw "foo";
+            return m_Begin[sz];
+        }
+
+        const value_type& at( size_type sz ) const
+        {
+            //BOOST_STATIC_ASSERT( is_random_access );
+            if( sz < size() )
+                   throw "foo";
+            return m_Begin[sz];
+        }
+
+    public: // iterable
+        value_type& operator*()
+        {
+            BOOST_ASSERT( !empty() );
+            return front();
+        }
+
+        const value_type& operator*() const
+        {
+            BOOST_ASSERT( !empty() );
+            return front();
+        }
     };
 
     template< class ForwardRange, class ForwardRange2 >
