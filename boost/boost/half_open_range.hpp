@@ -5,8 +5,10 @@
 // for any purpose.
 //
 // Revision History:
-// 04 Feb 2001  Support for user-defined iterator categories (David Abrahams)
-// 30 Jan 2001  Initial Checkin (David Abrahams)
+// 11 Feb 2001  Use new iterator_adaptor interface, Fixes for Borland.
+//              (Dave Abrahams)
+// 04 Feb 2001  Support for user-defined iterator categories (Dave Abrahams)
+// 30 Jan 2001  Initial Checkin (Dave Abrahams)
 
 #ifndef BOOST_HALF_OPEN_RANGE_HPP_
 # define BOOST_HALF_OPEN_RANGE_HPP_
@@ -75,7 +77,7 @@ namespace detail {
       static const Incrementable choose(const Incrementable& start, const Incrementable& finish)
       {
           return finish_chooser<(
-              boost::is_convertible<Category,std::random_access_iterator_tag>::value
+              ::boost::is_convertible<Category*,std::random_access_iterator_tag*>::value
               )>::template rebind<Incrementable>::choose(start, finish);
       }
   };
@@ -85,16 +87,18 @@ namespace detail {
 template <class Incrementable>
 struct half_open_range
 {
-    typedef iterator_adaptor<Incrementable,
-      counting_iterator_policies<Incrementable>,
-      counting_iterator_traits<Incrementable> > iterator;
+    typedef typename counting_iterator_generator<Incrementable>::type iterator;
 
  private: // utility type definitions
+    // Using iter_t prevents compiler confusion with boost::iterator
+    typedef typename counting_iterator_generator<Incrementable>::type iter_t;
+
     typedef std::less<Incrementable> less_value;
-    typedef typename boost::detail::iterator_traits<iterator>::iterator_category category;
+    typedef typename iter_t::iterator_category category;
+    typedef half_open_range<Incrementable> self;
 
  public:
-    typedef iterator const_iterator;
+    typedef iter_t const_iterator;
     typedef typename counting_iterator_traits<Incrementable>::value_type value_type;
     typedef typename counting_iterator_traits<Incrementable>::difference_type difference_type;
     typedef typename counting_iterator_traits<Incrementable>::reference reference;
@@ -130,7 +134,14 @@ struct half_open_range
 #endif
               )
         {}
-        
+
+    half_open_range& operator=(const self& x)
+    {
+        m_start = x.m_start;
+        m_finish = x.m_finish;
+        return *this;
+    }
+    
     half_open_range& operator=(const std::pair<Incrementable,Incrementable>& x)
     {
         m_start = x.first;
