@@ -15,7 +15,7 @@ Sparse Matrix</h1>
 <h2><a name="sparse_matrix" id="sparse_matrix"></a> Sparse
 Matrix</h2>
 <h4>Description</h4>
-<!-- TODO: replace nested sub/sup -->
+<!---->
 <p>The templated class <code>sparse_matrix&lt;T, F, A&gt;</code> is
 the base container adaptor for sparse matrices. For a <em>(m x
 n</em>)-dimensional sparse matrix and <em>0 &lt;= i &lt; m</em>,
@@ -103,8 +103,7 @@ int main () {
 rows of zero elements.</td>
 </tr>
 <tr>
-<td><code>sparse_matrix (size_type size1, size_type2, size_type
-non_zeros)</code></td>
+<td><code>sparse_matrix (size_type size1, size_type2, size_type non_zeros = 0)</code></td>
 <td>Allocates a <code>sparse_matrix</code> that holds at most
 <code>size1</code> rows of <code>size2</code> elements.</td>
 </tr>
@@ -119,8 +118,8 @@ matrix_expression&lt;AE&gt; &amp;ae)</code></td>
 <td>The extended copy constructor.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size1, size_type size2, size_type
-non_zeros)</code></td>
+<td><code>void resize (size_type size1, size_type size2, bool preserve = true, size_type
+non_zeros = 0)</code></td>
 <td>Reallocates a <code>sparse_matrix</code> to hold at most
 <code>size1</code> rows of <code>size2</code> elements. The
 existing elements of the <code>sparse_matrix</code> are preseved
@@ -422,8 +421,7 @@ TA&gt; &gt;</code></p>
 zero rows of zero elements.</td>
 </tr>
 <tr>
-<td><code>compressed_matrix (size_type size1, size_type2, size_type
-non_zeros)</code></td>
+<td><code>compressed_matrix (size_type size1, size_type2, size_type non_zeros = 0)</code></td>
 <td>Allocates a <code>compressed_matrix</code> that holds at most
 <code>size1</code> rows of <code>size2</code> elements.</td>
 </tr>
@@ -439,8 +437,8 @@ matrix_expression&lt;AE&gt; &amp;ae)</code></td>
 <td>The extended copy constructor.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size1, size_type size2, size_type
-non_zeros)</code></td>
+<td><code>void resize (size_type size1, size_type size2, bool preserve = true, size_type
+non_zeros = 0)</code></td>
 <td>Reallocates a <code>compressed_matrix</code> to hold at most
 <code>size1</code> rows of <code>size2</code> elements. The
 existing elements of the <code>compressed_matrix</code> are
@@ -745,8 +743,7 @@ TA&gt; &gt;</code></p>
 zero rows of zero elements.</td>
 </tr>
 <tr>
-<td><code>coordinate_matrix (size_type size1, size_type2, size_type
-non_zeros)</code></td>
+<td><code>coordinate_matrix (size_type size1, size_type2, size_type non_zeros = 0)</code></td>
 <td>Allocates a <code>coordinate_matrix</code> that holds at most
 <code>size1</code> rows of <code>size2</code> elements.</td>
 </tr>
@@ -762,8 +759,8 @@ matrix_expression&lt;AE&gt; &amp;ae)</code></td>
 <td>The extended copy constructor.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size1, size_type size2, size_type
-non_zeros)</code></td>
+<td><code>void resize (size_type size1, size_type size2, bool preserve = true, size_type
+non_zeros = 0)</code></td>
 <td>Reallocates a <code>coordinate_matrix</code> to hold at most
 <code>size1</code> rows of <code>size2</code> elements. The
 existing elements of the <code>coordinate_matrix</code> are

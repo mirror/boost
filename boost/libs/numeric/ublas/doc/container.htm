@@ -111,7 +111,7 @@ from, or is not defined in <a href=
 <td>Sizing constructor</td>
 <td><code>V v (n)</code></td>
 <td><code>n &gt;= 0</code></td>
-<td>Creates a vector of <code>n</code> elements.</td>
+<td>Allocates an unitialized vector of <code>n</code> elements.</td>
 <td><code>v.size () == n</code>.</td>
 </tr>
 <tr>
@@ -145,14 +145,11 @@ from, or is not defined in <a href=
 <td><code>v.resize (n)
 <br />v.resize (n, p)</code></td>
 <td>&nbsp;</td>
-<td>Modifies the vector so that it can hold <code>n</code>
+<td>Reallocates the vector so that it can hold <code>n</code>
 elements.<br />
-Erases or appends elements in order to bring the vector to the
-prescribed size. Appended elements are <code>value_type()</code>
-copies. When <code>p == false</code> then exisiting elements may no
-be preserved and elements will not appended as normal. That is with
-<code>p == false</code> the elements values after resize are
-undefined.</td>
+Erases or appends elements in order to bring the vector to the prescribed size. Appended elements copies of<code>value_type()</code>.
+<br />
+When <code>p == false</code> then exisiting elements are not preserved and elements will not appended as normal. Instead the vector is in the same state as that after an equivilent sizing constructor.</td>
 <td><code>v.size () == n</code>.</td>
 </tr>
 </tbody>
@@ -270,7 +267,7 @@ from, or is not defined in <a href=
 <td>Sizing constructor</td>
 <td><code>M m (n1, n2)</code></td>
 <td><code>n1 &gt;= 0</code> and <code>n2 &gt;= 0</code></td>
-<td>Creates a matrix of <code>n1</code> rows and <code>n2</code>
+<td>Allocates an uninitialized matrix of <code>n1</code> rows and <code>n2</code>
 columns.</td>
 <td><code>m.size1 () == n1</code> and <code>m.size2 () ==
 n2</code>.</td>
@@ -311,14 +308,12 @@ m (i, j)</code> is a copy of <code>value_type ()</code>.</td>
 m.resize (n1, n2, p)
 </code></td>
 <td>&nbsp;</td>
-<td>Modifies the matrix so that it can hold <code>n1</code> rows
+<td>Reallocate the matrix so that it can hold <code>n1</code> rows
 and <code>n2</code> columns.<br />
 Erases or appends elements in order to bring the matrix to the
 prescribed size. Appended elements are <code>value_type()</code>
-copies. When <code>p == false</code> then exisiting elements may no
-be preserved and elements will not appended as normal. That is with
-<code>p == false</code> the elements values after resize are
-undefined.</td>
+copies.<br />
+When <code>p == false</code> then exisiting elements are not preserved and elements will not appended as normal. Instead the matrix is in the same state as that after an equivilent sizing constructor.</td>
 <td><code>m.size1 () == n1</code> and <code>m.size2 () ==
 n2</code>.</td>
 </tr>

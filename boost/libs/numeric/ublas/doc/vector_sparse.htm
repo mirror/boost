@@ -15,7 +15,7 @@ Sparse Vector</h1>
 <h2><a name="sparse_vector" id="sparse_vector"></a> Sparse
 Vector</h2>
 <h4>Description</h4>
-<!-- TODO: replace nested sub/sup -->
+<!---->
 <p>The templated class <code>sparse_vector&lt;T, A&gt;</code> is
 the base container adaptor for sparse vectors. For a
 <em>n</em>-dimensional sparse vector and <em>0 &lt;= i &lt; n</em>
@@ -85,7 +85,7 @@ elements.</td>
 </tr>
 <tr>
 <td><code>sparse_vector (size_type size, size_type
-non_zeros)</code></td>
+non_zeros = 0)</code></td>
 <td>Allocates a <code>sparse_vector</code> that holds at most
 <code>size</code> elements.</td>
 </tr>
@@ -100,8 +100,8 @@ vector_expression&lt;AE&gt; &amp;ae)</code></td>
 <td>The extended copy constructor.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size, size_type non_zeros, bool
-preserve = true)</code></td>
+<td><code>void resize (size_type size, bool
+preserve = true, size_type non_zeros = 0)</code></td>
 <td>Reallocates a <code>sparse_vector</code> to hold at most
 <code>size</code> elements. The existing elements of the
 <code>sparse_vector</code> are preseved when specified.</td>
@@ -357,8 +357,8 @@ vector_expression&lt;AE&gt; &amp;ae)</code></td>
 <td>The extended copy constructor.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size, size_type non_zeros, bool
-preserve = true)</code></td>
+<td><code>void resize (size_type size, bool
+preserve = true, size_type non_zeros = 0)</code></td>
 <td>Reallocates a <code>compressed_vector</code> to hold at most
 <code>size</code> elements. The existing elements of the
 <code>compress_vector</code> are preseved when specified.</td>
@@ -617,8 +617,8 @@ vector_expression&lt;AE&gt; &amp;ae)</code></td>
 <td>The extended copy constructor.</td>
 </tr>
 <tr>
-<td><code>void resize (size_type size, size_type
-non_zeros)</code></td>
+<td><code>void resize (size_type size, bool
+preserve = true, size_type non_zeros = 0)</code></td>
 <td>Reallocates a <code>coordinate_vector</code> to hold at most
 <code>size</code> elements. The existing elements of the
 <code>coordinate_vector</code> are preseved when specified.</td>
