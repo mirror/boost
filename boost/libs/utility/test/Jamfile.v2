@@ -28,7 +28,6 @@ test-suite utility
         [ run ../enable_if_namespace_disambiguation.cpp ../../test/build//boost_test_exec_monitor ]
         [ run ../enable_if_no_disambiguation.cpp ../../test/build//boost_test_exec_monitor ]
         [ run ../enable_if_partial_specializations.cpp ../../test/build//boost_test_exec_monitor ]
-#        [ run ../half_open_range_test.cpp ]
         [ run ../iterator_traits_test.cpp ]
         [ run ../iterators_test.cpp ../../test/build//boost_test_exec_monitor ]
         [ run next_prior_test.cpp ../../test/build//boost_test_exec_monitor ]
