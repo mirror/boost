@@ -129,7 +129,7 @@ int test_main(int, char*[])
   test_integral_limits(long(), "long");
   typedef unsigned long unsigned_long;
   test_integral_limits(unsigned_long(), "unsigned long");
-#ifdef __GNUC__
+#if defined(__GNUC__) && !(__GNUC__ == 3 && __GNUC_MINOR__ == 0 && defined(__GLIBCPP__))
   typedef long long long_long;
   test_integral_limits(long_long(), "long long");
   typedef unsigned long long unsigned_long_long;
