@@ -228,10 +228,10 @@ public:
       return UINT_MAX;
    }
 
-   static void construct(pointer , const char& )
+   static void construct(pointer p, const char& val)
    { boost::detail::allocator_construct(p, val); }
 
-   static void destroy(pointer )
+   static void destroy(pointer p)
    { boost::detail::allocator_destroy(p); }
 };
 
