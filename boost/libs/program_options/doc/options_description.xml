@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
-     "/home/ghost/Work/boost/tools/boostbook/dtd/boostbook.dtd"
+     "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd"
 [
     <!ENTITY % entities SYSTEM "program_options.ent" >
     %entities;
