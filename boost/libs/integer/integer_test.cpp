@@ -13,8 +13,7 @@
 //   10 Mar 01  Boost Test Library now used for tests (Beman Dawes)
 //   31 Aug 99  Initial version
 
-#define  BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>  // for main, BOOST_TEST
+#include <boost/test/minimal.hpp>  // for main, BOOST_TEST
 
 #include <boost/config.hpp>   // for BOOST_NO_USING_TEMPLATE
 #include <boost/cstdlib.hpp>  // for boost::exit_success
