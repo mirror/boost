@@ -613,7 +613,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <xsl:param name="name"/>
 
     <!-- The parametername node associated with this description -->
-    <xsl:variable name="name-node" select="../*[position()=1]"/>
+    <xsl:variable name="name-node" select="preceding-sibling::*[1]"/>
 
     <xsl:if test="string($name-node/text()) = $name">
       <description>
@@ -647,6 +647,9 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
           mode="function-clauses"/>
       </throws>
     </xsl:if>
+    <xsl:apply-templates 
+      select="detaileddescription/para/simplesect[@kind='note']"
+      mode="function-clauses"/>
   </xsl:template>
 
   <!-- Handle free functions -->
@@ -767,7 +770,8 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
   <xsl:template match="para/simplesect" mode="passthrough">
     <xsl:if test="not (@kind='return') and 
-                  not (@kind='post')">
+                  not (@kind='post') and
+                  not (@kind='note')">
       <xsl:apply-templates mode="passthrough"/>
     </xsl:if>
   </xsl:template>
@@ -807,6 +811,11 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       <postconditions>
         <xsl:apply-templates mode="passthrough"/>
       </postconditions>
+    </xsl:if>
+    <xsl:if test="@kind='note'">
+      <notes>
+        <xsl:apply-templates mode="passthrough"/>
+      </notes>
     </xsl:if>
   </xsl:template>
 
