@@ -9,6 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   6 Jul 01  Reorder shared_ptr code so VC++ 6 member templates work, allowing
+//             polymorphic pointers to now work with that compiler (Gary Powell)
 //  21 May 01  Require complete type where incomplete type is unsafe.
 //             (suggested by Vladimir Prus)
 //  21 May 01  operator= fails if operand transitively owned by *this, as in a
@@ -136,16 +138,9 @@ template<typename T> class shared_ptr {
       catch (...) { checked_delete(p); throw; } 
    }
 
-   shared_ptr(const shared_ptr& r) : px(r.px) { ++*(pn = r.pn); }  // never throws
-
    ~shared_ptr() { dispose(); }
 
-   shared_ptr& operator=(const shared_ptr& r) {
-      share(r.px,r.pn);
-      return *this;
-   }
-
-#if !defined( BOOST_NO_MEMBER_TEMPLATES )
+#if !defined( BOOST_NO_MEMBER_TEMPLATES ) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
    template<typename Y>
       shared_ptr(const shared_ptr<Y>& r) : px(r.px) {  // never throws 
          ++*(pn = r.pn); 
@@ -199,6 +194,15 @@ template<typename T> class shared_ptr {
 #endif
 #endif
 
+   // The assignment operator and the copy constructor must come after
+   // the templated versions for MSVC6 to work. (Gary Powell)
+   shared_ptr(const shared_ptr& r) : px(r.px) { ++*(pn = r.pn); }  // never throws
+
+   shared_ptr& operator=(const shared_ptr& r) {
+      share(r.px,r.pn);
+      return *this;
+   }
+
    void reset(T* p=0) {
       if ( px == p ) return;  // fix: self-assignment safe
       if (--*pn == 0) { checked_delete(px); }
@@ -231,7 +235,7 @@ template<typename T> class shared_ptr {
 // Tasteless as this may seem, making all members public allows member templates
 // to work in the absence of member template friends. (Matthew Langston)
 // Don't split this line into two; that causes problems for some GCC 2.95.2 builds
-#if defined(BOOST_NO_MEMBER_TEMPLATES) || !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )
+#if ( defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_MSVC6_MEMBER_TEMPLATES) ) || !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )
    private:
 #endif
 
