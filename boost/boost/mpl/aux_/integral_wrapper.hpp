@@ -17,7 +17,7 @@
 
 // no include guards, the header is intended for multiple inclusion!
 
-#include "boost/mpl/aux_/ice_cast.hpp"
+#include "boost/mpl/aux_/static_cast.hpp"
 #include "boost/mpl/aux_/config/nttp.hpp"
 #include "boost/mpl/aux_/config/static_constant.hpp"
 #include "boost/mpl/aux_/config/workaround.hpp"
@@ -60,19 +60,19 @@ struct AUX_WRAPPER_NAME
 // either
 #if BOOST_WORKAROUND(__EDG_VERSION__, <= 243)
  private:
-    BOOST_STATIC_CONSTANT(AUX_WRAPPER_VALUE_TYPE, next_value = BOOST_MPL_AUX_ICE_CAST(AUX_WRAPPER_VALUE_TYPE, (N + 1)));
-    BOOST_STATIC_CONSTANT(AUX_WRAPPER_VALUE_TYPE, prior_value = BOOST_MPL_AUX_ICE_CAST(AUX_WRAPPER_VALUE_TYPE, (N - 1)));
+    BOOST_STATIC_CONSTANT(AUX_WRAPPER_VALUE_TYPE, next_value = BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (N + 1)));
+    BOOST_STATIC_CONSTANT(AUX_WRAPPER_VALUE_TYPE, prior_value = BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (N - 1)));
  public:
     typedef AUX_WRAPPER_INST(next_value) next;
     typedef AUX_WRAPPER_INST(prior_value) prior;
 #elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
     || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502)) \
     || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
-    typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_ICE_CAST(AUX_WRAPPER_VALUE_TYPE, (N + 1)) ) next;
-    typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_ICE_CAST(AUX_WRAPPER_VALUE_TYPE, (N - 1)) ) prior;
+    typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (N + 1)) ) next;
+    typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (N - 1)) ) prior;
 #else
-    typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_ICE_CAST(AUX_WRAPPER_VALUE_TYPE, (value + 1)) ) next;
-    typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_ICE_CAST(AUX_WRAPPER_VALUE_TYPE, (value - 1)) ) prior;
+    typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (value + 1)) ) next;
+    typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (value - 1)) ) prior;
 #endif
 
     // enables uniform function call syntax for families of overloaded 

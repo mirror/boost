@@ -21,7 +21,7 @@
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
  || BOOST_WORKAROUND(__GNUC__, < 3)
-#   define BOOST_MPL_AUX_ICE_CAST(T, expr) T(expr)
+#   define BOOST_MPL_AUX_ICE_CAST(T, expr) (T)(expr)
 #elif BOOST_WORKAROUND(__MWERKS__, <= 0x3001)
 #   define BOOST_MPL_AUX_ICE_CAST(T, expr) (T)(expr)
 #else
