@@ -447,7 +447,9 @@ namespace boost {
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 
   public:
-    explicit BOOST_FUNCTION_FUNCTION(const Mixin& m = Mixin()) : 
+    BOOST_FUNCTION_FUNCTION() : function_base(), Mixin() BOOST_FUNCTION_INIT {}
+
+    explicit BOOST_FUNCTION_FUNCTION(const Mixin& m) : 
       function_base(), Mixin(m) BOOST_FUNCTION_INIT 
     {
     }
