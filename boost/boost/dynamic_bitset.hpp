@@ -19,6 +19,8 @@
 // - corrected from_block_range [GP]
 // - Removed __GNUC__ from compilers that cannot handle the constructor
 //     from basic_string and added the workaround suggested by GP. [JGS]
+// - Removed __BORLANDC__ from the #if around the basic_string
+//     constructor. Luckily the fix by GP for g++ also fixes Borland. [JGS]
 
 #ifndef BOOST_DYNAMIC_BITSET_HPP
 #define BOOST_DYNAMIC_BITSET_HPP
@@ -174,7 +176,7 @@ public:
                const Allocator& alloc = Allocator());
 
     // from string
-#if defined(BOOST_OLD_IOSTREAMS) || defined(__BORLANDC__)
+#if defined(BOOST_OLD_IOSTREAMS)
     explicit
     dynamic_bitset(const std::string& s,
                std::string::size_type pos = 0, 
@@ -184,7 +186,7 @@ public:
             (std::min(n, s.size() - pos), alloc)
 #else
     // The parenthesis around std::basic_string<CharT, Traits, Alloc>::npos
-    // in the code below are to avoid a g++ 3.2 bug. -JGS
+    // in the code below are to avoid a g++ 3.2 bug and a Borland bug. -JGS
     template <typename CharT, typename Traits, typename Alloc>
     explicit
     dynamic_bitset(const std::basic_string<CharT, Traits, Alloc>& s, 
