@@ -22,19 +22,28 @@ using namespace boost::multi_index;
 using namespace boost::tuples;
 
 template<typename T>
-struct is_composite_key_result
+struct is_composite_key_result_helper
 {
   typedef char yes;
   struct no{char m[2];};
 
-  static no test(void *);
+  static no test(void*);
 
   template<typename CompositeKey>
   static yes test(composite_key_result<CompositeKey>*);
 
   static T* make();
+};
 
-  BOOST_STATIC_CONSTANT(bool,value=(sizeof(test(make()))==sizeof(yes)));
+template<typename T>
+struct is_composite_key_result
+{
+  typedef is_composite_key_result_helper<T> helper;
+
+  BOOST_STATIC_CONSTANT(bool,
+    value=(
+      sizeof(helper::test(helper::make()))==
+      sizeof(typename helper::yes)));
 };
 
 template<typename CompositeKeyResult>
@@ -339,6 +348,8 @@ void test_composite_key()
       BOOST_MULTI_INDEX_MEMBER(xyz,int,z)()));
   ckey_t1 ck4(get<0>(ck1.key_extractors()));
 
+  ck3=ck3; /* prevent unused var */
+
   get<2>(ck4.key_extractors())=
     get<2>(ck2.key_extractors());
 
@@ -407,6 +418,10 @@ void test_composite_key()
       std::greater<int>(),
       std::less<int>()));
   ckey_comp_t3 cp6(get<0>(cp3.key_comps()));
+
+  cp4=cp5; /* prevent unused var */
+  cp5=cp6; /* prevent unused var */
+  cp6=cp4; /* prevent unused var */
 
   BOOST_CHECK(is_equiv  (ck1(xyz(0,0,0)),ck2(xyz(0,0,0)),cp3));
   BOOST_CHECK(is_greater(ck1(xyz(0,0,1)),ck2(xyz(0,1,0)),cp3));
