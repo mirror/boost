@@ -13,12 +13,12 @@
  * See http://www.boost.org for most recent version.
  */
 
-#include <boost/preprocessor/empty.hpp>
-#include <boost/preprocessor/if.hpp>
+#include <boost/preprocessor/if_then.hpp>
+#include <boost/preprocessor/logical/not.hpp>
 
 /** <p>Expands to nothing if <code>C != 0</code> and to <code>MSG</code> if
 <code>C == 0</code>.</p> */
-#define BOOST_PP_ASSERT_MSG(C,MSG) BOOST_PP_IF(C,BOOST_PP_EMPTY,MSG BOOST_PP_EMPTY)()
+#define BOOST_PP_ASSERT_MSG(C,MSG) BOOST_PP_IF_THEN(BOOST_PP_NOT(C),MSG)
 
 /** <p>Obsolete. Use BOOST_PP_ASSERT_MSG().</p> */
 #define BOOST_PREPROCESSOR_ASSERT_MSG(C,MSG) BOOST_PP_ASSERT_MSG(C,MSG)

@@ -19,32 +19,19 @@
 
 <hr>
 
-<a href="if_then.htm">Prev</a> <a href="limits.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<a href="if.htm">Prev</a> <a href="inc.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
-<h1>#include &lt;<a href="../../../../boost/preprocessor/inc.hpp">boost/preprocessor/inc.hpp</a>&gt;</h1>
-
-<hr>
-
-<h2><a name="BOOST_PP_INC">#define BOOST_PP_INC</a>(X)</h2>
- <p>Increments <code>X</code> expanding to a single token.</p>
-
-<p>For example, <code><a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(3)</code> expands to <code>4</code> (a
-single token).</p>
-
-<p><a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>() uses saturation arithmetic. Incrementing a
-<a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a> yields a <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>.</p>
-
-<p>Only decimal integer literals in the range [0,<a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>] are
-supported.</p>
+<h1>#include &lt;<a href="../../../../boost/preprocessor/if_then.hpp">boost/preprocessor/if_then.hpp</a>&gt;</h1>
 
 <hr>
 
-<h2><a name="BOOST_PREPROCESSOR_INC">#define BOOST_PREPROCESSOR_INC</a>(X)</h2>
- <p>Obsolete. Use <a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>().</p> 
+<h2><a name="BOOST_PP_IF_THEN">#define BOOST_PP_IF_THEN</a>(C,T)</h2>
+ <p>Expands to <code>T</code> if <code>C != 0</code> and to nothing if <code>C == 0</code>.</p>
+
 <hr>
 
-<a href="if_then.htm">Prev</a> <a href="limits.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
+<a href="if.htm">Prev</a> <a href="inc.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>
 <hr>
 
 <p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan --><!--webbot bot="Timestamp" endspan i-checksum="15246" --></p>
