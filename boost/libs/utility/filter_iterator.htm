@@ -189,8 +189,32 @@ This function provides a convenient way to create filter iterators.
 
 <h3>Example</h3>
 
-In this example we print the positive number again, this time using
-the <tt>make_filter_iterator()</tt> function.
+In this example we print out all numbers in the array that are
+greater than negative two.
+
+<pre>
+int main()
+{
+  int numbers[] = { 0, -1, 4, -3, 5, 8, -2 };
+  const int N = sizeof(numbers)/sizeof(int);
+
+  std::copy(boost::make_filter_iterator(numbers, numbers + N, 
+					std::bind2nd(std::greater<int>(), -2)),
+	    boost::make_filter_iterator(numbers + N, numbers + N, 
+					std::bind2nd(std::greater<int>(), -2)),
+	    std::ostream_iterator<int>(std::cout, " "));
+  std::cout << std::endl;
+
+}
+</pre>
+The output is:
+<pre>
+0 -1 4 5 8 
+</pre>
+
+<p>
+In the next example we print the positive numbers using the
+<tt>make_filter_iterator()</tt> function.
 
 <pre>
 struct is_positive_number {
