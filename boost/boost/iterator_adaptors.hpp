@@ -333,8 +333,10 @@ namespace detail {
       typedef typename Traits::iterator_category category;
       typedef operator_arrow_proxy<typename Traits::value_type> proxy;
       typedef typename Traits::pointer pointer;
+      
       enum { is_input_iter = boost::is_convertible<category,std::input_iterator_tag>::value
              & !boost::is_convertible<category,std::forward_iterator_tag>::value };
+      
       typedef typename boost::detail::if_true<(is_input_iter)>::template
       then<
         proxy,
