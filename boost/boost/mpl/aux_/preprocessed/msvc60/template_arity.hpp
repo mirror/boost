@@ -18,6 +18,7 @@ struct template_arity_impl<true>
     template< typename F > struct result_
     {
         enum { value = F::arity };
+
     };
 };
 

@@ -11,7 +11,7 @@ struct resolve_arg_impl
 {
     template<
           typename T, typename U1, typename U2, typename U3
-        , typename U4 , typename U5
+        , typename U4, typename U5
         >
     struct result_
     {
@@ -24,7 +24,7 @@ struct resolve_arg_impl<true>
 {
     template<
           typename T, typename U1, typename U2, typename U3
-        , typename U4 , typename U5
+        , typename U4, typename U5
         >
     struct result_
     {

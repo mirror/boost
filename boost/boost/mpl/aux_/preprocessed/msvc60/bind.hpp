@@ -11,7 +11,7 @@ struct resolve_arg_impl
 {
     template<
           typename T, typename U1, typename U2, typename U3
-        , typename U4 , typename U5
+        , typename U4, typename U5
         >
     struct result_
     {
@@ -24,7 +24,7 @@ struct resolve_arg_impl<true>
 {
     template<
           typename T, typename U1, typename U2, typename U3
-        , typename U4 , typename U5
+        , typename U4, typename U5
         >
     struct result_
     {
@@ -64,7 +64,7 @@ struct replace_unnamed_arg_impl< arg<-1> >
     };
 };
 
-template< typename T, typename Arg >
+template< typename T, typename Arg > 
 struct replace_unnamed_arg
     : replace_unnamed_arg_impl<T>::template result_<Arg>
 {
