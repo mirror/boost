@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-
 <section id="variant.credits">
   <title>Credits</title>
+
+<using-namespace name="boost"/>
 
 <section id="variant.ack">
   <title>Acknowledgments</title>
 
-<para>Eric Friedman and Itay Maman designed the initial submission. Eric
-was the primary implementer and is the library maintainer.</para>
+<para>Eric Friedman and Itay Maman designed the initial submission.</para>
+
+<para>Eric Friedman expanded upon the initial submission significantly --
+  adding <code><classname>make_recursive_variant</classname></code>,
+  <code><classname>make_variant_over</classname></code>, support for
+  reference content, etc. -- and is the library maintainer.</para>
 
 <para>Andrei Alexandrescu's work in
-    [<link linkend="variant.biblio.ale01a">Ale01A</link>]
+    [<link linkend="variant.refs.ale01a">Ale01a</link>]
 and
-    [<link linkend="variant.biblio.ale02">Ale02</link>]
+    [<link linkend="variant.refs.ale02">Ale02</link>]
 inspired the library's design.</para>
+
+<para>Jeff Garland was the formal review manager.</para>
 
 <para>Douglas Gregor,
 Dave Abrahams,
 Anthony Williams,
 Fernando Cacciola,
 Joel de Guzman,
+Dirk Schreib,
 Brad King,
 Giovanni Bajo,
 Eugene Gladyshev,
@@ -30,86 +38,111 @@ interface, and implementation of the library.</para>
 
 </section>
 
-<section id="variant.biblio">
-  <title>Bibliography</title>
+<section id="variant.refs">
+  <title>References</title>
 
-<para id="variant.biblio.abr00">
-    [Abr98] David Abrahams.
-    &quot;<ulink url="http://boost.org/more/generic_exception_safety.html">Exception-Safety in Generic Components</ulink>.&quot;
+<para id="variant.refs.abr00">
+    <ulink url="http://boost.org/more/generic_exception_safety.html">[Abr00]</ulink>
+    David Abrahams.
+    &quot;Exception-Safety in Generic Components.&quot;
     M. Jazayeri, R. Loos, D. Musser (eds.):
       Generic Programming '98, Proc. of a Dagstuhl Seminar, Lecture Notes on Computer Science, Vol. 1766, pp. 69-79.
     Springer-Verlag Berlin Heidelberg.
     2000.
 </para>
-<para id="variant.biblio.abr01">
-    [Abr01] David Abrahams.
-    &quot;<ulink url="http://boost.org/more/error_handling.html">Error and Exception Handling</ulink>.&quot;
+<para id="variant.refs.abr01">
+    <ulink url="http://boost.org/more/error_handling.html">[Abr01]</ulink>
+    David Abrahams.
+    &quot;Error and Exception Handling.&quot;
     Boost technical article.
     2001-2003.
 </para>
-<para id="variant.biblio.ale01a">
-    [Ale01A] Andrei Alexandrescu.
-    &quot;<ulink url="http://www.oonumerics.org/tmpw01/alexandrescu.pdf">An Implementation of Discriminated Unions in C++</ulink>.&quot;
+<para id="variant.refs.ale01a">
+    <ulink url="http://www.oonumerics.org/tmpw01/alexandrescu.pdf">[Ale01a]</ulink>
+    Andrei Alexandrescu.
+    &quot;An Implementation of Discriminated Unions in C++.&quot;
     <emphasis>OOPSLA 2001</emphasis>, Second Workshop on C++ Template Programming.
     Tampa Bay, 14 October 2001.
 </para>
-<para id="variant.biblio.ale01b">
-    [Ale01B] Andrei Alexandrescu.
-    <emphasis><ulink url="http://www.moderncppdesign.com/book/main.html">
-        Modern C++ Design</ulink></emphasis>.
+<para id="variant.refs.ale01b">
+    <ulink url="http://www.moderncppdesign.com/book/main.html">[Ale01b]</ulink>
+    Andrei Alexandrescu.
+    <emphasis>Modern C++ Design</emphasis>.
     Addison-Wesley, C++ In-Depth series.
     2001.
 </para>
-<para id="variant.biblio.ale02">
-    [Ale02] Andrei Alexandrescu.
-    &quot;Generic&lt;Programming&gt;: Discriminated Unions&quot;
+<para id="variant.refs.ale02">
+    <ulink url="http://cuj.com/experts/2008/alexandr.htm">[Ale02]</ulink>
+    Andrei Alexandrescu.
+    &quot;Generic&lt;Programming&gt;: Discriminated Unions&quot; series:
         <ulink url="http://cuj.com/experts/2004/alexandr.htm">Part 1</ulink>,
         <ulink url="http://cuj.com/experts/2006/alexandr.htm">Part 2</ulink>,
         <ulink url="http://cuj.com/experts/2008/alexandr.htm">Part 3</ulink>.
     <emphasis>C/C++ Users Journal</emphasis>.
     2002.
 </para>
-<para id="variant.biblio.boo02">
-    [Boo02] Various Boost members.
-    &quot;<ulink url="http://lists.boost.org/MailArchives/boost/msg30415.php">Proposal --- A type-safe union</ulink>.&quot;
+<para id="variant.refs.boo02">
+    <ulink url="http://lists.boost.org/MailArchives/boost/msg30415.php">[Boo02]</ulink>
+    Various Boost members.
+    &quot;Proposal --- A type-safe union.&quot;
     Boost public discussion.
     2002.
 </para>
-<para id="variant.biblio.c++98">
-  [C++98] <emphasis>International Standard, Programming Languages – C++</emphasis>.
+<para id="variant.refs.c++98">
+  [C++98]
+  <emphasis>International Standard, Programming Languages – C++</emphasis>.
   ISO/IEC:14882.
   1998.
 </para>
-<para id="variant.biblio.fri02">
-    [Fri02] Eric Friedman.
-    &quot;<ulink url="http://groups.yahoo.com/group/boost/files/variant-20020701.zip">Variant (aka Discriminated Union)</ulink>.&quot;
+<para id="variant.refs.fri02">
+    <ulink url="http://groups.yahoo.com/group/boost/files/variant-20020701.zip">[Fri02]</ulink>
+    Eric Friedman.
+    &quot;Variant (aka Discriminated Union).&quot;
     Early implementation.
     2002.
 </para>
-<para id="variant.biblio.gre02">
-    [Gre02] Doug Gregor.
-    &quot;<ulink url="http://www.crystalclearsoftware.com/cgi-bin/boost_wiki/wiki.pl?variant">BOOST_USER: variant</ulink>.&quot;
+<para id="variant.refs.gre02">
+    <ulink url="http://www.crystalclearsoftware.com/cgi-bin/boost_wiki/wiki.pl?variant">[Gre02]</ulink>
+    Douglas Gregor.
+    &quot;BOOST_USER: variant.&quot;
     Boost Wiki paper.
     2002.
 </para>
-<para id="variant.biblio.hen01">
-    [Hen01] Kevlin Henney.
-    <link linkend="any">Boost.Any</link>.
+<para id="variant.refs.gur02">
+    <ulink url="http://www.boost.org/libs/mpl">[Gur02]</ulink>
+    Aleksey Gurtovoy.
+    <emphasis>Boost Metaprogramming Library.</emphasis>
+    2002.
+</para>
+<para id="variant.refs.hen01">
+    <ulink url="http://www.boost.org/libs/any">[Hen01]</ulink>
+    Kevlin Henney.
+    <emphasis>Boost Any Library.</emphasis>
     2001.
 </para>
-<para id="variant.biblio.sut00">
-    [Sut00] Herb Sutter.
-    <emphasis><ulink url="http://www.gotw.ca/publications/xc++.htm">
-        Exceptional C++: 47 Engineering Puzzles, Programming Problems, and Solutions
-    </ulink></emphasis>. 
+<para id="variant.refs.mk02">
+    <ulink url="http://www.boost.org/libs/preprocessor">[MK02]</ulink>
+    Paul Mensonides and Vesa Karvonen.
+    <emphasis>Boost Preprocessor Library.</emphasis>
+    2002.
+</para>
+<para id="variant.refs.mcd+01">
+    <ulink url="http://www.boost.org/libs/type_traits">[MCD+01]</ulink>
+    Steve Cleary, Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat Marcus, John Maddock, and Jeremy Siek.
+    <emphasis>Boost Type Traits Library</emphasis>.
+    2001.
+</para>
+<para id="variant.refs.sut00">
+    <ulink url="http://www.gotw.ca/publications/xc++.htm">[Sut00]</ulink>
+    Herb Sutter.
+    <emphasis>Exceptional C++: 47 Engineering Puzzles, Programming Problems, and Solutions</emphasis>.
     Addison-Wesley, C++ In-Depth series.
     2000.
 </para>
-<para id="variant.biblio.wil02">
-    [Wil02] Anthony Williams.
-    <ulink url="http://aspn.activestate.com/ASPN/Mail/Message/boost/1314807">
-        Double-Storage Proposal
-    </ulink>.
+<para id="variant.refs.wil02">
+    <ulink url="http://aspn.activestate.com/ASPN/Mail/Message/boost/1314807">[Wil02]</ulink>
+    Anthony Williams.
+    Double-Storage Proposal.
     2002.
 </para>
 
