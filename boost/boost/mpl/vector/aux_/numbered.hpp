@@ -117,9 +117,9 @@ struct vector_item<V,i>
 namespace aux {
 template<> struct vector_item_impl<i>
 {
-    template< typename V > struct result_
+    template< typename V_ > struct result_
     {
-        typedef typename V::BOOST_PP_CAT(item,i) type;
+        typedef typename V_::BOOST_PP_CAT(item,i) type;
     };
 };
 }
@@ -127,10 +127,10 @@ template<> struct vector_item_impl<i>
 template<>
 struct at_traits< aux::vector_tag<i> >
 {
-    template< typename V, typename N > struct algorithm
+    template< typename V_, typename N > struct algorithm
     {
         typedef typename aux::vector_item_impl<BOOST_MPL_AUX_VALUE_WKND(N)::value>
-            ::template result_<V>::type type;
+            ::template result_<V_>::type type;
     };
 };
 
