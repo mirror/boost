@@ -43,7 +43,10 @@ void test_matrix ();
 
 // #define USE_FLOAT
 #define USE_DOUBLE
+// MSVC Version 6.0 & 7.0 have problems with std complex
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1300)
 #define USE_STD_COMPLEX
+#endif
 
 #define USE_RANGE
 #define USE_SLICE

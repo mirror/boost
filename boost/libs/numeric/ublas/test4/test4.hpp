@@ -51,7 +51,9 @@ void test_matrix ();
 
 // #define USE_FLOAT
 #define USE_DOUBLE
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1300)
 #define USE_STD_COMPLEX
+#endif
 
 #define USE_RANGE
 #define USE_SLICE
