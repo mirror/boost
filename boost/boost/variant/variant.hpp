@@ -70,6 +70,7 @@
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iterator_range.hpp"
+#include "boost/mpl/iter_fold_if.hpp"
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
 #include "boost/mpl/pair.hpp"
