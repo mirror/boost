@@ -1852,7 +1852,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     };
 
-    // inner_prod (v1, v2) = sum (v1 [i] * v2 [i]
+    // inner_prod (v1, v2) = sum (v1 [i] * v2 [i])
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
     typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type,

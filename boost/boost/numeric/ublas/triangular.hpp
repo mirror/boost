@@ -1968,14 +1968,14 @@ namespace boost { namespace numeric { namespace ublas {
         typedef BOOST_UBLAS_TYPENAME E1::difference_type difference_type;
         typedef BOOST_UBLAS_TYPENAME E1::value_type value_type;
 
-        BOOST_UBLAS_CHECK (e1 ().size () == e2.size1 (), bad_size ());
-        BOOST_UBLAS_CHECK (e2.size1 () == e2.size2 (), bad_size ());
+        BOOST_UBLAS_CHECK (e1.size () == e2 ().size1 (), bad_size ());
+        BOOST_UBLAS_CHECK (e2 ().size1 () == e2 ().size2 (), bad_size ());
         size_type size = e1.size ();
         for (size_type n = 0; n < size; ++ n) {
-            BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
-            value_type t = e1 (n) /= e2 (n, n);
+            BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
+            value_type t = e1 (n) /= e2 () (n, n);
             for (size_type m = n + 1; m < size; ++ m)
-                e1 (m) -= t * e2 (n, m);
+                e1 (m) -= t * e2 () (n, m);
         }
     }
     // Packed (proxy) case
@@ -1987,14 +1987,14 @@ namespace boost { namespace numeric { namespace ublas {
         typedef BOOST_UBLAS_TYPENAME E1::difference_type difference_type;
         typedef BOOST_UBLAS_TYPENAME E1::value_type value_type;
 
-        BOOST_UBLAS_CHECK (e1 ().size () == e2.size1 (), bad_size ());
-        BOOST_UBLAS_CHECK (e2.size1 () == e2.size2 (), bad_size ());
+        BOOST_UBLAS_CHECK (e1.size () == e2 ().size1 (), bad_size ());
+        BOOST_UBLAS_CHECK (e2 ().size1 () == e2 ().size2 (), bad_size ());
         size_type size = e1.size ();
         for (size_type n = 0; n < size; ++ n) {
-            BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
-            value_type t = e1 (n) /= e2 (n, n);
+            BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
+            value_type t = e1 (n) /= e2 () (n, n);
             typename E1::iterator ite1 (e1.find_first (n + 1));
-            typename E1::iterator ite1_end (e1.find_first (e2.size ()));
+            typename E1::iterator ite1_end (e1.find_first (e2 ().size ()));
             typename E2::const_iterator2 it2e2 (e2 ().find_first2 (1, n, n + 1));
             typename E2::const_iterator2 it2e2_end (e2 ().find_first2 (1, n, e2 ().size2 ()));
             difference_type m (it2e2_end - it2e2);
@@ -2011,12 +2011,12 @@ namespace boost { namespace numeric { namespace ublas {
         typedef BOOST_UBLAS_TYPENAME E1::difference_type difference_type;
         typedef BOOST_UBLAS_TYPENAME E1::value_type value_type;
 
-        BOOST_UBLAS_CHECK (e1 ().size () == e2.size1 (), bad_size ());
-        BOOST_UBLAS_CHECK (e2.size1 () == e2.size2 (), bad_size ());
+        BOOST_UBLAS_CHECK (e1.size () == e2 ().size1 (), bad_size ());
+        BOOST_UBLAS_CHECK (e2 ().size1 () == e2 ().size2 (), bad_size ());
         size_type size = e1.size ();
         for (size_type n = 0; n < size; ++ n) {
-            BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
-            value_type t = e1 (n) /= e2 (n, n);
+            BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
+            value_type t = e1 (n) /= e2 () (n, n);
             typename E2::const_iterator2 it2e2 (e2 ().find_first2 (1, n, n + 1));
             typename E2::const_iterator2 it2e2_end (e2 ().find_first2 (1, n, e2 ().size2 ()));
             while (it2e2 != it2e2_end)
@@ -2029,7 +2029,7 @@ namespace boost { namespace numeric { namespace ublas {
     void inplace_solve (E1 &e1, const matrix_expression<E2> &e2,
                         vector_tag, lower_tag) {
         typedef BOOST_UBLAS_TYPENAME E2::storage_category dispatch_category;
-        inplace_solve (e1, e2, lower_tag (), vector_tag (), dispatch_category ());
+        inplace_solve (e1, e2, vector_tag (), lower_tag (), dispatch_category ());
     }
 
     // Dense (proxy) case

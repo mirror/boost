@@ -71,8 +71,14 @@
 #define BOOST_UBLAS_USE_STREAM
 // #endif
 
+// MSVC extensions seem to disable abs () overloads in <cmath>.
+#ifdef _MSC_EXTENSIONS
+#define BOOST_UBLAS_NO_CMATH
+#endif
+
 #define BOOST_UBLAS_NO_ELEMENT_PROXIES
-#define BOOST_UBLAS_NO_SMART_PROXIES
+// This seems to work now thanks to the great work of the MPL team!
+// #define BOOST_UBLAS_NO_SMART_PROXIES
 
 // Using MSVC the following is missing:
 // namespace std {
@@ -270,7 +276,7 @@ namespace std {
 
 #endif
 
-#ifdef BOOST_UBLAS_BOUNDS_CHECK
+#ifdef BOOST_UBLAS_TYPE_CHECK
 static bool disable_type_check = false;
 #endif
 
