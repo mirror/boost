@@ -25,7 +25,7 @@ struct is_abstract_test
    static char check_sig(...);
 
 #ifdef __GNUC__
-   enum{ s1 = sizeof(is_abstract_test<T>::template check_sig<T>(0))) };
+   enum{ s1 = sizeof(is_abstract_test<T>::template check_sig<T>(0)) };
 #else
    enum{ s1 = sizeof(check_sig<T>(0)) };
 #endif
