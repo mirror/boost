@@ -29,6 +29,7 @@
 
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
+#include <boost/serialization/serialization.hpp>
 
 namespace boost{
 namespace serialization {
