@@ -10,7 +10,7 @@
 #ifndef BOOST_POOL_CT_GCD_LCM_HPP
 #define BOOST_POOL_CT_GCD_LCM_HPP
 
-#include <boost/pool/detail/postulate.hpp>
+#include <boost/static_assert.hpp>
 
 namespace boost {
 
@@ -44,7 +44,7 @@ struct ct_gcd_helper<A, B, true>
 template <unsigned A, unsigned B>
 struct ct_gcd
 {
-  BOOST_POOL_POSTULATE(A != 0 && B != 0);
+  BOOST_STATIC_ASSERT(A != 0 && B != 0);
   static const unsigned value = details::ct_gcd_helper<A, B, false>::value;
 };
 
