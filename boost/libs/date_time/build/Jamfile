@@ -18,8 +18,8 @@
 # declare the location of this subproject relative to the root
 subproject libs/date_time/build ;
 
-#local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ;
-local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE ;
+local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ;
+#local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE ;
 
 local DATE_TIME_INCLUDES = <include>$(BOOST_ROOT)
                       <include>../../..
