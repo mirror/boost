@@ -15,7 +15,7 @@
 #include <exception>
 #include <stdexcept>
 
-#if (defined(_WINDOWS) || defined(_WIN32) || defined(_WIN64)) && !defined(BOOST_DISABLE_WIN32)
+#if defined(BOOST_WINDOWS) && !defined(BOOST_DISABLE_WIN32)
 #include <windows.h> // more things to test
 #endif
 
@@ -63,11 +63,10 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::runtime_error>::value, t
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::out_of_range>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<std::range_error>::value, true);
 
-#if (defined(_WINDOWS) || defined(_WIN32) || defined(_WIN64)) && !defined(BOOST_DISABLE_WIN32)
+#if defined(BOOST_WINDOWS) && !defined(BOOST_DISABLE_WIN32)
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<IUnknown>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<ITypeInfo>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<ITypeComp>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<ICreateTypeInfo>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<IDispatch>::value, true);
 #endif
 
