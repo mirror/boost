@@ -464,13 +464,13 @@ void test_style_errors()
     using namespace command_line_style;
     char* argv[] = {"program"};
 
-    BOOST_CHECK_THROW(cmdline cmd(1, argv, allow_long),
+    BOOST_CHECK_THROW(cmdline cmd(1, (const char*const *)argv, allow_long),
                       invalid_command_line_style);
 
-    BOOST_CHECK_THROW(cmdline cmd(1, argv, allow_short),
+    BOOST_CHECK_THROW(cmdline cmd(1, (const char*const *)argv, allow_short),
                       invalid_command_line_style);
 
-    BOOST_CHECK_THROW(cmdline cmd(1, argv, allow_short | 
+    BOOST_CHECK_THROW(cmdline cmd(1, (const char*const *)argv, allow_short | 
                                   short_allow_next),
                       invalid_command_line_style);
 }

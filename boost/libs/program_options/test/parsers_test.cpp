@@ -17,7 +17,7 @@ using namespace boost;
 #include <sstream>
 using namespace std;
 
-#include <cstdlib> // for setenv
+#include <cstdlib> // for putenv
 
 #define TEST_CHECK_THROW(expression, exception, description) \
     try \
@@ -195,7 +195,7 @@ void test_environment()
         ("bar", new untyped_value, "")
         ;
 
-#ifdef _WIN32
+#if defined(_WIN32) && ! defined(__BORLANDC__)
     _putenv("PO_TEST_FOO=1");
 #else
     putenv("PO_TEST_FOO=1");
