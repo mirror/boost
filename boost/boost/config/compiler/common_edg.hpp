@@ -25,6 +25,7 @@
 
 #ifdef c_plusplus
 // EDG has "long long" in non-strict mode
-#define BOOST_HAS_LONG_LONG
+// However, some libraries have insufficient "long long" support
+// #define BOOST_HAS_LONG_LONG
 #endif
 
