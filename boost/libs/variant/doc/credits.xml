@@ -5,30 +5,92 @@
 <section id="variant.credits">
   <title>Credits</title>
 
-<section>
+<section id="variant.ack">
   <title>Acknowledgments</title>
 
-<para>Eric Friedman and Itay Maman designed and implemented the
-initial submission.</para>
+<para>Eric Friedman and Itay Maman designed and implemented the initial
+submission.</para>
 
-<para>Andrei Alexandrescu's work in [Ale01A] and [Ale02] inspired
-the library's design.</para>
+<para>Andrei Alexandrescu's work in
+    [<link linkend="variant.biblio.ale01a">Ale01A</link>]
+and
+    [<link linkend="variant.biblio.ale02">Ale02</link>]
+inspired the library's design.</para>
 
-<para>Anthony Williams suggested the method [Wil02] by which
-<code>variant</code> generally guarantees strong
-exception-safety.</para>
+<para>Anthony Williams suggested the method
+    [<link linkend="variant.biblio.wil02">Wil02</link>]
+by which <classname alt="boost::variant"><code>variant</code></classname>
+generally guarantees strong exception-safety.</para>
 
-<para>Douglas Gregor, Dave Abrahams, Fernando Cacciola, Brad
-King, Giovanni Bajo, and others provided helpful feedback and
-suggestions to refine the semantics, interface, and implementation
-of the library.</para>
+<para>Douglas Gregor, Dave Abrahams, Fernando Cacciola, Brad King, Giovanni
+Bajo, and others provided helpful feedback and suggestions to refine the
+semantics, interface, and implementation of the library.</para>
 
 </section>
 
-<section>
+<section id="variant.biblio">
   <title>Bibliography</title>
 
-<para>TODO</para>
+<para id="variant.biblio.ale01a">
+    [Ale01A] Andrei Alexandrescu.
+    &quot;<ulink url="http://www.oonumerics.org/tmpw01/alexandrescu.pdf">An Implementation of Discriminated Unions in C++</ulink>.&quot;
+    <emphasis>OOPSLA 2001</emphasis>, Second Workshop on C++ Template Programming.
+    Tampa Bay, 14 October 2001.
+</para>
+<para id="variant.biblio.ale01b">
+    [Ale01B] Andrei Alexandrescu.
+    <emphasis><ulink url="http://www.moderncppdesign.com/book/main.html">
+        Modern C++ Design</ulink></emphasis>.
+    Addison-Wesley, C++ In-Depth series.
+    2001.
+</para>
+<para id="variant.biblio.ale02">
+    [Ale02] Andrei Alexandrescu.
+    &quot;Generic&lt;Programming&gt;: Discriminated Unions&quot;
+        <ulink url="http://cuj.com/experts/2004/alexandr.htm">Part 1</ulink>,
+        <ulink url="http://cuj.com/experts/2006/alexandr.htm">Part 2</ulink>,
+        <ulink url="http://cuj.com/experts/2008/alexandr.htm">Part 3</ulink>.
+    <emphasis>C/C++ Users Journal</emphasis>.
+    2002.
+</para>
+<para id="variant.biblio.boo02">
+    [Boo02] Various Boost members.
+    &quot;<ulink url="http://lists.boost.org/MailArchives/boost/msg30415.php">Proposal --- A type-safe union</ulink>.&quot;
+    Boost public discussion.
+    2002.
+</para>
+<para id="variant.biblio.fri02">
+    [Fri02] Eric Friedman.
+    &quot;<ulink url="http://groups.yahoo.com/group/boost/files/variant-20020701.zip">Variant (aka Discriminated Union)</ulink>.&quot;
+    Early implementation.
+    2002.
+</para>
+<para id="variant.biblio.gre02">
+    [Gre02] Doug Gregor.
+    &quot;<ulink url="http://www.crystalclearsoftware.com/cgi-bin/boost_wiki/wiki.pl?variant">BOOST_USER: variant</ulink>.&quot;
+    Boost Wiki paper.
+    2002.
+</para>
+<para id="variant.biblio.hen01">
+    [Hen01] Kevlin Henney.
+    <link linkend="any">Boost.Any</link>.
+    2001.
+</para>
+<para id="variant.biblio.sut00">
+    [Sut00] Herb Sutter.
+    <emphasis><ulink url="http://www.gotw.ca/publications/xc++.htm">
+        Exceptional C++: 47 Engineering Puzzles, Programming Problems, and Solutions
+    </ulink></emphasis>. 
+    Addison-Wesley, C++ In-Depth series.
+    2000.
+</para>
+<para id="variant.biblio.wil02">
+    [Wil02] Anthony Williams.
+    <ulink url="http://aspn.activestate.com/ASPN/Mail/Message/boost/1314807">
+        Double-Storage Proposal
+    </ulink>.
+    2002.
+</para>
 
 </section>
 

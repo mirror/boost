@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<section id="variant.concepts">
+  <title>Concepts</title>
+  
+  <section id="variant.concepts.bounded-type">
+    <title><emphasis>BoundedType</emphasis></title>
+
+    <para>The requirements on a <emphasis role="bold">bounded type</emphasis>
+      are as follows:</para>
+
+    <itemizedlist>
+      <listitem><emphasis>CopyConstructible</emphasis> [20.1.3].</listitem>
+      <listitem>Destructor upholds the no-throw exception-safety
+        guarantee.</listitem>
+      <listitem>Complete at the point of variant template instantiation. (See
+        <code><classname>boost::incomplete</classname>&lt;T&gt;</code> wrapper for
+        a solution to handling incomplete types.)</listitem>
+    </itemizedlist>
+
+    <para>Every type specified as a template argument to
+      <code><classname>variant</classname></code> must at minimum fulfill the
+      above requirements. In addition, certain features of <code>variant</code>
+      are available only if its bounded types meet the requirements of these
+      following additional concepts:</para>
+
+    <itemizedlist>
+      <listitem><link linkend="variant.concepts.assignable"><emphasis>Assignable</emphasis></link>:
+        <code>variant</code> is itself <emphasis>Assignable</emphasis> if and
+        only if every one of its bounded types meets the requirements of the
+        concept. (Note that top-level <code>const</code>-qualified types do
+        <emphasis>not</emphasis> meet these requirements.)</listitem>
+      <listitem><link linkend="variant.concepts.default-constructible"><emphasis>DefaultConstructible</emphasis></link>:
+        <code>variant</code> is itself
+        <emphasis>DefaultConstructible</emphasis> if and only if its first
+        bounded type (i.e., <code>T1</code>) meets the requirements of the
+        concept.</listitem>
+      <listitem><link linkend="variant.concepts.output-streamable"><emphasis>OutputStreamable</emphasis></link>:
+        <code>variant</code> is itself <emphasis>OutputStreamable</emphasis>
+        if and only if every one of its bounded types meets the requirements
+        of the concept.</listitem>
+    </itemizedlist>
+  </section>
+
+  <section id="variant.concepts.static-visitor">
+    <title><emphasis>StaticVisitor</emphasis></title>
+
+    <para>The requirements on a <emphasis role="bold">static
+    visitor</emphasis> of a type <code>T</code> are as follows:</para>
+
+    <itemizedlist>
+      <listitem>Must allow invocation as a function by overloading
+        <code>operator()</code>, unambiguously accepting any value of type
+        <code>T</code>.</listitem>
+      <listitem>Must expose inner type <code>result_type</code>. (See 
+        <code><functionname>boost::visitor_ptr</functionname></code> for a
+        solution to using functions as visitors.)</listitem>
+      <listitem>If <code>result_type</code> is not <code>void</code>, then
+        each operation of the function object must return a value implicitly
+        convertible to <code>result_type</code>.</listitem>
+    </itemizedlist>
+
+    <section id="variant.concepts.static-visitor.examples">
+      <title>Examples</title>
+      
+      <para>The following class satisfies the requirements of a static visitor
+      of several types (i.e., explicitly: <code>int</code> and
+      <code>std::string</code>; or, e.g., implicitly: <code>short</code> and
+      <code>const char *</code>; etc.):</para>
+
+<programlisting>class my_visitor
+    : public <classname>boost::static_visitor</classname>&lt;int&gt;
+{
+public:
+
+    int operator()(int i)
+    {
+        return i * 2;
+    }
+
+    int operator()(const std::string&amp; s)
+    {
+        return s.length();
+    }
+
+};</programlisting>
+
+      <para>Another example is the following class, whose function-call
+      operator is a member template, allowing it to operate on values of many
+      types. Thus, the following class is a visitor of any type that supports
+      streaming output (e.g., <code>int</code>, <code>double</code>,
+      <code>std::string</code>, etc.):</para>
+
+<programlisting>class printer
+    : public <classname>boost::static_visitor</classname>&lt;&gt;
+{
+    template &lt;typename T&gt;
+    void operator()(const T&amp; t)
+    {
+        std::cout &lt;&lt; t &lt;&lt; std::endl;
+    }
+};</programlisting>
+
+    </section>
+  </section>
+  
+  <section id="variant.concepts.assignable">
+    <title><emphasis>Assignable</emphasis></title>
+
+    <para>See
+    <ulink url="http://www.sgi.com/tech/stl/Assignable.html">external
+    documentation</ulink> for this concept.</para>
+  </section>
+
+  <section id="variant.concepts.default-constructible">
+    <title><emphasis>DefaultConstructible</emphasis></title>
+
+    <para>See
+    <ulink url="http://www.sgi.com/tech/stl/DefaultConstructible.html">external
+    documentation</ulink> for this concept.</para>
+  </section>
+
+  <section id="variant.concepts.output-streamable">
+    <title><emphasis>OutputStreamable</emphasis></title>
+
+    <para>The requirements on an <emphasis role="bold">output
+      streamable</emphasis> type <code>T</code> are as follows:</para>
+
+    <itemizedlist>
+      <listitem>For any object <code>t</code> of type <code>T</code>,
+        <code>std::cout &lt;&lt; t</code> must be a valid
+        expression.</listitem>
+    </itemizedlist>
+  </section>
+
+</section>

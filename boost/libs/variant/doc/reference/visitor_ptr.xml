@@ -19,19 +19,22 @@
 
     <class name="visitor_ptr_t">
       <template>
-        <template-type-parameter name="ArgumentType"/>
-        <template-type-parameter name="ResultType"/>
+        <template-type-parameter name="T"/>
+        <template-type-parameter name="R"/>
       </template>
 
-      <inherit access="public">
-        <classname alt="boost::static_visitor">
-          static_visitor&lt;ResultType&gt;
-        </classname>
-      </inherit>
+      <purpose>Adapts a function pointer for use as a static visitor.</purpose>
+      <description>
+        <simpara>Adapts the function given at construction for use as a
+        <link linkend="variant.concepts.static-visitor">static visitor</link>
+        of type <code>T</code> with result type <code>R</code>.</simpara>
+      </description>
 
-      <constructor>
+      <inherit access="public"><classname>static_visitor</classname>&lt;R&gt;</inherit>
+
+      <constructor specifiers="explicit">
         <parameter>
-          <paramtype>ResultType (*)(ArgumentType)</paramtype>
+          <paramtype>R (*)(T)</paramtype>
         </parameter>
 
         <effects>
@@ -39,15 +42,13 @@
         </effects>
       </constructor>
 
-      <method-group name="static visitor interface">
+      <method-group name="static visitor interfaces">
         <overloaded-method name="operator()">
           <signature>
-            <type>
-              <link linkend="static_visitor.result_type">result_type</link>
-            </type>
+            <type>R</type>
 
             <parameter name="operand">
-              <paramtype><emphasis>argument_forward_type</emphasis></paramtype>
+              <paramtype><emphasis>unspecified-forwarding-type</emphasis></paramtype>
             </parameter>
           </signature>
 
@@ -65,15 +66,15 @@
 
           <effects>
             <simpara>If passed a value or reference of type
-              <code>ArgumentType</code>, it invokes the function given at
+              <code>T</code>, it invokes the function given at
               construction, appropriately forwarding
               <code>operand</code>.</simpara>
           </effects>
           <returns>Returns the result of the function invocation.</returns>
 
-          <throws>
+          <throws id="visitor_ptr_t.visit.throws">
             <simpara>The overload taking a value or reference of type
-              <code>ArgumentType</code> throws if the invoked function throws.
+              <code>T</code> throws if the invoked function throws.
               The overload taking all other values <emphasis>always</emphasis>
               throws <code><classname>bad_visit</classname></code>.</simpara>
           </throws>
@@ -82,6 +83,16 @@
     </class>
 
     <function name="visitor_ptr">
+      <purpose>
+        <simpara>Returns a visitor object that adapts function pointers for
+        use as a static visitor.</simpara>
+      </purpose>
+      <description>
+        <simpara>Constructs and returns a
+        <code><classname>visitor_ptr_t</classname></code> adaptor over the
+        given function.</simpara>
+      </description>
+
       <template>
         <template-type-parameter name="R"/>
         <template-type-parameter name="T"/>
@@ -94,11 +105,16 @@
       </parameter>
 
       <returns>
-        <simpara>Returns a <classname>visitor_ptr_t</classname>
-          visitor object that, when applied, invokes the given function.</simpara>
+        <simpara>Returns a <code><classname>visitor_ptr_t</classname></code>
+          visitor object that, when applied, invokes the given
+          function.</simpara>
       </returns>
 
-      <throws>Does not throw. However, returned visitor may throw when applied.</throws>
+      <throws>
+        <simpara>Will not throw. (Note, however, that the returned
+        <classname alt="boost::visitor_ptr_t">visitor object</classname> may
+        throw when applied.)</simpara>
+      </throws>
     </function>
 
   </namespace>

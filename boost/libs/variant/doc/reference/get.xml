@@ -8,86 +8,117 @@
       <inherit access="public">
         <classname>std::exception</classname>
       </inherit>
-      <purpose>The exception thrown in the event of a failed
-      <code><functionname>get</functionname></code> of a
-      <code><classname>variant</classname></code> value.</purpose>
 
-      <method name="what" specifiers="virtual" cv="const">
-        <type>const char *</type>
+      <purpose>
+        <simpara>The exception thrown in	the	event	of a failed application of
+        <code><functionname>boost::get</functionname></code> on	the given
+        operand value.</simpara>
+      </purpose>
+
+      <method	name="what"	specifiers="virtual" cv="const">
+        <type>const	char *</type>
       </method>
     </class>
 
     <overloaded-function name="get">
       <signature>
         <template>
-          <template-type-parameter name="T"/>
+          <template-type-parameter name="U"/>
+          <template-type-parameter name="T1"/>
+          <template-type-parameter name="T2"/>
+          <template-varargs/>
+          <template-type-parameter name="TN"/>
         </template>
 
-        <type>T &amp;</type>
+        <type>U *</type>
 
         <parameter name="operand">
-          <paramtype><classname>variant</classname>&lt;...&gt; &amp;</paramtype>
+          <paramtype><classname>variant</classname>&lt;T1, T2, ..., TN&gt; *</paramtype>
         </parameter>
       </signature>
 
       <signature>
         <template>
-          <template-type-parameter name="T"/>
+          <template-type-parameter name="U"/>
+          <template-type-parameter name="T1"/>
+          <template-type-parameter name="T2"/>
+          <template-varargs/>
+          <template-type-parameter name="TN"/>
         </template>
 
-        <type>T &amp;</type>
+        <type>U *</type>
 
         <parameter name="operand">
-          <paramtype>const <classname>variant</classname>&lt;...&gt; &amp;</paramtype>
+          <paramtype>const <classname>variant</classname>&lt;T1, T2, ..., TN&gt; *</paramtype>
+        </parameter>
+      </signature>
+      
+      <signature>
+        <template>
+          <template-type-parameter name="U"/>
+          <template-type-parameter name="T1"/>
+          <template-type-parameter name="T2"/>
+          <template-varargs/>
+          <template-type-parameter name="TN"/>
+        </template>
+
+        <type>U &amp;</type>
+
+        <parameter name="operand">
+          <paramtype><classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
         </parameter>
       </signature>
 
       <signature>
         <template>
-          <template-type-parameter name="T"/>
+          <template-type-parameter name="U"/>
+          <template-type-parameter name="T1"/>
+          <template-type-parameter name="T2"/>
+          <template-varargs/>
+          <template-type-parameter name="TN"/>
         </template>
 
-        <type>T *</type>
+        <type>U &amp;</type>
 
         <parameter name="operand">
-          <paramtype><classname>variant</classname>&lt;...&gt; *</paramtype>
+          <paramtype>const <classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
         </parameter>
       </signature>
 
-      <signature>
-        <template>
-          <template-type-parameter name="T"/>
-        </template>
-
-        <type>T *</type>
-
-        <parameter name="operand">
-          <paramtype>const <classname>variant</classname>&lt;...&gt; *</paramtype>
-        </parameter>
-      </signature>
-
-      <purpose><simpara>Retrieves a value of a specified type from a given
-        <code><classname>variant</classname></code>.</simpara>
+      <purpose>
+        <simpara>Retrieves a value of a specified type from a given
+          <code><classname>variant</classname></code>.</simpara>
       </purpose>
 
-      <returns><simpara>If passed a pointer, it returns a similarly qualified
+      <returns>
+        <simpara>If passed a pointer, it returns a similarly qualified
         pointer to the value content if successful, otherwise null is returned.
         If passed a reference, it returns a similarly qualified reference to the
         value content if successful.</simpara>
       </returns>
 
-      <throws><simpara>Overloads taking a
+      <throws>
+        <simpara>Overloads taking a
         <code><classname>variant</classname></code> pointer do not
         throw; the overloads taking a
-        <code><classname>variant</classname></code> reference throws
+        <code><classname>variant</classname></code> reference throw
         <code><classname>bad_get</classname></code> if
         unsuccessful.</simpara>
       </throws>
 
-      <rationale><simpara>While visitation via
-        <code><functionname>apply_visitor</functionname></code> is generally
-        prefered due to its greater safety, explicit retrieval via
-        <code>get</code> may be convenient in some circumstances.</simpara>
+      <notes>
+        <simpara>After either <code>operand</code> or its content is destroyed
+        (e.g., when the given <code><classname>variant</classname></code> is
+        assigned a value of different type), the returned reference is
+        invalidated. Thus, significant care and caution must be extended when
+        handling the returned reference.</simpara>
+      </notes>
+
+      <rationale>
+        <simpara>While visitation via
+        <code><functionname>apply_visitor</functionname></code>
+        is generally prefered due to its greater safety, <code>get</code> may
+        may be more convenient in some cases due to its narrowness.</simpara>
       </rationale>
     </overloaded-function>
 

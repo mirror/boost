@@ -3,6 +3,111 @@
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <header name="boost/variant/apply_visitor.hpp">
   <namespace name="boost">
-    <!-- TODO -->
+    <overloaded-function name="apply_visitor">
+      <signature>
+        <template>
+          <template-type-parameter name="Visitor"/>
+          <template-type-parameter name="T1"/>
+          <template-type-parameter name="T2"/>
+          <template-varargs/>
+          <template-type-parameter name="TN"/>
+        </template>
+
+        <type>typename Visitor::result_type</type>
+
+        <parameter name="visitor">
+          <paramtype>Visitor &amp;</paramtype>
+        </parameter>
+        <parameter name="operand">
+          <paramtype><classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
+        </parameter>
+      </signature>
+      
+      <signature>
+        <template>
+          <template-type-parameter name="Visitor"/>
+          <template-type-parameter name="T1"/>
+          <template-type-parameter name="T2"/>
+          <template-varargs/>
+          <template-type-parameter name="TN"/>
+        </template>
+
+        <type>typename Visitor::result_type</type>
+
+        <parameter name="visitor">
+          <paramtype>Visitor &amp;</paramtype>
+        </parameter>
+        <parameter name="operand">
+          <paramtype>const <classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
+        </parameter>
+      </signature>
+      
+      <signature>
+        <template>
+          <template-type-parameter name="Visitor"/>
+          <template-type-parameter name="T1"/>
+          <template-type-parameter name="T2"/>
+          <template-varargs/>
+          <template-type-parameter name="TN"/>
+        </template>
+
+        <type>typename Visitor::result_type</type>
+
+        <parameter name="visitor">
+          <paramtype>const Visitor &amp;</paramtype>
+        </parameter>
+        <parameter name="operand">
+          <paramtype><classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
+        </parameter>
+      </signature>
+
+      <signature>
+        <template>
+          <template-type-parameter name="Visitor"/>
+          <template-type-parameter name="T1"/>
+          <template-type-parameter name="T2"/>
+          <template-varargs/>
+          <template-type-parameter name="TN"/>
+        </template>
+
+        <type>typename Visitor::result_type</type>
+
+        <parameter name="visitor">
+          <paramtype>const Visitor &amp;</paramtype>
+        </parameter>
+        <parameter name="operand">
+          <paramtype>const <classname>variant</classname>&lt;T1, T2, ..., TN&gt; &amp;</paramtype>
+        </parameter>
+      </signature>
+
+      <purpose>
+        <simpara>Allows compile-time checked type-safe application of the
+        given visitor to the content of the given variant, ensuring that all
+        types are handled by the visitor.</simpara>
+      </purpose>
+
+      <description>
+        <simpara>Invokes the function call operator of the given visitor on the
+        content of the given <code><classname>variant</classname></code>.</simpara>
+      </description>
+
+      <returns>
+        <simpara>Returns the result of applying the given visitor to the
+        content of the given
+        <code><classname>variant</classname></code>.</simpara>
+      </returns>
+
+      <requires>
+        <simpara>The given visitor must fulfill the
+        <link linkend="variant.concepts.static-visitor"><emphasis>StaticVisitor</emphasis></link>
+        concept requirements with respect to each of the bounded types of the
+        given <code>variant</code>.</simpara>
+      </requires>
+
+      <throws>
+        <simpara>Throws if the given visitor throws when applied to the
+        content of the given <code><classname>variant</classname></code>.</simpara>
+      </throws>
+    </overloaded-function>
   </namespace>
 </header>

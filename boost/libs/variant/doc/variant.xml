@@ -33,11 +33,12 @@
     purpose.</para>
   </legalnotice>
 
-  <librarypurpose>Safe, generic, stack-based discriminated union wrapper</librarypurpose>
+  <librarypurpose>Safe, generic, stack-based discriminated union container</librarypurpose>
+  <librarycategory name="category:containers"/>
   <librarycategory name="category:data-structures"/>
 </libraryinfo>
 
-<title>Boost Variant Library</title>
+<title>Boost.Variant</title>
   <xi:include href="introduction.xml"/>
 <!--
   <xi:include href="tutorial.xml"/>

@@ -3,24 +3,16 @@
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <library-reference xmlns:xi="http://www.w3.org/2001/XInclude">
 
-<!--
+  <xi:include href="concepts.xml"/>
+
   <header name="boost/variant.hpp">
-    <section>
-      <para>This header exists simply as a convenience, including the other
-        headers that are part of the library.</para>
+    <section id="variant.header.include-all">
+      <para>This header exists simply as a convenience to the user, including
+      all of the headers that are part of the library.</para>
     </section>
   </header>
 
-  <header name="boost/variant/variant_fwd.hpp">
-    <namespace name="boost">
-      <section>
-        <para>Provides a forward declaration of the
-          <classname>boost::variant</classname> class template.</para>
-      </section>
-    </namespace>
-  </header>
--->
-
+  <xi:include href="variant_fwd.xml"/>
   <xi:include href="variant.xml"/>
   <xi:include href="apply_visitor.xml"/>
   <xi:include href="get.xml"/>
