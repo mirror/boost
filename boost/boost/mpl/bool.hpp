@@ -3,7 +3,7 @@
 #define BOOST_MPL_BOOL_HPP_INCLUDED
 
 // + file: boost/mpl/bool.hpp
-// + last modified: 08/mar/03
+// + last modified: 12/apr/03
 
 // Copyright (c) 2000-03
 // Aleksey Gurtovoy
@@ -30,6 +30,11 @@ template< bool C_ > struct bool_
     typedef bool value_type;
     operator bool() const { return this->value; }
 };
+
+#if !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
+template< bool C_ >
+bool const bool_<C_>::value;
+#endif
 
 }} // namespace boost::mpl
 

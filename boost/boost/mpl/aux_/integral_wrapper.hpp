@@ -1,6 +1,6 @@
 
 // + file: boost/mpl/aux_/intergal_wrapper.hpp
-// + last modified: 27/jan/03
+// + last modified: 12/apr/03
 
 // Copyright (c) 2000-03
 // Aleksey Gurtovoy
@@ -77,6 +77,11 @@ struct AUX_WRAPPER_NAME
     // "mpl/example/power.cpp")
     operator AUX_WRAPPER_VALUE_TYPE() const { return this->value; } 
 };
+
+#if !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
+template< AUX_WRAPPER_PARAMS(N) >
+AUX_WRAPPER_VALUE_TYPE const AUX_WRAPPER_INST(N)::value;
+#endif
 
 }} // namespace boost::mpl
 
