@@ -574,6 +574,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\basic_text_iprmitive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_text_oprimitive.cpp">
+			</File>
+			<File
 				RelativePath="..\src\basic_xml_archive.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">

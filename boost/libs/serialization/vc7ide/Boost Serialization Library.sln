@@ -244,10 +244,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_void_cast", "test_void
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_zmisc", "test_zmisc.vcproj", "{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LibraryW", "LibraryW.vcproj", "{30E10563-960A-11D7-9FE9-525400E2CF85}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
@@ -326,10 +322,6 @@ Global
 		{15EA5B5E-D649-4C1C-80DD-B3CC7FA6658E}.Debug.Build.0 = Debug|Win32
 		{15EA5B5E-D649-4C1C-80DD-B3CC7FA6658E}.Release.ActiveCfg = Release|Win32
 		{15EA5B5E-D649-4C1C-80DD-B3CC7FA6658E}.Release.Build.0 = Release|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release|Win32
-		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.Build.0 = Release|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.ActiveCfg = Debug|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Debug.Build.0 = Debug|Win32
 		{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}.Release.ActiveCfg = Release|Win32

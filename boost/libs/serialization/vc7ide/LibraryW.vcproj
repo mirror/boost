@@ -115,6 +115,12 @@
 			Name="Source"
 			Filter="">
 			<File
+				RelativePath="..\src\basic_text_wiprimitive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_text_woprimitive.cpp">
+			</File>
+			<File
 				RelativePath="..\src\basic_xml_grammar.ipp">
 			</File>
 			<File

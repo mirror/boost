@@ -15,7 +15,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "LibraryW"=.\LibraryW\LibraryW.dsp - Package Owner=<4>
+Project: "LibraryW"=..\..\..\..\boost_1_31_0\libs\serialization\vc6ide\LibraryW\LibraryW.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -64,6 +64,18 @@ Package=<4>
 ###############################################################################
 
 Project: "demo_pimpl"=.\demo_pimpl.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "demo_polymorphic"=.\demo_polymorphic.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -561,7 +573,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "test_zmisc"=.\test_zmisc.dsp - Package Owner=<4>
+Project: "test_zmisc"=..\..\..\..\boost_1_31_0\libs\serialization\vc6ide\test_zmisc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -66,8 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "c:\spirit161" /I "..\..\.." /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
-# SUBTRACT CPP /YX /Yc /Yu
+# ADD CPP /nologo /W3 /Gm /GR /GX /ZI /Od /I "c:\spirit161" /I "..\..\.." /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D BOOST_ARCHIVE_TEST=polymorphic_xml_archive.hpp /FD /Zm800 /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -75,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib advapi32.lib shell32.lib Debug\Library.lib c:\boost\lib\libboost_test_exec_monitor-vc6-sgd.lib c:\boost\lib\libboost_unit_test_framework-vc6-sgd.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"Debug\Library.lib" /libpath:"c:\boost\lib\libboost_test_exec_monitor-vc6-sgd.lib" /libpath:"libboost_unit_test_framework-vc6-sgd.lib"
+# ADD LINK32 kernel32.lib user32.lib advapi32.lib ../../../bin/boost/libs/serialization/build/libboost_serialization.lib/msvc/debug/runtime-link-static/libboost_serialization.lib ../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/msvc/debug/runtime-link-static/libboost_test_exec_monitor.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"Debug\Library.lib" /libpath:"c:\boost\lib\libboost_test_exec_monitor-vc6-sgd.lib" /libpath:"libboost_unit_test_framework-vc6-sgd.lib"
 
 !ENDIF 
 
