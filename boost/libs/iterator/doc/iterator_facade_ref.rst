@@ -311,8 +311,14 @@ __ `operator arrow`_
   operator ==(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
               iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
-:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
-  ``lhs.equal(rhs)``.  Otherwise, ``rhs.equal(lhs)``.
+:Returns: 
+  if ``is_convertible<Dr2,Dr1>::value``
+
+  then 
+    ``((Dr1 const&)lhs).equal((Dr2 const&)rhs)``.
+
+  Otherwise, 
+    ``((Dr2 const&)rhs).equal((Dr1 const&)lhs)``.
 
 ::
 
@@ -322,8 +328,14 @@ __ `operator arrow`_
   operator !=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
               iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
-:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
-  ``!lhs.equal(rhs)``.  Otherwise, ``!rhs.equal(lhs)``.
+:Returns: 
+  if ``is_convertible<Dr2,Dr1>::value``
+
+  then 
+    ``!((Dr1 const&)lhs).equal((Dr2 const&)rhs)``.
+
+  Otherwise, 
+    ``!((Dr2 const&)rhs).equal((Dr1 const&)lhs)``.
 
 ::
 
@@ -333,9 +345,14 @@ __ `operator arrow`_
   operator <(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
-:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
-  ``lhs.distance_to(rhs) < 0``. Otherwise, ``rhs.distance_to(lhs) >
-  0``.
+:Returns: 
+  if ``is_convertible<Dr2,Dr1>::value``
+
+  then 
+    ``((Dr1 const&)lhs).distance_to((Dr2 const&)rhs) < 0``.
+
+  Otherwise, 
+    ``((Dr2 const&)rhs).distance_to((Dr1 const&)lhs) > 0``.
 
 ::
 
@@ -345,9 +362,14 @@ __ `operator arrow`_
   operator <=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
               iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
-:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
-  ``lhs.distance_to(rhs) <= 0``. Otherwise, ``rhs.distance_to(lhs)
-  >= 0``.
+:Returns: 
+  if ``is_convertible<Dr2,Dr1>::value``
+
+  then 
+    ``((Dr1 const&)lhs).distance_to((Dr2 const&)rhs) <= 0``.
+
+  Otherwise, 
+    ``((Dr2 const&)rhs).distance_to((Dr1 const&)lhs) >= 0``.
 
 ::
 
@@ -357,9 +379,14 @@ __ `operator arrow`_
   operator >(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
-:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
-  ``lhs.distance_to(rhs) > 0``. Otherwise,
-  ``rhs.distance_to(lhs) < 0``.
+:Returns: 
+  if ``is_convertible<Dr2,Dr1>::value``
+
+  then 
+    ``((Dr1 const&)lhs).distance_to((Dr2 const&)rhs) > 0``.
+
+  Otherwise, 
+    ``((Dr2 const&)rhs).distance_to((Dr1 const&)lhs) < 0``.
 
 
 ::
@@ -370,9 +397,14 @@ __ `operator arrow`_
   operator >=(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
               iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
-:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
-  ``lhs.distance_to(rhs) >= 0``. Otherwise,
-  ``rhs.distance_to(lhs) <= 0``.
+:Returns: 
+  if ``is_convertible<Dr2,Dr1>::value``
+
+  then 
+    ``((Dr1 const&)lhs).distance_to((Dr2 const&)rhs) >= 0``.
+
+  Otherwise, 
+    ``((Dr2 const&)rhs).distance_to((Dr1 const&)lhs) <= 0``.
 
 .. _minus:
 
@@ -380,15 +412,25 @@ __ `operator arrow`_
 
   template <class Dr1, class V1, class TC1, class R1, class D1,
             class Dr2, class V2, class TC2, class R2, class D2>
-  typename enable_if_interoperable<Dr1,Dr2,difference_type>::type
+  typename enable_if_interoperable<Dr1,Dr2,difference>::type
   operator -(iterator_facade<Dr1,V1,TC1,R1,D1> const& lhs,
              iterator_facade<Dr2,V2,TC2,R2,D2> const& rhs);
 
-:Return Type: if ``is_convertible<Dr2,Dr1>::value``, then ``difference_type`` shall be
-  ``iterator_traits<Dr1>::difference_type``.  Otherwise,
-  ``difference_type`` shall be
-  ``iterator_traits<Dr2>::difference_type``.
+:Return Type: 
+  if ``is_convertible<Dr2,Dr1>::value``
 
-:Returns: if ``is_convertible<Dr2,Dr1>::value``, then
-  ``-lhs.distance_to(rhs)``. Otherwise,
-  ``rhs.distance_to(lhs)``.
+   then 
+    ``difference`` shall be
+    ``iterator_traits<Dr1>::difference_type``.
+
+   Otherwise 
+    ``difference`` shall be ``iterator_traits<Dr2>::difference_type``
+
+:Returns: 
+  if ``is_convertible<Dr2,Dr1>::value``
+
+  then 
+    ``-((Dr1 const&)lhs).distance_to((Dr2 const&)rhs)``.
+
+  Otherwise, 
+    ``((Dr2 const&)rhs).distance_to((Dr1 const&)lhs)``.
