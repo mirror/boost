@@ -33,7 +33,7 @@ namespace serialization {
         const unsigned int /* version */
     ){
         T* r = t.get();
-        ar << make_nvp("scoped_ptr", r);
+        ar << boost::serialization::make_nvp("scoped_ptr", r);
     }
 
     template<class Archive, class T>
@@ -43,7 +43,7 @@ namespace serialization {
         const unsigned int /* version */
     ){
         T* r;
-        ar >> make_nvp("scoped_ptr", r);
+        ar >> boost::serialization::make_nvp("scoped_ptr", r);
         t.reset(r); 
     }
 
