@@ -1753,7 +1753,6 @@ bool dynamic_bitset<Block, Allocator>::m_check_invariants() const
 } // namespace boost
 
 
-#undef BOOST_OLD_IOSTREAMS
 #undef BOOST_BITSET_CHAR
 
 #endif // include guard
