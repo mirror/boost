@@ -18,6 +18,7 @@
 #include <string>
 #include <boost/random.hpp>
 #include <boost/progress.hpp>
+#include <boost/shared_ptr.hpp>
 
 /*
  * Configuration Section
@@ -53,11 +54,9 @@ class linear_congruential
 {
 public:
   typedef IntType result_type;
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool has_fixed_range = false;
-#else
-  enum { has_fixed_range = false };
-#endif
+
+  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
+
   linear_congruential(IntType x0, IntType a, IntType c, IntType m)
     : _x(x0), _a(a), _c(c), _m(m) { }
   // compiler-generated copy ctor and assignment operator are fine
@@ -72,6 +71,66 @@ private:
   IntType _x, _a, _c, _m;
 };
 
+
+// simplest "random" number generator possible, to check on overhead
+class counting
+{
+public:
+  typedef int result_type;
+
+  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
+
+  counting() : _x(0) { }
+  result_type operator()() { return ++_x; }
+  result_type min() const { return 1; }
+  result_type max() const { return std::numeric_limits<result_type>::max(); }
+
+private:
+  int _x;
+};
+
+
+// make distributions (and underlying engines) runtime-exchangeable,
+// for speed comparison
+template<class Ret>
+class DistributionBase
+{
+public:
+  virtual void reset() = 0;
+  virtual Ret operator()() = 0;
+  virtual ~DistributionBase() { }
+};
+
+template<class Dist, class Ret = typename Dist::result_type>
+class Distribution
+  : public DistributionBase<Ret>
+{
+public:
+  Distribution(const Dist& d) : _d(d) { }
+  void reset() { _d.reset(); }
+  Ret operator()() { return _d(); }
+private:
+  Dist _d;
+};
+
+template<class Ret>
+class GenericDistribution
+{
+public:
+  typedef Ret result_type;
+
+  GenericDistribution() { };
+  void set(boost::shared_ptr<DistributionBase<Ret> > p) { _p = p; }
+  // takes over ownership
+  void set(DistributionBase<Ret> * p) { _p.reset(p); }
+  Ret operator()() { return (*_p)(); }
+private:
+  boost::shared_ptr<DistributionBase<Ret> > _p;
+};
+
+
+// start implementation of measuring timing
+
 void show_elapsed(double end, int iter, const std::string & name)
 {
   double usec = end/iter*1e6;
@@ -82,8 +141,8 @@ void show_elapsed(double end, int iter, const std::string & name)
             << std::endl;
 }
 
-template<class Result, class RNG>
-void timing(RNG & rng, int iter, const std::string& name, const Result&)
+template<class RNG>
+void timing(RNG & rng, int iter, const std::string& name)
 {
   // make sure we're not optimizing too much
   volatile typename RNG::result_type tmp;
@@ -111,7 +170,7 @@ void run(int iter, const std::string & name, const RNG &)
   RNG rng;
   std::cout << (RNG::has_fixed_range ? "fixed-range " : "");
   // BCC has trouble with string autoconversion for explicit specializations
-  timing(rng, iter, std::string(name), 0l);
+  timing(rng, iter, std::string(name));
 }
 
 #ifdef HAVE_DRAND48
@@ -119,7 +178,7 @@ void run(int iter, const std::string & name, const RNG &)
 void run(int iter, const std::string & name, int)
 {
   std::srand48(1);
-  timing(std::lrand48, iter, name, 0l);
+  timing(std::lrand48, iter, name);
 }
 #endif
 
@@ -140,34 +199,96 @@ void distrib(int iter, const std::string & name, const Gen &)
   Gen gen;
 
   boost::uniform_smallint<Gen> usmallint(gen, -2, 4);
-  timing(usmallint, iter, name + " uniform_smallint", 0);
+  timing(usmallint, iter, name + " uniform_smallint");
 
   boost::uniform_int<Gen> uint(gen, -2, 4);
-  timing(uint, iter, name + " uniform_int", 0);
-
-  boost::uniform_01<Gen> uni(gen);
-  timing(uni, iter, name + " uniform_01", 0.0);
-
-  boost::uniform_real<Gen> ur(gen, -5.3, 4.8);
-  timing(ur, iter, name + " uniform_real", 0.0);
+  timing(uint, iter, name + " uniform_int");
 
   boost::geometric_distribution<Gen> geo(gen, 0.5);
-  timing(geo, iter, name + " geometric", 0);
+  timing(geo, iter, name + " geometric");
+
+
+  boost::uniform_01<Gen> uni(gen);
+  timing(uni, iter, name + " uniform_01");
+
+  boost::uniform_real<Gen> ur(gen, -5.3, 4.8);
+  timing(ur, iter, name + " uniform_real");
 
   boost::triangle_distribution<Gen> tria(gen, 1, 2, 7);
-  timing(tria, iter, name + " triangle", 0.0);
+  timing(tria, iter, name + " triangle");
 
   boost::exponential_distribution<Gen> ex(gen, 3);
-  timing(ex, iter, name + " exponential", 0.0);
+  timing(ex, iter, name + " exponential");
 
   boost::normal_distribution<Gen,double> no2(gen);
-  timing(no2, iter, name + " normal polar", 0.0);
+  timing(no2, iter, name + " normal polar");
 
   boost::lognormal_distribution<Gen,double> lnorm(gen, 1, 1);
-  timing(lnorm, iter, name + " lognormal", 0.0);
+  timing(lnorm, iter, name + " lognormal");
+
+  boost::cauchy_distribution<Gen,double> cauchy(gen);
+  timing(cauchy, iter, name + " cauchy");
+
+  boost::gamma_distribution<Gen,double> gamma(gen, 0.4);
+  timing(gamma, iter, name + " gamma");
 
   boost::uniform_on_sphere<Gen> usph(gen, 3);
   timing_sphere(usph, iter/10, name + " uniform_on_sphere");
+}
+
+template<class Gen>
+void distrib_runtime(int iter, const std::string & n, const Gen &)
+{
+  std::string name = n + " virtual function ";
+  Gen gen;
+
+  GenericDistribution<int> g_int;
+
+  boost::uniform_smallint<Gen> usmallint(gen, -2, 4);
+  g_int.set(new Distribution<boost::uniform_smallint<Gen> >(usmallint));
+  timing(g_int, iter, name + "uniform_smallint");
+
+  boost::uniform_int<Gen> uint(gen, -2, 4);
+  g_int.set(new Distribution<boost::uniform_int<Gen> >(uint));
+  timing(g_int, iter, name + "uniform_int");
+
+  boost::geometric_distribution<Gen> geo(gen, 0.5);
+  g_int.set(new Distribution<boost::geometric_distribution<Gen> >(geo));
+  timing(g_int, iter, name + "geometric");
+
+  GenericDistribution<double> g;
+
+  boost::uniform_01<Gen> uni(gen);
+  g.set(new Distribution<boost::uniform_01<Gen> >(uni));
+  timing(g, iter, name + "uniform_01");
+
+  boost::uniform_real<Gen> ur(gen, -5.3, 4.8);
+  g.set(new Distribution<boost::uniform_real<Gen> >(ur));
+  timing(g, iter, name + "uniform_real");
+
+  boost::triangle_distribution<Gen> tria(gen, 1, 2, 7);
+  g.set(new Distribution<boost::triangle_distribution<Gen> >(tria));
+  timing(g, iter, name + "triangle");
+
+  boost::exponential_distribution<Gen> ex(gen, 3);
+  g.set(new Distribution<boost::exponential_distribution<Gen> >(ex));
+  timing(g, iter, name + "exponential");
+
+  boost::normal_distribution<Gen,double> no2(gen);
+  g.set(new Distribution<boost::normal_distribution<Gen,double> >(no2));
+  timing(g, iter, name + "normal polar");
+
+  boost::lognormal_distribution<Gen,double> lnorm(gen, 1, 1);
+  g.set(new Distribution<boost::lognormal_distribution<Gen,double> >(lnorm));
+  timing(g, iter, name + "lognormal");
+
+  boost::cauchy_distribution<Gen,double> cauchy(gen);
+  g.set(new Distribution<boost::cauchy_distribution<Gen,double> >(cauchy));
+  timing(g, iter, name + "cauchy");
+
+  boost::gamma_distribution<Gen,double> gamma(gen, 0.4);
+  g.set(new Distribution<boost::gamma_distribution<Gen,double> >(gamma));
+  timing(g, iter, name + "gamma");
 }
 
 
@@ -192,7 +313,7 @@ int main(int argc, char*argv[])
     lcg48(boost::uint64_t(1)<<16 | 0x330e,
           boost::uint64_t(0xDEECE66DUL) | (boost::uint64_t(0x5) << 32), 0xB,
           boost::uint64_t(1)<<48);
-  timing(lcg48, iter, "lrand48 run-time", 0l);
+  timing(lcg48, iter, "lrand48 run-time");
 #endif
 
 #ifdef HAVE_DRAND48
@@ -215,13 +336,20 @@ int main(int argc, char*argv[])
   run(iter, "ranlux4", boost::ranlux4());
   run(iter, "ranlux3_01", boost::ranlux3_01());
   run(iter, "ranlux4_01", boost::ranlux4_01());
+  run(iter, "counting", counting());
 
 #ifdef HAVE_MT19937INT_C
   // requires the original mt19937int.c
   run<float>(iter, "mt19937 original");   // coded for sgenrand()/genrand()
 #endif
 
+  distrib(iter, "counting", counting());
+  distrib_runtime(iter, "counting", counting());
+
   distrib(iter, "minstd_rand", boost::minstd_rand());
+
   distrib(iter, "kreutzer1986", boost::kreutzer1986());
+
   distrib(iter, "mt19937", boost::mt19937());
+  distrib_runtime(iter, "mt19937", boost::mt19937());
 }
