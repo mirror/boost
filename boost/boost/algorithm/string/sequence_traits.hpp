@@ -160,7 +160,7 @@ namespace boost {
             static T* t;
         public:
             BOOST_STATIC_CONSTANT(bool, value=( 
-                sizeof(has_const_time_erase))==sizeof(yes_type) ) );
+                sizeof(has_const_time_erase(t))==sizeof(yes_type) ) );
 #else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     public:
             BOOST_STATIC_CONSTANT(bool, value=false);
