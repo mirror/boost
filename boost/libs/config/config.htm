@@ -746,9 +746,11 @@ f(&amp;bar); // should choose #2.</pre>
         <td valign="top" width="51%">BOOST_NO_USING_TEMPLATE</td>
         <td valign="top" width="16%">Compiler</td>
         <td valign="top" width="33%">The compiler will not accept
-        a using declaration that imports a template from the
-        global namespace into a named namespace. Probably Borland
-        specific.</td>
+        a using declaration that imports a template class or
+        function from another namespace. Originally a Borland
+        specific problem with imports to/from the global
+        namespace, extended to MSVC6 which has a specific issue
+        with importing template classes (but not functions).</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_VOID_RETURNS</td>
