@@ -46,22 +46,32 @@ class processor_container : noncopyable
 
     class processor_context
     {
-      processor_context(
-        Scheduler & scheduler, const processor_handle & handle
-      ) :
-        scheduler_( scheduler ),
-        handle_( handle )
-      {
-      }
+        processor_context(
+          Scheduler & scheduler, const processor_handle & handle
+        ) :
+          scheduler_( scheduler ),
+          handle_( handle )
+        {
+        }
 
-      Scheduler & my_scheduler() const { return scheduler_; }
-      const processor_handle & my_handle() const { return handle_; }
+      #ifdef BOOST_INTEL
+      public:
+      // for some reason Intel 8.0 seems to think that the following functions
+      // are inaccessible from event_processor<>::event_processor
+      #endif
 
-      Scheduler & scheduler_;
-      const processor_handle handle_;
+        Scheduler & my_scheduler() const { return scheduler_; }
+        const processor_handle & my_handle() const { return handle_; }
 
-      friend class processor_container;
-      friend class processor_base_type;
+      #ifdef BOOST_INTEL
+      private:
+      #endif
+
+        Scheduler & scheduler_;
+        const processor_handle handle_;
+
+        friend class processor_container;
+        friend class processor_base_type;
     };
 
     template< class Processor >
