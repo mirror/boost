@@ -16,6 +16,7 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <vector>
 #include <stdexcept>
 #include <fstream>
 
@@ -140,13 +141,13 @@ namespace boost {
        * it should be possible in the future (when poor compilers get 
        * fixed or stop being used). 
        * Since this class was designed to use charT as a parameter it 
-       * is simply typedefed here to ease converting in back to a 
+       * is simply typedef'd here to ease converting in back to a 
        * parameter the future */
       typedef char charT;
 
       typedef typename time_zone_type::base_type time_zone_base_type;
       typedef typename time_zone_type::time_duration_type time_duration_type;
-      typedef time_zone_names<charT> time_zone_names;
+      typedef time_zone_names_base<charT> time_zone_names;
       typedef dst_adjustment_offsets<time_duration_type> dst_adjustment_offsets;
       typedef std::basic_string<charT> string_type;
 
@@ -195,6 +196,19 @@ namespace boost {
           return boost::shared_ptr<time_zone_base_type>(); //null pointer
         }
         return record->second;
+      }
+
+      //! Returns a vector of strings holding the time zone regions in the database
+      std::vector<std::string> region_list() const
+      {
+        typedef std::vector<std::string> vector_type;
+        vector_type regions;
+        typename map_type::const_iterator itr = m_zone_map.begin();
+        while(itr != m_zone_map.end()) {
+          regions.push_back(itr->first);
+          ++itr;
+        }
+        return regions;
       }
     
     private:

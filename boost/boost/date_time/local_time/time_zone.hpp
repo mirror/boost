@@ -20,6 +20,7 @@ namespace local_time {
   typedef boost::date_time::time_zone_names time_zone_names;
   typedef boost::date_time::dst_adjustment_offsets<boost::posix_time::time_duration> dst_adjustment_offsets;
   typedef boost::date_time::time_zone_base<boost::posix_time::ptime> time_zone_base;
+  typedef boost::shared_ptr<dst_calc_rule> dst_calc_rule_ptr;
 
   //! A real time zone
   class time_zone : public time_zone_base {

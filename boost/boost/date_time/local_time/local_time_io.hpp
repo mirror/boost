@@ -14,7 +14,7 @@
 
 namespace boost {
 namespace local_time {
-
+  //! operator<< for local_date_time - see local_time docs for formatting details
   template<class CharT, class TraitsT>
   inline
   std::basic_ostream<CharT, TraitsT>&
