@@ -77,7 +77,7 @@ occurs when a single-index is specified to
 </programlisting>
 
 has a degenerate second dimension.  The view generated from the above
-specification will have 2 dimensions with shape <literal>5 x 2</literal>.
+specification will have 2 dimensions with shape <literal>5 x 4</literal>.
 If the "<literal>2</literal>" above were replaced with
 another <literal>index_range</literal> object, for example:
 
