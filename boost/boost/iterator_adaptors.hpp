@@ -12,6 +12,9 @@
 //
 // Revision History:
 
+// 04 Oct 2001   David Abrahams
+//      Applied indirect_iterator patch from George A. Heintzelman <georgeh@aya.yale.edu>
+//      Changed name of "bind" to "select" to avoid problems with MSVC.
 // 26 Sep 2001   David Abrahams
 //      Added borland bug fix
 // 08 Mar 2001   Jeremy Siek
@@ -443,25 +446,25 @@ namespace detail {
   
   struct default_value_type {
     template <class Base, class Traits>
-    struct bind {
+    struct select {
       typedef typename boost::detail::iterator_traits<Base>::value_type type;
     };
   };
   struct default_difference_type {
     template <class Base, class Traits>
-    struct bind {
+    struct select {
       typedef typename boost::detail::iterator_traits<Base>::difference_type type;
     };
   };
   struct default_iterator_category {
     template <class Base, class Traits>
-    struct bind {
+    struct select {
       typedef typename boost::detail::iterator_traits<Base>::iterator_category type;
     };
   };
   struct default_pointer {
     template <class Base, class Traits>
-    struct bind {
+    struct select {
       typedef typename Traits::value_type Value;
       typedef typename boost::detail::iterator_defaults<Base,Value>::pointer 
 	type;
@@ -469,7 +472,7 @@ namespace detail {
   };
   struct default_reference {
     template <class Base, class Traits>
-    struct bind {
+    struct select {
       typedef typename Traits::value_type Value;
       typedef typename boost::detail::iterator_defaults<Base,Value>::reference 
 	type;
@@ -891,9 +894,11 @@ struct indirect_iterator_policies : public default_iterator_policies
 namespace detail {
 # if !defined(BOOST_MSVC) // stragely instantiated even when unused! Maybe try a recursive template someday ;-)
   template <class T>
-  struct value_type_of_value_type {
+  struct traits_of_value_type {
       typedef typename boost::detail::iterator_traits<T>::value_type outer_value;
-      typedef typename boost::detail::iterator_traits<outer_value>::value_type type;
+      typedef typename boost::detail::iterator_traits<outer_value>::value_type value_type;
+      typedef typename boost::detail::iterator_traits<outer_value>::reference reference;
+      typedef typename boost::detail::iterator_traits<outer_value>::pointer pointer;
   };
 # endif
 }
@@ -901,11 +906,25 @@ namespace detail {
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class Value
 #if !defined(BOOST_MSVC)
-                = BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type
+                = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
+                        OuterIterator>::value_type
 #endif
-          , class Reference = Value&
-          , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<OuterIterator>::iterator_category
-          , class Pointer = Value*
+          , class Reference 
+#if !defined(BOOST_MSVC)
+                = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
+                        OuterIterator>::reference
+#else
+                = Value &
+#endif
+          , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<
+                        OuterIterator>::iterator_category
+          , class Pointer 
+#if !defined(BOOST_MSVC)
+                = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
+                        OuterIterator>::pointer
+#else
+                = Value*
+#endif
          >
 struct indirect_iterator_generator
 {
@@ -916,12 +935,26 @@ struct indirect_iterator_generator
 template <class OuterIterator,      // Mutable or Immutable, does not matter
           class Value
 #if !defined(BOOST_MSVC)
-                = BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type
+                = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
+                        OuterIterator>::value_type
 #endif
-          , class Reference = Value&
+          , class Reference 
+#if !defined(BOOST_MSVC)
+                = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
+                        OuterIterator>::reference
+#else
+                = Value &
+#endif
           , class ConstReference = const Value&
-          , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<OuterIterator>::iterator_category
-          , class Pointer = Value*
+          , class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<
+                OuterIterator>::iterator_category
+          , class Pointer 
+#if !defined(BOOST_MSVC)
+                = BOOST_ARG_DEPENDENT_TYPENAME detail::traits_of_value_type<
+                        OuterIterator>::pointer
+#else
+                = Value*
+#endif
           , class ConstPointer = const Value*
            >
 struct indirect_iterator_pair_generator
