@@ -3,8 +3,8 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-//  MACRO:         BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
-//  TITLE:         weak function template ordering
+//  MACRO:         BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+//  TITLE:         no function template ordering
 //  DESCRIPTION:   The compiler does not perform 
 //                 function template ordering or its function
 //                 template ordering is incorrect.
@@ -15,7 +15,7 @@
 //                 f(&bar); // should choose #2.
 
 
-namespace boost_weak_function_template_ordering{
+namespace boost_no_function_template_ordering{
 
 template<typename T>
 bool f(T)
