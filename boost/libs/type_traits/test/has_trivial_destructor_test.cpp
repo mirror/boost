@@ -137,8 +137,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<mp>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<cmf>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<enum_UDT>::value, true);
 
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<int&>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<const int&>::value, false);
+//
+// These are commented out for now because it's not clear what the semantics should be:
+// on the one hand references always have trivial destructors (in the sence that there is
+// nothing to destruct), on the other hand the thing referenced may not have a trivial
+// destructor, it really depends upon the users code as to what should happen here:
+//
+//BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<int&>::value, false);
+//BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<int[2]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<int[3][2]>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<int[2][4][5][6][3]>::value, true);
