@@ -13,6 +13,8 @@
 #ifndef BOOST_INTEGER_RANGE_HPP_
 #define BOOST_INTEGER_RANGE_HPP_
 
+#include <boost/config.hpp>
+
 #if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
 #define BOOST_USE_ITERATOR_ADAPTORS
 #endif
