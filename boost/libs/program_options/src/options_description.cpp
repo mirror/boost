@@ -303,7 +303,8 @@ namespace boost { namespace program_options {
 
         /* Find the maximum width of the option column */
         unsigned width(24);
-        for (unsigned i = 0; i < options.size(); ++i)
+        unsigned i; // vc6 has broken for loop scoping
+        for (i = 0; i < options.size(); ++i)
         {
             const option_description& opt = *options[i];
             stringstream ss;
@@ -312,7 +313,7 @@ namespace boost { namespace program_options {
         }
 
         /* The options formatting style is stolen from Subversion. */
-        for (unsigned i = 0; i < options.size(); ++i)
+        for (i = 0; i < options.size(); ++i)
         {
             if (belong_to_group[i])
                 continue;

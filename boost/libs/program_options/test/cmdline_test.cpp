@@ -478,6 +478,7 @@ void test_style_errors()
 int test_main(int ac, char* av[])
 {
 // ###     detail::test_cmdline_detail();
+    cerr << "Checkpojnt 1\n";
 
     test_long_options();
     test_short_options();
@@ -512,5 +513,6 @@ int test_main(int ac, char* av[])
         cout << e.what() << "\n";
     }
 
+    cerr << "Returning normally\n";
     return 0;
 }

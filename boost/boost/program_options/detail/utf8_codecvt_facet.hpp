@@ -53,7 +53,7 @@
 
 #include <boost/detail/workaround.hpp>
 
-#if BOOST_WORKAROUND(__ICL, <= 700)
+#if BOOST_WORKAROUND(__ICL, <= 700) || BOOST_WORKAROUND(_MSC_VER, <= 1200)
 #include <wchar.h>
 namespace std
 {

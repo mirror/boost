@@ -84,7 +84,7 @@ namespace boost {
     {
         return detail::convert<wchar_t>(
             s,                 
-            boost::bind(boost::mem_fn(&codecvt<wchar_t, char, mbstate_t>::in),
+            boost::bind(&std::codecvt<wchar_t, char, mbstate_t>::in,
                         &cvt,
                         _1, _2, _3, _4, _5, _6, _7));
     }
@@ -95,7 +95,7 @@ namespace boost {
     {
         return detail::convert<char>(
             s,                 
-            boost::bind(boost::mem_fn(&codecvt<wchar_t, char, mbstate_t>::out),
+            boost::bind(&codecvt<wchar_t, char, mbstate_t>::out,
                         &cvt,
                         _1, _2, _3, _4, _5, _6, _7));
     }

@@ -66,6 +66,10 @@ namespace boost { namespace program_options {
 
 namespace boost { namespace program_options { namespace detail {
 
+    // vc6 needs this.
+    using namespace std;
+    using namespace program_options;
+
     cmdline::cmdline(const std::vector<std::string>& args, int style,
                      bool allow_unregistered)
     {
@@ -371,7 +375,7 @@ namespace boost { namespace program_options { namespace detail {
         int (*cmp)(const char*, const char*, size_t);
         cmp = (style & case_insentitive) 
             ? detail::strncmp_nocase : detail::strncmp_case;
-        const option* result(0);
+        const option* result = 0;
         for (size_t i = 0; i < options.size(); ++i) {
             const char* known_name = options[i].long_name.c_str();
             bool prefix = (*options[i].long_name.rbegin() == '*');

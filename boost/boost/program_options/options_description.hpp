@@ -216,9 +216,6 @@ namespace program_options {
 
         approximation_range find_approximation(const std::string& prefix) const;
 
-        template<typename Derived>
-        friend class option_description_easy_init;
-
         std::string m_caption;
         // Data organization is chosen since:
         // - there could be two names for one option
