@@ -1,239 +1,5 @@
 <?xml version="1.0" standalone="yes"?>
 <library-reference id="gregorian_reference">
-  <header name="boost/date_time/gregorian/event_schedule.hpp">
-    <class name="event_schedule">
-      <template>
-      <template-type-parameter name="user_event_data"/>
-    </template>
-      <purpose>
-        <simpara>Utility class for some stuff. </simpara>
-      </purpose>
-      <description>
-        <para>Takes individual specifications for user defined events and creates a collection. Operations can then be performed on this collection </para>
-      </description>
-      <method-group name="public member functions">
-        <method name="add_event_spec" cv="">
-          <type>void</type>
-          <parameter name="ud">
-            <paramtype>const user_event_data &amp;</paramtype>
-          </parameter>
-          <parameter name="gen_rule">
-            <paramtype><classname>year_generator</classname> *</paramtype>
-          </parameter>
-          <parameter name="is_holiday">
-            <paramtype>bool</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Creates and adds an event specification to collection. </simpara>
-          </purpose>
-        </method>
-        <method name="generate_events" cv="const">
-          <type>std::multiset&lt; <classname>event</classname> &gt; *</type>
-          <parameter name="dp">
-            <paramtype>const date_period &amp;</paramtype>
-          </parameter>
-          <parameter name="other_ptr">
-            <paramtype>std::multiset&lt; <classname>event</classname> &gt; *</paramtype>
-            <default>NULL</default>
-          </parameter>
-          <description>
-            <para>Returns a pointer to a dynamically created multiset. If pointer to existing multiset is passed in, the set is merged with a new one. Caller of this function is responsible for calling 'delete' on returned reference to set. </para>
-          </description>
-        </method>
-        <method name="print_events" cv="">
-          <type>void</type>
-          <parameter name="dp">
-            <paramtype>const date_period &amp;</paramtype>
-          </parameter>
-          <parameter name="os">
-            <paramtype>std::ostream &amp;</paramtype>
-          </parameter>
-          <parameter name="delim">
-            <paramtype>const std::string &amp;</paramtype>
-            <default>"\n"</default>
-          </parameter>
-          <purpose>
-            <simpara>print_events sends ALL events to ostream. </simpara>
-          </purpose>
-        </method>
-        <method name="print_holidays" cv="">
-          <type>void</type>
-          <parameter name="dp">
-            <paramtype>const date_period &amp;</paramtype>
-          </parameter>
-          <parameter name="os">
-            <paramtype>std::ostream &amp;</paramtype>
-          </parameter>
-          <parameter name="delim">
-            <paramtype>const std::string &amp;</paramtype>
-            <default>"\n"</default>
-          </parameter>
-          <purpose>
-            <simpara>print_holidays sends only events marked as holiday to ostream </simpara>
-          </purpose>
-        </method>
-        <method name="weekend_days_in_period" cv="const">
-          <type>int</type>
-          <parameter name="dp">
-            <paramtype>const date_period &amp;</paramtype>
-          </parameter>
-          <description>
-            <para>returns number of days that are weekends for given period. Range is [dp.begin, dp.end) </para>
-          </description>
-        </method>
-        <method name="holidays_in_period" cv="const">
-          <type>int</type>
-          <parameter name="dp">
-            <paramtype>const date_period &amp;</paramtype>
-          </parameter>
-          <description>
-            <para>returns number of events that are marked as holidays for given period. Range is [dp.begin, dp.end) </para>
-          </description>
-        </method>
-        <method name="events_in_period" cv="const">
-          <type>int</type>
-          <parameter name="dp">
-            <paramtype>const date_period &amp;</paramtype>
-          </parameter>
-          <description>
-            <para>returns number of events for given period. Range is [dp.begin, dp.end) </para>
-          </description>
-        </method>
-        <method name="business_days_in_period" cv="const">
-          <type>int</type>
-          <parameter name="dp">
-            <paramtype>const date_period &amp;</paramtype>
-          </parameter>
-          <description>
-            <para>returns number of business days in given period. Range is [dp.begin, dp.end) </para>
-          </description>
-        </method>
-        <method name="x_many_business_days_from" cv="const">
-          <type>
-            <classname>date</classname>
-          </type>
-          <parameter name="days">
-            <paramtype>const int</paramtype>
-          </parameter>
-          <parameter name="d">
-            <paramtype>const <classname>date</classname></paramtype>
-          </parameter>
-          <description>
-            <para>range of counted days is (d, result]. This is consistant with how the library handles the addition of date + duration. </para>
-          </description>
-        </method>
-        <method name="col_size" cv="const">
-          <type>int</type>
-        </method>
-      </method-group>
-    </class>
-    <class name="generator_spec">
-      <template>
-      <template-type-parameter name="rule_spec"/>
-    </template>
-      <inherit access="public">year_generator</inherit>
-      <purpose>
-        <simpara>spec classes for date generation </simpara>
-      </purpose>
-      <method-group name="public member functions">
-        <method name="generate_date" cv="const">
-          <type>
-            <classname>date</classname>
-          </type>
-          <parameter name="year">
-            <paramtype>int</paramtype>
-          </parameter>
-        </method>
-        <method name="stream_out" cv="const">
-          <type>void</type>
-          <parameter name="os">
-            <paramtype>std::ostream &amp;</paramtype>
-          </parameter>
-        </method>
-      </method-group>
-      <constructor>
-        <parameter name="rs">
-          <paramtype>const rule_spec &amp;</paramtype>
-        </parameter>
-      </constructor>
-    </class>
-    <class name="X_many_business_days_from">
-      <template>
-      <template-type-parameter name="user_event_data"/>
-    </template>
-      <description>
-        <para>Function object that calculates the date, a given number of business days ('days') from a given date ('d'). Range of counted days is (d, result]. This is consistant with how the library handles the addition of date + duration. </para>
-      </description>
-      <typedef name="ES">
-        <type><classname>event_schedule</classname>&lt; user_event_data &gt;</type>
-      </typedef>
-      <method-group name="public member functions">
-        <method name="operator()" cv="">
-          <type>
-            <classname>date</classname>
-          </type>
-          <purpose>
-            <simpara>generates resulting date </simpara>
-          </purpose>
-        </method>
-      </method-group>
-      <constructor>
-        <parameter name="es">
-          <paramtype>const <classname>event_schedule</classname>&lt; user_event_data &gt; &amp;</paramtype>
-        </parameter>
-        <parameter name="days">
-          <paramtype>const int</paramtype>
-        </parameter>
-        <parameter name="d">
-          <paramtype>const <classname>date</classname></paramtype>
-        </parameter>
-      </constructor>
-      <method-group name="private member functions">
-        <method name="approximate_result" cv="">
-          <type>
-            <classname>date</classname>
-          </type>
-        </method>
-        <method name="generate_holiday_set" cv="">
-          <type>std::multiset&lt; typename ES::event &gt; *</type>
-          <parameter name="dp">
-            <paramtype>const date_period &amp;</paramtype>
-          </parameter>
-        </method>
-        <method name="refine_approximation" cv="">
-          <type>
-            <classname>date</classname>
-          </type>
-        </method>
-        <method name="get_holiday_count" cv="">
-          <type>int</type>
-          <parameter name="result">
-            <paramtype>const <classname>date</classname> &amp;</paramtype>
-          </parameter>
-        </method>
-      </method-group>
-    </class>
-    <class name="year_generator">
-      <purpose>
-        <simpara>Unifying base class for generator_spec types. </simpara>
-      </purpose>
-      <method-group name="public member functions">
-        <method name="generate_date" cv="const">
-          <type>virtual <classname>date</classname></type>
-          <parameter name="year">
-            <paramtype>int</paramtype>
-          </parameter>
-        </method>
-        <method name="stream_out" cv="const">
-          <type>virtual void</type>
-          <parameter name="os">
-            <paramtype>std::ostream &amp;</paramtype>
-          </parameter>
-        </method>
-      </method-group>
-    </class>
-    <macro name="EVENT_SCHEDULE_H"/>
-  </header>
   <header name="boost/date_time/gregorian/formatters.hpp">
     <namespace name="boost">
       <namespace name="gregorian">
@@ -266,12 +32,6 @@
             <simpara>Define a range representation type for the day of the year 1..366. </simpara>
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="greg_year_policies">
           <purpose>
@@ -311,6 +71,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -384,6 +153,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -399,11 +174,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -606,12 +381,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -650,6 +419,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -723,6 +501,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -738,11 +522,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -820,12 +604,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -864,6 +642,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -937,6 +724,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -952,11 +745,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -1037,6 +830,11 @@
             </method>
           </method-group>
           <constructor>
+            <purpose>
+              <simpara>Default constructor constructs with not_a_date_time. </simpara>
+            </purpose>
+          </constructor>
+          <constructor>
             <parameter name="y">
               <paramtype>year_type</paramtype>
             </parameter>
@@ -1113,12 +911,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -1157,6 +949,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -1230,6 +1031,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -1245,11 +1052,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -1332,12 +1139,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -1376,6 +1177,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -1449,6 +1259,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -1464,11 +1280,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -1522,12 +1338,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -1566,6 +1376,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -1639,6 +1458,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -1654,11 +1479,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -1705,12 +1530,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -1749,6 +1568,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -1822,6 +1650,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -1837,11 +1671,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -1904,12 +1738,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -1948,6 +1776,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -2021,6 +1858,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -2036,11 +1879,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -2106,12 +1949,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -2150,6 +1987,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -2223,6 +2069,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -2238,11 +2090,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -2486,7 +2338,7 @@
           </purpose>
         </function>
         <function name="generate_locale">
-          <type>BOOST_DATE_TIME_DECL std::locale</type>
+          <type>std::locale</type>
           <parameter name="loc">
             <paramtype>std::locale &amp;</paramtype>
           </parameter>
@@ -2498,7 +2350,7 @@
           </purpose>
         </function>
         <function name="generate_locale">
-          <type>BOOST_DATE_TIME_DECL std::locale</type>
+          <type>std::locale</type>
           <parameter name="loc">
             <paramtype>std::locale &amp;</paramtype>
           </parameter>
@@ -2673,12 +2525,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -2717,6 +2563,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -2790,6 +2645,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -2805,11 +2666,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -2820,6 +2681,768 @@
         <typedef name="weeks">
           <type>date_time::weeks_duration&lt; date_time::duration_traits_adapted &gt;</type>
         </typedef>
+      </namespace>
+    </namespace>
+  </header>
+  <header name="boost/date_time/gregorian/greg_serialize.hpp">
+    <namespace name="boost">
+      <namespace name="serialization">
+        <function name="serialize">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="d">
+            <paramtype>::<classname>boost::gregorian::date</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <description>
+            <para>Method that does serialization for gregorian::date -- splits to load/save </para>
+          </description>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="d">
+            <paramtype>const ::<classname>boost::gregorian::date</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save gregorian::date objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>Dates are serialized into a string for transport and storage. While it would be more efficient to store the internal integer used to manipulate the dates, it is an unstable solution. </para>
+          </description>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="d">
+            <paramtype>::<classname>boost::gregorian::date</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load gregorian::date objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>Dates are serialized into a string for transport and storage. While it would be more efficient to store the internal integer used to manipulate the dates, it is an unstable solution. </para>
+          </description>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dp">
+            <paramtype>::<classname>boost::gregorian::date</classname> *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dd">
+            <paramtype>const gregorian::date_duration &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save gregorian::date_duration objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dd">
+            <paramtype>gregorian::date_duration &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load gregorian::date_duration objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dd">
+            <paramtype>gregorian::date_duration *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dr">
+            <paramtype>const gregorian::date_duration::duration_rep &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>helper unction to save date_duration objects using serialization lib </simpara>
+          </purpose>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dr">
+            <paramtype>gregorian::date_duration::duration_rep &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>helper function to load date_duration objects using serialization lib </simpara>
+          </purpose>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dr">
+            <paramtype>gregorian::date_duration::duration_rep *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dp">
+            <paramtype>const gregorian::date_period &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save gregorian::date_period objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>date_period objects are broken down into 2 parts for serialization: the begining date object and the end date object </para>
+          </description>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dp">
+            <paramtype>gregorian::date_period &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load gregorian::date_period objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>date_period objects are broken down into 2 parts for serialization: the begining date object and the end date object </para>
+          </description>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="dp">
+            <paramtype>gregorian::date_period *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gm">
+            <paramtype>const <classname>gregorian::greg_month</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save gregorian::greg_month objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gm">
+            <paramtype><classname>gregorian::greg_month</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load gregorian::greg_month objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gm">
+            <paramtype><classname>gregorian::greg_month</classname> *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gd">
+            <paramtype>const <classname>gregorian::greg_day</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save gregorian::greg_day objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gd">
+            <paramtype><classname>gregorian::greg_day</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load gregorian::greg_day objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gd">
+            <paramtype><classname>gregorian::greg_day</classname> *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gd">
+            <paramtype>const <classname>gregorian::greg_weekday</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save gregorian::greg_weekday objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gd">
+            <paramtype><classname>gregorian::greg_weekday</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load gregorian::greg_weekday objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="gd">
+            <paramtype><classname>gregorian::greg_weekday</classname> *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="pd">
+            <paramtype>const gregorian::partial_date &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save gregorian::partial_date objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>partial_date objects are broken down into 2 parts for serialization: the day (typically greg_day) and month (typically greg_month) objects </para>
+          </description>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="pd">
+            <paramtype>gregorian::partial_date &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load gregorian::partial_date objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>partial_date objects are broken down into 2 parts for serialization: the day (greg_day) and month (greg_month) objects </para>
+          </description>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="pd">
+            <paramtype>gregorian::partial_date *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="nkd">
+            <paramtype>const gregorian::nth_kday_of_month &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save nth_day_of_the_week_in_month objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>nth_day_of_the_week_in_month objects are broken down into 3 parts for serialization: the week number, the day of the week, and the month </para>
+          </description>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="nkd">
+            <paramtype>gregorian::nth_kday_of_month &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load nth_day_of_the_week_in_month objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>nth_day_of_the_week_in_month objects are broken down into 3 parts for serialization: the week number, the day of the week, and the month </para>
+          </description>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="nkd">
+            <paramtype>gregorian::nth_kday_of_month *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkd">
+            <paramtype>const gregorian::first_kday_of_month &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save first_day_of_the_week_in_month objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>first_day_of_the_week_in_month objects are broken down into 2 parts for serialization: the day of the week, and the month </para>
+          </description>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkd">
+            <paramtype>gregorian::first_kday_of_month &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load first_day_of_the_week_in_month objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>first_day_of_the_week_in_month objects are broken down into 2 parts for serialization: the day of the week, and the month </para>
+          </description>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkd">
+            <paramtype>gregorian::first_kday_of_month *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="lkd">
+            <paramtype>const gregorian::last_kday_of_month &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save last_day_of_the_week_in_month objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>last_day_of_the_week_in_month objects are broken down into 2 parts for serialization: the day of the week, and the month </para>
+          </description>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="lkd">
+            <paramtype>gregorian::last_kday_of_month &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load last_day_of_the_week_in_month objects using serialization lib. </simpara>
+          </purpose>
+          <description>
+            <para>last_day_of_the_week_in_month objects are broken down into 2 parts for serialization: the day of the week, and the month </para>
+          </description>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="lkd">
+            <paramtype>gregorian::last_kday_of_month *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkdb">
+            <paramtype>const gregorian::first_kday_before &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save first_day_of_the_week_before objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkdb">
+            <paramtype>gregorian::first_kday_before &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load first_day_of_the_week_before objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkdb">
+            <paramtype>gregorian::first_kday_before *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
+        <function name="save">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkda">
+            <paramtype>const gregorian::first_kday_after &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to save first_day_of_the_week_after objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkda">
+            <paramtype>gregorian::first_kday_after &amp;</paramtype>
+          </parameter>
+          <parameter name="version">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to load first_day_of_the_week_after objects using serialization lib. </simpara>
+          </purpose>
+        </function>
+        <function name="load_construct_data">
+          <type>void</type>
+          <template>
+          <template-type-parameter name="Archive"/>
+        </template>
+          <parameter name="ar">
+            <paramtype>Archive &amp;</paramtype>
+          </parameter>
+          <parameter name="fkda">
+            <paramtype>gregorian::first_kday_after *</paramtype>
+          </parameter>
+          <parameter name="file_version">
+            <paramtype>const unsigned int</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>override needed b/c no default constructor </simpara>
+          </purpose>
+        </function>
       </namespace>
     </namespace>
   </header>
@@ -2896,12 +3519,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -2940,6 +3557,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -3013,6 +3639,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -3028,11 +3660,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -3104,12 +3736,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -3148,6 +3774,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -3221,6 +3856,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -3236,11 +3877,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -3287,12 +3928,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -3331,6 +3966,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -3404,6 +4048,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -3419,11 +4069,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -3474,12 +4124,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -3518,6 +4162,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -3591,6 +4244,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -3606,11 +4265,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>
@@ -3657,12 +4316,6 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_day_of_year_policies &gt;</type>
         </typedef>
-        <typedef name="greg_weekday_policies">
-          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
-        </typedef>
-        <typedef name="greg_weekday_rep">
-          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
-        </typedef>
         <typedef name="greg_year_policies">
           <purpose>
             <simpara>Policy class that declares error handling gregorian year type. </simpara>
@@ -3701,6 +4354,15 @@
             <simpara>Date periods for the gregorian system. </simpara>
           </purpose>
           <type>date_time::period&lt; <classname>date</classname>, date_duration &gt;</type>
+        </typedef>
+        <typedef name="year_based_generator">
+          <purpose>
+            <simpara>A unifying date_generator base type. </simpara>
+          </purpose>
+          <description>
+            <para>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month </para>
+          </description>
+          <type>date_time::year_based_generator&lt; <classname>date</classname> &gt;</type>
         </typedef>
         <typedef name="partial_date">
           <purpose>
@@ -3774,6 +4436,12 @@
           </purpose>
           <type>date_time::date_itr&lt; date_time::year_functor&lt; <classname>date</classname> &gt;, <classname>date</classname> &gt;</type>
         </typedef>
+        <typedef name="greg_base_facet">
+          <purpose>
+            <simpara>Create the base facet type for gregorian::date. </simpara>
+          </purpose>
+          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        </typedef>
         <typedef name="months_of_year">
           <type>date_time::months_of_year</type>
         </typedef>
@@ -3789,11 +4457,11 @@
           </purpose>
           <type>CV::constrained_value&lt; greg_month_policies &gt;</type>
         </typedef>
-        <typedef name="greg_base_facet">
-          <purpose>
-            <simpara>Create the base facet type for gregorian::date. </simpara>
-          </purpose>
-          <type>boost::date_time::date_names_put&lt; <classname>greg_facet_config</classname> &gt;</type>
+        <typedef name="greg_weekday_policies">
+          <type>CV::simple_exception_policy&lt; unsigned short, 0, 6, <classname>bad_weekday</classname> &gt;</type>
+        </typedef>
+        <typedef name="greg_weekday_rep">
+          <type>CV::constrained_value&lt; greg_weekday_policies &gt;</type>
         </typedef>
         <typedef name="months">
           <type>date_time::months_duration&lt; <classname>greg_durations_config</classname> &gt;</type>

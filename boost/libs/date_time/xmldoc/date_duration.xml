@@ -1,5 +1,5 @@
 <section id="date_time.gregorian.date_duration">
-  <title>Date Duration</title>
+  <title>Date Duration (aka Days)</title>
 
   <link linkend="duration_intro">Introduction</link> --
   <link linkend="duration_header">Header</link> --
@@ -8,6 +8,9 @@
 
   <anchor id="duration_intro" />
   <bridgehead renderas="sect3">Introduction</bridgehead>
+  <para>
+    As of version 1_32 the date_duration class has been typdefed as days in the boost::gregorian namespace. Throughout the examples you will find days used instead of date_duration.
+  </para>
   <para>
     The class boost::gregorian::date_duration is a simple day count used for arithmetic with <link linkend="date_time.gregorian.date_class">gregorian::date</link>. A duration can be either positive or negative. 
   </para>

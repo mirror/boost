@@ -2,23 +2,15 @@
   <title>Doxygen Generated Library Reference</title>
   
   <para>
-    We added doxygen generated documentation. &lt;Reword this&gt;
+    The following is a detailed reference of the date_time library. It is broken down into 3 sections: 
+    <orderedlist>
+      <listitem><link linkend="date_time_reference">date_time namespace</link> (top link)</listitem>
+      <listitem><link linkend="gregorian_reference">gregorian namespace</link> (second link)</listitem> 
+      <listitem><link linkend="posix_time_reference">posix_time namespace</link> (third link)</listitem>
+    </orderedlist>
+    A click on any of the reference links will take you to a list of the header files found in that section. Following one of those links will take you to a list of the items declared in that header file. Further sublinks take you to detailed descriptions of each individual item.
   </para>
 
-  <!--<ulink url="../../boost/date_time/html/index.html">Doxy docs</ulink>-->
-  
-  <!-- 
-  <link linkend="dt">Date_time</link>  
-  <link linkend="gt">Gregorian_time</link>  
-  <link linkend="pt">Posix_time</link> 
-
-  <anchor id="dt"/>
-  <xi:include href="date_time_autodoc.boostbook"/>
-  <anchor id="gt"/>
-  <xi:include href="date_time_gregorian_autodoc.boostbook"/>
-  <anchor id="pt"/>
-  <xi:include href="date_time_posix_time_autodoc.boostbook"/>
-  -->
   <xi:include href="date_time_autodoc.boostbook"/>
   <xi:include href="date_time_gregorian_autodoc.boostbook"/>
   <xi:include href="date_time_posix_time_autodoc.boostbook"/>

@@ -150,12 +150,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -203,12 +197,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -216,6 +204,7 @@
     <para>Provide workarounds related to the ctime header</para>
   </header>
   <header name="boost/date_time/compiler_config.hpp">
+    <macro name="BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES"/>
     <macro name="BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES"/>
     <macro name="INT64_C" kind="functionlike">
       <macro-parameter name="value"/>
@@ -513,12 +502,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -582,12 +565,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -602,12 +579,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
         <enum name="weekdays">
           <enumvalue name="Sunday"/>
@@ -830,12 +801,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -1134,12 +1099,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -1230,12 +1189,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -1363,12 +1316,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -1383,12 +1330,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -1559,12 +1500,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -1990,12 +1925,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
         <function name="nth_as_str">
           <type>BOOST_DATE_TIME_DECL const  char *</type>
           <parameter name="n">
@@ -2223,12 +2152,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
         <enum name="date_resolutions">
           <enumvalue name="day"/>
@@ -2653,12 +2576,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -2673,12 +2590,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
         <function name="convert_to_lower">
           <type>std::string</type>
@@ -3187,12 +3098,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
         <enum name="time_is_dst_result">
           <enumvalue name="is_not_in_dst"/>
           <enumvalue name="is_in_dst"/>
@@ -3287,12 +3192,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -3422,12 +3321,6 @@
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -3736,12 +3629,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
         <function name="operator&lt;&lt;">
           <type>std::basic_ostream&lt; charT, traits &gt; &amp;</type>
           <template>
@@ -3927,12 +3814,6 @@
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4100,12 +3981,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
         <function name="dummy_to_prevent_msvc6_ice">
           <type>void</type>
         </function>
@@ -4146,12 +4021,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -4342,12 +4211,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4366,12 +4229,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
         <enum name="month_format_spec">
           <enumvalue name="month_as_integer"/>
@@ -4614,12 +4471,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4635,12 +4486,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
         <enum name="special_values">
           <enumvalue name="not_a_date_time"/>
           <enumvalue name="neg_infin"/>
@@ -4652,41 +4497,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         </enum>
       </namespace>
     </namespace>
-  </header>
-  <header name="boost/date_time/testfrmwk.hpp">
-    <class name="TestStats">
-      <purpose>
-        <simpara>Really simple test framework for counting and printing. </simpara>
-      </purpose>
-      <method-group name="public member functions">
-        <method name="addPassingTest" cv="">
-          <type>void</type>
-        </method>
-        <method name="addFailingTest" cv="">
-          <type>void</type>
-        </method>
-        <method name="testcount" cv="const">
-          <type>unsigned int</type>
-        </method>
-        <method name="passcount" cv="const">
-          <type>unsigned int</type>
-        </method>
-        <method name="print" cv="const">
-          <type>void</type>
-          <parameter name="out">
-            <paramtype>std::ostream &amp;</paramtype>
-            <default>std::cout</default>
-          </parameter>
-        </method>
-      </method-group>
-      <method-group name="public static functions">
-        <method name="instance" cv="">
-          <type><classname>TestStats</classname> &amp;</type>
-        </method>
-      </method-group>
-      <method-group name="private member functions"/>
-      <constructor/>
-    </class>
   </header>
   <header name="boost/date_time/time.hpp">
     <para>This file contains the interface for the time associated classes.</para>
@@ -4868,12 +4678,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4924,12 +4728,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -4945,12 +4743,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
         <enum name="time_resolutions">
           <enumvalue name="sec"/>
@@ -5273,12 +5065,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -5390,12 +5176,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -5480,12 +5260,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -5500,12 +5274,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
         <function name="parse_delimited_time_duration">
           <type>
@@ -5782,12 +5550,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
         <function name="absolute_value">
           <type>T</type>
           <template>
@@ -6030,12 +5792,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -6188,224 +5944,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
-      </namespace>
-    </namespace>
-  </header>
-  <header name="boost/date_time/time_zone_base.hpp">
-    <namespace name="boost">
-      <namespace name="date_time">
-        <class name="dst_adjustment_offsets">
-          <template>
-      <template-type-parameter name="time_duration_type"/>
-    </template>
-          <purpose>
-            <simpara>Structure which holds the time offsets associated with daylight savings time. </simpara>
-          </purpose>
-          <description>
-            <para>
-</para>
-          </description>
-          <method-group name="public member functions"/>
-          <constructor>
-            <parameter name="dst_adjust">
-              <paramtype>const time_duration_type &amp;</paramtype>
-            </parameter>
-            <parameter name="dst_start_offset">
-              <paramtype>const time_duration_type &amp;</paramtype>
-            </parameter>
-            <parameter name="dst_end_offset">
-              <paramtype>const time_duration_type &amp;</paramtype>
-            </parameter>
-          </constructor>
-          <data-member name="dst_adjust_">
-            <type>time_duration_type</type>
-            <purpose>
-              <simpara>Amount DST adjusts the clock eg: plus one hour. </simpara>
-            </purpose>
-          </data-member>
-          <data-member name="dst_start_offset_">
-            <type>time_duration_type</type>
-            <purpose>
-              <simpara>Time past midnight on start transition day that dst starts. </simpara>
-            </purpose>
-          </data-member>
-          <data-member name="dst_end_offset_">
-            <type>time_duration_type</type>
-            <purpose>
-              <simpara>Time past midnight on end transition day that dst ends. </simpara>
-            </purpose>
-          </data-member>
-        </class>
-        <class name="time_zone_base">
-          <template>
-      <template-type-parameter name="time_type"/>
-      <template-type-parameter name="CharT"><default>char</default></template-type-parameter>
-    </template>
-          <purpose>
-            <simpara>Interface class for dynamic time zones. </simpara>
-          </purpose>
-          <description>
-            <para>This class represents the base interface for all timezone representations. Subclasses may provide different systems for identifying a particular zone. For example some may provide a geographical based zone construction while others may specify the offset from GMT. Another possible implementation would be to convert from POSIX timezone strings. Regardless of the construction technique, this is the interface that these time zone types must provide.</para>
-            <para>Note that this class is intended to be used as a shared resource (hence the derivation from boost::counted_base. </para>
-          </description>
-          <typedef name="string_type">
-            <type>std::basic_string&lt; char &gt;</type>
-          </typedef>
-          <typedef name="year_type">
-            <type>time_type::date_type::year_type</type>
-          </typedef>
-          <typedef name="time_duration_type">
-            <type>time_type::time_duration_type</type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="dst_zone_abbrev" cv="const">
-              <type>virtual string_type</type>
-              <purpose>
-                <simpara>String for the timezone when in daylight savings (eg: EDT). </simpara>
-              </purpose>
-            </method>
-            <method name="std_zone_abbrev" cv="const">
-              <type>virtual string_type</type>
-              <purpose>
-                <simpara>String for the zone when not in daylight savings (eg: EST). </simpara>
-              </purpose>
-            </method>
-            <method name="dst_zone_name" cv="const">
-              <type>virtual string_type</type>
-              <purpose>
-                <simpara>String for the timezone when in daylight savings (eg: Eastern Daylight Time). </simpara>
-              </purpose>
-            </method>
-            <method name="std_zone_name" cv="const">
-              <type>virtual string_type</type>
-              <purpose>
-                <simpara>String for the zone when not in daylight savings (eg: Eastern Standard Time). </simpara>
-              </purpose>
-            </method>
-            <method name="has_dst" cv="const">
-              <type>virtual bool</type>
-              <purpose>
-                <simpara>True if zone uses daylight savings adjustments otherwise false. </simpara>
-              </purpose>
-            </method>
-            <method name="dst_local_start_time" cv="const">
-              <type>virtual time_type</type>
-              <parameter name="y">
-                <paramtype>year_type</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Local time that DST starts -- undefined if has_dst is false. </simpara>
-              </purpose>
-            </method>
-            <method name="dst_local_end_time" cv="const">
-              <type>virtual time_type</type>
-              <parameter name="y">
-                <paramtype>year_type</paramtype>
-              </parameter>
-              <purpose>
-                <simpara>Local time that DST ends -- undefined if has_dst is false. </simpara>
-              </purpose>
-            </method>
-            <method name="base_utc_offset" cv="const">
-              <type>virtual time_duration_type</type>
-              <purpose>
-                <simpara>Base offset from UTC for zone (eg: -07:30:00). </simpara>
-              </purpose>
-            </method>
-            <method name="dst_offset" cv="const">
-              <type>virtual time_duration_type</type>
-              <purpose>
-                <simpara>Adjustment forward or back made while DST is in effect. </simpara>
-              </purpose>
-            </method>
-          </method-group>
-          <constructor/>
-          <destructor/>
-        </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
-      </namespace>
-    </namespace>
-  </header>
-  <header name="boost/date_time/time_zone_names.hpp">
-    <namespace name="boost">
-      <namespace name="date_time">
-        <class name="time_zone_names_base">
-          <template>
-      <template-type-parameter name="CharT"><default>char</default></template-type-parameter>
-    </template>
-          <purpose>
-            <simpara>Base type that holds various string names for timezone output. </simpara>
-          </purpose>
-          <description>
-            <para>Class that holds various types of strings used for timezones. For example, for the western United States there is the full name: Pacific Standard Time and the abbreviated name: PST. During daylight savings there are additional names: Pacific Daylight Time and PDT.  CharT Allows class to support different character types </para>
-          </description>
-          <typedef name="string_type">
-            <type>std::basic_string&lt; CharT &gt;</type>
-          </typedef>
-          <method-group name="public member functions">
-            <method name="dst_zone_abbrev" cv="const">
-              <type>string_type</type>
-            </method>
-            <method name="std_zone_abbrev" cv="const">
-              <type>string_type</type>
-            </method>
-            <method name="dst_zone_name" cv="const">
-              <type>string_type</type>
-            </method>
-            <method name="std_zone_name" cv="const">
-              <type>string_type</type>
-            </method>
-          </method-group>
-          <constructor>
-            <parameter name="std_zone_name">
-              <paramtype>const string_type &amp;</paramtype>
-            </parameter>
-            <parameter name="std_zone_abbrev">
-              <paramtype>const string_type &amp;</paramtype>
-            </parameter>
-            <parameter name="dst_zone_name">
-              <paramtype>const string_type &amp;</paramtype>
-            </parameter>
-            <parameter name="dst_zone_abbrev">
-              <paramtype>const string_type &amp;</paramtype>
-            </parameter>
-          </constructor>
-        </class>
-        <typedef name="milli_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted32_impl</classname>, milli, 1000, 3 &gt;</type>
-        </typedef>
-        <typedef name="micro_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, micro, 1000000, 6 &gt;</type>
-        </typedef>
-        <typedef name="nano_res">
-          <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -6533,12 +6071,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
         </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
-        </typedef>
       </namespace>
     </namespace>
   </header>
@@ -6596,12 +6128,6 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         </typedef>
         <typedef name="nano_res">
           <type>time_resolution_traits&lt; <classname>time_resolution_traits_adapted64_impl</classname>, nano, 1000000000, 9 &gt;</type>
-        </typedef>
-        <typedef name="time_zone_names">
-          <purpose>
-            <simpara>Specialization of timezone names for standard char. </simpara>
-          </purpose>
-          <type><classname>time_zone_names_base</classname>&lt; char &gt;</type>
         </typedef>
       </namespace>
     </namespace>
