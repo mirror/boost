@@ -115,12 +115,16 @@ namespace boost
     transform_iterator(Iterator const& x, UnaryFunction f)
       : super_t(x), m_f(f) { }
 
-    transform_iterator(Iterator const& x)
+    explicit transform_iterator(Iterator const& x)
       : super_t(x)
     {
+        // Pro8 is a little too aggressive about instantiating the
+        // body of this function.
+#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
         // don't provide this constructor if UnaryFunction is a
         // function pointer type, since it will be 0.  Too dangerous.
         BOOST_STATIC_ASSERT(is_class<UnaryFunction>::value);
+#endif 
     }
 
     template<class OtherIterator>

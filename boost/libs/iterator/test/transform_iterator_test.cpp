@@ -39,6 +39,10 @@ namespace boost { namespace detail
   template<> struct iterator_traits<std::pair<int, int> const*>
   : ptr_iter_traits<std::pair<int, int>, std::pair<int, int> const> {};
 
+  template<> struct function_object_result<int (*)(int)>
+  {
+      typedef int type;
+  };
 }}
 #endif
 

@@ -59,9 +59,13 @@ namespace boost
       filter_iterator(Iterator x, Iterator end = Iterator())
         : super_t(x), m_predicate(), m_end(end)
       {
+        // Pro8 is a little too aggressive about instantiating the
+        // body of this function.
+#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
           // Don't allow use of this constructor if Predicate is a
           // function pointer type, since it will be 0.
           BOOST_STATIC_ASSERT(is_class<Predicate>::value);
+#endif 
           satisfy_predicate();
       }
 
