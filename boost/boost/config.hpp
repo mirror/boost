@@ -521,7 +521,9 @@
 #       ifndef _GLOBAL_USING    // can be defined in yvals.h
 #         define BOOST_NO_STDC_NAMESPACE
 #       endif
-#       define BOOST_MSVC_STD_ITERATOR
+#       if _CPPLIB_VER < 308 // fix due to kensai@pacbell.net
+#        define BOOST_MSVC_STD_ITERATOR
+#       endif
 #     else
 #       define BOOST_MSVC_STD_ITERATOR
 #       define BOOST_NO_SLIST
