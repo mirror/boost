@@ -409,7 +409,7 @@
                 <tbody>
                     <row>
                         <entry>find_all</entry>
-                        <entry>Find/Extract all matching substrings in hte input</entry>
+                        <entry>Find/Extract all matching substrings in the input</entry>
                         <entry>
                             <functionname>find_all()</functionname>
                             <sbr/>

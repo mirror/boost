@@ -25,7 +25,7 @@
             First requirement of string-type is that it must accessible using 
             <link linkend="string_algo.collection_traits">collection traits</link>. This facility allows to access
             the elements inside the string in a uniform iterator-based fashion. 
-            This facility actualy requires lessen requirements then collection concept. It implements 
+            This facility actually requires lessen requirements then collection concept. It implements 
             <ulink url="../../libs/algorithm/string/doc/external_concepts.html">external</ulink> collection interface.
             This is sufficient for our library
         </para>
@@ -36,9 +36,9 @@
             work even if this requirement will not be satisfied, however at the cost of performance degradation.
         <para>
         </para>
-            In addition some algorithms have additional requirements on the string-type. Particulary, it is required,
+            In addition some algorithms have additional requirements on the string-type. Particularly, it is required,
             that an algorithm can create a new string of the given type. In this case, it is required, that
-            the type satifies the sequence (Std &sect;23.1.1) requirements.
+            the type satisfies the sequence (Std &sect;23.1.1) requirements.
         </para>
         <para>
             In the reference and also in the code, requirement on the string type is designated by the name of
@@ -78,7 +78,7 @@
             and <code>end()</code> accessors, it has member functions for checking if the range is empty,
             or to determine the size of the range. It has also a set of member typedefs that extract
             type information from the encapsulated iterators. As such, the interface is compatible with 
-            the <link linkend="string_algo.collection_traits">collecion traits</link> requirements so
+            the <link linkend="string_algo.collection_traits">collection traits</link> requirements so
             it is possible to use this class as a parameter to many algorithms in this library.
         </para>
         <para>
@@ -336,24 +336,24 @@
 
         <para>
             The library provides some exceptions safety guaranties under following assumptions:
-            <orderedlist numeration="arabic">
+		 	<orderedlist numeration="arabic">
                 <listitem>
                     <para>        
                         All types that are used as a template arguments or passed as arguments to the 
-                        facilities in this library provide <emphasis>basic exception guarantie</emphasis>.
+                        facilities in this library provide <emphasis>basic exception guarantee</emphasis>.
                     </para>
                 </listitem>
                 <listitem>
                     <para>
                         If the types mentioned in the first assumption can provide 
-                        <emphasis>strong exception guarantie</emphasis> for their const operations, some algorithm
+                        <emphasis>strong exception guarantee</emphasis> for their const operations, some algorithm
                         can provide stronger guaranties.
                     </para>
                 </listitem>
             </orderedlist>
         </para>        
         <para>
-            Unless stated otherwise, all facilities and algorithms in this library have <emphasis>basic exception guarantie</emphasis>.
+            Unless stated otherwise, all facilities and algorithms in this library have <emphasis>basic exception guarantee</emphasis>.
         </para>
     </section>
 </section>

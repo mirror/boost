@@ -66,7 +66,7 @@
                 <para><emphasis role="bold">Algorithm stacking:</emphasis>
                     Copy versions return a transformed input as a result, thus allow a simple chaining of
                     transformations within one expression (i.e. one can write <code>trim_copy(to_upper_copy(s))</code>). 
-                    Mutable versions have <code>void</code> return, to avoid missuse.
+                    Mutable versions have <code>void</code> return, to avoid misuse.
                 </para>
             </listitem>
             <listitem>
@@ -246,8 +246,8 @@
 
         <para>
             An extension to find algorithms it the Find Iterator. Instead of searching for just a one part of a string, 
-            the find iterator allows us to iterate over the substrings matching the specified criterium.
-            This facility is using the <link linkend="string_algo.finder_concept">Finder</link> to incrementaly
+            the find iterator allows us to iterate over the substrings matching the specified criteria.
+            This facility is using the <link linkend="string_algo.finder_concept">Finder</link> to incrementally
             search the string. 
             Dereferencing a find iterator yields an <link linkend="string_algo.iterator_range"><code>iterator_range</code></link> 
             object, that delimits the current match.
@@ -292,8 +292,8 @@
         <para>
             Note that find iterators have only one template parameter. It is the base iterator type.
             Finder is specified at runtime. This allows us to typedef a find iterator for
-            a common string types and reuse it. Additionaly make_*_iterator functions helps
-            to contruct a find iterator for a particular collection.
+            a common string types and reuse it. Additionally make_*_iterator functions helps
+            to construct a find iterator for a particular collection.
         </para>
         <para>
             See the reference in <headername>boost/algorithm/string/find_iterator.hpp</headername>.
