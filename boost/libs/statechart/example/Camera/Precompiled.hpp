@@ -1,5 +1,5 @@
-#ifndef PRECOMPILED_HPP
-#define PRECOMPILED_HPP
+#ifndef BOOST_FSM_EXAMPLE_PRECOMPILED_HPP
+#define BOOST_FSM_EXAMPLE_PRECOMPILED_HPP
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2004
 // Distributed under the Boost Software License, Version 1.0. (See accompany-

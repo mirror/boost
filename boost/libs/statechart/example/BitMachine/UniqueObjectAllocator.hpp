@@ -1,5 +1,5 @@
-#ifndef UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
-#define UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
+#ifndef BOOST_FSM_EXAMPLE_UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
+#define BOOST_FSM_EXAMPLE_UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) Copyright Andreas Huber Doenni 2002-2004
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
