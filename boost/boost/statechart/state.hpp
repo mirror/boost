@@ -10,6 +10,8 @@
 
 #include <boost/fsm/simple_state.hpp>
 
+#include <boost/mpl/list.hpp>
+
 
 
 namespace boost
@@ -22,7 +24,7 @@ namespace fsm
 template< class MostDerived,
           class Context,
           class Reactions = no_reactions,
-          class InnerInitial = detail::empty_list,
+          class InnerInitial = mpl::list<>,
           history_mode historyMode = has_no_history >
 class state : public simple_state<
   MostDerived, Context, Reactions, InnerInitial, historyMode >

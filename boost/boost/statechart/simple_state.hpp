@@ -61,8 +61,6 @@ namespace detail
 
 
 
-typedef mpl::clear< mpl::list<> >::type empty_list;
-
 //////////////////////////////////////////////////////////////////////////////
 template< class T >
 struct make_list : public mpl::eval_if<
@@ -168,7 +166,7 @@ struct deep_history_storer< true, true >
 
 
 //////////////////////////////////////////////////////////////////////////////
-typedef detail::empty_list no_reactions;
+typedef mpl::list<> no_reactions;
 
 //////////////////////////////////////////////////////////////////////////////
 enum history_mode
@@ -185,7 +183,7 @@ enum history_mode
 template< class MostDerived,
           class Context,
           class Reactions = no_reactions,
-          class InnerInitial = detail::empty_list,
+          class InnerInitial = mpl::list<>,
           history_mode historyMode = has_no_history >
 class simple_state : public detail::simple_state_base_type< MostDerived,
   typename Context::inner_context_type, InnerInitial >::type

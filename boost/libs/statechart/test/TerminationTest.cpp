@@ -92,7 +92,7 @@ template<
   class MostDerived,
   class Context,
   class Reactions,
-  class InnerInitial = fsm::detail::empty_list >
+  class InnerInitial = mpl::list<> >
 struct MyState : fsm::simple_state<
   MostDerived, Context, Reactions, InnerInitial >
 {
