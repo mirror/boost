@@ -17,8 +17,10 @@
 #ifndef BOOST_MPL_AUX_POP_FRONT_IMPL_HPP_INCLUDED
 #define BOOST_MPL_AUX_POP_FRONT_IMPL_HPP_INCLUDED
 
+#include "boost/config.hpp"
 #include "boost/mpl/pop_front_fwd.hpp"
 #include "boost/mpl/aux_/traits_lambda_spec.hpp"
+#include "boost/detail/workaround.hpp"
 
 namespace boost {
 namespace mpl {
@@ -28,7 +30,15 @@ namespace mpl {
 template< typename Tag >
 struct pop_front_traits
 {
-    template< typename Sequence > struct algorithm;
+    template< typename Sequence > struct algorithm
+    // conservatively placed, but maybe should go outside surrounding
+    // braces.
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) 
+    {
+        typedef int type;
+    }
+#endif
+    ;
 };
 
 BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(1,pop_front_traits)
