@@ -858,6 +858,11 @@ public:
       *out += v; 
       return *this; 
    }
+   typedef std::ptrdiff_t difference_type;
+   typedef UChar value_type;
+   typedef value_type* pointer;
+   typedef value_type& reference;
+   typedef std::output_iterator_tag iterator_category;
 };
 
 }

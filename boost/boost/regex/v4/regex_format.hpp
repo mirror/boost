@@ -536,6 +536,12 @@ public:
       out->append(1, v); 
       return *this; 
    }
+
+   typedef std::ptrdiff_t difference_type;
+   typedef typename S::value_type value_type;
+   typedef value_type* pointer;
+   typedef value_type& reference;
+   typedef std::output_iterator_tag iterator_category;
 };
 
 template <class OutputIterator, class Iterator, class Alloc, class charT, class traits>

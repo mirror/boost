@@ -19,6 +19,9 @@
 #ifndef BOOST_W32_REGEX_TRAITS_HPP_INCLUDED
 #define BOOST_W32_REGEX_TRAITS_HPP_INCLUDED
 
+#ifndef BOOST_RE_PAT_EXCEPT_HPP
+#include <boost/regex/pattern_except.hpp>
+#endif
 #ifndef BOOST_REGEX_TRAITS_DEFAULTS_HPP_INCLUDED
 #include <boost/regex/v4/regex_traits_defaults.hpp>
 #endif
@@ -199,10 +202,10 @@ w32_regex_traits_char_layer<charT>::w32_regex_traits_char_layer(::boost::re_deta
    {
       for(regex_constants::syntax_type i = 1; i < regex_constants::syntax_max; ++i)
       {
-         string_type mss = ::boost::re_detail::w32_cat_get(cat, m_locale, i, get_default_message(i));
+         string_type mss = ::boost::re_detail::w32_cat_get(cat, this->m_locale, i, get_default_message(i));
          for(typename string_type::size_type j = 0; j < mss.size(); ++j)
          {
-            m_char_map[mss[j]] = i;
+            this->m_char_map[mss[j]] = i;
          }
       }
    }
@@ -213,7 +216,7 @@ w32_regex_traits_char_layer<charT>::w32_regex_traits_char_layer(::boost::re_deta
          const char* ptr = get_default_syntax(i);
          while(ptr && *ptr)
          {
-            m_char_map[static_cast<charT>(*ptr)] = i;
+            this->m_char_map[static_cast<charT>(*ptr)] = i;
             ++ptr;
          }
       }
