@@ -26,7 +26,7 @@
 #include <boost/test/test_tools.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
-  namespace std { using ::fabs; }
+  namespace std { using ::abs; using ::fabs; using ::pow; }
 #endif
 
 
