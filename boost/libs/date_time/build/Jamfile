@@ -49,7 +49,8 @@ local GREGORIAN_CPP_SOURCES = gregorian_types greg_month greg_weekday ;
 
 lib boost_date_time : ../src/gregorian/$(GREGORIAN_CPP_SOURCES).cpp
     # requirements
-    : $(DATE_TIME_INCLUDES)
+    : <sysinclude>$(BOOST_ROOT)
+      $(DATE_TIME_INCLUDES)
       $(DATE_TIME_PROPERTIES) ;
 
 #dll libboost_gdtl
