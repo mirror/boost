@@ -25,6 +25,7 @@ namespace fsm
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 template<
   class FifoWorker = fifo_worker<>,
   class Allocator = std::allocator< void > >

@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_DEFERRAL_HPP_INCLUDED
 #define BOOST_FSM_DEFERRAL_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -21,21 +21,26 @@ namespace fsm
 
 //////////////////////////////////////////////////////////////////////////////
 template< class Event >
-struct deferral
+class deferral
 {
-  template< class State, class EventBase, class IdType >
-  static result react(
-    State & stt, const EventBase &, const IdType & eventType )
-  {
-    if ( eventType == Event::static_type() )
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    // The following declarations should be private.
+    // They are only public because many compilers lack template friends.
+    //////////////////////////////////////////////////////////////////////////
+    template< class State, class EventBase, class IdType >
+    static result react(
+      State & stt, const EventBase &, const IdType & eventType )
     {
-      return stt.defer_event();
+      if ( eventType == Event::static_type() )
+      {
+        return stt.defer_event();
+      }
+      else
+      {
+        return no_reaction;
+      }
     }
-    else
-    {
-      return no_reaction;
-    }
-  }
 };
 
 

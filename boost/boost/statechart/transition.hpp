@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_TRANSITION_HPP_INCLUDED
 #define BOOST_FSM_TRANSITION_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ template< class Event, class Destination,
           class TransitionContext = detail::no_context,
           void ( TransitionContext::*pTransitionAction )( const Event & ) =
             &detail::no_context::no_function< Event > >
-struct transition
+class transition
 {
   private:
     //////////////////////////////////////////////////////////////////////////
@@ -68,6 +68,9 @@ struct transition
     };
 
   public:
+    //////////////////////////////////////////////////////////////////////////
+    // The following declarations should be private.
+    // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     template< class State, class EventBase, class IdType >
     static result react(
