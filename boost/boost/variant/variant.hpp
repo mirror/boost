@@ -1705,22 +1705,29 @@ public:
 
 #endif// !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 
-    template <typename Visitor>
+    template <typename Visitor, typename VoidPtrCV>
+    static
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
               typename Visitor::result_type
             )
-    internal_apply_visitor(Visitor& visitor)
+    internal_apply_visitor_impl(
+          int internal_which
+        , int logical_which
+        , Visitor& visitor
+        , VoidPtrCV storage
+        )
     {
         typedef mpl::int_<0> first_which;
         typedef typename mpl::begin<internal_types>::type first_it;
         typedef typename mpl::end<internal_types>::type last_it;
+
         typedef detail::variant::visitation_impl_step<
               first_it, last_it
             > first_step;
 
         return detail::variant::visitation_impl(
-              which_, which()
-            , visitor, storage_.address(), mpl::false_()
+              internal_which, logical_which
+            , visitor, storage, mpl::false_()
             , never_uses_backup_flag()
             , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
@@ -1730,20 +1737,21 @@ public:
         BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
               typename Visitor::result_type
             )
+    internal_apply_visitor(Visitor& visitor)
+    {
+        return internal_apply_visitor_impl(
+              which_, which(), visitor, storage_.address()
+            );
+    }
+
+    template <typename Visitor>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+              typename Visitor::result_type
+            )
     internal_apply_visitor(Visitor& visitor) const
     {
-        typedef mpl::int_<0> first_which;
-        typedef typename mpl::begin<internal_types>::type first_it;
-        typedef typename mpl::end<internal_types>::type last_it;
-        typedef detail::variant::visitation_impl_step<
-              first_it, last_it
-            > first_step;
-
-        return detail::variant::visitation_impl(
-              which_, which()
-            , visitor, storage_.address(), mpl::false_()
-            , never_uses_backup_flag()
-            , static_cast<first_which*>(0), static_cast<first_step*>(0)
+        return internal_apply_visitor_impl(
+              which_, which(), visitor, storage_.address()
             );
     }
 
@@ -1781,7 +1789,9 @@ struct make_variant_over
 {
 private: // precondition assertions
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     BOOST_STATIC_ASSERT(( ::boost::mpl::is_sequence<Types>::value ));
+#endif
 
 public: // metafunction result
 
