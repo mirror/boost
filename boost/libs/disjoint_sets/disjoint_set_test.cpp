@@ -16,31 +16,32 @@ struct test_disjoint_set {
     // The following tests are pretty lame, just a basic sanity check.
     // Industrial strength tests still need to be written.
     
-    std::size_t elts[] = { 1, 2, 3, 4 }; 
-    const int N = 4; //sizeof(elts)/sizeof(std::size_t);
+    std::size_t elts[] = { 0, 1, 2, 3 }; 
+    const int N = sizeof(elts)/sizeof(std::size_t);
     
     DisjointSet ds(N);
+
     ds.make_set(elts[0]);
     ds.make_set(elts[1]);
     ds.make_set(elts[2]);
     ds.make_set(elts[3]);
 
+    BOOST_CHECK(ds.find_set(0) != ds.find_set(1));
+    BOOST_CHECK(ds.find_set(0) != ds.find_set(2));
+    BOOST_CHECK(ds.find_set(0) != ds.find_set(3));
     BOOST_CHECK(ds.find_set(1) != ds.find_set(2));
     BOOST_CHECK(ds.find_set(1) != ds.find_set(3));
-    BOOST_CHECK(ds.find_set(1) != ds.find_set(4));
     BOOST_CHECK(ds.find_set(2) != ds.find_set(3));
-    BOOST_CHECK(ds.find_set(2) != ds.find_set(4));
-    BOOST_CHECK(ds.find_set(3) != ds.find_set(4));
 
-    ds.union_set(1, 2);
-    ds.union_set(3, 4);
 
-    BOOST_CHECK(ds.find_set(1) != ds.find_set(4));
-    
-    int a = ds.find_set(1);
-    BOOST_CHECK(a == ds.find_set(2));
-    int b = ds.find_set(3);
-    BOOST_CHECK(b == ds.find_set(4));
+    ds.union_set(0, 1);
+    ds.union_set(2, 3);
+    BOOST_CHECK(ds.find_set(0) != ds.find_set(3));
+    int a = ds.find_set(0);
+    BOOST_CHECK(a == ds.find_set(1));
+    int b = ds.find_set(2);
+    BOOST_CHECK(b == ds.find_set(3));
+
     ds.link(a, b);
     BOOST_CHECK(ds.find_set(a) == ds.find_set(b));
     BOOST_CHECK(1 == ds.count_sets(elts, elts + N));
