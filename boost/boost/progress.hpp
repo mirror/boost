@@ -8,6 +8,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  20 May 01  Introduce several static_casts<> to eliminate warning messages
+//             (Fixed by Beman, reported by Herve Bronnimann)
 //  12 Jan 01  Change to inline implementation to allow use without library
 //             builds. See docs for more rationale. (Beman Dawes) 
 //  22 Jul 99  Name changed to .hpp
@@ -109,9 +111,15 @@ class progress_display : noncopyable
   unsigned int  _tic;
   void display_tic()
   {
-    int tics_needed = (static_cast<double>(_count)/_expected_count)*50.0;
+    // use of floating point ensures that both large and small counts
+    // work correctly.  static_cast<>() is also used several places
+    // to suppress spurious compiler warnings. 
+    unsigned int tics_needed =
+      static_cast<unsigned int>(
+        (static_cast<double>(_count)/_expected_count)*50.0 );
     do { _os << '*' << std::flush; } while ( ++_tic < tics_needed );
-    _next_tic_count = (_tic/50.0)*_expected_count;  // use fp so large counts work
+    _next_tic_count = 
+      static_cast<unsigned long>((_tic/50.0)*_expected_count);
     if ( _count == _expected_count ) {
       if ( _tic < 51 ) _os << '*';
       _os << std::endl;
