@@ -102,11 +102,11 @@ template<class Archive, class T>
 class iserializer : public basic_iserializer
 {
 private:
-    static void BOOST_FORCE_INCLUDE static_load_object_data(
+    static void BOOST_FORCE_INCLUDE(static_load_object_data(
         basic_iarchive & ar,
         void *x, 
         const unsigned int file_version
-    ){
+    )){
         // make sure call is routed through the higest interface that might
         // be specialized by the user.
         boost::serialization::serialize_adl(
@@ -167,11 +167,11 @@ template<class T, class Archive>
 class pointer_iserializer : public archive_pointer_iserializer<Archive> 
 {
 private:
-    static void BOOST_FORCE_INCLUDE static_load_object_ptr(
+    static void BOOST_FORCE_INCLUDE(static_load_object_ptr(
         basic_iarchive & ar, 
         void * & x,
         const unsigned int file_version
-    ){
+    )){
         boost::serialization::load_ptr_adl(
             boost::smart_cast_reference<Archive &>(ar),
             reinterpret_cast<T * &>(x),

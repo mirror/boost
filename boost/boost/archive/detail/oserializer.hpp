@@ -104,11 +104,11 @@ template<class Archive, class T>
 class oserializer : public basic_oserializer
 {
 private:
-    static void BOOST_FORCE_INCLUDE static_save_object_data(
+    static void BOOST_FORCE_INCLUDE(static_save_object_data(
         basic_oarchive & ar,    
         const void *x,
         unsigned int version
-    ) {
+    )){
         // make sure call is routed through the highest interface that might
         // be specialized by the user.
         boost::serialization::serialize_adl(
@@ -162,10 +162,10 @@ template<class T, class Archive>
 class pointer_oserializer : public archive_pointer_oserializer<Archive> 
 {
 private:
-    static void BOOST_FORCE_INCLUDE static_save_object_ptr(
+    static void BOOST_FORCE_INCLUDE(static_save_object_ptr(
         basic_oarchive & ar,
         const void * x
-    ){
+    )){
         assert(NULL != x);
         // make sure call is routed through the highest interface that might
         // be specialized by the user.
