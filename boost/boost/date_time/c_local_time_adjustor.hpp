@@ -3,7 +3,7 @@
 #define DATE_TIME_C_LOCAL_TIME_ADJUSTOR_HPP__
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 /*! @file c_local_time_adjustor.hpp
@@ -40,8 +40,8 @@ namespace date_time {
       std::time_t t2 = dd.days()*86400 + td.hours()*3600 + td.minutes()*60 + td.seconds();
       std::tm* tms = std::localtime(&t2);
       date_type d(tms->tm_year + 1900,
-                  tms->tm_mon + 1, 
-                  tms->tm_mday);
+                  static_cast<unsigned short>(tms->tm_mon + 1), 
+                  static_cast<unsigned short>(tms->tm_mday));
       time_duration_type td2(tms->tm_hour,
                              tms->tm_min,
 			     tms->tm_sec,

@@ -28,9 +28,9 @@ public:
   int_type add(int_type v) 
   {
     //take the mod here and assign it....
-    int_type remainder = v % wrap_val;
-    int_type overflow = v / wrap_val;
-    value_ += remainder;
+    int_type remainder = static_cast<int_type>(v % wrap_val);
+    int_type overflow = static_cast<int_type>(v / wrap_val);
+    value_ = static_cast<int_type>(value_ + remainder);
     if ((value_) >= wrap_val) {
       value_ -= wrap_val;
       overflow++;
@@ -98,9 +98,9 @@ public:
   //!Add, return number of wraps performed 
   int_type add(int_type v) 
   {
-    int_type remainder = v % (wrap_max - wrap_min + 1);
-    int_type overflow = v / (wrap_max - wrap_min + 1);
-    value_ += remainder;
+    int_type remainder = static_cast<int_type>(v % (wrap_max - wrap_min + 1));
+    int_type overflow = static_cast<int_type>(v / (wrap_max - wrap_min + 1));
+    value_ = static_cast<int_type>(value_ + remainder);
     if ((value_) > wrap_max) 
     {
       overflow++;
@@ -111,9 +111,9 @@ public:
   //! Subtract will return '-d' if wrapping took place ('d' is the number of wraps)
   int_type subtract(int_type v) 
   {
-    int_type remainder = v % (wrap_max - wrap_min + 1);
-    int_type underflow = -(v / (wrap_max - wrap_min + 1));
-    value_ -= remainder;
+    int_type remainder = static_cast<int_type>(v % (wrap_max - wrap_min + 1));
+    int_type underflow = static_cast<int_type>(-(v / (wrap_max - wrap_min + 1)));
+    value_ = static_cast<int_type>(value_ - remainder);
     if ((value_) < wrap_min) 
     {
       underflow--;
