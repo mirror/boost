@@ -37,7 +37,8 @@
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Files">Files</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Dependencies">Dependencies</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#NumberOfArguments">Number of Arguments</a></h4>
-		<h4 style="MARGIN-LEFT: 40pt"><a href="#stdcall">"__stdcall" Support</a></h4>
+		<h4 style="MARGIN-LEFT: 40pt"><a href="#stdcall">"__stdcall" and 
+				"__fastcall"&nbsp;Support</a></h4>
 		<h3 style="MARGIN-LEFT: 20pt"><a href="#Acknowledgements">Acknowledgements</a></h3>
 		<h2><a name="Purpose">Purpose</a></h2>
 		<p>
@@ -321,7 +322,7 @@ template&lt;class R, class T, class A1, class A2&gt; <i>implementation-defined-6
 			This implementation supports member functions with up to eight arguments. This 
 			is not an inherent limitation of the design, but an implementation detail.
 		</p>
-		<h3><a name="stdcall">"__stdcall" Support</a></h3>
+		<h3><a name="stdcall">"__stdcall" and "__fastcall" Support</a></h3>
 		<p>
 			Some platforms allow several types of member functions that differ by their <b>calling 
 				convention</b> (the rules by which the function is invoked: how are 
@@ -330,16 +331,19 @@ template&lt;class R, class T, class A1, class A2&gt; <i>implementation-defined-6
 		</p>
 		<p>
 			For example, Windows API functions and COM interface member functions use a 
-			calling convention known as <b>__stdcall</b>.
+			calling convention known as <b>__stdcall</b>. Borland VCL components use <STRONG>__fastcall</STRONG>.
 		</p>
 		<p>
 			To use <b>mem_fn</b> with <b>__stdcall</b> member functions, <b>#define</b> the 
 			macro <b>BOOST_MEM_FN_ENABLE_STDCALL</b> before including, directly or 
 			indirectly, <b>&lt;boost/mem_fn.hpp&gt;</b>.
 		</p>
-		<p>
-			[Note: this is a non-portable extension. It is not part of the interface.]
-		</p>
+		<P>To use <B>mem_fn</B> with <B>__fastcall</B> member functions, <B>#define</B> the 
+			macro <B>BOOST_MEM_FN_ENABLE_FASTCALL</B> before including, directly or 
+			indirectly, <B>&lt;boost/mem_fn.hpp&gt;</B>.
+		</P>
+		<P>[Note: this is a non-portable extension. It is not part of the interface.]
+		</P>
 		<p>
 			[Note: Some compilers provide only minimal support for the <b>__stdcall</b> keyword.]
 		</p>

@@ -1343,6 +1343,18 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 #endif
 
+#ifdef BOOST_BIND_ENABLE_FASTCALL
+
+#define BOOST_BIND_CC __fastcall
+#define BOOST_BIND_ST
+
+#include <boost/bind/bind_cc.hpp>
+
+#undef BOOST_BIND_CC
+#undef BOOST_BIND_ST
+
+#endif
+
 #ifdef BOOST_BIND_ENABLE_PASCAL
 
 #define BOOST_BIND_ST pascal
@@ -1369,6 +1381,18 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 #define BOOST_BIND_MF_NAME(X) X##_stdcall
 #define BOOST_BIND_MF_CC __stdcall
+
+#include <boost/bind/bind_mf_cc.hpp>
+
+#undef BOOST_BIND_MF_NAME
+#undef BOOST_BIND_MF_CC
+
+#endif
+
+#ifdef BOOST_MEM_FN_ENABLE_FASTCALL
+
+#define BOOST_BIND_MF_NAME(X) X##_fastcall
+#define BOOST_BIND_MF_CC __fastcall
 
 #include <boost/bind/bind_mf_cc.hpp>
 

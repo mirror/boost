@@ -66,6 +66,18 @@ template<class V> struct mf
 
 #endif
 
+#ifdef BOOST_MEM_FN_ENABLE_FASTCALL
+
+#define BOOST_MEM_FN_NAME(X) inner_##X##_fastcall
+#define BOOST_MEM_FN_CC __fastcall
+
+#include <boost/bind/mem_fn_template.hpp>
+
+#undef BOOST_MEM_FN_CC
+#undef BOOST_MEM_FN_NAME
+
+#endif
+
 #undef BOOST_MEM_FN_RETURN
 
 }; // struct mf<V>
@@ -87,6 +99,18 @@ template<> struct mf<void>
 
 #define BOOST_MEM_FN_NAME(X) inner_##X##_stdcall
 #define BOOST_MEM_FN_CC __stdcall
+
+#include <boost/bind/mem_fn_template.hpp>
+
+#undef BOOST_MEM_FN_CC
+#undef BOOST_MEM_FN_NAME
+
+#endif
+
+#ifdef BOOST_MEM_FN_ENABLE_FASTCALL
+
+#define BOOST_MEM_FN_NAME(X) inner_##X##_fastcall
+#define BOOST_MEM_FN_CC __fastcall
 
 #include <boost/bind/mem_fn_template.hpp>
 
@@ -117,6 +141,20 @@ template<> struct mf<void>
 #define BOOST_MEM_FN_NAME(X) X##_stdcall
 #define BOOST_MEM_FN_NAME2(X) inner_##X##_stdcall
 #define BOOST_MEM_FN_CC __stdcall
+
+#include <boost/bind/mem_fn_vw.hpp>
+
+#undef BOOST_MEM_FN_NAME
+#undef BOOST_MEM_FN_NAME2
+#undef BOOST_MEM_FN_CC
+
+#endif
+
+#ifdef BOOST_MEM_FN_ENABLE_FASTCALL
+
+#define BOOST_MEM_FN_NAME(X) X##_fastcall
+#define BOOST_MEM_FN_NAME2(X) inner_##X##_fastcall
+#define BOOST_MEM_FN_CC __fastcall
 
 #include <boost/bind/mem_fn_vw.hpp>
 
@@ -158,6 +196,18 @@ namespace _mfi
 
 #endif
 
+#ifdef BOOST_MEM_FN_ENABLE_FASTCALL
+
+#define BOOST_MEM_FN_NAME(X) X##_fastcall
+#define BOOST_MEM_FN_CC __fastcall
+
+#include <boost/bind/mem_fn_template.hpp>
+
+#undef BOOST_MEM_FN_CC
+#undef BOOST_MEM_FN_NAME
+
+#endif
+
 #undef BOOST_MEM_FN_RETURN
 
 } // namespace _mfi
@@ -179,6 +229,18 @@ namespace _mfi
 
 #define BOOST_MEM_FN_NAME(X) X##_stdcall
 #define BOOST_MEM_FN_CC __stdcall
+
+#include <boost/bind/mem_fn_cc.hpp>
+
+#undef BOOST_MEM_FN_NAME
+#undef BOOST_MEM_FN_CC
+
+#endif
+
+#ifdef BOOST_MEM_FN_ENABLE_FASTCALL
+
+#define BOOST_MEM_FN_NAME(X) X##_fastcall
+#define BOOST_MEM_FN_CC __fastcall
 
 #include <boost/bind/mem_fn_cc.hpp>
 

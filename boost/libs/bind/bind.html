@@ -46,7 +46,7 @@
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Q_mac">Does <b>bind</b> work with Mac toolbox 
 				functions?</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Q_extern_C">Does <b>bind</b> work with extern 
-				&quot;C&quot; functions?</a></h4>
+				"C" functions?</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Q_auto_stdcall">Why doesn't <b>bind</b> automatically 
 				recognize nonstandard functions?</a></h4>
 		<h3 style="MARGIN-LEFT: 20pt"><a href="#Troubleshooting">Troubleshooting</a></h3>
@@ -77,7 +77,8 @@
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Files">Files</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Dependencies">Dependencies</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#NumberOfArguments">Number of Arguments</a></h4>
-		<h4 style="MARGIN-LEFT: 40pt"><a href="#stdcall">"__stdcall" and "pascal" Support</a></h4>
+		<h4 style="MARGIN-LEFT: 40pt"><a href="#stdcall">"__stdcall", "__fastcall",&nbsp;and 
+				"pascal" Support</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#BOOST_BIND">Using the BOOST_BIND macro</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#visit_each"><b>visit_each</b> support</a></h4>
 		<h3 style="MARGIN-LEFT: 20pt"><a href="#Acknowledgements">Acknowledgements</a></h3>
@@ -455,13 +456,13 @@ template&lt;class T&gt; void f(T const &amp; t);
 			alternative is to treat the function as a <a href="#with_function_objects">generic 
 				function object</a> and use the bind&lt;R&gt;(f, ...) syntax.
 		</p>
-		<h3><a name="Q_extern_C">Does <b>bind</b> work with extern &quot;C&quot; functions?</a></h3>
+		<h3><a name="Q_extern_C">Does <b>bind</b> work with extern "C" functions?</a></h3>
 		<p>
-			Sometimes. On some platforms, pointers to extern &quot;C&quot; functions are 
-			equivalent to &quot;ordinary&quot; function pointers, so they work fine. Other 
-			platforms treat them as different types. A platform-specific implementation of <b>bind</b>
-			is expected to handle the problem transparently; this implementation does not. 
-			As usual, the workaround is to treat the function as a <a href="#with_function_objects">
+			Sometimes. On some platforms, pointers to extern "C" functions are equivalent 
+			to "ordinary" function pointers, so they work fine. Other platforms treat them 
+			as different types. A platform-specific implementation of <b>bind</b> is 
+			expected to handle the problem transparently; this implementation does not. As 
+			usual, the workaround is to treat the function as a <a href="#with_function_objects">
 				generic function object</a> and use the bind&lt;R&gt;(f, ...) syntax.
 		</p>
 		<h3><a name="Q_auto_stdcall">Why doesn't <b>bind</b> automatically recognize 
@@ -471,8 +472,9 @@ template&lt;class T&gt; void f(T const &amp; t);
 			lock-in. Had the <a href="#stdcall">appropriate macros</a> been defined 
 			automatically, you could have accidentally taken advantage of them without 
 			realizing that your code is, perhaps, no longer portable. In addition, some 
-			compilers have the option to make <b>__stdcall</b> their default calling 
-			convention, in which case no separate support would be necessary.
+			compilers have the option to make <b>__stdcall</b> (<STRONG>__fastcall</STRONG>) 
+			their default calling convention, in which case no separate support would be 
+			necessary.
 		</p>
 		<h2><a name="Troubleshooting">Troubleshooting</a></h2>
 		<h3><a name="err_num_args">Incorrect number of arguments</a></h3>
@@ -589,7 +591,7 @@ int main()
 			a2, ..., aN) <A href="#Q_forms">form</A> works with nonstandard functions.
 		</p>
 		<p>
-			On some platforms, extern &quot;C&quot; functions, like <b>std::strcmp</b>, are not
+			On some platforms, extern "C" functions, like <b>std::strcmp</b>, are not 
 			recognized by the short form of bind.
 		</p>
 		<P>
@@ -753,8 +755,8 @@ namespace
 				<b>Effects:</b> Equivalent to <tt>bind&lt;typename F::result_type, F&gt;(f);</tt>
 			</p>
 			<p>
-				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b>
-				via other means as an extension, without relying on the <tt>result_type</tt> member.
+				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b> via 
+				other means as an extension, without relying on the <tt>result_type</tt> member.
 			</p>
 		</blockquote>
 		<h4><a name="bind_2">template&lt;class R&gt; <i>unspecified-2</i> bind(R (*f) ())</a></h4>
@@ -789,8 +791,8 @@ namespace
 					a1);</tt>
 			</p>
 			<p>
-				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b>
-				via other means as an extension, without relying on the <tt>result_type</tt> member.
+				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b> via 
+				other means as an extension, without relying on the <tt>result_type</tt> member.
 			</p>
 		</blockquote>
 		<h4><a name="bind_4">template&lt;class R, class B1, class A1&gt; <i>unspecified-4</i> bind(R 
@@ -822,8 +824,8 @@ namespace
 					a1);</tt>
 			</p>
 		</blockquote>
-		<h4><a name="bind_6_1">template&lt;class R, class T, class A1&gt; <i>unspecified-6-1</i> bind(R 
-				T::*f, A1 a1)</a></h4>
+		<h4><a name="bind_6_1">template&lt;class R, class T, class A1&gt; <i>unspecified-6-1</i>
+				bind(R T::*f, A1 a1)</a></h4>
 		<blockquote>
 			<p>
 				<b>Effects:</b> Equivalent to <tt>bind&lt;R const &amp;&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
@@ -852,8 +854,8 @@ namespace
 					a1, a2);</tt>
 			</p>
 			<p>
-				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b>
-				via other means as an extension, without relying on the <tt>result_type</tt> member.
+				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b> via 
+				other means as an extension, without relying on the <tt>result_type</tt> member.
 			</p>
 		</blockquote>
 		<h4><a name="bind_8">template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>unspecified-8</i>
@@ -888,8 +890,8 @@ namespace
 		</blockquote>
 		<h3><a name="AdditionalOverloads">Additional overloads</a></h3>
 		<p>
-			Implementations are allowed to provide additional <b>bind</b> overloads in order to
-			support more arguments or different function pointer variations.
+			Implementations are allowed to provide additional <b>bind</b> overloads in 
+			order to support more arguments or different function pointer variations.
 		</p>
 		<h2><a name="Implementation">Implementation</a></h2>
 		<h3><a name="Files">Files</a></h3>
@@ -951,7 +953,7 @@ namespace
 			This implementation supports function objects with up to nine arguments. This 
 			is an implementation detail, not an inherent limitation of the design.
 		</p>
-		<h3><a name="stdcall">"__stdcall" and "pascal" Support</a></h3>
+		<h3><a name="stdcall">"__stdcall", "__fastcall", and "pascal" Support</a></h3>
 		<p>
 			Some platforms allow several types of (member) functions that differ by their <b>calling 
 				convention</b> (the rules by which the function is invoked: how are 
@@ -960,8 +962,8 @@ namespace
 		</p>
 		<p>
 			For example, Windows API functions and COM interface member functions use a 
-			calling convention known as <b>__stdcall</b>. Mac toolbox functions use a <b>pascal</b>
-			calling convention.
+			calling convention known as <b>__stdcall</b>.Borland VCL components use <STRONG>__fastcall</STRONG>. 
+			Mac toolbox functions use a <b>pascal</b> calling convention.
 		</p>
 		<p>
 			To use <b>bind</b> with <b>__stdcall</b> functions, <b>#define</b> the macro <b>BOOST_BIND_ENABLE_STDCALL</b>
@@ -971,10 +973,16 @@ namespace
 			To use <b>bind</b> with <b>__stdcall</b> <b>member</b> functions, <b>#define</b>
 			the macro <b>BOOST_MEM_FN_ENABLE_STDCALL</b> before including <b>&lt;boost/bind.hpp&gt;</b>.
 		</p>
-		<p>
+		<P>To use <B>bind</B> with <B>__fastcall</B> functions, <B>#define</B> the macro <B>BOOST_BIND_ENABLE_FASTCALL</B>
+			before including <B>&lt;boost/bind.hpp&gt;</B>.
+		</P>
+		<P>To use <B>bind</B> with <B>__fastcall</B> <B>member</B> functions, <B>#define</B>
+			the macro <B>BOOST_MEM_FN_ENABLE_FASTCALL</B> before including <B>&lt;boost/bind.hpp&gt;</B>.
+		</P>
+		<P>
 			To use <b>bind</b> with <b>pascal</b> functions, <b>#define</b> the macro <b>BOOST_BIND_ENABLE_PASCAL</b>
 			before including <b>&lt;boost/bind.hpp&gt;</b>.
-		</p>
+		</P>
 		<p>
 			[Note: this is a non-portable extension. It is not part of the interface.]
 		</p>
