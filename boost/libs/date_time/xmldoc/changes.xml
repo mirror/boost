@@ -140,7 +140,10 @@
 	</row>
 	<row>
 	  <entry>Bug Fix</entry>
-	  <entry>Fixed the special value constructor for date when constructing date(min_date_time) or date(max_date_time) the wrong value was constructed for these.</entry>
+	  <entry>Fixed the special value constructor for gregorian::date and posix_time::ptime 
+                 when constructing with min_date_time or max_date_time.  The wrong value was 
+                 constructed for these.
+          </entry>
 	</row>
       </tbody>
     </tgroup>
