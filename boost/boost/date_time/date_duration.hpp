@@ -23,7 +23,7 @@ namespace date_time {
   {
   public:
     //! Construct from a day count
-    explicit date_duration(duration_rep days) : days_(days) {};
+    explicit date_duration(duration_rep day_count) : days_(day_count) {};
 
     // copy constructor required for dividable<>
     //! Construct from another date_duration (Copy Constructor)
