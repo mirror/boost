@@ -18,16 +18,17 @@
 #define BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
 
 #include "boost/mpl/aux_/config/static_constant.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 
 namespace boost {
 namespace mpl {
 
 template< typename T,
 // the type of non-type template arguments may not depend on template arguments
-#if defined(BOOST_STRICT_CONFIG) || !defined(__HP_aCC) || __HP_aCC > 33900
-          T
+#if BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
+        long
 #else 
-    long
+        T
 #endif 
           N >
 struct integral_c
@@ -46,10 +47,9 @@ struct integral_c
  public:
     typedef integral_c<T, next_value> next;
     typedef integral_c<T, prior_value> prior;
-#elif !defined(BOOST_STRICT_CONFIG)                             \
-    && (defined(__BORLANDC__) && __BORLANDC__ <= 0x561          \
-        || defined(__IBMCPP__) && __IBMCPP__ <= 502             \
-        || defined(__HP_aCC) && __HP_aCC <= 33900)
+#elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
+    || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502)) \
+    || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(53800))
     typedef integral_c<T, (N + 1)> next;
     typedef integral_c<T, (N - 1)> prior;
 #else
@@ -65,7 +65,7 @@ struct integral_c
 };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
- && !defined(__BORLANDC__) || __BORLANDC__ > 0x551
+ && !BOOST_WORKAROUND(__BORLANDC__, <= 0x551)
 // 'bool' constant doesn't have 'next'/'prior' members
 template< bool C >
 struct integral_c<bool, C>
