@@ -71,27 +71,33 @@ lib boost_wserialization
 
 dll boost_serialization
     : ## sources ##
-        <template>boost_serialization_dll
+        <template>boost_serialization_base
         ../src/$(SOURCES).cpp
     : ## requirements ##
+        toolset::require-shared-libraries-support
         # this suppress the --a switch in the como toolset
         # without this one gets compile errors ! with "dllexport"
         # however, it doesn't link anyway so comment it out
         # <como-4_3_3-vc7_1><*><no-warn>$(SOURCES).cpp
+        <define>BOOST_SERIALIZATION_DYN_LINK=1
+        <runtime-link>dynamic
 ;
 
 dll boost_wserialization
     : ## sources ##
-        <template>boost_serialization_dll
+        <template>boost_serialization_base
         ../src/$(WSOURCES).cpp
         <dll>boost_serialization
     : ## requirements ##
         toolset::require-wide-char-io-support
+        toolset::require-shared-libraries-support
         # this suppress the --a switch in the como toolset
         # without this one gets compile errors ! with "dllexport"
         # however, it doesn't link anyway so comment it out
         # <como-4_3_3-vc7_1><*><no-warn>$(WSOURCES).cpp
         <define>BOOST_WSERIALIZATION_DYN_LINK=1
+        <define>BOOST_SERIALIZATION_DYN_LINK=1
+        <runtime-link>dynamic
 ;
 
 install serialization lib 

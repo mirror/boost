@@ -6,31 +6,6 @@
 #
 #  See http://www.boost.org/libs/serialization for the library home page.
 
-# we use a single requirement rule to guarantee a speicfic order
-# for evaluation of all the different requirements
-rule serialization::requirements ( toolset variant : subvariant-path properties * )
-{
-    properties = $(subvariant-path) $(properties) ;
-    
-    #~ ECHO >>> $(toolset) $(variant) ":" $(properties) ;
-    
-    # locale support required to build libraries
-    properties = [ std::locale-support
-        $(toolset) $(variant) : $(properties) ] ;
-    
-    # building this library needs a working version of spirit
-    properties = [ toolset::require-boost-spirit-support
-        $(toolset) $(variant) : $(properties) ] ;
-    
-    # when building DLLs some platforms don't support the build
-    properties = [ toolset::require-shared-libraries-support
-        $(toolset) $(variant) : $(properties) ] ;
-    
-    #~ ECHO <<< $(toolset) $(variant) ":" $(properties) ;
-    
-    return $(properties) ;
-}
-
 # building this library needs a working version of spirit
 rule toolset::require-boost-spirit-support ( toolset variant : subvariant-path properties * )
 {
@@ -82,48 +57,34 @@ rule toolset::require-wide-char-io-support ( toolset variant : subvariant-path p
 # certain tool sets are known apriori not to support creation of DLLS
 rule toolset::require-shared-libraries-support ( toolset variant : subvariant-path properties * )
 {
-    local target-type = [ get-values <target-type> : $(properties) ] ;
-    local target-id = $(target) ; ## this is a cheat.. target is a local to the caller
-    local shared-types-flag = TRUE ;
-    shared-types-flag = $(shared-types-flag:G=$(SHARED_TYPES)) ;
-    shared-types-flag = [ get-values $(gTARGET_DEPS($(target-id)):G) : $(shared-types-flag) ] ;
-    
-    if $(target-type) in $(SHARED_TYPES) # building a DLL
-        || $(shared-types-flag) # or we depend on a DLL
-    {
-        local requirements = ;
-        
-        switch $(toolset) {
-        case "como*" :
-            echo **** DLLs cannot be built with this compiler **** ;
+    local requirements = ;
+
+    switch $(toolset) {
+    case "como*" :
+        echo **** DLLs cannot be built with this compiler **** ;
+        requirements = <build>no ;
+    case "cw-8*" :
+        local runtime-link = [ get-values <runtime-link> : $(properties) ] ;
+        if static in $(runtime-link) {
+            echo **** DLLS cannot be built with static runtime linking **** ;
             requirements = <build>no ;
-        case "cw-8*" :
-            local runtime-link = [ get-values <runtime-link> : $(properties) ] ;
-            if static in $(runtime-link) {
-                echo **** DLLS cannot be built with static runtime linking **** ;
-                requirements = <build>no ;
-            }
         }
-        
-        return $(subvariant-path) [ impose-requirements $(properties) : $(requirements) ] ;
     }
-    else
-    {
-        return $(subvariant-path) $(properties) ;
-    }
+    return $(subvariant-path) [ impose-requirements $(properties) : $(requirements) ] ;
 }
 
 template boost_serialization_base
     : ## sources ##
     : ## requirements ##
-        serialization::requirements
+        <sysinclude>$(BOOST_ROOT)
+        std::locale-support
+        toolset::require-boost-spirit-support
         # the common names rule ensures that the library will
         # be named according to the rules used by the install
         # and auto-link features:
         common-variant-tag
         # set include path for Boost headers:
         <stlport-iostream>on 
-        <sysinclude>$(BOOST_ROOT)
         <borland-5_5_1><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
         <borland-5_6_4><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
         <msvc><*><cxxflags>-Gy
@@ -132,12 +93,4 @@ template boost_serialization_base
         <define>BOOST_LIB_DIAGNOSTIC=1
     : ## default build 
         debug release
-;
-
-template boost_serialization_dll
-    : ## sources ##
-        <template>boost_serialization_base
-    : ## requirements ##
-        <define>BOOST_SERIALIZATION_DYN_LINK=1
-        <runtime-link>dynamic
 ;

@@ -44,10 +44,11 @@ rule run-template ( test-name : sources * : requirements * ) {
         : # command
         : # input files
         : # requirements
-            serialization::requirements
+            <sysinclude>$(BOOST_ROOT)
+            std::locale-support
+            toolset::require-boost-spirit-support
             <borland-5_5_1><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062 -w-8008 -w-0018 -w-8066"
             <borland-5_6_4><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
-            <include>$(BOOST_ROOT)
             # inhibit cw linker from removing functions not explicitly referenced
             <cw-8_3><*><linkflags>"-export dllexport"
             <cw-9_2><*><linkflags>"-export dllexport"
@@ -83,6 +84,7 @@ rule run-invoke ( test-name : sources * : defns * )
             $(sources)
             <dll>../build/boost_serialization
         : # requiremens
+            toolset::require-shared-libraries-support
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
             <define>BOOST_ALL_DYN_LINK=1
@@ -120,6 +122,7 @@ rule run-winvoke ( test-name : sources * : defns * )
             <dll>../build/boost_wserialization
         : # requiremens
             toolset::require-wide-char-io-support
+            toolset::require-shared-libraries-support
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
             <define>BOOST_ALL_DYN_LINK=1
@@ -259,6 +262,7 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ test-bsl-run-no-lib test_iterators ]
         [ test-bsl-run-no-lib test_iterators_base64 ]
         [ test-bsl-run test_private_ctor ]
+        #[ test-bsl-run test_reset_object_address ]
         [ test-bsl-run-no-lib test_smart_cast ]
         [ test-bsl-run-no-lib test_static_warning ]
         [ test-bsl-run-no-lib test_utf8_codecvt : ../src/utf8_codecvt_facet ]
