@@ -169,7 +169,7 @@ void instantiate_dist(const char * name, const Dist& dist)
       d();
       restored_dist();
     }
-    BOOST_CHECK_MESSAGE(std::abs(d()-restored_dist()) < 0.0001,
+    BOOST_CHECK_MESSAGE(std::abs(double(d()-restored_dist())) < 0.0001,
                         std::string(name) + " d == restored_dist");
 #endif // BOOST_MSVC
   }
