@@ -22,6 +22,7 @@
 #include <boost/function/function_base.hpp>
 #include <boost/type_traits/function_traits.hpp>
 #include <boost/type_traits/same_traits.hpp>
+#include <boost/type_traits/transform_traits.hpp>
 #include <boost/type_traits/ice.hpp>
 #include <boost/function/function0.hpp>
 #include <boost/function/function1.hpp>
@@ -548,7 +549,7 @@ namespace boost {
       class get_function_impl
       {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        typedef function_traits<InR*> traits;
+        typedef function_traits<typename add_pointer<InR>::type> traits;
       public:                       
 
         typedef typename ct_if<(is_function<InR>::value),
