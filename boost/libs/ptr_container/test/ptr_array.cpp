@@ -147,7 +147,7 @@ using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
-    test_suite* test = BOOST_TEST_SUITE( "Smart Container Test Suite" );
+    test_suite* test = BOOST_TEST_SUITE( "Pointer Container Test Suite" );
 
     test->add( BOOST_TEST_CASE( &test_array ) );
 

@@ -7,7 +7,6 @@
 template< typename C, typename B, typename T >
 void reversible_container_test();
 
-
 template< typename C, typename B, typename T >
 void reversible_container_test()
 {
@@ -28,9 +27,7 @@ void reversible_container_test()
     c.assign( c3.begin(), c3.end() );
     BOOST_CHECK( c.size() == c3.size() );
         
-    //c.assign( size, T() );
     c.assign( c3 );
-    //BOOST_CHECK( c.size() == size );
     BOOST_MESSAGE( "finished construction test" ); 
                       
     BOOST_DEDUCED_TYPENAME C::allocator_type alloc        = c.get_allocator();
@@ -55,29 +52,33 @@ void reversible_container_test()
     BOOST_MESSAGE( "finished iterator test" ); 
     
     BOOST_DEDUCED_TYPENAME C::size_type s                 = c.size();
+    hide_warning(s);
     BOOST_DEDUCED_TYPENAME C::size_type s2                = c.max_size();
-    //c.resize( size, T() );
-    //BOOST_CHECK( c.size() == size );
+    hide_warning(s2);
     c.push_back( new T );
     bool b                                                = c.empty();
     BOOST_CHECK( !c.empty() );
     b                                                     = is_null( c.begin() );
     BOOST_CHECK( b == false );
     BOOST_DEDUCED_TYPENAME C::reference r                 = c.front();
+    hide_warning(r);
     BOOST_DEDUCED_TYPENAME C::const_reference cr          = c2.front();
+    hide_warning(cr);
     BOOST_DEDUCED_TYPENAME C::reference r2                = c.back();
+    hide_warning(r2);
     BOOST_DEDUCED_TYPENAME C::const_reference cr2         = c2.back();
+    hide_warning(cr2);
     BOOST_MESSAGE( "finished accessors test" ); 
     
     c.push_back( new T );
-    //c.push_back( T() );
+
     c.pop_back(); 
     c.insert( c.end(), new T );
-    //c.insert( c.end(), T() );  
-    //c.insert( c.end(), size, T() );
-    //c.insert( c.end(), make_iterator_range( c3 ) );
-    // vs. 
+
+#if BOOST_NO_SFINAE
+#else
     c.insert( c.end(), c3 );
+#endif    
     c3.insert( c3.end(), c.begin(), c.end() ); 
     c.erase( c.begin() );
     c3.erase( c3.begin(), c3.end() );
@@ -106,9 +107,12 @@ void reversible_container_test()
     c3.push_back( new T );
     c.transfer( c.begin(), c3.begin(), c3 );
     c.transfer( c.end(), c3.begin(), c3.end(), c3 );
-    c.transfer( c.end(), boost::make_iterator_range( c3 ), c3 );
+#if BOOST_NO_SFINAE
+#else    
+    c.transfer( c.end(), boost::make_iterator_range( c3 ), c3 );    
     BOOST_CHECK( c3.empty() );
     BOOST_CHECK( !c.empty() );
+#endif    
     c3.transfer( c3.begin(), c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );

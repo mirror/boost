@@ -65,8 +65,10 @@ void ptr_map_test()
    
     BOOST_DEDUCED_TYPENAME C::size_type s                 = c.size();
     BOOST_DEDUCED_TYPENAME C::size_type s2                = c.max_size();
+    hide_warning(s2);
     BOOST_CHECK_EQUAL( c.size(), s );
     bool b                                                = c.empty();
+    hide_warning(b);
     BOOST_MESSAGE( "finished accessors test" ); 
 
     a_key = get_next_key( a_key );
@@ -110,6 +112,13 @@ void ptr_map_test()
     c3.transfer( c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
+#if BOOST_NO_SFINAE
+#else
+    c.transfer( make_iterator_range(c3), c3 );
+    BOOST_CHECK( !c.empty() );
+    BOOST_CHECK( c3.empty() );
+    c3.transfer(c);
+#endif    
     BOOST_MESSAGE( "finished transfer test" );         
 
     BOOST_CHECK( !c3.empty() );
@@ -200,6 +209,7 @@ void test_map()
         if( is_null(i) )
             BOOST_CHECK( false );
         const string& ref  = i.key();
+        hide_warning(ref);
         int&          ref2 = *i;
         ref2++;
     }
@@ -210,7 +220,7 @@ using boost::unit_test::test_suite;
 
 test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
-    test_suite* test = BOOST_TEST_SUITE( "Smart Container Test Suite" );
+    test_suite* test = BOOST_TEST_SUITE( "Pointer Container Test Suite" );
 
     test->add( BOOST_TEST_CASE( &test_map ) );
 

@@ -197,5 +197,10 @@ ostream& operator<<( ostream& out, const Value& v )
     return out << v.name() << " ";
 }
 
-
+//
+// used to hide "unused variable" warnings
+//
+template< class T >
+void hide_warning( T& r )
+{ }
 

@@ -148,6 +148,8 @@ namespace boost
                     reference;
         typedef BOOST_DEDUCED_TYPENAME base_type::value_type
                     value_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
+                    auto_type;
 
     private:
         reference lookup( const key_type& key ) const
@@ -432,6 +434,9 @@ namespace boost
             return this->single_transfer( first, last, from );
         }
 
+#if BOOST_NO_SFINAE
+#else    
+
         template< class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
                                                                   iterator >,
@@ -440,6 +445,8 @@ namespace boost
         {
             return transfer( this->adl_begin(r), this->adl_end(r), from );
         }
+        
+#endif
 
         size_type transfer( ptr_map_adapter& from ) // basic
         {
@@ -577,6 +584,9 @@ namespace boost
             return this->multi_transfer( first, last, from );
         }
 
+#if BOOST_NO_SFINAE
+#else    
+
         template< class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
                                                                   iterator >,
@@ -585,6 +595,8 @@ namespace boost
         {
             return transfer( this->adl_begin(r), this->adl_end(r), from );
         }
+
+#endif        
 
         void transfer( ptr_multimap_adapter& from ) // basic
         {

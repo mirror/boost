@@ -46,13 +46,14 @@ void ptr_set_test()
    
     BOOST_DEDUCED_TYPENAME C::size_type s                 = c.size();
     BOOST_DEDUCED_TYPENAME C::size_type s2                = c.max_size();
+    hide_warning(s2);
     BOOST_CHECK_EQUAL( c.size(), s );
     bool b                                                = c.empty();
+    hide_warning(b);
     BOOST_MESSAGE( "finished accessors test" ); 
     
     T* t = new T;
     c.insert( c.end(), t );    
-//    c.insert( c.end(), T() ); 
     c.insert( new T ); 
     c3.insert( c.begin(), c.end() ); 
     c.erase( c.begin() );
@@ -74,6 +75,11 @@ void ptr_set_test()
     c3.insert( new T );
     c3.insert( new T );
     BOOST_CHECK_EQUAL( c3.size(), 2u );
+#if BOOST_NO_SFINAE
+#else            
+    c3.insert( make_iterator_range( c3 ) );
+    BOOST_CHECK_EQUAL( c3.size(), 4u );
+#endif    
     c.transfer( c3.begin(), c3 );
     BOOST_CHECK( c3.empty() == false );
     c.transfer( c3.begin(), c3.end(), c3 );
@@ -82,6 +88,12 @@ void ptr_set_test()
     c3.transfer( c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
+#if BOOST_NO_SFINAE
+#else        
+    c.transfer( make_iterator_range( c3 ), c3 );
+    BOOST_CHECK( !c.empty() );
+    BOOST_CHECK( c3.empty() );
+#endif    
     BOOST_MESSAGE( "finished transfer test" );         
   
     C c4;
@@ -101,9 +113,6 @@ void ptr_set_test()
     ci = c2.upper_bound( T() );
     sub  = c.equal_range( T() );
     csub = c2.equal_range( T() );         
-
-    //BOOST_CHECK_THROW( c.at( T() ), bad_ptr_container_operation );
-    //BOOST_CHECK_THROW( c2.at( T() ), bad_ptr_container_operation );
 
     try
     {

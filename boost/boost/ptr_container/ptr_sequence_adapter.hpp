@@ -370,6 +370,8 @@ namespace boost
                          iterator_category<InputIterator>::type() );
         } 
 
+#if BOOST_NO_SFINAE
+#else
         template< class Range >
         BOOST_DEDUCED_TYPENAME
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
@@ -378,7 +380,7 @@ namespace boost
             insert( before, this->adl_begin(r), this->adl_end(r) );
         }
 
-
+#endif
 
         /*
         auto_type release( size_type at )
@@ -418,6 +420,9 @@ namespace boost
             from.c_private().erase( object.base().base() );      // nothrow
         }
 
+#if BOOST_NO_SFINAE
+#else
+        
         template< class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
                                                                   iterator > >::type
@@ -425,6 +430,8 @@ namespace boost
         {
             transfer( before, this->adl_begin(r), this->adl_end(r), from );
         }
+
+#endif
         
         void transfer( iterator before, ptr_sequence_adapter& from ) // strong
         {

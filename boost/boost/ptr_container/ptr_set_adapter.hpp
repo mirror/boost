@@ -325,6 +325,9 @@ namespace boost
             set_basic_clone_and_insert( first, last );
         }
 
+#if BOOST_NO_SFINAE
+#else    
+        
         template< class Range >
         BOOST_DEDUCED_TYPENAME
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
@@ -332,6 +335,8 @@ namespace boost
         {
             insert( this->adl_begin(r), this->adl_end(r) );
         }
+
+#endif        
         
         bool transfer( iterator object, 
                        ptr_set_adapter& from ) // strong
@@ -346,6 +351,9 @@ namespace boost
             return this->single_transfer( first, last, from );
         }
 
+#if BOOST_NO_SFINAE
+#else    
+
         template< class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
                                                                   iterator >,
@@ -355,6 +363,7 @@ namespace boost
             return transfer( this->adl_begin(r), this->adl_end(r), from );
         }
 
+#endif
 
         size_type transfer( ptr_set_adapter& from ) // basic
         {
@@ -452,6 +461,9 @@ namespace boost
             set_basic_clone_and_insert( first, last );
         }
 
+#if BOOST_NO_SFINAE
+#else    
+        
         template< class Range >
         BOOST_DEDUCED_TYPENAME
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
@@ -459,6 +471,8 @@ namespace boost
         {
             insert( this->adl_begin(r), this->adl_end(r) );
         }
+
+#endif
 
         void transfer( iterator object, 
                        ptr_multiset_adapter& from ) // strong
@@ -473,6 +487,9 @@ namespace boost
             return this->multi_transfer( first, last, from );
         }
 
+#if BOOST_NO_SFINAE
+#else    
+        
         template< class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
                                            iterator >, size_type >::type
@@ -480,6 +497,8 @@ namespace boost
         {
             return transfer( this->adl_begin(r), this->adl_end(r), from );
         }
+
+#endif        
 
         void transfer( ptr_multiset_adapter& from ) // basic
         {
