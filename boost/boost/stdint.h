@@ -1,4 +1,4 @@
- //  boost stdint.h header file  ---------------------------------------------//
+//  boost stdint.h header file  ----------------------------------------------//
 
 //  (C) Copyright boost.org 1999. Permission to copy, use, modify, sell
 //  and distribute this software is granted provided this copyright
@@ -31,18 +31,21 @@
 
 //  These are fairly safe guesses for some 16-bit, and most 32-bit and 64-bit
 //  platforms.  For other systems, they will have to be hand tailored.
-//  It may also be possible to hand tailor a more efficient implementation
-//  if the asumptions below about fast type are not correct of your processor.
+//
+//  Because the fast types are assumed to be the same as the undecorated types,
+//  it may be possible to hand tailor a more efficient implementation.  Such
+//  an optimization may be illusionary; on the Intel x86-family 386 on, for
+//  example, byte arithmetic and load/stores are as fast as "int" sized ones.
 
 //  8-bit types  -------------------------------------------------------------//
 
 # if UCHAR_MAX == 0xff
      typedef signed char     int8_t;
      typedef signed char     int_least8_t;
-     typedef int             int_fast8_t;   // assume int faster than char
+     typedef signed char     int_fast8_t;
      typedef unsigned char   uint8_t;
      typedef unsigned char   uint_least8_t;
-     typedef unsigned int    uint_fast8_t;  // assume int faster than char
+     typedef unsigned char   uint_fast8_t;
 # else
 #    error defaults not correct; you must hand modify boost/stdint.h
 # endif
@@ -52,10 +55,10 @@
 # if USHRT_MAX == 0xffff
      typedef short           int16_t;
      typedef short           int_least16_t;
-     typedef int             int_fast16_t;  // assume int faster than short
+     typedef short           int_fast16_t;
      typedef unsigned short  uint16_t;
      typedef unsigned short  uint_least16_t;
-     typedef unsigned int    uint_fast16_t; // assume int faster than short
+     typedef unsigned short  uint_fast16_t;
 # else
 #    error defaults not correct; you must hand modify boost/stdint.h
 # endif
