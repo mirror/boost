@@ -318,7 +318,7 @@ namespace boost { namespace numeric { namespace ublas {
             return size_;
         }
         BOOST_UBLAS_INLINE
-        size_type nzz_capacity () const {
+        size_type nnz_capacity () const {
             return detail::map_capacity (data ());
         }
         BOOST_UBLAS_INLINE

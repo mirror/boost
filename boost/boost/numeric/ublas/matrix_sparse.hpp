@@ -2477,6 +2477,8 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE require type consistency check
         // is_convertable (IA::size_type, TA::size_type)
         typedef typename IA::value_type size_type;
+        // size_type for the data arrays.
+        typedef typename IA::size_type  array_size_type;
 		// FIXME difference type for sprase storage iterators should it be in the container?
         typedef typename IA::difference_type difference_type;
         typedef T value_type;
@@ -2559,11 +2561,11 @@ namespace boost { namespace numeric { namespace ublas {
             return IB;
         }
         BOOST_UBLAS_INLINE
-        typename index_array_type::size_type filled1 () const {
+        array_size_type filled1 () const {
             return filled1_;
         }
         BOOST_UBLAS_INLINE
-        typename index_array_type::size_type filled2 () const {
+        array_size_type filled2 () const {
             return filled2_;
         }
         BOOST_UBLAS_INLINE
@@ -2579,7 +2581,7 @@ namespace boost { namespace numeric { namespace ublas {
             return value_data_;
         }
         BOOST_UBLAS_INLINE
-        void set_filled (const typename index_array_type::size_type& filled1, const typename index_array_type::size_type& filled2) {
+        void set_filled (const array_size_type& filled1, const array_size_type& filled2) {
             filled1_ = filled1;
             filled2_ = filled2;
             storage_invariants ();
@@ -2913,8 +2915,8 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         const_iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) const {
             for (;;) {
-                size_type address1 (layout_type::address1 (i, size1_, j, size2_));
-                size_type address2 (layout_type::address2 (i, size1_, j, size2_));
+                array_size_type address1 (layout_type::address1 (i, size1_, j, size2_));
+                array_size_type address2 (layout_type::address2 (i, size1_, j, size2_));
                 vector_const_subiterator_type itv (index1_data_.begin () + (std::min) (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return const_iterator1 (*this, rank, i, j, itv, index2_data_.begin () + filled2_);
@@ -2953,8 +2955,8 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         iterator1 find1 (int rank, size_type i, size_type j, int direction = 1) {
             for (;;) {
-                size_type address1 (layout_type::address1 (i, size1_, j, size2_));
-                size_type address2 (layout_type::address2 (i, size1_, j, size2_));
+                array_size_type address1 (layout_type::address1 (i, size1_, j, size2_));
+                array_size_type address2 (layout_type::address2 (i, size1_, j, size2_));
                 vector_subiterator_type itv (index1_data_.begin () + (std::min) (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return iterator1 (*this, rank, i, j, itv, index2_data_.begin () + filled2_);
@@ -2993,8 +2995,8 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         const_iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) const {
             for (;;) {
-                size_type address1 (layout_type::address1 (i, size1_, j, size2_));
-                size_type address2 (layout_type::address2 (i, size1_, j, size2_));
+                array_size_type address1 (layout_type::address1 (i, size1_, j, size2_));
+                array_size_type address2 (layout_type::address2 (i, size1_, j, size2_));
                 vector_const_subiterator_type itv (index1_data_.begin () + (std::min) (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return const_iterator2 (*this, rank, i, j, itv, index2_data_.begin () + filled2_);
@@ -3033,8 +3035,8 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         iterator2 find2 (int rank, size_type i, size_type j, int direction = 1) {
             for (;;) {
-                size_type address1 (layout_type::address1 (i, size1_, j, size2_));
-                size_type address2 (layout_type::address2 (i, size1_, j, size2_));
+                array_size_type address1 (layout_type::address1 (i, size1_, j, size2_));
+                array_size_type address2 (layout_type::address2 (i, size1_, j, size2_));
                 vector_subiterator_type itv (index1_data_.begin () + (std::min) (filled1_ - 1, address1));
                 if (filled1_ <= address1 + 1)
                     return iterator2 (*this, rank, i, j, itv, index2_data_.begin () + filled2_);
@@ -3744,9 +3746,9 @@ namespace boost { namespace numeric { namespace ublas {
         
         size_type size1_;
         size_type size2_;
-        typename index_array_type::size_type capacity_;
-        typename index_array_type::size_type filled1_;
-        typename index_array_type::size_type filled2_;
+        array_size_type capacity_;
+        array_size_type filled1_;
+        array_size_type filled2_;
         index_array_type index1_data_;
         index_array_type index2_data_;
         value_array_type value_data_;
@@ -3789,6 +3791,8 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE require type consistency check
         // is_convertable (IA::size_type, TA::size_type)
         typedef typename IA::value_type size_type;
+        // size_type for the data arrays.
+        typedef typename IA::size_type  array_size_type;
 		// FIXME difference type for sprase storage iterators should it be in the container?
         typedef typename IA::difference_type difference_type;
         typedef T value_type;
@@ -3836,6 +3840,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         coordinate_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
             matrix_expression<self_type> (),
+            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), capacity_ (restrict_capacity (non_zeros)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
             index1_data_ (capacity_), index2_data_ (capacity_), value_data_ (capacity_) {
             storage_invariants ();
@@ -3866,7 +3871,7 @@ namespace boost { namespace numeric { namespace ublas {
             return IB;
         }
         BOOST_UBLAS_INLINE
-        typename index_array_type::size_type filled () const {
+        array_size_type filled () const {
             return filled_;
         }
         BOOST_UBLAS_INLINE
@@ -3882,7 +3887,7 @@ namespace boost { namespace numeric { namespace ublas {
             return value_data_;
         }
         BOOST_UBLAS_INLINE
-        void set_filled (const typename index_array_type::size_type &filled) {
+        void set_filled (const array_size_type &filled) {
             filled_ = filled;
             storage_invariants ();
             return filled_;
@@ -5066,9 +5071,9 @@ namespace boost { namespace numeric { namespace ublas {
 
         size_type size1_;
         size_type size2_;
-        typename index_array_type::size_type capacity_;
-        mutable typename index_array_type::size_type filled_;
-        mutable typename index_array_type::size_type sorted_filled_;
+        array_size_type capacity_;
+        mutable array_size_type filled_;
+        mutable array_size_type sorted_filled_;
         mutable bool sorted_;
         mutable index_array_type index1_data_;
         mutable index_array_type index2_data_;

@@ -17,6 +17,7 @@
 #ifndef BOOST_UBLAS_ITERATOR_H
 #define BOOST_UBLAS_ITERATOR_H
 
+#include <boost/numeric/ublas/exception.hpp>
 #include <iterator>
 
 
