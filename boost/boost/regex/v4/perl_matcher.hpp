@@ -287,7 +287,13 @@ public:
       match_flag_type f);
 
    bool match();
+   bool match_imp();
    bool find();
+   bool find_imp();
+#ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+   typedef bool (perl_matcher::*protected_proc_type)();
+   bool protected_call(protected_proc_type);
+#endif
 
    void setf(match_flag_type f)
    { m_match_flags |= f; }

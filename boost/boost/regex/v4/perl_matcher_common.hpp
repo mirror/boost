@@ -91,14 +91,37 @@ void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::estimate_max_sta
    max_state_count = BOOST_REGEX_MAX_STATE_COUNT;
 }
 
-
+#ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+template <class BidiIterator, class Allocator, class traits, class Allocator2>
+bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::protected_call(
+   protected_proc_type proc)
+{
+   __try{
+      return (this->*proc)();
+   }__except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode())
+   {
+      reset_stack_guard_page();
+   }
+   // we only get here after a stack overflow:
+   raise_error<traits>(traits_inst, REG_E_MEMORY);
+   // and we never really get here at all:
+   return false;
+}
+#endif
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match()
 {
 #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
-   __try{
+   return protected_call(&perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_imp);
+#else
+   return match_imp();
 #endif
+}
+
+template <class BidiIterator, class Allocator, class traits, class Allocator2>
+bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_imp()
+{
    // initialise our stack if we are non-recursive:
 #ifdef BOOST_REGEX_NON_RECURSIVE
    save_state_init init(&m_stack_base, &m_backup_state);
@@ -133,20 +156,20 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match()
       throw;
    }
 #endif
-#ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
-   }__except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode())
-   {
-      reset_stack_guard_page();
-   }
-   // we only get here after a stack overflow:
-   raise_error<traits>(traits_inst, REG_E_MEMORY);
-   // and we never really get here at all:
-   return false;
-#endif
 }
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find()
+{
+#ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
+   return protected_call(&perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_imp);
+#else
+   return find_imp();
+#endif
+}
+
+template <class BidiIterator, class Allocator, class traits, class Allocator2>
+bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_imp()
 {
    static matcher_proc_type const s_find_vtable[7] = 
    {
@@ -158,10 +181,6 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find()
       &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_lit,
       &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_lit,
    };
-
-#ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
-  __try{
-#endif
 
    // initialise our stack if we are non-recursive:
 #ifdef BOOST_REGEX_NON_RECURSIVE
@@ -227,16 +246,6 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find()
       while(unwind(true)){}
       throw;
    }
-#endif
-#ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
-   }__except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode())
-   {
-      reset_stack_guard_page();
-   }
-   // we only get here after a stack overflow:
-   raise_error<traits>(traits_inst, REG_E_MEMORY);
-   // and we never really get here at all:
-   return false;
 #endif
 }
 
