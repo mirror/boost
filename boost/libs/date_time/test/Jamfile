@@ -118,6 +118,34 @@ test-suite date_time_gregorian_dll
    [ run posix_time/teststreams.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  <define>USE_DATE_TIME_PRE_1_33_FACET_IO ]
  ;
 
+   local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_DATE_TIME_STATIC_LINK <define>BOOST_ALL_NO_LIB ;
+
+   test-suite date_time_localtime
+     : 
+    [ run local_time/testdst_transition_day_rule.cpp
+      <lib>../build/boost_date_time
+     : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testtime_zone.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testposix_time_zone.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testtz_database.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testlocal_time.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testlocal_time_facet.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testclocks.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
+ ;
+
+
 }
 
 # Copyright (c) 2000-2005
