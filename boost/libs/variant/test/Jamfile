@@ -27,13 +27,21 @@ DEPENDS all : test ;
 
    test-suite variant
      : 
-    [ run libs/variant/test/test1.cpp libs/variant/test/class_a.cpp ]
-    [ run libs/variant/test/test2.cpp ]
-    [ run libs/variant/test/test3.cpp ]
-    [ run libs/variant/test/test4.cpp libs/variant/test/class_a.cpp ]
-    [ run libs/variant/test/test5.cpp ]
-    [ run libs/variant/test/test6.cpp ]
-    [ run libs/variant/test/test7.cpp ]
-    [ run libs/variant/test/test8.cpp ]
+    [ run libs/variant/test/test1.cpp libs/variant/test/class_a.cpp
+       : : : : variant_test1 ]
+    [ run libs/variant/test/test2.cpp
+       : : : : variant_test2 ]
+    [ run libs/variant/test/test3.cpp
+       : : : : variant_test3 ]
+    [ run libs/variant/test/test4.cpp libs/variant/test/class_a.cpp
+       : : : : variant_test4 ]
+    [ run libs/variant/test/test5.cpp
+       : : : : variant_test5 ]
+    [ run libs/variant/test/test6.cpp
+       : : : : variant_test6 ]
+    [ run libs/variant/test/test7.cpp
+       : : : : variant_test7 ]
+    [ run libs/variant/test/test8.cpp
+       : : : : variant_test8 ]
    ; 
 }
