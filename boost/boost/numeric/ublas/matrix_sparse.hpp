@@ -2649,6 +2649,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data_.resize (capacity_);
                 filled1_ = 1;
                 filled2_ = 0;
+                index1_data_ [filled1_ - 1] = k_based (filled2_);
             }
             storage_invariants ();
        }
