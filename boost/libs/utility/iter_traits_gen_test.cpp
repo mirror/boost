@@ -29,9 +29,13 @@ main()
       boost::iterator_traits_generator
       ::reference<dummyT>
       ::iterator_category<std::input_iterator_tag> > iter_type;
-    
-    BOOST_STATIC_ASSERT((boost::is_same<iter_type::reference, dummyT>::value));
-    
+
+    BOOST_STATIC_ASSERT((boost::is_same<iter_type::iterator_category*,
+       std::input_iterator_tag*>::value));
+
+    BOOST_STATIC_ASSERT(( ! boost::is_convertible<iter_type::iterator_category*,
+       std::forward_iterator_tag*>::value));
+
     iter_type i(mi);
     boost::input_iterator_test(i, dummyT(0), dummyT(1));
   }
