@@ -1266,3 +1266,8 @@ abc "xyzabcCD" "\U\0\E" "xyzUabcECD"
 ABC "xyzABCCD" "\l\0" "xyzlABCCD"
 ABC "xyzABCCD" "\L\0\E" "xyzLABCECD"
 
+; and a couple of new bugs:
+- match_default normal REG_ICASE REG_NO_POSIX_TEST
+\u+ abcABC 0 6
+\l+ abcABC 0 6
+
