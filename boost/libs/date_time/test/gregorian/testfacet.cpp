@@ -178,8 +178,11 @@ main()
   check("check date order: "+os3.str(), 
         os3.str() == std::string("Oktober 01 2002"));
 
-
-
+  date_period dp(d1, date_duration(3));
+  os3.str("");
+  os3 << dp;
+  check("check date period: "+os3.str(), 
+        os3.str() == std::string("[Oktober 01 2002/Oktober 03 2002]"));
 #else
   check("All pass, no tests executed - Locales not supported", true);
 
