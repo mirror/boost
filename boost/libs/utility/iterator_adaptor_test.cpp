@@ -9,6 +9,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  19 Feb 01 Take adavantage of improved iterator_traits to do more tests
+//            on MSVC. Hack around an MSVC-with-STLport internal compiler
+//            error. (David Abrahams)
 //  11 Feb 01 Added test of operator-> for forward and input iterators.
 //            (Jeremy Siek)
 //  11 Feb 01 Borland fixes (David Abrahams)
@@ -331,34 +334,38 @@ main()
     boost::const_nonconst_iterator_test(i, ++j);    
   }
 
-  // Test reverse_iterator_generator again, with traits fully deducible on most platforms
-#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+  // Test reverse_iterator_generator again, with traits fully deducible on all platforms
   {
     std::deque<dummyT> reversed_container;
-    std::copy(array, array + N, std::back_inserter(reversed_container));
+    std::reverse_copy(array, array + N, std::back_inserter(reversed_container));
     const std::deque<dummyT>::iterator reversed = reversed_container.begin();
-    std::reverse(reversed, reversed + N);
+
 
     typedef boost::reverse_iterator_generator<
         std::deque<dummyT>::iterator>::type reverse_iterator;
     typedef boost::reverse_iterator_generator<
         std::deque<dummyT>::const_iterator, const dummyT>::type const_reverse_iterator;
 
-    reverse_iterator i(reversed + N);
+    // MSVC/STLport gives an INTERNAL COMPILER ERROR when any computation
+    // (e.g. "reversed + N") is used in the constructor below.
+    const std::deque<dummyT>::iterator finish = reversed_container.end();
+    reverse_iterator i(finish);
+    
     boost::random_access_iterator_test(i, N, array);
     boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
 
-    const_reverse_iterator j = reverse_iterator(reversed + N);
+    const_reverse_iterator j = reverse_iterator(finish);
     boost::random_access_iterator_test(j, N, array);
 
     const std::deque<dummyT>::const_iterator const_reversed = reversed;
     boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N), N, array);
     
-#if !defined(__GNUC__) && !defined(__BORLANDC__) || defined(__SGI_STL_PORT)  // GCC/Borland deque iterators don't allow all const/non-const comparisons
+    // Many compilers' builtin deque iterators don't interoperate well, though
+    // STLport fixes that problem.
+#if defined(__SGI_STL_PORT) || !defined(__GNUC__) && !defined(__BORLANDC__) && !defined(BOOST_MSVC)
     boost::const_nonconst_iterator_test(i, ++j);
 #endif
   }
-#endif
   
   // Test integer_range's iterators
   {
