@@ -12,6 +12,9 @@
 //
 // Revision History:
 
+// 04 Oct 2001   Jeremy Siek
+//      Changed projection_iterator to not rely on the default reference,
+//      working around a limitation of detail::iterator_traits.
 // 04 Oct 2001   David Abrahams
 //      Applied indirect_iterator patch from George A. Heintzelman <georgeh@aya.yale.edu>
 //      Changed name of "bind" to "select" to avoid problems with MSVC.
@@ -1054,7 +1057,7 @@ class projection_iterator_generator {
     typedef typename AdaptableUnaryFunction::result_type value_type;
     typedef projection_iterator_policies<AdaptableUnaryFunction> policies;
 public:
-    typedef iterator_adaptor<Iterator,policies,value_type> type;
+    typedef iterator_adaptor<Iterator,policies,value_type,value_type&,value_type*> type;
 };
 
 template <class AdaptableUnaryFunction, class Iterator>
