@@ -72,7 +72,7 @@ struct add_reference<T&>
 #elif defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
 namespace detail{
 
-template <bool>
+template <bool x>
 struct reference_adder
 {
    template <class T>
