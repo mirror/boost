@@ -267,7 +267,7 @@ namespace boost {
   typedef random::linear_congruential&lt; /* ... */ &gt; minstd_rand;
 
   namespace random {
-    template&lt;class DataType, int n, int m, int r, DataType a, int u,
+    template&lt;class DataType, int w, int n, int m, int r, DataType a, int u,
         int s, DataType b, int t, DataType c, int l, IntType val&gt;
     class mersenne_twister;
   }
@@ -598,7 +598,6 @@ paper.
 #include &lt;<a href="../../boost/random/shuffle_output.hpp">boost/random/shuffle_output.hpp</a>&gt;
 
 template&lt;class UniformRandomNumberGenerator, int k, 
-  class IntType = typename UniformRandomNumberGenerator::result_type,
   typename UniformRandomNumberGenerator::result_type val = 0&gt;
 class random::shuffle_output
 {
@@ -640,10 +639,7 @@ replaced with fresh output from the base generator.
 <p>
 
 Template parameters are the base generator and the array length k,
-which should be around 100.  As an implementation detail, the template
-parameter <code>IntType</code> shall denote an integer-like type which
-is large enough to hold integer numbers of value k *
-<code>base_type::max()</code>.  The template parameter
+which should be around 100.  The template parameter
 <code>val</code> is the validation value checked by
 <code>validation</code>.
 
@@ -788,7 +784,7 @@ above paper.
 <pre>
 #include &lt;<a href="../../boost/random/mersenne_twister.hpp">boost/random/mersenne_twister.hpp</a>&gt;
 
-template&lt;class DataType, int n, int m, int r, DataType a, int u,
+template&lt;class DataType, int w, int n, int m, int r, DataType a, int u,
 int s, DataType b, int t, DataType c, int l, IntType val&gt;
 class random::mersenne_twister
 {
