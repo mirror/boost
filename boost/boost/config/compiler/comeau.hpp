@@ -31,6 +31,10 @@
 #  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #endif
 
+#ifdef _WIN32
+#  define BOOST_NO_SWPRINTF
+#endif
+
 // Void returns don't work when emulating VC 6 (Peter Dimov)
 
 #  if defined(_MSC_VER) && (_MSC_VER == 1200)
