@@ -297,7 +297,7 @@ namespace boost { namespace program_options {
         // Finally, if the variable is called 'environ', then VC refuses
         // to link.
         char **env;
-        #if defined(_WIN32) && !defined( __MINGW32__ )
+        #if defined(_WIN32) && !defined( __MINGW32__ ) && !defined(__MWERKS__)
         env = _environ;
         #else
         env = environ;
@@ -328,9 +328,9 @@ namespace boost { namespace program_options {
                 string result;
                 if (s.find(prefix) == 0) {
                     for(string::size_type n = prefix.size(); n < s.size(); ++n) 
-                    {	
+                    {   
                         // Intel-Win-7.1 does not understand
-			// push_back on string.		    
+            // push_back on string.         
                         result += tolower(s[n]);
                     }
                 }
