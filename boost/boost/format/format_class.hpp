@@ -35,12 +35,17 @@ namespace boost {
 template<class Ch, class Tr>
 class basic_format 
 {
-  typedef BOOST_IO_STD basic_ostream<Ch, Tr>               stream_t;
+public:
+  typedef Ch  CharT;   // those 2 are necessary for borland compatibilty,
+  typedef Tr  Traits;  // in the body of the operator% template.
+
+
+  typedef std::basic_string<Ch, Tr>                string_t;
+  typedef BOOST_IO_STD basic_ostringstream<Ch, Tr> internal_stream_t;
+private:
+  typedef BOOST_IO_STD basic_ostream<Ch, Tr>       stream_t;
   typedef io::detail::stream_format_state<Ch, Tr>  stream_format_state;
   typedef io::detail::format_item<Ch, Tr>          format_item_t;
-public:
-  typedef std::basic_string<Ch, Tr>                string_t;
-  typedef BOOST_IO_STD basic_ostringstream<Ch, Tr>         internal_stream_t;
 
 public:
   basic_format(const Ch* str);
@@ -55,13 +60,13 @@ public:
   // pass arguments through those operators :
   template<class T>  basic_format&   operator%(const T& x) 
   { 
-    return io::detail::feed<Ch, Tr, const T&>(*this,x);
+    return io::detail::feed<CharT, Traits, const T&>(*this,x);
   }
 
 #ifdef BOOST_OVERLOAD_FOR_NON_CONST
   template<class T>  basic_format&   operator%(T& x) 
   {
-    return io::detail::feed<Ch, Tr, T&>(*this,x);
+    return io::detail::feed<CharT, Traits, T&>(*this,x);
   }
 #endif
 
@@ -96,7 +101,8 @@ public:
 #endif
                       
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )  && !defined( __BORLANDC__ )
+
   template<class Ch2, class Tr2, class T>  friend basic_format<Ch2, Tr2>&  
   io::detail::feed(basic_format<Ch2,Tr2>&, T);
     
