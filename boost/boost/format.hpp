@@ -17,6 +17,7 @@
 #include <vector>
 #include <string>
 #include <boost/detail/workaround.hpp>
+#include <boost/config.hpp>
 
 #ifndef BOOST_NO_STD_LOCALE
 #include <locale>
