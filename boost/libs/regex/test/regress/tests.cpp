@@ -594,20 +594,31 @@ void cpp_hl_tests(RegEx& e, bool recurse = true)
          }
       }
 
-      if((matches[0] == 0) && (e.Match(search_text.c_str(), flags[3])))
+      //
+      // test RegEx::Match only if we expect to match all of the input:
+      //
+      if((matches[0] == 0) && (matches[1] == search_text.size()))
       {
-         unsigned int i = 0;
-         unsigned int j = 0;
-         while(matches[j] != -2)
+         if(e.Match(search_text.c_str(), flags[3]))
          {
-            if( (matches[j] != (int)e.Position(i))
-               || ((matches[j] != -1) && ((matches[j+1] - matches[j] != (int)e.Length(i)))) )
+            unsigned int i = 0;
+            unsigned int j = 0;
+            while(matches[j] != -2)
             {
-               begin_error();
-               cout << "RegEx::Match error in subexpression " << i << ": found [" << e.Position(i) << "," << (e.Position(i) + e.Length(i)) << "] expected [" << matches[j] << "," << matches[j+1] << "]" << endl;
+               if( (matches[j] != (int)e.Position(i))
+                  || ((matches[j] != -1) && ((matches[j+1] - matches[j] != (int)e.Length(i)))) )
+               {
+                  begin_error();
+                  cout << "RegEx::Match error in subexpression " << i << ": found [" << e.Position(i) << "," << (e.Position(i) + e.Length(i)) << "] expected [" << matches[j] << "," << matches[j+1] << "]" << endl;
+               }
+               ++i;
+               j += 2;
             }
-            ++i;
-            j += 2;
+         }
+         else
+         {
+            begin_error();
+            cout << "Match expected but not found with RegEx::Match" << endl;
          }
       }
    }
