@@ -74,16 +74,19 @@ class state : public simple_state<
       outermost_context_type & outermostContext )
     {
       const inner_context_ptr_type pInnerContext(
-        shallow_construct( pContext ) );
+        shallow_construct( pContext, outermostContext ) );
       base_type::template deep_construct_inner< inner_initial_list >(
         pInnerContext, outermostContext );
     }
 
     static inner_context_ptr_type shallow_construct(
-      const context_ptr_type & pContext )
+      const context_ptr_type & pContext,
+      outermost_context_type & outermostContext )
     {
-      return inner_context_ptr_type(
+      const inner_context_ptr_type pInnerContext(
         new MostDerived( my_context( pContext ) ) );
+      outermostContext.add( pInnerContext, false );
+      return pInnerContext;
     }
 };
 

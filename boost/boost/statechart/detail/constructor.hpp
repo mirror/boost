@@ -68,9 +68,8 @@ struct outer_constructor
   static void construct(
     const context_ptr_type & pContext, OutermostContext & outermostContext )
   {
-    outermostContext.add( pContext );
     const inner_context_ptr_type pInnerContext =
-      to_construct::shallow_construct( pContext );
+      to_construct::shallow_construct( pContext, outermostContext );
     to_construct::template deep_construct_inner<
       first_inner_initial_list >( pInnerContext, outermostContext );
     mpl::front< inner_context_list >::type::reserve_history_slot(

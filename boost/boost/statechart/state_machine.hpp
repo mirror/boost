@@ -15,6 +15,8 @@
 
 #include <boost/fsm/detail/rtti_policy.hpp>
 #include <boost/fsm/detail/state_base.hpp>
+#include <boost/fsm/detail/leaf_state.hpp>
+#include <boost/fsm/detail/node_state.hpp>
 #include <boost/fsm/detail/constructor.hpp>
 #include <boost/fsm/detail/avoid_unused_warning.hpp>
 
@@ -23,6 +25,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/minus.hpp>
+#include <boost/mpl/equal_to.hpp>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/type_traits/is_pointer.hpp>
@@ -66,12 +70,6 @@ namespace fsm
 namespace detail
 {
 
-
-
-template< class NoOfOrthogonalRegions, class Allocator, class RttiPolicy >
-class node_state;
-template< class Allocator, class RttiPolicy >
-class leaf_state;
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -388,7 +386,11 @@ class state_machine : noncopyable
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    state_machine() : pOutermostState_( 0 ) {}
+    state_machine() :
+      pOutermostState_( 0 ),
+      isInnermostCommonOuter_( false )
+    {
+    }
 
     // This destructor was only made virtual so that that
     // polymorphic_downcast can be used to cast to MostDerived.
@@ -459,7 +461,8 @@ class state_machine : noncopyable
 
     void terminate( state_machine & )
     {
-      pUnstableState_ = 0;
+      pOutermostUnstableState_ = 0;
+      isInnermostCommonOuter_ = false;
 
       if ( pOutermostState_ != 0 )
       {
@@ -475,17 +478,28 @@ class state_machine : noncopyable
     {
       theState.set_termination_state();
 
-      if ( currentStates_.size() == 1 )
+      if ( ( currentStates_.size() == 1 ) &&
+        get_pointer( pOutermostUnstableState_ ) == 0 )
       {
-        // The following optimization is only correct when there are no
-        // orthogonal states.
+        // The following optimization is only correct for a stable machine
+        // without orthogonal states.
         currentStates_.clear();
       }
       else
       {
+        // If the state machine is unstable at this point then the termination
+        // is *guaranteed* to bring the machine back into a stable state
+        // because the termination reaction can only be triggered by the
+        // outermost unstable state or one of its direct or indirect outer
+        // states.
+
         // This would work for all cases, but is unnecessarily inefficient
-        // when there are no orthogonal states.
-        theState.remove_from_state_list( currentStates_, pUnstableState_ );
+        // for a stable non-orthogonal state machine.
+        theState.remove_from_state_list(
+          currentStates_, pOutermostUnstableState_ );
+
+        BOOST_ASSERT( get_pointer( pOutermostUnstableState_ ) == 0 );
+        isInnermostCommonOuter_ = false;
       }
     }
 
@@ -495,14 +509,34 @@ class state_machine : noncopyable
       eventQueue_.push_back( pEvent );
     }
 
+
     template< class State >
-    void add( const intrusive_ptr< State > & pState )
-    { 
-      pUnstableState_ = pState;
-      add_impl( *pState );
+    void add(
+      const intrusive_ptr< State > & pState,
+      bool isInnermostCommonOuter )
+    {
+      // The second dummy argument is necessary because the call to the
+      // overloaded function add_impl would otherwise be ambiguous.
+      intrusive_ptr< state_base_type > pNewOutermostUnstableStateCandidate =
+        add_impl( pState, *pState );
+
+      const state_base_type * const pCurrentOutermostUnstableState =
+        get_pointer( pOutermostUnstableState_ );
+
+      // TODO: outer_state_ptr() is a virtual function, which could be called
+      // non-virtually here (State is the most-derived type). Investigate why
+      // MSVC7.1 has problems with non-virtual call.
+      if ( ( pCurrentOutermostUnstableState == 0 ) ||
+        ( is_in_highest_orthogonal_region< State >() ||
+          isInnermostCommonOuter_ ) &&
+        ( pCurrentOutermostUnstableState == pState->outer_state_ptr() ) )
+      {
+        pOutermostUnstableState_ = pNewOutermostUnstableStateCandidate;
+        isInnermostCommonOuter_ = isInnermostCommonOuter;
+      }
     }
 
-    void add( state_machine * )
+    void add( state_machine *, bool )
     {
       BOOST_ASSERT( machine_status() == no_state );
     }
@@ -828,13 +862,13 @@ class state_machine : noncopyable
 
     machine_status_enum machine_status() const
     {
-      if ( currentStates_.empty() )
-      {
-        return no_state;
-      }
-      else if ( get_pointer( pUnstableState_ ) != 0 )
+      if ( get_pointer( pOutermostUnstableState_ ) != 0 )
       {
         return unstable;
+      }
+      else if ( currentStates_.empty() )
+      {
+        return no_state;
       }
       else
       {
@@ -845,19 +879,35 @@ class state_machine : noncopyable
     state_base_type & unstable_state()
     {
       BOOST_ASSERT( machine_status() == unstable );
-      return *pUnstableState_;
+      return *pOutermostUnstableState_;
     }
 
-    template< class NoOfOrthogonalRegions >
-    void add_impl( const detail::node_state<
-      NoOfOrthogonalRegions, allocator_type, rtti_policy_type > & ) {}
-
-    void add_impl(
-      detail::leaf_state< allocator_type, rtti_policy_type > & theState )
+    intrusive_ptr< state_base_type > add_impl(
+      const intrusive_ptr< detail::leaf_state<
+        allocator_type, rtti_policy_type > > & pState,
+      detail::leaf_state< allocator_type, rtti_policy_type > & )
     {
-      theState.set_list_position( 
-        currentStates_.insert( currentStates_.end(), pUnstableState_ ) );
-      pUnstableState_ = 0;
+      pState->set_list_position( 
+        currentStates_.insert( currentStates_.end(), pState ) );
+      return 0;
+    }
+
+    intrusive_ptr< state_base_type > add_impl(
+      const intrusive_ptr< state_base_type > & pState,
+      state_base_type & )
+    {
+      return pState;
+    }
+
+    template< class State >
+    bool is_in_highest_orthogonal_region()
+    {
+      return mpl::equal_to<
+        typename State::orthogonal_position,
+        mpl::minus< 
+          typename State::context_type::no_of_orthogonal_regions,
+          mpl::integral_c< detail::orthogonal_position_type, 1 > >
+      >::value;
     }
 
 
@@ -942,7 +992,8 @@ class state_machine : noncopyable
     deferred_map_type deferredMap_;
     state_list_type currentStates_;
     state_base_type * pOutermostState_;
-    state_base_ptr_type pUnstableState_;
+    state_base_ptr_type pOutermostUnstableState_;
+    bool isInnermostCommonOuter_;
     history_map_type shallowHistoryMap_;
     history_map_type deepHistoryMap_;
     ExceptionTranslator translator_;

@@ -478,18 +478,19 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       const context_ptr_type & pContext,
       outermost_context_type & outermostContext )
     {
-      outermostContext.add( pContext );
       const inner_context_ptr_type pInnerContext(
-        shallow_construct( pContext ) );
+        shallow_construct( pContext, outermostContext ) );
       deep_construct_inner< inner_initial_list >(
         pInnerContext, outermostContext );
     }
 
     static inner_context_ptr_type shallow_construct(
-      const context_ptr_type & pContext )
+      const context_ptr_type & pContext,
+      outermost_context_type & outermostContext )
     {
       const inner_context_ptr_type pInnerContext( new MostDerived );
       pInnerContext->set_context( pContext );
+      outermostContext.add( pInnerContext, false );
       return pInnerContext;
     }
 
@@ -555,10 +556,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     {
       template< class InnerList >
       static void deep_construct_inner_impl(
-        const inner_context_ptr_type & pInnerContext,
-        outermost_context_type & outermostContext )
+        const inner_context_ptr_type &,
+        outermost_context_type & )
       {
-        outermostContext.add( pInnerContext );
       }
     };
 
@@ -647,7 +647,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         pCommonContext->outermost_context() );
 
       outermostContext.terminate( terminationState );
-      outermostContext.add( pCommonContext );
+      outermostContext.add( pCommonContext, true );
       transitionAction( *pCommonContext );
 
       typedef typename detail::make_context_list<
