@@ -41,8 +41,8 @@ struct pair_iter_ops
 {
     template< typename I1, typename I2 > struct result_
     {
-        typedef typename next<I1>::type i1_;
-        typedef typename next<I2>::type i2_;
+        typedef typename mpl::next<I1>::type i1_;
+        typedef typename mpl::next<I2>::type i2_;
         typedef pair_iter<i1_,i2_,Category> next;
     };
 };
@@ -54,12 +54,12 @@ struct pair_iter_ops<bidirectional_iterator_tag>
     {
         typedef bidirectional_iterator_tag category;
 
-        typedef typename next<I1>::type i1_;
-        typedef typename next<I2>::type i2_;
+        typedef typename mpl::next<I1>::type i1_;
+        typedef typename mpl::next<I2>::type i2_;
         typedef pair_iter<i1_,i2_,category> next;
 
-        typedef typename prior<I1>::type k1_;
-        typedef typename prior<I2>::type k2_;
+        typedef typename mpl::prior<I1>::type k1_;
+        typedef typename mpl::prior<I2>::type k2_;
         typedef pair_iter<k1_,k2_,category> prior;
     };
 };
@@ -71,12 +71,12 @@ struct pair_iter_ops<random_access_iterator_tag>
     {
         typedef random_access_iterator_tag category;
 
-        typedef typename next<I1>::type i1_;
-        typedef typename next<I2>::type i2_;
+        typedef typename mpl::next<I1>::type i1_;
+        typedef typename mpl::next<I2>::type i2_;
         typedef pair_iter<i1_,i2_,category> next;
 
-        typedef typename prior<I1>::type k1_;
-        typedef typename prior<I2>::type k2_;
+        typedef typename mpl::prior<I1>::type k1_;
+        typedef typename mpl::prior<I2>::type k2_;
         typedef pair_iter<k1_,k2_,category> prior;
 
         template< typename Distance > struct BOOST_MPL_AUX_ITERATOR_ADVANCE
@@ -112,30 +112,30 @@ struct pair_iter
 template< typename I1, typename I2, typename C >
 struct next< pair_iter<I1,I2,C> >
 {
-    typedef typename next<I1>::type i1_;
-    typedef typename next<I2>::type i2_;
+    typedef typename mpl::next<I1>::type i1_;
+    typedef typename mpl::next<I2>::type i2_;
     typedef pair_iter<i1_,i2_,C> type;
 };
 
 template< typename I1, typename I2, typename C >
 struct prior< pair_iter<I1,I2,C> >
 {
-    typedef typename prior<I1>::type i1_;
-    typedef typename prior<I2>::type i2_;
+    typedef typename mpl::prior<I1>::type i1_;
+    typedef typename mpl::prior<I2>::type i2_;
     typedef pair_iter<i1_,i2_,C> type;
 };
 
 template< typename I1, typename I2, typename C, typename Distance >
 struct advance< pair_iter<I1,I2,C>,Distance>
 {
-    typedef typename advance<I1,Distance>::type iter1_;
-    typedef typename advance<I2,Distance>::type iter2_;
+    typedef typename mpl::advance<I1,Distance>::type iter1_;
+    typedef typename mpl::advance<I2,Distance>::type iter2_;
     typedef pair_iter<iter1_,iter2_,C> type;
 };
 
 template< typename I1, typename I2, typename K1, typename K2, typename C >
 struct distance< pair_iter<I1,I2,C>, pair_iter<K1,K2,C> >
-    : distance<K1,I1>
+    : mpl::distance<K1,I1>
 {
 };
 

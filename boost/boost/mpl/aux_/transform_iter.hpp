@@ -37,7 +37,7 @@ struct transform_iter
 {
     typedef Iterator base;
     typedef forward_iterator_tag category;
-    typedef transform_iter< typename next<base>::type,LastIterator,F > next;
+    typedef transform_iter< typename mpl::next<base>::type,LastIterator,F > next;
     
     typedef typename apply1<
           F
@@ -76,7 +76,7 @@ struct transform_iter_impl
     {
         typedef Iterator base;
         typedef forward_iterator_tag category;
-        typedef transform_iter< typename next<Iterator>::type,LastIterator,F > next;
+        typedef transform_iter< typename mpl::next<Iterator>::type,LastIterator,F > next;
         
         typedef typename apply1<
               F

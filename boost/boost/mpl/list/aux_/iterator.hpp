@@ -27,7 +27,7 @@ struct l_iter
     typedef aux::l_iter_tag tag;
     typedef forward_iterator_tag category;
     typedef typename Node::item type;
-    typedef l_iter<typename next<Node>::type> next;
+    typedef l_iter< typename mpl::next<Node>::type > next;
 };
 
 template<> struct l_iter<l_end>

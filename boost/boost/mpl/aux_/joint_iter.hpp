@@ -37,7 +37,7 @@ struct joint_iter
     typedef Iterator1 base;
     typedef forward_iterator_tag category;
     typedef joint_iter<
-          typename next<base>::type
+          typename mpl::next<base>::type
         , LastIterator1
         , Iterator2
         > next;
@@ -56,7 +56,7 @@ struct joint_iter<LastIterator1,LastIterator1,Iterator2>
     typedef joint_iter<
           LastIterator1
         , LastIterator1
-        , typename next<base>::type
+        , typename mpl::next<base>::type
         > next;
 
     typedef typename deref<base>::type type;
@@ -85,7 +85,7 @@ template< bool > struct joint_iter_impl
         typedef Iterator1 base;
         typedef forward_iterator_tag category;
         typedef joint_iter<
-              typename next<Iterator1>::type
+              typename mpl::next<Iterator1>::type
             , LastIterator1
             , Iterator2
             > next;
@@ -108,7 +108,7 @@ template<> struct joint_iter_impl<true>
         typedef joint_iter<
               LastIterator1
             , LastIterator1
-            , typename next<Iterator2>::type
+            , typename mpl::next<Iterator2>::type
             > next;
 
         typedef typename deref<Iterator2>::type type;

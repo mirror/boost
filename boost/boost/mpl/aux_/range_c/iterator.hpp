@@ -29,8 +29,8 @@ struct rc_iter
     typedef random_access_iterator_tag category;
     typedef N type;
 
-    typedef rc_iter<typename next<N>::type> next;
-    typedef rc_iter<typename prior<N>::type> prior;
+    typedef rc_iter<typename mpl::next<N>::type> next;
+    typedef rc_iter<typename mpl::prior<N>::type> prior;
 
     template< typename D >
     struct BOOST_MPL_AUX_ITERATOR_ADVANCE

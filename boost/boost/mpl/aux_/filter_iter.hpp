@@ -60,7 +60,7 @@ struct filter_iter
     typedef Iterator base;
     typedef forward_iterator_tag category;
     typedef typename aux::next_filter_iter<
-          typename next<base>::type
+          typename mpl::next<base>::type
         , LastIterator
         , Predicate
         >::type next;
@@ -93,7 +93,7 @@ struct filter_iter_impl
         typedef Iterator base;
         typedef forward_iterator_tag category;
         typedef typename next_filter_iter<
-              typename next<Iterator>::type
+              typename mpl::next<Iterator>::type
             , LastIterator
             , Predicate
             >::type next;
