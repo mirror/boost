@@ -26,6 +26,8 @@ void test_copy_assignment()
   employee_set es;
   employee_set es2(es);
 
+  employee_set::allocator_type al=es.get_allocator();
+
   BOOST_CHECK(es2.empty());
 
   es2.insert(employee(0,"Joe",31));

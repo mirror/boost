@@ -43,11 +43,15 @@ protected:
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>       final_type;
   typedef tuples::null_type                   ctor_args_list;
-  typedef Allocator                           final_allocator_type;
+  typedef typename allocator::rebind_to<
+    Allocator,
+    typename Allocator::value_type>::type     final_allocator_type;
   typedef mpl::vector0<>                      index_type_list;
   typedef mpl::vector0<>                      iterator_type_list;
   typedef mpl::vector0<>                      const_iterator_type_list;
-  typedef copy_map<final_node_type,Allocator> copy_map_type;
+  typedef copy_map<
+    final_node_type,
+    final_allocator_type>                     copy_map_type;
 
 private:
   typedef typename call_traits<Value>::param_type value_param_type;

@@ -347,12 +347,12 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
   node_type* allocate_node()
   {
-    return detail::allocator::allocate<node_type>(bfm_allocator::member,1);
+    return bfm_allocator::member.allocate(1);
   }
 
   void deallocate_node(node_type* x)
   {
-    detail::allocator::deallocate(bfm_allocator::member,x,1);
+    bfm_allocator::member.deallocate(x,1);
   }
 
   bool empty_()const

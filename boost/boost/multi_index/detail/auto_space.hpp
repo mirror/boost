@@ -39,12 +39,12 @@ template<typename T,typename Allocator=std::allocator<T> >
 struct auto_space:private noncopyable
 {
   explicit auto_space(const Allocator& al=Allocator(),std::size_t n=1):
-  al_(al),n_(n),data_(n_?allocator::allocate<T>(al_,n_):0)
+  al_(al),n_(n),data_(n_?al_.allocate(n_):0)
   {}
 
   ~auto_space()
   {
-    if(n_)allocator::deallocate(al_,data_,n_);
+    if(n_)al_.deallocate(data_,n_);
   }
 
   T* data()const{return data_;}

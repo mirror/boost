@@ -77,7 +77,7 @@ public:
   void clone(Node* node)
   {
     spc.data()[n].first=node;
-    spc.data()[n].second=allocator::allocate<Node>(al_,1);
+    spc.data()[n].second=al_.allocate(1);
     BOOST_TRY{
       allocator::construct(&spc.data()[n].second->value,node->value);
     }
@@ -114,7 +114,7 @@ private:
 
   void deallocate(Node* node)
   {
-    allocator::deallocate(al_,node,1);
+    al_.deallocate(node,1);
   }
 };
 
