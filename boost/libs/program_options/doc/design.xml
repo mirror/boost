@@ -19,8 +19,8 @@
       during the formal review. For the remainder of this document we'll use
       "Unicode support" as a synonim for "wchar_t" support, that is assuming
       that "wchar_t" always use Unicode encoding. Also, when talking about
-      "ascii" we'll not mean strict 7-bit ASCII encoding, but rather "char"
-      strings in local 8-bit encoding.
+      "ascii" (in lowercase) we'll not mean strict 7-bit ASCII encoding, 
+      but rather "char" strings in local 8-bit encoding.
     </para>
           
     <para>
@@ -36,7 +36,7 @@
         </listitem>
         <listitem>
           <para>For each option, it should be possible to specify if
-          conversion from string to value should use ascii or unicode.
+          conversion from string to value should use ascii or Unicode.
           </para>
         </listitem>
         <listitem>
@@ -47,11 +47,11 @@
                 </para>
               </listitem>
               <listitem>
-                <para>unicode input is passed to an unicode value without change</para>
+                <para>Unicode input is passed to an Unicode value without change</para>
               </listitem>
               <listitem>
-                <para>ascii input passed to an unicode value, and
-                  unicode input passed to an ascii value will be converted
+                <para>ascii input passed to an Unicode value, and
+                  Unicode input passed to an ascii value will be converted
                   using codecvt
                   facet (which can be specified by the user)
                 </para>
@@ -63,27 +63,27 @@
     </para>
 
     <para>The important point is that it's possible to have some "ascii
-      options" together with "unicode options". There are two reasons for
+      options" together with "Unicode options". There are two reasons for
       this. First, for a given type you might not have a code to extract the
-      value from unicode string and it's not good to require that such code be written.
+      value from Unicode string and it's not good to require that such code be written.
       Second, imagine a reusable library which has some options and exposes
       options description in its interface. If <emphasis>all</emphasis>
-      options are either ascii or unicode, and the library does not use any
-      unicode strings, then the author will likely to use ascii options, which
-      would make the library unusable inside unicode
+      options are either ascii or Unicode, and the library does not use any
+      Unicode strings, then the author will likely to use ascii options, which
+      would make the library unusable inside Unicode
       applications. Essentially, it would be necessary to provide two versions
-      of the library -- ascii and unicode.
+      of the library -- ascii and Unicode.
     </para>
 
     <para>Another important point is that ascii strings are passed though
       without modification. In other words, it's not possible to just convert
-      ascii to unicode and process the unicode further. The problem is that the
+      ascii to Unicode and process the Unicode further. The problem is that the
       default conversion mechanism -- the <code>codecvt</code> facet -- might
       not work with 8-bit input without additional setup.
     </para>
 
-    <para>The unicode support outlined above is not complete. For example,
-      it's not planned to allow unicode in option names. The reason is that
+    <para>The Unicode support outlined above is not complete. For example,
+      it's not planned to allow Unicode in option names. The reason is that
       Unicode support beyond the basic one is hard and requires a Boost-wide
       solution. For example, even comparing two arbitrary Unicode strings is
       non-trivial. Finally, using Unicode in option names is related to
@@ -133,13 +133,13 @@
 
     <para>The second solution appears to be the best -- it does not increase
     the code size much and is cleaner than the third. To avoid extra
-    conversions, the unicode version of &parsed_options; can also store
+    conversions, the Unicode version of &parsed_options; can also store
     strings in internal encoding.
     </para>
 
     <para>For the options descriptions component, we don't have much
       choice. Since it's not desirable to have either all options use ascii or all
-      of them use unicode, but rather have some ascii and some unicode options, the
+      of them use Unicode, but rather have some ascii and some Unicode options, the
       interface of the &value_semantic; should work with both. The only way is
       to pass an additional flag telling if strings use ascii or internal encoding.
       The instance of &value_semantic; can then convert into some
@@ -147,7 +147,7 @@
     </para>
 
     <para>For the storage component, the only affected function is &store;.
-      For unicode input, it should convert it to the internal encoding. It
+      For Unicode input, it should convert it to the internal encoding. It
       should also inform the &value_semantic; class about the used encoding.
     </para>
 
@@ -176,8 +176,9 @@
       will be used.      
     </para>
 
-    <para>The reason why UTF-8 allows the use existing parsers is that
-      searching for 7-bit ascii characters is really simple. However, there are
+    <para>Choosing the UTF-8 encoding allows the use of existing parsers, 
+      because 7-bit ascii characters retain their values in UTF-8, 
+      so searching for 7-bit strings is really simple. However, there are
       two subtle issues:
       <itemizedlist>
         <listitem>
@@ -185,15 +186,15 @@
           and that inputs use Unicode encoding.</para>
         </listitem>
         <listitem>
-          <para>Unicode character (say '=') can be followed by 'composing
+          <para>A Unicode character (say '=') can be followed by 'composing
           character' and the combination is not the same as just '=', so a
           simple search for '=' might find the wrong character.
           </para>
         </listitem>
       </itemizedlist>
       Neither of these issues appear to be critical in practice, since ascii is
-      almost universal encoding and since composing characters on '=' (and
-      other characters with special meaning to the library) are not likely.
+      almost universal encoding and since composing characters following '=' (and
+      other characters with special meaning to the library) are not likely to appear.
     </para>
                    
   </section>

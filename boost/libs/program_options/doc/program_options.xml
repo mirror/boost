@@ -54,7 +54,7 @@
           </para>
         </listitem>
         <listitem>
-          <para>Error reporting is better. All problems with the command line are
+          <para>Error reporting is better. All the problems with the command line are
             reported, while hand-written code can just misparse the input. In
             addition, the usage message can be automatically generated, to
             avoid falling out of sync with the real list of options.</para>

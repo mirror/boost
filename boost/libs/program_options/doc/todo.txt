@@ -25,3 +25,10 @@ The program_options.reference.html may contain one-liner
 > One tiny example concentrating on one feature as short/long options,
 > multiple sources, hidden options, positional options, INI handling etc.
 > Something what user can skim over and cut/paste into app.
+
+
+> I would prefer that all occurrences of ASCII be capitalized.  It is the
+> abbreviation of the name of the Standard.  You may show it in lower case,
+> though, to distinguish "char strings in local 8-bit encoding" from the
+> Standard but it may confuse some readers.  I can't think of a good
+> alternative right now.
