@@ -143,7 +143,14 @@ namespace boost { namespace program_options { namespace detail {
     basic_config_file_iterator<wchar_t>::getline(std::string& s)
     {
         std::wstring ws;
+        // On Comeau, using two-argument version causes
+        // call to some internal function with std::wstring, and '\n'
+        // (not L'\n') and compile can't resolve that call.
+#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303))
+        if (std::getline(*is, ws, L'\n')) {
+#else
         if (std::getline(*is, ws)) {
+#endif
             s = to_utf8(ws);
             return true;
         } else {
