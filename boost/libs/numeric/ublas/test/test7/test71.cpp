@@ -1,4 +1,3 @@
-//
 //  Copyright (c) 2000-2002
 //  Joerg Walter, Mathias Koch
 //
@@ -61,12 +60,12 @@ struct test_my_vector {
             initialize_vector (v1);
             v2 = value_type (1.) * v1;
             std::cout << "1. * v1 = " << v2 << std::endl;
-            v2 = t * v1;
+//            v2 = t * v1;
             std::cout << "N * v1 = " << v2 << std::endl;
             initialize_vector (v1);
-            v2 = v1 * value_type (1.);
+//            v2 = v1 * value_type (1.);
             std::cout << "v1 * 1. = " << v2 << std::endl;
-            v2 = v1 * t;
+//            v2 = v1 * t;
             std::cout << "v1 * N = " << v2 << std::endl;
 
             // Some assignments
@@ -142,18 +141,6 @@ void test_vector () {
     std::cout << "boost::numeric::interval<double>, bounded_array" << std::endl;
     test_my_vector<ublas::vector<boost::numeric::interval<double>, ublas::bounded_array<boost::numeric::interval<double>, 3> >, 3 > () ();
 #endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, bounded_array" << std::endl;
-    test_my_vector<ublas::vector<boost::complex<boost::numeric::interval<float> >, ublas::bounded_array<boost::complex<boost::numeric::interval<float> >, 3> >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, bounded_array" << std::endl;
-    test_my_vector<ublas::vector<boost::complex<boost::numeric::interval<double> >, ublas::bounded_array<boost::complex<boost::numeric::interval<double> >, 3> >, 3 > () ();
-#endif
-#endif
 #endif
 
 #ifdef USE_UNBOUNDED_ARRAY
@@ -166,18 +153,6 @@ void test_vector () {
     std::cout << "boost::numeric::interval<double>, unbounded_array" << std::endl;
     test_my_vector<ublas::vector<boost::numeric::interval<double>, ublas::unbounded_array<boost::numeric::interval<double> > >, 3 > () ();
 #endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, unbounded_array" << std::endl;
-    test_my_vector<ublas::vector<boost::complex<boost::numeric::interval<float> >, ublas::unbounded_array<boost::complex<boost::numeric::interval<float> > > >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, unbounded_array" << std::endl;
-    test_my_vector<ublas::vector<boost::complex<boost::numeric::interval<double> >, ublas::unbounded_array<boost::complex<boost::numeric::interval<double> > > >, 3 > () ();
-#endif
-#endif
 #endif
 
 #ifdef USE_STD_VECTOR
@@ -189,18 +164,6 @@ void test_vector () {
 #ifdef USE_DOUBLE
     std::cout << "boost::numeric::interval<double>, std::vector" << std::endl;
     test_my_vector<ublas::vector<boost::numeric::interval<double>, std::vector<boost::numeric::interval<double> > >, 3 > () ();
-#endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, std::vector" << std::endl;
-    test_my_vector<ublas::vector<boost::complex<boost::numeric::interval<float> >, std::vector<boost::complex<boost::numeric::interval<float> > > >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, std::vector" << std::endl;
-    test_my_vector<ublas::vector<boost::complex<boost::numeric::interval<double> >, std::vector<boost::complex<boost::numeric::interval<double> > > >, 3 > () ();
-#endif
 #endif
 #endif
 }

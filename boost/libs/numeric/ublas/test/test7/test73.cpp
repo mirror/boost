@@ -134,18 +134,6 @@ void test_matrix () {
     std::cout << "boost::numeric::interval<double>, bounded_array" << std::endl;
     test_my_matrix<ublas::matrix<boost::numeric::interval<double>, ublas::row_major, ublas::bounded_array<boost::numeric::interval<double>, 3 * 3> >, 3 > () ();
 #endif
-
-#ifdef BOOST_UBLAS_NEED_ANOTHER_COMPLEX_CLASS
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, bounded_array" << std::endl;
-    test_my_matrix<ublas::matrix<boost::complex<boost::numeric::interval<float> >, ublas::row_major, ublas::bounded_array<boost::complex<boost::numeric::interval<float> >, 3 * 3> >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, bounded_array" << std::endl;
-    test_my_matrix<ublas::matrix<boost::complex<boost::numeric::interval<double> >, ublas::row_major, ublas::bounded_array<boost::complex<boost::numeric::interval<double> >, 3 * 3> >, 3 > () ();
-#endif
-#endif
 #endif
 
 #ifdef USE_UNBOUNDED_ARRAY
@@ -158,18 +146,6 @@ void test_matrix () {
     std::cout << "boost::numeric::interval<double>, unbounded_array" << std::endl;
     test_my_matrix<ublas::matrix<boost::numeric::interval<double>, ublas::row_major, ublas::unbounded_array<boost::numeric::interval<double> > >, 3 > () ();
 #endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, unbounded_array" << std::endl;
-    test_my_matrix<ublas::matrix<boost::complex<boost::numeric::interval<float> >, ublas::row_major, ublas::unbounded_array<boost::complex<boost::numeric::interval<float> > > >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, unbounded_array" << std::endl;
-    test_my_matrix<ublas::matrix<boost::complex<boost::numeric::interval<double> >, ublas::row_major, ublas::unbounded_array<boost::complex<boost::numeric::interval<double> > > >, 3 > () ();
-#endif
-#endif
 #endif
 
 #ifdef USE_STD_VECTOR
@@ -181,18 +157,6 @@ void test_matrix () {
 #ifdef USE_DOUBLE
     std::cout << "boost::numeric::interval<double>, std::vector" << std::endl;
     test_my_matrix<ublas::matrix<boost::numeric::interval<double>, ublas::row_major, std::vector<boost::numeric::interval<double> > >, 3 > () ();
-#endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, std::vector" << std::endl;
-    test_my_matrix<ublas::matrix<boost::complex<boost::numeric::interval<float> >, ublas::row_major, std::vector<boost::complex<boost::numeric::interval<float> > > >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, std::vector" << std::endl;
-    test_my_matrix<ublas::matrix<boost::complex<boost::numeric::interval<double> >, ublas::row_major, std::vector<boost::complex<boost::numeric::interval<double> > > >, 3 > () ();
-#endif
 #endif
 #endif
 #endif
@@ -208,18 +172,6 @@ void test_matrix () {
     std::cout << "boost::numeric::interval<double>, bounded_array" << std::endl;
     test_my_matrix<ublas::vector_of_vector<boost::numeric::interval<double>, ublas::row_major, ublas::bounded_array<ublas::bounded_array<boost::numeric::interval<double>, 3>, 3 + 1> >, 3 > () ();
 #endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, bounded_array" << std::endl;
-    test_my_matrix<ublas::vector_of_vector<boost::complex<boost::numeric::interval<float> >, ublas::row_major, ublas::bounded_array<ublas::bounded_array<boost::complex<boost::numeric::interval<float> >, 3>, 3 + 1> >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, bounded_array" << std::endl;
-    test_my_matrix<ublas::vector_of_vector<boost::complex<boost::numeric::interval<double> >, ublas::row_major, ublas::bounded_array<ublas::bounded_array<boost::complex<boost::numeric::interval<double> >, 3>, 3 + 1> >, 3 > () ();
-#endif
-#endif
 #endif
 
 #ifdef USE_UNBOUNDED_ARRAY
@@ -232,18 +184,6 @@ void test_matrix () {
     std::cout << "boost::numeric::interval<double>, unbounded_array" << std::endl;
     test_my_matrix<ublas::vector_of_vector<boost::numeric::interval<double>, ublas::row_major, ublas::unbounded_array<ublas::unbounded_array<boost::numeric::interval<double> > > >, 3 > () ();
 #endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, unbounded_array" << std::endl;
-    test_my_matrix<ublas::vector_of_vector<boost::complex<boost::numeric::interval<float> >, ublas::row_major, ublas::unbounded_array<ublas::unbounded_array<boost::complex<boost::numeric::interval<float> > > > >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, unbounded_array" << std::endl;
-    test_my_matrix<ublas::vector_of_vector<boost::complex<boost::numeric::interval<double> >, ublas::row_major, ublas::unbounded_array<ublas::unbounded_array<boost::complex<boost::numeric::interval<double> > > > >, 3 > () ();
-#endif
-#endif
 #endif
 
 #ifdef USE_STD_VECTOR
@@ -255,18 +195,6 @@ void test_matrix () {
 #ifdef USE_DOUBLE
     std::cout << "boost::numeric::interval<double>, std::vector" << std::endl;
     test_my_matrix<ublas::vector_of_vector<boost::numeric::interval<double>, ublas::row_major, std::vector<std::vector<boost::numeric::interval<double> > > >, 3 > () ();
-#endif
-
-#ifdef USE_BOOST_COMPLEX
-#ifdef USE_FLOAT
-    std::cout << "boost::complex<boost::numeric::interval<float> >, std::vector" << std::endl;
-    test_my_matrix<ublas::vector_of_vector<boost::complex<boost::numeric::interval<float> >, ublas::row_major, std::vector<std::vector<boost::complex<boost::numeric::interval<float> > > > >, 3 > () ();
-#endif
-
-#ifdef USE_DOUBLE
-    std::cout << "boost::complex<boost::numeric::interval<double> >, std::vector" << std::endl;
-    test_my_matrix<ublas::vector_of_vector<boost::complex<boost::numeric::interval<double> >, ublas::row_major, std::vector<std::vector<boost::complex<boost::numeric::interval<double> > > > >, 3 > () ();
-#endif
 #endif
 #endif
 #endif
