@@ -11,7 +11,9 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include "boost/date_time/local_time/local_date_time.hpp"
 #include "boost/date_time/local_time/local_time_types.hpp"
+#if !defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
 #include "boost/date_time/local_time/local_time_io.hpp"
+#endif // USE_DATE_TIME_PRE_1_33_FACET_IO
 #include "boost/date_time/local_time/posix_time_zone.hpp"
 #include "boost/date_time/local_time/time_zone.hpp"
 #include "boost/date_time/local_time/tz_database.hpp"
