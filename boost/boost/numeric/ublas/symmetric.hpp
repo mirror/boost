@@ -17,8 +17,6 @@
 #ifndef BOOST_UBLAS_SYMMETRIC_H
 #define BOOST_UBLAS_SYMMETRIC_H
 
-#include <algorithm> // for std::min and std::max
-#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -105,12 +103,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         symmetric_matrix (const matrix_expression<AE> &ae):
             matrix_expression<self_type> (),
-            size_ (BOOST_UBLAS_SAME (ae ().size1 (), ae ().size2 ())), data_ (0) {
-#ifndef BOOST_UBLAS_TYPE_CHECK
-            resize (ae ().size1 (), ae ().size2 (), false);
-#else
-            resize (ae ().size1 (), ae ().size2 (), true);
-#endif
+            size_ (BOOST_UBLAS_SAME (ae ().size1 (), ae ().size2 ())),
+            data_ (functor1_type::packed_size (size_, size_)) {
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -167,8 +161,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         symmetric_matrix &operator = (const symmetric_matrix &m) {
-            // Precondition for container relaxed as requested during review.
-            // BOOST_UBLAS_CHECK (size_ == m.size_, bad_size ());
             size_ = m.size_;
             data () = m.data ();
             return *this;
@@ -232,8 +224,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        symmetric_matrix &minus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        symmetric_matrix &minus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
@@ -252,11 +244,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (symmetric_matrix &m) {
-            // Too unusual semantic
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
-                // Precondition for container relaxed as requested during review.
-                // BOOST_UBLAS_CHECK (size_ == m.size_, bad_size ());
                 std::swap (size_, m.size_);
                 data ().swap (m.data ());
             }
@@ -602,7 +590,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator1 &operator = (const iterator1 &it) {
                 container_reference<self_type>::assign (&it ());
@@ -746,7 +734,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator2 &operator = (const const_iterator2 &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -883,7 +871,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator2 &operator = (const iterator2 &it) {
                 container_reference<self_type>::assign (&it ());
@@ -1064,18 +1052,6 @@ namespace boost { namespace numeric { namespace ublas {
             return data_;
         }
 
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            BOOST_UBLAS_CHECK (data.size1 () == data.size2 (), bad_size ());
-            // References are not retargetable.
-            // Thanks to Michael Stevens for spotting this.
-            // data_ = data;
-            data_.reset (data);
-        }
-#endif
-
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
@@ -1111,7 +1087,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         symmetric_adaptor &operator = (const symmetric_adaptor &m) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, m, functor_type ());
+            matrix_assign (scalar_assign<reference, value_type> (), functor_type (), *this, m);
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1122,37 +1098,37 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         symmetric_adaptor &operator = (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (ae), functor_type ());
+            matrix_assign (scalar_assign<reference, value_type> (), functor_type (), *this, matrix<value_type> (ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         symmetric_adaptor &assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae, functor_type ());
+            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), functor_type (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         symmetric_adaptor& operator += (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this + ae), functor_type ()); 
+            matrix_assign (scalar_assign<reference, value_type> (), functor_type (), *this, matrix<value_type> (*this + ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        symmetric_adaptor &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae, functor_type ());
+        symmetric_adaptor &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), functor_type (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         symmetric_adaptor& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this - ae), functor_type ()); 
+            matrix_assign (scalar_assign<reference, value_type> (), functor_type (), *this, matrix<value_type> (*this - ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         symmetric_adaptor &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae, functor_type ()); 
+            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), functor_type (), *this, ae);
             return *this;
         }
         template<class AT>
@@ -1176,10 +1152,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (symmetric_adaptor &m) {
-            // Too unusual semantic
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m)
-                matrix_swap (scalar_swap<reference, reference> (), *this, m, functor_type ());
+                matrix_swap (scalar_swap<reference, reference> (), functor_type (), *this, m);
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
@@ -1380,26 +1354,25 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator += (difference_type n) {
-                BOOST_USING_STD_MIN();
                 BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
                 if (current_ == 0) {
-                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_);
+                    size_type d = (std::min) (n, it1_end_ - it1_);
                     it1_ += d;
                     n -= d;
                     if (n > 0 || (end_ == 1 && it1_ == it1_end_)) {
                         BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
-                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_begin_);
+                        d = (std::min) (n, it2_end_ - it2_begin_);
                         it2_ = it2_begin_ + d;
                         n -= d;
                         current_ = 1;
                     }
                 } else /* if (current_ == 1) */ {
-                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_);
+                    size_type d = (std::min) (n, it2_end_ - it2_);
                     it2_ += d;
                     n -= d;
                     if (n > 0 || (end_ == 0 && it2_ == it2_end_)) {
                         BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
-                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_begin_);
+                        d = (std::min) (n, it1_end_ - it1_begin_);
                         it1_ = it1_begin_ + d;
                         n -= d;
                         current_ = 0;
@@ -1410,26 +1383,25 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator -= (difference_type n) {
-                BOOST_USING_STD_MIN();
                 BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
                 if (current_ == 0) {
-                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_ - it1_begin_);
+                    size_type d = (std::min) (n, it1_ - it1_begin_);
                     it1_ -= d;
                     n -= d;
                     if (n > 0) {
                         BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
-                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_begin_);
+                        d = (std::min) (n, it2_end_ - it2_begin_);
                         it2_ = it2_end_ - d;
                         n -= d;
                         current_ = 1;
                     }
                 } else /* if (current_ == 1) */ {
-                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_ - it2_begin_);
+                    size_type d = (std::min) (n, it2_ - it2_begin_);
                     it2_ -= d;
                     n -= d;
                     if (n > 0) {
                         BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
-                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_begin_);
+                        d = (std::min) (n, it1_end_ - it1_begin_);
                         it1_ = it1_end_ - d;
                         n -= d;
                         current_ = 0;
@@ -1829,26 +1801,25 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator += (difference_type n) {
-                BOOST_USING_STD_MIN();
                 BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
                 if (current_ == 0) {
-                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_);
+                    size_type d = (std::min) (n, it1_end_ - it1_);
                     it1_ += d;
                     n -= d;
                     if (n > 0 || (end_ == 1 && it1_ == it1_end_)) {
                         BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
-                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_begin_);
+                        d = (std::min) (n, it2_end_ - it2_begin_);
                         it2_ = it2_begin_ + d;
                         n -= d;
                         current_ = 1;
                     }
                 } else /* if (current_ == 1) */ {
-                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_);
+                    size_type d = (std::min) (n, it2_end_ - it2_);
                     it2_ += d;
                     n -= d;
                     if (n > 0 || (end_ == 0 && it2_ == it2_end_)) {
                         BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
-                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_begin_);
+                        d = (std::min) (n, it1_end_ - it1_begin_);
                         it1_ = it1_begin_ + d;
                         n -= d;
                         current_ = 0;
@@ -1859,26 +1830,25 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator -= (difference_type n) {
-                BOOST_USING_STD_MIN();
                 BOOST_UBLAS_CHECK (current_ == 0 || current_ == 1, internal_logic ());
                 if (current_ == 0) {
-                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_ - it1_begin_);
+                    size_type d = (std::min) (n, it1_ - it1_begin_);
                     it1_ -= d;
                     n -= d;
                     if (n > 0) {
                         BOOST_UBLAS_CHECK (end_ == 1, external_logic ());
-                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_end_ - it2_begin_);
+                        d = (std::min) (n, it2_end_ - it2_begin_);
                         it2_ = it2_end_ - d;
                         n -= d;
                         current_ = 1;
                     }
                 } else /* if (current_ == 1) */ {
-                    size_type d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it2_ - it2_begin_);
+                    size_type d = (std::min) (n, it2_ - it2_begin_);
                     it2_ -= d;
                     n -= d;
                     if (n > 0) {
                         BOOST_UBLAS_CHECK (end_ == 0, external_logic ());
-                        d = min BOOST_PREVENT_MACRO_SUBSTITUTION (n, it1_end_ - it1_begin_);
+                        d = (std::min) (n, it1_end_ - it1_begin_);
                         it1_ = it1_end_ - d;
                         n -= d;
                         current_ = 0;
@@ -2222,7 +2192,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
-

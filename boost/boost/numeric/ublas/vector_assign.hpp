@@ -17,8 +17,6 @@
 #ifndef BOOST_UBLAS_VECTOR_ASSIGN_H
 #define BOOST_UBLAS_VECTOR_ASSIGN_H
 
-#include <algorithm> // for std::min and std::max
-#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
 
@@ -38,31 +36,62 @@ namespace boost { namespace numeric { namespace ublas {
                                     BOOST_UBLAS_TYPE_CHECK_MIN);
 #else
         // GCC 3.1, oops?!
-        BOOST_USING_STD_MAX();
         return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-               max BOOST_PREVENT_MACRO_SUBSTITUTION (real_type (max BOOST_PREVENT_MACRO_SUBSTITUTION (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
+               (std::max) (real_type ((std::max) (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
                          real_type (BOOST_UBLAS_TYPE_CHECK_MIN));
 #endif
     }
 
-    // Restart for sparse (proxy) assignments
-    template<class E>
-    BOOST_UBLAS_INLINE
-    void restart (const vector_expression<E> &e, typename E::size_type index,
-                  typename E::const_iterator &ite, typename E::const_iterator &ite_end) {
-        ite = e ().find (index);
-        ite_end = e ().find (e ().size ());
-        if (ite != ite_end && ite.index () == index)
+    // Make sparse proxies conformant
+    template<class V, class E>
+    // This function seems to be big. So we do not let the compiler inline it.
+    // BOOST_UBLAS_INLINE
+    void make_conformant (V &v, const vector_expression<E> &e) {
+        BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
+        typedef typename V::size_type size_type;
+        typedef typename V::difference_type difference_type;
+        typedef typename V::value_type value_type;
+        std::vector<size_type> index;
+        typename V::iterator it (v.begin ());
+        typename V::iterator it_end (v.end ());
+        typename E::const_iterator ite (e ().begin ());
+        typename E::const_iterator ite_end (e ().end ());
+        if (it != it_end && ite != ite_end) {
+            size_type it_index = it.index (), ite_index = ite.index ();
+            while (true) {
+                difference_type compare = it_index - ite_index;
+                if (compare == 0) {
+                    ++ it, ++ ite;
+                    if (it != it_end && ite != ite_end) {
+                        it_index = it.index ();
+                        ite_index = ite.index ();
+                    } else
+                        break;
+                } else if (compare < 0) {
+                    increment (it, it_end, - compare);
+                    if (it != it_end)
+                        it_index = it.index ();
+                    else
+                        break;
+                } else if (compare > 0) {
+                    if (*ite != value_type ())
+                        index.push_back (ite.index ());
+                    ++ ite;
+                    if (ite != ite_end)
+                        ite_index = ite.index ();
+                    else
+                        break;
+                }
+            }
+        }
+
+        while (ite != ite_end) {
+            if (*ite != value_type ())
+                index.push_back (ite.index ());
             ++ ite;
-    }
-    template<class E>
-    BOOST_UBLAS_INLINE
-    void restart (vector_expression<E> &e, typename E::size_type index,
-                  typename E::iterator &ite, typename E::iterator &ite_end) {
-        ite = e ().find (index);
-        ite_end = e ().find (e ().size ());
-        if (ite != ite_end && ite.index () == index)
-            ++ ite;
+        }
+        for (size_type k = 0; k < index.size (); ++ k)
+            v (index [k]) = value_type ();
     }
 
     // Iterating case
@@ -281,12 +310,11 @@ namespace boost { namespace numeric { namespace ublas {
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
     void vector_assign (F, V &v, const vector_expression<E> &e, packed_proxy_tag) {
-        BOOST_USING_STD_MIN();
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F functor_type;
         typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
@@ -303,14 +331,14 @@ namespace boost { namespace numeric { namespace ublas {
         difference_type it_size (it_end - it);
         difference_type ite_size (ite_end - ite);
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (it.index () - ite.index ()), ite_size));
+            difference_type size ((std::min) (difference_type (it.index () - ite.index ()), ite_size));
             if (size > 0) {
                 ite += size;
                 ite_size -= size;
             }
         }
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (ite.index () - it.index ()), it_size));
+            difference_type size ((std::min) (difference_type (ite.index () - it.index ()), it_size));
             if (size > 0) {
                 it_size -= size;
                 if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
@@ -321,7 +349,7 @@ namespace boost { namespace numeric { namespace ublas {
                 }
             }
         }
-        difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (it_size, ite_size));
+        difference_type size ((std::min) (it_size, ite_size));
         it_size -= size;
         ite_size -= size;
         while (-- size >= 0)
@@ -333,8 +361,8 @@ namespace boost { namespace numeric { namespace ublas {
         } else {
             it += size;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        if (! disable_type_check)
+#if BOOST_UBLAS_TYPE_CHECK
+        if (! disable_type_check<bool>::value)
             BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
 #endif
     }
@@ -346,7 +374,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F functor_type;
         typedef typename V::value_type value_type;
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
@@ -365,8 +393,8 @@ namespace boost { namespace numeric { namespace ublas {
                 v.insert (ite.index (), t);
             ++ ite;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        if (! disable_type_check)
+#if BOOST_UBLAS_TYPE_CHECK
+        if (! disable_type_check<bool>::value)
             BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
 #endif
     }
@@ -378,9 +406,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F functor_type;
         typedef typename V::size_type size_type;
+        typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
         typedef typename V::reference reference;
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
@@ -390,57 +419,45 @@ namespace boost { namespace numeric { namespace ublas {
         indexing_vector_assign (functor_type (), cv, e);
 #endif
 #endif
+#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
+        make_conformant (v, e);
+#endif
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
         typename E::const_iterator ite (e ().begin ());
         typename E::const_iterator ite_end (e ().end ());
-        while (it != it_end && ite != ite_end) {
-            int compare = it.index () - ite.index ();
-            if (compare == 0) {
-                functor_type () (*it, *ite);
-                ++ it, ++ ite;
-            } else if (compare < 0) {
-                functor_type () (*it, value_type ());
-                ++ it;
-            } else if (compare > 0) {
-#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
-                // Sparse proxies don't need to be conformant.
-                // Thanks to Michael Stevens for suggesting this.
-                size_type index (ite.index ());
-                // FIX: reduce fill in.
-                // functor_type () (v (index), e () (index));
-                value_type t (*ite);
-                if (t != value_type ()) {
-                    functor_type () (v (index), t);
-                    restart (v, index, it, it_end);
-                    // The proxies could reference the same container.
-                    restart (e, index, ite, ite_end);
-                } else {
-                    ++ ite;
+        if (it != it_end && ite != ite_end) {
+            size_type it_index = it.index (), ite_index = ite.index ();
+            while (true) {
+                difference_type compare = it_index - ite_index;
+                if (compare == 0) {
+                    functor_type () (*it, *ite);
+                    ++ it, ++ ite;
+                    if (it != it_end && ite != ite_end) {
+                        it_index = it.index ();
+                        ite_index = ite.index ();
+                    } else
+                        break;
+                } else if (compare < 0) {
+                    if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
+                        functor_type () (*it, value_type ());
+                        ++ it;
+                    } else
+                        increment (it, it_end, - compare);
+                    if (it != it_end)
+                        it_index = it.index ();
+                    else
+                        break;
+                } else if (compare > 0) {
+                    increment (ite, ite_end, compare);
+                    if (ite != ite_end)
+                        ite_index = ite.index ();
+                    else
+                        break;
                 }
-#else
-                ++ ite;
-#endif
             }
         }
-#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
-        while (ite != ite_end) {
-            // Sparse proxies don't need to be conformant.
-            // Thanks to Michael Stevens for suggesting this.
-            size_type index (ite.index ());
-            // FIX: reduce fill in.
-            // functor_type () (v (index), e () (index));
-            value_type t (*ite);
-            if (t != value_type ()) {
-                functor_type () (v (index), t);
-                restart (v, index, it, it_end);
-                // The proxies could reference the same container.
-                restart (e, index, ite, ite_end);
-            } else {
-                ++ ite;
-            }
-        }
-#endif
+
         if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
             while (it != it_end) {
                 functor_type () (*it, value_type ());
@@ -449,8 +466,8 @@ namespace boost { namespace numeric { namespace ublas {
         } else {
             it = it_end;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        if (! disable_type_check)
+#if BOOST_UBLAS_TYPE_CHECK
+        if (! disable_type_check<bool>::value)
             BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
 #endif
     }
@@ -499,7 +516,6 @@ namespace boost { namespace numeric { namespace ublas {
     // This function seems to be big. So we do not let the compiler inline it.
     // BOOST_UBLAS_INLINE
     void vector_swap (F, V &v, vector_expression<E> &e, packed_proxy_tag) {
-        BOOST_USING_STD_MIN();
         typedef F functor_type;
         typedef typename V::difference_type difference_type;
         typename V::iterator it (v.begin ());
@@ -509,18 +525,18 @@ namespace boost { namespace numeric { namespace ublas {
         difference_type it_size (it_end - it);
         difference_type ite_size (ite_end - ite);
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (it.index () - ite.index ()), ite_size));
+            difference_type size ((std::min) (difference_type (it.index () - ite.index ()), ite_size));
             if (size > 0) {
                 ite += size;
                 ite_size -= size;
             }
         }
         if (it_size > 0 && ite_size > 0) {
-            difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (ite.index () - it.index ()), it_size));
+            difference_type size ((std::min) (difference_type (ite.index () - it.index ()), it_size));
             if (size > 0)
                 it_size -= size;
         }
-        difference_type size (min BOOST_PREVENT_MACRO_SUBSTITUTION (it_size, ite_size));
+        difference_type size ((std::min) (it_size, ite_size));
         it_size -= size;
         ite_size -= size;
         while (-- size >= 0)
@@ -534,89 +550,47 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (v.size () == e ().size (), bad_size ());
         typedef F functor_type;
         typedef typename V::size_type size_type;
+        typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
+#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
+        make_conformant (v, e);
+        make_conformant (e (), v);
+#endif
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
         typename E::iterator ite (e ().begin ());
         typename E::iterator ite_end (e ().end ());
-        while (it != it_end && ite != ite_end) {
-            int compare = it.index () - ite.index ();
-            if (compare == 0) {
-                functor_type () (*it, *ite);
-                ++ it, ++ ite;
-            } else if (compare < 0) {
-#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
-                // Sparse proxies don't need to be conformant.
-                // Thanks to Michael Stevens for suggesting this.
-                size_type index (it.index ());
-                // FIX: reduce fill in.
-                // functor_type () (v (index), e () (index));
-                value_type t (*it);
-                if (t != value_type ()) {
-                    functor_type () (v (index), e () (index));
-                    restart (v, index, it, it_end);
-                    // The proxies could reference the same container.
-                    restart (e, index, ite, ite_end);
-                } else {
-                    ++ it;
+        if (it != it_end && ite != ite_end) {
+            size_type it_index = it.index (), ite_index = ite.index ();
+            while (true) {
+                difference_type compare = it_index - ite_index;
+                if (compare == 0) {
+                    functor_type () (*it, *ite);
+                    ++ it, ++ ite;
+                    if (it != it_end && ite != ite_end) {
+                        it_index = it.index ();
+                        ite_index = ite.index ();
+                    } else
+                        break;
+                } else if (compare < 0) {
+                    increment (it, it_end, - compare);
+                    if (it != it_end)
+                        it_index = it.index ();
+                    else
+                        break;
+                } else if (compare > 0) {
+                    increment (ite, ite_end, compare);
+                    if (ite != ite_end)
+                        ite_index = ite.index ();
+                    else
+                        break;
                 }
-#else
-                ++ it;
-#endif
-            } else if (compare > 0) {
-#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
-                // Sparse proxies don't need to be conformant.
-                // Thanks to Michael Stevens for suggesting this.
-                size_type index (ite.index ());
-                // FIX: reduce fill in.
-                // functor_type () (v (index), e () (index));
-                value_type t (*ite);
-                if (t != value_type ()) {
-                    functor_type () (v (index), e () (index));
-                    restart (e, index, ite, ite_end);
-                    // The proxies could reference the same container.
-                    restart (v, index, it, it_end);
-                } else {
-                    ++ ite;
-                }
-#else
-                ++ ite;
-#endif
             }
         }
-#ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
-        while (ite != ite_end) {
-            // Sparse proxies don't need to be conformant.
-            // Thanks to Michael Stevens for suggesting this.
-            size_type index (ite.index ());
-            // FIX: reduce fill in.
-            // functor_type () (v (index), e () (index));
-            value_type t (*ite);
-            if (t != value_type ()) {
-                functor_type () (v (index), e () (index));
-                // The proxies could reference the same container.
-                restart (e, index, ite, ite_end);
-                restart (v, index, it, it_end);
-            } else {
-                ++ ite;
-            }
-        }
-        while (it != it_end) {
-            // Sparse proxies don't need to be conformant.
-            // Thanks to Michael Stevens for suggesting this.
-            size_type index (it.index ());
-            // FIX: reduce fill in.
-            // functor_type () (v (index), e () (index));
-            value_type t (*it);
-            if (t != value_type ()) {
-                functor_type () (v (index), e () (index));
-                // The proxies could reference the same container.
-                restart (v, index, it, it_end);
-                restart (e, index, ite, ite_end);
-            } else {
-                ++ it;
-            }
-        }
+
+#if BOOST_UBLAS_TYPE_CHECK
+        increment (ite, ite_end);
+        increment (it, it_end);
 #endif
     }
 
@@ -633,23 +607,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

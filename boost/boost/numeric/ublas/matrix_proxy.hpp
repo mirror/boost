@@ -17,8 +17,6 @@
 #ifndef BOOST_UBLAS_MATRIX_PROXY_H
 #define BOOST_UBLAS_MATRIX_PROXY_H
 
-#include <algorithm> // for std::min and std::max
-#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/matrix_expression.hpp>
@@ -86,8 +84,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_row (matrix_type &data, size_type i):
             data_ (data), i_ (i) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (i_ < data_.size1 (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (i_ < data_.size1 (), bad_index ());
         }
 
         // Accessors
@@ -107,21 +105,6 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type &data () {
             return data_;
         }
-
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, size_type i) {
-            // data_ = data;
-            data_.reset (data);
-            i_ = i;
-        }
-#endif
 
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
@@ -227,8 +210,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix_row mr) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &mr, external_logic ());
             if (this != &mr) {
                 BOOST_UBLAS_CHECK (size () == mr.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
@@ -603,8 +584,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_column (matrix_type &data, size_type j):
             data_ (data), j_ (j) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (j_ < data_.size2 (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (j_ < data_.size2 (), bad_index ());
         }
 
         // Accessors
@@ -624,21 +605,6 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type &data () {
             return data_;
         }
-
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, size_type j) {
-            // data_ = data;
-            data_.reset (data);
-            j_ = j;
-        }
-#endif
 
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
@@ -673,7 +639,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        matrix_column &operator = (const matrix_column &mc) { 
+        matrix_column &operator = (const matrix_column &mc) {
             // FIXME: the columns could be differently sized.
             // std::copy (mc.begin (), mc.end (), begin ());
             vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (mc));
@@ -744,8 +710,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix_column mc) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &mc, external_logic ());
             if (this != &mc) {
                 BOOST_UBLAS_CHECK (size () == mc.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
@@ -801,7 +765,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
             public random_access_iterator_base<typename const_iterator_type::iterator_category,
                                                const_iterator, value_type> {
-#endif                                               
+#endif
         public:
             typedef typename const_iterator_type::iterator_category iterator_category;
             typedef typename const_iterator_type::difference_type difference_type;
@@ -866,7 +830,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it_.index1 ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -909,7 +873,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
             public random_access_iterator_base<typename iterator_type::iterator_category,
                                                iterator, value_type> {
-#endif                                               
+#endif
         public:
             typedef typename iterator_type::iterator_category iterator_category;
             typedef typename iterator_type::difference_type difference_type;
@@ -1115,12 +1079,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_vector_range (matrix_type &data, const range &r1, const range &r2):
             data_ (data), r1_ (r1.preprocess (data.size1 ())), r2_ (r2.preprocess (data.size2 ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
-                               r1_.start () + r1_.size () <= data_.size1 (), bad_index ());
-            BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
-                               r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
-            BOOST_UBLAS_CHECK (r1_.size () == r2_.size (), bad_size ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
+            //                     r1_.start () + r1_.size () <= data_.size1 (), bad_index ());
+            // BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
+            //                   r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
+            // BOOST_UBLAS_CHECK (r1_.size () == r2_.size (), bad_size ());
         }
 
         // Accessors
@@ -1144,22 +1108,6 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type &data () {
             return data_;
         }
-
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, const range &r1, const range &r2) {
-            // data_ = data;
-            data_.reset (data);
-            r1_ = r1;
-            r2_ = r2;
-        }
-#endif
 
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
@@ -1194,7 +1142,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        matrix_vector_range &operator = (const matrix_vector_range &mvr) { 
+        matrix_vector_range &operator = (const matrix_vector_range &mvr) {
             // FIXME: the ranges could be differently sized.
             // std::copy (mvr.begin (), mvr.end (), begin ());
             vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (mvr));
@@ -1265,8 +1213,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix_vector_range mvr) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &mvr, external_logic ());
             if (this != &mvr) {
                 BOOST_UBLAS_CHECK (size () == mvr.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
@@ -1379,7 +1325,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return BOOST_UBLAS_SAME (it1_.index (), it2_.index ());
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -1477,7 +1423,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                return (*this) ().data () (*it1_, *it2_); 
+                return (*this) ().data () (*it1_, *it2_);
             }
 
             // Index
@@ -1619,15 +1565,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_vector_slice (matrix_type &data, const slice &s1, const slice &s2):
             data_ (data), s1_ (s1.preprocess (data.size1 ())), s2_ (s2.preprocess (data.size2 ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
-                               s1_.start () + s1_.stride () * (s1_.size () - (s1_.size () > 0)) <= data_.size1 (), bad_index ());
-            BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
-                               s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
-            // One of the slices may be stationary.
-            // Thanks to Michael Stevens for this extension.
-            BOOST_UBLAS_CHECK ((s1_.stride () != 0 || s2_.stride () != 0) &&
-                               s1_.size () == s2_.size (), bad_size ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
+            //                    s1_.start () + s1_.stride () * (s1_.size () - (s1_.size () > 0)) <= data_.size1 (), bad_index ());
+            // BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
+            //                    s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
         }
 
         // Accessors
@@ -1659,22 +1601,6 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type &data () {
             return data_;
         }
-
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, const slice &s1, const slice &s2) {
-            // data_ = data;
-            data_.reset (data);
-            s1_ = s1;
-            s2_ = s2;
-        }
-#endif
 
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
@@ -1709,7 +1635,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Assignment
         BOOST_UBLAS_INLINE
-        matrix_vector_slice &operator = (const matrix_vector_slice &mvs) { 
+        matrix_vector_slice &operator = (const matrix_vector_slice &mvs) {
             // FIXME: the slices could be differently sized.
             // std::copy (mvs.begin (), mvs.end (), begin ());
             vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (mvs));
@@ -1780,8 +1706,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix_vector_slice mvs) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &mvs, external_logic ());
             if (this != &mvs) {
                 BOOST_UBLAS_CHECK (size () == mvs.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
@@ -1879,11 +1803,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
                 BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
-                // One of the slices may be stationary.
-                // Thanks to Michael Stevens for this extension.
-                // return BOOST_UBLAS_SAME (it1_ - it.it1_, it2_ - it.it2_);
-                BOOST_USING_STD_MAX();
-                return max BOOST_PREVENT_MACRO_SUBSTITUTION (it1_ - it.it1_, it2_ - it.it2_);
+                return BOOST_UBLAS_SAME (it1_ - it.it1_, it2_ - it.it2_);
             }
 
             // Dereference
@@ -1895,14 +1815,10 @@ namespace boost { namespace numeric { namespace ublas {
             // Index
             BOOST_UBLAS_INLINE
             size_type  index () const {
-                // One of the slices may be stationary.
-                // Thanks to Michael Stevens for this extension.
-                // return BOOST_UBLAS_SAME (it1_.index (), it2_.index ());
-                BOOST_USING_STD_MAX();
-                return max BOOST_PREVENT_MACRO_SUBSTITUTION (it1_.index (), it2_.index ());
+                return BOOST_UBLAS_SAME (it1_.index (), it2_.index ());
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -1947,7 +1863,7 @@ namespace boost { namespace numeric { namespace ublas {
             public random_access_iterator_base<typename iterator_restrict_traits<typename M::iterator1::iterator_category,
                                                                                  typename M::iterator2::iterator_category>::iterator_category,
                                                iterator, value_type> {
-#endif                                               
+#endif
         public:
             typedef typename iterator_restrict_traits<typename M::iterator1::iterator_category,
                                                       typename M::iterator2::iterator_category>::iterator_category iterator_category;
@@ -1994,11 +1910,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator &it) const {
                 BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
-                // One of the slices may be stationary.
-                // Thanks to Michael Stevens for this extension.
-                // return BOOST_UBLAS_SAME (it1_ - it.it1_, it2_ - it.it2_);
-                BOOST_USING_STD_MAX();
-                return max BOOST_PREVENT_MACRO_SUBSTITUTION (it1_ - it.it1_, it2_ - it.it2_);
+                return BOOST_UBLAS_SAME (it1_ - it.it1_, it2_ - it.it2_);
             }
 
             // Dereference
@@ -2010,11 +1922,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Index
             BOOST_UBLAS_INLINE
             size_type index () const {
-                // One of the slices may be stationary.
-                // Thanks to Michael Stevens for this extension.
-                // return BOOST_UBLAS_SAME (it1_.index (), it2_.index ());
-                BOOST_USING_STD_MAX();
-                return max BOOST_PREVENT_MACRO_SUBSTITUTION (it1_.index (), it2_.index ());
+                return BOOST_UBLAS_SAME (it1_.index (), it2_.index ());
             }
 
             // Assignment
@@ -2154,8 +2062,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_vector_indirect (matrix_type &data, const indirect_array_type &ia1, const indirect_array_type &ia2):
             data_ (data), ia1_ (ia1), ia2_ (ia2) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (ia1_.size () == ia2_.size (), bad_size ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (ia1_.size () == ia2_.size (), bad_size ());
         }
 
         // Accessors
@@ -2187,22 +2095,6 @@ namespace boost { namespace numeric { namespace ublas {
         indirect_array_type &indirect2 () {
             return ia2_;
         }
-
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, const indirect_array_type &ia1, const indirect_array_type &ia2) {
-            // data_ = data;
-            data_.reset (data);
-            ia1_ = ia1;
-            ia2_ = ia2;
-        }
-#endif
 
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
@@ -2308,8 +2200,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix_vector_indirect mvi) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &mvi, external_logic ());
             if (this != &mvi) {
                 BOOST_UBLAS_CHECK (size () == mvi.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
@@ -2674,20 +2564,20 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_range (matrix_type &data, const range &r1, const range &r2):
             data_ (data), r1_ (r1.preprocess (data.size1 ())), r2_ (r2.preprocess (data.size2 ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
-                               r1_.start () + r1_.size () <= data_.size1 (), bad_index ());
-            BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
-                               r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
+            //                    r1_.start () + r1_.size () <= data_.size1 (), bad_index ());
+            // BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
+            //                    r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
         }
         BOOST_UBLAS_INLINE
         matrix_range (const matrix_closure_type &data, const range &r1, const range &r2, int):
             data_ (data), r1_ (r1.preprocess (data.size1 ())), r2_ (r2.preprocess (data.size2 ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
-                               r1_.start () + r1_.size () <= data_.size1 (), bad_index ());
-            BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
-                               r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (r1_.start () <= data_.size1 () &&
+            //                    r1_.start () + r1_.size () <= data_.size1 (), bad_index ());
+            // BOOST_UBLAS_CHECK (r2_.start () <= data_.size2 () &&
+            //                    r2_.start () + r2_.size () <= data_.size2 (), bad_index ());
         }
 
         // Accessors
@@ -2715,22 +2605,6 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_closure_type &data () {
             return data_;
         }
-
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, const range &r1, const range &r2) {
-            // data_ = data;
-            data_.reset (data);
-            r1_ = r1;
-            r2_ = r2;
-        }
-#endif
 
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
@@ -2784,8 +2658,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        matrix_range &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        matrix_range &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -2822,8 +2696,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix_range mr) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &mr, external_logic ());
             if (this != &mr) {
                 BOOST_UBLAS_CHECK (size1 () == mr.size1 (), bad_size ());
                 BOOST_UBLAS_CHECK (size2 () == mr.size2 (), bad_size ());
@@ -3015,7 +2887,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it_.index2 () - (*this) ().start2 ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -3207,7 +3079,7 @@ namespace boost { namespace numeric { namespace ublas {
             public random_access_iterator_base<typename M::const_iterator2::iterator_category,
                                                const_iterator2, value_type> {
 #endif
-#endif                                               
+#endif
         public:
             typedef typename const_iterator2_type::iterator_category iterator_category;
             typedef typename const_iterator2_type::difference_type difference_type;
@@ -3614,20 +3486,20 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_slice (matrix_type &data, const slice &s1, const slice &s2):
             data_ (data), s1_ (s1.preprocess (data.size1 ())), s2_ (s2.preprocess (data.size2 ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
-                               s1_.start () + s1_.stride () * (s1_.size () - (s1_.size () > 0)) <= data_.size1 (), bad_index ());
-            BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
-                               s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
+            //                    s1_.start () + s1_.stride () * (s1_.size () - (s1_.size () > 0)) <= data_.size1 (), bad_index ());
+            // BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
+            //                    s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
         }
         BOOST_UBLAS_INLINE
         matrix_slice (const matrix_closure_type &data, const slice &s1, const slice &s2, int):
             data_ (data), s1_ (s1.preprocess (data.size1 ())), s2_ (s2.preprocess (data.size2 ())) {
             // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
-                               s1_.start () + s1_.stride () * (s1_.size () - (s1_.size () > 0)) <= data_.size1 (), bad_index ());
-            BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
-                               s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
+            // BOOST_UBLAS_CHECK (s1_.start () <= data_.size1 () &&
+            //                    s1_.start () + s1_.stride () * (s1_.size () - (s1_.size () > 0)) <= data_.size1 (), bad_index ());
+            // BOOST_UBLAS_CHECK (s2_.start () <= data_.size2 () &&
+            //                    s2_.start () + s2_.stride () * (s2_.size () - (s2_.size () > 0)) <= data_.size2 (), bad_index ());
         }
 
         // Accessors
@@ -3664,22 +3536,6 @@ namespace boost { namespace numeric { namespace ublas {
             return data_;
         }
 
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, const slice &s1, const slice &s2) {
-            // data_ = data;
-            data_.reset (data);
-            s1_ = s1;
-            s2_ = s2;
-        }
-#endif
-
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
@@ -3709,35 +3565,35 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         matrix_slice &operator = (const matrix_slice &ms) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, ms); 
+            matrix_assign (scalar_assign<reference, value_type> (), *this, ms);
             return *this;
         }
         BOOST_UBLAS_INLINE
-        matrix_slice &assign_temporary (matrix_slice &ms) { 
+        matrix_slice &assign_temporary (matrix_slice &ms) {
             return *this = ms;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        matrix_slice &operator = (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (ae)); 
+        matrix_slice &operator = (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        matrix_slice &assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        matrix_slice &assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_slice& operator += (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this + ae)); 
+            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this + ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        matrix_slice &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        matrix_slice &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -3774,8 +3630,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix_slice ms) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &ms, external_logic ());
             if (this != &ms) {
                 BOOST_UBLAS_CHECK (size1 () == ms.size1 (), bad_size ());
                 BOOST_UBLAS_CHECK (size2 () == ms.size2 (), bad_size ());
@@ -3957,7 +3811,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_.index ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator1 &operator = (const const_iterator1 &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -4146,7 +4000,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
             public random_access_iterator_base<typename M::const_iterator2::iterator_category,
                                                const_iterator2, value_type> {
-#endif                                               
+#endif
         public:
             typedef typename M::const_iterator2::iterator_category iterator_category;
             typedef typename M::const_iterator2::difference_type difference_type;
@@ -4242,7 +4096,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_.index ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator2 &operator = (const const_iterator2 &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -4289,7 +4143,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
             public random_access_iterator_base<typename M::iterator2::iterator_category,
                                                iterator2, value_type> {
-#endif                                               
+#endif
         public:
             typedef typename M::iterator2::iterator_category iterator_category;
             typedef typename M::iterator2::difference_type difference_type;
@@ -4610,22 +4464,6 @@ namespace boost { namespace numeric { namespace ublas {
             return ia2_;
         }
 
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, const indirect_array_type &ia1, const indirect_array_type &ia2) {
-            // data_ = data;
-            data_.reset (data);
-            ia1_ = ia1;
-            ia2_ = ia2;
-        }
-#endif
-
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
@@ -4724,8 +4562,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix_indirect mi) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &mi, external_logic ());
             if (this != &mi) {
                 BOOST_UBLAS_CHECK (size1 () == mi.size1 (), bad_size ());
                 BOOST_UBLAS_CHECK (size2 () == mi.size2 (), bad_size ());
@@ -5502,9 +5338,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
-
-
-

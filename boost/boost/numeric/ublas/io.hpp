@@ -17,9 +17,7 @@
 #ifndef BOOST_UBLAS_IO_H
 #define BOOST_UBLAS_IO_H
 
-// Clients should only pay for what they use.
-// Thanks to Michael Stevens for spotting this.
-// #include <iostream>
+// Only forward definition required to define stream operations
 #include <iosfwd>
 
 namespace boost { namespace numeric { namespace ublas {
@@ -77,12 +75,12 @@ namespace boost { namespace numeric { namespace ublas {
         } else if (is >> size >> ch && ch != ']') {
             is.putback (ch);
             is.setstate (std::ios_base::failbit);
-        } else {
+        } else if (! is.fail ()) {
             vector<VT, VA> s (size);
             if (is >> ch && ch != '(') {
                 is.putback (ch);
                 is.setstate (std::ios_base::failbit);
-            } else {
+            } else if (! is.fail ()) {
                 for (std::size_t i = 0; i < size; i ++) {
                     if (is >> s (i) >> ch && ch != ',') {
                         is.putback (ch);
@@ -96,10 +94,8 @@ namespace boost { namespace numeric { namespace ublas {
                     is.setstate (std::ios_base::failbit);
                 }
             }
-            if (! is.fail ()) {
-                v.resize (size);
-                v = s;
-            }
+            if (! is.fail ())
+                v.swap (s);
         }
         return is;
     }
@@ -184,12 +180,12 @@ namespace boost { namespace numeric { namespace ublas {
         } else if (is >> size2 >> ch && ch != ']') {
             is.putback (ch);
             is.setstate (std::ios_base::failbit);
-        } else {
+        } else if (! is.fail ()) {
             matrix<MT, MF, MA> s (size1, size2);
             if (is >> ch && ch != '(') {
                 is.putback (ch);
                 is.setstate (std::ios_base::failbit);
-            } else {
+            } else if (! is.fail ()) {
                 for (std::size_t i = 0; i < size1; i ++) {
                     if (is >> ch && ch != '(') {
                         is.putback (ch);
@@ -223,10 +219,8 @@ namespace boost { namespace numeric { namespace ublas {
                     is.setstate (std::ios_base::failbit);
                 }
             }
-            if (! is.fail ()) {
-                m.resize (size1, size2);
-                m = s;
-            }
+            if (! is.fail ())
+                m.swap (s);
         }
         return is;
     }
@@ -278,12 +272,12 @@ namespace boost { namespace numeric { namespace ublas {
         } else if (is >> size >> ch && ch != ']') {
             is.putback (ch);
             is.setstate (std::ios::failbit);
-        } else {
+        } else if (! is.fail ()) {
             vector<VT, VA> s (size);
             if (is >> ch && ch != '(') {
                 is.putback (ch);
                 is.setstate (std::ios::failbit);
-            } else {
+            } else if (! is.fail ()) {
                 for (std::size_t i = 0; i < size; i ++) {
                     if (is >> s (i) >> ch && ch != ',') {
                         is.putback (ch);
@@ -297,10 +291,8 @@ namespace boost { namespace numeric { namespace ublas {
                     is.setstate (std::ios::failbit);
                 }
             }
-            if (! is.fail ()) {
-                v.resize (size);
-                v = s;
-            }
+            if (! is.fail ()) 
+                v.swap (s);
         }
         return is;
     }
@@ -377,12 +369,12 @@ namespace boost { namespace numeric { namespace ublas {
         } else if (is >> size2 >> ch && ch != ']') {
             is.putback (ch);
             is.setstate (std::ios::failbit);
-        } else {
+        } else if (! is.fail ()) {
             matrix<MT, MF, MA> s (size1, size2);
             if (is >> ch && ch != '(') {
                 is.putback (ch);
                 is.setstate (std::ios::failbit);
-            } else {
+            } else if (! is.fail ()) {
                 for (std::size_t i = 0; i < size1; i ++) {
                     if (is >> ch && ch != '(') {
                         is.putback (ch);
@@ -416,10 +408,8 @@ namespace boost { namespace numeric { namespace ublas {
                     is.setstate (std::ios::failbit);
                 }
             }
-            if (! is.fail ()) {
-                m.resize (size1, size2);
-                m = s;
-            }
+            if (! is.fail ())
+                m.swap (s);
         }
         return is;
     }
@@ -429,6 +419,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-

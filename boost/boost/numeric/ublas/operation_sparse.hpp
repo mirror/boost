@@ -17,9 +17,6 @@
 #ifndef BOOST_UBLAS_OPERATION_SPARSE_H
 #define BOOST_UBLAS_OPERATION_SPARSE_H
 
-#include <algorithm> // for std::min and std::max
-#include <boost/config.hpp>
-
 // These scaled additions were borrowed from MTL unashamedly.
 // But Alexei Novakov had a lot of ideas to improve these. Thanks.
 
@@ -32,8 +29,6 @@ namespace boost { namespace numeric { namespace ublas {
                  const matrix_expression<E2> &e2,
                  M &m, const F &f,
                  row_major_tag) {
-        BOOST_USING_STD_MIN();
-        BOOST_USING_STD_MAX();
         typedef M matrix_type;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
@@ -41,8 +36,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
         vector<value_type> temporary (e2 ().size2 ());
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
+        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         typename expression1_type::const_iterator1 it1 (e1 ().begin1 ());
@@ -65,8 +61,8 @@ namespace boost { namespace numeric { namespace ublas {
                 while (itr != itr_end) {
                     size_type j (itr.index ());
                     temporary (j) += *it2 * *itr;
-                    jb = min BOOST_PREVENT_MACRO_SUBSTITUTION (jb, j);
-                    je = max BOOST_PREVENT_MACRO_SUBSTITUTION (je, j);
+                    jb = (std::min) (jb, j);
+                    je = (std::max) (je, j);
                     ++ itr;
                 }
                 ++ it2;
@@ -84,8 +80,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             ++ it1;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -97,8 +93,6 @@ namespace boost { namespace numeric { namespace ublas {
                  const matrix_expression<E2> &e2,
                  M &m, const F &f,
                  column_major_tag) {
-        BOOST_USING_STD_MIN();
-        BOOST_USING_STD_MAX();
         typedef M matrix_type;
         typedef const E1 expression1_type;
         typedef const E2 expression2_type;
@@ -106,8 +100,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
 
         vector<value_type> temporary (e1 ().size1 ());
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         typename expression2_type::const_iterator2 it2 (e2 ().begin2 ());
@@ -130,8 +125,8 @@ namespace boost { namespace numeric { namespace ublas {
                 while (itc != itc_end) {
                     size_type i (itc.index ());
                     temporary (i) += *it1 * *itc;
-                    ib = min BOOST_PREVENT_MACRO_SUBSTITUTION (ib, i);
-                    ie = max BOOST_PREVENT_MACRO_SUBSTITUTION (ie, i);
+                    ib = (std::min) (ib, i);
+                    ie = (std::max) (ie, i);
                     ++ itc;
                 }
                 ++ it1;
@@ -149,8 +144,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             ++ it2;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -211,5 +206,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-

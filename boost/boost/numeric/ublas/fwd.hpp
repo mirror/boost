@@ -31,7 +31,6 @@ namespace boost {
 
 }
 
-// Forward declarations
 namespace boost { namespace numeric { namespace ublas {
 
     struct concrete_tag {};
@@ -45,6 +44,8 @@ namespace boost { namespace numeric { namespace ublas {
     template<class A = unbounded_array<std::size_t> >
     class indirect_array;
 
+    template<class I, class T>
+    class map_std;
     template<class I, class T>
     class map_array;
 
@@ -94,7 +95,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, std::size_t N>
     class c_vector;
 
-    template<class T, class A = map_array<std::size_t, T> >
+    template<class T, class A = map_std<std::size_t, T> >
     class sparse_vector;
 
     template<class T, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
@@ -163,10 +164,10 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class F = lower>
     class hermitian_adaptor;
 
-    template<class T, class F = row_major, class A = map_array<std::size_t, T> >
+    template<class T, class F = row_major, class A = map_std<std::size_t, T> >
     class sparse_matrix;
 
-    template<class T, class F = row_major, class A = map_array<std::size_t, map_array<std::size_t, T> > >
+    template<class T, class F = row_major, class A = map_std<std::size_t, map_std<std::size_t, T> > >
     class sparse_vector_of_sparse_vector;
 
     template<class T, class F = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
@@ -196,31 +197,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

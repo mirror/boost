@@ -83,16 +83,16 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_range (vector_type &data, const range &r):
             data_ (data), r_ (r.preprocess (data.size ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
-                               r_.start () + r_.size () <= data_.size (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
+            //                   r_.start () + r_.size () <= data_.size (), bad_index ());
         }
         BOOST_UBLAS_INLINE
         vector_range (const vector_closure_type &data, const range &r, int):
             data_ (data), r_ (r.preprocess (data.size ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
-                               r_.start () + r_.size () <= data_.size (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
+            //                    r_.start () + r_.size () <= data_.size (), bad_index ());
         }
 
         // Accessors
@@ -112,21 +112,6 @@ namespace boost { namespace numeric { namespace ublas {
         vector_closure_type &data () {
             return data_;
         }
-
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (vector_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (vector_type &data, const range &r) {
-            // data_ = data;
-            data_.reset (data);
-            r_ = r;
-        }
-#endif
 
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
@@ -237,8 +222,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (vector_range vr) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &vr, external_logic ());
             if (this != &vr) {
                 BOOST_UBLAS_CHECK (size () == vr.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
@@ -626,16 +609,16 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_slice (vector_type &data, const slice &s):
             data_ (data), s_ (s.preprocess (data.size ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
-                               s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
+            //                    s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
         }
         BOOST_UBLAS_INLINE
         vector_slice (const vector_closure_type &data, const slice &s, int):
             data_ (data), s_ (s.preprocess (data.size ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
-                               s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
+            // Early checking of preconditions here.
+            // BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
+            //                    s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
         }
 
         // Accessors
@@ -659,21 +642,6 @@ namespace boost { namespace numeric { namespace ublas {
         vector_closure_type &data () {
             return data_;
         }
-
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (vector_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (vector_type &data, const slice &s) {
-            // data_ = data;
-            data_.reset (data);
-            s_ = s;
-        }
-#endif
 
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
@@ -788,8 +756,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (vector_slice vs) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &vs, external_logic ());
             if (this != &vs) {
                 BOOST_UBLAS_CHECK (size () == vs.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
@@ -908,7 +874,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it_.index ();
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator &operator = (const const_iterator &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -1209,21 +1175,6 @@ namespace boost { namespace numeric { namespace ublas {
             return ia_;
         }
 
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (vector_type &data) {
-            // data_ = data;
-            data_.reset (data);
-        }
-        BOOST_UBLAS_INLINE
-        void reset (vector_type &data, const indirect_array_type &ia) {
-            // data_ = data;
-            data_.reset (data);
-            ia_ = ia;
-        }
-#endif
-
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
@@ -1341,8 +1292,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (vector_indirect vi) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &vi, external_logic ());
             if (this != &vi) {
                 BOOST_UBLAS_CHECK (size () == vi.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
@@ -1719,7 +1668,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
-

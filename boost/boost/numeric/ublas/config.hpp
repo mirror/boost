@@ -44,11 +44,6 @@
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
-// This could be eliminated.
-#define BOOST_UBLAS_EXPLICIT explicit
-
-#define BOOST_UBLAS_USE_LONG_DOUBLE
-
 #define BOOST_UBLAS_USE_STREAM
 
 #endif
@@ -70,7 +65,9 @@
 #define BOOST_UBLAS_TYPENAME
 // MSVC doesn't accept the 'using' keyword (at least for importing base members).
 #define BOOST_UBLAS_USING
-#define BOOST_UBLAS_EXPLICIT explicit
+// MSVC doesn't support long double
+#define BOOST_UBLAS_NO_LONG_DOUBLE
+
 
 // With MSVC we could perform IO via basic_stream
 // #define BOOST_UBLAS_USE_BASIC_STREAM
@@ -114,11 +111,6 @@
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
-// This could be eliminated.
-#define BOOST_UBLAS_EXPLICIT explicit
-
-#define BOOST_UBLAS_USE_LONG_DOUBLE
-
 #define BOOST_UBLAS_USE_STREAM
 
 // One of these workarounds is needed for MSVC 7.1 AFAIK
@@ -138,16 +130,12 @@
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_EXPLICIT explicit
+#define BOOST_UBLAS_USE_STREAM
 
 // GCC 2.95.3 allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
 // GCC 2.95.3 needs BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS (this seems to be arguable).
 #define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
-
-#define BOOST_UBLAS_USE_LONG_DOUBLE
-
-#define BOOST_UBLAS_USE_STREAM
 
 #if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -163,10 +151,6 @@
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_EXPLICIT explicit
-
-#define BOOST_UBLAS_USE_LONG_DOUBLE
-
 #define BOOST_UBLAS_USE_STREAM
 
 #define BOOST_UBLAS_NO_ELEMENT_PROXIES
@@ -194,10 +178,6 @@ namespace std {
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_EXPLICIT explicit
-
-#define BOOST_UBLAS_USE_LONG_DOUBLE
-
 #define BOOST_UBLAS_USE_STREAM
 
 #endif
@@ -209,14 +189,10 @@ namespace std {
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_EXPLICIT explicit
+#define BOOST_UBLAS_USE_STREAM
 
 // ICC sometimes needs qualified type names.
 #define BOOST_UBLAS_QUALIFIED_TYPENAME
-
-#define BOOST_UBLAS_USE_LONG_DOUBLE
-
-#define BOOST_UBLAS_USE_STREAM
 
 #define BOOST_UBLAS_USE_SIMD
 
@@ -264,14 +240,10 @@ namespace std {
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_EXPLICIT explicit
+#define BOOST_UBLAS_USE_STREAM
 
 // Comeau allows to use iterator_base_traits.
 #define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
-
-#define BOOST_UBLAS_USE_LONG_DOUBLE
-
-#define BOOST_UBLAS_USE_STREAM
 
 #endif
 
@@ -282,10 +254,6 @@ namespace std {
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
-#define BOOST_UBLAS_EXPLICIT explicit
-
-#define BOOST_UBLAS_USE_LONG_DOUBLE
-
 #define BOOST_UBLAS_USE_STREAM
 
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -337,8 +305,16 @@ namespace std {
 #define BOOST_UBLAS_USE_FAST_SAME
 
 // Use expression templates.
-#ifndef BOOST_UBLAS_USE_ET
 #define BOOST_UBLAS_USE_ET
+
+// NO runtime error checks with BOOST_UBLAS_CHECK macro
+#ifndef BOOST_UBLAS_CHECK_ENABLE
+#define BOOST_UBLAS_CHECK_ENABLE 0
+#endif
+
+// NO numeric checks for non dense matrices
+#ifndef  BOOST_UBLAS_TYPE_CHECK
+#define BOOST_UBLAS_TYPE_CHECK 0
 #endif
 
 // Disable performance options in debug mode
@@ -354,29 +330,35 @@ namespace std {
 
 #ifdef BOOST_MSVC
 // Use expression templates (otherwise we get many ICE's)
-#ifndef BOOST_UBLAS_USE_ET
 #define BOOST_UBLAS_USE_ET
 #endif
+
+// Enable runtime error checks with BOOST_UBLAS_CHECK macro. Check bounds etc
+#ifndef BOOST_UBLAS_CHECK_ENABLE
+#define BOOST_UBLAS_CHECK_ENABLE 1
 #endif
 
-// Bounds check
-#define BOOST_UBLAS_BOUNDS_CHECK
-
-// Type check for non dense matrices
-#ifndef BOOST_UBLAS_NO_TYPE_CHECK
-#define BOOST_UBLAS_TYPE_CHECK
+// Type compatible numeric checks for non dense matrices (requires additional storage and complexity)
+#ifndef  BOOST_UBLAS_TYPE_CHECK
+#define BOOST_UBLAS_TYPE_CHECK 1
 #endif
 
 #endif
 
-#ifdef BOOST_UBLAS_TYPE_CHECK
-static bool disable_type_check = false;
+#if BOOST_UBLAS_TYPE_CHECK
+template <class Dummy>
+struct disable_type_check
+{
+    static bool value;
+};
+template <class Dummy>
+bool disable_type_check<Dummy>::value = false;
 #endif
 #ifndef BOOST_UBLAS_TYPE_CHECK_EPSILON
 #define BOOST_UBLAS_TYPE_CHECK_EPSILON (type_traits<real_type>::sqrt (std::numeric_limits<real_type>::epsilon ()))
 #endif
 #ifndef BOOST_UBLAS_TYPE_CHECK_MIN
-#define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::sqrt ((std::numeric_limits<real_type>::min) ()))
+#define BOOST_UBLAS_TYPE_CHECK_MIN (type_traits<real_type>::sqrt ( (std::numeric_limits<real_type>::min) ()))
 #endif
 
 
@@ -403,31 +385,3 @@ static bool disable_type_check = false;
 #include <boost/numeric/ublas/fwd.hpp>
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

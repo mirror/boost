@@ -14,6 +14,10 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
+/** \file operation.hpp
+ *  \brief This file contains some specialized products.
+ */
+
 #ifndef BOOST_UBLAS_OPERATION_H
 #define BOOST_UBLAS_OPERATION_H
 
@@ -72,13 +76,14 @@ namespace boost { namespace numeric { namespace ublas {
 
         if (init)
             v.assign (zero_vector<value_type> (e1.size1 ()));
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
+        value_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, orientation_category ());
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<value_type>::epsilon () * verrorbound, internal_logic ());
 #endif
         return v;
     }
@@ -184,6 +189,33 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E1::orientation_category orientation_category;
         return axpy_prod (e1, e2, v, packed_random_access_iterator_tag (), orientation_category ());
     }
+
+
+  /** \brief computes <tt>v += A x</tt> or <tt>v = A x</tt> in an
+	  optimized fashion.
+
+	  \param e1 the matrix expression \c A
+	  \param e2 the vector expression \c x
+	  \param v  the result vector \c v
+	  \param init a boolean parameter
+
+	  <tt>axpy_prod(A, x, v, init)</tt> implements the well known
+	  axpy-product.  Setting \a init to \c true is equivalent to call
+	  <tt>v.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
+	  defaults to \c true, but this may change in the future.
+
+	  Up to now there are some specialisation for compressed
+	  matrices that give a large speed up compared to prod.
+	  
+	  \ingroup blas2
+
+	  \internal
+	  
+	  template parameters:
+	  \param V type of the result vector \c v
+	  \param E1 type of a matrix expression \c A
+	  \param E2 type of a vector expression \c x
+  */
     template<class V, class E1, class E2>
     BOOST_UBLAS_INLINE
     V &
@@ -195,13 +227,14 @@ namespace boost { namespace numeric { namespace ublas {
 
         if (init)
             v.assign (zero_vector<value_type> (e1 ().size1 ()));
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
+        value_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, iterator_category ());
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<value_type>::epsilon () * verrorbound, internal_logic ());
 #endif
         return v;
     }
@@ -267,13 +300,14 @@ namespace boost { namespace numeric { namespace ublas {
 
         if (init)
             v.assign (zero_vector<value_type> (e2 ().size2 ()));
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
+        value_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, orientation_category ());
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<value_type>::epsilon () * verrorbound, internal_logic ());
 #endif
         return v;
     }
@@ -379,6 +413,33 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E2::orientation_category orientation_category;
         return axpy_prod (e1, e2, v, packed_random_access_iterator_tag (), orientation_category ());
     }
+
+
+  /** \brief computes <tt>v += A<sup>T</sup> x</tt> or <tt>v = A<sup>T</sup> x</tt> in an
+	  optimized fashion.
+
+	  \param e1 the vector expression \c x
+	  \param e2 the matrix expression \c A
+	  \param v  the result vector \c v
+	  \param init a boolean parameter
+
+	  <tt>axpy_prod(x, A, v, init)</tt> implements the well known
+	  axpy-product.  Setting \a init to \c true is equivalent to call
+	  <tt>v.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
+	  defaults to \c true, but this may change in the future.
+
+	  Up to now there are some specialisation for compressed
+	  matrices that give a large speed up compared to prod.
+	  
+	  \ingroup blas2
+
+	  \internal
+	  
+	  template parameters:
+	  \param V type of the result vector \c v
+	  \param E1 type of a vector expression \c x
+	  \param E2 type of a matrix expression \c A
+  */
     template<class V, class E1, class E2>
     BOOST_UBLAS_INLINE
     V &
@@ -390,13 +451,14 @@ namespace boost { namespace numeric { namespace ublas {
 
         if (init)
             v.assign (zero_vector<value_type> (e2 ().size2 ()));
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
+        value_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, iterator_category ());
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<value_type>::epsilon () * verrorbound, internal_logic ());
 #endif
         return v;
     }
@@ -426,8 +488,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
 
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
+        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         size_type size1 (e1 ().size1 ());
@@ -435,8 +498,8 @@ namespace boost { namespace numeric { namespace ublas {
         for (size_type i = 0; i < size1; ++ i)
             for (size_type j = 0; j < size2; ++ j)
                 row (m, i).plus_assign (e1 () (i, j) * row (e2 (), j));
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -454,8 +517,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
         typedef F functor_type;
 
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
+        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         typename expression1_type::const_iterator1 it1 (e1 ().begin1 ());
@@ -482,8 +546,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             ++ it1;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -501,8 +565,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
 
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         size_type size1 (e2 ().size1 ());
@@ -510,8 +575,8 @@ namespace boost { namespace numeric { namespace ublas {
         for (size_type j = 0; j < size2; ++ j)
             for (size_type i = 0; i < size1; ++ i)
                 column (m, j).plus_assign (e2 () (i, j) * column (e1 (), i));
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -529,8 +594,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::value_type value_type;
         typedef F functor_type;
 
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         typename expression2_type::const_iterator2 it2 (e2 ().begin2 ());
@@ -557,8 +623,8 @@ namespace boost { namespace numeric { namespace ublas {
             }
             ++ it2;
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -593,6 +659,31 @@ namespace boost { namespace numeric { namespace ublas {
         // return axpy_prod (e1, e2, m, functor_type (), false);
         return axpy_prod (e1, e2, m, functor_type (), true);
     }
+
+  /** \brief computes <tt>M += A X</tt> or <tt>M = A X</tt> in an
+	  optimized fashion.
+
+	  \param e1 the matrix expression \c A
+	  \param e2 the matrix expression \c X
+	  \param m  the result matrix \c M
+	  \param init a boolean parameter
+
+	  <tt>axpy_prod(A, X, M, init)</tt> implements the well known
+	  axpy-product.  Setting \a init to \c true is equivalent to call
+	  <tt>M.clear()</tt> before <tt>axpy_prod</tt>. Currently \a init
+	  defaults to \c true, but this may change in the future.
+
+	  Up to now there are no specialisations.
+	  
+	  \ingroup blas3
+
+	  \internal
+	  
+	  template parameters:
+	  \param M type of the result matrix \c M
+	  \param E1 type of a matrix expression \c A
+	  \param E2 type of a matrix expression \c X
+  */
     template<class M, class E1, class E2>
     BOOST_UBLAS_INLINE
     M &
@@ -633,8 +724,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
 
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
+        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         size_type size (BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ()));
@@ -643,8 +735,8 @@ namespace boost { namespace numeric { namespace ublas {
             vector<value_type> re2 (row (e2 (), k));
             m.plus_assign (outer_prod (ce1, re2));
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -662,8 +754,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
 
-#ifdef BOOST_UBLAS_TYPE_CHECK
+#if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
+        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         size_type size (BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ()));
@@ -672,8 +765,8 @@ namespace boost { namespace numeric { namespace ublas {
             vector<value_type> re2 (row (e2 (), k));
             m.plus_assign (outer_prod (ce1, re2));
         }
-#ifdef BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (equals (m, cm), internal_logic ());
+#if BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -708,6 +801,33 @@ namespace boost { namespace numeric { namespace ublas {
         // return opb_prod (e1, e2, m, functor_type (), false);
         return opb_prod (e1, e2, m, functor_type (), true);
     }
+
+  /** \brief computes <tt>M += A X</tt> or <tt>M = A X</tt> in an
+	  optimized fashion.
+
+	  \param e1 the matrix expression \c A
+	  \param e2 the matrix expression \c X
+	  \param m  the result matrix \c M
+	  \param init a boolean parameter
+
+	  <tt>opb_prod(A, X, M, init)</tt> implements the well known
+	  axpy-product. Setting \a init to \c true is equivalent to call
+	  <tt>M.clear()</tt> before <tt>opb_prod</tt>. Currently \a init
+	  defaults to \c true, but this may change in the future.
+
+	  This function may give a speedup if \c A has less columns than
+	  rows, because the product is computed as a sum of outer
+	  products.
+	  
+	  \ingroup blas3
+
+	  \internal
+	  
+	  template parameters:
+	  \param M type of the result matrix \c M
+	  \param E1 type of a matrix expression \c A
+	  \param E2 type of a matrix expression \c X
+  */
     template<class M, class E1, class E2>
     BOOST_UBLAS_INLINE
     M &
@@ -738,5 +858,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-

@@ -19,7 +19,7 @@
 
 #include <iterator>
 
-#include <boost/numeric/ublas/config.hpp>
+#include <boost/numeric/ublas/exception.hpp>
 
 // Using GCC the following is missing:
 //
@@ -47,6 +47,11 @@ namespace boost { namespace numeric { namespace ublas {
     class container_reference;
 #endif
 
+  /** \brief Base class of all proxy classes that contain
+	  a reference to an immutable object.
+   
+	  \param C the type of the container referred to
+  */
     template<class C>
     class container_const_reference {
     public:
@@ -86,6 +91,11 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
+  /** \brief Base class of all proxy classes that contain
+   *         a reference to a mutable object.
+   *
+   * \param C the type of the container referred to
+   */
     template<class C>
     class container_reference {
     public:
@@ -117,6 +127,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
+  /** \brief Base class of all forward iterators.
+   *
+   * \param IC the iterator category
+   * \param I the derived iterator type
+   * \param T the value type
+   *
+   * The forward iterator can only proceed in one direction
+   * via the post increment operator.
+   */
     template<class IC, class I, class T>
     struct forward_iterator_base:
         public boost::iterator<IC, T> {
@@ -160,6 +179,15 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #endif
 
+  /** \brief Base class of all bidirectional iterators.
+   *
+   * \param IC the iterator category
+   * \param I the derived iterator type
+   * \param T the value type
+   *
+   * The bidirectional iterator can proceed in both directions
+   * via the post increment and post decrement operator.
+   */
     template<class IC, class I, class T>
     struct bidirectional_iterator_base:
         public boost::iterator<IC, T> {
@@ -227,6 +255,18 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #endif
 
+  /** \brief Base class of all random access iterators.
+   *
+   * \param IC the iterator category
+   * \param I the derived iterator type
+   * \param T the value type
+   * \param D the difference type, default: std::ptrdiff_t
+   *
+   * The random access iterator can proceed in both directions
+   * via the post increment/decrement operator or in larger steps
+   * via the +, - and +=, -= operators. The random access iterator
+   * is LessThan Comparable.
+   */
     template<class IC, class I, class T, class D = std::ptrdiff_t>
     struct random_access_iterator_base:
         public boost::iterator<IC, T> {
@@ -365,6 +405,19 @@ namespace boost { namespace numeric { namespace ublas {
 
 #ifdef BOOST_MSVC_STD_ITERATOR
 
+  /** \brief Base class of all reverse iterators. (MSVC version)
+   *
+   * \param I the derived iterator type
+   * \param T the value type
+   * \param R the reference type
+   *
+   * The reverse iterator implements a bidirectional iterator
+   * reversing the elements of the underlying iterator. It
+   * implements most operators of a random access iterator.
+   *
+   * uBLAS extension: it.index()
+   */
+
     // Renamed this class from reverse_iterator to get
     // typedef reverse_iterator<...> reverse_iterator
     // working. Thanks to Gabriel Dos Reis for explaining this.
@@ -454,6 +507,20 @@ namespace boost { namespace numeric { namespace ublas {
     std::ptrdiff_t operator - (const reverse_iterator_base<I, T, R> &it1, const reverse_iterator_base<I, T, R> &it2) {
         return it2.base () - it1.base ();
     }
+
+  /** \brief 1st base class of all matrix reverse iterators. (MSVC version)
+   *
+   * \param I the derived iterator type
+   * \param T the value type
+   * \param R the reference type
+   *
+   * The reverse iterator implements a bidirectional iterator
+   * reversing the elements of the underlying iterator. It
+   * implements most operators of a random access iterator.
+   *
+   * uBLAS extension: it.index1(), it.index2() and access to
+   * the dual iterator via begin(), end(), rbegin(), rend()
+   */
 
     // Renamed this class from reverse_iterator1 to get
     // typedef reverse_iterator1<...> reverse_iterator1
@@ -573,6 +640,22 @@ namespace boost { namespace numeric { namespace ublas {
     std::ptrdiff_t operator - (const reverse_iterator_base1<I, T, R> &it1, const reverse_iterator_base1<I, T, R> &it2) {
         return it2.base () - it1.base ();
     }
+
+  /** \brief 2nd base class of all matrix reverse iterators. (MSVC version)
+   *
+   * \param I the derived iterator type
+   * \param T the value type
+   * \param R the reference type
+   *
+   * The reverse iterator implements a bidirectional iterator
+   * reversing the elements of the underlying iterator. It
+   * implements most operators of a random access iterator.
+   *
+   * uBLAS extension: it.index1(), it.index2() and access to
+   * the dual iterator via begin(), end(), rbegin(), rend()
+   *
+   * Note: This class is _identical_ to reverse_iterator_base1
+   */
 
     // Renamed this class from reverse_iterator2 to get
     // typedef reverse_iterator2<...> reverse_iterator2
@@ -695,6 +778,19 @@ namespace boost { namespace numeric { namespace ublas {
 
 #else
 
+  /** \brief Base class of all reverse iterators. (non-MSVC version)
+   *
+   * \param I the derived iterator type
+   * \param T the value type
+   * \param R the reference type
+   *
+   * The reverse iterator implements a bidirectional iterator
+   * reversing the elements of the underlying iterator. It
+   * implements most operators of a random access iterator.
+   *
+   * uBLAS extension: it.index()
+   */
+
     // Renamed this class from reverse_iterator to get
     // typedef reverse_iterator<...> reverse_iterator
     // working. Thanks to Gabriel Dos Reis for explaining this.
@@ -814,6 +910,18 @@ namespace boost { namespace numeric { namespace ublas {
         return it2.base () - it1.base ();
     }
 #endif
+
+  /** \brief 1st base class of all matrix reverse iterators. (non-MSVC version)
+   *
+   * \param I the derived iterator type
+   *
+   * The reverse iterator implements a bidirectional iterator
+   * reversing the elements of the underlying iterator. It
+   * implements most operators of a random access iterator.
+   *
+   * uBLAS extension: it.index1(), it.index2() and access to
+   * the dual iterator via begin(), end(), rbegin(), rend()
+   */
 
     // Renamed this class from reverse_iterator1 to get
     // typedef reverse_iterator1<...> reverse_iterator1
@@ -963,6 +1071,20 @@ namespace boost { namespace numeric { namespace ublas {
         return it2.base () - it1.base ();
     }
 #endif
+
+  /** \brief 2nd base class of all matrix reverse iterators. (non-MSVC version)
+   *
+   * \param I the derived iterator type
+   *
+   * The reverse iterator implements a bidirectional iterator
+   * reversing the elements of the underlying iterator. It
+   * implements most operators of a random access iterator.
+   *
+   * uBLAS extension: it.index1(), it.index2() and access to
+   * the dual iterator via begin(), end(), rbegin(), rend()
+   *
+   * Note: this type is _identical_ to reverse_iterator_base1
+   */
 
     // Renamed this class from reverse_iterator2 to get
     // typedef reverse_iterator2<...> reverse_iterator2
@@ -1115,6 +1237,18 @@ namespace boost { namespace numeric { namespace ublas {
 
 #endif
 
+  /** \brief A class implementing an indexed random access iterator.
+   *
+   * \param C the mutable container type
+   * \param IC the iterator category
+   *
+   * This class implements a random access iterator. The current 
+   * position is stored as the unsigned integer it_ and the
+   * values are accessed via operator()(it_) of the container.
+   *
+   * uBLAS extension: index()
+   */
+
     template<class C, class IC>
     class indexed_iterator:
         public container_reference<C>,
@@ -1242,6 +1376,21 @@ namespace boost { namespace numeric { namespace ublas {
         return tmp -= n;
     }
 #endif
+
+  /** \brief A class implementing an indexed random access iterator.
+   *
+   * \param C the mutable container type
+   * \param IC the iterator category
+   *
+   * This class implements a random access iterator. The current 
+   * position is stored as the unsigned integer \c it_ and the
+   * values are accessed via \c operator()(it_) of the container.
+   *
+   * uBLAS extension: \c index()
+   *
+   * Note: there is an automatic conversion from 
+   * \c indexed_iterator to \c indexed_const_iterator
+   */
 
     template<class C, class IC>
     class indexed_const_iterator:
@@ -1379,6 +1528,24 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class C, class IC>
     class indexed_iterator2;
+
+  /** \brief A class implementing an indexed random access iterator 
+   * of a matrix.
+   *
+   * \param C the mutable container type
+   * \param IC the iterator category
+   *
+   * This class implements a random access iterator. The current
+   * position is stored as two unsigned integers \c it1_ and \c it2_
+   * and the values are accessed via \c operator()(it1_, it2_) of the
+   * container. The iterator changes the first index.
+   *
+   * uBLAS extension: \c index1(), \c index2() and access to the
+   * dual iterator via \c begin(), \c end(), \c rbegin() and \c rend()
+   *
+   * Note: The container has to support the \code find2(rank, i, j) \endcode 
+   * method
+   */
 
     template<class C, class IC>
     class indexed_iterator1:
@@ -1543,6 +1710,26 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class C, class IC>
     class indexed_const_iterator2;
+
+  /** \brief A class implementing an indexed random access iterator 
+   * of a matrix.
+   *
+   * \param C the (immutable) container type
+   * \param IC the iterator category
+   *
+   * This class implements a random access iterator. The current
+   * position is stored as two unsigned integers \c it1_ and \c it2_
+   * and the values are accessed via \c operator()(it1_, it2_) of the
+   * container. The iterator changes the first index.
+   *
+   * uBLAS extension: \c index1(), \c index2() and access to the
+   * dual iterator via \c begin(), \c end(), \c rbegin() and \c rend()
+   *
+   * Note 1: The container has to support the find2(rank, i, j) method
+   *
+   * Note 2: there is an automatic conversion from 
+   * \c indexed_iterator1 to \c indexed_const_iterator1
+   */
 
     template<class C, class IC>
     class indexed_const_iterator1:
@@ -1711,6 +1898,22 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #endif
 
+  /** \brief A class implementing an indexed random access iterator 
+   * of a matrix.
+   *
+   * \param C the mutable container type
+   * \param IC the iterator category
+   *
+   * This class implements a random access iterator. The current
+   * position is stored as two unsigned integers \c it1_ and \c it2_
+   * and the values are accessed via \c operator()(it1_, it2_) of the
+   * container. The iterator changes the second index.
+   *
+   * uBLAS extension: \c index1(), \c index2() and access to the
+   * dual iterator via \c begin(), \c end(), \c rbegin() and \c rend()
+   *
+   * Note: The container has to support the find1(rank, i, j) method
+   */
     template<class C, class IC>
     class indexed_iterator2:
         public container_reference<C>, 
@@ -1871,6 +2074,26 @@ namespace boost { namespace numeric { namespace ublas {
         return tmp -= n;
     }
 #endif
+
+  /** \brief A class implementing an indexed random access iterator 
+   * of a matrix.
+   *
+   * \param C the (immutable) container type
+   * \param IC the iterator category
+   *
+   * This class implements a random access iterator. The current
+   * position is stored as two unsigned integers \c it1_ and \c it2_
+   * and the values are accessed via \c operator()(it1_, it2_) of the
+   * container. The iterator changes the second index.
+   *
+   * uBLAS extension: \c index1(), \c index2() and access to the
+   * dual iterator via \c begin(), \c end(), \c rbegin() and \c rend()
+   *
+   * Note 1: The container has to support the \c find2(rank, i, j) method
+   *
+   * Note 2: there is an automatic conversion from 
+   * \c indexed_iterator2 to \c indexed_const_iterator2
+   */
 
     template<class C, class IC>
     class indexed_const_iterator2:
@@ -2042,9 +2265,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
-
-
-

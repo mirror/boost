@@ -17,8 +17,6 @@
 #ifndef BOOST_UBLAS_BANDED_H
 #define BOOST_UBLAS_BANDED_H
 
-#include <algorithm> // for std::min and std::max
-#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -85,12 +83,8 @@ namespace boost { namespace numeric { namespace ublas {
         banded_matrix (const matrix_expression<AE> &ae, size_type lower = 0, size_type upper = 0):
             matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()),
-            lower_ (lower), upper_ (upper), data_ (0) {
-#ifndef BOOST_UBLAS_TYPE_CHECK
-            resize (ae ().size1 (), ae ().size2 (), lower, upper, false);
-#else
-            resize (ae ().size1 (), ae ().size2 (), lower, upper, true);
-#endif
+            lower_ (lower), upper_ (upper),
+            data_ (std::max (size1_, size2_) * (lower_ + 1 + upper_)) {
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -100,7 +94,7 @@ namespace boost { namespace numeric { namespace ublas {
             return size1_;
         }
         BOOST_UBLAS_INLINE
-        size_type size2 () const { 
+        size_type size2 () const {
             return size2_;
         }
         BOOST_UBLAS_INLINE
@@ -123,26 +117,24 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, size_type lower = 0, size_type upper = 0, bool preserve = true) {
-            BOOST_USING_STD_MAX();
             size1_ = size1;
             size2_ = size2;
             lower_ = lower;
             upper_ = upper;
-            detail::resize (data (), max BOOST_PREVENT_MACRO_SUBSTITUTION (size1, size2) * (lower + 1 + upper), preserve);
+            detail::resize (data (), (std::max) (size1, size2) * (lower + 1 + upper), preserve);
         }
 
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
-            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1_, bad_index ());
             BOOST_UBLAS_CHECK (j < size2_, bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-            size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+            size_type k = (std::max) (i, j);
             size_type l = lower_ + j - i;
-            if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_) &&
+            if (k < (std::max) (size1_, size2_) &&
                 l < lower_ + 1 + upper_)
-                return data () [functor_type::element (k, max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_),
+                return data () [functor_type::element (k, (std::max) (size1_, size2_),
                                                        l, lower_ + 1 + upper_)];
 #else
             size_type k = j;
@@ -156,15 +148,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
-            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1_, bad_index ());
             BOOST_UBLAS_CHECK (j < size2_, bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-            size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+            size_type k = (std::max) (i, j);
             size_type l = lower_ + j - i;
-            if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_) &&
+            if (k < (std::max) (size1_, size2_) &&
                 l < lower_ + 1 + upper_)
-                return data () [functor_type::element (k, max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_),
+                return data () [functor_type::element (k, (std::max) (size1_, size2_),
                                                        l, lower_ + 1 + upper_)];
 #else
             size_type k = j;
@@ -175,8 +166,6 @@ namespace boost { namespace numeric { namespace ublas {
                                                        l, lower_ + 1 + upper_)];
 #endif
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
             external_logic ().raise ();
 #endif
             return zero_;
@@ -185,11 +174,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         banded_matrix &operator = (const banded_matrix &m) {
-            // Precondition for container relaxed as requested during review.
-            // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-            // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
-            // BOOST_UBLAS_CHECK (lower_ == m.lower_, bad_size ());
-            // BOOST_UBLAS_CHECK (upper_ == m.upper_, bad_size ());
             size1_ = m.size1_;
             size2_ = m.size2_;
             lower_ = m.lower_;
@@ -222,8 +206,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        banded_matrix &assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        banded_matrix &assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -239,8 +223,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        banded_matrix &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        banded_matrix &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -256,8 +240,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        banded_matrix &minus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        banded_matrix &minus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
@@ -276,14 +260,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (banded_matrix &m) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
-                // Precondition for container relaxed as requested during review.
-                // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-                // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
-                // BOOST_UBLAS_CHECK (lower_ == m.lower_, bad_size ());
-                // BOOST_UBLAS_CHECK (upper_ == m.upper_, bad_size ());
                 std::swap (size1_, m.size1_);
                 std::swap (size2_, m.size2_);
                 std::swap (lower_, m.lower_);
@@ -303,22 +280,16 @@ namespace boost { namespace numeric { namespace ublas {
         // Thanks to Kresimir Fresl for spotting this.
         BOOST_UBLAS_INLINE
         void insert (size_type i, size_type j, const_reference t) {
-            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1_, bad_index ());
             BOOST_UBLAS_CHECK (j < size2_, bad_index ());
-// FIXME: is this ugly check still needed?!
-// #ifndef BOOST_UBLAS_USE_ET
-//             if (t == value_type ())
-//                 return;
-// #endif
 #ifdef BOOST_UBLAS_OWN_BANDED
-            size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+            size_type k = (std::max) (i, j);
             size_type l = lower_ + j - i;
-            BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [functor_type::element (k, max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_),
+            BOOST_UBLAS_CHECK (type_traits<value_type>::equals (data () [functor_type::element (k, std::max (size1_, size2_),
                                                                                                 l, lower_ + 1 + upper_)], value_type ()), bad_index ());
-            // data ().insert (data ().begin () + functor_type::element (k, max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_),
+            // data ().insert (data ().begin () + functor_type::element (k, (std::max) (size1_, size2_),
             //                                                           l, lower_ + 1 + upper_), t);
-            data () [functor_type::element (k, max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_),
+            data () [functor_type::element (k, (std::max) (size1_, size2_),
                                             l, lower_ + 1 + upper_)] = t;
 #else
             size_type k = j;
@@ -333,22 +304,21 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i, size_type j) {
-            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1_, bad_index ());
             BOOST_UBLAS_CHECK (j < size2_, bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-            size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+            size_type k = (std::max) (i, j);
             size_type l = lower_ + j - i;
-            // data ().erase (data ().begin () + functor_type::element (k, max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_), 
+            // data ().erase (data ().begin () + functor_type::element (k, (std::max) (size1_, size2_),
             //                                                         l, lower_ + 1 + upper_));
-            data () [functor_type::element (k, max BOOST_PREVENT_MACRO_SUBSTITUTION (size1_, size2_), 
+            data () [functor_type::element (k, (std::max) (size1_, size2_),
                                             l, lower_ + 1 + upper_)] = value_type ();
 #else
             size_type k = j;
             size_type l = upper_ + i - j;
-            // data ().erase (data ().begin () + functor_type::element (k, size2_, 
+            // data ().erase (data ().begin () + functor_type::element (k, size2_,
             //                                                          l, lower_ + 1 + upper_));
-            data () [functor_type::element (k, size2_, 
+            data () [functor_type::element (k, size2_,
                                             l, lower_ + 1 + upper_)] = value_type ();
 #endif
         }
@@ -384,49 +354,41 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator1 find1 (int rank, size_type i, size_type j) const {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                size_type lower_i = max BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (j - upper_), difference_type (0));
-                i = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, lower_i);
-                size_type upper_i = min BOOST_PREVENT_MACRO_SUBSTITUTION (j + 1 + lower_, size1_);
-                i = min BOOST_PREVENT_MACRO_SUBSTITUTION (i, upper_i);
+                size_type lower_i = (std::max) (difference_type (j - upper_), difference_type (0));
+                i = (std::max) (i, lower_i);
+                size_type upper_i = (std::min) (j + 1 + lower_, size1_);
+                i = (std::min) (i, upper_i);
             }
             return const_iterator1 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
         iterator1 find1 (int rank, size_type i, size_type j) {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                size_type lower_i = max BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (j - upper_), difference_type (0));
-                i = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, lower_i);
-                size_type upper_i = min BOOST_PREVENT_MACRO_SUBSTITUTION (j + 1 + lower_, size1_);
-                i = min BOOST_PREVENT_MACRO_SUBSTITUTION (i, upper_i);
+                size_type lower_i = (std::max) (difference_type (j - upper_), difference_type (0));
+                i = (std::max) (i, lower_i);
+                size_type upper_i = (std::min) (j + 1 + lower_, size1_);
+                i = (std::min) (i, upper_i);
             }
             return iterator1 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find2 (int rank, size_type i, size_type j) const {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                size_type lower_j = max BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (i - lower_), difference_type (0));
-                j = max BOOST_PREVENT_MACRO_SUBSTITUTION (j, lower_j);
-                size_type upper_j = min BOOST_PREVENT_MACRO_SUBSTITUTION (i + 1 + upper_, size2_);
-                j = min BOOST_PREVENT_MACRO_SUBSTITUTION (j, upper_j);
+                size_type lower_j = (std::max) (difference_type (i - lower_), difference_type (0));
+                j = (std::max) (j, lower_j);
+                size_type upper_j = (std::min) (i + 1 + upper_, size2_);
+                j = (std::min) (j, upper_j);
             }
             return const_iterator2 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
         iterator2 find2 (int rank, size_type i, size_type j) {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                size_type lower_j = max BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (i - lower_), difference_type (0));
-                j = max BOOST_PREVENT_MACRO_SUBSTITUTION (j, lower_j);
-                size_type upper_j = min BOOST_PREVENT_MACRO_SUBSTITUTION (i + 1 + upper_, size2_);
-                j = min BOOST_PREVENT_MACRO_SUBSTITUTION (j, upper_j);
+                size_type lower_j = (std::max) (difference_type (i - lower_), difference_type (0));
+                j = (std::max) (j, lower_j);
+                size_type upper_j = (std::min) (i + 1 + upper_, size2_);
+                j = (std::min) (j, upper_j);
             }
             return iterator2 (*this, i, j);
         }
@@ -818,7 +780,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             const_iterator2 &operator = (const const_iterator2 &it) {
                 container_const_reference<self_type>::assign (&it ());
@@ -955,7 +917,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return it2_;
             }
 
-            // Assignment 
+            // Assignment
             BOOST_UBLAS_INLINE
             iterator2 &operator = (const iterator2 &it) {
                 container_reference<self_type>::assign (&it ());
@@ -1044,7 +1006,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F, class A>
     typename banded_matrix<T, F, A>::value_type banded_matrix<T, F, A>::zero_ =
-        typename banded_matrix<T, F, A>::value_type ();
+        BOOST_UBLAS_TYPENAME banded_matrix<T, F, A>::value_type ();
 
     // Diagonal matrix class
     template<class T, class F, class A>
@@ -1179,30 +1141,16 @@ namespace boost { namespace numeric { namespace ublas {
             return data_;
         }
 
-#ifdef BOOST_UBLAS_DEPRECATED
-        // Resetting
-        BOOST_UBLAS_INLINE
-        void reset (matrix_type &data, size_type lower = 0, size_type upper = 0) {
-            // References are not retargetable.
-            // Thanks to Michael Stevens for spotting this.
-            // data_ = data;
-            data_.reset (data);
-            lower_ = lower;
-            upper_ = upper;
-        }
-#endif
-
         // Element access
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
-            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-            size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+            size_type k = (std::max) (i, j);
             size_type l = lower_ + j - i;
-            if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION (size1 (), size2 ()) &&
+            if (k < (std::max) (size1 (), size2 ()) &&
                 l < lower_ + 1 + upper_)
                 return data () (i, j);
 #else
@@ -1216,13 +1164,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
-            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-            size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+            size_type k = (std::max) (i, j);
             size_type l = lower_ + j - i;
-            if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION (size1 (), size2 ()) &&
+            if (k < (std::max) (size1 (), size2 ()) &&
                 l < lower_ + 1 + upper_)
                 return data () (i, j);
 #else
@@ -1233,22 +1180,19 @@ namespace boost { namespace numeric { namespace ublas {
                 return data () (i, j);
 #endif
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
             external_logic ().raise ();
-#endif            
+#endif
             return zero_;
         }
 #else
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) const {
-            BOOST_USING_STD_MAX();
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-            size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+            size_type k = (std::max) (i, j);
             size_type l = lower_ + j - i;
-            if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION (size1 (), size2 ()) &&
+            if (k < (std::max) (size1 (), size2 ()) &&
                 l < lower_ + 1 + upper_)
                 return data () (i, j);
 #else
@@ -1259,8 +1203,6 @@ namespace boost { namespace numeric { namespace ublas {
                 return data () (i, j);
 #endif
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
             external_logic ().raise ();
 #endif
             return zero_;
@@ -1280,38 +1222,38 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        banded_adaptor &operator = (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (ae)); 
+        banded_adaptor &operator = (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        banded_adaptor &assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        banded_adaptor &assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_adaptor& operator += (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this + ae)); 
+            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this + ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        banded_adaptor &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        banded_adaptor &plus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         banded_adaptor& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this - ae)); 
+            matrix_assign (scalar_assign<reference, value_type> (), *this, matrix<value_type> (*this - ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        banded_adaptor &minus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+        banded_adaptor &minus_assign (const matrix_expression<AE> &ae) {
+            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
@@ -1335,8 +1277,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (banded_adaptor &m) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
                 BOOST_UBLAS_CHECK (lower_ == m.lower_, bad_size ());
                 BOOST_UBLAS_CHECK (upper_ == m.upper_, bad_size ());
@@ -1376,49 +1316,41 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator1 find1 (int rank, size_type i, size_type j) const {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                size_type lower_i = max BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (j - upper_), difference_type (0));
-                i = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, lower_i);
-                size_type upper_i = min BOOST_PREVENT_MACRO_SUBSTITUTION (j + 1 + lower_, size1 ());
-                i = min BOOST_PREVENT_MACRO_SUBSTITUTION (i, upper_i);
+                size_type lower_i = (std::max) (difference_type (j - upper_), difference_type (0));
+                i = (std::max) (i, lower_i);
+                size_type upper_i = (std::min) (j + 1 + lower_, size1 ());
+                i = (std::min) (i, upper_i);
             }
             return const_iterator1 (*this, data ().find1 (rank, i, j));
         }
         BOOST_UBLAS_INLINE
         iterator1 find1 (int rank, size_type i, size_type j) {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                size_type lower_i = max BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (j - upper_), difference_type (0));
-                i = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, lower_i);
-                size_type upper_i = min BOOST_PREVENT_MACRO_SUBSTITUTION (j + 1 + lower_, size1 ());
-                i = min BOOST_PREVENT_MACRO_SUBSTITUTION (i, upper_i);
+                size_type lower_i = (std::max) (difference_type (j - upper_), difference_type (0));
+                i = (std::max) (i, lower_i);
+                size_type upper_i = (std::min) (j + 1 + lower_, size1 ());
+                i = (std::min) (i, upper_i);
             }
             return iterator1 (*this, data ().find1 (rank, i, j));
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find2 (int rank, size_type i, size_type j) const {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                size_type lower_j = max BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (i - lower_), difference_type (0));
-                j = max BOOST_PREVENT_MACRO_SUBSTITUTION (j, lower_j);
-                size_type upper_j = min BOOST_PREVENT_MACRO_SUBSTITUTION (i + 1 + upper_, size2 ());
-                j = min BOOST_PREVENT_MACRO_SUBSTITUTION (j, upper_j);
+                size_type lower_j = (std::max) (difference_type (i - lower_), difference_type (0));
+                j = (std::max) (j, lower_j);
+                size_type upper_j = (std::min) (i + 1 + upper_, size2 ());
+                j = (std::min) (j, upper_j);
             }
             return const_iterator2 (*this, data ().find2 (rank, i, j));
         }
         BOOST_UBLAS_INLINE
         iterator2 find2 (int rank, size_type i, size_type j) {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                size_type lower_j = max BOOST_PREVENT_MACRO_SUBSTITUTION (difference_type (i - lower_), difference_type (0));
-                j = max BOOST_PREVENT_MACRO_SUBSTITUTION (j, lower_j);
-                size_type upper_j = min BOOST_PREVENT_MACRO_SUBSTITUTION (i + 1 + upper_, size2 ());
-                j = min BOOST_PREVENT_MACRO_SUBSTITUTION (j, upper_j);
+                size_type lower_j = (std::max) (difference_type (i - lower_), difference_type (0));
+                j = (std::max) (j, lower_j);
+                size_type upper_j = (std::min) (i + 1 + upper_, size2 ());
+                j = (std::min) (j, upper_j);
             }
             return iterator2 (*this, data ().find2 (rank, i, j));
         }
@@ -1487,15 +1419,14 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                BOOST_USING_STD_MAX();
                 size_type i = index1 ();
                 size_type j = index2 ();
                 BOOST_UBLAS_CHECK (i < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (j < (*this) ().size2 (), bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-                size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+                size_type k = (std::max) (i, j);
                 size_type l = (*this) ().lower () + j - i;
-                if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION ((*this) ().size1 (), (*this) ().size2 ()) &&
+                if (k < (std::max) ((*this) ().size1 (), (*this) ().size2 ()) &&
                     l < (*this) ().lower () + 1 + (*this) ().upper ())
                     return *it1_;
 #else
@@ -1641,15 +1572,14 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                BOOST_USING_STD_MAX();
                 size_type i = index1 ();
                 size_type j = index2 ();
                 BOOST_UBLAS_CHECK (i < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (j < (*this) ().size2 (), bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-                size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+                size_type k = (std::max) (i, j);
                 size_type l = (*this) ().lower () + j - i;
-                if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION ((*this) ().size1 (), (*this) ().size2 ()) &&
+                if (k < (std::max) ((*this) ().size1 (), (*this) ().size2 ()) &&
                     l < (*this) ().lower () + 1 + (*this) ().upper ())
                     return *it1_;
 #else
@@ -1801,15 +1731,14 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                BOOST_USING_STD_MAX();
                 size_type i = index1 ();
                 size_type j = index2 ();
                 BOOST_UBLAS_CHECK (i < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (j < (*this) ().size2 (), bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-                size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+                size_type k = (std::max) (i, j);
                 size_type l = (*this) ().lower () + j - i;
-                if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION ((*this) ().size1 (), (*this) ().size2 ()) &&
+                if (k < (std::max) ((*this) ().size1 (), (*this) ().size2 ()) &&
                     l < (*this) ().lower () + 1 + (*this) ().upper ())
                     return *it2_;
 #else
@@ -1955,15 +1884,14 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
-                BOOST_USING_STD_MAX();
                 size_type i = index1 ();
                 size_type j = index2 ();
                 BOOST_UBLAS_CHECK (i < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (j < (*this) ().size2 (), bad_index ());
 #ifdef BOOST_UBLAS_OWN_BANDED
-                size_type k = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
+                size_type k = (std::max) (i, j);
                 size_type l = (*this) ().lower () + j - i;
-                if (k < max BOOST_PREVENT_MACRO_SUBSTITUTION ((*this) ().size1 (), (*this) ().size2 ()) &&
+                if (k < (std::max) ((*this) ().size1 (), (*this) ().size2 ()) &&
                     l < (*this) ().lower () + 1 + (*this) ().upper ())
                     return *it2_;
 #else
@@ -2103,7 +2031,7 @@ namespace boost { namespace numeric { namespace ublas {
     typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_;
     template<class M>
     typename banded_adaptor<M>::value_type banded_adaptor<M>::zero_ =
-        typename banded_adaptor<M>::value_type ();
+        BOOST_UBLAS_TYPENAME banded_adaptor<M>::value_type ();
 
     // Diagonal matrix adaptor class
     template<class M>

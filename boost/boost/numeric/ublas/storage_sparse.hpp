@@ -21,7 +21,6 @@
 #include <map>
 #include <set>
 
-#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/iterator.hpp>
@@ -89,7 +88,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef void data_const_reference;
         typedef void data_reference;
     };
-#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+#ifndef BOOST_UBLAS_NO_LONG_DOUBLE
     template<>
     struct sparse_storage_element_traits<long double> {
         typedef std::size_t index_type;
@@ -109,7 +108,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef void data_const_reference;
         typedef void data_reference;
     };
-#ifdef BOOST_UBLAS_USE_LONG_DOUBLE
+#ifndef BOOST_UBLAS_NO_LONG_DOUBLE
     template<>
     struct sparse_storage_element_traits<std::complex<long double> > {
         typedef std::size_t index_type;
@@ -159,14 +158,6 @@ namespace boost { namespace numeric { namespace ublas {
         operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) const {
             return d_ [i];
         }
-#ifdef BOOST_UBLAS_DEPRECATED
-        BOOST_UBLAS_INLINE
-        typename sparse_storage_element_traits<data_value_type>::data_reference
-        operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) {
-            dirty_ = true;
-            return d_ [i];
-        }
-#endif
 
         // Assignment
         template<class D>
@@ -240,13 +231,6 @@ namespace boost { namespace numeric { namespace ublas {
         operator data_const_reference () const {
             return d_;
         }
-#ifdef BOOST_UBLAS_DEPRECATED
-        BOOST_UBLAS_INLINE
-        operator data_reference () {
-            dirty_ = true;
-            return d_;
-        }
-#endif
 
         // Swapping
         BOOST_UBLAS_INLINE
@@ -271,6 +255,11 @@ namespace boost { namespace numeric { namespace ublas {
         bool dirty_;
     };
 #endif
+
+    // Default map type is simply forwarded to std::map
+    template<class I, class T>
+    class map_std : public std::map<I,T> {
+    };
 
     // Map array
     template<class I, class T>
@@ -297,63 +286,39 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         map_array ():
             capacity_ (0), data_ (new value_type [0]), size_ (0) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
             std::fill (data_, data_ + size_, value_type ());
         }
         BOOST_UBLAS_INLINE
         map_array (no_init):
             capacity_ (0), data_ (new value_type [0]), size_ (0) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
         }
-        BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
+        explicit BOOST_UBLAS_INLINE
         map_array (size_type size):
             capacity_ (size), data_ (new value_type [size]), size_ (0) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
             std::fill (data_, data_ + size_, value_type ());
         }
-        BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
+        explicit BOOST_UBLAS_INLINE
         map_array (size_type size, no_init):
             capacity_ (size), data_ (new value_type [size]), size_ (0) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
         }
         BOOST_UBLAS_INLINE
         map_array (const map_array &a):
             capacity_ (a.size_), data_ (new value_type [a.size_]), size_ (a.size_) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
             *this = a;
         }
         BOOST_UBLAS_INLINE
         ~map_array () {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
             delete [] data_;
         }
 
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
-            BOOST_USING_STD_MIN();
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (size > capacity_) {
                 pointer data = new value_type [size << 1];
-                // Assuming std compliant allocator as requested during review.
-                // if (! data)
-                //     throw std::bad_alloc ();
-                // if (! data_)
-                //     throw std::bad_alloc ();
-                std::copy (data_, data_ + min BOOST_PREVENT_MACRO_SUBSTITUTION (size, size_), data);
-                std::fill (data + min BOOST_PREVENT_MACRO_SUBSTITUTION (size, size_), data + size, value_type ());
+                std::copy (data_, data_ + (std::min) (size, size_), data);
+                std::fill (data + (std::min) (size, size_), data + size, value_type ());
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;
@@ -368,11 +333,6 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (capacity > capacity_) {
                 pointer data = new value_type [capacity];
-                // Assuming std compliant allocator as requested during review.
-                // if (! data)
-                //     throw std::bad_alloc ();
-                // if (! data_)
-                //     throw std::bad_alloc ();
                 std::copy (data_, data_ + size_, data);
                 delete [] data_;
                 capacity_ = capacity;
@@ -403,9 +363,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         map_array &operator = (const map_array &a) {
-            // Too unusual semantic.
-            // Thanks to Michael Stevens for spotting this.
-            // BOOST_UBLAS_CHECK (this != &a, external_logic ());
             if (this != &a) {
                 resize (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
@@ -421,8 +378,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (map_array &a) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &a, external_logic ());
             if (this != &a) {
                 std::swap (capacity_, a.capacity_);
                 std::swap (data_, a.data_);
@@ -445,8 +400,6 @@ namespace boost { namespace numeric { namespace ublas {
                 *(it = end () - 1) = p;
                 return it;
             }
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
             external_logic ().raise ();
             return it;
         }
@@ -465,7 +418,7 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         void insert (pointer it, pointer it1, pointer it2) {
-#ifdef BOOST_UBLAS_BOUNDS_CHECK
+#if BOOST_UBLAS_CHECK_ENABLE
             while (it1 != it2) {
                 insert (it, *it1);
                 ++ it1;
@@ -510,40 +463,18 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         const_pointer find (index_type i) const {
-#ifdef BOOST_UBLAS_DEPRECATED
-            std::pair<const_pointer, const_pointer> pit;
-            pit = std::equal_range (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
-            if (pit.first->first == i)
-                return pit.first;
-            else if (pit.second->first == i)
-                return pit.second;
-            else
-                return end ();
-#else
             const_pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
-#endif
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         pointer find (index_type i) {
-#ifdef BOOST_UBLAS_DEPRECATED
-            std::pair<pointer, pointer> pit;
-            pit = std::equal_range (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
-            if (pit.first->first == i)
-                return pit.first;
-            else if (pit.second->first == i)
-                return pit.second;
-            else
-                return end ();
-#else
             pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
-#endif
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
@@ -555,18 +486,6 @@ namespace boost { namespace numeric { namespace ublas {
         pointer lower_bound (index_type i) {
             return detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
         }
-#ifdef BOOST_UBLAS_DEPRECATED
-        // This function seems to be big. So we do not let the compiler inline it.
-        // BOOST_UBLAS_INLINE
-        const_pointer upper_bound (index_type i) const {
-            return detail::upper_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
-        }
-        // This function seems to be big. So we do not let the compiler inline it.
-        // BOOST_UBLAS_INLINE
-        pointer upper_bound (index_type i) {
-            return detail::upper_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
-        }
-#endif
 
         // Iterators simply are pointers.
 
@@ -685,8 +604,6 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class T, class F>
     BOOST_UBLAS_INLINE
     void swap (std::map<I, T, F> &a1, std::map<I, T, F> &a2) {
-        // Too unusual semantic.
-        // BOOST_UBLAS_CHECK (&a1 != &a2, external_logic ());
         if (&a1 != &a2)
             a1.swap (a2);
     }
@@ -708,63 +625,39 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         set_array ():
             capacity_ (0), data_ (new value_type [0]), size_ (0) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
             std::fill (data_, data_ + size_, value_type ());
         }
         BOOST_UBLAS_INLINE
         set_array (no_init):
             capacity_ (0), data_ (new value_type [0]), size_ (0) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
         }
-        BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
+        explicit BOOST_UBLAS_INLINE
         set_array (size_type size):
             capacity_ (size), data_ (new value_type [size]), size_ (0) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
             std::fill (data_, data_ + size_, value_type ());
         }
-        BOOST_UBLAS_EXPLICIT BOOST_UBLAS_INLINE
+        explicit BOOST_UBLAS_INLINE
         set_array (size_type size, no_init):
             capacity_ (size), data_ (new value_type [size]), size_ (0) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
         }
         BOOST_UBLAS_INLINE
         set_array (const set_array &a):
             capacity_ (a.size_), data_ (new value_type [a.size_]), size_ (a.size_) {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
             *this = a;
         }
         BOOST_UBLAS_INLINE
         ~set_array () {
-            // Assuming std compliant allocator as requested during review.
-            // if (! data_)
-            //     throw std::bad_alloc ();
             delete [] data_;
         }
 
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
-            BOOST_USING_STD_MIN();
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (size > capacity_) {
                 pointer data = new value_type [size << 1];
-                // Assuming std compliant allocator as requested during review.
-                // if (! data)
-                //     throw std::bad_alloc ();
-                // if (! data_)
-                //     throw std::bad_alloc ();
-                std::copy (data_, data_ + min BOOST_PREVENT_MACRO_SUBSTITUTION (size, size_), data);
-                std::fill (data + min BOOST_PREVENT_MACRO_SUBSTITUTION (size, size_), data + size, value_type ());
+                std::copy (data_, data_ + (std::min) (size, size_), data);
+                std::fill (data + (std::min) (size, size_), data + size, value_type ());
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;
@@ -779,11 +672,6 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (capacity > capacity_) {
                 pointer data = new value_type [capacity];
-                // Assuming std compliant allocator as requested during review.
-                // if (! data)
-                //     throw std::bad_alloc ();
-                // if (! data_)
-                //     throw std::bad_alloc ();
                 std::copy (data_, data_ + size_, data);
                 delete [] data_;
                 capacity_ = capacity;
@@ -810,9 +698,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         set_array &operator = (const set_array &a) {
-            // Too unusual semantic.
-            // Thanks to Michael Stevens for spotting this.
-            // BOOST_UBLAS_CHECK (this != &a, external_logic ());
             if (this != &a) {
                 resize (a.size_);
                 std::copy (a.data_, a.data_ + a.size_, data_);
@@ -828,8 +713,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (set_array &a) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &a, external_logic ());
             if (this != &a) {
                 std::swap (capacity_, a.capacity_);
                 std::swap (data_, a.data_);
@@ -852,8 +735,6 @@ namespace boost { namespace numeric { namespace ublas {
                 *(it = end () - 1) = p;
                 return it;
             }
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
             external_logic ().raise ();
             return it;
         }
@@ -872,7 +753,7 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         void insert (pointer it, pointer it1, pointer it2) {
-#ifdef BOOST_UBLAS_BOUNDS_CHECK
+#if BOOST_UBLAS_CHECK_ENABLE
             while (it1 != it2) {
                 insert (it, *it1);
                 ++ it1;
@@ -909,40 +790,18 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         const_pointer find (index_type i) const {
-#ifdef BOOST_UBLAS_DEPRECATED
-            std::pair<const_pointer, const_pointer> pit;
-            pit = std::equal_range (begin (), end (), i, std::less<value_type> ());
-            if (*pit.first == i)
-                return pit.first;
-            else if (*pit.second == i)
-                return pit.second;
-            else
-                return end ();
-#else
             const_pointer it (detail::lower_bound (begin (), end (), i, std::less<value_type> ()));
             if (it == end () || *it != i)
                 it = end ();
             return it;
-#endif
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         pointer find (index_type i) {
-#ifdef BOOST_UBLAS_DEPRECATED
-            std::pair<pointer, pointer> pit;
-            pit = std::equal_range (begin (), end (), i, std::less<value_type> ());
-            if (*pit.first == i)
-                return pit.first;
-            else if (*pit.second == i)
-                return pit.second;
-            else
-                return end ();
-#else
             pointer it (detail::lower_bound (begin (), end (), i, std::less<value_type> ()));
             if (it == end () || *it != i)
                 it = end ();
             return it;
-#endif
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
@@ -954,18 +813,6 @@ namespace boost { namespace numeric { namespace ublas {
         pointer lower_bound (index_type i) {
             return detail::lower_bound (begin (), end (), i, std::less<value_type> ());
         }
-#ifdef BOOST_UBLAS_DEPRECATED
-        // This function seems to be big. So we do not let the compiler inline it.
-        // BOOST_UBLAS_INLINE
-        const_pointer upper_bound (index_type i) const {
-            return detail::upper_bound (begin (), end (), i, std::less<value_type> ());
-        }
-        // This function seems to be big. So we do not let the compiler inline it.
-        // BOOST_UBLAS_INLINE
-        pointer upper_bound (index_type i) {
-            return detail::upper_bound (begin (), end (), i, std::less<value_type> ());
-        }
-#endif
 
         // Iterators simply are pointers.
 
@@ -1033,8 +880,6 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class F>
     BOOST_UBLAS_INLINE
     void swap (std::set<I, F> &a1, std::set<I, F> &a2) {
-        // Too unusual semantic.
-        // BOOST_UBLAS_CHECK (&a1 != &a2, external_logic ());
         if (&a1 != &a2)
             a1.swap (a2);
     }
@@ -1042,5 +887,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-

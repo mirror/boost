@@ -17,8 +17,6 @@
 #ifndef BOOST_UBLAS_MATRIX_H
 #define BOOST_UBLAS_MATRIX_H
 
-#include <algorithm> // for std::min and std::max
-#include <boost/config.hpp>
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage.hpp>
 #include <boost/numeric/ublas/vector.hpp>
@@ -74,8 +72,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix (size_type size1, size_type size2):
             matrix_expression<self_type> (),
-            size1_ (size1), size2_ (size2), data_ (0) {
-            resize (size1, size2);
+            size1_ (size1), size2_ (size2), data_ (functor_type::storage_size (size1, size2)) {
         }
         BOOST_UBLAS_INLINE
         matrix (size_type size1, size_type size2, const array_type &data):
@@ -89,12 +86,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix (const matrix_expression<AE> &ae):
             matrix_expression<self_type> (),
-            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (0) {
-#ifndef BOOST_UBLAS_TYPE_CHECK
-            resize (ae ().size1 (), ae ().size2 (), false);
-#else
-            resize (ae ().size1 (), ae ().size2 (), true);
-#endif
+            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (functor_type::storage_size (size1_, size2_)) {
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -119,9 +111,27 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, bool preserve = true) {
-            size1_ = size1;
-            size2_ = size2;
-            detail::resize (data (), size1 * size2, preserve);
+            if (preserve) {
+                self_type temporary (size1, size2);
+                // Common elements to preserve
+                const size_t size1_min = std::min (size1, size1_);
+                const size_t size2_min = std::min (size2, size2_);
+                // Order loop for i-major and j-minor sizes
+                const size_t i_size = functor_type::size1 (size1_min, size2_min);
+                const size_t j_size = functor_type::size2 (size1_min, size2_min);
+                for (size_t i = 0; i != i_size; ++i) {    // indexing copy over major
+                    for (size_t j = 0; j != j_size; ++j) {
+                        temporary.data () [functor_type::element (functor_type::element1(i,i_size, j,j_size), size1, functor_type::element2(i,i_size, j,j_size), size2)] =
+                            data() [functor_type::element (functor_type::element1(i,i_size, j,j_size), size1_, functor_type::element2(i,i_size, j,j_size), size2_)];
+                    }
+                }
+                assign_temporary (temporary);
+            }
+            else {
+                detail::resize (data (), functor_type::storage_size (size1, size2), preserve);
+                size1_ = size1;
+                size2_ = size2;
+            }
         }
 
         // Element access
@@ -137,9 +147,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         matrix &operator = (const matrix &m) {
-            // Precondition for container relaxed as requested during review.
-            // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-            // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             size1_ = m.size1_;
             size2_ = m.size2_;
             data () = m.data ();
@@ -165,7 +172,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix &reset (const matrix_expression<AE> &ae) {
             self_type temporary (ae);
-            resize (temporary.size1 (), temporary.size2 (), false);
+            // FIXME resizing here would seems to destroy temporary
+            // resize (temporary.size1 (), temporary.size2 (), false);
             return assign_temporary (temporary);
         }
         template<class AE>
@@ -224,12 +232,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (matrix &m) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
-                // Precondition for container relaxed as requested during review.
-                // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-                // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
                 std::swap (size1_, m.size1_);
                 std::swap (size2_, m.size2_);
                 data ().swap (m.data ());
@@ -1016,7 +1019,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_of_vector (size_type size1, size_type size2):
             matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2), data_ (1) {
-            resize (size1, size2);
+            resize (size1, size2, true);
         }
         BOOST_UBLAS_INLINE
         vector_of_vector (const vector_of_vector &m):
@@ -1026,8 +1029,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_of_vector (const matrix_expression<AE> &ae):
             matrix_expression<self_type> (),
-            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (1) {
-            resize (ae ().size1 (), ae ().size2 (), false);
+            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (functor_type::size1 (size1, size2) + 1) {
+            for (size_type k = 0; k < functor_type::size1 (size1, size2); ++ k)
+                detail::resize (data () [k], functor_type::size2 (size1, size2), false);
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
@@ -1072,9 +1076,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         vector_of_vector &operator = (const vector_of_vector &m) {
-            // Precondition for container relaxed as requested during review.
-            // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-            // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             size1_ = m.size1_;
             size2_ = m.size2_;
             data () = m.data ();
@@ -1100,7 +1101,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_of_vector &reset (const matrix_expression<AE> &ae) { 
             self_type temporary (ae);
-            resize (temporary.size1 (), temporary.size2 (), false);
+            // FIXME resizing here would seems to destroy temporary
+            // resize (temporary.size1 (), temporary.size2 (), false);
             return assign_temporary (temporary);
         }
         template<class AE>
@@ -1159,12 +1161,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (vector_of_vector &m) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
-                // Precondition for container relaxed as requested during review.
-                // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-                // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
                 std::swap (size1_, m.size1_);
                 std::swap (size2_, m.size2_);
                 data ().swap (m.data ());
@@ -2014,9 +2011,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         identity_matrix &operator = (const identity_matrix &m) {
-            // Precondition for container relaxed as requested during review.
-            BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-            BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             size1_ = m.size1_;
             size2_ = m.size2_;
             return *this;
@@ -2030,12 +2024,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (identity_matrix &m) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
-                // Precondition for container relaxed as requested during review.
-                // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-                // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
                 std::swap (size1_, m.size1_);
                 std::swap (size2_, m.size2_);
             }
@@ -2067,21 +2056,17 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator1 find1 (int rank, size_type i, size_type j) const {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                i = max BOOST_PREVENT_MACRO_SUBSTITUTION (i, j);
-                i = min BOOST_PREVENT_MACRO_SUBSTITUTION (i, j + 1);
+                i = (std::max) (i, j);
+                i = (std::min) (i, j + 1);
             }
             return const_iterator1 (*this, i, j);
         }
         BOOST_UBLAS_INLINE
         const_iterator2 find2 (int rank, size_type i, size_type j) const {
-            BOOST_USING_STD_MIN();
-            BOOST_USING_STD_MAX();
             if (rank == 1) {
-                j = max BOOST_PREVENT_MACRO_SUBSTITUTION (j, i);
-                j = min BOOST_PREVENT_MACRO_SUBSTITUTION (j, i + 1);
+                j = (std::max) (j, i);
+                j = (std::min) (j, i + 1);
             }
             return const_iterator2 (*this, i, j);
         }
@@ -2407,10 +2392,10 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     typename identity_matrix<T>::value_type identity_matrix<T>::zero_ =
-        typename identity_matrix<T>::value_type ();
+        BOOST_UBLAS_TYPENAME identity_matrix<T>::value_type ();
     template<class T>
     typename identity_matrix<T>::value_type identity_matrix<T>::one_ =
-        typename identity_matrix<T>::value_type (1);
+        BOOST_UBLAS_TYPENAME identity_matrix<T>::value_type (1);
 
     // Zero matrix class
     template<class T>
@@ -2489,9 +2474,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         zero_matrix &operator = (const zero_matrix &m) {
-            // Precondition for container relaxed as requested during review.
-            // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-            // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             size1_ = m.size1_;
             size2_ = m.size2_;
             return *this;
@@ -2505,12 +2487,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (zero_matrix &m) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
-                // Precondition for container relaxed as requested during review.
-                // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-                // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
                 std::swap (size1_, m.size1_);
                 std::swap (size2_, m.size2_);
             }
@@ -2867,7 +2844,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     typename zero_matrix<T>::value_type zero_matrix<T>::zero_ =
-        typename zero_matrix<T>::value_type ();
+        BOOST_UBLAS_TYPENAME zero_matrix<T>::value_type ();
 
     // Scalar matrix class
     template<class T>
@@ -2936,9 +2913,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         scalar_matrix &operator = (const scalar_matrix &m) {
-            // Precondition for container relaxed as requested during review.
-            // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-            // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             size1_ = m.size1_;
             size2_ = m.size2_;
             value_ = m.value_;
@@ -2953,12 +2927,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (scalar_matrix &m) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
-                // Precondition for container relaxed as requested during review.
-                // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-                // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
                 std::swap (size1_, m.size1_);
                 std::swap (size2_, m.size2_);
                 std::swap (value_, m.value_);
@@ -3360,8 +3329,6 @@ namespace boost { namespace numeric { namespace ublas {
         c_matrix (size_type size1, size_type size2):
             size1_ (size1), size2_ (size2) /* , data_ () */ {
             if (size1_ > N || size2_ > M)
-                // Raising exceptions abstracted as requested during review.
-                // throw std::bad_alloc ();
                 bad_size ().raise ();
             for (size_type i = 0; i < size1_; ++ i)
                 std::fill (data_ [i], data_ [i] + size2_, value_type ());
@@ -3370,8 +3337,6 @@ namespace boost { namespace numeric { namespace ublas {
         c_matrix (const c_matrix &m):
             size1_ (m.size1_), size2_ (m.size2_) /* , data_ () */ {
             if (size1_ > N || size2_ > M)
-                // Raising exceptions abstracted as requested during review.
-                // throw std::bad_alloc ();
                 bad_size ().raise ();
             *this = m;
         }
@@ -3380,8 +3345,6 @@ namespace boost { namespace numeric { namespace ublas {
         c_matrix (const matrix_expression<AE> &ae):
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()) /* , data_ () */ {
             if (size1_ > N || size2_ > M)
-                // Raising exceptions abstracted as requested during review.
-                // throw std::bad_alloc ();
                 bad_size ().raise ();
             matrix_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
@@ -3408,12 +3371,23 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, bool preserve = true) {
             if (size1 > N || size2 > M)
-                // Raising exceptions abstracted as requested during review.
-                // throw std::bad_alloc ();
                 bad_size ().raise ();
-            // The content of the array is intentionally not copied.
-            size1_ = size1;
-            size2_ = size2;
+            if (preserve) {
+                self_type temporary (size1, size2);
+                // Common elements to preserve
+                const size_t size1_min = std::min (size1, size1_);
+                const size_t size2_min = std::min (size2, size2_);
+                for (size_t i = 0; i != size1_min; ++i) {    // indexing copy over major
+                    for (size_t j = 0; j != size1_min; ++j) {
+                    	temporary.data_[i][j] = data_[i][j];
+                    }
+                }
+                assign_temporary (temporary);
+            }
+            else {
+                size1_ = size1;
+                size2_ = size2;
+            }
         }
 
         // Element access
@@ -3433,9 +3407,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         c_matrix &operator = (const c_matrix &m) {
-            // Precondition for container relaxed as requested during review.
-            // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-            // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
             size1_ = m.size1_;
             size2_ = m.size2_;
             for (size_type i = 0; i < m.size1_; ++ i)
@@ -3462,7 +3433,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         c_matrix &reset (const matrix_expression<AE> &ae) {
             self_type temporary (ae);
-            resize (temporary.size1 (), temporary.size2 (), false);
+            // FIXME resizing here would seems to destroy temporary
+            // resize (temporary.size1 (), temporary.size2 (), false);
             return assign_temporary (temporary);
         }
         template<class AE>
@@ -3521,8 +3493,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Swapping
         BOOST_UBLAS_INLINE
         void swap (c_matrix &m) {
-            // Too unusual semantic.
-            // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m) {
                 BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
                 BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
@@ -4235,23 +4205,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
