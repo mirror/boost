@@ -51,7 +51,9 @@
 #if defined(__MWERKS__)
 #include <crtl.h>
 #else
+#ifndef __BORLANDC__
 extern char** environ;
+#endif
 #endif
 #endif
 
@@ -301,18 +303,6 @@ namespace boost { namespace program_options {
     {
         parsed_options result(&desc);
         
-        // MinGW unconditionally #defines 'environ',
-        // so the following line won't compile.
-        // If initialization is in the same line as declaration
-        // VC 7.1 parser chokes.
-        // Finally, if the variable is called 'environ', then VC refuses
-        // to link.
-        char **env;
-        #if defined(_WIN32) && !defined( __MINGW32__ ) && !defined(__MWERKS__)
-        env = _environ;
-        #else
-        env = environ;
-        #endif
         for(environment_iterator i(environ), e; i != e; ++i) {
             string option_name = name_mapper(i->first);
 
