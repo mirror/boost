@@ -39,11 +39,15 @@
     namespace signals = BOOST_SIGNALS_NAMESPACE;
   }
 </pre>
+
+    <p> Redefining <code>BOOST_SIGNALS_NAMESPACE</code> breaks link
+      compatibility with modules compiled using different
+      <code>BOOST_SIGNALS_NAMESPACE</code> identifiers. <p>
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu"></a></address>
 <!-- Created: Wed Feb 27 23:53:03 EST 2002 -->
 <!-- hhmts start -->
-Last modified: Mon Jun 10 11:55:27 EDT 2002
+Last modified: Mon Jun 10 12:29:40 EDT 2002
 <!-- hhmts end -->
   </body>
 </html>
