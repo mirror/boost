@@ -198,22 +198,27 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
   </xsl:template>
 
   <xsl:template name="enum">
-    <xsl:variable name="name">
-      <xsl:call-template name="strip-qualifiers">
-        <xsl:with-param name="name" select="name"/>
-      </xsl:call-template>
-    </xsl:variable>
+    <xsl:param name="in-file"/>
 
-    <enum>
-      <xsl:attribute name="name">
-        <xsl:value-of select="$name"/>
-      </xsl:attribute>
-
-      <xsl:apply-templates select="enumvalue"/>
-
-      <xsl:apply-templates select="briefdescription" mode="passthrough"/>
-      <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
-    </enum>
+    <xsl:if test="contains(string(location/attribute::file), 
+                           concat('/', $in-file))">
+      <xsl:variable name="name">
+        <xsl:call-template name="strip-qualifiers">
+          <xsl:with-param name="name" select="name"/>
+        </xsl:call-template>
+      </xsl:variable>
+      
+      <enum>
+        <xsl:attribute name="name">
+          <xsl:value-of select="$name"/>
+        </xsl:attribute>
+        
+        <xsl:apply-templates select="enumvalue"/>
+        
+        <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+        <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+      </enum>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="enumvalue">
@@ -562,7 +567,9 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='enum'">
-        <xsl:apply-templates/>
+        <xsl:apply-templates>
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:when test="@kind='user-defined'">
         <xsl:apply-templates/>
@@ -640,7 +647,9 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
         </xsl:choose>
       </xsl:when>
       <xsl:when test="@kind='enum'">
-        <xsl:call-template name="enum"/>
+        <xsl:call-template name="enum">
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:when test="@kind='variable'">
         <xsl:call-template name="variable"/>
