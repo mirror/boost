@@ -254,7 +254,7 @@ namespace assign_detail
             for( ; i != end; ++i, ++n )
                 array[n] = *i;
             for( ; n < array.size(); ++n )
-                array[n] = typename Array::value_type();
+                array[n] = BOOST_DEDUCED_TYPENAME Array::value_type();
             return array; 
         }
         
