@@ -53,6 +53,7 @@ private:
    void enable_unix_lines();
    void enable_scan_mode();
    void enable_licence_mode();
+   void enable_bsl_convert_mode();
    void set_boost_path(const char* p);
    void set_destination(const char* p);
    void add_module(const char* p);
@@ -81,6 +82,7 @@ private:
    bool m_cvs_mode;                      // check cvs for files
    bool m_unix_lines;                    // fix line endings
    bool m_scan_mode;                     // scan non-boost files.
+   bool m_bsl_convert_mode;              // try to convert to the BSL
    fs::path m_boost_path;                // the path to the boost root
    fs::path m_dest_path;                 // the path to copy to
    std::map<fs::path, bool, path_less> m_cvs_paths;    // valid files under cvs control
@@ -92,6 +94,7 @@ private:
    std::set<fs::path, path_less> m_cannot_migrate_to_bsl; // files that cannot migrate to the BSL
    std::set<std::string> m_bsl_authors;                // authors giving blanket permission to use the BSL
    std::set<std::string> m_authors_for_bsl_migration;  // authors we need for BSL migration
+   std::map<fs::path, std::pair<std::string, std::string>, path_less> m_converted_to_bsl;
    std::map<std::string, std::set<fs::path, path_less> > m_author_data;  // all the authors
    std::map<fs::path, fs::path, path_less>               m_dependencies; // dependency information
 };

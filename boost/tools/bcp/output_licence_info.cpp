@@ -90,6 +90,7 @@ void bcp_implementation::output_licence_info()
    os << "<a href=\"#files\">Files with no recognised licence</a>\n"
       "<a href=\"#authors\">Files with no recognised copyright holder</a>\n"
       "Moving to the Boost Software License...\n"
+      "  <a href=\"#bsl-converted\">Files that have been converted to the Boost Software License</a>\n"
       "  <a href=\"#to-bsl\">Files that can be moved to the BSL</a>\n"
       "  <a href=\"#not-to-bsl\">Files that can <b>NOT</b> be moved to the BSL</a>\n"
       "  <a href=\"#need-bsl-authors\">Authors we need to move to the BSL</a>\n"
@@ -218,6 +219,28 @@ void bcp_implementation::output_licence_info()
    }
    os << "</p></BLOCKQUOTE>";
    //
+   // Output list of files that have been moved over to the Boost
+   // Software License, along with enough information for human
+   // verification.
+   //
+   os << "<h2><a name=\"bsl-converted\"></a>Files that have been converted to the Boost Software License</h2>\n"
+      << "<P>The following " << m_converted_to_bsl.size() << " files have been automatically converted to the Boost Software License, but require manual verification before they can be committed to CVS:</P>\n";
+   if (!m_converted_to_bsl.empty()) {
+     typedef std::map<fs::path, std::pair<std::string, std::string>, path_less>
+       ::const_iterator conv_iterator;
+     conv_iterator i = m_converted_to_bsl.begin(), 
+                   ie = m_converted_to_bsl.end();
+     int file_num = 1;
+     while (i != ie) {
+       os << "<P>[" << file_num << "] File: <tt>" << split_path(m_boost_path, i->first) 
+	  << "</tt><br>\n<table border=\"1\">\n  <tr>\n    <td><pre>" 
+	  << i->second.first << "</pre></td>\n    <td><pre>"
+	  << i->second.second << "</pre></td>\n  </tr>\n</table>\n";
+       ++i;
+       ++file_num;
+     }
+   }
+   //
    // Output list of files that could be moved over to the Boost Software License
    //
    os << "<h2><a name=\"to-bsl\"></a>Files that could be converted to the Boost Software License</h2>\n"
@@ -299,7 +322,7 @@ void bcp_implementation::output_licence_info()
             os << dep->second.string();
          if(seen_deps.find(dep->second) != seen_deps.end())
          {
-            os << " <I>(Cirular dependency!)</I>";
+            os << " <I>(Circular dependency!)</I>";
             break; // circular dependency!!!
          }
          seen_deps.insert(dep->second);

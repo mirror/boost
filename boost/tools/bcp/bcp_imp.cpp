@@ -18,7 +18,7 @@
 #include <string>
 
 bcp_implementation::bcp_implementation()
-  : m_list_mode(false), m_licence_mode(false), m_cvs_mode(false), m_unix_lines(false), m_scan_mode(false)
+  : m_list_mode(false), m_licence_mode(false), m_cvs_mode(false), m_unix_lines(false), m_scan_mode(false), m_bsl_convert_mode(false)
 {
 }
 
@@ -48,6 +48,11 @@ void bcp_implementation::enable_scan_mode()
 void bcp_implementation::enable_licence_mode()
 {
    m_licence_mode = true;
+}
+
+void bcp_implementation::enable_bsl_convert_mode()
+{
+   m_bsl_convert_mode = true;
 }
 
 void bcp_implementation::enable_unix_lines()
