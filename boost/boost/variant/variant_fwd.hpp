@@ -17,8 +17,6 @@
 #ifndef BOOST_VARIANT_VARIANT_FWD_HPP
 #define BOOST_VARIANT_VARIANT_FWD_HPP
 
-#include <iosfwd> // for std::basic_ostream forward declare
-
 #include "boost/config.hpp"
 #include "boost/mpl/limits/list.hpp"
 #include "boost/mpl/void.hpp"
@@ -166,21 +164,6 @@ template <
 
   >
 class variant;
-
-//////////////////////////////////////////////////////////////////////////
-// function template operator<<
-//
-// Streaming output forward declare. See variant.hpp for details.
-//
-
-template <
-      typename E, typename T
-    , BOOST_VARIANT_ENUM_PARAMS(typename U)
-    >
-inline std::basic_ostream<E,T>& operator<<(
-      std::basic_ostream<E,T>& out
-    , const variant< BOOST_VARIANT_ENUM_PARAMS(U) >& rhs
-    );
 
 } // namespace boost
 

@@ -18,7 +18,6 @@
 #define BOOST_VARIANT_VARIANT_HPP
 
 #include <cstddef> // for std::size_t
-#include <iosfwd> // for std::basic_ostream forward declare
 #include <new> // for placement new
 #include <typeinfo> // for typeid, std::type_info
 
@@ -1640,52 +1639,6 @@ inline void swap(
     )
 {
     lhs.swap(rhs);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// function template operator<<
-//
-// Outputs the content of the given variant to the given ostream.
-//
-
-namespace detail { namespace variant {
-
-template <typename OStream>
-class printer
-    : public boost::static_visitor<>
-{
-private: // representation
-
-    OStream& out_;
-
-public: // structors
-
-    explicit printer(OStream& out)
-        : out_( out )
-    {
-    }
-
-public: // visitor interface
-
-    template <typename T>
-    void operator()(const T& operand) const
-    {
-        out_ << operand;
-    }
-
-};
-
-}} // namespace detail::variant
-
-template <typename E, typename T, BOOST_VARIANT_ENUM_PARAMS(typename U)>
-inline std::basic_ostream<E,T>& operator<<(
-      std::basic_ostream<E,T>& out
-    , const variant< BOOST_VARIANT_ENUM_PARAMS(U) >& rhs
-    )
-{
-    detail::variant::printer< std::basic_ostream<E,T> > visitor(out);
-    rhs.apply_visitor(visitor);
-    return out;
 }
 
 } // namespace boost
