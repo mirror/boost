@@ -165,7 +165,7 @@ namespace boost { namespace numeric { namespace ublas {
                                                        l, lower_ + 1 + upper_)];
 #endif
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-            external_logic ().raise ();
+            bad_index ().raise ();
 #endif
             return zero_;
         }
@@ -1180,7 +1180,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return data () (i, j);
 #endif
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-            external_logic ().raise ();
+            bad_index ().raise ();
 #endif
             return zero_;
         }
@@ -1203,7 +1203,7 @@ namespace boost { namespace numeric { namespace ublas {
                 return data () (i, j);
 #endif
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-            external_logic ().raise ();
+            bad_index ().raise ();
 #endif
             return zero_;
         }

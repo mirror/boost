@@ -130,12 +130,12 @@ namespace boost { namespace numeric { namespace ublas {
                 return data () [functor1_type::element (functor2_type (), i, size1_, j, size2_)];
             else if (functor1_type::one (i, j)) {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-                external_logic ().raise ();
+                bad_index ().raise ();
 #endif
                 return one_;
             } else {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-                external_logic ().raise ();
+                bad_index ().raise ();
 #endif
                 return zero_;
             }
@@ -1053,12 +1053,12 @@ namespace boost { namespace numeric { namespace ublas {
                 return data () (i, j);
             else if (functor_type::one (i, j)) {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-                external_logic ().raise ();
+                bad_index ().raise ();
 #endif
                 return one_;
             } else {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-                external_logic ().raise ();
+                bad_index ().raise ();
 #endif
                 return zero_;
             }
@@ -1072,12 +1072,12 @@ namespace boost { namespace numeric { namespace ublas {
                 return data () (i, j);
             else if (functor_type::one (i, j)) {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-                external_logic ().raise ();
+                bad_index ().raise ();
 #endif
                 return one_;
             } else {
 #ifndef BOOST_UBLAS_REFERENCE_CONST_MEMBER
-                external_logic ().raise ();
+                bad_index ().raise ();
 #endif
                 return zero_;
             }
