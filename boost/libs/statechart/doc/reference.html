@@ -1043,28 +1043,29 @@ namespace fsm
   class exception_thrown : public event&lt; exception_thrown &gt; {};
 
   template&lt; class ExceptionEvent = exception_thrown &gt;
-  struct exception_translator
+  class exception_translator
   {
-    template&lt; class Action, class ExceptionEventHandler &gt;
-    fsm::result operator()(
-      Action action,
-      ExceptionEventHandler eventHandler,
-      result handlerSuccessResult )
-    {
-      try
+    public:
+      template&lt; class Action, class ExceptionEventHandler &gt;
+      fsm::result operator()(
+        Action action,
+        ExceptionEventHandler eventHandler,
+        result handlerSuccessResult )
       {
-        return action();
-      }
-      catch( ... )
-      {
-        if ( !eventHandler( ExceptionEvent() ) )
+        try
         {
-          throw;
+          return action();
         }
+        catch( ... )
+        {
+          if ( !eventHandler( ExceptionEvent() ) )
+          {
+            throw;
+          }
 
-        return handlerSuccessResult;
+          return handlerSuccessResult;
+        }
       }
-    }
   };
 }
 }</pre>
@@ -1078,14 +1079,15 @@ ExceptionTranslator concept</a>.</p>
 {
 namespace fsm
 {
-  struct null_exception_translator
+  class null_exception_translator
   {
-    template&lt; class Action, class ExceptionEventHandler &gt;
-    fsm::result operator()(
-      Action action, ExceptionEventHandler, result )
-    {
-      return action();
-    }
+    public:
+      template&lt; class Action, class ExceptionEventHandler &gt;
+      fsm::result operator()(
+        Action action, ExceptionEventHandler, result )
+      {
+        return action();
+      }
   };
 }
 }</pre>
@@ -1947,7 +1949,7 @@ namespace fsm
     class TransitionContext = <i>unspecified</i>,
     void ( TransitionContext::*pTransitionAction )(
       const Event &amp; ) = <i>unspecified</i> &gt;
-  struct transition
+  class transition
   {
     // <i>implementation-defined</i>
   };
@@ -1988,7 +1990,7 @@ and <code><a href="#Class template state">state</a></code> class templates.</p>
 namespace fsm
 {
   template&lt; class Event &gt;
-  struct termination
+  class termination
   {
     // <i>implementation-defined</i>
   };
@@ -2024,7 +2026,7 @@ of this template can be passed to the <code>Reactions</code> parameter of the
 namespace fsm
 {
   template&lt; class Event &gt;
-  struct deferral
+  class deferral
   {
     // <i>implementation-defined</i>
   };
@@ -2061,7 +2063,7 @@ this template can be passed to the <code>Reactions</code> parameter of the
 namespace fsm
 {
   template&lt; class Event &gt;
-  struct custom_reaction
+  class custom_reaction
   {
     // <i>implementation-defined</i>
   };
@@ -2107,7 +2109,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40399" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40411" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
