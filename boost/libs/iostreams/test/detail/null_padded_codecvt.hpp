@@ -48,7 +48,7 @@ private:
 
 } } }
 
-BOOST_IOSTREAMS_CODECVT_SPEC(::boost::iostreams::test::null_padded_codecvt_state)
+BOOST_IOSTREAMS_CODECVT_SPEC(boost::iostreams::test::null_padded_codecvt_state)
 
 namespace boost { namespace iostreams { namespace test {
 
@@ -60,7 +60,9 @@ namespace boost { namespace iostreams { namespace test {
 // as each character is consumed until its value reaches 0 again.
 //
 class null_padded_codecvt
-    : public iostreams::detail::codecvt_helper<wchar_t, char, null_padded_codecvt_state>
+    : public iostreams::detail::codecvt_helper<
+                 wchar_t, char, null_padded_codecvt_state
+             >
 {
 public:
     typedef null_padded_codecvt_state state_type;
