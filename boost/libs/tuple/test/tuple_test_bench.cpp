@@ -264,11 +264,13 @@ void foo7() {
 // Testing cons lists
 void foo8()
 {
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   cons<volatile float, null_type> a(1, null_type());
   cons<const int, cons<volatile float, null_type> > b(2,a);
   int i = 3;
   cons<int&, cons<const int, cons<volatile float, null_type> > > c(i, b);
   BOOST_TEST(make_tuple(3,2,1)==c);
+#endif
 }
 
 
