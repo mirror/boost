@@ -228,7 +228,7 @@ namespace boost
         template <class I1, class I2>
         struct apply
           :
-# if BOOST_WORKAROUND(__GNUC__, == 2) && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(95))
+# ifdef BOOST_NO_ONE_WAY_ITERATOR_INTEROP
           iterator_difference<I1>
 # elif BOOST_WORKAROUND(BOOST_MSVC, == 1200)
           mpl::if_<
@@ -575,9 +575,7 @@ namespace boost
   // ----------------
   //
 
-# if BOOST_WORKAROUND(__GNUC__, == 2) && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(95))
-// GCC-2.95 eagerly instantiates templated constructors and conversion
-// operators in convertibility checks, causing premature errors.
+# ifdef BOOST_NO_ONE_WAY_ITERATOR_INTEROP
 #  define BOOST_ITERATOR_CONVERTIBLE(a,b) mpl::true_()
 # else
 #  define BOOST_ITERATOR_CONVERTIBLE(a,b) is_convertible<a,b>()
