@@ -39,9 +39,8 @@ local test-dir = "$(BOOST_ROOT)$(SLASH)libs$(SLASH)serialization$(SLASH)test$(SL
 rule run-invoke ( test-name : sources * : defn * )
 {    
     Echo $(test-name) ;
-    local tests ;
     # debug
-    tests += [ 
+    local tests = [ 
         run 
             $(sources)
             <lib>../../test/build/boost_test_exec_monitor
@@ -63,12 +62,18 @@ rule run-invoke ( test-name : sources * : defn * )
          : # default-build
             debug  
     ] ;
+    
+    if [ MATCH (.*load.*.run) : $(tests) ] {
+	    DEPENDS $(tests) : [ SUBST $(tests) (.*)(load)(.*) $1save$3 ] ;
+	    ECHO DEPENDS $(tests) ":" [ SUBST $(tests) (.*)(load)(.*) $1save$3 ] ;
+	}
+	
     # release mode tests are only run if this environment variable is set
     # "_release" is appended to the name of the test if its a realease mode 
     # test.  This permits them to appear in the same table built by
     # compiler_status
     if $(BOOST_SERIALIZATION_TEST_RELEASE) {
-        tests += [ 
+        local releasetest = [ 
             run 
                 $(sources)
                 <lib>../../test/build/boost_test_exec_monitor
@@ -90,8 +95,16 @@ rule run-invoke ( test-name : sources * : defn * )
             : # default-build
                 release
         ] ;
+        
+        if [ MATCH (.*load.*.run) : $(releasetest) ] {
+	        DEPENDS $(releasetest) : [ SUBST $(releasetest) (.*)(load)(.*) $1save$3 ] ;
+	    }
+	    
+	    tests += releasetest ;
+	    
     }
-    return $(tests) ;
+    
+    return  ;
 }
 
 rule test-bsl-run ( test-name : sources * )
@@ -195,11 +208,12 @@ test-suite "serialization" :
     [ test-bsl-run_polymorphic_archive test_polymorphic : test_polymorphic_A ]
 ;
 
-DEPENDS test_class_info_load_text_archive : test_class_info_save_text_archive ;
-DEPENDS test_class_info_load_text_warchive : test_class_info_save_text_warchive ;
-DEPENDS test_class_info_load_binary_archive : test_class_info_save_binary_archive ;
-DEPENDS test_class_info_load_xml_archive : test_class_info_save_xml_archive ;
-DEPENDS test_class_info_load_xml_warchive : test_class_info_save_xml_warchive ;
+# This last DEPENDS makes the directory for the part 2 depend on the 
+# completion of part 1. You may ask why the directory and not the test 
+# itself? Strangely it's because to properly chain the tests you need to 
+# make the earliest step of the second test depend on the latest part of 
+# the next test. And directories are the only sure thing that you can know 
+# a test needs first.
 
 if $(BOOST_SERIALIZATION_TEST) {
     test-suite "serialization" : 
@@ -236,5 +250,7 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ compile test_const.cpp : std::locale-support ]
     ;
 }
-DEPENDS test_demo_xml_load : test_demo_xml_save ;
+
+
+
 
