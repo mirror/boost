@@ -60,6 +60,18 @@ namespace gregorian {
     explicit date(special_values sv):
       date_time::date<date, gregorian_calendar, date_duration>(date_rep_type::from_special(sv))
     {}
+    //!Return the Julian Day number for the date.
+    date_int_type julian_day() const
+    {
+      ymd_type ymd = year_month_day();
+      return gregorian_calendar::julian_day_number(ymd);
+    }
+    //!Return the Modified Julian Day number for the date.
+    long modjulian_day() const
+    {
+      ymd_type ymd = year_month_day();
+      return gregorian_calendar::modjulian_day_number(ymd);      
+    }
     //! Return the day number from the calendar
     date_int_type day_number() const
     {
