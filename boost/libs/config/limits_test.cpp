@@ -95,8 +95,8 @@ void test_float_limits(const T &, const char * msg)
   }
 
   if(lim::has_infinity) {
-    // make sure those values are not 0 or similar nonsense
-    // infinity is beyond the representable range
+    // Make sure those values are not 0 or similar nonsense.
+    // Infinity must compare as if larger than the maximum representable value.
     BOOST_TEST(infinity > lim::max());
     BOOST_TEST(-infinity < -lim::max());
   } else {
@@ -105,13 +105,14 @@ void test_float_limits(const T &, const char * msg)
  
   if(lim::has_quiet_NaN) { 
     // NaNs shall always compare "false" when compared for equality
-    // If one of these fail, your compiler may be optimizing incorrectly
+    // If one of these fail, your compiler may be optimizing incorrectly,
+    // or the standard library is incorrectly configured.
     BOOST_TEST(! (qnan == 42));
     BOOST_TEST(! (qnan == qnan));
     BOOST_TEST(qnan != 42);
     BOOST_TEST(qnan != qnan);
   
-    // The following tests may cause arithmetic traps etc. Avoid for now.
+    // The following tests may cause arithmetic traps.
     // BOOST_TEST(! (qnan < 42));
     // BOOST_TEST(! (qnan > 42));
     // BOOST_TEST(! (qnan <= 42));
