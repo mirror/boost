@@ -6,6 +6,12 @@ unit-test is_instance_of_test
     : <sysinclude>$(BOOST_ROOT)
     ;
 
+unit-test algortihm_test
+    : algorithm_test.cpp
+      <lib>../../test/build/test_exec_monitor
+    : <sysinclude>$(BOOST_ROOT)
+    ;
+    
 unit-test operator_tests_simple
     : operator_tests_simple.cpp
       <lib>../../test/build/test_exec_monitor
