@@ -212,23 +212,23 @@ void test_matrix () {
 
 #ifdef USE_BOUNDED_MATRIX
 #ifdef USE_FLOAT
-    std::cout << "float" << std::endl;
+    std::cout << "float, bounded" << std::endl;
     test_my_matrix<ublas::bounded_matrix<float, 3, 3>, 3> () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "double" << std::endl;
+    std::cout << "double, bounded" << std::endl;
     test_my_matrix<ublas::bounded_matrix<double, 3, 3>, 3> () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
-    std::cout << "std::complex<float>" << std::endl;
+    std::cout << "std::complex<float>, bounded" << std::endl;
     test_my_matrix<ublas::bounded_matrix<std::complex<float>, 3, 3>, 3> () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "std::complex<double>" << std::endl;
+    std::cout << "std::complex<double>, bounded" << std::endl;
     test_my_matrix<ublas::bounded_matrix<std::complex<double>, 3, 3>, 3> () ();
 #endif
 #endif
