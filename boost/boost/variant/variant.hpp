@@ -73,6 +73,7 @@
 #include "boost/mpl/size_t.hpp"
 #include "boost/mpl/sizeof.hpp"
 #include "boost/mpl/transform.hpp"
+#include "boost/mpl/assert.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Implementation Macros:
@@ -1043,11 +1044,7 @@ private: // static precondition assertions
     // NOTE TO USER :
     // variant< type-sequence > syntax is not supported on this compiler!
     //
-#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-    BOOST_STATIC_ASSERT( ::boost::mpl::not_<is_sequence_based_>::value );
-#   else
-    BOOST_STATIC_ASSERT( !is_sequence_based_::value );
-#   endif
+    BOOST_MPL_ASSERT_NOT(( is_sequence_based_ ));
 
 #endif // BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT workaround
 
