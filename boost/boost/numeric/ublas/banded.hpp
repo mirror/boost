@@ -109,17 +109,17 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, size_type lower = 0, size_type upper = 0, bool preserve = true) {
-            size1_ = size1;
-            size2_ = size2;
-            lower_ = lower;
-            upper_ = upper;
             if (preserve) {
                 self_type temporary (size1, size2, lower, upper);
-                detail::matrix_resize_preserve<layout_type> (*this, temporary, size_, size_);
-                assign_temporary (temporary);
+                detail::matrix_resize_preserve<layout_type> (*this, temporary);
             }
-            else
+            else {
                 data ().resize ((std::max) (size1, size2) * (lower + 1 + upper));
+	            size1_ = size1;
+    	        size2_ = size2;
+        	    lower_ = lower;
+            	upper_ = upper;
+	        }
         }
 
         BOOST_UBLAS_INLINE

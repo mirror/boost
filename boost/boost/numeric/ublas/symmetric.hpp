@@ -121,14 +121,14 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
-            size_ = size;
             if (preserve) {
-                self_type temporary (size_, size_);
-                detail::matrix_resize_preserve<triangular_type> (*this, temporary, size_, size_);
-                assign_temporary (temporary);
+                self_type temporary (size, size);
+                detail::matrix_resize_preserve<layout_type> (*this, temporary);
             }
-            else
-                data ().resize (triangular_type::packed_size (layout_type (), size_, size_));
+            else {
+                data ().resize (triangular_type::packed_size (layout_type (), size, size));
+	            size_ = size;
+            }
         }
         BOOST_UBLAS_INLINE
         void resize (size_type size1, size_type size2, bool preserve = true) {

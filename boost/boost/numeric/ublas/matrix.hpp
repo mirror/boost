@@ -31,12 +31,16 @@ namespace boost { namespace numeric { namespace ublas {
         // Matrix resizing algorithm
         template <class L, class M>
         BOOST_UBLAS_INLINE
-        void matrix_resize_preserve (M& m, M& temporary, typename M::size_type size1, typename M::size_type size2) {
+        void matrix_resize_preserve (M& m, M& temporary) {
             typedef L layout_type;
             typedef typename M::size_type size_type;
+            const size_type msize1 (m.size1 ());		// original size
+            const size_type msize2 (m.size2 ());
+            const size_type size1 (temporary.size1 ());	// new size is specified by temporary
+            const size_type size2 (temporary.size2 ());
             // Common elements to preserve
-            const size_type size1_min = (std::min) (size1, m.size1_);
-            const size_type size2_min = (std::min) (size2, m.size2_);
+            const size_type size1_min = (std::min) (size1, msize1);
+            const size_type size2_min = (std::min) (size2, msize2);
             // Order loop for i-major and j-minor sizes
             const size_type i_size = layout_type::size1 (size1_min, size2_min);
             const size_type j_size = layout_type::size2 (size1_min, size2_min);
@@ -45,10 +49,10 @@ namespace boost { namespace numeric { namespace ublas {
                     const size_type element1 = layout_type::element1(i,i_size, j,j_size);
                     const size_type element2 = layout_type::element2(i,i_size, j,j_size);
                     temporary.data () [layout_type::element (element1, size1, element2, size2)] =
-                            m.data() [layout_type::element (element1, m.size1_, element2, m.size2_)];
+                            m.data() [layout_type::element (element1, msize1, element2, msize2)];
                 }
             }
-            assign_temporary (temporary);
+            m.assign_temporary (temporary);
         }
     }
 
@@ -131,23 +135,7 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size1, size_type size2, bool preserve = true) {
             if (preserve) {
                 self_type temporary (size1, size2);
-                // FIXME use matrix_resize_preserve on conformant compilers
-                // detail::matrix_resize_reserve<layout_type> (*this, temporary, size1, size2);
-                // Common elements to preserve
-                const size_type size1_min = (std::min) (size1, size1_);
-                const size_type size2_min = (std::min) (size2, size2_);
-                // Order loop for i-major and j-minor sizes
-                const size_type i_size = layout_type::size1 (size1_min, size2_min);
-                const size_type j_size = layout_type::size2 (size1_min, size2_min);
-                for (size_type i = 0; i != i_size; ++i) {    // indexing copy over major
-                    for (size_type j = 0; j != j_size; ++j) {
-                        const size_type element1 = layout_type::element1(i,i_size, j,j_size);
-                        const size_type element2 = layout_type::element2(i,i_size, j,j_size);
-                        temporary.data () [layout_type::element (element1, size1, element2, size2)] =
-                                data() [layout_type::element (element1, size1_, element2, size2_)];
-                    }
-                }
-                assign_temporary (temporary);
+                detail::matrix_resize_preserve<layout_type> (*this, temporary);
             }
             else {
                 data ().resize (layout_type::storage_size (size1, size2));
