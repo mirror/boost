@@ -14,13 +14,6 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#include <iostream>
-
-#include <boost/numeric/ublas/config.hpp>
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/vector_sparse.hpp>
-#include <boost/numeric/ublas/io.hpp>
-
 #include "test3.hpp"
 
 // Test vector expression templates

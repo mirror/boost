@@ -17,6 +17,14 @@
 #ifndef TEST4_H
 #define TEST4_H
 
+#include <iostream>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_proxy.hpp>
+#include <boost/numeric/ublas/banded.hpp>
+#include <boost/numeric/ublas/io.hpp>
+
 //#define USE_BANDED
 #define USE_DIAGONAL
 

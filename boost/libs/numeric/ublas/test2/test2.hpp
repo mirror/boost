@@ -17,6 +17,15 @@
 #ifndef TEST2_H
 #define TEST2_H
 
+#include <iostream>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/triangular.hpp>
+#include <boost/numeric/ublas/io.hpp>
+
+#include <boost/numeric/ublas/blas.hpp>
+
 namespace ublas = boost::numeric::ublas;
 
 template<class V>

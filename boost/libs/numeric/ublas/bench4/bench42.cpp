@@ -20,7 +20,6 @@
 #include <boost/numeric/interval.hpp>
 #include <boost/numeric/interval/io.hpp>
 
-#include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 

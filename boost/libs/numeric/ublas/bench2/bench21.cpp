@@ -17,7 +17,6 @@
 #include <iostream>
 #include <string>
 
-#include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/vector_sparse.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
