@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+<!DOCTYPE chapter PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<section xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook.documenting"
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook.documenting"
          last-revision="$Date$">
   <title>Documenting libraries</title>
     
@@ -243,5 +243,5 @@ linkend="boostbook.linking"/></simpara></entry>
     IDs start with the short name of a library followed by a period,
     so that IDs do not conflict between libraries.</para>
   </section>
-</section>
+</chapter>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+<!DOCTYPE chapter PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<section xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook.together"
+<chapter xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook.together"
          last-revision="$Date$">
   <title>Bringing Together a BoostBook Document</title>
 
@@ -60,4 +60,4 @@
     alt="boost::function">function</classname>: <code>&lt;classname
     alt="boost::function"&gt;function&lt;/classname&gt;</code>.</para>
   </section>
-</section>
+</chapter>

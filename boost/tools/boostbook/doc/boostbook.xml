@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE chapter PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+<!DOCTYPE part PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<chapter xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook"
-         last-revision="$Date$">
-  <chapterinfo>
+<part xmlns:xi="http://www.w3.org/2001/XInclude" id="boostbook"
+     last-revision="$Date$">
+  <partinfo>
     <author>
       <firstname>Douglas</firstname>
       <surname>Gregor</surname>
@@ -26,11 +26,11 @@
       implied warranty, and with no claim as to its suitability for
       any purpose. </para> 
     </legalnotice>
-  </chapterinfo>
+  </partinfo>
 
   <title>The BoostBook Documentation Format</title>
 
-  <section>
+  <chapter>
     <title>Introduction</title>
    
     <para>The BoostBook documentation format is an extension of <ulink
@@ -92,9 +92,9 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
         </listitem>
       </itemizedlist>
     </para>
-  </section>
+  </chapter>
 
-  <section id="boostbook.getting.started">
+  <chapter id="boostbook.getting.started">
     <title>Getting Started</title>
 
     <para>To use the Boost documentation tools, you will need an
@@ -126,6 +126,15 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
             url="http://www.zlatkovic.com/pub/libxml/">download the
             libxml2, libxslt, and iconv binaries</ulink>.</para>
           </listitem>
+        </itemizedlist>
+      </listitem>
+      <listitem>
+        <para>On MacOS X:</para> 
+
+        <itemizedlist>
+          <listitem>
+            <para>If you have Fink, just get the <code>libxslt</code> and <code>doxygen</code> packages.</para>
+            <para>Without Fink, you can <ulink url="http://www.zveno.com/open_source/libxml2xslt.html">download the libxslt binaries</ulink>.</para>
         </itemizedlist>
       </listitem>
     </itemizedlist>
@@ -338,9 +347,9 @@ boostbook any : any.doxygen ;</programlisting>
         <listitem><simpara>Further transformations may generate HTML, FO, PDF, etc. from <filename>any.docbook</filename>.</simpara></listitem>
       </orderedlist>
     </section>
-  </section>
+  </chapter>
 
   <xi:include href="documenting.xml"/>
   <xi:include href="together.xml"/>
   <xi:include href="reference.xml"/>
-</chapter>
+</part>
