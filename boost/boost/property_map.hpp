@@ -429,13 +429,21 @@ namespace boost {
     typedef typename C::key_type key_type;
     typedef typename C::data_type value_type;
     typedef value_type& reference;
+    typedef lvalue_property_map_tag category;
     associative_property_map(C& c) : m_c(c) { }
     reference operator[](const key_type& k) const {
-      return (*m_c.find(k)).second;
+      return m_c[k];
     }
   private:
     C& m_c;
   };
+
+  template <class UniquePairAssociativeContainer>
+  associative_property_map<UniquePairAssociativeContainer>
+  make_assoc_property_map(UniquePairAssociativeContainer& c)
+  {
+    return associative_property_map<UniquePairAssociativeContainer>(c);
+  }
 
   template <typename UniquePairAssociativeContainer>
   class const_associative_property_map
@@ -448,14 +456,21 @@ namespace boost {
     typedef typename C::key_type key_type;
     typedef typename C::data_type value_type;
     typedef const value_type& reference;
+    typedef lvalue_property_map_tag category;
     const_associative_property_map(const C& c) : m_c(c) { }
     reference operator[](const key_type& k) const {
-      return (*m_c.find(k)).second;
+      return m_c[k];
     }
   private:
     C& m_c;
   };
   
+  template <class UniquePairAssociativeContainer>
+  const_associative_property_map<UniquePairAssociativeContainer>
+  make_assoc_property_map(const UniquePairAssociativeContainer& c)
+  {
+    return const_associative_property_map<UniquePairAssociativeContainer>(c);
+  }
 
   //=========================================================================
   // A property map that applies the identity function
