@@ -21,9 +21,6 @@
 #include <boost/utility.hpp>  // for noncopyable
 #include <boost/cstdint.hpp>  // for uintmax_t
 #include <iostream>
-#if defined(__GNUC__) && __GNUC__ == 2 && __GNUC_MINOR__ <= 95
-  namespace std { class ios_base : public ios{}; }
-#endif
 
 namespace boost {
 
@@ -46,8 +43,15 @@ class progress_timer : public timer, noncopyable
   //  Therefore, wrap the I/O in a try block, catch and ignore all exceptions.
     try
     {
+# if !defined(__GNUC__) || __GNUC__ > 2
       std::ios_base::fmtflags old_flags = _os.setf( std::ios_base::fixed,
-                                                   std::ios_base::floatfield );
+                                                    std::ios_base::floatfield );
+#else
+      std::ios::fmtflags old_flags = _os.setf( std::ios::fixed,
+                                               std::ios::floatfield );
+# endif
+
+
       std::streamsize old_prec = _os.precision( 2 );
       _os << elapsed() << " s\n" // "s" is System International d'Unités std
                        << std::endl;
