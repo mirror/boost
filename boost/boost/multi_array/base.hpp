@@ -306,6 +306,7 @@ public:
     const_reverse_iterator_generator<T,NumDims,value_type,
     const_reference,iterator_tag,index>::type const_reverse_iterator;
 
+  BOOST_STATIC_CONSTANT(std::size_t, dimensionality = NumDims);
 protected:
   typedef iterator_base<T,T*> iter_base;
   typedef iterator_base<T,const T*> const_iter_base;
