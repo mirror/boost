@@ -28,24 +28,24 @@
 #include <boost/static_assert.hpp>
 #include <boost/random/uniform_smallint.hpp>
 #include <boost/random/detail/signed_unsigned_compare.hpp>
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#include <boost/type_traits/is_float.hpp>
+#endif
 
 namespace boost {
 
 // uniform integer distribution on [min, max]
-template<class UniformRandomNumberGenerator, class IntType = int>
-class uniform_int
+
+namespace detail {
+
+template<class UniformRandomNumberGenerator, class IntType>
+class uniform_int_integer
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
-
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
-#endif
-
-  uniform_int(base_type & rng, IntType min, IntType max) 
+  uniform_int_integer(base_type & rng, IntType min, IntType max) 
     : _rng(rng), _min(min), _max(max), _range(_max - _min),
       _bmin(_rng.min()), _brange(_rng.max() - _bmin)
   {
@@ -61,18 +61,9 @@ public:
   result_type min() const { return _min; }
   result_type max() const { return _max; }
   base_type& base() const { return _rng; }
-  void reset() { }
 
   result_type operator()();
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend bool operator==(const uniform_int& x, const uniform_int& y)
-  { return x._min == y._min && x._max == y._max && x._rng == y._rng; }
-#else
-  // Use a member function
-  bool operator==(const uniform_int& rhs) const
-  { return _min == rhs._min && _max == rhs._max && _rng == rhs._rng;  }
-#endif
 private:
   typedef typename base_type::result_type base_result;
   base_type & _rng;
@@ -81,14 +72,8 @@ private:
   int _range_comparison;
 };
 
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-//  A definition is required even for integral static constants
 template<class UniformRandomNumberGenerator, class IntType>
-const bool uniform_int<UniformRandomNumberGenerator, IntType>::has_fixed_range;
-#endif
-
-template<class UniformRandomNumberGenerator, class IntType>
-inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
+inline IntType uniform_int_integer<UniformRandomNumberGenerator, IntType>::operator()()
 {
   if(_range_comparison == 0) {
     // this will probably never happen in real life
@@ -119,7 +104,7 @@ inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
         // _range+1 is an integer power of _brange+1: no rejections required
         return result;
       // _range/mult < _brange+1  -> no endless loop
-      result += uniform_int<base_type,result_type>(_rng, 0, _range/mult)() * mult;
+      result += uniform_int_integer<base_type,result_type>(_rng, 0, _range/mult)() * mult;
       if(result <= _range)
         return result + _min;
     }
@@ -127,7 +112,7 @@ inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
     if(_brange / _range > 4 /* quantization_cutoff */ ) {
       // the new range is vastly smaller than the source range,
       // so quantization effects are not relevant
-      return uniform_smallint<base_type,result_type>(_rng, _min, _max)();
+      return boost::uniform_smallint<base_type,result_type>(_rng, _min, _max)();
     } else {
       // use rejection method to handle things like 0..5 -> 0..4
       for(;;) {
@@ -140,6 +125,113 @@ inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
     }
   }
 }
+
+
+template<class UniformRandomNumberGenerator, class IntType>
+class uniform_int_float
+{
+public:
+  typedef UniformRandomNumberGenerator base_type;
+  typedef IntType result_type;
+
+  uniform_int_float(base_type & rng, IntType min, IntType max)
+    : _rng(rng), _min(min), _max(max),
+      _range(static_cast<base_result>(_max-_min)+1)
+  { }
+
+  result_type min() const { return _min; }
+  result_type max() const { return _max; }
+  base_type& base() const { return _rng.base(); }
+
+  result_type operator()()
+  {
+    return static_cast<IntType>(_rng() * _range) + _min;
+  }
+
+private:
+  typedef typename base_type::result_type base_result;
+  uniform_01<base_type> _rng;
+  result_type _min, _max;
+  base_result _range;
+};
+
+
+// simulate partial specialization
+template<bool is_integer>
+struct uniform_int;
+
+template<>
+struct uniform_int<true>
+{
+  template<class UniformRandomNumberGenerator, class IntType>
+  struct impl
+  {
+    typedef uniform_int_integer<UniformRandomNumberGenerator, IntType> type
+;
+  };
+};
+
+template<>
+struct uniform_int<false>
+{
+  template<class UniformRandomNumberGenerator, class IntType>
+  struct impl
+  {
+    typedef uniform_int_float<UniformRandomNumberGenerator, IntType> type;
+  };
+};
+
+} // namespace detail
+
+
+template<class UniformRandomNumberGenerator, class IntType = int>
+class uniform_int
+{
+private:
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+  typedef typename detail::uniform_int<std::numeric_limits<typename UniformRandomNumberGenerator::result_type>::is_integer>::impl<UniformRandomNumberGenerator, IntType>::type impl_type;
+#else
+  typedef typename detail::uniform_int<boost::is_float<typename UniformRandomNumberGenerator::result_type>::value == false>::impl<UniformRandomNumberGenerator, IntType>::type impl_type;
+#endif
+
+public:
+  typedef UniformRandomNumberGenerator base_type;
+  typedef IntType result_type;
+
+  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
+
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+  BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+#endif
+
+  uniform_int(base_type & rng, IntType min, IntType max)
+    : impl(rng, min, max)
+  { }
+
+  result_type min() const { return impl.min(); }
+  result_type max() const { return impl.max(); }
+  base_type& base() const { return impl.base(); }
+  void reset() { }
+
+  result_type operator()() { return impl(); }
+
+#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+  friend bool operator==(const uniform_int& x, const uniform_int& y)
+  { return x.min() == y.min() && x.max() == y.max() && x.base() == y.base(); }
+#else
+  // Use a member function
+  bool operator==(const uniform_int& rhs) const
+  { return min() == rhs.min() && max() == rhs.max() && base() == rhs.base();  }
+#endif
+private:
+  impl_type impl;
+};
+
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class UniformRandomNumberGenerator, class IntType>
+const bool uniform_int<UniformRandomNumberGenerator, IntType>::has_fixed_range;
+#endif
 
 } // namespace boost
 
