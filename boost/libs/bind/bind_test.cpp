@@ -190,10 +190,29 @@ void function_object_test()
 
 #if !defined(__MWERKS__) || (__MWERKS__ > 0x2406)     // Fails for this version of the compiler.
 
+    global_result = 0;
     bind<void>(Y(), i, _1, 9, 4)(k);
     BOOST_TEST( global_result == 4938 );
 
 #endif
+}
+
+void function_object_test2()
+{
+    using namespace boost;
+
+    short i(6);
+
+    int const k = 3;
+
+    BOOST_TEST( bind(type<short>(), Y(), ref(i))() == 7 );
+    BOOST_TEST( bind(type<short>(), Y(), ref(i))() == 8 );
+    BOOST_TEST( bind(type<int>(), Y(), i, _1)(k) == 38 );
+    BOOST_TEST( bind(type<long>(), Y(), i, _1, 9)(k) == 938 );
+
+    global_result = 0;
+    bind(type<void>(), Y(), i, _1, 9, 4)(k);
+    BOOST_TEST( global_result == 4938 );
 }
 
 //
@@ -487,6 +506,7 @@ int main()
 {
     function_test();
     function_object_test();
+    function_object_test2();
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     adaptable_function_object_test();
