@@ -63,7 +63,6 @@ class filter_iterator_generator
 {
 public:
   typedef <tt><a href="./iterator_adaptors.htm#iterator_adaptor">iterator_adaptor</a>&lt...&gt;</tt> type; // the resulting filter iterator type 
-  typedef ... policies_type;          // the policies type for the iterator adaptor
 }
 </pre>
 
@@ -81,11 +80,11 @@ int main() {
   int numbers[] = { 0, -1, 4, -3, 5, 8, -2 };
   const int N = sizeof(numbers)/sizeof(int);
 
-  typedef boost::filter_iterator_generator&lt;is_positive_number, int*, int&gt; Gen;
+  typedef boost::filter_iterator_generator&lt;is_positive_number, int*, int&gt;::type FilterIter;
   is_positive_number predicate;
-  Gen::policies_type policies(predicate, numbers + N);
-  Gen::type filter_iter_first(numbers, policies);
-  Gen::type filter_iter_last(numbers + N, policies);
+  FilterIter::policies_type policies(predicate, numbers + N);
+  FilterIter filter_iter_first(numbers, policies);
+  FilterIter filter_iter_last(numbers + N, policies);
 
   std::copy(filter_iter_first, filter_iter_last, std::ostream_iterator&lt;int&gt;(std::cout, " "));
   std::cout &lt;&lt; std::endl;
