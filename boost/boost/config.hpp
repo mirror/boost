@@ -119,12 +119,19 @@
 
 //  BOOST_DECL:  Certain compilers for Microsoft operating systems require
 //  non-standard class and function decoration if dynamic load library linking
-//  is desired.  BOOST_DECL supplies that decoration, defaulting to a nul string
-//  so that it is harmless when not required.  Boost does not encourage the use
-//  of BOOST_DECL - it is non-standard and to be avoided if practical to do so.
-
-//  BOOST_DECL_EXPORTS:  User defined, BOOST_DECL_EXPORTS causes BOOST_DECL to
-//  be defined as __declspec(dllexport) rather than __declspec(dllimport).
+//  is desired.  BOOST_DECL supplies that decoration.  Boost does not require
+//  use of BOOST_DECL - it is non-standard and to be avoided if practical to do
+//  so. Even compilers requiring it for DLL's only require it in certain cases.
+//
+//    BOOST_DECL_EXPORTS:  User defined, usually via command line or IDE,
+//    it causes BOOST_DECL to be defined as __declspec(dllexport).
+//
+//    BOOST_DECL_IMPORTS:  User defined, usually via command line or IDE,
+//    it causes BOOST_DECL to be defined as __declspec(dllimport).
+//
+//    If neither BOOST_DECL_EXPORTS nor BOOST_DECL_IMPORTS is defined, or if
+//    the compiler does not require __declspec() decoration, BOOST_DECL is
+//    defined as a null string.
 
 //  BOOST_MSVC6_MEMBER_TEMPLATES:  Microsoft Visual C++ 6.0 has enough member
 //  template idiosyncrasies (being polite) that BOOST_NO_MEMBER_TEMPLATES is
@@ -225,9 +232,14 @@
 #     endif
 #   endif
 #   if defined BOOST_DECL_EXPORTS
+#     if defined BOOST_DECL_IMPORTS
+#       error Not valid to define both BOOST_DECL_EXPORTS and BOOST_DECL_IMPORTS
+#     endif
 #     define BOOST_DECL __declspec(dllexport)
-#   else
+#   elif defined BOOST_DECL_IMPORTS
 #     define BOOST_DECL __declspec(dllimport)
+#   else
+#     define BOOST_DECL
 #   endif
 
 //  Intel  -------------------------------------------------------------------//
@@ -263,9 +275,14 @@
 #     define BOOST_SYSTEM_HAS_STDINT_H
 #   endif
 #   if defined BOOST_DECL_EXPORTS
+#     if defined BOOST_DECL_IMPORTS
+#       error Not valid to define both BOOST_DECL_EXPORTS and BOOST_DECL_IMPORTS
+#     endif
 #     define BOOST_DECL __declspec(dllexport)
-#   else
+#   elif defined BOOST_DECL_IMPORTS
 #     define BOOST_DECL __declspec(dllimport)
+#   else
+#     define BOOST_DECL
 #   endif
 
 #   define BOOST_STD_EXTENSION_NAMESPACE Metrowerks
@@ -347,9 +364,14 @@
 #   endif
 
 #   if defined BOOST_DECL_EXPORTS
+#     if defined BOOST_DECL_IMPORTS
+#       error Not valid to define both BOOST_DECL_EXPORTS and BOOST_DECL_IMPORTS
+#     endif
 #     define BOOST_DECL __declspec(dllexport)
-#   else
+#   elif defined BOOST_DECL_IMPORTS
 #     define BOOST_DECL __declspec(dllimport)
+#   else
+#     define BOOST_DECL
 #   endif
 
 # endif // Microsoft (excluding Intel/EDG frontend) 
