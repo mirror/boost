@@ -7,6 +7,7 @@
 #define BOOST_TT_IS_POLYMORPHIC_HPP
 
 #include <boost/type_traits/is_class.hpp>
+#include <boost/type_traits/remove_cv.hpp>
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
 
@@ -16,13 +17,14 @@ namespace detail{
 template <class T>
 struct is_polymorphic_imp1
 {
-   struct d1 : public T
+   typedef remove_cv<T>::type ncvT;
+   struct d1 : public ncvT
    {
       d1();
       ~d1()throw();
       char padding[256];
    };
-   struct d2 : public T
+   struct d2 : public ncvT
    {
       d2();
       virtual ~d2()throw();

@@ -13,6 +13,7 @@
 #include TYPE_TRAITS(is_base_and_derived)
 #include TYPE_COMPARE(is_same)
 #include TYPE_COMPARE(is_convertible)
+#include TYPE_TRAITS(is_polymorphic)
 
 //
 // VC++ emits an awful lot of warnings unless we define these:
@@ -58,6 +59,18 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same<test_abc1, test_abc1>::value), true
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same<test_abc1, const test_abc1>::value), false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<void,float>::value), false);
+
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const UDT>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<volatile empty_UDT>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const VB>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const volatile VD>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const test_abc1>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<volatile test_abc2>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::exception>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::bad_alloc>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::runtime_error>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::out_of_range>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_polymorphic<const std::range_error>::value, true);
 
 TT_TEST_END
 
