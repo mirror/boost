@@ -41,10 +41,6 @@ int cpp_main(int argc, char* argv[])
 
 //
 // define the number of failures expected for given compilers:
-#ifdef __MWERKS__
-unsigned int expected_failures = 5;
-#else
 unsigned int expected_failures = 0;
-#endif
 
 
