@@ -163,7 +163,7 @@ namespace boost {
             {
                 replace_native_helper< has_native_replace<InputT>::value >()(
                     Input, From, To, Begin, End );
-            };
+            }
 
             template< typename InputT, typename InsertT >
             inline void replace(

@@ -91,7 +91,7 @@ namespace boost {
 
             Result.swap(Tmp);
             return Result;
-        };
+        }
 
 //  iterate split ---------------------------------------------------//
 
@@ -151,7 +151,7 @@ namespace boost {
             
             Result.swap(Tmp);
             return Result;
-        };
+        }
 
     } // namespace algorithm
 
