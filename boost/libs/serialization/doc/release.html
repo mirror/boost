@@ -1,0 +1,141 @@
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>Serialization - Release Notes</title>
+</head>
+<body link="#0000ff" vlink="#800080">
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary="header">
+  <tr> 
+    <td valign="top" width="300"> 
+      <h3><a href="../../../index.htm"><img height="86" width="277" alt="C++ Boost" src="../../../c++boost.gif" border="0"></a></h3>
+    </td>
+    <td valign="top"> 
+      <h1 align="center">Serialization</h1>
+      <h2 align="center">Release Notes</h2>
+    </td>
+  </tr>
+</table>
+<hr>
+<dl class="index">
+  <dt><a href="#requirements">Requirements</a></dt>
+  <dt><a href="#Installation">Installation</a></dt>
+  <dt><a href="#Platforms">Platforms</a></dt>
+  <dt><a href="#recent_improvements">Differences from Draft #18</a></dt>
+  <dt><a href="#todo">Pending Issues</a></dt>
+</dl>
+This is Draft #19 of a proposed Boost Serialization Library.
+There are currently no known bugs. This library has been tested with Boost
+version 1.31.0 as of 11 April 2004.
+<h2><a name="requirements"></a>Requirements</h2>
+This library requires Boost version 1.31 or later.  Depending on the compiler used,
+It may also require spirit 1.6 which is not part of the standard boost distribution.
+<p>
+The installation procedure presumes that the following programs are in 
+your current path
+<ul>
+    <li><strong>bjam</strong>
+    <li><strong>process_jam_log</strong>
+    <li><strong>compiler_status</strong>
+</ul>
+If these are not built or not in the current path, make required adjustments.
+The programs are part of the boost tools/regression directory and can be built
+there if necessary.
+<p>
+I also recommend testing the regression system with the following procedure:
+<ol>
+    <li>change current directory to BOOST_ROOT/tools/regression/test.
+    (where BOOST_ROOT is your boost root directory)
+    <li>invoke runtest.bat (on an Windoz system) or runtest.sh or runtest.ksh on other systems.
+    <li>if necessary, you can invoke the commands in runtest.bat one
+    by one from the command line.
+    <li>when finished you should have an html file with a set of test
+    results.
+    <li>review the bjam.log to be sure that the results match the table.
+    If they don't, advise the boost build mailing list.
+</ol>
+The serialization library requires the boost spirit package to load XML archives.
+We have found that all tests pass using spirit 1.6x. Spirit 1.8 does not work with
+older compilers - specificallly MSVC 6 and Borland.
+If you are using one of these two compilers, you may download a version
+of spirit 1.6 <a href="http://spirit.sourceforge.net/index.php?doc=download/index.html">here</a>.
+To use this downloaded version rather than the one included with boost,
+set an environmental variable SPIRIT_ROOT to be equal to the root 
+directory where the downloaded copy of spirit has been placed. E. G.
+<pre><code>
+set SPIRIT_ROOT=c:/spirit161
+</code></pre>
+If you're not using bjam and the jamfile to build the library, be sure that
+the directory which contains the version of spirit you plan to use is placed
+at the front of the list of include paths.
+<h2><a name="Installation"></a>Installation</h2>
+I use the following procedure for building and testing this library:
+<ul>
+    <li>Unzip the <strong>serialization19.zip</strong> file to an empty directory.
+    (If you're reading this you probably have already done this.)
+    <li>Copy the files in this library into the corresponding
+    sub directories your local boost directory tree.
+    <li>Set current directory to the <strong>boost-root/libs/serialization/test</strong>.
+    <li>Invoke <code>runtest &lt;toolset&gt; &lt;boost root directory&gt;</code> for the toolset you use. 
+    (E.G. vc7, GCC, etc.) This will build the required libraries then run all the tests.  
+    <li>There now should exist an updated file 
+    <a href="../test/compiler_status.html"><strong>compiler_status.html</strong></a>
+</ul>
+Note that this will build only those libraries required to build and execute
+the tests.  If the above completes successfully and you want to start using
+the serialization library in your own projects, You can build all the
+variations of the library:
+<ul>
+    <li>Change the current directory to 
+    <a href="../build"><strong>boost-root/libs/serialization/build</strong></a>.
+    <li>Invoke <code>bjam -sTOOLS=&lt;toolset&gt;</code>
+</ul>
+This will build debug and release versions of libboost_serialization.lib.
+If your build platform supports wide character i/o, debug and release
+versions of libboost_wserialization.lib will also be built.  All 
+applications which use serialization should be linked with the former. 
+Applications which use wide character i/o should be linked with both.
+<p>
+Similarly, to build the examples:
+<ul>
+    <li>Change the current directory to 
+    <a href="../example"><strong>boost-root/libs/serialization/example</strong></a>.
+    <li>Invoke <code>bjam -sTOOLS=&lt;toolset&gt;</code>
+</ul>
+<h2><a name="Platforms"></a>Platforms</h2>
+This library has been built and tested for debug and release modes on 
+VC++ 6.0, VC 7.0, GCC 3.3, and Intel 8.0.
+Some less conforming compilers fail some tests.  
+Details are available in the <a href="implementation.html#othercompilerissues">
+implementation notes</a>.
+
+<h2><a name="recent_improvements"></a>Differences from Draft #18</h2>
+<ul>
+    <li>Reorganization of header and template file
+    <li>Enhanced documentation to help explain implementation issues.
+    <li>Adjustments to improve support for less conformant compilers.
+    <li>Introduction of polymorphic pointers.
+    <li>A few bug fixes.
+</ul>
+
+<h2><a name="todo"></a>Pending issues</h2>
+<ul>
+    <li>Compile, and test on more platforms
+    <li>implement <code>is_virtual_base&lt;T&gt;</code> to automatically
+    eliminate redundancy in virtual base class serialization.
+    <li>currently can't serialize through a pointer an object a of class
+    that implements its own <code style="white-space: normal">new/delete</code> operators.
+</ul>
+
+<hr>
+<p>Revised 
+  <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
+ 29 February, 2004 
+  <!--webbot bot="Timestamp" endspan i-checksum="39359" -->
+</p>
+<p><i>&copy; Copyright <a href="http://www.rrsd.com">Robert Ramey</a> 
+  2003-2004. All Rights Reserved.</i></p>
+</body>
+</html>

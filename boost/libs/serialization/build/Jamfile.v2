@@ -1,0 +1,44 @@
+# Boost serialization Library Build Jamfile
+
+project boost/serialization
+    : source-location ../src
+    ;
+
+SOURCES = 
+    basic_archive
+    basic_iarchive
+    basic_oarchive
+    basic_serializer_map
+    basic_xml_archive
+    binary_iarchive
+    binary_oarchive
+    codecvt_null
+    extended_type_info
+    extended_type_info_no_rtti
+    extended_type_info_typeid
+    polymorphic_iarchive
+    polymorphic_oarchive
+    text_iarchive
+    text_oarchive
+    void_cast
+    xml_grammar
+    xml_iarchive
+    xml_oarchive
+;
+    
+WSOURCES = 
+    binary_wiarchive
+    binary_woarchive
+    text_wiarchive
+    text_woarchive
+    xml_wgrammar
+    xml_wiarchive
+    xml_woarchive
+    utf8_codecvt_facet
+;
+
+lib boost_serialization : $(SOURCES).cpp :
+        <toolset>msvc:<cxxflags>/Gy ;
+
+lib boost_wserialization : $(WSOURCES).cpp :
+        <toolset>msvc:<cxxflags>/Gy ;
