@@ -8,7 +8,7 @@ subproject libs/functional/hash/test ;
 
 import testing ;
 
-DEPENDS all : hash_std hash_extensions ;
+DEPENDS all : functional/hash ;
 
 rule hash-test ( name )
 {
@@ -20,7 +20,7 @@ rule hash-test ( name )
 }
 
 {
-    test-suite "functional/hash"
+    test-suite functional/hash
         :
             [ hash-test hash_number_test ]
             [ hash-test hash_pointer_test ]
