@@ -5,12 +5,13 @@
  *      http://www.josuttis.com/cppcode
  * for details and the latest version.
  *
- * (C) Copyright Nicolai M. Josuttis 1999.
+ * (C) Copyright Nicolai M. Josuttis 2001.
  * Permission to copy, use, modify, sell and distribute this software
  * is granted provided this copyright notice appears in all copies.
  * This software is provided "as is" without express or implied
  * warranty, and with no claim as to its suitability for any purpose.
  *
+ * 05 Aug 2001 - minor update (Nico Josuttis)
  * 20 Jan 2001 - STLport fix (Beman Dawes)
  * 29 Sep 2000 - Initial Revision (Nico Josuttis)
  */
@@ -49,7 +50,7 @@ namespace boost {
         const_iterator end() const { return elems+N; }
 
         // reverse iterator support
-#if    !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
         typedef std::reverse_iterator<iterator> reverse_iterator;
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 #else

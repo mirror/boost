@@ -29,23 +29,25 @@ int&nbsp;main()<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;create&nbsp;and&nbsp;initialize&nbsp;array</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;array&lt;int,10&gt;&nbsp;a&nbsp;=&nbsp;{&nbsp;{&nbsp;1,&nbsp;2,&nbsp;3,&nbsp;4,&nbsp;5&nbsp;}&nbsp;};<BR>
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;PRINT_ELEMENTS(a);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;print_elements(a);<BR>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;modify&nbsp;elements&nbsp;directly</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;(unsigned&nbsp;i=0;&nbsp;i&lt;a.size();&nbsp;++i)&nbsp;{<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;++a[i];<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;}<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;PRINT_ELEMENTS(a);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;print_elements(a);<BR>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;change&nbsp;order&nbsp;using&nbsp;an&nbsp;STL&nbsp;algorithm</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;reverse(a.begin(),a.end());<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;PRINT_ELEMENTS(a);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;print_elements(a);<BR>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;negate&nbsp;elements&nbsp;using&nbsp;STL&nbsp;framework</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;transform(a.begin(),a.end(),&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;source</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a.begin(),&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;destination</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;negate&lt;int&gt;());&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;operation</FONT></I><BR>
-&nbsp;&nbsp;&nbsp;&nbsp;PRINT_ELEMENTS(a);<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;print_elements(a);<BR>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;makes&nbsp;Visual-C++&nbsp;compiler&nbsp;happy</FONT></I><BR>
 }<BR>
 <BR>
 </SPAN>

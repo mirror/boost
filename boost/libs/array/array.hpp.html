@@ -19,16 +19,16 @@
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;an&nbsp;STL&nbsp;container&nbsp;(as&nbsp;wrapper)&nbsp;for&nbsp;arrays&nbsp;of&nbsp;constant&nbsp;size.</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;See</FONT></I><BR>
-&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://www.josuttis.com/cppcode</FONT></I><BR>
+&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.josuttis.com/cppcode">http://www.josuttis.com/cppcode</a></FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;for&nbsp;details&nbsp;and&nbsp;the&nbsp;latest&nbsp;version.</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*</FONT></I><BR>
-&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;(C)&nbsp;Copyright&nbsp;Nicolai&nbsp;M.&nbsp;Josuttis&nbsp;1999.</FONT></I><BR>
+&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;(C)&nbsp;Copyright&nbsp;Nicolai&nbsp;M.&nbsp;Josuttis&nbsp;2001.</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;Permission&nbsp;to&nbsp;copy,&nbsp;use,&nbsp;modify,&nbsp;sell&nbsp;and&nbsp;distribute&nbsp;this&nbsp;software</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;is&nbsp;granted&nbsp;provided&nbsp;this&nbsp;copyright&nbsp;notice&nbsp;appears&nbsp;in&nbsp;all&nbsp;copies.</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;This&nbsp;software&nbsp;is&nbsp;provided&nbsp;"as&nbsp;is"&nbsp;without&nbsp;express&nbsp;or&nbsp;implied</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;warranty,&nbsp;and&nbsp;with&nbsp;no&nbsp;claim&nbsp;as&nbsp;to&nbsp;its&nbsp;suitability&nbsp;for&nbsp;any&nbsp;purpose.</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*</FONT></I><BR>
-&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;Sep&nbsp;29,&nbsp;2000</FONT></I><BR>
+&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;Aug&nbsp;05,&nbsp;2001</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*/</FONT></I><BR>
 #ifndef&nbsp;BOOST_ARRAY_HPP<BR>
 #define&nbsp;BOOST_ARRAY_HPP<BR>
@@ -65,11 +65,11 @@ namespace&nbsp;boost&nbsp;{<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const_iterator&nbsp;end()&nbsp;const&nbsp;{&nbsp;return&nbsp;elems+N;&nbsp;}<BR>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;reverse&nbsp;iterator&nbsp;support</FONT></I><BR>
-#if&nbsp;!defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)<BR>
+#if&nbsp;!defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)&nbsp;&&&nbsp;!defined(BOOST_MSVC_STD_ITERATOR)<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;std::reverse_iterator&lt;iterator&gt;&nbsp;reverse_iterator;<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;std::reverse_iterator&lt;const_iterator&gt;&nbsp;const_reverse_iterator;<BR>
 #else<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;workaround&nbsp;for&nbsp;broken&nbsp;reverse_iterator&nbsp;implementations&nbsp;due&nbsp;to&nbsp;no&nbsp;partial&nbsp;specialization</FONT></I><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;workaround&nbsp;for&nbsp;broken&nbsp;reverse_iterator&nbsp;implementations</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;std::reverse_iterator&lt;iterator,T&gt;&nbsp;reverse_iterator;<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;std::reverse_iterator&lt;const_iterator,T&gt;&nbsp;const_reverse_iterator;<BR>
 #endif<BR>

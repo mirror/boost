@@ -35,7 +35,8 @@ int main()
         std::cout << " " << *pos;
     }
     std::cout << std::endl;
-    return 0;
+
+    return 0;  // makes Visual-C++ compiler happy
 }
 
 template <class T>

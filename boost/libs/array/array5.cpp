@@ -47,11 +47,11 @@ int main()
     c = a;
     if (a==b && a==c) {
         std::cout << "copy construction and copy assignment are OK"
-	          << std::endl;
+                  << std::endl;
     }
     else {
-        std::cout << "copy construction and copy assignment are OK"
-	          << std::endl;
+        std::cout << "copy construction and copy assignment are BROKEN"
+                  << std::endl;
     }
 
     typedef boost::array<double,6> DArray;
@@ -60,6 +60,7 @@ int main()
     DArray da;
     da = ia;
     da.assign(42);
-    return 0;
+
+    return 0;  // makes Visual-C++ compiler happy
 }
 

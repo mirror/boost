@@ -40,12 +40,13 @@ int main()
     c = a;
     if (a==b && a==c) {
         std::cout << "copy construction and copy assignment are OK"
-	          << std::endl;
+                  << std::endl;
     }
     else {
         std::cout << "copy construction and copy assignment FAILED"
-	          << std::endl;
+                  << std::endl;
     }
-    return 0;
+
+    return 0;  // makes Visual-C++ compiler happy
 }
 
