@@ -135,7 +135,7 @@ private:
 int main()
 {
   my_generator gen;
-  boost::generator_iterator&lt;my_generator> it(gen);
+  boost::generator_iterator_generator&lt;my_generator&gt;::type it = boost::make_generator_iterator(gen);
   for(int i = 0; i &lt; 10; ++i, ++it)
     std::cout &lt;&lt; *it &lt;&lt; std::endl;
 }
