@@ -37,10 +37,10 @@ void save(Archive & ar,
   typename posix_time::time_duration::min_type m = td.minutes();
   typename posix_time::time_duration::sec_type s = td.seconds();
   typename posix_time::time_duration::fractional_seconds_type fs = td.fractional_seconds();
-  ar & make_nvp("time_duration: hours", h);
-  ar & make_nvp("time_duration: minutes", m);
-  ar & make_nvp("time_duration: seconds", s);
-  ar & make_nvp("time_duration: fractional seconds", fs);
+  ar & make_nvp("time_duration_hours", h);
+  ar & make_nvp("time_duration_minutes", m);
+  ar & make_nvp("time_duration_seconds", s);
+  ar & make_nvp("time_duration_fractional_seconds", fs);
 }
 
 //! Function to load posix_time::time_duration objects using serialization lib
@@ -57,10 +57,10 @@ void load(Archive & ar,
   typename posix_time::time_duration::min_type m(0);
   typename posix_time::time_duration::sec_type s(0);
   typename posix_time::time_duration::fractional_seconds_type fs(0);
-  ar & make_nvp("time_duration: hours", h);
-  ar & make_nvp("time_duration: minutes", m);
-  ar & make_nvp("time_duration: seconds", s);
-  ar & make_nvp("time_duration: fractional seconds", fs);
+  ar & make_nvp("time_duration_hours", h);
+  ar & make_nvp("time_duration_minutes", m);
+  ar & make_nvp("time_duration_seconds", s);
+  ar & make_nvp("time_duration_fractional_seconds", fs);
   td = posix_time::time_duration(h,m,s,fs);
 }
 
@@ -82,8 +82,8 @@ void save(Archive & ar,
   // therefore date and time_duration are used
   typename posix_time::ptime::date_type d = pt.date();
   typename posix_time::ptime::time_duration_type td = pt.time_of_day();
-  ar & make_nvp("ptime: date", d);
-  ar & make_nvp("ptime: time_duration", td);
+  ar & make_nvp("ptime_date", d);
+  ar & make_nvp("ptime_time_duration", td);
 }
 
 //! Function to load posix_time::ptime objects using serialization lib
@@ -99,8 +99,8 @@ void load(Archive & ar,
   // therefore date and time_duration are used
   typename posix_time::ptime::date_type d(posix_time::not_a_date_time);
   typename posix_time::ptime::time_duration_type td;
-  ar & make_nvp("ptime: date", d);
-  ar & make_nvp("ptime: time_duration", td);
+  ar & make_nvp("ptime_date", d);
+  ar & make_nvp("ptime_time_duration", td);
   pt = boost::posix_time::ptime(d,td);
 }
 
@@ -128,8 +128,8 @@ void save(Archive & ar,
 {
   typename posix_time::ptime beg(tp.begin().date(), tp.begin().time_of_day());
   typename posix_time::ptime end(tp.end().date(), tp.end().time_of_day());
-  ar & make_nvp("time_period: begin", beg);
-  ar & make_nvp("time_period: end", end);
+  ar & make_nvp("time_period_begin", beg);
+  ar & make_nvp("time_period_end", end);
 }
 
 //! Function to load posix_time::time_period objects using serialization lib
@@ -145,8 +145,8 @@ void load(Archive & ar,
   typename gregorian::date d(gregorian::not_a_date_time);
   typename posix_time::ptime beg(d,td);
   typename posix_time::ptime end(d,td);
-  ar & make_nvp("time_period: begin", beg);
-  ar & make_nvp("time_period: end", end);
+  ar & make_nvp("time_period_begin", beg);
+  ar & make_nvp("time_period_end", end);
   tp = boost::posix_time::time_period(beg, end);
 }
 

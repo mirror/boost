@@ -9,6 +9,8 @@
 #include <boost/date_time/posix_time/time_serialize.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/archive/xml_iarchive.hpp>
 #include <boost/date_time/testfrmwk.hpp>
 #include <fstream>
 
@@ -34,12 +36,27 @@ int main(){
   time_period tp2(pt2, hours(1));
   
   std::ofstream ofs("tmp_file");
+
+  // NOTE: DATE_TIME_XML_SERIALIZE is only used in testing and is
+  // defined in the testing Jamfile
+#if defined(DATE_TIME_XML_SERIALIZE)
+  std::cout << "Running xml archive tests" << std::endl;
+  archive::xml_oarchive oa(ofs);
+#else
+  std::cout << "Running text archive tests" << std::endl;
   archive::text_oarchive oa(ofs);
+#endif // DATE_TIME_XML_SERIALIZE
 
   try{
+#if defined(DATE_TIME_XML_SERIALIZE)
+    oa << BOOST_SERIALIZATION_NVP(pt);
+    oa << BOOST_SERIALIZATION_NVP(tp);
+    oa << BOOST_SERIALIZATION_NVP(td);
+#else
     oa << pt;
     oa << tp;
     oa << td;
+#endif // DATE_TIME_XML_SERIALIZE
   }catch(archive::archive_exception ae){
     std::string s(ae.what());
     check("Error writing to archive: " + s, false);
@@ -50,12 +67,22 @@ int main(){
   ofs.close();
 
   std::ifstream ifs("tmp_file");
+#if defined(DATE_TIME_XML_SERIALIZE)
+  archive::xml_iarchive ia(ifs);
+#else
   archive::text_iarchive ia(ifs);
+#endif // DATE_TIME_XML_SERIALIZE
 
   try{
+#if defined(DATE_TIME_XML_SERIALIZE)
+    ia >> BOOST_SERIALIZATION_NVP(pt2);
+    ia >> BOOST_SERIALIZATION_NVP(tp2);
+    ia >> BOOST_SERIALIZATION_NVP(td2);
+#else
     ia >> pt2;
     ia >> tp2;
     ia >> td2;
+#endif // DATE_TIME_XML_SERIALIZE
   }catch(archive::archive_exception ae){
     std::string s(ae.what());
     check("Error readng from archive: " + s, false);
