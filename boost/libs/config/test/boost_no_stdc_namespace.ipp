@@ -26,9 +26,11 @@ namespace boost_no_stdc_namespace{
 int test()
 {
    char c = 0;
+#ifndef BOOST_NO_CTYPE_FUNCTIONS
    std::isspace(c);
    std::isalpha(c);
    std::ispunct(c);
+#endif
    std::strlen(&c);
    std::clock();
 
@@ -36,6 +38,3 @@ int test()
 }
 
 }
-
-
-
