@@ -512,18 +512,15 @@ public: // visitor interfaces
 // (detail) metafunction make_variant_list
 //
 // Provides a MPL-compatible sequence with the specified non-void types
-// as arguments. However, if resultant sequence is empty, then resultant
-// sequence contains boost::empty.
+// as arguments.
 //
-// Rationale #1: see class template convert_void (above) and using-
+// Rationale: see class template convert_void (variant_fwd.hpp) and using-
 // declaration workaround (below).
-//
-// Rationale #2: boost::empty behavior enables variant<> syntax.
 //
 template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
 struct make_variant_list
 {
-private: // helpers, for metafunction result (below)
+public: // metafunction result
 
     // [Define a macro to convert any void(NN) tags to mpl::void...]
 #   define BOOST_VARIANT_AUX_CONVERT_VOID(z, N,_)   \
@@ -536,18 +533,10 @@ private: // helpers, for metafunction result (below)
             , BOOST_VARIANT_AUX_CONVERT_VOID
             , _
             )
-        >::type initial_result;
+        >::type type;
 
     // [...and, finally, the conversion macro can be undefined:]
 #   undef BOOST_VARIANT_AUX_CONVERT_VOID
-
-public: // metafunction result
-
-    typedef typename mpl::if_<
-          mpl::empty<initial_result>
-        , mpl::list1<boost::empty>
-        , initial_result
-        >::type type;
 
 };
 

@@ -21,8 +21,11 @@
 #include "boost/mpl/limits/list.hpp"
 #include "boost/mpl/void.hpp"
 #include "boost/preprocessor/cat.hpp"
+#include "boost/preprocessor/dec.hpp"
 #include "boost/preprocessor/enum_params.hpp"
 #include "boost/preprocessor/repeat.hpp"
+
+#include "boost/empty.hpp"
 
 #if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 #   include "boost/preprocessor/enum_params_with_a_default.hpp"
@@ -140,14 +143,16 @@ BOOST_PP_REPEAT(
 // or
 //   variant<T0,T1,...,Tn>  (where T0 is NOT a type-sequence)
 // or
-//   variant<>, which acts like variant<boost::empty>
+//   variant<>, which is variant<boost::empty>
 //
 template <
+
+    typename First = boost::empty,
 
 #if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
     BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-        BOOST_VARIANT_LIMIT_TYPES
+        BOOST_PP_DEC(BOOST_VARIANT_LIMIT_TYPES)
       , typename T
       , detail::variant::void_
       )
@@ -155,7 +160,7 @@ template <
 #else// defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 
     BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(
-        BOOST_VARIANT_LIMIT_TYPES
+        BOOST_PP_DEC(BOOST_VARIANT_LIMIT_TYPES)
       , typename T
       , detail::variant::void//NN
       )
