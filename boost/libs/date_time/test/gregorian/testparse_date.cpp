@@ -183,6 +183,25 @@ main()
   }
 
   try {
+    std::string s2("2001-02-29"); //oops should be 28
+    boost::gregorian::date bad_day(boost::gregorian::from_string(s2)); //won't construct
+    check("check bad leap year", false);
+    //The line below won't execute, but make the compiler think
+    //we are using bad day....
+    std::cout << "Oh oh, this shouldn't be reached: "
+              << boost::gregorian::to_iso_string(bad_day) << std::endl;
+
+  }
+  catch(boost::gregorian::bad_day_of_month) { //expected
+    check("check bad leap year", true);
+  }
+  catch(std::exception& e) {
+    //oops wrong exception
+    check("check bad leap year",  false);
+    std::cout << "Fail: " << e.what() << std::endl;
+  }
+
+  try {
     std::string s2("2001-14-1"); //oops should be <= 12
     boost::gregorian::date bad_month(boost::date_time::parse_date<boost::gregorian::date>(s2));
     check("check bad month", false); //fail the test
