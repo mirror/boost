@@ -20,6 +20,8 @@
 
 #include "boost/tuple/tuple_comparison.hpp"
 
+#include "boost/type_traits/is_const.hpp"
+
 #include <string>
 #include <utility>
 
@@ -208,6 +210,15 @@ void element_access_test()
 
   ++get<0>(t);
   BOOST_TEST(get<0>(t) == 6);
+
+  using boost::tuples::element;
+
+  BOOST_STATIC_ASSERT((boost::is_const<element<0, tuple<int, float> >::type>::value != true));
+  BOOST_STATIC_ASSERT((boost::is_const<element<0, const tuple<int, float> >::type>::value));
+
+  BOOST_STATIC_ASSERT((boost::is_const<element<1, tuple<int, float> >::type>::value != true));
+  BOOST_STATIC_ASSERT((boost::is_const<element<1, const tuple<int, float> >::type>::value));
+
 
   dummy(i); dummy(i2); dummy(j); dummy(e); // avoid warns for unused variables
 #else
