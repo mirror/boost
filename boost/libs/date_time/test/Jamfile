@@ -27,6 +27,7 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
      : 
    [ run gregorian/testdate.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testdate_duration.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
+   [ run gregorian/testgreg_durations.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testperiod.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testdate_iterator.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
    [ run gregorian/testfacet.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  ]
@@ -43,6 +44,7 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
      : 
    [ run gregorian/testdate.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testdate_dll ]
    [ run gregorian/testdate_duration.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testdate_duration_dll ]
+   [ run gregorian/testgreg_durations.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testgreg_duration_dll ]
    [ run gregorian/testperiod.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testperiod_dll ]
    [ run gregorian/testdate_iterator.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testdate_iterator_dll ]
    [ run gregorian/testfacet.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testfacet_dll ]
@@ -94,6 +96,9 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
    [ run posix_time/testtime_formatters.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
+   [ run posix_time/testgreg_duration_operators.cpp
+     <lib>../build/boost_date_time
+    : : :  $(DATE_TIME_PROPERTIES) ]
  ;
 
    test-suite date_time_wide_streaming
@@ -109,15 +114,10 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
 
 }
 
-# Copyright (c) 2000
+# Copyright (c) 2000-2004
 # CrystalClear Software, Inc.
-#
-# Permission to use, copy, modify, distribute and sell this software
-# and its documentation for any purpose is hereby granted without fee,
-# provided that the above copyright notice appear in all copies and
-# that both that copyright notice and this permission notice appear
-# in supporting documentation.  CrystalClear Software makes no
-# representations about the suitability of this software for any
-# purpose.  It is provided "as is" without express or implied warranty.
+# Subject to the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE-1.0 or 
+# http://www.boost.org/LICENSE-1.0)
 
 
