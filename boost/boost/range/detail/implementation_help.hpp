@@ -70,7 +70,7 @@ namespace boost
         }
 
         template< typename T, std::size_t sz >
-        inline T* array_end( T (&arrays)[sz], char_or_wchar_t_array_tag )
+        inline T* array_end( T (&array)[sz], char_or_wchar_t_array_tag )
         {
             return array + sz - 1;
         }
