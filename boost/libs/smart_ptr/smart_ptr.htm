@@ -24,7 +24,7 @@
 			responsible for deletion of the object when it is no longer needed.</p>
 		<p>The smart pointer library provides five smart pointer class templates:</p>
 		<div align="left">
-			<table border="1" cellpadding="4" cellspacing="4">
+			<table border="1" cellpadding="4" cellspacing="0">
 				<tr>
 					<td><a href="scoped_ptr.htm"><b>scoped_ptr</b></a></td>
 					<td><a href="../../boost/scoped_ptr.hpp">&lt;boost/scoped_ptr.hpp&gt;</a></td>
@@ -50,14 +50,19 @@
 					<td><a href="../../boost/weak_ptr.hpp">&lt;boost/weak_ptr.hpp&gt;</a></td>
 					<td>Non-owning observers of an object owned by <b>shared_ptr</b>.</td>
 				</tr>
+				<tr>
+					<td><a href="intrusive_ptr.html"><b>intrusive_ptr</b></a></td>
+					<td><a href="../../boost/intrusive_ptr.hpp">&lt;boost/intrusive_ptr.hpp&gt;</a></td>
+					<td>Shared ownership of objects with an embedded reference count.</td>
+				</tr>
 			</table>
 		</div>
 		<p>These templates are designed to complement the <b>std::auto_ptr</b> template.</p>
 		<p>They are examples of the "resource acquisition is initialization" idiom 
 			described in Bjarne Stroustrup's "The C++ Programming Language", 3rd edition, 
 			Section 14.4, Resource Management.</p>
-		<p>A test program, <a href="test/smart_ptr_test.cpp">smart_ptr_test.cpp</a>, is provided 
-			to verify correct operation.</p>
+		<p>A test program, <a href="test/smart_ptr_test.cpp">smart_ptr_test.cpp</a>, is 
+			provided to verify correct operation.</p>
 		<p>A page on <a href="compatibility.htm">compatibility</a> with older versions of 
 			the Boost smart pointer library describes some of the changes since earlier 
 			versions of the smart pointer implementation.</p>
@@ -169,10 +174,7 @@
 			February, 1994. This paper includes an extensive discussion of weak pointers 
 			and an extensive bibliography.</p>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan
---> 
-			15 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32303"
---></p>
+		<p>$Date$</p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Permission to copy, use, modify, sell and distribute this document is granted 
 			provided this copyright notice appears in all copies. This document is provided 
