@@ -99,12 +99,6 @@ protected:
     chain_base(const chain_base& rhs): pimpl_(rhs.pimpl_) { }
 public:
 
-    #if defined(BOOST_MSVC) && _MSC_VER == 1300
-        // Although chain_base is not otherwise polymorphic, if this definition
-        // is omitted some tests fail on VC7.0.
-        virtual ~chain_base() { }
-    #endif
-
     //----------Buffer sizing-------------------------------------------------//
 
     // Sets the size of the buffer created for the devices to be added to this
