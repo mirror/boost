@@ -25,8 +25,8 @@
 #define ENUM_PARAMS_TEST_MAX 50
 #endif
 
-#define CONSTANT(I,A) const BOOST_PP_CAT(A,I) = I;
-BOOST_PP_REPEAT(ENUM_PARAMS_TEST_MAX, CONSTANT, int default_param_)
+#define CONSTANT(I,A) BOOST_PP_CAT(A,I) = I
+const int BOOST_PP_ENUM(ENUM_PARAMS_TEST_MAX, CONSTANT, default_param_);
 #undef CONSTANT
 
 #define TEST_ENUM_PARAMS(N)\
@@ -41,3 +41,6 @@ TEST_ENUM_PARAMS(0)
 TEST_ENUM_PARAMS(ENUM_PARAMS_TEST_MAX)
 
 #undef TEST_ENUM_PARAMS
+
+template<BOOST_PP_ENUM_PARAMS(ENUM_PARAMS_TEST_MAX,class T)>
+struct no_rescan;
