@@ -289,7 +289,7 @@ inline void swap(const function&lt;Arg1, Arg2, <i>...</i>Arg<i>MAX_ARGS</i>&gt;&
 </ul>
 
 <h2><a name="usage">Basic usage</a></h2>
-<p> A wrapper is defined simply by specializing a <code>function</code> object with the desired return type and argument types. Any number of arguments may be supplied, up to some implementation-defined limit (10 is the default maximum). The following declares a function object wrapper <code>f</code> that takes two <code>int</code> parameters and returns a <code>float</code>:
+<p> A wrapper is defined simply by instantiating the <code>function</code> class template with the desired return type and argument types. Any number of arguments may be supplied, up to some implementation-defined limit (10 is the default maximum). The following declares a function object wrapper <code>f</code> that takes two <code>int</code> parameters and returns a <code>float</code>:
 <pre>
 boost::function&lt;float, int, int&gt; f;
 </pre>
@@ -379,7 +379,7 @@ struct print_policy {
 
 <p> A new instance of the policy class will be created prior to calling the function object target and will be preserved until after the call has returned. Therefore, for any invocation the <code>precall</code> and <code>postcall</code> will be executed on the same policy class instance; however, policy class instances will not be kept between target invocations.
 
-<p> Policies are further <a href="http://www.boost.org/more/generic_programming.html#policy">described</a> in the Boost discussion on <a href="http://www.boost.org/more/generic_programming.html">generic programming techniques</a>.
+<p> Policies are further <a href="../../more/generic_programming.html#policy">described</a> in the Boost discussion on <a href="../../more/generic_programming.html">generic programming techniques</a>.
 
 <h3><a name="mixins">Mixins</a></h3>
 <p> The function object wrappers allow any class to be "mixed in" as a base class. This allows extra members and/or functionality to be included by the user. This can be used, for instance, to overcome the limitations of policies by storing data between invocations in a base class instead of in a <code>static</code> member of a policy class. 
