@@ -173,7 +173,7 @@ BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<32> ,
 } // namespace detail
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-template<int Align>
+template<std::size_t Align>
 struct is_pod< ::boost::detail::lower_alignment<Align> >
 {
         BOOST_STATIC_CONSTANT(std::size_t, value = true);
