@@ -28,7 +28,7 @@
 #include <vector>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       // Forward declaration for the mapping from slot names to connections
       class named_slot_map;
@@ -145,7 +145,7 @@ namespace boost {
           slot_container_type;
         typedef slot_container_type::iterator slot_iterator;
         typedef slot_container_type::value_type stored_slot_type;
-        mutable slot_container_type slots;
+        mutable slot_container_type slots_;
       };
 
       class signal_base : public noncopyable {
@@ -182,7 +182,7 @@ namespace boost {
 	shared_ptr<signal_base_impl> impl;
       };
     } // end namespace detail
-  } // end namespace signals
+  } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
 
 #endif // BOOST_SIGNALS_SIGNAL_BASE_HEADER

@@ -16,11 +16,15 @@
 #ifndef BOOST_SIGNALS_COMMON_HEADER
 #define BOOST_SIGNALS_COMMON_HEADER
 
+#ifndef BOOST_SIGNALS_NAMESPACE
+#  define BOOST_SIGNALS_NAMESPACE signals
+#endif
+
 #include <boost/type_traits/conversion_traits.hpp>
 #include <boost/ref.hpp>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       // The unusable class is a placeholder for unused function arguments
       // It is also completely unusable except that it constructable from
@@ -149,7 +153,7 @@ namespace boost {
       class bound_objects_visitor;
       class slot_base;
     } // end namespace detail
-  } // end namespace signals
+  } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
 
 #endif // BOOST_SIGNALS_COMMON_HEADER

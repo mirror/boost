@@ -52,10 +52,10 @@
 
 // Define commonly-used instantiations
 #define BOOST_SIGNALS_ARGS_STRUCT_INST \
-  signals::detail::BOOST_SIGNALS_ARGS_STRUCT<BOOST_SIGNALS_TEMPLATE_ARGS>
+  BOOST_SIGNALS_NAMESPACE::detail::BOOST_SIGNALS_ARGS_STRUCT<BOOST_SIGNALS_TEMPLATE_ARGS>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       // Holds the arguments for a bound slot call in a single place
       template<BOOST_SIGNALS_TEMPLATE_PARMS
@@ -122,7 +122,7 @@ namespace boost {
 	};
       };
     } // namespace detail
-  } // namespace signals
+  } // namespace BOOST_SIGNALS_NAMESPACE
 
   // The actual signalN class
   template<
@@ -137,15 +137,15 @@ namespace boost {
                               BOOST_SIGNALS_TEMPLATE_ARGS> 
   >
   class BOOST_SIGNALS_SIGNAL : 
-    public signals::detail::signal_base, // management of slot list
-    public signals::trackable // signals are trackable
+    public BOOST_SIGNALS_NAMESPACE::detail::signal_base, // management of slot list
+    public BOOST_SIGNALS_NAMESPACE::trackable // signals are trackable
   {
   public:
     // The slot function type
     typedef SlotFunction slot_function_type;
 
     // Result type of a slot
-    typedef typename signals::detail::slot_result_type<R>::type
+    typedef typename BOOST_SIGNALS_NAMESPACE::detail::slot_result_type<R>::type
       slot_result_type;
 
     // Argument types
@@ -160,12 +160,12 @@ namespace boost {
 
   private:
     // The real slot name comparison object type
-    typedef signals::detail::any_bridge_compare<GroupCompare, Group>
+    typedef BOOST_SIGNALS_NAMESPACE::detail::any_bridge_compare<GroupCompare, Group>
       real_group_compare_type;
 
     // The function object passed to the slot call iterator that will call
     // the underlying slot function with its arguments bound
-    typedef signals::detail::BOOST_SIGNALS_CALL_BOUND<R> 
+    typedef BOOST_SIGNALS_NAMESPACE::detail::BOOST_SIGNALS_CALL_BOUND<R> 
       outer_bound_slot_caller;
     typedef typename outer_bound_slot_caller::template
               caller<BOOST_SIGNALS_TEMPLATE_ARGS
@@ -187,21 +187,21 @@ namespace boost {
     typedef Group group_type;
     typedef GroupCompare group_compare_type;
 
-    typedef typename signals::detail::slot_call_iterator_generator<
+    typedef typename BOOST_SIGNALS_NAMESPACE::detail::slot_call_iterator_generator<
                        call_bound_slot, 
                        slot_iterator>::type slot_call_iterator;
 
     explicit 
     BOOST_SIGNALS_SIGNAL(const Combiner& c = Combiner(),
                          const GroupCompare& comp = GroupCompare()) : 
-      signals::detail::signal_base(real_group_compare_type(comp)),
+      BOOST_SIGNALS_NAMESPACE::detail::signal_base(real_group_compare_type(comp)),
       combiner(c)
     {
     }
 
     // Connect a slot to this signal
-    signals::connection connect(const slot_type&);
-    signals::connection connect(const group_type&, const slot_type&);
+    BOOST_SIGNALS_NAMESPACE::connection connect(const slot_type&);
+    BOOST_SIGNALS_NAMESPACE::connection connect(const group_type&, const slot_type&);
 
     // Disconnect a named slot
     void disconnect(const group_type& group)
@@ -226,7 +226,7 @@ namespace boost {
     typename GroupCompare,
     typename SlotFunction
   >
-  signals::connection 
+  BOOST_SIGNALS_NAMESPACE::connection 
   BOOST_SIGNALS_SIGNAL<                                 
     R, BOOST_SIGNALS_TEMPLATE_ARGS                      
     BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS  
@@ -236,7 +236,7 @@ namespace boost {
     // If the slot has been disconnected, just return a disconnected 
     // connection
     if (!in_slot.is_active()) {
-      return signals::connection();
+      return BOOST_SIGNALS_NAMESPACE::connection();
     }
 
     return impl->connect_slot(in_slot.get_slot_function(),
@@ -253,7 +253,7 @@ namespace boost {
     typename GroupCompare,
     typename SlotFunction
   >
-  signals::connection 
+  BOOST_SIGNALS_NAMESPACE::connection 
   BOOST_SIGNALS_SIGNAL<                                 
     R, BOOST_SIGNALS_TEMPLATE_ARGS                      
     BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS  
@@ -286,7 +286,7 @@ namespace boost {
   >::operator()(BOOST_SIGNALS_PARMS)
   {
     // Notify the slot handling code that we are making a call
-    signals::detail::call_notification notification(this->impl);
+    BOOST_SIGNALS_NAMESPACE::detail::call_notification notification(this->impl);
 
     // Construct a function object that will call the underlying slots
     // with the given arguments. 
@@ -298,10 +298,10 @@ namespace boost {
     call_bound_slot f(&args);
 
     // Let the combiner call the slots via a pair of input iterators
-    return combiner(signals::detail::make_slot_call_iterator(
-		      notification.impl->slots.begin(), impl->slots.end(), f),
-		    signals::detail::make_slot_call_iterator(
-		      notification.impl->slots.end(), impl->slots.end(), f));
+    return combiner(BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
+		      notification.impl->slots_.begin(), impl->slots_.end(), f),
+		    BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
+		      notification.impl->slots_.end(), impl->slots_.end(), f));
   }
 
   template<
@@ -324,7 +324,7 @@ namespace boost {
   >::operator()(BOOST_SIGNALS_PARMS) const
   {
     // Notify the slot handling code that we are making a call
-    signals::detail::call_notification notification(this->impl);
+    BOOST_SIGNALS_NAMESPACE::detail::call_notification notification(this->impl);
 
     // Construct a function object that will call the underlying slots
     // with the given arguments. 
@@ -337,10 +337,10 @@ namespace boost {
     call_bound_slot f(&args);
 
     // Let the combiner call the slots via a pair of input iterators
-    return combiner(signals::detail::make_slot_call_iterator(
-		      notification.impl->slots.begin(), impl->slots.end(), f),
-		    signals::detail::make_slot_call_iterator(
-		      notification.impl->slots.end(), impl->slots.end(), f));
+    return combiner(BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
+		      notification.impl->slots_.begin(), impl->slots_.end(), f),
+		    BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
+		      notification.impl->slots_.end(), impl->slots_.end(), f));
   }
 } // namespace boost
 

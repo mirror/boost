@@ -23,7 +23,7 @@
 #include <vector>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     // Base class for "trackable" objects that can be tracked when they are
     // bound in slot target functions. When a trackable object is destroyed,
     // the signal/slot connections are disconnected automatically.
@@ -33,7 +33,7 @@ namespace boost {
 
       friend class detail::signal_base_impl;
       friend class detail::slot_base;
-      void signal_connected(connection, signals::detail::bound_object&) const;
+      void signal_connected(connection, BOOST_SIGNALS_NAMESPACE::detail::bound_object&) const;
       
     protected:
       trackable() : connected_signals(), dying(false) {}
@@ -103,7 +103,7 @@ namespace boost {
         mutable std::vector<const trackable*>& bound_objects;
       };
     } // end namespace detail
-  } // end namespace signals
+  } // end namespace BOOST_SIGNALS_NAMESPACE
 }
 
 #endif // BOOST_SIGNALS_TRACKABLE_HPP

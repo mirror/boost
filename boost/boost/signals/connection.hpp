@@ -25,7 +25,7 @@
 #include <utility>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     class trackable;
 
     namespace detail {
@@ -91,15 +91,15 @@ namespace boost {
       friend class trackable;
 
       // Reset this connection to refer to a different actual connection
-      void reset(signals::detail::basic_connection*);
+      void reset(BOOST_SIGNALS_NAMESPACE::detail::basic_connection*);
 
       // Add a bound object to this connection (not for users)
-      void add_bound_object(const signals::detail::bound_object& b);
+      void add_bound_object(const BOOST_SIGNALS_NAMESPACE::detail::bound_object& b);
 
-      friend class signals::detail::bound_objects_visitor;
+      friend class BOOST_SIGNALS_NAMESPACE::detail::bound_objects_visitor;
 
       // Pointer to the actual contents of the connection
-      shared_ptr<signals::detail::basic_connection> con;
+      shared_ptr<BOOST_SIGNALS_NAMESPACE::detail::basic_connection> con;
 
       // True if the destruction of this connection object should disconnect
       bool controlling_connection;
@@ -143,13 +143,13 @@ namespace boost {
     }
 
     inline void 
-    connection::reset(signals::detail::basic_connection* new_con)
+    connection::reset(BOOST_SIGNALS_NAMESPACE::detail::basic_connection* new_con)
     {
       con.reset(new_con);
     }
 
     inline void 
-    connection::add_bound_object(const signals::detail::bound_object& b)
+    connection::add_bound_object(const BOOST_SIGNALS_NAMESPACE::detail::bound_object& b)
     {
       assert(con.get());
       con->bound_objects.push_back(b);
@@ -285,7 +285,7 @@ namespace boost {
         bool auto_disconnect;
       };
     } // end namespace detail
-  } // end namespace signals
+  } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
 
 #endif // BOOST_SIGNALS_CONNECTION_HPP

@@ -22,7 +22,7 @@
 #include <boost/signals/connection.hpp>
 
 namespace boost {
-  namespace signals {
+  namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       // A cached return value from a slot
       template<typename T>
@@ -114,6 +114,6 @@ namespace boost {
 	return sc_iterator(first, sc_policy(last, f));
       }
     } // end namespace detail
-  } // end namespace signals
+  } // end namespace BOOST_SIGNALS_NAMESPACE
 } // end namespace boost
 #endif // BOOST_SIGNALS_SLOT_CALL_ITERATOR
