@@ -138,7 +138,7 @@ void pointer_constructor()
 {
     pc0_test(static_cast<int*>(0));
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1300)
 
     pc0_test(static_cast<int const*>(0));
     pc0_test(static_cast<int volatile*>(0));
