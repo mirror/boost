@@ -3,7 +3,7 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifdef _WIN32
+#if defined(_WIN32)
 #include <string>
 #include <vector>
 #include <cctype>
@@ -22,11 +22,11 @@ void test_winmain()
 #define TEST(input, expected) \
     char* BOOST_PP_CAT(e, __LINE__)[] = expected;\
     vector<string> BOOST_PP_CAT(v, __LINE__) = split_winmain(input);\
-    BOOST_REQUIRE(BOOST_PP_CAT(v, __LINE__).size() == \
-            sizeof(BOOST_PP_CAT(e, __LINE__))/sizeof(char*));\
     BOOST_CHECK_EQUAL_COLLECTIONS(BOOST_PP_CAT(v, __LINE__).begin(),\
                                   BOOST_PP_CAT(v, __LINE__).end(),\
-                                  BOOST_PP_CAT(e, __LINE__));    
+                                  BOOST_PP_CAT(e, __LINE__),\
+                                  BOOST_PP_CAT(e, __LINE__) + \
+                        sizeof(BOOST_PP_CAT(e, __LINE__))/sizeof(char*));    
 
 // The following expectations were obtained in Win2000 shell:
     TEST("1 ", {"1"});
