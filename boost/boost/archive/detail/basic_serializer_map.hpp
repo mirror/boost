@@ -32,7 +32,7 @@ struct type_info_pointer_compare
 {
     bool operator()(
         const basic_serializer * lhs, const basic_serializer * rhs
-    ) const	{
+    ) const    {
         return *lhs < *rhs;
     }
 };

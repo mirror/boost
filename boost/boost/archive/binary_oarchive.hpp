@@ -47,11 +47,11 @@ protected:
     {
         if(0 == (flags & no_header)){
             #if ! defined(__MWERKS__)
-        	    this->basic_binary_oarchive<Archive>::init();
-        	    this->basic_binary_oprimitive<Archive, std::ostream>::init();
+                this->basic_binary_oarchive<Archive>::init();
+                this->basic_binary_oprimitive<Archive, std::ostream>::init();
             #else
-        	    basic_binary_oarchive<Archive>::init();
-        	    basic_binary_oprimitive<Archive, std::ostream>::init();
+                basic_binary_oarchive<Archive>::init();
+                basic_binary_oprimitive<Archive, std::ostream>::init();
             #endif
         }
     }

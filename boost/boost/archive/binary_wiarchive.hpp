@@ -60,7 +60,7 @@ public:
         binary_wiarchive_impl<binary_wiarchive>(is, flags | no_header)
     {
         if(0 == (flags & no_header))
-        	init();
+            init();
     }
 };
 

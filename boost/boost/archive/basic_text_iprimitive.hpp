@@ -114,7 +114,7 @@ public:
      basic_text_iprimitive(IStream  &is, bool no_codecvt);
     ~basic_text_iprimitive();
 public:
-	void load_binary(void *address, std::size_t count);
+    void load_binary(void *address, std::size_t count);
 };
 
 } // namespace archive

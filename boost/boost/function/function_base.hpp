@@ -447,7 +447,7 @@ public:
     operator==(Functor g) const
     {
       if (const Functor* fp = target<Functor>())
-	return function_equal(*fp, g);
+        return function_equal(*fp, g);
       else return false;
     }
 
@@ -456,7 +456,7 @@ public:
     operator!=(Functor g) const
     {
       if (const Functor* fp = target<Functor>())
-	return !function_equal(*fp, g);
+        return !function_equal(*fp, g);
       else return true;
     }
 #endif

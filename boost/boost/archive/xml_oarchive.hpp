@@ -61,7 +61,7 @@ public:
     void save(const std::wstring &ws);
     #endif
 public:
-	void save_binary(const void *address, std::size_t count){
+    void save_binary(const void *address, std::size_t count){
         end_preamble();
         basic_text_oprimitive<std::ostream>::save_binary(
             address, 

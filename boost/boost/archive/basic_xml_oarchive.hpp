@@ -91,17 +91,17 @@ protected:
     void save_impl(const T & t){
         mpl::apply_if<
             #ifndef BOOST_NO_STD_WSTRING
- 				mpl::or_<
-                	mpl::equal_to<
-                		::boost::serialization::implementation_level<T>,
-                		// don't forget the damn space between < and :: !
-                		mpl::int_< ::boost::serialization::primitive_type>
-                	>,
-                	is_same<T, 	std::string>,
-                	is_same<T, 	std::wstring>
+                 mpl::or_<
+                    mpl::equal_to<
+                        ::boost::serialization::implementation_level<T>,
+                        // don't forget the damn space between < and :: !
+                        mpl::int_< ::boost::serialization::primitive_type>
+                    >,
+                    is_same<T, std::string>,
+                    is_same<T, std::wstring>
                 >,
             #else
-               is_same<T, 	std::string>,
+               is_same<T, std::string>,
             #endif
             mpl::identity<save_primitive_impl<T> >,
             mpl::identity<save_non_primitive_impl<T> >
@@ -126,7 +126,7 @@ protected:
     {
         this->This()->save_start(t.name());
         archive::save(* this->This(), t.value());
- 		this->This()->save_end(t.name());
+         this->This()->save_end(t.name());
     }
 
     // specific overrides for attributes - not name value pairs so we

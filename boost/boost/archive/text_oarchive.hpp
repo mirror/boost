@@ -41,7 +41,7 @@ protected:
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
-//	friend class detail::interface_oarchive<Archive>;
+//    friend class detail::interface_oarchive<Archive>;
     friend class basic_text_oarchive<Archive>;
     friend class save_access;
 #endif
@@ -59,7 +59,7 @@ public:
     void save(const std::wstring &ws);
     #endif
 public:
-	void save_binary(const void *address, std::size_t count){
+    void save_binary(const void *address, std::size_t count){
         put('\n');
         this->end_preamble();
         basic_text_oprimitive<std::ostream>::save_binary(

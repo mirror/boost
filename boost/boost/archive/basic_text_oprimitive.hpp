@@ -67,8 +67,8 @@ protected:
         BOOST_DEDUCED_TYPENAME OStream::char_type, BOOST_DEDUCED_TYPENAME OStream::traits_type
     > locale_saver;
     boost::scoped_ptr<std::locale> archive_locale;
-//	boost::scoped_ptr<codecvt_null<BOOST_DEDUCED_TYPENAME OStream::char_type> >
-//		archive_codecvt;
+//    boost::scoped_ptr<codecvt_null<BOOST_DEDUCED_TYPENAME OStream::char_type> >
+//        archive_codecvt;
 
     // default saving of primitives.
     template<class T>
@@ -139,7 +139,7 @@ public:
     basic_text_oprimitive(OStream & os, bool no_codecvt);
     ~basic_text_oprimitive();
 public:
-	void save_binary(const void *address, std::size_t count);
+    void save_binary(const void *address, std::size_t count);
 };
 
 } //namespace boost 

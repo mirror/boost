@@ -147,7 +147,7 @@ private:
         ClassNameAttribute,
         TrackingAttribute,
         VersionAttribute,
-		UnusedAttribute,
+        UnusedAttribute,
         Attribute,
         SignatureAttribute,
         SerializationWrapper,
@@ -165,7 +165,7 @@ private:
         Sch,
         NameChar;
 
-	void init_chset();
+    void init_chset();
 
     bool my_parse(
         IStream & is,

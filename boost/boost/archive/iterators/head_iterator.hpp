@@ -49,7 +49,7 @@ private:
     reference_type dereference_impl(){
         if(! m_end){
             while(! m_predicate(* base_reference()))
-            	++ base_reference();
+                ++ base_reference();
             m_end = true;
         }
         return * base_reference();

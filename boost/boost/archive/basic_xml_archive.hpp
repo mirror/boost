@@ -39,10 +39,10 @@ public:
         switch(code){
         case xml_archive_parsing_error:
             msg = "unrecognized XML syntax";
-        	break;
+            break;
         case xml_archive_tag_mismatch:
             msg = "XML start/end tag mismatch";
-        	break;
+            break;
         default:
             archive_exception::what();
         }

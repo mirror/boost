@@ -52,9 +52,9 @@ public:
         stream_error,       // i/o error on stream
         invalid_class_name, // class name greater than the maximum permitted.
                             // most likely a corrupted archive or an attempt
-                    		// to insert virus via buffer overrun method.
+                            // to insert virus via buffer overrun method.
         unregistered_cast   // base - derived relationship not registered with 
-            				// void_cast_register
+                            // void_cast_register
     } exception_code;
     exception_code code;
     archive_exception(exception_code c) : 
@@ -89,11 +89,11 @@ public:
             msg = "stream error";
             break;
         case invalid_class_name:
-        	msg = "class name too long";
-        	break;
+            msg = "class name too long";
+            break;
         case unregistered_cast:
-        	msg = "invalid dynamic cast";
-        	break;
+            msg = "invalid dynamic cast";
+            break;
         case other_exception:
             // if get here - it indicates a derived exception 
             // was sliced by passing by value in catch

@@ -41,8 +41,8 @@ class basic_pointer_iserializer;
 template<class ArchiveImplementation>
 class polymorphic_iarchive_impl : 
     public polymorphic_iarchive,
-	// note: gcc dynamic cross cast fails if the the derivation below is 
-	// not public.  I think this is a mistake.
+    // note: gcc dynamic cross cast fails if the the derivation below is 
+    // not public.  I think this is a mistake.
     public /*protected*/ ArchiveImplementation,
     private boost::noncopyable
 {
@@ -129,7 +129,7 @@ private:
         ArchiveImplementation::load(t);
     }
     #endif
-	virtual void load_binary(void * t, std::size_t size){
+    virtual void load_binary(void * t, std::size_t size){
         ArchiveImplementation::load(t);
     }
 

@@ -80,22 +80,22 @@ protected:
     template<class T>
     void load_impl(T & t){
         BOOST_STATIC_ASSERT(
-        	serialization::not_serializable 
-        	!=  serialization::implementation_level<T>::value
+            serialization::not_serializable 
+            !=  serialization::implementation_level<T>::value
         );
         mpl::apply_if<
             #ifndef BOOST_NO_STD_WSTRING
                 mpl::or_<
-                	mpl::equal_to<
-                		::boost::serialization::implementation_level<T>,
-                		// don't forget the damn space between < and :: !
-                		mpl::int_< ::boost::serialization::primitive_type>
-                	>,
-                	is_same<T, 	std::string>,
-                	is_same<T, 	std::wstring>
+                    mpl::equal_to<
+                        ::boost::serialization::implementation_level<T>,
+                        // don't forget the damn space between < and :: !
+                        mpl::int_< ::boost::serialization::primitive_type>
+                    >,
+                    is_same<T, std::string>,
+                    is_same<T, std::wstring>
                 >,
             #else
-                is_same<T, 	std::string>,
+                is_same<T, std::string>,
             #endif
             mpl::identity<load_primitive_impl<T> >,
             mpl::identity<load_non_primitive_impl<T> >

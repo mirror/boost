@@ -128,7 +128,7 @@ class filter_iterator
     reference_type dereference_impl(){
         if(! m_full){
             while(! m_predicate(* this->base_reference()))
-            	++(this->base_reference());
+                ++(this->base_reference());
             m_full = true;
         }
         return * this->base_reference();

@@ -74,7 +74,7 @@ void xml_iarchive_impl<Archive>::load(std::wstring &ws){
         }
         boost::throw_exception(
             iterators::dataflow_exception(
-            	iterators::dataflow_exception::invalid_conversion
+                iterators::dataflow_exception::invalid_conversion
             )
         );
     }
@@ -115,7 +115,7 @@ void xml_iarchive_impl<Archive>::load(wchar_t * ws){
         }
         boost::throw_exception(
             iterators::dataflow_exception(
-            	iterators::dataflow_exception::invalid_conversion
+                iterators::dataflow_exception::invalid_conversion
             )
         );
     }

@@ -99,7 +99,7 @@ int bcp_implementation::run()
        boost::regex e("([^(]+)\\(");
        boost::smatch result;
        if (boost::regex_search(line, result, e))
-	 m_bsl_authors.insert(format_authors_name(result[1]));
+         m_bsl_authors.insert(format_authors_name(result[1]));
      }
    }
 

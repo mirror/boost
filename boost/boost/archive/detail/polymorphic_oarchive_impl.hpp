@@ -41,8 +41,8 @@ class basic_pointer_oserializer;
 template<class ArchiveImplementation>
 class polymorphic_oarchive_impl : 
     public polymorphic_oarchive,
-	// note: gcc dynamic cross cast fails if the the derivation below is 
-	// not public.  I think this is a mistake.
+    // note: gcc dynamic cross cast fails if the the derivation below is 
+    // not public.  I think this is a mistake.
     public /*protected*/ ArchiveImplementation,
     private boost::noncopyable
 {
@@ -126,7 +126,7 @@ private:
     virtual unsigned int library_version() const{
         return ArchiveImplementation::library_version();
     }
-	virtual void save_binary(const void * t, std::size_t size){
+    virtual void save_binary(const void * t, std::size_t size){
         ArchiveImplementation::save(t);
     }
 
@@ -144,19 +144,19 @@ private:
         ArchiveImplementation::register_basic_serializer(bos);
     }
 public:
-	// to avoie ambiguities when using this class directly, trap an pass one
-	// to the implemenation these operations.
+    // to avoie ambiguities when using this class directly, trap an pass one
+    // to the implemenation these operations.
     // note: we presume that older compilers will never create a const
     // argument from a non-const by copyiing
     template<class T>
     polymorphic_oarchive & operator<<(const T & t){
-		return polymorphic_oarchive::operator<<(t);
+        return polymorphic_oarchive::operator<<(t);
     }
 
     // the & operator 
     template<class T>
     polymorphic_oarchive & operator&(const T & t){
-		return polymorphic_oarchive::operator&(t);
+        return polymorphic_oarchive::operator&(t);
     }
 
     // define operators for non-const arguments.  Don't depend one the const
@@ -171,7 +171,7 @@ public:
             // address for multiple items. This would be the source of very 
             // subtle errors and should be double checked
             // BOOST_STATIC_WARNING(
-            // 	serialization::tracking_level == serialization::track_never
+            //     serialization::tracking_level == serialization::track_never
             // );
             return polymorphic_oarchive::operator<<(t);
         }

@@ -97,12 +97,12 @@ public:
 public:
     // utility function implemented by all legal archives
     virtual unsigned int library_version() const = 0;
-	virtual void load_binary(void * t, std::size_t size) = 0;
+    virtual void load_binary(void * t, std::size_t size) = 0;
 
     virtual void delete_created_pointers() = 0;
 
-	// msvc and borland won't automatically pass these to the base class so
-	// make it explicit here
+    // msvc and borland won't automatically pass these to the base class so
+    // make it explicit here
     template<class T>
     void load_override(T & t, BOOST_PFTO int)
     {
@@ -115,7 +115,7 @@ public:
     {
         load_start(t.name());
         archive::load(* this, t.value());
- 		load_end(t.name());
+        load_end(t.name());
     }
 };
 

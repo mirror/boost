@@ -39,7 +39,7 @@ struct five
 {
     five( int, int, int, int, int ) { }
     five( const string&, const string&, const string&,  
-	  const string&, const string& ) { }
+          const string&, const string& ) { }
 };
 
 

@@ -47,7 +47,7 @@ class escape :
         Base, 
         base_value_type,
         single_pass_traversal_tag,
- 		base_value_type
+        base_value_type
     > super_t;
 
     typedef escape<Derived, Base> this_t;

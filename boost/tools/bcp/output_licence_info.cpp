@@ -249,7 +249,7 @@ void bcp_implementation::output_licence_info()
    os << "<h2><a name=\"need-bsl-authors\"></a>Authors we need for the BSL</h2>\n"
        "<P>Permission of the following authors is needed before we can convert to the Boost Software License. The list of authors that have given their permission is contained in <code>more/blanket-permission.txt</code>.</P>\n<BLOCKQUOTE><P>";
    std::copy(m_authors_for_bsl_migration.begin(), m_authors_for_bsl_migration.end(),
-	     std::ostream_iterator<std::string>(os, "<br>\n"));
+             std::ostream_iterator<std::string>(os, "<br>\n"));
    os << "</p></BLOCKQUOTE>";
    //
    // output a table of copyright information:

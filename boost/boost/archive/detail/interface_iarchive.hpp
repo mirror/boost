@@ -57,8 +57,8 @@ public:
     const basic_pointer_iserializer * register_type(T * t = NULL){
         const basic_pointer_iserializer & bpis =
             archive::detail::instantiate_pointer_iserializer(
-            	static_cast<Archive *>(NULL),
-            	static_cast<T *>(NULL)
+                static_cast<Archive *>(NULL),
+                static_cast<T *>(NULL)
             );
         this->This()->register_basic_serializer(bpis.get_basic_serializer());
         return & bpis;

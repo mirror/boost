@@ -73,8 +73,8 @@
 
 namespace boost {
 namespace serialization {
-//	template<class Archive, class T>
-//	void serialize(Archive &ar, T & t, const unsigned int file_version);
+//    template<class Archive, class T>
+//    void serialize(Archive &ar, T & t, const unsigned int file_version);
 }
 namespace archive {
 
@@ -227,31 +227,31 @@ struct save_non_pointer_type {
         ));
         typedef 
             BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            	// if its primitive
-            	mpl::equal_to<
-            		boost::serialization::implementation_level<T>,
-            		mpl::int_<boost::serialization::primitive_type>
-            	>,
-            	mpl::identity<save_primitive>,
+                // if its primitive
+                mpl::equal_to<
+                    boost::serialization::implementation_level<T>,
+                    mpl::int_<boost::serialization::primitive_type>
+                >,
+                mpl::identity<save_primitive>,
             // else
             BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            	mpl::and_<
-            		// no class info / version
-            		mpl::less<
-            			boost::serialization::implementation_level<T>,
-            			mpl::int_<boost::serialization::object_class_info>
-            		>,
-            		// and no tracking
-            		mpl::equal_to<
-            			boost::serialization::tracking_level<T>,
-            			mpl::int_<boost::serialization::track_never>
-            		>
-            	>,
-            	// do a fast save
-            	mpl::identity<save_only>,
+                mpl::and_<
+                    // no class info / version
+                    mpl::less<
+                        boost::serialization::implementation_level<T>,
+                        mpl::int_<boost::serialization::object_class_info>
+                    >,
+                    // and no tracking
+                    mpl::equal_to<
+                        boost::serialization::tracking_level<T>,
+                        mpl::int_<boost::serialization::track_never>
+                    >
+                >,
+                // do a fast save
+                mpl::identity<save_only>,
             // else
-            	// do standard save
-            	mpl::identity<save>
+                // do standard save
+                mpl::identity<save>
             >
         >::type typex; 
         // note: the invokeX keeps borland from getting confused
@@ -331,16 +331,16 @@ struct save_pointer_type {
             // known list it will fail below at execution time and one will have
             // a hell of time figuring out why.  Hence this warning.
             BOOST_STATIC_WARNING((
-            	mpl::not_<
-            		mpl::and_<
-            			mpl::not_<mpl::empty<known_archive_types<0>::type > >,
-            			is_same<
-            				mpl::end<known_archive_types<false>::type >::type,
-            				BOOST_DEDUCED_TYPENAME mpl::find<known_archive_types<false>::type, Archive>::type
-            			>
-            		>
-            	>
-            	::value
+                mpl::not_<
+                    mpl::and_<
+                        mpl::not_<mpl::empty<known_archive_types<0>::type > >,
+                        is_same<
+                            mpl::end<known_archive_types<false>::type >::type,
+                            BOOST_DEDUCED_TYPENAME mpl::find<known_archive_types<false>::type, Archive>::type
+                        >
+                    >
+                >
+                ::value
             ));
             #endif
             const boost::serialization::extended_type_info * this_type
@@ -379,9 +379,9 @@ struct save_pointer_type {
             bpos_ptr = archive_pointer_oserializer<Archive>::find(* true_type);
             assert(NULL != bpos_ptr);
             if(NULL == bpos_ptr)
-            	boost::throw_exception(
-            		archive_exception(archive_exception::unregistered_class)
-            	);
+                boost::throw_exception(
+                    archive_exception(archive_exception::unregistered_class)
+                );
             ar.save_pointer(vp, bpos_ptr);
         }
     };

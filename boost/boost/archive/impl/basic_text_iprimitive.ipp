@@ -56,9 +56,9 @@ void basic_text_iprimitive<IStream>::load_binary(
         iterators::transform_width<
             iterators::binary_from_base64<
                 iterators::remove_whitespace<
-                	iterators::istream_iterator<CharType>
+                    iterators::istream_iterator<CharType>
                 >
-            	,CharType
+                ,CharType
             >
             ,8
             ,6

@@ -145,11 +145,11 @@ public:
 
     explicit back_insert_iterator(container_type & s)
         : container(& s)
-    {}	// construct with container
+    {}    // construct with container
     
     back_insert_iterator<container_type> & operator=(
         /* typename */ container_type::const_reference Val_
-    ){	// push value into container
+    ){    // push value into container
         //container->push_back(Val_);
         *container += Val_;
         return (*this);
@@ -170,7 +170,7 @@ public:
     }
 
 protected:
-    container_type *container;	// pointer to container
+    container_type *container;    // pointer to container
 };
 
 template<char> 
@@ -190,11 +190,11 @@ public:
 
     explicit back_insert_iterator(container_type & s)
         : container(& s)
-    {}	// construct with container
+    {}    // construct with container
     
     back_insert_iterator<container_type> & operator=(
         /* typename */ container_type::const_reference Val_
-    ){	// push value into container
+    ){    // push value into container
         //container->push_back(Val_);
         *container += Val_;
         return (*this);
@@ -215,7 +215,7 @@ public:
     }
 
 protected:
-    container_type *container;	// pointer to container
+    container_type *container;    // pointer to container
 };
 
 template<wchar_t> 

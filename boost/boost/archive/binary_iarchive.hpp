@@ -48,11 +48,11 @@ protected:
     {
         if(0 == (flags & no_header)){
             #if ! defined(__MWERKS__)
-        	    this->basic_binary_iarchive<Archive>::init();
-        	    this->basic_binary_iprimitive<Archive, std::istream>::init();
+                this->basic_binary_iarchive<Archive>::init();
+                this->basic_binary_iprimitive<Archive, std::istream>::init();
             #else
-        	    basic_binary_iarchive<Archive>::init();
-        	    basic_binary_iprimitive<Archive, std::istream>::init();
+                basic_binary_iarchive<Archive>::init();
+                basic_binary_iprimitive<Archive, std::istream>::init();
             #endif
         }
     }

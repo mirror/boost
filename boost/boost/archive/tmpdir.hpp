@@ -21,7 +21,7 @@
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
-	using ::getenv;
+    using ::getenv;
 }
 #endif
 
@@ -30,7 +30,7 @@ namespace archive {
 
 char * tmpdir(){
     char *dirname;
-	dirname = std::getenv("TMP");
+    dirname = std::getenv("TMP");
     if(NULL == dirname)
         dirname = std::getenv("TMPDIR");
     if(NULL == dirname)
@@ -39,7 +39,7 @@ char * tmpdir(){
         //assert(false); // no temp directory found
         dirname = ".";
     }
-	return dirname;
+    return dirname;
 }
 
 } // archive

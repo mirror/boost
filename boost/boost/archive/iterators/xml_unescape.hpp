@@ -62,9 +62,9 @@ void xml_unescape<Base>::drain_residue(const char * literal){
     do{
         if(* literal != * ++(this->base_reference()))
             boost::throw_exception(
-            	dataflow_exception(
-            		dataflow_exception::invalid_xml_escape_sequence
-            	)
+                dataflow_exception(
+                    dataflow_exception::invalid_xml_escape_sequence
+                )
             );
     }
     while('\0' != * ++literal);

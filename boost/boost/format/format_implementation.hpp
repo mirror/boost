@@ -202,14 +202,14 @@ namespace boost {
     template< class Ch, class Tr, class Alloc>
     typename basic_format<Ch, Tr, Alloc>::size_type  basic_format<Ch,Tr, Alloc>:: 
     size () const {
-		BOOST_USING_STD_MAX();
+        BOOST_USING_STD_MAX();
         std::streamsize sz = prefix_.size();
         unsigned long i;
         for(i=0; i < items_.size(); ++i) {
             const format_item_t& item = items_[i];
             sz += item.res_.size();
             if( item.argN_ == format_item_t::argN_tabulation)
-				sz = max BOOST_PREVENT_MACRO_SUBSTITUTION (sz, item.fmtstate_.width_);
+                sz = max BOOST_PREVENT_MACRO_SUBSTITUTION (sz, item.fmtstate_.width_);
             sz +=  + item.appendix_.size();
         }
         return static_cast<typename string_type::size_type> (sz);

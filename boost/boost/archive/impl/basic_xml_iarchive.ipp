@@ -60,14 +60,14 @@ void basic_xml_iarchive<Archive>::load_end(const char *name){
         // double check that the tag matches what is expected - useful for debug
         if(0 != name[this->This()->gimpl->rv.object_name.size()]
         || ! std::equal(
-        		this->This()->gimpl->rv.object_name.begin(),
-        		this->This()->gimpl->rv.object_name.end(),
-        		name
-        	)
+                this->This()->gimpl->rv.object_name.begin(),
+                this->This()->gimpl->rv.object_name.end(),
+                name
+            )
         ){
-        	boost::throw_exception(
-        		archive_exception(archive_exception::stream_error)
-        	);	
+            boost::throw_exception(
+                archive_exception(archive_exception::stream_error)
+            );
         }
     }
 }

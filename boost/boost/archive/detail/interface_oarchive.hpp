@@ -60,8 +60,8 @@ public:
     const basic_pointer_oserializer * register_type(T * t = NULL){
         const basic_pointer_oserializer & bpos =
             instantiate_pointer_oserializer(
-            	static_cast<Archive *>(NULL),
-            	static_cast<T *>(NULL)
+                static_cast<Archive *>(NULL),
+                static_cast<T *>(NULL)
             );
         this->This()->register_basic_serializer(bpos.get_basic_serializer());
         return & bpos;
@@ -100,7 +100,7 @@ public:
             // address for multiple items. This would be the source of very 
             // subtle errors and should be double checked
             // BOOST_STATIC_WARNING(
-            // 	serialization::tracking_level == serialization::track_never
+            //     serialization::tracking_level == serialization::track_never
             // );
             return *this << const_cast<const T &>(t);
         }

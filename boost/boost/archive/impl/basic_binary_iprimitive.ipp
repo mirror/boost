@@ -131,8 +131,8 @@ basic_binary_iprimitive<Archive, IStream>::basic_binary_iprimitive(
     if(! no_codecvt){
         archive_locale.reset(
             boost::archive::add_facet(
-        		std::locale::classic(),
-        		new codecvt_null<BOOST_DEDUCED_TYPENAME IStream::char_type>
+                std::locale::classic(),
+                new codecvt_null<BOOST_DEDUCED_TYPENAME IStream::char_type>
             )
         );
         is.imbue(* archive_locale);

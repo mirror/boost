@@ -62,8 +62,8 @@ private:
 
     bool equal(const insert_linebreaks<Base, N, CharType> & rhs) const {
         return
-//			m_count == rhs.m_count
-//			&& base_reference() == rhs.base_reference()
+//            m_count == rhs.m_count
+//            && base_reference() == rhs.base_reference()
             this->base_reference() == rhs.base_reference()
         ;
     }

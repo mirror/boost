@@ -96,10 +96,10 @@ public:
     virtual unsigned int library_version() const = 0;
     virtual void end_preamble() = 0;
     // utility function implemented by all legal archives
-	virtual void save_binary(const void * t, std::size_t size) = 0;
+    virtual void save_binary(const void * t, std::size_t size) = 0;
 
-	// msvc and borland won't automatically pass these to the base class so
-	// make it explicit here
+    // msvc and borland won't automatically pass these to the base class so
+    // make it explicit here
     template<class T>
     void save_override(const T & t, BOOST_PFTO int)
     {
@@ -111,7 +111,7 @@ public:
     {
         save_start(t.name());
         archive::save(* this, t.value());
- 		save_end(t.name());
+        save_end(t.name());
     }
 };
 

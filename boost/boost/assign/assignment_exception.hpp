@@ -25,14 +25,14 @@ namespace boost
         class assignment_exception : public std::exception
         {
         public:
-        	assignment_exception( const char* what ) 
+            assignment_exception( const char* what ) 
             : what_( what )
-        	{ }
+            { }
         
-        	virtual const char* what() const throw()
-        	{
-        	    return what_;
-        	}
+            virtual const char* what() const throw()
+            {
+                return what_;
+            }
         
         private:
                 const char* what_;

@@ -90,12 +90,12 @@ class transform_width :
 
         while(m_displacement >= BitsIn){
             m_displacement -= BitsIn;
-        	if(0 == m_displacement)
-        		m_bufferfull = false;
-        	if(! m_bufferfull){
-        		// note: suspect that this is not invoked for borland
-        		++(this->base_reference());
-        	}
+            if(0 == m_displacement)
+                m_bufferfull = false;
+            if(! m_bufferfull){
+                // note: suspect that this is not invoked for borland
+                ++(this->base_reference());
+            }
         }
         m_full = false;
     }

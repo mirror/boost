@@ -41,11 +41,11 @@ void basic_text_oprimitive<OStream>::save_binary(
     typedef 
         boost::archive::iterators::insert_linebreaks<
             boost::archive::iterators::base64_from_binary<
-            	boost::archive::iterators::transform_width<
-            		const char *,
-            		6,
-            		8
-            	>
+                boost::archive::iterators::transform_width<
+                    const char *,
+                    6,
+                    8
+                >
             > 
             ,72
         > 

@@ -63,9 +63,9 @@ std::wostream & operator<<(std::wostream &os, const char *t){
             break;
         else
             boost::throw_exception(
-            	iterators::dataflow_exception(
-            		iterators::dataflow_exception::invalid_conversion
-            	)
+                iterators::dataflow_exception(
+                    iterators::dataflow_exception::invalid_conversion
+                )
             );
     }
     return os;
@@ -148,10 +148,10 @@ xml_woarchive_impl<Archive>::xml_woarchive_impl(
     if(0 == (flags & no_codecvt)){
         utf8_codecvt_facet_wchar_t *pfacet;
         #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-			static utf8_codecvt_facet_wchar_t facet(static_cast<size_t>(1));
-			pfacet = & facet;
+            static utf8_codecvt_facet_wchar_t facet(static_cast<size_t>(1));
+            pfacet = & facet;
         #else
-			pfacet = new utf8_codecvt_facet_wchar_t;
+            pfacet = new utf8_codecvt_facet_wchar_t;
         #endif
         archive_locale.reset(add_facet(std::locale::classic(), pfacet));
         os.imbue(* archive_locale);

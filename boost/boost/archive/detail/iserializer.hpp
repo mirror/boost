@@ -201,11 +201,11 @@ struct load_non_pointer_type {
     // with no runtime overhead
     struct load_only {
         static void invoke(Archive & ar, T & t){
-			// short cut to user's serializer
+            // short cut to user's serializer
             // make sure call is routed through the higest interface that might
             // be specialized by the user.
             boost::serialization::serialize(
-				ar, t, boost::serialization::version<T>::value
+                ar, t, boost::serialization::version<T>::value
             );
         }
     };
@@ -225,31 +225,31 @@ struct load_non_pointer_type {
             >::value
         ));
         mpl::apply_if<
-            	// if its primitive
-            	mpl::equal_to<
-            		boost::serialization::implementation_level<T>,
-            		mpl::int_<boost::serialization::primitive_type>
-            	>,
-            	mpl::identity<load_primitive>,
+                // if its primitive
+                mpl::equal_to<
+                    boost::serialization::implementation_level<T>,
+                    mpl::int_<boost::serialization::primitive_type>
+                >,
+                mpl::identity<load_primitive>,
             // else
             BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            	mpl::and_<
-            		// no class info / version
-            		mpl::less<
-            			boost::serialization::implementation_level<T>,
-            			mpl::int_<boost::serialization::object_class_info>
-            		>,
-            		// and no tracking
-            		mpl::equal_to<
-            			boost::serialization::tracking_level<T>,
-            			mpl::int_<boost::serialization::track_never>
-            		>
-            	>,
-            	// do a fast load
-            	mpl::identity<load_only>,
+                mpl::and_<
+                    // no class info / version
+                    mpl::less<
+                        boost::serialization::implementation_level<T>,
+                        mpl::int_<boost::serialization::object_class_info>
+                    >,
+                    // and no tracking
+                    mpl::equal_to<
+                        boost::serialization::tracking_level<T>,
+                        mpl::int_<boost::serialization::track_never>
+                    >
+                >,
+                // do a fast load
+                mpl::identity<load_only>,
             // else
-            	// do standard load
-            	mpl::identity<load>
+                // do standard load
+                mpl::identity<load>
             >
         >::type::invoke(ar, t);
     }
@@ -292,14 +292,14 @@ struct load_pointer_type {
         // a hell of time figuring out why.  Hence this warning.
         BOOST_STATIC_WARNING((
             mpl::not_<
-            	mpl::and_<
-            		BOOST_DEDUCED_TYPENAME serialization::type_info_implementation<T>::type::is_polymorphic,
-            		mpl::not_<mpl::empty<known_archive_types<false>::type > >,
-            		is_same<
-            			mpl::end<known_archive_types<false>::type >::type,
-            			BOOST_DEDUCED_TYPENAME mpl::find<known_archive_types<false>::type, Archive>::type
-            		>
-            	>
+                mpl::and_<
+                    BOOST_DEDUCED_TYPENAME serialization::type_info_implementation<T>::type::is_polymorphic,
+                    mpl::not_<mpl::empty<known_archive_types<false>::type > >,
+                    is_same<
+                        mpl::end<known_archive_types<false>::type >::type,
+                        BOOST_DEDUCED_TYPENAME mpl::find<known_archive_types<false>::type, Archive>::type
+                    >
+                >
             >
             ::value
         ));

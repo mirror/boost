@@ -62,7 +62,7 @@ class istream_iterator :
         if(NULL != m_istream){
             m_current_value = m_istream->get();
             if(! m_istream->good()){
-            	const_cast<this_t *>(this)->m_istream = NULL;
+                const_cast<this_t *>(this)->m_istream = NULL;
             }
         }
     }
