@@ -95,7 +95,7 @@ void bitwise_operators() {
   BOOST_TEST((_1 & 1)(ui)==(2 & 1));
   BOOST_TEST((_1 | 1)(ui)==(2 | 1));
   BOOST_TEST((_1 ^ 1)(ui)==(2 ^ 1));
-  BOOST_TEST((~_1)(ui)==~2);
+  BOOST_TEST((~_1)(ui)==~2u);
 }
 
 void comparison_operators() {
