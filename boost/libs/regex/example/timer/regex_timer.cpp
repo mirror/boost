@@ -100,7 +100,7 @@ int main()
    std::deque<char> ds;
    boost::regex_t r;
    boost::scoped_array<boost::regmatch_t> matches;
-   size_t nsubs;
+   std::size_t nsubs;
    boost::timer t;
    double tim;
    bool result;

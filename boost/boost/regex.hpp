@@ -23,7 +23,7 @@
   */
 
 
-/* start with C compatability API */
+/* start with C compatibility API */
 
 #ifndef BOOST_RE_REGEX_HPP
 #define BOOST_RE_REGEX_HPP
@@ -637,7 +637,7 @@ public:
    bool BOOST_RE_CALL operator<(const reg_expression&)const;
    //
    // The following are deprecated as public interfaces
-   // but are available for compatability with earlier versions.
+   // but are available for compatibility with earlier versions.
    allocator_type BOOST_RE_CALL allocator()const;
    const charT* BOOST_RE_CALL expression()const { return (this->error_code() ? 0 : _expression); }
    unsigned int BOOST_RE_CALL set_expression(const charT* p, const charT* end, flag_type f = regbase::normal);

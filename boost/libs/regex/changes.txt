@@ -196,7 +196,7 @@ ADDED:    High level C++ class RegEx.
 
 Version 111:
 BUG:      Wouldn't compile directly on C++ Builder 4 when it was released
-          (not really a bug - more an incompatability)
+          (not really a bug - more an incompatibility)
           
 FIXED:    All bugs discovered prior to this version (below).
 

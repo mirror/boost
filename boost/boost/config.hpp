@@ -74,11 +74,11 @@
 //  burden where it should be, on non-conforming compilers.  In the future,
 //  hopefully, less rather than more conformance flags will have to be defined.
 
-//  BOOST_NO_CV_SPECIALIZATIONS: if template specialisations for cv-qualified types
-//  conflict with a specialistaion for unqualififed type.
+//  BOOST_NO_CV_SPECIALIZATIONS: if template specializations for cv-qualified
+//  types conflict with a specialization for unqualififed type.
 
-//  BOOST_NO_CV_VOID_SPECIALIZATIONS: if template specialisations for cv-void types
-//  conflict with a specialistaion for void.
+//  BOOST_NO_CV_VOID_SPECIALIZATIONS: if template specializations for cv-void
+//  types conflict with a specialization for void.
 
 //  BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP: Compiler does not implement
 //  argument-dependent lookup (also named Koenig lookup); see std::3.4.2
