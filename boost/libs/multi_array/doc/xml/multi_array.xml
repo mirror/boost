@@ -72,6 +72,14 @@ public:
                        const storage_order_type& store = c_storage_order(),
 	               const Allocator& alloc = Allocator());
   multi_array(const multi_array& x);
+  multi_array(const const_multi_array_ref<ValueType,NumDims>& x);
+  multi_array(const const_subarray<NumDims>::type& x);
+  multi_array(const const_array_view<NumDims>::type& x);
+
+  multi_array(const multi_array_ref<ValueType,NumDims>& x);
+  multi_array(const subarray<NumDims>::type& x);
+  multi_array(const array_view<NumDims>::type& x);
+
   ~multi_array();
 
   // modifiers
@@ -193,11 +201,17 @@ elements.
 
 <varlistentry>
 <term><programlisting>
-<![CDATA[multi_array(const multi_array& x);]]>
+<![CDATA[multi_array(const multi_array& x);
+multi_array(const const_multi_array_ref<ValueType,NumDims>& x);
+multi_array(const const_subarray<NumDims>::type& x);
+multi_array(const const_array_view<NumDims>::type& x);
+multi_array(const multi_array_ref<ValueType,NumDims>& x);
+multi_array(const subarray<NumDims>::type& x);
+multi_array(const array_view<NumDims>::type& x);]]>
 </programlisting></term>
 <listitem>
-<para>This constructs a <literal>multi_array</literal> and performs a deep
-copy of <literal>x</literal>.
+<para>These constructors all constructs a <literal>multi_array</literal> and 
+perform a deep copy of <literal>x</literal>. 
 </para>
 
 <formalpara>
