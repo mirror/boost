@@ -39,13 +39,13 @@ using BOOST_PP_WHILE(), there is a version of the macro, distinguished by
 the _D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion
 depth as the first parameter. This technique is necessary to avoid
 recursively expanding the same macro again, which is not permitted by the
-C/C++ preprocessor.
+C++ preprocessor.
 
 NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.
 
 <H3>Usage</H3>
 
-Using BOOST_PP_WHILE() is a bit tricky. This is due to the C/C++ preprocessor
+Using BOOST_PP_WHILE() is a bit tricky. This is due to the C++ preprocessor
 limitations. It is recommended to take a look at the implementations of the
 various PREPROCESSOR library primitives such as BOOST_PP_ADD() for additional
 examples.
@@ -86,7 +86,7 @@ BOOST_PP_MUL().
   // element of the tuple is the result.
   //
   // #2) The WHILE primitive is "invoked" directly. BOOST_PP_WHILE(D,...)
-  // can't be used because it would not be expanded by the C preprocessor.
+  // can't be used because it would not be expanded by the C++ preprocessor.
   //
   // #3) ???_C is the condition and ???_F is the iteration macro.
 
