@@ -219,6 +219,9 @@ namespace boost {
     template<typename Function>
     void do_disconnect(const Function& f, mpl::bool_<false>)
     {
+      // Notify the slot handling code that we are iterating through the slots
+      BOOST_SIGNALS_NAMESPACE::detail::call_notification notification(this->impl);
+
       for (iterator i = impl->slots_.begin(); i != impl->slots_.end(); ++i) {
         slot_function_type& s =
           *any_cast<slot_function_type>(&i->second.second);
