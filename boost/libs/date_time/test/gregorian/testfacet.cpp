@@ -262,12 +262,22 @@ main()
     std::stringstream german("Okt");
     german.imbue(global2);
     greg_month m(3);
-    ss1 >> m;
-    check("Stream in month", m == greg_month(Jan));
+    try {
+      ss1 >> m;
+      check("Stream in month", m == greg_month(Jan));
+    }
+    catch(...) {
+      check("Caught unexpected exception during Stream in greg_month", false);
+    }
 #ifndef BOOST_NO_CWCHAR
     std::wstringstream ws1(L"Dec");
-    ws1 >> m;
-    check("Wide Stream in month", m == greg_month(Dec));
+    try {
+      ws1 >> m;
+      check("Wide Stream in month", m == greg_month(Dec));
+    }
+    catch(...) {
+      check("Caught unexpected exception during Stream in greg_month -- wide streams", false);
+    }
 #else
     check("Wide Stream in not supported by this compiler", false);
 #endif // BOOST_NO_CWCHAR
@@ -290,12 +300,23 @@ main()
     std::stringstream german("Mittwoch"); // Wednesday
     german.imbue(global2);
     greg_weekday wd(1);
-    ss1 >> wd;
-    check("Stream in weekday", wd == greg_weekday(Sunday));
+    try {
+      ss1 >> wd;
+      check("Stream in weekday", wd == greg_weekday(Sunday));
+    }
+    catch(...) {
+      check("Caught unexpected exception during Stream in greg_weekday", false);
+    }
 #ifndef BOOST_NO_CWCHAR
     std::wstringstream ws1(L"Saturday");
-    ws1 >> wd;
-    check("Wide Stream in weekday", wd == greg_weekday(Saturday));
+    try {
+      ws1 >> wd;
+      check("Wide Stream in weekday", wd == greg_weekday(Saturday));
+    }
+    catch(...) {
+      check("Caught unexpected exception during Stream in greg_weekday -- wide stream", false);
+    }
+
 #else
     check("Wide Stream in not supported by this compiler", false);
 #endif // BOOST_NO_CWCHAR
