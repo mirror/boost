@@ -201,9 +201,9 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
 
    const std::messages<char>* pm = 0;
 #ifndef __IBMCPP__
-   std::messages<char>::catalog cat = static_cast<std::messages<wchar_t>::catalog>(-1);
+   std::messages<char>::catalog cat = static_cast<std::messages<char>::catalog>(-1);
 #else
-   std::messages<char>::catalog cat = reinterpret_cast<std::messages<wchar_t>::catalog>(-1);
+   std::messages<char>::catalog cat = reinterpret_cast<std::messages<char>::catalog>(-1);
 #endif
    if(regex_message_catalogue.size())
    {
