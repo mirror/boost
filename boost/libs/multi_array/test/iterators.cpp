@@ -18,6 +18,8 @@
 #define MULTIARRAY_TEST_ASSIGN
 #include "generative_tests.hpp"
 #include "boost/concept_check.hpp" // for ignore_unused_variable_warning
+#include "boost/mpl/if.hpp"
+#include "boost/type_traits/is_same.hpp"
 
 // iterator-test-specific code
 
@@ -68,6 +70,8 @@ struct ittraits_mutable {
 // choose ittraits begins
 //
 
+#if 0
+
 struct choose_ittraits_const {
   template <typename Array>
   struct bind {
@@ -100,6 +104,19 @@ private:
 public:
   typedef typename Choice::template bind<Array>::type type;
 };
+
+#else
+
+// Meta-program chooses ittraits implementation.
+template <typename Array, typename ConstTag>
+struct ittraits_generator :
+  boost::mpl::if_< boost::is_same<ConstTag,const_array_tag>,
+                   ittraits_const<Array>,
+                   ittraits_mutable<Array> >
+{};
+
+
+#endif // 0
 
 //
 // choose ittraits ends
