@@ -57,9 +57,7 @@ namespace boost {
 class timer {
  public:
          timer();                        // postcondition: elapsed()==0
-         timer( const timer&amp; src );      // post: elapsed()==src.elapsed()
-        ~timer();
-  timer&amp; operator=( const timer&amp; src );  // post: elapsed()==src.elapsed()
+  // compiler generated copy constructor, copy assignment, and dtor apply
   void   restart();                      // post: elapsed()==0
   double elapsed() const;                // return elapsed time in seconds
 
@@ -180,6 +178,22 @@ progress classes. Sean Corfield suggested allowing output to any ostream.&nbsp;
 Dave Abrahams, Valentin Bonnard, Ed Brey, Andy Glew, and Dietmar Kühl also
 provided useful comments.&nbsp; Ed Brey suggested timer::elapsed_max(). John
 Maddock suggested timer::elapsed_min().</p>
+<h2>Rationale</h2>
+<p>The early versions of the timer classes had separate implementation
+files.&nbsp; This caused problems for users not wishing to build libraries,
+caused difficulties building DLL's (because of cascaded use of other libraries
+which in turn brought illuminated compiler deficiencies), and caused the classes
+not to be used even when clearly applicable.&nbsp; Thus the implementation was
+changed to all inline code.</p>
+<p>There have been several requests for platform specific implementations to use
+supposedly high-performance timers from the operating system API.&nbsp; John
+Maddock submitted an implementation using the Win32 API.&nbsp; Tests showed that
+while the precision of these timers was high, the latency was sometimes very
+much higher than for the std::clock() function, and that is very bad.&nbsp;
+Furthermore, results using the Win32 API were very dependent on both the
+compiler (Microsoft and Borland were tested) and the operating system version
+(Windows NT, Windows 95, etc.)&nbsp; Thus the std::clock() function was much
+more reliable, and so was retained even on this platform with its own timer API.</p>
 <hr>
 <p>© Copyright Beman Dawes 1999. Permission to copy, use, modify, sell and
 distribute this document is granted provided this copyright notice appears in
@@ -187,7 +201,7 @@ all copies. The software described is provided &quot;as is&quot; without express
 or implied&nbsp; warranty, and with no claim as to its suitability for any
 purpose.</p>
 
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->May 05, 2000<!--webbot bot="Timestamp" endspan i-checksum="11109" -->
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->January 12, 2001<!--webbot bot="Timestamp" endspan i-checksum="30945" -->
 </p>
 
 </body>

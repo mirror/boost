@@ -6,6 +6,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 //  Revision History
+//  12 Jan 01  Cut time to 1.0 secs to speed regression tests (Beman Dawes)
 //  25 Sep 99  added elapsed_min() and elapsed_max() reporting
 //  16 Jul 99  Second beta
 //   6 Jul 99  Initial boost version
@@ -34,7 +35,7 @@ int main() {
 
   long loops;
   timer loop_timer;
-  const double time = 4.0;
+  const double time = 1.0;
 
   cout << "\ndetermine " << time << " second iteration count" << endl;
   for ( loops = 0; loops < LONG_MAX
@@ -64,15 +65,15 @@ int main() {
   for ( i = loops; i--; )
     { time_waster = loop_timer.elapsed() < time; ++pd; }
 
-  cout << "t1 elapsed: " << t1.elapsed() << endl;
-  cout << "t2 elapsed: " << t2.elapsed() << endl;
-  cout << "t3 elapsed: " << t3.elapsed() << endl;
-  cout << "t4 elapsed: " << t4.elapsed() << endl;
-  cout << "t5 elapsed: " << t5.elapsed() << endl;
+  cout << "t1 elapsed: " << t1.elapsed() << '\n';
+  cout << "t2 elapsed: " << t2.elapsed() << '\n';
+  cout << "t3 elapsed: " << t3.elapsed() << '\n';
+  cout << "t4 elapsed: " << t4.elapsed() << '\n';
+  cout << "t5 elapsed: " << t5.elapsed() << '\n';
   cout << "t1 and t2 should report the same times (very approximately "
-       << 2*time << " seconds)."<< endl;
-  cout << "t3, t4 and t5 should report the same times," << endl;
-  cout << "and these should be about half the t1 and t2 times." << endl;
+       << 2*time << " seconds).\n";
+  cout << "t3, t4 and t5 should report about the same times,\n";
+  cout << "and these should be about half the t1 and t2 times.\n";
   cout << "The following elapsed time should be slightly greater than t1."
        << endl; 
   return 0;
