@@ -36,7 +36,6 @@ namespace boost {
       struct BOOST_FUNCTION_INVOKER_BASE
       {
         virtual ~BOOST_FUNCTION_INVOKER_BASE() {}
-        virtual R call(BOOST_FUNCTION_PARMS) = 0;
         virtual R call(BOOST_FUNCTION_PARMS) const = 0;
         virtual BOOST_FUNCTION_INVOKER_BASE* clone() const = 0;
         virtual void destroy(BOOST_FUNCTION_INVOKER_BASE*) = 0;
@@ -62,11 +61,6 @@ namespace boost {
 #ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
         explicit BOOST_FUNCTION_FUNCTION_INVOKER(FunctionPtr f) : 
           function_ptr(f) {}
-
-        virtual R call(BOOST_FUNCTION_PARMS)
-        {
-          return function_ptr(BOOST_FUNCTION_ARGS);
-        }
 
         virtual R call(BOOST_FUNCTION_PARMS) const
         {
@@ -115,8 +109,7 @@ namespace boost {
       private:
         FunctionPtr function_ptr;
 #else
-        static R invoke(any_pointer function_ptr,
-                        bool BOOST_FUNCTION_COMMA
+        static R invoke(any_pointer function_ptr BOOST_FUNCTION_COMMA
                         BOOST_FUNCTION_PARMS)
         {
           FunctionPtr f = reinterpret_cast<FunctionPtr>(function_ptr.func_ptr);
@@ -144,12 +137,6 @@ namespace boost {
 #  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
         explicit BOOST_FUNCTION_VOID_FUNCTION_INVOKER(FunctionPtr f) : 
           function_ptr(f) {}
-
-        virtual unusable call(BOOST_FUNCTION_PARMS)
-        {
-          function_ptr(BOOST_FUNCTION_ARGS);
-          return unusable();
-        }
 
         virtual unusable call(BOOST_FUNCTION_PARMS) const
         {
@@ -199,8 +186,7 @@ namespace boost {
       private:
         FunctionPtr function_ptr;
 #  else
-        static unusable invoke(any_pointer function_ptr,
-                               bool BOOST_FUNCTION_COMMA
+        static unusable invoke(any_pointer function_ptr BOOST_FUNCTION_COMMA
                                BOOST_FUNCTION_PARMS)
 
         {
@@ -230,11 +216,6 @@ namespace boost {
 #ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
         explicit BOOST_FUNCTION_FUNCTION_OBJ_INVOKER(const FunctionObj& f) :
           function_obj(f) {}
-
-        virtual R call(BOOST_FUNCTION_PARMS)
-        {
-          return function_obj(BOOST_FUNCTION_ARGS);
-        }
 
         virtual R call(BOOST_FUNCTION_PARMS) const
         {
@@ -281,21 +262,14 @@ namespace boost {
         }
 
       private:
-        FunctionObj function_obj;
+        mutable FunctionObj function_obj;
 #else
-        static R invoke(any_pointer function_obj_ptr,
-                        bool is_const BOOST_FUNCTION_COMMA
+        static R invoke(any_pointer function_obj_ptr BOOST_FUNCTION_COMMA
                         BOOST_FUNCTION_PARMS)
 
         {
           FunctionObj* f = static_cast<FunctionObj*>(function_obj_ptr.obj_ptr);
-          if (is_const) {
-            const FunctionObj* fc = f;
-            return (*fc)(BOOST_FUNCTION_ARGS);
-          }
-          else {
-            return (*f)(BOOST_FUNCTION_ARGS);
-          }
+          return (*f)(BOOST_FUNCTION_ARGS);
         }
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       };
@@ -319,12 +293,6 @@ namespace boost {
 #  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
         explicit BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER(const FunctionObj& f)
           : function_obj(f) {}
-
-        virtual unusable call(BOOST_FUNCTION_PARMS)
-        {
-          function_obj(BOOST_FUNCTION_ARGS);
-          return unusable();
-        }
 
         virtual unusable call(BOOST_FUNCTION_PARMS) const
         {
@@ -372,22 +340,15 @@ namespace boost {
         }
 
       private:
-        FunctionObj function_obj;
+        mutable FunctionObj function_obj;
 #  else
-        static unusable invoke(any_pointer function_obj_ptr,
-                               bool is_const BOOST_FUNCTION_COMMA
+        static unusable invoke(any_pointer function_obj_ptr 
+                               BOOST_FUNCTION_COMMA
                                BOOST_FUNCTION_PARMS)
 
         {
           FunctionObj* f = static_cast<FunctionObj*>(function_obj_ptr.obj_ptr);
-          if (is_const) {
-            const FunctionObj* fc = f;
-            (*fc)(BOOST_FUNCTION_ARGS);
-          }
-          else {
-            (*f)(BOOST_FUNCTION_ARGS);
-          }
-
+          (*f)(BOOST_FUNCTION_ARGS);
           return unusable();
         }
 #  endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
@@ -525,27 +486,6 @@ namespace boost {
 
     ~BOOST_FUNCTION_FUNCTION() { clear(); }
 
-    // Invoke the target
-    result_type operator()(BOOST_FUNCTION_PARMS)
-    {
-      assert(!this->empty());
-
-      policy_type policy;
-      policy.precall(this);
-
-#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-      impl_type* i = reinterpret_cast<impl_type*>(impl);
-      result_type result = i->call(BOOST_FUNCTION_ARGS);
-#else
-      result_type result = invoker(functor,
-                                   false BOOST_FUNCTION_COMMA
-                                   BOOST_FUNCTION_ARGS);
-#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-
-      policy.postcall(this);
-      return result;
-    }
-
     result_type operator()(BOOST_FUNCTION_PARMS) const
     {
       assert(!this->empty());
@@ -557,8 +497,7 @@ namespace boost {
       const impl_type* i = reinterpret_cast<const impl_type*>(impl);
       result_type result = i->call(BOOST_FUNCTION_ARGS);
 #else
-      result_type result = invoker(functor,
-                                   true BOOST_FUNCTION_COMMA
+      result_type result = invoker(functor BOOST_FUNCTION_COMMA
                                    BOOST_FUNCTION_ARGS);
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 
@@ -756,8 +695,8 @@ namespace boost {
     }
     
 #ifndef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-    typedef result_type (*invoker_type)(detail::function::any_pointer,
-                                        bool BOOST_FUNCTION_COMMA
+    typedef result_type (*invoker_type)(detail::function::any_pointer
+                                        BOOST_FUNCTION_COMMA
                                         BOOST_FUNCTION_TEMPLATE_ARGS);
     
     invoker_type invoker;
