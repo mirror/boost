@@ -49,17 +49,17 @@ public:
   
   result_type min() const { return _min; }
   result_type max() const { return _max; }
-  base_type& base() const { return _rng; }
+  base_type& base() const { return *_rng; }
   
   result_type operator()()
   {
     // we must not use the low bits here, because LCGs get very bad then
-    return ((_rng() - _rng.min()) / _factor) % _range + _min;
+    return (((*_rng)() - _rng->min()) / _factor) % _range + _min;
   }
 
 private:
   typedef typename base_type::result_type base_result;
-  base_type & _rng;
+  base_type * _rng;
   IntType _min, _max;
   base_result _range;
   int _factor;
@@ -68,7 +68,7 @@ private:
 template<class UniformRandomNumberGenerator, class IntType>
 uniform_smallint_integer<UniformRandomNumberGenerator, IntType>::
 uniform_smallint_integer(base_type & rng, IntType min, IntType max) 
-  : _rng(rng), _min(min), _max(max),
+  : _rng(&rng), _min(min), _max(max),
     _range(static_cast<base_result>(_max-_min)+1), _factor(1)
 {
   assert(min < max);
@@ -77,7 +77,7 @@ uniform_smallint_integer(base_type & rng, IntType min, IntType max)
   // (probably put this logic into a partial template specialization)
   // Check how many low bits we can ignore before we get too much
   // quantization error.
-  base_result r_base = _rng.max() - _rng.min();
+  base_result r_base = _rng->max() - _rng->min();
   if(r_base == std::numeric_limits<base_result>::max()) {
     _factor = 2;
     r_base /= 2;

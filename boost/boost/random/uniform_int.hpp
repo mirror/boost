@@ -46,8 +46,8 @@ public:
   typedef IntType result_type;
 
   uniform_int_integer(base_type & rng, IntType min, IntType max) 
-    : _rng(rng), _min(min), _max(max), _range(_max - _min),
-      _bmin(_rng.min()), _brange(_rng.max() - _bmin)
+    : _rng(&rng), _min(min), _max(max), _range(_max - _min),
+      _bmin(_rng->min()), _brange(_rng->max() - _bmin)
   {
     assert(min < max);
     if(random::equal_signed_unsigned(_brange, _range))
@@ -60,13 +60,13 @@ public:
 
   result_type min() const { return _min; }
   result_type max() const { return _max; }
-  base_type& base() const { return _rng; }
+  base_type& base() const { return *_rng; }
 
   result_type operator()();
 
 private:
   typedef typename base_type::result_type base_result;
-  base_type & _rng;
+  base_type * _rng;
   result_type _min, _max, _range;
   base_result _bmin, _brange;
   int _range_comparison;
@@ -78,7 +78,7 @@ inline IntType uniform_int_integer<UniformRandomNumberGenerator, IntType>::opera
   if(_range_comparison == 0) {
     // this will probably never happen in real life
     // basically nothing to do; just take care we don't overflow / underflow
-    return static_cast<result_type>(_rng() - _bmin) + _min;
+    return static_cast<result_type>((*_rng)() - _bmin) + _min;
   } else if(_range_comparison < 0) {
     // use rejection method to handle things like 0..3 --> 0..4
     for(;;) {
@@ -97,14 +97,14 @@ inline IntType uniform_int_integer<UniformRandomNumberGenerator, IntType>::opera
       result_type result = 0;
       result_type mult = 1;
       while(mult <= limit) {
-        result += (_rng() - _bmin) * mult;
+        result += ((*_rng)() - _bmin) * mult;
         mult *= static_cast<result_type>(_brange)+1;
       }
       if(mult == limit)
         // _range+1 is an integer power of _brange+1: no rejections required
         return result;
       // _range/mult < _brange+1  -> no endless loop
-      result += uniform_int_integer<base_type,result_type>(_rng, 0, _range/mult)() * mult;
+      result += uniform_int_integer<base_type,result_type>(*_rng, 0, _range/mult)() * mult;
       if(result <= _range)
         return result + _min;
     }
@@ -112,11 +112,11 @@ inline IntType uniform_int_integer<UniformRandomNumberGenerator, IntType>::opera
     if(_brange / _range > 4 /* quantization_cutoff */ ) {
       // the new range is vastly smaller than the source range,
       // so quantization effects are not relevant
-      return boost::uniform_smallint<base_type,result_type>(_rng, _min, _max)();
+      return boost::uniform_smallint<base_type,result_type>(*_rng, _min, _max)();
     } else {
       // use rejection method to handle things like 0..5 -> 0..4
       for(;;) {
-        base_result result = _rng() - _bmin;
+        base_result result = (*_rng)() - _bmin;
         // result and range are non-negative, and result is possibly larger
         // than range, so the cast is safe
         if(result <= static_cast<base_result>(_range))
