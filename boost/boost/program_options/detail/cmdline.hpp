@@ -10,6 +10,9 @@
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/errors.hpp>
 #include <boost/program_options/cmdline.hpp>
+
+#define DECL BOOST_PROGRAM_OPTIONS_DECL
+
 #include <boost/detail/workaround.hpp>
 
 #include <boost/function.hpp>
@@ -46,7 +49,7 @@ namespace boost { namespace program_options { namespace detail {
 
         @todo mininal match length for guessing?
     */
-    class cmdline {
+    class DECL cmdline {
     public:
 
         typedef ::boost::program_options::command_line_style::style_t style_t;
@@ -280,6 +283,8 @@ namespace boost { namespace program_options { namespace detail {
     void test_cmdline_detail();
     
 }}}
+
+#undef DECL
 
 #endif
 

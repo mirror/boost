@@ -49,7 +49,7 @@ namespace boost { namespace program_options {
         - stores the passed char-based options for later use.
     */
     template<>
-    class basic_parsed_options<wchar_t> {
+    class DECL basic_parsed_options<wchar_t> {
     public:
         /** Constructs wraped_options from options in UTF8 encoding. */
         explicit basic_parsed_options(const basic_parsed_options<char>& po);
@@ -72,7 +72,7 @@ namespace boost { namespace program_options {
     typedef function1<std::pair<std::string, std::string>, const std::string&> ext_parser;
 
     /** Character-type independent command line parser. */
-    class common_command_line_parser {
+    class DECL common_command_line_parser {
     public:
         /// Creates the parsers. The arguments must be in internal encoding.
         common_command_line_parser(const std::vector<std::string>& args);

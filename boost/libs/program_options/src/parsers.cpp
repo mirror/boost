@@ -11,14 +11,13 @@
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/positional_options.hpp>
-#define DECL BOOST_PROGRAM_OPTIONS_DECL
-
-
-
 #include <boost/program_options/detail/cmdline.hpp>
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/environment_iterator.hpp>
 #include <boost/program_options/detail/convert.hpp>
+
+#define DECL BOOST_PROGRAM_OPTIONS_DECL
+
 #include <boost/bind.hpp>
 
 

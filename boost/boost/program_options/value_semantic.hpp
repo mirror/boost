@@ -81,7 +81,7 @@ namespace boost { namespace program_options {
     };
 
     template<>
-    class value_semantic_codecvt_helper<char> : public value_semantic {
+    class DECL value_semantic_codecvt_helper<char> : public value_semantic {
     private: // base overrides
         void parse(boost::any& value_store, 
                    const std::vector<std::string>& new_tokens,
@@ -93,7 +93,7 @@ namespace boost { namespace program_options {
     };
 
     template<>
-    class value_semantic_codecvt_helper<wchar_t> : public value_semantic {
+    class DECL value_semantic_codecvt_helper<wchar_t> : public value_semantic {
     private: // base overrides
         void parse(boost::any& value_store, 
                    const std::vector<std::string>& new_tokens,
