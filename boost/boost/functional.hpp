@@ -16,6 +16,9 @@
 // $Id$
 // ------------------------------------------------------------------------------
 // $Log$
+// Revision 1.2  2000/08/01 07:53:58  mark_rodgers
+// Workarounds for Metrowerks as suggested by Fabrice Truillot.
+//
 // Revision 1.1.1.1  2000/07/07 16:03:47  beman
 // 1.16.1 initial CVS checkin
 //
@@ -137,7 +140,7 @@ namespace boost
         typedef A1 first_argument_type;
         typedef A2 second_argument_type;
     };
-#else
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     // --------------------------------------------------------------------------
     // If we have no partial specialisation available, decay to a situation
     // that is no worse than in the Standard, i.e., ptr_fun will be required.
@@ -161,7 +164,7 @@ namespace boost
         typedef typename Operation::first_argument_type  first_argument_type;
         typedef typename Operation::second_argument_type second_argument_type;
     };    
-#endif
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     
     // --------------------------------------------------------------------------
     // unary_negate, not1
@@ -375,6 +378,7 @@ namespace boost
         return mem_fun1_t<S,T,A>(f);
     }
 
+#ifndef BOOST_NO_POINTER_TO_MEMBER_CONST
     template<class S, class T>
     inline const_mem_fun_t<S,T> mem_fun(S (T::*f)() const)
     {
@@ -386,6 +390,7 @@ namespace boost
     {
         return const_mem_fun1_t<S,T,A>(f);
     }
+#endif // BOOST_NO_POINTER_TO_MEMBER_CONST
 
     // --------------------------------------------------------------------------
     // mem_fun_ref, etc
@@ -468,6 +473,7 @@ namespace boost
         return mem_fun1_ref_t<S,T,A>(f);
     }
 
+#ifndef BOOST_NO_POINTER_TO_MEMBER_CONST
     template<class S, class T>
     inline const_mem_fun_ref_t<S,T> mem_fun_ref(S (T::*f)() const)
     {
@@ -479,6 +485,7 @@ namespace boost
     {
         return const_mem_fun1_ref_t<S,T,A>(f);
     }   
+#endif // BOOST_NO_POINTER_TO_MEMBER_CONST
 
     // --------------------------------------------------------------------------
     // ptr_fun
