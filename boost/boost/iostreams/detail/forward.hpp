@@ -14,7 +14,9 @@
 #include <boost/iostreams/detail/config/limits.hpp>
 #include <boost/iostreams/detail/param_type.hpp>
 #include <boost/iostreams/detail/push_params.hpp>
+#include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/arithmetic/inc.hpp>
+#include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
@@ -30,11 +32,15 @@
 //      Not supported on Intel 7.1 and VC6.5.
 //
 #define BOOST_IOSTREAMS_FORWARD(class, impl, policy, params, args) \
-    class(typename ::boost::iostreams::detail::param_type<policy>::type t params()) \
+    class(const policy& t params()) \
+    { this->impl(::boost::iostreams::detail::wrap(t) args()); } \
+    class(policy& t params()) \
     { this->impl(::boost::iostreams::detail::wrap(t) args()); } \
     class(const ::boost::reference_wrapper<policy>& ref params()) \
     { this->impl(ref args()); } \
-    void open(typename ::boost::iostreams::detail::param_type<policy>::type t params()) \
+    void open(const policy& t params()) \
+    { this->impl(::boost::iostreams::detail::wrap(t) args()); } \
+    void open(policy& t params()) \
     { this->impl(::boost::iostreams::detail::wrap(t) args()); } \
     void open(const ::boost::reference_wrapper<policy>& ref params()) \
     { this->impl(ref args()); } \
@@ -54,6 +60,15 @@
     { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
       ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
         (BOOST_PP_ENUM_PARAMS_Z(z, n, u)) ); } \
+    template< typename U100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
+              BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), typename U) > \
+    BOOST_PP_TUPLE_ELEM(3, 0, tuple) \
+    ( U100& u100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
+      BOOST_PP_ENUM_BINARY_PARAMS_Z(z, BOOST_PP_DEC(n), const U, &u)) \
+    { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
+      ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
+        ( u100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
+          BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), u)) ); } \
     /**/
 #define BOOST_IOSTREAMS_FORWARDING_FN(z, n, tuple) \
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename U)> \
@@ -61,6 +76,14 @@
     { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
       ( BOOST_PP_TUPLE_ELEM(3, 2, tuple) \
         (BOOST_PP_ENUM_PARAMS_Z(z, n, u)) ); } \
+    template< typename U100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
+              BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), typename U) > \
+    void open \
+    ( U100& u100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
+      BOOST_PP_ENUM_BINARY_PARAMS_Z(z, BOOST_PP_DEC(n), const U, &u)) \
+    { this->BOOST_PP_TUPLE_ELEM(3, 1, tuple) \
+      ( u100 BOOST_PP_COMMA_IF(BOOST_PP_DEC(n)) \
+        BOOST_PP_ENUM_PARAMS_Z(z, BOOST_PP_DEC(n), u) ); } \
     /**/
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_FORWARD_HPP_INCLUDED

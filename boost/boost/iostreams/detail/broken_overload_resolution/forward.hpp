@@ -17,14 +17,8 @@ namespace boost { namespace iostreams { namespace detail {
 template<typename Device, typename U>
 struct forward_impl {
     BOOST_STATIC_CONSTANT(bool, value =
-        ( !is_same<
-               const U&,
-               typename detail::param_type<Device>::type
-          >::value &&
-          !is_same<
-              const U&,
-              const reference_wrapper<Device>
-          >::value ));
+        ( !is_same< U, Device >::value &&
+          !is_same< U, reference_wrapper<Device> >::value ));
 };
 
 template<typename Device, typename U>
@@ -35,4 +29,3 @@ struct forward
 } } } // End namespaces detail, iostreams, boost.
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_BROKEN_OVERLOAD_RESOLUTION_HPP_INCLUDED
-
