@@ -15,8 +15,11 @@
 #endif
 
 #if (__EDG_VERSION__ <= 238)
-#   define BOOST_NO_VOID_RETURNS
 #   define BOOST_NO_INTEGRAL_INT64_T
+#endif
+
+#if (__EDG_VERSION__ <= 240)
+#   define BOOST_NO_VOID_RETURNS
 #endif
 
 #if (__EDG_VERSION__ <= 241) && !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
