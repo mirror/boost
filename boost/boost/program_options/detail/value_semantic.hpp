@@ -56,8 +56,9 @@ namespace boost { namespace program_options {
                 throw validation_error("at least one value required");
         }
 
-        /* Throws multiple_occurences if 'value' is not empty. */
-        BOOST_PROGRAM_OPTIONS_DECL void check_first_occurence(const boost::any& value);
+        /* Throws multiple_occurrences if 'value' is not empty. */
+        BOOST_PROGRAM_OPTIONS_DECL void 
+        check_first_occurrence(const boost::any& value);
     }
 
     using namespace validators;
@@ -75,7 +76,7 @@ namespace boost { namespace program_options {
                   const std::vector< std::basic_string<charT> >& xs, 
                   T* target_type, long)
     {
-        validators::check_first_occurence(v);
+        validators::check_first_occurrence(v);
         std::basic_string<charT> s(validators::get_single_string(xs));
         try {
             v = any(lexical_cast<T>(s));
@@ -116,8 +117,8 @@ namespace boost { namespace program_options {
 #endif
 #endif
 
-    /** Validates sequences. Allows multiple values per option occurence
-       and multiple occurences. */
+    /** Validates sequences. Allows multiple values per option occurrence
+       and multiple occurrences. */
     template<class T, class charT>
     void validate(boost::any& v, 
                   const std::vector<std::basic_string<charT> >& s, 

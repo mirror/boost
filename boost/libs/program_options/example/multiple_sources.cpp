@@ -48,8 +48,8 @@ int main(int ac, char* av[])
                  "include path")
             ;
 
-        // Hidden options, will be alled both on command line and
-        // in config file, but will not be show to the user.
+        // Hidden options, will be allowed both on command line and
+        // in config file, but will not be shown to the user.
         po::options_description hidden("Hidden options");
         hidden.add_options()
             ("input-file", po::value< vector<string> >(), "input file")

@@ -74,7 +74,7 @@ namespace boost { namespace program_options {
                           const std::vector<std::string>& new_tokens) const
     {
         if (!value_store.empty()) 
-            throw multiple_occurences("multiple_occurences");
+            throw multiple_occurrences("multiple_occurrences");
         if (new_tokens.size() > 1)
             throw multiple_values("multiple_values");
         value_store = new_tokens.empty() ? std::string("") : new_tokens.front();
@@ -105,7 +105,7 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL void validate(any& v, const vector<string>& xs,
                        bool*, int)
     {
-        check_first_occurence(v);
+        check_first_occurrence(v);
         string s(get_single_string(xs, true));
 
         for (size_t i = 0; i < s.size(); ++i)
@@ -121,13 +121,13 @@ namespace boost { namespace program_options {
 
     // This is blatant copy-paste. However, templating this will cause a problem,
     // since wstring can't be constructed/compared with char*. We'd need to
-    // create auxilliary 'widen' routine to convert from char* into 
+    // create auxiliary 'widen' routine to convert from char* into 
     // needed string type, and that's more work.
 #if !defined(BOOST_NO_STD_WSTRING)
     BOOST_PROGRAM_OPTIONS_DECL 
     void validate(any& v, const vector<wstring>& xs, bool*, int)
     {
-        check_first_occurence(v);
+        check_first_occurrence(v);
         wstring s(get_single_string(xs, true));
 
         for (size_t i = 0; i < s.size(); ++i)
@@ -144,7 +144,7 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL 
     void validate(any& v, const vector<string>& xs, std::string*, int)
     {
-        check_first_occurence(v);
+        check_first_occurrence(v);
         string s(get_single_string(xs));
         if (*s.begin() == '\'' && *s.rbegin() == '\'' ||
             *s.begin() == '"' && *s.rbegin() == '"')
@@ -157,7 +157,7 @@ namespace boost { namespace program_options {
     BOOST_PROGRAM_OPTIONS_DECL 
     void validate(any& v, const vector<wstring>& xs, std::string*, int)
     {
-        check_first_occurence(v);
+        check_first_occurrence(v);
         wstring s(get_single_string(xs));
         if (*s.begin() == L'\'' && *s.rbegin() == L'\'' ||
             *s.begin() == L'"' && *s.rbegin() == L'"')
@@ -170,10 +170,10 @@ namespace boost { namespace program_options {
     namespace validators {
 
         BOOST_PROGRAM_OPTIONS_DECL 
-        void check_first_occurence(const boost::any& value)
+        void check_first_occurrence(const boost::any& value)
         {
             if (!value.empty())
-                throw multiple_occurences("multiple_occurences");
+                throw multiple_occurrences("multiple_occurrences");
         }
     }
 

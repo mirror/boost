@@ -20,9 +20,9 @@ namespace boost { namespace program_options {
         The class uses the information provided by the user to associate a name
         with every positional option, or tell that no name is known. 
 
-        The primary assumption is that only relative order of positional options
-        themself matters, and that any interleaving ordinary options don't 
-        affect interpretation of positional options.
+        The primary assumption is that only the relative order of the
+        positional options themselves matters, and that any interleaving
+        ordinary options don't affect interpretation of positional options.
         
         The user initializes the class by specifying that first N positional 
         options should be given the name X1, following M options should be given 
@@ -46,7 +46,7 @@ namespace boost { namespace program_options {
 
         /** Returns the name that should be associated with positional
             options at 'position'. 
-            Precodting: position < max_total_count()
+            Precondition: position < max_total_count()
         */
         const std::string& name_for_position(unsigned position) const;
 

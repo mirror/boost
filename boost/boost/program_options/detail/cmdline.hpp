@@ -21,9 +21,9 @@
 namespace boost { namespace program_options { namespace detail {
 
     /** Command line parser class. Main requirements were:
-        - Powerfull enough to support all common uses.
+        - Powerful enough to support all common uses.
         - Simple and easy to learn/use.
-        - Minimal code size and extrernal dependencies.
+        - Minimal code size and external dependencies.
         - Extensible for custom syntaxes.
 
         First all options are registered. After that, elements of command line
@@ -94,9 +94,9 @@ namespace boost { namespace program_options { namespace detail {
                '*' -- 0 or more parameters
                '+' -- 1 or more parameters
             @param index A distinguishing value for the option.
-            The index will be returned by 'option_index' member function. Indices
-            need not be unqiue -- e.g. client can set all indices to 0, and
-            use string value to recognize options.
+            The index will be returned by 'option_index' member function. 
+            Indices need not be unique -- e.g. client can set all indices to 0, 
+            and use the string value to recognize options.
         */
         void add_option(const std::string& long_name, char short_name,
                         char properties = '|', int index = 0);
@@ -120,10 +120,11 @@ namespace boost { namespace program_options { namespace detail {
         bool at_argument() const;
 
         /** Returns the option name. If there's long option name associated with
-            this option, it is returned, even if short name was used in command line.
-            Otherwise, the short name given to 'add_option' is returned with '-' prepended. 
-            For purposes of simplicity, '-' is used even when dos-style short option 
-            was found.
+            this option, it is returned, even if short name was used in command 
+            line.Otherwise, the short name given to 'add_option' is returned 
+            with a '-' prefix. 
+            For purposes of simplicity, '-' is used even when dos-style short 
+            option was found.
         */
         const std::string& option_name() const;
         /** Returns the index for the current option. */
@@ -147,8 +148,8 @@ namespace boost { namespace program_options { namespace detail {
         /** Returns all arguments read by this command line parser. */
         const std::vector<std::string>& arguments() const;
 
-        /** Returns the token that was current by the time 'operator++' was
-            invoked the last time. */
+        /** Returns the token that was current when 'operator++' was
+            last invoked. */
         const std::string& last() const;
 
     private:
@@ -246,7 +247,7 @@ namespace boost { namespace program_options { namespace detail {
         /// Converts parameter property character into enum value.
         properties_t translate_property(char p);
 
-        /** Clears all error state. If there were an error, throws appripriate
+        /** Clears the error state. If there were an error, throws appripriate
             exception. */
         void clear_error();
 

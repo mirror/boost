@@ -42,7 +42,7 @@ namespace boost { namespace program_options {
 
         /// Returns true if no value is stored.
         bool empty() const;
-        /** Returns true if the value was not explcitly
+        /** Returns true if the value was not explicitly
             given, but has default value. */
         bool defaulted() const;
         /** Returns the contained value. */
@@ -83,11 +83,11 @@ namespace boost { namespace program_options {
                 - otherwise, returns empty value
 
             - if there's defaulted value
-                - if there's next varaible map, which has non-defauled
+                - if there's next varaible map, which has a non-defauled
                   value, return that
                 - otherwise, return value from *this
 
-            - if there's non-defauled value, returns it.
+            - if there's a non-defauled value, returns it.
         */
         const variable_value& operator[](const std::string& name) const;
 
@@ -123,14 +123,14 @@ namespace boost { namespace program_options {
 
     /** Stores in 'm' all options that are defined in 'options'. 
         If 'm' already has a non-defaulted value of an option, that value
-        is not changed, even of 'options' specify some value.        
+        is not changed, even if 'options' specify some value.        
     */
     BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<char>& options, variables_map& m,
                     bool utf8 = false);
 
     /** Stores in 'm' all options that are defined in 'options'. 
         If 'm' already has a non-defaulted value of an option, that value
-        is not changed, even of 'options' specify some value.        
+        is not changed, even if 'options' specify some value.        
         This is wide character variant.
     */
     BOOST_PROGRAM_OPTIONS_DECL void store(const basic_parsed_options<wchar_t>& options, 

@@ -64,7 +64,7 @@ namespace boost {
     namespace program_options
     {
         /** Convert the input string into internal encoding used by
-            program_options. Presense of this function allows to avoid
+            program_options. Presence of this function allows to avoid
             specializing all methods which access input on wchar_t.
         */
         BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::string&);

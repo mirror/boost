@@ -65,11 +65,11 @@ namespace boost { namespace program_options { namespace command_line_style {
         /** Ignore the difference in case for options. 
             @todo Should this apply to long options only?
         */            
-        case_insentitive = allow_guessing << 1,
+        case_insensitive = allow_guessing << 1,
         /** Allow long options with single option starting character,
             e.g <tt>-foo=10</tt>
         */
-        allow_long_disguise = case_insentitive << 1,
+        allow_long_disguise = case_insensitive << 1,
         /** The more-or-less traditional unix style. */
         unix_style = (allow_short | short_allow_adjacent | short_allow_next
                       | allow_long | long_allow_adjacent | long_allow_next

@@ -92,7 +92,7 @@ Compression level was set to 10.
   <section>
     <title>Option Details</title>
     
-  <para>An Option value, surely, can have other types than <code>int</code>, and
+  <para>An option value, surely, can have other types than <code>int</code>, and
   can have other interesting properties, which we'll discuss right now. The
   complete version of the code snipped below can be found in
   "example/options_description.cpp".</para>
@@ -222,7 +222,7 @@ Optimization level is 4
     command line will annoy users. What if a user installs a new library and
     wants to always pass an additional command line element? What if he has
     made some choices which should be applied on every run? It's desirable to
-    create a config file with common settings which will used together with
+    create a config file with common settings which will be used together with
     the command line.
     </para>
 
@@ -261,8 +261,8 @@ config.add_options()
          &quot;include path&quot;)
     ;
 
-// Hidden options will be allowed both on the command line and
-// in the config file, but will not be show to the user.
+// Hidden options, will be allowed both on command line and
+// in config file, but will not be shown to the user.
 po::options_description hidden(&quot;Hidden options&quot;);
 hidden.add_options()
     (&quot;input-file&quot;, po::value&lt; vector&lt;string&gt; &gt;(), &quot;input file&quot;)
@@ -292,7 +292,7 @@ visible.add(generic).add(config);
       we additionally call <functionname>parse_config_file</functionname>, and
       call the &store; function twice. But what
       happens if the same value is specified both on the command line and in
-      config file. Usually, the value stored first is preferred. This is what
+      config file? Usually, the value stored first is preferred. This is what
       happens for the "--optimization" option. For "composing" options, like
       "include-file", the values are merged.
     </para>

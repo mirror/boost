@@ -61,7 +61,7 @@ int main(int ac, char* av[])
             // Load the file and tokenize it
             ifstream ifs(vm["response-file"].as<string>().c_str());
             if (!ifs) {
-                cout << "Could no open the response file\n";
+                cout << "Could not open the response file\n";
                 return 1;
             }
             // Read the whole file into a string

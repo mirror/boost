@@ -161,7 +161,7 @@ void test_semantic_values()
     
     options.push_back(option("bar", vector<string>(1, "2")));
     variables_map vm3;
-    BOOST_CHECK_THROW(store(parsed, vm3), multiple_occurences);
+    BOOST_CHECK_THROW(store(parsed, vm3), multiple_occurrences);
 
     options = saved_options;
     // Now try passing two int in one 'argv' element.

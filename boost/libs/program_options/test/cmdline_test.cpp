@@ -221,7 +221,7 @@ void test_long_options()
 
     style = cmdline::style_t(
         allow_long | long_allow_adjacent
-        | long_allow_next | case_insentitive);
+        | long_allow_next | case_insensitive);
 
     // Test case insensitive style.
     // Note that option names are normalized to lower case.

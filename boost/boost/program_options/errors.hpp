@@ -46,7 +46,7 @@ namespace boost { namespace program_options {
         {}
     };
 
-    /** Class thrown when there's ambiguity between several possible options. */
+    /** Class thrown when there's ambiguity amoung several possible options. */
     class BOOST_PROGRAM_OPTIONS_DECL ambiguous_option : public error {
     public:
         ambiguous_option(const std::string& name, 
@@ -68,12 +68,12 @@ namespace boost { namespace program_options {
         multiple_values(const std::string& what) : error(what) {}
     };
 
-    /** Class thrown when there are several occurences of an
+    /** Class thrown when there are several occurrences of an
         option, but user called a method which cannot return 
         them all. */
-    class BOOST_PROGRAM_OPTIONS_DECL multiple_occurences : public error {
+    class BOOST_PROGRAM_OPTIONS_DECL multiple_occurrences : public error {
     public:
-        multiple_occurences(const std::string& what) : error(what) {}
+        multiple_occurrences(const std::string& what) : error(what) {}
     };
 
     /** Class thrown when value of option is incorrect. */
@@ -82,14 +82,14 @@ namespace boost { namespace program_options {
         validation_error(const std::string& what) : error(what) {}
     };
 
-    /** Class thrown then there are too many positional options. */
+    /** Class thrown when there are too many positional options. */
     class BOOST_PROGRAM_OPTIONS_DECL too_many_positional_options_error : public error {
     public:
         too_many_positional_options_error(const std::string& what) 
         : error(what) {}
     };
 
-    /** Class thrown then there are too few positional options. */
+    /** Class thrown when there are too few positional options. */
     class BOOST_PROGRAM_OPTIONS_DECL too_few_positional_options_error : public error {
     public:
         too_few_positional_options_error(const std::string& what) 

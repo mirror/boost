@@ -14,7 +14,7 @@
     The first invocation would show to option groups, and will not show the
     '--num-threads' options. The second invocation will still get the value of
     the hidden '--num-threads' option. Finally, the third invocation will show
-    the options for the 'backend' module, including the '--num-theads' option.
+    the options for the 'backend' module, including the '--num-threads' option.
 
 */
 

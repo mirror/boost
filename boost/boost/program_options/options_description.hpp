@@ -33,7 +33,7 @@ namespace program_options {
         kinds of properties of an option. First describe it syntactically and
         are used only to validate input. Second affect interpretation of the
         option, for example default value for it or function that should be
-        called  when the value is finally know. Routines which perform parsing
+        called  when the value is finally known. Routines which perform parsing
         never use second kind of properties -- they are side effect free.
         @sa options_description
     */
@@ -145,14 +145,14 @@ namespace program_options {
         /** Creates the instance. */
         options_description();
         /** Creates the instance. The 'caption' parameter gives the name of
-            this 'options_description' instance. Primarily usefull for output.
+            this 'options_description' instance. Primarily useful for output.
         */
         options_description(const std::string& caption);
         /** Adds new variable description. Throws duplicate_variable_error if
             either short or long name matches that of already present one. 
         */
         void add(shared_ptr<option_description> desc);
-        /** Adds a group of option description. This have the same
+        /** Adds a group of option description. This has the same
             effect as adding all option_descriptions in 'desc' 
             individually, except that output operator will show
             a separate group.
@@ -172,7 +172,7 @@ namespace program_options {
         /** Count the number of option descriptions with given name. 
             Returns 0 or 1.
             The 'name' parameter can be either name of long option, and short
-            option prepended by '-'.
+            option prefixed by '-'.
         */
         unsigned count(const std::string& name) const;
         /** Count the number of descriptions having the given string as
@@ -202,7 +202,7 @@ namespace program_options {
         friend BOOST_PROGRAM_OPTIONS_DECL std::ostream& operator<<(std::ostream& os, 
                                              const options_description& desc);
 
-        /** Output 'desc' to the specified streeam, calling 'f' to output each
+        /** Output 'desc' to the specified stream, calling 'f' to output each
             option_description element. */
         void print(std::ostream& os) const;
 
@@ -215,7 +215,7 @@ namespace program_options {
         approximation_range find_approximation(const std::string& prefix) const;
 
         std::string m_caption;
-        // Data organization is chosen since:
+        // Data organization is chosen because:
         // - there could be two names for one option
         // - option_add_proxy needs to know the last added option
         std::vector< shared_ptr<option_description> > options;

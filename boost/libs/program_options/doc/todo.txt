@@ -87,3 +87,15 @@ Style of 'screen' in docs.
 >
 > This wording is quite stiff and I can't decipher it, especially the "not
 > specified when not needed" phrase.  Can you rewrite this?
+
+> While I'm thinking about it, can you add the "Last revised..." line at the
+> bottom of each HTML page as it is on program_options.html or it that
+> governed by an xsl file?
+
+> If it doesn't already exist, there should be something in the tutorial to
+> explicitly define the steps required prior to the use of a configuration
+> variable as:
+> 1. declaration
+> 2. addition or composition
+> 3. storage or insertion
+> 4. notification.

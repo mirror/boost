@@ -79,7 +79,7 @@ namespace boost { namespace program_options {
     basic_parsed_options<charT>
     basic_command_line_parser<charT>::run() const
     {
-        // Presents of parsed_options -> wparsed_options convertion
+        // Presense of parsed_options -> wparsed_options conversion
         // does the trick.
         return basic_parsed_options<charT>(
             common_command_line_parser::run());

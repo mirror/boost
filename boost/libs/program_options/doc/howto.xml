@@ -28,12 +28,12 @@ options groups/hidden options
     </para>
 
     <indexterm><primary>additional parser</primary></indexterm>
-    <para>For such cases, the library allows the user to provide
+    <para>For such cases, the library allows the user to provide an
     <firstterm>additional parser</firstterm> -- a function which will be called on each
     command line element, before any processing by the library. If the
     additional parser recognizes the syntax, it returns the option name and
     value, which are used directly. The above example can be handled by the
-    following code
+    following code:
     </para>
 
     <para>
@@ -50,7 +50,7 @@ pair&lt;string, string&gt; reg_foo(const string&amp; s)
     }
 }
 </programlisting>
-      Here's the definition of the additional parser. When parsing command
+      Here's the definition of the additional parser. When parsing the command
       line, we pass the additional parser:
 <programlisting>
 store(command_line_parser(ac, av).options(desc).extra_parser(reg_foo)
@@ -66,8 +66,8 @@ store(command_line_parser(ac, av).options(desc).extra_parser(reg_foo)
 
     <indexterm><primary>response files</primary></indexterm> 
     <para>Some operating system have very low limits of the command line
-      length. The common way to work around those limitation is using
-      <firstterm>respose files</firstterm>. Response file is just
+      length. The common way to work around those limitations is using
+      <firstterm>response files</firstterm>. Response file is just
       configuration file which uses the same syntax as the command line, and
       which name can be specified on the command line.  The library does not
       provide direct support for response files, so you'll need to write some
@@ -75,14 +75,14 @@ store(command_line_parser(ac, av).options(desc).extra_parser(reg_foo)
     </para>
 
     <para>
-      First, you need to define an option for response file:
+      First, you need to define an option for the response file:
 <programlisting>
 ("response-file", value&lt;string&gt;(), 
      "can be specified with '@name', too")
 </programlisting>
     </para>
 
-    <para>Second, you'll need additional parser to support the standard syntax
+    <para>Second, you'll need an additional parser to support the standard syntax
     for specifying response files: "@file":
 <programlisting><![CDATA[
 pair<string, string> at_option_parser(string const&s)
@@ -133,7 +133,7 @@ if (vm.count("response-file")) {
     <para>On the Windows operating system, GUI applications receive the
     command line as a single string, not split into elements. For that reason,
     the command line parser cannot be used directly. At least on some
-    compilers, It is possible to obtain
+    compilers, it is possible to obtain
     the split command line, but it's not clear if all compilers support the
     same mechanism on all versions of the operating system. The
     <code>split_command_line</code> function is a portable mechanism provided
@@ -144,7 +144,7 @@ if (vm.count("response-file")) {
 vector&lt;string&gt; args = split_winmain(lpCmdLine);
 store(command_line_parser(args).options(desc).run(), vm);
 </programlisting>      
-      The function was an overloaded for <code>wchar_t</code> strings, so can
+      The function is an overload for <code>wchar_t</code> strings, so can
       also be used in Unicode applications.
     </para>
 
@@ -164,13 +164,12 @@ store(command_line_parser(args).options(desc).run(), vm);
           <para>The user would prefer some structure in the generated help message.</para>
         </listitem>
         <listitem>
-          <para>Some options should be appear in the generated help message at
-          all.</para>
+          <para>Some options shouldn't appear in the generated help message at all.</para>
         </listitem>
       </itemizedlist>
     </para>
 
-    <para>To solve the above issues, the library allows to create several
+    <para>To solve the above issues, the library allows a programmer to create several
       instances of the &options_description; class, which can be merged in
       different combinations. The following example will define three groups of
       options: command line specific, and two options group for specific program
@@ -201,7 +200,7 @@ backend.add_options()
     </para>
 
     <para>After declaring options groups, we merge them in two
-      combinations. First will include all options, and be used for parsing. The
+      combinations. The first will include all options and be used for parsing. The
       second will be used for the "--help" option.
 <programlisting>
 // Declare an options description instance which will include
@@ -302,14 +301,14 @@ void validate(boost::any& v,
       for the value, and in this case is either empty or contains an instance of
       the <code>magic_number</code> class. The second is the list of strings
       found in the next occurence of the option. The remaining two parameters
-      are needed to workaround lack on partial template specialization and
+      are needed to workaround the lack of partial template specialization and
       partial function template ordering on some compilers.
     </para>
 
     <para>The function first checks that we don't try to assign to the same
-      option twice. Then it checks that only single string was passed
-      in. Finally, the Boost.Regex library is used to verify that the string has
-      the expected format, and the parsed value is stored into the
+      option twice. Then it checks that only a single string was passed
+      in. Next the string is verified with the help of the Boost.Regex
+      library. If that test is passed, the parsed value is stored into the
       <code>v</code> variable.
     </para>
 
@@ -387,10 +386,10 @@ $ export LC_CTYPE=ru_RU.KOI8-R
           </para>
         </listitem>
         <listitem>
-          <para>Run the "test_convert" binary passing it as parameter
-          arbitrary non-ascii string in selected encoding. If you see a list
-          of Unicode codepoints, everything's OK. Otherwise, locale support on
-          your system might be broken.</para>
+          <para>Run the "test_convert" binary with any non-ascii string in the
+            selected encoding as its parameterIf you see a list of Unicode codepoints,
+            everything's OK. Otherwise, locale support on your system might be
+            broken.</para>
         </listitem>
       </orderedlist>
     </para>

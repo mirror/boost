@@ -4,6 +4,9 @@ project
     <library>../build//program_options
     <library>/boost/test//boost_test_exec_monitor
     <hardcode-dll-paths>true
+    
+#    <define>_GLIBCXX_CONCEPT_CHECKS
+#    <define>_GLIBCXX_DEBUG
     ;
 
 test-suite program_options :

@@ -34,7 +34,7 @@ namespace boost { namespace program_options {
     invalid_command_line_syntax::error_message(kind_t kind)
     {
         // Initially, store the message in 'const char*' variable,
-        // to avoid convesion to std::string in all cases.
+        // to avoid conversion to std::string in all cases.
         const char* msg;
         switch(kind)
         {
@@ -42,7 +42,7 @@ namespace boost { namespace program_options {
             msg = "long options are not allowed";
             break;
         case long_adjacent_not_allowed:
-            msg = "parameters adjuacent to long options not allowed";
+            msg = "parameters adjacent to long options not allowed";
             break;
         case short_adjacent_not_allowed:
             msg = "parameters adjust to short options are not allowed";
@@ -383,7 +383,7 @@ namespace boost { namespace program_options { namespace detail {
         std::size_t n = eq ? eq - name : strlen(name);
 
         int (*cmp)(const char*, const char*, size_t);
-        cmp = (style & case_insentitive) 
+        cmp = (style & case_insensitive) 
             ? detail::strncmp_nocase : detail::strncmp_case;
         const option* result = 0;
         for (size_t i = 0; i < options.size(); ++i) {
@@ -589,11 +589,11 @@ namespace boost { namespace program_options { namespace detail {
         return process_parameter(m_opt, !p.second.empty(), false);
     }
 
-    /* Handles parameter assingments, setting m_option_value and 
+    /* Handles parameter assignments, setting m_option_value and 
        m_num_tokens.
 
        'opt' describes the detected option. If it's 0, it means the option
-       is not registered, but the parser allowes unregisted options. Assumes
+       is not registered, but the parser allows unregistered options. Assumes
        that this option allows but not requires a parameter.
 
        'adjacent_parameter' says if there's a parameter in the same token as

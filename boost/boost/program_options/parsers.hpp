@@ -49,7 +49,7 @@ namespace boost { namespace program_options {
     template<>
     class BOOST_PROGRAM_OPTIONS_DECL basic_parsed_options<wchar_t> {
     public:
-        /** Constructs wraped_options from options in UTF8 encoding. */
+        /** Constructs wrapped options from options in UTF8 encoding. */
         explicit basic_parsed_options(const basic_parsed_options<char>& po);
 
         std::vector< basic_option<wchar_t> > options;
@@ -87,13 +87,13 @@ namespace boost { namespace program_options {
         std::vector<std::string> m_args;
     };
 
-    /** Comamnd line parser.
+    /** Command line parser.
 
-        The class allows to specify all the information needed for parsing and
-        the parse the command line. It is primarily needed to emulate named 
-        function parameters -- a regular function with 5 parameters will be hard
-        to use and creating overloads with smaller nuber of parameters will be 
-        confusing.
+        The class allows one to specify all the information needed for parsing
+        and to parser the parse the command line. It is primarily needed to
+        emulate named function parameters -- a regular function with 5
+        parameters will be hard to use and creating overloads with a smaller
+        nuber of parameters will be confusing.
 
         For the most common case, the function parse_command_line is a better 
         alternative.        
@@ -166,9 +166,9 @@ namespace boost { namespace program_options {
     parse_environment(const options_description&, const std::string& prefix);
 
     /** @overload
-        This function exists for resolve ambiguity between the two above 
+        This function exists to resolve ambiguity between the two above 
         functions when second argument is of 'char*' type. There's implicit
-        convension to both function1 and string.
+        conversion to both function1 and string.
     */
     BOOST_PROGRAM_OPTIONS_DECL parsed_options
     parse_environment(const options_description&, const char* prefix);

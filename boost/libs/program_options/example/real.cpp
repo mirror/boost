@@ -10,7 +10,7 @@ using namespace boost::program_options;
 #include <iostream>
 using namespace std;
 
-/* Auxilliary functions for checking input for validity. */
+/* Auxiliary functions for checking input for validity. */
 
 /* Function used to check that 'opt1' and 'opt2' are not specified
    at the same time. */
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
         ("mainpackage,p", value(&mainpackage), 
              "output dependency information")
         ("depends,d", value(&depends), 
-         "write dependendies to <pathname>")
+         "write dependencies to <pathname>")
         ("sources,s", value(&sources), "write source package list to <pathname>")
         ("root,r", value(&root), "treat <dirname> as project root directory")
         ;

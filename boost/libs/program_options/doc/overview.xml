@@ -41,7 +41,7 @@
 
   <para>In the tutorial we've learned how those components can be used by the
     <code>main</code> function to parse the command line and config
-    file.Before going into the details of each component, a few notes about
+    file. Before going into the details of each component, a few notes about
     the world outside of <code>main</code>.
   </para>
 
@@ -50,9 +50,9 @@
     provides a class which stores all option values and that class can be
     freely passed around your program to modules which need access to the
     options. All the other components can be used only in the place where
-    actual parsing is the done.  "However, it might also make sense for the
+    the actual parsing is the done.  However, it might also make sense for the
     individual program modules to describe their options and pass them to the
-    main module, which will merge all options."Of course, this is only
+    main module, which will merge all options. Of course, this is only
     important when the number of options is large and declaring them in one
     place becomes troublesome.
   </para>
@@ -109,11 +109,11 @@ desc.add_options()
     </para>
 
     <para>The call to the <code>value</code> function creates an instance of
-      a class derived from <code>value_sematintic</code>: <code>typed_value</code>.
+      a class derived from the <code>value_semantic</code> class: <code>typed_value</code>.
       That class contains the code to parse
-      values of specific type, and contains a number of methods which can be
-      called by the user to  specify additional information. (This
-      essentially emulates named parameters of the constructor). Calls to
+      values of a specific type, and contains a number of methods which can be
+      called by the user to specify additional information. (This
+      essentially emulates named parameters of the constructor.) Calls to
       <code>operator()</code> on the object returned by <code>add_options</code>
       forward arguments to the constructor of the <code>option_description</code>
       class and add the new instance. 
@@ -128,7 +128,7 @@ desc.add_options()
       about the <code>value</code> function.
     </para>
 
-    <para>The information about option is divided into syntactic and
+    <para>The information about an option is divided into syntactic and
       semantic. Syntactic information includes the name of the option and the
       number of tokens which can be used to specify the value. This
       information is used by parsers to group tokens into (name, value) pairs,
@@ -270,8 +270,8 @@ desc.add_options()
     </para>
 
     <para>
-      To invoke a parser you typically call a function, passing options
-      desription and command line or config_file or something else.
+      To invoke a parser you typically call a function, passing the options
+      description and command line or config file or something else.
       The results of parsing are returned as an instance of the &parsed_options;
       class. Typically, that object is passed directly to the storage
       component. However, it also can be used directly, or undergo some additional
@@ -343,7 +343,7 @@ desc.add_options()
       values. The two calls to the <code>store</code> function add values
       found on the command line and in the config file. Finally the call to
       the <code>notify</code> function runs the user-specified notify
-      functions and stores the values into regular variables, if needed
+      functions and stores the values into regular variables, if needed.
     </para>
 
     <para>The priority is handled in a simple way: the <code>store</code>

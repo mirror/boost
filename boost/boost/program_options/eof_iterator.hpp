@@ -10,7 +10,7 @@
 
 namespace boost {
 
-    /** The 'eof_iterator' class is usefull for constructing forward iterators 
+    /** The 'eof_iterator' class is useful for constructing forward iterators 
         in cases where iterator extract data from some source and it's easy 
         to detect 'eof' -- i.e. the situation where there's no data. One 
         apparent example is reading lines from a file.
@@ -37,7 +37,7 @@ namespace boost {
                method.
             - advance the data pointer.
 
-        Essentially, the 'get' method has partly functionality of 'increment' 
+        Essentially, the 'get' method has the functionality of both 'increment' 
         and 'dereference'. It's very good for the cases where data extraction 
         implicitly moves data pointer, like for stream operation.         
     */
@@ -50,7 +50,7 @@ namespace boost {
         : m_at_eof(false)
         {}
 
-    protected: // iterface for derived
+    protected: // interface for derived
 
         /** Returns the reference which should be used by derived
             class to store the next value. */

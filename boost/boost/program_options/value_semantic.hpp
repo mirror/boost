@@ -25,7 +25,7 @@ namespace boost { namespace program_options {
     */
     class BOOST_PROGRAM_OPTIONS_DECL value_semantic {
     public:
-        /** Returns the name of the option. The name is only meaningfull
+        /** Returns the name of the option. The name is only meaningful
             for automatic help message.
          */
         virtual std::string name() const = 0;
@@ -51,7 +51,7 @@ namespace boost { namespace program_options {
         
         /** Parses a group of tokens that specify a value of option.
             Stores the result in 'value_store', using whatever representation
-            is desired. Maybe be called several times if value of the same
+            is desired. May be be called several times if value of the same
             option is specified more than once.
         */
         virtual void parse(boost::any& value_store, 
@@ -60,7 +60,7 @@ namespace boost { namespace program_options {
             = 0;
 
         /** Called to assign default value to 'value_store'. Returns
-            true if default value is assigned, and false if not default
+            true if default value is assigned, and false if no default
             value exists. */
         virtual bool apply_default(boost::any& value_store) const = 0;
                                    
@@ -106,7 +106,7 @@ namespace boost { namespace program_options {
             const = 0;
 #endif
     };
-    /** Class which specify handling of value for which user did not specified
+    /** Class which specifies the handling of a value for which user did not specified
         anything. */    
     class BOOST_PROGRAM_OPTIONS_DECL 
     untyped_value : public value_semantic_codecvt_helper<char>  {
@@ -216,7 +216,7 @@ namespace boost { namespace program_options {
 
 
         /** Creates an instance of the 'validator' class and calls
-            it's operator() to perform actual convertion. */
+            its operator() to perform athe ctual conversion. */
         void xparse(boost::any& value_store, 
                     const std::vector< std::basic_string<charT> >& new_tokens) 
             const;
@@ -245,7 +245,7 @@ namespace boost { namespace program_options {
         T* m_store_to;
         
         // Default value is stored as boost::any and not
-        // as boost::optional to avoid unnecessary instantinations.
+        // as boost::optional to avoid unnecessary instantiations.
         boost::any m_default_value;
         std::string m_default_value_as_text;
         bool m_composing, m_implicit, m_multitoken;

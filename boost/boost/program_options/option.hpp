@@ -14,8 +14,8 @@
 namespace boost { namespace program_options {
 
     /** Option found in input source.
-        Contains a key and a value. The key, in turn, can be string (name of
-        an option), or a integer (position in input source) -- in case no name
+        Contains a key and a value. The key, in turn, can be a string (name of
+        an option), or an integer (position in input source) -- in case no name
         is specified. The latter is only possible for command line.
         The template parameter specifies the type of char used for storing the
         option's value.
@@ -32,8 +32,8 @@ namespace boost { namespace program_options {
         /** String key of this option. Intentionally independent of the template
             parameter. */
         std::string string_key;
-        /** Position key of this option. All options without explicit name are
-            sequentally numbered starting from 0. If an option has explicit name,
+        /** Position key of this option. All options without an explicit name are
+            sequentially numbered starting from 0. If an option has explicit name,
             'position_key' is equal to -1. It is possible that both
             position_key and string_key is specified, in case name is implicitly
             added.

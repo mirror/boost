@@ -46,7 +46,7 @@ namespace boost { namespace program_options { namespace detail {
           spaces around '=' are trimmed.
         - Section names are given in brackets. 
 
-         The actuall option name is constructed by combining current section
+         The actual option name is constructed by combining current section
          name and specified option name, with dot between. If section_name 
          already contains dot at the end, new dot is not inserted. For example:
          @verbatim
