@@ -72,8 +72,6 @@
               <li><a href="#ordering">Ordering Note</a></li>
 
               <li><a href="#symmetry">Symmetry Note</a></li>
-
-              <li><a href="#safe_bool_note">Safe-Bool Note</a></li>
             </ul>
           </li>
 
@@ -342,11 +340,18 @@ class MyInt
 
       <li><code><a href="#indexable">indexable&lt;&gt;</a></code></li>
 
-      <li><code><a href="#bool_testable">bool_testable&lt;&gt;</a></code></li>
-
       <li>Any composite operator template that includes at least one of the
       above</li>
     </ul>
+
+    <p>As Daniel Kr&uuml;gler pointed out, this technique violates 14.6.5/2
+    and is thus non-portable. The reasoning is, that the operators injected 
+    by the instantiation of e.g.
+    <code>less_than_comparable&lt;myclass&gt;</code> can not be found
+    by ADL according to the rules given by 3.4.2/2, since myclass is
+    not an associated class of
+    <code>less_than_comparable&lt;myclass&gt;</code>.
+    Thus only use this technique if all else fails.</p>
 
     <h3>Requirement <a name="portability">Portability</a></h3>
 
@@ -529,17 +534,6 @@ const point&lt;float&gt; pi_over_4_normalized = pi_over_4 / length(pi_over_4);
 
         <td><code>t == u</code>.<br>
          Return convertible to <code>bool</code>.</td>
-      </tr>
-
-      <tr>
-        <td><code><a name="bool_testable">bool_testable&lt;T&gt;</a></code></
-        td>
-
-        <td><code>bool operator!(const T&)</code></td>
-
-        <td><code>static_cast&lt;bool&gt;(t)</code>.<br>
-         <code>T</code> convertible to <code>bool</code>. See the <a href=
-         "#safe_bool_note">Safe-Bool Note</a>.</td>
       </tr>
 
       <tr>
@@ -989,132 +983,6 @@ T operator+( T lhs, const T&amp; rhs )
     that don't implement the NRVO. <br>
      <br>
      
-    <h4><a name="safe_bool_note">Safe-Bool</a> Note</h4>
-
-    <p><code><a href="#bool_testable">bool_testable</a></code> provides the
-    antithesis of operator bool, such that the expression <code>if (!p)</code> 
-    is valid, whilst also making <code>operator bool</code> safer by preventing
-    accidental conversions to integer types.  If <code>operator bool</code>
-    were declared for a class without using 
-    <code><a href="#bool_testable">bool_testable</code></a> then expressions
-    such as :</p>
-
-<pre>
-void f(int);
-
-void g(object o)
-{
-    f(o);
-}
-</pre>
-
-    <p>would compile silently, not warning the user of the (probably) 
-    unintended behaviour of passing <code>0</code> or <code>1</code> to 
-    <code>f()</code>.</p> <code>bool_testable&lt;&gt;</code> prevents these 
-    accidental conversions by declaring a private conversion operator to 
-    <code>signed char</code>, and not defining the body.</p>
-
-    <h5>Example :</h5>
-
-<pre>
-class Stream : boost::bool_testable&lt;Stream&gt;
-{
-public:
-    explicit Stream(const char * source);
-    operator bool() const;
-    // non-member bool operator!(const T&) const auto-generated and 
-    // operator bool made safe by bool_testable&lt;&gt;
-
-    bool can_print();
-};
-
-void g(int);
-
-void f()
-{
-    if (Stream s1("source.txt"))
-    {
-        // use s1 ...
-    }
-
-    // or..
-
-    Stream s2("source.txt");
-    if (!s2)
-    {
-        // handle problem
-    }
-
-    // or ..
-
-    if (s2 && s2.can_print()) //* see <a href="#bool_testable_msvc">note</a>
-    {
-        // print something...
-    }
-
-    g(stream); // Will not compile, but would compile 
-               // fine without bool_testable&lt;&gt;
-}
-</pre>
-
-    <h5><a name="bool_testable_msvc">Note for MSVC version 6 users</a> :</h5>
-
-    <p>Due to a bug in MSVC6, whilst compiling the above code, the compiler 
-    will incorrectly diagnose an '<code>ambiguous operator &&</code>' at
-    the asterisked line.  The workaround for this is to either:</p>
-<pre>
-    if (s2)
-        if (s2.can_print())
-</pre>
-    <p>or</p>
-<pre>
-    if (!!s2 && s2.can_print())
-</pre>
-    <p>This problem also affects the other logical operators.</p>
-
-    <h5>Rationale for Implementation</h5>
-
-    <p>Another possible implementation for <code>bool_testable</code> was the
-    safe-bool idiom as found in <a href=
-    "../smart_ptr/shared_ptr.htm#conversions"><code>shared_ptr&lt;&gt;</code>
-    </a> written by <a href="../../people/peter_dimov.htm">Peter Dimov</a>. 
-    This implementation required the user to provide <code>operator!</code>, 
-    and provided a conversion operator to a pointer to member function. This 
-    method had the advantage of more descriptive diagnostic messages on most 
-    platforms, when the bool conversion was used incorrectly. Unfortunately 
-    that implementation had issues when used with a class with other user 
-    defined integer conversion operators.  This is because the integer 
-    conversion operator provided a better match than the conversion to pointer
-    to member function. For example:</p>
-
-<pre>
-class MyInt : alternative_bool_testable&lt;MyInt&gt;
-{
-public:
-    bool operator!() const;
-    operator int() const;
-
-    // alternative_bool_testable&lt;MyInt&gt; provides :
-    //
-    //  typedef void (MyInt::*member_fn)();
-    //  operator member_fn() { return &MyInt::f;	}
-
-};
-
-void g(int);
-
-void f(const MyInt& i)
-{
-    if (!i) // fine: calls operator!
-        ...
-
-    g(i);   // fine: calls operator int
-
-    if (i)  // error: calls operator int NOT operator member_fn()
-        ...
-}
-</pre>
-    
     <h3><a name="grpd_oprs">Grouped Arithmetic Operators</a></h3>
 
     <p>The following templates provide common groups of related operations.
@@ -2203,10 +2071,6 @@ public:
       <dd>Contributed the NRVO-friendly and symmetric implementation of
       arithmetic operators.</dd>
 
-      <dt>Sam Partington</dt>
-
-      <dd>Contributed the bool_testable class.</dd>
-
     </dl>
 
     <h2>Note for Users of <a name="old_lib_note">Older Versions</a></h2>
@@ -2255,13 +2119,15 @@ public:
     backward-compatible.</p>
     <hr>
 
-    <p>Revised: 30 Oct 2001</p>
+    <p>Revised: 03 Dec 2003</p>
 
-    <p>Copyright &copy; David Abrahams and Beman Dawes 1999-2001. Permission
-    to copy, use, modify, sell and distribute this document is granted
-    provided this copyright notice appears in all copies. This document is
-    provided "as is" without express or implied warranty, and with no claim
-    as to its suitability for any purpose.</p>
+    <p>Copyright &copy; Beman Dawes, David Abrahams, 1999-2001.</p>
+    <p>Copyright &copy; Daniel Frey, 2002-2003.</p>
+    <p>Use, modification, and distribution is subject to the Boost Software 
+    License, Version 1.0. (See accompanying file
+    <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at
+    <a href="http://www.boost.org/LICENSE_1_0.txt">
+    www.boost.org/LICENSE_1_0.txt</a>)</p>
   </body>
 </html>
 

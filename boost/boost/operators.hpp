@@ -9,7 +9,6 @@
 //  See http://www.boost.org/libs/utility/operators.htm for documentation.
 
 //  Revision History
-//  04 May 05 Added operator class bool_testable.  (Sam Partington)
 //  21 Oct 02 Modified implementation of operators to allow compilers with a
 //            correct named return value optimization (NRVO) to produce optimal
 //            code.  (Daniel Frey)
@@ -309,20 +308,6 @@ struct indexable : B
   }
 };
 
-//  bool_testable -----------------------------------------------------------//
-//  (contributed by Sam Partington, David Abrahams and Daniel Frey) ---------//
-
-template <class T, class B = ::boost::detail::empty_base>
-struct bool_testable : B
-{
-    friend bool operator!(const T& t) { return !static_cast<bool>(t); }
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-private:
-    typedef signed char private_number_type;
-    operator private_number_type() const;
-#endif 
-};
- 
 //  More operator classes (contributed by Daryle Walker) --------------------//
 //  (NRVO-friendly implementation contributed by Daniel Frey) ---------------//
 
@@ -830,8 +815,6 @@ BOOST_OPERATOR_TEMPLATE1(decrementable)
 
 BOOST_OPERATOR_TEMPLATE2(dereferenceable)
 BOOST_OPERATOR_TEMPLATE3(indexable)
-
-BOOST_OPERATOR_TEMPLATE1(bool_testable)
 
 BOOST_OPERATOR_TEMPLATE(left_shiftable)
 BOOST_OPERATOR_TEMPLATE(right_shiftable)

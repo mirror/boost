@@ -6,7 +6,6 @@
 //  See http://www.boost.org/libs/utility for documentation.
 
 //  Revision History
-//  23 May 03 Added tests for "bool_testable". (Sam Partington/Daniel Frey)
 //  01 Oct 01 Added tests for "left" operators
 //            and new grouped operators. (Helmut Zeisel)
 //  20 May 01 Output progress messages.  Added tests for new operator
@@ -49,7 +48,6 @@ namespace
     class Wrapped1
         : boost::operators<Wrapped1<T> >
         , boost::shiftable<Wrapped1<T> >
-        , boost::bool_testable<Wrapped1<T> >
     {
     public:
         explicit Wrapped1( T v = T() ) : _value(v) {}
@@ -80,7 +78,6 @@ namespace
           { _value >>= x._value; return *this; }
         Wrapped1& operator++()               { ++_value; return *this; }
         Wrapped1& operator--()               { --_value; return *this; }
-        operator bool() const { return _value != 0; }
         
     private:
         T _value;
@@ -565,13 +562,6 @@ template Wrapped6<unsigned int, unsigned char>;
 
 #define PRIVATE_EXPR_TEST(e, t)  BOOST_TEST( ((e), (t)) )
 
-#define PRIVATE_BOOLEAN_EXPR_TEST(t, res)    BOOST_TEST(static_cast<bool>((t)) == (res))
-#if defined(BOOST_MSVC)
-    #define PRIVATE_MSVC_BOOL_TEST_WORKAROUND(x) (!!x)
-#else
-    #define PRIVATE_MSVC_BOOL_TEST_WORKAROUND(x) (x)
-#endif
-
 int
 test_main( int , char * [] )
 {
@@ -621,18 +611,6 @@ test_main( int , char * [] )
 
     cout << "Created MyInt objects.\n";
 
-    PRIVATE_BOOLEAN_EXPR_TEST( i, false );
-    PRIVATE_BOOLEAN_EXPR_TEST( i1, true );
-    PRIVATE_BOOLEAN_EXPR_TEST( i2, true );
-    PRIVATE_BOOLEAN_EXPR_TEST( !i, true );
-    PRIVATE_BOOLEAN_EXPR_TEST( !i1, false );
-    PRIVATE_BOOLEAN_EXPR_TEST( !i2, false );
-    PRIVATE_BOOLEAN_EXPR_TEST( PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i)  && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), false );
-    PRIVATE_BOOLEAN_EXPR_TEST( PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i)  || PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), true );
-    PRIVATE_BOOLEAN_EXPR_TEST( PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i1) && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), true );
-    PRIVATE_BOOLEAN_EXPR_TEST( !i                                    && PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i2), true );
-    PRIVATE_BOOLEAN_EXPR_TEST( PRIVATE_MSVC_BOOL_TEST_WORKAROUND(i1) && !i, true );
-      
     PRIVATE_EXPR_TEST( (i = i2), (i.value() == 2) );
 
     BOOST_TEST( i2 == i );
