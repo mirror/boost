@@ -25,7 +25,7 @@
 
 #include <boost/regex/config.hpp>
 
-#ifndef BOOST_NO_STD_LOCALE
+#if !defined(BOOST_NO_STD_LOCALE) && !defined(BOOST_NO_STD_WSTREAMBUF)
 
 # ifdef BOOST_MSVC
 #  pragma warning(disable:4786 4702 4127 4244)

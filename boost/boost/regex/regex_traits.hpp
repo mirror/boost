@@ -536,7 +536,7 @@ private:
 #endif // Wide strings
 #endif // Win32
 
-#ifndef BOOST_NO_STD_LOCALE
+#if !defined(BOOST_NO_STD_LOCALE) && !defined(BOOST_NO_STD_WSTREAMBUF)
 
 } // namspace boost
 
