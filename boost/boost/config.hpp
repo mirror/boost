@@ -375,7 +375,7 @@
 
 #   define BOOST_STD_EXTENSION_NAMESPACE Metrowerks
 
-//  Sun Workshop Compiler C++ ------------------------------------------------//
+//  Sun Workshop Compiler C++ ------------------------------------------------
 
 # elif defined  __SUNPRO_CC
 #    if __SUNPRO_CC <= 0x520
@@ -388,7 +388,16 @@
 #      define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #    endif
 
-//  Microsoft Visual C++ (excluding Intel/EDG front end)  --------------------//
+
+//  HP aCC -------------------------------------------------------------------
+
+# elif defined __HP_aCC
+#    define BOOST_NO_SLIST
+#    define BOOST_NO_HASH
+#    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+#    define BOOST_NO_OPERATORS_IN_NAMESPACE
+
+//  Microsoft Visual C++ (excluding Intel/EDG front end)  --------------------
 //
 //  Must remain the last #elif since some other vendors (Metrowerks, for
 //  example) also #define _MSC_VER
