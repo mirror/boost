@@ -24,16 +24,22 @@
 <H2><a name="overview">Overview</a></H2>
 <p>
 The library has several functions that require the creation of a library file.
-The Jamfile in the build directory will produce a library 
-(<font class="bold">libboost_date_time</font>) that contains these functions.
+The Jamfile in the build directory (BOOST_ROOT/libs/date_time/build) will 
+produce the <font class="bold">libboost_date_time</font> library 
+that contains these functions.  The library is compiled into both 
+static and dynamic (dll) forms. Note that the static library is the
+prefered form as some compilers have spurious regression test 
+errors using the dynamic library.  See the 
+<a href="http://boost.sourceforge.net/regression-logs/">regression test logs at sourceforge </a> for more details.
+
 <p>
 <H2><a name="options">Compilation Options</a></H2>
 <p>
 By default the posix_time system uses a 64 bit integer and a 32 bit
-integer internally to provide nano-second level resolutions.  As
-an alternative, a single 64 bit integer can be used to provide a
-microsecond level resolution.  This alternative implementation 
-may provide better performance and more compact memory usage
+integer internally to provide nano-second level resolutions -- 96 
+bits for each time value.  As an alternative, a single 64 bit integer 
+can be used to provide a microsecond level resolution.  This alternative 
+implementation may provide better performance and more compact memory usage
 for many applications that do not require nano-second resolutions.
 <p>
 The variable <b>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG</b>, as defined in 
@@ -42,30 +48,43 @@ integer implementation simply remove this define from the Jamfile.
 <p>
 <H2><a name="portability">Compiler/Portability Notes</a></H2>
 <p>
-The Boost Date-Time library has been built and tested with many compilers. 
+The Boost Date-Time library has been built and tested with many compilers
+on many platforms.  In general, the more standard compliant the compiler
+and library combination the more likely the library will be fully supported.
 However, some compilers and standard libraries have issues.  While some
 of these issues can be worked around, others are difficult to work 
-around. The following compilers fully support all aspects of the library:
+around. The following compilers <b>fully support</b> all aspects of the library:
 <ul>
-  <li>GCC 3.0.3 on Linux
-  <li>GCC 3.1 (cygwin) 
-  <li>MSVC 7           
+  <li>GCC 3.x on Linux
+  <li>GCC 3.1 (cygwin) for Windows
+  <li>GCC 3.3 on Mac
+  <li>Borland 5.6.4 for Windows
+  <li>MSVC 7.1 on Windows
+  <li>MIPSpro 7.4 on SGI
+  <li>VisualAge 6.0 on IBM AIX
 </ul>
 <p>
 In particular, a lack of support for standard locales limits the ability 
-of the library to support iostream based input output.  For these
+of the library to support iostream based input and output.  For these
 compilers a set of more limited string based input-output is provided.
+In addition, some compilers have regression test failures with the dll form
+of the library or other issues that may prevent using some aspects of the 
+library.  Finally, wide-string and wide-stream output are problematic for
+several compilers.
 
-The compilers/standard libraries with this limitation include:
+Some compilers/standard libraries with known <b>limitations</b> include:
 <p>
 <ul>
  <li>GCC 2.9x on Linux
- <li>Borland 5.1.1 and 5.6
- <li>MSVC 6 SP5
+ <li>Borland 5.1.1 on Windows
+ <li>Intel 8.00 on Windows
+ <li>Metrowerks 8.3 on Windows
+ <li>MSVC 6 SP5 on Windows
+ <li>MSVC 7 on Windows
 </ul>
 
-Other compilers such as Comeau and Metroworks have been tested 
-successfully with earlier versions of the library. 
+A great resource for the details on this subject are
+the boost <a href="http://boost.sourceforge.net/regression-logs/">regression test logs at sourceforge </a>.
 
 <p>
 <H2><a name="directory">Directory Structure</a></H2>
@@ -91,21 +110,21 @@ The directory tree has the following structure:
 <H2><a name="required">Required Boost Libraries</a></H2>
 
 <p>
-The library depends on 
+The library depends on the following boost libraries:
 <ul>
-  <li><a href="../../tokenizer/index.html">boost.tokenizer</a>, 
-  <li><a href="../../integer/cstdint.htm">boost.integer(cstdint)</a>, 
-  <li><a href="../../utility/operators.htm">boost.operators</a>, and
-  <li><a href="../../conversion/lexical_cast.htm">boost::lexical_cast</a>
+  <li><a href="../../config/config.htm">config</a>
+  <li><a href="../../integer/cstdint.htm">integer(cstdint)</a>
+  <li><a href="../../utility/operators.htm">operators</a>
+  <li><a href="../../conversion/lexical_cast.htm">lexical_cast</a>
+  <li><a href="../../tokenizer/index.html">tokenizer</a>
 </ul>
- so at least these libraries need to be installed. 
 
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sun Jan 19 16:22:27 MST 2003
+Last modified: Sun Feb  1 16:32:44 MST 2004
 <!-- hhmts end -->
- by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
+ by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2004
 </small></address>
 </body>
 </html>
