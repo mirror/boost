@@ -416,7 +416,6 @@ namespace boost {
     };
     typedef const T* pointer;
     typedef std::ptrdiff_t difference_type;
-    input_iterator_archetype() { }
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
@@ -436,7 +435,6 @@ namespace boost {
     typedef const T& reference;
     typedef const T* pointer;
     typedef std::ptrdiff_t difference_type;
-    input_iterator_archetype_no_proxy() { }
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
