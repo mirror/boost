@@ -22,13 +22,13 @@ static const std::string boost_license_text[boost_license_lines] = {
 
 fileview::const_iterator
 context_before_license(const fileview& v, fileview::const_iterator start,
-		       int context_lines = 3)
+                       int context_lines = 3)
 {
   char last_char = '\0';
   while (start != v.begin() && context_lines >= 0) {
     if (*start == '\r' || *start == '\n'
-	&& (last_char == *start || (last_char != '\r' && last_char != '\n')))
-	--context_lines;
+        && (last_char == *start || (last_char != '\r' && last_char != '\n')))
+        --context_lines;
 
     last_char = *start;
     --start;
@@ -43,19 +43,38 @@ context_before_license(const fileview& v, fileview::const_iterator start,
 
 fileview::const_iterator
 context_after_license(const fileview& v, fileview::const_iterator end,
-		      int context_lines = 3)
+                      int context_lines = 3)
 {
   char last_char = '\0';
   while (end != v.end() && context_lines >= 0) {
     if (*end == '\r' || *end == '\n'
-	&& (last_char == *end || (last_char != '\r' && last_char != '\n')))
-	--context_lines;
+        && (last_char == *end || (last_char != '\r' && last_char != '\n')))
+        --context_lines;
 
     last_char = *end;
     ++end;
   }
 
   return end;
+}
+
+static std::string
+find_prefix(const fileview& v, fileview::const_iterator start_of_line)
+{
+  while (start_of_line != v.begin()
+         && *start_of_line != '\n'
+         && *start_of_line != '\r')
+    --start_of_line;
+  if (start_of_line != v.begin())
+    ++start_of_line;
+
+  fileview::const_iterator first_noncomment_char = start_of_line;
+  while (*first_noncomment_char == '/'
+         || *first_noncomment_char == '*'
+         || *first_noncomment_char == ' ')
+    ++first_noncomment_char;
+
+  return std::string(start_of_line, first_noncomment_char);
 }
 
 static std::string 
@@ -98,8 +117,8 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
       boost::match_results<fileview::const_iterator> m;
       if(boost::regex_search(v.begin(), v.end(), m, licences.first[i].licence_signature))
       {
-  	 start_of_license = m[0].first;
-	 end_of_license = m[0].second;
+           start_of_license = m[0].first;
+         end_of_license = m[0].second;
 
          if (is_non_bsl_license(i)) has_non_bsl_license = true;
 
@@ -114,11 +133,11 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
          while(cpy != ecpy)
          {
 #if 0
- 	    // Not dealing with copyrights because we don't have the years
-	    if ((*cpy)[0].first < start_of_license) 
-	      start_of_license = (*cpy)[0].first;
-	    if ((*cpy)[0].second > end_of_license) 
-	      end_of_license = (*cpy)[0].second;
+             // Not dealing with copyrights because we don't have the years
+            if ((*cpy)[0].first < start_of_license) 
+              start_of_license = (*cpy)[0].first;
+            if ((*cpy)[0].second > end_of_license) 
+              end_of_license = (*cpy)[0].second;
 #endif
 
             // extract the copy holders as a list:
@@ -152,22 +171,22 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
             ++cpy;
          }
 
-	 while (start_of_license != v.begin()
-		&& *start_of_license != '\r'
-		&& *start_of_license != '\n'
-		&& *start_of_license != '.')
-	   --start_of_license;
+         while (start_of_license != v.begin()
+                && *start_of_license != '\r'
+                && *start_of_license != '\n'
+                && *start_of_license != '.')
+           --start_of_license;
 
-	 if (start_of_license != v.begin()) {
-	   if (*start_of_license == '.')
-	     start_in_middle_of_line = true;
-	   ++start_of_license;
-	 }
+         if (start_of_license != v.begin()) {
+           if (*start_of_license == '.')
+             start_in_middle_of_line = true;
+           ++start_of_license;
+         }
 
-	 while (end_of_license != v.end()
-		&& *end_of_license != '\r'
-		&& *end_of_license != '\n')
-	   ++end_of_license;
+         while (end_of_license != v.end()
+                && *end_of_license != '\r'
+                && *end_of_license != '\n')
+           ++end_of_license;
       }
    }
    if(licence_count == 0)
@@ -180,58 +199,58 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
      if (nonbsl_author_count == 0 && licence_count == 1) {
        // Grab a few lines of context
        fileview::const_iterator context_start = 
-	 context_before_license(v, start_of_license);
+         context_before_license(v, start_of_license);
        fileview::const_iterator context_end = 
-	 context_after_license(v, end_of_license);
+         context_after_license(v, end_of_license);
 
        // TBD: For files that aren't C++ code, this will have to
        // change.
-       const std::string prefix = "// ";
+       std::string prefix = find_prefix(v, start_of_license);
 
        // Create enough information to permit manual verification of
        // the correctness of the transformation
        std::string before_conversion = 
-	 html_escape(context_start, start_of_license);
+         html_escape(context_start, start_of_license);
        before_conversion += "<b>";
        before_conversion += html_escape(start_of_license, end_of_license);
        before_conversion += "</b>";
        before_conversion += html_escape(end_of_license, context_end);
 
        std::string after_conversion = 
-	 html_escape(context_start, start_of_license);
+         html_escape(context_start, start_of_license);
        if (start_in_middle_of_line)
-	 after_conversion += '\n';
+         after_conversion += '\n';
 
        after_conversion += "<b>";
        for (int i = 0; i < boost_license_lines; ++i) {
-	 if (i > 0) after_conversion += '\n';
-	 after_conversion += prefix + boost_license_text[i];
+         if (i > 0) after_conversion += '\n';
+         after_conversion += prefix + boost_license_text[i];
        }
        after_conversion += "</b>";
        after_conversion += html_escape(end_of_license, context_end);
 
        m_converted_to_bsl[p] = 
-	 std::make_pair(before_conversion, after_conversion);
+         std::make_pair(before_conversion, after_conversion);
 
        // Perform the actual conversion
        if (m_bsl_convert_mode) {
-	 std::ofstream out(p.native_file_string().c_str());
-	 if (!out) {
-	   std::string msg("Cannot open file for license conversion: ");
-	   msg += p.native_file_string();
-	   std::runtime_error e(msg);
-	   boost::throw_exception(e);
-	 }
-	 
-	 out << std::string(v.begin(), start_of_license);
-	 if (start_in_middle_of_line)
-	   out << std::endl;
+         std::ofstream out(p.native_file_string().c_str());
+         if (!out) {
+           std::string msg("Cannot open file for license conversion: ");
+           msg += p.native_file_string();
+           std::runtime_error e(msg);
+           boost::throw_exception(e);
+         }
+         
+         out << std::string(v.begin(), start_of_license);
+         if (start_in_middle_of_line)
+           out << std::endl;
 
-	 for (int j = 0; j < boost_license_lines; ++j) {
-	   if (j > 0) out << std::endl;
-	   out << prefix << boost_license_text[j];
-	 }
-	 out << std::string(end_of_license, v.end());
+         for (int j = 0; j < boost_license_lines; ++j) {
+           if (j > 0) out << std::endl;
+           out << prefix << boost_license_text[j];
+         }
+         out << std::string(end_of_license, v.end());
        }
 
        converted = true;

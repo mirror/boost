@@ -233,9 +233,9 @@ void bcp_implementation::output_licence_info()
      int file_num = 1;
      while (i != ie) {
        os << "<P>[" << file_num << "] File: <tt>" << split_path(m_boost_path, i->first) 
-	  << "</tt><br>\n<table border=\"1\">\n  <tr>\n    <td><pre>" 
-	  << i->second.first << "</pre></td>\n    <td><pre>"
-	  << i->second.second << "</pre></td>\n  </tr>\n</table>\n";
+          << "</tt><br>\n<table border=\"1\">\n  <tr>\n    <td><pre>" 
+          << i->second.first << "</pre></td>\n    <td><pre>"
+          << i->second.second << "</pre></td>\n  </tr>\n</table>\n";
        ++i;
        ++file_num;
      }
