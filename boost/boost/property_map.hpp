@@ -368,8 +368,8 @@ namespace boost {
      >
   class iterator_property_map
     : public boost::put_get_at_helper< T, 
-        iterator_property_map<RandomAccessIterator,
-        T, R, IDfunc> >
+        iterator_property_map<RandomAccessIterator, IDfunc,
+        T, R> >
   {
   public:
     typedef void key_type; 
