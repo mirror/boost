@@ -30,7 +30,11 @@ provided by the class.</p>
 	</ul></li>
 	<li><a href="#usage">Usage</a>
 	<ul>
-		<li><a href="#two_arg">Two-Argument Template Forms</a></li>
+		<li><a href="#two_arg">Two-Argument Template Forms</a>
+		<ul>
+			<li><a href="#two_arg_gen">General Considerations</a></li>
+			<li><a href="#mixed_arithmetics">Mixed arithmetics</a></li>
+		</ul></li>
 		<li><a href="#chaining">Base Class Chaining and Object Size</a></li>
 		<li><a href="#explicit_instantiation">Separate, Explicit
 			Instantiation</a></li>
@@ -39,7 +43,10 @@ provided by the class.</p>
 	<li><a href="#example">Example</a></li>
 	<li><a href="#arithmetic">Arithmetic operators</a>
 	<ul>
-		<li><a href="#smpl_oprs">Simple Arithmetic Operators</a></li>
+		<li><a href="#smpl_oprs">Simple Arithmetic Operators</a>
+		<ul>
+			<li><a href="#ordering">Ordering Note</a></li>
+		</ul></li>
 		<li><a href="#grpd_oprs">Grouped Arithmetic Operators</a></li>
 		<li><a href="#ex_oprs">Example Templates</a></li>
 		<li><a href="#a_demo">Arithmetic Operators Demonstration
@@ -49,8 +56,12 @@ provided by the class.</p>
 		Helpers</a>
 	<ul>
 		<li><a href="#dereference">Dereference operators</a></li>
-		<li><a href="#iterator">Iterator Helpers</a></li>
-		<li><a href="#iterator_helpers_notes">Iterator Helper Notes</a></li>
+		<li><a href="#grpd_iter_oprs">Grouped Iterator Operators</a></li>
+		<li><a href="#iterator">Iterator Helpers</a>
+		<ul>
+			<li><a href="#iterator_helpers_notes">Iterator Helper
+				Notes</a></li>
+		</ul></li>
 		<li><a href="#i_demo">Iterator Demonstration and Test
 			Program</a></li>
 	</ul></li>
@@ -151,6 +162,8 @@ domains, <i>i.e.</i> eventually more useful.</p>
 
 <h3><a name="two_arg">Two-Argument</a> Template Forms</h3>
 
+<h4><a name="two_arg_gen">General Considerations</a></h4>
+
 <p>The arguments to a binary operator commonly have identical types, but
 it is not unusual to want to define operators which combine different
 types.  For <a href="#example">example</a>, one might want to multiply a
@@ -175,6 +188,46 @@ the trailing <code>'2'</code>.  The single-argument forms with the
 trailing <code>'1'</code> are provided for symmetry and to enable
 certain applications of the <a href="#chaining">base class chaining</a>
 technique.</p>
+
+<h4><a name="mixed_arithmetics">Mixed Arithmetics</a></h4>
+
+<p>Another application of the two-argument template forms is for
+mixed arithmetics between a type <code>T</code> and a type <code>U</code>
+that is convertible to <code>T</code>.  In this case there are two ways
+where the two-argument template forms are helpful: one is to provide
+the respective signatures for operator overloading, the second is
+performance.</p>
+
+<p>With respect to the operator overloading assume <i>e.g.</i> that
+<code>U</code> is <code>int</code>, that <code>T</code> is an user-defined
+unlimited integer type, and that <code>double operator-(double, const
+T&amp;)</code> exists.  If one wants to compute <code>int - T</code> and
+does not provide <code>T operator-(int, const T&amp;)</code>, the
+compiler will consider <code>double operator-(double, const T&amp;)</code>
+to be a better match than <code>T operator-(const T&amp;, const
+T&amp;)</code>, which will probably be different from the user's intention.
+To define a complete set of operator signatures, additional 'left' forms
+of the two-argument template forms are provided (<code><a
+href="#subtractable2_left">subtractable2_left&lt;T, U&gt;</a></code>,
+<code><a href="#dividable2_left">dividable2_left&lt;T, U&gt;</a></code>,
+<code><a href="#modable2_left">modable2_left&lt;T, U&gt;</a></code>) that
+define the signatures for non-commutative operators where <code>U</code>
+appears on the left hand side (<code>operator-(const U&amp;, const
+T&amp;)</code>, <code>operator/(const U&amp;, const T&amp;)</code>,
+<code>operator%(const U&amp;, const T&amp;)</code>).</p>
+
+<p>With respect to the performance observe that when one uses the
+single type binary operator for mixed type arithmetics, the type
+<code>U</code> argument has to be converted to type <code>T</code>.  In
+practice, however, there are often more efficient implementations of,
+say <code>T::operator-=(const U&amp;)</code> that avoid unnecessary
+conversions from <code>U</code> to <code>T</code>.  The two-argument
+template forms of the arithmetic operator create additional operator
+interfaces that use these more efficient implementations.  There is, however,
+no performance gain in the 'left' forms: they still need a conversion
+from <code>U</code> to <code>T</code> and have an implementation
+equivalent to the code that would be automatically created by the compiler
+if it considered the single type binary operator to be the best match.</p>
 
 <h3>Base Class <a name="chaining">Chaining</a> and Object Size</h3>
 
@@ -420,6 +473,12 @@ for the <a href="#chaining">base class chaining</a> technique.
 		    Return convertible to <code>T</code>.</td>
 	</tr>
 	<tr>
+		<td><code><a name="subtractable2_left">subtractable2_left&lt;T, U&gt;</a></code></td>
+		<td><code>T operator-(const U&amp;, const T&amp;)</code></td>
+		<td><code>T temp(u); temp -= t</code>.<br>
+		    Return convertible to <code>T</code>.</td>
+	</tr>
+	<tr>
 		<td><code><a name="multipliable1">multipliable&lt;T&gt;</a></code><br>
 		    <code>multipliable1&lt;T&gt;</code></td>
 		<td><code>T operator*(T, const T&amp;)</code></td>
@@ -449,6 +508,12 @@ for the <a href="#chaining">base class chaining</a> technique.
 		    Return convertible to <code>T</code>.</td>
 	</tr>
 	<tr>
+		<td><code><a name="dividable2_left">dividable2_left&lt;T, U&gt;</a></code></td>
+		<td><code>T operator/(const U&amp;, const T&amp;)</code></td>
+		<td><code>T temp(u); temp /= t</code>.<br>
+		    Return convertible to <code>T</code>.</td>
+	</tr>
+	<tr>
 		<td><code><a name="modable1">modable&lt;T&gt;</a></code><br>
 		    <code>modable1&lt;T&gt;</code></td>
 		<td><code>T operator%(T, const T&amp;)</code></td>
@@ -460,6 +525,12 @@ for the <a href="#chaining">base class chaining</a> technique.
 		    <code>modable2&lt;T, U&gt;</code></td>
 		<td><code>T operator%(T, const U&amp;)</code></td>
 		<td><code>t %= u</code>.<br>
+		    Return convertible to <code>T</code>.</td>
+	</tr>
+	<tr>
+		<td><code><a name="modable2_left">modable2_left&lt;T, U&gt;</a></code></td>
+		<td><code>T operator%(const U&amp;, const T&amp;)</code></td>
+		<td><code>T temp(u); temp %= t</code>.<br>
 		    Return convertible to <code>T</code>.</td>
 	</tr>
 	<tr>
@@ -588,8 +659,9 @@ for the <a href="#chaining">base class chaining</a> technique.
 	</tr>
 </table>
 
-<p><strong><a name="ordering">Ordering Note</a></strong><br>
-The <code><a href="#less_than_comparable1">less_than_comparable&lt;T&gt;</a></code>
+<h4><a name="ordering">Ordering</a> Note</h4>
+
+<p>The <code><a href="#less_than_comparable1">less_than_comparable&lt;T&gt;</a></code>
 and <code><a href="#partially_ordered1">partially_ordered&lt;T&gt;</a></code>
 templates provide the same set of operations.  However, the workings of
 <code><a href="#less_than_comparable1">less_than_comparable&lt;T&gt;</a></code>
@@ -771,6 +843,109 @@ optional template parameter <code>B</code>, which is not shown, for the
 			   <li><code><a href="#right_shiftable2">right_shiftable&lt;T, U&gt;</a></code></li>
 		   </ul></td>
 	</tr>
+	<tr>
+		<td><code><a name="ring_operators1">ring_operators&lt;T&gt;</a></code><br>
+		   <code>ring_operators1&lt;T&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#additive1">additive&lt;T&gt;</a></code></li>
+			   <li><code><a href="#multipliable1">multipliable&lt;T&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="ring_operators2">ring_operators&lt;T, U&gt;</a></code><br>
+		   <code>ring_operators2&lt;T, U&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#additive2">additive&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#subtractable2_left">subtractable2_left&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#multipliable2">multipliable&lt;T, U&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="ordered_ring_operators1">ordered_ring_operators&lt;T&gt;</a></code><br>
+		   <code>ordered_ring_operators1&lt;T&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#ring_operators1">ring_operators&lt;T&gt;</a></code></li>
+			   <li><code><a href="#totally_ordered1">totally_ordered&lt;T&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="ordered_ring_operators2">ordered_ring_operators&lt;T, U&gt;</a></code><br>
+		   <code>ordered_ring_operators2&lt;T, U&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#ring_operators2">ring_operators&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#totally_ordered2">totally_ordered&lt;T, U&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="field_operators1">field_operators&lt;T&gt;</a></code><br>
+		   <code>field_operators1&lt;T&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#ring_operators1">ring_operators&lt;T&gt;</a></code></li>
+			   <li><code><a href="#dividable1">dividable&lt;T&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="field_operators2">field_operators&lt;T, U&gt;</a></code><br>
+		   <code>field_operators2&lt;T, U&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#ring_operators2">ring_operators&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#dividable2">dividable&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#dividable2_left">dividable2_left&lt;T, U&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="ordered_field_operators1">ordered_field_operators&lt;T&gt;</a></code><br>
+		   <code>ordered_field_operators1&lt;T&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#field_operators1">field_operators&lt;T&gt;</a></code></li>
+			   <li><code><a href="#totally_ordered1">totally_ordered&lt;T&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="ordered_field_operators2">ordered_field_operators&lt;T, U&gt;</a></code><br>
+		   <code>ordered_field_operators2&lt;T, U&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#field_operators2">field_operators&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#totally_ordered2">totally_ordered&lt;T, U&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="euclidian_ring_operators1">euclidian_ring_operators&lt;T&gt;</a></code><br>
+		   <code>euclidian_ring_operators1&lt;T&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#ring_operators1">ring_operators&lt;T&gt;</a></code></li>
+			   <li><code><a href="#dividable1">dividable&lt;T&gt;</a></code></li>
+			   <li><code><a href="#modable1">modable&lt;T&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="euclidian_ring_operators2">euclidian_ring_operators&lt;T, U&gt;</a></code><br>
+		   <code>euclidian_ring_operators2&lt;T, U&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#ring_operators2">ring_operators&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#dividable2">dividable&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#dividable2_left">dividable2_left&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#modable2">modable&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#modable2_left">modable2_left&lt;T, U&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="ordered_euclidian_ring_operators1">ordered_euclidian_ring_operators&lt;T&gt;</a></code><br>
+		   <code>ordered_euclidian_ring_operators1&lt;T&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#euclidian_ring_operators1">euclidian_ring_operators&lt;T&gt;</a></code></li>
+			   <li><code><a href="#totally_ordered1">totally_ordered&lt;T&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="ordered_euclidian_ring_operators2">ordered_euclidian_ring_operators&lt;T, U&gt;</a></code><br>
+		   <code>ordered_euclidian_ring_operators2&lt;T, U&gt;</code></td>
+		<td><ul>
+			   <li><code><a href="#euclidian_ring_operators2">euclidian_ring_operators&lt;T, U&gt;</a></code></li>
+			   <li><code><a href="#totally_ordered2">totally_ordered&lt;T, U&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+
 </table>
 
 <h3><a name="ex_oprs">Example</a> Templates</h3>
@@ -888,19 +1063,87 @@ href="#chaining">base class chaining</a>.</p>
 	</tr>
 </table>
 
-<h3><a name="iterator">Iterator</a> Helpers</h3>
+<h3><a name="grpd_iter_oprs">Grouped Iterator Operators</a></h3>
 
-<p>There are five separate iterator helper classes, each for a
-different category of iterator.  Here is a summary of the core set of
-operators that the custom iterator must define, and the extra operators
-that are created by the helper classes.  These classes cannot be used for <a
-href="#chaining">base class chaining</a>.  For convenience, the helper
-classes also fill in all of the typedef's required of iterators by the
-C++ standard (<code>iterator_category</code>, <code>value_type</code>,
-<i>etc.</i>).</p>
+<p>There are five iterator operator class templates, each for a different
+category of iterator.  The following table shows the operator groups
+for any category that a custom iterator could define.  These class
+templates have an additional optional template parameter <code>B</code>,
+which is not shown, to support <a href="#chaining">base class chaining</a>.</p>
 
 <table cellpadding="5" border="1" align="center">
-	<caption>Iterator Helper Template Classes</caption>
+	<caption>Iterator Operator Class Templates</caption>
+	<tr>
+		<td colspan="2"><table align="center" border="1">
+			<caption><em>Key</em></caption>
+			<tr>
+				<td><code>T</code>: operand type</td>
+				<td><code>P</code>: <code>pointer</code> type</td>
+			</tr>
+			<tr>
+				<td><code>D</code>: <code>difference_type</code></td>
+				<td><code>R</code>: <code>reference</code> type</td>
+			</tr>
+			<tr>
+				<td><code>V</code>: <code>value_type</code></td>
+				<td></td>
+			</tr>
+		</table></td>
+	</tr>
+	<tr>
+		<th>Template</th>
+		<th>Component Operator Templates</th>
+	</tr>
+	<tr>
+		<td><code><a name="input_iteratable">input_iteratable&lt;T, P&gt;</a></code></td>
+		<td><ul>
+			   <li><code><a href="#equality_comparable1">equality_comparable&lt;T&gt;</a></code></li>
+			   <li><code><a href="#incrementable">incrementable&lt;T&gt;</a></code></li>
+			   <li><code><a href="#dereferenceable">dereferenceable&lt;T, P&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="output_iteratable">output_iteratable&lt;T&gt;</a></code></td>
+		<td><ul>
+			   <li><code><a href="#incrementable">incrementable&lt;T&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="forward_iteratable">forward_iteratable&lt;T, P&gt;</a></code></td>
+		<td><ul>
+			   <li><code><a href="#input_iteratable">input_iteratable&lt;T, P&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="bidirectional_iteratable">bidirectional_iteratable&lt;T, P&gt;</a></code></td>
+		<td><ul>
+			   <li><code><a href="#forward_iteratable">forward_iteratable&lt;T, P&gt;</a></code></li>
+			   <li><code><a href="#decrementable">decrementable&lt;T&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+	<tr>
+		<td><code><a name="random_access_iteratable">random_access_iteratable&lt;T, P, D, R&gt;</a></code></td>
+		<td><ul>
+			   <li><code><a href="#bidirectional_iteratable">bidirectional_iteratable&lt;T, P&gt;</a></code></li>
+			   <li><code><a href="#totally_ordered1">totally_ordered&lt;T&gt;</a></code></li>
+			   <li><code><a href="#additive2">additive&lt;T, D&gt;</a></code></li>
+			   <li><code><a href="#indexable">indexable&lt;T, D, R&gt;</a></code></li>
+		   </ul></td>
+	</tr>
+</table>
+
+<h3><a name="iterator">Iterator</a> Helpers</h3>
+
+<p>There are also five iterator helper class templates, each corresponding
+to a different iterator category.  These classes cannot be used for <a
+href="#chaining">base class chaining</a>.  The following summaries
+show that these class templates supply both the iterator operators from
+the <a href="#grpd_iter_oprs">iterator operator class templates</a> and
+the iterator typedef's required by the C++ standard (<code>iterator_category</code>,
+<code>value_type</code>, <i>etc.</i>).</p>
+
+<table cellpadding="5" border="1" align="center">
+	<caption>Iterator Helper Class Templates</caption>
 	<tr>
 		<td colspan="2"><table align="center" border="1">
 			<caption><em>Key</em></caption>
@@ -926,16 +1169,14 @@ C++ standard (<code>iterator_category</code>, <code>value_type</code>,
 		<td><code><a name="input_iterator_helper">input_iterator_helper&lt;T, V, D, P, R&gt;</a></code></td>
 		<td>Supports the operations and has the requirements of
 		    <ul>
-			   <li><code><a href="#equality_comparable1">equality_comparable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#incrementable">incrementable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#dereferenceable">dereferenceable&lt;T, P&gt;</a></code></li>
+			   <li><code><a href="#input_iteratable">input_iteratable&lt;T, P&gt;</a></code></li>
 		    </ul></td>
 	</tr>
 	<tr valign="baseline">
 		<td><code><a name="output_iterator_helper">output_iterator_helper&lt;T&gt;</a></code></td>
 		<td>Supports the operations and has the requirements of
 		    <ul>
-			   <li><code><a href="#incrementable">incrementable&lt;T&gt;</a></code></li>
+			   <li><code><a href="#output_iteratable">output_iteratable&lt;T&gt;</a></code></li>
 		    </ul>
         See also [<a href="#1">1</a>], [<a href="#2">2</a>].
         </td>
@@ -944,33 +1185,21 @@ C++ standard (<code>iterator_category</code>, <code>value_type</code>,
 		<td><code><a name="forward_iterator_helper">forward_iterator_helper&lt;T, V, D, P, R&gt;</a></code></td>
 		<td>Supports the operations and has the requirements of
 		    <ul>
-			   <li><code><a href="#equality_comparable1">equality_comparable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#incrementable">incrementable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#dereferenceable">dereferenceable&lt;T, P&gt;</a></code></li>
+			   <li><code><a href="#forward_iteratable">forward_iteratable&lt;T, P&gt;</a></code></li>
 		    </ul></td>
 	</tr>
 	<tr valign="baseline">
 		<td><code><a name="bidirectional_iterator_helper">bidirectional_iterator_helper&lt;T, V, D, P, R&gt;</a></code></td>
 		<td>Supports the operations and has the requirements of
 		    <ul>
-			   <li><code><a href="#equality_comparable1">equality_comparable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#incrementable">incrementable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#decrementable">decrementable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#dereferenceable">dereferenceable&lt;T, P&gt;</a></code></li>
+			   <li><code><a href="#bidirectional_iteratable">bidirectional_iteratable&lt;T, P&gt;</a></code></li>
 		    </ul></td>
 	</tr>
 	<tr valign="baseline">
 		<td><code><a name="random_access_iterator_helper">random_access_iterator_helper&lt;T, V, D, P, R&gt;</a></code></td>
 		<td>Supports the operations and has the requirements of
 		    <ul>
-			   <li><code><a href="#equality_comparable1">equality_comparable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#less_than_comparable1">less_than_comparable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#incrementable">incrementable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#decrementable">decrementable&lt;T&gt;</a></code></li>
-			   <li><code><a href="#dereferenceable">dereferenceable&lt;T, P&gt;</a></code></li>
-			   <li><code><a href="#addable2">addable&lt;T, D&gt;</a></code></li>
-			   <li><code><a href="#subtractable2">subtractable&lt;T, D&gt;</a></code></li>
-			   <li><code><a href="#indexable">indexable&lt;T, D, R&gt;</a></code></li>
+			   <li><code><a href="#random_access_iteratable">random_access_iteratable&lt;T, P, D, R&gt;</a></code></li>
 		   </ul>
 		   To satisfy <cite><a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a></cite>,
 		    <code>x1 - x2</code> with return convertible to <code>D</code>
@@ -978,7 +1207,7 @@ C++ standard (<code>iterator_category</code>, <code>value_type</code>,
 	</tr>
 </table>
 
-<h3><a name="iterator_helpers_notes">Iterator Helper Notes</a></h3>
+<h4><a name="iterator_helpers_notes">Iterator Helper Notes</a></h4>
 
 <p><a name="1">[1]</a> Unlike other iterator helpers templates,
 <code>output_iterator_helper</code> takes only one template parameter - the type of
@@ -987,8 +1216,8 @@ restriction, the standard requires <code>difference_type</code> and
 <code>value_type</code> of any output iterator to be 
 <code>void</code> (24.3.1 [lib.iterator.traits]), and
 <code>output_iterator_helper</code> template respects this
-requirement. Also, output iterators in the standard have void <tt>pointer</tt> and
-<tt>reference</tt> types, so the <tt>output_iterator_helper</tt> does the
+requirement. Also, output iterators in the standard have void <code>pointer</code> and
+<code>reference</code> types, so the <code>output_iterator_helper</code> does the
 same.
 
 <p><a name="2">[2]</a> As self-proxying is the easiest and most common way to 
@@ -1008,13 +1237,13 @@ template&lt;class UnaryFunction&gt;
 struct function_output_iterator
     : boost::output_iterator_helper&lt; function_output_iterator&lt;UnaryFunction&gt; &gt;
 {
-    explicit function_output_iterator(UnaryFunction const& f = UnaryFunction())
+    explicit function_output_iterator(UnaryFunction const&amp; f = UnaryFunction())
         : func(f) {}
 
     template&lt;typename T&gt;
-    function_output_iterator& operator=(T const& value)
+    function_output_iterator&amp; operator=(T const&amp; value)
     {
-        this->func(value); 
+        this-&gt;func(value); 
         return *this; 
     }
 
@@ -1093,6 +1322,10 @@ the test results with selected platforms.</p>
 		partial ordering, and arithmetic conversions.  Added the
 		grouped operator classes.  Added helper classes for
 		input and output iterators.
+
+	<dt>Helmut Zeisel
+	<dd>Contributed the 'left' operators and added some
+		grouped operator classes.
 </dl>
 
 <h2>Note for Users of <a name="old_lib_note">Older Versions</a></h2>
@@ -1142,7 +1375,7 @@ the library remain backward-compatible.</p>
 
 <hr>
 
-<p>Revised: 25 Jun 2001</p>
+<p>Revised: 30 Oct 2001</p>
 
 <p>Copyright &copy; David Abrahams and Beman Dawes 1999-2001. 
 Permission to copy, use, modify, sell and distribute this document is

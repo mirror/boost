@@ -8,6 +8,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  01 Oct 01 Added tests for "left" operators
+//            and new grouped operators. (Helmut Zeisel)
 //  20 May 01 Output progress messages.  Added tests for new operator
 //            templates.  Updated random number generator.  Changed tests to
 //            use Boost Test Tools library.  (Daryle Walker)
@@ -184,6 +186,74 @@ namespace
     template <class T, class U>
     T true_value(Wrapped4<T,U> x) { return x.value(); }
     
+    // U must be convertible to T
+    template <class T, class U>
+    class Wrapped5
+        : boost::ordered_field_operators2<Wrapped5<T, U>, U>
+        , boost::ordered_field_operators1<Wrapped5<T, U> >
+    {
+    public:
+        explicit Wrapped5( T v = T() ) : _value(v) {}
+
+        // Conversion from U to Wrapped5<T,U>
+        Wrapped5(U u) : _value(u) {}
+
+        T value() const { return _value; }
+        bool operator<(const Wrapped5& x) const { return _value < x._value; }
+        bool operator<(U u) const { return _value < u; }
+        bool operator>(U u) const { return _value > u; }
+        bool operator==(const Wrapped5& u) const { return _value == u._value; }
+        bool operator==(U u) const { return _value == u; }
+        Wrapped5& operator/=(const Wrapped5& u) { _value /= u._value; return *this;}
+        Wrapped5& operator/=(U u) { _value /= u; return *this;}
+        Wrapped5& operator*=(const Wrapped5& u) { _value *= u._value; return *this;}
+        Wrapped5& operator*=(U u) { _value *= u; return *this;}
+        Wrapped5& operator-=(const Wrapped5& u) { _value -= u._value; return *this;}
+        Wrapped5& operator-=(U u) { _value -= u; return *this;}
+        Wrapped5& operator+=(const Wrapped5& u) { _value += u._value; return *this;}
+        Wrapped5& operator+=(U u) { _value += u; return *this;}
+
+    private:
+        T _value;
+    };
+    template <class T, class U>
+    T true_value(Wrapped5<T,U> x) { return x.value(); }
+    
+    // U must be convertible to T
+    template <class T, class U>
+    class Wrapped6
+        : boost::ordered_euclidian_ring_operators2<Wrapped6<T, U>, U>
+        , boost::ordered_euclidian_ring_operators1<Wrapped6<T, U> >
+    {
+    public:
+        explicit Wrapped6( T v = T() ) : _value(v) {}
+
+        // Conversion from U to Wrapped6<T,U>
+        Wrapped6(U u) : _value(u) {}
+
+        T value() const { return _value; }
+        bool operator<(const Wrapped6& x) const { return _value < x._value; }
+        bool operator<(U u) const { return _value < u; }
+        bool operator>(U u) const { return _value > u; }
+        bool operator==(const Wrapped6& u) const { return _value == u._value; }
+        bool operator==(U u) const { return _value == u; }
+        Wrapped6& operator%=(const Wrapped6& u) { _value %= u._value; return *this;}
+        Wrapped6& operator%=(U u) { _value %= u; return *this;}
+        Wrapped6& operator/=(const Wrapped6& u) { _value /= u._value; return *this;}
+        Wrapped6& operator/=(U u) { _value /= u; return *this;}
+        Wrapped6& operator*=(const Wrapped6& u) { _value *= u._value; return *this;}
+        Wrapped6& operator*=(U u) { _value *= u; return *this;}
+        Wrapped6& operator-=(const Wrapped6& u) { _value -= u._value; return *this;}
+        Wrapped6& operator-=(U u) { _value -= u; return *this;}
+        Wrapped6& operator+=(const Wrapped6& u) { _value += u._value; return *this;}
+        Wrapped6& operator+=(U u) { _value += u; return *this;}
+
+    private:
+        T _value;
+    };
+    template <class T, class U>
+    T true_value(Wrapped6<T,U> x) { return x.value(); }
+    
     //  MyInt uses only the single template-argument form of all_operators<>
     typedef Wrapped1<int> MyInt;
 
@@ -192,6 +262,10 @@ namespace
     typedef Wrapped3<signed char> MyChar;
 
     typedef Wrapped4<short, short> MyShort;
+
+    typedef Wrapped5<double, int> MyDoubleInt;
+
+    typedef Wrapped6<long, int> MyLongInt;
 
     template <class X1, class Y1, class X2, class Y2>
     void sanity_check(X1 x1, Y1 y1, X2 x2, Y2 y2)
@@ -268,6 +342,13 @@ namespace
     }
 
     template <class X1, class Y1, class X2, class Y2>
+    void test_subtractable_left(X1 x1, Y1 y1, X2 x2, Y2 y2)
+    {
+        sanity_check( x1, y1, x2, y2 );
+        BOOST_TEST( (y1 - x1).value() == (y2 - x2) );
+    }
+
+    template <class X1, class Y1, class X2, class Y2>
     void test_dividable(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
         sanity_check( x1, y1, x2, y2 );
@@ -276,6 +357,14 @@ namespace
     }
     
     template <class X1, class Y1, class X2, class Y2>
+    void test_dividable_left(X1 x1, Y1 y1, X2 x2, Y2 y2)
+    {
+        sanity_check( x1, y1, x2, y2 );
+        if ( x2 != 0 )
+            BOOST_TEST( (y1 / x1).value() == (y2 / x2) );
+    }
+
+    template <class X1, class Y1, class X2, class Y2>
     void test_modable(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
         sanity_check( x1, y1, x2, y2 );
@@ -283,6 +372,14 @@ namespace
             BOOST_TEST( (x1 % y1).value() == (x2 % y2) );
     }
     
+    template <class X1, class Y1, class X2, class Y2>
+    void test_modable_left(X1 x1, Y1 y1, X2 x2, Y2 y2)
+    {
+        sanity_check( x1, y1, x2, y2 );
+        if ( x2 != 0 )
+            BOOST_TEST( (y1 % x1).value() == (y2 % x2) );
+    }
+
     template <class X1, class Y1, class X2, class Y2>
     void test_xorable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
@@ -374,6 +471,14 @@ namespace
         test_decrementable( x1, x2 );
     }
     
+    template <class X1, class Y1, class X2, class Y2>
+    void test_left(X1 x1, Y1 y1, X2 x2, Y2 y2)
+    {
+        test_subtractable_left( x1, y1, x2, y2 );
+        test_dividable_left( x1, y1, x2, y2 );
+        test_modable_left( x1, y1, x2, y2 );
+     }
+
     template <class Big, class Small>
     struct tester
     {
@@ -386,6 +491,19 @@ namespace
             test_all( Wrapped1<Big>(b1), Wrapped1<Big>(b2), b1, b2 );
             test_all( Wrapped2<Big, Small>(b1), s, b1, s );
         }
+    };
+
+    template <class Big, class Small>
+    struct tester_left
+    {
+        void operator()(boost::minstd_rand& randomizer) const
+        {
+            Big    b1 = Big( randomizer() );
+            Big    b2 = Big( randomizer() );
+            Small  s = Small( randomizer() );
+            
+            test_left( Wrapped6<Big, Small>(b1), s, b1, s );
+         }
     };
 
     // added as a regression test. We had a bug which this uncovered.
@@ -427,6 +545,13 @@ template Wrapped2<unsigned int, unsigned char>;
 template Wrapped2<unsigned long, unsigned int>;
 template Wrapped2<unsigned long, unsigned char>;
 template Wrapped2<unsigned long, unsigned long>;
+
+template Wrapped6<long, int>;
+template Wrapped6<long, signed char>;
+template Wrapped6<int, signed char>;
+template Wrapped6<unsigned long, unsigned int>;
+template Wrapped6<unsigned long, unsigned char>;
+template Wrapped6<unsigned int, unsigned char>;
 #endif
 
 #define PRIVATE_EXPR_TEST(e, t)  BOOST_TEST( ((e), (t)) )
@@ -459,6 +584,14 @@ test_main( int , char * [] )
         tester<unsigned long, unsigned long>()(r);
         tester<unsigned int, unsigned int>()(r);
         tester<unsigned int, unsigned char>()(r);
+
+        tester_left<long, int>()(r);
+        tester_left<long, signed char>()(r);
+        tester_left<int, signed char>()(r);
+
+        tester_left<unsigned long, unsigned int>()(r);
+        tester_left<unsigned long, unsigned char>()(r);
+        tester_left<unsigned int, unsigned char>()(r);
     }
     
     cout << "Did random tester loop." << endl;
@@ -653,5 +786,106 @@ test_main( int , char * [] )
     
     cout << "Performed tests on MyShort objects.\n";
     
+    MyDoubleInt di1(1);
+    MyDoubleInt di2(2.);
+    MyDoubleInt half(0.5);
+    MyDoubleInt di;
+    MyDoubleInt tmp;
+
+    BOOST_TEST( di1.value() == 1 );
+    BOOST_TEST( di2.value() == 2 );
+    BOOST_TEST( di2.value() == 2 );
+    BOOST_TEST( di.value() == 0 );
+
+    cout << "Created MyDoubleInt objects.\n";
+
+    PRIVATE_EXPR_TEST( (di = di2), (di.value() == 2) );
+    
+    BOOST_TEST( di2 == di );
+    BOOST_TEST( 2 == di );
+    BOOST_TEST( di == 2 );
+    BOOST_TEST( di1 < di2 );
+    BOOST_TEST( 1 < di2 );
+    BOOST_TEST( di1 <= di2 );
+    BOOST_TEST( 1 <= di2 );
+    BOOST_TEST( di2 > di1 );
+    BOOST_TEST( di2 > 1 );
+    BOOST_TEST( di2 >= di1 );
+    BOOST_TEST( di2 >= 1 );
+    BOOST_TEST( di1 / di2 == half );
+    BOOST_TEST( di1 / 2 == half );
+    BOOST_TEST( 1 / di2 == half );
+    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp/=2) == half) );
+    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp/=di2) == half) );
+    BOOST_TEST( di1 * di2 == di2 );
+    BOOST_TEST( di1 * 2 == di2 );
+    BOOST_TEST( 1 * di2 == di2 );
+    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp*=2) == di2) );
+    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp*=di2) == di2) );
+    BOOST_TEST( di2 - di1 == di1 );
+    BOOST_TEST( di2 - 1 == di1 );
+    BOOST_TEST( 2 - di1 == di1 );
+    PRIVATE_EXPR_TEST( (tmp=di2), ((tmp-=1) == di1) );
+    PRIVATE_EXPR_TEST( (tmp=di2), ((tmp-=di1) == di1) );
+    BOOST_TEST( di1 + di1 == di2 );
+    BOOST_TEST( di1 + 1 == di2 );
+    BOOST_TEST( 1 + di1 == di2 );
+    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp+=1) == di2) );
+    PRIVATE_EXPR_TEST( (tmp=di1), ((tmp+=di1) == di2) );
+
+    cout << "Performed tests on MyDoubleInt objects.\n";
+
+    MyLongInt li1(1);
+    MyLongInt li2(2);
+    MyLongInt li;
+    MyLongInt tmp2;
+
+    BOOST_TEST( li1.value() == 1 );
+    BOOST_TEST( li2.value() == 2 );
+    BOOST_TEST( li.value() == 0 );
+
+    cout << "Created MyLongInt objects.\n";
+
+    PRIVATE_EXPR_TEST( (li = li2), (li.value() == 2) );
+    
+    BOOST_TEST( li2 == li );
+    BOOST_TEST( 2 == li );
+    BOOST_TEST( li == 2 );
+    BOOST_TEST( li1 < li2 );
+    BOOST_TEST( 1 < li2 );
+    BOOST_TEST( li1 <= li2 );
+    BOOST_TEST( 1 <= li2 );
+    BOOST_TEST( li2 > li1 );
+    BOOST_TEST( li2 > 1 );
+    BOOST_TEST( li2 >= li1 );
+    BOOST_TEST( li2 >= 1 );
+    BOOST_TEST( li1 % li2 == li1 );
+    BOOST_TEST( li1 % 2 == li1 );
+    BOOST_TEST( 1 % li2 == li1 );
+    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2%=2) == li1) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2%=li2) == li1) );
+    BOOST_TEST( li1 / li2 == 0 );
+    BOOST_TEST( li1 / 2 == 0 );
+    BOOST_TEST( 1 / li2 == 0 );
+    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2/=2) == 0) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2/=li2) == 0) );
+    BOOST_TEST( li1 * li2 == li2 );
+    BOOST_TEST( li1 * 2 == li2 );
+    BOOST_TEST( 1 * li2 == li2 );
+    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2*=2) == li2) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2*=li2) == li2) );
+    BOOST_TEST( li2 - li1 == li1 );
+    BOOST_TEST( li2 - 1 == li1 );
+    BOOST_TEST( 2 - li1 == li1 );
+    PRIVATE_EXPR_TEST( (tmp2=li2), ((tmp2-=1) == li1) );
+    PRIVATE_EXPR_TEST( (tmp2=li2), ((tmp2-=li1) == li1) );
+    BOOST_TEST( li1 + li1 == li2 );
+    BOOST_TEST( li1 + 1 == li2 );
+    BOOST_TEST( 1 + li1 == li2 );
+    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2+=1) == li2) );
+    PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2+=li1) == li2) );
+
+    cout << "Performed tests on MyLongInt objects.\n";
+
     return boost::exit_success;
 }

@@ -9,6 +9,11 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  28 Sep 01 Factored out iterator operator groups.  (Daryle Walker)
+//  27 Aug 01 'left' form for non commutative operators added;
+//            additional classes for groups of related operators added;
+//            workaround for empty base class optimization
+//            bug of GCC 3.0 (Helmut Zeisel)
 //  25 Jun 01 output_iterator_helper changes: removed default template 
 //            parameters, added support for self-proxying, additional 
 //            documentation and tests (Aleksey Gurtovoy)
@@ -81,7 +86,14 @@
 namespace boost {
 namespace detail {
 
+// Helmut Zeisel, empty base class optimization bug with GCC 3.0.0
+#if defined(__GNUCC__) && __GNUC__==3 && __GNUC_MINOR__==0 && __GNU_PATCHLEVEL__==0
+class empty_base {
+  bool dummy; 
+};
+#else
 class empty_base {};
+#endif
 
 } // namespace detail
 } // namespace boost
@@ -168,6 +180,13 @@ struct subtractable2 : B
      friend T operator-(T x, const U& y) { return x -= y; }
 };
 
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct subtractable2_left : B
+{
+  friend T operator-(const U& x, const T& y)
+    { T result(x); return result -= y; }
+};
+
 template <class T, class B = ::boost::detail::empty_base>
 struct subtractable1 : B
 {
@@ -180,6 +199,13 @@ struct dividable2 : B
      friend T operator/(T x, const U& y) { return x /= y; }
 };
 
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct dividable2_left : B
+{
+  friend T operator/(const U& x, const T& y)
+    { T result(x); return result /= y; }
+};
+
 template <class T, class B = ::boost::detail::empty_base>
 struct dividable1 : B
 {
@@ -190,6 +216,13 @@ template <class T, class U, class B = ::boost::detail::empty_base>
 struct modable2 : B
 {
      friend T operator%(T x, const U& y) { return x %= y; }
+};
+
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct modable2_left : B
+{
+  friend T operator%(const U& x, const T& y)
+    { T result(x); return result %= y; }
 };
 
 template <class T, class B = ::boost::detail::empty_base>
@@ -463,12 +496,121 @@ struct shiftable1
     , right_shiftable1<T, B
       > > {};
 
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct ring_operators2
+    : additive2<T, U
+    , subtractable2_left<T, U
+    , multipliable2<T, U, B
+      > > > {};
+
+template <class T, class B = ::boost::detail::empty_base>
+struct ring_operators1
+    : additive1<T
+    , multipliable1<T, B
+      > > {};
+
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct ordered_ring_operators2
+    : ring_operators2<T, U
+    , totally_ordered2<T, U, B
+      > > {};
+
+template <class T, class B = ::boost::detail::empty_base>
+struct ordered_ring_operators1
+    : ring_operators1<T
+    , totally_ordered1<T, B
+      > > {};
+
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct field_operators2
+    : ring_operators2<T, U
+    , dividable2<T, U
+    , dividable2_left<T, U, B
+      > > > {};
+
+template <class T, class B = ::boost::detail::empty_base>
+struct field_operators1
+    : ring_operators1<T
+    , dividable1<T, B
+      > > {};
+
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct ordered_field_operators2
+    : field_operators2<T, U
+    , totally_ordered2<T, U, B
+      > > {};
+
+template <class T, class B = ::boost::detail::empty_base>
+struct ordered_field_operators1
+    : field_operators1<T
+    , totally_ordered1<T, B
+      > > {};
+
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct euclidian_ring_operators2
+    : ring_operators2<T, U
+    , dividable2<T, U
+    , dividable2_left<T, U
+    , modable2<T, U
+    , modable2_left<T, U, B
+      > > > > > {};
+
+template <class T, class B = ::boost::detail::empty_base>
+struct euclidian_ring_operators1
+    : ring_operators1<T
+    , dividable1<T
+    , modable1<T, B
+      > > > {};
+
+template <class T, class U, class B = ::boost::detail::empty_base>
+struct ordered_euclidian_ring_operators2
+    : totally_ordered2<T, U
+    , euclidian_ring_operators2<T, U, B
+      > > {};
+
+template <class T, class B = ::boost::detail::empty_base>
+struct ordered_euclidian_ring_operators1
+    : totally_ordered1<T
+    , euclidian_ring_operators1<T, B
+      > > {};
+      
+template <class T, class P, class B = ::boost::detail::empty_base>
+struct input_iteratable
+    : equality_comparable1<T
+    , incrementable<T
+    , dereferenceable<T, P, B
+      > > > {};
+
+template <class T, class B = ::boost::detail::empty_base>
+struct output_iteratable
+    : incrementable<T, B
+      > {};
+
+template <class T, class P, class B = ::boost::detail::empty_base>
+struct forward_iteratable
+    : input_iteratable<T, P, B
+      > {};
+
+template <class T, class P, class B = ::boost::detail::empty_base>
+struct bidirectional_iteratable
+    : forward_iteratable<T, P
+    , decrementable<T, B
+      > > {};
+
+template <class T, class P, class D, class R, class B = ::boost::detail::empty_base>
+struct random_access_iteratable
+    : bidirectional_iteratable<T, P
+    , totally_ordered1<T
+    , additive2<T, D
+    , indexable<T, D, R, B
+      > > > > {};
+
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 } // namespace boost
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE
 
 
-// BOOST_IMPORT_TEMPLATE1 .. BOOST_IMPORT_TEMPLATE3 -
+// BOOST_IMPORT_TEMPLATE1 .. BOOST_IMPORT_TEMPLATE4 -
 //
 // When BOOST_NO_OPERATORS_IN_NAMESPACE is defined we need a way to import an
 // operator template into the boost namespace. BOOST_IMPORT_TEMPLATE1 is used
@@ -479,6 +621,7 @@ struct shiftable1
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 
   // The template is already in boost so we have nothing to do.
+# define BOOST_IMPORT_TEMPLATE4(template_name)
 # define BOOST_IMPORT_TEMPLATE3(template_name)
 # define BOOST_IMPORT_TEMPLATE2(template_name)
 # define BOOST_IMPORT_TEMPLATE1(template_name)
@@ -489,6 +632,7 @@ struct shiftable1
 
      // Bring the names in with a using-declaration
      // to avoid stressing the compiler.
+#    define BOOST_IMPORT_TEMPLATE4(template_name) using ::template_name;
 #    define BOOST_IMPORT_TEMPLATE3(template_name) using ::template_name;
 #    define BOOST_IMPORT_TEMPLATE2(template_name) using ::template_name;
 #    define BOOST_IMPORT_TEMPLATE1(template_name) using ::template_name;
@@ -497,6 +641,10 @@ struct shiftable1
 
      // Otherwise, because a Borland C++ 5.5 bug prevents a using declaration
      // from working, we are forced to use inheritance for that compiler.
+#    define BOOST_IMPORT_TEMPLATE4(template_name)                                          \
+     template <class T, class U, class V, class W, class B = ::boost::detail::empty_base>  \
+     struct template_name : ::template_name<T, U, V, W, B> {};
+
 #    define BOOST_IMPORT_TEMPLATE3(template_name)                                 \
      template <class T, class U, class V, class B = ::boost::detail::empty_base>  \
      struct template_name : ::template_name<T, U, V, B> {};
@@ -541,6 +689,15 @@ template<class T> struct is_chained_base {
 };
 
 } // namespace boost
+
+// Import a 4-type-argument operator template into boost (if neccessary) and
+// provide a specialization of 'is_chained_base<>' for it.
+# define BOOST_OPERATOR_TEMPLATE4(template_name4)                     \
+  BOOST_IMPORT_TEMPLATE4(template_name4)                              \
+  template<class T, class U, class V, class W, class B>               \
+  struct is_chained_base< ::boost::template_name4<T, U, V, W, B> > {  \
+    typedef ::boost::detail::true_t value;                            \
+  };
 
 // Import a 3-type-argument operator template into boost (if neccessary) and
 // provide a specialization of 'is_chained_base<>' for it.
@@ -610,6 +767,8 @@ BOOST_OPERATOR_TEMPLATE1(template_name##1)
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
+#  define BOOST_OPERATOR_TEMPLATE4(template_name4) \
+        BOOST_IMPORT_TEMPLATE4(template_name4)
 #  define BOOST_OPERATOR_TEMPLATE3(template_name3) \
         BOOST_IMPORT_TEMPLATE3(template_name3)
 #  define BOOST_OPERATOR_TEMPLATE2(template_name2) \
@@ -632,8 +791,11 @@ BOOST_OPERATOR_TEMPLATE(equality_comparable)
 BOOST_OPERATOR_TEMPLATE(multipliable)
 BOOST_OPERATOR_TEMPLATE(addable)
 BOOST_OPERATOR_TEMPLATE(subtractable)
+BOOST_OPERATOR_TEMPLATE2(subtractable2_left)
 BOOST_OPERATOR_TEMPLATE(dividable)
+BOOST_OPERATOR_TEMPLATE2(dividable2_left)
 BOOST_OPERATOR_TEMPLATE(modable)
+BOOST_OPERATOR_TEMPLATE2(modable2_left)
 BOOST_OPERATOR_TEMPLATE(xorable)
 BOOST_OPERATOR_TEMPLATE(andable)
 BOOST_OPERATOR_TEMPLATE(orable)
@@ -658,14 +820,27 @@ BOOST_OPERATOR_TEMPLATE(integer_arithmetic)
 BOOST_OPERATOR_TEMPLATE(bitwise)
 BOOST_OPERATOR_TEMPLATE1(unit_steppable)
 BOOST_OPERATOR_TEMPLATE(shiftable)
+BOOST_OPERATOR_TEMPLATE(ring_operators)
+BOOST_OPERATOR_TEMPLATE(ordered_ring_operators)
+BOOST_OPERATOR_TEMPLATE(field_operators)
+BOOST_OPERATOR_TEMPLATE(ordered_field_operators)
+BOOST_OPERATOR_TEMPLATE(euclidian_ring_operators)
+BOOST_OPERATOR_TEMPLATE(ordered_euclidian_ring_operators)
+BOOST_OPERATOR_TEMPLATE2(input_iteratable)
+BOOST_OPERATOR_TEMPLATE1(output_iteratable)
+BOOST_OPERATOR_TEMPLATE2(forward_iteratable)
+BOOST_OPERATOR_TEMPLATE2(bidirectional_iteratable)
+BOOST_OPERATOR_TEMPLATE4(random_access_iteratable)
 
 #undef BOOST_OPERATOR_TEMPLATE
+#undef BOOST_OPERATOR_TEMPLATE4
 #undef BOOST_OPERATOR_TEMPLATE3
 #undef BOOST_OPERATOR_TEMPLATE2
 #undef BOOST_OPERATOR_TEMPLATE1
 #undef BOOST_IMPORT_TEMPLATE1
 #undef BOOST_IMPORT_TEMPLATE2
 #undef BOOST_IMPORT_TEMPLATE3
+#undef BOOST_IMPORT_TEMPLATE4
 
 // The following 'operators' classes can only be used portably if the derived class
 // declares ALL of the required member operators.
@@ -699,20 +874,18 @@ template <class T,
           class P = V const *,
           class R = V const &>
 struct input_iterator_helper
-  : equality_comparable1<T
-  , incrementable<T
-  , dereferenceable<T, P
+  : input_iteratable<T, P
   , boost::iterator<std::input_iterator_tag, V, D, P, R
-    > > > > {};
+    > > {};
 
-template<class Derived>
+template<class T>
 struct output_iterator_helper
-  : boost::incrementable<Derived
+  : output_iteratable<T
   , boost::iterator<std::output_iterator_tag, void, void, void, void
   > >
 {
-  Derived& operator*()  { return static_cast<Derived&>(*this); }
-  Derived& operator++() { return static_cast<Derived&>(*this); }
+  T& operator*()  { return static_cast<T&>(*this); }
+  T& operator++() { return static_cast<T&>(*this); }
 };
 
 template <class T,
@@ -721,11 +894,9 @@ template <class T,
           class P = V*,
           class R = V&>
 struct forward_iterator_helper
-  : equality_comparable1<T
-  , incrementable<T
-  , dereferenceable<T, P
+  : forward_iteratable<T, P
   , boost::iterator<std::forward_iterator_tag, V, D, P, R
-    > > > > {};
+    > > {};
 
 template <class T,
           class V,
@@ -733,11 +904,9 @@ template <class T,
           class P = V*,
           class R = V&>
 struct bidirectional_iterator_helper
-  : equality_comparable1<T
-  , unit_steppable<T
-  , dereferenceable<T, P
+  : bidirectional_iteratable<T, P
   , boost::iterator<std::bidirectional_iterator_tag, V, D, P, R
-    > > > > {};
+    > > {};
 
 template <class T,
           class V, 
@@ -745,13 +914,9 @@ template <class T,
           class P = V*,
           class R = V&>
 struct random_access_iterator_helper
-  : totally_ordered1<T
-  , unit_steppable<T
-  , dereferenceable<T, P
-  , additive2<T, D
-  , indexable<T, D, R
+  : random_access_iteratable<T, P, D, R
   , boost::iterator<std::random_access_iterator_tag, V, D, P, R
-    > > > > > >
+    > >
 {
   friend D requires_difference_operator(const T& x, const T& y) {
     return x - y;
