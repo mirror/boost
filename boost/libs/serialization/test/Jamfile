@@ -237,6 +237,7 @@ test-suite "serialization" :
      [ test-bsl-run_files test_split ]
      [ test-bsl-run_files test_tracking ]
      [ test-bsl-run_files test_unregistered ]
+     [ test-bsl-run_files test_variant ]
      [ test-bsl-run_files test_vector ]
      [ test-bsl-run_files test_optional ]
      [ test-bsl-run_files test_shared_ptr ]
