@@ -78,17 +78,17 @@ namespace is_incrementable_
 
 template<typename T> 
 struct is_incrementable 
-    BOOST_TT_AUX_BOOL_C_BASE(is_incrementable_::impl<T>::value)
+   BOOST_TT_AUX_BOOL_C_BASE(::boost::detail::is_incrementable_::impl<T>::value)
 { 
-    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(is_incrementable_::impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(::boost::detail::is_incrementable_::impl<T>::value)
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_incrementable,(T))
 };
 
 template<typename T> 
 struct is_postfix_incrementable 
-    BOOST_TT_AUX_BOOL_C_BASE(is_incrementable_::impl<T>::value)
+    BOOST_TT_AUX_BOOL_C_BASE(::boost::detail::is_incrementable_::impl<T>::value)
 { 
-    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(is_incrementable_::postfix_impl<T>::value)
+    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(::boost::detail::is_incrementable_::postfix_impl<T>::value)
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_postfix_incrementable,(T))
 };
 
