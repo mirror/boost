@@ -334,6 +334,11 @@
 //  Sun Workshop Compiler C++ ------------------------------------------------//
 
 # elif defined  __SUNPRO_CC
+#    if __SUNPRO_CC <= 0x520
+#      define BOOST_NO_SLIST
+#      define BOOST_NO_HASH
+#      define BOOST_NO_STD_ITERATOR_TRAITS
+#    endif
 #    if __SUNPRO_CC <= 0x500
 #      define BOOST_NO_MEMBER_TEMPLATES
 #      define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
