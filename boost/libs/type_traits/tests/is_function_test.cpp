@@ -8,7 +8,7 @@
 #include "boost/type_traits/type_traits_test.hpp"
 
 template <class T>
-void is_function_test(const T& foo)
+void is_function_test(T& foo)
 {
    value_test(true, ::boost::is_function<T>::value);
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -35,11 +35,11 @@ void is_function_test(const T& foo)
 #endif
 }
 
-void foo0(){};
-void foo1(int){};
-void foo2(int&, double){};
-void foo3(int&, bool, int, int){};
-void foo4(int, bool, int*, int[], int, int, int, int, int){};
+void foo0(){}
+void foo1(int){}
+void foo2(int&, double){}
+void foo3(int&, bool, int, int){}
+void foo4(int, bool, int*, int[], int, int, int, int, int){}
 
 
 int main(int argc, char* argv[])
@@ -67,6 +67,7 @@ int main(int argc, char* argv[])
 //
 // define the number of failures expected for given compilers:
 unsigned int expected_failures = 0;
+
 
 
 
