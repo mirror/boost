@@ -197,10 +197,12 @@ template<
       typename F, AUX_APPLY_N_PARAMS(i, typename T)
     >
 struct BOOST_PP_CAT(apply,i)
-    : BOOST_PP_CAT(aux::msvc_apply,i)<F>::template result_<
-          AUX_APPLY_N_PARAMS(i, T)
-        >
 {
+    // Metafunction forwarding confuses vc6
+    typedef typename BOOST_PP_CAT(aux::msvc_apply,i)<F>::template result_<
+        AUX_APPLY_N_PARAMS(i, T)
+    >::type type;
+    
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           BOOST_PP_INC(i)
         , BOOST_PP_CAT(apply,i)

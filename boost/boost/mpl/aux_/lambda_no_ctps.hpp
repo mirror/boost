@@ -82,15 +82,16 @@ template<
     , bool Protect = true 
     >
 struct lambda
-    : aux::lambda_impl<
+{
+    // Metafunction forwarding confuses vc6
+    typedef typename aux::lambda_impl<
           ::boost::mpl::aux::template_arity<T>::value
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1200
         , Protect
 #else
         , bool_<Protect>::value
 #endif
-        >::template result_<T,Tag>
-{
+    >::template result_<T,Tag>::type type;
 };
 
 #   undef AUX_LAMBDA_PARAMS

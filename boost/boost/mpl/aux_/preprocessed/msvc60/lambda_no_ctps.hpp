@@ -188,13 +188,11 @@ template<
     , bool Protect = true
     >
 struct lambda
-    : aux::lambda_impl<
-          ::boost::mpl::aux::template_arity<T>::value
-
-        , bool_<Protect>::value
-
-        >::template result_< T,Tag >
 {
+    typedef aux::lambda_impl<
+        ::boost::mpl::aux::template_arity<T>::value
+      , bool_<Protect>::value
+    >::template result_< T,Tag >::type type;
 };
 
 } // namespace mpl
