@@ -1,35 +1,25 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
 <html>
-
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>weak_ptr</title>
-</head>
-
-<body bgcolor="#FFFFFF" text="#000000">
-
-<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="middle" width="277" height="86">weak_ptr class template</h1>
-
-<p>The <b>weak_ptr</b> class template stores a pointer to an
-object that's already managed by a <b>shared_ptr</b>. When the
-object last <b>shared_ptr</b> to the object goes away and the object
-is deleted, all <b>weak_ptr</b> objects have their stored pointers
-set to 0.</p>
-
-<p>Every <b>weak_ptr</b> meets the <b>CopyConstructible</b>
-and <b>Assignable</b> requirements of the C++ Standard Library, and so
-can be used in standard library containers. Comparison operators
-are supplied so that <b>weak_ptr</b> works with
-the standard library's associative containers.</p>
-
-<p>The class template is parameterized on <b>T</b>, the type of the object
-pointed to. <b>T</b> must meet the smart pointer
-<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
-
-<h2><a name="Synopsis">Synopsis</a></h2>
-
-<pre>namespace boost {
+	<head>
+		<title>weak_ptr</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	</head>
+	<body bgcolor="#ffffff" text="#000000">
+		<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="middle" width="277" height="86">weak_ptr 
+			class template</h1>
+		<p>The <b>weak_ptr</b> class template stores a pointer to an object that's already 
+			managed by a <b>shared_ptr</b>. When the object last <b>shared_ptr</b> to the 
+			object goes away and the object is deleted, all <b>weak_ptr</b> objects have 
+			their stored pointers set to 0.</p>
+		<p>Every <b>weak_ptr</b> meets the <b>CopyConstructible</b> and <b>Assignable</b> requirements 
+			of the C++ Standard Library, and so can be used in standard library containers. 
+			Comparison operators are supplied so that <b>weak_ptr</b> works with the 
+			standard library's associative containers.</p>
+		<p>The class template is parameterized on <b>T</b>, the type of the object pointed 
+			to. <b>T</b> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">
+				common requirements</a>.</p>
+		<h2><a name="Synopsis">Synopsis</a></h2>
+		<pre>namespace boost {
 
   template&lt;typename T&gt; class weak_ptr {
 
@@ -48,12 +38,10 @@ pointed to. <b>T</b> must meet the smart pointer
       template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
 
       void <a href="#reset">reset</a>();
-
-      T &amp; <a href="#indirection">operator*</a>() const; // never throws
-      T * <a href="#indirection">operator-&gt;</a>() const; // never throws
-      T * <a href="#get">get</a>() const; // never throws
+      T * <a href="#get">get</a>() const; // never throws; unsafe in multithreaded code!
 
       long <a href="#use_count">use_count</a>() const; // never throws
+      bool <a href="#expired">expired</a>() const; // never throws
 
       void <a href="#swap">swap</a>(weak_ptr&lt;T&gt; &amp; b); // never throws
   };
@@ -67,174 +55,218 @@ pointed to. <b>T</b> must meet the smart pointer
 
   template&lt;typename T&gt; void <a href="#free-swap">swap</a>(weak_ptr&lt;T&gt; &amp; a, weak_ptr&lt;T&gt; &amp; b); // never throws
 
+  template&lt;typename T&gt;
+    shared_ptr&lt;T&gt; <a href="#make_shared">make_shared</a>(weak_ptr&lt;T&gt; const &amp; r); // never throws
+
   template&lt;typename T, typename U&gt;
-    weak_ptr&lt;T&gt <a href="#shared_static_cast">shared_static_cast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws
+    weak_ptr&lt;T&gt; <a href="#shared_static_cast">shared_static_cast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws
   template&lt;typename T, typename U&gt;
-    weak_ptr&lt;T&gt <a href="#shared_dynamic_cast">shared_dynamic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);
+    weak_ptr&lt;T&gt; <a href="#shared_dynamic_cast">shared_dynamic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);
   template&lt;typename T, typename U&gt;
-    weak_ptr&lt;T&gt <a href="#shared_polymorphic_cast">shared_polymorphic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);
+    weak_ptr&lt;T&gt; <a href="#shared_polymorphic_cast">shared_polymorphic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);
   template&lt;typename T, typename U&gt;
-    weak_ptr&lt;T&gt <a href="#shared_polymorphic_downcast">shared_polymorphic_downcast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws
+    weak_ptr&lt;T&gt; <a href="#shared_polymorphic_downcast">shared_polymorphic_downcast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws
 
-}</pre>
-
-<h2><a name="Members">Members</a></h2>
-
-<h3><a name="element_type">element_type</a></h3>
-<pre>typedef T element_type;</pre>
-<p>Provides the type of the stored pointer.</p>
-
-<h3><a name="constructors">constructors</a></h3>
-
-<pre>explicit weak_ptr();</pre>
-<p>Constructs a <b>weak_ptr</b>, with 0 as its stored pointer.
-The only exception which may be thrown by this constructor is <b>std::bad_alloc</b>.
-If an exception is thrown, the constructor has no effect.</p>
-
-<pre>template&lt;typename Y&gt; weak_ptr</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
-<p>Constructs a <b>weak_ptr</b>, as if by storing a copy of the pointer stored in <b>r</b>.
-Afterwards, the <a href="#use_count">use count</a> for all copies is unchanged.
-When the last <b>shared_ptr</b> is destroyed, the use count and stored pointer become 0.</p>
-
-<pre>weak_ptr(weak_ptr const &amp; r); // never throws
+}
+</pre>
+		<h2><a name="Members">Members</a></h2>
+		<h3><a name="element_type">element_type</a></h3>
+		<pre>typedef T element_type;</pre>
+		<blockquote>
+			<p>Provides the type of the template parameter T.</p>
+		</blockquote>
+		<h3><a name="constructors">constructors</a></h3>
+		<pre>explicit weak_ptr();</pre>
+		<blockquote>
+			<p><b>Effects:</b> Constructs a <b>weak_ptr</b>.</p>
+			<p><b>Postconditions:</b> <A href="#use_count">use count</A> is 0; the stored 
+				pointer is 0.</p>
+			<p><b>Throws:</b> <b>std::bad_alloc</b>.</p>
+			<p><b>Exception safety:</b> If an exception is thrown, the constructor has no 
+				effect.</p>
+			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
+					common requirements</A>.</P>
+		</blockquote>
+		<pre>template&lt;typename Y&gt; weak_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
+		<blockquote>
+			<p><b>Effects:</b> Constructs a <b>weak_ptr</b>, as if by storing a copy of the 
+				pointer stored in <b>r</b>.</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> The <a href="#use_count">use count</a> for all copies is 
+				unchanged. When the last <b>shared_ptr</b> is destroyed, the use count and 
+				stored pointer become 0.</P>
+		</blockquote>
+		<pre>weak_ptr(weak_ptr const &amp; r); // never throws
 template&lt;typename Y&gt; weak_ptr(weak_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
-<p>Constructs a <b>weak_ptr</b>, as if by storing a copy of the
-pointer stored in <b>r</b>.</p>
-
-<h3><a name="destructor">destructor</a></h3>
-
-<pre>~weak_ptr(); // never throws</pre>
-<p>Destroys this <b>weak_ptr</b> but has no effect on the object its stored pointer points to.
-<b>T</b> need not be a complete type.
-See the smart pointer <a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
-
-<h3><a name="operator=">assignment</a></h3>
-
-<pre>weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr const &amp; r); // never throws
+		<blockquote>
+			<p><b>Effects:</b> Constructs a <b>weak_ptr</b>, as if by storing a copy of the 
+				pointer stored in <b>r</b>.</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> The <a href="#use_count">use count</a> for all copies is 
+				unchanged.</P>
+		</blockquote>
+		<h3><a name="destructor">destructor</a></h3>
+		<pre>~weak_ptr(); // never throws</pre>
+		<BLOCKQUOTE>
+			<P><B>Effects:</B> Destroys this <b>weak_ptr</b> but has no effect on the object 
+				its stored pointer points to.</P>
+			<P><B>Throws:</B> nothing.</P>
+			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
+					common requirements</A>.</P>
+		</BLOCKQUOTE>
+		<h3><a name="assignment">assignment</a></h3>
+		<pre>weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr const &amp; r); // never throws
 template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr&lt;Y&gt; const &amp; r); // never throws
 template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
-<p>Constructs a new <b>weak_ptr</b> as described <a href="#constructors">above</a>,
-then replaces this <b>weak_ptr</b> with the new one, destroying the replaced object.</p>
-
-<h3><a name="reset">reset</a></h3>
-
-<pre>void reset();</pre>
-<p>Constructs a new <b>weak_ptr</b> as described <a href="#constructors">above</a>,
-then replaces this <b>weak_ptr</b> with the new one, destroying the replaced object.
-The only exception which may be thrown is <b>std::bad_alloc</b>. If
-an exception is thrown, the <b>reset</b> has no effect.</p>
-
-<h3><a name="indirection">indirection</a></h3>
-
-<pre>T &amp; operator*() const; // never throws</pre>
-<p>Returns a reference to the object pointed to by the stored pointer.
-Behavior is undefined if the stored pointer is 0.
-Note that the stored pointer becomes 0 if all <b>shared_ptr</b> objects for that
-pointer are destroyed.</p>
-
-<pre>T * operator-&gt;() const; // never throws</pre>
-<p>Returns the stored pointer.
-Behavior is undefined if the stored pointer is 0.
-Note that the stored pointer becomes 0 if all <b>shared_ptr</b> objects for that
-pointer are destroyed.</p>
-
-<h3><a name="get">get</a></h3>
-<pre>T * get() const; // never throws</pre>
-<p>Returns the stored pointer.
-Note that the stored pointer becomes 0 if all <b>shared_ptr</b> objects for that
-pointer are destroyed.
-<b>T</b> need not be a complete type.
-See the smart pointer
-<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
-
-<h3><a name="use_count">use_count</a></h3>
-<pre>long use_count() const; // never throws</pre>
-<p>Returns the number of <b>shared_ptr</b> objects sharing ownership of the
-stored pointer.
-<b>T</b> need not be a complete type.
-See the smart pointer
-<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
-<p>Because <b>use_count</b> is not necessarily efficient to implement for
-implementations of <b>weak_ptr</b> that do not use an explicit reference
-count, it might be removed from some future version. Thus it should
-be used for debugging purposes only, and <b>get</b> should be used for
-production code.</p>
-
-<h3><a name="swap">swap</a></h3>
-<pre>void swap(weak_ptr &amp; b); // never throws</pre>
-<p>Exchanges the contents of the two smart pointers.
-<b>T</b> need not be a complete type.
-See the smart pointer
-<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
-
-<h2><a name="functions">Free Functions</a></h2>
-
-<h3><a name="comparison">comparison</a></h3>
-<pre>template&lt;typename T, typename U&gt;
+		<BLOCKQUOTE>
+			<P><B>Effects:</B> Equivalent to <code>weak_ptr(r).swap(*this)</code>.</P>
+			<P><B>Throws:</B> nothing.</P>
+			<P><B>Notes:</B> The implementation is free to meet the effects (and the implied 
+				guarantees) via different means, without creating a temporary.</P>
+		</BLOCKQUOTE>
+		<h3><a name="reset">reset</a></h3>
+		<pre>void reset();</pre>
+		<BLOCKQUOTE>
+			<P><B>Effects:</B> Equivalent to <code>weak_ptr().swap(*this)</code>.</P>
+		</BLOCKQUOTE>
+		<h3><a name="get">get</a></h3>
+		<pre>T * get() const; // never throws</pre>
+		<blockquote>
+			<p><b>Returns:</b> the stored pointer (0 if all <b>shared_ptr</b> objects for that 
+				pointer are destroyed.)</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> Using <b>get</b> in multithreaded code is dangerous. After the 
+				function returns, the pointed-to object may be destroyed by a different thread, 
+				since the <b>weak_ptr</b> doesn't affect its <b>use_count</b>.</P>
+		</blockquote>
+		<h3><a name="use_count">use_count</a></h3>
+		<pre>long use_count() const; // never throws</pre>
+		<blockquote>
+			<p><b>Returns:</b> the number of <b>shared_ptr</b> objects sharing ownership of the 
+				stored pointer.</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> <code>use_count()</code> is not necessarily efficient. Use only 
+				for debugging and testing purposes, not for production code. <B>T</B> need not 
+				be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
+					common requirements</A>.</P>
+		</blockquote>
+		<h3><a name="expired">expired</a></h3>
+		<pre>bool expired() const; // never throws</pre>
+		<blockquote>
+			<p><b>Returns:</b> <code>use_count() == 0</code>.</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> <code>expired()</code> may be faster than <code>use_count()</code>.
+				<B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
+					common requirements</A>.</P>
+		</blockquote>
+		<h3><a name="swap">swap</a></h3>
+		<pre>void swap(weak_ptr &amp; b); // never throws</pre>
+		<blockquote>
+			<p><b>Effects:</b> Exchanges the contents of the two smart pointers.</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
+					common requirements</A>.</P>
+		</blockquote>
+		<h2><a name="functions">Free Functions</a></h2>
+		<h3><a name="comparison">comparison</a></h3>
+		<pre>template&lt;typename T, typename U&gt;
   bool operator==(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
 template&lt;typename T, typename U&gt;
-  bool operator!=(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
-template&lt;typename T&gt;
+  bool operator!=(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws</pre>
+		<blockquote>
+			<p><b>Returns:</b> <code>a.get() == b.get()</code>.</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> <B>T</B> need not be a complete type. See the smart pointer <A href="smart_ptr.htm#Common requirements">
+					common requirements</A>.</P>
+		</blockquote>
+		<pre>template&lt;typename T&gt;
   bool operator&lt;(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws</pre>
-<p>Compares the stored pointers of the two smart pointers.
-<b>T</b> need not be a complete type.
-See the smart pointer
-<a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
-<p>The <b>operator&lt;</b> overload is provided to define an ordering so that <b>weak_ptr</b>
-objects can be used in associative containers such as <b>std::map</b>.
-The implementation uses <b>std::less&lt;T *&gt;</b> to perform the
-comparison. This ensures that the comparison is handled correctly, since the
-standard mandates that relational operations on pointers are unspecified (5.9 [expr.rel]
-paragraph 2) but <b>std::less&lt;&gt;</b> on pointers is well-defined (20.3.3 [lib.comparisons]
-paragraph 8).</p>
-
-<h3><a name="free-swap">swap</a></h3>
-<pre>template&lt;typename T&gt;
+		<blockquote>
+			<p><b>Returns:</b> an implementation-defined value such that <b>operator&lt;</b> is 
+				a strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
+				of the C++ standard.</p>
+			<p><b>Throws:</b> nothing.</p>
+			<P><B>Notes:</B> Allows <STRONG>weak_ptr</STRONG> objects to be used as keys in 
+				associative containers. <B>T</B> need not be a complete type. See the smart 
+				pointer <A href="smart_ptr.htm#Common requirements">common requirements</A>.</P>
+		</blockquote>
+		<h3><a name="free-swap">swap</a></h3>
+		<pre>template&lt;typename T&gt;
   void swap(weak_ptr&lt;T&gt; &amp; a, weak_ptr&lt;T&gt; &amp; b) // never throws</pre>
-<p>Equivalent to <b>a.swap(b)</b>. Matches the interface of <b>std::swap</b>.
-Provided as an aid to generic programming.</p>
-
-<h3><a name="shared_static_cast">shared_static_cast</a></h3>
-<pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt shared_static_cast(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
-<p>Perform a <b>static_cast</b> on the stored pointer, returning another <b>weak_ptr</b>.
-The resulting smart pointer will share its use count with the original pointer.</p>
-
-<h3><a name="shared_dynamic_cast">shared_dynamic_cast</a></h3>
-<pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt shared_dynamic_cast(weak_ptr&lt;U&gt; const &amp; r);</pre>
-<p>Perform a <b>dynamic_cast</b> on the stored pointer, returning another <b>weak_ptr</b>.
-The resulting smart pointer will share its use count with the original pointer unless the result of the
-cast is 0. The only exception which may be thrown is <b>std::bad_alloc</b>, which may be thrown during the
-construction of the new <b>weak_ptr</b> if the result of the cast is 0. If an exception is thrown, the
-cast has no effect.</p>
-
-<h3><a name="shared_polymorphic_cast">shared_polymorphic_cast</a></h3>
-<pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt shared_polymorphic_cast(weak_ptr&lt;U&gt; const &amp; r);</pre>
-<p>Perform a <a href="../conversion/cast.htm#Polymorphic_cast"><b>polymorphic_cast</b><a> on the stored pointer,
-returning another <b>weak_ptr</b>.
-The resulting smart pointer will share its use count with the original pointer.
-The only exception which may be thrown is <b>std::bad_cast</b>, if the pointer type can not be converted.
-If an exception is thrown, the cast has no effect.</p>
-
-<h3><a name="shared_polymorphic_downcast">shared_polymorphic_downcast</a></h3>
-<pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt shared_polymorphic_downcast(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
-<p>Perform a <a href="../conversion/cast.htm#Polymorphic_cast"><b>polymorphic_downcast</b><a> on the stored pointer,
-returning another <b>weak_ptr</b>.
-The resulting smart pointer will share its use count with the original pointer.</p>
-
-<hr>
-
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->8 February 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
-
-<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler.
-Permission to copy, use, modify, sell and distribute this document is granted
-provided this copyright notice appears in all copies.
-This document is provided &quot;as is&quot; without express or implied warranty,
-and with no claim as to its suitability for any purpose.</p>
-
-</body>
-
+		<BLOCKQUOTE>
+			<P><B>Effects:</B> Equivalent to <code>a.swap(b)</code>.</P>
+			<P><B>Throws:</B> nothing.</P>
+			<P><B>Notes:</B> Matches the interface of <B>std::swap</B>. Provided as an aid to 
+				generic programming.</P>
+		</BLOCKQUOTE>
+		<h3><a name="make_shared">make_shared</a></h3>
+		<pre>template&lt;typename T&gt;
+  shared_ptr&lt;T&gt; make_shared(weak_ptr&lt;T&gt; &amp; const r) // never throws</pre>
+		<BLOCKQUOTE>
+			<P><B>Returns:</B> <code>r.expired()? shared_ptr&lt;T&gt;(): shared_ptr&lt;T&gt;(r)</code>.</P>
+			<P><B>Throws:</B> nothing.</P>
+		</BLOCKQUOTE>
+		<h3><a name="shared_static_cast">shared_static_cast</a></h3>
+		<pre>template&lt;typename T, typename U&gt;
+  weak_ptr&lt;T&gt; shared_static_cast(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
+		<BLOCKQUOTE>
+			<P><STRONG>Requires:</STRONG> The expression <code>static_cast&lt;T*&gt;(r.get())</code>
+				must be well-formed.</P>
+			<P><B>Returns:</B> A <STRONG>weak_ptr&lt;T&gt;</STRONG> object that stores a copy 
+				of <code>static_cast&lt;T*&gt;(r.get())</code> and shares ownership with <b>r</b>.</P>
+			<P><B>Throws:</B> nothing.</P>
+		</BLOCKQUOTE>
+		<h3><a name="shared_dynamic_cast">shared_dynamic_cast</a></h3>
+		<pre>template&lt;typename T, typename U&gt;
+  weak_ptr&lt;T&gt; shared_dynamic_cast(weak_ptr&lt;U&gt; const &amp; r);</pre>
+		<BLOCKQUOTE>
+			<P><STRONG>Requires:</STRONG> The expression <CODE>dynamic_cast&lt;T*&gt;(r.get())</CODE>
+				must be well-formed and its behavior defined.</P>
+			<P><B>Returns:</B></P>
+			<UL>
+				<LI>
+					When <CODE>dynamic_cast&lt;T*&gt;(r.get())</CODE> returns a nonzero 
+					value,&nbsp;a <STRONG>weak_ptr&lt;T&gt;</STRONG> object that stores a copy of 
+					it and shares ownership with <STRONG>r</STRONG>;
+				<LI>
+					Otherwise, a default-constructed <STRONG>weak_ptr&lt;T&gt;</STRONG> object.</LI></UL>
+			<P><B>Throws:</B> <STRONG>std::bad_alloc</STRONG>.</P>
+			<P><B>Exception safety:</B> If an exception is thrown, the function has no effect.</P>
+		</BLOCKQUOTE>
+		<h3><a name="shared_polymorphic_cast">shared_polymorphic_cast</a></h3>
+		<pre>template&lt;typename T, typename U&gt;
+  weak_ptr&lt;T&gt; shared_polymorphic_cast(weak_ptr&lt;U&gt; const &amp; r);</pre>
+		<BLOCKQUOTE>
+			<p><STRONG>Requires:</STRONG> The expression <CODE><A href="../conversion/cast.htm#Polymorphic_cast">
+						polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE> must be well-formed and 
+				its behavior defined.</p>
+			<P><B>Returns:</B> A <STRONG>weak_ptr&lt;T&gt;</STRONG> object that stores a copy 
+				of <CODE><A href="../conversion/cast.htm#Polymorphic_cast">polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE>
+				and shares ownership with <B>r</B>.</P>
+			<P><B>Throws:</B> <STRONG>std::bad_cast</STRONG> when the pointer cannot be 
+				converted.</P>
+			<P><B>Exception safety:</B> If an exception is thrown, the function has no effect.</P>
+		</BLOCKQUOTE>
+		<h3><a name="shared_polymorphic_downcast">shared_polymorphic_downcast</a></h3>
+		<pre>template&lt;typename T, typename U&gt;
+  weak_ptr&lt;T&gt; shared_polymorphic_downcast(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
+		<BLOCKQUOTE>
+			<p><STRONG>Requires:</STRONG> The expression <CODE><A href="../conversion/cast.htm#Polymorphic_cast">
+						polymorphic_downcast</A>&lt;T*&gt;(r.get())</CODE> must be well-formed 
+				and its behavior defined.</p>
+			<P><B>Returns:</B> A <STRONG>weak_ptr&lt;T&gt;</STRONG> object that stores a copy 
+				of <CODE><A href="../conversion/cast.htm#Polymorphic_cast">polymorphic_downcast</A>&lt;T*&gt;(r.get())</CODE>
+				and shares ownership with <B>r</B>.</P>
+			<P><B>Throws:</B> nothing.</P>
+		</BLOCKQUOTE>
+		<hr>
+		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->
+			8 March 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
+		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
+			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
+			distribute this document is granted provided this copyright notice appears in 
+			all copies. This document is provided "as is" without express or implied 
+			warranty, and with no claim as to its suitability for any purpose.</p>
+		</A>
+	</body>
 </html>

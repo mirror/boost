@@ -297,7 +297,7 @@ q = p;
 		<pre>template&lt;typename T&gt;
   bool operator&lt;(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an implementation-defined value such that <code>operator&lt;</code>
+			<p><b>Returns:</b> an implementation-defined value such that <b>operator&lt;</b>
 				is a strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
 				of the C++ standard.</p>
 			<p><b>Throws:</b> nothing.</p>
@@ -343,7 +343,7 @@ q = p;
 				<LI>
 					Otherwise, a default-constructed <STRONG>shared_ptr&lt;T&gt;</STRONG> object.</LI></UL>
 			<P><B>Throws:</B> <STRONG>std::bad_alloc</STRONG>.</P>
-			<P><B>Exception safety:</B> If an exception is thrown, the&nbsp;function has no 
+			<P><B>Exception safety:</B> If an exception is thrown, the function has no 
 				effect.</P>
 			<P><B>Notes:</B> the seemingly equivalent expression</P>
 			<P><CODE>shared_ptr&lt;T&gt;(dynamic_cast&lt;T*&gt;(r.get()))</CODE></P>

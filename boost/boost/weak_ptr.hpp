@@ -97,12 +97,17 @@ public:
 
     T * get() const // never throws; unsafe in multithreaded programs!
     {
-        return use_count() == 0? 0: px;
+        return pn.use_count() == 0? 0: px;
     }
 
     long use_count() const // never throws
     {
         return pn.use_count();
+    }
+
+    bool expired() const // never throws
+    {
+        return pn.use_count() == 0;
     }
 
     void swap(this_type & other) // never throws
