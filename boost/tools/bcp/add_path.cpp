@@ -21,10 +21,12 @@
 
 void bcp_implementation::add_path(const fs::path& p)
 {
-   if(fs::exists(m_boost_path / p) && fs::is_directory(m_boost_path / p))
-      add_directory(p);
+   fs::path normalized_path = p;
+   normalized_path.normalize();
+   if(fs::exists(m_boost_path / normalized_path) && fs::is_directory(m_boost_path / normalized_path))
+      add_directory(normalized_path);
    else
-      add_file(p);
+      add_file(normalized_path);
 }
 
 void bcp_implementation::add_directory(const fs::path& p)
