@@ -79,17 +79,13 @@ namespace boost {
        * so function requires a union of the two. */
       union any_pointer 
       {
-	struct container {};
-
         void* obj_ptr;
         const void* const_obj_ptr;
         void (*func_ptr)();
-	void (container::* mem_func_ptr)();
 
         explicit any_pointer(void* p) : obj_ptr(p) {}
         explicit any_pointer(const void* p) : const_obj_ptr(p) {}
         explicit any_pointer(void (*p)()) : func_ptr(p) {}
-	explicit any_pointer(void (container::*p)()) : mem_func_ptr(p) {}
       };
 
       /**
@@ -118,8 +114,8 @@ namespace boost {
 
       // The operation type to perform on the given functor/function pointer
       enum functor_manager_operation_type { 
-        clone_functor, 
-        destroy_functor
+        clone_functor_tag, 
+        destroy_functor_tag
       };
 
       // Tags used to decide between different types of functions
@@ -155,24 +151,10 @@ namespace boost {
         manager(any_pointer function_ptr, functor_manager_operation_type op,
                 function_ptr_tag)
         {
-          if (op == clone_functor)
+          if (op == clone_functor_tag)
             return function_ptr;
           else
             return any_pointer(static_cast<void (*)()>(0));
-        }
-
-	// For member function pointers, the manager is trivial
-        static inline any_pointer
-        manager(any_pointer member_ptr, functor_manager_operation_type op,
-                member_ptr_tag)
-        {
-          if (op == clone_functor)
-            return member_ptr;
-          else {
-	    typedef void (any_pointer::container::* stored_mem_func_type)();
-	    stored_mem_func_type p = 0;
-            return any_pointer(p);
-	  }
         }
 
         // For function object pointers, we clone the pointer to each 
@@ -194,7 +176,7 @@ namespace boost {
           allocator_type allocator;
 #  endif // BOOST_NO_STD_ALLOCATOR
 
-          if (op == clone_functor) {
+          if (op == clone_functor_tag) {
             functor_type* f = 
               static_cast<functor_type*>(function_obj_ptr.obj_ptr);
 

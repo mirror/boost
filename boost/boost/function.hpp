@@ -459,10 +459,9 @@ namespace boost {
     function(const Functor& f) : base_type(f) {}
                       
 #ifdef __BORLANDC__
-    template<typename Functor>
-    function(Functor* f) : base_type(f) {}
+    template<typename Functor> function(Functor* f) : base_type(f) {}
 #endif // __BORLANDC__
-                                                      
+
     function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
          
     template<typename Functor>

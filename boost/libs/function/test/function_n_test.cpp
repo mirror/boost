@@ -584,6 +584,7 @@ struct X {
 static void
 test_member_functions()
 {
+
   boost::function1<int, X*> f1(&X::twice);
   
   X one(1);

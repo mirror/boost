@@ -50,16 +50,10 @@
   BOOST_JOIN(function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
 #define BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER \
   BOOST_JOIN(void_function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
-#define BOOST_FUNCTION_MEM_FUNCTION_INVOKER \
-  BOOST_JOIN(mem_function_invoker,BOOST_FUNCTION_NUM_ARGS)
-#define BOOST_FUNCTION_VOID_MEM_FUNCTION_INVOKER \
-  BOOST_JOIN(void_mem_function_invoker,BOOST_FUNCTION_NUM_ARGS)
 #define BOOST_FUNCTION_GET_FUNCTION_INVOKER \
   BOOST_JOIN(get_function_invoker,BOOST_FUNCTION_NUM_ARGS)
 #define BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER \
   BOOST_JOIN(get_function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
-#define BOOST_FUNCTION_GET_MEM_FUNCTION_INVOKER \
-  BOOST_JOIN(get_mem_function_invoker,BOOST_FUNCTION_NUM_ARGS)
 
 namespace boost {
   namespace detail {
@@ -130,43 +124,6 @@ namespace boost {
         }
       };
 
-#if BOOST_FUNCTION_NUM_ARGS > 0
-      template<
-        typename MemFunctionPtr,
-	typename R BOOST_FUNCTION_COMMA
-        BOOST_FUNCTION_TEMPLATE_PARMS
-      >
-      struct BOOST_FUNCTION_MEM_FUNCTION_INVOKER
-      {
-	static R invoke(any_pointer mem_function_ptr
-			BOOST_FUNCTION_COMMA
-			BOOST_FUNCTION_PARMS)
-	{
-          // Was a reinterpret_cast<>, but not all compilers handle it
-	  MemFunctionPtr f = (MemFunctionPtr)(mem_function_ptr.mem_func_ptr);
-          return mem_fn(f)(BOOST_FUNCTION_ARGS);
-	}
-      };
-
-      template<
-        typename MemFunctionPtr,
-	typename R BOOST_FUNCTION_COMMA
-        BOOST_FUNCTION_TEMPLATE_PARMS
-      >
-      struct BOOST_FUNCTION_VOID_MEM_FUNCTION_INVOKER
-      {
-	static unusable invoke(any_pointer mem_function_ptr
-			       BOOST_FUNCTION_COMMA
-			       BOOST_FUNCTION_PARMS)
-	{
-          // Was a reinterpret_cast<>, but not all compilers handle it
-	  MemFunctionPtr f = (MemFunctionPtr)(mem_function_ptr.mem_func_ptr);
-          mem_fn(f)(BOOST_FUNCTION_ARGS);
-          return unusable();
-	}
-      };
-#endif // BOOST_FUNCTION_NUM_ARGS > 0
-
       template<
         typename FunctionPtr,
         typename R BOOST_FUNCTION_COMMA
@@ -208,29 +165,6 @@ namespace boost {
                           >
                        >::type type;
       };
-
-#if BOOST_FUNCTION_NUM_ARGS > 0
-      template<
-        typename MemFunctionPtr,
-        typename R BOOST_FUNCTION_COMMA
-        BOOST_FUNCTION_TEMPLATE_PARMS
-       >
-      struct BOOST_FUNCTION_GET_MEM_FUNCTION_INVOKER
-      {
-        typedef typename IF<(is_void<R>::value),
-                            BOOST_FUNCTION_VOID_MEM_FUNCTION_INVOKER<
-                              MemFunctionPtr,
-                              R BOOST_FUNCTION_COMMA
-                              BOOST_FUNCTION_TEMPLATE_ARGS
-                            >,
-                            BOOST_FUNCTION_MEM_FUNCTION_INVOKER<
-                              MemFunctionPtr,
-                              R BOOST_FUNCTION_COMMA
-                              BOOST_FUNCTION_TEMPLATE_ARGS
-                            >
-                           >::type type;
-      };
-#endif // BOOST_FUNCTION_NUM_ARGS > 0
     } // end namespace function
   } // end namespace detail
 
@@ -275,21 +209,21 @@ namespace boost {
       this->assign_to(f);
     }
 
+#ifdef __BORLANDC__
+    template<typename Functor>
+    BOOST_FUNCTION_FUNCTION(Functor* f) :
+      function_base(), Mixin(), invoker(0)
+    {
+      this->assign_to(f);
+    }
+#endif // __BORLANDC__
+
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION(const Functor& f, const Mixin& m) :
       function_base(), Mixin(m), invoker(0)
     {
       this->assign_to(f);
     }
-
-#ifdef __BORLANDC__
-    template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor* f, const Mixin& m = Mixin()) : 
-      function_base(), Mixin(m), invoker(0)
-    {
-      this->assign_to(f);
-    }
-#endif // __BORLANDC__
 
     BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) :
       function_base(), Mixin(static_cast<const Mixin&>(f)), invoker(0)
@@ -382,7 +316,7 @@ namespace boost {
     void clear()
     {
       if (manager)
-        functor = manager(functor, detail::function::destroy_functor);
+        functor = manager(functor, detail::function::destroy_functor_tag);
     
       manager = 0;
       invoker = 0;
@@ -394,7 +328,7 @@ namespace boost {
       if (!f.empty()) {
         invoker = f.invoker;
         manager = f.manager;
-        functor = f.manager(f.functor, detail::function::clone_functor);
+        functor = f.manager(f.functor, detail::function::clone_functor_tag);
       }          
     }
 
@@ -424,7 +358,7 @@ namespace boost {
         functor = manager(detail::function::any_pointer(
                             reinterpret_cast<void (*)()>(f)
                           ),
-                          detail::function::clone_functor);
+                          detail::function::clone_functor_tag);
       }
     }  
 
@@ -432,28 +366,7 @@ namespace boost {
     template<typename MemberPtr>
     void assign_to(MemberPtr f, detail::function::member_ptr_tag)
     {
-      clear();
-
-      if (f) {
-	typedef void (detail::function::any_pointer::container:: 
-		        *stored_mem_func_type)();
-	  typedef 
-	 typename detail::function::BOOST_FUNCTION_GET_MEM_FUNCTION_INVOKER<
-                    MemberPtr,
-	            R BOOST_FUNCTION_COMMA
-                    BOOST_FUNCTION_TEMPLATE_ARGS
-                    >::type
-        invoker_type;
-    
-        invoker = &invoker_type::invoke;
-        manager = &detail::function::functor_manager<MemberPtr, 
-                                                     Allocator>::manage;
-        // Was a reinterpret_cast<>, but not all compilers handle it
-        functor = manager(detail::function::any_pointer(
-                            (stored_mem_func_type)(f)
-                          ),
-                          detail::function::clone_functor);
-      }
+      this->assign_to(mem_fn(f));
     }
 #endif // BOOST_FUNCTION_NUM_ARGS > 0
         
@@ -474,7 +387,7 @@ namespace boost {
                                                      Allocator>::manage;
         functor = 
           manager(detail::function::any_pointer(const_cast<FunctionObj*>(&f)),
-                  detail::function::clone_functor);
+                  detail::function::clone_functor_tag);
       }
     }
     
@@ -516,8 +429,6 @@ namespace boost {
 #undef BOOST_FUNCTION_VOID_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_FUNCTION_OBJ_INVOKER
 #undef BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER
-#undef BOOST_FUNCTION_MEM_FUNCTION_INVOKER
-#undef BOOST_FUNCTION_VOID_MEM_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_GET_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER
 #undef BOOST_FUNCTION_GET_MEM_FUNCTION_INVOKER
