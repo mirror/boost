@@ -39,8 +39,6 @@
 #if BOOST_MSVC < 1300
 // Cannot access private members from member class
 #define BOOST_UBLAS_NESTED_CLASS_DR45
-// static member data initialisers require = syntax
-#define BOOST_UBLAS_STATIC_OLD_INIT
 #endif
 
 // Version 6.0 & 7.0
@@ -51,6 +49,8 @@
 #pragma warning (disable: 4503)
 #pragma warning (disable: 4786)
 
+// static member data initialisers require = syntax
+#define BOOST_UBLAS_STATIC_OLD_INIT
 // Member friend syntax works but lookup sometime fails on VC7
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
 // Base traits templates syntax not supported
