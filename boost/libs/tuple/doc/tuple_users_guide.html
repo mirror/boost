@@ -74,22 +74,14 @@ Both <code>tuple_io.hpp</code> and <code>tuple_comparison.hpp</code> include <co
 The template parameters specify the types of the tuple elements.
 The current version supports tuples with 0-10 elements. 
 If necessary, the upper limit can be increased up to, say, a few dozen elements.
-The data element can be any C++ type, except for a non-reference type
-that is not copy constructible from a const qualified reference to that
-same type. In practice this means, that the element type must be <i>CopyConstructible</i> [C++ Standard 20.1.3]. (To be precise, CopyConstrucible is an unnecessary strong requirement for a valid element type, as the <code>operator&amp;</code> is not used by the library.)
-</p>
-
-<p>
-Examples of types that are not allowed as tuple elements:
-
-<ul>
-<li>classes that do not have a public copy constructor</li>
-<li>classes, where the copy constructor takes its argument as a non-const reference (cf. <code>auto_ptr</code>)
-<li>arrays</li>
-</ul>
-
-Note that a reference to any of these non-copyable types is a valid element
-type.
+The data element can be any C++ type.
+Note that <code>void</code> and plain function types are valid 
+C++ types, but objects of such types cannot exist. 
+Hence, if a tuple type contains such types as elements, the tuple type
+can exist, but not an object of that type.
+There are natural limitations for element types that cannot
+be be copied, or that are not default constructible (see 'Constructing tuples'
+ below). 
 
 <p>
 For example, the following definitions are valid tuple instantiations (<code>A</code>, <code>B</code> and <code>C</code> are some user defined classes):
@@ -100,21 +92,6 @@ tuple&lt;A, int(*)(char, int), B(A::*)(C&amp;), C&gt;
 tuple&lt;std::string, std::pair&lt;A, B&gt; &gt;
 tuple&lt;A*, tuple&lt;const A*, const B&amp;, C&gt;, bool, void*&gt;
 </code></pre>
-
-<p>
-The following code shows some invalid tuple instantiations:
-<pre><code>class Y { 
-  Y(const Y&amp;); 
-public:
-  Y();
-};
-
-tuple&lt;Y&gt;        // not allowed, objects of type Y cannot be copied
-tuple&lt;char[10]&gt; // not allowed: arrays cannot be copied
-</code></pre>
-
-Note however that <code>tuple&lt;Y&amp;&gt;</code> and <code>tuple&lt;char(&)[10]&gt;</code> are valid instantiations.
-
 
 <h2><a name = "constructing_tuples">Constructing tuples</a></h2>
 
@@ -155,6 +132,31 @@ tuple&lt;double&amp;&gt;(d+3.14)          // error: cannot initialize
 tuple&lt;const double&amp;&gt;(d+3.14)    // ok, but dangerous: 
                                 // the element becomes a dangling reference 
 </code></pre>
+
+<p>Using an initial value for an element that cannot be copied, is a compile
+time error:
+
+<pre><code>class Y { 
+  Y(const Y&amp;); 
+public:
+  Y();
+};
+
+char a[10];
+
+tuple&lt;char[10], Y&gt;(a, Y()); // error, neither arrays nor Y can be copied
+tuple&lt;char[10], Y&gt;();       // ok
+</code></pre>
+
+Note particularly that the following is perfectly ok:
+<code><pre>Y y;
+tuple&lt;char(&amp;)[10], Y&amp;&gt;(a, y); 
+</code></pre>
+
+It is possible to come up with a tuple type that cannot be constructed.
+This occurs if an element that cannot be initialized has a lower
+index than an element that requires initialization. 
+For example: <code>tuple&lt;char[10], int&amp;&gt;</code>.
 
 <p>In sum, the tuple construction is semantically just a group of individual elementary constructions.
 </p>
