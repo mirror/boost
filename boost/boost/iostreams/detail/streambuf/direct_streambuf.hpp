@@ -17,9 +17,11 @@
 #include <boost/config.hpp>                     // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
+#include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/detail/error.hpp>
+#include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/optional.hpp>
 
@@ -50,6 +52,8 @@ public: // stream_facade needs access.
                int /* pback_size */ );
     bool is_open();
     void close();
+    bool auto_close() const { return auto_close_; }
+    void set_auto_close(bool close) { auto_close_ = close; }
 protected:
 #if !BOOST_WORKAROUND(__GNUC__, == 2)
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
@@ -78,13 +82,14 @@ private:
     bool two_head() const;
     optional<T>  storage_;
     char_type   *ibeg_, *iend_, *obeg_, *oend_;
+    bool        auto_close_;
 };
                     
 //------------------Implementation of direct_streambuf------------------------//
 
 template<typename T, typename Tr>
 direct_streambuf<T, Tr>::direct_streambuf() 
-    : ibeg_(0), iend_(0), obeg_(0), oend_(0) { }
+    : ibeg_(0), iend_(0), obeg_(0), oend_(0), auto_close_(true) { }
 
 template<typename T, typename Tr>
 void direct_streambuf<T, Tr>::open(const T& t, int, int)
@@ -101,7 +106,14 @@ bool direct_streambuf<T, Tr>::is_open() { return ibeg_ != 0 && !obeg_ != 0; }
 
 template<typename T, typename Tr>
 void direct_streambuf<T, Tr>::close() 
-{ ibeg_ = iend_ = obeg_ = oend_ = 0; storage_.reset(); }
+{ 
+    using namespace std;
+    if (ibeg_ != 0)
+        try { close(BOOST_IOS::in); } catch (std::exception&) { }
+    if (obeg_ != 0)
+        try { close(BOOST_IOS::out); } catch (std::exception&) { }
+    storage_.reset();
+}
 
 template<typename T, typename Tr>
 typename direct_streambuf<T, Tr>::int_type 
@@ -160,7 +172,21 @@ direct_streambuf<T, Tr>::seekpos
 { return seek_impl(sp, BOOST_IOS::beg, BOOST_IOS::in | BOOST_IOS::out); }
 
 template<typename T, typename Tr>
-void direct_streambuf<T, Tr>::close(BOOST_IOS::openmode) { close(); }
+void direct_streambuf<T, Tr>::close(BOOST_IOS::openmode which)
+{
+    if (which & BOOST_IOS::in) {
+        setg(0, 0, 0);
+        ibeg_ = iend_ = 0;
+    }
+    if (which & BOOST_IOS::out) {
+        sync();
+        setp(0, 0);
+        obeg_ = oend_ = 0;
+    }
+    try { 
+        boost::iostreams::close(storage_.get(), which);
+    } catch (std::exception&) { }
+}
 
 template<typename T, typename Tr>
 typename direct_streambuf<T, Tr>::pos_type direct_streambuf<T, Tr>::seek_impl

@@ -107,56 +107,6 @@ private:
     typedef Device                          policy_type;
 public:
     stream_facade() { }
-    // BEGIN DEBUG
-    //stream_facade(typename ::boost::iostreams::detail::param_type<Device>::type t , int buffer_size = -1 , int pback_size = -1) {
-       // this->open_impl(::boost::iostreams::detail::wrap(t) , buffer_size, pback_size);
-    //}
-    //stream_facade(const ::boost::reference_wrapper<Device>& ref , int buffer_size = -1 , int pback_size = -1) {
-       // this->open_impl(ref , buffer_size, pback_size);
-    //}
-    //void open(typename ::boost::iostreams::detail::param_type<Device>::type t , int buffer_size = -1 , int pback_size = -1) {
-       // this->open_impl(::boost::iostreams::detail::wrap(t) , buffer_size, pback_size);
-    //}
-    //void open(const ::boost::reference_wrapper<Device>& ref , int buffer_size = -1 , int pback_size = -1) {
-       // this->open_impl(ref , buffer_size, pback_size);
-    //}
-    //template< typename U0> stream_facade ( const U0 &u0) {
-       // this->open_impl ( Device ( u0) );
-    //}
-    //template< typename U100  > stream_facade ( U100& u100 ) {
-       // this->open_impl ( Device ( u100 ) );
-    //}
-    //template< typename U0 , typename U1> stream_facade ( const U0 &u0 , const U1 &u1) {
-       // this->open_impl ( Device ( u0 , u1) );
-    //}
-    //template< typename U100 , typename U0 > stream_facade ( U100& u100 , const U0 &u0) {
-       // this->open_impl ( Device ( u100 , u0) );
-    //}
-    //template< typename U0 , typename U1 , typename U2> stream_facade ( const U0 &u0 , const U1 &u1 , const U2 &u2) {
-       // this->open_impl ( Device ( u0 , u1 , u2) );
-    //}
-    //template< typename U100 , typename U0 , typename U1 > stream_facade ( U100& u100 , const U0 &u0 , const U1 &u1) {
-       // this->open_impl ( Device ( u100 , u0 , u1) );
-    //}
-    //template< typename U0> void open( const U0 &u0) {
-       // this->open_impl ( Device ( u0) );
-    //}
-    //template< typename U100  > void open ( U100& u100 ) {
-       // this->open_impl ( u100  );
-    //}
-    //template< typename U0 , typename U1> void open( const U0 &u0 , const U1 &u1) {
-       // this->open_impl ( Device ( u0 , u1) );
-    //}
-    //template< typename U100 , typename U0 > void open ( U100& u100 , const U0 &u0) {
-       // this->open_impl ( u100 , u0 );
-    //}
-    //template< typename U0 , typename U1 , typename U2> void open( const U0 &u0 , const U1 &u1 , const U2 &u2) {
-       // this->open_impl ( Device ( u0 , u1 , u2) );
-    //}
-    //template< typename U100 , typename U0 , typename U1 > void open ( U100& u100 , const U0 &u0 , const U1 &u1) {
-       // this->open_impl ( u100 , u0 , u1 );
-    //}
-    // END DEBUG
     BOOST_IOSTREAMS_FORWARD( stream_facade, open_impl, Device,
                              BOOST_IOSTREAMS_PUSH_PARAMS,
                              BOOST_IOSTREAMS_PUSH_ARGS )

@@ -120,12 +120,9 @@ public:
 
     //----------Device interface----------------------------------------------//
 
-    std::streamsize read(char_type* s, std::streamsize n)
-        { return list().front()->sgetn(s, n); }
-    void write(const char_type* s, std::streamsize n)
-        { list().front()->sputn(s, n); }
-    off_type seek(off_type off, BOOST_IOS::seekdir way)
-        { return list().front()->pubseekoff(off, way); }
+    std::streamsize read(char_type* s, std::streamsize n);
+    void write(const char_type* s, std::streamsize n);
+    std::streamoff seek(std::streamoff off, BOOST_IOS::seekdir way);
 
     //----------Direct stream buffer access-----------------------------------//
 
@@ -141,7 +138,9 @@ public:
 
     // Returns true if this chain is non-empty and its final link
     // is a source or sink, i.e., if it is ready to perform i/o.
-    bool is_complete() const { return pimpl_->complete_; }
+    bool is_complete() const;
+    bool auto_close() const;
+    void set_auto_close(bool close);
 private:
     template<typename T>
     void push_impl(const T& t, int buffer_size = -1, int pback_size = -1)
@@ -172,7 +171,7 @@ private:
             list().push_back(buf.get());
             buf.release();
             if (is_device<policy_type>::value)
-                pimpl_->complete_ = true;
+                pimpl_->flags_ |= f_complete;
             if (prev) prev->set_next(list().back());
             notify();
         }
@@ -201,22 +200,32 @@ private:
         BOOST_IOS::openmode mode_;
     };
     friend struct closer;
+
+    enum { 
+        f_complete = 1, 
+        f_auto_close = 2
+    };
+
     struct chain_impl {
         chain_impl()
             : client_(0), device_buffer_size_(default_buffer_size),
               filter_buffer_size_(default_filter_buffer_size),
               pback_size_(default_pback_buffer_size),
-              complete_(false)
+              flags_(f_auto_close)
             { }
         ~chain_impl()
             {
-                try { close(); } catch (std::exception&) { }
+                try { 
+                    if ((flags_ & f_auto_close) != 0)
+                        close(); 
+                } catch (std::exception&) { }
                 std::for_each( links_.begin(), links_.end(),
                                checked_deleter<streambuf_type>() );
             }
         void close()
             {
-                if (!complete_) return;
+                if ((flags_ & f_complete) == 0) 
+                    return;
                 links_.front()->BOOST_IOSTREAMS_PUBSYNC();
                 if (is_convertible<Mode, input>::value)
                     std::for_each( links_.rbegin(), links_.rend(), 
@@ -230,7 +239,7 @@ private:
         int           device_buffer_size_,
                       filter_buffer_size_,
                       pback_size_;
-        bool          complete_;
+        int           flags_;
     };
     friend struct chain_impl;
 
@@ -309,6 +318,8 @@ public:
     chain_type filters() const { return *chain_; }
 
     bool is_complete() const { return chain_->is_complete(); }
+    bool auto_close() const { return chain_->auto_close(); }
+    void set_auto_close(bool close) { chain_->set_auto_close(close); }
     void set_buffer_size(std::streamsize n) { chain_->set_buffer_size(n); }
     void set_filter_buffer_size(std::streamsize n)
         { chain_->set_filter_buffer_size(n); }
@@ -340,13 +351,48 @@ private:
 //--------------Implementation of chain_base----------------------------------//
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
+inline std::streamsize chain_base<Self, Ch, Tr, Alloc, Mode>::read
+    (char_type* s, std::streamsize n)
+{ return list().front()->sgetn(s, n); }
+
+template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
+inline void chain_base<Self, Ch, Tr, Alloc, Mode>::write
+    (const char_type* s, std::streamsize n)
+{ list().front()->sputn(s, n); }
+
+template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
+inline std::streamoff chain_base<Self, Ch, Tr, Alloc, Mode>::seek
+    (std::streamoff off, BOOST_IOS::seekdir way)
+{ return list().front()->pubseekoff(off, way); }
+
+template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
 void chain_base<Self, Ch, Tr, Alloc, Mode>::reset()
 {
     using namespace std;
     pimpl_->close();
     for_each(list().begin(), list().end(), checked_deleter<streambuf_type>());
     list().clear();
-    pimpl_->complete_ = false;
+    pimpl_->flags_ &= ~f_complete;
+}
+
+template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
+bool chain_base<Self, Ch, Tr, Alloc, Mode>::is_complete() const 
+{ 
+    return (pimpl_->flags_ & f_complete) != 0;
+}
+
+template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
+bool chain_base<Self, Ch, Tr, Alloc, Mode>::auto_close() const 
+{ 
+    return (pimpl_->flags_ & f_auto_close) != 0;
+}
+
+template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
+void chain_base<Self, Ch, Tr, Alloc, Mode>::set_auto_close(bool close) 
+{ 
+    pimpl_->flags_ = 
+        (pimpl_->flags_ & ~f_auto_close) |
+        (close ? f_auto_close : 0);
 }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
@@ -356,7 +402,7 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::pop()
     pimpl_->close();
     delete list().back();
     list().pop_back();
-    pimpl_->complete_ = false;
+    pimpl_->flags_ &= ~f_complete;
 }
 
 } // End namespace detail.

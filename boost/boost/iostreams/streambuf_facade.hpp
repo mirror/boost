@@ -78,62 +78,13 @@ public:
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 public:
     streambuf_facade() { }
-    //// BEGIN DEBUG
-    //streambuf_facade(typename ::boost::iostreams::detail::param_type<T>::type t , int buffer_size = -1 , int pback_size = -1) {
-       // this->open_impl(::boost::iostreams::detail::wrap(t) , buffer_size, pback_size);
-    //}
-    //streambuf_facade(const ::boost::reference_wrapper<T>& ref , int buffer_size = -1 , int pback_size = -1) {
-       // this->open_impl(ref , buffer_size, pback_size);
-    //}
-    //void open(typename ::boost::iostreams::detail::param_type<T>::type t , int buffer_size = -1 , int pback_size = -1) {
-       // this->open_impl(::boost::iostreams::detail::wrap(t) , buffer_size, pback_size);
-    //}
-    //void open(const ::boost::reference_wrapper<T>& ref , int buffer_size = -1 , int pback_size = -1) {
-       // this->open_impl(ref , buffer_size, pback_size);
-    //}
-    //template< typename U0>
-    //streambuf_facade ( const U0 &u0) {
-       // this->open_impl ( T ( u0) );
-    //}
-    //template< typename U100  >
-    //streambuf_facade ( U100& u100 ) {
-       // this->open_impl ( T ( u100 ) );
-    //}
-    //template< typename U0 , typename U1>
-    //streambuf_facade ( const U0 &u0 , const U1 &u1) {
-       // this->open_impl ( T ( u0 , u1) );
-    //}
-    //template< typename U100 , typename U0 >
-    //streambuf_facade ( U100& u100 , const U0 &u0) {
-       // this->open_impl ( T ( u100 , u0) );
-    //}
-    //template< typename U0 , typename U1 , typename U2>
-    //streambuf_facade ( const U0 &u0 , const U1 &u1 , const U2 &u2) {
-       // this->open_impl ( T ( u0 , u1 , u2) );
-    //}
-    //template< typename U100 , typename U0 , typename U1 >
-    //streambuf_facade ( U100& u100 , const U0 &u0 , const U1 &u1) {
-       // this->open_impl ( T ( u100 , u0 , u1) );
-    //}
-    //template< typename U0> void open( const U0 &u0) {
-       // this->open_impl ( T ( u0) );
-    //}
-    //template< typename U100  > void open ( U100& u100 ) {
-       // this->open_impl ( u100  );
-    //}
-    //template< typename U0 , typename U1> void open( const U0 &u0 , const U1 &u1) {
-       // this->open_impl ( T ( u0 , u1) );
-    //}
-    //template< typename U100 , typename U0 > void open ( U100& u100 , const U0 &u0) {
-       // this->open_impl ( u100 , u0 );
-    //}
-    //template< typename U0 , typename U1 , typename U2> void open( const U0 &u0 , const U1 &u1 , const U2 &u2) {
-       // this->open_impl ( T ( u0 , u1 , u2) );
-    //}
-    //template< typename U100 , typename U0 , typename U1 > void open ( U100& u100 , const U0 &u0 , const U1 &u1) {
-       // this->open_impl ( u100 , u0 , u1 );
-    //}
-    //// END DEBUG
+    ~streambuf_facade()
+    { 
+        try { 
+            if (this->is_open() && this->auto_close()) 
+                this->close(); 
+        } catch (std::exception&) { } 
+    }
     BOOST_IOSTREAMS_FORWARD( streambuf_facade, open_impl, T,
                              BOOST_IOSTREAMS_PUSH_PARAMS,
                              BOOST_IOSTREAMS_PUSH_ARGS )

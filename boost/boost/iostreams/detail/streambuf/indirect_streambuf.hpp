@@ -20,6 +20,7 @@
 #include <boost/iostreams/detail/buffer.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
+#include <boost/iostreams/detail/ios.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/traits.hpp>
@@ -55,11 +56,12 @@ private:
 #endif
 public:
     indirect_streambuf();
-    ~indirect_streambuf();
 
     void open(const T& t BOOST_IOSTREAMS_PUSH_PARAMS());
     bool is_open();
     void close();
+    bool auto_close() const;
+    void set_auto_close(bool close);
 
     //----------Direct filter or device access--------------------------------//
 
@@ -115,7 +117,8 @@ private:
         f_open             = 1,
         f_input_closed     = f_open << 1,
         f_output_closed    = f_input_closed << 1,
-        f_output_buffered  = f_output_closed << 1
+        f_output_buffered  = f_output_closed << 1,
+        f_auto_close       = f_output_buffered << 1
     };
 
     optional<wrapper>           storage_;
@@ -135,11 +138,7 @@ private:
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 indirect_streambuf<T, Tr, Alloc, Mode>::indirect_streambuf()
-    : next_(0), pback_size_(0), flags_(0) { }
-
-template<typename T, typename Tr, typename Alloc, typename Mode>
-indirect_streambuf<T, Tr, Alloc, Mode>::~indirect_streambuf()
-{ try { if (is_open()) close(); } catch (std::exception&) { } }
+    : next_(0), pback_size_(0), flags_(f_auto_close) { }
 
 //--------------Implementation of open, is_open and close---------------------//
 
@@ -200,6 +199,14 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::close()
     storage_.reset();
     flags_ = 0;
 }
+
+template<typename T, typename Tr, typename Alloc, typename Mode>
+bool indirect_streambuf<T, Tr, Alloc, Mode>::auto_close() const
+{ return (flags_ & f_auto_close) != 0; }
+
+template<typename T, typename Tr, typename Alloc, typename Mode>
+void indirect_streambuf<T, Tr, Alloc, Mode>::set_auto_close(bool close)
+{ flags_ = (flags_ & ~f_auto_close) | (close ? f_auto_close : 0); }
 
 //--------------Implementation virtual functions------------------------------//
 
