@@ -247,7 +247,10 @@ void bad()
 				example, a "no-op" deallocator is useful when returning a <STRONG>shared_ptr</STRONG>
 				to a statically allocated object.</EM></P>
 		<P><EM>The support for custom deallocators does not impose significant overhead. Other <STRONG>
-					shared_ptr</STRONG> features still require a deallocator to be kept.]</EM></P>
+					shared_ptr</STRONG> features still require a deallocator to be kept.</EM></P>
+		<P><EM>The requirement that the copy constructor of <b>D</b> does not throw is too strong.
+					It will be removed when some core language issues are resolved (cv-qualified
+					function types, partial ordering clarifications.)]</EM></P>
 		<pre>shared_ptr(shared_ptr const &amp; r); // never throws
 template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 		<blockquote>
