@@ -136,7 +136,7 @@ BOOST_RE_IX_DECL char* re_custom_error_messages[] = {
    0,
 };
 
-#if !defined(LC_MESSAGES) && defined(BOOST_RE_NO_CAT)
+#if !defined(LC_MESSAGES)
 #define LC_MESSAGES LC_CTYPE
 #endif
 
