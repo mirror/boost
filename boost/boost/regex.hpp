@@ -661,9 +661,9 @@ private:
    const charT* _leading_string;
    unsigned int _leading_string_len;
    re_detail::kmp_info<charT>* pkmp;
+   unsigned error_code_;
    charT* _expression;
    traits_type traits_inst;
-   unsigned error_code_;
 
    void BOOST_RE_CALL compile_maps();
    void BOOST_RE_CALL compile_map(re_detail::re_syntax_base* node, unsigned char* _map, unsigned int* pnull, unsigned char mask, re_detail::re_syntax_base* terminal = 0)const;
