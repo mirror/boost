@@ -9,6 +9,8 @@
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 using namespace boost::program_options;
+// We'll use po::value everywhere to workaround vc6 bug.
+namespace po = boost::program_options;
 
 #include <boost/function.hpp>
 using namespace boost;
@@ -26,7 +28,7 @@ void test_unicode_to_unicode()
     options_description desc;
 
     desc.add_options()
-        ("foo", wvalue<wstring>(), "unicode option")
+        ("foo", po::wvalue<wstring>(), "unicode option")
         ;
 
     vector<wstring> args;
@@ -50,7 +52,7 @@ void test_unicode_to_native()
     options_description desc;
 
     desc.add_options()
-        ("foo", value<string>(), "unicode option")
+        ("foo", po::value<string>(), "unicode option")
         ;
 
     vector<wstring> args;
@@ -71,7 +73,7 @@ void test_native_to_unicode()
     options_description desc;
 
     desc.add_options()
-        ("foo", wvalue<wstring>(), "unicode option")
+        ("foo", po::wvalue<wstring>(), "unicode option")
         ;
 
     vector<string> args;
@@ -95,7 +97,7 @@ void test_config_file()
     options_description desc;
 
     desc.add_options()
-        ("foo", value<string>(), "unicode option")
+        ("foo", po::value<string>(), "unicode option")
         ;
 
     std::wstringstream stream(L"foo = \u044F");
