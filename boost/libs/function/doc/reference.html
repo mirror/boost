@@ -134,6 +134,7 @@
     <b>return</b> (*x).*mf(arg1, arg2, ..., arg<em>N</em>);
   }
 </pre>
+  <li><a name="stateless"></a>A function object <code>f</code> of type <code>F</code> is <em>stateless</em> if it is a function pointer or if <a href="../../type_traits/index.htm#properties"><code>boost::is_stateless&lt;T&gt;</code></a> is true. The construction of or copy to a Boost.Function object from a stateless function object will not cause exceptions to be thrown and will not allocate any storage.</li>
 </ul>
 
 <h2><a name="function_base">Class <code>function_base</code></a></h2>
@@ -166,12 +167,13 @@
 <ul>
   <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject with the given mixin.</li>
   <li><b>Postconditions</b>: <code>f.<a href="#empty">empty</a>()</code>.</li>
-  <li><b>Throws</b>: will not throw.</li>
+  <li><b>Throws</b>: will not throw unless construction of the <code>Mixin</code> subobject throws.</li>
 </ul>
 
 <p> <a name="functionN_copy"><code>function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Postconditions</b>: <code>f</code> contains a copy of the <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for the <code>f</code> is copy-constructed from the mixin of <code>g</code>.</li>
+  <li><b>Throws</b>: will not throw unless copying the target of <code>g</code> or construction of the <code>Mixin</code> subobject throws.</li>
 </ul>
 
 <p> <a name="functionN_target"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(F g, <b>const</b> Mixin<b>&amp;</b> = Mixin());</code></a>
@@ -179,7 +181,7 @@
   <li><b>Requires</b>: <code>g</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
-  <li><b>Rationale</b>: <code>g</code> is a reference-to-<code><b>const</b></code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code><b>const</b></code> pointer-to-function.</li>
+  <li><b>Throws</b>: will not throw when <code>g</code> is a <a href="#stateless">stateless</a> function object unless construction of the <code>Mixin</code> subobject throws.</li>
 </ul>
 
 <p> <a name="functionN_target_ref"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code></a>
@@ -187,13 +189,14 @@
   <li><b>Requires</b>: <code>g.get()</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
   <li><b>Postconditions</b>: <code>this</code> object targets <code>g</code> (<em>not</em> a copy of <code>g.get()</code>) if <code>g.get()</code> is nonempty, or <code>this-&gt;empty()</code> if <code>g.get()</code> is empty.</li>
-  <li><b>Throws</b>: will not throw.</li>
+  <li><b>Throws</b>: will not throw unless the construction of the <code>Mixin</code> subobject throws.</li>
 </ul>
 
 <p> <a name="functionN_copy_assn"><code>function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for <code>f</code> is assigned the value of the mixin for <code>g</code>.</li>
   <li><b>Returns</b>: <code>*this</code>.</li>
+  <li><b>Throws</b>: will not throw when the target of <code>g</code> is a <a href="#stateless">stateless</a> function object or a reference to the function object, unless the copy of the <code>Mixin</code> subobject throws.</li>
 </ul>
 
 <p> <a name="functionN_target_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(F g);</code></a>
@@ -201,7 +204,7 @@
   <li><b>Requires</b>: <code>g</code> is a <a href="#compatible">compatible</a> function object.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
   <li><b>Returns</b>: <code>*this</code>.</li>
-  <li><b>Rationale</b>: <code>g</code> is a reference-to-<code><b>const</b></code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code><b>const</b></code> pointer-to-function.</li>
+  <li><b>Throws</b>: will not throw when <code>g</code> is a <a href="#stateless">stateless</a> function object.</li>
 </ul>
 
 <p> <a name="functionN_target_ref_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<a href="../../bind/ref.html">reference_wrapper</a>&lt;F&gt; g);</code></a>
@@ -288,7 +291,7 @@
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Fri Jan 25 10:00:28 EST 2002
+Last modified: Tue Jan 29 22:51:49 EST 2002
 <!-- hhmts end -->
   </body>
 </html>
