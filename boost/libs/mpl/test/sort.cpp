@@ -1,6 +1,6 @@
 
 // Copyright Aleksey Gurtovoy 2004
-// Copyright David Eric Friedman 2002-2003
+// Copyright Eric Friedman 2002-2003
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,11 +10,9 @@
 
 #include <boost/mpl/sort.hpp>
 
-#include <boost/static_assert.hpp>
 #include <boost/mpl/list_c.hpp>
 #include <boost/mpl/equal.hpp>
 #include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/at.hpp>
 
 #include <boost/mpl/aux_/test.hpp>
 
