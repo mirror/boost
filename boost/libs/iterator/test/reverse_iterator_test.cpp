@@ -71,10 +71,11 @@ int main()
     
     // Many compilers' builtin deque iterators don't interoperate well, though
     // STLport fixes that problem.
-#if defined(__SGI_STL_PORT)                                     \
-    || !BOOST_WORKAROUND(__GNUC__, <= 2)                        \
-    && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))  \
-    && !BOOST_WORKAROUND(__LIBCOMO_VERSION__, BOOST_TESTED_AT(29))  \
+#if defined(__SGI_STL_PORT)                                                             \
+    || !BOOST_WORKAROUND(__GNUC__, <= 2)                                                \
+    && !(BOOST_WORKAROUND(__GNUC__, == 3) && BOOST_WORKAROUND(__GNUC_MINOR__, <= 1))    \
+    && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))                          \
+    && !BOOST_WORKAROUND(__LIBCOMO_VERSION__, BOOST_TESTED_AT(29))                      \
     && !BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, <= 1)
     
     boost::const_nonconst_iterator_test(i, ++j);
