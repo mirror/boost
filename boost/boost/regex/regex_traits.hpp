@@ -357,7 +357,7 @@ struct BOOST_RE_IX_DECL w32_traits_base : public regex_traits_base
    char_class_unicode = 0x0400
    };
 public:
-   static std::string set_message_catalogue(const std::string& s);
+   static std::string BOOST_RE_CALL set_message_catalogue(const std::string& s);
 protected:
    static char regex_message_catalogue[200];
    enum syntax_map_size
