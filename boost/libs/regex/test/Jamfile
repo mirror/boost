@@ -1,7 +1,7 @@
 subproject libs/regex/test ;
 
 
-exe regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
+unit-test regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>$(BOOST_ROOT)
@@ -11,7 +11,7 @@ exe regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
       <runtime-link>dynamic
 	;
 
-exe wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
+unit-test wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>$(BOOST_ROOT)
@@ -22,7 +22,7 @@ exe wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
       <runtime-link>dynamic
 	;
 
-exe posix_api_check_c : c_compiler_checks/posix_api_check.c
+unit-test posix_api_check_c : c_compiler_checks/posix_api_check.c
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>$(BOOST_ROOT)
@@ -32,7 +32,7 @@ exe posix_api_check_c : c_compiler_checks/posix_api_check.c
       <runtime-link>dynamic
 	;
 
-exe wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
+unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>$(BOOST_ROOT)
@@ -42,7 +42,7 @@ exe wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
       <runtime-link>dynamic
 	;
 
-exe posix_api_check : c_compiler_checks/posix_api_check.cpp
+unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>$(BOOST_ROOT)
@@ -52,7 +52,7 @@ exe posix_api_check : c_compiler_checks/posix_api_check.cpp
       <runtime-link>dynamic
 	;
 
-exe wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
+unit-test wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>$(BOOST_ROOT)
@@ -61,5 +61,6 @@ exe wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
 		debug
       <runtime-link>dynamic
 	;
+
 
 
