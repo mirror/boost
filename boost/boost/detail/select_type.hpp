@@ -19,8 +19,7 @@ namespace boost { namespace detail {
   // Template class if_true -- select among 2 types based on a bool constant expression
   // Usage:
   //   typename if_true<(bool_const_expression)>::template then<true_type, false_type>::type
-  template <bool>
-  struct if_true
+  template <bool> struct if_true
   {
       template <class T, class F>
       struct then { typedef T type; };
