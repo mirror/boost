@@ -126,12 +126,6 @@ public:
         return p_ != 0;
     }
 
-private:
-
-    operator int () const;
-
-public:
-
 #else
 
     typedef T * (intrusive_ptr::*unspecified_bool_type) () const;

@@ -102,12 +102,6 @@ public:
         return px != 0;
     }
 
-private:
-
-    operator int () const;
-
-public:
-
 #else
 
     typedef T * (this_type::*unspecified_bool_type)() const;
