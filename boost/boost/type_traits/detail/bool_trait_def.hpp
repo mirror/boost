@@ -150,9 +150,13 @@ template< param > struct trait##_impl< sp1,sp2 > \
     /**/
 #endif
 
-#ifndef BOOST_TT_INTEGRAL_CONSTANT
-#define BOOST_TT_INTEGRAL_CONSTANT
-#include <boost/mpl/integral_c.hpp>
+#if 0  // there are true_type and false_type already in boost::
+       // This also induces dependencies which may be undesirable
+       // Let's wait until sometime not just before a release and clean
+       // the whole ct_if mess up.
+# ifndef BOOST_TT_INTEGRAL_CONSTANT
+#  define BOOST_TT_INTEGRAL_CONSTANT
+#  include <boost/mpl/integral_c.hpp>
 
 //
 // this is not a TR1 conforming integral_constant,
@@ -179,10 +183,12 @@ template<> struct integral_constant< bool, false > \
     BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,integral_constant,(bool)) \
 };
 
-typedef integral_constant<bool, true> true_type;
-typedef integral_constant<bool, false> false_type;
-
+namespace pending {
+typedef mpl::true_ true_type;
+typedef mpl::false_ false_type;
+}
 
 }
 
+# endif
 #endif
