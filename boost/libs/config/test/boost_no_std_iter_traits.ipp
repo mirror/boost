@@ -11,13 +11,14 @@
 //                 implementation.
 
 #include <iterator>
+#include <stddef.h>
 
 namespace boost_no_std_iterator_traits{
 
 struct UDT_iterator
 {
    typedef int value_type;
-   typedef std::ptrdiff_t difference_type;
+   typedef ptrdiff_t difference_type;
    typedef int* pointer;
    typedef int& reference;
    typedef std::input_iterator_tag iterator_category;
