@@ -1,14 +1,14 @@
 <html>
 	<head>
-		<title>seqs.html</title>
+		<title>sequences.html</title>
 		<link rel="stylesheet" type="text/css" href="../styles.css">
 	</head>
 	<body>
 		<h4>
-			Sets
+			Sequences
 		</h4>
 		<div>
-			A <i>seq</i> is a group of adjacent parenthesized elements. For example,
+			A <i>sequence</i> (abbreviated to <i>seq</i>) is a group of adjacent parenthesized elements. For example,
 		</div>
 		<div class="code">
 			(<i>a</i>)(<i>b</i>)(<i>c</i>)
@@ -17,8 +17,8 @@
 			...is a <i>seq</i> of <i>3</i> elements--<i>a</i>, <i>b</i>, and <i>c</i>.
 		</div>
 		<div>
-			<i>Sets</i> are data structures that merge the properties of both <i>lists</i> and
-			<i>tuples</i> with the exception that <i>seqs</i> cannot be empty.&nbsp; 
+			<i>Sequences</i> are data structures that merge the properties of both <i>lists</i> and
+			<i>tuples</i> with the exception that a <i>seq</i> cannot be empty.&nbsp; 
 			Therefore, an "empty" <i>seq</i> is considered a special case scenario that 
 			must be handled separately in C++.
 		</div>
@@ -44,7 +44,7 @@ BOOST_PP_SEQ_FOLD_RIGHT(INC, BOOST_PP_SEQ_NIL, SEQ)
 </pre>
 		</div>
 		<div>
-			<i>Sets</i> are extremely efficient.&nbsp; Element access speed approaches 
+			<i>Sequences</i> are extremely efficient.&nbsp; Element access speed approaches 
 			random access--even with <i>seqs</i> of up to <i>256</i> elements.&nbsp; This 
 			is because element access (among other things) is implemented iteratively 
 			rather than recursively.&nbsp; Therefore, elements can be accessed at extremely 
