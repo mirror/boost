@@ -95,7 +95,11 @@ int main(int, char*[])
 
   // to be continued...
 </pre>
-
+The output from this part is:
+<pre>
+counting from 0 to 4:
+0 1 2 3 
+</pre>
 
 <h3>Template Parameters</h3>
 
@@ -118,7 +122,7 @@ If the <tt>Incrementable</tt> type has all of the functionality of a
 Access Iterator</a> except the <tt>operator*()</tt>, then the counting
 iterator will be a model of <a
 href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
-Access Iterator</a>. In the <tt>Incrementable</tt> type has less
+Access Iterator</a>. If the <tt>Incrementable</tt> type has less
 functionality, then the counting iterator will have correspondingly
 less functionality.
 
@@ -157,15 +161,59 @@ typing.
 
 <pre>
   // continuing from previous example...
-  std::cout &lt;&lt; "counting from -5 to 5:" &lt;&lt; std::endl;
+
+  std::cout &lt;&lt; "counting from -5 to 4:" &lt;&lt; std::endl;
   std::copy(boost::make_counting_iterator(-5),
 	    boost::make_counting_iterator(5),
 	    std::ostream_iterator&lt;int&gt;(std::cout, " "));
   std::cout &lt;&lt; std::endl;
 
+  // to be continued...
+</pre>
+The output from this part is:
+<pre>
+counting from -5 to 4:
+-5 -4 -3 -2 -1 0 1 2 3 4 
+</pre>
 
-  return 0;
-}
+In the next example we create an array of numbers, and then create a
+second array of pointers, where each pointer is the address of a
+number in the first array. The counting iterator makes it easy to do
+this since dereferencing a counting iterator that is wrapping an
+iterator over the array of numbers just returns a pointer to the
+current location in the array. We then use the <a
+href="./indirect_iterator.htm">indirect iterator adaptor</a> to print
+out the number in the array by accessing the numbers through the array
+of pointers.
+
+<pre>
+  // continuing from previous example...
+
+  const int N = 7;
+  std::vector&lt;int&gt; numbers;
+  // Fill "numbers" array with [0,N)
+  std::copy(boost::make_counting_iterator(0), boost::make_counting_iterator(N),
+	    std::back_inserter(numbers));
+  std::vector&lt;int*&gt; pointers;
+
+  // Use counting iterator to fill in the array of pointers.
+  std::copy(boost::make_counting_iterator(numbers.begin()),
+	    boost::make_counting_iterator(numbers.end()),
+	    std::back_inserter(pointers));
+
+  // Use indirect iterator to print out numbers by accessing
+  // them through the array of pointers.
+  std::cout &lt;&lt; "indirectly printing out the numbers from 0 to " 
+	    &lt;&lt; N &lt;&lt; std::endl;
+  std::copy(boost::make_indirect_iterator(pointers.begin()),
+	    boost::make_indirect_iterator(pointers.end()),
+	    std::ostream_iterator&lt;int&gt;(std::cout, " "));
+  std::cout &lt;&lt; std::endl;
+</pre>
+The output is:
+<pre>
+indirectly printing out the numbers from 0 to 7
+0 1 2 3 4 5 6 
 </pre>
 
 
