@@ -36,6 +36,8 @@ namespace boost {
     friend void dummy_friend(); // just to avoid warnings
   };
 
+  // This is a helper class that provides a way to get a reference to
+  // an object.
   template <class T>
   class static_object {
   public:
@@ -104,8 +106,9 @@ namespace boost {
     default_archetype_base(detail::dummy_constructor x) { }
   };
 
-  // Careful, don't use same type for T and Base. That
-  // results in the conversion operator being invalid.
+  // Careful, don't use same type for T and Base. That results in the
+  // conversion operator being invalid.  Since T is often
+  // null_archetype, can't use null_archetype for Base.
   template <class T, class Base = default_archetype_base>
   class convertible_to_archetype : public Base {
   private:
@@ -294,8 +297,6 @@ namespace boost {
   { \
     return Return(dummy_cons); \
   }
-
-  // The default constructor used in Return() above is bad.
 
   BOOST_DEFINE_BINARY_OPERATOR_ARCHETYPE(+, plus_op)
   BOOST_DEFINE_BINARY_OPERATOR_ARCHETYPE(*, time_op)

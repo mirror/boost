@@ -109,12 +109,18 @@ namespace part_sum
 
 // for std::power
 
-template <class Base>
-boost::multipliable_archetype<Base>
-identity_element(std::multiplies< boost::multipliable_archetype<Base> >) {
-  return boost::multipliable_archetype<Base>(boost::dummy_cons);
+namespace power_stuff {
+  struct monoid_archetype {
+    monoid_archetype(boost::detail::dummy_constructor x) { }  
+  };
+  
+  boost::multipliable_archetype<monoid_archetype>
+  identity_element
+  (std::multiplies< boost::multipliable_archetype<monoid_archetype> >) 
+  {
+    return boost::multipliable_archetype<monoid_archetype>(boost::dummy_cons);
+  }
 }
-
 
 int
 main()
@@ -1075,12 +1081,12 @@ main()
   // SGI STL extension
   {
     int n = 1;
-    multipliable_archetype<> x(dummy_cons);
+    multipliable_archetype<power_stuff::monoid_archetype> x(dummy_cons);
     x = std::power(x, n);
   }
   {
     int n = 1;
-    typedef multipliable_archetype<> T;
+    typedef multipliable_archetype<power_stuff::monoid_archetype> T;
     T x(dummy_cons);
     x = std::power(x, n, multiplies<T>());
   }
