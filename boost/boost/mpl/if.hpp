@@ -53,12 +53,17 @@ template<
     >
 struct if_
 {
-    typedef typename if_c<
+ private:
+    // agurt, 02/jan/03: two-step 'type' definition for the sake of aCC 
+    typedef if_c<
           BOOST_MPL_AUX_ICE_CAST(bool, BOOST_MPL_AUX_VALUE_WKND(C)::value)
         , T1
         , T2
-        >::type type;
-
+        > almost_type_;
+ 
+ public:
+    typedef typename almost_type_::type type;
+    
     BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C,T1,T2))
 };
 
