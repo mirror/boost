@@ -82,7 +82,7 @@ bool query_match(iterator first, iterator last, boost::match_results<iterator, A
 
 //
 // query_match convenience interfaces:
-#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -155,7 +155,7 @@ bool reg_search(iterator first, iterator last, boost::match_results<iterator, Al
 
 //
 // reg_search convenience interfaces:
-#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -231,7 +231,7 @@ inline unsigned int reg_grep(Predicate foo, iterator first, iterator last, const
 
 //
 // reg_grep convenience interfaces:
-#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation

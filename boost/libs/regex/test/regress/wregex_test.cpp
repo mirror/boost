@@ -123,7 +123,7 @@ template std::size_t regex_split(test_string_type*,
 
 template std::size_t regex_split(test_string_type*, test_string_type&);
 
-#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 //
 // the following prototypes are only available if partial ordering
 // of template functions is supported:

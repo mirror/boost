@@ -126,11 +126,6 @@ struct BOOST_REGEX_DECL c_traits_base : public regex_traits_base
 {
 public:
    enum{
-      //
-      // these values *must* have the same values as their Win32
-      // equivalents, in order to share data between the two traits
-      // classes (we will static-assert that later):
-      //
       char_class_none = 0,
       char_class_alpha = 0x0001,
       char_class_cntrl = 0x0002,

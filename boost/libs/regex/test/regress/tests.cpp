@@ -246,7 +246,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
       debug_iterator<string_type::iterator> y(search_text.end(), search_text.begin(), search_text.end());
       grep_test_predicate<debug_iterator<string_type::iterator>, allocator_type> oi(x, y);
       regex_grep(oi, x, y, e, flags[3]);
-#if !defined(BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
       if(!recurse)
       {
          std::basic_string<char_t> s(search_text.begin(), search_text.end());
@@ -309,7 +309,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
 
          //
          // now try alternative forms of regex_search if available:
-#if !defined(BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
          if(!recurse)
          {
             std::basic_string<char_t> s(search_text.begin(), search_text.end());

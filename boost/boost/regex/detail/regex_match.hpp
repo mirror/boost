@@ -40,10 +40,6 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
                           re_set_long* set_, 
                           const reg_expression<charT, traits_type, Allocator>& e)
 {   
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable: 4800)
-#endif
    const charT* p = (const charT*)(set_+1);
    iterator ptr;
    unsigned int i;
@@ -144,9 +140,6 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
    if(traits_inst.is_class(col, set_->cclasses) == true)
       return set_->isnot ? next : ++next;
    return set_->isnot ? ++next : next;
-#ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
 }
 
 template <class iterator, class Allocator>
@@ -267,10 +260,6 @@ bool query_match_aux(iterator first,
                      _priv_match_data<iterator, Allocator>& pd,
                      iterator* restart)
 {
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable: 4800)
-#endif
    typedef access_t<charT, traits, Allocator2> access;
 
    if(e.flags() & regbase::failbit)
@@ -955,9 +944,6 @@ bool query_match_aux(iterator first,
    // if we get to here then everything has failed
    // and no match was found:
    return false;
-#ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
 }
 #if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace
@@ -1033,7 +1019,7 @@ struct grep_search_predicate
    }
 };
 
-#if !defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) && !defined(BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
 template <class iterator, class Allocator>
 inline const match_results_base<iterator, Allocator>& grep_out_type(const grep_search_predicate<iterator, Allocator>& o, const Allocator&)
@@ -1545,9 +1531,6 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
    }
 
    return cmatches;
-#ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
 }
 #if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace {anon}
@@ -1586,7 +1569,7 @@ bool regex_match(iterator first, iterator last, const reg_expression<charT, trai
 }
 //
 // query_match convenience interfaces:
-#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -1693,10 +1676,6 @@ inline bool regex_match(const std::basic_string<wchar_t>& s,
 template <class iterator, class Allocator, class charT, class traits, class Allocator2>
 bool regex_search(iterator first, iterator last, match_results<iterator, Allocator>& m, const reg_expression<charT, traits, Allocator2>& e, unsigned flags = match_default)
 {
-#ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable: 4800)
-#endif
    if(e.flags() & regbase::failbit)
       return false;
 
@@ -1704,14 +1683,11 @@ bool regex_search(iterator first, iterator last, match_results<iterator, Allocat
    typedef typename traits::uchar_type traits_uchar_type;
 
    return re_detail::reg_grep2(re_detail::grep_search_predicate<iterator, Allocator>(&m), first, last, e, flags, m.allocator());
-#ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
 }
 
 //
 // regex_search convenience interfaces:
-#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -1782,7 +1758,7 @@ inline unsigned int regex_grep(Predicate foo, iterator first, iterator last, con
 
 //
 // regex_grep convenience interfaces:
-#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
