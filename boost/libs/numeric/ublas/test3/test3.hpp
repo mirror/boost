@@ -39,10 +39,6 @@ void test_vector ();
 void test_matrix_vector ();
 void test_matrix ();
 
-// FIXME range and slice are failing
-#undef USE_RANGE
-#undef USE_SLICE
-
 // Disable some tests for truly broken compilers
 	// MSVC Version 6.0 & 7.0 have problems compiling with std::complex
 #if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
