@@ -162,7 +162,7 @@ struct code_converter_impl {
     bool fill() // Returns true for eof.
     {
         using namespace std;
-        typedef typename Codecvt::extern_type extern_type;
+        typedef typename codecvt_extern<Codecvt>::type extern_type;
         buffer_type& in = buf_.first();
         streamsize off =
             static_cast<streamsize>(in.eptr() - in.ptr());
@@ -231,6 +231,9 @@ public:
     ));
 public:
     code_converter() { }
+    code_converter(const code_converter& other) 
+        : code_converter_base<Device, Codecvt, Alloc>(other)
+        { }
     // BEGIN DEBUG
     code_converter( typename detail::param_type<Device>::type t, 
                     std::streamsize buffer_size = -1 ) 
