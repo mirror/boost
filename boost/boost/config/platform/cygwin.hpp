@@ -32,6 +32,14 @@
 #  define BOOST_HAS_FTIME
 #endif
 
+//
+// find out if we have a stdint.h, there should be a better way to do this:
+//
+#include <sys/types.h>
+#ifdef _STDINT_H
+#define BOOST_HAS_STDINT_H
+#endif
+
 // boilerplate code:
 #include <boost/config/posix_features.hpp>
  

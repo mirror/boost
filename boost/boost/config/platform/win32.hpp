@@ -19,6 +19,11 @@
 #  define BOOST_HAS_DECLSPEC
 #endif
 
+#if defined(__MINGW32__) && ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 2)))
+#  define BOOST_HAS_STDINT_H
+#  define __STDC_LIMIT_MACROS
+#endif
+
 //
 // Win32 will normally be using native Win32 threads,
 // but there is a pthread library avaliable as an option,

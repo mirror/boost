@@ -245,6 +245,15 @@ namespace boost
 #    else
 #       error defaults not correct; you must hand modify boost/cstdint.hpp
 #    endif
+# elif defined(__GNUC__) && defined(BOOST_HAS_LONG_LONG)
+     __extension__ typedef long long            intmax_t;
+     __extension__ typedef unsigned long long   uintmax_t;
+     __extension__ typedef long long            int64_t;
+     __extension__ typedef long long            int_least64_t;
+     __extension__ typedef long long            int_fast64_t;
+     __extension__ typedef unsigned long long   uint64_t;
+     __extension__ typedef unsigned long long   uint_least64_t;
+     __extension__ typedef unsigned long long   uint_fast64_t;
 # elif defined(BOOST_HAS_MS_INT64)
      //
      // we have Borland/Intel/Microsoft __int64:
