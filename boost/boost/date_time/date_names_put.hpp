@@ -175,7 +175,10 @@ namespace date_time {
         }
       }
     };
-
+    
+    //! Generate storage location for a std::locale::id 
+    template<class Config, class charT, class OutputIterator>
+    std::locale::id date_names_put<Config, charT, OutputIterator>::id;
 
     //! An date name output facet that takes an array of char* to define strings
     template<class Config,
