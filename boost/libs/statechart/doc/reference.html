@@ -611,7 +611,9 @@ to Target<br>
 <a href="#process_event">process_event</a>()</code></p>
 <pre>template&lt; class Target &gt;
 Target <a name="state_downcast">state_downcast</a>() const;</pre>
-<p><b>Returns</b>: Depending on the form of <code>Target</code> either a 
+<p><b>Requires</b>: For reference targets the compiler must support partial 
+specialization of class templates, otherwise a compile-time error will result<br>
+<b>Returns</b>: Depending on the form of <code>Target</code> either a 
 reference or a pointer to <code>const</code> if <code>Target</code> is equal 
 to the most-derived type of a currently active state. Returns <code>0</code> 
 for pointer targets and throws <code>std::bad_cast</code> for reference 
@@ -2090,9 +2092,9 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->24 November, 2004<!--webbot bot="Timestamp" endspan i-checksum="39362" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38839" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
