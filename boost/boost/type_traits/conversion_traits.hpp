@@ -3,15 +3,11 @@
 // Copyright (C) 2000 Jeremy Siek (jsiek@lsc.nd.edu)
 // Copyright (C) 1999, 2000 Jaakko J„rvi (jaakko.jarvi@cs.utu.fi)
 //
-// Permission to copy and use this software is granted, 
-// provided this copyright notice appears in all copies. 
-// Permission to modify the code and to distribute modified code is granted, 
-// provided this copyright notice appears in all copies, and a notice 
-// that the code was modified is included with the copyright notice.
+//  Use, modification and distribution are subject to the Boost Software License,
+//  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt).
 //
-// This software is provided "as is" without express or implied warranty, 
-// and with no claim as to its suitability for any purpose.
-//
+//  See http://www.boost.org/libs/type_traits for most recent version including documentation.
 
 #ifndef BOOST_TT_CONVERSION_TRAITS_HPP_INCLUDED
 #define BOOST_TT_CONVERSION_TRAITS_HPP_INCLUDED
