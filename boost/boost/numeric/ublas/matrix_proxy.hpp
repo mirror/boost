@@ -35,7 +35,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const M const_matrix_type;
         typedef M matrix_type;
-        typedef typename M::simd_category simd_category;
+        typedef abstract_tag simd_category;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
@@ -541,7 +541,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const M const_matrix_type;
         typedef M matrix_type;
-        typedef typename M::simd_category simd_category;
+        typedef abstract_tag simd_category;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
@@ -1047,7 +1047,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const M const_matrix_type;
         typedef M matrix_type;
-        typedef typename M::simd_category simd_category;
+        typedef abstract_tag simd_category;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
@@ -1541,7 +1541,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const M const_matrix_type;
         typedef M matrix_type;
-        typedef typename M::simd_category simd_category;
+        typedef abstract_tag simd_category;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
         typedef typename M::value_type value_type;
