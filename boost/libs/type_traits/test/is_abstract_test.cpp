@@ -255,7 +255,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TestAD&>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TestAE&>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TestAF&>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TestAG&>::value), false);
-
+#if !(defined(BOOST_MSVC) && (BOOST_MSVC < 1310))
+// MSVC prior to VC7.1 always runs out of swap space trying to
+// compile these, so leave them out for now (the test fails anyway).
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TTestA<int> >::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TTestB<int> >::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TTestC<int> >::value), true);
@@ -425,6 +427,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TTestAD<int>& >::value), false)
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TTestAE<int>& >::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TTestAF<int>& >::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_abstract<TTestAG<int>& >::value), false);
+#endif
 TT_TEST_END
 
 

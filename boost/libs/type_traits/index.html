@@ -358,9 +358,16 @@
             <TD vAlign="top" bgColor="#c0c0c0"><code>::boost::is_abstract&lt;T&gt;::value</code></TD>
             <TD vAlign="top" bgColor="#c0c0c0">Evaluates true only if T is abstract class.</TD>
             <TD vAlign="top" bgColor="#c0c0c0">10.3</TD>
-            <TD vAlign="top" bgColor="#c0c0c0">Compiler must support DR337 (as Jan 2004: GCC 
-               3.4,<BR>
-               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VC++ 7.1, Intel C++ 7, Comeau 4.3.2).</TD>
+            <TD vAlign="top" bgColor="#c0c0c0">
+               <P>Compiler must support DR337 (as Jan 2004: GCC 3.4, VC++ 7.1, Intel C++ 7, and 
+                  Comeau 4.3.2).</P>
+               <P>Otherwise produces the same value as is_polymorphic&lt;T&gt;::value; this is 
+                  the&nbsp;"safe fallback position" for which&nbsp;polymorphic types&nbsp;are 
+                  always regarded as potentially abstract.</P>
+               <P>The macro BOOST_NO_IS_ABSTRACT is used to signify that the implemention is 
+                  buggy, users should check for this in their own code if the "safe fallback" is 
+                  not suitable for their particular use-case.</P>
+            </TD>
             <TD vAlign="top" width="5%"></TD>
          </TR>
          <tr>
