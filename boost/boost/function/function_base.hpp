@@ -278,25 +278,6 @@ namespace boost {
                            detail::function::any_pointer, 
                            detail::function::functor_manager_operation_type);
     detail::function::any_pointer functor;
-
-#if (defined __SUNPRO_CC) && (__SUNPRO_CC <= 0x530) && !(defined BOOST_NO_COMPILER_CONFIG)
-    // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
-    operator bool () const { return !this->empty(); }
-#else
-  private:
-    struct dummy {
-      void nonnull() {};
-    };
-
-    typedef void (dummy::*safe_bool)();
-
-  public:
-    operator safe_bool () const 
-      { return (this->empty())? 0 : &dummy::nonnull; }
-
-    safe_bool operator!() const
-      { return (this->empty())? &dummy::nonnull : 0; }
-#endif
   };
 
   /* Poison comparison between Boost.Function objects (because it is 
