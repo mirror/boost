@@ -7,6 +7,10 @@
 
 __ ../../../index.htm
 
+
+-------------------------------------
+
+
 :Authors:       David Abrahams, Jeremy Siek, Thomas Witt
 :Contact:       dave@boost-consulting.com, jsiek@osl.iu.edu, witt@ive.uni-hannover.de
 :organizations: `Boost Consulting`_, Indiana University `Open Systems
@@ -34,6 +38,10 @@ __ ../../../index.htm
 .. _concepts: ../../more/generic_programming.html
 
 .. contents:: **Table of Contents**
+
+
+-------------------------------------
+
 
 =====================
  New-Style Iterators
