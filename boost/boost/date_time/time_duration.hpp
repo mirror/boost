@@ -6,11 +6,18 @@
  */
 
 #include "boost/operators.hpp"
-#include "boost/date_time/compiler_config.hpp"
 #include "boost/date_time/time_defs.hpp"
 
 namespace boost {
 namespace date_time {
+
+  //! Simple function to calculate absolute value of a numeric type
+  template <typename T> // JDG [7/6/02 made a template]
+  inline T absolute_value(T x)
+  {
+    return x < 0 ? -x : x;
+  }
+
   
   //! Represents some amount of elapsed time measure to a given resolution
   /*! This class represents a standard set of capabilities for all
@@ -64,17 +71,17 @@ namespace date_time {
     //! Returns normalized number of minutes
     min_type minutes() const
     {
-      return std::abs(((ticks() / (60*rep_type::res_adjust())) % 60));
+      return absolute_value(((ticks() / (60*rep_type::res_adjust())) % 60));
     }
     //! Returns normalized number of seconds
     sec_type seconds() const
     {
-      return std::abs((ticks()/rep_type::res_adjust()) % 60);
+      return absolute_value((ticks()/rep_type::res_adjust()) % 60);
     }
     //! Returns count of fractional seconds at given resolution
     fractional_seconds_type fractional_seconds() const
     {
-      return std::abs((ticks()%rep_type::res_adjust()));
+      return absolute_value((ticks()%rep_type::res_adjust()));
     }
     //! Returns number of possible digits in fractional seconds
     static unsigned short num_fractional_digits()
