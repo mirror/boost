@@ -19,6 +19,13 @@ struct apply0 : F
  
 };
 
+// workaround for the ETI bug
+template<>
+struct apply0<int>
+{
+    typedef int type;
+};
+
 namespace aux {
 
 template<>
@@ -53,6 +60,13 @@ struct apply1
  };
  class apply1_rebind { public: template< typename U1, typename U2 > struct apply : apply1< U1,U2 > { };
  
+};
+
+// workaround for ETI bug
+template<>
+struct apply1< int,int >
+{
+    typedef int type;
 };
 
 namespace aux {
@@ -92,6 +106,13 @@ struct apply2
  
 };
 
+// workaround for ETI bug
+template<>
+struct apply2< int,int,int >
+{
+    typedef int type;
+};
+
 namespace aux {
 
 template<>
@@ -128,6 +149,13 @@ struct apply3
  };
  class apply3_rebind { public: template< typename U1, typename U2, typename U3, typename U4 > struct apply : apply3< U1,U2,U3,U4 > { };
  
+};
+
+// workaround for ETI bug
+template<>
+struct apply3< int,int,int,int >
+{
+    typedef int type;
 };
 
 namespace aux {
@@ -169,6 +197,13 @@ struct apply4
  
 };
 
+// workaround for ETI bug
+template<>
+struct apply4< int,int,int,int,int >
+{
+    typedef int type;
+};
+
 namespace aux {
 
 template<>
@@ -208,6 +243,13 @@ struct apply5
  };
  class apply5_rebind { public: template< typename U1, typename U2, typename U3, typename U4, typename U5, typename U6 > struct apply : apply5< U1,U2,U3,U4,U5,U6 > { };
  
+};
+
+// workaround for ETI bug
+template<>
+struct apply5< int,int,int,int,int,int >
+{
+    typedef int type;
 };
 
 namespace aux {
