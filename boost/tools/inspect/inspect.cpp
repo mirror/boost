@@ -203,6 +203,14 @@ namespace
 
   void display_summary()
   {
+    std::cout << "</pre>\n"
+            "<h2>Summary</h2>\n"
+            "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
+            "  <tr>\n"
+            "    <td><b>Library</b></td>\n"
+            "    <td><b>Problems</b></td>\n"
+            "  </tr>\n"
+            ;
     string current_library( msgs.begin()->library ); 
     int err_count = 0;
     for ( error_msg_vector::iterator itr ( msgs.begin() );
@@ -217,6 +225,8 @@ namespace
       ++err_count;
     }
     display_summary_helper( current_library, err_count );
+
+    std::cout << "</table>\n";
   }
 
 
@@ -224,6 +234,7 @@ namespace
 
   void display_details()
   {
+    std::cout << "<h2>Details</h2>\n";
 
     // display error messages with group indication
     error_msg current;
@@ -419,8 +430,9 @@ int cpp_main( int argc, char * argv[] )
   std::cout << "<h2>Totals</h2>\n<pre>"
             << file_count << " files scanned\n"
             << directory_count << " directories scanned\n"
-            << error_count << " problems reported\n"
-            << "\nproblem counts:\n";
+            << error_count << " problems reported\n";
+
+  std::cout << "\nproblem counts:\n";
 
   for ( inspector_list::iterator itr = inspectors.begin();
         itr != inspectors.end(); ++itr )
@@ -428,23 +440,13 @@ int cpp_main( int argc, char * argv[] )
     itr->inspector.reset();
   }
 
-  std::cout << "</pre>\n"
-          "<h2>Summary</h2>\n"
-          "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
-          "  <tr>\n"
-          "    <td><b>Library</b></td>\n"
-          "    <td><b>Problems</b></td>\n"
-          "  </tr>\n"
-          ;
-
   std::sort( msgs.begin(), msgs.end() );
 
-  display_summary();
-
-  std::cout << "</table>\n"
-               "<h2>Details</h2>\n";
-
-  display_details();
+  if ( !msgs.empty() )
+  {
+    display_summary();
+    display_details();
+  }
 
   std::cout << "</body>\n"
                "</html>\n";
