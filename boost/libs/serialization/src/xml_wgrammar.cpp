@@ -20,7 +20,8 @@ using namespace boost::spirit;
 
 // fixup for RogueWave
 #include <boost/config.hpp>
-#if defined(_RWSTD_VER) && ! defined(__SGI_STL_PORT)
+#if ! defined(__SGI_STL_PORT) \
+&& defined(BOOST_RWSTD_VER) && BOOST_RWSTD_VER<=0x020101
 #include <string>
 namespace std {
     template<>
