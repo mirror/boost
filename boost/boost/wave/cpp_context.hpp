@@ -190,9 +190,9 @@ protected:
 #endif
     
 // maintain include pathes (helper functions)
-    bool find_include_file (std::string &s, bool is_system, 
+    bool find_include_file (std::string &s, std::string &d, bool is_system, 
         char const *current_file) const
-    { return includes.find_include_file(s, is_system, current_file); }
+    { return includes.find_include_file(s, d, is_system, current_file); }
     void set_current_directory(char const *path_) 
         { includes.set_current_directory(path_); }
     
