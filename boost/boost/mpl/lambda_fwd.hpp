@@ -18,6 +18,7 @@
 #define BOOST_MPL_LAMBDA_FWD_HPP_INCLUDED
 
 #include "boost/mpl/aux_/lambda_arity_param.hpp"
+#include "boost/mpl/aux_/config/lambda.hpp"
 
 namespace boost {
 namespace mpl {
