@@ -1,4 +1,4 @@
-//  smart pointer test program  ----------------------------------------------//
+//  rational number example program  ----------------------------------------//
 
 //  (C) Copyright Paul Moore 1999. Permission to copy, use, modify, sell
 //  and distribute this software is granted provided this copyright notice
@@ -6,21 +6,19 @@
 //  implied warranty, and with no claim as to its suitability for any purpose.
 
 //  Revision History
-//  20 Jan 01  Check BOOST_NO_LIMITS instead of __MINGW32__ where appropriate
-//             (Dave Abrahams)
 //  14 Dec 99  Initial version
 
 #include <iostream>
 #include <cassert>
 #include <cstdlib>
-#include <exception>
-#include <boost/rational.hpp>
 #include <boost/config.hpp>
 #ifndef BOOST_NO_LIMITS
-# include <limits>
+#include <limits>
 #else
-# include <limits.h>
+#include <limits.h>
 #endif
+#include <exception>
+#include <boost/rational.hpp>
 
 using std::cout;
 using std::endl;
