@@ -60,15 +60,14 @@ namespace std {
 // workaround for errors associated with output for date classes 
 // modifications and input streaming for time classes. 
 // Compilers affected are:
-// Borland 551, gcc295 (not stlport), msvc6, mingw, cygwin
-// Any of these compilers *should* work if used with StlPort's streams
-#if ((defined(__GNUC__) && (__GNUC__ < 3)) || \
-     (defined(_MSC_VER) && (_MSC_VER <= 1200)) || \
-     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0564)) ) && \
-     !defined(_STLP_OWN_IOSTREAMS)
+// gcc295, msvc (neither with STLPort), any borland
+// 
+#if (((defined(__GNUC__) && (__GNUC__ < 3)) || \
+      (defined(_MSC_VER) && (_MSC_VER <= 1200)) ) && \
+      !defined(_STLP_OWN_IOSTREAMS) ) || \
+       defined(__BORLANDC__)
 #define BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS
 #endif
-
 
 /* The following handles the definition of the necessary macros
  * for dll building on Win32 platforms.
