@@ -291,7 +291,7 @@ lambda_functor<
 > 
 make_void(const Arg1& a1) { 
 return 
-    lambda_functor_base<do_nothing_action, null_type>(null_type());
+    lambda_functor_base<do_nothing_action, null_type>();
 }
 
 // std_functor -----------------------------------------------------
