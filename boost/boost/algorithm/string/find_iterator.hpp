@@ -154,7 +154,7 @@ namespace boost {
         /*!
          *    Construct a find iterator to iterate through the specified collection
          */
-         template<typename CollectionT, typename FinderT>
+        template<typename CollectionT, typename FinderT>
         inline find_iterator< 
             BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
         make_find_iterator(
@@ -304,7 +304,7 @@ namespace boost {
         /*!
          *    Construct a split iterator to iterate through the specified collection
          */
-         template<typename CollectionT, typename FinderT>
+        template<typename CollectionT, typename FinderT>
         inline split_iterator< 
             BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
         make_split_iterator(
