@@ -37,7 +37,7 @@ namespace boost {
       template<bool> struct truth {};
 
       /*
-       * The IF implementation is temporary code. When a Boost metaprogramming
+       * The ct_if implementation is temporary code. When a Boost metaprogramming
        * library is introduced, Boost.Function will use it instead. 
        */
       namespace intimate {
@@ -73,7 +73,7 @@ namespace boost {
       } // end namespace intimate 
  
       template<bool Condition, typename Then, typename Else>
-      struct IF
+      struct ct_if
       {
         typedef typename intimate::Selector<Condition>::type select;
         typedef typename select::template Result<Then,Else>::type type;
@@ -137,20 +137,20 @@ namespace boost {
       template<typename F>
       class get_function_tag
       {
-        typedef typename IF<(is_pointer<F>::value),
+        typedef typename ct_if<(is_pointer<F>::value),
                             function_ptr_tag,
                             function_obj_tag>::type ptr_or_obj_tag;
 
-        typedef typename IF<(is_member_pointer<F>::value),
+        typedef typename ct_if<(is_member_pointer<F>::value),
                             member_ptr_tag,
                             ptr_or_obj_tag>::type ptr_or_obj_or_mem_tag;
 
-        typedef typename IF<(is_reference_wrapper<F>::value),
+        typedef typename ct_if<(is_reference_wrapper<F>::value),
                              function_obj_ref_tag,
                              ptr_or_obj_or_mem_tag>::type or_ref_tag;
 
       public:
-        typedef typename IF<(is_stateless<F>::value),
+        typedef typename ct_if<(is_stateless<F>::value),
                             stateless_function_obj_tag,
                             or_ref_tag>::type type;
       };
