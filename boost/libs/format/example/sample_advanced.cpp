@@ -1,17 +1,14 @@
-// -*- C++ -*-
-//  Boost general library 'format'  ---------------------------
-//  See http://www.boost.org for updates, documentation, and revision history.
-
-//  (C) Samuel Krempp 2001
-//                  krempp@crans.ens-cachan.fr
-//  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
-
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // sample_advanced.cc :  examples of adanced usage of format 
-// ------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+//  Copyright Samuel Krempp 2003. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/format for library home page
+
+// ----------------------------------------------------------------------------
 
 #include <iostream>
 #include <iomanip>
@@ -24,7 +21,7 @@ namespace MyNS_ForOutput {
   using std::string;
   using std::endl; using std::flush;
 
-  using boost::format; using boost::io::str;
+  using boost::format;
   using boost::io::group;
 }
 
@@ -44,9 +41,6 @@ int main(){
     using namespace MyNS_Manips;
 
     std::string s;
-    std::stringstream oss;
-
-
 
     //------------------------------------------------------------------------
     // storing the parsed format-string in a 'formatter' : 
@@ -94,7 +88,7 @@ int main(){
     
     // bind one of the argumets :
     fmter.bind_arg(1, 18);
-    cout << fmter % group(hex, showbase, 20) % 30;        // %2 is 20, and 20 == 0x14
+    cout << fmter % group(hex, showbase, 20) % 30;  // %2 is 20, and 20 == 0x14
     //          prints  "18 0x14 30  _0x14 18 \n"
     
     
@@ -112,12 +106,12 @@ int main(){
       cout <<  exc.what() << "***Dont worry, that was planned\n";
     }
 
-    // clear() clears regular arguments, but not bound arguments :
+    // clear regular arguments, but not bound arguments :
     fmter.clear();
     cout << fmter % 2 % 3;
     //          prints "77 2 3 0x2 77 \n"
 
-    // use clear_binds() to clear both regular AND bound arguments :
+    // clear_binds() clears both regular AND bound arguments :
     fmter.clear_binds(); 
     cout << fmter % 1 % 2 % 3;
     //          prints  "1 2 3 0x2 1 \n"

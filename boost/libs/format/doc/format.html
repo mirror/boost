@@ -319,6 +319,11 @@ Each of those fields are explained one by one in the following list :
 	    <td>N/A (applied later on the string)<br>
 	      Inexistent in printf <i>(added feature)</i></td> 
 </tr>
+<tr> 
+	    <td><b>'_'</b></td> <td>internal alignment</td> 
+	    <td>sets internal alignment<br>
+	      Inexistent in printf <i>(added feature)</i></td> 
+</tr>
 <tr> <td><b>'+'</b></td> <td>show sign even for positive numbers</td> 
 	    <td>sets <i>showpos</i></td> 
 </tr>
@@ -446,7 +451,7 @@ Also, printf 'l', 'L',  or 'h' modifiers (to indicate wide, long or short types)
 <h3>new format-specifications</h3>
 <a name="new_directives">
 <ul>
-<li> as stated in the flags table, a centered alignment flag ' <i>=</i> '  was added.
+<li> as stated in the flags table, centered and internal alignment flags (' <i>=</i> ', and ' <i>_</i> ')  were added.
 </li>
 <li> <i><b>%{</b>n</i><b>t}</b> , where <i>n</i> is a positive number, 
         inserts an <i>absolute tabulation</i>.

@@ -25,7 +25,7 @@ namespace MyNS_ForOutput {
   using std::string;
   using std::endl; using std::flush;
 
-  using boost::format; using boost::io::str;
+  using boost::format;
   using boost::io::group;
 }
 

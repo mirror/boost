@@ -97,32 +97,58 @@ static int NTests = 300000;
 //static std::stringstream nullStream;
 static NulStream nullStream;
 static double tstream, tpf;
-static const std::string fstring="%3$#x %1$20.10E %2$g %3$d \n";//"point number %03d : x=%1$20.10E, v=%1$20.10E,  (%s) \n"
+//static const std::string fstring="%3$#x %1$20.10E %2$g %3$d \n";
+static const std::string fstring="%3$0#6x %1$20.10E %2$g %3$0+5d \n";
 static const double     arg1=45.23;
 static const double     arg2=12.34;
 static const int        arg3=23;
-static const std::string res = "0x17     4.5230000000E+01 12.34 23 \n";
+static const std::string res = 
+"0x0017     4.5230000000E+01 12.34 +0023 \n";
 //static const std::string res = "23.0000     4.5230000000E+01 12.34 23 \n";
-
 void test_snprintf();
 void test_nullstream();
-void test_stored_format();
+void test_opti_nullstream();
+void test_parsed_once_format();
+void test_reused_format();
 void test_format();
+void test_try1();
+void test_try2();
 
 #ifdef knelson
 void test_format3();
 #endif
 
-int main(){
+int main(int argc, char * argv[]) {
     using namespace boost;
     using namespace std;
+    const string::size_type  npos = string::npos;
 
-    test_snprintf();
-    test_nullstream();
-    test_stored_format();
-    test_format();
+    string choices="";
+    if(1<argc) {
+      choices = (argv[1]); // profiling is easier launching only one.
+      NTests = 1000*1000;  // andmoreprecise with many iterations
+      cout << "choices (" << choices << ") \n";
+    }
+
+    if(choices=="" || choices.find('p') !=npos)
+      test_snprintf();
+    if(choices=="" || choices.find('n') !=npos)
+      test_nullstream();
+    if(choices=="" || choices.find('1') !=npos)
+      test_parsed_once_format();
+    if(choices=="" || choices.find('r') !=npos)
+      test_reused_format();
+    if(choices=="" || choices.find('f') !=npos)
+      test_format();
+    if(choices.find('t') !=npos)
+      test_try1();
+    if(choices.find('y') !=npos)
+      test_try2();
+    if(choices.find('o') !=npos)
+      test_opti_nullstream();
 #ifdef knelson
-    //    test_format3();
+    if(choices=="" || choices.find('k') !=npos)
+      test_format3();
 #endif
     return 0;
 }
@@ -147,47 +173,141 @@ void test_snprintf()
     cout  << left << setw(20) <<"printf time"<< right <<":" << tpf  << endl;
 }
 
+void test_try1()
+{
+  using namespace std;
+  boost::io::outsstream oss;
+  oss << boost::format(fstring) % arg1 % arg2 % arg3;
+  boost::timer chrono;
+  int dummy=0;
+  for(int i=0; i<NTests; ++i) {
+      dummy += oss.cur_str().size();
+  }
+  double t = chrono.elapsed();
+  cout  << left << setw(20) <<"try1 time"<< right <<":" << setw(5) << t
+        << ",  = " << t / tpf << " * printf "
+        << ",  = " << t / tstream << " * nullStream \n";
+}
+
+void test_try2()
+{
+  using namespace std;
+  boost::io::outsstream oss;
+  oss << boost::format(fstring) % arg1 % arg2 % arg3;
+  oss << "blas 34567890GGGGGGGGGGGGGGGGGGGGGGGGGGGGggggggggggggggggggggggggggg " << endl;
+  string s = oss.cur_str();
+  oss << s << s << s;
+  oss.clear_buffer();
+  oss << s << s;
+  s = oss.cur_str();
+  boost::timer chrono;
+  int dummy=0;
+  for(int i=0; i<NTests; ++i) {
+      dummy += oss.cur_size();
+  }
+  double t = chrono.elapsed();
+  cout  << left << setw(20) <<"try2 time"<< right <<":" << setw(5) << t
+        << ",  = " << t / tpf << " * printf "
+        << ",  = " << t / tstream << " * nullStream \n";
+}
+
+void do_stream(std::ostream& os) {
+    using namespace std;
+    std::ios_base::fmtflags f = os.flags();
+    os << hex << showbase << internal << setfill('0') << setw(6) << arg3
+       << dec << noshowbase << right << setfill(' ') 
+       << " " 
+       << scientific << setw(20) << setprecision(10) << uppercase << arg1 
+       << setprecision(6) << nouppercase ;
+    os.flags(f);
+    os << " " << arg2 << " " 
+       << showpos << setw(5) << internal << setfill('0') << arg3 << " \n" ;
+    os.flags(f);
+}
+
 void test_nullstream()
 {
     using namespace std;
     boost::timer chrono;
-    stringstream oss;
-    //static const std::string fstring="%3$#x %1$20.10E %2$g %3$d \n";
+    boost::io::outsstream oss;
 
-    std::ios_base::fmtflags f = std::ios_base::floatfield;
-    oss << hex << showbase << arg3
-         << dec << noshowbase << " " 
-         << scientific << setw(20) << setprecision(10) << uppercase << arg1 
-         << setprecision(0) << nouppercase ;
-    oss.unsetf( f);
-    oss << " " << arg2 << " " << arg3 << " \n" ;
-    
-    if(oss.str() != res ) {
-      cerr << endl << oss.str() ;
+    {   
+        do_stream(oss);
+        if(oss.str() != res ) {
+            cerr << endl << oss.str() ;
+        }
     }
-
 
     for(int i=0; i<NTests; ++i) { 
-      nullStream << hex << showbase << arg3
-                 << dec << noshowbase << " " 
-                 << scientific << setw(20) << setprecision(10) << uppercase <<  arg1 
-                 << setprecision(6) << nouppercase;
-      nullStream.unsetf( f);
-      nullStream << " " << arg2 << " " << arg3 << " \n" ;
-
+        do_stream(nullStream);
     }
+
+//     for(int i=0; i<NTests; ++i) { 
+//       std::ios_base::fmtflags f0 = nullStream.flags();
+//       nullStream << hex << showbase << arg3
+//                  << dec << noshowbase << " " 
+//                  << scientific << setw(20) << setprecision(10) << uppercase <<  arg1 
+//                  << setprecision(0);
+//       nullStream.flags(f0);
+//       nullStream << " " << arg2 << " " << arg3 << " \n" ;
+
+//     }
     double t = chrono.elapsed();
     cout  << left << setw(20) <<"ostream time"<< right <<":" << setw(5) << t  
           << ",  = " << t / tpf << " * printf \n";
     tstream = t;
 }
 
-void test_stored_format()
+void test_opti_nullstream()
 {
     using namespace std;
-    boost::format fmter = boost::format(fstring.c_str());
+    boost::timer chrono;
+    boost::io::outsstream oss;
+    //static const std::string fstring="%3$#x %1$20.10E %2$g %3$d \n";
 
-    stringstream oss;
+    std::ios_base::fmtflags f0 = oss.flags(), f1, f2;
+    streamsize p0 = oss.precision();
+    {
+      oss << hex << showbase; 
+      f1 = oss.flags();
+      oss << arg3;
+
+      oss.flags(f0);
+      oss << " " << scientific << setw(20) << setprecision(10) << uppercase;
+      f2 = oss.flags();
+      oss << arg1;
+
+      oss.flags(f0); oss.precision(p0);
+      oss << " " << arg2 << " " << arg3 << " \n" ;
+    
+      if(oss.str() != res ) {
+        cerr << endl << oss.str() ;
+      }
+    }
+
+    for(int i=0; i<NTests; ++i) { 
+      nullStream.flags(f1);
+      nullStream << arg3;
+
+      nullStream << setw(20) << setprecision(10);
+      nullStream.flags(f2);
+      nullStream << arg1;
+
+      nullStream.flags(f0); nullStream.precision(p0);
+      nullStream << " " << arg2 << " " << arg3 << " \n" ;
+    }
+    double t = chrono.elapsed();
+    cout  << left << setw(20) <<"opti-stream time"<< right <<":" << setw(5) << t  
+          << ",  = " << t / tpf << " * printf \n";
+    //    tstream = t;
+}
+
+void test_parsed_once_format()
+{
+    using namespace std;
+    boost::format fmter = boost::format(fstring);
+
+    boost::io::outsstream oss;
     oss << fmter % arg1 % arg2 % arg3 ;
     if( oss.str() != res ) {
       cerr << endl << oss.str();
@@ -201,33 +321,56 @@ void test_stored_format()
       nullStream << fmter % arg1 % arg2 % arg3;
     }
     double t=chrono.elapsed();
-    cout  << left << setw(20) <<"stored format time"<< right <<":" << setw(5) << t 
-          << ",  = " << t / tstream << " * stream \n";
+    cout  << left << setw(20) <<"parsed-once time"<< right <<":" << setw(5) << t 
+          << ",  = " << t / tpf << " * printf "
+          << ",  = " << t / tstream << " * nullStream \n";
+}
+
+void test_reused_format()
+{
+  using namespace std;
+  boost::io::outsstream oss;
+  oss << boost::format(fstring) % arg1 % arg2 % arg3;
+  if(oss.str() != res ) {
+    cerr << endl << oss.str();
+  }
+
+  boost::timer chrono;
+  boost::format fmter;
+  for(int i=0; i<NTests; ++i) {
+    nullStream << fmter.parse(fstring) % arg1 % arg2 % arg3;
+  }
+  double t = chrono.elapsed();
+  cout  << left << setw(20) <<"reused format time"<< right <<":" << setw(5) << t
+        << ",  = " << t / tpf << " * printf "
+        << ",  = " << t / tstream << " * nullStream \n";
 }
 
 void test_format()
 {
   using namespace std;
-  stringstream oss;
-  oss << boost::format(fstring.c_str()) % arg1 % arg2 % arg3;
+  boost::io::outsstream oss;
+  oss << boost::format(fstring) % arg1 % arg2 % arg3;
   if(oss.str() != res ) {
     cerr << endl << oss.str();
   }
 
   boost::timer chrono;
   for(int i=0; i<NTests; ++i) {
-    nullStream << boost::format(fstring.c_str()) % arg1 % arg2 % arg3;
+    nullStream << boost::format(fstring) % arg1 % arg2 % arg3;
   }
   double t = chrono.elapsed();
   cout  << left << setw(20) <<"format time"<< right <<":" << setw(5) << t
-        << ",  = " << t / tstream << " * stream \n";
+        << ",  = " << t / tpf << " * printf "
+        << ",  = " << t / tstream << " * nullStream \n";
 }
+
  
 #ifdef knelson
 void test_format3()
 {
   using namespace std;
-  stringstream oss;
+  boost::io::outsstream oss;
   oss << KNelson::boost::format(fstring.c_str(), arg1, arg2, arg3);
   if(oss.str() != res ) {
     cerr << endl << oss.str();
@@ -239,7 +382,8 @@ void test_format3()
   }
   double t = chrono.elapsed();
   cout  << left << setw(20) <<"format3 time"<< right <<":" << setw(5) << t
-        << ",  = " << t / tstream << " * stream \n";
+        << ",  = " << t / tpf << " * printf "
+        << ",  = " << t / tstream << " * nullStream \n" ;
 }
  
 #endif
