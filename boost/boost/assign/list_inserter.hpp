@@ -38,9 +38,6 @@ namespace assign_detail
         std::size_t  sz;
         T            val;
 
-        repeater( const repeater& r ) : sz( r.sz ), val( r.val )
-        { }
-        
         repeater( std::size_t sz, T r ) : sz( sz ), val( r )
         { }
     };
@@ -51,9 +48,6 @@ namespace assign_detail
         std::size_t  sz;
         Fun          val;
         
-        fun_repeater( const fun_repeater& r ) : sz( r.sz ), val( r.val )
-        { }
-
         fun_repeater( std::size_t sz, Fun r ) : sz( sz ), val( r )
         { }
     };
@@ -63,9 +57,6 @@ namespace assign_detail
     {
         C& c_;
     public:
-        call_push_back( const call_push_back& r ) : c_( r.c_ )
-        { }
-
         call_push_back( C& c ) : c_( c )
         { }
         
@@ -81,9 +72,6 @@ namespace assign_detail
     {
         C& c_;
     public:
-        call_push_front( const call_push_front& r ) : c_( r.c_ )
-        { }
-
         call_push_front( C& c ) : c_( c )
         { }
         
@@ -99,9 +87,6 @@ namespace assign_detail
     {
         C& c_;
     public:
-        call_push( const call_push& r ) : c_( r.c_ )
-        { }
-            
         call_push( C& c ) : c_( c )
         { }
     
@@ -117,9 +102,6 @@ namespace assign_detail
     {
         C& c_;
     public:
-        call_insert( const call_insert& r ) : c_( r.c_ )
-        { }
-
         call_insert( C& c ) : c_( c )
         { }
     
@@ -130,6 +112,28 @@ namespace assign_detail
         }
     };
 
+    template< class C >
+    class call_add_edge
+    {
+        C& c_;
+    public:
+        call_add_edge( C& c ) : c_(c)
+        { }
+
+        template< class T >
+        void operator()( T l, T r )
+        {
+            add_edge( l, r, c_ );
+        }
+
+        template< class T, class EP >
+        void operator()( T l, T r, const EP& ep )
+        {
+            add_edge( l, r, ep, c_ );
+        }
+
+    };
+    
     struct forward_n_arguments {};
     
 } // namespace 'assign_detail'
@@ -362,6 +366,13 @@ namespace assign
         static BOOST_DEDUCED_TYPENAME C::value_type* p = 0;
         return make_list_inserter( assign_detail::call_push<C>( c ),
                                    p );
+    }
+
+    template< class C >
+    inline list_inserter< assign_detail::call_add_edge<C> >
+    add_edge( C& c )   
+    {
+        return make_list_inserter( assign_detail::call_add_edge<C>( c ) );
     }
     
 } // namespace 'assign'

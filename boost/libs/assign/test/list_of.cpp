@@ -65,7 +65,7 @@ void test_sequence_list_of_int()
 #if BOOST_WORKAROUND(BOOST_MSVC, <=1300)
 
     const C c = ba::list_of<int>(1)(2)(3)(4).to_container( c );
-    const C c2 = (ba::list_of(1),2,3,4).to_container( c2 );
+    const C c2 = ba::list_of(1)(2)(3)(4).to_container( c2 );
     BOOST_CHECK_EQUAL( c.size(), 4u );
     BOOST_CHECK_EQUAL( c2.size(), 4u );
     C c3 = ba::list_of(1).repeat( 1, 2 )(3).to_container( c3 );
@@ -77,7 +77,7 @@ void test_sequence_list_of_int()
 #else
 
     const C c = ba::list_of<int>(1)(2)(3)(4);
-    const C c2 = (ba::list_of(1),2,3,4);
+    const C c2 = ba::list_of(1)(2)(3)(4);
     BOOST_CHECK_EQUAL( c.size(), 4u );
     BOOST_CHECK_EQUAL( c2.size(), 4u );
     C c3 = ba::list_of(1).repeat( 1, 2 )(3);

@@ -144,13 +144,6 @@ namespace assign_detail
 
         
         template< class U >
-        generic_list& operator,( U u )
-        {
-            this->push_back( u );
-            return *this;
-        }
-        
-        template< class U >
         generic_list& repeat( std::size_t sz, U u )
         {
             std::size_t i = 0;
@@ -313,6 +306,13 @@ namespace assign
     map_list_of( Key k, T t )
     {
         return assign_detail::generic_list< std::pair<Key,T> >()( k, t );
+    }
+
+    template< class F, class S >
+    inline assign_detail::generic_list< std::pair<F,S> >
+    pair_list_of( F f, S s )
+    {
+        return assign_detail::generic_list< std::pair<F,S> >()( f, s );
     }
 
 

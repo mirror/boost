@@ -35,25 +35,25 @@ void check_array()
 
 
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))   
-    Array a = (list_of(1),2,3,4,5,6).to_array(a);
+    Array a = list_of(1)(2)(3)(4)(5)(6).to_array(a);
 #else
-    Array a = (list_of(1),2,3,4,5,6);
+    Array a = list_of(1)(2)(3)(4)(5)(6);
 #endif
 
     BOOST_CHECK_EQUAL( a[0], 1 );
     BOOST_CHECK_EQUAL( a[5], 6 );
     // last element is implicitly 0
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    Array a2 = (list_of(1),2,3,4,5).to_array(a2);
+    Array a2 = list_of(1)(2)(3)(4)(5).to_array(a2);
 #else
-    Array a2 = (list_of(1),2,3,4,5);
+    Array a2 = list_of(1)(2)(3)(4)(5);
 #endif 
     BOOST_CHECK_EQUAL( a2[5], 0 );
     // two last elements are implicitly
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))   
-    a2 = (list_of(1),2,3,4).to_array(a2);
+    a2 = list_of(1))(2)(3)(4).to_array(a2);
 #else    
-    a2 = (list_of(1),2,3,4);
+    a2 = list_of(1)(2)(3)(4);
 #endif    
     BOOST_CHECK_EQUAL( a2[4], 0 );
     BOOST_CHECK_EQUAL( a2[5], 0 );
