@@ -18,6 +18,7 @@
 #include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 
 #ifdef BOOST_NO_STRINGSTREAM
@@ -186,7 +187,7 @@ namespace boost
         Target result;
 
         if(!(interpreter << arg && interpreter >> result))
-            throw bad_lexical_cast(typeid(Target), typeid(Source));
+            throw_exception(detail::no_lexical_conversion<Target, Source>());
         return result;
     }
 }
@@ -201,3 +202,4 @@ namespace boost
 
 #undef DISABLE_WIDE_CHAR_SUPPORT
 #endif
+
