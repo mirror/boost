@@ -39,7 +39,7 @@ namespace date_time {
     unsigned i = 0;
 #if defined(BOOST_NO_STD_LOCALE)
     while(i < inp.length()) {
-      tmp += static_cast<char>(tolower(inp.at(i++)));
+      tmp += static_cast<char>(std::tolower(inp.at(i++)));
 #else
       std::locale loc("");
       while(i < inp.length()) {
