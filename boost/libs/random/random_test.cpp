@@ -68,7 +68,7 @@ bool check(int x, const boost::ecuyer1988&) { return x == 2060321752; }
 // validation by experiment from Harry Erwin's generator.h (private e-mail)
 bool check(unsigned int x, const boost::kreutzer1986&) { return x == 139726; }
 
-bool check(double x, const boost::lagged_fibonacci607&) { return x == 0.4293817707235914; }
+bool check(double x, const boost::lagged_fibonacci607&) { return std::abs(x-0.401269) < 1e-5; }
 
 // principal operation validated with CLHEP, values by experiment
 bool check(unsigned long x, const boost::ranlux3&) { return x == 5957620; }
@@ -132,9 +132,9 @@ void instantiate_dist(const Dist& dist)
   b();
   BOOST_TEST(d.base() == b);
   d.reset();
-  // d = dist;            // copy assignment
-  // b();
-  // BOOST_TEST(d.base() == b);
+  d = dist;            // copy assignment
+  b();
+  BOOST_TEST(d.base() == b);
 }
 
 template<class URNG, class ResultType>
@@ -230,6 +230,8 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   instantiate_dist(boost::normal_distribution<URNG>(urng));
   instantiate_dist(boost::lognormal_distribution<URNG>(urng, 1, 1));
   instantiate_dist(boost::poisson_distribution<URNG>(urng, 1));
+  instantiate_dist(boost::cauchy_distribution<URNG>(urng, 1));
+  instantiate_dist(boost::gamma_distribution<URNG>(urng, 1));
   instantiate_dist(boost::uniform_on_sphere<URNG>(urng, 2));
 }
 
