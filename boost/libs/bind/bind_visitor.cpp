@@ -6,9 +6,9 @@
 #endif
 
 //
-//  bind_test_2.cpp - tests bind.hpp with function objects
+//  bind_visitor.cpp - tests bind.hpp with a visitor
 //
-//  Version 1.00.0005 (2001-07-13)
+//  Version 1.00.0003 (2001-10-18)
 //
 //  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
 //
@@ -21,20 +21,49 @@
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 #include <iostream>
+#include <typeinfo>
 
-struct X
+int hash = 0;
+
+struct ref_visitor
 {
-    short operator()(short & r) const { return ++r; }
-    int operator()(int a, int b) const { return a + 10 * b; }
-    long operator() (long a, long b, long c) const { return a + 10 * b + 100 * c; }
+    template<class R, class F, class L> void operator()(boost::_bi::bind_t<R, F, L> const & b) const
+    {
+        b.accept(*this);
+    }
+
+    template<class T> void operator()(boost::reference_wrapper<T> const & r) const
+    {
+        std::cout << "Reference to " << typeid(T).name() << " @ " << &r.get() << " (with value " << r.get() << ")\n";
+        hash += r.get();
+    }
+
+#ifndef BOOST_MSVC
+
+    template<class T> void operator()(T const &) const
+    {
+        std::cout << "Catch-all: " << typeid(T).name() << '\n';
+    }
+
+#else
+
+    void operator()(...) const
+    {
+    }
+
+#endif
+
 };
 
-unsigned long hash = 0;
-
-template<class F> void test(F f, int const i)
+int f(int & i, int & j)
 {
-    hash = (hash * 17041 + f(i)) % 32768;
+    ++i;
+    --j;
+    return i + j;
 }
+
+int x = 2;
+int y = 7;
 
 int detect_errors(bool x)
 {
@@ -54,12 +83,7 @@ int main()
 {
     using namespace boost;
 
-    short i(6);
+    ref_visitor()(bind<int>(bind(f, ref(x), _1), ref(y)));
 
-    test(bind<short>(X(), ref(i)), 1);
-    test(bind<short>(X(), ref(i)), 2);
-    test(bind<int>(X(), i, _1), 3);
-    test(bind<long>(X(), i, _1, 9), 4);
-
-    return detect_errors(hash == 24857);
+    return detect_errors(hash == 9);
 }
