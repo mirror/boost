@@ -1036,15 +1036,13 @@ provide rather than how they're implemented.
           typedef Difference difference_type;
     
       if (CategoryOrTraversal is use_default)
-          typedef |iterator-category|_\ (
+          typedef |iterator-category|\ (
               iterator_traversal<Iterator>::type,``reference``,``value_type``
           ) iterator_category;
       else
-          typedef |iterator-category|_\ (
+          typedef |iterator-category|\ (
               CategoryOrTraversal,``reference``,``value_type``
           ) iterator_category;
-
-
 
 
   Change::
@@ -1195,6 +1193,7 @@ provide rather than how they're implemented.
     :Returns: ``*this``
   
 
+.. |iterator-category| replace:: *iterator-category*
 
 
 
@@ -1447,6 +1446,22 @@ specification
 
    :Proposed resolution: add "from" before "making"
 
-9.46y N1530: ``base()``
-=====================================================
+9.46y N1530: ``base()`` return-by-value is costly
+=================================================
+
+:Submitter: Dave Abrahams
+
+We've had some real-life reports that iterators that use
+``iterator_adaptor``\ 's ``base()`` function can be inefficient
+when the ``Base`` iterator is expensive to copy.  Iterators, of
+all things, should be efficient.
+
+:Proposed resolution: 
+   Change::
+
+      Base base() const;
+
+   to::
+
+      Base const const& base() const;
 
