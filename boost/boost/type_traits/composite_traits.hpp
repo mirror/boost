@@ -372,24 +372,48 @@ public:
  * is_enum
  *
  **********************************************/
-namespace detail{
-struct int_convertible
+namespace detail
 {
-   int_convertible(int);
-};
+  struct int_convertible
+  {
+      int_convertible(int);
+  };
+
+  // Don't evaluate convertibility to int_convertible unless the type
+  // is non-arithmetic. This suppresses warnings with GCC.
+  template <bool arithmetic_or_reference>
+  struct is_enum_helper
+  {
+      template <class T>
+      struct type
+      {
+          BOOST_STATIC_CONSTANT(bool, value = false);
+      };
+  };
+
+  template <>
+  struct is_enum_helper<false>
+  {
+      template <class T> 
+      struct type
+          : ::boost::is_convertible<T,::boost::detail::int_convertible>
+      {
+      };
+  };
 } // namespace detail
 #ifndef __BORLANDC__
 template <typename T> struct is_enum
 {
 private:
    typedef typename ::boost::add_reference<T>::type r_type;
-public:
-   BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_and<
-         ::boost::type_traits::ice_not< ::boost::is_arithmetic<T>::value>::value,
-         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
-         ::boost::is_convertible<r_type, detail::int_convertible>::value
+   BOOST_STATIC_CONSTANT(bool, selector =
+      (::boost::type_traits::ice_or<
+         ::boost::is_arithmetic<T>::value
+         , ::boost::is_reference<T>::value
       >::value));
+    typedef typename ::boost::detail::is_enum_helper<selector>::template type<r_type> helper;
+public:
+    BOOST_STATIC_CONSTANT(bool, value = helper::value);
 };
 
 // Specializations suppress some nasty warnings with GCC
