@@ -16,11 +16,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <cassert>
 #include <cmath>
 #include <iterator>
 #include <boost/random.hpp>
 #include <boost/config.hpp>
+
+#define BOOST_INCLUDE_MAIN
+#include <boost/test/test_tools.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
   namespace std { using ::fabs; }
@@ -49,15 +51,13 @@ void validate(const std::string & name, const PRNG &)
   for(int i = 0; i < 9999; i++)
     rng();
   typename PRNG::result_type val = rng();
+  // make sure the validation function is a const member
   bool result = const_cast<const PRNG&>(rng).validation(val);
   
   // allow for a simple eyeball check for MSVC instantiation brokenness
   // (if the numbers for all generators are the same, it's obviously broken)
-  std::cout << val << " ";
-  if(!result)
-    std::cout << "validation failed or not possible.\n";
-  else
-    std::cout << "ok\n";
+  std::cout << val << std::endl;
+  BOOST_TEST(result);
 }
 
 void validate_all()
@@ -94,14 +94,14 @@ void instantiate_iterator_interface(Generator & gen)
   std::input_iterator_tag it = iterator_category();
   (void) &it;
 
-  assert(res == *gen++);
-  assert(gen == gen);
+  BOOST_TEST(res == *gen++);
+  BOOST_TEST(gen == gen);
   Generator gen2 = gen;
-  assert(gen == gen2);     // must be equal to a copy
+  BOOST_TEST(gen == gen2);     // must be equal to a copy
 #if 0
   ++gen2;
   // this is only correct for elementary generators, others have ref members
-  assert(gen != gen2);
+  BOOST_TEST(gen != gen2);
 #endif
 }
 
@@ -117,11 +117,11 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   (void) &x2;           // avoid "unused" warning
 
 #ifndef BOOST_MSVC   // MSVC brokenness
-  URNG urng2 = urng;         // copy constructor
-  assert(urng == urng2);     // operator==
+  URNG urng2 = urng;           // copy constructor
+  BOOST_TEST(urng == urng2);   // operator==
   urng();
   urng2 = urng;              // assignment
-  assert(urng == urng2);
+  BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
@@ -138,7 +138,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
     file >> urng;
   }
 #ifndef BOOST_MSVC    // MSVC brokenness
-  assert(urng == urng2);
+  BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE
 
@@ -199,8 +199,8 @@ void instantiate_all()
   
   instantiate_urng("mt11213b", mt11213b(), 0u);
   instantiate_urng("mt19937", mt19937(), 0u);
-  mt19937 mt(17u);      // needs to be an exact type match for MSVC
-  mt.seed(42u);
+  mt19937 mt(boost::uint32_t(17));  // needs to be an exact type match for MSVC
+  mt.seed(boost::uint32_t(42));
   mt19937 mt2(mstd);
   mt2.seed(mstd);
 
@@ -252,8 +252,8 @@ void test_uniform_int(Generator & gen)
 
   // large range => small range (modulo case)
   int_gen uint12(gen,1,2);
-  assert(uint12.min() == 1);
-  assert(uint12.max() == 2);
+  BOOST_TEST(uint12.min() == 1);
+  BOOST_TEST(uint12.max() == 2);
   check_uniform_int(uint12, 100000);
   int_gen uint16(gen,1,6);
   check_uniform_int(uint16, 100000);
@@ -313,7 +313,7 @@ INSTANT(boost::mt11213b)
 
 #endif
 
-int main()
+int test_main(int, char*[])
 {
   instantiate_all();
   validate_all();
