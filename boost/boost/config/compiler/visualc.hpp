@@ -95,6 +95,7 @@
 # endif
 
 #define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
+#undef BOOST_COMPILER_VERSION
 
 //
 // versions check:
