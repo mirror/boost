@@ -333,7 +333,17 @@ public: // structors
     {
     }
 
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
 public: // visitor interfaces
+
+    template <typename T>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    operator()(boost::recursive_wrapper<T>& operand) const
+    {
+        operand.swap( *static_cast< boost::recursive_wrapper<T>* >(toswap_) );
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
 
     template <typename T>
         BOOST_VARIANT_AUX_RETURN_VOID_TYPE
@@ -342,6 +352,34 @@ public: // visitor interfaces
         ::boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
         BOOST_VARIANT_AUX_RETURN_VOID;
     }
+
+#else // defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
+private: // helpers, for visitor interfaces
+
+    template <typename T>
+    void execute(boost::recursive_wrapper<T>& operand, long) const
+    {
+        operand.swap( *static_cast< boost::recursive_wrapper<T>* >(toswap_) );
+    }
+
+    template <typename T>
+    void execute(T& operand, int) const
+    {
+        ::boost::detail::variant::move_swap(operand, *static_cast<T*>(toswap_));
+    }
+
+public: // visitor interfaces
+
+    template <typename T>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    operator()(T& operand) const
+    {
+        execute(operand, 1L);
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING workaround
 
 };
 
