@@ -203,9 +203,9 @@ public:
 
     A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
 
-    template<class T> T & operator[] (value<T> & v) const { return v.get(); }
+    template<class T> T & operator[] ( _bi::value<T> & v ) const { return v.get(); }
 
-    template<class T> T const & operator[] (value<T> const & v) const { return v.get(); }
+    template<class T> T const & operator[] ( _bi::value<T> const & v ) const { return v.get(); }
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
