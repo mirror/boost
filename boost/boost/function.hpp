@@ -39,207 +39,6 @@
 namespace boost {
   namespace detail {
     namespace function {
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      template<typename Signature> 
-      struct function_traits
-      {
-        typedef void result_type;
-        typedef void arg1_type;
-        typedef void arg2_type;
-        typedef void arg3_type;
-        typedef void arg4_type;
-        typedef void arg5_type;
-        typedef void arg6_type;
-        typedef void arg7_type;
-        typedef void arg8_type;
-        typedef void arg9_type;
-        typedef void arg10_type;
-      };
-
-      template<typename R>
-      struct function_traits<R (*)(void)>
-      {
-        typedef R result_type;
-        typedef unusable arg1_type;
-        typedef unusable arg2_type;
-        typedef unusable arg3_type;
-        typedef unusable arg4_type;
-        typedef unusable arg5_type;
-        typedef unusable arg6_type;
-        typedef unusable arg7_type;
-        typedef unusable arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-      
-      template<typename R, typename T1>
-      struct function_traits<R (*)(T1)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef unusable arg2_type;
-        typedef unusable arg3_type;
-        typedef unusable arg4_type;
-        typedef unusable arg5_type;
-        typedef unusable arg6_type;
-        typedef unusable arg7_type;
-        typedef unusable arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-      
-      template<typename R, typename T1, typename T2>
-      struct function_traits<R (*)(T1, T2)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef unusable arg3_type;
-        typedef unusable arg4_type;
-        typedef unusable arg5_type;
-        typedef unusable arg6_type;
-        typedef unusable arg7_type;
-        typedef unusable arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-
-      template<typename R, typename T1, typename T2, typename T3>
-      struct function_traits<R (*)(T1, T2, T3)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef T3 arg3_type;
-        typedef unusable arg4_type;
-        typedef unusable arg5_type;
-        typedef unusable arg6_type;
-        typedef unusable arg7_type;
-        typedef unusable arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4>
-      struct function_traits<R (*)(T1, T2, T3, T4)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef T3 arg3_type;
-        typedef T4 arg4_type;
-        typedef unusable arg5_type;
-        typedef unusable arg6_type;
-        typedef unusable arg7_type;
-        typedef unusable arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4,
-               typename T5>
-      struct function_traits<R (*)(T1, T2, T3, T4, T5)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef T3 arg3_type;
-        typedef T4 arg4_type;
-        typedef T5 arg5_type;
-        typedef unusable arg6_type;
-        typedef unusable arg7_type;
-        typedef unusable arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4,
-               typename T5, typename T6>
-      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef T3 arg3_type;
-        typedef T4 arg4_type;
-        typedef T5 arg5_type;
-        typedef T6 arg6_type;
-        typedef unusable arg7_type;
-        typedef unusable arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4,
-               typename T5, typename T6, typename T7>
-      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef T3 arg3_type;
-        typedef T4 arg4_type;
-        typedef T5 arg5_type;
-        typedef T6 arg6_type;
-        typedef T7 arg7_type;
-        typedef unusable arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4,
-               typename T5, typename T6, typename T7, typename T8>
-      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef T3 arg3_type;
-        typedef T4 arg4_type;
-        typedef T5 arg5_type;
-        typedef T6 arg6_type;
-        typedef T7 arg7_type;
-        typedef T8 arg8_type;
-        typedef unusable arg9_type;
-        typedef unusable arg10_type;
-      };
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4,
-               typename T5, typename T6, typename T7, typename T8, typename T9>
-      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef T3 arg3_type;
-        typedef T4 arg4_type;
-        typedef T5 arg5_type;
-        typedef T6 arg6_type;
-        typedef T7 arg7_type;
-        typedef T8 arg8_type;
-        typedef T9 arg9_type;
-        typedef unusable arg10_type;
-      };
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4,
-               typename T5, typename T6, typename T7, typename T8, typename T9,
-               typename T10>
-      struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
-      {
-        typedef R result_type;
-        typedef T1 arg1_type;
-        typedef T2 arg2_type;
-        typedef T3 arg3_type;
-        typedef T4 arg4_type;
-        typedef T5 arg5_type;
-        typedef T6 arg6_type;
-        typedef T7 arg7_type;
-        typedef T8 arg8_type;
-        typedef T9 arg9_type;
-        typedef T10 arg10_type;
-      };
-#endif
-
       // Choose the appropriate underlying implementation
       template<int Args> struct real_get_function_impl {};
 
@@ -530,6 +329,205 @@ namespace boost {
   	    BOOST_STATIC_CONSTANT(bool, value = !(is_same<T1, T2>::value));
       };
 
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+      template<bool GetIt, typename Traits> 
+      struct get_arg1_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg1_type<true, Traits>
+      {
+        typedef typename Traits::arg1_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg2_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg2_type<true, Traits>
+      {
+        typedef typename Traits::arg2_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg3_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg3_type<true, Traits>
+      {
+        typedef typename Traits::arg3_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg4_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg4_type<true, Traits>
+      {
+        typedef typename Traits::arg4_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg5_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg5_type<true, Traits>
+      {
+        typedef typename Traits::arg5_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg6_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg6_type<true, Traits>
+      {
+        typedef typename Traits::arg6_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg7_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg7_type<true, Traits>
+      {
+        typedef typename Traits::arg7_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg8_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg8_type<true, Traits>
+      {
+        typedef typename Traits::arg8_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg9_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg9_type<true, Traits>
+      {
+        typedef typename Traits::arg9_type type;
+      };
+
+      template<bool GetIt, typename Traits> 
+      struct get_arg10_type
+      {
+        typedef unusable type;
+      };
+
+      template<typename Traits> 
+      struct get_arg10_type<true, Traits>
+      {
+        typedef typename Traits::arg10_type type;
+      };
+
+      template<bool IsFunction,
+               typename InR, 
+               typename InT1, 
+               typename InT2, 
+               typename InT3, 
+               typename InT4,
+               typename InT5, 
+               typename InT6, 
+               typename InT7, 
+               typename InT8, 
+               typename InT9,
+               typename InT10,
+               typename InPolicy,
+               typename InMixin,
+               typename InAllocator>
+      struct maybe_decode_function_args
+      {
+        // Not a function, so just map the types directly
+        typedef InR R;
+        typedef InT1 T1;
+        typedef InT2 T2;
+        typedef InT3 T3;
+        typedef InT4 T4;
+        typedef InT5 T5;
+        typedef InT6 T6;
+        typedef InT7 T7;
+        typedef InT8 T8;
+        typedef InT9 T9;
+        typedef InT10 T10;
+        typedef InPolicy Policy;
+        typedef InMixin Mixin;
+        typedef InAllocator Allocator;
+      };
+
+      template<typename InR, 
+               typename InT1, 
+               typename InT2, 
+               typename InT3, 
+               typename InT4,
+               typename InT5, 
+               typename InT6, 
+               typename InT7, 
+               typename InT8, 
+               typename InT9,
+               typename InT10,
+               typename InPolicy,
+               typename InMixin,
+               typename InAllocator>
+      struct maybe_decode_function_args<true, InR, InT1, InT2, InT3, InT4,
+                                        InT5, InT6, InT7, InT8, InT9, InT10,
+                                        InPolicy, InMixin, InAllocator>
+      {
+        typedef function_traits<InR> traits;
+
+        typedef typename traits::result_type R;
+        typedef typename get_arg1_type<(traits::arity >= 1), traits>::type T1;
+        typedef typename get_arg2_type<(traits::arity >= 2), traits>::type T2;
+        typedef typename get_arg3_type<(traits::arity >= 3), traits>::type T3;
+        typedef typename get_arg4_type<(traits::arity >= 4), traits>::type T4;
+        typedef typename get_arg5_type<(traits::arity >= 5), traits>::type T5;
+        typedef typename get_arg6_type<(traits::arity >= 6), traits>::type T6;
+        typedef typename get_arg7_type<(traits::arity >= 7), traits>::type T7;
+        typedef typename get_arg8_type<(traits::arity >= 8), traits>::type T8;
+        typedef typename get_arg9_type<(traits::arity >= 9), traits>::type T9;
+        typedef typename get_arg10_type<(traits::arity >= 10), traits>::type T10;
+        typedef typename ct_if<(is_same<InT1, unusable>::value),
+                               empty_function_policy,
+                               InT1>::type Policy;
+        typedef typename ct_if<(is_same<InT2, unusable>::value),
+                               empty_function_mixin,
+                               InT2>::type Mixin;
+        typedef typename ct_if<(is_same<InT3, unusable>::value),
+                               std::allocator<function_base>,
+                               InT3>::type Allocator;
+      };
+
+#endif // ndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
       template<
         typename InR, 
         typename InT1, 
@@ -549,82 +547,42 @@ namespace boost {
       class get_function_impl
       {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        typedef function_traits<typename add_pointer<InR>::type> traits;
-      public:                       
-
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::result_type,
-                               InR>::type R;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg1_type,
-                               InT1>::type T1;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg2_type,
-                               InT2>::type T2;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg3_type,
-                               InT3>::type T3;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg4_type,
-                               InT4>::type T4;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg5_type,
-                               InT5>::type T5;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg6_type,
-                               InT6>::type T6;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg7_type,
-                               InT7>::type T7;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg8_type,
-                               InT8>::type T8;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg9_type,
-                               InT9>::type T9;
-        typedef typename ct_if<(is_function<InR>::value),
-                               typename traits::arg10_type,
-                               InT10>::type T10;        
-        typedef typename ct_if<
-	                   (type_traits::ice_and<
-	                     (is_function<InR>::value),
-			     (is_not_same<InT1, unusable>::value)
-	                    >::value),
-                           InT1,
-                           InPolicy>::type Policy;
-
-        typedef typename ct_if<
-	                   (type_traits::ice_and<
-	                     (is_function<InR>::value),
-			     (is_not_same<InT2, unusable>::value)
-	                    >::value),
-                           InT2,
-                           InMixin>::type Mixin;
-
-        typedef typename ct_if<
-	                   (type_traits::ice_and<
-	                     (is_function<InR>::value),
-			     (is_not_same<InT3, unusable>::value)
-	                    >::value),
-                           InT3,
-                           InAllocator>::type Allocator;
+        typedef maybe_decode_function_args<(is_function<InR>::value),
+                                           InR, InT1, InT2, InT3, InT4, InT5,
+                                           InT6, InT7, InT8, InT9, InT10,
+                                           InPolicy, InMixin, InAllocator>
+          decoder;
+        typedef typename decoder::R R;
+        typedef typename decoder::T1 T1;
+        typedef typename decoder::T2 T2;
+        typedef typename decoder::T3 T3;
+        typedef typename decoder::T4 T4;
+        typedef typename decoder::T5 T5;
+        typedef typename decoder::T6 T6;
+        typedef typename decoder::T7 T7;
+        typedef typename decoder::T8 T8;
+        typedef typename decoder::T9 T9;
+        typedef typename decoder::T10 T10;
+        typedef typename decoder::Policy Policy;
+        typedef typename decoder::Mixin Mixin;
+        typedef typename decoder::Allocator Allocator;
 #else
+        typedef InR R;
+        typedef InT1 T1;
+        typedef InT2 T2;
+        typedef InT3 T3;
+        typedef InT4 T4;
+        typedef InT5 T5;
+        typedef InT6 T6;
+        typedef InT7 T7;
+        typedef InT8 T8;
+        typedef InT9 T9;
+        typedef InT10 T10;
+        typedef InPolicy Policy;
+        typedef InMixin Mixin;
+        typedef InAllocator Allocator;
+#endif // def BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       public:                       
-		typedef InR R;
-		typedef InT1 T1;
-		typedef InT2 T2;
-		typedef InT3 T3;
-		typedef InT4 T4;
-		typedef InT5 T5;
-		typedef InT6 T6;
-		typedef InT7 T7;
-		typedef InT8 T8;
-		typedef InT9 T9;
-		typedef InT10 T10;
-		typedef InPolicy Policy;
-		typedef InMixin Mixin;
-		typedef InAllocator Allocator;
-#endif
         typedef typename real_get_function_impl<
           (count_used_args<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>::value)
           >::template params<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
