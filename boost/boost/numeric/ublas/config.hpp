@@ -227,8 +227,8 @@ namespace std {
 #ifndef BOOST_UBLAS_TYPENAME
 #define BOOST_UBLAS_TYPENAME typename
 #endif
-#ifndef BOOST_UBLAS_TEMPLATE template
-#define BOOST_UBLAS_TEMPLATE
+#ifndef BOOST_UBLAS_TEMPLATE
+#define BOOST_UBLAS_TEMPLATE template
 #endif
 #ifndef BOOST_UBLAS_USING
 #define BOOST_UBLAS_USING using
