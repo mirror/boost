@@ -1,7 +1,7 @@
 //
 //  shared_ptr_alloc_test.cpp - use to evaluate the impact of count allocations
 //
-//  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2002, 2003 Peter Dimov
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -11,10 +11,12 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/config.hpp>
+#include <boost/detail/quick_allocator.hpp>
 
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <cstddef>
 #include <memory>
 
 int const n = 1024 * 1024;
@@ -33,7 +35,7 @@ template<class T> void test(T * = 0)
 
     t = std::clock() - t;
 
-    std::cout << static_cast<double>(t) / CLOCKS_PER_SEC << '\n';
+    std::cout << "   " << static_cast<double>(t) / CLOCKS_PER_SEC << " seconds.\n";
 }
 
 class X
@@ -62,6 +64,48 @@ private:
     int n_;
 };
 
+class Y
+{
+public:
+
+    explicit Y(int n): n_(n)
+    {
+    }
+
+    void * operator new(std::size_t n)
+    {
+        return boost::detail::quick_allocator<Y>::alloc(n);
+    }
+
+    void operator delete(void * p, std::size_t n)
+    {
+        boost::detail::quick_allocator<Y>::dealloc(p, n);
+    }
+
+private:
+
+    Y(Y const &);
+    Y & operator=(Y const &);
+
+    int n_;
+};
+
+class Z: public Y
+{
+public:
+
+    explicit Z(int n): Y(n), m_(n + 1)
+    {
+    }
+
+private:
+
+    Z(Z const &);
+    Z & operator=(Z const &);
+
+    int m_;
+};
+
 int main()
 {
     std::cout << BOOST_COMPILER "\n";
@@ -80,6 +124,12 @@ int main()
     std::cout << "BOOST_SP_USE_STD_ALLOCATOR: (not defined)\n";
 #endif
 
+#if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
+    std::cout << "BOOST_SP_USE_QUICK_ALLOCATOR: (defined)\n";
+#else
+    std::cout << "BOOST_SP_USE_QUICK_ALLOCATOR: (not defined)\n";
+#endif
+
     std::cout << n << " shared_ptr<int> allocations + deallocations:\n";
 
     test<int>();
@@ -91,4 +141,16 @@ int main()
     test<X>();
     test<X>();
     test<X>();
+
+    std::cout << n << " shared_ptr<Y> allocations + deallocations:\n";
+
+    test<Y>();
+    test<Y>();
+    test<Y>();
+
+    std::cout << n << " shared_ptr<Z> allocations + deallocations:\n";
+
+    test<Z>();
+    test<Z>();
+    test<Z>();
 }

@@ -18,19 +18,24 @@
 
 #include <boost/config.hpp>
 
-#ifndef BOOST_NO_AUTO_PTR
-# include <memory>
+#if defined(BOOST_SP_USE_STD_ALLOCATOR) && defined(BOOST_SP_USE_QUICK_ALLOCATOR)
+# error BOOST_SP_USE_STD_ALLOCATOR and BOOST_SP_USE_QUICK_ALLOCATOR are incompatible.
 #endif
 
 #include <boost/checked_delete.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/detail/lightweight_mutex.hpp>
 
-#include <functional>       // for std::less
-#include <exception>        // for std::exception
-#include <new>              // for std::bad_alloc
-#include <typeinfo>         // for std::type_info in get_deleter
-#include <cstddef>          // for std::size_t
+#if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
+#include <boost/detail/quick_allocator.hpp>
+#endif
+
+#include <memory>           // std::auto_ptr, std::allocator
+#include <functional>       // std::less
+#include <exception>        // std::exception
+#include <new>              // std::bad_alloc
+#include <typeinfo>         // std::type_info in get_deleter
+#include <cstddef>          // std::size_t
 
 #ifdef __BORLANDC__
 # pragma warn -8026     // Functions with excep. spec. are not expanded inline
@@ -272,6 +277,20 @@ public:
     void operator delete(void * p)
     {
         std::allocator<this_type>().deallocate(static_cast<this_type *>(p), 1);
+    }
+
+#endif
+
+#if defined(BOOST_SP_USE_QUICK_ALLOCATOR)
+
+    void * operator new(std::size_t)
+    {
+        return quick_allocator<this_type>::alloc();
+    }
+
+    void operator delete(void * p)
+    {
+        quick_allocator<this_type>::dealloc(p);
     }
 
 #endif
