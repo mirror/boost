@@ -89,7 +89,7 @@ namespace boost {
               f_(begin_,end_,tok_):false;
       }
   public:
-      token_iterator():valid_(false),begin_(),end_(),tok_() { }
+      token_iterator():begin_(),end_(),valid_(false),tok_() { }
 
       token_iterator(TokenizerFunc f, Iterator begin, Iterator end = Iterator())
           : f_(f),begin_(begin),end_(end),valid_(false),tok_(){ initialize(); }
