@@ -56,30 +56,30 @@ test_zero_args()
 
   // Default construction
   func_void_type v1;
-  BOOST_TEST(v1.empty());
+  BOOST_CHECK(v1.empty());
 
   // Assignment to an empty function
   v1 = five;
-  BOOST_TEST(!v1.empty());
+  BOOST_CHECK(!v1.empty());
 
   // Invocation of a function
   global_int = 0;
   v1();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear() method
   v1.clear();
-  BOOST_TEST(!v1);
+  BOOST_CHECK(!v1);
 
   // Assignment to an empty function
   v1 = three;
-  BOOST_TEST(!v1.empty());
+  BOOST_CHECK(!v1.empty());
 
   // Invocation and self-assignment
   global_int = 0;
   v1 = v1;
   v1();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment to a non-empty function
   v1 = five;
@@ -88,61 +88,61 @@ test_zero_args()
   global_int = 0;
   v1 = (v1);
   v1();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear
   v1 = 0;
-  BOOST_TEST(v1.empty());
+  BOOST_CHECK(v1.empty());
 
   // Assignment to an empty function from a free function
   v1 = &write_five;
-  BOOST_TEST(!v1.empty());
+  BOOST_CHECK(!v1.empty());
 
   // Invocation
   global_int = 0;
   v1();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Assignment to a non-empty function from a free function
   v1 = &write_three;
-  BOOST_TEST(!v1.empty());
+  BOOST_CHECK(!v1.empty());
 
   // Invocation
   global_int = 0;
   v1();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment
   v1 = five;
-  BOOST_TEST(!v1.empty());
+  BOOST_CHECK(!v1.empty());
 
   // Invocation
   global_int = 0;
   v1();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Assignment to a non-empty function from a free function
   v1 = write_three;
-  BOOST_TEST(!v1.empty());
+  BOOST_CHECK(!v1.empty());
 
   // Invocation
   global_int = 0;
   v1();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Construction from another function (that is empty)
   v1.clear();
   func_void_type v2(v1);
-  BOOST_TEST(!v2? true : false);
+  BOOST_CHECK(!v2? true : false);
 
   // Assignment to an empty function
   v2 = three;
-  BOOST_TEST(!v2.empty());
+  BOOST_CHECK(!v2.empty());
 
   // Invocation
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment to a non-empty function
   v2 = (five);
@@ -150,86 +150,86 @@ test_zero_args()
   // Invocation
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   v2.clear();
-  BOOST_TEST(v2.empty());
+  BOOST_CHECK(v2.empty());
 
   // Assignment to an empty function from a free function
   v2 = (&write_five);
-  BOOST_TEST(v2? true : false);
+  BOOST_CHECK(v2? true : false);
 
   // Invocation
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Assignment to a non-empty function from a free function
   v2 = &write_three;
-  BOOST_TEST(!v2.empty());
+  BOOST_CHECK(!v2.empty());
 
   // Invocation
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Swapping
   v1 = five;
   swap(v1, v2);
   v2();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
   v1();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
   swap(v1, v2);
   v1.clear();
 
   // Assignment
   v2 = five;
-  BOOST_TEST(!v2.empty());
+  BOOST_CHECK(!v2.empty());
 
   // Invocation
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Assignment to a non-empty function from a free function
   v2 = &write_three;
-  BOOST_TEST(!v2.empty());
+  BOOST_CHECK(!v2.empty());
 
   // Invocation
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment to a function from an empty function
   v2 = v1;
-  BOOST_TEST(v2.empty());
+  BOOST_CHECK(v2.empty());
 
   // Assignment to a function from a function with a functor
   v1 = three;
   v2 = v1;
-  BOOST_TEST(!v1.empty());
-  BOOST_TEST(!v2.empty());
+  BOOST_CHECK(!v1.empty());
+  BOOST_CHECK(!v2.empty());
 
   // Invocation
   global_int = 0;
   v1();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assign to a function from a function with a function
   v2 = &write_five;
   v1 = v2;
-  BOOST_TEST(!v1.empty());
-  BOOST_TEST(!v2.empty());
+  BOOST_CHECK(!v1.empty());
+  BOOST_CHECK(!v2.empty());
   global_int = 0;
   v1();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
   global_int = 0;
   v2();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Construct a function given another function containing a function
   func_void_type v3(v1);
@@ -237,20 +237,20 @@ test_zero_args()
   // Invocation of a function
   global_int = 0;
   v3();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear() method
   v3.clear();
-  BOOST_TEST(!v3? true : false);
+  BOOST_CHECK(!v3? true : false);
 
   // Assignment to an empty function
   v3 = three;
-  BOOST_TEST(!v3.empty());
+  BOOST_CHECK(!v3.empty());
 
   // Invocation
   global_int = 0;
   v3();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment to a non-empty function
   v3 = five;
@@ -258,38 +258,38 @@ test_zero_args()
   // Invocation
   global_int = 0;
   v3();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear()
   v3.clear();
-  BOOST_TEST(v3.empty());
+  BOOST_CHECK(v3.empty());
 
   // Assignment to an empty function from a free function
   v3 = &write_five;
-  BOOST_TEST(!v3.empty());
+  BOOST_CHECK(!v3.empty());
 
   // Invocation
   global_int = 0;
   v3();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Assignment to a non-empty function from a free function
   v3 = &write_three;
-  BOOST_TEST(!v3.empty());
+  BOOST_CHECK(!v3.empty());
 
   // Invocation
   global_int = 0;
   v3();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment
   v3 = five;
-  BOOST_TEST(!v3.empty());
+  BOOST_CHECK(!v3.empty());
 
   // Invocation
   global_int = 0;
   v3();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Construction of a function from a function containing a functor
   func_void_type v4(v3);
@@ -297,20 +297,20 @@ test_zero_args()
   // Invocation of a function
   global_int = 0;
   v4();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear() method
   v4.clear();
-  BOOST_TEST(v4.empty());
+  BOOST_CHECK(v4.empty());
 
   // Assignment to an empty function
   v4 = three;
-  BOOST_TEST(!v4.empty());
+  BOOST_CHECK(!v4.empty());
 
   // Invocation
   global_int = 0;
   v4();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment to a non-empty function
   v4 = five;
@@ -318,38 +318,38 @@ test_zero_args()
   // Invocation
   global_int = 0;
   v4();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear()
   v4.clear();
-  BOOST_TEST(v4.empty());
+  BOOST_CHECK(v4.empty());
 
   // Assignment to an empty function from a free function
   v4 = &write_five;
-  BOOST_TEST(!v4.empty());
+  BOOST_CHECK(!v4.empty());
 
   // Invocation
   global_int = 0;
   v4();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Assignment to a non-empty function from a free function
   v4 = &write_three;
-  BOOST_TEST(!v4.empty());
+  BOOST_CHECK(!v4.empty());
 
   // Invocation
   global_int = 0;
   v4();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment
   v4 = five;
-  BOOST_TEST(!v4.empty());
+  BOOST_CHECK(!v4.empty());
 
   // Invocation
   global_int = 0;
   v4();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Construction of a function from a functor
   func_void_type v5(five);
@@ -357,20 +357,20 @@ test_zero_args()
   // Invocation of a function
   global_int = 0;
   v5();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear() method
   v5.clear();
-  BOOST_TEST(v5.empty());
+  BOOST_CHECK(v5.empty());
 
   // Assignment to an empty function
   v5 = three;
-  BOOST_TEST(!v5.empty());
+  BOOST_CHECK(!v5.empty());
 
   // Invocation
   global_int = 0;
   v5();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment to a non-empty function
   v5 = five;
@@ -378,38 +378,38 @@ test_zero_args()
   // Invocation
   global_int = 0;
   v5();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear()
   v5.clear();
-  BOOST_TEST(v5.empty());
+  BOOST_CHECK(v5.empty());
 
   // Assignment to an empty function from a free function
   v5 = &write_five;
-  BOOST_TEST(!v5.empty());
+  BOOST_CHECK(!v5.empty());
 
   // Invocation
   global_int = 0;
   v5();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Assignment to a non-empty function from a free function
   v5 = &write_three;
-  BOOST_TEST(!v5.empty());
+  BOOST_CHECK(!v5.empty());
 
   // Invocation
   global_int = 0;
   v5();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment
   v5 = five;
-  BOOST_TEST(!v5.empty());
+  BOOST_CHECK(!v5.empty());
 
   // Invocation
   global_int = 0;
   v5();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Construction of a function from a function
   func_void_type v6(&write_five);
@@ -417,20 +417,20 @@ test_zero_args()
   // Invocation of a function
   global_int = 0;
   v6();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear() method
   v6.clear();
-  BOOST_TEST(v6.empty());
+  BOOST_CHECK(v6.empty());
 
   // Assignment to an empty function
   v6 = three;
-  BOOST_TEST(!v6.empty());
+  BOOST_CHECK(!v6.empty());
 
   // Invocation
   global_int = 0;
   v6();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment to a non-empty function
   v6 = five;
@@ -438,38 +438,38 @@ test_zero_args()
   // Invocation
   global_int = 0;
   v6();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // clear()
   v6.clear();
-  BOOST_TEST(v6.empty());
+  BOOST_CHECK(v6.empty());
 
   // Assignment to an empty function from a free function
   v6 = &write_five;
-  BOOST_TEST(!v6.empty());
+  BOOST_CHECK(!v6.empty());
 
   // Invocation
   global_int = 0;
   v6();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Assignment to a non-empty function from a free function
   v6 = &write_three;
-  BOOST_TEST(!v6.empty());
+  BOOST_CHECK(!v6.empty());
 
   // Invocation
   global_int = 0;
   v6();
-  BOOST_TEST(global_int == 3);
+  BOOST_CHECK(global_int == 3);
 
   // Assignment
   v6 = five;
-  BOOST_TEST(!v6.empty());
+  BOOST_CHECK(!v6.empty());
 
   // Invocation
   global_int = 0;
   v6();
-  BOOST_TEST(global_int == 5);
+  BOOST_CHECK(global_int == 5);
 
   // Const vs. non-const
   // Initialization for Borland C++ 5.5
@@ -479,19 +479,19 @@ test_zero_args()
 
   global_int = 0;
   v7();
-  BOOST_TEST(global_int == 2);
+  BOOST_CHECK(global_int == 2);
 
   global_int = 0;
   v8();
-  BOOST_TEST(global_int == 2);
+  BOOST_CHECK(global_int == 2);
 
   // Test construction from 0 and comparison to 0
   func_void_type v9(0);
-  BOOST_TEST(v9 == 0);
+  BOOST_CHECK(v9 == 0);
 # if !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540 || defined(BOOST_STRICT_CONFIG)
-  BOOST_TEST(0 == v9);
+  BOOST_CHECK(0 == v9);
 #else
-  BOOST_TEST(v9.empty());
+  BOOST_CHECK(v9.empty());
 #endif
 
   // Test return values
@@ -501,31 +501,31 @@ test_zero_args()
   generate_three_obj gen_three = generate_three_obj();
   func_int_type i0(gen_five);
 
-  BOOST_TEST(i0() == 5);
+  BOOST_CHECK(i0() == 5);
   i0 = gen_three;
-  BOOST_TEST(i0() == 3);
+  BOOST_CHECK(i0() == 3);
   i0 = &generate_five;
-  BOOST_TEST(i0() == 5);
+  BOOST_CHECK(i0() == 5);
   i0 = &generate_three;
-  BOOST_TEST(i0() == 3);
-  BOOST_TEST(i0? true : false);
+  BOOST_CHECK(i0() == 3);
+  BOOST_CHECK(i0? true : false);
   i0.clear();
-  BOOST_TEST(!i0? true : false);
+  BOOST_CHECK(!i0? true : false);
 
   // Test return values with compatible types
   typedef function0<long> func_long_type;
   func_long_type i1(gen_five);
 
-  BOOST_TEST(i1() == 5);
+  BOOST_CHECK(i1() == 5);
   i1 = gen_three;
-  BOOST_TEST(i1() == 3);
+  BOOST_CHECK(i1() == 3);
   i1 = &generate_five;
-  BOOST_TEST(i1() == 5);
+  BOOST_CHECK(i1() == 5);
   i1 = &generate_three;
-  BOOST_TEST(i1() == 3);
-  BOOST_TEST(i1? true : false);
+  BOOST_CHECK(i1() == 3);
+  BOOST_CHECK(i1? true : false);
   i1.clear();
-  BOOST_TEST(!i1? true : false);
+  BOOST_CHECK(!i1? true : false);
 }
 
 static void
@@ -534,45 +534,45 @@ test_one_arg()
   negate<int> neg = negate<int>(); // Initialization for Borland C++ 5.5
 
   function1<int, int> f1(neg);
-  BOOST_TEST(f1(5) == -5);
+  BOOST_CHECK(f1(5) == -5);
 
   function1<string, string> id(&identity_str);
-  BOOST_TEST(id("str") == "str");
+  BOOST_CHECK(id("str") == "str");
 
   function1<std::string, const char*> id2(&identity_str);
-  BOOST_TEST(id2("foo") == "foo");
+  BOOST_CHECK(id2("foo") == "foo");
 
   add_to_obj add_to(5);
   function1<int, int> f2(add_to);
-  BOOST_TEST(f2(3) == 8);
+  BOOST_CHECK(f2(3) == 8);
 
   const function1<int, int> cf2(add_to);
-  BOOST_TEST(cf2(3) == 8);
+  BOOST_CHECK(cf2(3) == 8);
 }
 
 static void
 test_two_args()
 {
   function2<string, const string&, const string&> cat(&string_cat);
-  BOOST_TEST(cat("str", "ing") == "string");
+  BOOST_CHECK(cat("str", "ing") == "string");
 
   function2<int, short, short> sum(&sum_ints);
-  BOOST_TEST(sum(2, 3) == 5);
+  BOOST_CHECK(sum(2, 3) == 5);
 }
 
 static void
 test_emptiness()
 {
   function0<float> f1;
-  BOOST_TEST(f1.empty());
+  BOOST_CHECK(f1.empty());
 
   function0<float> f2;
   f2 = f1;
-  BOOST_TEST(f2.empty());
+  BOOST_CHECK(f2.empty());
 
   function0<double> f3;
   f3 = f2;
-  BOOST_TEST(f3.empty());
+  BOOST_CHECK(f3.empty());
 }
 
 struct X {
@@ -593,18 +593,18 @@ test_member_functions()
   X one(1);
   X five(5);
 
-  BOOST_TEST(f1(&one) == 2);
-  BOOST_TEST(f1(&five) == 10);
+  BOOST_CHECK(f1(&one) == 2);
+  BOOST_CHECK(f1(&five) == 10);
 
   boost::function1<int, X*> f1_2;
   f1_2 = &X::twice;
 
-  BOOST_TEST(f1_2(&one) == 2);
-  BOOST_TEST(f1_2(&five) == 10);
+  BOOST_CHECK(f1_2(&one) == 2);
+  BOOST_CHECK(f1_2(&five) == 10);
 
   boost::function2<int, X&, int> f2(&X::plus);
-  BOOST_TEST(f2(one, 3) == 4);
-  BOOST_TEST(f2(five, 4) == 9);
+  BOOST_CHECK(f2(one, 3) == 4);
+  BOOST_CHECK(f2(five, 4) == 9);
 }
 
 struct add_with_throw_on_copy {
@@ -629,7 +629,7 @@ test_ref()
   add_with_throw_on_copy atc;
   try {
     boost::function2<int, int, int> f(ref(atc));
-    BOOST_TEST(f(1, 3) == 4);
+    BOOST_CHECK(f(1, 3) == 4);
   }
   catch(std::runtime_error e) {
     BOOST_ERROR("Nonthrowing constructor threw an exception");

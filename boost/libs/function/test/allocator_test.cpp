@@ -56,8 +56,8 @@ test_main(int, char*[])
   function2<int, int, int, counting_allocator<int> > f;
   f = plus<int>();
   f.clear();
-  BOOST_TEST(alloc_count == 1);
-  BOOST_TEST(dealloc_count == 1);
+  BOOST_CHECK(alloc_count == 1);
+  BOOST_CHECK(dealloc_count == 1);
 
   alloc_count = 0;
   dealloc_count = 0;
@@ -69,8 +69,8 @@ test_main(int, char*[])
   dealloc_count = 0;
   fv = DoNothing();
   fv.clear();
-  BOOST_TEST(alloc_count == 1);
-  BOOST_TEST(dealloc_count == 1);
+  BOOST_CHECK(alloc_count == 1);
+  BOOST_CHECK(dealloc_count == 1);
 
   alloc_count = 0;
   dealloc_count = 0;
