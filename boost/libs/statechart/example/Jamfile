@@ -4,7 +4,7 @@
 
 subproject libs/fsm/example ;
 
-local no-of-bits-list = 1 2 3 4 5 6 ;
+local no-of-bits-list = 1 2 3 4 ;
 
 template fsm-common-options
   :
