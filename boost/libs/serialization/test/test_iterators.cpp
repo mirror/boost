@@ -158,7 +158,7 @@ void test_stream_iterators(
 }
 
 int
-test_main( int argc, char* argv[] )
+test_main(int /* argc */, char* /* argv */ [] )
 {
     const char xml[] = "<+>+&+\"+'";
     const char xml_escaped[] = "&lt;+&gt;+&amp;+&quot;+&apos;";

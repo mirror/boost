@@ -14,6 +14,14 @@
 #include <vector>
 #include <string>
 
+#include <cstddef> // size_t
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #include <boost/test/test_tools.hpp>
 #include <boost/archive/iterators/istream_iterator.hpp>
 #include <boost/archive/iterators/ostream_iterator.hpp>
@@ -21,7 +29,7 @@
 #include <boost/archive/add_facet.hpp>
 #include <boost/utf8_codecvt_facet.hpp>
 
-template<size_t s>
+template<std::size_t s>
 struct test_data
 {
     static unsigned char utf8_encoding[];
@@ -99,7 +107,7 @@ test_main(int /* argc */, char * /* argv */[]) {
             td::utf8_encoding,
 			#if ! defined(__BORLANDC__)
                 // borland 5.60 complains about this
-				td::utf8_encoding + sizeof(td::utf8_encoding)/sizeof(wchar_t),
+				td::utf8_encoding + sizeof(td::utf8_encoding) / sizeof(unsigned char),
 			#else
 				// so use this instead
 				td::utf8_encoding + 12,
@@ -129,14 +137,16 @@ test_main(int /* argc */, char * /* argv */[]) {
         }
     }
 
-    // compare the data read back in with the orginal 
-    BOOST_TEST(from_file.size() == sizeof(td::wchar_encoding) / sizeof(wchar_t));
+    // compare the data read back in with the orginal
+	#if ! defined(__BORLANDC__)
+        // borland 5.60 complains about this
+        BOOST_TEST(from_file.size() == sizeof(td::wchar_encoding)/sizeof(wchar_t));
+	#else
+		// so use this instead
+        BOOST_TEST(from_file.size() == 6);
+	#endif
 
-    BOOST_TEST(std::equal(
-            from_file.begin(),
-            from_file.end(),
-            td::wchar_encoding
-    ));
+    BOOST_TEST(std::equal(from_file.begin(), from_file.end(), td::wchar_encoding));
   
     // Send the UCS4_data back out, converting to UTF-8
     {
