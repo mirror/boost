@@ -6,19 +6,24 @@
 #include <boost/config.hpp>
 #include <iostream>
 #include <algorithm>
-#include <boost/iterator_adaptors.hpp>
+#include <boost/iterator/reverse_iterator.hpp>
+#include <boost/detail/iterator.hpp>
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+namespace boost { namespace detail
+{
+  template <>
+  struct iterator_traits<char*>
+      : ptr_iter_traits<char>
+  {
+  };
+}}
+#endif 
 int main(int, char*[])
 {
   char letters_[] = "hello world!";
   const int N = sizeof(letters_)/sizeof(char) - 1;
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-  // Assume there won't be proper iterator traits for pointers. This
-  // is just a wrapper for char* which has the right traits.
-  typedef boost::iterator_adaptor<char*, boost::default_iterator_policies, char> base_iterator;
-#else
   typedef char* base_iterator;
-#endif
   base_iterator letters(letters_);
   
   std::cout << "original sequence of letters:\t"
@@ -29,7 +34,7 @@ int main(int, char*[])
   // Use reverse_iterator_generator to print a sequence
   // of letters in reverse order.
   
-  boost::reverse_iterator_generator<base_iterator>::type
+  boost::reverse_iterator<base_iterator>
     reverse_letters_first(letters + N),
     reverse_letters_last(letters);
 

@@ -56,8 +56,15 @@ namespace boost
           satisfy_predicate();
       }
 
-      filter_iterator(Iterator x, Iterator end = Iterator())
-          : super_t(x), m_predicate(), m_end(end)
+      // don't provide this constructor if UnaryFunction is a
+      // function pointer type.  Too dangerous.
+      filter_iterator(
+          typename detail::enable_if<
+              is_class<Predicate>
+            , Iterator
+          >::type x
+        , Iterator end = Iterator())
+        : super_t(x), m_predicate(), m_end(end)
       {
           satisfy_predicate();
       }
@@ -102,6 +109,22 @@ namespace boost
   make_filter_iterator(Predicate f, Iterator x, Iterator end = Iterator())
   {
       return filter_iterator<Predicate,Iterator>(f,x,end);
+  }
+
+  template <class Predicate, class Iterator>
+  filter_iterator<Predicate,Iterator>
+  make_filter_iterator(
+      typename detail::enable_if<
+          is_class<Predicate>
+        , Iterator
+      >::type x
+    , Iterator end = Iterator()
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+    , Predicate* = 0
+#endif 
+  )
+  {
+      return filter_iterator<Predicate,Iterator>(x,end);
   }
 
 } // namespace boost

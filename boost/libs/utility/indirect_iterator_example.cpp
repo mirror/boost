@@ -8,7 +8,43 @@
 #include <iostream>
 #include <iterator>
 #include <functional>
-#include <boost/iterator_adaptors.hpp>
+#include <algorithm>
+#include <boost/iterator/indirect_iterator.hpp>
+
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+namespace boost { namespace detail
+{
+  template <>
+  struct iterator_traits<char*>
+      : ptr_iter_traits<char>
+  {
+  };
+  
+  template <>
+  struct iterator_traits<char const*>
+      : ptr_iter_traits<char, char const>
+  {
+  };
+  
+  template <>
+  struct iterator_traits<char**>
+      : ptr_iter_traits<char*>
+  {
+  };
+  
+  template <>
+  struct iterator_traits<char const* const*>
+      : ptr_iter_traits<char const*, char const* const>
+  {
+  };
+
+  template <>
+  struct iterator_traits<char* const*>
+      : ptr_iter_traits<char*, char* const>
+  {
+  };
+}}
+#endif
 
 int main(int, char*[])
 {
@@ -20,7 +56,7 @@ int main(int, char*[])
 
   // Example of using indirect_iterator_generator
   
-  boost::indirect_iterator_generator<char**, char>::type 
+  boost::indirect_iterator<char**, char>
     indirect_first(pointers_to_chars), indirect_last(pointers_to_chars + N);
 
   std::copy(indirect_first, indirect_last, std::ostream_iterator<char>(std::cout, ","));
@@ -29,16 +65,14 @@ int main(int, char*[])
 
   // Example of using indirect_iterator_pair_generator
 
-  typedef boost::indirect_iterator_pair_generator<char**, char> PairGen;
-
   char mutable_characters[N];
   char* pointers_to_mutable_chars[N];
   for (int j = 0; j < N; ++j)
     pointers_to_mutable_chars[j] = &mutable_characters[j];
 
-  PairGen::iterator mutable_indirect_first(pointers_to_mutable_chars),
+  boost::indirect_iterator<char* const*> mutable_indirect_first(pointers_to_mutable_chars),
     mutable_indirect_last(pointers_to_mutable_chars + N);
-  PairGen::const_iterator const_indirect_first(pointers_to_chars),
+  boost::indirect_iterator<char const* const*> const_indirect_first(pointers_to_chars),
     const_indirect_last(pointers_to_chars + N);
 
   std::transform(const_indirect_first, const_indirect_last,

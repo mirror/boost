@@ -7,7 +7,7 @@
 #include <functional>
 #include <algorithm>
 #include <iostream>
-#include <boost/iterator_adaptors.hpp>
+#include <boost/iterator/transform_iterator.hpp>
 #include <boost/pending/integer_range.hpp>
 
 int
@@ -21,8 +21,8 @@ main(int, char*[])
   int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
   typedef std::binder1st< std::multiplies<int> > Function;
-  typedef boost::transform_iterator_generator<Function, int* 
-  >::type doubling_iterator;
+  
+  typedef boost::transform_iterator<Function, int*> doubling_iterator;
 
   doubling_iterator i(x, std::bind1st(std::multiplies<int>(), 2)),
     i_end(x + sizeof(x)/sizeof(int), std::bind1st(std::multiplies<int>(), 2));

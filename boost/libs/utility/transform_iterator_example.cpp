@@ -7,7 +7,7 @@
 #include <functional>
 #include <algorithm>
 #include <iostream>
-#include <boost/iterator_adaptors.hpp>
+#include <boost/iterator/transform_iterator.hpp>
 
 // What a bummer. We can't use std::binder1st with transform iterator
 // because it does not have a default constructor. Here's a version
@@ -53,7 +53,7 @@ main(int, char*[])
   const int N = sizeof(x)/sizeof(int);
 
   typedef boost::binder1st< std::multiplies<int> > Function;
-  typedef boost::transform_iterator_generator<Function, int*>::type doubling_iterator;
+  typedef boost::transform_iterator<Function, int*> doubling_iterator;
 
   doubling_iterator i(x, boost::bind1st(std::multiplies<int>(), 2)),
     i_end(x + N, boost::bind1st(std::multiplies<int>(), 2));

@@ -14,10 +14,11 @@
 #include <boost/iterator/detail/enable_if.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/iterator/iterator_categories.hpp>
-#include <boost/mpl/and.hpp>
+#include <boost/mpl/not.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/function_traits.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/is_class.hpp>
 #include <boost/type_traits/is_function.hpp>
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/type_traits/remove_const.hpp>
@@ -96,7 +97,6 @@ namespace boost
         , result_type  
       > type;
     };
-
   }
 
   template <class UnaryFunction, class Iterator, class Reference, class Value>
@@ -115,10 +115,28 @@ namespace boost
     transform_iterator(Iterator const& x, UnaryFunction f)
       : super_t(x), m_f(f) { }
 
+    // don't provide this constructor if UnaryFunction is a
+    // function pointer type.  Too dangerous.
+    transform_iterator(
+      // Sadly, GCC 3.2 seems to choke on the enable_if when
+      // UnaryFunction is a plain function pointer
+#if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(3)) \
+     && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(2))
+        Iterator const& x
+#else 
+      typename detail::enable_if<
+          is_class<UnaryFunction>
+        , Iterator const&
+      >::type x
+#endif 
+    )
+      : super_t(x)
+    {}
+
     template<class OtherIterator>
     transform_iterator(
-                       transform_iterator<UnaryFunction, OtherIterator, Reference, Value> const& t
-                       , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0
+         transform_iterator<UnaryFunction, OtherIterator, Reference, Value> const& t
+       , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0
     )
       : super_t(t.base()), m_f(t.functor()) {}
 
@@ -135,9 +153,23 @@ namespace boost
   };
 
   template <class UnaryFunction, class Iterator>
-  transform_iterator<UnaryFunction, Iterator> make_transform_iterator(Iterator it, UnaryFunction fun)
+  transform_iterator<UnaryFunction, Iterator>
+  make_transform_iterator(Iterator it, UnaryFunction fun)
   {
-    return transform_iterator<UnaryFunction, Iterator>(it, fun);
+      return transform_iterator<UnaryFunction, Iterator>(it, fun);
+  }
+
+  template <class UnaryFunction, class Iterator>
+  // don't provide this generator if UnaryFunction is a
+  // function pointer type.  Too dangerous.  We should probably
+  // find a cheaper test than is_class<>
+  typename detail::enable_if<
+      is_class<UnaryFunction>
+    , transform_iterator<UnaryFunction, Iterator>
+  >::type
+  make_transform_iterator(Iterator it)
+  {
+      return transform_iterator<UnaryFunction, Iterator>(it, UnaryFunction());
   }
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION ) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
