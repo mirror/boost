@@ -16,7 +16,7 @@
 
 :abstract:
 
-.. include:: transform_iterator_abstract.rst
+  .. include:: transform_iterator_abstract.rst
 
 .. contents:: Table of Contents
 

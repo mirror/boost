@@ -54,7 +54,7 @@ Input Iterator.
 ``filter_iterator`` models
 ..........................
 
-The concepts that ``filter_iterator`` models are dependent on what
+The concepts that ``filter_iterator`` models are dependent on which
 concepts the ``Iterator`` argument models, as specified in the
 following tables.
 

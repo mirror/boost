@@ -16,7 +16,7 @@
 
 :abstract:
 
-.. include:: reverse_iterator_abstract.rst
+  .. include:: reverse_iterator_abstract.rst
 
 .. contents:: Table of Contents
 

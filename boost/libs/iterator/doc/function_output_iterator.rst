@@ -16,7 +16,7 @@
 
 :abstract:
 
-.. include:: function_output_iterator_abstract.rst
+  .. include:: function_output_iterator_abstract.rst
 
 .. contents:: Table of Contents
 

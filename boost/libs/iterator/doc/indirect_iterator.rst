@@ -16,7 +16,7 @@
 
 :abstract:
 
-.. include:: indirect_iterator_abstract.rst
+  .. include:: indirect_iterator_abstract.rst
 
 .. contents:: Table of Contents
 
