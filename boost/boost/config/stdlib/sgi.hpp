@@ -56,7 +56,7 @@
 //
 // SGI's new iostreams have missing "const" in messages<>::open
 //
-#if defined(__sgi) && (_COMPILER_VERSION <= 730) && defined(__STL_USE_NEW_IOSTREAMS)
+#if defined(__sgi) && (_COMPILER_VERSION <= 740) && defined(__STL_USE_NEW_IOSTREAMS)
 #  define BOOST_NO_STD_MESSAGES
 #endif
 
@@ -104,4 +104,5 @@
 #define BOOST_HAS_SGI_TYPE_TRAITS
 
 #define BOOST_STDLIB "SGI standard library"
+
 
