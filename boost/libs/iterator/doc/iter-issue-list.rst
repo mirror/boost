@@ -176,10 +176,14 @@ iterator_adaptor(Base) has no Requires clause, although the Returns clause says 
 member is copy construced from the argument (this may actually be an oversight in N1550, 
 which doesn't require iterators to be copy constructible or assignable). 
 
-:Proposed resolution: **Needs work** (Jeremy)
+:Proposed resolution:
   Add a requirements section for the template parameters of
   iterator_adaptor, and state that Base must be Copy Constructible and
   Assignable.
+
+  N1550 does in fact include requirements for copy constructible
+  and assignable in the requirements tables. To clarify, we've also
+  added the requirements to the text.
 
 
 9.8 Specialized adaptors text should be normative 

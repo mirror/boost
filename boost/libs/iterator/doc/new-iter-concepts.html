@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
 <title>New Iterator Concepts</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -107,7 +107,7 @@ geared towards iterator traversal (hence the category names), while
 requirements that address value access sneak in at various places. The
 following table gives a summary of the current value access
 requirements in the iterator categories.</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="31%" />
 <col width="69%" />
@@ -360,17 +360,18 @@ object of type <tt class="literal"><span class="pre">T</span></tt>.</p>
 <a class="target" id="readable-iterator" name="readable-iterator"></a><div class="section" id="readable-iterators-lib-readable-iterators">
 <h4><a class="toc-backref" href="#id11" name="readable-iterators-lib-readable-iterators">Readable Iterators [lib.readable.iterators]</a></h4>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Readable Iterator</em> concept
-for the value type <tt class="literal"><span class="pre">T</span></tt> if the following expressions are valid and
-respect the stated semantics. <tt class="literal"><span class="pre">U</span></tt> is the type of any specified
-member of type <tt class="literal"><span class="pre">T</span></tt>.</p>
-<table border class="table">
+for value type <tt class="literal"><span class="pre">T</span></tt> if, in addition to <tt class="literal"><span class="pre">X</span></tt> being Assignable and
+Copy Constructible, the following expressions are valid and respect
+the stated semantics. <tt class="literal"><span class="pre">U</span></tt> is the type of any specified member of
+type <tt class="literal"><span class="pre">T</span></tt>.</p>
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="42%" />
 <col width="29%" />
 <col width="30%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th colspan="3">Readable Iterator Requirements (in addition to CopyConstructible)</th>
+<tr><th colspan="3">Readable Iterator Requirements (in addition to Assignable and Copy Constructible)</th>
 </tr>
 <tr><th>Expression</th>
 <th>Return Type</th>
@@ -418,16 +419,17 @@ is equivalent to accessing a T directly. -->
 <div class="section" id="writable-iterators-lib-writable-iterators">
 <h4><a class="toc-backref" href="#id12" name="writable-iterators-lib-writable-iterators">Writable Iterators [lib.writable.iterators]</a></h4>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Writable Iterator</em> concept
-if the following expressions are valid and respect the stated
-semantics.  Writable Iterators have an associated <em>set of value types</em>.</p>
-<table border class="table">
+if, in addition to <tt class="literal"><span class="pre">X</span></tt> being Copy Constructible, the following
+expressions are valid and respect the stated semantics.  Writable
+Iterators have an associated <em>set of value types</em>.</p>
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="37%" />
 <col width="21%" />
 <col width="42%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th colspan="3">Writable Iterator Requirements (in addition to CopyConstructible)</th>
+<tr><th colspan="3">Writable Iterator Requirements (in addition to Copy Constructible)</th>
 </tr>
 <tr><th>Expression</th>
 <th>Return Type</th>
@@ -447,16 +449,16 @@ value types of <tt class="literal"><span class="pre">X</span></tt></td>
 <div class="section" id="swappable-iterators-lib-swappable-iterators">
 <h4><a class="toc-backref" href="#id13" name="swappable-iterators-lib-swappable-iterators">Swappable Iterators [lib.swappable.iterators]</a></h4>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Swappable Iterator</em> concept
-if the following expressions are valid and respect the stated
-semantics.</p>
-<table border class="table">
+if, in addition to <tt class="literal"><span class="pre">X</span></tt> being Copy Constructible, the following
+expressions are valid and respect the stated semantics.</p>
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="37%" />
 <col width="19%" />
 <col width="43%" />
 </colgroup>
 <thead valign="bottom">
-<tr><th colspan="3">Swappable Iterator Requirements (in addition to CopyConstructible)</th>
+<tr><th colspan="3">Swappable Iterator Requirements (in addition to Copy Constructible)</th>
 </tr>
 <tr><th>Expression</th>
 <th>Return Type</th>
@@ -480,7 +482,7 @@ exchanged</td>
 <h4><a class="toc-backref" href="#id14" name="lvalue-iterators-lib-lvalue-iterators">Lvalue Iterators [lib.lvalue.iterators]</a></h4>
 <p>The <em>Lvalue Iterator</em> concept adds the requirement that the
 <tt class="literal"><span class="pre">reference</span></tt> type be a reference to the value type of the iterator.</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="42%" />
 <col width="14%" />
@@ -515,9 +517,10 @@ type <tt class="literal"><span class="pre">X</span></tt>, <tt class="literal"><s
 <div class="section" id="incrementable-iterators-lib-incrementable-iterators">
 <h4><a class="toc-backref" href="#id16" name="incrementable-iterators-lib-incrementable-iterators">Incrementable Iterators [lib.incrementable.iterators]</a></h4>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Incrementable Iterator</em>
-concept if the following expressions are valid and respect the stated
-semantics.</p>
-<table border class="table">
+concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> being Assignable and Copy
+Constructible, the following expressions are valid and respect the
+stated semantics.</p>
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="39%" />
 <col width="37%" />
@@ -562,7 +565,7 @@ incrementable_traversal_tag for consistency. -->
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Single Pass Iterator</em>
 concept if the following expressions are valid and respect the stated
 semantics.</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="36%" />
 <col width="33%" />
@@ -608,9 +611,10 @@ single_pass_traversal_tag for consistency -->
 <div class="section" id="forward-traversal-iterators-lib-forward-traversal-iterators">
 <h4><a class="toc-backref" href="#id18" name="forward-traversal-iterators-lib-forward-traversal-iterators">Forward Traversal Iterators [lib.forward.traversal.iterators]</a></h4>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Forward Traversal Iterator</em>
-concept if the following expressions are valid and respect the stated
-semantics.</p>
-<table border class="table">
+concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> meeting the requirements of Single
+Pass Iterator, the following expressions are valid and respect the
+stated semantics.</p>
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="44%" />
 <col width="39%" />
@@ -657,9 +661,10 @@ forward_traversal_tag for consistency -->
 <div class="section" id="bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">
 <h4><a class="toc-backref" href="#id19" name="bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">Bidirectional Traversal Iterators [lib.bidirectional.traversal.iterators]</a></h4>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Bidirectional Traversal
-Iterator</em> concept if the following expressions are valid and respect
-the stated semantics.</p>
-<table border class="table">
+Iterator</em> concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> meeting the requirements of
+Forward Traversal Iterator, the following expressions are valid and
+respect the stated semantics.</p>
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="35%" />
 <col width="44%" />
@@ -715,7 +720,7 @@ Iterator</em> concept if the following expressions are valid and respect
 the stated semantics.  In the table below, <tt class="literal"><span class="pre">Distance</span></tt> is
 <tt class="literal"><span class="pre">iterator_traits&lt;X&gt;::difference_type</span></tt> and <tt class="literal"><span class="pre">n</span></tt> represents a
 constant object of type <tt class="literal"><span class="pre">Distance</span></tt>.</p>
-<table border class="table">
+<table class="table" frame="border" rules="all">
 <colgroup>
 <col width="31%" />
 <col width="35%" />
@@ -881,10 +886,10 @@ LocalWords:  incrementable xxx min prev inplace png oldeqnew AccessTag struct
 LocalWords:  TraversalTag typename lvalues DWA Hmm JGS mis enum -->
 </div>
 </div>
-<hr class="footer" />
+<hr class="footer"/>
 <div class="footer">
 <a class="reference" href="new-iter-concepts.rst">View document source</a>.
-Generated on: 2004-01-12 15:50 UTC.
+Generated on: 2004-01-12 18:05 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

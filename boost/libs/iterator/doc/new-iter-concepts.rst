@@ -355,12 +355,13 @@ Readable Iterators [lib.readable.iterators]
 -------------------------------------------
 
 A class or built-in type ``X`` models the *Readable Iterator* concept
-for the value type ``T`` if the following expressions are valid and
-respect the stated semantics. ``U`` is the type of any specified
-member of type ``T``.
+for value type ``T`` if, in addition to ``X`` being Assignable and
+Copy Constructible, the following expressions are valid and respect
+the stated semantics. ``U`` is the type of any specified member of
+type ``T``.
 
 +--------------------------------------------------------------------------------------+
-|Readable Iterator Requirements (in addition to CopyConstructible)                     |
+|Readable Iterator Requirements (in addition to Assignable and Copy Constructible)     |
 +-----------------------------------+------------------------+-------------------------+
 |Expression                         |Return Type             |Note/Precondition        |
 +===================================+========================+=========================+
@@ -394,11 +395,12 @@ Writable Iterators [lib.writable.iterators]
 -------------------------------------------
 
 A class or built-in type ``X`` models the *Writable Iterator* concept
-if the following expressions are valid and respect the stated
-semantics.  Writable Iterators have an associated *set of value types*.
+if, in addition to ``X`` being Copy Constructible, the following
+expressions are valid and respect the stated semantics.  Writable
+Iterators have an associated *set of value types*.
 
 +---------------------------------------------------------------------+
-|Writable Iterator Requirements (in addition to CopyConstructible)    |
+|Writable Iterator Requirements (in addition to Copy Constructible)   |
 +-------------------------+--------------+----------------------------+
 |Expression               |Return Type   |Precondition                |
 +=========================+==============+============================+
@@ -411,11 +413,11 @@ Swappable Iterators [lib.swappable.iterators]
 ---------------------------------------------
 
 A class or built-in type ``X`` models the *Swappable Iterator* concept
-if the following expressions are valid and respect the stated
-semantics.
+if, in addition to ``X`` being Copy Constructible, the following
+expressions are valid and respect the stated semantics.
 
 +---------------------------------------------------------------------+
-|Swappable Iterator Requirements (in addition to CopyConstructible)   |
+|Swappable Iterator Requirements (in addition to Copy Constructible)  |
 +-------------------------+-------------+-----------------------------+
 |Expression               |Return Type  |Postcondition                |
 +=========================+=============+=============================+
@@ -458,8 +460,9 @@ Incrementable Iterators [lib.incrementable.iterators]
 -----------------------------------------------------
 
 A class or built-in type ``X`` models the *Incrementable Iterator*
-concept if the following expressions are valid and respect the stated
-semantics.
+concept if, in addition to ``X`` being Assignable and Copy
+Constructible, the following expressions are valid and respect the
+stated semantics.
 
 
 +-------------------------------------------------------------------------------------+
@@ -522,8 +525,9 @@ Forward Traversal Iterators [lib.forward.traversal.iterators]
 -------------------------------------------------------------
 
 A class or built-in type ``X`` models the *Forward Traversal Iterator*
-concept if the following expressions are valid and respect the stated
-semantics.
+concept if, in addition to ``X`` meeting the requirements of Single
+Pass Iterator, the following expressions are valid and respect the
+stated semantics.
 
 +-------------------------------------------------------------------------------------------+
 |Forward Traversal Iterator Requirements (in addition to Single Pass Iterator)              |
@@ -556,8 +560,9 @@ Bidirectional Traversal Iterators [lib.bidirectional.traversal.iterators]
 -------------------------------------------------------------------------
 
 A class or built-in type ``X`` models the *Bidirectional Traversal
-Iterator* concept if the following expressions are valid and respect
-the stated semantics.
+Iterator* concept if, in addition to ``X`` meeting the requirements of
+Forward Traversal Iterator, the following expressions are valid and
+respect the stated semantics.
 
 +--------------------------------------------------------------------------------------------------------+
 |Bidirectional Traversal Iterator Requirements (in addition to Forward Traversal Iterator)               |
