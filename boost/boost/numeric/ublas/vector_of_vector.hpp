@@ -67,7 +67,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         generalized_vector_of_vector ():
-            size1_ (0), size2_ (0), non_zeros_ (0), data_ (0) {
+            size1_ (0), size2_ (0), non_zeros_ (0), data_ (1) {
             for (size_type i = 0; i < functor_type::size1 (size1_, size2_); ++ i)
                 static_cast<vector_data_value_type &> (data_ [i]).resize (functor_type::size2 (size1_, size2_));
             data_ [functor_type::size1 (size1_, size2_)] = vector_data_value_type ();
@@ -123,7 +123,7 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ = size1;
             size2_ = size2;
             non_zeros_ = non_zeros;
-            data ().clear ();
+            data ().resize (functor_type::size1 (size1_, size2_) + 1);
             for (size_type i = 0; i < functor_type::size1 (size1_, size2_); ++ i)
                 static_cast<vector_data_value_type &> (data_ [i]).resize (functor_type::size2 (size1_, size2_));
             data () [functor_type::size1 (size1_, size2_)] = vector_data_value_type ();
@@ -311,7 +311,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void clear () {
-            data ().clear ();
+            data ().resize (functor_type::size1 (size1_, size2_) + 1);
             for (size_type i = 0; i < functor_type::size1 (size1_, size2_); ++ i)
                 static_cast<vector_data_value_type &> (data_ [i]).resize (functor_type::size2 (size1_, size2_));
             data_ [functor_type::size1 (size1_, size2_)] = vector_data_value_type ();

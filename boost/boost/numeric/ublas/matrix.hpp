@@ -947,6 +947,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_matrix (std::size_t size1, std::size_t size2):
             matrix_type (size1, size2) {}
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        bounded_matrix (const matrix_expression<AE> &ae):
+            matrix_type (ae) {}
         BOOST_UBLAS_INLINE
         ~bounded_matrix () {}
 

@@ -57,11 +57,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        banded_matrix (): 
+        banded_matrix ():
             size1_ (0), size2_ (0),
             lower_ (0), upper_ (0), data_ (0) {}
         BOOST_UBLAS_INLINE
-        banded_matrix (size_type size1, size_type size2, size_type lower = 0, size_type upper = 0): 
+        banded_matrix (size_type size1, size_type size2, size_type lower = 0, size_type upper = 0):
             size1_ (size1), size2_ (size2),
             lower_ (lower), upper_ (upper), data_ (0) {
             resize (size1, size2, lower, upper);
@@ -89,7 +89,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Accessors
         BOOST_UBLAS_INLINE
-        size_type size1 () const { 
+        size_type size1 () const {
             return size1_;
         }
         BOOST_UBLAS_INLINE
@@ -1045,6 +1045,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         diagonal_matrix (std::size_t size1, std::size_t size2):
             matrix_type (size1, size2) {}
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        diagonal_matrix (const matrix_expression<AE> &ae):
+            matrix_type (ae) {}
         BOOST_UBLAS_INLINE
         ~diagonal_matrix () {}
 

@@ -538,6 +538,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_vector (std::size_t size):
             vector_type (size) {}
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        bounded_vector (const vector_expression<AE> &ae):
+            vector_type (ae) {}
         BOOST_UBLAS_INLINE
         ~bounded_vector () {}
 

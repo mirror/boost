@@ -281,7 +281,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E>
         BOOST_UBLAS_INLINE
         result_type operator () (const vector_expression<E> &e) const { 
-            result_type t (0);
+            result_type t = result_type ();
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i)
                 t += e () (i);
@@ -291,7 +291,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I it) const { 
-            result_type t (0);
+            result_type t = result_type ();
             while (-- size >= 0)
                 t += *it, ++ it;
             return t; 
@@ -300,7 +300,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (I it, const I &it_end) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it != it_end) 
                 t += *it, ++ it;
             return t; 
@@ -329,7 +329,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E>
         BOOST_UBLAS_INLINE
         result_type operator () (const vector_expression<E> &e) const {
-            real_type t (0);
+            real_type t = real_type ();
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_1 (e () (i)));
@@ -341,7 +341,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I it) const {
-            real_type t (0);
+            real_type t = real_type ();
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_1 (*it));
                 t += u;
@@ -353,7 +353,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (I it, const I &it_end) const {
-            real_type t (0);
+            real_type t = real_type ();
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_1 (*it));
                 t += u;
@@ -375,7 +375,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (const vector_expression<E> &e) const {
 #ifndef BOOST_UBLAS_SCALED_NORM
-            real_type t (0);
+            real_type t = real_type ();
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_2 (e () (i)));
@@ -383,7 +383,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return type_traits<real_type>::sqrt (t);
 #else
-            real_type scale (0);
+            real_type scale = real_type ();
             real_type sum_squares (1);
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
@@ -405,7 +405,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I it) const {
 #ifndef BOOST_UBLAS_SCALED_NORM
-            real_type t (0);
+            real_type t = real_type ();
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_2 (*it));
                 t +=  u * u;
@@ -413,7 +413,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return type_traits<real_type>::sqrt (t);
 #else
-            real_type scale (0);
+            real_type scale = real_type ();
             real_type sum_squares (1);
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_2 (*it));
@@ -435,7 +435,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (I it, const I &it_end) const {
 #ifndef BOOST_UBLAS_SCALED_NORM
-            real_type t (0);
+            real_type t = real_type ();
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_2 (*it));
                 t +=  u * u;
@@ -443,7 +443,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             return type_traits<real_type>::sqrt (t);
 #else
-            real_type scale (0);
+            real_type scale = real_type ();
             real_type sum_squares (1);
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_2 (*it));
@@ -473,7 +473,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E>
         BOOST_UBLAS_INLINE
         result_type operator () (const vector_expression<E> &e) const {
-            real_type t (0);
+            real_type t = real_type ();
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_inf (e () (i)));
@@ -486,7 +486,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I it) const {
-            real_type t (0);
+            real_type t = real_type ();
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
                 if (u > t)
@@ -499,7 +499,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (I it, const I &it_end) const { 
-            real_type t (0);
+            real_type t = real_type ();
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
                 if (u > t) 
@@ -535,7 +535,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Here we'd better guarantee a valid return value to achieve BLAS compatibility
             // result_type i_norm_inf (-1);
             result_type i_norm_inf (e ().size () == 0 ? -1 : 0);
-            real_type t (0);
+            real_type t = real_type ();
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
                 real_type u (type_traits<value_type>::norm_inf (e () (i)));
@@ -553,7 +553,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Here we'd better guarantee a valid return value to achieve BLAS compatibility
             // result_type i_norm_inf (-1);
             result_type i_norm_inf (size == 0 ? -1 : 0);
-            real_type t (0);
+            real_type t = real_type ();
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
                 if (u > t) {
@@ -571,7 +571,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Here we'd better guarantee a valid return value to achieve BLAS compatibility
             // result_type i_norm_inf (-1);
             result_type i_norm_inf (it ().size () == 0 ? -1 : 0);
-            real_type t (0);
+            real_type t = real_type ();
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
                 if (u > t) {
@@ -612,7 +612,7 @@ namespace boost { namespace numeric { namespace ublas {
             const T2 *data2 = data_const (e2 ());
             size_type s1 = stride (e1 ());
             size_type s2 = stride (e2 ());
-            result_type t (0);
+            result_type t = result_type ();
             if (s1 == 1 && s2 == 1) {
                 for (size_type i = 0; i < size; ++ i)
                     t += data1 [i] * data2 [i];
@@ -637,7 +637,7 @@ namespace boost { namespace numeric { namespace ublas {
                                  const vector_expression<E2> &e2,
                                  abstract_tag) const {
             size_type size (BOOST_UBLAS_SAME (e1 ().size (), e2 ().size ()));
-            result_type t (0);
+            result_type t = result_type ();
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             for (size_type i = 0; i < size; ++ i)
                 t += e1 () (i) * e2 () (i);
@@ -666,7 +666,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I1 it1, I2 it2) const {
-            result_type t (0);
+            result_type t = result_type ();
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
@@ -679,7 +679,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) const {
-            result_type t (0);
+            result_type t = result_type ();
             difference_type it1_size (it1_end - it1);
             difference_type it2_size (it2_end - it2);
             difference_type diff (0);
@@ -708,7 +708,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, sparse_bidirectional_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it1 != it1_end && it2 != it2_end) {
                 difference_type compare = it1.index () - it2.index ();
                 if (compare < 0) 
@@ -752,7 +752,7 @@ namespace boost { namespace numeric { namespace ublas {
             const T2 *data2 = data_const (e2 ());
             size_type s1 = stride2 (e1 ());
             size_type s2 = stride (e2 ());
-            result_type t (0);
+            result_type t = result_type ();
             if (s1 == 1 && s2 == 1) {
                 for (size_type j = 0; j < size; ++ j)
                     t += data1 [j] * data2 [j];
@@ -777,7 +777,7 @@ namespace boost { namespace numeric { namespace ublas {
                                  const vector_expression<E2> &e2,
                                  size_type i, abstract_tag) const {
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
-            result_type t (0);
+            result_type t = result_type ();
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             for (size_type j = 0; j < size; ++ j)
                 t += e1 () (i, j) * e2 () (j);
@@ -807,7 +807,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I1 it1, I2 it2) const {
-            result_type t (0);
+            result_type t = result_type ();
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
@@ -820,7 +820,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) const {
-            result_type t (0);
+            result_type t = result_type ();
             difference_type it1_size (it1_end - it1);
             difference_type it2_size (it2_end - it2);
             difference_type diff (0);
@@ -850,7 +850,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  sparse_bidirectional_iterator_tag, sparse_bidirectional_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it1 != it1_end && it2 != it2_end) {
                 difference_type compare = it1.index2 () - it2.index ();
                 if (compare < 0)
@@ -867,7 +867,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  sparse_bidirectional_iterator_tag, packed_random_access_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it1 != it1_end) {
                 t += *it1 * it2 () (it1.index2 ());
                 ++ it1;
@@ -879,7 +879,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  packed_random_access_iterator_tag, sparse_bidirectional_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it2 != it2_end) {
                 t += it1 () (it1.index1 (), it2.index ()) * *it2;
                 ++ it2;
@@ -916,7 +916,7 @@ namespace boost { namespace numeric { namespace ublas {
             const T2 *data2 = data_const (e2 ()) + i * stride2 (e2 ());
             size_type s1 = stride (e1 ());
             size_type s2 = stride1 (e2 ());
-            result_type t (0);
+            result_type t = result_type ();
             if (s1 == 1 && s2 == 1) {
                 for (size_type j = 0; j < size; ++ j)
                     t += data1 [j] * data2 [j];
@@ -941,7 +941,7 @@ namespace boost { namespace numeric { namespace ublas {
                                  const matrix_expression<E2> &e2,
                                  size_type i, abstract_tag) const {
             size_type size = BOOST_UBLAS_SAME (e1 ().size (), e2 ().size1 ());
-            result_type t (0);
+            result_type t = result_type ();
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             for (size_type j = 0; j < size; ++ j)
                 t += e1 () (j) * e2 () (j, i);
@@ -971,7 +971,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I1 it1, I2 it2) const {
-            result_type t (0);
+            result_type t = result_type ();
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
@@ -984,7 +984,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end) const {
-            result_type t (0);
+            result_type t = result_type ();
             difference_type it1_size (it1_end - it1);
             difference_type it2_size (it2_end - it2);
             difference_type diff (0);
@@ -1014,7 +1014,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  sparse_bidirectional_iterator_tag, sparse_bidirectional_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it1 != it1_end && it2 != it2_end) {
                 difference_type compare = it1.index () - it2.index1 ();
                 if (compare < 0)
@@ -1031,7 +1031,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  packed_random_access_iterator_tag, sparse_bidirectional_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it2 != it2_end) {
                 t += it1 () (it2.index1 ()) * *it2;
                 ++ it2;
@@ -1043,7 +1043,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end,
                                  sparse_bidirectional_iterator_tag, packed_random_access_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it1 != it1_end) {
                 t += *it1 * it2 () (it1.index (), it2.index2 ());
                 ++ it1;
@@ -1089,7 +1089,7 @@ namespace boost { namespace numeric { namespace ublas {
             const T2 *data2 = data_const (e2 ()) + j * stride2 (e2 ());
             size_type s1 = stride2 (e1 ());
             size_type s2 = stride1 (e2 ());
-            result_type t (0);
+            result_type t = result_type ();
             if (s1 == 1 && s2 == 1) {
                 for (size_type k = 0; k < size; ++ k)
                     t += data1 [k] * data2 [k];
@@ -1114,7 +1114,7 @@ namespace boost { namespace numeric { namespace ublas {
                                  const matrix_expression<E2> &e2,
                                  size_type i, size_type j, abstract_tag) const {
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
-            result_type t (0);
+            result_type t = result_type ();
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             for (size_type k = 0; k < size; ++ k)
                 t += e1 () (i, k) * e2 () (k, j);
@@ -1144,7 +1144,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I1 it1, I2 it2) const {
-            result_type t (0);
+            result_type t = result_type ();
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             while (-- size >= 0)
                 t += *it1 * *it2, ++ it1, ++ it2;
@@ -1157,7 +1157,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, packed_random_access_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             difference_type it1_size (it1_end - it1);
             difference_type it2_size (it2_end - it2);
             difference_type diff (0);
@@ -1186,7 +1186,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
         result_type operator () (I1 it1, const I1 &it1_end, I2 it2, const I2 &it2_end, sparse_bidirectional_iterator_tag) const {
-            result_type t (0);
+            result_type t = result_type ();
             while (it1 != it1_end && it2 != it2_end) {
                 difference_type compare = it1.index2 () - it2.index1 ();
                 if (compare < 0)
@@ -1222,10 +1222,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E>
         BOOST_UBLAS_INLINE
         result_type operator () (const matrix_expression<E> &e) const {
-            real_type t (0);
+            real_type t = real_type ();
             size_type size2 (e ().size2 ());
             for (size_type j = 0; j < size2; ++ j) {
-                real_type u (0);
+                real_type u = real_type ();
                 size_type size1 (e ().size1 ());
                 for (size_type i = 0; i < size1; ++ i) {
                     real_type v (type_traits<value_type>::norm_1 (e () (i, j)));
@@ -1249,7 +1249,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E>
         BOOST_UBLAS_INLINE
         result_type operator () (const matrix_expression<E> &e) const { 
-            real_type t (0);
+            real_type t = real_type ();
             size_type size1 (e ().size1 ());
             for (size_type i = 0; i < size1; ++ i) {
                 size_type size2 (e ().size2 ());
@@ -1273,10 +1273,10 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E>
         BOOST_UBLAS_INLINE
         result_type operator () (const matrix_expression<E> &e) const {
-            real_type t (0);
+            real_type t = real_type ();
             size_type size1 (e ().size1 ());
             for (size_type i = 0; i < size1; ++ i) {
-                real_type u (0);
+                real_type u = real_type ();
                 size_type size2 (e ().size2 ());
                 for (size_type j = 0; j < size2; ++ j) {
                     real_type v (type_traits<value_type>::norm_inf (e () (i, j)));
