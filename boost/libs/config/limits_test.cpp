@@ -40,6 +40,7 @@ void test_integral_limits(const T &, const char * msg)
   BOOST_TEST(lim::is_specialized);
   BOOST_TEST(lim::is_integer);
   // BOOST_TEST(lim::is_modulo);
+  BOOST_TEST(lim::min() < lim::max());
 }
 
 template <class T>
