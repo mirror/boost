@@ -58,11 +58,31 @@ class worker : noncopyable
       #endif
       terminated_( false )
     {
-      pProcessorContainer_->reset(
-        new processor_container( *this, processorHolderHandle_ ) );
+      pProcessorContainer_->reset( new processor_container(
+        processor_context( *this, processorHolderHandle_ ) ) );
     }
 
     typedef weak_ptr< processor_holder_type > processor_handle;
+
+    class processor_context : noncopyable
+    {
+      processor_context(
+        worker & theWorker, const processor_handle & theHandle
+      ) :
+        worker_( theWorker ),
+        handle_( theHandle )
+      {
+      }
+
+      worker & my_worker() const { return worker_; }
+      const processor_handle & my_handle() const { return handle_; }
+
+      worker & worker_;
+      const processor_handle handle_;
+
+      friend class worker;
+      friend class event_processor< worker >;
+    };
 
     template< class Processor >
     processor_handle create_processor()
@@ -78,7 +98,8 @@ class worker : noncopyable
       // handle (a bit strange but legal). For this case we must queue the
       // event *before* constructing the processor.
       processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
-      pProcessor->reset( new Processor( *this, pProcessor ) );
+      pProcessor->reset( new Processor(
+        processor_context( *this, pProcessor ) ) );
       return pProcessor;
     }
 
@@ -89,7 +110,8 @@ class worker : noncopyable
       recursive_mutex::scoped_lock lock( mutex_ );
       #endif
       processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
-      pProcessor->reset( new Processor( *this, pProcessor, param1 ) );
+      pProcessor->reset( new Processor(
+        processor_context( *this, pProcessor ), param1 ) );
       return pProcessor;
     }
 
@@ -100,7 +122,8 @@ class worker : noncopyable
       recursive_mutex::scoped_lock lock( mutex_ );
       #endif
       processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
-      pProcessor->reset( new Processor( *this, pProcessor, param1, param2 ) );
+      pProcessor->reset( new Processor(
+        processor_context( *this, pProcessor ), param1, param2 ) );
       return pProcessor;
     }
 
@@ -114,7 +137,7 @@ class worker : noncopyable
       #endif
       processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
       pProcessor->reset( new Processor(
-        *this, pProcessor, param1, param2, param3 ) );
+        processor_context( *this, pProcessor ), param1, param2, param3 ) );
       return pProcessor;
     }
 
@@ -129,7 +152,8 @@ class worker : noncopyable
       #endif
       processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
       pProcessor->reset( new Processor(
-        *this, pProcessor, param1, param2, param3, param4 ) );
+        processor_context( *this, pProcessor ),
+        param1, param2, param3, param4 ) );
       return pProcessor;
     }
 
@@ -145,7 +169,8 @@ class worker : noncopyable
       #endif
       processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
       pProcessor->reset( new Processor(
-        *this, pProcessor, param1, param2, param3, param4, param5 ) );
+        processor_context( *this, pProcessor ),
+        param1, param2, param3, param4, param5 ) );
       return pProcessor;
     }
 
@@ -161,7 +186,8 @@ class worker : noncopyable
       #endif
       processor_holder_ptr_type pProcessor = queue_empty_event_unlocked();
       pProcessor->reset( new Processor(
-        *this, pProcessor, param1, param2, param3, param4, param5, param6 ) );
+        processor_context( *this, pProcessor ),
+        param1, param2, param3, param4, param5, param6 ) );
       return pProcessor;
     }
 
@@ -280,10 +306,9 @@ class worker : noncopyable
     {
       public:
         processor_container(
-          worker & myWorker,
-          const typename worker::processor_handle & myHandle
+          const typename processor_type::processor_context & myContext
         ) :
-          processor_type( myWorker, myHandle )
+          processor_type( myContext )
         {
         }
 

@@ -80,11 +80,10 @@ struct Player : fsm::asynchronous_state_machine< Player, Waiting >
   typedef fsm::asynchronous_state_machine< Player, Waiting > BaseType;
   public:
     Player( 
-      fsm::worker<> & myWorker,
-      const processor_handle & myHandle,
+      const processor_context & myContext,
       unsigned int maxNoOfReturns
     ) :
-      BaseType( myWorker, myHandle ),
+      BaseType( myContext ),
       maxNoOfReturns_( maxNoOfReturns ),
       noOfReturns_( 0 ),
       pBallReturned_( new BallReturned() )
@@ -92,11 +91,11 @@ struct Player : fsm::asynchronous_state_machine< Player, Waiting >
       // as we will always return the same event to the opponent, we construct
       // and fill it here so that we can reuse it over and over
       pBallReturned_->returnToOpponent = boost::bind(
-        &fsm::worker<>::queue_event, &myWorker, myHandle, _1 );
+        &fsm::worker<>::queue_event, &my_worker(), my_handle(), _1 );
       pBallReturned_->abortGame = boost::bind(
         &fsm::worker<>::queue_event,
-        &myWorker, myHandle,  MakeIntrusive( new GameAborted() ) );
-      myWorker.initiate_processor( myHandle );
+        &my_worker(), my_handle(),  MakeIntrusive( new GameAborted() ) );
+      my_worker().initiate_processor( my_handle() );
     }
 
     void ReturnToOpponent( const BallReturned & ballReturned )
@@ -180,11 +179,10 @@ int main()
       case 'p':
       {
         fsm::worker<> worker1;
-        fsm::worker<> workerObj2;
 
         #ifdef USE_TWO_WORKER_THREADS
         #ifdef BOOST_HAS_THREADS
-        fsm::worker<> & worker2 = workerObj2;
+        fsm::worker<> worker2;
         #else
         fsm::worker<> & worker2 = worker1;
         #endif

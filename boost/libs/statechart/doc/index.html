@@ -49,17 +49,14 @@ include:</p>
   error handling and threading</li>
 </ul>
 <p>All code has been tested on the following platforms using boost 
-distribution 1.30.2:</p>
+distribution 1.31.0:</p>
 <ul>
   <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
-  <li>GCC3.2 (Mingw)</li>
+  <li>GCC3.2 (MinGW)</li>
 </ul>
 <p>The library is functionally complete. However, the following is still in 
 the making:</p>
 <ol>
-  <li>Rework the <code>worker</code> and <code>asynchronous_state_machine</code> 
-  templates so that state machine objects can dynamically be added and removed 
-  and workers with priority-queues become possible</li>
   <li>Regression tests</li>
   <li>Refactor the <code>state_machine</code> class template to reduce code 
   size in projects with many different state machines</li>
@@ -83,11 +80,20 @@ the making:</p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>03 March 2004:</p>
+<ul>
+  <li><b>Breaking change</b>: Redesigned the <code>worker&lt;&gt;</code> and <code>
+  asynchronous_state_machine&lt;&gt;</code> class templates and updated 
+  documentation accordingly. Event processors can now be added and removed 
+  while a worker is running. Moreover, the new design allows for custom 
+  workers with non-FIFO queueing schemes</li>
+  <li>The StopWatch example now uses std::time() instead of std::clock()</li>
+</ul>
 <p>09 February 2004:</p>
 <ul>
   <li>Integrated the standard conformance fixes contributed by Peter Petrov. 
-  The library now also works on GCC 3.2 and should be much easier portable to 
-  other highly conformant compilers</li>
+  The library now also works on GCC 3.2 and should be much easier to port to 
+  other highly conforming compilers</li>
   <li>Added the state type information facility to <code>simple_state</code></li>
   <li>Added the function templates <code>simple_state::clear_shallow_history()</code> 
   and <code>simple_state::clear_deep_history()</code></li>
@@ -141,7 +147,7 @@ the making:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 February, 2004<!--webbot bot="Timestamp" endspan i-checksum="40415" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28866" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

@@ -50,7 +50,7 @@ struct EvReset : fsm::event< EvReset > {};
 
 struct IElapsedTime
 {
-  virtual std::clock_t ElapsedTime() const = 0;
+  virtual double ElapsedTime() const = 0;
 };
 
 
@@ -63,20 +63,20 @@ struct Active : fsm::simple_state< Active, StopWatch,
   fsm::transition< EvReset, Active >, Stopped >
 {
   public:
-    Active() : elapsedTime_( 0 ) {}
+    Active() : elapsedTime_( 0.0 ) {}
 
-    std::clock_t & ElapsedTime()
+    double & ElapsedTime()
     {
       return elapsedTime_;
     }
 
-    std::clock_t ElapsedTime() const
+    double ElapsedTime() const
     {
       return elapsedTime_;
     }
 
   private:
-    std::clock_t elapsedTime_;
+    double elapsedTime_;
 };
 
 struct Running :
@@ -85,20 +85,21 @@ struct Running :
     fsm::transition< EvStartStop, Stopped > >
 {
   public:
-    Running() : startTime_( std::clock() ) {}
+    Running() : startTime_( std::time( 0 ) ) {}
 
     ~Running()
     {
       context< Active >().ElapsedTime() = ElapsedTime();
     }
 
-    virtual std::clock_t ElapsedTime() const
+    virtual double ElapsedTime() const
     {
-      return context< Active >().ElapsedTime() + std::clock() - startTime_;
+      return context< Active >().ElapsedTime() +
+        std::difftime( std::time( 0 ), startTime_ );
     }
 
   private:
-    std::clock_t startTime_;
+    std::time_t startTime_;
 };
 
 struct Stopped :
@@ -106,7 +107,7 @@ struct Stopped :
   fsm::simple_state< Stopped, Active,
     fsm::transition< EvStartStop, Running > >
 {
-  virtual std::clock_t ElapsedTime() const
+  virtual double ElapsedTime() const
   {
     return context< Active >().ElapsedTime();
   }

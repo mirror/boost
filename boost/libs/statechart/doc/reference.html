@@ -37,6 +37,8 @@
   <dt><a href="#asynchronous_state_machine.hpp">asynchronous_state_machine.hpp</a></dt>
   <dd><a href="#Class template asynchronous_state_machine">Class template
   <code>asynchronous_state_machine</code></a></dd>
+  <dt><a href="#event_processor.hpp">event_processor.hpp</a></dt>
+  <dd><a href="#Class template event_processor">Class template event_processor</a></dd>
   <dt>&nbsp;</dt>
   <dt><a href="#simple_state.hpp">simple_state.hpp</a></dt>
   <dd><a href="#Typedef no_reactions">Typedef <code>no_reactions</code></a></dd>
@@ -142,8 +144,8 @@ the indicated results:</p>
     <td width="14%"><code>S::id_type</code></td>
     <td width="35%">A value unambiguously identifying the most-derived type of
     <code>cs</code>. <code>S::id_type</code> values are comparable with <code>
-    operator==</code> and <code>operator!=</code>. An unspecified collating 
-    order can be established with <code>std::less&lt; S::id_type &gt;</code></td>
+    operator==()</code> and <code>operator!=()</code>. An unspecified 
+    collating order can be established with <code>std::less&lt; S::id_type &gt;</code></td>
   </tr>
   <tr>
     <td width="25%"><code>cs.custom_dynamic_type_ptr&lt;<br>
@@ -157,59 +159,44 @@ the indicated results:</p>
   </tr>
 </table>
 <h2><a name="Worker">Worker</a> concept</h2>
-<p><font color="#FF0000">The Worker concept and the <code>
-asynchronous_state_machine</code> class template will be changed substantially 
-in the near future (see <a href="index.html">to-do list</a>).</font></p>
 <p>A Worker type defines the following:</p>
 <ul>
+  <li>What is passed to the constructors of <code>event_processor</code> 
+  subclasses and how the lifetime of such objects is managed</li>
   <li>How events are added to the workers' event queue</li>
   <li>Whether and how to wait for new events when the workers' event queue 
   runs empty</li>
   <li>Whether and what type of locking is used to ensure thread-safety</li>
-  <li>What happens when one of the served state machines propagates an 
-  exception</li>
+  <li>Whether it is possible to queue events for no longer existing <code>
+  event_processor</code> subclass objects and what happens when such an event 
+  is processed</li>
+  <li>What happens when one of the serviced <code>event_processor</code> 
+  subclass objects propagates an exception</li>
 </ul>
-<p>Any type directly or indirectly deriving from the <code>worker_base</code> 
-class template satisfies all library requirements of the Worker concept. 
-However, if <b>user code</b> wants to use a Worker type W as a drop-in 
-replacement for the library-supplied <code>worker</code> class template then 
-the following expressions must also be well-formed and have the indicated 
-results (<code>w</code> is a object of W, <code>cw</code> a const object of W 
-and <code>m</code> a <code>asynchronous_state_machine</code> subclass object):</p>
+<p>For a Worker type <code>W</code> and a <code>const</code> object <code>cpc</code> 
+of type <code>W::processor_context</code> the following expressions must be 
+well-formed and have the indicated results:</p>
 <table border="3" width="100%" id="AutoNumber9" cellpadding="2">
   <tr>
     <td width="26%"><b>Expression</b></td>
     <td width="14%"><b>Type</b></td>
-    <td width="35%"><b>Effects/Result</b></td>
+    <td width="35%"><b>Result</b></td>
   </tr>
   <tr>
-    <td width="26%"><code>w()</code></td>
-    <td width="14%">&nbsp;</td>
-    <td width="35%">
-    <ol>
-      <li>If all registered state machines are terminated, they are all 
-      initiated</li>
-      <li>Returns to the caller if all registered state machines are 
-      terminated</li>
-      <li>If the event queue is currently empty:<ul>
-        <li>waits for a new event to be queued in multithreaded builds</li>
-        <li>returns to the caller in single-threaded builds</li>
-      </ul>
-      </li>
-      <li>Dequeues an event, in multithreaded builds the dequeuing is 
-      protected with a mutex</li>
-      <li>Has the previously dequeued event processed</li>
-      <li>Continues with step 2</li>
-    </ol>
-    </td>
+    <td width="25%"><code>cpc.my_worker()</code></td>
+    <td width="14%"><code>W &amp;</code></td>
+    <td width="35%">A reference to the worker</td>
   </tr>
   <tr>
-    <td width="25%"><code>cw.terminated()</code></td>
-    <td width="14%"><code>bool</code></td>
-    <td width="35%"><code>true</code> if all state machine objects registered 
-    with <code>cw</code> are terminated, <code>false</code> otherwise</td>
+    <td width="25%"><code>cpc.my_handle()</code></td>
+    <td width="14%"><code>W::processor_handle</code></td>
+    <td width="35%">The handle identifying the <code>event_processor</code> 
+    subclass object</td>
   </tr>
 </table>
+<p>To protect against abuse, all members of <code>W::processor_context</code> 
+should be declared private. As a result, <code>W</code> and the <code>
+event_processor</code> class must be friends of <code>W::processor_context</code>.</p>
 <h1>Header &lt;boost/fsm/<a name="state_machine.hpp">state_machine.hpp</a>&gt;</h1>
 <h2><a name="Class template state_machine">Class template <code>state_machine</code></a></h2>
 <p>This is the base class template of all synchronous state machines.</p>
@@ -268,11 +255,11 @@ namespace fsm
     public:
       typedef MostDerived outermost_context_type;
 
-      bool <a href="#initiate">initiate</a>();
+      void <a href="#initiate">initiate</a>();
       void <a href="#terminate">terminate</a>();
       bool <a href="#terminated">terminated</a>() const;
 
-      bool <a href="#process_event">process_event</a>( const <a href="#Class event_base">event_base</a> &amp; );
+      void <a href="#process_event">process_event</a>( const <a href="#Class event_base">event_base</a> &amp; );
 
       template&lt; class Target &gt;
       Target <a href="#state_cast">state_cast</a>() const;
@@ -299,12 +286,12 @@ namespace fsm
 <pre><a name="~state_machine">~state_machine</a>();</pre>
 <p><b>Effects</b>: <code>terminate();</code></p>
 <h3>Class template <code>state_machine</code> modifier functions</h3>
-<pre>bool <a name="initiate">initiate</a>();</pre>
+<pre>void <a name="initiate">initiate</a>();</pre>
 <p><b>Effects</b>:</p>
 <ol>
   <li>Calls <code>terminate()</code></li>
   <li>Constructs a function object <code>action</code> with a parameter-less
-  <code>operator()</code> returning <code><a href="#Enum result">result</a></code> 
+  <code>operator()()</code> returning <code><a href="#Enum result">result</a></code> 
   that<ol type="a">
     <li>enters (constructs) the state specified with the <code>InitialState</code> 
     template parameter</li>
@@ -313,7 +300,7 @@ namespace fsm
   </ol>
   </li>
   <li>Constructs a function object <code>exceptionEventHandler</code> with an
-  <code>operator()</code> returning <code>bool</code> and accepting an 
+  <code>operator()()</code> returning <code>bool</code> and accepting an 
   exception event parameter that processes the passed exception event, with 
   the following differences to the processing of normal events:<ul type="disc">
     <li><a href="definitions.html#Reaction">Reaction</a> search always starts 
@@ -337,19 +324,18 @@ namespace fsm
   </li>
   <li>Passes <code>action</code>, <code>exceptionEventHandler</code> and the
   <code><a href="#Enum result">result</a></code> value <code>
-  handlerSuccessResult</code> to <code>ExceptionTranslator::operator()</code>. 
-  If <code>ExceptionTranslator::operator()</code> throws an exception, <code>
+  handlerSuccessResult</code> to <code>ExceptionTranslator::operator()()</code>. 
+  If <code>ExceptionTranslator::operator()()</code> throws an exception, <code>
   terminate()</code> is called and the exception is propagated to the caller. 
   Continues with step 5 otherwise (the return value is discarded)</li>
-  <li>Processes all posted events (see <code>process_event</code>)</li>
+  <li>Processes all posted events (see <code>process_event()</code>)</li>
 </ol>
-<p><b>Returns</b>: <code>terminated()</code><br>
-<b>Throws</b>: Any exceptions propagated from <code>
-ExceptionTranslator::operator()</code>. Exceptions never originate in the 
+<p><b>Throws</b>: Any exceptions propagated from <code>
+ExceptionTranslator::operator()()</code>. Exceptions never originate in the 
 library itself but only in code supplied through template parameters:</p>
 <ul>
-  <li><code>operator new</code> (used to allocate states)</li>
-  <li><code>Allocator::allocate</code></li>
+  <li><code>operator new()</code> (used to allocate states)</li>
+  <li><code>Allocator::allocate()</code></li>
   <li>state constructors</li>
   <li><code>react</code> functions</li>
   <li>transition-actions</li>
@@ -358,8 +344,9 @@ library itself but only in code supplied through template parameters:</p>
 <p><b>Effects</b>: The state machine exits (destructs) all currently active 
 states. <a href="definitions.html#Innermost state">Innermost states</a> are 
 exited first. Other states are exited as soon as all their direct and indirect 
-inner states have been exited</p>
-<pre>bool <a name="process_event">process_event</a>( const <a href="#Class event_base">event_base</a> &amp; );</pre>
+inner states have been exited. Also discards all remaining events and clears 
+all history information.</p>
+<pre>void <a name="process_event">process_event</a>( const <a href="#Class event_base">event_base</a> &amp; );</pre>
 <p><b>Effects</b>:</p>
 <ol>
   <li>Selects the passed event as the current event</li>
@@ -368,7 +355,7 @@ inner states have been exited</p>
   from all the currently active <a href="definitions.html#Innermost state">
   innermost states</a>. If no such state exists then continues with step 10</li>
   <li>Constructs a function object <code>action</code> with a parameter-less
-  <code>operator()</code> returning <code><a href="#Enum result">result</a></code> 
+  <code>operator()()</code> returning <code><a href="#Enum result">result</a></code> 
   that does the following:<ol type="a">
     <li>Searches a reaction suitable for the current event, starting with the 
     current innermost state and moving outward until a state defining a 
@@ -380,9 +367,9 @@ inner states have been exited</p>
   </ol>
   </li>
   <li>Constructs a function object <code>exceptionEventHandler</code> with an
-  <code>operator()</code> accepting an exception event parameter and returning
-  <code>bool</code> that processes the passed exception event, with the 
-  following differences to the processing of normal events:<ul type="disc">
+  <code>operator()()</code> accepting an exception event parameter and 
+  returning <code>bool</code> that processes the passed exception event, with 
+  the following differences to the processing of normal events:<ul type="disc">
     <li>If the state machine is stable when the exception event is processed 
     then exception event reaction search starts with the innermost state that 
     was last visited during the last normal event reaction search (the 
@@ -410,16 +397,16 @@ inner states have been exited</p>
   </li>
   <li>Passes <code>action</code>, an <code>exceptionEventHandler</code> 
   callback and the <code><a href="#Enum result">result</a></code> value <code>
-  handlerSuccessResult</code> to <code>ExceptionTranslator::operator()</code>. 
-  If <code>ExceptionTranslator::operator()</code> throws an exception then 
+  handlerSuccessResult</code> to <code>ExceptionTranslator::operator()()</code>. 
+  If <code>ExceptionTranslator::operator()()</code> throws an exception then 
   calls <code>terminate()</code> and propagates the exception to the caller</li>
-  <li>If the return value of <code>ExceptionTranslator::operator()</code> is 
+  <li>If the return value of <code>ExceptionTranslator::operator()()</code> is 
   equal to the one of <code>simple_state::forward_event()</code> then 
   continues with step 3</li>
-  <li>If the return value of <code>ExceptionTranslator::operator()</code> is 
+  <li>If the return value of <code>ExceptionTranslator::operator()()</code> is 
   equal to the one of <code>simple_state::defer_event()</code> then the 
   current event is stored in a state-specific queue. Continues with step 10</li>
-  <li>If <code>ExceptionTranslator::operator()</code> returns the previously 
+  <li>If <code>ExceptionTranslator::operator()()</code> returns the previously 
   passed <code>handlerSuccessResult</code> or if the return value is equal to 
   the one of <code>simple_state::discard_event()</code> then continues with 
   step 10</li>
@@ -427,16 +414,14 @@ inner states have been exited</p>
   selects it as the current event and continues with step 2. Returns to the 
   caller otherwise</li>
 </ol>
-<p><b>Returns</b>: <code>false</code>, if the machine was terminated before 
-processing the event. Returns <code>terminated()</code> otherwise<br>
-<b>Throws</b>: Any exceptions propagated from <code>
+<p><b>Throws</b>: Any exceptions propagated from <code>
 ExceptionTranslator::operator()</code>. Exceptions never originate in the 
 library itself but only in code supplied through template parameters:</p>
 <ul>
-  <li><code>operator new</code> (used to allocate states)</li>
-  <li><code>Allocator::allocate</code></li>
+  <li><code>operator new()</code> (used to allocate states)</li>
+  <li><code>Allocator::allocate()</code></li>
   <li>state constructors</li>
-  <li><code>react</code> functions</li>
+  <li><code>react()</code> functions</li>
   <li>transition-actions</li>
 </ul>
 <h3>Class template <code>state_machine</code> observer functions</h3>
@@ -455,8 +440,8 @@ following forms: <code>const Class *</code> or <code>const Class &amp;</code><br
 <b>Throws</b>: <code>std::bad_cast</code> if <code>Target</code> is a 
 reference type and none of the active states can be <code>dynamic_cast</code> 
 to Target<br>
-<b>Note</b>: The search sequence is the same as for <a href="#process_event">
-process_event</a></p>
+<b>Note</b>: The search sequence is the same as for <code>
+<a href="#process_event">process_event</a>()</code></p>
 <pre>template&lt; class Target &gt;
 Target <a name="state_downcast">state_downcast</a>() const;</pre>
 <p><b>Returns</b>: Depending on the form of <code>Target</code> either a 
@@ -469,7 +454,7 @@ targets otherwise. <code>Target</code> can take either of the following forms:
 reference type and none of the active states has a most derived type equal to
 <code>Target</code><br>
 <b>Note</b>: The search sequence is the same as for <a href="#process_event">
-process_event</a></p>
+<code>process_event</code></a><code>()</code></p>
 <pre>state_iterator <a name="state_begin">state_begin</a>() const;</pre>
 <pre>state_iterator <a name="state_end">state_end</a>() const;</pre>
 <p><b>Return</b>: Iterator objects, the range [<code>state_begin()</code>,
@@ -484,9 +469,6 @@ iterators are invalidated when a modifier function is called</p>
 <h1>Header &lt;boost/fsm/<a name="asynchronous_state_machine.hpp">asynchronous_state_machine.hpp</a>&gt;</h1>
 <h2><a name="Class template asynchronous_state_machine">Class template <code>
 asynchronous_state_machine</code></a></h2>
-<p><font color="#FF0000">The Worker concept and the <code>
-asynchronous_state_machine</code> class template will be changed substantially 
-in the near future (see <a href="index.html">to-do list</a>).</font></p>
 <p>This is the base class template of all asynchronous state machines.</p>
 <h3>Class template <code>asynchronous_state_machine</code> parameters</h3>
 <table border="3" cellpadding="2" width="100%" id="AutoNumber8">
@@ -535,41 +517,328 @@ in the near future (see <a href="index.html">to-do list</a>).</font></p>
   </tr>
 </table>
 <h3>Class template <code>asynchronous_state_machine</code> synopsis</h3>
-<pre>template&lt;
-  class MostDerived,
-  class InitialState,
-  class Worker = worker&lt;&gt;,
-  class Allocator = std::allocator&lt; void &gt;,
-  class ExceptionTranslator = exception_translator&lt;&gt; &gt;
-class asynchronous_state_machine
+<pre>namespace boost
 {
-  public:
-    void queue_event( const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );
-
-  protected:
-    asynchronous_state_machine( Worker &amp; myWorker );
-    ~asynchronous_state_machine();  
-};</pre>
+namespace fsm
+{
+  template&lt;
+    class MostDerived,
+    class InitialState,
+    class Worker = worker&lt;&gt;,
+    class Allocator = std::allocator&lt; void &gt;,
+    class ExceptionTranslator = exception_translator&lt;&gt; &gt;
+  class asynchronous_state_machine :
+    public event_processor&lt; Worker &gt;
+  {
+    protected:
+      asynchronous_state_machine(
+        const processor_context &amp; myContext );
+      ~asynchronous_state_machine();  
+  };
+}
+}</pre>
 <h3>Class template <code>asynchronous_state_machine</code> constructor and 
 destructor</h3>
-<pre>asynchronous_state_machine( Worker &amp; myWorker );</pre>
-<p><b>Requires</b>:<b> </b>No thread of control is currently inside <code>
-myWorker.operator()</code><b><br>
-Effects</b>: Constructs a non-running asynchronous state machine and registers 
-it with the passed worker<br>
-<b>Throws</b>: Whatever <code>Allocator::allocate</code> (the workers' 
-allocator) throws</p>
+<pre>asynchronous_state_machine(
+  const processor_context &amp; myContext );</pre>
+<p><b>Effects</b>: Constructs a non-running asynchronous state machine<br>
+<b>Note</b>: Users cannot create <code>asynchronous_state_machine</code> 
+subclass objects directly. This can only be done through an object of the
+<code>Worker</code> class</p>
 <pre>~asynchronous_state_machine();</pre>
-<p><b>Requires</b>:<b> </b>No thread of control is currently inside <code>
-myWorker.operator()</code>. The worker object passed to the constructor has 
-not yet been destructed<b><br>
-Effects</b>: Terminates the state machine</p>
-<h3>Class template <code>asynchronous_state_machine</code> modifier functions</h3>
-<pre>void queue_event( const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );</pre>
-<p><b>Effects</b>: Pushes the passed event into the queue of the worker object 
-passed to the constructor<br>
-<b>Throws</b>: Whatever <code>Allocator::allocate</code> (the workers' 
-allocator) throws</p>
+<p><b>Effects</b>: Terminates the state machine<br>
+<b>Note</b>: Users cannot destroy <code>asynchronous_state_machine</code> 
+subclass objects directly. This can only be done through an object of the
+<code>Worker</code> class</p>
+<h1>Header &lt;boost/fsm/<a name="event_processor.hpp">event_processor.hpp</a>&gt;</h1>
+<h2><a name="Class template event_processor">Class template <code>
+event_processor</code></a></h2>
+<p>This is the base class template of all classes processing events. An 
+asynchronous state machine is just one possible event processor 
+implementation.</p>
+<h3>Class template <code>event_processor</code> parameters</h3>
+<table border="3" cellpadding="2" width="100%" id="AutoNumber15">
+  <tr>
+    <td width="15%"><b>Template parameter</b></td>
+    <td width="51%"><b>Requirements</b></td>
+    <td width="18%"><b>Semantics</b></td>
+    <td width="19%"><b>Default</b></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>Worker</code></td>
+    <td width="51%">A model of the Worker concept</td>
+    <td width="18%">see <a href="#Worker">Worker concept </a></td>
+    <td width="19%">&nbsp;</td>
+  </tr>
+</table>
+<h3>Class template <code>event_processor</code> synopsis</h3>
+<pre>namespace boost
+{
+namespace fsm
+{
+  template&lt; class Worker &gt;
+  class event_processor
+  {
+    public:
+      virtual <a href="#~event_processor">~event_processor</a>();
+
+      Worker &amp; <a href="#my_worker">my_worker</a>() const
+
+      typedef typename Worker::processor_handle
+        processor_handle;
+      processor_handle <a href="#my_handle">my_handle</a>() const;
+
+      void <a href="#event_processor::initiate">initiate</a>();
+      void <a href="#event_processor::process_event">process_event</a>( const event_base &amp; evt );
+      void <a href="#event_processor::terminate">terminate</a>();
+
+    protected:
+      typedef typename Worker::processor_context
+        processor_context;
+      <a href="#event_processor">event_processor</a>( const processor_context &amp; myContext );
+
+    private:
+      virtual void initiate_impl() = 0;
+      virtual void process_event_impl(
+        const event_base &amp; evt ) = 0;
+      virtual void terminate_impl() = 0;
+  };
+}
+}</pre>
+<h3>Class template <code>event_processor</code> constructor and destructor</h3>
+<pre><a name="event_processor">event_processor</a>( const processor_context &amp; myContext );</pre>
+<p><b>Effects</b>: Constructs an event processor object and stores copies of 
+the reference returned by <code>myContext.my_worker()</code> and the object 
+returned by <code>myContext.my_handle()</code><br>
+<b>Note</b>: Users cannot create <code>event_processor</code> subclass objects 
+directly. This can only be done through an object of the <code>Worker</code> 
+class</p>
+<pre>virtual <a name="~event_processor">~event_processor</a>();</pre>
+<p><b>Effects</b>: Destructs and event processor object<br>
+<b>Note</b>: Users cannot destroy <code>event_processor</code> subclass 
+objects directly. This can only be done through an object of the <code>Worker</code> 
+class</p>
+<h3>Class template <code>event_processor</code> modifier functions</h3>
+<pre>void <a name="event_processor::initiate">initiate</a>();</pre>
+<p><b>Effects</b>: <code>initiate_impl();<br>
+</code><b>Throws</b>: Any exceptions propagated from the implementation of
+<code>initiate_impl()</code></p>
+<pre>void <a name="event_processor::process_event">process_event</a>( const event_base &amp; evt );</pre>
+<p><b>Effects</b>: <code>process_event_impl( evt );<br>
+</code><b>Throws</b>: Any exceptions propagated from the implementation of
+<code>process_event_impl()</code></p>
+<pre>void <a name="event_processor::terminate">terminate</a>();</pre>
+<p><b>Effects</b>: <code>terminate_impl();<br>
+</code><b>Throws</b>: Any exceptions propagated from the implementation of
+<code>terminate_impl()</code>. However, since <code>terminate()</code> is 
+called from destructors, <code>terminate_impl()</code> overrides should not 
+propagate any exceptions</p>
+<h3>Class template <code>event_processor</code> observer functions</h3>
+<pre>Worker &amp; <a name="my_worker">my_worker</a>() const;</pre>
+<p><b>Returns</b>: The <code>Worker</code> reference obtained in the 
+constructor</p>
+<pre>processor_handle <a name="my_handle">my_handle</a>() const;</pre>
+<p><b>Returns</b>: The <code>processor_handle</code> object obtained in the 
+constructor</p>
+<h1>Header &lt;boost/fsm/<a name="worker.hpp">worker.hpp</a>&gt;</h1>
+<h2><a name="Class template worker">Class template <code>worker</code></a></h2>
+<p>This class is a model of the <a href="#Worker">Worker concept</a>.</p>
+<h3>Class template <code>worker</code> parameters</h3>
+<table border="3" cellpadding="2" width="100%" id="AutoNumber16">
+  <tr>
+    <td width="15%"><b>Template parameter</b></td>
+    <td width="51%"><b>Requirements</b></td>
+    <td width="18%"><b>Semantics</b></td>
+    <td width="19%"><b>Default</b></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>Allocator</code></td>
+    <td width="51%">A model of the standard Allocator concept</td>
+    <td width="18%">&nbsp;</td>
+    <td width="19%"><code>std::allocator&lt; void &gt;</code></td>
+  </tr>
+</table>
+<h3>Class template <code>worker</code> synopsis</h3>
+<pre>namespace boost
+{
+namespace fsm
+{
+  template&lt; class Allocator = std::allocator&lt; void &gt; &gt;
+  class worker : noncopyable
+  {
+    public:
+      <a href="#worker::worker">worker</a>( bool waitOnEmptyQueue = true );
+
+      typedef <i>implementation-defined</i> processor_handle;
+
+      class processor_context : noncopyable
+      {
+        processor_context(
+          worker &amp; theWorker,
+          const processor_handle &amp; theHandle );
+
+        worker &amp; my_worker() const;
+        const processor_handle &amp; my_handle() const;
+
+        friend class worker;
+        friend class event_processor&lt; worker &gt;;
+      };
+
+      template&lt; class Processor &gt;
+      processor_handle <a href="#create_processor()">create_processor</a>();
+      template&lt; class Processor, typename Param1 &gt;
+      processor_handle <a href="#create_processor( Param1 param1 )">create_processor</a>( Param1 param1 );
+
+      // More create_processor overloads
+
+      void <a href="#destroy_processor">destroy_processor</a>( processor_handle processor );
+
+      void <a href="#initiate_processor">initiate_processor</a>( processor_handle processor );
+      void <a href="#terminate_processor">terminate_processor</a>( processor_handle processor );
+
+      typedef intrusive_ptr&lt; const event_base &gt; event_ptr_type;
+
+      void <a href="#queue_event">queue_event</a>(
+        const processor_handle &amp; processor,
+        const event_ptr_type &amp; pEvent );
+
+      void <a href="#worker::terminate">terminate</a>();
+      bool <a href="#worker::terminated">terminated</a>() const;
+
+      unsigned long <a href="#operator()">operator()</a>(
+        unsigned long maxEventCount = 0 );
+  };
+}
+}</pre>
+<h3>Class template <code>worker</code> constructor</h3>
+<pre><a name="worker::worker">worker</a>( bool waitOnEmptyQueue = true );</pre>
+<p><b>Effects</b>: Constructs a worker object. Based on what is passed for
+<code>waitOnEmptyQueue</code>, <code>operator()()</code> will later either 
+block when the event queue is empty or return to the caller<br>
+<b>Note</b>: In single-threaded builds the worker constructor does not accept 
+any parameters and <code>operator()()</code> always returns to the caller when 
+the event queue is empty</p>
+<h3>Class template <code>worker</code> modifier functions</h3>
+<pre>template&lt; class Processor &gt;
+processor_handle <a name="create_processor()">create_processor</a>();</pre>
+<p><b>Requires</b>: The <code>Processor</code> type must be a direct or 
+indirect subclass of the <a href="#Class template event_processor"><code>
+event_processor</code> class template</a><br>
+<b>Effects</b>: Creates and queues an object that, when later processed in
+<code>operator()()</code>, leads to a call to the constructor of <code>
+Processor</code>, passing a <code>processor_context</code> object as the only 
+argument<br>
+<b>Returns</b>: A <code>processor_handle</code> object that henceforth 
+identifies the created event processor object<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><br>
+<b>Note</b>: <code>boost::ref</code> and <code>boost::cref</code> can be used 
+to pass arguments by reference rather than by copy<br>
+<b>Caution</b>: The current implementation of this function makes an 
+(indirect) call to global <code>operator new()</code>. Unless global <code>
+operator new()</code> is replaced, care must be taken when to call this 
+function in applications with hard real-time requirements</p>
+<pre>template&lt; class Processor, typename Param1 &gt;
+processor_handle <a name="create_processor( Param1 param1 )">create_processor( Param1 param1 )</a>;</pre>
+<p><b>Requires</b>: The <code>Processor</code> type must be a direct or 
+indirect subclass of the <a href="#Class template event_processor"><code>
+event_processor</code> class template</a><br>
+<b>Effects</b>: Creates and queues an object that, when later processed in
+<code>operator()()</code>, leads to a call to the constructor of <code>
+Processor</code>, passing a <code>processor_context</code> object and <code>
+param1</code> as arguments<br>
+<b>Returns</b>: A <code>processor_handle</code> object that henceforth 
+identifies the created event processor object<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><b><br>
+Note</b>: <code>boost::ref</code> and <code>boost::cref</code> can be used to 
+pass arguments by reference rather than by copy. <code>worker</code> has an 5 
+additional <code>create_processor</code> overloads, allowing to pass up to 6 
+custom arguments to the constructors of event processors<br>
+<b>Caution</b>: The current implementation of this and all other overloads 
+make (indirect) calls to global <code>operator new()</code>. Unless global
+<code>operator new()</code> is replaced, care must be taken when to call these 
+overloads in applications with hard real-time requirements</p>
+<pre>void <a name="destroy_processor">destroy_processor</a>( processor_handle processor );</pre>
+<p><b>Requires</b>: <code>processor</code> was obtained from a call to one of 
+the <code>create_processor()</code> overloads on the same <code>worker</code> 
+object<br>
+<b>Effects</b>: Creates and queues an object that, when later processed in
+<code>operator()()</code>, leads to a call to the destructor of the event 
+processor object associated with <code>processor</code>. The object is 
+silently discarded if the event processor object has been destructed before<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><br>
+<b>Caution</b>: The current implementation of this function leads to an 
+(indirect) call to global <code>operator delete()</code> (the call is made 
+when the last <code>processor_handle</code> object associated with the event 
+processor object is destructed). Unless global <code>operator delete()</code> 
+is replaced, care must be taken when to call this function in applications 
+with hard real-time requirements</p>
+<pre>void <a name="initiate_processor">initiate_processor</a>( processor_handle processor );</pre>
+<p><b>Requires</b>: <code>processor</code> was obtained from a call to one of 
+the <code>create_processor()</code> overloads on the same <code>worker</code> 
+object<br>
+<b>Effects</b>: Creates and queues an object that, when later processed in
+<code>operator()()</code>, leads to a call to <code>
+<a href="#event_processor::initiate">initiate</a>()</code> on the event 
+processor object associated with <code>processor</code>. The object is 
+silently discarded if the event processor object has been destructed before<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<pre>void <a name="terminate_processor">terminate_processor</a>( processor_handle processor );</pre>
+<p><b>Requires</b>: <code>processor</code> was obtained from a call to one of 
+the <code>create_processor()</code> overloads on the same <code>worker</code> 
+object<br>
+<b>Effects</b>: Creates and queues an object that, when later processed in
+<code>operator()()</code>, leads to a call to <code>
+<a href="#event_processor::terminate">terminate</a>()</code> on the event 
+processor object associated with <code>processor</code>. The object is 
+silently discarded if the event processor object has been destructed before<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<pre>void <a name="queue_event">queue_event</a>(
+  const processor_handle &amp; processor,
+  const event_ptr_type &amp; pEvent );</pre>
+<p><b>Requires</b>: <code>pEvent.get() != 0</code> and <code>processor</code> 
+was obtained from a call to one of the <code>create_processor()</code> 
+overloads on the same <code>worker</code> object.<br>
+<b>Effects</b>: Creates and queues an object that, when later processed in
+<code>operator()()</code>, leads to a call to <code>
+<a href="#event_processor::process_event">process_event</a>( *pEvent )</code> 
+on the event processor object associated with <code>processor</code>. The 
+object is silently discarded if the event processor object has been destructed 
+before<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<pre>void <a name="worker::terminate">terminate</a>();</pre>
+<p><b>Effects</b>: Creates and queues an object that, when later processed in
+<code>operator()()</code>, leads to a modification of internal state so that
+<code>terminated()</code> henceforth returns <code>true</code><br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<pre>unsigned long <a name="operator()">operator()</a>( unsigned long maxEventCount = 0 );</pre>
+<p><b>Requires</b>: Must only be called from exactly one thread<b><br>
+Effects</b>: Enters a loop that, with each cycle, dequeues and processes the 
+oldest object in the queue. The loop is left if either of the following 
+conditions is met:</p>
+<ul>
+  <li><code>terminated() == true</code></li>
+  <li>The application is single-threaded and the internal queue is empty</li>
+  <li>The application is multi-threaded and the internal queue is empty and
+  <code>false</code> has been passed to the <code>worker</code> constructor</li>
+  <li><code>maxEventCount != 0</code> and the number of objects that have been 
+  processed since <code>operator()()</code> was called equals <code>
+  maxEventCount</code></li>
+</ul>
+<p>If the queue is empty and none of the above conditions is met then the 
+thread calling <code>operator()()</code> is put into a wait state until new 
+events are queued<br>
+<b>Returns</b>: The number of processed objects<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code>, 
+event processor constructors, <code>event_processor::initiate()</code>, <code>
+event_processor::process_event()</code> and&nbsp; <code>
+event_processor::terminate()</code></p>
+<h3>Class template <code>worker</code> observer functions</h3>
+<pre>bool <a name="worker::terminated">terminated</a>() const;</pre>
+<p><b>Requires</b>: Must only be called from the thread that also calls <code>
+operator()()</code><br>
+<b>Returns</b>: <code>true</code> if <code>terminate()</code> has been called 
+and the resulting object has been processed in <code>operator()()</code>. 
+Returns <code>false</code> otherwise</p>
 <h1>Header &lt;boost/fsm/<a name="simple_state.hpp">simple_state.hpp</a>&gt;</h1>
 <h2><a name="Typedef no_reactions">Typedef <code>no_reactions</code></a></h2>
 <p>This is the default value for the <code>Reactions</code> parameter of the
@@ -776,7 +1045,7 @@ namespace fsm
 must be exception-neutral<b><br>
 Effects</b>: Depending on the <code>historyMode</code> parameter, reserves 
 storage to store none, shallow, deep or both histories<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
 (the template parameter passed to the base class of <code>
 outermost_context_type</code>)</p>
 <pre>virtual <a name="~simple_state">~simple_state</a>();</pre>
@@ -792,7 +1061,7 @@ from the <code>state</code> class template<b>. </b>All direct and indirect
 callers must be exception-neutral<b><br>
 Effects</b>: Pushes the passed event into the state machine's posted events 
 queue<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
 (the template parameter passed to the base class of <code>
 outermost_context_type</code>)</p>
 <pre><a href="#Enum result">result</a> <a name="discard_event">discard_event</a>();</pre>
@@ -802,7 +1071,8 @@ functions, which are called by <code>
 instantiations. All direct and indirect callers must be exception-neutral<br>
 <b>Effects</b>: Instructs the state machine to discard the current event and 
 to continue with the processing of the remaining events (see <code>
-<a href="#process_event">state_machine::process_event</a></code> for details)<br>
+<a href="#process_event">state_machine::process_event</a>()</code> for 
+details)<br>
 <b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller</p>
@@ -813,7 +1083,7 @@ functions, which are called by <code>
 instantiations. All direct and indirect callers must be exception-neutral<br>
 <b>Effects</b>: Instructs the state machine to forward the current event to 
 the next state (see <code><a href="#process_event">
-state_machine::process_event</a></code> for details)<br>
+state_machine::process_event</a>()</code> for details)<br>
 <b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller</p>
@@ -826,11 +1096,12 @@ with <code>new</code> and passed to a <code>boost::intrusive_ptr&lt;&gt;</code>.
 direct and indirect callers must be exception-neutral<br>
 <b>Effects</b>: Instructs the state machine to defer the current event and to 
 continue with the processing of the remaining events (see <code>
-<a href="#process_event">state_machine::process_event</a></code> for details)<br>
+<a href="#process_event">state_machine::process_event</a>()</code> for 
+details)<br>
 <b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
 (the template parameter passed to the base class of <code>
 outermost_context_type</code>)</p>
 <pre>template&lt; class DestinationState &gt;
@@ -856,16 +1127,16 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
   initial states of <code>DestinationState</code> depth first</li>
   <li>Instructs the state machine to discard the current event and to continue 
   with the processing of the remaining events (see <code>
-  <a href="#process_event">state_machine::process_event</a></code> for 
+  <a href="#process_event">state_machine::process_event</a>()</code> for 
   details)</li>
 </ol>
 <p><b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller<br>
-<b>Throws</b>: Any exceptions propagated from <code>operator new</code> (used 
-to allocate states), <code>Allocator::allocate</code> (the template parameter 
-passed to the base class of <code>outermost_context_type</code>) or state 
-constructors<br>
+<b>Throws</b>: Any exceptions propagated from <code>operator new()</code> 
+(used to allocate states), <code>Allocator::allocate()</code> (the template 
+parameter passed to the base class of <code>outermost_context_type</code>) or 
+state constructors<br>
 <b>Caution</b>: Inevitably exits (destructs) this state before returning to 
 the calling <code>react</code> member function, which must therefore not 
 attempt to access anything except stack objects before returning to its caller</p>
@@ -898,16 +1169,16 @@ instantiations. All direct and indirect callers must be exception-neutral<br>
   initial states of <code>DestinationState</code> depth first</li>
   <li>Instructs the state machine to discard the current event and to continue 
   with the processing of the remaining events (see <code>
-  <a href="#process_event">state_machine::process_event</a></code> for 
+  <a href="#process_event">state_machine::process_event</a>()</code> for 
   details)</li>
 </ol>
 <p><b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
 function must return this value to its caller<br>
-<b>Throws</b>: Any exceptions propagated from <code>operator new</code> (used 
-to allocate states), <code>Allocator::allocate</code> (the template parameter 
-passed to the base class of <code>outermost_context_type</code>), state 
-constructors or the transition action<br>
+<b>Throws</b>: Any exceptions propagated from <code>operator new()</code> 
+(used to allocate states), <code>Allocator::allocate()</code> (the template 
+parameter passed to the base class of <code>outermost_context_type</code>), 
+state constructors or the transition action<br>
 <b>Caution</b>: Inevitably exits (destructs) this state before returning to 
 the calling <code>react</code> member function, which must therefore not 
 attempt to access anything except stack objects before returning to its caller</p>
@@ -918,7 +1189,7 @@ functions, which are called by <code>
 instantiations. All direct and indirect callers must be exception-neutral<br>
 <b>Effects</b>: Terminates the state and instructs the state machine to 
 discard the current event and to continue with the processing of the remaining 
-events (see <code><a href="#process_event">state_machine::process_event</a></code> 
+events (see <code><a href="#process_event">state_machine::process_event</a>()</code> 
 for details)<br>
 <b>Returns</b>: An unspecified value of the <code><a href="#Enum result">
 result</a></code> enumeration. The user-supplied <code>react</code> member 
@@ -939,7 +1210,7 @@ or <code>has_full_history</code> must be passed to the base class template of
 <b>Effects</b>: Clears the shallow history of the orthogonal region specified 
 by <code>orthogonalPosition</code> of the state specified by <code>
 HistoryContext</code><br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
 (the template parameter passed to the base class of <code>
 outermost_context_type</code>)</p>
 <pre>template&lt;
@@ -954,7 +1225,7 @@ or <code>has_full_history</code> must be passed to the base class template of
 <code>HistoryContext</code><br>
 <b>Effects</b>: Clears the deep history of the orthogonal region specified by
 <code>orthogonalPosition</code> of the state specified by <code>HistoryContext</code><br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
 (the template parameter passed to the base class of <code>
 outermost_context_type</code>)</p>
 <h3>Class template <code>simple_state</code> observer functions</h3>
@@ -988,9 +1259,9 @@ Target <a name="simple_state::state_cast">state_cast</a>() const;</pre>
 subclass then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Returns</b>: Has exactly the same semantics as <code><a href="#state_cast">
-state_machine::state_cast</a></code><br>
+state_machine::state_cast</a>&lt;&gt;()</code><br>
 <b>Throws</b>: Has exactly the same semantics as <code><a href="#state_cast">
-state_machine::state_cast</a></code><b><br>
+state_machine::state_cast</a>&lt;&gt;()</code><b><br>
 Note</b>: The result is <b>unspecified</b> if this function is called when the 
 machine is not stable</p>
 <pre>template&lt; class Target &gt;
@@ -999,9 +1270,9 @@ Target <a name="simple_state::state_downcast">state_downcast</a>() const;</pre>
 subclass then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Returns</b>: Has exactly the same semantics as <code>
-<a href="#state_downcast">state_machine::state_downcast</a></code><br>
+<a href="#state_downcast">state_machine::state_downcast</a>&lt;&gt;()</code><br>
 <b>Throws</b>: Has exactly the same semantics as <code>
-<a href="#state_downcast">state_machine::state_downcast</a></code><b><br>
+<a href="#state_downcast">state_machine::state_downcast</a>&lt;&gt;()</code><b><br>
 Note</b>: The result is <b>unspecified</b> if this function is called when the 
 machine is not stable</p>
 <pre>state_iterator <a name="simple_state::state_begin">state_begin</a>() const;</pre>
@@ -1010,17 +1281,17 @@ machine is not stable</p>
 subclass then the most-derived type must either directly or indirectly derive 
 from the <code>state</code> class template<b><br>
 Return</b>: Have exactly the same semantics as <code><a href="#state_begin">
-state_machine::state_begin</a></code> and <code><a href="#state_end">
-state_machine::state_end</a></code><br>
+state_machine::state_begin</a>()</code> and <code><a href="#state_end">
+state_machine::state_end</a>()</code><br>
 <b>Note</b>: The result is <b>unspecified</b> if these functions are called 
 when the machine is not stable</p>
 <h3>Class template <code>simple_state</code> static functions</h3>
 <pre>static id_type <a name="static_type">static_type</a>();</pre>
 <p><b>Returns</b>: A value unambiguously identifying the type of <code>
 MostDerived</code><br>
-<b>Note</b>: <code>id_type</code> values are comparable with <code>operator==</code> 
-and <code>operator!=</code>. An unspecified collating order can be established 
-with <code>std::less&lt; id_type &gt;</code></p>
+<b>Note</b>: <code>id_type</code> values are comparable with <code>
+operator==()</code> and <code>operator!=()</code>. An unspecified collating 
+order can be established with <code>std::less&lt; id_type &gt;</code></p>
 <pre>template&lt; class CustomId &gt;
 static const CustomId * <a name="custom_static_type_ptr">custom_static_type_ptr</a>();</pre>
 <p><b>Requires</b>: If a custom type identifier has been set then <code>
@@ -1181,6 +1452,8 @@ namespace fsm
   class event_base
   {
     public:
+      intrusive_ptr&lt; const event_base &gt; <a href="#intrusive_from_this">intrusive_from_this</a>() const;
+
       typedef <i>implementation-defined</i> id_type;
 
       id_type <a href="#event_base::dynamic_type">dynamic_type</a>() const;
@@ -1200,11 +1473,15 @@ namespace fsm
 <pre>virtual <a name="~event_base">~event_base</a>();</pre>
 <p><b>Effects</b>: Destructs the common base portion of an event</p>
 <h3>Class <code>event_base</code> observer functions</h3>
+<pre>intrusive_ptr&lt; const event_base &gt; <a name="intrusive_from_this">intrusive_from_this</a>() const;</pre>
+<p><b>Requires</b>: Another <code>intrusive_ptr</code> is already pointing to 
+the object<b><br>
+Returns</b>: An <code>intrusive_ptr</code> pointing to the object</p>
 <pre>id_type <a name="event_base::dynamic_type">dynamic_type</a>() const;</pre>
 <p><b>Returns</b>: A value unambiguously identifying the most-derived type<br>
-<b>Note</b>: <code>id_type</code> values are comparable with <code>operator==</code> 
-and <code>operator!=</code>. An unspecified collating order can be established 
-with <code>std::less&lt; S::id_type &gt;</code></p>
+<b>Note</b>: <code>id_type</code> values are comparable with <code>
+operator==()</code> and <code>operator!=()</code>. An unspecified collating 
+order can be established with <code>std::less&lt; id_type &gt;</code></p>
 <pre>template&lt; typename CustomId &gt;
 const CustomId * <a name="event_base::custom_dynamic_type_ptr">custom_dynamic_type_ptr</a>() const;</pre>
 <p><b>Requires</b>: If a custom type identifier has been set then <code>
@@ -1248,9 +1525,9 @@ namespace fsm
 <pre>static id_type <a name="event::static_type">static_type</a>();</pre>
 <p><b>Returns</b>: A value unambiguously identifying the type of <code>
 MostDerived</code><br>
-<b>Note</b>: <code>id_type</code> values are comparable with <code>operator==</code> 
-and <code>operator!=</code>. An unspecified collating order can be established 
-with <code>std::less&lt; S::id_type &gt;</code></p>
+<b>Note</b>: <code>id_type</code> values are comparable with <code>
+operator==()</code> and <code>operator!=()</code>. An unspecified collating 
+order can be established with <code>std::less&lt; id_type &gt;</code></p>
 <pre>template&lt; class CustomId &gt;
 static const CustomId * <a name="event::custom_static_type_ptr">custom_static_type_ptr</a>();</pre>
 <p><b>Requires</b>: If a custom type identifier has been set then <code>
@@ -1379,7 +1656,8 @@ namespace fsm
 }</pre>
 <h3>Class template <code>termination</code> semantics</h3>
 <p>When executed, a call is made to the <a href="#simple_state::terminate">
-terminate</a> member function of the state for which the reaction was defined.</p>
+<code>terminate</code></a><code>()</code> member function of the state for 
+which the reaction was defined.</p>
 <h1>Header &lt;boost/fsm/<a name="deferral.hpp">deferral.hpp</a>&gt;</h1>
 <h2><a name="Class template deferral">Class template <code>deferral</code></a></h2>
 <p>This class template is used to specify a deferral reaction. Instantiations 
@@ -1413,8 +1691,9 @@ namespace fsm
 }
 }</pre>
 <h3>Class template <code>deferral</code> semantics</h3>
-<p>When executed, a call is made to the <a href="#defer_event">defer_event</a> 
-member function of the state for which the reaction was defined.</p>
+<p>When executed, a call is made to the <a href="#defer_event"><code>
+defer_event</code></a><code>()</code> member function of the state for which 
+the reaction was defined.</p>
 <h1>Header &lt;boost/fsm/<a name="custom_reaction.hpp">custom_reaction.hpp</a>&gt;</h1>
 <h2><a name="Class template custom_reaction">Class template <code>
 custom_reaction</code></a></h2>
@@ -1449,9 +1728,9 @@ namespace fsm
 }
 }</pre>
 <h3>Class template <code>custom_reaction</code> semantics</h3>
-<p>When executed, a call is made to the user-supplied <code>react</code> 
+<p>When executed, a call is made to the user-supplied <code>react()</code> 
 member function of the state for which the reaction was defined. The <code>
-react</code> member function must have the following signature:</p>
+react()</code> member function must have the following signature:</p>
 <pre><a href="#Enum result">boost::fsm::result</a> react( const Event &amp; );</pre>
 <p>and must call exactly one of the following reaction functions and return 
 the obtained <code><a href="#Enum result">result</a></code> object:</p>
@@ -1470,7 +1749,7 @@ template&lt;
 <a href="#Enum result">result</a> <a href="#simple_state::terminate">terminate</a>();</pre>
 <h1>Header &lt;boost/fsm/<a name="result.hpp">result.hpp</a>&gt;</h1>
 <h2><a name="Enum result">Enum <code>result</code></a></h2>
-<p>Defines the nature of the reaction taken in a user-supplied <code>react</code> 
+<p>Defines the nature of the reaction taken in a user-supplied <code>react()</code> 
 member function (called when a <code>
 <a href="#Class template custom_reaction">custom_reaction</a></code> is 
 executed). Values of this type are always obtained by calling one of the 
@@ -1487,7 +1766,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 February, 2004<!--webbot bot="Timestamp" endspan i-checksum="40415" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->02 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28864" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

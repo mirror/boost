@@ -417,9 +417,9 @@ should be satisfactory for applications where all the following prerequisites
 are met:</p>
 <ul>
   <li>There are no deterministic reaction time (hard real-time) requirements.</li>
-  <li>The application will typically not process more than a few events per 
-  second. Of course, this figure depends on your platform. A typical desktop 
-  PC could easily cope with more than 100000 events per second.</li>
+  <li>The application will typically not process more than a handful of events 
+  per second. This is just a general guideline, some platforms can easily cope 
+  with more than 100000 events per second (see timings above).</li>
   <li>The application will never run long enough for heap fragmentation to 
   become a problem. This is of course an issue for all long running programs 
   not only the ones employing this library. However, it should be noted that 
@@ -465,15 +465,19 @@ Currently, there are exactly two options:</p>
 <p>Just about the only reason to favor 2 is the fact that state objects need 
 to store one pointer less, meaning that in the best case the memory footprint 
 of a state machine object could shrink by 15%. However, on most platforms 
-executable size also grows considerably when C++ RTTI is turned on. So, given 
-the small per machine object savings, option 2 only makes sense in 
-applications that ...</p>
+executable size grows when C++ RTTI is turned on. So, given the small per 
+machine object savings, option 2 only makes sense in applications where both 
+of the following conditions hold:</p>
 <ul>
-  <li>are not processor-bound, and</li>
-  <li>need to cut down on overall memory footprint (executable size plus 
-  memory allocated at runtime), and</li>
-  <li>need to simultaneously run a large number of identical state machines</li>
+  <li>So few events are processed that event dispatch will never become a 
+  bottleneck</li>
+  <li>There is a need to reduce the memory allocated at runtime (at the cost 
+  of a larger executable)</li>
 </ul>
+<p>Obvious candidates are embedded systems where the executable resides in 
+ROM. Other candidates are applications running a large number of identical 
+state machines where this measure could even reduce the <b>overall</b> memory 
+footprint.</p>
 <h2><a name="Double dispatch">Double dispatch</a></h2>
 <p>At the heart of every state machine lies an implementation of double 
 dispatch. This is due to the fact that the incoming event <b>and</b> the 
@@ -512,8 +516,8 @@ rejected:</p>
 </ul>
 <h2><a name="Resource usage">Resource usage</a></h2>
 <h3>Memory</h3>
-<p>On a 32-bit box, one empty state typically needs less than 50 bytes of 
-memory. Even <b>very</b> complex machines will usually have less than 20 
+<p>On a 32-bit box, one empty active state typically needs less than 50 bytes 
+of memory. Even <b>very</b> complex machines will usually have less than 20 
 simultaneously active states so just about every machine should run with less 
 than one kilobyte of memory (not counting event queues). Obviously, the 
 per-machine memory footprint is offset by whatever state-local members the 
@@ -681,7 +685,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 January, 2004<!--webbot bot="Timestamp" endspan i-checksum="38695" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->26 February, 2004<!--webbot bot="Timestamp" endspan i-checksum="40411" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

@@ -40,19 +40,6 @@ class event_processor
       return myHandle_;
     }
 
-  protected:
-    //////////////////////////////////////////////////////////////////////////
-    event_processor( Worker & myWorker, const processor_handle & myHandle ) :
-      myWorker_( myWorker ),
-      myHandle_( myHandle )
-    {
-    }
-
-  public:
-    //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
     void initiate()
     {
       initiate_impl();
@@ -68,7 +55,18 @@ class event_processor
       terminate_impl();
     }
 
+  protected:
+    //////////////////////////////////////////////////////////////////////////
+    typedef typename Worker::processor_context processor_context;
+
+    event_processor( const processor_context & myContext ) :
+      myWorker_( myContext.my_worker() ),
+      myHandle_( myContext.my_handle() )
+    {
+    }
+
   private:
+    //////////////////////////////////////////////////////////////////////////
     virtual void initiate_impl() = 0;
     virtual void process_event_impl( const event_base & evt ) = 0;
     virtual void terminate_impl() = 0;

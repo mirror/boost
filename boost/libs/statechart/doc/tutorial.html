@@ -76,10 +76,10 @@ The UML specifications can be found at
 http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
 3.74).</p>
 <p>All examples have been tested on the following platforms using boost 
-distribution 1.30.2:</p>
+distribution 1.31.0:</p>
 <ul>
   <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
-  <li>GCC3.2 (Mingw)</li>
+  <li>GCC3.2 (MinGW)</li>
 </ul>
 <h3><a name="How to read this tutorial">How to read this tutorial</a></h3>
 <p>This tutorial was designed to be read linearly. First time users should 
@@ -293,25 +293,25 @@ struct Active : fsm::simple_state&lt; Active, StopWatch,
   fsm::transition&lt; EvReset, Active &gt;, Stopped &gt;
 {
   <b>public:
-</b>    <b>Active() : elapsedTime_( 0 ) {}
-</b>    <b>std::clock_t ElapsedTime() const { return elapsedTime_; }
-</b>    <b>std::clock_t &amp; ElapsedTime() { return elapsedTime_; }
+</b>    <b>Active() : elapsedTime_( 0.0 ) {}
+</b>    <b>double ElapsedTime() const { return elapsedTime_; }
+</b>    <b>double &amp; ElapsedTime() { return elapsedTime_; }
 </b>  <b>private:
-</b>    <b>std::clock_t elapsedTime_;
+</b>    <b>double elapsedTime_;
 </b>};
 
 struct Running : fsm::simple_state&lt; Running, Active,
   fsm::transition&lt; EvStartStop, Stopped &gt; &gt;
 {
   <b>public:
-</b>    <b>Running() : startTime_( std::clock() ) {}
+</b>    <b>Running() : startTime_( std::time( 0 ) ) {}
 </b>    <b>~Running()
 </b>    <b>{
 </b>      <b>context&lt; Active &gt;().ElapsedTime() +=
-</b>        <b>( std::clock() - startTime_ );
+</b>        <b>std::difftime( std::time( 0 ), startTime_ );
 </b>    <b>}
 </b>  <b>private:
-</b>    <b>std::clock_t startTime_;
+</b>    <b>std::time_t startTime_;
 </b>};
 
 // ...</pre>
@@ -342,13 +342,13 @@ retrieve the elapsed time:</p>
 
 <b>struct IElapsedTime
 {
-</b>  <b>virtual std::clock_t ElapsedTime() const = 0;
+</b>  <b>virtual double ElapsedTime() const = 0;
 };
 
 </b>struct Active;
 struct StopWatch : fsm::state_machine&lt; StopWatch, Active &gt;
 {
-  <b>std::clock_t ElapsedTime() const
+  <b>double ElapsedTime() const
 </b>  <b>{
 </b>    <b>return state_cast&lt; const IElapsedTime &amp; &gt;().ElapsedTime();
 </b>  <b>}
@@ -360,25 +360,25 @@ struct Running : <b>IElapsedTime,</b> fsm::simple_state&lt;
   Running, Active, fsm::transition&lt; EvStartStop, Stopped &gt; &gt;
 {
   public:
-    Running() : startTime_( std::clock() ) {}
+    Running() : startTime_( std::time( 0 ) ) {}
     ~Running()
     {
       <b>context&lt; Active &gt;().ElapsedTime() = ElapsedTime();
 </b>    }
 <b>
-</b>    <b>virtual std::clock_t ElapsedTime() const
+</b>    <b>virtual double ElapsedTime() const
 </b>    <b>{
 </b>      <b>return context&lt; Active &gt;().ElapsedTime() +
-</b>        <b>std::clock() - startTime_;
+</b>        <b>std::difftime( std::time( 0 ), startTime_ );
 </b>    <b>}
 </b>  private:
-    std::clock_t startTime_;
+    std::time_t startTime_;
 };
 
 struct Stopped : <b>IElapsedTime,</b> fsm::simple_state&lt;
   Stopped, Active, fsm::transition&lt; EvStartStop, Running &gt; &gt;
 {
-  <b>virtual std::clock_t ElapsedTime() const
+  <b>virtual double ElapsedTime() const
 </b>  <b>{
 </b>    <b>return context&lt; Active &gt;().ElapsedTime();
 </b>  <b>}
@@ -1199,34 +1199,36 @@ struct Off : fsm::simple_state&lt;
 <h4>Why asynchronous state machines are necessary</h4>
 <p>As the name suggests, a synchronous state machine processes each event 
 synchronously. This behavior is implemented by the <code>state_machine</code> 
-class template, whose <code>process_event()</code> only returns after having 
-executed all reactions (including the ones provoked by internal events that 
-actions might have posted). Moreover, this function is also strictly 
-non-reentrant (just like all other member functions, so <code>state_machine</code> 
-is not thread-safe). This makes it difficult for two <code>state_machine</code> 
+class template, whose <code>process_event()</code> function only returns after 
+having executed all reactions (including the ones provoked by internal events 
+that actions might have posted). This function is strictly non-reentrant (just 
+like all other member functions, so <code>state_machine</code> is not 
+thread-safe). This makes it difficult for two <code>state_machine</code> 
 subclasses to communicate via events in a bi-directional fashion correctly, <b>
 even in a single-threaded program</b>. For example, state machine <code>A</code> 
 is in the middle of processing an external event. Inside an action, it decides 
 to send a new event to state machine <code>B</code> (by calling <code>
-B::process_event</code> with an appropriate event). It then &quot;waits&quot; for B to 
-send back an answer via a boost::function-like call-back, which references
-<code>A::process_event</code> and was passed as a data member of the event. 
-However, while <code>A</code> is &quot;waiting&quot; for <code>B</code> to send back an 
-event, <code>A::process_event</code> has not yet returned from processing the 
-external event and as soon as <code>B</code> answers via the call-back, <code>
-A::process_event</code> is <b>unavoidably</b> reentered. This all really 
-happens in a single thread, that's why &quot;wait&quot; is in quotes.</p>
+B::process_event()</code>). It then &quot;waits&quot; for B to send back an answer via a 
+boost::function-like call-back, which references <code>A::process_event()</code> 
+and was passed as a data member of the event. However, while <code>A</code> is 
+&quot;waiting&quot; for <code>B</code> to send back an event, <code>A::process_event()</code> 
+has not yet returned from processing the external event and as soon as <code>B</code> 
+answers via the call-back, <code>A::process_event()</code> is <b>unavoidably</b> 
+reentered. This all really happens in a single thread, that's why &quot;wait&quot; is in 
+quotes.</p>
 <h4>How it works</h4>
-<p>In contrast to <code>state_machine</code>, <code>asynchronous_state_machine</code> 
-does not have a member function <code>process_event()</code>. Instead, there 
-is only <code>queue_event()</code>, which returns immediately after pushing 
-the event into a queue. A worker thread will later pop the event out of the 
-queue to have it processed. For applications using the boost::thread library, 
-the necessary locking, unlocking and waiting logic is readily available in 
-class <code>worker</code>.</p>
-<p>Applications will usually first create a <code>worker</code> object and 
-then create one or more <code>asynchronous_state_machine</code> subclass 
-objects, passing the worker object to the constructor(s). Finally, <code>
+<p>The <code>asynchronous_state_machine</code> class template has none of the 
+member functions the <code>state_machine</code> class template has. Moreover,
+<code>asynchronous_state_machine</code> subclass objects cannot even be 
+created or destroyed directly. Instead, all these operations must be performed 
+through the <code>Worker</code> object each asynchronous state machine is 
+associated with. All these <code>Worker</code> member functions only push an 
+appropriate event into the workers' event queue and then return immediately. A 
+dedicated worker thread will later pop the events out of the queue to have 
+them processed.</p>
+<p>Applications will usually first create a <code>worker&lt;&gt;</code> object and 
+then call <code>worker&lt;&gt;::create_processor()</code> to create one or more
+<code>asynchronous_state_machine</code> subclass objects. Finally, <code>
 worker&lt;&gt;::operator()()</code> is either called directly to let the machine(s) 
 run in the current thread, or, a <code>boost::function</code> object 
 referencing <code>operator()</code> is passed to a new <code>boost::thread</code>. 
@@ -1242,10 +1244,13 @@ struct Player :
   typedef fsm::asynchronous_state_machine&lt; Player, Waiting &gt;
     BaseType;
 
-  Player( fsm::worker&lt;&gt; &amp; myWorker ) :
-    BaseType( myWorker ) // ...
+  Player( const processor_context &amp; myContext ) :
+    BaseType( myContext ) // ...
   {
     // ...
+    // Make sure each Player is initiated right after
+    // construction
+    my_worker().initiate_processor( my_handle() );
   }
 
   // ...
@@ -1259,14 +1264,22 @@ int main()
   fsm::worker&lt;&gt; worker2;
 
   // each player runs in its own worker thread
-  Player player1( worker1 );
-  Player player2( worker2 );
+  fsm::worker&lt;&gt;::processor_handle player1 = 
+    worker1.create_processor&lt; Player &gt;( /* ... */ );
+  fsm::worker&lt;&gt;::processor_handle player2 = 
+    worker2.create_processor&lt; Player &gt;( /* ... */ );
+
+  // the initial event that will start the game
+  boost::intrusive_ptr&lt; BallReturned &gt; pInitialBall =
+    new BallReturned();
 
   // ...
 
+  worker2.queue_event( player2, pInitialBall );
+
   // run first worker in a new thread
   boost::thread otherThread(
-    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker1 ) );
+    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker1, 0 ) );
 
   worker2(); // run second worker in this thread 
   otherThread.join();
@@ -1279,9 +1292,9 @@ int main()
   // ...
 
   boost::thread thread1(
-    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker1 ) );
+    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker1, 0 ) );
   boost::thread thread2(
-    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker2 ) );
+    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker2, 0 ) );
 
   // do something else ...
 
@@ -1295,8 +1308,10 @@ int main()
 {
   fsm::worker&lt;&gt; worker1;
 
-  Player player1( worker1 );
-  Player player2( worker1 );
+  fsm::worker&lt;&gt;::processor_handle player1 = 
+    worker1.create_processor&lt; Player &gt;( /* ... */ );
+  fsm::worker&lt;&gt;::processor_handle player2 = 
+    worker1.create_processor&lt; Player &gt;( /* ... */ );
 
   // ...
 
@@ -1304,33 +1319,13 @@ int main()
 
   return 0;
 }</pre>
-<p><code>worker&lt;&gt;::operator()()</code> first initiates all machines and then 
-waits for events. Whenever <code>queue_event</code> is called on one of the 
-previously registered machines, the passed event is pushed into the worker's 
-queue and the worker thread is waked up to dispatch all queued events before 
-waiting again. <code>worker&lt;&gt;::operator()()</code> returns as soon as all 
-machines have terminated. <code>worker&lt;&gt;::operator()()</code> also throws any 
-exceptions that machines fail to handle. In this case all machines are 
-terminated before the exception is propagated.</p>
-<p><b>Caution:</b></p>
-<ul>
-  <li><b><code>asynchronous_state_machine</code> subclass objects must not be 
-  destructed before <code>worker::operator()()</code> returns. Moreover, the
-  <code>worker</code> object may be destructed only after all of the 
-  registered state machines have been destructed. Violations of these rules 
-  will result in failing runtime asserts. </b></li>
-  <li><b>The interface of <code>asynchronous_state_machine</code> consists of 
-  only the constructor and <code>queue_event()</code>. For technical reasons, 
-  other functions like <code>initiate()</code>, <code>process_event()</code>, 
-  etc. are nevertheless also publicly available, but it is not safe to call 
-  these functions from any other thread than the worker (over which most users 
-  have no control). <font color="#FF0000"><code>asynchronous_state_machine&lt;&gt;::queue_event()</code> 
-  is the only function than can safely be called simultaneously from multiple 
-  threads.</font></b></li>
-</ul>
+<p>By default <code>worker&lt;&gt;::operator()()</code> waits on an empty event 
+queue and will only return after a call to <code>worker&lt;&gt;::terminate()</code>. 
+In the example, each of the two <code>Player</code> state machines calls this 
+function on its <code>worker&lt;&gt;</code> object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 February, 2004<!--webbot bot="Timestamp" endspan i-checksum="40415" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28866" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

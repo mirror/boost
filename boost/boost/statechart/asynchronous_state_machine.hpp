@@ -41,10 +41,8 @@ class asynchronous_state_machine : public state_machine<
   typedef event_processor< Worker > processor_base;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    asynchronous_state_machine(
-      Worker & myWorker, const processor_handle & myHandle
-    ) :
-      processor_base( myWorker, myHandle )
+    asynchronous_state_machine( const processor_context & myContext ) :
+      processor_base( myContext )
     {
     }
 
