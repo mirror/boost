@@ -187,12 +187,17 @@ public:
     super(x),
     node_count(0)
   {
-    BOOST_MULTI_INDEX_CHECK_INVARIANT;
     copy_map_type map(bfm_allocator::member,x.size(),x.header(),header());
     for(const_iterator it=x.begin();it!=x.end();++it)map.clone(it.get_node());
     super::copy_(x,map);
     map.release();
     node_count=x.size();
+
+    /* Not until this point are the indices required to be consistent,
+     * hence the position of the invariant checker.
+     */
+
+    BOOST_MULTI_INDEX_CHECK_INVARIANT;
   }
 
   ~multi_index_container()
