@@ -471,7 +471,7 @@ unsigned int expected_failures = 474; // cv-qualifiers
 #endif
 #elif defined(BOOST_MSVC)
 unsigned int expected_failures = 84; // partial specialisation (fails for UDT's)
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) || defined(__SUNPRO_CC)
 unsigned int expected_failures = 1; // cv-qualified references
 #else
 unsigned int expected_failures = 0;

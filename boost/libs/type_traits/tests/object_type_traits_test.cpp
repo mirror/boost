@@ -222,7 +222,11 @@ int cpp_main(int argc, char* argv[])
 // can't handle enum's or classes that are POD's
 unsigned int expected_failures = 10;
 #elif defined(__SUNPRO_CC)
+#if(__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 55;
+#else
+unsigned int expected_failures = 4;
+#endif
 #elif defined(__GNUC__)
 // classes that are POD's, or empty:
 unsigned int expected_failures = 4;

@@ -122,7 +122,11 @@ int cpp_main(int argc, char* argv[])
 #ifdef __BORLANDC__
 unsigned int expected_failures = 2;
 #elif defined(__SUNPRO_CC)
+#if (__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 11;
+#else
+unsigned int expected_failures = 1;
+#endif
 #elif defined(__GNUC__)
 unsigned int expected_failures = 1; // can't handle cv-qualified references
 #elif defined(BOOST_MSVC)
