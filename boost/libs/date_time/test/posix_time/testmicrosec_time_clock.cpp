@@ -47,6 +47,33 @@ main()
 
     
   }
+
+#if defined(BOOST_HAS_GETTIMEOFDAY)
+  std::cout << "Now do the same test for universal time -- a few less iterations" << std::endl;
+  max = 10;
+  for (int i = 0; i<max; i++)
+  {
+    for (int j=0; j<100000; j++)
+    {
+    }
+
+    ptime t1 = second_clock::universal_time();
+    std::cout << to_simple_string(t1) << std::endl;
+
+    ptime t2 = microsec_clock::universal_time();
+    std::cout << to_simple_string(t2) << std::endl;
+    check("hours match", t1.time_of_day().hours() == t2.time_of_day().hours());
+    check("minutes match", 
+          t1.time_of_day().minutes() == t2.time_of_day().minutes());
+    check("seconds match", 
+          t1.time_of_day().minutes() == t2.time_of_day().minutes());
+    check("hours date", t1.date() == t2.date());
+    check("last is less", last < t2);
+    last = t2;
+
+    
+  }
+#endif
 #else
   check("Get time of day micro second clock not supported due to inadequate compiler/platform", false);
 #endif
