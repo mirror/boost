@@ -12,71 +12,65 @@
     <table border="0" >
         <tr>
             <td ><img src="cboost.gif" border="0" ></td>
-            <td ><h1 align="center">Boost.Range </h1></td> </tr>
+            <td ><h1 align="center">Boost.Range </h1></td>
+        </tr>
     </table>
 
     <h2>Terminology and style guidelines </h2>
-    
+
     <p>
-    The use of a consistent terminologi is as important for iterator <a href="range.html#range">Range</a>s 
-    and <a href="range.html#external_range">ExternalRange</a>-based algorithms as it 
-    is for iterators and iterator-based algorithms. If a conventional set of names 
-    are adopted, we can avoid misunderstandings and write generic function 
-    prototypes that are <i>self-documenting</i>.
+    The use of a consistent terminology is as important for <a href="range.html#range">Range</a>s 
+    and range-based algorithms as it is for iterators and iterator-based algorithms. 
+    If a conventional set of names are adopted, we can avoid misunderstandings and 
+    write generic function prototypes that are <i>self-documenting</i>.
     </p>
 
     <p>
-    Since iterator ranges are characterized by a specific underlying iterator type, 
-    we get a type of iterator range for each type of iterator. Hence we can speak of 
-    the following types of iterator ranges:
+    Since ranges are characterized by a specific underlying iterator type, we get a 
+    type of range for each type of iterator. Hence we can speak of the following 
+    types of ranges:
     <ul>
-        <li>
-            Range
-        <li>
-            ReversibleRange
         <li>
             <i>Value access</i> category:
             <ul>
                 <li>
-                    ReadableRange
+                    Readable Range
                 <li>
-                    WriteableRange
+                    Writeable Range
                 <li>
-                    SwappableRange
+                    Swappable Range
                 <li>
-                    LvalueRange
+                    Lvalue Range
             </ul>
         <li>
             <i>Traversal</i> category:
             <ul>
                 <li>
-                    IncrementableRange
+                    <a href="range.htm#single_pass_range">Single Pass Range</a>
                 <li>
-                    SinglePassRange
+                    <a href="range.htm#forward_range">Forward Range</a>
                 <li>
-                    ForwardRange
+                    <a href="range.htm#bidirectional_range">Bidirectional Range</a>
                 <li>
-                    BidirectionalRange
-                <li>
-                    RandomAccessRange
+                    <a href="range.htm#random_access_range">Random Access Range</a>
             </ul>
     </ul>
     Notice how we have used the categories from the <a href=../../iterator/doc/new-iter-concepts.html>new 
-    style iterators</a>.
-     
+    style iterators</a>. 
+
     <p>
-    Notice that an interator (and therefore an iterator range) has one <i>traversal</i> 
+    Notice that an iterator (and therefore an range) has one <i>traversal</i> 
     property and one or more properties from the <i>value access</i> category. So in 
-    reality we will mostly talk about mixtures such as 
+    reality we will mostly talk about mixtures such as
     <ul>
         <li>
-            RandomAccessReadableWriteableRange
+            Random Access Readable Writeable Range
         <li>
-            ForwardLvalueRange
+            Forward Lvalue Range
     </ul>
-    By convention, we should always specify the <i>travelsal</i> property first as 
-    done above. This seems resonable since there will only be one <i>traversal</i> 
-    property, but perhaps many <i>value acccess</i> properties.
+    By convention, we should always specify the <i>traversal</i> property first as 
+    done above. This seems reasonable since there will only be one <i>traversal</i> 
+    property, but perhaps many <i>value access</i> properties.
     </p>
 
     <p>
@@ -88,7 +82,7 @@
    void sort( RandomAccessTraversalReadableWritableIterator first,
               RandomAccessTraversalReadableWritableIterator last );
    </pre>
-    For iterator ranges the interface becomes
+    For ranges the interface becomes
 
     <pre>
    template< class RandomAccessReadableWritableRange >

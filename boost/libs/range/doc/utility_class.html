@@ -2,146 +2,179 @@
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Boost.Range Utility Classes </title>
-<link rel="stylesheet" href="style.css" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Boost.Range Utilities </title>
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 
-<body>
-  <table border="0" >
-    <tr>
-      <td ><img src="cboost.gif" border="0" ></td>
-      <td >
-        <h1 align="center">Boost.Range utility classes</h1>
-      </td>
-    </tr>
-  </table>
+    <body>
+    <table border="0" >
+        <tr>
+            <td ><img src="cboost.gif" border="0" ></td>
+            <td ><h1 align="center">Boost.Range</h1></td>
+        </tr>
+    </table>
 
+    <h2>Utilities</h2>
+    <p>
+    Having an abstraction that encapsulates a pair of iterators is very useful. The 
+    standard library uses <code>std::pair</code> in some circumstances, but that 
+    class is cumbersome to use because we need to specify two template arguments, 
+    and for all range algorithm purposes we must enforce the two template arguments 
+    to be the same. Moreover, <code>std::pair&lt;iterator,iterator></code> is hardly 
+    self-documenting whereas more domain specific class names are. Therefore these 
+    two classes are provided:
 
-<p> Having an abstraction that encapsulates a pair of iterators is very 
-    useful. The standard library uses <code>std::pair</code> in some 
-cercumstances, but that class is cumbersome to use because we need to
-specify two template arguments, and for all range algorithm purposes,
-we must enforce the two template arguments to be the same. Moreover,
-<code>std::pair&lt;iterator,iterator></code> is hardly self-documenting
-whereas more domain specific class names are. Therefore these two 
-classes are provided:
+    <ul>
+        <li>
+            Class <a href=#iter_range><code>iterator_range</code></a>
+        <li>
+            Class <a href=#sub_range><code>sub_range</code></a> 
+    </ul>
+    </ul>
 
-<ul>
-   <li>Class <a href=#iter_range><code>iterator_range</code></a> 
-   <li>Class <a href=#sub_range><code>sub_range</code></a> </ul>
-</ul>
+    The <code>iterator_range</code> class is templated on an <a href="">Forward 
+    Traversal Iterator</a> and should be used whenever fairly general code is needed. 
+    The <code>sub_range</code> class is templated on an <a href="range.htm#forward_range">Forward 
+    Range</a> and it is less general, but a bit easier to use since its template 
+    argument is easier to specify.
+    </p>
 
-The <code>iterator_range</code> class is templated on an iterator and should be 
-used whenever super general code is needed. The <code>sub_range</code> class 
-is templated on an <a href=range.html#external_range>ExternalRange</a>
-and it is less general, but a bit easier to use since its template argument
-is easier to specify. 
-</p>
+    <hr>
+    <a name=iter_range></a> <h1>Class <code>iterator_range</code></h1>
+   <p>
+    The intention of the <code>iterator_range</code> class is to encapsulate two 
+    iterators so they fulfill the <a
+   href="range.htm#forward_range">Forward Range</a> concept. A few other functions 
+   are also provided for convenience.
+   </p>
+   <p>
+   If the template argument is not a model of Forward Traversal Iterator, one 
+   can still use a subset of the interface. In particular, <code>size()</code>
+   requires Forward Traversal Iterators whereas <code>empty()</code> only 
+requires Single Pass Iterators.
+   </p>
 
-<hr> <a name=iter_range></a> <h1>Class <code>iterator_range</code></h1>
- 
- The intention of the 
-<code>iterator_range</code> class is to encapsulate 
-two iterators so they fulfill the <a href=range.html#range>Range</a> concept.
-A few other functions are also provided for convinience.
+    <h3>Synopsis</h3>
 
-<h3>Synopsis</h3>
-
-<pre>
+    <pre>
 namespace boost
 {
-    template< class Iterator > 
+    template< class ForwardTraversalIterator >
     class iterator_range
     {
         iterator_range(); // not implemented
         
-    public: // Range types
-        typedef ...        value_type;
-        typedef ...        difference_type;
-        typedef ...        size_type;
-        typedef Iterator   iterator;        
-        typedef Iterator   const_iterator;
+    public: // Forward Range types
+        typedef ...                        value_type;
+        typedef ...                        difference_type;
+        typedef ...                        size_type;
+        typedef ForwardTraversalIterator   iterator;
+        typedef ForwardTraversalIterator   const_iterator;
 
     public: // construction, assignment
-        template< class Iterator >
-        iterator_range( Iterator Begin, Iterator End );
+        template< class ForwardTraversalIterator2 >
+        iterator_range( ForwardTraversalIterator2 Begin, ForwardTraversalIterator2 End );
                     
-        template< class XRange >
-        iterator_range( XRange& r ); 
+        template< class ForwardRange >
+        iterator_range( ForwardRange& r );
   
-        template< class XRange >
-        iterator_range( const XRange& r ); 
+        template< class ForwardRange >
+        iterator_range( const ForwardRange& r );
         
-        template< class XRange >
-        iterator_range& operator=( XRange& r );
+        template< class ForwardRange >
+        iterator_range& operator=( ForwardRange& r );
 
-        template< class XRange >
-        iterator_range& operator=( const XRange& r );
+        template< class ForwardRange >
+        iterator_range& operator=( const ForwardRange& r );
     
-    public: // Range functions
-        iterator  begin() const; 
-        iterator  end() const; 
+    public: // Forward Range functions
+        iterator  begin() const;
+        iterator  end() const;
         size_type size() const;
         bool      empty() const;
         
     public: // convenience
-        operator  unspecified_bool_type() const;
-        void      swap( iterator_range& r );
+        operator  unspecified_bool_type() const; 
     };
     
     // stream output
-    template< class Iterator, class T, class Traits >
+    template< class ForwardTraversalIterator, class T, class Traits >
     std::basic_ostream&lt;T,Traits>& operator<<( std::basic_ostream&lt;T,Traits>& Os,
-                                              const iterator_range&lt;Iterator>& r );
+                                              const iterator_range&lt;ForwardTraversalIterator>& r );
 
     // comparison
-    template< class Iterator > 
-    bool operator==( const iterator_range&lt;Iterator>& l, const iterator_range&lt;Iterator>& r );
+    template< class ForwardTraversalIterator >
+    bool operator==( const iterator_range&lt;ForwardTraversalIterator>& l, const iterator_range&lt;ForwardTraversalIterator>& r );
     
-    template< class Iterator > 
-    bool operator!=( const iterator_range&lt;Iterator>& l, const iterator_range&lt;Iterator>& r );
+    template< class ForwardTraversalIterator >
+    bool operator!=( const iterator_range&lt;ForwardTraversalIterator>& l, const iterator_range&lt;ForwardTraversalIterator>& r );
 
     // external construction
-    template< class Iterator >
-    iterator_range< Iterator > 
-    make_iterator_range( Iterator Begin, Iterator End ); 
+    template< class ForwardTraversalIterator >
+    iterator_range< ForwardTraversalIterator >
+    make_iterator_range( ForwardTraversalIterator Begin, ForwardTraversalIterator End );
        
-    template< class XRange >
-    iterator_range< typename iterator_of&lt;XRange>::type >
-    make_iterator_range( XRange& r ); 
+    template< class ForwardRange >
+    iterator_range< typename iterator_of&lt;ForwardRange>::type >
+    make_iterator_range( ForwardRange& r );
 
-    template< class XRange >
-    iterator_range< typename const_iterator_of&lt;XRange>::type >
-    make_iterator_range( const XRange& r ); 
+    template< class ForwardRange >
+    iterator_range< typename const_iterator_of&lt;ForwardRange>::type >
+    make_iterator_range( const ForwardRange& r );
 
     // convenience
-    template< class Sequence, class XRange >
-    Sequence copy_range( const XRange& r )
+    template< class Sequence, class ForwardRange >
+    Sequence copy_range( const ForwardRange& r );
 
-    template< class Sequence, class XRange, class Func >
-    Sequence transform_range( const XRange& r, Func func );
+    template< class Sequence, class ForwardRange, class Func >
+    Sequence transform_range( const ForwardRange& r, Func func );
 
 } // namespace 'boost'
-</pre>
+    </pre>
 
 <p>
-It is worth noticing that the templated constructors and assignment operators 
-allow conversion from <code>iterator_range<iterator></code> to 
-<code>iterator_range<const_iterator></code>. If an instance of 
-<code>iterator_range</code> is constructed by a client with two iterators, the 
-client must ensure that the two iterators delimit a valid closed-open range 
+It is worth noticing that the templated constructors and assignment operators
+allow conversion from <code>iterator_range&lt;iterator></code> to
+<code>iterator_range&lt;const_iterator></code>. If an instance of
+<code>iterator_range</code> is constructed by a client with two iterators, the
+client must ensure that the two iterators delimit a valid closed-open range
 <code>[begin,end)</code>.
- 
  </p>
+ 
+ <h3>Details member functions</h3>
+ 
+<code>operator  unspecified_bool_type() const; </code> 
+ <blockquote>
+Returns <code>!empty().</code>     
 
-<hr> <a name=sub_range></a> 
-<h1>Class <code>sub_range</code></h1> 
+     <!--
+     <b>Example</b> <code> iterator_range<const char*> r( "a string" ); if( r ) 
+do_something();</code>-->
+      </blockquote>
+     
+ <h3>Details functions</h3>
 
-The <code>sub_range</code> class inherits all its functionality 
-from the <a href="#iter_range"><code>iterator_range</code></a> class. 
+<code>Sequence copy_range( const ForwardRange& r );</code>
+<blockquote>
+            Constructs a new sequence of the specified type from the elements
+            in the given range.
+</blockquote>
+
+<code>Sequence transform_range( const ForwardRange& r, Func func );</code>
+<blockquote>
+            Constructs a new sequence from the elements in the range, 
+transformed by a function.
+
+</blockquote>
+
+<hr> <a name=sub_range></a>
+<h1>Class <code>sub_range</code></h1>
+
+The <code>sub_range</code> class inherits all its functionality
+from the <a href="#iter_range"><code>iterator_range</code></a> class.
 The <code>sub_range</code> class is often easier to use because
-one must specify the <a href="range.html#external_range">ExternalRange</a>
+one must specify the <a href="range.html#forward_range">Forward Range</a>
 template argument instead of an iterator.
  
 <h3>Synopsis</h3>
@@ -150,32 +183,40 @@ template argument instead of an iterator.
 namespace boost
 {
     
-    template< class XRange > 
-    class sub_range : public iterator_range< typename result_iterator_of&lt;XRange>::type > 
+    template< class ForwardRange >
+    class sub_range : public iterator_range< typename result_iterator_of&lt;ForwardRange>::type >
     {
     public: // construction, assignment
-        template< class Iterator >
-        sub_range( Iterator Begin, Iterator End );
+        template< class ForwardTraversalIterator >
+        sub_range( ForwardTraversalIterator Begin, ForwardTraversalIterator End );
 
-        template< class XRange2 >
-        sub_range( XRange2& r );
+        template< class ForwardRange2 >
+        sub_range( ForwardRange2& r );
          
-        template< class XRange2 >
+        template< class ForwardRange2 >
         sub_range( const Range2& r );
          
-        template< class XRange2 >
-        sub_range& operator=( XRange2& r );
+        template< class ForwardRange2 >
+        sub_range& operator=( ForwardRange2& r );
 
-        template< class XRange2 >
-        sub_range& operator=( const XRange2& r );
+        template< class ForwardRange2 >
+        sub_range& operator=( const ForwardRange2& r );
         
     public:
         // rest of interface inherited from iterator_range
     };
     
 } // namespace 'boost'
-
-</pre>
+    </pre>
+    
+    <p>
+    The class should be trivial to use, an example with strings is shown below.
+    <pre>
+    typedef sub_range<std::string> sub_string;
+    std::string s = "something";
+    sub_string  ss( s ); 
+    sub_string  ss2( begin( s ), begin( s ) + 2 );</pre>
+    
 
 <hr>
   <p>
@@ -195,6 +236,6 @@ namespace boost
   <br>
   <br>
   
-</body>
+    </body>
 </html>
 

@@ -3,6 +3,7 @@
 <head>
     <title>Boost.Range Range Implementation </title>
     <meta http-equiv="Content-Type"content="text/html; charset=iso-8859-1">
+    <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 
 <body>
@@ -42,17 +43,14 @@ Five types of objects are currently supported by the library:
         standard containers
     </li>
     <li  >
-        built-in arrays
+        <code  >std::pair&lt;iterator,iterator&gt;</code>
     </li>
     <li  >
         null terminated strings (this includes <code  >char[]</code>,<code  >wchar_t[]</code>,
         <code  >char*</code>, and <code  >wchar_t*</code>)
     </li>
     <li  >
-        <code  >std::pair&lt;iterator,iterator&gt;</code>
-    </li>
-    <li  >
-        iterators which when default constructed denotes the end of the range
+        built-in arrays
     </li>
 </ul>
 It is worth noticing that some functionality requires partial template 
@@ -61,99 +59,102 @@ small problem since one would use <code>boost::array<></code> anyway). Also note
 that arrays and pointers of <code  >char</code> or <code  >whar_t</code> are 
 treated special because of their use in string algorithms.
 </p>
-<h3  >ExternalCollectionConcept</h3><a name="ExternalCollectionConcept" ></a>
+
 <p  >
-The concept is defined by the type-generators and the functions below. Even 
+The concept is defined by the metafunction and the functions below. Even 
 though these functions are defined in namespace <code>boost</code>, there is no 
 such general requirement, that is, if one wants to extend the list of supported 
 types, it can be done in any namespace.
 </p>
+
 <h3  >Synopsis</h3><a name="Synopsis" ></a>
+
 <p  >
+
 <pre>
-    namespace boost
-    {
-        //
-        // type generators
-        //
-        
-        template< typename EC >
-        struct <a href="#value_type_of" >value_type_of</a>
-        {
-            typedef ... type; // type of stored objects
-        };
-                     
-        template< typename EC >
-        struct <a href="#iterator_of" >iterator_of</a>
-        {
-            typedef ... type; // iterator over stored objects
-        };
-        
-        template< typename EC >
-        struct <a href="#const_iterator_of" >const_iterator_of</a>
-        {
-            typedef ... type; // iterator over immutable stored objects
-        };
-
-        template< typename EC >
-        struct <a href="#difference_type_of" >difference_type_of</a>
-        {
-            typedef ... type;
-            BOOST_STATIC_ASSERT( boost::is_signed< type >::value );
-            //
-            // remark: if std::iterator_traits<> works for the type, this assertion must
-            hold
-            //
-            BOOST_STATIC_ASSERT( boost::is_same< type, std::iterator_traits< typename
-                                                       <a href="#iterator_of" >iterator_of</a>< EC >::type >::difference_type>::value );
-        };
-
-        template< typename EC >
-        struct <a href="#size_type_of" >size_type_of</a>
-        {
-            typedef ... type;
-            BOOST_STATIC_ASSERT( boost::is_unsigned< type >::value );
-            BOOST_STATIC_ASSERT( sizeof( type ) >= sizeof( <a href="#difference_type_of" >
-            difference_type_of</a>< EC >::type ) );
-        };
-
-        template< typename EC >
-        struct <a href="#result_iterator_of" >result_iterator_of</a>
-        {
-            typedef ... type;
-            // <a href="#iterator_of" >iterator_of</a>< EC >::type if EC is non-const, <a href="#const_iterator_of" >
-            const_iterator_of</a>< EC >::type otherwise
-        };
-                     
-        //
-        // funtions
-        //
-        
-        template< typename EC >
-        inline typename iterator_of<EC>::type
-        <a href="#begin" >begin</a>( EC& c );
+namespace boost
+{
+    //
+    // Range metafunctions
+    //
     
-        template< typename EC >
-        inline typename const_iterator_of< EC >::type
-        <a href="#begin" >begin</a>( const EC& c );
-            
-        template< typename EC >
-        inline typename iterator_of< EC >::type
-        <a href="#end" >end</a>( EC& c );
-                          
-        template< typename EC >
-        inline typename const_iterator_of< EC >::type
-        <a href="#end" >end</a>( const EC& c );
+    template< class T >
+    struct <a href="#value_type_of" >value_type_of</a>
+    {
+        typedef ... type; // type of stored objTts
+    };
+                 
+    template< class T >
+    struct <a href="#iterator_of" >iterator_of</a>
+    {
+        typedef ... type; // iterator over stored objects
+    };
+    
+    template< class T >
+    struct <a href="#const_iterator_of" >const_iterator_of</a>
+    {
+        typedef ... type; // iterator over immutable stored objects
+    };
+    
+    template< class T >
+    struct <a href="#difference_type_of" >difference_type_of</a>
+    {
+        typedef ... type;
+        BOOST_STATIC_ASSERT( boost::is_signed< type >::value );
+        //
+        // remark: if std::iterator_traits<> works for the type, this assertion must
+        hold
+        //
+        BOOST_STATIC_ASSERT( boost::is_same< type, std::iterator_traits< typename
+                                                   <a href="#iterator_of" >iterator_of</a>< T >::type >::difference_type>::value );
+    };
+    
+    template< class T >
+    struct <a href="#size_type_of" >size_type_of</a>
+    {
+        typedef ... type;
+        BOOST_STATIC_ASSERT( boost::is_unsigned< type >::value );
+        BOOST_STATIC_ASSERT( sizeof( type ) >= sizeof( <a href="#difference_type_of" >
+        difference_type_of</a>< T >::type ) );
+    };
+    
+    template< class T >
+    struct <a href="#result_iterator_of" >result_iterator_of</a>
+    {
+        typedef ... type;
+        // <a href="#iterator_of" >iterator_of</a>< T >::type if T is non-const, <a href="#const_iterator_of" >
+        const_iterator_of</a>< T >::type otherwise
+    };
+                 
+    //
+    // funtions
+    //
+    
+    template< class T >
+    inline typename iterator_of<T>::type
+    <a href="#begin" >begin</a>( T& c );
+    
+    template< class T >
+    inline typename const_iterator_of< T >::type
+    <a href="#begin" >begin</a>( const T& c );
         
-        template< typename EC >
-        inline bool
-        <a href="#empty" >empty</a>( const EC& c );
-                   
-        template< typename EC >
-        inline typename size_type_of< EC >::type
-        <a href="#size" >size</a>( const EC& c );
-                     
-     } // namespace 'boost' </pre>
+    template< class T >
+    inline typename iterator_of< T >::type
+    <a href="#end" >end</a>( T& c );
+                      
+    template< class T >
+    inline typename const_iterator_of< T >::type
+    <a href="#end" >end</a>( const T& c );
+    
+    template< class T >
+    inline bool
+    <a href="#empty" >empty</a>( const T& c );
+               
+    template< class T >
+    inline typename size_type_of< T >::type
+    <a href="#size" >size</a>( const T& c );
+                 
+} // namespace 'boost' </pre>
 </p>
 
 
