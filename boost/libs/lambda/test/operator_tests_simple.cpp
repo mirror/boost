@@ -26,25 +26,25 @@ unary_plus_tester operator+(const unary_plus_tester& a) { return a; }
 
 void cout_tests()
 {
-  // standard ostream and istream operators work
-  // stringstreams etc. do not work:
-
-  // ostringstream os;
-  // os << 1
-
-  // This should the derived basic_ostream instance (or a reference to it)
-  // but now the type deduction returns a reference to ostringstream.
-  // must be fixed.
   using std::cout;
   ostringstream os;
   int i = 10; 
-  ret<std::ostream&>(os << _1)(i);
+  (os << _1)(i);
 
-  ret<std::ostream&>(os << constant("FOO"))();
+  (os << constant("FOO"))();
 
   BOOST_TEST(os.str() == std::string("10FOO"));
   
- 
+
+  istringstream is("ABC 1");
+  std::string s;
+  int k;
+
+  is >> s;
+  is >> k;
+
+  BOOST_TEST(s == std::string("ABC"));
+  BOOST_TEST(k == 1);
   // test for constant, constant_ref and var
   i = 5;
   constant_type<int>::type ci(constant(i));
