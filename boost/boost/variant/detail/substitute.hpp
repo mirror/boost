@@ -138,7 +138,7 @@ struct substitute<
     BOOST_VARIANT_AUX_SUBSTITUTE_TYPEDEF_IMPL( BOOST_PP_INC(N) ) \
     /**/
 
-#define BOOST_PP_ITERATION_LIMITS (1,BOOST_MPL_METAFUNCTION_MAX_ARITY)
+#define BOOST_PP_ITERATION_LIMITS (0,BOOST_MPL_METAFUNCTION_MAX_ARITY)
 #define BOOST_PP_FILENAME_1 "boost/variant/detail/substitute.hpp"
 #include BOOST_PP_ITERATE()
 
@@ -156,6 +156,8 @@ struct substitute<
 
 #elif BOOST_PP_ITERATION_DEPTH() == 1
 #define i BOOST_PP_FRAME_ITERATION(1)
+
+#if i > 0
 
 //
 // template specializations
@@ -201,10 +203,32 @@ private:
     BOOST_MPL_PP_REPEAT(i, BOOST_VARIANT_AUX_SUBSTITUTE_TYPEDEF, _)
 
 public:
-
     typedef r (*type)( BOOST_MPL_PP_PARAMS(i,u) );
-
 };
+
+#elif i == 0
+
+//
+// zero-arg function specialization
+//
+template <
+      typename R, typename Dest, typename Source
+    >
+struct substitute<
+      R (*)( void )
+    , Dest
+    , Source
+      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
+    >
+{
+private:
+    typedef typename substitute< R, Dest, Source >::type r;
+
+public:
+    typedef r (*type)( void );
+};
+
+#endif // i
 
 #undef i
 #endif // BOOST_PP_IS_ITERATING
