@@ -365,7 +365,7 @@ The quotient is 1.66667
 <p>So any values that are given to <code>sig</code> when it is called
 like a function are passed to each of the slots. We have to declare
 the types of these values up front when we create the signal. The type
-<code>boost::signal&lt;void, float, float&gt;</code> means that the
+<code>boost::signal&lt;void (float, float)&gt;</code> means that the
 signal has a <code>void</code> return value and takes two
 <code>float</code> values. Any slot connected to <code>sig</code> must
 therefore be able to take two <code>float</code> values.
