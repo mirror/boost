@@ -9,7 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
-//   23 Sept 00 Added INTXX_C constant macro support + int64_t support (John Maddock).
+//   12 Nov 00  Adapted to merged <boost/cstdint.hpp>
+//   23 Sep 00  Added INTXX_C constant macro support + int64_t support (John Maddock).
 //   28 Jun 00  Initial version
 #include <cassert>
 #include <iostream>
@@ -86,7 +87,7 @@ void integral_constant_checker::check()
   assert( uint_least32 == 4294967295u );
   assert( uint_fast32 == 4294967295u );
 }
-#endif
+#endif // BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 
 //
 // the following function simply verifies that the type
@@ -111,8 +112,10 @@ void integral_constant_type_check(T1, T2)
    T1 t1 = -1;
    T2 t2 = -1;
    assert(t1 == t2);
-   if(t1 >= 0)assert(t2 >= 0);
-   else assert(t2 < 0);
+   if(t1 >= 0)
+     assert(t2 >= 0);
+   else
+     assert(t2 < 0);
 }
 
 
@@ -124,15 +127,15 @@ int main()
   //
   // verify the types of the integral constants:
   //
-  integral_constant_type_check(int8_t(0), INT8_C(0));
-  integral_constant_type_check(uint8_t(0), UINT8_C(0));
-  integral_constant_type_check(int16_t(0), INT16_C(0));
-  integral_constant_type_check(uint16_t(0), UINT16_C(0));
-  integral_constant_type_check(int32_t(0), INT32_C(0));
-  integral_constant_type_check(uint32_t(0), UINT32_C(0));
+  integral_constant_type_check(boost::int8_t(0), INT8_C(0));
+  integral_constant_type_check(boost::uint8_t(0), UINT8_C(0));
+  integral_constant_type_check(boost::int16_t(0), INT16_C(0));
+  integral_constant_type_check(boost::uint16_t(0), UINT16_C(0));
+  integral_constant_type_check(boost::int32_t(0), INT32_C(0));
+  integral_constant_type_check(boost::uint32_t(0), UINT32_C(0));
 #ifndef BOOST_NO_INT64_T
-  integral_constant_type_check(int64_t(0), INT64_C(0));
-  integral_constant_type_check(uint64_t(0), UINT64_C(0));
+  integral_constant_type_check(boost::int64_t(0), INT64_C(0));
+  integral_constant_type_check(boost::uint64_t(0), UINT64_C(0));
 #endif
   //
   boost::int8_t          int8          = INT8_C(-127);
@@ -220,5 +223,5 @@ int main()
 #include <boost/cstdint.hpp>
 
 #ifdef INT8_C
-#error stdint.h not correctly defined
+#error boost/cstdint.hpp not correctly defined
 #endif
