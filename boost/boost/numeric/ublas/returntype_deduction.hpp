@@ -14,9 +14,7 @@
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/identity.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/remove_cv.hpp>
-#include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/utility/enable_if.hpp>
 
@@ -129,8 +127,7 @@ struct error_cant_deduce_type {};
 
     template <typename X, typename Y>
     typename disable_if<
-        mpl::or_<is_basic<X>, is_const<X> >
-      , x_value_type
+        is_basic<X>, x_value_type
     >::type
     test(X const&);
 
@@ -139,8 +136,7 @@ struct error_cant_deduce_type {};
         mpl::or_<
             is_basic<Y>
           , is_same<Y, asymmetric>
-          , is_const<Y>
-          , is_same<X, Y>
+          , is_same<const X, const Y>
         >
       , y_value_type
     >::type
@@ -149,8 +145,8 @@ struct error_cant_deduce_type {};
     template <typename X, typename Y>
     struct base_result_of
     {
-        typedef typename remove_reference<X>::type x_type;
-        typedef typename remove_reference<Y>::type y_type;
+        typedef typename remove_cv<X>::type x_type;
+        typedef typename remove_cv<Y>::type y_type;
 
         typedef mpl::vector16<
             mpl::identity<bool>
