@@ -37,7 +37,7 @@ private:
 
 public:
 
-    lightweight_mutex(): a_(1)
+    lightweight_mutex(): a_(0)
     {
     }
 
@@ -57,16 +57,16 @@ public:
 
         explicit scoped_lock(lightweight_mutex & m): m_(m)
         {
-            while( !__exchange_and_add(&m_.a_, -1) )
+            while( __exchange_and_add(&m_.a_, 1) )
             {
-                __atomic_add(&m_.a_, 1);
+                __atomic_add(&m_.a_, -1);
                 sched_yield();
             }
         }
 
         ~scoped_lock()
         {
-            __atomic_add(&m_.a_, 1);
+            __atomic_add(&m_.a_, -1);
         }
     };
 };
