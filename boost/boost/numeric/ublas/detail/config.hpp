@@ -59,8 +59,8 @@
 // GNU Compiler Collection
 #if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
 
-#if __GNUC__ >= 3 && __GNUC_MINOR__ >= 4
-// By ABI definition see GCC bug id 9982
+#if __GNUC__ >= 4 || (__GNUC__ >= 3 && __GNUC_MINOR__ >= 4)
+// Specified by ABI definition see GCC bug id 9982
 #define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
 #endif
 
@@ -74,7 +74,7 @@
 // Intel Compiler
 #if defined (BOOST_INTEL) && ! defined (BOOST_STRICT_CONFIG)
 
-#if (BOOST_INTEL >= 800)
+#if defined (BOOST_INTEL_LINUX) && (BOOST_INTEL_LINUX >= 800)
 // By inspection of compiler results
 #define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
 #endif
