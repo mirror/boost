@@ -130,25 +130,25 @@ namespace date_time {
     {
       return duration_type(ticks_ / divisor);
     }
-    time_duration operator-=(const duration_type& d)
+    duration_type operator-=(const duration_type& d)
     {
       ticks_ -= d.ticks_;
-      return *this;
+      return duration_type(ticks_);
     }
-    time_duration operator+=(const duration_type& d)
+    duration_type operator+=(const duration_type& d)
     {
       ticks_ += d.ticks_;
-      return *this;
+      return duration_type(ticks_);
     }
     //! Division operations on a duration with an integer.
-    time_duration operator/=(int divisor) 
+    duration_type operator/=(int divisor) 
     {
       ticks_ /= divisor;
-      return *this;
+      return duration_type(ticks_);
     }
-    time_duration operator*(int rhs) const
+    duration_type operator*(int rhs) const
     {
-      return time_duration(ticks_ * rhs);
+      return duration_type(ticks_ * rhs);
     }
     tick_type ticks() const 
     { 
