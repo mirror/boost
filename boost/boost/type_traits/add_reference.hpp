@@ -11,6 +11,7 @@
 #define BOOST_TT_ADD_REFERENCE_HPP_INCLUDED
 
 #include "boost/type_traits/is_reference.hpp"
+#include "boost/detail/workaround.hpp"
 #include "boost/config.hpp"
 
 // should be the last #include
@@ -75,6 +76,12 @@ BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(add_reference,void const volatile,void const 
 } // namespace detail
 
 BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,typename detail::add_reference_impl<T>::type)
+
+// agurt, 07/mar/03: workaround Borland's ill-formed sensitivity to an additional 
+// level of indirection, here
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561))
+BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,add_reference,T&,T&)
+#endif
 
 } // namespace boost
 
