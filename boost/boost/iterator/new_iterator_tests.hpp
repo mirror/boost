@@ -49,7 +49,7 @@ namespace boost {
 template <class Iterator, class T>
 void readable_iterator_traversal_test(Iterator i1, T v, mpl::true_)
 {
-    T v2 = *i1++;
+    T v2(*i1++);
     assert(v == v2);
 }
 
@@ -62,6 +62,8 @@ void writable_iterator_traversal_test(Iterator i1, T v, mpl::true_)
 {
     ++i1;  // we just wrote into that position
     *i1++ = v;
+    Iterator x(i1++);
+    (void)x;
 }
 
 template <class Iterator, class T>
