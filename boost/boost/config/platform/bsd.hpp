@@ -29,8 +29,11 @@
 #endif
 
 //
-// no wide character support:
+// No wide character support in the BSD header files:
 //
 #define BOOST_NO_CWCHAR
 
-
+//
+// The BSD <ctype.h> has macros only, no functions:
+//
+#define BOOST_NO_CTYPE_FUNCTIONS
