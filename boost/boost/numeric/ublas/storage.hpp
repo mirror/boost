@@ -963,6 +963,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         range (size_type start, size_type stop):
             start_ (start), size_ (stop - start) {
+            BOOST_UBLAS_CHECK (start_ <= stop, bad_index ());
         }
 
         BOOST_UBLAS_INLINE
@@ -984,7 +985,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Composition
         BOOST_UBLAS_INLINE
         range compose (const range &r) const {
-            BOOST_UBLAS_CHECK (r.start_ + r.size_ <= size_, bad_size ());
             return range (start_ + r.start_, start_ + r.start_ + r.size_);
         }
 
@@ -1186,12 +1186,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Composition
         BOOST_UBLAS_INLINE
         slice compose (const range &r) const {
-            BOOST_UBLAS_CHECK (r.start () + r.size () <= size_, bad_size ());
+            BOOST_UBLAS_CHECK (start_ >= stride_ * r.start (), bad_index ());
             return slice (start_ + stride_ * r.start (), stride_, r.size ());
         }
         BOOST_UBLAS_INLINE
         slice compose (const slice &s) const {
-            BOOST_UBLAS_CHECK (s.start_ + s.stride_ * (s.size_ - (s.size_ > 0)) <= size_, bad_size ());
+            BOOST_UBLAS_CHECK (start_ >= stride_ * s.start_, bad_index ());
             return slice (start_ + stride_ * s.start_, stride_ * s.stride_, s.size_);
         }
 
