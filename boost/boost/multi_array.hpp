@@ -48,74 +48,6 @@ namespace boost {
         }
       };
 
-#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-//
-// Compilers that don't support partial ordering may need help to
-// disambiguate multi_array's templated constructors.  Even vc6/7 are
-// capable of some limited SFINAE, so we take the most-general version
-// out of the overload set with disable_multi_array_impl.
-//
-template <typename T, std::size_t NumDims, typename TPtr>
-char is_multi_array_impl_help(const_multi_array_view<T,NumDims,TPtr>&);
-template <typename T, std::size_t NumDims, typename TPtr>
-char is_multi_array_impl_help(const_sub_array<T,NumDims,TPtr>&);
-template <typename T, std::size_t NumDims, typename TPtr>
-char is_multi_array_impl_help(const_multi_array_ref<T,NumDims,TPtr>&);
-
-char ( &is_multi_array_impl_help(...) )[2];
-
-template <class T>
-struct is_multi_array_impl
-{
-    static T x;
-    BOOST_STATIC_CONSTANT(bool, value = sizeof((is_multi_array_impl_help)(x)) == 1);
-  //  typedef mpl::bool_< ( sizeof((is_multi_array_impl_help)(x)) == 1 ) > type;
-  typedef mpl::bool_<value> type;
-};
-
-template <bool multi_array = false>
-struct disable_multi_array_impl_impl
-{
-    typedef int type;
-};
-
-template <>
-struct disable_multi_array_impl_impl<true>
-{
-    // forming a pointer to a reference triggers SFINAE
-    typedef int& type; 
-};
-
-#if 0
-template <class T>
-struct disable_multi_array_impl
-{
-    typedef typename disable_multi_array_impl_impl<is_multi_array_impl<T>::value>::type type;
-};
-
-    
-#else
-
-template <class T>
-struct disable_multi_array_impl :
-  disable_multi_array_impl_impl<is_multi_array_impl<T>::value>
-{
-  typedef disable_multi_array_impl_impl<is_multi_array_impl<T>::value> super_type;
-  typedef typename super_type::type type;
-
-};
-
-
-#endif // 0
-template <>
-struct disable_multi_array_impl<int>
-{
-  typedef int type;
-};
-
-
-#endif
-
     } //namespace multi_array
   } // namespace detail
 
@@ -157,20 +89,7 @@ public:
   }
 
   template <class ExtentList>
-  explicit multi_array(
-      ExtentList const& extents
-#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-#if 0
-      , typename detail::multi_array::disable_non_sub_array<ExtentList>::type* = 0
-      //#elif 0
-      //   , typename detail::multi_array::disable_multi_array_impl<ExtentList>::type* = 0
-#else
-      , typename mpl::if_<
-      detail::multi_array::is_multi_array_impl<ExtentList>,
-      int&,int>::type* = 0
-#endif
-#endif 
-  ) :
+  explicit multi_array(ExtentList const& extents) :
     super_type((T*)initial_base_,extents) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<ExtentList> >();
@@ -329,8 +248,7 @@ public:
 
 #endif // !BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
-  // This constructor is necessary because of more exact template matches.
-  // enable-if?
+  // Thes constructors are necessary because of more exact template matches.
   multi_array(const multi_array_ref<T,NumDims>& rhs)
     : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
   {
@@ -349,8 +267,6 @@ public:
   }
 
 
-  // This constructor is necessary because of more exact template matches.
-  // enable-if?
   multi_array(const detail::multi_array::
               sub_array<T,NumDims>& rhs)
     : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
@@ -368,8 +284,7 @@ public:
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
 
-  // This constructor is necessary because of more exact template matches.
-  // enable-if?
+
   multi_array(const detail::multi_array::
               multi_array_view<T,NumDims>& rhs)
     : super_type(0,c_storage_order(),rhs.index_bases(),rhs.shape()) 
