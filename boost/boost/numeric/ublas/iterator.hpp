@@ -21,7 +21,7 @@
 
 #include <boost/numeric/ublas/exception.hpp>
 
-// Using GCC the following is missing:
+// Using older GCC the following is missing:
 //
 // namespace std {
 //
@@ -42,23 +42,16 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-#ifdef BOOST_UBLAS_NEED_CONVERSION
-    template<class C>
-    class container_reference;
-#endif
-
   /** \brief Base class of all proxy classes that contain
-          a reference to an immutable object.
-   
-          \param C the type of the container referred to
-  */
+   *       a (redirectable) reference to an immutable object.
+   *
+   *       \param C the type of the container referred to
+   */
     template<class C>
-    class container_const_reference {
+    class container_const_reference:
+        private boost::nonassignable {
     public:
         typedef C container_type;
-#ifdef BOOST_UBLAS_NEED_CONVERSION
-        typedef container_reference<container_type> container_reference;
-#endif
 
         BOOST_UBLAS_INLINE
         container_const_reference ():
@@ -66,11 +59,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         container_const_reference (const container_type &c):
             c_ (&c) {}
-#ifdef BOOST_UBLAS_NEED_CONVERSION
-        BOOST_UBLAS_INLINE
-        container_const_reference (const container_reference &c):
-            c_ (c.c ()) {}
-#endif
 
         BOOST_UBLAS_INLINE
         const container_type &operator () () const {
@@ -91,19 +79,16 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         const container_type *c_;
-
-        container_const_reference &operator = (const container_const_reference &) {
-            return *this;
-        }
     };
 
   /** \brief Base class of all proxy classes that contain
-   *         a reference to a mutable object.
+   *         a (redirectable) reference to a mutable object.
    *
    * \param C the type of the container referred to
    */
     template<class C>
-    class container_reference {
+    class container_reference:
+        private boost::nonassignable {
     public:
         typedef C container_type;
 
@@ -125,20 +110,22 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
+        // Closure comparison
+        BOOST_UBLAS_INLINE
+        bool same_closure (const container_reference &cr) const {
+            return c_ == cr.c_;
+        }
+
     private:
         container_type *c_;
-
-        container_reference operator = (const container_reference &) {
-            return *this;
-        }
     };
 
   /** \brief Base class of all forward iterators.
-   *
-   * \param IC the iterator category
-   * \param I the derived iterator type
-   * \param T the value type
-   *
+   * 
+   *  \param IC the iterator category
+   *  \param I the derived iterator type
+   *  \param T the value type
+   * 
    * The forward iterator can only proceed in one direction
    * via the post increment operator.
    */
