@@ -51,11 +51,12 @@ The ``Derived`` template parameter must be a derived class of
 expressions involving ``m_iterator`` in the specifications of those
 private member functions of ``iterator_adaptor`` that are not
 redefined by the ``Derived`` class and that are needed to model the
-concept corresponding to the ``iterator_adaptor``\ 's ``category``
-typedef according to the requirements of ``iterator_facade``.  The
-rest of the template parameters specify the types for the member
-typedefs in ``iterator_facade``.  The following pseudo-code
-specifies the traits types for ``iterator_adaptor``.
+concept corresponding to
+``iterator_traits<Derived>::iterator_category`` according to the
+requirements of ``iterator_facade``.  The rest of the template
+parameters specify the types for the member typedefs in
+``iterator_facade``.  The following pseudo-code specifies the
+traits types for ``iterator_adaptor``.
 
 ::
 
@@ -82,12 +83,17 @@ specifies the traits types for ``iterator_adaptor``.
             access_category< Base >,
             traversal_category< Base >
         >
-    else if (Category is an access tag)
+    else if (Category is convertible to a standard access tag)
         iterator_category = iterator_tag<
             Category
-        ...
+        else if (Category has a nested traversal type)
+             if (reference is not a reference-to-const)
+                 Category::access
+             else
+                 if (Category
+            
     
-    else if (Category is a traversal tag)
+    else if (Category is convertable to a standard traversal tag)
         ...
     else
         iterator_category = Category;
