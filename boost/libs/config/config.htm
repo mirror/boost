@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 
 <head>
@@ -12,8 +11,8 @@ content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
 
 <body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
 
-<p align="left"><img src="../../c++boost.gif" width="277"
-height="86" alt="Boost"></p>
+<p align="left"><img src="../../c++boost.gif" alt="Boost"
+width="277" height="86"></p>
 
 <h1 align="center">Boost Configuration Reference</h1>
 
@@ -539,6 +538,11 @@ struct foo : {
         cannot have a dependent type, for example:<pre>template&lt;class T, typename T::type value&gt; 
 class X { ... };</pre>
         </td>
+    </tr>
+    <tr>
+        <td>BOOST_NO_EXCEPTIONS</td>
+        <td>Compiler</td>
+        <td>The compiler does not support exception handling.</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS</td>

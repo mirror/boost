@@ -78,7 +78,7 @@ $as_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || { LC_MESSAGES=C; ex
 # We need space, tab and new line, in precisely that order.
 as_nl='
 '
-IFS="    $as_nl"
+IFS=" 	$as_nl"
 
 # CDPATH.
 $as_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }
@@ -745,7 +745,7 @@ do
   | --no-cr | --no-c) ;;
   -no-recursion | --no-recursion | --no-recursio | --no-recursi \
   | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r) ;;
-  *" "*|*"  "*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
+  *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
     ac_arg=`echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"`
     ac_configure_args="$ac_configure_args$ac_sep'$ac_arg'"
     ac_sep=" " ;;
@@ -772,7 +772,7 @@ trap 'exit_status=$?
     *ac_space=\ *)
       sed -n \
         "s/'"'"'/'"'"'\\\\'"'"''"'"'/g;
-        s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
+    	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='"'"'\\2'"'"'/p"
       ;;
     *)
       sed -n \
@@ -858,7 +858,7 @@ echo "$as_me:   current value: $ac_new_val" >&2;}
   # we pass some twice (in addition to the command line arguments).
   if test "$ac_new_set" = set; then
     case $ac_new_val in
-    *" "*|*"   "*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
+    *" "*|*"	"*|*[\[\]\~\#\$\^\&\*\(\)\{\}\\\|\;\<\>\?\"\']*)
       ac_arg=$ac_var=`echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"`
       ac_configure_args="$ac_configure_args '$ac_arg'"
       ;;
@@ -883,7 +883,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
   *c*,-n*) ECHO_N= ECHO_C='
-' ECHO_T='  ' ;;
+' ECHO_T='	' ;;
   *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
   *)      ECHO_N= ECHO_C='\c' ECHO_T= ;;
 esac
@@ -1146,9 +1146,9 @@ if test "$cross_compiling" != yes; then
     cross_compiling=no
   else
     if test "$cross_compiling" = maybe; then
-   cross_compiling=yes
+	cross_compiling=yes
     else
-   { { echo "$as_me:1151: error: cannot run C++ compiled programs.
+	{ { echo "$as_me:1151: error: cannot run C++ compiled programs.
 If you meant to cross compile, use \`--host'." >&5
 echo "$as_me: error: cannot run C++ compiled programs.
 If you meant to cross compile, use \`--host'." >&2;}
@@ -1608,8 +1608,8 @@ ac_cv_lib_rt=ac_cv_lib_rt_main
 for file in ./test/boost_no*.cxx; do
 
    basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
-   macroname=`cat $file | grep '^//[]  []*MACRO:' | sed 's/.*MACRO:[]   []*\([]_A-Z0-9[]*\).*/\1/'`
-   title=`cat $file | grep '^//[]   []*TITLE:' | sed 's/.*TITLE:[]   []*\([]^    [].*\)/\1/'`
+   macroname=`cat $file | grep '^//[]    []*MACRO:' | sed 's/.*MACRO:[]    []*\([]_A-Z0-9[]*\).*/\1/'`
+   title=`cat $file | grep '^//[]  []*TITLE:' | sed 's/.*TITLE:[]    []*\([]^  [].*\)/\1/'`
    namespace=`echo $macroname | tr [:upper:] [:lower:]`
 
 #echo file      = $file
@@ -1747,8 +1747,8 @@ done
 for file in ./test/boost_has*.cxx; do
 
    basename=`echo $file | sed 's/.*boost_\(.*\)\.cxx/\1/'`
-   macroname=`cat $file | grep '^//[]  []*MACRO:' | sed 's/.*MACRO:[]   []*\([]_A-Z0-9[]*\).*/\1/'`
-   title=`cat $file | grep '^//[]   []*TITLE:' | sed 's/.*TITLE:[]   []*\([]^    [].*\)/\1/'`
+   macroname=`cat $file | grep '^//[]    []*MACRO:' | sed 's/.*MACRO:[]    []*\([]_A-Z0-9[]*\).*/\1/'`
+   title=`cat $file | grep '^//[]  []*TITLE:' | sed 's/.*TITLE:[]    []*\([]^  [].*\)/\1/'`
    namespace=`echo $macroname | tr [:upper:] [:lower:]`
 
 #  echo $file
@@ -2009,13 +2009,13 @@ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 # trailing colons and then remove the whole line if VPATH becomes empty
 # (actually we leave an empty line to preserve line numbers).
 if test "x$srcdir" = x.; then
-  ac_vpsub='/^[   ]*VPATH[    ]*=/{
+  ac_vpsub='/^[ 	]*VPATH[ 	]*=/{
 s/:*\$(srcdir):*/:/;
 s/:*\${srcdir}:*/:/;
 s/:*@srcdir@:*/:/;
-s/^\([^=]*=[   ]*\):*/\1/;
+s/^\([^=]*=[ 	]*\):*/\1/;
 s/:*$//;
-s/^[^=]*=[  ]*$//;
+s/^[^=]*=[ 	]*$//;
 }'
 fi
 
@@ -2029,13 +2029,13 @@ fi
 cat >confdef2opt.sed <<\EOF
 t clear
 : clear
-s,^[  ]*#[  ]*define[   ][    ]*\([^   (][^  (]*([^)]*)\)[  ]*\(.*\),-D\1=\2,g
+s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	(][^ 	(]*([^)]*)\)[ 	]*\(.*\),-D\1=\2,g
 t quote
-s,^[  ]*#[  ]*define[   ][    ]*\([^   ][^   ]*\)[    ]*\(.*\),-D\1=\2,g
+s,^[ 	]*#[ 	]*define[ 	][ 	]*\([^ 	][^ 	]*\)[ 	]*\(.*\),-D\1=\2,g
 t quote
 d
 : quote
-s,[   `~#$^&*(){}\\|;'"<>?],\\&,g
+s,[ 	`~#$^&*(){}\\|;'"<>?],\\&,g
 s,\[,\\&,g
 s,\],\\&,g
 s,\$,$$,g
@@ -2128,7 +2128,7 @@ $as_unset LC_MESSAGES || test "${LC_MESSAGES+set}" != set || { LC_MESSAGES=C; ex
 # We need space, tab and new line, in precisely that order.
 as_nl='
 '
-IFS="    $as_nl"
+IFS=" 	$as_nl"
 
 # CDPATH.
 $as_unset CDPATH || test "${CDPATH+set}" != set || { CDPATH=:; export CDPATH; }
