@@ -157,6 +157,11 @@ public:
   // A multi_array is constructible from any multi_array_ref, subarray, or
   // array_view object.  The following constructors ensure that.
   //
+
+  // Due to limited support for partial template ordering, 
+  // MSVC 6&7 confuse the following with the most basic ExtentList 
+  // constructor.
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
   template <typename OPtr>
   multi_array(const const_multi_array_ref<T,NumDims,OPtr>& rhs,
               const general_storage_order<NumDims>& so = c_storage_order())
@@ -166,6 +171,87 @@ public:
     // Warning! storage order may change, hence the following copy technique.
     std::copy(rhs.begin(),rhs.end(),this->begin());
   }
+
+  template <typename OPtr>
+  multi_array(const detail::multi_array::
+              const_sub_array<T,NumDims,OPtr>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
+    allocate_space();
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+
+  template <typename OPtr>
+  multi_array(const detail::multi_array::
+              const_multi_array_view<T,NumDims,OPtr>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
+    allocate_space();
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+#else // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+  // Enumerate the cases for MSVC
+
+  multi_array(const const_multi_array_ref<T,NumDims,T*>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
+    allocate_space();
+    // Warning! storage order may change, hence the following copy technique.
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+  multi_array(const const_multi_array_ref<T,NumDims,T const*>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
+    allocate_space();
+    // Warning! storage order may change, hence the following copy technique.
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+  multi_array(const detail::multi_array::
+              const_sub_array<T,NumDims,T*>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
+    allocate_space();
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+  multi_array(const detail::multi_array::
+              const_sub_array<T,NumDims,T const*>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
+    allocate_space();
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+
+  multi_array(const detail::multi_array::
+              const_multi_array_view<T,NumDims,T*>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
+    allocate_space();
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+  multi_array(const detail::multi_array::
+              const_multi_array_view<T,NumDims,T const*>& rhs,
+              const general_storage_order<NumDims>& so = c_storage_order())
+    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
+  {
+    allocate_space();
+    std::copy(rhs.begin(),rhs.end(),this->begin());
+  }
+
+#endif // !BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
   // This constructor is necessary because of more exact template matches.
   // enable-if?
@@ -179,30 +265,10 @@ public:
   }
 
 
-  template <typename OPtr>
-  multi_array(const detail::multi_array::
-              const_sub_array<T,NumDims,OPtr>& rhs,
-              const general_storage_order<NumDims>& so = c_storage_order())
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
-  {
-    allocate_space();
-    std::copy(rhs.begin(),rhs.end(),this->begin());
-  }
-
   // This constructor is necessary because of more exact template matches.
   // enable-if?
   multi_array(const detail::multi_array::
               sub_array<T,NumDims>& rhs,
-              const general_storage_order<NumDims>& so = c_storage_order())
-    : super_type(0,so,rhs.index_bases(),rhs.shape()) 
-  {
-    allocate_space();
-    std::copy(rhs.begin(),rhs.end(),this->begin());
-  }
-
-  template <typename OPtr>
-  multi_array(const detail::multi_array::
-              const_multi_array_view<T,NumDims,OPtr>& rhs,
               const general_storage_order<NumDims>& so = c_storage_order())
     : super_type(0,so,rhs.index_bases(),rhs.shape()) 
   {
