@@ -1005,7 +1005,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_slow_dot_
    {
       // can't repeat any more, remove the pushed state: 
       destroy_single_repeat();
-      if(rep->can_be_null & mask_skip)
+      if(0 == (rep->can_be_null & mask_skip))
          return true;
    }
    else if(count == rep->max)
@@ -1057,7 +1057,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_fast_dot_
    {
       // can't repeat any more, remove the pushed state: 
       destroy_single_repeat();
-      if(rep->can_be_null & mask_skip)
+      if(0 == (rep->can_be_null & mask_skip))
          return true;
    }
    else if(count == rep->max)
@@ -1121,7 +1121,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_char_repe
    {
       // can't repeat any more, remove the pushed state: 
       destroy_single_repeat();
-      if(rep->can_be_null & mask_skip)
+      if(0 == (rep->can_be_null & mask_skip))
          return true;
    }
    else if(count == rep->max)
@@ -1185,7 +1185,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_short_set
    {
       // can't repeat any more, remove the pushed state: 
       destroy_single_repeat();
-      if(rep->can_be_null & mask_skip)
+      if(0 == (rep->can_be_null & mask_skip))
          return true;
    }
    else if(count == rep->max)
@@ -1250,7 +1250,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_long_set_
    {
       // can't repeat any more, remove the pushed state:
       destroy_single_repeat();
-      if(rep->can_be_null & mask_skip)
+      if(0 == (rep->can_be_null & mask_skip))
          return true;
    }
    else if(count == rep->max)
