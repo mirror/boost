@@ -34,11 +34,18 @@
 // in an ungraceful crash at runtime when (and only when) built in
 // release mode.
 
-// Intel compiler
-#if defined(__INTEL_COMPILER) || defined(__MWERKS__)
+// MetroWerks CodeWarrior
+#if defined(__MWERKS__)
 #   if defined(_WIN32) || defined(_WIN64)
 #       define BOOST_DLLEXPORT __declspec(dllexport)
 #   else
+#       define BOOST_USED __attribute__ ((used))
+#   endif
+// Intel compiler
+#elif defined(__INTEL_COMPILER)
+#   if defined(_WIN32) || defined(_WIN64)
+#       define BOOST_DLLEXPORT __declspec(dllexport)
+#   elif  BOOST_INTEL_CXX_VERSION > 710
 #       define BOOST_USED __attribute__ ((used))
 #   endif
 // MSVC
