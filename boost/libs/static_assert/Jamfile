@@ -1,0 +1,16 @@
+subproject libs/static_assert ;
+
+
+unit-test static_assert_test : static_assert_test.cpp
+	: <include>$(BOOST_ROOT) : ;
+
+unit-test static_assert_example_1 : static_assert_example_1.cpp
+	: <include>$(BOOST_ROOT) : ;
+
+unit-test static_assert_example_2 : static_assert_example_2.cpp
+	: <include>$(BOOST_ROOT) : ;
+
+unit-test static_assert_example_3 : static_assert_example_3.cpp
+	: <include>$(BOOST_ROOT) : ;
+
+
