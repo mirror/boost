@@ -40,7 +40,7 @@
 */
 #define BOOST_PP_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM_DELAY(N,I,T)
 
-#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
+#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 /* This is a workaround for a CodeWarrior PP bug. Strictly speaking
  * this workaround invokes undefined behavior, but it works as desired.
  */

@@ -29,6 +29,19 @@ list <code>L</code> (from the left or the start of the list).</p>
   )
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TEST(D,P,X) BOOST_PP_CAT(P,X)
+  BOOST_PP_FOLD_LEFT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  _ABC
+</pre>
+
 <h3>Note</h3>
 <ul>
   <li>Folding, or accumulation, is a very general pattern of computation.
@@ -54,7 +67,7 @@ list <code>L</code> (from the left or the start of the list).</p>
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_LIST_FOLD_LEFT_D(D,F,P,L) BOOST_PP_TUPLE_ELEM(3,1,BOOST_PP_WHILE##D(BOOST_PP_LIST_FOLD_LEFT_C,BOOST_PP_LIST_FOLD_LEFT_F,(F,P,L)))
-#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
+#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 #  define BOOST_PP_LIST_FOLD_LEFT_C(D,X) BOOST_PP_TUPLE_ELEM(3,2,BOOST_PP_TUPLE_ELEM(3,2,X))
 #  define BOOST_PP_LIST_FOLD_LEFT_F(D,X) (BOOST_PP_TUPLE_ELEM(3,0,X),BOOST_PP_TUPLE_ELEM(3,0,X)(D,BOOST_PP_TUPLE_ELEM(3,1,X),BOOST_PP_TUPLE_ELEM(3,0,BOOST_PP_TUPLE_ELEM(3,2,X))),BOOST_PP_TUPLE_ELEM(3,1,BOOST_PP_TUPLE_ELEM(3,2,X)))
 #elif !defined(BOOST_NO_COMPILER_CONFIG) && defined(_MSC_VER)

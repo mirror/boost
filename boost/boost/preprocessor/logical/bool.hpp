@@ -14,6 +14,8 @@
  */
 
 /** <p>Expands to <code>0</code> if <code>X == 0</code> and <code>1</code> if <code>X != 0</code>.</p>
+
+<p>For example, <code>BOOST_PP_BOOL(3)</code> expands to <code>1</code>.</p>
 */
 #define BOOST_PP_BOOL(X) BOOST_PP_BOOL_DELAY(X)
 

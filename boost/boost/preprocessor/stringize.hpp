@@ -15,6 +15,8 @@
 
 /** <p>Stringizes <code>X</code> after it is macro expanded.</p>
 
+<p>For example, <code>BOOST_PP_STRINGIZE(BOOST_PP_CAT(a,b))</code> expands to <code>"ab"</code>.</p>
+
 <h3>Example</h3>
 <ul>
   <li><a href="../../example/note.c">note.c</a></li>

@@ -21,6 +21,19 @@
   M(0,P) M(1,P) ... M(BOOST_PP_DEC(N),P)
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TEST(I,P) P(I);
+  BOOST_PP_REPEAT(3,TEST,X)
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  X(0); X(1); X(2);
+</pre>
+
 <h3>2D and 3D repetition</h3>
 
 <p>2D and 3D repetition are supported with the BOOST_PP_REPEAT_2ND() and
