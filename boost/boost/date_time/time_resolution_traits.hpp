@@ -3,7 +3,7 @@
 
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 
@@ -13,11 +13,20 @@
 namespace boost {
 namespace date_time {
 
-   template<typename frac_sec_type, 
-            time_resolutions res, 
-            frac_sec_type resolution_adjust,
-            unsigned short frac_digits,
-            typename v_type = boost::int32_t >
+  //! Simple function to calculate absolute value of a numeric type
+  template <typename T> 
+  // JDG [7/6/02 made a template], 
+  // moved here from time_duration.hpp 2003-Sept-4.
+  inline T absolute_value(T x) 
+  {
+    return x < 0 ? -x : x;
+  }
+
+  template<typename frac_sec_type, 
+           time_resolutions res, 
+           frac_sec_type resolution_adjust,
+           unsigned short frac_digits,
+           typename v_type = boost::int32_t >
   class time_resolution_traits {
   public:
     typedef frac_sec_type fractional_seconds_type;
@@ -43,14 +52,27 @@ namespace date_time {
     {
       return resolution_adjust;
     }
+    //! Any negative argument results in a negative tick_count
     static tick_type to_tick_count(hour_type hours,
                                    min_type  minutes,
                                    sec_type  seconds,
                                    fractional_seconds_type  fs)
     {
-      return (((fractional_seconds_type(hours)*3600) 
-               + (fractional_seconds_type(minutes)*60) 
-               + seconds)*res_adjust()) + fs;
+      if(hours < 0 || minutes < 0 || seconds < 0 || fs < 0)
+      {
+	hours = absolute_value(hours);
+	minutes = absolute_value(minutes);
+	seconds = absolute_value(seconds);
+	fs = absolute_value(fs);
+        return (-1 *(((fractional_seconds_type(hours)*3600) 
+                 + (fractional_seconds_type(minutes)*60) 
+                 + seconds)*res_adjust()) + fs);
+      }
+      else{
+        return (((fractional_seconds_type(hours)*3600) 
+                 + (fractional_seconds_type(minutes)*60) 
+                 + seconds)*res_adjust()) + fs;
+      }
     }
     
   };

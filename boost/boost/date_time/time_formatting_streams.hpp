@@ -2,11 +2,12 @@
 #define DATE_TIME_TIME_FORMATTING_STREAMS_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 
 #include "boost/date_time/date_formatting_locales.hpp" 
+#include "boost/date_time/time_resolution_traits.hpp"
 
 #ifndef BOOST_DATE_TIME_NO_LOCALE
 
@@ -27,10 +28,17 @@ namespace date_time {
     static void duration_put(const time_duration_type& td, 
                              ostream_type& os)
     {
-      os  << std::setw(2) << std::setfill('0') << td.hours() << ":";
-      os  << std::setw(2) << std::setfill('0') << td.minutes() << ":";
-      os  << std::setw(2) << std::setfill('0') << td.seconds();
-      fractional_seconds_type frac_sec = td.fractional_seconds();
+      if(td.is_negative()) {
+        os << '-';
+      }
+      os  << std::setw(2) << std::setfill('0') 
+          << absolute_value(td.hours()) << ":";
+      os  << std::setw(2) << std::setfill('0') 
+          << absolute_value(td.minutes()) << ":";
+      os  << std::setw(2) << std::setfill('0') 
+          << absolute_value(td.seconds());
+      fractional_seconds_type frac_sec = 
+	absolute_value(td.fractional_seconds());
       if (frac_sec != 0) {
         os  << "." << std::setw(time_duration_type::num_fractional_digits())
             << std::setfill('0')

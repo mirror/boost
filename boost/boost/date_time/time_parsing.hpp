@@ -9,28 +9,33 @@
 #include "boost/lexical_cast.hpp"
 #include "boost/date_time/date_parsing.hpp"
 #include "boost/cstdint.hpp"
-
+#include <iostream>
 
 namespace boost {
 namespace date_time {
 
-
+  //! Creates a time_duration object from a delimited string
+  /*! Expected format for string is "[-]h[h][:mm][:ss][.fff]".
+   * A negative duration will be created if the first character in
+   * string is a '-', all other '-' will be treated as delimiters.
+   * Accepted delimiters are "-:,.". */
   template<class time_duration>
   inline
   time_duration
   parse_delimited_time_duration(const std::string& s)
   {
     unsigned short min=0, sec =0;
-    short hour=0;
+    int hour =0; 
+    bool is_neg = (s.at(0) == '-');
     boost::int64_t fs=0;
     int pos = 0;
     
-    char_separator<char> sep(":,.");
+    char_separator<char> sep("-:,.");
     tokenizer<char_separator<char> > tok(s,sep);
     for(tokenizer<char_separator<char> >::iterator beg=tok.begin(); beg!=tok.end();++beg){
       switch(pos) {
       case 0: {
-        hour = boost::lexical_cast<short>(*beg);
+        hour = boost::lexical_cast<int>(*beg);
         break;
       }
       case 1: {
@@ -54,10 +59,15 @@ namespace date_time {
       }//switch
       pos++;
     }
-    return time_duration(hour, min, sec, fs);
+    if(is_neg) {
+      return -time_duration(hour, min, sec, fs);
+    }
+    else {
+      return time_duration(hour, min, sec, fs);
+    }
   }
 
-  //TODO this could use some error checking!
+  //! Utility function to split appart string
   inline
   bool 
   split(const std::string& s,
@@ -70,6 +80,7 @@ namespace date_time {
     second = s.substr(sep_pos+1);
     return true;
   }
+
 
   template<class time_type>
   inline
@@ -91,28 +102,52 @@ namespace date_time {
 
   }
 
-  //! Parse time duration part of an iso time of form: hhmmss (eg: 120259 is 12 hours 2 min 59 seconds)
+  //! Parse time duration part of an iso time of form: [-]hhmmss (eg: 120259 is 12 hours 2 min 59 seconds)
   template<class time_duration>
   inline
   time_duration
   parse_undelimited_time_duration(const std::string& s)
   {
     int offsets[] = {2,2,2};
-    int pos = 0;
-    short hours=0, min=0, sec=0;
+    int pos = 0, sign = 0;
+    int hours = 0;
+    short min=0, sec=0;
+    // increment one position if the string was "signed"
+    if(s.at(sign) == '-')
+    {
+      ++sign;
+    }
+    // stlport choked when passing s.substr() to tokenizer
+    // using a new string fixed the error
+    std::string remain = s.substr(sign);
     boost::offset_separator osf(offsets, offsets+3); 
-    boost::tokenizer<boost::offset_separator> tok(s, osf);
+    boost::tokenizer<boost::offset_separator> tok(remain, osf);
     for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti){
-      short i = boost::lexical_cast<int>(*ti);
-      //      std::cout << i << std::endl;
       switch(pos) {
-      case 0: hours = i; break;
-      case 1: min = i; break;
-      case 2: sec = i; break;
+      case 0: 
+        {
+          hours = boost::lexical_cast<int>(*ti); 
+          break;
+        }
+      case 1: 
+        {
+          min = boost::lexical_cast<int>(*ti); 
+          break;
+        }
+      case 2: 
+       {
+         sec = boost::lexical_cast<int>(*ti); 
+         break;
+        }
       };
       pos++;
-    } 
-    return time_duration(hours, min, sec);
+    }
+    if(sign) {
+      return -time_duration(hours, min, sec);
+    }
+    else {
+      return time_duration(hours, min, sec);
+    }
   }
 
   //! Parse time string of form YYYYMMDDThhmmss where T is delimeter between date and time

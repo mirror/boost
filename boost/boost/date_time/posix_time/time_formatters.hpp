@@ -2,7 +2,7 @@
 #define POSIXTIME_FORMATTERS_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
@@ -15,22 +15,31 @@ namespace boost {
 
 namespace posix_time {
 
-  //! Time duration to string hh::mm::ss.fffffff. Example: 10:09:03.0123456
+  //! Time duration to string -hh::mm::ss.fffffff. Example: 10:09:03.0123456
   /*!\ingroup time_format
    */
   inline std::string to_simple_string(time_duration td) {
     std::ostringstream ss;
-    ss  << std::setw(2) << std::setfill('0') << td.hours() << ":";
-    ss  << std::setw(2) << std::setfill('0') << td.minutes() << ":";
-    ss  << std::setw(2) << std::setfill('0') << td.seconds();
+    if(td.is_negative())
+    {
+      ss << '-';
+    }
+    ss  << std::setw(2) << std::setfill('0') 
+        << date_time::absolute_value(td.hours()) << ":";
+    ss  << std::setw(2) << std::setfill('0') 
+        << date_time::absolute_value(td.minutes()) << ":";
+    ss  << std::setw(2) << std::setfill('0') 
+        << date_time::absolute_value(td.seconds());
     //TODO the following is totally non-generic, yelling FIXME
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-    boost::int64_t frac_sec = td.fractional_seconds();
+    boost::int64_t frac_sec = 
+      date_time::absolute_value(td.fractional_seconds());
 // JDG [7/6/02 VC++ compatibility]
     char buff[32];
     _i64toa(frac_sec, buff, 10);
 #else
-    time_duration::fractional_seconds_type frac_sec = td.fractional_seconds();
+    time_duration::fractional_seconds_type frac_sec = 
+      date_time::absolute_value(td.fractional_seconds());
 #endif
     if (frac_sec != 0) {
       ss  << "." << std::setw(time_duration::num_fractional_digits())
@@ -46,22 +55,31 @@ namespace posix_time {
     return ss.str();
   }
 
-  //! Time duration in iso format hhmmss,fffffff Example: 10:09:03,0123456
+  //! Time duration in iso format -hhmmss,fffffff Example: 10:09:03,0123456
   /*!\ingroup time_format
    */
   inline std::string to_iso_string(time_duration td) {
     std::ostringstream ss;
-    ss  << std::setw(2) << std::setfill('0') << td.hours();
-    ss  << std::setw(2) << std::setfill('0') << td.minutes();
-    ss  << std::setw(2) << std::setfill('0') << td.seconds();
+    if(td.is_negative())
+    {
+      ss << '-';
+    }
+    ss  << std::setw(2) << std::setfill('0') 
+        << date_time::absolute_value(td.hours());
+    ss  << std::setw(2) << std::setfill('0') 
+        << date_time::absolute_value(td.minutes());
+    ss  << std::setw(2) << std::setfill('0') 
+        << date_time::absolute_value(td.seconds());
     //TODO the following is totally non-generic, yelling FIXME
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-    boost::int64_t frac_sec = td.fractional_seconds();
+    boost::int64_t frac_sec = 
+      date_time::absolute_value(td.fractional_seconds());
     // JDG [7/6/02 VC++ compatibility]
     char buff[32];
     _i64toa(frac_sec, buff, 10);
 #else
-    time_duration::fractional_seconds_type frac_sec = td.fractional_seconds();
+    time_duration::fractional_seconds_type frac_sec = 
+      date_time::absolute_value(td.fractional_seconds());
 #endif
     if (frac_sec != 0) {
       ss  << "." << std::setw(time_duration::num_fractional_digits())
@@ -148,7 +166,7 @@ namespace posix_time {
 
 
 
-#endif
+#endif //BOOST_DATE_TIME_NO_LOCALE
 
 
 } } //namespace posix_time
