@@ -19,9 +19,9 @@
 			<A href="smarttests.htm">Smart Pointer Timings</A></p>
 		<h2><a name="Introduction">Introduction</a></h2>
 		<p>The <b>shared_ptr</b> class template stores a pointer to a dynamically allocated 
-			object. (Dynamically allocated objects are allocated with the C++ <b>new</b> expression.) 
-			The object pointed to is guaranteed to be deleted when the last <b>shared_ptr</b>
-			pointing to it is destroyed or reset. See the <A href="#example">example</A>.</p>
+			object, typically with a C++ <EM>new-expression</EM> . The object pointed to is 
+			guaranteed to be deleted when the last <b>shared_ptr</b> pointing to it is 
+			destroyed or reset. See the <A href="#example">example</A>.</p>
 		<p>Every <b>shared_ptr</b> meets the <b>CopyConstructible</b> and <b>Assignable</b> 
 			requirements of the C++ Standard Library, and so can be used in standard 
 			library containers. Comparison operators are supplied so that <b>shared_ptr</b> 
@@ -29,11 +29,11 @@
 		<p>Normally, a <b>shared_ptr</b> cannot correctly hold a pointer to a dynamically 
 			allocated array. See <A href="shared_array.htm"><b>shared_array</b></A> for 
 			that usage.</p>
-		<p>Because the implementation uses reference counting, <b>shared_ptr</b> will not 
-			work correctly with cyclic data structures. For example, if <b>main()</b> holds 
-			a <b>shared_ptr</b> to <b>A</b>, which directly or indirectly holds a <b>shared_ptr</b>
-			back to <b>A</b>, <b>A</b>'s use count will be 2. Destruction of the original <b>shared_ptr</b>
-			will leave <b>A</b> dangling with a use count of 1. Use <A href="weak_ptr.htm">weak_ptr</A>
+		<p>Because the implementation uses reference counting, cycles of <b>shared_ptr</b> instances 
+			will not be reclaimed. For example, if <b>main()</b> holds a <b>shared_ptr</b> to
+			<b>A</b>, which directly or indirectly holds a <b>shared_ptr</b> back to <b>A</b>,
+			<b>A</b>'s use count will be 2. Destruction of the original <b>shared_ptr</b> will 
+			leave <b>A</b> dangling with a use count of 1. Use <A href="weak_ptr.htm">weak_ptr</A>
 			to "break cycles."</p>
 		<p>The class template is parameterized on <b>T</b>, the type of the object pointed 
 			to. <STRONG>shared_ptr</STRONG> and most of its member functions place no 
@@ -148,10 +148,11 @@ void bad()
 
 }</pre>
 		<P><EM>[It might be&nbsp;convenient to relax the requirements on <STRONG>shared_ptr</STRONG>'s 
-				signature, allowing an additional, defaulted, template parameter. This would 
-				help in detecting possible ODR violations. On the other hand, using <STRONG>shared_ptr</STRONG>
-				as an argument to a&nbsp;template template parameter requires an exact 
-				signature match.]</EM></P>
+				signature, allowing an additional, defaulted, template parameter; the parameter 
+				can encode the threading model, for example. This would help in detecting 
+				possible ODR violations. On the other hand, using <STRONG>shared_ptr</STRONG> as 
+				an argument to a&nbsp;template template parameter requires an exact signature 
+				match.]</EM></P>
 		<h2><a name="Members">Members</a></h2>
 		<h3><a name="element_type">element_type</a></h3>
 		<pre>typedef T element_type;</pre>
@@ -229,16 +230,17 @@ void bad()
 		<pre>template&lt;typename Y, typename D&gt; shared_ptr(Y * p, D d);</pre>
 		<blockquote>
 			<p><b>Requirements:</b> <B>p</B> must be convertible to <B>T *</B>. The copy 
-				constructor and destructor of <b>D</b> must not throw. The expression <code>d(p)</code>
-				must be well-formed, must not invoke undefined behavior, and must not throw 
-				exceptions.
+				constructor and destructor of <b>D</b> must not throw. The expression <code>d2(p)</code>, 
+				where <STRONG>d2</STRONG> is a copy of <STRONG>d</STRONG>, must be well-formed, 
+				must not invoke undefined behavior, and must not throw exceptions.
 			</p>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>, storing a copy of <b>p</b> and <b>d</b>.</p>
 			<p><b>Postconditions:</b> <A href="#use_count">use count</A> is 1.</p>
 			<p><b>Throws:</b> <b>std::bad_alloc</b>.</p>
 			<p><b>Exception safety:</b> If an exception is thrown, <code>d(p)</code> is called.</p>
 			<p><b>Notes:</b> When the the time comes to delete the object pointed to by <b>p</b>,
-				<code>d(p)</code> is invoked.</p>
+				<code>d2(p)</code> is invoked, where <STRONG>d2</STRONG> is the stored copy of <STRONG>
+					d</STRONG>.</p>
 		</blockquote>
 		<P><EM>[Custom deallocators allow a factory function returning a <STRONG>shared_ptr</STRONG>
 				to insulate the user from its memory allocation strategy. Since the deallocator 
@@ -647,7 +649,7 @@ int * p = a.release();
 			implementation or a linked list implementation, or some other specific 
 			implementation. This is not the intent.</p>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->
+		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan --> 
 			23 July 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
