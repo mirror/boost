@@ -12,7 +12,7 @@
 
 #include <typeinfo> // for std::bad_cast
 
-#include "boost/compatibility/cpp_c_headers/cmath" // for std::floor and std::ceil
+#include <cmath> // for std::floor and std::ceil
 
 #include "boost/type_traits/is_arithmetic.hpp"
 

@@ -16,7 +16,7 @@
 //       from the Numeric Conversions Library
 //
 //
-#include "boost/compatibility/cpp_c_headers/cmath"
+#include <cmath>
 
 #include "boost/limits.hpp"
 #include "boost/utility.hpp"
