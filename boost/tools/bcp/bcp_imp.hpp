@@ -88,6 +88,10 @@ private:
    std::map<int, licence_data>   m_licence_data;       // licences in use
    std::set<fs::path, path_less> m_unknown_licences;   // files with no known licence
    std::set<fs::path, path_less> m_unknown_authors;    // files with no known copyright/author
+   std::set<fs::path, path_less> m_can_migrate_to_bsl; // files that can migrate to the BSL
+   std::set<fs::path, path_less> m_cannot_migrate_to_bsl; // files that cannot migrate to the BSL
+   std::set<std::string> m_bsl_authors;                // authors giving blanket permission to use the BSL
+   std::set<std::string> m_authors_for_bsl_migration;  // authors we need for BSL migration
    std::map<std::string, std::set<fs::path, path_less> > m_author_data;  // all the authors
    std::map<fs::path, fs::path, path_less>               m_dependencies; // dependency information
 };

@@ -20,7 +20,7 @@ struct licence_info
    //
    // we should really be able to initialize licence_info as an
    // aggregate, but some compilers reject this, so use a constructor
-   //instaed:
+   //instead:
    //
    licence_info(const boost::regex& e1, 
             const boost::regex& e2, 

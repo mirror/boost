@@ -9,9 +9,13 @@
  */
 
 #include "bcp_imp.hpp"
+#include "licence_info.hpp"
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/fstream.hpp>
 #include <iostream>
 #include <stdexcept>
+#include <boost/regex.hpp>
+#include <string>
 
 bcp_implementation::bcp_implementation()
   : m_list_mode(false), m_licence_mode(false), m_cvs_mode(false), m_unix_lines(false), m_scan_mode(false)
@@ -84,6 +88,21 @@ int bcp_implementation::run()
    {
       scan_cvs_path(fs::path());
    }
+   //
+   // if in licence mode, try to load more/blanket_permission.txt
+   //
+   fs::path blanket_permission(m_boost_path / "more" / "blanket-permission.txt");
+   if (fs::exists(blanket_permission)) {
+     fs::ifstream in(blanket_permission);
+     std::string line;
+     while (getline(in, line)) {
+       boost::regex e("([^(]+)\\(");
+       boost::smatch result;
+       if (boost::regex_search(line, result, e))
+	 m_bsl_authors.insert(format_authors_name(result[1]));
+     }
+   }
+
    //
    // scan through modules looking for the equivalent
    // file to add to our list:

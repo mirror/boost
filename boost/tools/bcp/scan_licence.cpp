@@ -19,10 +19,14 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
    //
    int licence_count = 0;
    int author_count = 0;
+   int nonbsl_author_count = 0;
+   bool has_non_bsl_license = false;
    for(int i = 0; i < licences.second; ++i)
    {
       if(boost::regex_search(v.begin(), v.end(), licences.first[i].licence_signature))
       {
+	 if (i != 0) has_non_bsl_license = true;
+
          // add this licence to the list:
          m_licence_data[i].files.insert(p);
          ++licence_count;
@@ -50,6 +54,13 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
                   // add file to author index:
                   m_author_data[name].insert(p);
                   ++author_count;
+
+		  // If this is not the Boost Software License (license 0), and the author hasn't given 
+		  // blanket permission, note this for the report.
+		  if (m_bsl_authors.find(name) == m_bsl_authors.end()) {
+		    ++nonbsl_author_count;
+		    m_authors_for_bsl_migration.insert(name);
+		  }
                }
                ++atr;
             }
@@ -61,5 +72,10 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
       m_unknown_licences.insert(p);
    if(licence_count && !author_count)
       m_unknown_authors.insert(p);
+
+   if (has_non_bsl_license) {
+     if (nonbsl_author_count > 0) m_cannot_migrate_to_bsl.insert(p);
+     else m_can_migrate_to_bsl.insert(p);
+   }
 }
 

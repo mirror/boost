@@ -89,6 +89,10 @@ void bcp_implementation::output_licence_info()
 
    os << "<a href=\"#files\">Files with no recognised licence</a>\n"
       "<a href=\"#authors\">Files with no recognised copyright holder</a>\n"
+      "Moving to the Boost Software License...\n"
+      "  <a href=\"#to-bsl\">Files that can be moved to the BSL</a>\n"
+      "  <a href=\"#not-to-bsl\">Files that can <b>NOT</b> be moved to the BSL</a>\n"
+      "  <a href=\"#need-bsl-authors\">Authors we need to move to the BSL</a>\n"
       "<a href=\"#copyright\">Copyright Holder Information</a>\n"
       "<a href=\"#depend\">File Dependency Information</a>\n"
       "</pre>";
@@ -213,7 +217,40 @@ void bcp_implementation::output_licence_info()
       ++i2;
    }
    os << "</p></BLOCKQUOTE>";
-
+   //
+   // Output list of files that could be moved over to the Boost Software License
+   //
+   os << "<h2><a name=\"to-bsl\"></a>Files that could be converted to the Boost Software License</h2>\n"
+       "<P>The following files could be converted to the Boost Software License, but have not yet been:</P>\n<BLOCKQUOTE><P>";
+   i2 = m_can_migrate_to_bsl.begin();
+   j2 = m_can_migrate_to_bsl.end();
+   while(i2 != j2)
+   {
+      os << split_path(m_boost_path, *i2) << "<br>\n";
+      ++i2;
+   }
+   os << "</p></BLOCKQUOTE>";
+   //
+   // Output list of files that can not be moved over to the Boost Software License
+   //
+   os << "<h2><a name=\"not-to-bsl\"></a>Files that can NOT be converted to the Boost Software License</h2>\n"
+       "<P>The following files cannot be converted to the Boost Software License because we need the permission of more authors:</P>\n<BLOCKQUOTE><P>";
+   i2 = m_cannot_migrate_to_bsl.begin();
+   j2 = m_cannot_migrate_to_bsl.end();
+   while(i2 != j2)
+   {
+      os << split_path(m_boost_path, *i2) << "<br>\n";
+      ++i2;
+   }
+   os << "</p></BLOCKQUOTE>";
+   //
+   // Output list of authors that we need permission for to move to the BSL
+   //
+   os << "<h2><a name=\"need-bsl-authors\"></a>Authors we need for the BSL</h2>\n"
+       "<P>Permission of the following authors is needed before we can convert to the Boost Software License. The list of authors that have given their permission is contained in <code>more/blanket-permission.txt</code>.</P>\n<BLOCKQUOTE><P>";
+   std::copy(m_authors_for_bsl_migration.begin(), m_authors_for_bsl_migration.end(),
+	     std::ostream_iterator<std::string>(os, "<br>\n"));
+   os << "</p></BLOCKQUOTE>";
    //
    // output a table of copyright information:
    //
