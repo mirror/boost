@@ -61,7 +61,11 @@ namespace multi_array {
   struct ConstMultiArrayConcept
   {
     void constraints() {
-      //    function_requires< CopyConstructibleConcept<Array> >();
+    //    function_requires< CopyConstructibleConcept<Array> >();
+    function_requires< boost_concepts::ForwardTraversalConcept<iterator> >();
+    function_requires< boost_concepts::ReadableIteratorConcept<iterator> >();
+    function_requires< boost_concepts::ForwardTraversalConcept<const_iterator> >();
+    function_requires< boost_concepts::ReadableIteratorConcept<const_iterator> >();
 
       // RG - a( CollectionArchetype) when available...
       a[ id ];
@@ -100,11 +104,6 @@ namespace multi_array {
     typedef typename Array::extent_gen extent_gen;
     typedef typename Array::extent_range extent_range;
 
-    BOOST_CLASS_REQUIRE(iterator, boost_concepts, ForwardTraversalConcept);
-    BOOST_CLASS_REQUIRE(iterator, boost_concepts, ReadableIteratorConcept);
-    BOOST_CLASS_REQUIRE(const_iterator, boost_concepts, ForwardTraversalConcept);
-    BOOST_CLASS_REQUIRE(const_iterator, boost_concepts, ReadableIteratorConcept);
-                  
     Array a;
     size_type st;
     const size_type* stp;
@@ -124,6 +123,12 @@ namespace multi_array {
     void constraints() {
       //    function_requires< CopyConstructibleConcept<Array> >();
 
+      function_requires< boost_concepts::ForwardTraversalConcept<iterator> >();
+      function_requires< boost_concepts::ReadableIteratorConcept<iterator> >();
+      function_requires< boost_concepts::WritableIteratorConcept<iterator> >();
+      function_requires< boost_concepts::ForwardTraversalConcept<const_iterator> >();
+      function_requires< boost_concepts::ReadableIteratorConcept<const_iterator> >();
+      
       // RG - a( CollectionArchetype) when available...
       value_type vt = a[ id ];
 
@@ -186,12 +191,6 @@ namespace multi_array {
     typedef typename Array::extent_gen extent_gen;
     typedef typename Array::extent_range extent_range;
 
-    BOOST_CLASS_REQUIRE(iterator, boost_concepts, ForwardTraversalConcept);
-    BOOST_CLASS_REQUIRE(iterator, boost_concepts, ReadableIteratorConcept);
-    BOOST_CLASS_REQUIRE(iterator, boost_concepts, WritableIteratorConcept);
-    BOOST_CLASS_REQUIRE(const_iterator, boost_concepts, ForwardTraversalConcept);
-    BOOST_CLASS_REQUIRE(const_iterator, boost_concepts, ReadableIteratorConcept);
-      
     Array a;
     size_type st;
     const size_type* stp;

@@ -85,15 +85,20 @@ public:
     super_type((T*)initial_base_) {
     allocate_space();
   }
-
+    
   template <class ExtentList>
-  explicit multi_array(ExtentList const& extents) :
+  explicit multi_array(
+      ExtentList const& extents
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    , typename detail::multi_array::disable_non_sub_array<ExtentList>::type* = 0
+#endif 
+  ) :
     super_type((T*)initial_base_,extents) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<ExtentList> >();
     allocate_space();
   }
-
+    
   template <class ExtentList>
   explicit multi_array(ExtentList const& extents,
                        const general_storage_order<NumDims>& so) :
