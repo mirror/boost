@@ -11,6 +11,12 @@
 #include <string>
 #include <map>
 
+#include "boost/detail/workaround.hpp"
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#   include "boost/mpl/bool.hpp"
+#   include "boost/type_traits/is_same.hpp"
+#endif
+
 
 using namespace boost;
 using namespace std;
@@ -140,16 +146,46 @@ struct compare_helper : boost::static_visitor<bool>
 {
    compare_helper(ValueType& expected) : expected_(expected) { }
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
    bool operator()(const ValueType& value)
    {
       return value == expected_;
    }
 
-   template<typename T>
+   template <typename T>
    bool operator()(const T& )
    {
       return false;         
    }
+
+#else // MSVC6
+
+private:
+
+   bool compare_impl(const ValueType& value, boost::mpl::true_)
+   {
+      return value == expected_;
+   }
+
+   template <typename T>
+   bool compare_impl(const T&, boost::mpl::false_)
+   {
+      return false;
+   }
+
+public:
+
+   template <typename T>
+   bool operator()(const T& value)
+   {
+      typedef typename boost::is_same<T, ValueType>::type
+          T_is_ValueType;
+
+      return compare_impl(value, T_is_ValueType());
+   }
+
+#endif // MSVC6 workaround
 
    ValueType& expected_;
 

@@ -819,16 +819,6 @@ public: // structors
         activate_storage1(0); // zero is the index of the first bounded type
     }
 
-    variant(const variant& operand)
-    {
-        // Copy the value of operand into *this...
-        detail::variant::copy_into visitor( storage1() );
-        operand.raw_apply_visitor(visitor);
-
-        // ...and activate the *this's primary storage on success:
-        activate_storage1(operand.which());
-    }
-
 private: // helpers, for structors, cont. (below)
 
     class convert_copy_into
@@ -863,7 +853,7 @@ private: // helpers, for structors, cont. (below)
     friend class convert_copy_into;
 
     template <typename T>
-    void copy_construct(
+    void convert_construct(
           const T& operand
         , mpl::false_ = mpl::false_() // from_foreign_variant
         )
@@ -882,7 +872,7 @@ private: // helpers, for structors, cont. (below)
     }
 
     template <typename Variant>
-    void copy_construct(
+    void convert_construct(
           const Variant& operand
         , mpl::true_// from_foreign_variant
         )
@@ -894,7 +884,7 @@ private: // helpers, for structors, cont. (below)
     }
 
     template <typename Variant>
-    void copy_construct_variant(const Variant& operand)
+    void convert_construct_variant(const Variant& operand)
     {
         // [Determine if operand is a bounded type, or if it needs to be
         //  converted (foreign):]
@@ -902,7 +892,7 @@ private: // helpers, for structors, cont. (below)
               mpl::contains<types, Variant>
             >::type from_foreign_variant;
 
-        copy_construct(
+        convert_construct(
               operand
             , from_foreign_variant()
             );
@@ -919,13 +909,13 @@ public: // structors, cont.
             >& operand
         )
     {
-        copy_construct_variant(operand);
+        convert_construct_variant(operand);
     }
 
     template <typename T>
     variant(const T& operand)
     {
-        copy_construct(operand);
+        convert_construct(operand);
     }
 
 #else // defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -940,13 +930,13 @@ private: // workaround, for structors, cont. (below)
         , long
         )
     {
-        copy_construct_variant(operand);
+        convert_construct_variant(operand);
     }
 
     template <typename T>
     void constructor_simulated_partial_ordering(const T& operand, int)
     {
-        copy_construct(operand);
+        convert_construct(operand);
     }
 
 public: // structors, cont.
@@ -958,6 +948,18 @@ public: // structors, cont.
     }
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING workaround
+
+public: // structors, cont.
+
+    variant(const variant& operand)
+    {
+        // Copy the value of operand into *this...
+        detail::variant::copy_into visitor( storage1() );
+        operand.raw_apply_visitor(visitor);
+
+        // ...and activate the *this's primary storage on success:
+        activate_storage1(operand.which());
+    }
 
 private: // helpers, for modifiers (below)
 
@@ -1055,12 +1057,6 @@ private: // helpers, for modifiers (below)
 
 public: // modifiers
 
-    variant& operator=(const variant& rhs)
-    {
-        assign(rhs);
-        return *this;
-    }
-
     template <typename T>
     variant& operator=(const T& rhs)
     {
@@ -1072,6 +1068,12 @@ public: // modifiers
         //
         variant temp(rhs);
         assign(temp);
+        return *this;
+    }
+
+    variant& operator=(const variant& rhs)
+    {
+        assign(rhs);
         return *this;
     }
 
