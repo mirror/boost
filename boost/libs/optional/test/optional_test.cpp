@@ -876,7 +876,6 @@ void test_no_implicit_conversions()
   test_no_implicit_conversions_impl(p);
 }
 
-#ifndef BOOST_OPTIONAL_NO_CONVERTIONS
 struct A {} ;
 void test_conversions()
 {
@@ -895,7 +894,6 @@ void test_conversions()
   opt3 = opt2 ;
   BOOST_CHECK(*opt3 == d);
 }
-#endif
 
 int test_main( int, char* [] )
 {
@@ -904,11 +902,7 @@ int test_main( int, char* [] )
     test_with_class_type();
     test_with_builtin_types();
     test_no_implicit_conversions();
-
-#ifndef BOOST_OPTIONAL_NO_CONVERTIONS
     test_conversions();
-#endif
-
   }
   catch ( ... )
   {
