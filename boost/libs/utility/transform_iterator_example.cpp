@@ -65,8 +65,8 @@ main(int, char*[])
 
   std::cout << "adding 4 to each element in the array:" << std::endl;
 
-  std::copy(boost::make_transform_iterator(x, std::bind1st(std::plus<int>(), 4)),
-	    boost::make_transform_iterator(x + N, std::bind1st(std::plus<int>(), 4)),
+  std::copy(boost::make_transform_iterator(x, boost::bind1st(std::plus<int>(), 4)),
+	    boost::make_transform_iterator(x + N, boost::bind1st(std::plus<int>(), 4)),
 	    std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
   
