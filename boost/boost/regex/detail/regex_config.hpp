@@ -161,6 +161,46 @@ full list of macros and their usage.
 
 #endif
 
+// Intel C++
+#ifdef __ICL
+   #ifndef BOOST_RE_CALL
+      #ifdef _DEBUG
+         #define BOOST_RE_CALL __cdecl
+      #else
+         #define BOOST_RE_CALL __fastcall
+      #endif
+   #endif
+   #ifndef BOOST_RE_CCALL
+      #define BOOST_RE_CCALL __stdcall
+   #endif
+
+   #if !defined(_CPPUNWIND) && defined(__cplusplus)
+      #error exception handling support required
+   #endif
+
+   #define BOOST_RE_NO_CAT
+   #define BOOST_RE_NO_SWPRINTF
+
+   #ifdef _MT
+      #define BOOST_RE_THREADS
+   #endif
+
+   //
+   // import export options:
+   #if defined(_DLL) && !defined(BOOST_RE_STATIC_LIB) && !defined(BOOST_RE_NO_LIB)
+      #ifdef BOOST_RE_BUILD_DLL
+         #define BOOST_RE_IX_DECL __declspec( dllexport )
+      #elif !defined(BOOST_REGEX_LIBRARY_INCLUDE_HPP) && !defined(BOOST_RE_NO_LIB)
+         #define BOOST_RE_IX_DECL __declspec( dllimport ) 
+      #endif
+   #endif
+   //
+   // disable automatic library selection for now
+   // anyone know if this works?
+   //#include <boost/regex/detail/regex_library_include.hpp>
+
+#endif
+
 //
 // only want "real" Visual C++ here:
 #if defined(BOOST_MSVC) && !defined(__WATCOMC__) && !defined(__BORLANDC__) && !defined(__GNUC__) && !defined(__MWERKS__) && !defined (__ICL)
