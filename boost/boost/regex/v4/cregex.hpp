@@ -252,8 +252,11 @@ public:
    std::string What(int i = 0)const;
    std::string operator[](int i)const { return What(i); }
 
+#ifdef __MINGW32__
+   static const std::size_t npos = ~0u;
+#else
    static const std::size_t npos;
-
+#endif
    friend struct re_detail::pred1;
    friend struct re_detail::pred2;
    friend struct re_detail::pred3;
