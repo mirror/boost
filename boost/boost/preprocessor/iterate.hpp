@@ -50,14 +50,32 @@
 # define BOOST_PP_RELATIVE_3(m) BOOST_PP_DETAIL_CAT2(m, BOOST_PP_DEC(BOOST_PP_DEC(BOOST_PP_DEC(BOOST_PP_ITERATION_DEPTH()))))
 # define BOOST_PP_RELATIVE_4(m) BOOST_PP_DETAIL_CAT2(m, BOOST_PP_DEC(BOOST_PP_DEC(BOOST_PP_DEC(BOOST_PP_DEC(BOOST_PP_ITERATION_DEPTH())))))
 #
-# define BOOST_PP_SET_ITERATION_START() BOOST_PP_DETAIL_CAT3(<boost/preprocessor/detail/iterate/lower, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()),.hpp>)
-# define BOOST_PP_SET_ITERATION_FINISH() BOOST_PP_DETAIL_CAT3(<boost/preprocessor/detail/iterate/upper, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()),.hpp>)
-# define BOOST_PP_SET_ITERATION_FLAGS() BOOST_PP_DETAIL_CAT3(<boost/preprocessor/detail/iterate/flags, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()),.hpp>)
+# /* hotfix:  these will be removed shortly! */
+# define BOOST_PP_SET_ITERATION_START() BOOST_PP_DETAIL_CAT2(BOOST_PP_SET_ITERATION_START_, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()))
+# define BOOST_PP_SET_ITERATION_START_1 <boost/preprocessor/detail/iterate/lower1.hpp>
+# define BOOST_PP_SET_ITERATION_START_2 <boost/preprocessor/detail/iterate/lower2.hpp>
+# define BOOST_PP_SET_ITERATION_START_3 <boost/preprocessor/detail/iterate/lower3.hpp>
+# define BOOST_PP_SET_ITERATION_START_4 <boost/preprocessor/detail/iterate/lower4.hpp>
+# define BOOST_PP_SET_ITERATION_START_5 <boost/preprocessor/detail/iterate/lower5.hpp>
 #
-# if !defined(__MWERKS__) || __MWERKS__ > 0x3001
-#   define BOOST_PP_LINE(line, file) line BOOST_PP_STRINGIZE(BOOST_PP_DETAIL_CAT2(file, BOOST_PP_DETAIL_CAT2(BOOST_PP_LINE_, BOOST_PP_ITERATION_DEPTH())()))
+# define BOOST_PP_SET_ITERATION_FINISH() BOOST_PP_DETAIL_CAT2(BOOST_PP_SET_ITERATION_FINISH_, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()))
+# define BOOST_PP_SET_ITERATION_FINISH_1 <boost/preprocessor/detail/iterate/upper1.hpp>
+# define BOOST_PP_SET_ITERATION_FINISH_2 <boost/preprocessor/detail/iterate/upper2.hpp>
+# define BOOST_PP_SET_ITERATION_FINISH_3 <boost/preprocessor/detail/iterate/upper3.hpp>
+# define BOOST_PP_SET_ITERATION_FINISH_4 <boost/preprocessor/detail/iterate/upper4.hpp>
+# define BOOST_PP_SET_ITERATION_FINISH_5 <boost/preprocessor/detail/iterate/upper5.hpp>
+#
+# define BOOST_PP_SET_ITERATION_FLAGS() BOOST_PP_DETAIL_CAT2(BOOST_PP_SET_ITERATION_FLAGS_, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()))
+# define BOOST_PP_SET_ITERATION_FLAGS_1 <boost/preprocessor/detail/iterate/flags1.hpp>
+# define BOOST_PP_SET_ITERATION_FLAGS_2 <boost/preprocessor/detail/iterate/flags2.hpp>
+# define BOOST_PP_SET_ITERATION_FLAGS_3 <boost/preprocessor/detail/iterate/flags3.hpp>
+# define BOOST_PP_SET_ITERATION_FLAGS_4 <boost/preprocessor/detail/iterate/flags4.hpp>
+# define BOOST_PP_SET_ITERATION_FLAGS_5 <boost/preprocessor/detail/iterate/flags5.hpp>
+#
+# if defined BOOST_PP_EXTENDED_LINE_INFO && (!defined(__MWERKS__) || __MWERKS__ > 0x3001)
+#   define BOOST_PP_LINE(line, file) line BOOST_PP_STRINGIZE(file BOOST_PP_DETAIL_CAT2(BOOST_PP_LINE_, BOOST_PP_ITERATION_DEPTH()))
 # else
-#   define BOOST_PP_LINE(line, file) __LINE__ __FILE__
+#   define BOOST_PP_LINE(line, file) __LINE__
 # endif
 #
 # define BOOST_PP_LINE_0() (!BOOST_PP_ERROR_NO_ACTIVE_ITERATION)
@@ -67,7 +85,12 @@
 # define BOOST_PP_LINE_4() BOOST_PP_DETAIL_CAT2(BOOST_PP_DETAIL_CAT3([, BOOST_PP_FRAME_ITERATION(3), ]), BOOST_PP_LINE_3())
 # define BOOST_PP_LINE_5() BOOST_PP_DETAIL_CAT2(BOOST_PP_DETAIL_CAT3([, BOOST_PP_FRAME_ITERATION(4), ]), BOOST_PP_LINE_4())
 #
-# define BOOST_PP_ITERATE() BOOST_PP_DETAIL_CAT3(<boost/preprocessor/detail/iterate/exp, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()),.hpp>)
+# define BOOST_PP_ITERATE() BOOST_PP_DETAIL_CAT2(BOOST_PP_ITERATE_, BOOST_PP_INC(BOOST_PP_ITERATION_DEPTH()))
+# define BOOST_PP_ITERATE_1 <boost/preprocessor/detail/iterate/exp1.hpp>
+# define BOOST_PP_ITERATE_2 <boost/preprocessor/detail/iterate/exp2.hpp>
+# define BOOST_PP_ITERATE_3 <boost/preprocessor/detail/iterate/exp3.hpp>
+# define BOOST_PP_ITERATE_4 <boost/preprocessor/detail/iterate/exp4.hpp>
+# define BOOST_PP_ITERATE_5 <boost/preprocessor/detail/iterate/exp5.hpp>
 #
 # define BOOST_PP_LOCAL_ITERATE() <boost/preprocessor/detail/iterate/local_iterate.hpp>
 #
