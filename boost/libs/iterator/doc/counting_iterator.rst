@@ -21,3 +21,6 @@
 .. contents:: Table of Contents
 
 .. include:: counting_iterator_ref.rst
+.. include:: make_counting_iterator.rst
+
+.. include:: counting_iterator_eg.rst

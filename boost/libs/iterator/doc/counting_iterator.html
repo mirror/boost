@@ -3,204 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
 <title>Counting Iterator</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
 <meta name="date" content="2003-09-14" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
-<style type="text/css"><!--
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:date: $Date$
-:version: $Revision$
-:copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-*/
-
-.first {
-  margin-top: 0 }
-
-.last {
-  margin-bottom: 0 }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-dd {
-  margin-bottom: 0.5em }
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.attention, div.caution, div.danger, div.error, div.hint,
-div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.hint p.admonition-title, div.important p.admonition-title,
-div.note p.admonition-title, div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em }
-
-div.footer, div.header {
-  font-size: smaller }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr {
-  width: 75% }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.line-block {
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option-argument {
-  font-style: italic }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-table {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.citation {
-  border-left: solid thin gray ;
-  padding-left: 0.5ex }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.footnote {
-  border-left: solid thin black ;
-  padding-left: 0.5ex }
-
-td, th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-th.docinfo-name, th.field-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap }
-
-h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
-  font-size: 100% }
-
-tt {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
---></style>
+<link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="counting-iterator">
@@ -231,45 +40,32 @@ Railway Operation and Construction</a></td></tr>
 </tr>
 </tbody>
 </table>
-<p>The counting iterator adaptor implements dereference by returning a
-reference to the base object. The other operations are implemented by
-the base <tt class="literal"><span class="pre">m_iterator</span></tt>, as per the inheritance from
-<tt class="literal"><span class="pre">iterator_adaptor</span></tt>.</p>
+<p><tt class="literal"><span class="pre">counting_iterator</span></tt> adapts an arithmetic type, such as <tt class="literal"><span class="pre">int</span></tt>, by
+adding an <tt class="literal"><span class="pre">operator*</span></tt> that returns the current value of the object.</p>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#counting-iterator-requirements" id="id1" name="id1"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#counting-iterator-operations" id="id2" name="id2"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#counting-iterator-models" id="id2" name="id2"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#counting-iterator-operations" id="id3" name="id3"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#example" id="id4" name="id4">Example</a></li>
 </ul>
 </div>
 <pre class="literal-block">
 template &lt;
     class Incrementable
-  , unsigned Access = use_default_access
-  , class Traversal = use_default
+  , class CategoryOrTraversal = use_default
   , class Difference = use_default
 &gt;
 class counting_iterator
-  : public iterator_adaptor&lt;
-        counting_iterator&lt;Incrementable, Access, Traversal, Difference&gt;
-      , Incrementable
-      , Incrementable
-      , Access
-      , /* see details for traversal category */
-      , Incrementable const&amp;
-      , Incrementable const*
-      , /* distance = Difference or a signed integral type */&gt;
 {
-    friend class iterator_core_access;
  public:
     counting_iterator();
     counting_iterator(counting_iterator const&amp; rhs);
-    counting_iterator(Incrementable x);
+    explicit counting_iterator(Incrementable x);
+    Incrementable base() const;
  private:
-    typename counting_iterator::reference dereference() const
-    {
-        return this-&gt;base_reference();
-    }
+    Incrementable current; // exposition
   };
 </pre>
 <dl>
@@ -281,8 +77,11 @@ the cases when the <tt class="literal"><span class="pre">Incrementable</span></t
 <h1><a class="toc-backref" href="#id1" name="counting-iterator-requirements"><tt class="literal"><span class="pre">counting_iterator</span></tt> requirements</a></h1>
 <p>The <tt class="literal"><span class="pre">Incrementable</span></tt> type must be Default Constructible, Copy
 Constructible, and Assignable.  The default distance is
-an implementation defined signed integegral type.</p>
-<p>The resulting <tt class="literal"><span class="pre">counting_iterator</span></tt> models Readable Lvalue Iterator.</p>
+an implementation defined signed integral type.</p>
+</div>
+<div class="section" id="counting-iterator-models">
+<h1><a class="toc-backref" href="#id2" name="counting-iterator-models"><tt class="literal"><span class="pre">counting_iterator</span></tt> models</a></h1>
+<p><tt class="literal"><span class="pre">counting_iterator</span></tt> models Readable Lvalue Iterator.</p>
 <p>Furthermore, if you wish to create a counting iterator that is a Forward
 Traversal Iterator, then the following expressions must be valid:</p>
 <pre class="literal-block">
@@ -306,7 +105,7 @@ i &lt; j
 </pre>
 </div>
 <div class="section" id="counting-iterator-operations">
-<h1><a class="toc-backref" href="#id2" name="counting-iterator-operations"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></h1>
+<h1><a class="toc-backref" href="#id3" name="counting-iterator-operations"><tt class="literal"><span class="pre">counting_iterator</span></tt> operations</a></h1>
 <p><tt class="literal"><span class="pre">counting_iterator();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -325,23 +124,90 @@ i &lt; j
 </tr>
 </tbody>
 </table>
-<p><tt class="literal"><span class="pre">counting_iterator(Incrementable</span> <span class="pre">x);</span></tt></p>
+<p><tt class="literal"><span class="pre">explicit</span> <span class="pre">counting_iterator(Incrementable</span> <span class="pre">x);</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">counting_iterator</span></tt> with its base
-object copy constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">counting_iterator</span></tt> with <tt class="literal"><span class="pre">current</span></tt>
+constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">current</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">counting_iterator&amp;</span> <span class="pre">operator++();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="literal"><span class="pre">++current</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">Incrementable</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">current</span></tt></td>
+</tr>
+</tbody>
+</table>
+<pre class="literal-block">
+template &lt;class Incrementable&gt;
+counting_iterator&lt;Incrementable&gt;
+make_counting_iterator(Incrementable x)
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">counting_iterator&lt;Incrementable&gt;</span></tt>
+with <tt class="literal"><span class="pre">current</span></tt> constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="section" id="example">
+<h1><a class="toc-backref" href="#id4" name="example">Example</a></h1>
+<p>This example fills an array with numbers and a second array with
+pointers into the first array, using <tt class="literal"><span class="pre">counting_iterator</span></tt> for both
+tasks. Finally <tt class="literal"><span class="pre">indirect_iterator</span></tt> is used to print out the numbers
+into the first array via indirection through the second array.</p>
+<pre class="literal-block">
+int N = 7;
+std::vector&lt;int&gt; numbers;
+typedef std::vector&lt;int&gt;::iterator n_iter;
+std::copy(boost::counting_iterator&lt;int&gt;(0),
+         boost::counting_iterator&lt;int&gt;(N),
+         std::back_inserter(numbers));
+
+std::vector&lt;std::vector&lt;int&gt;::iterator&gt; pointers;
+std::copy(boost::make_counting_iterator(numbers.begin()),
+          boost::make_counting_iterator(numbers.end()),
+          std::back_inserter(pointers));
+
+std::cout &lt;&lt; &quot;indirectly printing out the numbers from 0 to &quot; 
+          &lt;&lt; N &lt;&lt; std::endl;
+std::copy(boost::make_indirect_iterator(pointers.begin()),
+          boost::make_indirect_iterator(pointers.end()),
+          std::ostream_iterator&lt;int&gt;(std::cout, &quot; &quot;));
+std::cout &lt;&lt; std::endl;
+</pre>
+<p>The output is:</p>
+<pre class="literal-block">
+indirectly printing out the numbers from 0 to 7
+0 1 2 3 4 5 6 
+</pre>
 </div>
-<hr class="footer" />
-<div class="footer">
-<a class="reference" href="counting_iterator.rst">View document source</a>.
-Generated on: 2003-11-24 05:00 UTC.
-Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>
