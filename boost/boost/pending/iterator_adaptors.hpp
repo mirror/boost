@@ -214,6 +214,45 @@ inline bool operator<=(const iterator_comparisons<D1,Base1>& xb,
 #endif
 
 //============================================================================
+// Some compilers (SGI MIPSpro) instantiate/compile member functions
+// whether or not they are used. The following functions make sure that
+// when the base iterators do not support particular operators, those
+// operators do not get used.
+
+namespace detail {
+
+  // Dummy version for iterators that don't support member access
+  template <class Iter, class Cat>
+  inline typename Iter::pointer
+  operator_arrow(const Iter&, Cat) {
+    typedef typename Iter::pointer Pointer;
+    return Pointer();
+  }
+  // Real version
+  template <class Iter>
+  inline typename Iter::pointer
+  operator_arrow(const Iter& i, std::forward_iterator_tag) {
+    return &(*i);
+  }
+
+  // Dummy version for iterators that don't support member access
+  template <class Iter, class Diff, class Cat>
+  inline void advance_impl(const Iter&, Diff, Cat) { }
+
+  // Real version
+  template <class Iter, class Diff>
+  inline typename Iter::pointer
+  advance_impl(const Iter& i, Diff n, std::random_access_iterator_tag) {
+#ifdef __MWERKS__
+        i.policies().advance<Iter>(iter(), n);
+#else
+        i.policies().advance(iter(), n);
+#endif
+  }
+
+} // namespace detail
+
+//============================================================================
 // iterator_adaptor - A generalized adaptor around an existing
 //   iterator, which is itself an iterator
 //
@@ -274,7 +313,7 @@ public:
 #endif
 
     pointer operator->() const
-        { return &*this; }
+        { return detail::operator_arrow(*this, iterator_category()); }
 
 #ifdef _MSC_VER
 # pragma warning(pop)
@@ -308,20 +347,12 @@ public:
     Self operator--(int) { Self tmp(*this); --*this; return tmp; }
 
     Self& operator+=(difference_type n) {
-#ifdef __MWERKS__
-        policies().advance<Iterator>(iter(), n);
-#else
-        policies().advance(iter(), n);
-#endif
+        detail::advance_impl(*this, n, iterator_category());
         return *this;
     }
   
     Self& operator-=(difference_type n) {
-#ifdef __MWERKS__
-        policies().advance<Iterator>(iter(), -n);
-#else
-        policies().advance(iter(), -n);
-#endif
+        detail::advance_impl(*this, -n, iterator_category());
         return *this;
     }
 
@@ -336,6 +367,7 @@ public: // too many compilers have trouble when these are private.
     Iterator& iter() { return m_iter_p.first(); }
     const Iterator& iter() const { return m_iter_p.first(); }
 };
+
 
 template <class Iterator, class Policies, class Traits>
 iterator_adaptor<Iterator,Policies,Traits>
