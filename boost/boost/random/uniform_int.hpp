@@ -86,10 +86,10 @@ inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
     for(;;) {
       // concatenate several invocations of the base RNG
       // take extra care to avoid overflows
-      int limit;
+      result_type limit;
       if(_range == std::numeric_limits<result_type>::max()) {
         limit = _range/(static_cast<result_type>(_brange)+1);
-        if(_range % static_cast<result_type>(_brange)+1 == _brange)
+        if(_range % static_cast<result_type>(_brange)+1 == static_cast<result_type>(_brange))
           ++limit;
       } else {
         limit = (_range+1)/(static_cast<result_type>(_brange)+1);
