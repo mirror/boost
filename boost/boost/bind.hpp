@@ -1093,18 +1093,6 @@ template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, c
     typedef list9<B1, B2, B3, B4, B5, B6, B7, B8, B9> type;
 };
 
-// g++ 2.95 specific helper; used by the data member overload
-
-template<class T> struct add_cref
-{
-    typedef T const & type;
-};
-
-template<> struct add_cref<void>
-{
-    typedef void type;
-};
-
 } // namespace _bi
 
 // visit_each
@@ -1458,6 +1446,26 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 // data member pointers
 
 #if defined(__GNUC__) && (__GNUC__ == 2)
+
+namespace _bi
+{
+
+template<class T> struct add_cref
+{
+    typedef T const & type;
+};
+
+template<class T> struct add_cref< T & >
+{
+    typedef T const & type;
+};
+
+template<> struct add_cref<void>
+{
+    typedef void type;
+};
+
+} // namespace _bi
 
 template<class R, class T, class A1>
 _bi::bind_t< typename _bi::add_cref<R>::type, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
