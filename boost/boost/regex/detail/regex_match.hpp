@@ -289,11 +289,6 @@ bool query_match_aux(iterator first,
                      _priv_match_data<iterator, Allocator>& pd,
                      iterator* restart)
 {
-# ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable: 4127)
-#endif
-
    typedef access_t<charT, traits, Allocator2> access;
 
    if(e.flags() & regbase::failbit)
@@ -1047,9 +1042,6 @@ bool query_match_aux(iterator first,
    // if we get to here then everything has failed
    // and no match was found:
    return false;
-# ifdef BOOST_MSVC
-#  pragma warning(pop)
-#endif
 }
 #if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace
