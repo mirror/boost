@@ -27,6 +27,7 @@
 #include "boost/variant/detail/make_variant_list.hpp"
 #include "boost/variant/detail/visitation_impl.hpp"
 
+#include "boost/variant/detail/enable_if.hpp"
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
 #include "boost/variant/detail/move.hpp"
@@ -75,41 +76,6 @@
 #include "boost/mpl/size_t.hpp"
 #include "boost/mpl/transform.hpp"
 #include "boost/mpl/void.hpp"
-
-///////////////////////////////////////////////////////////////////////////////
-// Temporary home-grown enable_if (until boost::enable_if is adopted)
-//
-#if BOOST_WORKAROUND(BOOST_MSVC,  <= 1300)                      \
- || BOOST_WORKAROUND(__GNUC__, <= 2 && __GNUC_MINOR__ <= 95)    \
- || BOOST_WORKAROUND(__MWERKS__, <= 0x3000)                     \
- || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-#   define BOOST_VARIANT_AUX_NO_SFINAE
-#endif
-
-#if !defined(BOOST_VARIANT_AUX_NO_SFINAE)
-
-namespace boost { namespace detail { namespace variant {
-
-template <bool Cond, typename T = void>
-struct enable_if_c
-{
-};
-
-template <typename T>
-struct enable_if_c< true,T >
-{
-    typedef T type;
-};
-
-template <typename C, typename T = void>
-struct enable_if
-    : enable_if_c< C::value, T >
-{
-};
-
-}}} // namespace boost::detail::variant
-
-#endif // !defined(BOOST_VARIANT_AUX_NO_SFINAE)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Implementation Macros:
