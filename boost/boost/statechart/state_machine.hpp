@@ -1,11 +1,10 @@
 #ifndef BOOST_FSM_STATE_MACHINE_HPP_INCLUDED
 #define BOOST_FSM_STATE_MACHINE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
+// Copyright (c) Andreas Huber Doenni 2002-2004.
+// Use, modification and distribution are subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -195,7 +194,7 @@ class history_key
       const history_key & left, const history_key & right )
     {
       return
-        std::less< RttiPolicy::id_type >()( 
+        std::less< typename RttiPolicy::id_type >()( 
           left.historyContextType_, right.historyContextType_ ) ||
         ( ( left.historyContextType_ == right.historyContextType_ ) &&
           ( left.historizedOrthogonalRegion_ <
@@ -271,10 +270,10 @@ class state_machine : noncopyable
     Target state_cast() const
     {
       typedef detail::state_cast_impl<
-        typename rtti_policy_type::id_type >::template
+        typename rtti_policy_type::id_type >::
           impl< is_pointer< Target >::value > impl;
 
-      for ( state_list_type::const_iterator pCurrentLeafState =
+      for ( typename state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
             pCurrentLeafState != currentStates_.end();
             ++pCurrentLeafState )
@@ -304,19 +303,19 @@ class state_machine : noncopyable
         }
       }
 
-      return impl::not_found< Target >();
+      return impl::template not_found< Target >();
     }
 
     template< class Target >
     Target state_downcast() const
     {
       typedef detail::state_cast_impl<
-        typename rtti_policy_type::id_type >::template
+        typename rtti_policy_type::id_type >::
           impl< is_pointer< Target >::value > impl;
 
-      typename rtti_policy_type::id_type targetType = impl::type< Target >();
+      typename rtti_policy_type::id_type targetType = typename impl::type< Target >();
 
-      for ( state_list_type::const_iterator pCurrentLeafState =
+      for ( typename state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
             pCurrentLeafState != currentStates_.end();
             ++pCurrentLeafState )
@@ -336,7 +335,7 @@ class state_machine : noncopyable
         }
       }
 
-      return impl::not_found< Target >();
+      return typename impl::not_found< Target >();
     }
 
     typedef detail::state_base< allocator_type, rtti_policy_type >
@@ -350,7 +349,7 @@ class state_machine : noncopyable
       public:
         //////////////////////////////////////////////////////////////////////
         explicit state_iterator(
-          state_base_type::state_list_type::const_iterator baseIterator
+          typename state_base_type::state_list_type::const_iterator baseIterator
         ) : baseIterator_( baseIterator ) {}
 
         const state_base_type & operator*() const { return **baseIterator_; }
@@ -375,7 +374,7 @@ class state_machine : noncopyable
         }
 
       private:
-        state_base_type::state_list_type::const_iterator baseIterator_;
+        typename state_base_type::state_list_type::const_iterator baseIterator_;
     };
 
     state_iterator state_begin() const
@@ -855,7 +854,7 @@ class state_machine : noncopyable
       history_map_type & historyMap,
       const typename DefaultState::context_ptr_type & pContext )
     {
-      history_map_type::iterator pFoundSlot = historyMap.find(
+      typename history_map_type::iterator pFoundSlot = historyMap.find(
         history_key_type::make_history_key< DefaultState >() );
       // The slot is allocated before this state is entered.
       BOOST_ASSERT( pFoundSlot != historyMap.end() );

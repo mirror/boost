@@ -1,11 +1,10 @@
 #ifndef BOOST_FSM_DETAIL_RTTI_POLICY_HPP_INCLUDED
 #define BOOST_FSM_DETAIL_RTTI_POLICY_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
+// Copyright (c) Andreas Huber Doenni 2002-2004.
+// Use, modification and distribution are subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -92,10 +91,12 @@ struct rtti_policy
 
   ////////////////////////////////////////////////////////////////////////////
   template< class Base >
-  class base_type : public Base
+  class rtti_base_type : public Base
   {
     public:
       ////////////////////////////////////////////////////////////////////////
+      typedef rtti_policy::id_type id_type;
+
       id_type dynamic_type() const
       {
         #ifdef BOOST_FSM_USE_NATIVE_RTTI
@@ -118,12 +119,12 @@ struct rtti_policy
 
     protected:
       ////////////////////////////////////////////////////////////////////////
-      virtual ~base_type() {}
+      virtual ~rtti_base_type() {}
 
     #ifdef BOOST_FSM_USE_NATIVE_RTTI
-      base_type( id_provider_type ) {}
+      rtti_base_type( id_provider_type ) {}
     #else
-      base_type(
+      rtti_base_type(
         id_provider_type idProvider
       ) :
         idProvider_( idProvider )
@@ -138,7 +139,7 @@ struct rtti_policy
 
   ////////////////////////////////////////////////////////////////////////////
   template< class MostDerived, class Base >
-  class derived_type : public Base
+  class rtti_derived_type : public Base
   {
     public:
       ////////////////////////////////////////////////////////////////////////
@@ -176,12 +177,12 @@ struct rtti_policy
 
     protected:
       ////////////////////////////////////////////////////////////////////////
-      virtual ~derived_type() {}
+      virtual ~rtti_derived_type() {}
 
       #ifdef BOOST_FSM_USE_NATIVE_RTTI
-      derived_type() : Base( false ) {}
+      rtti_derived_type() : Base( false ) {}
       #else
-      derived_type() : Base( id_holder< MostDerived >::idProvider_ ) {}
+      rtti_derived_type() : Base( id_holder< MostDerived >::idProvider_ ) {}
       #endif
   };
 };

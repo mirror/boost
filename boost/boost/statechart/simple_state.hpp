@@ -1,11 +1,10 @@
 #ifndef BOOST_FSM_SIMPLE_STATE_HPP_INCLUDED
 #define BOOST_FSM_SIMPLE_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
+// Copyright (c) Andreas Huber Doenni 2002-2004.
+// Use, modification and distribution are subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -79,11 +78,11 @@ struct simple_state_base_type
     typedef typename mpl::apply_if<
       mpl::empty< inner_initial_list >,
       mpl::identity< typename rtti_policy_type::
-        template derived_type< MostDerived, leaf_state<
+        template rtti_derived_type< MostDerived, leaf_state<
           allocator_type,
           rtti_policy_type > > >,
       mpl::identity< typename rtti_policy_type::
-        template derived_type< MostDerived, node_state<
+        template rtti_derived_type< MostDerived, node_state<
           mpl::size< inner_initial_list >::type::value,
           allocator_type,
           rtti_policy_type > > > >::type type;
@@ -405,7 +404,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     template< class OtherContext >
     const typename OtherContext::inner_context_ptr_type & context_ptr() const
     {
-      return context_ptr_impl( OtherContext::inner_context_ptr_type() );
+      return context_ptr_impl( typename OtherContext::inner_context_ptr_type() );
     }
 
 
@@ -475,7 +474,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       {
         detail::deep_history_storer< 
           context_type::inherited_deep_history, context_type::deep_history
-        >::store_deep_history< MostDerived, LeafState >( *pContext_ );
+        >::template store_deep_history< MostDerived, LeafState >( *pContext_ );
       }
     }
 
@@ -558,7 +557,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
       termination_state_type & terminationState(
         context< termination_state_type >() );
-      const common_context_type::inner_context_ptr_type pCommonContext(
+      const typename common_context_type::inner_context_ptr_type pCommonContext(
         terminationState.context_ptr< common_context_type >() );
       outermost_context_type & outermostContext(
         pCommonContext->outermost_context() );

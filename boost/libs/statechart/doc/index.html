@@ -56,30 +56,46 @@ include:</p>
 <p>The library is functionally complete. However, the following is still in 
 the making:</p>
 <ol>
-  <li>Finish reference documentation</li>
-  <li>gcc port</li>
+  <li>Integrate standard conformance fixed contributed by Peter Petrov. The 
+  library will then also work on GCC 3.2 and be much easier portable to other 
+  highly conformant compilers</li>
+  <li>Add the state type information facility to simple_state</li>
+  <li>Rework the worker and asynchronous_state_machine templates so that state 
+  machine objects can dynamically be added and removed and workers with 
+  priority-queues become possible</li>
   <li>Regression tests</li>
-  <li>Refactoring of the <code>state_machine</code> class template to reduce 
-  code size in projects with many different state machines</li>
+  <li>Refactor the <code>state_machine</code> class template to reduce code 
+  size in projects with many different state machines</li>
 </ol>
 <p><b>This is a preliminary submission. All comments are most welcome!</b></p>
 <hr>
 <h2>Contents</h2>
 <dl class="index">
-  <dt><a href="tutorial.html">Tutorial</a></dt>
+  <dt><a href="tutorial.html">Tutorial</a> [pdf: <a href="tutorial.pdf">
+  English</a>,
+  <a href="http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf">
+  Japanese</a>]</dt>
   <dt><a href="faq.html">Frequently Asked Questions (FAQs)</a></dt>
   <dt><a href="configuration.html">Configuration</a></dt>
   <dt><a href="definitions.html">Definitions</a></dt>
-  <dt><a href="reference.html">Reference</a></dt>
-  <dt><a href="rationale.html">Rationale</a></dt>
+  <dt><a href="reference.html">Reference</a> [pdf: <a href="reference.pdf">
+  English</a>]</dt>
+  <dt><a href="rationale.html">Rationale</a> [pdf: <a href="rationale.pdf">
+  English</a>]</dt>
   <dt><a href="acknowledgments.html">Acknowledgments</a></dt>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>11 January 2004:</p>
+<ul>
+  <li>Finished reference documentation</li>
+  <li>Updated Copyright notices</li>
+</ul>
 <p>12 December 2003:</p>
 <ul>
   <li><b>Thanks to Mitsuo Fukasawa the tutorial is now also available in 
   Japanese!!!</b></li>
+  <li>Added a state type information facility</li>
   <li>Added reference (unfinished) and configuration documentation and updated 
   other documents</li>
   <li>Various code brush-ups (no breaking changes)</li>
@@ -119,9 +135,13 @@ the making:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38508" --></p>
-<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
-2003. All Rights Reserved.</i></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 January, 2004<!--webbot bot="Timestamp" endspan i-checksum="38695" --></p>
+<p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
+2003-2004. Use, modification and distribution are subject to the Boost 
+Software License, Version 1.0. (See accompanying file
+<a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at
+<a href="http://www.boost.org/LICENSE_1_0.txt">
+http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
 
 </body>
 

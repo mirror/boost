@@ -1,11 +1,10 @@
 #ifndef BOOST_FSM_DETAIL_STATE_BASE_HPP_INCLUDED
 #define BOOST_FSM_DETAIL_STATE_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
+// Copyright (c) Andreas Huber Doenni 2002-2004.
+// Use, modification and distribution are subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -57,12 +56,12 @@ typedef unsigned char orthogonal_position_type;
 
 //////////////////////////////////////////////////////////////////////////////
 template< class Allocator, class RttiPolicy >
-class state_base : private noncopyable, public RttiPolicy::base_type<
+class state_base : private noncopyable, public RttiPolicy::rtti_base_type<
   // Derived class objects will be created, handled and destroyed by one and
   // the same thread --> locking is not necessary
   counted_base< orthogonal_position_type, false > >
 {
-  typedef typename RttiPolicy::base_type<
+  typedef typename RttiPolicy::rtti_base_type<
     counted_base< orthogonal_position_type, false > > base_type;
 
   public:

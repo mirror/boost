@@ -1,11 +1,10 @@
 #ifndef BOOST_FSM_EVENT_BASE_HPP_INCLUDED
 #define BOOST_FSM_EVENT_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
+// Copyright (c) Andreas Huber Doenni 2002-2004.
+// Use, modification and distribution are subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -26,10 +25,10 @@ namespace fsm
 
 
 //////////////////////////////////////////////////////////////////////////////
-class event_base : public detail::rtti_policy::base_type<
+class event_base : public detail::rtti_policy::rtti_base_type<
   detail::counted_base< unsigned int > >
 {
-  typedef detail::rtti_policy::base_type<
+  typedef detail::rtti_policy::rtti_base_type<
     detail::counted_base< unsigned int > > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -45,6 +44,8 @@ class event_base : public detail::rtti_policy::base_type<
       base_type( idProvider )
     {
     }
+
+    virtual ~event_base() {}
 };
 
 

@@ -46,8 +46,6 @@ contributed by Mitsuo Fukasawa.</p>
   <dd><a href="#In-state reactions">In-state reactions</a></dd>
   <dd><a href="#Transition actions">Transition actions</a></dd>
   <dt><a href="#Advanced topics">Advanced topics</a></dt>
-  <dd><a href="#Reaction function reference">Reaction function reference</a></dd>
-  <dd><a href="#Reaction reference">Reaction reference</a></dd>
   <dd><a href="#Specifying multiple reactions for a state">Specifying multiple 
   reactions for a state</a></dd>
   <dd><a href="#Posting events">Posting events</a></dd>
@@ -670,58 +668,6 @@ fsm::result Focusing::react( const EvInFocus &amp; evt )
 }</pre>
 <p>Please note that we have to manually forward the event.</p>
 <h2><a name="Advanced topics">Advanced topics</a></h2>
-<h3><a name="Reaction function reference">Reaction function reference</a></h3>
-<p>The following functions can only be called from within <code>react</code> 
-member functions, which must return by calling <b>exactly one</b> function 
-(e.g. <code>return terminate();</code>):</p>
-<ul>
-  <li><code>simple_state::forward_event()</code>: The dispatch algorithm keeps 
-  searching for a reaction for the current event. The search always continues 
-  with the immediate outer state. If there is none it continues with the next 
-  orthogonal leaf state. This process is repeated until one of the visited 
-  states returns by calling any of the other 5 reaction functions. The event 
-  is silently discarded if no reaction can be found. Useful to implement 
-  guards.<br>
-  <code>forward_event()</code> is also the default for all states that do not 
-  define a reaction for the event.</li>
-  <li><code>simple_state::discard_event()</code>: The dispatch algorithm stops 
-  searching for a reaction and the current event is discarded. Useful to 
-  implement <a href="definitions.html#In-state reaction">in-state reactions</a>.</li>
-  <li><code>simple_state::defer_event()</code>: The current event is pushed 
-  into a separate queue and the dispatch algorithm stops searching for a 
-  reaction. When the state is exited later, the separate queue is emptied into 
-  the main queue, which is afterwards processed as usual. Please see
-  <a href="#Deferring events">Deferring events</a>!</li>
-  <li><code>simple_state::transit&lt; DestinationState &gt;()</code>: Makes a 
-  transition to the specified destination state and discards the current 
-  event.</li>
-  <li><code>simple_state::transit&lt; DestinationState &gt;( void ( 
-  TransitionContext::* )( const Event &amp; ), const Event &amp; )</code>: Makes a 
-  transition to the specified destination state during which the passed 
-  transition action is called and discards the current event.</li>
-  <li><code>simple_state::terminate()</code>: Terminates the state and 
-  discards the current event.</li>
-</ul>
-<h3><a name="Reaction reference">Reaction reference</a></h3>
-<p>Reactions other than <code>custom_reaction</code> are nothing but syntactic 
-sugar so that users don't have to write <code>react</code> member functions 
-for common cases. Here's a list of the currently supplied reactions:</p>
-<ul>
-  <li><code>transition&lt; Event, DestinationState &gt;</code>: returns <code>
-  simple_state::transit&lt; DestinationState &gt;();</code></li>
-  <li><code>transition&lt; Event, DestinationState, TransitionContext, void ( 
-  TransitionContext::*pTransitionAction )( const Event &amp; ) &gt;</code>: returns
-  <code>simple_state::transit&lt; DestinationState &gt;( pTransitionAction, evt );</code></li>
-  <li><code>termination&lt; Event &gt;</code>: returns <code>simple_state::terminate();</code></li>
-  <li><code>deferral&lt; Event &gt;</code>: returns <code>simple_state::defer_event();</code>. 
-  Please see <a href="#Deferring events">Deferring events</a>!</li>
-  <li><code>custom_reaction&lt; Event &gt;</code>: returns <code>react( evt );</code> 
-  (the user-supplied member function). The <code>react</code> member function 
-  must return by calling one of the reaction functions.</li>
-</ul>
-<p>Should a user find herself implementing similar <code>react</code> member 
-functions very often, she can easily define her own reaction and use it just 
-like the ones that come with boost::fsm.</p>
 <h3><a name="Specifying multiple reactions for a state">Specifying multiple 
 reactions for a state</a></h3>
 <p>Often a state must define reactions for more than one event. In this case, 
@@ -1368,15 +1314,19 @@ terminated before the exception is propagated.</p>
   other functions like <code>initiate()</code>, <code>process_event()</code>, 
   etc. are nevertheless also publicly available, but it is not safe to call 
   these functions from any other thread than the worker (over which most users 
-  have no control). <font color="#FF0000"><code>
-  asynchronous_state_machine&lt;&gt;::queue_event()</code> is the only function than 
-  can safely be called simultaneously from multiple threads.</font></b></li>
+  have no control). <font color="#FF0000"><code>asynchronous_state_machine&lt;&gt;::queue_event()</code> 
+  is the only function than can safely be called simultaneously from multiple 
+  threads.</font></b></li>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38508" --></p>
-<p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. 
-All Rights Reserved.</i></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 January, 2004<!--webbot bot="Timestamp" endspan i-checksum="38695" --></p>
+<p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
+2003-2004. Use, modification and distribution are subject to the Boost 
+Software License, Version 1.0. (See accompanying file
+<a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at
+<a href="http://www.boost.org/LICENSE_1_0.txt">
+http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
 
 </body>
 

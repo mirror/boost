@@ -1,11 +1,10 @@
 #ifndef BOOST_FSM_DETAIL_CONSTRUCTOR_HPP_INCLUDED
 #define BOOST_FSM_DETAIL_CONSTRUCTOR_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
-// Permission to copy, use, modify, sell and distribute this software
-// is granted provided this copyright notice appears in all copies.
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
+// Copyright (c) Andreas Huber Doenni 2002-2004.
+// Use, modification and distribution are subject to the Boost Software
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -31,6 +30,9 @@ namespace detail
 {
 
 
+
+template< class ContextList, class OutermostContext >
+struct constructor;
 
 //////////////////////////////////////////////////////////////////////////////
 template< class ContextList, class OutermostContext >
@@ -102,7 +104,7 @@ struct make_context_list
   typedef typename mpl::reverse< typename mpl::push_front<
     typename mpl::erase<
       typename DestinationState::context_type_list,
-      typedef typename mpl::find<
+      typename mpl::find<
         typename DestinationState::context_type_list, 
         CommonContext
       >::type,

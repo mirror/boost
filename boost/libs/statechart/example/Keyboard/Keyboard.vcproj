@@ -147,6 +147,9 @@
 				RelativePath="..\..\..\..\boost\fsm\custom_reaction.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\boost\fsm\deep_history.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\boost\fsm\deferral.hpp">
 			</File>
 			<File
@@ -159,10 +162,10 @@
 				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\history.hpp">
+				RelativePath="..\..\..\..\boost\fsm\result.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\result.hpp">
+				RelativePath="..\..\..\..\boost\fsm\shallow_history.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\simple_state.hpp">
