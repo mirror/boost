@@ -24,7 +24,7 @@ import testing ;
 # all the files *_test.cpp, but any badly named examples can 
 # be added to this list :-)
 #
-TEST_SOURCES = [ GLOB . : *_test.cpp ]
+TEST_SOURCES = [ GLOB $(BOOST_ROOT)/libs/type_traits/test : *_test.cpp ]
             udt_specialisations.cpp ;  
             
 if --type-traits-unit-test in $(ARGV)
