@@ -21,6 +21,7 @@
 
 #include <boost/config.hpp>
 #include <boost/get_pointer.hpp>
+#include <boost/detail/workaround.hpp>
 
 namespace boost
 {
@@ -292,7 +293,7 @@ public:
         return call(u, &u);
     }
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1300)
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300) && !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
 
     R & operator()(T & t) const
     {
