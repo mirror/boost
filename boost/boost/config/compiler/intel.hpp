@@ -61,7 +61,7 @@
 
 #endif
 
-#if defined(__ICL) && (__ICL <= 710)
+#if (BOOST_INTEL_CXX_VERSION <= 710) && defined(_WIN32)
 #  define BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS
 #endif
 
