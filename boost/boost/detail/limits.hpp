@@ -152,6 +152,18 @@ public:
   BOOST_STL_DECLARE_LIMITS_MEMBER(bool, is_modulo, true);
 };
 
+ template<class __number, unsigned int __Word>
+ struct float_helper{
+  static __number __get_word() throw() {
+    // sizeof(long double) == 12, but only 10 bytes significant
+    const unsigned int _S_word[4] = { 0, 0, 0, __Word };
+    return *reinterpret_cast<const __number*>(
+        reinterpret_cast<const char *>(&_S_word)+16-
+		(sizeof(__number) == 12 ? 10 : sizeof(__number)));
+  } 
+};
+
+
 // Base class for floating-point numbers.
 template <class __number,
          int __Digits, int __Digits10,
@@ -186,23 +198,15 @@ public:
                               denorm_indeterminate);
   BOOST_STL_DECLARE_LIMITS_MEMBER(bool, has_denorm_loss,   false);
 
-  template<unsigned int __Word>
-  static __number __get_word() throw() {
-    // sizeof(long double) == 12, but only 10 bytes significant
-    const unsigned int _S_word[4] = { 0, 0, 0, __Word };
-    return *reinterpret_cast<const __number*>(
-        reinterpret_cast<const char *>(&_S_word)+16-
-		(sizeof(__number) == 12 ? 10 : sizeof(__number)));
-  } 
-
+ 
   static __number infinity() throw() {
-    return __get_word<__InfinityWord>();
+    return float_helper<__number, __InfinityWord>::__get_word();
   }
   static __number quiet_NaN() throw() {
-    return __get_word<__QNaNWord>();
+    return float_helper<__number,__QNaNWord>::__get_word();
   }
   static __number signaling_NaN() throw() {
-    return __get_word<__SNaNWord>();
+    return float_helper<__number,__SNaNWord>::__get_word();
   }
 
   BOOST_STL_DECLARE_LIMITS_MEMBER(bool, is_iec559,       __IsIEC559);
