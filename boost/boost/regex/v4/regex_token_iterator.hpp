@@ -163,6 +163,14 @@ template <class BidirectionalIterator,
           class traits = regex_traits<charT>,
           class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
 class regex_token_iterator 
+#ifndef BOOST_NO_STD_ITERATOR
+   : public std::iterator<
+         std::forward_iterator_tag, 
+         sub_match<BidirectionalIterator>,
+         typename re_detail::regex_iterator_traits<BidirectionalIterator>::difference_type,
+         const sub_match<BidirectionalIterator>*,
+         const sub_match<BidirectionalIterator>& >         
+#endif
 {
 private:
    typedef regex_token_iterator_implementation<BidirectionalIterator, charT, traits, Allocator> impl;
