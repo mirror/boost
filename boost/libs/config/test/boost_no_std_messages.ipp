@@ -12,6 +12,16 @@
 
 namespace boost_no_std_messages{
 
+//
+// this just has to complile, not run:
+//
+void test_messages(const std::messages<char>& m)
+{
+   static const std::locale l;
+   static const std::string name("foobar");
+   m.close(m.open(name, l));
+}
+
 int test()
 {
    const std::messages<char>* pmf = 0;
