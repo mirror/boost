@@ -10,7 +10,7 @@
 #include <vector>
 
 int
-test_main(int, char**)
+test_main(int, char*[])
 {
   using boost::extents;
   using boost::indices;
