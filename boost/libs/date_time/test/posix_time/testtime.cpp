@@ -282,6 +282,15 @@ main()
   check("check max time constructor", max_ptime == ptime(date(9999,12,31), 
                                                          hours(24)-time_duration::unit())); 
   //  std::cout << max_ptime << std::endl;
+
+  //tm conversion checks
+  //converts to date and back -- should get same result -- note no fractional seconds in these times
+  check("tm conversion functions 2001-12-1 05:04:03", ptime_from_tm(to_tm(t1)) == t1);
+  check("tm conversion functions min date 1400-1-1 ", ptime_from_tm(to_tm(min_ptime)) == min_ptime);
+  //this conversion will drop fractional seconds
+  check("tm conversion functions max date 9999-12-31 23:59:59.9999 - truncated frac seconds", 
+        ptime_from_tm(to_tm(max_ptime)) == ptime(date(max_date_time), time_duration(23,59,59)));
+
   
   return printTestStats();
   
