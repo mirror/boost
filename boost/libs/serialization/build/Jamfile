@@ -49,6 +49,7 @@ lib boost_serialization
     : ## sources ##
         ../src/$(SOURCES).cpp
     : ## requirements ##
+        std::locale-support
         <msvc><*><include>$(SPIRIT_ROOT) 
         <vc7><*><include>$(SPIRIT_ROOT) 
         <borland><*><include>$(SPIRIT_ROOT) 
@@ -68,6 +69,7 @@ lib boost_wserialization
     : ## sources ##
         ../src/$(WSOURCES).cpp
     : ## requirements ##
+        std::locale-support
         <msvc><*><include>$(SPIRIT_ROOT) 
         <vc7><*><include>$(SPIRIT_ROOT) 
         <borland><*><include>$(SPIRIT_ROOT) 
