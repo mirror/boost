@@ -78,7 +78,7 @@ Example
 
 .. parsed-literal::
     
-    BOOST_MPL_HAS_XXX_TRAIT_DEF(has_xxx)
+    BOOST_MPL_HAS_XXX_TRAIT_DEF(xxx)
 
     struct test1 {};
     struct test2 { void xxx(); };
