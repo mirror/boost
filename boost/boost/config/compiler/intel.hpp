@@ -72,6 +72,10 @@
 #  endif
 #endif
 
+#if (BOOST_INTEL_CXX_VERSION <= 800) || !defined(BOOST_STRICT_CONFIG)
+#  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
+#endif
+
 #if _MSC_VER+0 >= 1000
 #  if _MSC_VER >= 1200
 #     define BOOST_HAS_MS_INT64

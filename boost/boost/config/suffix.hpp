@@ -108,6 +108,14 @@
 #  endif
 
 //
+// Without partial specialization, we can't have array-type partial specialisations:
+//
+#  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+      && !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
+#     define BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
+#  endif
+
+//
 // Without partial specialization, std::iterator_traits can't work:
 //
 #  if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
