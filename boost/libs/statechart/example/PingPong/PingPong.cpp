@@ -195,7 +195,6 @@ char GetKey()
 
 int main()
 {
-  std::cout << sizeof( Waiting ) << " " << sizeof( BallReturned );
   std::cout << "boost::fsm PingPong example\n\n";
   std::cout << "Threading configuration:\n";
   #ifdef BOOST_HAS_THREADS
