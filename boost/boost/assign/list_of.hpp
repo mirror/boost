@@ -116,7 +116,7 @@ namespace assign_detail
     public:
 
         template< class Container >
-        operator Container() const
+        Container convert_to_container() const
         {
             static Container* c = 0;
             BOOST_STATIC_CONSTANT( bool, is_array_flag = sizeof( assign_detail::assign_is_array( c ) ) 
@@ -128,7 +128,9 @@ namespace assign_detail
 
             return convert<Container>( c, tag_type() );
         }
-
+        
+    private:
+        
         template< class Container >
         Container convert( const Container*, default_type_tag ) const
         {
@@ -333,7 +335,7 @@ namespace assign_detail
         template< class Container >
         operator Container() const
         {
-            return (Container)static_cast<const base_type&>(*this);
+            return this-> BOOST_NESTED_TEMPLATE convert_to_container<Container>();
         }
     };
 
@@ -456,7 +458,7 @@ namespace assign_detail
         template< class Container >
         operator Container() const
         {
-            return (Container)static_cast<const base_class&>( *this );
+            return this-> BOOST_NESTED_TEMPLATE convert_to_container<Container>();
         }
 
     private:
