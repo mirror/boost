@@ -847,6 +847,13 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       <xsl:with-param name="indentation" select="$indentation"/>
     </xsl:call-template>
 
+    <xsl:if test="@specifiers">
+      <xsl:call-template name="highlight-keyword">
+        <xsl:with-param name="keyword" select="@specifiers"/>
+      </xsl:call-template>
+      <xsl:text> </xsl:text>
+    </xsl:if>
+
     <xsl:apply-templates select="type/*|type/text()" mode="annotation"/>
     <xsl:text> </xsl:text>
     <xsl:value-of select="@name"/>
