@@ -15,10 +15,10 @@
 //  This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 //
-//  typedef <implementation-defined> boost::detail::lightweight_mutex;
+//  typedef <unspecified> boost::detail::lightweight_mutex;
 //
-//  boost::detail::lightweight_mutex meets the Mutex concept requirements
-//  See http://www.boost.org/libs/thread/doc/mutex_concept.html#Mutex
+//  boost::detail::lightweight_mutex meets a subset of the Mutex concept
+//  requirements: http://www.boost.org/libs/thread/doc/mutex_concept.html#Mutex
 //
 //  * Used by the smart pointer library
 //  * Performance oriented
@@ -30,6 +30,23 @@
 //    lightweight_mutex does not guarantee fairness.
 //  * Never keep a lightweight_mutex locked for long periods.
 //
+//  The current implementation can use a pthread_mutex, a CRITICAL_SECTION,
+//  or a platform-specific spinlock.
+//
+//  You can force a particular implementation by defining BOOST_LWM_USE_PTHREADS,
+//  BOOST_LWM_USE_CRITICAL_SECTION, or BOOST_LWM_USE_SPINLOCK.
+//
+//  If neither macro has been defined, the default is to use a spinlock on Win32,
+//  and a pthread_mutex otherwise.
+//
+//  Note that a spinlock is not a general synchronization primitive. In particular,
+//  it is not guaranteed to be a memory barrier, and it is possible to "livelock"
+//  if a lower-priority thread has acquired the spinlock but a higher-priority
+//  thread is spinning trying to acquire the same lock.
+//
+//  For these reasons, spinlocks have been disabled by default except on Windows,
+//  where a spinlock can be several orders of magnitude faster than a CRITICAL_SECTION.
+
 
 //  Note: lwm_linux.hpp has been disabled by default; see the comments
 //        inside for more info.
@@ -37,8 +54,7 @@
 
 #include <boost/config.hpp>
 
-//
-//  Note to implementors: if you write a platform-specific lightweight_mutex
+//  Note to implementors: if you write a platform-specific spinlock
 //  for a platform that supports pthreads, be sure to test its performance
 //  against the pthreads-based version using shared_ptr_timing_test.cpp and
 //  shared_ptr_mt_test.cpp. Custom versions are usually not worth the trouble
@@ -47,11 +63,10 @@
 //  Be sure to compare against a "real" pthreads library;
 //  shared_ptr_timing_test.cpp will compile succesfully with a stub do-nothing
 //  pthreads library, since it doesn't create any threads.
-//
 
 #ifndef BOOST_HAS_THREADS
 #  include <boost/detail/lwm_nop.hpp>
-#elif defined(BOOST_USE_ASM_ATOMIC_H)
+#elif defined(BOOST_LWM_USE_SPINLOCK) && defined(BOOST_USE_ASM_ATOMIC_H)
 #  include <boost/detail/lwm_linux.hpp>
 #elif defined(BOOST_LWM_USE_CRITICAL_SECTION)
 #  include <boost/detail/lwm_win32_cs.hpp>
@@ -59,9 +74,9 @@
 #  include <boost/detail/lwm_pthreads.hpp>
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  include <boost/detail/lwm_win32.hpp>
-#elif defined(__sgi)
+#elif defined(BOOST_LWM_USE_SPINLOCK) && defined(__sgi)
 #  include <boost/detail/lwm_irix.hpp>
-#elif defined(__GLIBCPP__)
+#elif defined(BOOST_LWM_USE_SPINLOCK) && defined(__GLIBCPP__)
 #  include <boost/detail/lwm_gcc.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
 #  define BOOST_LWM_USE_PTHREADS
