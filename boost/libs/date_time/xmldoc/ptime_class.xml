@@ -59,6 +59,21 @@
 	    <entry>Copy constructor</entry>
 	    <entry>ptime t3(t1)</entry>
 	  </row>
+	  <row>
+	    <entry>ptime(special_values sv)</entry>
+	    <entry>Constructor for infinities, not-a-date-time, max_date_time, and min_date_time</entry>
+	    <entry>
+	      ptime d1(neg_infin);
+	      ptime d2(pos_infin);
+	      ptime d3(not_a_date_time);
+	      ptime d4(max_date_time);
+	      ptime d5(min_date_time);</entry>
+	  </row>
+	  <row>
+	    <entry>ptime;</entry>
+	    <entry>Default constructor. Creates a ptime object initialized to not_a_date_time. NOTE: this constructor can be disabled by defining DATE_TIME_NO_DEFAULT_CONSTRUCTOR (see compiler_config.hpp)</entry>
+	    <entry>ptime p; // p =&gt; not_a_date_time</entry>
+	  </row>
 	</tbody>
       </tgroup>
     </informaltable>

@@ -53,13 +53,18 @@
 	</row>
 	<row>
 	  <entry>date(special_values sv)</entry>
-	  <entry>Constructor for infinities, not-a-date-time, max_date, and min_date</entry>
+	  <entry>Constructor for infinities, not-a-date-time, max_date_time, and min_date_time</entry>
 	  <entry>
 	    date d1(neg_infin);
 	    date d2(pos_infin);
 	    date d3(not_a_date_time);
-	    date d4(max_date);
-	    date d5(min_date);</entry>
+	    date d4(max_date_time);
+	    date d5(min_date_time);</entry>
+	</row>
+	<row>
+	  <entry>date;</entry>
+	  <entry>Default constructor. Creates a date object initialized to not_a_date_time. NOTE: this constructor can be disabled by defining DATE_TIME_NO_DEFAULT_CONSTRUCTOR (see compiler_config.hpp)</entry>
+	  <entry>date d; // d =&gt; not_a_date_time</entry>
 	</row>
       </tbody>
     </tgroup>

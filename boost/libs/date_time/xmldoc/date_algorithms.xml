@@ -61,6 +61,16 @@
 	  </entry>
 	</row>
 	<row>
+	  <entry>year_based_generator</entry>
+	  <entry>abstract base class</entry>
+	  <entry>greg_year year</entry>
+	  <entry>A unifying date_generator base type for: partial_date, nth_day_of_the_week_in_month, first_day_of_the_week_in_month, and last_day_of_the_week_in_month
+	  </entry>
+	  <entry>
+	    <!--The <link linkend="date_time.examples.print_holidays">print holidays</link> example shows a detailed usage example. -->
+	  </entry>
+	</row>
+	<row>
 	  <entry>last_kday_of_month</entry>
 	  <entry>greg_day_of_week day_of_week greg_month month</entry>
 	  <entry>greg_year year</entry>
@@ -78,6 +88,15 @@
 	  <entry>
 	    first_kday_of_month fkm(Monday,Jan);
 	    date d = fkm.get_date(2002);//2002-Jan-07
+	  </entry>
+	</row>
+	<row>
+	  <entry>nth_day_of_the_week_in_month</entry>
+	  <entry>week_num day_of_week greg_month month</entry>
+	  <entry>greg_year year</entry>
+	  <entry>Calculate something like second Monday of January</entry>
+	  <entry>
+	    The <link linkend="date_time.examples.print_holidays">print holidays</link> example shows a detailed usage example. 
 	  </entry>
 	</row>
 	<row>
