@@ -48,18 +48,18 @@ void find_test()
 
     nc_result=find_first( str1, string("abc") );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 3) &&
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 6) );
+        ( (nc_result.begin()-str1.begin()) == 3) &&
+        ( (nc_result.end()-str1.begin()) == 6) );
 
     cv_result=find_first( const_cast<const string&>(str1), str2 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 3) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 6) );
+        ( (cv_result.begin()-str1.begin()) == 3) &&
+        ( (cv_result.end()-str1.begin()) == 6) );
 
     cv_result=ifind_first( const_cast<const string&>(str1), "xXX" );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 6) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 9) );
+        ( (cv_result.begin()-str1.begin()) == 6) &&
+        ( (cv_result.end()-str1.begin()) == 9) );
 
     ch_result=find_first( pch1, "abc" );
     BOOST_CHECK(( (ch_result.begin() - pch1 ) == 3) && ( (ch_result.end() - pch1 ) == 6 ) );
@@ -69,18 +69,18 @@ void find_test()
     
     nc_result=find_last( str1, string("abc") );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 15) &&
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 18) );
+        ( (nc_result.begin()-str1.begin()) == 15) &&
+        ( (nc_result.end()-str1.begin()) == 18) );
 
     cv_result=find_last( const_cast<const string&>(str1), str2 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 15) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 18) );
+        ( (cv_result.begin()-str1.begin()) == 15) &&
+        ( (cv_result.end()-str1.begin()) == 18) );
 
     cv_result=ifind_last( const_cast<const string&>(str1), "XXx" );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 12) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 15) );
+        ( (cv_result.begin()-str1.begin()) == 12) &&
+        ( (cv_result.end()-str1.begin()) == 15) );
 
     ch_result=find_last( pch1, "abc" );
     BOOST_CHECK(( (ch_result.begin() - pch1 ) == 15) && ( (ch_result.end() - pch1 ) == 18 ) );
@@ -90,18 +90,18 @@ void find_test()
 
     nc_result=find_nth( str1, string("abc"), 1 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 9) &&
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 12) );
+        ( (nc_result.begin()-str1.begin()) == 9) &&
+        ( (nc_result.end()-str1.begin()) == 12) );
 
     cv_result=find_nth( const_cast<const string&>(str1), str2, 1 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 9) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 12) );
+        ( (cv_result.begin()-str1.begin()) == 9) &&
+        ( (cv_result.end()-str1.begin()) == 12) );
         
     cv_result=ifind_nth( const_cast<const string&>(str1), "xxx", 1 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 12) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 15) );
+        ( (cv_result.begin()-str1.begin()) == 12) &&
+        ( (cv_result.end()-str1.begin()) == 15) );
 
     ch_result=find_nth( pch1, "abc", 1 );
     BOOST_CHECK(( (ch_result.begin() - pch1 ) == 9) && ( (ch_result.end() - pch1 ) == 12 ) );
@@ -111,13 +111,13 @@ void find_test()
 
     nc_result=find_head( str1, 6 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 0) &&
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 6) );
+        ( (nc_result.begin()-str1.begin()) == 0) &&
+        ( (nc_result.end()-str1.begin()) == 6) );
 
     cv_result=find_head( const_cast<const string&>(str1), 6 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 0) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 6) );
+        ( (cv_result.begin()-str1.begin()) == 0) &&
+        ( (cv_result.end()-str1.begin()) == 6) );
 
     ch_result=find_head( pch1, 6 );
     BOOST_CHECK( ( (ch_result.begin() - pch1 ) == 0 ) && ( (ch_result.end() - pch1 ) == 6 ) );
@@ -127,13 +127,13 @@ void find_test()
 
     nc_result=find_tail( str1, 6 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 15) &&
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 21) );
+        ( (nc_result.begin()-str1.begin()) == 15) &&
+        ( (nc_result.end()-str1.begin()) == 21) );
 
     cv_result=find_tail( const_cast<const string&>(str1), 6 );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 15) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 21) );
+        ( (cv_result.begin()-str1.begin()) == 15) &&
+        ( (cv_result.end()-str1.begin()) == 21) );
 
     ch_result=find_tail( pch1, 6 );
     BOOST_CHECK( ( (ch_result.begin() - pch1 ) == 15 ) && ( (ch_result.end() - pch1 ) == 21 ) );
@@ -143,23 +143,23 @@ void find_test()
 
     nc_result=find_token( str1, is_any_of("abc"), token_compress_on );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 3) &&
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 6) );
+        ( (nc_result.begin()-str1.begin()) == 3) &&
+        ( (nc_result.end()-str1.begin()) == 6) );
 
     cv_result=find_token( const_cast<const string&>(str1), is_any_of("abc"), token_compress_on );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 3) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 6) );
+        ( (cv_result.begin()-str1.begin()) == 3) &&
+        ( (cv_result.end()-str1.begin()) == 6) );
 
     nc_result=find_token( str1, is_any_of("abc"), token_compress_off );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 3) &&
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 4) );
+        ( (nc_result.begin()-str1.begin()) == 3) &&
+        ( (nc_result.end()-str1.begin()) == 4) );
 
     cv_result=find_token( const_cast<const string&>(str1), is_any_of("abc"), token_compress_off );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 3) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 4) );
+        ( (cv_result.begin()-str1.begin()) == 3) &&
+        ( (cv_result.end()-str1.begin()) == 4) );
 
     ch_result=find_token( pch1, is_any_of("abc"), token_compress_off );
     BOOST_CHECK( ( (ch_result.begin() - pch1 ) == 3 ) && ( (ch_result.end() - pch1 ) == 4 ) );
@@ -169,26 +169,26 @@ void find_test()
 
     nc_result=find(str1, first_finder(string("abc")));
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.begin()) == 3) &&
-        (std::distance<string::const_iterator>( str1.begin(),nc_result.end()) == 6) );
+        ( (nc_result.begin()-str1.begin()) == 3) &&
+        ( (nc_result.end()-str1.begin()) == 6) );
 
     cv_result=find(const_cast<const string&>(str1), first_finder(str2) );
     BOOST_CHECK( 
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.begin()) == 3) &&
-        (std::distance<string::const_iterator>( str1.begin(),cv_result.end()) == 6) );
+        ( (cv_result.begin()-str1.begin()) == 3) &&
+        ( (cv_result.end()-str1.begin()) == 6) );
 
     // multi-type comparison test 
     BOOST_CHECKPOINT( "multi-type" );
 
     nc_vresult=find_first( vec1, string("abc") );
     BOOST_CHECK( 
-        (std::distance<vector<int>::const_iterator>( vec1.begin(),nc_vresult.begin()) == 3) &&
-        (std::distance<vector<int>::const_iterator>( vec1.begin(),nc_vresult.end()) == 6) );
+        ( (nc_result.begin()-str1.begin()) == 3) &&
+        ( (nc_result.end()-str1.begin()) == 6) );
 
     cv_vresult=find_first( const_cast<const vector<int>&>(vec1), str2 );
     BOOST_CHECK( 
-        (std::distance<vector<int>::const_iterator>( vec1.begin(),cv_vresult.begin()) == 3) &&
-        (std::distance<vector<int>::const_iterator>( vec1.begin(),cv_vresult.end()) == 6) );
+        ( (cv_result.begin()-str1.begin()) == 3) &&
+        ( (cv_result.end()-str1.begin()) == 6) );
 
     // overflow test
     BOOST_CHECKPOINT( "overflow" );
