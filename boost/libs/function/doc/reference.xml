@@ -79,7 +79,7 @@
     <method-group name="capacity">
       <method name="empty" cv="const">
         <type>bool</type>
-        <returns><simpara><code>true</code> if <code>this</code> has a target, and <code>false</code> otherwise.</simpara></returns>
+        <returns><simpara><code>false</code> if <code>this</code> has a target, and <code>true</code> otherwise.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
     </method-group>
@@ -223,7 +223,7 @@
     <method-group name="capacity">
       <method name="empty" cv="const">
         <type>bool</type>
-        <returns><simpara><code>true</code> if <code>this</code> has a target, and <code>false</code> otherwise.</simpara></returns>
+        <returns><simpara><code>false</code> if <code>this</code> has a target, and <code>true</code> otherwise.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
@@ -634,7 +634,7 @@
     <method-group name="capacity">
       <method name="empty" cv="const">
         <type>bool</type>
-        <returns><simpara><code>true</code> if <code>this</code> has a target, and <code>false</code> otherwise.</simpara></returns>
+        <returns><simpara><code>false</code> if <code>this</code> has a target, and <code>true</code> otherwise.</simpara></returns>
         <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
