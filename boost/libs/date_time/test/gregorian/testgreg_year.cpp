@@ -42,7 +42,7 @@ main()
 
   printTestStats();
   return 0;
-};
+}
 
 /*
  * Copyright (c) 2001
