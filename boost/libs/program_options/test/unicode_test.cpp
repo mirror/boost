@@ -32,12 +32,12 @@ void test_unicode_to_unicode()
         ;
 
     vector<wstring> args;
-    args.push_back(L"--foo=\u044F");
+    args.push_back(L"--foo=\x044F");
 
     variables_map vm;
     store(wcommand_line_parser(args).options(desc).run(), vm);
 
-    BOOST_CHECK(vm["foo"].as<wstring>() == L"\u044F");           
+    BOOST_CHECK(vm["foo"].as<wstring>() == L"\x044F");           
 }
 
 // Test that unicode input is property converted into
@@ -56,7 +56,7 @@ void test_unicode_to_native()
         ;
 
     vector<wstring> args;
-    args.push_back(L"--foo=\u044F");
+    args.push_back(L"--foo=\x044F");
 
     variables_map vm;
     store(wcommand_line_parser(args).options(desc).run(), vm);
@@ -82,7 +82,7 @@ void test_native_to_unicode()
     variables_map vm;
     store(command_line_parser(args).options(desc).run(), vm);
 
-    BOOST_TEST(vm["foo"].as<wstring>() == L"\u044F");    
+    BOOST_TEST(vm["foo"].as<wstring>() == L"\x044F");    
 }
 
 // Since we've already tested conversion between parser encoding and
@@ -100,7 +100,7 @@ void test_config_file()
         ("foo", po::value<string>(), "unicode option")
         ;
 
-    std::wstringstream stream(L"foo = \u044F");
+    std::wstringstream stream(L"foo = \x044F");
 
     variables_map vm;
     store(parse_config_file(stream, desc), vm);
