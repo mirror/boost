@@ -288,8 +288,9 @@ typedef basic_zlib_decompressor<> zlib_decompressor;
 
 namespace detail {
 
-template<typename Alloc>
-void* zlib_allocator<Alloc>::alloc(void* self, zlib::uint items, zlib::uint size)
+template<typename Alloc, typename Base>
+void* zlib_allocator<Alloc, Base>::alloc
+    (void* self, zlib::uint items, zlib::uint size)
 { 
     size_type len = items * size;
     char* ptr = 
@@ -298,8 +299,8 @@ void* zlib_allocator<Alloc>::alloc(void* self, zlib::uint items, zlib::uint size
     return ptr + sizeof(size_type);
 }
 
-template<typename Alloc>
-void zlib_allocator<Alloc>::free(void* self, void* address)
+template<typename Alloc, typename Base>
+void zlib_allocator<Alloc, Base>::free(void* self, void* address)
 { 
     char* ptr = reinterpret_cast<char*>(address) - sizeof(size_type);
     size_type len = *reinterpret_cast<size_type*>(ptr) + sizeof(size_type);

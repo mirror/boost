@@ -270,8 +270,8 @@ typedef basic_bzip2_decompressor<> bzip2_decompressor;
 
 namespace detail {
 
-template<typename Alloc>
-void* bzip2_allocator<Alloc>::alloc(void* self, int items, int size)
+template<typename Alloc, typename Base>
+void* bzip2_allocator<Alloc, Base>::alloc(void* self, int items, int size)
 { 
     size_type len = items * size;
     char* ptr = 
@@ -280,8 +280,8 @@ void* bzip2_allocator<Alloc>::alloc(void* self, int items, int size)
     return ptr + sizeof(size_type);
 }
 
-template<typename Alloc>
-void bzip2_allocator<Alloc>::free(void* self, void* address)
+template<typename Alloc, typename Base>
+void bzip2_allocator<Alloc, Base>::free(void* self, void* address)
 { 
     char* ptr = reinterpret_cast<char*>(address) - sizeof(size_type);
     size_type len = *reinterpret_cast<size_type*>(ptr) + sizeof(size_type);
