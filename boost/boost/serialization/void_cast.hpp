@@ -130,14 +130,16 @@ class void_caster_primitive :
 {
     static const void_caster_primitive<Derived, Base> instance;
     virtual void const* downcast( void const * t ) const {
-        return boost::smart_cast<const Derived *>(
-            boost::smart_cast<const Base *>(t)
+        Derived * d = boost::smart_cast<const Derived *, const Base *>(
+            static_cast<const Base *>(t)
         );
+        return d;
     }
     virtual void const* upcast(void const * t) const {
-        return boost::smart_cast<const Base *>(
-            boost::smart_cast<const Derived *>(t)
+        Base * b = boost::smart_cast<const Base *, const Derived *>(
+            static_cast<const Derived *>(t)
         );
+        return b;
     }
 
 public:
