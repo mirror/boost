@@ -63,7 +63,7 @@ main()
   function_requires< BackInsertionSequenceConcept<List> >();
 
 #ifndef BOOST_NO_SLIST
-  typedef std::slist<int> SList;
+  typedef BOOST_STD_EXTENSION_NAMESPACE::slist<int> SList;
   function_requires< FrontInsertionSequenceConcept<SList> >();
 #endif
 

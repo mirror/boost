@@ -74,7 +74,7 @@ The Boost Concept Checking Library provides:
  <li>A framework for specifying concept requirements though concept
   checking classes.</li> 
 
- <li>Verify that concept requirements cover the template.</li>
+ <li>A mechanism for verifying that concept requirements cover the template.</li>
 
  <li>A suite of concept checking classes and archetype classes that
    match the concept requirements in the C++ Standard Library.</li>
@@ -85,7 +85,7 @@ overhead. The main cost of using the mechanism is in compile-time.
 
 <p>
 Any programmer writing class or function templates ought to make
-concept checking a normal part of their code-writing routine. A
+concept checking a normal part of their code writing routine. A
 concept check should be inserted for each template parameter in a
 component's public interface. If the concept is one of the ones from
 the Standard Library, then simply use the matching concept checking
