@@ -14,6 +14,7 @@
 #  define BOOST_NO_CWCHAR
 #  define BOOST_NO_CWCTYPE
 #  define BOOST_NO_STD_WSTRING
+#  define BOOST_NO_STD_WSTREAMBUF
 #endif
  
 #ifndef _GLIBCPP_USE_LONG_LONG
