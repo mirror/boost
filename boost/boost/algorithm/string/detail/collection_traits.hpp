@@ -530,8 +530,8 @@ namespace boost {
 
                 typedef value_type* iterator;
                 typedef const value_type* const_iterator;
-                typedef BOOST_STRING_TYPENAME std::ptrdiff_t difference_type;
-                typedef BOOST_STRING_TYPENAME std::size_t size_type;
+                typedef std::ptrdiff_t difference_type;
+                typedef std::size_t size_type;
 
                 typedef BOOST_STRING_TYPENAME
                     ::boost::mpl::if_< ::boost::is_const<T>,
