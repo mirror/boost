@@ -51,7 +51,9 @@ MPL_TEST_CASE()
     MPL_ASSERT_NOT(( has_xxx<a2> ));
     MPL_ASSERT_NOT(( has_xxx<a3> ));
     MPL_ASSERT_NOT(( has_xxx<a4> ));
+#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
     MPL_ASSERT_NOT(( has_xxx<a5> ));
+#endif
     MPL_ASSERT_NOT(( has_xxx< enum_ > ));
 #endif
     MPL_ASSERT_NOT(( has_xxx<a1> ));
