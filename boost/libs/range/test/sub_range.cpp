@@ -59,13 +59,14 @@ void check_iterator_range()
     typedef sub_range<string>       srange;
     typedef sub_range<const string> csrange;
     srange s     = r;
-    BOOST_CHECK( r == s );
+    BOOST_CHECK( r == r );
     s            = make_iterator_range( str );
     csrange s2   = r;
     s2           = r2;
     s2           = make_iterator_range( cstr );
-    BOOST_CHECK( r != s2 );
+    BOOST_CHECK( r2 == r2 );
     s2           = make_iterator_range( str );
+    BOOST_CHECK( !(s != s) );
     
     BOOST_CHECK( r.begin() == s.begin() );
     BOOST_CHECK( r2.begin()== s2.begin() );

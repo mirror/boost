@@ -51,6 +51,8 @@ namespace boost {
         template<typename IteratorT> 
         class iterator_range
         {
+            iterator_range(); // not implemented
+            
         public:
             //! this type
             typedef iterator_range<IteratorT> type;
@@ -75,62 +77,35 @@ namespace boost {
             //! iterator type
             typedef IteratorT iterator;
 
-            //! Default constructor
-            iterator_range() {}
-            
             //! Constructor from a pair of iterators
-            iterator_range( iterator Begin, iterator End ) : 
+            template< class Iterator >
+            iterator_range( Iterator Begin, Iterator End ) : 
                 m_Begin(Begin), m_End(End) {}
 
             //! Constructor from a Range
             template< class Range >
             iterator_range( const Range& r ) : 
-                m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
+                m_Begin( begin_impl( r ) ), m_End( end_impl( r ) ) {}
 
             //! Constructor from a Range
             template< class Range >
             iterator_range( Range& r ) : 
-            m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
-
-            //! Copy constructor -- default OK
-
-            //! Templated copy constructor
-            /*!
-                This constructor is provided to allow conversion between
-                const and mutable iterator instances of this class template
-            */
-            template< typename OtherItT >
-            iterator_range( const iterator_range<OtherItT>& Other ) :
-                m_Begin(Other.begin()), m_End(Other.end()) {}
-
-            //! Assignment operator -- defefault OK
-
-            //! Assignment operator ( templated version )
-            template< typename OtherItT >
-            iterator_range& operator=( const iterator_range<OtherItT>& Other )
+            m_Begin( begin_impl( r ) ), m_End( end_impl( r ) ) {}
+            
+            template< class XRange >
+            iterator_range& operator=( XRange& r )
             {
-                m_Begin=Other.begin(); m_End=Other.end();
+                m_Begin = begin_impl( r ); 
+                m_End   = end_impl( r );
                 return *this;
             }
-            
-            //! Comparison operator ( equal )
-            /*! 
-                Compare operands for equality
-            */
-            template< typename OtherItT > 
-            bool operator==( const iterator_range<OtherItT>& Other ) const
-            {
-                return ! (*this != Other);
-            }
 
-            //! Comparison operator ( not-equal )
-            /*! 
-                Compare operands for non-equality
-            */
-            template< typename OtherItT > 
-            bool operator!=( const iterator_range<OtherItT>& Other ) const
+            template< class XRange >
+            iterator_range& operator=( const XRange& r )
             {
-                return m_Begin!=Other.begin() || m_End!=Other.end();
+                m_Begin = begin_impl( r ); 
+                m_End   = end_impl( r );
+                return *this;
             }
 
             //! begin access
@@ -203,6 +178,22 @@ namespace boost {
             // begin and end iterators
             IteratorT m_Begin;
             IteratorT m_End;
+            
+        private:
+            template< class XRange >
+            iterator end_impl( XRange& r ) const
+            {
+                using boost::end;
+                return end( r );
+            }
+            
+            template< class XRange >
+            iterator begin_impl( XRange& r ) const
+            {
+                using boost::begin;
+                return begin( r );
+            }
+
         };
 
 //  iterator range free-standing operators ---------------------------//
@@ -213,15 +204,35 @@ namespace boost {
             in a sequence without separators.
         */
         template< typename IteratorT, typename Elem, typename Traits >
-        std::basic_ostream<Elem,Traits>& operator<<( 
-            std::basic_ostream<Elem, Traits>& Os,
-            const iterator_range<IteratorT>& r )
+        inline std::basic_ostream<Elem,Traits>& operator<<( 
+                    std::basic_ostream<Elem, Traits>& Os,
+                    const iterator_range<IteratorT>& r )
         {
             std::copy( begin(r), end(r), std::ostream_iterator<Elem>(Os));
-
             return Os;
         }
 
+        //! Comparison operator ( equal )
+        /*! 
+            Compare operands for equality
+        */
+        template< class IteratorT > 
+        inline bool operator==( const iterator_range<IteratorT>& l,
+                         const iterator_range<IteratorT>& r )
+        {
+            return ! (l != r);
+        }
+
+        //! Comparison operator ( not-equal )
+        /*! 
+            Compare operands for non-equality
+        */
+        template< class IteratorT > 
+        inline bool operator!=( const iterator_range<IteratorT>& l,
+                         const iterator_range<IteratorT>& r )
+        {
+            return l.begin() !=  r.begin() || l.end() != r.end();
+        }
 
 //  iterator range utilities -----------------------------------------//
 
@@ -256,19 +267,19 @@ namespace boost {
             Construct an \c iterator_range from a \c Range containing the begin
             and end iterators.
         */
-        template< typename Range >
-        inline iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<Range>::type >
-        make_iterator_range( Range& r ) 
+        template< class XRange >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<XRange>::type >
+        make_iterator_range( XRange& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<Range>::type >
+            return iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<XRange>::type >
                 ( r );
         }
 
-        template< typename Range >
-        inline iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<Range>::type >
-        make_iterator_range( const Range& r ) 
+        template< class XRange >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<XRange>::type >
+        make_iterator_range( const XRange& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<Range>::type >
+            return iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<XRange>::type >
                 ( r );
         }
 #endif
