@@ -48,11 +48,31 @@ namespace boost{
   class escaped_list_separator{
 
   private:
+    typedef std::basic_string<Char,Traits> string_type;
+    struct char_eq{
+      Char e_;
+      char_eq(Char e):e_(e){}
+      bool operator()(Char c){
+	return Traits::eq(e_,c);
+      }
+    };
+    string_type  escape_;
+    string_type  c_;
+    string_type  quote_;		  
+    bool last_;
 
-	  Char escape_;
-	  Char c_;
-	  Char quote_;		  
-
+    bool is_escape(Char e){
+      char_eq f(e);
+      return std::find_if(escape_.begin(),escape_.end(),f)!=escape_.end();
+    }
+    bool is_c(Char e){
+      char_eq f(e);
+      return std::find_if(c_.begin(),c_.end(),f)!=c_.end();
+    }
+    bool is_quote(Char e){
+      char_eq f(e);
+      return std::find_if(quote_.begin(),quote_.end(),f)!=quote_.end();
+    }
 	  template<class iterator,class Token>
 	  void do_escape(iterator& next,iterator end,Token& tok){
 				
@@ -63,16 +83,16 @@ namespace boost{
 			  tok+='\n';
 			  return;
 			}
-			else if(Traits::eq(*next,quote_)){
-			  tok+=quote_;
+			else if(is_quote(*next)){
+			  tok+=*next;
 			  return;
 			}
-			else if(Traits::eq(*next,c_)){
-			  tok+=c_;
+			else if(is_c(*next)){
+			  tok+=*next;
 			  return;
 			}
-			else if(Traits::eq(*next,escape_)){
-			  tok+=escape_;
+			else if(is_escape(*next)){
+			  tok+=*next;
 			  return;
 			}
 			else
@@ -84,49 +104,63 @@ namespace boost{
 
 	  public:
 	  
-		explicit escaped_list_separator(Char escape = '\\',
-			Char c = ',',Char q = '\"'):escape_(escape),c_(c),quote_(q){}
-
-		void reset(){}
+    explicit escaped_list_separator(Char  e = '\\',
+      Char c = ',',Char  q = '\"')
+      :escape_(1,e),c_(1,c),quote_(1,q),last_(false){}
+    escaped_list_separator(string_type e, string_type c, string_type q):
+      escape_(e),c_(c),quote_(q),last_(false){}
+    
+    void reset(){last_=false;}
 
 	  
 	  
 
-		template<class InputIterator,class Token>
-		bool operator()(InputIterator& next,InputIterator end,Token& tok){
-
-		  bool bInQuote = false;
-		  tok = Token();
-		  
-		  if(next==end)return false;
-		  for(;next != end;++next){
-			  
-			  if(Traits::eq(*next,escape_)){
-					do_escape(next,end,tok);
-			  }
-			  
-			  else if(Traits::eq(*next,c_)){
-				  if(!bInQuote) {
-					  // If we are not in quote, then we are done
-					  ++next;
-					  return true;
-				  }
-				  else tok+=c_;
-			  }
-			  
-			  else if(Traits::eq(*next,quote_)){
-				  bInQuote=!bInQuote;
-			  }
-			  
-			  
-			  else{
-				  tok += *next;
-			  }
-		  }
-		  return true;
-		  
-		  
+    template<class InputIterator,class Token>
+    bool operator()(InputIterator& next,InputIterator end,Token& tok){
+      
+      bool bInQuote = false;
+      tok = Token();
+      
+      if(next==end){
+	if(last_){
+	  last_ = false;
+	  return true;
+	}
+	else
+	  return false;
+      }
+      last_ = false;
+      for(;next != end;++next){
+	
+	if(is_escape(*next)){
+	  do_escape(next,end,tok);
+	}
+	
+	else if(is_c(*next)){
+	  if(!bInQuote) {
+	    // If we are not in quote, then we are done
+	    ++next;
+	    // The last character was a c, that means there is
+	    // 1 more blank field
+	    last_ = true; 
+	    return true;
 	  }
+	  else tok+=*next;
+	}
+	
+	else if(is_quote(*next)){
+	  bInQuote=!bInQuote;
+	}
+	  
+	
+	else{
+	  tok += *next;
+	}
+      }
+      return true;
+      
+      
+    }
   };
 
    

@@ -46,6 +46,16 @@ int test_main(int, char**)
 	}
 
 	{
+		const string test_string = ",1,;2\\\";3\\;,4,5^\\,\'6,7\';";
+		string answer[] = {"","1","","2\"","3;","4","5\\","6,7",""};
+		typedef tokenizer<escaped_list_separator<char> > Tok;
+		escaped_list_separator<char> sep("\\^",",;","\"\'");
+		Tok t(test_string,sep);
+		BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));
+
+	}
+
+	{
 		const string test_string = "12252001";
 		string answer[] = {"12","25","2001"};
 		typedef tokenizer<offset_separator > Tok;

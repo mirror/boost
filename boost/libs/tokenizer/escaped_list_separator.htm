@@ -57,20 +57,22 @@ sequences are supported</p>
         </td>
     </tr>
     <tr>
-        <td>\&quot;</td>
-        <td>&quot;</td>
+        <td>&lt;escape&gt;&lt;quote&gt;</td>
+        <td>&lt;quote&gt;</td>
     </tr>
     <tr>
-        <td>\n</td>
+        <td>&lt;escape&gt;n</td>
         <td>newline</td>
     </tr>
     <tr>
-        <td>\\</td>
-        <td>\</td>
+        <td>&lt;escape&gt;&lt;escape&gt;</td>
+        <td>&lt;escape&gt;</td>
     </tr>
 </table>
 
-<p>&nbsp;</p>
+<p>Where &lt;quote&gt; is any character specified to be a quote
+and&lt;escape&gt; is any character specified to be an escape
+character.</p>
 
 <h2>Example</h2>
 
@@ -93,9 +95,9 @@ int main(){
 
 <h2>Construction and Usage</h2>
 
-<p>escaped_list_separator has 1 constructor. It is as follows</p>
+<p>escaped_list_separator has 2 constructors. They are as follows</p>
 
-<pre>explicit escaped_list_separator(Char escape = '\\', Char c = ',',Char q = '\&quot;')</pre>
+<pre>explicit escaped_list_separator(Char e = '\\', Char c = ',',Char q = '\&quot;')</pre>
 
 <table border="1">
     <tr>
@@ -105,7 +107,7 @@ int main(){
         </td>
     </tr>
     <tr>
-        <td>escape</td>
+        <td>e</td>
         <td>Specifies the character to use for escape sequences.
         It defaults to the C style \ (backslash). However you can
         override by passing in a different character. An example
@@ -123,6 +125,39 @@ int main(){
         <td>Specifies the character to use for the quote.</td>
     </tr>
 </table>
+
+<p>&nbsp;</p>
+
+<pre>escaped_list_separator(string_type e, string_type c, string_type q):</pre>
+
+<table border="1">
+    <tr>
+        <td><p align="center"><strong>Parameter</strong></p>
+        </td>
+        <td><p align="center"><strong>Description</strong></p>
+        </td>
+    </tr>
+    <tr>
+        <td>e</td>
+        <td>Any character in the string e, is considered to be an
+        escape character. If an empty string is given, then there
+        are no escape characters.</td>
+    </tr>
+    <tr>
+        <td>c</td>
+        <td>Any character in the string c, is considered to be a
+        separator. If an empty string is given, then there are no
+        separator characters.</td>
+    </tr>
+    <tr>
+        <td>q</td>
+        <td>Any character in the string q, is considered to be a
+        quote. If an empty string is given, then there are no
+        quote characters.</td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
 
 <p>To use this class, pass an object of it anywhere in the
 Tokenizer package where a TokenizerFunction is required.</p>
