@@ -325,7 +325,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       detail::orthogonal_position_type orthogonalPosition >
     void clear_shallow_history()
     {
-      outermost_context_base().clear_shallow_history<
+      outermost_context_base().template clear_shallow_history<
         HistoryContext, orthogonalPosition >();
     }
 
@@ -334,7 +334,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       detail::orthogonal_position_type orthogonalPosition >
     void clear_deep_history()
     {
-      outermost_context_base().clear_deep_history<
+      outermost_context_base().template clear_deep_history<
         HistoryContext, orthogonalPosition >();
     }
 
