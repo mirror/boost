@@ -71,7 +71,7 @@ struct name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
 }; \
 \
 namespace v2_1 { \
-struct name : ::boost::mpl::name<> {}; \
+/*struct name : ::boost::mpl::name<> {};  breaks mpl::if_<...> */ \
 } \
 /**/
 
