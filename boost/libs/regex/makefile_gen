@@ -490,7 +490,7 @@ EOF
 #	 now for the main target for this library:
 	echo $subdir\\$libname.lib : $all_obj >> $tout
 	echo "	tlib @&&|" >> $tout
-	echo "/P32 /u /a \$(XSFLAGS) $subdir\\$libname.lib $all_lib_obj" >> $tout
+	echo "/P32 /C /u /a \$(XSFLAGS) $subdir\\$libname.lib $all_lib_obj" >> $tout
 	echo "|" >> $tout
 	echo "" >> $tout
 }
@@ -1013,6 +1013,7 @@ sun_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

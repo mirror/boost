@@ -36,7 +36,7 @@ void search(std::istream& is)
       // and how much is left to fill:
       unsigned size = next_pos - buf;
       // copy forward whatever we have left:
-      memcpy(buf, next_pos, leftover);
+      memmove(buf, next_pos, leftover);
       // fill the rest from the stream:
       unsigned read = is.readsome(buf + leftover, size);
       // check to see if we've run out of text:
@@ -79,4 +79,5 @@ int main(int argc, char* argv[])
    std::cout << "total tag count was " << tags << std::endl;
    return 0;
 }
+
 

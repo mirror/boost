@@ -127,7 +127,7 @@ bcb4re300_clean :
 
 bcb4\bcb4re300.lib : bcb4\bcb4re300\c_regex_traits.obj bcb4\bcb4re300\c_regex_traits_common.obj bcb4\bcb4re300\cpp_regex_traits.obj bcb4\bcb4re300\cregex.obj bcb4\bcb4re300\fileiter.obj bcb4\bcb4re300\posix_api.obj bcb4\bcb4re300\regex.obj bcb4\bcb4re300\regex_debug.obj bcb4\bcb4re300\regex_synch.obj bcb4\bcb4re300\w32_regex_traits.obj bcb4\bcb4re300\wide_posix_api.obj
 	tlib @&&|
-/P32 /u /a $(XSFLAGS) bcb4\bcb4re300.lib  +bcb4\bcb4re300\c_regex_traits.obj +bcb4\bcb4re300\c_regex_traits_common.obj +bcb4\bcb4re300\cpp_regex_traits.obj +bcb4\bcb4re300\cregex.obj +bcb4\bcb4re300\fileiter.obj +bcb4\bcb4re300\posix_api.obj +bcb4\bcb4re300\regex.obj +bcb4\bcb4re300\regex_debug.obj +bcb4\bcb4re300\regex_synch.obj +bcb4\bcb4re300\w32_regex_traits.obj +bcb4\bcb4re300\wide_posix_api.obj
+/P32 /C /u /a $(XSFLAGS) bcb4\bcb4re300.lib  +bcb4\bcb4re300\c_regex_traits.obj +bcb4\bcb4re300\c_regex_traits_common.obj +bcb4\bcb4re300\cpp_regex_traits.obj +bcb4\bcb4re300\cregex.obj +bcb4\bcb4re300\fileiter.obj +bcb4\bcb4re300\posix_api.obj +bcb4\bcb4re300\regex.obj +bcb4\bcb4re300\regex_debug.obj +bcb4\bcb4re300\regex_synch.obj +bcb4\bcb4re300\w32_regex_traits.obj +bcb4\bcb4re300\wide_posix_api.obj
 |
 
 ########################################################
@@ -201,7 +201,7 @@ bcb4re300m_clean :
 
 bcb4\bcb4re300m.lib : bcb4\bcb4re300m\c_regex_traits.obj bcb4\bcb4re300m\c_regex_traits_common.obj bcb4\bcb4re300m\cpp_regex_traits.obj bcb4\bcb4re300m\cregex.obj bcb4\bcb4re300m\fileiter.obj bcb4\bcb4re300m\posix_api.obj bcb4\bcb4re300m\regex.obj bcb4\bcb4re300m\regex_debug.obj bcb4\bcb4re300m\regex_synch.obj bcb4\bcb4re300m\w32_regex_traits.obj bcb4\bcb4re300m\wide_posix_api.obj
 	tlib @&&|
-/P32 /u /a $(XSFLAGS) bcb4\bcb4re300m.lib  +bcb4\bcb4re300m\c_regex_traits.obj +bcb4\bcb4re300m\c_regex_traits_common.obj +bcb4\bcb4re300m\cpp_regex_traits.obj +bcb4\bcb4re300m\cregex.obj +bcb4\bcb4re300m\fileiter.obj +bcb4\bcb4re300m\posix_api.obj +bcb4\bcb4re300m\regex.obj +bcb4\bcb4re300m\regex_debug.obj +bcb4\bcb4re300m\regex_synch.obj +bcb4\bcb4re300m\w32_regex_traits.obj +bcb4\bcb4re300m\wide_posix_api.obj
+/P32 /C /u /a $(XSFLAGS) bcb4\bcb4re300m.lib  +bcb4\bcb4re300m\c_regex_traits.obj +bcb4\bcb4re300m\c_regex_traits_common.obj +bcb4\bcb4re300m\cpp_regex_traits.obj +bcb4\bcb4re300m\cregex.obj +bcb4\bcb4re300m\fileiter.obj +bcb4\bcb4re300m\posix_api.obj +bcb4\bcb4re300m\regex.obj +bcb4\bcb4re300m\regex_debug.obj +bcb4\bcb4re300m\regex_synch.obj +bcb4\bcb4re300m\w32_regex_traits.obj +bcb4\bcb4re300m\wide_posix_api.obj
 |
 
 ########################################################
@@ -275,7 +275,7 @@ bcb4re300v_clean :
 
 bcb4\bcb4re300v.lib : bcb4\bcb4re300v\c_regex_traits.obj bcb4\bcb4re300v\c_regex_traits_common.obj bcb4\bcb4re300v\cpp_regex_traits.obj bcb4\bcb4re300v\cregex.obj bcb4\bcb4re300v\fileiter.obj bcb4\bcb4re300v\posix_api.obj bcb4\bcb4re300v\regex.obj bcb4\bcb4re300v\regex_debug.obj bcb4\bcb4re300v\regex_synch.obj bcb4\bcb4re300v\w32_regex_traits.obj bcb4\bcb4re300v\wide_posix_api.obj
 	tlib @&&|
-/P32 /u /a $(XSFLAGS) bcb4\bcb4re300v.lib  +bcb4\bcb4re300v\c_regex_traits.obj +bcb4\bcb4re300v\c_regex_traits_common.obj +bcb4\bcb4re300v\cpp_regex_traits.obj +bcb4\bcb4re300v\cregex.obj +bcb4\bcb4re300v\fileiter.obj +bcb4\bcb4re300v\posix_api.obj +bcb4\bcb4re300v\regex.obj +bcb4\bcb4re300v\regex_debug.obj +bcb4\bcb4re300v\regex_synch.obj +bcb4\bcb4re300v\w32_regex_traits.obj +bcb4\bcb4re300v\wide_posix_api.obj
+/P32 /C /u /a $(XSFLAGS) bcb4\bcb4re300v.lib  +bcb4\bcb4re300v\c_regex_traits.obj +bcb4\bcb4re300v\c_regex_traits_common.obj +bcb4\bcb4re300v\cpp_regex_traits.obj +bcb4\bcb4re300v\cregex.obj +bcb4\bcb4re300v\fileiter.obj +bcb4\bcb4re300v\posix_api.obj +bcb4\bcb4re300v\regex.obj +bcb4\bcb4re300v\regex_debug.obj +bcb4\bcb4re300v\regex_synch.obj +bcb4\bcb4re300v\w32_regex_traits.obj +bcb4\bcb4re300v\wide_posix_api.obj
 |
 
 ########################################################
