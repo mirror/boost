@@ -21,6 +21,14 @@
 
 //! Expands to the I:th element of an N-tuple.
 /*!
+For example,
+
+<PRE>\verbatim
+  BOOST_PP_TUPLE_ELEM(2,1,(A,B))
+\endverbatim</PRE>
+
+expands to B.
+
 Tuples can be used for representing structured data.
 
 Examples of tuples:
@@ -30,14 +38,6 @@ Examples of tuples:
   3-tuple: (1, 2, 3)
   4-tuple: (A B C, D, EF, 34)
 \endverbatim</PRE>
-
-Example:
-
-<PRE>\verbatim
-  BOOST_PP_TUPLE_ELEM(2,1,(A,B))
-\endverbatim</PRE>
-
-The above expands to B.
 
 See also BOOST_PP_LIMIT_TUPLE.
 */

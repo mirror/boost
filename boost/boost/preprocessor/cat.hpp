@@ -19,7 +19,7 @@
 
 //! Delays the catenation of L and R.
 /*!
-Example:
+For example,
 
 <PRE>\verbatim
   #define STATIC_ASSERT(EXPR)\
@@ -36,7 +36,7 @@ Example:
   STATIC_ASSERT(sizeof(int) <= sizeof(long));
 \endverbatim</PRE>
 
-The above expands to:
+expands to:
 
 <PRE>\verbatim
   enum

@@ -23,14 +23,14 @@
 /*!
 Designed to be used with BOOST_PP_IF(), when one of the clauses need to be invoked.
 
-Example:
+For example,
 
 <PRE>\verbatim
   BOOST_PP_IDENTITY(X)()
   //                  ^^ NOTE!
 \endverbatim</PRE>
 
-The above expands to:
+expands to:
 
 <PRE>\verbatim
   X

@@ -19,7 +19,7 @@
 
 //! Delays the stringization of E.
 /*!
-Example:
+For example,
 
 <PRE>\verbatim
 #define NOTE(STR)\
@@ -30,7 +30,7 @@ Example:
 #pragma NOTE("TBD!")
 \endverbatim</PRE>
 
-The above expands to:
+expands to:
 
 <PRE>\verbatim
   #pragma message("examples.cpp" "(" "20" ") : " "TBD!")

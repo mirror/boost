@@ -22,13 +22,13 @@
 BOOST_PP_TUPLE_EAT() is designed to be used with BOOST_PP_IF() like
 BOOST_PP_EMPTY().
 
-For example:
+For example,
 
 <PRE>\verbatim
   BOOST_PP_IF(0,BOOST_PP_ENUM_PARAMS,BOOST_PP_TUPLE_EAT(2))(10,P)
 \endverbatim</PRE>
 
-The above expands to nothing.
+expands to nothing.
 */
 #define BOOST_PP_TUPLE_EAT(N) BOOST_PP_TUPLE_EAT_DELAY(N)
 
