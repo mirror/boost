@@ -37,28 +37,25 @@
 // Intel compiler
 #if defined(__INTEL_COMPILER)
 //   Intel C++ 7.0+ on Windows
-#    if (__INTEL_COMPILER >= 700) && (defined_WIN32)
-#        define BOOST_FORCE_INCLUDE __declspec(dllexport) //__declspec(noinline)
-#    else
-#        define BOOST_FORCE_INCLUDE
+#    if (__INTEL_COMPILER >= 700)
+#       if defined(_WIN32)
+#           define BOOST_FORCE_INCLUDE(f) __declspec(dllexport) f
+#       else
+#           define BOOST_FORCE_INCLUDE(f) f __attribute__ ((used))
+#       endif
 #    endif
 // MSVC
 #elif defined(BOOST_MSVC)
-//   VC 7.0 & higher
-#    if (BOOST_MSVC >= 1300)
-#        define BOOST_FORCE_INCLUDE __declspec(dllexport) //__declspec(noinline)
-#    else
-#        define BOOST_FORCE_INCLUDE __declspec(dllexport)
-#    endif
+#    define BOOST_FORCE_INCLUDE(f) __declspec(dllexport) f 
+// Code Warrior - question does this work for non-windows platforms?
 #elif defined(__MWERKS__) 
-//   Code Warrior
-#    if(__MWERKS__ >= 0x3003)  // 8.x
-#        define BOOST_FORCE_INCLUDE __declspec(dllexport)
-#    endif
+#    define BOOST_FORCE_INCLUDE(f) __declspec(dllexport) f
+#elif defined(__GCC__)
+#    define BOOST_FORCE_INCLUDE(f) f __attribute__ ((used))
 #endif
 
 #ifndef BOOST_FORCE_INCLUDE
-#    define BOOST_FORCE_INCLUDE
+#    define BOOST_FORCE_INCLUDE(x) x
 #endif
 
 #endif // BOOST_SERIALIZATION_FORCE_INCLUDE_HPP

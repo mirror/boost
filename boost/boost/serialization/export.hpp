@@ -133,7 +133,7 @@ struct guid_initializer {
     };
     struct non_empty {
         typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type eti_type;
-        static void BOOST_FORCE_INCLUDE key_register(const char *key){
+        static void BOOST_FORCE_INCLUDE(key_register(const char *key)){
             boost::serialization::extended_type_info * eti = eti_type::get_instance();
             eti->key_register(key);
         }
@@ -175,15 +175,14 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
             export_generator<T, ASEQ >::instance;                    \
         template                                                     \
         const guid_initializer<T, ASEQ >                             \
-        guid_initializer<T, ASEQ >::instance(K) ;                    \
+        BOOST_FORCE_INCLUDE((guid_initializer<T, ASEQ >::instance(K))) ;\
         } } }                                                        \
         /**/
 #else
     namespace boost { namespace archive { namespace detail {
     template<class T, class ASeq>
     const guid_initializer<T, ASeq> & 
-    BOOST_FORCE_INCLUDE 
-    boost_template_instantiate(T &, ASeq &){
+    BOOST_FORCE_INCLUDE(boost_template_instantiate(T &, ASeq &)){
         return guid_initializer<T, ASeq>::instance;
     }
     } } }

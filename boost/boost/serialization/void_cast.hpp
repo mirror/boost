@@ -185,7 +185,7 @@ struct static_initializer
     static_initializer(){
         static void_caster_primitive<const Derived, const Base> instance1;
     }
-    static const BOOST_FORCE_INCLUDE static_initializer & instantiate(){
+    static const static_initializer & instantiate(){
         return instance;
     }
 };
@@ -229,10 +229,10 @@ const static_initializer<Derived, Base> static_initializer<Derived, Base>::insta
 // bug in msvc 6.0
 template<class Derived, class Base>
 inline void
-void_cast_register(
+BOOST_FORCE_INCLUDE(void_cast_register(
     const Derived * /* dnull = NULL */, 
-    const Base * /* bnull = NULL */)
-{
+    const Base * /* bnull = NULL */
+)){
     void_cast_detail::static_initializer<Derived, Base>::instantiate();
 }
 
