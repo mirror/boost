@@ -651,6 +651,10 @@ public:
       gen(value);
     seed(gen);
   }
+
+  // For GCC, moving this function out-of-line prevents inlining, which may
+  // reduce overall object code size.  However, MSVC does not grok
+  // out-of-line template member functions.
   template<class Generator>
   void seed(Generator & gen) {
     // TODO: should be a compile-time assert
@@ -662,7 +666,7 @@ public:
   }
   
   result_type operator()();
-  bool validation(result_type x) const { return val == x; }
+  bool validation(result_type v) const { return val == v; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend std::ostream& operator<<(std::ostream& os, const mersenne_twister& mt)
