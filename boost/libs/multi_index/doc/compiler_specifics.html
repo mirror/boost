@@ -41,7 +41,12 @@ indication of which compilers are actually supported.
   <li><a href="#bcb_64">Borland C++ Builder 6.4</a></li>
   <li><a href="#comeau_433_win_vc7_71">Comeau C/C++ 4.3.3 for Windows (VC++ 7.0/7.1 backend)</a></li>
   <li><a href="#compaq_65">Compaq C++ 6.5-041 for Tru64 UNIX</a></li>
-  <li><a href="#gcc_32">GNU GCC 3.2 and later</a></li>
+  <li>
+    <a href="#gcc_32">GNU GCC 3.2 and later</a>
+    <ul>
+      <li><a href="#gcc_tru64">GNU GCC for Tru64 UNIX</a></li>
+    </ul>
+  </li>
   <li><a href="#va_60">IBM VisualAge C++ V6.0 for AIX</a></li>
   <li><a href="#intel_7_8_lin">Intel C++ Compiler for Linux 7.1/8.0</a></li>
   <li><a href="#intel_7_win">Intel C++ Compiler for Windows 32-bit 7.0/7.1</a></li>
@@ -91,9 +96,35 @@ starting from 3.2. The following versions have been explicitly tested:
   <li>GCC 3.3.3 under Linux,</li>
   <li>GCC 3.4.0 under Linux and Solaris,</li>
   <li>GCC 3.4.1 under HP-UX and Linux,</li>
-  <li>GCC 3.4.2 under Linux, (mingw-special) under Win32.</li>
+  <li>GCC 3.4.2 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),
+    (mingw-special) under Win32.</li>
 </ul>
 Boost.MultiIndex does not work with versions 3.1 and prior of GCC.
+</p>
+
+<h3><a name="gcc_tru64">GNU GCC for Tru64 UNIX</a></h3>
+
+<p>
+When compiling heavily templatized code, as is often the case
+with Boost.MultiIndex, GCC produces debug symbols which are too long to handle for
+the system assembler on Alpha platforms. This results in the error message
+<code>mips-tfile, ... string too big</code>. The problem can be overcome
+by omitting the compiler option <code>-g</code> (generate debugging information.)
+Alternatively, you can restrict the maximum number of elements accepted by 
+<a href="reference/indices.html#indexed_by"><code>indexed_by</code></a>,
+<a href="reference/indices.html#tag"><code>tag</code></a> and
+<a href="reference/key_extraction.html#composite_key"><code>composite_key</code></a>
+by globally setting the values of the macros
+<ul>
+  <li><code>BOOST_MULTI_INDEX_LIMIT_INDEXED_BY_SIZE</code>
+    (default: 20),</li>
+  <li><code>BOOST_MULTI_INDEX_LIMIT_TAG_SIZE</code>
+    (default: 20),</li>
+  <li><code>BOOST_MULTI_INDEX_LIMIT_COMPOSITE_KEY_SIZE</code>
+    (default: 10).</li>
+</ul>
+This operation results in a modest reduction of the lengths of symbol
+names.
 </p>
 
 <h2><a name="va_60">IBM VisualAge C++ V6.0 for AIX</a></h2>
@@ -425,7 +456,7 @@ Performance
 
 <br>
 
-<p>Revised October 8th 2004</p>
+<p>Revised October 13th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
