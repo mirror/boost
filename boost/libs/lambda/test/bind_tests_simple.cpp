@@ -31,6 +31,18 @@ class A {
 public:
   A(int n) : i(n) {};
   int add(const int& j) { return i + j; }
+  int add2(int a1, int a2) { return i + a1 + a2; }
+  int add3(int a1, int a2, int a3) { return i + a1 + a2 + a3; }
+  int add4(int a1, int a2, int a3, int a4) { return i + a1 + a2 + a3 + a4; }
+  int add5(int a1, int a2, int a3, int a4, int a5) 
+  { return i + a1 + a2 + a3 + a4 + a5; }
+  int add6(int a1, int a2, int a3, int a4, int a5, int a6) 
+  { return i + a1 + a2 + a3 + a4 + a5 + a6; }
+  int add7(int a1, int a2, int a3, int a4, int a5, int a6, int a7) 
+  { return i + a1 + a2 + a3 + a4 + a5 + a6 + a7; }
+  int add8(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8) 
+  { return i + a1 + a2 + a3 + a4 + a5 + a6 + a7 + a8; }
+
 };
 
 void test_member_functions()
@@ -46,6 +58,14 @@ void test_member_functions()
     BOOST_TEST(bind(&A::add, &a, _1)(i) == 11);
     BOOST_TEST(bind(&A::add, _1, 1)(a) == 11);
     BOOST_TEST(bind(&A::add, _1, 1)(make_const(&a)) == 11);
+
+    BOOST_TEST(bind(&A::add2, _1, 1, 1)(a) == 12);
+    BOOST_TEST(bind(&A::add3, _1, 1, 1, 1)(a) == 13);
+    BOOST_TEST(bind(&A::add4, _1, 1, 1, 1, 1)(a) == 14);
+    BOOST_TEST(bind(&A::add5, _1, 1, 1, 1, 1, 1)(a) == 15);
+    BOOST_TEST(bind(&A::add6, _1, 1, 1, 1, 1, 1, 1)(a) == 16);
+    BOOST_TEST(bind(&A::add7, _1, 1, 1, 1, 1, 1, 1, 1)(a) == 17);
+    BOOST_TEST(bind(&A::add8, _1, 1, 1, 1, 1, 1, 1, 1, 1)(a) == 18);
 
   // This should fail, as lambda functors store arguments as const
   // bind(&A::add, a, _1); 
