@@ -22,7 +22,7 @@ rule toolset::require-boost-spirit-support ( toolset variant : subvariant-path p
     case "vc7-stlport" :
         requires-spirit = true ;
     case "gcc-2*" :
-        requires-spirit = true;
+        requires-spirit = true ;
     }
     if $(requires-spirit) {
         if  $(SPIRIT_ROOT) # && ( exist $(SPIRIT_ROOT) )
