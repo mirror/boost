@@ -10,6 +10,7 @@
 #ifndef BOOST_TT_ARRAY_TRAITS_HPP
 # define BOOST_TT_ARRAY_TRAITS_HPP
 # include <boost/type_traits/utility.hpp>
+# include <boost/type_traits/ice.hpp>
 
 namespace boost { 
 
