@@ -38,7 +38,7 @@
 <h2><a name="Does boost::fsm support polymorphic events">Does boost::fsm 
 support polymorphic events?</a></h2>
 <p>No. Although events can be derived from each other to write common code 
-only once, only most-derived events can be used for reactions.</p>
+only once, reactions can only be defined for most-derived events.</p>
 <p>Example:</p>
 <pre>template&lt; class MostDerived &gt;
 struct EvButtonPressed : fsm::event&lt; MostDerived &gt;
@@ -57,8 +57,8 @@ sturct EvForwardButtonPressed :
 
 // We want to turn the player on, no matter what button we
 // press in the Off state. Although we can write the reaction
-// code only once, we must mention all events in the reaction
-// list.
+// code only once, we must mention all most-derived events in
+// the reaction list.
 struct Off : fsm::simple_state&lt; Off, Mp3Player, mpl::list&lt;
   fsm::custom_reaction&lt; EvPlayButtonPressed &gt;,
   fsm::custom_reaction&lt; EvStopButtonPressed &gt;,
@@ -80,18 +80,16 @@ facts:</p>
   where they're actually called. If the function is never called, it will not 
   be instantiated and not a single assembly instruction will ever be 
   generated.</li>
-  <li>Except for <code>Context</code> all class template parameters of <code>
-  fsm::simple_state</code>, <code>fsm::state</code> and <code>
-  fsm::state_machine</code> can be incomplete types (i.e. forward declared).</li>
+  <li>The <code>InitialState</code> template parameter of <code>
+  fsm::state_machine</code> can be an incomplete type (i.e. forward declared).</li>
 </ul>
-<p>The function that leads to the instantiation of the initial state and all 
-states that can directly or indirectly be reached from the initial state 
-through <code>fsm::transition</code>s is <code>state_machine::initiate()</code>. 
-So, the definition of all these states must be known before the compiler 
-reaches the point where <code>initiate()</code> is called.</p>
-<p>To be able to hide the states of a state machine in a .cpp file we must 
-therefore no longer let clients call <code>initiate()</code>. Instead, we do 
-so in the .cpp file, at a point where all states are known.</p>
+<p>The class template member function <code>state_machine&lt;&gt;::initiate()</code> 
+creates an object of the initial state. So, the definition of this state must 
+be known before the compiler reaches the point where <code>initiate()</code> 
+is called. To be able to hide the initial state of a state machine in a .cpp 
+file we must therefore no longer let clients call <code>initiate()</code>. 
+Instead, we do so in the .cpp file, at a point where the full definition of 
+the initial state is known.</p>
 <p>Example:</p>
 <p>StopWatch.hpp:</p>
 <pre>// define events ...
@@ -112,16 +110,19 @@ struct Stopped : fsm::simple_state&lt; Stopped, Active,
 
 StopWatch::StopWatch()
 {
-  // we ensure that the state machine is
-  // already started after construction.  
+  // For example, we might want to ensure that the state
+  // machine is already started after construction.
+  // Alternatively we could also provide the client with
+  // a Start() function...
   <b>initiate();</b>
 }</pre>
 <h2>
 <a name="Is it possible to inherit from a given state machine and modify its layout in the subclass">
 Is it possible to inherit from a given state machine and modify its layout in 
 the subclass?</a></h2>
-<p>Yes, but only in a way that was foreseen by the designer of the base state 
-machine: </p>
+<p>Yes, but contrary to what some FSM code generators allow, boost::fsm 
+machines can do so only in a way that was foreseen by the designer of the base 
+state machine: </p>
 <pre>struct EvStart : fsm::event&lt; EvStart &gt; {};
 
 struct Idle;
@@ -161,7 +162,7 @@ struct MyPump : PumpBase
 };</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->08 June, 2003<!--webbot bot="Timestamp" endspan i-checksum="19892" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 August, 2003<!--webbot bot="Timestamp" endspan i-checksum="34481" --></p>
 <p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003. All Rights Reserved.</i></p>
 

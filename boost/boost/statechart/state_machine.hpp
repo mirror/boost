@@ -59,8 +59,8 @@ namespace fsm
 namespace detail
 {
 
-  
-  
+
+
 template< orthogonal_position_type noOfOrthogonalRegions,
   class Allocator, class RttiPolicy >
 class node_state;
@@ -104,7 +104,7 @@ struct state_cast_impl
   struct impl
   {
     public:
-      //////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
       template< class StateBaseType >
       static const StateBaseType * deref_if_necessary(
         const StateBaseType * pState )
@@ -131,7 +131,7 @@ struct state_cast_impl
       }
 
     private:
-      //////////////////////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////////////////////
       template< class Type >
       static IdType type_impl( const Type * )
       {
@@ -182,7 +182,7 @@ template< class MostDerived,
           class Allocator = std::allocator< void >,
           class ExceptionTranslator = exception_translator<>,
           class RttiPolicy = rtti_policy >
-class state_machine : private noncopyable
+class state_machine : noncopyable
 {
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -191,7 +191,10 @@ class state_machine : private noncopyable
     typedef event_base< rtti_policy_type > event_base_type;
     typedef intrusive_ptr< const event_base_type > event_base_ptr_type;
 
-    void initiate()
+    // Initiates the state machine.
+    // Returns true if the state machine terminated as a direct or indirect
+    // result of entering the initial state.
+    bool initiate()
     {
       terminate();
       translator_(
@@ -199,6 +202,8 @@ class state_machine : private noncopyable
         exception_event_handler( *this ),
         do_discard_event );
       process_queued_events();
+
+      return terminated();
     }
 
     void terminate()
@@ -206,11 +211,20 @@ class state_machine : private noncopyable
       terminate( *this );
     }
 
-
-    void process_event( const event_base_type & evt )
+    bool terminated() const
     {
+      return currentStates_.size() == 0;
+    }
+
+    // Processes the passed event.
+    // Returns true if the state machine was running before and terminated
+    // after processing the event.
+    bool process_event( const event_base_type & evt )
+    {
+      const bool running = !terminated();
       send_event( evt );
       process_queued_events();
+      return terminated() && running;
     }
 
     // Has semantics similar to dynamic_cast. Returns a pointer or a reference
@@ -321,14 +335,15 @@ class state_machine : private noncopyable
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    typedef detail::state_base< allocator_type, rtti_policy_type > state_base_type;
+    typedef detail::state_base< allocator_type, rtti_policy_type >
+      state_base_type;
 
     typedef MostDerived inner_context_type;
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
       inner_orthogonal_position = 0 );
 
-    typedef MostDerived top_context_type;
+    typedef MostDerived outermost_context_type;
     typedef MostDerived * inner_context_ptr_type;
     typedef typename state_base_type::state_base_ptr_type state_base_ptr_type;
     typedef typename state_base_type::state_list_type state_list_type;
@@ -350,23 +365,25 @@ class state_machine : private noncopyable
     template< class Context >
     Context & context()
     {
-      // As we are in the top context here, only this object can be returned.
+      // As we are in the outermost context here, only this object can be
+      // returned.
       return *polymorphic_downcast< MostDerived * >( this );
     }
 
     template< class Context >
     const Context & context() const
     {
-      // As we are in the top context here, only this object can be returned.
+      // As we are in the outermost context here, only this object can be
+      // returned.
       return *polymorphic_downcast< const MostDerived * >( this );
     }
 
-    top_context_type & top_context()
+    outermost_context_type & outermost_context()
     {
       return *polymorphic_downcast< MostDerived * >( this );
     }
 
-    const top_context_type & top_context() const
+    const outermost_context_type & outermost_context() const
     {
       return *polymorphic_downcast< const MostDerived * >( this );
     }
@@ -382,18 +399,18 @@ class state_machine : private noncopyable
 
     void terminate( state_base_type & theState )
     {
-		  if ( currentStates_.size() == 1 )
-		  {
-			  // The following optimization is only correct when there are no
-			  // orthogonal states.
-			  currentStates_.clear();
-		  }
-		  else
-		  {
-			  // This would work for all cases, but is unnecessarily inefficient
-			  // when there are no orthogonal states.
-			  theState.remove_from_state_list( currentStates_, pUnstableState_ );
-		  }
+      if ( currentStates_.size() == 1 )
+      {
+        // The following optimization is only correct when there are no
+        // orthogonal states.
+        currentStates_.clear();
+      }
+      else
+      {
+        // This would work for all cases, but is unnecessarily inefficient
+        // when there are no orthogonal states.
+        theState.remove_from_state_list( currentStates_, pUnstableState_ );
+      }
     }
 
     void post_event( const event_base_ptr_type & pEvent )
@@ -482,7 +499,7 @@ class state_machine : private noncopyable
         state_machine & machine_;
     };
 
-    friend initial_construct_function;
+    friend class initial_construct_function;
 
     template< class ExceptionEvent >
     bool handle_exception_event(
@@ -552,7 +569,7 @@ class state_machine : private noncopyable
         state_base_type * pCurrentState_;
     };
 
-    friend exception_event_handler;
+    friend class exception_event_handler;
 
     class terminator
     {
@@ -581,7 +598,7 @@ class state_machine : private noncopyable
         ( pState != currentStates_.end() ) )
       {
         // CAUTION: The following statement could modify our state list!
-        // We must not continue iterating, if the event was consumed
+        // We must not continue iterating if the event was consumed
         reactionResult = translator_( detail::send_function<
           state_base_type, event_base_type, rtti_policy_type::id_type >(
             **pState, evt, eventType ),
@@ -669,7 +686,8 @@ class state_machine : private noncopyable
     typedef std::map<
       const state_base_type *, event_queue_type,
       std::less< const state_base_type * >,
-      typename allocator_type::rebind< std::pair< const state_base_type * const,
+      typename allocator_type::rebind< std::pair<
+        const state_base_type *,
         event_queue_type > >::other > deferred_map_type;
 
     event_queue_type eventQueue_;

@@ -52,17 +52,20 @@
   <dd><a href="#Orthogonal states">Orthogonal states</a></dd>
   <dd><a href="#Exception handling">Exception handling</a></dd>
   <dd><a href="#Submachines">Submachines</a></dd>
+  <dd><a href="#Asynchronous state machines">Asynchronous state machines</a></dd>
 </dl>
 <hr>
 <h2><a name="Introduction">Introduction</a></h2>
 <p>The boost::fsm library is a framework that allows you to quickly transform 
 a UML state chart into executable C++ code. This tutorial requires some 
 familiarity with the state machine concept and UML state charts. A nice 
-introduction to both can be found
-<a href="http://www.objectmentor.com/resources/articles/umlfsm.pdf">here</a>. 
-The UML specifications can be found
-<a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">here</a> (see 
-chapters 2.12 and 3.74).</p>
+introduction to both can be found in
+<a href="http://www.objectmentor.com/resources/articles/umlfsm.pdf">
+http://www.objectmentor.com/resources/articles/umlfsm.pdf</a>. The UML 
+specifications can be found in
+<a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
+http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
+3.74).</p>
 <p>All examples have been tested with MSVC7.1 and boost distribution 1.30.0.</p>
 <h2><a name="Hello World!">Hello World!</a></h2>
 <p>We follow the tradition and use the simplest possible program to make our 
@@ -182,7 +185,17 @@ int main()
   </ul>
   </li>
   <li>A state is defined as an inner state simply by passing its outer state 
-  as the second parameter (where outermost states pass the state machine).</li>
+  as its context (where outermost states pass the state machine).</li>
+  <li>Because the context of a state must be a complete type (i.e. not forward 
+  declared), a machine must be defined from &quot;outside to inside&quot;. That is, we 
+  always start with the state machine, followed by outermost states, followed 
+  by the inner states of outermost states and so on. We can do so in a 
+  breadth-first or depth-first way or employ a mixture of the two.<br>
+  Since the source and destination state of a transition often have the same 
+  nesting depth, the pure depth-first approach tends to require a lot of 
+  forward declarations for transition destinations while the pure 
+  breadth-first approach tends to minimize the number of necessary forward 
+  declarations.</li>
 </ul>
 <h3><a name="Adding reactions">Adding reactions</a></h3>
 <p>With boost::fsm a reaction is always defined as part of a state. A reaction 
@@ -213,7 +226,8 @@ int main()
 }</pre>
 <p>A state can define an arbitrary number of reactions. That's why we have to 
 put them into an <code>mpl::list&lt;&gt;</code> as soon as there is more than one of 
-them (see <a href="#Specifying multiple reactions for a state">below</a>).<br>
+them (see <a href="#Specifying multiple reactions for a state">Specifying 
+multiple reactions for a state</a>).<br>
 Now we have all the states and all the transitions in place and a number of 
 events are also sent to the stop watch. The machine dutifully makes the 
 transitions we would expect, but no actions are executed yet.</p>
@@ -230,8 +244,8 @@ the machine is in. Moreover, this variable should be reset to 0 when we send
 an <code>EvReset</code> event to the machine. The other variable is only 
 needed while the machine is in the Running state. It should be set to the 
 current time of the system clock whenever we enter the Running state. Upon 
-exit we simply subtract the start time from the system clock time and add the 
-result to the elapsed time.</p>
+exit we simply subtract the start time from the current system clock time and 
+add the result to the elapsed time.</p>
 <pre><b>#include &lt;ctime&gt;
 </b>
 // ...
@@ -438,7 +452,7 @@ struct Camera : fsm::state_machine&lt; Camera, NotShooting &gt;
 
 struct Idle;
 struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
-    <b>fsm::custom_reaction&lt; EvShutterHalf &gt;</b>, Idle &gt;
+  <b>fsm::custom_reaction&lt; EvShutterHalf &gt;</b>, Idle &gt;
 {
   // ...
   <b>fsm::result react( const EvShutterHalf &amp; );</b>
@@ -475,11 +489,11 @@ fsm::result Idle::react( const EvConfig &amp; )
 }</pre>
 <p><b><font color="#FF0000">Caution: Any call to the <code>
 simple_state::transit&lt;&gt;()</code> or <code>simple_state::terminate()</code> 
-(see <a href="#Reaction function reference">below</a>) member functions will 
-inevitably destruct the current state object (similar to <code>delete this;</code>)! 
-That is, code executed after any of these calls may invoke undefined behavior!</font></b> 
-That's why these functions should only be called as part of a return 
-statement.</p>
+(see <a href="#Reaction function reference">Reaction function reference</a>) 
+member functions will inevitably destruct the current state object (similar to
+<code>delete this;</code>)! That is, code executed after any of these calls 
+may invoke undefined behavior!</font></b> That's why these functions should 
+only be called as part of a return statement.</p>
 <h3><a name="Guards, junctions and choice points">Guards, junctions and choice 
 points</a></h3>
 <p>The inner workings of the Shooting state could look as follows:</p>
@@ -611,11 +625,13 @@ member functions, which must return by calling <b>exactly one</b> function
   with the immediate outer state. If there is none it continues with the next 
   orthogonal leaf state. This process is repeated until one of the visited 
   states returns by calling any of the other 5 reaction functions. The event 
-  is silently discarded if no reaction can be found.<br>
+  is silently discarded if no reaction can be found. Useful to implement 
+  guards.<br>
   <code>forward_event()</code> is also the default for all states that do not 
   define a reaction for the event.</li>
   <li><code>simple_state::discard_event()</code>: The dispatch algorithm stops 
-  searching for a reaction and the current event is discarded.</li>
+  searching for a reaction and the current event is discarded. Useful to 
+  implement in-state reactions.</li>
   <li><code>simple_state::defer_event()</code>: The current event is pushed 
   into a separate queue and the dispatch algorithm stops searching for a 
   reaction. When the state is exited later, the separate queue is emptied into 
@@ -655,7 +671,15 @@ like the ones that come with boost::fsm.</p>
 reactions for a state</a></h3>
 <p>Often a state must define reactions for more than one event. In this case, 
 an <code>mpl::list</code> must be used as outlined below:</p>
-<pre>struct Playing : fsm::simple_state&lt; Playing, Mp3Player,
+<pre>// ...
+
+<b>#include &lt;boost/mpl/list.hpp&gt;
+</b>
+<b>namespace mpl = boost::mpl;
+</b>
+// ...
+
+struct Playing : fsm::simple_state&lt; Playing, Mp3Player,
   <b>mpl::list&lt;</b>
     fsm::custom_reaction&lt; EvFastForward &gt;,
     fsm::transition&lt; EvStop, Stopped &gt; <b>&gt;</b> &gt; { /* ... */ };</pre>
@@ -724,14 +748,17 @@ int main()
 <h3><a name="Orthogonal states">Orthogonal states</a></h3>
 <p><img border="0" src="OrthogonalStates.GIF" width="633" height="393"></p>
 <p>To implement this state chart with boost::fsm, you simply specify more than 
-one inner initial state:</p>
-<pre>struct NumLockOff;
+one inner initial state (see the Keyboard example):</p>
+<pre>struct Active;
+struct Keyboard : fsm::state_machine&lt; Keyboard, Active &gt; {};
+
+struct NumLockOff;
 struct CapsLockOff;
 struct ScrollLockOff;
 struct Active: fsm::simple_state&lt;
   Active, Keyboard, fsm::no_reactions,
   <b>mpl::list&lt; NumLockOff, CapsLockOff, ScrollLockOff &gt;</b> &gt; {};</pre>
-<p>Actives' inner states must declare which orthogonal region they belong to:</p>
+<p>Active's inner states must declare which orthogonal region they belong to:</p>
 <pre>struct EvNumLockPressed : fsm::event&lt; EvNumLockPressed &gt; {};
 struct EvCapsLockPressed : fsm::event&lt; EvCapsLockPressed &gt; {};
 struct EvScrollLockPressed :
@@ -782,8 +809,51 @@ struct CapsLockOn : fsm::simple_state&lt;
   fsm::transition&lt; EvCapsLockPressed, CapsLockOff &gt; &gt; {};
 struct CapsLockOff : fsm::simple_state&lt;
   CapsLockOff, Active<b>::</b>orthogonal&lt; <b>2</b> &gt;,
-  fsm::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};
-</pre>
+  fsm::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};</pre>
+<h4>State queries</h4>
+<p>Often reactions in a state machine depend on the current state in one or 
+more orthogonal regions. This is because orthogonal regions are not completely 
+orthogonal or a certain reaction in an outer state can only take place if the 
+inner orthogonal regions are in particular states. For this purpose, the 
+previously introduced <code>state_cast&lt;&gt;()</code> function is also available 
+within states.</p>
+<p>As a somewhat far-fetched example, let's assume that our keyboard above 
+also accepts <code>EvRequestShutdown</code> events, the reception of which 
+makes the keyboard terminate only if all lock keys are in the off state. We 
+would then modify the <code>Active</code> state as follows: </p>
+<pre>struct EvRequestShutdown : fsm::event&lt; EvRequestShutdown &gt; {};
+
+struct NumLockOff;
+struct CapsLockOff;
+struct ScrollLockOff;
+struct Active: fsm::simple_state&lt;
+  Active, Keyboard, fsm::custom_reaction&lt; EvRequestShutdown &gt;,
+  mpl::list&lt; NumLockOff, CapsLockOff, ScrollLockOff &gt; &gt;
+{
+  fsm::result react( const EvRequestShutdown &amp; )
+  {
+    if ( ( state_downcast&lt; const NumLockOff * &gt;() != 0 ) &amp;&amp;
+         ( state_downcast&lt; const CapsLockOff * &gt;() != 0 ) &amp;&amp;
+         ( state_downcast&lt; const ScrollLockOff * &gt;() != 0 ) )
+    {
+      return terminate();
+    }
+    else
+    {
+      return discard_event();
+    }
+  }
+};</pre>
+<p>Just like <code>dynamic_cast</code>, passing a pointer type instead of 
+reference type results in 0 pointers being returned when the cast fails. Note 
+also the use of <code>state_downcast</code> instead of <code>state_cast</code>. 
+Similar to the differences between <code>boost::polymorphic_downcast</code> 
+and <code>dynamic_cast</code>, <code>state_downcast</code> is a much faster 
+variant of <code>state_cast</code> and can only be used when the passed type 
+is a most-derived type. <code>state_cast</code> should only be used if you 
+want to query an additional base, as under
+<a href="#Getting state information out of the machine">Getting state 
+information out of the machine</a>.</p>
 <h3><a name="Exception handling">Exception handling</a></h3>
 <p>Exceptions can be propagated from all user code except from state exit 
 actions (mapped to destructors and destructors should virtually never throw in 
@@ -803,10 +873,25 @@ C++). Out of the box, <code>state_machine</code> does the following:</p>
 </ol>
 <p>This behavior is implemented in the <code>exception_translator</code> 
 class, which is the default for the <code>ExceptionTranslator</code> parameter 
-of the <code>state_machine</code> class template. It was introduced only 
-because users would want to change this on some platforms to work around buggy 
+of the <code>state_machine</code> class template. It was introduced because 
+users would want to change this on some platforms to work around buggy 
 exception handling implementations (see <a href="#Discriminating exceptions">
-below</a>).</p>
+Discriminating exceptions</a>). Moreover, applications running on heavily 
+resource-starved platforms are often compiled with C++ exception handling 
+turned off. Such applications can still use boost::fsm if they pass the 
+following exception translator instead of the default one:</p>
+<pre>struct NoExceptionHandlingTranslator
+{
+  template&lt; class Action, class ExceptionEventHandler &gt;
+  result operator()(
+    Action action, ExceptionEventHandler, fsm::result )
+  {
+    return action();
+  }
+};</pre>
+<p>However, doing so also means losing <b>all</b> boost::fsm error handling 
+support, making proper error handling much more cumbersome (see
+<a href="rationale.html#Error handling">Error handling</a> in the Rationale).</p>
 <h4>Which states can react to an <code>fsm::exception_thrown</code> event?</h4>
 <p>This depends on where the exception occurred. There are three scenarios:</p>
 <ol>
@@ -892,8 +977,8 @@ struct Idle : fsm::simple_state&lt; Idle, Purifier,
 <p><b>Unfortunately, this idiom does not work on at least one very popular 
 compiler.</b> If you have to use one of these platforms, you can pass a 
 customized exception translator class to the <code>state_machine</code> class 
-template. This will allow you generate different events depending on the type 
-of the exception.</p>
+template. This will allow you to generate different events depending on the 
+type of the exception.</p>
 <h3><a name="Submachines">Submachines</a></h3>
 <p>Submachines are to event-driven programming what functions are to 
 procedural programming, reusable building blocks implementing often needed 
@@ -903,8 +988,8 @@ different orthogonal regions) and does not seem to account for obvious stuff
 like e.g. parameters.</p>
 <p>boost::fsm is completely unaware of submachines but they can be implemented 
 quite nicely with templates. Here, a submachine is used to improve the 
-copy-paste implementation of the keyboard machine discussed
-<a href="#Orthogonal states">above</a>:</p>
+copy-paste implementation of the keyboard machine discussed under
+<a href="#Orthogonal states">Orthogonal states</a>:</p>
 <pre>enum LockType
 {
   NUM_LOCK,
@@ -919,22 +1004,156 @@ struct Active : fsm::simple_state&lt;
   Off&lt; NUM_LOCK &gt;, Off&lt; CAPS_LOCK &gt;, Off&lt; SCROLL_LOCK &gt; &gt; &gt; {};
 
 template&lt; LockType lockType &gt;
-struct Pressed : fsm::event&lt; Pressed&lt; lockType &gt; &gt; {};
+struct EvPressed : fsm::event&lt; EvPressed&lt; lockType &gt; &gt; {};
 
 template&lt; LockType lockType &gt;
 struct On : fsm::simple_state&lt;
   On&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt;,
-  fsm::transition&lt; Pressed&lt; lockType &gt;, Off&lt; lockType &gt; &gt; &gt; {};
+  fsm::transition&lt; EvPressed&lt; lockType &gt;, Off&lt; lockType &gt; &gt; &gt; {};
 
 template&lt; LockType lockType &gt;
 struct Off : fsm::simple_state&lt;
   Off&lt; lockType &gt;, Active::orthogonal&lt; lockType &gt;,
-  fsm::transition&lt; Pressed&lt; lockType &gt;, On&lt; lockType &gt; &gt; &gt; {};</pre>
+  fsm::transition&lt; EvPressed&lt; lockType &gt;, On&lt; lockType &gt; &gt; &gt; {};</pre>
 <p>The <code>On</code> and <code>Off</code> templates could be given 
 additional parameters to make them truly reusable.</p>
+<h3><a name="Asynchronous state machines">Asynchronous state machines</a></h3>
+<h4>Why asynchronous state machines are necessary</h4>
+<p>As the name suggests, a synchronous state machine processes each event 
+synchronously. In boost::fsm this behavior is implemented by the <code>
+state_machine&lt;&gt;</code> class template, whose <code>process_event()</code> only 
+returns after having executed all reactions (including the ones provoked by 
+internal events that actions might have posted). Moreover, this function is 
+also strictly non-reentrant (just like all other member functions, so <code>
+state_machine&lt;&gt;</code> is not thread-safe). This makes it difficult for two
+<code>state_machine&lt;&gt;</code> subclasses to communicate via events in a 
+bi-directional fashion correctly, <b>even in a single-threaded program</b>. 
+For example, state machine <code>A</code> is in the middle of processing an 
+external event. Inside an action, it decides to send a new event to state 
+machine <code>B</code> (by calling <code>B::process_event</code> with an 
+appropriate event). It then &quot;waits&quot; for B to send back an answer via a 
+boost::function-like call-back, which references <code>A::process_event</code> 
+and was passed as a data member of the event. However, while <code>A</code> is 
+&quot;waiting&quot; for <code>B</code> to send back an event, <code>A::process_event</code> 
+has not yet returned from processing the external event and as soon as <code>B</code> 
+answers via the call-back, <code>A::process_event</code> is <b>unavoidably</b> 
+reentered. This all really happens in a single thread, that's why &quot;wait&quot; is in 
+quotes.</p>
+<h4>How it works</h4>
+<p>In contrast to <code>state_machine&lt;&gt;</code>, <code>
+asynchronous_state_machine&lt;&gt;</code> does not have a member function <code>
+process_event()</code>. Instead, there is only <code>queue_event()</code>, 
+which returns immediately after pushing the event into a queue. A worker 
+thread will later pop the event out of the queue to have it processed. For 
+applications using the boost::thread library, the necessary locking, unlocking 
+and waiting logic is readily available in class <code>worker&lt;&gt;</code>.</p>
+<p>Applications will usually first create a <code>worker&lt;&gt;</code> object and 
+then create one or more <code>asynchronous_state_machine&lt;&gt;</code> subclass 
+objects, passing the worker object to the constructor(s). Finally, <code>
+worker&lt;&gt;::operator()()</code> is either called directly to let the machine(s) 
+run in the current thread, or, a <code>boost::function</code> object 
+referencing <code>operator()</code> is passed to a new <code>boost::thread</code>. 
+I the following code, we are running one state machine in a new boost::thread 
+and the other in the main thread (see the PingPong example for the full source 
+code):</p>
+<pre>// ...
+
+struct Waiting;
+struct Player : 
+  public <b>fsm::asynchronous_state_machine</b>&lt; Player, Waiting &gt;
+{
+  typedef fsm::asynchronous_state_machine&lt; Player, Waiting &gt;
+    BaseType;
+  public:
+    Player( fsm::worker&lt;&gt; &amp; myWorker ) :
+      BaseType( myWorker ) // ...
+    {
+      // ...
+    }
+
+    // ...
+};
+
+// ...
+
+int main()
+{
+  fsm::worker&lt;&gt; worker1;
+  fsm::worker&lt;&gt; worker2;
+
+  // each player runs in its own worker thread
+  Player player1( worker1 );
+  Player player2( worker2 );
+
+  // ...
+
+  // run first worker in a new thread
+  boost::thread otherThread(
+    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker1 ) );
+
+  worker2(); // run second worker in this thread 
+  otherThread.join();
+
+  return 0;
+}</pre>
+<p>We could just as well use two boost::threads:</p>
+<pre>int main()
+{
+  // ...
+
+  boost::thread thread1(
+    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker1 ) );
+  boost::thread thread2(
+    boost::bind( &amp;fsm::worker&lt;&gt;::operator(), &amp;worker2 ) );
+
+  // do something else ...
+
+  thread1.join();
+  thread2.join();
+
+  return 0;
+}</pre>
+<p>Or, run both machines in the same worker thread:</p>
+<pre>int main()
+{
+  fsm::worker&lt;&gt; worker1;
+
+  Player player1( worker1 );
+  Player player2( worker1 );
+
+  // ...
+
+  worker1();
+
+  return 0;
+}</pre>
+<p><code>worker&lt;&gt;::operator()()</code> first initiates all machines and then 
+waits for events. Whenever <code>queue_event</code> is called on one of the 
+previously registered machines, the passed event is pushed into the worker's 
+queue and the worker thread is waked up to dispatch all queued events before 
+waiting again. <code>worker&lt;&gt;::operator()()</code> returns as soon as all 
+machines have terminated. <code>worker&lt;&gt;::operator()()</code> also throws any 
+exceptions that machines fail to handle. In this case all machines are 
+terminated before the exception is propagated.</p>
+<p><b>Caution:</b></p>
+<ul>
+  <li><b>State machine objects must not be destructed before <code>
+  worker::operator()()</code> returns. Moreover, the <code>worker&lt;&gt;</code> 
+  object may be destructed only after all of the registered state machines 
+  have been destructed. Violations of these rules will result in failing 
+  runtime asserts. </b></li>
+  <li><b>The interface of <code>asynchronous_state_machine</code> consists of 
+  only the constructor and <code>queue_event()</code>. For technical reasons, 
+  other functions like <code>initiate()</code>, <code>process_event()</code>, 
+  etc. are nevertheless also publicly available, but it is not safe to call 
+  these functions from any other thread than the worker (over which most users 
+  have no control). <font color="#FF0000"><code>asynchronous_state_machine&lt;&gt;::queue_event()</code> 
+  is the only function than can safely be called simultaneously from multiple 
+  threads.</font></b></li>
+</ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->08 June, 2003<!--webbot bot="Timestamp" endspan i-checksum="19892" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 August, 2003<!--webbot bot="Timestamp" endspan i-checksum="34481" --></p>
 <p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. 
 All Rights Reserved.</i></p>
 

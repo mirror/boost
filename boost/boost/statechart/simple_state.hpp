@@ -51,8 +51,8 @@ namespace fsm
 namespace detail
 {
 
-  
-  
+
+
 typedef mpl::clear< mpl::list<> >::type empty_list;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -62,15 +62,14 @@ struct make_list : public mpl::apply_if<
   mpl::identity< T >,
   mpl::identity< mpl::list< T > > > {};
 
-using namespace mpl::placeholders;
-
 //////////////////////////////////////////////////////////////////////////////
 template< class MostDerived, class Context, class InnerInitial >
 struct simple_state_base_type
 {
   private:
-    typedef typename Context::top_context_type::allocator_type allocator_type;
-    typedef typename Context::top_context_type::rtti_policy_type
+    typedef typename Context::outermost_context_type::allocator_type 
+      allocator_type;
+    typedef typename Context::outermost_context_type::rtti_policy_type
       rtti_policy_type;
     // TODO: Check that position in inner initial list corresponds to
     // orthogonal_position
@@ -115,7 +114,8 @@ class transition_function
     template< class CommonContext >
     void operator()( CommonContext & commonContext ) const
     {
-      ( commonContext.context< TransitionContext >().*pTransitionAction_ )( evt_ );
+      ( commonContext.context< TransitionContext >().*pTransitionAction_ )(
+        evt_ );
     }
 
   private:
@@ -124,110 +124,62 @@ class transition_function
 };
 
 
-template< class State >
-struct get_context_ptr_type
-{
-  typedef typename State::context_ptr_type type;
-};
-
-template<>
-struct get_context_ptr_type< int >
-{
-  typedef int type;
-};
-
-template< class State >
-struct get_inner_context_ptr_type
-{
-  typedef typename State::inner_context_ptr_type type;
-};
-
-template<>
-struct get_inner_context_ptr_type< int >
-{
-  typedef int type;
-};
-
-template< class State >
-struct get_inner_initial_list
-{
-  typedef typename State::inner_initial_list type;
-};
-
-template<>
-struct get_inner_initial_list< int >
-{
-  typedef int type;
-};
-
-template< class State >
-struct get_orthogonal_position
-{
-  typedef mpl::integral_c< long, State::orthogonal_position > type;
-};
-
-template<>
-struct get_orthogonal_position< int >
-{
-  typedef int type;
-};
-
-
 //////////////////////////////////////////////////////////////////////////////
-template< class ContextList, class TopContext >
+template< class ContextList, class OutermostContext >
 struct outer_constructor
 {
   typedef typename mpl::front< ContextList >::type to_construct;
-  typedef typename get_context_ptr_type< to_construct >::type
-    context_ptr_type;
-  typedef typename get_inner_context_ptr_type< to_construct >::type
+  typedef typename to_construct::context_ptr_type context_ptr_type;
+  typedef typename to_construct::inner_context_ptr_type
     inner_context_ptr_type;
 
-  typedef typename get_inner_initial_list< to_construct >::type
-    inner_initial_list;
+  typedef typename to_construct::inner_initial_list inner_initial_list;
   typedef typename mpl::pop_front< ContextList >::type inner_context_list;
-  typedef typename get_orthogonal_position<
-    typename mpl::front< inner_context_list >::type
-  >::type inner_orthogonal_position;
+  typedef mpl::integral_c< long,
+    mpl::front< inner_context_list >::type::orthogonal_position
+  > inner_orthogonal_position;
+
   typedef typename mpl::erase< 
     inner_initial_list,
     typename mpl::advance<
       typename mpl::begin< inner_initial_list >::type,
       inner_orthogonal_position >::type >::type remaining_inner_initial_list;
 
-  static construct( const context_ptr_type & pContext, TopContext & topContext )
+  static construct(
+    const context_ptr_type & pContext, OutermostContext & outermostContext )
   {
-    topContext.add( pContext );
+    outermostContext.add( pContext );
     const inner_context_ptr_type pInnerContext =
       to_construct::shallow_construct( pContext );
-    to_construct::deep_construct_inner< remaining_inner_initial_list >(
-      pInnerContext, topContext );
-    constructor< inner_context_list, TopContext >::construct(
-      pInnerContext, topContext );
+    to_construct::template deep_construct_inner<
+      remaining_inner_initial_list >( pInnerContext, outermostContext );
+    constructor< inner_context_list, OutermostContext >::construct(
+      pInnerContext, outermostContext );
   }
 };
 
-template< class ContextList, class TopContext >
+template< class ContextList, class OutermostContext >
 struct inner_constructor
 {
   typedef typename mpl::front< ContextList >::type to_construct;
-  typedef typename get_context_ptr_type< to_construct >::type context_ptr_type;
+  typedef typename to_construct::context_ptr_type context_ptr_type;
 
-  static construct( const context_ptr_type & pContext, TopContext & topContext )
+  static construct(
+    const context_ptr_type & pContext, OutermostContext & outermostContext )
   {
-    to_construct::deep_construct( pContext, topContext );
+    to_construct::deep_construct( pContext, outermostContext );
   }
 };
 
-template< class ContextList, class TopContext >
+template< class ContextList, class OutermostContext >
 struct constructor_impl : public mpl::apply_if< 
   mpl::equal_to< mpl::size< ContextList >, mpl::integral_c< long, 1 > >,
-  mpl::identity< inner_constructor< ContextList, TopContext > >,
-  mpl::identity< outer_constructor< ContextList, TopContext > > > {};
+  mpl::identity< inner_constructor< ContextList, OutermostContext > >,
+  mpl::identity< outer_constructor< ContextList, OutermostContext > > > {};
 
-template< class ContextList, class TopContext >
+template< class ContextList, class OutermostContext >
 struct constructor :
-  public constructor_impl< ContextList, TopContext >::type {};
+  public constructor_impl< ContextList, OutermostContext >::type {};
 
 
 
@@ -290,21 +242,21 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
     void post_event( const event_base_ptr_type & pEvent )
     {
-      top_context().post_event( pEvent );
+      outermost_context().post_event( pEvent );
     }
 
     // see state_machine class for documentation
     template< class Target >
     Target state_cast() const
     {
-      return top_context().state_cast< Target >();
+      return outermost_context().state_cast< Target >();
     }
 
     // see state_machine class for documentation
     template< class Target >
     Target state_downcast() const
     {
-      return top_context().state_downcast< Target >();
+      return outermost_context().state_downcast< Target >();
     }
 
     
@@ -354,13 +306,13 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     result terminate()
     {
       state_base_type::reaction_initiated();
-      top_context().terminate( *this );
+      outermost_context().terminate( *this );
       return do_discard_event;
     }
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    simple_state() {}
+    simple_state() : pContext_( 0 ) {}
 
     virtual ~simple_state()
     {
@@ -370,7 +322,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       {
         if ( state_base_type::deferred_events() )
         {
-          top_context().release_events( this );
+          outermost_context().release_events( this );
         }
 
         pContext_->remove_inner_state( orthogonal_position );
@@ -392,7 +344,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     typedef typename context_type::event_base_type event_base_type;
     typedef typename context_type::rtti_policy_type rtti_policy_type;
 
-    typedef typename context_type::top_context_type top_context_type;
+    typedef typename context_type::outermost_context_type
+      outermost_context_type;
     typedef typename context_type::inner_context_ptr_type context_ptr_type;
     typedef typename context_type::state_list_type state_list_type;
     typedef intrusive_ptr< MostDerived > inner_context_ptr_type;
@@ -414,9 +367,12 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
       if ( reactionResult == do_forward_event )
       {
-        // we can only safely access pCurrentState if the handler did not
+        // we can only safely access pContext_ if the handler did not
         // return do_discard_event!
-        reactionResult = pContext_->Context::react_impl( evt, eventType );
+        // TODO: The following call to react_impl of our outer state should
+        // be made with a context_type:: prefix to call directly instead of
+        // virtually. For some reason the compiler complains...
+        reactionResult = pContext_->react_impl( evt, eventType );
       }
 
       return reactionResult;
@@ -425,20 +381,20 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     virtual state_base_type * outer_state_ptr() const
     {
       return outer_state_ptr_impl<
-        is_same< top_context_type, Context >::value >();
+        is_same< outermost_context_type, context_type >::value >();
     }
 
 
-    top_context_type & top_context()
+    outermost_context_type & outermost_context()
     {
       BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
-      return pContext_->top_context();
+      return pContext_->outermost_context();
     }
 
-    const top_context_type & top_context() const
+    const outermost_context_type & outermost_context() const
     {
       BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
-      return pContext_->top_context();
+      return pContext_->outermost_context();
     }
 
 
@@ -452,14 +408,14 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     }
 
 
-    // Given a top context (i.e. a state machine), constructs this state with
-    // all its outer and inner initial states. Used for initial construction
-    // only.
+    // Given a outermost context (i.e. a state machine), constructs this state
+    // with all its outer and inner initial states. Used for initial
+    // construction only.
     // After each successful (non-throwing) construction the current state is
     // reported back to the state machine.
-    static void deep_construct( top_context_type & topContext )
+    static void deep_construct( outermost_context_type & outermostContext )
     {
-      deep_construct( &topContext, topContext );
+      deep_construct( &outermostContext, outermostContext );
     }
 
     // Constructs this state with all its inner initial states.
@@ -467,12 +423,13 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     // reported back to the state machine.
     static void deep_construct(
       const context_ptr_type & pContext,
-      top_context_type & topContext )
+      outermost_context_type & outermostContext )
     {
-      topContext.add( pContext );
+      outermostContext.add( pContext );
       const inner_context_ptr_type pInnerContext(
         shallow_construct( pContext ) );
-      deep_construct_inner< inner_initial_list >( pInnerContext, topContext );
+      deep_construct_inner< inner_initial_list >(
+        pInnerContext, outermostContext );
     }
 
     static inner_context_ptr_type shallow_construct(
@@ -493,16 +450,18 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     template< class InnerList >
     static void deep_construct_inner(
       const inner_context_ptr_type & pInnerContext,
-      top_context_type & topContext )
+      outermost_context_type & outermostContext )
     {
-      deep_construct_inner_impl< InnerList >( pInnerContext, topContext );
+      deep_construct_inner_impl< InnerList >(
+        pInnerContext, outermostContext );
     }
 
     template<>
     static void deep_construct_inner< detail::empty_list >(
-      const inner_context_ptr_type & pInnerContext, top_context_type & topContext )
+      const inner_context_ptr_type & pInnerContext,
+      outermost_context_type & outermostContext )
     {
-      topContext.add( pInnerContext );
+      outermostContext.add( pInnerContext );
     }
 
   private:
@@ -558,8 +517,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       base_type::reaction_initiated();
       typedef typename mpl::find_if<
         context_type_list,
-        mpl::contains< typename DestinationState::context_type_list, _ >
-      >::type common_context_iter;
+        mpl::contains<
+          typename DestinationState::context_type_list,
+          mpl::placeholders::_ > >::type common_context_iter;
       typedef typename mpl::deref< common_context_iter >::type
         common_context_type;
       typedef typename mpl::at<
@@ -572,28 +532,32 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         context< termination_state_type >() );
       const common_context_type::inner_context_ptr_type pCommonContext(
         terminationState.context_ptr< common_context_type >() );
-      top_context_type & topContext( pCommonContext->top_context() );
+      outermost_context_type & outermostContext(
+        pCommonContext->outermost_context() );
 
-      topContext.terminate( terminationState );
-      topContext.add( pCommonContext );
+      outermostContext.terminate( terminationState );
+      outermostContext.add( pCommonContext );
       transitionAction( *pCommonContext );
 
       // TODO: Check that the termination state and the construction state
       // have the same orthogonal_position
 
-      typedef typename mpl::reverse< mpl::push_front<
-        mpl::erase<
+      typedef typename mpl::reverse< typename mpl::push_front<
+        typename mpl::erase<
           typename DestinationState::context_type_list,
           typedef typename mpl::find<
             typename DestinationState::context_type_list, 
-            common_context_type >::type,
-          typename mpl::end< typename DestinationState::context_type_list >::type
+            common_context_type
+          >::type,
+          typename mpl::end<
+            typename DestinationState::context_type_list
+          >::type
         >::type,
         DestinationState
       >::type >::type context_list;
 
-      detail::constructor< context_list, top_context_type >::construct(
-        pCommonContext, topContext );
+      detail::constructor< context_list, outermost_context_type >::construct(
+        pCommonContext, outermostContext );
 
       return do_discard_event;
     }
@@ -639,17 +603,17 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     template< class InnerList >
     static void deep_construct_inner_impl(
       const inner_context_ptr_type & pInnerContext,
-      top_context_type & topContext )
+      outermost_context_type & outermostContext )
     {
       mpl::front< InnerList >::type::deep_construct(
-        pInnerContext, topContext );
+        pInnerContext, outermostContext );
       deep_construct_inner_impl< mpl::pop_front< InnerList >::type >(
-        pInnerContext, topContext );
+        pInnerContext, outermostContext );
     }
 
     template<>
     static void deep_construct_inner_impl< detail::empty_list >(
-      const inner_context_ptr_type &, top_context_type & ) {}
+      const inner_context_ptr_type &, outermost_context_type & ) {}
 
 
     context_ptr_type pContext_;

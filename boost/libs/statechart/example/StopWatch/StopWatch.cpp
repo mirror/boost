@@ -26,7 +26,7 @@
 // | |                            | |
 // | |         Running            | |
 // |  ----------------------------  |
-//  --------------------------------                              
+//  --------------------------------
 
 
 
@@ -34,9 +34,6 @@
 #include <boost/fsm/state_machine.hpp>
 #include <boost/fsm/simple_state.hpp>
 #include <boost/fsm/transition.hpp>
-
-#include <boost/mpl/list.hpp>
-
 
 #include <ctime>
 #include <iostream>
@@ -125,11 +122,8 @@ char GetKey()
   return key;
 }
 
-int main( int argc, char * argv[] )
+int main()
 {
-  argc;
-  argv;
-
   std::cout << "boost::fsm StopWatch example\n\n";
   std::cout << "s<CR>: Starts/Stops stop watch\n";
   std::cout << "r<CR>: Resets stop watch\n";

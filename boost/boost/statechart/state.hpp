@@ -25,14 +25,15 @@ template< class MostDerived,
           class Context, // either an outer state or a state_machine
           class Reactions = no_reactions,
           class InnerInitial = detail::empty_list > // initial inner state
-class state : public simple_state< MostDerived, Context, Reactions, InnerInitial >
+class state : public simple_state<
+  MostDerived, Context, Reactions, InnerInitial >
 {
   typedef simple_state< MostDerived, Context, Reactions, InnerInitial >
     base_type;
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    typedef typename base_type::top_context_type top_context_type;
+    typedef typename base_type::outermost_context_type outermost_context_type;
     typedef typename base_type::context_ptr_type context_ptr_type;
     typedef typename base_type::inner_context_ptr_type inner_context_ptr_type;
     typedef typename base_type::inner_initial_list inner_initial_list;
@@ -60,26 +61,27 @@ class state : public simple_state< MostDerived, Context, Reactions, InnerInitial
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     // See base class for documentation
-    static void deep_construct( top_context_type & topContext )
+    static void deep_construct( outermost_context_type & outermostContext )
     {
-      base_type::deep_construct( topContext );
+      deep_construct( &outermostContext, outermostContext );
     }
 
     // See base class for documentation
     static void deep_construct(
       const context_ptr_type & pContext,
-      top_context_type & topContext )
+      outermost_context_type & outermostContext )
     {
       const inner_context_ptr_type pInnerContext(
         shallow_construct( pContext ) );
       base_type::deep_construct_inner< inner_initial_list >(
-        pInnerContext, topContext );
+        pInnerContext, outermostContext );
     }
 
     static inner_context_ptr_type shallow_construct(
       const context_ptr_type & pContext )
     {
-      return inner_context_ptr_type( new MostDerived( my_context( pContext ) ) );
+      return inner_context_ptr_type(
+        new MostDerived( my_context( pContext ) ) );
     }
 };
 

@@ -31,7 +31,8 @@
 <dl class="definitions">
   <p>An FSM library supports polymorphic events, if events can inherit from 
   each other without restrictions <b>and</b> allows the definition of 
-  reactions for leafs <b>and</b> nodes of the event inheritance tree.</p>
+  reactions for leafs <b>and</b> nodes of the resulting event inheritance 
+  tree.</p>
   <p>Example (using a hypothetical fsm library, as boost::fsm does not support 
   polymorphic events):</p>
   <pre>struct EvButtonPressed : Event // node
@@ -49,7 +50,7 @@ struct EvForwardButtonPressed : EvButtonPressed {}; // leaf</pre>
 </dl>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->08 June, 2003<!--webbot bot="Timestamp" endspan i-checksum="19892" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->16 August, 2003<!--webbot bot="Timestamp" endspan i-checksum="34481" -->
 </p>
 <p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber</a> 2003.</i></p>
 

@@ -11,7 +11,6 @@
 
 
 #include <boost/fsm/detail/counted_base.hpp>
-
 #include <boost/fsm/rtti_policy.hpp>
 
 #include <boost/assert.hpp>

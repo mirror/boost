@@ -146,6 +146,9 @@
 			Name="fsm Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
+				RelativePath="..\..\..\..\boost\fsm\asynchronous_state_machine.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\boost\fsm\custom_reaction.hpp">
 			</File>
 			<File
@@ -177,6 +180,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\transition.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\worker.hpp">
 			</File>
 		</Filter>
 		<Filter

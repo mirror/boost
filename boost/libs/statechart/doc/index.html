@@ -19,7 +19,7 @@
     </td>
     <td valign="top">
     <h1 align="center">The boost::fsm library</h1>
-    <h2 align="center">Index</h2>
+    <h2 align="center">Overview</h2>
     </td>
   </tr>
 </table>
@@ -41,28 +41,28 @@ include:</p>
   </li>
   <li>Error handling support</li>
   <li>Full type-safety</li>
+  <li>Support for asynchronous state machines and multi-threading</li>
   <li>State-local storage</li>
-  <li>Customizable resource acquisition</li>
+  <li>Generic design allowing for the customization of memory management, 
+  error handling, RTTI and threading</li>
 </ul>
 <p>All code has been tested on the following platforms:</p>
 <ul>
   <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003) with boost 
-  distribution 1.30.0.</li>
+  distribution 1.30.0</li>
 </ul>
 <p>The library is not yet complete. Here is the current to-do list:</p>
 <ol>
-  <li>The library does not yet check for invalid transitions between different 
-  orthogonal regions, although the documentation claims otherwise.</li>
+  <li>Add support for shallow/deep history</li>
+  <li>Add checks for invalid transitions between different orthogonal regions 
+  (the documentation claims these are already present)</li>
+  <li>Add reference documentation</li>
+  <li>Add regression tests</li>
   <li>Factor out several functions in the <code>state_machine</code> class 
   template into base classes to reduce code size in projects with many 
-  different state machines.</li>
-  <li>Add a <code>concurrent_state_machine</code> class template to model a 
-  state machine running in its own thread.</li>
-  <li>Add regression tests.</li>
-  <li>gcc-port.</li>
-  <li>Add reference documentation.</li>
-  <li>Add support for shallow/deep history.</li>
-  <li>Allow triggerless transitions.</li>
+  different state machines</li>
+  <li>gcc-port</li>
+  <li>Allow triggerless transitions</li>
 </ol>
 <p><b>This is a preliminary submission. All comments are most welcome!</b></p>
 <hr>
@@ -76,17 +76,26 @@ include:</p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>16 August, 2003:</p>
+<ul>
+  <li>Added <code>asynchronous_state_machine&lt;&gt;</code> and <code>worker&lt;&gt;</code> 
+  and updated documentation accordingly</li>
+  <li>Various minor bug fixes and code improvements (no breaking interface 
+  changes)</li>
+  <li>Added Keyboard and PingPong examples</li>
+  <li>Added .pdf documentation</li>
+</ul>
 <p>08 June, 2003:</p>
 <ul>
-  <li>Added 3 FAQs (asked by Bohdan) &amp; 1 definition.</li>
+  <li>Added 3 FAQs (asked by Bohdan) &amp; 1 definition</li>
   <li>Removed the superfluous public derivation specifiers in the tutorial and 
-  the examples as suggested by Aleksey Gurtovoy.</li>
-  <li>Various code improvements (no interface changes).</li>
+  the examples as suggested by Aleksey Gurtovoy</li>
+  <li>Various code improvements (no interface changes)</li>
   <li>Various html improvements</li>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->08 June, 2003<!--webbot bot="Timestamp" endspan i-checksum="19892" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 August, 2003<!--webbot bot="Timestamp" endspan i-checksum="34481" --></p>
 <p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003. All Rights Reserved.</i></p>
 

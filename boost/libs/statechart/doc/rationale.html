@@ -31,6 +31,7 @@
   <dt><a href="#State-local storage">State-local storage</a></dt>
   <dt><a href="#Dynamic configurability">Dynamic configurability</a></dt>
   <dt><a href="#Error handling">Error handling</a></dt>
+  <dt><a href="#Asynchronous state machines">Asynchronous state machines</a></dt>
   <dt><a href="#User actions: Member functions vs. function objects">User 
   actions: Member functions vs. function objects</a></dt>
   <dt><a href="#Speed versus scalability tradeoffs">Speed versus scalability 
@@ -53,10 +54,11 @@ are the result of the following requirements.</p>
   solutions force the developer to design the state machine either graphically 
   or in a specialized language. All or part of the code is then generated.</li>
   <li>allow for easy transformation of a UML statechart (defined in
-  <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">UML specifications</a>) 
-  into a working state machine. Vice versa, an existing C++ implementation of 
-  a state machine should be fairly trivial to transform into a UML statechart. 
-  Specifically, the following state machine features should be supported:
+  <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
+  http://www.omg.org/cgi-bin/doc?formal/03-03-01</a>) into a working state 
+  machine. Vice versa, an existing C++ implementation of a state machine 
+  should be fairly trivial to transform into a UML statechart. Specifically, 
+  the following state machine features should be supported:
   <ul>
     <li>Entry-, exit- and transition-actions</li>
     <li>Guards</li>
@@ -68,8 +70,9 @@ are the result of the following requirements.</p>
   </li>
   <li>produce a customizable reaction when a C++ exception is propagated from 
   user code.</li>
-  <li>support sequential and concurrent state machines and leave it to the 
-  user which thread a concurrent state machine will run in.</li>
+  <li>support synchronous and asynchronous state machines and leave it to the 
+  user which thread an asynchronous state machine will run in. Users should 
+  also be able to use the threading library of their choice.</li>
   <li>support the development of arbitrarily large and complex state machines. 
   Multiple developers should be able to work on the same state machine 
   simultaneously.</li>
@@ -100,8 +103,8 @@ frameworks:</p>
   </a>Fails to satisfy at least the requirements 1, 3, 4, 5 (there is no 
   direct threading support), 6, 8.</li>
 </ul>
-<p>boost::fsm currently satisfies all requirements except for 3 (history not 
-yet implemented) and 5 (support for threading not yet implemented).</p>
+<p>I believe boost::fsm currently satisfies all requirements except for 3 
+(history not yet implemented).</p>
 <h2><a name="State-local storage">State-local storage</a></h2>
 <p>This not yet widely known state machine feature is enabled by the fact that 
 every state in boost::fsm is represented by a class. Upon state-entry, an 
@@ -120,22 +123,29 @@ most of which are needed only briefly in a tiny part of the machine. The state
 machine class therefore often becomes a change hotspot what leads to frequent 
 recompilations of the whole state machine.&nbsp;</p>
 <h2><a name="Dynamic configurability">Dynamic configurability</a></h2>
-<h3>Two types of state machines</h3>
+<h3>Two types of state machine frameworks</h3>
 <ul>
   <li>A state machine framework supports dynamic configurability if the whole 
   layout of a state machine can be defined at runtime (&quot;layout&quot; refers to 
-  states and transitions only, actions are still specified with normal C++ 
-  code). That is, data only available at runtime can be used to build 
-  arbitrarily complex machines. See &quot;A Multiple Substring Search Algorithm&quot; by 
-  Moishe Halibard and Moshe Rubin in June 2002 issue of CUJ for a good example 
-  (unfortunately not available online). Such machines almost always get away 
-  with a simple state model (no hierarchical states, no orthogonal states, no 
-  entry and exit actions, no history) because the machine layout is <b>
-  computed by an algorithm</b> rather than designed by a human.</li>
-  <li>On the other side are human-designed state machines, exploiting the 
-  standard features as necessary. Naturally, the layout of such machines is 
-  known at compile time.</li>
+  states and transitions, actions are still specified with normal C++ code). 
+  That is, data only available at runtime can be used to build arbitrarily 
+  large machines. See &quot;A Multiple Substring Search Algorithm&quot; by Moishe 
+  Halibard and Moshe Rubin in June 2002 issue of CUJ for a good example 
+  (unfortunately not available online).</li>
+  <li>On the other side are state machine frameworks which require the layout 
+  to be specified at compile time.</li>
 </ul>
+<p>State machines that are built at runtime almost always get away with a 
+simple state model (no hierarchical states, no orthogonal states, no entry and 
+exit actions, no history) because the layout is very often <b>computed by an 
+algorithm</b>. On the other hand, machine layouts that are fixed at compile 
+time are almost always designed by humans, who frequently need/want a 
+sophisticated state model in order to keep the complexity at acceptable 
+levels. Dynamically configurable FSM frameworks are therefore often optimized 
+for simple flat machines while incarnations of the static variant tend to 
+offer more features for abstraction.</p>
+<p>However, fully-featured dynamic FSM libraries do exist. So, the question 
+is:</p>
 <h3>Why not use a dynamically configurable FSM library for all state machines?</h3>
 <p>One might argue that a dynamically configurable FSM framework is all one 
 ever needs because <b>any</b> state machine can be implemented with it. 
@@ -148,7 +158,8 @@ used to implement static machines:</p>
   time. Moreover, compile time checks ensure that the state machine is valid 
   (e.g. that there are no transitions between orthogonal states).</li>
   <li>Double dispatch must inevitably be implemented with some kind of a 
-  table. As argued <a href="#Double dispatch">below</a>, this scales badly.</li>
+  table. As argued under <a href="#Double dispatch">Double dispatch</a>, this 
+  scales badly.</li>
   <li>To warrant fast table lookup, states and events must be represented with 
   an integer. To keep the table as small as possible, the numbering should be 
   continuous, e.g. if there are ten states, it's best to use the ids 0-9. To 
@@ -179,12 +190,12 @@ could depend on the side-effects of x(). Therefore, executing y() does not
 make sense if x() fails. This is not an esoteric corner case but happens in 
 every-day state machines all the time. For example, x() could acquire memory 
 the contents of which is later modified by y(). There is a different but in 
-terms of error handling equally critical situation in the
-<a href="tutorial.html#Getting state information out of the machine">tutorial</a> 
-when <code>Running::~Running</code> accesses its outer state <code>Active</code>. 
-Had the entry action of <code>Active</code> failed and had <code>Running</code> 
-been entered anyway then <code>Running</code>'s exit action would have invoked 
-undefined behavior.<br>
+terms of error handling equally critical situation in the Tutorial under
+<a href="tutorial.html#Getting state information out of the machine">Getting 
+state information out of the machine</a> when <code>Running::~Running</code> 
+accesses its outer state <code>Active</code>. Had the entry action of <code>
+Active</code> failed and had <code>Running</code> been entered anyway then
+<code>Running</code>'s exit action would have invoked undefined behavior.<br>
 The error handling situation with outer and inner states resembles the one 
 with base and derived classes: If a base class constructor fails (by throwing 
 an exception) the construction is aborted, the derived class constructor is 
@@ -196,9 +207,9 @@ true. Every following action would first have to check the error variable
 before doing anything. After all actions have completed (by doing nothing!), 
 the previously posted error event would have to be processed what would lead 
 to the remedy action being executed. Please note that it is not sufficient to 
-simply push the error event into the end of the queue as other events could 
-still be pending. Instead, the error event has absolute priority and would 
-have to be dealt with immediately.</p>
+simply queue the error event as other events could still be pending. Instead, 
+the error event has absolute priority and would have to be dealt with 
+immediately.</p>
 <p>So, to be safe, programmers would have to encapsulate the code of <b>every</b> 
 action in <code>if ( !error ) { /* action */ }</code> blocks. Moreover, a
 <code>try { /* action */ } catch ( ... ) { /* post error event */ error = 
@@ -213,7 +224,7 @@ code is simply boring and quite unnecessary.</p>
   propagated from destructors), exceptions can be propagated from all user 
   functions.</li>
   <li>A customizable per state machine policy specifies how to convert all 
-  exceptions propagated from user code. Out of the box, a <code>
+  exceptions propagated from user code. Out of the box, an <code>
   exception_thrown</code> event is generated.</li>
   <li>An exception event is always processed immediately and thus has absolute 
   priority over any possibly pending events. The event queue stays as it was 
@@ -236,6 +247,27 @@ code is simply boring and quite unnecessary.</p>
   this is not the case the state machine is terminated and the exception is 
   rethrown. </li>
 </ul>
+<h2><a name="Asynchronous state machines">Asynchronous state machines</a></h2>
+<p>The design of the <code>asynchronous_state_machine&lt;&gt;</code> and <code>
+worker&lt;&gt;</code> class templates follow from the requirements:</p>
+<ol>
+  <li>The user must be able to specify in which thread a particular machine 
+  will run:<br>
+  The <code>worker&lt;&gt;</code> class template is not associated with a particular 
+  thread. Instead, users can choose to either call <code>worker&lt;&gt;::operator()</code> 
+  directly from the current thread or pass an appropriate function object to a 
+  new thread.</li>
+  <li>An arbitrary number of state machines might run in the same thread:<br>
+  Multiple state machine objects can be constructed passing the same <code>
+  worker&lt;&gt;</code> object. The state machines will then share the same 
+  thread-safe queue and event loop.</li>
+  <li>Out of the box, boost::fsm should employ the boost::thread library. 
+  However, it should be possible to use any other threading library or run 
+  asynchronous machines on OS-less systems:<br>
+  In such cases, the locking and waiting logic can be fully customized by 
+  implementing a new class template that is interface-compatible with <code>
+  worker&lt;&gt;</code>.</li>
+</ol>
 <h2><a name="User actions: Member functions vs. function objects">User 
 actions: Member functions vs. function objects</a></h2>
 <p>With boost::fsm, all user-supplied functions (<code>react</code> member 
@@ -285,18 +317,29 @@ application uses handcrafted or boost::fsm machines it will...</p>
   <li>almost never run into a situation where a state machine is swamped with 
   as many events as in the benchmarks. Unless a state machine is abused for 
   parsing, it will typically spend a good deal of time waiting for events.</li>
+  <li>often run state machines in their own threads. This adds considerable 
+  locking and waiting overhead. Performance tests with the PingPong example, 
+  where two asynchronous state machines exchange events, gave the following 
+  times to process one event and perform the resulting transition:<ul>
+    <li>Single-threaded (no locking and waiting): 1700ns</li>
+    <li>Multi-threaded with one worker thread (the worker uses mutex locking 
+    but never has to wait for events): 4700ns</li>
+    <li>Multi-threaded with two worker threads (both workers use mutex locking 
+    and exactly one worker always waits for an event): 8200ns</li>
+  </ul>
+  <p>Handcrafted machines will also pay the 3000ns/6500ns per event 
+  multithreading overhead, making raw dispatch and transition speed much less 
+  important.</li>
   <li>almost always allocate events with <code>new</code> and destroy them 
-  after consumption. This will add quite a few cycles, even if event memory 
+  after consumption. This will add a few cycles, even if event memory 
   management is customized.</li>
-  <li>often run state machines in their own threads. This adds event queuing 
-  and locking overhead.</li>
   <li>often use state machines that employ orthogonal states and other 
   advanced features. This forces the handcrafted machines to use a more 
   adequate and more time-consuming book-keeping.&nbsp;</li>
 </ul>
-<p>So, in real-world applications event dispatch and transition not normally 
-constitutes a bottleneck and the gap between handcrafted and boost::fsm 
-machines also becomes much smaller than in the worst-case scenario.</p>
+<p>Therefore, in real-world applications event dispatch and transition not 
+normally constitutes a bottleneck and the gap between handcrafted and 
+boost::fsm machines also becomes much smaller than in the worst-case scenario.</p>
 <p>BitMachine measurements with more states and with different levels of 
 optimization:</p>
 <table border="3" cellspacing="1" style="border-collapse: collapse" width="100%" id="AutoNumber2">
@@ -368,8 +411,8 @@ supports this as follows:</p>
 <ul>
   <li>By passing a class offering a <code>std::allocator</code> interface for 
   the <code>Allocator</code> parameter of the <code>state_machine</code> class 
-  template. The <code>rebind</code> allocator member template is used to 
-  customize memory allocation of the internal containers.</li>
+  template. The <code>rebind</code> member template is used to customize 
+  memory allocation of the internal containers.</li>
   <li>By replacing the <code>simple_state</code>, <code>state</code> and <code>
   event</code> class templates with ones that have a customized <code>operator 
   new</code> and <code>operator delete</code>. This can be as easy as 
@@ -460,15 +503,15 @@ function will consume how many cycles:</p>
   suitable reaction, using one RTTI comparison per visited reaction.</li>
   <li>Orthogonal states: One additional virtual call for each exited state <b>
   if</b> there is more than one current leaf state before a transition. It 
-  should also be noted that the worst-case event dispatch&nbsp; time is 
-  multiplied in the presence of orthogonal states. For example, if two 
-  orthogonal leaf states are added to a given current state configuration, the 
-  worst-case time is tripled.</li>
+  should also be noted that the worst-case event dispatch time is multiplied 
+  in the presence of orthogonal states. For example, if two orthogonal leaf 
+  states are added to a given current state configuration, the worst-case time 
+  is tripled.</li>
 </ol>
 <h2><a name="Limitations">Limitations</a></h2>
 <ul>
   <li>Deferring and posting events: For performance reasons and because 
-  sequential state machines often do not need to queue events, it is possible 
+  synchronous state machines often do not need to queue events, it is possible 
   to operate such machines entirely with stack-allocated events. However, as 
   soon as events need to be deferred and/or posted there is no way around 
   queuing and allocation with <code>new</code>. The interface of <code>
@@ -479,16 +522,16 @@ function will consume how many cycles:</p>
   easily be transformed into one allocated with <code>new</code> and pointed 
   to by <code>boost::intrusive_ptr</code> with a virtual <code>clone()</code> 
   function. However, in my experience, event deferral is needed only very 
-  rarely in sequential state machines and the concurrent variant will enforce 
-  the use of <code>boost::intrusive_ptr</code> anyway. So, most users won't 
-  run into this limitation and I rejected the <code>clone()</code> idea 
+  rarely in synchronous state machines and the asynchronous variant will 
+  enforce the use of <code>boost::intrusive_ptr</code> anyway. So, most users 
+  won't run into this limitation and I rejected the <code>clone()</code> idea 
   because it could cause inefficiencies casual users wouldn't be aware of. In 
   addition, users not needing event deferral would nevertheless pay with 
   increased code size.</li>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->08 June, 2003<!--webbot bot="Timestamp" endspan i-checksum="19892" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 August, 2003<!--webbot bot="Timestamp" endspan i-checksum="34481" --></p>
 <p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. 
 All Rights Reserved.</i></p>
 
