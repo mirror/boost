@@ -15,6 +15,8 @@
 //  This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 //
+//  http://www.boost.org/libs/utility/current_function.html
+//
 
 namespace boost
 {
