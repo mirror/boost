@@ -16,7 +16,8 @@
 #endif
 
 #include <boost/mpl/if.hpp>
-#include <boost/type_traits/is_void.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/config.hpp>
 #include <cstddef>
 
 //###
@@ -109,6 +110,8 @@ namespace assign_detail
         }
     };
 
+    struct forward_n_arguments {};
+    
 } // namespace 'assign_detail'
 
 namespace assign
@@ -128,15 +131,16 @@ namespace assign
         return assign_detail::fun_repeater<Function>( sz, r );
     }
     
-    template< class Function, class Argument = void > 
+
+    template< class Function, class Argument = assign_detail::forward_n_arguments > 
     class list_inserter
     {
         struct single_arg_type {};
         struct n_arg_type      {};
 
-        typedef typename mpl::if_c< is_void<Argument>::value,
-                                    n_arg_type,
-                                    single_arg_type >::type arg_type;  
+        typedef BOOST_DEDUCED_TYPENAME mpl::if_c< is_same<Argument,assign_detail::forward_n_arguments>::value,
+                                                  n_arg_type,
+                                                  single_arg_type >::type arg_type;  
             
     public:
         
