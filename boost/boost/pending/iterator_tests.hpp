@@ -5,6 +5,10 @@
 // test suite for STL concepts such as iterators and containers.
 //
 // Revision History:
+// 28 Apr 2002  Fixed input iterator requirements.
+//              For a == b a++ == b++ is no longer required.
+//              See 24.1.1/3 for details.
+//              (Thomas Witt)
 // 08 Feb 2001  Fixed bidirectional iterator test so that
 //              --i is no longer a precondition.
 //              (Jeremy Siek)
@@ -74,22 +78,40 @@ void mutable_trivial_iterator_test(const Iterator i, const Iterator j, T val)
 template <class Iterator, class T>
 void input_iterator_test(Iterator i, T v1, T v2) 
 {
-  Iterator i1 = i, i2 = i;
+  Iterator i1(i);
 
-  assert(i == i1++);
-  assert(i != ++i2);
-
-  trivial_iterator_test(i, i1, v1);
-  trivial_iterator_test(i, i2, v1);
-
-  ++i;
   assert(i == i1);
-  assert(i == i2);
-  ++i1;
-  ++i2;
+  assert(!(i != i1));
 
-  trivial_iterator_test(i, i1, v2);
-  trivial_iterator_test(i, i2, v2);
+  // I can see no generic way to create an input iterator
+  // that is in the domain of== of i and != i.
+  // The following works for istream_iterator but is not
+  // guaranteed to work for arbitrary input iterators.
+  //
+  //   Iterator i2;
+  //
+  //   assert(i != i2);
+  //   assert(!(i == i2));
+
+  assert(*i1 == v1);
+  assert(*i  == v1);
+
+  // we cannot test for equivalence of (void)++i & (void)i++
+  // as i is only guaranteed to be single pass.
+  assert(*i++ == v1);
+
+  i1 = i;
+
+  assert(i == i1);
+  assert(!(i != i1));
+
+  assert(*i1 == v2);
+  assert(*i  == v2);
+
+  // i is dereferencable, so it must be incrementable.
+  ++i;
+
+  // how to test for operator-> ?
 }
 
 // how to test output iterator?
@@ -123,6 +145,23 @@ template <class Iterator, class T>
 void forward_iterator_test(Iterator i, T v1, T v2) 
 {
   input_iterator_test(i, v1, v2);
+
+  Iterator i1 = i, i2 = i;
+
+  assert(i == i1++);
+  assert(i != ++i2);
+
+  trivial_iterator_test(i, i1, v1);
+  trivial_iterator_test(i, i2, v1);
+
+  ++i;
+  assert(i == i1);
+  assert(i == i2);
+  ++i1;
+  ++i2;
+
+  trivial_iterator_test(i, i1, v2);
+  trivial_iterator_test(i, i2, v2);
 
  // borland doesn't allow non-type template parameters
 # if !defined(__BORLANDC__) || (__BORLANDC__ > 0x551)
