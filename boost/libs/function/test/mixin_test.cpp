@@ -19,22 +19,37 @@
 #include <functional>
 #include <boost/function.hpp>
 
-using namespace std;
-using namespace boost;
-
 struct id_mixin
-{
+{	
+  id_mixin(const id_mixin& rhs) : id(rhs.id) {}
+  id_mixin& operator=(const id_mixin& rhs){id = rhs.id; return *this;}
+  id_mixin(){ id = 0;}
   int id;
 };
 
-int
-test_main(int, char*[])
-{
-  function<int, int, int>::mixin<id_mixin>::type f;
-  f = plus<int>();
-  f.id = 7;
-  f.clear();
-  BOOST_TEST(f.id == 7);
+typedef boost::function<int,int,int>::mixin<id_mixin>::type func;
 
+int test_main(int, char*[])
+{
+  func f;  
+  f = std::plus<int>();
+  BOOST_TEST(f.id == 0);
+  
+  f.clear();
+  f.id = 7;    
+  BOOST_TEST(f.id == 7);
+    
+  func g(f);
+  BOOST_TEST(g.id == 7);
+
+  f.id = 21;    
+  BOOST_TEST(f.id == 21);
+	  
+  boost::swap(f,g);  
+  BOOST_TEST(f.id == 7);
+  BOOST_TEST(g.id == 21);
+
+  g = f;	  
+  BOOST_TEST(g.id == 7);  
   return 0;
 }
