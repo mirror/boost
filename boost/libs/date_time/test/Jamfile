@@ -23,6 +23,7 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
     [ run testwrapping_int.cpp ]
     [ run testconstrained_value.cpp ]
     [ run testgregorian_calendar.cpp ]
+    [ run testgeneric_period.cpp ]
    ; 
 
    test-suite date_time_gregorian
