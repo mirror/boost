@@ -73,6 +73,19 @@ inline void serialize(
     access::serialize(ar, t, static_cast<unsigned int>(file_version));
 }
 
+// trick to call serialize from within boost::serialization namspace
+// thus permitting serialize override to be in either of 3 namespace
+// 1) boost::serialization
+// 2) same namepace as Archive
+// 3) same namespace as T
+// Due to Martin Ecker
+template<class Archive, class T>
+inline void serialize_adl(
+    Archive & ar, T & t, const unsigned int file_version
+){
+    serialize(ar, t, file_version);
+}
+
 // save data required for construction
 template<class Archive, class T>
 inline void save_construct_data(
