@@ -1,9 +1,9 @@
 /*=============================================================================
-    Wave: A Standard compliant C++ preprocessor library
+    Boost.Wave: A Standard compliant C++ preprocessor library
 
     Sample: IDL oriented preprocessor
     
-    http://spirit.sourceforge.net/
+    http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost 
     Software License, Version 1.0. (See accompanying file 
@@ -88,7 +88,7 @@ int print_copyright()
         "",
         "Sample: IDL oriented preprocessor",
         "Based on: Wave, A Standard conformant C++ preprocessor library",
-        "It is hosted by http://spirit.sourceforge.net/.", 
+        "It is hosted by http://www.boost.org/.", 
         "",
         "Copyright (c) 2001-2005 Hartmut Kaiser, Distributed under the Boost",
         "Software License, Version 1.0. (See accompanying file",

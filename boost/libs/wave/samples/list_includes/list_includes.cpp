@@ -1,5 +1,5 @@
 /*=============================================================================
-    Wave: A Standard compliant C++ preprocessor library
+    Boost.Wave: A Standard compliant C++ preprocessor library
 
     Sample: List include dependencies of a given source file
     
@@ -9,7 +9,7 @@
     To get a hint which commandline options are supported, call it with the 
     --help option.
 
-    http://spirit.sourceforge.net/
+    http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost 
     Software License, Version 1.0. (See accompanying file 

@@ -1,5 +1,5 @@
-Wave: A Standard compliant C++ preprocessor library
-http://spirit.sourceforge.net/
+Boost.Wave: A Standard compliant C++ preprocessor library
+http://www.boost.org/
 
 Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
 Software License, Version 1.0. (See accompanying file
@@ -28,7 +28,10 @@ CHANGELOG
 - Fixed the inconsistencies between the documentation and the behaviour wrt the 
   different include search paths. See the Wave driver docs for details of how
   the '-I', '-I-', and '-S' options work.
-  
+- Allowed to specify more than one config file ('@' syntax) on the command line
+  of the wave driver executable.
+- Changed copyrights in all files to reflect the acceptance of Wave into Boost.
+
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
 - Fixed a bug where the complete set of C99 predefined macros were pre-defined

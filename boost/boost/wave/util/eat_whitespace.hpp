@@ -1,8 +1,8 @@
 /*=============================================================================
-    Wave: A Standard compliant C++ preprocessor library
+    Boost.Wave: A Standard compliant C++ preprocessor library
     Whitespace eater
     
-    http://spirit.sourceforge.net/
+    http://www.boost.org/
 
     Copyright (c) 2003 Paul Mensonides
     Copyright (c) 2001-2005 Hartmut Kaiser. 

@@ -1,7 +1,7 @@
 /*=============================================================================
-    Wave: A Standard compliant C++ preprocessor library
+    Boost.Wave: A Standard compliant C++ preprocessor library
 
-    http://spirit.sourceforge.net/
+    http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
@@ -67,8 +67,8 @@ struct cpp_grammar_rule_ids {
 template <typename LexIteratorT>
 struct cpp_grammar_gen
 {
-    typedef LexIteratorT                    iterator_type;
-    typedef typename LexIteratorT::token_type  token_type;
+    typedef LexIteratorT                          iterator_type;
+    typedef typename LexIteratorT::token_type     token_type;
     typedef typename token_type::position_type    position_type;
     
 //  the parser_id's of all rules of the cpp_grammar are stored here

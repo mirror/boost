@@ -1,12 +1,12 @@
 /*=============================================================================
-    Wave: A Standard compliant C++ preprocessor library
+    Boost.Wave: A Standard compliant C++ preprocessor library
     
     Sample: Print out the preprocessed tokens returned by the Wave iterator
 
     This sample shows, how it is possible to use a custom lexer type and a 
     custom token type with the Wave library. 
     
-    http://spirit.sourceforge.net/
+    http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost 
     Software License, Version 1.0. (See accompanying file 

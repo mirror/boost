@@ -1,9 +1,9 @@
 /*=============================================================================
-    Wave: A Standard compliant C++ preprocessor library
+    Boost.Wave: A Standard compliant C++ preprocessor library
 
     Global application configuration
     
-    http://spirit.sourceforge.net/
+    http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
@@ -258,6 +258,10 @@
 #if !defined(BOOST_NO_MT)
 #define BOOST_NO_MT
 #endif // !defined(BOOST_NO_MT)
+
+//#if !defined(BOOST_DISABLE_THREADS)
+//#define BOOST_DISABLE_THREADS
+//#endif // !defined(BOOST_DISABLE_THREADS)
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Auto library naming

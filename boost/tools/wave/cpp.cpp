@@ -1,7 +1,7 @@
 /*=============================================================================
-    Wave: A Standard compliant C++ preprocessor library
+    Boost.Wave: A Standard compliant C++ preprocessor library
 
-    http://spirit.sourceforge.net/
+    http://www.boost.org/
 
     Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
@@ -94,8 +94,7 @@ int print_copyright()
 {
     char const *copyright[] = {
         "",
-        "Wave: A Standard conformant C++ preprocessor",
-        "It is hosted by http://spirit.sourceforge.net/.", 
+        "Wave: A Standard conformant C++ preprocessor based on the Boost.Wave library",
         "",
         "Copyright (c) 2001-2005 Hartmut Kaiser, Distributed under the Boost",
         "Software License, Version 1.0. (See accompanying file",
@@ -114,7 +113,8 @@ namespace cmd_line_util {
 
     // Additional command line parser which interprets '@something' as an 
     // option "config-file" with the value "something".
-    pair<string, string> at_option_parser(string const&s)
+    inline pair<string, string> 
+    at_option_parser(string const&s)
     {
         if ('@' == s[0]) 
             return std::make_pair(string("config-file"), s.substr(1));
@@ -553,7 +553,7 @@ main (int argc, char *argv[])
             ("help,h", "print out program usage (this message)")
             ("version,v", "print the version number")
             ("copyright,c", "print out the copyright statement")
-            ("config-file", po::value<vector<string> >(), 
+            ("config-file", po::value<vector<string> >()->composing(), 
                 "specify a config file (alternatively: @filepath)")
         ;
 
@@ -654,9 +654,9 @@ main (int argc, char *argv[])
     vector<po::option> arguments;
     
         std::remove_copy_if(opts.options.begin(), opts.options.end(), 
-            inserter(arguments, arguments.end()), cmd_line_util::is_argument());
+            back_inserter(arguments), cmd_line_util::is_argument());
             
-    // if there is no input file given, then exit
+    // if there is no input file given, then take input from stdin
         if (0 == arguments.size() || 0 == arguments[0].value.size() ||
             arguments[0].value[0] == "-") 
         {

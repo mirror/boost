@@ -1,9 +1,9 @@
 /*=============================================================================
-    Wave: A Standard compliant C++ preprocessor library
+    Boost.Wave: A Standard compliant C++ preprocessor library
 
     Spirit based lexer
     
-    http://spirit.sourceforge.net/
+    http://www.boost.org/
 
     Copyright (c) 2001, Daniel C. Nuffer.
     Copyright (c) 2001-2005 Hartmut Kaiser. 
