@@ -45,6 +45,11 @@ public:
     : _rng(rng), _median(median), _sigma(sigma) { }
   // compiler-generated copy constructor is fine
   // uniform_01 cannot be assigned, neither can this class
+  base_type& base() const { return _rng.base(); }
+  RealType median() const { return _median; }
+  RealType sigma() const { return _sigma; }
+  void reset() { _rng.reset(); }
+
   result_type operator()()
   {
     const double pi = 3.14159265358979323846;
