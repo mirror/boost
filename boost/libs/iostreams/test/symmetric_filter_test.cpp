@@ -28,28 +28,33 @@ void symmetric_filter_test()
     uppercase_file upper;
 
     {
+        // Note: the ifstream second is placed in a nested scope because 
+        // closing and reopening a single ifstream failed for CW 9.4 on Windows.
+
         test_file          src;
         filtering_istream  first(filter_type(new impl_type, 4));
 
         // Test reading from a symmetric filter in chars.
         first.push(file_source(src.name()));
-        ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
-        BOOST_CHECK_MESSAGE(
-            compare_streams_in_chars(first, second),
-            "failed reading from symmetric filter in chars"
-        );
-
+        {
+            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            BOOST_CHECK_MESSAGE(
+                compare_streams_in_chars(first, second),
+                "failed reading from symmetric filter in chars"
+            );
+        }
         first.pop();
-        second.close();
 
         // Test reading from a symmetric filter in chunks.
         // (Also tests reusing the symmetric filter.)
         first.push(file_source(src.name()));
-        second.open(upper.name().c_str());
-        BOOST_CHECK_MESSAGE(
-            compare_streams_in_chunks(first, second),
-            "failed reading from symmetric filter in chunks"
-        );
+        {
+            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            BOOST_CHECK_MESSAGE(
+                compare_streams_in_chunks(first, second),
+                "failed reading from symmetric filter in chunks"
+            );
+        }
     }
 
     {

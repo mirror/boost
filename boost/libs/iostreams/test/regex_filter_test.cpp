@@ -36,53 +36,61 @@ void regex_filter_test()
     std::string fmt = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     {
+        // Note: the ifstream second is placed in a nested scope because 
+        // closing and reopening a single ifstream failed for CW 9.4 on Windows.
+
         // Test reading from a regex filter based on a function in chars.
         filtering_istream
             first(boost::iostreams::regex_filter(match_lower, replace_lower()));
         first.push(file_source(test.name()));
-        ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
-        BOOST_CHECK_MESSAGE(
-            compare_streams_in_chars(first, second),
-            "failed reading from function-based regex_filter in chars"
-        );
-
+        {
+            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            BOOST_CHECK_MESSAGE(
+                compare_streams_in_chars(first, second),
+                "failed reading from function-based regex_filter in chars"
+            );
+        }
         first.pop();
-        second.close();
 
         // Test reading from a regex filter based on a function in chunks.
         // (Also tests reusing the regex filter.)
         first.push(file_source(test.name()));
-        second.open(upper.name().c_str());
-        BOOST_CHECK_MESSAGE(
-            compare_streams_in_chunks(first, second),
-            "failed reading from function-based regex_filter in chars"
-        );
-
+        {
+            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            BOOST_CHECK_MESSAGE(
+                compare_streams_in_chunks(first, second),
+                "failed reading from function-based regex_filter in chunks"
+            );
+        }
     }
 
     {
+        // Note: the ifstream second is placed in a nested scope because 
+        // closing and reopening a single ifstream failed for CW 9.4 on Windows.
+
         // Test reading from a regex filter based on a format string in chars.
         filtering_istream 
             first(boost::iostreams::regex_filter(match_lower, fmt));
         first.push(file_source(test.name()));
-        ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
-        BOOST_CHECK_MESSAGE(
-            compare_streams_in_chars(first, second),
-            "failed reading from format-string-based regex_filter in chars"
-        );
-
-
+        {
+            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            BOOST_CHECK_MESSAGE(
+                compare_streams_in_chars(first, second),
+                "failed reading from format-string-based regex_filter in chars"
+            );
+        }
         first.pop();
-        second.close();
 
         // Test reading from a regex filter based on a format string in chunks.
         // (Also tests reusing the regex filter.)
         first.push(file_source(test.name()));
-        second.open(upper.name().c_str());
-        BOOST_CHECK_MESSAGE(
-            compare_streams_in_chars(first, second),
-            "failed reading from format-string-based regex_filter in chunks"
-        );
+        {
+            ifstream second((upper.name().c_str()));  // CW8.3 Workaround.
+            BOOST_CHECK_MESSAGE(
+                compare_streams_in_chars(first, second),
+                "failed reading from format-string-based regex_filter in chunks"
+            );
+        }
     }
 
     {
