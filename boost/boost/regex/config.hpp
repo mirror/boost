@@ -189,11 +189,7 @@ using std::distance;
 #ifndef BOOST_REGEX_DECL
 #  define BOOST_REGEX_DECL
 #endif
-
-#if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE)
-#  include <boost/regex/detail/regex_library_include.hpp>
-#endif
-
+ 
 // Borland C++ Fix/error check:
 #if defined(__BORLANDC__)
 #  if (__BORLANDC__ == 0x550) || (__BORLANDC__ == 0x551)
@@ -216,6 +212,10 @@ using std::distance;
 #  if !defined(__CONSOLE__) && !defined(_NO_VCL)
 #     define BOOST_REGEX_USE_VCL
 #  endif
+#endif
+
+#if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE)
+#  include <boost/regex/detail/regex_library_include.hpp>
 #endif
 
 /*****************************************************************************
