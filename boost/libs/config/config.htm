@@ -5,21 +5,21 @@
 content="text/html; charset=iso-8859-1">
 <meta name="Template"
 content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
-<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
 <title></title>
 </head>
 
 <body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
 
-<p align="left"><img src="../../c++boost.gif" width="277"
-height="86"></p>
+<p align="left"><img src="../../c++boost.gif" width="277" height="86"></p>
 
 <h1 align="center">Boost Configuration Reference</h1>
 
 <h2>Contents</h2>
 
 <pre><a href="#configuring">Configuring Boost for Your Platform</a>
-   <a href="#default_config">Using the default boost configuration</a>
+   <a href="#default_config">Using the default boost configuration
+</a>   <a href="#header">The &lt;boost\config.hpp&gt; header</a>
    <a href="#config_script">Using the configure script</a>
    <a href="#user_settable">User settable options</a>
    <a href="#advanced_config">Advanced configuration usage</a>
@@ -38,34 +38,37 @@ height="86"></p>
 
 <h2><a name="configuring"></a>Configuring Boost for Your Platform</h2>
 
-<p>Boost library users are never required to #include &lt;boost/config.hpp&gt;,
-and are discouraged from including it on their own. </p>
-
-<p>Boost library users can request support for additional
-platforms to be added to config.hpp by emailing <a
-href="mailto:config@boost.org">config@boost.org</a> describing
-their request. </p>
-
 <h4><a name="default_config"></a>Using the default boost
 configuration</h4>
 
-<p>Boost is designed so that it is already correctly configured
-for most common compilers; you should be able to use boost &quot;as
-is&quot; without any configuration work. Since the compiler is
-configured separately from the standard library used, that should
-hold true even if you have replaced your compiler's standard
-library with one from a third party (like STLport). </p>
+<p>Boost is comes already configured
+for most common compilers and platforms; you should be able to use boost &quot;as
+is&quot;. Since the compiler is
+configured separately from the standard library, the default configuration
+should work even if you replace the compiler's standard
+library with a third-party standard library (like <a href="http://www.stlport.org"> STLport</a>). </p>
 
-<p>Using boost &quot;as is&quot; without trying to reconfigure it
-is the recommended method of using boost, however you can run a
-configure script if you want to, and there are regression tests
+<p>Using boost &quot;as is&quot; without trying to reconfigure is the recommended method
+for using boost. You can, however, run the configure script if you want to, and there are regression tests
 provided that allow you to test the current boost configuration
 with your particular compiler setup.</p>
+
+<p>Boost library users can request support for additional compilers or platforms
+by visiting our <a href="http://sourceforge.net/tracker/?group_id=7586">
+Tracker</a> and submitting a support request. </p>
+
+<h4>The <a href="../../boost/config.hpp">&lt;boost/config.hpp&gt;</a> <a name="header">header</a></h4>
+
+<p>Boost library implementations access configuration macros via <code> #include &lt;boost/config.hpp&gt;</code>. </p>
+
+<p>Boost library users are never required to <code> #include &lt;boost/config.hpp&gt;</code>,
+and are discouraged from doing so on their own. It is an implementation detail
+which is subject to change, and thus should not be depended upon by users. </p>
 
 <h4><a name="config_script">Using the configure script</a></h4>
 
 <p>If you know that boost is incorrectly configured for your
-particular setup, and you are on a unix like platform, then you
+particular setup, and you are on a UNIX like platform, then you
 may want to try and improve things by running the boost configure
 script. From a shell command prompt you will need to cd into
 &lt;boost-root&gt;/libs/config/ and type:</p>
