@@ -1795,7 +1795,9 @@ namespace boost { namespace numeric { namespace ublas {
     void swap(index_pair<V> lhs, index_pair<V> rhs) {
         lhs.swap(rhs);
     }
+#endif
 
+#if defined (BOOST_UBLAS_NO_MEMBER_FRIENDS) || defined (BOOST_MSVC)
     template<class V>
     BOOST_UBLAS_INLINE
     bool operator < (const index_pair<V>& lhs, const index_pair<V>& rhs) {
@@ -1948,7 +1950,9 @@ namespace boost { namespace numeric { namespace ublas {
     void swap(index_triple<M> lhs, index_triple<M> rhs) {
         lhs.swap(rhs);
     }
+#endif
 
+#if defined (BOOST_UBLAS_NO_MEMBER_FRIENDS) || defined (BOOST_MSVC)
     template<class M>
     BOOST_UBLAS_INLINE
     bool operator < (const index_triple<M>& lhs, const index_triple<M>& rhs) {

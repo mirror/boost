@@ -144,7 +144,11 @@ int main (int argc, char *argv []) {
 
     int scale = 1;
     if (argc > 1)
+#ifndef BOOST_NO_STDC_NAMESPACE
         scale = std::atoi (argv [1]);
+#else
+        scale = ::atoi (argv [1]);
+#endif
 
 #ifdef USE_FLOAT
     header ("boost::numeric::interval<float>, 3");
