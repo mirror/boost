@@ -81,10 +81,10 @@
 
 //
 // whenever we have a conversion function with elipses
-// it needs to be declared _cdecl to suppress compiler
+// it needs to be declared __cdecl to suppress compiler
 // warnings from MS and Borland compilers:
 #if defined(BOOST_MSVC) || defined(__BORLANDC__)
-#define BOOST_TT_DECL _cdecl
+#define BOOST_TT_DECL __cdecl
 #else
 #define BOOST_TT_DECL
 #endif
