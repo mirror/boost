@@ -478,7 +478,7 @@ void test_throwing_assign_to_initialized( T const* )
   {
     // This should:
     //   Attempt to copy construct 'opt1.value()' into opt0 and throw.
-    //   opt0 should be left uninitialized (even though it was initialized)
+    //   opt0 should be left unmodified or uninitialized
     set_pending_dtor( ARG(T) ) ;
     set_pending_copy( ARG(T) ) ;
     opt0 = opt1 ;
@@ -488,12 +488,21 @@ void test_throwing_assign_to_initialized( T const* )
 
   BOOST_CHECK(!passed);
 
-  -- count ;
 
+#ifdef BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
+  // opt0 was left unmodified
+  check_is_pending_dtor( ARG(T) );
+  check_is_not_pending_copy( ARG(T) );
+  check_instance_count(count, ARG(T) );
+  check_initialized(opt0);
+#else
+  // opt0 was left uninitialized
+  -- count ;
   check_is_not_pending_dtor( ARG(T) );
   check_is_not_pending_copy( ARG(T) );
   check_instance_count(count, ARG(T) );
   check_uninitialized(opt0);
+#endif
 }
 
 //
