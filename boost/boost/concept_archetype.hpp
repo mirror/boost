@@ -40,30 +40,16 @@ namespace boost {
   };
 
   // This is a helper class that provides a way to get a reference to
-  // an object.
+  // an object. The get() function will never be called at run-time
+  // (nothing in this file will) so this seemingly very bad function
+  // is really quite innocent. The name of this class needs to be
+  // changed.
   template <class T>
   class static_object {
   public:
     static T& get() {
-      detail::dummy_constructor d;
-      static T x(d);
-      return x;
-    }
-  };
-  template <>
-  class static_object<bool> {
-  public:
-    static bool& get() {
-      static bool b;
-      return b;
-    }
-  };
-  template <>
-  class static_object<int> {
-  public:
-    static int& get() {
-      static int b;
-      return b;
+     char d[sizeof(T)];
+      return *reinterpret_cast<T*>(d);
     }
   };
 
