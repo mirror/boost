@@ -44,10 +44,11 @@ private:
   int& m_counter;
 };
 
+using namespace boost;
+
 template <class Value>
 void test(BOOST_EXPLICIT_TEMPLATE_TYPE(Value))
 {
-  using namespace boost;
   Value zero(0), one(1);
   int counter = 0;
   less_count<Value> lc(counter);
