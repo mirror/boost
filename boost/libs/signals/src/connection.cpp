@@ -1,6 +1,6 @@
 // Boost.Signals library
 //
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001, 2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -12,6 +12,8 @@
 // and with no claim as to its suitability for any purpose.
  
 // For more information, see http://www.boost.org
+
+#define BOOST_SIGNALS_IN_LIBRARY_SOURCE
 
 #include <boost/signals/connection.hpp>
 #include <cassert>
