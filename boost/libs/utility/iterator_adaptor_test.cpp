@@ -124,7 +124,6 @@ void more_indirect_iterator_tests()
         const int*
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , boost::iterator<std::random_access_iterator_tag,int,std::ptrdiff_t,const int*,const int&>
-        , int*
         , boost::iterator<std::random_access_iterator_tag,int> 
 #endif
     > IndirectDeque;
