@@ -27,60 +27,56 @@
 
 
 If the ``Difference`` argument is ``use_default`` then the
-``difference_type`` member is an implementation defined signed
-integral type. Otherwise ``difference_type`` is ``Difference``.
+``difference_type`` member is an unspecified signed integral
+type. Otherwise ``difference_type`` is ``Difference``.
 
 If ``CategoryOrTraversal`` is not ``use_default`` then the member
 ``iterator_category`` is ``CategoryOrTraversal``.  Otherwise, if
-``Incrementable`` is a numeric type then ``iterator_category`` is a
-type convertible to ``random_access_iterator_tag``. If
-``Incrementable`` is not a numeric type then ``iterator_category`` is
-``iterator_traversal<Incrementable>::type``.
-
+``Incrementable`` is a numberic type ``iterator_category`` is a
+type convertible to ``random_access_iterator_tag``.  Otherwise,
+``iterator_category`` is unspecified, and the ``counting_iterator``
+specialization models the same iterator traversal concepts modeled
+by ``Incrementable``.
 
 [*Note:* implementers are encouraged to provide an implementation of
-  ``operator-`` and a ``difference_type`` that avoids overflows in
+  ``operator-`` and a ``difference_type`` that avoid overflows in
   the cases when the ``Incrementable`` type is a numeric type.]
-
 
 ``counting_iterator`` requirements
 ..................................
 
-The ``Incrementable`` type must be Default Constructible, Copy
-Constructible, and Assignable. 
+``Incrementable`` must be Default Constructible, Copy
+Constructible, and Assignable.
 
-If ``iterator_category`` is convertible to ``forward_iterator_tag`` or
-``forward_traversal_tag`` then the following expressions must be valid::
+If ``iterator_category`` is convertible to ``forward_iterator_tag``
+or ``forward_traversal_tag``, the following must be well-formed::
 
     Incrementable i, j;
-    ++i         // pre-increment
-    i == j      // operator equal
+    ++i;         // pre-increment
+    i == j;      // operator equal
 
 
 If ``iterator_category`` is convertible to
-``bidirectional_iterator_tag`` or ``bidirectional_traversal_tag`` then
-pre-decrement is required::
+``bidirectional_iterator_tag`` or ``bidirectional_traversal_tag``,
+the following expression must also be well-formed::
 
     --i
 
 If ``iterator_category`` is convertible to
-``random_access_iterator_tag`` or ``random_access_traversal_tag`` then
-these additional expressions are also required::
+``random_access_iterator_tag`` or ``random_access_traversal_tag``,
+the following must must also be valid::
 
     counting_iterator::difference_type n;
-    i += n
-    n = i - j
-    i < j
-
-
+    i += n;
+    n = i - j;
+    i < j;
 
 ``counting_iterator`` models
 ............................
 
-``counting_iterator`` models Readable Lvalue Iterator. In addition,
-``counting_iterator`` models the concepts corresponding to the
-iterator tags that ``counting_iterator::iterator_category`` is
-convertible to.
+Specializations of ``counting_iterator`` model Readable Lvalue
+Iterator. In addition, they model the concepts corresponding to the
+iterator tags to which their ``iterator_category`` is convertible.
 
 
 ``counting_iterator`` operations
