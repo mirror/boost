@@ -3,7 +3,7 @@
 ++++++++++++++++++++++
 
 :Author: David Abrahams, Jeremy Siek, Thomas Witt
-:Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@ive.uni-hannover.de
+:Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@acm.org
 :organization: `Boost Consulting`_, Indiana University `Open Systems Lab`_, University of Hanover `Institute for Transport Railway Operation and Construction`_
 :date: $Date$
 :Number: **This document is a revised version of the official** N1477=03-0060 
