@@ -19,6 +19,8 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 
+#include <boost/concept_archetype.hpp>
+
 #include <boost/mpl/aux_/msvc_eti_base.hpp>
 #include <boost/mpl/bitand.hpp>
 #include <boost/mpl/int.hpp>
@@ -80,26 +82,26 @@ namespace detail
   template <class T>
   struct assign_proxy
   {
-      assign_proxy& operator=(T);
+      assign_proxy& operator=(T) { return *this; }
   };
 
   template <class T>
   struct read_proxy
   {
-      operator T();
+      operator T() { return static_object<T>::get(); }
   };
 
   template <class T>
   struct read_write_proxy
     : read_proxy<T> // Use to inherit from assign_proxy, but that doesn't work. -JGS
   {
-    read_write_proxy& operator=(T);
+      read_write_proxy& operator=(T) { return *this; }
   };
 
   template <class T>
   struct arrow_proxy
   {
-      T const* operator->() const;
+      T const* operator->() const { return 0; }
   };
 
   struct no_operator_brackets {};
@@ -107,13 +109,13 @@ namespace detail
   template <class ValueType>
   struct readable_operator_brackets
   {
-      read_proxy<ValueType> operator[](std::ptrdiff_t n) const;
+      read_proxy<ValueType> operator[](std::ptrdiff_t n) const { return read_proxy<ValueType>(); }
   };
 
   template <class ValueType>
   struct writable_operator_brackets
   {
-      read_write_proxy<ValueType> operator[](std::ptrdiff_t n) const;
+      read_write_proxy<ValueType> operator[](std::ptrdiff_t n) const { return read_write_proxy<ValueType>(); }
   };
 
   template <class Value, class AccessCategory, class TraversalCategory>
@@ -160,10 +162,11 @@ namespace detail
       template<class Derived, class Value>
       struct archetype
       {
-          typedef void difference_type;
+          struct bogus { }; // This use to be void, but that causes trouble for iterator_facade. Need more research. -JGS
+          typedef bogus difference_type;
 
-          Derived& operator++();
-          Derived  operator++(int) const;
+          Derived& operator++() { return (Derived&)static_object<Derived>::get(); }
+          Derived  operator++(int) const { return (Derived&)static_object<Derived>::get(); }
       };
   };
 
@@ -180,13 +183,13 @@ namespace detail
 
   template <class Derived, class Value>
   bool operator==(traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&,
-                  traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&);
+                  traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&) { return true; }
   
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
   // doesn't seem to pick up != from equality_comparable
   template <class Derived, class Value>
   bool operator!=(traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&,
-                  traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&);
+                  traversal_archetype_<Derived, Value, single_pass_traversal_tag> const&) { return true; }
 #endif 
   template <>
   struct traversal_archetype_impl<forward_traversal_tag>
@@ -206,8 +209,8 @@ namespace detail
       struct archetype
         : public traversal_archetype_<Derived, Value, forward_traversal_tag>
       {
-          Derived& operator--();
-          Derived  operator--(int) const;
+          Derived& operator--() { return static_object<Derived>::get(); }
+          Derived  operator--(int) const { return static_object<Derived>::get(); }
       };
   };
 
@@ -219,30 +222,34 @@ namespace detail
         : public partially_ordered<traversal_archetype_<Derived, Value, random_access_traversal_tag> >,
           public traversal_archetype_<Derived, Value, bidirectional_traversal_tag> 
       {
-          Derived& operator+=(std::ptrdiff_t);
-          Derived& operator-=(std::ptrdiff_t);
+          Derived& operator+=(std::ptrdiff_t) { return static_object<Derived>::get(); }
+          Derived& operator-=(std::ptrdiff_t) { return static_object<Derived>::get(); }
       };
   };
 
   template <class Derived, class Value>
   Derived& operator+(traversal_archetype_<Derived, Value, random_access_traversal_tag> const&,
-                     std::ptrdiff_t);
+                     std::ptrdiff_t) { return static_object<Derived>::get(); }
 
   template <class Derived, class Value>
   Derived& operator+(std::ptrdiff_t,
-                     traversal_archetype_<Derived, Value, random_access_traversal_tag> const&);
+                     traversal_archetype_<Derived, Value, random_access_traversal_tag> const&)
+      { return static_object<Derived>::get(); }
 
   template <class Derived, class Value>
   Derived& operator-(traversal_archetype_<Derived, Value, random_access_traversal_tag> const&,
-                     std::ptrdiff_t);
+                     std::ptrdiff_t)
+      { return static_object<Derived>::get(); }
 
   template <class Derived, class Value>
   std::ptrdiff_t operator-(traversal_archetype_<Derived, Value, random_access_traversal_tag> const&,
-                           traversal_archetype_<Derived, Value, random_access_traversal_tag> const&);
+                           traversal_archetype_<Derived, Value, random_access_traversal_tag> const&)
+      { return 0; }
 
   template <class Derived, class Value>
   bool operator<(traversal_archetype_<Derived, Value, random_access_traversal_tag> const&,
-                 traversal_archetype_<Derived, Value, random_access_traversal_tag> const&);
+                 traversal_archetype_<Derived, Value, random_access_traversal_tag> const&)
+      { return true; }
 
   struct bogus_type;
 
@@ -286,9 +293,9 @@ struct iterator_access_archetype_impl<
         typedef Value                           reference;
         typedef Value*                          pointer;
 
-        value_type operator*() const;
+        value_type operator*() const { return static_object<value_type>::get(); }
 
-        detail::arrow_proxy<Value> operator->() const;
+        detail::arrow_proxy<Value> operator->() const { return detail::arrow_proxy<Value>(); }
     };
 };
 
@@ -307,7 +314,7 @@ struct iterator_access_archetype_impl<
         typedef void reference;
         typedef void pointer;
 
-        detail::assign_proxy<Value> operator*() const;
+        detail::assign_proxy<Value> operator*() const { return detail::assign_proxy<Value>(); }
     };
 };
 
@@ -324,7 +331,7 @@ struct iterator_access_archetype_impl<
     {
         typedef detail::read_write_proxy<Value>    reference;
 
-        detail::read_write_proxy<Value> operator*() const;
+        detail::read_write_proxy<Value> operator*() const { return detail::read_write_proxy<Value>(); }
     };
 };
 
@@ -339,8 +346,8 @@ struct iterator_access_archetype_impl<iterator_archetypes::readable_lvalue_itera
     {
         typedef Value&    reference;
 
-        Value& operator*() const;
-        Value* operator->() const;
+        Value& operator*() const { return static_object<Value>::get(); }
+        Value* operator->() const { return 0; }
     };
 };
   
@@ -443,10 +450,10 @@ struct iterator_archetype
     typedef typename base::iterator_category iterator_category;
 # endif
 
-    iterator_archetype();
-    iterator_archetype(iterator_archetype const&);
+    iterator_archetype() { }
+    iterator_archetype(iterator_archetype const&) { }
 
-    iterator_archetype& operator=(iterator_archetype const&);
+    iterator_archetype& operator=(iterator_archetype const&) { return *this; }
 
     // Optional conversion from mutable
     // iterator_archetype(iterator_archetype<typename detail::convertible_type<Value>::type, AccessCategory, TraversalCategory> const&);
