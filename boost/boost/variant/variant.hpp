@@ -43,6 +43,7 @@
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/enum.hpp"
 #include "boost/preprocessor/enum_params.hpp"
+#include "boost/preprocessor/inc.hpp"
 #include "boost/preprocessor/repeat.hpp"
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/is_const.hpp"
@@ -73,6 +74,16 @@
 #include "boost/mpl/transform.hpp"
 #include "boost/mpl/void.hpp"
 
+
+///////////////////////////////////////////////////////////////////////////////
+// BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE
+//
+// Unrolls variant's visitation mechanism to reduce template instantiation
+// and potentially increase runtime performance. (TODO: Investigate further.)
+//
+#if !defined(BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE)
+#   define BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE 5
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // BOOST_VARIANT_MINIMIZE_SIZE
@@ -475,20 +486,20 @@ struct make_variant_list
 private: // helpers, for metafunction result (below)
 
     // [Define a macro to convert any void(NN) tags to mpl::void...]
-#   define BOOST_VARIANT_DETAIL_CONVERT_VOID(z, N,_)   \
+#   define BOOST_VARIANT_AUX_CONVERT_VOID(z, N,_)   \
         typename convert_void<BOOST_PP_CAT(T,N)>::type
 
     // [...so that the specified types can be passed to mpl::list...]
     typedef typename mpl::list< 
           BOOST_PP_ENUM(
               BOOST_VARIANT_LIMIT_TYPES
-            , BOOST_VARIANT_DETAIL_CONVERT_VOID
+            , BOOST_VARIANT_AUX_CONVERT_VOID
             , _
             )
         >::type initial_result;
 
     // [...and, finally, the conversion macro can be undefined:]
-#   undef BOOST_VARIANT_DETAIL_CONVERT_VOID
+#   undef BOOST_VARIANT_AUX_CONVERT_VOID
 
 public: // metafunction result
 
@@ -589,67 +600,172 @@ inline const T& cast_storage(const void* storage, T* = 0)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) function template forced_return
+//
+// Should never be called at runtime, but (artificially) satisfies
+// compile-time requirement of returning a result value. (TODO: Determine the
+// most efficient way to handle this -- as below? by throwing? by recursive
+// call to forced_return itself? etc.)
+//
+
+#if !defined(BOOST_MSVC)
+
+namespace {
+
+template <typename T>
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
+forced_return()
+{
+    BOOST_ASSERT(false);
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T) (*dummy)() = 0;
+    return dummy();
+}
+
+}
+
+#else // defined(BOOST_MSVC)
+
+__declspec(noreturn) inline void forced_return_no_return() {};
+
+template <typename T>
+inline
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
+forced_return()
+{
+    BOOST_ASSERT(false);
+    forced_return_no_return();
+}
+
+#endif // BOOST_MSVC optimization
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) function template apply_visitor_impl
 //
 // Invokes the given visitor on the type in the given variant storage.
 //
 
-template <
-      typename Which, typename T
-    , typename NI, typename LI
-    , typename Visitor, typename VoidPtrCV
-    >
-inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
-          typename Visitor::result_type
-        )
-apply_visitor_impl(
-      const int var_which
-    , Visitor& visitor
-    , VoidPtrCV storage
-    , mpl::true_// next_is_last
-    , Which* = 0, T* = 0, NI* = 0, LI* = 0
-    )
+struct unrolled {};
+
+template <typename Iter, typename LastIter>
+struct apply_visitor_impl_step
 {
-    // No prior iterations matched, so variant content must be last type:
-    BOOST_ASSERT(var_which == Which::value);
-    return visitor( cast_storage<T>(storage) );
+    typedef typename mpl::apply_if<
+          is_same<Iter, LastIter>
+        , mpl::identity<unrolled>
+        , Iter
+        >::type type;
+
+    typedef typename mpl::apply_if<
+          is_same<type, unrolled> //is_same<Iter, LastIter>
+        , mpl::identity<LastIter>
+        , mpl::next<Iter>
+        >::type next_iter;
+
+    typedef apply_visitor_impl_step<
+          next_iter, LastIter
+        > next;
+};
+
+template <typename Visitor, typename VoidPtrCV, typename T>
+inline
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
+apply_visitor_impl(Visitor& visitor, VoidPtrCV operand, T*, int)
+{
+    return visitor( cast_storage<T>(operand) );
+}
+
+template <typename Visitor, typename VoidPtrCV>
+inline
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
+apply_visitor_impl(Visitor&, VoidPtrCV, unrolled*, long)
+{
+    // should never be here at runtime:
+    typedef typename Visitor::result_type result_type;
+    return forced_return< result_type >();
 }
 
 template <
-      typename Which, typename T
-    , typename NextIt, typename LastIt
+      typename W, typename S
+    , typename Visitor, typename VPCV
+    >
+inline
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
+apply_visitor_impl(
+      const int, Visitor&, VPCV
+    , mpl::true_ // is_unrolled
+    , W* = 0, S* = 0
+    )
+{
+    // should never be here at runtime:
+    typedef typename Visitor::result_type result_type;
+    return forced_return< result_type >();
+}
+
+template <
+      typename Which, typename step0
     , typename Visitor, typename VoidPtrCV
     >
 inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
-          typename Visitor::result_type
-        )
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
 apply_visitor_impl(
-      const int var_which
-    , Visitor& visitor
-    , VoidPtrCV storage
-    , mpl::false_// next_is_last
-    , Which* = 0, T* = 0, NextIt* = 0, LastIt* last_it = 0
+      const int var_which, Visitor& visitor, VoidPtrCV storage
+    , mpl::false_ // is_unrolled
+    , Which* = 0, step0* = 0
     )
 {
-    // If current iteration matches variant content...
-    if (var_which == Which::value)
+    // Typedef unrolled steps and associated types...
+#   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF(z, N, _)    \
+    typedef typename BOOST_PP_CAT(step,N)::type BOOST_PP_CAT(T,N);  \
+    typedef typename BOOST_PP_CAT(step,N)::next                     \
+        BOOST_PP_CAT(step, BOOST_PP_INC(N));                        \
+    /**/
+
+    BOOST_PP_REPEAT(
+          BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE
+        , BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF
+        , _
+        )
+
+#   undef BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_TYPEDEF
+
+    // ...switch on the target which-index value...
+    switch (var_which)
     {
-        // ...then apply visitor to the variant content:
-        return visitor( cast_storage<T>(storage) );
+
+    // ...applying the appropriate case:
+#   define BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE(z, N, _)           \
+    case (Which::value + (N)):                                          \
+        return apply_visitor_impl(                                      \
+              visitor, storage, static_cast<BOOST_PP_CAT(T,N)*>(0), 1L  \
+            );                                                          \
+    /**/
+
+    BOOST_PP_REPEAT(
+          BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE
+        , BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE
+        , _
+        )
+
+#   undef BOOST_VARIANT_AUX_APPLY_VISITOR_STEP_CASE
+
     }
 
-    // Otherwise, tail recurse, checking next iteration:
-    typename mpl::next<Which>::type* next_which = 0;
-    typename BOOST_MPL_AUX_DEREF_WNKD(NextIt)* next_type = 0;
-    typedef typename mpl::next<NextIt>::type next_next_it_t;
-    next_next_it_t* next_next_it = 0;
-    typedef typename is_same<next_next_it_t, LastIt>::type next_next_is_last;
+    // If not handled in this iteration, continue unrolling:
+    typedef mpl::int_<
+          Which::value + (BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE)
+        > next_which;
+
+    typedef BOOST_PP_CAT(step, BOOST_VARIANT_APPLY_VISITOR_STEP_SIZE)
+        next_step;
+
+    typedef typename next_step::type next_type;
+    typedef typename is_same< next_type,unrolled >::type
+        is_unrolled;
 
     return apply_visitor_impl(
-          var_which, visitor, storage, next_next_is_last()
-        , next_which, next_type, next_next_it, last_it
+          var_which, visitor, storage
+        , is_unrolled()
+        , static_cast<next_which*>(0), static_cast<next_step*>(0)
         );
 }
 
@@ -1418,15 +1534,16 @@ public:
             )
     raw_apply_visitor(Visitor& visitor)
     {
-        mpl::int_<0>* first_which = 0;
+        typedef mpl::int_<0> first_which;
         typedef typename mpl::begin<types>::type first_it;
-        typename BOOST_MPL_AUX_DEREF_WNKD(first_it)* first_type = 0;
-        typename mpl::next<first_it>::type* next_it = 0;
-        typename mpl::end<types>::type* last_it = 0;
+        typedef typename mpl::end<types>::type last_it;
+        typedef detail::variant::apply_visitor_impl_step<
+              first_it, last_it
+            > first_step;
 
         return detail::variant::apply_visitor_impl(
               which(), visitor, active_storage(), mpl::false_()
-            , first_which, first_type, next_it, last_it
+            , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
     }
 
@@ -1436,15 +1553,16 @@ public:
             )
     raw_apply_visitor(Visitor& visitor) const
     {
-        mpl::int_<0>* first_which = 0;
+        typedef mpl::int_<0> first_which;
         typedef typename mpl::begin<types>::type first_it;
-        typename BOOST_MPL_AUX_DEREF_WNKD(first_it)* first_type = 0;
-        typename mpl::next<first_it>::type* next_it = 0;
-        typename mpl::end<types>::type* last_it = 0;
+        typedef typename mpl::end<types>::type last_it;
+        typedef detail::variant::apply_visitor_impl_step<
+              first_it, last_it
+            > first_step;
 
         return detail::variant::apply_visitor_impl(
               which(), visitor, active_storage(), mpl::false_()
-            , first_which, first_type, next_it, last_it
+            , static_cast<first_which*>(0), static_cast<first_step*>(0)
             );
     }
 
