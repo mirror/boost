@@ -136,13 +136,9 @@ class simple_segregated_storage
       }
     }
 
-    // pre: !empty()
     // Note: if you're allocating/deallocating n a lot, you should
     //  be using an ordered pool.
     void * malloc_n(size_type n, size_type partition_size);
-
-    // pre: !empty()
-    void * ordered_malloc_n(size_type n, size_type partition_size);
 
     // pre: chunks was previously allocated from *this with the same
     //   values for n and partition_size
