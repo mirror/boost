@@ -21,14 +21,14 @@ namespace pool {
 
 // BOOST_POOL_POSTULATE_FAILED cannot be instantiated if its template parameter is
 //  false.  This is what the compiler will try to do if a postulate fails.
-template <bool>
+template <bool x>
 struct BOOST_POOL_POSTULATE_FAILED;
 template <>
 struct BOOST_POOL_POSTULATE_FAILED<true> { };
 
 // POSTULATE_helper is just a helper class used to force the implicit
 //  instantiation of BOOST_POOL_POSTULATE_FAILED.
-template <int>
+template <int x>
 struct POSTULATE_helper { };
 
 } // namespace pool
