@@ -521,7 +521,7 @@ public:
 
    template <class ST, class SA>
    explicit reg_expression(const std::basic_string<charT, ST, SA>& p, flag_type f = regbase::normal, const Allocator& a = Allocator())
-    : data(a), pkmp(0) { set_expression(p, f); }
+    : data(a), pkmp(0) { set_expression(p, f | regbase::use_except); }
 
    template <class I>
    reg_expression(I first, I last, flag_type f = regbase::normal, const Allocator& al = Allocator())
@@ -562,10 +562,10 @@ public:
    }
 #elif !defined(BOOST_RE_NO_STRING_DEF_ARGS)
    unsigned int BOOST_RE_CALL set_expression(const std::basic_string<charT>& p, flag_type f = regbase::normal)
-   { return set_expression(p.data(), p.data() + p.size(), f); }
+   { return set_expression(p.data(), p.data() + p.size(), f | regbase::use_except); }
 
    reg_expression(const std::basic_string<charT>& p, flag_type f = regbase::normal, const Allocator& a = Allocator())
-    : data(a), pkmp(0) { set_expression(p, f); }
+    : data(a), pkmp(0) { set_expression(p, f | regbase::use_except); }
 
    reg_expression& BOOST_RE_CALL operator=(const std::basic_string<charT>& p)
    {
@@ -980,11 +980,11 @@ public:
       ref->tail.matched = (ref->tail.first == ref->tail.second) ? false : true;
    }
 
-   void BOOST_RE_CALL set_second(iterator i, size_t pos)
+   void BOOST_RE_CALL set_second(iterator i, size_t pos, bool m = true)
    {
       cow();
       ((sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>) * pos))->second = i;
-      ((sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>) * pos))->matched = true;
+      ((sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>) * pos))->matched = m;
       if(pos == 0)
       {
          ref->tail.first = i;

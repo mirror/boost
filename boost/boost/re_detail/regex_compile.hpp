@@ -103,21 +103,21 @@ template <class charT, class traits, class Allocator>
 CONSTRUCTOR_INLINE reg_expression<charT, traits, Allocator>::reg_expression(const charT* p, flag_type f, const Allocator& a)
     : data(a), pkmp(0), error_code_(REG_EMPTY)
 {
-    set_expression(p, f);
+   set_expression(p, f | regbase::use_except);
 }
 
 template <class charT, class traits, class Allocator>
 CONSTRUCTOR_INLINE reg_expression<charT, traits, Allocator>::reg_expression(const charT* p1, const charT* p2, flag_type f, const Allocator& a)
     : data(a), pkmp(0), error_code_(REG_EMPTY)
 {
-    set_expression(p1, p2, f);
+    set_expression(p1, p2, f | regbase::use_except);
 }
 
 template <class charT, class traits, class Allocator>
 CONSTRUCTOR_INLINE reg_expression<charT, traits, Allocator>::reg_expression(const charT* p, size_type len, flag_type f, const Allocator& a)
     : data(a), pkmp(0), error_code_(REG_EMPTY)
 {
-    set_expression(p, p + len, f);
+    set_expression(p, p + len, f | regbase::use_except);
 }
 
 template <class charT, class traits, class Allocator>
@@ -130,10 +130,13 @@ reg_expression<charT, traits, Allocator>::reg_expression(const reg_expression<ch
    if(e.error_code() == 0)
    {
       const charT* pe = e.expression();
-      set_expression(pe, pe + e._expression_len, e.flags());
+      set_expression(pe, pe + e._expression_len, e.flags() | regbase::use_except);
    }
    else
+   {
+      _flags = regbase::use_except;
       fail(e.error_code());
+   }
 }
 
 template <class charT, class traits, class Allocator>
@@ -153,7 +156,7 @@ reg_expression<charT, traits, Allocator>& BOOST_RE_CALL reg_expression<charT, tr
    _flags = use_except;
    fail(e.error_code());
    if(error_code() == 0)
-      set_expression(e._expression, e._expression + e._expression_len, e.flags());
+      set_expression(e._expression, e._expression + e._expression_len, e.flags() | regbase::use_except);
    return *this;
 }
 
@@ -2005,7 +2008,15 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fail(unsigned int e
 {
    error_code_  = err;
    if(err)
-      throw bad_expression(traits_inst.error_string(err));
+   {
+      _flags |= regbase::failbit;
+      if(_flags & regbase::use_except)
+      {
+         throw bad_expression(traits_inst.error_string(err));
+      }
+   }
+   else
+      _flags &= ~regbase::failbit;
 }
 
 
