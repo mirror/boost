@@ -18,7 +18,7 @@ using namespace std;
 using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
-using boost::unit_test::test_suite;   
+using boost::unit_test::test_suite;
 
 // Code generation bugs cause tests to fail with global optimization.
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
