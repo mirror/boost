@@ -11,7 +11,7 @@
   <xsl:param name="max-columns" select="78"/>
 
   <!-- The root of the Boost directory -->
-  <xsl:param name="boost.root" select="'./'"/>
+  <xsl:param name="boost.root" select="'../..'"/>
 
   <!-- A space-separated list of libraries to include in the
        output. If this list is empty, all libraries will be included. -->
@@ -86,7 +86,8 @@
           <xsl:text>Header &lt;</xsl:text>
           <ulink>
             <xsl:attribute name="url">
-              <xsl:text>../../</xsl:text>
+              <xsl:value-of select="$boost.root"/>
+              <xsl:text>/</xsl:text>
               <xsl:value-of select="@name"/>
             </xsl:attribute>
             <xsl:value-of select="@name"/>

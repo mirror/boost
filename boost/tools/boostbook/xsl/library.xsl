@@ -25,7 +25,8 @@
               <xsl:value-of select="$node/attribute::url"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat('../../libs/', 
+              <xsl:value-of select="concat($boost.root,
+                                           '/libs/', 
                                            $node/attribute::dirname, 
                                            '/index.html')"/>
             </xsl:otherwise>
