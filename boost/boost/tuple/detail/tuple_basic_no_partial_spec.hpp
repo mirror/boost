@@ -98,6 +98,7 @@ namespace tuples {
         }
       };
 
+    template <typename T> struct add_const_reference : add_reference<typename add_const<T>::type> {};
   } // end of namespace detail
 
     // cons builds a heterogenous list of types
@@ -108,36 +109,42 @@ namespace tuples {
      typedef Head head_type;
      typedef Tail tail_type;
 
+    private:
+       typedef typename boost::add_reference<head_type>::type head_ref;
+       typedef typename boost::add_reference<tail_type>::type tail_ref;
+       typedef typename detail::add_const_reference<head_type>::type head_cref;
+       typedef typename detail::add_const_reference<tail_type>::type tail_cref;
+    public:
      head_type head;
      tail_type tail;
 
-     typename boost::add_reference<head_type>::type get_head() { return head; }
-     typename boost::add_reference<tail_type>::type get_tail() { return tail; }  
+     head_ref get_head() { return head; }
+     tail_ref get_tail() { return tail; }  
 
-     typename boost::add_reference<const head_type>::type get_head() const { return head; }
-     typename boost::add_reference<const tail_type>::type get_tail() const { return tail; }
+     head_cref get_head() const { return head; }
+     tail_cref get_tail() const { return tail; }
   
 #if defined BOOST_MSVC
       template<typename Tail>
-      explicit cons(const head_type& h /* = head_type() */, // causes MSVC 6.5 to barf.
+      explicit cons(head_cref h /* = head_type() */, // causes MSVC 6.5 to barf.
                     const Tail& t) : head(h), tail(t.head, t.tail)
       {
       }
 
-      explicit cons(const head_type& h /* = head_type() */, // causes MSVC 6.5 to barf.
+      explicit cons(head_cref h /* = head_type() */, // causes MSVC 6.5 to barf.
                     const null_type& t) : head(h), tail(t)
       {
       }
 
 #else
       template<typename T>
-      explicit cons(const head_type& h, const T& t) : 
+      explicit cons(head_cref h, const T& t) : 
         head(h), tail(t.head, t.tail)
       {
       }
 
-      explicit cons(const head_type& h = head_type(),
-                    const tail_type& t = tail_type()) :
+      explicit cons(head_cref h = head_type(),
+                    tail_cref t = tail_type()) :
         head(h), tail(t)
       {
       }
@@ -416,20 +423,31 @@ namespace tuples {
       typedef typename mapped_tuple::cons2 cons2;
       typedef typename mapped_tuple::cons1 cons1;
 
+      typedef typename detail::add_const_reference<T1>::type t1_cref;
+      typedef typename detail::add_const_reference<T2>::type t2_cref;
+      typedef typename detail::add_const_reference<T3>::type t3_cref;
+      typedef typename detail::add_const_reference<T4>::type t4_cref;
+      typedef typename detail::add_const_reference<T5>::type t5_cref;
+      typedef typename detail::add_const_reference<T6>::type t6_cref;
+      typedef typename detail::add_const_reference<T7>::type t7_cref;
+      typedef typename detail::add_const_reference<T8>::type t8_cref;
+      typedef typename detail::add_const_reference<T9>::type t9_cref;
+      typedef typename detail::add_const_reference<T10>::type t10_cref;
     public:
       typedef cons1 inherited;
       typedef tuple self_type;
 
-      explicit tuple(const T1& t1 = T1(), 
-                     const T2& t2 = T2(),
-                     const T3& t3 = T3(),
-                     const T4& t4 = T4(),
-                     const T5& t5 = T5(),
-                     const T6& t6 = T6(),
-                     const T7& t7 = T7(),
-                     const T8& t8 = T8(),
-                     const T9& t9 = T9(),
-                     const T10& t10 = T10()) :
+      explicit tuple(t1_cref t1 = T1(), 
+                     t2_cref t2 = T2(),
+                     t3_cref t3 = T3(),
+                     t4_cref t4 = T4(),
+                     t5_cref t5 = T5(),
+                     t6_cref t6 = T6(),
+                     t7_cref t7 = T7(),
+                     t8_cref t8 = T8(),
+                     t9_cref t9 = T9(),
+                     t10_cref t10 = T10()
+          ) :
         cons1(t1, cons2(t2, cons3(t3, cons4(t4, cons5(t5, cons6(t6,cons7(t7,cons8(t8,cons9(t9,cons10(t10))))))))))
       {
       }
