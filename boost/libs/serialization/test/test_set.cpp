@@ -103,6 +103,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("ahash_set", ahash_set1);
     }
+    bool result = (ahash_set == ahash_set1);
     BOOST_CHECK(ahash_set == ahash_set1);
     
     BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<A> ahash_multiset;
