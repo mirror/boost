@@ -14,6 +14,7 @@
  */
 
 #include <boost/limits.hpp>
+#include <math.h>
 #include <cassert>
 #include <iostream>
 
@@ -42,6 +43,20 @@ void test_integral_limits(const T &, const char * msg)
   // assert(lim::is_modulo);
 
   std::cout << "min: " << lim::min() << ", max: " << lim::max() << '\n';
+}
+
+template <class T>
+void print_hex_val(T t, const char* name)
+{
+	const unsigned char* p = (const unsigned char*)&t;
+	std::cout << "hex value of " << name << " is: ";
+	for (int i = 0; i < sizeof(T); ++i)
+	{
+		if(p[i] <= 0xF)
+			std::cout << "0";
+		std:: cout << std::hex << (int)p[i];
+	}
+	std::cout << endl;
 }
 
 template<class T>
@@ -74,10 +89,14 @@ void test_float_limits(const T &, const char * msg)
 	    << ", exact: " << lim::is_exact << '\n'
 	    << "min: " << lim::min() << ", max: " << lim::max() << '\n'
 	    << "infinity: " << infinity << ", QNaN: " << qnan << '\n';
+	print_hex_val(lim::max(), "max");
+	print_hex_val(infinity, "infinity");
+	print_hex_val(qnan, "qnan");
+	print_hex_val(snan, "snan");
   // infinity is beyond the representable range
   assert(lim::max() > 1000);
-  assert(infinity > lim::max());
-  assert(-infinity < -lim::max());
+  assert(lim::infinity() > lim::max());
+  assert(-lim::infinity() < -lim::max());
   assert(lim::min() < 0.001);
   assert(lim::min() > 0);
 
@@ -124,3 +143,4 @@ int main()
   // warning here if "return 0;" is omitted.
   return 0;
 }
+
