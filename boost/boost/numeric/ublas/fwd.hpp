@@ -103,6 +103,9 @@ namespace boost { namespace numeric { namespace ublas {
     class unit_vector;
 
     template<class T>
+    class zero_vector;
+
+    template<class T>
     class scalar_vector;
 
     template<class T, std::size_t N>
@@ -132,6 +135,9 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     class identity_matrix;
+
+    template<class T>
+    class zero_matrix;
 
     template<class T>
     class scalar_matrix;
