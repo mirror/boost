@@ -20,6 +20,9 @@
 // $Id$
 // ------------------------------------------------------------------------------
 // $Log$
+// Revision 1.2  2001/09/22 11:52:24  johnmaddock
+// Intel C++ fixes: no void return types supported.
+//
 // Revision 1.1.1.1  2000/07/07 16:04:18  beman
 // 1.16.1 initial CVS checkin
 //
@@ -128,7 +131,7 @@ int main()
 
     std::ostream &os = std::cout;
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__ICL)
     // unary_traits, unary_negate
     std::transform(v2.begin(), v2.end(),
                    std::ostream_iterator<bool>(std::cout, " "),
