@@ -620,7 +620,9 @@
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="$boost.generation.mode='standardese'">
-        <xsl:with-param name="text" select="$text"/>
+        <xsl:call-template name="function.documentation.standardese">
+          <xsl:with-param name="text" select="$text"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>Error: invalid value '</xsl:text>
@@ -637,14 +639,17 @@
 
   <xsl:template name="function.documentation.standardese">
     <xsl:param name="text"/>
+    <!--
     <formalpara>
       <title>
         <xsl:call-template name="fully-qualified-name">
           <xsl:with-param name="node" select="."/>
         </xsl:call-template>
-        <xsl:copy-of select="$text"/>
       </title>
+      <xsl:copy-of select="$text"/>
     </formalpara>
+-->
+    <listitem><xsl:copy-of select="$text"/></listitem>
   </xsl:template>
 
   <!-- Semantic descriptions of functions -->
