@@ -163,15 +163,16 @@ bool codecvt_test1()
     typedef code_converter<file_descriptor_source, Codecvt>  wide_file_source;
     typedef code_converter<file_descriptor_sink, Codecvt>    wide_file_sink;
 
+    // Borland needs modes specified separately.
     BOOST_CHECK(Codecvt().max_length() <= max_length);
     temp_file                       temp;
     string_type                     test = test_string<Codecvt>();
-    ios_base::openmode              mode = ios::out | ios::binary; // Borland
+    BOOST_IOS::openmode             mode = BOOST_IOS::out | BOOST_IOS::binary;
     stream_facade<wide_file_sink>   out(temp.name(), mode);
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
-    mode = ios::in | ios::binary;                                  // Borland
+    mode = BOOST_IOS::in | BOOST_IOS::binary;
     stream_facade<wide_file_source> in(temp.name(), mode);
     string_type                     test2;
     boost::iostreams::copy(in, boost::iostreams::back_inserter(test2));
@@ -193,14 +194,15 @@ bool codecvt_test2()
     locale loc = add_facet(locale(), new Codecvt);
     locale::global(loc);
 
+    // Borland needs modes specified separately.
     temp_file                       temp;
     string_type                     test = test_string<Codecvt>();
-    ios_base::openmode              mode = ios::out | ios::binary; // Borland
+    BOOST_IOS::openmode             mode = BOOST_IOS::out | BOOST_IOS::binary;
     stream_facade<wide_file_sink>   out(temp.name(), mode);
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
-    mode = ios::in | ios::binary;                                  // Borland
+    mode = BOOST_IOS::in | BOOST_IOS::binary;
     stream_facade<wide_file_source> in(temp.name(), mode);
     string_type                     test2;
     boost::iostreams::copy(in, boost::iostreams::back_inserter(test2));

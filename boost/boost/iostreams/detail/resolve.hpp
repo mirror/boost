@@ -62,7 +62,7 @@ typename resolve_traits<Mode, Ch, T>::type
 resolve( const T& t 
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)
          #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(810)) || \
-             BOOST_WORKAROUND(__GNUC__, == 3) && !defined(BOOST_INTEL) \
+             BOOST_WORKAROUND(__GNUC__, <= 3) && !defined(BOOST_INTEL) \
              /**/
          , typename disable_if< is_iterator_range<T> >::type* = 0
          #endif
@@ -105,7 +105,12 @@ resolve(const boost::iterator_range<Iter>& rng)
 
 template<typename Mode, typename Ch, typename T>
 typename resolve_traits<Mode, Ch, T>::type
-resolve(const T& t BOOST_IOSTREAMS_DISABLE_IF_STREAM(T))
+resolve( const T& t 
+         BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)
+         #if defined(__GNUC__)
+         , typename disable_if< is_iterator_range<T> >::type* = 0
+         #endif
+         )
 {
     typedef typename resolve_traits<Mode, Ch, T>::type return_type;
     return return_type(t);
@@ -190,7 +195,8 @@ resolve(const T& t BOOST_IOSTREAMS_DISABLE_IF_STREAM(T))
 { return resolve<Mode, Ch>(t, is_std_io<T>()); }
 
 # if !BOOST_WORKAROUND(__BORLANDC__, < 0x600) && \
-     !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) // -------------------------------//
+     !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && \
+     !defined(__GNUC__) // ---------------------------------------------------//
 
 template<typename Mode, typename Ch, typename T>
 typename resolve_traits<Mode, Ch, T>::type 
@@ -213,7 +219,7 @@ typename resolve_traits<Mode, Ch, T>::type
 resolve(T& t BOOST_IOSTREAMS_ENABLE_IF_STREAM(T))
 { return resolve<Mode, Ch>(t, is_std_io<T>()); }
 
-# endif // Borland 5.x or VC6-7.0 // -----------------------------------------//
+# endif // Borland 5.x, VC6-7.0 or GCC 2.9x //--------------------------------//
 #endif // #ifndef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION //---------------//
 
 } } } // End namespaces detail, iostreams, boost.

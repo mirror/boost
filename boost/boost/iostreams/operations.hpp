@@ -14,6 +14,7 @@
 #include <utility>           // pair.
 #include <boost/config.hpp>  // NO_STD_LOCALE, DEDUCED_TYPENAME, MSVC.
 #include <boost/detail/workaround.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/traits.hpp>
@@ -76,8 +77,8 @@ void write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize 
 
 template<typename T>
 inline std::streamoff
-seek( T& t, std::streamoff off, std::ios::seekdir way,
-      std::ios::openmode which = std::ios::in | std::ios::out )
+seek( T& t, std::streamoff off, BOOST_IOS::seekdir way,
+      BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
 { return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
 
 template<typename T>
@@ -95,11 +96,11 @@ inline std::pair<
 output_sequence(T& t) { return detail::direct_impl<T>::output_sequence(t); }
 
 template<typename T>
-void close(T& t, std::ios::openmode which)
+void close(T& t, BOOST_IOS::openmode which)
 { detail::close_impl<T>::close(detail::unwrap(t), which); }
 
 template<typename T, typename Sink>
-void close(T& t, Sink& snk, std::ios::openmode which)
+void close(T& t, Sink& snk, BOOST_IOS::openmode which)
 { detail::close_impl<T>::close(detail::unwrap(t), snk, which); }
 
 template<typename T, typename Locale>
@@ -127,8 +128,9 @@ struct read_impl<input> {
     template<typename T>
     static typename io_int<T>::type get(T& t)
     {
-        typedef std::char_traits<typename io_char<T>::type> traits_type;
-        typename io_char<T>::type c;
+        typedef typename io_char<T>::type               char_type;
+        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
+        char_type c;
         return t.read(&c, 1) == 1 ?
             traits_type::to_int_type(c) :
             traits_type::eof();
@@ -156,7 +158,7 @@ struct read_impl<istream_tag> {
 
     template<typename T>
     static std::streamsize
-    read(T& t, typename T::char_type* s, std::streamsize n)
+    read(T& t, typename io_char<T>::type* s, std::streamsize n)
     { t.read(s, n); return t.gcount(); }
 
     template<typename T>
@@ -172,7 +174,7 @@ struct read_impl<streambuf_tag> {
 
     template<typename T>
     static std::streamsize
-    read(T& t, typename T::char_type* s, std::streamsize n)
+    read(T& t, typename io_char<T>::type* s, std::streamsize n)
     { return t.sgetn(s, n); }
 
     template<typename T>
@@ -211,7 +213,8 @@ struct write_impl<ostream_tag> {
     { t.put(c); }
 
     template<typename T>
-    static void write(T& t, const typename T::char_type* s, std::streamsize n)
+    static void write
+        (T& t, const typename io_char<T>::type* s, std::streamsize n)
     { t.write(s, n); }
 };
 
@@ -222,7 +225,8 @@ struct write_impl<streambuf_tag> {
     { t.sputc(c); }
 
     template<typename T>
-    static void write(T& t, const typename T::char_type* s, std::streamsize n)
+    static void write
+        (T& t, const typename io_char<T>::type* s, std::streamsize n)
     { t.sputn(s, n); }
 };
 
@@ -257,11 +261,11 @@ struct filter_impl<any_tag> {
     static std::streamsize read
         (T& t, Source& src, typename io_char<T>::type* s, std::streamsize n)
     {
-        typedef typename io_char<T>::type    char_type;
-        typedef std::char_traits<char_type>  traits_type;
+        typedef typename io_char<T>::type               char_type;
+        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
         std::streamsize result;
         for (result = 0; result < n; ++result) {
-            typename io_int<T>::type c = t.get(src);
+            char_type c = t.get(src);
             if (traits_type::eq_int_type(c, traits_type::eof()))
                 break;
             s[result] = traits_type::to_int_type(c);
@@ -309,23 +313,26 @@ struct seek_impl
 template<>
 struct seek_impl<any_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
-                                std::ios::openmode )
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode )
     { return t.seek(off, way); }
 };
 
 template<>
 struct seek_impl<two_head> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
-                                std::ios::openmode which )
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode which )
     { return t.seek(off, way, which); }
 };
 
 struct seek_impl_basic_ios {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
-                                std::ios::openmode which )
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode which )
     { return t.rdbuf()->pubseekoff(off, way, which); }
 };
 
@@ -341,8 +348,9 @@ struct seek_impl<iostream_tag> : seek_impl_basic_ios { };
 template<>
 struct seek_impl<streambuf_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
-                                std::ios::openmode which )
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode which )
     { return t.pubseekoff(off, way, which); }
 };
 
@@ -383,30 +391,30 @@ struct close_impl
 template<>
 struct close_impl<any_tag> {
     template<typename T>
-    static void close(T&, std::ios::openmode) { }
+    static void close(T&, BOOST_IOS::openmode) { }
     template<typename T, typename Sink>
-    static void close(T&, Sink&, std::ios::openmode) { }
+    static void close(T&, Sink&, BOOST_IOS::openmode) { }
 };
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // Borland.
 template<>
 struct close_impl<closable_tag> {
     template<typename T>
-    static void close(T& t, std::ios::openmode which)
+    static void close(T& t, BOOST_IOS::openmode which)
     {
         typedef typename io_category<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
-        if (in == ((which & std::ios::in) != 0))
+        if (in == ((which & BOOST_IOS::in) != 0))
             t.close();
     }
     template<typename T, typename Sink>
-    static void close(T& t, Sink& snk, std::ios::openmode which)
+    static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
     {
         typedef typename io_category<T>::type category;
         const bool in =  is_convertible<category, input>::value &&
                         !is_convertible<category, output>::value;
-        if (in == ((which & std::ios::in) != 0))
+        if (in == ((which & BOOST_IOS::in) != 0))
             t.close(snk);
     }
 };
@@ -415,9 +423,9 @@ struct close_impl<closable_tag> {
 template<>
 struct close_impl<two_sequence> {
     template<typename T>
-    static void close(T& t, std::ios::openmode which) { t.close(which); }
+    static void close(T& t, BOOST_IOS::openmode which) { t.close(which); }
     template<typename T, typename Sink>
-    static void close(T& t, Sink& snk, std::ios::openmode which)
+    static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
     { t.close(snk, which); }
 };
 

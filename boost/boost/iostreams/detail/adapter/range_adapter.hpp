@@ -54,7 +54,7 @@ public:
     range_adapter(iterator first, iterator last);
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek(std::streamoff off, std::ios::seekdir way);
+    std::streamoff seek(std::streamoff off, BOOST_IOS::seekdir way);
 private:
     iterator first_, cur_, last_;
 };
@@ -82,7 +82,7 @@ void range_adapter<Mode, Range>::write
 
 template<typename Mode, typename Range>
 std::streamoff range_adapter<Mode, Range>::seek
-    (std::streamoff off, std::ios::seekdir way)
+    (std::streamoff off, BOOST_IOS::seekdir way)
 { 
     impl::seek(first_, cur_, last_, off, way); 
     return static_cast<std::streamoff>(cur_ - first_);
@@ -141,22 +141,22 @@ struct range_adapter_impl<random_access_traversal_tag> {
     template<typename Iter>
     static void seek
         ( Iter& first, Iter& cur, Iter& last, std::streamoff off,
-          std::ios::seekdir way )
+          BOOST_IOS::seekdir way )
     {
         using namespace std;
         switch (way) {
-        case ios::beg:
+        case BOOST_IOS::beg:
             if (off > last - first || off < 0) bad_seek();
             cur = first + off;
             break;
-        case ios::cur:
+        case BOOST_IOS::cur:
             {
                 std::ptrdiff_t newoff = cur - first + off;
                 if (newoff > last - first || newoff < 0) bad_seek();
                 cur += off;
                 break;
             }
-        case ios::end:
+        case BOOST_IOS::end:
             if (last - first + off < 0 || off > 0) bad_seek();
             cur = last + off;
             break;

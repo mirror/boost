@@ -26,9 +26,8 @@
 #include <boost/iostreams/detail/codecvt_holder.hpp>
 #include <boost/iostreams/detail/codecvt_helper.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
-#include <boost/iostreams/detail/failure.hpp>
 #include <boost/iostreams/detail/forward.hpp>
-#include <boost/iostreams/detail/openmode.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // failure, openmode, int types.
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -292,14 +291,14 @@ public:
         // fstream-like interface.
 
     bool is_open() const { return impl().is_open(); }
-    void close(std::ios::openmode = std::ios::in | std::ios::out );
+    void close(BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
 
         // Device interface.
 
     std::streamsize read(char_type*, std::streamsize);
     void write(const char_type*, std::streamsize);
-    std::streamoff seek( std::streamoff, std::ios::seekdir,
-                         std::ios::openmode = std::ios::in | std::ios::out );
+    std::streamoff seek( std::streamoff, BOOST_IOS::seekdir,
+                         BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
     void imbue(const std::locale& loc) { impl().cvt_.imbue(loc); }
 
         // Direct device access.
@@ -326,13 +325,13 @@ private:
 
 template<typename Device, typename Codevt, typename Alloc>
 void code_converter<Device, Codevt, Alloc>::close
-    (std::ios::openmode which)
+    (BOOST_IOS::openmode which)
 {
-    if (which & std::ios::in)
-        iostreams::close(dev(), std::ios::in);
-    if (which & std::ios::out) {
+    if (which & BOOST_IOS::in)
+        iostreams::close(dev(), BOOST_IOS::in);
+    if (which & BOOST_IOS::out) {
         flush();
-        iostreams::close(dev(), std::ios::out);
+        iostreams::close(dev(), BOOST_IOS::out);
     }
 }
 

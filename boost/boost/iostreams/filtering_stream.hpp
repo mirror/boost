@@ -11,17 +11,16 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/config/wide_streams.hpp>
-#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
-# include <istream>
-# include <ostream>
-#else
-# include <iostream.h>
-#endif
-#include <memory>                                // allocator.
+#include <memory>                                     // allocator.
 #include <boost/iostreams/detail/access_control.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
+#include <boost/iostreams/detail/iostream.hpp>        // standard streams.
 #include <boost/iostreams/detail/push.hpp>
+#include <boost/iostreams/detail/select.hpp>
+#include <boost/iostreams/detail/streambuf.hpp>       // pubsync.
 #include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/mpl/and.hpp>
+#include <boost/mpl/bool.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -33,7 +32,6 @@ namespace boost { namespace iostreams {
 
 namespace detail {
 
-#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------------------//
 template<typename Mode, typename Ch, typename Tr>
 struct filtering_stream_traits {
     typedef typename 
@@ -42,31 +40,13 @@ struct filtering_stream_traits {
                     is_convertible<Mode, input>, 
                     is_convertible<Mode, output> 
                 >,          
-                std::basic_iostream<Ch, Tr>,
+                BOOST_IOSTREAMS_BASIC_IOSTREAM(Ch, Tr),
                 is_convertible<Mode, input>, 
-                std::basic_istream<Ch, Tr>,
+                BOOST_IOSTREAMS_BASIC_ISTREAM(Ch, Tr),
                 mpl::true_,        
-                std::basic_ostream<Ch, Tr>
+                BOOST_IOSTREAMS_BASIC_OSTREAM(Ch, Tr)
             >::type type;
 };
-#else // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-----------------------//
-template<typename Mode, typename Ch, typename Tr>
-struct filtering_stream_traits {
-    BOOST_STATIC_ASSERT((is_same<Ch, char>::value));
-    typedef typename 
-            select<                 
-                mpl::and_< 
-                    is_convertible<Mode, input>, 
-                    is_convertible<Mode, output> 
-                >,          
-                std::iostream,
-                is_convertible<Mode, input>, 
-                std::istream,
-                mpl::true_,        
-                std::ostream
-            >::type type;
-};
-#endif // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //----------------------//
 
 template<typename Chain, typename Access>
 class filtering_stream_base 
@@ -105,6 +85,7 @@ private:
 // Macro: BOOST_IOSTREAMS_DEFINE_FILTER_STERAM(name_, chain_type_, default_char_)
 // Description: Defines a template derived from std::basic_streambuf which uses
 //      a chain to perform i/o. The template has the following parameters:
+//      Mode - the i/o mode.
 //      Ch - The character type.
 //      Tr - The character traits type.
 //      Alloc - The allocator type.
@@ -112,12 +93,13 @@ private:
 //          public_ or protected_; defaults to public_.
 // Macro parameters:
 //      name_ - The name of the template to be defined.
-//      mode_ - The i/o mode of the template to be defined.
+//      chain_type_ - The name of the chain template.
+//      default_char_ - The default value for the char template parameter.
 //
 #define BOOST_IOSTREAMS_DEFINE_FILTER_STREAM(name_, chain_type_, default_char_) \
     template< typename Mode, \
               typename Ch = default_char_, \
-              typename Tr = std::char_traits<Ch>, \
+              typename Tr = BOOST_IOSTREAMS_CHAR_TRAITS(Ch), \
               typename Alloc = std::allocator<Ch>, \
               typename Access = public_ > \
     class name_ \
@@ -132,9 +114,10 @@ private:
         typedef chain_type_<Mode, Ch, Tr, Alloc>  chain_type; \
         name_() { } \
         BOOST_IOSTREAMS_DEFINE_PUSH_CONSTRUCTOR(name_, mode, Ch, push_impl) \
-        ~name_() { if (this->is_complete()) this->rdbuf()->pubsync(); } \
-        void clear(std::ios::iostate state = std::ios::goodbit) \
-        { std::basic_ios<char_type, traits_type>::clear(state); } \
+        ~name_() { \
+            if (this->is_complete()) \
+                 this->rdbuf()->BOOST_IOSTREAMS_PUBSYNC(); \
+        } \
     private: \
         typedef access_control< \
                     boost::iostreams::detail::chain_client< \

@@ -99,7 +99,7 @@
     name(::std::streambuf& sb BOOST_IOSTREAMS_PUSH_PARAMS()) \
     { BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, sb, helper, has_return); } \
     BOOST_PP_EXPR_IF(has_return, result) \
-    name(::std::istream<& is BOOST_IOSTREAMS_PUSH_PARAMS()) \
+    name(::std::istream& is BOOST_IOSTREAMS_PUSH_PARAMS()) \
     { BOOST_STATIC_ASSERT((!is_convertible<mode, output>::value)); \
       BOOST_IOSTREAMS_ADAPT_STREAM(mode, ch, is, helper, has_return); } \
     BOOST_PP_EXPR_IF(has_return, result) \

@@ -10,8 +10,10 @@
 #include <boost/config.hpp>                             // SFINAE.
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/error.hpp>
+#include <boost/iostreams/detail/streambuf.hpp>        // pubsync.
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>
@@ -78,26 +80,27 @@ public:
     void write(const char_type* s, std::streamsize n, Sink* snk)
     { output_impl::write(t_, snk, s, n); }
 
-    std::streamoff seek( std::streamoff off, std::ios::seekdir way,
-                         std::ios::openmode which )
+    std::streamoff seek( std::streamoff off, BOOST_IOS::seekdir way,
+                         BOOST_IOS::openmode which )
     { 
         return this->seek( off, way, which, 
                            (basic_null_device<char_type, seekable>*) 0); 
     }
 
     template<typename Device>
-    std::streamoff seek( std::streamoff off, std::ios::seekdir way,
-                         std::ios::openmode which, Device* dev )
+    std::streamoff seek( std::streamoff off, BOOST_IOS::seekdir way,
+                         BOOST_IOS::openmode which, Device* dev )
     { return any_impl::seek(t_, dev, off, way, which); }
 
-    void flush(std::basic_streambuf<char_type>* sb)
-    { if (sb) sb->pubsync(); }
+    void flush( BOOST_IOSTREAMS_BASIC_STREAMBUF(char_type,                
+                BOOST_IOSTREAMS_CHAR_TRAITS(char_type))* sb )
+    { if (sb) sb->BOOST_IOSTREAMS_PUBSYNC(); }
 
-    void close(std::ios::openmode which)
+    void close(BOOST_IOS::openmode which)
     { this->close(which, (basic_null_device<char_type, seekable>*) 0); }
 
     template<typename Device>
-    void close(std::ios::openmode which, Device* dev)
+    void close(BOOST_IOS::openmode which, Device* dev)
     { any_impl::close(t_, dev, which); }
 
     template<typename Locale> // Avoid dependency on <locale>
@@ -113,7 +116,7 @@ struct device_wrapper_impl<any_tag> {
     template<typename Device, typename Dummy>
     static std::streamoff 
     seek( Device& dev, Dummy*, std::streamoff off, 
-          std::ios::seekdir way, std::ios::openmode which )
+          BOOST_IOS::seekdir way, BOOST_IOS::openmode which )
     { 
         typedef typename io_category<Device>::type io_category;
         return seek(dev, off, way, which, io_category()); 
@@ -121,8 +124,8 @@ struct device_wrapper_impl<any_tag> {
 
     template<typename Device>
     static std::streamoff 
-    seek( Device&, std::streamoff, std::ios::seekdir, 
-          std::ios::openmode, any_tag )
+    seek( Device&, std::streamoff, BOOST_IOS::seekdir, 
+          BOOST_IOS::openmode, any_tag )
     { 
         throw cant_seek(); 
     }
@@ -130,14 +133,14 @@ struct device_wrapper_impl<any_tag> {
     template<typename Device>
     static std::streamoff 
     seek( Device& dev, std::streamoff off, 
-          std::ios::seekdir way, std::ios::openmode which, 
+          BOOST_IOS::seekdir way, BOOST_IOS::openmode which, 
           random_access )
     { 
         return iostreams::seek(dev, off, way, which); 
     }
 
     template<typename Device, typename Dummy>
-    static void close(Device& dev, Dummy*, std::ios::openmode which)
+    static void close(Device& dev, Dummy*, BOOST_IOS::openmode which)
     { iostreams::close(dev, which); }
 };
 
@@ -177,7 +180,7 @@ struct flt_wrapper_impl<any_tag> {
     template<typename Filter, typename Device>
     static std::streamoff
     seek( Filter& f, Device* dev, std::streamoff off,
-          std::ios::seekdir way, std::ios::openmode which )
+          BOOST_IOS::seekdir way, BOOST_IOS::openmode which )
     {
         typedef typename io_category<Filter>::type io_category;
         return seek(f, dev, off, way, which, io_category());
@@ -186,13 +189,13 @@ struct flt_wrapper_impl<any_tag> {
     template<typename Filter, typename Device>
     static std::streamoff
     seek( Filter&, Device*, std::streamoff,
-          std::ios::seekdir, std::ios::openmode, any_tag )
+          BOOST_IOS::seekdir, BOOST_IOS::openmode, any_tag )
     { throw cant_seek(); }
 
     template<typename Filter, typename Device>
     static std::streamoff
     seek( Filter& f, Device* dev, std::streamoff off,
-          std::ios::seekdir way, std::ios::openmode which,
+          BOOST_IOS::seekdir way, BOOST_IOS::openmode which,
           random_access tag )
     {
         typedef typename io_category<Filter>::type io_category;
@@ -202,19 +205,19 @@ struct flt_wrapper_impl<any_tag> {
     template<typename Filter, typename Device>
     static std::streamoff
     seek( Filter& f, Device* dev, std::streamoff off,
-          std::ios::seekdir way, std::ios::openmode which,
+          BOOST_IOS::seekdir way, BOOST_IOS::openmode which,
           random_access, any_tag )
     { return f.seek(*dev, off, way); }
 
     template<typename Filter, typename Device>
     static std::streamoff
     seek( Filter& f, Device* dev, std::streamoff off,
-          std::ios::seekdir way, std::ios::openmode which,
+          BOOST_IOS::seekdir way, BOOST_IOS::openmode which,
           random_access, two_sequence )
     { return f.seek(*dev, off, way);  }
 
     template<typename Filter, typename Device>
-    static void close(Filter& f, Device* dev, std::ios::openmode which)
+    static void close(Filter& f, Device* dev, BOOST_IOS::openmode which)
     { iostreams::close(f, *dev, which); }
 };
 

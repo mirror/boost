@@ -15,6 +15,8 @@
 #include <boost/iostreams/device/mapped_file.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // failure.
+
 
 #ifdef BOOST_IOSTREAMS_WINDOWS
 # define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
@@ -39,7 +41,7 @@ struct mapped_file_impl {
     {
         data_ = 0;
         size_ = 0;
-        mode_ = std::ios::openmode();
+        mode_ = BOOST_IOS::openmode();
         error_ = error;
         handle_ = 0;
         #ifdef BOOST_IOSTREAMS_WINDOWS
@@ -65,7 +67,7 @@ struct mapped_file_impl {
     }
     char*                data_;
     std::size_t          size_;
-    std::ios::openmode   mode_;
+    BOOST_IOS::openmode  mode_;
     bool                 error_;
 #ifdef BOOST_IOSTREAMS_WINDOWS
     HANDLE               handle_;
@@ -80,11 +82,11 @@ struct mapped_file_impl {
 mapped_file_source::mapped_file_source( const std::string& path,
                                         mapped_file_source::size_type length,
                                         boost::intmax_t offset )
-{ open(path, std::ios::in, length, offset); }
+{ open(path, BOOST_IOS::in, length, offset); }
 
 void mapped_file_source::open( const std::string& path, size_type length,
                                boost::intmax_t offset )
-{ open(path, std::ios::in, length, offset); }
+{ open(path, BOOST_IOS::in, length, offset); }
 
 mapped_file_source::size_type mapped_file_source::size() const
 { return pimpl_->size_; }
@@ -103,7 +105,7 @@ mapped_file_source::operator mapped_file_source::safe_bool() const
 bool mapped_file_source::operator!() const
 { return !!pimpl_ || pimpl_->error_; }
 
-std::ios::openmode mapped_file_source::mode() const { return pimpl_->mode_; }
+BOOST_IOS::openmode mapped_file_source::mode() const { return pimpl_->mode_; }
 
 const char* mapped_file_source::data() const { return pimpl_->data_; }
 
@@ -120,19 +122,20 @@ void close_handles(detail::mapped_file_impl& impl)
     impl.clear(true);
 }
 
-void mapped_file_source::open( const std::string& path, std::ios::openmode mode,
-                               size_type length, boost::intmax_t offset )
+void mapped_file_source::open( const std::string& path, 
+                               BOOST_IOS::openmode mode, size_type length, 
+                               boost::intmax_t offset )
 {
     using namespace std;
 
     if (is_open())
-        throw ios::failure("file already open");
+        throw detail::failure("file already open");
     if (!pimpl_)
         pimpl_.reset(new impl_type);
     else
         pimpl_->clear(false);
-    bool readonly = (mode & ios::out) == 0;
-    pimpl_->mode_ = readonly ? ios::in : (ios::in | ios::out);
+    bool readonly = (mode & BOOST_IOS::out) == 0;
+    pimpl_->mode_ = readonly ? BOOST_IOS::in : (BOOST_IOS::in | BOOST_IOS::out);
 
     //--------------Open underlying file--------------------------------------//
 
@@ -227,19 +230,20 @@ int mapped_file_source::alignment()
 
 #else // #ifdef BOOST_IOSTREAMS_WINDOWS //-------------------------------------------//
 
-void mapped_file_source::open( const std::string& path, std::ios::openmode mode,
-                               size_type length, boost::intmax_t offset )
+void mapped_file_source::open( const std::string& path, 
+                               BOOST_IOS::openmode mode, size_type length, 
+                               boost::intmax_t offset )
 {
     using namespace std;
 
     if (is_open())
-        throw ios::failure("file already open");
+        throw detail::failure("file already open");
     if (!pimpl_)
         pimpl_.reset(new impl_type);
     else
         pimpl_->clear(false);
-    bool readonly = (mode & ios::out) == 0;
-    pimpl_->mode_ = readonly ? ios::in : (ios::in | ios::out);
+    bool readonly = (mode & BOOST_IOS::out) == 0;
+    pimpl_->mode_ = readonly ? BOOST_IOS::in : (BOOST_IOS::in | BOOST_IOS::out);
 
     //--------------Open underlying file--------------------------------------//
 

@@ -4,8 +4,8 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-// No include guards -- file included by boost/iostreams/streambuf_facade.hpp
-// within include guards.
+#ifndef BOOST_IOSTREAMS_DETAIL_BROKEN_OVERLOAD_RESOLUTION_STREAMBUF_FACADE_HPP_INCLUDED
+#define BOOST_IOSTREAMS_DETAIL_BROKEN_OVERLOAD_RESOLUTION_STREAMBUF_FACADE_HPP_INCLUDED
 
 #include <boost/iostreams/detail/broken_overload_resolution/forward.hpp>
 
@@ -13,9 +13,9 @@ namespace boost { namespace iostreams {
 
 template< typename T, 
           typename Tr = 
-              std::char_traits<
+              BOOST_IOSTREAMS_CHAR_TRAITS(
                   BOOST_DEDUCED_TYPENAME io_char<T>::type 
-              >,
+              ),
           typename Alloc = 
               std::allocator<
                   BOOST_DEDUCED_TYPENAME io_char<T>::type 
@@ -163,3 +163,5 @@ private:
 };
 
 } } // End namespaces iostreams, boost.
+
+#endif BOOST_IOSTREAMS_DETAIL_BROKEN_OVERLOAD_RESOLUTION_STREAMBUF_FACADE_HPP_INCLUDED

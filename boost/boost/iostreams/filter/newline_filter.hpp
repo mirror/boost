@@ -17,8 +17,9 @@
 #include <cassert>     
 #include <cstdio>                            
 #include <stdexcept>                       // logic_error.               
-#include <boost/config.hpp>                // BOOST_STATIC_CONSTANT, 
+#include <boost/config.hpp>                // BOOST_STATIC_CONSTANT.
 #include <boost/iostreams/categories.hpp> 
+#include <boost/iostreams/detail/char_traits.hpp> 
 #include <boost/iostreams/pipable.hpp>      
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp>
@@ -67,14 +68,15 @@ const int print_mask = print_CR | print_LF | print_CRLF;
 template<typename Ch>
 class basic_newline_filter {
 public:
-    typedef Ch                              char_type;
-    typedef std::char_traits<Ch>            traits_type;
-    typedef typename traits_type::int_type  int_type;
+    typedef Ch                                      char_type;
+    typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
+    typedef typename traits_type::int_type          int_type;
     struct io_category 
         : dual_use, 
           filter_tag, 
           closable_tag 
         { };
+
     basic_newline_filter(int flags) : flags_(flags) 
     { 
         using namespace newline;
@@ -166,10 +168,10 @@ public:
     }
 
     template<typename Sink>
-    void close(Sink& snk, std::ios::openmode which)
+    void close(Sink& snk, BOOST_IOS::openmode which)
     {
         using namespace newline;
-        if ( which & std::ios::out && 
+        if ( which & BOOST_IOS::out && 
              (flags_ & final_newline) != 0 && 
              (flags_ & line_complete) == 0 )
         {

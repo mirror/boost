@@ -22,9 +22,11 @@ void seekable_file_test()
 {
     {
         temp_file temp;
-        file f(temp.name(), ios::in | ios::out | ios::trunc | ios::binary);
+        file f( temp.name(), 
+                BOOST_IOS::in | BOOST_IOS::out | 
+                BOOST_IOS::trunc | BOOST_IOS::binary);
         filtering_stream<seekable> io(f);
-        io.exceptions(ios::failbit | ios::badbit);
+        io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
             "failed seeking within a file, in chars"
@@ -33,9 +35,11 @@ void seekable_file_test()
 
     {
         temp_file temp;
-        file f(temp.name(), ios::in | ios::out | ios::trunc | ios::binary);
+        file f( temp.name(), 
+                BOOST_IOS::in | BOOST_IOS::out | 
+                BOOST_IOS::trunc | BOOST_IOS::binary);
         filtering_stream<seekable> io(f);
-        io.exceptions(ios::failbit | ios::badbit);
+        io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chunks(io),
             "failed seeking within a file, in chunks"

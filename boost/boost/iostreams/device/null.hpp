@@ -13,9 +13,8 @@
 # pragma once
 #endif
 
-#include <iosfwd>                              // streamsize.
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/openmode.hpp> // openmodes.
+#include <boost/iostreams/detail/ios.hpp> // openmode, streamsize, streamoff.
 
 namespace boost { namespace iostreams {
 
@@ -30,11 +29,11 @@ public:
         { };
     std::streamsize read(Ch*, std::streamsize) { return 0; }
     void write(const Ch*, std::streamsize) { }
-    std::streamoff seek( std::streamoff, std::ios::seekdir,
-                         std::ios::openmode = 
-                             std::ios::in | std::ios::out ) 
+    std::streamoff seek( std::streamoff, BOOST_IOS::seekdir,
+                         BOOST_IOS::openmode = 
+                             BOOST_IOS::in | BOOST_IOS::out ) 
     { return -1; }
-    void close(std::ios::openmode = std::ios::in | std::ios::out) { }
+    void close(BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out) { }
 };
 
 template<typename Ch>

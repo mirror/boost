@@ -43,7 +43,7 @@
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
-#include <boost/iostreams/detail/openmode.hpp>
+#include <boost/iostreams/detail/ios.hpp>     // openmode.
 #include <boost/iostreams/operations.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -93,7 +93,7 @@ public:
 
     operator safe_bool() const;
     bool operator!() const;
-    std::ios::openmode mode() const;
+    BOOST_IOS::openmode mode() const;
                     
     //--------------Container interface---------------------------------------//
 
@@ -111,7 +111,7 @@ private:
     friend class mapped_file;
     typedef detail::mapped_file_impl impl_type;
     void open( const std::string& pathname, 
-               std::ios::openmode,
+               BOOST_IOS::openmode,
                size_type length, boost::intmax_t offset );
 
     boost::shared_ptr<impl_type> pimpl_;
@@ -137,8 +137,8 @@ public:
     BOOST_STATIC_CONSTANT(size_type, max_length = delegate_type::max_length);
     mapped_file() { }
     mapped_file( const std::string& path, 
-                 std::ios::openmode mode = 
-                     std::ios::in | std::ios::out,
+                 BOOST_IOS::openmode mode = 
+                    BOOST_IOS::in | BOOST_IOS::out,
                  size_type length = max_length,
                  boost::intmax_t offset = 0 ) 
     { delegate_.open(path, mode, length, offset); }
@@ -151,8 +151,8 @@ public:
     //--------------Stream interface------------------------------------------//
 
     void open( const std::string& path, 
-               std::ios::openmode mode = 
-                   std::ios::in | std::ios::out,
+               BOOST_IOS::openmode mode = 
+                   BOOST_IOS::in | BOOST_IOS::out,
                size_type length = max_length,
                boost::intmax_t offset = 0 )
     { delegate_.open(path, mode, length, offset); }
@@ -160,7 +160,7 @@ public:
     void close() { delegate_.close(); }
     operator delegate_type::safe_bool() const { return delegate_; }
     bool operator!() const { return !is_open(); }
-    std::ios::openmode mode() const { return delegate_.mode(); }
+    BOOST_IOS::openmode mode() const { return delegate_.mode(); }
 
     //--------------Container interface---------------------------------------//
 
@@ -191,7 +191,7 @@ struct mapped_file_sink : private mapped_file {
     mapped_file_sink( const std::string& path, 
                       size_type length = max_length,
                       boost::intmax_t offset = 0 ) 
-        : mapped_file(path, std::ios::out | std::ios::trunc) { }
+        : mapped_file(path, BOOST_IOS::out | BOOST_IOS::trunc) { }
 };
                     
 //------------------Specialization of direct_impl-----------------------------//

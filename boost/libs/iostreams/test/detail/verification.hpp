@@ -12,15 +12,19 @@
 #include <string>
 #include <string.h>
 #include <fstream>
-#include <istream>
-#include <ostream>
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
+# include <istream>
+# include <ostream>
+#else
+# include <iostream.h>
+#endif
 
-#include <boost/config.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/config/wide_streams.hpp>
 #include "./constants.hpp"
 
 // Included only by tests; no need to #undef.
-#ifndef BOOST_IOSTREAM_NO_STREAM_TEMPLATES
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 # define BOOST_TEMPLATE_DECL template<typename Ch, typename Tr>
 # define BOOST_CHAR Ch
 # define BOOST_ISTREAM std::basic_istream<Ch, Tr>
@@ -54,8 +58,9 @@ bool compare_streams_in_chunks(BOOST_ISTREAM& first, BOOST_ISTREAM& second)
         first.read(buf_one, chunk_size);
         second.read(buf_two, chunk_size);
         std::streamsize amt = first.gcount();
-        if ( amt != second.gcount() ||
-             std::char_traits<BOOST_CHAR>::compare(buf_one, buf_two, amt) != 0 )
+        if ( amt != static_cast<std::streamsize>(second.gcount()) ||
+             BOOST_IOSTREAMS_CHAR_TRAITS(BOOST_CHAR)::
+                compare(buf_one, buf_two, amt) != 0 )
             return false;
         ++i;
     } while (!first.eof());
@@ -64,12 +69,13 @@ bool compare_streams_in_chunks(BOOST_ISTREAM& first, BOOST_ISTREAM& second)
 
 bool compare_files(const std::string& first, const std::string& second)
 {
-    std::fstream one(first.c_str());
-    std::fstream two(second.c_str());
+    using namespace std;
+    ifstream one(first.c_str(), BOOST_IOS::in | BOOST_IOS::binary);
+    ifstream two(second.c_str(), BOOST_IOS::in | BOOST_IOS::binary);
     return compare_streams_in_chunks(one, two);
 }
 
-#ifndef BOOST_IOSTREAM_NO_STREAM_TEMPLATES
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
     template<typename Container, typename Ch, typename Tr>
 #else
     template<typename Container>
@@ -109,11 +115,11 @@ bool test_seekable_in_chars(std::iostream& io)
         int j;
         for (j = 0; j < chunk_size; ++j)
             io.put(narrow_data()[j]);
-        io.seekp(-chunk_size, std::ios::cur);
+        io.seekp(-chunk_size, BOOST_IOS::cur);
         for (j = 0; j < chunk_size; ++j)
             if (io.get() != narrow_data()[j])
                return false;
-        io.seekp(-chunk_size, std::ios::cur);
+        io.seekp(-chunk_size, BOOST_IOS::cur);
         for (j = 0; j < chunk_size; ++j)
             io.put(narrow_data()[j]);
     }
@@ -124,12 +130,12 @@ bool test_seekable_in_chunks(std::iostream& io)
 {
     for (int i = 0; i < data_reps; ++i) {
         io.write(narrow_data(), chunk_size);
-        io.seekp(-chunk_size, std::ios::cur);
+        io.seekp(-chunk_size, BOOST_IOS::cur);
         char buf[chunk_size];
         io.read(buf, chunk_size);
         if (strncmp(buf, narrow_data(), chunk_size) != 0)
             return false;
-        io.seekp(-chunk_size, std::ios::cur);
+        io.seekp(-chunk_size, BOOST_IOS::cur);
         io.write(narrow_data(), chunk_size);
     }
     return true;
@@ -141,7 +147,7 @@ bool unbuffered_putback_test(std::istream& is)
         do {
             char buf[chunk_size];
             is.read(buf, chunk_size);
-            if (is.gcount() < chunk_size)
+            if (is.gcount() < static_cast<std::streamsize>(chunk_size))
                 break;
             is.putback('a');
             if (is.get() != 'a')
@@ -157,7 +163,7 @@ bool buffered_putback_test(std::istream& is)
         do {
             char buf[chunk_size];
             is.read(buf, chunk_size);
-            if (is.gcount() < chunk_size)
+            if (is.gcount() < static_cast<std::streamsize>(chunk_size))
                 break;
             is.putback('a');
             is.putback('b');

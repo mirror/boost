@@ -15,11 +15,10 @@
 // a filter or device to function as if it has a different i/o mode than that
 // deduced by the metafunction io_mode.
 
-#include <iosfwd>                               // streamsize, streamoff.
-#include <boost/config.hpp>                     // BOOST_MSVC.
+#include <boost/config.hpp>                // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/openmode.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // openmode, seekdir, int types. 
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp> 
 #include <boost/mpl/if.hpp> 
@@ -49,11 +48,11 @@ public:
 
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek( std::streamoff off, std::ios::seekdir way,
-                         std::ios::openmode which = 
-                             std::ios::in | std::ios::out );
+    std::streamoff seek( std::streamoff off, BOOST_IOS::seekdir way,
+                         BOOST_IOS::openmode which = 
+                             BOOST_IOS::in | BOOST_IOS::out );
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    void close(std::ios::openmode which = std::ios::in | std::ios::out);
+    void close(BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out);
 #endif
 
         // Filter member functions.
@@ -67,12 +66,12 @@ public:
     { iostreams::write(t_, snk, s, n); }
 
     template<typename Device>
-    std::streamoff seek(Device& dev, std::streamoff off, std::ios::seekdir way)
+    std::streamoff seek(Device& dev, std::streamoff off, BOOST_IOS::seekdir way)
     { return iostreams::seek(t_, dev, off, way); }
 
     template<typename Device>
-    std::streamoff seek( Device& dev, std::streamoff off, std::ios::seekdir way,
-                         std::ios::openmode which  )
+    std::streamoff seek( Device& dev, std::streamoff off, 
+                         BOOST_IOS::seekdir way, BOOST_IOS::openmode which  )
     { return iostreams::seek(t_, dev, off, way, which); }
 
     template<typename Device>
@@ -80,7 +79,7 @@ public:
     { iostreams::close(t_, dev); }
 
     template<typename Device>
-    void close(Device& dev, std::ios::openmode which)
+    void close(Device& dev, BOOST_IOS::openmode which)
     { iostreams::close(t_, dev, which); }
 
     template<typename Locale>
@@ -102,12 +101,12 @@ void mode_adapter<Mode, T>::write(const char_type* s, std::streamsize n)
 
 template<typename Mode, typename T>
 std::streamoff mode_adapter<Mode, T>::seek
-    (std::streamoff off, std::ios::seekdir way, std::ios::openmode which)
+    (std::streamoff off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 { return boost::iostreams::seek(t_, off, way, which); }
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     template<typename Mode, typename T>
-    void mode_adapter<Mode, T>::close(std::ios::openmode which) 
+    void mode_adapter<Mode, T>::close(BOOST_IOS::openmode which) 
     { iostreams::close(t_, which); }
 #endif
 

@@ -12,11 +12,11 @@
 // than using it (possibly importing code).
 #define BOOST_IOSTREAMS_SOURCE 
 
-#include <ios>              // openmodes, failure.
 #include <boost/config.hpp> // BOOST_JOIN
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/windows_posix.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // openmodes, failure.
 #include <boost/iostreams/device/file_descriptor.hpp>
 
     // OS-specific headers for low-level i/o.
@@ -49,8 +49,8 @@ namespace boost { namespace iostreams {
 //------------------Implementation of file_descriptor-------------------------//
 
 void file_descriptor::open
-    ( const std::string& path, std::ios::openmode m,
-      std::ios::openmode base )
+    ( const std::string& path, BOOST_IOS::openmode m,
+      BOOST_IOS::openmode base )
 {
     using namespace std;
     m |= base;
@@ -58,22 +58,25 @@ void file_descriptor::open
         // Calculate oflag argument to open.
 
     int oflag = 0;
-    if ((m & (ios::in | ios::out)) == (ios::in | ios::out)) {
-        assert(!(m & ios::app));
+    if ( (m & (BOOST_IOS::in | BOOST_IOS::out)) 
+             == 
+         (BOOST_IOS::in | BOOST_IOS::out) ) 
+    {
+        assert(!(m & BOOST_IOS::app));
         oflag |= O_RDWR;
-    } else if (m & ios::in) {
-        assert(!(m & (ios::app |ios::trunc)));
+    } else if (m & BOOST_IOS::in) {
+        assert(!(m & (BOOST_IOS::app |BOOST_IOS::trunc)));
         oflag |= O_RDONLY;
-    } else if (m & ios::out) {
+    } else if (m & BOOST_IOS::out) {
         oflag |= O_WRONLY;
-        m |= ios::trunc;
-        if (m & ios::app)
+        m |= BOOST_IOS::trunc;
+        if (m & BOOST_IOS::app)
             oflag |= O_APPEND;
     }
-    if (m & ios::trunc)
+    if (m & BOOST_IOS::trunc)
         oflag |= O_CREAT;
     #ifdef BOOST_IOSTREAMS_WINDOWS
-        if (m & ios::binary)
+        if (m & BOOST_IOS::binary)
             oflag |= O_BINARY;
     #endif
 
@@ -94,13 +97,15 @@ void file_descriptor::open
     #ifndef __BORLANDC__
         fd_ = BOOST_RTL(open)(path.c_str(), oflag, pmode);
     #else
-        fd_ = (m & ios::out) && (!(m & ios::in) || (m & ios::trunc)) ?
-            BOOST_RTL(creat)(path.c_str(), 0) :
-            BOOST_RTL(open)(path.c_str(), oflag);
+        fd_ = (m & BOOST_IOS::out) && 
+              (!(m & BOOST_IOS::in) || (m & BOOST_IOS::trunc)) 
+                  ?
+              BOOST_RTL(creat)(path.c_str(), 0) :
+              BOOST_RTL(open)(path.c_str(), oflag);
     #endif
 
     if (fd_ == -1)
-        throw std::ios::failure("bad open");
+        throw detail::failure("bad open");
     close_ = true;
 }
 
@@ -109,7 +114,7 @@ std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
     errno = 0;
     std::streamsize result = BOOST_RTL(read)(fd_, s, n);
     if (errno != 0)
-        throw std::ios::failure("bad open");
+        throw detail::failure("bad open");
     return result;
 }
 
@@ -121,7 +126,7 @@ void file_descriptor::write(const char_type* s, std::streamsize n)
 }
 
 std::streamoff file_descriptor::seek
-    (std::streamoff off, std::ios::seekdir way)
+    (std::streamoff off, BOOST_IOS::seekdir way)
 {
     using namespace std;
     std::streamoff result =
@@ -130,9 +135,9 @@ std::streamoff file_descriptor::seek
         #else
             lseek
         #endif
-            (fd_, off, way == ios::beg ?
+            (fd_, off, way == BOOST_IOS::beg ?
                            SEEK_SET :
-                           way == ios::cur ?
+                           way == BOOST_IOS::cur ?
                                SEEK_CUR :
                                SEEK_END );
     if (result == -1)
@@ -143,7 +148,7 @@ std::streamoff file_descriptor::seek
 void file_descriptor::close()
 {
     if (close_ && fd_ != -1 && BOOST_RTL(close)(fd_) == -1)
-        throw std::ios::failure("bad close");
+        throw detail::failure("bad close");
 }
 
 } } // End namespaces iostreams, boost.

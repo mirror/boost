@@ -14,12 +14,11 @@
 # pragma once
 #endif              
 
-#include <iosfwd>                                      // streamsize, streamoff.
-#include <string>                                      // file pathnames.
-#include <boost/iostreams/categories.hpp>              // tags.
+#include <string>                          // file pathnames.
+#include <boost/iostreams/categories.hpp>  // tags.
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
-#include <boost/iostreams/detail/openmode.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // openmode, seekdir, int types.
 
 // Must come last.
 #include <boost/config/abi_prefix.hpp>     
@@ -34,19 +33,19 @@ public:
     explicit file_descriptor(int fd, bool close = false) 
         : fd_(fd), close_(close) { }
     explicit file_descriptor( const std::string& path, 
-                              std::ios::openmode mode =
-                                  std::ios::in | std::ios::out,
-                              std::ios::openmode base_mode =
-                                  std::ios::in | std::ios::out )
+                              BOOST_IOS::openmode mode =
+                                  BOOST_IOS::in | BOOST_IOS::out,
+                              BOOST_IOS::openmode base_mode =
+                                  BOOST_IOS::in | BOOST_IOS::out )
     { open(path, mode, base_mode); }
     void open( const std::string& path, 
-               std::ios::openmode =
-                   std::ios::in | std::ios::out,
-               std::ios::openmode base_mode =
-                   std::ios::in | std::ios::out );
+               BOOST_IOS::openmode =
+                   BOOST_IOS::in | BOOST_IOS::out,
+               BOOST_IOS::openmode base_mode =
+                   BOOST_IOS::in | BOOST_IOS::out );
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek(std::streamoff off, std::ios::seekdir way);
+    std::streamoff seek(std::streamoff off, BOOST_IOS::seekdir way);
     void close();
 private:
     int   fd_;
@@ -63,8 +62,8 @@ struct file_descriptor_source : private file_descriptor {
     explicit file_descriptor_source(int fd, bool close = false) 
         : file_descriptor(fd, close) { }
     explicit file_descriptor_source( const std::string& path, 
-                                     std::ios::openmode m = std::ios::in )
-        : file_descriptor(path, m & ~std::ios::out, std::ios::in) 
+                                     BOOST_IOS::openmode m = BOOST_IOS::in )
+        : file_descriptor(path, m & ~BOOST_IOS::out, BOOST_IOS::in) 
         { }
 };
 
@@ -78,8 +77,8 @@ struct file_descriptor_sink : private file_descriptor {
     explicit file_descriptor_sink(int fd, bool close = false) 
         : file_descriptor(fd, close) { }
     explicit file_descriptor_sink( const std::string& path, 
-                                   std::ios::openmode m = std::ios::out )
-        : file_descriptor(path, m & ~std::ios::in, std::ios::out) 
+                                   BOOST_IOS::openmode m = BOOST_IOS::out )
+        : file_descriptor(path, m & ~BOOST_IOS::in, BOOST_IOS::out) 
         { }
 };
 

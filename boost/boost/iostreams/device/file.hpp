@@ -17,13 +17,18 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif        
 
-#include <fstream>
-#include <locale>
-#include <string>                                // pathnames, char_traits.
-#include <boost/iostreams/categories.hpp>               
-#include <boost/shared_ptr.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
+#ifndef BOOST_IOSTREAMS_NO_LOCALE
+# include <locale>
+#endif
+#include <string>                               // pathnames, char_traits.
+#include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/detail/ios.hpp>       // openmode, seekdir, int types.
+#include <boost/iostreams/detail/fstream.hpp>
+#include <boost/iostreams/detail/streambuf.hpp> // pubseekoff.
+#include <boost/shared_ptr.hpp>      
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
@@ -39,23 +44,25 @@ public:
           public localizable_tag
         { };
     basic_file( const std::string& path,
-                std::ios::openmode mode =
-                    std::ios::in | std::ios::out,
-                std::ios::openmode base_mode =
-                    std::ios::in | std::ios::out );
+                BOOST_IOS::openmode mode =
+                    BOOST_IOS::in | BOOST_IOS::out,
+                BOOST_IOS::openmode base_mode =
+                    BOOST_IOS::in | BOOST_IOS::out );
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek( std::streamoff off, std::ios::seekdir way, 
-                         std::ios::openmode mode = 
-                             std::ios::in | std::ios::out );
+    std::streamoff seek( std::streamoff off, BOOST_IOS::seekdir way, 
+                         BOOST_IOS::openmode which = 
+                             BOOST_IOS::in | BOOST_IOS::out );
     void close();
+#ifndef BOOST_IOSTREAMS_NO_LOCALE
     void imbue(const std::locale& loc) { pimpl_->file_.pubimbue(loc);  }
+#endif
 private:
     struct impl {
-        impl(const std::string& path, std::ios::openmode mode)
+        impl(const std::string& path, BOOST_IOS::openmode mode)
             { file_.open(path.c_str(), mode); }
         ~impl() { if (file_.is_open()) file_.close(); }
-        std::basic_filebuf<Ch> file_;
+        BOOST_IOSTREAMS_BASIC_FILEBUF(Ch) file_;
     };
     shared_ptr<impl> pimpl_;
 };
@@ -73,8 +80,9 @@ struct basic_file_source : private basic_file<Ch> {
     using basic_file<Ch>::read;
     using basic_file<Ch>::close;
     basic_file_source( const std::string& path,
-                       std::ios::openmode mode = std::ios::in )
-        : basic_file<Ch>(path, mode & ~std::ios::out, std::ios::in) 
+                       BOOST_IOS::openmode mode = 
+                           BOOST_IOS::in )
+        : basic_file<Ch>(path, mode & ~BOOST_IOS::out, BOOST_IOS::in) 
         { }
 };
 
@@ -91,8 +99,8 @@ struct basic_file_sink : private basic_file<Ch> {
     using basic_file<Ch>::write;
     using basic_file<Ch>::close;
     basic_file_sink( const std::string& path,
-                     std::ios::openmode mode = std::ios::out )
-        : basic_file<Ch>(path, mode & ~std::ios::in, std::ios::out) 
+                     BOOST_IOS::openmode mode = BOOST_IOS::out )
+        : basic_file<Ch>(path, mode & ~BOOST_IOS::in, BOOST_IOS::out) 
         { }
 };
 
@@ -103,8 +111,8 @@ typedef basic_file_sink<wchar_t>  wfile_sink;
 
 template<typename Ch>
 basic_file<Ch>::basic_file
-    ( const std::string& path, std::ios::openmode mode, 
-      std::ios::openmode base_mode )
+    ( const std::string& path, BOOST_IOS::openmode mode, 
+      BOOST_IOS::openmode base_mode )
     : pimpl_(new impl(path, mode | base_mode)) { }
 
 template<typename Ch>
@@ -119,9 +127,9 @@ inline void basic_file<Ch>::write
 
 template<typename Ch>
 std::streamoff basic_file<Ch>::seek
-    ( std::streamoff off, std::ios::seekdir way, 
-      std::ios::openmode )
-{ return pimpl_->file_.pubseekoff(off, way); }
+    ( std::streamoff off, BOOST_IOS::seekdir way, 
+      BOOST_IOS::openmode )
+{ return pimpl_->file_.BOOST_IOSTREAMS_PUBSEEKOFF(off, way); }
 
 template<typename Ch>
 void basic_file<Ch>::close() { pimpl_->file_.close(); }

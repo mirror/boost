@@ -84,8 +84,8 @@ void write(T& t, Sink& snk, const typename io_char<T>::type* s, std::streamsize 
 
 template<typename T>
 inline std::streamoff
-seek( T& t, std::streamoff off, std::ios::seekdir way,
-      std::ios::openmode which = std::ios::in | std::ios::out )
+seek( T& t, std::streamoff off, BOOST_IOS::seekdir way,
+      BOOST_IOS::openmode which = BOOST_IOS::in | BOOST_IOS::out )
 { return detail::seek_impl<T>::seek(detail::unwrap(t), off, way, which); }
 
 template<typename T>
@@ -103,14 +103,14 @@ inline std::pair<
 output_sequence(T& t) { return detail::direct_impl<T>::output_sequence(t); }
 
 template<typename T>
-void close(T& t, std::ios::openmode which)
+void close(T& t, BOOST_IOS::openmode which)
 { 
     typedef typename detail::unwrapped_type<T>::type unwrapped;
     detail::close_impl<T>::inner<unwrapped>::close(detail::unwrap(t), which); 
 }
 
 template<typename T, typename Sink>
-void close(T& t, Sink& snk, std::ios::openmode which)
+void close(T& t, Sink& snk, BOOST_IOS::openmode which)
 { 
     typedef typename detail::unwrapped_type<T>::type unwrapped;
     detail::close_impl<T>::inner<unwrapped>::close(detail::unwrap(t), snk, which); 
@@ -387,23 +387,25 @@ struct seek_impl
 template<>
 struct seek_impl<any_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
-                                std::ios::openmode )
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way, BOOST_IOS::openmode )
     { return t.seek(off, way); }
 };
 
 template<>
 struct seek_impl<two_head> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
-                                std::ios::openmode which )
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way, 
+                                BOOST_IOS::openmode which )
     { return t.seek(off, way, which); }
 };
 
 struct seek_impl_basic_ios {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
-                                std::ios::openmode which )
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode which )
     { return t.rdbuf()->pubseekoff(off, way, which); }
 };
 
@@ -419,8 +421,9 @@ struct seek_impl<iostream_tag> : seek_impl_basic_ios { };
 template<>
 struct seek_impl<streambuf_tag> {
     template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
-                                std::ios::openmode which )
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode which )
     { return t.pubseekoff(off, way, which); }
 };
 
@@ -462,9 +465,9 @@ template<>
 struct close_impl<any_tag> {
     template<typename T>
     struct inner {
-        static void close(T&, std::ios::openmode) { }
+        static void close(T&, BOOST_IOS::openmode) { }
         template<typename Sink>
-        static void close(T&, Sink&, std::ios::openmode) { }
+        static void close(T&, Sink&, BOOST_IOS::openmode) { }
     };
 };
 
@@ -472,21 +475,21 @@ template<>
 struct close_impl<closable_tag> {
     template<typename T>
     struct inner {
-        static void close(T& t, std::ios::openmode which)
+        static void close(T& t, BOOST_IOS::openmode which)
         {
             typedef typename io_category<T>::type category;
             const bool in =  is_convertible<category, input>::value &&
                             !is_convertible<category, output>::value;
-            if (in == ((which & std::ios::in) != 0))
+            if (in == ((which & BOOST_IOS::in) != 0))
                 t.close();
         }
         template<typename Sink>
-        static void close(T& t, Sink& snk, std::ios::openmode which)
+        static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
         {
             typedef typename io_category<T>::type category;
             const bool in =  is_convertible<category, input>::value &&
                             !is_convertible<category, output>::value;
-            if (in == ((which & std::ios::in) != 0))
+            if (in == ((which & BOOST_IOS::in) != 0))
                 t.close(snk);
         }
     };
@@ -496,9 +499,9 @@ template<>
 struct close_impl<two_sequence> {
     template<typename T>
     struct inner {
-        static void close(T& t, std::ios::openmode which) { t.close(which); }
+        static void close(T& t, BOOST_IOS::openmode which) { t.close(which); }
         template<typename Sink>
-        static void close(T& t, Sink& snk, std::ios::openmode which)
+        static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
         { t.close(snk, which); }
     };
 };

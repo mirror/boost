@@ -17,7 +17,7 @@
 #include <cstddef>                   // size_t.
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/error.hpp>
-#include <boost/iostreams/detail/openmode.hpp>  // openmode.
+#include <boost/iostreams/detail/ios.hpp>  // openmode, seekdir, int types.
 #include <boost/mpl/if.hpp>
 #include <boost/ref.hpp>
 #include <boost/shared_ptr.hpp>
@@ -67,8 +67,8 @@ public:
         : pimpl_(new impl(ref.get_pointer(), false)) { }
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek( std::streamoff, std::ios::seekdir,
-                         std::ios::openmode = std::ios::in | std::ios::out );
+    std::streamoff seek( std::streamoff, BOOST_IOS::seekdir,
+                         BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
     Container container() const { return *pimpl_->cnt_; }
     void container(const Container& cnt)
     { 
@@ -124,22 +124,22 @@ void random_access_container_adapter<Container, Mode>::write
 
 template<typename Container, typename Mode>
 std::streamoff random_access_container_adapter<Container, Mode>::seek
-    (std::streamoff off, std::ios::seekdir way, std::ios::openmode which)
+    (std::streamoff off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 {
     using namespace std;
-    if (way == ios::cur && pimpl_->gptr() != pimpl_->pptr())
+    if (way == BOOST_IOS::cur && pimpl_->gptr() != pimpl_->pptr())
        bad_seek();
     bool dual = is_convertible<Mode, two_sequence>::value;
-    if ((which & ios::in) || !dual) {
+    if ((which & BOOST_IOS::in) || !dual) {
         std::size_t next;
         switch (way) {
-        case ios::beg:
+        case BOOST_IOS::beg:
             next = off; 
             break;
-        case ios::cur:
+        case BOOST_IOS::cur:
             next = pimpl_->gptr() + off; 
             break;
-        case ios::end: 
+        case BOOST_IOS::end: 
             next = cnt().size() + off; 
             break;
         }
@@ -148,16 +148,16 @@ std::streamoff random_access_container_adapter<Container, Mode>::seek
         else
             bad_seek();
     }
-    if ((which & ios::out) && dual) {
+    if ((which & BOOST_IOS::out) && dual) {
         std::size_t next;
         switch (way) {
-        case ios::beg:
+        case BOOST_IOS::beg:
             next = off; 
             break;
-        case ios::cur:
+        case BOOST_IOS::cur:
             next = pimpl_->pptr() + off; 
             break;
-        case ios::end:
+        case BOOST_IOS::end:
             next = cnt().size() + off; 
             break;
         }
@@ -167,7 +167,7 @@ std::streamoff random_access_container_adapter<Container, Mode>::seek
             bad_seek();
     }
     return static_cast<std::streamoff>(
-               (which & ios::in) ?
+               (which & BOOST_IOS::in) ?
                     pimpl_->gptr() :
                     pimpl_->pptr()
            );

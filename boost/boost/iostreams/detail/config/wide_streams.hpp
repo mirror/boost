@@ -7,13 +7,12 @@
 // Adapted from http://www.boost.org/more/separate_compilation.html, by
 // John Maddock.
 
-#ifndef BOOST_IOSTREAMS_DETAIL_CONFIG_LOCALE_HPP_INCLUDED
-#define BOOST_IOSTREAMS_DETAIL_CONFIG_LOCALE_HPP_INCLUDED
+#ifndef BOOST_IOSTREAMS_DETAIL_CONFIG_WIDE_STREAMS_HPP_INCLUDED
+#define BOOST_IOSTREAMS_DETAIL_CONFIG_WIDE_STREAMS_HPP_INCLUDED
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 #include <cstddef>
-#include <locale> 
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
@@ -21,7 +20,7 @@
 
 //------------------Templated stream support----------------------------------//
 
-#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //From boost/dynamic_bitset.hpp.
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES // From boost/dynamic_bitset.hpp.
 # if defined(__STL_CONFIG_H) && !defined (__STL_USE_NEW_IOSTREAMS)
 #  define BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 # endif
@@ -57,8 +56,19 @@
 # define BOOST_EMPTY_PRIMARY_CODECVT_DEFINITION
 #endif
 
+//------------------Normalize codecvt::length---------------------------------//
+
+#if !defined(__MSL_CPP__) && !defined(__LIBCOMO__)
+    #define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER const
+#else
+    #define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER
+#endif
                     
 //------------------Put mbstate_t and codecvt in std--------------------------//
+
+#ifndef BOOST_IOSTREAMS_NO_LOCALE
+# include <locale>
+#endif
 
 // From Robert Ramey's version of utf8_codecvt_facet.
 namespace std { 
@@ -75,12 +85,4 @@ namespace std {
 
 } // End namespace std.
 
-//------------------Normalize codecvt::length---------------------------------//
-
-#if !defined(__MSL_CPP__) && !defined(__LIBCOMO__)
-    #define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER const
-#else
-    #define BOOST_IOSTREAMS_CODECVT_CV_QUALIFIER
-#endif
-
-#endif // #ifndef BOOST_IOSTREAMS_DETAIL_CONFIG_LOCALE_HPP_INCLUDED
+#endif // #ifndef BOOST_IOSTREAMS_DETAIL_CONFIG_WIDE_STREAMS_HPP_INCLUDED

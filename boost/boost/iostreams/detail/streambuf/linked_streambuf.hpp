@@ -11,9 +11,10 @@
 # pragma once
 #endif              
  
-#include <streambuf>                  
-#include <boost/config.hpp>  // member template friends.
-#include <boost/iostreams/detail/openmode.hpp>
+#include <boost/config.hpp>                        // member template friends.
+#include <boost/iostreams/detail/char_traits.hpp>
+#include <boost/iostreams/detail/ios.hpp>          // openmode.
+#include <boost/iostreams/detail/streambuf.hpp>
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp> // MSVC.
 
@@ -24,20 +25,20 @@ class chain_base;
 
 template<typename Chain, typename Access, typename Mode> class chainbuf;
 
-#define BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base)              \
-    using base::eback; using base::gptr; using base::egptr;           \
-    using base::setg; using base::gbump; using base::pbase;           \
-    using base::pptr; using base::epptr; using base::setp;            \
-    using base::pbump; using base::underflow; using base::pbackfail;  \
-    using base::xsgetn; using base::overflow; using base::sputc;      \
-    using base::xsputn; using base::sync; using base::seekoff;        \
-    using base::seekpos;                                              \
+#define BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base) \
+    using base::eback; using base::gptr; using base::egptr; \
+    using base::setg; using base::gbump; using base::pbase; \
+    using base::pptr; using base::epptr; using base::setp; \
+    using base::pbump; using base::underflow; using base::pbackfail; \
+    using base::xsgetn; using base::overflow; using base::sputc; \
+    using base::xsputn; using base::sync; using base::seekoff; \
+    using base::seekpos; \
     /**/
 
-template<typename Ch, typename Tr = std::char_traits<Ch> >
-class linked_streambuf : public std::basic_streambuf<Ch, Tr> {
+template<typename Ch, typename Tr = BOOST_IOSTREAMS_CHAR_TRAITS(Ch) >
+class linked_streambuf : public BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, Tr) {
 protected:
-    typedef std::basic_streambuf<Ch> link;
+    typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(Ch, Tr) link;
     linked_streambuf() { }
 
     //----------grant friendship to chain_base and chainbuf-------------------//
@@ -49,12 +50,11 @@ protected:
     template<typename Chain, typename Mode, typename Access>
     friend class chainbuf;
 #else
-    public:
-        typedef std::basic_streambuf<Ch, Tr> base;
-        BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base)
+public:
+    BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(link)
 #endif
     virtual void set_next(link* /* next */) { }
-    virtual void close(std::ios::openmode) = 0;
+    virtual void close(BOOST_IOS::openmode) = 0;
 };
                                     
 } } } // End namespaces detail, iostreams, boost.

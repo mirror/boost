@@ -18,6 +18,7 @@
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/adapter/concept_adapter.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/push.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
@@ -47,7 +48,11 @@ private:
     typedef detail::basic_buffer<char_type, Alloc>            buffer_type;
     typedef indirect_streambuf<T, Tr, Alloc, Mode>            my_type;
     typedef detail::linked_streambuf<char_type, traits_type>  base_type;
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
     typedef std::basic_streambuf<char_type, traits_type>      streambuf_type;
+#else
+    typedef std::streambuf                                    streambuf_type;
+#endif
 public:
     indirect_streambuf();
     ~indirect_streambuf();
@@ -61,21 +66,25 @@ public:
     T& operator*() { return *obj(); }
     T* operator->() { return &*obj(); }
 protected:
+#if !BOOST_WORKAROUND(__GNUC__, == 2)
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
+#endif
 
     //----------virtual functions---------------------------------------------//
 
+#ifndef BOOST_IOSTREAMS_NO_LOCALE
     void imbue(const std::locale& loc);
+#endif
     int_type underflow();
     int_type pbackfail(int_type c);
     std::streamsize xsgetn(char_type* s, std::streamsize n);
     int_type overflow(int_type c);
     std::streamsize xsputn(const char_type* s, std::streamsize n);
     int sync();
-    pos_type seekoff( off_type off, std::ios::seekdir way,
-                      std::ios::openmode which );
-    pos_type seekpos(pos_type sp, std::ios::openmode which);
-    void close(std::ios::openmode m); // Declared in linked_streambuf.
+    pos_type seekoff( off_type off, BOOST_IOS::seekdir way,
+                      BOOST_IOS::openmode which );
+    pos_type seekpos(pos_type sp, BOOST_IOS::openmode which);
+    void close(BOOST_IOS::openmode m); // Declared in linked_streambuf.
     void set_next(streambuf_type* next); // Declared in linked_streambuf.
 private:
 
@@ -97,10 +106,10 @@ private:
 
     //----------Utility function----------------------------------------------//
 
-    pos_type seek_impl( off_type off, std::ios::seekdir way,
-                        std::ios::openmode which );
+    pos_type seek_impl( off_type off, BOOST_IOS::seekdir way,
+                        BOOST_IOS::openmode which );
     void sync_impl();
-    void close_impl(std::ios::openmode);
+    void close_impl(BOOST_IOS::openmode);
 
     enum {
         f_open             = 1,
@@ -187,15 +196,16 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::close()
 {
     using namespace std;
     if ((flags_ & f_input_closed) == 0)
-        try { close(std::ios::in); } catch (std::exception&) { }
+        try { close(BOOST_IOS::in); } catch (std::exception&) { }
     if ((flags_ & f_output_closed) == 0)
-        try { close(std::ios::out); } catch (std::exception&) { }
+        try { close(BOOST_IOS::out); } catch (std::exception&) { }
     storage_.reset();
     flags_ = 0;
 }
 
 //--------------Implementation virtual functions------------------------------//
 
+#ifndef BOOST_IOSTREAMS_NO_LOCALE
 template<typename T, typename Tr, typename Alloc, typename Mode>
 void indirect_streambuf<T, Tr, Alloc, Mode>::imbue(const std::locale& loc)
 {
@@ -205,6 +215,7 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::imbue(const std::locale& loc)
             next_->pubimbue(loc);
     }
 }
+#endif
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 typename indirect_streambuf<T, Tr, Alloc, Mode>::int_type
@@ -346,22 +357,22 @@ int indirect_streambuf<T, Tr, Alloc, Mode>::sync()
 template<typename T, typename Tr, typename Alloc, typename Mode>
 inline typename indirect_streambuf<T, Tr, Alloc, Mode>::pos_type
 indirect_streambuf<T, Tr, Alloc, Mode>::seekoff
-    (off_type off, std::ios::seekdir way, std::ios::openmode which)
+    (off_type off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 { return seek_impl(off, way, which); }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 inline typename indirect_streambuf<T, Tr, Alloc, Mode>::pos_type
 indirect_streambuf<T, Tr, Alloc, Mode>::seekpos
-    (pos_type sp, std::ios::openmode)
-{ return seek_impl(sp, std::ios::beg, std::ios::in | std::ios::out); }
+    (pos_type sp, BOOST_IOS::openmode)
+{ return seek_impl(sp, BOOST_IOS::beg, BOOST_IOS::in | BOOST_IOS::out); }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 typename indirect_streambuf<T, Tr, Alloc, Mode>::pos_type
 indirect_streambuf<T, Tr, Alloc, Mode>::seek_impl
-    (off_type off, std::ios::seekdir way, std::ios::openmode which)
+    (off_type off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 {
     if (pptr() != 0) sync();
-    if (way == std::ios::cur && gptr())
+    if (way == BOOST_IOS::cur && gptr())
         off -= static_cast<off_type>(egptr() - gptr());
     setg(0, 0, 0);
     setp(0, 0);
@@ -375,7 +386,7 @@ inline void indirect_streambuf<T, Tr, Alloc, Mode>::set_next
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 inline void indirect_streambuf<T, Tr, Alloc, Mode>::close
-    (std::ios::openmode which)
+    (BOOST_IOS::openmode which)
 {
     close_impl(which);
     try { obj().close(which, next_); } catch (std::exception&) { }
@@ -385,13 +396,13 @@ inline void indirect_streambuf<T, Tr, Alloc, Mode>::close
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 inline void indirect_streambuf<T, Tr, Alloc, Mode>::close_impl
-    (std::ios::openmode which)
+    (BOOST_IOS::openmode which)
 {
-    if (which & std::ios::in) {
+    if (which & BOOST_IOS::in) {
         setg(0, 0, 0);
         flags_ |= f_input_closed;
     }
-    if (which & std::ios::out) {
+    if (which & BOOST_IOS::out) {
         sync();
         setp(0, 0);
         flags_ |= f_output_closed;

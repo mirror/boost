@@ -30,7 +30,7 @@ void write_bidirectional_filter_test()
         filtering_stream<bidirectional>  out;
         out.push(combine(toupper_filter(), tolower_filter()));
         filebuf dest;
-        dest.open(lower2.name().c_str(), ios::out | ios::trunc);
+        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chars(out);
         dest.close();
@@ -48,7 +48,7 @@ void write_bidirectional_filter_test()
         filtering_stream<bidirectional>  out;
         out.push(combine(toupper_filter(), tolower_filter()));
         filebuf dest;
-        dest.open(lower2.name().c_str(), ios::out | ios::trunc);
+        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chunks(out);
         dest.close();
@@ -65,7 +65,7 @@ void write_bidirectional_filter_test()
             combine(toupper_filter(), tolower_multichar_filter()), 0
         );
         filebuf dest;
-        dest.open(lower2.name().c_str(), ios::out | ios::trunc);
+        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chars(out);
         dest.close();
@@ -82,7 +82,7 @@ void write_bidirectional_filter_test()
             combine(toupper_filter(), tolower_multichar_filter()), 0
         );
         filebuf dest;
-        dest.open(lower2.name().c_str(), ios::out | ios::trunc);
+        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chunks(out);
         dest.close();
@@ -99,7 +99,7 @@ void write_bidirectional_filter_test()
             combine(toupper_filter(), tolower_multichar_filter())
         );
         filebuf dest;
-        dest.open(lower2.name().c_str(), ios::out | ios::trunc);
+        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chars(out);
         dest.close();
@@ -116,7 +116,7 @@ void write_bidirectional_filter_test()
             combine(toupper_filter(), tolower_multichar_filter())
         );
         filebuf dest;
-        dest.open(lower2.name().c_str(), ios::out | ios::trunc);
+        dest.open(lower2.name().c_str(), BOOST_IOS::out | BOOST_IOS::trunc);
         out.push(dest);
         write_data_in_chunks(out);
         dest.close();

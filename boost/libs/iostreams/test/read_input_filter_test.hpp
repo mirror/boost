@@ -30,7 +30,6 @@ void read_input_filter_test()
         filtering_istream first;
         first.push(toupper_filter());
         first.push(file_source(test.name()));
-        first.imbue(std::locale::classic());
         ifstream second(upper.name().c_str());
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),

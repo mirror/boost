@@ -15,6 +15,9 @@
 #include <cstddef>
 #include <utility>                              // pair.
 #include <boost/config.hpp>                     // BOOST_DEDUCED_TYPENAME.
+#include <boost/iostreams/detail/char_traits.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
+#include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/traits.hpp>
@@ -24,21 +27,23 @@
 
 namespace boost { namespace iostreams { namespace detail {
 
-template< typename T, 
+template< typename T,
           typename Tr = 
-              std::char_traits<
+              BOOST_IOSTREAMS_CHAR_TRAITS(
                  BOOST_DEDUCED_TYPENAME io_char<T>::type 
-              > >
+              ) >
 class direct_streambuf 
-    : public linked_streambuf<BOOST_DEDUCED_TYPENAME io_char<T>::type , Tr> 
+    : public linked_streambuf<BOOST_DEDUCED_TYPENAME io_char<T>::type, Tr>
 {
 public:
     typedef typename io_char<T>::type                     char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
 private:
     typedef linked_streambuf<char_type, traits_type>      base_type;
-    typedef std::basic_streambuf<char_type, traits_type>  streambuf_type;
     typedef typename io_category<T>::type                 io_category;
+    typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(
+                char_type, traits_type
+            )                                             streambuf_type;
 public: // stream_facade needs access.
     void open( const T& t,
                std::streamsize,   // buffer size -- not used.
@@ -46,7 +51,9 @@ public: // stream_facade needs access.
     bool is_open();
     void close();
 protected:
+#if !BOOST_WORKAROUND(__GNUC__, == 2)
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
+#endif
     direct_streambuf();
 
     //--------------Virtual functions-----------------------------------------//
@@ -54,13 +61,13 @@ protected:
     int_type underflow();
     int_type pbackfail(int_type c);
     int_type overflow(int_type c);
-    pos_type seekoff( off_type off, std::ios::seekdir way,
-                      std::ios::openmode which );
-    pos_type seekpos(pos_type sp, std::ios::openmode which);
-    void close(std::ios::openmode m);
+    pos_type seekoff( off_type off, BOOST_IOS::seekdir way,
+                      BOOST_IOS::openmode which );
+    pos_type seekpos(pos_type sp, BOOST_IOS::openmode which);
+    void close(BOOST_IOS::openmode m);
 private:
-    pos_type seek_impl( off_type off, std::ios::seekdir way,
-                        std::ios::openmode which );
+    pos_type seek_impl( off_type off, BOOST_IOS::seekdir way,
+                        BOOST_IOS::openmode which );
     void init_input(any_tag) { }
     void init_input(input);
     void init_output(any_tag) { }
@@ -143,37 +150,37 @@ direct_streambuf<T, Tr>::overflow(int_type c)
 template<typename T, typename Tr>
 inline typename direct_streambuf<T, Tr>::pos_type
 direct_streambuf<T, Tr>::seekoff
-    (off_type off, std::ios::seekdir way, std::ios::openmode which)
+    (off_type off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 { return seek_impl(off, way, which); }
 
 template<typename T, typename Tr>
 inline typename direct_streambuf<T, Tr>::pos_type
 direct_streambuf<T, Tr>::seekpos
-    (pos_type sp, std::ios::openmode)
-{ return seek_impl(sp, std::ios::beg, std::ios::in | std::ios::out); }
+    (pos_type sp, BOOST_IOS::openmode)
+{ return seek_impl(sp, BOOST_IOS::beg, BOOST_IOS::in | BOOST_IOS::out); }
 
 template<typename T, typename Tr>
-void direct_streambuf<T, Tr>::close(std::ios::openmode) { close(); }
+void direct_streambuf<T, Tr>::close(BOOST_IOS::openmode) { close(); }
 
 template<typename T, typename Tr>
 typename direct_streambuf<T, Tr>::pos_type direct_streambuf<T, Tr>::seek_impl
-    (off_type off, std::ios::seekdir way, std::ios::openmode which)
+    (off_type off, BOOST_IOS::seekdir way, BOOST_IOS::openmode which)
 {
     using namespace std;
-    ios::openmode both = ios::in | ios::out;
+    BOOST_IOS::openmode both = BOOST_IOS::in | BOOST_IOS::out;
     if (two_head() && (which & both) == both)
         throw bad_seek();
     off_type result = -1;
     bool one = one_head();
     if (one && (pptr() != 0 || gptr()== 0))
         init_get_area(); // Switch to input mode, for code reuse.
-    if (one || (which & ios::in) != 0 && ibeg_ != 0) {
+    if (one || (which & BOOST_IOS::in) != 0 && ibeg_ != 0) {
         if (!gptr()) setg(ibeg_, ibeg_, iend_);
         ptrdiff_t next = 0;
         switch (way) {
-        case ios::beg: next = off; break;
-        case ios::cur: next = (gptr() - ibeg_) + off; break;
-        case ios::end: next = (iend_ - ibeg_) + off; break;
+        case BOOST_IOS::beg: next = off; break;
+        case BOOST_IOS::cur: next = (gptr() - ibeg_) + off; break;
+        case BOOST_IOS::end: next = (iend_ - ibeg_) + off; break;
         default: assert(0);
         }
         if (next < 0 || next > (iend_ - ibeg_))
@@ -181,13 +188,13 @@ typename direct_streambuf<T, Tr>::pos_type direct_streambuf<T, Tr>::seek_impl
         setg(ibeg_, ibeg_ + next, iend_);
         result = next;
     }
-    if (!one && (which & ios::out) != 0 && obeg_ != 0) {
+    if (!one && (which & BOOST_IOS::out) != 0 && obeg_ != 0) {
         if (!pptr()) setp(obeg_, oend_);
         ptrdiff_t next = 0;
         switch (way) {
-        case ios::beg: next = off; break;
-        case ios::cur: next = (pptr() - obeg_) + off; break;
-        case ios::end: next = (oend_ - obeg_) + off; break;
+        case BOOST_IOS::beg: next = off; break;
+        case BOOST_IOS::cur: next = (pptr() - obeg_) + off; break;
+        case BOOST_IOS::end: next = (oend_ - obeg_) + off; break;
         default: assert(0);
         }
         if (next < 0 || next > (oend_ - obeg_))

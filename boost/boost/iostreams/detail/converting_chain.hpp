@@ -13,10 +13,12 @@
 # pragma once
 #endif              
 
-#include <memory>                               // allocator.
+#include <memory>                                // allocator.
 #include <boost/iostreams/converter.hpp>
 #include <boost/iostreams/detail/chain.hpp>
 #include <boost/iostreams/detail/push.hpp>
+#include <boost/iostreams/detail/ios.hpp>        // seekdir, streamsize.
+#include <boost/iostreams/detail/streambuf.hpp>  // pubsync.
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -68,8 +70,8 @@ public:
 
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    off_type seek(off_type off, std::ios::seekdir way);
-    void flush() { list().front()->pubsync(); }
+    off_type seek(off_type off, BOOST_IOS::seekdir way);
+    void flush() { list().front()->BOOST_IOSTREAMS_PUBSYNC(); }
 
     //----------Container interface-------------------------------------------//
 

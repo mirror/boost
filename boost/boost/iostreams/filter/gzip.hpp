@@ -15,16 +15,20 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>               // STATIC_CONSTANT, STDC_NAMESPACE.
+#include <boost/config.hpp> // STATIC_CONSTANT, STDC_NAMESPACE, 
+                            // DINKUMWARE_STDLIB, __STL_CONFIG_H.
 #include <algorithm>                      // min.
 #include <cstdio>                         // EOF.
 #include <ctime>                          // std::time_t.
 #include <memory>                         // allocator.
-#include <sstream>                        // allocator.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>  // buffer size.
+#include <boost/iostreams/detail/char_traits.hpp>
+#include <boost/iostreams/detail/ios.hpp> // failure.
 #include <boost/iostreams/operations.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
 #include <boost/iostreams/pipable.hpp>      
+#include <boost/iostreams/streambuf_facade.hpp>      
 
 // Must come last.
 #if defined(BOOST_MSVC)
@@ -216,18 +220,24 @@ public:
         }
 
     template<typename Sink>
-    void close(Sink& snk, std::ios::openmode m)
+    void close(Sink& snk, BOOST_IOS::openmode m)
         {
-            if (m & std::ios::out) {
+            if (m & BOOST_IOS::out) {
 
                 // Close zlib compressor.
-                base_type::close(snk, std::ios::out);
+                base_type::close(snk, BOOST_IOS::out);
 
                 // Write final fields of gzip file format.
                 write_long(this->crc(), snk);
                 write_long(this->total_in(), snk);
             }
-            footer_.clear();
+            #if BOOST_WORKAROUND(__GNUC__, == 2) && defined(__STL_CONFIG_H) || \
+                BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) \
+                /**/
+                footer_.erase(0, std::string::npos);
+            #else
+                footer_.clear();
+            #endif
             offset_ = 0;
             flags_ = 0;
         }
@@ -328,7 +338,7 @@ public:
     void close(Source& src)
         {
             try {
-                base_type::close(src, std::ios::in);
+                base_type::close(src, BOOST_IOS::in);
                 flags_ = 0;
             } catch (const zlib_error& e) {
                 throw gzip_error(e);
@@ -342,8 +352,8 @@ public:
     int os() const { return os_; }
     std::time_t mtime() const { return mtime_; }
 private:
-    typedef basic_zlib_decompressor<Alloc>        base_type;
-    typedef typename std::char_traits<char_type>  traits_type;
+    typedef basic_zlib_decompressor<Alloc>     base_type;
+    typedef BOOST_IOSTREAMS_CHAR_TRAITS(char)  traits_type;
     static bool is_eof(int c) { return traits_type::eq_int_type(c, EOF); }
     static gzip_params make_params(int window_bits);
 
@@ -385,8 +395,15 @@ private:
     void read_header(Source& src)
         {
             // Reset saved values.
-            file_name_.clear();
-            comment_.clear();
+            #if BOOST_WORKAROUND(__GNUC__, == 2) && defined(__STL_CONFIG_H) || \
+                BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) \
+                /**/
+                file_name_.erase(0, std::string::npos);
+                comment_.erase(0, std::string::npos);
+            #else
+                file_name_.clear();
+                comment_.clear();
+            #endif
             os_ = gzip::os_unknown;
             mtime_ = 0;
 
@@ -428,12 +445,13 @@ private:
     template<typename Source>
     void read_footer(Source& src)
         {
-            std::basic_string<char_type, traits_type, Alloc> footer =
+            typename base_type::string_type footer = 
                 this->unconsumed_input();
             int c;
             while (!is_eof(c = boost::iostreams::get(src)))
                 footer += c;
-            std::basic_stringbuf<char_type, traits_type, Alloc> in(footer);
+            streambuf_facade<array_source> 
+                in(footer.c_str(), footer.c_str() + footer.size());
             if ( static_cast<unsigned long>(read_long(in, gzip::bad_footer))
                     !=
                  this->crc() )

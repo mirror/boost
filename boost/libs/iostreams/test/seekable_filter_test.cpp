@@ -27,7 +27,7 @@ void seekable_filter_test()
         filtering_stream<seekable> io;
         io.push(identity_seekable_filter());
         io.push(make_iterator_range(test));
-        io.exceptions(ios::failbit | ios::badbit);
+        io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
             "failed seeking within a file, in chars"
@@ -39,7 +39,7 @@ void seekable_filter_test()
         filtering_stream<seekable> io;
         io.push(identity_seekable_filter());
         io.push(make_iterator_range(test));
-        io.exceptions(ios::failbit | ios::badbit);
+        io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chunks(io),
             "failed seeking within a file, in chunks"
@@ -51,7 +51,7 @@ void seekable_filter_test()
         filtering_stream<seekable> io;
         io.push(identity_seekable_multichar_filter());
         io.push(make_iterator_range(test));
-        io.exceptions(ios::failbit | ios::badbit);
+        io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
             "failed seeking within a file, in chars"
@@ -63,7 +63,7 @@ void seekable_filter_test()
         filtering_stream<seekable> io;
         io.push(identity_seekable_multichar_filter());
         io.push(make_iterator_range(test));
-        io.exceptions(ios::failbit | ios::badbit);
+        io.exceptions(BOOST_IOS::failbit | BOOST_IOS::badbit);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chunks(io),
             "failed seeking within a file, in chunks"

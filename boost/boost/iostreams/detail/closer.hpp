@@ -11,9 +11,9 @@
 # pragma once
 #endif              
 
-#include <exception>                            // exception.
-#include <boost/iostreams/detail/openmode.hpp>
-#include <boost/iostreams/operations.hpp>       // close.
+#include <exception>                       // exception.
+#include <boost/iostreams/detail/ios.hpp>  // openmode.
+#include <boost/iostreams/operations.hpp>  // close.
 
 namespace boost { namespace iostreams { namespace detail {
 
@@ -26,7 +26,7 @@ struct closer {
 
 template<typename T>
 struct external_closer {
-    external_closer(T& t, std::ios::openmode mode) 
+    external_closer(T& t, BOOST_IOS::openmode mode) 
         : t_(&t), mode_(mode) 
         { }
     ~external_closer() 
@@ -36,7 +36,7 @@ struct external_closer {
         } catch (std::exception&) { } 
     }
     T* t_;
-    std::ios::openmode  mode_;
+    BOOST_IOS::openmode  mode_;
 };
 
 } } } // End namespaces detail, iostreams, boost.

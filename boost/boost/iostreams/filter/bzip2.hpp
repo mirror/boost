@@ -10,18 +10,17 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
-
-#include <iosfwd>            // streamsize.                         
+                   
 #include <cassert>                            
 #include <memory>            // allocator.
 #include <new>               // bad_alloc.
 #include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME, DINKUM.
 #include <boost/detail/workaround.hpp>
-#include <boost/iostreams/constants.hpp>  // buffer size.
+#include <boost/iostreams/constants.hpp>   // buffer size.
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/bzip2.hpp>
-#include <boost/iostreams/detail/failure.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
 #include <boost/iostreams/filter/symmetric_filter_adapter.hpp>               
 #include <boost/iostreams/pipable.hpp>       
 #include <boost/type_traits/is_same.hpp>     

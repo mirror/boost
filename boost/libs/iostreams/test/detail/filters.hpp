@@ -10,14 +10,16 @@
 #define BOOST_IOSTREAMS_TEST_FILTERS_HPP_INCLUDED
 
 #include <boost/config.hpp>                 
-#include <algorithm>                        // min.
-#include <cctype>                           // to_upper, to_lower.
-#include <cstdlib>                          // to_upper, to_lower (VC6).
-#include <cstddef>                          // ptrdiff_t.
-#include <streambuf>
+#include <algorithm>                            // min.
+#include <cctype>                               // to_upper, to_lower.
+#include <cstdlib>                              // to_upper, to_lower (VC6).
+#include <cstddef>                              // ptrdiff_t.
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
+#include <boost/iostreams/detail/iostream.hpp>  // seekdir, streamsize.
+#include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/pipable.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #ifdef BOOST_NO_STDC_NAMESPACE
@@ -30,29 +32,6 @@ struct toupper_filter : public input_filter {
     template<typename Source>
     int get(Source& s) { return std::toupper(boost::iostreams::get(s)); }
 };
-// BEGIN DEBUG
-//template<typename Concept> 
-//::boost::iostreams::detail::piper< 
-//    ::boost::iostreams::detail::piper< 
-//        ::boost::iostreams::detail::null_piper, toupper_filter 
-//    >, 
-//    Concept 
-//> 
-//operator|( const ::boost::iostreams::detail::piper< 
-//                     ::boost::iostreams::detail::null_piper, 
-//                     toupper_filter 
-//                 >& p, 
-//           const Concept& concept) 
-//{
-//  return ::boost::iostreams::detail::piper< 
-//                ::boost::iostreams::detail::piper< 
-//                     ::boost::iostreams::detail::null_piper, 
-//                     toupper_filter 
-//                >, 
-//                Concept 
-//           >(p, concept);
-//}
-// END DEBUG
 BOOST_IOSTREAMS_PIPABLE(toupper_filter, 0)
 
 struct tolower_filter : public output_filter {
@@ -86,8 +65,7 @@ BOOST_IOSTREAMS_PIPABLE(tolower_multichar_filter, 0)
 // Note: The filter is given an internal buffer, unnecessary in this simple
 // case, to test symmetric_filter_adapter.
 struct toupper_symmetric_filter {
-    typedef char                    char_type;
-    typedef std::char_traits<char>  traits_type;
+    typedef char char_type;
     toupper_symmetric_filter() : buf_(default_filter_buffer_size) 
     { 
         buf_.set(0, 0);
@@ -109,7 +87,8 @@ struct toupper_symmetric_filter {
     {
         std::ptrdiff_t count =
             std::min<std::ptrdiff_t>( src_end - src_begin,
-                                      buf_.size() - (buf_.eptr() - buf_.data()) );
+                                      buf_.size() - 
+                                          (buf_.eptr() - buf_.data()) );
         while (count-- > 0)
             *buf_.eptr()++ = std::toupper(*src_begin++);
     }
@@ -139,7 +118,7 @@ struct identity_seekable_filter : filter<seekable> {
     void put(Sink& s, char c) { boost::iostreams::put(s, c); }
 
     template<typename Device>
-    std::streamoff seek(Device& d, std::streamoff off, std::ios::seekdir way)
+    std::streamoff seek(Device& d, std::streamoff off, BOOST_IOS::seekdir way)
     { return boost::iostreams::seek(d, off, way); }
 };
 BOOST_IOSTREAMS_PIPABLE(identity_seekable_filter, 0)
@@ -152,7 +131,7 @@ struct identity_seekable_multichar_filter : multichar_filter<seekable> {
     void write(Sink& s, const char* buf, std::streamsize n)
     { boost::iostreams::write(s, buf, n); }
     template<typename Device>
-    std::streamoff seek(Device& d, std::streamoff off, std::ios::seekdir way)
+    std::streamoff seek(Device& d, std::streamoff off, BOOST_IOS::seekdir way)
     { return boost::iostreams::seek(d, off, way); }
 };
 BOOST_IOSTREAMS_PIPABLE(identity_seekable_multichar_filter, 0)

@@ -28,7 +28,7 @@ void mapped_file_test()
         test_file test;
         stream_facade<mapped_file_source> first(test.name());
         ifstream second( test.name().c_str(), 
-                         std::ios::in | std::ios::binary );
+                         BOOST_IOS::in | BOOST_IOS::binary );
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chars(first, second),
             "failed reading from stream_facade<mapped_file_source> in chars"
@@ -41,7 +41,7 @@ void mapped_file_test()
         // in chunks. (Also tests reopening the stream_facade.)
         first.open(mapped_file_source(test.name()));
         second.open( test.name().c_str(), 
-                     std::ios::in | std::ios::binary );
+                     BOOST_IOS::in | BOOST_IOS::binary );
         BOOST_CHECK_MESSAGE(
             compare_streams_in_chunks(first, second),
             "failed reading from stream_facade<mapped_file_source> in chunks"

@@ -12,10 +12,10 @@
 #include "detail/temp_file.hpp"
 #include "detail/verification.hpp"
 
-using namespace std;
 using namespace boost;
 using namespace boost::iostreams;
 using namespace boost::iostreams::test;
+using std::ifstream;
 using boost::unit_test_framework::test_suite;   
 
 void file_descriptor_test()
@@ -72,7 +72,7 @@ void file_descriptor_test()
                                                     
     {
         temp_file             temp;
-        file_descriptor_sink  file(temp.name(), ios_base::trunc);
+        file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
         fdostream             out(file, 0);
         write_data_in_chars(out);
         out.close();
@@ -84,7 +84,7 @@ void file_descriptor_test()
 
     {
         temp_file             temp;
-        file_descriptor_sink  file(temp.name(), ios_base::trunc);
+        file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
         fdostream             out(file, 0);
         write_data_in_chunks(out);
         out.close();
@@ -96,7 +96,7 @@ void file_descriptor_test()
 
     {
         temp_file             temp;
-        file_descriptor_sink  file(temp.name(), ios_base::trunc);
+        file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
         fdostream             out(file);
         write_data_in_chars(out);
         out.close();
@@ -108,7 +108,7 @@ void file_descriptor_test()
 
     {
         temp_file             temp;
-        file_descriptor_sink  file(temp.name(), ios_base::trunc);
+        file_descriptor_sink  file(temp.name(), BOOST_IOS::trunc);
         fdostream             out(file);
         write_data_in_chunks(out);
         out.close();
@@ -123,8 +123,10 @@ void file_descriptor_test()
     {
         temp_file                  temp;
         file_descriptor            file( temp.name(),
-                                         ios_base::in | ios_base::out |
-                                         ios_base::trunc | ios_base::binary );
+                                         BOOST_IOS::in | 
+                                         BOOST_IOS::out |
+                                         BOOST_IOS::trunc | 
+                                         BOOST_IOS::binary );
         fdstream                   io(file, BUFSIZ);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chars(io),
@@ -135,8 +137,10 @@ void file_descriptor_test()
     {
         temp_file                  temp;
         file_descriptor            file( temp.name(),
-                                         ios_base::in | ios_base::out |
-                                         ios_base::trunc | ios_base::binary );
+                                         BOOST_IOS::in | 
+                                         BOOST_IOS::out |
+                                         BOOST_IOS::trunc | 
+                                         BOOST_IOS::binary );
         fdstream                   io(file, BUFSIZ);
         BOOST_CHECK_MESSAGE(
             test_seekable_in_chunks(io),

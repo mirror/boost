@@ -26,7 +26,7 @@ void read_bidirectional_streambuf_test()
 
     {
         filebuf fb;
-        fb.open(test1.name().c_str(), ios::in);
+        fb.open(test1.name().c_str(), BOOST_IOS::in);
         filtering_stream<bidirectional> first(fb, 0);
         ifstream second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
@@ -38,7 +38,7 @@ void read_bidirectional_streambuf_test()
 
     {
         filebuf fb;
-        fb.open(test1.name().c_str(), ios::in);
+        fb.open(test1.name().c_str(), BOOST_IOS::in);
         filtering_stream<bidirectional> first(fb, 0);
         ifstream second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
@@ -50,7 +50,7 @@ void read_bidirectional_streambuf_test()
 
     {
         filebuf fb;
-        fb.open(test1.name().c_str(), ios::in);
+        fb.open(test1.name().c_str(), BOOST_IOS::in);
         filtering_stream<bidirectional> first(fb);
         ifstream second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(
@@ -62,7 +62,7 @@ void read_bidirectional_streambuf_test()
 
     {
         filebuf fb;
-        fb.open(test1.name().c_str(), ios::in);
+        fb.open(test1.name().c_str(), BOOST_IOS::in);
         filtering_stream<bidirectional> first(fb);
         ifstream second(test2.name().c_str());
         BOOST_CHECK_MESSAGE(

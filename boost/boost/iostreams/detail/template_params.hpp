@@ -11,7 +11,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 
 #define BOOST_IOSTREAMS_TEMPLATE_PARAMS(arity) \
-    template BOOST_PP_EXPR_IF(arity, <) \
+    BOOST_PP_EXPR_IF(arity, template<) \
     BOOST_PP_ENUM_PARAMS(arity, typename T) \
     BOOST_PP_EXPR_IF(arity, >) \
     /**/

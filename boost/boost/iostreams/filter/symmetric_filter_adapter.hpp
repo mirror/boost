@@ -40,6 +40,7 @@
 #include <boost/config.hpp>                     // BOOST_DEDUCED_TYPENAME.
 #include <boost/iostreams/constants.hpp>        // buffer size.
 #include <boost/iostreams/detail/buffer.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/operations.hpp>       // read, write.
@@ -54,9 +55,8 @@ namespace detail {
 template<typename SymmetricFilter, typename Alloc>
 class symmetric_filter_adapter_impl {
 public:
-    typedef typename io_char<SymmetricFilter>::type           char_type;
-    typedef std::char_traits<char_type>                       traits_type;
-    typedef std::basic_string<char_type, traits_type, Alloc>  string_type;
+    typedef typename io_char<SymmetricFilter>::type  char_type;
+    typedef std::basic_string<char_type>             string_type;
     struct category
         : dual_use,
           filter_tag,
@@ -123,12 +123,12 @@ public:
     typedef symmetric_filter_adapter_impl<SymmetricFilter, Alloc> self;
     friend struct closer<self>;
     template<typename Sink>
-    void close(Sink& snk, std::ios::openmode which)
+    void close(Sink& snk, BOOST_IOS::openmode which)
     {
         using namespace std;
-        if ((state_ & f_read) && (which & ios::in))
+        if ((state_ & f_read) && (which & BOOST_IOS::in))
             close();
-        if ((state_ & f_write) && (which & ios::out)) {
+        if ((state_ & f_write) && (which & BOOST_IOS::out)) {
             closer<self> closer(*this);
             char e; // Dummy.
             const char* end = &e;
@@ -202,7 +202,7 @@ public:
     { pimpl_->write(snk, s, n); }
 
     template<typename Sink>
-    void close(Sink& snk, std::ios::openmode which)
+    void close(Sink& snk, BOOST_IOS::openmode which)
     { pimpl_->close(snk, which); }
 protected:
     typedef typename impl_type::string_type         string_type;

@@ -11,7 +11,7 @@
 # pragma once
 #endif              
                  
-#include <boost/iostreams/detail/failure.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // failure.
 
 namespace boost { namespace iostreams { namespace detail {
 

@@ -13,9 +13,10 @@
 
 #include <memory>            // allocator.
 #include <boost/config.hpp>  // BOOST_DEDUCED_TYPENAME.
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
-#include <boost/iostreams/detail/failure.hpp>
 #include <boost/iostreams/detail/forward.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
 #include <boost/iostreams/detail/param_type.hpp>
 #include <boost/iostreams/detail/streambuf/direct_streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/indirect_streambuf.hpp>
@@ -50,9 +51,9 @@ namespace boost { namespace iostreams {
 
 template< typename T, 
           typename Tr = 
-              std::char_traits<
+              BOOST_IOSTREAMS_CHAR_TRAITS(
                   BOOST_DEDUCED_TYPENAME io_char<T>::type 
-              >,
+              ),
           typename Alloc = 
               std::allocator<
                   BOOST_DEDUCED_TYPENAME io_char<T>::type

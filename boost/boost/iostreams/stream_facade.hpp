@@ -11,16 +11,11 @@
 # pragma once
 #endif
 
-#include <boost/iostreams/detail/config/wide_streams.hpp>
-#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
-# include <istream>
-# include <ostream>
-#else
-# include <iostream.h>
-#endif
 #include <boost/iostreams/constants.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/forward.hpp>
+#include <boost/iostreams/detail/iostream.hpp>  // standard streams.
 #include <boost/iostreams/detail/select.hpp>
 #include <boost/iostreams/streambuf_facade.hpp>
 #include <boost/mpl/and.hpp>
@@ -28,53 +23,33 @@
 
 namespace boost { namespace iostreams { namespace detail {
 
-#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------------------//
 template<typename Device, typename Tr>
 struct stream_facade_traits {
     typedef typename io_char<Device>::type                     char_type;
     typedef Tr                                                 traits_type;
     typedef typename io_category<Device>::type                 mode;
     typedef typename
-            select<
-                mpl::and_<
-                    is_convertible<mode, input>,
-                    is_convertible<mode, output>
-                >,
-                std::basic_iostream<char_type, traits_type>,
-                is_convertible<mode, input>,
-                std::basic_istream<char_type, traits_type>,
-                mpl::true_,
-                std::basic_ostream<char_type, traits_type>
-            >::type                                            type;
+            select<                 
+                mpl::and_< 
+                    is_convertible<mode, input>, 
+                    is_convertible<mode, output> 
+                >,          
+                BOOST_IOSTREAMS_BASIC_IOSTREAM(char_type, traits_type),
+                is_convertible<mode, input>, 
+                BOOST_IOSTREAMS_BASIC_ISTREAM(char_type, traits_type),
+                mpl::true_,        
+                BOOST_IOSTREAMS_BASIC_OSTREAM(char_type, traits_type)
+            >::type type;
 };
-#else // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-----------------------//
-template<typename Device, typename Tr>
-struct stream_facade_traits {
-    typedef typename io_char<Device>::type                     char_type;
-    typedef typename io_category<Device>::type                 mode;
-    typedef typename
-            select<
-                mpl::and_<
-                    is_convertible<mode, input>,
-                    is_convertible<mode, output>
-                >,
-                std::iostream,
-                is_convertible<mode, input>,
-                std::istream,
-                mpl::true_,
-                std::ostream
-            >::type                                            type;
-    BOOST_STATIC_ASSERT((is_same<Ch, char>::value));
-};
-#endif // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //----------------------//
 
-// Hack to work around fact that streams don't have default constructors.
-// Simplifies the definition of the macro BOOST_IOSTREAMS_DEFINE_FORWARDING_FUNCTIONS.
+// By encapsulating initialization in a base, we can define the macro
+// BOOST_IOSTREAMS_DEFINE_FORWARDING_FUNCTIONS to generate constuctors
+// without base member initializer lists.
 template< typename Device,
           typename Tr =
-              std::char_traits<
+              BOOST_IOSTREAMS_CHAR_TRAITS(
                   BOOST_DEDUCED_TYPENAME io_char<Device>::type
-              >,
+              ),
           typename Alloc =
               std::allocator<
                   BOOST_DEDUCED_TYPENAME io_char<Device>::type
@@ -113,9 +88,9 @@ namespace boost { namespace iostreams {
 //
 template< typename Device,
           typename Tr =
-              std::char_traits<
+              BOOST_IOSTREAMS_CHAR_TRAITS(
                   BOOST_DEDUCED_TYPENAME io_char<Device>::type
-              >,
+              ),
           typename Alloc =
               std::allocator<
                   BOOST_DEDUCED_TYPENAME io_char<Device>::type

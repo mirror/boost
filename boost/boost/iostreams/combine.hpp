@@ -51,7 +51,7 @@ public:
     combined_device(const Source& src, const Sink& snk);
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    void close(std::ios::openmode);
+    void close(BOOST_IOS::openmode);
     #ifndef BOOST_NO_STD_LOCALE
         void imbue(const std::locale& loc);
     #endif
@@ -94,11 +94,11 @@ public:
     { boost::iostreams::write(out_, snk, s, n); }
 
     template<typename Sink>
-    void close(Sink& snk, std::ios::openmode which)
+    void close(Sink& snk, BOOST_IOS::openmode which)
         {
-            if (which & std::ios::in)
+            if (which & BOOST_IOS::in)
                 iostreams::close(in_, snk, which);
-            if (which & std::ios::out)
+            if (which & BOOST_IOS::out)
                 iostreams::close(out_, snk, which);
         }
     #ifndef BOOST_NO_STD_LOCALE
@@ -194,11 +194,11 @@ combined_device<Source, Sink>::write(const char_type* s, std::streamsize n)
 
 template<typename Source, typename Sink>
 inline void
-combined_device<Source, Sink>::close(std::ios::openmode which)
+combined_device<Source, Sink>::close(BOOST_IOS::openmode which)
 { 
-    if (which & std::ios::in)
+    if (which & BOOST_IOS::in)
         iostreams::close(src_, which); 
-    if (which & std::ios::out)
+    if (which & BOOST_IOS::out)
         iostreams::close(sink_, which); 
 }
 

@@ -16,14 +16,14 @@
 #include <memory>            // allocator, bad_alloc.
 #include <new>          
 #include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME, DINKUM.
-#include <boost/iostreams/constants.hpp>  // buffer size.
+#include <boost/iostreams/constants.hpp>   // buffer size.
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/zlib.hpp>
-#include <boost/iostreams/detail/failure.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
 #include <boost/iostreams/filter/symmetric_filter_adapter.hpp>                
 #include <boost/iostreams/pipable.hpp>                
-#include <boost/type_traits/is_same.hpp>      
+#include <boost/type_traits/is_same.hpp>
 
 // Must come last.
 #ifdef BOOST_MSVC

@@ -13,9 +13,11 @@
 
 #include <exception>
 #include <memory>                               // allocator.
-#include <boost/iostreams/detail/chain.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
+#include <boost/iostreams/detail/chain.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/push.hpp>
+#include <boost/iostreams/detail/streambuf.hpp> // pubsync.
 #include <boost/iostreams/detail/streambuf/chainbuf.hpp>
 #include <boost/mpl/if.hpp>                    
 
@@ -33,7 +35,7 @@ namespace boost { namespace iostreams {
 //
 #define BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(name_, chain_type_, default_char_) \
     template< typename Mode, typename Ch = default_char_, \
-              typename Tr = std::char_traits<Ch>, \
+              typename Tr = BOOST_IOSTREAMS_CHAR_TRAITS(Ch), \
               typename Alloc = std::allocator<Ch>, typename Access = public_ > \
     class name_ : public boost::iostreams::detail::chainbuf< \
                              chain_type_<Mode, Ch, Tr, Alloc>, Mode, Access \
@@ -46,7 +48,7 @@ namespace boost { namespace iostreams {
         typedef chain_type_<Mode, Ch, Tr, Alloc>               chain_type; \
         name_() { } \
         BOOST_IOSTREAMS_DEFINE_PUSH_CONSTRUCTOR(name_, mode, Ch, push_impl) \
-        ~name_() { if (this->is_complete()) this->pubsync(); } \
+        ~name_() { if (this->is_complete()) this->BOOST_IOSTREAMS_PUBSYNC(); } \
     }; \
     /**/ 
 BOOST_IOSTREAMS_DEFINE_FILTER_STREAMBUF(filtering_streambuf, boost::iostreams::detail::chain, char)

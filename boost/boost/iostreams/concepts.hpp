@@ -11,8 +11,8 @@
 # pragma once
 #endif
 
-#include <locale>
 #include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/detail/ios.hpp>  // openmode.
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -36,13 +36,14 @@ struct device {
         BOOST_STATIC_ASSERT((!is_convertible<Mode, two_sequence>::value));
     }
 
-    void close(std::ios_base::openmode)
+    void close(BOOST_IOS::openmode)
     {
         using namespace detail;
         BOOST_STATIC_ASSERT((is_convertible<Mode, two_sequence>::value));
     }
 
-    void imbue(const std::locale&) { }
+    template<typename Locale>
+    void imbue(const Locale&) { }
 };
 
 template<typename Mode, typename Ch = wchar_t>
@@ -73,13 +74,14 @@ struct filter {
     }
 
     template<typename Device>
-    void close(Device&, std::ios_base::openmode)
+    void close(Device&, BOOST_IOS::openmode)
     {
         using namespace detail;
         BOOST_STATIC_ASSERT((is_convertible<Mode, two_sequence>::value));
     }
 
-    void imbue(const std::locale&) { }
+    template<typename Locale>
+    void imbue(const Locale&) { }
 };
 
 template<typename Mode, typename Ch = wchar_t>

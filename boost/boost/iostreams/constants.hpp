@@ -25,16 +25,7 @@
 # define BOOST_IOSTREAMS_DEFAULT_FILTER_BUFFER_SIZE 128
 #endif
 
-#include <boost/detail/workaround.hpp>
-#include <boost/iostreams/detail/config/wide_streams.hpp>
-
-#if !BOOST_WORKAROUND(__MWERKS__, <= 0x3003) && \
-    !defined(BOOST_IOSTREAMS_NO_STREAM_TEMPLATES) \
-    /**/
-# include <iosfwd>
-#else
-# include <ios>
-#endif
+#include <boost/iostreams/detail/ios.hpp>  // streamsize.
 
 namespace boost { namespace iostreams {
 

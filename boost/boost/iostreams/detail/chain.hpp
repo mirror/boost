@@ -24,7 +24,9 @@
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/push.hpp>
+#include <boost/iostreams/detail/streambuf.hpp> // pubsync.
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/traits.hpp>           // is_filter.
 #include <boost/iostreams/streambuf_facade.hpp>
@@ -124,7 +126,7 @@ public:
         { return list().front()->sgetn(s, n); }
     void write(const char_type* s, std::streamsize n)
         { list().front()->sputn(s, n); }
-    off_type seek(off_type off, std::ios::seekdir way)
+    off_type seek(off_type off, BOOST_IOS::seekdir way)
         { return list().front()->pubseekoff(off, way); }
 
     //----------Direct stream buffer access-----------------------------------//
@@ -152,7 +154,7 @@ private:
             typedef typename unwrap_ios<T>::type              policy_type;
             typedef streambuf_facade<
                         policy_type, 
-                        std::char_traits<char_type>,
+                        BOOST_IOSTREAMS_CHAR_TRAITS(char_type),
                         Alloc, Mode
                     >                                         facade_type;
             BOOST_STATIC_ASSERT((is_convertible<category, Mode>::value));
@@ -190,13 +192,17 @@ private:
     // chain_impl::close. A more elegant solution using boost::bind failed on
     // VC6 and Borland.
 
-    static void close(streambuf_type* b, std::ios::openmode m)
-    { if (m & std::ios::out) b->pubsync(); b->close(m); }
+    static void close(streambuf_type* b, BOOST_IOS::openmode m)
+    { 
+        if (m & BOOST_IOS::out) 
+            b->BOOST_IOSTREAMS_PUBSYNC(); 
+        b->close(m); 
+    }
 
     struct closer  : public std::unary_function<streambuf_type*, void>  {
-        closer(std::ios::openmode m) : mode_(m) { }
+        closer(BOOST_IOS::openmode m) : mode_(m) { }
         void operator() (streambuf_type* b) { close(b, mode_); }
-        std::ios::openmode mode_;
+        BOOST_IOS::openmode mode_;
     };
     friend struct closer;
     struct chain_impl {
@@ -215,13 +221,13 @@ private:
         void close()
             {
                 if (!complete_) return;
-                links_.front()->pubsync();
+                links_.front()->BOOST_IOSTREAMS_PUBSYNC();
                 if (is_convertible<Mode, input>::value)
                     std::for_each( links_.rbegin(), links_.rend(), 
-                                   closer(std::ios::in) );
+                                   closer(BOOST_IOS::in) );
                 if (is_convertible<Mode, output>::value)
                     std::for_each( links_.begin(), links_.end(), 
-                                   closer(std::ios::out) );
+                                   closer(BOOST_IOS::out) );
             }
         list_type        links_;
         client_type*     client_;
@@ -251,7 +257,7 @@ private:
 //
 #define BOOST_IOSTREAMS_DECL_CHAIN(name_, default_char_) \
     template< typename Mode, typename Ch = default_char_, \
-              typename Tr = std::char_traits<Ch>, \
+              typename Tr = BOOST_IOSTREAMS_CHAR_TRAITS(Ch), \
               typename Alloc = std::allocator<Ch> > \
     class name_ : public boost::iostreams::detail::chain_base< \
                             name_<Mode, Ch, Tr, Alloc>, \

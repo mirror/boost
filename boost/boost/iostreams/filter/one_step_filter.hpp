@@ -11,14 +11,14 @@
 # pragma once
 #endif              
 
-#include <iosfwd>                                // streamsize.
-#include <algorithm>                             // copy, min.
+#include <algorithm>                          // copy, min.
 #include <cassert>
-#include <iterator>                              // back_inserter
+#include <iterator>                           // back_inserter
 #include <vector>
 #include <boost/iostreams/categories.hpp>
+#include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/closer.hpp>
-#include <boost/iostreams/detail/openmode.hpp>
+#include <boost/iostreams/detail/ios.hpp>     // openmode, streamsize.
 
 #include <boost/iostreams/detail/config/disable_warnings.hpp>  // MSVC.
 
@@ -57,7 +57,7 @@ public:
             do_read(src);
         streamsize amt =
             std::min(n, static_cast<streamsize>(data_.size() - ptr_));
-        std::char_traits<char_type>::copy(s, &data_[ptr_], amt);
+        BOOST_IOSTREAMS_CHAR_TRAITS(char_type)::copy(s, &data_[ptr_], amt);
         ptr_ += amt;
         return amt;
     }
@@ -73,12 +73,12 @@ public:
     typedef one_step_filter<Ch, Alloc> self;
     friend struct detail::closer<self>;
     template<typename Sink>
-    void close(Sink& sink, std::ios::openmode which)
+    void close(Sink& sink, BOOST_IOS::openmode which)
     {
-        if ((state_ & f_read) && (which & std::ios::in)) 
+        if ((state_ & f_read) && (which & BOOST_IOS::in)) 
             close();
 
-        if ((state_ & f_write) && (which & std::ios::out)) {
+        if ((state_ & f_write) && (which & BOOST_IOS::out)) {
             detail::closer<self> closer(*this);
             vector_type filtered;
             do_filter(data_, filtered);

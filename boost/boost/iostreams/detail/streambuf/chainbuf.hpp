@@ -9,14 +9,16 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif      
 
-#include <streambuf>
 #include <boost/config.hpp>                    // BOOST_MSVC, template friends.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
 #include <boost/iostreams/detail/chain.hpp>
-#include <boost/iostreams/detail/translate_int_type.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
+#include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/streambuf/linked_streambuf.hpp>
+#include <boost/iostreams/detail/translate_int_type.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -33,10 +35,10 @@ namespace boost { namespace iostreams { namespace detail {
 //
 template<typename Chain, typename Mode, typename Access>
 class chainbuf
-    : public std::basic_streambuf<
+    : public BOOST_IOSTREAMS_BASIC_STREAMBUF(
                  typename Chain::char_type,
                  typename Chain::traits_type
-             >,
+             ),
       public access_control<typename Chain::client_type, Access>,
       private noncopyable
 {
@@ -59,24 +61,26 @@ protected:
     std::streamsize xsputn(const char_type* s, std::streamsize n)
         { sentry t(this); return delegate().xsputn(s, n); }
     int sync() { sentry t(this); return delegate().sync(); }
-    pos_type seekoff( off_type off, std::ios::seekdir way,
-                      std::ios::openmode which =
-                          std::ios::in | std::ios::out )
+    pos_type seekoff( off_type off, BOOST_IOS::seekdir way,
+                      BOOST_IOS::openmode which =
+                          BOOST_IOS::in | BOOST_IOS::out )
         { sentry t(this); return delegate().seekoff(off, way, which); }
     pos_type seekpos( pos_type sp,
-                      std::ios::openmode which =
-                          std::ios::in | std::ios::out )
+                      BOOST_IOS::openmode which =
+                          BOOST_IOS::in | BOOST_IOS::out )
         { sentry t(this); return delegate().seekpos(sp, which); }
 protected:
-    typedef std::basic_streambuf<
+    typedef BOOST_IOSTREAMS_BASIC_STREAMBUF(
                  typename Chain::char_type,
                  typename Chain::traits_type
-            >                                                base_type;
+             )                                               base_type;
+#if !BOOST_WORKAROUND(__GNUC__, == 2)                                 
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
+#endif
 private:
 
     // Translate from std int_type to chain's int_type.
-    typedef std::char_traits<char_type>                      std_traits;
+    typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)           std_traits;
     typedef typename Chain::traits_type                      chain_traits;
     typename chain_traits::int_type 
     static translate(typename std_traits::int_type c)

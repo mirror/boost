@@ -19,14 +19,13 @@
 #endif              
 
 #include <algorithm>                        // copy.
-#include <iosfwd>                           // streamsize.
 #include <utility>                          // pair.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/buffer.hpp>       
 #include <boost/iostreams/detail/closer.hpp>    
 #include <boost/iostreams/detail/enable_if_stream.hpp>  
-#include <boost/iostreams/detail/failure.hpp>                        
+#include <boost/iostreams/detail/ios.hpp>   // failure, streamsize.                   
 #include <boost/iostreams/detail/resolve.hpp>                   
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/operations.hpp>  // read, write, close.
@@ -118,8 +117,8 @@ std::streamsize copy_impl(Source src, Sink snk, std::streamsize buffer_size)
     typedef typename io_char<Source>::type  src_char;
     typedef typename io_char<Sink>::type    snk_char;
     BOOST_STATIC_ASSERT((is_same<src_char, snk_char>::value));
-    external_closer<Source> close_source(src, ios::in | ios::out);
-    external_closer<Sink> close_sink(snk, ios::in | ios::out);
+    external_closer<Source> close_source(src, BOOST_IOS::in | BOOST_IOS::out);
+    external_closer<Sink> close_sink(snk, BOOST_IOS::in | BOOST_IOS::out);
     streamsize result =
         copy_impl( src, snk, buffer_size, 
                     is_direct<Source>(), is_direct<Sink>() );
@@ -137,11 +136,10 @@ copy( const Source& src, const Sink& snk,
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Source)
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Sink) )
 { 
-    using namespace detail;
     typedef typename io_char<Source>::type char_type;
-    return copy_impl( resolve<input, char_type>(src), 
-                      resolve<output, char_type>(snk), 
-                      buffer_size ); 
+    return detail::copy_impl( detail::resolve<input, char_type>(src), 
+                              detail::resolve<output, char_type>(snk), 
+                              buffer_size ); 
 }
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
@@ -152,9 +150,10 @@ copy( Source& src, const Sink& snk,
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Source)
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Sink) ) 
 { 
-    using namespace detail;
     typedef typename io_char<Source>::type char_type;
-    return copy_impl(wrap(src), resolve<output, char_type>(snk), buffer_size);
+    return detail::copy_impl( detail::wrap(src), 
+                              detail::resolve<output, char_type>(snk), 
+                              buffer_size );
 }
 
 template<typename Source, typename Sink>
@@ -164,9 +163,9 @@ copy( const Source& src, Sink& snk,
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Source)
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Sink) ) 
 { 
-    using namespace detail;
     typedef typename io_char<Source>::type char_type;
-    return copy_impl(resolve<input, char_type>(src), wrap(snk), buffer_size);
+    return detail::copy_impl( detail::resolve<input, char_type>(src), 
+                              detail::wrap(snk), buffer_size);
 }
 
 template<typename Source, typename Sink>
@@ -176,9 +175,9 @@ copy( Source& src, Sink& snk,
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Source)
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Sink) ) 
 { 
-    using namespace detail;
-    return copy_impl(wrap(src), wrap(snk), buffer_size);
+    return detail::copy_impl(detail::wrap(src), detail::wrap(snk), buffer_size);
 }
+
 #endif // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //-----------------------//
 
 } } // End namespaces iostreams, boost.

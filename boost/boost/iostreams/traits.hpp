@@ -56,8 +56,6 @@ BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_istream, std::istream, 0)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_ostream, std::ostream, 0)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iostream, std::iostream, 0)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_streambuf, std::streambuf, 0)
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringstream, std::stringstream, 0)
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringbuf, std::stringbuf, 0)
 
 #endif // #ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //----------------------//
 
@@ -76,6 +74,7 @@ struct member_char_type { typedef typename T::char_type type; };
 } // End namespace detail.
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //---------------------------//
+# ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-------------------------------//
 
 template<typename T>
 struct io_char 
@@ -83,6 +82,21 @@ struct io_char
           typename detail::unwrapped_type<T>::type
       > 
     { };
+
+# else // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //---------------------//
+
+template<typename T>
+struct io_char {
+    typedef typename detail::unwrapped_type<T>::type U;
+    typedef typename 
+            mpl::eval_if<
+                is_std_io<U>,
+                mpl::identity<char>,
+                detail::member_char_type<U>
+            >::type type;
+};
+
+# endif // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //--------------------//
 
 template<typename Iter>
 struct io_char< iterator_range<Iter> > {
@@ -151,10 +165,14 @@ inline typename io_category<T>::type get_category(const T&)
 
 template<typename T>
 struct io_int { 
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
     typedef std::char_traits<
                 BOOST_DEDUCED_TYPENAME io_char<T>::type
-            > traits_type; 
+            > traits_type;      
     typedef typename traits_type::int_type type; 
+#else  
+    typedef int                            type; 
+#endif
 };
 
 //------------------Definition of mode----------------------------------------//
@@ -218,10 +236,10 @@ struct is_direct : detail::has_trait<T, direct_tag> { };
 //------------------Definition of BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS----------//
 
 #define BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr) \
-    typedef Tr traits_type; \
-    typedef typename traits_type::int_type int_type; \
-    typedef typename traits_type::off_type off_type; \
-    typedef typename traits_type::pos_type pos_type; \
+    typedef Tr                              traits_type; \
+    typedef typename traits_type::int_type  int_type; \
+    typedef typename traits_type::off_type  off_type; \
+    typedef typename traits_type::pos_type  pos_type; \
     /**/
 
 } } // End namespaces iostreams, boost.

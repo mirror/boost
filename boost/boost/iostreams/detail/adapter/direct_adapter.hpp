@@ -14,13 +14,14 @@
 #include <boost/config.hpp>       // SFINAE, MSVC, put ptrdiff_t in std.
 #include <algorithm>              // copy, min.
 #include <cstddef>                // ptrdiff_t.
-#include <iosfwd>                 // streamsize.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/config/limits.hpp>       // forwarding.
+#include <boost/iostreams/detail/config/limits.hpp>        // forwarding.
+#include <boost/iostreams/detail/config/wide_streams.hpp>  // locale.
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/error.hpp>
-#include <boost/iostreams/traits.hpp>                     // io_mode, is_direct.
+#include <boost/iostreams/detail/ios.hpp>  // openmode, seekdir, int types.
+#include <boost/iostreams/traits.hpp>      // io_mode, is_direct.
 #include <boost/iostreams/operations.hpp>
 #include <boost/mpl/bool.hpp> 
 #include <boost/mpl/or.hpp> 
@@ -42,8 +43,10 @@ public:
     struct io_category 
         : io_mode<Direct>::type,
           device_tag,
-          closable_tag,
-          localizable_tag
+          closable_tag
+          #ifndef BOOST_IOSTREAMS_NO_LOCALE
+          , localizable_tag
+          #endif
         { };
 protected:
     direct_adapter_base(const Direct& d);
@@ -105,11 +108,13 @@ public:
 
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
-    std::streamoff seek( std::streamoff, std::ios::seekdir,
-                         std::ios::openmode = std::ios::in | std::ios::out );
+    std::streamoff seek( std::streamoff, BOOST_IOS::seekdir,
+                         BOOST_IOS::openmode = BOOST_IOS::in | BOOST_IOS::out );
     void close();
-    void close(std::ios_base::openmode which);
+    void close(BOOST_IOS::openmode which);
+#ifndef BOOST_IOSTREAMS_NO_LOCALE
     void imbue(const std::locale&);
+#endif
 
         // Direct device access.
 
@@ -207,19 +212,19 @@ inline void direct_adapter<Direct>::write
 
 template<typename Direct>
 inline std::streamoff direct_adapter<Direct>::seek
-    ( std::streamoff off, std::ios::seekdir way, 
-      std::ios::openmode which )
+    ( std::streamoff off, BOOST_IOS::seekdir way, 
+      BOOST_IOS::openmode which )
 {
     using namespace std;
     pointers& get = ptrs_.first();
     pointers& put = ptrs_.second();
-    if (way == ios::cur && get.ptr != put.ptr)
+    if (way == BOOST_IOS::cur && get.ptr != put.ptr)
        bad_seek();
     ptrdiff_t next = 0;
-    if ((which & ios::in) || !is_double::value) {
-        if (way == ios::beg)
+    if ((which & BOOST_IOS::in) || !is_double::value) {
+        if (way == BOOST_IOS::beg)
             next = off; 
-        else if (way == ios::cur)
+        else if (way == BOOST_IOS::cur)
             next = get.ptr - get.beg + off; 
         else
             next = get.end - get.beg + off; 
@@ -228,10 +233,10 @@ inline std::streamoff direct_adapter<Direct>::seek
         else
             bad_seek();
     }
-    if ((which & ios::out) && is_double::value) {
-        if (way == ios::beg)
+    if ((which & BOOST_IOS::out) && is_double::value) {
+        if (way == BOOST_IOS::beg)
             next = off; 
-        else if (way == ios::cur)
+        else if (way == BOOST_IOS::cur)
             next = put.ptr - put.beg + off; 
         else
             next = put.end - put.beg + off; 
@@ -247,19 +252,21 @@ template<typename Direct>
 void direct_adapter<Direct>::close() 
 { 
     BOOST_STATIC_ASSERT((!is_convertible<io_category, two_sequence>::value));
-    boost::iostreams::close(d_, std::ios::in | std::ios::out);
+    boost::iostreams::close(d_, BOOST_IOS::in | BOOST_IOS::out);
 }
 
 template<typename Direct>
-void direct_adapter<Direct>::close(std::ios_base::openmode which) 
+void direct_adapter<Direct>::close(BOOST_IOS::openmode which) 
 { 
     BOOST_STATIC_ASSERT((is_convertible<io_category, two_sequence>::value));
     boost::iostreams::close(d_, which);
 }
 
-template<typename Direct>
-void direct_adapter<Direct>::imbue(const std::locale& loc) 
-{ boost::iostreams::imbue(d_, loc); }
+#ifndef BOOST_IOSTREAMS_NO_LOCALE
+    template<typename Direct>
+    void direct_adapter<Direct>::imbue(const std::locale& loc) 
+    { boost::iostreams::imbue(d_, loc); }
+#endif
 
 } } } // End namespaces detail, iostreams, boost.
 

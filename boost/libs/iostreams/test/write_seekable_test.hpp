@@ -25,7 +25,7 @@ void write_seekable_test()
 
     {
         temp_file                   test2;
-        filtering_stream<seekable>  out(file(test2.name(), ios::trunc), 0);
+        filtering_stream<seekable>  out(file(test2.name(), BOOST_IOS::trunc), 0);
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -37,7 +37,7 @@ void write_seekable_test()
 
     {
         temp_file                   test2;
-        filtering_stream<seekable>  out(file(test2.name(), ios::trunc), 0);
+        filtering_stream<seekable>  out(file(test2.name(), BOOST_IOS::trunc), 0);
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -49,7 +49,7 @@ void write_seekable_test()
 
     {
         temp_file                   test2;
-        filtering_stream<seekable>  out(file(test2.name(), ios::trunc));
+        filtering_stream<seekable>  out(file(test2.name(), BOOST_IOS::trunc));
         write_data_in_chars(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
@@ -61,7 +61,7 @@ void write_seekable_test()
 
     {
         temp_file                   test2;
-        filtering_stream<seekable>  out(file(test2.name(), ios::trunc));
+        filtering_stream<seekable>  out(file(test2.name(), BOOST_IOS::trunc));
         write_data_in_chunks(out);
         out.reset();
         BOOST_CHECK_MESSAGE(
