@@ -54,9 +54,17 @@
 #define BOOST_HAS_GETTIMEOFDAY
 #define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 
+//
+// On *BSD thread support not enabled unless _POSIX_THREADS is defined:
+//
+#if !defined(_POSIX_THREADS) && defined(BOOST_HAS_THREADS)
+#  undef BOOST_HAS_THREADS
+#endif
+
 // boilerplate code:
 #define BOOST_HAS_UNISTD_H
 #include <boost/config/posix_features.hpp>
+
 
 
 
