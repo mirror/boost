@@ -598,9 +598,9 @@ test_member_functions()
   BOOST_TEST(f1_2(&one) == 2);
   BOOST_TEST(f1_2(&five) == 10);
 
-  boost::function<int, X*, int> f2(&X::plus);
-  BOOST_TEST(f2(&one, 3) == 4);
-  BOOST_TEST(f2(&five, 4) == 9);
+  boost::function<int, X&, int> f2(&X::plus);
+  BOOST_TEST(f2(one, 3) == 4);
+  BOOST_TEST(f2(five, 4) == 9);
 }
 
 int test_main(int, char* [])
