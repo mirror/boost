@@ -19,6 +19,7 @@
 
 #include <exception>
 
+#include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
 #include "boost/utility/addressof.hpp"
 #include "boost/variant/variant_fwd.hpp"
@@ -119,10 +120,18 @@ public: // visitor interfaces
 
 }} // namespace detail::variant
 
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
+#   define BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(t)  \
+    BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)
+#else
+#   define BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(t)  \
+    , t* = 0
+#endif
+
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline U* get(
       boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
-    , U* = 0
+      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
     if (!operand) return static_cast<U*>(0);
@@ -134,7 +143,7 @@ inline U* get(
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline U* get(
       const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
-    , U* = 0
+      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
     if (!operand) return static_cast<U*>(0);
@@ -146,7 +155,7 @@ inline U* get(
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline U& get(
       boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
-    , U* = 0
+      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
     U* result = get<U>(&operand);
@@ -158,7 +167,7 @@ inline U& get(
 template <typename U, BOOST_VARIANT_ENUM_PARAMS(typename T) >
 inline U& get(
       const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >& operand
-    , U* = 0
+      BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
     )
 {
     U* result = get<U>(&operand);
