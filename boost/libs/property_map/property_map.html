@@ -24,20 +24,22 @@
 Property Map Concepts
 </H1>
 
-The property map interface consists of a set of concepts (see <a href="../concept_check/concept_check.htm#introduction">&quot;concept&quot;
-definition</a>) that
-define a general purpose mechanism for mapping key objects to
+The property map interface consists of a set of concepts (see
+definition of &quot;concept&quot; in <a
+href="../concept_check/concept_check.htm#introduction">[1]</a> and <a
+href="http://www.sgi.com/Technology/STL/stl_introduction.html">[2]</a>)
+that define a general purpose mechanism for mapping key objects to
 corresponding value objects, thereby hiding the details of how the
-mapping is implemented from algorithms that use property maps.
-The property map requirements are purposefully vague on the type
-of the key and value objects to allow for the utmost flexibility.
-Since the property map operations are global functions, it is
-possible to overload the map functions such that nearly arbitrary
-property map types and key types can be used. The interface for
-property maps consists of three functions: <tt>get()</tt>,
-<tt>put()</tt>, and <tt>operator[]</tt>. The following concrete example
-shows how the three functions could be used to access the addresses
-associated with various people.
+mapping is implemented from algorithms that use property maps.  The
+property map requirements are purposefully vague on the type of the
+key and value objects to allow for the utmost flexibility.  Since the
+property map operations are global functions, it is possible to
+overload the map functions such that nearly arbitrary property map
+types and key types can be used. The interface for property maps
+consists of three functions: <tt>get()</tt>, <tt>put()</tt>, and
+<tt>operator[]</tt>. The following concrete example shows how the
+three functions could be used to access the addresses associated with
+various people.
 
 <pre>template &lt;class AddressMap&gt;
 void foo(AddressMap address)
@@ -179,6 +181,24 @@ functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
 
 }</PRE>
 
+
+<h3>History</h3>
+
+The property map interface originated as <i>data accessors</i> in
+Dietmar K&uuml;hl's Masters Thesis on generic graph algorithms.  The
+property map idea also appeared under the guise of <i>decorators</i>
+in early versions of the Generic Graph Component Library (GGCL), which
+is now the Boost Graph Library (BGL).  The main motivation for the
+property map interface was to support the access of data associated
+with vertices and edges in a graph, though the applicability of
+property maps goes beyond this.
+
+<h3>Acknowledgments</h3>
+
+Thanks go to Dietmar K&uuml;hl for coming up with this mechanism, and
+thanks go to the Boost members who helped refine and improve the
+property map interface. Thanks to Dave Abrahams for managing the
+formal review of the BGL which included the property map library.
 
 <h3>Notes to Implementors</h3>
 
