@@ -1,8 +1,8 @@
-//  (C) Copyright John Maddock 2003. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2003.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
- 
+
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         auto_link.hpp
@@ -17,7 +17,7 @@ USAGE:
 
 Before including this header you must define one or more of define the following macros:
 
-BOOST_LIB_NAME:       Required: A string containing the basename of the library, 
+BOOST_LIB_NAME:       Required: A string containing the basename of the library,
                       for example boost_regex.
 BOOST_DYN_LINK:       Optional: when set link to dll rather than static library.
 BOOST_LIB_DIAGNOSTIC: Optional: when set the header will print out the name
@@ -33,7 +33,7 @@ Libraries for Borland and Microsoft compilers are automatically
 selected here, the name of the lib is selected according to the following
 formula:
 
-BOOST_LIB_PREFIX 
+BOOST_LIB_PREFIX
    + BOOST_LIB_NAME
    + "_"
    + BOOST_LIB_TOOLSET
@@ -66,12 +66,23 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 
 ***************************************************************************/
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
 #ifdef __cplusplus
-#ifndef BOOST_CONFIG_HPP
-#  include <boost/config.hpp>
+#  ifndef BOOST_CONFIG_HPP
+#     include <boost/config.hpp>
+#  endif
+#elif defined(_MSC_VER) && !defined(__MWERKS__) && !defined(__EDG_VERSION__)
+//
+// C language compatability (no, honestly)
+//
+#  define BOOST_MSVC _MSC_VER
+#  define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
+#  define BOOST_DO_STRINGIZE(X) #X
 #endif
-#endif
+//
+// Only include what follows for known and supported compilers:
+//
+#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+
 #ifndef BOOST_VERSION_HPP
 #  include <boost/version.hpp>
 #endif
@@ -87,16 +98,6 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #  pragma message("Using the /RTC option without specifying a debug runtime will lead to linker errors")
 #  pragma message("Hint: go to the code generation options and switch to one of the debugging runtimes")
 #  error "Incompatible build options"
-#endif
-//
-// C language compatability (no, honestly)
-//
-#ifndef __cplusplus
-#  if defined(_MSC_VER) && !defined(__COMO__) && !defined(__ICL)
-#     define BOOST_MSVC _MSC_VER
-#  endif
-#  define BOOST_STRINGIZE(X) BOOST_DO_STRINGIZE(X)
-#  define BOOST_DO_STRINGIZE(X) #X
 #endif
 //
 // select toolset:
@@ -116,7 +117,7 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
    // vc71:
 #  define BOOST_LIB_TOOLSET "vc71"
 
-#elif defined(__BORLANDC__) 
+#elif defined(__BORLANDC__)
 
    // CBuilder 6:
 #  define BOOST_LIB_TOOLSET "bcb"
@@ -165,7 +166,7 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #        if defined(_DEBUG)
 #            define BOOST_LIB_RT_OPT "-gd"
 #        else
-#            define BOOST_LIB_RT_OPT 
+#            define BOOST_LIB_RT_OPT
 #        endif
 
 #     endif
@@ -226,7 +227,7 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 #     ifdef BOOST_BORLAND_DEBUG
 #         define BOOST_LIB_RT_OPT "-d"
 #     else
-#         define BOOST_LIB_RT_OPT 
+#         define BOOST_LIB_RT_OPT
 #     endif
 
 #  else
@@ -245,7 +246,7 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
 // select linkage opt:
 //
 #if (defined(_DLL) || defined(_RTLDLL)) && defined(BOOST_DYN_LINK)
-#  define BOOST_LIB_PREFIX 
+#  define BOOST_LIB_PREFIX
 #elif defined(BOOST_DYN_LINK)
 #  error "Mixing a dll boost library with a static runtime is a really bad idea..."
 #else
