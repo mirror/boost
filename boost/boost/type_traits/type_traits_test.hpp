@@ -379,6 +379,8 @@ struct test_abc2
    virtual void foo2() = 0;
 };
 
+struct incomplete_type;
+
 
 #endif // BOOST_TYPE_TRAITS_TEST_HPP
 
