@@ -107,8 +107,10 @@
 #if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
 
 #if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
-#define BOOST_UBLAS_NO_MEMBER_FRIENDS
 #define BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#define BOOST_UBLAS_NO_MEMBER_FRIENDS
+// Cannot overload basic_stream
+#define BOOST_UBLAS_USE_STREAM
 // Cannot access private members from member class
 #define BOOST_UBLAS_NESTED_CLASS_DR45
 #endif
@@ -207,10 +209,6 @@ namespace std {
 #define BOOST_UBLAS_USING using
 #endif
 
-#ifndef BOOST_UBLAS_USE_BASIC_STREAM
-#define BOOST_UBLAS_USE_BASIC_STREAM
-#endif
-
 #ifndef BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS
 #define BOOST_UBLAS_REVERSE_ITERATOR_OVERLOADS 1
 #endif
@@ -292,7 +290,7 @@ bool disable_type_check<Dummy>::value = false;
 
 // Select stream types defined for IO
 #if !defined(BOOST_UBLAS_USE_STREAM) && !defined(BOOST_UBLAS_USE_BASIC_STREAM)
-#define BOOST_UBLAS_USE_STREAM
+#define BOOST_UBLAS_USE_BASIC_STREAM
 #endif
 
 // Use invariant hoisting.
