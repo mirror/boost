@@ -7,17 +7,21 @@
 #include <boost/pending/concept_checks.hpp>
 #include <boost/pending/concept_archetypes.hpp>
 #include <algorithm>
+#include <numeric>
 
 /*
 
-  This file uses the archetype classes to find out which concepts
-  actually *cover* the algorithms true requirements. The
-  archetypes/concepts chosen do not necessarily match the C++ standard
-  or the SGI STL documentation, but instead were chosen based on the
-  minimal concepts that current STL implementations require, which in
-  many cases is less stringent than the standard. It is an open issue
-  as to whether the C++ standard should be changed to reflect these
-  weaker requirements.
+ This file uses the archetype classes to find out which concepts
+ actually *cover* the STL algorithms true requirements. The
+ archetypes/concepts chosen do not necessarily match the C++ standard
+ or the SGI STL documentation, but instead were chosen based on the
+ minimal concepts that current STL implementations require, which in
+ many cases is less stringent than the standard. In some places there
+ was significant differences in the implementations' requirements and
+ in those places macros were used to select different requirements,
+ the purpose being to document what the requirements of various
+ implementations are.  It is an open issue as to whether the C++
+ standard should be changed to reflect these weaker requirements.
 
 */
 
@@ -43,6 +47,74 @@
       { return *this; }
 
   };
+
+
+// for std::accumulate
+namespace accum
+{
+  typedef boost::sgi_assignable_archetype<> Ret;
+  struct T {
+    T(const Ret&) { }
+    T(boost::detail::dummy_constructor x) { }
+  };
+  typedef boost::null_archetype<> Tin;
+  Ret operator+(const T&, const Tin&) {
+    return Ret(boost::dummy_cons);
+  }
+}
+
+// for std::inner_product
+namespace inner_prod
+{
+  typedef boost::sgi_assignable_archetype<> RetAdd;
+  typedef boost::sgi_assignable_archetype<> RetMult;
+  struct T {
+    T(const RetAdd&) { }
+    T(boost::detail::dummy_constructor x) { }
+  };
+  typedef boost::null_archetype<int> Tin1;
+  typedef boost::null_archetype<char> Tin2;
+}
+inner_prod::RetMult
+operator*(const inner_prod::Tin1&, const inner_prod::Tin2&) {
+  return inner_prod::RetMult(boost::dummy_cons);
+}
+inner_prod::RetAdd 
+operator+(const inner_prod::T&, 
+	  const inner_prod::RetMult&) {
+  return inner_prod::RetAdd(boost::dummy_cons);
+}
+
+// for std::partial_sum and adj_diff
+namespace part_sum
+{
+  typedef boost::null_archetype<> Tout;
+  typedef boost::sgi_assignable_archetype<
+    boost::convertible_to_archetype<Tout> > Ret;
+  class Tin {
+  public:
+    Tin(const Ret&) { }
+    Tin(boost::detail::dummy_constructor x) { }  
+    operator const Tout&() const { return boost::static_object<Tout>::get(); }
+  private:
+    Tin() { }
+  };
+  Ret operator+(const Tin&, const Tin&) {
+    return Ret(boost::dummy_cons);
+  }
+  Ret operator-(const Tin&, const Tin&) {
+    return Ret(boost::dummy_cons);
+  }
+}
+
+// for std::power
+
+template <class Base>
+boost::multipliable_archetype<Base>
+identity_element(std::multiplies< boost::multipliable_archetype<Base> >) {
+  return boost::multipliable_archetype<Base>(boost::dummy_cons);
+}
+
 
 int
 main()
@@ -516,24 +588,502 @@ main()
     unary_predicate_archetype<PredArg> pred(dummy_cons);
     fi = std::stable_partition(fi, fi, pred);
   }
+
   //===========================================================================
   // Sorting Algorithms
-
-  // UNDER CONSTRUCTION
-
+  {
+    typedef sgi_assignable_archetype< 
+      less_than_comparable_archetype<> > T;
+    random_access_iterator_archetype<T> ri;
+    std::sort(ri, ri);
+  }
+  {
+    typedef null_archetype<> Arg;
+    typedef sgi_assignable_archetype< 
+      convertible_to_archetype<Arg> > T;
+    random_access_iterator_archetype<T> ri;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    std::sort(ri, ri, comp);
+  }
   {
     typedef less_than_comparable_archetype< 
-      copy_constructible_archetype<
-        assignable_archetype<> > > ValueType;
+        sgi_assignable_archetype<> > ValueType;
     random_access_iterator_archetype<ValueType> ri;
     std::stable_sort(ri, ri);
   }
+  {
+    typedef null_archetype<> Arg;
+    typedef sgi_assignable_archetype<
+      convertible_to_archetype<Arg> > ValueType;
+    random_access_iterator_archetype<ValueType> ri;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    std::stable_sort(ri, ri, comp);
+  }
+  {
+    typedef sgi_assignable_archetype< 
+      less_than_comparable_archetype<> > T;
+    random_access_iterator_archetype<T> ri;
+    std::partial_sort(ri, ri, ri);
+  }
 
+  {
+    typedef null_archetype<> Arg;
+    typedef sgi_assignable_archetype< 
+      convertible_to_archetype<Arg> > T;
+    random_access_iterator_archetype<T> ri;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    std::partial_sort(ri, ri, ri, comp);
+  }
+  {
+    // This could be formulated so that the two iterators are not
+    // required to have the same value type, but it is messy.
+    typedef sgi_assignable_archetype< 
+      less_than_comparable_archetype<> > T;
+    input_iterator_archetype<T> in;
+    random_access_iterator_archetype<T> ri_out;
+    ri_out = std::partial_sort_copy(in, in , ri_out, ri_out);
+  }
+  {
+    typedef null_archetype<> Arg;
+    typedef sgi_assignable_archetype<
+      convertible_to_archetype<Arg> > T;
+    input_iterator_archetype<T> in;
+    random_access_iterator_archetype<T> ri_out;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    ri_out = std::partial_sort_copy(in, in , ri_out, ri_out, comp);
+  }
+#if !defined(__KCC)
+  {
+    // An SGI STL extension
+    typedef less_than_comparable_archetype<> T;
+    forward_iterator_archetype<T> fi;
+    bool b = std::is_sorted(fi, fi);
+    ignore_unused_variable_warning(b);
+  }
+#endif
+  {
+    typedef sgi_assignable_archetype< less_than_comparable_archetype<> > T;
+    random_access_iterator_archetype<T> ri;
+    std::nth_element(ri, ri, ri);
+  }
+  {
+    typedef null_archetype<int> Arg1;
+    typedef null_archetype<char> Arg2;
+    typedef sgi_assignable_archetype<
+      convertible_to_archetype<Arg1,
+      convertible_to_archetype<Arg2> > > T;
+    random_access_iterator_archetype<T> ri;
+    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    std::nth_element(ri, ri, ri, comp);
+  }
+  {
+#if defined(__KCC)
+    // The KAI version of this uses a one-argument less-than function
+    // object.
+    typedef less_than_comparable_archetype<> FT;
+    typedef convertible_to_archetype<FT> T;
+#else
+    typedef less_than_op_first_archetype<> FT;
+    typedef less_than_op_second_archetype<> T;
+#endif
+    forward_iterator_archetype<FT> fi;
+    T value(dummy_cons);
+    fi = std::lower_bound(fi, fi, value);
+  }
+  {
+    typedef null_archetype<int> Arg1;
+    typedef null_archetype<char> Arg2;
+    typedef convertible_to_archetype<Arg1> FT;
+    typedef convertible_to_archetype<Arg2> T;
+    forward_iterator_archetype<FT> fi;
+    T value(dummy_cons);
+    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    fi = std::lower_bound(fi, fi, value, comp);
+  }
+  {
+#if defined(__GNUC__)
+    typedef less_than_op_first_archetype<
+      less_than_op_second_archetype<> > FT;
+    typedef less_than_op_second_archetype<
+      less_than_op_first_archetype<> > T;
+#else
+    typedef less_than_op_first_archetype<> FT;
+    typedef less_than_op_second_archetype<> T;
+#endif
+    forward_iterator_archetype<FT> fi;
+    T value(dummy_cons);
+    fi = std::upper_bound(fi, fi, value);
+  }
+  {
+    typedef null_archetype<int> Arg1;
+    typedef null_archetype<char> Arg2;
+#if defined(__GNUC__)
+    typedef convertible_to_archetype<Arg1,
+      convertible_to_archetype<Arg2> > FT;
+    typedef convertible_to_archetype<Arg2,
+      convertible_to_archetype<Arg1> > T;
+#else
+    typedef convertible_to_archetype<Arg1> FT;
+    typedef convertible_to_archetype<Arg2> T;
+#endif
+    forward_iterator_archetype<FT> fi;
+    T value(dummy_cons);
+    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    fi = std::upper_bound(fi, fi, value, comp);
+  }
+  {
+#if defined(__GNUC__)
+    typedef less_than_op_first_archetype<
+      less_than_op_second_archetype<> > FT;
+    typedef less_than_op_second_archetype<
+      less_than_op_first_archetype<> > T;
+#else
+    typedef less_than_op_first_archetype<> FT;
+    typedef less_than_op_second_archetype<> T;
+#endif
+    typedef forward_iterator_archetype<FT> FIter;
+    FIter fi;
+    T value(dummy_cons);
+    std::pair<FIter,FIter> p = std::equal_range(fi, fi, value);
+    ignore_unused_variable_warning(p);
+  }
+  {
+    typedef null_archetype<int> Arg1;
+    typedef null_archetype<char> Arg2;
+#if defined(__GNUC__)
+    typedef convertible_to_archetype<Arg1,
+      convertible_to_archetype<Arg2> > FT;
+    typedef convertible_to_archetype<Arg2,
+      convertible_to_archetype<Arg1> > T;
+#else
+    typedef convertible_to_archetype<Arg1> FT;
+    typedef convertible_to_archetype<Arg2> T;
+#endif
+    typedef forward_iterator_archetype<FT> FIter;
+    FIter fi;
+    T value(dummy_cons);
+    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    std::pair<FIter,FIter> p = std::equal_range(fi, fi, value, comp);
+    ignore_unused_variable_warning(p);
+  }
+  {
+#if defined(__KCC) || defined(__GNUC__)
+    typedef less_than_op_first_archetype<
+      less_than_op_second_archetype<> > FT;
+    typedef less_than_op_second_archetype<
+      less_than_op_first_archetype<> > T;
+#else
+    typedef less_than_op_first_archetype<> FT;
+    typedef less_than_op_second_archetype<> T;
+#endif
+    forward_iterator_archetype<FT> fi;
+    T value(dummy_cons);
+    bool b = std::binary_search(fi, fi, value);
+    ignore_unused_variable_warning(b);
+  }
+  {
+    typedef null_archetype<int> Arg1;
+    typedef null_archetype<char> Arg2;
+#if defined(__GNUC__) || defined(__KCC)
+    typedef convertible_to_archetype<Arg1,
+      convertible_to_archetype<Arg2> > FT;
+    typedef convertible_to_archetype<Arg2,
+      convertible_to_archetype<Arg1> > T;
+#else
+    typedef convertible_to_archetype<Arg1> FT;
+    typedef convertible_to_archetype<Arg2> T;
+#endif
+    typedef forward_iterator_archetype<FT> FIter;
+    FIter fi;
+    T value(dummy_cons);
+    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    bool b = std::binary_search(fi, fi, value, comp);
+    ignore_unused_variable_warning(b);
+  }
+  {
+    typedef null_archetype<> Tout;
+#if defined(__GNUC__)
+    typedef less_than_op_first_archetype<
+      less_than_op_second_archetype<
+      convertible_to_archetype<Tout> > > Tin1;
+    typedef less_than_op_second_archetype<
+      less_than_op_first_archetype<
+      convertible_to_archetype<Tout> > > Tin2;
+#else
+    typedef less_than_op_first_archetype<
+      convertible_to_archetype<Tout> > Tin1;
+    typedef less_than_op_second_archetype<
+      convertible_to_archetype<Tout> > Tin2;
+#endif
+    input_iterator_archetype<Tin1> in1;
+    input_iterator_archetype<Tin2> in2;
+    output_iterator_archetype<Tout> out;
+    out = std::merge(in1, in1, in2, in2, out);
+    out = std::set_union(in1, in1, in2, in2, out);
+    out = std::set_intersection(in1, in1, in2, in2, out);
+    out = std::set_difference(in1, in1, in2, in2, out);
+    out = std::set_symmetric_difference(in1, in1, in2, in2, out);
+  }
+  {
+    typedef null_archetype<int> Arg1;
+    typedef null_archetype<char> Arg2;
+    typedef null_archetype<short> Tout;
+#if defined(__GNUC__)
+    typedef convertible_to_archetype<Tout,
+      convertible_to_archetype<Arg1,
+      convertible_to_archetype<Arg2> > > Tin1;
+    typedef convertible_to_archetype<Tout,
+      convertible_to_archetype<Arg2,
+      convertible_to_archetype<Arg1> > > Tin2;
+#else
+    typedef convertible_to_archetype<Tout,
+      convertible_to_archetype<Arg1> > Tin1;
+    typedef convertible_to_archetype<Tout,
+      convertible_to_archetype<Arg2> > Tin2;
+#endif
+    input_iterator_archetype<Tin1> in1;
+    input_iterator_archetype<Tin2> in2;
+    output_iterator_archetype<Tout> out;
+    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    out = std::merge(in1, in1, in2, in2, out, comp);
+    out = std::set_union(in1, in1, in2, in2, out, comp);
+    out = std::set_intersection(in1, in1, in2, in2, out, comp);
+    out = std::set_difference(in1, in1, in2, in2, out, comp);
+    out = std::set_symmetric_difference(in1, in1, in2, in2, out, comp);
+  }
+  {
+    typedef sgi_assignable_archetype< 
+      less_than_comparable_archetype<> > T;
+    bidirectional_iterator_archetype<T> bi;
+    std::inplace_merge(bi, bi, bi);
+  }
+  {
+    typedef null_archetype<> Arg;
+    typedef sgi_assignable_archetype< 
+      convertible_to_archetype<Arg> > T;
+    bidirectional_iterator_archetype<T> bi;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    std::inplace_merge(bi, bi, bi, comp);
+  }
+  {
+#if defined(__GNUC__)
+    typedef less_than_op_first_archetype<
+      less_than_op_second_archetype<> > Tin1;
+    typedef less_than_op_second_archetype<
+      less_than_op_first_archetype<> > Tin2;
+#else
+    typedef less_than_op_first_archetype<> Tin1;
+    typedef less_than_op_second_archetype<> Tin2;
+#endif
+    input_iterator_archetype<Tin1> in1;
+    input_iterator_archetype<Tin2> in2;
+    bool b = std::includes(in1, in1, in2, in2);
+    b = std::lexicographical_compare(in1, in1, in2, in2);
+    ignore_unused_variable_warning(b);
+#if 0
+    // SGI STL extension
+    int r = std::lexicographical_compare_3way(in1, in1, in2, in2);
+    ignore_unused_variable_warning(r);
+#endif
+  }
+  {
+    typedef null_archetype<int> Arg1;
+    typedef null_archetype<char> Arg2;
+#if defined(__GNUC__)
+    typedef convertible_to_archetype<Arg1,
+      convertible_to_archetype<Arg2> > Tin1;
+    typedef convertible_to_archetype<Arg2,
+      convertible_to_archetype<Arg1> > Tin2;
+#else
+    typedef convertible_to_archetype<Arg1> Tin1;
+    typedef convertible_to_archetype<Arg2> Tin2;
+#endif
+    input_iterator_archetype<Tin1> in1;
+    input_iterator_archetype<Tin2> in2;
+    binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
+    bool b = std::includes(in1, in1, in2, in2, comp);
+    b = std::lexicographical_compare(in1, in1, in2, in2, comp);
+    ignore_unused_variable_warning(b);
+#if 0
+    // SGI STL extension
+    int r = std::lexicographical_compare_3way(in1, in1, in2, in2, comp);
+    ignore_unused_variable_warning(r);
+#endif
+  }
+  {
+    typedef sgi_assignable_archetype< less_than_comparable_archetype<> > T;
+    random_access_iterator_archetype<T> ri;
+    std::push_heap(ri, ri);
+    std::pop_heap(ri, ri);
+    std::make_heap(ri, ri);
+    std::sort_heap(ri, ri);
+#if defined(__GNUC__)
+    // SGI STL extension
+    bool b = std::is_heap(ri, ri);
+    ignore_unused_variable_warning(b);
+#endif
+  }
+  {
+    typedef null_archetype<> Arg;
+    typedef sgi_assignable_archetype< 
+      convertible_to_archetype<Arg> > T;
+    random_access_iterator_archetype<T> ri;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    std::push_heap(ri, ri, comp);
+    std::pop_heap(ri, ri, comp);
+    std::make_heap(ri, ri, comp);
+    std::sort_heap(ri, ri, comp);
+#if defined(__GNUC__)
+    // SGI STL extension
+    bool b = std::is_heap(ri, ri, comp);
+    ignore_unused_variable_warning(b);
+#endif
+  }
+  {
+    typedef less_than_comparable_archetype<> T;
+    T a(dummy_cons), b(dummy_cons);
+    const T& c = std::min(a, b);
+    const T& d = std::max(a, b);
+    ignore_unused_variable_warning(c);
+    ignore_unused_variable_warning(d);
+  }
+  {
+    typedef null_archetype<> Arg;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    typedef convertible_to_archetype<Arg> T;
+    T a(dummy_cons), b(dummy_cons);
+    const T& c = std::min(a, b, comp);
+    const T& d = std::max(a, b, comp);
+    ignore_unused_variable_warning(c);
+    ignore_unused_variable_warning(d);
+  }
+  {
+    typedef less_than_comparable_archetype<> T;
+    forward_iterator_archetype<T> fi;
+    fi = std::min_element(fi, fi);
+    fi = std::max_element(fi, fi);
+  }
+  {
+    typedef null_archetype<> Arg;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    typedef convertible_to_archetype<Arg> T;
+    forward_iterator_archetype<T> fi;
+    fi = std::min_element(fi, fi, comp);
+    fi = std::max_element(fi, fi, comp);
+  }
+  {
+    typedef sgi_assignable_archetype<
+      less_than_comparable_archetype<> > T;
+    bidirectional_iterator_archetype<T> bi;
+    bool b = std::next_permutation(bi, bi);
+    b = std::prev_permutation(bi, bi);
+    ignore_unused_variable_warning(b);
+  }
+  {
+    typedef null_archetype<> Arg;
+    binary_predicate_archetype<Arg, Arg> comp(dummy_cons);
+    typedef sgi_assignable_archetype<
+      convertible_to_archetype<Arg> > T;
+    bidirectional_iterator_archetype<T> bi;
+    bool b = std::next_permutation(bi, bi, comp);
+    b = std::prev_permutation(bi, bi, comp);
+    ignore_unused_variable_warning(b);
+  }
   //===========================================================================
   // Generalized Numeric Algorithms
 
-  // UNDER CONSTRUCTION
-
-
+  {
+#if 0
+    // SGI STL extension
+    typedef null_archetype<> FT;
+    typedef assignable_archetype<
+      convertible_to_archetype<FT> > T;
+    forward_iterator_archetype<FT> fi;
+    T value(dummy_cons);
+    std::iota(fi, fi, value);
+#endif
+  }
+  {
+    // Bummer, couldn't use plus_op because of a problem with
+    // mutually recursive types.
+    input_iterator_archetype<accum::Tin> in;
+    accum::T init(dummy_cons);
+    init = std::accumulate(in, in, init);
+  }
+  {
+    typedef null_archetype<int> Arg1;
+    typedef null_archetype<char> Arg2;
+    typedef sgi_assignable_archetype<
+      convertible_to_archetype<Arg1> > T;
+    typedef convertible_to_archetype<T> Ret;
+    typedef convertible_to_archetype<Arg2> Tin;
+    input_iterator_archetype<Tin> in;
+    T init(dummy_cons);
+    binary_function_archetype<Arg1, Arg2, Ret> op(dummy_cons);
+    init = std::accumulate(in, in, init, op);
+  }
+  {
+    input_iterator_archetype<inner_prod::Tin1> in1;
+    input_iterator_archetype<inner_prod::Tin2> in2;
+    inner_prod::T init(dummy_cons);
+    init = std::inner_product(in1, in1, in2, init);
+  }
+  {
+    typedef null_archetype<int> MultArg1;
+    typedef null_archetype<char> MultArg2;
+    typedef null_archetype<short> AddArg1;
+    typedef null_archetype<long> AddArg2;
+    typedef sgi_assignable_archetype<
+      convertible_to_archetype<AddArg1> > T;
+    typedef convertible_to_archetype<AddArg2> RetMult;
+    typedef convertible_to_archetype<T> RetAdd;
+    typedef convertible_to_archetype<MultArg1> Tin1;
+    typedef convertible_to_archetype<MultArg2> Tin2;
+    input_iterator_archetype<Tin1> in1;
+    input_iterator_archetype<Tin2> in2;
+    T init(dummy_cons);
+    binary_function_archetype<MultArg1, MultArg2, RetMult> mult_op(dummy_cons);
+    binary_function_archetype<AddArg1, AddArg2, RetAdd> add_op(dummy_cons);
+    init = std::inner_product(in1, in1, in2, init, add_op, mult_op);
+  }
+  {
+    input_iterator_archetype<part_sum::Tin> in;
+    output_iterator_archetype<part_sum::Tout> out;
+    out = std::partial_sum(in, in, out);
+  }
+  {
+    typedef null_archetype<int> Arg;
+    typedef null_archetype<char> Tout;
+    typedef sgi_assignable_archetype<
+      convertible_to_archetype<Arg,
+      convertible_to_archetype<Tout> > > Tin;
+    typedef convertible_to_archetype<Tout,
+      convertible_to_archetype<Tin> > Ret;
+    input_iterator_archetype<Tin> in;
+    output_iterator_archetype<Tout> out;
+    binary_function_archetype<Arg, Arg, Ret> add_op(dummy_cons);
+    out = std::partial_sum(in, in, out, add_op);
+    binary_function_archetype<Arg, Arg, Ret> subtract_op(dummy_cons);
+    out = std::adjacent_difference(in, in, out, subtract_op);
+  }
+  {
+    input_iterator_archetype<part_sum::Tin> in;
+    output_iterator_archetype<part_sum::Tout> out;
+    out = std::adjacent_difference(in, in, out);
+  }
+#if defined(__GNUC__)
+  // SGI STL extension
+  {
+    int n = 1;
+    multipliable_archetype<> x(dummy_cons);
+    x = std::power(x, n);
+  }
+  {
+    int n = 1;
+    typedef multipliable_archetype<> T;
+    T x(dummy_cons);
+    x = std::power(x, n, multiplies<T>());
+  }
+#endif
   return 0;
 }
