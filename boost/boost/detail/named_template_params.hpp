@@ -102,14 +102,16 @@ namespace boost {
       };
     };
 
-    template <bool Named> struct choose_default_dispatch { };
-    template <> struct choose_default_dispatch<true> {
+    template <bool Named> struct choose_default_dispatch_;
+    template <> struct choose_default_dispatch_<true> {
       typedef choose_named_params type;
     };
-    template <> struct choose_default_dispatch<false> {
+    template <> struct choose_default_dispatch_<false> {
       typedef choose_default_arg type;
     };
-
+    // The use of inheritance here is a Solaris Forte 6 workaround.
+    template <bool Named> struct choose_default_dispatch
+      : public choose_default_dispatch_ { };
 
     template <class PreviousArg>
     struct choose_default_argument {
