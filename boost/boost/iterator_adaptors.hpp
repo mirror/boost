@@ -428,12 +428,15 @@ public:
       policies().initialize(iter());
     }
 
+#ifndef BOOST_MSVC
     // To allow construction of const adaptor from non-const adaptee.
+    // However, when this is defined MSVC gives ambiguous error.
     template <class OtherIterator>
     iterator_adaptor(const OtherIterator& it, const Policies& p = Policies())
         : m_iter_p(it, p) {
       policies().initialize(iter());
     }
+#endif
 
     template <class OtherIter, class OtherTraits>
     iterator_adaptor (const iterator_adaptor<OtherIter, Policies,
@@ -681,9 +684,7 @@ struct indirect_iterator_pair_generator
     ConstInnerTraits>::type const_iterator;
 };
 
-// WARNING: Do not use the one argument version of
-// make_indirect_iterator() if the iterator is a builtin pointer type
-// and if your compiler does not support partial specialization.
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
 template <class OuterIterator>
 inline typename indirect_iterator_generator<OuterIterator>::type
 make_indirect_iterator(OuterIterator base)
@@ -692,6 +693,7 @@ make_indirect_iterator(OuterIterator base)
         <OuterIterator>::type result_t;
     return result_t(base);
 }
+#endif
 
 // Tried to allow InnerTraits to be provided by explicit template
 // argument to the function, but could not get it to work. -Jeremy Siek
