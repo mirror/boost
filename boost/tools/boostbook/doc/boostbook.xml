@@ -122,12 +122,9 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
             libxml2 and libxslt packages</para>
           </listitem>
           <listitem>
-            <para>Without Cygwin, you can at <ulink
-            url="http://www.zlatkovic.com/projects/libxml/binaries.html">download
-            the libxml2, libxslt, and iconv binaries</ulink>. Or, use
-            my <ulink
-            url="http://www.cs.rpi.edu/~gregod/boost/doc/xsltproc-win32.zip">minimal
-            repackaged version</ulink>.</para>
+            <para>Without Cygwin, you can <ulink
+            url="http://www.zlatkovic.com/pub/libxml/">download the
+            libxml2, libxslt, and iconv binaries</ulink>.</para>
           </listitem>
         </itemizedlist>
       </listitem>
