@@ -70,10 +70,8 @@
 
 
 #if BOOST_WORKAROUND(__BORLANDC__, <= 0x551)
-// BCB (5.5.1) defines BOOST_NESTED_TEMPLATE as 'template' but in this context it produces an error.
-#define BOOST_OPTIONAL_NESTED_TEMPLATE
-#else
-#define BOOST_OPTIONAL_NESTED_TEMPLATE BOOST_NESTED_TEMPLATE
+// BCB (5.5.1) cannot parse the nested template struct in an inplace factory.
+#define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
 #endif
 
 namespace boost {
@@ -213,7 +211,7 @@ class optional_base : public optional_tag
         if ( rhs.is_initialized() )
           construct(rhs.get_impl());
       }
-    
+
     // Assigns from a T (deep-copies the rhs value)
     // Basic Guarantee: If T::( T const& ) throws, this is left UNINITIALIZED
     void assign ( argument_type val )
@@ -267,7 +265,7 @@ class optional_base : public optional_tag
     void construct ( Expr const& factory, InPlaceFactoryBase const* )
      {
        BOOST_STATIC_ASSERT ( ::boost::mpl::not_<is_reference_predicate>::value ) ;
-       factory.BOOST_OPTIONAL_NESTED_TEMPLATE apply<value_type>(m_storage.address()) ;
+       factory.BOOST_NESTED_TEMPLATE apply<value_type>(m_storage.address()) ;
        m_initialized = true ;
      }
 
@@ -705,8 +703,6 @@ template<class T> inline void swap ( optional<T>& x, optional<T>& y )
 {
   optional_detail::optional_swap(x,y);
 }
-
-#undef BOOST_OPTIONAL_NESTED_TEMPLATE
 
 } // namespace boost
 
