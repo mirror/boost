@@ -358,15 +358,10 @@ class numeric_limits<unsigned long>
 # define LONGLONG_MIN (-LONGLONG_MAX - 1)
 #endif 
 
-template<>
-class numeric_limits<long long>
-  : public _Integer_limits<long long, LONGLONG_MIN, LONGLONG_MAX>
-{};
 
-template<>
-class numeric_limits<unsigned long long>
-  : public _Integer_limits<unsigned long long, 0, ULONGLONG_MAX>
-{};
+#if !defined(ULONGLONG_MIN)
+# define ULONGLONG_MIN 0
+#endif 
 
 #endif /* __GNUC__ */
 
