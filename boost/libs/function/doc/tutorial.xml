@@ -329,8 +329,8 @@ exceptions during assignment or construction.
   or <code>!=</code> against any function object that can be stored
   within the wrapper. If the function object wrapper contains a
   function object of that type, it will be compared against the given
-  function object (which must be
-  <conceptname>EqualityComparable</conceptname>). For instance:</para>
+  function object (which must be either be
+  <conceptname>EqualityComparable</conceptname> or have an overloaded <functionname>boost::function_equal</functionname>). For instance:</para>
   
   <programlisting name="function.tutorial.compare">int compute_with_X(X*, int);
 
