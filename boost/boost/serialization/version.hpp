@@ -20,12 +20,9 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/apply_if.hpp>
 #include <boost/mpl/identity.hpp>
-//#include <boost/mpl/equal_to.hpp>
-//#include <boost/mpl/or.hpp>
 
 #include <boost/serialization/traits.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
-
 
 namespace boost { 
 namespace serialization {
@@ -47,7 +44,6 @@ struct version
         >::type type;
     BOOST_STATIC_CONSTANT(unsigned int, value = version::type::value);
 };
-
 
 } // namespace serialization
 } // namespace boost

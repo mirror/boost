@@ -6,6 +6,10 @@
 # pragma once
 #endif
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1310)
+#  pragma warning (disable : 4675) // suppress ADL warning
+#endif
+
 #include <cstddef> // size_t
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -66,24 +70,12 @@ namespace std{
 namespace boost {
 namespace serialization {
 
+// default implemenation - call the member function "serialize"
 template<class Archive, class T>
 inline void serialize(
     Archive & ar, T & t, const BOOST_PFTO unsigned int file_version
 ){
     access::serialize(ar, t, static_cast<unsigned int>(file_version));
-}
-
-// trick to call serialize from within boost::serialization namspace
-// thus permitting serialize override to be in either of 3 namespace
-// 1) boost::serialization
-// 2) same namepace as Archive
-// 3) same namespace as T
-// Due to Martin Ecker
-template<class Archive, class T>
-inline void serialize_adl(
-    Archive & ar, T & t, const unsigned int file_version
-){
-    serialize(ar, t, file_version);
 }
 
 // save data required for construction
@@ -212,6 +204,33 @@ void save_ptr(
     // in order to sneak past the archive code that requires
     // names on all variable not primitives
     static_cast<Archive &>(ar) << make_nvp(NULL, *t);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// layer 3 - default implementation of non-intrusive serialization.
+//
+// trick to call serialize from within boost::serialization namspace
+// thus permitting serialize override to be in either of 3 namespace
+// 1) boost::serialization
+// 2) same namepace as Archive
+// 3) same namespace as T
+// Due to Martin Ecker
+
+template<class Archive, class T>
+inline void serialize_adl(
+    Archive & ar, T & t, const unsigned int file_version
+){
+    serialize(ar, t, file_version);
+}
+
+template<class Archive, class T>
+inline void load_ptr_adl(Archive & ar, T * & t, const unsigned int file_version){
+    load_ptr(ar, t, file_version);
+}
+
+template<class Archive, class T>
+inline void save_ptr_adl(Archive & ar, const T * t, const unsigned int file_version){
+    save_ptr(ar, t, file_version);
 }
 
 } // namespace serialization

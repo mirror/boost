@@ -18,10 +18,19 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <utility>
+#include <boost/config.hpp>
+
 #include <boost/serialization/nvp.hpp>
 
-namespace boost {
-namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace boost { namespace serialization {
+#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+namespace _STLP_STD {
+#else
+namespace std {
+#endif
 
 // pair
 template<class Archive, class F, class S>
@@ -30,10 +39,14 @@ inline void serialize(
     std::pair<F, S> & p,
     const unsigned int /* file_version */
 ){
-    ar & make_nvp("first", p.first);
-    ar & make_nvp("second", p.second);
+    ar & boost::serialization::make_nvp("first", p.first);
+    ar & boost::serialization::make_nvp("second", p.second);
 }
 
-} // namespace serialization
-} // namespace boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#else
+} // namespace std
+#endif
+
 #endif // BOOST_SERIALIZATION_UTILITY_HPP

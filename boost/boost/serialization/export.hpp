@@ -173,37 +173,32 @@ boost_template_instantiate(T &, ASeq &){
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)
 
 // in my view either of these should be ok 
-// but this one fails with gcc
-#elif \
-    defined(BOOST_MSVC)       \
-    || defined(BOOST_INTEL)   \
-    || defined(__BORLANDC__)  \
-    || defined(__MWERKS__)
-#define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
-    namespace boost { namespace archive { namespace detail {     \
-    template<>                                                   \
-    const export_generator<T, ASEQ >                             \
-        export_generator<T, ASEQ >::instance;                    \
-    template<>                                                   \
-    const guid_initializer<T, ASEQ>                              \
-        guid_initializer<T, ASEQ>::instance(K);                  \
-    template                                                     \
-    BOOST_FORCE_INCLUDE const guid_initializer<T, ASEQ> &        \
-    boost_template_instantiate(T &, ASEQ &);                     \
-    } } }                                                        \
-    /**/
+// gcc needs special treatment
+#elif defined(__GNUC__)
+    #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
+        namespace boost { namespace archive { namespace detail {     \
+        template                                                     \
+        const export_generator<T, ASEQ >                             \
+            export_generator<T, ASEQ >::instance;                    \
+        template                                                     \
+        const guid_initializer<T, ASEQ >                             \
+        guid_initializer<T, ASEQ >::instance(K) ;                    \
+        } } }                                                        \
+        /**/
 #else
-// and this one fails with VC, BORLAND and INTEL
-#define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
-    namespace boost { namespace archive { namespace detail {     \
-    template                                                     \
-    const export_generator<T, ASEQ >                             \
-        export_generator<T, ASEQ >::instance;                    \
-    template                                                     \
-    const guid_initializer<T, ASEQ >                             \
-    guid_initializer<T, ASEQ >::instance(K) ;                    \
-    } } }                                                        \
-    /**/
+    #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
+        namespace boost { namespace archive { namespace detail {     \
+        template<>                                                   \
+        const export_generator<T, ASEQ >                             \
+            export_generator<T, ASEQ >::instance;                    \
+        template<>                                                   \
+        const guid_initializer<T, ASEQ>                              \
+            guid_initializer<T, ASEQ>::instance(K);                  \
+        template                                                     \
+        BOOST_FORCE_INCLUDE const guid_initializer<T, ASEQ> &        \
+        boost_template_instantiate(T &, ASEQ &);                     \
+        } } }                                                        \
+        /**/
 #endif
 
 // check for unnecessary export.  T isn't polymorphic so there is no 

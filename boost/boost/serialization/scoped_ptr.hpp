@@ -13,11 +13,18 @@
 // Provides non-intrusive serialization for boost::scoped_ptr
 // Does not allow to serialize scoped_ptr's to builtin types.
 
+#include <boost/config.hpp>
+
 #include <boost/scoped_ptr.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/split_free.hpp>
 
-namespace boost { namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+namespace boost { 
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace serialization {
+#endif
     
     template<class Archive, class T>
     void save(
@@ -46,8 +53,12 @@ namespace boost { namespace serialization {
         boost::scoped_ptr<T>& t, 
         const unsigned int version
     ){
-        split_free(ar, t, version);
+        boost::serialization::split_free(ar, t, version);
     }
-}}
+
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+} // namespace serialization
+#endif
+} // namespace boost
 
 #endif

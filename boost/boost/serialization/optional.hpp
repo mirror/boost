@@ -15,13 +15,20 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
+
 #include <boost/optional.hpp>
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/assert.hpp>
 
-namespace boost { namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+namespace boost { 
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace serialization {
+#endif
     
     template<class Archive, class T>
     void save(
@@ -56,10 +63,10 @@ namespace boost { namespace serialization {
     template<class Archive, class T>
     void serialize(
         Archive & ar, 
-        optional<T>& t, 
+        boost::optional<T> & t, 
         const unsigned int version
     ){
-        split_free(ar, t, version);
+        boost::serialization::split_free(ar, t, version);
     }
 
     // the following would be slightly more efficient.  But it
@@ -72,18 +79,27 @@ namespace boost { namespace serialization {
     template <class T>
     struct implementation_level<optional<T> >
     {
-        typedef mpl::int_<object_serializable> type;
-        BOOST_STATIC_CONSTANT(int , value = implementation_level::type::value);
+        typedef mpl::int_<boost::serialization::object_serializable> type;
+        BOOST_STATIC_CONSTANT(
+            int , 
+            value = boost::serialization::implementation_level::type::value
+        );
     };
 
     template<class T>
     struct tracking_level<optional<T> >
     {
-        typedef mpl::int_<track_never> type;
-        BOOST_STATIC_CONSTANT(int , value = tracking_level::type::value);
+        typedef mpl::int_<boost::serialization::track_never> type;
+        BOOST_STATIC_CONSTANT(
+            int , 
+            value = boost::serialization::tracking_level::type::value
+        );
     };
 
     #endif
-}}
 
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+} // serialization
+#endif
+} // namespace boost
 #endif

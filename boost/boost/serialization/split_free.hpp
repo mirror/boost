@@ -49,7 +49,6 @@ struct free_saver {
         const  T & t, 
         const unsigned int file_version
     ){
-        //boost::serialization::
         save(ar, t, file_version);
     }
 };
@@ -60,7 +59,6 @@ struct free_loader {
         T & t, 
         const unsigned int file_version
     ){
-        //boost::serialization::
         load(ar, t, file_version);
     }
 };
@@ -82,17 +80,35 @@ inline void split_free(
 } // namespace serialization
 } // namespace boost
 
-// split non-intrusive serialization into corresponding save/load
-#define BOOST_SERIALIZATION_SPLIT_FREE(T)       \
-namespace boost { namespace serialization {     \
-template<class Archive>                         \
-inline void serialize(                          \
-    Archive & ar,                               \
-    T & t,                                      \
-    const unsigned int file_version             \
-){                                              \
-    split_free(ar, t, file_version);            \
-}                                               \
-}}
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+    // split non-intrusive serialization into corresponding save/load
+    #define BOOST_SERIALIZATION_SPLIT_FREE(T)       \
+    namespace boost { namespace serialization {     \
+    template<class Archive>                         \
+    inline void serialize(                          \
+        Archive & ar,                               \
+        T & t,                                      \
+        const unsigned int file_version             \
+    ){                                              \
+        split_free(ar, t, file_version);            \
+    }                                               \
+    }}
+    /**/
+#else
+    #define BOOST_SERIALIZATION_SPLIT_FREE(T)       \
+    template<class Archive>                         \
+    inline void serialize(                          \
+        Archive & ar,                               \
+        T & t,                                      \
+        const unsigned int file_version             \
+    ){                                              \
+        boost::serialization::split_free(           \
+            ar, t, file_version                     \
+        );                                          \
+    }                                               \
+    /**/
+#endif
 
 #endif // BOOST_SERIALIZATION_SPLIT_FREE_HPP

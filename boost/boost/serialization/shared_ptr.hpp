@@ -20,6 +20,8 @@
 // in shared_ptr and shared_count. Unfortunately its the only way to
 // do this without changing shared_ptr and shared_count
 // the best we can do is to detect a conflict here
+#include <boost/config.hpp>
+
 #ifdef BOOST_SHARED_PTR_HPP_INCLUDED
 #error "include <boost/serialization/shared_ptr> first"
 #endif
@@ -37,8 +39,14 @@
 // mark base class as an (uncreatable) base class
 BOOST_IS_ABSTRACT(boost::detail::sp_counted_base)
 
-namespace boost {
-namespace serialization{
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+namespace boost { 
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace serialization {
+#else
+namespace detail {
+#endif
 
 /////////////////////////////////////////////////////////////
 // sp_counted_base_impl serialization
@@ -51,7 +59,7 @@ inline void serialize(
 ){
     // register the relationship between each derived class
     // its polymorphic base
-    void_cast_register<
+    boost::serialization::void_cast_register<
         boost::detail::sp_counted_base_impl<P, D>,
         boost::detail::sp_counted_base 
     >(
@@ -118,20 +126,24 @@ inline void serialize(
     boost::serialization::split_free(ar, t, file_version);
 }
 
+#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+} // detail
+#endif
+
 /////////////////////////////////////////////////////////////
 // implement serialization for shared_ptr<T>
 
 template<class Archive, class T>
 inline void serialize(
     Archive & ar,
-    shared_ptr<T> &t,
+    boost::shared_ptr<T> &t,
     const unsigned int /* file_version */
 ){
     // correct shared_ptr serialization depends upon object tracking
     // being used.
     BOOST_STATIC_ASSERT(
-        serialization::tracking_level<T>::value
-        != serialization::track_never
+        boost::serialization::tracking_level<T>::value
+        != boost::serialization::track_never
     );
     // only the raw pointer has to be saved
     // the ref count is maintained automatically as shared pointers are loaded
@@ -142,9 +154,10 @@ inline void serialize(
     ar & boost::serialization::make_nvp("pn", t.pn);
 }
 
-} // namespace serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+} // serialization
+#endif
 } // namespace boost
-
 
 // This macro is used to export GUIDS for shared pointers to allow
 // the serialization system to export them properly. David Tonge

@@ -34,8 +34,15 @@ BOOST_CLASS_IMPLEMENTATION(std::wstring, boost::serialization::primitive_type)
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
 
-namespace boost{
-namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace boost { namespace serialization {
+#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+namespace _STLP_STD {
+#else
+namespace std {
+#endif
 
 // basic_string - general case
 template<class Archive, class U, class Allocator>
@@ -44,9 +51,9 @@ inline void save(
     const std::basic_string<U, Allocator> &t,
     const unsigned int file_version
 ){
-    stl::save_collection<Archive, std::basic_string<U, Allocator> >(
-        ar, t
-    );
+    boost::serialization::stl::save_collection<
+        Archive, std::basic_string<U, Allocator> 
+    >(ar, t);
 }
 
 template<class Archive, class U, class Allocator>
@@ -55,11 +62,16 @@ inline void load(
     std::basic_string<U, Allocator> &t,
     const unsigned int file_version
 ){
-    stl::load_collection<
+    boost::serialization::stl::load_collection<
         Archive,
         std::basic_string<U, Allocator>,
-        stl::archive_input_seq<Archive, std::basic_string<U, Allocator> >,
-        stl::reserve_imp<std::basic_string<U, Allocator> >
+        boost::serialization::stl::archive_input_seq<
+            Archive, 
+            std::basic_string<U, Allocator> 
+        >,
+        boost::serialization::stl::reserve_imp<
+            std::basic_string<U, Allocator> 
+        >
     >(ar, t);
 }
 
@@ -71,11 +83,15 @@ inline void serialize(
     std::basic_string<U, Allocator> & t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
-} // namespace serialization
-} // namespace boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#else
+} // std
+#endif
+
 #endif
 
 #endif // BOOST_SERIALIZATION_STRING_HPP

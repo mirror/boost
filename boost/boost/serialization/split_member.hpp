@@ -16,8 +16,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <boost/config.hpp>
 #include <boost/mpl/if.hpp>
-//#include <boost/type_traits/is_base_and_derived.hpp>
 
 #include <boost/serialization/access.hpp>
 
@@ -78,6 +78,7 @@ void serialize(                                                  \
     const unsigned int file_version                              \
 ){                                                               \
     boost::serialization::split_member(ar, *this, file_version); \
-}
+}                                                                \
+/**/
 
 #endif // BOOST_SERIALIZATION_SPLIT_MEMBER_HPP

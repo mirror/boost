@@ -25,8 +25,15 @@
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
 
-namespace boost {
-namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace boost { namespace serialization {
+#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+namespace _STLP_STD {
+#else
+namespace std {
+#endif
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // vector<T>
@@ -36,7 +43,7 @@ inline void save(
     const std::vector<U, Allocator> &t,
     const unsigned int /* file_version */
 ){
-    stl::save_collection<Archive, std::vector<U, Allocator> >(
+    boost::serialization::stl::save_collection<Archive, std::vector<U, Allocator> >(
         ar, t
     );
 }
@@ -47,11 +54,13 @@ inline void load(
     std::vector<U, Allocator> &t,
     const unsigned int /* file_version */
 ){
-    stl::load_collection<
+    boost::serialization::stl::load_collection<
         Archive,
         std::vector<U, Allocator>,
-        stl::archive_input_seq<Archive, std::vector<U, Allocator> >,
-        stl::reserve_imp<std::vector<U, Allocator> >
+        boost::serialization::stl::archive_input_seq<
+            Archive, std::vector<U, Allocator> 
+        >,
+        boost::serialization::stl::reserve_imp<std::vector<U, Allocator> >
     >(ar, t);
 }
 
@@ -63,7 +72,7 @@ inline void serialize(
     std::vector<U, Allocator> & t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
 #if ! BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
@@ -82,7 +91,7 @@ inline void save(
     std::vector<bool>::const_iterator it = t.begin();
     while(count-- > 0){
         bool tb = *it++;
-        ar << make_nvp("item", tb);
+        ar << boost::serialization::make_nvp("item", tb);
     }
 }
 
@@ -98,7 +107,7 @@ inline void load(
     t.clear();
     while(count-- > 0){
         bool i;
-        ar >> make_nvp("item", i);
+        ar >> boost::serialization::make_nvp("item", i);
         t.push_back(i);
     }
 }
@@ -111,13 +120,16 @@ inline void serialize(
     std::vector<bool, Allocator> & t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
 #endif // BOOST_WORKAROUND
 
-} // namespace serialization
-} // namespace boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#else
+} // namspace std
+#endif
 
 #include <boost/serialization/collection_traits.hpp>
 

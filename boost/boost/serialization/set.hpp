@@ -17,12 +17,20 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <set>
+
+#include <boost/config.hpp>
+
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
 
-namespace boost {
-namespace serialization {
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace boost { namespace serialization
+#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+namespace _STLP_STD {
+#else
+namespace std {
+#endif
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void save(
@@ -30,7 +38,9 @@ inline void save(
     const std::set<Key, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
-    stl::save_collection<Archive, std::set<Key, Compare, Allocator> >(ar, t);
+    boost::serialization::stl::save_collection<
+        Archive, std::set<Key, Compare, Allocator> 
+    >(ar, t);
 }
 
 template<class Archive, class Key, class Compare, class Allocator >
@@ -39,11 +49,15 @@ inline void load(
     std::set<Key, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
-    stl::load_collection<
+    boost::serialization::stl::load_collection<
         Archive,
         std::set<Key, Compare, Allocator>,
-        stl::archive_input_assoc<Archive, std::set<Key, Compare, Allocator> >,
-        stl::no_reserve_imp<std::set<Key, Compare, Allocator> >
+        boost::serialization::stl::archive_input_assoc<
+            Archive, std::set<Key, Compare, Allocator> 
+        >,
+        boost::serialization::stl::no_reserve_imp<std::set<
+            Key, Compare, Allocator> 
+        >
     >(ar, t);
 }
 
@@ -55,7 +69,7 @@ inline void serialize(
     std::set<Key, Compare, Allocator> & t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
 // multiset
@@ -65,7 +79,10 @@ inline void save(
     const std::multiset<Key, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
-    stl::save_collection<Archive, std::multiset<Key, Compare, Allocator> >(ar, t);
+    boost::serialization::stl::save_collection<
+        Archive, 
+        std::multiset<Key, Compare, Allocator> 
+    >(ar, t);
 }
 
 template<class Archive, class Key, class Compare, class Allocator >
@@ -74,11 +91,15 @@ inline void load(
     std::multiset<Key, Compare, Allocator> &t,
     const unsigned int /* file_version */
 ){
-    stl::load_collection<
+    boost::serialization::stl::load_collection<
         Archive,
         std::multiset<Key, Compare, Allocator>,
-        stl::archive_input_assoc<Archive, std::multiset<Key, Compare, Allocator> >,
-        stl::no_reserve_imp<std::multiset<Key, Compare, Allocator> >
+        boost::serialization::stl::archive_input_assoc<
+            Archive, std::multiset<Key, Compare, Allocator> 
+        >,
+        boost::serialization::stl::no_reserve_imp<
+            std::multiset<Key, Compare, Allocator> 
+        >
     >(ar, t);
 }
 
@@ -90,11 +111,14 @@ inline void serialize(
     std::multiset<Key, Compare, Allocator> & t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
-} // namespace serialization 
-} // namespace boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#else
+} // std
+#endif
 
 #include <boost/serialization/collection_traits.hpp>
 

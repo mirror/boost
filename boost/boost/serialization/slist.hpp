@@ -6,7 +6,6 @@
 # pragma once
 #endif
 
-
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // slist.hpp
 
@@ -26,8 +25,15 @@
 #include <boost/serialization/split_free.hpp>
 #include <boost/serialization/nvp.hpp>
 
-namespace boost {
-namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace boost { namespace serialization {
+#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+namespace _STLP_STD {
+#else
+namespace BOOST_STD_EXTENSION_NAMESPACE {
+#endif
 
 template<class Archive, class U, class Allocator>
 inline void save(
@@ -35,7 +41,7 @@ inline void save(
     const BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator> &t,
     const unsigned int file_version
 ){
-    stl::save_collection<
+    boost::serialization::stl::save_collection<
         Archive,
         BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator> 
     >(ar, t);
@@ -55,13 +61,13 @@ inline void load(
     if(0 == count)
         return;
 
-    stl::stack_construct<Archive, U> u(ar);
+    boost::serialization::stl::stack_construct<Archive, U> u(ar);
     ar >> make_nvp("item", u.reference());
     t.push_front(u.reference());
     BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator>::iterator last;
     last = t.begin();
     while(--count > 0){
-        stl::stack_construct<Archive, U> u(ar);
+        boost::serialization::stl::stack_construct<Archive, U> u(ar);
         ar >> boost::serialization::make_nvp("item", u.reference());
         last = t.insert_after(last, u.reference());
     }
@@ -75,11 +81,14 @@ inline void serialize(
     BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator> &t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
-} // namespace serialization
-} // namespace boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#else
+} // BOOST_STD_EXTENSION_NAMESPACE
+#endif
 
 #include <boost/serialization/collection_traits.hpp>
 

@@ -26,8 +26,15 @@
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
 
-namespace boost {
-namespace serialization {
+// function specializations must be defined in the appropriate
+// namespace - boost::serialization
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+namespace boost { namespace serialization {
+#elif defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+namespace _STLP_STD {
+#else
+namespace BOOST_STD_EXTENSION_NAMESPACE
+#endif
 
 template<class Archive, class Key, class Compare, class Allocator >
 inline void save(
@@ -35,7 +42,10 @@ inline void save(
     const BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
-    stl::save_collection<Archive, BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> >(ar, t);
+    boost::serialization::stl::save_collection<
+        Archive, 
+        BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> 
+    >(ar, t);
 }
 
 template<class Archive, class Key, class Compare, class Allocator >
@@ -44,11 +54,16 @@ inline void load(
     BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
-    stl::load_collection<
+    boost::serialization::stl::load_collection<
         Archive,
         BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator>,
-        stl::archive_input_assoc<Archive, BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> >,
-        stl::no_reserve_imp<BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> >
+        boost::serialization::stl::archive_input_assoc<
+            Archive, 
+            BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> 
+        >,
+        boost::serialization::stl::no_reserve_imp<
+            BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> 
+        >
     >(ar, t);
 }
 
@@ -60,7 +75,7 @@ inline void serialize(
     BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator> & t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
 // hash_multiset
@@ -70,7 +85,10 @@ inline void save(
     const BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
-    stl::save_collection<Archive, BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator> >(ar, t);
+    boost::serialization::stl::save_collection<
+        Archive, 
+        BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator> 
+    >(ar, t);
 }
 
 template<class Archive, class Key, class Compare, class Allocator >
@@ -79,11 +97,19 @@ inline void load(
     BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator> &t,
     const unsigned int file_version
 ){
-    stl::load_collection<
+    boost::serialization::stl::load_collection<
         Archive,
         BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator>,
-        stl::archive_input_assoc<Archive, BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator> >,
-        stl::no_reserve_imp<BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator> >
+        boost::serialization::stl::archive_input_assoc<
+            Archive, BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
+                Key, 
+                Compare, 
+                Allocator
+            > 
+        >,
+        boost::serialization::stl::no_reserve_imp<
+            BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator> 
+        >
     >(ar, t);
 }
 
@@ -95,11 +121,14 @@ inline void serialize(
     BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator> & t,
     const unsigned int file_version
 ){
-    split_free(ar, t, file_version);
+    boost::serialization::split_free(ar, t, file_version);
 }
 
-} // namespace serialization 
-} // namespace boost
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+}} // namespace boost::serialization
+#else
+} // BOOST_STD_EXTENSION_NAMESPACE
+#endif
 
 #include <boost/serialization/collection_traits.hpp>
 
