@@ -36,49 +36,65 @@ public:
     };
     
     typedef std::pair<std::string,address_option> bcc_type;
-        
+    typedef std::vector< bcc_type >               bcc_map;
+    typedef std::map<std::string,address_option>  address_map;
+    
+    
 private:
 
-    mutable std::map<std::string,address_option> cc_list;
-    mutable std::map<std::string,address_option> to_list;
-    std::vector< bcc_type >                      bcc_list;
+    mutable address_map      cc_list;
+    mutable address_map      to_list;
+    bcc_map                  bcc_list;
+            
+    struct add_to_map
+    {
+        address_map& m;
+    
+        add_to_map( address_map& m ) : m(m)        
+        {}
+    
+        void operator()( const std::string& name, address_option ao )
+        {
+            m[ name ] = ao; 
+        }
         
-    void add_cc_impl( const std::string& name, address_option ao )
+        void operator()( const std::string& name )
+        {
+            m[ name ] = check_addr_book;
+        }
+    };
+
+    struct add_to_vector
     {
-        cc_list[ name ] = ao;
-    }
-    
-    void add_to_impl( const std::string& name )
-    {
-        to_list[ name ] = check_addr_book;
-    }
-    
-    void add_bcc_impl( const bcc_type& bcc )
-    {
-        bcc_list.push_back( bcc ); 
-    }
-     
+        bcc_map& m;
+        
+        add_to_vector( bcc_map& m ) : m(m)
+        {}
+        
+        void operator()( const bcc_type& r )
+        {
+            m.push_back( r );
+        }
+    };
+
 public:
     
-    ba::list_inserter< boost::function2< void, std::string, address_option > >
+    ba::list_inserter< add_to_map >
     add_cc( std::string name, address_option ao )
     {
-        add_cc_impl( name, ao );
-        return ba::make_list_inserter( boost::bind( &email::add_cc_impl, this, _1, _2 ) );
+        return ba::make_list_inserter( add_to_map( cc_list ) )( name, ao );
     }
 
-    ba::list_inserter< boost::function1< void, std::string > >
+    ba::list_inserter< add_to_map >
     add_to( const std::string& name )
     {
-        add_to_impl( name );
-        return ba::make_list_inserter( boost::bind( &email::add_to_impl, this, _1 ) );
+        return ba::make_list_inserter( add_to_map( to_list ) )( name );
     }
     
-    ba::list_inserter< boost::function1< void, bcc_type >, bcc_type >
+    ba::list_inserter< add_to_vector, bcc_type >
     add_bcc( const bcc_type& bcc )
     {
-        add_bcc_impl( bcc );
-        return ba::make_list_inserter( boost::bind( &email::add_bcc_impl, this, _1 ) );     
+        return ba::make_list_inserter( add_to_vector( bcc_list ) )( bcc );     
     }
     
     address_option
