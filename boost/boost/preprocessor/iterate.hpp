@@ -67,6 +67,4 @@
 #
 # define BOOST_PP_INCLUDE_SELF() <boost/preprocessor/detail/iterate/self.hpp>
 #
-# define BOOST_PP_
-#
 # endif
