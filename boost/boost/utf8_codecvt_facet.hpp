@@ -55,6 +55,7 @@ namespace std{
         using ::mbstate_t;
     #elif defined(BOOST_DINKUMWARE_STDLIB)
         using ::mbstate_t;
+    #elif defined(__SGI_STL_PORT)
     #elif defined(BOOST_NO_STDC_NAMESPACE)
         using ::codecvt;
         using ::mbstate_t;
