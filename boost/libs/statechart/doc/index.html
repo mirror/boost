@@ -21,7 +21,7 @@
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/02/09<!--webbot bot="Timestamp" endspan i-checksum="12428" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/02/20<!--webbot bot="Timestamp" endspan i-checksum="12412" --></font></td>
   </tr>
 </table>
 <hr>
@@ -43,7 +43,7 @@ include:</p>
   </ul>
   </li>
   <li>Error handling support</li>
-  <li>Full type-safety</li>
+  <li>Maximum type-safety</li>
   <li>Compile-time state chart validation</li>
   <li>Support for asynchronous state machines and multi-threading</li>
   <li>State-local storage</li>
@@ -122,6 +122,14 @@ been tested yet):</p>
 	machines). An out-of-the-box state machine no longer tries to do anything smart 
 	with exceptions (see <a href="rationale.html#Error handling">Error handling</a> 
 	in the Rationale for details)</li>
+	<li>On some compilers (e.g. gcc), the asynchronous part of the library and 
+	most of the tests currently cannot be compiled with RTTI turned off. This 
+	is due to the fact that <code>boost::shared_ptr&lt;&gt;</code> internally uses
+	<code>typeid</code> for deleter support and these compilers issue a 
+	diagnostic even if deleters are not used and the associated code is not 
+	instantiated. The asynchronous part will eventually replace <code>
+	shared_ptr&lt;&gt;</code> with its own optimized facility. In order to make the 
+	tests work, a <code>shared_ptr&lt;&gt;</code> &quot;fix&quot; is necessary</li>
 </ol>
 <hr>
 <h2>Contents</h2>
@@ -184,6 +192,22 @@ left:</p>
 	when C++ RTTI is turned off</li>
 </ol>
 <h2>Change history</h2>
+<p>20 February, 2005</p>
+<p></p>
+<ul>
+	<li><b>Breaking change</b>: Incorporated a part of <code>
+	exception_translator::operator()</code> code into the <code>state_machine</code> 
+	class template. This simplifies custom exception translators and makes 
+	implementing them less error-prone</li>
+	<li><b>Breaking change</b>: A request to defer an exception event is no 
+	longer honored and ultimately results in the exception being rethrown. This 
+	change is the result of the rule that during the processing of an exception 
+	no non-user code must be called that could itself propagate an exception and 
+	thus mask the original exception (for event deferral <code>operator new</code> 
+	must be called, which could throw). Exception event deferral has always been 
+	a strange concept anyway</li>
+	<li>Various code brush-ups</li>
+</ul>
 <p>09 February, 2005</p>
 <p></p>
 <ul>
@@ -380,7 +404,7 @@ left:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40416" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->20 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40400" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
