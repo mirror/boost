@@ -105,15 +105,19 @@
 //
 // all versions support __declspec:
 //
-#define BOOST_HAS_DECLSPEC
+#ifndef __STRICT_ANSI__
+#  define BOOST_HAS_DECLSPEC
+#endif
 //
 // ABI fixing headers:
 //
+#if __BORLANDC__ < 0x600 // not implemented for version 6 compiler yet
 #ifndef BOOST_ABI_PREFIX
 #  define BOOST_ABI_PREFIX "boost/config/abi/borland_prefix.hpp"
 #endif
 #ifndef BOOST_ABI_SUFFIX
 #  define BOOST_ABI_SUFFIX "boost/config/abi/borland_suffix.hpp"
+#endif
 #endif
 //
 // Disable Win32 support in ANSI mode:
