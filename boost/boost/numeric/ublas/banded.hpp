@@ -277,7 +277,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (banded_matrix &m1, banded_matrix &m2) {
             m1.swap (m2);
@@ -1248,7 +1248,7 @@ namespace boost { namespace numeric { namespace ublas {
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, m);
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (banded_adaptor &m1, banded_adaptor &m2) {
             m1.swap (m2);

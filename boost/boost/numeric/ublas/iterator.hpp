@@ -131,7 +131,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ d;
             return tmp;
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator ++ (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -148,7 +148,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) && ! defined (BOOST_MSVC6_MEMBER_TEMPLATES)
     template<class IC, class I, class T>
     BOOST_UBLAS_INLINE
     typename forward_iterator_base<IC, I, T>::derived_iterator_type operator ++ (forward_iterator_base<IC, I, T> &it, int) {
@@ -174,7 +174,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ d;
             return tmp;
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator ++ (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -189,7 +189,7 @@ namespace boost { namespace numeric { namespace ublas {
             -- d;
             return tmp;
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator -- (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -206,7 +206,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) && ! defined (BOOST_MSVC6_MEMBER_TEMPLATES)
     template<class IC, class I, class T>
     BOOST_UBLAS_INLINE
     typename bidirectional_iterator_base<IC, I, T>::derived_iterator_type operator ++ (bidirectional_iterator_base<IC, I, T> &it, int) {
@@ -245,7 +245,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ d;
             return tmp;
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator ++ (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -260,7 +260,7 @@ namespace boost { namespace numeric { namespace ublas {
             -- d;
             return tmp;
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator -- (derived_iterator_type &d, int) {
             derived_iterator_type tmp (d);
@@ -273,7 +273,7 @@ namespace boost { namespace numeric { namespace ublas {
             derived_iterator_type tmp (*static_cast<const derived_iterator_type *> (this));
             return tmp += n;
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator + (const derived_iterator_type &d, derived_difference_type n) {
             derived_iterator_type tmp (d);
@@ -285,7 +285,7 @@ namespace boost { namespace numeric { namespace ublas {
             derived_iterator_type tmp (*static_cast<const derived_iterator_type *> (this));
             return tmp -= n;
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend derived_iterator_type operator - (const derived_iterator_type &d, derived_difference_type n) {
             derived_iterator_type tmp (d);
@@ -316,7 +316,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) && ! defined (BOOST_MSVC6_MEMBER_TEMPLATES)
     template<class IC, class I, class T>
     BOOST_UBLAS_INLINE
     typename random_access_iterator_base<IC, I, T>::derived_iterator_type operator ++ (random_access_iterator_base<IC, I, T> &it, int) {
@@ -723,7 +723,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend reverse_iterator_base operator + (const reverse_iterator_base &it, difference_type n) {
             reverse_iterator_base tmp (it);
@@ -754,7 +754,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) && ! defined (BOOST_MSVC6_MEMBER_TEMPLATES)
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base<I> operator + (const reverse_iterator_base<I> &it, std::ptrdiff_t n) {
@@ -834,7 +834,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend reverse_iterator_base1 operator + (const reverse_iterator_base1 &it, difference_type n) {
             reverse_iterator_base1 tmp (it);
@@ -892,7 +892,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) && ! defined (BOOST_MSVC6_MEMBER_TEMPLATES)
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base1<I> operator + (const reverse_iterator_base1<I> &it, std::ptrdiff_t n) {
@@ -972,7 +972,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend reverse_iterator_base2 operator + (const reverse_iterator_base2 &it, difference_type n) {
             reverse_iterator_base2 tmp (it);
@@ -1030,7 +1030,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
 
-#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) && ! defined (BOOST_MSVC6_MEMBER_TEMPLATES)
     template<class I>
     BOOST_UBLAS_INLINE
     reverse_iterator_base2<I> operator + (const reverse_iterator_base2<I> &it, std::ptrdiff_t n) {

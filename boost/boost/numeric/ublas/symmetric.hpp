@@ -249,7 +249,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (symmetric_matrix &m1, symmetric_matrix &m2) {
             m1.swap (m2);
@@ -1125,7 +1125,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m) 
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, m, functor_type ());
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (symmetric_adaptor &m1, symmetric_adaptor &m2) {
             m1.swap (m2);

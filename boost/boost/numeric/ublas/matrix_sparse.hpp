@@ -421,7 +421,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (sparse_matrix &m1, sparse_matrix &m2) {
             m1.swap (m2);
@@ -1500,7 +1500,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (sparse_vector_of_sparse_vector &m1, sparse_vector_of_sparse_vector &m2) {
             m1.swap (m2);
@@ -2722,7 +2722,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data ().swap (m.value_data ());
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (compressed_matrix &m1, compressed_matrix &m2) {
             m1.swap (m2);
@@ -4012,7 +4012,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data ().swap (m.value_data ());
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (coordinate_matrix &m1, coordinate_matrix &m2) {
             m1.swap (m2);

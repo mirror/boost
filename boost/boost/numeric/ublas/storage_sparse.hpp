@@ -381,7 +381,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size_, a.size_);
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (map_array &a1, map_array &a2) {
             a1.swap (a2);
@@ -763,7 +763,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size_, a.size_);
             }
         }
-#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
         BOOST_UBLAS_INLINE
         friend void swap (set_array &a1, set_array &a2) {
             a1.swap (a2);
