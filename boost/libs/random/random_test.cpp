@@ -14,10 +14,11 @@
  */
 
 #include <iostream>
-#include <fstream>
+#include <sstream>
 #include <string>
 #include <cmath>
 #include <iterator>
+#include <vector>
 #include <boost/random.hpp>
 #include <boost/config.hpp>
 
@@ -43,6 +44,36 @@
  * Validate correct implementation
  */
 
+// validation by experiment from mt19937.c
+bool check(uint32_t x, const boost::mt19937&) { return x == 3346425566U; }
+
+// own run
+bool check(uint32_t x, const boost::mt11213b&) { return x == 0xa37d3c92; }
+
+// validation values from the publications
+bool check(int32_t x, const boost::minstd_rand0&) { return x == 1043618065; }
+
+// validation values from the publications
+bool check(int32_t x, const boost::minstd_rand&) { return x == 399268537; }
+
+// by experiment from lrand48()
+bool check(int32_t x, const boost::rand48&) { return x == 1993516219; }
+
+// no information available
+bool check(int32_t x, const boost::taus88&) { return false; }
+
+// ????
+bool check(int32_t x, const boost::ecuyer1988&) { return x == 2060321752; }
+
+// validation by experiment from Harry Erwin's generator.h (private e-mail)
+bool check(int32_t x, const boost::kreutzer1986&) { return x == 139726; }
+
+bool check(double x, const boost::lagged_fibonacci607&) { return x == 0.4293817707235914; }
+
+bool check(uint32_t x, const boost::ranlux_4&) { return false; }
+bool check(uint32_t x, const boost::ranlux_7&) { return false; }
+bool check(uint32_t x, const boost::ranlux_14&) { return false; }
+
 template<class PRNG>
 void validate(const std::string & name, const PRNG &)
 {
@@ -51,8 +82,8 @@ void validate(const std::string & name, const PRNG &)
   for(int i = 0; i < 9999; i++)
     rng();
   typename PRNG::result_type val = rng();
-  // make sure the validation function is a const member
-  bool result = const_cast<const PRNG&>(rng).validation(val);
+  // make sure the validation function is a static member
+  bool result = check(val, rng);
   
   // allow for a simple eyeball check for MSVC instantiation brokenness
   // (if the numbers for all generators are the same, it's obviously broken)
@@ -69,8 +100,14 @@ void validate_all()
   validate("minstd_rand", minstd_rand());
   validate("minstd_rand0", minstd_rand0());
   validate("ecuyer combined", ecuyer1988());
+  validate("mt11213b", mt11213b());
   validate("mt19937", mt19937());
   validate("kreutzer1986", kreutzer1986());
+  validate("ranlux_4", ranlux_4());
+  validate("ranlux_7", ranlux_7());
+  validate("ranlux_14", ranlux_14());
+  validate("taus88", taus88());
+  validate("lagged_fibonacci607", lagged_fibonacci607());
 }
 
 
@@ -78,10 +115,22 @@ void validate_all()
  * Check function signatures
  */
 
+template<class Dist>
+void instantiate_dist(const Dist& dist)
+{
+  // check reference maintenance throughout
+  typename Dist::base_type& b = dist.base();
+  Dist d = dist;  // make a copy
+  typename Dist::result_type result = d();
+  b();
+  BOOST_TEST(d.base() == b);
+  d.reset();
+}
+
 template<class URNG, class ResultType>
 void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 {
-  std::cout << "Basic tests for " << s << std::endl;
+  std::cout << "Basic tests for " << s;
   URNG urng;
   int a[URNG::has_fixed_range ? 5 : 10];        // compile-time constant
   (void) a;   // avoid "unused" warning
@@ -90,53 +139,76 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   (void) &x2;           // avoid "unused" warning
 
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
-  URNG urng2 = urng;           // copy constructor
-  BOOST_TEST(urng == urng2);   // operator==
+  URNG urng2 = urng;             // copy constructor
+  BOOST_TEST(urng == urng2);     // operator==
+  BOOST_TEST(!(urng != urng2));  // operator!=
   urng();
   urng2 = urng;              // assignment
   BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
 
+  const std::vector<int> v(9999u, 0x41);
+  std::vector<int>::const_iterator it = v.begin();
+  URNG urng3(it, v.end());
+  BOOST_TEST(it != v.begin());
+  std::cout << "; seeding uses " << (it - v.begin()) << " words" << std::endl;
+
+  bool have_exception = false;
+  try {
+    // now check that exceptions are thrown
+    it = v.end();
+    urng3.seed(it, v.end());
+  } catch(std::invalid_argument& x) {
+    have_exception = true;
+  }
+  BOOST_TEST(have_exception);
+
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   // Streamable concept not supported for broken compilers
   {
-    std::ofstream file("rng.tmp", std::ofstream::trunc);
+    // narrow stream first
+    std::ostringstream file;
     file << urng;
-  }
-  // move forward
-  urng();
-  {
+    // move forward
+    urng();
     // restore old state
-    std::ifstream file("rng.tmp");
-    file >> urng;
-  }
+    std::istringstream input(file.str());
+    input >> urng;
+    // std::cout << file.str() << std::endl;
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
-  BOOST_TEST(urng == urng2);
+    BOOST_TEST(urng == urng2);
 #endif // BOOST_MSVC
+  }
+  
+  urng2 = urng;
+  {
+    // then wide stream
+    std::wostringstream file;
+    file << urng;
+    // move forward
+    urng();
+    std::wistringstream input(file.str());
+    input >> urng;
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
+    BOOST_TEST(urng == urng2);
+#endif // BOOST_MSVC
+  }
 #endif // BOOST_NO_OPERATORS_IN_NAMESPACE
 
   // instantiate various distributions with this URNG
-  boost::uniform_smallint<URNG> unismall(urng, 0, 11);
-  unismall();
-  boost::uniform_int<URNG> uni_int(urng, -200, 20000);
-  uni_int();
-  boost::uniform_real<URNG> uni_real(urng, 0, 2.1);
-  uni_real();
+  instantiate_dist(boost::uniform_smallint<URNG>(urng, 0, 11));
+  instantiate_dist(boost::uniform_int<URNG>(urng, -200, 20000));
+  instantiate_dist(boost::uniform_real<URNG>(urng, 0, 2.1));
 
-  boost::bernoulli_distribution<URNG> ber(urng, 0.2);
-  ber();
-  boost::geometric_distribution<URNG> geo(urng, 0.8);
-  geo();
-  boost::triangle_distribution<URNG> tria(urng, 1, 1.5, 7);
-  tria();
-  boost::exponential_distribution<URNG> ex(urng, 5);
-  ex();
-  boost::normal_distribution<URNG> norm(urng);
-  norm();
-  boost::lognormal_distribution<URNG> lnorm(urng, 1, 1);
-  lnorm();
-  boost::uniform_on_sphere<URNG> usph(urng, 2);
-  usph();
+  instantiate_dist(boost::bernoulli_distribution<URNG>(urng, 0.2));
+  instantiate_dist(boost::binomial_distribution<URNG>(urng, 4, 0.2));
+  instantiate_dist(boost::geometric_distribution<URNG>(urng, 0.8));
+  instantiate_dist(boost::triangle_distribution<URNG>(urng, 1, 1.5, 7));
+  instantiate_dist(boost::exponential_distribution<URNG>(urng, 5));
+  instantiate_dist(boost::normal_distribution<URNG>(urng));
+  instantiate_dist(boost::lognormal_distribution<URNG>(urng, 1, 1));
+  instantiate_dist(boost::poisson_distribution<URNG>(urng, 1));
+  instantiate_dist(boost::uniform_on_sphere<URNG>(urng, 2));
 }
 
 void instantiate_all()
@@ -171,6 +243,21 @@ void instantiate_all()
 
   random_number_generator<mt19937> std_rng(mt2);
   (void) std_rng(10);
+
+  instantiate_urng("lagged_fibonacci",
+                   boost::random::lagged_fibonacci<uint32_t, 24, 607, 273>(),
+                   0u);
+  instantiate_urng("lagged_fibonacci607", lagged_fibonacci607(), 0.0);
+
+  instantiate_urng("ranlux_4", ranlux_4(), 0u);
+  instantiate_urng("ranlux_7", ranlux_7(), 0u);
+  instantiate_urng("ranlux_14", ranlux_14(), 0u);
+
+  instantiate_urng("ranlux_4_01", ranlux_4_01(), 0.0);
+  instantiate_urng("ranlux_7_01", ranlux_7_01(), 0.0);
+  instantiate_urng("ranlux_14_01", ranlux_14_01(), 0.0);
+
+  instantiate_urng("taus88", taus88(), 0u);
 }
 
 /*
