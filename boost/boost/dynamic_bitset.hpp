@@ -776,7 +776,6 @@ TO Gennaro: Please give a description of the method.
 
 */
 
-
 // count using full table
 //
 template <typename Block, typename Allocator>
@@ -812,15 +811,6 @@ dynamic_bitset<Block, Allocator>::count() const
 
     return num;
 }
-
-
-
-
-
-
-
-
-
 
 
 //-----------------------------------------------------------------------------
