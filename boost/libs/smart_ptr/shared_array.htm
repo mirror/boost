@@ -97,7 +97,7 @@ If an exception is thrown, <b>delete[] p</b> is called.</p>
 <pre>template&lt;typename D&gt; shared_array(T * p, D d);</pre>
 <p>Constructs a <b>shared_array</b>, storing a copy of <b>p</b> and of <b>d</b>.
 Afterwards, the <a href="#use_count">use count</a> is 1.
-<b>D</b>'s copy constructor must not throw.
+<b>D</b>'s copy constructor and destructor must not throw.
 When the the time comes to delete the array pointed to by <b>p</b>, the object
 <b>d</b> is used in the statement <b>d(p)</b>. Invoking the object <b>d</b> with
 parameter <b>p</b> in this way must not throw.
