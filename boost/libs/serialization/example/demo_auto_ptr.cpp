@@ -94,7 +94,7 @@ void save(std::auto_ptr<A> &spa, const char *filename)
     oa << spa;
 }
 
-void load(std::auto_ptr<A> &spa)
+void load(std::auto_ptr<A> &spa, const char *filename)
 {
     // open the archive
     std::ifstream ifs(filename);
@@ -106,7 +106,7 @@ void load(std::auto_ptr<A> &spa)
 
 int main(int argc, char *argv[])
 {
-	const char filename = boost::archive::tmpdir();
+	std::string filename = boost::archive::tmpdir();
 	filename += "/testfile";
 
     // create  a new auto pointer to ta new object of type A
@@ -126,6 +126,6 @@ int main(int argc, char *argv[])
     load(spa, filename.c_str());
     // obj of type A gets destroyed
     // as auto_ptr goes out of scope
-	std::remove(filename);
+	std::remove(filename.c_str());
     return 0;
 }
