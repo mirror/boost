@@ -19,7 +19,7 @@
 //
 //  intrusive_ptr_test.cpp
 //
-//  Copyright (c) 2002, 2003 Peter Dimov
+//  Copyright (c) 2002-2005 Peter Dimov
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -28,6 +28,7 @@
 
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/intrusive_ptr.hpp>
+#include <boost/detail/atomic_count.hpp>
 #include <boost/config.hpp>
 #include <algorithm>
 #include <functional>
@@ -41,7 +42,7 @@ class base
 {
 private:
 
-    long use_count_;
+    boost::detail::atomic_count use_count_;
 
     base(base const &);
     base & operator=(base const &);
