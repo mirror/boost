@@ -228,6 +228,35 @@ struct is_convertible<void, void>
 
 #endif // is_convertible
 
+template <class Base, class Derived>
+struct is_base_and_derived
+{
+   BOOST_STATIC_CONSTANT(bool, value = (::boost::is_convertible<Derived*,Base*>::value));
+};
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+template <class Base, class Derived>
+struct is_base_and_derived<Base&, Derived>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class Base, class Derived>
+struct is_base_and_derived<Base, Derived&>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class Base, class Derived>
+struct is_base_and_derived<Base&, Derived&>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class Base>
+struct is_base_and_derived<Base, void>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+#endif
+
 } // namespace boost
 
 #endif  // include guard

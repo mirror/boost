@@ -87,6 +87,8 @@ namespace boost{
 // conversion_traits.hpp:
 template <class From, class To>
 struct is_convertible;
+template <class Base, class Derived>
+struct is_base_and_derived;
 // alignment_traits.hpp:
 template <class T>
 struct alignment_of;
@@ -113,6 +115,12 @@ template <class T>
 struct remove_volatile;
 template <class T>
 struct remove_cv;
+template <class T>
+struct add_const;
+template <class T>
+struct add_volatile;
+template <class T>
+struct add_cv;
 
 // composite_traits.hpp:
 template <class T>
@@ -149,6 +157,12 @@ template <class T>
 struct has_trivial_assign;
 template <class T>
 struct has_trivial_destructor;
+template <class T>
+struct has_nothrow_constructor;
+template <class T>
+struct has_nothrow_copy;
+template <class T>
+struct has_nothrow_assign;
 template <class T>
 struct is_empty;
 

@@ -219,6 +219,42 @@ struct has_trivial_destructor
 
 /**********************************************
  *
+ * has_nothrow_constructor
+ *
+ **********************************************/
+template <typename T>
+struct has_nothrow_constructor
+{
+   BOOST_STATIC_CONSTANT(bool, value =
+      (::boost::has_trivial_constructor<T>::value));
+};
+
+/**********************************************
+ *
+ * has_nothrow_copy
+ *
+ **********************************************/
+template <typename T>
+struct has_nothrow_copy
+{
+   BOOST_STATIC_CONSTANT(bool, value =
+      (::boost::has_trivial_copy<T>::value));
+};
+
+/**********************************************
+ *
+ * has_nothrow_assign
+ *
+ **********************************************/
+template <typename T>
+struct has_nothrow_assign
+{
+   BOOST_STATIC_CONSTANT(bool, value =
+      (::boost::has_trivial_assign<T>::value));
+};
+
+/**********************************************
+ *
  * is_empty
  *
  **********************************************/

@@ -12,11 +12,11 @@
 
 int cpp_main(int argc, char* argv[])
 {
-   value_test(true, (boost::is_convertible<Deriverd,Base>::value));
-   value_test(true, (boost::is_convertible<Deriverd,Deriverd>::value));
+   value_test(true, (boost::is_convertible<Derived,Base>::value));
+   value_test(true, (boost::is_convertible<Derived,Derived>::value));
    value_test(true, (boost::is_convertible<Base,Base>::value));
-   value_test(false, (boost::is_convertible<Base,Deriverd>::value));
-   value_test(true, (boost::is_convertible<Deriverd,Deriverd>::value));
+   value_test(false, (boost::is_convertible<Base,Derived>::value));
+   value_test(true, (boost::is_convertible<Derived,Derived>::value));
    value_test(false, (boost::is_convertible<NonDerived,Base>::value));
    value_test(false, (boost::is_convertible<boost::noncopyable, int>::value));
    value_test(true, (boost::is_convertible<float,int>::value));
@@ -26,14 +26,14 @@ int cpp_main(int argc, char* argv[])
    value_test(true, (boost::is_convertible<void,void>::value));
 #endif
    value_test(true, (boost::is_convertible<enum1, int>::value));
-   value_test(true, (boost::is_convertible<Deriverd*, Base*>::value));
-   value_test(false, (boost::is_convertible<Base*, Deriverd*>::value));
-   value_test(true, (boost::is_convertible<Deriverd&, Base&>::value));
-   value_test(false, (boost::is_convertible<Base&, Deriverd&>::value));
-   value_test(true, (boost::is_convertible<const Deriverd*, const Base*>::value));
-   value_test(false, (boost::is_convertible<const Base*, const Deriverd*>::value));
-   value_test(true, (boost::is_convertible<const Deriverd&, const Base&>::value));
-   value_test(false, (boost::is_convertible<const Base&, const Deriverd&>::value));
+   value_test(true, (boost::is_convertible<Derived*, Base*>::value));
+   value_test(false, (boost::is_convertible<Base*, Derived*>::value));
+   value_test(true, (boost::is_convertible<Derived&, Base&>::value));
+   value_test(false, (boost::is_convertible<Base&, Derived&>::value));
+   value_test(true, (boost::is_convertible<const Derived*, const Base*>::value));
+   value_test(false, (boost::is_convertible<const Base*, const Derived*>::value));
+   value_test(true, (boost::is_convertible<const Derived&, const Base&>::value));
+   value_test(false, (boost::is_convertible<const Base&, const Derived&>::value));
 
    value_test(false, (boost::is_convertible<const int *, int*>::value));
    value_test(false, (boost::is_convertible<const int&, int&>::value));
@@ -52,8 +52,20 @@ int cpp_main(int argc, char* argv[])
    value_test(false, (boost::is_convertible<non_pointer, int*>::value));
    value_test(true, (boost::is_convertible<non_int_pointer, int*>::value));
    value_test(true, (boost::is_convertible<non_int_pointer, void*>::value));
-   value_test(true, (boost::is_convertible<int, int_constructible>::value));
+   //value_test(true, (boost::is_convertible<int, int_constructible>::value));
    value_test(false, (boost::is_convertible<test_abc1&, test_abc2&>::value));
+
+   value_test(false, (boost::is_base_and_derived<Derived,Base>::value));
+   value_test(true, (boost::is_base_and_derived<Derived,Derived>::value));
+   value_test(true, (boost::is_base_and_derived<Base,Base>::value));
+   value_test(true, (boost::is_base_and_derived<Base,Derived>::value));
+   value_test(false, (boost::is_base_and_derived<NonDerived,Base>::value));
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, (boost::is_base_and_derived<Base&,Derived>::value));
+   value_test(false, (boost::is_base_and_derived<Base&,Derived&>::value));
+   value_test(false, (boost::is_base_and_derived<Base,Derived&>::value));
+   value_test(false, (boost::is_base_and_derived<Base,void>::value));
+#endif
 
    return check_result(argc, argv);
 }

@@ -310,7 +310,7 @@ union empty_POD_union_UDT{};
 
 class Base { };
 
-class Deriverd : public Base { };
+class Derived : public Base { };
 
 class NonDerived { };
 

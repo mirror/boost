@@ -452,6 +452,33 @@ has.</p>
         </td>
         <td valign="top" width="5%">&nbsp;</td>
     </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>::boost::has_nothrow_constructor&lt;T&gt;::value</code></td>
+        <td bgcolor="#C0C0C0">True if T has a non-throwing
+        default constructor.</td>
+        <td bgcolor="#C0C0C0">&nbsp;</td>
+        <td align="center" bgcolor="#C0C0C0">PC</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>::boost::has_nothrow_copy&lt;T&gt;::value</code></td>
+        <td bgcolor="#C0C0C0">True if T has a non-throwing copy
+        constructor.</td>
+        <td bgcolor="#C0C0C0">&nbsp;</td>
+        <td align="center" bgcolor="#C0C0C0">PC</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>::boost::has_nothrow_assign&lt;T&gt;::value</code></td>
+        <td bgcolor="#C0C0C0">True if T has a non-throwing
+        assignment operator.</td>
+        <td bgcolor="#C0C0C0">&nbsp;</td>
+        <td align="center" bgcolor="#C0C0C0">PC</td>
+        <td>&nbsp;</td>
+    </tr>
 </table>
 
 <p>&nbsp;</p>
@@ -504,6 +531,15 @@ relationship between two types:</p>
         this template is currently broken with Borland's
         compiler, for constructor-based conversions.</td>
         <td valign="top" width="5%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>::boost::is_base_and_derived&lt;T,U&gt;::value</code></td>
+        <td bgcolor="#C0C0C0">Evaluates to true if type T is a
+        base class to type U.</td>
+        <td align="center" bgcolor="#C0C0C0">10</td>
+        <td align="center" bgcolor="#C0C0C0">P</td>
+        <td>&nbsp;</td>
     </tr>
 </table>
 

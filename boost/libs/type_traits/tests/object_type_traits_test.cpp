@@ -183,6 +183,62 @@ int cpp_main(int argc, char* argv[])
    value_test(false, boost::has_trivial_destructor<test_abc1>::value)
 #endif
 
+   value_test(true, boost::has_nothrow_constructor<int>::value)
+   value_test(true, boost::has_nothrow_constructor<int*>::value)
+   value_test(true, boost::has_nothrow_constructor<int*const>::value)
+   value_test(true, boost::has_nothrow_constructor<const int>::value)
+   value_test(true, boost::has_nothrow_constructor<volatile int>::value)
+   value_test(true, boost::has_nothrow_constructor<int[2]>::value)
+   value_test(true, boost::has_nothrow_constructor<int[3][2]>::value)
+   value_test(true, boost::has_nothrow_constructor<int[2][4][5][6][3]>::value)
+   value_test(true, boost::has_nothrow_constructor<f1>::value)
+   value_test(true, boost::has_nothrow_constructor<mf2>::value)
+   value_test(false, boost::has_nothrow_constructor<UDT>::value)
+   soft_value_test(true, boost::has_nothrow_constructor<empty_UDT>::value)
+   value_test(true, boost::has_nothrow_constructor<enum_UDT>::value)
+   value_test(true, boost::has_nothrow_constructor<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::has_nothrow_constructor<test_abc1>::value)
+#endif
+
+   value_test(true, boost::has_nothrow_copy<int>::value)
+   value_test(true, boost::has_nothrow_copy<int*>::value)
+   value_test(true, boost::has_nothrow_copy<int*const>::value)
+   value_test(true, boost::has_nothrow_copy<const int>::value)
+   // Steve: was 'false' -- should be 'true' via 3.9p3, 3.9p10
+   value_test(false, boost::has_nothrow_copy<volatile int>::value)
+   value_test(true, boost::has_nothrow_copy<int[2]>::value)
+   value_test(true, boost::has_nothrow_copy<int[3][2]>::value)
+   value_test(true, boost::has_nothrow_copy<int[2][4][5][6][3]>::value)
+   value_test(true, boost::has_nothrow_copy<f1>::value)
+   value_test(true, boost::has_nothrow_copy<mf2>::value)
+   value_test(false, boost::has_nothrow_copy<UDT>::value)
+   soft_value_test(true, boost::has_nothrow_copy<empty_UDT>::value)
+   value_test(true, boost::has_nothrow_copy<enum_UDT>::value)
+   value_test(true, boost::has_nothrow_copy<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::has_nothrow_copy<test_abc1>::value)
+#endif
+
+   value_test(true, boost::has_nothrow_assign<int>::value)
+   value_test(true, boost::has_nothrow_assign<int*>::value)
+   value_test(false, boost::has_nothrow_assign<int*const>::value)
+   value_test(false, boost::has_nothrow_assign<const int>::value)
+   // Steve: was 'false' -- should be 'true' via 3.9p3, 3.9p10
+   value_test(false, boost::has_nothrow_assign<volatile int>::value)
+   value_test(true, boost::has_nothrow_assign<int[2]>::value)
+   value_test(true, boost::has_nothrow_assign<int[3][2]>::value)
+   value_test(true, boost::has_nothrow_assign<int[2][4][5][6][3]>::value)
+   value_test(true, boost::has_nothrow_assign<f1>::value)
+   value_test(true, boost::has_nothrow_assign<mf2>::value)
+   value_test(false, boost::has_nothrow_assign<UDT>::value)
+   soft_value_test(true, boost::has_nothrow_assign<empty_UDT>::value)
+   value_test(true, boost::has_nothrow_assign<enum_UDT>::value)
+   value_test(true, boost::has_nothrow_assign<void>::value)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   value_test(false, boost::has_nothrow_assign<test_abc1>::value)
+#endif
+
    soft_value_test(false, boost::is_empty<int>::value)
    soft_value_test(false, boost::is_empty<int*>::value)
    soft_value_test(false, boost::is_empty<int&>::value)
@@ -220,7 +276,7 @@ int cpp_main(int argc, char* argv[])
 // define the number of failures expected for given compilers:
 #ifdef __BORLANDC__
 // can't handle enum's or classes that are POD's
-unsigned int expected_failures = 6;
+unsigned int expected_failures = 9;
 #elif defined(__SUNPRO_CC)
 #if (__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 55;
@@ -231,7 +287,7 @@ unsigned int expected_failures = 20;
 unsigned int expected_failures = 10;
 #elif defined(BOOST_MSVC)
 // can't handle classes that are POD's or arrays that are POD's
-unsigned int expected_failures = 15;
+unsigned int expected_failures = 24;
 #else
 unsigned int expected_failures = 0;
 #endif
