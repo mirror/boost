@@ -120,6 +120,23 @@ void function_object_test()
 
 //
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
+struct Z
+{
+    typedef int result_type;
+    int operator()(int a, int b) const { return a + 10 * b; }
+};
+
+void adaptable_function_object_test()
+{
+    BOOST_TEST( boost::bind(Z(), 7, 4)() == 47 );
+}
+
+#endif
+
+//
+
 struct X
 {
     mutable unsigned int hash;
@@ -262,6 +279,9 @@ int test_main(int, char * [])
 {
     function_test();
     function_object_test();
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+    adaptable_function_object_test();
+#endif
     member_function_test();
     nested_bind_test();
 

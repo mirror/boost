@@ -17,7 +17,7 @@
 	<td align="center">
 		<table border="0">
 			<tr><td nowrap><h1>bind.hpp</h1></td></tr>
-			<tr><td align="right" nowrap><small>&nbsp;1.01.0001 (2001-09-02)</small></td></tr>
+			<tr><td align="right" nowrap><small>&nbsp;1.02.0001 (2001-10-18)</small></td></tr>
 		</table>
 	</td>
 </tr>
@@ -109,6 +109,14 @@ bind(g, _1, _1, _1)(x, y, z);          // g(x, x, x)
 </pre>
 
 <p>
+Note that, in the last example, the function object produced by
+<tt>bind(g, _1, _1, _1)</tt> does not contain references to any arguments
+beyond the first, but it can still be used with more than one argument.
+Any extra arguments are silently ignored, just like the first and the second
+argument are ignored in the third example.
+</p>
+
+<p>
 The arguments that <b>bind</b> takes are copied and held internally by
 the returned function object. For example, in the following code:
 </p>
@@ -135,10 +143,10 @@ bind(f, ref(i), _1);
 <h3>Using bind with function objects</h3>
 
 <p>
-Any function object can be passed as a first argument to <b>bind</b>, but the
-syntax is a bit different. The return type of the generated function object's
+<b>bind</b> is not limited to functions; it accepts arbitrary function objects.
+In the general case, the return type of the generated function object's
 <b>operator()</b> has to be specified explicitly (without a <b>typeof</b>
-operator the return type cannot be inferred in the general case):
+operator the return type cannot be inferred):
 </p>
 
 <pre>
@@ -156,11 +164,18 @@ bind&lt;int&gt;(f, _1, _1)(x);               // f(x, x), i.e. zero
 </pre>
 
 <p>
-[Note: when, hopefully,
-<a href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/cwg_active.html#226">
-function template default arguments</a> become part of C++,
-<b>bind</b> will no longer require the explicit specification of the return type
-when the function object defines <b>result_type</b>.]
+When the function object exposes a nested type named <b>result_type</b>,
+the explicit return type can be omitted:
+</p>
+
+<pre>
+int x = 8;
+
+bind(std::less&lt;int&gt;, _1, 9)(x);               // x < 9
+</pre>
+
+<p>
+[Note: the ability to omit the return type is not available on all compilers.]
 </p>
 
 <h3>Using bind with member function pointers</h3>
@@ -392,11 +407,15 @@ namespace boost
 
 template&lt;class R, class F&gt; <i>implementation-defined-1</i> <a href="#bind_1">bind</a>(F f);
 
+template&lt;class F&gt; <i>implementation-defined-1-1</i> <a href="#bind_1_1">bind</a>(F f);
+
 template&lt;class R&gt; <i>implementation-defined-2</i> <a href="#bind_2">bind</a>(R (*f) ());
 
 // one argument
 
 template&lt;class R, class F, class A1&gt; <i>implementation-defined-3</i> <a href="#bind_3">bind</a>(F f, A1 a1);
+
+template&lt;class F, class A1&gt; <i>implementation-defined-3-1</i> <a href="#bind_3_1">bind</a>(F f, A1 a1);
 
 template&lt;class R, class B1, class A1&gt; <i>implementation-defined-4</i> <a href="#bind_4">bind</a>(R (*f) (B1), A1 a1);
 
@@ -407,6 +426,8 @@ template&lt;class R, class T, class A1&gt; <i>implementation-defined-6</i> <a hr
 // two arguments
 
 template&lt;class R, class F, class A1, class A2&gt; <i>implementation-defined-7</i> <a href="#bind_7">bind</a>(F f, A1 a1, A2 a2);
+
+template&lt;class F, class A1, class A2&gt; <i>implementation-defined-7-1</i> <a href="#bind_7_1">bind</a>(F f, A1 a1, A2 a2);
 
 template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>implementation-defined-8</i> <a href="#bind_8">bind</a>(R (*f) (B1, B2), A1 a1, A2 a2);
 
@@ -474,6 +495,12 @@ implicitly converted to <b>R</b>.
 <b>Throws:</b> Nothing unless the copy constructor of <b>F</b> throws an exception.
 </p>
 
+<h4><a name="bind_1_1">template&lt;class F&gt; <i>implementation-defined-1-1</i> bind(F f)</a></h4>
+
+<p>
+<b>Effects:</b> equivalent to <tt>bind&lt;typename F::result_type, F&gt;(f);</tt>
+</p>
+
 <h4><a name="bind_2">template&lt;class R&gt; <i>implementation-defined-2</i> bind(R (*f) ())</a></h4>
 
 <p>
@@ -494,6 +521,12 @@ implicitly converted to <b>R</b>.
 </p>
 <p>
 <b>Throws:</b> Nothing unless the copy constructors of <b>F</b> and <b>A1</b> throw an exception.
+</p>
+
+<h4><a name="bind_3_1">template&lt;class F, class A1&gt; <i>implementation-defined-3-1</i> bind(F f, A1 a1)</a></h4>
+
+<p>
+<b>Effects:</b> equivalent to <tt>bind&lt;typename F::result_type, F, A1&gt;(f, a1);</tt>
 </p>
 
 <h4><a name="bind_4">template&lt;class R, class B1, class A1&gt; <i>implementation-defined-4</i> bind(R (*f) (B1), A1 a1)</a></h4>
@@ -529,6 +562,12 @@ implicitly converted to <b>R</b>.
 </p>
 <p>
 <b>Throws:</b> Nothing unless the copy constructors of <b>F</b>, <b>A1</b> and <b>A2</b> throw an exception.
+</p>
+
+<h4><a name="bind_7_1">template&lt;class F, class A1, class A2&gt; <i>implementation-defined-7-1</i> bind(F f, A1 a1, A2 a2)</a></h4>
+
+<p>
+<b>Effects:</b> equivalent to <tt>bind&lt;typename F::result_type, F, A1, A2&gt;(f, a1, a2);</tt>
 </p>
 
 <h4><a name="bind_8">template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>implementation-defined-8</i> bind(R (*f) (B1, B2), A1 a1, A2 a2)</a></h4>
@@ -691,6 +730,11 @@ was Darin Adler.
 
 <p>
 The precise semantics of <b>bind</b> were refined in discussions with Jaakko J&auml;rvi.
+</p>
+
+<p>
+Dave Abrahams fixed a MSVC-specific conflict between <b>bind</b> and the
+<a href="../utility\iterator_adaptors.htm">iterator adaptors library</a>.
 </p>
 
 <p><br><br><br><small>Copyright &copy; 2001 by Peter Dimov and Multi Media

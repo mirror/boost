@@ -8,7 +8,7 @@
 //
 //  bind.hpp - binds function objects to arguments
 //
-//  Version 1.01.0001 (2001-08-29)
+//  Version 1.02.0001 (2001-10-18)
 //
 //  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
 //
@@ -512,144 +512,170 @@ private:
     list9 & operator= (list9 const &);
 };
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
+// unspecified
+
+struct unspecified {};
+
+template<class R, class F> struct result_traits
+{
+    typedef R type;
+};
+
+template<class F> struct result_traits<unspecified, F>
+{
+    typedef typename F::result_type type;
+};
+
+#endif
+
 // bind_t
 
 template<class R, class F, class L> class bind_t
 {
 public:
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
+    typedef typename result_traits<R, F>::type result_type;
+
+#else
+
     typedef R result_type;
+
+#endif
 
     bind_t(F f, L const & l): f_(f), l_(l) {}
 
-    R operator()()
+    result_type operator()()
     {
         list0 a;
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    R operator()() const
+    result_type operator()() const
     {
         list0 a;
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1> R operator()(A1 & a1)
+    template<class A1> result_type operator()(A1 & a1)
     {
         list1<A1 &> a(a1);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1> R operator()(A1 & a1) const
+    template<class A1> result_type operator()(A1 & a1) const
     {
         list1<A1 &> a(a1);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2> R operator()(A1 & a1, A2 & a2)
+    template<class A1, class A2> result_type operator()(A1 & a1, A2 & a2)
     {
         list2<A1 &, A2 &> a(a1, a2);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2> R operator()(A1 & a1, A2 & a2) const
+    template<class A1, class A2> result_type operator()(A1 & a1, A2 & a2) const
     {
         list2<A1 &, A2 &> a(a1, a2);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3> R operator()(A1 & a1, A2 & a2, A3 & a3)
+    template<class A1, class A2, class A3> result_type operator()(A1 & a1, A2 & a2, A3 & a3)
     {
         list3<A1 &, A2 &, A3 &> a(a1, a2, a3);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3> R operator()(A1 & a1, A2 & a2, A3 & a3) const
+    template<class A1, class A2, class A3> result_type operator()(A1 & a1, A2 & a2, A3 & a3) const
     {
         list3<A1 &, A2 &, A3 &> a(a1, a2, a3);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4)
+    template<class A1, class A2, class A3, class A4> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4)
     {
         list4<A1 &, A2 &, A3 &, A4 &> a(a1, a2, a3, a4);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4) const
+    template<class A1, class A2, class A3, class A4> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4) const
     {
         list4<A1 &, A2 &, A3 &, A4 &> a(a1, a2, a3, a4);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5)
+    template<class A1, class A2, class A3, class A4, class A5> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5)
     {
         list5<A1 &, A2 &, A3 &, A4 &, A5 &> a(a1, a2, a3, a4, a5);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5) const
+    template<class A1, class A2, class A3, class A4, class A5> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5) const
     {
         list5<A1 &, A2 &, A3 &, A4 &, A5 &> a(a1, a2, a3, a4, a5);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5, class A6> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6)
+    template<class A1, class A2, class A3, class A4, class A5, class A6> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6)
     {
         list6<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &> a(a1, a2, a3, a4, a5, a6);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5, class A6> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6) const
+    template<class A1, class A2, class A3, class A4, class A5, class A6> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6) const
     {
         list6<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &> a(a1, a2, a3, a4, a5, a6);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7)
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7)
     {
         list7<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &> a(a1, a2, a3, a4, a5, a6, a7);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7) const
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7) const
     {
         list7<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &> a(a1, a2, a3, a4, a5, a6, a7);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8)
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8)
     {
         list8<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &> a(a1, a2, a3, a4, a5, a6, a7, a8);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8) const
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8) const
     {
         list8<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &> a(a1, a2, a3, a4, a5, a6, a7, a8);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8, A9 & a9)
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8, A9 & a9)
     {
         list9<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &, A9 &> a(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> R operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8, A9 & a9) const
+    template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> result_type operator()(A1 & a1, A2 & a2, A3 & a3, A4 & a4, A5 & a5, A6 & a6, A7 & a7, A8 & a8, A9 & a9) const
     {
         list9<A1 &, A2 &, A3 &, A4 &, A5 &, A6 &, A7 &, A8 &, A9 &> a(a1, a2, a3, a4, a5, a6, a7, a8, a9);
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A> R eval(A & a)
+    template<class A> result_type eval(A & a)
     {
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
-    template<class A> R eval(A & a) const
+    template<class A> result_type eval(A & a) const
     {
-        return l_(type<R>(), f_, a);
+        return l_(type<result_type>(), f_, a);
     }
 
     template<class V> void accept(V & v) const
@@ -914,6 +940,92 @@ template<class R, class F, class A1, class A2, class A3, class A4, class A5, cla
     typedef typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type list_type;
     return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
 }
+
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
+// adaptable function objects
+
+template<class F>
+    _bi::bind_t<_bi::unspecified, F, _bi::list0>
+    BOOST_BIND(F f)
+{
+    typedef _bi::list0 list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type> (f, list_type());
+}
+
+template<class F, class A1>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_1<A1>::type>
+    BOOST_BIND(F f, A1 a1)
+{
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type> (f, list_type(a1));
+}
+
+template<class F, class A1, class A2>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_2<A1, A2>::type>
+    BOOST_BIND(F f, A1 a1, A2 a2)
+{
+    typedef typename _bi::list_av_2<A1, A2>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type> (f, list_type(a1, a2));
+}
+
+template<class F, class A1, class A2, class A3>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_3<A1, A2, A3>::type>
+    BOOST_BIND(F f, A1 a1, A2 a2, A3 a3)
+{
+    typedef typename _bi::list_av_3<A1, A2, A3>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3));
+}
+
+template<class F, class A1, class A2, class A3, class A4>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_4<A1, A2, A3, A4>::type>
+    BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4)
+{
+    typedef typename _bi::list_av_4<A1, A2, A3, A4>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4));
+}
+
+template<class F, class A1, class A2, class A3, class A4, class A5>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_5<A1, A2, A3, A4, A5>::type>
+    BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
+{
+    typedef typename _bi::list_av_5<A1, A2, A3, A4, A5>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5));
+}
+
+template<class F, class A1, class A2, class A3, class A4, class A5, class A6>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_6<A1, A2, A3, A4, A5, A6>::type>
+    BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
+{
+    typedef typename _bi::list_av_6<A1, A2, A3, A4, A5, A6>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6));
+}
+
+template<class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type>
+    BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
+{
+    typedef typename _bi::list_av_7<A1, A2, A3, A4, A5, A6, A7>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7));
+}
+
+template<class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type>
+    BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
+{
+    typedef typename _bi::list_av_8<A1, A2, A3, A4, A5, A6, A7, A8>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8));
+}
+
+template<class F, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+    _bi::bind_t<_bi::unspecified, F, typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type>
+    BOOST_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
+{
+    typedef typename _bi::list_av_9<A1, A2, A3, A4, A5, A6, A7, A8, A9>::type list_type;
+    return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
+}
+
+#endif
 
 // function pointers
 
