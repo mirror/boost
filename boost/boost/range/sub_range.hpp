@@ -13,6 +13,7 @@
 
 #include <boost/range/config.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <boost/range/value_type.hpp>
 #include <boost/range/result_iterator.hpp>
 #include <boost/range/size_type.hpp>
 #include <boost/range/difference_type.hpp>
@@ -27,9 +28,9 @@ namespace boost
         typedef iterator_range< iterator_t  > base;
         
     public:
-        using BOOST_DEDUCED_TYPENAME base::value_type;
-        using BOOST_DEDUCED_TYPENAME base::iterator;
-        typedef BOOST_DEDUCED_TYPENAME const_iterator_of<ForwardRange>::type     const_iterator;
+        typedef BOOST_DEDUCED_TYPENAME value_type_of<ForwardRange>::type       value_type;
+        typedef BOOST_DEDUCED_TYPENAME result_iterator_of<ForwardRange>::type  iterator;
+        typedef BOOST_DEDUCED_TYPENAME const_iterator_of<ForwardRange>::type   const_iterator;
         typedef BOOST_DEDUCED_TYPENAME difference_type_of<ForwardRange>::type  difference_type;
         typedef BOOST_DEDUCED_TYPENAME size_type_of<ForwardRange>::type        size_type;
 
