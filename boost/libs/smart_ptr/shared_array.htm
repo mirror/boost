@@ -30,13 +30,13 @@ structures. For example, if main() holds a shared_array pointing to array A,
 which directly or indirectly holds a shared_array pointing back to array A, then
 array A's use_count() will be 2, and destruction of the main() shared_array will
 leave array A dangling with a use_count() of 1.</p>
-<p>A heavier duty alternative to a <strong>shared_array</strong> is a <strong>shared_ptr</strong>
-to a C++ Standard Library <strong>vector</strong>.</p>
+<p>A C++ Standard Library <strong>vector</strong> is <strong> </strong>a <strong>
+</strong>heavier duty alternative to a <strong>shared_array</strong>.</p>
 <p>The class is a template parameterized on <tt>T</tt>, the type of the object
 pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">Common
 requirements</a>.</p>
 <h2>Class shared_array Synopsis</h2>
-<pre>#include &lt;boost/smart_ptr.hpp&gt;
+<pre>#include &lt;<a href="../../boost/smart_ptr.hpp">boost/smart_ptr.hpp</a>&gt;
 namespace boost {
 
 template&lt;typename T&gt; class shared_array {
@@ -108,23 +108,17 @@ name BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION is defined.</p>
 <p>Provides the type of the stored pointer.</p>
 <h3><a name="shared_array_ctor">shared_array constructors</a></h3>
 <pre>explicit shared_array( T* p=0 );</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>Constructs a <strong>shared_array</strong>, storing a copy of <tt>p</tt>,
 which must have been allocated via a C++ <tt>new</tt>[] expression or be 0.
 Afterwards, use_count() is 1 (even if p==0; see <a href="#shared_array_~shared_array">~shared_array</a>).</p>
 <p>The only exception which may be thrown is <tt>std::bad_alloc</tt>.&nbsp; If
 an exception is thrown,&nbsp; <tt>delete[] p</tt> is called.</p>
 <pre>shared_array( const shared_array&amp; r);  // never throws</pre>
-<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
-See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Constructs a <strong>shared_array</strong>, as if by storing a copy of the
 pointer stored in <strong>r</strong>. Afterwards, <strong>use_count()</strong>
 for all copies is 1 more than the initial <strong>r.use_count()</strong>.</p>
 <h3><a name="shared_array_~shared_array">shared_array destructor</a></h3>
 <pre>~shared_array();</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>If <strong>use_count()</strong> == 1, deletes the array pointed to by the
 stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any remaining
 copies is decremented by 1. Note that in C++ <tt>delete</tt>[] on a pointer with
@@ -132,8 +126,6 @@ a value of 0 is harmless.</p>
 <p>Does not throw exceptions.</p>
 <h3>shared_array <a name="shared_array_operator=">operator=</a></h3>
 <pre>shared_array&amp; operator=( const shared_array&amp; r);  // never throws</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>First, if <strong>use_count()</strong> == 1, deletes the array pointed to by
 the stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any
 remaining copies is decremented by 1. Note that in C++ <tt>delete</tt>[] on a
@@ -143,8 +135,6 @@ of the pointer stored in <strong>r</strong>. Afterwards, <strong>use_count()</st
 for all copies is 1 more than the initial <strong>r.use_count()</strong>.&nbsp;</p>
 <h3>shared_array <a name="shared_array_reset">reset</a></h3>
 <pre>void reset( T* p=0 );</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>First, if <strong>use_count()</strong> == 1, deletes the array pointed to by
 the stored pointer.&nbsp;Otherwise, <strong>use_count()</strong> for any
 remaining copies is decremented by 1. Note that in C++&nbsp; <tt>delete</tt>[]
@@ -157,8 +147,6 @@ see <a href="#shared_array_~shared_array">~shared_array</a>).</p>
 an exception is thrown,&nbsp; <tt>delete[] p</tt> is called.</p>
 <h3>shared_array <a name="shared_array_operator[]">operator[]</a></h3>
 <p><tt>T&amp; operator[](std::size_t i) const; // never throws</tt></p>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>Returns a reference to element <tt>i</tt> of the array pointed to by the
 stored pointer.</p>
 <p>Behavior is undefined (and almost certainly undesirable) if <tt>get()==0</tt>,
@@ -166,29 +154,30 @@ or if <tt>i</tt> is less than 0 or is greater or equal to the number of elements
 in the array.</p>
 <h3>shared_array <a name="shared_array_get">get</a></h3>
 <pre>T* get() const;  // never throws</pre>
-<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+<p><b>T</b> is not required be a complete type.&nbsp;
 See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Returns the stored pointer.</p>
 <h3>shared_array<a name="shared_array_use_count"> use_count</a></h3>
 <p><tt>long use_count() const; // never throws</tt></p>
-<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+<p><b>T</b> is not required be a complete type.&nbsp;
 See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Returns the number of <strong>shared_arrays</strong> sharing ownership of the
 stored pointer.</p>
 <h3>shared_array <a name="shared_array_unique">unique</a></h3>
 <p><tt>bool unique() const; // never throws</tt></p>
-<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+<p><b>T</b> is not required be a complete type.&nbsp;
 See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Returns <strong>use_count()</strong> == 1.</p>
 <h3><a name="shared_array_swap">shared_array swap</a></h3>
 <p><code>void swap( shared_array&lt;T&gt;&amp; other ) throw()</code></p>
-<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+<p><b>T</b> is not required be a complete type.&nbsp;
 See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Swaps the two smart pointers, as if by std::swap.</p>
 <h2>Class <a name="shared_array_example">shared_array example</a></h2>
 <p>[To be supplied. In the meantime, see <a href="smart_ptr_test.cpp">smart_ptr_test.cpp</a>.]</p>
 <hr>
-<p>Revised December 8, 1999</p>
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->24 May, 2001<!--webbot bot="Timestamp" endspan i-checksum="13964" -->
+</p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright
 notice appears in all copies. This document is provided &quot;as is&quot;

@@ -34,7 +34,7 @@ for that usage.</p>
 pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">common
 requirements</a>.</p>
 <h2>Class scoped_array Synopsis</h2>
-<pre>#include &lt;boost/smart_ptr.hpp&gt;
+<pre>#include &lt;<a href="../../boost/smart_ptr.hpp">boost/smart_ptr.hpp</a>&gt;
 namespace boost {
 
 template&lt;typename T&gt; class scoped_array : <a href="../utility/utility.htm#noncopyable">noncopyable</a> {
@@ -59,27 +59,21 @@ template&lt;typename T&gt; class scoped_array : <a href="../utility/utility.htm#
 <pre>explicit scoped_array( T* p=0 );  // never throws</pre>
 <p>Constructs a <tt>scoped_array</tt>, storing a copy of <tt>p</tt>, which must
 have been allocated via a C++ <tt>new</tt>[] expression or be 0.</p>
-<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+<p><b>T</b> is not required be a complete type.&nbsp;
 See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <h3><a name="scoped_array_~scoped_array">scoped_array destructor</a></h3>
 <pre>~scoped_array();</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>Deletes the array pointed to by the stored pointer.&nbsp; Note that in C++ <tt>delete</tt>[]
 on a pointer with a value of 0 is harmless.</p>
 <p>Does not throw exceptions.</p>
 <h3>scoped_array <a name="scoped_array_reset">reset</a></h3>
 <pre>void reset( T* p=0 )();</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>If p is not equal to the stored pointer, deletes the array pointed to by the
 stored pointer and then stores a copy of p, which must have been allocated via a
 C++ <tt>new[]</tt> expression or be 0.</p>
 <p>Does not throw exceptions.</p>
 <h3>scoped_array <a name="scoped_array_operator[]">operator[]</a></h3>
 <p><tt>T&amp; operator[](std::size_t i) const; // never throws</tt></p>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>Returns a reference to element <tt>i</tt> of the array pointed to by the
 stored pointer.</p>
 <p>Behavior is undefined (and almost certainly undesirable) if <tt>get()==0</tt>,
@@ -87,13 +81,16 @@ or if <tt>i</tt> is less than 0 or is greater or equal to the number of elements
 in the array.</p>
 <h3>scoped_array <a name="scoped_array_get">get</a></h3>
 <pre>T* get() const;  // never throws</pre>
-<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+<p><b>T</b> is not required be a complete type.&nbsp;
 See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Returns the stored pointer.</p>
 <h2>Class <a name="shared_array_example">scoped_array example</a></h2>
 <p>[To be supplied. In the meantime, see <a href="smart_ptr_test.cpp">smart_ptr_test.cpp</a>.]</p>
 <hr>
-<p>Revised&nbsp; December 8, 1999</p>
+<p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan
+-->24 May, 2001<!--webbot bot="Timestamp" endspan i-checksum="13964"
+-->
+</p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright
 notice appears in all copies. This document is provided &quot;as is&quot;

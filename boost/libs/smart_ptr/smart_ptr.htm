@@ -56,22 +56,20 @@ interest to those curious about performance issues.</p>
 <p>These smart pointer classes have a template parameter, <tt><b>T</b></tt>, which
 specifies the type of the object pointed to by the smart pointer.&nbsp; The
 behavior of all four classes is undefined if the destructor or operator delete
-for objects of type <tt><b>T</b></tt> throws exceptions.</p>
+for objects of type <tt><b>T</b></tt>  throw exceptions.</p>
 <p><code><b>T</b></code> may be an incomplete type at the point of smart pointer
 declaration.&nbsp; Unless otherwise specified, it is required that <code><b>T</b></code>
-be a complete type at point of instantiation of all member functions.</p>
+be a complete type at points of smart pointer instantiation. Implementations are
+required to diagnose (treat as an error) all violations of this requirement,
+including deletion of an incomplete type. See <a href="../utility/utility.htm#checked_delete">checked_delete()</a>.</p>
 <h3>Rationale</h3>
-<p>The requirements on <tt><b>T</b></tt> are carefully crafted to ensure safety
-yet allow handle-body (aka pimpl) and similar idioms.&nbsp; In these idioms a
+<p>The requirements on <tt><b>T</b></tt> are carefully crafted to maximize safety
+yet allow handle-body (also called pimpl) and similar idioms.&nbsp; In these idioms a
 smart pointer may appear in translation units where <tt><b>T</b></tt> is an
 incomplete type.&nbsp; This separates interface from implementation and hides
-implementation from translation units which merely use the interface.</p>
-<h3>Example</h3>
-<p>The <a href="scoped_ptr_example_test.cpp">scoped_ptr_example_test.cpp</a>
-sample program includes a header file, <a href="scoped_ptr_example.hpp">scoped_ptr_example.hpp</a>,
-which uses a <b>scoped_ptr&lt;&gt;</b> to an incomplete type.&nbsp;&nbsp; The
-instantiation of member functions which require a complete type occurs in the <a href="scoped_ptr_example.cpp">scoped_ptr_example.cpp</a>
-implementation file.&nbsp;</p>
+implementation from translation units which merely use the interface.&nbsp;
+Examples described in the documentation for specific smart pointers illustrate
+use of smart pointers in these idioms.</p>
 <h2>Exception safety</h2>
 <p>Several functions in these smart pointer classes are specified as having
 &quot;no effect&quot; or &quot;no effect except such-and-such&quot; if an
@@ -144,7 +142,7 @@ implementation.</p>
 <p>See the Revision History section of the header for further contributors.</p>
 <hr>
 <p>Revised&nbsp; <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan
--->22 May 2001<!--webbot bot="Timestamp" endspan i-checksum="15106"
+-->24 May 2001<!--webbot bot="Timestamp" endspan i-checksum="15110"
 --></p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright

@@ -19,13 +19,16 @@ See <a href="#scoped_ptr_example">example</a>.</p>
 needs.&nbsp; It supplies a basic &quot;resource acquisition is
 initialization&quot; facility, without shared-ownership or transfer-of-ownership
 semantics.&nbsp; Both its name and enforcement of semantics (by being <a href="../utility/utility.htm#class noncopyable">noncopyable</a>)
-signal its intent to retain ownership solely within the current scope.&nbsp; By
-being <a href="../utility/utility.htm#class noncopyable">noncopyable</a>, it is
-safer than <b>shared_ptr</b> or std::auto_ptr for pointers which should not be
+signal its intent to retain ownership solely within the current scope.&nbsp;
+Because it is <a href="../utility/utility.htm#class noncopyable">noncopyable</a>, it is
+safer than <b>shared_ptr</b> or <b> std::auto_ptr</b> for pointers which should not be
 copied.</p>
 <p>Because <strong>scoped_ptr</strong> is so simple, in its usual implementation
 every operation is as fast as for a built-in pointer and it has no more space overhead
-that a built-in pointer.</p>
+that a built-in pointer.&nbsp; (Because of the &quot;complete type&quot;
+requirement for delete and reset members, they may have one additional function
+call overhead in certain idioms.&nbsp; See <a href="#Handle/Body">Handle/Body
+Idiom</a>.)&nbsp;&nbsp;&nbsp;</p>
 <p>Class<strong> scoped_ptr</strong> cannot be used in C++ Standard Library containers.&nbsp; See <a href="shared_ptr.htm"><strong>shared_ptr</strong></a>
 or std::auto_ptr if <strong>scoped_ptr</strong> does not meet your needs.</p>
 <p>Class<strong> scoped_ptr</strong> cannot correctly hold a pointer to a
@@ -35,7 +38,7 @@ for that usage.</p>
 pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">common
 requirements</a>.</p>
 <h2>Class scoped_ptr Synopsis</h2>
-<pre>#include &lt;boost/smart_ptr.hpp&gt;
+<pre>#include &lt;<a href="../../boost/smart_ptr.hpp">boost/smart_ptr.hpp</a>&gt;
 namespace boost {
 
 template&lt;typename T&gt; class scoped_ptr : <a href="../utility/utility.htm#class noncopyable">noncopyable</a> {
@@ -59,38 +62,28 @@ template&lt;typename T&gt; class scoped_ptr : <a href="../utility/utility.htm#cl
 <p>Provides the type of the stored pointer.</p>
 <h3><a name="scoped_ptr_ctor">scoped_ptr constructors</a></h3>
 <pre>explicit scoped_ptr( T* p=0 );  // never throws</pre>
-<p><b>T</b> is not required be a complete type at point of instantiation.&nbsp;
+<p><b>T</b> is not required be a complete type.&nbsp;
 See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Constructs a <tt>scoped_ptr</tt>, storing a copy of <tt>p</tt>, which must
 have been allocated via a C++ <tt>new</tt> expression or be 0.</p>
 <h3><a name="scoped_ptr_~scoped_ptr">scoped_ptr destructor</a></h3>
 <pre>~scoped_ptr();</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>Deletes the object pointed to by the stored pointer.&nbsp; Note that in C++, <tt>delete</tt>
 on a pointer with a value of 0 is harmless.</p>
 <p>Does not throw exceptions.</p>
 <h3>scoped_ptr <a name="scoped_ptr_reset">reset</a></h3>
 <pre>void reset( T* p=0 );</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>If p is not equal to the stored pointer, deletes the object pointed to by the
 stored pointer and then stores a copy of p, which must have been allocated via a
 C++ <tt>new</tt> expression or be 0.</p>
 <p>Does not throw exceptions.</p>
 <h3>scoped_ptr <a name="scoped_ptr_operator*">operator*</a></h3>
 <pre>T&amp; operator*() const;  // never throws</pre>
-<p><b>T</b> is required be a complete type at point of instantiation.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
 <p>Returns a reference to the object pointed to by the stored pointer.</p>
 <h3>scoped_ptr <a name="scoped_ptr_operator-&gt;">operator-&gt;</a> and <a name="scoped_ptr_get">get</a></h3>
 <pre>T* operator-&gt;() const;  // never throws
 T* get() const;  // never throws</pre>
-<p><b>T</b> is required be a complete type at point of instantiation of
-operator-&gt;().&nbsp; See <a href="smart_ptr.htm#Common requirements">Common
-Requirements</a>.</p>
-<p><b>T</b> is not required be a complete type at point of instantiation of
-get().&nbsp; See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
+<p><b>T</b> is not required by get() be a complete type.&nbsp; See <a href="smart_ptr.htm#Common requirements">Common Requirements</a>.</p>
 <p>Both return the stored pointer.</p>
 <h2>Class <a name="scoped_ptr_example">scoped_ptr example</a>s</h2>
 <pre>#include &lt;iostream&gt;
@@ -118,17 +111,37 @@ output:</p>
 2
 Buckle my shoe</pre>
 </blockquote>
-<h2>Handle/Body Idiom</h2>
-<p>One common usage of <b>scoped_ptr</b> is to implement a handle/body idiom which avoids exposing the body (implementation) in the header
+<h2>Rationale</h2>
+<p>The primary reason to use <b> scoped_ptr</b> rather than <b> auto_ptr</b> is to let readers
+of your code know that you intend "resource acquisition is initialization" to be applied only for the current scope, and have no intent to transfer
+ownership.</p>
+<p>A secondary reason to use <b> scoped_ptr</b> is to prevent a later maintenance programmer from adding a function that actually transfers
+ownership by returning the <b> auto_ptr</b> (because the maintenance programmer saw
+<b>auto_ptr</b>, and assumed ownership could safely be transferred.)&nbsp;</p>
+<p>Think of <b>bool</b> vs <b>int</b>.  We all know that under the covers <b> bool</b> is usually
+just an <b>int</b>.  Indeed, some argued against including <b> bool</b> in the
+C++ standard because of that.  But by coding <b> bool</b> rather than <b> int</b>, you tell your readers
+what your intent is.  Same with <b> scoped_ptr</b> - you are signaling intent.</p>
+<p>It has been suggested that <b>boost::scoped_ptr&lt;T&gt;</b> is equivalent to
+<b>std::auto_ptr&lt;T> const</b>.&nbsp; Ed Brey pointed out, however, that
+reset() will not work on a <b>std::auto_ptr&lt;T> const.</b></p>
+<h2><a name="Handle/Body">Handle/Body</a> Idiom</h2>
+<p>One common usage of <b>scoped_ptr</b> is to implement a handle/body (also
+called pimpl) idiom which avoids exposing the body (implementation) in the header
 file.</p>
 <p>The <a href="scoped_ptr_example_test.cpp">scoped_ptr_example_test.cpp</a>
 sample program includes a header file, <a href="scoped_ptr_example.hpp">scoped_ptr_example.hpp</a>,
 which uses a <b>scoped_ptr&lt;&gt;</b> to an incomplete type to hide the
 implementation.&nbsp;&nbsp; The
 instantiation of member functions which require a complete type occurs in the <a href="scoped_ptr_example.cpp">scoped_ptr_example.cpp</a>
-implementation file.&nbsp;</p>
+implementation file.</p>
+<h2>FAQ</h2>
+<p><b>Q</b>. Why doesn't <b>scoped_ptr</b> have a release() member?<br>
+<b>A</b>. Because the whole point of <b>scoped_ptr</b> is to signal intent not
+to transfer ownership.&nbsp; Use <b>std::auto_ptr</b> if ownership transfer is
+required.</p>
 <hr>
-<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->22 May 2001<!--webbot bot="Timestamp" endspan i-checksum="15106" --></p>
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->24 May 2001<!--webbot bot="Timestamp" endspan i-checksum="15110" --></p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright
 notice appears in all copies. This document is provided &quot;as is&quot;
