@@ -84,13 +84,13 @@ void instantiate_iterator_interface(Generator & gen)
   gen++;
   typename Generator::result_type res = *gen;
   typename Generator::pointer p = &res;
-  (void) p;
+  (void) &p;
   typename Generator::reference ref = res;
-  (void) ref;
+  (void) &ref;
   typename Generator::difference_type diff = 0;
-  (void) diff;
+  (void) &diff;
   std::input_iterator_tag it(typename Generator::iterator_category());
-  (void) it;
+  (void) &it;
 
   assert(res == *gen++);
   assert(gen == gen);
@@ -112,7 +112,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   (void) a;   // avoid "unused" warning
   typename URNG::result_type x1 = urng();
   ResultType x2 = x1;
-  (void) x2;           // avoid "unused" warning
+  (void) &x2;           // avoid "unused" warning
 
 #ifndef BOOST_MSVC   // MSVC brokenness
   URNG urng2(urng);          // copy constructor
