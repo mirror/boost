@@ -11,9 +11,6 @@
 # pragma once
 #endif              
 
-#include <string>              // char_traits.
-#include <utility>             // pair.
-#include <boost/optional.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
