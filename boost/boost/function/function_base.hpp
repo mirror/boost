@@ -22,13 +22,6 @@
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
 
-// Microsoft Visual C++ 6.0sp5 has lots of quirks
-#ifdef BOOST_MSVC
-#  define BOOST_MSVC_INCLUDE(x) x
-#else
-#  define BOOST_MSVC_INCLUDE(x)
-#endif
-
 namespace boost {
   namespace detail {
     namespace function {
@@ -183,23 +176,22 @@ namespace boost {
           }
           else {
             /* Cast from the void pointer to the functor pointer type */
-          functor_type* f = 
-            reinterpret_cast<functor_type*>(function_obj_ptr.obj_ptr);
+            functor_type* f = 
+              reinterpret_cast<functor_type*>(function_obj_ptr.obj_ptr);
 
 #  ifndef BOOST_NO_STD_ALLOCATOR
-          /* Cast from the functor pointer type to the allocator's pointer
-             type */
-          pointer_type victim = static_cast<pointer_type>(f);
+            /* Cast from the functor pointer type to the allocator's pointer
+               type */
+            pointer_type victim = static_cast<pointer_type>(f);
 
-          
-          // Destroy and deallocate the functor
-          allocator.destroy(victim);
-          allocator.deallocate(victim, 1);
+            // Destroy and deallocate the functor
+            allocator.destroy(victim);
+            allocator.deallocate(victim, 1);
 #  else
-          delete f;
+            delete f;
 #  endif // BOOST_NO_STD_ALLOCATOR
 
-          return any_pointer(static_cast<void*>(0));
+            return any_pointer(static_cast<void*>(0));
           }
         }
 
@@ -285,22 +277,19 @@ namespace boost {
     detail::function::any_pointer functor;
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 
-#ifndef BOOST_WEAK_CONVERSION_OPERATORS
   private:
     struct dummy {
       void nonnull() {};
     };
 
     typedef void (dummy::*safe_bool)();
+
   public:
     operator safe_bool () const 
-    { 
-      return (this->empty())? 0 : &dummy::nonnull;
-    }
-#else
-  public:
-    operator bool() const { return !this->empty(); }
-#endif // BOOST_WEAK_CONVERSION_OPERATORS
+      { return (this->empty())? 0 : &dummy::nonnull; }
+
+    safe_bool operator!() const
+      { return (this->empty())? &dummy::nonnull : 0; }
   };
 
   /* Poison comparison between Boost.Function objects (because it is 

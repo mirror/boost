@@ -456,56 +456,68 @@ namespace boost {
     function() : base_type() {}                                     
                                                                             
     template<typename Functor>                                              
-    function(Functor BOOST_MSVC_INCLUDE(const &) f) : base_type(f) {}       
-                                                                            
+    function(const Functor& f) : base_type(f) {}
+                      
+#ifdef __BORLANDC__
+    template<typename Functor>
+    function(const Functor* fc) : base_type(fc) {}
+#endif // __BORLANDC__
+                                                      
     function(const function& f) : base_type(static_cast<const base_type&>(f)){}
-                                                                            
+         
+    template<typename Functor>
+    function& operator=(const Functor& f)
+    {
+      this->assign_to(f);
+      return *this;
+    }
+
+#ifdef __BORLANDC__
+    template<typename Functor>
+    function& operator=(const Functor* fc)
+    {
+      Functor* f = const_cast<Functor*>(fc);
+      this->assign_to(f);
+      return *this;
+    }
+#endif // __BORLANDC__
+
+    function& operator=(const base_type& f)
+    {
+      this->assign_to_own(f);
+      return *this;
+    }
+
     function& operator=(const function& f)                                  
     {   
-      if (this == &f)
-        return *this;
-
-      const base_type& bf = static_cast<const base_type&>(f);
-      base_type* self = this;
-      self->set(bf);
+      this->assign_to_own(f);
       return *this;                                                         
     }                                                           
 
+    template<typename Functor>
+    void set(const Functor& f)
+    {
+      this->assign_to(f);
+    }
+
+#ifdef __BORLANDC__
+    template<typename Functor>
+    void set(const Functor* fc)
+    {
+      Functor* f = const_cast<Functor*>(fc);
+      this->assign_to(f);
+    }
+#endif // __BORLANDC__
+ 
+    void set(const base_type& f)
+    {
+      this->assign_to_own(f);
+    }
+
     void set(const function& f)                             
     {
-      if (this == &f)
-        return;
-
-      const base_type& bf = static_cast<const base_type&>(f);
-      base_type* self = this;
-      self->set(bf);
+      this->assign_to_own(f);
     }   
-
-    void swap(function& other)
-    {
-#ifndef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-      std::swap(this->manager, other.manager);
-      std::swap(this->functor, other.functor);
-      std::swap(this->invoker, other.invoker);
-#else
-      std::swap(this->impl, other.impl);
-#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-    }
-
-#ifdef BOOST_NO_DEPENDENT_BASE_LOOKUP
-    template<typename Functor>                                          
-    function& operator=(Functor BOOST_MSVC_INCLUDE(const &) f)
-    {           
-      this->set(f);                                                     
-      return *this;                                                     
-    }                                                                   
-                                                                        
-    base_type& operator=(const base_type& f)                            
-    {                                                                   
-      this->set(f);
-      return *this;                                                     
-    }
-#endif // BOOST_NO_DEPENDENT_BASE_LOOKUP
   };
 
   template<typename R,
