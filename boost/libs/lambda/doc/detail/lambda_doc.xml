@@ -3349,6 +3349,37 @@ was dropped.
 <bibliomisc><ulink url="http://www.oonumerics.org/tmpw01/">www.oonumerics.org/tmpw01/</ulink></bibliomisc>
 </biblioentry>
 
+<biblioentry id="cit:jarvi:03">
+<abbrev>Jär03</abbrev>
+
+<articleinfo>
+
+<author>
+<surname>Järvi</surname>
+<firstname>Jaakko</firstname>
+</author>
+
+<author>
+<firstname>Gary</firstname>
+<surname>Powell</surname>
+</author>
+
+<author>
+<firstname>Andrew</firstname>
+<surname>Lumsdaine</surname>
+</author>
+<title>The Lambda Library : unnamed functions in C++</title>
+
+</articleinfo>
+
+<title>Software - Practice and Expreience</title>
+<volumenum>33:259-291</volumenum>
+
+
+<pubdate>2003</pubdate>
+</biblioentry>
+
+
 <biblioentry id="cit:boost::tuple">
 <abbrev>tuple</abbrev>
 <title>The Boost Tuple Library</title>
