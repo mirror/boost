@@ -40,6 +40,10 @@ namespace boost {
                 Returned iterator is either \c InputContainerT::iterator or 
                 \c InputContainerT::const_iterator, depending on the constness of 
                 the input parameter.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template< 
             typename CollectionT, 
@@ -71,7 +75,11 @@ namespace boost {
             \param Format Regex format definition
             \param Flags Regex options
             \return An output iterator pointing just after last inserted character or
-                    a modified copy of the input            
+                    a modified copy of the input   
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template< 
             typename OutputIteratorT,
@@ -155,7 +163,11 @@ namespace boost {
             \param Format Regex format definition
             \param Flags Regex options
             \return An output iterator pointing just after last inserted character or
-                    a modified copy of the input            
+                    a modified copy of the input     
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template< 
             typename OutputIteratorT,
@@ -206,7 +218,7 @@ namespace boost {
             \param Input An input string
             \param Rx A regular expression
             \param Format Regex format definition
-            \param Flags Regex options
+            \param Flags Regex options            
         */
         template< 
             typename SequenceT, 
@@ -238,8 +250,12 @@ namespace boost {
             \param Rx A regular expression
             \param Flags Regex options
             \return An output iterator pointing just after last inserted character or
-                       a modified copy of the input                        
-        */
+                       a modified copy of the input    
+
+           \note If the input paramters satisfy the second assumption
+               about exception safety, second variant of this function provides strong
+               exception guarantie.
+       */
         template< 
             typename OutputIteratorT,
             typename CollectionT, 
@@ -315,7 +331,11 @@ namespace boost {
             \param Rx A regular expression
             \param Flags Regex options
             \return An output iterator pointing just after last inserted character or
-                       a modified copy of the input                        
+                    a modified copy of the input                        
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template< 
             typename OutputIteratorT,
@@ -383,23 +403,26 @@ namespace boost {
         //! Find all regex algorithm
         /*!
             This algorithm finds all substrings matching the give regex
-            in the input. The result is given as a 'container of containers'.
-            Each match of the search sequence is represented by one
-            element in the result.
+            in the input.             
+            
+            Each part is copied and added as a new element to the output container.
+            Thus the result container must be able to hold copies
+            of the matches (in a compatible structure like std::string) or
+            a reference to it (f.e. using the iterator range class).
+            Examples of such a container are \c std::vector<std::string>
+            or \c std::list<boost::iterator_range<std::string::iterator>>
 
-            \param Result A 'container container' to container the result of search.
-                Both outer and inner container must have constructor taking a pair
-                of iterators as an argument.
-                Typical type of the result is 
-                    \c std::vector<boost::iterator_range<iterator>>.
-                (each element of such a vector will container a range delimiting 
-                a match).
+            \param Result A container that can hold copies of references to the substrings.
             \param Input A container which will be searched.
             \param Rx A regular expression
             \param Flags Regex options
             \return A reference to the result
 
             \note Prior content of the result will be overridden.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety and result's container swap() method have strong exception guarantie, 
+                this function provides strong exception guarantie.
         */
         template< 
             typename SequenceSequenceT, 
@@ -425,20 +448,24 @@ namespace boost {
             Tokenize expression. This function is equivalent of C strtok. Input
             sequence is split into tokens, separated  by separators. Separator
             is an every match of the given regex.
-
-            \param Result A 'container container' to container the result of search.
-                Both outer and inner container must have constructor taking a pair
-                of iterators as an argument.
-                Typical type of the result is 
-                    'c std::vector<boost::iterator_range<iterator>>.
-                (each element of such a vector will container a range delimiting 
-                a match).
+            Each part is copied and added as a new element to the output container.
+            Thus the result container must be able to hold copies
+            of the matches (in a compatible structure like std::string) or
+            a reference to it (f.e. using the iterator range class).
+            Examples of such a container are \c std::vector<std::string>
+            or \c std::list<boost::iterator_range<std::string::iterator>>
+    
+            \param Result A container that can hold copies of references to the substrings.          
             \param Input A container which will be searched.
             \param Rx A regular expression
             \param Flags Regex options
             \return A reference to the result
 
             \note Prior content of the result will be overridden.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety and result's container swap() method have strong exception guarantie, 
+                this function provides strong exception guarantie.
         */
         template< 
             typename SequenceSequenceT, 

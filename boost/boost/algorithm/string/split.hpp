@@ -19,12 +19,16 @@
 
 /*! \file
     Defines basic split algorithms. 
-    Split algorithms can be used to divide a sequence
+    Split algorithms can be used to divide a string
     into several parts according to a given criterium.
-    Result is given as a 'container of containers' where
-    elements are copies or references to extracted parts.
-    This file contains some common specializations of generic
-    algorithms contained in the file split2.hpp
+    
+    Each part is copied and added as a new element to the
+    output container.
+    Thus the result container must be able to hold copies
+    of the matches (in a compatible structure like std::string) or
+    a reference to it (f.e. using the iterator range class).
+    Examples of such a container are \c std::vector<std::string>
+    or \c std::list<boost::iterator_range<std::string::iterator>>
 */
 
 namespace boost {
@@ -34,23 +38,27 @@ namespace boost {
 
         //! Find all algorithm
         /*!
-            This algorithm finds all occurrences of the search sequence
-            in the input. A result is given as a 'container of containers'.
-            Each match of the search sequence is represented by one
-            element in the result.
+            This algorithm finds all occurrences of the search string
+            in the input.
+            
+            Each part is copied and added as a new element to the
+            output container.
+            Thus the result container must be able to hold copies
+            of the matches (in a compatible structure like std::string) or
+            a reference to it (f.e. using the iterator range class).
+            Examples of such a container are \c std::vector<std::string>
+            or \c std::list<boost::iterator_range<std::string::iterator>>
 
-            \param Result A 'container container' to container the result of search.
-                Both outer and inner container must have constructor taking a pair
-                of iterators as an argument.
-                Typical type of the result is 
-                    \c std::vector<boost::iterator_range<iterator>).
-                (each element of such a vector will container a range delimiting 
-                a match).
+            \param Result A container that can hold copies of references to the substrings
             \param Input A container which will be searched.
             \param Search A string to be searched for.
             \return A reference the result
 
             \note Prior content of the result will be overridden.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety and result's container swap method have strong exception guarantie, 
+                this function provides strong exception guarantie.
         */
         template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
         inline SequenceSequenceT& find_all(
@@ -67,23 +75,27 @@ namespace boost {
         //! Find all algorithm ( case insensitive ) 
         /*!
             This algorithm finds all occurrences of the search sequence
-            in the input. A result is given as a 'container of containers'.
-            Each match of the search sequence is represented by one
-            element in the result. Searching is case insensitive.
+            in the input. 
+            Each part is copied and added as a new element to the
+            output container. Thus the result container must be able to hold copies
+            of the matches (in a compatible structure like std::string) or
+            a reference to it (f.e. using the iterator range class).
+            Examples of such a container are \c std::vector<std::string>
+            or \c std::list<boost::iterator_range<std::string::iterator>>
 
-            \param Result A 'container container' to container the result of search.
-                Both outer and inner container must have constructor taking a pair
-                of iterators as an argument.
-                Typical type of the result is 
-                    \c std::vector<boost::iterator_range<iterator>>.
-                (each element of such a vector will container a range delimiting 
-                a match).
+            Searching is case insensitive.
+
+            \param Result A container that can hold copies of references to the substrings
             \param Input A container which will be searched.
             \param Search A string to be searched for.
             \param Loc a locale used for case insensitive comparison
             \return A reference the result
 
             \note Prior content of the result will be overridden.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety and result's container swap method have strong exception guarantie, 
+                this function provides strong exception guarantie.
         */
         template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
         inline SequenceSequenceT& ifind_all(
@@ -107,14 +119,15 @@ namespace boost {
             sequence is split into tokens, separated by separators. Separators 
             are given in the mean of predicate.
 
-            \param Result A 'container container' to container the result of search.
-                Both outer and inner container must have constructor taking a pair
-                of iterators as an argument.
-                Typical type of the result is 
-                    \c std::vector<boost::iterator_range<iterator>>.
-                (each element of such a vector will container a range delimiting 
-                a match).
-
+            Each part is copied and added as a new element to the
+            output container.
+            Thus the result container must be able to hold copies
+            of the matches (in a compatible structure like std::string) or
+            a reference to it (f.e. using the iterator range class).
+            Examples of such a container are \c std::vector<std::string>
+            or \c std::list<boost::iterator_range<std::string::iterator>>
+    
+            \param Result A container that can hold copies of references to the substrings          
             \param Input A container which will be searched.
             \param Pred A predicate to identify separators. This predicate is 
                 supposed to return true if a given element is a separator.
@@ -124,6 +137,10 @@ namespace boost {
             \return A reference the result
 
             \note Prior content of the result will be overridden.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety and result's container swap() method have strong exception guarantie, 
+                this function provides strong exception guarantie.
         */
         template< typename SequenceSequenceT, typename CollectionT, typename PredicateT >
         inline SequenceSequenceT& split(

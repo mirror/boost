@@ -42,6 +42,10 @@ namespace boost {
             \param Formatter A Formatter object used to format a match
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template< 
             typename OutputIteratorT,
@@ -151,6 +155,10 @@ namespace boost {
             \param Formatter A Formatter object used to format a match
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template< 
             typename OutputIteratorT,

@@ -63,6 +63,10 @@ namespace boost {
                 Returned iterator is either \c CollectionT::iterator or 
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -88,6 +92,10 @@ namespace boost {
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -114,6 +122,10 @@ namespace boost {
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -139,6 +151,10 @@ namespace boost {
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -194,6 +210,11 @@ namespace boost {
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
+
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -223,6 +244,10 @@ namespace boost {
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename CollectionT>
         inline iterator_range< 
@@ -250,6 +275,11 @@ namespace boost {
                 Returned iterator is either \c CollectionT::iterator or 
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
+
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename CollectionT>
         inline iterator_range< 
@@ -278,6 +308,10 @@ namespace boost {
                 Returned iterator is either \c CollectionT::iterator or 
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename CollectionT, typename PredicateT>
         inline iterator_range< 

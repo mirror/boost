@@ -40,6 +40,10 @@ namespace boost {
             \param Format A substitute string
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,
@@ -116,6 +120,10 @@ namespace boost {
             \param Format A substitute string
             \return An output iterator pointing just after last inserted character or
                     a modified copy of the input
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,
@@ -189,6 +197,11 @@ namespace boost {
             \param Loc a locale used for case insensitive comparison
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
+
         */
         template<
             typename OutputIteratorT,
@@ -265,6 +278,10 @@ namespace boost {
             \param Format A substitute string
             \return An output iterator pointing just after last inserted character or
                     a modified copy of the input            
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,
@@ -337,7 +354,11 @@ namespace boost {
             \param Format A substitute string
             \param Loc a locale used for case insensitive comparison
             \return An output iterator pointing just after last inserted character or
-                    a modified copy of the input            
+                    a modified copy of the input  
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,
@@ -416,6 +437,10 @@ namespace boost {
             \param Format A substitute string
             \return An output iterator pointing just after last inserted character or
                 a modified copy of the input
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,
@@ -494,7 +519,11 @@ namespace boost {
             \param Loc a locale used for case insensitive comparison
             \return An output iterator pointing just after last inserted character or
                     a modified copy of the input            
-        */
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
+       */
         template<
             typename OutputIteratorT,
             typename Collection1T, 
@@ -573,7 +602,11 @@ namespace boost {
             \param Search A string to be searched for 
             \param Format A substitute string
             \return An output iterator pointing just after last inserted character or
-                    a modified copy of the input        
+                    a modified copy of the input 
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,
@@ -647,7 +680,11 @@ namespace boost {
             \param Format A substitute string
             \param Loc a locale used for case insensitive comparison
             \return An output iterator pointing just after last inserted character or
-                    a modified copy of the input            
+                    a modified copy of the input 
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,
@@ -725,7 +762,11 @@ namespace boost {
             \param N A length of the head
             \param Format A substitute string
             \return An output iterator pointing just after last inserted character or
-                a modified copy of the input            
+                a modified copy of the input  
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,
@@ -799,7 +840,11 @@ namespace boost {
             \param N A length of the head
             \param Format A substitute string
             \return An output iterator pointing just after last inserted character or
-                    a modified copy of the input            
+                    a modified copy of the input   
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, second variant of this function provides strong
+                exception guarantie.
         */
         template<
             typename OutputIteratorT,

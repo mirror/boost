@@ -23,6 +23,9 @@
     substring, simply contains the substring or if both strings are equal.
     In addition the algorithm \c all() checks all elements of a container to satisfy a 
     condition.
+
+    All predicates provide strong exception guarantie if input parameters satisfy
+    second assumption about exception safety.
 */
 
 namespace boost {
@@ -41,6 +44,10 @@ namespace boost {
             \param Test A test sequence
             \param Comp An element comparison predicate
             \return A result of the test
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
             inline bool starts_with( 
@@ -91,6 +98,10 @@ namespace boost {
             \param Test A test sequence
             \param Loc a locale used for case insensitive comparison
             \return A result of the test
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline bool istarts_with( 
@@ -116,6 +127,10 @@ namespace boost {
             \param Test A test sequence
             \param Comp An element comparison predicate
             \return A result of the test
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool ends_with( 
@@ -161,6 +176,10 @@ namespace boost {
             \param Test A test sequence
             \param Loc a locale used for case insensitive comparison
             \return A result of the test
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline bool iends_with( 
@@ -183,6 +202,10 @@ namespace boost {
             \param Test A test sequence
             \param Comp An element comparison predicate
             \return A result of the test
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool contains( 
@@ -220,6 +243,10 @@ namespace boost {
             \param Test A test sequence
             \param Loc a locale used for case insensitive comparison
             \return A result of the test
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline bool icontains( 
@@ -245,6 +272,10 @@ namespace boost {
             \return A result of the test
 
             \note This is two-way version of \c std::equal algorithm
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool equals( 
@@ -297,6 +328,10 @@ namespace boost {
             \return A result of the test
 
             \note This is two-way version of \c std::equal algorithm
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename Collection1T, typename Collection2T>
         inline bool iequals( 
@@ -317,6 +352,10 @@ namespace boost {
             \param Input An input sequence
             \param Pred A predicate
             \return A result of the test
+
+            \note If the input paramters satisfy the second assumption
+                about exception safety, this function provides strong
+                exception guarantie.
         */
         template<typename CollectionT, typename PredicateT>
         inline bool all( 

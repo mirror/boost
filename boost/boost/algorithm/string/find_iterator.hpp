@@ -1,10 +1,9 @@
 //  Boost string_algo library find_iterator.hpp header file  ---------------------------//
 
-//  Copyright Pavol Droba 2002-2003. Use, modification and
+//  Copyright Pavol Droba 2002-2004. Use, modification and
 //  distribution is subject to the Boost Software License, Version
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
-
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #ifndef BOOST_STRING_FIND_ITERATOR_HPP
@@ -17,6 +16,13 @@
 #include <boost/algorithm/string/detail/find_iterator.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/iterator/iterator_categories.hpp>
+
+/*! \file
+    Defines find iterator classes. Find iterator repeatly applies a Finder
+    on a specified input string to search for matches. Dereferencing
+    the iterator yields the current match or a range between last and current
+    match depending on the iterator used.
+*/
 
 namespace boost {
     namespace algorithm { 
