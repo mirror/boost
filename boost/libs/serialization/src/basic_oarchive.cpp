@@ -304,7 +304,7 @@ basic_oarchive_impl::save_pointer(
     const basic_pointer_oserializer * bpos_ptr
 ){
     const basic_oserializer & bos = bpos_ptr->get_basic_serializer();
-    unsigned int original_count = cobject_info_set.size();
+    std::size_t original_count = cobject_info_set.size();
     const cobject_type & co = register_type(bos);
     if(! co.initialized){
         ar.vsave(co.class_id);
