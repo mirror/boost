@@ -52,6 +52,15 @@
 #  if !defined(__CONSOLE__) && !defined(_NO_VCL)
 #     define BOOST_REGEX_USE_VCL
 #  endif
+   //
+   // if this isn't Win32 then don't automatically select link
+   // libraries:
+   //
+#  ifndef _Windows
+#     define BOOST_REGEX_NO_LIB
+#     define BOOST_REGEX_STATIC_LINK
+#  endif
+
 #endif
 
 /*****************************************************************************
@@ -624,6 +633,7 @@ inline void pointer_construct(T* p, const T& t)
 #endif
 
 #endif
+
 
 
 
