@@ -26,9 +26,9 @@
 
 namespace boost { namespace mpl { namespace aux {
 
-template< typename C >
+template< typename C_ >
 struct value_wknd
-    : C
+    : C_
 {
 };
 
