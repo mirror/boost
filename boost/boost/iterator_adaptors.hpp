@@ -686,7 +686,11 @@ struct iterator_adaptor :
     self operator++(int) { self tmp(*this); ++*this; return tmp; }
     
     self& operator--() {
+#ifdef __MWERKS__
+        policies().decrement<Base>(iter());
+#else
         policies().decrement(iter());
+#endif
         return *this;
     }
     
