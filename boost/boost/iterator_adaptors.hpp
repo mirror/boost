@@ -123,7 +123,6 @@
 # include <boost/utility.hpp>
 # include <boost/compressed_pair.hpp>
 # include <boost/concept_check.hpp>
-# include <boost/type.hpp>
 # include <boost/static_assert.hpp>
 # include <boost/type_traits.hpp>
 # include <boost/type_traits/conversion_traits.hpp>
