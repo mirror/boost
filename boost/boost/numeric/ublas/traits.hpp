@@ -42,8 +42,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T real_type;
         typedef T precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 0);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 0);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 0);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 0);
 
         static
         BOOST_UBLAS_INLINE
@@ -101,8 +101,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type real_type;
         typedef double precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 1);
 
         static
         BOOST_UBLAS_INLINE
@@ -177,8 +177,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type precision_type;
 #endif
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 1);
 
         static
         BOOST_UBLAS_INLINE
@@ -250,8 +250,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type real_type;
         typedef value_type precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 1);
 
         static
         BOOST_UBLAS_INLINE
@@ -324,8 +324,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef float real_type;
         typedef std::complex<double> precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 6);
 
         static
         BOOST_UBLAS_INLINE
@@ -394,8 +394,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type precision_type;
 #endif
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 6);
 
         static
         BOOST_UBLAS_INLINE
@@ -461,8 +461,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef long double real_type;
         typedef value_type precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 6);
 
         static
         BOOST_UBLAS_INLINE
@@ -530,8 +530,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type real_type;
         typedef boost::numeric::interval<double> precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 1);
 
         static
         BOOST_UBLAS_INLINE
@@ -598,8 +598,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type precision_type;
 #endif
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 1);
 
         static
         BOOST_UBLAS_INLINE
@@ -663,8 +663,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type real_type;
         typedef value_type precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 1);
 
         static
         BOOST_UBLAS_INLINE
@@ -730,8 +730,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef boost::numeric::interval<float> real_type;
         typedef boost::complex<boost::numeric::interval<double> > precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 6);
 
         static
         BOOST_UBLAS_INLINE
@@ -800,8 +800,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type precision_type;
 #endif
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 6);
 
         static
         BOOST_UBLAS_INLINE
@@ -867,8 +867,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef boost::numeric::interval<long double> real_type;
         typedef value_type precision_type;
 
-        BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
-        BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
+        BOOST_STATIC_CONSTANT (unsigned, plus_complexity = 2);
+        BOOST_STATIC_CONSTANT (unsigned, multiplies_complexity = 6);
 
         static
         BOOST_UBLAS_INLINE
@@ -1432,30 +1432,17 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class I>
     BOOST_UBLAS_INLINE
-    void increment (I &it, const I &it_end, std::ptrdiff_t compare, packed_random_access_iterator_tag) {
+    void increment (I &it, const I &it_end, BOOST_UBLAS_TYPENAME I::difference_type compare, packed_random_access_iterator_tag) {
         it += (std::min) (compare, it_end - it);
     }
     template<class I>
     BOOST_UBLAS_INLINE
-    void increment (I &it, const I &/* it_end */, std::ptrdiff_t /* compare */, sparse_bidirectional_iterator_tag) {
-#ifdef BOOST_UBLAS_DEPRECATED
-        std::size_t index = it.index ();
-        while (compare > 0) {
-            ++ it;
-            if (it != it_end) {
-                compare += index;
-                index = it.index ();
-                compare -= index;
-            } else
-                compare = 0;
-        }
-#else
+    void increment (I &it, const I &/* it_end */, BOOST_UBLAS_TYPENAME I::difference_type /* compare */, sparse_bidirectional_iterator_tag) {
         ++ it;
-#endif
     }
     template<class I>
     BOOST_UBLAS_INLINE
-    void increment (I &it, const I &it_end, std::ptrdiff_t compare) {
+    void increment (I &it, const I &it_end, BOOST_UBLAS_TYPENAME I::difference_type compare) {
         increment (it, it_end, compare, BOOST_UBLAS_TYPENAME I::iterator_category ());
     }
 
