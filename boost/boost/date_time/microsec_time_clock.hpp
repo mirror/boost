@@ -8,10 +8,13 @@
 
 
 /*! @file highres_time_clock.hpp
-  This file contains the interface for clock devices
+  This file contains a high resolution time clock implementation.
 */
 
 #include "boost/date_time/c_time.hpp"
+#include "boost/cstdint.hpp"
+
+
 #ifdef BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
 
 namespace boost {
