@@ -1,74 +1,74 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
 
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
-<meta name="ProgId" content="FrontPage.Editor.Document">
-<title>Reverse Iterator Adaptor Documentation</title>
-</head>
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+    <meta name="ProgId" content="FrontPage.Editor.Document">
 
-<body bgcolor="#FFFFFF" text="#000000">
+    <title>Reverse Iterator Adaptor Documentation</title>
 
-<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
-align="center" width="277" height="86">
+    <img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align=
+    "center" width="277" height="86"> 
 
-<h1>Reverse Iterator Adaptor</h1>
+    <h1>Reverse Iterator Adaptor</h1>
+    Defined in header <a href=
+    "../../boost/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a> 
 
-Defined in header
-<a href="../../boost/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a>
+    <p>The reverse iterator adaptor flips the direction of a base iterator's
+    motion. Invoking <tt>operator++()</tt> moves the base iterator backward and
+    invoking <tt>operator--()</tt> moves the base iterator forward. The Boost
+    reverse iterator adaptor is better to use than the
+    <tt>std::reverse_iterator</tt> class in situations where pairs of
+    mutable/const iterators are needed (e.g., in containers) because
+    comparisons and conversions between the mutable and const versions are
+    implemented correctly.
 
-<p>
-The reverse iterator adaptor flips the direction of an iterators
-motion.  Invoking <tt>operator++()</tt> moves the reverse iterator
-backwards and calling <tt>operator--()</tt> moves the reverse iterator
-forwards. The Boost reverse iterator adaptor is better to use than the
-<tt>std::reverse_iterator</tt> class in situations where pairs of
-mutable/const iterators are needed (such as in containers) because
-comparisons and conversions between the mutable and const versions are
-implemented correctly.
-
-<h2>Synopsis</h2>
-
+    <h2>Synopsis</h2>
 <pre>
 namespace boost {
-  template &lt;class <a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>,
+  template &lt;class <a href=
+"http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>,
             class Value, class Reference, class Pointer, class Category, class Distance&gt;
   struct reverse_iterator_generator;
   
-  template &lt;class <a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>&gt;
+  template &lt;class <a href=
+"http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>&gt;
   typename reverse_iterator_generator&lt;BidirectionalIterator&gt;::type
   make_reverse_iterator(BidirectionalIterator base)  
 }
 </pre>
+    <hr>
 
-<hr>
+    <h2><a name="reverse_iterator_generator">The Reverse Iterator Type
+    Generator</a></h2>
+    The <tt>reverse_iterator_generator</tt> template is a <a href=
+    "../../more/generic_programming.html#type_generator">generator</a> of
+    reverse iterator types. The main template parameter for this class is the
+    base <tt>BidirectionalIterator</tt> type that is being adapted. In most
+    cases the associated types of the base iterator can be deduced using
+    <tt>std::iterator_traits</tt>, but in some situations the user may want to
+    override these types, so there are also template parameters for the base
+    iterator's associated types. 
 
-<h2><a name="reverse_iterator_generator">The Reverse Iterator Type
-Generator</a></h2>
-
-The class <tt>reverse_iterator_generator</tt> is a helper class whose
-purpose is to construct a reverse iterator type.  The main template
-parameter for this class is the <tt>BidirectionalIterator</tt> type
-that is being wrapped. In most cases the associated types of the base
-iterator can be deduced using <tt>std::iterator_traits</tt>, but in
-some situations the user may want to override these types, so there
-are also template parameters for the base iterators associates types.
-
+    <blockquote>
 <pre>
-template &lt;class <a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>,
+template &lt;class <a href=
+"http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>,
           class Value, class Reference, class Pointer, class Category, class Distance&gt;
 class reverse_iterator_generator
 {
 public:
-  typedef <tt><a href="./iterator_adaptors.htm#iterator_adaptor">iterator_adaptor</a>&lt...&gt;</tt> type; // the resulting reverse iterator type 
+  typedef <tt><a href=
+"./iterator_adaptors.htm#iterator_adaptor">iterator_adaptor</a>&lt;...&gt;</tt> type; // the resulting reverse iterator type 
 };
 </pre>
+    </blockquote>
 
-<h3>Example</h3>
+    <h3>Example</h3>
+    In this example we sort a sequence of letters and then output the sequence
+    in descending order using reverse iterators. 
 
-In this example we sort a sequence of letters and then output
-the sequence in descending order using reverse iterators.
-
+    <blockquote>
 <pre>
 #include &lt;boost/config.hpp&gt;
 #include &lt;iostream&gt;
@@ -80,7 +80,7 @@ int main(int, char*[])
   char letters[] = "hello world!";
   const int N = sizeof(letters)/sizeof(char) - 1;
   std::cout &lt;&lt; "original sequence of letters:\t"
-	    &lt;&lt; letters &lt;&lt; std::endl;
+      &lt;&lt; letters &lt;&lt; std::endl;
 
   std::sort(letters, letters + N);
 
@@ -93,153 +93,167 @@ int main(int, char*[])
 
   std::cout &lt;&lt; "letters in descending order:\t";
   std::copy(reverse_letters_first, reverse_letters_last,
-	    std::ostream_iterator&lt;char&gt;(std::cout));
+      std::ostream_iterator&lt;char&gt;(std::cout));
   std::cout &lt;&lt; std::endl;
 
   // to be continued...
 </pre>
-The output is:
+    </blockquote>
+    The output is: 
+
+    <blockquote>
 <pre>
-original sequence of letters:	hello world!
-letters in descending order:	wroolllhed! 
+original sequence of letters: hello world!
+letters in descending order:  wroolllhed! 
 </pre>
+    </blockquote>
 
-<h3>Template Parameters</h3>
+    <h3>Template Parameters</h3>
 
-<Table border>
-<TR>
-<TH>Parameter</TH><TH>Description</TH>
-</TR>
+    <table border>
+      <tr>
+        <th>Parameter
 
-<TR>
-<TD><tt><a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a></tt></TD>
-<TD>The iterator type being wrapped.</TD>
-</TD>
-</TR>
+        <th>Description
 
-<TR>
-<TD><tt>Value</tt></TD>
+      <tr>
+        <td><tt><a href=
+        "http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a></tt>
+        
 
-<TD>The value-type of the base iterator and the resulting reverse
-iterator.<br>
-<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::value_type</tt>
-</TD>
+        <td>The iterator type being wrapped.
 
-<TR>
-<TD><tt>Reference</tt></TD>
+      <tr>
+        <td><tt>Value</tt> 
 
-<TD>The <tt>reference</tt> type for the resulting iterator,
-and in particular, the result type of <tt>operator*()</tt>
-Typically the default for this parameter is the appropriate type.<br>
-<b>Default:</b> If <tt>Value</tt> is supplied, <tt>Value&amp;</tt> is
-used. Otherwise
-<tt>std::iterator_traits&lt;BidirectionalIterator&gt;::reference</tt> is used.
-</TD>
+        <td>The value-type of the base iterator and the resulting reverse
+        iterator.<br>
+         <b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::value_type</tt>
+        
 
-<TR>
-<TD><tt>Pointer</tt></TD>
+      <tr>
+        <td><tt>Reference</tt> 
 
-<TD>The <tt>pointer</tt> type of the resulting iterator, and in
- particular, the result type of <tt>operator->()</tt>.  Typically the
- default for this parameter is the appropriate type.<br>
- <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>.
- Otherwise
- <tt>std::iterator_traits&lt;BidirectionalIterator&gt;::pointer</tt> is used.</TD>
-</TR>
+        <td>The <tt>reference</tt> type of the resulting iterator, and in
+        particular, the result type of <tt>operator*()</tt>.<br>
+         <b>Default:</b> If <tt>Value</tt> is supplied, <tt>Value&amp;</tt> is
+        used. Otherwise
+        <tt>std::iterator_traits&lt;BidirectionalIterator&gt;::reference</tt>
+        is used.
 
+      <tr>
+        <td><tt>Pointer</tt> 
 
-<TR>
-<TD><tt>Category</tt></TD>
-<TD>The iterator category.<br>
-<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::iterator_category</tt>
-</TD>
+        <td>The <tt>pointer</tt> type of the resulting iterator, and in
+        particular, the result type of <tt>operator-&gt;()</tt>.<br>
+         <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
+        otherwise
+        <tt>std::iterator_traits&lt;BidirectionalIterator&gt;::pointer</tt>.
 
-<TR>
-<TD><tt>Distance</tt></TD>
-<TD>The corresponding pointer type for the <tt>Value</tt>.<br>
-<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::difference_type</tt>
-</TD>
+      <tr>
+        <td><tt>Category</tt> 
 
+        <td>The <tt>iterator_category</tt> type for the resulting iterator.<br>
+         <b>Default:</b>
+        <tt>std::iterator_traits&lt;BidirectionalIterator&gt;::iterator_category</tt>
+        
 
-</Table>
+      <tr>
+        <td><tt>Distance</tt> 
 
-<h3>Model of</h3>
+        <td>The <tt>difference_type</tt> for the resulting iterator.<br>
+         <b>Default:</b>
+        <tt>std::iterator_traits&lt;BidirectionalIterator&amp;gt::difference_type</tt>
+        
+    </table>
 
-If the base iterator is a model of <a
-href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
-Access Iterator</a> then so is the resulting reverse iterator.  If the
-base iterator supports less functionality than this the resulting
-reverse iterator will also support less functionality. The base
-iterator must be at least a <a
-href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional
-Iterator</a>
+    <h3>Concept Model</h3>
+    The indirect iterator will model whichever <a href=
+    "http://www.sgi.com/tech/stl/Iterators.html">standard iterator concept
+    category</a> is modeled by the base iterator. Thus, if the base iterator is
+    a model of <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
+    Iterator</a> then so is the resulting indirect iterator. If the base
+    iterator models a more restrictive concept, the resulting indirect iterator
+    will model the same concept. The base iterator must be at least a <a href=
+    "http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional
+    Iterator</a> 
 
-<h3>Members</h3>
+    <h3>Members</h3>
+    The reverse iterator type implements the member functions and operators
+    required of the <a href=
+    "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access
+    Iterator</a> concept. In addition it has the following constructor: 
 
-The reverse iterator type implements the member functions and
-operators required of the <a
-href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
-Access Iterator</a> concept.
-In addition it has the following constructor:
-
+    <blockquote>
 <pre>
 reverse_iterator_generator::type(const BidirectionalIterator&amp; it)
 </pre>
+    </blockquote>
+    <br>
+     <br>
+     
+    <hr>
 
-<p>
-<hr>
-<p>
+    <p>
 
-<h2><a name="make_reverse_iterator">The Reverse Iterator Object Generator</a></h2>
+    <h2><a name="make_reverse_iterator">The Reverse Iterator Object
+    Generator</a></h2>
+    The <tt>make_reverse_iterator()</tt> function provides a more convenient
+    way to create reverse iterator objects. The function saves the user the
+    trouble of explicitly writing out the iterator types. 
 
-The <tt>make_reverse_iterator()</tt> function provides a more
-convenient way to create reverse iterator objects. The function saves
-the user the trouble of explicitly writing out the iterator types.
-
+    <blockquote>
 <pre>
-  template &lt;class BidirectionalIterator&gt;
-  typename reverse_iterator_generator&lt;BidirectionalIterator&gt;::type
-  make_reverse_iterator(BidirectionalIterator base)  
+template &lt;class BidirectionalIterator&gt;
+typename reverse_iterator_generator&lt;BidirectionalIterator&gt;::type
+make_reverse_iterator(BidirectionalIterator base);
 </pre>
+    </blockquote>
 
+    <h3>Example</h3>
+    In this part of the example we use <tt>make_reverse_iterator()</tt> to
+    print the sequence of letters in reverse-reverse order, which is the
+    original order. 
 
-<h3>Example</h3>
-
-In this part of the example we use <tt>make_reverse_iterator()</tt> to
-print the sequence of letters in reverse-reverse order, which is the
-original order.
-
+    <blockquote>
 <pre>
   // continuing from the previous example...
 
-  std::cout << "letters in ascending order:\t";
+  std::cout &lt;&lt; "letters in ascending order:\t";
   std::copy(boost::make_reverse_iterator(reverse_letters_last),
-	    boost::make_reverse_iterator(reverse_letters_first),
-	    std::ostream_iterator<char>(std::cout));
-  std::cout << std::endl;
+      boost::make_reverse_iterator(reverse_letters_first),
+      std::ostream_iterator&lt;char&gt;(std::cout));
+  std::cout &lt;&lt; std::endl;
 
   return 0;
 }
 </pre>
-The output is:
+    </blockquote>
+    The output is: 
+
+    <blockquote>
 <pre>
-letters in ascending order:	 !dehllloorw
+letters in ascending order:  !dehllloorw
 </pre>
+    </blockquote>
+    <hr>
 
-<hr>
-<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10 Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" --></p>
-<p>© Copyright Jeremy Siek 2000. Permission to copy, use,
-modify, sell and distribute this document is granted provided this copyright
-notice appears in all copies. This document is provided &quot;as is&quot;
-without express or implied warranty, and with no claim as to its suitability for
-any purpose.</p>
+    <p>Revised 
+    <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->15
+    Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" -->
 
-</body>
 
-</html>
-<!--  LocalWords:  html charset alt gif hpp BidirectionalIterator const namespace struct
- -->
-<!--  LocalWords:  ConstPointer ConstReference typename iostream int abcdefg
- -->
-<!--  LocalWords:  sizeof  PairGen pre Siek wroolllhed dehllloorw
- -->
+    <p>&copy; Copyright Jeremy Siek 2000. Permission to copy, use, modify, sell
+    and distribute this document is granted provided this copyright notice
+    appears in all copies. This document is provided "as is" without express or
+    implied warranty, and with no claim as to its suitability for any purpose. 
+    <!--  LocalWords:  html charset alt gif hpp BidirectionalIterator const namespace struct
+         -->
+     
+    <!--  LocalWords:  ConstPointer ConstReference typename iostream int abcdefg
+         -->
+     <!--  LocalWords:  sizeof  PairGen pre Siek wroolllhed dehllloorw
+         -->
+
+
