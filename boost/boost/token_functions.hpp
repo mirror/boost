@@ -34,8 +34,11 @@ namespace boost{
   struct escaped_list_error : public std::runtime_error{
     escaped_list_error(const std::string& what):std::runtime_error(what){}
   };
+  
 
-  template <class Char, class Traits = std::char_traits<Char> >
+// The out of the box GCC 2.95 on cygwin does not have a char_traits class.
+  template <class Char, 
+	  class Traits = std::basic_string<Char>::traits_type >
   class escaped_list_separator{
 
   private:
@@ -190,8 +193,11 @@ namespace boost{
   // be returned as tokens. These are often punctuation. nonreturnable
   // delimiters cannot be returned as tokens. These are often whitespace
 
-  template <class Char, class Traits = std::char_traits<Char> >
+// The out of the box GCC 2.95 on cygwin does not have a char_traits class.
+  template <class Char, 
+	  class Traits = std::basic_string<Char>::traits_type >
   class char_delimiters_separator{
+
 
   private:	
 
@@ -207,9 +213,12 @@ namespace boost{
 		 if(returnable_.length())
 			 return  returnable_.find(E) != string_type::npos;
 		 else{
-			 if(no_ispunct_)return false;
-			 using namespace std;
-			 return  ispunct(E)!=0;
+			 if(no_ispunct_){return false;}
+			 else{
+			 	using namespace std;
+				int r = ispunct(E);
+				return r != 0;
+			}
 		 }
 	 }
      bool is_nonret(Char E)const
@@ -217,9 +226,12 @@ namespace boost{
 		 if(nonreturnable_.length())
 			 return  nonreturnable_.find(E) != string_type::npos;
 		 else{
-			 if(no_isspace_)return false;
-			 using namespace std; 
-			 return isspace(E)!=0;
+			 if(no_isspace_){return false;}
+			 else{
+			 	using namespace std; 
+				int r = isspace(E);
+				return r != 0;
+			}
 		 }
 	 }
 
