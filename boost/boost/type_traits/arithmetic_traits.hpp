@@ -10,6 +10,8 @@
 //  is_void, is_integral, is_float, is_arithmetic, is_fundamental.
 //
 
+/  Revision History:
+// Feb 19 2001 Added #include <climits> (David Abrahams)
 
 #ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #define BOOST_ARITHMETIC_TYPE_TRAITS_HPP
@@ -20,6 +22,8 @@
 #ifndef BOOST_FWD_TYPE_TRAITS_HPP
 #include <boost/type_traits/fwd.hpp>
 #endif
+
+#include <climits> // for ULLONG_MAX/ULONG_LONG_MAX
 
 namespace boost{
 
