@@ -41,7 +41,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 //
-// Defined if variant does not support variant<Types> syntax (see below). 
+// Defined if variant does not support make_variant_over (see below). 
 //
 #if defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
 #   define BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
@@ -65,7 +65,8 @@
 // macro BOOST_VARIANT_RECURSIVE_VARIANT_MAX_ARITY
 //
 // Exposes maximum allowed arity of class templates with recursive_variant
-// arguments. (That is, variant< ..., T<[1], recursive_variant, ... [N]> >.)
+// arguments. That is,
+//   make_recursive_variant< ..., T<[1], recursive_variant_, ... [N]> >.
 //
 #include "boost/mpl/limits/arity.hpp"
 #define BOOST_VARIANT_RECURSIVE_VARIANT_MAX_ARITY \
@@ -226,14 +227,14 @@ template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct make_recursive_variant;
 ///////////////////////////////////////////////////////////////////////////////
 // metafunction make_variant_over
 //
-// Results in a variant w/ bounded types by specified type sequence.
+// Result is a variant w/ types of the specified type sequence.
 //
 template <typename Types> struct make_variant_over;
 
 ///////////////////////////////////////////////////////////////////////////////
 // metafunction make_recursive_variant_over
 //
-// Results in a recursive variant w/ bounded types by specified type sequence.
+// Result is a recursive variant w/ types of the specified type sequence.
 //
 template <typename Types> struct make_recursive_variant_over;
 
