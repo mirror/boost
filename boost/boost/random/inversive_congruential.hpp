@@ -96,7 +96,7 @@ public:
   bool operator==(inversive_congruential rhs) const
   { return value == rhs.value; }
   bool operator!=(inversive_congruential rhs) const
-  { return !(x == y); }
+  { return !(*this == rhs); }
 #endif
 private:
   IntType value;

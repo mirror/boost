@@ -97,7 +97,7 @@ public:
   bool operator==(const discard_block& rhs) const
   { return _rng == rhs._rng && _n == rhs._n; }
   bool operator!=(const discard_block& rhs) const
-  { return !(x == y); }
+  { return !(*this == rhs); }
 #endif
 
 private:

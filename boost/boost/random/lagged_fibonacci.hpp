@@ -124,7 +124,7 @@ public:
   bool operator==(const lagged_fibonacci& rhs) const
   { return i == rhs.i && std::equal(x, x+long_lag, rhs.x); }
   bool operator!=(const lagged_fibonacci& rhs) const
-  { return !(x == y); }
+  { return !(*this == rhs); }
 #endif
 
 private:
@@ -258,7 +258,7 @@ public:
     using std::fmod;
 #endif
     unsigned long mask = ~0u;
-    for(int i = 0; i < w; ++i)
+    for(int k = 0; k < w; ++k)
       mask <<= 1;
     mask = ~mask;                // now lowest w bits set
     unsigned int j;
@@ -331,7 +331,7 @@ public:
   bool operator==(const lagged_fibonacci_01& rhs) const
   { return i == rhs.i && std::equal(x, x+long_lag, rhs.x); }
   bool operator!=(const lagged_fibonacci_01& rhs) const
-  { return !(x == y); }
+  { return !(*this == rhs); }
 #endif
 
 private:
