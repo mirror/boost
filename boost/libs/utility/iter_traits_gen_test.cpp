@@ -4,7 +4,9 @@
 // "as is" without express or implied warranty, and with no claim as
 // to its suitability for any purpose.
 
-// 8 Mar 2001   Jeremy Siek
+// 04 Nov 2001   Jeremy Siek
+//     Updated with respect to new named parameter interface.
+// 08 Mar 2001   Jeremy Siek
 //     Initial checkin.
 
 #include <boost/iterator_adaptors.hpp>
@@ -26,9 +28,8 @@ main()
 
   {
     typedef boost::iterator_adaptor<my_iter, boost::default_iterator_policies,
-      boost::iterator_traits_generator
-      ::reference<dummyT>
-      ::iterator_category<std::input_iterator_tag> > iter_type;
+      boost::reference_is<dummyT>,
+      boost::iterator_category_is<std::input_iterator_tag> > iter_type;
 
     BOOST_STATIC_ASSERT((boost::is_same<iter_type::iterator_category*,
        std::input_iterator_tag*>::value));
@@ -42,12 +43,11 @@ main()
   {
     typedef boost::iterator_adaptor<dummyT*,
       boost::default_iterator_policies,
-      boost::iterator_traits_generator
-        ::value_type<dummyT>
-        ::reference<const dummyT&>
-        ::pointer<const dummyT*> 
-        ::iterator_category<std::forward_iterator_tag>
-        ::difference_type<std::ptrdiff_t> > adaptor_type;
+      boost::value_type_is<dummyT>,
+      boost::reference_is<const dummyT&>,
+      boost::pointer_is<const dummyT*> ,
+      boost::iterator_category_is<std::forward_iterator_tag>,
+      boost::difference_type_is<std::ptrdiff_t> > adaptor_type;
 
     adaptor_type i(array);
 
