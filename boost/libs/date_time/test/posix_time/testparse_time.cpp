@@ -110,6 +110,11 @@ main()
   check("parse iso time: " + ts4, 
         t21 == ptime(date(1900,12,31),time_duration(0,0,0)));
 
+  std::string ts5("19001231T23");
+  ptime t22 = from_iso_string(ts5);
+  check("parse iso time: " + ts5, 
+        t22 == ptime(date(1900,12,31),time_duration(23,0,0)));
+
 
   return printTestStats();
  
