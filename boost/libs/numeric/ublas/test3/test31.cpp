@@ -67,6 +67,7 @@ struct test_my_vector {
             // Binary vector operations resulting in a vector
             initialize_vector (v1);
             initialize_vector (v2);
+            initialize_vector (v3);
             v3 = v1 + v2;
             std::cout << "v1 + v2 = " << v3 << std::endl;
 

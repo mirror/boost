@@ -63,6 +63,7 @@ struct test_my_matrix {
             // Binary matrix operations resulting in a matrix
             initialize_matrix (m1);
             initialize_matrix (m2);
+            initialize_matrix (m3);
             m3 = m1 + m2;
             std::cout << "m1 + m2 = " << m3 << std::endl;
             m3 = m1 - m2;

@@ -1298,7 +1298,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         hermitian_adaptor &operator = (const hermitian_adaptor &m) {
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, m);
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, m, functor_type ());
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1309,37 +1309,37 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         hermitian_adaptor &operator = (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (ae)); 
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (ae), functor_type ()); 
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         hermitian_adaptor &assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+            matrix_assign (scalar_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae, functor_type ()); 
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         hermitian_adaptor& operator += (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (*this + ae)); 
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (*this + ae), functor_type ()); 
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         hermitian_adaptor &plus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae, functor_type ());
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         hermitian_adaptor& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (*this - ae)); 
+            matrix_assign (scalar_assign<value_type, value_type> (), *this, matrix<value_type> (*this - ae), functor_type ()); 
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         hermitian_adaptor &minus_assign (const matrix_expression<AE> &ae) { 
-            matrix_assign (scalar_minus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae); 
+            matrix_assign (scalar_minus_assign<value_type, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae, functor_type ());
             return *this;
         }
         template<class AT>
@@ -1369,7 +1369,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Too unusual semantic.
             // BOOST_UBLAS_CHECK (this != &m, external_logic ());
             if (this != &m)
-                matrix_swap (scalar_swap<value_type, value_type> (), *this, m); 
+                matrix_swap (scalar_swap<value_type, value_type> (), *this, m, functor_type ());
         }
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
         BOOST_UBLAS_INLINE

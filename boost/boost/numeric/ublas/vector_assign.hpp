@@ -386,6 +386,8 @@ namespace boost { namespace numeric { namespace ublas {
                 restart (v, index, it, it_end);
                 // The proxies could reference the same container.
                 restart (e, index, ite, ite_end);
+#else
+                ++ ite;
 #endif
             }
         }
@@ -489,6 +491,8 @@ namespace boost { namespace numeric { namespace ublas {
                 restart (v, index, it, it_end);
                 // The proxies could reference the same container.
                 restart (e, index, ite, ite_end);
+#else
+                ++ it;
 #endif
             } else if (compare > 0) {
 #ifdef BOOST_UBLAS_NON_CONFORMANT_PROXIES
@@ -499,6 +503,8 @@ namespace boost { namespace numeric { namespace ublas {
                 restart (e, index, ite, ite_end);
                 // The proxies could reference the same container.
                 restart (v, index, it, it_end);
+#else
+                ++ ite;
 #endif
             }
         }

@@ -1082,6 +1082,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type element (size_type i, size_type size1, size_type j, size_type size2) {
+            // Guarding against overflow.
+            BOOST_UBLAS_CHECK ((size1 * size2) / size1 == size2, bad_size ());
             BOOST_UBLAS_CHECK (i < size1, bad_index ());
             BOOST_UBLAS_CHECK (j < size2, bad_index ());
             return i * size2 + j;
@@ -1089,6 +1091,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type address (size_type i, size_type size1, size_type j, size_type size2) {
+            // Guarding against overflow.
+            BOOST_UBLAS_CHECK ((size1 * size2) / size1 == size2, bad_size ());
             BOOST_UBLAS_CHECK (i <= size1, bad_index ());
             BOOST_UBLAS_CHECK (j <= size2, bad_index ());
             return i * size2 + j;
@@ -1238,6 +1242,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type element (size_type i, size_type size1, size_type j, size_type size2) {
+            // Guarding against overflow.
+            BOOST_UBLAS_CHECK ((size1 * size2) / size1 == size2, bad_size ());
             BOOST_UBLAS_CHECK (i < size1, bad_index ());
             BOOST_UBLAS_CHECK (j < size2, bad_index ());
             return i + j * size1;
@@ -1245,6 +1251,8 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         size_type address (size_type i, size_type size1, size_type j, size_type size2) {
+            // Guarding against overflow.
+            BOOST_UBLAS_CHECK ((size1 * size2) / size1 == size2, bad_size ());
             BOOST_UBLAS_CHECK (i <= size1, bad_index ());
             BOOST_UBLAS_CHECK (j <= size2, bad_index ());
             return i + j * size1;

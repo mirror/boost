@@ -1812,10 +1812,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e1 ().size2 () == e2.size (), bad_size ());
         size_type size = e2.size ();
         for (size_type n = 0; n < size; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e2 (n) /= e1 () (n, n);
-            for (size_type m = n + 1; m < size; ++ m)
-                e2 (m) -= e1 () (m, n) * t;
+            if (t != value_type ()) {
+                for (size_type m = n + 1; m < size; ++ m)
+                    e2 (m) -= e1 () (m, n) * t;
+            }
         }
     }
     // Packed (proxy) case
@@ -1831,13 +1838,20 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e1 ().size2 () == e2.size (), bad_size ());
         size_type size = e2.size ();
         for (size_type n = 0; n < size; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e2 (n) /= e1 () (n, n);
-            typename E1::const_iterator1 it1e1 (e1 ().find_first1 (1, n + 1, n));
-            typename E1::const_iterator1 it1e1_end (e1 ().find_first1 (1, e1 ().size1 (), n));
-            difference_type m (it1e1_end - it1e1);
-            while (-- m >= 0)
-                e2 (it1e1.index1 ()) -= *it1e1 * t, ++ it1e1;
+            if (t != value_type ()) {
+                typename E1::const_iterator1 it1e1 (e1 ().find_first1 (1, n + 1, n));
+                typename E1::const_iterator1 it1e1_end (e1 ().find_first1 (1, e1 ().size1 (), n));
+                difference_type m (it1e1_end - it1e1);
+                while (-- m >= 0)
+                    e2 (it1e1.index1 ()) -= *it1e1 * t, ++ it1e1;
+            }
         }
     }
     // Sparse (proxy) case
@@ -1853,12 +1867,19 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e1 ().size2 () == e2.size (), bad_size ());
         size_type size = e2.size ();
         for (size_type n = 0; n < size; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e2 (n) /= e1 () (n, n);
-            typename E1::const_iterator1 it1e1 (e1 ().find_first1 (1, n + 1, n));
-            typename E1::const_iterator1 it1e1_end (e1 ().find_first1 (1, e1 ().size1 (), n));
-            while (it1e1 != it1e1_end)
-                e2 (it1e1.index1 ()) -= *it1e1 * t, ++ it1e1;
+            if (t != value_type ()) {
+                typename E1::const_iterator1 it1e1 (e1 ().find_first1 (1, n + 1, n));
+                typename E1::const_iterator1 it1e1_end (e1 ().find_first1 (1, e1 ().size1 (), n));
+                while (it1e1 != it1e1_end)
+                    e2 (it1e1.index1 ()) -= *it1e1 * t, ++ it1e1;
+            }
         }
     }
     // Dispatcher
@@ -1883,10 +1904,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e1 ().size2 () == e2.size (), bad_size ());
         size_type size = e2.size ();
         for (difference_type n = size - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e2 (n) /= e1 () (n, n);
-            for (difference_type m = n - 1; m >= 0; -- m)
-                e2 (m) -= e1 () (m, n) * t;
+            if (t != value_type ()) {
+                for (difference_type m = n - 1; m >= 0; -- m)
+                    e2 (m) -= e1 () (m, n) * t;
+            }
         }
     }
     // Packed (proxy) case
@@ -1902,13 +1930,20 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e1 ().size2 () == e2.size (), bad_size ());
         size_type size = e2.size ();
         for (difference_type n = size - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e2 (n) /= e1 () (n, n);
-            typename E1::const_reverse_iterator1 it1e1 (e1 ().find_first1 (1, n, n));
-            typename E1::const_reverse_iterator1 it1e1_rend (e1 ().find_first1 (1, 0, n));
-            difference_type m (it1e1_rend - it1e1);
-            while (-- m >= 0)
-                e2 (it1e1.index1 ()) -= *it1e1 * t, ++ it1e1;
+            if (t != value_type ()) {
+                typename E1::const_reverse_iterator1 it1e1 (e1 ().find_first1 (1, n, n));
+                typename E1::const_reverse_iterator1 it1e1_rend (e1 ().find_first1 (1, 0, n));
+                difference_type m (it1e1_rend - it1e1);
+                while (-- m >= 0)
+                    e2 (it1e1.index1 ()) -= *it1e1 * t, ++ it1e1;
+            }
         }
     }
     // Sparse (proxy) case
@@ -1924,12 +1959,19 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e1 ().size2 () == e2.size (), bad_size ());
         size_type size = e2.size ();
         for (difference_type n = size - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e2 (n) /= e1 () (n, n);
-            typename E1::const_reverse_iterator1 it1e1 (e1 ().find_first1 (1, n, n));
-            typename E1::const_reverse_iterator1 it1e1_rend (e1 ().find_first1 (1, 0, n));
-            while (it1e1 != it1e1_rend)
-                e2 (it1e1.index1 ()) -= *it1e1 * t, ++ it1e1;
+            if (t != value_type ()) {
+                typename E1::const_reverse_iterator1 it1e1 (e1 ().find_first1 (1, n, n));
+                typename E1::const_reverse_iterator1 it1e1_rend (e1 ().find_first1 (1, 0, n));
+                while (it1e1 != it1e1_rend)
+                    e2 (it1e1.index1 ()) -= *it1e1 * t, ++ it1e1;
+            }
         }
     }
     // Dispatcher
@@ -1946,7 +1988,7 @@ namespace boost { namespace numeric { namespace ublas {
     void inplace_solve (const matrix_expression<E1> &e1,
                         vector_expression<E2> &e2,
                         C) {
-        inplace_solve (e1, e2, C (), vector_tag ());
+        inplace_solve (e1, e2 (), C (), vector_tag ());
     }
     template<class E1, class E2, class C>
     BOOST_UBLAS_INLINE
@@ -1972,10 +2014,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e2 ().size1 () == e2 ().size2 (), bad_size ());
         size_type size = e1.size ();
         for (size_type n = 0; n < size; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
+#else
+            if (e2 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e1 (n) /= e2 () (n, n);
-            for (size_type m = n + 1; m < size; ++ m)
-                e1 (m) -= t * e2 () (n, m);
+            if (t != value_type ()) {
+                for (size_type m = n + 1; m < size; ++ m)
+                    e1 (m) -= t * e2 () (n, m);
+            }
         }
     }
     // Packed (proxy) case
@@ -1991,15 +2040,22 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e2 ().size1 () == e2 ().size2 (), bad_size ());
         size_type size = e1.size ();
         for (size_type n = 0; n < size; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
+#else
+            if (e2 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e1 (n) /= e2 () (n, n);
-            typename E1::iterator ite1 (e1.find_first (n + 1));
-            typename E1::iterator ite1_end (e1.find_first (e2 ().size ()));
-            typename E2::const_iterator2 it2e2 (e2 ().find_first2 (1, n, n + 1));
-            typename E2::const_iterator2 it2e2_end (e2 ().find_first2 (1, n, e2 ().size2 ()));
-            difference_type m (it2e2_end - it2e2);
-            while (-- m >= 0)
-                e1 (it2e2.index2 ()) -= *it2e2 * t, ++ it2e2;
+            if (t != value_type ()) {
+                typename E1::iterator ite1 (e1.find_first (n + 1));
+                typename E1::iterator ite1_end (e1.find_first (e2 ().size ()));
+                typename E2::const_iterator2 it2e2 (e2 ().find_first2 (1, n, n + 1));
+                typename E2::const_iterator2 it2e2_end (e2 ().find_first2 (1, n, e2 ().size2 ()));
+                difference_type m (it2e2_end - it2e2);
+                while (-- m >= 0)
+                    e1 (it2e2.index2 ()) -= *it2e2 * t, ++ it2e2;
+            }
         }
     }
     // Sparse (proxy) case
@@ -2015,12 +2071,19 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e2 ().size1 () == e2 ().size2 (), bad_size ());
         size_type size = e1.size ();
         for (size_type n = 0; n < size; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
+#else
+            if (e2 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e1 (n) /= e2 () (n, n);
-            typename E2::const_iterator2 it2e2 (e2 ().find_first2 (1, n, n + 1));
-            typename E2::const_iterator2 it2e2_end (e2 ().find_first2 (1, n, e2 ().size2 ()));
-            while (it2e2 != it2e2_end)
-                e1 (it2e2.index2 ()) -= *it2e2 * t, ++ it2e2;
+            if (t != value_type ()) {
+                typename E2::const_iterator2 it2e2 (e2 ().find_first2 (1, n, n + 1));
+                typename E2::const_iterator2 it2e2_end (e2 ().find_first2 (1, n, e2 ().size2 ()));
+                while (it2e2 != it2e2_end)
+                    e1 (it2e2.index2 ()) -= *it2e2 * t, ++ it2e2;
+            }
         }
     }
     // Dispatcher
@@ -2045,10 +2108,17 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e2.size1 () == e2.size2 (), bad_size ());
         size_type size = e1.size ();
         for (difference_type n = size - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
+#else
+            if (e2 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e1 (n) /= e2 (n, n);
-            for (difference_type m = n - 1; m >= 0; -- m)
-                e1 (m) -= t * e2 (n, m);
+            if (t != value_type ()) {
+                for (difference_type m = n - 1; m >= 0; -- m)
+                    e1 (m) -= t * e2 (n, m);
+            }
         }
     }
     // Packed (proxy) case
@@ -2064,13 +2134,20 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e2.size1 () == e2.size2 (), bad_size ());
         size_type size = e1.size ();
         for (difference_type n = size - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
+#else
+            if (e2 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e1 (n) /= e2 (n, n);
-            typename E2::const_reverse_iterator2 it2e2 (e2 ().find_first2 (1, n, n));
-            typename E2::const_reverse_iterator2 it2e2_rend (e2 ().find_first2 (1, n, 0));
-            difference_type m (it2e2_rend - it2e2);
-            while (-- m >= 0)
-                e1 (it2e2.index2 ()) -= *it2e2 * t, ++ it2e2;
+            if (t != value_type ()) {
+                typename E2::const_reverse_iterator2 it2e2 (e2 ().find_first2 (1, n, n));
+                typename E2::const_reverse_iterator2 it2e2_rend (e2 ().find_first2 (1, n, 0));
+                difference_type m (it2e2_rend - it2e2);
+                while (-- m >= 0)
+                    e1 (it2e2.index2 ()) -= *it2e2 * t, ++ it2e2;
+            }
         }
     }
     // Sparse (proxy) case
@@ -2086,12 +2163,19 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e2.size1 () == e2.size2 (), bad_size ());
         size_type size = e1.size ();
         for (difference_type n = size - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
+#else
+            if (e2 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             value_type t = e1 (n) /= e2 (n, n);
-            typename E2::const_reverse_iterator2 it2e2 (e2 ().find_first2 (1, n, n));
-            typename E2::const_reverse_iterator2 it2e2_rend (e2 ().find_first2 (1, n, 0));
-            while (it2e2 != it2e2_rend)
-                e1 (it2e2.index2 ()) -= *it2e2 * t, ++ it2e2;
+            if (t != value_type ()) {
+                typename E2::const_reverse_iterator2 it2e2 (e2 ().find_first2 (1, n, n));
+                typename E2::const_reverse_iterator2 it2e2_rend (e2 ().find_first2 (1, n, 0));
+                while (it2e2 != it2e2_rend)
+                    e1 (it2e2.index2 ()) -= *it2e2 * t, ++ it2e2;
+            }
         }
     }
     // Dispatcher
@@ -2108,7 +2192,7 @@ namespace boost { namespace numeric { namespace ublas {
     void inplace_solve (vector_expression<E1> &e1,
                         const matrix_expression<E2> &e2,
                         C) {
-        inplace_solve (e1, e2, vector_tag (), C ());
+        inplace_solve (e1 (), e2, vector_tag (), C ());
     }
     template<class E1, class E2, class C>
     BOOST_UBLAS_INLINE
@@ -2145,11 +2229,18 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size1 = e2.size1 ();
         size_type size2 = e2.size2 ();
         for (size_type n = 0; n < size1; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             for (size_type l = 0; l < size2; ++ l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
-                for (size_type m = n + 1; m < size1; ++ m)
-                    e2 (m, l) -= e1 () (m, n) * t;
+                if (t != value_type ()) {
+                    for (size_type m = n + 1; m < size1; ++ m)
+                        e2 (m, l) -= e1 () (m, n) * t;
+                }
             }
         }
     }
@@ -2167,14 +2258,21 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size1 = e2.size1 ();
         size_type size2 = e2.size2 ();
         for (size_type n = 0; n < size1; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             for (size_type l = 0; l < size2; ++ l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
-                typename E1::const_iterator1 it1e1 (e1 ().find_first1 (1, n + 1, n));
-                typename E1::const_iterator1 it1e1_end (e1 ().find_first1 (1, e1 ().size1 (), n));
-                difference_type m (it1e1_end - it1e1);
-                while (-- m >= 0)
-                    e2 (it1e1.index1 (), l) -= *it1e1 * t, ++ it1e1;
+                if (t != value_type ()) {
+                    typename E1::const_iterator1 it1e1 (e1 ().find_first1 (1, n + 1, n));
+                    typename E1::const_iterator1 it1e1_end (e1 ().find_first1 (1, e1 ().size1 (), n));
+                    difference_type m (it1e1_end - it1e1);
+                    while (-- m >= 0)
+                        e2 (it1e1.index1 (), l) -= *it1e1 * t, ++ it1e1;
+                }
             }
         }
     }
@@ -2192,13 +2290,20 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size1 = e2.size1 ();
         size_type size2 = e2.size2 ();
         for (size_type n = 0; n < size1; ++ n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             for (size_type l = 0; l < size2; ++ l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
-                typename E1::const_iterator1 it1e1 (e1 ().find_first1 (1, n + 1, n));
-                typename E1::const_iterator1 it1e1_end (e1 ().find_first1 (1, e1 ().size1 (), n));
-                while (it1e1 != it1e1_end)
-                    e2 (it1e1.index1 (), l) -= *it1e1 * t, ++ it1e1;
+                if (t != value_type ()) {
+                    typename E1::const_iterator1 it1e1 (e1 ().find_first1 (1, n + 1, n));
+                    typename E1::const_iterator1 it1e1_end (e1 ().find_first1 (1, e1 ().size1 (), n));
+                    while (it1e1 != it1e1_end)
+                        e2 (it1e1.index1 (), l) -= *it1e1 * t, ++ it1e1;
+                }
             }
         }
     }
@@ -2225,11 +2330,18 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size1 = e2.size1 ();
         size_type size2 = e2.size2 ();
         for (difference_type n = size1 - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             for (difference_type l = size2 - 1; l >= 0; -- l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
-                for (difference_type m = n - 1; m >= 0; -- m)
-                    e2 (m, l) -= e1 () (m, n) * t;
+                if (t != value_type ()) {
+                    for (difference_type m = n - 1; m >= 0; -- m)
+                        e2 (m, l) -= e1 () (m, n) * t;
+                }
             }
         }
     }
@@ -2247,14 +2359,21 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size1 = e2.size1 ();
         size_type size2 = e2.size2 ();
         for (difference_type n = size1 - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             for (difference_type l = size2 - 1; l >= 0; -- l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
-                typename E1::const_reverse_iterator1 it1e1 (e1 ().find_first1 (1, n, n));
-                typename E1::const_reverse_iterator1 it1e1_rend (e1 ().find_first1 (1, 0, n));
-                difference_type m (it1e1_rend - it1e1);
-                while (-- m >= 0)
-                    e2 (it1e1.index1 (), l) -= *it1e1 * t, ++ it1e1;
+                if (t != value_type ()) {
+                    typename E1::const_reverse_iterator1 it1e1 (e1 ().find_first1 (1, n, n));
+                    typename E1::const_reverse_iterator1 it1e1_rend (e1 ().find_first1 (1, 0, n));
+                    difference_type m (it1e1_rend - it1e1);
+                    while (-- m >= 0)
+                        e2 (it1e1.index1 (), l) -= *it1e1 * t, ++ it1e1;
+                }
             }
         }
     }
@@ -2272,13 +2391,19 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size1 = e2.size1 ();
         size_type size2 = e2.size2 ();
         for (difference_type n = size1 - 1; n >= 0; -- n) {
+#ifndef BOOST_UBLAS_SINGULAR_CHECK
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
+#else
+            if (e1 () (n, n) == value_type ())
+                singular.raise ();
+#endif
             for (difference_type l = size2 - 1; l >= 0; -- l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
-                typename E1::const_reverse_iterator1 it1e1 (e1 ().find_first1 (1, n, n));
-                typename E1::const_reverse_iterator1 it1e1_rend (e1 ().find_first1 (1, 0, n));
-                while (it1e1 != it1e1_rend) {
-                    e2 (it1e1.index1 (), l) -= *it1e1 * t, ++ it1e1;
+                if (t != value_type ()) {
+                    typename E1::const_reverse_iterator1 it1e1 (e1 ().find_first1 (1, n, n));
+                    typename E1::const_reverse_iterator1 it1e1_rend (e1 ().find_first1 (1, 0, n));
+                    while (it1e1 != it1e1_rend)
+                        e2 (it1e1.index1 (), l) -= *it1e1 * t, ++ it1e1;
                 }
             }
         }
@@ -2297,7 +2422,7 @@ namespace boost { namespace numeric { namespace ublas {
     void inplace_solve (const matrix_expression<E1> &e1,
                         matrix_expression<E2> &e2,
                         C) {
-        inplace_solve (e1, e2, C (), matrix_tag ());
+        inplace_solve (e1, e2 (), C (), matrix_tag ());
     }
     template<class E1, class E2, class C>
     BOOST_UBLAS_INLINE
