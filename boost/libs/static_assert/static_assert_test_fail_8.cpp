@@ -24,6 +24,12 @@ RandomAccessIterator foo(RandomAccessIterator from, RandomAccessIterator)
    return from;
 }
 
+// ensure that delayed instantiation compilers like Comeau see the failure early
+// enough for "compile-fail" testing with the Boost.Build testing framework. (Greg Comeau)
+template
+std::list<int>::iterator
+   foo(std::list<int>::iterator, std::list<int>::iterator);
+
 int main()
 {
    std::deque<int> d;
