@@ -13,12 +13,12 @@
 
       <typedef name="result_type"><type>T</type></typedef>
 
-      <member-function-group name="invocation">
-        <method name="operator()" return-type="result_type" cv="const">
+      <method-group name="invocation">
+        <method name="operator()" cv="const">
           <template> 
             <template-type-parameter name="InputIterator"/>
           </template>
-
+          <type>result_type</type>
           <parameter name="first">
             <paramtype>InputIterator</paramtype>
           </parameter>
@@ -31,7 +31,7 @@
 
           <returns><para>The result of dereferencing the iterator <computeroutput>last-1</computeroutput>.</para></returns>
         </method>
-      </member-function-group>
+      </method-group>
     </class>
 
     <class-specialization name="last_value">
@@ -46,12 +46,12 @@
         <type><emphasis>unspecified</emphasis></type>
       </typedef>
 
-      <member-function-group name="invocation">
-        <method name="operator()" return-type="result_type" cv="const">
+      <method-group name="invocation">
+        <method name="operator()" cv="const">
           <template> 
             <template-type-parameter name="InputIterator"/>
           </template>
-
+          <type>result_type</type>
           <parameter name="first">
             <paramtype>InputIterator</paramtype>
           </parameter>
@@ -61,7 +61,7 @@
 
           <effects><para>Dereferences every iterator in the sequence <computeroutput>[first, last)</computeroutput>.</para></effects>
         </method>
-      </member-function-group>
+      </method-group>
     </class-specialization>
   </namespace>
 </header>

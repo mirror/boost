@@ -3,12 +3,12 @@
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <header name="boost/visit_each.hpp" last-revision="$Date$">
   <namespace name="boost">
-    <function name="visit_each" return-type="void">
+    <function name="visit_each">
       <template>
         <template-type-parameter name="Visitor"/>
         <template-type-parameter name="T"/>
       </template>
-
+      <type>void</type>
       <parameter name="visitor">
         <paramtype>const Visitor&amp;</paramtype>
       </parameter>  
@@ -20,15 +20,18 @@
       </parameter>
 
       <purpose>Allow limited exploration of class members.</purpose>
-      <para>The <functionname>visit_each</functionname> mechanism
-      allows a visitor to be applied to every subobject in a given
-      object. It is used by the Signals library to discover
-      <classname>signals::trackable</classname> objects within a
-      function object, but other uses may surface if used universally
-      (e.g., conservative garbage collection). To fit within the
-      <functionname>visit_each</functionname> framework, a
-      <functionname>visit_each</functionname> overload must be supplied for
-      each object type. </para>
+
+      <description>
+        <para>The <functionname>visit_each</functionname> mechanism
+        allows a visitor to be applied to every subobject in a given
+        object. It is used by the Signals library to discover
+        <classname>signals::trackable</classname> objects within a
+        function object, but other uses may surface if used
+        universally (e.g., conservative garbage collection). To fit
+        within the <functionname>visit_each</functionname> framework,
+        a <functionname>visit_each</functionname> overload must be
+        supplied for each object type. </para>
+      </description>
 
       <effects><para><code>visitor(t)</code>, and for
       every subobject <code>x</code> of

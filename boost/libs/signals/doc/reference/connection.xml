@@ -48,8 +48,9 @@
           <throws><para>Will not throw.</para></throws>
         </copy-assignment>
 
-        <member-function-group name="connection management">
-          <method name="disconnect" cv="const" return-type="void">
+        <method-group name="connection management">
+          <method name="disconnect" cv="const">
+             <type>void</type>
              <effects><para>If
              <computeroutput>this-&gt;<methodname>connected</methodname>()</computeroutput>,
              disconnects the signal and slot referenced by this;
@@ -58,17 +59,19 @@
              <postconditions><para><computeroutput>!this-&gt;<methodname>connected</methodname>()</computeroutput>.</para></postconditions>
           </method>
 
-          <method name="connected" cv="const" return-type="bool">
+          <method name="connected" cv="const">
+            <type>bool</type>
             <returns><para><computeroutput>true</computeroutput> if this
             references a non-NULL connection that is still active
             (connected), and <computeroutput>false</computeroutput>
             otherwise.</para></returns>
             <throws><para>Will not throw.</para></throws>
           </method>
-        </member-function-group>
+        </method-group>
 
-        <member-function-group name="modifiers">
-          <method name="swap" return-type="void">
+        <method-group name="modifiers">
+          <method name="swap">
+            <type>void</type>
             <parameter name="other">
               <paramtype>const <classname>connection</classname>&amp;</paramtype>
             </parameter>
@@ -78,10 +81,11 @@
  
             <throws><para>Will not throw.</para></throws>
           </method> 
-        </member-function-group>
+        </method-group>
 
-        <member-function-group name="comparisons">
-          <method name="operator==" cv="const" return-type="bool">
+        <method-group name="comparisons">
+          <method name="operator==" cv="const">
+            <type>bool</type>
             <parameter name="other">
               <paramtype>const <classname>connection</classname>&amp;</paramtype>
             </parameter>
@@ -96,7 +100,8 @@
             <throws><para>Will not throw.</para></throws>
           </method>
 
-          <method name="operator&lt;" cv="const" return-type="bool">
+          <method name="operator&lt;" cv="const">
+            <type>bool</type>
             <parameter name="other">
               <paramtype>const <classname>connection</classname>&amp;</paramtype>
             </parameter>
@@ -112,10 +117,11 @@
 
             <throws><para>Will not throw.</para></throws>
           </method>
-        </member-function-group>
+        </method-group>
 
         <free-function-group name="specialized algorithms">
-          <function name="swap" return-type="void">
+          <function name="swap">
+            <type>void</type>
             <parameter name="x">
               <paramtype><classname>connection</classname>&amp;</paramtype>
             </parameter>
@@ -151,8 +157,9 @@
           disconnects the signal-slot connection.</para></effects>
         </destructor>
 
-        <member-function-group name="connection management">
-          <method name="disconnect" cv="const" return-type="void">
+        <method-group name="connection management">
+          <method name="disconnect" cv="const">
+            <type>void</type>
              <effects><para>If
              <computeroutput>this-&gt;<methodname>connected</methodname>()</computeroutput>,
              disconnects the signal and slot referenced by this;
@@ -161,14 +168,15 @@
              <postconditions><para><computeroutput>!this-&gt;<methodname>connected</methodname>()</computeroutput>.</para></postconditions>
           </method>
 
-          <method name="connected" cv="const" return-type="bool">
+          <method name="connected" cv="const">
+            <type>bool</type>
             <returns><para><computeroutput>true</computeroutput> if this
             references a non-NULL connection that is still active
             (connected), and <computeroutput>false</computeroutput>
             otherwise.</para></returns>
             <throws><para>Will not throw.</para></throws>
           </method>
-        </member-function-group>
+        </method-group>
       </class>
     </namespace>
   </namespace>
