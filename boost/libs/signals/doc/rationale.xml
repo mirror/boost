@@ -443,7 +443,7 @@ private:
           it is calling.</para>
         </listitem>
 
-        <listitem><para>Do not allow return types.</para></listitem>
+        <listitem><para>Only return the result of the last target called, with no option for customization.</para></listitem>
         <listitem>
           <para>Must call a method with <code>this</code> already
           bound.</para>
