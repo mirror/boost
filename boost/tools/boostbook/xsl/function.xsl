@@ -731,7 +731,19 @@
 
   <xsl:template name="function.documentation.compact">
     <xsl:param name="text"/>
-    <listitem><xsl:copy-of select="$text"/></listitem>
+    
+    <xsl:choose>
+      <xsl:when test="count(ancestor::free-function-group) &gt; 0
+                      or count(ancestor::method-group) &gt; 0
+                      or local-name(.)='constructor'
+                      or local-name(.)='copy-assignment'
+                      or local-name(.)='destructor'">
+        <listitem><xsl:copy-of select="$text"/></listitem>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="function.documentation.standardese">
