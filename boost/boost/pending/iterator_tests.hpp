@@ -4,6 +4,7 @@
 // This is meant to be the beginnings of a comprehensive, generic
 // test suite for STL concepts such as iterators and containers.
 
+#include <iterator>
 #include <assert.h>
 
 namespace boost {
