@@ -12,10 +12,10 @@
 #endif              
 
 #include <cassert>                            
-#include <ios>                            // failure.
-#include <memory>                         // allocator,
-#include <new>                            // bad_alloc.
-#include <boost/config.hpp>               // BOOST_MSVC, BOOST_STATIC_CONSTANT.
+#include <ios>                // failure.
+#include <memory>             // allocator, bad_alloc.
+#include <new>          
+#include <boost/config.hpp>   // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME
 #include <boost/iostreams/constants.hpp>  // buffer size.
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
@@ -137,17 +137,22 @@ namespace detail {
 
 template<typename Alloc>
 struct zlib_allocator_traits {
+#ifndef BOOST_NO_STD_ALLOCATOR
     typedef typename Alloc::template rebind<char>::other type;
+#else
+    typedef std::allocator<char> type;
+#endif
 };
 
-template<typename Alloc>
-struct zlib_allocator : private zlib_allocator_traits<Alloc>::type {
+template< typename Alloc,
+          typename Base = // VC6 workaround (C2516)
+              BOOST_DEDUCED_TYPENAME zlib_allocator_traits<Alloc>::type >
+struct zlib_allocator : private Base {
 private:
-    typedef typename zlib_allocator_traits<Alloc>::type  base_type;
-    typedef typename base_type::size_type                size_type;
+    typedef typename Base::size_type size_type;
 public:
     BOOST_STATIC_CONSTANT(bool, custom = 
-        (!is_same<std::allocator<char>, base_type>::value));
+        (!is_same<std::allocator<char>, Base>::value));
     typedef typename zlib_allocator_traits<Alloc>::type allocator_type;
     static void* alloc(void* self, zlib::uint items, zlib::uint size);
     static void free(void* self, void* address);
