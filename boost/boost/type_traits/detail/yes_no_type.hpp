@@ -16,7 +16,10 @@ namespace boost {
 namespace type_traits {
 
 typedef char yes_type;
-typedef double no_type;
+struct no_type
+{
+   char padding[8];
+};
 
 } // namespace type_traits
 } // namespace boost
