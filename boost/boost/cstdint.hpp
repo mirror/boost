@@ -26,7 +26,13 @@
 
 #ifdef BOOST_SYSTEM_HAS_STDINT_H
 
-# include <stdint.h> // implementation artifact; not part of interface
+// The following #include is an implementation artifact; not part of interface.
+# ifdef __hpux
+// HP-UX has a nice <stdint.h> in a non-standard location
+#   include <sys/_inttypes.h>
+# else
+#   include <stdint.h>
+# endif
 
 namespace boost
 {
