@@ -49,7 +49,9 @@ namespace boost {
         dynamic_bitset_alloc_base<Allocator>
     {
       typedef std::size_t size_type;
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     public: // should be protected, see below
+#endif
       enum { bits_per_block = CHAR_BIT * sizeof(Block) };
     public:
       dynamic_bitset_base()
@@ -69,11 +71,9 @@ namespace boost {
         if (m_bits)
           this->m_alloc.deallocate(m_bits, m_num_blocks);
       }
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
     protected: 
-      // This should be protected, but I was getting errors from g++
-      // 2.95.2 from operator== trying to access m_bits and
-      // m_num_bits. I'm not sure whether it is a compiler bug or a
-      // problem with the code. -JGS
+#endif
       Block* m_bits;
       size_type m_num_bits;
       size_type m_num_blocks;
