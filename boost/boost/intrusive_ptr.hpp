@@ -143,12 +143,12 @@ template<class T> void swap(intrusive_ptr<T> & lhs, intrusive_ptr<T> & rhs)
     lhs.swap(rhs);
 }
 
-template<class T, class U> intrusive_ptr<T> shared_dynamic_cast(intrusive_ptr<U> const & p)
+template<class T, class U> intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U> const & p)
 {
     return dynamic_cast<T *>(p.get());
 }
 
-template<class T, class U> intrusive_ptr<T> shared_static_cast(intrusive_ptr<U> const & p)
+template<class T, class U> intrusive_ptr<T> static_pointer_cast(intrusive_ptr<U> const & p)
 {
     return static_cast<T *>(p.get());
 }
