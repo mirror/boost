@@ -30,9 +30,7 @@
 #pragma warning(pop)
 #endif
 
-
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 struct X
 {
@@ -158,8 +156,8 @@ void member_function_test()
     BOOST_TEST( x.hash == 23558 );
 }
 
-int test_main(int, char * [])
+int main()
 {
     member_function_test();
-    return 0;
+    return boost::report_errors();
 }

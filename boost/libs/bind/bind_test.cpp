@@ -30,9 +30,7 @@
 #pragma warning(pop)
 #endif
 
-
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 //
 
@@ -485,7 +483,7 @@ void nested_bind_test()
     BOOST_TEST( (bind(fv_1, bind(f_0))(), (global_result == 17041L)) );
 }
 
-int test_main(int, char * [])
+int main()
 {
     function_test();
     function_object_test();
@@ -498,5 +496,5 @@ int test_main(int, char * [])
     member_function_void_test();
     nested_bind_test();
 
-    return 0;
+    return boost::report_errors();
 }

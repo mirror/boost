@@ -16,8 +16,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -197,7 +196,7 @@ template<class T> void test_is_nonzero(boost::shared_ptr<T> const & p)
     BOOST_TEST(p.get() != 0);
 }
 
-int test_main(int, char * [])
+int main()
 {
     using namespace boost;
 
@@ -369,5 +368,5 @@ int test_main(int, char * [])
 
     BOOST_TEST(cnt == 0);
 
-    return 0;
+    return boost::report_errors();
 }

@@ -19,9 +19,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
-
 #include <vector>
 #include <memory>
 #include <stdexcept>
@@ -153,7 +150,7 @@ int const m = 16; // threads
     char const * implementation = "spinlock";
 #endif
 
-int test_main( int, char ** )
+int main()
 {
     std::printf("%s: %s, %d threads, %d iterations: ", title, implementation, m, n);
 

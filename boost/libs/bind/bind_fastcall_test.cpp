@@ -30,8 +30,7 @@
 #pragma warning(pop)
 #endif
 
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 //
 
@@ -103,8 +102,8 @@ void function_test()
     BOOST_TEST( bind(f_9, _1, 2, 3, 4, 5, 6, 7, 8, 9)(i) == 987654321L );
 }
 
-int test_main(int, char * [])
+int main()
 {
     function_test();
-    return 0;
+    return boost::report_errors();
 }
