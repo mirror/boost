@@ -38,15 +38,25 @@
 <h3 style="margin-left: 20pt;"><a href="#Limitations">Limitations</a></h3>
 
 <h3 style="margin-left: 20pt;"><a href="#FAQ">Frequently Asked Questions</a></h3>
-<h4 style="margin-left: 40pt;"><a href="#Q1">Why doesn't this compile?</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#Q2">Why does this compile? It should not.</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#Q3">What is the difference between bind(f, ...) and bind&lt;R&gt;(f, ...)?</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#Q4">Does <b>bind</b> work with Windows API functions?</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#Q5">Does <b>bind</b> work with COM methods?</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#Q6">Does <b>bind</b> work with Mac toolbox functions?</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#Q7">Why doesn't <b>bind</b> automatically recognize nonstandard functions?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q_doesnt_compile">Why doesn't this compile?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q_does_compile">Why does this compile? It should not.</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q_forms">What is the difference between bind(f, ...) and bind&lt;R&gt;(f, ...)?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q_win32_api">Does <b>bind</b> work with Windows API functions?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q_com">Does <b>bind</b> work with COM methods?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q_mac">Does <b>bind</b> work with Mac toolbox functions?</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#Q_auto_stdcall">Why doesn't <b>bind</b> automatically recognize nonstandard functions?</a></h4>
 
 <h3 style="margin-left: 20pt;"><a href="#Troubleshooting">Troubleshooting</a></h3>
+<h4 style="margin-left: 40pt;"><a href="#err_num_args">Incorrect number of arguments</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_signature">The function object cannot be called with the specified arguments</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_arg_access">Accessing an argument that does not exist</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_short_form">Inappropriate use of bind(f, ...)</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_long_form">Inappropriate use of bind&lt;R&gt;(f, ...)</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_nonstd">Binding a nonstandard function</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_msvc_using">MSVC specific: using boost::bind;</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_msvc_class_template">MSVC specific: class templates shadow function templates</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_msvc_const_arg">MSVC specific: const in signatures</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#err_msvc_ellipsis">MSVC specific: ... in signatures treated as type</a></h4>
 
 <h3 style="margin-left: 20pt;"><a href="#Interface">Interface</a></h3>
 <h4 style="margin-left: 40pt;"><a href="#Synopsis">Synopsis</a></h4>
@@ -59,7 +69,7 @@
 <h4 style="margin-left: 40pt;"><a href="#Dependencies">Dependencies</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#NumberOfArguments">Number of Arguments</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#stdcall">&quot;__stdcall&quot; and &quot;pascal&quot; Support</a></h4>
-<h4 style="margin-left: 40pt;"><a href="#MSVC">MSVC specific problems and workarounds</a></h4>
+<h4 style="margin-left: 40pt;"><a href="#BOOST_BIND">Using the BOOST_BIND macro</a></h4>
 <h4 style="margin-left: 40pt;"><a href="#visit_each"><b>visit_each</b> support</a></h4>
 
 <h3 style="margin-left: 20pt;"><a href="#Acknowledgements">Acknowledgements</a></h3>
@@ -111,15 +121,15 @@ library primitives:
 </p>
 
 <pre>
-std::bind1st(std::ptr_fun(f), 5)(x);
+std::bind2nd(std::ptr_fun(f), 5)(x);
 </pre>
 
 <p>
-<b>bind</b> covers the functionality of <b>std::bind2nd</b> as well:
+<b>bind</b> covers the functionality of <b>std::bind1st</b> as well:
 </p>
 
 <pre>
-std::bind2nd(std::ptr_fun(f), 5)(x);   // f(5, x)
+std::bind1st(std::ptr_fun(f), 5)(x);   // f(5, x)
 bind(f, 5, _1)(x);                     // f(5, x)
 </pre>
 
@@ -429,13 +439,13 @@ corresponding issue</a> has not been resolved yet.]
 
 <h2><a name="FAQ">Frequently Asked Questions</a></h2>
 
-<h3><a name="Q1">Why doesn't this compile?</a></h3>
+<h3><a name="Q_doesnt_compile">Why doesn't this compile?</a></h3>
 
 <p>
 See the <a href="#Troubleshooting">dedicated Troubleshooting section</a>.
 </p>
 
-<h3><a name="Q2">Why does this compile? It should not.</a></h3>
+<h3><a name="Q_does_compile">Why does this compile? It should not.</a></h3>
 
 <p>
 Probably because you used the general bind&lt;R&gt;(f, ...) syntax, thereby
@@ -443,7 +453,7 @@ instructing <b>bind</b> to not &quot;inspect&quot; <b>f</b> to detect arity
 and return type errors.
 </p>
 
-<h3><a name="Q3">What is the difference between bind(f, ...) and bind&lt;R&gt;(f, ...)?</a></h3>
+<h3><a name="Q_forms">What is the difference between bind(f, ...) and bind&lt;R&gt;(f, ...)?</a></h3>
 
 <p>
 The first form instructs <b>bind</b> to inspect the type of <b>f</b> in order
@@ -471,7 +481,7 @@ first form when <b>f</b> is a function object, and in most cases will not handle
 the second form when <b>f</b> is a function (pointer) or a member function pointer.
 </p>
 
-<h3><a name="Q4">Does <b>bind</b> work with Windows API functions?</a></h3>
+<h3><a name="Q_win32_api">Does <b>bind</b> work with Windows API functions?</a></h3>
 
 <p>
 Yes, if you <a href="#stdcall">#define BOOST_BIND_ENABLE_STDCALL</a>.
@@ -480,13 +490,13 @@ An alternative is to treat the function as a
 bind&lt;R&gt;(f, ...) syntax.
 </p>
 
-<h3><a name="Q5">Does <b>bind</b> work with COM methods?</a></h3>
+<h3><a name="Q_com">Does <b>bind</b> work with COM methods?</a></h3>
 
 <p>
 Yes, if you <a href="#stdcall">#define BOOST_MEM_FN_ENABLE_STDCALL</a>.
 </p>
 
-<h3><a name="Q6">Does <b>bind</b> work with Mac toolbox functions?</a></h3>
+<h3><a name="Q_mac">Does <b>bind</b> work with Mac toolbox functions?</a></h3>
 
 <p>
 Yes, if you <a href="#stdcall">#define BOOST_BIND_ENABLE_PASCAL</a>.
@@ -495,7 +505,7 @@ An alternative is to treat the function as a
 bind&lt;R&gt;(f, ...) syntax.
 </p>
 
-<h3><a name="Q7">Why doesn't <b>bind</b> automatically recognize nonstandard functions?</a></h3>
+<h3><a name="Q_auto_stdcall">Why doesn't <b>bind</b> automatically recognize nonstandard functions?</a></h3>
 
 <p>
 Non-portable extensions, in general, should default to off to prevent vendor
@@ -509,9 +519,207 @@ separate support would be necessary.
 
 <h2><a name="Troubleshooting">Troubleshooting</a></h2>
 
+<h3><a name="err_num_args">Incorrect number of arguments</a></h3>
+
 <p>
-This section is still under development.
+In a bind(f, a1, a2, ..., aN) expression, the function object <b>f</b> must
+be able to take exactly <b>N</b> arguments. This error is normally detected
+at &quot;bind time&quot;; in other words, the compilation error is reported
+on the line where bind() is invoked:
 </p>
+
+<pre>
+int f(int, int);
+
+int main()
+{
+    boost::bind(f, 1);    // error, f takes two arguments
+    boost::bind(f, 1, 2); // OK
+}
+</pre>
+
+<p>
+A common variation of this error is to forget that member functions have an
+implicit &quot;this&quot; argument:
+</p>
+
+<pre>
+struct X
+{
+    int f(int);
+}
+
+int main()
+{
+    boost::bind(&amp;X::f, 1);     // error, X::f takes two arguments
+    boost::bind(&amp;X::f, <b>_1</b>, 1); // OK
+}
+</pre>
+
+<h3><a name="err_signature">The function object cannot be called with the specified arguments</a></h3>
+
+<p>
+As in normal function calls, the function object that is bound must be
+compatible with the argument list. The incompatibility will usually be
+detected by the compiler at &quot;call time&quot; and the result is
+typically an error in <b>bind.hpp</b> on a line that looks like:
+</p>
+
+<pre>
+    return f(a[a1_], a[a2_]);
+</pre>
+
+<p>
+An example of this kind of error:
+</p>
+
+<pre>
+int f(int);
+
+int main()
+{
+    boost::bind(f, &quot;incompatible&quot;);      // OK so far, no call
+    boost::bind(f, &quot;incompatible&quot;)();    // error, &quot;incompatible&quot; is not an int
+    boost::bind(f, _1);                  // OK
+    boost::bind(f, _1)(&quot;incompatible&quot;);  // error, &quot;incompatible&quot; is not an int
+}
+</pre>
+
+<h3><a name="err_arg_access">Accessing an argument that does not exist</a></h3>
+
+<p>
+The placeholder <b>_N</b> selects the argument at position <b>N</b> from the
+argument list passed at &quot;call time.&quot; Naturally, it is an error to
+attempt to access beyond the end of this list:
+</p>
+
+<pre>
+int f(int);
+
+int main()
+{
+    boost::bind(f, _1);                  // OK
+    boost::bind(f, _1)();                // error, there is no argument number 1
+}
+</pre>
+
+<p>
+The error is usually reported in <b>bind.hpp</b>, at a line similar to:
+</p>
+
+<pre>
+    A2 operator[] (arg<2>) const { return a2_; }
+</pre>
+
+<p>
+When emulating <b>std::bind1st(f, a)</b>, a common mistake of this category
+is to type <b>bind(f, a, _2)</b> instead of the correct <b>bind(f, a, _1)</b>.
+</p>
+
+<h3><a name="err_short_form">Inappropriate use of bind(f, ...)</a></h3>
+
+<p>
+The bind(f, a1, a2, ..., aN) <a href="#Q_forms">form</a> causes automatic
+recognition of the type of <b>f</b>. It will not work with arbitrary
+function objects; <b>f</b> must be a function or a member function pointer.
+</p>
+
+<p>
+It is possible to use this form with function objects that define
+<b>result_type</b>, but <b>only on compilers</b> that support partial
+specialization and partial ordering. In particular, MSVC up to version 7.0
+does not support this syntax for function objects.
+</p>
+
+<h3><a name="err_long_form">Inappropriate use of bind&lt;R&gt;(f, ...)</a></h3>
+
+<p>
+The bind&lt;R&gt;(f, a1, a2, ..., aN) <a href="#Q_forms">form</a> supports
+arbitrary function objects.
+</p>
+
+<p>
+It is possible (but not recommended) to use this form with functions or
+member function pointers, but <b>only on compilers</b> that support partial
+ordering. In particular, MSVC up to version 7.0 does not fully support this
+syntax for functions and member function pointers.
+</p>
+
+<h3><a name="err_nonstd">Binding a nonstandard function</a></h3>
+
+<p>
+(to be written)
+</p>
+
+<h3><a name="err_msvc_using">MSVC specific: using boost::bind;</a></h3>
+
+On MSVC (up to version 7.0), when <b>boost::bind</b> is brought into scope
+with an using declaration:
+</p>
+
+<pre>
+using boost::bind;
+</pre>
+
+<p>
+the syntax <b>bind&lt;R&gt;(...)</b> does not work. Workaround: either use the
+qualified name, <b>boost::bind</b>, or use an using directive instead:
+</p>
+
+<pre>
+using namespace boost;
+</pre>
+
+<h3><a name="err_msvc_class_template">MSVC specific: class templates shadow function templates</a></h3>
+
+<p>
+On MSVC (up to version 7.0), a nested class template named <b>bind</b> will
+shadow the function template <b>boost::bind</b>, breaking the
+<b>bind&lt;R&gt;(...)</b> syntax. Unfortunately, some libraries contain nested
+class templates named <b>bind</b> (ironically, such code is often an MSVC
+specific workaround.) You may try to patch the library in question or contact
+its author/maintainer. The other option is use the
+<a href="#BOOST_BIND">BOOST_BIND</a> macro to rename <b>bind</b>.
+</p>
+
+<h3><a name="err_msvc_const_arg">MSVC specific: const in signatures</a></h3>
+
+<p>
+MSVC 6.0 has problems with <b>const</b> in function signatures:
+</p>
+
+<pre>
+int f(int const);
+
+int main()
+{
+    boost::bind(f, 1);     // error
+}
+</pre>
+
+<p>
+Workaround: remove the <b>const</b> qualifier from the argument.
+</p>
+
+<h3><a name="err_msvc_ellipsis">MSVC specific: ... in signatures treated as type</a></h3>
+
+<p>
+MSVC (up to version 7.0) treats the ellipsis in a variable argument function
+(such as <b>std::printf</b>) as a type. Therefore, it will accept the
+(incorrect in the current implementation) form:
+</p>
+
+<pre>
+    bind(printf, &quot;%s\n&quot;, _1);
+</pre>
+
+<p>
+and will reject the correct version:
+</p>
+
+<pre>
+    bind&lt;int&gt;(printf, &quot;%s\n&quot;, _1);
+</pre>
 
 <h2><a name="Interface">Interface</a></h2>
 
@@ -779,39 +987,16 @@ To use <b>bind</b> with <b>pascal</b> functions, <b>#define</b> the macro
 [Note: Some compilers provide only minimal support for the <b>__stdcall</b> keyword.]
 </p>
 
-<h3><a name="MSVC">MSVC specific problems and workarounds</a></h3>
+<h3><a name="BOOST_BIND">Using the BOOST_BIND macro</a></h3>
 
 <p>
-Microsoft Visual C++ (up to version 7.0) does not fully support the
-<b>bind&lt;R&gt;(...)</b>
-syntax required by the library when arbitrary function objects are bound.
-The first problem is that when <b>boost::bind</b> is brought into scope
-with an <b>using declaration</b>:
-</p>
-
-<pre>
-using boost::bind;
-</pre>
-
-<p>
-the syntax above does not work. Workaround: either use the qualified name,
-<b>boost::bind</b>, or use an <b>using directive</b> instead:
-</p>
-
-<pre>
-using namespace boost;
-</pre>
-
-<p>
-The second problem is that some libraries contain nested class templates
-named <b>bind</b> (ironically, such code is often an MSVC specific
-workaround.) Due to some quirks with the parser, such a class template
-breaks the <b>bind&lt;R&gt;(...)</b> syntax, even when the name <b>bind</b>
-is fully qualified. You may try to patch the library in question or contact
-its author/maintainer. The other option is to define the macro
-<b>BOOST_BIND</b> to something other than <b>bind</b> (before the inclusion of
-<b>&lt;boost/bind.hpp&gt;</b>) and use this identifier throughout your code
-wherever you'd normally use <b>bind</b>.
+A <a href="#err_msvc_class_template">bug in MSVC (up to version 7.0)</a>
+causes <b>boost::bind</b> to be incompatible
+with libraries that contain nested class templates named <b>bind</b>. To work
+around this problem, <b>#define</b> the macro <b>BOOST_BIND</b> to something
+other than <b>bind</b> (before the inclusion of <b>&lt;boost/bind.hpp&gt;</b>)
+and use this identifier throughout your code wherever you'd normally use
+<b>bind</b>.
 </p>
 
 <p style="color: Red;">
