@@ -10,6 +10,7 @@
  *  See if base pointer is effected by array count cookie
  */
 
+#include <boost/numeric/ublas/storage.hpp>
 #include <iostream>
 
 // User defined type to capture base pointer on construction
