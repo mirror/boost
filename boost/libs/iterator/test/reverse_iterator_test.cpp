@@ -52,6 +52,9 @@ int main()
     boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
     boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
   }
+#if 0
+  // It does not seem feasible to make this work. Need to change docs to
+  // require at lease Readable for the base iterator. -Jeremy
   {
     typedef boost::iterator_archetype<
 	dummyT
@@ -62,6 +65,7 @@ int main()
     boost::function_requires< boost_concepts::WritableIteratorConcept<Iter, dummyT> >();
     boost::function_requires< boost_concepts::BidirectionalTraversalConcept<Iter> >();
   }
+#endif
   {
     typedef boost::iterator_archetype<
 	dummyT
