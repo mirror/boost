@@ -34,20 +34,11 @@ namespace detail
       
 # ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
       
-#  if defined(BOOST_HAS_LONG_LONG)
-      BOOST_STATIC_CONSTANT(
-          bool, value = (
-              std::numeric_limits<T>::is_specialized
-            | boost::is_same<T,long long>::value
-            | boost::is_same<T,unsigned long long>::value
-              ));
-#  else
       BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<T>::is_specialized);
-#  endif
       
 # else
       
-#  if !defined(__BORLANDC__)
+#  if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
       BOOST_STATIC_CONSTANT(
           bool, value = (
               boost::is_convertible<int,T>::value
@@ -64,6 +55,21 @@ namespace detail
   struct is_numeric
     : mpl::bool_<(::boost::detail::is_numeric_impl<T>::value)>
   {};
+
+#  if defined(BOOST_HAS_LONG_LONG)
+  template <>
+  struct is_numeric<long long>
+    : mpl::true_ {};
+  
+  template <>
+  struct is_numeric<unsigned long long>
+    : mpl::true_ {};
+#  endif
+
+  // Some compilers fail to have a numeric_limits specialization
+  template <>
+  struct is_numeric<wchar_t>
+    : mpl::true_ {};
   
   template <class T>
   struct numeric_difference
