@@ -20,6 +20,7 @@
 // member templates are sufficiently broken that we disable them for now
 #    define BOOST_NO_MEMBER_TEMPLATES
 #    define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
+#    define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
 #endif
 
 #if (__HP_aCC <= 33900) || !defined(BOOST_STRICT_CONFIG)
