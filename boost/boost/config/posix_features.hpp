@@ -31,8 +31,11 @@
 #     endif
 
       // BOOST_HAS_NANOSLEEP:
-      // This is predicated on _POSIX_TIMERS:
+      // This is predicated on _POSIX_TIMERS or _XOPEN_REALTIME:
 #     if defined(_POSIX_TIMERS) && (_POSIX_TIMERS+0 >= 0)
+#        define BOOST_HAS_NANOSLEEP
+#     endif
+#     if defined(_XOPEN_REALTIME) && (_XOPEN_REALTIME+0 >= 0) && !defined(BOOST_HAS_NANOSLEEP)
 #        define BOOST_HAS_NANOSLEEP
 #     endif
 

@@ -33,6 +33,10 @@
 #  define BOOST_HAS_GETTIMEOFDAY
 #endif
 
+#ifdef __USE_POSIX199309
+#  define BOOST_HAS_NANOSLEEP
+#endif
+
 #if defined(__GLIBC__) && defined(__GLIBC_PREREQ)
 // __GLIBC_PREREQ is available since 2.1.2
 
