@@ -772,7 +772,7 @@ top level of the Caramel distribution. -->
             <xsl:text>'</xsl:text>
           </xsl:message>
         </xsl:if>
-        <xsl:value-of select="$name"/>
+        <xsl:value-of select="$text"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="internal-link">
@@ -781,7 +781,7 @@ top level of the Caramel distribution. -->
               <xsl:with-param name="node" select="$node"/>
             </xsl:call-template>
           </xsl:with-param>
-          <xsl:with-param name="text" select="$name"/>
+          <xsl:with-param name="text" select="$text"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>    
