@@ -27,10 +27,15 @@ namespace boost {
 //
 // See docs and recursive_wrapper_fwd.hpp for more information.
 //
+
 template <typename T>
 class recursive_wrapper
 {
-public: // representation
+public: // typedefs
+
+    typedef T type;
+
+private: // representation
 
     T* p_;
 
