@@ -74,6 +74,8 @@ yes_type is_function_tester(R (*)(A0, A1, A2));
   <li>invoking the generator may be difficult</li>
   <li>automating the invocation of the generator can be difficult in certain environments 
     (automatic invocation is desirable for active libraries)</li>
+  <li>porting and distributing the generator may be difficult or simply takes 
+    precious time</li>
 </ul>
 <h3>What about the preprocessor?</h3>
 <p>Because C++ comes with a preprocessor, one would assume that it would support 
@@ -173,8 +175,8 @@ BOOST_PREPROCESSOR_DEF(const)
 
 <P><B>HOW:</B> BOOST_PREPROCESSOR_EMPTY() expands to nothing and can be used as 
   an unused parameter.</P>
-<P><b>NOTE:</b> BOOST_PREPROCESSOR_EMPTY without the () never get expanded. The 
-  () is necessary to invoke a function style macro.</P>
+<P><b>NOTE:</b> BOOST_PREPROCESSOR_EMPTY without the () never gets expanded. The 
+  () is necessary to invoke a function-like macro.</P>
 <B>CAVEAT:</B> You can not safely use concatenation while using BOOST_PREPROCESSOR_EMPTY(). 
 <P><B>TIP:</B> Occasionally one or two lines are 
 considerably longer than the rest. It can often save some work to not align all 
