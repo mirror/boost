@@ -100,15 +100,26 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class T = typename std::iterator_traits<I>::value_type>
     struct BidirectionalIteratorConcept {
         typedef I iterator_type;
-        typedef T value_type;
+        
+        typedef typename std::iterator_traits<I>::iterator_category iterator_category;
+        typedef typename std::iterator_traits<I>::difference_type difference_type;
+        typedef typename std::iterator_traits<I>::value_type value_type;
+        typedef typename std::iterator_traits<I>::reference reference;
+        typedef typename std::iterator_traits<I>::pointer pointer;
 
         static void constraints () {
             AssignableConcept<iterator_type>::constraints (iterator_type ());
             EqualityComparableConcept<iterator_type>::constraints (iterator_type ());
             DefaultConstructibleConcept<iterator_type>::constraints ();
             iterator_type it = iterator_type ();
-            // Dereference - assume copy constructable value_type
-            const value_type t (*it);
+
+            // Associated types - assume constructable
+            iterator_category c;
+            difference_type d (0);
+            pointer p (0);
+            // Dereference
+            reference r (*it);
+            value_type t (r);
             // Member access
             // FIXME it->m;
             // Preincrement
@@ -120,6 +131,10 @@ namespace boost { namespace numeric { namespace ublas {
             // Postdecrement
             it --;
             ignore_unused_variable_warning (t);
+            ignore_unused_variable_warning (c);
+            ignore_unused_variable_warning (d);
+            ignore_unused_variable_warning (p);
+            ignore_unused_variable_warning (r);
         }
     };
 
@@ -1591,6 +1606,7 @@ namespace boost { namespace numeric { namespace ublas {
         VectorSpaceConcept<double, matrix<double> >::constraints ();
         LinearOperatorConcept<double, vector<double>, matrix<double> >::constraints ();
 
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
         AdditiveAbelianGroupConcept<std::complex<float> >::constraints ();
         CommutativeRingWithIdentityConcept<std::complex<float> >::constraints ();
         FieldConcept<std::complex<float> >::constraints ();
@@ -1606,6 +1622,7 @@ namespace boost { namespace numeric { namespace ublas {
         RingWithIdentityConcept<matrix<std::complex<double> > >::constraints (0);
         VectorSpaceConcept<std::complex<double>, matrix<std::complex<double> > >::constraints ();
         LinearOperatorConcept<std::complex<double>, vector<std::complex<double> >, matrix<std::complex<double> > >::constraints ();
+#endif
 #endif
     }
 
