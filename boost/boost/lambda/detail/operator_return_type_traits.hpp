@@ -866,7 +866,6 @@ struct return_type_2<other_action<subscript_action>, A, B> {
 namespace std {
  template <class Key, class T, class Cmp, class Allocator> class map;
  template <class Key, class T, class Cmp, class Allocator> class multimap;
- template <class T, class Allocator> class vector;
  template <class Char, class Traits, class Allocator> class basic_string;
 }
 
@@ -880,6 +879,17 @@ namespace std {
 }
 
 #endif
+
+#if BOOST_WORKAROUND(__GNUC__, == 3) && __GNUC_MINOR__ >=4
+#include <vector>
+#else
+
+namespace std {
+ template <class T, class Allocator> class vector;
+}
+
+#endif
+
 
 
 namespace boost { 
