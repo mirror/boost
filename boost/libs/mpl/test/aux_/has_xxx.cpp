@@ -35,6 +35,8 @@ struct b5 { typedef int xxx[10]; };
 struct b6 { typedef void (*xxx)(); };
 struct b7 { typedef void (xxx)(); };
 
+template <class T> struct outer;
+template <class T> struct inner { typedef typename T::type type; };
 
 int main()
 {
@@ -58,6 +60,8 @@ int main()
     BOOST_STATIC_ASSERT(has_xxx<b5>::value);
     BOOST_STATIC_ASSERT(has_xxx<b6>::value);
     BOOST_STATIC_ASSERT(has_xxx<b7>::value);
+
+    BOOST_STATIC_ASSERT(!has_xxx<outer<inner<int> > >::value);
 
     return 0;
 }
