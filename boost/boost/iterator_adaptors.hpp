@@ -341,11 +341,8 @@ namespace detail {
   template <class Iter>
   inline operator_arrow_proxy<typename Iter::value_type>
   operator_arrow(const Iter& i, std::input_iterator_tag) {
-      return operator_arrow_proxy<
-#ifndef BOOST_MSVC
-          typename
-#endif
-          Iter::value_type>(*i);
+    typedef typename Iter::value_type value_t; // VC++ needs this typedef
+    return operator_arrow_proxy<value_t>(*i);
   }
 
   template <class Iter>

@@ -83,7 +83,7 @@ template <class From, class To>
 struct is_convertible
 {
  typedef typename detail::conversion_helper<From>::type Selector;
- typedef Selector::template n_bind<From,To> Conversion;
+ typedef typename Selector::template n_bind<From,To> Conversion;
 public:
  enum { value = Conversion::exists };
 };
