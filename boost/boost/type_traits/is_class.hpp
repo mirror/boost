@@ -82,6 +82,7 @@ struct is_class_impl
         ::boost::type_traits::ice_not< ::boost::is_array<T>::value >::value,
         ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
         ::boost::type_traits::ice_not< ::boost::is_void<T>::value >::value
+        ::boost::type_traits::ice_not< ::boost::is_function<T>::value >::value
         >::value));
 #   endif
 };
