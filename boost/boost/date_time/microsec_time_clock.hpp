@@ -2,10 +2,10 @@
 #define DATE_TIME_HIGHRES_TIME_CLOCK_HPP___
 
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland, Bart Garst 
+ * Author: Jeff Garland, Bart Garst
  * $Date$
  */
 
@@ -16,6 +16,7 @@
 
 #include "boost/date_time/c_time.hpp"
 #include "boost/cstdint.hpp"
+#include "boost/shared_ptr.hpp"
 
 #ifdef BOOST_HAS_FTIME
 #include <windows.h>
@@ -27,7 +28,7 @@ namespace boost {
 namespace date_time {
 
 
-  //! A clock providing microsecond level resolution 
+  //! A clock providing microsecond level resolution
   /*! A high precision clock that measures the local time
    *  at a resolution up to microseconds and adjusts to the
    *  resolution of the time system.  For example, for the
@@ -35,7 +36,7 @@ namespace date_time {
    *  the last 3 places of the fractional seconds will always
    *  be 000 since there are 1000 nano-seconds in a micro second.
    */
-  template<class time_type> 
+  template<class time_type>
   class microsec_clock
   {
   public:
@@ -48,7 +49,7 @@ namespace date_time {
     static time_type local_time(shared_ptr<time_zone_type> tz_ptr) {
       typedef typename time_type::utc_time_type utc_time_type;
       typedef second_clock<utc_time_type> second_clock;
-      // we'll need to know the utc_offset this machine has 
+      // we'll need to know the utc_offset this machine has
       // in order to get a utc_time_type set to utc
       utc_time_type utc_time = second_clock::universal_time();
       time_duration_type utc_offset = second_clock::local_time() - utc_time;
@@ -57,7 +58,7 @@ namespace date_time {
       utc_time = microsec_clock<utc_time_type>::local_time() - utc_offset;
       return time_type(utc_time, tz_ptr);
     }
-    
+
 #ifdef BOOST_HAS_GETTIMEOFDAY
     //! Return the local time based on computer clock settings
     static time_type local_time() {
@@ -65,15 +66,15 @@ namespace date_time {
       gettimeofday(&tv, 0); //gettimeofday does not support TZ adjust on Linux.
       return create_time(&tv);
     }
-    
+
   private:
     static time_type create_time(timeval* tv) {
       time_t t = tv->tv_sec;
       boost::uint32_t fs = tv->tv_usec;
-      ::std::time(&t); 
+      ::std::time(&t);
       tm* curr = localtime(&t);
-      date_type d(curr->tm_year + 1900, 
-                  curr->tm_mon + 1, 
+      date_type d(curr->tm_year + 1900,
+                  curr->tm_mon + 1,
                   curr->tm_mday);
       //The following line will adjusts the fractional second tick in terms
       //of the current time system.  For example, if the time system
@@ -86,7 +87,7 @@ namespace date_time {
                             curr->tm_sec,
                             fs*adjust);
       return time_type(d,td);
-      
+
     }
 #endif // BOOST_HAS_GETTIMEOFDAY
 
@@ -99,7 +100,7 @@ namespace date_time {
       GetSystemTimeAsFileTime(&ft);
       return create_time(ft);
     }
-    
+
   private:
     static time_type create_time(FILETIME& ft) {
       // offset is difference (in 100-nanoseconds) from
@@ -111,16 +112,16 @@ namespace date_time {
       boost::uint64_t filetime = ft.dwHighDateTime;
       filetime = filetime << 32;
       filetime += ft.dwLowDateTime;
-      filetime -= OFFSET; 
+      filetime -= OFFSET;
       // filetime now holds 100-nanoseconds since 1970-Jan-01
 
       boost::uint32_t sub_sec = (filetime % 10000000) / 10; // microseconds
-     
+
       time_t t;
-      ::std::time(&t); 
+      ::std::time(&t);
       tm* curr = localtime(&t);
-      date_type d(curr->tm_year + 1900, 
-                  curr->tm_mon + 1, 
+      date_type d(curr->tm_year + 1900,
+                  curr->tm_mon + 1,
                   curr->tm_mday);
 
       //The following line will adjusts the fractional second tick in terms
@@ -135,12 +136,12 @@ namespace date_time {
                             sub_sec * adjust);
                             //st.wMilliseconds * adjust);
       return time_type(d,td);
-      
+
     }
 #endif // BOOST_HAS_FTIME
   };
 
-  
+
 } } //namespace date_time
 
 #endif //BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
