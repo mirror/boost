@@ -10,7 +10,7 @@
 //
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
-
+ 
 // For more information, see http://www.boost.org
 
 #ifndef BOOST_SIGNALS_TRACKABLE_HPP
@@ -37,25 +37,25 @@ namespace BOOST_SIGNALS_NAMESPACE {
     friend class detail::signal_base_impl;
     friend class detail::slot_base;
     void signal_connected(connection, BOOST_SIGNALS_NAMESPACE::detail::bound_object&) const;
-
+    
   protected:
     trackable() : connected_signals(), dying(false) {}
     trackable(const trackable&) : connected_signals(), dying(false) {}
     ~trackable();
-
+    
     trackable& operator=(const trackable&)
     {
       connected_signals.clear();
       return *this;
     }
-
+    
   private:
     typedef std::list<connection> connection_list;
     typedef connection_list::iterator connection_iterator;
-
+    
     // List of connections that this object is part of
     mutable connection_list connected_signals;
-
+    
     // True when the object is being destroyed
     mutable bool dying;
   };
@@ -66,13 +66,13 @@ namespace BOOST_SIGNALS_NAMESPACE {
     // A visitor that adds each trackable object to a vector
     class bound_objects_visitor {
     public:
-      bound_objects_visitor(std::vector<const trackable*>& v) :
-        bound_objects(v)
+      bound_objects_visitor(std::vector<const trackable*>& v) : 
+        bound_objects(v) 
       {
       }
 
       template<typename T>
-      void operator()(T& t) const
+      void operator()(const T& t) const
       {
         decode(t, 0);
       }
@@ -82,11 +82,11 @@ namespace BOOST_SIGNALS_NAMESPACE {
       template<typename T>
       void decode(const reference_wrapper<T>& t, int) const
       {
-        maybe_get_pointer(t.get(), truth<false>());
+        add_if_trackable(t.get_pointer());
       }
 
       template<typename T>
-      void decode(T& t, long) const
+      void decode(const T& t, long) const
       {
         typedef truth<(is_pointer<T>::value)> is_a_pointer;
         maybe_get_pointer(t, is_a_pointer());
@@ -94,30 +94,92 @@ namespace BOOST_SIGNALS_NAMESPACE {
 
       // maybe_get_pointer() decides between a pointer and a non-pointer
       template<typename T>
-      void maybe_get_pointer(T& t, truth<true>) const
+      void maybe_get_pointer(const T& t, truth<true>) const
       {
-        if (t)
-          maybe_get_pointer(*t, truth<false>());
+        add_if_trackable(t);
       }
 
       template<typename T>
-      void maybe_get_pointer(T& t, truth<false>) const
+      void maybe_get_pointer(const T& t, truth<false>) const
       {
         // Take the address of this object, because the object itself may be
         // trackable
-        typedef truth<(is_base_and_derived<const trackable, T>::value)>
-          is_trackable;
-        add_if_trackable(&t, is_trackable());
+        add_if_trackable(addressof(t));
       }
 
       // add_if_trackable() adds trackable objects to the list of bound objects
-      inline void add_if_trackable(const trackable* b, truth<true>) const
+      inline void add_if_trackable(const trackable* b) const
       {
-        bound_objects.push_back(b);
+        if (b) {
+          bound_objects.push_back(b);
+        }
       }
 
-      template<typename T>
-      inline void add_if_trackable(const T*, truth<false>) const
+      inline void add_if_trackable(const void*) const
+      {
+      }
+
+      template<typename R>
+      inline void add_if_trackable(R (*)()) const
+      {
+      }
+
+      template<typename R, typename T1>
+      inline void add_if_trackable(R (*)(T1)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2>
+      inline void add_if_trackable(R (*)(T1, T2)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2, typename T3>
+      inline void add_if_trackable(R (*)(T1, T2, T3)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4>
+      inline void add_if_trackable(R (*)(T1, T2, T3, T4)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+     	       typename T5>
+      inline void add_if_trackable(R (*)(T1, T2, T3, T4, T5)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+     	       typename T5, typename T6>
+      inline void add_if_trackable(R (*)(T1, T2, T3, T4, T5, T6)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+     	       typename T5, typename T6, typename T7>
+      inline void add_if_trackable(R (*)(T1, T2, T3, T4, T5, T6, T7)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+     	       typename T5, typename T6, typename T7, typename T8>
+      inline void add_if_trackable(R (*)(T1, T2, T3, T4, T5, T6, T7, T8)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+     	       typename T5, typename T6, typename T7, typename T8, typename T9>
+      inline void 
+      add_if_trackable(R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9)) const
+      {
+      }
+
+      template<typename R, typename T1, typename T2, typename T3, typename T4,
+     	       typename T5, typename T6, typename T7, typename T8, typename T9,
+	       typename T10>
+      inline void 
+      add_if_trackable(R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)) const
       {
       }
 
