@@ -331,6 +331,36 @@ public:
     }
     return int_adapter<int_type>(value_ / rhs);
   }
+
+  // should templatize this to be consistant with op +-
+  int_adapter operator%(const int_adapter& rhs)const
+  {
+    if(this->is_special() || rhs.is_special())
+    {
+      if(is_infinity() && rhs.is_infinity())
+      {
+	return int_adapter<int_type>(not_a_number());
+      }
+      if(rhs != 0)
+      {
+        return mult_div_specials(rhs);
+      }
+      else { // let divide by zero blow itself up
+        return int_adapter<int_type>(value_ % rhs.value_);
+      }
+    }
+    return int_adapter<int_type>(value_ % rhs.value_);
+  }
+  /*! Provided for cases when automatic conversion from 
+   * 'int' to 'int_adapter' causes incorrect results. */
+  int_adapter operator%(const int rhs) const
+  {
+    if(is_special() && rhs != 0)
+    {
+      return mult_div_specials(rhs);
+    }
+    return int_adapter<int_type>(value_ % rhs);
+  }
 private:
   int_type value_;
   
