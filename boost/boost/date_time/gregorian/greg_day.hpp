@@ -7,6 +7,7 @@
 
 #include "boost/date_time/constrained_value.hpp"
 #include <stdexcept>
+#include <string>
 
 namespace boost {
 namespace gregorian {
