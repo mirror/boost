@@ -5,7 +5,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 #include <boost/type_traits.hpp>
-#include <boost/test/cpp_main.cpp>
+#include <boost/test/execution_monitor.hpp>
 #include "boost/type_traits/type_traits_test.hpp"
 
 template <class T>

@@ -5,7 +5,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 #include <boost/type_traits/arithmetic_traits.hpp>
-#include <boost/test/cpp_main.cpp>
+#include <boost/test/execution_monitor.hpp>
 #include <boost/utility.hpp>
 
 #ifdef __BORLANDC__

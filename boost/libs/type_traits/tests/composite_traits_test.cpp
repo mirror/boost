@@ -6,7 +6,7 @@
 
 #include <boost/type_traits/composite_traits.hpp>
 #include <boost/utility.hpp>
-#include <boost/test/cpp_main.cpp>
+#include <boost/test/execution_monitor.hpp>
 
 #ifdef __BORLANDC__
 #pragma hrdstop

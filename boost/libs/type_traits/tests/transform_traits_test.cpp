@@ -7,7 +7,7 @@
 #include <boost/type_traits/transform_traits.hpp>
 #include <boost/type_traits/cv_traits.hpp>
 #include <boost/utility.hpp>
-#include <boost/test/cpp_main.cpp>
+#include <boost/test/execution_monitor.hpp>
 
 #ifdef __BORLANDC__
 #pragma hrdstop

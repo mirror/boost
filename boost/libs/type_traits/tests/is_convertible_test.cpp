@@ -6,7 +6,7 @@
 
 #include <boost/type_traits/conversion_traits.hpp>
 #include <boost/utility.hpp>
-#include <boost/test/cpp_main.cpp>
+#include <boost/test/execution_monitor.hpp>
 #include "boost/type_traits/type_traits_test.hpp"
 
 template <class T>
