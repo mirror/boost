@@ -84,7 +84,7 @@ class processor_container : noncopyable
       typedef void ( processor_container::*impl_fun_ptr )(
         const processor_holder_ptr_type &, const processor_context & );
       impl_fun_ptr pImpl =
-        &processor_container::create_processor_impl0< Processor >;
+        &processor_container::template create_processor_impl0< Processor >;
       return bind(
         pImpl, this, pProcessor, processor_context( scheduler, handle ) );
     }
@@ -98,7 +98,8 @@ class processor_container : noncopyable
       typedef void ( processor_container::*impl_fun_ptr )(
         const processor_holder_ptr_type &, const processor_context &, Arg1 );
       impl_fun_ptr pImpl =
-        &processor_container::create_processor_impl1< Processor, Arg1 >;
+        &processor_container::template create_processor_impl1<
+          Processor, Arg1 >;
       return bind(
         pImpl, this, pProcessor, processor_context( scheduler, handle ), arg1 );
     }
@@ -113,7 +114,8 @@ class processor_container : noncopyable
         const processor_holder_ptr_type &,
         const processor_context &, Arg1, Arg2 );
       impl_fun_ptr pImpl =
-        &processor_container::create_processor_impl2< Processor, Arg1, Arg2 >;
+        &processor_container::template create_processor_impl2<
+          Processor, Arg1, Arg2 >;
       return bind(
         pImpl, this, pProcessor, processor_context( scheduler, handle ),
         arg1, arg2 );
@@ -130,8 +132,9 @@ class processor_container : noncopyable
         const processor_holder_ptr_type &,
         const processor_context &,
         Arg1, Arg2, Arg3 );
-      impl_fun_ptr pImpl = &processor_container::create_processor_impl3<
-        Processor, Arg1, Arg2, Arg3 >;
+      impl_fun_ptr pImpl =
+        &processor_container::template create_processor_impl3<
+          Processor, Arg1, Arg2, Arg3 >;
       return bind(
         pImpl, this, pProcessor, processor_context( scheduler, handle ),
         arg1, arg2, arg3 );
@@ -150,8 +153,9 @@ class processor_container : noncopyable
         const processor_holder_ptr_type &,
         const processor_context &,
         Arg1, Arg2, Arg3, Arg4 );
-      impl_fun_ptr pImpl = &processor_container::create_processor_impl4<
-        Processor, Arg1, Arg2, Arg3, Arg4 >;
+      impl_fun_ptr pImpl =
+        &processor_container::template create_processor_impl4<
+          Processor, Arg1, Arg2, Arg3, Arg4 >;
       return bind(
         pImpl, this, pProcessor, processor_context( scheduler, handle ),
         arg1, arg2, arg3, arg4 );
@@ -170,8 +174,9 @@ class processor_container : noncopyable
         const processor_holder_ptr_type &,
         const processor_context &,
         Arg1, Arg2, Arg3, Arg4, Arg5 );
-      impl_fun_ptr pImpl = &processor_container::create_processor_impl5<
-        Processor, Arg1, Arg2, Arg3, Arg4, Arg5 >;
+      impl_fun_ptr pImpl =
+        &processor_container::template create_processor_impl5<
+          Processor, Arg1, Arg2, Arg3, Arg4, Arg5 >;
       return bind(
         pImpl, this, pProcessor, processor_context( scheduler, handle ),
         arg1, arg2, arg3, arg4, arg5 );
@@ -190,8 +195,9 @@ class processor_container : noncopyable
         const processor_holder_ptr_type &,
         const processor_context &,
         Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 );
-      impl_fun_ptr pImpl = &processor_container::create_processor_impl6<
-        Processor, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 >;
+      impl_fun_ptr pImpl =
+        &processor_container::template create_processor_impl6<
+          Processor, Arg1, Arg2, Arg3, Arg4, Arg5, Arg6 >;
       return bind(
         pImpl, this, pProcessor, processor_context( scheduler, handle ),
         arg1, arg2, arg3, arg4, arg5, arg6 );
