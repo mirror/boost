@@ -105,11 +105,11 @@ test-suite date_time_gregorian_dll
    test-suite date_time_wide_streaming
     :
    [ run gregorian/testgreg_wstream.cpp
-     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) : test_greg_wstream ]
+     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) : testgreg_wstream ]
    [ run posix_time/testtime_wstream.cpp
-     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) : test_time_wstream_std_config ]
+     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) : testtime_wstream_std_config ]
    [ run posix_time/testtime_wstream.cpp
-     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  : test_time_wstream ]
+     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES)  : testtime_wstream ]
  ;
 
 
