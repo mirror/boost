@@ -22,18 +22,18 @@ using namespace std;
 void test_option_description_construction()
 {
     option_description d1("a", new untyped_value(), "desc1");
-    BOOST_TEST(d1.long_name() == "a");
-    BOOST_TEST(d1.description() == "desc1");
-    BOOST_TEST(d1.semantic()->name() == "arg");
+    BOOST_CHECK(d1.long_name() == "a");
+    BOOST_CHECK(d1.description() == "desc1");
+    BOOST_CHECK(d1.semantic()->name() == "arg");
 
     // It is not possible to compare boost::function
     #if 0
     function<string, string> f1;
-    BOOST_TEST(&option_description("x", "y", "z").
+    BOOST_CHECK(&option_description("x", "y", "z").
                validator(f1).validator() ==
                &f1);
     function<void, string> f2;
-    BOOST_TEST(&option_description("x", "y", "z").
+    BOOST_CHECK(&option_description("x", "y", "z").
                notify(f2).notify() ==
                &f2);
     #endif
@@ -50,27 +50,27 @@ void test_options_description()
     shared_ptr<option_description> d1(
         new option_description("first,f", new untyped_value(), ""));
     desc.add(d1);
-    BOOST_TEST(desc.count("first") == 1);
-    BOOST_TEST(desc.count("-f") == 1);
-    BOOST_TEST(desc.keys().size() == 2);
-    BOOST_TEST(desc.keys().count("first") == 1);
-    BOOST_TEST(desc.keys().count("-f") == 1);
+    BOOST_CHECK(desc.count("first") == 1);
+    BOOST_CHECK(desc.count("-f") == 1);
+    BOOST_CHECK(desc.keys().size() == 2);
+    BOOST_CHECK(desc.keys().count("first") == 1);
+    BOOST_CHECK(desc.keys().count("-f") == 1);
 
     desc.add_options()
         ("second,s", new untyped_value())
         ("third,t", new untyped_value())
         ;
-    BOOST_TEST(desc.count("second") == 1);
-    BOOST_TEST(desc.count("-s") == 1);
+    BOOST_CHECK(desc.count("second") == 1);
+    BOOST_CHECK(desc.count("-s") == 1);
 
     desc.add_options()
         (",x", new untyped_value)
         ;
-    BOOST_TEST(desc.primary_keys().size() == 4);
-    BOOST_TEST(desc.primary_keys().count("first") == 1);
-    BOOST_TEST(desc.primary_keys().count("second") == 1);
-    BOOST_TEST(desc.primary_keys().count("third") == 1);
-    BOOST_TEST(desc.primary_keys().count("-x") == 1);
+    BOOST_CHECK(desc.primary_keys().size() == 4);
+    BOOST_CHECK(desc.primary_keys().count("first") == 1);
+    BOOST_CHECK(desc.primary_keys().count("second") == 1);
+    BOOST_CHECK(desc.primary_keys().count("third") == 1);
+    BOOST_CHECK(desc.primary_keys().count("-x") == 1);
 }
 
 void test_approximation()
@@ -81,12 +81,12 @@ void test_approximation()
     ("fee", new untyped_value())
     ("baz", new untyped_value());
 
-    BOOST_TEST(desc.count_approx("f") == 2);
-    BOOST_TEST(desc.count_approx("foo") == 1);
+    BOOST_CHECK(desc.count_approx("f") == 2);
+    BOOST_CHECK(desc.count_approx("foo") == 1);
     set<string> a = desc.approximations("f");
-    BOOST_TEST(a.size() == 2);
-    BOOST_TEST(*a.begin() == "fee");
-    BOOST_TEST(*(++a.begin()) == "foo");
+    BOOST_CHECK(a.size() == 2);
+    BOOST_CHECK(*a.begin() == "fee");
+    BOOST_CHECK(*(++a.begin()) == "foo");
 }
 
 int test_main(int, char* [])

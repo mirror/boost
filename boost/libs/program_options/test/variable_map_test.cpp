@@ -57,12 +57,12 @@ void test_variable_map()
     variables_map vm;
     store(a3, vm);
     notify(vm);
-    BOOST_CRITICAL_TEST(vm.size() == 4);
-    BOOST_TEST(vm["foo"].as<string>() == "'12'");
-    BOOST_TEST(vm["bar"].as<string>() == "11");
-    BOOST_TEST(vm.count("biz") == 1);
-    BOOST_TEST(vm["biz"].as<string>() == "3");
-    BOOST_TEST(vm["output"].as<string>() == "foo");
+    BOOST_REQUIRE(vm.size() == 4);
+    BOOST_CHECK(vm["foo"].as<string>() == "'12'");
+    BOOST_CHECK(vm["bar"].as<string>() == "11");
+    BOOST_CHECK(vm.count("biz") == 1);
+    BOOST_CHECK(vm["biz"].as<string>() == "3");
+    BOOST_CHECK(vm["output"].as<string>() == "foo");
 
     int i;
     desc.add_options()
@@ -78,11 +78,11 @@ void test_variable_map()
     variables_map vm2;
     store(a4, vm2);
     notify(vm2);
-    BOOST_CRITICAL_TEST(vm2.size() == 3);
-    BOOST_TEST(vm2["zee"].as<bool>() == true);
-    BOOST_TEST(vm2["zak"].as<int>() == 13);
-    BOOST_TEST(vm2["opt"].as<bool>() == false);
-    BOOST_TEST(i == 13);
+    BOOST_REQUIRE(vm2.size() == 3);
+    BOOST_CHECK(vm2["zee"].as<bool>() == true);
+    BOOST_CHECK(vm2["zak"].as<int>() == 13);
+    BOOST_CHECK(vm2["opt"].as<bool>() == false);
+    BOOST_CHECK(i == 13);
 
     options_description desc2;
     desc2.add_options()
@@ -98,10 +98,10 @@ void test_variable_map()
     variables_map vm3;
     store(a5, vm3);
     notify(vm3);
-    BOOST_CRITICAL_TEST(vm3.size() == 3);
-    BOOST_TEST(vm3["vee"].as<string>() == "42");
-    BOOST_TEST(vm3["voo"].as<string>() == "1");
-    BOOST_TEST(vm3["iii"].as<int>() == 123);
+    BOOST_REQUIRE(vm3.size() == 3);
+    BOOST_CHECK(vm3["vee"].as<string>() == "42");
+    BOOST_CHECK(vm3["voo"].as<string>() == "1");
+    BOOST_CHECK(vm3["iii"].as<int>() == 123);
 }
 
 int stored_value;

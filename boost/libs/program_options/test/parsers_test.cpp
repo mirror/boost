@@ -74,14 +74,14 @@ void test_command_line()
         parse_command_line(cmdline1,
                            cmdline1 + sizeof(cmdline1)/sizeof(cmdline1[0]));
 
-    BOOST_CRITICAL_TEST(a1.options().size() == 4);
-    BOOST_TEST(a1.options()[0] == msp("a", ""));
-    BOOST_TEST(a1.options()[1] == msp("b", "12"));
-    BOOST_TEST(a1.options()[2] == msp("-f", ""));
-    BOOST_TEST(a1.options()[3] == msp("-g", "4"));
-    BOOST_CRITICAL_TEST(a1.arguments().size() == 2);
-    BOOST_TEST(a1.arguments()[0] == "-");
-    BOOST_TEST(a1.arguments()[1] == "file");
+    BOOST_REQUIRE(a1.options().size() == 4);
+    BOOST_CHECK(a1.options()[0] == msp("a", ""));
+    BOOST_CHECK(a1.options()[1] == msp("b", "12"));
+    BOOST_CHECK(a1.options()[2] == msp("-f", ""));
+    BOOST_CHECK(a1.options()[3] == msp("-g", "4"));
+    BOOST_REQUIRE(a1.arguments().size() == 2);
+    BOOST_CHECK(a1.arguments()[0] == "-");
+    BOOST_CHECK(a1.arguments()[1] == "file");
 
     char* cmdline2[] = { "--a", "--", "file" };
 
@@ -89,10 +89,10 @@ void test_command_line()
         parse_command_line(cmdline2,
                            cmdline2 + sizeof(cmdline2)/sizeof(cmdline2[0]));
 
-    BOOST_CRITICAL_TEST(a2.options().size() == 1);
-    BOOST_TEST(a2.options()[0] == msp("a", ""));
-    BOOST_TEST(a2.arguments().size() == 1);
-    BOOST_TEST(a2.arguments()[0] == "file");
+    BOOST_REQUIRE(a2.options().size() == 1);
+    BOOST_CHECK(a2.options()[0] == msp("a", ""));
+    BOOST_CHECK(a2.arguments().size() == 1);
+    BOOST_CHECK(a2.arguments()[0] == "file");
     #endif
     
     options_description desc;
@@ -110,19 +110,19 @@ void test_command_line()
     vector<option> a3 = 
         command_line_parser(cmdline3).options(desc).run().options;
                        
-    BOOST_CRITICAL_TEST(a3.size() == 7);
+    BOOST_REQUIRE(a3.size() == 7);
 
     check_value(a3[0], "foo", "12");
     check_value(a3[1], "foo", "4");
     check_value(a3[2], "bar", "11");
 
-    BOOST_TEST(a3[3].string_key == "bar");
-    BOOST_CRITICAL_TEST(a3[3].value.size() == 0);
+    BOOST_CHECK(a3[3].string_key == "bar");
+    BOOST_REQUIRE(a3[3].value.size() == 0);
 
     check_value(a3[4], "bar", "4");
 
-    BOOST_TEST(a3[5].string_key == "bar");
-    BOOST_CRITICAL_TEST(a3[5].value.size() == 0);
+    BOOST_CHECK(a3[5].string_key == "bar");
+    BOOST_REQUIRE(a3[5].value.size() == 0);
 
     check_value(a3[6], "plug3", "10");
 }
@@ -151,7 +151,7 @@ void test_config_file()
 
     stringstream ss(content1);
     vector<option> a1 = parse_config_file(ss, desc).options;
-    BOOST_CRITICAL_TEST(a1.size() == 5);
+    BOOST_REQUIRE(a1.size() == 5);
     check_value(a1[0], "gv1", "0");
     check_value(a1[1], "plug3", "7");
     check_value(a1[2], "b", "true");

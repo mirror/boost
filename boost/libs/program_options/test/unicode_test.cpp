@@ -61,7 +61,7 @@ void test_unicode_to_native()
     variables_map vm;
     store(wcommand_line_parser(args).options(desc).run(), vm);
 
-    BOOST_TEST(vm["foo"].as<string>() == "\xD1\x8F");    
+    BOOST_CHECK(vm["foo"].as<string>() == "\xD1\x8F");    
 }
 
 void test_native_to_unicode()
@@ -82,7 +82,7 @@ void test_native_to_unicode()
     variables_map vm;
     store(command_line_parser(args).options(desc).run(), vm);
 
-    BOOST_TEST(vm["foo"].as<wstring>() == L"\x044F");    
+    BOOST_CHECK(vm["foo"].as<wstring>() == L"\x044F");    
 }
 
 
@@ -119,7 +119,7 @@ void test_command_line()
     vector<woption> a4 = 
         wcommand_line_parser(cmdline4).options(desc).run().options;
 
-    BOOST_CRITICAL_TEST(a4.size() == 7);
+    BOOST_REQUIRE(a4.size() == 7);
 
     check_value(a4[0], "foo", L"1\u0FF52");
     check_value(a4[1], "foo", L"4");
@@ -146,7 +146,7 @@ void test_config_file()
     variables_map vm;
     store(parse_config_file(stream, desc), vm);
 
-    BOOST_TEST(vm["foo"].as<string>() == "\xD1\x8F");    
+    BOOST_CHECK(vm["foo"].as<string>() == "\xD1\x8F");    
 }
 
 int test_main(int, char* [])
