@@ -11,10 +11,11 @@
 # pragma once
 #endif              
 
-#include <boost/config.hpp>       // SFINAE, make sure ptrdiff_t is in std.
+#include <boost/config.hpp>       // SFINAE, MSVC, put ptrdiff_t in std.
 #include <algorithm>              // copy, min.
 #include <cstddef>                // ptrdiff_t.
 #include <iosfwd>                 // streamsize.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/assert_convertible.hpp>    
 #include <boost/iostreams/detail/config/limits.hpp>       // forwarding.
@@ -23,10 +24,11 @@
 #include <boost/iostreams/traits.hpp>                     // io_mode.
 #include <boost/iostreams/is_direct.hpp>
 #include <boost/iostreams/operations.hpp>
+#include <boost/mpl/bool.hpp> 
+#include <boost/mpl/or.hpp> 
 #include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
-#include <boost/mpl/bool.hpp> 
 
 namespace boost { namespace iostreams { namespace detail {
                     
@@ -68,8 +70,27 @@ private:
 public:
     typedef typename base_type::char_type    char_type;
     typedef typename base_type::io_category  io_category;
-    direct_adapter(const Direct& d) : base_type(d) { }                                          
+
+        // Constructors
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+    direct_adapter(const Direct& d) : base_type(d) { }   
     direct_adapter(const direct_adapter& d) : base_type(d) { }
+# define BOOST_PP_LOCAL_LIMITS (1, BOOST_IOSTREAMS_MAX_FORWARDING_ARITY)
+#else
+    template<typename U>
+    struct is_direct
+        : mpl::or_< 
+              is_same<U, direct_adapter<Direct> >, 
+              is_same<U, Direct> 
+          >
+        { };
+    template<typename U>
+    direct_adapter(const U& u) 
+        : base_type(forward(u, is_direct<U>()))
+        { }
+# define BOOST_PP_LOCAL_LIMITS (2, BOOST_IOSTREAMS_MAX_FORWARDING_ARITY)
+#endif
 
 #define BOOST_PP_LOCAL_MACRO(n) \
     template<BOOST_PP_ENUM_PARAMS(n, typename P)> \
@@ -77,8 +98,8 @@ public:
         : base_type(Direct(BOOST_PP_ENUM_PARAMS(n, p))) \
         { } \
     /**/
-#define BOOST_PP_LOCAL_LIMITS (1, BOOST_IOSTREAMS_MAX_FORWARDING_ARITY)
 #include BOOST_PP_LOCAL_ITERATE()
+#undef BOOST_PP_LOCAL_MACRO
 
         // Device interface.
 
@@ -94,6 +115,13 @@ public:
 
     Direct& operator*() { return d_; }
     Direct* operator->() { return &d_; }
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+private:
+    template<typename U>
+    static Direct forward(const U& u, mpl::true_) { return u; }
+    template<typename U>
+    static Direct forward(const U& u, mpl::false_) { return Direct(u); }
+#endif
 };
 
 //--------------Definition of wrap_direct and unwrap_direct-------------------//
