@@ -148,6 +148,13 @@ private:
    }
 };
 
+typedef regex_iterator<const char*> cregex_iterator;
+typedef regex_iterator<std::string::const_iterator> sregex_iterator;
+#ifndef BOOST_NO_WREGEX
+typedef regex_iterator<const wchar_t*> wcregex_iterator;
+typedef regex_iterator<std::wstring::const_iterator> wsregex_iterator;
+#endif
+
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
 #endif

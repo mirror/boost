@@ -284,6 +284,13 @@ private:
    }
 };
 
+typedef regex_token_iterator<const char*> cregex_token_iterator;
+typedef regex_token_iterator<std::string::const_iterator> sregex_token_iterator;
+#ifndef BOOST_NO_WREGEX
+typedef regex_token_iterator<const wchar_t*> wcregex_token_iterator;
+typedef regex_token_iterator<std::wstring::const_iterator> wsregex_token_iterator;
+#endif
+
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
 #  pragma warning(pop)
 #endif
