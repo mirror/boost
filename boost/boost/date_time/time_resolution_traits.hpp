@@ -48,7 +48,9 @@ namespace date_time {
                                    sec_type  seconds,
                                    fractional_seconds_type  fs)
     {
-      return (((hours*3600) + (minutes*60) + seconds)*res_adjust()) + fs;
+      return (((fractional_seconds_type(hours)*3600) 
+               + (fractional_seconds_type(minutes)*60) 
+               + seconds)*res_adjust()) + fs;
     }
     
   };
