@@ -58,6 +58,8 @@ apply_visitor(Visitor& visitor, Visitable& visitable)
     return visitable.apply_visitor(visitor);
 }
 
+#undef BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE
+
 //
 // const-visitor version:
 //

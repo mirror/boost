@@ -106,11 +106,30 @@ public: // visitor interfaces
 
 }} // namespace detail::variant
 
+//
+// nonconst-visitor version:
+//
+
+#if !BOOST_WORKAROUND(__EDG__, BOOST_TESTED_AT(302))
+
+#   define BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE(V) \
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename V::result_type) \
+    /**/
+
+#else // EDG-based compilers
+
+#   define BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE(V) \
+    typename detail::variant::enable_if< \
+          mpl::not_< is_const< V > > \
+        , BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename V::result_type) \
+        >::type \
+    /**/
+
+#endif // EDG-based compilers workaround
+
 template <typename Visitor, typename Visitable1, typename Visitable2>
 inline
-    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
-          typename Visitor::result_type
-        )
+    BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE(Visitor)
 apply_visitor(
       Visitor& visitor
     , Visitable1& visitable1, Visitable2& visitable2
@@ -122,6 +141,12 @@ apply_visitor(
 
     return boost::apply_visitor(unwrapper, visitable1);
 }
+
+#undef BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE
+
+//
+// const-visitor version:
+//
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
