@@ -1515,6 +1515,9 @@ private: // helpers, for modifiers, cont. (below)
             {
                 // In case of failure, destroy the copied value...
                 static_cast<T*>(lhs_.inactive_storage())->~T(); // nothrow
+
+                // ...and rethrow:
+                throw;
             }
 
             // In case of success, destroy lhs's active storage...
