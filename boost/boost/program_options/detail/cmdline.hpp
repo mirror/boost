@@ -191,6 +191,16 @@ namespace boost { namespace program_options { namespace detail {
             ed_ambiguous_option
         };
 
+        // The standard say that nested classes has no access to
+        // private member of enclosing class. However, most compilers
+        // allow that and it's likely be to allowed in future:
+        // http://std.dkuug.dk/jtc1/sc22/wg21/docs/cwg_defects.html#45  
+        // For Sun compiler, try using friend declaration.
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x560))
+        struct option;
+        friend struct option;
+#endif
+
         struct option {
             option(const std::string& long_name, char short_name,
                    properties_t properties, int index)
@@ -204,14 +214,6 @@ namespace boost { namespace program_options { namespace detail {
             properties_t properties;
         };
 
-        // The standard say that nested classes has no access to
-        // private member of enclosing class. However, most compilers
-        // allow that and it's likely be to allowed in future:
-        // http://std.dkuug.dk/jtc1/sc22/wg21/docs/cwg_defects.html#45  
-        // For Sun compiler, try using friend declaration.
-#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x560))
-        friend class option;
-#endif
 
         std::vector<option> options;
 
