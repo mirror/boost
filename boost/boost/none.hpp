@@ -9,10 +9,23 @@
 // You are welcome to contact the author at:
 //  fernando_cacciola@hotmail.com
 //
-#ifndef BOOST_OPTIONAL_FLC_19NOV2002_HPP
-#define BOOST_OPTIONAL_FLC_19NOV2002_HPP
+#ifndef BOOST_NONE_17SEP2003_HPP
+#define BOOST_NONE_17SEP2003_HPP
 
-#include "boost/optional/optional.hpp"
+#include "boost/detail/none_t.hpp"
+
+// NOTE: Borland users have to include this header outside any precompiled headers
+// (bcc<=5.64 cannot include instance data in a precompiled header)
+
+namespace boost {
+
+namespace {
+
+detail::none_t const none = ((detail::none_t)0) ;
+
+}
+
+} // namespace boost
 
 #endif
 
