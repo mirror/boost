@@ -12,9 +12,9 @@ test-suite iterator_examples
     [ run node_iterator3.cpp ]
     [ run counting_iterator_example.cpp ]
     [ run filter_iterator_example.cpp ]
-    [ run function_output_iterator_example.cpp ]
+    [ run func_output_iter_example.cpp ]
     [ run indirect_iterator_example.cpp ]
-    [ run permutation_iterator_example.cpp ]
+    [ run permutation_iter_example.cpp ]
     [ run reverse_iterator_example.cpp ]
     [ run transform_iterator_example.cpp ]
       ;
