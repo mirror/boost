@@ -64,15 +64,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_range<vector_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
-        typedef typename V::const_iterator const_iterator_type;
-        typedef typename V::iterator iterator_type;
-#else
-        typedef typename V::const_iterator const_iterator_type;
-        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
-                                          typename V::const_iterator,
-                                          typename V::iterator>::type iterator_type;
-#endif
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -242,6 +233,20 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+        // Reuse the vector iterator
+        typedef typename V::const_iterator const_iterator_type;
+        typedef typename V::iterator iterator_type;
+#else
+        typedef typename V::const_iterator const_iterator_type;
+        typedef typename boost::mpl::if_c<boost::is_const<V>::value,
+                                          typename V::const_iterator,
+                                          typename V::iterator>::type iterator_type;
+#endif
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator<vector_range<vector_type>,
                                  BOOST_UBLAS_TYPENAME iterator_type::iterator_category> iterator;
@@ -271,8 +276,6 @@ namespace boost { namespace numeric { namespace ublas {
             return iterator (*this, it);
 #endif
         }
-
-        // Iterators simply are pointers.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
@@ -593,8 +596,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_slice<vector_type> self_type;
         typedef const vector_slice<vector_type> const_closure_type;
         typedef vector_slice<vector_type> closure_type;
-        typedef slice::const_iterator const_iterator_type;
-        typedef slice::const_iterator iterator_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -772,6 +773,13 @@ return true;
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use slice as an index - FIXME this fails for packed assignment
+        typedef slice::const_iterator const_iterator_type;
+        typedef slice::const_iterator iterator_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator<vector_slice<vector_type>,
                                  BOOST_UBLAS_TYPENAME vector_type::iterator::iterator_category> iterator;
@@ -799,8 +807,6 @@ return true;
             return iterator (*this, s_.begin () + i);
 #endif
         }
-
-        // Iterators simply are indices.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
@@ -1138,8 +1144,6 @@ return true;
         typedef vector_indirect<vector_type, indirect_array_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename IA::const_iterator const_iterator_type;
-        typedef typename IA::const_iterator iterator_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -1316,6 +1320,13 @@ return true;
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use indirect array as an index - FIXME this fails for packed assignment
+        typedef typename IA::const_iterator const_iterator_type;
+        typedef typename IA::const_iterator iterator_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator<vector_indirect<vector_type, indirect_array_type>,
                                  BOOST_UBLAS_TYPENAME vector_type::iterator::iterator_category> iterator;
@@ -1325,7 +1336,6 @@ return true;
         class const_iterator;
         class iterator;
 #endif
-
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {

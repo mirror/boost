@@ -65,15 +65,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_row<matrix_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
-        typedef typename M::const_iterator2 const_iterator_type;
-        typedef typename M::iterator2 iterator_type;
-#else
-        typedef typename M::const_iterator2 const_iterator_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
-                                          typename M::const_iterator2,
-                                          typename M::iterator2>::type iterator_type;
-#endif
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -230,6 +221,20 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+        // Reuse the matrix iterator
+        typedef typename M::const_iterator2 const_iterator_type;
+        typedef typename M::iterator2 iterator_type;
+#else
+        typedef typename M::const_iterator2 const_iterator_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_iterator2,
+                                          typename M::iterator2>::type iterator_type;
+#endif
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator<matrix_row<matrix_type>,
                                  BOOST_UBLAS_TYPENAME iterator_type::iterator_category> iterator;
@@ -259,8 +264,6 @@ namespace boost { namespace numeric { namespace ublas {
             return iterator (*this, it2);
 #endif
         }
-
-        // Iterators simply are pointers.
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
         class const_iterator:
@@ -571,15 +574,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_column<matrix_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
-        typedef typename M::const_iterator1 const_iterator_type;
-        typedef typename M::iterator1 iterator_type;
-#else
-        typedef typename M::const_iterator1 const_iterator_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
-                                          typename M::const_iterator1,
-                                          typename M::iterator1>::type iterator_type;
-#endif
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -736,6 +730,20 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+        // Reuse the matrix iterator
+        typedef typename M::const_iterator1 const_iterator_type;
+        typedef typename M::iterator1 iterator_type;
+#else
+        typedef typename M::const_iterator1 const_iterator_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_iterator1,
+                                          typename M::iterator1>::type iterator_type;
+#endif
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator<matrix_column<matrix_type>,
                                  BOOST_UBLAS_TYPENAME iterator_type::iterator_category> iterator;
@@ -1077,10 +1085,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_vector_range<matrix_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-        typedef range::const_iterator const_iterator1_type;
-        typedef range::const_iterator iterator1_type;
-        typedef range::const_iterator const_iterator2_type;
-        typedef range::const_iterator iterator2_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -1245,6 +1249,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use range as an index - FIXME this fails for packed assignment
+        typedef range::const_iterator const_iterator1_type;
+        typedef range::const_iterator iterator1_type;
+        typedef range::const_iterator const_iterator2_type;
+        typedef range::const_iterator iterator2_type;
+
+    public:
         class const_iterator;
         class iterator;
 
@@ -1257,8 +1270,6 @@ namespace boost { namespace numeric { namespace ublas {
         iterator find (size_type i) {
             return iterator (*this, r1_.begin () + i, r2_.begin () + i);
         }
-
-        // Iterators simply are indices.
 
         class const_iterator:
             public container_const_reference<matrix_vector_range>,
@@ -1571,10 +1582,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_vector_slice<matrix_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-        typedef slice::const_iterator const_iterator1_type;
-        typedef slice::const_iterator iterator1_type;
-        typedef slice::const_iterator const_iterator2_type;
-        typedef slice::const_iterator iterator2_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -1746,6 +1753,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use slice as an index - FIXME this fails for packed assignment
+        typedef slice::const_iterator const_iterator1_type;
+        typedef slice::const_iterator iterator1_type;
+        typedef slice::const_iterator const_iterator2_type;
+        typedef slice::const_iterator iterator2_type;
+
+    public:
         class const_iterator;
         class iterator;
 
@@ -2073,10 +2089,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_vector_indirect<matrix_type, indirect_array_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename IA::const_iterator const_iterator1_type;
-        typedef typename IA::const_iterator iterator1_type;
-        typedef typename IA::const_iterator const_iterator2_type;
-        typedef typename IA::const_iterator iterator2_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -2248,6 +2260,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use indirect array as an index - FIXME this fails for packed assignment
+        typedef typename IA::const_iterator const_iterator1_type;
+        typedef typename IA::const_iterator iterator1_type;
+        typedef typename IA::const_iterator const_iterator2_type;
+        typedef typename IA::const_iterator iterator2_type;
+
+    public:
         class const_iterator;
         class iterator;
 
@@ -2574,21 +2595,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_range<matrix_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
-        typedef typename M::const_iterator1 const_iterator1_type;
-        typedef typename M::iterator1 iterator1_type;
-        typedef typename M::const_iterator2 const_iterator2_type;
-        typedef typename M::iterator2 iterator2_type;
-#else
-        typedef typename M::const_iterator1 const_iterator1_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
-                                          typename M::const_iterator1,
-                                          typename M::iterator1>::type iterator1_type;
-        typedef typename M::const_iterator2 const_iterator2_type;
-        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
-                                          typename M::const_iterator2,
-                                          typename M::iterator2>::type iterator2_type;
-#endif
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -2751,6 +2757,26 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+#ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
+        // Reuse the matrix iterator
+        typedef typename M::const_iterator1 const_iterator1_type;
+        typedef typename M::iterator1 iterator1_type;
+        typedef typename M::const_iterator2 const_iterator2_type;
+        typedef typename M::iterator2 iterator2_type;
+#else
+        typedef typename M::const_iterator1 const_iterator1_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_iterator1,
+                                          typename M::iterator1>::type iterator1_type;
+        typedef typename M::const_iterator2 const_iterator2_type;
+        typedef typename boost::mpl::if_c<boost::is_const<M>::value,
+                                          typename M::const_iterator2,
+                                          typename M::iterator2>::type iterator2_type;
+#endif
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<matrix_range<matrix_type>,
                                   BOOST_UBLAS_TYPENAME iterator1_type::iterator_category> iterator1;
@@ -3493,10 +3519,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_slice<matrix_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-        typedef slice::const_iterator const_iterator1_type;
-        typedef slice::const_iterator iterator1_type;
-        typedef slice::const_iterator const_iterator2_type;
-        typedef slice::const_iterator iterator2_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -3671,6 +3693,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        // Use slice as an index - FIXME this fails for packed assignment
+        typedef slice::const_iterator const_iterator1_type;
+        typedef slice::const_iterator iterator1_type;
+        typedef slice::const_iterator const_iterator2_type;
+        typedef slice::const_iterator iterator2_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<matrix_slice<matrix_type>,
                                   BOOST_UBLAS_TYPENAME matrix_type::iterator1::iterator_category> iterator1;
@@ -4438,10 +4469,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef matrix_indirect<matrix_type, indirect_array_type> self_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename IA::const_iterator const_iterator1_type;
-        typedef typename IA::const_iterator iterator1_type;
-        typedef typename IA::const_iterator const_iterator2_type;
-        typedef typename IA::const_iterator iterator2_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -4611,6 +4638,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // Iterator types
+    private:
+        typedef typename IA::const_iterator const_iterator1_type;
+        typedef typename IA::const_iterator iterator1_type;
+        typedef typename IA::const_iterator const_iterator2_type;
+        typedef typename IA::const_iterator iterator2_type;
+
+    public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
         typedef indexed_iterator1<matrix_indirect<matrix_type, indirect_array_type>,
                                   BOOST_UBLAS_TYPENAME matrix_type::iterator1::iterator_category> iterator1;
