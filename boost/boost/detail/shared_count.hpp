@@ -202,6 +202,13 @@ inline void intrusive_ptr_release(counted_base * p)
 namespace detail
 {
 
+//
+// Borland's Codeguard trips up over the -Vx- option here:
+//
+#ifdef __CODEGUARD__
+#pragma option push -Vx-
+#endif
+
 template<class P, class D> class counted_base_impl: public counted_base
 {
 private:
@@ -343,6 +350,11 @@ public:
         return std::less<counted_base *>()(a.pi_, b.pi_);
     }
 };
+
+#ifdef __CODEGUARD__
+#pragma option pop
+#endif
+
 
 class weak_count
 {
