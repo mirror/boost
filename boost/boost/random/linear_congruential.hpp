@@ -48,12 +48,14 @@ public:
   BOOST_STATIC_CONSTANT(IntType, increment = c);
   BOOST_STATIC_CONSTANT(IntType, modulus = m);
 
-  BOOST_STATIC_ASSERT(m == 0 || a < m);
-  BOOST_STATIC_ASSERT(m == 0 || c < m);
+  // MSVC 6 and possibly others crash when encountering complicated integral
+  // constant expressions.  Avoid the check for now.
+  // BOOST_STATIC_ASSERT(m == 0 || a < m);
+  // BOOST_STATIC_ASSERT(m == 0 || c < m);
   BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 
   explicit linear_congruential(IntType x0 = 1)
-    : _x(x0)
+    : _x(m ? (x0 % m) : x0)
   { 
     assert(c || x0); /* if c == 0 and x(0) == 0 then x(n) = 0 for all n */
     // overflow check
@@ -65,7 +67,7 @@ public:
   linear_congruential(It& first, It last) { seed(first, last); }
 
   // compiler-generated copy constructor and assignment operator are fine
-  void seed(IntType x0) { assert(c || x0); _x = x0; }
+  void seed(IntType x0 = 1) { assert(c || x0); _x = (m ? (x0 % m) : x0); }
   template<class It>
   void seed(It& first, It last)
   {
