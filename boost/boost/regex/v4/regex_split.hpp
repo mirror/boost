@@ -27,8 +27,8 @@
 
 namespace boost{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 namespace re_detail{
@@ -142,8 +142,8 @@ inline std::size_t regex_split(OutputIterator out,
    return regex_split(out, s, re_detail::get_default_expression(charT(0)), match_default, UINT_MAX);
 }
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace boost

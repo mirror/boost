@@ -26,8 +26,8 @@
 
 namespace boost{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc  -w-8037
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 template <class BidiIterator, class Allocator, class charT, class traits, class Allocator2>
@@ -187,8 +187,8 @@ inline bool regex_search(const std::basic_string<wchar_t>& s,
 
 #endif
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace boost

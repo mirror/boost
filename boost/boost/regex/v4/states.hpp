@@ -23,8 +23,8 @@
 #ifndef BOOST_REGEX_V4_STATES_HPP
 #define BOOST_REGEX_V4_STATES_HPP
 
-#ifdef __BORLANDC__
-#  pragma option push -a8 -b -Vx -Ve -pc -w-8027
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 namespace boost{
@@ -226,8 +226,8 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
 
 } // namespace boost
 
-#ifdef __BORLANDC__
-#  pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 #endif

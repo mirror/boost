@@ -28,8 +28,8 @@
 
 namespace boost{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc  -w-8037
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 template <class OutputIterator, class Iterator, class traits, class Allocator, class charT>
@@ -72,8 +72,8 @@ inline std::basic_string<charT> regex_merge(const std::basic_string<charT>& s,
    return regex_replace(s, e, fmt, flags);
 }
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace boost

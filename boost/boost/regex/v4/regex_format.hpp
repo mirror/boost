@@ -28,8 +28,8 @@
 
 namespace boost{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc  -w-8037
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 //
@@ -143,6 +143,9 @@ OutputIterator BOOST_REGEX_CALL _reg_format_aux(OutputIterator out,
                           const charT*& fmt,
                           match_flag_type flags, const traits_type& traits_inst)
 {
+#ifdef __BORLANDC__
+#pragma option push -w-8037
+#endif
    const charT* fmt_end = fmt;
    while(*fmt_end) ++ fmt_end;
 
@@ -424,6 +427,9 @@ default_opt:
    }
 
    return out;
+#ifdef __BORLANDC__
+#pragma option pop
+#endif
 }
 
 #if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
@@ -520,8 +526,8 @@ std::basic_string<charT> regex_format(const match_results<Iterator, Allocator>& 
    return result;
 }
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace boost

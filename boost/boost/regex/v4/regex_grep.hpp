@@ -26,10 +26,9 @@
 
 namespace boost{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc  -w-8037
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
-
 
 //
 // regex_grep:
@@ -138,8 +137,8 @@ inline unsigned int regex_grep(bool (*foo)(const match_results<std::basic_string
 #endif
 #endif
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace boost

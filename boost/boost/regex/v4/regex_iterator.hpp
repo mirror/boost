@@ -27,6 +27,10 @@
 
 namespace boost{
 
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+
 template <class BidirectionalIterator, 
           class charT,
           class traits,
@@ -148,6 +152,9 @@ private:
    }
 };
 
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 } // namespace boost
 

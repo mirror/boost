@@ -25,8 +25,8 @@
 #include <new>
 #include <boost/regex/v4/regex_synch.hpp>
 
-#ifdef __BORLANDC__
-#  pragma option push -a8 -b -Vx -Ve -pc -w-8027
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 namespace boost{
@@ -90,8 +90,8 @@ extern mem_block_cache block_cache;
 }
 } // namespace boost
 
-#ifdef __BORLANDC__
-#  pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 #endif

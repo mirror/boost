@@ -35,8 +35,8 @@
 namespace boost{
    namespace re_detail{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 //
@@ -60,7 +60,7 @@ private:
       T* end;    // last item
       T* last;   // end of storage
    };
-   
+
    //
    // empty base member optimisation:
    struct data : public allocator_type
@@ -208,8 +208,8 @@ jstack<T, Allocator>::~jstack()
    }
 }
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace re_detail

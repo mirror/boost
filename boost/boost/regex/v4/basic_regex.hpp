@@ -24,8 +24,8 @@
 #ifndef BOOST_REGEX_V4_BASIC_REGEX_HPP
 #define BOOST_REGEX_V4_BASIC_REGEX_HPP
 
-#ifdef __BORLANDC__
-#  pragma option push -a8 -b -Vx -Ve -pc -w-8027
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 namespace boost{
@@ -388,8 +388,8 @@ public:
 
 } // namespace boost
 
-#ifdef __BORLANDC__
-#  pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 #endif

@@ -82,8 +82,8 @@ using std::list;
 namespace boost{
    namespace re_detail{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 struct _fi_find_data
@@ -101,12 +101,6 @@ typedef _fi_priv_data* _fi_find_handle;
 _fi_find_handle _fi_FindFirstFile(const char* lpFileName, _fi_find_data* lpFindFileData);
 bool _fi_FindNextFile(_fi_find_handle hFindFile,   _fi_find_data* lpFindFileData);
 bool _fi_FindClose(_fi_find_handle hFindFile);
-
-#ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
-  #pragma option pop
- #endif
-#endif
 
    } // namespace re_detail
 } // namespace boost
@@ -129,14 +123,6 @@ bool _fi_FindClose(_fi_find_handle hFindFile);
 
 namespace boost{
    namespace re_detail{
-
-#ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b
-   #endif
-#endif
 
 #ifdef BOOST_REGEX_FI_WIN32_MAP // win32 mapfile
 
@@ -424,8 +410,8 @@ inline bool operator < (const directory_iterator&, const directory_iterator&)
    return false;
 }
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 

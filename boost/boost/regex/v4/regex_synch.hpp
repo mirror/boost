@@ -46,8 +46,8 @@
 namespace boost{
    namespace re_detail{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 void BOOST_REGEX_CALL re_init_threads();
@@ -197,8 +197,8 @@ BOOST_REGEX_DECL extern unsigned int re_lock_count;
 
 #endif // BOOST_HAS_THREADS
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace re_detail

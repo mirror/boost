@@ -33,8 +33,8 @@
 namespace boost{
    namespace re_detail{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 template <class charT>
@@ -98,8 +98,8 @@ kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans transla
    return pinfo;
 }
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
    } // namepsace re_detail

@@ -19,8 +19,8 @@
 #include <boost/regex/v4/iterator_category.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc  -w-8026 -w-8027
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 namespace boost{
@@ -426,6 +426,10 @@ private:
 
 } // namespace re_detail
 
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
+
 } // namespace boost
 
 //
@@ -438,9 +442,5 @@ private:
 #endif
 // this one has to be last:
 #include <boost/regex/v4/perl_matcher_common.hpp>
-
-#ifdef __BORLANDC__
-  #pragma option pop
-#endif
 
 #endif

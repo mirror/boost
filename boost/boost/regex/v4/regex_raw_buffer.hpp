@@ -32,8 +32,8 @@
 namespace boost{
    namespace re_detail{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 struct empty_padding{};
@@ -241,8 +241,8 @@ void* BOOST_REGEX_CALL raw_storage<Allocator>::insert(size_type pos, size_type n
    return result;
 }
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace re_detail

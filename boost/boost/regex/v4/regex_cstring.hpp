@@ -34,10 +34,6 @@
 namespace boost{
    namespace re_detail{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
-#endif
-
 //
 // start by defining some template function aliases for C API functions:
 //
@@ -118,10 +114,6 @@ inline void BOOST_REGEX_CALL re_strfree(charT* p)
 {
    delete[] p;
 }
-
-#ifdef __BORLANDC__
-  #pragma option pop
-#endif
 
 } // namespace re_detail
 } // namespace boost

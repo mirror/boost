@@ -29,8 +29,8 @@
 #endif
 #include <boost/regex/v4/match_flags.hpp>
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 /* include these defs only for POSIX compatablity */
@@ -160,19 +160,14 @@ typedef enum
   REG_E_UNKNOWN = 18 /* unknown error */
 } reg_errcode_t;
 
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 #ifdef __cplusplus
 } // extern "C"
 } // namespace
 #endif
-
-
-#ifdef __BORLANDC__
- #if __BORLANDC__ > 0x520
-  #pragma option pop
- #endif
-#endif
-
 
 //
 // C++ high level wrapper goes here:
@@ -182,12 +177,8 @@ typedef enum
 #include <vector>
 namespace boost{
 
-#ifdef __BORLANDC__
-   #if __BORLANDC__ == 0x530
-    #pragma option push -a4 -b
-   #elif __BORLANDC__ > 0x530
-    #pragma option push -a8 -b
-   #endif
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 class RegEx;
@@ -273,8 +264,8 @@ public:
    friend struct re_detail::pred4;
 };
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace boost

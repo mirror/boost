@@ -24,8 +24,11 @@
 #ifndef BOOST_REGEX_V4_PERL_MATCHER_RECURSIVE_HPP
 #define BOOST_REGEX_V4_PERL_MATCHER_RECURSIVE_HPP
 
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
 #ifdef __BORLANDC__
-#  pragma option push -a8 -b -Vx -Ve -pc -w-8027 -w-8066 -w-8008
+#pragma option push -w-8008 -w-8066 -w-8004
 #endif
 
 namespace boost{
@@ -683,9 +686,11 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::backtrack_till_m
 } // namespace re_detail
 } // namespace boost
 
-
 #ifdef __BORLANDC__
-#  pragma option pop
+#pragma option pop
+#endif
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 #endif

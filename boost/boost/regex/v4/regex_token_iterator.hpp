@@ -40,6 +40,14 @@
 
 namespace boost{
 
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
+#if BOOST_WORKAROUND(BOOST_MSVC, > 1300)
+#  pragma warning(push)
+#  pragma warning(disable:4700)
+#endif
+
 template <class BidirectionalIterator,
           class charT,
           class traits,
@@ -129,7 +137,7 @@ public:
       }
       if(what.prefix().first != what[0].second)
          flags |= match_prev_avail;
-      BidirectionalIterator last_end = what[0].second;
+      BidirectionalIterator last_end(what[0].second);
       if(regex_search(last_end, end, what, *pre, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags)))
       {
          N =0;
@@ -248,6 +256,12 @@ private:
    }
 };
 
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+#  pragma warning(pop)
+#endif
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 } // namespace boost
 

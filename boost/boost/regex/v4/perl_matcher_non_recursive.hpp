@@ -26,8 +26,11 @@
 
 #include <new>
 
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
 #ifdef __BORLANDC__
-#  pragma option push -a8 -b -Vx -Ve -pc -w-8027 -w-8066 -w-8008
+#pragma option push -w-8008 -w-8066 -w-8004
 #endif
 
 namespace boost{
@@ -1156,7 +1159,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_long_set_
    saved_single_repeat<BidiIterator>* pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
 
    // if we have a match, just discard this state:
-   if(r) 
+   if(r)
    {
       destroy_single_repeat();
       return true;
@@ -1194,7 +1197,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_long_set_
    }   
    if(position == last)
    {
-      // can't repeat any more, remove the pushed state: 
+      // can't repeat any more, remove the pushed state:
       destroy_single_repeat();
       if(rep->can_be_null & mask_skip)
          return true;
@@ -1234,7 +1237,10 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_non_greed
 } // namespace boost
 
 #ifdef __BORLANDC__
-#  pragma option pop
+#pragma option pop
+#endif
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 #endif

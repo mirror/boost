@@ -59,6 +59,9 @@
 #  include <boost/detail/allocator.hpp>
 #  include <boost/regex/config/cstring.hpp>
 #  include <boost/throw_exception.hpp>
+#  ifndef BOOST_NO_STD_LOCALE
+#     include <locale>
+#  endif
 #else
    //
    // C build,
@@ -223,7 +226,11 @@ using std::distance;
 #endif
  
 #if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE)
-#  include <boost/regex/config/regex_library_include.hpp>
+#  define BOOST_LIB_NAME "boost_regex"
+#  ifdef BOOST_REGEX_DYN_LINK
+#     define BOOST_DYN_LINK
+#  endif
+#  include <boost/config/auto_link.hpp>
 #endif
 
 /*****************************************************************************
@@ -610,5 +617,6 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL print_regex_library_info();
 #endif
 
 #endif
+
 
 

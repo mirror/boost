@@ -43,7 +43,9 @@ namespace boost{
 
 #ifdef __BORLANDC__
 
-#pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
+#endif
 
 #  ifndef BOOST_REGEX_INSTANTIATE
 #     pragma option push -Jgx
@@ -55,7 +57,9 @@ template class BOOST_REGEX_DECL reg_expression< BOOST_REGEX_CHAR_T >;
 #     pragma option pop
 #  endif
 
-#pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
+#endif
 
 #elif defined(BOOST_MSVC) || defined(__GNUC__)
 

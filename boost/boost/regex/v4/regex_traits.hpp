@@ -32,8 +32,8 @@
 
 namespace boost{
 
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
 
 template <class charT>
@@ -543,18 +543,6 @@ private:
 
 #if !defined(BOOST_NO_STD_LOCALE)
 
-} // namspace boost
-
-#ifdef __BORLANDC__
-  #pragma option pop
-#endif
-#include <locale>
-#ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc
-#endif
-
-namespace boost{
-
 namespace re_detail
 {
 
@@ -806,8 +794,8 @@ class regex_traits : public cpp_regex_traits<charT>
 #error No default localisation model defined
 #endif
 
-#ifdef __BORLANDC__
-  #pragma option pop
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace boost

@@ -25,10 +25,14 @@
 #define BOOST_REGEX_COMPILE_HPP
 
 namespace boost{
-#ifdef __BORLANDC__
-   #pragma option push -a8 -b -Vx -Ve -pc  -w-8004
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_PREFIX
 #endif
-   namespace re_detail{
+#ifdef __BORLANDC__
+#pragma option push -w-8004
+#endif
+
+namespace re_detail{
 
 
 template <class traits>
@@ -2160,9 +2164,11 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fail(unsigned in
       _flags &= ~regex_constants::failbit;
 }
 
-
 #ifdef __BORLANDC__
-  #pragma option pop
+#pragma option pop
+#endif
+#ifdef BOST_HAS_ABI_HEADERS
+#  include BOOST_ABI_SUFFIX
 #endif
 
 } // namespace boost
