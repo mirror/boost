@@ -80,7 +80,7 @@ operator*(const inner_prod::Tin1&, const inner_prod::Tin2&) {
 }
 inner_prod::RetAdd 
 operator+(const inner_prod::T&, 
-	  const inner_prod::RetMult&) {
+          const inner_prod::RetMult&) {
   return inner_prod::RetAdd(boost::dummy_cons);
 }
 
