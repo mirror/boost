@@ -149,7 +149,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<int[2][4][5][6][3]>::value,
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<void>::value, true);
 // cases we would like to succeed but can't implement in the language:
-BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<empty_UDT>::value, true);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<empty_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<empty_POD_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<POD_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<POD_union_UDT>::value, true, false);
