@@ -28,9 +28,7 @@
 
 #include <boost/regex.hpp>
 
-#ifndef BOOST_NO_WREGEX
 #include <cwchar>
-#endif
 #include <cstring>
 #include <cstdio>
 
