@@ -55,9 +55,12 @@ namespace boost {
         public:
             //! this type
             typedef iterator_range<IteratorT> type;
+        	//BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(value_type);
+
             //! Encapsulated value type
             typedef BOOST_DEDUCED_TYPENAME boost::
                 iterator_value<IteratorT>::type value_type;
+
             //! Difference type
             typedef BOOST_DEDUCED_TYPENAME boost::
                 iterator_difference<IteratorT>::type difference_type;
