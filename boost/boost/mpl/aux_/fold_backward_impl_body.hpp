@@ -20,7 +20,7 @@
 
 #   include "boost/mpl/aux_/apply.hpp"
 #   include "boost/mpl/aux_/next.hpp"
-#   include "boost/config.hpp"
+#   include "boost/mpl/aux_/config/ctps.hpp"
 
 #   include "boost/mpl/limits/unrolling.hpp"
 #   include "boost/mpl/aux_/preprocessor/repeat.hpp"
@@ -33,7 +33,7 @@
 
 // local macros, #undef-ined at the end of the header
 
-#   define AUX_ITER_FOLD_FORWARD_STEP(i, unused) \
+#   define AUX_ITER_FOLD_FORWARD_STEP(unused, i, unused2) \
     typedef typename BOOST_MPL_AUX_APPLY2( \
           ForwardOp \
         , BOOST_PP_CAT(fwd_state,i) \
@@ -51,7 +51,7 @@
         )::type BOOST_PP_CAT(bkwd_state,BOOST_PP_DEC(i)); \
     /**/
 
-#   define AUX_ITER_FOLD_BACKWARD_STEP(i, j) \
+#   define AUX_ITER_FOLD_BACKWARD_STEP(unused, i, j) \
     AUX_ITER_FOLD_BACKWARD_STEP_FUNC( \
         BOOST_PP_SUB_D(1,j,i) \
         ) \
@@ -84,7 +84,8 @@ template<
     > 
 struct AUX_FOLD_IMPL_NAME;
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+ && !defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 #   define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(0, BOOST_MPL_UNROLLING_LIMIT, "boost/mpl/aux_/fold_backward_impl_body.hpp"))
@@ -265,6 +266,15 @@ struct AUX_FOLD_CHUNK_NAME<-1>
         typedef typename res_::state state;
         typedef typename res_::iterator iterator;
     };
+
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
+    //: ETI workaround
+    template<> struct result_<int,int,int,int,int>
+    {
+        typedef int state;
+        typedef int iterator;
+    };
+#endif
 };
 
 template<
@@ -326,7 +336,8 @@ struct AUX_FOLD_IMPL_NAME
 #else
 #define i BOOST_PP_FRAME_ITERATION(1)
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+ && !defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template<
       typename First
@@ -393,11 +404,14 @@ struct AUX_FOLD_CHUNK_NAME<BOOST_PP_FRAME_ITERATION(1)>
         typedef BOOST_PP_CAT(iter,i) iterator;
     };
 
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
+    //: ETI workaround
     template<> struct result_<int,int,int,int,int>
     {
         typedef int state;
         typedef int iterator;
     };
+#endif
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

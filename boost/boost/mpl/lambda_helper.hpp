@@ -58,7 +58,7 @@ namespace mpl {
 #else
 #define i BOOST_PP_FRAME_ITERATION(1)
 
-#define MPL_AUX_ARG_TYPEDEF(i, T) \
+#define MPL_AUX_ARG_TYPEDEF(unused, i, T) \
     typedef BOOST_PP_CAT(T, BOOST_PP_INC(i)) \
         BOOST_PP_CAT(arg, BOOST_PP_INC(i)); \
 /**/

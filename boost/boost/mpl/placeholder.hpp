@@ -60,11 +60,6 @@ using boost::mpl::_;
 } // namespace mpl
 } // namespace boost 
 
-#if !defined(_) || defined(BOOST_MPL_NO_UNNAMED_PLACEHOLDER_SUPPORT)
-//: injecting the unnumbered placeholder into global namespace
-using boost::mpl::_;
-#endif
-
 #endif // BOOST_MPL_USE_PREPROCESSED_HEADERS
 #endif // BOOST_MPL_PLACEHOLDER_HPP_INCLUDED
 

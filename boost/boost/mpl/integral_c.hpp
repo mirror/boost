@@ -30,7 +30,8 @@ struct integral_c
     typedef T value_type;
 
     // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
-    // while some other don't like 'value + 1' (Borland)
+    // while some other don't like 'value + 1' (Borland), and some don't like
+    // either
 #if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
  private:
     BOOST_STATIC_CONSTANT(T, next_value = (N + 1));
@@ -38,7 +39,8 @@ struct integral_c
  public:
     typedef integral_c<T, next_value> next;
     typedef integral_c<T, prior_value> prior;
-#elif defined(__BORLANDC__) || defined(__IBMCPP__)
+#elif defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
+   || defined(__IBMCPP__) && (__IBMCPP__ <= 502 || !defined(BOOST_STRICT_CONFIG))
     typedef integral_c<T, (N + 1)> next;
     typedef integral_c<T, (N - 1)> prior;
 #else
@@ -54,8 +56,7 @@ struct integral_c
 };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
- && (!defined(BOOST_MSVC) || BOOST_MSVC != 1301) \
- && !defined(__BORLANDC__)
+ && !defined(__BORLANDC__) || __BORLANDC__ > 0x551
 // 'bool' constant doesn't have 'next'/'prior' members
 template< bool C >
 struct integral_c<bool, C>

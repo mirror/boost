@@ -203,7 +203,7 @@ struct lambda_impl< bind2nd<F,T>, Protect AUX_ARITY_PARAM(-1) >
 
 #else // BOOST_MPL_NO_LAMBDA_HEURISTIC
 
-#   define AUX_LAMBDA_RESULT(i, T) \
+#   define AUX_LAMBDA_RESULT(unused, i, T) \
     BOOST_PP_COMMA_IF(i) \
     typename BOOST_PP_CAT(T, BOOST_PP_INC(i))::type \
     /**/
@@ -249,12 +249,12 @@ struct BOOST_PP_CAT(le_result,i)< true,true,F,AUX_LAMBDA_PARAMS(i, L) >
 
 } // namespace aux
 
-#   define AUX_LAMBDA_INVOCATION(i, T) \
+#   define AUX_LAMBDA_INVOCATION(unused, i, T) \
     typedef lambda_impl< BOOST_PP_CAT(T, BOOST_PP_INC(i)) > \
         BOOST_PP_CAT(l,BOOST_PP_INC(i)); \
     /**/
 
-#   define AUX_IS_LAMBDA_EXPR(i, unused) \
+#   define AUX_IS_LAMBDA_EXPR(unused, i, unused2) \
     BOOST_PP_COMMA_IF(i) \
     BOOST_PP_CAT(l,BOOST_PP_INC(i))::is_le::value \
     /**/
@@ -322,7 +322,7 @@ template<
     >
 struct lambda_impl< F<AUX_LAMBDA_PARAMS(i, T)>, Protect AUX_LAMBDA_IMPL_ARITY >
 {
-#   define AUX_LAMBDA_INVOCATION(i, T) \
+#   define AUX_LAMBDA_INVOCATION(unused, i, T) \
     BOOST_PP_COMMA_IF(i) \
     typename lambda_impl< BOOST_PP_CAT(T, BOOST_PP_INC(i)) >::type \
     /**/

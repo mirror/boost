@@ -40,7 +40,7 @@ struct modulus_c
 #endif
 };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
 template<>
 struct modulus_c<long,0,0>
 {

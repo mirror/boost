@@ -17,18 +17,31 @@
 #ifndef BOOST_MPL_VOID_HPP_INCLUDED
 #define BOOST_MPL_VOID_HPP_INCLUDED
 
+#include "boost/mpl/bool_c.hpp"
+#include "boost/config.hpp"
+
 namespace boost {
 namespace mpl {
 
 struct void_;
 
-namespace aux {
-template< typename > struct reject_if_void_ { enum { value = 1 }; };
-template<> struct reject_if_void_<void_>; // never defined
+template< typename T >
+struct is_void_
+    : false_c
+{
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1300
+    using false_c::value;
+#endif
+};
 
-template< typename > struct reject_if_not_void_; // never defined
-template<> struct reject_if_not_void_<void_> { enum { value = 1 }; };
-}
+template<>
+struct is_void_<void_>
+    : true_c
+{
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1300
+    using true_c::value;
+#endif
+};
 
 } // namespace mpl
 } // namespace boost

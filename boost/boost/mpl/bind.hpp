@@ -23,14 +23,14 @@
 
 #include "boost/mpl/aux_/apply.hpp"
 #include "boost/mpl/aux_/config/bind.hpp"
-#include "boost/mpl/aux_/config/lambda_support.hpp"
+#include "boost/mpl/aux_/config/lambda.hpp"
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include "boost/mpl/placeholder.hpp"
 #   include "boost/mpl/void.hpp"
 #   include "boost/mpl/protect.hpp"
 #   include "boost/mpl/limits/arity.hpp"
-#   include "boost/mpl/aux_/arity.hpp"
+#   include "boost/mpl/aux_/arity_spec.hpp"
 #   include "boost/mpl/aux_/type_wrapper.hpp"
 #   include "boost/mpl/aux_/yes_no.hpp"
 #   include "boost/type_traits/same_traits.hpp"
@@ -100,6 +100,16 @@ namespace mpl {
         , def \
         ) \
     /**/
+
+#if !defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
+#   define AUX_BIND_NESTED_DEFAULT_PARAMS(param, value) \
+    AUX_BIND_DEFAULT_PARAMS(param, value) \
+    /**/
+#else
+#   define AUX_BIND_NESTED_DEFAULT_PARAMS(param, value) \
+    AUX_BIND_PARAMS(param) \
+    /**/
+#endif
 
 namespace aux {
 
@@ -208,11 +218,13 @@ struct replace_unnamed_arg
 
 } // namespace aux
 
+#if !defined(BOOST_MPL_NO_BIND_TEMPLATE)
 // forward declaration
 template<
       typename F, AUX_BIND_DEFAULT_PARAMS(typename T, void_)
     >
 struct bind;
+#endif
 
 // fwd, for 'resolve_bind_arg'/'is_bind_template' specializations
 template< typename F, typename T > struct bind1st;
@@ -229,6 +241,7 @@ struct resolve_bind_arg< arg<N>,AUX_BIND_PARAMS(U) >
     typedef typename AUX_APPLY((arg<N>, AUX_BIND_PARAMS(U)))::type type;
 };
 
+#if !defined(BOOST_MPL_NO_BIND_TEMPLATE)
 template<
       typename F, AUX_BIND_PARAMS(typename T), AUX_BIND_PARAMS(typename U)
     >
@@ -237,6 +250,7 @@ struct resolve_bind_arg< bind<F,AUX_BIND_PARAMS(T)>,AUX_BIND_PARAMS(U) >
     typedef bind<F,AUX_BIND_PARAMS(T)> f_;
     typedef typename AUX_APPLY((f_, AUX_BIND_PARAMS(U)))::type type;
 };
+#endif
 
 template<
       typename F, typename T, AUX_BIND_PARAMS(typename U)
@@ -268,10 +282,12 @@ template< typename T > aux::no_tag is_bind_helper(protect<T>*);
 // agurt, 15/mar/02: MSVC 6.5 fails to properly resolve the overload 
 // in case if we use 'aux::type_wrapper< bind<...> >' here, and all 
 // 'bind' instantiations form a complete type anyway
+#if !defined(BOOST_MPL_NO_BIND_TEMPLATE)
 template<
       typename F, AUX_BIND_PARAMS(typename T)
     >
 aux::yes_tag is_bind_helper(bind<F,AUX_BIND_PARAMS(T)>*);
+#endif
 
 template< int N >
 aux::yes_tag is_bind_helper(arg<N>*);
@@ -289,38 +305,17 @@ template< typename T > struct is_bind_template
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-#if defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
-// MWCW/Borland workaround
-
-template<
-      typename F, AUX_BIND_PARAMS(typename T), int N
-    >
-struct arity< bind<F,AUX_BIND_PARAMS(T)>,N >
-{
-    BOOST_STATIC_CONSTANT(int
-        , value = BOOST_MPL_METAFUNCTION_MAX_ARITY
-        );
-};
-
-template< typename F, typename T, int N >
-struct arity< bind1st<F,T>,N >
-{
-    BOOST_STATIC_CONSTANT(int
-        , value = BOOST_MPL_METAFUNCTION_MAX_ARITY
-        );
-};
-
-template< typename F, typename T, int N >
-struct arity< bind2nd<F,T>,N >
-{
-    BOOST_STATIC_CONSTANT(int
-        , value = BOOST_MPL_METAFUNCTION_MAX_ARITY
-        );
-};
-
-#endif // BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES
-
 } // namespace aux
+
+#if !defined(BOOST_MPL_NO_BIND_TEMPLATE)
+BOOST_MPL_AUX_ARITY_SPEC(
+      BOOST_PP_INC(BOOST_MPL_METAFUNCTION_MAX_ARITY)
+    , bind
+    )
+#endif
+
+BOOST_MPL_AUX_ARITY_SPEC(2,bind1st)
+BOOST_MPL_AUX_ARITY_SPEC(2,bind2nd)
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(0, BOOST_MPL_METAFUNCTION_MAX_ARITY, "boost/mpl/bind.hpp"))
@@ -328,7 +323,7 @@ struct arity< bind2nd<F,T>,N >
 
 // real C++ version is already taken care of
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-   && !defined(BOOST_MPL_NO_BIND_TEMPLATE)
+ && !defined(BOOST_MPL_NO_BIND_TEMPLATE)
 
 namespace aux {
 // apply_count_args
@@ -350,14 +345,14 @@ struct bind
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-       // && !defined(BOOST_MPL_NO_BIND_TEMPLATE)
 
 // bind1st/bind2nd, lightweight, for simple cases/backward compatibility
 template< typename F, typename T >
 struct bind1st
 {
     template<
-          typename U BOOST_MPL_PP_DEF_PARAMS_TAIL(1, typename U)
+          typename U
+        BOOST_MPL_PP_NESTED_DEF_PARAMS_TAIL(1, typename U, void_)
         >
     struct apply
         : BOOST_MPL_AUX_APPLY2(F,T,U)
@@ -369,7 +364,8 @@ template< typename F, typename T >
 struct bind2nd
 {
     template<
-          typename U BOOST_MPL_PP_DEF_PARAMS_TAIL(1, typename U)
+          typename U
+        BOOST_MPL_PP_NESTED_DEF_PARAMS_TAIL(1, typename U, void_)
         >
     struct apply
         : BOOST_MPL_AUX_APPLY2(F,U,T)
@@ -377,6 +373,7 @@ struct bind2nd
     };
 };
 
+#   undef AUX_BIND_NESTED_DEFAULT_PARAMS
 #   undef AUX_BIND_N_SPEC_PARAMS
 #   undef AUX_BIND_N_PARAMS
 #   undef AUX_BIND_DEFAULT_PARAMS
@@ -401,7 +398,7 @@ template<
 struct BOOST_PP_CAT(bind,i)
 {
     template<
-          AUX_BIND_DEFAULT_PARAMS(typename U, void_)
+          AUX_BIND_NESTED_DEFAULT_PARAMS(typename U, void_)
         >
     struct apply
     {
@@ -418,8 +415,10 @@ struct BOOST_PP_CAT(bind,i)
 
 #   endif // BOOST_MPL_NO_UNNAMED_PLACEHOLDER_SUPPORT
 
+#   if i > 0
 #       define BOOST_PP_ITERATION_PARAMS_2 (3,(1, i, "boost/mpl/bind.hpp"))
 #       include BOOST_PP_ITERATE()
+#   endif
 
      public:
         typedef typename BOOST_MPL_AUX_APPLY(
@@ -455,27 +454,14 @@ is_bind_helper(BOOST_PP_CAT(bind,i)<F AUX_BIND_N_PARAMS(i,T)>*);
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-
-// MWCW/Borland workaround
-#if defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
-template<
-      typename F AUX_BIND_N_PARAMS(i, typename T), int N
-    >
-struct arity<
-      BOOST_PP_CAT(bind,i)<F AUX_BIND_N_PARAMS(i,T)>, N
-    >
-{
-    BOOST_STATIC_CONSTANT(int
-        , value = BOOST_MPL_METAFUNCTION_MAX_ARITY
-        );
-};
-#endif
-
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(BOOST_PP_INC(i), BOOST_PP_CAT(bind,i))
 
+
+#   if !defined(BOOST_MPL_NO_BIND_TEMPLATE)
 #   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
+    
 #if i == BOOST_MPL_METAFUNCTION_MAX_ARITY
 
 //: primary template (not a specialization!)
@@ -518,6 +504,7 @@ struct bind_impl_chooser<i>
 } // namespace aux
 
 #   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#   endif // BOOST_MPL_NO_BIND_TEMPLATE
 
 #   undef i
 

@@ -29,14 +29,14 @@ struct protect : T
     typedef protect type;
 };
 
-#if defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
-namespace aux {
-template< typename T, int N > 
-struct arity< protect<T>, N >
+#if defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
+namespace aux { 
+template< int N, typename T >
+struct arity< protect<T>, N > 
     : arity<T,N>
-{
+{ 
 };
-}
+} // namespace aux
 #endif
 
 } // namespace mpl

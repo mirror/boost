@@ -19,6 +19,7 @@
 
 #include "boost/mpl/aux_/apply.hpp"
 #include "boost/mpl/aux_/next.hpp"
+#include "boost/mpl/aux_/config/eti.hpp"
 #include "boost/config.hpp"
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && \

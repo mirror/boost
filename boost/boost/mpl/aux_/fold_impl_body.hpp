@@ -31,7 +31,7 @@
 
 // local macros, #undef-ined at the end of the header
 
-#   define AUX_ITER_FOLD_STEP(i, unused) \
+#   define AUX_ITER_FOLD_STEP(unused, i, unused2) \
     typedef typename BOOST_MPL_AUX_APPLY2( \
           ForwardOp \
         , BOOST_PP_CAT(state,i) \
@@ -252,6 +252,15 @@ struct AUX_FOLD_CHUNK_NAME<-1>
         typedef typename res_::state state;
         typedef typename res_::iterator iterator;
     };
+
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
+    //: ETI workaround
+    template<> struct result_<int,int,int,int>
+    {
+        typedef int state;
+        typedef int iterator;
+    };
+#endif
 };
 
 template<
@@ -353,11 +362,14 @@ struct AUX_FOLD_CHUNK_NAME<BOOST_PP_FRAME_ITERATION(1)>
         typedef BOOST_PP_CAT(iter,BOOST_PP_FRAME_ITERATION(1)) iterator;
     };
 
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
+    //: ETI workaround
     template<> struct result_<int,int,int,int>
     {
         typedef int state;
         typedef int iterator;
     };
+#endif
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

@@ -31,7 +31,7 @@ namespace mpl {
 template< typename Tag >
 struct at_traits
 {
-    template< typename N, typename Sequence > struct algorithm
+    template< typename Sequence, typename N > struct algorithm
     {
         typedef typename advance<
               typename begin<Sequence>::type

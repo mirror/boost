@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost mpl/aux_/arity.hpp header file
+// boost mpl/aux_/arity_spec.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,32 +14,36 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_MPL_AUX_ARITY_HPP_INCLUDED
-#define BOOST_MPL_AUX_ARITY_HPP_INCLUDED
+#ifndef BOOST_MPL_AUX_ARITY_SPEC_HPP_INCLUDED
+#define BOOST_MPL_AUX_ARITY_SPEC_HPP_INCLUDED
 
 #include "boost/mpl/aux_/config/dtp.hpp"
+#include "boost/mpl/aux_/preprocessor/params.hpp"
+#include "boost/mpl/aux_/arity.hpp"
+#include "boost/mpl/limits/arity.hpp"
+#include "boost/config.hpp"
 
 #if defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
+#   define BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(i,type,name) \
+namespace aux { \
+template< int N, BOOST_MPL_PP_PARAMS(i,type T) > \
+struct arity< \
+      name< BOOST_MPL_PP_PARAMS(i,T) > \
+    , N \
+    > \
+{ \
+    BOOST_STATIC_CONSTANT(int \
+        , value = BOOST_MPL_METAFUNCTION_MAX_ARITY \
+        ); \
+}; \
+} \
+/**/
+#else
+#   define BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(i,type,name) /**/
+#endif
 
-#   include "boost/config.hpp"
+#   define BOOST_MPL_AUX_ARITY_SPEC(i,name) \
+    BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(i,typename,name) \
+/**/
 
-namespace boost {
-namespace mpl {
-namespace aux {
-
-// agurt, 15/mar/02: it's possible to implement the template so that it will 
-// "just work" and do not require any specialization, but not on the compilers
-// that require the arity workaround in the first place
-template< typename F, int N >
-struct arity
-{
-    BOOST_STATIC_CONSTANT(int, value = N);
-};
-
-} // namespace aux
-} // namespace mpl
-} // namespace boost
-
-#endif // BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES
-
-#endif // BOOST_MPL_AUX_ARITY_HPP_INCLUDED
+#endif // BOOST_MPL_AUX_ARITY_SPEC_HPP_INCLUDED

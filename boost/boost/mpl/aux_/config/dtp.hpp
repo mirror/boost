@@ -21,12 +21,21 @@
 
 // MWCW 7.x-8.0 "losts" default template parameters of nested class 
 // templates when their owner classes are passed as arguments to other 
-// templates; Borland "forgets" them from the very beginning (if the owner 
-// class is a class template).
+// templates; Borland 5.5.1 "forgets" them from the very beginning (if 
+// the owner class is a class template), and Borland 5.6 isn't even
+// able to compile a definition of nested class template with DTP
+
+#if defined(__BORLANDC__) && __BORLANDC__ >= 0x560 && \
+    (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
+ && !defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
+#   define BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES
+#endif
+
 #if defined(__MWERKS__) && __MWERKS__ <= 0x3001 \
  || defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
+ || defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES) \
  && !defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
-#   define BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES
+#   define BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES
 #endif
 
 #endif // BOOST_MPL_AUX_CONFIG_DTP_HPP_INCLUDED

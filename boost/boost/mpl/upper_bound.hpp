@@ -26,6 +26,7 @@
 #include "boost/mpl/apply.hpp"
 #include "boost/mpl/aux_/apply.hpp"
 #include "boost/mpl/aux_/deref_wknd.hpp"
+#include "boost/mpl/aux_/value_wknd.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 
 namespace boost {
@@ -70,9 +71,9 @@ struct upper_bound_step
                 , T
                 , typename BOOST_MPL_AUX_DEREF_WNKD(middle_)
                 )::type
-            , typename upper_bound_step<offset_::value>
+            , typename upper_bound_step< BOOST_MPL_AUX_VALUE_WKND(offset_)::value >
                 ::template result_< Predicate,T,DeferredIterator >
-            , typename upper_bound_step<Distance - offset_::value - 1>
+            , typename upper_bound_step< Distance - BOOST_MPL_AUX_VALUE_WKND(offset_)::value - 1 >
                 ::template result_< Predicate,T,next<middle_> >
             >::type type;
     };
@@ -91,7 +92,7 @@ struct upper_bound
     typedef typename lambda<Predicate>::type pred_;
 
  public:
-    typedef typename aux::upper_bound_step< size<Sequence>::value >
+    typedef typename aux::upper_bound_step< BOOST_MPL_AUX_VALUE_WKND(size<Sequence>)::value >
         ::template result_< pred_,T,begin<Sequence> >::type type;
 };
 

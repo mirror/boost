@@ -19,9 +19,12 @@
 
 #include "boost/config.hpp"
 
-// flag for MSVC 6.5's so-called "early template instantiation bug"
-#if defined(BOOST_MSVC) && BOOST_MSVC < 1300
-#   define BOOST_MPL_MSVC_ETI_BUG
+// flags for MSVC 6.5's so-called "early template instantiation bug"
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
+#   if BOOST_MSVC < 1300
+#       define BOOST_MPL_MSVC_ETI_BUG
+#   endif
+#   define BOOST_MPL_MSVC_70_ETI_BUG
 #endif
 
 #endif // BOOST_MPL_AUX_CONFIG_ETI_HPP_INCLUDED

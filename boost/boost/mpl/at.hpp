@@ -28,23 +28,23 @@ namespace boost {
 namespace mpl {
 
 template<
-      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(N)
-    , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
+    , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(N)
     >
 struct at
     : at_traits< typename BOOST_MPL_AUX_SEQUENCE_TAG(Sequence) >
-        ::template algorithm< N,Sequence >
+        ::template algorithm< Sequence,N >
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,at,(N,Sequence))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(2,at,(Sequence,N))
 };
 
 template<
-      long N
-    , typename Sequence
+      typename Sequence
+    , long N
     >
 struct at_c
     : at_traits< typename BOOST_MPL_AUX_SEQUENCE_TAG(Sequence) >
-        ::template algorithm< integral_c<long,N>,Sequence >
+        ::template algorithm< Sequence,integral_c<long,N> >
 {
 };
 

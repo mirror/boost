@@ -17,7 +17,9 @@
 #ifndef BOOST_MPL_AUX_VALUE_WKND_HPP_INCLUDED
 #define BOOST_MPL_AUX_VALUE_WKND_HPP_INCLUDED
 
-#if defined(__BORLANDC__)
+#include "boost/config.hpp"
+
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG))
 
 namespace boost { namespace mpl { namespace aux {
 
@@ -29,7 +31,7 @@ struct value_wknd
 
 }}} // namespace boost::mpl::aux
 
-#   define BOOST_MPL_AUX_VALUE_WKND(C) ::boost::mpl::aux::value_wknd<C>
+#   define BOOST_MPL_AUX_VALUE_WKND(C) ::boost::mpl::aux::value_wknd< C >
 
 #else
 

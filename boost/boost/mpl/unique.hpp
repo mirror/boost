@@ -30,6 +30,7 @@
 #include "boost/mpl/void.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_spec.hpp"
+#include "boost/mpl/aux_/config/eti.hpp"
 #include "boost/type_traits/is_same.hpp"
 
 namespace boost {
@@ -75,9 +76,13 @@ struct unique
         >::type fold_result_;
 
  public:
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
     // MSVC6.5 forces us to use 'select1st<fold_result_>::type' instead of 
     // simple 'fold_result_::first' here
     typedef typename select1st<fold_result_>::type type;
+#else
+    typedef typename fold_result_::first type;
+#endif
 };
 
 BOOST_MPL_AUX_VOID_SPEC(1, unique)

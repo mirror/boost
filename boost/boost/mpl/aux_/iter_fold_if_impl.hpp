@@ -126,7 +126,7 @@ struct iter_fold_if_backward_step
 
 // local macros, #undef-ined at the end of the header
 
-#   define AUX_ITER_FOLD_FORWARD_STEP(i, unused) \
+#   define AUX_ITER_FOLD_FORWARD_STEP(unused, i, unused2) \
     typedef iter_fold_if_forward_step< \
           typename BOOST_PP_CAT(forward_step,i)::iterator \
         , typename BOOST_PP_CAT(forward_step,i)::state \
@@ -144,7 +144,7 @@ struct iter_fold_if_backward_step
         > BOOST_PP_CAT(backward_step,BOOST_PP_DEC(i)); \
     /**/
 
-#   define AUX_ITER_FOLD_BACKWARD_STEP(i, unused) \
+#   define AUX_ITER_FOLD_BACKWARD_STEP(unused, i, unused2) \
     AUX_ITER_FOLD_BACKWARD_STEP_FUNC( \
         BOOST_PP_SUB_D(1,BOOST_MPL_UNROLLING_LIMIT,i) \
         ) \
@@ -170,7 +170,7 @@ struct iter_fold_if_impl
 {
  private:
     typedef iter_fold_if_null_step<Iterator,State> forward_step0;
-    BOOST_PP_REPEAT_1ST(
+    BOOST_PP_REPEAT_1(
           BOOST_MPL_UNROLLING_LIMIT
         , AUX_ITER_FOLD_FORWARD_STEP
         , unused
@@ -192,7 +192,7 @@ struct iter_fold_if_impl
             >
         >::type AUX_LAST_BACKWARD_STEP;
 
-    BOOST_PP_REPEAT_1ST(
+    BOOST_PP_REPEAT_1(
           BOOST_MPL_UNROLLING_LIMIT
         , AUX_ITER_FOLD_BACKWARD_STEP
         , unused

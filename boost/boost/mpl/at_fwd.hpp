@@ -21,7 +21,7 @@ namespace boost {
 namespace mpl {
 
 template< typename Tag > struct at_traits;
-template< typename N, typename Sequence > struct at;
+template< typename Sequence, typename N > struct at;
 
 } // namespace mpl
 } // namespace boost

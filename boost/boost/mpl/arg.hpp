@@ -24,7 +24,8 @@
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include "boost/mpl/arg_fwd.hpp"
 #   include "boost/mpl/void.hpp"
-#   include "boost/mpl/aux_/arity.hpp"
+#   include "boost/mpl/aux_/arity_spec.hpp"
+#   include "boost/static_assert.hpp"
 #endif
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
@@ -39,7 +40,8 @@
 #   include "boost/mpl/limits/arity.hpp"
 #   include "boost/mpl/aux_/preprocessor/default_params.hpp"
 #   include "boost/mpl/aux_/preprocessor/params.hpp"
-#   include "boost/mpl/aux_/config/lambda_support.hpp"
+#   include "boost/mpl/aux_/config/lambda.hpp"
+#   include "boost/mpl/aux_/config/dtp.hpp"
 
 #   include "boost/preprocessor/iterate.hpp"
 #   include "boost/preprocessor/inc.hpp"
@@ -50,6 +52,7 @@ namespace boost {
 namespace mpl {
 
 // local macro, #undef-ined at the end of the header
+#if !defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
 #   define AUX_ARG_N_DEFAULT_PARAMS(param,value) \
     BOOST_MPL_PP_DEFAULT_PARAMS( \
           BOOST_MPL_METAFUNCTION_MAX_ARITY \
@@ -57,6 +60,14 @@ namespace mpl {
         , value \
         ) \
     /**/
+#else
+#   define AUX_ARG_N_DEFAULT_PARAMS(param,value) \
+    BOOST_MPL_PP_PARAMS( \
+          BOOST_MPL_METAFUNCTION_MAX_ARITY \
+        , param \
+        ) \
+    /**/
+#endif
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(0, BOOST_MPL_METAFUNCTION_MAX_ARITY, "boost/mpl/arg.hpp"))
@@ -65,18 +76,7 @@ namespace mpl {
 
 #   undef AUX_ARG_N_DEFAULT_PARAMS
 
-#if defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
-// MWCW/Borland workaround
-namespace aux {
-template< int N, int A >
-struct arity< arg<N>, A >
-{
-    BOOST_STATIC_CONSTANT(int
-        , value = BOOST_MPL_METAFUNCTION_MAX_ARITY
-        );
-};
-}
-#endif
+BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(1,int,arg)
 
 } // namespace mpl
 } // namespace boost
@@ -105,10 +105,10 @@ template<> struct arg<i>
     struct apply
     {
         typedef BOOST_PP_CAT(U,i) type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+#if !defined(__BORLANDC__) || (__BORLANDC__ > 0x561 && defined(BOOST_STRICT_CONFIG))
+        BOOST_STATIC_ASSERT(!is_void_<type>::value);
+#endif
+    };
 };
 
 #else
@@ -126,9 +126,9 @@ template<> struct arg<-1>
     struct apply
     {
         typedef U1 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
+#if !defined(__BORLANDC__) || (__BORLANDC__ > 0x561 && defined(BOOST_STRICT_CONFIG))
+        BOOST_STATIC_ASSERT(!is_void_<type>::value);
+#endif
     };
 };
 

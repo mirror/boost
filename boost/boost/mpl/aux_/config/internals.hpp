@@ -19,7 +19,8 @@
 
 #include "boost/config.hpp"
 
-#if defined(BOOST_MSVC) && BOOST_MSVC < 1300
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1300 \
+ && !defined(BOOST_MPL_INTERNALS_USE_ITERATOR_CATEGORY)
 #   define BOOST_MPL_INTERNALS_USE_ITERATOR_CATEGORY
 #endif
 

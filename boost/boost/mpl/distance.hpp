@@ -58,12 +58,13 @@ template<
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Last)
     >
 struct distance
-    : aux::distance_impl<
+{
+    // agurt, 29/sep/02: Borland doesn't like inheritance here
+    typedef typename aux::distance_impl<
           typename BOOST_MPL_AUX_ITERATOR_CATEGORY(First)
         , First
         , Last
-        >
-{
+        >::type type;
 };
 
 #else

@@ -30,13 +30,22 @@ struct int_c
     typedef int value_type;
 
     // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
-    // while some other don't like 'value + 1' (Borland)
-#if !defined(__BORLANDC__)
-    typedef int_c<value + 1> next;
-    typedef int_c<value - 1> prior;
+    // while some other don't like 'value + 1' (Borland), and some don't like
+    // either
+#if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
+ private:
+    BOOST_STATIC_CONSTANT(T, next_value = (N + 1));
+    BOOST_STATIC_CONSTANT(T, prior_value = (N - 1));
+ public:
+    typedef int_c<next_value> next;
+    typedef int_c<prior_value> prior;
+#elif defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
+   || defined(__IBMCPP__) && (__IBMCPP__ <= 502 || !defined(BOOST_STRICT_CONFIG))
+    typedef int_c<(N + 1)> next;
+    typedef int_c<(N - 1)> prior;
 #else
-    typedef int_c<N + 1> next;
-    typedef int_c<N - 1> prior;
+    typedef int_c<(value + 1)> next;
+    typedef int_c<(value - 1)> prior;
 #endif
 
     operator int() const { return this->value; } 

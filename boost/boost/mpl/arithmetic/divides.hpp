@@ -40,7 +40,7 @@ struct divides_c
 #endif
 };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
+#if defined(BOOST_MPL_MSVC_70_ETI_BUG)
 template<>
 struct divides_c<long,0,0,0,0,0>
 {

@@ -17,7 +17,7 @@
 #ifndef BOOST_MPL_AUX_LAMBDA_EXPR_HPP_INCLUDED
 #define BOOST_MPL_AUX_LAMBDA_EXPR_HPP_INCLUDED
 
-#include "boost/mpl/aux_/config/lambda_support.hpp"
+#include "boost/mpl/aux_/config/lambda.hpp"
 
 #if defined(BOOST_MPL_NO_LAMBDA_HEURISTIC)
 #   define BOOST_MPL_AUX_IS_LAMBDA_EXPR(value) /**/

@@ -20,7 +20,7 @@
 #include "boost/mpl/lambda_fwd.hpp"
 #include "boost/mpl/aux_/preprocessor/params.hpp"
 #include "boost/mpl/aux_/lambda_arity_param.hpp"
-#include "boost/mpl/aux_/config/lambda_support.hpp"
+#include "boost/mpl/aux_/config/lambda.hpp"
 
 #if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
 

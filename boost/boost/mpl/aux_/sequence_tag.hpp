@@ -17,6 +17,7 @@
 #ifndef BOOST_MPL_AUX_SEQUENCE_TAG_HPP_INCLUDED
 #define BOOST_MPL_AUX_SEQUENCE_TAG_HPP_INCLUDED
 
+//#include "boost/mpl/aux_/config/internal.hpp"
 #include "boost/config.hpp"
 
 #if defined(BOOST_MPL_INTERNAL_USE_SEQUENCE_TAG) || \

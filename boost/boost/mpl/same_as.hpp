@@ -28,7 +28,7 @@ template< typename T1 >
 struct same_as
 {
     template< typename T2 > struct apply
-#if !defined(__BORLANDC__)
+#if !defined(__BORLANDC__) || (__BORLANDC__ > 0x551 && defined(BOOST_STRICT_CONFIG))
         : is_same<T1,T2>
     {
 #else
@@ -42,7 +42,7 @@ template< typename T1 >
 struct not_same_as
 {
     template< typename T2 > struct apply
-#if !defined(__BORLANDC__)
+#if !defined(__BORLANDC__) || (__BORLANDC__ > 0x51 && defined(BOOST_STRICT_CONFIG))
         : logical_not< is_same<T1,T2> >
     {
 #else

@@ -83,6 +83,7 @@ struct advance_forward
 ///// iteration, depth == 1
 
 #elif BOOST_PP_ITERATION_DEPTH() == 1
+#define i BOOST_PP_FRAME_ITERATION(1)
 
 template<>
 struct advance_forward< BOOST_PP_FRAME_ITERATION(1) >
@@ -91,17 +92,24 @@ struct advance_forward< BOOST_PP_FRAME_ITERATION(1) >
     {
         typedef Iterator iter0;
 
+#if i > 0
 #   define BOOST_PP_ITERATION_PARAMS_2 \
-    (3,(1, BOOST_PP_FRAME_ITERATION(1), "boost/mpl/aux_/advance_forward.hpp"))
+    (3,(1, i, "boost/mpl/aux_/advance_forward.hpp"))
 #   include BOOST_PP_ITERATE()
-
-        typedef BOOST_PP_CAT(iter,BOOST_PP_FRAME_ITERATION(1)) type;
+#endif
+        typedef BOOST_PP_CAT(iter,i) type;
     };
 
 #if defined(BOOST_MPL_MSVC_ETI_BUG)
-    template<> struct apply<int> { typedef int type; };
+    //: ETI workaround
+    template<> struct apply<int>
+    {
+        typedef int type;
+    };
 #endif
 };
+
+#undef i
 
 ///// iteration, depth == 2
 

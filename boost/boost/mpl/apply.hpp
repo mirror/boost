@@ -46,7 +46,8 @@
 #   include "boost/mpl/aux_/preprocessor/add.hpp"
 #   include "boost/mpl/aux_/preprocessor/sub.hpp"
 #   include "boost/mpl/aux_/config/dtp.hpp"
-#   include "boost/mpl/aux_/config/lambda_support.hpp"
+#   include "boost/mpl/aux_/config/eti.hpp"
+#   include "boost/mpl/aux_/config/lambda.hpp"
 
 #   include "boost/preprocessor/comma_if.hpp"
 #   include "boost/preprocessor/inc.hpp"
@@ -221,7 +222,7 @@ struct BOOST_PP_CAT(apply,i)<AUX_APPLY_N_SPEC_PARAMS(i, int)>
     typedef BOOST_PP_CAT(apply,i) type;
 };
 
-#   elif defined(BOOST_NO_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
+#   elif defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
 // MWCW/Borland version
 
 namespace aux {

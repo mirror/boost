@@ -97,7 +97,7 @@ struct lambda
 #else
 #define i BOOST_PP_FRAME_ITERATION(1)
 
-#   define AUX_LAMBDA_INVOCATION(i, T) \
+#   define AUX_LAMBDA_INVOCATION(unused, i, T) \
     , typename lambda< \
           typename f_::BOOST_PP_CAT(arg,BOOST_PP_INC(i)) \
         , false \

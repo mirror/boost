@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------------
-// boost mpl/aux_/config/overload_resolution.hpp header file
+// boost mpl/sizeof.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2002
+// Copyright (c) 2001-02
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -14,15 +14,30 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_MPL_AUX_CONFIG_OVERLOAD_RESOLUTION_HPP_INCLUDED
-#define BOOST_MPL_AUX_CONFIG_OVERLOAD_RESOLUTION_HPP_INCLUDED
+#ifndef BOOST_MPL_SIZEOF_HPP_INCLUDED
+#define BOOST_MPL_SIZEOF_HPP_INCLUDED
 
-#include "boost/config.hpp"
+#include "boost/mpl/size_t_c.hpp"
+#include "boost/mpl/aux_/void_spec.hpp"
+#include "boost/mpl/aux_/lambda_support.hpp"
 
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__MWERKS__) && __MWERKS__ < 0x3001 \
- && !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION)
-#   define BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION
-#endif
+#include <cstddef> // for std::size_t
 
-#endif // BOOST_MPL_AUX_CONFIG_OVERLOAD_RESOLUTION_HPP_INCLUDED
+namespace boost {
+namespace mpl {
+
+template<
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
+    >
+struct sizeof_
+    : size_t_c<sizeof(T)>
+{
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(1,sizeof_,(T))
+};
+
+BOOST_MPL_AUX_VOID_SPEC(1, sizeof_)
+
+} // namespace mpl
+} // namespace boost
+
+#endif // BOOST_MPL_SIZEOF_HPP_INCLUDED
