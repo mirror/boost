@@ -1625,4 +1625,7 @@ inline void swap(
 
 } // namespace boost
 
+// implementation additions
+#include "boost/variant/detail/variant_io.hpp"
+
 #endif // BOOST_VARIANT_VARIANT_HPP

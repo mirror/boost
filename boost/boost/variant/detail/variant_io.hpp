@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost variant/variant_comparison.hpp header file
+// boost variant/detail/variant_io.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,12 +14,11 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_VARIANT_VARIANT_IO_HPP
-#define BOOST_VARIANT_VARIANT_IO_HPP
+#ifndef BOOST_VARIANT_DETAIL_VARIANT_IO_HPP
+#define BOOST_VARIANT_DETAIL_VARIANT_IO_HPP
 
 #include <iosfwd> // for std::basic_ostream forward declare
 
-#include "boost/variant/variant_fwd.hpp"
 #include "boost/variant/static_visitor.hpp"
 
 namespace boost {
@@ -82,4 +81,4 @@ inline std::basic_ostream<E,T>& operator<<(
 
 } // namespace boost
 
-#endif // BOOST_VARIANT_VARIANT_IO_HPP
+#endif // BOOST_VARIANT_DETAIL_VARIANT_IO_HPP

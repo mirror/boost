@@ -20,7 +20,6 @@
 // variant "main"
 #include "boost/variant/variant_fwd.hpp"
 #include "boost/variant/variant.hpp"
-#include "boost/variant/variant_io.hpp"
 
 // common applications
 #include "boost/variant/get.hpp"
