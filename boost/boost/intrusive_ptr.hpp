@@ -19,7 +19,12 @@
 # pragma warning(disable:4284) // odd return type for operator->
 #endif
 
-#include <functional> // std::less
+#include <boost/assert.hpp>
+#include <boost/detail/workaround.hpp>
+
+#include <functional>           // for std::less
+#include <iosfwd>               // for std::basic_ostream
+
 
 namespace boost
 {
@@ -53,14 +58,9 @@ public:
     {
     }
 
-    intrusive_ptr(T * p): p_(p)
+    intrusive_ptr(T * p, bool add_ref = true): p_(p)
     {
-        if(p_ != 0) intrusive_ptr_add_ref(p_);
-    }
-
-    ~intrusive_ptr()
-    {
-        if(p_ != 0) intrusive_ptr_release(p_);
+        if(p_ != 0 && add_ref) intrusive_ptr_add_ref(p_);
     }
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
@@ -75,6 +75,11 @@ public:
     intrusive_ptr(intrusive_ptr const & rhs): p_(rhs.p_)
     {
         if(p_ != 0) intrusive_ptr_add_ref(p_);
+    }
+
+    ~intrusive_ptr()
+    {
+        if(p_ != 0) intrusive_ptr_release(p_);
     }
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) || defined(BOOST_MSVC6_MEMBER_TEMPLATES)
@@ -99,13 +104,6 @@ public:
         return *this;
     }
 
-    void swap(intrusive_ptr & rhs)
-    {
-        T * tmp = p_;
-        p_ = rhs.p_;
-        rhs.p_ = tmp;
-    }
-
     T * get() const
     {
         return p_;
@@ -121,37 +119,24 @@ public:
         return p_;
     }
 
-    bool empty() const
+    typedef T * (intrusive_ptr::*unspecified_bool_type) () const;
+
+    operator unspecified_bool_type () const
     {
-        return p_ == 0;
+        return p_ == 0? 0: &intrusive_ptr::get;
     }
 
-    typedef bool (intrusive_ptr::*bool_type) () const;
-
-    operator bool_type () const
+    void swap(intrusive_ptr & rhs)
     {
-        return p_ == 0? 0: &intrusive_ptr::empty;
+        T * tmp = p_;
+        p_ = rhs.p_;
+        rhs.p_ = tmp;
     }
 
 private:
 
     T * p_;
 };
-
-template<class T> void swap(intrusive_ptr<T> & lhs, intrusive_ptr<T> & rhs)
-{
-    lhs.swap(rhs);
-}
-
-template<class T, class U> intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U> const & p)
-{
-    return dynamic_cast<T *>(p.get());
-}
-
-template<class T, class U> intrusive_ptr<T> static_pointer_cast(intrusive_ptr<U> const & p)
-{
-    return static_cast<T *>(p.get());
-}
 
 template<class T, class U> inline bool operator==(intrusive_ptr<T> const & a, intrusive_ptr<U> const & b)
 {
@@ -161,11 +146,6 @@ template<class T, class U> inline bool operator==(intrusive_ptr<T> const & a, in
 template<class T, class U> inline bool operator!=(intrusive_ptr<T> const & a, intrusive_ptr<U> const & b)
 {
     return a.get() != b.get();
-}
-
-template<class T> inline bool operator<(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
-{
-    return std::less<T *>(a.get(), b.get());
 }
 
 template<class T> inline bool operator==(intrusive_ptr<T> const & a, T * b)
@@ -188,12 +168,58 @@ template<class T> inline bool operator!=(T * a, intrusive_ptr<T> const & b)
     return a != b.get();
 }
 
+template<class T> inline bool operator<(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
+{
+    return std::less<T *>()(a.get(), b.get());
+}
+
+template<class T> void swap(intrusive_ptr<T> & lhs, intrusive_ptr<T> & rhs)
+{
+    lhs.swap(rhs);
+}
+
 // mem_fn support
 
 template<class T> T * get_pointer(intrusive_ptr<T> const & p)
 {
     return p.get();
 }
+
+template<class T, class U> intrusive_ptr<T> static_pointer_cast(intrusive_ptr<U> const & p)
+{
+    return static_cast<T *>(p.get());
+}
+
+template<class T, class U> intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U> const & p)
+{
+    return dynamic_cast<T *>(p.get());
+}
+
+// operator<<
+
+#if defined(__GNUC__) &&  (__GNUC__ < 3)
+
+template<class Y> std::ostream & operator<< (std::ostream & os, intrusive_ptr<Y> const & p)
+{
+    os << p.get();
+    return os;
+}
+
+#else
+
+# if BOOST_WORKAROUND(BOOST_MSVC, <= 1200 && __SGI_STL_PORT)
+// MSVC6 has problems finding std::basic_ostream through the using declaration in namespace _STL
+using std::basic_ostream;
+template<class E, class T, class Y> basic_ostream<E, T> & operator<< (basic_ostream<E, T> & os, intrusive_ptr<Y> const & p)
+# else
+template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::basic_ostream<E, T> & os, intrusive_ptr<Y> const & p)
+# endif 
+{
+    os << p.get();
+    return os;
+}
+
+#endif
 
 } // namespace boost
 
