@@ -89,6 +89,42 @@ otherwise.
 </TR>
 </TABLE>
 
+<h3>Concept Checking Class</h3>
+
+<pre>
+  template &lt;class PMap, class Key&gt;
+  struct LvaluePropertyMapConcept
+  {
+    typedef typename property_traits&lt;PMap&gt;::category Category;
+    typedef boost::lvalue_property_map_tag LvalueTag;
+    typedef const typename property_traits&lt;PMap&gt;::value_type& const_reference;
+    void constraints() {
+      function_requires&lt; ReadWritePropertyMapConcept&lt;PMap, Key&gt; &gt;();
+      function_requires&lt; ConvertibleConcept&lt;Category, LvalueTag&gt; &gt;();
+
+      const_reference ref = pmap[k];
+    }
+    PMap pmap;
+    Key k;
+  };
+
+  template &lt;class PMap, class Key&gt;
+  struct Mutable_LvaluePropertyMapConcept
+  {
+    typedef typename property_traits&lt;PMap&gt;::category Category;
+    typedef boost::lvalue_property_map_tag LvalueTag;
+    typedef typename property_traits&lt;PMap&gt;::value_type& reference;
+    void constraints() { 
+      function_requires&lt; ReadWritePropertyMapConcept&lt;PMap, Key&gt; &gt;();
+      function_requires&lt;ConvertibleConcept&lt;Category, LvalueTag&gt; &gt;();
+
+      reference ref = pmap[k];
+    }
+    PMap pmap;
+    Key k;
+  };
+</pre>
+
 <h3>See Also</h3>
 
 <a href="./property_map.html">Property map concepts</a>

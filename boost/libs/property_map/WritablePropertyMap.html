@@ -123,6 +123,25 @@ namespace boost {
 </pre>
 
 
+<h3>Concept Checking Class</h3>
+
+<pre>
+  template &lt;class PMap, class Key&gt;
+  struct WritablePropertyMapConcept
+  {
+    typedef typename property_traits&lt;PMap&gt;::key_type key_type;
+    typedef typename property_traits&lt;PMap&gt;::category Category;
+    typedef boost::writable_property_map_tag WritableTag;
+    void constraints() {
+      function_requires&lt; ConvertibleConcept&lt;Category, WritableTag&gt; &gt;();
+      put(pmap, k, val);
+    }
+    PMap pmap;
+    Key k;
+    typename property_traits&lt;PMap&gt;::value_type val;
+  };
+</pre>
+
 <h3>See Also</h3>
 
 <a href="./property_map.html">Property map concepts</a>

@@ -62,6 +62,23 @@ The category of the property map must be a type convertible to
 
 </table>
 
+
+<h3>Concept Checking Class</h3>
+
+<pre>
+  template &lt;class PMap, class Key&gt;
+  struct ReadWritePropertyMapConcept
+  {
+    typedef typename property_traits&lt;PMap&gt;::category Category;
+    typedef boost::read_write_property_map_tag ReadWriteTag;
+    void constraints() {
+      function_requires&lt; ReadablePropertyMapConcept&lt;PMap, Key&gt; &gt;();
+      function_requires&lt; WritablePropertyMapConcept&lt;PMap, Key&gt; &gt;();
+      function_requires&lt; ConvertibleConcept&lt;Category, ReadWriteTag&gt; &gt;();
+    }
+  };
+</pre>
+
 <h3>See Also</h3>
 
 <a href="./property_map.html">Property map concepts</a>

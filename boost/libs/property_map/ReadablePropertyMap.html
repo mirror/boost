@@ -97,6 +97,26 @@ The category of the property: a type convertible to
 
 </TABLE>
 
+<h3>Concept Checking Class</h3>
+
+<pre>
+  template &lt;class PMap, class Key&gt;
+  struct ReadablePropertyMapConcept
+  {
+    typedef typename property_traits&lt;PMap&gt;::key_type key_type;
+    typedef typename property_traits&lt;PMap&gt;::category Category;
+    typedef boost::readable_property_map_tag ReadableTag;
+    void constraints() {
+      function_requires&lt; ConvertibleConcept&lt;Category, ReadableTag&gt; &gt;();
+
+      val = get(pmap, k);
+    }
+    PMap pmap;
+    Key k;
+    typename property_traits&lt;PMap&gt;::value_type val;
+  };
+</pre>
+
 <h3>See Also</h3>
 
 <a href="./property_map.html">Property map concepts</a>
