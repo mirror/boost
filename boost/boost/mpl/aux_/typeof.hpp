@@ -19,7 +19,7 @@
 
 #if defined(__BORLANDC__) 
 #   define BOOST_MPL_AUX_TYPEOF(T,x) typename T::value_type
-#elif defined(__MWERKS__) || defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__EDG_VERSION__) && __EDG_VERSION__ <= 241
+#elif defined(__MWERKS__) || defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__EDG_VERSION__) && __EDG_VERSION__ <= 243
 #   define BOOST_MPL_AUX_TYPEOF(T,x) long
 #elif defined(__GCC__)
 #   define BOOST_MPL_AUX_TYPEOF(T,x) __typeof__(x)
