@@ -10,6 +10,7 @@
   <xsl:import href="chunk-common.xsl"/>
   <xsl:import href="docbook-layout.xsl"/>
   <xsl:import href="navbar.xsl"/>
+  <xsl:import href="relative-href.xsl"/>
 
   <xsl:param name="html.stylesheet" select="'boostbook.css'"/>
   <xsl:param name="navig.graphics" select="1"/>
@@ -197,4 +198,45 @@ set       toc,title
         <xsl:apply-templates/>
      </div>
   </xsl:template>
- </xsl:stylesheet>
+
+<!-- ============================================================ -->
+
+<xsl:template name="output.html.stylesheets">
+    <xsl:param name="stylesheets" select="''"/>
+
+    <xsl:choose>
+        <xsl:when test="contains($stylesheets, ' ')">
+            <link rel="stylesheet">
+                <xsl:attribute name="href">
+                    <xsl:call-template name="href.target.relative">
+                        <xsl:with-param name="target" select="substring-before($stylesheets, ' ')"/>
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:if test="$html.stylesheet.type != ''">
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$html.stylesheet.type"/>
+                    </xsl:attribute>
+                </xsl:if>
+            </link>
+            <xsl:call-template name="output.html.stylesheets">
+                <xsl:with-param name="stylesheets" select="substring-after($stylesheets, ' ')"/>
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$stylesheets != ''">
+            <link rel="stylesheet">
+                <xsl:attribute name="href">
+                    <xsl:call-template name="href.target.relative">
+                        <xsl:with-param name="target" select="$stylesheets"/>
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:if test="$html.stylesheet.type != ''">
+                    <xsl:attribute name="type">
+                        <xsl:value-of select="$html.stylesheet.type"/>
+                    </xsl:attribute>
+                </xsl:if>
+            </link>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+</xsl:stylesheet>
