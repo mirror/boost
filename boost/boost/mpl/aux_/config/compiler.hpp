@@ -27,7 +27,7 @@
 #elif defined(BOOST_MSVC) && BOOST_MSVC == 1300
 #   define BOOST_MPL_COMPILER_DIR msvc70
 
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && !defined(__EDG_VERSION__)
 #   define BOOST_MPL_COMPILER_DIR gcc
 
 #elif defined(__BORLANDC__) 

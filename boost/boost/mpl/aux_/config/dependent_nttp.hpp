@@ -27,7 +27,7 @@
 #if    !defined(BOOST_NO_DEPENDENT_NON_TYPE_PARAMETER_IN_PARTIAL_SPECIALIZATION) \
     && !defined(BOOST_MPL_PREPROCESSING_MODE) \
     && (   defined(__EDG__) && (__EDG_VERSION__ <= 300 || !defined(BOOST_STRICT_CONFIG)) \
-        || defined(__GNUC__) && (__GNUC__ < 3 || __GNUC__ == 3 && __GNUC_MINOR__ <= 2 \
+        || defined(__GNUC__) && !defined(__EDG_VERSION__) && (__GNUC__ < 3 || __GNUC__ == 3 && __GNUC_MINOR__ <= 2 \
         || !defined(BOOST_STRICT_CONFIG)) \
         )
 
