@@ -91,11 +91,11 @@ namespace boost {
   public:
       token_iterator():begin_(),end_(),valid_(false),tok_() { }
 
-      token_iterator(TokenizerFunc f, Iterator begin, Iterator end = Iterator())
-          : f_(f),begin_(begin),end_(end),valid_(false),tok_(){ initialize(); }
+      token_iterator(TokenizerFunc f, Iterator begin, Iterator e = Iterator())
+          : f_(f),begin_(begin),end_(e),valid_(false),tok_(){ initialize(); }
 
-      token_iterator(Iterator begin, Iterator end = Iterator())
-            : f_(),begin_(begin),end_(end),valid_(false),tok_() {initialize();}
+      token_iterator(Iterator begin, Iterator e = Iterator())
+            : f_(),begin_(begin),end_(e),valid_(false),tok_() {initialize();}
 
       template<class OtherIter>
       token_iterator(
