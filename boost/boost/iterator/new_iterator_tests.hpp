@@ -1,6 +1,15 @@
 #ifndef BOOST_NEW_ITERATOR_TESTS_HPP
 # define BOOST_NEW_ITERATOR_TESTS_HPP
 
+//
+// Copyright (c) Thomas Witt 2002.
+//
+// Use, modification and distribution is subject to the
+// Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+
 // This is meant to be the beginnings of a comprehensive, generic
 // test suite for STL concepts such as iterators and containers.
 //
