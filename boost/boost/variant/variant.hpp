@@ -70,6 +70,7 @@
 #include "boost/mpl/front.hpp"
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/if.hpp"
+#include "boost/mpl/index_of.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iterator_range.hpp"
@@ -533,11 +534,48 @@ public: // structors
     {
     }
 
-public: // visitor interface
+private: // helpers, for visitor interface (below)
 
     template <typename LhsT>
-        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    internal_visit(LhsT& lhs_content, int)
+    void backup_assign_impl(
+          LhsT& lhs_content
+        , mpl::true_// has_nothrow_move
+        )
+    {
+        // Move lhs content to backup...
+        LhsT backup_lhs_content(
+              ::boost::detail::variant::move(lhs_content)
+            ); // nothrow
+
+        // ...destroy lhs content...
+        lhs_content.~LhsT(); // nothrow
+
+        try
+        {
+            // ...and attempt to copy rhs content into lhs storage:
+            new(lhs_.storage_.address()) RhsT(rhs_content_);
+        }
+        catch (...)
+        {
+            // In case of failure, restore backup content to lhs storage...
+            new(lhs_.storage_.address())
+                LhsT(
+                      ::boost::detail::variant::move(backup_lhs_content)
+                    ); // nothrow
+
+            // ...and rethrow:
+            throw;
+        }
+
+        // In case of success, indicate new content type:
+        lhs_.indicate_which(rhs_which_); // nothrow
+    }
+
+    template <typename LhsT>
+    void backup_assign_impl(
+          LhsT& lhs_content
+        , mpl::false_// has_nothrow_move
+        )
     {
         // Backup lhs content...
         LhsT* backup_lhs_ptr = new LhsT(lhs_content);
@@ -563,13 +601,23 @@ public: // visitor interface
             throw;
         }
 
-        // In case of success, indicate success...
+        // In case of success, indicate new content type...
         lhs_.indicate_which(rhs_which_); // nothrow
 
         // ...and delete backup:
         delete backup_lhs_ptr; // nothrow
+    }
 
-        BOOST_VARIANT_AUX_RETURN_VOID;
+public: // visitor interface
+
+    template <typename LhsT>
+        BOOST_VARIANT_AUX_RETURN_VOID_TYPE
+    internal_visit(LhsT& lhs_content, int)
+    {
+        typedef typename has_nothrow_move_constructor<LhsT>::type
+            nothrow_move;
+
+        backup_assign_impl( lhs_content, nothrow_move() );
     }
 
 };
@@ -1382,7 +1430,7 @@ private: // helpers, for modifiers (below)
             new(lhs_.storage_.address())
                 RhsT( rhs_content ); // nothrow
 
-            // ...and indicate success:
+            // ...and indicate new content type:
             lhs_.indicate_which(rhs_which_); // nothrow
         }
 
@@ -1404,7 +1452,7 @@ private: // helpers, for modifiers (below)
             new(lhs_.storage_.address())
                 RhsT( detail::variant::move(temp) ); // nothrow
 
-            // ...and indicate success:
+            // ...and indicate new content type:
             lhs_.indicate_which(rhs_which_); // nothrow
         }
 
@@ -1431,14 +1479,18 @@ private: // helpers, for modifiers (below)
                 new (lhs_.storage_.address())
                     fallback_type_; // nothrow
 
-                // ...indicate the construction...
-                lhs_.indicate_which(0);
+                // ...indicate construction of fallback type...
+                lhs_.indicate_which(
+                      ::boost::mpl::index_of<
+                          internal_types, fallback_type_
+                        >::type::value
+                    ); // nothrow
 
                 // ...and rethrow:
                 throw;
             }
 
-            // In the event of success, indicate success:
+            // In the event of success, indicate new content type:
             lhs_.indicate_which(rhs_which_); // nothrow
         }
 
@@ -1561,15 +1613,8 @@ public: // queries
 
     bool empty() const
     {
-        typedef typename mpl::begin<internal_types>::type
-            begin_it;
-
-        typedef typename mpl::find<
+        typedef typename mpl::index_of<
               internal_types, boost::empty
-            >::type empty_it;
-
-        typedef typename mpl::distance<
-              begin_it, empty_it
             >::type empty_index;
 
         return which() == empty_index::value;
