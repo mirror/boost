@@ -34,9 +34,9 @@
 
 #if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730
 // Work around a compiler bug.
-// boost::python::detail::function has to be seen by the compiler before the
+// boost::python::objects::function has to be seen by the compiler before the
 // boost::function class template.
-namespace boost { namespace python { namespace detail {
+namespace boost { namespace python { namespace objects {
   class function;
 }}}
 #endif
