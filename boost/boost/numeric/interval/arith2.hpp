@@ -156,7 +156,7 @@ interval<T, Policies> pow(const interval<T, Policies>& x, int pwr)
     else
       return I(1);
   else if (pwr < 0)
-    return multiplicative_inverse(pow(x, -pwr));
+    return interval_lib::multiplicative_inverse(pow(x, -pwr));
 
   typename Policies::rounding rnd;
   
