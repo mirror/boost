@@ -61,7 +61,7 @@ namespace boost {
           iter = std::find_if(iter, end, std::not1(is_disconnected()));
         }
 
-        typename slot_call_iterator::reference
+        typename inherited::reference
         dereference() const
         {
           if (!cache.get()) {
