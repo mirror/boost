@@ -166,9 +166,9 @@ public:
 
     explicit list1(A1 a1): a1_(a1) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -212,11 +212,11 @@ public:
 
     list2(A1 a1, A2 a2): a1_(a1), a2_(a2) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
-    A2 operator[] (arg<2>) const { return a2_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
+    A2 operator[] (boost::arg<2>) const { return a2_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
-    A2 operator[] (arg<2> (*) ()) const { return a2_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -262,13 +262,13 @@ public:
 
     list3(A1 a1, A2 a2, A3 a3): a1_(a1), a2_(a2), a3_(a3) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
-    A2 operator[] (arg<2>) const { return a2_; }
-    A3 operator[] (arg<3>) const { return a3_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
+    A2 operator[] (boost::arg<2>) const { return a2_; }
+    A3 operator[] (boost::arg<3>) const { return a3_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
-    A2 operator[] (arg<2> (*) ()) const { return a2_; }
-    A3 operator[] (arg<3> (*) ()) const { return a3_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -316,15 +316,15 @@ public:
 
     list4(A1 a1, A2 a2, A3 a3, A4 a4): a1_(a1), a2_(a2), a3_(a3), a4_(a4) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
-    A2 operator[] (arg<2>) const { return a2_; }
-    A3 operator[] (arg<3>) const { return a3_; }
-    A4 operator[] (arg<4>) const { return a4_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
+    A2 operator[] (boost::arg<2>) const { return a2_; }
+    A3 operator[] (boost::arg<3>) const { return a3_; }
+    A4 operator[] (boost::arg<4>) const { return a4_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
-    A2 operator[] (arg<2> (*) ()) const { return a2_; }
-    A3 operator[] (arg<3> (*) ()) const { return a3_; }
-    A4 operator[] (arg<4> (*) ()) const { return a4_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (boost::arg<4> (*) ()) const { return a4_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -374,17 +374,17 @@ public:
 
     list5(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5): a1_(a1), a2_(a2), a3_(a3), a4_(a4), a5_(a5) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
-    A2 operator[] (arg<2>) const { return a2_; }
-    A3 operator[] (arg<3>) const { return a3_; }
-    A4 operator[] (arg<4>) const { return a4_; }
-    A5 operator[] (arg<5>) const { return a5_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
+    A2 operator[] (boost::arg<2>) const { return a2_; }
+    A3 operator[] (boost::arg<3>) const { return a3_; }
+    A4 operator[] (boost::arg<4>) const { return a4_; }
+    A5 operator[] (boost::arg<5>) const { return a5_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
-    A2 operator[] (arg<2> (*) ()) const { return a2_; }
-    A3 operator[] (arg<3> (*) ()) const { return a3_; }
-    A4 operator[] (arg<4> (*) ()) const { return a4_; }
-    A5 operator[] (arg<5> (*) ()) const { return a5_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (boost::arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (boost::arg<5> (*) ()) const { return a5_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -436,19 +436,19 @@ public:
 
     list6(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6): a1_(a1), a2_(a2), a3_(a3), a4_(a4), a5_(a5), a6_(a6) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
-    A2 operator[] (arg<2>) const { return a2_; }
-    A3 operator[] (arg<3>) const { return a3_; }
-    A4 operator[] (arg<4>) const { return a4_; }
-    A5 operator[] (arg<5>) const { return a5_; }
-    A6 operator[] (arg<6>) const { return a6_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
+    A2 operator[] (boost::arg<2>) const { return a2_; }
+    A3 operator[] (boost::arg<3>) const { return a3_; }
+    A4 operator[] (boost::arg<4>) const { return a4_; }
+    A5 operator[] (boost::arg<5>) const { return a5_; }
+    A6 operator[] (boost::arg<6>) const { return a6_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
-    A2 operator[] (arg<2> (*) ()) const { return a2_; }
-    A3 operator[] (arg<3> (*) ()) const { return a3_; }
-    A4 operator[] (arg<4> (*) ()) const { return a4_; }
-    A5 operator[] (arg<5> (*) ()) const { return a5_; }
-    A6 operator[] (arg<6> (*) ()) const { return a6_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (boost::arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (boost::arg<5> (*) ()) const { return a5_; }
+    A6 operator[] (boost::arg<6> (*) ()) const { return a6_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -502,21 +502,21 @@ public:
 
     list7(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7): a1_(a1), a2_(a2), a3_(a3), a4_(a4), a5_(a5), a6_(a6), a7_(a7) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
-    A2 operator[] (arg<2>) const { return a2_; }
-    A3 operator[] (arg<3>) const { return a3_; }
-    A4 operator[] (arg<4>) const { return a4_; }
-    A5 operator[] (arg<5>) const { return a5_; }
-    A6 operator[] (arg<6>) const { return a6_; }
-    A7 operator[] (arg<7>) const { return a7_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
+    A2 operator[] (boost::arg<2>) const { return a2_; }
+    A3 operator[] (boost::arg<3>) const { return a3_; }
+    A4 operator[] (boost::arg<4>) const { return a4_; }
+    A5 operator[] (boost::arg<5>) const { return a5_; }
+    A6 operator[] (boost::arg<6>) const { return a6_; }
+    A7 operator[] (boost::arg<7>) const { return a7_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
-    A2 operator[] (arg<2> (*) ()) const { return a2_; }
-    A3 operator[] (arg<3> (*) ()) const { return a3_; }
-    A4 operator[] (arg<4> (*) ()) const { return a4_; }
-    A5 operator[] (arg<5> (*) ()) const { return a5_; }
-    A6 operator[] (arg<6> (*) ()) const { return a6_; }
-    A7 operator[] (arg<7> (*) ()) const { return a7_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (boost::arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (boost::arg<5> (*) ()) const { return a5_; }
+    A6 operator[] (boost::arg<6> (*) ()) const { return a6_; }
+    A7 operator[] (boost::arg<7> (*) ()) const { return a7_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -572,23 +572,23 @@ public:
 
     list8(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8): a1_(a1), a2_(a2), a3_(a3), a4_(a4), a5_(a5), a6_(a6), a7_(a7), a8_(a8) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
-    A2 operator[] (arg<2>) const { return a2_; }
-    A3 operator[] (arg<3>) const { return a3_; }
-    A4 operator[] (arg<4>) const { return a4_; }
-    A5 operator[] (arg<5>) const { return a5_; }
-    A6 operator[] (arg<6>) const { return a6_; }
-    A7 operator[] (arg<7>) const { return a7_; }
-    A8 operator[] (arg<8>) const { return a8_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
+    A2 operator[] (boost::arg<2>) const { return a2_; }
+    A3 operator[] (boost::arg<3>) const { return a3_; }
+    A4 operator[] (boost::arg<4>) const { return a4_; }
+    A5 operator[] (boost::arg<5>) const { return a5_; }
+    A6 operator[] (boost::arg<6>) const { return a6_; }
+    A7 operator[] (boost::arg<7>) const { return a7_; }
+    A8 operator[] (boost::arg<8>) const { return a8_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
-    A2 operator[] (arg<2> (*) ()) const { return a2_; }
-    A3 operator[] (arg<3> (*) ()) const { return a3_; }
-    A4 operator[] (arg<4> (*) ()) const { return a4_; }
-    A5 operator[] (arg<5> (*) ()) const { return a5_; }
-    A6 operator[] (arg<6> (*) ()) const { return a6_; }
-    A7 operator[] (arg<7> (*) ()) const { return a7_; }
-    A8 operator[] (arg<8> (*) ()) const { return a8_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (boost::arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (boost::arg<5> (*) ()) const { return a5_; }
+    A6 operator[] (boost::arg<6> (*) ()) const { return a6_; }
+    A7 operator[] (boost::arg<7> (*) ()) const { return a7_; }
+    A8 operator[] (boost::arg<8> (*) ()) const { return a8_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -646,25 +646,25 @@ public:
 
     list9(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9): a1_(a1), a2_(a2), a3_(a3), a4_(a4), a5_(a5), a6_(a6), a7_(a7), a8_(a8), a9_(a9) {}
 
-    A1 operator[] (arg<1>) const { return a1_; }
-    A2 operator[] (arg<2>) const { return a2_; }
-    A3 operator[] (arg<3>) const { return a3_; }
-    A4 operator[] (arg<4>) const { return a4_; }
-    A5 operator[] (arg<5>) const { return a5_; }
-    A6 operator[] (arg<6>) const { return a6_; }
-    A7 operator[] (arg<7>) const { return a7_; }
-    A8 operator[] (arg<8>) const { return a8_; }
-    A9 operator[] (arg<9>) const { return a9_; }
+    A1 operator[] (boost::arg<1>) const { return a1_; }
+    A2 operator[] (boost::arg<2>) const { return a2_; }
+    A3 operator[] (boost::arg<3>) const { return a3_; }
+    A4 operator[] (boost::arg<4>) const { return a4_; }
+    A5 operator[] (boost::arg<5>) const { return a5_; }
+    A6 operator[] (boost::arg<6>) const { return a6_; }
+    A7 operator[] (boost::arg<7>) const { return a7_; }
+    A8 operator[] (boost::arg<8>) const { return a8_; }
+    A9 operator[] (boost::arg<9>) const { return a9_; }
 
-    A1 operator[] (arg<1> (*) ()) const { return a1_; }
-    A2 operator[] (arg<2> (*) ()) const { return a2_; }
-    A3 operator[] (arg<3> (*) ()) const { return a3_; }
-    A4 operator[] (arg<4> (*) ()) const { return a4_; }
-    A5 operator[] (arg<5> (*) ()) const { return a5_; }
-    A6 operator[] (arg<6> (*) ()) const { return a6_; }
-    A7 operator[] (arg<7> (*) ()) const { return a7_; }
-    A8 operator[] (arg<8> (*) ()) const { return a8_; }
-    A9 operator[] (arg<9> (*) ()) const { return a9_; }
+    A1 operator[] (boost::arg<1> (*) ()) const { return a1_; }
+    A2 operator[] (boost::arg<2> (*) ()) const { return a2_; }
+    A3 operator[] (boost::arg<3> (*) ()) const { return a3_; }
+    A4 operator[] (boost::arg<4> (*) ()) const { return a4_; }
+    A5 operator[] (boost::arg<5> (*) ()) const { return a5_; }
+    A6 operator[] (boost::arg<6> (*) ()) const { return a6_; }
+    A7 operator[] (boost::arg<7> (*) ()) const { return a7_; }
+    A8 operator[] (boost::arg<8> (*) ()) const { return a8_; }
+    A9 operator[] (boost::arg<9> (*) ()) const { return a9_; }
 
     template<class T> T & operator[] (value<T> & v) const { return v.get(); }
 
@@ -989,12 +989,12 @@ template<class T> struct add_value< reference_wrapper<T> >
 
 template<int I> struct add_value< arg<I> >
 {
-    typedef arg<I> type;
+    typedef boost::arg<I> type;
 };
 
 template<int I> struct add_value< arg<I> (*) () >
 {
-    typedef arg<I> (*type) ();
+    typedef boost::arg<I> (*type) ();
 };
 
 template<class R, class F, class L> struct add_value< bind_t<R, F, L> >
