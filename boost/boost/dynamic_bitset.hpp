@@ -15,6 +15,10 @@
 // - changed macro test for old iostreams [GP]
 // - removed #include <vector> for now. [JGS]
 // - Added __GNUC__ to compilers that cannot handle the constructor from basic_string. [JGS]
+// - corrected to_block_range [GP]
+// - corrected from_block_range [GP]
+// - Removed __GNUC__ from compilers that cannot handle the constructor
+//     from basic_string and added the workaround suggested by GP. [JGS]
 
 #ifndef BOOST_DYNAMIC_BITSET_HPP
 #define BOOST_DYNAMIC_BITSET_HPP
@@ -36,8 +40,7 @@
 #include "boost/dynamic_bitset_fwd.hpp" //G.P.S.
 #include "boost/detail/dynamic_bitset.hpp"
 
-#if defined (__STL_CONFIG_H) && (!defined (__SGI_STL_PORT) ||                  \
-                                  defined (__STL_USE_NEW_IOSTREAMS) ) /* old sgi */
+#if defined (__STL_CONFIG_H) && !defined (__STL_USE_NEW_IOSTREAMS)
 #define BOOST_OLD_IOSTREAMS
 #endif
 
@@ -171,9 +174,7 @@ public:
                const Allocator& alloc = Allocator());
 
     // from string
-#if defined(BOOST_OLD_IOSTREAMS) || defined(__BORLANDC__) || defined(__GNUC__)
-    // The appearance of __GNUC__ in the above #if is due to a bug in g++
-    // concerning the expression std::basic_string<CharT, Traits, Alloc>::npos. -JGS
+#if defined(BOOST_OLD_IOSTREAMS) || defined(__BORLANDC__)
     explicit
     dynamic_bitset(const std::string& s,
                std::string::size_type pos = 0, 
@@ -182,12 +183,14 @@ public:
         : detail::dynamic_bitset_base<Block, Allocator>
             (std::min(n, s.size() - pos), alloc)
 #else
+    // The parenthesis around std::basic_string<CharT, Traits, Alloc>::npos
+    // in the code below are to avoid a g++ 3.2 bug. -JGS
     template <typename CharT, typename Traits, typename Alloc>
     explicit
     dynamic_bitset(const std::basic_string<CharT, Traits, Alloc>& s, 
         typename std::basic_string<CharT, Traits, Alloc>::size_type pos = 0, 
         typename std::basic_string<CharT, Traits, Alloc>::size_type n 
-            = std::basic_string<CharT, Traits, Alloc>::npos,
+            = (std::basic_string<CharT, Traits, Alloc>::npos),
         const Allocator& alloc = Allocator())
         : detail::dynamic_bitset_base<Block, Allocator>
             (std::min(n, s.size() - pos), alloc)
@@ -310,10 +313,13 @@ public:
     friend void to_block_range(const dynamic_bitset<B, A>& b, 
                                BlockOutputIterator result);
 
+    template <typename BlockIterator, typename B, typename A>
+    friend void from_block_range(BlockIterator first, BlockIterator last,
+                                 dynamic_bitset<B, A>& result);
+
     template <typename B, typename A, typename CharT, typename Alloc>
     friend void dump_to_string(const dynamic_bitset<B, A>& b, 
                                std::basic_string<CharT, Alloc>& s);
-
 #endif
 
 private:
@@ -343,14 +349,6 @@ public:
 	        assert(s[pos + tot - i - 1] == '0');
             }
         }       
-    }
-
-    template <typename BlockIterator>
-    void from_block_range(BlockIterator first, BlockIterator last)
-    {
-        // PRE: distance(first, last) == size() / bits_per_block
-        for (size_type i = 0; first != last; ++first, ++i)
-            this->m_bits[i] = *first;
     }
 
 };
@@ -426,7 +424,10 @@ void
 to_block_range(const dynamic_bitset<Block, Allocator>& b, 
                BlockOutputIterator result);
 
-
+template <typename BlockIterator, typename B, typename A>
+inline void
+from_block_range(BlockIterator first, BlockIterator last,
+                 dynamic_bitset<B, A>& result);
 
 //=============================================================================
 // dynamic_bitset implementation
@@ -993,10 +994,17 @@ void
 to_block_range(const dynamic_bitset<Block, Allocator>& b, 
                BlockOutputIterator result)
 {
-  
-  //std::copy(m.m_bits, m.m_num_bits, result);
-  //[gps] Did you mean this?
-    std::copy (b.m_bits, b.m_bits + b.m_num_bits, result); 
+    assert(b.size() != 0 || b.num_blocks() == 0);
+    std::copy (b.m_bits, b.m_bits + b.m_num_blocks, result); 
+}
+
+template <typename BlockIterator, typename B, typename A>
+inline void
+from_block_range(BlockIterator first, BlockIterator last,
+                 dynamic_bitset<B, A>& result)
+{
+    // PRE: distance(first, last) == numblocks()
+    std::copy (first, last, result.m_bits);
 }
 
 template <typename Block, typename Allocator>
