@@ -243,13 +243,14 @@ namespace boost { namespace numeric { namespace ublas {
 
 
     // Default map type is simply forwarded to std::map
-    // FIXME should use ALLOC for map but std::pair<const I, T> fails
+    // FIXME should use ALLOC for map but std::pair<const I, T> and std::pair<I,T> fail
     template<class I, class T, class ALLOC>
-    class map_std : public std::map<I, T> {
+    class map_std : public std::map<I, T /*, ALLOC */> {
     };
 
 
     // Map array
+    //  Implementation requires pair<I, T> allocator definition (without const)
     template<class I, class T, class ALLOC>
     class map_array {
     public:
