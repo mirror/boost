@@ -301,7 +301,7 @@ using std::abs;
 template <typename IntType>
 inline rational<IntType> abs(const rational<IntType>& r)
 {
-#ifndef BOOST_NO_STDC_NAMESPACE
+#if !defined(BOOST_NO_STDC_NAMESPACE) && !defined(BOOST_MSVC)
     // We want to use abs() unadorned below, so that if IntType is a
     // user-defined type, the name lookup rules will work to find an
     // appropriate abs() defined for IntType.
