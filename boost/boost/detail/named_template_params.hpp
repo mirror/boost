@@ -8,7 +8,6 @@
 #define BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
 
 #include <boost/type_traits/conversion_traits.hpp>
-#include <boost/type_traits/ice.hpp>
 
 namespace boost {
   namespace detail {
@@ -27,14 +26,8 @@ namespace boost {
      typedef detail::dummy_default_gen type;
    };
 
-    template <class T> struct is_default { 
-      enum { value = false }; 
-      typedef boost::type_traits::no_type type;
-    };
-    template <> struct is_default<default_argument> { 
-      enum { value = true }; 
-      typedef boost::type_traits::yes_type type;
-    };
+    template <class T> struct is_default { enum { value = false };  };
+    template <> struct is_default<default_argument> { enum { value = true }; };
 
     struct choose_default {
       template <class Arg, class DefaultGen, class Base, class Traits>
@@ -49,18 +42,17 @@ namespace boost {
 	typedef Arg type;
       };
     };
-    template <class UseDefault>
+    template <bool UseDefault>
     struct choose_arg_or_default { typedef choose_arg type; };
     template <>
-    struct choose_arg_or_default<boost::type_traits::yes_type> {
+    struct choose_arg_or_default<true> {
       typedef choose_default type;
     };
     
     template <class Arg, class DefaultGen, class Base, class Traits>
     class resolve_default {
-      typedef typename choose_arg_or_default<
-        is_default<Arg>::type
-        >::type Selector;
+      enum { is_def = is_default<Arg>::value };
+      typedef typename choose_arg_or_default<is_def>::type Selector;
     public:
       typedef typename Selector
 	::template bind<Arg, DefaultGen, Base, Traits>::type type;
