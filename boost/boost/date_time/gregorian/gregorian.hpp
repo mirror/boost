@@ -18,6 +18,7 @@
 
 #include "boost/date_time/compiler_config.hpp"
 #include "boost/date_time/gregorian/gregorian_types.hpp"
+#include "boost/date_time/gregorian/conversion.hpp"
 #if defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
 #include "boost/date_time/gregorian/formatters_limited.hpp"
 #else
