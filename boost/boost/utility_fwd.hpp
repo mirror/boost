@@ -18,17 +18,6 @@ namespace boost
 template < typename MemberType, int UniqueID = 0 >
     class base_from_member;
 
-//  From <boost/noncopyable.hpp>  --------------------------------------------//
-
-  namespace noncopyable_
-  {
-    class noncopyable;
-  }
-
-  typedef noncopyable_::noncopyable noncopyable;
-  
-// Also has a few function templates
-
 }  // namespace boost
 
 
