@@ -16,6 +16,8 @@
 # include <boost/preprocessor/inc.hpp>
 # include <boost/preprocessor/stringize.hpp>
 #
+# include <boost/preprocessor/tuple/elem.hpp>
+#
 # define BOOST_PP_ITERATION_DEPTH_LIMIT 5
 # define BOOST_PP_ITERATION_LIMIT 256
 #

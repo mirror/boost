@@ -8,12 +8,11 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
-# ifndef BOOST_PP_LOCAL_FINISH
-#   error BOOST_PP:  local upper bound is not set
-# endif
-#
-# ifndef BOOST_PP_LOCAL_START
-#   define BOOST_PP_LOCAL_START BOOST_PP_DEFAULT_START
+# ifdef BOOST_PP_LOCAL_LIMITS
+#   define BOOST_PP_LOCAL_START BOOST_PP_TUPLE_ELEM(2, 0, BOOST_PP_LOCAL_LIMITS)
+#   define BOOST_PP_LOCAL_FINISH BOOST_PP_TUPLE_ELEM(2, 1, BOOST_PP_LOCAL_LIMITS)
+# else
+#   error BOOST_PP:  local iteration boundaries are not defined
 # endif
 #
 # if (BOOST_PP_LOCAL_START) <= 0 && (BOOST_PP_LOCAL_FINISH) >= 0

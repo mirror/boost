@@ -9,13 +9,17 @@
 #  ************************************************************************** */
 #
 # ifndef BOOST_PP_FILENAME_3
-#   error BOOST_PP:  depth #3 filename is not set
-# elif !defined BOOST_PP_ITERATION_FINISH_3
-#   error BOOST_PP:  depth #3 upper bound is not set
+#   error BOOST_PP:  depth #3 filename is not defined
 # endif
 #
-# ifndef BOOST_PP_ITERATION_START_3
-#   define BOOST_PP_ITERATION_START_3 BOOST_PP_DEFAULT_START
+# ifdef BOOST_PP_ITERATION_LIMITS
+#   define BOOST_PP_ITERATION_BOUND BOOST_PP_TUPLE_ELEM(2, 0, BOOST_PP_ITERATION_LIMITS)
+#   include BOOST_PP_SET_ITERATION_START()
+#   define BOOST_PP_ITERATION_BOUND BOOST_PP_TUPLE_ELEM(2, 1, BOOST_PP_ITERATION_LIMITS)
+#   include BOOST_PP_SET_ITERATION_FINISH()
+#   undef BOOST_PP_ITERATION_LIMITS
+# else
+#   error BOOST_PP:  depth #3 iterations boundaries not defined
 # endif
 #
 # if BOOST_PP_ITERATION_DEPTH() != 2
@@ -27,12 +31,12 @@
 #
 # line 1 ""
 #
-# if BOOST_PP_ITERATION_START_3 <= 0 && BOOST_PP_ITERATION_FINISH_3 >= 0
+# if (BOOST_PP_ITERATION_START_3 <= 0) && (BOOST_PP_ITERATION_FINISH_3 >= 0)
 #   define BOOST_PP_ITERATION_3 0
 #   include BOOST_PP_FILENAME_3
 #   undef BOOST_PP_ITERATION_3
 # endif
-# if BOOST_PP_ITERATION_START_3 <= 1 && BOOST_PP_ITERATION_FINISH_3 >= 1
+# if (BOOST_PP_ITERATION_START_3 <= 1) && (BOOST_PP_ITERATION_FINISH_3 >= 1)
 #   define BOOST_PP_ITERATION_3 1
 #   include BOOST_PP_FILENAME_3
 #   undef BOOST_PP_ITERATION_3
