@@ -43,6 +43,12 @@
     <xsl:param name="in-file"/>
 
     <xsl:choose>
+      <!-- If the string INTERNAL ONLY is in the description, don't
+           emit this entity. This hack is necessary because Doxygen doesn't
+           tell us what is \internal and what isn't. -->
+      <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+
       <xsl:when test="@kind='file'">
         <xsl:call-template name="file"/>
       </xsl:when>
@@ -357,8 +363,7 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
             <xsl:value-of select="string(declname)"/>
           </xsl:attribute>
           <type>
-            <xsl:apply-templates select="type/*|type/text()" 
-              mode="passthrough"/>
+            <xsl:apply-templates select="type"/>
           </type>
           <xsl:if test="defval">
             <default>
@@ -502,6 +507,12 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
     <xsl:param name="in-file" select="''"/>
 
     <xsl:choose>
+      <!-- If the string INTERNAL ONLY is in the description, don't
+           emit this entity. This hack is necessary because Doxygen doesn't
+           tell us what is \internal and what isn't. -->
+      <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
+
       <xsl:when test="@kind='typedef'">
         <xsl:call-template name="typedef"/>
       </xsl:when>
@@ -536,6 +547,12 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
               <xsl:when test="string(name/text())='operator='">
                 <xsl:if test="not ($in-section)">
                   <xsl:call-template name="copy-assignment"/>
+                </xsl:if>
+              </xsl:when>
+              <xsl:when test="normalize-space(string(type))=''
+                              and contains(name/text(), 'operator ')">
+                <xsl:if test="$in-section">
+                  <xsl:call-template name="conversion-operator"/>
                 </xsl:if>
               </xsl:when>
               <xsl:otherwise>
@@ -590,7 +607,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
       <!-- Parameter type -->
       <paramtype>
-        <xsl:apply-templates select="type/*|type/text()" mode="passthrough"/>
+        <xsl:apply-templates select="type"/>
       </paramtype>
 
       <!-- Default argument -->
@@ -692,7 +709,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         <xsl:when test="not(contains($has-overload, 'false'))">
           <overloaded-function>
             <xsl:attribute name="name">
-              <xsl:value-of select="name/text()"/>
+              <xsl:call-template name="normalize-name"/>
             </xsl:attribute>
 
             <xsl:call-template name="overload-signatures"/>
@@ -704,12 +721,12 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         <xsl:otherwise>
           <function>
             <xsl:attribute name="name">
-              <xsl:value-of select="name/text()"/>
+              <xsl:call-template name="normalize-name"/>
             </xsl:attribute>
             
             <!-- Return type -->
             <type>
-              <xsl:value-of select="type"/>
+              <xsl:apply-templates select="type"/>
             </type>
             
             <xsl:call-template name="function.children"/>
@@ -734,7 +751,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       <xsl:otherwise>
         <signature>
           <type>
-            <xsl:value-of select="$node/type"/>
+            <xsl:apply-templates select="$node/type"/>
           </type>
           <xsl:apply-templates select="$node/templateparamlist" 
             mode="template"/>
@@ -771,6 +788,37 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     </copy-assignment>
   </xsl:template>
 
+  <!-- Handle conversion operator -->
+  <xsl:template name="conversion-operator">
+    <method>
+      <xsl:attribute name="name">
+        <xsl:text>conversion-operator</xsl:text>
+      </xsl:attribute>
+
+      <!-- CV Qualifiers -->
+      <xsl:if test="not (@const='no' and @volatile='no')">
+        <xsl:attribute name="cv">
+          <xsl:if test="@const='yes'">
+            <xsl:text>const</xsl:text>
+          </xsl:if>
+          <xsl:if test="@volatile='yes'">
+            <xsl:if test="@const='yes'">
+              <xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:text>volatile</xsl:text>
+          </xsl:if>
+        </xsl:attribute>
+      </xsl:if>
+
+      <!-- Conversion type -->
+      <type>
+        <xsl:value-of select="substring-after(name/text(), 'operator ')"/>
+      </type>
+
+      <xsl:call-template name="function.children"/>
+    </method>
+  </xsl:template>
+
   <!-- Handle methods -->
   <xsl:template name="method">
     <method>
@@ -797,7 +845,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
       <!-- Return type -->
       <type>
-        <xsl:value-of select="type"/>
+        <xsl:apply-templates select="type"/>
       </type>
 
       <xsl:call-template name="function.children"/>
@@ -820,7 +868,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:if>
 
       <type>
-        <xsl:apply-templates select="type/text()|type/*" mode="passthrough"/>
+        <xsl:apply-templates select="type"/>
       </type>
 
       <xsl:apply-templates select="briefdescription" mode="passthrough"/>
@@ -918,4 +966,41 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </simpara>
     </xsl:if>
   </xsl:template>
-</xsl:stylesheet>
+
+  <xsl:template match="type">
+    <xsl:apply-templates mode="type"/>
+  </xsl:template>
+
+  <xsl:template match="ref" mode="type">
+    <xsl:choose>
+      <xsl:when test="@kindref='compound'">
+        <classname>
+          <xsl:value-of select="text()"/>
+        </classname>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="text()"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="*" mode="type">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+  <!-- Normalize the names of functions, because Doxygen sometimes
+       puts in an obnoixous space. -->
+  <xsl:template name="normalize-name">
+    <xsl:param name="name" select="name/text()"/>
+
+    <xsl:choose>
+      <xsl:when test="contains($name, ' ')">
+        <xsl:value-of select="substring-before($name, ' ')"/>
+        <xsl:value-of select="substring-after($name, ' ')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$name"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+ </xsl:stylesheet>
