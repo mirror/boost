@@ -153,6 +153,14 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="conceptname" mode="annotation">
+    <xsl:param name="name" select="text()"/>
+
+    <xsl:call-template name="concept.link">
+      <xsl:with-param name="name" select="$name"/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="text()" mode="annotation">
     <xsl:param name="highlight" select="false()"/>
     <xsl:choose>

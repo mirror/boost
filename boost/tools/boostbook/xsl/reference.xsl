@@ -12,7 +12,8 @@
   <xsl:include href="index.xsl"/>
   <xsl:include href="error.xsl"/>
   <xsl:include href="testing/testsuite.xsl"/>
-
+  <xsl:include href="caramel/concept2docbook.xsl"/>
+  
   <xsl:template name="namespace-synopsis">
     <xsl:param name="indentation" select="0"/>
     <!-- Open namespace-->

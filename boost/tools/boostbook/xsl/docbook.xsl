@@ -133,7 +133,7 @@
     <xsl:param name="text"/>
     <xsl:param name="highlight" select="false()"/>
 
-    <anchor id="{$to}"></anchor>
+    <anchor id="{$to}"/>
     <xsl:if test="$highlight">
       <xsl:call-template name="source-highlight">
         <xsl:with-param name="text" select="$text"/>
@@ -300,7 +300,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
               <xsl:value-of select="@id"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="generate-id(.)"/>
+              <xsl:call-template name="generate.id"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:attribute>
@@ -340,7 +340,8 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   </xsl:template>
 
   <!-- These DocBook elements have special meaning. Use the annotation mode -->
-  <xsl:template match="classname|methodname|functionname|libraryname">
+  <xsl:template match="classname|methodname|functionname|libraryname|
+                       conceptname">
     <xsl:apply-templates select="." mode="annotation"/>
   </xsl:template>
 

@@ -271,7 +271,25 @@
       <xsl:with-param name="is-last" select="$is-last"/>
       <xsl:with-param name="highlight" select="$highlight"/>
     </xsl:apply-templates>
+  </xsl:template>
 
+  <xsl:template name="template.parameter.name">
+    <xsl:param name="name" select="@name"/>
+    <xsl:param name="highlight" select="true()"/>
+    
+    <xsl:choose>
+      <xsl:when test="$highlight">
+        <xsl:call-template name="concept.link">
+          <xsl:with-param name="name" 
+            select="translate($name, '0123456789', '')"/>
+          <xsl:with-param name="text" select="$name"/>
+          <xsl:with-param name="warn" select="false"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$name"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="template-type-parameter" mode="print.parameter">
@@ -290,7 +308,11 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:text> </xsl:text>
-    <xsl:value-of select="$parameter/@name"/>
+
+    <xsl:call-template name="template.parameter.name">
+      <xsl:with-param name="name" select="$parameter/@name"/>
+      <xsl:with-param name="highlight" select="$highlight"/>
+    </xsl:call-template>
 
     <xsl:variable name="def">
       <xsl:choose>
@@ -360,7 +382,11 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:text> </xsl:text>
-    <xsl:value-of select="$parameter/@name"/>
+
+    <xsl:call-template name="template.parameter.name">
+      <xsl:with-param name="name" select="$parameter/@name"/>
+      <xsl:with-param name="highlight" select="$highlight"/>
+    </xsl:call-template>
 
     <xsl:variable name="def">
       <xsl:if test="$parameter/default">
