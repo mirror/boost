@@ -54,6 +54,10 @@ template<unsigned size, unsigned align> struct allocator_impl
     // and don't interfere with ::new.
     //
     // The other alternative is to use much bigger pages (1M.)
+    //
+    // It is surprisingly easy to hit pathological behavior by
+    // varying the page size. g++ 2.96 on Red Hat Linux 7.2,
+    // for example, passionately dislikes 496. 512 seems OK.
 
 #if defined(BOOST_QA_PAGE_SIZE)
 
@@ -61,7 +65,7 @@ template<unsigned size, unsigned align> struct allocator_impl
 
 #else
 
-    enum { items_per_page = 496 / size }; // 1048560 / size
+    enum { items_per_page = 512 / size }; // 1048560 / size
 
 #endif
 
