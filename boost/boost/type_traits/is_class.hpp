@@ -48,6 +48,24 @@ namespace detail {
 // is_class<> metafunction due to Paul Mensonides
 // (leavings@attbi.com). For more details:
 // http://groups.google.com/groups?hl=en&selm=000001c1cc83%24e154d5e0%247772e50c%40c161550a&rnum=1
+#ifdef __GNUC__
+
+template <class U> static ::boost::type_traits::yes_type is_class_tester(void(U::*)(void));
+template <class U> static ::boost::type_traits::no_type is_class_tester(...);
+
+template <typename T>
+struct is_class_impl
+{
+
+    BOOST_STATIC_CONSTANT(bool, value = 
+        (::boost::type_traits::ice_and<
+            sizeof(is_class_tester<T>(0)) == sizeof(::boost::type_traits::yes_type),
+            ::boost::type_traits::ice_not< ::boost::is_union<T>::value >::value
+        >::value)
+        );
+};
+
+#else
 
 template <typename T>
 struct is_class_impl
@@ -82,6 +100,7 @@ struct is_class_impl<T const volatile>
 {
 };
 # endif
+#endif
 
 #else
 

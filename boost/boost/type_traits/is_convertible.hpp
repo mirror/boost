@@ -107,7 +107,7 @@ struct is_convertible_impl
 struct any_conversion
 {
     template <typename T> any_conversion(const volatile T&);
-    //template <typename T> any_conversion(T&);
+    template <typename T> any_conversion(T&);
 };
 
 template <typename T> struct checker
@@ -124,14 +124,17 @@ struct is_convertible_basic_impl
         == sizeof(::boost::type_traits::yes_type);
 };
 
-#elif (defined(BOOST_MSVC) && (BOOST_MSVC > 1310)) \
-      || (defined(__EDG_VERSION__) && (__EDG_VERSION__ >= 245) && !defined(__ICL)) \
+#elif (defined(__EDG_VERSION__) && (__EDG_VERSION__ >= 245) && !defined(__ICL)) \
       || defined(__IBMCPP__)
 //
 // This is *almost* an ideal world implementation as it doesn't rely
 // on undefined behaviour by passing UDT's through (...).
 // Unfortunately it doesn't quite pass all the tests for most compilers (sigh...)
 // Enable this for your compiler if is_convertible_test.cpp will compile it...
+//
+// Note we do not enable this for VC7.1, because even though it passes all the
+// type_traits tests it is known to cause problems when instantiation occurs
+// deep within the instantiation tree :-(
 //
 struct any_conversion
 {

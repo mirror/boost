@@ -19,6 +19,11 @@
 #include <boost/type_traits/is_function.hpp>
 #endif
 #include "boost/type_traits/config.hpp"
+#if defined(BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION) 
+#  include <boost/type_traits/is_class.hpp>
+#  include <boost/type_traits/is_union.hpp>
+#endif
+
 
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
@@ -28,6 +33,20 @@ namespace boost {
 #if !(defined(__BORLANDC__) && (__BORLANDC__ <= 0x551))
 
 namespace detail {
+
+#if defined(BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION) 
+
+template <typename T>
+struct is_class_or_union
+{
+   BOOST_STATIC_CONSTANT(bool, value =
+      (::boost::type_traits::ice_or<
+           ::boost::is_class<T>::value
+         , ::boost::is_union<T>::value
+      >::value));
+};
+
+#else
 
 template <typename T>
 struct is_class_or_union
@@ -50,6 +69,7 @@ struct is_class_or_union
 #  endif
 # endif
 };
+#endif
 
 struct int_convertible
 {
@@ -81,13 +101,25 @@ template <typename T> struct is_enum_impl
    typedef ::boost::add_reference<T> ar_t;
    typedef typename ar_t::type r_type;
 
-#if defined __GNUC__
+#if defined(__GNUC__)
+
+#ifdef BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
+   BOOST_STATIC_CONSTANT(bool, selector =
+      (::boost::type_traits::ice_or<
+           ::boost::is_arithmetic<T>::value
+         , ::boost::is_reference<T>::value
+         , ::boost::is_function<T>::value
+         , is_class_or_union<T>::value
+      >::value));
+#else
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
          , ::boost::is_reference<T>::value
          , ::boost::is_function<T>::value
       >::value));
+#endif // BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
+
 #else
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
