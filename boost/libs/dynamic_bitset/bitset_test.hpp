@@ -27,10 +27,19 @@
 #include "boost/dynamic_bitset.hpp"
 #include "boost/test/minimal.hpp"
 
+
 template <typename Block>
 inline bool nth_bit(Block num, std::size_t n)
 {
-  assert(n < (std::size_t)std::numeric_limits<Block>::digits);
+#ifdef __BORLANDC__
+  // Borland deduces Block as a const qualified type,
+  // and finds numeric_limits<Block> to be zero :(
+  int block_width = sizeof(Block) * CHAR_BIT;
+#else
+  int block_width = std::numeric_limits<Block>::digits;
+#endif
+
+  assert(n < (std::size_t) block_width);
   return (num >> n) & 1;
 }
 
@@ -1018,7 +1027,7 @@ struct bitset_test {
                               )
   {
     // save necessary info then do extraction
-	//
+    //
     const std::streamsize w = is.width();
     Bitset a_copy(b);
     bool stream_was_good = is.good();
@@ -1029,7 +1038,7 @@ struct bitset_test {
     bool has_stream_exceptions = false;
     is >> b;
 #else
-	const std::ios::iostate except = is.exceptions();
+    const std::ios::iostate except = is.exceptions();
     bool has_stream_exceptions = true;
     try {
       is >> b;
@@ -1041,7 +1050,7 @@ struct bitset_test {
     // postconditions
     BOOST_CHECK(except == is.exceptions()); // paranoid
 #endif
-	//------------------------------------------------------------------
+    //------------------------------------------------------------------
 
     // postconditions
     BOOST_CHECK(b.size() <= b.max_size());
