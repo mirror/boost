@@ -9,7 +9,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 #include <boost/assert.hpp>
 #include <new>
@@ -241,4 +241,4 @@ void operator delete[](void * p, nothrow_t const &) throw()
 
 #endif
 
-#endif // defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#endif // defined(BOOST_SP_ENABLE_DEBUG_HOOKS)

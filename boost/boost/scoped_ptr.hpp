@@ -24,7 +24,7 @@ namespace boost
 
 // Debug hooks
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 void sp_scalar_constructor_hook(void * p);
 void sp_scalar_destructor_hook(void * p);
@@ -53,7 +53,7 @@ public:
 
     explicit scoped_ptr(T * p = 0): ptr(p) // never throws
     {
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         boost::sp_scalar_constructor_hook(ptr);
 #endif
     }
@@ -62,7 +62,7 @@ public:
 
     explicit scoped_ptr(std::auto_ptr<T> p): ptr(p.release()) // never throws
     {
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         boost::sp_scalar_constructor_hook(ptr);
 #endif
     }
@@ -71,7 +71,7 @@ public:
 
     ~scoped_ptr() // never throws
     {
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         boost::sp_scalar_destructor_hook(ptr);
 #endif
         boost::checked_delete(ptr);

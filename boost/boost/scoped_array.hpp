@@ -22,7 +22,7 @@ namespace boost
 
 // Debug hooks
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 void sp_array_constructor_hook(void * p);
 void sp_array_destructor_hook(void * p);
@@ -50,14 +50,14 @@ public:
 
     explicit scoped_array(T * p = 0) : ptr(p) // never throws
     {
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         boost::sp_array_constructor_hook(ptr);
 #endif
     }
 
     ~scoped_array() // never throws
     {
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         boost::sp_array_destructor_hook(ptr);
 #endif
         boost::checked_array_delete(ptr);

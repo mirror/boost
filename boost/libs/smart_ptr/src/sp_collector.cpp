@@ -9,7 +9,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 #include <boost/assert.hpp>
 #include <boost/shared_ptr.hpp>
@@ -266,4 +266,4 @@ void sp_array_destructor_hook(void *)
 
 } // namespace boost
 
-#endif // defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#endif // defined(BOOST_SP_ENABLE_DEBUG_HOOKS)

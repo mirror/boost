@@ -47,7 +47,7 @@ namespace boost
 
 // Debug hooks
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 void sp_scalar_constructor_hook(void * px, std::size_t size, void * pn);
 void sp_array_constructor_hook(void * px);
@@ -192,7 +192,7 @@ private:
 #endif
 };
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 template<class T> void cbi_call_constructor_hook(sp_counted_base * pn, T * px, checked_deleter<T> const &, int)
 {
@@ -249,14 +249,14 @@ public:
 
     sp_counted_base_impl(P p, D d): ptr(p), del(d)
     {
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         detail::cbi_call_constructor_hook(this, p, d, 0);
 #endif
     }
 
     virtual void dispose() // nothrow
     {
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         detail::cbi_call_destructor_hook(this, ptr, del, 0);
 #endif
         del(ptr);
@@ -296,7 +296,7 @@ public:
 #endif
 };
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
 
 int const shared_count_id = 0x2C35F101;
 int const   weak_count_id = 0x298C38A4;
@@ -311,7 +311,7 @@ private:
 
     sp_counted_base * pi_;
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
     int id_;
 #endif
 
@@ -320,14 +320,14 @@ private:
 public:
 
     shared_count(): pi_(0) // nothrow
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
     }
 
     template<class P, class D> shared_count(P p, D d): pi_(0)
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
@@ -362,7 +362,7 @@ public:
 
     template<class Y>
     explicit shared_count(std::auto_ptr<Y> & r): pi_(new sp_counted_base_impl< Y *, checked_deleter<Y> >(r.get(), checked_deleter<Y>()))
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
@@ -374,13 +374,13 @@ public:
     ~shared_count() // nothrow
     {
         if(pi_ != 0) pi_->release();
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         id_ = 0;
 #endif
     }
 
     shared_count(shared_count const & r): pi_(r.pi_) // nothrow
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
@@ -443,7 +443,7 @@ private:
 
     sp_counted_base * pi_;
 
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
     int id_;
 #endif
 
@@ -452,14 +452,14 @@ private:
 public:
 
     weak_count(): pi_(0) // nothrow
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(weak_count_id)
 #endif
     {
     }
 
     weak_count(shared_count const & r): pi_(r.pi_) // nothrow
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
@@ -467,7 +467,7 @@ public:
     }
 
     weak_count(weak_count const & r): pi_(r.pi_) // nothrow
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
     {
@@ -477,7 +477,7 @@ public:
     ~weak_count() // nothrow
     {
         if(pi_ != 0) pi_->weak_release();
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         id_ = 0;
 #endif
     }
@@ -526,7 +526,7 @@ public:
 };
 
 inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
-#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
 {
