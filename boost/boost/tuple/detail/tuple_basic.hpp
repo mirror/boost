@@ -43,6 +43,8 @@
 #include "boost/type_traits/cv_traits.hpp"
 #include "boost/type_traits/function_traits.hpp"
 
+#include "boost/detail/workaround.hpp" // needed for BOOST_WORKAROUND
+
 namespace boost {
 namespace tuples {
 
@@ -97,12 +99,22 @@ struct get_class {
   template<class RET, class HT, class TT >
   inline static RET get(const cons<HT, TT>& t)
   {
+#if BOOST_WORKAROUND(__IBMCPP__,==600)
+    // vacpp 6.0 is not very consistent regarding the member template keyword
+    // Here it generates an error when the template keyword is used.
+    return get_class<N-1>::get<RET>(t.tail);
+#else
     return get_class<N-1>::BOOST_NESTED_TEMPLATE get<RET>(t.tail);
+#endif
   }
   template<class RET, class HT, class TT >
   inline static RET get(cons<HT, TT>& t)
   {
+#if BOOST_WORKAROUND(__IBMCPP__,==600)
+    return get_class<N-1>::get<RET>(t.tail);
+#else
     return get_class<N-1>::BOOST_NESTED_TEMPLATE get<RET>(t.tail);
+#endif
   }
 };
 
@@ -194,11 +206,17 @@ inline typename access_traits<
                   typename element<N, cons<HT, TT> >::type
                 >::non_const_type
 get(cons<HT, TT>& c BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
-  return detail::get_class<N>::BOOST_NESTED_TEMPLATE
+#if BOOST_WORKAROUND(__IBMCPP__,==600 )
+  return get_class<N>::
+#else
+  return get_class<N>::BOOST_NESTED_TEMPLATE
+#endif
          get<
            typename access_traits<
              typename element<N, cons<HT, TT> >::type
-           >::non_const_type>(c);
+           >::non_const_type,
+           HT,TT
+         >(c);
 }
 
 // get function for const cons-lists, returns a const reference to
@@ -209,11 +227,17 @@ inline typename access_traits<
                   typename element<N, cons<HT, TT> >::type
                 >::const_type
 get(const cons<HT, TT>& c BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
+#if BOOST_WORKAROUND(__IBMCPP__,==600)
+  return detail::get_class<N>::
+#else
   return detail::get_class<N>::BOOST_NESTED_TEMPLATE
+#endif
          get<
            typename access_traits<
              typename element<N, cons<HT, TT> >::type
-         >::const_type>(c);
+           >::const_type,
+           HT,TT
+         >(c);
 }
 
 // -- the cons template  --------------------------------------------------
