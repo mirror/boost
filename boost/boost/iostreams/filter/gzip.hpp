@@ -26,6 +26,7 @@
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/ios.hpp> // failure.
 #include <boost/iostreams/operations.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filter/zlib.hpp>
 #include <boost/iostreams/pipable.hpp>      
 #include <boost/iostreams/streambuf_facade.hpp>      
@@ -142,13 +143,13 @@ struct gzip_params : zlib_params {
 // Description: Subclass of std::ios_base::failure thrown to indicate
 //     zlib errors other than out-of-memory conditions.
 //
-class gzip_error : public detail::failure {
+class gzip_error : public BOOST_IOSTREAMS_FAILURE {
 public:
     explicit gzip_error(int error)
-        : detail::failure("gzip error"),
+        : BOOST_IOSTREAMS_FAILURE("gzip error"),
           error_(error), zlib_error_code_(zlib::okay) { }
     explicit gzip_error(const zlib_error& e)
-        : detail::failure("gzip error"),
+        : BOOST_IOSTREAMS_FAILURE("gzip error"),
           error_(gzip::zlib_error), zlib_error_code_(e.error())
         { }
     int error() const { return error_; }
@@ -246,8 +247,9 @@ private:
 
     void prepare_footer()
         {
-            write_long(this->crc(), footer_);
-            write_long(this->total_in(), footer_);
+            boost::iostreams::back_insert_device<std::string> out(footer_);
+            write_long(this->crc(), out);
+            write_long(this->total_in(), out);
             flags_ |= f_body_done;
             offset_ = 0;
         }
@@ -270,13 +272,13 @@ private:
             return amt;
         }
 
-    static void write_long(long n, std::string& str)
-        {
-            str += static_cast<char>(0xFF & n);
-            str += static_cast<char>(0xFF & (n >> 8));
-            str += static_cast<char>(0xFF & (n >> 16));
-            str += static_cast<char>(0xFF & (n >> 24));
-        }
+    //static void write_long(long n, std::string& str)
+    //    {
+    //        str += static_cast<char>(0xFF & n);
+    //        str += static_cast<char>(0xFF & (n >> 8));
+    //        str += static_cast<char>(0xFF & (n >> 16));
+    //        str += static_cast<char>(0xFF & (n >> 24));
+    //    }
 
     template<typename Sink>
     static void write_long(long n, Sink& next)

@@ -44,7 +44,13 @@ const int run                  = BZ_RUN;
 //------------------Implementation of bzip2_error-----------------------------//
                     
 bzip2_error::bzip2_error(int error) 
-    : detail::failure("bzip2 error"), error_(error) { }
+#ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
+        : std::ios_base::failure 
+    #else
+        : detail::failure 
+    #endif
+          ("bzip2 error"), error_(error) 
+    { }
 
 void bzip2_error::check(int error)
 {
@@ -110,12 +116,22 @@ int bzip2_base::decompress()
     return BZ2_bzDecompress(static_cast<bz_stream*>(stream_));
 }
 
-void bzip2_base::do_init( bool compress, bzip2::alloc_func alloc, 
-                          bzip2::free_func free, void* derived )
+void bzip2_base::do_init
+    ( bool compress, 
+      #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+          bzip2::alloc_func alloc, 
+          bzip2::free_func free, 
+      #endif
+      void* derived )
 {
     bz_stream* s = static_cast<bz_stream*>(stream_);
-    s->bzalloc = alloc;
-    s->bzfree = free;
+    #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+        s->bzalloc = alloc;
+        s->bzfree = free;
+    #else
+        s->bzalloc = 0;
+        s->bzfree = 0;
+    #endif
     s->opaque = derived;
     bzip2_error::check( 
         compress ?

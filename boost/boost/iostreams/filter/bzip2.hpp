@@ -4,6 +4,9 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
+// Note: custom allocators are not supported on VC6, since that compiler
+// had trouble finding the function zlib_base::do_init.
+
 #ifndef BOOST_IOSTREAMS_BZIP2_HPP_INCLUDED
 #define BOOST_IOSTREAMS_BZIP2_HPP_INCLUDED
 
@@ -18,8 +21,9 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>   // buffer size.
 #include <boost/iostreams/detail/config/auto_link.hpp>
-#include <boost/iostreams/detail/config/dyn_link.hpp>
 #include <boost/iostreams/detail/config/bzip2.hpp>
+#include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
 #include <boost/iostreams/filter/symmetric_filter_adapter.hpp>               
 #include <boost/iostreams/pipable.hpp>       
@@ -104,7 +108,7 @@ struct bzip2_params {
 // Description: Subclass of std::ios_base::failure thrown to indicate
 //     bzip2 errors other than out-of-memory conditions.
 //
-class BOOST_IOSTREAMS_DECL bzip2_error : public detail::failure {
+class BOOST_IOSTREAMS_DECL bzip2_error : public BOOST_IOSTREAMS_FAILURE {
 public:
     explicit bzip2_error(int error);
     int error() const { return error_; }
@@ -134,8 +138,8 @@ public:
     BOOST_STATIC_CONSTANT(bool, custom = 
         (!is_same<std::allocator<char>, Base>::value));
     typedef typename bzip2_allocator_traits<Alloc>::type allocator_type;
-    static void* alloc(void* self, int items, int size);
-    static void free(void* self, void* address);
+    static void* allocate(void* self, int items, int size);
+    static void deallocate(void* self, void* address);
 };
 
 class BOOST_IOSTREAMS_DECL bzip2_base  { 
@@ -152,8 +156,10 @@ protected:
         {
             bool custom = bzip2_allocator<Alloc>::custom;
             do_init( compress,
-                     custom ? bzip2_allocator<Alloc>::alloc : 0,
-                     custom ? bzip2_allocator<Alloc>::free : 0,
+                     #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+                         custom ? bzip2_allocator<Alloc>::allocate : 0,
+                         custom ? bzip2_allocator<Alloc>::deallocate : 0,
+                     #endif
                      custom ? &alloc : 0 );
         }
     void before( const char*& src_begin, const char* src_end,
@@ -163,8 +169,12 @@ protected:
     int decompress();
     void end(bool compress);
 private:
-    void do_init( bool compress, bzip2::alloc_func, 
-                  bzip2::free_func, void* derived );
+    void do_init( bool compress, 
+                  #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+                      bzip2::alloc_func, 
+                      bzip2::free_func, 
+                  #endif
+                  void* derived );
     bzip2_params  params_;
     void*         stream_; // Actual type: bz_stream*.
     bool          ready_;
@@ -271,7 +281,7 @@ typedef basic_bzip2_decompressor<> bzip2_decompressor;
 namespace detail {
 
 template<typename Alloc, typename Base>
-void* bzip2_allocator<Alloc, Base>::alloc(void* self, int items, int size)
+void* bzip2_allocator<Alloc, Base>::allocate(void* self, int items, int size)
 { 
     size_type len = items * size;
     char* ptr = 
@@ -286,7 +296,7 @@ void* bzip2_allocator<Alloc, Base>::alloc(void* self, int items, int size)
 }
 
 template<typename Alloc, typename Base>
-void bzip2_allocator<Alloc, Base>::free(void* self, void* address)
+void bzip2_allocator<Alloc, Base>::deallocate(void* self, void* address)
 { 
     char* ptr = reinterpret_cast<char*>(address) - sizeof(size_type);
     size_type len = *reinterpret_cast<size_type*>(ptr) + sizeof(size_type);

@@ -58,7 +58,8 @@ const int buf_error            = Z_BUF_ERROR;
 //------------------Implementation of zlib_error------------------------------//
                     
 zlib_error::zlib_error(int error) 
-    : detail::failure("zlib error"), error_(error) { }
+    : BOOST_IOSTREAMS_FAILURE("zlib error"), error_(error) 
+    { }
 
 void zlib_error::check(int error)
 {
@@ -132,14 +133,22 @@ void zlib_base::reset(bool compress)
     zlib_error::check(compress ? deflateReset(s) : inflateReset(s));
 }
 
-void zlib_base::do_init( const zlib_params& p, bool compress, 
-                         zlib::alloc_func alloc, zlib::free_func free, 
-                         void* derived )
+void zlib_base::do_init
+    ( const zlib_params& p, bool compress, 
+      #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+          zlib::alloc_func alloc, zlib::free_func free, 
+      #endif
+      void* derived )
 {
     calculate_crc_ = p.calculate_crc;
     z_stream* s = static_cast<z_stream*>(stream_);
-    s->zalloc = alloc;
-    s->zfree = free;
+    #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+        s->zalloc = alloc;
+        s->zfree = free;
+    #else
+        s->zalloc = 0;
+        s->zfree = 0;
+    #endif
     s->opaque = derived;
     int window_bits = p.noheader? -p.window_bits : p.window_bits;
     zlib_error::check(

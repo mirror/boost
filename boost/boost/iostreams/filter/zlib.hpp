@@ -4,6 +4,9 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
+// Note: custom allocators are not supported on VC6, since that compiler
+// had trouble finding the function zlib_base::do_init.
+
 #ifndef BOOST_IOSTREAMS_ZLIB_HPP_INCLUDED
 #define BOOST_IOSTREAMS_ZLIB_HPP_INCLUDED
 
@@ -16,9 +19,11 @@
 #include <memory>            // allocator, bad_alloc.
 #include <new>          
 #include <boost/config.hpp>  // MSVC, STATIC_CONSTANT, DEDUCED_TYPENAME, DINKUM.
+#include <boost/detail/workaround.hpp>
 #include <boost/iostreams/constants.hpp>   // buffer size.
 #include <boost/iostreams/detail/config/auto_link.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/config/wide_streams.hpp>
 #include <boost/iostreams/detail/config/zlib.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // failure, streamsize.
 #include <boost/iostreams/filter/symmetric_filter_adapter.hpp>                
@@ -125,7 +130,7 @@ struct zlib_params {
 // Description: Subclass of std::ios::failure thrown to indicate
 //     zlib errors other than out-of-memory conditions.
 //
-class BOOST_IOSTREAMS_DECL zlib_error : public detail::failure {
+class BOOST_IOSTREAMS_DECL zlib_error : public BOOST_IOSTREAMS_FAILURE {
 public:
     explicit zlib_error(int error);
     int error() const { return error_; }
@@ -155,8 +160,8 @@ public:
     BOOST_STATIC_CONSTANT(bool, custom = 
         (!is_same<std::allocator<char>, Base>::value));
     typedef typename zlib_allocator_traits<Alloc>::type allocator_type;
-    static void* alloc(void* self, zlib::uint items, zlib::uint size);
-    static void free(void* self, void* address);
+    static void* allocate(void* self, zlib::uint items, zlib::uint size);
+    static void deallocate(void* self, void* address);
 };
 
 class BOOST_IOSTREAMS_DECL zlib_base { 
@@ -169,13 +174,15 @@ protected:
     template<typename Alloc> 
     void init( const zlib_params& p, 
                bool compress,
-               zlib_allocator<Alloc>& alloc )
+               zlib_allocator<Alloc>& zalloc )
         {
             bool custom = zlib_allocator<Alloc>::custom;
             do_init( p, compress,
-                     custom ? zlib_allocator<Alloc>::alloc : 0,
-                     custom ? zlib_allocator<Alloc>::free : 0,
-                     &alloc );
+                     #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+                         custom ? zlib_allocator<Alloc>::allocate : 0,
+                         custom ? zlib_allocator<Alloc>::deallocate : 0,
+                     #endif
+                     &zalloc );
         }
     void before( const char*& src_begin, const char* src_end,
                  char*& dest_begin, char* dest_end );
@@ -189,8 +196,12 @@ public:
     int total_in() const { return total_in_; }
     int total_out() const { return total_out_; }
 private:
-    void do_init( const zlib_params& p, bool compress, zlib::alloc_func, 
-                  zlib::free_func, void* derived );
+    void do_init( const zlib_params& p, bool compress, 
+                  #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+                      zlib::alloc_func, 
+                      zlib::free_func, 
+                  #endif
+                  void* derived );
     void*        stream_;         // Actual type: z_stream*.
     bool         calculate_crc_;
     zlib::ulong  crc_;
@@ -290,7 +301,7 @@ typedef basic_zlib_decompressor<> zlib_decompressor;
 namespace detail {
 
 template<typename Alloc, typename Base>
-void* zlib_allocator<Alloc, Base>::alloc
+void* zlib_allocator<Alloc, Base>::allocate
     (void* self, zlib::uint items, zlib::uint size)
 { 
     size_type len = items * size;
@@ -306,7 +317,7 @@ void* zlib_allocator<Alloc, Base>::alloc
 }
 
 template<typename Alloc, typename Base>
-void zlib_allocator<Alloc, Base>::free(void* self, void* address)
+void zlib_allocator<Alloc, Base>::deallocate(void* self, void* address)
 { 
     char* ptr = reinterpret_cast<char*>(address) - sizeof(size_type);
     size_type len = *reinterpret_cast<size_type*>(ptr) + sizeof(size_type);
