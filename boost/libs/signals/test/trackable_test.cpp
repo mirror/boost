@@ -12,7 +12,7 @@
 #include <boost/signal.hpp>
 #include <boost/bind.hpp>
 
-struct short_lived : public boost::signals::trackable {
+struct short_lived : public boost::BOOST_SIGNALS_NAMESPACE::trackable {
   ~short_lived() {}
 };
 

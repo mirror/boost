@@ -14,7 +14,7 @@
 
 typedef boost::signal1<int, int> sig_type;
 
-class with_constant : public boost::signals::trackable {
+class with_constant : public boost::BOOST_SIGNALS_NAMESPACE::trackable {
 public:
   with_constant(int c) : constant(c) {}
 
@@ -31,7 +31,7 @@ void do_delayed_connect(with_constant* wc,
   // Should invalidate the slot, so that we cannot connect to it
   delete wc;
 
-  boost::signals::connection c = sig.connect(slot);
+  boost::BOOST_SIGNALS_NAMESPACE::connection c = sig.connect(slot);
   BOOST_TEST(!c.connected());
 }
 

@@ -13,7 +13,7 @@
 #include <iostream>
 #include <string>
 
-static boost::signals::connection connections[5];
+static boost::BOOST_SIGNALS_NAMESPACE::connection connections[5];
 
 static std::string test_output;
 

@@ -63,10 +63,10 @@ test_zero_args()
     boost::signal<int (), max_or_default<int> > s0;
 
     std::cout << "sizeof(signal) = " << sizeof(s0) << std::endl;
-    boost::signals::connection c2 = s0.connect(i2);
-    boost::signals::connection c72 = s0.connect(72, i72);
-    boost::signals::connection c62 = s0.connect(60, i62);
-    boost::signals::connection c42 = s0.connect(i42);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c2 = s0.connect(i2);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c72 = s0.connect(72, i72);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c62 = s0.connect(60, i62);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c42 = s0.connect(i42);
 
     BOOST_TEST(s0() == 72);
 
@@ -96,10 +96,10 @@ test_zero_args()
 
   {
     boost::signal<int (), max_or_default<int> > s0;
-    boost::signals::connection c2 = s0.connect(i2);
-    boost::signals::connection c72 = s0.connect(i72);
-    boost::signals::connection c62 = s0.connect(i62);
-    boost::signals::connection c42 = s0.connect(i42);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c2 = s0.connect(i2);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c72 = s0.connect(i72);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c62 = s0.connect(i62);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c42 = s0.connect(i42);
 
     const boost::signal<int (), max_or_default<int> >& cs0 = s0;
     BOOST_TEST(cs0() == 72);
@@ -110,8 +110,8 @@ test_zero_args()
     make_increasing_int<10> i10;
 
     boost::signal<int (), max_or_default<int> > s0;
-    boost::signals::connection c7 = s0.connect(i7);
-    boost::signals::connection c10 = s0.connect(i10);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c7 = s0.connect(i7);
+    boost::BOOST_SIGNALS_NAMESPACE::connection c10 = s0.connect(i10);
 
     BOOST_TEST(s0() == 10);
     BOOST_TEST(s0() == 11);
