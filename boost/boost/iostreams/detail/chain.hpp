@@ -262,17 +262,17 @@ private:
     { \
     public: \
         struct io_category : device_tag, Mode { }; \
-        typedef Mode                                                     mode; \
+        typedef Mode                                   mode; \
     private: \
         typedef boost::iostreams::detail::chain_base< \
                     name_<Mode, Ch, Tr, Alloc>, \
                     Ch, Tr, Alloc, Mode \
-                >                                                        base_type; \
+                >                                      base_type; \
     public: \
-        typedef Ch                                                       char_type; \
-        typedef Tr                                                       traits_type; \
-        typedef typename traits_type::int_type                           int_type; \
-        typedef typename traits_type::off_type                           off_type; \
+        typedef Ch                                     char_type; \
+        typedef Tr                                     traits_type; \
+        typedef typename traits_type::int_type         int_type; \
+        typedef typename traits_type::off_type         off_type; \
         name_() { } \
         name_(const name_& rhs) { *this = rhs; } \
         name_& operator=(const name_& rhs) \
