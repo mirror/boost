@@ -15,22 +15,18 @@
 # ifndef BOOST_PREPROCESSOR_ARITHMETIC_DEC_HPP
 # define BOOST_PREPROCESSOR_ARITHMETIC_DEC_HPP
 #
-# include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 #
 # /* BOOST_PP_DEC */
 #
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
-#    define BOOST_PP_DEC(x) BOOST_PP_CAT(BOOST_PP_DEC_, x)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define BOOST_PP_DEC(x) BOOST_PP_DEC_I(x)
 # else
-#    if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#        define BOOST_PP_DEC(x) BOOST_PP_DEC_D(x)
-#    else
-#        define BOOST_PP_DEC(x) BOOST_PP_EVIL_DEC_D((x))
-#        define BOOST_PP_EVIL_DEC_D(par) BOOST_PP_DEC_D ## par
-#    endif
-#    define BOOST_PP_DEC_D(x) BOOST_PP_DEC_ ## x
+#    define BOOST_PP_DEC(x) BOOST_PP_DEC_OO((x))
+#    define BOOST_PP_DEC_OO(par) BOOST_PP_DEC_I ## par
 # endif
+#
+# define BOOST_PP_DEC_I(x) BOOST_PP_DEC_ ## x
 #
 # define BOOST_PP_DEC_0 0
 # define BOOST_PP_DEC_1 0

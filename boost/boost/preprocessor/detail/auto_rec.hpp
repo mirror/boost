@@ -1,9 +1,9 @@
 # /* **************************************************************************
 #  *                                                                          *
-#  *     (C) Copyright Paul Mensonides 2002.  Permission to copy, use,          *
-#  *     modify, sell, and distribute this software is granted provided          *
-#  *     this copyright notice appears in all copies.  This software is          *
-#  *     provided "as is" without express or implied warranty, and with          *
+#  *     (C) Copyright Paul Mensonides 2002.  Permission to copy, use,        *
+#  *     modify, sell, and distribute this software is granted provided       *
+#  *     this copyright notice appears in all copies.  This software is       *
+#  *     provided "as is" without express or implied warranty, and with       *
 #  *     no claim at to its suitability for any purpose.                      *
 #  *                                                                          *
 #  ************************************************************************** */
@@ -13,41 +13,21 @@
 # ifndef BOOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
 # define BOOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
 #
-# include <boost/preprocessor/cat.hpp>
-# include <boost/preprocessor/config/config.hpp>
+# //include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/control/iif.hpp>
 #
 # /* BOOST_PP_AUTO_REC */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG && ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_AUTO_REC(pred, n) BOOST_PP_CAT(BOOST_PP_NODE_ENTRY_, n)(pred)
-# else
-#    define BOOST_PP_AUTO_REC(pred, n) BOOST_PP_AUTO_REC_D(pred, n)
-#    define BOOST_PP_AUTO_REC_D(pred, n) BOOST_PP_NODE_ENTRY_ ## n(pred)
-# endif
+# define BOOST_PP_AUTO_REC(pred, n) BOOST_PP_NODE_ENTRY_ ## n(pred)
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MSVC
-#    define BOOST_PP_NODE_ENTRY_256(p) BOOST_PP_NODE_128(p)(p)(p)(p)(p)(p)(p)(p)
-#    define BOOST_PP_NODE_ENTRY_128(p) BOOST_PP_NODE_64(p)(p)(p)(p)(p)(p)(p)
-#    define BOOST_PP_NODE_ENTRY_64(p) BOOST_PP_NODE_32(p)(p)(p)(p)(p)(p)
-#    define BOOST_PP_NODE_ENTRY_32(p) BOOST_PP_NODE_16(p)(p)(p)(p)(p)
-#    define BOOST_PP_NODE_ENTRY_16(p) BOOST_PP_NODE_8(p)(p)(p)(p)
-#    define BOOST_PP_NODE_ENTRY_8(p) BOOST_PP_NODE_4(p)(p)(p)
-#    define BOOST_PP_NODE_ENTRY_4(p) BOOST_PP_NODE_2(p)(p)
-#    define BOOST_PP_NODE_ENTRY_2(p) BOOST_PP_NODE_1(p)
-# else
-#    define BOOST_PP_NODE_ENTRY_256(p) BOOST_PP_NODE_IDENTITY((BOOST_PP_NODE_128(p)(p)(p)(p)(p)(p)(p)(p)))
-#    define BOOST_PP_NODE_ENTRY_128(p) BOOST_PP_NODE_IDENTITY((BOOST_PP_NODE_64(p)(p)(p)(p)(p)(p)(p)))
-#    define BOOST_PP_NODE_ENTRY_64(p) BOOST_PP_NODE_IDENTITY((BOOST_PP_NODE_32(p)(p)(p)(p)(p)(p)))
-#    define BOOST_PP_NODE_ENTRY_32(p) BOOST_PP_NODE_IDENTITY((BOOST_PP_NODE_16(p)(p)(p)(p)(p)))
-#    define BOOST_PP_NODE_ENTRY_16(p) BOOST_PP_NODE_IDENTITY((BOOST_PP_NODE_8(p)(p)(p)(p)))
-#    define BOOST_PP_NODE_ENTRY_8(p) BOOST_PP_NODE_IDENTITY((BOOST_PP_NODE_4(p)(p)(p)))
-#    define BOOST_PP_NODE_ENTRY_4(p) BOOST_PP_NODE_IDENTITY((BOOST_PP_NODE_2(p)(p)))
-#    define BOOST_PP_NODE_ENTRY_2(p) BOOST_PP_NODE_IDENTITY((BOOST_PP_NODE_1(p)))
-#    define BOOST_PP_NODE_IDENTITY(id) BOOST_PP_NODE_IDENTITY_3(BOOST_PP_NODE_IDENTITY_2 id)
-#    define BOOST_PP_NODE_IDENTITY_2(n) n
-#    define BOOST_PP_NODE_IDENTITY_3(n) n
-# endif
+# define BOOST_PP_NODE_ENTRY_256(p) BOOST_PP_NODE_128(p)(p)(p)(p)(p)(p)(p)(p)
+# define BOOST_PP_NODE_ENTRY_128(p) BOOST_PP_NODE_64(p)(p)(p)(p)(p)(p)(p)
+# define BOOST_PP_NODE_ENTRY_64(p) BOOST_PP_NODE_32(p)(p)(p)(p)(p)(p)
+# define BOOST_PP_NODE_ENTRY_32(p) BOOST_PP_NODE_16(p)(p)(p)(p)(p)
+# define BOOST_PP_NODE_ENTRY_16(p) BOOST_PP_NODE_8(p)(p)(p)(p)
+# define BOOST_PP_NODE_ENTRY_8(p) BOOST_PP_NODE_4(p)(p)(p)
+# define BOOST_PP_NODE_ENTRY_4(p) BOOST_PP_NODE_2(p)(p)
+# define BOOST_PP_NODE_ENTRY_2(p) BOOST_PP_NODE_1(p)
 #
 # define BOOST_PP_NODE_128(p) BOOST_PP_IIF(p(128), BOOST_PP_NODE_64, BOOST_PP_NODE_192)
 #    define BOOST_PP_NODE_64(p) BOOST_PP_IIF(p(64), BOOST_PP_NODE_32, BOOST_PP_NODE_96)

@@ -13,23 +13,18 @@
 # ifndef BOOST_PREPROCESSOR_LOGICAL_COMPL_HPP
 # define BOOST_PREPROCESSOR_LOGICAL_COMPL_HPP
 #
-# include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 #
 # /* BOOST_PP_COMPL */
 #
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
-#   define BOOST_PP_COMPL(x) BOOST_PP_CAT(BOOST_PP_COMPL_, x)
-# elif ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#   define BOOST_PP_COMPL(x) BOOST_PP_COMPL_D(x)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define BOOST_PP_COMPL(x) BOOST_PP_COMPL_I(x)
 # else
-#   define BOOST_PP_COMPL(x) BOOST_PP_EVIL_COMPL_D((x))
-#   define BOOST_PP_EVIL_COMPL_D(par) BOOST_PP_COMPL_D ## par
+#    define BOOST_PP_COMPL(x) BOOST_PP_COMPL_OO((x))
+#    define BOOST_PP_COMPL_OO(par) BOOST_PP_COMPL_I ## par
 # endif
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
-#   define BOOST_PP_COMPL_D(x) BOOST_PP_COMPL_ ## x
-# endif
+# define BOOST_PP_COMPL_I(x) BOOST_PP_COMPL_ ## x
 #
 # define BOOST_PP_COMPL_0 1
 # define BOOST_PP_COMPL_1 0

@@ -21,22 +21,20 @@
 #
 # /* BOOST_PP_MAX */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_MAX BOOST_PP_MAX_I
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_MAX(x, y) BOOST_PP_IIF(BOOST_PP_LESS_EQUAL(x, y), y, x)
 # else
 #    define BOOST_PP_MAX(x, y) BOOST_PP_MAX_I(x, y)
+#    define BOOST_PP_MAX_I(x, y) BOOST_PP_IIF(BOOST_PP_LESS_EQUAL(x, y), y, x)
 # endif
-#
-# define BOOST_PP_MAX_I(x, y) BOOST_PP_IIF(BOOST_PP_LESS_EQUAL(x, y), y, x)
 #
 # /* BOOST_PP_MAX_D */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_MAX_D BOOST_PP_MAX_D_I
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_MAX_D(d, x, y) BOOST_PP_IIF(BOOST_PP_LESS_EQUAL_D(d, x, y), y, x)
 # else
 #    define BOOST_PP_MAX_D(d, x, y) BOOST_PP_MAX_D_I(d, x, y)
+#    define BOOST_PP_MAX_D_I(d, x, y) BOOST_PP_IIF(BOOST_PP_LESS_EQUAL_D(d, x, y), y, x)
 # endif
-#
-# define BOOST_PP_MAX_D_I(d, x, y) BOOST_PP_IIF(BOOST_PP_LESS_EQUAL_D(d, x, y), y, x)
 #
 # endif

@@ -24,24 +24,18 @@
 #
 # /* BOOST_PP_MUL */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_MUL BOOST_PP_MUL_I
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_MUL(x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_WHILE(BOOST_PP_MUL_P, BOOST_PP_MUL_O, (0, x, y)))
 # else
 #    define BOOST_PP_MUL(x, y) BOOST_PP_MUL_I(x, y)
+#    define BOOST_PP_MUL_I(x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_WHILE(BOOST_PP_MUL_P, BOOST_PP_MUL_O, (0, x, y)))
 # endif
 #
-# define BOOST_PP_MUL_I(x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_WHILE(BOOST_PP_MUL_P, BOOST_PP_MUL_O, (0, x, y)))
+# define BOOST_PP_MUL_P(d, rxy) BOOST_PP_TUPLE_ELEM(3, 2, rxy)
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_MUL_P(d, rxy) BOOST_PP_MUL_P_I rxy
-#    define BOOST_PP_MUL_P_I(r, x, y) y
-# else
-#    define BOOST_PP_MUL_P(d, rxy) BOOST_PP_TUPLE_ELEM(3, 2, rxy)
-# endif
-#
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_MUL_O(d, rxy) BOOST_PP_MUL_O_D(d, BOOST_PP_TUPLE_REM_3 rxy)
-#    define BOOST_PP_MUL_O_D(d, im) BOOST_PP_MUL_O_I(d, im)
+# if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_STRICT()
+#    define BOOST_PP_MUL_O(d, rxy) BOOST_PP_MUL_O_IM(d, BOOST_PP_TUPLE_REM_3 rxy)
+#    define BOOST_PP_MUL_O_IM(d, im) BOOST_PP_MUL_O_I(d, im)
 # else
 #    define BOOST_PP_MUL_O(d, rxy) BOOST_PP_MUL_O_I(d, BOOST_PP_TUPLE_ELEM(3, 0, rxy), BOOST_PP_TUPLE_ELEM(3, 1, rxy), BOOST_PP_TUPLE_ELEM(3, 2, rxy))
 # endif
@@ -50,12 +44,11 @@
 #
 # /* BOOST_PP_MUL_D */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_MUL_D BOOST_PP_MUL_D_I
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_MUL_D(d, x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_WHILE_ ## d(BOOST_PP_MUL_P, BOOST_PP_MUL_O, (0, x, y)))
 # else
 #    define BOOST_PP_MUL_D(d, x, y) BOOST_PP_MUL_D_I(d, x, y)
+#    define BOOST_PP_MUL_D_I(d, x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_WHILE_ ## d(BOOST_PP_MUL_P, BOOST_PP_MUL_O, (0, x, y)))
 # endif
-#
-# define BOOST_PP_MUL_D_I(d, x, y) BOOST_PP_TUPLE_ELEM(3, 0, BOOST_PP_WHILE_ ## d(BOOST_PP_MUL_P, BOOST_PP_MUL_O, (0, x, y)))
 #
 # endif

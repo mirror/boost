@@ -21,22 +21,20 @@
 #
 # /* BOOST_PP_LIST_AT */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_LIST_AT BOOST_PP_LIST_AT_I
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_LIST_AT(list, index) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N(index, list))
 # else
 #    define BOOST_PP_LIST_AT(list, index) BOOST_PP_LIST_AT_I(list, index)
+#    define BOOST_PP_LIST_AT_I(list, index) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N(index, list))
 # endif
-#
-# define BOOST_PP_LIST_AT_I(list, index) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N(index, list))
 #
 # /* BOOST_PP_LIST_AT_D */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_LIST_AT_D BOOST_PP_LIST_AT_D_I
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_LIST_AT_D(d, list, index) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N_D(d, index, list))
 # else
 #    define BOOST_PP_LIST_AT_D(d, list, index) BOOST_PP_LIST_AT_D_I(d, list, index)
+#    define BOOST_PP_LIST_AT_D_I(d, list, index) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N_D(d, index, list))
 # endif
-#
-# define BOOST_PP_LIST_AT_D_I(d, list, index) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N_D(d, index, list))
 #
 # endif

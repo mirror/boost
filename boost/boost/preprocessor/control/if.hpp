@@ -21,12 +21,11 @@
 #
 # /* BOOST_PP_IF */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_IF BOOST_PP_IF_D
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_IF(cond, t, f) BOOST_PP_IIF(BOOST_PP_BOOL(cond), t, f)
 # else
-#    define BOOST_PP_IF(cond, t, f) BOOST_PP_IF_D(cond, t, f)
+#    define BOOST_PP_IF(cond, t, f) BOOST_PP_IF_I(cond, t, f)
+#    define BOOST_PP_IF_I(cond, t, f) BOOST_PP_IIF(BOOST_PP_BOOL(cond), t, f)
 # endif
-#
-# define BOOST_PP_IF_D(cond, t, f) BOOST_PP_IIF(BOOST_PP_BOOL(cond), t, f)
 #
 # endif

@@ -14,7 +14,6 @@
 # define BOOST_PREPROCESSOR_SLOT_SLOT_HPP
 #
 # include <boost/preprocessor/cat.hpp>
-# include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/slot/detail/def.hpp>
 #
 # /* BOOST_PP_ASSIGN_SLOT */

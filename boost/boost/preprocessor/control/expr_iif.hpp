@@ -13,22 +13,18 @@
 # ifndef BOOST_PREPROCESSOR_CONTROL_EXPR_IIF_HPP
 # define BOOST_PREPROCESSOR_CONTROL_EXPR_IIF_HPP
 #
-# include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 #
 # /* BOOST_PP_EXPR_IIF */
 #
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
-#    define BOOST_PP_EXPR_IIF(bit, expr) BOOST_PP_CAT(BOOST_PP_EXPR_IIF_, bit)(expr)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define BOOST_PP_EXPR_IIF(bit, expr) BOOST_PP_EXPR_IIF_I(bit, expr)
 # else
-#    if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#        define BOOST_PP_EXPR_IIF(bit, expr) BOOST_PP_EXPR_IIF_D(bit, expr)
-#    else
-#        define BOOST_PP_EXPR_IIF(bit, expr) BOOST_PP_EVIL_EXPR_IIF_D((bit, expr))
-#        define BOOST_PP_EVIL_EXPR_IIF_D(par) BOOST_PP_EXPR_IIF_D ## par
-#    endif
-#    define BOOST_PP_EXPR_IIF_D(bit, expr) BOOST_PP_EXPR_IIF_ ## bit(expr)
+#    define BOOST_PP_EXPR_IIF(bit, expr) BOOST_PP_EXPR_IIF_OO((bit, expr))
+#    define BOOST_PP_EXPR_IIF_OO(par) BOOST_PP_EXPR_IIF_I ## par
 # endif
+#
+# define BOOST_PP_EXPR_IIF_I(bit, expr) BOOST_PP_EXPR_IIF_ ## bit(expr)
 #
 # define BOOST_PP_EXPR_IIF_0(expr)
 # define BOOST_PP_EXPR_IIF_1(expr) expr

@@ -15,7 +15,7 @@
 # elif !defined(BOOST_PP_LOCAL_MACRO)
 #    error BOOST_PP_ERROR:  local iteration target macro is not defined
 # else
-#    if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
+#    if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #        define BOOST_PP_LOCAL_S BOOST_PP_TUPLE_ELEM(2, 0, BOOST_PP_LOCAL_LIMITS)
 #        define BOOST_PP_LOCAL_F BOOST_PP_TUPLE_ELEM(2, 1, BOOST_PP_LOCAL_LIMITS)
 #    else

@@ -14,27 +14,16 @@
 # define BOOST_PREPROCESSOR_ARRAY_SIZE_HPP
 #
 # include <boost/preprocessor/config/config.hpp>
+# include <boost/preprocessor/tuple/elem.hpp>
 #
 # /* BOOST_PP_ARRAY_SIZE */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG && ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_ARRAY_SIZE BOOST_PP_ARRAY_SIZE_I
-# elif ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_ARRAY_SIZE(array) BOOST_PP_ARRAY_SIZE_I(array)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_ARRAY_SIZE(array) BOOST_PP_TUPLE_ELEM(2, 0, array)
 # else
-#    define BOOST_PP_ARRAY_SIZE(array) BOOST_PP_EVIL_ARRAY_SIZE_D((array))
-#    define BOOST_PP_EVIL_ARRAY_SIZE_D(par) BOOST_PP_ARRAY_SIZE_I ## par
+#    define BOOST_PP_ARRAY_SIZE(array) BOOST_PP_ARRAY_SIZE_I(array)
+#    define BOOST_PP_ARRAY_SIZE_I(array) BOOST_PP_ARRAY_SIZE_II array
+#    define BOOST_PP_ARRAY_SIZE_II(size, data) size
 # endif
-#
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_STRICT || BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_BCC
-#    define BOOST_PP_ARRAY_SIZE_I(array) BOOST_PP_ARRAY_SIZE_X array
-# elif BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_ARRAY_SIZE_I(array) BOOST_PP_ARRAY_SIZE_X ## array
-# elif BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MSVC
-#    define BOOST_PP_ARRAY_SIZE_I(array) BOOST_PP_ARRAY_SIZE_D(BOOST_PP_ARRAY_SIZE_X array)
-#    define BOOST_PP_ARRAY_SIZE_D(res) res
-# endif
-#
-# define BOOST_PP_ARRAY_SIZE_X(s, d) s
 #
 # endif

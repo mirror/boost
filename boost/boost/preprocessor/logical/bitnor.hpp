@@ -13,22 +13,18 @@
 # ifndef BOOST_PREPROCESSOR_LOGICAL_BITNOR_HPP
 # define BOOST_PREPROCESSOR_LOGICAL_BITNOR_HPP
 #
-# include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 #
 # /* BOOST_PP_BITNOR */
 #
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
-#    define BOOST_PP_BITNOR(x, y) BOOST_PP_CAT(BOOST_PP_BITNOR_, BOOST_PP_CAT(x, y))
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define BOOST_PP_BITNOR(x, y) BOOST_PP_BITNOR_I(x, y)
 # else
-#    if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#        define BOOST_PP_BITNOR(x, y) BOOST_PP_BITNOR_D(x, y)
-#    else
-#        define BOOST_PP_BITNOR(x, y) BOOST_PP_EVIL_BITNOR_D((x, y))
-#        define BOOST_PP_EVIL_BITNOR_D(par) BOOST_PP_BITNOR_D ## par
-#    endif
-#    define BOOST_PP_BITNOR_D(x, y) BOOST_PP_BITNOR_ ## x ## y
+#    define BOOST_PP_BITNOR(x, y) BOOST_PP_BITNOR_OO((x, y))
+#    define BOOST_PP_BITNOR_OO(par) BOOST_PP_BITNOR_I ## par
 # endif
+#
+# define BOOST_PP_BITNOR_I(x, y) BOOST_PP_BITNOR_ ## x ## y
 #
 # define BOOST_PP_BITNOR_00 1
 # define BOOST_PP_BITNOR_01 0

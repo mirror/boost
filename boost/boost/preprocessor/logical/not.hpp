@@ -21,12 +21,11 @@
 #
 # /* BOOST_PP_NOT */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_NOT BOOST_PP_NOT_I
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_NOT(x) BOOST_PP_COMPL(BOOST_PP_BOOL(x))
 # else
 #    define BOOST_PP_NOT(x) BOOST_PP_NOT_I(x)
+#    define BOOST_PP_NOT_I(x) BOOST_PP_COMPL(BOOST_PP_BOOL(x))
 # endif
-#
-# define BOOST_PP_NOT_I(x) BOOST_PP_COMPL(BOOST_PP_BOOL(x))
 #
 # endif

@@ -13,17 +13,16 @@
 # ifndef BOOST_PREPROCESSOR_TUPLE_REM_HPP
 # define BOOST_PREPROCESSOR_TUPLE_REM_HPP
 #
-# include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 #
-# /* BOOST_PP_TUPLE_REM */
-#
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_TUPLE_REM(size) BOOST_PP_CAT(BOOST_PP_TUPLE_REM_, size)
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define BOOST_PP_TUPLE_REM(size) BOOST_PP_TUPLE_REM_I(size)
 # else
-#    define BOOST_PP_TUPLE_REM(size) BOOST_PP_TUPLE_REM_D(size)
-#    define BOOST_PP_TUPLE_REM_D(size) BOOST_PP_TUPLE_REM_ ## size
+#    define BOOST_PP_TUPLE_REM(size) BOOST_PP_TUPLE_REM_OO((size))
+#    define BOOST_PP_TUPLE_REM_OO(par) BOOST_PP_TUPLE_REM_I ## par
 # endif
+#
+# define BOOST_PP_TUPLE_REM_I(size) BOOST_PP_TUPLE_REM_ ## size
 #
 # define BOOST_PP_TUPLE_REM_0()
 # define BOOST_PP_TUPLE_REM_1(a) a

@@ -17,18 +17,13 @@
 #
 # include <boost/preprocessor/config/config.hpp>
 #
-# /* BOOST_PP_EXPAND */
-#
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
-#    define BOOST_PP_EXPAND(x) x
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
+#    define BOOST_PP_EXPAND(x) BOOST_PP_EXPAND_I(x)
 # else
-#    if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#        define BOOST_PP_EXPAND(x) BOOST_PP_EXPAND_D(x)
-#    else
-#        define BOOST_PP_EXPAND(x) BOOST_PP_EVIL_EXPAND_D((x))
-#        define BOOST_PP_EVIL_EXPAND_D(par) BOOST_PP_EXPAND_D ## par
-#    endif
-#    define BOOST_PP_EXPAND_D(x) x
+#    define BOOST_PP_EXPAND(x) BOOST_PP_EXPAND_OO((x))
+#    define BOOST_PP_EXPAND_OO(par) BOOST_PP_EXPAND_I ## par
 # endif
+#
+# define BOOST_PP_EXPAND_I(x) x
 #
 # endif

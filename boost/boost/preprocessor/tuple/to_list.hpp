@@ -15,22 +15,22 @@
 # ifndef BOOST_PREPROCESSOR_TUPLE_TO_LIST_HPP
 # define BOOST_PREPROCESSOR_TUPLE_TO_LIST_HPP
 #
-# include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/config/config.hpp>
 #
-# /* BOOST_PP_TUPLE_TO_LIST */
+# /* BOOST_PP_TUPLE_REVERSE */
 #
-# if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
-#    define BOOST_PP_TUPLE_TO_LIST(size, tuple) BOOST_PP_CAT(BOOST_PP_TUPLE_TO_LIST_, size) tuple
-# elif ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MWCC()
 #    define BOOST_PP_TUPLE_TO_LIST(size, tuple) BOOST_PP_TUPLE_TO_LIST_I(size, tuple)
-#    define BOOST_PP_TUPLE_TO_LIST_I(size, tuple) BOOST_PP_TUPLE_TO_LIST_II(BOOST_PP_TUPLE_TO_LIST_ ## size, tuple)
-#    define BOOST_PP_TUPLE_TO_LIST_II(tl, tuple) tl tuple
+#    if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
+#        define BOOST_PP_TUPLE_TO_LIST_I(s, t) BOOST_PP_TUPLE_TO_LIST_ ## s t
+#    else
+#        define BOOST_PP_TUPLE_TO_LIST_I(s, t) BOOST_PP_TUPLE_TO_LIST_II(BOOST_PP_TUPLE_TO_LIST_ ## s t)
+#        define BOOST_PP_TUPLE_TO_LIST_II(res) res
+#    endif
 # else
-#    define BOOST_PP_TUPLE_TO_LIST(size, tuple) BOOST_PP_EVIL_TUPLE_TO_LIST_I((size, tuple))
-#    define BOOST_PP_EVIL_TUPLE_TO_LIST_I(par) BOOST_PP_TUPLE_TO_LIST_II ## par
-#    define BOOST_PP_TUPLE_TO_LIST_II(size, tuple) BOOST_PP_EVIL_TUPLE_TO_LIST_III(BOOST_PP_TUPLE_TO_LIST_ ## size, tuple)
-#    define BOOST_PP_EVIL_TUPLE_TO_LIST_III(tl, tuple) tl ## tuple
+#    define BOOST_PP_TUPLE_TO_LIST(size, tuple) BOOST_PP_TUPLE_TO_LIST_OO((size, tuple))
+#    define BOOST_PP_TUPLE_TO_LIST_OO(par) BOOST_PP_TUPLE_TO_LIST_I ## par
+#    define BOOST_PP_TUPLE_TO_LIST_I(s, t) BOOST_PP_TUPLE_TO_LIST_ ## s ## t
 # endif
 #
 # define BOOST_PP_TUPLE_TO_LIST_0() BOOST_PP_NIL

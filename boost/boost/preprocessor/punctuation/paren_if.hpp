@@ -1,12 +1,14 @@
-# /* **************************************************************************
-#  *                                                                          *
-#  *     (C) Copyright Paul Mensonides 2002.  Permission to copy, use,        *
-#  *     modify, sell, and distribute this software is granted provided       *
-#  *     this copyright notice appears in all copies.  This software is       *
-#  *     provided "as is" without express or implied warranty, and with       *
-#  *     no claim at to its suitability for any purpose.                      *
-#  *                                                                          *
-#  ************************************************************************** */
+# /* Copyright (C) 2001
+#  * Housemarque Oy
+#  * http://www.housemarque.com
+#  *
+#  * Permission to copy, use, modify, sell and distribute this software is
+#  * granted provided this copyright notice appears in all copies. This
+#  * software is provided "as is" without express or implied warranty, and
+#  * with no claim as to its suitability for any purpose.
+#  */
+#
+# /* Revised by Paul Mensonides (2002) */
 #
 # /* See http://www.boost.org for most recent version. */
 #
@@ -20,22 +22,20 @@
 #
 # /* BOOST_PP_LPAREN_IF */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_LPAREN_IF BOOST_PP_LPAREN_IF_D
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_LPAREN_IF(cond) BOOST_PP_IF(cond, BOOST_PP_LPAREN, BOOST_PP_EMPTY)()
 # else
-#    define BOOST_PP_LPAREN_IF(cond) BOOST_PP_LPAREN_IF_D(cond)
+#    define BOOST_PP_LPAREN_IF(cond) BOOST_PP_LPAREN_IF_I(cond)
+#    define BOOST_PP_LPAREN_IF_I(cond) BOOST_PP_IF(cond, BOOST_PP_LPAREN, BOOST_PP_EMPTY)()
 # endif
-#
-# define BOOST_PP_LPAREN_IF_D(cond) BOOST_PP_IF(cond, BOOST_PP_LPAREN, BOOST_PP_EMPTY)()
 #
 # /* BOOST_PP_RPAREN_IF */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_RPAREN_IF BOOST_PP_RPAREN_IF_D
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_RPAREN_IF(cond) BOOST_PP_IF(cond, BOOST_PP_RPAREN, BOOST_PP_EMPTY)()
 # else
-#    define BOOST_PP_RPAREN_IF(cond) BOOST_PP_RPAREN_IF_D(cond)
+#    define BOOST_PP_RPAREN_IF(cond) BOOST_PP_RPAREN_IF_I(cond)
+#    define BOOST_PP_RPAREN_IF_I(cond) BOOST_PP_IF(cond, BOOST_PP_RPAREN, BOOST_PP_EMPTY)()
 # endif
-#
-# define BOOST_PP_RPAREN_IF_D(cond) BOOST_PP_IF(cond, BOOST_PP_RPAREN, BOOST_PP_EMPTY)()
 #
 # endif

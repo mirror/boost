@@ -14,24 +14,16 @@
 # define BOOST_PREPROCESSOR_ARRAY_DATA_HPP
 #
 # include <boost/preprocessor/config/config.hpp>
+# include <boost/preprocessor/tuple/elem.hpp>
 #
 # /* BOOST_PP_ARRAY_DATA */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG && ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_ARRAY_DATA BOOST_PP_ARRAY_DATA_I
-# elif ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_ARRAY_DATA(array) BOOST_PP_TUPLE_ELEM(2, 1, array)
+# else
 #    define BOOST_PP_ARRAY_DATA(array) BOOST_PP_ARRAY_DATA_I(array)
-# else
-#    define BOOST_PP_ARRAY_DATA(array) BOOST_PP_EVIL_ARRAY_DATA_D((array))
-#    define BOOST_PP_EVIL_ARRAY_DATA_D(par) BOOST_PP_ARRAY_DATA_I ## par
+#    define BOOST_PP_ARRAY_DATA_I(array) BOOST_PP_ARRAY_DATA_II array
+#    define BOOST_PP_ARRAY_DATA_II(size, data) data
 # endif
-#
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
-#    define BOOST_PP_ARRAY_DATA_I(array) BOOST_PP_ARRAY_DATA_X array
-# else
-#    define BOOST_PP_ARRAY_DATA_I(array) BOOST_PP_ARRAY_DATA_X ## array
-# endif
-#
-# define BOOST_PP_ARRAY_DATA_X(s, d) d
 #
 # endif

@@ -16,17 +16,14 @@
 # define BOOST_PREPROCESSOR_CONTROL_EXPR_IF_HPP
 #
 # include <boost/preprocessor/config/config.hpp>
-# include <boost/preprocessor/control/expr_iif.hpp>
-# include <boost/preprocessor/logical/bool.hpp>
 #
 # /* BOOST_PP_EXPR_IF */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG
-#    define BOOST_PP_EXPR_IF BOOST_PP_EXPR_IF_D
+# if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
+#    define BOOST_PP_EXPR_IF(cond, expr) BOOST_PP_EXPR_IIF(BOOST_PP_BOOL(cond), expr)
 # else
-#    define BOOST_PP_EXPR_IF(cond, expr) BOOST_PP_EXPR_IF_D(cond, expr)
+#    define BOOST_PP_EXPR_IF(cond, expr) BOOST_PP_EXPR_IF_I(cond, expr)
+#    define BOOST_PP_EXPR_IF_I(cond, expr) BOOST_PP_EXPR_IIF(BOOST_PP_BOOL(cond), expr)
 # endif
-#
-# define BOOST_PP_EXPR_IF_D(cond, expr) BOOST_PP_EXPR_IIF(BOOST_PP_BOOL(cond), expr)
 #
 # endif
