@@ -87,9 +87,9 @@ void print_byte_order(const char* what, T /* t */ )
 template <class T>
 void print_sign(const char* what, T t)
 {
-   t = -1;
+   t = static_cast<T>(-1);  // cast suppresses warnings
    for(unsigned i = 0; i < indent; ++i) std::cout.put(' ');
-   std::cout << "Type " << what << " is " << ((t < 0) ? "signed" : "unsigned") << std::endl;
+   std::cout << "Type " << what << " is " << ((t > 0) ? "unsigned" : "signed") << std::endl;
 }
 
 #define PRINT_SIGN(T) print_sign(#T, T())

@@ -99,8 +99,8 @@ void integral_constant_type_check(T1, T2)
    // numeric_limits implementations currently
    // vary too much, or are incomplete or missing.
    //
-   T1 t1 = -1;
-   T2 t2 = -1;
+   T1 t1 = static_cast<T1>(-1);  // cast suppresses warnings
+   T2 t2 = static_cast<T2>(-1);  // ditto
 #if defined(BOOST_HAS_STDINT_H)
    // if we have a native stdint.h
    // then the INTXX_C macros may define
@@ -110,10 +110,10 @@ void integral_constant_type_check(T1, T2)
    assert(sizeof(T1) == sizeof(T2));
    assert(t1 == t2);
 #endif
-   if(t1 >= 0)
-     assert(t2 >= 0);
+   if(t1 > 0)
+     assert(t2 > 0);
    else
-     assert(t2 < 0);
+     assert(!(t2 > 0));
 }
 
 
