@@ -119,6 +119,14 @@
 #  define BOOST_NO_CWTYPE
 #endif
 
+//
+// Borland ships a version of STLport with C++ Builder 6 that lacks
+// hashtables and the like:
+//
+#if defined(__BORLANDC__) && (__BORLANDC__ == 0x560)
+#  undef BOOST_HAS_HASH
+#endif
+
 
 #define BOOST_STDLIB "STLPort standard library version " BOOST_STRINGIZE(__SGI_STL_PORT)
 
