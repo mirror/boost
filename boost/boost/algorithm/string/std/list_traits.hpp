@@ -36,30 +36,42 @@ namespace boost {
         
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         
-    // stable iterators trait
+        // stable iterators trait
         template<typename T, typename AllocT>
         class has_stable_iterators< ::std::list<T,AllocT> >
         {
-           public:
+        public:
+#if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+            enum { value = true };
+#else
             BOOST_STATIC_CONSTANT(bool, value=true);
+#endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
             typedef mpl::bool_<value> type;     
         };
 
-    // const time insert trait
+        // const time insert trait
         template<typename T, typename AllocT>
         class has_const_time_insert< ::std::list<T,AllocT> >
         {
-           public:
+        public:
+#if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+            enum { value = true };
+#else
             BOOST_STATIC_CONSTANT(bool, value=true);
+#endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
             typedef mpl::bool_<value> type;     
         };
 
-    // const time erase trait
+        // const time erase trait
         template<typename T, typename AllocT>
         class has_const_time_erase< ::std::list<T,AllocT> >
         {
-           public:
+        public:
+#if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+            enum { value = true };
+#else
             BOOST_STATIC_CONSTANT(bool, value=true);
+#endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
             typedef mpl::bool_<value> type;     
         };
 #endif

@@ -92,8 +92,12 @@ namespace boost {
             BOOST_STATIC_CONSTANT(bool, value=( 
                 sizeof(has_native_replace_tester(t))==sizeof(yes_type) ) );
 #else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    public:
+        public:
+#    if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+            enum { value = false };
+#    else
             BOOST_STATIC_CONSTANT(bool, value=false);
+#    endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     
 
@@ -116,8 +120,12 @@ namespace boost {
             BOOST_STATIC_CONSTANT(bool, value=( 
                 sizeof(has_stable_iterators_tester(t))==sizeof(yes_type) ) );
 #else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    public:
+        public:
+#    if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+            enum { value = false };
+#    else
             BOOST_STATIC_CONSTANT(bool, value=false);
+#    endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
             typedef mpl::bool_<value> type;
@@ -139,8 +147,12 @@ namespace boost {
             BOOST_STATIC_CONSTANT(bool, value=( 
                 sizeof(has_const_time_insert_tester(t))==sizeof(yes_type) ) );
 #else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    public:
+        public:
+#    if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+            enum { value = false };
+#    else
             BOOST_STATIC_CONSTANT(bool, value=false);
+#    endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
             typedef mpl::bool_<value> type;
@@ -162,8 +174,12 @@ namespace boost {
             BOOST_STATIC_CONSTANT(bool, value=( 
                 sizeof(has_const_time_erase_tester(t))==sizeof(yes_type) ) );
 #else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    public:
+        public:
+#    if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+            enum { value = false };
+#    else
             BOOST_STATIC_CONSTANT(bool, value=false);
+#    endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
             typedef mpl::bool_<value> type;

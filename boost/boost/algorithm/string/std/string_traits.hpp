@@ -31,9 +31,14 @@ namespace boost {
         template<typename T, typename TraitsT, typename AllocT>
         class has_native_replace< std::basic_string<T, TraitsT, AllocT> >
         {
-           public:
+        public:
+#if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+            enum { value = true } ;
+#else
             BOOST_STATIC_CONSTANT(bool, value=true);
-            typedef mpl::bool_<value> type;     
+#endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
+
+        typedef mpl::bool_<value> type;     
         };
 
 
