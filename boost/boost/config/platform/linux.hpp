@@ -16,7 +16,10 @@
 #if defined(__GLIBC__) && ((__GLIBC__ > 2) || ((__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 1)))
 #define BOOST_HAS_STDINT_H
 #endif
+
+#if !defined(__GLIBC__) || !defined(__GLIBC_PREREQ) || !__GLIBC_PREREQ(2,2) || (!defined(__USE_ISOC99) && !defined(__USE_UNIX98))
 #define BOOST_NO_SWPRINTF
+#endif
 
 #ifndef __GNUC__
 //
