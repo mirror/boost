@@ -17,7 +17,6 @@
     </tr>
   </table>
 
-<h1></h1>
 
 <p> Having an abstraction that encapsulates a pair of iterators is very 
     useful. The standard library uses <code>std::pair</code> in some 
@@ -29,8 +28,8 @@ whereas more domain specific class names are. Therefore these two
 classes are provided:
 
 <ul>
-   <li> <a href=#iter_range><code>iterator_range</code></a> 
-   <li> <a href=#sub_range><code>sub_range</code></a> </ul>
+   <li>Class <a href=#iter_range><code>iterator_range</code></a> 
+   <li>Class <a href=#sub_range><code>sub_range</code></a> </ul>
 </ul>
 
 The <code>iterator_range</code> class is templated on an iterator and should be 
@@ -40,7 +39,7 @@ and it is less general, but a bit easier to use since its template argument
 is easier to specify. 
 </p>
 
-<hr> <a name=iter_range></a> <h1><code>iterator_range</code></h1>
+<hr> <a name=iter_range></a> <h1>Class <code>iterator_range</code></h1>
  
  The intention of the 
 <code>iterator_range</code> class is to encapsulate 
@@ -137,7 +136,7 @@ client must ensure that the two iterators delimit a valid closed-open range
  </p>
 
 <hr> <a name=sub_range></a> 
-<h1><code>sub_range</code></h1> 
+<h1>Class <code>sub_range</code></h1> 
 
 The <code>sub_range</code> class inherits all its functionality 
 from the <a href="#iter_range"><code>iterator_range</code></a> class. 
