@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cstring>
 #include <boost/filesystem/path.hpp>
+#include <boost/version.hpp>
 #include "bcp.hpp"
 
 #ifdef BOOST_NO_STDC_NAMESPACE
@@ -78,6 +79,13 @@ int cpp_main(int argc, char* argv[])
          || 0 == std::strcmp("--help", argv[i]))
       {
          show_usage();
+         return 0;
+      }
+      if(0 == std::strcmp("-v", argv[i])
+         || 0 == std::strcmp("--version", argv[i]))
+      {
+         std::cout << "bcp " << (BOOST_VERSION / 100000) << "." << (BOOST_VERSION / 100 % 1000) << "." << (BOOST_VERSION % 100) << std::endl;
+         std::cout << __DATE__ << std::endl;
          return 0;
       }
       else if(0 == std::strcmp("--list", argv[i]))
