@@ -27,6 +27,10 @@
 
 namespace boost { namespace mpl {
 
+// agurt, 27/nov/02: have to use a simplistic 'sequence_tag' implementation
+// on MSVC to avoid dreadful "internal structure overflow" error
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
+
 namespace aux {
 
 template< bool has_tag_, bool has_begin_ >
@@ -87,6 +91,19 @@ struct sequence_tag
         >::template result_<Sequence>
 {
 };
+
+#else 
+
+template<
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
+    >
+struct sequence_tag
+{
+    typedef typename Sequence::tag type;
+};
+
+#endif // BOOST_MSVC
+
 
 #if defined(BOOST_MPL_MSVC_ETI_BUG)
 template<> struct sequence_tag<int>
