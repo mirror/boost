@@ -11,15 +11,31 @@
       <firstname>Vladimir</firstname>
       <surname>Prus</surname>
     </author>
+    
+    <copyright>
+      <year>2002</year>
+      <year>2003</year>
+      <year>2004</year>
+      <holder>Vladimir Prus</holder>
+    </copyright>
+
+    <legalnotice>
+      <para>Distributed under the Boost Software License, Version 1.0.
+      (See accompanying file <filename>LICENSE_1_0.txt</filename> or copy at 
+      <ulink
+      url="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</ulink>)
+      </para>
+    </legalnotice>
+
             
     <librarypurpose>
       Facilities to obtain configuration data from command line, config files
-      and other sources.
+      and other sources
     </librarypurpose>
     <librarycategory name="category:data-structures"></librarycategory>
   </libraryinfo>
   
-  <title>Boost.program_options library</title>
+  <title>Boost.Program_options</title>
   
   <section>
     <title>Introduction</title>
@@ -58,34 +74,6 @@
       Now let's see some examples of the library usage in the <xref
       linkend="program_options.tutorial"/>.
     </para>
-
-<!--
-    <para>Basic goals for the library include support for:</para>
-    <itemizedlist>
-    <listitem>parsing of command line and config files</listitem>
-    <listitem>performing semantic processing of input, such as checking for correct
-      type of parameters, and storing values to program variables</listitem>
-    <listitem>combining all inputs together, so that all program options can
-      be obtained in one place</listitem>
-    </itemizedlist>
-
-    <para>
-    <itemizedlist>
-    <listitem>it should be more convenient to use it than parse command line by hand,
-      even when the number of possible options is 2,</listitem>
-    <listitem>all popular command line styles should be supported,</listitem>
-    <listitem>
-    - "you pay for what you use" principle is important: simple utilities
-      need not be forced to depend on excessive amount of code.</listitem>
-    - it must be possible to validate option values, convert them to required
-      types, and store either in program variables, or in data structures
-      maintained by the library.
-    - data from command line and config file should be usable together, and
-      alternative program option sources (such as registry) should be
-      possible.
-    </itemizedlist>
-    </para>
--->
     
   </section>
 
