@@ -532,7 +532,7 @@ namespace boost {
     typedef std::forward_iterator_tag iterator_category;
     typedef T value_type;
     typedef const T& reference;
-    typedef T* pointer;
+    typedef T const* pointer;
     typedef std::ptrdiff_t difference_type;
     forward_iterator_archetype() { }
     self& operator=(const self&) { return *this;  }
