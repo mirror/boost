@@ -38,7 +38,7 @@
 // arguments explicitly specified.  At least one compiler that needs this
 // workaround also needs the default value for the dummy argument to be
 // specified in the definition.
-#ifndef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+#if defined(__GNUC__) || !defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS)
 #define BOOST_CRC_DUMMY_PARM_TYPE
 #define BOOST_CRC_DUMMY_INIT
 #define BOOST_ACRC_DUMMY_PARM_TYPE
