@@ -47,7 +47,13 @@ namespace boost {
 
   template &lt;class <a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a>, class BaseIterator&gt;
   typename projection_iterator_generator&lt;AdaptableUnaryFunction, BaseIterator&gt;::type
-  make_projection_iterator(BaseIterator base)  
+  make_projection_iterator(BaseIterator base,
+			   const AdaptableUnaryFunction& p = AdaptableUnaryFunction())
+
+  template &lt;class <a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a>, class ConstBaseIterator&gt;
+  typename projection_iterator_generator&lt;AdaptableUnaryFunction, ConstBaseIterator&gt;::type
+  make_const_projection_iterator(ConstBaseIterator base,
+                                 const AdaptableUnaryFunction& p = AdaptableUnaryFunction())  
 }
 </pre>
 
@@ -327,15 +333,15 @@ save the user the trouble of explicitly writing out the iterator
 types.
 
 <pre>
-  template &lt;class <a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a>, class BaseIterator&gt;
-  typename projection_iterator_generator&lt;AdaptableUnaryFunction, BaseIterator&gt;::type
-  make_projection_iterator(BaseIterator base,
-                           const AdaptableUnaryFunction& p = AdaptableUnaryFunction())  
+template &lt;class <a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a>, class BaseIterator&gt;
+typename projection_iterator_generator&lt;AdaptableUnaryFunction, BaseIterator&gt;::type
+make_projection_iterator(BaseIterator base,
+			 const AdaptableUnaryFunction& p = AdaptableUnaryFunction())  
 
-  template &lt;class <a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a>, class ConstBaseIterator&gt;
-  typename projection_iterator_generator&lt;AdaptableUnaryFunction, ConstBaseIterator&gt;::type
-  make_const_projection_iterator(ConstBaseIterator base,
-                                 const AdaptableUnaryFunction& p = AdaptableUnaryFunction())  
+template &lt;class <a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a>, class ConstBaseIterator&gt;
+typename projection_iterator_generator&lt;AdaptableUnaryFunction, ConstBaseIterator&gt;::type
+make_const_projection_iterator(ConstBaseIterator base,
+			       const AdaptableUnaryFunction& p = AdaptableUnaryFunction())  
 </pre>
 
 
@@ -343,7 +349,7 @@ types.
 
 In this part of the example, we again print out the names of the
 personnel, but this time we use the
-<tt>make_projection_iterator()</tt> function to save some typing.
+<tt>make_const_projection_iterator()</tt> function to save some typing.
 
 <pre>
   // continuing from the last example...
