@@ -1218,8 +1218,6 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, bool preserve = true) {
             if (size > N)
                 bad_size ().raise ();
-                // only necessary for non POD to maintain default initialised invariant
-            std::fill (data_ + size_, data_ + size, value_type ());
             size_ = size;
         }
 

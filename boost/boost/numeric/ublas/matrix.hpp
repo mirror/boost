@@ -3155,8 +3155,6 @@ namespace boost { namespace numeric { namespace ublas {
                 assign_temporary (temporary);
             }
             else {
-                // only necessary for non POD to maintain default initialised invariant
-	            std::fill (data_ + size1_*size2_, data_ + size1+size2, value_type ());
                 size1_ = size1;
                 size2_ = size2;
 	        }
