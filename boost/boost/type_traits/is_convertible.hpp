@@ -125,7 +125,7 @@ struct is_convertible_impl
         == sizeof(::boost::type_traits::yes_type);
 };
 
-#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1310))\
+#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1310) && _MSC_FULL_VER > 13102215) \
       || (defined(__EDG_VERSION__) && (__EDG_VERSION__ >= 245) && !defined(__ICL))
 //
 // This is *almost* an ideal world implementation as it doesn't rely
