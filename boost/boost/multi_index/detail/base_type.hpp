@@ -46,9 +46,11 @@ struct index_applier
 struct index_applier
 {
   template<typename IndexSpecifierIterator,typename Super>
-  struct apply:IndexSpecifierIterator::type::
-    BOOST_NESTED_TEMPLATE index_class<Super>
+  struct apply
   {
+    typedef typename IndexSpecifierIterator::type index_specifier;
+    typedef typename index_specifier::
+      BOOST_NESTED_TEMPLATE index_class<Super>::type type;
   }; 
 };
 #endif

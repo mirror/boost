@@ -12,7 +12,7 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/aux_/msvc_never_true.hpp>
-#include <boost/mpl/if.hpp>
+#include <boost/mpl/apply_if.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <cstddef>
@@ -147,11 +147,11 @@ struct compliant_allocator_rebind_to
 
 template<typename Allocator,typename Type>
 struct rebind_to:
-  mpl::if_c<
+  mpl::apply_if_c<
     is_partial_std_allocator<Allocator>::value,
     partial_std_allocator_rebind_to<Allocator,Type>,
     compliant_allocator_rebind_to<Allocator,Type>
-  >::type
+  >
 {
 };
 
