@@ -228,7 +228,9 @@ namespace boost
         template <class I1, class I2>
         struct apply
           :
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+# if BOOST_WORKAROUND(__GNUC__, == 2) && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(95))
+          iterator_difference<I1>
+# elif BOOST_WORKAROUND(BOOST_MSVC, == 1200)
           mpl::if_<
               is_convertible<I2,I1>
             , typename I1::difference_type
@@ -573,6 +575,14 @@ namespace boost
   // ----------------
   //
 
+# if BOOST_WORKAROUND(__GNUC__, == 2) && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(95))
+// GCC-2.95 eagerly instantiates templated constructors and conversion
+// operators in convertibility checks, causing premature errors.
+#  define BOOST_ITERATOR_CONVERTIBLE(a,b) mpl::true_()
+# else
+#  define BOOST_ITERATOR_CONVERTIBLE(a,b) is_convertible<a,b>()
+# endif
+
 # define BOOST_ITERATOR_FACADE_INTEROP(op, result_type, return_prefix, base_op) \
   BOOST_ITERATOR_FACADE_INTEROP_HEAD(inline, op, result_type)                   \
   {                                                                             \
@@ -582,8 +592,8 @@ namespace boost
       ));                                                                       \
       return_prefix iterator_core_access::base_op(                              \
           static_cast<Derived1 const&>(lhs)                                     \
-        , static_cast<Derived2 const&>(rhs)                                    \
-        , is_convertible<Derived2,Derived1>()                                   \
+        , static_cast<Derived2 const&>(rhs)                                     \
+        , BOOST_ITERATOR_CONVERTIBLE(Derived2,Derived1)                         \
       );                                                                        \
   }
 
