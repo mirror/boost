@@ -2879,7 +2879,7 @@ at compile time, and being slow to compile.
 <listitem>
 <para>
 The types of lambda functors that result from even the simplest lambda expressions are cryptic. 
-Usually the programmer doesn't need to deal with the lambda functor the types at all, but in the case of an error in a lambda expression, the compiler usually outputs the types of the lambda functors involved. 
+Usually the programmer doesn't need to deal with the lambda functor types at all, but in the case of an error in a lambda expression, the compiler usually outputs the types of the lambda functors involved. 
 This can make the error messages very long and difficult to interpret, particularly if the compiler outputs the whole chain of template instantiations.
 </para>
 </listitem>
