@@ -58,6 +58,9 @@
 #  ifndef BOOST_NO_STD_LOCALE
 #     include <locale>
 #  endif
+#  ifdef BOOST_REGEX_MATCH_EXTRA
+#     include <boost/scoped_ptr.hpp>
+#  endif
 #else
    //
    // C build,
@@ -395,7 +398,10 @@ public:
  ****************************************************************************/
 
 #if !defined(BOOST_REGEX_NO_W32) && !defined(BOOST_REGEX_V3)
-#  if(defined(_WIN32) || defined(_WIN64) || defined(_WINCE)) && !defined(__GNUC__) && !(__BORLANDC__ >= 0x600)
+#  if(defined(_WIN32) || defined(_WIN64) || defined(_WINCE)) \
+        && !defined(__GNUC__) \
+        && !(defined(__BORLANDC__) && (__BORLANDC__ >= 0x600)) \
+        && !(defined(__MWERKS__) && (__MWERKS__ <= 0x3003))
 #     define BOOST_REGEX_HAS_MS_STACK_GUARD
 #  endif
 #elif defined(BOOST_REGEX_HAS_MS_STACK_GUARD)
