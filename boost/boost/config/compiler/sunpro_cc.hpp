@@ -43,6 +43,7 @@
 
        // integral constant expressions with 64 bit numbers fail
 #      define BOOST_NO_INTEGRAL_INT64_T
+#      define BOOST_NO_TEMPLATE_TEMPLATES
 #    endif
 
 #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
@@ -60,6 +61,7 @@
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
+
 
 
 
