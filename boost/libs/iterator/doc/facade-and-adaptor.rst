@@ -3,10 +3,9 @@
 +++++++++++++++++++++++++++++
 
 :Author: David Abrahams, Jeremy Siek, Thomas Witt
-:Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@acm.org
+:Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@styleadvisor.com
 :organization: `Boost Consulting`_, Indiana University `Open Systems
-               Lab`_, University of Hanover `Institute for Transport
-               Railway Operation and Construction`_
+               Lab`_, `Zephyr Associates, Inc.`_
 :date: $Date$
 
 :Number: This is a revised version of N1530_\ =03-0113, which was
@@ -22,7 +21,7 @@
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu
-.. _`Institute for Transport Railway Operation and Construction`: http://www.ive.uni-hannover.de
+.. _`Zephyr Associates, Inc.`: http://www.styleadvisor.com
 
 :abstract: We propose a set of class templates that help programmers
            build standard-conforming iterators, both from scratch and
