@@ -22,6 +22,34 @@
 
 #ifndef BOOST_REGEX_CONFIG_HPP
 #define BOOST_REGEX_CONFIG_HPP
+//
+// Borland C++ Fix/error check
+// this has to go *before* we include any std lib headers:
+//
+#if defined(__BORLANDC__)
+#  if (__BORLANDC__ == 0x550) || (__BORLANDC__ == 0x551)
+      // problems with std::basic_string and dll RTL:
+#     if defined(_RTLDLL) && defined(_RWSTD_COMPILE_INSTANTIATE)
+#        ifdef BOOST_REGEX_BUILD_DLL
+#           error _RWSTD_COMPILE_INSTANTIATE must not be defined when building regex++ as a DLL
+#        else
+#           pragma message("Defining _RWSTD_COMPILE_INSTANTIATE when linking to the DLL version of the RTL may produce memory corruption problems in std::basic_string, as a result of separate versions of basic_string's static data in the RTL and you're exe/dll: be warned!!")
+#        endif
+#     endif
+#     ifndef _RTLDLL
+         // this is harmless for a staic link:
+#        define _RWSTD_COMPILE_INSTANTIATE
+#     endif
+#  endif
+   //
+   // VCL support:
+   // if we're building a console app then there can't be any VCL (can there?)
+#  if !defined(__CONSOLE__) && !defined(_NO_VCL)
+#     define BOOST_REGEX_USE_VCL
+#  endif
+#endif
+
+
 
 /*****************************************************************************
  *
@@ -190,30 +218,6 @@ using std::distance;
 #  define BOOST_REGEX_DECL
 #endif
  
-// Borland C++ Fix/error check:
-#if defined(__BORLANDC__)
-#  if (__BORLANDC__ == 0x550) || (__BORLANDC__ == 0x551)
-      // problems with std::basic_string and dll RTL:
-#     if defined(_RTLDLL) && defined(_RWSTD_COMPILE_INSTANTIATE)
-#        ifdef BOOST_REGEX_BUILD_DLL
-#           error _RWSTD_COMPILE_INSTANTIATE must not be defined when building regex++ as a DLL
-#        else
-#           pragma warn defining _RWSTD_COMPILE_INSTANTIATE when linking to the DLL version of the RTL may produce memory corruption problems in std::basic_string, as a result of separate versions of basic_string's static data in the RTL and you're exe/dll: be warned!!
-#        endif
-#     endif
-#     ifndef _RTLDLL
-         // this is harmless for a staic link:
-#        define _RWSTD_COMPILE_INSTANTIATE
-#     endif
-#  endif
-   //
-   // VCL support:
-   // if we're building a console app then there can't be any VCL (can there?)
-#  if !defined(__CONSOLE__) && !defined(_NO_VCL)
-#     define BOOST_REGEX_USE_VCL
-#  endif
-#endif
-
 #if (defined(BOOST_MSVC) || defined(__BORLANDC__)) && !defined(BOOST_REGEX_NO_LIB) && !defined(BOOST_REGEX_SOURCE)
 #  include <boost/regex/detail/regex_library_include.hpp>
 #endif
