@@ -25,6 +25,10 @@ namespace std{
 }
 #endif
 
+#include <boost/type_traits/is_same.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+
 #if defined(_MSC_VER) && (_MSC_VER <= 1020)
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
@@ -45,16 +49,32 @@ class are_equal
     : public boost::static_visitor<bool>
 {
 public:
-    template <typename T, typename U>
-    bool operator()( const T &, const U & ) const 
+    // note extra rigamorole for compilers which don't support
+    // partial function template ordering - specfically msvc 6.x
+    struct same {
+        template<class T, class U>
+        static bool invoke(const T & t, const U & u){
+            return t == u;
+        }
+    };
+
+    struct not_same {
+        template<class T, class U>
+        static bool invoke(const T &, const U &){
+            return false;
+        }
+    };
+
+    template <class T, class U>
+    bool operator()( const T & t, const U & u) const 
     {
-        return false; // cannot compare different types
+        typedef BOOST_DEDUCED_TYPENAME boost::mpl::eval_if<boost::is_same<T, U>,
+            boost::mpl::identity<same>,
+            boost::mpl::identity<not_same>
+        >::type type;
+        return type::invoke(t, u);
     }
-    template <typename T>
-    bool operator()( const T & lhs, const T & rhs ) const 
-    {
-        return lhs == rhs;
-    }
+
     bool operator()( const float & lhs, const float & rhs ) const
     {
         return std::fabs(lhs- rhs) < std::numeric_limits<float>::round_error();
@@ -86,7 +106,6 @@ void test_type(const T& gets_written){
    std::remove(testfile);
 }
 
-//
 // this verifies that if you try to read in a variant from a file
 // whose "which" is illegal for the one in memory (that is, you're
 // reading in to a different variant than you wrote out to) the load()
@@ -96,29 +115,33 @@ void test_type(const T& gets_written){
 //
 void do_bad_read()
 {
-  boost::variant<bool, float, int, std::string> big_variant;
-  big_variant = std::string("adrenochrome");
+    // Compiling this test invokes and ICE on msvc 6
+    // So, we'll just to skip it for this compiler
+    #if defined(_MSC_VER) && (_MSC_VER <= 1020)
+        boost::variant<bool, float, int, std::string> big_variant;
+        big_variant = std::string("adrenochrome");
 
-  const char * testfile = boost::archive::tmpnam(NULL);
-  BOOST_REQUIRE(testfile != NULL);
-  {
-    test_ostream os(testfile, TEST_STREAM_FLAGS);
-    test_oarchive oa(os);
-    oa << BOOST_SERIALIZATION_NVP(big_variant);
-  }
-  boost::variant<bool, float, int> little_variant;
-  {
-    test_istream is(testfile, TEST_STREAM_FLAGS);
-    test_iarchive ia(is);
-    bool exception_invoked = false;
-    BOOST_TRY {
-      ia >> BOOST_SERIALIZATION_NVP(little_variant);
-    } BOOST_CATCH (boost::archive::archive_exception e) {
-      BOOST_CHECK(boost::archive::archive_exception::stream_error == e.code);
-      exception_invoked = true;
-    }
-    BOOST_CHECK(exception_invoked);
-  }
+        const char * testfile = boost::archive::tmpnam(NULL);
+        BOOST_REQUIRE(testfile != NULL);
+        {
+            test_ostream os(testfile, TEST_STREAM_FLAGS);
+            test_oarchive oa(os);
+            oa << BOOST_SERIALIZATION_NVP(big_variant);
+        }
+        boost::variant<bool, float, int> little_variant;
+        {
+            test_istream is(testfile, TEST_STREAM_FLAGS);
+            test_iarchive ia(is);
+            bool exception_invoked = false;
+            BOOST_TRY {
+                ia >> BOOST_SERIALIZATION_NVP(little_variant);
+            } BOOST_CATCH (boost::archive::archive_exception e) {
+                BOOST_CHECK(boost::archive::archive_exception::unsupported_version == e.code);
+                exception_invoked = true;
+            }
+            BOOST_CHECK(exception_invoked);
+        }
+    #endif
 }
 
 int test_main( int /* argc */, char* /* argv */[] )
