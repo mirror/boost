@@ -25,6 +25,9 @@ BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_10, ::boost::remove_bounds, const*,
 BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_11, ::boost::remove_bounds, volatile*, volatile*)
 BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_12, ::boost::remove_bounds, const[2][3], const[3])
 BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_13, ::boost::remove_bounds, (&)[2], (&)[2])
+BOOST_DECL_TRANSFORM_TEST3(remove_bounds_test_14, ::boost::remove_bounds, [])
+BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_15, ::boost::remove_bounds, const [], const)
+BOOST_DECL_TRANSFORM_TEST(remove_bounds_test_16, ::boost::remove_bounds, const[][3], const[3])
 
 TT_TEST_BEGIN(remove_bounds)
 
@@ -41,6 +44,9 @@ TT_TEST_BEGIN(remove_bounds)
    remove_bounds_test_11();
    remove_bounds_test_12();
    remove_bounds_test_13();
+   remove_bounds_test_14();
+   remove_bounds_test_15();
+   remove_bounds_test_16();
 
 TT_TEST_END
 
