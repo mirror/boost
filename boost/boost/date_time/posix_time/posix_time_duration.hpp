@@ -65,7 +65,7 @@ namespace posix_time {
 
 #endif
 
-#if defined(BOOST_DATE_TIME_HAS_MICROSECONDS) && (!defined(BOOST_GDTL_HAS_NANOSECONDS))
+#if defined(BOOST_DATE_TIME_HAS_MICROSECONDS) && (!defined(BOOST_DATE_TIME_HAS_NANOSECONDS))
 
   //! Allows expression of durations as milli seconds
   /*! \ingroup time_basics
