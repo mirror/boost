@@ -1,7 +1,9 @@
 <section id="date_time.changes">
   <title>Change History</title>
   
-  <bridgehead renderas="sect3">Changes from Boost 1.30 to 1.3? (date_time 1.02 to 1.03--prerelease)</bridgehead>
+  <!-- if each new change tgroup has a "Bug Fix" as the first "Type", the columns will line up nicely -->
+
+  <bridgehead renderas="sect3">Changes from Boost 1.31 to 1.32 (date_time 1.02 to 1.03)</bridgehead>
   <informaltable frame="all">
     <tgroup cols="2">
       <thead>
@@ -11,6 +13,95 @@
 	</row>
       </thead>
       <tbody>
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Snap to end of month behavior corrected for year_functor. Previously, starting from 2000-Feb-28 (leap year and not end of month) and iterating through the next leap year would result in 2004-Feb-29 instead of 2004-Feb-28. This behavior has been corrected to produce the correct result of 2004-Feb-28. Thanks to Bart Garst for this change.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>Use of the boost::serialization library is now available with many of the date_time classes. Classes capable of serialization are: date_generator classes, date, days, date_period, greg_month, greg_weekday, greg_day, ptime, time_duration, and time_period. Thanks to Bart Garst for this change.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>Functions added to convert date and time classes to wstring. The library now provides to_*_wstring as well as to_*_string functions for: simple, iso, iso_extended, and sql for dates and compilers that support wstrings. Thanks to Bart Garst for this change.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>Period classes now handle zero length and NULL periods correctly. A NULL period is a period with a negative length. Thanks to Frank Wolf and Bart Garst for this change.
+          </entry>
+        </row>
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Removed incorrect usage of BOOST_NO_CWCHAR macro throughout library.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>New names added for some date classes. Original names are still valid but may some day be deprecated. Changes are:
+            <simplelist type='horiz' columns='3'>
+              <member>date_duration</member>
+              <member>is now</member>
+              <member>days</member>
+              <member>nth_kday_of_month</member>
+              <member>is now</member>
+              <member>nth_day_of_the_week_in_month</member>
+              <member>first_kday_of_month</member>
+              <member>is now</member>
+              <member>first_day_of_the_week_in_month</member>
+              <member>last_kday_of_month</member>
+              <member>is now</member>
+              <member>last_day_of_the_week_in_month</member>
+              <member>first_kday_after</member>
+              <member>is now</member>
+              <member>first_day_of_the_week_after</member>
+              <member>first_kday_before</member>
+              <member>is now</member>
+              <member>first_day_of_the_week_before</member>
+            </simplelist>
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>Free functions for date generators added. Functions are: days_until_weekday, days_before_weekday, next_weekday, and previous_weekday.
+            <programlisting>
+              days days_until_weekday(date, greg_weekday);
+              days days_before_weekday(date, greg_weekday);
+              date next_weekday(date, greg_weekday);
+              date previous_weekday(date, greg_weekday);</programlisting>
+	    Thanks to Bart Garst for this change.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>New duration types added for months, years, and weeks. These classes also provide mathematical operators for use with date and time classes. Input streaming is not yet implemented for these types.
+            <programlisting>
+              months m(12);
+              years y(1);
+              m == y; // true
+              days d(7);
+              weeks w(1);
+              d == w; // true</programlisting>
+	    Thanks to Bart Garst for this change.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>Unifying base class for date_generators brought in to gregorian namespace. See <link linkend="date_time.examples.print_holidays">Print Holidays Example</link>.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>Added constructors for date and ptime that allow for default construction (both) and special values construction (ptime, both now support this). Default constructors initialize the objects to not_a_date_time (NADT).
+            <programlisting>
+              ptime p_nadt(not_a_date_time), p_posinf(pos_infin);
+              ptime p; // p == NADT
+              date d;  // d == NADT</programlisting>
+	    Thanks to Bart Garst for this change.
+          </entry>
+        </row>
 	<row>
 	  <entry>Feature</entry>
 	  <entry>Output streaming now supports wide stream output on compiler / standard library combinations that support wide streams. This allows code like:
@@ -23,11 +114,13 @@
 	</row>
 	<row>
 	  <entry>Feature</entry>
-	  <entry>Input streaming for dates and times types is now supported:
+          <entry>Input streaming for date and time types is now supported on both wide and narrow streams:
 	    <programlisting>
-	      std::stringstream ss("2000-FEB-29");
 	      date d(not_a_date_time);
-	      ss &lt;&lt; d; //Feb 29th, 2000</programlisting>
+	      std::stringstream ss("2000-FEB-29");
+	      ss &gt;&gt; d; //Feb 29th, 2000
+              std::wstringstream ws("2000-FEB-29");
+              ws &gt;&gt; d; //Feb 29th, 2000</programlisting>
 	    Thanks to Bart Garst for this change.
 	  </entry>
 	</row>
@@ -75,7 +168,7 @@
 	</row>
 	<row>
 	  <entry>Bug Fix</entry>
-	  <entry>Provided additional operators for duration types (eg: date_duration, time_duration). This includes divideable by integer and fixes to allow +=, -= operators. Thanks to Bart Garst for writing this code. Also, the documentation of <link linkend="date_time.calculations">Calculations</link> has been improved.</entry>
+	  <entry>Provided additional operators for duration types (eg: date_duration, time_duration). This includes dividable by integer and fixes to allow +=, -= operators. Thanks to Bart Garst for writing this code. Also, the documentation of <link linkend="date_time.calculations">Calculations</link> has been improved.</entry>
 	</row>
 	<row>
 	  <entry>Bug Fix</entry>
