@@ -38,7 +38,7 @@
 #if defined(__sparc) || defined(__sparc__) || defined(__powerpc__)
 #define BOOST_BIG_ENDIAN
 #elif !defined(__i386__)
-#error This file is not correctly set up for your cpu type.
+#error The file boost/detail/limits.hpp needs to be set up for your CPU type.
 #endif
 
 namespace std {
