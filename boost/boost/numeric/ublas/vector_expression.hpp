@@ -1775,7 +1775,9 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E, class F>
     struct vector_scalar_unary_traits {
         typedef vector_scalar_unary<E, F> expression_type;
-#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
+#if !defined (BOOST_UBLAS_SIMPLE_ET_DEBUG) && defined (BOOST_UBLAS_USE_SCALAR_ET)
+// FIXME don't define USE_SCALAR_ET other then for testing
+// They do not work for complex types
          typedef expression_type result_type;
 #else
          typedef typename F::result_type result_type;
@@ -1907,7 +1909,9 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E1, class E2, class F>
     struct vector_scalar_binary_traits {
         typedef vector_scalar_binary<E1, E2, F> expression_type;
-#ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
+#if !defined (BOOST_UBLAS_SIMPLE_ET_DEBUG) && defined (BOOST_UBLAS_USE_SCALAR_ET)
+// FIXME don't define USE_SCALAR_ET other then for testing
+// They do not work for complex types
         typedef expression_type result_type;
 #else
         typedef typename F::result_type result_type;
