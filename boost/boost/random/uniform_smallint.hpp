@@ -38,6 +38,15 @@ namespace boost {
 
 namespace detail {
 
+template <class InputStream, class UniformInt, class Impl>
+InputStream& extract_uniform_int(InputStream& is, UniformInt& ud, Impl& impl)
+{
+    typename UniformInt::result_type min, max;
+    is >> std::ws >> min >> std::ws >> max;
+    impl.set(min, max);
+    return is;
+}
+
 template<class UniformRandomNumberGenerator, class IntType>
 struct uniform_smallint_integer
 {
@@ -224,10 +233,14 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, uniform_smallint& ud)
   {
+# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
+      return detail::extract_uniform_int(is, ud, ud._impl);
+# else
     IntType min, max;
     is >> std::ws >> min >> std::ws >> max;
     ud._impl.set(min, max);
     return is;
+# endif 
   }
 #endif
 

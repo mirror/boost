@@ -30,6 +30,7 @@
 #include <boost/integer_traits.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/random/linear_congruential.hpp>
+# include <boost/detail/workaround.hpp>
 
 namespace boost {
 namespace random {
@@ -142,7 +143,11 @@ public:
   {
     for(int j = 0; j < mt.state_size; ++j)
       is >> mt.x[j] >> std::ws;
+# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
+    mt.i = mt.state_size;
+# else 
     mt.i = n;
+# endif 
     return is;
   }
 #endif

@@ -151,7 +151,7 @@ void instantiate_dist(const char * name, const Dist& dist)
   typename Dist::adaptor_type& adapt = d2.adaptor();
   adapt();
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   {
     std::ostringstream file;
     file << d.base() << std::endl;
@@ -210,8 +210,8 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   ResultType x2 = x1;
   (void) &x2;           // avoid "unused" warning
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
   URNG urng2 = urng;             // copy constructor
+#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 // MSVC brokenness
   BOOST_TEST(urng == urng2);     // operator==
   BOOST_TEST(!(urng != urng2));  // operator!=
   urng();
@@ -235,7 +235,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
   }
   BOOST_TEST(have_exception);
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+#if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   // Streamable concept not supported for broken compilers
 
   // advance a little so that state is relatively arbitrary

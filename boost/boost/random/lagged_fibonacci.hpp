@@ -33,6 +33,44 @@
 namespace boost {
 namespace random {
 
+#  if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292) && BOOST_MSVC > 1300)
+namespace detail
+{
+  template<class IStream, class F, class RealType>
+  IStream&
+  extract_lagged_fibonacci_01(
+      IStream& is
+      , F const& f
+      , unsigned int& i
+      , RealType* x
+      , RealType modulus)
+  {
+        is >> i >> std::ws;
+        for(unsigned int i = 0; i < f.long_lag; ++i)
+        {
+            RealType value;
+            is >> value >> std::ws;
+            x[i] = value / modulus;
+        }
+        return is;
+  }
+
+  template<class IStream, class F, class UIntType>
+  IStream&
+  extract_lagged_fibonacci(
+      IStream& is
+      , F const& f
+      , unsigned int& i
+      , UIntType* x)
+  {
+      is >> i >> std::ws;
+      for(unsigned int i = 0; i < f.long_lag; ++i)
+          is >> x[i] >> std::ws;
+      return is;
+  }
+}
+#  endif
+
 template<class UIntType, int w, unsigned int p, unsigned int q,
          UIntType val = 0>
 class lagged_fibonacci
@@ -102,7 +140,7 @@ public:
   operator<<(std::basic_ostream<CharT,Traits>& os, const lagged_fibonacci& f)
   {
     os << f.i << " ";
-    for(unsigned int i = 0; i < long_lag; ++i)
+    for(unsigned int i = 0; i < f.long_lag; ++i)
       os << f.x[i] << " ";
     return os;
   }
@@ -111,10 +149,14 @@ public:
   friend std::basic_istream<CharT, Traits>&
   operator>>(std::basic_istream<CharT, Traits>& is, lagged_fibonacci& f)
   {
-    is >> f.i >> std::ws;
-    for(unsigned int i = 0; i < long_lag; ++i)
-      is >> f.x[i] >> std::ws;
-    return is;
+# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
+      return detail::extract_lagged_fibonacci(is, f, f.i, f.x);
+# else
+      is >> f.i >> std::ws;
+      for(unsigned int i = 0; i < f.long_lag; ++i)
+          is >> f.x[i] >> std::ws;
+      return is;
+# endif 
   }
 #endif
 
@@ -311,7 +353,7 @@ public:
 #endif
     os << f.i << " ";
     std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
-    for(unsigned int i = 0; i < long_lag; ++i)
+    for(unsigned int i = 0; i < f.long_lag; ++i)
       os << f.x[i] * f._modulus << " ";
     os.flags(oldflags);
     return os;
@@ -320,15 +362,19 @@ public:
   template<class CharT, class Traits>
   friend std::basic_istream<CharT, Traits>&
   operator>>(std::basic_istream<CharT, Traits>& is, lagged_fibonacci_01& f)
-  {
-   is >> f.i >> std::ws;
-   for(unsigned int i = 0; i < long_lag; ++i) {
-      RealType value;
-      is >> value >> std::ws;
-      f.x[i] = value / f._modulus;
+    {
+# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
+        return detail::extract_lagged_fibonacci_01(is, f, f.i, f.x, f._modulus);
+# else
+        is >> f.i >> std::ws;
+        for(unsigned int i = 0; i < f.long_lag; ++i) {
+            RealType value;
+            is >> value >> std::ws;
+            f.x[i] = value / f._modulus;
+        }
+        return is;
+# endif 
     }
-    return is;
-  }
 #endif
 
   friend bool operator==(const lagged_fibonacci_01& x,

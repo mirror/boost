@@ -34,6 +34,27 @@
 namespace boost {
 namespace random {
 
+# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
+namespace detail
+{
+  template <class IStream, class SubtractWithCarry, class RealType>
+  void extract_subtract_with_carry_01(
+      IStream& is
+      , SubtractWithCarry& f
+      , RealType& carry
+      , RealType* x
+      , RealType modulus)
+  {
+    RealType value;
+    for(unsigned int j = 0; j < f.long_lag; ++j) {
+      is >> value >> std::ws;
+      x[j] = value / modulus;
+    }
+    is >> value >> std::ws;
+    carry = value / modulus;
+  }
+}
+# endif 
 // subtract-with-carry generator
 // Marsaglia and Zaman
 
@@ -129,7 +150,7 @@ public:
   operator<<(std::basic_ostream<CharT,Traits>& os,
              const subtract_with_carry& f)
   {
-    for(unsigned int j = 0; j < long_lag; ++j)
+    for(unsigned int j = 0; j < f.long_lag; ++j)
       os << f.compute(j) << " ";
     os << f.carry << " ";
     return os;
@@ -139,7 +160,7 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, subtract_with_carry& f)
   {
-    for(unsigned int j = 0; j < long_lag; ++j)
+    for(unsigned int j = 0; j < f.long_lag; ++j)
       is >> f.x[j] >> std::ws;
     is >> f.carry >> std::ws;
     f.k = 0;
@@ -282,7 +303,7 @@ public:
     }
     if(first == last && j < long_lag)
       throw std::invalid_argument("subtract_with_carry::seed");
-    carry = (x[long_lag-1] == 0) / _modulus;
+    carry = (x[long_lag-1] ? 0 : 1 / _modulus);
     k = 0;
   }
 
@@ -324,7 +345,7 @@ public:
     using std::pow;
 #endif
     std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
-    for(unsigned int j = 0; j < long_lag; ++j)
+    for(unsigned int j = 0; j < f.long_lag; ++j)
       os << (f.compute(j) * f._modulus) << " ";
     os << (f.carry * f._modulus);
     os.flags(oldflags);
@@ -335,6 +356,9 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, subtract_with_carry_01& f)
   {
+# if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
+      detail::extract_subtract_with_carry_01(is, f, f.carry, f.x, f._modulus);
+# else
     RealType value;
     for(unsigned int j = 0; j < long_lag; ++j) {
       is >> value >> std::ws;
@@ -342,6 +366,7 @@ public:
     }
     is >> value >> std::ws;
     f.carry = value / f._modulus;
+# endif 
     f.k = 0;
     return is;
   }
