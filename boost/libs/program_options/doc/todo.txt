@@ -77,3 +77,13 @@ Style of 'screen' in docs.
 > locale support or include a link to somewhere else in Boost where the
 > reader can find more information.  I wouldn't know a Unicode if it came up
 > and bit me on the ankle.
+
+
+> "Common cases are when the value is explicitly specified by the user, and
+> when the value cannot be specified by the user, but the presense of the
+> option implies some value (for example, <code>true</code>). So, the parser
+> checks that the value is specified when needed and not specified when not
+> needed, and returns new (name, value) pair."
+>
+> This wording is quite stiff and I can't decipher it, especially the "not
+> specified when not needed" phrase.  Can you rewrite this?

@@ -7,7 +7,7 @@
 ]>
 <section id="program_options.howto">
 
-  <title>Howto</title>
+  <title>How To</title>
 
   <para>This section describes how the library can be used in specific situations.</para>
 
@@ -17,51 +17,51 @@
     <para>To use the library with Unicode, you'd need to:
       <itemizedlist>
         <listitem>
-          <para>Use Unicode-aware parsers for unicode input</para>
+          <para>Use Unicode-aware parsers for Unicode input</para>
         </listitem>
         <listitem>
-          <para>Require unicode support for options which need it</para>
+          <para>Require Unicode support for options which need it</para>
         </listitem>
       </itemizedlist>
     </para>
 
-    <para>Most of the parsers have unicode versions. For example, the
+    <para>Most of the parsers have Unicode versions. For example, the
       &parse_command_line; function has an overload which takes
       <code>wchar_t</code> strings, instead of ordinary <code>char</code>.
     </para>
 
     <para>Even if some of the parsers are Unicode-aware, it does not mean you
     need to change definition of all the options. In fact, for many options,
-    like integer ones, it makes no sense. But to makes use of Unicode, you'd
-    need <emphasis>some</emphasis> Unicode-aware options. They are different
-    from ordinary option in
-    that they accept <code>wstring</code> input, and process it using wide
-    character streams. Creating an Unicode-aware option is easy, just use the
-    the <code>wvalue</code> function instead of the regular <code>value</code>.
+    like integer ones, it makes no sense. To make use of Unicode you'll need
+    <emphasis>some</emphasis> Unicode-aware options. They are different from
+    ordinary options in that they accept <code>wstring</code> input, and
+    process it using wide character streams. Creating an Unicode-aware option
+    is easy: just use the the <code>wvalue</code> function instead of the
+    regular <code>value</code>.
     </para>
 
-    <para>When an ascii parser passes data to an ascii option, or a Unicode parser
-      passes data to a Unicode option, the data are not changed at all. So,
-      the ascii
-      option will see a string in local 8 bit encoding, and the Unicode option will
-      see whatever string was passes as the Unicode input.
+    <para>When an ascii parser passes data to an ascii option, or a Unicode
+      parser passes data to a Unicode option, the data are not changed at
+      all. So, the ascii option will see a string in local 8-bit encoding, and
+      the Unicode option will see whatever string was passed as the Unicode
+      input.
     </para>
 
-    <para>What happens when unicode data is passed to an ascii option, and
+    <para>What happens when Unicode data is passed to an ascii option, and
       vice versa? The library automatically performs the conversion from
       Unicode to local 8-bit encoding. For example, if command line is in
       ascii, but you use <code>wstring</code> options, then the ascii input
-      will be converted into unicode.
+      will be converted into Unicode.
     </para>
 
     <para>To perform the conversion, the library uses the <code>codecvt&lt;wchar_t,
     char&gt;</code> locale facet from the global locale. If
     you want to work with strings that use local 8-bit encoding (as opposed to
-    7-bit ascii subset),  your application should start with:
+    7-bit ascii subset), your application should start with:
       <programlisting>
 locale::global(locale(""));
       </programlisting>
-      which would set up the conversion facet according to user's selected
+      which would set up the conversion facet according to the user's selected
       locale. 
     </para>
 

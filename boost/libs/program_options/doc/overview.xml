@@ -8,9 +8,9 @@
 <section id="program_options.overview">
   <title>Library overview</title>
 
-  <para>In the previous section, we've seen several examples of library usage.
-    This section will describe overall library design: what are the primary 
-    components and what do they do.
+  <para>In the tutorial section, we saw several examples of library usage.
+    Here we will describe the overall library design including the primary
+    components and their function.
   </para>
 
   <para>The library has three main components:
@@ -39,10 +39,10 @@
   <code>parse_command_line</code> function is from the parsers component, and the
   <code>variables_map</code> class is from the storage component. </para>
 
-  <para>We've learned how those components can be used by the
-  <code>main</code> function to parse command line and config file. Before
-  going into the details of each component, a few notes about the world outside of
-  <code>main</code>
+  <para>In the tutorial we've learned how those components can be used by the
+    <code>main</code> function to parse the command line and config
+    file.Before going into the details of each component, a few notes about
+    the world outside of <code>main</code>.
   </para>
 
   <para>
@@ -50,9 +50,9 @@
     provides a class which stores all option values and that class can be
     freely passed around your program to modules which need access to the
     options. All the other components can be used only in the place where
-    actual parsing is the done. However, it might also make sense to make the
-    individual program modules describe their options and pass them to main
-    module, which will merge all options together. Of course, this is only
+    actual parsing is the done.  "However, it might also make sense for the
+    individual program modules to describe their options and pass them to the
+    main module, which will merge all options."Of course, this is only
     important when the number of options is large and declaring them in one
     place becomes troublesome.
   </para>
@@ -96,7 +96,7 @@
 
     <para>For almost every library, those classes could be created in a
       conventional way: that is, you'd create new options using constructors and
-      then call <code>insert</code> method of &options_description;. However,
+      then call the <code>add</code> method of &options_description;. However,
       that's overly verbose for declaring 20 or 30 options. This concern led
       to creation of the syntax that you've already seen:
 <programlisting>
@@ -109,8 +109,8 @@ desc.add_options()
     </para>
 
     <para>The call to the <code>value</code> function creates an instance of
-    suitable class, derived from <code>options_semantic</code>. Calling member
-    functions of that instance allows one to specify additional information (this
+    a suitable class, derived from <code>options_semantic</code>. Calling member
+    functions of that instance allows one to specify additional information. (This
     essentially emulates named parameters of the constructor). Calls to
     <code>operator()</code> on the object returned by <code>add_options</code>
     forward arguments to the constructor of the <code>option_description</code>
@@ -125,10 +125,10 @@ desc.add_options()
 
     <para>The parsers component splits input sources into (name, value) pairs.
       Each parser looks for possible options and consults the options
-      description component to determine if the option is know and how the value
-      can be specified. In the simplest case, the name is explicitly specified,
+      description component to determine if the option is known and how its value
+      is specified. In the simplest case, the name is explicitly specified,
       which allows the library to decide if such option is known. If it is known, the
-      &value_semantic; instance tells how the value can be specified. Common
+      &value_semantic; instance determines how the value is specified. Common
       cases are when the value is explicitly specified by the user, and when
       the value cannot be specified by the user, but the presense of the
       option implies some value (for example, <code>true</code>). So, the
@@ -140,18 +140,19 @@ desc.add_options()
       To invoke a parser you typically call a function, passing options
       desription and command line or config_file or something else.
       The results of parsing are returned as an instance of the &parsed_options;
-      class. Typically, it's passed directly to the storage
-      component. However, it also can be used to add some special processing,
-      for example, if the order in which options are specified is important.                  
+      class. Typically, that object is passed directly to the storage
+      component. However, it also can be used directly, or undergo some additional
+      processing. 
     </para>
 
     <para>
-      There are three exceptions to the above model -- all related to tradional
-      usage of the command line. While they require some support from the options
-      description component, the additional complexity is tolerable.
+      There are three exceptions to the above model -- all related to
+      traditional usage of the command line. While they require some support
+      from the options description component, the additional complexity is
+      tolerable.
       <itemizedlist>
         <listitem>
-          <para>The name specified on the command line can be
+          <para>The name specified on the command line may be
             different from the option name -- it's common to provide a "short option
             name" alias to a longer name. It's also common to allow an abbreviated name
             to be specified on the command line.
@@ -159,14 +160,14 @@ desc.add_options()
         </listitem>
         <listitem>
           <para>Sometimes it's desirable to specify value as several
-          tokens. For example, an option "--email-recipient" can be followed
+          tokens. For example, an option "--email-recipient" may be followed
           by several emails, each as a separate command line token. This
           behaviour is supported, though it can lead to parsing ambiguities
           and is not enabled by default.
           </para>
         </listitem>
         <listitem>
-          <para>The command line can contain positional options -- i.e. elements
+          <para>The command line may contain positional options -- elements
             which don't have any name. The command line parser provides a
             mechanism to guess names for such options, as we've seen in the
             tutorial.
@@ -203,20 +204,19 @@ desc.add_options()
         variables_map vm;
         store(parse_command_line(argc, argv, desc), vm);
         store(parse_config_file("example.cfg", desc), vm);
-        finish(vm);
+        notify(vm);
       </programlisting>
       The <code>variables_map</code> class is used to store the option
       values. The two calls to the <code>store</code> function add values
-      found on the command line and in the config file. Finally the call to 
-      <code>notify</code> function runs user-specified notify functions and
-      stores values into regular variables, if needed. 
+      found on the command line and in the config file. Finally the call to
+      the <code>notify</code> function runs the user-specified notify
+      functions and stores the values into regular variables, if needed
     </para>
 
-    <para>The priority is handled
-      in a simple way: the <code>store</code> function will not change the value
-      of an option if it's already assigned. In this case, if the command line
-      specifies a value for an option, that value will be preferred to the
-      value specified in config file.
+    <para>The priority is handled in a simple way: the <code>store</code>
+      function will not change the value of an option if it's already
+      assigned. In this case, if the command line specifies the value for an
+      option, any value in the config file is ignored.
     </para>
 
     <warning>

@@ -10,7 +10,7 @@
   <title>Options Description</title>
 
   <para>The options description layer enables the programmer to specify what
-    options are allowed and how they are should be processed. There are two
+    options are allowed and how they should be processed. There are two
     sublayers: syntactic and semantic. The syntactic layer allows the parsers
     to group tokens into (name, value) pairs, where value is just a vector of
     strings (<code>std::vector&lt;std::string&gt;</code>). The semantic layer
@@ -23,8 +23,8 @@
     overly complex structures. For example, it's not easy to parse syntax
     like: <screen>calc --expression=1 + 2/3</screen> because it's not possible
     to parse <screen>1 + 2/3</screen> without knowing that it's a C
-    expression. With a little help the from user the task becomes trivial, and the
-    syntax becomes much more clear: <screen>calc --expression="1 + 2/3"</screen>.
+    expression. With a little help from the user the task becomes trivial, and the
+    syntax clear: <screen>calc --expression="1 + 2/3"</screen>.
   </para>
 
   <section><title>Syntactic layer</title>
@@ -54,11 +54,11 @@
       </programlisting>
       Since we're talking about syntactic layer, we can't expect any
       interesting logic yet. In fact, the passed value name is only used for
-      the help message, and the value itself will represented as a vector of strings,
+      the help message, and the value itself will be represented as a vector of strings,
       leaving all interpretation to the user.       
     </para>
     
-    <para>The only other thing that's possible to specify is number of tokens in
+    <para>The only other thing that's possible to specify is the number of tokens in
       the value. Consider the following example:
       <programlisting>
         ("verbose", "change verbosity level", "number?")
@@ -84,15 +84,14 @@
     <title>Semantic layer</title>
 
     <para>The semantic layer is more interesting. As said before, it converts
-      values, represented as vector of strings, into C++ type that the programmer
-      desires. In order to do so, it's necessary to pass something smarter
-      than a value name. That "smarter" thing is a pointer to the 
+      values, represented as vectors of strings, into the C++ types that the
+      programmer desires.In order to do so, it's necessary to pass something
+      smarter than a value name. That "smarter" thing is a pointer to the
       <classname>boost::program_options::value_semantic</classname> abstract
-      class. Most of the time, you'd be using the 
+      class. Most of the time, you'll be using the
       <classname>boost::program_options::typed_value</classname>, created via
       a call to the <functionname>boost::program_options::value</functionname>
-      function.
-      For example:
+      function.  For example:
       <programlisting>
         options_description desc;
         desc.add_options()
@@ -112,7 +111,7 @@
         ("verbose", "change verbosity level", value&lt;int&gt;("number")->default_value(0))
         ;        
       </programlisting>
-      would cause the "verbose" option to have the value of 0 when nothing else if
+      would cause the "verbose" option to have the value of 0 when nothing else is
       specified. For the complete list of methods which can be be called on the
       pointer, refer to class
       <classname>boost::program_options::typed_value</classname> documentation.                  
@@ -134,22 +133,22 @@
     </para>
 
     <para>One solution is to ask the user to extract positional options
-      himself and process as he likes. However, there's a nicer approach -- 
-      provide a method to guess names for positional options, so that the
-      above command line can be interpreted the same way as:
+      himself and process them as he likes. However, there's a nicer approach
+      -- provide a method to automatically assign the names for positional
+      options, so that the above command line can be interpreted the same way
+      as:
       <screen>
         archiver --compression=9 --input-file=/etc/passwd
       </screen>
     </para>
 
-    <para>The &positional_options_desc; class is what allows command line
-    parser to guess the names. The class specifies how many positional options
+    <para>The &positional_options_desc; class allows the command line
+    parser to assign the names. The class specifies how many positional options
     are allowed, and for each allowed option, specifies the name. For example:
       <programlisting>
-        positional_options_description pd;
-        pd.add("input-file", 1, 1);</programlisting>
-      specifies that for exactly one, first, positional option the guessed
-      name will be "input-file".
+        positional_options_description pd; pd.add("input-file", 1, 1);
+      </programlisting> specifies that for exactly one, first, positional
+        option the name will be "input-file".
     </para>
 
     <para>It's possible to specify that a number, or even all positional options, be
@@ -159,7 +158,7 @@
         pd.add("output-file", 2, 2).add_optional("input-file", 0, -1);
       </programlisting>]
       In the above example, the first two positional options will be associated
-      with name "output-file", and any others with the name "input-file"."
+      with name "output-file", and any others with the name "input-file".
     </para>
     
   </section>
