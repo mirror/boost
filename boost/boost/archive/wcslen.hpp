@@ -26,16 +26,11 @@ namespace std{
 
 #ifndef BOOST_NO_CWCHAR
 
-#include <cwchar>
-#ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::wcslen; }
-#endif
+// a couple of libraries which include wchar_t don't include
+// wcslen
 
-#else
-
-// it seems that gcc library >= 3.4.1 has this even if wchar.h doesn't exist
-#if ! defined(__GNUC__) \
-|| ( __GNUC__ * 10 + __GNUC_MINOR__ ) < 34
+#if defined(BOOST_DINKUMWARE_STDLIB) && BOOST_DINKUMWARE_STDLIB < 306 \
+|| defined(__LIBCOMO__) 
 
 namespace std {
 inline std::size_t wcslen(const wchar_t * ws)
@@ -47,7 +42,14 @@ inline std::size_t wcslen(const wchar_t * ws)
 }
 } // namespace std
 
-#endif // gcc
+#else
+
+#include <cwchar>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{ using ::wcslen; }
+#endif
+
+#endif // wcslen
 
 #endif //BOOST_NO_CWCHAR
 

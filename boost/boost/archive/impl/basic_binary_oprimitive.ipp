@@ -22,7 +22,13 @@ namespace std{
 
 #include <boost/scoped_ptr.hpp>
 
-#include <boost/archive/wcslen.hpp>
+#ifndef BOOST_NO_CWCHAR
+#include <cwchar>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{ using ::wcslen; }
+#endif
+
+#endif
 #include <boost/archive/codecvt_null.hpp>
 #include <boost/archive/add_facet.hpp>
 
@@ -56,19 +62,20 @@ void basic_binary_oprimitive<Archive, OStream>::save(const char * s)
 }
 
 template<class Archive, class OStream>
-void basic_binary_oprimitive<Archive, OStream>::save(const wchar_t * ws)
-{
-    std::size_t l = std::wcslen(ws);
-    this->This()->save(l);
-    save_binary(ws, l * sizeof(wchar_t) / sizeof(char));
-}
-
-template<class Archive, class OStream>
 void basic_binary_oprimitive<Archive, OStream>::save(const std::string &s)
 {
     std::size_t l = static_cast<unsigned int>(s.size());
     this->This()->save(l);
     save_binary(s.data(), l);
+}
+
+#ifndef BOOST_NO_CWCHAR
+template<class Archive, class OStream>
+void basic_binary_oprimitive<Archive, OStream>::save(const wchar_t * ws)
+{
+    std::size_t l = std::wcslen(ws);
+    this->This()->save(l);
+    save_binary(ws, l * sizeof(wchar_t) / sizeof(char));
 }
 
 #ifndef BOOST_NO_STD_WSTRING
@@ -79,6 +86,7 @@ void basic_binary_oprimitive<Archive, OStream>::save(const std::wstring &ws)
     this->This()->save(l);
     save_binary(ws.data(), l * sizeof(wchar_t) / sizeof(char));
 }
+#endif
 #endif
 
 template<class Archive, class OStream>

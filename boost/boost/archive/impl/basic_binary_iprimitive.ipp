@@ -72,15 +72,6 @@ void basic_binary_iprimitive<Archive, IStream>::init()
 }
 
 template<class Archive, class IStream>
-void basic_binary_iprimitive<Archive, IStream>::load(char * s)
-{
-    std::size_t l;
-    this->This()->load(l);
-    load_binary(s, l);
-    s[l] = '\0';
-}
-
-template<class Archive, class IStream>
 void basic_binary_iprimitive<Archive, IStream>::load(wchar_t * ws)
 {
     std::size_t l;
@@ -102,6 +93,17 @@ void basic_binary_iprimitive<Archive, IStream>::load(std::string & s)
     // note breaking a rule here - could be a problem on some platform
     load_binary(const_cast<char *>(s.data()), l);
 }
+
+#ifndef BOOST_NO_CWCHAR
+template<class Archive, class IStream>
+void basic_binary_iprimitive<Archive, IStream>::load(char * s)
+{
+    std::size_t l;
+    this->This()->load(l);
+    load_binary(s, l);
+    s[l] = '\0';
+}
+#endif
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive, class IStream>

@@ -55,6 +55,7 @@ void text_iarchive_impl<Archive>::load(std::string &s)
     is.read(const_cast<char *>(s.data()), size);
 }
 
+#ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
 void text_iarchive_impl<Archive>::load(wchar_t *ws)
@@ -85,6 +86,7 @@ void text_iarchive_impl<Archive>::load(std::wstring &ws)
 }
 
 #endif
+#endif // BOOST_NO_CWCHAR
 
 } // namespace archive
 } // namespace boost

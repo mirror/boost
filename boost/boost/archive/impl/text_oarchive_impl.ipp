@@ -21,7 +21,13 @@ namespace std{
 } // namespace std
 #endif
 
-#include <boost/archive/wcslen.hpp>
+#ifndef BOOST_NO_CWCHAR
+#include <cwchar>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{ using ::wcslen; }
+#endif
+#endif
+
 #include <boost/archive/codecvt_null.hpp>
 #include <boost/archive/add_facet.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -51,6 +57,7 @@ void text_oarchive_impl<Archive>::save(const std::string &s)
     os << s;
 }
 
+#ifndef BOOST_NO_CWCHAR
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 template<class Archive>
 void text_oarchive_impl<Archive>::save(const wchar_t * ws)
@@ -60,7 +67,6 @@ void text_oarchive_impl<Archive>::save(const wchar_t * ws)
     this->This()->newtoken();
     os.write((const char *)ws, l * sizeof(wchar_t)/sizeof(char));
 }
-#endif
 
 #ifndef BOOST_NO_STD_WSTRING
 template<class Archive>
@@ -72,6 +78,8 @@ void text_oarchive_impl<Archive>::save(const std::wstring &ws)
     os.write((const char *)(ws.data()), l * sizeof(wchar_t)/sizeof(char));
 }
 #endif
+#endif
+#endif // BOOST_NO_CWCHAR
 
 } // namespace archive
 } // namespace boost
