@@ -252,7 +252,7 @@ public:
    std::string What(int i = 0)const;
    std::string operator[](int i)const { return What(i); }
 
-   static const unsigned int npos;
+   static const std::size_t npos;
 
    friend struct re_detail::pred1;
    friend struct re_detail::pred2;

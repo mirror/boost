@@ -23,7 +23,8 @@
 #include <boost/detail/workaround.hpp>
 #if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
       || BOOST_WORKAROUND(BOOST_MSVC, < 1300) \
-      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
+      || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(55500))
 //
 // Borland C++ Builder 6, and Visual C++ 6,
 // can't cope with the array template constructor
