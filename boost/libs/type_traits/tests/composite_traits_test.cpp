@@ -100,6 +100,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_member_pointer<mf2>::value)
    value_test(true, boost::is_member_pointer<mf3>::value)
    value_test(true, boost::is_member_pointer<mf4>::value)
+   value_test(true, boost::is_member_pointer<cmf>::value)
    value_test(false, boost::is_member_pointer<void>::value)
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    value_test(false, boost::is_member_pointer<test_abc1>::value)
