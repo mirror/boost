@@ -14,29 +14,23 @@
 #include <cassert>
 
 #include <boost/compressed_pair.hpp>
-#include <libs/type_traits/test/test.hpp>
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/test/included/test_exec_monitor.hpp>
 
 using namespace boost;
 
-namespace boost {
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-template <> struct is_empty<empty_UDT>
-{ static const bool value = true; };
-template <> struct is_empty<empty_POD_UDT>
-{ static const bool value = true; };
-template <> struct is_POD<empty_POD_UDT>
-{ static const bool value = true; };
-#else
-template <> struct is_empty<empty_UDT>
-{ enum{ value = true }; };
-template <> struct is_empty<empty_POD_UDT>
-{ enum{ value = true }; };
-template <> struct is_POD<empty_POD_UDT>
-{ enum{ value = true }; };
-#endif
-}
+struct empty_UDT
+{
+   ~empty_UDT(){};
+   empty_UDT& operator=(const empty_UDT&){ return *this; }
+   bool operator==(const empty_UDT&)const
+   { return true; }
+};
+struct empty_POD_UDT
+{
+   empty_POD_UDT& operator=(const empty_POD_UDT&){ return *this; }
+   bool operator==(const empty_POD_UDT&)const
+   { return true; }
+};
 
 struct non_empty1
 { 

@@ -20,6 +20,41 @@
 #include <boost/call_traits.hpp>
 
 #include <libs/type_traits/test/test.hpp>
+#include <libs/type_traits/test/check_type.hpp>
+
+//
+// define tests here
+unsigned failures = 0;
+unsigned test_count = 0;
+//
+// This must get defined within the test file.
+// All compilers have bugs, set this to the number of
+// regressions *expected* from a given compiler,
+// if there are no workarounds for the bugs, *and*
+// the regressions have been investigated.
+//
+extern unsigned int expected_failures;
+//
+// proc check_result()
+// Checks that there were no regressions:
+//
+int check_result(int argc, char** argv)
+{
+   std::cout << test_count << " tests completed, "
+      << failures << " failures found, "
+      << expected_failures << " failures expected from this compiler." << std::endl;
+   if((argc == 2) 
+      && (argv[1][0] == '-')
+      && (argv[1][1] == 'a')
+      && (argv[1][2] == 0))
+   {
+      std::cout << "Press any key to continue...";
+      std::cin.get();
+   }
+   return (failures == expected_failures)
+       ? 0
+       : (failures != 0) ? static_cast<int>(failures) : -1;
+}
 
 // a way prevent warnings for unused variables
 template<class T> inline void unused_variable(const T&) {}
@@ -231,51 +266,51 @@ int main(int argc, char *argv[ ])
    typedef int& r_type;
    typedef const r_type cr_type;
 
-   type_test(comparible_UDT, boost::call_traits<comparible_UDT>::value_type)
-   type_test(comparible_UDT&, boost::call_traits<comparible_UDT>::reference)
-   type_test(const comparible_UDT&, boost::call_traits<comparible_UDT>::const_reference)
-   type_test(const comparible_UDT&, boost::call_traits<comparible_UDT>::param_type)
-   type_test(int, boost::call_traits<int>::value_type)
-   type_test(int&, boost::call_traits<int>::reference)
-   type_test(const int&, boost::call_traits<int>::const_reference)
-   type_test(const int, boost::call_traits<int>::param_type)
-   type_test(int*, boost::call_traits<int*>::value_type)
-   type_test(int*&, boost::call_traits<int*>::reference)
-   type_test(int*const&, boost::call_traits<int*>::const_reference)
-   type_test(int*const, boost::call_traits<int*>::param_type)
+   BOOST_CHECK_TYPE(comparible_UDT, boost::call_traits<comparible_UDT>::value_type);
+   BOOST_CHECK_TYPE(comparible_UDT&, boost::call_traits<comparible_UDT>::reference);
+   BOOST_CHECK_TYPE(const comparible_UDT&, boost::call_traits<comparible_UDT>::const_reference);
+   BOOST_CHECK_TYPE(const comparible_UDT&, boost::call_traits<comparible_UDT>::param_type);
+   BOOST_CHECK_TYPE(int, boost::call_traits<int>::value_type);
+   BOOST_CHECK_TYPE(int&, boost::call_traits<int>::reference);
+   BOOST_CHECK_TYPE(const int&, boost::call_traits<int>::const_reference);
+   BOOST_CHECK_TYPE(const int, boost::call_traits<int>::param_type);
+   BOOST_CHECK_TYPE(int*, boost::call_traits<int*>::value_type);
+   BOOST_CHECK_TYPE(int*&, boost::call_traits<int*>::reference);
+   BOOST_CHECK_TYPE(int*const&, boost::call_traits<int*>::const_reference);
+   BOOST_CHECK_TYPE(int*const, boost::call_traits<int*>::param_type);
 #if defined(BOOST_MSVC6_MEMBER_TEMPLATES)
-   type_test(int&, boost::call_traits<int&>::value_type)
-   type_test(int&, boost::call_traits<int&>::reference)
-   type_test(const int&, boost::call_traits<int&>::const_reference)
-   type_test(int&, boost::call_traits<int&>::param_type)
+   BOOST_CHECK_TYPE(int&, boost::call_traits<int&>::value_type);
+   BOOST_CHECK_TYPE(int&, boost::call_traits<int&>::reference);
+   BOOST_CHECK_TYPE(const int&, boost::call_traits<int&>::const_reference);
+   BOOST_CHECK_TYPE(int&, boost::call_traits<int&>::param_type);
 #if !(defined(__GNUC__) && ((__GNUC__ < 3) || (__GNUC__ == 3) && (__GNUC_MINOR__ < 1)))
-   type_test(int&, boost::call_traits<cr_type>::value_type)
-   type_test(int&, boost::call_traits<cr_type>::reference)
-   type_test(const int&, boost::call_traits<cr_type>::const_reference)
-   type_test(int&, boost::call_traits<cr_type>::param_type)
+   BOOST_CHECK_TYPE(int&, boost::call_traits<cr_type>::value_type);
+   BOOST_CHECK_TYPE(int&, boost::call_traits<cr_type>::reference);
+   BOOST_CHECK_TYPE(const int&, boost::call_traits<cr_type>::const_reference);
+   BOOST_CHECK_TYPE(int&, boost::call_traits<cr_type>::param_type);
 #else
    std::cout << "Your compiler cannot instantiate call_traits<int&const>, skipping four tests (4 errors)" << std::endl;
    failures += 4;
    test_count += 4;
 #endif
-   type_test(const int&, boost::call_traits<const int&>::value_type)
-   type_test(const int&, boost::call_traits<const int&>::reference)
-   type_test(const int&, boost::call_traits<const int&>::const_reference)
-   type_test(const int&, boost::call_traits<const int&>::param_type)
+   BOOST_CHECK_TYPE(const int&, boost::call_traits<const int&>::value_type);
+   BOOST_CHECK_TYPE(const int&, boost::call_traits<const int&>::reference);
+   BOOST_CHECK_TYPE(const int&, boost::call_traits<const int&>::const_reference);
+   BOOST_CHECK_TYPE(const int&, boost::call_traits<const int&>::param_type);
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-   type_test(const int*, boost::call_traits<int[3]>::value_type)
-   type_test(int(&)[3], boost::call_traits<int[3]>::reference)
-   type_test(const int(&)[3], boost::call_traits<int[3]>::const_reference)
-   type_test(const int*const, boost::call_traits<int[3]>::param_type)
-   type_test(const int*, boost::call_traits<const int[3]>::value_type)
-   type_test(const int(&)[3], boost::call_traits<const int[3]>::reference)
-   type_test(const int(&)[3], boost::call_traits<const int[3]>::const_reference)
-   type_test(const int*const, boost::call_traits<const int[3]>::param_type)
+   BOOST_CHECK_TYPE(const int*, boost::call_traits<int[3]>::value_type);
+   BOOST_CHECK_TYPE(int(&)[3], boost::call_traits<int[3]>::reference);
+   BOOST_CHECK_TYPE(const int(&)[3], boost::call_traits<int[3]>::const_reference);
+   BOOST_CHECK_TYPE(const int*const, boost::call_traits<int[3]>::param_type);
+   BOOST_CHECK_TYPE(const int*, boost::call_traits<const int[3]>::value_type);
+   BOOST_CHECK_TYPE(const int(&)[3], boost::call_traits<const int[3]>::reference);
+   BOOST_CHECK_TYPE(const int(&)[3], boost::call_traits<const int[3]>::const_reference);
+   BOOST_CHECK_TYPE(const int*const, boost::call_traits<const int[3]>::param_type);
    // test with abstract base class:
-   type_test(test_abc1, boost::call_traits<test_abc1>::value_type)
-   type_test(test_abc1&, boost::call_traits<test_abc1>::reference)
-   type_test(const test_abc1&, boost::call_traits<test_abc1>::const_reference)
-   type_test(const test_abc1&, boost::call_traits<test_abc1>::param_type)
+   BOOST_CHECK_TYPE(test_abc1, boost::call_traits<test_abc1>::value_type);
+   BOOST_CHECK_TYPE(test_abc1&, boost::call_traits<test_abc1>::reference);
+   BOOST_CHECK_TYPE(const test_abc1&, boost::call_traits<test_abc1>::const_reference);
+   BOOST_CHECK_TYPE(const test_abc1&, boost::call_traits<test_abc1>::param_type);
 #else
    std::cout << "You're compiler does not support partial template specialiation, skipping 8 tests (8 errors)" << std::endl;
    failures += 12;
@@ -287,10 +322,10 @@ int main(int argc, char *argv[ ])
    test_count += 24;
 #endif
    // test with an incomplete type:
-   type_test(incomplete_type, boost::call_traits<incomplete_type>::value_type)
-   type_test(incomplete_type&, boost::call_traits<incomplete_type>::reference)
-   type_test(const incomplete_type&, boost::call_traits<incomplete_type>::const_reference)
-   type_test(const incomplete_type&, boost::call_traits<incomplete_type>::param_type)
+   BOOST_CHECK_TYPE(incomplete_type, boost::call_traits<incomplete_type>::value_type);
+   BOOST_CHECK_TYPE(incomplete_type&, boost::call_traits<incomplete_type>::reference);
+   BOOST_CHECK_TYPE(const incomplete_type&, boost::call_traits<incomplete_type>::const_reference);
+   BOOST_CHECK_TYPE(const incomplete_type&, boost::call_traits<incomplete_type>::param_type);
 
    return check_result(argc, argv);
 }
