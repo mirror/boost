@@ -56,18 +56,24 @@ static void equal_test()
 
   f = &forty_two;
   BOOST_TEST(f == &forty_two);
-  BOOST_TEST(&forty_two == f);
   BOOST_TEST(f != ReturnInt(17));
+#if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+  BOOST_TEST(&forty_two == f);
   BOOST_TEST(ReturnInt(17) != f);
+#endif
+
   BOOST_TEST(f.contains(&forty_two));
 
   f = ReturnInt(17);
   BOOST_TEST(f != &forty_two);
-  BOOST_TEST(&forty_two != f);
   BOOST_TEST(f == ReturnInt(17));
-  BOOST_TEST(ReturnInt(17) == f);
   BOOST_TEST(f != ReturnInt(16));
+#if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+  BOOST_TEST(&forty_two != f);
+  BOOST_TEST(ReturnInt(17) == f);
   BOOST_TEST(ReturnInt(16) != f);
+#endif
+
   BOOST_TEST(f.contains(ReturnInt(17)));
 
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
@@ -75,17 +81,21 @@ static void equal_test()
 
   g = &forty_two;
   BOOST_TEST(g == &forty_two);
-  BOOST_TEST(&forty_two == g);
   BOOST_TEST(g != ReturnInt(17));
+#  if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+  BOOST_TEST(&forty_two == g);
   BOOST_TEST(ReturnInt(17) != g);
+#  endif
 
   g = ReturnInt(17);
   BOOST_TEST(g != &forty_two);
-  BOOST_TEST(&forty_two != g);
   BOOST_TEST(g == ReturnInt(17));
-  BOOST_TEST(ReturnInt(17) == g);
   BOOST_TEST(g != ReturnInt(16));
+#  if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+  BOOST_TEST(&forty_two != g);
+  BOOST_TEST(ReturnInt(17) == g);
   BOOST_TEST(ReturnInt(16) != g);
+#  endif
 #endif
 }
 
@@ -99,22 +109,26 @@ static void ref_equal_test()
     BOOST_TEST(f == boost::ref(ri));
     BOOST_TEST(f == ri);
     BOOST_TEST(boost::ref(ri) == f);
-    BOOST_TEST(ri == f);
     BOOST_TEST(!(f != boost::ref(ri)));
     BOOST_TEST(!(f != ri));
     BOOST_TEST(!(boost::ref(ri) != f));
+#if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+    BOOST_TEST(ri == f);
     BOOST_TEST(!(ri != f));
+#endif
 
     // Values equal, references inequal
     ReturnInt ri2(17);
     BOOST_TEST(f == ri2);
     BOOST_TEST(f != boost::ref(ri2));
-    BOOST_TEST(ri2 == f);
     BOOST_TEST(boost::ref(ri2) != f);
     BOOST_TEST(!(f != ri2));
     BOOST_TEST(!(f == boost::ref(ri2)));
-    BOOST_TEST(!(ri2 != f));
     BOOST_TEST(!(boost::ref(ri2) == f));
+#if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+    BOOST_TEST(ri2 == f);
+    BOOST_TEST(!(ri2 != f));
+#endif 
   }
 
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
@@ -126,22 +140,26 @@ static void ref_equal_test()
     BOOST_TEST(f == boost::ref(ri));
     BOOST_TEST(f == ri);
     BOOST_TEST(boost::ref(ri) == f);
-    BOOST_TEST(ri == f);
     BOOST_TEST(!(f != boost::ref(ri)));
     BOOST_TEST(!(f != ri));
     BOOST_TEST(!(boost::ref(ri) != f));
+#  if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+    BOOST_TEST(ri == f);
     BOOST_TEST(!(ri != f));
+#  endif
 
     // Values equal, references inequal
     ReturnInt ri2(17);
     BOOST_TEST(f == ri2);
     BOOST_TEST(f != boost::ref(ri2));
-    BOOST_TEST(ri2 == f);
     BOOST_TEST(boost::ref(ri2) != f);
     BOOST_TEST(!(f != ri2));
     BOOST_TEST(!(f == boost::ref(ri2)));
-    BOOST_TEST(!(ri2 != f));
     BOOST_TEST(!(boost::ref(ri2) == f));
+#  if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+    BOOST_TEST(ri2 == f);
+    BOOST_TEST(!(ri2 != f));
+#  endif
   }
 #endif
 }

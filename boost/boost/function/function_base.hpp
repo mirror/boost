@@ -63,6 +63,12 @@ namespace boost { namespace python { namespace objects {
 #  define BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
 #endif
 
+#define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
+  typename ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
+                        (::boost::is_integral<Functor>::value)>::value), \
+                       Type>::type
+
+
 #if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
 namespace boost {
 
@@ -432,6 +438,29 @@ public:
       }
     }
 
+#if defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3
+  // GCC 3.3 and newer cannot copy with the global operator==, due to
+  // problems with instantiation of function return types before it
+  // has been verified that the argument types match up.
+  template<typename Functor>
+    BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+    operator==(Functor g) const
+    {
+      if (const Functor* fp = target<Functor>())
+	return function_equal(*fp, g);
+      else return false;
+    }
+
+  template<typename Functor>
+    BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+    operator!=(Functor g) const
+    {
+      if (const Functor* fp = target<Functor>())
+	return !function_equal(*fp, g);
+      else return true;
+    }
+#endif
+
 public: // should be protected, but GCC 2.95.3 will fail to allow access
   detail::function::any_pointer (*manager)(
     detail::function::any_pointer,
@@ -524,12 +553,10 @@ template<typename Functor>
   }
 #else
 
-#define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
-  typename ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
-                        (::boost::is_integral<Functor>::value)>::value), \
-                       Type>::type
-
-// Comparisons between boost::function objects and arbitrary function objects
+#  if !(defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ <= 3)
+// Comparisons between boost::function objects and arbitrary function
+// objects. GCC 3.3 and before has an obnoxious bug that prevents this
+// from working.
 template<typename Functor>
   BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
   operator==(const function_base& f, Functor g)
@@ -565,6 +592,7 @@ template<typename Functor>
       return !function_equal(g, *fp);
     else return true;
   }
+#  endif
 
 template<typename Functor>
   BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
@@ -601,7 +629,7 @@ template<typename Functor>
       return g.get_pointer() != fp;
     else return true;
   }
-#undef BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL
+
 #endif // Compiler supporting SFINAE
 
 namespace detail {
@@ -626,6 +654,7 @@ namespace detail {
 } // end namespace detail
 } // end namespace boost
 
+#undef BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL
 #undef BOOST_FUNCTION_COMPARE_TYPE_ID
 
 #endif // BOOST_FUNCTION_BASE_HEADER
