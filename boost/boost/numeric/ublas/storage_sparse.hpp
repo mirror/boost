@@ -18,7 +18,6 @@
 #define BOOST_UBLAS_STORAGE_SPARSE_H
 
 #include <map>
-#include <set>
 
 #include <boost/numeric/ublas/storage.hpp>
 
@@ -377,22 +376,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
-        void insert (pointer it, pointer it1, pointer it2) {
-#if BOOST_UBLAS_CHECK_ENABLE
-            while (it1 != it2) {
-                insert (it, *it1);
-                ++ it1;
-            }
-#else
-            difference_type n = it - begin ();
-            resize (size () + it2 - it1);
-            it = begin () + n;
-            std::copy (it1, it2, it);
-            std::sort (begin (), end (), detail::less_pair<value_type> ());
-#endif
-        }
-        // This function seems to be big. So we do not let the compiler inline it.
-        // BOOST_UBLAS_INLINE
         void erase (pointer it) {
             BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
             // Fixed by George Katsirelos.
@@ -710,22 +693,6 @@ namespace boost { namespace numeric { namespace ublas {
             std::copy_backward (it, end () - 1, end ());
             *it = p;
             return it;
-        }
-        // This function seems to be big. So we do not let the compiler inline it.
-        // BOOST_UBLAS_INLINE
-        void insert (pointer it, pointer it1, pointer it2) {
-#if BOOST_UBLAS_CHECK_ENABLE
-            while (it1 != it2) {
-                insert (it, *it1);
-                ++ it1;
-            }
-#else
-            difference_type n = it - begin ();
-            resize (size () + it2 - it1);
-            it = begin () + n;
-            std::copy (it1, it2, it);
-            std::sort (begin (), end (), std::less<value_type> ());
-#endif
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
