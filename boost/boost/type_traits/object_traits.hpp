@@ -307,6 +307,7 @@ namespace detail{
 template <typename T>
 struct empty_helper_t1 : public T
 {
+   empty_helper_t1();
    int i[256];
 };
 struct empty_helper_t2 { int i[256]; };
