@@ -183,7 +183,7 @@ template<class Generator>
 void check_uniform_int(Generator & gen, int iter)
 {
   std::cout << "testing uniform_int(" << gen.min() << "," << gen.max() 
-	    << ")" << std::endl;
+            << ")" << std::endl;
   int range = gen.max()-gen.min()+1;
   std::vector<int> bucket(range);
   for(int j = 0; j < iter; j++) {
@@ -203,8 +203,8 @@ void check_uniform_int(Generator & gen, int iter)
     if(std::fabs(bucket[i] - avg) > threshold) {
       // 95% confidence interval
       std::cout << "   ... has bucket[" << i << "] = " << bucket[i] 
-		<< "  (distance " << (bucket[i] - avg) << ")" 
-		<< std::endl;
+                << "  (distance " << (bucket[i] - avg) << ")" 
+                << std::endl;
     }
   }
 }

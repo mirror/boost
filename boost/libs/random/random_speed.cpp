@@ -77,9 +77,9 @@ void show_elapsed(double end, int iter, const std::string & name)
   double usec = end/iter*1e6;
   double cycles = usec * cpu_frequency/1e6;
   std::cout << name << ": " 
-	    << usec*1e3 << " nsec/loop = " 
-	    << cycles << " CPU cycles"
-	    << std::endl;
+            << usec*1e3 << " nsec/loop = " 
+            << cycles << " CPU cycles"
+            << std::endl;
 }
 
 template<class Result, class RNG>
@@ -189,8 +189,8 @@ int main(int argc, char*argv[])
   run(iter, "rand48", boost::rand48());
   linear_congruential<boost::uint64_t>
     lcg48(boost::uint64_t(1)<<16 | 0x330e,
-	  boost::uint64_t(0xDEECE66DUL) | (boost::uint64_t(0x5) << 32), 0xB,
-	  boost::uint64_t(1)<<48);
+          boost::uint64_t(0xDEECE66DUL) | (boost::uint64_t(0x5) << 32), 0xB,
+          boost::uint64_t(1)<<48);
   timing(lcg48, iter, "lrand48 run-time", 0l);
 #endif
 

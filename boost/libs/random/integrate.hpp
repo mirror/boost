@@ -24,7 +24,7 @@
 template<class UnaryFunction>
 inline typename UnaryFunction::result_type 
 trapezoid(UnaryFunction f, typename UnaryFunction::argument_type a,
-	  typename UnaryFunction::argument_type b, int n)
+          typename UnaryFunction::argument_type b, int n)
 {
   typename UnaryFunction::result_type tmp = 0;
   for(int i = 1; i <= n-1; ++i)
@@ -35,7 +35,7 @@ trapezoid(UnaryFunction f, typename UnaryFunction::argument_type a,
 template<class UnaryFunction>
 inline typename UnaryFunction::result_type 
 simpson(UnaryFunction f, typename UnaryFunction::argument_type a,
-	typename UnaryFunction::argument_type b, int n)
+        typename UnaryFunction::argument_type b, int n)
 {
   typename UnaryFunction::result_type tmp1 = 0;
   for(int i = 1; i <= n-1; ++i)
@@ -51,8 +51,8 @@ simpson(UnaryFunction f, typename UnaryFunction::argument_type a,
 template<class UnaryFunction>
 inline typename UnaryFunction::argument_type
 invert_monotone_inc(UnaryFunction f, typename UnaryFunction::result_type y,
-		    typename UnaryFunction::argument_type lower = -1,
-		    typename UnaryFunction::argument_type upper = 1)
+                    typename UnaryFunction::argument_type lower = -1,
+                    typename UnaryFunction::argument_type upper = 1)
 {
   while(upper-lower > 1e-6) {
     double middle = (upper+lower)/2;
@@ -68,8 +68,8 @@ invert_monotone_inc(UnaryFunction f, typename UnaryFunction::result_type y,
 template<class UnaryFunction>
 inline typename UnaryFunction::argument_type
 quantil(UnaryFunction f, typename UnaryFunction::argument_type a,
-	typename UnaryFunction::result_type y,
-	typename UnaryFunction::argument_type step)
+        typename UnaryFunction::result_type y,
+        typename UnaryFunction::argument_type step)
 {
   typedef typename UnaryFunction::result_type result_type;
   if(y >= 1.0)

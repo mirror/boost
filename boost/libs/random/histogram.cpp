@@ -26,7 +26,7 @@
 
 
 void plot_histogram(const std::vector<int>& slots, int samples,
-		    double from, double to)
+                    double from, double to)
 {
   int m = *std::max_element(slots.begin(), slots.end());
   const int nRows = 20;
@@ -38,13 +38,13 @@ void plot_histogram(const std::vector<int>& slots, int samples,
     for(unsigned int col = 0; col < slots.size(); col++) {
       char out = ' ';
       if(slots[col]/double(samples) >= y)
-	out = 'x';
+        out = 'x';
       std::cout << out;
     }
     std::cout << std::endl;
   }
   std::cout << std::setw(12) << " "
-	    << std::setw(10) << from;
+            << std::setw(10) << from;
   std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout << std::setw(slots.size()-10) << to << std::endl;
 }
@@ -91,7 +91,7 @@ private:
 
 template<class RNG>
 void histogram(RNG base, int samples, double from, double to, 
-	       const std::string & name)
+               const std::string & name)
 {
   typedef squaresum_result<sum_result<RNG, double>, double > SRNG;
   SRNG gen((sum_result<RNG, double>(base)));
@@ -110,8 +110,8 @@ void histogram(RNG base, int samples, double from, double to,
   plot_histogram(slots, samples, from, to);
   double mean = gen.base().sum() / samples;
   std::cout << "mean: " << mean
-	    << " sigma: " << std::sqrt(gen.squaresum()/samples-mean*mean)
-	    << "\n" << std::endl;
+            << " sigma: " << std::sqrt(gen.squaresum()/samples-mean*mean)
+            << "\n" << std::endl;
 }
 
 
@@ -122,21 +122,21 @@ void histograms()
   using namespace boost;
   histogram(uniform_01<PRNG>(rng), 100000, -0.5, 1.5, "uniform_01(0,1)");
   histogram(bernoulli_distribution<PRNG>(rng, 0.2), 100000, -0.5, 1.5,
-	    "bernoulli(0.2)");
+            "bernoulli(0.2)");
   histogram(triangle_distribution<PRNG>(rng, 1, 2, 8), 100000, 0, 10,
-	    "triangle(1,2,8)");
+            "triangle(1,2,8)");
   histogram(geometric_distribution<PRNG>(rng, 5.0/6.0), 100000, 0, 10,
-	    "geometric(5/6)");
+            "geometric(5/6)");
   histogram(exponential_distribution<PRNG>(rng, 0.3), 100000, 0, 10,
-	    "exponential(0.3)");
+            "exponential(0.3)");
   histogram(cauchy_distribution<PRNG>(rng), 100000, -5, 5,
-	    "cauchy");
+            "cauchy");
   histogram(lognormal_distribution<PRNG>(rng, 3, 2), 100000, 0, 10,
-	    "lognormal");
+            "lognormal");
   histogram(normal_distribution<PRNG>(rng), 100000, -3, 3,
-	    "normal");
+            "normal");
   histogram(normal_distribution<PRNG>(rng, 0.5, 0.5), 100000, -3, 3,
-	    "normal(0.5, 0.5)");
+            "normal(0.5, 0.5)");
 }
 
 

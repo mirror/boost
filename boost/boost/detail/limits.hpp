@@ -33,7 +33,7 @@
  * 5 Apr 2001:
  *    Added sparc (big endian) processor support (John Maddock).
  * Initial sub:
- * 	Modified by Jens Maurer for gcc 2.95 on x86.
+ *      Modified by Jens Maurer for gcc 2.95 on x86.
  */
 
 #ifndef BOOST_SGI_CPP_LIMITS
@@ -194,7 +194,7 @@ public:
     const unsigned int _S_word[4] = { 0, 0, 0, Word };
     return *reinterpret_cast<const Number*>(
         reinterpret_cast<const char *>(&_S_word)+16-
-		(sizeof(Number) == 12 ? 10 : sizeof(Number)));
+                (sizeof(Number) == 12 ? 10 : sizeof(Number)));
   } 
 };
 
