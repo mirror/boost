@@ -5,42 +5,16 @@
  //  in all copies. This software is provided "as is" without express or implied   
  //  warranty, and with no claim as to its suitability for any purpose.   
 
+// standalone test program for <boost/compressed_pair.hpp>
+
 #include <iostream>
 #include <typeinfo>
 #include <cassert>
 
 #include <boost/compressed_pair.hpp>
+#include "type_traits_test.hpp"
 
 using namespace boost;
-
-#ifdef __BORLANDC__
-#pragma option -w-ccc -w-rch -w-eff -w-aus
-#endif
-
-//
-// define tests here
-unsigned failures = 0;
-unsigned test_count = 0;
-
-#define value_test(v, x) ++test_count;\
-                         if(v != x){++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;}
-#define value_fail(v, x) ++test_count; ++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#define type_test(v, x)  ++test_count;\
-                         if(boost::is_same<v, x>::value == false){\
-                           ++failures; \
-                           std::cout << "checking type of " << #x << "...failed" << std::endl; \
-                           std::cout << "   expected type was " << #v << std::endl; \
-                           std::cout << "   " << typeid(boost::is_same<v, x>).name() << "::value is false" << std::endl; }
-#else
-#define type_test(v, x)  ++test_count;\
-                         if(typeid(v) != typeid(x)){\
-                           ++failures; \
-                           std::cout << "checking type of " << #x << "...failed" << std::endl; \
-                           std::cout << "   expected type was " << #v << std::endl; \
-                           std::cout << "   " << "typeid(" #v ") != typeid(" #x ")" << std::endl; }
-#endif
 
 struct empty_POD_UDT{};
 struct empty_UDT

@@ -10,9 +10,27 @@
 //  support partial specialisation. (C) John Maddock 2000
 
 /* Release notes:
+   31st July 2000:
+      Added is_convertable, alignment_of.
    23rd July 2000:
       Fixed is_void specialization. (JM)
 */
+
+//
+// partial copyright for is_convertible:
+//
+// Copyright (C) 2000 Jeremy Siek (jsiek@lsc.nd.edu)
+// Copyright (C) 1999, 2000 Jaakko J„rvi (jaakko.jarvi@cs.utu.fi)
+//
+// Permission to copy and use this software is granted,
+// provided this copyright notice appears in all copies.
+// Permission to modify the code and to distribute modified code is granted,
+// provided this copyright notice appears in all copies, and a notice
+// that the code was modified is included with the copyright notice.
+//
+// This software is provided "as is" without express or implied warranty,
+// and with no claim as to its suitability for any purpose.
+
 
 #ifndef BOOST_OB_TYPE_TRAITS_HPP
 #define BOOST_OB_TYPE_TRAITS_HPP
@@ -272,6 +290,76 @@ template <typename T> struct is_compound
 template <typename T> struct is_POD
 { enum{ value = is_scalar<T>::value  //JM 7Jan2000
       || BOOST_IS_POD(T) }; };
+
+namespace detail{
+
+    // This workaround is necessary to handle when From is void
+    // which is normally taken care of by the partial specialization
+    // of the is_convertible class.
+#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
+  struct from_not_void_conversion {
+    template <class From, class To>
+    struct bind {
+      typedef char (&no)[1];
+      typedef char (&yes)[2];
+      static no check(...);
+      static yes check(To);
+    public:
+      void foo(); // avoid warning about all members being private
+      static From from;
+      enum { exists = sizeof( check(from) ) == sizeof(yes) };
+    };
+  };
+  struct from_is_void_conversion {
+    template <class From, class To>
+    struct bind {
+      enum { exists = is_void<To>::value };
+    };
+  };
+
+  template <class From>
+  struct conversion_helper {
+    typedef from_not_void_conversion type;
+  };
+  template <>
+  struct conversion_helper<void> {
+    typedef from_is_void_conversion type;
+  };
+#endif
+} // namespace detail
+
+template <class From, class To>
+class is_convertible
+{
+#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
+ typedef typename detail::conversion_helper<From>::type Selector;
+ typedef Selector::template bind<From,To> Conversion;
+public:
+ enum { value = Conversion::exists };
+#else
+   typedef char (&no)[1];
+   typedef char (&yes)[2];
+   static no check(...);
+   static yes check(To);
+ public:
+   void foo(); // avoid warning about all members being private
+   static From from;
+   enum { value = sizeof( check(from) ) == sizeof(yes) };
+#endif
+};
+
+template <class T>
+class alignment_of
+{
+   struct padded
+   {
+      char c;
+      T t;
+      padded();
+   };
+public:
+   enum{ value = sizeof(padded) - sizeof(T) };
+};
 
 //*? is type T an empty composite type (allows cv-qual)
 template <typename T> struct is_empty

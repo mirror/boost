@@ -1,3 +1,11 @@
+ // boost::compressed_pair test program   
+    
+ //  (C) Copyright John Maddock 2000. Permission to copy, use, modify, sell and   
+ //  distribute this software is granted provided this copyright notice appears   
+ //  in all copies. This software is provided "as is" without express or implied   
+ //  warranty, and with no claim as to its suitability for any purpose.   
+
+// standalone test program for <boost/call_traits.hpp>
 
 #include <cassert>
 #include <iostream>
@@ -6,12 +14,7 @@
 #include <typeinfo>
 #include <boost/call_traits.hpp>
 
-#ifdef __BORLANDC__
-// turn off some warnings, the way we do the tests will generate a *lot* of these
-// this is a result of the tests not call_traits itself....
-#pragma option -w-8004 -w-ccc -w-rch -w-eff -w-aus
-#endif
-
+#include "type_traits_test.hpp"
 //
 // struct contained models a type that contains a type (for example std::pair)
 // arrays are contained by value, and have to be treated as a special case:
@@ -177,30 +180,6 @@ struct UDT
    UDT() : i_(2){}
    bool operator == (const UDT& v){ return v.i_ == i_; }
 };
-
-//
-// define tests here
-unsigned failures = 0;
-unsigned test_count = 0;
-
-#define value_test(v, x) ++test_count;\
-                         if(v != x){++failures; std::cout << "checking value of " << #x << "...failed" << std::endl;}
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#define type_test(v, x)  ++test_count;\
-                           if(boost::is_same<v, x>::value == false){\
-                           ++failures; \
-                           std::cout << "checking type of " << #x << "...failed" << std::endl; \
-                           std::cout << "   expected type was " << #v << std::endl; \
-                           std::cout << "   " << typeid(boost::is_same<v, x>).name() << "::value is false" << std::endl; }
-#else
-#define type_test(v, x)  ++test_count;\
-                         if(typeid(v) != typeid(x)){\
-                           ++failures; \
-                           std::cout << "checking type of " << #x << "...failed" << std::endl; \
-                           std::cout << "   expected type was " << #v << std::endl; \
-                           std::cout << "   " << "typeid(" #v ") != typeid(" #x ")" << std::endl; }
-#endif
 
 int main()
 {

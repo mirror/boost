@@ -7,6 +7,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 //
 //  Crippled version for crippled compilers:
+//  see libs/utility/call_traits.htm
 //
 #ifndef BOOST_OB_CALL_TRAITS_HPP
 #define BOOST_OB_CALL_TRAITS_HPP

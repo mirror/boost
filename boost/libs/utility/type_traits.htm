@@ -25,6 +25,7 @@ divided up into the following sections:</p>
 
 <pre><a href="#fop">Fundamental type operations</a>
 <a href="#fp">Fundamental type properties</a>
+   <a href="#misc">Miscellaneous</a>
 <code>   </code><a href="#cv">cv-Qualifiers</a>
 <code>   </code><a href="#ft">Fundamental Types</a>
 <code>   </code><a href="#ct">Compound Types</a>
@@ -37,7 +38,7 @@ divided up into the following sections:</p>
 <p>Usage: &quot;class_name&lt;T&gt;::type&quot; performs
 indicated transformation on type T.</p>
 
-<table border="1" cellpadding="7" cellspacing="1" width="624">
+<table border="1" cellpadding="7" cellspacing="1" width="100%">
     <tr>
         <td valign="top" width="45%"><p align="center">Expression.</p>
         </td>
@@ -108,39 +109,75 @@ indicated transformation on type T.</p>
 indicated property is true, false otherwise. (Note that class_name&lt;T&gt;::value
 is always defined as a compile time constant).</p>
 
+<h3><a name="misc"></a>Miscellaneous</h3>
+
+<table border="1" cellspacing="1" width="100%">
+    <tr>
+        <td width="37%"><p align="center">Expression</p>
+        </td>
+        <td width="36%"><p align="center">Description</p>
+        </td>
+        <td width="27%"><p align="center">Compiler</p>
+        </td>
+    </tr>
+    <tr>
+        <td width="37%"><div align="center"><center><pre><code>is_same&lt;T,U&gt;::value</code></pre>
+        </center></div></td>
+        <td width="36%"><p align="center">True if T and U are the
+        same type.</p>
+        </td>
+        <td width="27%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td width="37%"><div align="center"><center><pre>is_convertible&lt;T,U&gt;::value</pre>
+        </center></div></td>
+        <td width="36%"><p align="center">True if type T is
+        convertible to type U.</p>
+        </td>
+        <td width="27%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td width="37%"><div align="center"><center><pre>alignment_of&lt;T&gt;::value</pre>
+        </center></div></td>
+        <td width="36%"><p align="center">An integral value
+        representing the minimum alignment requirements of type T
+        (strictly speaking defines a multiple of the type's
+        alignment requirement; for all compilers tested so far
+        however it does return the actual alignment).</p>
+        </td>
+        <td width="27%">&nbsp;</td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
 <h3><a name="cv"></a>cv-Qualifiers</h3>
 
 <p>The following classes determine what cv-qualifiers are present
 on a type (see 3.93).</p>
 
-<table border="1" cellpadding="7" cellspacing="1" width="624">
+<table border="1" cellpadding="7" cellspacing="1" width="100%">
     <tr>
-        <td valign="top" width="45%"><p align="center">Expression.</p>
+        <td valign="top" width="37%"><p align="center">Expression.</p>
         </td>
-        <td valign="top" width="45%"><p align="center">Description.</p>
+        <td valign="top" width="37%"><p align="center">Description.</p>
         </td>
-        <td valign="top" width="33%"><p align="center">Compiler.</p>
+        <td valign="top" width="27%"><p align="center">Compiler.</p>
         </td>
     </tr>
     <tr>
-        <td valign="top" width="45%"><code>is_const&lt;T&gt;::value</code></td>
-        <td valign="top" width="45%">True if type T is top-level
+        <td valign="top" width="37%"><code>is_const&lt;T&gt;::value</code></td>
+        <td valign="top" width="37%">True if type T is top-level
         const qualified.</td>
-        <td valign="top" width="33%"><p align="center">P</p>
+        <td valign="top" width="27%"><p align="center">P</p>
         </td>
     </tr>
     <tr>
-        <td valign="top" width="45%"><code>is_volatile&lt;T&gt;::value</code></td>
-        <td valign="top" width="45%">True if type T is top-level
+        <td valign="top" width="37%"><code>is_volatile&lt;T&gt;::value</code></td>
+        <td valign="top" width="37%">True if type T is top-level
         volatile qualified.</td>
-        <td valign="top" width="33%"><p align="center">P</p>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top" width="45%"><code>is_same&lt;T,U&gt;::value</code></td>
-        <td valign="top" width="45%">True if T and U are the same
-        type.</td>
-        <td valign="top" width="33%"><p align="center">P</p>
+        <td valign="top" width="27%"><p align="center">P</p>
         </td>
     </tr>
 </table>
@@ -152,7 +189,7 @@ on a type (see 3.93).</p>
 <p>The following will only ever be true for cv-unqualified types;
 these are closely based on the section 3.9 of the C++ Standard.</p>
 
-<table border="1" cellpadding="7" cellspacing="1" width="624">
+<table border="1" cellpadding="7" cellspacing="1" width="100%">
     <tr>
         <td valign="top" width="45%"><p align="center">Expression.</p>
         </td>
@@ -291,7 +328,7 @@ these are closely based on the section 3.9 of the C++ Standard.</p>
 <p>The following will only ever be true for cv-unqualified types,
 as defined by the Standard.&nbsp;</p>
 
-<table border="1" cellpadding="7" cellspacing="1" width="624">
+<table border="1" cellpadding="7" cellspacing="1" width="100%">
     <tr>
         <td valign="top" width="45%"><p align="center">Expression</p>
         </td>
@@ -365,7 +402,7 @@ as defined by the Standard.&nbsp;</p>
 is true then <code>class_name&lt;cv-qualified-T&gt;::value</code>
 will also be true.</p>
 
-<table border="1" cellpadding="7" cellspacing="1" width="624">
+<table border="1" cellpadding="7" cellspacing="1" width="100%">
     <tr>
         <td valign="top" width="45%"><p align="center">Expression</p>
         </td>
@@ -420,9 +457,10 @@ will also be true.</p>
         or class. If the compiler implements the &quot;zero sized
         empty base classes&quot; optimisation, then is_empty will
         correctly guess whether T is empty. Relies upon is_class
-        to determine whether T is a class type - as a result will
-        not compile when passed an enumerated type unless there
-        is compiler support for is_enum.</td>
+        to determine whether T is a class type. Screens out enum
+        types by using is_convertible&lt;T,int&gt;, this means
+        that empty classes that overload operator int(), will not
+        be classified as empty.</td>
         <td valign="top" width="33%"><p align="center">PCD</p>
         </td>
     </tr>
@@ -582,7 +620,7 @@ Hinnant and John Maddock.</p>
 
 <p>Maintained by <a href="mailto:John_Maddock@compuserve.com">John
 Maddock</a>, the latest version of this file can be found at <a
-href="http://www.boost.org">www.boost.org</a>, and the boost
+href="http://www.boost.org/">www.boost.org</a>, and the boost
 discussion list at <a href="http://www.egroups.com/list/boost">www.egroups.com/list/boost</a>.</p>
 </body>
 </html>

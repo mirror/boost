@@ -6,6 +6,9 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 
+// call_traits: defines typedefs for function usage
+// (see libs/utility/call_traits.htm)
+
 /* Release notes:
    23rd July 2000:
       Fixed array specialization. (JM)

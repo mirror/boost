@@ -6,6 +6,8 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 
+// compressed_pair: pair that "compresses" empty members
+// (see libs/utility/compressed_pair.htm)
 //
 // JM changes 25 Jan 2000:
 // Removed default arguments from compressed_pair_switch to get
