@@ -56,7 +56,7 @@ enum token_category {
     CharacterLiteralTokenType   = 0x44000000,
     BoolLiteralTokenType        = 0x45000000,
     PPTokenType                 = 0x50000000,
-    PPConditionalTokenType      = 0x50100000,
+    PPConditionalTokenType      = 0x50800000,
 
     UnknownTokenType            = 0xA0000000,
     EOLTokenType                = 0xB0000000,

@@ -38,6 +38,8 @@ CHANGELOG
   context information about the position of the #undef directive to the 
   user provided hook (thanks to Stefan Seefeld for pointing that out).
 - Fixed several broken links in the Context Policy topic.
+- Fixed a bug in the handling of the #include_next directive inside of 
+  non-evaluated #if blocks.
 
 Mon Feb 21 09:30:04 WEST 2005
 Version 1.1.14 (Fixes in response to the Boost review)
