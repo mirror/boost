@@ -32,7 +32,8 @@ int main(int, char*[])
   // Fill "numbers" array with [0,N)
   std::copy(boost::make_counting_iterator(0), boost::make_counting_iterator(N),
 	    std::back_inserter(numbers));
-  std::vector<int*> pointers;
+
+  std::vector<std::vector<int>::iterator> pointers;
 
   // Use counting iterator to fill in the array of pointers.
   std::copy(boost::make_counting_iterator(numbers.begin()),
