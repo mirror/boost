@@ -37,6 +37,10 @@ struct test_my_vector {
             size_type i;
             real_type n;
 
+            // Default Construct
+            VP default_constuct;
+            std::cout << "default construct = " << default_constuct << std::endl;
+            
             // Copy and swap
             initialize_vector (v1);
             initialize_vector (v2);
@@ -112,6 +116,12 @@ struct test_my_vector {
             initialize_vector (v2);
             t = ublas::inner_prod (v1, v2);
             std::cout << "inner_prod (v1, v2) = " << t << std::endl;
+
+            // Scalar and Binary vector expression resulting in a vector
+            initialize_vector (v1);
+            initialize_vector (v2);
+            v1 = v1 * ublas::inner_prod (v1, v2);
+            std::cout << "v1 * inner_prod (v1, v2) = " << v1 << std::endl;
         }
     }
     void operator () () const {
