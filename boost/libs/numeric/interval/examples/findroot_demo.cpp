@@ -1,22 +1,15 @@
 /* Boost example/findroot_demo.cpp
  * find zero points of some function by dichotomy
  *
- * Copyright Jens Maurer 2000, Guillaume Melquiond 2002-2003
- * Permission to use, copy, modify, sell, and distribute this software
- * is hereby granted without free provided that the above copyright notice
- * appears in all copies and that both that copyright notice and this
- * permission notice appear in supporting documentation.
+ * Copyright 2000 Jens Maurer
+ * Copyright 2002-2003 Guillaume Melquiond
  *
- * None of the above authors nor Polytechnic University makes no
- * representations about the suitability of this software for any
- * purpose. It is provided "as is" without express or implied
- * warranty.
- *
- * $Id$
- *
+ * Distributed under the Boost Software License, Version 1.0.
+ * (See accompanying file LICENSE_1_0.txt or
+ * copy at http://www.boost.org/LICENSE_1_0.txt)
  *
  * The idea and the 2D function are based on RVInterval,
- * which contains the following following copyright notice:
+ * which contains the following copyright notice:
 
         This file is copyrighted 1996 by Ronald Van Iwaarden.
 
