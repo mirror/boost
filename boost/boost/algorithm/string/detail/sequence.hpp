@@ -172,7 +172,14 @@ namespace boost {
                 BOOST_STRING_TYPENAME InputT::iterator To,
                 const InsertT& Insert )
             {
-                replace( Input, From, To, begin(Insert), end(Insert) );
+                if(From!=To)
+                {
+                    replace( Input, From, To, begin(Insert), end(Insert) );
+                }
+                else
+                {
+                    insert( Input, From, begin(Insert), end(Insert) );
+                }
             }
 
         } // namespace detail
