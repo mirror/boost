@@ -39,11 +39,26 @@ namespace boost {
         : store(new std::vector<T>(initial_size)), index(index)
         {}
 
-        void reserve(unsigned size)
+        std::vector<T>::iterator storage_begin()
         {
-            store->reserve(size);
+            return store->begin();
         }
-            
+
+        std::vector<T>::iterator storage_end()
+        {
+            return store->end();
+        }
+
+        std::vector<T>::const_iterator storage_begin() const
+        {
+            return store->begin();
+        }
+
+        std::vector<T>::const_iterator storage_end() const
+        {
+            return store->end();
+        }
+                           
     public:
         // Copy ctor absent, default semantics is OK.
         // Assignment operator absent, default semantics is OK.
