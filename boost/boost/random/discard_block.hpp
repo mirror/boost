@@ -49,10 +49,17 @@ public:
   BOOST_STATIC_CONSTANT(unsigned int, total_block = p);
   BOOST_STATIC_CONSTANT(unsigned int, returned_block = r);
 
+  BOOST_STATIC_ASSERT(total_block >= returned_block);
+
   discard_block() : _rng(), _n(0) { }
   explicit discard_block(const base_type & rng) : _rng(rng), _n(0) { }
-  template<class T>
-  void seed(T s) { _rng.seed(s); _n = 0; }
+  template<class It> discard_block(It& first, It last)
+    : _rng(first, last), _n(0) { }
+  template<class T> void seed(T s) { _rng.seed(s); _n = 0; }
+  template<class It> void seed(It& first, It last)
+  { _n = 0; _rng.seed(first, last); }
+
+  const base_type& base() const { return _rng; }
 
   result_type operator()()
   {
@@ -71,22 +78,32 @@ public:
   static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  friend std::ostream& operator<<(std::ostream& os, const discard_block& s)
+  template<class CharT, class Traits>
+  friend std::basic_ostream<CharT,Traits>&
+  operator<<(std::basic_ostream<CharT,Traits>& os, const discard_block& s)
   {
     os << s._rng << " " << s._n << " ";
     return os;
   }
-  friend std::istream& operator>>(std::istream& is, discard_block& s)
+
+  template<class CharT, class Traits>
+  friend std::basic_istream<CharT,Traits>&
+  operator>>(std::basic_istream<CharT,Traits>& is, discard_block& s)
   {
     is >> s._rng >> std::ws >> s._n >> std::ws;
     return is;
   }
+
   friend bool operator==(const discard_block& x, const discard_block& y)
   { return x._rng == y._rng && x._n == y._n; }
+  friend bool operator!=(const discard_block& x, const discard_block& y)
+  { return !(x == y); }
 #else
   // Use a member function; Streamable concept not supported.
   bool operator==(const discard_block& rhs) const
   { return _rng == rhs._rng && _n == rhs._n; }
+  bool operator!=(const discard_block& rhs) const
+  { return !(x == y); }
 #endif
 
 private:
