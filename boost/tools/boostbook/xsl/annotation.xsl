@@ -268,4 +268,18 @@
       </xsl:apply-templates>
     </xsl:element>
   </xsl:template>
+
+  <!-- The "purpose" mode strips simpara/para elements so that we can
+       place the resulting text into a comment in the synopsis. -->
+  <xsl:template match="para|simpara" mode="purpose">
+    <xsl:apply-templates mode="annotation"/>
+  </xsl:template>
+
+  <xsl:template match="*" mode="purpose">
+    <xsl:apply-templates select="." mode="annotation"/>
+  </xsl:template>
+
+  <xsl:template match="text()" mode="purpose">
+    <xsl:apply-templates select="." mode="annotation"/>
+  </xsl:template>
 </xsl:stylesheet>

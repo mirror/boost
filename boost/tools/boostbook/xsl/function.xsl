@@ -468,7 +468,8 @@
     <xsl:variable name="compact"
       select="not (para|description|requires|effects|postconditions|returns|
                    throws|complexity|notes|rationale) and 
-              ($boost.compact.function='1')"/>
+              ($boost.compact.function='1') and
+              not (local-name(.)='method')"/>
 
     <xsl:choose>
       <xsl:when test="$compact">
@@ -484,7 +485,7 @@
             <xsl:with-param name="text">
               <xsl:text>// </xsl:text>
               <xsl:apply-templates select="purpose/*|purpose/text()"
-                mode="annotation"/>
+                mode="purpose"/>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:if>
@@ -512,7 +513,8 @@
     <xsl:variable name="compact"
       select="not (para|description|requires|effects|postconditions|returns|
                    throws|complexity|notes|rationale) and 
-              ($boost.compact.function='1')"/>
+              ($boost.compact.function='1') and
+              not (local-name(.)='overloaded-method')"/>
 
     <xsl:choose>
       <xsl:when test="$compact">
@@ -898,7 +900,8 @@
     <xsl:variable name="compact"
       select="not (para|description|requires|effects|postconditions|returns|
                    throws|complexity|notes|rationale) and 
-              ($boost.compact.function='1')"/>
+              ($boost.compact.function='1') and
+              not (local-name(.)='method')"/>
 
     <xsl:if test="not ($compact)">
       <xsl:call-template name="function.documentation">
@@ -1052,37 +1055,29 @@
   <xsl:template match="overloaded-method" mode="reference">
     <xsl:variable name="name" select="@name"/>
 
-    <!-- True if we should compact this function -->
-    <xsl:variable name="compact"
-      select="not (para|description|requires|effects|postconditions|returns|
-                   throws|complexity|notes|rationale) and 
-              ($boost.compact.function='1')"/>
-
-    <xsl:if test="not ($compact)">
-      <xsl:call-template name="function.documentation">
-        <xsl:with-param name="text">
-          <para>
-            <xsl:attribute name="id">
-              <xsl:call-template name="generate.id"/>
-            </xsl:attribute>
-            
-            <xsl:call-template name="preformatted">
-              <xsl:with-param name="text">
-                <xsl:for-each select="signature">
-                  <xsl:call-template name="function">
-                    <xsl:with-param name="indentation" select="0"/>
-                    <xsl:with-param name="is-reference" select="true()"/>
-                    <xsl:with-param name="name" select="$name"/>
-                    <xsl:with-param name="standalone" select="true()"/>
-                  </xsl:call-template>
-                </xsl:for-each>
-              </xsl:with-param>
-            </xsl:call-template>
-          </para>
-          <xsl:call-template name="function-requirements"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </xsl:if>
+    <xsl:call-template name="function.documentation">
+      <xsl:with-param name="text">
+        <para>
+          <xsl:attribute name="id">
+            <xsl:call-template name="generate.id"/>
+          </xsl:attribute>
+          
+          <xsl:call-template name="preformatted">
+            <xsl:with-param name="text">
+              <xsl:for-each select="signature">
+                <xsl:call-template name="function">
+                  <xsl:with-param name="indentation" select="0"/>
+                  <xsl:with-param name="is-reference" select="true()"/>
+                  <xsl:with-param name="name" select="$name"/>
+                  <xsl:with-param name="standalone" select="true()"/>
+                </xsl:call-template>
+              </xsl:for-each>
+            </xsl:with-param>
+          </xsl:call-template>
+        </para>
+        <xsl:call-template name="function-requirements"/>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
   <!-- Group member functions together under a category name (synopsis)-->

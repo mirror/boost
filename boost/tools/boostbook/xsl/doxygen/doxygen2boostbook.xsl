@@ -1147,7 +1147,8 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <xsl:apply-templates select="." mode="passthrough"/>
   </xsl:template>
 
-  <!-- Remove top-level "para" and elements in the purpose -->
+  <!-- Replace top-level "para" elements with "simpara" elements in
+       the purpose -->
   <xsl:template match="*" mode="purpose">
     <xsl:apply-templates mode="passthrough"/>
   </xsl:template>
@@ -1157,7 +1158,9 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   </xsl:template>
 
   <xsl:template match="para" mode="purpose">
-    <xsl:apply-templates select="*|text()" mode="passthrough"/>
+    <simpara>
+      <xsl:apply-templates select="*|text()" mode="passthrough"/>
+    </simpara>
   </xsl:template>
 
  </xsl:stylesheet>
