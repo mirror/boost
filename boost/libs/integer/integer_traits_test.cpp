@@ -70,9 +70,10 @@ int main()
   runtest("long", long());
   typedef unsigned long unsigned_long;
   runtest("unsigned long", unsigned_long());
-#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_MSVC) && !defined(__BORLANDC__) && !defined(__BEOS__)
   //
   // MS/Borland compilers can't support 64-bit member constants
+  // BeOS doesn't have specialisations for long long in SGI's <limits> header.
   runtest("int64_t (possibly long long)", boost::int64_t());
   runtest("uint64_t (possibly unsigned long long)", boost::uint64_t());
 #endif
@@ -80,3 +81,4 @@ int main()
   // warning here if "return 0;" is omitted.
   return 0;
 }
+
