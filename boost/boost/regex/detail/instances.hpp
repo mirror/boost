@@ -68,13 +68,6 @@ template class BOOST_REGEX_DECL match_results<std::basic_string<BOOST_REGEX_CHAR
 #pragma warning(push)
 #pragma warning(disable : 4251 4231 4660)
 
-//
-// these next two lines are deliberate: raw_storage is used only internally
-// by reg_expression it is not exported from the dll:
-//
-template class re_detail::raw_storage< BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T) >;
-template class BOOST_REGEX_DECL re_detail::raw_storage< BOOST_DEFAULT_ALLOCATOR(BOOST_REGEX_CHAR_T) >;
-
 template class BOOST_REGEX_DECL regex_traits< BOOST_REGEX_CHAR_T >;
 template class BOOST_REGEX_DECL reg_expression< BOOST_REGEX_CHAR_T >;
 template class BOOST_REGEX_DECL re_detail::match_results_base<BOOST_REGEX_CHAR_T const*, BOOST_DEFAULT_ALLOCATOR(re_detail::def_alloc_param_traits<BOOST_REGEX_CHAR_T const*>::type)>;
@@ -168,3 +161,4 @@ template void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::cow();
 
 #endif // BOOST_REGEX_NO_EXTERNAL_TEMPLATES
  
+

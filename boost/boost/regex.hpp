@@ -451,6 +451,11 @@ class match_results;
 // regular expression:
 //
 
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4251 4231 4660)
+#endif
+
 #ifdef BOOST_REGEX_NO_FWD
 template <class charT, class traits = regex_traits<charT>, class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
 #else
@@ -702,6 +707,10 @@ protected:
    static bool BOOST_REGEX_CALL can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_wide_type&);
    static bool BOOST_REGEX_CALL can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_narrow_type&);
 };
+
+#ifdef BOOST_MSVC
+#pragma warning (pop)
+#endif
 
 template <class charT, class traits, class Allocator>
 inline void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::swap(reg_expression& that)throw()
