@@ -15,7 +15,7 @@
     , class Difference = ptrdiff_t
   >
   class iterator_facade {
-  public:
+   public:
       typedef remove_const<Value>::type value_type;
       typedef Reference reference;
       typedef Value\* pointer;
@@ -32,6 +32,8 @@
       Derived& operator+=(difference_type n);
       Derived& operator-=(difference_type n);
       Derived operator-(difference_type n) const;
+   protected:
+      typedef iterator_facade iterator_facade\_;
   };
 
   // Comparison operators

@@ -23,6 +23,7 @@
       explicit iterator_adaptor(Base iter);
       Base const& base() const;
    protected:
+      typedef iterator_adaptor iterator_adaptor\_;
       Base const& base_reference() const;
       Base& base_reference();
    private: // Core iterator interface for iterator_facade.  

@@ -247,10 +247,10 @@ namespace boost
   {
       friend class iterator_core_access;
 
+   protected:
       typedef typename detail::iterator_adaptor_base<
           Derived, Base, Value, Traversal, Reference, Difference
       >::type super_t;
-
    public:
       iterator_adaptor() {}
 
@@ -263,6 +263,9 @@ namespace boost
         { return m_iterator; }
 
    protected:
+      // for convenience in derived classes
+      typedef iterator_adaptor<Derived,Base,Value,Traversal,Reference,Difference> iterator_adaptor_;
+      
       //
       // lvalue access to the Base object for Derived
       //

@@ -614,7 +614,7 @@ template &lt;
   , class Difference = ptrdiff_t
 &gt;
 class iterator_facade {
-public:
+ public:
     typedef remove_const&lt;Value&gt;::type value_type;
     typedef Reference reference;
     typedef Value* pointer;
@@ -631,6 +631,8 @@ public:
     Derived&amp; operator+=(difference_type n);
     Derived&amp; operator-=(difference_type n);
     Derived operator-(difference_type n) const;
+ protected:
+    typedef iterator_facade iterator_facade_;
 };
 
 // Comparison operators
@@ -1202,6 +1204,7 @@ class iterator_adaptor
     explicit iterator_adaptor(Base iter);
     Base const&amp; base() const;
  protected:
+    typedef iterator_adaptor iterator_adaptor_;
     Base const&amp; base_reference() const;
     Base&amp; base_reference();
  private: // Core iterator interface for iterator_facade.  

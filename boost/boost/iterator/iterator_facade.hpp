@@ -586,8 +586,6 @@ namespace boost
       //
       // Curiously Recurring Template interface.
       //
-      typedef Derived derived_t;
-
       Derived& derived()
       {
           return *static_cast<Derived*>(this);
@@ -602,6 +600,10 @@ namespace boost
          Value, CategoryOrTraversal, Reference, Difference
       > associated_types;
 
+   protected:
+      // For use by derived classes
+      typedef iterator_facade<Derived,Value,Reference,Difference> iterator_facade_;
+      
    public:
 
       typedef typename associated_types::value_type value_type;

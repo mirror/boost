@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.4: http://docutils.sourceforge.net/" />
 <title>Iterator Adaptor</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="iterator-adaptor">
 <h1 class="title">Iterator Adaptor</h1>
 <table class="docinfo" frame="void" rules="none">
 <col class="docinfo-name" />
@@ -32,6 +31,7 @@ Railway Operation and Construction</a></td></tr>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved</td></tr>
 </tbody>
 </table>
+<div class="document" id="iterator-adaptor">
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -55,7 +55,7 @@ depends on the operations supported by the <tt class="literal"><span class="pre"
 core interface functions of <tt class="literal"><span class="pre">iterator_facade</span></tt> are redefined in the
 <tt class="literal"><span class="pre">Derived</span></tt> class.</p>
 <div class="contents topic" id="table-of-contents">
-<p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
+<p class="topic-title first"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#overview" id="id6" name="id6">Overview</a></li>
 <li><a class="reference" href="#reference" id="id7" name="id7">Reference</a><ul>
@@ -135,6 +135,7 @@ class iterator_adaptor
     explicit iterator_adaptor(Base iter);
     Base const&amp; base() const;
  protected:
+    typedef iterator_adaptor iterator_adaptor_;
     Base const&amp; base_reference() const;
     Base&amp; base_reference();
  private: // Core iterator interface for iterator_facade.  
@@ -339,7 +340,7 @@ template we developed in the <a class="reference" href="iterator_facade.html#tut
 read that material, you should go back now and check it out because
 we're going to pick up right where it left off.</p>
 <div class="sidebar">
-<p class="sidebar-title"><tt class="literal"><span class="pre">node_base*</span></tt> really <em>is</em> an iterator</p>
+<p class="sidebar-title first"><tt class="literal"><span class="pre">node_base*</span></tt> really <em>is</em> an iterator</p>
 <p>It's not really a very interesting iterator, since <tt class="literal"><span class="pre">node_base</span></tt>
 is an abstract class: a pointer to a <tt class="literal"><span class="pre">node_base</span></tt> just points
 at some base subobject of an instance of some other class, and
@@ -349,7 +350,7 @@ position is to compare another <tt class="literal"><span class="pre">node_base*<
 words, the original iterator traverses a one-element array.</p>
 </div>
 <p>You probably didn't think of it this way, but the <tt class="literal"><span class="pre">node_base*</span></tt>
-object which underlies <tt class="literal"><span class="pre">node_iterator</span></tt> is itself an iterator,
+object that underlies <tt class="literal"><span class="pre">node_iterator</span></tt> is itself an iterator,
 just like all other pointers.  If we examine that pointer closely
 from an iterator perspective, we can see that it has much in common
 with the <tt class="literal"><span class="pre">node_iterator</span></tt> we're building.  First, they share most
@@ -358,9 +359,10 @@ of the same associated types (<tt class="literal"><span class="pre">value_type</
 core functionality is the same: <tt class="literal"><span class="pre">operator*</span></tt> and <tt class="literal"><span class="pre">operator==</span></tt> on
 the <tt class="literal"><span class="pre">node_iterator</span></tt> return the result of invoking the same
 operations on the underlying pointer, via the <tt class="literal"><span class="pre">node_iterator</span></tt>'s
-<a class="reference" href="iterator_facade.html#implementing-the-core-operations"><tt class="literal"><span class="pre">dereference</span></tt> and <tt class="literal"><span class="pre">equal</span></tt> member functions</a>). However, the <tt class="literal"><span class="pre">operator++</span></tt> for
-<tt class="literal"><span class="pre">node_iterator</span></tt> behaves differently than for <tt class="literal"><span class="pre">node_base*</span></tt>
-since it follows the <tt class="literal"><span class="pre">m_next</span></tt> pointer.</p>
+<a class="reference" href="iterator_facade.html#implementing-the-core-operations"><tt class="literal"><span class="pre">dereference</span></tt> and <tt class="literal"><span class="pre">equal</span></tt> member functions</a>).  The only real behavioral difference
+between <tt class="literal"><span class="pre">node_base*</span></tt> and <tt class="literal"><span class="pre">node_iterator</span></tt> can be observed when
+they are incremented: <tt class="literal"><span class="pre">node_iterator</span></tt> follows the
+<tt class="literal"><span class="pre">m_next</span></tt> pointer, while <tt class="literal"><span class="pre">node_base*</span></tt> just applies an address offset.</p>
 <p>It turns out that the pattern of building an iterator on another
 iterator-like type (the <tt class="literal"><span class="pre">Base</span></tt> <a class="footnote-reference" href="#base" id="id3" name="id3"><sup>1</sup></a> type) while modifying
 just a few aspects of the underlying type's behavior is an
@@ -384,16 +386,12 @@ class node_iter
  private:
     struct enabler {};  // a private type avoids misuse
 
-    typedef boost::iterator_adaptor&lt;
-        node_iter&lt;Value&gt;, Value*, boost::use_default, boost::forward_traversal_tag
-    &gt; super_t;
-
  public:
     node_iter()
-      : super_t(0) {}
+      : node_iter::iterator_adaptor_(0) {}
 
     explicit node_iter(Value* p)
-      : super_t(p) {}
+      : node_iter::iterator_adaptor_(p) {}
 
     template &lt;class OtherValue&gt;
     node_iter(
@@ -403,14 +401,20 @@ class node_iter
           , enabler
         &gt;::type = enabler()
     )
-      : super_t(other.base()) {}
+      : node_iter::iterator_adaptor_(other.base()) {}
 
  private:
     friend class boost::iterator_core_access;
     void increment() { this-&gt;base_reference() = this-&gt;base()-&gt;next(); }
 };
 </pre>
-<p>You can see an example program which exercises this version of the
+<p>Note the use of <tt class="literal"><span class="pre">node_iter::iterator_adaptor_</span></tt> here: because
+<tt class="literal"><span class="pre">iterator_adaptor</span></tt> defines a nested <tt class="literal"><span class="pre">iterator_adaptor_</span></tt> type
+that refers to itself, that gives us a convenient way to refer to
+the complicated base class type of <tt class="literal"><span class="pre">node_iter&lt;Value&gt;</span></tt>. [Note:
+this technique is known not to work with Borland C++ 5.6.4 and
+Metrowerks CodeWarrior versions prior to 9.0]</p>
+<p>You can see an example program that exercises this version of the
 node iterators <a class="reference" href="../example/node_iterator3.cpp">here</a>.</p>
 <p>In the case of <tt class="literal"><span class="pre">node_iter</span></tt>, it's not very compelling to pass
 <tt class="literal"><span class="pre">boost::use_default</span></tt> as <tt class="literal"><span class="pre">iterator_adaptor</span></tt>'s <tt class="literal"><span class="pre">Value</span></tt>
@@ -423,7 +427,7 @@ iterator type argument and reverses its direction of traversal,
 since the original iterator and the reversed one have all the same
 associated types, <tt class="literal"><span class="pre">iterator_adaptor</span></tt>'s delegation of default
 types to its <tt class="literal"><span class="pre">Base</span></tt> saves the implementor of
-<tt class="literal"><span class="pre">boost::reverse_iterator</span></tt> from writing</p>
+<tt class="literal"><span class="pre">boost::reverse_iterator</span></tt> from writing:</p>
 <pre class="literal-block">
 std::iterator_traits&lt;Iterator&gt;::<em>some-associated-type</em>
 </pre>

@@ -21,7 +21,7 @@ we're going to pick up right where it left off.
    words, the original iterator traverses a one-element array.
 
 You probably didn't think of it this way, but the ``node_base*``
-object which underlies ``node_iterator`` is itself an iterator,
+object that underlies ``node_iterator`` is itself an iterator,
 just like all other pointers.  If we examine that pointer closely
 from an iterator perspective, we can see that it has much in common
 with the ``node_iterator`` we're building.  First, they share most
@@ -30,9 +30,10 @@ of the same associated types (``value_type``, ``reference``,
 core functionality is the same: ``operator*`` and ``operator==`` on
 the ``node_iterator`` return the result of invoking the same
 operations on the underlying pointer, via the ``node_iterator``\ 's
-|dereference_and_equal|_). However, the ``operator++`` for
-``node_iterator`` behaves differently than for ``node_base*``
-since it follows the ``m_next`` pointer.
+|dereference_and_equal|_).  The only real behavioral difference
+between ``node_base*`` and ``node_iterator`` can be observed when
+they are incremented: ``node_iterator`` follows the
+``m_next`` pointer, while ``node_base*`` just applies an address offset.   
 
 .. |dereference_and_equal| replace:: ``dereference`` and ``equal`` member functions
 .. _dereference_and_equal: iterator_facade.html#implementing-the-core-operations
@@ -60,16 +61,12 @@ behaviors other than ``increment``.  The implementation of
    private:
       struct enabler {};  // a private type avoids misuse
 
-      typedef boost::iterator_adaptor<
-          node_iter<Value>, Value*, boost::use_default, boost::forward_traversal_tag
-      > super_t;
-
    public:
       node_iter()
-        : super_t(0) {}
+        : node_iter::iterator_adaptor_(0) {}
 
       explicit node_iter(Value* p)
-        : super_t(p) {}
+        : node_iter::iterator_adaptor_(p) {}
 
       template <class OtherValue>
       node_iter(
@@ -79,14 +76,21 @@ behaviors other than ``increment``.  The implementation of
             , enabler
           >::type = enabler()
       )
-        : super_t(other.base()) {}
+        : node_iter::iterator_adaptor_(other.base()) {}
 
    private:
       friend class boost::iterator_core_access;
       void increment() { this->base_reference() = this->base()->next(); }
   };
 
-You can see an example program which exercises this version of the
+Note the use of ``node_iter::iterator_adaptor_`` here: because
+``iterator_adaptor`` defines a nested ``iterator_adaptor_`` type
+that refers to itself, that gives us a convenient way to refer to
+the complicated base class type of ``node_iter<Value>``. [Note:
+this technique is known not to work with Borland C++ 5.6.4 and
+Metrowerks CodeWarrior versions prior to 9.0]
+
+You can see an example program that exercises this version of the
 node iterators `here`__.
 
 __ ../example/node_iterator3.cpp
@@ -102,7 +106,7 @@ iterator type argument and reverses its direction of traversal,
 since the original iterator and the reversed one have all the same
 associated types, ``iterator_adaptor``\ 's delegation of default
 types to its ``Base`` saves the implementor of
-``boost::reverse_iterator`` from writing
+``boost::reverse_iterator`` from writing:
 
 .. parsed-literal::
 
