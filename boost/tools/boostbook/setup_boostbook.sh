@@ -3,6 +3,8 @@
 # User configuration
 DOCBOOK_XSL_VERSION=1.67.2
 DOCBOOK_DTD_VERSION=4.2
+FOP_VERSION=0.20.5
+FOP_MIRROR=http://www.ibiblio.org/pub/mirrors/apache/xml/fop/
 SOURCEFORGE_MIRROR=http://dl.sourceforge.net
 HTTP_GET_CMD="curl -O"
 
@@ -37,12 +39,13 @@ fi
 
 DOCBOOK_DTD_DIR="$PWD/docbook-dtd-$DOCBOOK_DTD_VERSION"
 if test ! -d docbook-dtd-$DOCBOOK_DTD_VERSION; then
-  echo -n "Expanding DocBook XML DTD into $DOCBOOK_DTD_DIR..."
+  echo -n "Expanding DocBook XML DTD into $DOCBOOK_DTD_DIR... "
   unzip -q $DOCBOOK_DTD_ZIP -d $DOCBOOK_DTD_DIR
   echo "done."
 fi
 
-# Find xsltproc and doxygen
+# Find xsltproc, doxygen, and java
+OLD_IFS=$IFS
 IFS=:
 for dir in $PATH; do
   if test -f $dir/xsltproc && test -x $dir/xsltproc; then
@@ -51,26 +54,64 @@ for dir in $PATH; do
   if test -f $dir/doxygen && test -x $dir/doxygen; then
     DOXYGEN="$dir/doxygen"
   fi
+  if test -f $dir/java && test -x $dir/java; then
+    JAVA="$dir/java"
+    JAVA_HOME=`dirname $dir`
+  fi
 done
+IFS=$OLD_IFS
 
 # Make sure we have xsltproc
 if test ! -f "$XSLTPROC" && test ! -x "$XSLTPROC"; then
+  echo "Searching for xsltproc... NOT FOUND.";
   echo "ERROR: Unable to find xsltproc executable."
   echo "If you have already installed xsltproc, please set the environment"
   echo "variable XSLTPROC to the xsltproc executable. If you do not have"
   echo "xsltproc, you may download it from http://xmlsoft.org/XSLT/."
   exit 0;
+else
+  echo "Searching for xsltproc... $XSLTPROC.";
 fi
 
 # Just notify the user if we haven't found doxygen.
 if test ! -f "$DOXYGEN" && test ! -x "$DOXYGEN"; then
+  echo "Searching for Doxygen... not found.";
   echo "Warning: unable to find Doxygen executable. You will not be able to"
   echo "  use Doxygen to generate BoostBook documentation. If you have Doxygen,"
   echo "  please set the DOXYGEN environment variable to the path of the doxygen"
   echo "  executable."
   HAVE_DOXYGEN="no"
 else
+  echo "Searching for Doxygen... $DOXYGEN.";
   HAVE_DOXYGEN="yes"
+fi
+
+# Just notify the user if we haven't found Java. Otherwise, go get FOP.
+if test ! -f "$JAVA" && test ! -x "$JAVA"; then
+  echo "Searching for Java... not found.";
+  echo "Warning: unable to find Java executable. You will not be able to"
+  echo "  generate PDF documentation. If you have Java, please set the JAVA"
+  echo "  environment variable to the path of the java executable."
+  HAVE_FOP="no"
+else
+  echo "Searching for Java... $JAVA.";
+  FOP_TARBALL="fop-$FOP_VERSION-bin.tar.gz"
+  FOP_URL="$FOP_MIRROR/$FOP_TARBALL"
+  FOP_DIR="$PWD/fop-$FOP_VERSION"
+  FOP="$FOP_DIR/fop.sh"
+  if test -f $FOP_TARBALL; then
+    echo "Using existing FOP distribution (version $FOP_VERSION)."
+  else
+    echo "Downloading FOP distribution version $FOP_VERSION..." 
+    $HTTP_GET_CMD $FOP_URL
+  fi
+ 
+  if test ! -d $FOP_DIR; then
+    echo -n "Expanding FOP distribution into $FOP_DIR... ";
+    gunzip -cd $FOP_TARBALL | tar xf -
+    echo "done.";
+  fi
+  HAVE_FOP="yes"
 fi
 
 # Find the input jamfile to configure
@@ -79,12 +120,12 @@ if test -r "$HOME/user-config.jam"; then
   JAM_CONFIG_IN="user-config-backup.jam"
   cp $JAM_CONFIG_OUT user-config-backup.jam 
   JAM_CONFIG_IN_TEMP="yes"
-  echo -n "Updating Boost.Jam configuration in $JAM_CONFIG_OUT..."
+  echo -n "Updating Boost.Jam configuration in $JAM_CONFIG_OUT... "
 
 elif test -r "$BOOST_ROOT/tools/build/v2/user-config.jam"; then
   JAM_CONFIG_IN="$BOOST_ROOT/tools/build/v2/user-config.jam";
   JAM_CONFIG_IN_TEMP="no"
-  echo -n "Writing Boost.Jam configuration to $JAM_CONFIG_OUT..."
+  echo -n "Writing Boost.Jam configuration to $JAM_CONFIG_OUT... "
 else 
   echo "ERROR: Please set the BOOST_ROOT environment variable to refer to your"
   echo "Boost installation or copy user-config.jam into your home directory."
@@ -107,6 +148,7 @@ using_boostbook==1 { eaten=1 }
 
 /^\s*using xsltproc.*$/ { eaten=1 }
 /^\s*using doxygen.*$/ { eaten=1 }
+/^\s*using fop.*$/ { eaten=1 }
 
 /^.*$/             { if (eaten == 0) print; eaten=0 }
 
@@ -119,6 +161,7 @@ END {
   }
   print "using xsltproc : $XSLTPROC ;"
   if ("$HAVE_DOXYGEN" == "yes") print "using doxygen : $DOXYGEN ;";
+  if ("$HAVE_FOP" == "yes") print "using fop : $FOP : : $JAVA ;";
 }
 EOF
 
