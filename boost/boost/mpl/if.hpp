@@ -24,6 +24,10 @@
 #include "boost/mpl/aux_/config/workaround.hpp"
 #include "boost/config.hpp"
 
+#ifndef BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
+# include "boost/mpl/arg_fwd.hpp"
+#endif
+
 namespace boost {
 namespace mpl {
 
@@ -113,6 +117,20 @@ struct if_
 template <class T1, class T2, class T3, class T4> struct bind3;
 template <template <class T1, class T2, class T3> class> struct quote3;
 
+namespace aux
+{
+  template <
+      typename T
+    , BOOST_MPL_PP_PARAMS(BOOST_MPL_METAFUNCTION_MAX_ARITY, typename U)
+  > struct resolve_bind_arg;
+
+  template<
+        typename T
+      , typename Arg
+      >
+  struct replace_unnamed_arg;
+}
+
 template<
       typename T1, typename T2, typename T3
     >
@@ -125,9 +143,8 @@ struct bind3<quote3<if_>, T1, T2, T3>
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg<quote3<if_>, mpl::arg< 1> > r0;
-        typedef typename r0::type a0;
-        typedef typename r0::next_arg n1;
+        typedef quote3<if_> a0;
+        typedef mpl::arg< 1> n1;
         
         typedef aux::replace_unnamed_arg< T1,n1 > r1;
         typedef typename r1::type a1;
