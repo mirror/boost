@@ -9,6 +9,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  21 Oct 02 Modified implementation of operators to allow compilers with a
+//            correct named return value optimization (NRVO) to produce optimal
+//            code.  (Daniel Frey)
 //  02 Dec 01 Bug fixed in random_access_iteratable.  (Helmut Zeisel)
 //  28 Sep 01 Factored out iterator operator groups.  (Daryle Walker)
 //  27 Aug 01 'left' form for non commutative operators added;
@@ -149,127 +152,107 @@ struct equality_comparable1 : B
      friend bool operator!=(const T& x, const T& y) { return !(x == y); }
 };
 
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct multipliable2 : B
-{
-     friend T operator*(T x, const U& y) { return x *= y; }
-     friend T operator*(const U& y, T x) { return x *= y; }
+//  NRVO-friendly implementation (contributed by Daniel Frey) ---------------//
+
+#if defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
+
+// This is the optimal implementation for ISO/ANSI C++,
+// but it requires the compiler to implement the NRVO.
+// If the compiler has no NRVO, this is the best symmetric
+// implementation available.
+
+#define BOOST_BINARY_OPERATOR_COMMUTATIVE( NAME, OP )                         \
+template <class T, class U, class B = ::boost::detail::empty_base>            \
+struct NAME##2 : B                                                            \
+{                                                                             \
+  friend T operator OP( const T& lhs, const U& rhs )                          \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
+  friend T operator OP( const U& lhs, const T& rhs )                          \
+    { T nrv( rhs ); nrv OP##= lhs; return nrv; }                              \
+};                                                                            \
+                                                                              \
+template <class T, class B = ::boost::detail::empty_base>                     \
+struct NAME##1 : B                                                            \
+{                                                                             \
+  friend T operator OP( const T& lhs, const T& rhs )                          \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
 };
 
-template <class T, class B = ::boost::detail::empty_base>
-struct multipliable1 : B
-{
-     friend T operator*(T x, const T& y) { return x *= y; }
+#define BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( NAME, OP )                     \
+template <class T, class U, class B = ::boost::detail::empty_base>            \
+struct NAME##2 : B                                                            \
+{                                                                             \
+  friend T operator OP( const T& lhs, const U& rhs )                          \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
+};                                                                            \
+                                                                              \
+template <class T, class U, class B = ::boost::detail::empty_base>            \
+struct NAME##2_left : B                                                       \
+{                                                                             \
+  friend T operator OP( const U& lhs, const T& rhs )                          \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
+};                                                                            \
+                                                                              \
+template <class T, class B = ::boost::detail::empty_base>                     \
+struct NAME##1 : B                                                            \
+{                                                                             \
+  friend T operator OP( const T& lhs, const T& rhs )                          \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
 };
 
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct addable2 : B
-{
-     friend T operator+(T x, const U& y) { return x += y; }
-     friend T operator+(const U& y, T x) { return x += y; }
+#else // defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
+
+// For compilers without NRVO the following code is optimal, but not symmetric!
+// Note that the implementation of NAME##2_left only looks cool, but doesn't
+// provide optimization opportunities to the compiler :)
+
+#define BOOST_BINARY_OPERATOR_COMMUTATIVE( NAME, OP )                         \
+template <class T, class U, class B = ::boost::detail::empty_base>            \
+struct NAME##2 : B                                                            \
+{                                                                             \
+  friend T operator OP( T lhs, const U& rhs ) { return lhs OP##= rhs; }       \
+  friend T operator OP( const U& lhs, T rhs ) { return rhs OP##= lhs; }       \
+};                                                                            \
+                                                                              \
+template <class T, class B = ::boost::detail::empty_base>                     \
+struct NAME##1 : B                                                            \
+{                                                                             \
+  friend T operator OP( T lhs, const T& rhs ) { return lhs OP##= rhs; }       \
 };
 
-template <class T, class B = ::boost::detail::empty_base>
-struct addable1 : B
-{
-     friend T operator+(T x, const T& y) { return x += y; }
+#define BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( NAME, OP )                     \
+template <class T, class U, class B = ::boost::detail::empty_base>            \
+struct NAME##2 : B                                                            \
+{                                                                             \
+  friend T operator OP( T lhs, const U& rhs ) { return lhs OP##= rhs; }       \
+};                                                                            \
+                                                                              \
+template <class T, class U, class B = ::boost::detail::empty_base>            \
+struct NAME##2_left : B                                                       \
+{                                                                             \
+  friend T operator OP( const U& lhs, const T& rhs )                          \
+    { return T( lhs ) OP##= rhs; }                                            \
+};                                                                            \
+                                                                              \
+template <class T, class B = ::boost::detail::empty_base>                     \
+struct NAME##1 : B                                                            \
+{                                                                             \
+  friend T operator OP( T lhs, const T& rhs ) { return lhs OP##= rhs; }       \
 };
 
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct subtractable2 : B
-{
-     friend T operator-(T x, const U& y) { return x -= y; }
-};
+#endif // defined(BOOST_HAS_NRVO) || defined(BOOST_FORCE_SYMMETRIC_OPERATORS)
 
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct subtractable2_left : B
-{
-  friend T operator-(const U& x, const T& y)
-    { T result(x); return result -= y; }
-};
+BOOST_BINARY_OPERATOR_COMMUTATIVE( multipliable, * );
+BOOST_BINARY_OPERATOR_COMMUTATIVE( addable, + );
+BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( subtractable, - );
+BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( dividable, / );
+BOOST_BINARY_OPERATOR_NON_COMMUTATIVE( modable, % );
+BOOST_BINARY_OPERATOR_COMMUTATIVE( xorable, ^ );
+BOOST_BINARY_OPERATOR_COMMUTATIVE( andable, & );
+BOOST_BINARY_OPERATOR_COMMUTATIVE( orable, | );
 
-template <class T, class B = ::boost::detail::empty_base>
-struct subtractable1 : B
-{
-     friend T operator-(T x, const T& y) { return x -= y; }
-};
-
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct dividable2 : B
-{
-     friend T operator/(T x, const U& y) { return x /= y; }
-};
-
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct dividable2_left : B
-{
-  friend T operator/(const U& x, const T& y)
-    { T result(x); return result /= y; }
-};
-
-template <class T, class B = ::boost::detail::empty_base>
-struct dividable1 : B
-{
-     friend T operator/(T x, const T& y) { return x /= y; }
-};
-
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct modable2 : B
-{
-     friend T operator%(T x, const U& y) { return x %= y; }
-};
-
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct modable2_left : B
-{
-  friend T operator%(const U& x, const T& y)
-    { T result(x); return result %= y; }
-};
-
-template <class T, class B = ::boost::detail::empty_base>
-struct modable1 : B
-{
-     friend T operator%(T x, const T& y) { return x %= y; }
-};
-
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct xorable2 : B
-{
-     friend T operator^(T x, const U& y) { return x ^= y; }
-     friend T operator^(const U& y, T x) { return x ^= y; }
-};
-
-template <class T, class B = ::boost::detail::empty_base>
-struct xorable1 : B
-{
-     friend T operator^(T x, const T& y) { return x ^= y; }
-};
-
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct andable2 : B
-{
-     friend T operator&(T x, const U& y) { return x &= y; }
-     friend T operator&(const U& y, T x) { return x &= y; }
-};
-
-template <class T, class B = ::boost::detail::empty_base>
-struct andable1 : B
-{
-     friend T operator&(T x, const T& y) { return x &= y; }
-};
-
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct orable2 : B
-{
-     friend T operator|(T x, const U& y) { return x |= y; }
-     friend T operator|(const U& y, T x) { return x |= y; }
-};
-
-template <class T, class B = ::boost::detail::empty_base>
-struct orable1 : B
-{
-     friend T operator|(T x, const T& y) { return x |= y; }
-};
+#undef BOOST_BINARY_OPERATOR_COMMUTATIVE
+#undef BOOST_BINARY_OPERATOR_NON_COMMUTATIVE
 
 //  incrementable and decrementable contributed by Jeremy Siek
 
@@ -278,9 +261,9 @@ struct incrementable : B
 {
   friend T operator++(T& x, int)
   {
-    incrementable_type tmp(x);
+    incrementable_type nrv(x);
     ++x;
-    return tmp;
+    return nrv;
   }
 private: // The use of this typedef works around a Borland bug
   typedef T incrementable_type;
@@ -291,9 +274,9 @@ struct decrementable : B
 {
   friend T operator--(T& x, int)
   {
-    decrementable_type tmp(x);
+    decrementable_type nrv(x);
     --x;
-    return tmp;
+    return nrv;
   }
 private: // The use of this typedef works around a Borland bug
   typedef T decrementable_type;
@@ -320,30 +303,46 @@ struct indexable : B
 };
 
 //  More operator classes (contributed by Daryle Walker) --------------------//
+//  (NRVO-friendly implementation contributed by Daniel Frey) ---------------//
 
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct left_shiftable2 : B
-{
-     friend T operator<<(T x, const U& y) { return x <<= y; }
+#if defined(BOOST_HAS_NRVO)
+
+#define BOOST_BINARY_OPERATOR( NAME, OP )                                     \
+template <class T, class U, class B = ::boost::detail::empty_base>            \
+struct NAME##2 : B                                                            \
+{                                                                             \
+  friend T operator OP( const T& lhs, const U& rhs )                          \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
+};                                                                            \
+                                                                              \
+template <class T, class B = ::boost::detail::empty_base>                     \
+struct NAME##1 : B                                                            \
+{                                                                             \
+  friend T operator OP( const T& lhs, const T& rhs )                          \
+    { T nrv( lhs ); nrv OP##= rhs; return nrv; }                              \
 };
 
-template <class T, class B = ::boost::detail::empty_base>
-struct left_shiftable1 : B
-{
-     friend T operator<<(T x, const T& y) { return x <<= y; }
+#else // defined(BOOST_HAS_NRVO)
+
+#define BOOST_BINARY_OPERATOR( NAME, OP )                                     \
+template <class T, class U, class B = ::boost::detail::empty_base>            \
+struct NAME##2 : B                                                            \
+{                                                                             \
+  friend T operator OP( T lhs, const U& rhs ) { return lhs OP##= rhs; }       \
+};                                                                            \
+                                                                              \
+template <class T, class B = ::boost::detail::empty_base>                     \
+struct NAME##1 : B                                                            \
+{                                                                             \
+  friend T operator OP( T lhs, const T& rhs ) { return lhs OP##= rhs; }       \
 };
 
-template <class T, class U, class B = ::boost::detail::empty_base>
-struct right_shiftable2 : B
-{
-     friend T operator>>(T x, const U& y) { return x >>= y; }
-};
+#endif // defined(BOOST_HAS_NRVO)
 
-template <class T, class B = ::boost::detail::empty_base>
-struct right_shiftable1 : B
-{
-     friend T operator>>(T x, const T& y) { return x >>= y; }
-};
+BOOST_BINARY_OPERATOR( left_shiftable, << );
+BOOST_BINARY_OPERATOR( right_shiftable, >> );
+
+#undef BOOST_BINARY_OPERATOR
 
 template <class T, class U, class B = ::boost::detail::empty_base>
 struct equivalent2 : B

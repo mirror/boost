@@ -40,6 +40,13 @@
 //
 #define BOOST_HAS_LONG_LONG
 
+//
+// gcc implements the named return value optimization since version 3.1
+//
+#if __GNUC__ > 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ >= 1 )
+#define BOOST_HAS_NRVO
+#endif
+
 #define BOOST_COMPILER "GNU C++ version " BOOST_STRINGIZE(__GNUC__) "." BOOST_STRINGIZE(__GNUC_MINOR__)
 
 //

@@ -62,6 +62,12 @@
 #  define BOOST_DISABLE_WIN32
 #endif
 
+// I checked version 6.0 build 020312Z, it implements the NRVO.
+// Correct this as you find out which version of the compiler
+// implemented the NRVO first.  (Daniel Frey)
+#if (BOOST_INTEL_CXX_VERSION >= 600)
+#  define BOOST_HAS_NRVO
+#endif
 
 //
 // versions check:
