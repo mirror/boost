@@ -6,6 +6,7 @@
 #ifndef WORKAROUND_DWA2002126_HPP
 # define WORKAROUND_DWA2002126_HPP
 
+# include <boost/config.hpp>
 
 // Compiler/library version workaround macro
 //
