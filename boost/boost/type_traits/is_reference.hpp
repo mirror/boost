@@ -33,7 +33,7 @@ namespace boost {
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_reference,T,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T&,true)
 
-#if defined(__BORLANDC__)
+#if defined(__BORLANDC__) && !defined(__COMO__)
 // these are illegal specialisations; cv-qualifies applied to
 // references have no effect according to [8.3.2p1],
 // C++ Builder requires them though as it treats cv-qualified

@@ -32,17 +32,17 @@ namespace boost
 namespace detail
 {
 
-template<unsigned size, unsigned align> union freeblock
+template<unsigned size, unsigned align_> union freeblock
 {
-    typedef typename boost::type_with_alignment<align>::type aligner_type;
+    typedef typename boost::type_with_alignment<align_>::type aligner_type;
     aligner_type aligner;
     char bytes[size];
     freeblock * next;
 };
 
-template<unsigned size, unsigned align> struct allocator_impl
+template<unsigned size, unsigned align_> struct allocator_impl
 {
-    typedef freeblock<size, align> block;
+    typedef freeblock<size, align_> block;
 
     // It may seem odd to use such small pages.
     //
@@ -162,18 +162,18 @@ template<unsigned size, unsigned align> struct allocator_impl
 };
 
 #ifdef BOOST_HAS_THREADS
-template<unsigned size, unsigned align>
-  lightweight_mutex allocator_impl<size, align>::mutex;
+template<unsigned size, unsigned align_>
+  lightweight_mutex allocator_impl<size, align_>::mutex;
 #endif
 
-template<unsigned size, unsigned align>
-  freeblock<size, align> * allocator_impl<size, align>::free = 0;
+template<unsigned size, unsigned align_>
+  freeblock<size, align_> * allocator_impl<size, align_>::free = 0;
 
-template<unsigned size, unsigned align>
-  freeblock<size, align> * allocator_impl<size, align>::page = 0;
+template<unsigned size, unsigned align_>
+  freeblock<size, align_> * allocator_impl<size, align_>::page = 0;
 
-template<unsigned size, unsigned align>
-  unsigned allocator_impl<size, align>::last = allocator_impl<size, align>::items_per_page;
+template<unsigned size, unsigned align_>
+  unsigned allocator_impl<size, align_>::last = allocator_impl<size, align_>::items_per_page;
 
 template<class T>
 struct quick_allocator: public allocator_impl< sizeof(T), boost::alignment_of<T>::value >

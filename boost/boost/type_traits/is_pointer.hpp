@@ -68,7 +68,8 @@ struct is_pointer_impl
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pointer,T,::boost::detail::is_pointer_impl<T>::value)
-#ifdef __BORLANDC__
+
+#if defined(__BORLANDC__) && !defined(__COMO__)
 template <class T> struct is_pointer<T&>
 { BOOST_STATIC_CONSTANT(bool, value = false); };
 template <class T> struct is_pointer<T&const>
