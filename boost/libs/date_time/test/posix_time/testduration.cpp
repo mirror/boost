@@ -37,10 +37,12 @@ main()
 
   time_duration t_5(1,30,20,10); // 1hr, 30min, 20sec, 10 frac sec
   t_5 /= 2;
-  check("Division operations ", (t_5.hours() == 0 &&
+  check("divide equal",         (t_5.hours() == 0 &&
 	                         t_5.minutes() == 45 &&
 				 t_5.seconds() == 10 &&
 				 t_5.fractional_seconds() == 5));
+  t_5 = time_duration(3,15,8,0) / 2;
+  check("divide int", t_5 == time_duration(1,37,34,0));
 
   
   t_5 = t_2 + t_1;
@@ -51,7 +53,16 @@ main()
   std::cout << t_5.ticks() << std::endl;  
 #endif
   check("add", t_5 == time_duration(0,3,21));
-  
+  time_duration td_a(5,5,5,5);
+  time_duration td_b(4,4,4,4);
+  time_duration td_c(2,2,2,2);
+  td_a += td_b;
+  check("add equal", td_a == time_duration(9,9,9,9));
+  time_duration td_d = td_b - td_c; 
+  check("subtract", td_d == time_duration(2,2,2,2));
+  td_d -= td_b; 
+  check("subtract equal (neg result)", td_d == td_c - td_b);
+
   time_duration t_6(5,4,3); //05:04:03
   check("h-m-s 5-4-3 hours", t_6.hours() == 5);
   check("h-m-s 5-4-3 hours", t_6.minutes() == 4);
@@ -155,3 +166,4 @@ main()
  * Author:  Jeff Garland (jeff@CrystalClearSoftware.com)
  *
  */
+
