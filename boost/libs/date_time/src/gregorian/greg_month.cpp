@@ -31,7 +31,7 @@ namespace gregorian {
 
     if(month_map_ptr->empty()) {
       std::string s("");
-      for(int i = 1; i <= 12; ++i) {
+      for(unsigned short i = 1; i <= 12; ++i) {
         greg_month m(static_cast<month_enum>(i));
         s = m.as_long_string();
 #if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
