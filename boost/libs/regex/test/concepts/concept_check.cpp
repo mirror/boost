@@ -28,7 +28,7 @@ int main()
    typedef boost::bidirectional_iterator_archetype<char> iterator_type;
    typedef boost::input_iterator_archetype<char> input_iterator_type;
    input_iterator_type i, j;
-#if!defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
+#if!defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__) && !BOOST_WORKAROUND(__GNUC__, < 3)
    boost::regex r(i, j);
    r.assign(i, j);
 #else
@@ -63,7 +63,6 @@ int main()
       >
    >();
 #endif
-#endif
    //
    // verify basic_regex member functions:
    //
@@ -81,7 +80,7 @@ int main()
    r.assign(s, boost::regex::perl);
    r.assign(c_exp, c_exp+1);
    r.assign(c_exp, c_exp+1, boost::regex::perl);
-   
+#endif   
    return 0;
 }
 

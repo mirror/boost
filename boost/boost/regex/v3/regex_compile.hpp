@@ -195,7 +195,9 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_in
    unsigned int result = traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+1));
    if((result == traits_type::syntax_colon) && ((first-base) == 5))
    {
-      return traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+2));
+      unsigned type = traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+2));
+      if((type == traits_type::syntax_left_word) || (type == traits_type::syntax_right_word))
+         return type;
    }
    return ((result == traits_type::syntax_colon) || (result == traits_type::syntax_dot) || (result == traits_type::syntax_equal)) ? result : 0;
 }

@@ -123,7 +123,7 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void* p)
 
 #else
 
-mem_block_cache block_cache = { 0, };
+mem_block_cache block_cache = { 0, 0, };
 
 BOOST_REGEX_DECL void* BOOST_REGEX_CALL get_mem_block()
 {

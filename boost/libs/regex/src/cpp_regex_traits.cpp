@@ -155,11 +155,11 @@ parser_buf<charT, traits>::seekpos(pos_type sp, ::std::ios_base::openmode which)
 {
    if(which & ::std::ios_base::out)
       return pos_type(off_type(-1));
-   std::ptrdiff_t size = this->egptr() - this->eback();
+   off_type size = this->egptr() - this->eback();
    charT* g = this->eback();
-   if(sp <= size)
+   if(off_type(sp) <= size)
    {
-      this->setg(g, g + ::std::streamsize(sp), g + size);
+      this->setg(g, g + off_type(sp), g + size);
    }
    return pos_type(off_type(-1));
 }
@@ -234,7 +234,7 @@ message_data<char>::message_data(const std::locale& l, std::string regex_message
 #endif
       for(std::size_t j = 0; j < s.size(); ++j)
       {
-         syntax_map[s[j]] = (unsigned char)(i);
+         syntax_map[(unsigned char)s[j]] = (unsigned char)(i);
       }
    }
 
@@ -640,7 +640,11 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
 #endif
       for(unsigned int j = 0; j < s.size(); ++j)
       {
+#if defined(WCHAR_MIN) && (WCHAR_MIN == 0)
+         if(s[j] <= UCHAR_MAX)
+#else
          if((s[j] <= UCHAR_MAX) && (s[j] >= 0))
+#endif
             syntax_[s[j]] = static_cast<unsigned char>(i);
          else
          {

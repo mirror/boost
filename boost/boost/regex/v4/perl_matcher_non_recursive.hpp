@@ -90,7 +90,7 @@ struct save_state_init
       *base = static_cast<saved_state*>(get_mem_block());
       *end = reinterpret_cast<saved_state*>(reinterpret_cast<char*>(*base)+BOOST_REGEX_BLOCKSIZE);
       --(*end);
-      new (*end)saved_state(0);
+      (void) new (*end)saved_state(0);
       assert(*end > *base);
    }
    ~save_state_init()
@@ -175,7 +175,7 @@ void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::extend_stack()
       backup_state = reinterpret_cast<saved_state*>(reinterpret_cast<char*>(stack_base)+BOOST_REGEX_BLOCKSIZE);
       saved_extra_block* block = static_cast<saved_extra_block*>(backup_state);
       --block;
-      new (block) saved_extra_block(m_stack_base, m_backup_state);
+      (void) new (block) saved_extra_block(m_stack_base, m_backup_state);
       m_stack_base = stack_base;
       m_backup_state = block;
    }
@@ -195,7 +195,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::push_matc
       pmp = static_cast<saved_matched_paren<BidiIterator>*>(m_backup_state);
       --pmp;
    }
-   new (pmp)saved_matched_paren<BidiIterator>(index, sub);
+   (void) new (pmp)saved_matched_paren<BidiIterator>(index, sub);
    m_backup_state = pmp;
 }
 
@@ -210,7 +210,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::push_recu
       pmp = m_backup_state;
       --pmp;
    }
-   new (pmp)saved_state(saved_type_recurse);
+   (void) new (pmp)saved_state(saved_type_recurse);
    m_backup_state = pmp;
 }
 
@@ -225,7 +225,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::push_asse
       pmp = static_cast<saved_assertion<BidiIterator>*>(m_backup_state);
       --pmp;
    }
-   new (pmp)saved_assertion<BidiIterator>(positive, ps, position);
+   (void) new (pmp)saved_assertion<BidiIterator>(positive, ps, position);
    m_backup_state = pmp;
 }
 
@@ -240,7 +240,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::push_alt(
       pmp = static_cast<saved_position<BidiIterator>*>(m_backup_state);
       --pmp;
    }
-   new (pmp)saved_position<BidiIterator>(ps, position, saved_state_alt);
+   (void) new (pmp)saved_position<BidiIterator>(ps, position, saved_state_alt);
    m_backup_state = pmp;
 }
 
@@ -255,7 +255,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::push_non_
       pmp = static_cast<saved_position<BidiIterator>*>(m_backup_state);
       --pmp;
    }
-   new (pmp)saved_position<BidiIterator>(ps, position, saved_state_non_greedy_long_repeat);
+   (void) new (pmp)saved_position<BidiIterator>(ps, position, saved_state_non_greedy_long_repeat);
    m_backup_state = pmp;
 }
 
@@ -270,7 +270,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::push_repe
       pmp = static_cast<saved_repeater<BidiIterator>*>(m_backup_state);
       --pmp;
    }
-   new (pmp)saved_repeater<BidiIterator>(i, s, position);
+   (void) new (pmp)saved_repeater<BidiIterator>(i, s, position);
    m_backup_state = pmp;
 }
 
@@ -285,7 +285,7 @@ inline void perl_matcher<BidiIterator, Allocator, traits, Allocator2>::push_sing
       pmp = static_cast<saved_single_repeat<BidiIterator>*>(m_backup_state);
       --pmp;
    }
-   new (pmp)saved_single_repeat<BidiIterator>(c, r, last_position, id);
+   (void) new (pmp)saved_single_repeat<BidiIterator>(c, r, last_position, id);
    m_backup_state = pmp;
 }
 

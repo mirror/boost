@@ -562,7 +562,7 @@ struct BOOST_REGEX_DECL cpp_regex_traits_base : public regex_traits_base
       char_class_digit = std::ctype_base::digit,
       char_class_graph = std::ctype_base::graph,
       char_class_lower = std::ctype_base::lower,
-      char_class_print = std::ctype_base::print,
+      char_class_print = 0,//std::ctype_base::print,
       char_class_punct = std::ctype_base::punct,
       char_class_space = std::ctype_base::space,
       char_class_upper = std::ctype_base::upper,

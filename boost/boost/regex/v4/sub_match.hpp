@@ -271,6 +271,7 @@ operator + (const sub_match<RandomAccessIterator>& m,
    result.reserve(s.size() + m.length() + 1);
    return result.append(m.first, m.second).append(s);
 }
+#if !(defined(__GNUC__) && defined(BOOST_NO_STD_LOCALE))
 template <class RandomAccessIterator>
 inline std::basic_string<typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type> 
 operator + (typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type const* s,
@@ -289,6 +290,23 @@ operator + (const sub_match<RandomAccessIterator>& m,
    result.reserve(std::char_traits<typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type>::length(s) + m.length() + 1);
    return result.append(m.first, m.second).append(s);
 }
+#else
+// worwaround versions:
+template <class RandomAccessIterator>
+inline std::basic_string<typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type> 
+operator + (typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type const* s,
+                  const sub_match<RandomAccessIterator>& m)
+{
+   return s + m.str();
+}
+template <class RandomAccessIterator>
+inline std::basic_string<typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type> 
+operator + (const sub_match<RandomAccessIterator>& m,
+            typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type const * s)
+{
+   return m.str() + s;
+}
+#endif
 template <class RandomAccessIterator>
 inline std::basic_string<typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type> 
 operator + (typename re_detail::regex_iterator_traits<RandomAccessIterator>::value_type const& s,

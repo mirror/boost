@@ -66,11 +66,25 @@ bool BOOST_REGEX_CALL re_maybe_set_member(charT c,
 
 } // namespace re_detail
 
+template <class traits>
+struct is_big_char
+{
+   typedef typename traits::uchar_type traits_uchar_type;
+   typedef typename traits::size_type traits_size_type;
+   static bool test(char)
+   { return false; }
+   static bool test(unsigned char)
+   { return false; }
+   static bool test(signed char)
+   { return false; }
+   template <class charT> static bool test(charT c)
+   { return (traits_size_type)(traits_uchar_type)c >= 256; }
+};
 
 template <class charT, class traits, class Allocator>
 inline bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_wide_type&)
 {
-   if((traits_size_type)(traits_uchar_type)c >= 256)
+   if(is_big_char<traits>::test(c))
       return true;
    return BOOST_REGEX_MAKE_BOOL(_map[(traits_uchar_type)c] & mask);
 }
@@ -209,7 +223,9 @@ unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_in
    unsigned int result = traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+1));
    if((result == traits_type::syntax_colon) && ((first-base) == 5))
    {
-      return traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+2));
+      unsigned type = traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*(base+2));
+      if((type == traits_type::syntax_left_word) || (type == traits_type::syntax_right_word))
+         return type;
    }
    return ((result == traits_type::syntax_colon) || (result == traits_type::syntax_dot) || (result == traits_type::syntax_equal)) ? result : 0;
 }
