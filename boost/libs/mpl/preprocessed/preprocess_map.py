@@ -14,7 +14,7 @@
 import preprocess
 
 preprocess.main(
-      [ "plain", "typeof_based" ]
+      [ "plain", "typeof_based", "no_ctps" ]
     , "map"
     , "boost\\mpl\\map\\aux_\\preprocessed"
     )
