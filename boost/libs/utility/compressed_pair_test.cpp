@@ -128,6 +128,7 @@ template class boost::compressed_pair<empty_UDT, empty_POD_UDT>;
 #endif
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef __MWERKS__
 //
 // now some for which only a few specific members can be instantiated,
 // first references:
@@ -137,7 +138,6 @@ template compressed_pair<double, int&>::compressed_pair(int&);
 template compressed_pair<double, int&>::compressed_pair(call_traits<double>::param_type,int&);
 //
 // and then arrays:
-#ifndef __MWERKS__
 #ifndef __BORLANDC__
 template call_traits<int[2]>::reference compressed_pair<double, int[2]>::second();
 #endif
@@ -146,6 +146,7 @@ template compressed_pair<double, int[2]>::compressed_pair(const double&);
 template compressed_pair<double, int[2]>::compressed_pair();
 #endif // __MWERKS__
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 
 
 

@@ -49,7 +49,15 @@ Do not change this file unless you really really have to, add options to
 #include <string>
 #include <boost/smart_ptr.hpp>
 #else
+//
+// C build,
+// don't include <boost/config.hpp> because that may
+// do C++ specific things in future...
+//
 #include <stdlib.h>
+#ifdef _MSC_VER
+#define BOOST_MSVC _MSC_VER
+#endif
 #endif
 
 /* this will increase in future versions: */
@@ -201,7 +209,7 @@ Do not change this file unless you really really have to, add options to
       #define BOOST_RE_NO_STRING_DEF_ARGS
    #endif
 
-   #ifndef _CPPUNWIND
+   #if !defined(_CPPUNWIND) && defined(__cplusplus)
       #error exception handling support required
    #endif
 
@@ -1176,6 +1184,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 

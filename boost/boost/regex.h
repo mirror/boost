@@ -54,6 +54,11 @@ using boost::REG_ASSERT;
 using boost::REG_INVARG;
 using boost::REG_ATOI;
 using boost::REG_ITOA;
+
+using boost::REG_NOTBOL;
+using boost::REG_NOTEOL;
+using boost::REG_STARTEND;
+
 using boost::reg_comp_flags;
 using boost::reg_exec_flags;
 using boost::regcompA;
@@ -93,3 +98,4 @@ using boost::reg_errcode_t;
 #endif // __cplusplus
 
 #endif // BOOST_RE_REGEX_H
+
