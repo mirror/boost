@@ -7,9 +7,7 @@
             class Reference = use_default, 
             class Value = use_default>
   class transform_iterator
-    : public iterator_adaptor</* see discussion */>
   {
-    friend class iterator_core_access;
   public:
     transform_iterator();
     transform_iterator(Iterator const& x, UnaryFunction f);
@@ -21,15 +19,18 @@
         , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition
     );
 
+    reference operator*() const;
+    transform_iterator& operator++();
+    Iterator base() const;
     UnaryFunction functor() const;
   private:
-    typename transform_iterator::value_type dereference() const;
-    UnaryFunction m_f;
+    Iterator m_iterator; // exposition
+    UnaryFunction m_f;   // exposition
   };
 
 
 ``transform_iterator`` requirements
-...................................
+-----------------------------------
 
 The type ``UnaryFunction`` must be Assignable, Copy Constructible, and
 the expression ``f(*i)`` must be valid where ``f`` is an object of
@@ -37,8 +38,13 @@ type ``UnaryFunction``, ``i`` is an object of type ``Iterator``, and
 where the type of ``f(*i)`` must be
 ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
 
-The type ``Iterator`` must at least model Readable Iterator.  The
-resulting ``transform_iterator`` models the most refined of the
+The type ``Iterator`` must at least model Readable Iterator.  
+
+
+``transform_iterator`` models
+-----------------------------
+
+The resulting ``transform_iterator`` models the most refined of the
 following options that is also modeled by ``Iterator``.
 
   * Writable Lvalue Iterator if ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type`` is a non-const reference. 
@@ -56,9 +62,9 @@ The ``reference`` type of ``transform_iterator`` is
 ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
 The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
 
-``transform_iterator`` public operations
-........................................
 
+``transform_iterator`` operations
+---------------------------------
 
 ``transform_iterator();``
 
@@ -83,14 +89,24 @@ The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
 :Returns: An instance of ``transform_iterator`` that is a copy of ``t``.
 :Requires: ``OtherIterator`` is implicitly convertible to ``Iterator``.
 
+
+``Iterator base() const;``
+
+:Returns: ``m_iterator``
+
+
 ``UnaryFunction functor() const;``
 
 :Returns: ``m_f``
 
-``transform_iterator`` private operations
-.........................................
 
-``typename transform_iterator::value_type dereference() const;``
+``reference operator*() const;``
 
-:Returns: ``m_f(transform_iterator::dereference());``
+:Returns: ``m_f(*m_iterator)``
+
+
+``transform_iterator& operator++();``
+
+:Effects: ``++m_iterator``
+:Returns: ``*this``
 

@@ -151,4 +151,4 @@ operations.
 :Effects: Increments ``*this`` and then continues to
   increment ``*this`` until either ``this->base() == this->end()``
   or ``f(**this) == true``.
-  
+:Returns: ``*this``  

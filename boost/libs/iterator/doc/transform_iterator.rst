@@ -21,3 +21,5 @@
 .. contents:: Table of Contents
 
 .. include:: transform_iterator_ref.rst
+.. include:: make_transform_iterator.rst
+.. include:: transform_iterator_eg.rst
