@@ -43,32 +43,48 @@
 
 <BR Clear>
 
+
 <h1>Iterator Concepts</h1>
 
-<p>The standard iterator concepts (the iterator requirements defined
-in the C++ Standard) have a flaw. They glom together two separate
-issues into a single set of concepts. The two issues are iterator
-traversal and dereference return type semantics. These two issues are
-inherently orthogonal and therefore ought to be represented by two
-separate sets of concepts. The concepts described here do just
-that.</p>
+<p>The standard iterator categories and requirements are flawed because
+they use a single hierarchy of requirements to address two orthogonal
+issues: <b><i>iterator traversal</i></b> and <b><i>dereference return
+type</i></b>. The current iterator requirement hierarchy is mainly
+geared towards iterator traversal (hence the category names), while
+requirements that address dereference return type sneak in at various
+places. 
 
+<p>
+The iterator requirements should be separated into two hierarchies.
 One set of concepts handles the return type semantics: 
 <ul>
   <li><a href="#concept:ReadableIterator">Readable Iterator</a></li>
   <li><a href="#concept:WritableIterator">Writable Iterator</a></li>
-  <li><a href="#concept:MutableLvalueIterator">Mutable Lvalue Iterator</a></li>
+  <li><a href="#concept:SwappableIterator">Swappable Iterator</a></li>
   <li><a href="#concept:ConstantLvalueIterator">Constant Lvalue Iterator</a></li>
+  <li><a href="#concept:MutableLvalueIterator">Mutable Lvalue Iterator</a></li>
 </ul>
 
 The other set of concepts handles iterator traversal: 
 
 <ul>
-  <li><a href="#concept:SinglePassIterator">Single-Pass Iterator</a></li>
-  <li><a href="#concept:ForwardIterator">Forward Iterator</a></li>
-  <li><a href="#concept:BidirectionalIterator">Bidirectional Iterator</a></li>
-  <li><a href="#concept:RandomAccessIterator">Random Access Iterator</a></li>
+  <li><a href="#concept:ForwardTraversalIterator">Forward Traversal Iterator</a></li>
+  <li><a href="#concept:BidirectionalTraversalIterator">Bidirectional Traversal Iterator</a></li>
+  <li><a href="#concept:RandomAccessTraversalIterator">Random Access Traversal Iterator</a></li>
 </ul>
+
+The current Input Iterator and Output Iterator requirements will
+continue to be used as is. Note that Input Iterator implies Readable
+Iterator and Output Iterator implies Writable Iterator.
+
+<p>
+Note: we considered defining a Single-Pass Iterator, which could be
+combined with Readable or Writable Iterator to replace the Input and
+Output Iterator requirements. We rejected this idea because there are
+some differences between Input and Output Iterators that make it hard
+to merge them: for example Input Iterator requires Equality Comparable
+while Output Iterator does not.
+
 
 <p></p>
 <DIV ALIGN="CENTER"><A NAME="fig:graph-concepts"></A></A>
@@ -76,20 +92,19 @@ The other set of concepts handles iterator traversal:
 <CAPTION ALIGN="TOP"><STRONG>Figure 1:</STRONG>
 The iterator concepts and refinement relationships.
 </CAPTION>
-<TR><TD><IMG SRC="./iterator_concepts.gif" width="541" height="214"></TD></TR>
+<TR><TD><IMG SRC="./iterator_concepts.gif" ></TD></TR>
 </TABLE>
 </DIV>
 <p></p>
 
+
 <h2>Relationship with the standard iterator concepts</h2>
 
 <p>
-std::Input Iterator refines boost::Single-Pass Iterator and
-boost::ReadableIterator.
+std::Input Iterator implies boost::ReadableIterator.
 
 <p>
-std::Output Iterator refines boost::Single-Pass Iterator and
-boost::Writable Iterator.
+std::Output Iterator implies boost::Writable Iterator.
 
 <p>
 std::Forward Iterator refines boost::Forward Iterator and
@@ -106,106 +121,99 @@ boost::Constant Lvalue Iterator or boost::Mutable Lvalue Iterator.
 
 <h3>Notation</h3>
 <Table>
-  <TR>
-    <TD><tt>X</tt></TD>
-    <TD>The iterator type.</TD>
-  </TR>
-  <TR>
-    <TD><tt>T</tt></TD>
-    <TD>The value type of <tt>X</tt>.</TD>
-  </TR>
-  <TR>
-    <TD><tt>x</tt>, <tt>y</tt></TD>
-    <TD>An object of type <tt>X</tt>.</TD>
-  </TR>
-  <TR>
-    <TD><tt>t</tt></TD>
-    <TD>An object of type <tt>T</tt>.</TD>
+  <tr>
+    <td><tt>X</tt></td>
+    <td>The iterator type.</td>
+  </tr>
+  <tr>
+    <td><tt>T</tt></td>
+    <td>The value type of <tt>X</tt>, i.e., <tt>std::iterator_traits&lt;X&gt;::value_type</tt>.</td>
+  </tr>
+  <tr>
+    <td><tt>x</tt>, <tt>y</tt></td>
+    <td>An object of type <tt>X</tt>.</td>
+  </tr>
+  <tr>
+    <td><tt>t</tt></td>
+    <td>An object of type <tt>T</tt>.</td>
   </tr>
 </table>
 
 <p>
 
 <hr>
+<!--------------------------------------------------------------------------->
 
-<H2><A NAME="concept:ReadableIterator"></A>
+<H3><A NAME="concept:ReadableIterator"></A>
 Readable Iterator
-</H2>
+</H3>
 
 A Readable Iterator is an iterator that dereferences to produce an
 rvalue that is convertible to the <tt>value_type</tt> of the
-iterator. For example, derefencing may return a temporary object and
-therefore it would be a mistake to bind the result to a reference.
-Also, an attempt to assign a value to the result will most likely
-cause an error.
-
-<pre>
-  template &lt;class Readable Iterator&gt;
-  void foo(Readable Iterator x)
-  {
-    typedef std::iterator_traits&lt;Readable Iterator&gt;::value_type T;
-    T t = *x;  // Read a value. This is OK.
-    T& s = *x; // Bind to a reference. This is a bad idea.
-    *x = t;    // Try to assign. This is a really bad idea.
-  }
-</pre>
- 
+iterator. 
 
 <h3>Associated Types</h3>
 
 <Table border>
 
-  <TR>
-    <TD>Value type</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::value_type</tt></TD>
-    <TD>
-    The type of the value obtained by dereferencing a LvalueIterator
-    </TD>
+  <tr>
+    <td>Value type</td>
+    <td><tt>std::iterator_traits&lt;X&gt;::value_type</tt></td>
+    <td>The type of the objects pointed to by the iterator.</td>
   </tr>
 
-  <TR>
-    <TD>Return Category</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::return_category</tt></TD>
-    <TD>
-    A type convertible to <tt>boost::readable_iterator_tag</tt>
-    </TD>
+  <tr>
+    <td>Reference type</td>
+    <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+    <td>
+    The return type of dereferencing the iterator. This
+    type must be convertible to <tt>T</tt>.
+    </td>
+  </tr>
+
+  <tr>
+    <td>Return Category</td>
+    <td><tt>std::return_category&lt;X&gt;::type</tt></td>
+    <td>
+    A type convertible to <tt>std::readable_iterator_tag</tt>
+    </td>
   </tr>
 
 </Table>
 
 <h3>Refinement of</h3>
 
-<A href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</A>,
-<A href="http://www.sgi.com/Technology/STL/EqualityComparable.html">Equality Comparable</A>,
-<A href="http://www.sgi.com/Technology/STL/DefaultConstructible.html">Default Constructible</A>
+<A href="http://www.boost.org/libs/utility/CopyConstructible.html">Copy Constructible</A>
 
 <h3>Valid expressions</h3>
 
 <Table border>
-<TR><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH><TH>Return type</TH></TR>
-<TR>
- <TD>Dereference</TD>
- <TD><tt>*x</tt></TD>
- <TD>&nbsp;</TD>
- <TD>Convertible to <tt>T</tt>.</TD>
-</TR>
-<TR>
- <TD>Member access</TD>
- <TD><tt>x-&gt;m</tt></TD>
- <TD><tt>T</tt> is a type with a member named <tt>m</tt>.</TD>
- <TD>
- &nbsp;
- </TD>
+<tr><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH><TH>Return type</TH></tr>
+<tr>
+ <td>Dereference</td>
+ <td><tt>*x</tt></td>
+ <td>&nbsp;</td>
+ <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+</tr>
+<tr>
+ <td>Member access</td>
+ <td><tt>x-&gt;m</tt></td>
+ <td><tt>T</tt> is a type with a member named <tt>m</tt>.</td>
+ <td>
+If <tt>m</tt> is a data member, the type of <tt>m</tt>.
+If <tt>m</tt> is a member function, the return type of <tt>m</tt>.
+ </td>
 </tr>
 </table>
 
 <p>
 
 <hr>
+<!--------------------------------------------------------------------------->
 
-<H2><A NAME="concept:WritableIterator"></A>
+<H3><A NAME="concept:WritableIterator"></A>
 Writable Iterator
-</H2>
+</H3>
 
 A Writable Iterator is an iterator that can be used to store a value
 using the dereference-assignment expression.
@@ -226,12 +234,12 @@ conversions on <tt>a</tt>.
 
 <Table border>
 
-  <TR>
-    <TD>Return Category</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::return_category</tt></TD>
-    <TD>
-    A type convertible to <tt>boost::writable_iterator_tag</tt>
-    </TD>
+  <tr>
+    <td>Return Category</td>
+    <td><tt>std::return_category&lt;X&gt;::type</tt></td>
+    <td>
+    A type convertible to <tt>std::writable_iterator_tag</tt>
+    </td>
   </tr>
 
 </Table>
@@ -240,30 +248,100 @@ conversions on <tt>a</tt>.
 
 <h3>Refinement of</h3>
 
-<A href="http://www.sgi.com/Technology/STL/Assignable.html">Assignable</A>,
-<A href="http://www.sgi.com/Technology/STL/EqualityComparable.html">Equality Comparable</A>,
-<A href="http://www.sgi.com/Technology/STL/DefaultConstructible.html">Default Constructible</A>
+<A href="http://www.boost.org/libs/utility/CopyConstructible.html">Copy Constructible</A>
 
 <h3>Valid expressions</h3>
 
 <Table border>
-  <TR>
+  <tr>
     <TH>Name</TH><TH>Expression</TH><TH>Return type</TH>
-  </TR>
-  <TR>
-    <TD>Dereference assignment</TD>
-    <TD><tt>*x = a</tt></TD>
-    <TD>unspecified</TD>
-  </TR>
+  </tr>
+  <tr>
+    <td>Dereference assignment</td>
+    <td><tt>*x = a</tt></td>
+    <td>unspecified</td>
+  </tr>
 </table>
 
 <p>
 
-<hr>
 
-<H2><A NAME="concept:ConstantLvalueIterator"></A>
+<hr>
+<!--------------------------------------------------------------------------->
+
+<H3><A NAME="concept:SwappableIterator"></A>
+Swappable Iterator
+</H3>
+
+A Swappable Iterator is an iterator whose dereferenced values can be
+swapped.
+
+<p>
+Note: the requirements for Swappable Iterator are dependent on the
+issues surrounding <tt>std::swap()</tt> being resolved. Here we assume
+that the issue will be resolved by allowing the overload of
+<tt>std::swap()</tt> for user-defined types.
+
+<p>
+Note: Readable Iterator and Writable Iterator combined implies
+Swappable Iterator because of the fully templated
+<tt>std::swap()</tt>.  However, Swappable Iterator does not imply
+Readable Iterator nor Writable Iterator.
+
+<h3>Associated Types</h3>
+
+<Table border>
+
+  <tr>
+    <td>Return Category</td>
+    <td><tt>std::return_category&lt;X&gt;::type</tt></td>
+    <td>
+    A type convertible to <tt>std::swappable_iterator_tag</tt>
+    </td>
+  </tr>
+
+</Table>
+
+
+<h3>Valid expressions</h3>
+
+Of the two valid expressions listed below, only one <b>OR</b> the
+other is required. If <tt>std::iter_swap()</tt> is overloaded for
+<tt>X</tt> then <tt>std::swap()</tt> is not required. If
+<tt>std::iter_swap()</tt> is not overloaded for <tt>X</tt> then the
+default (fully templated) version is used, which will call
+<tt>std::swap()</tt> (this means changing the current requirements for
+<tt>std::iter_swap()</tt>).
+
+<p>
+<Table border>
+  <tr>
+    <TH>Name</TH><TH>Expression</TH><TH>Return type</TH>
+  </tr>
+
+  <tr>
+    <td>Iterator Swap</td>
+    <td><tt>std::iter_swap(x, y)</tt></td>
+    <td>void</td>
+  </tr>
+
+  <tr>
+    <td>Dereference and Swap</td>
+    <td><tt>std::swap(*x, *y)</tt></td>
+    <td>void</td>
+  </tr>
+
+</table>
+
+<p>
+
+
+<hr>
+<!--------------------------------------------------------------------------->
+
+<H3><A NAME="concept:ConstantLvalueIterator"></A>
 Constant Lvalue Iterator
-</H2>
+</H3>
 
 A Constant Lvalue Iterator is an iterator that dereferences to produce a
 const reference to the pointed-to object, i.e., the associated
@@ -275,72 +353,72 @@ iterator.
  
 <h3>Refinement of</h3>
 
-<a href="#concept:Readable Iterator">Readable Iterator</a> 
+<a href="#concept:ReadableIterator">Readable Iterator</a> 
 
 <h3>Associated Types</h3>
 
 <Table border>
 
-  <TR>
-    <TD>Value type</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::value_type</tt></TD>
-    <TD>
-    The type of the value obtained by dereferencing a Constant Lvalue Iterator.
-    </TD>
-  </tr>
-
-  <TR>
-    <TD>Reference type</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::reference</tt></TD>
-    <TD>
-     The return type of <tt>operator*()</tt>, which must be
+  <tr>
+    <td>Reference type</td>
+    <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+    <td>
+     The return type of dereferencing the iterator, which must be
      <tt>const T&amp;</tt>.
-    </TD>
+    </td>
   </tr>
 
-  <TR>
-    <TD>POinter type</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::pointer</tt></TD>
-    <TD>
+<!--  I don't think this is needed
+  <tr>
+    <td>Pointer type</td>
+    <td><tt>std::iterator_traits&lt;X&gt;::pointer</tt></td>
+    <td>
      The pointer to the value type, which must be <tt>const T*</tt>.
-    </TD>
+    </td>
   </tr>
+-->
 
-  <TR>
-    <TD>Return Category</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::return_category</tt></TD>
-    <TD>
-    A type convertible to <tt>boost::constant_lvalue_iterator_tag</tt>
-    </TD>
+  <tr>
+    <td>Return Category</td>
+    <td><tt>std::return_category&lt;X&gt;::type</tt></td>
+    <td>
+    A type convertible to <tt>std::constant_lvalue_iterator_tag</tt>
+    </td>
   </tr>
 
 </table>
 
-
+<!-- these are not necessary now that we use reference as operator* return type
 <h3>Valid expressions</h3>
 
 <Table border>
-<TR><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH><TH>Return type</TH></TR>
-<TR>
- <TD>Dereference</TD>
- <TD><tt>*x</tt></TD>
- <TD>&nbsp;</TD>
- <TD><tt>const T&amp;</tt></TD>
-</TR>
-<TR>
- <TD>Member access</TD>
- <TD><tt>x-&gt;m</tt></TD>
- <TD><tt>T</tt> is a type with a member named <tt>m</tt>.</TD>
- <TD>
+<tr><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH><TH>Return type</TH></tr>
+<tr>
+ <td>Dereference</td>
+ <td><tt>*x</tt></td>
+ <td>&nbsp;</td>
+ <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+</tr>
+<tr>
+ <td>Member access</td>
+ <td><tt>x-&gt;m</tt></td>
+ <td><tt>T</tt> is a type with a member named <tt>m</tt>.</td>
+ <td>
  &nbsp;
- </TD>
+ </td>
 </tr>
 </table>
 
+-->
 
-<H2><A NAME="concept:MutableLvalueIterator"></A>
+<p>
+
+<hr>
+<!--------------------------------------------------------------------------->
+
+<H3><A NAME="concept:MutableLvalueIterator"></A>
 Mutable Lvalue Iterator
-</H2>
+</H3>
 
 A Mutable Lvalue Iterator is an iterator that dereferences to produce a
 reference to the pointed-to object. The associated <tt>reference</tt>
@@ -350,8 +428,9 @@ pointers and references previously obtained from that iterator.
  
 <h3>Refinement of</h3>
 
-<a href="#concept:Readable Iterator">Readable Iterator</a> and
-<a href="#concept:WritableIterator">Writable Iterator</a>.
+<a href="#concept:ReadableIterator">Readable Iterator</a>,
+<a href="#concept:WritableIterator">Writable Iterator</a>,
+and <a href="#concept:SwappableIterator">Swappable Iterator</a>.
 
 
 
@@ -359,241 +438,219 @@ pointers and references previously obtained from that iterator.
 
 <Table border>
 
-  <TR>
-    <TD>Value type</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::value_type</tt></TD>
-    <TD>
-    The type of the value obtained by dereferencing a Mutable Lvalue Iterator.
-    </TD>
+  <tr>
+    <td>Reference type</td>
+    <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+    <td>The return type of dereferencing the iterator, which must be
+     <tt>T&amp;</tt>.</td>
   </tr>
 
-  <TR>
-    <TD>Reference type</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::reference</tt></TD>
-    <TD>
-     The return type of <tt>operator*()</tt>, which is
-     <tt>T&amp;</tt>.
-    </TD>
-  </tr>
-
-  <TR>
-    <TD>Pointer type</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::pointer</tt></TD>
-    <TD>
+<!-- I don't think this is necessary
+  <tr>
+    <td>Pointer type</td>
+    <td><tt>std::iterator_traits&lt;X&gt;::pointer</tt></td>
+    <td>
      The pointer to the value type, which is <tt>T*</tt>.
-    </TD>
+    </td>
   </tr>
+-->
 
-  <TR>
-    <TD>Return Category</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::return_category</tt></TD>
-    <TD>
-    A type convertible to <tt>boost::mutable_lvalue_iterator_tag</tt>
-    </TD>
+  <tr>
+    <td>Return Category</td>
+    <td><tt>std::return_category&lt;X&gt;::type</tt></td>
+    <td>
+    A type convertible to <tt>std::mutable_lvalue_iterator_tag</tt>
+    </td>
   </tr>
 
 </table>
 
-
+<!-- no longer needed since the return type is specified as reference in the readable iterator
 <h3>Valid expressions</h3>
 
 <Table border>
-<TR><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH><TH>Return type</TH></TR>
-<TR>
- <TD>Dereference</TD>
- <TD><tt>*x</tt></TD>
- <TD>&nbsp;</TD>
- <TD> <tt>T&amp;</tt> </TD>
-</TR>
-<TR>
- <TD>Member access</TD>
- <TD><tt>x-&gt;m</tt></TD>
- <TD><tt>T</tt> is a type with a member named <tt>m</tt>.</TD>
- <TD>
+<tr><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH><TH>Return type</TH></tr>
+<tr>
+ <td>Dereference</td>
+ <td><tt>*x</tt></td>
+ <td>&nbsp;</td>
+ <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+</tr>
+<tr>
+ <td>Member access</td>
+ <td><tt>x-&gt;m</tt></td>
+ <td><tt>T</tt> is a type with a member named <tt>m</tt>.</td>
+ <td>
  &nbsp;
- </TD>
+ </td>
 </tr>
 </table>
 
+-->
+
 <p>
 <hr>
+<!--------------------------------------------------------------------------->
 
-<H2><A NAME="concept:SinglePassIterator"></A>
-Single-Pass Iterator
-</H2>
+<H3><A NAME="concept:ForwardTraversalIterator"></A>
+Forward Traversal Iterator
+</H3>
 
-A Single-Pass Iterator is an iterator that can be incremented to
-traverse through a sequence of objects, but the sequence can only be
-traversed a single time.
+The Forward Iterator is an iterator that can be incremented. Also, it
+is permissible to make multiple passes through the iterator's range.
+
+<h3>Refinement of</h3>
+
+<A href="http://www.boost.org/libs/utility/CopyConstructible.html">Copy Constructible</A>,
+<A href="http://www.boost.org/libs/utility/Assignable.html">Assignable</A>,
+<A href="http://www.sgi.com/tech/stl/DefaultConstructible.html">Default Constructible</A>, and 
+<A href="http://www.sgi.com/tech/stl/EqualityComparable.html">Equality Comparable</A>
+
 
 <h3>Associated types</h3>
 
 <Table border>
-  <TR>
-    <TD>Difference type</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::difference_type</tt></TD>
-    <TD>
-      A signed integral type used to represent the distance from one
-      iterator to another, or the number of elements in a range.
-    </TD>
-  </TR>
 
-  <TR>
-    <TD>Traversal Category</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::traversal_category</tt></TD>
-    <TD>
-    A type convertible to <tt>boost::single_pass_iterator_tag</tt>
-    </TD>
+  <tr>
+    <td>Difference Type</td>
+    <td><tt>std::iterator_traits&lt;X&gt;::difference_type</tt></td>
+    <td>
+    A signed integral type used for representing distances
+    between iterators that point into the same range.
+    </td>
   </tr>
 
-</table>
+  <tr>
+    <td>Traversal Category</td>
+    <td><tt>std::traversal_category&lt;X&gt;::type</tt></td>
+    <td>
+    A type convertible to <tt>std::forward_traversal_tag</tt>
+    </td>
+  </tr>
+</Table>
 
 <h3>Valid expressions</h3>
 
 <Table border>
-  <TR>
+  <tr>
     <TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH>
       <TH>Return type</TH>
-  </TR>
-  <TR>
-    <TD>Preincrement</TD>
-    <TD><tt>++i</tt></TD><TD>&nbsp;</TD><TD><tt>X&amp;</tt></TD>
-  </TR>
-  <TR>
-    <TD>Postincrement</TD>
-    <TD><tt>(void)i++</tt></TD><TD>&nbsp;</TD><TD>&nbsp;</TD>
-  </TR>
-</Table>
-
-<p>
-<hr>
-
-<H2><A NAME="concept:ForwardIterator"></A>
-Forward Iterator
-</H2>
-
-The Forward Iterator is an iterator that can be incremented. Also, it
-is permissible to make multiple passes through the sequence.
-
-<h3>Refinement of</h3>
-
-<a href="#concept:SinglePassIterator">Single-Pass Iterator</a>
-
-<h3>Associated types</h3>
-
-<Table border>
-  <TR>
-    <TD>Traversal Category</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::traversal_category</tt></TD>
-    <TD>
-    A type convertible to <tt>boost::forward_iterator_tag</tt>
-    </TD>
+  </tr>
+  <tr>
+    <td>Preincrement</td>
+    <td><tt>++i</tt></td><td>&nbsp;</td><td><tt>X&amp;</tt></td>
+  </tr>
+  <tr>
+    <td>Postincrement</td>
+    <td><tt>i++</tt></td><td>&nbsp;</td><td>convertible to <tt>const X&amp;</tt></td>
   </tr>
 </Table>
 
 <p>
 <hr>
+<!--------------------------------------------------------------------------->
 
-<H2><A NAME="concept:BidirectionalIterator"></A>
-Bidirectional Iterator
-</H2>
+<H3><A NAME="concept:BidirectionalTraversalIterator"></A>
+Bidirectional Traversal Iterator
+</H3>
 
 An iterator that can be incremented and decremented.
 
 <h3>Refinement of</h3>
 
-<a href="#concept:ForwardIterator">Forward Iterator</a>
+<a href="#concept:ForwardTraversalIterator">Forward Traversal Iterator</a>
 
 <h3>Associated types</h3>
 
 <Table border>
-  <TR>
-    <TD>Traversal Category</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::traversal_category</tt></TD>
-    <TD>
-    A type convertible to <tt>boost::bidirectional_iterator_tag</tt>
-    </TD>
+  <tr>
+    <td>Traversal Category</td>
+    <td><tt>std::traversal_category&lt;X&gt;::type</tt></td>
+    <td>
+    A type convertible to <tt>std::bidirectional_traversal_tag</tt>
+    </td>
   </tr>
 </Table>
 
 <h3>Valid expressions</h3>
 
 <Table border>
-  <TR>
+  <tr>
   <TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH>
       <TH>Return type</TH>
-  </TR>
-  <TR><TD>Predecrement</TD>
-      <TD><tt>--i</tt></TD><TD>&nbsp;</TD><TD><tt>X&amp;</tt></TD>
-  </TR>
-  <TR><TD>Postdecrement</TD>
-      <TD><tt>i--</tt></TD><TD>&nbsp;</TD><TD><tt>X</tt></TD>
+  </tr>
+  <tr><td>Predecrement</td>
+      <td><tt>--i</tt></td><td>&nbsp;</td><td><tt>X&amp;</tt></td>
+  </tr>
+  <tr><td>Postdecrement</td>
+      <td><tt>i--</tt></td><td>&nbsp;</td><td>convertible to <tt>const X&amp;</tt></td>
   </tr>
 </table>
 
 <p>
 <hr>
+<!--------------------------------------------------------------------------->
 
-<H2><A NAME="concept:RandomAccessIterator"></A>
-Random Access Iterator
-</H2>
+<H3><A NAME="concept:RandomAccessTraversalIterator"></A>
+Random Access Traversal Iterator
+</H3>
 
 An iterator that provides constant-time methods for moving forward and
-backward in arbitrary-sized steps
+backward in arbitrary-sized steps.
 
 <h3>Refinement of</h3>
 
-<a href="#concept:BidirectionalIterator">Bidirectional Iterator</a>
+<a href="#concept:BidirectionalTraversalIterator">Bidirectional Traversal Iterator</a> and
+<A href="http://www.sgi.com/tech/stl/LessThanComparable.html">Less Than Comparable</A> where <tt>&lt;</tt> is a total ordering
 
 <h3>Associated types</h3>
 
 <Table border>
-  <TR>
-    <TD>Traversal Category</TD>
-    <TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::traversal_category</tt></TD>
-    <TD>
-    A type convertible to <tt>boost::random_access_iterator_tag</tt>
-    </TD>
+  <tr>
+    <td>Traversal Category</td>
+    <td><tt>std::traversal_category&lt;X&gt;::type</tt></td>
+    <td>
+    A type convertible to <tt>std::random_access_traversal_tag</tt>
+    </td>
   </tr>
 </Table>
 
 <h3>Valid expressions</h3>
 
 <Table border>
-<TR><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH>
+<tr><TH>Name</TH><TH>Expression</TH><TH>Type requirements</TH>
     <TH>Return type</TH>
-</TR>
-<TR><TD>Iterator addition</TD>
-    <TD><tt>i += n</tt></TD><TD>&nbsp;</TD><TD><tt>X&amp;</tt></TD>
-</TR>
-<TR><TD>Iterator addition</TD>
-    <TD><tt>i + n</tt> or <tt>n + i</tt></TD><TD>&nbsp;</TD><TD><tt>X</tt></TD>
-</TR>
-<TR><TD>Iterator subtraction</TD>
-   <TD><tt>i -= n</tt></TD><TD>&nbsp;</TD><TD><tt>X&amp;</tt></TD>
-</TR>
-<TR><TD>Iterator subtraction</TD>
-    <TD><tt>i - n</tt></TD><TD>&nbsp;</TD><TD><tt>X</tt></TD>
-</TR>
-<TR><TD>Difference</TD>
-    <TD><tt>i - j</tt></TD><TD>&nbsp;</TD><TD><tt><a href="./iterator_traits.htm">boost::iterator_traits</a>&lt;X&gt;::difference_type</tt></TD>
-</TR>
-<TR><TD>Element operator</TD>
-    <TD><tt>i[n]</tt></TD>
-    <TD><tt>X</tt> must be a model of
-     <a href="#concept:Readable Iterator">Readable Iterator</a>. </TD>
-    <TD>The same return type as <tt>*i</tt>.</TD>
-</TR>
-<TR><TD>Element assignment</TD>
-    <TD><tt>i[n] = t</tt></TD>
-    <TD><tt>X</tt> must be a model of
-      <a href="#concept:WritableIterator">Writable Iterator</a>.</TD>
-    <TD>unspecified</TD>
+</tr>
+<tr><td>Iterator addition</td>
+    <td><tt>i += n</tt></td><td>&nbsp;</td><td><tt>X&amp;</tt></td>
+</tr>
+<tr><td>Iterator addition</td>
+    <td><tt>i + n</tt> or <tt>n + i</tt></td><td>&nbsp;</td><td><tt>X</tt></td>
+</tr>
+<tr><td>Iterator subtraction</td>
+   <td><tt>i -= n</tt></td><td>&nbsp;</td><td><tt>X&amp;</tt></td>
+</tr>
+<tr><td>Iterator subtraction</td>
+    <td><tt>i - n</tt></td><td>&nbsp;</td><td><tt>X</tt></td>
+</tr>
+<tr><td>Difference</td>
+    <td><tt>i - j</tt></td><td>&nbsp;</td><td><tt>std::iterator_traits&lt;X&gt;::difference_type</tt></td>
+</tr>
+<tr><td>Element operator</td>
+    <td><tt>i[n]</tt></td>
+    <td><tt>X</tt> must also be a model of
+     <a href="#concept:ReadableIterator">Readable Iterator</a>. </td>
+    <td><tt>std::iterator_traits&lt;X&gt;::reference</tt></td>
+</tr>
+<tr><td>Element assignment</td>
+    <td><tt>i[n] = t</tt></td>
+    <td><tt>X</tt> must also be a model of
+      <a href="#concept:WritableIterator">Writable Iterator</a>.</td>
+    <td>unspecified</td>
 </tr>
 </table>
 
-
-<hr>
+<p>
 
 <HR>
 <TABLE>
