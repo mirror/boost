@@ -360,7 +360,7 @@ shared_ptr&lt;X&gt; make_shared_from_another(another_ptr&lt;X&gt; qx)
 			instance. Example:</p>
 		<pre>void f(X * p)
 {
-    shared_ptr&lt;X&gt; px(<i>???</I>);
+    shared_ptr&lt;X&gt; px(<i>???</i>);
 }
 </pre>
 		<p>Inside <code>f</code>, we'd like to create a <code>shared_ptr</code> to <code>*p</code>.</p>
@@ -381,21 +381,32 @@ shared_ptr&lt;X&gt; make_shared_from_another(another_ptr&lt;X&gt; qx)
 			will never outlive the object, use <A href="#static">a null deleter</A>.</p>
 		<h2><A name="in_constructor">Obtaining a <code>shared_ptr</code> (<code>weak_ptr</code>) 
 				to <code>this</code> in a constructor</A></h2>
-		<p>[...]</p>
+		<p>Some designs require objects to register themselves on construction with a 
+			central authority. When the registration routines take a shared_ptr, this leads 
+			to the question how could a constructor obtain a shared_ptr to this:</p>
 		<pre>class X
 {
 public:
 
     X()
     {
-        shared_ptr&lt;X&gt; this_(<i>???</I>);
+        shared_ptr&lt;X&gt; this_(<i>???</i>);
     }
 };
 </pre>
-		<p>[Not possible in general. If <code>X</code> can have automatic or static 
-			storage, and <code>this_</code> doesn't need to keep the object alive, use a <code>null_deleter</code>. 
-			If <code>X</code> is supposed to always live on the heap, and be managed by a <code>
-				shared_ptr</code>, use:]</p>
+		<p>In the general case, the problem cannot be solved. The <code>X</code> instance 
+			being constructed can be an automatic variable or a static variable; it can be 
+			created on the heap:</p>
+		<pre>shared_ptr&lt;X&gt; px(new X);</pre>
+		<P>but at construction time, <code>px</code> does not exist yet, and it is 
+			impossible to create another <code>shared_ptr</code> instance that shares 
+			ownership with it.</P>
+		<P>
+			Depending on context, if the inner <code>shared_ptr</code> <code>this_</code> doesn't 
+			need to keep the object alive, use a <code>null_deleter</code> as explained <A href="#static">
+				here</A> and <A href="#weak_without_shared">here</A>. If <code>X</code> is 
+			supposed to always live on the heap, and be managed by a <code>shared_ptr</code>, 
+			use a static factory function:</P>
 		<pre>class X
 {
 private:
@@ -413,9 +424,11 @@ public:
 };
 </pre>
 		<h2><A name="from_this">Obtaining a <code>shared_ptr</code> to <code>this</code></A></h2>
-		<p>[Sometimes it is needed to obtain a shared_ptr from this in a virtual member 
-			function.]</p>
-		<p>[The transformations from above cannot be applied.]</p>
+		<p>Sometimes it is needed to obtain a <code>shared_ptr</code> from <code>this</code>
+			in a virtual member function under the assumption that <code>this</code> is 
+			already managed by a <code>shared_ptr</code>. The transformations <A href="#from_raw">
+				described in the previous technique</A> cannot be applied.</p>
+		<P>A typical example:</P>
 		<pre>class X
 {
 public:
@@ -450,12 +463,12 @@ public:
 
     virtual shared_ptr&lt;X&gt; getX()
     {
-        shared_ptr&lt;X&gt; px(<i>???</I>);
+        shared_ptr&lt;X&gt; px(<i>???</i>);
         return px;
     }
 };
 </pre>
-		<p>[Solution:]</p>
+		<p>The solution is to keep a weak pointer to <code>this</code> as a member in <code>impl</code>:</p>
 		<pre>class impl: public X, public Y
 {
 private:
@@ -480,19 +493,40 @@ public:
 
     virtual shared_ptr&lt;X&gt; getX()
     {
-        shared_ptr&lt;X&gt; px = weak_this.lock();
+        shared_ptr&lt;X&gt; px(weak_this);
         return px;
     }
 };
 </pre>
-		<p>[Future support planned, <code>impl: public enable_shared_from_this&lt;impl&gt;</code>.]</p>
+		<p>The library now includes a helper class template <code>enable_shared_from_this</code>
+			that can be used to encapsulate the solution:</p>
+		<pre>
+class impl: public X, public Y, public enable_shared_from_this&lt;impl&gt;
+{
+public:
+
+    impl(impl const &amp;);
+    impl &amp; operator=(impl const &amp;);
+
+public:
+
+    virtual void f() { ... }
+
+    virtual shared_ptr&lt;X&gt; getX()
+    {
+        return shared_from_this();
+    }
+}
+</pre>
 		<h2><A name="handle">Using <code>shared_ptr</code> as a smart counted handle</A></h2>
-		<p>[Win32 API allusion]</p>
+		<p>Some library interfaces use opaque handles, a variation of the <A href="#incomplete">
+				incomplete class technique</A> described above. An example:</p>
 		<pre>typedef void * HANDLE;
 HANDLE CreateProcess();
 void CloseHandle(HANDLE);
 </pre>
-		<p>[Quick wrapper]</p>
+		<p>Instead of a raw pointer, it is possible to use <code>shared_ptr</code> as the 
+			handle and get reference counting and automatic resource management for free:</p>
 		<pre>typedef shared_ptr&lt;void&gt; handle;
 
 handle createProcess()
@@ -501,34 +535,35 @@ handle createProcess()
     return pv;
 }
 </pre>
-		<p>[Better, typesafe:]</p>
-		<pre>class handle
-{
-private:
-
-    shared_ptr&lt;void&gt; pv_;
-
-public:
-
-    explicit handle(HANDLE h): pv_(h, CloseHandle) {}
-    HANDLE get() { return pv_.get(); }
-};
-</pre>
 		<h2><A name="on_block_exit">Using <code>shared_ptr</code> to execute code on block exit</A></h2>
-		<p>[1. Executing <code>f(p)</code>, where <code>p</code> is a pointer:]</p>
+		<p>It is possible to use <code>shared_ptr&lt;void&gt;</code> to automatically 
+			execute cleanup code when control leaves a scope.</p>
+		<UL>
+			<LI>
+				Executing <code>f(p)</code>, where <code>p</code> is a pointer:</LI></UL>
 		<pre>    shared_ptr&lt;void&gt; guard(p, f);
 </pre>
-		<p>[2. Executing arbitrary code: <code>f(x, y)</code>:]</p>
-		<pre>    shared_ptr&lt;void&gt; guard(static_cast&lt;void*&gt;(0), bind(f, x, y));
+		<UL>
+			<LI>
+				Executing arbitrary code: <code>f(x, y)</code>:</LI></UL>
+		<pre>    shared_ptr&lt;void&gt; guard(static_cast&lt;void*&gt;(0), <A href="../bind/bind.html">bind</A>(f, x, y));
 </pre>
+		<P>For a more thorough treatment, see the article "Simplify Your Exception-Safe 
+			Code" by Andrei Alexandrescu and Petru Marginean, available online at <A href="http://www.cuj.com/experts/1812/alexandr.htm?topic=experts">
+				http://www.cuj.com/experts/1812/alexandr.htm?topic=experts</A>.</P>
 		<h2><A name="pvoid">Using <code>shared_ptr&lt;void&gt;</code> to hold an arbitrary 
 				object</A></h2>
-		<p>[...]</p>
+		<p>It is possible to use <code>shared_ptr&lt;void&gt;</code> as a generic object 
+			pointer similar to <code>void*</code>. When a <code>shared_ptr&lt;void&gt;</code>
+			instance constructed as:</p>
 		<pre>    shared_ptr&lt;void&gt; pv(new X);
 </pre>
-		<p>[Will correctly call <code>~X</code>.]</p>
-		<p>[Can be used to strip type information: <code>shared_ptr&lt;X&gt;</code> -&gt; <code>
-				(shared_ptr&lt;void&gt;, typeid(X))</code>]</p>
+		<p>is destroyed, it will correctly dispose of the <code>X</code> object by 
+			executing <code>~X</code>.</p>
+		<p>This propery can be used in much the same manner as a raw <code>void*</code> is 
+			used to temporarily strip type information from an object pointer. A <code>shared_ptr&lt;void&gt;</code>
+			can later be cast back to the correct type by using <code><A href="shared_ptr.htm#static_pointer_cast">
+					static_pointer_cast</A></code>.</p>
 		<h2><A name="extra_data">Associating arbitrary data with heterogeneous <code>shared_ptr</code>
 				instances</A></h2>
 		<p>[...]</p>
