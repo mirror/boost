@@ -21,9 +21,9 @@ NESTED_DECL(is_POD)
 
 struct non_default_constructable_UDT
 {
-	non_default_constructable_UDT(const non_default_constructable_UDT&){}
+   non_default_constructable_UDT(const non_default_constructable_UDT&){}
 private:
-	non_default_constructable_UDT(){}
+   non_default_constructable_UDT(){}
 };
 
 int cpp_main(int argc, char* argv[])

@@ -233,7 +233,14 @@ struct is_convertible<void, void>
 template <class Base, class Derived>
 struct is_base_and_derived
 {
-   BOOST_STATIC_CONSTANT(bool, value = (::boost::is_convertible<Derived*,Base*>::value));
+   BOOST_STATIC_CONSTANT(bool, value =
+      (::boost::type_traits::ice_and<
+         ::boost::is_convertible<Derived*,Base*>::value,
+         ::boost::type_traits::ice_not<
+            ::boost::is_void<Base>::value
+         >::value
+      >::value)
+   );
 };
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

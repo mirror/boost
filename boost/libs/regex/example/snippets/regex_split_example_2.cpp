@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 {
    std::string s;
    std::list<std::string> l;
-	int i;
+   int i;
    for(i = 1; i < argc; ++i)
    {
       std::cout << "Findings URL's in " << argv[i] << ":" << std::endl;

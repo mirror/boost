@@ -8,8 +8,8 @@
 
 /*
  Revision history:
- 	02 August 2000
- 		Initial version.
+   02 August 2000
+      Initial version.
 */
 
 #ifndef BOOST_STATIC_ASSERT_HPP

@@ -236,22 +236,22 @@ template <> struct is_float<const volatile long double>
 template <typename T> 
 struct is_arithmetic
 { 
-	BOOST_STATIC_CONSTANT(bool, value = 
-		(::boost::type_traits::ice_or< 
-			::boost::is_integral<T>::value,
-			::boost::is_float<T>::value
-		>::value)); 
+   BOOST_STATIC_CONSTANT(bool, value = 
+      (::boost::type_traits::ice_or< 
+         ::boost::is_integral<T>::value,
+         ::boost::is_float<T>::value
+      >::value)); 
 };
 
 //* is a type T a fundamental type described in the standard (3.9.1)
 template <typename T> 
 struct is_fundamental
 { 
-	BOOST_STATIC_CONSTANT(bool, value = 
-		(::boost::type_traits::ice_or< 
-			::boost::is_arithmetic<T>::value, 
-			::boost::is_void<T>::value
-		>::value)); 
+   BOOST_STATIC_CONSTANT(bool, value = 
+      (::boost::type_traits::ice_or< 
+         ::boost::is_arithmetic<T>::value, 
+         ::boost::is_void<T>::value
+      >::value)); 
 };
 
 } // namespace boost

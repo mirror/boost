@@ -10,8 +10,8 @@
 /* Release notes:
    20 Jan 2001:
         Fixed obvious bugs (David Abrahams)
-	07 Oct 2000:
-		Added better single argument constructor support.
+   07 Oct 2000:
+      Added better single argument constructor support.
    03 Oct 2000:
       Added VC6 support (JM).
    23rd July 2000:

@@ -26,11 +26,11 @@ RandomAccessIterator foo(RandomAccessIterator from, RandomAccessIterator to)
 
 int main()
 {
-	std::deque<int> d;
-	std::list<int> l;
-	foo(d.begin(), d.end()); // OK
-	//foo(l.begin(), l.end()); // error
-	return 0;
+   std::deque<int> d;
+   std::list<int> l;
+   foo(d.begin(), d.end()); // OK
+   //foo(l.begin(), l.end()); // error
+   return 0;
 }
 
 
