@@ -18,8 +18,9 @@
 #define BOOST_UBLAS_TRAITS_H
 
 #include <algorithm>
-#include <cmath>
+#include <iterator>
 #include <complex>
+#include <cmath>
 
 #include <boost/numeric/ublas/iterator.hpp>
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_SFINAE)
