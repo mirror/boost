@@ -10,12 +10,12 @@
 #include <algorithm>
 #include <list>
 
-void check_shape(const double&, unsigned int*, int*, unsigned int)
+void check_shape(const double&, size_t*, int*, unsigned int)
 {}
 
 template <class Array>
 void check_shape(const Array& A, 
-                 unsigned int* sizes, 
+                 size_t* sizes, 
                  int* strides,
                  unsigned int num_elements)
 {
