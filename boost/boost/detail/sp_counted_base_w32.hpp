@@ -20,6 +20,9 @@
 //
 //  Lock-free algorithm by Alexander Terekhov
 //
+//  Thanks to Ben Hitchings for the #weak + (#shared != 0)
+//  formulation
+//
 
 #include <boost/detail/interlocked.hpp>
 #include <typeinfo>
