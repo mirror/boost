@@ -69,11 +69,6 @@
 #define BOOST_UBLAS_INLINE __inline
 #endif
 
-// With MSVC we could perform IO via basic_stream
-// #define BOOST_UBLAS_USE_BASIC_STREAM
-// IO via streams
-#define BOOST_UBLAS_USE_STREAM
-
 // MSVC extensions seem to disable abs () overloads in <cmath>.
 #ifdef _MSC_EXTENSIONS
 #define BOOST_UBLAS_NO_CMATH
@@ -141,7 +136,7 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 namespace std {
-    // Needed for ICC on Itanium?
+    // iter_swap needed for ICC on Itanium?
     template<class C, class IC>
     inline
     void iter_swap (boost::numeric::ublas::indexed_iterator<C, IC> it1,
@@ -193,10 +188,11 @@ namespace std {
 #ifndef BOOST_UBLAS_USING
 #define BOOST_UBLAS_USING using
 #endif
+
+
 #ifndef BOOST_UBLAS_USE_STREAM
 #define BOOST_UBLAS_USE_STREAM
 #endif
-
 
 
 // Enable assignment of non conformant proxies
@@ -209,8 +205,11 @@ namespace std {
 // #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
 #define BOOST_UBLAS_STRICT_VECTOR_SPARSE
 #define BOOST_UBLAS_STRICT_MATRIX_SPARSE
-// #define BOOST_UBLAS_STRICT_HERMITIAN
 #endif
+
+// Hermitian matrices can also use element proxies to allow assignment to conjugate triangle
+// #define BOOST_UBLAS_STRICT_HERMITIAN
+
 
 // Enable compile time typedefs for proxies
 #define BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
@@ -244,10 +243,6 @@ namespace std {
 
 // Disable performance options in DEBUG mode
 #else
-
-// In order to simplify debugging is is possible to simplify expression template
-// so they are restricted to a single operation
-// #define BOOST_UBLAS_SIMPLE_ET_DEBUG
 
 #ifndef BOOST_UBLAS_INLINE
 #define BOOST_UBLAS_INLINE
@@ -286,10 +281,19 @@ bool disable_type_check<Dummy>::value = false;
 
 
 
+// In order to simplify debugging is is possible to simplify expression template
+// so they are restricted to a single operation
+// #define BOOST_UBLAS_SIMPLE_ET_DEBUG
+
+// Select stream types defined for IO
+#if !define (BOOST_UBLAS_USE_STREAM) && !define(BOOST_UBLAS_USE_BASIC_STREAM)
+#define BOOST_UBLAS_USE_STREAM
+#endif
+
 // Use invariant hoisting.
 // #define BOOST_UBLAS_USE_INVARIANT_HOISTING
 
-// Use Duff's device
+// Use Duff's device in element access loops
 // #define BOOST_UBLAS_USE_DUFF_DEVICE
 
 // Choose evaluation method for dense vectors and matrices
@@ -303,7 +307,7 @@ bool disable_type_check<Dummy>::value = false;
 // Use indexed iterators.
 // #define BOOST_UBLAS_USE_INDEXED_ITERATOR
 
-// Alignment of bounded arrays. align(16) possible useful for ICC
+// Alignment of bounded arrays. align(16) possibly useful for ICC
 #define BOOST_UBLAS_BOUNDED_ARRAY_ALIGN
 
 #include <boost/numeric/ublas/fwd.hpp>
