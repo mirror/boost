@@ -76,7 +76,7 @@ bool ogrep_predicate<iterator, Allocator>::operator()(const boost::match_results
    }
    // calculate which line we are on, by adding the number of newlines 
    // we've skipped in the last search:
-   int current_line = last_line + std::count(last_line_start, end_of_storage, '\n');
+   unsigned int current_line = last_line + std::count(last_line_start, end_of_storage, '\n');
    // if we haven't already printed this line out, then do it now:
    if(last_line != current_line)
    {
