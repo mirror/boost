@@ -5,10 +5,6 @@ namespace boost {
 namespace mpl {
 namespace aux {
 
-#if !defined(PRIOR)
-#   define PRIOR(x) x::prior
-#endif
-
 template< long N > struct advance_backward;
 template<>
 struct advance_backward<0>
@@ -26,7 +22,7 @@ struct advance_backward<1>
     template< typename Iterator > struct apply
     {
         typedef Iterator iter0;
-        typedef typename PRIOR(iter0) iter1;
+        typedef typename iter0::prior iter1;
         typedef iter1 type;
     };
 };
@@ -37,8 +33,8 @@ struct advance_backward<2>
     template< typename Iterator > struct apply
     {
         typedef Iterator iter0;
-        typedef typename PRIOR(iter0) iter1;
-        typedef typename PRIOR(iter1) iter2;
+        typedef typename iter0::prior iter1;
+        typedef typename iter1::prior iter2;
         typedef iter2 type;
     };
 };
@@ -49,9 +45,9 @@ struct advance_backward<3>
     template< typename Iterator > struct apply
     {
         typedef Iterator iter0;
-        typedef typename PRIOR(iter0) iter1;
-        typedef typename PRIOR(iter1) iter2;
-        typedef typename PRIOR(iter2) iter3;
+        typedef typename iter0::prior iter1;
+        typedef typename iter1::prior iter2;
+        typedef typename iter2::prior iter3;
         typedef iter3 type;
     };
 };
@@ -62,10 +58,10 @@ struct advance_backward<4>
     template< typename Iterator > struct apply
     {
         typedef Iterator iter0;
-        typedef typename PRIOR(iter0) iter1;
-        typedef typename PRIOR(iter1) iter2;
-        typedef typename PRIOR(iter2) iter3;
-        typedef typename PRIOR(iter3) iter4;
+        typedef typename iter0::prior iter1;
+        typedef typename iter1::prior iter2;
+        typedef typename iter2::prior iter3;
+        typedef typename iter3::prior iter4;
         typedef iter4 type;
     };
 };

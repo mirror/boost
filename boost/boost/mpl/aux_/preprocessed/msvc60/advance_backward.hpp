@@ -6,7 +6,6 @@ namespace mpl {
 namespace aux {
 
 template< nttp_long N > struct advance_backward;
-
 template<>
 struct advance_backward<0>
 {

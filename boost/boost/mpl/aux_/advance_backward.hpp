@@ -1,9 +1,15 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/advance_backward.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
+
+#if !defined(BOOST_PP_IS_ITERATING)
+
+///// header body
+
+#ifndef BOOST_MPL_AUX_ADVANCE_BACKWARD_HPP_INCLUDED
+#define BOOST_MPL_AUX_ADVANCE_BACKWARD_HPP_INCLUDED
+
+// + file: boost/mpl/aux_/advance_backward.hpp
+// + last modified: 06/aug/03
+
+// Copyright (c) 2000-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,13 +19,8 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-#if !defined(BOOST_PP_IS_ITERATING)
-
-///// header body
-
-#ifndef BOOST_MPL_AUX_ADVANCE_BACKWARD_HPP_INCLUDED
-#define BOOST_MPL_AUX_ADVANCE_BACKWARD_HPP_INCLUDED
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
 #include "boost/mpl/aux_/apply.hpp"
 #include "boost/mpl/aux_/prior.hpp"
@@ -27,8 +28,8 @@
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
 
-#if !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS) && \
-    !defined(BOOST_MPL_PREPROCESSING_MODE)
+#if    !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS) \
+    && !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   define BOOST_MPL_PREPROCESSED_HEADER advance_backward.hpp
 #   include "boost/mpl/aux_/include_preprocessed.hpp"

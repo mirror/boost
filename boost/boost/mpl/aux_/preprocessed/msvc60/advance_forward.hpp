@@ -6,7 +6,6 @@ namespace mpl {
 namespace aux {
 
 template< nttp_long N > struct advance_forward;
-
 template<>
 struct advance_forward<0>
 {
@@ -102,7 +101,7 @@ struct advance_forward<4>
 
 };
 
-template< nttp_long N > 
+template< nttp_long N >
 struct advance_forward
 {
     template< typename Iterator > struct apply
