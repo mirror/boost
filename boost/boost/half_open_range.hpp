@@ -5,6 +5,7 @@
 // for any purpose.
 //
 // Revision History:
+// 04 Feb 2001  Support for user-defined iterator categories (David Abrahams)
 // 30 Jan 2001  Initial Checkin (David Abrahams)
 
 #ifndef BOOST_HALF_OPEN_RANGE_HPP_
@@ -16,35 +17,69 @@
 # include <boost/operators.hpp>
 # include <string>
 # include <stdexcept>
+# include <iterator>
 
 namespace boost {
 
 namespace detail {
 
-// Template class choose_finish -- allows us to maintain the invariant that
-// start() <= finish() on half_open_range specializations that support random
-// access.
-template <class Tag>
-struct choose_finish
-{
-    template <class T>
-    struct rebind
-    {
-        static T choose(const T&, const T& finish)
-            { return finish; }
-    };
-};
+  // Template class choose_finish -- allows us to maintain the invariant that
+  // start() <= finish() on half_open_range specializations that support random
+  // access.
+#ifdef __MWERKS__
+  template <class T>
+  const T& choose_finish(const T&, const T& finish, std::input_iterator_tag)
+  {
+      return finish;
+  }
 
-template <>
-struct choose_finish<std::random_access_iterator_tag>
-{
-    template <class T>
-    struct rebind
-    {
-        static T choose(const T& start, const T& finish)
-            { return finish < start ? start : finish; }
-    };
-};
+  template <class T>
+  const T& choose_finish(const T&, const T& finish, std::output_iterator_tag)
+  {
+      return finish;
+  }
+
+  template <class T>
+  const T& choose_finish(const T& start, const T& finish, std::random_access_iterator_tag)
+  {
+      return finish < start ? start : finish;
+  }
+#else
+  template <bool is_random_access> struct finish_chooser;
+
+  template <>
+  struct finish_chooser<false>
+  {
+      template <class T>
+      struct rebind
+      {
+          static T choose(const T&, const T& finish)
+              { return finish; }
+      };
+  };
+
+  template <>
+  struct finish_chooser<true>
+  {
+      template <class T>
+      struct rebind
+      {
+          static T choose(const T& start, const T& finish)
+              { return finish < start ? start : finish; }
+      };
+  };
+
+  template <class Category, class Incrementable>
+  struct choose_finish
+  {
+      static const Incrementable choose(const Incrementable& start, const Incrementable& finish)
+      {
+          return finish_chooser<(
+              boost::is_convertible<Category,std::random_access_iterator_tag>::value
+              )>::template rebind<Incrementable>::choose(start, finish);
+      }
+  };
+#endif
 }
 
 template <class Incrementable>
@@ -75,7 +110,12 @@ struct half_open_range
     half_open_range(Incrementable start, Incrementable finish)
         : m_start(start),
           m_finish(
-            detail::choose_finish<category>::template rebind<Incrementable>::choose(start, finish))
+#ifndef __MWERKS__
+            detail::choose_finish<category,Incrementable>::choose(start, finish)
+#else
+            detail::choose_finish(start, finish, category())
+#endif
+              )
         {}
 
     // Implicit conversion from std::pair<Incrementable,Incrementable> allows us
@@ -83,14 +123,23 @@ struct half_open_range
     half_open_range(const std::pair<Incrementable,Incrementable>& x)
         : m_start(x.first),
           m_finish(
-              detail::choose_finish<category>::template rebind<Incrementable>::choose(x.first,x.second))
+#ifndef __MWERKS__
+              detail::choose_finish<category,Incrementable>::choose(x.first, x.second)
+#else
+            detail::choose_finish(x.first, x.second, category())
+#endif
+              )
         {}
         
     half_open_range& operator=(const std::pair<Incrementable,Incrementable>& x)
     {
         m_start = x.first;
         m_finish =
-            detail::choose_finish<category>::template rebind<Incrementable>::choose(x.first,x.second);
+#ifndef __MWERKS__
+            detail::choose_finish<category,Incrementable>::choose(x.first, x.second);
+#else
+            detail::choose_finish(x.first, x.second, category();
+#endif
     }
         
     iterator begin() const { return iterator(m_start); }
