@@ -48,8 +48,8 @@ PRINTZIP = prints.zip
 SLIDEZIP = slides.zip
 
 # ... Depend
-DEPENDFILE = .depend
-GENFILE	   = .generated
+DEPENDFILES = .depend .depend-rst
+GENFILE	    = .generated
 
 # ... List of extensions and files generated
 texcrap = *.mpx *.log *.aux *.blg *-print.brf *-print.tex *.out
@@ -58,7 +58,7 @@ mpxcrap = mpxerr.tex mpxerr.pdf
 
 generated = *.out *.[0-9] *.[0-9][0-9] *.bbl *.brf \
 	    *.mp *.mmp *.pdf .depend *.ps TMP-*.pdf *.ftoc\
-	    ${PRINTZIP} ${SLIDEZIP} ${GENFILE} ${DEPENDFILE} \
+	    ${PRINTZIP} ${SLIDEZIP} ${GENFILE} ${DEPENDFILES} \
 	    ${texcrap} ${mpxcrap} ${CUTFOILS} $(strip $(wildcard *---*.tex))
 
 
@@ -185,7 +185,7 @@ cleanup-crap:
 	@${RMRF} ${mpxcrap}
 
 # ... Target: all
-all: cleanup-crap .depend ${PDFFILES} ${PRINTS} ${PRINTZIP} ${SLIDEZIP}
+all: cleanup-crap ${DEPENDFILES} ${PDFFILES} ${PRINTS} ${PRINTZIP} ${SLIDEZIP}
 	@${ECHO} ""
 	@${TOUCH} ${GENFILE}
 	@${CAT} ${GENFILE}
@@ -211,7 +211,7 @@ clean:
 	${RMRF} ${generated}
 
 # ... Target: create dependencies
-depend: .depend
+depend: .depend .depend-rst
 
 # ... Target: dependency file (parse TEXFILES for multiinclude and includegraphics)
 .depend: GNUmakefile ${TEXFILES}
@@ -221,6 +221,9 @@ depend: .depend
 		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /\\multiinclude(\[.*?\])?{(.*?)}/ && print "$$target: $$2.0\n";}' $$t.pdf < $$t.tex >> $@; \
 		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /\\includegraphics(\[.*?\])?{(.*?)\.(.*?)}/ && print "$$target: $$2.$$3\n";}' $$t.pdf < $$t.tex >> $@; \
 	done
+
+.depend-rst: GNUmakefile ${RSTFILES}
+	${RMRF} $@
 	@for t in ${RSTSTEMS} ; do \
 		${ECHO} "Scanning $$t.rst"; \
 		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /^\.\. include::\s+(.*)/ && print "$$target: $$1\n";}' $$t.html < $$t.rst >> $@; \
@@ -228,5 +231,6 @@ depend: .depend
 	done
 
 
-# ... include dependency file
+# ... include dependency files
 -include .depend
+-include .depend-rst
