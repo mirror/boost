@@ -66,9 +66,9 @@ purpose is to construct an indirect iterator type.  The main template
 parameter for this class is the <tt>BaseIterator</tt> type that is
 being wrapped. In most cases the type of the elements being pointed to
 can be deduced using <tt>std::iterator_traits</tt>, but in some
-sitatuions the user may want to override these types, so there are
-also template parameters for the type being pointed to (the
-<tt>Value</tt>) as well as reference and pointer versions of the type.
+situations the user may want to override this type, so there are also
+template parameters for the type being pointed to (the <tt>Value</tt>)
+as well as reference and pointer versions of the type.
 
 <pre>
 template &lt;class BaseIterator,
@@ -108,8 +108,7 @@ int main(int, char*[])
   std::copy(indirect_first, indirect_last, std::ostream_iterator&lt;char&gt;(std::cout, ","));
   std::cout &lt;&lt; std::endl;
   
-  return 0;
-}
+  // to be continued...
 </pre>
 
 <h3>Template Parameters</h3>
@@ -138,13 +137,13 @@ type of object that is accessed by dereferences in the base iterator twice.<br>
 
 <TR>
 <TD><tt>Reference</tt></TD>
-<TD>The corresponding reference type for the <tt>Value</tt>.
+<TD>The corresponding reference type for the <tt>Value</tt>.<br>
 <b>Default:</b> <tt>Value&</tt></TD>
 </TD>
 
 <TR>
 <TD><tt>Pointer</tt></TD>
-<TD>The corresponding pointer type for the <tt>Value</tt>.
+<TD>The corresponding pointer type for the <tt>Value</tt>.<br>
 <b>Default:</b> <tt>Value*</tt></TD>
 </TD>
 
@@ -174,9 +173,132 @@ indirect_iterator_generator::type(const BaseIterator&amp; it)
 <hr>
 <p>
 
-<h2><a name="indirect_iterator_generator">The Indirect Iterator Pair
+<h2><a name="indirect_iterator_pair_generator">The Indirect Iterator Pair
 Generator</a></h2>
 
+Sometimes a mutable/const pair of iterator types is needed, such as
+when implementing a container type. The
+<tt>indirect_iterator_pair_generator</tt> class makes it more
+convenient to create this pair of iterator types.
+
+<pre>
+template &lt;class BaseIterator,
+          class Value, class Pointer, class Reference,
+          class ConstPointer, class ConstReference&gt;
+class indirect_iterator_pair_generator
+{
+public:
+  typedef <tt><a href="./iterator_adaptor.htm">iterator_adaptor</a>&lt...&gt;</tt> iterator;       // the mutable indirect iterator type 
+  typedef <tt><a href="./iterator_adaptor.htm">iterator_adaptor</a>&lt...&gt;</tt> const_iterator; // the immutable indirect iterator type 
+};
+</pre>
+
+<h3>Example</h3>
+
+<pre>
+  // continuing from the last example...
+
+  typedef boost::indirect_iterator_pair_generator<char**,
+    char, char*, char&, const char*, const char&> PairGen;
+
+  char mutable_characters[N];
+  char* pointers_to_mutable_chars[N];
+  for (int i = 0; i < N; ++i)
+    pointers_to_mutable_chars[i] = &mutable_characters[i];
+
+  PairGen::iterator mutable_indirect_first(pointers_to_mutable_chars),
+    mutable_indirect_last(pointers_to_mutable_chars + N);
+  PairGen::const_iterator const_indirect_first(pointers_to_chars),
+    const_indirect_last(pointers_to_chars + N);
+
+  std::transform(const_indirect_first, const_indirect_last,
+		 mutable_indirect_first, std::bind1st(std::plus<char>(), 1));
+
+  std::copy(mutable_indirect_first, mutable_indirect_last,
+	    std::ostream_iterator<char>(std::cout, ","));
+  std::cout << std::endl;
+  // to be continued...
+</pre>
+The output is:
+<pre>
+b,c,d,e,f,g,h,
+</pre>
+
+<h3>Template Parameters</h3>
+
+<Table border>
+<TR>
+<TH>Parameter</TH><TH>Description</TH>
+</TR>
+
+<TR>
+<TD><tt>BaseIterator</tt></TD>
+<TD>The iterator type being wrapped. The value type of the base iterator
+should be a pointer (a <a
+href="http://www.sgi.com/tech/stl/trivial.html">Trivial
+Iterator</a>).</TD>
+</TD>
+</TR>
+
+<TR>
+<TD><tt>Value</tt></TD>
+<TD>The value-type of the value-type of the base iterator. That is, the
+type of object that is accessed by dereferences in the base iterator twice.<br>
+<b>Default:</b><br>
+<tt>std::iterator_traits&lt;std::iterator_traits&lt;BaseIterator&gt;::value_type&gt;::value_type</tt>
+</TD>
+
+<TR>
+<TD><tt>Reference</tt></TD>
+<TD>The corresponding reference type for the <tt>Value</tt>.<br>
+<b>Default:</b> <tt>Value&</tt></TD>
+</TD>
+
+<TR>
+<TD><tt>Pointer</tt></TD>
+<TD>The corresponding pointer type for the <tt>Value</tt>.<br>
+<b>Default:</b> <tt>Value*</tt></TD>
+</TD>
+
+<TR>
+<TD><tt>ConstReference</tt></TD>
+<TD>The corresponding const reference type for the <tt>Value</tt>.<br>
+<b>Default:</b> <tt>const Value&</tt></TD>
+</TD>
+
+<TR>
+<TD><tt>ConstPointer</tt></TD>
+<TD>The corresponding const pointer type for the <tt>Value</tt>.<br>
+<b>Default:</b> <tt>const Value*</tt></TD>
+</TD>
+
+</Table>
+
+<h3>Model of</h3>
+
+If the base iterator is a model of <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a> then so is the resulting indirect iterator types.
+If the base iterator supports less functionality than this the
+resulting indirect iterator types will also support less
+functionality.  The resulting <tt>iterator</tt> type is mutable, and
+the resulting <tt>const_iterator</tt> type is constant.
+
+<h3>Members</h3>
+
+The resulting <tt>iterator</tt> and <tt>const_iterator</tt> types
+implements the member functions and operators required of the <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a> concept.  In addition they support the following
+constructors:
+
+<pre>
+indirect_iterator_pair_generator::iterator(const BaseIterator&amp; it)
+</pre>
+
+<pre>
+indirect_iterator_pair_generator::const_iterator(const BaseIterator&amp; it)
+</pre>
 
 <p>
 <hr>
@@ -184,7 +306,39 @@ Generator</a></h2>
 
 <h2><a name="make_indirect_iterator">The Indirect Iterator Object Generator</a></h2>
 
+The <tt>make_indirect_iterator()</tt> function provides a more
+convenient way to create indirect iterator objects. The function saves
+the user the trouble of explicitly writing out the iterator types.
 
+<pre>
+  template &lt;class BaseIterator&gt;
+  typename indirect_iterator_generator&lt;BaseIterator&gt;::type
+  make_indirect_iterator(BaseIterator base)  
+</pre>
+
+
+<h3>Example</h3>
+
+Here we again print the <tt>char</tt>'s from the array
+<tt>characters</tt> by accessing them through the array of pointers
+<tt>pointer_to_chars</tt>, but this time we use the
+<tt>make_indirect_iterator()</tt> function which saves us some typing.
+
+<pre>
+  // continuing from the last example...
+
+  std::copy(boost::make_indirect_iterator(pointers_to_chars), 
+	    boost::make_indirect_iterator(pointers_to_chars + N),
+	    std::ostream_iterator<char>(std::cout, ","));
+  std::cout << std::endl;
+
+  return 0;
+}
+</pre>
+The output is:
+<pre>
+a,b,c,d,e,f,g,
+</pre>
 
 <hr>
 <p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10 Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" --></p>
@@ -197,3 +351,9 @@ any purpose.</p>
 </body>
 
 </html>
+<!--  LocalWords:  html charset alt gif hpp BaseIterator const namespace struct
+ -->
+<!--  LocalWords:  ConstPointer ConstReference typename iostream int abcdefg
+ -->
+<!--  LocalWords:  sizeof  PairGen pre Siek
+ -->
