@@ -88,6 +88,23 @@ template <typename T>
 struct is_class
 {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+# if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || BOOST_MSVC >= 1300 || defined(BOOST_NO_COMPILER_CONFIG)
+    // This is actually the conforming implementation which works with
+    // abstract classes.  However, enough compilers have trouble with
+    // it that most will use the following one.
+
+// is_class<> metafunction due to Paul Mensonides
+// (leavings@attbi.com). For more details:
+// http://groups.google.com/groups?hl=en&selm=000001c1cc83%24e154d5e0%247772e50c%40c161550a&rnum=1
+ private:
+    template <class U> static ::boost::type_traits::yes_type is_class_helper(void(U::*)(void));
+    template <class U> static ::boost::type_traits::no_type is_class_helper(...);
+ public:
+    BOOST_STATIC_CONSTANT(
+        bool, value = sizeof(
+            is_class_helper<T>(0)
+            ) == sizeof(::boost::type_traits::yes_type));
+# else 
    BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
          ::boost::type_traits::ice_not< ::boost::is_union<T>::value >::value,
@@ -97,6 +114,7 @@ struct is_class
          ::boost::type_traits::ice_not< ::boost::is_void<T>::value >::value,
          ::boost::type_traits::ice_not< ::boost::is_function<T>::value >::value
       >::value));
+# endif 
 #else
    BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
@@ -348,11 +366,11 @@ struct empty_helper_t1 : public T
 };
 struct empty_helper_t2 { int i[256]; };
 
-template <typename T, bool b, bool b2>
+template <typename T, bool is_a_class = false>
 struct empty_helper{ BOOST_STATIC_CONSTANT(bool, value = false); };
 
 template <typename T>
-struct empty_helper<T, true, false>
+struct empty_helper<T, true>
 {
    BOOST_STATIC_CONSTANT(bool, value =
       (sizeof(empty_helper_t1<T>) == sizeof(empty_helper_t2)));
@@ -369,8 +387,7 @@ public:
    BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
          ::boost::detail::empty_helper<T,
-            ::boost::is_class<T>::value ,
-            ::boost::is_convertible< r_type,int>::value
+            ::boost::is_class<T>::value
          >::value,
          BOOST_IS_EMPTY(cvt)
       >::value));
