@@ -38,7 +38,7 @@
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::size_t;
-    #if ! defined(BOOST_DINKUMWARE_STDLIB)
+    #if ! defined(BOOST_DINKUMWARE_STDLIB) && ! defined(__SGI_STL_PORT)
         using ::locale;
     #endif
 } // namespace std

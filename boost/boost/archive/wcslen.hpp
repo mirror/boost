@@ -33,6 +33,10 @@ namespace std{ using ::wcslen; }
 
 #else
 
+// it seems that gcc library >= 3.4.1 has this even if wchar.h doesn't exist
+#if ! defined(__GNUC__) \
+|| ( __GNUC__ * 10 + __GNUC_MINOR__ ) < 34
+
 namespace std {
 inline std::size_t wcslen(const wchar_t * ws)
 {
@@ -42,6 +46,8 @@ inline std::size_t wcslen(const wchar_t * ws)
     return eows - ws;
 }
 } // namespace std
+
+#endif // gcc
 
 #endif //BOOST_NO_CWCHAR
 
