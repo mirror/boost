@@ -70,9 +70,7 @@
 # include <boost/static_assert.hpp>
 # include <boost/type_traits.hpp>
 # include <boost/detail/select_type.hpp>
-# ifndef BOOST_NO_LIMITS
-#  include <limits>
-# endif
+# include <boost/limits.hpp>
 
 namespace boost { namespace detail {
 

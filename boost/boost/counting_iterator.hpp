@@ -56,9 +56,7 @@
 # include <boost/type_traits.hpp>
 # include <boost/detail/numeric_traits.hpp>
 # include <boost/static_assert.hpp>
-# ifndef BOOST_NO_LIMITS
-#  include <limits>
-# endif
+# include <boost/limits.hpp>
 
 namespace boost {
 

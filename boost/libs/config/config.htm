@@ -589,7 +589,10 @@ f(&amp;bar); // should choose #2.</pre>
         <td valign="top" width="51%">BOOST_NO_LIMITS</td>
         <td valign="top" width="16%">Standard library</td>
         <td valign="top" width="33%">The C++ implementation does
-        not provide the &lt;limits&gt; header.</td>
+        not provide the &lt;limits&gt; header.  Never check for this
+        symbol in library code; always include
+        &lt;boost/limits.hpp&gt;, which guarantees to provide
+        <code>std::numeric_limits</code>.</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS</td>

@@ -82,6 +82,8 @@
 #  include <string>
 #  if defined(__BASTRING__)
 #     define BOOST_NO_LIMITS
+// Note: <boost/limits.hpp> will provide compile-time constants
+#     undef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #     define BOOST_NO_STD_WSTRING
 #  endif
 #endif
