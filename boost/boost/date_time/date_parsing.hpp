@@ -117,6 +117,11 @@ namespace date_time {
       typename date_type::ymd_type ymd((year_type::min)(),1,1);
       boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
       for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end(), pos < spec_str.size(); ++beg, ++pos) {
+      //typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+      // may need more delimiters, defaults are no good
+      //boost::char_separator<char> sep(",-. /"); 
+      //tokenizer tok(s,sep);
+      //for(tokenizer::iterator beg=tok.begin(); beg!=tok.end(), pos < spec_str.size(); ++beg, ++pos) {
         unsigned short i =0;
         switch(spec_str.at(pos)) {
           case 'y': 
@@ -208,7 +213,8 @@ namespace date_time {
     {
       std::stringstream ss("");
       while(beg != end) {
-        ss << ss.narrow(*beg++, 'X'); // 'X' will cause exception to be thrown
+		  ss << std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(*beg++, 'X'); // 'X' will cause exception to be thrown
+		  //ss << ss.narrow(*beg++, 'X');
       }
       return parse_date<date_type>(ss.str());
     }
@@ -226,7 +232,8 @@ namespace date_time {
       std::stringstream ss("");
       std::wstring::iterator wsb = ws.begin(), wse = ws.end();
       while(wsb != wse) {
-        ss << ss.narrow(*wsb++, 'X'); // 'X' will cause exception to be thrown
+		ss << std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(*wsb++, 'X'); // 'X' will cause exception to be thrown
+        //ss << ss.narrow(*wsb++, 'X'); // 'X' will cause exception to be thrown
       }
       return parse_date<date_type>(ss.str());
     }

@@ -60,9 +60,10 @@ namespace date_time {
         return date_type(ymd);
       }
     }
-    int_type day_count() const
+    //int_type day_count() const
+	unsigned long day_count() const
     {
-      return resolution_traits::as_number(time_count_) / frac_sec_per_day();
+      return static_cast<unsigned long>(resolution_traits::as_number(time_count_) / frac_sec_per_day());
     }
     int_type time_count() const
     {

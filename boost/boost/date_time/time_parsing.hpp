@@ -78,7 +78,7 @@ namespace date_time {
         fs = boost::lexical_cast<boost::int64_t>(*beg);
         int precision = time_duration::num_fractional_digits();
 #endif
-        int digits = beg->length();
+        int digits = static_cast<int>(beg->length());
         if(digits < precision){
           // leading zeros get dropped from the string, 
           // "1:01:01.1" would yield .000001 instead of .100000
