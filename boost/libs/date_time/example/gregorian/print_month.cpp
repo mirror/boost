@@ -36,7 +36,11 @@ main()
     day_iterator ditr(date(year,month,1));
     //loop thru the days and print each one
     for (; ditr <= endOfMonth; ++ditr) {
+#if defined(BOOST_DATE_TIME_NO_LOCALE) 
+      std::cout << to_simple_string(*ditr) << " ["
+#else
       std::cout << *ditr << " ["
+#endif
                 << ditr->day_of_week() << "]"
                 << std::endl; 
     }

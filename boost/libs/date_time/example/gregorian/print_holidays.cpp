@@ -24,7 +24,12 @@ Number Holidays: 7
 void
 print_date(boost::gregorian::date d) 
 {
+  using namespace boost::gregorian;
+#if defined(BOOST_DATE_TIME_NO_LOCALE)
+  std::cout << to_simple_string(d) << " [" << d.day_of_week() << "]\n";
+#else
   std::cout << d << " [" << d.day_of_week() << "]\n";
+#endif
 }
 
 
@@ -57,8 +62,7 @@ main() {
   typedef std::set<date> date_set;
   date_set all_holidays;
   
-//#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-#ifdef BOOST_DATE_TIME_NO_STD_TRANSFORM
+#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
   std::cout << "Sorry, this example temporarily disabled on VC 6.\n"
             << "The std::transform isn't accepted by the compiler\n"
             << "So if you hack up the example without std::transform\n"
