@@ -270,8 +270,8 @@ namespace boost
     struct postfix_increment_result
       : mpl::eval_if<
             mpl::and_<
-            // A proxy is only needed for readable iterators
-            is_convertible<Reference,Value>
+                // A proxy is only needed for readable iterators
+                is_convertible<Reference,Value const&>
                 
                 // No multipass iterator can have values that disappear
                 // before positions can be re-visited
