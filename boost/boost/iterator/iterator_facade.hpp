@@ -107,7 +107,7 @@ namespace boost
         
         typedef typename mpl::eval_if<
             detail::iterator_writability_disabled<ValueParam,Reference>
-          , add_pointer<typename add_const<value_type>::type>
+          , add_pointer<const value_type>
           , add_pointer<value_type>
         >::type pointer;
       
