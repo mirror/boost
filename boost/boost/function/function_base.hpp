@@ -158,7 +158,7 @@ namespace boost {
       // The trivial manager does nothing but return the same pointer (if we
       // are cloning) or return the null pointer (if we are deleting).
       inline any_pointer trivial_manager(any_pointer f, 
-					 functor_manager_operation_type op)
+                                         functor_manager_operation_type op)
       {
         if (op == clone_functor_tag)
           return f;
@@ -179,7 +179,7 @@ namespace boost {
         // For function pointers, the manager is trivial
         static inline any_pointer
         manager(any_pointer function_ptr, 
-		functor_manager_operation_type op,
+                functor_manager_operation_type op,
                 function_ptr_tag)
         {
           if (op == clone_functor_tag)
@@ -346,7 +346,7 @@ namespace boost {
       template<typename FunctionObj>
       inline bool has_empty_target(const FunctionObj&, truth<false>)
       {
-	return false;
+        return false;
       }
 
       // The result is a Boost.Function object, so query whether it is empty

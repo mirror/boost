@@ -362,8 +362,8 @@ namespace boost {
     {
       if (function_base::manager) {
         function_base::functor = 
-	  function_base::manager(function_base::functor, 
-				 detail::function::destroy_functor_tag);
+          function_base::manager(function_base::functor, 
+                                 detail::function::destroy_functor_tag);
       }
 
       function_base::manager = 0;
@@ -377,7 +377,7 @@ namespace boost {
         invoker = f.invoker;
         function_base::manager = f.manager;
         function_base::functor = 
-	  f.manager(f.functor, detail::function::clone_functor_tag);
+          f.manager(f.functor, detail::function::clone_functor_tag);
       }          
     }
 
@@ -403,9 +403,9 @@ namespace boost {
     
         invoker = &invoker_type::invoke;
         function_base::manager = 
-	  &detail::function::functor_manager<FunctionPtr, Allocator>::manage;
+          &detail::function::functor_manager<FunctionPtr, Allocator>::manage;
         function_base::functor = 
-	  function_base::manager(detail::function::any_pointer(
+          function_base::manager(detail::function::any_pointer(
                             // should be a reinterpret cast, but some compilers
                             // insist on giving cv-qualifiers to free functions
                             (void (*)())(f)
@@ -427,7 +427,7 @@ namespace boost {
     {
       typedef detail::function::truth<
                 boost::is_base_and_derived<function_base, FunctionObj>::value>
-	is_boost_function;
+        is_boost_function;
 
       if (!detail::function::has_empty_target(f, is_boost_function())) {
         typedef 
@@ -440,22 +440,22 @@ namespace boost {
     
         invoker = &invoker_type::invoke;
         function_base::manager = &detail::function::functor_manager<
-	                            FunctionObj, Allocator>::manage;
+                                    FunctionObj, Allocator>::manage;
 #ifndef BOOST_NO_STD_ALLOCATOR
         typedef typename Allocator::template rebind<FunctionObj>::other 
           allocator_type;
         typedef typename allocator_type::pointer pointer_type;
-	allocator_type allocator;
-	pointer_type copy = allocator.allocate(1);
-	allocator.construct(copy, f);
+        allocator_type allocator;
+        pointer_type copy = allocator.allocate(1);
+        allocator.construct(copy, f);
 
-	// Get back to the original pointer type
-	FunctionObj* new_f = static_cast<FunctionObj*>(copy);
+        // Get back to the original pointer type
+        FunctionObj* new_f = static_cast<FunctionObj*>(copy);
 #else
-	FunctionObj* new_f = new FunctionObj(f);
+        FunctionObj* new_f = new FunctionObj(f);
 #endif // BOOST_NO_STD_ALLOCATOR
         function_base::functor = 
-	  detail::function::any_pointer(static_cast<void*>(new_f));
+          detail::function::any_pointer(static_cast<void*>(new_f));
       }
     }
     
@@ -465,7 +465,7 @@ namespace boost {
     {
       typedef detail::function::truth<
                 boost::is_base_and_derived<function_base, FunctionObj>::value>
-	is_boost_function;
+        is_boost_function;
 
       if (!detail::function::has_empty_target(f.get(), is_boost_function())) {
         typedef 
@@ -482,7 +482,7 @@ namespace boost {
           function_base::manager(
             detail::function::any_pointer(
               const_cast<FunctionObj*>(f.get_pointer())),
-	    detail::function::clone_functor_tag);
+            detail::function::clone_functor_tag);
       }
     }
     
