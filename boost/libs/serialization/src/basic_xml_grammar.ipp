@@ -24,11 +24,13 @@
 // for head_iterator test
 #include <boost/bind.hpp> 
 #include <boost/function.hpp>
+#include <boost/pfto.hpp>
 
 #include <boost/io/ios_state.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/archive/impl/basic_xml_grammar.hpp>
 #include <boost/archive/basic_xml_archive.hpp>
+#include <boost/archive/iterators/xml_unescape.hpp>
 
 using namespace boost::spirit;
 
@@ -108,6 +110,13 @@ template<class String, class Iterator>
 struct append_string {
     String & contents;
     void operator()(Iterator start, Iterator end) const {
+    #if 0
+        typedef boost::archive::iterators::xml_unescape<Iterator> translator;
+        contents.append(
+            translator(BOOST_MAKE_PFTO_WRAPPER(start)), 
+            translator(BOOST_MAKE_PFTO_WRAPPER(end))
+        );
+    #endif
         contents.append(start, end);
     }
     append_string(String & contents_)
@@ -208,7 +217,7 @@ bool basic_xml_grammar<CharType>::parse_string(IStream & is, StringType & s) {
         );
     }
     rv.contents.resize(0);
-    bool result = my_parse(is, CharData, '<');
+    bool result = my_parse(is, content, '<');
     // note: unget caused a problem with dinkumware.  replace with
  // is.unget();
     // putback another dilimiter instead
@@ -284,9 +293,9 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         | CharRef
     ;
 
-    content =
-        !CharData
-        >> *(Reference >> !CharData)
+    content = 
+        L"<" // should be end_p
+        | (Reference | CharData) >> content
     ;
 
     ClassIDAttribute = 
