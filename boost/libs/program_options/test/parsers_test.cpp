@@ -67,6 +67,7 @@ vector<string> sv(char* array[], unsigned size)
     return r;
 }
 
+#ifndef BOOST_NO_STD_WSTRING
 vector<wstring> sv(wchar_t* array[], unsigned size)
 {
     vector<wstring> r;
@@ -74,6 +75,7 @@ vector<wstring> sv(wchar_t* array[], unsigned size)
         r.push_back(array[i]);
     return r;
 }
+#endif
 
 
 void test_command_line()
