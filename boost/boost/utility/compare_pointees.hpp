@@ -52,7 +52,7 @@ template<class OptionalPointee>
 inline
 bool less_pointees ( OptionalPointee const& x, OptionalPointee const& y )
 {
-  return !y ? false : ( !x ? true : (*x) < (*y) ) ;
+  return !y ? false : ( !x ? false : (*x) < (*y) ) ;
 }
 
 template<class OptionalPointee>

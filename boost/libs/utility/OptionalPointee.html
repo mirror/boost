@@ -97,22 +97,50 @@ But boost::optional&lt;T&gt;, on the other hand, which is also a model of Option
 deep-copy and deep-relational semantics.<br>
 If generic code is written for this concept, it is important not to use relational
 operators directly because the semantics might be different depending on the actual type.<br>
-Still, the concept itsef can be used to define a <i>deep</i> equality-test that can
+Still, the concept itsef can be used to define <i>deep</i> relational tests that can
 be used in generic code with any type which models OptionalPointee:</p>
 <a name="equal"></a>
-<pre>
-template&lt;class OptionalPointee&gt;
+<p><u>Equivalence relation:</u></p>
+<pre>template&lt;class OptionalPointee&gt;
 inline
 bool equal_pointees ( OptionalPointee const&amp; x, OptionalPointee const&amp; y )
 {
   return (!x) != (!y) ? false : ( !x ? true : (*x) == (*y) ) ;
 }
+template&lt;class OptionalPointee&gt;
+struct equal_pointees_t : std::binary_function&lt;bool,OptionalPointee,OptionalPointee&gt;
+{
+  bool operator() ( OptionalPointee const& x, OptionalPointee const& y ) const
+    { return equal_pointees(x,y) ; }
+} ;
 </pre>
-<p>The preceding generic function has the following semantics:<br>
-If both x and y have valid pointees, it compares pointee's values via (*x == *y).<br>
+<p>The preceding generic function and function object have the following semantics:<br>
+If both x and y have valid pointees, it compares values via (*x == *y) or (*x &lt; 
+*y).<br>
 If only one has a valid pointee, returns false.<br>
 If both have invalid pointees, returns true.</p>
-<p><code>equal_pointees()</code> is implemented in <a href="../../boost/optional.hpp">optional.hpp</a></p>
+<a name="less"></a>
+<p><u>Less-than relation:</u></p>
+<pre>template&lt;class OptionalPointee&gt;
+inline
+bool less_pointees ( OptionalPointee const&amp; x, OptionalPointee const&amp; y )
+{
+  return (!x) != (!y) ? false : ( !x ? false : (*x) == (*y) ) ;
+}
+template&lt;class OptionalPointee&gt;
+struct less_pointees_t : std::binary_function&lt;bool,OptionalPointee,OptionalPointee&gt;
+{
+  bool operator() ( OptionalPointee const& x, OptionalPointee const& y ) const
+    { return less_pointees(x,y) ; }
+} ;
+</pre>
+<p>The preceding generic function and function object have the following semantics:<br>
+If both x and y have valid pointees, it compares values via (*x == *y) or (*x &lt; 
+*y).<br>
+If only one has a valid pointee, returns false.<br>
+If both have invalid pointees, returns false.</p>
+<p>All these functions and function 
+objects are is implemented in <a href="../../boost/utility/compare_pointees.hpp">compare_pointees.hpp</a></p>
 <p>Notice that OptionalPointee does not imply aliasing (and optional&lt;&gt; for instance does not alias);
 so direct usage of relational operators with the implied aliasing of shallow semantics
 -as with pointers- should not be used with generic code written for this concept.</p>
