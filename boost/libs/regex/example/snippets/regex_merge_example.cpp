@@ -72,12 +72,12 @@ int main(int argc, const char** argv)
       // strip '<' and '>' first by outputting to a
       // temporary string stream
       std::ostringstream t(std::ios::out | std::ios::binary);
-      std::ostream_iterator<char, char> oi(t);
+      std::ostream_iterator<char> oi(t);
       boost::regex_merge(oi, in.begin(), in.end(), e2, pre_format);
       // then output to final output stream
       // adding syntax highlighting:
       std::string s(t.str());
-      std::ostream_iterator<char, char> out(os);
+      std::ostream_iterator<char> out(os);
       boost::regex_merge(out, s.begin(), s.end(), e1, format_string);
       os << footer_text;
    }
