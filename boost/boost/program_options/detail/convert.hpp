@@ -9,6 +9,7 @@
 #include <boost/detail/workaround.hpp>
 
 #include <string>
+#include <vector>
 #include <locale>
 // for mbstate_t
 #include <cwchar>
@@ -65,6 +66,16 @@ namespace boost {
         std::string to_internal(const std::string&);
         /** @overload */
         std::string to_internal(const std::wstring&);
+
+        template<class T>
+        std::vector<std::string> to_internal(const std::vector<T>& s)
+        {
+            std::vector<std::string> result;
+            for (unsigned i = 0; i < s.size(); ++i)
+                result.push_back(to_internal(s[i]));            
+            return result;
+        }
+
     }
 
 

@@ -90,29 +90,13 @@ namespace boost { namespace program_options {
         parse_command_line(cmdline& cmd, parsed_options& result);
     }
 
-    template<>
-    basic_command_line_parser<char>::
-    basic_command_line_parser(const std::vector<std::string>& args)
+    common_command_line_parser::
+    common_command_line_parser(const std::vector<std::string>& args)
     : m_style(0), m_desc(0), m_positional(0), m_args(args)
     {}
 
-    template<>
-    basic_command_line_parser<char>::
-    basic_command_line_parser(int argc, char* argv[])
-    :  m_style(0), m_desc(0), m_positional(0)
-#if ! defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-    ,m_args(argv+1, argv+argc)
-#endif
-    {       
-#if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-        m_args.reserve(argc);
-        copy(argv+1, argv+argc, inserter(m_args, m_args.end()));
-#endif
-    }
-
-    template<>    
-    parsed_options 
-    basic_command_line_parser<char>::run() const
+    parsed_options
+    common_command_line_parser::run() const
     {
         parsed_options result(m_desc);
         detail::cmdline cmd(m_args, m_style);
@@ -162,58 +146,6 @@ namespace boost { namespace program_options {
         }
 
         return result;        
-    }
-
-    namespace {
-        std::vector<string> utf8_args(
-            const std::vector<std::wstring>& args)
-        {
-            std::vector<string> r;
-            r.reserve(args.size());
-            transform(args.begin(), args.end(), back_inserter(r),
-                      bind(to_utf8, _1));
-            return r;
-        }
-
-        // This version exists since some compiler crash on 
-        // template vector ctor, so we can't just create vector inline
-        // and pass it to the above function.
-        std::vector<string> utf8_args(int argc, wchar_t* argv[])
-        {   
-            std::vector<string> r;    
-            r.reserve(argc);
-            transform(argv + 1, argv +  argc, back_inserter(r),
-                      bind(to_utf8, _1));
-            return r;
-        }
-    }
-
-    
-    template<>
-    basic_command_line_parser<wchar_t>::
-    basic_command_line_parser(const std::vector<std::wstring>& args)
-    : m_style(0), m_desc(0), m_positional(0), m_args(utf8_args(args))
-    {}
-
-    template<>
-    basic_command_line_parser<wchar_t>::
-    basic_command_line_parser(int argc, wchar_t* argv[])
-    : m_style(0), m_desc(0), m_positional(0), m_args(utf8_args(argc, argv))
-    {}
-
-    template<>
-    wparsed_options 
-    basic_command_line_parser<wchar_t>::run() const
-    {
-        command_line_parser ascii_parser(m_args);
-        ascii_parser.style(m_style);
-        if (m_desc)
-            ascii_parser.options(*m_desc);
-        if (m_positional)
-            ascii_parser.positional(*m_positional);
-        ascii_parser.extra_parser(m_ext);
-        
-        return wparsed_options(ascii_parser.run());
     }
 
 

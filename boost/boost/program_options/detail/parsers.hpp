@@ -6,8 +6,40 @@
 #ifndef BOOST_PARSERS_HPP_VP_2004_05_06
 #define BOOST_PARSERS_HPP_VP_2004_05_06
 
+#include <boost/program_options/detail/convert.hpp>
+
 namespace boost { namespace program_options {
 
+    namespace detail {
+        template<class charT, class Iterator>
+        std::vector<std::basic_string<charT> > 
+        make_vector(Iterator i, Iterator e)
+        {
+            std::vector<std::basic_string<charT> > result;
+            // Some compilers don't have templated constructor for 
+            // vector, so we can't create vector from (argv+1, argv+argc) range
+            for(; i != e; ++i)
+                result.push_back(*i);
+            return result;            
+        }
+    }
+
+    template<class charT>
+    basic_command_line_parser<charT>::
+    basic_command_line_parser(const std::vector<
+                              std::basic_string<charT> >& args)
+    : common_command_line_parser(to_internal(args))
+    {}
+
+
+    template<class charT>
+    basic_command_line_parser<charT>::
+    basic_command_line_parser(int argc, charT* argv[])
+    : common_command_line_parser(
+        to_internal(detail::make_vector(argv+1, argv+argc)))
+    {}
+
+    
     template<class charT>
     basic_command_line_parser<charT>& 
     basic_command_line_parser<charT>::options(const options_description& desc)
@@ -40,6 +72,17 @@ namespace boost { namespace program_options {
         m_ext = ext;
         return *this;
     }
+
+    template<class charT>    
+    basic_parsed_options<charT>
+    basic_command_line_parser<charT>::run() const
+    {
+        // Presents of parsed_options -> wparsed_options convertion
+        // does the trick.
+        return basic_parsed_options<charT>(
+            common_command_line_parser::run());
+    }
+
 
     template<class charT>
     basic_parsed_options<charT>
