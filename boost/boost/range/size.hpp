@@ -60,7 +60,7 @@ namespace range_detail
         template< typename T, std::size_t sz >
         inline std::size_t size( const T (&array)[sz] )
         {
-            return range_detail::array_size<const T,sz>( array ); 
+            return range_detail::array_size<T,sz>( array ); 
         }
         
         template< typename T, std::size_t sz >
@@ -73,14 +73,14 @@ namespace range_detail
         // string
         //////////////////////////////////////////////////////////////////////
 
-        inline std::size_t size( const char* s )
+        inline std::size_t size( const char*& s )
         {
-            return range_detail::str_size( s );
+            return boost::range_detail::str_size( s );
         }
 
-        inline std::size_t size( const wchar_t* s )
+        inline std::size_t size( const wchar_t*& s )
         {
-            return range_detail::str_size( s );
+            return boost::range_detail::str_size( s );
         }
         
 } // namespace 'range_detail'
@@ -94,13 +94,13 @@ inline BOOST_DEDUCED_TYPENAME range_size<T>::type size( const T& r )
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
 // BCB is not able to overload pointer when class overloads are also available
 template<>
-inline range_size<const char*>::type size<const char*>( const char* r )
+inline range_size<const char*>::type size<const char*>( const char*& r )
 {
     return range_detail::str_size( r );
 }
 
 template<>
-inline range_size<const wchar_t*>::type size<const wchar_t*>( const wchar_t* r )
+inline range_size<const wchar_t*>::type size<const wchar_t*>( const wchar_t*& r )
 {
     return range_detail::str_size( r );
 }
