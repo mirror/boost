@@ -17,7 +17,6 @@
 #ifndef BOOST_UBLAS_EXCEPTION_H
 #define BOOST_UBLAS_EXCEPTION_H
 
-#define BOOST_UBLAS_USE_EXCEPTIONS
 #if ! defined (BOOST_NO_EXCEPTIONS) && defined (BOOST_UBLAS_USE_EXCEPTIONS)
 #include <stdexcept>
 #else
