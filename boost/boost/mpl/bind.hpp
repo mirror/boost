@@ -238,7 +238,7 @@ template<
     >
 struct resolve_bind_arg< arg<N>,AUX_BIND_PARAMS(U) >
 {
-    typedef typename AUX_APPLY((arg<N>, AUX_BIND_PARAMS(U)))::type type;
+    typedef typename AUX_APPLY((mpl::arg<N>, AUX_BIND_PARAMS(U)))::type type;
 };
 
 #if !defined(BOOST_MPL_NO_BIND_TEMPLATE)
@@ -405,7 +405,7 @@ struct BOOST_PP_CAT(bind,i)
      private:
 #   if !defined(BOOST_MPL_NO_UNNAMED_PLACEHOLDER_SUPPORT)
 
-        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F,mpl::arg<1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg<a0,AUX_BIND_PARAMS(U)>::type f_;
