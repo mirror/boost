@@ -75,6 +75,12 @@ protected:
 
 };  // test_opr_base
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+const std::size_t test_opr_base::fruit_length;
+const std::size_t test_opr_base::scratch_length;
+#endif
+
 template <typename T, typename R = T&, typename P = T*>
 class test_opr
     : public test_opr_base

@@ -200,6 +200,12 @@ public:
    void foo(); // avoid warning about all members being private
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template <class From, class To>
+const bool is_convertible<From, To>::value;
+#endif
+
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class From>
 struct is_convertible<From, void>
