@@ -833,7 +833,8 @@ int equal_signed_unsigned(T1 x, T2 y)
       return false;
     else 
       return static_cast<T2>(x) == y;
-  } else if(y_traits::is_signed) {
+  } else {          // !x_traits::is_signed && y_traits::is_signed
+    // x must be unsigned, i.e. non-negative
     if(y < 0)
       return false;
     else
@@ -858,7 +859,7 @@ int lessthan_signed_unsigned(T1 x, T2 y)
       return true;
     else 
       return static_cast<T2>(x) < y;
-  } else if(y_traits::is_signed) {
+  } else {          // !x_traits::is_signed && y_traits::is_signed
     // x must be unsigned, i.e. non-negative
     if(y < 0)
       return false;
@@ -872,8 +873,7 @@ int lessthan_signed_unsigned(T1 x, T2 y)
 // must be in boost namespace, otherwise the inline friend trick fails
 template<class Generator, class ResultType>
 class generator_iterator_mixin_adapter
-  : incrementable<Generator>, decrementable<Generator>,
-  equality_comparable<Generator>
+  : incrementable<Generator>, equality_comparable<Generator>
 {
 public:
   typedef std::input_iterator_tag iterator_category;
