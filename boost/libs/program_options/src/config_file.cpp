@@ -136,9 +136,8 @@ namespace boost { namespace program_options { namespace detail {
         return false;
     }
 
-// On Metrowerks, the function is defined inline.
-
-#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303))
+#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303)) || \
+        (defined(__sgi) && BOOST_WORKAROUND(_COMPILER_VERSION, BOOST_TESTED_AT(741)))
     template<>
     bool
     basic_config_file_iterator<wchar_t>::getline(std::string& s)
