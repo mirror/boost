@@ -11,7 +11,7 @@ template regex-options
    : # requirements
      <debug><define>BOOST_REGEX_CONFIG_INFO=1
      <sysinclude>$(BOOST_ROOT)
-     <native-wchar_t>on
+     # <native-wchar_t>on
      # como requires this:
      <como-win32><*><define>BOOST_REGEX_NO_W32=1
    ;
