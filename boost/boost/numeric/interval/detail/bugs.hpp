@@ -13,7 +13,7 @@
 
 #include <boost/config.hpp>
 
-#if defined(__GLIBC__) && !defined(__GLIBCPP__) && (defined(__USE_MISC) || defined(__USE_XOPEN_EXTENDED) || defined(__USE_ISOC99)) && !defined(__ICC)
+#if defined(__GLIBC__) && (defined(__USE_MISC) || defined(__USE_XOPEN_EXTENDED) || defined(__USE_ISOC99)) && !defined(__ICC)
 #  define BOOST_HAS_INV_HYPERBOLIC
 #endif
 
@@ -24,10 +24,12 @@
 #  endif
 #else
 #  define BOOST_NUMERIC_INTERVAL_using_math(a) using std::a
-#  if defined(__GNUC__) && (__GNUC__ == 3) && (__GNUC_MINOR__ > 3)
+#  if defined(BOOST_HAS_INV_HYPERBOLIC)
+#    if defined(__GLIBCPP__) || defined(__GLIBCXX__)
 #    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) using ::a
-#  elif defined(BOOST_HAS_INV_HYPERBOLIC)
+#    else
 #    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) using std::a
+#  endif
 #  endif
 #endif
 
