@@ -38,6 +38,7 @@ struct test_my_vector {
 
             // Default Construct
             VP default_constuct;
+            initialize_vector (default_constuct);
             std::cout << "default construct = " << default_constuct << std::endl;
             
             // Copy and swap
