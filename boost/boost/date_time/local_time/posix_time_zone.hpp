@@ -120,7 +120,7 @@ namespace local_time{
       gregorian::date d(1900,1,1);
       if(has_dst_)
       {
-	d = dst_calc_rules_->start_day(y);
+        d = dst_calc_rules_->start_day(y);
       }
       return posix_time::ptime(d, dst_offsets_.dst_start_offset_);
     }
@@ -130,7 +130,7 @@ namespace local_time{
       gregorian::date d(1900,1,1);
       if(has_dst_)
       {
-	d = dst_calc_rules_->end_day(y);
+        d = dst_calc_rules_->end_day(y);
       }
       return posix_time::ptime(d, dst_offsets_.dst_end_offset_);
     }
@@ -163,59 +163,59 @@ namespace local_time{
 
       // get 'std' name/abbrev
       while(isalpha(*sit)){
-	ss << *sit++;
+        ss << *sit++;
       }
       std_zone_abbrev = ss.str(); 
       ss.str("");
 
       // get UTC offset
       if(sit != obj.end()){
-	// get duration
-	while(!isalpha(*sit) && sit != obj.end()){
-	  ss << *sit++;
-	}
-	base_utc_offset_ = posix_time::duration_from_string(ss.str()); 
-	ss.str("");
+        // get duration
+        while(!isalpha(*sit) && sit != obj.end()){
+        ss << *sit++;
+    }
+    base_utc_offset_ = posix_time::duration_from_string(ss.str()); 
+    ss.str("");
 
-	// base offset must be within range of -12 hours to +12 hours
-	if(base_utc_offset_ < time_duration_type(-12,0,0) ||
-	    base_utc_offset_ > time_duration_type(12,0,0))
-	{
-	  throw bad_offset(posix_time::to_simple_string(base_utc_offset_));
-	}
+    // base offset must be within range of -12 hours to +12 hours
+    if(base_utc_offset_ < time_duration_type(-12,0,0) ||
+        base_utc_offset_ > time_duration_type(12,0,0))
+    {
+        throw bad_offset(posix_time::to_simple_string(base_utc_offset_));
+    }
       }
 
       // get DST data if given
       if(sit != obj.end()){
-	has_dst_ = true;
-	
+        has_dst_ = true;
+    
         // get 'dst' name/abbrev
         while(isalpha(*sit)){
           ss << *sit++;
         }
         dst_zone_abbrev = ss.str(); 
-	ss.str("");
+        ss.str("");
 
         // get DST offset if given
         if(sit != obj.end()){
           // get duration
           while(!isalpha(*sit) && sit != obj.end()){
-	    ss << *sit++;
+            ss << *sit++;
           }
           dst_offsets_.dst_adjust_ = 
-	    posix_time::duration_from_string(ss.str());
-	  ss.str("");
+                posix_time::duration_from_string(ss.str());
+        ss.str("");
         }
         else{ // default DST offset
           dst_offsets_.dst_adjust_ = posix_time::hours(1);
         }
 
-	// adjustment must be within +|- 1 day
-	if(dst_offsets_.dst_adjust_ <= time_duration_type(-24,0,0) ||
-	    dst_offsets_.dst_adjust_ >= time_duration_type(24,0,0))
-	{
-	  throw bad_adjustment(posix_time::to_simple_string(dst_offsets_.dst_adjust_));
-	}
+    // adjustment must be within +|- 1 day
+    if(dst_offsets_.dst_adjust_ <= time_duration_type(-24,0,0) ||
+        dst_offsets_.dst_adjust_ >= time_duration_type(24,0,0))
+    {
+      throw bad_adjustment(posix_time::to_simple_string(dst_offsets_.dst_adjust_));
+    }
       }
       // full names not extracted so abbrevs used in their place
       zone_names_ = time_zone_names(std_zone_abbrev, std_zone_abbrev, dst_zone_abbrev, dst_zone_abbrev);
@@ -231,13 +231,13 @@ namespace local_time{
       // generate date spec
       char x = std::string(*sit).at(0);
       if(x == 'M'){
-	M_func(*sit, *eit);
+        M_func(*sit, *eit);
       }
       else if(x == 'J'){
-	julian_no_leap(*sit, *eit);
+        julian_no_leap(*sit, *eit);
       }
       else{
-	julian_day(*sit, *eit);
+        julian_day(*sit, *eit);
       }
 
       ++sit;
@@ -245,32 +245,32 @@ namespace local_time{
       // generate durations
       // starting offset
       if(sit != st_tok.end()){
-	dst_offsets_.dst_start_offset_ = posix_time::duration_from_string(*sit);
+        dst_offsets_.dst_start_offset_ = posix_time::duration_from_string(*sit);
       }
       else{
         // default
-	dst_offsets_.dst_start_offset_ = posix_time::hours(2);
+        dst_offsets_.dst_start_offset_ = posix_time::hours(2);
       }
       // start/end offsets must fall on given date
       if(dst_offsets_.dst_start_offset_ < time_duration_type(0,0,0) ||
-	  dst_offsets_.dst_start_offset_ >= time_duration_type(24,0,0))
+          dst_offsets_.dst_start_offset_ >= time_duration_type(24,0,0))
       {
-	throw bad_offset(posix_time::to_simple_string(dst_offsets_.dst_start_offset_));
+        throw bad_offset(posix_time::to_simple_string(dst_offsets_.dst_start_offset_));
       }
 
       // ending offset
       if(eit != et_tok.end()){
-	dst_offsets_.dst_end_offset_ = posix_time::duration_from_string(*eit);
+        dst_offsets_.dst_end_offset_ = posix_time::duration_from_string(*eit);
       }
       else{
         // default
-	dst_offsets_.dst_end_offset_ = posix_time::hours(2);
+        dst_offsets_.dst_end_offset_ = posix_time::hours(2);
       }
       // start/end offsets must fall on given date
       if(dst_offsets_.dst_end_offset_ < time_duration_type(0,0,0) ||
-	  dst_offsets_.dst_end_offset_ >= time_duration_type(24,0,0))
+        dst_offsets_.dst_end_offset_ >= time_duration_type(24,0,0))
       {
-	throw bad_offset(posix_time::to_simple_string(dst_offsets_.dst_end_offset_));
+        throw bad_offset(posix_time::to_simple_string(dst_offsets_.dst_end_offset_));
       }
     }
 
@@ -295,11 +295,11 @@ namespace local_time{
       ed = lexical_cast<int>(*it);
 
       dst_calc_rules_ = shared_ptr<dst_calc_rule>(
-	  new nth_kday_dst_rule(
-	    nth_last_dst_rule::start_rule(
-	      static_cast<nkday::week_num>(sw),sd,sm), 
-	    nth_last_dst_rule::start_rule(
-	      static_cast<nkday::week_num>(ew),ed,em) 
+        new nth_kday_dst_rule(
+          nth_last_dst_rule::start_rule(
+            static_cast<nkday::week_num>(sw),sd,sm), 
+          nth_last_dst_rule::start_rule(
+            static_cast<nkday::week_num>(ew),ed,em) 
           )
       );
     }
@@ -312,21 +312,21 @@ namespace local_time{
       int sm=1, sd=0;
       sd = lexical_cast<int>(s.substr(1)); // skip 'J'
       while(sd >= calendar::end_of_month_day(year,sm)){
-	sd -= calendar::end_of_month_day(year,sm++);
+        sd -= calendar::end_of_month_day(year,sm++);
       }
       int em=1, ed=0;
       ed = lexical_cast<int>(e.substr(1)); // skip 'J'
       while(ed >= calendar::end_of_month_day(year,em)){
-	ed -= calendar::end_of_month_day(year,em++);
+        ed -= calendar::end_of_month_day(year,em++);
       }
-	
+
       dst_calc_rules_ = shared_ptr<dst_calc_rule>(
-	  new partial_date_dst_rule(
-	    partial_date_dst_rule::start_rule(
-	      sd, static_cast<date_time::months_of_year>(sm)), 
-	    partial_date_dst_rule::end_rule(
-	      ed, static_cast<date_time::months_of_year>(em)) 
-	  )
+        new partial_date_dst_rule(
+          partial_date_dst_rule::start_rule(
+            sd, static_cast<date_time::months_of_year>(sm)), 
+          partial_date_dst_rule::end_rule(
+            ed, static_cast<date_time::months_of_year>(em)) 
+          )
       );
     }
 
@@ -337,10 +337,10 @@ namespace local_time{
       sd = lexical_cast<int>(s);
       ed = lexical_cast<int>(e);
       dst_calc_rules_ = shared_ptr<dst_calc_rule>(
-	  new partial_date_dst_rule(
-	    partial_date_dst_rule::start_rule(++sd),// args are 0-365
-	    partial_date_dst_rule::end_rule(++ed) // pd expects 1-366
-	  )
+        new partial_date_dst_rule(
+          partial_date_dst_rule::start_rule(++sd),// args are 0-365
+          partial_date_dst_rule::end_rule(++ed) // pd expects 1-366
+          )
       );
     }
 

@@ -123,7 +123,7 @@ void check_list_inserter()
     
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) || BOOST_WORKAROUND(BOOST_MSVC, <=1300)
 #else
-	
+
     typedef vector<int>                   score_type;
     typedef map<string,score_type>        team_score_map;
     typedef std::pair<string,score_type>  score_pair;
@@ -142,7 +142,7 @@ void check_list_inserter()
     BOOST_CHECK_EQUAL( team_score.size(), 3u );
     BOOST_CHECK_EQUAL( team_score[ "Team Foo" ][1], 1 );
     BOOST_CHECK_EQUAL( team_score[ "Team Bar" ][0], 0 );
-	
+
 #endif
                         
 }

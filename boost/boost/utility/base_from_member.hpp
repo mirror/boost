@@ -44,10 +44,10 @@
 
 #define BOOST_PRIVATE_CTR_DEF( z, n, data )                            \
     template < BOOST_PP_ENUM_PARAMS(n, typename T) >                   \
-	explicit base_from_member( BOOST_PP_ENUM_BINARY_PARAMS(n, T, x) )  \
-	    : member( BOOST_PP_ENUM_PARAMS(n, x) )                         \
-		{}                                                             \
-	/**/
+    explicit base_from_member( BOOST_PP_ENUM_BINARY_PARAMS(n, T, x) )  \
+        : member( BOOST_PP_ENUM_PARAMS(n, x) )                         \
+        {}                                                             \
+    /**/
 
 
 namespace boost
@@ -73,7 +73,7 @@ protected:
         {}
 
     BOOST_PP_REPEAT_FROM_TO( 1, BOOST_PP_INC(BOOST_BASE_FROM_MEMBER_MAX_ARITY),
-	 BOOST_PRIVATE_CTR_DEF, _ )
+     BOOST_PRIVATE_CTR_DEF, _ )
 
 };  // boost::base_from_member
 

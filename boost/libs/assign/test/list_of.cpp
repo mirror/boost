@@ -96,7 +96,7 @@ void test_sequence_list_of_int()
 #endif
 
 #endif
-	
+
 }
 
 template< class C >
@@ -217,9 +217,9 @@ void check_list_of()
     test_sequence_list_of_int< std::set<int> >();
     test_sequence_list_of_int< std::multiset<int> >();
     test_sequence_list_of_int< std::vector<float> >();
-	
+
     test_sequence_list_of_string< std::vector<std::string> >();
-	
+
     test_map_list_of< std::map<std::string,int> >();
     test_map_list_of< std::multimap<std::string,int> >();
     
@@ -227,7 +227,7 @@ void check_list_of()
     test_list_of();
     
     test_vector_matrix();
-	
+
 }
 
 

@@ -29,11 +29,11 @@ namespace boost {
         // friends to make this private (as it otherwise should be). We can't
         // name all of them because we don't know how many there are.
       public:
-	struct data_t {
-	  std::vector<const trackable*> bound_objects;
-	  connection watch_bound_objects;
-	};
-	shared_ptr<data_t> get_data() const { return data; }
+        struct data_t {
+          std::vector<const trackable*> bound_objects;
+          connection watch_bound_objects;
+        };
+        shared_ptr<data_t> get_data() const { return data; }
 
         // Get the set of bound objects
         std::vector<const trackable*>& get_bound_objects() const
@@ -42,13 +42,13 @@ namespace boost {
         // Determine if this slot is still "active", i.e., all of the bound
         // objects still exist
         bool is_active() const 
-	{ return data->watch_bound_objects.connected(); }
+        { return data->watch_bound_objects.connected(); }
 
       protected:
         // Create a connection for this slot
         void create_connection();
 
-	shared_ptr<data_t> data;
+        shared_ptr<data_t> data;
 
       private:
         static void bound_object_destructed(void*, void*) {}
@@ -117,10 +117,10 @@ namespace boost {
       // destroyed when this goes out of scope, and no other connections
       // have been made.
       BOOST_SIGNALS_NAMESPACE::detail::bound_objects_visitor 
-	do_bind(this->data->bound_objects);
+        do_bind(this->data->bound_objects);
       visit_each(do_bind, 
-		 BOOST_SIGNALS_NAMESPACE::get_inspectable_slot
-		   (f, BOOST_SIGNALS_NAMESPACE::tag_type(f)));
+                 BOOST_SIGNALS_NAMESPACE::get_inspectable_slot
+                   (f, BOOST_SIGNALS_NAMESPACE::tag_type(f)));
       create_connection();
     }
 

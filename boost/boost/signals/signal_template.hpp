@@ -281,7 +281,7 @@ namespace boost {
     }
 
     return impl->connect_slot(in_slot.get_slot_function(), any(), 
-			      in_slot.get_data(), at);
+                              in_slot.get_data(), at);
   }
 
   template<
@@ -309,7 +309,7 @@ namespace boost {
     }
 
     return impl->connect_slot(in_slot.get_slot_function(), group, 
-			      in_slot.get_data(), at);
+                              in_slot.get_data(), at);
   }
 
   template<
