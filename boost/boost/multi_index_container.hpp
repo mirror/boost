@@ -11,6 +11,10 @@
 #ifndef BOOST_MULTI_INDEX_HPP
 #define BOOST_MULTI_INDEX_HPP
 
+#if defined(_MSC_VER)&&(_MSC_VER>=1200)
+#pragma once
+#endif
+
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
 #include <boost/detail/allocator_utilities.hpp>
@@ -85,7 +89,7 @@ class multi_index_container:
 #endif
 
 private:
-#if !defined(BOOST_MULTI_INDEX_NO_MEMBER_TEMPLATE_FRIENDS)
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template <typename,typename,typename> friend class  detail::index_base;
   template <typename,typename>          friend class  detail::header_holder;
   template <typename,typename>          friend class  detail::converter;
@@ -190,7 +194,7 @@ public:
       }
     }
     BOOST_CATCH(...){
-      clean_up();
+      delete_all_nodes_();
       BOOST_RETHROW;
     }
     BOOST_CATCH_END
@@ -219,8 +223,7 @@ public:
 
   ~multi_index_container()
   {
-    BOOST_MULTI_INDEX_CHECK_INVARIANT;
-    clean_up();
+    delete_all_nodes_();
   }
 
   multi_index_container<Value,IndexSpecifierList,Allocator>& operator=(
@@ -476,6 +479,24 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     --node_count;
   }
 
+  void delete_node_(node_type* x)
+  {
+    super::delete_node_(x);
+    deallocate_node(x);
+  }
+
+  void delete_all_nodes_()
+  {
+    super::delete_all_nodes_();
+  }
+
+  void clear_()
+  {
+    delete_all_nodes_();
+    super::clear_();
+    node_count=0;
+  }
+
   void swap_(multi_index_container<Value,IndexSpecifierList,Allocator>& x)
   {
     std::swap(bfm_header::member,x.bfm_header::member);
@@ -540,7 +561,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   {
     BOOST_MULTI_INDEX_CHECK_INVARIANT;
 
-    clean_up(); 
+    clear_(); 
 
     std::size_t s;
     ar>>serialization::make_nvp("count",s);
@@ -576,13 +597,6 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 #endif
 
 private:
-  void clean_up()
-  {
-    for(iterator it=super::begin(),it_end=super::end();it!=it_end;){
-      erase_(it++.get_node());
-    }
-  }
-
   std::size_t node_count;
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)&&\
