@@ -203,6 +203,13 @@ namespace boost
             *this->stored_iterator = x;
             return x;
         }
+
+        // Provides X(r++)
+        operator Iterator const&() const
+        {
+            return stored_iterator;
+        }
+        
      private:
         mutable value_type stored_value;
         Iterator stored_iterator;

@@ -64,6 +64,6 @@ int main()
     state = 3;
     boost::readable_iterator_test(counter_iterator<proxy>(&state), 3);
     boost::writable_iterator_test(counter_iterator<proxy>(&state), 9, 7);
-    BOOST_ASSERT(state == 7);
+    BOOST_ASSERT(state == 8);
     return 0;
 }
