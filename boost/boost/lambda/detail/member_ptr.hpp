@@ -624,7 +624,7 @@ public:
           detail::member_pointer<plainB>::is_data_member,
         boost::is_pointer<A>::value && 
           detail::member_pointer<plainB>::is_function_member
-	  >::template apply<RET>(a, b); 
+      >::template apply<RET>(a, b); 
     }
 };
 
