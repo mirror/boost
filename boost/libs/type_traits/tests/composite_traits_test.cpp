@@ -17,6 +17,11 @@ NESTED_DECL(is_array)
 NESTED_DECL(is_pointer)
 NESTED_DECL(is_reference)
 
+struct convertible_to_pointer
+{
+    operator char*() const;
+};
+
 int cpp_main(int argc, char* argv[])
 {
    NESTED_TEST(is_array, int)
@@ -48,6 +53,7 @@ int cpp_main(int argc, char* argv[])
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    value_test(false, boost::is_array<test_abc1>::value)
 #endif
+   value_test(false, boost::is_array<convertible_to_pointer>::value)
 
    value_test(false, boost::is_pointer<int>::value)
    value_test(false, boost::is_pointer<int&>::value)
@@ -147,7 +153,7 @@ unsigned int expected_failures = 1;
 #elif defined(__GNUC__)
 unsigned int expected_failures = 1; // can't handle cv-qualified references
 #elif defined(BOOST_MSVC)
-unsigned int expected_failures = 1;
+unsigned int expected_failures = 0;
 #elif defined(__MWERKS__) || defined(__HP_aCC)
 unsigned int expected_failures = 1; // is_enum doesn't work
 #else
