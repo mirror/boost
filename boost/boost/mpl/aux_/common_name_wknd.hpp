@@ -18,7 +18,7 @@
 #define BOOST_MPL_AUX_COMMON_NAME_WKND_HPP_INCLUDED
 
 #if defined(__BORLANDC__) && __BORLANDC__ < 0x561
-// agurt 12/nov/02: to supress the bogus "Cannot have both a template class and 
+// agurt 12/nov/02: to suppress the bogus "Cannot have both a template class and 
 // function named 'xxx'" diagnostic
 #   define BOOST_MPL_AUX_COMMON_NAME_WKND(name) \
 namespace name_##wknd { \
