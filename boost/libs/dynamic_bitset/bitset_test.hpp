@@ -12,9 +12,6 @@
 #ifndef BOOST_BITSET_TEST_HPP_GP_20040319
 #define BOOST_BITSET_TEST_HPP_GP_20040319
 
- // NOTE: Tests are designed to be generic.
- //       No need to include "boost/dynamic_bitset.hpp".
- //
 #include "boost/config.hpp"
 #if !defined (BOOST_NO_STD_LOCALE)
 # include <locale>
@@ -31,6 +28,7 @@
 #include <cassert>
 
 #include "boost/limits.hpp"
+#include "boost/dynamic_bitset.hpp"
 #include "boost/test/minimal.hpp"
 
 template <typename Block>
