@@ -168,6 +168,10 @@ namespace
   void FillEventArray< 0 >() {}
 
   ////////////////////////////////////////////////////////////////////////////
+  template< typename T >
+  T AvoidConstantWarning( T value ) { return value; }
+
+  ////////////////////////////////////////////////////////////////////////////
   template< unsigned int msb, bool display >
   void VisitAllStates( BitMachine & bitMachine )
   {
@@ -175,19 +179,10 @@ namespace
     bitMachine.process_event( *pFlipBitEvents[ msb ] );
     ++eventsSentTotal;
 
-    #ifdef BOOST_MSVC
-    #  pragma warning( push )
-    #  pragma warning( disable: 4127 ) // conditional expression is constant
-    #endif
-
-    if ( display )
+    if ( AvoidConstantWarning( display ) )
     {
       DisplayMachineState( bitMachine );
     }
-
-    #ifdef BOOST_MSVC
-    #  pragma warning( pop )
-    #endif
 
     VisitAllStates< msb - 1, display >( bitMachine );
   }
