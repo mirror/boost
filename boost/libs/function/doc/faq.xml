@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<section id="function.faq" last-revision="$Date$">
+  <title>Frequently Asked Questions</title>
+
+<qandaset>
+  <qandaentry>
+    <question><para>I see void pointers; is this [mess] type safe?</para></question>
+    <answer>
+<para>Yes, <computeroutput>boost::function</computeroutput> is type
+safe even though it uses void pointers and pointers to functions
+returning void and taking no arguments. Essentially, all type
+information is encoded in the functions that manage and invoke
+function pointers and function objects. Only these functions are
+instantiated with the exact type that is pointed to by the void
+pointer or pointer to void function. The reason that both are required
+is that one may cast between void pointers and object pointers safely
+or between different types of function pointers (provided you don't
+invoke a function pointer with the wrong type).  </para>
+    </answer>
+  </qandaentry>
+
+  <qandaentry>
+    <question><para>Why are there workarounds for void returns? C++ allows them!</para></question>
+    <answer><para>Void returns are permitted by the C++ standard, as in this code snippet:
+<programlisting>void f();
+void g() { return f(); }</programlisting>
+    </para>
+
+    <para> This is a valid usage of <computeroutput>boost::function</computeroutput> because void returns are not used. With void returns, we would attempting to compile ill-formed code similar to:
+<programlisting>int f();
+void g() { return f(); }</programlisting>
+</para>
+
+<para> In essence, not using void returns allows
+<computeroutput>boost::function</computeroutput> to swallow a return value. This is
+consistent with allowing the user to assign and invoke functions and
+function objects with parameters that don't exactly match.</para>
+
+    </answer>
+  </qandaentry>
+
+  <qandaentry>
+    <question><para>Why (function) cloning?</para></question>
+    <answer>
+      <para>In November and December of 2000, the issue of cloning
+      vs. reference counting was debated at length and it was decided
+      that cloning gave more predictable semantics. I won't rehash the
+      discussion here, but if it cloning is incorrect for a particular
+      application a reference-counting allocator could be used.</para>
+    </answer>
+  </qandaentry>
+</qandaset> 
+
+</section>
