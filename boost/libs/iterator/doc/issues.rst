@@ -77,82 +77,15 @@ The same problem applies to ``is_swappable``.
    ``is_readable<X>::type`` is ``true_type`` if the
    result type of ``X::operator*`` is convertible to
    ``iterator_traits<X>::value_type`` and is ``false_type``
-   otherwise.
-
+   otherwise. Also, ``is_readable`` is required to satisfy
+   the requirements for the UnaryTypeTrait concept
+   (defined in the type traits proposal).
+   
    Remove the requirement for support of the ``is_readable`` trait from
    the Readable Iterator concept.
 
-.. We should give some attention to the UnaryTypeTrait concept,
-   which requires the trait to be derived from either true_type or
-   false_type (as of the last LWG meeting).
 
-.. I must not have been there for that. Could you handle
-   giving it attention? -JGS
-
-
-3. Change ``iterator_tag`` to::
-
-     template <class Value, class Reference, class Traversal>
-     struct iterator_tag;
-
-   If ``iterator_tag`` is to be used as the ``iterator_category``
-   for iterator type ``X``, then the argument for ``Value`` must be
-   the ``value_type`` for iterator ``X``, possibly const-qualified
-   to indicate a non-writable iterator. The argument for
-   ``Reference`` must be the
-   return type of ``operator*`` [*]_, and the argument for ``Traversal``
-   must be the traversal tag for the iterator.
-
-.. I think the language above is still too informal.  There is no
-   "the iterator", when considering iterator_tag in isolation.
-   Perhaps that language belongs in a non-normative note
-
-.. I'm not so sure it makes sense to talk of iterator_tag in
-   isolation. I've added some more words to spell out the
-   connection between "the iterator" and the iterator_tag. -JGS
-
-
-   ``iterator_tag<Value,Reference,Traversal>`` is required to be
-   convertible to both ``Traversal`` tag and also to the
-   ``iterator_category`` type specified by the following
-   pseudo-code::
-
-     old-category(Value, Reference, Traversal) =
-         if (Reference is a reference
-             and Traversal is convertible to forward_traversal_tag)
-         {
-             if (Traversal is convertible to random_access_traversal_tag)
-                 return random_access_iterator_tag;
-             else if (Traversal is convertible to bidirectional_traversal_tag)
-                 return bidirectional_iterator_tag;
-             else
-                 return forward_iterator_tag;
-         } 
-         else if (Traversal is convertible to single_pass_traversal_tag
-                    and Reference is convertible to Value)
-         {
-             if (Value is const)
-                 return input_iterator_tag;
-             else
-                 return input_output_iterator_tag;
-         } else
-             return output_iterator_tag;
-           
-.. I reformatted the code for legibility; sorry.
-.. No problemo. -JGS
-  
-.. [*] Instead of saying "return type of operator*", we could have
-   said ``iterator_traits<X>::reference``. However, the standard
-   specifies nothing about ``iterator_traits<X>::reference`` in
-   many cases, which we believe is a defect.  Furthermore, in some
-   cases it explicitly differs from the return type of
-   ``operator*``, for example see ``istreambuf_iterator``.
-
-.. Hmm, istreambuf_iterator does not fit nicely into the new iterator
-   categories. It's reference type is charT& but the return type
-   of operator* is charT. In the new concepts, these are required to be
-   the same type. We'll have to deal with this in the
-   reference problem paper. -JGS
+3. Remove ``iterator_tag``.
 
 
 
