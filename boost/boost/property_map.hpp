@@ -450,16 +450,17 @@ namespace boost {
   public:
     typedef void key_type; 
     typedef int value_type;
-    typedef const int& reference; 
+    struct reference {
+      template <class T>
+      reference& operator=(const T&) { return *this; }
+    };
     typedef boost::lvalue_property_map_tag category;
     inline dummy_property_map() : c(0) { }
     inline dummy_property_map(value_type cc) : c(cc) { }
     inline dummy_property_map(const dummy_property_map& x)
       : c(x.c) { }
     template <class Vertex>
-    inline value_type& operator[](Vertex) { return c; }
-    template <class Vertex>
-    inline const value_type& operator[](Vertex)  const { return c; }
+    inline reference operator[](Vertex)  const { return reference(); }
    protected:
     value_type c;
   };
