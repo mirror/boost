@@ -1,0 +1,232 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Reverse Iterator Adaptor Documentation</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
+align="center" width="277" height="86">
+
+<h1>Reverse Iterator Adaptor</h1>
+
+Defined in header
+<a href="../../boost/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a>
+
+<p>
+The reverse iterator adaptor flips the direction of an iterators
+motion.  Invoking <tt>operator++()</tt> moves the reverse iterator
+backwards and calling <tt>operator--()</tt> moves the reverse iterator
+forwards. The Boost reverse iterator adaptor is better to use than the
+<tt>std::reverse_iterator</tt> class in situations where pairs of
+mutable/const iterators are needed (such as in containers) because
+comparisons and conversions between the mutable and const versions are
+implemented correctly.
+
+<h2>Synopsis</h2>
+
+<pre>
+namespace boost {
+  template &lt;class <a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>,
+            class Value, class Reference, class Pointer, class Category, class Distance&gt;
+  struct reverse_iterator_generator;
+  
+  template &lt;class <a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>&gt;
+  typename reverse_iterator_generator&lt;BidirectionalIterator&gt;::type
+  make_reverse_iterator(BidirectionalIterator base)  
+}
+</pre>
+
+<hr>
+
+<h2><a name="reverse_iterator_generator">The Reverse Iterator Type
+Generator</a></h2>
+
+The class <tt>reverse_iterator_generator</tt> is a helper class whose
+purpose is to construct a reverse iterator type.  The main template
+parameter for this class is the <tt>BidirectionalIterator</tt> type
+that is being wrapped. In most cases the associated types of the base
+iterator can be deduced using <tt>std::iterator_traits</tt>, but in
+some situations the user may want to override these types, so there
+are also template parameters for the base iterators associates types.
+
+<pre>
+template &lt;class <a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a>,
+          class Value, class Reference, class Pointer, class Category, class Distance&gt;
+class reverse_iterator_generator
+{
+public:
+  typedef <tt><a href="./iterator_adaptor.htm">iterator_adaptor</a>&lt...&gt;</tt> type; // the resulting reverse iterator type 
+};
+</pre>
+
+<h3>Example</h3>
+
+In this example we sort a sequence of letters and then output
+the sequence in descending order using reverse iterators.
+
+<pre>
+#include &lt;boost/config.hpp&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;boost/iterator_adaptors.hpp&gt;
+
+int main(int, char*[])
+{
+  char letters[] = "hello world!";
+  const int N = sizeof(letters)/sizeof(char) - 1;
+  std::cout &lt;&lt; "original sequence of letters:\t"
+	    &lt;&lt; letters &lt;&lt; std::endl;
+
+  std::sort(letters, letters + N);
+
+  // Use reverse_iterator_generator to print a sequence
+  // of letters in reverse order.
+  
+  boost::reverse_iterator_generator&lt;char*&gt;::type
+    reverse_letters_first(letters + N),
+    reverse_letters_last(letters);
+
+  std::cout &lt;&lt; "letters in descending order:\t";
+  std::copy(reverse_letters_first, reverse_letters_last,
+	    std::ostream_iterator&lt;char&gt;(std::cout));
+  std::cout &lt;&lt; std::endl;
+
+  // to be continued...
+</pre>
+The output is:
+<pre>
+original sequence of letters:	hello world!
+letters in descending order:	wroolllhed! 
+</pre>
+
+<h3>Template Parameters</h3>
+
+<Table border>
+<TR>
+<TH>Parameter</TH><TH>Description</TH>
+</TR>
+
+<TR>
+<TD><tt><a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterator</a></tt></TD>
+<TD>The iterator type being wrapped.</TD>
+</TD>
+</TR>
+
+<TR>
+<TD><tt>Value</tt></TD>
+<TD>The value-type of the base iterator and the resulting reverse iterator.<br>
+<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::value_type</tt>
+</TD>
+
+<TR>
+<TD><tt>Reference</tt></TD>
+<TD>The corresponding reference type for the <tt>value_type</tt>.<br>
+<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::reference</tt>
+</TD>
+
+<TR>
+<TD><tt>Pointer</tt></TD>
+<TD>The pointer type for the <tt>value_type</tt>.<br>
+<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::pointer</tt>
+</TD>
+
+<TR>
+<TD><tt>Category</tt></TD>
+<TD>The iterator category.<br>
+<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::iterator_category</tt>
+</TD>
+
+<TR>
+<TD><tt>Distance</tt></TD>
+<TD>The corresponding pointer type for the <tt>Value</tt>.<br>
+<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::difference_type</tt>
+</TD>
+
+
+</Table>
+
+<h3>Model of</h3>
+
+If the base iterator is a model of <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a> then so is the resulting reverse iterator.  If the
+base iterator supports less functionality than this the resulting
+reverse iterator will also support less functionality. The base
+iterator must be at least a <a
+href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional
+Iterator</a>
+
+<h3>Members</h3>
+
+The reverse iterator type implements the member functions and
+operators required of the <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+Access Iterator</a> concept.
+In addition it has the following constructor:
+
+<pre>
+reverse_iterator_generator::type(const BidirectionalIterator&amp; it)
+</pre>
+
+<p>
+<hr>
+<p>
+
+<h2><a name="make_reverse_iterator">The Reverse Iterator Object Generator</a></h2>
+
+The <tt>make_reverse_iterator()</tt> function provides a more
+convenient way to create reverse iterator objects. The function saves
+the user the trouble of explicitly writing out the iterator types.
+
+<pre>
+  template &lt;class BidirectionalIterator&gt;
+  typename reverse_iterator_generator&lt;BidirectionalIterator&gt;::type
+  make_reverse_iterator(BidirectionalIterator base)  
+</pre>
+
+
+<h3>Example</h3>
+
+In this part of the example we use <tt>make_reverse_iterator()</tt> to
+print the sequence of letters in reverse-reverse order, which is the
+original order.
+
+<pre>
+  // continuing from the previous example...
+
+  std::cout << "letters in ascending order:\t";
+  std::copy(boost::make_reverse_iterator(reverse_letters_last),
+	    boost::make_reverse_iterator(reverse_letters_first),
+	    std::ostream_iterator<char>(std::cout));
+  std::cout << std::endl;
+
+  return 0;
+}
+</pre>
+The output is:
+<pre>
+letters in ascending order:	 !dehllloorw
+</pre>
+
+<hr>
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10 Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" --></p>
+<p>© Copyright Jeremy Siek 2000. Permission to copy, use,
+modify, sell and distribute this document is granted provided this copyright
+notice appears in all copies. This document is provided &quot;as is&quot;
+without express or implied warranty, and with no claim as to its suitability for
+any purpose.</p>
+
+</body>
+
+</html>
+<!--  LocalWords:  html charset alt gif hpp BidirectionalIterator const namespace struct
+ -->
+<!--  LocalWords:  ConstPointer ConstReference typename iostream int abcdefg
+ -->
+<!--  LocalWords:  sizeof  PairGen pre Siek wroolllhed dehllloorw
+ -->
