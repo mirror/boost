@@ -28,8 +28,9 @@
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/assert.hpp>
-#include <boost/cast.hpp>    // boost::polymorphic_downcast
-#include <boost/config.hpp>  // BOOST_STATIC_CONSTANT
+#include <boost/static_assert.hpp>
+#include <boost/cast.hpp> // boost::polymorphic_downcast
+#include <boost/config.hpp> // BOOST_MSVC
 
 #ifdef BOOST_MSVC
 #  pragma warning( push )
@@ -414,10 +415,9 @@ class state_machine : noncopyable
 
     typedef mpl::clear< mpl::list<> >::type context_type_list;
 
-    BOOST_STATIC_CONSTANT( bool, shallow_history = false );
-    BOOST_STATIC_CONSTANT( bool, deep_history = false );
-    BOOST_STATIC_CONSTANT( bool, inherited_deep_history = false );
-
+    typedef mpl::bool_< false > shallow_history;
+    typedef mpl::bool_< false > deep_history;
+    typedef mpl::bool_< false > inherited_deep_history;
 
     result react_impl(
       const event_base_type &,
@@ -573,7 +573,7 @@ class state_machine : noncopyable
       // for a state that does not have shallow history. That is, the state
       // does not pass either fsm::has_shallow_history or
       // fsm::has_full_history to its base class template.
-      BOOST_STATIC_ASSERT( HistoryContext::shallow_history );
+      BOOST_STATIC_ASSERT( HistoryContext::shallow_history::value );
 
       typedef typename mpl::at_c<
         typename HistoryContext::inner_initial_list,
@@ -630,7 +630,7 @@ class state_machine : noncopyable
       // a state that does not have deep history. That is, the state does not
       // pass either fsm::has_deep_history or fsm::has_full_history to its
       // base class template
-      BOOST_STATIC_ASSERT( HistoryContext::deep_history );
+      BOOST_STATIC_ASSERT( HistoryContext::deep_history::value );
 
       typedef typename mpl::at_c<
         typename HistoryContext::inner_initial_list,

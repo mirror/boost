@@ -30,7 +30,7 @@ class shallow_history
     // compiler error here then you forgot to pass either
     // fsm::has_shallow_history or fsm::has_full_history as the last parameter
     // of DefaultState's context.
-    BOOST_STATIC_ASSERT( DefaultState::context_type::shallow_history );
+    BOOST_STATIC_ASSERT( DefaultState::context_type::shallow_history::value );
 
     //////////////////////////////////////////////////////////////////////////
     // The following declarations should be private.

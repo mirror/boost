@@ -30,7 +30,7 @@ class deep_history
     // compiler error here then you forgot to pass either
     // fsm::has_deep_history or fsm::has_full_history as the last parameter of
     // DefaultState's context.
-    BOOST_STATIC_ASSERT( DefaultState::context_type::deep_history );
+    BOOST_STATIC_ASSERT( DefaultState::context_type::deep_history::value );
 
     //////////////////////////////////////////////////////////////////////////
     // The following declarations should be private.

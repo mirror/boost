@@ -45,7 +45,6 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/cast.hpp>   // boost::polymorphic_downcast
-#include <boost/config.hpp> // BOOST_STATIC_CONSTANT
 
 
 
@@ -403,20 +402,26 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     // boost::fsm does not currently support deep history in a state whose
     // direct or indirect inner states have two or more orthogonal regions.
     // Please consult the documentation on how to work around this limitation.
-    BOOST_STATIC_ASSERT(
-      ( no_of_orthogonal_regions::value <= 1 ) ||
-      ( !context_type::inherited_deep_history ) );
+    BOOST_STATIC_ASSERT( ( mpl::or_<
+      mpl::less<
+        no_of_orthogonal_regions,
+        mpl::integral_c< detail::orthogonal_position_type, 2 > >,
+      mpl::not_<
+        typename context_type::inherited_deep_history > >::value ) );
 
-    BOOST_STATIC_CONSTANT( bool, shallow_history =
-      ( historyMode & has_shallow_history ) != 0 );
-    BOOST_STATIC_CONSTANT( bool, stores_shallow_history =
-      context_type::shallow_history );
-    BOOST_STATIC_CONSTANT( bool, deep_history =
-      ( historyMode & has_deep_history ) != 0 );
-    BOOST_STATIC_CONSTANT( bool, inherited_deep_history =
-      ( deep_history || context_type::inherited_deep_history ) );
-    BOOST_STATIC_CONSTANT( bool, stores_deep_history =
-      inherited_deep_history && mpl::empty< inner_initial_list >::value );
+    typedef mpl::bool_< ( historyMode & has_shallow_history ) != 0 >
+      shallow_history;
+    typedef typename context_type::shallow_history stores_shallow_history;
+
+    typedef mpl::bool_< ( historyMode & has_deep_history ) != 0 >
+      deep_history;
+    typedef typename mpl::or_<
+      deep_history, 
+      typename context_type::inherited_deep_history
+    >::type inherited_deep_history;
+    typedef typename mpl::and_<
+      inherited_deep_history,
+      mpl::empty< inner_initial_list > >::type stores_deep_history;
 
     typedef mpl::bool_< false > history_destination;
 
@@ -513,9 +518,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     static void reserve_history_slot(
       outermost_context_type & outermostContext )
     {
-      reserve_shallow_history_slot< context_type::shallow_history >(
+      reserve_shallow_history_slot< typename context_type::shallow_history >(
         outermostContext );
-      reserve_deep_history_slot< context_type::deep_history >(
+      reserve_deep_history_slot< typename context_type::deep_history >(
         outermostContext );
     }
 
@@ -525,8 +530,8 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       if ( !state_base_type::termination_state() )
       {
         detail::deep_history_storer<
-          context_type::inherited_deep_history,
-          context_type::deep_history
+          context_type::inherited_deep_history::value,
+          context_type::deep_history::value
         >::template store_deep_history< MostDerived, LeafState >(
           *pContext_ );
       }
@@ -798,12 +803,12 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       }
     };
 
-    template< bool reserveShallowHistorySlot >
+    template< class ReserveShallowHistorySlot >
     static void reserve_shallow_history_slot(
       outermost_context_type & outermostContext )
     {
       typedef typename mpl::if_<
-        mpl::bool_< reserveShallowHistorySlot >,
+        ReserveShallowHistorySlot,
         reserve_shallow_history_slot_impl_yes,
         reserve_shallow_history_slot_impl_no
       >::type impl;
@@ -833,11 +838,11 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     };
     friend struct check_store_shallow_history_impl_yes;
 
-    template< bool storeShallowHistory >
+    template< class StoreShallowHistory >
     void check_store_shallow_history()
     {
       typedef typename mpl::if_<
-        mpl::bool_< storeShallowHistory >,
+        StoreShallowHistory,
         check_store_shallow_history_impl_yes,
         check_store_shallow_history_impl_no
       >::type impl;
@@ -860,12 +865,12 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       }
     };
 
-    template< bool reserveDeepHistorySlot >
+    template< class ReserveDeepHistorySlot >
     static void reserve_deep_history_slot(
       outermost_context_type & outermostContext )
     {
       typedef typename mpl::if_<
-        mpl::bool_< reserveDeepHistorySlot >,
+        ReserveDeepHistorySlot,
         reserve_deep_history_slot_impl_yes,
         reserve_deep_history_slot_impl_no
       >::type impl;
@@ -890,11 +895,11 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     };
     friend struct check_store_deep_history_impl_yes;
 
-    template< bool storeDeepHistory >
+    template< class StoreDeepHistory >
     void check_store_deep_history()
     {
       typedef typename mpl::if_<
-        mpl::bool_< storeDeepHistory >,
+        StoreDeepHistory,
         check_store_deep_history_impl_yes,
         check_store_deep_history_impl_no
       >::type impl;
