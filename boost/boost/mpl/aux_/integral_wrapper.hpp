@@ -26,7 +26,13 @@
 
 #if !defined(AUX_WRAPPER_NAME)
 #   define AUX_WRAPPER_NAME BOOST_PP_CAT(AUX_WRAPPER_VALUE_TYPE,_)
+#endif
+
+#if !defined(AUX_WRAPPER_PARAMS)
 #   define AUX_WRAPPER_PARAMS(N) BOOST_MPL_AUX_NTTP_DECL(AUX_WRAPPER_VALUE_TYPE, N)
+#endif
+
+#if !defined(AUX_WRAPPER_INST)
 #   define AUX_WRAPPER_INST(value) mpl::AUX_WRAPPER_NAME< value >
 #endif
 

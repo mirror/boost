@@ -1,8 +1,8 @@
 
-#ifndef BOOST_MPL_LONG_HPP_INCLUDED
-#define BOOST_MPL_LONG_HPP_INCLUDED
+#ifndef BOOST_MPL_LONG_FWD_HPP_INCLUDED
+#define BOOST_MPL_LONG_FWD_HPP_INCLUDED
 
-// + file: boost/mpl/long.hpp
+// + file: boost/mpl/long_fwd.hpp
 // + last modified: 08/mar/03
 
 // Copyright (c) 2000-03
@@ -18,9 +18,8 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/long_fwd.hpp"
+namespace boost { namespace mpl {
+template< long N > struct long_;
+}}
 
-#define AUX_WRAPPER_VALUE_TYPE long
-#include "boost/mpl/aux_/integral_wrapper.hpp"
-
-#endif // BOOST_MPL_LONG_HPP_INCLUDED
+#endif // BOOST_MPL_LONG_FWD_HPP_INCLUDED
