@@ -142,7 +142,9 @@ namespace smart_cast_impl {
     struct pointer {
 
         struct polymorphic {
-
+            // unfortunately, this below fails to work for virtual base 
+            // classes.  Subject for further study
+            #if 0
             struct linear {
                 template<class U>
                  static T cast(U * u){
@@ -162,7 +164,7 @@ namespace smart_cast_impl {
             };
 
             template<class U>
-             static T cast(U * u){
+            static T cast(U * u){
                 // if we're in debug mode
                 #if ! defined(NDEBUG) || defined(__BORLANDC__) && (__BORLANDC__ <= 0x564)
                     // do a checked dynamic cast
@@ -192,6 +194,16 @@ namespace smart_cast_impl {
                     return typex::cast(u);
                 #endif
             }
+            #endif
+            template<class U>
+            static T cast(U * u){
+                T tmp = dynamic_cast<T>(u);
+                #ifndef NDEBUG
+                    if ( tmp == 0 ) throw std::bad_cast();
+                #endif
+                return tmp;
+            }
+
         };
 
         struct non_polymorphic {
@@ -204,7 +216,7 @@ namespace smart_cast_impl {
         template<class U>
         static T cast(U * u){
             #if defined(__BORLANDC__)
-                return BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                return mpl::eval_if<
                     boost::is_polymorphic<U>,
                     mpl::identity<polymorphic>,
                     mpl::identity<non_polymorphic>
