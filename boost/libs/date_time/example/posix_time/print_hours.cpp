@@ -43,3 +43,11 @@ main()
             << to_simple_string(remaining) << std::endl;
   return 0;
 }
+
+/*  Copyright 2001-2004: CrystalClear Software, Inc
+ *  http://www.crystalclearsoftware.com
+ *
+ *  Subject to the Boost Software License, Version 1.0.
+ * (See accompanying file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
+ */
+
