@@ -20,6 +20,7 @@
 #define BOOST_FORMAT_FUNCS_HPP
 
 #include "boost/format/format_class.hpp"
+#include "boost/throw_exception.hpp"
 
 namespace boost {
 
@@ -44,7 +45,7 @@ operator<<( BOOST_IO_STD basic_ostream<Ch, Tr>& os,
   else {
     if(f.cur_arg_ < f.num_args_)
       if( f.exceptions() & io::too_few_args_bit )
-        throw io::too_few_args(); // not enough variables have been supplied !
+        boost::throw_exception(io::too_few_args()); // not enough variables have been supplied !
     if(f.style_ & format_t::special_needs) 
         os << f.str();
     else {

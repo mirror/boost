@@ -32,6 +32,7 @@
 
 
 #include "boost/format/format_class.hpp"
+#include "boost/throw_exception.hpp"
 
 namespace boost {
 namespace io {
@@ -84,7 +85,7 @@ namespace detail {
     // it either throws if user sets the corresponding flag, or does nothing.
   {
     if(exceptions & io::bad_format_string_bit)
-          throw io::bad_format_string();
+          boost::throw_exception(io::bad_format_string());
   }
     
 
@@ -359,7 +360,7 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
     {
       if( i1+1 >= buf.size() ) {
         if(exceptions() & io::bad_format_string_bit)
-          throw io::bad_format_string(); // must not end in "bla bla %"
+          boost::throw_exception(io::bad_format_string()); // must not end in "bla bla %"
         else break; // stop there, ignore last '%'
       }
       if(buf[i1+1] == buf[i1] ) { i1+=2; continue; } // escaped "%%" / "##"
@@ -421,7 +422,7 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
       if(max_argN >= 0 )  // dont mix positional with non-positionnal directives
         {
           if(exceptions() & io::bad_format_string_bit)
-            throw io::bad_format_string();
+            boost::throw_exception(io::bad_format_string());
           // else do nothing. => positionnal arguments are processed as non-positionnal
         }
       // set things like it would have been with positional directives :

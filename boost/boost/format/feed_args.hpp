@@ -25,6 +25,7 @@
 #include "boost/format/group.hpp"
 
 #include "boost/format/msvc_disambiguater.hpp"
+#include "boost/throw_exception.hpp"
 
 namespace boost {
 namespace io {
@@ -221,7 +222,7 @@ void distribute(basic_format<Ch,Tr>& self, T x)
     if(self.cur_arg_ >= self.num_args_)
       {
         if( self.exceptions() & too_many_args_bit )
-          throw too_many_args(); // too many variables have been supplied !
+          boost::throw_exception(too_many_args()); // too many variables have been supplied !
         else return;
       }
     for(unsigned long i=0; i < self.items_.size(); ++i)
