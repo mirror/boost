@@ -3,7 +3,7 @@
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  * $Date$
  */
 
@@ -162,8 +162,13 @@ int main() {
                   std::wstring(L"Wed Oct 13 18:01:56 2004"));
     teststreaming("widestream default time period with fractional seconds truncated", tp, 
                   std::wstring(L"[Wed Oct 13 18:01:56 2004/Wed Oct 20 19:02:57 2004]"));
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
     teststreaming("widestream time duration", td, 
                   std::wstring(L"03:02:01.009000000"));
+#else
+    teststreaming("widestream time duration", td, 
+                  std::wstring(L"03:02:01.009000"));
+#endif // BOOST_DATE_TIME_HAS_NANOSECONDS
 
     wptime_facet *timefacet = new wptime_facet();
     cloc = std::locale(cloc, timefacet);
@@ -233,31 +238,55 @@ int main() {
 
     {
       wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%S%F");
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time with frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tf, 
                     std::wstring(L"2004-Oct-13 18:01:56.000003000"), 
                     std::locale(std::locale::classic(), wtimefacet));
+#else
+      teststreaming("widestream custom time with frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tf, 
+                    std::wstring(L"2004-Oct-13 18:01:56.000003"), 
+                    std::locale(std::locale::classic(), wtimefacet));
+#endif // BOOST_DATE_TIME_HAS_NANOSECONDS
     }
     {
       wptime_facet* wtimefacet = new wptime_facet();
       wtimefacet->set_iso_format();
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time iso format", tf, 
                     std::wstring(L"20041013T180156.000003000"), 
                     std::locale(std::locale::classic(), wtimefacet));
+#else
+      teststreaming("widestream custom time iso format", tf, 
+                    std::wstring(L"20041013T180156.000003"), 
+                    std::locale(std::locale::classic(), wtimefacet));
+#endif // BOOST_DATE_TIME_HAS_NANOSECONDS
     }
     {
       wptime_facet* wtimefacet = new wptime_facet();
       wtimefacet->set_iso_extended_format();
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time iso extended format", tf, 
                     std::wstring(L"2004-10-13 18:01:56.000003000"), 
                     std::locale(std::locale::classic(), wtimefacet));
+#else
+      teststreaming("widestream custom time iso extended format", tf, 
+                    std::wstring(L"2004-10-13 18:01:56.000003"), 
+                    std::locale(std::locale::classic(), wtimefacet));
+#endif // BOOST_DATE_TIME_HAS_NANOSECONDS
     }
 
 
     {
       wptime_facet* wtimefacet = new wptime_facet(L"%Y-%b-%d %H:%M:%S%F");
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream time period frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tp, 
                     std::wstring(L"[2004-Oct-13 18:01:56/2004-Oct-20 19:02:57.000002999]"), 
                     std::locale(std::locale::classic(), wtimefacet));
+#else
+      teststreaming("widestream time period frac seconds %F operator: %Y-%b-%d %H:%M:%S%F", tp, 
+                    std::wstring(L"[2004-Oct-13 18:01:56/2004-Oct-20 19:02:57.000002]"), 
+                    std::locale(std::locale::classic(), wtimefacet));
+#endif // BOOST_DATE_TIME_HAS_NANOSECONDS
     }
 
     {
@@ -265,9 +294,15 @@ int main() {
       wperiod_formatter pf(wperiod_formatter::AS_OPEN_RANGE, L" / ", L"[ ", L" )", L" ]");
       wtimefacet->period_formatter(pf);
 
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
       teststreaming("widestream custom time : %Y-%b-%d %H:%M:%s", tp, 
                     std::wstring(L"[ 2004-Oct-13 18:01:56.000000000 / 2004-Oct-20 19:02:57.000003000 )"), 
                     std::locale(std::locale::classic(), wtimefacet));
+#else
+      teststreaming("widestream custom time : %Y-%b-%d %H:%M:%s", tp, 
+                    std::wstring(L"[ 2004-Oct-13 18:01:56.000000 / 2004-Oct-20 19:02:57.000003 )"), 
+                    std::locale(std::locale::classic(), wtimefacet));
+#endif // BOOST_DATE_TIME_HAS_NANOSECONDS
     }
 
 
@@ -302,3 +337,4 @@ int main() {
 
   return printTestStats();
 }
+
