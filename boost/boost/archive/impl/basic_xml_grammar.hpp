@@ -55,32 +55,45 @@
 #  pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
-// experiment to see if msvc-stlport at meta-com can be addressed
 #if 0
-isalnum
-isalpha
-iscntrl
-isdigit
-isgraph
-islower
-isprint
-ispunct
-isspace
-isupper
-isxdigit
-tolower
-iswalnum
-iswalpha
-iswcntrl
-iswdigit
-iswgraph
-iswlower
-iswprint
-iswpunct
-iswspace
-iswupper
-iswxdigit
-towlower
+// failed attempt address an issue with msvc w stlport that shows up in spirit
+#if defined(BOOST_NO_STDC_NAMESPACE)
+
+#include <cctype>
+namespace std{ 
+    using ::isalnum;
+    using ::isalpha;
+    using ::iscntrl;
+    using ::isdigit;
+    using ::isgraph;
+    using ::islower;
+    using ::isprint;
+    using ::ispunct;
+    using ::isspace;
+    using ::isupper;
+    using ::isxdigit;
+    using ::tolower;
+}
+
+#if !defined(BOOST_NO_CWCTYPE)
+#include <cwctype>
+namespace std{ 
+    using ::iswalnum;
+    using ::iswalpha;
+    using ::iswcntrl;
+    using ::iswdigit;
+    using ::iswgraph;
+    using ::iswlower;
+    using ::iswprint;
+    using ::iswpunct;
+    using ::iswspace;
+    using ::iswupper;
+    using ::iswxdigit;
+    using ::towlower;
+}
+#endif
+
+#endif
 #endif
 
 //#define BOOST_SPIRIT_DEBUG
