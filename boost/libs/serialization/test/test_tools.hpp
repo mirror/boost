@@ -52,8 +52,9 @@ leak_reporter leak_reporter::instance;
 #if defined(BOOST_MSVC) || defined(__BORLANDC__)
 
 #include <cstdlib>
-#include <cstring>
 #include <cstdio>
+#include <string>
+#include <boost/archive/tmpdir.hpp>
 
 #if defined(__BORLANDC__) 
 namespace { 
@@ -68,15 +69,8 @@ namespace {
 
 char * tmpnam(char * buffer){
     static char ibuffer [256];
-    char *libvar;
-    libvar = getenv("TMP");
-    if(NULL == libvar)
-        libvar = getenv("TMPDIR");
-    if(NULL == libvar)
-        libvar = getenv("TEMP");
-    if(NULL == libvar)
-        libvar = "C:/TMP";
-    char * tfilename = _tempnam(libvar, "ser");
+	const char * dname = boost::archive::tmpdir();
+	/* const */ char * tfilename = _tempnam(dname, "ser");
     if(NULL == buffer){
         strcpy(ibuffer, tfilename);
         delete tfilename;
