@@ -272,6 +272,9 @@ shared_ptr&lt;X&gt; createX()
 			single reference created in <code>make_shared_from_COM</code>. Weak pointers 
 			created from <code>pw</code> will be invalidated when the last <code>shared_ptr</code>
 			is destroyed, regardless of whether the COM object itself is still alive.</p>
+		<P>As <A href="../bind/mem_fn.html#Q3">explained</A> in the <code>mem_fn</code> documentation, 
+			you need to <A href="../bind/mem_fn.html#stdcall">#define 
+				BOOST_MEM_FN_ENABLE_STDCALL</A> first.</P>
 		<h2><A name="intrusive">Using a <code>shared_ptr</code> to hold a pointer to an object 
 				with an embedded reference count</A></h2>
 		<p>This is a generalization of the above technique. The example assumes that the 
@@ -753,8 +756,8 @@ public:
 		<hr>
 		<p>$Date$</p>
 		<p><small>Copyright © 2003 Peter Dimov. Permission to copy, use, modify, sell and 
-			distribute this document is granted provided this copyright notice appears in 
-			all copies. This document is provided "as is" without express or implied 
-			warranty, and with no claim as to its suitability for any purpose.</small></p>
+				distribute this document is granted provided this copyright notice appears in 
+				all copies. This document is provided "as is" without express or implied 
+				warranty, and with no claim as to its suitability for any purpose.</small></p>
 	</body>
 </html>
