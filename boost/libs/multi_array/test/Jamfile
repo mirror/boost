@@ -39,6 +39,7 @@ test-suite multi_array
       [ run iterators.cpp <lib>../../test/build/boost_test_exec_monitor ]
       [ run slice.cpp <lib>../../test/build/boost_test_exec_monitor ]
       [ run assign.cpp <lib>../../test/build/boost_test_exec_monitor ]
+      [ run assign_to_array.cpp <lib>../../test/build/boost_test_exec_monitor ]
       [ run index_bases.cpp <lib>../../test/build/boost_test_exec_monitor ]
       [ run storage_order.cpp <lib>../../test/build/boost_test_exec_monitor ]
       [ run reshape.cpp <lib>../../test/build/boost_test_exec_monitor ]
