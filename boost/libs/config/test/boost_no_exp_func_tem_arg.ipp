@@ -16,16 +16,16 @@
 namespace boost_no_explicit_function_template_arguments{
 
 template <int i>
-bool foo(int j)
+bool foo_17041(int j)
 {
    return (i == j);
 }
 
 int test()
 {
-   if(0 == foo<8>(8)) return -1;
-   if(0 == foo<4>(4)) return -1;
-   if(0 == foo<5>(5)) return -1;
+   if(0 == foo_17041<8>(8)) return -1;
+   if(0 == foo_17041<4>(4)) return -1;
+   if(0 == foo_17041<5>(5)) return -1;
    return 0;
 }
 
