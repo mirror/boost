@@ -97,11 +97,7 @@ test_zero_args()
   BOOST_TEST(global_int == 5);
 
   // clear
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
   v1 = 0;
-#else
-  v1.clear();
-#endif
   BOOST_TEST(0 == v1);
 
   // Assignment to an empty function from a free function
@@ -495,11 +491,7 @@ test_zero_args()
   BOOST_TEST(global_int == 2);
 
   // Test construction from 0 and comparison to 0
-#ifndef BOOST_FUNCTION_NO_ENABLE_IF
   func_void_type v9(0);
-#else
-  func_void_type v9; // just default construct
-#endif
   BOOST_TEST(v9 == 0);
   BOOST_TEST(0 == v9);
 
