@@ -80,6 +80,7 @@ public:
 
   index_iterator& operator=(const index_iterator& x)
   {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(x);
     safe_super::operator=(x);
     node=x.node;
     return *this;
@@ -90,7 +91,6 @@ public:
   index_iterator(){}
   index_iterator(Node* node_):node(node_){}
 #endif
-
 
   const typename Node::value_type& operator*()const
   {

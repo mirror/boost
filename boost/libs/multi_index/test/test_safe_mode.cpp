@@ -53,6 +53,12 @@ void test_safe_mode()
 
   TRY_SAFE_MODE
     employee_set::iterator it;
+    employee_set::iterator it2=es.begin();
+    it2=it;
+  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+
+  TRY_SAFE_MODE
+    employee_set::iterator it;
     employee e=*it;
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
   
@@ -129,6 +135,16 @@ void test_safe_mode()
       it=es3.insert(employee(0,"Joe",31)).first;
     }
     employee e=*it;
+  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+
+  TRY_SAFE_MODE
+    employee_set::iterator it;
+    {
+      employee_set es3;
+      it=es3.insert(employee(0,"Joe",31)).first;
+    }
+    employee_set::iterator it2;
+    it2=it;
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
