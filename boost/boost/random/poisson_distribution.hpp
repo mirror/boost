@@ -45,7 +45,7 @@ public:
     _exp_mean = exp(-_mean);
   }
 
-  // uniform_01 cannot be assigned, neither can this class
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
   RealType mean() const { return _mean; }

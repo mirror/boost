@@ -54,8 +54,8 @@ public:
   { 
     assert(mean > 0);
   }
-  // compiler-generated copy constructor is fine
-  // normal_distribution cannot be assigned, neither can this class
+
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }

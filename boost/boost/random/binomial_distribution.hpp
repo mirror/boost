@@ -40,7 +40,7 @@ public:
     assert(t >= 0);
   }
 
-  // uniform_01 cannot be assigned, neither can this class
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
   IntType t() const { return _t; }

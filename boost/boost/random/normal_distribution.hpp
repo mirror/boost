@@ -51,7 +51,8 @@ public:
     : _rng(other._rng), _mean(other._mean), _sigma(other._sigma), _valid(false)
   {
   }
-  // uniform_01 cannot be assigned, neither can this class
+
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
   RealType mean() const { return _mean; }

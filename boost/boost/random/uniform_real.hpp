@@ -47,8 +47,8 @@ public:
 #endif
     assert(min < max);
   }
-  // compiler-generated copy ctor is fine
-  // uniform_01 cannot be assigned, neither can this class
+
+  // compiler-generated copy ctor and assignment operator are fine
 
   result_type min() const { return _min; }
   result_type max() const { return _max; }

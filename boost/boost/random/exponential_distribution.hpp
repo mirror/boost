@@ -43,8 +43,8 @@ public:
 
   exponential_distribution(base_type& rng, result_type lambda)
     : _rng(rng), _lambda(lambda) { assert(lambda > 0); }
-  // compiler-generated copy ctor is fine
-  // uniform_01 cannot be assigned, neither can this class
+
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }

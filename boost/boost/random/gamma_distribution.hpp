@@ -45,7 +45,7 @@ public:
    _p = exp(result_type(1.0)) / (_alpha + exp(result_type(1.0)));
   }
 
-  // uniform_01 cannot be assigned, neither can this class
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
   RealType alpha() const { return _alpha; }

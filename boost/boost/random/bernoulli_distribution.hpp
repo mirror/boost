@@ -42,8 +42,8 @@ public:
     assert(p >= 0);
     assert(p <= 1);
   }
-  // compiler-generated copy ctor is fine
-  // assignment is disallowed because there is a reference member
+
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return *_rng; }
   RealType p() const { return _p; }

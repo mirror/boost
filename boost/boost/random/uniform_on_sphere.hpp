@@ -38,8 +38,8 @@ public:
 
   explicit uniform_on_sphere(base_type & rng, int dim = 2)
     : _rng(rng), _container(dim), _dim(dim) { }
-  // compiler-generated copy ctor is fine
-  // normal_distribution cannot be assigned, neither can this class
+
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }

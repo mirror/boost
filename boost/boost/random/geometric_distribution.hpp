@@ -51,8 +51,8 @@ public:
 #endif
     _log_p = log(p);
   }
-  // compiler-generated copy ctor is fine
-  // uniform_01 cannot be assigned, neither can this class
+
+  // compiler-generated copy ctor and assignment operator are fine
 
   RealType p() const { return _p; }
   base_type& base() const { return _rng.base(); }

@@ -47,8 +47,8 @@ public:
     p1 = sqrt(p1);
     assert(_a <= _b && _b <= _c);
   }
-  // compiler-generated copy ctor is fine
-  // uniform_01 cannot be assigned, neither can this class
+
+  // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }

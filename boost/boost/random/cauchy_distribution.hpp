@@ -43,8 +43,9 @@ public:
   cauchy_distribution(base_type & rng, result_type median = 0, 
                       result_type sigma = 1)
     : _rng(rng), _median(median), _sigma(sigma) { }
-  // compiler-generated copy constructor is fine
-  // uniform_01 cannot be assigned, neither can this class
+
+  // compiler-generated copy ctor and assignment operator are fine
+
   base_type& base() const { return _rng.base(); }
   RealType median() const { return _median; }
   RealType sigma() const { return _sigma; }
