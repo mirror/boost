@@ -15,7 +15,7 @@
 #include "boost/config.hpp"
 
 // Codewarrior 8.3 for Windows fails without this
-#ifdef __MERKS__
+#ifdef __MWERKS__
 #pragma parse_func_templ off
 #endif
 
