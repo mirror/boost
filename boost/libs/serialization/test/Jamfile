@@ -262,7 +262,7 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ test-bsl-run-no-lib test_iterators ]
         [ test-bsl-run-no-lib test_iterators_base64 ]
         [ test-bsl-run test_private_ctor ]
-        #[ test-bsl-run test_reset_object_address ]
+        [ test-bsl-run test_reset_object_address ]
         [ test-bsl-run-no-lib test_smart_cast ]
         [ test-bsl-run-no-lib test_static_warning ]
         [ test-bsl-run-no-lib test_utf8_codecvt : ../src/utf8_codecvt_facet ]
