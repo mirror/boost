@@ -17,9 +17,23 @@
 
 /** <P>Converts a tuple to a list.</P>
 
+<P>For example,</P>
+
+<PRE>
+  BOOST_PP_TUPLE_TO_LIST(3,(A,B,C))
+</PRE>
+
+<P>expands to the same as</P>
+
+<PRE>
+  BOOST_PP_LIST_CONS(A,
+  BOOST_PP_LIST_CONS(B,
+  BOOST_PP_LIST_CONS(C,
+  BOOST_PP_LIST_NIL)))
+</PRE>
+
 <H3>See</H3>
 <UL>
-  <LI>BOOST_PP_LIST_CONS()
   <LI>BOOST_PP_LIMIT_TUPLE
 </UL>
 */

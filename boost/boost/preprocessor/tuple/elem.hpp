@@ -56,7 +56,7 @@
 #  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_TUPLE##N##_ELEM##I T
 #endif
 
-/* NOTE: TUPLE_ELEM can be implemented in O(N*N) space and O(N) time instead
+/* TUPLE_ELEM can be implemented in O(N*N) space and O(N) time instead
  * of O(N*N*N) space and O(1) time. The current trade-off seems better.
  */
 #define BOOST_PP_TUPLE1_ELEM0(A) A
