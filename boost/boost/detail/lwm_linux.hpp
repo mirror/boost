@@ -17,6 +17,7 @@
 //
 
 #include <asm/atomic.h>
+#include <sched.h>
 
 namespace boost
 {
@@ -60,7 +61,7 @@ public:
             while( !atomic_dec_and_test(&m_.a_) )
             {
                 atomic_inc(&m_.a_);
-                // sched_yield();
+                sched_yield();
             }
         }
 
