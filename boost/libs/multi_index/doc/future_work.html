@@ -33,7 +33,6 @@ principle driving the current internal design of <code>multi_index_container</co
 <h2>Contents</h2>
 
 <ul>
-  <li><a href="#hashed_indices">Hashed indices</a></li>
   <li><a href="#ranked_indices">Ranked indices</a></li>
   <li><a href="#notifying">Notifying indices</a></li>
   <li><a href="#constraints">Constraints</a></li>
@@ -42,20 +41,6 @@ principle driving the current internal design of <code>multi_index_container</co
   <li><a href="#indexed_maps">Indexed maps</a></li>
   <li><a href="#move_semantics">Move semantics</a></li>
 </ul>
-
-<h2><a name="hashed_indices">Hashed indices</a></h2>
-
-<p>
-Several STL implementations feature hashed sets as a natural
-counterpart to <code>std::set</code> and <code>std::multiset</code>.
-<code>multi_index_container</code> can also benefit from the inclusion of hashed
-indices. As the exact details of the interfaces of hashed sets differ among
-library vendors, a good starting point seems Matt Austern's paper
-<a href="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1456.html">A
-Proposal to Add Hash Tables to the Standard Library (revision 4)</a>, which
-has been submitted for acceptance into the next revision of the
-C++ standard.
-</p>
 
 <h2><a name="ranked_indices">Ranked indices</a></h2>
 
@@ -251,9 +236,9 @@ Release notes
 
 <br>
 
-<p>Revised November 30th 2004</p>
+<p>Revised February 8th 2005</p>
 
-<p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
