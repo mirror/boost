@@ -29,11 +29,13 @@
 #   endif
 
 //
-// Threading support:
-// Turn this on unconditionally here, it will get turned off again later
-// if no threading API is detected.
+// Threading support: Turn this on unconditionally here (except for
+// MinGW, where we can know for sure). It will get turned off again
+// later if no threading API is detected.
 //
-#define BOOST_HAS_THREADS
+#if !defined(__MINGW32__) || defined(_MT)
+# define BOOST_HAS_THREADS
+#endif 
 
 //
 // gcc has "long long"
