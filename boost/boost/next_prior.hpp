@@ -1,6 +1,6 @@
 //  Boost next_prior.hpp header file  ---------------------------------------//
 
-//  (C) Copyright Aleksey Gurtovoy 1999-2003. Distributed under the Boost
+//  (C) Copyright Dave Abrahams and Daniel Walker 1999-2003. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
