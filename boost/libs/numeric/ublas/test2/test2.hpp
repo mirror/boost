@@ -83,7 +83,8 @@ struct test_blas_3 {
 
 #define USE_FLOAT
 #define USE_DOUBLE
-#ifndef BOOST_MSVC
+// MSVC Version 6.0 & 7.0 have problems with std complex
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1300)
 #define USE_STD_COMPLEX
 #endif
 

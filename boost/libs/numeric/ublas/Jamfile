@@ -74,8 +74,8 @@ test-suite numeric/uBLAS
         : # requirements
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
-# Test7 check uBLAS operation with interval types.
-# This causes to much compiler badness, issues need to be addressed for VC7.1 VC8 CW9 and Intel 8 (windows)
+# Test7 checks uBLAS operation with interval types.
+# This causes too much compiler badness. Issues need to be addressed for VC7.1 VC8 CW9 and Intel 8 (windows)
 #      [ run test7/test7.cpp
 #            test7/test71.cpp
 #            test7/test72.cpp

@@ -14,14 +14,6 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifdef BOOST_MSVC
-
-#pragma warning (disable: 4355)
-#pragma warning (disable: 4503)
-#pragma warning (disable: 4786)
-
-#endif
-
 #include <iostream>
 
 #include <boost/numeric/ublas/config.hpp>
@@ -84,17 +76,14 @@ struct test_my_matrix {
             // Some assignments
             initialize_matrix (m1);
             initialize_matrix (m2);
-#ifdef BOOST_UBLAS_USE_ET
             m2 += m1;
             std::cout << "m2 += m1 = " << m2 << std::endl;
             m2 -= m1;
             std::cout << "m2 -= m1 = " << m2 << std::endl;
-#else
             m2 = m2 + m1;
-            std::cout << "m2 += m1 = " << m2 << std::endl;
+            std::cout << "m2 = m2 + m1 = " << m2 << std::endl;
             m2 = m2 - m1;
-            std::cout << "m2 -= m1 = " << m2 << std::endl;
-#endif
+            std::cout << "m2 = m2 - m1 = " << m2 << std::endl;
             m1 *= value_type (1.);
             std::cout << "m1 *= 1. = " << m1 << std::endl;
             m1 *= t;

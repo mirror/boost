@@ -68,10 +68,10 @@ void test_matrix ();
 
 // #define USE_FLOAT
 #define USE_DOUBLE
-// #define USE_STD_COMPLEX
+#define USE_STD_COMPLEX
 
-// #define USE_RANGE
-// #define USE_SLICE
+#define USE_RANGE
+#define USE_SLICE
 
 // #define USE_BOUNDED_ARRAY
 #define USE_UNBOUNDED_ARRAY

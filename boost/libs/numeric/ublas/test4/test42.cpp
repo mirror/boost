@@ -14,14 +14,6 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifdef BOOST_MSVC
-
-#pragma warning (disable: 4355)
-#pragma warning (disable: 4503)
-#pragma warning (disable: 4786)
-
-#endif
-
 #include <iostream>
 
 #include <boost/numeric/ublas/config.hpp>
@@ -91,11 +83,13 @@ struct test_my_matrix_vector {
             ublas::matrix_column<M> mc1 (m1, 1), mc2 (m1, 1);
             (*this) (mc1, mc2, m1);
 
-#ifdef USE_RANGE_AND_SLICE
+#ifdef USE_RANGE
             ublas::matrix_vector_range<M> mvr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                           mvr2 (m1, ublas::range (0, N), ublas::range (0, N));
             (*this) (mvr1, mvr2, m1);
+#endif
 
+#ifdef USE_SLICE
             ublas::matrix_vector_slice<M> mvs1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                           mvs2 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
             (*this) (mvs1, mvs2, m1);
@@ -123,11 +117,13 @@ struct test_my_matrix_vector {
             ublas::matrix_column<ublas::banded_adaptor<M> > mc1 (bam1, 1), mc2 (bam1, 1);
             (*this) (mc1, mc2, bam1);
 
-#ifdef USE_RANGE_AND_SLICE
+#ifdef USE_RANGE
             ublas::matrix_vector_range<ublas::banded_adaptor<M> > mvr1 (bam1, ublas::range (0, N), ublas::range (0, N)),
                                                                   mvr2 (bam1, ublas::range (0, N), ublas::range (0, N));
             (*this) (mvr1, mvr2, bam1);
+#endif
 
+#ifdef USE_SLICE
             ublas::matrix_vector_slice<ublas::banded_adaptor<M> > mvs1 (bam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                                   mvs2 (bam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
             (*this) (mvs1, mvs2, bam1);
@@ -145,11 +141,13 @@ struct test_my_matrix_vector {
             ublas::matrix_column<ublas::diagonal_adaptor<M> > mc1 (dam1, 1), mc2 (dam1, 1);
             (*this) (mc1, mc2, dam1);
 
-#ifdef USE_RANGE_AND_SLICE
+#ifdef USE_RANGE
             ublas::matrix_vector_range<ublas::diagonal_adaptor<M> > mvr1 (dam1, ublas::range (0, N), ublas::range (0, N)),
                                                                     mvr2 (dam1, ublas::range (0, N), ublas::range (0, N));
             (*this) (mvr1, mvr2, dam1);
+#endif
 
+#ifdef USE_SLICE
             ublas::matrix_vector_slice<ublas::diagonal_adaptor<M> > mvs1 (dam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                                     mvs2 (dam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
             (*this) (mvs1, mvs2, dam1);

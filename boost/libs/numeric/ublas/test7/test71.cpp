@@ -14,14 +14,6 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifdef BOOST_MSVC
-
-#pragma warning (disable: 4355)
-#pragma warning (disable: 4503)
-#pragma warning (disable: 4786)
-
-#endif
-
 #include <iostream>
 
 #include <boost/numeric/interval.hpp>
@@ -90,17 +82,14 @@ struct test_my_vector {
             // Some assignments
             initialize_vector (v1);
             initialize_vector (v2);
-#ifdef BOOST_UBLAS_USE_ET
             v2 += v1;
             std::cout << "v2 += v1 = " << v2 << std::endl;
             v2 -= v1;
             std::cout << "v2 -= v1 = " << v2 << std::endl;
-#else
             v2 = v2 + v1;
-            std::cout << "v2 += v1 = " << v2 << std::endl;
+            std::cout << "v2 = v2 + v1 = " << v2 << std::endl;
             v2 = v2 - v1;
-            std::cout << "v2 -= v1 = " << v2 << std::endl;
-#endif
+            std::cout << "v2 = v2 - v1 = " << v2 << std::endl;
             v1 *= value_type (1.);
             std::cout << "v1 *= 1. = " << v1 << std::endl;
             v1 *= t;

@@ -43,13 +43,14 @@ void test_matrix ();
 
 // #define USE_FLOAT
 #define USE_DOUBLE
-// #define USE_STD_COMPLEX
+#define USE_STD_COMPLEX
 
-// #define USE_RANGE
-// #define USE_SLICE
+//FIXME range and slice are failing
+//#define USE_RANGE
+//#define USE_SLICE
 
 #define USE_MAP_ARRAY
-// #define USE_STD_MAP
+#define USE_STD_MAP
 
 #define USE_SPARSE_VECTOR
 #define USE_COMPRESSED_VECTOR
