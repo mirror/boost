@@ -31,6 +31,7 @@
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
 #include <boost/wave/cpplexer/cpplexer_exceptions.hpp>
 #include <boost/wave/cpplexer/token_cache.hpp>
+#include <boost/wave/cpplexer/convert_trigraphs.hpp>
 
 #include <boost/wave/cpplexer/cpp_lex_token.hpp>
 #include <boost/wave/cpplexer/cpp_lex_interface.hpp>
@@ -137,7 +138,8 @@ lexer<IteratorT, PositionT>::get()
     switch (id) {
     case T_IDENTIFIER:
     // test identifier characters for validity (throws if invalid chars found)
-        value = string_type((char const *)scanner.tok, scanner.cur-scanner.tok);
+        value = string_type((char const *)scanner.tok, 
+            scanner.cur-scanner.tok);
         if (!(language & support_option_no_character_validation))
             impl::validate_identifier_name(value, scanner.line, -1, filename); 
         break;
@@ -145,7 +147,10 @@ lexer<IteratorT, PositionT>::get()
     case T_STRINGLIT:
     case T_CHARLIT:
     // test literal characters for validity (throws if invalid chars found)
-        value = string_type((char const *)scanner.tok, scanner.cur-scanner.tok);
+        value = string_type((char const *)scanner.tok, 
+            scanner.cur-scanner.tok);
+        if (language & support_option_convert_trigraphs)
+            value = impl::convert_trigraphs(value, scanner.line, -1, filename); 
         if (!(language & support_option_no_character_validation))
             impl::validate_literal(value, scanner.line, -1, filename); 
         break;
@@ -155,7 +160,8 @@ lexer<IteratorT, PositionT>::get()
     case T_PP_QHEADER:
     case T_PP_INCLUDE:
     // convert to the corresponding ..._next token, if appropriate
-        value = string_type((char const *)scanner.tok, scanner.cur-scanner.tok);
+        value = string_type((char const *)scanner.tok, 
+            scanner.cur-scanner.tok);
         if (string_type::npos != value.find("include_"))
             id = token_id(id | AltTokenType);
         break;
@@ -172,7 +178,8 @@ lexer<IteratorT, PositionT>::get()
     case T_SPACE:
     case T_SPACE2:
     case T_ANY:
-        value = string_type((char const *)scanner.tok, scanner.cur-scanner.tok);
+        value = string_type((char const *)scanner.tok, 
+            scanner.cur-scanner.tok);
         break;
         
     case T_EOF:
@@ -181,11 +188,42 @@ lexer<IteratorT, PositionT>::get()
         at_eof = true;
         break;
         
+    case T_OR_TRIGRAPH:
+    case T_XOR_TRIGRAPH:
+    case T_LEFTBRACE_TRIGRAPH:
+    case T_RIGHTBRACE_TRIGRAPH:
+    case T_LEFTBRACKET_TRIGRAPH:
+    case T_RIGHTBRACKET_TRIGRAPH:
+    case T_COMPL_TRIGRAPH:
+    case T_POUND_TRIGRAPH:
+        if (language & support_option_convert_trigraphs) {
+            value = cache.get_token_value(BASEID_FROM_TOKEN(id));
+        }
+        else {
+            value = string_type((char const *)scanner.tok, 
+                scanner.cur-scanner.tok);
+        }
+        break;
+        
+    case T_ANY_TRIGRAPH:
+        if (language & support_option_convert_trigraphs) {
+            value = impl::convert_trigraph(
+                string_type((char const *)scanner.tok, 
+                    scanner.cur-scanner.tok), 
+                scanner.line, -1, filename); 
+        }
+        else {
+            value = string_type((char const *)scanner.tok, 
+                scanner.cur-scanner.tok);
+        }
+        break;
+        
     default:
         if (CATEGORY_FROM_TOKEN(id) != EXTCATEGORY_FROM_TOKEN(id) ||
             IS_CATEGORY(id, UnknownTokenType))
         {
-            value = string_type((char const *)scanner.tok, scanner.cur-scanner.tok);
+            value = string_type((char const *)scanner.tok, 
+                scanner.cur-scanner.tok);
         }
         else {
             value = cache.get_token_value(id);

@@ -49,6 +49,11 @@ CHANGELOG
 - Added the '$F' replacement string to the testwave application. This allows
   to handle file paths sensitive comparison of the expected and real results.
 - Fixed a minor problem in the whitespace eating component.
+- Added optional trigraph conversion.
+- Changed all size_t, time_t etc. to std::size_t, std::time_t etc (for CW).
+- If the comments should not be preserved every C comment containing at minimum 
+  one newline is now converted to a newline token.
+- Added the lexed_tokens sample.
 
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15

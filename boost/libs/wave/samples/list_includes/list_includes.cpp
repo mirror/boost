@@ -113,7 +113,7 @@ struct trace_include_files
         set<string>::iterator it = files.find(filename);
         if (it == files.end()) {
             // print indented filename
-            for (size_t i = 0; i < include_depth; ++i)
+            for (std::size_t i = 0; i < include_depth; ++i)
                 cout << " ";
             cout << filename << endl;
             

@@ -114,7 +114,7 @@ namespace flex_string_details
     template <class Pod>
     inline Pod* pod_copy(const Pod* b, const Pod* e, Pod* d)
     {
-        const size_t s = e - b;
+        const std::size_t s = e - b;
         using namespace std;
         memcpy(d, b, s * sizeof(*b));
         return d + s;
@@ -374,7 +374,7 @@ public:
     { return pData_->pEnd_ - pData_->buffer_; }
 
     size_type max_size() const
-    { return size_t(-1) / sizeof(E) - sizeof(Data) - 1; }
+    { return std::size_t(-1) / sizeof(E) - sizeof(Data) - 1; }
 
     size_type capacity() const
     { return pData_->pEndOfMem_ - pData_->buffer_; }

@@ -141,7 +141,7 @@ namespace cmd_line_util {
 
             include_paths *p = boost::any_cast<include_paths>(&v);
 
-            BOOST_SPIRIT_ASSERT(p);
+            BOOST_ASSERT(p);
             // Assume only one path per '-I' occurrence.
             string const& t = po::validators::get_single_string(tokens);
             if (t == "-") {

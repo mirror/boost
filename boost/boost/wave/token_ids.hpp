@@ -69,6 +69,7 @@ enum token_category {
     TriGraphTokenType           = 0x00200000,
     AltExtTokenType             = 0x00500000,   // and, bit_and etc.
     ExtTokenTypeMask            = 0xFFF00000,
+    ExtTokenOnlyMask            = 0x00F00000,
     TokenValueMask              = 0x000FFFFF,
     MainTokenMask               = TokenTypeMask|TokenValueMask,
 };
@@ -246,6 +247,7 @@ enum token_id {
     T_POUND_ALT             = TOKEN_FROM_ID(396, OperatorTokenType|AltTokenType),
     T_POUND_TRIGRAPH        = TOKEN_FROM_ID(396, OperatorTokenType|TriGraphTokenType),
     T_ANY          = TOKEN_FROM_ID(397, UnknownTokenType),
+    T_ANY_TRIGRAPH          = TOKEN_FROM_ID(397, UnknownTokenType|TriGraphTokenType),
     T_PP_INCLUDE   = TOKEN_FROM_ID(398, PPTokenType),
     T_PP_QHEADER   = TOKEN_FROM_ID(399, PPTokenType),
     T_PP_HHEADER   = TOKEN_FROM_ID(400, PPTokenType),
@@ -293,6 +295,10 @@ enum token_id {
 #define TOKEN_FROM_ID(id, cat)   boost::wave::token_id((id) | (cat))
 #define BASE_TOKEN(tok)                                                       \
     boost::wave::token_id((tok) & MainTokenMask)                              \
+  /**/
+#undef BASEID_FROM_TOKEN
+#define BASEID_FROM_TOKEN(tok)                                                \
+    boost::wave::token_id(((tok) & ~ExtTokenTypeMask))                        \
   /**/
 
 ///////////////////////////////////////////////////////////////////////////////

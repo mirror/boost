@@ -345,7 +345,7 @@ public:
     {
         if (enabled_include_tracing()) {
             // print indented filename
-            for (size_t i = 0; i < include_depth; ++i)
+            for (std::size_t i = 0; i < include_depth; ++i)
                 includestrm << " ";
                 
             if (is_system_include)

@@ -25,7 +25,11 @@ SOURCES = testwave testwave_app
 #
 # This are the arguments for the testwave executable
 #
-TESTWAVE_ARGUMENTS = -d2 -S../testwave/testfiles ;
+TESTWAVE_ARGUMENTS = 
+        -d2                              # use -d4 for verbose results 
+        -S../testwave/testfiles 
+        -S$(BOOST_ROOT) -I$(BOOST_ROOT)
+    ;
 
 #
 # These are the names of the different unit tests to run

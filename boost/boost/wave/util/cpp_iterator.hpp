@@ -410,9 +410,10 @@ token_id id = T_ANY;
 
     // if comments shouldn't be preserved replace them with newlines
         id = token_id(act_token);
-        if (T_CPPCOMMENT == id && !need_preserve_comments(ctx.get_language()))
+        if (!need_preserve_comments(ctx.get_language()) &&
+            (T_CPPCOMMENT == id || util::ccomment_has_newline(act_token)))
         {
-            act_token.set_token_id(T_NEWLINE);
+            act_token.set_token_id(id = T_NEWLINE);
             act_token.set_value("\n");
         }
         

@@ -27,6 +27,8 @@
 <p dir="ltr">The <tt>Wave</tt> library contains several samples illustrating how to use the different features. This section describes these samples and its main characteristics. </p>
 <h2 dir="ltr">The quick_start sample</h2>
  <p>The <tt>quick_start</tt> sample shows a minimal way to use the <tt>Wave</tt> preprocessor library. It simply opens the file given as the first command line argument, preprocesses it assuming that there aren't any additional include paths or macros defined and outputs the textual representation of the tokens generated from the given input file. This sample may be used to introduce yourself to <tt>Wave</tt>, because it does not contain all the potential additional complexity exposed by more complex samples. </p>
+ <h2>The lexed_tokens sample</h2>
+ <p>The <tt>lexed_tokens</tt> sample shows a minimal way to use the C++ lexing component of Wave without using the preprocessor. It opens the file specified as the first command line argument and prints out the contents of the tokens returned from the lexer. </p>
  <h2>The <strong>cpp_tokens sample </strong></h2>
 <p dir="ltr">The <tt>cpp_tokens</tt> sample dumps out the information contained within the tokens returned from the iterator supplied by the <tt>Wave</tt> library. It shows, how to use the <tt>Wave</tt> library in conjunction with custom lexer and custom token types. The lexer used within this sample is <tt>SLex</tt> <a href="references.html#slex">[5]</a> based, i.e. it <tt></tt> is feeded during runtime (at startup) with the token definitions (regular expressions) and generates a resulting DFA table. This table is used for token identification and is saved to disc afterwards to avoid the table generation process at the next program startup. The name of the file to which the DFA table is saved is <tt>wave_slex_lexer.dfa</tt>. </p>
 <p dir="ltr">The main advantage of this <tt>SLex</tt> based lexer if compared to the default <tt>Re2C</tt> <a href="references.html#re2c">[3]</a> generated lexer is, that it provides not only the line information, where a particular token was recognized, but also the related column position. Otherwise the <tt>SLex</tt> based lexer is functionally fully compatible to the <tt>Re2C</tt> based one, i.e. you always may switch your application to use it, if you additionally need to get the column information back from the preprocessing. </p>
@@ -86,7 +88,7 @@ preprocessed tokens generated from a given input file. It is described in more d
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated:
-  <!-- #BeginDate format:fcAm1m -->Saturday, February 12, 2005  9:56<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Monday, April 4, 2005  9:06<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

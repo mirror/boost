@@ -1616,7 +1616,8 @@ position_type pos;
 #endif 
     }
 
-// predefine the __BASE_FILE__ macro which contains the main file name  
+// predefine the __BASE_FILE__ macro which contains the main file name 
+    namespace fs = boost::filesystem; 
     if (string_type(fname) != "<Unknown>") {
     fs::path filename(fname, fs::native);
     

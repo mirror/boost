@@ -173,6 +173,7 @@ bool is_backslash(uchar *p, uchar *end, int &len)
 
 uchar *fill(Scanner *s, uchar *cursor)
 {
+    using namespace std;    // some systems have memcpy etc. in namespace std
     if(!s->eof)
     {
         uchar* p;
@@ -557,7 +558,8 @@ Pound              = "#" | "??=" | "%:";
             }
         }
     "->"            { RET(T_ARROW); }
-
+    "??/"           { RET(T_ANY_TRIGRAPH); }
+    
     ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*        
         { RET(T_IDENTIFIER); }
     

@@ -130,7 +130,7 @@ namespace {
     //
     //  This function compares the real result and the expected one but first 
     //  replaces all occurences of $F in the expected result to the passed
-    //  full filepath.
+    //  full filepath and $V to the current Boost version number.
     //
     ///////////////////////////////////////////////////////////////////////////
     inline bool 
@@ -152,6 +152,12 @@ namespace {
                     pos1 = expected.find_first_of ("$", pos = pos1 + 2);
                     break;
 
+                case 'V':
+                    full_result = full_result + 
+                        expected.substr(pos, pos1-pos) + BOOST_LIB_VERSION;
+                    pos1 = expected.find_first_of ("$", pos = pos1 + 2);
+                    break;
+                    
                 default:
                     full_result = full_result +
                         expected.substr(pos, pos1-pos);
@@ -403,7 +409,8 @@ testwave_app::extract_special_information(std::string const& filename,
     
     boost::wave::language_support const lang_opts = 
         (boost::wave::language_support)(boost::wave::support_cpp | 
-             boost::wave::support_option_no_character_validation);
+             boost::wave::support_option_no_character_validation |
+             boost::wave::support_option_convert_trigraphs);
     
     position_type pos(filename.c_str());
     lexer_type it = lexer_type(instr.begin(), instr.end(), pos, lang_opts);
@@ -492,6 +499,21 @@ bool
 testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
 {
 //  initialise the given context from the parsed options
+#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+// enable C99 mode, if appropriate (implies variadics)
+    if (vm.count("c99")) {
+        ctx.set_language(boost::wave::support_c99);
+    }
+    else if (vm.count("variadics")) {
+    // enable variadics and placemarkers, if appropriate
+        ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
+    }
+#endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+    
+// enable trigraph conversion
+    ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
+        boost::wave::support_option_convert_trigraphs));
+
 //  add include directories to the system include search paths
     if (vm.count("sysinclude")) {
     std::vector<std::string> syspaths = 
@@ -576,18 +598,6 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         }
         ctx.set_max_include_nesting_depth(max_depth);
     }
-    
-#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-// enable C99 mode, if appropriate (implies variadics)
-    if (vm.count("c99")) {
-        ctx.set_language(boost::wave::support_c99);
-    }
-    else if (vm.count("variadics")) {
-    // enable variadics and placemarkers, if appropriate
-        ctx.set_language(boost::wave::enable_variadics(ctx.get_language()));
-    }
-#endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-    
     return true;
 }
 

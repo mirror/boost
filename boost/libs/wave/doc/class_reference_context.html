@@ -174,7 +174,7 @@
 <p><b><a name="constructor" id="constructor"></a>Constructor</b></p>
 <pre>    context(IteratorT <span class="keyword">const</span> &amp;first, 
         IteratorT <span class="keyword">const</span> &amp;last, 
-        <span class="keyword"><!-- #BeginDate format:fcAm1m -->Saturday, March 12, 2005  11:41<!-- #EndDate -->e> 
+        <span class="keyword"><!-- #BeginDate format:fcAm1m -->Monday, April 4, 2005  7:45<!-- #EndDate -->e> 
   <p>Constructs a context object on top of the input stream given by the pair 
     of auxilliary iterators <tt>[first,&nbsp;last)</tt>. The iterators should 
     be at least <tt>forward_iterator</tt> type iterators. The filename parameter 
@@ -390,7 +390,7 @@
 <pre><span class="keyword">    void</span> set_language(<span class="keyword">language_support</span> language);
     <span class="keyword">language_support</span> get_language() <span class="keyword">const</span>;</pre>
 <blockquote> 
-  <p>This functions allow to specify the language mode, in which the <tt>Wave</tt> 
+  <p>This functions allows to specify the language mode, in which the <tt>Wave</tt> 
     library should work. The possible language modes are defined by the enumerated 
     type <tt>language_support</tt>:</p>
   <pre>    <span class="keyword">enum</span> language_support {
@@ -404,8 +404,9 @@
     };</pre>
   <p>When used with <tt>support_variadics</tt> the support for variadics, placemarkers 
     and the <tt>operator _Pragma()</tt> is enabled in normal C++ mode. The <tt>support_c99</tt> 
-     switch to the C99 language support.</p>
-</blockquote>
+     switches to the C99 language support.</p>
+  </blockquote>
+<p><strong>Note:</strong> The set_language function internally resets the list of defined macros, so please be careful not to call it after you have defined your own macros already. </p>
 <p><a name="set_max_include_nesting_depth" id="set_max_include_nesting_depth"></a>set_max_include_nesting_depth<br>
   g et_max_include_nesting_depth</p>
 <pre><span class="keyword">    void</span> set_max_include_nesting_depth(size_t new_depth); 
@@ -430,7 +431,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Saturday, March 12, 2005  11:41<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Monday, April 4, 2005  7:45<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

@@ -12,7 +12,7 @@
 #if !defined(VALIDATE_UNIVERSAL_CHAR_HPP_55F1B811_CD76_4C72_8344_CBC69CF3B339_INCLUDED)
 #define VALIDATE_UNIVERSAL_CHAR_HPP_55F1B811_CD76_4C72_8344_CBC69CF3B339_INCLUDED
 
-#include <boost/spirit/core.hpp>
+#include <boost/assert.hpp>
 
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/cpplexer/cpplexer_exceptions.hpp>
@@ -225,7 +225,7 @@ typename StringT::size_type pos = name.find_first_of('\\');
 
     while (StringT::npos != pos) {
     // the identifier name contains a backslash (must be universal char)
-        BOOST_SPIRIT_ASSERT('u' == name[pos+1] || 'U' == name[pos+1]);
+        BOOST_ASSERT('u' == name[pos+1] || 'U' == name[pos+1]);
         
     StringT uchar_val(name.substr(pos+2, ('u' == name[pos+1]) ? 4 : 8));
     universal_char_type type = 

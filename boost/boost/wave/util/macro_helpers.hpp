@@ -11,6 +11,7 @@
 #if !defined(MACRO_HELPERS_HPP_931BBC99_EBFA_4692_8FBE_B555998C2C39_INCLUDED)
 #define MACRO_HELPERS_HPP_931BBC99_EBFA_4692_8FBE_B555998C2C39_INCLUDED
 
+#include <boost/assert.hpp>
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
@@ -136,7 +137,7 @@ namespace impl {
         using namespace boost::wave;
         typedef typename ContainerT::value_type::string_type string_type;
         
-        BOOST_SPIRIT_ASSERT(0 <= i && i < arguments.size());
+        BOOST_ASSERT(0 <= i && i < arguments.size());
         
         string_type result("\"");
         bool was_whitespace = false;

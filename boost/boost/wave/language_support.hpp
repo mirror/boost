@@ -31,6 +31,7 @@ enum language_support {
     support_option_mask = 0xFF00,
     support_option_preserve_comments = 0x0100,
     support_option_no_character_validation = 0x0200,
+    support_option_convert_trigraphs = 0x0400,
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -140,6 +141,33 @@ enable_preserve_comments(language_support language, bool enable = true)
     if (enable)
         return static_cast<language_support>(language | support_option_preserve_comments);
     return static_cast<language_support>(language & ~support_option_preserve_comments);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  
+//  get_support_options
+//
+//      Set preserve comments support in the language to support
+//
+///////////////////////////////////////////////////////////////////////////////
+inline language_support
+get_support_options(language_support language)
+{
+    return static_cast<language_support>(language & support_option_mask);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  
+//  set_support_options
+//
+//      Set language option (for fine tuning of lexer bahaviour)
+//
+///////////////////////////////////////////////////////////////////////////////
+inline language_support
+set_support_options(language_support language, language_support option)
+{
+    return static_cast<language_support>(
+        (language & ~support_option_mask) | (option & support_option_mask));
 }
 
 ///////////////////////////////////////////////////////////////////////////////

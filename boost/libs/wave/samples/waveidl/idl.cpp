@@ -12,6 +12,7 @@
 
 #include "idl.hpp"                  // global configuration
 
+#include <boost/assert.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -133,7 +134,7 @@ namespace cmd_line_util {
 
             include_paths *p = boost::any_cast<include_paths>(&v);
 
-            BOOST_SPIRIT_ASSERT(p);
+            BOOST_ASSERT(p);
             // Assume only one path per '-I' occurrence.
             string t = tokens[0];
             if (t == "-") {

@@ -185,6 +185,7 @@ boost::wave::cpplexer::re2clex::uchar *
 fill(boost::wave::cpplexer::re2clex::Scanner *s, 
     boost::wave::cpplexer::re2clex::uchar *cursor)
 {
+    using namespace std;    // some systems have memcpy etc. in namespace std
     using namespace boost::wave::cpplexer::re2clex;
 
     if(!s->eof)

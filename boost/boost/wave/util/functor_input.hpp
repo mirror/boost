@@ -11,6 +11,7 @@
 #if !defined(FUNCTOR_INPUT_HPP_ED3A4C21_8F8A_453F_B438_08214FAC106A_INCLUDED)
 #define FUNCTOR_INPUT_HPP_ED3A4C21_8F8A_453F_B438_08214FAC106A_INCLUDED
 
+#include <boost/assert.hpp>
 #include <boost/spirit/iterator/multi_pass.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,7 +104,7 @@ struct functor_input {
 
         void advance_input()
         {
-            BOOST_SPIRIT_ASSERT(0 != data);
+            BOOST_ASSERT(0 != data);
             data->curtok = (data->ftor)();
             data->was_initialized = true;
         }
@@ -116,7 +117,7 @@ struct functor_input {
 
         FunctorT& get_functor() const
         {
-            BOOST_SPIRIT_ASSERT(0 != data);
+            BOOST_ASSERT(0 != data);
             return data->ftor;
         }
 

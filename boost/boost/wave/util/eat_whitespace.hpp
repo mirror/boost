@@ -21,6 +21,23 @@ namespace boost {
 namespace wave {
 namespace util {
 
+///////////////////////////////////////////////////////////////////////////////
+template <typename TokenT>
+bool ccomment_has_newline(TokenT const& token)
+{
+    using namespace boost::wave;
+
+    if (T_CCOMMENT == token_id(token)) {
+        if (TokenT::string_type::npos != 
+            token.get_value().find_first_of("\n"))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 template <typename TokenT>
 class eat_whitespace {
 
@@ -69,13 +86,8 @@ eat_whitespace<TokenT>::general(TokenT &token, bool &skipped_newline)
     else if (T_SPACE == id || T_SPACE2 == id || T_CCOMMENT == id) {
         state = &eat_whitespace::whitespace;
 
-        if (T_CCOMMENT == id) {
-            if (TokenT::string_type::npos != 
-                token.get_value().find_first_of("\n"))
-            {
-                skipped_newline = true;
-            }
-        }
+        if (ccomment_has_newline(token)) 
+            skipped_newline = true;
 
         if ((!preserve_comments || T_CCOMMENT != id) && 
             token.get_value().size() > 1)
@@ -106,11 +118,9 @@ eat_whitespace<TokenT>::newline(TokenT &token, bool &skipped_newline)
     }
 
     if (T_CCOMMENT == id) {
-        if (TokenT::string_type::npos != 
-            token.get_value().find_first_of("\n"))
-        {
+        if (ccomment_has_newline(token))
             skipped_newline = true;
-        }
+
         if (preserve_comments) {
             state = &eat_whitespace::general;
             return false;
@@ -130,11 +140,8 @@ eat_whitespace<TokenT>::newline_2nd(TokenT &token, bool &skipped_newline)
     if (T_SPACE == id || T_SPACE2 == id)
         return true;
     if (T_CCOMMENT == id) {
-        if (TokenT::string_type::npos != 
-            token.get_value().find_first_of("\n"))
-        {
+        if (ccomment_has_newline(token))
             skipped_newline = true;
-        }
         return !preserve_comments;
     }
     if (T_NEWLINE != id && T_CPPCOMMENT != id) 
@@ -158,11 +165,8 @@ eat_whitespace<TokenT>::whitespace(TokenT &token, bool &skipped_newline)
     }
     
     if (T_CCOMMENT == id) {
-        if (TokenT::string_type::npos != 
-            token.get_value().find_first_of("\n"))
-        {
+        if (ccomment_has_newline(token))
             skipped_newline = true;
-        }
         return !preserve_comments;
     }
 
