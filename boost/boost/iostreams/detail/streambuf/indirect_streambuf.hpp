@@ -352,7 +352,7 @@ int indirect_streambuf<T, Tr, Alloc, Mode>::sync()
 {
     try { // sync() is no-throw.
         sync_impl();
-        return obj().flush(next_);
+        return obj().flush(next_) ? 0 : -1;
     } catch (std::exception&) { return -1; }
 }
 
