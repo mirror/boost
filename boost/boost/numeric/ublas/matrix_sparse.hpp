@@ -74,23 +74,17 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Assignment
-        template<class D>
-        BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator = (const D &d) {
-            d_ = d;
-            dirty_ = true;
-            return *this;
-        }
         BOOST_UBLAS_INLINE
         sparse_matrix_element &operator = (const sparse_matrix_element &p) {
+        	// Overide the implict copy assignment
             d_ = p.d_;
             dirty_ = true;
             return *this;
         }
-        template<class OM>
+        template<class D>
         BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator = (const sparse_matrix_element<OM> &p) {
-            d_ = value_type (p);
+        sparse_matrix_element &operator = (const D &d) {
+            d_ = d;
             dirty_ = true;
             return *this;
         }
@@ -101,36 +95,10 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
-        BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator += (const sparse_matrix_element &p) {
-            d_ += p.d_;
-            dirty_ = true;
-            return *this;
-        }
-        template<class OM>
-        BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator += (const sparse_matrix_element<OM> &p) {
-            d_ += value_type (p);
-            dirty_ = true;
-            return *this;
-        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_matrix_element &operator -= (const D &d) {
             d_ -= d;
-            dirty_ = true;
-            return *this;
-        }
-        BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator -= (const sparse_matrix_element &p) {
-            d_ -= p.d_;
-            dirty_ = true;
-            return *this;
-        }
-        template<class OM>
-        BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator -= (const sparse_matrix_element<OM> &p) {
-            d_ -= value_type (p);
             dirty_ = true;
             return *this;
         }
@@ -141,19 +109,6 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
-        BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator *= (const sparse_matrix_element &p) {
-            d_ *= p.d_;
-            dirty_ = true;
-            return *this;
-        }
-        template<class OM>
-        BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator *= (const sparse_matrix_element<OM> &p) {
-            d_ *= value_type (p);
-            dirty_ = true;
-            return *this;
-        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_matrix_element &operator /= (const D &d) {
@@ -161,19 +116,19 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
+
+		// Comparison
+        template<class D>
         BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator /= (const sparse_matrix_element &p) {
-            d_ /= p.d_;
-            dirty_ = true;
-            return *this;
+        bool operator == (const D &d) const {
+            return d_ == d;
         }
-        template<class OM>
+        template<class D>
         BOOST_UBLAS_INLINE
-        sparse_matrix_element &operator /= (const sparse_matrix_element<OM> &p) {
-            d_ /= value_type (p);
-            dirty_ = true;
-            return *this;
+        bool operator != (const D &d) const {
+            return d_ != d;
         }
+
 
         // Conversion
         BOOST_UBLAS_INLINE
