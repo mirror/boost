@@ -47,7 +47,7 @@
 #define BOOST_HAS_NRVO
 #endif
 
-#define BOOST_COMPILER "GNU C++ version " BOOST_STRINGIZE(__GNUC__) "." BOOST_STRINGIZE(__GNUC_MINOR__)
+#define BOOST_COMPILER "GNU C++ version " __VERSION__
 
 //
 // versions check:
