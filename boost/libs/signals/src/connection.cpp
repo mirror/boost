@@ -39,7 +39,7 @@ namespace boost {
         typedef std::list<BOOST_SIGNALS_NAMESPACE::detail::bound_object>::iterator iterator;
         for (iterator i = local_con->bound_objects.begin(); 
              i != local_con->bound_objects.end(); ++i) {
-          assert(i->disconnect);
+          assert(i->disconnect != 0);
           i->disconnect(i->obj, i->data);
         }
       }
