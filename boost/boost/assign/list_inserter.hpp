@@ -15,6 +15,8 @@
 # pragma once
 #endif
 
+#include <boost/detail/workaround.hpp>
+
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/config.hpp>
@@ -165,12 +167,12 @@ namespace assign
         list_inserter( Function fun ) : insert_( fun )
         {}
         
-        list_inserter( const list_inserter& r ) : insert_( r.insert_ )
-        {}
-        
         template< class Function2, class Arg >
-        list_inserter( list_inserter<Function2,Arg> r ) 
+        list_inserter( const list_inserter<Function2,Arg>& r ) 
         : insert_( r.fun_private() ) 
+        {}
+
+        list_inserter( const list_inserter& r ) : insert_( r.insert_ )
         {}
 
         list_inserter& operator()()
@@ -195,6 +197,10 @@ namespace assign
         template< class Nullary_function >
         list_inserter& operator=( assign_detail::fun_repeater<Nullary_function> r )
         {
+            //BOOST_STATIC_ASSERT( function_traits<Nullary_function>::arity == 0 );
+            //BOOST_STATIC_ASSERT( is_convertible< BOOST_DEDUCED_TYPENAME function_traits<
+            //                      Nullary_function>::result_type >,T>::value );
+
             return operator,( r );
         }
         
@@ -234,9 +240,16 @@ namespace assign
                 insert_( fun() );
             return *this;
         }
+
         
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
+        template< class T >
+        list_inserter& operator()( const T& t )
+#else        
         template< class T >
         list_inserter& operator()( T t )
+#endif       
         {
             insert_( t );
             return *this;
