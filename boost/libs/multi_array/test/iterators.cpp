@@ -200,7 +200,7 @@ void access(Array& A, const const_array_tag&) {
 
 
 int
-test_main(int, char**)
+test_main(int, char*[])
 {
   return run_generative_tests();
 }
