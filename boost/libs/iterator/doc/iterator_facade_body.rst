@@ -151,14 +151,16 @@ into the temporary iterator ``p+n``, which is destroyed when
 
 Writable iterators built with ``iterator_facade`` implement the
 semantics required by the preferred resolution to `issue 299`_ and
-adopted by proposal n1550_: the result of ``p[n]`` is a proxy object
-containing a copy of ``p+n``, and ``p[n] = x`` is equivalent to ``*(p
-+ n) = x``.  This approach will work properly for any random-access
-iterator regardless of the other details of its implementation.  A
-user who knows more about the implementation of her iterator is free
-to implement an ``operator[]`` which returns an lvalue in the derived
-iterator class; it will hide the one supplied by ``iterator_facade``
-from clients of her iterator.
+adopted by proposal n1550_: the result of ``p[n]`` is an object
+convertible to the iterator's ``value_type``, and ``p[n] = x`` is
+equivalent to ``*(p + n) = x`` (Note: This result object may be
+implemented as a proxy containing a copy of ``p+n``).  This approach
+will work properly for any random-access iterator regardless of the
+other details of its implementation.  A user who knows more about
+the implementation of her iterator is free to implement an
+``operator[]`` that returns an lvalue in the derived iterator
+class; it will hide the one supplied by ``iterator_facade`` from
+clients of her iterator.
 
 .. _n1550: http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html
 

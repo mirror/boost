@@ -22,9 +22,11 @@
 #include <boost/type_traits/add_pointer.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#include <boost/type_traits/is_POD.hpp>
 
 #include <boost/mpl/apply_if.hpp>
 #include <boost/mpl/or.hpp>
+#include <boost/mpl/and.hpp>
 
 #include <boost/iterator/detail/config_def.hpp> // this goes last
 
@@ -182,11 +184,21 @@ namespace boost
         Iterator m_iter;
     };
 
+    template <class Value, class Reference>
+    struct use_operator_brackets_proxy
+      : mpl::and_<
+            // Really we want an is_copy_constructible trait here,
+            // but is_POD will have to suffice in the meantime.
+            boost::is_POD<Value>
+          , iterator_writability_disabled<Value,Reference>
+        >
+    {};
+        
     template <class Iterator, class Value, class Reference>
     struct operator_brackets_result
     {
         typedef typename mpl::if_<
-            iterator_writability_disabled<Value,Reference>
+            use_operator_brackets_proxy<Value,Reference>
           , Value 
           , operator_brackets_proxy<Iterator>
         >::type type;
@@ -387,12 +399,11 @@ namespace boost
       typename detail::operator_brackets_result<Derived,Value,Reference>::type
       operator[](difference_type n) const
       {
-          typedef detail::iterator_writability_disabled<Value,Reference>
-              not_writable;
+          typedef detail::use_operator_brackets_proxy<Value,Reference> use_proxy;
           
           return detail::make_operator_brackets_result<Derived>(
               this->derived() + n
-            , not_writable()
+            , use_proxy()
           );
       }
 

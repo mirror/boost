@@ -11,6 +11,7 @@
 # include <boost/iterator/iterator_traits.hpp>
 # include <boost/type_traits/remove_cv.hpp>
 # include <boost/mpl/apply_if.hpp>
+# include <boost/pointee.hpp>
 
 namespace boost { 
 
@@ -19,7 +20,7 @@ namespace detail
   template <class P>
   struct smart_ptr_reference
   {
-      typedef typename P::element_type& type;
+      typedef typename boost::pointee<P>::type& type;
   };
 }
 

@@ -30,19 +30,8 @@ struct my_ptr {
 BOOST_TT_BROKEN_COMPILER_SPEC(my_ptr)
 BOOST_TT_BROKEN_COMPILER_SPEC(zow)
 
-#ifndef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY
-    
-# define STATIC_ASSERT_SAME_POINTER(P1, P2)                         \
-    STATIC_ASSERT_SAME(                                             \
-        boost::remove_const<boost::remove_pointer<P1>::type>::type  \
-      , boost::remove_const<boost::remove_pointer<P2>::type>::type  \
-    )
-
-#else
-    
-# define STATIC_ASSERT_SAME_POINTER(P1, P2) STATIC_ASSERT_SAME(P1,P2)
-    
-#endif
+// Borland 5.6.4 and earlier drop const all over the place, so this
+// test will fail in the lines marked with (**)
     
 int main()
 {
@@ -50,7 +39,7 @@ int main()
     typedef boost::indirect_iterator<int**> Iter;
     STATIC_ASSERT_SAME(Iter::value_type, int);
     STATIC_ASSERT_SAME(Iter::reference, int&);  
-    STATIC_ASSERT_SAME_POINTER(Iter::pointer, int*);  
+    STATIC_ASSERT_SAME(Iter::pointer, int*);  
     STATIC_ASSERT_SAME(Iter::difference_type, std::ptrdiff_t);
     
     BOOST_STATIC_ASSERT((boost::is_convertible<Iter::iterator_category,
@@ -62,31 +51,26 @@ int main()
     typedef boost::indirect_iterator<int const**> Iter;
     STATIC_ASSERT_SAME(Iter::value_type, int);
     STATIC_ASSERT_SAME(Iter::reference, const int&);
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  // Borland drops const all over the place
-    STATIC_ASSERT_SAME_POINTER(Iter::pointer, const int*);
-#endif 
+    STATIC_ASSERT_SAME(Iter::pointer, const int*);    // (**)
   }
   {
     typedef boost::indirect_iterator<int**, int> Iter;
     STATIC_ASSERT_SAME(Iter::value_type, int);
     STATIC_ASSERT_SAME(Iter::reference, int&);  
-    STATIC_ASSERT_SAME_POINTER(Iter::pointer, int*);  
+    STATIC_ASSERT_SAME(Iter::pointer, int*);  
   }
   {
     typedef boost::indirect_iterator<int**, const int> Iter;
     STATIC_ASSERT_SAME(Iter::value_type, int);
     STATIC_ASSERT_SAME(Iter::reference, const int&);  
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  // Borland drops const all over the place
-    STATIC_ASSERT_SAME_POINTER(Iter::pointer, const int*);
-#endif 
+    STATIC_ASSERT_SAME(Iter::pointer, const int*);    // (**)
   }
   {
     typedef boost::indirect_iterator<my_ptr*> Iter;
     STATIC_ASSERT_SAME(Iter::value_type, zow);
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  // Borland drops const all over the place
-    STATIC_ASSERT_SAME(Iter::reference, const zow&);
-    STATIC_ASSERT_SAME_POINTER(Iter::pointer, const zow*);  
-#endif 
+    STATIC_ASSERT_SAME(Iter::reference, const zow&);  // (**)
+    STATIC_ASSERT_SAME(Iter::pointer, const zow*);    // (**)
+    
     STATIC_ASSERT_SAME(Iter::difference_type, std::ptrdiff_t);
     
     BOOST_STATIC_ASSERT((boost::is_convertible<Iter::iterator_category,
@@ -98,7 +82,7 @@ int main()
     typedef boost::indirect_iterator<char**, int, std::random_access_iterator_tag, long&, short> Iter;
     STATIC_ASSERT_SAME(Iter::value_type, int);
     STATIC_ASSERT_SAME(Iter::reference, long&);  
-    STATIC_ASSERT_SAME_POINTER(Iter::pointer, int*);  
+    STATIC_ASSERT_SAME(Iter::pointer, int*);  
     STATIC_ASSERT_SAME(Iter::difference_type, short);  
   }
   return 0;

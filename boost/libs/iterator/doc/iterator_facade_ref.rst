@@ -245,10 +245,13 @@ __ `operator arrow`_
 
 *unspecified* ``operator[](difference_type n) const;``
 
-:Returns: an object convertible to ``reference`` and holding a copy
-     *p* of ``*static_cast<Derived const*>(this) + n`` such that, for a constant object ``v`` of type
-     ``value_type``, ``(*static_cast<Derived const*>(this))[n] = v`` is equivalent
-     to ``p = v``.
+:Returns: an object convertible to ``value_type``. For constant
+     objects ``v`` of type ``value_type``, and ``n`` of type
+     ``difference_type``, and reference ``p`` equal to
+     ``*static_cast<Derived const*>(this)``, ``(*this)[n] = v`` is
+     equivalent to ``*(p+ n) = v``, and ``static_cast<value_type
+     const&>((*this)[n])`` is equivalent to
+     ``static_cast<value_type const&>(*(p+n))`` 
 
 
 
