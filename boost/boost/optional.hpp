@@ -240,13 +240,25 @@ inline
 bool operator != ( optional<T> const& x, optional<T> const& y )
 { return !( x == y ) ; }
 
+
+//
+// The following swap implementation follows the GCC workaround as found in
+//  "boost/detail/compressed_pair.hpp"
+//
+namespace optional_detail {
+
+#ifdef __GNUC__
+   // workaround for GCC (JM):
+   using std::swap;
+#endif
+
 // optional's swap:
 // If both are initialized, calls swap(T&, T&), with whatever exception guarantess are given there.
 // If only one is initialized, calls I.reset() and U.reset(*I), with the Basic Guarantee
 // If both are uninitialized, do nothing (no-throw)
 template<class T>
 inline
-void swap ( optional<T>& x, optional<T>& y )
+void optional_swap ( optional<T>& x, optional<T>& y )
 {
   if ( !x && !!y )
   {
@@ -260,10 +272,20 @@ void swap ( optional<T>& x, optional<T>& y )
   }
   else if ( !!x && !!y )
   {
+#ifndef __GNUC__
     using std::swap ;
+#endif
     swap(*x,*y);
   }
 }
+
+} // namespace optional_detail
+
+template<class T> inline void swap ( optional<T>& x, optional<T>& y )
+{
+  optional_detail::optional_swap(x,y);
+}
+
 
 } // namespace boost
 
