@@ -15,10 +15,7 @@
 		<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" WIDTH="277" HEIGHT="86">
 	</td>
 	<td align="center">
-		<table border="0">
-			<tr><td nowrap><h1>bind.hpp</h1></td></tr>
-			<tr><td align="right" nowrap><small>&nbsp;1.02.0001 (2001-10-18)</small></td></tr>
-		</table>
+		<h1>bind.hpp</h1>
 	</td>
 </tr>
 <tr>
@@ -32,6 +29,8 @@
 <li><a href="bind_test.cpp">bind_test.cpp</a> (test)</li>
 <li><a href="bind_as_compose.cpp">bind_as_compose.cpp</a> (function composition example)</li>
 <li><a href="bind_visitor.cpp">bind_visitor.cpp</a> (visitor example)</li>
+<li><a href="bind_stdcall_test.cpp">bind_stdcall_test.cpp</a> (test with __stdcall functions)</li>
+<li><a href="bind_stdcall_mf_test.cpp">bind_stdcall_mf_test.cpp</a> (test with __stdcall member functions)</li>
 </ul>
 
 <h2>Purpose</h2>
@@ -628,6 +627,38 @@ work for function pointers, member function pointers or function objects that
 return <b>void</b> if the compiler does not support the feature. A possible
 workaround is to change the return type of the function object in question
 from <b>void</b> to <b>int</b> and return a dummy value of 0.
+</p>
+
+<h3>__stdcall support</h3>
+
+<p>
+Some platforms allow several types of (member) functions that differ by their
+<b>calling convention</b> (the rules by which the function is invoked: how
+are arguments passed, how is the return value handled, and who cleans up the
+stack - if any.)
+</p>
+
+<p>
+For example, Windows API functions and COM interface member functions use a
+calling convention known as <b>__stdcall</b>.
+</p>
+
+<p>
+To use <b>bind</b> with <b>__stdcall</b> functions, <b>#define</b> the macro
+<b>BOOST_BIND_ENABLE_STDCALL</b> before including <b>&lt;boost/bind.hpp&gt;</b>.
+</p>
+
+<p>
+To use <b>bind</b> with <b>__stdcall</b> <b>member</b> functions, <b>#define</b> the
+macro <b>BOOST_MEM_FN_ENABLE_STDCALL</b> before including <b>&lt;boost/bind.hpp&gt;</b>.
+</p>
+
+<p>
+[Note: this is a non-portable extension. It is not part of the interface.]
+</p>
+
+<p>
+[Note: Some compilers provide only minimal support for the <b>__stdcall</b> keyword.]
 </p>
 
 <h3>MSVC specific problems and workarounds</h3>

@@ -15,10 +15,7 @@
 		<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" WIDTH="277" HEIGHT="86">
 	</td>
 	<td align="center">
-		<table border="0">
-			<tr><td nowrap><h1>mem_fn.hpp</h1></td></tr>
-			<tr><td align="right" nowrap><small>&nbsp;1.02.0001 (2001-08-30)</small></td></tr>
-		</table>
+		<h1>mem_fn.hpp</h1>
 	</td>
 </tr>
 <tr>
@@ -30,6 +27,7 @@
 <ul>
 <li><a href="../../boost/mem_fn.hpp">mem_fn.hpp</a> (implementation)
 <li><a href="mem_fn_test.cpp">mem_fn_test.cpp</a> (test)
+<li><a href="mem_fn_stdcall_test.cpp">mem_fn_stdcall_test.cpp</a> (test with __stdcall member functions)
 </ul>
 
 <h2>Purpose</h2>
@@ -242,6 +240,35 @@ This is not an inherent limitation of the design, but an implementation
 detail.
 </p>
 
+<h3>__stdcall support</h3>
+
+<p>
+Some platforms allow several types of member functions that differ by their
+<b>calling convention</b> (the rules by which the function is invoked: how
+are arguments passed, how is the return value handled, and who cleans up the
+stack - if any.)
+</p>
+
+<p>
+For example, Windows API functions and COM interface member functions use a
+calling convention known as <b>__stdcall</b>.
+</p>
+
+<p>
+To use <b>mem_fn</b> with <b>__stdcall</b> member functions, <b>#define</b>
+the macro <b>BOOST_MEM_FN_ENABLE_STDCALL</b> before including, directly or
+indirectly, <b>&lt;boost/mem_fn.hpp&gt;</b>.
+</p>
+
+<p>
+[Note: this is a non-portable extension. It is not part of the interface.]
+</p>
+
+<p>
+[Note: Some compilers provide only minimal support for the <b>__stdcall</b> keyword.]
+</p>
+
+
 <h2>Acknowledgements</h2>
 
 <p>
@@ -256,6 +283,9 @@ Richard Crossley, Jens Maurer, Ed Brey, and others. Review manager
 was Darin Adler.
 </p>
 
+<p>
+Steve Anichini pointed out that COM interfaces use <b>__stdcall</b>.
+</p>
 
 <p><br><br><br><small>Copyright &copy; 2001 by Peter Dimov and Multi Media
 Ltd. Permission to copy, use, modify, sell and distribute this document is
