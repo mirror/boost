@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
 <title>New Iterator Concepts</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -107,7 +107,7 @@ geared towards iterator traversal (hence the category names), while
 requirements that address value access sneak in at various places. The
 following table gives a summary of the current value access
 requirements in the iterator categories.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="31%" />
 <col width="69%" />
@@ -364,7 +364,7 @@ for value type <tt class="literal"><span class="pre">T</span></tt> if, in additi
 Copy Constructible, the following expressions are valid and respect
 the stated semantics. <tt class="literal"><span class="pre">U</span></tt> is the type of any specified member of
 type <tt class="literal"><span class="pre">T</span></tt>.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="30%" />
 <col width="20%" />
@@ -409,7 +409,7 @@ non-cv-qualified type</td>
 if, in addition to <tt class="literal"><span class="pre">X</span></tt> being Copy Constructible, the following
 expressions are valid and respect the stated semantics.  Writable
 Iterators have an associated <em>set of value types</em>.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="37%" />
 <col width="21%" />
@@ -438,7 +438,7 @@ value types of <tt class="literal"><span class="pre">X</span></tt></td>
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Swappable Iterator</em> concept
 if, in addition to <tt class="literal"><span class="pre">X</span></tt> being Copy Constructible, the following
 expressions are valid and respect the stated semantics.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="37%" />
 <col width="19%" />
@@ -470,7 +470,7 @@ exchanged</td>
 <p>The <em>Lvalue Iterator</em> concept adds the requirement that the return
 type of <tt class="literal"><span class="pre">operator*</span></tt> type be a reference to the value type of the
 iterator.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="42%" />
 <col width="14%" />
@@ -512,7 +512,7 @@ type <tt class="literal"><span class="pre">X</span></tt>, <tt class="literal"><s
 concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> being Assignable and Copy
 Constructible, the following expressions are valid and respect the
 stated semantics.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="39%" />
 <col width="37%" />
@@ -557,7 +557,7 @@ incrementable_traversal_tag for consistency. -->
 <p>A class or built-in type <tt class="literal"><span class="pre">X</span></tt> models the <em>Single Pass Iterator</em>
 concept if the following expressions are valid and respect the stated
 semantics.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="36%" />
 <col width="33%" />
@@ -606,7 +606,7 @@ single_pass_traversal_tag for consistency -->
 concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> meeting the requirements of Single
 Pass Iterator, the following expressions are valid and respect the
 stated semantics.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="38%" />
 <col width="34%" />
@@ -653,7 +653,7 @@ forward_traversal_tag for consistency -->
 Iterator</em> concept if, in addition to <tt class="literal"><span class="pre">X</span></tt> meeting the requirements of
 Forward Traversal Iterator, the following expressions are valid and
 respect the stated semantics.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="35%" />
 <col width="44%" />
@@ -709,7 +709,7 @@ Iterator</em> concept if the following expressions are valid and respect
 the stated semantics.  In the table below, <tt class="literal"><span class="pre">Distance</span></tt> is
 <tt class="literal"><span class="pre">iterator_traits&lt;X&gt;::difference_type</span></tt> and <tt class="literal"><span class="pre">n</span></tt> represents a
 constant object of type <tt class="literal"><span class="pre">Distance</span></tt>.</p>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="31%" />
 <col width="35%" />
@@ -875,10 +875,10 @@ LocalWords:  incrementable xxx min prev inplace png oldeqnew AccessTag struct
 LocalWords:  TraversalTag typename lvalues DWA Hmm JGS mis enum -->
 </div>
 </div>
-<hr class="footer"/>
+<hr class="footer" />
 <div class="footer">
 <a class="reference" href="new-iter-concepts.rst">View document source</a>.
-Generated on: 2004-01-13 00:29 UTC.
+Generated on: 2004-01-13 14:26 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
