@@ -50,6 +50,7 @@
 #include "boost/preprocessor/repeat.hpp"
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/add_const.hpp"
+#include "boost/type_traits/has_nothrow_copy.hpp"
 #include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_same.hpp"
 #include "boost/variant/static_visitor.hpp"
@@ -1266,21 +1267,19 @@ private: // helpers, for modifiers (below)
 
     private: // helpers, for visitor interfaces (below)
 
-        template <typename T>
+        template <typename T, typename B>
         void assign_impl(
               const T& operand
-            , mpl::true_// has_nothrow_move_constructor
+            , mpl::true_// has_nothrow_copy
+            , B// has_nothrow_move_constructor
             )
         {
-            // Attempt to make a temporary copy...
-            T temp(operand);
-
-            // ...and upon success destroy the target's active storage...
+            // Destroy the target's active storage...
             target_.destroy_content(); // nothrow
 
-            // ...move the temporary copy into the target's storage1...
-            new(target_.storage1())  // nothrow
-                T( detail::variant::move(temp) );
+            // ...copy the source content into the target's storage1...
+            new(target_.storage1())
+                T( operand ); // nothrow
 
             // ...and activate the target's storage1:
             target_.activate_storage1(source_which_); // nothrow
@@ -1289,6 +1288,28 @@ private: // helpers, for modifiers (below)
         template <typename T>
         void assign_impl(
               const T& operand
+            , mpl::false_// has_nothrow_copy
+            , mpl::true_// has_nothrow_move_constructor
+            )
+        {
+            // Attempt to make a temporary copy (so as to move it below)...
+            T temp(operand);
+
+            // ...and upon success destroy the target's active storage...
+            target_.destroy_content(); // nothrow
+
+            // ...move the temporary copy into the target's storage1...
+            new(target_.storage1())
+                T( detail::variant::move(temp) ); // nothrow
+
+            // ...and activate the target's storage1:
+            target_.activate_storage1(source_which_); // nothrow
+        }
+
+        template <typename T>
+        void assign_impl(
+              const T& operand
+            , mpl::false_// has_nothrow_copy
             , mpl::false_// has_nothrow_move_constructor
             )
         {
@@ -1313,12 +1334,15 @@ private: // helpers, for modifiers (below)
             BOOST_VARIANT_AUX_RETURN_VOID_TYPE
         operator()(const T& operand)
         {
+            typedef typename has_nothrow_copy<T>::type
+                nothrow_copy;
             typedef typename detail::variant::has_nothrow_move_constructor<T>::type
-                has_nothrow_move_constructor;
+                nothrow_move_constructor;
 
             assign_impl(
                   operand
-                , has_nothrow_move_constructor()
+                , nothrow_copy()
+                , nothrow_move_constructor()
                 );
 
             BOOST_VARIANT_AUX_RETURN_VOID;
@@ -1411,8 +1435,8 @@ private: // helpers, for modifiers, cont. (below)
             catch(...)
             {
                 // In case of failure, restore rhs's old contents...
-                new(boost::addressof(rhs_content))     // nothrow
-                    T( detail::variant::move(rhs_old_content) );
+                new(boost::addressof(rhs_content))
+                    T( detail::variant::move(rhs_old_content) ); // nothrow
 
                 // ...and rethrow:
                 throw;
@@ -1422,8 +1446,8 @@ private: // helpers, for modifiers, cont. (below)
             lhs_.destroy_content(); // nothrow
 
             // ...move rhs's old contents to lhs's storage1...
-            new(lhs_.storage1())   // nothrow
-                T( detail::variant::move(rhs_old_content) );
+            new(lhs_.storage1())
+                T( detail::variant::move(rhs_old_content) ); // nothrow
 
             // ...and activate lhs's storage1:
             lhs_.activate_storage1(rhs_old_which); // nothrow
