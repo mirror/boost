@@ -817,6 +817,10 @@ void weak_ptr_constructor()
     }
 }
 
+#if defined(BOOST_DINKUMWARE_STDLIB) && (BOOST_DINKUMWARE_STDLIB < 306)
+#  define BOOST_OLD_AUTO_PTR
+#endif
+
 void auto_ptr_constructor()
 {
     {
@@ -940,7 +944,7 @@ void auto_ptr_constructor()
         BOOST_TEST(pi.unique());
         BOOST_TEST(*pi == 7);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -956,7 +960,7 @@ void auto_ptr_constructor()
         BOOST_TEST(pi.unique());
         BOOST_TEST(*pi == 7);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -971,7 +975,7 @@ void auto_ptr_constructor()
         BOOST_TEST(pv.use_count() == 1);
         BOOST_TEST(pv.unique());
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -986,7 +990,7 @@ void auto_ptr_constructor()
         BOOST_TEST(pv.use_count() == 1);
         BOOST_TEST(pv.unique());
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -1004,7 +1008,7 @@ void auto_ptr_constructor()
         BOOST_TEST(px.unique());
         BOOST_TEST(X::instances == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -1022,7 +1026,7 @@ void auto_ptr_constructor()
         BOOST_TEST(px.unique());
         BOOST_TEST(X::instances == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -1040,7 +1044,7 @@ void auto_ptr_constructor()
         BOOST_TEST(pv.unique());
         BOOST_TEST(X::instances == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -1058,7 +1062,7 @@ void auto_ptr_constructor()
         BOOST_TEST(pv.unique());
         BOOST_TEST(X::instances == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -1078,7 +1082,7 @@ void auto_ptr_constructor()
         BOOST_TEST(X::instances == 1);
         BOOST_TEST(Y::instances == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -1098,7 +1102,7 @@ void auto_ptr_constructor()
         BOOST_TEST(X::instances == 1);
         BOOST_TEST(Y::instances == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p.get() == 0);
 #endif
     }
@@ -1407,7 +1411,7 @@ void auto_ptr_assignment()
         BOOST_TEST(p1.get() == p);
         BOOST_TEST(p1.use_count() == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p3.get() == 0);
 #endif
 
@@ -1436,7 +1440,7 @@ void auto_ptr_assignment()
         BOOST_TEST(p1.get() == p);
         BOOST_TEST(p1.use_count() == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p3.get() == 0);
 #endif
 
@@ -1473,7 +1477,7 @@ void auto_ptr_assignment()
         BOOST_TEST(X::instances == 1);
         BOOST_TEST(Y::instances == 1);
 
-#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
+#if !defined(BOOST_OLD_AUTO_PTR)
         BOOST_TEST(p3.get() == 0);
 #endif
 
