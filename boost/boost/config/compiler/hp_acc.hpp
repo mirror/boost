@@ -25,6 +25,7 @@
 
 #if (__HP_aCC <= 33900)
 #    define BOOST_NO_TEMPLATE_TEMPLATES
+#    define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #endif 
 
 #define BOOST_COMPILER "HP aCC version " BOOST_STRINGIZE(__HP_aCC)
