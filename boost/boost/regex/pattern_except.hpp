@@ -28,7 +28,7 @@
 namespace boost{
 
 #ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc
+   #pragma option push -a8 -b -Vx -Ve -pc
 #endif
 
 class BOOST_REGEX_DECL bad_pattern : public std::runtime_error

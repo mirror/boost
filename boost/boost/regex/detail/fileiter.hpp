@@ -81,7 +81,7 @@ namespace boost{
    namespace re_detail{
 
 #ifdef __BORLANDC__
-    #pragma option push -a4 -b -Ve -pc
+   #pragma option push -a8 -b -Vx -Ve -pc
 #endif
 
 struct _fi_find_data

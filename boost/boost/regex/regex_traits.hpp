@@ -30,7 +30,7 @@
 namespace boost{
 
 #ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc
+   #pragma option push -a8 -b -Vx -Ve -pc
 #endif
 
 template <class charT>
@@ -123,6 +123,10 @@ struct BOOST_REGEX_DECL regex_traits_base
 
       syntax_max = 54
    };
+#ifdef __BORLANDC__
+private:
+   char dummy_member;
+#endif
 };
 
 struct BOOST_REGEX_DECL c_traits_base : public regex_traits_base

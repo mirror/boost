@@ -26,7 +26,7 @@
 
 namespace boost{
 #ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc -w-8004
+   #pragma option push -a8 -b -Vx -Ve -pc  -w-8004
 #endif
    namespace re_detail{
 

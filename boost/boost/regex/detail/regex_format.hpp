@@ -40,7 +40,7 @@ enum format_flags_t{
 namespace re_detail{
 
 #ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc -w-8037
+   #pragma option push -a8 -b -Vx -Ve -pc  -w-8037
 #endif
 
 template <class O, class I>

@@ -40,6 +40,8 @@ namespace boost{
 
 #ifdef __BORLANDC__
 
+#pragma option push -a8 -b -Vx -Ve -pc
+
 #  ifndef BOOST_REGEX_INSTANTIATE
 #     pragma option push -Jgx
 #  endif
@@ -54,6 +56,8 @@ template class BOOST_REGEX_DECL match_results<std::basic_string<BOOST_REGEX_CHAR
 #  ifndef BOOST_REGEX_INSTANTIATE
 #     pragma option pop
 #  endif
+
+#pragma option pop
 
 #elif defined(BOOST_MSVC)
 

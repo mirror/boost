@@ -27,7 +27,7 @@
 #include <boost/regex/config.hpp>
 
 #ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc
+   #pragma option push -a8 -b -Vx -Ve -pc
 #endif
 
 /* include these defs only for POSIX compatablity */
