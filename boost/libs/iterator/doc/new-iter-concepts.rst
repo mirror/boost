@@ -6,7 +6,7 @@
 :Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@ive.uni-hannover.de
 :organization: `Boost Consulting`_, Indiana University `Open Systems Lab`_, University of Hanover `Institute for Transport Railway Operation and Construction`_
 :date: $Date$
-:Number: N1477=03-0060
+:Number: **This document is a revised version of the official** N1477=03-0060 
 :copyright: Copyright Dave Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com

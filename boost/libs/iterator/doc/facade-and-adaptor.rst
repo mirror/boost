@@ -8,7 +8,7 @@
                Lab`_, University of Hanover `Institute for Transport
                Railway Operation and Construction`_
 :date: $Date$
-:Number: N1476=03-0059
+:Number: **This document is a revised version of the official** N1476=03-0059
 :copyright: Copyright Dave Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
@@ -202,28 +202,40 @@ objects for several reasons:
      iterators, and a separate ``iterator_adaptor`` layer would be
      impossible.
 
+Usage
+-----
+
 The user of ``iterator_facade`` derives his iterator class from an
-instantiation of ``iterator_facade`` and defines member functions
-implementing the core behaviors.  The following table describes
+instantiation of ``iterator_facade`` which takes the derived iterator
+class as the first template parameter.  The order of the other
+template parameters to ``iterator_facade`` have been carefully chosen
+to take advantage of useful defaults.  For example, when defining a
+constant lvalue iterator, the user can pass a const-qualified version
+of the iterator's ``value_type`` as ``iterator_facade``\ 's ``Value``
+parameter and omit the ``Reference`` parameter which follows.
+
+The derived iterator class must define member functions implementing
+the iterator's core behaviors.  The following table describes
 expressions which are required to be valid depending on the category
 of the derived iterator type.  These member functions are described
-briefly below and in more detail in the `iterator facade requirements`_.
+briefly below and in more detail in the `iterator facade
+requirements`_.
 
-   +----------------------------------------+-------------------------------------------+
-   | Expression                             | Effects                                   |
-   +========================================+===========================================+
-   | ``i.dereference()``                    | Access the value referred to              |
-   +----------------------------------------+-------------------------------------------+
-   | ``i.equal(j)``                         | Compare for equality with ``j``           |
-   +----------------------------------------+-------------------------------------------+
-   | ``i.increment()``                      | Advance by one position                   |
-   +----------------------------------------+-------------------------------------------+
-   | ``i.decrement()``                      | Retreat by one position                   |
-   +----------------------------------------+-------------------------------------------+
-   | ``i.advance(n)``                       | Advance by ``n`` positions                |
-   +----------------------------------------+-------------------------------------------+
-   | ``i.distance_to(j)``                   | Measure the distance to ``j``             |
-   +----------------------------------------+-------------------------------------------+
+   +------------------------+-------------------------------+
+   |Expression              |Effects                        |
+   +========================+===============================+
+   |``i.dereference()``     |Access the value referred to   |
+   +------------------------+-------------------------------+
+   |``i.equal(j)``          |Compare for equality with ``j``|
+   +------------------------+-------------------------------+
+   |``i.increment()``       |Advance by one position        |
+   +------------------------+-------------------------------+
+   |``i.decrement()``       |Retreat by one position        |
+   +------------------------+-------------------------------+
+   |``i.advance(n)``        |Advance by ``n`` positions     |
+   +------------------------+-------------------------------+
+   |``i.distance_to(j)``    |Measure the distance to ``j``  |
+   +------------------------+-------------------------------+
 
 .. Should we add a comment that a zero overhead implementation of iterator_facade
    is possible with proper inlining?
@@ -236,8 +248,9 @@ type ``X`` is meant to be automatically interoperate with another
 iterator type ``Y`` (as with constant and mutable iterators) then
 there must be an implicit conversion from ``X`` to ``Y`` or from ``Y``
 to ``X`` (but not both), typically implemented as a conversion
-constructor. Also, if the iterator is to model Forward Traversal
-Iterator, a default constructor is required.
+constructor. Finally, if the iterator is to model Forward Traversal
+Iterator or a more-refined iterator concept, a default constructor is
+required.
 
 
 
@@ -306,6 +319,8 @@ from clients of her iterator.
 
 .. _issue 299: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#299
 
+.. _`operator arrow`:
+
 ``operator->``
 ==============
 
@@ -355,7 +370,7 @@ implementation.  Finally, ``use_default`` is not left unspecified
 because specification helps to highlight that the ``Reference``
 template parameter may not always be identical to the iterator's
 ``reference`` type, and will keep users making mistakes based on that
-assumtion.
+assumption.
 
 Specialized Adaptors
 ====================
@@ -480,27 +495,27 @@ and associated types, to be supplied by a derived iterator class.
 Class template ``iterator_facade``
 ----------------------------------
 
-::
+.. parsed-literal::
 
   template <
       class Derived
     , class Value
     , class AccessCategory
     , class TraversalCategory
-    , class Reference  = /* see below */
+    , class Reference  = /* see below__ \*/
     , class Difference = ptrdiff_t
   >
   class iterator_facade {
   public:
       typedef remove_cv<Value>::type value_type;
       typedef Reference reference;
-      typedef /* see description of operator-> */ pointer;
+      typedef /* see `description of operator->`__ \*/ pointer;
       typedef Difference difference_type;
       typedef iterator_tag<AccessCategory, TraversalCategory> iterator_category;
 
-      reference operator*() const;
-      /* see below */ operator->() const;
-      /* impl defined */ operator[](difference_type n) const;
+      reference operator\*() const;
+      /* see below__ \*/ operator->() const;
+      /* see below__ \*/ operator[](difference_type n) const;
       Derived& operator++();
       Derived operator++(int);
       Derived& operator--();
@@ -566,6 +581,14 @@ Class template ``iterator_facade``
                      typename Derived::difference_type n)
 
 
+__ `iterator facade requirements`_
+
+__ `operator arrow`_
+
+__ `operator arrow`_
+
+__ brackets_
+
 [*Note:* The ``enable_if_interoperable`` template used above is for exposition
 purposes. The member operators should be only be in an overload set
 provided the derived types ``Dr1`` and ``Dr2`` are interoperable, by
@@ -602,30 +625,35 @@ object of a single pass iterator type interoperable with X, and ``z``
 is a constant object of a random access traversal iterator type
 interoperable with ``X``.
 
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-| Expression                             | Return Type                            |    Assertion/Note/Precondition/Postcondition    | Required to implement Iterator Concept(s) |
-|                                        |                                        |                                                 |                                           |
-+========================================+========================================+=================================================+===========================================+
-| ``c.dereference()``                    | ``X::reference``                       |                                                 | Readable Iterator, Writable Iterator      |
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-| ``c.equal(b)``                         | convertible to bool                    |true iff ``b`` and ``c`` are equivalent.         | Single Pass Iterator                      |
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-| ``c.equal(y)``                         | convertible to bool                    |true iff ``c`` and ``y`` refer to the same       | Single Pass Iterator                      |
-|                                        |                                        |position.  Implements ``c == y`` and ``c != y``. |                                           |
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-| ``a.advance(n)``                       | unused                                 |                                                 | Random Access Traversal Iterator          |
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-| ``a.increment()``                      | unused                                 |                                                 | Incrementable Iterator                    |
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-| ``a.decrement()``                      | unused                                 |                                                 | Bidirectional Traversal Iterator          |
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-| ``c.distance_to(b)``                   | convertible to X::difference_type      | equivalent to ``distance(c, b)``                | Random Access Traversal Iterator          |
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-| ``c.distance_to(z)``                   | convertible to X::difference_type      |equivalent to ``distance(c, z)``.  Implements ``c| Random Access Traversal Iterator          |
-|                                        |                                        |- z``, ``c < z``, ``c <= z``, ``c > z``, and ``c |                                           |
-|                                        |                                        |>= c``.                                          |                                           |
-+----------------------------------------+----------------------------------------+-------------------------------------------------+-------------------------------------------+
-
++--------------------+-------------------+-------------------------------------+---------------------------+
+|Expression          |Return Type        |Assertion/Note                       |Required to implement      |
+|                    |                   |                                     |Iterator Concept(s)        |
++====================+===================+=====================================+===========================+
+|``c.dereference()`` |``X::reference``   |                                     |Readable Iterator, Writable|
+|                    |                   |                                     |Iterator                   |
++--------------------+-------------------+-------------------------------------+---------------------------+
+|``c.equal(b)``      |convertible to bool|true iff ``b`` and ``c`` are         |Single Pass Iterator       |
+|                    |                   |equivalent.                          |                           |
++--------------------+-------------------+-------------------------------------+---------------------------+
+|``c.equal(y)``      |convertible to bool|true iff ``c`` and ``y`` refer to the|Single Pass Iterator       |
+|                    |                   |same position.  Implements ``c == y``|                           |
+|                    |                   |and ``c != y``.                      |                           |
++--------------------+-------------------+-------------------------------------+---------------------------+
+|``a.advance(n)``    |unused             |                                     |Random Access Traversal    |
+|                    |                   |                                     |Iterator                   |
++--------------------+-------------------+-------------------------------------+---------------------------+
+|``a.increment()``   |unused             |                                     |Incrementable Iterator     |
++--------------------+-------------------+-------------------------------------+---------------------------+
+|``a.decrement()``   |unused             |                                     |Bidirectional Traversal    |
+|                    |                   |                                     |Iterator                   |
++--------------------+-------------------+-------------------------------------+---------------------------+
+|``c.distance_to(b)``|convertible to     |equivalent to ``distance(c, b)``     |Random Access Traversal    |
+|                    |X::difference_type |                                     |Iterator                   |
++--------------------+-------------------+-------------------------------------+---------------------------+
+|``c.distance_to(z)``|convertible to     |equivalent to ``distance(c, z)``.    |Random Access Traversal    |
+|                    |X::difference_type |Implements ``c - z``, ``c < z``, ``c |Iterator                   |
+|                    |                   |<= z``, ``c > z``, and ``c >= c``.   |                           |
++--------------------+-------------------+-------------------------------------+---------------------------+
 
 .. We should explain more about how the
    functions in the interface of iterator_facade
@@ -644,7 +672,9 @@ through member functions of class ``iterator_core_access``.
 
 :Returns: ``static_cast<Derived const*>(this)->dereference()``
 
-*see below* ``operator->() const;``
+``operator->() const;`` (see below__)
+
+__ `operator arrow`_
 
 :Returns: If ``X::reference`` is a reference type, returns an object
   of type ``X::pointer`` equal to::
@@ -659,6 +689,8 @@ through member functions of class ``iterator_core_access``.
   ``X`` is implicitly convertible to ``writable_iterator_tag``, and
   ``Value const*`` otherwise.
 
+
+.. _brackets:
 
 *unspecified* ``operator[](difference_type n) const;``
 
@@ -765,7 +797,7 @@ core interface functions of ``iterator_facade`` are redefined in the
 Class template ``iterator_adaptor``
 -----------------------------------
 
-::
+.. parsed-literal::
   
   template <
       class Derived
@@ -776,7 +808,7 @@ Class template ``iterator_adaptor``
     , class Difference = use_default
   >
   class iterator_adaptor 
-    : public iterator_facade<Derived, /* see details ...*/>
+    : public iterator_facade<Derived, /* see details__ ...\*/>
   {
       friend class iterator_core_access;
    public:
@@ -808,7 +840,7 @@ Class template ``iterator_adaptor``
       Base m_iterator;
   };
 
-
+__ :
 
 ``iterator_adaptor`` requirements
 ---------------------------------
