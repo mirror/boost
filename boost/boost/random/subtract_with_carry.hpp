@@ -125,12 +125,15 @@ public:
     int short_index = k - short_lag;
     if(short_index < 0)
       short_index += long_lag;
-    IntType delta = x[short_index] - x[k] - carry;
-    if(delta < 0) {
-      delta += modulus;
-      carry = 1;
-    } else {
+    IntType delta;
+    if (x[short_index] >= x[k] + carry) {
+      // x(n) >= 0
+      delta =  x[short_index] - (x[k] + carry);
       carry = 0;
+    } else {
+      // x(n) < 0
+      delta = modulus - (x[k] + carry) + x[short_index];
+      carry = 1;
     }
     x[k] = delta;
     ++k;
