@@ -18,7 +18,7 @@
 #include "boost/type_traits/add_reference.hpp"
 #include "boost/type_traits/ice.hpp"
 #include "boost/type_traits/is_arithmetic.hpp"
-#ifndef BOOST_NO_SFINAE
+#ifndef BOOST_NO_IS_ABSTRACT
 #include "boost/type_traits/is_abstract.hpp"
 #endif
 
@@ -282,7 +282,7 @@ struct is_convertible_impl_dispatch_base
    typedef is_convertible_impl_select< 
       ::boost::is_arithmetic<From>::value, 
       ::boost::is_arithmetic<To>::value,
-#ifndef BOOST_NO_SFINAE
+#ifndef BOOST_NO_IS_ABSTRACT
       ::boost::is_abstract<To>::value
 #else
       false
