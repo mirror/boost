@@ -9,8 +9,8 @@
 
 //
 // Note that some platforms put these prototypes in the wrong headers,
-// we have to include prretty well all the string headers on the chance that
-// one of them will contain what we want!!
+// we have to include pretty well all the string headers on the chance that
+// one of them will contain what we want!
 //
 #include <cwctype>
 #include <wctype.h>
