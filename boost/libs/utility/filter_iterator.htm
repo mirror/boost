@@ -85,7 +85,7 @@ int main() {
 
   typedef boost::filter_iterator_generator&lt;is_positive_number, int*, int&gt; Gen;
   is_positive_number predicate;
-  Gen::policies_type policies(numbers + N, predicate);
+  Gen::policies_type policies(predicate, numbers + N);
   Gen::type filter_iter_first(numbers, policies);
   Gen::type filter_iter_last(numbers + N, policies);
 
