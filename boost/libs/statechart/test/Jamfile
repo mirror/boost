@@ -93,5 +93,7 @@ test-suite fsm :
   [ fsm-compile-fail-variants InconsistentHistoryTest7 ]
   [ fsm-compile-fail-variants InconsistentHistoryTest8 ]
   [ fsm-compile-fail-variants UnsupportedDeepHistoryTest ]
+  [ fsm-st-run-variants StateCastTest ]
+  [ fsm-st-run-variants TypeInfoTest ]
 ;
       
