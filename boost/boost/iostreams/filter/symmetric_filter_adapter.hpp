@@ -38,15 +38,13 @@
 #include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
 
 #include <cassert>
-#include <memory>                                  // allocator
-#include <boost/bind.hpp>                          // Used w/ scope_guard.
-#include <boost/ref.hpp>                           // Used w/ scope_guard.
-#include <boost/iostreams/constants.hpp>           // buffer size.
-#include <boost/iostreams/constants.hpp>           // buffer size.
+#include <memory>                               // allocator
+#include <boost/config.hpp>                     // BOOST_DEDUCED_TYPENAME.
+#include <boost/iostreams/constants.hpp>        // buffer size.
 #include <boost/iostreams/detail/buffer.hpp>
-#include <boost/iostreams/detail/scope_guard.hpp>
+#include <boost/iostreams/detail/closer.hpp>
 #include <boost/iostreams/traits.hpp>
-#include <boost/iostreams/operations.hpp>          // read, write.
+#include <boost/iostreams/operations.hpp>       // read, write.
 #include <boost/shared_ptr.hpp>
 
 namespace boost { namespace iostreams {
@@ -122,7 +120,8 @@ public:
         }
     }
 
-    #include <boost/iostreams/detail/scope_guard_prefix.hpp> // CW workaround.
+    typedef symmetric_filter_adapter_impl<SymmetricFilter, Alloc> self;
+    friend struct closer<self>;
     template<typename Sink>
     void close(Sink& snk, std::ios::openmode which)
     {
@@ -130,11 +129,8 @@ public:
         if ((state_ & f_read) && (which & ios::in))
             close();
         if ((state_ & f_write) && (which & ios::out)) {
-            void (symmetric_filter_adapter_impl::*close) () = 
-                &symmetric_filter_adapter_impl::close;
-            BOOST_SCOPE_GUARD(bind(close, ref(*this)));
-
-            char e;                // Dummy.
+            closer<self> closer(*this);
+            char e; // Dummy.
             const char* end = &e;
             bool done = false;
             flush(snk);
@@ -146,7 +142,6 @@ public:
             }
         }
     }
-    #include <boost/iostreams/detail/scope_guard_suffix.hpp>
 
     SymmetricFilter& filter() { return *filter_; }
     string_type unconsumed_input() const;
@@ -180,7 +175,11 @@ private:
 } // End namespace detail.
 
 template< typename SymmetricFilter,
-          typename Alloc = std::allocator<BOOST_IOSTREAMS_CHAR_TYPE(SymmetricFilter)> >
+          typename Alloc = 
+              std::allocator<
+                  BOOST_DEDUCED_TYPENAME
+                  io_char<SymmetricFilter>::type
+              > >
 class symmetric_filter_adapter {
 private:
     typedef detail::symmetric_filter_adapter_impl<

@@ -18,10 +18,8 @@
 #include <ios>                                   // openmode.
 #include <iterator>                              // back_inserter
 #include <vector>
-#include <boost/bind.hpp>                        // Used w/ scope_guard.
-#include <boost/ref.hpp>                         // Used w/ scope_guard.
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/scope_guard.hpp>
+#include <boost/iostreams/detail/closer.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -71,16 +69,16 @@ public:
         data_.insert(data_.end(), s, s + n);
     }
     
-    #include <boost/iostreams/detail/scope_guard_prefix.hpp> // CW workaround
+    typedef one_step_filter<Ch, Alloc> self;
+    friend struct detail::closer<self>;
     template<typename Sink>
     void close(Sink& sink, std::ios::openmode which)
     {
         if ((state_ & f_read) && (which & std::ios::in)) 
-            close_impl();
+            close();
 
         if ((state_ & f_write) && (which & std::ios::out)) {
-            typedef one_step_filter<Ch, Alloc> self;
-            BOOST_SCOPE_GUARD(boost::bind(&self::close_impl, boost::ref(*this)));
+            detail::closer<self> closer(*this);
             vector_type filtered;
             do_filter(data_, filtered);
             boost::iostreams::write( 
@@ -89,7 +87,6 @@ public:
             );
         }
     }
-    #include <boost/iostreams/detail/scope_guard_suffix.hpp>
 
 protected:
     typedef std::vector<Ch, Alloc>        vector_type;
@@ -111,7 +108,7 @@ private:
         state_ |= f_eof;
     }
 
-    void close_impl()
+    void close()
     {
         data_.clear();
         ptr_ = 0;
