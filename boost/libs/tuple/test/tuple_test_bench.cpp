@@ -22,7 +22,7 @@ using namespace boost;
 
 
 
-template<class T> void dummy(const T& t) {}
+template<class T> void dummy(const T&) {}
 
 class A {}; class B {}; class C {};
 
