@@ -141,19 +141,20 @@ class rational :
     > > > > > > > > > > > > > >
 {
     typedef IntType int_type;
+    typedef typename boost::call_traits<IntType>::param_type param_type;
 
 public:
     rational() : num(0), den(1) {}
-    rational(boost::call_traits<IntType>::param_type n) : num(n), den(1) {}
-    rational(boost::call_traits<IntType>::param_type n, boost::call_traits<IntType>::param_type d) : num(n), den(d) { normalize(); }
+    rational(param_type n) : num(n), den(1) {}
+    rational(param_type n, param_type d) : num(n), den(d) { normalize(); }
 
     // Default copy constructor and assignment are fine
 
     // Add assignment from IntType
-    rational& operator=(boost::call_traits<IntType>::param_type n) { return assign(n, 1); }
+    rational& operator=(param_type n) { return assign(n, 1); }
 
     // Assign in place
-    rational& assign(boost::call_traits<IntType>::param_type n, boost::call_traits<IntType>::param_type d);
+    rational& assign(param_type n, param_type d);
 
     // Access to representation
     IntType numerator() const { return num; }
@@ -165,10 +166,10 @@ public:
     rational& operator*= (const rational& r);
     rational& operator/= (const rational& r);
 
-    rational& operator+= (boost::call_traits<IntType>::param_type i);
-    rational& operator-= (boost::call_traits<IntType>::param_type i);
-    rational& operator*= (boost::call_traits<IntType>::param_type i);
-    rational& operator/= (boost::call_traits<IntType>::param_type i);
+    rational& operator+= (param_type i);
+    rational& operator-= (param_type i);
+    rational& operator*= (param_type i);
+    rational& operator/= (param_type i);
 
     // Increment and decrement
     const rational& operator++();
@@ -181,9 +182,9 @@ public:
     bool operator< (const rational& r) const;
     bool operator== (const rational& r) const;
 
-    bool operator< (boost::call_traits<IntType>::param_type i) const;
-    bool operator> (boost::call_traits<IntType>::param_type i) const;
-    bool operator== (boost::call_traits<IntType>::param_type i) const;
+    bool operator< (param_type i) const;
+    bool operator> (param_type i) const;
+    bool operator== (param_type i) const;
 
 private:
     // Implementation - numerator and denominator (normalized).
@@ -200,7 +201,7 @@ private:
 
 // Assign in place
 template <typename IntType>
-inline rational<IntType>& rational<IntType>::assign(boost::call_traits<IntType>::param_type n, boost::call_traits<IntType>::param_type d)
+inline rational<IntType>& rational<IntType>::assign(param_type n, param_type d)
 {
     num = n;
     den = d;
@@ -302,28 +303,28 @@ rational<IntType>& rational<IntType>::operator/= (const rational<IntType>& r)
 // Mixed-mode operators
 template <typename IntType>
 inline rational<IntType>&
-rational<IntType>::operator+= (boost::call_traits<IntType>::param_type i)
+rational<IntType>::operator+= (param_type i)
 {
     return operator+= (rational<IntType>(i));
 }
 
 template <typename IntType>
 inline rational<IntType>&
-rational<IntType>::operator-= (boost::call_traits<IntType>::param_type i)
+rational<IntType>::operator-= (param_type i)
 {
     return operator-= (rational<IntType>(i));
 }
 
 template <typename IntType>
 inline rational<IntType>&
-rational<IntType>::operator*= (boost::call_traits<IntType>::param_type i)
+rational<IntType>::operator*= (param_type i)
 {
     return operator*= (rational<IntType>(i));
 }
 
 template <typename IntType>
 inline rational<IntType>&
-rational<IntType>::operator/= (boost::call_traits<IntType>::param_type i)
+rational<IntType>::operator/= (param_type i)
 {
     return operator/= (rational<IntType>(i));
 }
@@ -384,7 +385,7 @@ bool rational<IntType>::operator< (const rational<IntType>& r) const
 }
 
 template <typename IntType>
-bool rational<IntType>::operator< (boost::call_traits<IntType>::param_type i) const
+bool rational<IntType>::operator< (param_type i) const
 {
     // Avoid repeated construction
     IntType zero(0);
@@ -408,7 +409,7 @@ bool rational<IntType>::operator< (boost::call_traits<IntType>::param_type i) co
 }
 
 template <typename IntType>
-bool rational<IntType>::operator> (boost::call_traits<IntType>::param_type i) const
+bool rational<IntType>::operator> (param_type i) const
 {
     // Trap equality first
     if (num == i && den == IntType(1))
@@ -425,7 +426,7 @@ inline bool rational<IntType>::operator== (const rational<IntType>& r) const
 }
 
 template <typename IntType>
-inline bool rational<IntType>::operator== (boost::call_traits<IntType>::param_type i) const
+inline bool rational<IntType>::operator== (param_type i) const
 {
     return ((den == IntType(1)) && (num == i));
 }
