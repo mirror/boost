@@ -33,14 +33,6 @@
 
 #endif  // version 4245
 
-#if (__COMO_VERSION__ <= 4303) || !defined(BOOST_STRICT_CONFIG)
-
-#ifdef _WIN32
-#  define BOOST_NO_SWPRINTF
-#endif
-
-#endif // Version 4303
-
 //
 // enable __int64 support in VC emulation mode
 //
