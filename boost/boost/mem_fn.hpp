@@ -293,7 +293,7 @@ public:
         return call(u, &u);
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300) && !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
 
     R & operator()(T & t) const
     {
