@@ -19,9 +19,15 @@ void initialize_vector (V &v) {
 template<class M>
 void initialize_matrix_impl (M &m, ublas::packed_proxy_tag) {
     typename M::size_type size1 = m.size1 ();
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
     for (typename M::iterator1 i = m.begin1(); i != m.end1(); ++ i)
         for (typename M::iterator2 j = i.begin(); j != i.end(); ++ j)
             *j = typename M::value_type (i.index1() * size1 + j.index2() + 1);
+#else
+    for (typename M::iterator1 i = m.begin1(); i != m.end1(); ++ i)
+        for (typename M::iterator2 j = ublas::begin (i, ublas::iterator1_tag ()); j != ublas::end (i, ublas::iterator1_tag ()); ++ j)
+            *j = typename M::value_type (i.index1() * size1 + j.index2() + 1);
+#endif
 }
 
 template<class M>
