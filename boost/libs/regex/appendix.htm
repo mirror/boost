@@ -754,6 +754,14 @@ catalogue. The messages and their id's are as follows: <br>
         <td valign="top" width="29%">&quot;G&quot; </td>
         <td valign="top" width="9%">&nbsp;</td>
     </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td>153</td>
+        <td>The character which when preceeded by (? indicates a
+        zero width negated forward lookahead assert.</td>
+        <td>!</td>
+        <td>&nbsp;</td>
+    </tr>
 </table>
 
 <p><br>
@@ -1159,84 +1167,34 @@ directory private to your application, and not in the PC's
 directory path. Note that if you link to a static version of your
 run time library, then you will also link to a static version of
 regex++ and no dll's will need to be distributed. The possible
-regex++ dll's are as follows: <br>
-&nbsp; </p>
+regex++ dll and library names are computed according to the
+following formula:<br>
+</p>
 
-<table border="0" cellpadding="7" cellspacing="0" width="624">
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%"><b>Development Tool</b> </td>
-        <td valign="top" width="30%"><b>Run Time Library</b> </td>
-        <td valign="top" width="30%"><b>Regex++ Dll</b> </td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%">Microsoft Visual C++ 6 </td>
-        <td valign="top" width="30%">Msvcp60.dll and msvcrt.dll </td>
-        <td valign="top" width="30%">Mre200l.dll </td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%">Microsoft Visual C++ 6 </td>
-        <td valign="top" width="30%">Msvcp60d.dll and msvcrtd.dll
-        </td>
-        <td valign="top" width="30%">Mre300dl.dll </td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%">Borland C++ Builder 4 </td>
-        <td valign="top" width="30%">Cw3245.dll </td>
-        <td valign="top" width="30%">bcb4re300l.dll </td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%">Borland C++ Builder 4 </td>
-        <td valign="top" width="30%">Cw3245mt.dll </td>
-        <td valign="top" width="30%">bcb4re300lm.dll </td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%">Borland C++ Builder 4 </td>
-        <td valign="top" width="30%">Cp3245mt.dll and vcl40.bpl </td>
-        <td valign="top" width="30%">bcb4re300lv.dll </td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%"><p align="center">Borland C++
-        Builder 5</p>
-        </td>
-        <td valign="top" width="30%"><p align="center">cp3250.dll</p>
-        </td>
-        <td valign="top" width="30%">bcb5re300l.dll</td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%"><p align="center">Borland C++
-        Builder 5</p>
-        </td>
-        <td valign="top" width="30%"><p align="center">cp3250mt.dll</p>
-        </td>
-        <td valign="top" width="30%">bcb5re300lm.dll</td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-    <tr>
-        <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="27%"><p align="center">Borland C++
-        Builder 5</p>
-        </td>
-        <td valign="top" width="30%"><p align="center">cw3250mt.dll</p>
-        </td>
-        <td valign="top" width="30%">bcb5re300lv.dll</td>
-        <td valign="top" width="7%">&nbsp;</td>
-    </tr>
-</table>
+<p>&quot;boost_regex_&quot;<br>
++ BOOST_LIB_TOOLSET<br>
++ &quot;_&quot;<br>
++ BOOST_LIB_THREAD_OPT<br>
++ BOOST_LIB_RT_OPT<br>
++ BOOST_LIB_LINK_OPT<br>
++ BOOST_LIB_DEBUG_OPT<br>
+<br>
+These are defined as:<br>
+<br>
+BOOST_LIB_TOOLSET: The compiler toolset name (vc6, vc7, bcb5 etc).<br>
+<br>
+BOOST_LIB_THREAD_OPT: &quot;s&quot; for single thread builds,<br>
+&quot;m&quot; for multithread builds.<br>
+<br>
+BOOST_LIB_RT_OPT: &quot;s&quot; for static runtime,<br>
+&quot;d&quot; for dynamic runtime.<br>
+<br>
+BOOST_LIB_LINK_OPT: &quot;s&quot; for static link,<br>
+&quot;i&quot; for dynamic link.<br>
+<br>
+BOOST_LIB_DEBUG_OPT: nothing for release builds,<br>
+&quot;d&quot; for debug builds,<br>
+&quot;dd&quot; for debug-diagnostic builds (_STLP_DEBUG).</p>
 
 <p>Note: you can disable automatic library selection by defining
 the symbol BOOST_REGEX_NO_LIB when compiling, this is useful if
