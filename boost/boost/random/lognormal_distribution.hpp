@@ -34,8 +34,8 @@ namespace std {
 
 namespace boost {
 
-#ifdef __GNUC__
-// Special gcc workaround: gcc does not yet support using-declarations
+#if defined(__GNUC__) && (__GNUC__ < 3)
+// Special gcc workaround: gcc 2.95.x ignores using-declarations
 // in template classes (confirmed by gcc author Martin v. Loewis)
   using std::sqrt;
   using std::exp;
