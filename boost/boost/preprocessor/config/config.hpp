@@ -24,7 +24,7 @@
 # define BOOST_PP_CONFIG_EDG() 0x0020
 #
 # ifndef BOOST_PP_CONFIG_FLAGS
-#    if defined(__SPIRIT_PP__)
+#    if defined(__SPIRIT_PP__) || defined(__MWERKS__) && __MWERKS__ >= 0x3200
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_STRICT())
 #    elif defined(__EDG__) || defined(__EDG_VERSION__)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_EDG() | BOOST_PP_CONFIG_STRICT())
