@@ -3,6 +3,8 @@ subproject libs/mpl/test ;
 # bring in rules for testing
 import testing ;
 
+compile aux_/has_xxx.cpp ;
+
 compile advance.cpp ;
 compile always.cpp ;
 compile apply.cpp ;
