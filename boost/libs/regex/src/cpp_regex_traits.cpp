@@ -544,6 +544,9 @@ struct message_data<wchar_t>
    std::string error_strings[boost::REG_E_UNKNOWN+1];
 
    message_data(const std::locale& l, const std::string& regex_message_catalogue);
+private:
+   message_data(const message_data&);
+   message_data& operator=(const message_data&);
 };
 
 message_data<wchar_t>::message_data(const std::locale& l, const std::string& regex_message_catalogue)

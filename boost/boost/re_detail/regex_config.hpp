@@ -504,9 +504,20 @@ typedef unsigned long jm_uintfast32_t;
          //#define BOOST_RE_NO_NOT_EQUAL
       #endif
 
-   #elif defined(__STD_ITERATOR__)
+   #elif defined(_RWSTD_VER)
 
       /* Rogue Wave STL */
+      // Sometimes we have a four figure version number, sometimes a
+      // six figure one (RW seems to omit trailing zeros from version number)
+      #ifndef _RWSTD_VER
+         #define BOOST_RWSTD_VER 0
+      #else
+         #if _RWSTD_VER < 0x10000
+            #define BOOST_RWSTD_VER (_RWSTD_VER << 8)
+         #else
+            #define BOOST_RWSTD_VER _RWSTD_VER
+         #endif
+      #endif
 
       #if defined(RWSTD_NO_MEMBER_TEMPLATES) || defined(RWSTD_NO_MEM_CLASS_TEMPLATES)
          #define BOOST_RE_NO_MEMBER_TEMPLATES
@@ -538,7 +549,7 @@ typedef unsigned long jm_uintfast32_t;
          #define BOOST_RE_NO_BOOL
       #endif
 
-      #if _RWSTD_VER > 0x020000
+      #if BOOST_RWSTD_VER > 0x020000
          #ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
           #define BOOST_RE_DISTANCE(i, j, n) do { n = 0; std::distance(i, j, n); } while(false)
          #else 
@@ -552,7 +563,7 @@ typedef unsigned long jm_uintfast32_t;
       #else 
          #define BOOST_RE_DISTANCE(i, j, n) std::distance(i, j, n)do { n = 0; std::distance(i, j, n); } while(false)
          #define BOOST_RE_OUTPUT_ITERATOR(T, D) std::output_iterator
-         #if _RWSTD_VER >= 0x0200
+         #if BOOST_RWSTD_VER >= 0x0200
             #define BOOST_RE_INPUT_ITERATOR(T, D) std::input_iterator<T>
          #else
             #define BOOST_RE_INPUT_ITERATOR(T, D) std::input_iterator<T, D>
@@ -592,7 +603,7 @@ typedef unsigned long jm_uintfast32_t;
       #endif
 
       #define BOOST_RE_STL_DONE
-      #if _RWSTD_VER < 0x020100
+      #if BOOST_RWSTD_VER < 0x020100
          #define BOOST_RE_NO_OI_ASSIGN
       #endif
 
