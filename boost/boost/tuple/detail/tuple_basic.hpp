@@ -135,6 +135,8 @@ struct get_class<0> {
 // Nth element ot T, first element is at index 0
 // -------------------------------------------------------
 
+#ifndef BOOST_NO_CV_SPECIALIZATIONS
+
 template<int N, class T>
 struct element
 {
@@ -156,13 +158,68 @@ private:
   typedef typename T::tail_type Next;
   typedef typename element<N-1, Next>::type unqualified_type;
 public:
+#if BOOST_WORKAROUND(__BORLANDC__,<0x600)
+  typedef const unqualified_type type;
+#else
   typedef typename boost::add_const<unqualified_type>::type type;
+#endif
+
 };
 template<class T>
 struct element<0,const T>
 {
+#if BOOST_WORKAROUND(__BORLANDC__,<0x600)
+  typedef const typename T::head_type type;
+#else
   typedef typename boost::add_const<typename T::head_type>::type type;
+#endif
 };
+
+#else // def BOOST_NO_CV_SPECIALIZATIONS
+
+namespace detail {
+
+template<int N, class T, bool IsConst>
+struct element_impl
+{
+private:
+  typedef typename T::tail_type Next;
+public:
+  typedef typename element_impl<N-1, Next, IsConst>::type type;
+};
+
+template<int N, class T>
+struct element_impl<N, T, true /* IsConst */>
+{
+private:
+  typedef typename T::tail_type Next;
+public:
+  typedef const typename element_impl<N-1, Next, true>::type type;
+};
+
+template<class T>
+struct element_impl<0, T, false /* IsConst */>
+{
+  typedef typename T::head_type type;
+};
+
+template<class T>
+struct element_impl<0, T, true /* IsConst */>
+{
+  typedef const typename T::head_type type;
+};
+
+} // end of namespace detail
+
+
+template<int N, class T>
+struct element: 
+  public detail::element_impl<N, T, ::boost::is_const<T>::value>
+{
+};
+
+#endif
+
 
 // -get function templates -----------------------------------------------
 // Usage: get<N>(aTuple)
