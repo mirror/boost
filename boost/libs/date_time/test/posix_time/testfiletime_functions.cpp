@@ -23,7 +23,7 @@ int main()
   // adjustor is used to truncate ptime's fractional seconds for 
   // comparison with SYSTEMTIME's milliseconds
   const int adjustor = 
-    static_cast<int>(std::pow(10, time_duration::num_fractional_digits() - 3));
+    static_cast<int>(std::pow(10.0, time_duration::num_fractional_digits() - 3));
   
   for(int i = 0; i < 5; ++i){
 
