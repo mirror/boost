@@ -1,8 +1,8 @@
 
 // (C) Copyright John Maddock 2000.
-// Permission to copy, use, modify, sell and distribute this software is 
-// granted provided this copyright notice appears in all copies. This 
-// software is provided "as is" without express or implied warranty, 
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This
+// software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
 
 #ifndef BOOST_TT_TYPE_WITH_ALIGNMENT_INCLUDED
@@ -43,15 +43,20 @@ typedef int (alignment_dummy::*member_function_ptr)();
         char, short, int, long, float, double, long double \
         , void*, function_ptr, member_ptr, member_function_ptr))
 
-#define BOOST_TT_CHOOSE_MIN_ALIGNMENT(R,P,I,T) \
-        typename mpl::if_c< \
-           alignment_of<T>::value <= target, T, char>::type BOOST_PP_CAT(t,I);
+#define BOOST_TT_CHOOSE_MIN_ALIGNMENT(R,P,I,T)                               \
+        typename mpl::if_c<                                                  \
+           (alignment_of<T>::value == target && !BOOST_PP_CAT(found,I)),     \
+           T, char>::type BOOST_PP_CAT(t,I);                                 \
+        enum { BOOST_PP_CAT(found,BOOST_PP_INC(I)) =                         \
+               alignment_of<T>::value == target || BOOST_PP_CAT(found,I) } ;
 
 #define BOOST_TT_CHOOSE_T(R,P,I,T) T BOOST_PP_CAT(t,I);
-           
+
 template <std::size_t target>
 union lower_alignment
 {
+    enum { found0 = false };
+
     BOOST_PP_LIST_FOR_EACH_I(
           BOOST_TT_CHOOSE_MIN_ALIGNMENT
         , ignored
@@ -92,7 +97,7 @@ BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_pod,::boost::detail::lower_alignment<32> ,
 } // namespace detail
 
 // This alignment method originally due to Brian Parker, implemented by David
-// Abrahams, and then ported here by Doug Gregor. 
+// Abrahams, and then ported here by Doug Gregor.
 template <int Align>
 class type_with_alignment
 {
@@ -105,13 +110,8 @@ class type_with_alignment
 
     BOOST_STATIC_CONSTANT(std::size_t, found = alignment_of<align_t>::value);
 
-#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT(found >= Align);
     BOOST_STATIC_ASSERT(found % Align == 0);
-#else
-    BOOST_STATIC_ASSERT(::boost::type_with_alignment<Align>::found >= Align);
-    BOOST_STATIC_ASSERT(::boost::type_with_alignment<Align>::found % Align == 0);
-#endif
 
  public:
     typedef align_t type;
