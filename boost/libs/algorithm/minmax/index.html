@@ -36,10 +36,10 @@ HREF="../../../../boost/minmax.hpp">boost/algorithm/minmax.hpp</A>&gt; </H2>
 <h3>
 Motivation</h3>
 
-<p>The minmax library is composed of two headers <tt><a
-href="../../../boost/algorithm/minmax.hpp">&lt;boost/algorithm/minmax.hpp></a></tt>.
+<p>The minmax library is composed of two headers, <a
+href="../../../boost/algorithm/minmax.hpp">&lt;boost/algorithm/minmax.hpp></a>
 and <a
-href="../../../boost/algorithm/minmax_element.hpp">&lt;boost/algorithm/minmax_element.hpp></a></tt>.
+href="../../../boost/algorithm/minmax_element.hpp">&lt;boost/algorithm/minmax_element.hpp></a>.
 (See <a href="#two_headers">rationale</a>.)
 The problem solved by this library is that simultaneous min and max
 computation requires
@@ -55,7 +55,7 @@ be enough. The present library solves both problems.</p>
 <p>The first file implements the function templates
 <tt>minmax</tt>
 as straightforward extensions of the C++
-standard. As it returns a pair of <tt>const&amp;<TT>, we must use the <a
+standard. As it returns a pair of <tt>const&amp;</tt>, we must use the <a
 href=:../../tuple/index.html>Boost.tuple</a> library to construct such
 pairs. (Please note: the intent is not to fix the known defaults of
 <tt>std::min</tt>
@@ -85,25 +85,29 @@ comparisons and exactly n increments of the
 
 <a name="synopsis">
 <h3>
-Synopsis of <tt>&amp;boost/algorithm/minmax.hpp></tt></h3>
+Synopsis of <tt>&lt;boost/algorithm/minmax.hpp></tt></h3>
 
-<pre>namespace boost {
+<pre>#include &lt;boost/tuple/tuple.hpp>
 
-  #include &lt;boost/tuple/tuple.hpp>
+namespace boost {
 
   template &lt;class T>
-  std::tuple&lt;T const&amp;, T const&amp;> >
+  tuple&lt;T const&amp;, T const&amp;> >
   minmax(const T&amp; a, const T&amp; b);
 
   template &lt;class T, class <a href="http://www.sgi.com/tech/stl/  BinaryPredicate.html">BinaryPredicate</a>>
-  std::tuple&lt;T const&amp;, T const&amp;> >
+  tuple&lt;T const&amp;, T const&amp;> >
   minmax(const T&amp; a, const T&amp; b, BinaryPredicate comp);
+
+}
 </pre>
 
 <h3>
-Synopsis of <tt>&amp;boost/algorithm/minmax_element.hpp></tt></h3>
+Synopsis of <tt>&lt;boost/algorithm/minmax_element.hpp></tt></h3>
 
-<pre>namespace boost {
+<pre>#include &lt;utility> // for std::pair
+
+namespace boost {
 
   template &lt;class <a href="http://www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>>
   std::pair&lt;ForwardIterator,ForwardIterator>
@@ -276,7 +280,7 @@ the library under
 <pre>int main()
 {
   using namespace std;
-  boost::tuple<int const&, int const&> result1 = boost::minmax(1, 0);
+  boost::tuple&lt;int const&amp;, int const&amp;> result1 = boost::minmax(1, 0);
 
   assert( result1.get<0>() == 0 );
   assert( result1.get<1>() == 1 );
@@ -285,12 +289,12 @@ the library under
   <a href="http://www.sgi.com/tech/stl/generate_n.html">generate_n</a>(<a href="http://www.sgi.com/tech/stl/front_insert_iterator.html">front_inserter</a>(L), 1000, rand);
 
   typedef list&lt;int>::const_iterator iterator;
-  pair&lt; iterator, iterator > result = boost::minmax_element(L.begin(), L.end());
-  cout &lt;&lt; "The smallest element is " &lt;&lt; *(result.first) &lt;&lt; endl;
-  cout &lt;&lt; "The largest element is  " &lt;&lt; *(result.second) &lt;&lt; endl;
+  pair&lt; iterator, iterator > result2 = boost::minmax_element(L.begin(), L.end());
+  cout &lt;&lt; "The smallest element is " &lt;&lt; *(result2.first) &lt;&lt; endl;
+  cout &lt;&lt; "The largest element is  " &lt;&lt; *(result2.second) &lt;&lt; endl;
 
-  assert( result.first  == std::min_element(L.begin(), L.end());
-  assert( result.second == std::max_element(L.begin(), L.end());
+  assert( result2.first  == std::min_element(L.begin(), L.end());
+  assert( result2.second == std::max_element(L.begin(), L.end());
 }</pre>
 </a>
 
@@ -404,7 +408,7 @@ way to perform only three
 comparisons per pair and return the first min and first max elements.
 For a long time, it seemed any
 attempts at doing so would consume four comparisons per pair in the worst
-case. This implementation achieves that.</p>
+case. This implementation achieves three.</p>
 <p>It is not possible (or even desirable) to change the meaning of
 <tt>max_element</tt>,
 but it is still beneficial to provide a function called <tt>minmax_element</tt>,
@@ -513,7 +517,7 @@ Comparable</a></tt>,
 <tt><a href="http://www.sgi.com/tech/stl/nth_element.html">nth_element</a></tt>
 .
 <hr SIZE="6">
-<br>Last modified 2002-07-01
+<br>Last modified 2004-07-01
 <p><font face="Arial,Helvetica"><font size=-1>&copy; Copyright Herv&eacute;
 Br&ouml;nnimann, Polytechnic University, 2002--2004. 
 Use, modification, and distribution is subject to the Boost Software

@@ -11,28 +11,32 @@
 
 <center>
 <h1>
-Minmax_element</h1></center>
+Minmax_element complete synopsis</h1></center>
 
 <h3>
-Synopsis of <tt>&amp;boost/algorithm/minmax.hpp></tt></h3>
+Synopsis of <tt>&lt;boost/algorithm/minmax.hpp></tt></h3>
 
-<pre>namespace boost {
+<pre>#include &lt;boost/tuple/tuple.hpp>
 
-  #include &lt;boost/tuple/tuple.hpp>
+namespace boost {
 
   template &lt;class T>
-  std::tuple&lt;T const&amp;, T const&amp;> >
+  tuple&lt;T const&amp;, T const&amp;> >
   minmax(const T&amp; a, const T&amp; b);
 
   template &lt;class T, class <a href="http://www.sgi.com/tech/stl/  BinaryPredicate.html">BinaryPredicate</a>>
-  std::tuple&lt;T const&amp;, T const&amp;> >
+  tuple&lt;T const&amp;, T const&amp;> >
   minmax(const T&amp; a, const T&amp; b, BinaryPredicate comp);
+
+}
 </pre>
 
 <h3>
-Synopsis of <tt>&amp;boost/algorithm/minmax_element.hpp></tt></h3>
+Synopsis of <tt>&lt;boost/algorithm/minmax_element.hpp></tt></h3>
 
-<pre>namespace boost {
+<pre>#include &lt;utility> //for std::pair
+
+namespace boost {
 
   template &lt;class <a href="http://www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>>
   std::pair&lt;ForwardIterator,ForwardIterator>
