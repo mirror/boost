@@ -130,28 +130,36 @@ namespace detail {
 
   // Try to detect numeric types at compile time in ways compatible with the
   // limitations of the compiler and library.
+#ifndef __BORLANDC__
   template <class T>
   struct is_numeric {
     // For a while, this wasn't true, but we rely on it below. This is a regression assert.
     BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
-    enum { value = 
+    enum { value =
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         std::numeric_limits<T>::is_specialized
-#elif defined(__BORLANDC__)
-        ::boost::is_arithmetic<T>::value
 #else
         boost::is_convertible<int,T>::value && boost::is_convertible<T,int>::value
 #endif
     };
   };
-
+#else
+   // Borland seems to have a strange problem with is_numeric, just delegate
+   // to is_arithmetic instead:
+  template <class T>
+  struct is_numeric {
+    // For a while, this wasn't true, but we rely on it below. This is a regression assert.
+    BOOST_STATIC_ASSERT(::boost::is_integral<char>::value);
+    static const bool value = ::boost::is_arithmetic<T>::value;
+  };
+#endif
   // Compute the distance over arbitrary numeric and/or iterator types
   template <class Distance, class Incrementable>
   Distance any_distance(Incrementable start, Incrementable finish, Distance* = 0)
   {
     
       return distance_policy_select<(
-          is_numeric<Incrementable>::value)>::template
+          ::boost::detail::is_numeric<Incrementable>::value)>::template
           policy<Distance, Incrementable>::distance(start, finish);
   }
   
@@ -160,10 +168,11 @@ namespace detail {
 template <class Incrementable>
 struct counting_iterator_traits {
  private:
-    enum {numeric = detail::is_numeric<Incrementable>::value };
-    typedef typename detail::counting_iterator_traits_select<(
-        numeric
-        )>::template traits<Incrementable> traits;
+ BOOST_STATIC_ASSERT(::boost::detail::is_numeric<Incrementable>::value == ::boost::is_arithmetic<Incrementable>::value);
+    typedef ::boost::detail::counting_iterator_traits_select<(
+        ::boost::detail::is_numeric<Incrementable>::value
+        )> binder;
+    typedef typename binder::template traits<Incrementable> traits;
  public:
     typedef Incrementable value_type;
     typedef const Incrementable& reference;
