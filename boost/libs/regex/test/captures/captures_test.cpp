@@ -22,8 +22,13 @@
 
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
 
+#ifdef __sgi
+template <class T>
+void test_captures(const std::string& regx, const std::string& text, const T& expected)
+#else
 template <class T>
 void test_captures(const std::string& regx, const std::string& text, T& expected)
+#endif
 {
    boost::regex e(regx);
    boost::smatch what;

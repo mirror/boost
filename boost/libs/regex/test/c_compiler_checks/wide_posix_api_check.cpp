@@ -23,9 +23,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <wchar.h>
 #include <stdlib.h>
 #include <boost/regex.h>
+#include <wchar.h>
 
 #ifndef BOOST_NO_WREGEX
 

@@ -23,11 +23,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <wchar.h>
 #include <stdlib.h>
 #include <boost/regex.h>
 
 #ifndef BOOST_NO_WREGEX
+#include <wchar.h>
 
 const wchar_t* expression = L"^";
 const wchar_t* text = L"\n      ";
