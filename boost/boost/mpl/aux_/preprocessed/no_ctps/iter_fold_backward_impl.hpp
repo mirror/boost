@@ -37,6 +37,7 @@ struct iter_fold_backward_chunk<0>
         typedef bkwd_state0 state;
         typedef iter0 iterator;
     };
+
 };
 
 template<>
@@ -62,6 +63,7 @@ struct iter_fold_backward_chunk<1>
         typedef bkwd_state0 state;
         typedef iter1 iterator;
     };
+
 };
 
 template<>
@@ -92,6 +94,7 @@ struct iter_fold_backward_chunk<2>
         typedef bkwd_state0 state;
         typedef iter2 iterator;
     };
+
 };
 
 template<>
@@ -125,6 +128,7 @@ struct iter_fold_backward_chunk<3>
         typedef bkwd_state0 state;
         typedef iter3 iterator;
     };
+
 };
 
 template<>
@@ -161,6 +165,7 @@ struct iter_fold_backward_chunk<4>
         typedef bkwd_state0 state;
         typedef iter4 iterator;
     };
+
 };
 
 template< long N > 
@@ -248,6 +253,7 @@ struct iter_fold_backward_chunk< -1 >
         typedef typename res_::state state;
         typedef typename res_::iterator iterator;
     };
+
 };
 
 template<

@@ -52,7 +52,7 @@ struct BOOST_PP_CAT(BOOST_PP_CAT(vector,i),_c)
 
 #else // "brute force" implementation
 
-#   define MPL_AUX_VECTOR_C_PARAM_FUNC(i,param) \
+#   define MPL_AUX_VECTOR_C_PARAM_FUNC(unused, i, param) \
     BOOST_PP_COMMA_IF(i) \
     integral_c<T,BOOST_PP_CAT(param,i)> \
     /**/
@@ -62,7 +62,7 @@ template<
     , BOOST_PP_ENUM_PARAMS(i, T C)
     >
 struct BOOST_PP_CAT(BOOST_PP_CAT(vector,i),_c)
-    : BOOST_PP_CAT(vector,i)< BOOST_PP_REPEAT_1ST(i,MPL_AUX_VECTOR_C_PARAM_FUNC,C) >
+    : BOOST_PP_CAT(vector,i)< BOOST_PP_REPEAT_1(i,MPL_AUX_VECTOR_C_PARAM_FUNC,C) >
 {
 };
 

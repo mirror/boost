@@ -19,9 +19,8 @@
 #include "boost/mpl/limits/arity.hpp"
 #include "boost/mpl/aux_/preprocessor/params.hpp"
 #include "boost/mpl/aux_/preprocessor/enum.hpp"
-#include "boost/mpl/aux_/preprocessor/project1st.hpp"
 
-#include "boost/preprocessor/repeat_2nd.hpp"
+#include "boost/preprocessor/repeat.hpp"
 #include "boost/preprocessor/comma_if.hpp"
 #include "boost/preprocessor/dec.hpp"
 #include "boost/preprocessor/if.hpp"
@@ -56,7 +55,7 @@ namespace mpl = boost::mpl;
 /**/
 
 namespace aux {
-BOOST_PP_REPEAT_2ND(
+BOOST_PP_REPEAT(
       BOOST_MPL_METAFUNCTION_MAX_ARITY
     , APPLY_FUNC_DEF
     , unused
@@ -98,14 +97,14 @@ BOOST_PP_REPEAT_2ND(
 
 int main()
 {
-    BOOST_PP_REPEAT_2ND(
+    BOOST_PP_REPEAT(
           BOOST_MPL_METAFUNCTION_MAX_ARITY
         , APPLY_TEST
         , MAKE_APPLY_N_NAME
         )
 
 #if defined(BOOST_MPL_HAS_APPLY)
-    BOOST_PP_REPEAT_2ND(
+    BOOST_PP_REPEAT(
           BOOST_MPL_METAFUNCTION_MAX_ARITY
         , APPLY_TEST
         , MAKE_APPLY_NAME

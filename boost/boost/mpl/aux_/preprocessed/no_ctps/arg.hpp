@@ -17,9 +17,8 @@ template<> struct arg<-1>
     struct apply
     {
         typedef U1 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
+        BOOST_STATIC_ASSERT(!is_void_<type>::value);
+
     };
 };
 
@@ -36,10 +35,9 @@ template<> struct arg<1>
     struct apply
     {
         typedef U1 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+        BOOST_STATIC_ASSERT(!is_void_<type>::value);
+
+    };
 };
 
 template<> struct arg<2>
@@ -55,10 +53,9 @@ template<> struct arg<2>
     struct apply
     {
         typedef U2 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+        BOOST_STATIC_ASSERT(!is_void_<type>::value);
+
+    };
 };
 
 template<> struct arg<3>
@@ -74,10 +71,9 @@ template<> struct arg<3>
     struct apply
     {
         typedef U3 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+        BOOST_STATIC_ASSERT(!is_void_<type>::value);
+
+    };
 };
 
 template<> struct arg<4>
@@ -93,10 +89,9 @@ template<> struct arg<4>
     struct apply
     {
         typedef U4 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+        BOOST_STATIC_ASSERT(!is_void_<type>::value);
+
+    };
 };
 
 template<> struct arg<5>
@@ -112,11 +107,12 @@ template<> struct arg<5>
     struct apply
     {
         typedef U5 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+        BOOST_STATIC_ASSERT(!is_void_<type>::value);
+
+    };
 };
+
+BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(1, int, arg)
 
 } // namespace mpl
 } // namespace boost

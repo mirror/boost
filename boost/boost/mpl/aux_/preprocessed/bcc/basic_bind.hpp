@@ -17,12 +17,6 @@ struct resolve_bind_arg
 
 } // namespace aux
 
-template<
-      typename F, typename T1 = void_, typename T2 = void_
-    , typename T3 = void_, typename T4 = void_, typename T5 = void_
-    >
-struct bind;
-
 template< typename F, typename T > struct bind1st;
 template< typename F, typename T > struct bind2nd;
 
@@ -34,17 +28,6 @@ template<
 struct resolve_bind_arg< arg<N>,U1,U2,U3,U4,U5 >
 {
     typedef typename apply5< arg<N>,U1,U2,U3,U4,U5 >::type type;
-};
-
-template<
-      typename F, typename T1, typename T2, typename T3, typename T4
-    , typename T5, typename U1, typename U2, typename U3, typename U4
-    , typename U5
-    >
-struct resolve_bind_arg< bind<F,T1,T2,T3,T4,T5>,U1,U2,U3,U4,U5 >
-{
-    typedef bind< F,T1,T2,T3,T4,T5 > f_;
-    typedef typename apply5< f_,U1,U2,U3,U4,U5 >::type type;
 };
 
 template<
@@ -67,28 +50,10 @@ struct resolve_bind_arg< bind2nd<F,T>,U1,U2,U3,U4,U5 >
     typedef typename apply5< f_,U1,U2,U3,U4,U5 >::type type;
 };
 
-template<
-      typename F, typename T1, typename T2, typename T3, typename T4
-    , typename T5, int N
-    >
-struct arity< bind<F,T1,T2,T3,T4,T5>,N >
-{
-    static int const value = 5;
-};
-
-template< typename F, typename T, int N >
-struct arity< bind1st<F,T>,N >
-{
-    static int const value = 5;
-};
-
-template< typename F, typename T, int N >
-struct arity< bind2nd<F,T>,N >
-{
-    static int const value = 5;
-};
-
 } // namespace aux
+
+BOOST_MPL_AUX_ARITY_SPEC(2, bind1st)
+BOOST_MPL_AUX_ARITY_SPEC(2, bind2nd)
 
 template<
       typename F
@@ -96,8 +61,7 @@ template<
 struct bind0
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
@@ -123,25 +87,9 @@ struct resolve_bind_arg<
     typedef typename apply5< f_,U1,U2,U3,U4,U5 >::type type;
 };
 
-template<
-      typename F, int N
-    >
-struct arity<
-      bind0<F>, N
-    >
-{
-    static int const value = 5;
-};
-
 } // namespace aux
 
-template<
-      typename F
-    >
-struct bind< F,void_,void_,void_,void_,void_ >
-    : bind0<F>
-{
-};
+BOOST_MPL_AUX_ARITY_SPEC(1, bind0)
 
 template<
       typename F, typename T1
@@ -149,8 +97,7 @@ template<
 struct bind1
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
@@ -177,25 +124,9 @@ struct resolve_bind_arg<
     typedef typename apply5< f_,U1,U2,U3,U4,U5 >::type type;
 };
 
-template<
-      typename F, typename T1, int N
-    >
-struct arity<
-      bind1< F,T1 >, N
-    >
-{
-    static int const value = 5;
-};
-
 } // namespace aux
 
-template<
-      typename F, typename T1
-    >
-struct bind< F,T1,void_,void_,void_,void_ >
-    : bind1< F,T1 >
-{
-};
+BOOST_MPL_AUX_ARITY_SPEC(2, bind1)
 
 template<
       typename F, typename T1, typename T2
@@ -203,8 +134,7 @@ template<
 struct bind2
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
@@ -232,25 +162,9 @@ struct resolve_bind_arg<
     typedef typename apply5< f_,U1,U2,U3,U4,U5 >::type type;
 };
 
-template<
-      typename F, typename T1, typename T2, int N
-    >
-struct arity<
-      bind2< F,T1,T2 >, N
-    >
-{
-    static int const value = 5;
-};
-
 } // namespace aux
 
-template<
-      typename F, typename T1, typename T2
-    >
-struct bind< F,T1,T2,void_,void_,void_ >
-    : bind2< F,T1,T2 >
-{
-};
+BOOST_MPL_AUX_ARITY_SPEC(3, bind2)
 
 template<
       typename F, typename T1, typename T2, typename T3
@@ -258,8 +172,7 @@ template<
 struct bind3
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
@@ -288,25 +201,9 @@ struct resolve_bind_arg<
     typedef typename apply5< f_,U1,U2,U3,U4,U5 >::type type;
 };
 
-template<
-      typename F, typename T1, typename T2, typename T3, int N
-    >
-struct arity<
-      bind3< F,T1,T2,T3 >, N
-    >
-{
-    static int const value = 5;
-};
-
 } // namespace aux
 
-template<
-      typename F, typename T1, typename T2, typename T3
-    >
-struct bind< F,T1,T2,T3,void_,void_ >
-    : bind3< F,T1,T2,T3 >
-{
-};
+BOOST_MPL_AUX_ARITY_SPEC(4, bind3)
 
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
@@ -314,8 +211,7 @@ template<
 struct bind4
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
@@ -345,25 +241,9 @@ struct resolve_bind_arg<
     typedef typename apply5< f_,U1,U2,U3,U4,U5 >::type type;
 };
 
-template<
-      typename F, typename T1, typename T2, typename T3, typename T4, int N
-    >
-struct arity<
-      bind4< F,T1,T2,T3,T4 >, N
-    >
-{
-    static int const value = 5;
-};
-
 } // namespace aux
 
-template<
-      typename F, typename T1, typename T2, typename T3, typename T4
-    >
-struct bind< F,T1,T2,T3,T4,void_ >
-    : bind4< F,T1,T2,T3,T4 >
-{
-};
+BOOST_MPL_AUX_ARITY_SPEC(5, bind4)
 
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
@@ -372,8 +252,7 @@ template<
 struct bind5
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
@@ -405,35 +284,16 @@ struct resolve_bind_arg<
     typedef typename apply5< f_,U1,U2,U3,U4,U5 >::type type;
 };
 
-template<
-      typename F, typename T1, typename T2, typename T3, typename T4
-    , typename T5, int N
-    >
-struct arity<
-      bind5< F,T1,T2,T3,T4,T5 >, N
-    >
-{
-    static int const value = 5;
-};
-
 } // namespace aux
 
-// primary template (not a specialization!)
-template<
-      typename F, typename T1, typename T2, typename T3, typename T4
-    , typename T5
-    >
-struct bind
-    : bind5< F,T1,T2,T3,T4,T5 >
-{
-};
+BOOST_MPL_AUX_ARITY_SPEC(6, bind5)
 
 template< typename F, typename T >
 struct bind1st
 {
     template<
-          typename U, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U
+        , typename U2, typename U3, typename U4, typename U5
         >
     struct apply
         : apply2< F,T,U >
@@ -445,8 +305,8 @@ template< typename F, typename T >
 struct bind2nd
 {
     template<
-          typename U, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U
+        , typename U2, typename U3, typename U4, typename U5
         >
     struct apply
         : apply2< F,U,T >

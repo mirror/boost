@@ -18,15 +18,9 @@
 #define BOOST_MPL_AUX_PREPROCESSOR_SUB_HPP_INCLUDED
 
 #include "boost/mpl/aux_/preprocessor/tuple.hpp"
+#include "boost/mpl/aux_/config/preprocessor.hpp"
 
-#if !defined(__MWERKS__) || __MWERKS__ > 0x3003
-#   define BOOST_MPL_PP_SUB(i,j) \
-    BOOST_MPL_PP_SUB_DELAY(i,j)
-
-#   define BOOST_MPL_PP_SUB_DELAY(i,j) \
-    BOOST_PP_MPL_TUPLE_11_ELEM_##i BOOST_MPL_PP_SUB_##j \
-    /**/
-#else
+#if defined(BOOST_MPL_BROKEN_PP_MACRO_EXPANSION)
 #   include "boost/preprocessor/cat.hpp"
 
 #   define BOOST_MPL_PP_SUB(i,j) \
@@ -34,9 +28,17 @@
     /**/
 
 #   define BOOST_MPL_PP_SUB_DELAY(i,j) \
-    BOOST_PP_CAT(BOOST_PP_MPL_TUPLE_11_ELEM_##i,BOOST_MPL_PP_SUB_##j) \
+    BOOST_PP_CAT(BOOST_MPL_PP_TUPLE_11_ELEM_##i,BOOST_MPL_PP_SUB_##j) \
     /**/
-#endif // __MWERKS__
+#else
+#   define BOOST_MPL_PP_SUB(i,j) \
+    BOOST_MPL_PP_SUB_DELAY(i,j) \
+    /**/
+
+#   define BOOST_MPL_PP_SUB_DELAY(i,j) \
+    BOOST_MPL_PP_TUPLE_11_ELEM_##i BOOST_MPL_PP_SUB_##j \
+    /**/
+#endif // BOOST_MPL_BROKEN_PP_MACRO_EXPANSION
 
 #define BOOST_MPL_PP_SUB_0 (0,1,2,3,4,5,6,7,8,9,10)
 #define BOOST_MPL_PP_SUB_1 (0,0,1,2,3,4,5,6,7,8,9)

@@ -34,6 +34,7 @@ struct iter_fold_chunk<0>
         typedef state0 state;
         typedef iter0 iterator;
     };
+
 };
 
 template<>
@@ -49,13 +50,14 @@ struct iter_fold_chunk<1>
     {
         typedef First iter0;
         typedef State state0;
-        typedef typename ForwardOp::template apply< state0,iter0 >::type state1;
+        typedef typename apply2< ForwardOp,state0,iter0 >::type state1;
         typedef typename iter0::next iter1;
         
 
         typedef state1 state;
         typedef iter1 iterator;
     };
+
 };
 
 template<>
@@ -71,15 +73,16 @@ struct iter_fold_chunk<2>
     {
         typedef First iter0;
         typedef State state0;
-        typedef typename ForwardOp::template apply< state0,iter0 >::type state1;
+        typedef typename apply2< ForwardOp,state0,iter0 >::type state1;
         typedef typename iter0::next iter1;
-        typedef typename ForwardOp::template apply< state1,iter1 >::type state2;
+        typedef typename apply2< ForwardOp,state1,iter1 >::type state2;
         typedef typename iter1::next iter2;
         
 
         typedef state2 state;
         typedef iter2 iterator;
     };
+
 };
 
 template<>
@@ -95,17 +98,18 @@ struct iter_fold_chunk<3>
     {
         typedef First iter0;
         typedef State state0;
-        typedef typename ForwardOp::template apply< state0,iter0 >::type state1;
+        typedef typename apply2< ForwardOp,state0,iter0 >::type state1;
         typedef typename iter0::next iter1;
-        typedef typename ForwardOp::template apply< state1,iter1 >::type state2;
+        typedef typename apply2< ForwardOp,state1,iter1 >::type state2;
         typedef typename iter1::next iter2;
-        typedef typename ForwardOp::template apply< state2,iter2 >::type state3;
+        typedef typename apply2< ForwardOp,state2,iter2 >::type state3;
         typedef typename iter2::next iter3;
         
 
         typedef state3 state;
         typedef iter3 iterator;
     };
+
 };
 
 template<>
@@ -121,19 +125,20 @@ struct iter_fold_chunk<4>
     {
         typedef First iter0;
         typedef State state0;
-        typedef typename ForwardOp::template apply< state0,iter0 >::type state1;
+        typedef typename apply2< ForwardOp,state0,iter0 >::type state1;
         typedef typename iter0::next iter1;
-        typedef typename ForwardOp::template apply< state1,iter1 >::type state2;
+        typedef typename apply2< ForwardOp,state1,iter1 >::type state2;
         typedef typename iter1::next iter2;
-        typedef typename ForwardOp::template apply< state2,iter2 >::type state3;
+        typedef typename apply2< ForwardOp,state2,iter2 >::type state3;
         typedef typename iter2::next iter3;
-        typedef typename ForwardOp::template apply< state3,iter3 >::type state4;
+        typedef typename apply2< ForwardOp,state3,iter3 >::type state4;
         typedef typename iter3::next iter4;
         
 
         typedef state4 state;
         typedef iter4 iterator;
     };
+
 };
 
 template< long N > 
@@ -206,6 +211,7 @@ struct iter_fold_chunk< -1 >
         typedef typename res_::state state;
         typedef typename res_::iterator iterator;
     };
+
 };
 
 template<
@@ -219,7 +225,7 @@ struct iter_fold_step
     typedef iter_fold_chunk< -1 >::template result_<
           typename First::next
         , Last
-        , typename ForwardOp::template apply< State,First >::type
+        , typename apply2< ForwardOp,State,First >::type
         , ForwardOp
         > chunk_;
 

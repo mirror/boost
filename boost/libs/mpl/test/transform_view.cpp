@@ -17,7 +17,7 @@
 #include "boost/mpl/transform_view.hpp"
 #include "boost/mpl/max_element.hpp"
 #include "boost/mpl/list.hpp"
-#include "boost/mpl/size_of.hpp"
+#include "boost/mpl/sizeof.hpp"
 #include "boost/static_assert.hpp"
 
 namespace mpl = boost::mpl;
@@ -27,7 +27,7 @@ int main()
 {
     typedef mpl::list<int,long,char,char[50],double> types;
     typedef mpl::max_element<
-          mpl::transform_view< types, mpl::size_of<_> >
+          mpl::transform_view< types, mpl::sizeof_<_> >
         >::type iter;
 
     BOOST_STATIC_ASSERT(iter::type::value == 50);

@@ -19,7 +19,7 @@
 
 #include "boost/config.hpp"
 
-#if defined(__MWERKS__) && (__MWERKS__ <= 0x3002 || !defined(BOOST_STRICT_CONFIG)) \
+#if defined(__MWERKS__) && (__MWERKS__ <= 0x3003 || !defined(BOOST_STRICT_CONFIG)) \
  || defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
  || defined(__IBMCPP__) && (__IBMCPP__ <= 502 || !defined(BOOST_STRICT_CONFIG))
 #   define BOOST_MPL_BROKEN_PP_MACRO_EXPANSION

@@ -24,16 +24,16 @@ int main()
 {
     typedef mpl::vector10_c<int,9,8,7,6,5,4,3,2,1,0> numbers;
 
-    BOOST_STATIC_ASSERT((mpl::at_c<0, numbers>::type::value == 9));
-    BOOST_STATIC_ASSERT((mpl::at_c<1, numbers>::type::value == 8));
-    BOOST_STATIC_ASSERT((mpl::at_c<2, numbers>::type::value == 7));
-    BOOST_STATIC_ASSERT((mpl::at_c<3, numbers>::type::value == 6));
-    BOOST_STATIC_ASSERT((mpl::at_c<4, numbers>::type::value == 5));
-    BOOST_STATIC_ASSERT((mpl::at_c<5, numbers>::type::value == 4));
-    BOOST_STATIC_ASSERT((mpl::at_c<6, numbers>::type::value == 3));
-    BOOST_STATIC_ASSERT((mpl::at_c<7, numbers>::type::value == 2));
-    BOOST_STATIC_ASSERT((mpl::at_c<8, numbers>::type::value == 1));
-    BOOST_STATIC_ASSERT((mpl::at_c<9, numbers>::type::value == 0));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,0>::type::value == 9));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,1>::type::value == 8));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,2>::type::value == 7));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,3>::type::value == 6));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,4>::type::value == 5));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,5>::type::value == 4));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,6>::type::value == 3));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,7>::type::value == 2));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,8>::type::value == 1));
+    BOOST_STATIC_ASSERT((mpl::at_c<numbers,9>::type::value == 0));
 
     return 0;
 }

@@ -38,11 +38,13 @@ struct iter_fold_backward_chunk<0>
         typedef iter0 iterator;
     };
 
-    template<> struct result_<int,int,int,int,int>
+    // ETI workaround
+    template<> struct result_<int, int, int, int, int>
     {
         typedef int state;
         typedef int iterator;
     };
+
 };
 
 template<>
@@ -69,11 +71,13 @@ struct iter_fold_backward_chunk<1>
         typedef iter1 iterator;
     };
 
-    template<> struct result_<int,int,int,int,int>
+    // ETI workaround
+    template<> struct result_<int, int, int, int, int>
     {
         typedef int state;
         typedef int iterator;
     };
+
 };
 
 template<>
@@ -105,11 +109,13 @@ struct iter_fold_backward_chunk<2>
         typedef iter2 iterator;
     };
 
-    template<> struct result_<int,int,int,int,int>
+    // ETI workaround
+    template<> struct result_<int, int, int, int, int>
     {
         typedef int state;
         typedef int iterator;
     };
+
 };
 
 template<>
@@ -144,11 +150,13 @@ struct iter_fold_backward_chunk<3>
         typedef iter3 iterator;
     };
 
-    template<> struct result_<int,int,int,int,int>
+    // ETI workaround
+    template<> struct result_<int, int, int, int, int>
     {
         typedef int state;
         typedef int iterator;
     };
+
 };
 
 template<>
@@ -186,11 +194,13 @@ struct iter_fold_backward_chunk<4>
         typedef iter4 iterator;
     };
 
-    template<> struct result_<int,int,int,int,int>
+    // ETI workaround
+    template<> struct result_<int, int, int, int, int>
     {
         typedef int state;
         typedef int iterator;
     };
+
 };
 
 template< long N > 
@@ -279,11 +289,13 @@ struct iter_fold_backward_chunk< -1 >
         typedef typename res_::iterator iterator;
     };
 
-    template<> struct result_<int,int,int,int,int>
+    // ETI workaround
+    template<> struct result_<int, int, int, int, int>
     {
         typedef int state;
         typedef int iterator;
     };
+
 };
 
 template<

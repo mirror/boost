@@ -46,12 +46,6 @@ struct resolve_bind_arg
 
 } // namespace aux
 
-template<
-      typename F, typename T1 = void_, typename T2 = void_
-    , typename T3 = void_, typename T4 = void_, typename T5 = void_
-    >
-struct bind;
-
 template< typename F, typename T > struct bind1st;
 template< typename F, typename T > struct bind2nd;
 
@@ -61,12 +55,6 @@ template< int > struct bind_impl_chooser;
 
 aux::no_tag is_bind_helper(...);
 template< typename T > aux::no_tag is_bind_helper(protect<T>*);
-
-template<
-      typename F, typename T1, typename T2, typename T3, typename T4
-    , typename T5
-    >
-aux::yes_tag is_bind_helper(bind< F,T1,T2,T3,T4,T5 >*);
 
 template< int N >
 aux::yes_tag is_bind_helper(arg<N>*);
@@ -83,6 +71,9 @@ template< typename T > struct is_bind_template
 };
 
 } // namespace aux
+
+BOOST_MPL_AUX_ARITY_SPEC(2, bind1st)
+BOOST_MPL_AUX_ARITY_SPEC(2, bind2nd)
 
 template<
       typename F
@@ -113,22 +104,7 @@ is_bind_helper(bind0<F>*);
 
 } // namespace aux
 
-namespace aux {
-
-template<>
-struct bind_impl_chooser<0>
-{
-    template<
-          typename F, typename T1, typename T2, typename T3, typename T4
-        , typename T5
-        >
-    struct result_
-    {
-        typedef bind0<F> type;
-    };
-};
-
-} // namespace aux
+BOOST_MPL_AUX_ARITY_SPEC(1, bind0)
 
 template<
       typename F, typename T1
@@ -160,22 +136,7 @@ is_bind_helper(bind1< F,T1 >*);
 
 } // namespace aux
 
-namespace aux {
-
-template<>
-struct bind_impl_chooser<1>
-{
-    template<
-          typename F, typename T1, typename T2, typename T3, typename T4
-        , typename T5
-        >
-    struct result_
-    {
-        typedef bind1< F,T1 > type;
-    };
-};
-
-} // namespace aux
+BOOST_MPL_AUX_ARITY_SPEC(2, bind1)
 
 template<
       typename F, typename T1, typename T2
@@ -208,22 +169,7 @@ is_bind_helper(bind2< F,T1,T2 >*);
 
 } // namespace aux
 
-namespace aux {
-
-template<>
-struct bind_impl_chooser<2>
-{
-    template<
-          typename F, typename T1, typename T2, typename T3, typename T4
-        , typename T5
-        >
-    struct result_
-    {
-        typedef bind2< F,T1,T2 > type;
-    };
-};
-
-} // namespace aux
+BOOST_MPL_AUX_ARITY_SPEC(3, bind2)
 
 template<
       typename F, typename T1, typename T2, typename T3
@@ -257,22 +203,7 @@ is_bind_helper(bind3< F,T1,T2,T3 >*);
 
 } // namespace aux
 
-namespace aux {
-
-template<>
-struct bind_impl_chooser<3>
-{
-    template<
-          typename F, typename T1, typename T2, typename T3, typename T4
-        , typename T5
-        >
-    struct result_
-    {
-        typedef bind3< F,T1,T2,T3 > type;
-    };
-};
-
-} // namespace aux
+BOOST_MPL_AUX_ARITY_SPEC(4, bind3)
 
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
@@ -307,22 +238,7 @@ is_bind_helper(bind4< F,T1,T2,T3,T4 >*);
 
 } // namespace aux
 
-namespace aux {
-
-template<>
-struct bind_impl_chooser<4>
-{
-    template<
-          typename F, typename T1, typename T2, typename T3, typename T4
-        , typename T5
-        >
-    struct result_
-    {
-        typedef bind4< F,T1,T2,T3,T4 > type;
-    };
-};
-
-} // namespace aux
+BOOST_MPL_AUX_ARITY_SPEC(5, bind4)
 
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
@@ -360,68 +276,15 @@ is_bind_helper(bind5< F,T1,T2,T3,T4,T5 >*);
 
 } // namespace aux
 
-namespace aux {
-
-template<>
-struct bind_impl_chooser<5>
-{
-    template<
-          typename F, typename T1, typename T2, typename T3, typename T4
-        , typename T5
-        >
-    struct result_
-    {
-        typedef bind5< F,T1,T2,T3,T4,T5 > type;
-    };
-};
-
-} // namespace aux
-
-namespace aux {
-
-template< typename T >
-struct is_bind_arg
-{
-    enum { value = true };
-};
-
-template<>
-struct is_bind_arg<void_>
-{
-    enum { value = false };
-};
-
-template<
-      typename T1, typename T2, typename T3, typename T4, typename T5
-    >
-struct bind_count_args
-{
-    enum { value =
-          is_bind_arg<T1>::value + is_bind_arg<T2>::value 
-        + is_bind_arg<T3>::value + is_bind_arg<T4>::value 
-        + is_bind_arg<T5>::value
-        };
-};
-
-}
-
-template<
-      typename F, typename T1, typename T2, typename T3, typename T4
-    , typename T5
-    >
-struct bind
-    : aux::bind_impl_chooser<
-          aux::bind_count_args< T1,T2,T3,T4,T5 >::value
-        >::template result_< F,T1,T2,T3,T4,T5 >::type
-{
-};
+BOOST_MPL_AUX_ARITY_SPEC(6, bind5)
 
 template< typename F, typename T >
 struct bind1st
 {
     template<
-          typename U, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U
+        , typename U2 = void_, typename U3 = void_, typename U4 = void_
+        , typename U5 = void_
         >
     struct apply
         : apply2< F,T,U >
@@ -433,8 +296,9 @@ template< typename F, typename T >
 struct bind2nd
 {
     template<
-          typename U, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U
+        , typename U2 = void_, typename U3 = void_, typename U4 = void_
+        , typename U5 = void_
         >
     struct apply
         : apply2< F,U,T >

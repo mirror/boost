@@ -50,6 +50,7 @@ int main()
     typedef mpl::list<char,short,int,long,float,double> types;
     mpl::for_each< types,mpl::make_identity<_> >(printer(std::cout));
 
+#if !defined(__BORLANDC__) || __BORLANDC__ != 0x560
     typedef mpl::range_c<int,0,10> numbers;
     std::vector<int> v;
     mpl::for_each<numbers,mpl::_>(
@@ -58,6 +59,7 @@ int main()
     
     for (int i = 0; i < v.size(); ++i)
         assert(v[i] == i);
+#endif
 
     return 0;
 }

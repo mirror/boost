@@ -22,20 +22,17 @@
 #endif
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
-#include "boost/mpl/aux_/config/vector.hpp"
 
-#if defined(BOOST_MPL_USE_PREPROCESSED_HEADERS) && \
-    !defined(BOOST_MPL_PREPROCESSING_MODE)
+#if defined(BOOST_MPL_USE_PREPROCESSED_HEADERS) \
+ && !defined(BOOST_MPL_PREPROCESSING_MODE)
 
-#   if !defined(BOOST_MPL_TYPEOF_BASED_VECTOR_IMPL)
-#       define BOOST_MPL_PREPROCESSED_HEADER vector50.hpp
-#   else
-#       define BOOST_MPL_PREPROCESSED_HEADER lite_vector50.hpp
-#   endif
-#   include "boost/mpl/aux_/include_preprocessed.hpp"
+#   define BOOST_MPL_PREPROCESSED_HEADER vector50.hpp
+#   include "boost/mpl/vector/aux_/include_preprocessed.hpp"
 
 #else
 
+#   include "boost/mpl/aux_/config/vector.hpp"
+#   include "boost/mpl/aux_/config/ctps.hpp"
 #   include "boost/preprocessor/iterate.hpp"
 #   include "boost/config.hpp"
 

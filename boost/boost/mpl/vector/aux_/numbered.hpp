@@ -63,11 +63,11 @@ struct BOOST_PP_CAT(vector,i)
     typedef aux::vector_tag<i> tag;
     typedef BOOST_PP_CAT(vector,i) type;
 
-#   define AUX_VECTOR_ITEM(i, unused) \
+#   define AUX_VECTOR_ITEM(unused, i, unused2) \
     typedef BOOST_PP_CAT(T,i) BOOST_PP_CAT(item,i); \
     /**/
 
-    BOOST_PP_REPEAT_1ST(i, AUX_VECTOR_ITEM, unused)
+    BOOST_PP_REPEAT_1(i, AUX_VECTOR_ITEM, unused)
 #   undef AUX_VECTOR_ITEM
     typedef void_ BOOST_PP_CAT(item,i);
     typedef BOOST_PP_CAT(T,BOOST_PP_DEC(i)) back;
@@ -103,7 +103,8 @@ struct pop_front_traits< aux::vector_tag<i> >
 
 #   endif // i > 0
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+    && !defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename V >
 struct vector_item<V,i>
@@ -123,13 +124,23 @@ template<> struct vector_item_impl<i>
 };
 }
 
+template<>
+struct at_traits< aux::vector_tag<i> >
+{
+    template< typename V, typename N > struct algorithm
+    {
+        typedef typename aux::vector_item_impl<BOOST_MPL_AUX_VALUE_WKND(N)::value>
+            ::template result_<V>::type type;
+    };
+};
+
 #if i > 0
 template<>
 struct front_traits< aux::vector_tag<i> >
 {
     template< typename Vector > struct algorithm
     {
-        typedef typename Vector::front type;
+        typedef typename Vector::item0 type;
     };
 };
 

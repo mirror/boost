@@ -183,7 +183,7 @@ struct largest
     typedef typename mpl::max_element<
           mpl::transform_view<
               Sequence
-            , mpl::size_of<_>
+            , mpl::sizeof_<_>
             >
         >::type type;
 };
@@ -201,8 +201,8 @@ struct largest
     typedef typename mpl::max_element<
           Sequence
           mpl::less<
-              mpl::size_of<_1>
-            , mpl::size_of<_2>
+              mpl::sizeof_<_1>
+            , mpl::sizeof_<_2>
             >
         >::type iter;
 

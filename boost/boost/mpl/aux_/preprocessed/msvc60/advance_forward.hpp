@@ -16,7 +16,12 @@ struct advance_forward<0>
         typedef iter0 type;
     };
 
-    template<> struct apply<int> { typedef int type; };
+    // ETI workaround
+    template<> struct apply<int>
+    {
+        typedef int type;
+    };
+
 };
 
 template<>
@@ -29,7 +34,12 @@ struct advance_forward<1>
         typedef iter1 type;
     };
 
-    template<> struct apply<int> { typedef int type; };
+    // ETI workaround
+    template<> struct apply<int>
+    {
+        typedef int type;
+    };
+
 };
 
 template<>
@@ -43,7 +53,12 @@ struct advance_forward<2>
         typedef iter2 type;
     };
 
-    template<> struct apply<int> { typedef int type; };
+    // ETI workaround
+    template<> struct apply<int>
+    {
+        typedef int type;
+    };
+
 };
 
 template<>
@@ -58,7 +73,12 @@ struct advance_forward<3>
         typedef iter3 type;
     };
 
-    template<> struct apply<int> { typedef int type; };
+    // ETI workaround
+    template<> struct apply<int>
+    {
+        typedef int type;
+    };
+
 };
 
 template<>
@@ -74,7 +94,12 @@ struct advance_forward<4>
         typedef iter4 type;
     };
 
-    template<> struct apply<int> { typedef int type; };
+    // ETI workaround
+    template<> struct apply<int>
+    {
+        typedef int type;
+    };
+
 };
 
 template< long N > 

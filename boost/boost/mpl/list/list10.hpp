@@ -23,11 +23,11 @@
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
 
-#if defined(BOOST_MPL_USE_PREPROCESSED_HEADERS) && \
-    !defined(BOOST_MPL_PREPROCESSING_MODE)
+#if defined(BOOST_MPL_USE_PREPROCESSED_HEADERS) \
+ && !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   define BOOST_MPL_PREPROCESSED_HEADER list10.hpp
-#   include "boost/mpl/aux_/include_preprocessed.hpp"
+#   include "boost/mpl/list/aux_/include_preprocessed.hpp"
 
 #else
 

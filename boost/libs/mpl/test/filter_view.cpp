@@ -18,7 +18,7 @@
 #include "boost/mpl/transform_view.hpp"
 #include "boost/mpl/max_element.hpp"
 #include "boost/mpl/list.hpp"
-#include "boost/mpl/size_of.hpp"
+#include "boost/mpl/sizeof.hpp"
 #include "boost/type_traits/is_float.hpp"
 #include "boost/type_traits/is_same.hpp"
 #include "boost/static_assert.hpp"
@@ -32,7 +32,7 @@ int main()
     typedef mpl::max_element<
           mpl::transform_view<
               mpl::filter_view< types,boost::is_float<_> >
-            , mpl::size_of<_>
+            , mpl::sizeof_<_>
             >
         >::type iter;
 

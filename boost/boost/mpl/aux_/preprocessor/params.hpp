@@ -17,6 +17,8 @@
 #ifndef BOOST_MPL_AUX_PREPROCESSOR_PARAMS_HPP_INCLUDED
 #define BOOST_MPL_AUX_PREPROCESSOR_PARAMS_HPP_INCLUDED
 
+#include "boost/mpl/aux_/config/preprocessor.hpp"
+
 // BOOST_MPL_PP_PARAMS(0,T): <nothing>
 // BOOST_MPL_PP_PARAMS(1,T): T1
 // BOOST_MPL_PP_PARAMS(2,T): T1, T2
@@ -48,13 +50,13 @@
 #   include "boost/preprocessor/inc.hpp"
 #   include "boost/preprocessor/cat.hpp"
 
-#   define BOOST_MPL_PP_AUX_PARAM_FUNC(z, i, param) \
+#   define BOOST_MPL_PP_AUX_PARAM_FUNC(unused, i, param) \
     BOOST_PP_COMMA_IF(i) \
     BOOST_PP_CAT(param, BOOST_PP_INC(i)) \
     /**/
 
-#   define BOOST_MPL_PP_PARAMS(n,param) \
-    BOOST_PP_REPEAT( \
+#   define BOOST_MPL_PP_PARAMS(n, param) \
+    BOOST_PP_REPEAT_1( \
           n \
         , BOOST_MPL_PP_AUX_PARAM_FUNC \
         , param \

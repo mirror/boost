@@ -52,7 +52,7 @@ Inline composition is very appealing syntactically when one deals with metafunct
 
 <programlisting><![CDATA[
 typedef mpl::logical_or<
-      mpl::less< mpl::size_of<_1>, mpl::int_c<16> >
+      mpl::less< mpl::sizeof_<_1>, mpl::int_c<16> >
     , boost::is_same<_1,_2>
     > expr;
 
@@ -71,7 +71,7 @@ The alternative way to write an equivalent of the above metafunction class would
 typedef bind<
       mpl::meta_fun2<mpl::logical_or>
     , mpl::bind< mpl::meta_fun2<mpl::less>
-        , mpl::bind< mpl::meta_fun1<mpl::size_of>,_1 >
+        , mpl::bind< mpl::meta_fun1<mpl::sizeof_>,_1 >
         , mpl::int_c<16>
         >
     , mpl::bind< mpl::meta_fun2<boost::is_same>,_1,_2 >
@@ -89,7 +89,7 @@ For its own metafunctions (algorithms, primitives, etc.), &MPL; enables one to w
 <programlisting><![CDATA[
 typedef mpl::bind<
       mpl::logical_or<>
-    , mpl::bind< mpl::less<>, mpl::bind<mpl::size_of<>,_1>, mpl::int_c<16> >
+    , mpl::bind< mpl::less<>, mpl::bind<mpl::sizeof_<>,_1>, mpl::int_c<16> >
     , mpl::bind< mpl::make_f2<boost::is_same>, _1,_2 >
     > func;
 ]]></>
@@ -112,7 +112,7 @@ struct my_predicate
 };
 
 typedef mpl::logical_or<
-      mpl::less< mpl::size_of<_>,mpl::int_c<16> >
+      mpl::less< mpl::sizeof_<_>,mpl::int_c<16> >
     , mpl::bind< my_predicate,_,_ > // here
     > expr;
 ]]></>
@@ -123,7 +123,7 @@ To bind something to one of its arguments (or change the order of parameters), t
 
 <programlisting><![CDATA[
 typedef mpl::logical_or<
-      mpl::less< mpl::size_of<_>,mpl::int_c<16> >
+      mpl::less< mpl::sizeof_<_>,mpl::int_c<16> >
     , mpl::bind<my_predicate,int,_>::type // here
     > expr;
 ]]></>
@@ -134,7 +134,7 @@ or
 
 <programlisting><![CDATA[
 typedef mpl::logical_or<
-      mpl::less< mpl::size_of<_>,mpl::int_c<16> >
+      mpl::less< mpl::sizeof_<_>,mpl::int_c<16> >
     , my_predicate::apply<int,_> // here
     > expr;
 ]]></>

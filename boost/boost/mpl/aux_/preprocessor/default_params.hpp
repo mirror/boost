@@ -17,6 +17,8 @@
 #ifndef BOOST_MPL_AUX_PREPROCESSOR_DEFAULT_PARAMS_HPP_INCLUDED
 #define BOOST_MPL_AUX_PREPROCESSOR_DEFAULT_PARAMS_HPP_INCLUDED
 
+#include "boost/mpl/aux_/config/preprocessor.hpp"
+
 // BOOST_MPL_PP_DEFAULT_PARAMS(0,T,int): <nothing>
 // BOOST_MPL_PP_DEFAULT_PARAMS(1,T,int): T1 = int
 // BOOST_MPL_PP_DEFAULT_PARAMS(2,T,int): T1 = int, T2 = int
@@ -49,14 +51,14 @@
 #   include "boost/preprocessor/inc.hpp"
 #   include "boost/preprocessor/cat.hpp"
 
-#   define BOOST_MPL_PP_AUX_DEFAULT_PARAM_FUNC(i,pv) \
+#   define BOOST_MPL_PP_AUX_DEFAULT_PARAM_FUNC(unused, i, pv) \
     BOOST_PP_COMMA_IF(i) \
     BOOST_PP_CAT( BOOST_PP_TUPLE_ELEM(2,0,pv), BOOST_PP_INC(i) ) \
         = BOOST_PP_TUPLE_ELEM(2,1,pv) \
     /**/
 
-#   define BOOST_MPL_PP_DEFAULT_PARAMS(n,param,value) \
-    BOOST_PP_REPEAT_1ST( \
+#   define BOOST_MPL_PP_DEFAULT_PARAMS(n, param, value) \
+    BOOST_PP_REPEAT_1( \
           n \
         , BOOST_MPL_PP_AUX_DEFAULT_PARAM_FUNC \
         , (param,value) \

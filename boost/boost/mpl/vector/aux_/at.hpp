@@ -22,7 +22,7 @@
 #include "boost/mpl/vector/aux_/item.hpp"
 #include "boost/mpl/vector/aux_/tag.hpp"
 #include "boost/mpl/aux_/config/vector.hpp"
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/ctps.hpp"
 
 namespace boost {
 namespace mpl {
@@ -32,7 +32,7 @@ namespace mpl {
 template<>
 struct at_traits< aux::vector_tag >
 {
-    template< typename N, typename Vector > struct algorithm
+    template< typename Vector, typename N > struct algorithm
         : vector_item<
               Vector
             , BOOST_MPL_AUX_VALUE_WKND(N)::value
@@ -43,12 +43,13 @@ struct at_traits< aux::vector_tag >
 
 #else
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+ && !defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< long S >
 struct at_traits< aux::vector_tag<S> >
 {
-    template< typename N, typename Vector > struct algorithm
+    template< typename Vector, typename N > struct algorithm
 #if !defined(__BORLANDC__)
         : vector_item<
               Vector

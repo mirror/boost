@@ -15,6 +15,7 @@ struct advance_forward<0>
         typedef Iterator iter0;
         typedef iter0 type;
     };
+
 };
 
 template<>
@@ -26,6 +27,7 @@ struct advance_forward<1>
         typedef typename iter0::next iter1;
         typedef iter1 type;
     };
+
 };
 
 template<>
@@ -38,6 +40,7 @@ struct advance_forward<2>
         typedef typename iter1::next iter2;
         typedef iter2 type;
     };
+
 };
 
 template<>
@@ -51,6 +54,7 @@ struct advance_forward<3>
         typedef typename iter2::next iter3;
         typedef iter3 type;
     };
+
 };
 
 template<>
@@ -65,6 +69,7 @@ struct advance_forward<4>
         typedef typename iter3::next iter4;
         typedef iter4 type;
     };
+
 };
 
 template< long N > 

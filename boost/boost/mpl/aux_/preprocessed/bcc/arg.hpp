@@ -11,15 +11,11 @@ template<> struct arg<-1>
     typedef void_ tag;
 
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
         typedef U1 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
     };
 };
 
@@ -30,16 +26,12 @@ template<> struct arg<1>
     typedef void_ tag;
 
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
         typedef U1 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+    };
 };
 
 template<> struct arg<2>
@@ -49,16 +41,12 @@ template<> struct arg<2>
     typedef void_ tag;
 
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
         typedef U2 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+    };
 };
 
 template<> struct arg<3>
@@ -68,16 +56,12 @@ template<> struct arg<3>
     typedef void_ tag;
 
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
         typedef U3 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+    };
 };
 
 template<> struct arg<4>
@@ -87,16 +71,12 @@ template<> struct arg<4>
     typedef void_ tag;
 
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
         typedef U4 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+    };
 };
 
 template<> struct arg<5>
@@ -106,25 +86,15 @@ template<> struct arg<5>
     typedef void_ tag;
 
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1, typename U2, typename U3, typename U4, typename U5
         >
     struct apply
     {
         typedef U5 type;
-        typedef char arity_constraint[
-            ::boost::mpl::aux::reject_if_void_<type>::value
-            ];
-    };   
+    };
 };
 
-namespace aux {
-template< int N, int A >
-struct arity< arg<N>,A >
-{
-    static int const value = 5;
-};
-}
+BOOST_MPL_AUX_NONTYPE_ARITY_SPEC(1, int, arg)
 
 } // namespace mpl
 } // namespace boost

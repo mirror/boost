@@ -84,6 +84,14 @@ template< typename T > struct is_bind_template
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(
+      6
+    , bind
+    )
+
+BOOST_MPL_AUX_ARITY_SPEC(2, bind1st)
+BOOST_MPL_AUX_ARITY_SPEC(2, bind2nd)
+
 template<
       typename F
     >
@@ -112,6 +120,8 @@ aux::yes_tag
 is_bind_helper(bind0<F>*);
 
 } // namespace aux
+
+BOOST_MPL_AUX_ARITY_SPEC(1, bind0)
 
 namespace aux {
 
@@ -160,6 +170,8 @@ is_bind_helper(bind1< F,T1 >*);
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(2, bind1)
+
 namespace aux {
 
 template<>
@@ -207,6 +219,8 @@ aux::yes_tag
 is_bind_helper(bind2< F,T1,T2 >*);
 
 } // namespace aux
+
+BOOST_MPL_AUX_ARITY_SPEC(3, bind2)
 
 namespace aux {
 
@@ -257,6 +271,8 @@ is_bind_helper(bind3< F,T1,T2,T3 >*);
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(4, bind3)
+
 namespace aux {
 
 template<>
@@ -306,6 +322,8 @@ aux::yes_tag
 is_bind_helper(bind4< F,T1,T2,T3,T4 >*);
 
 } // namespace aux
+
+BOOST_MPL_AUX_ARITY_SPEC(5, bind4)
 
 namespace aux {
 
@@ -359,6 +377,8 @@ aux::yes_tag
 is_bind_helper(bind5< F,T1,T2,T3,T4,T5 >*);
 
 } // namespace aux
+
+BOOST_MPL_AUX_ARITY_SPEC(6, bind5)
 
 namespace aux {
 
@@ -420,8 +440,9 @@ template< typename F, typename T >
 struct bind1st
 {
     template<
-          typename U, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U
+        , typename U2 = void_, typename U3 = void_, typename U4 = void_
+        , typename U5 = void_
         >
     struct apply
         : F::template apply< T,U >
@@ -433,8 +454,9 @@ template< typename F, typename T >
 struct bind2nd
 {
     template<
-          typename U, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U
+        , typename U2 = void_, typename U3 = void_, typename U4 = void_
+        , typename U5 = void_
         >
     struct apply
         : F::template apply< U,T >

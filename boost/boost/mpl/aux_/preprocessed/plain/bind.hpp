@@ -52,7 +52,7 @@ template<
     >
 struct resolve_bind_arg< arg<N>,U1,U2,U3,U4,U5 >
 {
-    typedef typename mpl::arg<N>::template apply< U1,U2,U3,U4,U5 >::type type;
+    typedef typename arg<N>::template apply< U1,U2,U3,U4,U5 >::type type;
 };
 
 template<
@@ -88,6 +88,14 @@ struct resolve_bind_arg< bind2nd<F,T>,U1,U2,U3,U4,U5 >
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(
+      6
+    , bind
+    )
+
+BOOST_MPL_AUX_ARITY_SPEC(2, bind1st)
+BOOST_MPL_AUX_ARITY_SPEC(2, bind2nd)
+
 template<
       typename F
     >
@@ -100,7 +108,7 @@ struct bind0
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,mpl::arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -126,6 +134,8 @@ struct resolve_bind_arg<
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(1, bind0)
+
 template<
       typename F
     >
@@ -146,7 +156,7 @@ struct bind1
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,mpl::arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -177,6 +187,8 @@ struct resolve_bind_arg<
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(2, bind1)
+
 template<
       typename F, typename T1
     >
@@ -197,7 +209,7 @@ struct bind2
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,mpl::arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -233,6 +245,8 @@ struct resolve_bind_arg<
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(3, bind2)
+
 template<
       typename F, typename T1, typename T2
     >
@@ -253,7 +267,7 @@ struct bind3
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,mpl::arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -294,6 +308,8 @@ struct resolve_bind_arg<
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(4, bind3)
+
 template<
       typename F, typename T1, typename T2, typename T3
     >
@@ -314,7 +330,7 @@ struct bind4
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,mpl::arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -360,6 +376,8 @@ struct resolve_bind_arg<
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(5, bind4)
+
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
     >
@@ -381,7 +399,7 @@ struct bind5
     struct apply
     {
      private:
-        typedef aux::replace_unnamed_arg< F,mpl::arg<1> > r0;
+        typedef aux::replace_unnamed_arg< F,arg<1> > r0;
         typedef typename r0::type a0;
         typedef typename r0::next_arg n1;
         typedef typename aux::resolve_bind_arg< a0,U1,U2,U3,U4,U5 >::type f_;
@@ -433,6 +451,8 @@ struct resolve_bind_arg<
 
 } // namespace aux
 
+BOOST_MPL_AUX_ARITY_SPEC(6, bind5)
+
 // primary template (not a specialization!)
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
@@ -447,8 +467,9 @@ template< typename F, typename T >
 struct bind1st
 {
     template<
-          typename U, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U
+        , typename U2 = void_, typename U3 = void_, typename U4 = void_
+        , typename U5 = void_
         >
     struct apply
         : F::template apply< T,U >
@@ -460,8 +481,9 @@ template< typename F, typename T >
 struct bind2nd
 {
     template<
-          typename U, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U
+        , typename U2 = void_, typename U3 = void_, typename U4 = void_
+        , typename U5 = void_
         >
     struct apply
         : F::template apply< U,T >

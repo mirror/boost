@@ -19,7 +19,7 @@
 
 #include "boost/mpl/integral_c.hpp"
 #include "boost/mpl/aux_/config/vector.hpp"
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/config/ctps.hpp"
 
 namespace boost {
 namespace mpl {
@@ -35,7 +35,10 @@ struct vector_item
 
 #else
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+// agurt, 29/sep/02: Borland 5.5.1 does a poor job on partial 
+// specialization here
+#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+    && !defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 // forward declaration
 template< typename T, long N >

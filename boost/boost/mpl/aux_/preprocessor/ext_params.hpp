@@ -17,6 +17,8 @@
 #ifndef BOOST_MPL_AUX_PREPROCESSOR_EXT_PARAMS_HPP_INCLUDED
 #define BOOST_MPL_AUX_PREPROCESSOR_EXT_PARAMS_HPP_INCLUDED
 
+#include "boost/mpl/aux_/config/preprocessor.hpp"
+
 // BOOST_MPL_PP_EXT_PARAMS(1,1,T): <nothing>
 // BOOST_MPL_PP_EXT_PARAMS(1,2,T): T1
 // BOOST_MPL_PP_EXT_PARAMS(1,3,T): T1, T2
@@ -58,7 +60,7 @@
 #   include "boost/preprocessor/tuple/elem.hpp"
 #   include "boost/preprocessor/cat.hpp"
 
-#   define BOOST_MPL_PP_AUX_EXT_PARAM_FUNC(i,op) \
+#   define BOOST_MPL_PP_AUX_EXT_PARAM_FUNC(unused, i, op) \
     BOOST_PP_COMMA_IF(i) \
     BOOST_PP_CAT( \
           BOOST_PP_TUPLE_ELEM(2,1,op) \
@@ -66,8 +68,8 @@
         ) \
     /**/
 
-#   define BOOST_MPL_PP_EXT_PARAMS(i,j,param) \
-    BOOST_PP_REPEAT( \
+#   define BOOST_MPL_PP_EXT_PARAMS(i, j, param) \
+    BOOST_PP_REPEAT_1( \
           BOOST_PP_SUB_D(1,j,i) \
         , BOOST_MPL_PP_AUX_EXT_PARAM_FUNC \
         , (i,param) \

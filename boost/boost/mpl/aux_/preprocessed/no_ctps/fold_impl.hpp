@@ -34,6 +34,7 @@ struct fold_chunk<0>
         typedef state0 state;
         typedef iter0 iterator;
     };
+
 };
 
 template<>
@@ -56,6 +57,7 @@ struct fold_chunk<1>
         typedef state1 state;
         typedef iter1 iterator;
     };
+
 };
 
 template<>
@@ -80,6 +82,7 @@ struct fold_chunk<2>
         typedef state2 state;
         typedef iter2 iterator;
     };
+
 };
 
 template<>
@@ -106,6 +109,7 @@ struct fold_chunk<3>
         typedef state3 state;
         typedef iter3 iterator;
     };
+
 };
 
 template<>
@@ -134,6 +138,7 @@ struct fold_chunk<4>
         typedef state4 state;
         typedef iter4 iterator;
     };
+
 };
 
 template< long N > 
@@ -206,6 +211,7 @@ struct fold_chunk< -1 >
         typedef typename res_::state state;
         typedef typename res_::iterator iterator;
     };
+
 };
 
 template<
