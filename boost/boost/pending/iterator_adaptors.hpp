@@ -17,6 +17,7 @@
 #include <boost/utility.hpp>
 #include <boost/compressed_pair.hpp>
 #include <boost/concept_check.hpp>
+#include <boost/type.hpp>
 
 // I was having some problems with VC6. I couldn't tell whether our hack for
 // stock GCC was causing problems so I needed an easy way to turn it on and
@@ -27,11 +28,6 @@
 #endif
 
 namespace boost {
-
-// Just a "type envelope"; works around some MSVC deficiencies.
-template <class T>
-struct type {};
-
 
 //============================================================================
 // Concept checking classes that express the requirements for iterator
