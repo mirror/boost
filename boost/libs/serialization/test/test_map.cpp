@@ -180,5 +180,5 @@ int test_main( int /* argc */, char* /* argv */[] )
     #endif
 
     std::remove(testfile);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

@@ -223,5 +223,5 @@ test_main(int /* argc */, char * /* argv */[])
     test_dynamic_reference_cast_1();
     test_dynamic_pointer_cast();
 
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

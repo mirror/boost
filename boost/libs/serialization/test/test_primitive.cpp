@@ -59,7 +59,7 @@ test_main( int /* argc */, char* /* argv */[] )
     A a;
     out(testfile, a);
     in(testfile, a);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
 
 // EOF

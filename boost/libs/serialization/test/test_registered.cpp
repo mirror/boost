@@ -233,7 +233,7 @@ test_main( int /* argc */, char* /* argv */[] )
     load_registered(testfile);
 
     std::remove(testfile);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
 
 // EOF

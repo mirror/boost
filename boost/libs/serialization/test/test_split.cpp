@@ -160,7 +160,7 @@ test_main( int /* argc */, char* /* argv */[] )
     out(testfile, a, b, c);
     in(testfile, a, b, c);
     std::remove(testfile);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
 
 // EOF

@@ -95,7 +95,7 @@ test_main( int /* argc */, char* /* argv */[] )
     filename += BOOST_PP_STRINGIZE(testfile_);
     filename += BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST);
     out(filename.c_str(), a, b);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
 
 // EOF

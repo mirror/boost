@@ -199,5 +199,5 @@ int test_main(int /* argc */, char * /* argv */[])
     test2();
     test3();
     test4();
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

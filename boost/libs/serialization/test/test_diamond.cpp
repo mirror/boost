@@ -201,5 +201,5 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_ASSERT(*bp2 == *bp);
     std::remove(testfile);
 
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

@@ -126,7 +126,7 @@ test_main( int /* argc */, char* /* argv */[] )
     //identify the leaks
     BOOST_CHECK(A::objcount == 0);
     std::remove(testfile);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
 
 

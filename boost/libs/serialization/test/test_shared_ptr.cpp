@@ -146,5 +146,5 @@ int test_main(int /* argc */, char * /* argv */[])
 
     // obj of type B gets destroyed
     // as smart_ptr goes out of scope
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

@@ -147,7 +147,7 @@ test_main( int /* argc */, char* /* argv */[] )
         static_cast<MostDerived *>(NULL),
         static_cast<Derived *>(NULL)
     );
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
 
 // EOF

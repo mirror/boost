@@ -48,7 +48,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     BOOST_CHECK(avector == avector1);
     std::remove(testfile);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
 
 // EOF

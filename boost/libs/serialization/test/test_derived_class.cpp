@@ -44,7 +44,7 @@ int test_main( int argc, char* argv[] )
     }
     BOOST_CHECK(b == b1);
     std::remove(testfile);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
 
 // EOF

@@ -27,5 +27,5 @@ void warnings() {
 
 int test_main(int /* argc */, char * /* argv */[]){
     warnings();
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

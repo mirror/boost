@@ -132,5 +132,5 @@ test_main( int /* argc */, char* /* argv */[] )
 
     delete pc;
     std::remove(testfile);
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

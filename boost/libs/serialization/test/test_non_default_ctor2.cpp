@@ -142,5 +142,5 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     delete a;
     delete a_new;
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

@@ -241,5 +241,5 @@ test_main(int /* argc */, char * /* argv */[]) {
     }
 
     delete utf8_locale;
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }

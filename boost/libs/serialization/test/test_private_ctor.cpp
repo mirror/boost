@@ -38,5 +38,5 @@ int test_main(int /* argc */, char * /* argv */[])
         boost::archive::text_iarchive ia(ss);
         ia >> v;
     }
-    return boost::exit_success;
+    return EXIT_SUCCESS;
 }
