@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   29 Sep 00  BOOST_NO_INTEGRAL_INT64_T (Jens Maurer)
 //   25 Sep 00  BOOST_NO_STD_ALLOCATOR (Jeremy Siek)
 //   18 SEP 00  BOOST_NO_SLIST, BOOST_NO_HASH, 
 //              BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
@@ -55,6 +56,9 @@
 //  "template<class T, typename T::type value> class X { ... };"
 
 //  BOOST_NO_INCLASS_MEMBER_INITIALIZATION: Compiler violates std::9.4.2/4. 
+
+//  BOOST_NO_INTEGRAL_INT64_T: int64_t as defined by <boost/cstdint.hpp> is
+//  not an integral type.
 
 //  BOOST_NO_MEMBER_TEMPLATES: Member template functions not fully supported.
 //  Also see BOOST_MSVC6_MEMBER_TEMPLATES in the Compiler Control section below.
@@ -188,6 +192,7 @@
 
 #elif defined __BORLANDC__
 #   if __BORLANDC__ <= 0x0551
+#     define BOOST_NO_INTEGRAL_INT64_T
 #     define BOOST_NO_PRIVATE_IN_AGGREGATE
 #   endif
 #   if __BORLANDC__ <= 0x0550
