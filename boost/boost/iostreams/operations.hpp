@@ -15,7 +15,6 @@
 #include <boost/config.hpp>                     // BOOST_NO_STD_LOCALE.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
-#include <boost/iostreams/detail/iterator_traits.hpp>
 #include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/traits.hpp>
@@ -187,18 +186,6 @@ struct write_impl<streambuf_tag> {
 };
 
 template<>
-struct write_impl<insert_iterator_tag> {
-    template<typename T>
-    static void put(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
-    { *t++ = c; }
-
-    template<typename T>
-    static void write( T& t, const typename iter_val<T>::type* s,
-                       std::streamsize n )
-    { while (n--) *t++ = *s++; }
-};
-
-template<>
 struct seek_impl<any_tag> {
     template<typename T>
     static std::streamoff seek( T& t, std::streamoff off, std::ios::seekdir way,
@@ -340,7 +327,7 @@ template<typename T>
 void put(T& t, BOOST_IOSTREAMS_CHAR_TYPE(T) c)
 {
     typedef typename detail::dispatch<
-                T, ostream_tag, streambuf_tag, insert_iterator_tag, output
+                T, ostream_tag, streambuf_tag, output
             >::type tag;
     detail::write_impl<tag>::put(detail::unwrap(t), c);
 }
@@ -350,7 +337,7 @@ inline void
 write(T& t, const BOOST_IOSTREAMS_CHAR_TYPE(T)* s, std::streamsize n)
 {
     typedef typename detail::dispatch<
-                T, ostream_tag, streambuf_tag, insert_iterator_tag, output
+                T, ostream_tag, streambuf_tag, output
             >::type tag;
     detail::write_impl<tag>::write(detail::unwrap(t), s, n);
 }
