@@ -1,7 +1,7 @@
 #ifndef _DATE_TIME_DATE_PARSING_HPP___
 #define _DATE_TIME_DATE_PARSING_HPP___
 
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -114,36 +114,40 @@ namespace date_time {
       typedef typename date_type::year_type year_type;
       typedef typename date_type::month_type month_type;
       unsigned pos = 0;
-      typename date_type::ymd_type ymd((year_type::min)(),1,1);
-      boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
-      for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end(), pos < spec_str.size(); ++beg, ++pos) {
-      //typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
-      // may need more delimiters, defaults are no good
-      //boost::char_separator<char> sep(",-. /"); 
-      //tokenizer tok(s,sep);
-      //for(tokenizer::iterator beg=tok.begin(); beg!=tok.end(), pos < spec_str.size(); ++beg, ++pos) {
-        unsigned short i =0;
+      unsigned short year(0), month(0), day(0);
+      
+      typedef boost::tokenizer<boost::char_separator<char>,
+                               typename std::basic_string<char>::const_iterator,
+                               std::basic_string<char> > tokenizer;
+      typedef boost::tokenizer<boost::char_separator<char>,
+                               std::basic_string<char>::const_iterator,
+                               std::basic_string<char> >::iterator tokenizer_iterator;
+      // may need more delimiters, these work for the regression tests
+      const char sep_char[] = {',','-','.',' ','/','\0'};
+      boost::char_separator<char> sep(sep_char);
+      tokenizer tok(s,sep);
+      for(tokenizer_iterator beg=tok.begin(); 
+          beg!=tok.end() && pos < spec_str.size(); 
+          ++beg, ++pos) {
         switch(spec_str.at(pos)) {
           case 'y': 
           {
-            i = boost::lexical_cast<unsigned short>(*beg);
-            ymd.year = i;
+            year = boost::lexical_cast<unsigned short>(*beg);
             break;
           }
           case 'm': 
           {
-            ymd.month = month_str_to_ushort<month_type>(*beg);
+            month = month_str_to_ushort<month_type>(*beg);
             break;
           }
           case 'd': 
           {
-            i = boost::lexical_cast<unsigned short>(*beg);
-            ymd.day = i;
+            day = boost::lexical_cast<unsigned short>(*beg);
             break;
           }
         } //switch
       }
-      return date_type(ymd.year, ymd.month, ymd.day);
+      return date_type(year, month, day);
     }
     
     //! Generic function to parse undelimited date (eg: 20020201)
