@@ -155,27 +155,32 @@ entered. At the end of <code>main()</code>, the <code>myMachine</code> object
 is destroyed what automatically exits the <code>Greeting</code> state.</p>
 <p>A few remarks:</p>
 <ul>
-  <li>boost::fsm makes heavy use of the curiously recurring template pattern. 
-  The deriving class must always be passed as the first parameter to the base 
-  class template.</li>
-  <li>The machine is not yet running after construction. We start it by 
-  calling <code>initiate()</code>.</li>
-  <li>Whenever the state machine enters a state it creates an object of the 
+  <li>boost::fsm makes heavy use of the
+  <a href="http://www.informit.com/articles/article.asp?p=31473&seqNum=3">
+  curiously recurring template pattern</a>. The deriving class must always be 
+  passed as the first parameter to all base class templates</li>
+  <li>The state machine must be informed which state it has to enter when the 
+  machine is initiated. That's why <code>Greeting</code> is passed as the 
+  second template parameter of <code>Machine</code>'s base. We have to forward 
+  declare <code>Greeting</code> for this purpose</li>
+  <li>For each state we need to define which state machine it belongs to and 
+  where it is located in the state chart. Both is specified with <code>Context</code> 
+  argument that is passed to <code>simple_state&lt;&gt;</code>. For a flat state 
+  machine as we have it here, the context is always the state machine. 
+  Consequently, <code>Machine</code> must be passed as the second template 
+  parameter to <code>Greeting</code>'s base (the <code>Context</code> 
+  parameter is explained in more detail in the next example)</li>
+  <li>Whenever the state machine enters a state, it creates an object of the 
   corresponding state class. The object is then kept alive as long as the 
   machine remains in the state. Finally, the object is destroyed when the 
   state machine exits the state. Therefore, a state entry action can be 
   defined by adding a constructor and a state exit action can be defined by 
-  adding a destructor.</li>
-  <li>All states reside in a <a href="definitions.html#Context">context</a>. 
-  For the moment, this context is the state machine. That's why <code>Machine</code> 
-  is passed as the second template parameter of <code>Greeting</code>'s base.</li>
-  <li>The state machine must be informed which state it has to enter when the 
-  machine is initiated. That's why <code>Greeting</code> is passed as the 
-  second template parameter of <code>Machine</code>'s base. We have to forward 
-  declare <code>Greeting</code> for this purpose.</li>
+  adding a destructor</li>
+  <li>The machine is not yet running after construction. We start it by 
+  calling <code>initiate()</code></li>
   <li>We are declaring all types as <code>struct</code>s only to avoid having 
   to type <code>public</code>. If you don't mind doing so, you can just as 
-  well use <code>class</code>.</li>
+  well use <code>class</code></li>
 </ul>
 <h2><a name="A stop watch">A stop watch</a></h2>
 <p>Next we will model a simple mechanical stop watch with a state machine. 
@@ -186,21 +191,19 @@ Such watches typically have two buttons:</p>
 </ul>
 <p>And two states:</p>
 <ul>
-  <li>Stopped: The hands reside in the position where they were last stopped.
-  <ul>
+  <li>Stopped: The hands reside in the position where they were last stopped:<ul>
     <li>Pressing the reset button moves the hands back to the 0 position. The 
-    watch remains in the Stopped state.</li>
+    watch remains in the Stopped state</li>
     <li>Pressing the start/stop button leads to a transition to the Running 
-    state.</li>
+    state</li>
   </ul>
   </li>
   <li>Running: The hands of the watch are in motion and continually show the 
-  elapsed time.
-  <ul>
+  elapsed time<ul>
     <li>Pressing the reset button moves the hands back to the 0 position and 
-    leads to a transition to the Stopped state.</li>
+    leads to a transition to the Stopped state</li>
     <li>Pressing the start/stop button leads to a transition to the Stopped 
-    state.</li>
+    state</li>
   </ul>
   </li>
 </ul>
@@ -237,19 +240,23 @@ int main()
 <p>This compiles but doesn't do anything observable yet. A few comments:</p>
 <ul>
   <li>The <code>simple_state</code> class template accepts up to five 
-  parameters.
-  <ul>
+  parameters:<ul>
     <li>The third parameter specifies <a href="definitions.html#Reaction">
     reactions</a> (explained in due course). Because there aren't any yet, we 
     pass <code>no_reactions</code>, which is also the default</li>
     <li>The fourth parameter specifies the inner initial state, if there is 
-    one</li>
+    one. Here, only Active has inner states, which is why it needs to pass its 
+    inner initial state Stopped to its base</li>
     <li>The fifth parameter specifies whether and what kind of history is kept</li>
   </ul>
   </li>
   <li>A state is defined as an inner state simply by passing its outer state 
-  as its context (where <a href="definitions.html#Outermost state">outermost 
-  states</a> pass the state machine).</li>
+  as its <code>Context</code> parameter (where
+  <a href="definitions.html#Outermost state">outermost states</a> pass the 
+  state machine). Here, <code>Active</code> is the outermost state and 
+  therefore needs to pass the state machine class it belongs to. <code>Stopped</code> 
+  and <code>Running</code> both specify <code>Active</code> as their <code>
+  Context</code>, which makes them nested inside <code>Active</code></li>
   <li>Because the context of a state must be a complete type (i.e. not forward 
   declared), a machine must be defined from &quot;outside to inside&quot;. That is, we 
   always start with the state machine, followed by outermost states, followed 
@@ -350,8 +357,9 @@ information out of the machine</a></h3>
 <p>To retrieve the measured time, we need a mechanism to get state information 
 out of the machine. With our current machine design there are two ways to do 
 that. For the sake of simplicity we use the less efficient one: <code>
-state_cast&lt;&gt;()</code>. As the name suggests, the semantics are very similar to 
-the ones of <code>dynamic_cast</code>. For example, when we call <code>
+state_cast&lt;&gt;()</code> (StopWatch2.cpp shows the slightly more complex 
+alternative). As the name suggests, the semantics are very similar to the ones 
+of <code>dynamic_cast</code>. For example, when we call <code>
 myWatch.state_cast&lt; const Stopped &amp; &gt;()</code> <b>and</b> the machine is 
 currently in the Stopped state, we get a reference to the <code>Stopped</code> 
 state. Otherwise <code>std::bad_cast</code> is thrown. We can use this 
@@ -437,26 +445,25 @@ limitations:</p>
   state machine must be implemented in one single translation unit (actions 
   can be compiled separately, but this is of no importance here). For bigger 
   (and more real-world) state machines, this leads to the following 
-  limitations:
-  <ul>
+  limitations:<ul>
     <li>At some point compilers reach their internal template instantiation 
     limits and give up. This can happen even for moderately-sized machines. 
     For example, in debug mode one popular compiler refused to compile earlier 
     versions of the BitMachine example for anything above 3 bits. This means 
     that the compiler reached its limits somewhere between 8 states, 24 
-    transitions and 16 states, 64 transitions.</li>
+    transitions and 16 states, 64 transitions</li>
     <li>Multiple programmers can hardly work on the same state machine 
     simultaneously because every layout change will inevitably lead to a 
-    recompilation of the whole state machine.</li>
+    recompilation of the whole state machine</li>
   </ul>
   </li>
   <li>Maximum one reaction per event: According to UML a state can have 
   multiple reactions triggered by the same event. This makes sense when all 
   reactions have mutually exclusive guards. The interface we used above only 
   allows for at most one unguarded reaction for each event. Moreover, the UML 
-  concepts junction and choice point are not directly supported.</li>
+  concepts junction and choice point are not directly supported</li>
   <li>There is no way to specify <a href="definitions.html#In-state reaction">
-  in-state reactions</a>.</li>
+  in-state reactions</a></li>
 </ul>
 <p>All these limitations can be overcome with custom reactions. <b>Warning: It 
 is easy to abuse custom reactions up to the point of invoking undefined 
@@ -1348,7 +1355,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29901" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->21 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29904" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
