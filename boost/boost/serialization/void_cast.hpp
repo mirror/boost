@@ -228,16 +228,16 @@ const static_initializer<Derived, Base> static_initializer<Derived, Base>::insta
 // void pointer from Base to Derived.  Note bogus arguments to workaround
 // bug in msvc 6.0
 template<class Derived, class Base>
-inline BOOST_DLLEXPORT void void_cast_register(
+inline BOOST_DLLEXPORT const void *  void_cast_register(
     const Derived * /* dnull = NULL */, 
     const Base * /* bnull = NULL */
 ) BOOST_USED;
 template<class Derived, class Base>
-inline BOOST_DLLEXPORT void void_cast_register(
+inline BOOST_DLLEXPORT const void * void_cast_register(
     const Derived * /* dnull = NULL */, 
     const Base * /* bnull = NULL */
 ){
-    void_cast_detail::static_initializer<Derived, Base>::instantiate();
+    return & void_cast_detail::static_initializer<Derived, Base>::instantiate();
 }
 
 } // namespace serialization

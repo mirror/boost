@@ -20,6 +20,8 @@
 // "forward declaration" method to provoke instantiation of derived classes
 // that are to be serialized through pointers.
 
+#include <utility>
+
 #include <boost/config.hpp>
 
 #include <boost/static_assert.hpp>
@@ -37,11 +39,6 @@
 #include <boost/serialization/type_info_implementation.hpp>
 
 #include <boost/archive/detail/known_archive_types.hpp>
-
-#if defined(__MWERKS__)
-#pragma push
-#pragma opt_dead_code off
-#endif
 
 namespace boost {
 
@@ -118,8 +115,7 @@ namespace export_impl
 
 } // namespace export_impl
 
-#if defined(BOOST_MSVC) || defined(__COMO__)
-// work around for less conforming compilers
+// strictly conforming
 template<class T, class ASeq>
 struct export_generator {
     export_generator(){
@@ -131,21 +127,6 @@ struct export_generator {
 template<class T, class ASeq>
 const export_generator<T, ASeq> 
     export_generator<T, ASeq>::instance;
-
-#else
-// strictly conforming
-template<class T, class ASeq>
-struct export_generator {
-    export_generator(int){
-        export_impl::for_each_archive<ASeq, T>::instantiate();
-    }
-    static const export_generator instance;
-};
-
-template<class T, class ASeq>
-const export_generator<T, ASeq> 
-    export_generator<T, ASeq>::instance(0);
-#endif
 
 // instantiation of this template creates a static object.
 template<class T, class ASeq>
@@ -161,7 +142,7 @@ struct guid_initializer {
         }
     };
     static const guid_initializer instance;
-    /* BOOST_DLLEXPORT */  guid_initializer(const char *key) BOOST_USED ;
+    /* BOOST_DLLEXPORT */  guid_initializer(const char *key = NULL) BOOST_USED ;
 };
 
 template<class T, class ASeq>
@@ -175,11 +156,7 @@ template<class T, class ASeq>
 }
 
 template<class T, class ASeq>
-const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
-#if defined(__MWERKS__)
-(NULL)
-#endif
-;
+const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance;
 
 } // namespace detail
 } // namespace archive
@@ -190,43 +167,31 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
 // file declaration header
 #if ! defined(BOOST_ARCHIVE_EXPORT)
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)
-
-// these compilers need special treatment
-#elif defined(BOOST_MSVC) || defined(__COMO__) || defined(__MWERKS__)
-// work around for less conforming compilers
+#else
+    // only gcc seems to be able to explicitly instantiate a static instance.
+    // all but can instantiate a function that refers to a static instance
     namespace boost { namespace archive { namespace detail {
+    // note declaration to permit gcc trailing function attribute
     template<class T, class ASeq>
-    BOOST_DLLEXPORT const guid_initializer<T, ASeq> &
+    BOOST_DLLEXPORT std::pair<const void *, const void *> 
     boost_template_instantiate(T &, ASeq &) BOOST_USED;
     template<class T, class ASeq>
-    BOOST_DLLEXPORT const guid_initializer<T, ASeq> &
+    BOOST_DLLEXPORT std::pair<const void *, const void *>
     boost_template_instantiate(T &, ASeq &){
-        return guid_initializer<T, ASeq>::instance;
+        return std::pair<const void *, const void *>(
+            & export_generator<T, ASeq>::instance,
+            & guid_initializer<T, ASeq>::instance
+        );
     }
     } } }
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
         namespace boost { namespace archive { namespace detail {     \
-        template                                                     \
-        const export_generator<T, ASEQ >                             \
-            export_generator<T, ASEQ >::instance;                    \
         template<>                                                   \
         const guid_initializer<T, ASEQ>                              \
             guid_initializer<T, ASEQ>::instance(K);                  \
-        template<>                                                   \
-        const guid_initializer<T, ASEQ> &                            \
+        template                                                     \
+        BOOST_DLLEXPORT std::pair<const void *, const void *>        \
         boost_template_instantiate(T &, ASEQ &);                     \
-        } } }                                                        \
-        /**/
-#else
-// strictly conforming
-    #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
-        namespace boost { namespace archive { namespace detail {     \
-        template                                                     \
-        const export_generator<T, ASEQ >                             \
-            export_generator<T, ASEQ >::instance(0);                 \
-        template                                                     \
-        const guid_initializer<T, ASEQ >                             \
-            guid_initializer<T, ASEQ >::instance(K);                 \
         } } }                                                        \
         /**/
 #endif
@@ -263,9 +228,5 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
         boost::archive::detail::known_archive_types<false>::type \
     )                                                            \
     /**/
-
-#if defined(__MWERKS__)
-#pragma pop
-#endif
 
 #endif // BOOST_SERIALIZATION_EXPORT_HPP

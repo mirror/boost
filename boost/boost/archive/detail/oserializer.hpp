@@ -103,8 +103,6 @@ namespace detail {
 template<class Archive, class T>
 class oserializer : public basic_oserializer
 {
-private:
-    static oserializer instance;
 public:
     explicit oserializer() :
         basic_oserializer(
@@ -158,7 +156,6 @@ template<class T, class Archive>
 class pointer_oserializer : public archive_pointer_oserializer<Archive> 
 {
 private:
-    static const pointer_oserializer instance;
     virtual const basic_oserializer & get_basic_serializer() const {
         return oserializer<Archive, T>::instantiate();
     }
@@ -167,6 +164,7 @@ private:
         const void * x
     ) const BOOST_USED ;
 public:
+    static const pointer_oserializer instance;
     explicit pointer_oserializer() :
         archive_pointer_oserializer<Archive>(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
@@ -205,12 +203,6 @@ BOOST_DLLEXPORT void pointer_oserializer<T, Archive>::save_object_ptr(
 // won't work here so we created a free instance here.
 template<class T, class Archive>
 const pointer_oserializer<T, Archive> pointer_oserializer<T, Archive>::instance;
-
-template<class T, class Archive>
-BOOST_DLLEXPORT const pointer_oserializer <T, Archive> & 
-pointer_oserializer<T, Archive>::instantiate(){
-    return instance;
-}
 
 template<class Archive, class T>
 struct save_non_pointer_type {
@@ -483,15 +475,23 @@ struct save_array_type
 };
 
 // note bogus arguments to workaround msvc 6 silent runtime failure
+// declaration to satisfy gcc
 template<class Archive, class T>
-inline const basic_pointer_oserializer &
+BOOST_DLLEXPORT inline const basic_pointer_oserializer &
+instantiate_pointer_oserializer(
+    Archive * /* ar = NULL */,
+    T * /* t = NULL */
+) BOOST_USED ;
+// definition
+template<class Archive, class T>
+BOOST_DLLEXPORT inline const basic_pointer_oserializer &
 instantiate_pointer_oserializer(
     Archive * /* ar = NULL */,
     T * /* t = NULL */
 ){
     // note: reversal of order of arguments to work around msvc 6.0 bug
     // that manifests itself while trying to link.
-    return pointer_oserializer<T, Archive>::instantiate();
+    return pointer_oserializer<T, Archive>::instance;
 }
 
 } // detail

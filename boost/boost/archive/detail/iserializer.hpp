@@ -163,7 +163,6 @@ template<class T, class Archive>
 class pointer_iserializer : public archive_pointer_iserializer<Archive> 
 {
 private:
-    static const pointer_iserializer instance;
     virtual const basic_iserializer & get_basic_serializer() const {
         return iserializer<Archive, T>::instantiate();
     }
@@ -173,6 +172,7 @@ private:
         const unsigned int file_version
     ) const BOOST_USED;
 public:
+    static const pointer_iserializer instance;
     explicit pointer_iserializer() :
         archive_pointer_iserializer<Archive>(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
@@ -204,12 +204,6 @@ BOOST_DLLEXPORT void pointer_iserializer<T, Archive>::load_object_ptr(
 // won't work here so we created a free instance here.
 template<class T, class Archive>
 const pointer_iserializer<T, Archive> pointer_iserializer<T, Archive>::instance;
-
-template<class T, class Archive>
-BOOST_DLLEXPORT const pointer_iserializer <T, Archive> & 
-pointer_iserializer<T, Archive>::instantiate(){
-    return instance;
-}
 
 template<class Archive, class T>
 struct load_non_pointer_type {
@@ -401,14 +395,21 @@ struct load_array_type {
 
 // note bogus arguments to workaround msvc 6 silent runtime failure
 template<class Archive, class T>
-inline const basic_pointer_iserializer &
+BOOST_DLLEXPORT inline const basic_pointer_iserializer &
+instantiate_pointer_iserializer(
+    Archive * /* ar = NULL */,
+    T * /* t = NULL */
+) BOOST_USED;
+
+template<class Archive, class T>
+BOOST_DLLEXPORT inline const basic_pointer_iserializer &
 instantiate_pointer_iserializer(
     Archive * /* ar = NULL */,
     T * /* t = NULL */
 ){
     // note: reversal of order of arguments to work around msvc 6.0 bug
     // that manifests itself while trying to link.
-    return pointer_iserializer<T, Archive>::instantiate();
+    return pointer_iserializer<T, Archive>::instance;
 }
 
 } // detail
