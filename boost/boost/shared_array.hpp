@@ -95,7 +95,7 @@ public:
 
     // implicit conversion to "bool"
 
-#if BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
+#if defined(__SUNPRO_CC) && BOOST_WORKAROUND(__SUNPRO_CC, <= 0x530)
 
     operator bool () const
     {

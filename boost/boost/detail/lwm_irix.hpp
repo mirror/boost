@@ -1,10 +1,6 @@
 #ifndef BOOST_DETAIL_LWM_IRIX_HPP_INCLUDED
 #define BOOST_DETAIL_LWM_IRIX_HPP_INCLUDED
 
-#if _MSC_VER >= 1020
-#pragma once
-#endif
-
 //
 //  boost/detail/lwm_irix.hpp
 //
