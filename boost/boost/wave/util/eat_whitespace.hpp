@@ -144,9 +144,12 @@ eat_whitespace<TokenT>::whitespace(TokenT &token, bool &skipped_newline)
     using namespace boost::wave;
     
     token_id id = token_id(token);
-    if (T_SPACE != id && T_SPACE2 != id && T_CCOMMENT != id) 
+    if (T_SPACE != id && T_SPACE2 != id && 
+        T_CCOMMENT != id && T_CPPCOMMENT != id) 
+    {
         return general(token, skipped_newline);
-
+    }
+    
     if (T_CCOMMENT == id) {
         if (TokenT::string_type::npos != 
             token.get_value().find_first_of("\n"))
@@ -155,7 +158,8 @@ eat_whitespace<TokenT>::whitespace(TokenT &token, bool &skipped_newline)
         }
         return !preserve_comments;
     }
-    return true;
+
+    return T_SPACE == id || T_SPACE2 == id || skip_cppcomment(id);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

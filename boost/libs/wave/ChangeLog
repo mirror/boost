@@ -23,6 +23,12 @@ TODO (known issues):
 
 CHANGELOG
 
+- Fixed a bug in the white space eating component, which prevented a C++ 
+  comment to be supressed if it followed after another whitespace.
+- Fixed the inconsistencies between the documentation and the behaviour wrt the 
+  different include search paths. See the Wave driver docs for details of how
+  the '-I', '-I-', and '-S' options work.
+  
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
 - Fixed a bug where the complete set of C99 predefined macros were pre-defined

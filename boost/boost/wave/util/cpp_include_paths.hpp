@@ -194,7 +194,7 @@ include_paths::find_include_file (std::string &s, std::string &dir,
 // if not system include (<...>), then search current directory first
     if (!is_system) {
         if (!was_sys_include_path) {  // set_sys_include_delimiter() not called
-        // first look in the current directory
+        // first have a look at the current directory
             fs::path currpath (current_dir.string(), fs::native);
             currpath /= fs::path(s, fs::native);
             
@@ -210,17 +210,17 @@ include_paths::find_include_file (std::string &s, std::string &dir,
             }   
 
         // iterate all user include file directories to find the file
-            if (0 == current_file)
-                return find_include_file(s, dir, user_include_paths, 0);
+            if (find_include_file(s, dir, user_include_paths, current_file))
+                return true;
 
-        // #include_next doesn't distinguish between <file> and "file"
         // ... fall through
         }
-
-    // iterate all user include file directories to find the file
-        if (find_include_file(s, dir, user_include_paths, current_file))
-            return true;
-
+        else {
+        //  if set_sys_include_delimiter() was called, then user include files
+        //  are searched in the user search path only
+            return find_include_file(s, dir, user_include_paths, current_file);
+        }
+        
     // if nothing found, fall through
     // ...
     }

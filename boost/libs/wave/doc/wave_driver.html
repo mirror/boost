@@ -69,27 +69,33 @@
 </blockquote>
 <P dir="ltr">-I [--include] option</P>
 <blockquote> 
-  <p dir="ltr">Add the given directory to the head of the list of directories 
-    to be searched for header files. This can be used to override a system header 
-    file, substituting your own version, since these directories are searched 
-    before the system header file directories. If you use more than one '-I' option, the directories are scanned in left-to-right order, the system directories 
-    come after. </p>
+  <p dir="ltr">Add the directory dir to the head of the list of directories to be searched for header files. This can be used to override a system 
+    header file, substituting your own version, since these directories are 
+    searched before the system header file directories. However, you should 
+    not use this option to add directories that contain vendor-supplied 
+    system header files (use '-S' for that). If you use more than 
+    one '-I' option, the directories are scanned in left-to-right order, 
+  the standard system directories come after. </p>
+  <p>If a standard system include directory, or a directory specified with 
+    '-S', is also specified with '-I', the '-I' option will be 
+    ignored. The directory will still be searched but as a system 
+    directory at its normal position in the system include chain.  </p>
 </blockquote>
 <p dir="ltr">-I- [--include-] option</p>
 <blockquote> 
   <p dir="ltr">The <tt>Wave</tt> library maintains two separate search paths 
     for include files. A search path for user include files and a search path 
-    for system include files. Any directories specified with '-I' options before 
+    for system include files, where the user include paths are searched before the system include paths. </p>
+  <p dir="ltr">Any directories specified with '-I' options before 
     an eventually given '-I-' option are searched only for the case of '#include&nbsp;&quot;file&quot;' 
     (user include files), they are not searched for '#include&nbsp;&lt;file&gt;' 
     directives (system include files). If additional directories are specified 
     with '-I' options after a '-I-' option was given, these directories are searched 
-    for all '#include' directives. In addition, the '-I-' option inhibits the 
-    use of the current directory as the first search directory for '#include &quot;file&quot;' 
-    directives. Therefore, the current directory is searched only if it is requested 
-    explicitly with a '-I.' option. Specifying both '-I-' and '-I.' allows to 
-    control precisely which directories are searched before the current one and 
-    which are searched after.</p>
+    for all '#include' directives (ordinarily all '-I' directories are used this way.). </p>
+  <p dir="ltr">In addition, the '-I-' option inhibits the 
+    use of the current directory (where the current input file came from) as the first search directory for '#include &quot;file&quot;' 
+    directives . With '-I.' you can specify searching the directory which was current when the compiler was invoked. That is not exactly the same as what the
+  preprocessor does by default, but it is often satisfactory. </p>
 </blockquote>
 <p dir="ltr">-S [--sysinclude] option</p>
 <blockquote> 
@@ -224,7 +230,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, March 22, 2005  14:06<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Friday, March 25, 2005  19:35<!-- #EndDate -->
 </span></p>
 </body>
 </html>
