@@ -136,7 +136,7 @@ namespace boost { namespace program_options {
                     if (position >= m_positional->max_total_count())
                     {
                         throw too_many_positional_options_error(
-                            "too much positional options");
+                            "too many positional options");
                     }
                     opt.string_key = m_positional->name_for_position(position);
                     ++position;
