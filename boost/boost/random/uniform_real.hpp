@@ -50,11 +50,10 @@ public:
   void reset() { }
 
   template<class Engine>
-  result_type operator()(Engine& eng)
-  {
-    return static_cast<result_type>((eng() - eng.min()) /
-                                    (eng.max() - eng.min()))
-               * (_max - _min) + _min;
+  result_type operator()(Engine& eng) { 
+    return static_cast<result_type>(eng() - eng.min()) 
+           / static_cast<result_type>(eng.max() - eng.min())
+           * (_max - _min) + _min; 
   }
 
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
