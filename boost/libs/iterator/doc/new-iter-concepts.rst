@@ -669,14 +669,13 @@ Interoperable Iterators [lib.interoperable.iterators]
 
 A class or built-in type ``X`` that models Single Pass Iterator is
 *interoperable with* a class or built-in type ``Y`` that also models
-Single Pass Iterator if both ``X`` and ``Y`` have the same traversal
-tag and if the following expressions are valid and respect the stated
-semantics. In the tables below, ``x`` is an object of type ``X``,
-``y`` is an object of type ``Y``, ``Distance`` is
+Single Pass Iterator if the following expressions are valid and
+respect the stated semantics. In the tables below, ``x`` is an object
+of type ``X``, ``y`` is an object of type ``Y``, ``Distance`` is
 ``iterator_traits<Y>::difference_type``, and ``n`` represents a
 constant object of type ``Distance``.
 
-If the traversal tag for ``X`` and ``Y`` is convertible to
+If the traversal tags for ``X`` and ``Y`` are convertible to
 ``single_pass_traversal_tag`` then the following requirements must be
 met.
 
@@ -696,7 +695,7 @@ met.
 |``y != x``                                 |convertible to ``bool``                          |``bool(a==b) != bool(a!=b)`` over its domain.      |
 +-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
 
-If the traversal tag for ``X`` and ``Y`` is convertible to
+If the traversal tags for ``X`` and ``Y`` are convertible to
 ``random_access_traversal_tag`` then the following requirements must
 be met.
 
