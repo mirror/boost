@@ -244,11 +244,10 @@ void foo4()
 // testing tie
 // testing assignment from std::pair
 void foo7() {
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    int i, j; 
    tie (i, j) = std::make_pair(1, 2);
    BOOST_TEST(i == 1 && j == 2);
-#endif
+
    tuple<int, int, float> a;
 #ifdef E11
    a = std::make_pair(1, 2); // should fail, tuple is of length 3, not 2

@@ -32,6 +32,7 @@
 #define BOOST_TUPLE_BASIC_NO_PARTIAL_SPEC_HPP
 
 #include "boost/type_traits.hpp"
+#include <utility>
 
 #if defined BOOST_MSVC
 #pragma warning(disable:4518) // storage-class or type specifier(s) unexpected here; ignored
@@ -86,32 +87,33 @@ namespace boost {
 
     // cons builds a heterogenous list of types
    template<typename Head, typename Tail = null_type>
-    struct cons
-    {
-      typedef cons self_type;
-      typedef Head head_type;
-      typedef Tail tail_type;
+   struct cons
+   {
+     typedef cons self_type;
+     typedef Head head_type;
+     typedef Tail tail_type;
 
-      head_type head;
-      tail_type tail;
+     head_type head;
+     tail_type tail;
 
-      typename boost::add_reference<head_type>::type get_head() { return head; }
-      typename boost::add_reference<tail_type>::type get_tail() { return tail; }  
+     typename boost::add_reference<head_type>::type get_head() { return head; }
+     typename boost::add_reference<tail_type>::type get_tail() { return tail; }  
 
-      typename boost::add_reference<const head_type>::type get_head() const { return head; }
-      typename boost::add_reference<const tail_type>::type get_tail() const { return tail; }
+     typename boost::add_reference<const head_type>::type get_head() const { return head; }
+     typename boost::add_reference<const tail_type>::type get_tail() const { return tail; }
   
-      template<typename Other>
-      explicit cons(const Other& other) : head(other.head), tail(other.tail)
+#if defined BOOST_MSVC
+      template<typename Tail>
+      explicit cons(const head_type& h /* = head_type() */, // causes MSVC 6.5 to barf.
+                    const Tail& t) : head(h), tail(t.head, t.tail)
       {
       }
 
-#if defined BOOST_MSVC
       explicit cons(const head_type& h /* = head_type() */, // causes MSVC 6.5 to barf.
-        const tail_type& t = tail_type()) :
-          head(h), tail(t)
+                    const null_type& t) : head(h), tail(t)
       {
       }
+
 #else
       explicit cons(const head_type& h = head_type(),
                     const tail_type& t = tail_type()) :
@@ -347,16 +349,26 @@ namespace boost {
       {
       }
 
-      template<typename Other>
-      explicit tuple(const Other& other) : cons1(other)
+      template<typename Head, typename Tail>
+      explicit tuple(const cons<Head, Tail>& other) : 
+        cons1(other.head, other.tail)
       {
       }
 
-      template<typename Other>
-      self_type& operator=(const Other& other)
+      template<typename First, typename Second>
+      self_type& operator=(const std::pair<First, Second>& other)
+      {
+        this->head = other.first;
+        this->tail.head = other.second;
+        return *this;
+      }
+
+      template<typename Head, typename Tail>
+      self_type& operator=(const cons<Head, Tail>& other)
       {
         this->head = other.head;
         this->tail = other.tail;
+
         return *this;
       }
     };
