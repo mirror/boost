@@ -260,7 +260,12 @@ namespace boost {
   template <typename KeyArchetype, typename ValueArchetype>
   struct read_write_property_map_archetype
     : public readable_property_map_archetype<KeyArchetype, ValueArchetype>,
-      public writable_property_map_archetype<KeyArchetype, ValueArchetype> { };
+      public writable_property_map_archetype<KeyArchetype, ValueArchetype>
+  {
+    typedef KeyArchetype key_type;
+    typedef ValueArchetype value_type;
+    typedef read_write_property_map_tag category;
+  };
 
 
   template <class PMap, class Key>
