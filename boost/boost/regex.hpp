@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex.cpp
-  *   VERSION      3.12
+  *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: Declares boost::reg_expression<> and associated
   *                functions and classes. This header is the main
   *                entry point for the template regex code.
@@ -41,6 +41,7 @@
 #include <new>
 #include <boost/regex/config.hpp>
 #include <cstring>
+#include <boost/regex_fwd.hpp>
 #include <boost/regex/detail/regex_stack.hpp>
 #include <boost/regex/detail/regex_raw_buffer.hpp>
 #include <boost/regex/detail/regex_kmp.hpp>
@@ -458,7 +459,11 @@ class match_results;
 namespace{
 #endif
 
+#ifdef BOOST_REGEX_NO_FWD
 template <class charT, class traits = regex_traits<charT>, class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
+#else
+template <class charT, class traits, class Allocator >
+#endif
 class reg_expression : public regbase
 {
    typedef typename traits::size_type traits_size_type;
@@ -1529,10 +1534,11 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
 #include <boost/regex/detail/regex_compile.hpp>
 
 namespace boost{
-
+#ifdef BOOST_REGEX_NO_FWD
 typedef reg_expression<char, regex_traits<char>, BOOST_DEFAULT_ALLOCATOR(char)> regex;
 #ifndef BOOST_NO_WREGEX
 typedef reg_expression<wchar_t, regex_traits<wchar_t>, BOOST_DEFAULT_ALLOCATOR(wchar_t)> wregex;
+#endif
 #endif
 
 typedef match_results<const char*> cmatch;
