@@ -167,7 +167,17 @@
      </table>
   </xsl:template>
 
-  <!-- table of contents -->
+  <!-- table of contents 
+       
+    The standard Docbook template selects, amoung others,
+    the 'refentry' element for inclusion in TOC. In some
+    cases, this creates empty TOC. The most possible reason
+    is that there's 'refentry' element without 'refentrytitle',
+    but it's a mistery why it occurs. Even if we fix that
+    problem, we'll get non-empty TOC where no TOC is desired
+    (e.g. for section corresponding to each header file in
+    library doc). So, don't bother for now.
+  -->
 
   <xsl:template name="section.toc">
      <xsl:param name="toc-context" select="."/>

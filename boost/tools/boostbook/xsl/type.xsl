@@ -1075,13 +1075,13 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
               select="$value/default/*|$value/default/text()"/>
           </xsl:if>
 
-          <xsl:variable name="end" select="$indentation 
+          <xsl:variable name="end2" select="$indentation 
                                            + string-length($result) 
                                            - string-length($prefix)"/>
 
           <xsl:call-template name="type.enum.list.compact">
             <xsl:with-param name="indentation" select="$indentation"/>
-            <xsl:with-param name="column" select="$end"/>
+            <xsl:with-param name="column" select="$end2"/>
             <xsl:with-param name="values" select="$rest"/>
             <xsl:with-param name="prefix" select="', '"/>
           </xsl:call-template>
