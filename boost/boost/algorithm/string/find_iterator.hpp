@@ -108,7 +108,7 @@ namespace boost {
             // increment
             void increment()
             {
-                m_Match=do_find(m_Match.end(),m_End);
+                m_Match=this->do_find(m_Match.end(),m_End);
             }
 
             // comparison
@@ -137,7 +137,7 @@ namespace boost {
             bool eof() const
             {
                 return 
-                    is_null() || 
+                    this->is_null() || 
                     ( 
                         m_Match.begin() == m_End &&
                         m_Match.end() == m_End
@@ -254,7 +254,7 @@ namespace boost {
             // increment
             void increment()
             {
-                match_type FindMatch=do_find( m_Next, m_End );
+                match_type FindMatch=this->do_find( m_Next, m_End );
                 m_Match=match_type( m_Next, FindMatch.begin() );
                 m_Next=FindMatch.end();
             }
@@ -286,7 +286,7 @@ namespace boost {
             bool eof() const
             {
                 return 
-                    is_null() || 
+                    this->is_null() || 
                     ( 
                         m_Match.begin() == m_End &&
                         m_Match.end() == m_End
