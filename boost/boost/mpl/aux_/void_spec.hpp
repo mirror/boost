@@ -25,6 +25,7 @@
 #include "boost/mpl/aux_/arity.hpp"
 #include "boost/mpl/aux_/template_arity_fwd.hpp"
 #include "boost/mpl/aux_/lambda_arity_param.hpp"
+#include "boost/mpl/aux_/algorithm_namespace.hpp"
 #include "boost/mpl/aux_/config/dtp.hpp"
 #include "boost/mpl/aux_/config/nttp.hpp"
 #include "boost/mpl/aux_/config/ttp.hpp"
@@ -140,6 +141,15 @@ BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_LAMBDA(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_ARITY(i, name) \
 BOOST_MPL_AUX_VOID_SPEC_TEMPLATE_ARITY(i, j, name) \
+/**/
+
+#define BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(i, name) \
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN \
+BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END \
+BOOST_MPL_AUX_VOID_SPEC_LAMBDA(i, BOOST_MPL_AUX_AGLORITHM_NAMESPACE_PREFIX name) \
+BOOST_MPL_AUX_VOID_SPEC_ARITY(i, BOOST_MPL_AUX_AGLORITHM_NAMESPACE_PREFIX name) \
+BOOST_MPL_AUX_VOID_SPEC_TEMPLATE_ARITY(i, i, BOOST_MPL_AUX_AGLORITHM_NAMESPACE_PREFIX name) \
 /**/
 
 #endif // BOOST_MPL_AUX_VOID_SPEC_HPP_INCLUDED

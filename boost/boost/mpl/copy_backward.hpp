@@ -19,9 +19,12 @@
 
 #include "boost/mpl/fold_backward.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
+#include "boost/mpl/aux_/algorithm_namespace.hpp"
 
 namespace boost {
 namespace mpl {
+
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
@@ -33,7 +36,8 @@ struct copy_backward
 {
 };
 
-BOOST_MPL_AUX_VOID_SPEC(3, copy_backward)
+BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(3, copy_backward)
 
 } // namespace mpl
 } // namespace boost
