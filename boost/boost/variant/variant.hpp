@@ -368,7 +368,7 @@ private: // helpers, for visitor interfaces (below)
         return visitor_(operand);
     }
 
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x0551)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0564))
     template <typename T>
     result_type visit(const T& operand)
     {
