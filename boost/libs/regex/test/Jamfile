@@ -1,3 +1,5 @@
+# copyright John Maddock 2003
+
 subproject libs/regex/test ;
 
 # bring in the rules for testing

@@ -1,3 +1,4 @@
+# copyright John Maddock 2003
 
 subproject libs/regex/performance ;
 

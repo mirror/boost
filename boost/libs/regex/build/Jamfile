@@ -1,3 +1,5 @@
+# copyright John Maddock 2003
+
 subproject libs/regex/build ;
 
 SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
@@ -136,6 +138,7 @@ stage bin-stage : <lib>boost_regex <dll>boost_regex
     :
         debug release
     ;
+
 
 
 

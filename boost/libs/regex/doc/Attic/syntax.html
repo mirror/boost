@@ -90,10 +90,10 @@
       </H3>
       <P>Parentheses serve two purposes, to group items together into a sub-expression, 
          and to mark what generated the match. For example the expression "(ab)*" would 
-         match all of the string "ababab". The matching algorithms <A href="template_class_ref.htm#query_match">
-            regex_match</A> and <A href="template_class_ref.htm#reg_search">regex_search</A>
-         each take an instance of <A href="template_class_ref.htm#reg_match">match_results</A>
-         that reports what caused the match, on exit from these functions the <A href="template_class_ref.htm#reg_match">
+         match all of the string "ababab". The matching algorithms <A href="regex_match.html">
+            regex_match</A> and <A href="regex_search.html">regex_search</A>
+         each take an instance of <A href="match_results.html">match_results</A>
+         that reports what caused the match, on exit from these functions the <A href="match_results.html">
             match_results</A> contains information both on what the whole expression 
          matched and on what each sub-expression matched. In the example above 
          match_results[1] would contain a pair of iterators denoting the final "ab" of 
