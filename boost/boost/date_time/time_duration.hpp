@@ -118,6 +118,11 @@ namespace date_time {
     {
       return ticks_ ==  rhs.ticks_;
     }
+    //! unary- Allows for time_duration td = -td1
+    duration_type operator-()const
+    {
+      return duration_type(ticks_ * (-1));
+    }
     duration_type operator-(const duration_type& d) const
     {
       return duration_type(ticks_ - d.ticks_);
