@@ -1,0 +1,41 @@
+
+#  (C) Copyright Daniel James 2005.
+#  Use, modification and distribution are subject to the
+#  Boost Software License, Version 1.0. (See accompanying file
+#  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+subproject libs/functional/hash/test ;
+
+import testing ;
+
+DEPENDS all : hash_std hash_extensions ;
+
+rule hash-test ( name )
+{
+    return [
+        run $(name).cpp
+        <lib>../../../test/build/boost_unit_test_framework
+        : : : <include>$(BOOST_ROOT)
+        ] ;
+}
+
+{
+    test-suite "hash_std"
+        :
+            [ hash-test hash_number_test ]
+            [ hash-test hash_pointer_test ]
+            [ hash-test hash_float_test ]
+            [ hash-test hash_string_test ]
+        ;
+
+    test-suite "hash_extensions"
+        :
+            [ hash-test hash_range_test ]
+            [ hash-test hash_custom_test ]
+            [ hash-test hash_vector_test ]
+            [ hash-test hash_list_test ]
+            [ hash-test hash_deque_test ]
+            [ hash-test hash_set_test ]
+            [ hash-test hash_map_test ]
+        ;
+}

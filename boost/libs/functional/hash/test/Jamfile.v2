@@ -1,0 +1,28 @@
+
+#  (C) Copyright Daniel James 2005.
+#  Use, modification and distribution are subject to the
+#  Boost Software License, Version 1.0. (See accompanying file
+#  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+import testing ;
+
+alias framework : /boost/test//boost_unit_test_framework ;
+
+test-suite /boost/hash_std
+    :
+        [ run hash_number_test.cpp framework ]
+        [ run hash_pointer_test.cpp framework ]
+        [ run hash_float_test.cpp framework ]
+        [ run hash_string_test.cpp framework ]
+    ;
+
+test-suite /boost/hash_extensions
+    :
+        [ run hash_range_test.cpp framework ]
+        [ run hash_custom_test.cpp framework ]
+        [ run hash_vector_test.cpp framework ]
+        [ run hash_list_test.cpp framework ]
+        [ run hash_deque_test.cpp framework ]
+        [ run hash_set_test.cpp framework ]
+        [ run hash_map_test.cpp framework ]
+    ;
