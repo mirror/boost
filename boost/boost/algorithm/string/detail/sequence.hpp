@@ -110,7 +110,14 @@ namespace boost {
                     BOOST_STRING_TYPENAME InputT::iterator At=Input.erase( From, To );
                     if ( Begin!=End )
                     {
-                        Input.insert( At, Begin, End );
+                        if(!Input.empty())
+                        {
+                            Input.insert( At, Begin, End );
+                        }
+                        else
+                        {
+                            Input.insert( Input.begin(), Begin, End );
+                        }
                     }
                 }
             };
