@@ -24,11 +24,14 @@
 #include "boost/mpl/iterator_range.hpp"
 #include "boost/mpl/integral_c.hpp"
 #include "boost/mpl/next.hpp"
+#include "boost/mpl/aux_/common_name_wknd.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/config.hpp"
 
 namespace boost {
 namespace mpl {
+
+BOOST_MPL_AUX_COMMON_NAME_WKND(distance)
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 

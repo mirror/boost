@@ -27,12 +27,15 @@
 #include "boost/mpl/aux_/iterator_category.hpp"
 #include "boost/mpl/aux_/iterator_names.hpp"
 #include "boost/mpl/aux_/msvc_never_true.hpp"
+#include "boost/mpl/aux_/common_name_wknd.hpp"
 #include "boost/mpl/aux_/apply.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/config.hpp"
 
 namespace boost {
 namespace mpl {
+
+BOOST_MPL_AUX_COMMON_NAME_WKND(advance)
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
