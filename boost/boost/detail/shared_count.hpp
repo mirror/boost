@@ -23,10 +23,12 @@
 #endif
 
 #include <boost/checked_delete.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/detail/lightweight_mutex.hpp>
 
 #include <functional>       // for std::less
 #include <exception>        // for std::exception
+#include <new>              // for std::bad_alloc
 
 #ifdef __BORLANDC__
 # pragma warn -8026     // Functions with excep. spec. are not expanded inline
@@ -95,7 +97,7 @@ public:
 #ifdef BOOST_HAS_THREADS
         mutex_type::scoped_lock lock(mtx_);
 #endif
-        if(use_count_ == 0 && weak_count_ != 0) throw use_count_is_zero();
+        if(use_count_ == 0 && weak_count_ != 0) boost::throw_exception(boost::use_count_is_zero());
         ++use_count_;
         ++weak_count_;
     }
@@ -235,6 +237,8 @@ public:
 
     template<class P, class D> shared_count(P p, D d, void const * = 0): pi_(0)
     {
+#ifndef BOOST_NO_EXCEPTIONS
+
         try
         {
             pi_ = new counted_base_impl<P, D>(p, d, 1, 1);
@@ -244,6 +248,18 @@ public:
             d(p); // delete p
             throw;
         }
+
+#else
+
+        pi_ = new counted_base_impl<P, D>(p, d, 1, 1);
+
+        if(pi_ == 0)
+        {
+            d(p); // delete p
+            boost::throw_exception(std::bad_alloc());
+        }
+
+#endif
     }
 
     template<class P, class D> shared_count(P, D, counted_base * pi): pi_(pi)

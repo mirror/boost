@@ -17,14 +17,16 @@
 
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/detail/atomic_count.hpp>
 
 #ifndef BOOST_NO_AUTO_PTR
-#include <memory>             // for std::auto_ptr
+# include <memory>          // for std::auto_ptr
 #endif
 
-#include <algorithm>          // for std::swap
-#include <functional>         // for std::less
+#include <algorithm>        // for std::swap
+#include <functional>       // for std::less
+#include <new>              // for std::bad_alloc
 
 namespace boost
 {
@@ -38,25 +40,40 @@ private:
 public:
 
     typedef T element_type;
+    typedef T value_type;
 
     explicit shared_ptr(T * p = 0): px(p)
     {
+#ifndef BOOST_NO_EXCEPTIONS
+
         try  // prevent leak if new throws
         {
             pn = new count_type(1);
         }
         catch(...)
         {
-            checked_delete(p);
+            boost::checked_delete(p);
             throw;
-        } 
+        }
+
+#else
+
+        pn = new count_type(1);
+
+        if(pn == 0)
+        {
+            boost::checked_delete(p);
+            boost::throw_exception(std::bad_alloc());
+        }
+
+#endif
     }
 
     ~shared_ptr()
     {
         if(--*pn == 0)
         {
-            checked_delete(px);
+            boost::checked_delete(px);
             delete pn;
         }
     }

@@ -23,7 +23,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
-
+#include <boost/throw_exception.hpp>
 #include <boost/detail/shared_count.hpp>
 
 #include <memory>             // for std::auto_ptr
@@ -90,6 +90,7 @@ private:
 public:
 
     typedef T element_type;
+    typedef T value_type;
 
     shared_ptr(): px(0), pn()
     {
@@ -146,7 +147,7 @@ public:
     {
         if (px == 0)
         {
-            throw std::bad_cast();
+            boost::throw_exception(std::bad_cast());
         }
     }
 
