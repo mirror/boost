@@ -21,6 +21,27 @@ namespace boost
 {
 namespace fsm
 {
+namespace detail
+{
+
+
+
+// This helper is necessary because there doesn't seem to be consensus among
+// compilers on how a friend declaration for a function in another namespace
+// has to look like.
+class delete_helper
+{
+  public:
+    template< class T >
+    static void delete_object( const T * pObject )
+    {
+      delete pObject;
+    }
+};
+
+
+
+} // namespace detail
 
 
 
@@ -32,11 +53,7 @@ class event_base : public detail::rtti_policy::rtti_base_type<
     detail::counted_base<> > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
-    intrusive_ptr< const event_base > intrusive_from_this() const
-    {
-      BOOST_ASSERT( base_type::ref_counted() );
-      return intrusive_ptr< const event_base >( this );
-    }
+    intrusive_ptr< const event_base > intrusive_from_this() const;
 
   protected:
     //////////////////////////////////////////////////////////////////////////
@@ -47,8 +64,7 @@ class event_base : public detail::rtti_policy::rtti_base_type<
 
     virtual ~event_base() {}
 
-    friend void intrusive_ptr_release(
-      const ::boost::fsm::event_base * pBase );
+    friend class detail::delete_helper;
 };
 
 
@@ -68,7 +84,7 @@ inline void intrusive_ptr_release( const ::boost::fsm::event_base * pBase )
 {
   if ( pBase->release() )
   {
-    delete pBase;
+    ::boost::fsm::detail::delete_helper::delete_object( pBase );
   }
 }
 
@@ -80,6 +96,21 @@ inline void intrusive_ptr_release( const ::boost::fsm::event_base * pBase )
 
 
 
+namespace fsm
+{
+
+
+
+inline intrusive_ptr< const event_base >
+  event_base::intrusive_from_this() const
+{
+  BOOST_ASSERT( base_type::ref_counted() );
+  return intrusive_ptr< const event_base >( this );
+}
+
+
+
+} // namespace fsm
 } // namespace boost
 
 
