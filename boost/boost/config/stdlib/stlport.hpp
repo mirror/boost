@@ -78,6 +78,10 @@
 #  define BOOST_NO_STD_ALLOCATOR
 #endif
 
+#if defined(_STLP_NO_MEMBER_TEMPLATE_KEYWORD) && defined(BOOST_MSVC) && (BOOST_MSVC <= 1200)
+#  define BOOST_NO_STD_ALLOCATOR
+#endif
+
 //
 // We always have SGI style hash_set, hash_map, and slist:
 //
