@@ -76,7 +76,7 @@ namespace boost {
     operator= (const basic_format& x) {
         if(this == &x)
             return *this;
-        (basic_format(x)).swap(*this);
+        (basic_format<Ch, Tr, Alloc>(x)).swap(*this);
         return *this;
     }
     template< class Ch, class Tr, class Alloc>
@@ -158,7 +158,7 @@ namespace boost {
     template< class Ch, class Tr, class Alloc>
     basic_format<Ch,Tr, Alloc>& basic_format<Ch,Tr, Alloc>:: 
     clear_bind (int argN) {
-        // remove the bind of ONE argument then clear_notbound()
+        // remove the bind of ONE argument then clear()
         if(argN<1 || argN > num_args_ || bound_.size()==0 || !bound_[argN-1] ) {
             if( exceptions() & io::out_of_range_bit)
                 boost::throw_exception(io::out_of_range(argN, 1, num_args_+1 ) ); 
