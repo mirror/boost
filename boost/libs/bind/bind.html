@@ -76,8 +76,8 @@
 		<h4 style="MARGIN-LEFT: 40pt"><A href="#Files">Files</A></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><A href="#Dependencies">Dependencies</A></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><A href="#NumberOfArguments">Number of Arguments</A></h4>
-		<h4 style="MARGIN-LEFT: 40pt"><A href="#stdcall">"__stdcall", "__fastcall", and 
-				"pascal" Support</A></h4>
+		<h4 style="MARGIN-LEFT: 40pt"><A href="#stdcall">"__stdcall", "__cdecl", "__fastcall", 
+				and "pascal" Support</A></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><A href="#visit_each"><b>visit_each</b> support</A></h4>
 		<h3 style="MARGIN-LEFT: 20pt"><A href="#Acknowledgements">Acknowledgements</A></h3>
 		<h2><a name="Purpose">Purpose</a></h2>
@@ -270,12 +270,13 @@ std::vector&lt;pf&gt; v;
 
 std::for_each(v.begin(), v.end(), bind(apply&lt;void&gt;(), _1, 5));
 </pre>
-		<P>Sometimes it is necessary not to evaluate the first argument, but <STRONG>not</STRONG>
-			to evaluate some of the other arguments, even when they are nested <STRONG>bind</STRONG>
-			subexpressions. This can be achieved with the help of another function object, <STRONG>
-				protect</STRONG>, that masks the type so that <STRONG>bind</STRONG> does 
-			not recognize and evaluate it. When called, <STRONG>protect</STRONG> simply 
-			forwards the argument list to the other function object unmodified.</P>
+		<P>Although the first argument is, by default, not evaluated, all other arguments 
+			are. Sometimes it is necessary not to evaluate arguments subsequent to the 
+			first, even when they are nested <STRONG>bind</STRONG> subexpressions. This can 
+			be achieved with the help of another function object, <STRONG>protect</STRONG>, 
+			that masks the type so that <STRONG>bind</STRONG> does not recognize and 
+			evaluate it. When called, <STRONG>protect</STRONG> simply forwards the argument 
+			list to the other function object unmodified.</P>
 		<P>The header <STRONG>boost/bind/protect.hpp</STRONG> contains an implementation of <STRONG>
 				protect</STRONG>. To protect a <STRONG>bind</STRONG> function object from 
 			evaluation, use <tt>protect(bind(f, ...))</tt>.</P>
@@ -795,7 +796,7 @@ namespace
 		<h3><a name="NumberOfArguments">Number of Arguments</a></h3>
 		<p>This implementation supports function objects with up to nine arguments. This is 
 			an implementation detail, not an inherent limitation of the design.</p>
-		<h3><a name="stdcall">"__stdcall", "__fastcall", and "pascal" Support</a></h3>
+		<h3><a name="stdcall">"__stdcall", "__cdecl", "__fastcall", and "pascal" Support</a></h3>
 		<p>Some platforms allow several types of (member) functions that differ by their <b>calling 
 				convention</b> (the rules by which the function is invoked: how are 
 			arguments passed, how is the return value handled, and who cleans up the stack 
@@ -813,6 +814,12 @@ namespace
 			the macro <B>BOOST_MEM_FN_ENABLE_FASTCALL</B> before including <B>&lt;boost/bind.hpp&gt;</B>.</P>
 		<P>To use <b>bind</b> with <b>pascal</b> functions, <b>#define</b> the macro <b>BOOST_BIND_ENABLE_PASCAL</b>
 			before including <b>&lt;boost/bind.hpp&gt;</b>.</P>
+		<P>To use <B>bind</B> with <B>__cdecl</B> <B>member</B> functions, <B>#define</B> the 
+			macro <B>BOOST_MEM_FN_ENABLE_CDECL</B> before including <B>&lt;boost/bind.hpp&gt;</B>.</P>
+		<P><STRONG>It is best to define these macros in the project options, via -D on the 
+				command line, or as the first line in the translation unit (.cpp file) where 
+				bind is used.</STRONG> Not following this rule can lead to obscure errors 
+			when a header includes bind.hpp before the macro has been defined.</P>
 		<p>[Note: this is a non-portable extension. It is not part of the interface.]</p>
 		<p>[Note: Some compilers provide only minimal support for the <b>__stdcall</b> keyword.]</p>
 		<h3><a name="visit_each"><b>visit_each</b> support</a></h3>
@@ -857,10 +864,10 @@ namespace
 		<p><br>
 			<br>
 			<br>
-			<small>Copyright © 2001, 2002 by Peter Dimov and Multi Media Ltd. Permission to 
-				copy, use, modify, sell and distribute this document is granted provided this 
-				copyright notice appears in all copies. This document is provided "as is" 
-				without express or implied warranty, and with no claim as to its suitability 
-				for any purpose.</small></p>
+			<small>Copyright © 2001, 2002 by Peter Dimov and Multi Media Ltd. Copyright 
+				2003-2005 Peter Dimov. Permission to copy, use, modify, sell and distribute 
+				this document is granted provided this copyright notice appears in all copies. 
+				This document is provided "as is" without express or implied warranty, and with 
+				no claim as to its suitability for any purpose.</small></p>
 	</body>
 </html>

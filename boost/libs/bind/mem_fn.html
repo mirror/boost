@@ -37,8 +37,8 @@
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Files">Files</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Dependencies">Dependencies</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#NumberOfArguments">Number of Arguments</a></h4>
-		<h4 style="MARGIN-LEFT: 40pt"><a href="#stdcall">"__stdcall" and 
-				"__fastcall"&nbsp;Support</a></h4>
+		<h4 style="MARGIN-LEFT: 40pt"><a href="#stdcall">"__stdcall", "__cdecl" and 
+				"__fastcall" Support</a></h4>
 		<h3 style="MARGIN-LEFT: 20pt"><a href="#Acknowledgements">Acknowledgements</a></h3>
 		<h2><a name="Purpose">Purpose</a></h2>
 		<p>
@@ -168,10 +168,13 @@ void k(std::vector&lt;boost::shared_ptr&lt;X&gt; &gt; const &amp; v)
 		</p>
 		<h3><a name="Q4">Why isn't BOOST_MEM_FN_ENABLE_STDCALL defined automatically?</a></h3>
 		<p>
-			Non-portable extensions, in general, should default to off to prevent vendor 
-			lock-in. Had BOOST_MEM_FN_ENABLE_STDCALL been defined automatically, you could 
-			have accidentally taken advantage of it without realizing that your code is, 
-			perhaps, no longer portable.
+			Non-portable extensions, in general, should default to 
+off to prevent vendor lock-in. Had BOOST_MEM_FN_ENABLE_STDCALL been defined 
+automatically, you could have accidentally taken advantage of 
+			it without realizing that your code is, perhaps, no longer portable. 
+			In addition, it is possible for the default 
+			calling convention to be __stdcall, in which case enabling __stdcall support will 
+			result in duplicate definitions.
 		</p>
 		<h2><a name="Interface">Interface</a></h2>
 		<h3><a name="Synopsis">Synopsis</a></h3>
@@ -346,7 +349,7 @@ template&lt;class R, class T, class A1, class A2&gt; <i>unspecified-6</i> <a hre
 			This implementation supports member functions with up to eight arguments. This 
 			is not an inherent limitation of the design, but an implementation detail.
 		</p>
-		<h3><a name="stdcall">"__stdcall" and "__fastcall" Support</a></h3>
+		<h3><a name="stdcall">"__stdcall", "__cdecl" and "__fastcall" Support</a></h3>
 		<p>
 			Some platforms allow several types of member functions that differ by their <b>calling 
 				convention</b> (the rules by which the function is invoked: how are 
@@ -355,7 +358,8 @@ template&lt;class R, class T, class A1, class A2&gt; <i>unspecified-6</i> <a hre
 		</p>
 		<p>
 			For example, Windows API functions and COM interface member functions use a 
-			calling convention known as <b>__stdcall</b>. Borland VCL components use <STRONG>__fastcall</STRONG>.
+			calling convention known as <b>__stdcall</b>. Borland VCL components use <STRONG>__fastcall</STRONG>. UDK, the component model of 
+OpenOffice.org, uses <STRONG>__cdecl</STRONG>.
 		</p>
 		<p>
 			To use <b>mem_fn</b> with <b>__stdcall</b> member functions, <b>#define</b> the 
@@ -363,11 +367,18 @@ template&lt;class R, class T, class A1, class A2&gt; <i>unspecified-6</i> <a hre
 			indirectly, <b>&lt;boost/mem_fn.hpp&gt;</b>.
 		</p>
 		<P>To use <B>mem_fn</B> with <B>__fastcall</B> member functions, <B>#define</B> the 
-			macro <B>BOOST_MEM_FN_ENABLE_FASTCALL</B> before including, directly or 
-			indirectly, <B>&lt;boost/mem_fn.hpp&gt;</B>.
+			macro <B>BOOST_MEM_FN_ENABLE_FASTCALL</B>    before 
+			including <B>&lt;boost/mem_fn.hpp&gt;</B>.
 		</P>
-		<P>[Note: this is a non-portable extension. It is not part of the interface.]
-		</P>
+<P>To use <B>mem_fn</B> with <B>__cdecl</B> member functions, <B>#define</B> the 
+macro <B>BOOST_MEM_FN_ENABLE_CDECL</B> before including 
+<B>&lt;boost/mem_fn.hpp&gt;</B>. </P>
+<P><STRONG>It is best to define these macros in the project options, via -D 
+on the command line, or as the first line in the translation unit (.cpp file) 
+where mem_fn is used.</STRONG> Not following this rule can lead to obscure 
+errors when a header includes mem_fn.hpp before the macro has been defined.</P>
+<P>[Note: this is a non-portable extension. It is not part of the interface.] 
+</P>
 		<p>
 			[Note: Some compilers provide only minimal support for the <b>__stdcall</b> keyword.]
 		</p>
@@ -387,10 +398,10 @@ template&lt;class R, class T, class A1, class A2&gt; <i>unspecified-6</i> <a hre
 			Dave Abrahams modified <b>bind</b> and <b>mem_fn</b> to support void returns on 
 			deficient compilers.
 		</p>
-		<p><br>
+		<p>Daniel Boelzle pointed out that UDK uses <STRONG>__cdecl</STRONG>.<br>
 			<br>
 			<br>
-			<small>Copyright © 2001, 2002&nbsp;by Peter Dimov and Multi Media Ltd. Permission 
+			<small>Copyright © 2001, 2002 by Peter Dimov and Multi Media Ltd. Copyright 2003-2005 Peter Dimov. Permission 
 				to copy, use, modify, sell and distribute this document is granted provided 
 				this copyright notice appears in all copies. This document is provided "as is" 
 				without express or implied warranty, and with no claim as to its suitability 

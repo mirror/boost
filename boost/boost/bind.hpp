@@ -1422,6 +1422,18 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 #undef BOOST_BIND_MF_NAME
 #undef BOOST_BIND_MF_CC
 
+#ifdef BOOST_MEM_FN_ENABLE_CDECL
+
+#define BOOST_BIND_MF_NAME(X) X##_cdecl
+#define BOOST_BIND_MF_CC __cdecl
+
+#include <boost/bind/bind_mf_cc.hpp>
+
+#undef BOOST_BIND_MF_NAME
+#undef BOOST_BIND_MF_CC
+
+#endif
+
 #ifdef BOOST_MEM_FN_ENABLE_STDCALL
 
 #define BOOST_BIND_MF_NAME(X) X##_stdcall
