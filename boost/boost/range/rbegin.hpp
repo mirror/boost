@@ -52,24 +52,6 @@ rbegin( const C& c )
     return iter_type( end( c ) );
 }
 
-/*
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-// BCB is not able to overload pointer when class overloads are also available
-template<>
-inline range_const_reverse_iterator<const char*>::type rbegin<const char*>( const char*& c )
-{
-    return range_const_reverse_iterator<const char*>::type( end<const char*>( c ) );
-}
-
-template<>
-inline range_const_reverse_iterator<const wchar_t*>::type rbegin<const wchar_t*>( const wchar_t*& c )
-{
-    return range_const_reverse_iterator<const wchar_t*>::type( end<const wchar_t*>( c ) );
-}
-
-#endif
-*/
-
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
 }
