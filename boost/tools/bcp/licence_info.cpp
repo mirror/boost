@@ -43,7 +43,7 @@ std::pair<const licence_info*, int> get_licences()
    static const licence_info licences[] = 
    {
       licence_info( boost::regex("distributed\\W+under"
-         "(\\W+the)?\\W+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
+         "(\\W+the)?[^\"[:word:]]+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
          ,
@@ -58,7 +58,7 @@ std::pair<const licence_info*, int> get_licences()
        )
       ,
       licence_info( boost::regex("Use\\W+\\modification\\W+and\\W+distribution(\\W+is|\\W+are)\\W+subject\\W+to"
-         "(\\W+the)?\\W+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
+         "(\\W+the)?[^\"[:word:]]+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
          ,
@@ -73,7 +73,7 @@ std::pair<const licence_info*, int> get_licences()
        )
       ,
       licence_info( boost::regex("\\W+subject\\W+to"
-         "(\\W+the)?\\W+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
+         "(\\W+the)?[^\"[:word:]]+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
          ,
@@ -103,7 +103,7 @@ std::pair<const licence_info*, int> get_licences()
          "\\W+for\\W+any\\W+purpose\\W+is\\W+hereby\\W+granted\\W+without\\W+fee"
          "\\W+provided\\W+that\\W+the\\W+above\\W+copyright\\W+notice\\W+appears?\\W+in\\W+all\\W+copies\\W+and"
          "\\W+that\\W+both\\W+(the|that)\\W+copyright\\W+notice\\W+and\\W+this\\W+permission\\W+notice\\W+appears?"
-         "\\W+in\\W+supporting\\W+documentation.{1, 100}\\W+no\\W+representations"
+         "\\W+in\\W+supporting\\W+documentation[^<>]{1, 100}\\W+no\\W+representations"
          "\\W+(are\\W+made\\W+)?about\\W+the\\W+suitability\\W+of\\W+this\\W+software\\W+for\\W+any\\W+purpose"
          "\\W+It\\W+is\\W+provided\\W+as\\W+is\\W+without\\W+express\\W+or\\W+implied\\W+warranty"
          , boost::regex::perl | boost::regex::icase)
@@ -130,7 +130,7 @@ std::pair<const licence_info*, int> get_licences()
          "\\W+for\\W+any\\W+purpose\\W+is\\W+hereby\\W+granted\\W+without\\W+fee"
          "\\W+provided\\W+that\\W+the\\W+above\\W+copyright\\W+notice\\W+appears?\\W+in\\W+all\\W+copies\\W+and"
          "\\W+that\\W+both\\W+(the|that)\\W+copyright\\W+notice\\W+and\\W+this\\W+permission\\W+notice\\W+appears?"
-         "\\W+in\\W+supporting\\W+documentation.{1, 100}\\W+no\\W+representations"
+         "\\W+in\\W+supporting\\W+documentation[^<>]{1, 100}\\W+no\\W+representations"
          "\\W+(are\\W+made\\W+)?about\\W+the\\W+suitability\\W+of\\W+this\\W+software\\W+for\\W+any\\W+purpose"
          "\\W+It\\W+is\\W+provided\\W+as\\W+is\\W+without\\W+express(ed)?\\W+or\\W+implied\\W+warranty", boost::regex::perl | boost::regex::icase)
          ,
@@ -176,7 +176,7 @@ std::pair<const licence_info*, int> get_licences()
       ,
       licence_info(
          boost::regex(
-            "Permission\\W+to\\W+copy\\W+use\\W+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software\\W+is\\W+granted\\W+provided"
+            "Permission\\W+to\\W+copy\\W+use[^\"[:word:]]+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software\\W+is\\W+granted\\W+provided"
             "\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies\\W+This\\W+software\\W+is"
             "\\W+provided\\W+as\\W+is\\W+without\\W+express\\W+or\\W+implied\\W+warranty\\W+and\\W+with"
             "\\W+no\\W+claim\\W+at\\W+to\\W+its\\W+suitability\\W+for\\W+any\\W+purpose"
@@ -309,7 +309,7 @@ std::pair<const licence_info*, int> get_licences()
        )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+copy\\W+use\\W+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software\\W+is"
-                     "\\W+granted\\W+provided\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies\\W+and"
+                     "[^\"[:word:]]+granted\\W+provided\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies\\W+and"
                      "\\W+modified\\W+version\\W+are\\W+clearly\\W+marked\\W+as\\W+such\\W+This\\W+software\\W+is\\W+provided"
                      "\\W+as\\W+is\\W+without\\W+express\\W+or\\W+implied\\W+warranty\\W+and\\W+with\\W+no\\W+claim\\W+as\\W+to\\W+its"
                      "\\W+suitability\\W+for\\W+any\\W+purpose"
@@ -351,7 +351,7 @@ std::pair<const licence_info*, int> get_licences()
                      "\\W+is\\W+hereby\\W+granted\\W+without\\W+fee\\W+provided\\W+that\\W+the\\W+above\\W+copyright\\W+notice"
                      "\\W+appears\\W+in\\W+all\\W+copies\\W+and\\W+that\\W+both\\W+that\\W+copyright\\W+notice\\W+and\\W+this"
                      "\\W+permission\\W+notice\\W+appear\\W+in\\W+supporting\\W+documentation"
-                     ".{1,100}\\W+(make\\W+any\\W+representation|makes\\W+no\\W+representations)\\W+about\\W+the\\W+suitability\\W+of\\W+this"
+                     "[^<>]{1,100}\\W+(make\\W+any\\W+representation|makes\\W+no\\W+representations)\\W+about\\W+the\\W+suitability\\W+of\\W+this"
                      "\\W+software\\W+for\\W+any\\W+purpose\\W+It\\W+is\\W+provided\\W+as\\W+is\\W+without\\W+express\\W+or"
                      "\\W+implied\\W+warranty"
                      , boost::regex::perl | boost::regex::icase)
@@ -373,7 +373,7 @@ std::pair<const licence_info*, int> get_licences()
        )
       ,
       licence_info( boost::regex("Permission\\W+to\\W+copy"
-                     "\\W+use\\W+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software\\W+is\\W+granted\\W+provided"
+                     "[^\"[:word:]]+use\\W+modify\\W+sell\\W+and\\W+distribute\\W+this\\W+software\\W+is\\W+granted\\W+provided"
                      "\\W+this\\W+copyright\\W+notice\\W+appears\\W+in\\W+all\\W+copies\\W+of\\W+the\\W+source\\W+This"
                      "\\W+software\\W+is\\W+provided\\W+as\\W+is\\W+without\\W+express\\W+or\\W+implied\\W+warranty"
                      "\\W+and\\W+with\\W+no\\W+claim\\W+as\\W+to\\W+its\\W+suitability\\W+for\\W+any\\W+purpose"
