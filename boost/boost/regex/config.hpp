@@ -125,8 +125,10 @@
 // If there isn't good enough wide character support then there will
 // be no wide character regular expressions:
 //
-#if (defined(BOOST_NO_CWCHAR) || defined(BOOST_NO_CWCTYPE) || defined(BOOST_NO_STD_WSTRING)) && !defined(BOOST_NO_WREGEX)
-#  define BOOST_NO_WREGEX
+#if (defined(BOOST_NO_CWCHAR) || defined(BOOST_NO_CWCTYPE) || defined(BOOST_NO_STD_WSTRING))
+#  if !defined(BOOST_NO_WREGEX)
+#     define BOOST_NO_WREGEX
+#  endif
 #else
 #  if defined(__sgi) && defined(__SGI_STL_PORT)
       // STLPort on IRIX is misconfigured: <cwctype> does not compile
@@ -637,6 +639,7 @@ inline void pointer_construct(T* p, const T& t)
 #endif
 
 #endif
+
 
 
 

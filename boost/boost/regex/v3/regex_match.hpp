@@ -56,8 +56,10 @@ inline int string_compare(const std::basic_string<C,T,A>& s, const C* p)
 { return s.compare(p); }
 inline int string_compare(const std::string& s, const char* p)
 { return std::strcmp(s.c_str(), p); }
+# ifndef BOOST_NO_WREGEX
 inline int string_compare(const std::wstring& s, const wchar_t* p)
 { return std::wcscmp(s.c_str(), p); }
+# endif
 # define STR_COMP(s,p) string_compare(s,p)
 #endif
 
@@ -753,6 +755,15 @@ bool query_match_aux(iterator first,
                   start_loop[cur_acc] = first;
                   continue;
                }
+               else if((unsigned int)accumulators[cur_acc] < static_cast<const re_repeat*>(ptr)->min)
+               {
+                  // the repeat was null, and we haven't gone round min times yet,
+                  // since all subsequent repeats will be null as well, just update
+                  // our repeat count and skip out.
+                  accumulators[cur_acc] = static_cast<const re_repeat*>(ptr)->min;
+                  ptr = static_cast<const re_repeat*>(ptr)->alt.p;
+                  continue;
+               }
                goto failure;
             }
             // see if we can skip the repeat:
@@ -809,6 +820,15 @@ bool query_match_aux(iterator first,
             start_loop[cur_acc] = first;
             continue;
          }
+         else if((first == start_loop[cur_acc]) && accumulators[cur_acc] && ((unsigned int)accumulators[cur_acc] < static_cast<const re_repeat*>(ptr)->min))
+         {
+            // the repeat was null, and we haven't gone round min times yet,
+            // since all subsequent repeats will be null as well, just update
+            // our repeat count and skip out.
+            accumulators[cur_acc] = static_cast<const re_repeat*>(ptr)->min;
+            ptr = static_cast<const re_repeat*>(ptr)->alt.p;
+            continue;
+         }
 
          // if we get here then neither option is allowed so fail:
          goto failure;
@@ -826,7 +846,7 @@ bool query_match_aux(iterator first,
             if(flags & match_not_eob)
                goto failure;
             iterator p(first);
-            while((p != last) && traits_inst.is_separator(traits_inst.translate(*first, icase)))++p;
+            while((p != last) && traits_inst.is_separator(traits_inst.translate(*p, icase)))++p;
             if(p != last)
                goto failure;
             ptr = ptr->next.p;
@@ -956,6 +976,12 @@ bool query_match_aux(iterator first,
       case syntax_element_restart_continue:
          if(first != temp_match[-1].first)
             goto failure;
+         ptr = ptr->next.p;
+         continue;
+      case syntax_element_backref:
+         if(temp_match[static_cast<const re_brace*>(ptr)->index].first
+               != temp_match[static_cast<const re_brace*>(ptr)->index].second)
+               goto failure;
          ptr = ptr->next.p;
          continue;
       default:
