@@ -116,7 +116,7 @@ boost::shared_ptr<Object> object_cache<Key, Object>::do_get(const Key& k, size_t
    // Add it to the list, and index it:
    //
    s_data.cont.push_back(value_type(result, 0));
-   s_data.index[k] = --(s_data.cont.end());
+   s_data.index.insert(std::make_pair(k, --(s_data.cont.end())));
    s_data.cont.back().second = &(s_data.index.find(k)->first);
    list_size_type s = s_data.cont.size();
    BOOST_ASSERT(s_data.index[k]->first.get() == result.get());
