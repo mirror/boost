@@ -322,18 +322,18 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_startmark(
             // we need to unpack them, and insert them
             // back in the right order when we unwind the stack:
             //
-            match_results<BidiIterator, Allocator> tm(*m_presult);
+            match_results<BidiIterator, Allocator> temp_match(*m_presult);
             unsigned i;
-            for(i = 0; i < tm.size(); ++i)
+            for(i = 0; i < temp_match.size(); ++i)
                (*m_presult)[i].get_captures().clear();
             // match everything else:
             r = match_all_states();
             // now place the stored captures back:
-            for(i = 0; i < tm.size(); ++i)
+            for(i = 0; i < temp_match.size(); ++i)
             {
                typedef typename sub_match<BidiIterator>::capture_sequence_type seq;
                seq& s1 = (*m_presult)[i].get_captures();
-               const seq& s2 = tm[i].captures();
+               const seq& s2 = temp_match[i].captures();
                s1.insert(
                   s1.end(), 
                   s2.begin(), 
