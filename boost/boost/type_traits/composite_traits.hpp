@@ -938,9 +938,11 @@ namespace detail
           static T& make_t();
 
           BOOST_STATIC_CONSTANT(
-              bool, value = (
-                  1 == sizeof(detail::is_member_function_pointer_helper(make_t())))
-              || (1 == sizeof(detail::is_member_pointer_helper(make_t()))) );
+             bool, value = 
+               (::boost::type_traits::ice_or<
+                  (1 == sizeof(detail::is_member_function_pointer_helper(make_t()))),
+                  (1 == sizeof(detail::is_member_pointer_helper(make_t())))
+                >::value) );
       };
   };
 }
