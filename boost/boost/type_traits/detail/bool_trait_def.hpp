@@ -59,9 +59,8 @@
           typedef T arg1;                               \
                                                         \
           template< typename U1 >                       \
-          struct apply                                  \
+          struct apply : trait< U1 >                    \
           {                                             \
-              typedef typename trait< U1 >::type type;  \
           };                                            \
       };                                                \
     }                                                   \
