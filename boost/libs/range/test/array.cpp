@@ -40,7 +40,8 @@ void check_array()
 
  
 // BOOST_RANGE_NO_STATIC_ASSERT 
-#if !defined( __BORLANDC__ )
+#if !defined( __BORLANDC__ ) || ( _MSC_VER <= 1200 )
+#else
     BOOST_STATIC_ASSERT(( is_same< value_type_of<int[10]>::type, int >::value ));
     BOOST_STATIC_ASSERT(( is_same< iterator_of<int[10]>::type, int* >::value ));
     BOOST_STATIC_ASSERT(( is_same< const_iterator_of<int[10]>::type, const int* >::value ));
