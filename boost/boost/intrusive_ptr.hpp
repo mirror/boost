@@ -130,11 +130,11 @@ public:
 
 #else
 
-    typedef T * (intrusive_ptr::*unspecified_bool_type) () const;
+    typedef T * this_type::*unspecified_bool_type;
 
     operator unspecified_bool_type () const
     {
-        return p_ == 0? 0: &intrusive_ptr::get;
+        return p_ == 0? 0: &this_type::p_;
     }
 
 #endif

@@ -112,11 +112,11 @@ public:
 
 #else
 
-    typedef T * (this_type::*unspecified_bool_type)() const;
+    typedef T * this_type::*unspecified_bool_type;
 
     operator unspecified_bool_type() const // never throws
     {
-        return ptr == 0? 0: &this_type::get;
+        return ptr == 0? 0: &this_type::ptr;
     }
 
 #endif
