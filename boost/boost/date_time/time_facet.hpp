@@ -97,12 +97,12 @@ namespace date_time {
     }
     virtual void set_iso_format()
     {
-      m_format = iso_time_format_specifier;
+      this->m_format = iso_time_format_specifier;
       //TODO: set time_dur format to iso spec too?
     }
     virtual void set_iso_extended_format()
     {
-      m_format = iso_time_format_extended_specifier;
+      this->m_format = iso_time_format_extended_specifier;
       //TODO: set time_dur format to iso_ext spec too?
     }
 
@@ -115,7 +115,7 @@ namespace date_time {
         return do_put_special(a_next, a_ios, a_fill, 
                               a_time.date().as_special());
       }
-      string_type format(m_format);
+      string_type format(this->m_format);
       string_type frac_str;
       if (format.find(seconds_with_fractional_seconds_format)) {
         // replace %s with %S.nnn 
@@ -305,7 +305,7 @@ namespace date_time {
     OutItrT put(OutItrT next, std::ios_base& a_ios, 
                 char_type fill, const period_type& p) const 
     {
-      return m_period_formatter.put_period(next, a_ios, fill,p,*this);
+      return this->m_period_formatter.put_period(next, a_ios, fill,p,*this);
     }
 
 
