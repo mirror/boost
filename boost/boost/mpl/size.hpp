@@ -22,6 +22,7 @@
 #include "boost/mpl/aux_/sequence_tag.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
+#include "boost/mpl/aux_/msvc_eti_base.hpp"
 
 namespace boost {
 namespace mpl {
@@ -30,8 +31,10 @@ template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
     >
 struct size
-    : size_traits< typename BOOST_MPL_AUX_SEQUENCE_TAG(Sequence) >
-        ::template algorithm< Sequence >
+    : aux::msvc_eti_base<
+        typename size_traits< typename BOOST_MPL_AUX_SEQUENCE_TAG(Sequence) >
+            ::template algorithm< Sequence >::type
+      >::type
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,size,(Sequence))
 };
