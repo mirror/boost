@@ -65,18 +65,19 @@ struct assert_
 #if !defined(BOOST_MPL_CFG_NO_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
     template< typename T1, typename T2 = na, typename T3 = na, typename T4 = na > struct types {};
 #endif
-    enum relations { arg, equal, not_equal, greater, greater_equal, less, less_equal };
+    static assert_ const arg;
+    enum relations { equal = 1, not_equal, greater, greater_equal, less, less_equal };
 };
 
 
 #if !defined(BOOST_MPL_CFG_ASSERT_USE_RELATION_NAMES)
 
-bool operator==(failed, failed);
-bool operator!=(failed, failed);
-bool operator>(failed, failed);
-bool operator>=(failed, failed);
-bool operator<(failed, failed);
-bool operator<=(failed, failed);
+bool operator==( failed, failed );
+bool operator!=( failed, failed );
+bool operator>( failed, failed );
+bool operator>=( failed, failed );
+bool operator<( failed, failed );
+bool operator<=( failed, failed );
 
 #if defined(__EDG_VERSION__)
 template< bool (*)(failed, failed), long x, long y > struct assert_relation {};
@@ -89,12 +90,12 @@ struct assert_relation {};
 
 #else // BOOST_MPL_CFG_ASSERT_USE_RELATION_NAMES
 
-aux::weighted_tag<1>::type operator==(assert_::relations, assert_::relations);
-aux::weighted_tag<2>::type operator!=(assert_::relations, assert_::relations);
-aux::weighted_tag<3>::type operator>(assert_::relations, assert_::relations);
-aux::weighted_tag<4>::type operator>=(assert_::relations, assert_::relations);
-aux::weighted_tag<5>::type operator<(assert_::relations, assert_::relations);
-aux::weighted_tag<6>::type operator<=(assert_::relations, assert_::relations);
+aux::weighted_tag<1>::type operator==( assert_, assert_ );
+aux::weighted_tag<2>::type operator!=( assert_, assert_ );
+aux::weighted_tag<3>::type operator>(  assert_, assert_ );
+aux::weighted_tag<4>::type operator>=( assert_, assert_ );
+aux::weighted_tag<5>::type operator<( assert_, assert_ );
+aux::weighted_tag<6>::type operator<=( assert_, assert_ );
 
 template< assert_::relations r, long x, long y > struct assert_relation {};
 
