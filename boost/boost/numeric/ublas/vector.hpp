@@ -667,7 +667,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return i == index_ ? one_ : zero_;
+            if (i == index_)
+                return one_;
+            else
+                return zero_;
         }
 
         BOOST_UBLAS_INLINE

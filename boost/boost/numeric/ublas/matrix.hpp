@@ -2024,7 +2024,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
-            return i == j ? one_ : zero_;
+            if (i == j)
+                return one_;
+            else
+                return zero_;
         }
 
         // Assignment
