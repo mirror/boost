@@ -39,22 +39,22 @@ namespace boost {
         : store(new std::vector<T>(initial_size)), index(index)
         {}
 
-        std::vector<T>::iterator storage_begin()
+        typename std::vector<T>::iterator storage_begin()
         {
             return store->begin();
         }
 
-        std::vector<T>::iterator storage_end()
+        typename std::vector<T>::iterator storage_end()
         {
             return store->end();
         }
 
-        std::vector<T>::const_iterator storage_begin() const
+        typename std::vector<T>::const_iterator storage_begin() const
         {
             return store->begin();
         }
 
-        std::vector<T>::const_iterator storage_end() const
+        typename std::vector<T>::const_iterator storage_end() const
         {
             return store->end();
         }
