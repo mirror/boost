@@ -450,57 +450,63 @@ For practical demonstrations of use of these key extractors, refer to
 <p>
 The <code>member</code> key extractor poses some problems in compilers
 that do not properly support pointers to members as non-type
-template arguments. The following compilers have been confirmed not
+template arguments, as indicated by the
+<a href="../../../libs/config/config.htm">Boost Configuration Library</a>
+defect macro <code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code>.
+The following compilers have been confirmed not
 to work correctly with <code>member</code>:
 <ul>
   <li>MSVC++ 6.0/7.0,</li>
   <li>Intel C++ 7.0/7.1 for Windows,</li>
   <li>VisualAge 6.0 for AIX.</li>
 </ul>
-In these cases, a replacement utility
-<a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a>
-has been provided that does the work of <code>member</code> at the
-expense of less convenient notation and the possibility of
-non-conformance with the standard. Please consult
-the reference for further information on <code>member_offset</code>.
-<p>
-
-<p>
-The following test program can help determine if your compiler
+This program can help determine if your compiler
 properly supports pointers to members as non-type template parameters:
 </p>
 
 <blockquote><pre>
-<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>multi_index_container</span><span class=special>/</span><span class=identifier>member</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
-<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>utility</span><span class=special>&gt;</span>
 <span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>iostream</span><span class=special>&gt;</span>
 
-<span class=keyword>using</span> <span class=keyword>namespace</span> <span class=identifier>std</span><span class=special>;</span>
-<span class=keyword>using</span> <span class=identifier>boost</span><span class=special>::</span><span class=identifier>multi_index</span><span class=special>::</span><span class=identifier>member</span><span class=special>;</span>
+<span class=keyword>struct</span> <span class=identifier>pair</span>
+<span class=special>{</span>
+  <span class=keyword>int</span> <span class=identifier>x</span><span class=special>,</span><span class=identifier>y</span><span class=special>;</span>
 
-<span class=keyword>typedef</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>,</span><span class=keyword>int</span><span class=special>&gt;</span> <span class=identifier>pair_of_ints</span><span class=special>;</span>
+  <span class=identifier>pair</span><span class=special>(</span><span class=keyword>int</span> <span class=identifier>x_</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>y_</span><span class=special>):</span><span class=identifier>x</span><span class=special>(</span><span class=identifier>x_</span><span class=special>),</span><span class=identifier>y</span><span class=special>(</span><span class=identifier>y_</span><span class=special>){}</span>
+<span class=special>};</span>
+
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>pair</span><span class=special>::*</span> <span class=identifier>PtrToPairMember</span><span class=special>&gt;</span>
+<span class=keyword>struct</span> <span class=identifier>foo</span>
+<span class=special>{</span>
+  <span class=keyword>int</span> <span class=identifier>bar</span><span class=special>(</span><span class=identifier>pair</span><span class=special>&amp;</span> <span class=identifier>p</span><span class=special>){</span><span class=keyword>return</span> <span class=identifier>p</span><span class=special>.*</span><span class=identifier>PtrToPairMember</span><span class=special>;}</span>
+<span class=special>};</span>
 
 <span class=keyword>int</span> <span class=identifier>main</span><span class=special>()</span>
 <span class=special>{</span>
-  <span class=identifier>pair_of_ints</span> <span class=identifier>p</span><span class=special>(</span><span class=number>0</span><span class=special>,</span><span class=number>1</span><span class=special>);</span>
-  <span class=keyword>int</span> <span class=identifier>i</span><span class=special>=</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>pair_of_ints</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>pair_of_ints</span><span class=special>::</span><span class=identifier>first</span><span class=special>&gt;()(</span><span class=identifier>p</span><span class=special>);</span>
-  <span class=keyword>int</span> <span class=identifier>j</span><span class=special>=</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>pair_of_ints</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>pair_of_ints</span><span class=special>::</span><span class=identifier>second</span><span class=special>&gt;()(</span><span class=identifier>p</span><span class=special>);</span>
-  <span class=keyword>if</span><span class=special>(</span><span class=identifier>i</span><span class=special>!=</span><span class=number>0</span><span class=special>||</span><span class=identifier>j</span><span class=special>!=</span><span class=number>1</span><span class=special>){</span>
-    <span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=string>&quot;WARNING: compiler does not properly support\n&quot;</span>
-          <span class=string>&quot;pointers as non-type template parameters&quot;</span><span class=special>&lt;&lt;</span><span class=identifier>endl</span><span class=special>;</span>
-    <span class=keyword>return</span> <span class=number>1</span><span class=special>;</span>
-  <span class=special>}</span>
+  <span class=identifier>pair</span> <span class=identifier>p</span><span class=special>(</span><span class=number>0</span><span class=special>,</span><span class=number>1</span><span class=special>);</span>
+  <span class=identifier>foo</span><span class=special>&lt;&amp;</span><span class=identifier>pair</span><span class=special>::</span><span class=identifier>x</span><span class=special>&gt;</span> <span class=identifier>fx</span><span class=special>;</span>
+  <span class=identifier>foo</span><span class=special>&lt;&amp;</span><span class=identifier>pair</span><span class=special>::</span><span class=identifier>y</span><span class=special>&gt;</span> <span class=identifier>fy</span><span class=special>;</span>
 
-  <span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=string>&quot;test succesful&quot;</span><span class=special>&lt;&lt;</span><span class=identifier>endl</span><span class=special>;</span>
+  <span class=keyword>if</span><span class=special>(</span><span class=identifier>fx</span><span class=special>.</span><span class=identifier>bar</span><span class=special>(</span><span class=identifier>p</span><span class=special>)!=</span><span class=number>0</span><span class=special>||</span><span class=identifier>fy</span><span class=special>.</span><span class=identifier>bar</span><span class=special>(</span><span class=identifier>p</span><span class=special>)!=</span><span class=number>1</span><span class=special>)</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=string>&quot;KO&quot;</span><span class=special>&lt;&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>endl</span><span class=special>;</span>
+  <span class=keyword>else</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=string>&quot;OK&quot;</span><span class=special>&lt;&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>endl</span><span class=special>;</span>
+
   <span class=keyword>return</span> <span class=number>0</span><span class=special>;</span>
 <span class=special>}</span>
 
 </pre></blockquote>
 
 <p>
-If you find a compiler not listed here that does not pass the test,
-please report to the maintainer of the library. As an example of use,
-given the class</p>
+If you find a compiler that does not pass the test, and for which
+<code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code> is <i>not</i> defined,
+please report to the Boost developers mailing list.
+</p>
+<p>To overcome this defect, a replacement utility
+<a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a>
+has been provided that does the work of <code>member</code> at the
+expense of less convenient notation and the possibility of
+non-conformance with the standard. Please consult
+the reference for further information on <code>member_offset</code>.
+As an example of use, given the class
+</p>
 
 <blockquote><pre>
 <span class=keyword>class</span> <span class=identifier>A</span>
@@ -525,7 +531,7 @@ expression
 </pre></blockquote>
 
 <p>
-expands to either
+expands by default to
 </p>
 
 <blockquote><pre>
@@ -541,21 +547,7 @@ or alternatively to
 </pre></blockquote>
 
 <p>
-depending on whether the current compiler supports pointer to members as
-non-type template arguments or not. The alternative expansion is driven by
-the defect macro <code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code>,
-which has been proposed for inclusion in the
-<a href="../../../libs/config/config.htm">Boost Configuration Library</a>.
-Until the defect macro is accepted, Boost.MultiIndex treats it as if defined for 
-<ul>
-  <li>MSVC++ 7.0 or lower,</li>
-  <li>Intel C++ 7.1 or lower for Windows,</li>
-  <li>VisualAge 6.0 or lower.</li>
-</ul>
-If you detect this defect in a compiler other than these, you can take
-advantage of <code>BOOST_MULTI_INDEX_MEMBER</code> by manually defining
-<code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code> prior to the
-inclusion of Boost.MultiIndex headers.
+if <code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code> is defined.
 </p>
 
 <h3><a name="mem_fun_explicit">Use of <code>const_mem_fun_explicit</code> and
@@ -1310,7 +1302,7 @@ Reference
 
 <br>
 
-<p>Revised June 21st 2004</p>
+<p>Revised June 28th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
