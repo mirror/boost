@@ -1,5 +1,5 @@
-#ifndef EVENT_RECEIVER_HPP
-#define EVENT_RECEIVER_HPP
+#ifndef BOOST_FSM_CUSTOM_HANDLER_HPP_INCLUDED
+#define BOOST_FSM_CUSTOM_HANDLER_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) 2002 Andreas Huber, Zurich, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -10,30 +10,25 @@
 
 
 
+#include <boost/fsm/detail/event_handler.hpp>
+
+
+
 namespace boost
 {
 namespace fsm
 {
 
-template< class Derived >
-class event;
 
 
-
-//////////////////////////////////////////////////////////////////////////////
 template< class Event >
-class event_receiver
+struct custom_handler
 {
-  protected:
-    //////////////////////////////////////////////////////////////////////////
-    event_receiver() {}
-    ~event_receiver() {}
-
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    virtual const bool receive( const Event & theEvent ) = 0;
-
-    friend class event< Event >;
+    template< class Derived >
+    struct apply
+    {
+      typedef detail::event_handler< Event > type;
+    };
 };
 
 

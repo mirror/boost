@@ -1,5 +1,5 @@
-#ifndef EVENT_HPP
-#define EVENT_HPP
+#ifndef BOOST_FSM_EVENT_HPP_INCLUDED
+#define BOOST_FSM_EVENT_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) 2002 Andreas Huber, Zurich, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -10,10 +10,11 @@
 
 
 
-#include <boost/fsm/state_base.hpp>
-#include <boost/fsm/event_base.hpp>
-#include <boost/fsm/event_receiver.hpp>
+#include <boost/fsm/detail/state_base.hpp>
+#include <boost/fsm/detail/event_base.hpp>
+#include <boost/fsm/detail/event_handler.hpp>
 
+#include <boost/cast.hpp>
 
 
 #ifdef _MSC_VER
@@ -32,7 +33,7 @@ namespace fsm
 
 
 template< class Derived >
-class event : public event_base
+class event : public detail::event_base
 {
   protected:
     //////////////////////////////////////////////////////////////////////////
@@ -40,20 +41,20 @@ class event : public event_base
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    virtual const bool send_to( state_base & toState ) const
+    virtual bool send_to( detail::state_base & toState ) const
     {
       bool wasConsumed( false );
-      state_base * pCurrentState( &toState );
+      detail::state_base * pCurrentState( &toState );
 
       while ( !wasConsumed && ( pCurrentState != 0 ) )
       {
-        event_receiver< Derived > * const pReceiver(
-          dynamic_cast< event_receiver< Derived > * >( pCurrentState ) );
+        detail::event_handler< Derived > * const pReceiver =
+          dynamic_cast< detail::event_handler< Derived > * >( pCurrentState );
 
         if ( pReceiver != 0 )
         {
-          wasConsumed =
-            pReceiver->receive( static_cast< const Derived & >( *this ) );
+          wasConsumed = pReceiver->handle_event(
+            *polymorphic_downcast< const Derived * >( this ) );
         }
 
         if ( !wasConsumed )

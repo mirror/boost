@@ -1,5 +1,5 @@
-#ifndef SIMPLE_EXCEPTION_TRANSLATOR_HPP
-#define SIMPLE_EXCEPTION_TRANSLATOR_HPP
+#ifndef BOOST_FSM_SIMPLE_EXCEPTION_TRANSLATOR_HPP_INCLUDED
+#define BOOST_FSM_SIMPLE_EXCEPTION_TRANSLATOR_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // (c) 2002 Andreas Huber, Zurich, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -10,9 +10,9 @@
 
 
 
+#include <boost/fsm/detail/event_base.hpp>
 #include <boost/fsm/event.hpp>
-
-#include <utility>
+#include <boost/shared_ptr.hpp>
 
 
 
@@ -21,6 +21,8 @@ namespace boost
 namespace fsm
 {
 
+
+
 class simple_exception_event : public event< simple_exception_event > {};
 
 
@@ -28,19 +30,22 @@ class simple_exception_event : public event< simple_exception_event > {};
 template< class ExceptionEvent = simple_exception_event >
 struct simple_exception_translator
 {
-  template< class Action >
-  static std::auto_ptr< const event_base > execute( Action action )
+  template< class Action, class ExceptionEventHandler >
+  bool operator()( Action action, ExceptionEventHandler eventHandler )
   {
     try
     {
-      action();
+      return action();
     }
-    catch( ... )
+    catch ( ... )
     {
-      return std::auto_ptr< const event_base >( new ExceptionEvent );
-    }
+      if ( !eventHandler( ExceptionEvent() ) )
+      {
+        throw;
+      }
 
-    return std::auto_ptr< const event_base >( 0 );
+      return true;
+    }
   }
 };
 
