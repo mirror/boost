@@ -90,6 +90,10 @@ int main()
         cout << "__INTEL_COMPILER defined as " << __INTEL_COMPILER << "\n";
 #   endif
 
+#   ifdef __USLC__
+        cout << "__USLC__ defined\n";
+#   endif
+
 #   ifdef __BORLANDC__
         cout << "__BORLANDC__ defined as " << __BORLANDC__ << "\n";
 #   endif
