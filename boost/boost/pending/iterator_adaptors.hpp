@@ -214,7 +214,7 @@ inline bool operator<=(const iterator_comparisons<D1,Base1>& xb,
 #endif
 
 //============================================================================
-// Some compilers (SGI MIPSpro) instantiate/compile member functions
+// Some compilers (SGI MIPSpro 7.1.3.3) instantiate/compile member functions
 // whether or not they are used. The following functions make sure that
 // when the base iterators do not support particular operators, those
 // operators do not get used.
