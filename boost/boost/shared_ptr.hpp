@@ -129,8 +129,8 @@ public:
 
 //  generated copy constructor, assignment, destructor are fine...
 
-//  except on Borland C++ 5.5.1 (and 5.6)
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561)
+//  except that Borland C++ has a bug, and g++ with -Wsynth warns
+#if defined(__BORLANDC__) || defined(__GNUC__)
 
     shared_ptr & operator=(shared_ptr const & r) // never throws
     {
