@@ -41,8 +41,12 @@
 //    (starting with submission #10).
 //  - Jan 2004: GCC 3.4 fixed to suport DR337 (Giovanni Bajo).
 //  - Jan 2004: modified to be part of Boost.TypeTraits (Pavel Vozenilek).
+//  - Nov 2004: Christoph Ludwig found that the implementation did not work with
+//              template types and gcc-3.4 or VC7.1, fix due to Christoph Ludwig
+//              and John Maddock.
 //
 
+#include <boost/static_assert.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include "boost/type_traits/detail/ice_and.hpp"
@@ -64,6 +68,11 @@ struct is_abstract_imp
    static type_traits::no_type check_sig(U (*)[1]);
    template<class U>
    static type_traits::yes_type check_sig(...);
+   //
+   // T must be a complete type, further if T is a template then
+   // it must be instantiated in order for us to get the right answer:
+   //
+   BOOST_STATIC_ASSERT(sizeof(T));
 
    // GCC2 won't even parse this template if we embed the computation
    // of s1 in the computation of value.
