@@ -36,6 +36,19 @@ list <code>L</code> (from the right or the end of the list).</p>
   )
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TEST(D,X,P) BOOST_PP_CAT(P,X)
+  BOOST_PP_LIST_FOLD_RIGHT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  _CBA
+</pre>
+
 <h3>Uses</h3>
 <ul>
   <li>BOOST_PP_WHILE() (see for explanation of the D parameter)</li>

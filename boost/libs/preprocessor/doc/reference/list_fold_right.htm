@@ -48,6 +48,19 @@ list <code>L</code> (from the right or the end of the list).</p>
   )
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TEST(D,X,P) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(P,X)
+  <a href="list_fold_right.htm#BOOST_PP_LIST_FOLD_RIGHT">BOOST_PP_LIST_FOLD_RIGHT</a>(TEST,_,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(3,(A,B,C)))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  _CBA
+</pre>
+
 <h3>Uses</h3>
 <ul>
   <li><a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>() (see for explanation of the D parameter)</li>

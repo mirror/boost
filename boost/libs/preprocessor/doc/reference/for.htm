@@ -38,6 +38,21 @@
 
 <p>The length of the sequence is determined by <code>C(R,X)</code>.</p>
 
+<p>For example,</p>
+
+<pre>
+  #define C(R,X) <a href="comparison_less.htm#BOOST_PP_LESS">BOOST_PP_LESS</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,X),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,X))
+  #define F(R,X) (<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,X)),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,X))
+  #define I(R,X) <a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,X)
+  <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>((0,3),C,F,I)
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  0 1 2
+</pre>
+
 <h3>Legend</h3>
 <ul>
   <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
@@ -54,21 +69,6 @@
       avoid recursively expanding the same macro again, which is not permitted
       by the C++ preprocessor.</li>
 </ul>
-
-<p>For example,</p>
-
-<pre>
-  #define C(R,X) <a href="comparison_less.htm#BOOST_PP_LESS">BOOST_PP_LESS</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,X),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,X))
-  #define F(R,X) (<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,X)),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,X))
-  #define I(R,X) <a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,X)
-  <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>((0,3),C,F,I)
-</pre>
-
-<p>expands to:</p>
-
-<pre>
-  0 1 2
-</pre>
 
 <h3><a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>() vs <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>()</h3>
 

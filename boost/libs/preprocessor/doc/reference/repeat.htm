@@ -35,6 +35,19 @@
   M(0,P) M(1,P) ... M(<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(N),P)
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TEST(I,P) P(I);
+  <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a>(3,TEST,X)
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  X(0); X(1); X(2);
+</pre>
+
 <h3>2D and 3D repetition</h3>
 
 <p>2D and 3D repetition are supported with the <a href="repeat_2nd.htm#BOOST_PP_REPEAT_2ND">BOOST_PP_REPEAT_2ND</a>() and

@@ -27,6 +27,19 @@ BOOST_PP_LIST_SIZE(L)[.</p>
   F(R,P,BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L))))
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TEST(R,P,X) BOOST_PP_CAT(P,X)();
+  BOOST_PP_LIST_FOR_EACH(TEST,prefix_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  prefix_A(); prefix_B(); prefix_C();
+</pre>
+
 <h3>Example</h3>
 <ul>
   <li><a href="../../example/catch_builtin.cpp">catch_builtin.cpp</a></li>

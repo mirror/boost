@@ -29,6 +29,19 @@ BOOST_PP_LIST_SIZE(L)[.</p>
   F(R,P,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L)),BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L))))
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TEST(R,P,I,X) BOOST_PP_CAT(P,X)(I);
+  BOOST_PP_LIST_FOR_EACH_I(TEST,prefix_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  prefix_A(0); prefix_B(1); prefix_C(2);
+</pre>
+
 <h3>Uses</h3>
 <ul>
   <li>BOOST_PP_FOR() (see for explanation of the R parameter)</li>

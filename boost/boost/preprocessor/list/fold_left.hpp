@@ -33,7 +33,7 @@ list <code>L</code> (from the left or the start of the list).</p>
 
 <pre>
   #define TEST(D,P,X) BOOST_PP_CAT(P,X)
-  BOOST_PP_FOLD_LEFT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
+  BOOST_PP_LIST_FOLD_LEFT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
 <p>expands to:</p>

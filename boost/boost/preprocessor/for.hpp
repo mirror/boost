@@ -27,6 +27,21 @@
 
 <p>The length of the sequence is determined by <code>C(R,X)</code>.</p>
 
+<p>For example,</p>
+
+<pre>
+  #define C(R,X) BOOST_PP_LESS(BOOST_PP_TUPLE_ELEM(2,0,X),BOOST_PP_TUPLE_ELEM(2,1,X))
+  #define F(R,X) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,X)),BOOST_PP_TUPLE_ELEM(2,1,X))
+  #define I(R,X) BOOST_PP_TUPLE_ELEM(2,0,X)
+  BOOST_PP_FOR((0,3),C,F,I)
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  0 1 2
+</pre>
+
 <h3>Legend</h3>
 <ul>
   <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
@@ -43,21 +58,6 @@
       avoid recursively expanding the same macro again, which is not permitted
       by the C++ preprocessor.</li>
 </ul>
-
-<p>For example,</p>
-
-<pre>
-  #define C(R,X) BOOST_PP_LESS(BOOST_PP_TUPLE_ELEM(2,0,X),BOOST_PP_TUPLE_ELEM(2,1,X))
-  #define F(R,X) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,X)),BOOST_PP_TUPLE_ELEM(2,1,X))
-  #define I(R,X) BOOST_PP_TUPLE_ELEM(2,0,X)
-  BOOST_PP_FOR((0,3),C,F,I)
-</pre>
-
-<p>expands to:</p>
-
-<pre>
-  0 1 2
-</pre>
 
 <h3>BOOST_PP_REPEAT() vs BOOST_PP_FOR()</h3>
 

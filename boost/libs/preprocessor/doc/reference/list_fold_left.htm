@@ -40,6 +40,19 @@ list <code>L</code> (from the left or the start of the list).</p>
   )
 </pre>
 
+<p>For example,</p>
+
+<pre>
+  #define TEST(D,P,X) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(P,X)
+  <a href="list_fold_left.htm#BOOST_PP_LIST_FOLD_LEFT">BOOST_PP_LIST_FOLD_LEFT</a>(TEST,_,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(3,(A,B,C)))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  _ABC
+</pre>
+
 <h3>Note</h3>
 <ul>
   <li>Folding, or accumulation, is a very general pattern of computation.

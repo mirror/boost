@@ -26,6 +26,20 @@
 
 <p>The depth of iteration is determined by <code>C(D,X)</code>.</p>
 
+<p>For example,</p>
+
+<pre>
+  #define C(D,X) BOOST_PP_LESS_D(D,BOOST_PP_TUPLE_ELEM(2,0,X),BOOST_PP_TUPLE_ELEM(2,1,X))
+  #define F(D,X) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,X)),BOOST_PP_TUPLE_ELEM(2,1,X))
+  BOOST_PP_WHILE(C,F,(0,3))
+</pre>
+
+<p>expands to:</p>
+
+<pre>
+  (3,3)
+</pre>
+
 <h3>Legend</h3>
 <ul>
   <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
