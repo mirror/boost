@@ -231,7 +231,6 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
 
    const S* ptr1 = 0;
    const S* ptr2 = 0;
-   int count = 0;
    try
    {
       const S& r = boost::get<const S>(vari);
@@ -239,7 +238,7 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
    }
    catch(boost::bad_get& )
    {
-      count += 1;
+      BOOST_ERROR( "get<const S> failed unexpectedly" );
    }
 
    try
@@ -249,10 +248,9 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
    }
    catch(boost::bad_get& )
    {
-      count += 1;
+      BOOST_ERROR( "get<S> failed unexpectedly" );
    }
 
-   BOOST_CHECK(count == 0);
    BOOST_CHECK(ptr1 != 0 && ptr2 == ptr1);
 
    //
@@ -282,28 +280,30 @@ inline void verify_not(const VariantType& vari, spec<S>)
 
    const S* ptr1 = 0;
    const S* ptr2 = 0;
-   int count = 0;
    try
    {
-      const S& r = boost::get<const S>(vari);
+      const S& r = boost::get<const S>(vari); // should throw
+      BOOST_ERROR( "get<const S> passed unexpectedly" );
+
       ptr1 = &r;
    }
    catch(boost::bad_get& )
    {
-      count += 1;
+      // do nothing except pass-through
    }
 
    try
    {
-      S& mut_r = boost::get<S>(mut_vari);
+      S& mut_r = boost::get<S>(mut_vari); // should throw
+      BOOST_ERROR( "get<S> passed unexpectedly" );
+
       ptr2 = &mut_r;
    }
    catch(boost::bad_get& )
    {
-      count += 1;
+      // do nothing except pass-through
    }
 
-   BOOST_CHECK(count == 2);
    BOOST_CHECK(ptr1 == 0 && ptr2 == 0);   
 }
 
