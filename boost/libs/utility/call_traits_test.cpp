@@ -181,6 +181,12 @@ struct comparible_UDT
 {
    int i_;
    comparible_UDT() : i_(2){}
+   comparible_UDT(const comparible_UDT& other) : i_(other.i_){}
+   comparible_UDT& operator=(const comparible_UDT& other)
+   { 
+      i_ = other.i_;
+      return *this;
+   }
    bool operator == (const comparible_UDT& v){ return v.i_ == i_; }
 };
 
@@ -193,6 +199,7 @@ int main(int argc, char *argv[ ])
    int i = 2;
    c2(i);
    int* pi = &i;
+   int a[2] = {1,2};
 #if (defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)) && !defined(__ICL)
    call_traits_checker<int*> c3;
    c3(pi);
@@ -201,7 +208,6 @@ int main(int argc, char *argv[ ])
    call_traits_checker<const int&> c5;
    c5(i);
 #if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__MWERKS__)
-   int a[2] = {1,2};
    call_traits_checker<int[2]> c6;
    c6(a);
 #endif
