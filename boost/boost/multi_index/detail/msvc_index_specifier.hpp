@@ -12,7 +12,7 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/workaround.hpp>
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
+#if BOOST_WORKAROUND(BOOST_MSVC,<1310)
 /* Workaround for a problem in MSVC with dependent template typedefs
  * when accesing index specifiers.
  * Modeled after <boost/mpl/aux_/msvc_dtw.hpp> (thanks, Aleksey!)

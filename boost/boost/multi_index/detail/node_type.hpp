@@ -32,7 +32,7 @@ namespace detail{
  * index list.
  */
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
+#if BOOST_WORKAROUND(BOOST_MSVC,<1310)
 struct index_node_applier
 {
   template<typename IndexSpecifierIterator,typename Super>
