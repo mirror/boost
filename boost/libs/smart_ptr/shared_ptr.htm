@@ -247,6 +247,14 @@ supply an automatic conversion to <b>T*</b>?<br>
 <b>A.</b> As an aid to writing test cases and debugging displays. One of the
 progenitors had use_count(), and it was useful in tracking down bugs in a
 complex project that turned out to have cyclic-dependencies.</p>
+<p><b>Q.</b> Why doesn't <b>shared_ptr</b> specify complexity requirements?<br>
+<b>A.</b> Because complexity limit implementors and complicate the specification without apparent benefit to
+<b>shared_ptr</b> users. For example, error-checking implementations might become non-conforming if they
+had to meet stringent complexity requirements.</p>
+<p><b>Q.</b> Why doesn't <b>shared_ptr</b> provide (your pet feature here)?<br>
+<b>A.</b> Because (your pet feature here) would mandate a reference counted (or a link-list, or ...) implementation. This is not the intent.
+[Provided by Peter Dimov]<br>
+</p>
 <hr>
 <p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->13 July, 2001<!--webbot bot="Timestamp" endspan i-checksum="21067" -->
 </p>
