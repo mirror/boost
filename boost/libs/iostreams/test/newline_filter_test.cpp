@@ -99,21 +99,19 @@ bool test_options(int flags, int count)
 
 void newline_filter_test()
 {
-    {
-        BOOST_CHECK(test_options(posix, 34));
-        BOOST_CHECK(test_options(mac, 34));
-        BOOST_CHECK(test_options(windows, 34));
-        BOOST_CHECK(test_options(posix | final_newline, 35));
-        BOOST_CHECK(test_options(mac | final_newline, 35));
-        BOOST_CHECK(test_options(windows | final_newline, 35));
-        BOOST_CHECK(test_options(posix, 34));
-        BOOST_CHECK(test_options(mac, 34));
-        BOOST_CHECK(test_options(windows, 34));
-        BOOST_CHECK(test_options(print_CR | accept_CR, 23));
-        BOOST_CHECK(test_options(print_LF | accept_LF, 23));
-        BOOST_CHECK(test_options(print_CRLF | accept_LF | accept_CR, 46));
-        BOOST_CHECK(test_options(print_CRLF | accept_LF | accept_CR | accept_CRLF, 46));
-    }
+    BOOST_CHECK(test_options(posix, 34));
+    BOOST_CHECK(test_options(mac, 34));
+    BOOST_CHECK(test_options(windows, 34));
+    BOOST_CHECK(test_options(posix | final_newline, 35));
+    BOOST_CHECK(test_options(mac | final_newline, 35));
+    BOOST_CHECK(test_options(windows | final_newline, 35));
+    BOOST_CHECK(test_options(posix, 34));
+    BOOST_CHECK(test_options(mac, 34));
+    BOOST_CHECK(test_options(windows, 34));
+    BOOST_CHECK(test_options(print_CR | accept_CR, 23));
+    BOOST_CHECK(test_options(print_LF | accept_LF, 23));
+    BOOST_CHECK(test_options(print_CRLF | accept_LF | accept_CR, 46));
+    BOOST_CHECK(test_options(print_CRLF | accept_LF | accept_CR | accept_CRLF, 46));
 }
 
 test_suite* init_unit_test_suite(int, char* []) 
