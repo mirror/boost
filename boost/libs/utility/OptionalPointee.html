@@ -115,10 +115,9 @@ struct equal_pointees_t : std::binary_function&lt;OptionalPointee,OptionalPointe
 } ;
 </pre>
 <p>The preceding generic function and function object have the following semantics:<br>
-If both x and y have valid pointees, it compares values via (*x == *y) or (*x &lt; 
-*y).<br>
-If only one has a valid pointee, returns false.<br>
-If both have invalid pointees, returns true.</p>
+If both <b>x</b> and <b>y</b> have valid pointees, it compares values via <code>(*x == *y)</code>.<br>
+If only one has a valid pointee, returns <code>false</code>.<br>
+If both have invalid pointees, returns <code>true</code>.</p>
 <a name="less"></a>
 <p><u>Less-than relation:</u></p>
 <pre>template&lt;class OptionalPointee&gt;
@@ -135,11 +134,12 @@ struct less_pointees_t : std::binary_function&lt;OptionalPointee,OptionalPointee
 } ;
 </pre>
 <p>The preceding generic function and function object have the following semantics:<br>
-If both x and y have valid pointees, it compares values via (*x == *y) or (*x &lt; 
-*y).<br>
-If only one has a valid pointee, returns false.<br>
-If both have invalid pointees, returns false.</p>
-<p>All these functions and function 
+If <b>y</b> has an invalid pointee, returns <code>false</code>.<br>
+Else, if <b>x</b> has an invalid pointee, returns <code>true</code>.<br>
+Else, ( <b>x</b> and <b>y</b> have valid pointees), compares values via <code>(*x &lt; 
+*y).</code></p>
+<p><br>
+All these functions and function 
 objects are is implemented in <a href="../../boost/utility/compare_pointees.hpp">compare_pointees.hpp</a></p>
 <p>Notice that OptionalPointee does not imply aliasing (and optional&lt;&gt; for instance does not alias);
 so direct usage of relational operators with the implied aliasing of shallow semantics
