@@ -59,6 +59,9 @@
 
 //  BOOST_NO_INCLASS_MEMBER_INITIALIZATION: Compiler violates std::9.4.2/4. 
 
+//  BOOST_NO_INT64_T: <boost/cstdint.hpp> does not support 64-bit integer
+//  types.  (Set by <boost/cstdint.hpp> rather than <boost/config.hpp>).
+
 //  BOOST_NO_INTEGRAL_INT64_T: int64_t as defined by <boost/cstdint.hpp> is
 //  not an integral type.
 
