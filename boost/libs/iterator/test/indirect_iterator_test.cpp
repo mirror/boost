@@ -175,7 +175,7 @@ main()
     > c_iter_t;
 
 # ifndef NO_MUTABLE_CONST_RA_ITERATOR_INTEROPERABILITY
-    boost::function_requires< boost_concepts::InteroperableConcept<iter_t, c_iter_t> >();
+    boost::function_requires< boost_concepts::InteroperableIteratorConcept<iter_t, c_iter_t> >();
 # endif 
   }
 

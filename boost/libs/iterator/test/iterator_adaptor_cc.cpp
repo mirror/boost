@@ -13,7 +13,7 @@ int main()
     boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<rev_iter> >();
     boost::function_requires< boost_concepts::RandomAccessTraversalConcept<rev_iter> >();
     boost::function_requires< boost::RandomAccessIteratorConcept<rev_iter> >();
-    boost::function_requires< boost_concepts::InteroperableConcept<rev_iter, c_rev_iter> >();
+    boost::function_requires< boost_concepts::InteroperableIteratorConcept<rev_iter, c_rev_iter> >();
   }
   {
     typedef boost::reverse_iterator<std::list<int>::iterator>       rev_iter;
@@ -22,7 +22,7 @@ int main()
     boost::function_requires< boost_concepts::ReadableLvalueIteratorConcept<c_rev_iter> >();
     boost::function_requires< boost_concepts::BidirectionalTraversalConcept<c_rev_iter> >();
     boost::function_requires< boost::BidirectionalIteratorConcept<c_rev_iter> >();
-    boost::function_requires< boost_concepts::InteroperableConcept<rev_iter, c_rev_iter> >();
+    boost::function_requires< boost_concepts::InteroperableIteratorConcept<rev_iter, c_rev_iter> >();
   }
 
   return boost::exit_success;

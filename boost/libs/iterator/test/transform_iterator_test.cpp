@@ -115,7 +115,7 @@ main()
     typedef boost::transform_iterator<adaptable_mult_functor, int*>       iter_t;
     typedef boost::transform_iterator<adaptable_mult_functor, int const*> c_iter_t;
 
-    boost::function_requires< boost_concepts::InteroperableConcept<iter_t, c_iter_t> >();
+    boost::function_requires< boost_concepts::InteroperableIteratorConcept<iter_t, c_iter_t> >();
   }
 
   // Test transform_iterator
