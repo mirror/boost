@@ -47,7 +47,7 @@ pointed to. <b>T</b> must meet the smart pointer
       template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(weak_ptr&lt;Y&gt; const &amp; r); // never throws
       template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
 
-      void <a href="#reset">reset</a>(); // never throws
+      void <a href="#reset">reset</a>();
 
       T &amp; <a href="#indirection">operator*</a>() const; // never throws
       T * <a href="#indirection">operator-&gt;</a>() const; // never throws
@@ -62,8 +62,8 @@ pointed to. <b>T</b> must meet the smart pointer
     bool <a href="#operator==">operator==</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
   template&lt;typename T, typename U&gt;
     bool <a href="#operator!=">operator!=</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
-  template&lt;typename T, typename U&gt;
-    bool <a href="#operator&lt;">operator&lt;</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
+  template&lt;typename T&gt;
+    bool <a href="#operator&lt;">operator&lt;</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws
 
   template&lt;typename T&gt; void <a href="#free-swap">swap</a>(weak_ptr&lt;T&gt; &amp; a, weak_ptr&lt;T&gt; &amp; b); // never throws
 
@@ -174,8 +174,8 @@ See the smart pointer
   bool <a href="#operator==">operator==</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
 template&lt;typename T, typename U&gt;
   bool <a href="#operator!=">operator!=</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
-template&lt;typename T, typename U&gt;
-  bool <a href="#operator&lt;">operator&lt;</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws</pre>
+template&lt;typename T&gt;
+  bool <a href="#operator&lt;">operator&lt;</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 <p>Compares the stored pointers of the two smart pointers.
 <b>T</b> need not be a complete type.
 See the smart pointer

@@ -71,8 +71,8 @@ function must be passed in, or the pointed-to object must have a trivial destruc
       template&lt;typename Y&gt; shared_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
       template&lt;typename Y&gt; shared_ptr &amp; <a href="#assignment">operator=</a>(std::auto_ptr&lt;Y&gt; &amp; r);
 
-      void <a href="#reset">reset</a>(T * p = 0); // never throws
-      template&lt;typename D&gt; void <a href="#reset">reset</a>(T * p, D d); // never throws
+      void <a href="#reset">reset</a>(T * p = 0);
+      template&lt;typename D&gt; void <a href="#reset">reset</a>(T * p, D d);
 
       T &amp; <a href="#indirection">operator*</a>() const; // never throws
       T * <a href="#indirection">operator-&gt;</a>() const; // never throws
@@ -88,8 +88,8 @@ function must be passed in, or the pointed-to object must have a trivial destruc
     bool <a href="#operator==">operator==</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
   template&lt;typename T, typename U&gt;
     bool <a href="#operator!=">operator!=</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
-  template&lt;typename T, typename U&gt;
-    bool <a href="#operator&lt;">operator&lt;</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
+  template&lt;typename T&gt;
+    bool <a href="#operator&lt;">operator&lt;</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws
 
   template&lt;typename T&gt; void <a href="#free-swap">swap</a>(shared_ptr&lt;T&gt; &amp; a, shared_ptr&lt;T&gt; &amp; b); // never throws
 
@@ -226,8 +226,8 @@ See the smart pointer
   bool <a href="#operator==">operator==</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
 template&lt;typename T, typename U&gt;
   bool <a href="#operator!=">operator!=</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
-template&lt;typename T, typename U&gt;
-  bool <a href="#operator&lt;">operator&lt;</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws</pre>
+template&lt;typename T&gt;
+  bool <a href="#operator&lt;">operator&lt;</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 <p>Compares the stored pointers of the two smart pointers.
 <b>T</b> need not be a complete type.
 See the smart pointer

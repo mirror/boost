@@ -54,10 +54,10 @@ pointed to. <b>T</b> must meet the smart pointer
 
       <a href="#constructors">shared_array</a>(shared_array const &amp; r); // never throws
 
-      shared_array &amp; <a href="#assignment">operator=</a>(shared_array const &amp; r); // never throws  
+      shared_array &amp; <a href="#assignment">operator=</a>(shared_array const &amp; r); // never throws
 
-      void <a href="#reset">reset</a>(T * p = 0); // never throws
-      template&lt;typename D&gt; void <a href="#reset">reset</a>(T * p, D d); // never throws
+      void <a href="#reset">reset</a>(T * p = 0);
+      template&lt;typename D&gt; void <a href="#reset">reset</a>(T * p, D d);
 
       T &amp; <a href="#indexing">operator[]</a>(std::ptrdiff_t i) const() const; // never throws
       T * <a href="#get">get</a>() const; // never throws
