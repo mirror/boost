@@ -678,7 +678,7 @@ namespace boost { namespace numeric { namespace ublas {
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, m, row_major_tag ());
         indexing_matrix_assign (functor1_type::template make_debug_functor<typename matrix<value_type, row_major>::reference, value_type> (), cm, e, row_major_tag ());
 #else
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
+        indexing_matrix_assign (scalar_assign<value_type&, value_type> (), cm, m, row_major_tag ());
         indexing_matrix_assign (functor1_type (), cm, e, row_major_tag ());
 #endif
 #endif
@@ -813,7 +813,7 @@ namespace boost { namespace numeric { namespace ublas {
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, m, column_major_tag ());
         indexing_matrix_assign (functor1_type::template make_debug_functor<typename matrix<value_type, column_major>::reference, value_type> (), cm, e, column_major_tag ());
 #else
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
+        indexing_matrix_assign (scalar_assign<value_type&, value_type> (), cm, m, column_major_tag ());
         indexing_matrix_assign (functor1_type (), cm, e, column_major_tag ());
 #endif
 #endif
@@ -1011,7 +1011,7 @@ namespace boost { namespace numeric { namespace ublas {
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, m, row_major_tag ());
         indexing_matrix_assign (functor1_type::template make_debug_functor<typename matrix<value_type, row_major>::reference, value_type> (), cm, e, row_major_tag ());
 #else
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, row_major_tag ());
+        indexing_matrix_assign (scalar_assign<value_type&, value_type> (), cm, m, row_major_tag ());
         indexing_matrix_assign (functor1_type (), cm, e, row_major_tag ());
 #endif
 #endif
@@ -1138,7 +1138,7 @@ namespace boost { namespace numeric { namespace ublas {
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, m, column_major_tag ());
         indexing_matrix_assign (functor1_type::template make_debug_functor<typename matrix<value_type, column_major>::reference, value_type> (), cm, e, column_major_tag ());
 #else
-        indexing_matrix_assign (scalar_assign<value_type, value_type> (), cm, m, column_major_tag ());
+        indexing_matrix_assign (scalar_assign<value_type&, value_type> (), cm, m, column_major_tag ());
         indexing_matrix_assign (functor1_type (), cm, e, column_major_tag ());
 #endif
 #endif
