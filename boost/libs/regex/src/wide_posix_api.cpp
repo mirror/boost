@@ -55,7 +55,6 @@ BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompW(regex_tW* expression, const wchar_t
       expression->guts = new wregex();
       } catch(...)
       {
-         delete (wregex*)(expression->guts);
          return REG_ESPACE;
       }
    }

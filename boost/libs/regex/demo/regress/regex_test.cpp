@@ -196,6 +196,5 @@ template test_string_type regex_merge(const test_string_type&,
 #include "libs/regex/src/regex.cpp"
 #include "libs/regex/src/regex_debug.cpp"
 #include "libs/regex/src/regex_synch.cpp"
-#include "libs/regex/src/wide_posix_api.cpp"
 
 

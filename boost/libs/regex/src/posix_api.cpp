@@ -45,7 +45,6 @@ BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompA(regex_tA* expression, const char* p
       expression->guts = new regex();
       } catch(...)
       {
-         delete (regex*)(expression->guts);
          return REG_ESPACE;
       }
    }
