@@ -271,15 +271,12 @@ main()
     check("check day of year number", false);
   }
 
-  tm datetm = to_tm(d);
-  date newdate = date_from_tm(datetm);
   //converts to date and back -- should get same result
   check("tm conversion functions 2000-1-1", date_from_tm(to_tm(d)) == d);
   check("tm conversion functions 1900-1-1", date_from_tm(to_tm(d1)) == d1);
   check("tm conversion functions min date 1400-1-1 ", date_from_tm(to_tm(d14)) == d14);
   check("tm conversion functions max date 9999-12-31", date_from_tm(to_tm(d13)) == d13);
 
-  std::cout << newdate << std::endl;
   return printTestStats();
 
 }
