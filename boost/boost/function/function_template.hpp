@@ -142,8 +142,8 @@ namespace boost {
 			BOOST_FUNCTION_COMMA
 			BOOST_FUNCTION_PARMS)
 	{
-	  MemFunctionPtr f = 
-	    reinterpret_cast<MemFunctionPtr>(mem_function_ptr.mem_func_ptr);
+          // Was a reinterpret_cast<>, but not all compilers handle it
+	  MemFunctionPtr f = (MemFunctionPtr)(mem_function_ptr.mem_func_ptr);
           return mem_fn(f)(BOOST_FUNCTION_ARGS);
 	}
       };
@@ -159,8 +159,8 @@ namespace boost {
 			       BOOST_FUNCTION_COMMA
 			       BOOST_FUNCTION_PARMS)
 	{
-	  MemFunctionPtr f = 
-	    reinterpret_cast<MemFunctionPtr>(mem_function_ptr.mem_func_ptr);
+          // Was a reinterpret_cast<>, but not all compilers handle it
+	  MemFunctionPtr f = (MemFunctionPtr)(mem_function_ptr.mem_func_ptr);
           mem_fn(f)(BOOST_FUNCTION_ARGS);
           return unusable();
 	}
@@ -448,8 +448,9 @@ namespace boost {
         invoker = &invoker_type::invoke;
         manager = &detail::function::functor_manager<MemberPtr, 
                                                      Allocator>::manage;
+        // Was a reinterpret_cast<>, but not all compilers handle it
         functor = manager(detail::function::any_pointer(
-                            reinterpret_cast<stored_mem_func_type>(f)
+                            (stored_mem_func_type)(f)
                           ),
                           detail::function::clone_functor);
       }
