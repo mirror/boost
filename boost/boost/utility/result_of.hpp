@@ -58,6 +58,8 @@ struct result_of : get_result_of<F, FArgs, (has_result_type<F>::value)> {};
 #include BOOST_PP_ITERATE()
 
 }
-#endif // can't use result_of
+#else
+#  error Your compiler cannot support class template result_of
+#endif
 
 #endif // BOOST_RESULT_OF_HPP
