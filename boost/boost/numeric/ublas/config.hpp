@@ -454,7 +454,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T>
     class scalar_matrix;
 
-    template<class T, std::size_t M, size_t N>
+    template<class T, std::size_t M, std::size_t N>
     class c_matrix;
 
     template<class T, class F = row_major, class A = unbounded_array<unbounded_array<T> > >
