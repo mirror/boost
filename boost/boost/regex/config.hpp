@@ -52,7 +52,7 @@
 #  include <vector>
 #  include <boost/config.hpp>
 #  include <boost/cstdint.hpp>
-#  include <boost/detail/allocator.hpp>
+#  include <boost/regex/config/allocator.hpp>
 #  include <boost/regex/config/cstring.hpp>
 #  include <boost/throw_exception.hpp>
 #  include <boost/scoped_ptr.hpp>
