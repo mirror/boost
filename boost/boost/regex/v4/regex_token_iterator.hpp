@@ -100,7 +100,7 @@ public:
       if(what.prefix().first != what[0].second)
          flags |= match_prev_avail;
       BidirectionalIterator last_end = what[0].second;
-      if(regex_search(what[0].second, end, what, *pre, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags)))
+      if(regex_search(last_end, end, what, *pre, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags)))
       {
          N =0;
          result =((subs[N] == -1) ? value_type(what.prefix().str()) : value_type(what[subs[N]].str()));
@@ -117,7 +117,7 @@ public:
 };
 
 template <class BidirectionalIterator, 
-          class charT = typename re_detail::regex_iterator_traits<BidirectionalIterator>::value_type,
+          class charT = BOOST_DEDUCED_TYPENAME re_detail::regex_iterator_traits<BidirectionalIterator>::value_type,
           class traits = regex_traits<charT>,
           class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
 class regex_token_iterator 

@@ -72,7 +72,7 @@ public:
 };
 
 template <class BidirectionalIterator, 
-          class charT = typename re_detail::regex_iterator_traits<BidirectionalIterator>::value_type,
+          class charT = BOOST_DEDUCED_TYPENAME re_detail::regex_iterator_traits<BidirectionalIterator>::value_type,
           class traits = regex_traits<charT>,
           class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
 class regex_iterator 
