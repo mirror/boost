@@ -110,7 +110,7 @@ struct rtti_policy
       const CustomId * custom_dynamic_type_ptr() const
       {
         BOOST_ASSERT(
-          ( idProvider_.pCustomIdType_ == 0 ) ||
+          ( idProvider_.pCustomId_ == 0 ) ||
           ( *idProvider_.pCustomIdType_ == typeid( CustomId ) ) );
         return static_cast< const CustomId * >( idProvider_.pCustomId_ );
       }
@@ -160,7 +160,7 @@ struct rtti_policy
       static const CustomId * custom_static_type_ptr()
       {
         BOOST_ASSERT(
-          ( id_holder< MostDerived >::idProvider_.pCustomIdType_ == 0 ) ||
+          ( id_holder< MostDerived >::idProvider_.pCustomId_ == 0 ) ||
           ( *id_holder< MostDerived >::idProvider_.pCustomIdType_ ==
             typeid( CustomId ) ) );
         return static_cast< const CustomId * >(
