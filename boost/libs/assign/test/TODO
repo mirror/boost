@@ -1,6 +1,6 @@
 0. add description of empty () for list_of(), list_inserter.
 1. add repeat description
-2. add preprocessor description
+
 3. docs may mention whether hash_map/set can be used
    as well as upcoming boost::unordered_map/set.
 

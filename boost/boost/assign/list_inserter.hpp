@@ -162,7 +162,7 @@ namespace assign
             
     public:
         
-        explicit list_inserter( Function fun ) : insert_( fun )
+        list_inserter( Function fun ) : insert_( fun )
         {}
         
         list_inserter( const list_inserter& r ) : insert_( r.insert_ )

@@ -84,7 +84,7 @@ void test_vector_matrix()
     using namespace boost::assign;
     using namespace std;
 
-#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)    
+#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || _MSC_VER <= 1300   
 #else    
       
     const int              sz = 3;
@@ -191,7 +191,7 @@ void check_list_of()
     test_map_list_of< std::map<std::string,int> >();
     test_map_list_of< std::multimap<std::string,int> >();
     
-    std::stack<std::string> s = ba::list_of( "Foo" )( "Bar" )( "FooBar" ).to_adapter();
+    std::stack<std::string> s = ba::list_of( "Foo" )( "Bar" )( "FooBar" ).to_adapter( s );
     test_list_of();
     
     test_vector_matrix();
