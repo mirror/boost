@@ -11,6 +11,8 @@
     
     <copyright>
       <year>2003</year>
+      <year>2004</year>
+      <year>2005</year>
       <holder>Douglas Gregor</holder>
     </copyright>
 
@@ -97,121 +99,43 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
   <chapter id="boostbook.getting.started">
     <title>Getting Started</title>
 
-    <para>To use the Boost documentation tools, you will need an
-    <ulink url="http://www.w3c.org/Style/XSL/">XSLT</ulink>
-    processor. There are many XSLT processors available, but for now
-    we suggest that you use <code>xsltproc</code>, part of <ulink
-    url="http://xmlsoft.org/XSLT/">libxslt</ulink>. There are several
-    ways to get libxslt, depending on your platform:</para>
-
+    <para>To use the Boost documentation tools, you will need several tools:</para>
     <itemizedlist>
-      <listitem>
-        <para>On Unix: Build and install <ulink
-        url="http://xmlsoft.org/">libxml2</ulink> and then <ulink
-        url="http://xmlsoft.org/XSLT/">libxslt</ulink>. Both
-        libraries are part of the <ulink
-        url="http://www.gnome.org">GNOME</ulink> project.</para>
-      </listitem>
-      <listitem>
-        <para>On Windows:</para>
-
+      <listitem><simpara><command>xsltproc</command>:</simpara>
         <itemizedlist>
-          <listitem>
-            <para>With <ulink
-            url="http://www.cygwin.com/">Cygwin</ulink>, select the
-            libxml2 and libxslt packages</para>
-          </listitem>
-          <listitem>
-            <para>Without Cygwin, you need a patched version of the tools available from 
-            <ulink url="http://www.meta-comm.com/engineering/boost/xsltproc-win32.zip">
-            here</ulink>.</para>
-          </listitem>
+          <listitem>Windows with <ulink
+                       url="http://www.cygwin.com/">Cygwin</ulink>: select the libxml2 and libxslt packages.</listitem>
+          <listitem>Windows without Cygwin: Download packages <ulink url="http://www.meta-comm.com/engineering/boost/xsltproc-win32.zip">
+              here</ulink>.</listitem>
+          <listitem>Mac OS X with Fink: Get the <code>libxslt</code> package.</listitem>
+          <listitem>Mac OS X without Fink: <ulink url="http://www.zveno.com/open_source/libxml2xslt.html">Download the libxslt binaries</ulink></listitem>
+          <listitem>Any platform: <ulink
+                                     url="http://xmlsoft.org/XSLT/">libxslt source</ulink>.</listitem>
         </itemizedlist>
       </listitem>
-      <listitem>
-        <para>On MacOS X:</para> 
-
-        <itemizedlist>
-          <listitem>
-            <para>If you have Fink, just get the <code>libxslt</code> and <code>doxygen</code> packages.</para>
-            <para>Without Fink, you can <ulink url="http://www.zveno.com/open_source/libxml2xslt.html">download the libxslt binaries</ulink>.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
+        <listitem><simpara><command>doxygen</command>:</simpara> Available from <ulink>http://www.doxygen.org</ulink></listitem>
     </itemizedlist>
 
-    <para>You will also need a recent checkout of Boost from <ulink
-    url="http://www.boost.org/more/download.html#CVS">CVS</ulink>. If
-    you would like to limit your network bandwidth or limit delays in
-    building documentation, now might be a good time to download the
-    DocBook DTD and XSL stylesheets as described in <xref
-    linkend="boostbook.docbook.config"/>. You should delete or make
-    writable the <code>.html</code> files in
-    <code>$BOOST_ROOT/doc/html</code> before continuing.</para>
+    <section id="boostbook.setup.autounix">
+      <title>Automatic setup for Unix-like systems</title>
+            
+      <para>BoostBook provides a nearly-automatic setup script. Once
+      you have downloaded and
+      installed <command>xsltproc</command>, <command>doxygen</command>,
+      and (optionally) <command>java</command>, the setup script can
+      download the required DocBook stylesheets, DocBook DTD, and
+      (when Java is enabled) Apache FOP for PDF output. It will then
+      configure Boost.Build version 2 to build BoostBook
+      documentation. To perform the installation, execute the
+      script <command>tools/boostbook/setup_boostbook.sh</command>
+      from a directory where you would like the resulting XSL, DTD,
+      and Apache FOP installations to occur. </para>
+    </section>
 
-    <para>Now we can build some documentation. Change to the directory
-    <code>$BOOST_ROOT/doc</code> and run <code>bjam --v2</code> to
-    build HTML documentation. You should see several warnings like
-    these while DocBook documentation is being built from BoostBook
-    documentation:</para>
-
-    <programlisting>Cannot find function named 'checked_delete'
-Cannot find function named 'checked_array_delete'
-Cannot find function named 'next'</programlisting>
-
-    <para>These warnings are emitted when the Boost documentation
-    tools cannot find documentation for functions, methods, or classes
-    that are referenced in the source, and are not harmful in any
-    way. Once Boost.Jam has completed its execution, HTML
-    documentation for Boost will be available in
-    <code>$BOOST_ROOT/doc/html</code>. You can also create HTML
-    documentation in a single (large!) HTML file with the command line
-    <code>bjam --v2 onehtml</code>, or Unix man pages with the command
-    line <code>bjam --v2 man</code>. The complete list of output
-    formats is listed in <xref
-    linkend="boostbook.output.formats"/>. Several output formats can
-    be passed to a single invocation of <code>bjam</code>, e.g.,
-    <code>bjam --v2 html man docbook</code> would generate HTML
-    (multiple files), man pages, and DocBook documentation.</para>
-   
-    <table id="boostbook.output.formats">
-      <title>BoostBook Output Formats</title>
-      <tgroup cols="2">
-        <thead>
-          <row><entry>Format</entry><entry>Description</entry></row>
-        </thead>
-        <tbody> 
-          <row>
-            <entry>html</entry>
-            <entry><simpara>HTML output (multiple files). This is the default</simpara></entry>
-          </row>
-          <row>
-            <entry>onehtml</entry>
-            <entry><simpara>HTML output in a single HTML file.</simpara></entry>
-          </row>
-          <row>
-            <entry>man</entry>
-            <entry><simpara>Unix man pages.</simpara></entry>
-          </row>
-          <row>
-            <entry>pdf</entry>
-            <entry><simpara>PDF. Requires <ulink url="http://xml.apache.org/fop/index.html">Apache FOP</ulink>.</simpara></entry>
-          </row>
-          <row>
-            <entry>ps</entry>
-            <entry><simpara>Postscript. Requires <ulink url="http://xml.apache.org/fop/index.html">Apache FOP</ulink>.</simpara></entry>
-          </row>
-          <row>
-            <entry>docbook</entry>
-            <entry><ulink url="http://www.docbook.org/">DocBook</ulink>.</entry>
-          </row>
-          <row>
-            <entry>fo</entry>
-            <entry><ulink url="http://www.w3.org/TR/xsl/">XSL Formatting Objects</ulink></entry>
-          </row>
-        </tbody> 
-      </tgroup>
-    </table>
+    <section id="boostbook.setup.manual">
+      <title>Manual setup for all systems</title>
+    
+      <para>Manual setup for TBD </para>
 
     <section id="boostbook.docbook.config">
       <title>Configuring local DocBook XSL and DTD distributions</title>
@@ -356,6 +280,79 @@ boostbook any : any.doxygen ;</programlisting>
         <listitem><simpara>The XSLT processor applies the stylesheet <filename>docbook.xsl</filename> to transform <filename>any.xml</filename> into the DocBook XML document <filename>any.docbook</filename>.</simpara></listitem>
         <listitem><simpara>Further transformations may generate HTML, FO, PDF, etc. from <filename>any.docbook</filename>.</simpara></listitem>
       </orderedlist>
+    </section>
+    </section>
+
+    <section id="boostbook.setup.running">
+      <title>Running BoostBook</title>
+
+      <para>Once BoostBook has been configured, we can build some
+      documentation. First, change to the
+      directory <code>$BOOST_ROOT/doc</code> and remove (or make
+      writable) the <code>.html</code> files
+      in <code>$BOOST_ROOT/doc/html</code>. Then,
+      run <code>bjam --v2</code> to build HTML documentation. You
+      should see several warnings like these while DocBook
+      documentation is being built from BoostBook
+      documentation:</para>
+
+    <programlisting>Cannot find function named 'checked_delete'
+Cannot find function named 'checked_array_delete'
+Cannot find function named 'next'</programlisting>
+
+    <para>These warnings are emitted when the Boost documentation
+    tools cannot find documentation for functions, methods, or classes
+    that are referenced in the source, and are not harmful in any
+    way. Once Boost.Jam has completed its execution, HTML
+    documentation for Boost will be available in
+    <code>$BOOST_ROOT/doc/html</code>. You can also create HTML
+    documentation in a single (large!) HTML file with the command line
+    <code>bjam --v2 onehtml</code>, or Unix man pages with the command
+    line <code>bjam --v2 man</code>. The complete list of output
+    formats is listed in <xref
+    linkend="boostbook.output.formats"/>. Several output formats can
+    be passed to a single invocation of <code>bjam</code>, e.g.,
+    <code>bjam --v2 html man docbook</code> would generate HTML
+    (multiple files), man pages, and DocBook documentation.</para>
+   
+    <table id="boostbook.output.formats">
+      <title>BoostBook Output Formats</title>
+      <tgroup cols="2">
+        <thead>
+          <row><entry>Format</entry><entry>Description</entry></row>
+        </thead>
+        <tbody> 
+          <row>
+            <entry>html</entry>
+            <entry><simpara>HTML output (multiple files). This is the default</simpara></entry>
+          </row>
+          <row>
+            <entry>onehtml</entry>
+            <entry><simpara>HTML output in a single HTML file.</simpara></entry>
+          </row>
+          <row>
+            <entry>man</entry>
+            <entry><simpara>Unix man pages.</simpara></entry>
+          </row>
+          <row>
+            <entry>pdf</entry>
+            <entry><simpara>PDF. Requires <ulink url="http://xml.apache.org/fop/index.html">Apache FOP</ulink>.</simpara></entry>
+          </row>
+          <row>
+            <entry>ps</entry>
+            <entry><simpara>Postscript. Requires <ulink url="http://xml.apache.org/fop/index.html">Apache FOP</ulink>.</simpara></entry>
+          </row>
+          <row>
+            <entry>docbook</entry>
+            <entry><ulink url="http://www.docbook.org/">DocBook</ulink>.</entry>
+          </row>
+          <row>
+            <entry>fo</entry>
+            <entry><ulink url="http://www.w3.org/TR/xsl/">XSL Formatting Objects</ulink></entry>
+          </row>
+        </tbody> 
+      </tgroup>
+    </table>
     </section>
 
     <section id="boostbook.troubleshooting">
