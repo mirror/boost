@@ -1,0 +1,598 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Header boost/operators.hpp Documentation</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">Header
+<a href="../../boost/operators.hpp">boost/operators.hpp</a></h1>
+<p>Header <a href="http://www.boost.org/boost/operators.hpp">boost/operators.hpp</a>
+supplies (in namespace boost) several sets of templates:</p>
+<ul>
+  <li><a href="#Arithmetic">Arithmetic operators</a>.
+  <li><a href="#deref and helpers">Dereference operators and iterator helpers.</a></li>
+</ul>
+<p>These templates define many global operators in terms of a minimal number of
+fundamental operators.</p>
+<h1><a name="Arithmetic">Arithmetic</a> Operators</h1>
+<p>If, for example, you declare a class like this:</p>
+<blockquote>
+  <pre>class MyInt : boost::operators&lt;MyInt&gt;
+{
+    bool operator&lt;(const MyInt&amp; x) const; 
+    bool operator==(const MyInt&amp; x) const;
+    MyInt&amp; operator+=(const MyInt&amp; x);    
+    MyInt&amp; operator-=(const MyInt&amp; x);    
+    MyInt&amp; operator*=(const MyInt&amp; x);    
+    MyInt&amp; operator/=(const MyInt&amp; x);    
+    MyInt&amp; operator%=(const MyInt&amp; x);    
+    MyInt&amp; operator|=(const MyInt&amp; x);    
+    MyInt&amp; operator&amp;=(const MyInt&amp; x);    
+    MyInt&amp; operator^=(const MyInt&amp; x);    
+    MyInt&amp; operator++();    
+    MyInt&amp; operator--();    
+};</pre>
+</blockquote>
+<p>then the <code>operators&lt;&gt;</code> template adds more than a dozen
+additional operators, such as operator&gt;, &lt;=, &gt;=, and +.&nbsp; <a href="#two_arg">Two-argument
+forms</a> of the templates are also provided to allow interaction with other
+types.</p>
+<p><a href="http://www.boost.org/people/dave_abrahams.htm">Dave Abrahams</a>
+started the library and contributed the arithmetic operators in <a href="http://www.boost.org/boost/operators.hpp">boost/operators.hpp</a>.<br>
+<a href="http://www.boost.org/people/jeremy_siek.htm">Jeremy Siek</a>
+contributed the <a href="#deref and helpers">dereference operators and iterator
+helpers</a> in <a href="http://www.boost.org/boost/operators.hpp">boost/operators.hpp</a>.<br>
+<a href="http://www.boost.org/people/aleksey_gurtovoy.htm">Aleksey Gurtovoy</a>
+contributed the code to support <a href="#chaining">base class chaining</a>
+while remaining backward-compatible with old versions of the library.<br>
+<a href="http://www.boost.org/people/beman_dawes.html">Beman Dawes</a>
+contributed <a href="http://www.boost.org/libs/utility/operators_test.cpp">test_operators.cpp</a>.</p>
+<h2>Rationale</h2>
+<p>Overloaded operators for class types typically occur in groups. If you can
+write <code>x + y</code>, you probably also want to be able to write <code>x +=
+y</code>. If you can write <code>x &lt; y,</code> you also want <code>x &gt; y,
+x &gt;= y,</code> and <code>x &lt;= y</code>. Moreover, unless your class has
+really surprising behavior, some of these related operators can be defined in
+terms of others (e.g. <code>x &gt;= y <b>&lt;=&gt;</b> !(x &lt; y)</code>).
+Replicating this boilerplate for multiple classes is both tedious and
+error-prone. The <a href="http://www.boost.org/boost/operators.hpp">boost/operators.hpp</a>
+templates help by generating operators for you at namespace scope based on other
+operators you've defined in your class.</p>
+<a name="two_arg">
+<h2>Two-Argument Template Forms</h2>
+</a>
+<p>The arguments to a binary operator commonly have identical types, but it is
+not unusual to want to define operators which combine different types. For <a href="#usage">example</a>,
+one might want to multiply a mathematical vector by a scalar. The two-argument
+template forms of the arithmetic operator templates are supplied for this
+purpose. When applying the two-argument form of a template, the desired return
+type of the operators typically determines which of the two types in question
+should be derived from the operator template. For example, if the result of <code>T&nbsp;+&nbsp;U</code>
+is of type <code>T</code>, then <code>T</code> (not <code>U</code>) should be
+derived from <code>addable&lt;T,U&gt;</code>. The comparison templates <code><a href="#less_than_comparable">less_than_comparable&lt;&gt;</a></code>
+and <code><a href="#equality_comparable">equality_comparable&lt;&gt;</a></code>
+are exceptions to this guideline, since the return type of the operators they
+define is <code>bool</code>.</p>
+<p>On compilers which do not support partial specialization, the two-argument
+forms must be specified by using the names shown below with the trailing <code>'2'</code>.
+The single-argument forms with the trailing <code>'1'</code> are provided for
+symmetry and to enable certain applications of the <a href="#chaining">base
+class chaining</a> technique.</p>
+<h2>Arithmetic operators table</h2>
+<p>The requirements for the types used to instantiate operator templates are
+specified in terms of expressions which must be valid and by the return type of
+the expression. In the following table <code>t</code> and <code>t1</code> are
+values of type <code>T</code>, and <code>u</code> is a value of type <code>U</code>.
+Every template in the library other than <a href="#operators"><code>operators&lt;&gt;</code></a>
+and <a href="#operators"><code>operators2&lt;&gt;</code></a> has an additional
+optional template parameter <code>B</code> which is not shown in the table, but
+is explained <a href="#chaining">below</a></p>
+<table cellpadding="5" border="1">
+  <tbody>
+    <tr>
+      <td><b>template</b></td>
+      <td><b>template will supply</b></td>
+      <td><b>Requirements</b></td>
+    </tr>
+    <a name="operators">
+    <tr>
+      <td><code>operators&lt;T&gt;</code></td>
+      <td>All the other &lt;T&gt; templates in this table.</td>
+      <td>All the &lt;T&gt; requirements in this table.</td>
+    <tr>
+      <td><code>operators&lt;T,U&gt;<br>
+        operators2&lt;T,U&gt;</code></td>
+      <td>All the other &lt;T,U&gt; templates in this table, plus incrementable&lt;T&gt;
+        and decrementable&lt;T&gt;.</td>
+      <td><b>All</b> the &lt;T,U&gt; requirements in this table</a><a href="#portability">*</a>,
+      plus incrementable&lt;T&gt; and decrementable&lt;T&gt;.</td>
+    </tr>
+    <a name="less_than_comparable">
+    <tr>
+      <td><code>less_than_comparable&lt;T&gt;<br>
+        less_than_comparable1&lt;T&gt;</code></td>
+      <td><code>bool operator&gt;(const T&amp;, const T&amp;)&nbsp;<br>
+        bool operator&lt;=(const T&amp;, const T&amp;)<br>
+        bool operator&gt;=(const T&amp;, const T&amp;)</code></td>
+      <td><code>t&lt;t1</code>. Return convertible to bool</td>
+    <tr>
+      <td><code>less_than_comparable&lt;T,U&gt;<br>
+        less_than_comparable2&lt;T,U&gt;</code></td>
+      <td><code>bool operator&lt;=(const T&amp;, const U&amp;)<br>
+        bool operator&gt;=(const T&amp;, const U&amp;)<br>
+        bool operator&gt;(const U&amp;, const T&amp;)&nbsp;<br>
+        bool operator&lt;(const U&amp;, const T&amp;)&nbsp;<br>
+        bool operator&lt;=(const U&amp;, const T&amp;)<br>
+        bool operator&gt;=(const U&amp;, const T&amp;)</code></td>
+      <td><code>t&lt;u</code>. Return convertible to bool<br>
+        <code>t&gt;u</code>. Return convertible to bool</td>
+    </tr>
+    </a><a name="equality_comparable">
+    <tr>
+      <td><code>equality_comparable&lt;T&gt;<br>
+        equality_comparable1&lt;T&gt;</code></td>
+      <td><code>bool operator!=(const T&amp;, const T&amp;)</code></td>
+      <td><code>t==t1</code>. Return convertible to bool</td>
+    <tr>
+      <td><code>equality_comparable&lt;T,U&gt;<br>
+        equality_comparable2&lt;T,U&gt;</code></td>
+      <td><code>friend bool operator==(const U&amp;, const T&amp;)<br>
+        friend bool operator!=(const U&amp;, const T&amp;)<br>
+        friend bool operator!=( const T&amp;, const U&amp;)</code></td>
+      <td><code>t==u</code>. Return convertible to bool</td>
+    </tr>
+    </a>
+    <tr>
+      <td><code>addable&lt;T&gt;<br>
+        addable1&lt;T&gt;</code></td>
+      <td><code>T operator+(T, const T&amp;)</code></td>
+      <td><code>t+=t1</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>addable&lt;T,U&gt;<br>
+        addable2&lt;T,U&gt;</code></td>
+      <td><code>T operator+(T, const U&amp;)<br>
+        T operator+(const U&amp;, T )</code></td>
+      <td><code>t+=u</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>subtractable&lt;T&gt;<br>
+        subtractable1&lt;T&gt;</code></td>
+      <td><code>T operator-(T, const T&amp;)</code></td>
+      <td><code>t-=t1</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>subtractable&lt;T,U&gt;<br>
+        subtractable2&lt;T,U&gt;</code></td>
+      <td><code>T operator-(T, const U&amp;)</code></td>
+      <td><code>t-=u</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>multipliable&lt;T&gt;<br>
+        multipliable1&lt;T&gt;</code></td>
+      <td><code>T operator*(T, const T&amp;)</code></td>
+      <td><code>t*=t1</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>multipliable&lt;T,U&gt;<br>
+        multipliable2&lt;T,U&gt;</code></td>
+      <td><code>T operator*(T, const U&amp;)<br>
+        T operator*(const U&amp;, T )</code></td>
+      <td><code>t*=u</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>dividable&lt;T&gt;<br>
+        dividable1&lt;T&gt;</code></td>
+      <td><code>T operator/(T, const T&amp;)</code></td>
+      <td><code>t/=t1</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>dividable&lt;T,U&gt;<br>
+        dividable2&lt;T,U&gt;</code></td>
+      <td><code>T operator/(T, const U&amp;)</code></td>
+      <td><code>t/=u</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>modable&lt;T&gt;<br>
+        modable1&lt;T&gt;</code></td>
+      <td><code>T operator%(T, const T&amp;)</code></td>
+      <td><code>t%=t1</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>modable&lt;T,U&gt;<br>
+        modable2&lt;T,U&gt;</code></td>
+      <td><code>T operator%(T, const U&amp;)</code></td>
+      <td><code>t%=u</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>orable&lt;T&gt;<br>
+        orable1&lt;T&gt;</code></td>
+      <td><code>T operator|(T, const T&amp;)</code></td>
+      <td><code>t|=t1</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>orable&lt;T,U&gt;<br>
+        orable2&lt;T,U&gt;</code></td>
+      <td><code>T operator|(T, const U&amp;)<br>
+        T operator|(const U&amp;, T )</code></td>
+      <td><code>t|=u</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>andable&lt;T&gt;<br>
+        andable1&lt;T&gt;</code></td>
+      <td><code>T operator&amp;(T, const T&amp;)</code></td>
+      <td><code>t&amp;=t1</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>andable&lt;T,U&gt;<br>
+        andable2&lt;T,U&gt;</code></td>
+      <td><code>T operator&amp;(T, const U&amp;)<br>
+        T operator&amp;(const U&amp;, T)</code></td>
+      <td><code>t&amp;=u</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>xorable&lt;T&gt;<br>
+        xorable1&lt;T&gt;</code></td>
+      <td><code>T operator^(T, const T&amp;)</code></td>
+      <td><code>t^=t1</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>xorable&lt;T,U&gt;<br>
+        xorable2&lt;T,U&gt;</code></td>
+      <td><code>T operator^(T, const U&amp;)<br>
+        T operator^(const U&amp;, T )</code></td>
+      <td><code>t^=u</code>. Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>incrementable&lt;T&gt;<br>
+        incrementable1&lt;T&gt;</code></td>
+      <td><code>T operator++(T&amp; x, int)</code></td>
+      <td><code>T temp(x); ++x; return temp;</code><br>
+        Return convertible to <code>T</code></td>
+    </tr>
+    <tr>
+      <td><code>decrementable&lt;T&gt;<br>
+        decrementable1&lt;T&gt;</code></td>
+      <td><code>T operator--(T&amp; x, int)</code></td>
+      <td><code>T temp(x); --x; return temp;</code><br>
+        Return convertible to <code>T</code></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<b><a name="portability">Portability Note:</a></b> many compilers (e.g. MSVC6.3,
+GCC 2.95.2) will not enforce the requirements in this table unless the
+operations which depend on them are actually used. This is not
+standard-conforming behavior. If you are trying to write portable code it is
+important not to rely on this bug. In particular, it would be convenient to
+derive all your classes which need binary operators from the <a href="#operators"><code>operators&lt;&gt;</code></a>
+and <a href="#operators"><code>operators2&lt;&gt;</code></a> templates,
+regardless of whether they implement all the requirements in the table. Even if
+this works with your compiler today, it may not work tomorrow.
+<h2><a name="chaining">Base Class Chaining</a> and Object Size</h2>
+<p>Every template listed in the table except <a href="#operators"><code>operators&lt;&gt;</code></a>
+and <a href="#operators"><code>operators2&lt;&gt;</code></a> has an additional
+optional template parameter <code>B</code>.&nbsp; If supplied, <code>B</code>
+must be a class type; the resulting class will be publicly derived from B. This
+can be used to avoid the object size bloat commonly associated with multiple
+empty base classes (see the <a href="#old_lib_note">note for users of older
+versions</a> below for more details). To provide support for several groups of
+operators, use the additional parameter to chain operator templates into a
+single-base class hierarchy, as in the following <a href="#usage">example</a>.</p>
+<p><b>Caveat:</b> to chain to a base class which is <i>not</i> a boost operator
+template when using the <a href="#two_arg">single-argument form</a><a> of a
+boost operator template, you must specify the operator template with the
+trailing <code>'1'</code> in its name. Otherwise the library will assume you
+mean to define a binary operation combining the class you intend to use as a
+base class and the class you're deriving.</p>
+<p><b>Borland users</b>: even single-inheritance seems to cause an increase in
+object size in some cases. If you are not defining a template, you may get
+better object-size performance by avoiding derivation altogether, and instead
+explicitly instantiating the operator template as follows:
+<pre>
+    class myclass // lose the inheritance...
+    {
+        //...
+    };
+    // explicitly instantiate the operators I need.
+    template class less_than_comparable&lt;myclass&gt;;
+    template class equality_comparable&lt;myclass&gt;;
+    template class incrementable&lt;myclass&gt;;
+    template class decrementable&lt;myclass&gt;;
+    template class addable&lt;myclass,long&gt;;
+    template class subtractable&lt;myclass,long&gt;;
+</pre>
+</a><a name="usage">
+<h2>Usage example</h2>
+</a>
+<pre>template &lt;class T&gt;
+class point    // note: private inheritance is OK here!
+    : boost::addable&lt; point&lt;T&gt;          // point + point
+    , boost::subtractable&lt; point&lt;T&gt;     // point - point
+    , boost::dividable2&lt; point&lt;T&gt;, T    // point / T
+    , boost::multipliable2&lt; point&lt;T&gt;, T // point * T, T * point
+      &gt; &gt; &gt; &gt;
+{
+public:
+    point(T, T);
+    T x() const;
+    T y() const;
+
+    point operator+=(const point&amp;);
+    // point operator+(point, const point&amp;) automatically
+    // generated by addable.
+
+    point operator-=(const point&amp;);
+    // point operator-(point, const point&amp;) automatically
+    // generated by subtractable.
+
+    point operator*=(T);
+    // point operator*(point, const T&amp;) and
+    // point operator*(const T&amp;, point) auto-generated
+    // by multipliable.
+
+    point operator/=(T);
+    // point operator/(point, const T&amp;) auto-generated
+    // by dividable.
+private:
+    T x_;
+    T y_;
+};
+
+// now use the point&lt;&gt; class:
+
+template &lt;class T&gt;
+T length(const point&lt;T&gt; p)
+{
+    return sqrt(p.x()*p.x() + p.y()*p.y());
+}
+
+const point&lt;float&gt; right(0, 1);
+const point&lt;float&gt; up(1, 0);
+const point&lt;float&gt; pi_over_4 = up + right;
+const point&lt;float&gt; pi_over_4_normalized = pi_over_4 / length(pi_over_4);</pre>
+<h2>Arithmetic operators demonstration and test program</h2>
+<p>The <a href="http://www.boost.org/libs/utility/operators_test.cpp">operators_test.cpp</a>
+program demonstrates the use of the arithmetic operator templates, and can also
+be used to verify correct operation.</p>
+<p>The test program has been compiled and run successfully with:&nbsp;</p>
+<ul>
+  <li>GCC 2.95.2
+  <li>GCC 2.95.2 / STLport 4.0b8.
+  <li>Metrowerks Codewarrior 5.3
+  <li>KAI C++ 3.3
+  <li>Microsoft Visual C++ 6.0 SP3.
+  <li>Microsoft Visual C++ 6.0 SP3 / STLport 4.0b8.</li>
+</ul>
+<h1><a name="deref and helpers">Dereference</a> operators and iterator helpers</h1>
+<p>The <a href="#Iterator helpers">iterator helper</a> templates ease the task
+of creating a custom iterator. Similar to arithmetic types, a complete iterator
+has many operators that are &quot;redundant&quot; and can be implemented in
+terms of the core set of operators.</p>
+<p>The <a href="#dereference">dereference operators</a> were motivated by the <a href="#Iterator helpers">iterator
+helpers</a>, but are often useful in non-iterator contexts as well. Many of the
+redundant iterator operators are also arithmetic operators, so the iterator
+helper classes borrow many of the operators defined above. In fact, only two new
+operators need to be defined! (the pointer-to-member <code>operator-&gt;</code>
+and the subscript <code>operator[]</code>). </PP>
+<h3>Notation</h3>
+<table>
+  <tbody>
+    <tr>
+      <td valign="top"><code>T</code></td>
+      <td valign="top">is the user-defined type for which the operations are
+        being supplied.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>V</code></td>
+      <td valign="top">is the type which the resulting <code>dereferenceable</code>
+        type &quot;points to&quot;, or the <code>value_type</code> of the custom
+        iterator.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>D</code></td>
+      <td valign="top">is the type used to index the resulting <code>indexable</code>
+        type or the <code>difference_type</code> of the custom iterator.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>P</code></td>
+      <td valign="top">is a type which can be dereferenced to access <code>V</code>,
+        or the <code>pointer</code> type of the custom iterator.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>R</code></td>
+      <td valign="top">is the type returned by indexing the <code>indexable</code>
+        type or the <code>reference</code> type of the custom iterator.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>i</code></td>
+      <td valign="top">is short for <code>static_cast&lt;const T&amp;&gt;(*this)</code>,
+        where <code>this</code> is a pointer to the helper class.<br>
+        Another words, <code>i</code> should be an object of the custom iterator
+        type.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>x,x1,x2</code></td>
+      <td valign="top">are objects of type <code>T</code>.</td>
+    </tr>
+    <tr>
+      <td valign="top"><code>n</code></td>
+      <td valign="top">is an object of type <code>D</code>.</td>
+    </tr>
+  </tbody>
+</table>
+<p>The requirements for the types used to instantiate the dereference operators
+and iterator helpers are specified in terms of expressions which must be valid
+and their return type.&nbsp;</p>
+<h2><a name="dereference">Dereference operators</a></h2>
+<p>The dereference operator templates in this table all accept an optional
+template parameter (not shown) to be used for <a href="#chaining">base class
+chaining</a>.
+<table cellpadding="5" border="1">
+  <tbody>
+    <tr>
+      <td><b>template</b></td>
+      <td><b>template will supply</b></td>
+      <td><b>Requirements</b></td>
+    </tr>
+    <tr>
+      <td><code>dereferenceable&lt;T,P&gt;</code></td>
+      <td><code>P operator-&gt;() const</code></td>
+      <td><code>(&amp;*i.)</code>. Return convertible to <code>P</code>.</td>
+    </tr>
+    <tr>
+      <td><code>indexable&lt;T,D,R&gt;</code></td>
+      <td><code>R operator[](D n) const</code></td>
+      <td><code>*(i + n)</code>. Return of type <code>R</code>.</td>
+    </tr>
+  </tbody>
+</table>
+<h2><a name="Iterator helpers">Iterator</a> helpers</h2>
+<p>There are three separate iterator helper classes, each for a different
+category of iterator. Here is a summary of the core set of operators that the
+custom iterator must define, and the extra operators that are created by the
+helper classes. For convenience, the helper classes also fill in all of the
+typedef's required of iterators by the C++ standard (<code>iterator_category</code>,
+<code>value_type</code>, etc.).</p>
+<table cellpadding="5" border="1" valign="top">
+  <tbody>
+    <tr>
+      <td><b>template</b></td>
+      <td><b>template will supply</b></td>
+      <td><b>Requirements</b></td>
+    </tr>
+    <tr>
+      <td><code>forward_iterator_helper</code><br>
+        <code>&lt;T,V,D,P,R&gt;</code></td>
+      <td><code>bool operator!=(const T&amp; x1, const T&amp; x2)</code><br>
+        <code>T operator++(T&amp; x, int)</code><br>
+        <code>V* operator-&gt;() const</code><br>
+      </td>
+      <td><code>x1==x2</code>. Return convertible to bool<br>
+        <code>T temp(x); ++x; return temp;</code><br>
+        <code>(&amp;*i.)</code>. Return convertible to <code>V*</code>.</td>
+    </tr>
+    <tr>
+      <td><code>bidirectional_iterator_helper</code><br>
+        <code>&lt;T,V,D,P,R&gt;</code></td>
+      <td>Same as above, plus<br>
+        <code>T operator--(T&amp; x, int)</code></td>
+      <td>Same as above, plus<br>
+        <code>T temp(x); --x; return temp;</code></td>
+    </tr>
+    <tr>
+      <td><code>random_access_iterator_helper</code><br>
+        <code>&lt;T,V,D,P,R&gt;</code></td>
+      <td>Same as above, plus<br>
+        <code>T operator+(T x, const D&amp;)<br>
+        T operator+(const D&amp; n, T x)<br>
+        T operator-(T x, const D&amp; n)<br>
+        R operator[](D n) const<br>
+        bool operator&gt;(const T&amp; x1, const T&amp; x2)&nbsp;<br>
+        bool operator&lt;=(const T&amp; x1, const T&amp; x2)<br>
+        bool operator&gt;=(const T&amp; x1, const T&amp; x2)</code></td>
+      <td>Same as above, plus<br>
+        <code>x+=n</code>. Return convertible to <code>T</code><br>
+        <code>x-=n</code>. Return convertible to <code>T</code><br>
+        <code>x1&lt;x2</code>. Return convertible to bool<br>
+        And to satisfy <a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>:<br>
+        <code>x1-x2</code>. Return convertible to <code>D</code></td>
+    </tr>
+  </tbody>
+</table>
+<h2>Iterator demonstration and test program</h2>
+<p>The <a href="http://www.boost.org/libs/utility/iterators_test.cpp">iterators_test.cpp</a>
+program demonstrates the use of the iterator templates, and can also be used to
+verify correct operation. The following is the custom iterator defined in the
+test program. It demonstrates a correct (though trivial) implementation of the
+core operations that must be defined in order for the iterator helpers to
+&quot;fill in&quot; the rest of the iterator operations.</p>
+<blockquote>
+  <pre>template &lt;class T, class R, class P&gt;
+struct test_iter
+  : public boost::random_access_iterator_helper&lt;
+     test_iter&lt;T,R,P&gt;, T, std::ptrdiff_t, P, R&gt;
+{
+  typedef test_iter self;
+  typedef R Reference;
+  typedef std::ptrdiff_t Distance;
+
+public:
+  test_iter(T* i) : _i(i) { }
+  test_iter(const self&amp; x) : _i(x._i) { }
+  self&amp; operator=(const self&amp; x) { _i = x._i; return *this; }
+  Reference operator*() const { return *_i; }
+  self&amp; operator++() { ++_i; return *this; }
+  self&amp; operator--() { --_i; return *this; }
+  self&amp; operator+=(Distance n) { _i += n; return *this; }
+  self&amp; operator-=(Distance n) { _i -= n; return *this; }
+  bool operator==(const self&amp; x) const { return _i == x._i; }
+  bool operator&lt;(const self&amp; x) const { return _i &lt; x._i; }
+  friend Distance operator-(const self&amp; x, const self&amp; y) {
+    return x._i - y._i; 
+  }
+protected:
+  T* _i;
+};</pre>
+</blockquote>
+<p>It has been compiled and run successfully with:</p>
+<ul>
+  <li>GCC 2.95.2
+  <li>Metrowerks Codewarrior 5.2
+  <li>Microsoft Visual C++ 6.0 SP3</li>
+</ul>
+<p><a href="http://www.boost.org/people/jeremy_siek.htm">Jeremy Siek</a>
+contributed the iterator operators and helpers.&nbsp; He also contributed <a href="http://www.boost.org/libs/utility/iterators_test.cpp">iterators_test.cpp</a>.&nbsp;</p>
+<hr>
+<h2><a name="old_lib_note">Note for users of older versions</a></h2>
+<p>The <a href="#chaining">changes in the library interface and recommended
+usage</a> were motivated by some practical issues described below. The new
+version of the library is still backward-compatible with the former one (so
+you're not <i>forced</i> change any existing code), but the old usage is
+deprecated. Though it was arguably simpler and more intuitive than using <a href="#chaining">base
+class chaining</a>, it has been discovered that the old practice of deriving
+from multiple operator templates can cause the resulting classes to be much
+larger than they should be. Most modern C++ compilers significantly bloat the
+size of classes derived from multiple empty base classes, even though the base
+classes themselves have no state. For instance, the size of <code>point&lt;int&gt;</code>
+from the <a href="#usage">example</a> above was 12-24 bytes on various compilers
+for the Win32 platform, instead of the expected 8 bytes.
+<p>Strictly speaking, it was not the library's fault - the language rules allow
+the compiler to apply the empty base class optimization in that situation. In
+principle an arbitrary number of empty base classes can be allocated at the same
+offset, provided that none of them have a common ancestor (see section 10.5 [class.derived],
+par. 5 of the standard). But the language definition also doesn't <i>require</i>
+implementations to do the optimization, and few if any of today's compilers
+implement it when multiple inheritance is involved. What's worse, it is very
+unlikely that implementors will adopt it as a future enhancement to existing
+compilers, because it would break binary compatibility between code generated by
+two different versions of the same compiler. As Matt Austern said, &quot;One of
+the few times when you have the freedom to do this sort of thing is when you're
+targeting a new architecture...&quot;. On the other hand, many common compilers
+will use the empty base optimization for single inheritance hierarchies.</p>
+<p>Given the importance of the issue for the users of the library (which aims to
+be useful for writing light-weight classes like <code>MyInt</code> or <code>point&lt;&gt;</code>),
+and the forces described above, we decided to change the library interface so
+that the object size bloat could be eliminated even on compilers that support
+only the simplest form of the empty base class optimization. The current library
+interface is the result of those changes. Though the new usage is a bit more
+complicated than the old one, we think it's worth it to make the library more
+useful in real world. Alexy Gurtovoy contributed the code which supports the new
+usage idiom while allowing the library remain backward-compatible.</p>
+<hr>
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->28 Jun 2000<!--webbot bot="Timestamp" endspan i-checksum="15058" -->
+</p>
+<p>© Copyright David Abrahams and Beman Dawes 1999-2000. Permission to copy,
+use, modify, sell and distribute this document is granted provided this
+copyright notice appears in all copies. This document is provided &quot;as
+is&quot; without express or implied warranty, and with no claim as to its
+suitability for any purpose.</p>
+
+</body>
+
+</html>

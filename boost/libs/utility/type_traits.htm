@@ -1,0 +1,588 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="Template"
+content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Type Traits</title>
+</head>
+
+<body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
+
+<h1><img src="../../c++boost.gif" width="276" height="86">Header
+&lt;<a href="../../boost/detail/type_traits.hpp">boost/type_traits.hpp</a>&gt;</h1>
+
+<p>The contents of &lt;boost/type_traits.hpp&gt; are declared in
+namespace boost.</p>
+
+<p>The file &lt;<a href="../../boost/detail/type_traits.hpp">boost/type_traits.hpp</a>&gt;
+contains various template classes that describe the fundamental
+properties of a type; each class represents a single type
+property or a single type transformation. This documentation is
+divided up into the following sections:</p>
+
+<pre><a href="#fop">Fundamental type operations</a>
+<a href="#fp">Fundamental type properties</a>
+<code>   </code><a href="#cv">cv-Qualifiers</a>
+<code>   </code><a href="#ft">Fundamental Types</a>
+<code>   </code><a href="#ct">Compound Types</a>
+<code>   </code><a href="#ot">Object/Scalar Types</a>
+<a href="#cs">Compiler Support Information</a>
+<a href="#ec">Example Code</a></pre>
+
+<h2><a name="fop"></a>Fundamental type operations</h2>
+
+<p>Usage: &quot;class_name&lt;T&gt;::type&quot; performs
+indicated transformation on type T.</p>
+
+<table border="1" cellpadding="7" cellspacing="1" width="624">
+    <tr>
+        <td valign="top" width="45%"><p align="center">Expression.</p>
+        </td>
+        <td valign="top" width="45%"><p align="center">Description.</p>
+        </td>
+        <td valign="top" width="33%"><p align="center">Compiler.</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>remove_volatile&lt;T&gt;::type</code></td>
+        <td valign="top" width="45%">Creates a type the same as T
+        but with any top level volatile qualifier removed. For
+        example &quot;volatile int&quot; would become &quot;int&quot;.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>remove_const&lt;T&gt;::type</code></td>
+        <td valign="top" width="45%">Creates a type the same as T
+        but with any top level const qualifier removed. For
+        example &quot;const int&quot; would become &quot;int&quot;.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>remove_cv&lt;T&gt;::type</code></td>
+        <td valign="top" width="45%">Creates a type the same as T
+        but with any top level cv-qualifiers removed. For example
+        &quot;const int&quot; would become &quot;int&quot;, and
+        &quot;volatile double&quot; would become &quot;double&quot;.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>remove_reference&lt;T&gt;::type</code></td>
+        <td valign="top" width="45%">If T is a reference type
+        then removes the reference, otherwise leaves T unchanged.
+        For example &quot;int&amp;&quot; becomes &quot;int&quot;
+        but &quot;int*&quot; remains unchanged.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>add_reference&lt;T&gt;::type</code></td>
+        <td valign="top" width="45%">If T is a reference type
+        then leaves T unchanged, otherwise converts T to a
+        reference type. For example &quot;int&amp;&quot; remains
+        unchanged, but &quot;double&quot; becomes &quot;double&amp;&quot;.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>remove_bounds&lt;T&gt;::type</code></td>
+        <td valign="top" width="45%">If T is an array type then
+        removes the top level array qualifier from T, otherwise
+        leaves T unchanged. For example &quot;int[2][3]&quot;
+        becomes &quot;int[3]&quot;.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<h2><a name="fp"></a>Fundamental type properties</h2>
+
+<p>Usage: &quot;class_name&lt;T&gt;::value&quot; is true if
+indicated property is true, false otherwise. (Note that class_name&lt;T&gt;::value
+is always defined as a compile time constant).</p>
+
+<h3><a name="cv"></a>cv-Qualifiers</h3>
+
+<p>The following classes determine what cv-qualifiers are present
+on a type (see 3.93).</p>
+
+<table border="1" cellpadding="7" cellspacing="1" width="624">
+    <tr>
+        <td valign="top" width="45%"><p align="center">Expression.</p>
+        </td>
+        <td valign="top" width="45%"><p align="center">Description.</p>
+        </td>
+        <td valign="top" width="33%"><p align="center">Compiler.</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_const&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if type T is top-level
+        const qualified.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_volatile&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if type T is top-level
+        volatile qualified.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_same&lt;T,U&gt;::value</code></td>
+        <td valign="top" width="45%">True if T and U are the same
+        type.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<h3><a name="ft"></a>Fundamental Types</h3>
+
+<p>The following will only ever be true for cv-unqualified types;
+these are closely based on the section 3.9 of the C++ Standard.</p>
+
+<table border="1" cellpadding="7" cellspacing="1" width="624">
+    <tr>
+        <td valign="top" width="45%"><p align="center">Expression.</p>
+        </td>
+        <td valign="top" width="45%"><p align="center">Description.</p>
+        </td>
+        <td valign="top" width="33%"><p align="center">Compiler.</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_void&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True only if T is void.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_standard_unsigned_integral&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True only if T is one of the
+        standard unsigned integral types (3.9.1 p3) - unsigned
+        char, unsigned short, unsigned int, and unsigned long.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_standard_signed_integral&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True only if T is one of the
+        standard signed integral types (3.9.1 p2) - signed char,
+        short, int, and long.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_standard_integral&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a standard
+        integral type(3.9.1 p7) - T is either char, wchar_t, bool
+        or either is_standard_signed_integral&lt;T&gt;::value or
+        is_standard_integral&lt;T&gt;::value is true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_standard_float&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is one of the
+        standard floating point types(3.9.1 p8) - float, double
+        or long double.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_standard_arithmetic&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a standard
+        arithmetic type(3.9.1 p8) - implies is_standard_integral
+        or is_standard_float is true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_standard_fundamental&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a standard
+        arithmetic type or if T is void.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_extension_unsigned_integral&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True for compiler specific
+        unsigned integral types.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_extension_signed_integral&lt;T&gt;&gt;:value</code></td>
+        <td valign="top" width="45%">True for compiler specific
+        signed integral types.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_extension_integral&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_extension_unsigned_integral&lt;T&gt;::value
+        or is_extension_signed_integral&lt;T&gt;::value is true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_extension_float&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True for compiler specific
+        floating point types.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_extension_arithmetic&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_extension_integral&lt;T&gt;::value
+        or is_extension_float&lt;T&gt;::value are true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>&nbsp;is_extension_fundamental&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_extension_arithmetic&lt;T&gt;::value
+        or is_void&lt;T&gt;::value are true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>&nbsp;is_unsigned_integral&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_standard_unsigned_integral&lt;T&gt;::value
+        or is_extention_unsigned_integral&lt;T&gt;::value are
+        true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_signed_integral&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_standard_signed_integral&lt;T&gt;::value
+        or is_extention_signed_integral&lt;T&gt;&gt;::value are
+        true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_integral&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_standard_integral&lt;T&gt;::value
+        or is_extention_integral&lt;T&gt;::value are true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_float&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_standard_float&lt;T&gt;::value
+        or is_extention_float&lt;T&gt;::value are true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_arithmetic&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_integral&lt;T&gt;::value
+        or is_float&lt;T&gt;::value are true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_fundamental&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if either is_arithmetic&lt;T&gt;::value
+        or is_void&lt;T&gt;::value are true.</td>
+        <td valign="top" width="33%">&nbsp;</td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<h3><a name="ct"></a>Compound Types</h3>
+
+<p>The following will only ever be true for cv-unqualified types,
+as defined by the Standard.&nbsp;</p>
+
+<table border="1" cellpadding="7" cellspacing="1" width="624">
+    <tr>
+        <td valign="top" width="45%"><p align="center">Expression</p>
+        </td>
+        <td valign="top" width="45%"><p align="center">Description</p>
+        </td>
+        <td valign="top" width="33%"><p align="center">Compiler</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_array&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is an array type.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_pointer&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a regular
+        pointer type - including function pointers - but
+        excluding pointers to member functions (3.9.2 p1 and 8.3.1).</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_member_pointer&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a pointer to a
+        non-static class member (3.9.2 p1 and 8.3.1).</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_reference&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a reference
+        type (3.9.2 p1 and 8.3.2).</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_class&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a class or
+        struct type.</td>
+        <td valign="top" width="33%"><p align="center">PD</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_union&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a union type.</td>
+        <td valign="top" width="33%"><p align="center">C</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_enum&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is an enumerator
+        type.</td>
+        <td valign="top" width="33%"><p align="center">C</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_compound&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is any of the
+        above compound types.</td>
+        <td valign="top" width="33%"><p align="center">PD</p>
+        </td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<h3><a name="ot"></a>Object/Scalar Types</h3>
+
+<p>The following ignore any top level cv-qualifiers: if <code>class_name&lt;T&gt;::value</code>
+is true then <code>class_name&lt;cv-qualified-T&gt;::value</code>
+will also be true.</p>
+
+<table border="1" cellpadding="7" cellspacing="1" width="624">
+    <tr>
+        <td valign="top" width="45%"><p align="center">Expression</p>
+        </td>
+        <td valign="top" width="45%"><p align="center">Description</p>
+        </td>
+        <td valign="top" width="33%"><p align="center">Compiler</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_object&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is not a reference
+        type, or a (possibly cv-qualified) void type.</td>
+        <td valign="top" width="33%"><p align="center">P</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_standard_scalar&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a standard
+        arithmetic type, an enumerated type, a pointer or a
+        member pointer.</td>
+        <td valign="top" width="33%"><p align="center">PD</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_extension_scalar&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is an extentions
+        arithmetic type, an enumerated type, a pointer or a
+        member pointer.</td>
+        <td valign="top" width="33%"><p align="center">PD</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_scalar&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is an arithmetic
+        type, an enumerated type, a pointer or a member pointer.</td>
+        <td valign="top" width="33%"><p align="center">PD</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_POD&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is a &quot;Plain
+        Old Data&quot; type (see 3.9 p2&amp;p3). Note that
+        although this requires compiler support to be correct in
+        all cases, if T is a scalar or an array of scalars then
+        we can correctly define T as a POD.</td>
+        <td valign="top" width="33%"><p align="center">PC</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>is_empty&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T is an empty struct
+        or class. If the compiler implements the &quot;zero sized
+        empty base classes&quot; optimisation, then is_empty will
+        correctly guess whether T is empty. Relies upon is_class
+        to determine whether T is a class type - as a result will
+        not compile when passed an enumerated type unless there
+        is compiler support for is_enum.</td>
+        <td valign="top" width="33%"><p align="center">PCD</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>has_trivial_constructor&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T has a trivial
+        default constructor - that is T() is equivalent to memset.</td>
+        <td valign="top" width="33%"><p align="center">PC</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>has_trivial_copy&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T has a trivial copy
+        constructor - that is T(const T&amp;) is equivalent to
+        memcpy.</td>
+        <td valign="top" width="33%"><p align="center">PC</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>has_trivial_assign&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T has a trivial
+        assignment operator - that is if T::operator=(const T&amp;)
+        is equivalent to memcpy.</td>
+        <td valign="top" width="33%"><p align="center">PC</p>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top" width="45%"><code>has_trivial_destructor&lt;T&gt;::value</code></td>
+        <td valign="top" width="45%">True if T has a trivial
+        destructor - that is if T::~T() has no effect.</td>
+        <td valign="top" width="33%"><p align="center">PC</p>
+        </td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<h2><a name="cs"></a>Compiler Support Information</h2>
+
+<p>The legends used in the tables above have the following
+meanings:</p>
+
+<table border="0" cellpadding="7" cellspacing="0" width="480">
+    <tr>
+        <td valign="top" width="50%"><p align="center">P</p>
+        </td>
+        <td valign="top" width="90%">Denotes that the class
+        requires support for partial specialisation of class
+        templates to work correctly.</td>
+    </tr>
+    <tr>
+        <td valign="top" width="50%"><p align="center">C</p>
+        </td>
+        <td valign="top" width="90%">Denotes that direct compiler
+        support for that traits class is required.</td>
+    </tr>
+    <tr>
+        <td valign="top" width="50%"><p align="center">D</p>
+        </td>
+        <td valign="top" width="90%">Denotes that the traits
+        class is dependent upon a class that requires direct
+        compiler support.</td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p>For those classes that are marked with a D or C, if compiler
+support is not provided, this type trait may return &quot;false&quot;
+when the correct value is actually &quot;true&quot;. The single
+exception to this rule is &quot;is_class&quot;, which attempts to
+guess whether or not T is really a class, and may return &quot;true&quot;
+when the correct value is actually &quot;false&quot;. This can
+happen if: T is a union, T is an enum, or T is a compiler-supplied
+scalar type that is not specialised for in these type traits.</p>
+
+<p><i>If there is no compiler support</i>, to ensure that these
+traits <i>always</i> return the correct values, specialise 'is_enum'
+for each user-defined enumeration type, 'is_union' for each user-defined
+union type, 'is_empty' for each user-defined empty composite type,
+and 'is_POD' for each user-defined POD type. The 'has_*' traits
+should also be specialized if the user-defined type has those
+traits and is <i>not</i> a POD.</p>
+
+<p>The following rules are automatically enforced:</p>
+
+<p>is_enum implies is_POD</p>
+
+<p>is_POD implies has_*</p>
+
+<p>This means, for example, if you have an empty POD-struct, just
+specialize is_empty and is_POD, which will cause all the has_* to
+also return true.</p>
+
+<h2><a name="ec"></a>Example code</h2>
+
+<p>Type-traits comes with two sample programs: <a
+href="type_traits_test.cpp">type_traits_test.cpp</a> tests the
+type traits classes - mostly this is a test of your compiler's
+support for the concepts used in the type traits implementation,
+while <a href="algo_opt_examples.cpp">algo_opt_examples.cpp</a>
+uses the type traits classes to &quot;optimise&quot; some
+familiar standard library algorithms.</p>
+
+<p>There are four algorithm examples in algo_opt_examples.cpp:</p>
+
+<table border="0" cellpadding="7" cellspacing="0" width="638">
+    <tr>
+        <td valign="top" width="50%"><pre>opt::copy</pre>
+        </td>
+        <td valign="top" width="50%">If the copy operation can be
+        performed using memcpy then does so, otherwise uses a
+        regular element by element copy (<i>c.f.</i> std::copy).</td>
+    </tr>
+    <tr>
+        <td valign="top" width="50%"><pre>opt::fill</pre>
+        </td>
+        <td valign="top" width="50%">If the fill operation can be
+        performed by memset, then does so, otherwise uses a
+        regular element by element assign. Also uses call_traits
+        to optimise how the parameters can be passed (<i>c.f.</i>
+        std::fill).</td>
+    </tr>
+    <tr>
+        <td valign="top" width="50%"><pre>opt::destroy_array</pre>
+        </td>
+        <td valign="top" width="50%">If the type in the array has
+        a trivial destructor then does nothing, otherwise calls
+        destructors for all elements in the array - this
+        algorithm is the reverse of std::uninitialized_copy / std::uninitialized_fill.</td>
+    </tr>
+    <tr>
+        <td valign="top" width="50%"><pre>opt::iter_swap</pre>
+        </td>
+        <td valign="top" width="50%">Determines whether the
+        iterator is a proxy-iterator: if it is then does a &quot;slow
+        and safe&quot; swap, otherwise calls std::swap on the
+        assumption that std::swap may be specialised for the
+        iterated type.</td>
+    </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<hr>
+
+<p>Revised 08<sup>th</sup> March 2000</p>
+
+<p>© Copyright boost.org 2000. Permission to copy, use, modify,
+sell and distribute this document is granted provided this
+copyright notice appears in all copies. This document is provided
+&quot;as is&quot; without express or implied warranty, and with
+no claim as to its suitability for any purpose.</p>
+
+<p>Based on contributions by Steve Cleary, Beman Dawes, Howard
+Hinnant and John Maddock.</p>
+
+<p>Maintained by <a href="mailto:John_Maddock@compuserve.com">John
+Maddock</a>, the latest version of this file can be found at <a
+href="http://www.boost.org">www.boost.org</a>, and the boost
+discussion list at <a href="http://www.egroups.com/list/boost">www.egroups.com/list/boost</a>.</p>
+</body>
+</html>
