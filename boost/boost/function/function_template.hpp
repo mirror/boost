@@ -50,10 +50,16 @@
   BOOST_JOIN(function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
 #define BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER \
   BOOST_JOIN(void_function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
+#define BOOST_FUNCTION_STATELESS_FUNCTION_OBJ_INVOKER \
+  BOOST_JOIN(stateless_function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
+#define BOOST_FUNCTION_STATELESS_VOID_FUNCTION_OBJ_INVOKER \
+  BOOST_JOIN(stateless_void_function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
 #define BOOST_FUNCTION_GET_FUNCTION_INVOKER \
   BOOST_JOIN(get_function_invoker,BOOST_FUNCTION_NUM_ARGS)
 #define BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER \
   BOOST_JOIN(get_function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
+#define BOOST_FUNCTION_GET_STATELESS_FUNCTION_OBJ_INVOKER \
+  BOOST_JOIN(get_stateless_function_obj_invoker,BOOST_FUNCTION_NUM_ARGS)
 
 namespace boost {
   namespace detail {
@@ -125,6 +131,37 @@ namespace boost {
       };
 
       template<
+        typename FunctionObj,
+        typename R BOOST_FUNCTION_COMMA
+        BOOST_FUNCTION_TEMPLATE_PARMS
+      >
+      struct BOOST_FUNCTION_STATELESS_FUNCTION_OBJ_INVOKER
+      {
+        static R invoke(any_pointer BOOST_FUNCTION_COMMA BOOST_FUNCTION_PARMS)
+        {
+          FunctionObj f;
+          return f(BOOST_FUNCTION_ARGS);
+        }
+      };
+
+      template<
+        typename FunctionObj,
+        typename R BOOST_FUNCTION_COMMA
+        BOOST_FUNCTION_TEMPLATE_PARMS
+      >
+      struct BOOST_FUNCTION_STATELESS_VOID_FUNCTION_OBJ_INVOKER
+      {
+        static unusable invoke(any_pointer BOOST_FUNCTION_COMMA 
+                               BOOST_FUNCTION_PARMS)
+
+        {
+          FunctionObj f;
+          f(BOOST_FUNCTION_ARGS);
+          return unusable();
+        }
+      };
+
+      template<
         typename FunctionPtr,
         typename R BOOST_FUNCTION_COMMA
         BOOST_FUNCTION_TEMPLATE_PARMS
@@ -165,6 +202,28 @@ namespace boost {
                           >
                        >::type type;
       };
+
+      template<
+        typename FunctionObj,
+        typename R BOOST_FUNCTION_COMMA
+        BOOST_FUNCTION_TEMPLATE_PARMS
+       >
+      struct BOOST_FUNCTION_GET_STATELESS_FUNCTION_OBJ_INVOKER
+      {
+        typedef typename IF<(is_void<R>::value),
+                            BOOST_FUNCTION_STATELESS_VOID_FUNCTION_OBJ_INVOKER<
+                            FunctionObj,
+                            R BOOST_FUNCTION_COMMA
+                            BOOST_FUNCTION_TEMPLATE_ARGS
+                          >,
+                          BOOST_FUNCTION_STATELESS_FUNCTION_OBJ_INVOKER<
+                            FunctionObj,
+                            R BOOST_FUNCTION_COMMA
+                            BOOST_FUNCTION_TEMPLATE_ARGS
+                          >
+                       >::type type;
+      };
+
     } // end namespace function
   } // end namespace detail
 
@@ -390,6 +449,22 @@ namespace boost {
       }
     }
     
+    template<typename FunctionObj>
+    void assign_to(FunctionObj f, detail::function::stateless_function_obj_tag)
+    {
+      typedef 
+          typename detail::function::
+                     BOOST_FUNCTION_GET_STATELESS_FUNCTION_OBJ_INVOKER<
+                       FunctionObj,
+                       R BOOST_FUNCTION_COMMA
+                       BOOST_FUNCTION_TEMPLATE_ARGS
+                     >::type
+          invoker_type;
+      invoker = &invoker_type::invoke;
+      function_base::manager = &detail::function::trivial_manager;
+      function_base::functor = detail::function::any_pointer(this);
+    }
+
     typedef result_type (*invoker_type)(detail::function::any_pointer
                                         BOOST_FUNCTION_COMMA
                                         BOOST_FUNCTION_TEMPLATE_ARGS);
@@ -428,7 +503,10 @@ namespace boost {
 #undef BOOST_FUNCTION_VOID_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_FUNCTION_OBJ_INVOKER
 #undef BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER
+#undef BOOST_FUNCTION_STATELESS_FUNCTION_OBJ_INVOKER
+#undef BOOST_FUNCTION_STATELESS_VOID_FUNCTION_OBJ_INVOKER
 #undef BOOST_FUNCTION_GET_FUNCTION_INVOKER
 #undef BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER
+#undef BOOST_FUNCTION_GET_STATELESS_FUNCTION_OBJ_INVOKER
 #undef BOOST_FUNCTION_GET_MEM_FUNCTION_INVOKER
 
