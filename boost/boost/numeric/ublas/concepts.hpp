@@ -932,7 +932,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
                                                     BOOST_UBLAS_TYPENAME E2::value_type>::promote_type value_type;
         typedef BOOST_UBLAS_TYPENAME type_traits<value_type>::real_type real_type;
-        return norm_inf (e1 - e2) == real_type ();
+        return norm_inf (e1 - e2) == real_type (0);
     }
     template<class E1, class E2>
     bool
@@ -940,7 +940,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef BOOST_UBLAS_TYPENAME promote_traits<BOOST_UBLAS_TYPENAME E1::value_type,
                                                     BOOST_UBLAS_TYPENAME E2::value_type>::promote_type value_type;
         typedef BOOST_UBLAS_TYPENAME type_traits<value_type>::real_type real_type;
-        return norm_inf (e1 - e2) == real_type ();
+        return norm_inf (e1 - e2) == real_type (0);
     }
 
     template<class T>
@@ -1485,7 +1485,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Scalar Expressions
 #if defined (INTERNAL) || defined (INTERNAL_VECTOR_EXPRESSION)
         ScalarExpressionConcept<scalar_value<double > >::constraints ();
-        ScalarExpressionConcept<scalar_const_reference<double > >::constraints ();
+        ScalarExpressionConcept<scalar_reference<double > >::constraints ();
 
         // Vector Expressions
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
@@ -1509,13 +1509,21 @@ namespace boost { namespace numeric { namespace ublas {
         IndexedRandomAccess1DIteratorConcept<vector_binary<vector<double>, vector<double>, scalar_plus<double, double> >::const_iterator>::constraints ();
         IndexedRandomAccess1DIteratorConcept<vector_binary<vector<double>, vector<double>, scalar_plus<double, double> >::const_reverse_iterator>::constraints ();
 
-        VectorExpressionConcept<vector_binary_scalar1<scalar_value<double>, vector<double>, scalar_multiplies<double, double> > >::constraints ();
-        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar1<scalar_value<double>, vector<double>, scalar_multiplies<double, double> >::const_iterator>::constraints ();
-        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar1<scalar_value<double>, vector<double>, scalar_multiplies<double, double> >::const_reverse_iterator>::constraints ();
+        VectorExpressionConcept<vector_binary_scalar1<double, vector<double>, scalar_multiplies<double, double>, scalar_reference<double> > >::constraints ();
+        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar1<double, vector<double>, scalar_multiplies<double, double>, scalar_reference<double> >::const_iterator>::constraints ();
+        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar1<double, vector<double>, scalar_multiplies<double, double>, scalar_reference<double> >::const_reverse_iterator>::constraints ();
 
-        VectorExpressionConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double> > >::constraints ();
-        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double> >::const_iterator>::constraints ();
-        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double> >::const_reverse_iterator>::constraints ();
+        VectorExpressionConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<double> > >::constraints ();
+        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<double> >::const_iterator>::constraints ();
+        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<double> >::const_reverse_iterator>::constraints ();
+
+        VectorExpressionConcept<vector_binary_scalar1<scalar_value<double>, vector<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > > >::constraints ();
+        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar1<scalar_value<double>, vector<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_iterator>::constraints ();
+        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar1<scalar_value<double>, vector<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_reverse_iterator>::constraints ();
+
+        VectorExpressionConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > > >::constraints ();
+        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_iterator>::constraints ();
+        IndexedRandomAccess1DIteratorConcept<vector_binary_scalar2<vector<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_reverse_iterator>::constraints ();
 
         ScalarExpressionConcept<vector_scalar_unary<vector<double>, vector_sum<double> > >::constraints ();
         ScalarExpressionConcept<vector_scalar_unary<vector<double>, vector_norm_1<double> > >::constraints ();
@@ -1562,17 +1570,29 @@ namespace boost { namespace numeric { namespace ublas {
         IndexedRandomAccess2DIteratorConcept<matrix_binary<matrix<double>, matrix<double>, scalar_plus<double, double> >::const_reverse_iterator1,
                                              matrix_binary<matrix<double>, matrix<double>, scalar_plus<double, double> >::const_reverse_iterator2>::constraints ();
 
-        MatrixExpressionConcept<matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double> > >::constraints ();
-        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double> >::const_iterator1,
-                                             matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double> >::const_iterator2>::constraints ();
-        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double> >::const_reverse_iterator1,
-                                             matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double> >::const_reverse_iterator2>::constraints ();
+        MatrixExpressionConcept<matrix_binary_scalar1<double, matrix<double>, scalar_multiplies<double, double>, scalar_reference<double> > >::constraints ();
+        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar1<double, matrix<double>, scalar_multiplies<double, double>, scalar_reference<double> >::const_iterator1,
+                                             matrix_binary_scalar1<double, matrix<double>, scalar_multiplies<double, double>, scalar_reference<double> >::const_iterator2>::constraints ();
+        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar1<double, matrix<double>, scalar_multiplies<double, double>, scalar_reference<double> >::const_reverse_iterator1,
+                                             matrix_binary_scalar1<double, matrix<double>, scalar_multiplies<double, double>, scalar_reference<double> >::const_reverse_iterator2>::constraints ();
 
-        MatrixExpressionConcept<matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double> > >::constraints ();
-        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double> >::const_iterator1,
-                                             matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double> >::const_iterator2>::constraints ();
-        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double> >::const_reverse_iterator1,
-                                             matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double> >::const_reverse_iterator2>::constraints ();
+        MatrixExpressionConcept<matrix_binary_scalar2<matrix<double>, double, scalar_multiplies<double, double>, scalar_reference<double> > >::constraints ();
+        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar2<matrix<double>, double, scalar_multiplies<double, double>, scalar_reference<double> >::const_iterator1,
+                                             matrix_binary_scalar2<matrix<double>, double, scalar_multiplies<double, double>, scalar_reference<double> >::const_iterator2>::constraints ();
+        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar2<matrix<double>, double, scalar_multiplies<double, double>, scalar_reference<double> >::const_reverse_iterator1,
+                                             matrix_binary_scalar2<matrix<double>, double, scalar_multiplies<double, double>, scalar_reference<double> >::const_reverse_iterator2>::constraints ();
+
+        MatrixExpressionConcept<matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > > >::constraints ();
+        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_iterator1,
+                                             matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_iterator2>::constraints ();
+        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_reverse_iterator1,
+                                             matrix_binary_scalar1<scalar_value<double>, matrix<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_reverse_iterator2>::constraints ();
+
+        MatrixExpressionConcept<matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > > >::constraints ();
+        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_iterator1,
+                                             matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_iterator2>::constraints ();
+        IndexedRandomAccess2DIteratorConcept<matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_reverse_iterator1,
+                                             matrix_binary_scalar2<matrix<double>, scalar_value<double>, scalar_multiplies<double, double>, scalar_reference<scalar_value<double> > >::const_reverse_iterator2>::constraints ();
 
         VectorExpressionConcept<matrix_vector_binary1<matrix<double>, vector<double>, matrix_vector_prod1<double, double, double> > >::constraints ();
         IndexedRandomAccess1DIteratorConcept<matrix_vector_binary1<matrix<double>, vector<double>, matrix_vector_prod1<double, double, double> >::const_iterator>::constraints ();

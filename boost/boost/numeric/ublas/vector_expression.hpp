@@ -66,10 +66,89 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T>
+    class scalar_reference:
+        public scalar_expression<scalar_reference<T> > {
+    public:
+        typedef T value_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+#else
+        typedef const value_type &const_reference;
+        typedef typename boost::mpl::if_<boost::is_const<T>,
+                                          const_reference,
+                                          value_type &>::type reference;
+#endif
+    private:
+        typedef scalar_reference<T> self_type;
+    public:
+        typedef const self_type const_closure_type;
+        typedef const_closure_type closure_type;
+
+        // Construction and destruction
+        BOOST_UBLAS_INLINE
+        scalar_reference ():
+            t_ (nil_) {}
+        BOOST_UBLAS_INLINE
+        explicit scalar_reference (reference t):
+            t_ (t) {}
+
+        BOOST_UBLAS_INLINE
+        operator value_type () const {
+            return t_;
+        }
+
+        // Assignment
+        BOOST_UBLAS_INLINE
+        scalar_reference &operator = (const scalar_reference &s) {
+            t_ = s.t_;
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        scalar_reference &operator = (const scalar_expression<AE> &ae) {
+            t_ = ae;
+            return *this;
+        }
+
+        // Closure comparison
+        BOOST_UBLAS_INLINE
+        bool same_closure (const scalar_reference &sr) const {
+            return &t_ == &sr.t_;
+        }
+
+    private:
+        reference t_;
+        static value_type nil_;
+    };
+
+    template<class T>
+    typename scalar_reference<T>::value_type scalar_reference<T>::nil_
+        = BOOST_UBLAS_TYPENAME scalar_reference<T>::value_type ();
+
+    template<class T>
     class scalar_value:
         public scalar_expression<scalar_value<T> > {
     public:
         typedef T value_type;
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+#else
+        typedef const value_type &const_reference;
+        typedef typename boost::mpl::if_<boost::is_const<T>,
+                                          const_reference,
+                                          value_type &>::type reference;
+#endif
+    private:
+        typedef scalar_value<T> self_type;
+    public:
+#ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
+        typedef const scalar_const_reference<const self_type> const_closure_type;
+#else
+        typedef const scalar_reference<const self_type> const_closure_type;
+#endif
+        typedef scalar_reference<self_type> closure_type;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -84,49 +163,28 @@ namespace boost { namespace numeric { namespace ublas {
             return t_;
         }
 
+        // Assignment
+        BOOST_UBLAS_INLINE
+        scalar_value &operator = (const scalar_value &s) {
+            t_ = s.t_;
+            return *this;
+        }
+        template<class AE>
+        BOOST_UBLAS_INLINE
+        scalar_value &operator = (const scalar_expression<AE> &ae) {
+            t_ = ae;
+            return *this;
+        }
+
         // Closure comparison
         BOOST_UBLAS_INLINE
         bool same_closure (const scalar_value &sv) const {
-            return this == &sv;    // shortcut for &t_ == &sv.t_
+            return this == &sv;    // self closing on instances value
         }
 
     private:
         value_type t_;
     };
-
-    template<class T>
-    class scalar_const_reference:
-        public scalar_expression<scalar_const_reference<T> > {
-    public:
-        typedef T value_type;
-
-        // Construction and destruction
-        BOOST_UBLAS_INLINE
-        scalar_const_reference ():
-            t_ (nil_) {}
-        BOOST_UBLAS_INLINE
-        scalar_const_reference (const value_type &t):
-            t_ (t) {}
-
-        BOOST_UBLAS_INLINE
-        operator value_type () const {
-            return t_;
-        }
-
-        // Closure comparison
-        BOOST_UBLAS_INLINE
-        bool same_closure (const scalar_const_reference &sr) const {
-            return &t_ == &sr.t_;
-        }
-
-    private:
-        const value_type &t_;
-        static const value_type nil_;
-    };
-
-    template<class T>
-    const typename scalar_const_reference<T>::value_type scalar_const_reference<T>::nil_
-        = BOOST_UBLAS_TYPENAME scalar_const_reference<T>::value_type ();
 
 
     // Base class for Vector Expressions - see the Barton Nackman trick
@@ -222,33 +280,33 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
     };
 
-    template<class E>
+    template<class T>
     class vector_reference:
-        public vector_expression<vector_reference<E> > {
+        public vector_expression<vector_reference<T> > {
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
-        BOOST_UBLAS_USING vector_expression<vector_reference<E> >::operator ();
+        BOOST_UBLAS_USING vector_expression<vector_reference<T> >::operator ();
 #endif
-        typedef typename E::size_type size_type;
-        typedef typename E::difference_type difference_type;
-        typedef typename E::value_type value_type;
+        typedef typename T::size_type size_type;
+        typedef typename T::difference_type difference_type;
+        typedef typename T::value_type value_type;
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef typename E::const_reference const_reference;
-        typedef typename E::reference reference;
+        typedef typename T::const_reference const_reference;
+        typedef typename T::reference reference;
 #else
-        typedef typename E::const_reference const_reference;
-        typedef typename boost::mpl::if_<boost::is_const<E>,
-                                          typename E::const_reference,
-                                          typename E::reference>::type reference;
+        typedef typename T::const_reference const_reference;
+        typedef typename boost::mpl::if_<boost::is_const<T>,
+                                          typename T::const_reference,
+                                          typename T::reference>::type reference;
 #endif
     private:
-        typedef vector_reference<E> self_type;
+        typedef vector_reference<T> self_type;
     public:
-        typedef E refered_type;
+        typedef T refered_type;
         typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
-        typedef typename E::storage_category storage_category;
-        typedef typename E::simd_category simd_category;
+        typedef typename T::storage_category storage_category;
+        typedef typename T::simd_category simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -378,13 +436,13 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Iterator types
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
-        typedef typename E::const_iterator const_iterator;
-        typedef typename E::iterator iterator;
+        typedef typename T::const_iterator const_iterator;
+        typedef typename T::iterator iterator;
 #else
-        typedef typename E::const_iterator const_iterator;
-        typedef typename boost::mpl::if_<boost::is_const<E>,
-                                          typename E::const_iterator,
-                                          typename E::iterator>::type iterator;
+        typedef typename T::const_iterator const_iterator;
+        typedef typename boost::mpl::if_<boost::is_const<T>,
+                                          typename T::const_iterator,
+                                          typename T::iterator>::type iterator;
 #endif
 
         // Element lookup
@@ -454,10 +512,10 @@ namespace boost { namespace numeric { namespace ublas {
         static refered_type nil_;
     };
 
-    template<class E>
-    typename vector_reference<E>::refered_type vector_reference<E>::nil_
+    template<class T>
+    typename vector_reference<T>::refered_type vector_reference<T>::nil_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
-        = BOOST_UBLAS_TYPENAME vector_reference<E>::refered_type ();
+        = BOOST_UBLAS_TYPENAME vector_reference<T>::refered_type ()
 #endif
     ;
 
@@ -521,7 +579,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return functor_type () (e_ (i));
+            return functor_type::apply (e_ (i));
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
@@ -531,7 +589,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
-            return functor_type () (e_ [i]);
+            return functor_type::apply (e_ [i]);
         }
         BOOST_UBLAS_INLINE
         reference operator [] (size_type i) {
@@ -631,7 +689,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
-                return functor_type () (*it_);
+                return functor_type::apply (*it_);
             }
 
             // Index
@@ -702,7 +760,7 @@ namespace boost { namespace numeric { namespace ublas {
 // #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 // #else
-//         typedef vector<typename F::result_type> result_type;
+//         typedef typename E::vector_temporary_type result_type;
 // #endif
     };
 
@@ -821,12 +879,12 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return functor_type () (e1_ (i), e2_ (i));
+            return functor_type::apply (e1_ (i), e2_ (i));
         }
 
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
-            return functor_type () (e1_ [i], e2_ [i]);
+            return functor_type::apply (e1_ [i], e2_ [i]);
         }
 
         // Closure comparison
@@ -915,7 +973,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             value_type dereference (dense_random_access_iterator_tag) const {
-                return functor_type () (*it1_, *it2_);
+                return functor_type::apply (*it1_, *it2_);
             }
 
             // Packed specializations
@@ -949,7 +1007,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (it2_ != it2_end_)
                     if (it2_.index () == i_)
                         t2 = *it2_;
-                return functor_type () (t1, t2);
+                return functor_type::apply (t1, t2);
             }
 
             // Sparse specializations
@@ -999,7 +1057,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (it2_ != it2_end_)
                     if (it2_.index () == i_)
                         t2 = *it2_;
-                return functor_type () (t1, t2);
+                return functor_type::apply (t1, t2);
             }
 
             // Arithmetic
@@ -1111,7 +1169,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type; 
 #else
-        typedef vector<typename F::result_type> result_type;
+        typedef typename E1::vector_temporary_type result_type;
 #endif
     };
 
@@ -1163,12 +1221,13 @@ namespace boost { namespace numeric { namespace ublas {
         return expression_type (e1 (), e2 ());
     }
 
-    template<class E1, class E2, class F>
+
+    template<class E1, class E2, class F, class C1>
     class vector_binary_scalar1:
-        public vector_expression<vector_binary_scalar1<E1, E2, F> > {
+        public vector_expression<vector_binary_scalar1<E1, E2, F, C1> > {
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
-        BOOST_UBLAS_USING vector_expression<vector_binary_scalar1<E1, E2, F> >::operator ();
+        BOOST_UBLAS_USING vector_expression<vector_binary_scalar1<E1, E2, F, C1> >::operator ();
 #endif
         typedef typename E2::size_type size_type;
         typedef typename E2::difference_type difference_type;
@@ -1177,12 +1236,12 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
     private:
         typedef const value_type *const_pointer;
+        typedef F functor_type;
         typedef E1 expression1_type;
         typedef E2 expression2_type;
-        typedef F functor_type;
-        typedef E1 expression1_closure_type;
+        typedef C1 expression1_closure_type;
         typedef typename E2::const_closure_type expression2_closure_type;
-        typedef vector_binary_scalar1<E1, E2, F> self_type;
+        typedef vector_binary_scalar1<E1, E2, F, C1> self_type;
     public:
         typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
@@ -1202,40 +1261,29 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size ();
         }
 
-    private:
-        // Expression accesors
-        BOOST_UBLAS_INLINE
-        const expression1_closure_type &expression1 () const {
-            return e1_;
-        }
-        BOOST_UBLAS_INLINE
-        const expression2_closure_type &expression2 () const {
-            return e2_;
-        }
-
     public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return functor_type () (e1_, e2_ (i));
+            return functor_type::apply (expression1_type (e1_), e2_ (i));
         }
 
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
-            return functor_type () (e1_, e2_ [i]);
+            return functor_type::apply (expression1_type (e1_), e2_ [i]);
         }
 
         // Closure comparison
         BOOST_UBLAS_INLINE
         bool same_closure (const vector_binary_scalar1 &vbs1) const {
-            return (*this).expression1 ().same_closure (vbs1.expression1 ()) &&
-                   (*this).expression2 ().same_closure (vbs1.expression2 ());
+            return (*this).e1_.same_closure (vbs1.e1_) &&
+                   (*this).e2_.same_closure (vbs1.e2_);
         }
 
         // Iterator types
     private:
-        typedef typename E1::value_type const_iterator1_type;
-        typedef typename E2::const_iterator const_iterator2_type;
+        typedef expression1_type const_iterator1_type;
+        typedef typename expression2_type::const_iterator const_iterator2_type;
 
     public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1253,7 +1301,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator2_type it (e2_.find (i));
             return const_iterator (*this, it.index ());
 #else
-            return const_iterator (*this, e1_, e2_.find (i));
+            return const_iterator (*this, const_iterator1_type (e1_), e2_.find (i));
 #endif
         }
 
@@ -1321,7 +1369,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
-                return functor_type () (it1_, *it2_);
+                return functor_type::apply (it1_, *it2_);
             }
 
             // Index
@@ -1392,32 +1440,45 @@ namespace boost { namespace numeric { namespace ublas {
         expression2_closure_type e2_;
     };
 
-    template<class T1, class E2, class F>
+    template<class E1, class E2, class F, class C1 = typename E1::const_closure_type>
     struct vector_binary_scalar1_traits {
-        typedef vector_binary_scalar1<scalar_const_reference<T1>, E2, F> expression_type;
+        typedef vector_binary_scalar1<E1, E2, F, C1> expression_type;   // allow E1 to be builtin type
 #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
-        typedef vector<typename F::result_type> result_type;
+        typedef typename E2::vector_temporary_type result_type;
 #endif
     };
+
+#ifdef BOOST_UBLAS_USE_SCALAR_ET
+    // (s * v) [i] = scalar_expression * v [i]
+    template<class E1, class E2>
+    BOOST_UBLAS_INLINE
+    typename vector_binary_scalar1_traits<E1, E2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type, BOOST_UBLAS_TYPENAME E2::value_type> >::result_type
+    operator * (const scalar_expression<E1> &e1,
+                const vector_expression<E2> &e2) {
+        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar1_traits<E1, E2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type, BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
+        return expression_type (e1 (), e2 ());
+    }
+#endif
 
     // (t * v) [i] = t * v [i]
     template<class T1, class E2>
     BOOST_UBLAS_INLINE
-    typename vector_binary_scalar1_traits<T1, E2, scalar_multiplies<T1, typename E2::value_type> >::result_type
+    typename vector_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, BOOST_UBLAS_TYPENAME E2::value_type>, scalar_reference<const T1> >::result_type
     operator * (const T1 &e1,
                 const vector_expression<E2> &e2) {
-        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar1_traits<T1, E2, scalar_multiplies<T1, BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
+        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar1_traits<const T1, E2, scalar_multiplies<T1, BOOST_UBLAS_TYPENAME E2::value_type>, scalar_reference<const T1> >::expression_type expression_type;
         return expression_type (e1, e2 ());
     }
 
-    template<class E1, class E2, class F>
+
+    template<class E1, class E2, class F, class C2>
     class vector_binary_scalar2:
-        public vector_expression<vector_binary_scalar2<E1, E2, F> > {
+        public vector_expression<vector_binary_scalar2<E1, E2, F, C2> > {
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
-        BOOST_UBLAS_USING vector_expression<vector_binary_scalar2<E1, E2, F> >::operator ();
+        BOOST_UBLAS_USING vector_expression<vector_binary_scalar2<E1, E2, F, C2> >::operator ();
 #endif
         typedef typename E1::size_type size_type;
         typedef typename E1::difference_type difference_type;
@@ -1426,13 +1487,12 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const_reference reference;
     private:
         typedef const value_type *const_pointer;
-        typedef const_pointer pointer;
+        typedef F functor_type;
         typedef E1 expression1_type;
         typedef E2 expression2_type;
-        typedef F functor_type;
         typedef typename E1::const_closure_type expression1_closure_type;
-        typedef E2 expression2_closure_type;
-        typedef vector_binary_scalar2<E1, E2, F> self_type;
+        typedef C2 expression2_closure_type;
+        typedef vector_binary_scalar2<E1, E2, F, C2> self_type;
     public:
         typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
@@ -1452,40 +1512,29 @@ namespace boost { namespace numeric { namespace ublas {
             return e1_.size (); 
         }
 
-    private:
-        // Expression accesors
-        BOOST_UBLAS_INLINE
-        const expression1_closure_type &expression1 () const {
-            return e1_;
-        }
-        BOOST_UBLAS_INLINE
-        const expression2_closure_type &expression2 () const {
-            return e2_;
-        }
-
     public:
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return functor_type () (e1_ (i), e2_);
+            return functor_type::apply (e1_ (i), expression2_type (e2_));
         }
 
         BOOST_UBLAS_INLINE
         const_reference operator [] (size_type i) const {
-            return functor_type () (e1_ [i], e2_);
+            return functor_type::apply (e1_ [i], expression2_type (e2_));
         }
 
         // Closure comparison
         BOOST_UBLAS_INLINE
         bool same_closure (const vector_binary_scalar2 &vbs2) const {
-            return (*this).expression1 ().same_closure (vbs2.expression1 ()) &&
-                   (*this).expression2 ().same_closure (vbs2.expression2 ());
+            return (*this).e1_.same_closure (vbs2.e1_) &&
+                   (*this).e2_.same_closure (vbs2.e2_);
         }
 
         // Iterator types
     private:
-        typedef typename E1::const_iterator const_iterator1_type;
-        typedef typename E2::value_type const_iterator2_type;
+        typedef typename expression1_type::const_iterator const_iterator1_type;
+        typedef expression2_type const_iterator2_type;
 
     public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1503,7 +1552,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator1_type it (e1_.find (i));
             return const_iterator (*this, it.index ());
 #else
-            return const_iterator (*this, e1_.find (i), e2_);
+            return const_iterator (*this, e1_.find (i), const_iterator2_type (e2_));
 #endif
         }
 
@@ -1571,7 +1620,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
-                return functor_type () (*it1_, it2_);
+                return functor_type::apply (*it1_, it2_);
             }
 
             // Index
@@ -1642,39 +1691,62 @@ namespace boost { namespace numeric { namespace ublas {
         expression2_closure_type e2_;
     };
 
-    template<class E1, class T2, class F>
+    template<class E1, class E2, class F, class C2 = typename E2::const_closure_type>
     struct vector_binary_scalar2_traits {
-        typedef vector_binary_scalar2<E1, scalar_const_reference<T2>, F> expression_type;
+        typedef vector_binary_scalar2<E1, E2, F, C2> expression_type;   // allow E2 to be builtin type
 #ifndef BOOST_UBLAS_SIMPLE_ET_DEBUG
         typedef expression_type result_type;
 #else
-        typedef vector<typename F::result_type> result_type;
+        typedef typename E1::vector_temporary_type result_type;
 #endif
     };
+
+#ifdef BOOST_UBLAS_USE_SCALAR_ET
+    // (v * s) [i] = v [i] * scalar_expression
+    template<class E1, class E2>
+    BOOST_UBLAS_INLINE
+    typename vector_binary_scalar2_traits<E1, E2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type, BOOST_UBLAS_TYPENAME E2::value_type> >::result_type
+    operator * (const vector_expression<E1> &e1,
+                const scalar_expression<E2> &e2) {
+        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar2_traits<E1, E2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type, BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
+        return expression_type (e1 (), e2 ());
+    }
+
+    // (v / s) [i] = v [i] / scalar_expression
+    template<class E1, class E2>
+    BOOST_UBLAS_INLINE
+    typename vector_binary_scalar2_traits<E1, E2, scalar_divides<BOOST_UBLAS_TYPENAME E1::value_type, BOOST_UBLAS_TYPENAME E2::value_type> >::result_type
+    operator / (const vector_expression<E1> &e1,
+                const scalar_expression<E2> &e2) {
+        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar2_traits<E1, E2, scalar_divides<BOOST_UBLAS_TYPENAME E1::value_type, BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
+        return expression_type (e1 (), e2 ());
+    }
+#endif
 
     // (v * t) [i] = v [i] * t
     template<class E1, class T2>
     BOOST_UBLAS_INLINE
-    typename vector_binary_scalar2_traits<E1, T2, scalar_multiplies<typename E1::value_type, T2> >::result_type
+    typename vector_binary_scalar2_traits<E1, const T2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type, T2>, scalar_reference<const T2> >::result_type
     operator * (const vector_expression<E1> &e1,
                 const T2 &e2) {
-        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar2_traits<E1, T2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type, T2> >::expression_type expression_type;
+        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar2_traits<E1, const T2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type, T2>, scalar_reference<const T2> >::expression_type expression_type;
         return expression_type (e1 (), e2);
     }
 
     // (v / t) [i] = v [i] / t
     template<class E1, class T2>
     BOOST_UBLAS_INLINE
-    typename vector_binary_scalar2_traits<E1, T2, scalar_divides<typename E1::value_type, T2> >::result_type
+    typename vector_binary_scalar2_traits<E1, const T2, scalar_divides<BOOST_UBLAS_TYPENAME E1::value_type, T2>, scalar_reference<const T2> >::result_type
     operator / (const vector_expression<E1> &e1,
                 const T2 &e2) {
-        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar2_traits<E1, T2, scalar_divides<BOOST_UBLAS_TYPENAME E1::value_type, T2> >::expression_type expression_type;
+        typedef BOOST_UBLAS_TYPENAME vector_binary_scalar2_traits<E1, const T2, scalar_divides<BOOST_UBLAS_TYPENAME E1::value_type, T2>, scalar_reference<const T2> >::expression_type expression_type;
         return expression_type (e1 (), e2);
     }
 
+
     template<class E, class F>
     class vector_scalar_unary:
-        public scalar_expression<typename F::result_type> {
+        public scalar_expression<vector_scalar_unary<E, F> > {
     public:
         typedef typename F::size_type size_type;
         typedef typename F::difference_type difference_type;
@@ -1684,7 +1756,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef F functor_type;
         typedef typename E::const_closure_type expression_closure_type;
         typedef typename E::const_iterator::iterator_category iterator_category;
+        typedef vector_scalar_unary<E, F> self_type;
     public:
+        typedef const self_type const_closure_type;
+        typedef const_closure_type closure_type;
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
@@ -1715,29 +1790,29 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         value_type evaluate (dense_random_access_iterator_tag) const {
 #ifdef BOOST_UBLAS_USE_INDEXING
-            return functor_type () (e_);
+            return functor_type::apply (e_);
 #elif BOOST_UBLAS_USE_ITERATING
             difference_type size = e_.size ();
-            return functor_type () (size, e_.begin ());
+            return functor_type::apply (size, e_.begin ());
 #else
             difference_type size = e_.size ();
             if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
-                return functor_type () (size, e_.begin ());
+                return functor_type::apply (size, e_.begin ());
             else
-                return functor_type () (e_);
+                return functor_type::apply (e_);
 #endif
         }
 
         // Packed bidirectional specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (packed_random_access_iterator_tag) const {
-            return functor_type () (e_.begin (), e_.end ());
+            return functor_type::apply (e_.begin (), e_.end ());
         }
 
         // Sparse bidirectional specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (sparse_bidirectional_iterator_tag) const {
-            return functor_type () (e_.begin (), e_.end ());
+            return functor_type::apply (e_.begin (), e_.end ());
         }
 
     private:
@@ -1806,7 +1881,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class E1, class E2, class F>
     class vector_scalar_binary:
-        public scalar_expression<typename F::result_type> {
+        public scalar_expression<vector_scalar_binary<E1, E2, F> > {
     public:
         BOOST_STATIC_CONSTANT (unsigned, complexity = 1);
         typedef typename F::size_type size_type;
@@ -1820,7 +1895,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E2::const_closure_type expression2_closure_type;
         typedef typename iterator_restrict_traits<typename E1::const_iterator::iterator_category,
                                                   typename E2::const_iterator::iterator_category>::iterator_category iterator_category;
+        typedef vector_scalar_binary<E1, E2, F> self_type;
     public:
+        typedef const self_type const_closure_type;
+        typedef const_closure_type closure_type;
         typedef unknown_storage_tag storage_category;
 
         // Construction and destruction
@@ -1853,29 +1931,29 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         value_type evaluate (dense_random_access_iterator_tag) const {
 #ifdef BOOST_UBLAS_USE_INDEXING
-            return functor_type () (e1_, e2_);
+            return functor_type::apply (e1_, e2_);
 #elif BOOST_UBLAS_USE_ITERATING
             difference_type size = BOOST_UBLAS_SAME (e1_.size (), e2_.size ());
-            return functor_type () (size, e1_.begin (), e2_.begin ());
+            return functor_type::apply (size, e1_.begin (), e2_.begin ());
 #else
             difference_type size = BOOST_UBLAS_SAME (e1_.size (), e2_.size ());
             if (size >= BOOST_UBLAS_ITERATOR_THRESHOLD)
-                return functor_type () (size, e1_.begin (), e2_.begin ());
+                return functor_type::apply (size, e1_.begin (), e2_.begin ());
             else
-                return functor_type () (e1_, e2_);
+                return functor_type::apply (e1_, e2_);
 #endif
         }
 
         // Packed bidirectional specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (packed_random_access_iterator_tag) const {
-            return functor_type () (e1_.begin (), e1_.end (), e2_.begin (), e2_.end ());
+            return functor_type::apply (e1_.begin (), e1_.end (), e2_.begin (), e2_.end ());
         }
 
         // Sparse bidirectional specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (sparse_bidirectional_iterator_tag) const {
-            return functor_type () (e1_.begin (), e1_.end (), e2_.begin (), e2_.end (), sparse_bidirectional_iterator_tag ());
+            return functor_type::apply (e1_.begin (), e1_.end (), e2_.begin (), e2_.end (), sparse_bidirectional_iterator_tag ());
         }
 
     private:

@@ -108,9 +108,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (v.end () - it == size, bad_size ());
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
         while (-- size >= 0)
-            functor_type () (*it, t), ++ it;
+            functor_type::apply (*it, t), ++ it;
 #else
-        DD (size, 4, r, (functor_type () (*it, t), ++ it));
+        DD (size, 4, r, (functor_type::apply (*it, t), ++ it));
 #endif
     }
     // Indexing case
@@ -123,10 +123,10 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size (v.size ());
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
         for (size_type i = 0; i < size; ++ i)
-            functor_type () (v (i), t);
+            functor_type::apply (v (i), t);
 #else
         size_type i (0);
-        DD (size, 4, r, (functor_type () (v (i), t), ++ i));
+        DD (size, 4, r, (functor_type::apply (v (i), t), ++ i));
 #endif
     }
 
@@ -159,7 +159,7 @@ namespace boost { namespace numeric { namespace ublas {
         typename V::iterator it (v.begin ());
         difference_type size (v.end () - it);
         while (-- size >= 0)
-            functor_type () (*it, t), ++ it;
+            functor_type::apply (*it, t), ++ it;
     }
     // Sparse (proxy) case
     template<class F, class V, class T>
@@ -170,7 +170,7 @@ namespace boost { namespace numeric { namespace ublas {
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
         while (it != it_end)
-            functor_type () (*it, t), ++ it;
+            functor_type::apply (*it, t), ++ it;
     }
 
     // Dispatcher
@@ -266,9 +266,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (e ().end () - ite == size, bad_size ());
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
         while (-- size >= 0)
-            functor_type () (*it, *ite), ++ it, ++ ite;
+            functor_type::apply (*it, *ite), ++ it, ++ ite;
 #else
-        DD (size, 2, r, (functor_type () (*it, *ite), ++ it, ++ ite));
+        DD (size, 2, r, (functor_type::apply (*it, *ite), ++ it, ++ ite));
 #endif
     }
     // Indexing case
@@ -281,10 +281,10 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
         for (size_type i = 0; i < size; ++ i)
-            functor_type () (v (i), e () (i));
+            functor_type::apply (v (i), e () (i));
 #else
         size_type i (0);
-        DD (size, 2, r, (functor_type () (v (i), e () (i)), ++ i));
+        DD (size, 2, r, (functor_type::apply (v (i), e () (i)), ++ i));
 #endif
     }
 
@@ -345,7 +345,7 @@ namespace boost { namespace numeric { namespace ublas {
                 it_size -= size;
                 if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
                     while (-- size >= 0)
-                        functor_type () (*it, value_type (0)), ++ it;
+                        functor_type::apply (*it, value_type (0)), ++ it;
                 } else {
                     it += size;
                 }
@@ -355,11 +355,11 @@ namespace boost { namespace numeric { namespace ublas {
         it_size -= size;
         ite_size -= size;
         while (-- size >= 0)
-            functor_type () (*it, *ite), ++ it, ++ ite;
+            functor_type::apply (*it, *ite), ++ it, ++ ite;
         size = it_size;
         if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
             while (-- size >= 0)
-                functor_type () (*it, value_type (0)), ++ it;
+                functor_type::apply (*it, value_type (0)), ++ it;
         } else {
             it += size;
         }
@@ -433,7 +433,7 @@ namespace boost { namespace numeric { namespace ublas {
             while (true) {
                 difference_type compare = it_index - ite_index;
                 if (compare == 0) {
-                    functor_type () (*it, *ite);
+                    functor_type::apply (*it, *ite);
                     ++ it, ++ ite;
                     if (it != it_end && ite != ite_end) {
                         it_index = it.index ();
@@ -442,7 +442,7 @@ namespace boost { namespace numeric { namespace ublas {
                         break;
                 } else if (compare < 0) {
                     if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
-                        functor_type () (*it, value_type (0));
+                        functor_type::apply (*it, value_type (0));
                         ++ it;
                     } else
                         increment (it, it_end, - compare);
@@ -462,7 +462,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
             while (it != it_end) {
-                functor_type () (*it, value_type (0));
+                functor_type::apply (*it, value_type (0));
                 ++ it;
             }
         } else {
@@ -511,7 +511,7 @@ namespace boost { namespace numeric { namespace ublas {
         typename V::iterator it (v.begin ());
         typename E::iterator ite (e ().begin ());
         while (-- size >= 0)
-            functor_type () (*it, *ite), ++ it, ++ ite;
+            functor_type::apply (*it, *ite), ++ it, ++ ite;
     }
     // Packed (proxy) case
     template<class F, class V, class E>
@@ -542,7 +542,7 @@ namespace boost { namespace numeric { namespace ublas {
         it_size -= size;
         ite_size -= size;
         while (-- size >= 0)
-            functor_type () (*it, *ite), ++ it, ++ ite;
+            functor_type::apply (*it, *ite), ++ it, ++ ite;
     }
     // Sparse proxy case
     template<class F, class V, class E>
@@ -567,7 +567,7 @@ namespace boost { namespace numeric { namespace ublas {
             while (true) {
                 difference_type compare = it_index - ite_index;
                 if (compare == 0) {
-                    functor_type () (*it, *ite);
+                    functor_type::apply (*it, *ite);
                     ++ it, ++ ite;
                     if (it != it_end && ite != ite_end) {
                         it_index = it.index ();
