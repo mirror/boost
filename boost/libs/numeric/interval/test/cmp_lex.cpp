@@ -36,8 +36,10 @@ static void test_12_34() {
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 // comparisons between [1,3] and [2,4]
@@ -58,8 +60,10 @@ static void test_13_24() {
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 // comparisons between [1,2] and [2,3]
@@ -80,8 +84,10 @@ static void test_12_23() {
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 // comparisons between [1,2] and 0
@@ -98,8 +104,10 @@ static void test_12_0() {
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 // comparisons between [1,2] and 1
@@ -116,8 +124,10 @@ static void test_12_1() {
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 // comparisons between [1,2] and 2
@@ -134,8 +144,10 @@ static void test_12_2() {
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 // comparisons between [1,2] and 3
@@ -152,8 +164,10 @@ static void test_12_3() {
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 static void test_12_12() {
@@ -162,8 +176,10 @@ static void test_12_12() {
   BOOST_CHECK(a == b);
   BOOST_CHECK(!(a != b));
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 static void test_11_11() {
@@ -172,8 +188,10 @@ static void test_11_11() {
   BOOST_CHECK(a == b);
   BOOST_CHECK(!(a != b));
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 static void test_11_1() {
@@ -183,8 +201,10 @@ static void test_11_1() {
   BOOST_CHECK(a == b);
   BOOST_CHECK(!(a != b));
 
+# ifdef __BORLANDC__
   detail::ignore_unused_variable_warning(a);
   detail::ignore_unused_variable_warning(b);
+# endif
 }
 
 int test_main(int, char *[]) {

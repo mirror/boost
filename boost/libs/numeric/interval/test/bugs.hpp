@@ -15,8 +15,9 @@
  * $Id$
  */
 
-// this should never hurt
+// Borland compiler complains about unused variables a bit easily
 
+#ifdef __BORLANDC__
 namespace detail {
 
   template <class T> inline void ignore_unused_variable_warning(const T&) { }
@@ -24,20 +25,19 @@ namespace detail {
   inline void ignore_warnings() {
 #   ifdef BOOST_NUMERIC_INTERVAL_CONSTANTS_HPP
     using namespace boost::numeric::interval_lib::constants;
-    detail::ignore_unused_variable_warning( pi_f_l );
-    detail::ignore_unused_variable_warning( pi_f_u );
-    detail::ignore_unused_variable_warning( pi_d_l );
-    detail::ignore_unused_variable_warning( pi_d_u );
+    ignore_unused_variable_warning( pi_f_l );
+    ignore_unused_variable_warning( pi_f_u );
+    ignore_unused_variable_warning( pi_d_l );
+    ignore_unused_variable_warning( pi_d_u );
 #   endif
   }
 
 }
+#endif
 
-// this would never hurt in theory, unless some conflict occurs (which
-// does not happen in this test suite...) but is not necessary unless the
-// platform is really bad with namespace resolution
+// Some compilers are broken with respect to name resolution
 
-#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)
+#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 
 using namespace boost;
 using namespace numeric;

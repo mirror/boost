@@ -22,10 +22,6 @@
 
 template<class I>
 void det(I (&mat)[size][size]) {
-  using namespace boost;
-  using namespace numeric;
-  using namespace interval_lib;
-
   for(int i = 0; i < size; i++)
     for(int j = 0; j < size; j++)
       mat[i][j] = I(1) / I(i + j + 1);
@@ -106,6 +102,8 @@ int test_main(int, char *[]) {
   BOOST_TEST(test<float>());
   BOOST_TEST(test<double>());
   BOOST_TEST(test<long double>());
+# ifdef __BORLANDC__
   detail::ignore_warnings();
+# endif
   return 0;
 }
