@@ -91,7 +91,7 @@ namespace boost {
   } // namespace detail
 
 template <typename Block, typename Allocator>
-class dynamic_bitset : public detail::dynamic_bitset_base<Block, Allocator>
+class dynamic_bitset : private detail::dynamic_bitset_base<Block, Allocator>
 {
   // Portability note: member function templates are defined inside
   // this class definition to avoid problems with VC++. Similarly,
@@ -118,11 +118,57 @@ public:
                 bs->reset(bit);
             return *this;       
         }
+        reference& operator|=(bool value)         // for b[i] |= x
+        {
+            if (value)
+                bs->set(bit);
+            return *this;       
+        }
+        reference& operator&=(bool value)         // for b[i] &= x
+        {
+            if (! (value && bs->test(bit)))
+                bs->reset(bit);
+            return *this;       
+        }
+        reference& operator^=(bool value)         // for b[i] ^= x
+        {
+            bs->set(bit, bs->test(bit) ^ value);
+            return *this;       
+        }
+        reference& operator-=(bool value)         // for b[i] -= x
+        {
+            if (!value)
+                bs->reset(bit);
+            return *this;       
+        }
         reference& operator=(const reference& j)  // for b[i] = b[j]
         {
-            if (j.bs->test(bit))
+            if (j.bs->test(j.bit))
                 bs->set(bit);
             else
+                bs->reset(bit);
+            return *this;           
+        }
+        reference& operator|=(const reference& j) // for b[i] |= b[j]
+        {
+            if (j.bs->test(j.bit))
+                bs->set(bit);
+            return *this;           
+        }
+        reference& operator&=(const reference& j) // for b[i] &= b[j]
+        {
+            if (! (j.bs->test(j.bit) && bs->test(bit)))
+                bs->reset(bit);
+            return *this;           
+        }
+        reference& operator^=(const reference& j) // for b[i] ^= b[j]
+        {
+            bs->set(bit, bs->test(bit) ^ j.bs->test(j.bit));
+            return *this;           
+        }
+        reference& operator-=(const reference& j) // for b[i] -= b[j]
+        {
+            if (!j.bs->test(j.bit))
                 bs->reset(bit);
             return *this;           
         }
