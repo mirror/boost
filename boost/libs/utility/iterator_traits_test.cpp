@@ -7,6 +7,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  04 Mar 2001 Patches for Intel C++ (Dave Abrahams)
 //  19 Feb 2001 Take advantage of improved iterator_traits to do more tests
 //              on MSVC. Reordered some #ifdefs for coherency.
 //              (David Abrahams)
@@ -153,7 +154,7 @@ input_iterator_test<std::istream_iterator<int>, int, std::ptrdiff_t, int*, int&,
 typedef ::std::char_traits<char>::off_type distance;
 non_pointer_test<std::ostream_iterator<int>,int,
     distance,int*,int&,std::output_iterator_tag> ostream_iterator_test;
-#elif defined(BOOST_MSVC) && !defined(__SGI_STL_PORT)
+#elif defined(BOOST_MSVC_STD_ITERATOR)
 non_pointer_test<std::ostream_iterator<int>,
     int, void, void, void, std::output_iterator_tag>
         ostream_iterator_test;
