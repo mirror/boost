@@ -35,7 +35,7 @@ inline void current_function_helper()
 
 # define BOOST_CURRENT_FUNCTION __FUNCSIG__
 
-#elif defined(__BORLANDC__)
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
 
 # define BOOST_CURRENT_FUNCTION __FUNC__
 
