@@ -23,10 +23,13 @@
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/apply.hpp"
 #include "boost/mpl/lambda.hpp"
+#include "boost/mpl/aux_/common_name_wknd.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 
 namespace boost {
 namespace mpl {
+
+BOOST_MPL_AUX_COMMON_NAME_WKND(max_element)
 
 namespace aux {
 
