@@ -21,7 +21,9 @@
 #include <boost/numeric/ublas/vector_sparse.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/matrix_sparse.hpp>
+#ifdef USE_GENERALIZED_VECTOR_OF_VECTOR
 #include <boost/numeric/ublas/vector_of_vector.hpp>
+#endif
 #include <boost/numeric/ublas/io.hpp>
 
 #include "test3.hpp"
