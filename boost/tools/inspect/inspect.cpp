@@ -18,6 +18,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
 
+#include <iostream>
 #include <cassert>
 #include <vector>
 #include <list>
@@ -32,6 +33,7 @@
 #include "link_check.hpp"
 #include "long_name_check.hpp"
 #include "tab_check.hpp"
+#include "cvs_iterator.hpp"
 
 namespace fs = boost::filesystem;
 
@@ -54,7 +56,7 @@ namespace
 
   boost::inspect::string_set content_signatures;
 
-  fs::directory_iterator end_itr;
+  hack::cvs_iterator end_itr;
 
   struct error_msg
   {
@@ -162,7 +164,7 @@ namespace
   {
     ++directory_count;
 
-    for ( fs::directory_iterator itr( dir_path ); itr != end_itr; ++itr )
+    for ( hack::cvs_iterator itr( dir_path ); itr != end_itr; ++itr )
     {
 
       if ( fs::is_directory( *itr ) )
@@ -185,27 +187,52 @@ namespace
     }
   }
 
-//  display_errors  ----------------------------------------------------------//
+//  display_summary  ---------------------------------------------------------//
 
-  void display_errors()
+  void display_summary()
   {
+    string current_library( msgs.begin()->library ); 
+    int err_count = 0;
+    for ( error_msg_vector::iterator itr ( msgs.begin() );
+      itr != msgs.end(); ++itr )
+    {
+      if ( current_library != itr->library )
+      {
+        std::cout << "  <tr><td><a href=\"#" 
+                  << current_library
+                  << "\">" << current_library
+                  << "</a></td><td align=\"center\">"
+                  << err_count << "</td></tr>\n";
+        current_library = itr->library;
+        err_count = 0;
+      }
+      ++err_count;
+    }
+  }
 
-    std::sort( msgs.begin(), msgs.end() );
+
+//  display_details  ---------------------------------------------------------//
+
+  void display_details()
+  {
 
     // display error messages with group indication
     error_msg current;
     string sep;
+    bool first = true;
     for ( error_msg_vector::iterator itr ( msgs.begin() );
       itr != msgs.end(); ++itr )
     {
       if ( current.library != itr->library )
       {
-        std::cout << "\n\n" << itr->library;
+        if ( !first ) std::cout << "</pre>\n";
+        std::cout << "\n<h3><a name=\"" << itr->library
+                  << "\">" << itr->library << "</a></h3>\n<pre>";
       }
       if ( current.library != itr->library
         || current.rel_path != itr->rel_path )
       {
-        std::cout << "\n   " << itr->rel_path;
+        std::cout << "\n<br>" << itr->rel_path;
         sep = ": ";
       }
       if ( current.library != itr->library
@@ -218,6 +245,7 @@ namespace
       current.library = itr->library;
       current.rel_path = itr->rel_path;
       current.msg = itr->msg;
+      first = false;
    }
   }
 
@@ -298,13 +326,63 @@ int cpp_main( int argc, char * argv[] )
     itr->inspector->close();
   }
 
-  display_errors();
+  char run_date[128];
+  std::time_t tod;
+  std::time( &tod );
+  std::strftime( run_date, sizeof(run_date),
+    "%X UTC, %A %d %B %Y", std::gmtime( &tod ) );
 
-  std::cout << "\n\n";
-  std::cout << file_count << " files scanned\n";
-  std::cout << directory_count << " directories scanned\n";
-  std::cout << error_count << " problems reported\n";
-  std::cout << "\nproblem counts:\n";
+  std::cout << "<html>\n"
+          "<head>\n"
+          "<title>Boost Inspection Report</title>\n"
+          "</head>\n"
+          "<body bgcolor=\"#ffffff\" text=\"#000000\">\n"
+          "<table border=\"0\">\n"
+          "<tr>\n"
+          "<td><img border=\"0\" src=\"../c++boost.gif\" width=\"277\" "
+          "height=\"86\"></td>\n"
+          "<td align=\"center\">\n"
+          "<h1>Boost Inspection Report</h1>\n"
+          "<b>Run Date:</b> " << run_date  << "\n"
+          "</td>\n"
+          "</table>\n"
+          "<p>An <a href=\"http://www.boost.org/tools/inspect/index.html\">inspection\n" 
+          "program</a> checks each file in the current Boost CVS for various problems,\n" 
+          "generating this web page as output. Problems detected include tabs in files,\n" 
+          "missing copyrights, broken URL's, and similar misdemeanors.</p>\n"
+          ;
 
+  std::cout << "<h2>Totals</h2>\n<pre>"
+            << file_count << " files scanned\n"
+            << directory_count << " directories scanned\n"
+            << error_count << " problems reported\n"
+            << "\nproblem counts:\n";
+
+  for ( inspector_list::iterator itr = inspectors.begin();
+        itr != inspectors.end(); ++itr )
+  {
+    itr->inspector.reset();
+  }
+
+  std::cout << "</pre>\n"
+          "<h2>Summary</h2>\n"
+          "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
+          "  <tr>\n"
+          "    <td><b>Library</b></td>\n"
+          "    <td><b>Problems</b></td>\n"
+          "  </tr>\n"
+          ;
+
+  std::sort( msgs.begin(), msgs.end() );
+
+  display_summary();
+
+  std::cout << "</table>\n"
+               "<h2>Details</h2>\n";
+
+  display_details();
+
+  std::cout << "</body>\n"
+               "</html>\n";
   return 0;
 }
