@@ -165,7 +165,9 @@ struct iterator_category_with_traversal
     BOOST_STATIC_ASSERT(is_iterator_category<Category>::value);
     BOOST_STATIC_ASSERT(!is_iterator_category<Traversal>::value);
     BOOST_STATIC_ASSERT(!is_iterator_traversal<Category>::value);
+#  if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
     BOOST_STATIC_ASSERT(is_iterator_traversal<Traversal>::value);
+#  endif 
 # endif 
 };
 
