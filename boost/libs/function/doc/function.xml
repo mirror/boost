@@ -3,7 +3,7 @@
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <library name="Function" dirname="function" id="function" 
          last-revision="$Date$" 
-         xmlns:xi="http://www.w3.org/2003/XInclude">
+         xmlns:xi="http://www.w3.org/2001/XInclude">
 <libraryinfo>
   <author>
     <firstname>Douglas</firstname>
