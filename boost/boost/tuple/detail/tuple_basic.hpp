@@ -555,25 +555,25 @@ tuple<> inline make_tuple() {
 template<class T0>
 typename boost::detail::tuples::make_tuple_mapper<T0>::type
 inline make_tuple(const T0& t0) {
-  return boost::detail::tuples::make_tuple_mapper<T0>::type(t0); 
+  return typename boost::detail::tuples::make_tuple_mapper<T0>::type(t0); 
 }
 
 template<class T0, class T1>
 typename boost::detail::tuples::make_tuple_mapper<T0, T1>::type
 inline make_tuple(const T0& t0, const T1& t1) {
-  return boost::detail::tuples::make_tuple_mapper<T0, T1>::type(t0, t1); 
+  return typename boost::detail::tuples::make_tuple_mapper<T0, T1>::type(t0, t1); 
 }
 
 template<class T0, class T1, class T2>
 typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2>::type
 inline make_tuple(const T0& t0, const T1& t1, const T2& t2) {
-  return boost::detail::tuples::make_tuple_mapper<T0, T1, T2>::type(t0, t1, t2); 
+  return typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2>::type(t0, t1, t2); 
 }
 
 template<class T0, class T1, class T2, class T3>
 typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3>::type
 inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3) {
-  return boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3>::type
+  return typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3>::type
            (t0, t1, t2, t3); 
 }
 
@@ -581,7 +581,7 @@ template<class T0, class T1, class T2, class T3, class T4>
 typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4>::type
 inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4) {
-  return boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4>::type
+  return typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4>::type
            (t0, t1, t2, t3, t4); 
 }
 
@@ -589,7 +589,7 @@ template<class T0, class T1, class T2, class T3, class T4, class T5>
 typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type
 inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5) {
-  return boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type
+  return typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type
            (t0, t1, t2, t3, t4, t5); 
 }
 
@@ -597,7 +597,7 @@ template<class T0, class T1, class T2, class T3, class T4, class T5, class T6>
 typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5, T6>::type
 inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6) {
-  return boost::detail::tuples::make_tuple_mapper
+  return typename boost::detail::tuples::make_tuple_mapper
            <T0, T1, T2, T3, T4, T5, T6>::type
            (t0, t1, t2, t3, t4, t5, t6); 
 }
@@ -607,7 +607,7 @@ template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
 typename boost::detail::tuples::make_tuple_mapper<T0, T1, T2, T3, T4, T5, T6, T7>::type
 inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7) {
-  return boost::detail::tuples::make_tuple_mapper
+  return typename boost::detail::tuples::make_tuple_mapper
            <T0, T1, T2, T3, T4, T5, T6, T7>::type
            (t0, t1, t2, t3, t4, t5, t6, t7); 
 }
@@ -619,7 +619,7 @@ typename boost::detail::tuples::make_tuple_mapper
 inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7,
                   const T8& t8) {
-  return boost::detail::tuples::make_tuple_mapper
+  return typename boost::detail::tuples::make_tuple_mapper
            <T0, T1, T2, T3, T4, T5, T6, T7, T8>::type
            (t0, t1, t2, t3, t4, t5, t6, t7, t8); 
 }
@@ -631,7 +631,7 @@ typename boost::detail::tuples::make_tuple_mapper
 inline make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7,
                   const T8& t8, const T9& t9) {
-  return boost::detail::tuples::make_tuple_mapper
+  return typename boost::detail::tuples::make_tuple_mapper
            <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>::type
            (t0, t1, t2, t3, t4, t5, t6, t7, t8, t9); 
 }
