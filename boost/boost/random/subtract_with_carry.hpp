@@ -168,7 +168,10 @@ public:
 
 private:
   // returns x(i-r+index), where index is in 0..r-1
-  IntType compute(unsigned int index) const;
+  IntType compute(unsigned int index) const
+  {
+    return x[(k+index) % long_lag];
+  }
 
   // state representation; next output (state) is x(i)
   //   x[0]  ... x[k] x[k+1] ... x[long_lag-1]     represents
@@ -204,12 +207,6 @@ const unsigned int subtract_with_carry<IntType, m, s, r, val>::long_lag;
 template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
 const unsigned int subtract_with_carry<IntType, m, s, r, val>::short_lag;
 #endif
-
-template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
-IntType subtract_with_carry<IntType, m, s, r, val>::compute(unsigned int index) const
-{
-  return x[(k+index) % long_lag];
-}
 
 
 // use a floating-point representation to produce values in [0..1)
