@@ -16,23 +16,13 @@
 #include <locale>
 #include <set>
 #include <boost/algorithm/string/collection_traits.hpp>
+#include <boost/algorithm/string/predicate_facade.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
 namespace boost {
     namespace algorithm {
         namespace detail {
-
-//  predicate facade ------------------------------------------------------//
-
-            // Predicate facade
-            /*
-                This class allows to recognize classification
-                predicates, so that they can be combined using
-                composition operators.
-            */
-            template<typename Derived>
-            struct predicate_facade {};
-
+			
 //  classification functors -----------------------------------------------//
             
             // is_classified functor
