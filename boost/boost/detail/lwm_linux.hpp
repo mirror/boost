@@ -16,6 +16,16 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
+//
+//  This implementation uses <asm/atomic.h>. This is a kernel header;
+//  using kernel headers in a user program may cause a number of problems,
+//  and not all flavors of Linux provide the atomic instructions.
+//
+//  This file is only provided because the performance of this implementation
+//  is about 3.5 times higher than the pthreads version. Use at your own risk
+//  (by defining BOOST_USE_ASM_ATOMIC_H.)
+//
+
 #include <asm/atomic.h>
 #include <sched.h>
 

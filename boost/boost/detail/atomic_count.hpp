@@ -72,6 +72,8 @@
 //      are called driven by smart_ptr interface...
 //
 
+//  Note: atomic_count_linux.hpp has been disabled by default; see the
+//        comments inside for more info.
 
 #include <boost/config.hpp>
 
@@ -90,17 +92,12 @@ typedef long atomic_count;
 }
 
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
-
-#include <boost/detail/atomic_count_win32.hpp>
-
-#elif defined(linux) || defined(__linux) || defined(__linux__)
-
-#include <boost/detail/atomic_count_linux.hpp>
-
+#  include <boost/detail/atomic_count_win32.hpp>
+//#elif defined(linux) || defined(__linux) || defined(__linux__)
+#elif defined(BOOST_USE_ASM_ATOMIC_H)
+#  include <boost/detail/atomic_count_linux.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
-
-#include <boost/detail/atomic_count_pthreads.hpp>
-
+#  include <boost/detail/atomic_count_pthreads.hpp>
 #else
 
 // #warning Unrecognized platform, detail::atomic_count will not be thread safe

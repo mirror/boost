@@ -31,6 +31,9 @@
 //  * Never keep a lightweight_mutex locked for long periods.
 //
 
+//  Note: lwm_linux.hpp has been disabled by default; see the comments
+//        inside for more info.
+
 
 #include <boost/config.hpp>
 
@@ -38,7 +41,8 @@
 #  include <boost/detail/lwm_nop.hpp>
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  include <boost/detail/lwm_win32.hpp>
-#elif defined(linux) || defined(__linux) || defined(__linux__)
+//#elif defined(linux) || defined(__linux) || defined(__linux__)
+#elif defined(BOOST_USE_ASM_ATOMIC_H)
 #  include <boost/detail/lwm_linux.hpp>
 #elif defined(__sgi)
 #  include <boost/detail/lwm_irix.hpp>
