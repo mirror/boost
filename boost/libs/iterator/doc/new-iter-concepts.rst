@@ -669,11 +669,11 @@ Interoperable Iterators [lib.interoperable.iterators]
 
 A class or built-in type ``X`` that models Single Pass Iterator is
 *interoperable with* a class or built-in type ``Y`` that also models
-Single Pass Iterator if both ``X`` and ``Y`` have the same difference
-type and traversal tag and if the following expressions are valid and
-respect the stated semantics. In the tables below, ``x`` is an object
-of type ``X``, ``y`` is an object of type ``Y``, ``Distance`` is
-``iterator_traits<X>::difference_type``, and ``n`` represents a
+Single Pass Iterator if both ``X`` and ``Y`` have the same traversal
+tag and if the following expressions are valid and respect the stated
+semantics. In the tables below, ``x`` is an object of type ``X``,
+``y`` is an object of type ``Y``, ``Distance`` is
+``iterator_traits<Y>::difference_type``, and ``n`` represents a
 constant object of type ``Distance``.
 
 If the traversal tag for ``X`` and ``Y`` is convertible to
@@ -724,16 +724,16 @@ be met.
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 |``y <= x``                                 |convertible to ``bool``                          |``!(y > x)``             |                      |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
-|``y - x``                                  |``Distance``                                     |``x < y ?  distance(x,y) |pre: there exists a   |
-|                                           |                                                 |: -distance(y,x)``       |value ``n`` of        |
-|                                           |                                                 |                         |``Distance`` such that|
+|``y - x``                                  |``Distance``                                     |``x < y ?                |pre: there exists a   |
+|                                           |                                                 |distance(Y(x),y)         |value ``n`` of        |
+|                                           |                                                 |: -distance(y,Y(x))``    |``Distance`` such that|
 |                                           |                                                 |                         |``x + n == y``.  ``y  |
 |                                           |                                                 |                         |== x + (y - x)``.     |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
-|``x - y``                                  |``Distance``                                     |``y < x ?  distance(y,x) |pre: there exists a   |
-|                                           |                                                 |: -distance(x,y)``       |value ``n`` of        |
-|                                           |                                                 |                         |``Distance`` such that|
-|                                           |                                                 |                         |``y + n == x``.  ``x  |
+|``x - y``                                  |``Distance``                                     |``y < x ?                |pre: there exists a   |
+|                                           |                                                 |distance(y,Y(x))         |value ``n`` of        |
+|                                           |                                                 |: -distance(Y(x),y)``    |``Distance`` such that|   
+|                                           |                                                 |                         |``y + n == x``.  ``x  | 
 |                                           |                                                 |                         |== y + (x - y)``.     |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 

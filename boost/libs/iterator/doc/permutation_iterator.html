@@ -44,17 +44,18 @@ in a potentially different order.</td>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#introduction" id="id5" name="id5">Introduction</a></li>
-<li><a class="reference" href="#reference" id="id6" name="id6">Reference</a><ul>
-<li><a class="reference" href="#permutation-iterator-requirements" id="id7" name="id7"><tt class="literal"><span class="pre">permutation_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#permutation-iterator-operations" id="id8" name="id8"><tt class="literal"><span class="pre">permutation_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#introduction" id="id2" name="id2">Introduction</a></li>
+<li><a class="reference" href="#reference" id="id3" name="id3">Reference</a><ul>
+<li><a class="reference" href="#permutation-iterator-requirements" id="id4" name="id4"><tt class="literal"><span class="pre">permutation_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#permutation-iterator-models" id="id5" name="id5"><tt class="literal"><span class="pre">permutation_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#permutation-iterator-operations" id="id6" name="id6"><tt class="literal"><span class="pre">permutation_iterator</span></tt> operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#example" id="id9" name="id9">Example</a></li>
+<li><a class="reference" href="#example" id="id7" name="id7">Example</a></li>
 </ul>
 </div>
 <div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id5" name="introduction">Introduction</a></h1>
+<h1><a class="toc-backref" href="#id2" name="introduction">Introduction</a></h1>
 <p>The adaptor takes two arguments:</p>
 <blockquote>
 <ul class="simple">
@@ -74,7 +75,7 @@ end permutation iterator is completely defined by means of the
 past-the-end iterator to the indices.</p>
 </div>
 <div class="section" id="reference">
-<h1><a class="toc-backref" href="#id6" name="reference">Reference</a></h1>
+<h1><a class="toc-backref" href="#id3" name="reference">Reference</a></h1>
 <pre class="literal-block">
 template&lt; class ElementIterator
         , class IndexIterator
@@ -94,9 +95,12 @@ public:
       , typename enable_if_convertible&lt;OEIter, ElementIterator&gt;::type* = 0
       , typename enable_if_convertible&lt;OIIter, IndexIterator&gt;::type* = 0
       );
+  reference operator*() const;
+  permutation_iterator&amp; operator++();
   ElementIterator base() const;
 private:
-  ElementIterator m_iterator; // exposition
+  ElementIterator m_iterator; // exposition only
+  IndexIterator m_order;      // exposition only
 };
 
 template &lt;class ElementIterator, class IndexIterator&gt;
@@ -104,33 +108,87 @@ permutation_iterator&lt;ElementIterator, IndexIterator&gt;
 make_permutation_iterator( ElementIterator e, IndexIterator i);
 </pre>
 <div class="section" id="permutation-iterator-requirements">
-<h2><a class="toc-backref" href="#id7" name="permutation-iterator-requirements"><tt class="literal"><span class="pre">permutation_iterator</span></tt> requirements</a></h2>
-<p><tt class="literal"><span class="pre">ElementIterator</span></tt> must be a model of <a class="reference" href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterator</a>.
-<tt class="literal"><span class="pre">IndexIterator</span></tt> must at least be a model <a class="reference" href="http://www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>.  The
-value type of the <tt class="literal"><span class="pre">IndexIterator</span></tt> must be convertible to the
-difference type of <tt class="literal"><span class="pre">ElementIterator</span></tt>.</p>
+<h2><a class="toc-backref" href="#id4" name="permutation-iterator-requirements"><tt class="literal"><span class="pre">permutation_iterator</span></tt> requirements</a></h2>
+<p><tt class="literal"><span class="pre">ElementIterator</span></tt> shall model Random Access Traversal Iterator.
+<tt class="literal"><span class="pre">IndexIterator</span></tt> shall model Readable Iterator.  The value type of
+the <tt class="literal"><span class="pre">IndexIterator</span></tt> must be convertible to the difference type of
+<tt class="literal"><span class="pre">ElementIterator</span></tt>.</p>
+</div>
+<div class="section" id="permutation-iterator-models">
+<h2><a class="toc-backref" href="#id5" name="permutation-iterator-models"><tt class="literal"><span class="pre">permutation_iterator</span></tt> models</a></h2>
+<p><tt class="literal"><span class="pre">permutation_iterator</span></tt> models the same iterator traversal concepts
+as <tt class="literal"><span class="pre">IndexIterator</span></tt> and the same iterator access concepts as
+<tt class="literal"><span class="pre">ElementIterator</span></tt>.</p>
+<p>If <tt class="literal"><span class="pre">IndexIterator</span></tt> models Single Pass Iterator and 
+<tt class="literal"><span class="pre">ElementIterator</span></tt> models Readable Iterator then
+<tt class="literal"><span class="pre">permutation_iterator</span></tt> models Input Iterator.</p>
+<p>If <tt class="literal"><span class="pre">IndexIterator</span></tt> models Forward Traversal Iterator and 
+<tt class="literal"><span class="pre">ElementIterator</span></tt> models Readable Lvalue Iterator then
+<tt class="literal"><span class="pre">permutation_iterator</span></tt> models Forward Iterator.</p>
+<p>If <tt class="literal"><span class="pre">IndexIterator</span></tt> models Bidirectional Traversal Iterator and 
+<tt class="literal"><span class="pre">ElementIterator</span></tt> models Readable Lvalue Iterator then
+<tt class="literal"><span class="pre">permutation_iterator</span></tt> models Bidirectional Iterator.</p>
+<p>If <tt class="literal"><span class="pre">IndexIterator</span></tt> models Random Access Traversal Iterator and
+<tt class="literal"><span class="pre">ElementIterator</span></tt> models Readable Lvalue Iterator then
+<tt class="literal"><span class="pre">permutation_iterator</span></tt> models Random Access Iterator.</p>
 </div>
 <div class="section" id="permutation-iterator-operations">
-<h2><a class="toc-backref" href="#id8" name="permutation-iterator-operations"><tt class="literal"><span class="pre">permutation_iterator</span></tt> operations</a></h2>
-<p>The permutation iterator implements the member functions and operators
-required for the <a class="reference" href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random Access Iterator</a> concept. However, the
-permutation iterator can only meet the complexity guarantees of the
-same concept as the IndexIterator. Thus for instance, although the
-permutation iterator provides <tt class="literal"><span class="pre">operator+=(distance)</span></tt>, this operation
-will take linear time in case the IndexIterator is a model of
-ForwardIterator instead of amortized constant time.</p>
+<h2><a class="toc-backref" href="#id6" name="permutation-iterator-operations"><tt class="literal"><span class="pre">permutation_iterator</span></tt> operations</a></h2>
+<p>In addition to those operations required by the concepts that
+<tt class="literal"><span class="pre">permutation_iterator</span></tt> models, <tt class="literal"><span class="pre">permutation_iterator</span></tt> provides the
+following operations.</p>
+<p><tt class="literal"><span class="pre">permutation_iterator();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Default constructs <tt class="literal"><span class="pre">m_iterator</span></tt> and <tt class="literal"><span class="pre">m_order</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">explicit</span> <span class="pre">permutation_iterator(ElementIterator</span> <span class="pre">x,</span> <span class="pre">IndexIterator</span> <span class="pre">y);</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs <tt class="literal"><span class="pre">m_iterator</span></tt> from <tt class="literal"><span class="pre">x</span></tt> and <tt class="literal"><span class="pre">m_order</span></tt> from <tt class="literal"><span class="pre">y</span></tt>.</td>
+</tr>
+</tbody>
+</table>
 <pre class="literal-block">
-template &lt;class ElementIterator, class IndexIterator&gt;
-permutation_iterator&lt;ElementIterator, IndexIterator&gt; 
-make_permutation_iterator(ElementIterator e, IndexIterator i);
+template&lt; class OEIter, class OIIter, class V, class C, class R, class D &gt;
+permutation_iterator(
+    permutation_iterator&lt;OEIter, OIIter, V, C, R, D&gt; const&amp; r
+    , typename enable_if_convertible&lt;OEIter, ElementIterator&gt;::type* = 0
+    , typename enable_if_convertible&lt;OIIter, IndexIterator&gt;::type* = 0
+    );
 </pre>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">permutation_iterator&lt;ElementIterator,</span> <span class="pre">IndexIterator&gt;</span></tt>
-that views the range of elements starting at <tt class="literal"><span class="pre">e`</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">order</span> <span class="pre">given</span>
-<span class="pre">by</span> <span class="pre">``i</span></tt>.</td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body">Constructs <tt class="literal"><span class="pre">m_iterator</span></tt> from <tt class="literal"><span class="pre">r.m_iterator</span></tt> and
+<tt class="literal"><span class="pre">m_order</span></tt> from <tt class="literal"><span class="pre">y.m_order</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*(m_iterator</span> <span class="pre">+</span> <span class="pre">*m_order)</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">permutation_iterator&amp;</span> <span class="pre">operator++();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="literal"><span class="pre">++m_order</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*this</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -143,10 +201,23 @@ that views the range of elements starting at <tt class="literal"><span class="pr
 </tr>
 </tbody>
 </table>
+<pre class="literal-block">
+template &lt;class ElementIterator, class IndexIterator&gt;
+permutation_iterator&lt;ElementIterator, IndexIterator&gt; 
+make_permutation_iterator(ElementIterator e, IndexIterator i);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">permutation_iterator&lt;ElementIterator,</span> <span class="pre">IndexIterator&gt;(e,</span> <span class="pre">i)</span></tt></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section" id="example">
-<h1><a class="toc-backref" href="#id9" name="example">Example</a></h1>
+<h1><a class="toc-backref" href="#id7" name="example">Example</a></h1>
 <pre class="literal-block">
 using namespace boost;
 int i = 0;
@@ -214,7 +285,7 @@ Iterate backward with stride 2 : 6 8
 <hr class="footer" />
 <div class="footer">
 <a class="reference" href="permutation_iterator.rst">View document source</a>.
-Generated on: 2004-01-13 14:27 UTC.
+Generated on: 2004-01-13.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

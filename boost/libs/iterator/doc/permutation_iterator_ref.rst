@@ -18,9 +18,12 @@
 	, typename enable_if_convertible<OEIter, ElementIterator>::type* = 0
 	, typename enable_if_convertible<OIIter, IndexIterator>::type* = 0
 	);
+    reference operator*() const;
+    permutation_iterator& operator++();
     ElementIterator base() const;
   private:
-    ElementIterator m_iterator; // exposition
+    ElementIterator m_iterator; // exposition only
+    IndexIterator m_order;      // exposition only
   };
 
   template <class ElementIterator, class IndexIterator>
@@ -32,30 +35,80 @@
 ``permutation_iterator`` requirements
 -------------------------------------
 
-``ElementIterator`` must be a model of RandomAccessIterator__.
-``IndexIterator`` must at least be a model ForwardIterator__.  The
-value type of the ``IndexIterator`` must be convertible to the
-difference type of ``ElementIterator``.
-
-__ http://www.sgi.com/tech/stl/RandomAccessIterator.html
-
-__ http://www.sgi.com/tech/stl/ForwardIterator.html
+``ElementIterator`` shall model Random Access Traversal Iterator.
+``IndexIterator`` shall model Readable Iterator.  The value type of
+the ``IndexIterator`` must be convertible to the difference type of
+``ElementIterator``.
 
 
+``permutation_iterator`` models
+-------------------------------
+
+``permutation_iterator`` models the same iterator traversal concepts
+as ``IndexIterator`` and the same iterator access concepts as
+``ElementIterator``.
+
+If ``IndexIterator`` models Single Pass Iterator and 
+``ElementIterator`` models Readable Iterator then
+``permutation_iterator`` models Input Iterator.
+
+If ``IndexIterator`` models Forward Traversal Iterator and 
+``ElementIterator`` models Readable Lvalue Iterator then
+``permutation_iterator`` models Forward Iterator.
+
+If ``IndexIterator`` models Bidirectional Traversal Iterator and 
+``ElementIterator`` models Readable Lvalue Iterator then
+``permutation_iterator`` models Bidirectional Iterator.
+
+If ``IndexIterator`` models Random Access Traversal Iterator and
+``ElementIterator`` models Readable Lvalue Iterator then
+``permutation_iterator`` models Random Access Iterator.
 
 
 ``permutation_iterator`` operations
 -----------------------------------
 
-The permutation iterator implements the member functions and operators
-required for the `Random Access Iterator`__ concept. However, the
-permutation iterator can only meet the complexity guarantees of the
-same concept as the IndexIterator. Thus for instance, although the
-permutation iterator provides ``operator+=(distance)``, this operation
-will take linear time in case the IndexIterator is a model of
-ForwardIterator instead of amortized constant time.
+In addition to those operations required by the concepts that
+``permutation_iterator`` models, ``permutation_iterator`` provides the
+following operations.
 
-__ http://www.sgi.com/tech/stl/RandomAccessIterator.html
+``permutation_iterator();``
+
+:Effects: Default constructs ``m_iterator`` and ``m_order``.
+
+
+``explicit permutation_iterator(ElementIterator x, IndexIterator y);``
+
+:Effects: Constructs ``m_iterator`` from ``x`` and ``m_order`` from ``y``.
+
+
+::
+
+    template< class OEIter, class OIIter, class V, class C, class R, class D >
+    permutation_iterator(
+	permutation_iterator<OEIter, OIIter, V, C, R, D> const& r
+	, typename enable_if_convertible<OEIter, ElementIterator>::type* = 0
+	, typename enable_if_convertible<OIIter, IndexIterator>::type* = 0
+	);
+
+:Effects: Constructs ``m_iterator`` from ``r.m_iterator`` and
+  ``m_order`` from ``y.m_order``.
+
+
+``reference operator*() const;``
+
+:Returns: ``*(m_iterator + *m_order)``
+
+
+``permutation_iterator& operator++();``
+
+:Effects: ``++m_order``
+:Returns: ``*this``
+
+
+``ElementIterator base() const;``
+
+:Returns: ``m_iterator``
 
 
 ::
@@ -64,11 +117,5 @@ __ http://www.sgi.com/tech/stl/RandomAccessIterator.html
   permutation_iterator<ElementIterator, IndexIterator> 
   make_permutation_iterator(ElementIterator e, IndexIterator i);
 
-:Returns: An instance of ``permutation_iterator<ElementIterator, IndexIterator>``
-  that views the range of elements starting at ``e` in the order given
-  by ``i``.
+:Returns: ``permutation_iterator<ElementIterator, IndexIterator>(e, i)``
 
-
-``ElementIterator base() const;``
-
-:Returns: ``m_iterator``
