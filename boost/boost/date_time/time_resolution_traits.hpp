@@ -8,6 +8,7 @@
 
 
 #include "boost/date_time/time_defs.hpp"
+#include "boost/date_time/int_adapter.hpp"
 #include "boost/cstdint.hpp"
 
 namespace boost {
@@ -22,19 +23,67 @@ namespace date_time {
     return x < 0 ? -x : x;
   }
 
+  //! traits struct for time_resolution_traits implementation type
+  struct time_resolution_traits_bi32_impl {
+    typedef boost::int32_t int_type;
+    typedef boost::int32_t impl_type;
+    static int_type as_number(impl_type i){ return i;}
+    //! Used to determine if implemented type is int_adapter or int
+    static bool is_adapted() { return false;}
+  };
+  //! traits struct for time_resolution_traits implementation type
+  struct time_resolution_traits_adapted32_impl {
+    typedef boost::int32_t int_type;
+    typedef boost::date_time::int_adapter<boost::int32_t> impl_type;
+    static int_type as_number(impl_type i){ return i.as_number();}
+    //! Used to determine if implemented type is int_adapter or int
+    static bool is_adapted() { return true;}
+  };
+  //! traits struct for time_resolution_traits implementation type
+  struct time_resolution_traits_bi64_impl {
+    typedef boost::int64_t int_type;
+    typedef boost::int64_t impl_type;
+    static int_type as_number(impl_type i){ return i;}
+    //! Used to determine if implemented type is int_adapter or int
+    static bool is_adapted() { return false;}
+  };
+  //! traits struct for time_resolution_traits implementation type
+  struct time_resolution_traits_adapted64_impl {
+    typedef boost::int64_t int_type;
+    typedef boost::date_time::int_adapter<boost::int64_t> impl_type;
+    static int_type as_number(impl_type i){ return i.as_number();}
+    //! Used to determine if implemented type is int_adapter or int
+    static bool is_adapted() { return true;}
+  };
+
   template<typename frac_sec_type, 
-           time_resolutions res, 
-           frac_sec_type resolution_adjust,
+           time_resolutions res,
+#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+	   boost::int64_t resolution_adjust,
+#else
+           typename frac_sec_type::int_type resolution_adjust,
+#endif
            unsigned short frac_digits,
            typename v_type = boost::int32_t >
   class time_resolution_traits {
   public:
-    typedef frac_sec_type fractional_seconds_type;
-    typedef frac_sec_type tick_type;
+    typedef typename frac_sec_type::int_type fractional_seconds_type;
+    typedef typename frac_sec_type::int_type tick_type;
+    typedef typename frac_sec_type::impl_type impl_type;
     typedef v_type  day_type;
     typedef v_type  hour_type;
     typedef v_type  min_type;
     typedef v_type  sec_type;
+
+    // bring in function from frac_sec_type traits structs
+    static typename frac_sec_type::int_type as_number(typename frac_sec_type::impl_type i)
+    {
+      return frac_sec_type::as_number(i);
+    }
+    static bool is_adapted()
+    {
+      return frac_sec_type::is_adapted();
+    }
 
     //Would like this to be frac_sec_type, but some compilers complain
     BOOST_STATIC_CONSTANT(int, ticks_per_second = resolution_adjust);
@@ -64,9 +113,9 @@ namespace date_time {
 	minutes = absolute_value(minutes);
 	seconds = absolute_value(seconds);
 	fs = absolute_value(fs);
-        return (-1 *(((fractional_seconds_type(hours)*3600) 
+        return (((((fractional_seconds_type(hours)*3600) 
                  + (fractional_seconds_type(minutes)*60) 
-                 + seconds)*res_adjust()) + fs);
+                 + seconds)*res_adjust()) + fs) * -1);
       }
       else{
         return (((fractional_seconds_type(hours)*3600) 
@@ -77,9 +126,9 @@ namespace date_time {
     
   };
 
-  typedef time_resolution_traits<boost::int32_t, milli, 1000, 3 > milli_res;
-  typedef time_resolution_traits<boost::int64_t, micro, 1000000, 6 > micro_res;
-  typedef time_resolution_traits<boost::int64_t, nano,  1000000000, 9 > nano_res;
+  typedef time_resolution_traits<time_resolution_traits_adapted32_impl, milli, 1000, 3 > milli_res;
+  typedef time_resolution_traits<time_resolution_traits_adapted64_impl, micro, 1000000, 6 > micro_res;
+  typedef time_resolution_traits<time_resolution_traits_adapted64_impl, nano,  1000000000, 9 > nano_res;
 
 
 } } //namespace date_time

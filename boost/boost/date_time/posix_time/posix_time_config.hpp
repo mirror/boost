@@ -2,7 +2,7 @@
 #define POSIX_TIME_CONFIG_HPP___
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/time_duration.hpp"
@@ -34,14 +34,15 @@ namespace posix_time {
 #define BOOST_DATE_TIME_HAS_MILLISECONDS
 #define BOOST_DATE_TIME_HAS_MICROSECONDS
 #define BOOST_DATE_TIME_HAS_NANOSECONDS
-  typedef date_time::time_resolution_traits<boost::int64_t, boost::date_time::nano, 
-                                            1000000000, 9 > time_res_traits;
+  typedef date_time::time_resolution_traits<boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::nano, 
+    1000000000, 9 > time_res_traits;
 #else
   // set up conditional test compilations
 #define BOOST_DATE_TIME_HAS_MILLISECONDS
 #define BOOST_DATE_TIME_HAS_MICROSECONDS
 #undef  BOOST_DATE_TIME_HAS_NANOSECONDS
-  typedef date_time::time_resolution_traits<boost::int64_t, boost::date_time::micro, 
+  typedef date_time::time_resolution_traits<
+    boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 
                                             1000000, 6 > time_res_traits;
 
 
@@ -68,6 +69,7 @@ namespace posix_time {
     typedef time_res_traits::sec_type sec_type;
     typedef time_res_traits::fractional_seconds_type fractional_seconds_type;
     typedef time_res_traits::tick_type tick_type;
+    typedef time_res_traits::impl_type impl_type;
     time_duration(hour_type hour,
                   min_type min,
                   sec_type sec,
@@ -77,10 +79,14 @@ namespace posix_time {
     time_duration() :
       date_time::time_duration<time_duration, time_res_traits>(0,0,0)
     {}
+    //! Construct from special_values
+    time_duration(boost::date_time::special_values sv) :
+      date_time::time_duration<time_duration, time_res_traits>(sv)
+    {}
     //Give duration access to ticks constructor -- hide from users
     friend class date_time::time_duration<time_duration, time_res_traits>;
   private:
-    explicit time_duration(tick_type ticks) :
+    explicit time_duration(impl_type ticks) :
       date_time::time_duration<time_duration, time_res_traits>(ticks)
     {}
   };
@@ -98,6 +104,22 @@ namespace posix_time {
     {}
     date_type day;
     time_duration_type time_of_day;
+    bool is_special()const
+    {
+      return(is_pos_infinity() || is_neg_infinity() || is_not_a_date_time());
+    }
+    bool is_pos_infinity()const
+    {
+      return(day.is_pos_infinity() || time_of_day.is_pos_infinity());
+    }
+    bool is_neg_infinity()const
+    {
+      return(day.is_neg_infinity() || time_of_day.is_neg_infinity());
+    }
+    bool is_not_a_date_time()const
+    {
+      return(day.is_not_a_date() || time_of_day.is_not_a_date_time());
+    }
   };
 
   class posix_time_system_config 
@@ -121,10 +143,12 @@ namespace posix_time {
   {
    public:
     typedef boost::int64_t time_rep_type;
+    //typedef time_res_traits::tick_type time_rep_type;
     typedef gregorian::date date_type;
     typedef gregorian::date_duration date_duration_type;
     typedef time_duration time_duration_type;
     typedef time_res_traits::tick_type int_type;
+    typedef time_res_traits::impl_type impl_type;
     typedef time_res_traits resolution_traits;
 #if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT)) //help bad compilers 
 #else

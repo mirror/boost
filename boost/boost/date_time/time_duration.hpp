@@ -7,6 +7,7 @@
 
 #include "boost/operators.hpp"
 #include "boost/date_time/time_defs.hpp"
+#include "boost/date_time/special_defs.hpp"
 
 namespace boost {
 namespace date_time {
@@ -42,6 +43,7 @@ namespace date_time {
     typedef typename rep_type::sec_type  sec_type;
     typedef typename rep_type::fractional_seconds_type fractional_seconds_type;
     typedef typename rep_type::tick_type tick_type;
+    typedef typename rep_type::impl_type impl_type;
 
     time_duration() : ticks_(0) {} 
     time_duration(hour_type hours, 
@@ -53,8 +55,11 @@ namespace date_time {
     // copy constructor required for dividable<>
     //! Construct from another time_duration (Copy constructor)
     time_duration(const time_duration<T, rep_type>& other)
-      : ticks_(other.ticks_){}
-    
+      : ticks_(other.ticks_)
+    {}
+    //! Construct from special_values
+    time_duration(special_values sv) : ticks_(impl_type::from_special(sv))
+    {}
     //! Returns smallest representable duration
     static duration_type unit()
     {
@@ -73,7 +78,7 @@ namespace date_time {
     //! Returns number of hours in the duration
     hour_type hours()   const
     {
-      return static_cast<hour_type>(ticks_ / (3600*ticks_per_second()));
+      return static_cast<hour_type>(ticks() / (3600*ticks_per_second()));
     }
     //! Returns normalized number of minutes
     min_type minutes() const
@@ -88,36 +93,36 @@ namespace date_time {
     //! Returns total number of seconds truncating any fractional seconds
     sec_type total_seconds() const
     {
-      return static_cast<sec_type>(ticks_ / ticks_per_second());
+      return static_cast<sec_type>(ticks() / ticks_per_second());
     }
     //! Returns total number of milliseconds truncating any fractional seconds
     tick_type total_milliseconds() const
     {
       if (ticks_per_second() < 1000) {
-        return ticks_ * (1000 / ticks_per_second());
+        return ticks() * (1000 / ticks_per_second());
       }
-      return ticks_ / (ticks_per_second() / static_cast<tick_type>(1000)) ;
+      return ticks() / (ticks_per_second() / static_cast<tick_type>(1000)) ;
     }
     //! Returns total number of nanoseconds truncating any sub millisecond values
     tick_type total_nanoseconds() const
     {
       if (ticks_per_second() < 1000000000) {
-        return ticks_ * (static_cast<tick_type>(1000000000) / ticks_per_second());
+        return ticks() * (static_cast<tick_type>(1000000000) / ticks_per_second());
       }
-      return ticks_ / (ticks_per_second() / static_cast<tick_type>(1000000000)) ;
+      return ticks() / (ticks_per_second() / static_cast<tick_type>(1000000000)) ;
     }
     //! Returns total number of microseconds truncating any sub microsecond values
     tick_type total_microseconds() const
     {
       if (ticks_per_second() < 1000000) {
-        return ticks_ * (static_cast<tick_type>(1000000) / ticks_per_second());
+        return ticks() * (static_cast<tick_type>(1000000) / ticks_per_second());
       }
-      return ticks_ / (ticks_per_second() / static_cast<tick_type>(1000000)) ;
+      return ticks() / (ticks_per_second() / static_cast<tick_type>(1000000)) ;
     }
     //! Returns count of fractional seconds at given resolution
     fractional_seconds_type fractional_seconds() const
     {
-      return (ticks_ % ticks_per_second());
+      return (ticks() % ticks_per_second());
     }
     //! Returns number of possible digits in fractional seconds
     static unsigned short num_fractional_digits()
@@ -126,7 +131,7 @@ namespace date_time {
     }
     duration_type invert_sign() const
     {
-      return duration_type(-ticks_); 
+      return duration_type(ticks_ * (-1)); 
     }    
     bool is_negative() const
     {
@@ -159,32 +164,89 @@ namespace date_time {
     }
     duration_type operator-=(const duration_type& d)
     {
-      ticks_ -= d.ticks_;
+      ticks_ = ticks_ - d.ticks_;
       return duration_type(ticks_);
     }
     duration_type operator+=(const duration_type& d)
     {
-      ticks_ += d.ticks_;
+      ticks_ = ticks_ + d.ticks_;
       return duration_type(ticks_);
     }
     //! Division operations on a duration with an integer.
     duration_type operator/=(int divisor) 
     {
-      ticks_ /= divisor;
+      ticks_ = ticks_ / divisor;
       return duration_type(ticks_);
     }
+    //! Multiplication operations an a duration with an integer
     duration_type operator*(int rhs) const
     {
       return duration_type(ticks_ * rhs);
     }
+    duration_type operator*=(int divisor) 
+    {
+      ticks_ = ticks_ * divisor;
+      return duration_type(ticks_);
+    }
     tick_type ticks() const 
     { 
+      return traits_type::as_number(ticks_);
+    }
+
+    //! Is ticks_ a special value?
+    bool is_special()const
+    {
+      if(traits_type::is_adapted())
+      {
+	return ticks_.is_special();
+      }
+      else{
+	return false;
+      }
+    }
+    //! Is duration pos-infinity
+    bool is_pos_infinity()const
+    {
+      if(traits_type::is_adapted())
+      {
+	return ticks_.is_pos_infinity();
+      }
+      else{
+	return false;
+      }
+    }
+    //! Is duration neg-infinity
+    bool is_neg_infinity()const
+    {
+      if(traits_type::is_adapted())
+      {
+	return ticks_.is_neg_infinity();
+      }
+      else{
+	return false;
+      }
+    }
+    //! Is duration not-a-date-time
+    bool is_not_a_date_time()const
+    {
+      if(traits_type::is_adapted())
+      {
+	return ticks_.is_nan();
+      }
+      else{
+	return false;
+      }
+    }
+
+    //! Used for special_values output
+    impl_type get_rep()const
+    {
       return ticks_;
     }
 
   protected:
-    explicit time_duration(tick_type in) : ticks_(in) {};
-    tick_type ticks_;
+    explicit time_duration(impl_type in) : ticks_(in) {};
+    impl_type ticks_;
   };
 
 

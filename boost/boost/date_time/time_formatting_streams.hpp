@@ -28,23 +28,27 @@ namespace date_time {
     static void duration_put(const time_duration_type& td, 
                              ostream_type& os)
     {
-      if(td.is_negative()) {
-        os << '-';
+      if(td.is_special()){
+	os << td.get_rep(); 
       }
-      os  << std::setw(2) << std::setfill('0') 
-          << absolute_value(td.hours()) << ":";
-      os  << std::setw(2) << std::setfill('0') 
-          << absolute_value(td.minutes()) << ":";
-      os  << std::setw(2) << std::setfill('0') 
-          << absolute_value(td.seconds());
-      fractional_seconds_type frac_sec = 
-	absolute_value(td.fractional_seconds());
-      if (frac_sec != 0) {
-        os  << "." << std::setw(time_duration_type::num_fractional_digits())
-            << std::setfill('0')
-            << frac_sec;
-      }
-      
+      else{
+	if(td.is_negative()) {
+	  os << '-';
+	}
+	os  << std::setw(2) << std::setfill('0') 
+	  << absolute_value(td.hours()) << ":";
+	os  << std::setw(2) << std::setfill('0') 
+	  << absolute_value(td.minutes()) << ":";
+	os  << std::setw(2) << std::setfill('0') 
+	  << absolute_value(td.seconds());
+	fractional_seconds_type frac_sec = 
+	  absolute_value(td.fractional_seconds());
+	if (frac_sec != 0) {
+	  os  << "." << std::setw(time_duration_type::num_fractional_digits())
+	    << std::setfill('0')
+	    << frac_sec;
+	}
+      } // else
     } // duration_put
   }; //class ostream_time_duration_formatter
 
@@ -65,7 +69,10 @@ namespace date_time {
     {
       date_type d = t.date();
       os << d << " "; //TODO: fix the separator here.
-      duration_formatter::duration_put(t.time_of_day(), os);
+      if(!d.is_infinity() && !d.is_not_a_date())
+      {
+        duration_formatter::duration_put(t.time_of_day(), os);
+      }
       
     } // time_to_ostream    
   }; //class ostream_time_formatter

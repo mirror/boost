@@ -40,8 +40,61 @@ namespace date_time {
 
     static time_rep_type get_time_rep(const date_type& day,
                                       const time_duration_type& tod,
-                                      date_time::dst_flags)
+                                      date_time::dst_flags dst=not_dst)
     {
+      if(day.is_special() || tod.is_special())
+      {
+	if(day.is_not_a_date() || tod.is_not_a_date_time())
+	{
+	  return time_rep_type(date_type(not_a_date_time),
+	      time_duration_type(not_a_date_time));
+	}
+	else if(day.is_pos_infinity())
+	{
+	  if(tod.is_neg_infinity())
+	  {
+	    return time_rep_type(date_type(not_a_date_time),
+		time_duration_type(not_a_date_time));
+	  }
+	  else{
+	    return time_rep_type(day, time_duration_type(pos_infin));
+	  }
+	}
+	else if(day.is_neg_infinity())
+	{
+	  if(tod.is_pos_infinity())
+	  {
+	    return time_rep_type(date_type(not_a_date_time),
+		time_duration_type(not_a_date_time));
+	  }
+	  else{
+	    return time_rep_type(day, time_duration_type(neg_infin));
+	  }
+	}
+	else if(tod.is_pos_infinity())
+	{
+	  if(day.is_neg_infinity())
+	  {
+	    return time_rep_type(date_type(not_a_date_time),
+		time_duration_type(not_a_date_time));
+	  }
+	  else{
+	    return time_rep_type(date_type(pos_infin), tod);
+	  }
+	}
+	else if(tod.is_neg_infinity())
+	{
+	  if(day.is_pos_infinity())
+	  {
+	    return time_rep_type(date_type(not_a_date_time),
+		time_duration_type(not_a_date_time));
+	  }
+	  else{
+	    return time_rep_type(date_type(neg_infin), tod);
+	  }
+	}
+
+      }
       return time_rep_type(day, tod);
     }
     static date_type get_date(const time_rep_type& val)
@@ -75,11 +128,17 @@ namespace date_time {
     static time_rep_type subtract_days(const time_rep_type& base,
                                        const date_duration_type& dd)
     {
-      return time_rep_type(base.day-dd, base.time_of_day);
+      return split_timedate_system::get_time_rep(base.day-dd, base.time_of_day);
+      //return time_rep_type(base.day-dd, base.time_of_day);
     }
     static time_rep_type subtract_time_duration(const time_rep_type& base,
                                                 const time_duration_type& td)
     {
+      if(base.day.is_special() || td.is_special())
+      {
+        return split_timedate_system::get_time_rep(base.day, -td);
+      }
+
       wrap_int_type  day_offset(base.time_of_day.ticks());
       date_duration_type day_overflow(static_cast<int_type>(day_offset.subtract(td.ticks())));
 //       std::cout << "sub: " << base.time_of_day.ticks() << "|"
@@ -91,6 +150,10 @@ namespace date_time {
     static time_rep_type add_time_duration(const time_rep_type& base,
                                            time_duration_type td)
     {
+      if(base.day.is_special() || td.is_special())
+      {
+        return split_timedate_system::get_time_rep(base.day, td);
+      }
       if (td.is_negative()) {
         time_duration_type td1 = td.invert_sign();
         return subtract_time_duration(base,td1);

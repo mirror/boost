@@ -11,6 +11,15 @@
 namespace boost {
 
 namespace posix_time {
+ 
+  //bring special enum values into the namespace
+  using date_time::special_values;
+  using date_time::not_special;
+  using date_time::neg_infin;
+  using date_time::pos_infin;
+  using date_time::not_a_date_time;
+  using date_time::max_date_time;
+  using date_time::min_date_time; 
   
   //! Time type with no timezone or other adjustments
   /*! \ingroup time_basics

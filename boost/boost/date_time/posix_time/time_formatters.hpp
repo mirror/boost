@@ -20,38 +20,60 @@ namespace posix_time {
    */
   inline std::string to_simple_string(time_duration td) {
     std::ostringstream ss;
-    if(td.is_negative())
-    {
-      ss << '-';
+    if(td.is_special()){
+      /* simply using 'ss << td.get_rep()' won't work on compilers
+       * that don't support locales. This way does. */
+      // switch copied from date_names_put.hpp
+      switch(td.get_rep().as_special())
+      {
+	case not_a_date_time:
+	  //ss << "not-a-number";
+	  ss << "not-a-date-time";
+	  break;
+	case pos_infin:
+	  ss << "+infinity";
+	  break;
+	case neg_infin:
+	  ss << "-infinity";
+	  break;
+	default:
+	  ss << "";
+      }
     }
-    ss  << std::setw(2) << std::setfill('0') 
-        << date_time::absolute_value(td.hours()) << ":";
-    ss  << std::setw(2) << std::setfill('0') 
-        << date_time::absolute_value(td.minutes()) << ":";
-    ss  << std::setw(2) << std::setfill('0') 
-        << date_time::absolute_value(td.seconds());
-    //TODO the following is totally non-generic, yelling FIXME
+    else{
+      if(td.is_negative())
+      {
+	ss << '-';
+      }
+      ss  << std::setw(2) << std::setfill('0') 
+	<< date_time::absolute_value(td.hours()) << ":";
+      ss  << std::setw(2) << std::setfill('0') 
+	<< date_time::absolute_value(td.minutes()) << ":";
+      ss  << std::setw(2) << std::setfill('0') 
+	<< date_time::absolute_value(td.seconds());
+      //TODO the following is totally non-generic, yelling FIXME
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-    boost::int64_t frac_sec = 
-      date_time::absolute_value(td.fractional_seconds());
+      boost::int64_t frac_sec = 
+	date_time::absolute_value(td.fractional_seconds());
 // JDG [7/6/02 VC++ compatibility]
-    char buff[32];
-    _i64toa(frac_sec, buff, 10);
+      char buff[32];
+      _i64toa(frac_sec, buff, 10);
 #else
-    time_duration::fractional_seconds_type frac_sec = 
-      date_time::absolute_value(td.fractional_seconds());
+      time_duration::fractional_seconds_type frac_sec = 
+	date_time::absolute_value(td.fractional_seconds());
 #endif
-    if (frac_sec != 0) {
-      ss  << "." << std::setw(time_duration::num_fractional_digits())
-          << std::setfill('0')
+      if (frac_sec != 0) {
+	ss  << "." << std::setw(time_duration::num_fractional_digits())
+	  << std::setfill('0')
 
 // JDG [7/6/02 VC++ compatibility]
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-        << buff;
+	  << buff;
 #else
-        << frac_sec;
+	<< frac_sec;
 #endif
-    }
+      }
+    }// else
     return ss.str();
   }
 
@@ -60,38 +82,60 @@ namespace posix_time {
    */
   inline std::string to_iso_string(time_duration td) {
     std::ostringstream ss;
-    if(td.is_negative())
-    {
-      ss << '-';
+    if(td.is_special()){
+      /* simply using 'ss << td.get_rep()' won't work on compilers
+       * that don't support locales. This way does. */
+      // switch copied from date_names_put.hpp
+      switch(td.get_rep().as_special())
+      {
+	case not_a_date_time:
+	  //ss << "not-a-number";
+	  ss << "not-a-date-time";
+	  break;
+	case pos_infin:
+	  ss << "+infinity";
+	  break;
+	case neg_infin:
+	  ss << "-infinity";
+	  break;
+	default:
+	  ss << "";
+      }
     }
-    ss  << std::setw(2) << std::setfill('0') 
-        << date_time::absolute_value(td.hours());
-    ss  << std::setw(2) << std::setfill('0') 
-        << date_time::absolute_value(td.minutes());
-    ss  << std::setw(2) << std::setfill('0') 
-        << date_time::absolute_value(td.seconds());
-    //TODO the following is totally non-generic, yelling FIXME
+    else{
+      if(td.is_negative())
+      {
+	ss << '-';
+      }
+      ss  << std::setw(2) << std::setfill('0') 
+	<< date_time::absolute_value(td.hours());
+      ss  << std::setw(2) << std::setfill('0') 
+	<< date_time::absolute_value(td.minutes());
+      ss  << std::setw(2) << std::setfill('0') 
+	<< date_time::absolute_value(td.seconds());
+      //TODO the following is totally non-generic, yelling FIXME
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-    boost::int64_t frac_sec = 
-      date_time::absolute_value(td.fractional_seconds());
-    // JDG [7/6/02 VC++ compatibility]
-    char buff[32];
-    _i64toa(frac_sec, buff, 10);
+      boost::int64_t frac_sec = 
+	date_time::absolute_value(td.fractional_seconds());
+      // JDG [7/6/02 VC++ compatibility]
+      char buff[32];
+      _i64toa(frac_sec, buff, 10);
 #else
-    time_duration::fractional_seconds_type frac_sec = 
-      date_time::absolute_value(td.fractional_seconds());
+      time_duration::fractional_seconds_type frac_sec = 
+	date_time::absolute_value(td.fractional_seconds());
 #endif
-    if (frac_sec != 0) {
-      ss  << "." << std::setw(time_duration::num_fractional_digits())
-          << std::setfill('0')
+      if (frac_sec != 0) {
+	ss  << "." << std::setw(time_duration::num_fractional_digits())
+	  << std::setfill('0')
 
 // JDG [7/6/02 VC++ compatibility]
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-        << buff;
+	  << buff;
 #else
-        << frac_sec;
+	  << frac_sec;
 #endif
-    }
+      }
+    }// else
     return ss.str();
   }
 
@@ -99,8 +143,14 @@ namespace posix_time {
   /*!\ingroup time_format
    */
   inline std::string to_simple_string(ptime t) {
-    std::string ts = gregorian::to_simple_string(t.date()) + " ";
-    return ts + to_simple_string(t.time_of_day());
+    std::string ts = gregorian::to_simple_string(t.date());// + " ";
+    if(!t.time_of_day().is_special())
+    {
+      return ts + " " + to_simple_string(t.time_of_day());
+    }
+    else{
+      return ts;
+    }
   }
 
   //! Convert to string of form [YYYY-mmm-DD HH:MM::SS.ffffff/YYYY-mmm-DD HH:MM::SS.fffffff]
@@ -116,16 +166,28 @@ namespace posix_time {
   /*!\ingroup time_format
    */
   inline std::string to_iso_string(ptime t) {
-    std::string ts = gregorian::to_iso_string(t.date()) + "T";
-    return ts + to_iso_string(t.time_of_day());
+    std::string ts = gregorian::to_iso_string(t.date());// + "T";
+    if(!t.time_of_day().is_special())
+    {
+      return "T" + ts + to_iso_string(t.time_of_day());
+    }
+    else{
+      return ts;
+    }
   }
 
   //! Convert to form YYYY-MM-DDTHH:MM:SS where T is the date-time separator
   /*!\ingroup time_format
    */
   inline std::string to_iso_extended_string(ptime t) {
-    std::string ts = gregorian::to_iso_extended_string(t.date()) + "T";
-    return ts + to_simple_string(t.time_of_day());
+    std::string ts = gregorian::to_iso_extended_string(t.date());// + "T";
+    if(!t.time_of_day().is_special())
+    {
+      return "T" + ts + to_simple_string(t.time_of_day());
+    }
+    else{
+      return ts;
+    }
   }
 
 //The following code is removed for configurations with good std::locale support (eg: MSVC6, gcc 2.9x)
