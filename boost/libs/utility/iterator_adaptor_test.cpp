@@ -152,14 +152,12 @@ void more_indirect_iterator_tests()
     typedef boost::indirect_iterator_generator<
         iterator_set::iterator
 # ifdef BOOST_NO_STD_ITERATOR_TRAITS
-        , storage::iterator
         , boost::iterator<std::random_access_iterator_tag,int>
 # endif
         >::type indirect_set_iterator;
 
     typedef boost::indirect_iterator_generator<
-        iterator_set::iterator,
-        storage::const_iterator
+        iterator_set::iterator
 # ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , boost::iterator<std::random_access_iterator_tag,int,std::ptrdiff_t,const int*,const int&>
 # endif
@@ -234,12 +232,11 @@ main()
     
     typedef boost::indirect_iterator_generator<dummyT**
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-        , dummyT*
         , boost::iterator<std::random_access_iterator_tag,dummyT>
 #endif
       >::type indirect_iterator;
 
-    typedef boost::indirect_iterator_generator<dummyT**, const dummyT*
+    typedef boost::indirect_iterator_generator<dummyT**
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , boost::iterator<std::random_access_iterator_tag,dummyT,std::ptrdiff_t,const dummyT*,const dummyT&>
 #endif
@@ -248,10 +245,14 @@ main()
     indirect_iterator i = ptr;
     boost::random_access_iterator_test(i, N, array);
 
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
     typedef boost::iterator<std::random_access_iterator_tag, dummyT> InnerTraits;
-    boost::random_access_iterator_test(boost::make_indirect_iterator(&*ptr, *ptr, InnerTraits()), N, array);
+#if 0
+    boost::random_access_iterator_test(boost::make_indirect_iterator<InnerTraits>(&*ptr), N, array);
 #else
+    boost::random_access_iterator_test(boost::make_indirect_iterator<InnerTraits, dummyT**>(&*ptr), N, array);
+#endif
+
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
     boost::random_access_iterator_test(boost::make_indirect_iterator(&*ptr), N, array);
 #endif
 
@@ -259,10 +260,14 @@ main()
     boost::random_access_iterator_test(j, N, array);
 
     dummyT*const* const_ptr = ptr;
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
     typedef boost::iterator<std::random_access_iterator_tag,dummyT,std::ptrdiff_t,const dummyT*,const dummyT&> ConstInnerTraits;
-    boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr, *const_ptr, ConstInnerTraits()), N, array);
+#if 0
+    boost::random_access_iterator_test(boost::make_indirect_iterator<ConstInnerTraits>(const_ptr), N, array);
 #else
+    boost::random_access_iterator_test(boost::make_indirect_iterator<ConstInnerTraits,dummyT*const*>(const_ptr), N, array);
+#endif
+
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
     boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr), N, array);
 #endif
 
@@ -287,11 +292,13 @@ main()
     boost::random_access_iterator_test(i, N, array);
 
     boost::random_access_iterator_test(boost::make_projection_iterator(pair_array, select1st_<Pair>()), N, array);    
+    boost::random_access_iterator_test(boost::make_projection_iterator< select1st_<Pair> >(pair_array), N, array);    
 
     Projection::const_iterator j = pair_array;
     boost::random_access_iterator_test(j, N, array);
 
     boost::random_access_iterator_test(boost::make_const_projection_iterator(pair_array, select1st_<Pair>()), N, array);
+    boost::random_access_iterator_test(boost::make_const_projection_iterator< select1st_<Pair> >(pair_array), N, array);
 
     boost::const_nonconst_iterator_test(i, ++j);
   }
@@ -310,10 +317,9 @@ main()
     reverse_iterator i = reversed + N;
     boost::random_access_iterator_test(i, N, array);
 
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
     typedef boost::iterator<std::random_access_iterator_tag,dummyT> ReverseTraits;
     boost::random_access_iterator_test(boost::make_reverse_iterator<ReverseTraits>(reversed + N), N, array);
-#else
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
     boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
 #endif
 
@@ -321,10 +327,9 @@ main()
     boost::random_access_iterator_test(j, N, array);
 
     const dummyT* const_reversed = reversed;
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
     typedef boost::iterator<std::random_access_iterator_tag,const dummyT> ConstReverseTraits;
     boost::random_access_iterator_test(boost::make_reverse_iterator<ConstReverseTraits>(const_reversed + N), N, array);
-#else
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
     boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N), N, array);
 #endif
 
