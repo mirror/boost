@@ -28,7 +28,4 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 </ul>
 */
 #define BOOST_PP_XOR(X,Y) BOOST_PP_NOR(BOOST_PP_NOR(X,Y),BOOST_PP_AND(X,Y))
-
-/* <p>Obsolete. Use BOOST_PP_XOR().</p> */
-#define BOOST_PREPROCESSOR_XOR(X,Y) BOOST_PP_XOR(X,Y)
 #endif
