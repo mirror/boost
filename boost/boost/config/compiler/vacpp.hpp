@@ -12,16 +12,16 @@
 #  define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #endif
 
-#if (__IBMCPP__ <= 502)
-#  define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
-#endif
-
 #if (__IBMCPP__ <= 502) || !defined(BOOST_STRICT_CONFIG)
 // Actually the compiler supports inclass member initialization but it
 // requires a definition for the class member and it doesn't recognize
 // it as an integral constant expression when used as a template argument.
 #  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #  define BOOST_NO_INTEGRAL_INT64_T
+#endif
+
+#if (__IBMCPP__ <= 600)
+#  define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #endif
 
 //
@@ -40,8 +40,8 @@
 #error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 500:
-#if (__IBMCPP__ > 502)
+// last known and checked version is 600:
+#if (__IBMCPP__ > 600)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
