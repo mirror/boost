@@ -14,6 +14,7 @@
 
   <xi:include href="variant_fwd.xml"/>
   <xi:include href="variant.xml"/>
+  <xi:include href="recursive_variant.xml"/>
   <xi:include href="apply_visitor.xml"/>
   <xi:include href="get.xml"/>
   <xi:include href="bad_visit.xml"/>
