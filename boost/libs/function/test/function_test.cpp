@@ -603,6 +603,35 @@ test_member_functions()
   BOOST_TEST(f2(five, 4) == 9);
 }
 
+struct add_with_throw_on_copy {
+  int operator()(int x, int y) const { return x+y; }
+
+  add_with_throw_on_copy() {}
+
+  add_with_throw_on_copy(const add_with_throw_on_copy&)
+  {
+    throw std::runtime_error("But this CAN'T throw");
+  }
+
+  add_with_throw_on_copy& operator=(const add_with_throw_on_copy&)
+  {
+    throw std::runtime_error("But this CAN'T throw");
+  }
+};
+
+static void
+test_ref()
+{
+  add_with_throw_on_copy atc;
+  try {
+    boost::function<int, int, int> f(ref(atc));
+    BOOST_TEST(f(1, 3) == 4);
+  }
+  catch(std::runtime_error e) {
+    BOOST_ERROR("Nonthrowing constructor threw an exception");
+  }
+};
+
 int test_main(int, char* [])
 {
   test_zero_args();
@@ -610,5 +639,7 @@ int test_main(int, char* [])
   test_two_args();
   test_emptiness();
   test_member_functions();
+  test_ref();
+
   return 0;
 }
