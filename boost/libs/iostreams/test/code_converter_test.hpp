@@ -160,11 +160,13 @@ bool codecvt_test1()
     BOOST_CHECK(Codecvt().max_length() <= max_length);
     temp_file                       temp;
     string_type                     test = test_string<Codecvt>();
-    stream_facade<wide_file_sink>   out(temp.name(), ios::out | ios::binary);
+    ios_base::openmode              mode = ios::out | ios::binary; // Borland
+    stream_facade<wide_file_sink>   out(temp.name(), mode);
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
-    stream_facade<wide_file_source> in(temp.name(), ios::in | ios::binary);
+    mode = ios::in | ios::binary;                                  // Borland
+    stream_facade<wide_file_source> in(temp.name(), mode);
     string_type                     test2;
     boost::iostreams::copy(in, boost::iostreams::back_inserter(test2));
 
@@ -184,11 +186,13 @@ bool codecvt_test2()
 
     temp_file                       temp;
     string_type                     test = test_string<Codecvt>();
-    stream_facade<wide_file_sink>   out(temp.name(), ios::out | ios::binary);
+    ios_base::openmode              mode = ios::out | ios::binary; // Borland
+    stream_facade<wide_file_sink>   out(temp.name(), mode);
     out.write(test.data(), static_cast<streamsize>(test.size()));
     out.close();
 
-    stream_facade<wide_file_source> in(temp.name(), ios::in | ios::binary);
+    mode = ios::in | ios::binary;                                  // Borland
+    stream_facade<wide_file_source> in(temp.name(), mode);
     string_type                     test2;
     boost::iostreams::copy(in, boost::iostreams::back_inserter(test2));
 
