@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 1998-2004
+ * Copyright (c) 1998-2005
  * John Maddock
  *
  * Use, modification and distribution are subject to the 
@@ -41,6 +41,12 @@
 #include <boost/mpl/bool_fwd.hpp>
 #ifndef BOOST_NO_STD_LOCALE
 #   include <locale>
+#endif
+
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{
+   using ::sprintf; using ::strcpy; using ::strcat; using ::strlen;
+}
 #endif
 
 namespace boost{ namespace re_detail{
@@ -112,4 +118,73 @@ inline void pointer_construct(T* p, const T& t)
 }} // namespaces
 #endif
 
+/*****************************************************************************
+ *
+ *  helper function copy:
+ *
+ ****************************************************************************/
+
+#ifdef __cplusplus
+namespace boost{ namespace re_detail{
+#if BOOST_WORKAROUND(BOOST_MSVC,>=1400)
+   //
+   // MSVC 8 will either emit warnings or else refuse to compile
+   // code that makes perfectly legitimate use of std::copy, when
+   // the OutputIterator type is a user-defined class (apparently all user 
+   // defined iterators are "unsafe").  This code works around that:
+   //
+   template<class InputIterator, class OutputIterator>
+   inline OutputIterator copy(
+      InputIterator first, 
+      InputIterator last, 
+      OutputIterator dest
+   )
+   {
+      return stdext::unchecked_copy(first, last, dest);
+   }
+
+   // use safe versions of strcpy etc:
+   using ::strcpy_s;
+   using ::strcat_s;
+#else
+   using std::copy;
+
+   inline std::size_t strcpy_s(
+      char *strDestination,
+      std::size_t sizeInBytes,
+      const char *strSource 
+   )
+   {
+      if(std::strlen(strSource)+1 > sizeInBytes)
+         return 1;
+      std::strcpy(strDestination, strSource);
+      return 0;
+   }
+   inline std::size_t strcat_s(
+      char *strDestination,
+      std::size_t sizeInBytes,
+      const char *strSource 
+   )
+   {
+      if(std::strlen(strSource) + std::strlen(strDestination) + 1 > sizeInBytes)
+         return 1;
+      std::strcat(strDestination, strSource);
+      return 0;
+   }
+
+#endif
+
+   inline void overflow_error_if_not_zero(std::size_t i)
+   {
+      if(i)
+      {
+         std::overflow_error e("String buffer too small");
+         boost::throw_exception(e);
+      }
+   }
+
+}} // namespaces
+#endif
+
 #endif // include guard
+

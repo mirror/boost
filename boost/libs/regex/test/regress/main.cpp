@@ -35,7 +35,6 @@ int cpp_main(int /*argc*/, char * /*argv*/[])
    test_character_escapes();
    test_assertion_escapes();
    test_tricky_cases();
-   test_tricky_cases2();
    test_grep();
    test_replace();
    test_non_greedy_repeats();

@@ -1422,7 +1422,15 @@ charT basic_regex_parser<charT, traits>::unescape_character()
       // an octal escape sequence, the first character must be a zero
       // followed by up to 3 octal digits:
       std::ptrdiff_t len = (std::min)(::boost::re_detail::distance(m_position, m_end), static_cast<std::ptrdiff_t>(4));
-      int val = this->m_traits.toi(m_position, m_position + len, 8);
+      const charT* bp = m_position;
+      int val = this->m_traits.toi(bp, bp + 1, 8);
+      if(val != 0)
+      {
+         // Oops not an octal escape after all:
+         fail(regex_constants::error_escape, m_position - m_base);
+         return result;
+      }
+      val = this->m_traits.toi(m_position, m_position + len, 8);
       if(val < 0) 
       {
          fail(regex_constants::error_escape, m_position - m_base);
@@ -1477,18 +1485,19 @@ template <class charT, class traits>
 bool basic_regex_parser<charT, traits>::parse_backref()
 {
    BOOST_ASSERT(m_position != m_end);
-   int i = this->m_traits.toi(m_position, m_position + 1, 10);
-   if((i > 0) && (this->m_backrefs & (1u << (i-1))))
-   {
-      re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_backref, sizeof(re_brace)));
-      pb->index = i;
-   }
-   else if(i == 0)
+   const charT* pc = m_position;
+   int i = this->m_traits.toi(pc, pc + 1, 10);
+   if((i == 0) || (((this->flags() & regbase::main_option_type) == regbase::perl_syntax_group) && (this->flags() & regbase::no_bk_refs)))
    {
       // not a backref at all but an octal escape sequence:
-      --m_position;
       charT c = unescape_character();
       this->append_literal(c);
+   }
+   else if((i > 0) && (this->m_backrefs & (1u << (i-1))))
+   {
+      m_position = pc;
+      re_brace* pb = static_cast<re_brace*>(this->append_state(syntax_element_backref, sizeof(re_brace)));
+      pb->index = i;
    }
    else
    {

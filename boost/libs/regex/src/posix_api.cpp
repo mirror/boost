@@ -131,7 +131,7 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA*
       {
          result = std::strlen(names[code]) + 1;
          if(buf_size >= result)
-            std::strcpy(buf, names[code]);
+            re_detail::strcpy_s(buf, buf_size, names[code]);
          return result;
       }
       return result;
@@ -145,15 +145,23 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA*
       {
          if(std::strcmp(e->re_endp, names[i]) == 0)
          {
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+            (::sprintf_s)(localbuf, 5, "%d", i);
+#else
             (std::sprintf)(localbuf, "%d", i);
+#endif
             if(std::strlen(localbuf) < buf_size)
-               std::strcpy(buf, localbuf);
+               re_detail::strcpy_s(buf, buf_size, localbuf);
             return std::strlen(localbuf) + 1;
          }
       }
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+      (::sprintf_s)(localbuf, 5, "%d", 0);
+#else
       (std::sprintf)(localbuf, "%d", 0);
+#endif
       if(std::strlen(localbuf) < buf_size)
-         std::strcpy(buf, localbuf);
+         re_detail::strcpy_s(buf, buf_size, localbuf);
       return std::strlen(localbuf) + 1;
    }
    if(code <= (int)REG_E_UNKNOWN)
@@ -168,7 +176,7 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorA(int code, const regex_tA*
       std::size_t len = p.size();
       if(len < buf_size)
       {
-         std::strcpy(buf, p.c_str());
+         re_detail::strcpy_s(buf, buf_size, p.c_str());
       }
       return len + 1;
    }

@@ -300,29 +300,73 @@ void BOOST_REGEX_CALL match_results<BidiIterator, Allocator>::maybe_assign(const
    const_iterator p1, p2;
    p1 = begin();
    p2 = m.begin();
-   BidiIterator base = (*this)[-1].first;
-   std::size_t len1 = 0;
-   std::size_t len2 = 0;
-   std::size_t base1 = 0;
-   std::size_t base2 = 0;
+   //
+   // Distances are measured from the start of *this* match, unless this isn't
+   // a valid match in which case we use the start of the whole sequence.  Note that
+   // no subsequent match-candidate can ever be to the left of the first match found.
+   // This ensures that when we are using bidirectional iterators, that distances 
+   // measured are as short as possible, and therefore as efficient as possible
+   // to compute.  Finally note that we don't use the "matched" data member to test
+   // whether a sub-expression is a valid match, because partial matches set this
+   // to false for sub-expression 0.
+   //
+   BidiIterator end = this->suffix().second;
+   BidiIterator base = (p1->first == end) ? this->prefix().first : (*this)[0].first;
+   difference_type len1 = 0;
+   difference_type len2 = 0;
+   difference_type base1 = 0;
+   difference_type base2 = 0;
    std::size_t i;
-   for(i = 0; i < size(); ++i)
+   for(i = 0; i < size(); ++i, ++p1, ++p2)
    {
       //
-      // leftmost takes priority over longest:
+      // Leftmost takes priority over longest; handle special cases
+      // where distances need not be computed first (an optimisation
+      // for bidirectional iterators: ensure that we don't accidently
+      // compute the length of the whole sequence, as this can be really
+      // expensive).
+      //
+      if(p1->first == end)
+      {
+         if(p2->first != end)
+         {
+            // p2 must be better than p1, and no need to calculate
+            // actual distances:
+            base1 = 1;
+            base2 = 0;
+            break;
+         }
+         else
+         {
+            // *p1 and *p2 are either unmatched or match end-of sequence,
+            // either way no need to calculate distances:
+            if((p1->matched == false) && (p2->matched == true))
+               break;
+            if((p1->matched == true) && (p2->matched == false))
+               return;
+            continue;
+         }
+      }
+      else if(p2->first == end)
+      {
+         // p1 better than p2, and no need to calculate distances:
+         return;
+      }
       base1 = ::boost::re_detail::distance(base, p1->first);
       base2 = ::boost::re_detail::distance(base, p2->first);
+      BOOST_ASSERT(base1 >= 0);
+      BOOST_ASSERT(base2 >= 0);
       if(base1 < base2) return;
       if(base2 < base1) break;
 
       len1 = ::boost::re_detail::distance((BidiIterator)p1->first, (BidiIterator)p1->second);
       len2 = ::boost::re_detail::distance((BidiIterator)p2->first, (BidiIterator)p2->second);
+      BOOST_ASSERT(len1 >= 0);
+      BOOST_ASSERT(len2 >= 0);
       if((len1 != len2) || ((p1->matched == false) && (p2->matched == true)))
          break;
       if((p1->matched == true) && (p2->matched == false))
          return;
-      ++p1;
-      ++p2;
    }
    if(i == size())
       return;

@@ -33,12 +33,6 @@ typedef boost::match_flag_type match_flag_type;
 #endif
 #include <cstdio>
 
-#if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{
-   using ::sprintf; using ::strcpy; using ::strcat;
-}
-#endif
-
 namespace boost{
 
 #ifdef __BORLANDC__
@@ -342,17 +336,17 @@ void BuildFileList(std::list<std::string>* pl, const char* files, bool recurse)
    {
       // go through sub directories:
       char buf[MAX_PATH];
-      std::strcpy(buf, start.root());
+      re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(buf, MAX_PATH, start.root()));
       if(*buf == 0)
       {
-         std::strcpy(buf, ".");
-         std::strcat(buf, directory_iterator::separator());
-         std::strcat(buf, "*");
+         re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(buf, MAX_PATH, "."));
+         re_detail::overflow_error_if_not_zero(re_detail::strcat_s(buf, MAX_PATH, directory_iterator::separator()));
+         re_detail::overflow_error_if_not_zero(re_detail::strcat_s(buf, MAX_PATH, "*"));
       }
       else
       {
-         std::strcat(buf, directory_iterator::separator());
-         std::strcat(buf, "*");
+         re_detail::overflow_error_if_not_zero(re_detail::strcat_s(buf, MAX_PATH, directory_iterator::separator()));
+         re_detail::overflow_error_if_not_zero(re_detail::strcat_s(buf, MAX_PATH, "*"));
       }
       directory_iterator dstart(buf);
       directory_iterator dend;
@@ -365,7 +359,11 @@ void BuildFileList(std::list<std::string>* pl, const char* files, bool recurse)
 
       while(dstart != dend)
       {
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+         (::sprintf_s)(buf, sizeof(buf), "%s%s%s", dstart.path(), directory_iterator::separator(), ptr);
+#else
          (std::sprintf)(buf, "%s%s%s", dstart.path(), directory_iterator::separator(), ptr);
+#endif
          BuildFileList(pl, buf, recurse);
          ++dstart;
       }

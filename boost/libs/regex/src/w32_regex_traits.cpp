@@ -231,7 +231,7 @@ BOOST_REGEX_DECL std::string BOOST_REGEX_CALL w32_transform(lcid_type id, const 
       id,       // locale identifier
       LCMAP_SORTKEY,  // mapping transformation type
       p1,  // source string
-      p2 - p1,        // number of characters in source string
+      static_cast<int>(p2 - p1),        // number of characters in source string
       0,  // destination buffer
       0        // size of destination buffer
       );
@@ -242,7 +242,7 @@ BOOST_REGEX_DECL std::string BOOST_REGEX_CALL w32_transform(lcid_type id, const 
       id,       // locale identifier
       LCMAP_SORTKEY,  // mapping transformation type
       p1,  // source string
-      p2 - p1,        // number of characters in source string
+      static_cast<int>(p2 - p1),        // number of characters in source string
       &*result.begin(),  // destination buffer
       bytes        // size of destination buffer
       );
@@ -262,7 +262,7 @@ BOOST_REGEX_DECL std::wstring BOOST_REGEX_CALL w32_transform(lcid_type id, const
       id,       // locale identifier
       LCMAP_SORTKEY,  // mapping transformation type
       p1,  // source string
-      p2 - p1,        // number of characters in source string
+      static_cast<int>(p2 - p1),        // number of characters in source string
       0,  // destination buffer
       0        // size of destination buffer
       );
@@ -273,7 +273,7 @@ BOOST_REGEX_DECL std::wstring BOOST_REGEX_CALL w32_transform(lcid_type id, const
       id,       // locale identifier
       LCMAP_SORTKEY,  // mapping transformation type
       p1,  // source string
-      p2 - p1,        // number of characters in source string
+      static_cast<int>(p2 - p1),        // number of characters in source string
       reinterpret_cast<wchar_t*>(&*result.begin()),  // destination buffer *of bytes*
       bytes        // size of destination buffer
       );
@@ -295,7 +295,7 @@ BOOST_REGEX_DECL std::basic_string<unsigned short> BOOST_REGEX_CALL w32_transfor
       id,       // locale identifier
       LCMAP_SORTKEY,  // mapping transformation type
       (LPCWSTR)p1,  // source string
-      p2 - p1,        // number of characters in source string
+      static_cast<int>(p2 - p1),        // number of characters in source string
       0,  // destination buffer
       0        // size of destination buffer
       );
@@ -306,7 +306,7 @@ BOOST_REGEX_DECL std::basic_string<unsigned short> BOOST_REGEX_CALL w32_transfor
       id,       // locale identifier
       LCMAP_SORTKEY,  // mapping transformation type
       (LPCWSTR)p1,  // source string
-      p2 - p1,        // number of characters in source string
+      static_cast<int>(p2 - p1),        // number of characters in source string
       reinterpret_cast<wchar_t*>(&*result.begin()),  // destination buffer *of bytes*
       bytes        // size of destination buffer
       );

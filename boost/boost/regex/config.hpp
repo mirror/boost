@@ -319,7 +319,7 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL reset_stack_guard_page();
  ****************************************************************************/
 
 #if !defined(BOOST_REGEX_RECURSIVE) && !defined(BOOST_REGEX_NON_RECURSIVE)
-#  if defined(BOOST_REGEX_HAS_MS_STACK_GUARD) && !defined(_STLP_DEBUG) && !defined(__STL_DEBUG)
+#  if defined(BOOST_REGEX_HAS_MS_STACK_GUARD) && !defined(_STLP_DEBUG) && !defined(__STL_DEBUG) && !(defined(BOOST_MSVC) && (BOOST_MSVC >= 1400))
 #     define BOOST_REGEX_RECURSIVE
 #  else
 #     define BOOST_REGEX_NON_RECURSIVE

@@ -23,11 +23,8 @@
 #include <stdexcept>
 #include <string>
 #include <boost/throw_exception.hpp>
-#ifdef BOOST_REGEX_V3
-#include <boost/regex/v3/fileiter.hpp>
-#else
 #include <boost/regex/v4/fileiter.hpp>
-#endif
+#include <boost/regex/v4/regex_workaround.hpp>
 #include <boost/regex/pattern_except.hpp>
 
 #include <cstdio>
@@ -395,34 +392,24 @@ file_iterator::file_iterator(const char* wild)
    BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
    BOOST_REGEX_NOEH_ASSERT(_path)
-   std::strcpy(_root, wild);
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_root, MAX_PATH, wild));
    ptr = _root;
    while(*ptr)++ptr;
    while((ptr > _root) && (*ptr != *_fi_sep) && (*ptr != *_fi_sep_alt))--ptr;
-   #if 0
-   *ptr = 0;
-   std::strcpy(_path, _root);
-   if(*_path == 0)
-      std::strcpy(_path, ".");
-   std::strcat(_path, _fi_sep);
-   ptr = _path + std::strlen(_path);
-   #else
    if((ptr == _root) && ( (*ptr== *_fi_sep) || (*ptr==*_fi_sep_alt) ) )
    {
      _root[1]='\0';
-     std::strcpy(_path, _root);
-     ptr = _path + std::strlen(_path);
+     re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, _root));
    }
    else
    {
      *ptr = 0;
-     std::strcpy(_path, _root);
+     re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, _root));
      if(*_path == 0)
-       std::strcpy(_path, ".");
-     std::strcat(_path, _fi_sep);
-     ptr = _path + std::strlen(_path);
+       re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, "."));
+     re_detail::overflow_error_if_not_zero(re_detail::strcat_s(_path, MAX_PATH, _fi_sep));
    }
-   #endif
+   ptr = _path + std::strlen(_path);
 
    ref = new file_iterator_ref();
    BOOST_REGEX_NOEH_ASSERT(ref)
@@ -436,7 +423,7 @@ file_iterator::file_iterator(const char* wild)
    }
    else
    {
-      std::strcpy(ptr, ref->_data.cFileName);
+      re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(ptr, (MAX_PATH - (ptr - _path)), ref->_data.cFileName));
       if(ref->_data.dwFileAttributes & _fi_dir)
          next();
    }
@@ -463,8 +450,8 @@ file_iterator::file_iterator(const file_iterator& other)
    BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
    BOOST_REGEX_NOEH_ASSERT(_path)
-   std::strcpy(_root, other._root);
-   std::strcpy(_path, other._path);
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_root, MAX_PATH, other._root));
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, other._path));
    ptr = _path + (other.ptr - other._path);
    ref = other.ref;
 #ifndef BOOST_NO_EXCEPTIONS
@@ -481,8 +468,8 @@ file_iterator::file_iterator(const file_iterator& other)
 
 file_iterator& file_iterator::operator=(const file_iterator& other)
 {
-   std::strcpy(_root, other._root);
-   std::strcpy(_path, other._path);
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_root, MAX_PATH, other._root));
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, other._path));
    ptr = _path + (other.ptr - other._path);
    if(--(ref->count) == 0)
    {
@@ -536,7 +523,7 @@ void file_iterator::next()
          ptr = _path;
       }
       else
-         std::strcpy(ptr, ref->_data.cFileName);
+         re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(ptr, MAX_PATH - (ptr - _path), ref->_data.cFileName));
    }
 }
 
@@ -583,34 +570,26 @@ directory_iterator::directory_iterator(const char* wild)
    BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
    BOOST_REGEX_NOEH_ASSERT(_path)
-   std::strcpy(_root, wild);
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_root, MAX_PATH, wild));
    ptr = _root;
    while(*ptr)++ptr;
    while((ptr > _root) && (*ptr != *_fi_sep) && (*ptr != *_fi_sep_alt))--ptr;
-   #if 0
-   *ptr = 0;
-   std::strcpy(_path, _root);
-   if(*_path == 0)
-      std::strcpy(_path, ".");
-   std::strcat(_path, _fi_sep);
-   ptr = _path + std::strlen(_path);
-   #else
+
    if((ptr == _root) && ( (*ptr== *_fi_sep) || (*ptr==*_fi_sep_alt) ) )
    {
      _root[1]='\0';
-     std::strcpy(_path, _root);
-     ptr = _path + std::strlen(_path);
+     re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, _root));
    }
    else
    {
      *ptr = 0;
-     std::strcpy(_path, _root);
+     re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, _root));
      if(*_path == 0)
-       std::strcpy(_path, ".");
-     std::strcat(_path, _fi_sep);
-     ptr = _path + std::strlen(_path);
+       re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, "."));
+     re_detail::overflow_error_if_not_zero(re_detail::strcat_s(_path, MAX_PATH, _fi_sep));
    }
-   #endif
+   ptr = _path + std::strlen(_path);
+
    ref = new file_iterator_ref();
    BOOST_REGEX_NOEH_ASSERT(ref)
    ref->count = 1;
@@ -622,7 +601,7 @@ directory_iterator::directory_iterator(const char* wild)
    }
    else
    {
-      std::strcpy(ptr, ref->_data.cFileName);
+      re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(ptr, MAX_PATH - (ptr - _path), ref->_data.cFileName));
       if(((ref->_data.dwFileAttributes & _fi_dir) == 0) || (std::strcmp(ref->_data.cFileName, ".") == 0) || (std::strcmp(ref->_data.cFileName, "..") == 0))
          next();
    }
@@ -661,8 +640,8 @@ directory_iterator::directory_iterator(const directory_iterator& other)
    BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
    BOOST_REGEX_NOEH_ASSERT(_path)
-   std::strcpy(_root, other._root);
-   std::strcpy(_path, other._path);
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_root, MAX_PATH, other._root));
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, other._path));
    ptr = _path + (other.ptr - other._path);
    ref = other.ref;
 #ifndef BOOST_NO_EXCEPTIONS
@@ -679,8 +658,8 @@ directory_iterator::directory_iterator(const directory_iterator& other)
 
 directory_iterator& directory_iterator::operator=(const directory_iterator& other)
 {
-   std::strcpy(_root, other._root);
-   std::strcpy(_path, other._path);
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_root, MAX_PATH, other._root));
+   re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(_path, MAX_PATH, other._path));
    ptr = _path + (other.ptr - other._path);
    if(--(ref->count) == 0)
    {
@@ -723,7 +702,7 @@ void directory_iterator::next()
          ptr = _path;
       }
       else
-         std::strcpy(ptr, ref->_data.cFileName);
+         re_detail::overflow_error_if_not_zero(re_detail::strcpy_s(ptr, MAX_PATH - (ptr - _path), ref->_data.cFileName));
    }
 }
 

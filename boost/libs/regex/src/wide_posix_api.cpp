@@ -139,7 +139,11 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorW(int code, const regex_tW*
       {
          result = std::wcslen(wnames[code]) + 1;
          if(buf_size >= result)
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+            ::wcscpy_s(buf, buf_size, wnames[code]);
+#else
             std::wcscpy(buf, wnames[code]);
+#endif
          return result;
       }
       return result;
@@ -156,13 +160,21 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorW(int code, const regex_tW*
          {
             (std::swprintf)(localbuf, 5, L"%d", i);
             if(std::wcslen(localbuf) < buf_size)
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+               ::wcscpy_s(buf, buf_size, localbuf);
+#else
                std::wcscpy(buf, localbuf);
+#endif
             return std::wcslen(localbuf) + 1;
          }
       }
       (std::swprintf)(localbuf, 5, L"%d", 0);
       if(std::wcslen(localbuf) < buf_size)
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)
+         ::wcscpy_s(buf, buf_size, localbuf);
+#else
          std::wcscpy(buf, localbuf);
+#endif
       return std::wcslen(localbuf) + 1;
    }
 #endif
@@ -178,7 +190,7 @@ BOOST_REGEX_DECL regsize_t BOOST_REGEX_CCALL regerrorW(int code, const regex_tW*
       std::size_t len = p.size();
       if(len < buf_size)
       {
-         std::copy(p.c_str(), p.c_str() + p.size() + 1, buf);
+         re_detail::copy(p.c_str(), p.c_str() + p.size() + 1, buf);
       }
       return len + 1;
    }

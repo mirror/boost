@@ -435,10 +435,10 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
          return 0;
       }
       charT* p = static_cast<charT*>(this->m_pdata->m_data.extend(sizeof(charT) * (s1.size() + s2.size() + 2) ) );
-      std::copy(s1.begin(), s1.end(), p);
+      re_detail::copy(s1.begin(), s1.end(), p);
       p[s1.size()] = charT(0);
       p += s1.size() + 1;
-      std::copy(s2.begin(), s2.end(), p);
+      re_detail::copy(s2.begin(), s2.end(), p);
       p[s2.size()] = charT(0);
    }
    //
@@ -459,7 +459,7 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
       if(s.empty())
          return 0;  // invalid or unsupported equivalence class
       charT* p = static_cast<charT*>(this->m_pdata->m_data.extend(sizeof(charT) * (s.size()+1) ) );
-      std::copy(s.begin(), s.end(), p);
+      re_detail::copy(s.begin(), s.end(), p);
       p[s.size()] = charT(0);
       ++first;
    }
@@ -620,7 +620,7 @@ void basic_regex_creator<charT, traits>::finalize(const charT* p1, const charT* 
    m_pdata->m_expression_len = len;
    charT* ps = static_cast<charT*>(m_pdata->m_data.extend(sizeof(charT) * (1 + (p2 - p1))));
    m_pdata->m_expression = ps;
-   std::copy(p1, p2, ps);
+   re_detail::copy(p1, p2, ps);
    ps[p2 - p1] = 0;
    // fill in our other data...
    // successful parsing implies a zero status:
