@@ -148,7 +148,6 @@ namespace boost {
 <ul>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for <code>f</code> is assigned the value of the mixin for <code>g</code>.</li>
   <li><b>Returns</b>: <code>*this</code>.</li>
-  <li><b>Throws</b>: TBD: Should meet strong guarantee, but doesn't yet.</li>
 </ul>
 
 <p> <a name="functionN_target_assn"><code>template&lt;typename F&gt; function<i>N</i>& operator=(const F& g);</code></a>
@@ -156,7 +155,6 @@ namespace boost {
   <li><b>Requires</b>: <code>g</code> is a compatible function object.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
   <li><b>Returns</b>: <code>*this</code>.</li>
-  <li><b>Throws</b>: TBD: Should meet strong guarantee, but doesn't yet.</li>
   <li><b>Rationale</b>: <code>g</code> is a reference-to-<code>const</code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code>const</code> pointer-to-function.</li>
 </ul>
 
@@ -249,7 +247,7 @@ inline void <a name="swap_function">swap</a>(const function&lt;Arg1, Arg2, <i>..
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Sat Jul 14 15:55:35 EDT 2001
+Last modified: Sat Jul 14 16:04:32 EDT 2001
 <!-- hhmts end -->
   </body>
 </html>
