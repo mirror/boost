@@ -22,6 +22,7 @@ local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE <d
 #local DATE_TIME_PROPERTIES = $(DATE_TIME_PROPERTIES) <define>DATE_TIME_INLINE ;
 
 local DATE_TIME_INCLUDES = <include>$(BOOST_ROOT)
+                      <sysinclude>$(BOOST_ROOT)
                       <include>../../..
                       <include>../../../boost ;
 
