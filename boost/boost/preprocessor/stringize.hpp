@@ -17,7 +17,7 @@
 <a href="../../../../boost/preprocessor/stringize.hpp">Click here to see the header.</a>
 */
 
-//! Delays the stringization of E.
+//! Delays the stringization of X.
 /*!
 For example,
 
@@ -44,10 +44,11 @@ expand to:
   #pragma message("examples.cpp" "(" "__LINE__" ") : " "TBD!")
 \endverbatim</PRE>
 */
-#define BOOST_PP_STRINGIZE(E) BOOST_PP_STRINGIZE_DELAY(E)
+#define BOOST_PP_STRINGIZE(X) BOOST_PP_STRINGIZE_DELAY(X)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_STRINGIZE_DELAY(E) #E
+#define BOOST_PP_STRINGIZE_DELAY(X) BOOST_PP_DO_STRINGIZE(X)
+#define BOOST_PP_DO_STRINGIZE(X) #X
 #endif
 
 //! Obsolete. Use BOOST_PP_STRINGIZE().

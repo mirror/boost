@@ -17,7 +17,7 @@
 <a href="../../../../boost/preprocessor/cat.hpp">Click here to see the header.</a>
 */
 
-//! Delays the catenation of L and R.
+//! Delays the catenation of X and Y.
 /*!
 For example,
 
@@ -62,12 +62,13 @@ the above would expand to:
     ];
 \endverbatim</PRE>
 */
-#define BOOST_PP_CAT(L,R) BOOST_PP_CAT_DELAY(L,R)
+#define BOOST_PP_CAT(X,Y) BOOST_PP_CAT_DELAY(X,Y)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_CAT_DELAY(L,R) L##R
+#define BOOST_PP_CAT_DELAY(X,Y) BOOST_PP_DO_CAT(X,Y)
+#define BOOST_PP_DO_CAT(X,Y) X##Y
 #endif
 
 //! Obsolete. Use BOOST_PP_CAT().
-#define BOOST_PREPROCESSOR_CAT(L,R) BOOST_PP_CAT(L,R)
+#define BOOST_PREPROCESSOR_CAT(X,Y) BOOST_PP_CAT(X,Y)
 #endif
