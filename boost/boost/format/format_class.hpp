@@ -35,6 +35,7 @@ namespace boost {
         typedef typename io::CompatAlloc<Alloc>::type_for_string stringAlloc;  
 
         typedef std::basic_string<Ch, stringTr, stringAlloc>  string_type;
+        typename string_type::size_type                       size_type;
         typedef io::detail::format_item<Ch, Tr, Alloc>        format_item_t;
         typedef io::basic_altstringbuf<Ch, Tr, Alloc>         internal_streambuf_t;
         
@@ -51,14 +52,13 @@ namespace boost {
 #endif
         io::detail::locale_or_dummy_t  getloc() const;
 
-
-        typename string_type::size_type 
-                    size() const;            // sum of the current string pieces sizes
-        string_type str()  const;            // final string 
-
         basic_format& clear();       // empty all converted string buffers (except bound items)
         basic_format& clear_binds(); // unbind all bound items, and call clear()
         basic_format& parse(const string_type&); // resets buffers and parse a new format string
+
+        // ** formatted result ** //
+        size_type   size() const;    // sum of the current string pieces sizes
+        string_type str()  const;    // final string 
 
         // ** arguments passing ** //
         template<class T>  
