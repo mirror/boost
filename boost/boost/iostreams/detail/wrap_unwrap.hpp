@@ -69,8 +69,7 @@ struct unwrap_ios
 
     template<typename T>
     inline typename wrapped_type<T>::type 
-    wrap(const T& t) 
-    { return wrap_impl(t, is_std_io<T>()); }
+    wrap(const T& t) { return wrap_impl(t, is_std_io<T>()); }
 
     template<typename T>
     inline typename wrapped_type<T>::type 
