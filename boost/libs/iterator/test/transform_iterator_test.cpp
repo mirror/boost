@@ -59,7 +59,18 @@ struct adaptable_mult_functor
 };
 
 
+struct const_select_first
+{
+  typedef int const& result_type;
+
+  int const& operator()(std::pair<int, int>const& p) const
+  {
+    return p.first;
+  }
+};
+
 struct select_first
+  : const_select_first // derivation to allow conversions
 {
   typedef int& result_type;
 
@@ -76,16 +87,6 @@ struct select_second
   int& operator()(std::pair<int, int>& p) const
   {
     return p.second;
-  }
-};
-
-struct const_select_first
-{
-  typedef int const& result_type;
-
-  int const& operator()(std::pair<int, int>const& p) const
-  {
-    return p.first;
   }
 };
 
@@ -237,8 +238,12 @@ main()
         boost::make_transform_iterator((pair_t*)values, const_select_first()), x[0]); 
 
     boost::non_const_lvalue_iterator_test(
-        boost::make_transform_iterator((pair_t*)values, select_first()), x[0], 17); 
+        boost::make_transform_iterator((pair_t*)values, select_first()), x[0], 17);
 
+    boost::const_nonconst_iterator_test(
+        ++boost::make_transform_iterator((pair_t*)values, select_first())
+      , boost::make_transform_iterator((pair_t*)values, const_select_first())
+    );
   }
 
   std::cout << "test successful " << std::endl;

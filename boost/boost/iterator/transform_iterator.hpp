@@ -111,12 +111,18 @@ namespace boost
 #endif 
     }
 
-    template<class OtherIterator>
+    template<
+        class OtherUnaryFunction
+      , class OtherIterator
+      , class OtherReference
+      , class OtherValue>
     transform_iterator(
-         transform_iterator<UnaryFunction, OtherIterator, Reference, Value> const& t
+         transform_iterator<OtherUnaryFunction, OtherIterator, OtherReference, OtherValue> const& t
        , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0
+       , typename enable_if_convertible<OtherUnaryFunction, UnaryFunction>::type* = 0
     )
-      : super_t(t.base()), m_f(t.functor()) {}
+      : super_t(t.base()), m_f(t.functor())
+   {}
 
     UnaryFunction functor() const
       { return m_f; }
