@@ -56,7 +56,6 @@ for dir in $PATH; do
   fi
   if test -f $dir/java && test -x $dir/java; then
     JAVA="$dir/java"
-    JAVA_HOME=`dirname $dir`
   fi
 done
 IFS=$OLD_IFS
