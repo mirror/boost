@@ -410,6 +410,8 @@ unsigned int expected_failures = 6;
 unsigned int expected_failures = 2;
 #elif defined(__GNUC__)
 unsigned int expected_failures = 4;
+#elif defined(__HP_aCC)
+unsigned int expected_failures = 20;
 #else
 unsigned int expected_failures = 0;
 #endif
