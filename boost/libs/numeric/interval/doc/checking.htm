@@ -187,15 +187,14 @@ if the base type does not have corresponding values).</p>
     intervals, then <code>checking_base&lt;T&gt;</code> is a possibility.</li>
   <li>If you do not want empty intervals to be created and are not sure all
     the numbers are valid, then <code>checking_catch_nan&lt;T,
-    checking_no_empty&lt;T&gt; &gt;</code> can help you. This is the default
-    policy and it is also called
-  <code>interval_lib::checking_strict</code>.</li>
+    checking_no_empty&lt;T&gt; &gt;</code> can help you.</li>
   <li>If all the numbers will be valid and if no empty interval is supposed
     to be created (or if you do not want them to be created), then you can
     use <code>checking_no_nan&lt;T, checking_no_empty&lt;T&gt; &gt;</code>.
     Please note that if <code>T</code> does not have a way to represent
     invalid numbers, then this policy will behave the same way as
-    <code>checking_no_empty&lt;T&gt;</code>.</li>
+    <code>checking_no_empty&lt;T&gt;</code>. This is the default policy and
+    it is also called interval_lib::checking_strict.</li>
   <li>If all numerical data are valid but the algorithm can produce and
     manipulate empty intervals, then <code>checking_no_nan&lt;T&gt;</code>
     should be used.</li>
@@ -211,8 +210,9 @@ if the base type does not have corresponding values).</p>
 </ul>
 <hr>
 
-<p>Revised: 2003-01-19<br>
-Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.<br>
-Polytechnic University.</p>
+<p>Revised: 2003-04-24<br>
+Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
+Polytechnic University.<br>
+Copyright (c) Guillaume Melquiond, 2003.</p>
 </body>
 </html>

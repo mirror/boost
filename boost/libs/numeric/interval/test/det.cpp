@@ -1,4 +1,4 @@
-/* Boost test/det.hpp
+/* Boost test/det.cpp
  * test protected and unprotected rounding on an unstable determinant
  *
  * Copyright Guillaume Melquiond 2002-2003

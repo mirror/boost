@@ -35,7 +35,7 @@ return_type operator== (const interval&lt;T, Policies1&gt;&amp;, const interval&
 template&lt;class T, class Policies&gt;
 return_type operator== (const interval&lt;T, Policies&gt;&amp;, const T&amp;);</pre>
 
-<h2>Provided comparisons</h2>
+<h2>vided comparisons</h2>
 
 <h3>Default comparison</h3>
 
@@ -64,9 +64,9 @@ comparison was unsure and should have been rewritten.</p>
 <h3>Other comparisons</h3>
 
 <p>The other comparisons are selected by using a namespace. These namespaces
-are located under <code>boost::interval_lib::compare</code> and are invoked
-by:</p>
-<pre>using namespace boost::interval_lib::compare::the_comparison_to_select;</pre>
+are located under <code>boost::numeric::interval_lib::compare</code> and are
+invoked by:</p>
+<pre>using namespace boost::numeric::interval_lib::compare::the_comparison_to_select;</pre>
 
 <p>After this line, the default meaning of the operators will have been
 replaced by the meaning located in the namespace. Please note that because of
@@ -93,10 +93,18 @@ using namespace compare1;
 
 <p>Now comes the list of the provided comparisons. They all are located in
 their respective header files under
-<code>&lt;boost/numeric/interval/compare/&gt;</code>. And as for the default
-comparison, the operators will generally complain by throwing an exception if
-feed by invalid values.</p>
+<code>&lt;boost/numeric/interval/compare/...&gt;</code>. And as for the
+default comparison, the operators will generally complain by throwing an
+exception if feed by invalid values.</p>
 <ul>
+  <li><code>certain</code>: this comparison is equivalent to the default
+    scheme with the exceptional case mapped to <code>false</code>. So these
+    operators answer <code>true</code> only when the comparison is verified
+    for all pairs of elements.</li>
+  <li><code>possible</code>: this time, the exceptional case is mapped to
+    <code>true</code>. The operators answer <code>true</code> as soon as the
+    comparison is verified for a pair of elements.<br>
+  </li>
   <li><code>lexicographic</code>: the lexicographic order (the lower bounds
     are first compared, and if it is not enough to know the result, the upper
     bounds are then compared). This order does not have a meaning in interval
@@ -107,8 +115,8 @@ feed by invalid values.</p>
     invalid). <code>&lt;=</code> and <code>&lt;</code> are the subset and
     proper subset relations; and <code>&gt;=</code> and <code>&gt;</code> are
     the superset and proper superset relations.</li>
-  <li><code>tribool</code>: this comparison relies on the Boost Tri-state
-    boolean Library and changes the default operators so that an
+  <li><code>tribool</code>: this comparison relies on the Boost tristate
+    boolean library and changes the default operators so that an explicit
     indeterminate value is returned in the third case instead of throwing an
     exception.</li>
 </ul>
@@ -117,12 +125,14 @@ feed by invalid values.</p>
 
 <p></p>
 <pre>namespace boost {
-  namespace interval_lib {
+namespace numeric {
+namespace interval_lib {
 
 class comparison_error: std::runtime_error; // "boost::interval: uncertain comparison"
 
-  }
-}</pre>
+} // namespace interval_lib
+} // namespace numeric
+} // namespace boost</pre>
 
 <h2>Explicit comparison functions</h2>
 
@@ -135,12 +145,13 @@ true, the result is true) or <code>pos</code> (for "possible", if the default
 comparison is false, the result is false) followed by <code>lt</code>,
 <code>le</code>, <code>gt</code>, <code>ge</code>, <code>eq</code> or
 <code>ne</code>. They are located in
-<code>&lt;boost/numeric/interval/compare/explicit.hpp&gt;</code>. Each of these
-functions takes two parameters and returns a boolean; the parameters are
-expected to be valid, undefined behavior may result otherwise. For example,
-the definition of the "certainly less than" comparison is:</p>
+<code>&lt;boost/numeric/interval/compare/explicit.hpp&gt;</code>. Each of
+these functions takes two parameters and returns a boolean; the parameters
+are expected to be valid, undefined behavior may result otherwise. For
+example, the definition of the "certainly less than" comparison is:</p>
 <pre>namespace boost {
-  namespace interval_lib {
+namespace numeric {
+namespace interval_lib {
 
 template&lt;class T, class Policies1, class Policies2&gt;
 bool cerlt(const interval&lt;T, Policies1&gt;&amp; x, const interval&lt;T, Policies2&gt;&amp; y);
@@ -151,12 +162,14 @@ bool cerlt(const interval&lt;T, Policies&gt;&amp; x, const T&amp; y);
 template&lt;class T, class Policies&gt;
 bool cerlt(const T&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 
-  } // namespace interval_lib
+} // namespace interval_lib
+} // namespace numeric
 } // namespace boost</pre>
 <hr>
 
-<p>Revised: 2002-10-13<br>
-Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.<br>
-Polytechnic University.</p>
+<p>Revised: 2003-04-22<br>
+Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
+Polytechnic University.<br>
+Copyright (c) Guillaume Melquiond, 2003.</p>
 </body>
 </html>

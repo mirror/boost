@@ -45,16 +45,16 @@ void test_binary() {
       I rII = F::f_II(a, b);
       I rIT1 = F::f_IT(a, bl), rIT2 = F::f_IT(a, bu);
       I rTI1 = F::f_TI(al, b), rTI2 = F::f_TI(au, b);
-      T rTT1 = F::f_TT(al, bl), rTT2 = F::f_TT(al, bu);
-      T rTT3 = F::f_TT(au, bl), rTT4 = F::f_TT(au, bu);
-      BOOST_REQUIRE(in(rTT1, rIT1));
-      BOOST_REQUIRE(in(rTT3, rIT1));
-      BOOST_REQUIRE(in(rTT2, rIT2));
-      BOOST_REQUIRE(in(rTT4, rIT2));
-      BOOST_REQUIRE(in(rTT1, rTI1));
-      BOOST_REQUIRE(in(rTT2, rTI1));
-      BOOST_REQUIRE(in(rTT3, rTI2));
-      BOOST_REQUIRE(in(rTT4, rTI2));
+      I rTT1 = F::f_TT(al, bl), rTT2 = F::f_TT(al, bu);
+      I rTT3 = F::f_TT(au, bl), rTT4 = F::f_TT(au, bu);
+      BOOST_REQUIRE(subset(rTT1, rIT1));
+      BOOST_REQUIRE(subset(rTT3, rIT1));
+      BOOST_REQUIRE(subset(rTT2, rIT2));
+      BOOST_REQUIRE(subset(rTT4, rIT2));
+      BOOST_REQUIRE(subset(rTT1, rTI1));
+      BOOST_REQUIRE(subset(rTT2, rTI1));
+      BOOST_REQUIRE(subset(rTT3, rTI2));
+      BOOST_REQUIRE(subset(rTT4, rTI2));
       BOOST_REQUIRE(subset(rIT1, rII));
       BOOST_REQUIRE(subset(rIT2, rII));
       BOOST_REQUIRE(subset(rTI1, rII));
@@ -72,34 +72,37 @@ void test_binary() {
     static bool validate(const I& a) { return val; } \
   }
 
+using std::abs;
+
 new_unary_bunch(bunch_pos, +, true);
 new_unary_bunch(bunch_neg, -, true);
-//new_unary_bunch(bunch_sqrt, sqrt, a.lower() >= 0.);
-//new_unary_bunch(bunch_abs, abs, true);
+new_unary_bunch(bunch_sqrt, sqrt, a.lower() >= 0.);
+new_unary_bunch(bunch_abs, abs, true);
 
 template<class T>
 void test_all_unaries() {
   BOOST_CHECKPOINT("pos");  test_unary<T, bunch_pos<T> >();
   BOOST_CHECKPOINT("neg");  test_unary<T, bunch_neg<T> >();
-  //  BOOST_CHECKPOINT("sqrt"); test_unary<T, bunch_sqrt<T> >();
-  //  BOOST_CHECKPOINT("abs");  test_unary<T, bunch_abs<T> >();
+  BOOST_CHECKPOINT("sqrt"); test_unary<T, bunch_sqrt<T> >();
+  BOOST_CHECKPOINT("abs");  test_unary<T, bunch_abs<T> >();
 }
 
 #define new_binary_bunch(name, op, val) \
   template<class T> \
-  struct name { \
+  struct bunch_##name { \
     typedef boost::numeric::interval<T> I; \
     static I f_II(const I& a, const I& b) { return a op b; } \
     static I f_IT(const I& a, const T& b) { return a op b; } \
     static I f_TI(const T& a, const I& b) { return a op b; } \
-    static T f_TT(const T& a, const T& b) { return a op b; } \
+    static I f_TT(const T& a, const T& b) \
+    { return boost::numeric::interval_lib::name<I>(a,b); } \
     static bool validate(const I& a, const I& b) { return val; } \
   }
 
-new_binary_bunch(bunch_add, +, true);
-new_binary_bunch(bunch_sub, -, true);
-new_binary_bunch(bunch_mul, *, true);
-new_binary_bunch(bunch_div, /, !in_zero(b));
+new_binary_bunch(add, +, true);
+new_binary_bunch(sub, -, true);
+new_binary_bunch(mul, *, true);
+new_binary_bunch(div, /, !in_zero(b));
 
 template<class T>
 void test_all_binaries() {
@@ -116,8 +119,8 @@ int test_main(int, char *[]) {
   BOOST_CHECKPOINT("double tests");
   test_all_unaries<double>();
   test_all_binaries<double>();
-  BOOST_CHECKPOINT("long double tests");
-  test_all_unaries<long double>();
-  test_all_binaries<long double>();
+  //BOOST_CHECKPOINT("long double tests");
+  //test_all_unaries<long double>();
+  //test_all_binaries<long double>();
   return 0;
 }

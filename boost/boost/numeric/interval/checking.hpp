@@ -120,7 +120,7 @@ struct checking_catch_nan: Checking
 
 template<class T>
 struct checking_strict:
-  checking_catch_nan<T, checking_no_empty<T> >
+  checking_no_nan<T, checking_no_empty<T> >
 {};
 
 namespace detail {

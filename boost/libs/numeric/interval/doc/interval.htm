@@ -678,6 +678,8 @@ template &lt;class T, class Traits&gt;  bool posne(const T&amp; x, const interva
 
 <font color="#ff0000">/* comparison namespaces */</font>
 namespace compare {
+  namespace certain;
+  namespace possible;
   namespace lexicographic;
   namespace set;
   namespace tribool;
@@ -768,7 +770,7 @@ fixed-precision bigfloat library types (MPFR, etc.)</p>
 <p><strong>Policy design.</strong> Although it was tempting to make it a
 class template with only one template argument, the diversity of uses for an
 interval arithmetic practically forced us to use policies. The behavior of
-this class can be fixed by three policies. These policies are packaged into a
+this class can be fixed by two policies. These policies are packaged into a
 single policy class, rather than making <code>interval</code> with three
 template parameters. This is both for ease of use (the policy class can be
 picked by default) and for readability.</p>
@@ -806,8 +808,8 @@ singleton, there is no use to widen the interval). We decided to drop those
 functions.</p>
 
 <p><strong>Specialization of <code>std::less</code>.</strong> Since the
-operator <code>&lt;</code> depends on the comparison namespace chosen locally
-chosen by the user, it is not possible to correctly specialize
+operator <code>&lt;</code> depends on the comparison namespace locally chosen
+by the user, it is not possible to correctly specialize
 <code>std::less</code>. So you have to explicitely provide such a class to
 all the algorithms and templates that could require it (for example,
 <code>std::map</code>).</p>
@@ -841,6 +843,15 @@ instead, the result should be correctly rounded to ensure the inclusion
 property. So we decided not to provide the conversion and leave it up to the
 user to do it himself or herself.</p>
 
+<p><strong>Mixed operations with integers.</strong> When using and reusing
+template codes, it is common there are operations like <code>2*x</code>.
+However, the library does not provide them by default because the conversion
+from <code>int</code> to the base number type is not always correct. So the
+functions have been put in a separate header and the user need to include
+them explicitely if she wants to benefit from these mixed operators Another
+point, there is no mixed comparison operators due to the technical way they
+are defined..</p>
+
 <h2 id="acks">History and Acknowledgments</h2>
 
 <p>This library was mostly inspired by previous work from Jens Maurer. Some
@@ -860,9 +871,9 @@ order for this library to be written. Hervé reorganized and wrote chapters of
 the documentation based on Guillaume's great starting point.</p>
 <hr>
 
-<p>Revised: 2003-02-05<br>
-Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann,
-2002-2003.<br>
-Polytechnic University, 2002.</p>
+<p>Revised: 2003-04-22<br>
+Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
+Polytechnic University.<br>
+Copyright (c) Guillaume Melquiond, 2003.</p>
 </body>
 </html>

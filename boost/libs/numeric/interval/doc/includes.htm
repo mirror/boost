@@ -17,12 +17,12 @@ header:</p>
 <p>This header will include almost all the other headers (except the ones
 listed as extensions). However, you may not want to access all the
 functionalities of the library. So this page stands as a reminder for the
-whole structure of the library. <code>&lt;boost/numeric/interval.hpp&gt;</code>
-is the only header to be located directly under <code>boost/numeric/</code>;
-all the other headers are located in the subdirectory
-<code>boost/numeric/interval/</code>. And each time this documentation will
-refer to <code>interval/something.hpp</code>, it is
-<code>&lt;boost/numeric/interval/something.hpp&gt;</code>.</p>
+whole structure of the library.
+<code>&lt;boost/numeric/interval.hpp&gt;</code> is the only header to be
+located directly under <code>boost/numeric</code>; all the other headers are
+located in the subdirectory <code>boost/numeric/interval</code>. And each
+time this documentation will refer to <code>interval/something.hpp</code>, it
+is <code>&lt;boost/numeric/interval/something.hpp&gt;</code>.</p>
 
 <p>Please also note that all the following headers are independent and can
 easily be pre-compiled if necessary (for compilers which support pre-compiled
@@ -69,14 +69,19 @@ functions: <code>in,</code> <code>in_zero</code>, <code>empty</code>,
 <p>This header defines <code>fmod</code>, <code>square</code>,
 <code>sqrt</code> and <code>pow</code>.</p>
 
+<h3><code>interval/arith3.hpp</code></h3>
+
+<p>The third arithmetic header: it provides the functions <code>add</code>,
+<code>sub</code>, <code>mul</code>, <code>div</code>. The type of their
+arguments is the base number type.</p>
+
 <h3><code>interval/transc.hpp</code></h3>
 
-<p>It is the last of the three headers with mathematical functions; it
-provides the following functions: <code>cos</code>, <code>sin</code>,
-<code>tan</code>, <code>acos</code>, <code>asin</code>, <code>atan</code>,
-<code>cosh</code>, <code>sinh</code>, <code>tanh</code>, <code>acosh</code>,
-<code>asinh</code>, <code>atanh</code>, <code>exp</code> and
-<code>log</code>.</p>
+<p>It is the last of the headers with mathematical functions; it provides the
+following functions: <code>cos</code>, <code>sin</code>, <code>tan</code>,
+<code>acos</code>, <code>asin</code>, <code>atan</code>, <code>cosh</code>,
+<code>sinh</code>, <code>tanh</code>, <code>acosh</code>, <code>asinh</code>,
+<code>atanh</code>, <code>exp</code> and <code>log</code>.</p>
 
 <h2>Policies</h2>
 
@@ -125,6 +130,14 @@ are the arithmetic functions of the rounding policy.</p>
 <p>This header includes all the following headers. They provide some
 predefined comparison namespaces.</p>
 
+<h3><code>interval/compare/certain.hpp</code></h3>
+
+<p>Here is <code>compare::certain</code>.</p>
+
+<h3><code>interval/compare/possible.hpp</code></h3>
+
+<p>And here is its friend <code>compare::possible</code>.</p>
+
 <h3><code>interval/compare/explicit.hpp</code></h3>
 
 <p>The explicit comparison functions <code>cerlt</code>, <code>posge</code>,
@@ -154,16 +167,27 @@ be replaced by a customized version.</p>
 <p>This header provides a comparison namespace <code>compare::tribool</code>
 especially adapted to a tristate boolean.</p>
 
+<h3><code>interval/ext/integer.hpp</code></h3>
+
+<p>This header provides mixed operations between intervals and integers. It
+is done by converting the integer to the base number type. Because this
+comparison is not always correct (for a big <code>int</code> may not be
+exactly convertible to <code>float</code>), this header is not automatically
+included and the user should ensure that this behavior is compatible with
+what she wants to do (if it is only to multiply some intervals by 2, it
+probably is a good thing to include this header).</p>
+
 <h3><code>interval/ext/x86_fast_rounding_control.hpp</code></h3>
 
 <p>This header defines a new rounding policy allowing to workaround the
 precision problem of the x86 processors (and so speeding up the
 computations). However, it only is a partial solution and it shouldn't be
-used when there is a possibility of underflow.</p>
+used when there is a possibility of underflow or overflow.</p>
 <hr>
 
-<p>Revised: 2003-01-21<br>
-Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.<br>
-Polytechnic University.</p>
+<p>Revised: 2003-04-22<br>
+Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
+Polytechnic University.<br>
+Copyright (c) Guillaume Melquiond, 2003.</p>
 </body>
 </html>
