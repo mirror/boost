@@ -28,8 +28,9 @@
 //     Incrementable.
 // 
 // Revision History
+// 10 Feb 2001  Use new iterator_adaptor<> interface (David Abrahams)
 // 10 Feb 2001  Rolled in supposed Borland fixes from John Maddock, but not
-//              seeing any improvement yet
+//              seeing any improvement yet (David Abrahams)
 // 09 Feb 2001  Factored out is_numeric computation. Borland still
 //              unhappy :( (David Abrahams)
 // 08 Feb 2001  Beginning of a failed attempt to appease Borland
@@ -189,9 +190,16 @@ struct counting_iterator_policies : public default_iterator_policies
 template <class Incrementable>
 struct counting_iterator_generator
 {
+    typedef counting_iterator_traits<Incrementable> traits;
+    
     typedef iterator_adaptor<Incrementable,
         counting_iterator_policies<Incrementable>,
-        counting_iterator_traits<Incrementable> > type;
+        typename traits::value_type,
+        typename traits::reference,
+        typename traits::pointer,
+        typename traits::iterator_category,
+        typename traits::difference_type
+    > type;
 };
 
 // Manufacture a counting iterator for an arbitrary incrementable type
@@ -199,9 +207,19 @@ template <class Incrementable>
 inline typename counting_iterator_generator<Incrementable>::type
 make_counting_iterator(Incrementable x)
 {
+    typedef counting_iterator_traits<Incrementable> traits;
+    
+    // These typedefs appease MSVC
+    typedef typename traits::value_type value_type;
+    typedef typename traits::reference reference;
+    typedef typename traits::pointer pointer;
+    typedef typename traits::iterator_category iterator_category;
+    typedef typename traits::difference_type difference_type;
+    
     return iterator_adaptor<Incrementable,
         counting_iterator_policies<Incrementable>,
-        counting_iterator_traits<Incrementable> >(x);
+        value_type, reference, pointer, iterator_category,difference_type
+        >(x);
 }
 
 
