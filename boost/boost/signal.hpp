@@ -323,7 +323,7 @@ namespace boost {
     typename Signature, // function type R (T1, T2, ..., TN)
     typename Combiner = last_value<typename function_traits<Signature>::result_type>,
     typename Group = int,
-    typename GroupCompare = std::less<int>,
+    typename GroupCompare = std::less<Group>,
     typename SlotFunction = function<Signature>
   >
   class signal :
