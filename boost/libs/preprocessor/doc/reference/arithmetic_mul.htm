@@ -29,6 +29,9 @@
 <h2><a name="BOOST_PP_MUL">#define BOOST_PP_MUL</a>(X,Y)</h2>
  <p>Expands to the product of <code>X</code> and <code>Y</code>.</p>
 
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals
+in the range [0, <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>].</p>
+
 <p>For example, <code><a href="arithmetic_mul.htm#BOOST_PP_MUL">BOOST_PP_MUL</a>(4,3)</code> expands to <code>12</code> (a
 single token).</p>
 

@@ -30,7 +30,7 @@
  <p>Expands to <code>THEN</code> if <code>COND != 0</code> and <code>ELSE</code> if
 <code>COND == 0</code>.</p>
 
-<p><code>COND</code> must expand to an integer literal.</p>
+<p><code>COND</code> must expand to an integer literal in the range [0, <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>].</p>
 
 <p>For example, <code><a href="if.htm#BOOST_PP_IF">BOOST_PP_IF</a>(0,1,2)</code> expands to <code>2</code>.</p>
 

@@ -17,6 +17,9 @@
 
 /** <p>Expands to the logical OR of the operands.</p>
 
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals
+in the range [0, BOOST_PP_LIMIT_MAG].</p>
+
 <p>For example, <code>BOOST_PP_OR(0,2)</code> expands to <code>1</code> (a single token).</p>
 
 <h3>Test</h3>

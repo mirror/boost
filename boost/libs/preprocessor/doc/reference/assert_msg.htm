@@ -30,7 +30,7 @@
  <p>Expands to nothing if <code>COND != 0</code> and to <code>MSG</code> if
 <code>COND == 0</code>.</p>
 
-<p><code>COND</code> must expand to an integer literal.</p>
+<p><code>COND</code> must expand to an integer literal in the range [0, <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>].</p>
 
 <p>For example, <code><a href="assert_msg.htm#BOOST_PP_ASSERT_MSG">BOOST_PP_ASSERT_MSG</a>(1,A BUG!)</code> expands to <code>A BUG!</code>.</p>
 

@@ -19,7 +19,7 @@
 /** <p>Expands to <code>THEN</code> if <code>COND != 0</code> and <code>ELSE</code> if
 <code>COND == 0</code>.</p>
 
-<p><code>COND</code> must expand to an integer literal.</p>
+<p><code>COND</code> must expand to an integer literal in the range [0, BOOST_PP_LIMIT_MAG].</p>
 
 <p>For example, <code>BOOST_PP_IF(0,1,2)</code> expands to <code>2</code>.</p>
 

@@ -19,7 +19,8 @@
 /** <p>Expands to <code>1</code> if <code>X == Y</code> and <code>0</code>
 otherwise.</p>
 
-<p>Both <code>X</code> and <code>Y</code> must expand to integer literals.</p>
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals
+in the range [0, BOOST_PP_LIMIT_MAG].</p>
 
 <p>For example, <code>BOOST_PP_EQUAL(4,4)</code> expands to <code>1</code>.</p>
 

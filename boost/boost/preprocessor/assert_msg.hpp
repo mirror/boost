@@ -19,7 +19,7 @@
 /** <p>Expands to nothing if <code>COND != 0</code> and to <code>MSG</code> if
 <code>COND == 0</code>.</p>
 
-<p><code>COND</code> must expand to an integer literal.</p>
+<p><code>COND</code> must expand to an integer literal in the range [0, BOOST_PP_LIMIT_MAG].</p>
 
 <p>For example, <code>BOOST_PP_ASSERT_MSG(1,A BUG!)</code> expands to <code>A BUG!</code>.</p>
 */

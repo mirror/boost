@@ -29,6 +29,9 @@
 <h2><a name="BOOST_PP_NOR">#define BOOST_PP_NOR</a>(X,Y)</h2>
  <p>Expands to the logical NEITHER OR of the operands.</p>
 
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals
+in the range [0, <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>].</p>
+
 <p>For example, <code><a href="logical_nor.htm#BOOST_PP_NOR">BOOST_PP_NOR</a>(0,5)</code> expands to <code>0</code> (a single token).</p>
 
 <h3>Test</h3>

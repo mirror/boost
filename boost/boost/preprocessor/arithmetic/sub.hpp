@@ -19,6 +19,9 @@
 
 /** <p>Expands to the difference of <code>X</code> and <code>Y</code>.</p>
 
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals
+in the range [0, BOOST_PP_LIMIT_MAG].</p>
+
 <p>For example, <code>BOOST_PP_SUB(4,3)</code> expands to <code>1</code> (a
 single token).</p>
 

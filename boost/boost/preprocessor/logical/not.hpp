@@ -17,6 +17,8 @@
 
 /** <p>Expands to the logical NOT of the operand.</p>
 
+<p><code>X</code> must be an integer literal in the range [0, BOOST_PP_LIMIT_MAG].</p>
+
 <p>For example, <code>BOOST_PP_NOT(0)</code> expands to <code>1</code> (a single token).</p>
 
 <h3>Test</h3>

@@ -30,7 +30,8 @@
  <p>Expands to <code>1</code> if <code>X &lt;= Y</code> and <code>0</code>
 otherwise.</p>
 
-<p><code>X</code> must expand to an integer literal.</p>
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals
+in the range [0, <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>].</p>
 
 <p>For example, <code><a href="comparison_less_equal.htm#BOOST_PP_LESS_EQUAL">BOOST_PP_LESS_EQUAL</a>(7,5)</code> expands to <code>0</code>.</p>
 

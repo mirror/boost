@@ -20,7 +20,7 @@
 /** <p>Expands to a comma if <code>COND != 0</code> and nothing if
 <code>COND == 0</code>.</p>
 
-<p><code>COND</code> must expand to an integer literal.</p>
+<p><code>COND</code> must expand to an integer literal in the range [0, BOOST_PP_LIMIT_MAG].</p>
 
 <p>For example, <code>BOOST_PP_COMMA_IF(0)</code> expands to nothing.</p>
 */

@@ -20,6 +20,9 @@
 
 /** <p>Expands to the sum of <code>X</code> and <code>Y</code>.</p>
 
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals
+in the range [0, BOOST_PP_LIMIT_MAG].</p>
+
 <p>For example, <code>BOOST_PP_ADD(4,3)</code> expands to <code>7</code> (a
 single token).</p>
 

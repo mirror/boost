@@ -17,6 +17,9 @@
 
 /** <p>Expands to the logical AND of the operands.</p>
 
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals
+in the range [0, BOOST_PP_LIMIT_MAG].</p>
+
 <p>For example, <code>BOOST_PP_AND(0,5)</code> expands to <code>0</code> (a single token).</p>
 
 <h3>Test</h3>
