@@ -556,6 +556,8 @@ struct make_initializer_node
 
         };
 
+        friend class initializer_node;
+
     public: // metafunction result
 
         typedef mpl::pair<
