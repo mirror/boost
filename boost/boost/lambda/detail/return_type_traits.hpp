@@ -242,7 +242,16 @@ struct return_type_N<function_action<I, Ret>, Args> {
   // Ret is detail::unspecified, so try to deduce return type
 template<int I, class Args> 
 struct return_type_N<function_action<I, detail::unspecified>, Args > { 
-  typedef typename function_adaptor_with_actuals<Args>::type type;
+
+  // in the case of function action, the first element in Args is 
+  // some type of function
+  typedef typename Args::head_type Func;
+  typedef typename detail::remove_reference_and_cv<Func>::type plain_Func;
+
+public: 
+  // pass the function to function_adaptor, and get the return type from 
+  // that
+  typedef typename function_adaptor<plain_Func>::template sig<Args>::type type;
 };
 
 
