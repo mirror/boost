@@ -116,38 +116,24 @@ template< typename Case1 = mpl::true_,
           typename Type16 = detail::select_default >
 struct select {
     typedef typename
-            mpl::if_<
-                Case1, Type1, typename mpl::if_<
-                Case2, Type2, typename mpl::if_<
-                Case3, Type3, typename mpl::if_<
-                Case4, Type4, typename mpl::if_<
-                Case5, Type5, typename mpl::if_<
-                Case6, Type6, typename mpl::if_<
-                Case7, Type7, typename mpl::if_<
-                Case8, Type8, typename mpl::if_<
-                Case9, Type9, typename mpl::if_<
-                Case10, Type10, typename mpl::if_<
-                Case11, Type11, typename mpl::if_<
-                Case12, Type12, typename mpl::if_<
-                Case13, Type13, typename mpl::if_<
-                Case14, Type14, typename mpl::if_<
-                Case15, Type15, typename mpl::if_<
+            mpl::eval_if<
+                Case1, mpl::identity<Type1>, mpl::eval_if<
+                Case2, mpl::identity<Type2>, mpl::eval_if<
+                Case3, mpl::identity<Type3>, mpl::eval_if<
+                Case4, mpl::identity<Type4>, mpl::eval_if<
+                Case5, mpl::identity<Type5>, mpl::eval_if<
+                Case6, mpl::identity<Type6>, mpl::eval_if<
+                Case7, mpl::identity<Type7>, mpl::eval_if<
+                Case8, mpl::identity<Type8>, mpl::eval_if<
+                Case9, mpl::identity<Type9>, mpl::eval_if<
+                Case10, mpl::identity<Type10>, mpl::eval_if<
+                Case11, mpl::identity<Type11>, mpl::eval_if<
+                Case12, mpl::identity<Type12>, mpl::eval_if<
+                Case13, mpl::identity<Type13>, mpl::eval_if<
+                Case14, mpl::identity<Type14>, mpl::eval_if<
+                Case15, mpl::identity<Type15>, mpl::if_<
                 Case16, Type16, mpl::void_
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
-                >::type
+                > > > > > > > > > > > > > > >
             >::type                                 temp;
     typedef typename detail::lazy_eval<temp>::type  type;
 };
