@@ -23,6 +23,7 @@
 #define BOOST_RANDOM_UNIFORM_INT_HPP
 
 #include <cassert>
+#include <limits>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
@@ -76,15 +77,30 @@ inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
     return static_cast<result_type>(_rng() - _bmin) + _min;
   } else if(random::lessthan_signed_unsigned(_brange, _range)) {
     // use rejection method to handle things like 0..3 --> 0..4
-    // note: this still does not have perfect efficiency
     for(;;) {
-      // we have to concatenate several invocations of the base RNG
-      result_type result = 0;
-      for(result_type mult = 1;
-          mult-1 <= _range;
-          mult *= static_cast<result_type>(_brange)+1) {
-        result += (_rng() - _bmin) * mult;
+      // concatenate several invocations of the base RNG
+      // take extra care to avoid overflows
+      int limit;
+      if(_range == std::numeric_limits<result_type>::max()) {
+        limit = _range/(static_cast<result_type>(_brange)+1);
+        if(_range % static_cast<result_type>(_brange)+1 == _brange)
+          ++limit;
+      } else {
+        limit = (_range+1)/(static_cast<result_type>(_brange)+1);
       }
+      // we consider "result" as expressed to base (_brange+1)
+      // for every power of (_brange+1), we determine a random factor
+      result_type result = 0;
+      result_type mult = 1;
+      while(mult <= limit) {
+        result += (_rng() - _bmin) * mult;
+        mult *= static_cast<result_type>(_brange)+1;
+      }
+      if(mult == limit)
+        // _range+1 is an integer power of _brange+1: no rejections required
+        return result;
+      // _range/mult < _brange+1  -> no endless loop
+      result += uniform_int<base_type,result_type>(_rng, 0, _range/mult)() * mult;
       if(result <= _range)
         return result + _min;
     }
