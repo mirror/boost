@@ -4,8 +4,8 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 //  MACRO:         BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
-//  TITLE:         pthread_mutexattr_gettype
-//  DESCRIPTION:   The platform supports POSIX API pthread_mutexattr_gettype.
+//  TITLE:         pthread_mutexattr_settype
+//  DESCRIPTION:   The platform supports POSIX API pthread_mutexattr_settype.
 
 #include <pthread.h>
 
@@ -17,8 +17,8 @@ void f()
     // this is never called, it just has to compile:
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
-    int type;
-    pthread_mutexattr_gettype(&attr, &type);
+    int type = 0;
+    pthread_mutexattr_settype(&attr, type);
 }
 
 int test()

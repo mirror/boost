@@ -17,7 +17,7 @@ struct t
 private:
    void foo(){ i = j; }
 public:
-   void bar(){ j = i; } // silences warning from GCC
+   void uncallable(); // silences warning from GCC
    int i;
    int j;
 };
