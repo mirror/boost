@@ -25,12 +25,18 @@
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#Introduction">Introduction</a></dt>
-  <dt><a href="#Debug mode compilation options">Debug mode compilation options</a></dt>
-  <dt><a href="#Release mode compilation options">Release mode compilation 
-  options</a></dt>
-  <dt><a href="#Application Defined Macros">Application Defined Macros</a></dt>
+  <dt><a href="#General configuration">General configuration</a></dt>
+  <dd><a href="#Introduction">Introduction</a></dd>
+  <dd><a href="#Debug mode compilation options">Debug mode compilation options</a></dd>
+  <dd><a href="#Release mode compilation options">Release mode compilation 
+  options</a></dd>
+  <dd><a href="#Application Defined Macros">Application Defined Macros</a></dd>
+  <dt><a href="#Compiler-specific configuration">Compiler-specific 
+  configuration</a></dt>
+  <dd><a href="#Intel 7.0 (Win32, MS Visual Studio 6 std library)">Intel 7.0 
+  (Win32, MS Visual Studio 6 std library)</a></dd>
 </dl>
+<h1><a name="General configuration">General configuration</a></h1>
 <h2><a name="Introduction">Introduction</a></h2>
 <p>The library uses several configuration macros in
 <a href="http://www.boost.org/libs/config/config.htm">&lt;boost/config.hpp&gt;</a>, 
@@ -78,9 +84,15 @@ options</a></h2>
     </td>
   </tr>
 </table>
+<h1><a name="Compiler-specific configuration">Compiler-specific configuration</a></h1>
+<h2><a name="Intel 7.0 (Win32, MS Visual Studio 6 std library)">Intel 7.0 
+(Win32, MS Visual Studio 6 std library)</a></h2>
+<p>By default, this compiler has argument dependent lookup disabled. ADL must 
+be enabled to compile the library without errors. To enable ADL, &quot;<code>/Qoption,c,--arg_dep_lookup</code>&quot; 
+must be added to the compiler command line (without the quotes).</p>
 <hr>
 <p>Revised 
-      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->11 January, 2004<!--webbot bot="Timestamp" endspan i-checksum="38695" -->
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->21 May, 2004<!--webbot bot="Timestamp" endspan i-checksum="13982" -->
 </p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
