@@ -22,9 +22,11 @@
 
 <P>This macro is useful for generating code to avoid combinatorial explosion.</P>
 
+<H3>Legend</H3>
 <UL>
   <LI><B>LL</B> is a list of lists.
-  <LI><B>X</B> is an element of the cartesian product of the lists LL.
+  <LI><B>X</B> is a list of the elements of an element of the cartesian product of
+      the lists LL.
 </UL>
 
 <H3>Example</H3>

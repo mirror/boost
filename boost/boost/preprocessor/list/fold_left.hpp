@@ -34,8 +34,11 @@
   )
 </PRE>
 
-<P>Note that folding, or accumulation, is a very general pattern of computation.
-Most list operations can be implemented in terms of folding.</P>
+<H3>Note</H3>
+<UL>
+  <LI>Folding, or accumulation, is a very general pattern of computation.
+      Most list operations can be implemented in terms of folding.
+</UL>
 
 <H3>See</H3>
 <UL>

@@ -26,8 +26,11 @@
 
 <P>expands to (A,B,C).</P>
 
-<P>NOTE: The supported size of the list being converted to a tuple is limited by
-BOOST_PP_LIMIT_MAG rather than BOOST_PP_LIMIT_TUPLE.</P>
+<H3>Note</H3>
+<UL>
+  <LI>The supported size of the list being converted to a tuple is limited by
+      BOOST_PP_LIMIT_MAG rather than BOOST_PP_LIMIT_TUPLE.</P>
+</UL>
 
 <H3>Uses</H3>
 <UL>
