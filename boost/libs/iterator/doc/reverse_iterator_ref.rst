@@ -15,6 +15,7 @@
     Iterator base() const;
     reference operator*() const;
     reverse_iterator& operator++();
+    reverse_iterator& operator--();
   private:
     Iterator m_iterator; // exposition
   };
@@ -39,6 +40,12 @@ argument models.
 
 ``reverse_iterator`` operations
 ...............................
+
+In addition to the operations required by the concepts modeled by
+``reverse_iterator``, ``reverse_iterator`` provides the following
+operations.
+
+
 
 ``reverse_iterator();``
 
@@ -84,4 +91,10 @@ argument models.
 ``reverse_iterator& operator++();``
 
 :Effects: ``--m_iterator``
+:Returns: ``*this``
+
+
+``reverse_iterator& operator--();``
+
+:Effects: ``++m_iterator``
 :Returns: ``*this``

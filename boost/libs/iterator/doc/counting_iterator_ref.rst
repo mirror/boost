@@ -12,8 +12,11 @@
       counting_iterator(counting_iterator const& rhs);
       explicit counting_iterator(Incrementable x);
       Incrementable base() const;
+      reference operator*() const;
+      counting_iterator& operator++();
+      counting_iterator& operator--();
    private:
-      Incrementable current; // exposition
+      Incrementable m_inc; // exposition
     };
 
 
@@ -61,6 +64,11 @@ required::
 ``counting_iterator`` operations
 ................................
 
+In addition to the operations required by the concepts modeled by
+``counting_iterator``, ``counting_iterator`` provides the following
+operations.
+
+
 ``counting_iterator();``
 
 :Returns: A default constructed instance of ``counting_iterator``.
@@ -74,20 +82,27 @@ required::
 
 ``explicit counting_iterator(Incrementable x);``
 
-:Returns: An instance of ``counting_iterator`` with ``current``
+:Returns: An instance of ``counting_iterator`` with ``m_inc``
     constructed from ``x``.
 
 
 ``reference operator*() const;``
 
-:Returns: ``current``
+:Returns: ``m_inc``
 
 
 ``counting_iterator& operator++();``
 
-:Effects: ``++current``
-  
+:Effects: ``++m_inc``
+:Returns: ``*this``
+
+
+``counting_iterator& operator--();``
+
+:Effects: ``--m_inc``
+:Returns: ``*this``  
+
 
 ``Incrementable base() const;``
 
-:Returns: ``current``
+:Returns: ``m_inc``

@@ -18,11 +18,11 @@
         , typename enable_if_convertible<I2, Iterator>::type* = 0      // exposition
         , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition
     );
-
-    reference operator*() const;
-    transform_iterator& operator++();
     Iterator base() const;
     UnaryFunction functor() const;
+    reference operator*() const;
+    transform_iterator& operator++();
+    transform_iterator& operator--();
   private:
     Iterator m_iterator; // exposition
     UnaryFunction m_f;   // exposition
@@ -66,6 +66,11 @@ The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
 ``transform_iterator`` operations
 .................................
 
+In addition to the operations required by the concepts modeled by
+``transform_iterator``, ``transform_iterator`` provides the following
+operations.
+
+
 ``transform_iterator();``
 
 :Returns: An instance of ``transform_iterator`` with ``m_f``
@@ -108,5 +113,11 @@ The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
 ``transform_iterator& operator++();``
 
 :Effects: ``++m_iterator``
+:Returns: ``*this``
+
+
+``transform_iterator& operator--();``
+
+:Effects: ``--m_iterator``
 :Returns: ``*this``
 

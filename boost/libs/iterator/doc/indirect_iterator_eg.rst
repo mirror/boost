@@ -1,6 +1,15 @@
 Example
 .......
 
+This example prints an array of characters, using
+``indirect_iterator`` to access the array of characters through an
+array of pointers. Next ``indirect_iterator`` is used with the
+``transform`` algorithm to copy the characters (incremented by one) to
+another array. A constant indirect iterator is used for the source and
+a mutable indirect iterator is used for the destination. The last part
+of the example prints the original array of characters, but this time
+using the ``make_indirect_iterator`` helper function.
+
 
 ::
 
@@ -52,3 +61,4 @@ The output is::
     a,b,c,d,e,f,g,
     b,c,d,e,f,g,h,
     a,b,c,d,e,f,g,
+

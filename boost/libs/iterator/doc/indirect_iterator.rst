@@ -20,5 +20,8 @@
 
 .. contents:: Table of Contents
 
+``indirect_iterator`` synopsis
+..............................
+
 .. include:: indirect_iterator_ref.rst
 .. include:: indirect_iterator_eg.rst

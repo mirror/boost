@@ -20,6 +20,9 @@
 
 .. contents:: Table of Contents
 
+``filter_iterator`` synopsis
+............................
+
 .. include:: filter_iterator_ref.rst
 .. include:: make_filter_iterator.rst
 

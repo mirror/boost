@@ -21,7 +21,7 @@
 .. contents:: Table of Contents
 
 ``reverse_iterator`` synopsis
------------------------------
+.............................
 
 .. include:: reverse_iterator_ref.rst
 .. include:: make_reverse_iterator.rst

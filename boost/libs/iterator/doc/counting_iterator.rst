@@ -20,6 +20,9 @@
 
 .. contents:: Table of Contents
 
+``counting_iterator`` synopsis
+..............................
+
 .. include:: counting_iterator_ref.rst
 .. include:: make_counting_iterator.rst
 

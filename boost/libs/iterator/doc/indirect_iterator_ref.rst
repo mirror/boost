@@ -31,6 +31,9 @@
       );
 
       Iterator base() const;
+      reference operator*() const;
+      indirect_iterator& operator++();
+      indirect_iterator& operator--();
   private:
      Iterator m_iterator; // exposition
   };
@@ -108,6 +111,11 @@ the ``Iterator`` argument.
 ``indirect_iterator`` operations
 ................................
 
+In addition to the operations required by the concepts modeled by
+``indirect_iterator``, ``indirect_iterator`` provides the following
+operations.
+
+
 ``indirect_iterator();``
 
 :Requires: ``Iterator`` must be Default Constructible.
@@ -141,3 +149,20 @@ the ``Iterator`` argument.
 ``Iterator base() const;``
 
 :Returns: ``m_iterator``
+
+
+``reference operator*() const;``
+
+:Returns:  ``**m_iterator``
+
+
+``indirect_iterator& operator++();``
+
+:Effects: ``++m_iterator``
+:Returns: ``*this``
+
+
+``indirect_iterator& operator--();``
+
+:Effects: ``--m_iterator``
+:Returns: ``*this``

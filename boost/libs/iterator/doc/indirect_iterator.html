@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
 <title>Indirect Iterator</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -50,12 +50,15 @@ iterators over smart pointers, which the impl handles. -JGS -->
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#indirect-iterator-requirements" id="id1" name="id1"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#indirect-iterator-models" id="id2" name="id2"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#indirect-iterator-operations" id="id3" name="id3"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></li>
-<li><a class="reference" href="#example" id="id4" name="id4">Example</a></li>
+<li><a class="reference" href="#indirect-iterator-synopsis" id="id1" name="id1"><tt class="literal"><span class="pre">indirect_iterator</span></tt> synopsis</a></li>
+<li><a class="reference" href="#indirect-iterator-requirements" id="id2" name="id2"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#indirect-iterator-models" id="id3" name="id3"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#indirect-iterator-operations" id="id4" name="id4"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#example" id="id5" name="id5">Example</a></li>
 </ul>
 </div>
+<div class="section" id="indirect-iterator-synopsis">
+<h1><a class="toc-backref" href="#id1" name="indirect-iterator-synopsis"><tt class="literal"><span class="pre">indirect_iterator</span></tt> synopsis</a></h1>
 <pre class="literal-block">
 template &lt;
     class Iterator
@@ -88,6 +91,9 @@ class indirect_iterator
     );
 
     Iterator base() const;
+    reference operator*() const;
+    indirect_iterator&amp; operator++();
+    indirect_iterator&amp; operator--();
 private:
    Iterator m_iterator; // exposition
 };
@@ -122,8 +128,9 @@ else
 <p>The member <tt class="literal"><span class="pre">indirect_iterator::iterator_category</span></tt> is a type that
 satisfies the requirements of the concepts modeled by the indirect
 iterator as specified in the models section.</p>
+</div>
 <div class="section" id="indirect-iterator-requirements">
-<h1><a class="toc-backref" href="#id1" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h1>
+<h1><a class="toc-backref" href="#id2" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h1>
 <p>The <tt class="literal"><span class="pre">Iterator</span></tt> argument shall meet the requirements of Readable
 Iterator. The <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> argument shall be one of the
 standard iterator tags or <tt class="literal"><span class="pre">use_default</span></tt>. If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>
@@ -139,7 +146,7 @@ is not <tt class="literal"><span class="pre">use_default</span></tt>, as implied
 default for the <tt class="literal"><span class="pre">value_type</span></tt> member.</p>
 </div>
 <div class="section" id="indirect-iterator-models">
-<h1><a class="toc-backref" href="#id2" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h1>
+<h1><a class="toc-backref" href="#id3" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h1>
 <p>If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is a standard iterator tag,
 <tt class="literal"><span class="pre">indirect_iterator</span></tt> is a model of the iterator concept corresponding
 to the tag, otherwise <tt class="literal"><span class="pre">indirect_iterator</span></tt> satisfies the requirements
@@ -153,7 +160,10 @@ the <tt class="literal"><span class="pre">Iterator</span></tt> argument.</p>
 <tt class="literal"><span class="pre">indirect_iterator</span></tt> models Lvalue Iterator.</p>
 </div>
 <div class="section" id="indirect-iterator-operations">
-<h1><a class="toc-backref" href="#id3" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h1>
+<h1><a class="toc-backref" href="#id4" name="indirect-iterator-operations"><tt class="literal"><span class="pre">indirect_iterator</span></tt> operations</a></h1>
+<p>In addition to the operations required by the concepts modeled by
+<tt class="literal"><span class="pre">indirect_iterator</span></tt>, <tt class="literal"><span class="pre">indirect_iterator</span></tt> provides the following
+operations.</p>
 <p><tt class="literal"><span class="pre">indirect_iterator();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -208,9 +218,48 @@ indirect_iterator(
 </tr>
 </tbody>
 </table>
+<p><tt class="literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">**m_iterator</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">indirect_iterator&amp;</span> <span class="pre">operator++();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="literal"><span class="pre">++m_iterator</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*this</span></tt></td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">indirect_iterator&amp;</span> <span class="pre">operator--();</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="literal"><span class="pre">--m_iterator</span></tt></td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*this</span></tt></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="example">
-<h1><a class="toc-backref" href="#id4" name="example">Example</a></h1>
+<h1><a class="toc-backref" href="#id5" name="example">Example</a></h1>
+<p>This example prints an array of characters, using
+<tt class="literal"><span class="pre">indirect_iterator</span></tt> to access the array of characters through an
+array of pointers. Next <tt class="literal"><span class="pre">indirect_iterator</span></tt> is used with the
+<tt class="literal"><span class="pre">transform</span></tt> algorithm to copy the characters (incremented by one) to
+another array. A constant indirect iterator is used for the source and
+a mutable indirect iterator is used for the destination. The last part
+of the example prints the original array of characters, but this time
+using the <tt class="literal"><span class="pre">make_indirect_iterator</span></tt> helper function.</p>
 <pre class="literal-block">
 char characters[] = &quot;abcdefg&quot;;
 const int N = sizeof(characters)/sizeof(char) - 1; // -1 since characters has a null char
@@ -261,6 +310,12 @@ b,c,d,e,f,g,h,
 a,b,c,d,e,f,g,
 </pre>
 </div>
+</div>
+<hr class="footer"/>
+<div class="footer">
+<a class="reference" href="indirect_iterator.rst">View document source</a>.
+Generated on: 2004-01-12 15:51 UTC.
+Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>

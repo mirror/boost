@@ -187,15 +187,15 @@ Traits
 Testing and Concept Checking
 ----------------------------
 
-* |iterator_archetypes|_: Add summary here
+* |iterator_concepts|_: Concept checking classes for the new iterator concepts.
 
-* |iterator_concepts|_: Add summary
-
-.. |iterator_archetypes| replace:: ``iterator_archetypes.hpp``
-.. _iterator_archetypes: iterator_archetypes.html
+* |iterator_archetypes|_: Concept archetype classes for the new iterators concepts.
 
 .. |iterator_concepts| replace:: ``iterator_concepts.hpp``
 .. _iterator_concepts: iterator_concepts.html
+
+.. |iterator_archetypes| replace:: ``iterator_archetypes.hpp``
+.. _iterator_archetypes: iterator_archetypes.html
 
 
 =======================================================
