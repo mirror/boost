@@ -438,9 +438,9 @@ namespace boost {
                            R BOOST_FUNCTION_COMMA
                            BOOST_FUNCTION_TEMPLATE_ARGS
                          >::type
-          invoker_type;
+          actual_invoker_type;
 
-        invoker = &invoker_type::invoke;
+        invoker = &actual_invoker_type::invoke;
         this->manager =
           &detail::function::functor_manager<FunctionPtr, Allocator>::manage;
         this->functor =
@@ -471,16 +471,16 @@ namespace boost {
                                        R BOOST_FUNCTION_COMMA
                                        BOOST_FUNCTION_TEMPLATE_ARGS
                                      >::type
-          invoker_type;
+          actual_invoker_type;
 
-        invoker = &invoker_type::invoke;
+        invoker = &actual_invoker_type::invoke;
         this->manager = &detail::function::functor_manager<
                                     FunctionObj, Allocator>::manage;
 #ifndef BOOST_NO_STD_ALLOCATOR
         typedef typename Allocator::template rebind<FunctionObj>::other
-          allocator_type;
-        typedef typename allocator_type::pointer pointer_type;
-        allocator_type allocator;
+          rebound_allocator_type;
+        typedef typename rebound_allocator_type::pointer pointer_type;
+        rebound_allocator_type allocator;
         pointer_type copy = allocator.allocate(1);
         allocator.construct(copy, f);
 
@@ -505,9 +505,9 @@ namespace boost {
                                        R BOOST_FUNCTION_COMMA
                                        BOOST_FUNCTION_TEMPLATE_ARGS
                                      >::type
-          invoker_type;
+          actual_invoker_type;
 
-        invoker = &invoker_type::invoke;
+        invoker = &actual_invoker_type::invoke;
         this->manager = &detail::function::trivial_manager<FunctionObj>::get;
         this->functor =
           this->manager(
@@ -527,8 +527,8 @@ namespace boost {
                        R BOOST_FUNCTION_COMMA
                        BOOST_FUNCTION_TEMPLATE_ARGS
                      >::type
-          invoker_type;
-      invoker = &invoker_type::invoke;
+          actual_invoker_type;
+      invoker = &actual_invoker_type::invoke;
       this->manager = &detail::function::trivial_manager<FunctionObj>::get;
       this->functor = detail::function::make_any_pointer(this);
     }
