@@ -63,7 +63,7 @@ using boost::get_pointer ;
 
 // MSVC6.0 does not support comparisons of optional against a literal null pointer value (0)
 // via the safe_bool operator.
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) // 1200 == VC++ 6.0
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1300) ) // 1300 == VC++ 7.1
 #define BOOST_OPTIONAL_NO_NULL_COMPARE
 #endif
 
