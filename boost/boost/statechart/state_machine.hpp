@@ -20,6 +20,7 @@
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/clear.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/at.hpp>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/type_traits/is_pointer.hpp>
@@ -561,9 +562,32 @@ class state_machine : noncopyable
       // different function pointer and back must yield the same value. The
       // following reinterpret_cast is the first half of such a sequence.
       store_history_impl(
-        shallowHistoryMap_, 
+        shallowHistoryMap_,
         history_key_type::make_history_key< HistorizedState >(),
         reinterpret_cast< void (*)() >( &HistorizedState::deep_construct ) );
+    }
+
+    template<
+      class HistoryContext,
+      detail::orthogonal_position_type orthogonalPosition >
+    void clear_shallow_history()
+    {
+      // If you receive a
+      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
+      // similar compiler error here then you tried to clear shallow history
+      // for a state that does not have shallow history. That is, the state
+      // does not pass either fsm::has_shallow_history or
+      // fsm::has_full_history to its base class template.
+      BOOST_STATIC_ASSERT( HistoryContext::shallow_history );
+
+      typedef typename mpl::at_c<
+        typename HistoryContext::inner_initial_list,
+        orthogonalPosition >::type historized_state;
+
+      store_history_impl(
+        shallowHistoryMap_,
+        history_key_type::make_history_key< historized_state >(),
+        reinterpret_cast< void (*)() >( 0 ) );
     }
 
     template< class DefaultState >
@@ -598,6 +622,29 @@ class state_machine : noncopyable
         deepHistoryMap_, 
         history_key_type::make_history_key< HistorizedState >(),
         reinterpret_cast< void (*)() >( &constructor_type::construct ) );
+    }
+
+    template<
+      class HistoryContext,
+      detail::orthogonal_position_type orthogonalPosition >
+    void clear_deep_history()
+    {
+      // If you receive a
+      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
+      // similar compiler error here then you tried to clear deep history for
+      // a state that does not have deep history. That is, the state does not
+      // pass either fsm::has_deep_history or fsm::has_full_history to its
+      // base class template
+      BOOST_STATIC_ASSERT( HistoryContext::deep_history );
+
+      typedef typename mpl::at_c<
+        typename HistoryContext::inner_initial_list,
+        orthogonalPosition >::type historized_state;
+
+      store_history_impl(
+        deepHistoryMap_,
+        history_key_type::make_history_key< historized_state >(),
+        reinterpret_cast< void (*)() >( 0 ) );
     }
 
     template< class DefaultState >
@@ -861,8 +908,7 @@ class state_machine : noncopyable
       
       if ( pFoundSlot->second == 0 )
       {
-        // We either have never entered this state before or we are not
-        // transitioning from outside the outer state.
+        // We have never entered this state before.
         DefaultState::deep_construct(
           pContext, *polymorphic_downcast< MostDerived * >( this ) );
       }

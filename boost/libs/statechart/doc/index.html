@@ -48,21 +48,18 @@ include:</p>
   <li>Generic design allowing for the customization of memory management, 
   error handling and threading</li>
 </ul>
-<p>All code has been tested on the following platforms:</p>
+<p>All code has been tested on the following platforms using boost 
+distribution 1.30.2:</p>
 <ul>
-  <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003) with boost 
-  distribution 1.30.2</li>
+  <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
+  <li>GCC3.2 (Mingw)</li>
 </ul>
 <p>The library is functionally complete. However, the following is still in 
 the making:</p>
 <ol>
-  <li>Integrate standard conformance fixed contributed by Peter Petrov. The 
-  library will then also work on GCC 3.2 and be much easier portable to other 
-  highly conformant compilers</li>
-  <li>Add the state type information facility to simple_state</li>
-  <li>Rework the worker and asynchronous_state_machine templates so that state 
-  machine objects can dynamically be added and removed and workers with 
-  priority-queues become possible</li>
+  <li>Rework the <code>worker</code> and <code>asynchronous_state_machine</code> 
+  templates so that state machine objects can dynamically be added and removed 
+  and workers with priority-queues become possible</li>
   <li>Regression tests</li>
   <li>Refactor the <code>state_machine</code> class template to reduce code 
   size in projects with many different state machines</li>
@@ -86,6 +83,15 @@ the making:</p>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>09 February 2004:</p>
+<ul>
+  <li>Integrated the standard conformance fixes contributed by Peter Petrov. 
+  The library now also works on GCC 3.2 and should be much easier portable to 
+  other highly conformant compilers</li>
+  <li>Added the state type information facility to <code>simple_state</code></li>
+  <li>Added the function templates <code>simple_state::clear_shallow_history()</code> 
+  and <code>simple_state::clear_deep_history()</code></li>
+</ul>
 <p>11 January 2004:</p>
 <ul>
   <li>Finished reference documentation</li>
@@ -135,7 +141,7 @@ the making:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 January, 2004<!--webbot bot="Timestamp" endspan i-checksum="38695" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 February, 2004<!--webbot bot="Timestamp" endspan i-checksum="40415" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

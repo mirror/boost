@@ -70,8 +70,6 @@ struct simple_state_base_type
       allocator_type;
     typedef typename Context::outermost_context_type::rtti_policy_type
       rtti_policy_type;
-    // TODO: Check that position in inner initial list corresponds to
-    // orthogonal_position
     typedef typename detail::make_list< InnerInitial >::type
       inner_initial_list;
 
@@ -247,7 +245,20 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       return outermost_context().template state_downcast< Target >();
     }
 
-    
+    typedef typename context_type::state_base_type state_base_type;
+    typedef typename context_type::state_iterator state_iterator;
+
+    state_iterator state_begin() const
+    {
+      return outermost_context().state_begin();
+    }
+
+    state_iterator state_end() const
+    {
+      return outermost_context().state_end();
+    }
+
+
     typedef typename context_type::event_base_ptr_type event_base_ptr_type;
 
     void post_event( const event_base_ptr_type & pEvent )
@@ -296,6 +307,24 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       state_base_type::reaction_initiated();
       outermost_context().terminate( *this );
       return do_discard_event;
+    }
+
+    template<
+      class HistoryContext,
+      detail::orthogonal_position_type orthogonalPosition >
+    void clear_shallow_history()
+    {
+      outermost_context().clear_shallow_history<
+        HistoryContext, orthogonalPosition >();
+    }
+
+    template<
+      class HistoryContext,
+      detail::orthogonal_position_type orthogonalPosition >
+    void clear_deep_history()
+    {
+      outermost_context().clear_deep_history<
+        HistoryContext, orthogonalPosition >();
     }
 
   protected:
@@ -477,7 +506,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     {
       reserve_shallow_history_slot< context_type::shallow_history >(
         outermostContext );
-      reserve_deep_history_slot_impl< context_type::deep_history >(
+      reserve_deep_history_slot< context_type::deep_history >(
         outermostContext );
     }
 
@@ -821,7 +850,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     };
 
     template< bool reserveDeepHistorySlot >
-    static void reserve_deep_history_slot_impl(
+    static void reserve_deep_history_slot(
       outermost_context_type & outermostContext )
     {
       typedef typename mpl::if_<

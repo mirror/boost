@@ -157,6 +157,9 @@ the indicated results:</p>
   </tr>
 </table>
 <h2><a name="Worker">Worker</a> concept</h2>
+<p><font color="#FF0000">The Worker concept and the <code>
+asynchronous_state_machine</code> class template will be changed substantially 
+in the near future (see <a href="index.html">to-do list</a>).</font></p>
 <p>A Worker type defines the following:</p>
 <ul>
   <li>How events are added to the workers' event queue</li>
@@ -481,6 +484,9 @@ iterators are invalidated when a modifier function is called</p>
 <h1>Header &lt;boost/fsm/<a name="asynchronous_state_machine.hpp">asynchronous_state_machine.hpp</a>&gt;</h1>
 <h2><a name="Class template asynchronous_state_machine">Class template <code>
 asynchronous_state_machine</code></a></h2>
+<p><font color="#FF0000">The Worker concept and the <code>
+asynchronous_state_machine</code> class template will be changed substantially 
+in the near future (see <a href="index.html">to-do list</a>).</font></p>
 <p>This is the base class template of all asynchronous state machines.</p>
 <h3>Class template <code>asynchronous_state_machine</code> parameters</h3>
 <table border="3" cellpadding="2" width="100%" id="AutoNumber8">
@@ -714,6 +720,14 @@ namespace fsm
       template&lt; class Target &gt;
       Target <a href="#simple_state::state_downcast">state_downcast</a>() const;
 
+      // a model of the StateBase concept
+      typedef <i>implementation-defined</i> state_base_type;
+      // a model of the standard Forward Iterator concept
+      typedef <i>implementation-defined</i> state_iterator;
+
+      state_iterator <a href="#simple_state::state_begin">state_begin</a>() const;
+      state_iterator <a href="#simple_state::state_end">state_end</a>() const;
+
       void <a href="#post_event">post_event</a>(
         const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );
 
@@ -730,6 +744,17 @@ namespace fsm
         void ( TransitionContext::* )( const Event &amp; ),
         const Event &amp; );
       <a href="#Enum result">result</a> <a href="#simple_state::terminate">terminate</a>();
+
+      template&lt;
+        class HistoryContext,
+        <i>implementation-defined-unsigned-integer-type
+</i>          orthogonalPosition &gt;
+      void <a href="#clear_shallow_history">clear_shallow_history</a>();
+      template&lt;
+        class HistoryContext,
+        <i>implementation-defined-unsigned-integer-type
+</i>          orthogonalPosition &gt;
+      void <a href="#clear_deep_history">clear_deep_history</a>();
 
       static id_type <a href="#static_type">static_type</a>();
 
@@ -901,6 +926,37 @@ function must return this value to its caller<br>
 <b>Caution</b>: Inevitably exits (destructs) this state before returning to 
 the calling <code>react</code> member function, which must therefore not 
 attempt to access anything except stack objects before returning to its caller</p>
+<pre>template&lt;
+  class HistoryContext,
+  <i>implementation-defined-unsigned-integer-type
+</i>    orthogonalPosition &gt;
+void <a name="clear_shallow_history">clear_shallow_history</a>();</pre>
+<p><b>Requires</b>: If called from a constructor of a direct or indirect 
+subclass then the most-derived type must either directly or indirectly derive 
+from the <code>state</code> class template. Either <code>has_shallow_history</code> 
+or <code>has_full_history</code> must be passed to the base class template of
+<code>HistoryContext</code><br>
+<b>Effects</b>: Clears the shallow history of the orthogonal region specified 
+by <code>orthogonalPosition</code> of the state specified by <code>
+HistoryContext</code><br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+(the template parameter passed to the base class of <code>
+outermost_context_type</code>)</p>
+<pre>template&lt;
+  class HistoryContext,
+  <i>implementation-defined-unsigned-integer-type
+</i>    orthogonalPosition &gt;
+void <a name="clear_deep_history">clear_deep_history</a>();</pre>
+<p><b>Requires</b>: If called from a constructor of a direct or indirect 
+subclass then the most-derived type must either directly or indirectly derive 
+from the <code>state</code> class template. Either <code>has_deep_history</code> 
+or <code>has_full_history</code> must be passed to the base class template of
+<code>HistoryContext</code><br>
+<b>Effects</b>: Clears the deep history of the orthogonal region specified by
+<code>orthogonalPosition</code> of the state specified by <code>HistoryContext</code><br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+(the template parameter passed to the base class of <code>
+outermost_context_type</code>)</p>
 <h3>Class template <code>simple_state</code> observer functions</h3>
 <pre>outermost_context_type &amp; <a name="outermost_context">outermost_context</a>();</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
@@ -944,17 +1000,27 @@ subclass then the most-derived type must either directly or indirectly derive
 from the <code>state</code> class template<b><br>
 Returns</b>: Has exactly the same semantics as <code>
 <a href="#state_downcast">state_machine::state_downcast</a></code><br>
-<b>Throws</b>: Has exactly the same semantics as <code><a href="#state_cast">
-state_machine::state_cast</a></code><b><br>
+<b>Throws</b>: Has exactly the same semantics as <code>
+<a href="#state_downcast">state_machine::state_downcast</a></code><b><br>
 Note</b>: The result is <b>unspecified</b> if this function is called when the 
 machine is not stable</p>
+<pre>state_iterator <a name="simple_state::state_begin">state_begin</a>() const;</pre>
+<pre>state_iterator <a name="simple_state::state_end">state_end</a>() const;</pre>
+<p><b>Require</b>: If called from a constructor of a direct or indirect 
+subclass then the most-derived type must either directly or indirectly derive 
+from the <code>state</code> class template<b><br>
+Return</b>: Have exactly the same semantics as <code><a href="#state_begin">
+state_machine::state_begin</a></code> and <code><a href="#state_end">
+state_machine::state_end</a></code><br>
+<b>Note</b>: The result is <b>unspecified</b> if these functions are called 
+when the machine is not stable</p>
 <h3>Class template <code>simple_state</code> static functions</h3>
 <pre>static id_type <a name="static_type">static_type</a>();</pre>
 <p><b>Returns</b>: A value unambiguously identifying the type of <code>
 MostDerived</code><br>
 <b>Note</b>: <code>id_type</code> values are comparable with <code>operator==</code> 
 and <code>operator!=</code>. An unspecified collating order can be established 
-with <code>std::less&lt; S::id_type &gt;</code></p>
+with <code>std::less&lt; id_type &gt;</code></p>
 <pre>template&lt; class CustomId &gt;
 static const CustomId * <a name="custom_static_type_ptr">custom_static_type_ptr</a>();</pre>
 <p><b>Requires</b>: If a custom type identifier has been set then <code>
@@ -976,21 +1042,35 @@ BOOST_FSM_USE_NATIVE_RTTI</code></a> is defined</p>
 <p>This is the base class template of all states that need to call any of the 
 following <code><a href="#Class template simple_state">simple_state</a></code> 
 member functions from their constructors:</p>
-<pre>void post_event(
+<pre>void <b>post_event</b>(
   const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );
 
-outermost_context_type &amp; outermost_context();
-const outermost_context_type &amp; outermost_context() const;
+template&lt;
+  class HistoryContext,
+  <i>implementation-defined-unsigned-integer-type
+</i>    orthogonalPosition &gt;
+void <b>clear_shallow_history</b>();
+template&lt;
+  class HistoryContext,
+  <i>implementation-defined-unsigned-integer-type
+</i>    orthogonalPosition &gt;
+void <b>clear_deep_history</b>();
+
+outermost_context_type &amp; <b>outermost_context</b>();
+const outermost_context_type &amp; <b>outermost_context</b>() const;
 
 template&lt; class OtherContext &gt;
-OtherContext &amp; context();
+OtherContext &amp; <b>context</b>();
 template&lt; class OtherContext &gt;
-const OtherContext &amp; context() const;
+const OtherContext &amp; <b>context</b>() const;
 
 template&lt; class Target &gt;
-Target state_cast() const;
+Target <b>state_cast</b>() const;
 template&lt; class Target &gt;
-Target state_downcast() const;</pre>
+Target <b>state_downcast</b>() const;
+
+state_iterator <b><a name="simple_state::state_begin">state_begin</a></b>() const;
+state_iterator <b><a name="simple_state::state_end">state_end</a></b>() const;</pre>
 <p>States that do not need to call any of these functions from their 
 constructors should rather derive from the <code>
 <a href="#Class template simple_state">simple_state</a></code> class template, 
@@ -1407,7 +1487,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 January, 2004<!--webbot bot="Timestamp" endspan i-checksum="38695" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 February, 2004<!--webbot bot="Timestamp" endspan i-checksum="40415" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

@@ -75,7 +75,12 @@ The UML specifications can be found at
 <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
 http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
 3.74).</p>
-<p>All examples have been tested with MSVC7.1 and boost distribution 1.30.2.</p>
+<p>All examples have been tested on the following platforms using boost 
+distribution 1.30.2:</p>
+<ul>
+  <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003)</li>
+  <li>GCC3.2 (Mingw)</li>
+</ul>
 <h3><a name="How to read this tutorial">How to read this tutorial</a></h3>
 <p>This tutorial was designed to be read linearly. First time users should 
 start reading right at the beginning and stop as soon as they know enough for 
@@ -523,11 +528,11 @@ fsm::result Idle::react( const EvConfig &amp; )
 }</pre>
 <p><b><font color="#FF0000">Caution: Any call to the <code>
 simple_state::transit&lt;&gt;()</code> or <code>simple_state::terminate()</code> 
-(see <a href="#Reaction function reference">Reaction function reference</a>) 
-member functions will inevitably destruct the state object (similar to <code>
-delete this;</code>)! That is, code executed after any of these calls may 
-invoke undefined behavior!</font></b> That's why these functions should only 
-be called as part of a return statement.</p>
+(see <a href="reference.html#transit1">reference</a>) member functions will 
+inevitably destruct the state object (similar to <code>delete this;</code>)! 
+That is, code executed after any of these calls may invoke undefined behavior!</font></b> 
+That's why these functions should only be called as part of a return 
+statement.</p>
 <h3><a name="Guards">Guards</a></h3>
 <p>The inner workings of the Shooting state could look as follows:</p>
 <p><img border="0" src="Camera2.gif" width="427" height="427"></p>
@@ -715,10 +720,15 @@ outlined above (apart from the constructor, <code>fsm::state</code> offers the
 same interface as <code>fsm::simple_state</code>). Hence, this must be done 
 whenever an entry action makes one or more calls to the following functions:</p>
 <ul>
-  <li><code>simple_state::context&lt;&gt;()</code></li>
   <li><code>simple_state::post_event()</code></li>
+  <li><code>simple_state::clear_shallow_history&lt;&gt;()</code></li>
+  <li><code>simple_state::clear_deep_history&lt;&gt;()</code></li>
+  <li><code>simple_state::outermost_context&lt;&gt;()</code></li>
+  <li><code>simple_state::context&lt;&gt;()</code></li>
   <li><code>simple_state::state_cast&lt;&gt;()</code></li>
   <li><code>simple_state::state_downcast&lt;&gt;()</code></li>
+  <li><code>simple_state::state_begin()</code></li>
+  <li><code>simple_state::state_end()</code></li>
 </ul>
 <p>In my experience, these functions are needed only rarely in entry actions 
 so this workaround should not uglify user code too much.</p>
@@ -1320,7 +1330,7 @@ terminated before the exception is propagated.</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 January, 2004<!--webbot bot="Timestamp" endspan i-checksum="38695" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->09 February, 2004<!--webbot bot="Timestamp" endspan i-checksum="40415" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file

@@ -16,7 +16,7 @@ const unsigned int noOfBits = 6;
 // of the complexity (e.g. in separate .cpp file) of a boost::fsm state
 // machine once a certain size is reached.
 // For this purpose, a state machine with exactly 2^noOfBits states (i.e.
-// BitState< 0 > .. BitState< 2^noOfBits - 1 >) is generated . For the events
+// BitState< 0 > .. BitState< 2^noOfBits - 1 >) is generated. For the events
 // EvFlipBit< 0 > .. EvFlipBit< noOfBits - 1 > there is a transition from each
 // state to the state with the corresponding bit toggled. That is, there is a
 // total of 2^noOfBits * noOfBits transitions.
@@ -39,10 +39,7 @@ const unsigned int noOfBits = 6;
 // MSVC 7.1      |      b < 7      |  64 < s < 128  |  384 < t <  896
 // GCC 3.2 *     |      b < 8      | 128 < s < 256  |  896 < t < 2048
 //
-// * These are practical rather than hard limits, caused by a compiler memory
-//   footprint that was substantially larger than the 1GB physical memory
-//   installed on the test machine. The resulting frequent swapping caused
-//   overly long build-times (hours rather than minutes).
+// * ICE for b = 8
 //////////////////////////////////////////////////////////////////////////////
 
 
