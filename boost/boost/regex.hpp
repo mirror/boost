@@ -976,7 +976,7 @@ public:
    void BOOST_RE_CALL init_fail(iterator i, iterator j);
 
    void BOOST_RE_CALL set_first(iterator i);
-   void BOOST_RE_CALL set_first(iterator i, size_t pos);
+   void BOOST_RE_CALL set_first(iterator i, std::size_t pos);
 
    void BOOST_RE_CALL set_second(iterator i)
    {
@@ -987,7 +987,7 @@ public:
       ref->tail.matched = (ref->tail.first == ref->tail.second) ? false : true;
    }
 
-   void BOOST_RE_CALL set_second(iterator i, size_t pos, bool m = true)
+   void BOOST_RE_CALL set_second(iterator i, std::size_t pos, bool m = true)
    {
       cow();
       ((sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>) * pos))->second = i;
@@ -1032,7 +1032,7 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_first(iterator i
 }
 
 template <class iterator, class Allocator>
-void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_first(iterator i, size_t pos)
+void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_first(iterator i, std::size_t pos)
 {
    cow();
    ((sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>) * pos))->first = i;
