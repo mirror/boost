@@ -347,7 +347,7 @@ q = p;
 			<P><B>Returns:</B> A <STRONG>shared_ptr&lt;T&gt;</STRONG> object that stores a copy 
 				of <CODE><A href="../conversion/cast.htm#Polymorphic_cast">polymorphic_cast</A>&lt;T*&gt;(r.get())</CODE>
 				and shares ownership with <B>r</B>.</P>
-			<P><B>Throws:</B> <STRONG>std::bad_cast</STRONG>.</P>
+			<P><B>Throws:</B> <STRONG>std::bad_cast</STRONG> when the pointer cannot be converted.</P>
 			<P><B>Exception safety:</B> If an exception is thrown, the function has no effect.</P>
 		</BLOCKQUOTE>
 		<h3><a name="shared_polymorphic_downcast">shared_polymorphic_downcast</a></h3>

@@ -120,7 +120,7 @@ public:
     {
         if (px == 0) // need to allocate new counter -- the cast failed
         {
-            pn = detail::shared_count(static_cast<element_type *>(0), deleter());
+            pn = detail::shared_count();
         }
     }
 
