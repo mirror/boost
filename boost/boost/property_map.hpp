@@ -51,96 +51,36 @@ namespace boost {
   // The user will just have to create their own specializations for
   // other pointers types if the compiler does not have partial
   // specializations. Sorry!
-  template <>
-  struct property_traits<long*> {
-    typedef long value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
 
-  template <>
-  struct property_traits<unsigned long*> {
-    typedef unsigned long value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
+#define BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(TYPE) \
+  template <> \
+  struct property_traits<TYPE*> { \
+    typedef TYPE value_type; \
+    typedef value_type& reference; \
+    typedef std::ptrdiff_t key_type; \
+    typedef lvalue_property_map_tag   category; \
+  }; \
+  template <> \
+  struct property_traits<const TYPE*> { \
+    typedef TYPE value_type; \
+    typedef const value_type& reference; \
+    typedef std::ptrdiff_t key_type; \
+    typedef lvalue_property_map_tag   category; \
+  }
 
-  template <>
-  struct property_traits<int*> {
-    typedef int value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<unsigned int*> {
-    typedef unsigned int value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<short*> {
-    typedef short value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<unsigned short*> {
-    typedef unsigned short value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<char*> {
-    typedef char value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<unsigned char*> {
-    typedef unsigned char value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<signed char*> {
-    typedef signed char value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<bool*> {
-    typedef bool value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<float*> {
-    typedef float value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<double*> {
-    typedef double value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
-
-  template <>
-  struct property_traits<long double*> {
-    typedef long double value_type;
-    typedef std::ptrdiff_t key_type;
-    typedef lvalue_property_map_tag   category;
-  };
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(long);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(unsigned long);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(int);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(unsigned int);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(short);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(unsigned short);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(char);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(unsigned char);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(signed char);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(bool);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(float);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(double);
+  BOOST_SPECIALIZE_PROPERTY_TRAITS_PTR(long double);
 
   // This may need to be turned off for some older compilers that don't have
   // wchar_t intrinsically.
@@ -148,6 +88,14 @@ namespace boost {
   template <>
   struct property_traits<wchar_t*> {
     typedef wchar_t value_type;
+    typedef value_type& reference;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag   category;
+  };
+  template <>
+  struct property_traits<const wchar_t*> {
+    typedef wchar_t value_type;
+    typedef const value_type& reference;
     typedef std::ptrdiff_t key_type;
     typedef lvalue_property_map_tag   category;
   };
@@ -157,6 +105,14 @@ namespace boost {
   template <class T>
   struct property_traits<T*> {
     typedef T value_type;
+    typedef value_type& reference;
+    typedef std::ptrdiff_t key_type;
+    typedef lvalue_property_map_tag category;
+  };
+  template <class T>
+  struct property_traits<const T*> {
+    typedef T value_type;
+    typedef const value_type& reference;
     typedef std::ptrdiff_t key_type;
     typedef lvalue_property_map_tag category;
   };
@@ -435,13 +391,13 @@ namespace boost {
   template <typename UniquePairAssociativeContainer>
   class associative_property_map
     : public boost::put_get_at_helper<
-       typename UniquePairAssociativeContainer::data_type,
+       typename UniquePairAssociativeContainer::value_type::second_type,
        associative_property_map<UniquePairAssociativeContainer> >
   {
     typedef UniquePairAssociativeContainer C;
   public:
     typedef typename C::key_type key_type;
-    typedef typename C::data_type value_type;
+    typedef typename C::value_type::second_type value_type;
     typedef value_type& reference;
     typedef lvalue_property_map_tag category;
     associative_property_map(C& c) : m_c(c) { }
@@ -462,13 +418,13 @@ namespace boost {
   template <typename UniquePairAssociativeContainer>
   class const_associative_property_map
     : public boost::put_get_at_helper<
-       typename UniquePairAssociativeContainer::data_type,
+       typename UniquePairAssociativeContainer::value_type::second_type,
        const_associative_property_map<UniquePairAssociativeContainer> >
   {
     typedef UniquePairAssociativeContainer C;
   public:
     typedef typename C::key_type key_type;
-    typedef typename C::data_type value_type;
+    typedef typename C::value_type::second_type value_type;
     typedef const value_type& reference;
     typedef lvalue_property_map_tag category;
     const_associative_property_map(const C& c) : m_c(c) { }
