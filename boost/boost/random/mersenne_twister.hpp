@@ -65,7 +65,7 @@ public:
   template<class Generator>
   explicit mersenne_twister(Generator & gen) { seed(gen); }
   // compiler-generated copy ctor and assignment operator are fine
-  void seed() { seed(DataType(4357)); }      // exact match required for MSVC
+  void seed() { seed(DataType(4357)); }
   void seed(DataType value) {
     random::linear_congruential<uint32_t, 69069, 0, 0, /* unknown */ 0> 
       gen(value);
