@@ -148,8 +148,7 @@ interoperable with ``X``.
    |                    |                      |                                     |Iterator                   |
    +--------------------+----------------------+-------------------------------------+---------------------------+
    |``c.equal(y)``      |convertible to bool   |true iff ``c`` and ``y`` refer to the|Single Pass Iterator       |
-   |                    |                      |same position.  Implements ``c == y``|                           |
-   |                    |                      |and ``c != y``.                      |                           |
+   |                    |                      |same position.                       |                           |
    +--------------------+----------------------+-------------------------------------+---------------------------+
    |``a.increment()``   |unused                |                                     |Incrementable Iterator     |
    +--------------------+----------------------+-------------------------------------+---------------------------+
@@ -159,12 +158,8 @@ interoperable with ``X``.
    |``a.advance(n)``    |unused                |                                     |Random Access Traversal    |
    |                    |                      |                                     |Iterator                   |
    +--------------------+----------------------+-------------------------------------+---------------------------+
-   |``c.distance_to(b)``|convertible to        |equivalent to ``distance(c, b)``     |Random Access Traversal    |
+   |``c.distance_to(z)``|convertible to        |equivalent to ``distance(c, X(z))``. |Random Access Traversal    |
    |                    |``F::difference_type``|                                     |Iterator                   |
-   +--------------------+----------------------+-------------------------------------+---------------------------+
-   |``c.distance_to(z)``|convertible to        |equivalent to ``distance(c, z)``.    |Random Access Traversal    |
-   |                    |``F::difference_type``|Implements ``c - z``, ``c < z``, ``c |Iterator                   |
-   |                    |                      |<= z``, ``c > z``, and ``c >= c``.   |                           |
    +--------------------+----------------------+-------------------------------------+---------------------------+
 
 .. _facade iterator category:
