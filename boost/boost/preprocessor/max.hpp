@@ -24,11 +24,6 @@ in the range [0, BOOST_PP_LIMIT_MAG].</p>
 <p>For example, <code>BOOST_PP_MAX(5,7)</code> expands to <code>7</code> (a
 single token).</p>
 
-<h3>Uses</h3>
-<ul>
-  <li>BOOST_PP_WHILE()</li>
-</ul>
-
 <h3>Test</h3>
 <ul>
   <li><a href="../../test/arithmetic_test.cpp">arithmetic_test.cpp</a></li>
@@ -36,9 +31,6 @@ single token).</p>
 */
 #define BOOST_PP_MAX(X,Y) BOOST_PP_MAX_D(0,X,Y)
 
-/** <p>Can be used inside BOOST_PP_WHILE().</p> */
+/** <p>Can be used inside BOOST_PP_WHILE() (see for an explanation of the D parameter).</p> */
 #define BOOST_PP_MAX_D(D,X,Y) BOOST_PP_IF(BOOST_PP_LESS_EQUAL_D(D,X,Y),Y,X)
-
-/* <p>Obsolete. Use BOOST_PP_MAX().</p> */
-#define BOOST_PREPROCESSOR_MAX(X,Y) BOOST_PP_MAX(X,Y)
 #endif
