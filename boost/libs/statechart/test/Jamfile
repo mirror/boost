@@ -97,5 +97,6 @@ test-suite fsm :
   [ fsm-st-run-variants TypeInfoTest ]
   [ fsm-st-run-variants StateIterationTest ]
   [ fsm-st-run-variants CustomReactionTest ]
+  [ fsm-st-run-variants TerminationTest ]
 ;
       
