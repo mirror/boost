@@ -103,9 +103,13 @@
 #endif
 
 
-
 // GNU Compiler Collection
 #if defined (__GNUC__) && ! defined (BOOST_STRICT_CONFIG)
+
+#if __GNUC__ >= 3 && __GNUC_MINOR__ >= 4
+// By ABI definition see GCC bug id 9982
+#define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
+#endif
 
 #if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
 #define BOOST_UBLAS_NO_PROXY_SHORTCUTS
@@ -119,9 +123,13 @@
 #endif
 
 
-
 // Intel Compiler
 #if defined (BOOST_INTEL) && ! defined (BOOST_STRICT_CONFIG)
+
+#if (BOOST_INTEL >= 800)
+// By inspection of compiler results
+#define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
+#endif
 
 #if (BOOST_INTEL < 800)
 // Base traits templates syntax untested
@@ -141,14 +149,6 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 namespace std {
-    // iter_swap needed for ICC on Itanium?
-    template<class C, class IC>
-    inline
-    void iter_swap (boost::numeric::ublas::indexed_iterator<C, IC> it1,
-                    boost::numeric::ublas::indexed_iterator<C, IC> it2) {
-        swap (*it1, *it2);
-    }
-
     template<class V>
     inline
     void swap (boost::numeric::ublas::index_pair<V> i1, boost::numeric::ublas::index_pair<V> i2) {
@@ -159,11 +159,17 @@ namespace std {
     void swap (boost::numeric::ublas::index_triple<M> i1, boost::numeric::ublas::index_triple<M> i2) {
         i1.swap (i2);
     }
+    // iter_swap also needed for ICC on Itanium?
+    template<class C, class IC>
+    inline
+    void iter_swap (boost::numeric::ublas::indexed_iterator<C, IC> it1,
+                    boost::numeric::ublas::indexed_iterator<C, IC> it2) {
+        swap (*it1, *it2);
+    }
 }
 #endif
 
 #endif
-
 
 
 // Comeau compiler - thanks to Kresimir Fresl
@@ -177,7 +183,6 @@ namespace std {
 #endif
 
 
-
 //  HP aCC C++ compiler
 #if defined (__HP_aCC) && ! defined (BOOST_STRICT_CONFIG)
 // No version specific configuration
@@ -185,16 +190,19 @@ namespace std {
 #endif
 
 
-
-//  SGI C++ compiler
+//  SGI MIPSpro C++ compiler
 #if defined (__sgi) && ! defined (BOOST_STRICT_CONFIG)
 
 // Missing std::abs overloads for float types in <cmath> are in <cstdlib>
 // This should should be library version specific.
 #include <cstdlib>
 
+#if __COMPILER_VERSION >=650
+// By inspection of compiler results - thanks to Peter Schmitteckert
+#define BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
 #endif
 
+#endif
 
 
 // Metrowerks Codewarrior
