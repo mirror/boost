@@ -34,7 +34,7 @@ SUNWS_CACHE_NAME=SunWS_cache
 
 
 
-ALL_HEADER=../../../boost/cregex.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_config.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_options.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/detail/fileiter.hpp ../../../boost/regex/detail/regex_compile.hpp ../../../boost/regex/detail/regex_cstring.hpp ../../../boost/regex/detail/regex_format.hpp ../../../boost/regex/detail/regex_kmp.hpp ../../../boost/regex/detail/regex_library_include.hpp ../../../boost/regex/detail/regex_match.hpp ../../../boost/regex/detail/regex_raw_buffer.hpp ../../../boost/regex/detail/regex_split.hpp ../../../boost/regex/detail/regex_stack.hpp ../../../boost/regex/detail/regex_synch.hpp
 
 all : sunpro sunpro/libboost_regex$(LIBSUFFIX) sunpro/libboost_regex$(LIBSUFFIX).a sunpro/libboost_regex_mt$(LIBSUFFIX) sunpro/libboost_regex_mt$(LIBSUFFIX).a sunpro/shared_libboost_regex$(LIBSUFFIX) sunpro/libboost_regex$(LIBSUFFIX).so sunpro/shared_libboost_regex_mt$(LIBSUFFIX) sunpro/libboost_regex_mt$(LIBSUFFIX).so
 

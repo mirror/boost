@@ -226,7 +226,7 @@ treated as &quot;unknown&quot; graphic characters. </p>
 an operating system other than Win32, and is encapsulated by the
 traits class <a href="template_class_ref.htm#regex_char_traits"><i>c_regex_traits</i></a>,
 Win32 users can force this model to take effect by defining the
-pre-processor symbol BOOST_RE_LOCALE_C. When this model is in
+pre-processor symbol BOOST_REGEX_USE_C_LOCALE. When this model is in
 effect there is a single global locale, as set by <i>setlocale</i>.
 All settings are acquired from your run time library,
 consequently Unicode support is dependent upon your run time
@@ -261,7 +261,7 @@ regular expression libraries including version 1 of this library.
 </p>
 
 <p>This model is only in effect if the library is built with the
-pre-processor symbol BOOST_RE_LOCALE_CPP defined. When this model
+pre-processor symbol BOOST_REGEX_USE_CPP_LOCALE defined. When this model
 is in effect each instance of reg_expression&lt;&gt; has its own
 instance of std::locale, class reg_expression&lt;&gt; also has a
 member function <i>imbue</i> which allows the locale for the
@@ -292,8 +292,8 @@ supports either message catalogues, or locales other than &quot;C&quot;
 or &quot;POSIX&quot;. </p>
 
 <p>Finally note that if you build the library with a non-default
-localization model, then the appropriate pre-processor symbol (BOOST_RE_LOCALE_C
-or BOOST_RE_LOCALE_CPP) must be defined both when you build the
+localization model, then the appropriate pre-processor symbol (BOOST_REGEX_USE_C_LOCALE
+or BOOST_REGEX_USE_CPP_LOCALE) must be defined both when you build the
 support library, and when you include &lt;boost/regex.hpp&gt; or
 &lt;boost/cregex.hpp&gt; in your code. The best way to ensure
 this is to add the #define to &lt;boost/regex/detail/regex_options.hpp&gt;.
@@ -1241,7 +1241,7 @@ regex++ dll's are as follows: <br>
 </table>
 
 <p>Note: you can disable automatic library selection by defining
-the symbol BOOST_RE_NO_LIB when compiling, this is useful if you
+the symbol BOOST_REGEX_NO_LIB when compiling, this is useful if you
 want to statically link even though you're using the dll version
 of your run time library, or if you need to debug regex++. </p>
 

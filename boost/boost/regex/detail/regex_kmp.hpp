@@ -26,7 +26,7 @@
 #define BOOST_REGEX_KMP_HPP
 
 #ifdef BOOST_REGEX_CONFIG_HPP
-#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/config.hpp>
 #endif
 
 
@@ -49,14 +49,14 @@ struct kmp_info
 template <class charT, class Allocator>
 void kmp_free(kmp_info<charT>* pinfo, const Allocator& a)
 {
-   typedef typename boost::re_detail::rebind_allocator<char, Allocator>::type atype;
+   typedef typename boost::detail::rebind_allocator<char, Allocator>::type atype;
    atype(a).deallocate((char*)pinfo, pinfo->size);
 }
 
 template <class iterator, class charT, class Trans, class Allocator>
 kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans translate, const Allocator& a) 
 {    
-   typedef typename boost::re_detail::rebind_allocator<char, Allocator>::type atype;
+   typedef typename boost::detail::rebind_allocator<char, Allocator>::type atype;
    int i, j, m;
    i = 0;
    m = boost::re_detail::distance(first, last);

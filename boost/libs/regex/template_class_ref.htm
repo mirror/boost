@@ -791,8 +791,8 @@ template &lt;class charT&gt; class regex_traits : public base_type { /*detailts*
 <p>Where &quot;<i>base_type</i>&quot; defaults to <i>w32_regex_traits</i>
 on Win32 systems, and <i>c_regex_traits</i> otherwise. The
 default behaviour can be changed by defining one of
-BOOST_RE_LOCALE_C (forces use of <i>c_regex_traits</i> by default),
-or BOOST_RE_LOCALE_CPP (forces use of <i>cpp_regex_traits</i> by
+BOOST_REGEX_USE_C_LOCALE (forces use of <i>c_regex_traits</i> by default),
+or BOOST_REGEX_USE_CPP_LOCALE (forces use of <i>cpp_regex_traits</i> by
 default). Alternatively a specific traits class can be passed to
 the <i>reg_expression</i> template. </p>
 

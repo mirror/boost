@@ -26,20 +26,20 @@
 #define BOOST_REGEX_SYNCH_HPP
 
 #ifndef BOOST_REGEX_CONFIG_HPP
-#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/config.hpp>
 #endif
 
-#if defined(BOOST_RE_PLATFORM_W32) && defined(BOOST_RE_THREADS)
-#include <windows.h>
-#endif
-
-#if !defined(BOOST_RE_PLATFORM_W32) && defined(BOOST_RE_THREADS) 
-#if defined(__BEOS__)
-#include <OS.h>
-#include <cassert>
-#else
-#include <pthread.h>
-#endif
+#if defined(BOOST_HAS_THREADS)
+#  if defined(BOOST_HAS_WINTHREADS)
+#     include <windows.h>
+#  elif defined(BOOST_HAS_BETHREADS)
+#     include <OS.h>
+#     include <cassert>
+#  elif defined(BOOST_HAS_PTHREADS)
+#     include <pthread.h>
+#  else
+#     error "Unknown threading API"
+#  endif
 #endif
 
 
@@ -50,65 +50,66 @@ namespace boost{
    #pragma option push -a4 -b -Ve -pc
 #endif
 
-void BOOST_RE_CALL re_init_threads();
-void BOOST_RE_CALL re_free_threads();
+void BOOST_REGEX_CALL re_init_threads();
+void BOOST_REGEX_CALL re_free_threads();
 
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
 
-#ifndef BOOST_RE_PLATFORM_W32
-#ifdef __BEOS__
+#  ifdef BOOST_HAS_BETHREADS
 
 typedef sem_id CRITICAL_SECTION;
 
-inline void BOOST_RE_CALL InitializeCriticalSection(CRITICAL_SECTION* ps)
+inline void BOOST_REGEX_CALL InitializeCriticalSection(CRITICAL_SECTION* ps)
 {
     *ps = create_sem(1, "regex++");
     assert(*ps > 0);
 }
 
-inline void BOOST_RE_CALL DeleteCriticalSection(CRITICAL_SECTION* ps)
+inline void BOOST_REGEX_CALL DeleteCriticalSection(CRITICAL_SECTION* ps)
 {
     int t = delete_sem(*ps);
     assert(t == B_NO_ERROR);
 }
 
-inline void BOOST_RE_CALL EnterCriticalSection(CRITICAL_SECTION* ps)
+inline void BOOST_REGEX_CALL EnterCriticalSection(CRITICAL_SECTION* ps)
 {
    status_t t = acquire_sem(*ps);
    assert(t == B_NO_ERROR);
 }
 
-inline void BOOST_RE_CALL LeaveCriticalSection(CRITICAL_SECTION* ps)
+inline void BOOST_REGEX_CALL LeaveCriticalSection(CRITICAL_SECTION* ps)
 {
     status_t t = release_sem(*ps);
     assert(t == B_NO_ERROR);
 }
 
-#else // __BEOS__
+#  elif defined(BOOST_HAS_PTHREADS)
 
 typedef pthread_mutex_t CRITICAL_SECTION;
 
-inline void BOOST_RE_CALL InitializeCriticalSection(CRITICAL_SECTION* ps)
+inline void BOOST_REGEX_CALL InitializeCriticalSection(CRITICAL_SECTION* ps)
 {
    pthread_mutex_init(ps, 0);
 }
 
-inline void BOOST_RE_CALL DeleteCriticalSection(CRITICAL_SECTION* ps)
+inline void BOOST_REGEX_CALL DeleteCriticalSection(CRITICAL_SECTION* ps)
 {
    pthread_mutex_destroy(ps);
 }
 
-inline void BOOST_RE_CALL EnterCriticalSection(CRITICAL_SECTION* ps)
+inline void BOOST_REGEX_CALL EnterCriticalSection(CRITICAL_SECTION* ps)
 {
    pthread_mutex_lock(ps);
 }
 
-inline void BOOST_RE_CALL LeaveCriticalSection(CRITICAL_SECTION* ps)
+inline void BOOST_REGEX_CALL LeaveCriticalSection(CRITICAL_SECTION* ps)
 {
    pthread_mutex_unlock(ps);
 }
-#endif // __BEOS__
-#endif
+
+#  elif !defined(BOOST_HAS_WINTHREADS)
+#    error "Unknown threading API"
+#  endif
 
 template <class Lock>
 class lock_guard
@@ -121,7 +122,7 @@ public:
    ~lock_guard()
    { acquire(false); }
 
-   void BOOST_RE_CALL acquire(bool aq = true)
+   void BOOST_REGEX_CALL acquire(bool aq = true)
    {
       if(aq && !owned)
       {
@@ -151,7 +152,7 @@ public:
    critical_section(const critical_section&)
    { InitializeCriticalSection(&hmutex);}
 
-   const critical_section& BOOST_RE_CALL operator=(const critical_section&)
+   const critical_section& BOOST_REGEX_CALL operator=(const critical_section&)
    {return *this;}
 
    ~critical_section()
@@ -159,7 +160,7 @@ public:
 
 private:
 
-   void BOOST_RE_CALL acquire(bool aq)
+   void BOOST_REGEX_CALL acquire(bool aq)
    { if(aq) EnterCriticalSection(&hmutex);
       else LeaveCriticalSection(&hmutex);
    }
@@ -173,20 +174,20 @@ public:
    friend class lock_guard<critical_section>;
 };
 
-inline bool BOOST_RE_CALL operator==(const critical_section&, const critical_section&)
+inline bool BOOST_REGEX_CALL operator==(const critical_section&, const critical_section&)
 {
    return false;
 }
 
-inline bool BOOST_RE_CALL operator<(const critical_section&, const critical_section&)
+inline bool BOOST_REGEX_CALL operator<(const critical_section&, const critical_section&)
 {
    return true;
 }
 
 typedef lock_guard<critical_section> cs_guard;
 
-BOOST_RE_IX_DECL extern critical_section* p_re_lock;
-BOOST_RE_IX_DECL extern unsigned int re_lock_count;
+BOOST_REGEX_DECL extern critical_section* p_re_lock;
+BOOST_REGEX_DECL extern unsigned int re_lock_count;
 
 #define BOOST_RE_GUARD(inst) boost::re_detail::critical_section::rw_guard g(inst);
 

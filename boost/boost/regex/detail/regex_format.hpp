@@ -40,11 +40,11 @@ enum format_flags_t{
 namespace re_detail{
 
 #ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc
+   #pragma option push -a4 -b -Ve -pc -w-8037
 #endif
 
 template <class O, class I>
-O BOOST_RE_CALL re_copy_out(O out, I first, I last)
+O BOOST_REGEX_CALL re_copy_out(O out, I first, I last)
 {
    while(first != last)
    {
@@ -56,7 +56,7 @@ O BOOST_RE_CALL re_copy_out(O out, I first, I last)
 }
 
 template <class charT, class traits_type>
-void BOOST_RE_CALL re_skip_format(const charT*& fmt, const traits_type& traits_inst)
+void BOOST_REGEX_CALL re_skip_format(const charT*& fmt, const traits_type& traits_inst)
 {
    // dwa 9/13/00 - suppress incorrect unused parameter warning for MSVC
    (void)traits_inst;
@@ -96,7 +96,7 @@ void BOOST_RE_CALL re_skip_format(const charT*& fmt, const traits_type& traits_i
    }
 }
 
-#ifdef BOOST_RE_NO_OI_ASSIGN
+#ifdef BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN
 
 //
 // ugly hack for buggy output iterators
@@ -104,8 +104,8 @@ void BOOST_RE_CALL re_skip_format(const charT*& fmt, const traits_type& traits_i
 template <class T>
 inline void oi_assign(T* p, T v)
 {
-   jm_destroy(p);
-   jm_construct(p, v);
+   ::boost::re_detail::destroy(p);
+   construct(p, v);
 }
 
 #else
@@ -116,15 +116,15 @@ inline void oi_assign(T* p, T v)
    //
    // if you get a compile time error in here then you either
    // need to rewrite your output iterator to make it assignable
-   // (as is required by the standard), or define BOOST_RE_NO_OI_ASSIGN
-   // to use the ugly hack above
+   // (as is required by the standard), or define
+   // BOOST_NO_STD_OUTPUT_ITERATOR_ASSIGN to use the ugly hack above
    *p = v;
 }
 
 #endif
 
 
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 //
 // Ugly ugly hack,
 // template don't merge if they contain switch statements so declare these
@@ -141,7 +141,7 @@ namespace{
 // _reg_format_aux does the actual work:
 //
 template <class OutputIterator, class iterator, class Allocator, class charT, class traits_type>
-OutputIterator BOOST_RE_CALL _reg_format_aux(OutputIterator out, 
+OutputIterator BOOST_REGEX_CALL _reg_format_aux(OutputIterator out, 
                           const match_results<iterator, Allocator>& m, 
                           const charT*& fmt,
                           unsigned flags, const traits_type& traits_inst)
@@ -428,7 +428,7 @@ default_opt:
    return out;
 }
 
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace
 #endif
 
@@ -462,7 +462,7 @@ public:
       : out(&o), last(&pi), fmt(f), flags(format_flags), pt(&p){}
 
    ~merge_out_predicate() {}
-   bool BOOST_RE_CALL operator()(const boost::match_results<iterator, Allocator>& m)
+   bool BOOST_REGEX_CALL operator()(const boost::match_results<iterator, Allocator>& m)
    {
       const charT* f = fmt;
       if(0 == (flags & format_no_copy))

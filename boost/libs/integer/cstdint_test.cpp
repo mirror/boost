@@ -9,21 +9,12 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   11 Sep 01  Adapted to work with macros defined in native stdint.h (John Maddock)
 //   12 Nov 00  Adapted to merged <boost/cstdint.hpp>
 //   23 Sep 00  Added INTXX_C constant macro support + int64_t support (John Maddock).
 //   28 Jun 00  Initial version
 #include <cassert>
 #include <iostream>
-#include <boost/cstdint.hpp>
-//
-// macros should not be defined by default:
-//
-#ifdef INT8_C
-#error header incorrectly implemented
-#endif
-//
-// now define the macros:
-//
 #define __STDC_CONSTANT_MACROS
 #include <boost/cstdint.hpp>
 
@@ -216,12 +207,4 @@ int main()
   return 0;
 }
 
-//
-// now verify that constant macros get undef'ed correctly:
-//
-#undef __STDC_CONSTANT_MACROS
-#include <boost/cstdint.hpp>
 
-#ifdef INT8_C
-#error boost/cstdint.hpp not correctly defined
-#endif

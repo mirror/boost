@@ -20,6 +20,8 @@
   *   DESCRIPTION: Implements the w32_regex_traits<charT> traits class
   */
 
+#define BOOST_REGEX_SOURCE
+
 #include <clocale>
 #include <cstdio>
 #include <list>
@@ -30,7 +32,7 @@
 #include <boost/regex/detail/regex_synch.hpp>
 #include <boost/regex/detail/regex_cstring.hpp>
 
-#if defined(_WIN32) && !defined(BOOST_RE_NO_W32)
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
 
 //
 // VC6 needs to link to user32.lib:
@@ -103,7 +105,7 @@ std::list<collate_name_t>* pcoll_names = 0;
 
 HINSTANCE hresmod = 0;
 
-BOOST_RE_IX_DECL char* re_custom_error_messages[] = {
+BOOST_REGEX_DECL char* re_custom_error_messages[] = {
    0,
    0,
    0,
@@ -140,10 +142,10 @@ enum syntax_map_size
    map_size = UCHAR_MAX + 1
 };
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 
-BOOST_RE_IX_DECL wchar_t re_zero_w;
-BOOST_RE_IX_DECL wchar_t re_ten_w;
+BOOST_REGEX_DECL wchar_t re_zero_w;
+BOOST_REGEX_DECL wchar_t re_ten_w;
 
 bool isPlatformNT = false;
 
@@ -157,10 +159,10 @@ std::list<syntax_map_t>* syntax;
 
 #endif
 
-unsigned int BOOST_RE_CALL _re_get_message(char* buf, unsigned int len, unsigned int id);
+unsigned int BOOST_REGEX_CALL _re_get_message(char* buf, unsigned int len, unsigned int id);
 
 template <class charT>
-unsigned int BOOST_RE_CALL get_message(charT* buf, unsigned int len, unsigned int id)
+unsigned int BOOST_REGEX_CALL get_message(charT* buf, unsigned int len, unsigned int id)
 {
    unsigned int size = _re_get_message((char*)0, 0, id);
    if(len < size)
@@ -171,12 +173,12 @@ unsigned int BOOST_RE_CALL get_message(charT* buf, unsigned int len, unsigned in
    return size;
 }
 
-inline unsigned int BOOST_RE_CALL get_message(char* buf, unsigned int len, unsigned int id)
+inline unsigned int BOOST_REGEX_CALL get_message(char* buf, unsigned int len, unsigned int id)
 {
    return _re_get_message(buf, len, id);
 }
 
-unsigned int BOOST_RE_CALL _re_get_message(char* buf, unsigned int len, unsigned int id)
+unsigned int BOOST_REGEX_CALL _re_get_message(char* buf, unsigned int len, unsigned int id)
 {
    BOOST_RE_GUARD_STACK
    // get the customised message if any:
@@ -193,7 +195,7 @@ unsigned int BOOST_RE_CALL _re_get_message(char* buf, unsigned int len, unsigned
    return boost::re_detail::re_get_default_message(buf, len, id);
 }
 
-const char* BOOST_RE_CALL re_get_error_str(unsigned int id)
+const char* BOOST_REGEX_CALL re_get_error_str(unsigned int id)
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_RE_THREADS
@@ -221,7 +223,7 @@ namespace re_detail{
 
 char w32_traits_base::regex_message_catalogue[200] = {0};
 
-void BOOST_RE_CALL w32_traits_base::do_init()
+void BOOST_REGEX_CALL w32_traits_base::do_init()
 {
    BOOST_RE_GUARD_STACK
    if(is_init == 0)
@@ -240,7 +242,7 @@ void BOOST_RE_CALL w32_traits_base::do_init()
             re_custom_error_messages[i] = 0;
          }
       }
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
       //
       // wide character strings:
       syntax = new std::list<syntax_map_t>();
@@ -323,7 +325,7 @@ void BOOST_RE_CALL w32_traits_base::do_init()
       }
       else
          re_ten = 'a';
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
       //
       // wide string data:
       std::basic_string<wchar_t> ws;
@@ -359,11 +361,11 @@ void BOOST_RE_CALL w32_traits_base::do_init()
             syntax->push_back(sm);
          }
       }
-#endif // BOOST_RE_NO_WCSTRING
+#endif // BOOST_NO_WREGEX
    }
 }
 
-void BOOST_RE_CALL w32_traits_base::do_free()
+void BOOST_REGEX_CALL w32_traits_base::do_free()
 {
    BOOST_RE_GUARD_STACK
    delete[] pclasses;
@@ -384,12 +386,12 @@ void BOOST_RE_CALL w32_traits_base::do_free()
    }
 }
 
-std::string BOOST_RE_CALL w32_traits_base::error_string(unsigned id)
+std::string BOOST_REGEX_CALL w32_traits_base::error_string(unsigned id)
 {
    return re_get_error_str(id);
 }
 
-boost::uint_fast32_t BOOST_RE_CALL w32_traits_base::do_lookup_class(const char* p)
+boost::uint_fast32_t BOOST_REGEX_CALL w32_traits_base::do_lookup_class(const char* p)
 {
    BOOST_RE_GUARD_STACK
    unsigned int i;
@@ -410,7 +412,7 @@ boost::uint_fast32_t BOOST_RE_CALL w32_traits_base::do_lookup_class(const char* 
    return 0;
 }
 
-bool BOOST_RE_CALL w32_traits_base::do_lookup_collate(std::string& buf, const char* p)
+bool BOOST_REGEX_CALL w32_traits_base::do_lookup_collate(std::string& buf, const char* p)
 {
    BOOST_RE_GUARD_STACK
    std::list<collate_name_t>::iterator first, last;
@@ -435,7 +437,7 @@ bool BOOST_RE_CALL w32_traits_base::do_lookup_collate(std::string& buf, const ch
    return result;
 }
 
-std::string BOOST_RE_CALL w32_traits_base::set_message_catalogue(const std::string& l)
+std::string BOOST_REGEX_CALL w32_traits_base::set_message_catalogue(const std::string& l)
 {
    BOOST_RE_GUARD_STACK
    #ifdef BOOST_RE_THREADS
@@ -456,7 +458,7 @@ char w32_traits_base::lower_case_map[map_size];
 
 w32_regex_traits<char> w32_regex_traits<char>::i;
 
-void BOOST_RE_CALL w32_regex_traits<char>::update()
+void BOOST_REGEX_CALL w32_regex_traits<char>::update()
 {
    BOOST_RE_GUARD_STACK
    #ifdef BOOST_RE_THREADS
@@ -489,7 +491,7 @@ w32_regex_traits<char>::~w32_regex_traits()
 #endif
 }
 
-void BOOST_RE_CALL w32_regex_traits<char>::transform(std::string& out, const std::string& in)
+void BOOST_REGEX_CALL w32_regex_traits<char>::transform(std::string& out, const std::string& in)
 {
    BOOST_RE_GUARD_STACK
    size_t n = LCMapStringA(GetUserDefaultLCID(), LCMAP_SORTKEY, in.c_str(), -1, 0, 0);
@@ -508,7 +510,7 @@ void BOOST_RE_CALL w32_regex_traits<char>::transform(std::string& out, const std
    out = buf.get();
 }
 
-void BOOST_RE_CALL w32_regex_traits<char>::transform_primary(std::string& out, const std::string& in)
+void BOOST_REGEX_CALL w32_regex_traits<char>::transform_primary(std::string& out, const std::string& in)
 {
    transform(out, in);
    for(unsigned int i = 0; i < out.size(); ++i)
@@ -522,7 +524,7 @@ void BOOST_RE_CALL w32_regex_traits<char>::transform_primary(std::string& out, c
 }
 
 
-int BOOST_RE_CALL w32_regex_traits<char>::toi(char c)
+int BOOST_REGEX_CALL w32_regex_traits<char>::toi(char c)
 {
    if(is_class(c, char_class_digit))
       return c - re_zero;
@@ -531,7 +533,7 @@ int BOOST_RE_CALL w32_regex_traits<char>::toi(char c)
    return -1; // error!!
 }
 
-int BOOST_RE_CALL w32_regex_traits<char>::toi(const char*& first, const char* last, int radix)
+int BOOST_REGEX_CALL w32_regex_traits<char>::toi(const char*& first, const char* last, int radix)
 {
    unsigned int maxval;
    if(radix < 0)
@@ -561,9 +563,9 @@ int BOOST_RE_CALL w32_regex_traits<char>::toi(const char*& first, const char* la
    return result;
 }
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 
-bool BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_collatename(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last)
+bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::lookup_collatename(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last)
 {
    BOOST_RE_GUARD_STACK
    std::basic_string<wchar_t> s(first, last);
@@ -588,7 +590,7 @@ bool BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_collatename(std::basic_stri
    return result;
 }
 
-unsigned int BOOST_RE_CALL w32_regex_traits<wchar_t>::syntax_type(size_type c)
+unsigned int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::syntax_type(size_type c)
 {
    BOOST_RE_GUARD_STACK
    std::list<syntax_map_t>::const_iterator first, last;
@@ -603,7 +605,7 @@ unsigned int BOOST_RE_CALL w32_regex_traits<wchar_t>::syntax_type(size_type c)
    return 0;
 }
 
-bool BOOST_RE_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last)
+bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last)
 {
    BOOST_RE_GUARD_STACK
    std::basic_string<wchar_t> s(first, last);
@@ -623,7 +625,7 @@ bool BOOST_RE_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_strin
 }
 
 
-void BOOST_RE_CALL w32_regex_traits<wchar_t>::update()
+void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::update()
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_RE_THREADS
@@ -656,22 +658,22 @@ w32_regex_traits<wchar_t>::~w32_regex_traits()
 #endif
 }
 
-bool BOOST_RE_CALL w32_regex_traits<wchar_t>::do_iswclass(wchar_t c, boost::uint_fast32_t f)
+bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_iswclass(wchar_t c, boost::uint_fast32_t f)
 {
    BOOST_RE_GUARD_STACK
    if((c & ~0xFF) == 0)
-      return BOOST_RE_MAKE_BOOL(re_detail::wide_unicode_classes[(uchar_type)c] & f);
+      return BOOST_REGEX_MAKE_BOOL(re_detail::wide_unicode_classes[(uchar_type)c] & f);
    WORD mask;
    if(f & char_class_unicode)
       return true;
    else if(isPlatformNT && GetStringTypeW(CT_CTYPE1, &c, 1, &mask))
-      return BOOST_RE_MAKE_BOOL(mask & f &char_class_win);
+      return BOOST_REGEX_MAKE_BOOL(mask & f &char_class_win);
    else if((f & char_class_graph) == char_class_graph)
       return true;  // all wide characters are considered "graphics"
    return false;
 }
 
-void BOOST_RE_CALL w32_regex_traits<wchar_t>::transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)
+void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)
 {
    BOOST_RE_GUARD_STACK
    scoped_array<char> alt;
@@ -714,7 +716,7 @@ void BOOST_RE_CALL w32_regex_traits<wchar_t>::transform(std::basic_string<wchar_
    out = buf.get();
 }
 
-void BOOST_RE_CALL w32_regex_traits<wchar_t>::transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)
+void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)
 {
    transform(out, in);
    for(unsigned int i = 0; i < out.size(); ++i)
@@ -728,7 +730,7 @@ void BOOST_RE_CALL w32_regex_traits<wchar_t>::transform_primary(std::basic_strin
 }
 
 
-int BOOST_RE_CALL w32_regex_traits<wchar_t>::toi(wchar_t c)
+int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::toi(wchar_t c)
 {
    if(is_class(c, char_class_digit))
       return c - re_zero_w;
@@ -737,7 +739,7 @@ int BOOST_RE_CALL w32_regex_traits<wchar_t>::toi(wchar_t c)
    return -1; // error!!
 }
 
-int BOOST_RE_CALL w32_regex_traits<wchar_t>::toi(const wchar_t*& first, const wchar_t* last, int radix)
+int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::toi(const wchar_t*& first, const wchar_t* last, int radix)
 {
    unsigned int maxval;
    if(radix < 0)
@@ -767,7 +769,7 @@ int BOOST_RE_CALL w32_regex_traits<wchar_t>::toi(const wchar_t*& first, const wc
    return result;
 }
 
-boost::uint_fast32_t BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
+boost::uint_fast32_t BOOST_REGEX_CALL w32_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
 {
    std::basic_string<wchar_t> s(first, last);
    unsigned int len = strnarrow((char*)0, 0, s.c_str());
@@ -777,7 +779,7 @@ boost::uint_fast32_t BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_classname(c
    return len;
 }
 
-wchar_t BOOST_RE_CALL w32_regex_traits<wchar_t>::wtolower(wchar_t c)
+wchar_t BOOST_REGEX_CALL w32_regex_traits<wchar_t>::wtolower(wchar_t c)
 {
    BOOST_RE_GUARD_STACK
    if(isPlatformNT)
@@ -788,7 +790,7 @@ wchar_t BOOST_RE_CALL w32_regex_traits<wchar_t>::wtolower(wchar_t c)
 
 w32_regex_traits<wchar_t> w32_regex_traits<wchar_t>::init_;
 
-unsigned int BOOST_RE_CALL w32_regex_traits<wchar_t>::strnarrow(char *s1, unsigned int len, const wchar_t *s2)
+unsigned int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::strnarrow(char *s1, unsigned int len, const wchar_t *s2)
 {
    BOOST_RE_GUARD_STACK
    unsigned int size = WideCharToMultiByte(CP_ACP, 0, s2, -1, s1, 0, 0, 0);
@@ -797,7 +799,7 @@ unsigned int BOOST_RE_CALL w32_regex_traits<wchar_t>::strnarrow(char *s1, unsign
    return WideCharToMultiByte(CP_ACP, 0, s2, -1, s1, len, 0, 0);
 }
 
-unsigned int BOOST_RE_CALL w32_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsigned int len, const char *s2)
+unsigned int BOOST_REGEX_CALL w32_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsigned int len, const char *s2)
 {
    BOOST_RE_GUARD_STACK
    unsigned int size = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED,   s2, -1, s1, 0);
@@ -1068,10 +1070,10 @@ unsigned short w32_regex_traits<wchar_t>::wide_unicode_classes[] = {
 
 
 
-#endif // BOOST_RE_NO_WCSTRING
+#endif // BOOST_NO_WREGEX
 
 
 } // namespace boost
 
-#endif // #if defined(_WIN32) && !defined(BOOST_RE_NO_W32)
+#endif // #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
 

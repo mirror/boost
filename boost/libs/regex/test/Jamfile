@@ -4,8 +4,8 @@ subproject libs/regex/test ;
 unit-test regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
-		<include>$(BOOST_ROOT)
-		<define>BOOST_RE_NO_LIB=1
+		<include>../../../
+		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
       <runtime-link>dynamic
@@ -14,8 +14,8 @@ unit-test regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
 unit-test wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
-		<include>$(BOOST_ROOT)
-		<define>BOOST_RE_NO_LIB=1
+		<include>../../../
+		<define>BOOST_REGEX_NO_LIB=1
 		<define>TEST_UNICODE=1
 	: 
 		debug
@@ -25,8 +25,8 @@ unit-test wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
 unit-test posix_api_check_c : c_compiler_checks/posix_api_check.c
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
-		<include>$(BOOST_ROOT)
-		<define>BOOST_RE_NO_LIB=1
+		<include>../../../
+		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
       <runtime-link>dynamic
@@ -35,8 +35,8 @@ unit-test posix_api_check_c : c_compiler_checks/posix_api_check.c
 unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
-		<include>$(BOOST_ROOT)
-		<define>BOOST_RE_NO_LIB=1
+		<include>../../../
+		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
       <runtime-link>dynamic
@@ -45,8 +45,8 @@ unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
 unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
-		<include>$(BOOST_ROOT)
-		<define>BOOST_RE_NO_LIB=1
+		<include>../../../
+		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
       <runtime-link>dynamic
@@ -55,8 +55,8 @@ unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
 unit-test wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
-		<include>$(BOOST_ROOT)
-		<define>BOOST_RE_NO_LIB=1
+		<include>../../../
+		<define>BOOST_REGEX_NO_LIB=1
 	: 
 		debug
       <runtime-link>dynamic

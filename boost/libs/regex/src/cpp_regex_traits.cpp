@@ -19,17 +19,25 @@
   *   VERSION:     3.12
   *   DESCRIPTION: Implements the cpp_regex_traits<charT> traits class
   */
+
+
+#define BOOST_REGEX_SOURCE
+
+#include <boost/regex/config.hpp>
+
+#ifndef BOOST_NO_STD_LOCALE
+
 #include <clocale>
+#include <locale>
 #include <cstdio>
 #include <list>
 #include <cctype>
 #include <iostream>
-#include <boost/regex/regex_traits.hpp>
 #include <map>
+#include <boost/regex/regex_traits.hpp>
 #include <boost/cregex.hpp>
 #include "primary_transform.hpp"
 
-#ifndef BOOST_RE_NO_LOCALE_H
 
 # ifdef BOOST_MSVC
 #  pragma warning(disable:4786)
@@ -180,8 +188,8 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
    : is(&sbuf)
 {
    is.imbue(l);
-#ifndef BOOST_RE_NO_MESSAGES
-   const std::messages<char>* pm = &BOOST_RE_USE_FACET(l, std::messages<char>);
+#ifndef BOOST_NO_STD_MESSAGES
+   const std::messages<char>* pm = &BOOST_USE_FACET(std::messages<char>, l);
    std::messages<char>::catalog cat = regex_message_catalogue.size() ? pm->open(regex_message_catalogue, l) : -1;
 #endif
    std::memset(syntax_map, cpp_regex_traits<char>::syntax_char, 256);
@@ -199,7 +207,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
       }
       re_get_default_message(a.get(), array_size, i+100);
       std::string s = a.get();
-#ifndef BOOST_RE_NO_MESSAGES
+#ifndef BOOST_NO_STD_MESSAGES
       if((int)cat >= 0)
          s = pm->get(cat, 0, i+100, s);
 #endif
@@ -209,7 +217,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
       }
    }
 
-#ifndef BOOST_RE_NO_MESSAGES
+#ifndef BOOST_NO_STD_MESSAGES
    // load any custom collate names:
    std::string c1, c2;
    i = 400;
@@ -249,7 +257,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
 */
    std::string m;
    std::string s;
-#ifndef BOOST_RE_NO_MESSAGES
+#ifndef BOOST_NO_STD_MESSAGES
    if((int)cat >= 0)
    {
       for(i = 0; i < re_classes_max; ++i)
@@ -270,7 +278,7 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
 #endif
 }
 
-std::string BOOST_RE_CALL cpp_regex_traits_base::set_message_catalogue(const std::string& l)
+std::string BOOST_REGEX_CALL cpp_regex_traits_base::set_message_catalogue(const std::string& l)
 {
    if(sizeof(regex_message_cat) <= l.size())
       return l;
@@ -299,9 +307,9 @@ cpp_regex_traits<char>::cpp_regex_traits()
    }
    for(unsigned int i = 0; i < char_set_size; ++i)
       lower_map[i] = static_cast<char>(i);
-   pctype = &BOOST_RE_USE_FACET(locale_inst, std::ctype<char>);
+   pctype = &BOOST_USE_FACET(std::ctype<char>, locale_inst);
    pctype->tolower(&lower_map[0], &lower_map[char_set_size]);
-   pcollate = &BOOST_RE_USE_FACET(locale_inst, std::collate<char>);
+   pcollate = &BOOST_USE_FACET(std::collate<char>, locale_inst);
    sort_type = re_detail::find_sort_syntax(this, &(this->sort_delim));
 }
 
@@ -311,7 +319,7 @@ cpp_regex_traits<char>::~cpp_regex_traits()
    delete[] lower_map;
 }
 
-int BOOST_RE_CALL cpp_regex_traits<char>::toi(char c)const
+int BOOST_REGEX_CALL cpp_regex_traits<char>::toi(char c)const
 {
    pmd->sbuf.pubsetbuf(&c, 1);
    pmd->is.clear();
@@ -325,7 +333,7 @@ int BOOST_RE_CALL cpp_regex_traits<char>::toi(char c)const
       return 0;
 }
 
-int BOOST_RE_CALL cpp_regex_traits<char>::toi(const char*& first, const char* last, int radix)const
+int BOOST_REGEX_CALL cpp_regex_traits<char>::toi(const char*& first, const char* last, int radix)const
 {
    pmd->sbuf.pubsetbuf((char*)first, last-first);
    pmd->is.clear();
@@ -342,7 +350,7 @@ int BOOST_RE_CALL cpp_regex_traits<char>::toi(const char*& first, const char* la
       return 0;
 }
 
-boost::uint_fast32_t BOOST_RE_CALL cpp_regex_traits<char>::lookup_classname(const char* first, const char* last)const
+boost::uint_fast32_t BOOST_REGEX_CALL cpp_regex_traits<char>::lookup_classname(const char* first, const char* last)const
 {
    BOOST_RE_GUARD_STACK
    unsigned int i;
@@ -360,7 +368,7 @@ boost::uint_fast32_t BOOST_RE_CALL cpp_regex_traits<char>::lookup_classname(cons
    return 0;
 }
 
-bool BOOST_RE_CALL cpp_regex_traits<char>::lookup_collatename(std::string& s, const char* first, const char* last)const
+bool BOOST_REGEX_CALL cpp_regex_traits<char>::lookup_collatename(std::string& s, const char* first, const char* last)const
 {
    BOOST_RE_GUARD_STACK
    std::string name(first, last);
@@ -373,7 +381,7 @@ bool BOOST_RE_CALL cpp_regex_traits<char>::lookup_collatename(std::string& s, co
    return re_detail::re_lookup_def_collate_name(s, name.c_str());
 }
 
-void BOOST_RE_CALL cpp_regex_traits<char>::transform_primary(std::string& out, const std::string& in)const
+void BOOST_REGEX_CALL cpp_regex_traits<char>::transform_primary(std::string& out, const std::string& in)const
 {
    transform(out, in);
    switch(sort_type)
@@ -398,14 +406,14 @@ void BOOST_RE_CALL cpp_regex_traits<char>::transform_primary(std::string& out, c
 }
 
 
-std::string BOOST_RE_CALL cpp_regex_traits<char>::error_string(unsigned id)const
+std::string BOOST_REGEX_CALL cpp_regex_traits<char>::error_string(unsigned id)const
 {
    if((id <= boost::REG_E_UNKNOWN) && (pmd->error_strings[id].size()))
       return pmd->error_strings[id];
    return boost::re_detail::re_default_error_messages[id];
 }
 
-cpp_regex_traits<char>::locale_type BOOST_RE_CALL cpp_regex_traits<char>::imbue(locale_type l)
+cpp_regex_traits<char>::locale_type BOOST_REGEX_CALL cpp_regex_traits<char>::imbue(locale_type l)
 {
    locale_type old_l(locale_inst);
    locale_inst = l;
@@ -415,18 +423,18 @@ cpp_regex_traits<char>::locale_type BOOST_RE_CALL cpp_regex_traits<char>::imbue(
    psyntax = pmd->syntax_map;
    for(unsigned int i = 0; i < char_set_size; ++i)
       lower_map[i] = static_cast<char>(i);
-   pctype = &BOOST_RE_USE_FACET(locale_inst, std::ctype<char>);
+   pctype = &BOOST_USE_FACET(std::ctype<char>, locale_inst);
    pctype->tolower(&lower_map[0], &lower_map[char_set_size]);
-   pcollate = &BOOST_RE_USE_FACET(locale_inst, std::collate<char>);
+   pcollate = &BOOST_USE_FACET(std::collate<char>, locale_inst);
    sort_type = re_detail::find_sort_syntax(this, &(this->sort_delim));
    return old_l;
 }
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 
 namespace re_detail{
 
-std::string BOOST_RE_CALL to_narrow(const std::basic_string<wchar_t>& is, const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
+std::string BOOST_REGEX_CALL to_narrow(const std::basic_string<wchar_t>& is, const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
 {
    BOOST_RE_GUARD_STACK
    unsigned int bufsize = is.size() * 2;
@@ -434,8 +442,6 @@ std::string BOOST_RE_CALL to_narrow(const std::basic_string<wchar_t>& is, const 
    // declare buffer first as VC6 workaround for internal compiler error!
    char* pc = new char[bufsize];
    scoped_array<char> t(pc);
-   //typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_type;
-   //const cvt_type& cvt = BOOST_RE_USE_FACET(l, cvt_type);
    #ifdef BOOST_MSVC
    std::mbstate_t state = 0;
    #else
@@ -467,7 +473,7 @@ std::string BOOST_RE_CALL to_narrow(const std::basic_string<wchar_t>& is, const 
    }
 }
 
-std::wstring BOOST_RE_CALL to_wide(const std::string& is, const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
+std::wstring BOOST_REGEX_CALL to_wide(const std::string& is, const std::codecvt<wchar_t, char, std::mbstate_t>& cvt)
 {
    BOOST_RE_GUARD_STACK
    unsigned int bufsize = is.size() + 2;
@@ -476,8 +482,6 @@ std::wstring BOOST_RE_CALL to_wide(const std::string& is, const std::codecvt<wch
    // declare buffer first as VC6 workaround for internal compiler error!
    wchar_t* pc = new wchar_t[bufsize];
    scoped_array<wchar_t> t(pc);
-   //typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_type;
-   //const cvt_type& cvt = BOOST_RE_USE_FACET(l, cvt_type);
    #ifdef BOOST_MSVC
    std::mbstate_t state = 0;
    #else
@@ -520,7 +524,7 @@ std::wstring BOOST_RE_CALL to_wide(const std::string& is, const std::codecvt<wch
 template <>
 struct message_data<wchar_t>
 {
-#ifndef BOOST_RE_NO_MESSAGES
+#ifndef BOOST_NO_STD_MESSAGES
    typedef std::messages<wchar_t>::string_type string_type;
 #else
    typedef std::wstring string_type;
@@ -555,9 +559,9 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    is.imbue(l);
    syntax_map m;
    typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_type;
-   const cvt_type& cvt = BOOST_RE_USE_FACET(l, cvt_type);
-#ifndef BOOST_RE_NO_MESSAGES
-   const std::messages<wchar_t>& msgs = BOOST_RE_USE_FACET(l, std::messages<wchar_t>);
+   const cvt_type& cvt = BOOST_USE_FACET(cvt_type, l);
+#ifndef BOOST_NO_STD_MESSAGES
+   const std::messages<wchar_t>& msgs = BOOST_USE_FACET(std::messages<wchar_t>, l);
    std::messages<wchar_t>::catalog cat = regex_message_catalogue.size() ? msgs.open(regex_message_catalogue, l) : -1;
 #endif
    scoped_array<char> a;
@@ -576,9 +580,9 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
       re_get_default_message(a.get(), array_size, i+100);
       std::string ns = a.get();
       string_type s = to_wide(ns, cvt);
-#ifndef BOOST_RE_NO_MESSAGES
+#ifndef BOOST_NO_STD_MESSAGES
       if((int)cat >= 0)
-         s = BOOST_RE_USE_FACET(l, std::messages<wchar_t>).get(cat, 0, i+100, s);
+         s = BOOST_USE_FACET(std::messages<wchar_t>, l).get(cat, 0, i+100, s);
 #endif
       for(unsigned int j = 0; j < s.size(); ++j)
       {
@@ -593,7 +597,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
       }
    }
 
-#ifndef BOOST_RE_NO_MESSAGES
+#ifndef BOOST_NO_STD_MESSAGES
    // load any custom collate names:
    string_type c1, c2;
    i = 400;
@@ -639,7 +643,7 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
 
 } // namespace re_detail
 
-unsigned int BOOST_RE_CALL cpp_regex_traits<wchar_t>::do_syntax_type(size_type c)const
+unsigned int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::do_syntax_type(size_type c)const
 {
    std::list<re_detail::message_data<wchar_t>::syntax_map>::const_iterator i, j;
    i = pmd->syntax.begin();
@@ -653,7 +657,7 @@ unsigned int BOOST_RE_CALL cpp_regex_traits<wchar_t>::do_syntax_type(size_type c
    return 0;
 }
 
-void BOOST_RE_CALL cpp_regex_traits<wchar_t>::transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)const
+void BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)const
 {
    transform(out, in);
    switch(sort_type)
@@ -677,7 +681,7 @@ void BOOST_RE_CALL cpp_regex_traits<wchar_t>::transform_primary(std::basic_strin
    }
 }
 
-int BOOST_RE_CALL cpp_regex_traits<wchar_t>::toi(wchar_t c)const
+int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::toi(wchar_t c)const
 {
    pmd->sbuf.pubsetbuf(&c, 1);
    pmd->is.clear();
@@ -691,7 +695,7 @@ int BOOST_RE_CALL cpp_regex_traits<wchar_t>::toi(wchar_t c)const
       return 0;
 }
 
-int BOOST_RE_CALL cpp_regex_traits<wchar_t>::toi(const wchar_t*& first, const wchar_t* last, int radix)const
+int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::toi(const wchar_t*& first, const wchar_t* last, int radix)const
 {
    pmd->sbuf.pubsetbuf((wchar_t*)first, last-first);
    pmd->is.clear();
@@ -708,7 +712,7 @@ int BOOST_RE_CALL cpp_regex_traits<wchar_t>::toi(const wchar_t*& first, const wc
       return 0;
 }
 
-boost::uint_fast32_t BOOST_RE_CALL cpp_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)const
+boost::uint_fast32_t BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)const
 {
    BOOST_RE_GUARD_STACK
    unsigned int i;
@@ -728,7 +732,7 @@ boost::uint_fast32_t BOOST_RE_CALL cpp_regex_traits<wchar_t>::lookup_classname(c
    return 0;
 }
 
-bool BOOST_RE_CALL cpp_regex_traits<wchar_t>::lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last)const
+bool BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last)const
 {
    BOOST_RE_GUARD_STACK
    std::wstring name(first, last);
@@ -745,7 +749,7 @@ bool BOOST_RE_CALL cpp_regex_traits<wchar_t>::lookup_collatename(std::basic_stri
    return result;
 }
 
-std::string BOOST_RE_CALL cpp_regex_traits<wchar_t>::error_string(unsigned id)const
+std::string BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::error_string(unsigned id)const
 {
    if((id <= boost::REG_E_UNKNOWN) && (pmd->error_strings[id].size()))
       return pmd->error_strings[id];
@@ -766,11 +770,11 @@ cpp_regex_traits<wchar_t>::cpp_regex_traits()
    }
    for(unsigned int i = 0; i < char_set_size; ++i)
       lower_map[i] = static_cast<wchar_t>(i);
-   pctype = &BOOST_RE_USE_FACET(locale_inst, std::ctype<wchar_t>);
+   pctype = &BOOST_USE_FACET(std::ctype<wchar_t>, locale_inst);
    pctype->tolower(&lower_map[0], &lower_map[char_set_size]);
-   pcollate = &BOOST_RE_USE_FACET(locale_inst, std::collate<wchar_t>);
+   pcollate = &BOOST_USE_FACET(std::collate<wchar_t>, locale_inst);
    typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_t;
-   pcdv = &BOOST_RE_USE_FACET(locale_inst, cvt_t);
+   pcdv = &BOOST_USE_FACET(cvt_t, locale_inst);
    sort_type = re_detail::find_sort_syntax(this, &(this->sort_delim));
 }
 
@@ -780,7 +784,7 @@ cpp_regex_traits<wchar_t>::~cpp_regex_traits()
    delete[] lower_map;
 }
 
-cpp_regex_traits<wchar_t>::locale_type BOOST_RE_CALL cpp_regex_traits<wchar_t>::imbue(locale_type l)
+cpp_regex_traits<wchar_t>::locale_type BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::imbue(locale_type l)
 {
    locale_type old_l(locale_inst);
    locale_inst = l;
@@ -790,16 +794,16 @@ cpp_regex_traits<wchar_t>::locale_type BOOST_RE_CALL cpp_regex_traits<wchar_t>::
    psyntax = pmd->syntax_;
    for(unsigned int i = 0; i < char_set_size; ++i)
       lower_map[i] = static_cast<wchar_t>(i);
-   pctype = &BOOST_RE_USE_FACET(locale_inst, std::ctype<wchar_t>);
+   pctype = &BOOST_USE_FACET(std::ctype<wchar_t>, locale_inst);
    pctype->tolower(&lower_map[0], &lower_map[char_set_size]);
-   pcollate = &BOOST_RE_USE_FACET(locale_inst, std::collate<wchar_t>);
+   pcollate = &BOOST_USE_FACET(std::collate<wchar_t>, locale_inst);
    typedef std::codecvt<wchar_t, char, std::mbstate_t> cvt_t;
-   pcdv = &BOOST_RE_USE_FACET(locale_inst, cvt_t);
+   pcdv = &BOOST_USE_FACET(cvt_t, locale_inst);
    sort_type = re_detail::find_sort_syntax(this, &(this->sort_delim));
    return old_l;
 }
 
-unsigned int BOOST_RE_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsigned int len, const char *s2)const
+unsigned int BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsigned int len, const char *s2)const
 {
    std::string s(s2);
    std::wstring ws = re_detail::to_wide(s2, *pcdv);
@@ -808,7 +812,7 @@ unsigned int BOOST_RE_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, unsi
    return ws.size()+1;
 }
 
-#endif // BOOST_RE_NO_WCSTRING
+#endif // BOOST_NO_WREGEX
 
 
 } // namespace boost

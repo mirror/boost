@@ -16,7 +16,7 @@ INCLUDES=
 #
 XLFLAGS=
 
-CFLAGS= $(INCLUDES) /Oityb1 /GF /Gy -GX -GR -I..\..\..\..\ $(CXXFLAGS)
+CFLAGS= $(INCLUDES) /O2 /GB /GF /Gy -GX -GR -I..\..\..\..\ $(CXXFLAGS)
 
 LFLAGS= -link /LIBPATH:..\..\build\vc6 user32.lib $(XLFLAGS)
 
@@ -202,6 +202,7 @@ r5lmd.exe : tests.cpp parse.cpp regress.cpp
 
 r6lmd.exe : tests.cpp parse.cpp regress.cpp
 	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r6lmd.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
 
 
 

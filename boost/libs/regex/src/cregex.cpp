@@ -19,6 +19,10 @@
   *   VERSION:     3.12
   *   DESCRIPTION: Implements high level class boost::RexEx
   */
+
+
+#define BOOST_REGEX_SOURCE
+
 #include <boost/cregex.hpp>
 #include <boost/regex.hpp>
 #if !defined(BOOST_RE_NO_STRING_H)

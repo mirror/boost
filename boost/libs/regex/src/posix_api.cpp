@@ -20,6 +20,8 @@
   *   DESCRIPTION: Implements the Posix API wrappers.
   */
 
+#define BOOST_REGEX_SOURCE
+
 #include <cstdio>
 #include <boost/regex.hpp>
 
@@ -35,7 +37,7 @@ const char* names[] = {"REG_NOERROR", "REG_NOMATCH", "REG_BADPAT", "REG_ECOLLATE
                         "REG_ESPACE", "REG_BADRPT", "REG_EMPTY", "REG_E_UNKNOWN"};
 } // namespace
 
-BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompA(regex_tA* expression, const char* ptr, int f)
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char* ptr, int f)
 {
    BOOST_RE_GUARD_STACK
    if(expression->re_magic != magic_value)
@@ -90,7 +92,7 @@ BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompA(regex_tA* expression, const char* p
 
 }
 
-BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorA(int code, const regex_tA* e, char* buf, unsigned int buf_size)
+BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorA(int code, const regex_tA* e, char* buf, unsigned int buf_size)
 {
    BOOST_RE_GUARD_STACK
    unsigned int result = 0;
@@ -148,7 +150,7 @@ BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorA(int code, const regex_tA*
    return 0;
 }
 
-BOOST_RE_IX_DECL int BOOST_RE_CCALL regexecA(const regex_tA* expression, const char* buf, unsigned int n, regmatch_t* array, int eflags)
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA* expression, const char* buf, unsigned int n, regmatch_t* array, int eflags)
 {
    BOOST_RE_GUARD_STACK
    bool result = false;
@@ -204,7 +206,7 @@ BOOST_RE_IX_DECL int BOOST_RE_CCALL regexecA(const regex_tA* expression, const c
    return REG_NOMATCH;
 }
 
-BOOST_RE_IX_DECL void BOOST_RE_CCALL regfreeA(regex_tA* expression)
+BOOST_REGEX_DECL void BOOST_REGEX_CCALL regfreeA(regex_tA* expression)
 {
    BOOST_RE_GUARD_STACK
    if(expression->re_magic == magic_value)

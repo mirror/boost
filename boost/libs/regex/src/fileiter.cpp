@@ -21,6 +21,8 @@
   */
 
 
+#define BOOST_REGEX_SOURCE
+
 #include <climits>
 #include <stdexcept>
 #include <boost/regex/detail/fileiter.hpp>
@@ -29,11 +31,15 @@
 #include <sys/cygwin.h>
 #endif
 
+#ifdef BOOST_MSVC
+#  pragma warning(disable: 4800)
+#endif
+
 namespace boost{
    namespace re_detail{
 // start with the operating system specific stuff:
 
-#if (defined(__BORLANDC__) || defined(FI_WIN32_DIR) || defined(BOOST_MSVC)) && !defined(BOOST_RE_NO_WIN32)
+#if (defined(__BORLANDC__) || defined(BOOST_REGEX_FI_WIN32_DIR) || defined(BOOST_MSVC)) && !defined(BOOST_RE_NO_WIN32)
 
 // platform is DOS or Windows
 // directories are separated with '\\'
@@ -41,7 +47,7 @@ namespace boost{
 
 const char* _fi_sep = "\\";
 const char* _fi_sep_alt = "/";
-#define FI_TRANSLATE(c) std::tolower(c)
+#define BOOST_REGEX_FI_TRANSLATE(c) std::tolower(c)
 
 #else
 
@@ -51,11 +57,11 @@ const char* _fi_sep_alt = "/";
 
 const char* _fi_sep = "/";
 const char* _fi_sep_alt = _fi_sep;
-#define FI_TRANSLATE(c) c
+#define BOOST_REGEX_FI_TRANSLATE(c) c
 
 #endif
 
-#ifdef FI_WIN32_MAP
+#ifdef BOOST_REGEX_FI_WIN32_MAP
 
 void mapfile::open(const char* file)
 {
@@ -679,7 +685,7 @@ void directory_iterator::next()
 }
 
 
-#ifdef FI_POSIX_DIR
+#ifdef BOOST_REGEX_FI_POSIX_DIR
 
 struct _fi_priv_data
 {
@@ -746,7 +752,7 @@ bool iswild(const char* mask, const char* name)
          }
          // fall through:
       default:
-         if(FI_TRANSLATE(*mask) != FI_TRANSLATE(*name))
+         if(BOOST_REGEX_FI_TRANSLATE(*mask) != BOOST_REGEX_FI_TRANSLATE(*name))
             return false;
          ++mask;
          ++name;

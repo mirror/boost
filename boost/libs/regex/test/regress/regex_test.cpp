@@ -24,11 +24,14 @@
   */
 
 // disable automatic selection of support library:
-#define BOOST_RE_NO_LIB
+#define BOOST_REGEX_NO_LIB
 
 #include <boost/regex.hpp>
 #include <boost/regex/src.cpp>
 
+#ifdef BOOST_MSVC
+#  pragma warning(disable: 4660)
+#endif
 //
 // instantiate templates used:
 //
@@ -111,7 +114,7 @@ template std::size_t regex_split(test_string_type*,
 
 template std::size_t regex_split(test_string_type*, test_string_type&);
 
-#ifndef BOOST_RE_NO_PARTIAL_FUNC_SPEC
+#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 //
 // the following prototypes are only available if partial ordering
 // of template functions is supported:
@@ -170,9 +173,9 @@ template test_string_type regex_merge(const test_string_type&,
 //
 // include regression test source files:
 //
-#ifdef BOOST_RE_LOCALE_W32
+#ifdef BOOST_REGEX_USE_WIN32_LOCALE
 #define BOOST_RE_TEST_LOCALE_W32
-#elif !defined(BOOST_RE_LOCALE_C)
+#elif !defined(BOOST_REGEX_USE_C_LOCALE)
 #define BOOST_RE_TEST_LOCALE_CPP
 #endif
 

@@ -25,25 +25,25 @@
 #ifndef BOOST_RE_FILEITER_HPP
 #define BOOST_RE_FILEITER_HPP
 
-#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/config.hpp>
 
-#if (defined(__CYGWIN__) || defined(__CYGWIN32__)) && !defined(BOOST_RE_NO_W32)
+#if (defined(__CYGWIN__) || defined(__CYGWIN32__)) && !defined(BOOST_REGEX_NO_W32)
 #error "Sorry, can't mix <windows.h> with STL code and gcc compiler: if you ran configure, try again with configure --disable-ms-windows"
-#define FI_WIN32_MAP
-#define FI_POSIX_DIR
-#elif (defined(__WIN32__) || defined(_WIN32) || defined(WIN32)) && !defined(BOOST_RE_NO_W32)
-#define FI_WIN32_MAP
-#define FI_WIN32_DIR
+#define BOOST_REGEX_FI_WIN32_MAP
+#define BOOST_REGEX_FI_POSIX_DIR
+#elif (defined(__WIN32__) || defined(_WIN32) || defined(WIN32)) && !defined(BOOST_REGEX_NO_W32)
+#define BOOST_REGEX_FI_WIN32_MAP
+#define BOOST_REGEX_FI_WIN32_DIR
 #else
-#define FI_POSIX_MAP
-#define FI_POSIX_DIR
+#define BOOST_REGEX_FI_POSIX_MAP
+#define BOOST_REGEX_FI_POSIX_DIR
 #endif
 
-#if defined(FI_WIN32_MAP)||defined(FI_WIN32_DIR)
+#if defined(BOOST_REGEX_FI_WIN32_MAP)||defined(BOOST_REGEX_FI_WIN32_DIR)
 #include <windows.h>
 #endif
 
-#if defined(FI_WIN32_DIR)
+#if defined(BOOST_REGEX_FI_WIN32_DIR)
 
 namespace boost{
    namespace re_detail{
@@ -58,7 +58,7 @@ typedef HANDLE _fi_find_handle;
 #define _fi_invalid_handle INVALID_HANDLE_VALUE
 #define _fi_dir FILE_ATTRIBUTE_DIRECTORY
 
-#elif defined(FI_POSIX_DIR)
+#elif defined(BOOST_REGEX_FI_POSIX_DIR)
 
 #include <cstdio>
 #include <cctype>
@@ -134,9 +134,9 @@ namespace boost{
    #endif
 #endif
 
-#ifdef FI_WIN32_MAP // win32 mapfile
+#ifdef BOOST_REGEX_FI_WIN32_MAP // win32 mapfile
 
-class BOOST_RE_IX_DECL mapfile
+class BOOST_REGEX_DECL mapfile
 {
    HANDLE hfile;
    HANDLE hmap;
@@ -158,11 +158,11 @@ public:
 };
 
 
-#elif !defined(BOOST_RE_NO_STL)  // use C API to emulate the memory map:
+#else
 
-class BOOST_RE_IX_DECL mapfile_iterator;
+class BOOST_REGEX_DECL mapfile_iterator;
 
-class BOOST_RE_IX_DECL mapfile
+class BOOST_REGEX_DECL mapfile
 {
    typedef char* pointer;
    std::FILE* hfile;
@@ -192,7 +192,7 @@ public:
    friend class mapfile_iterator;
 };
 
-class BOOST_RE_IX_DECL mapfile_iterator
+class BOOST_REGEX_DECL mapfile_iterator
 {
    typedef mapfile::pointer internal_pointer;
    internal_pointer* node;
@@ -272,12 +272,12 @@ public:
    {
       return (i.file == j.file) && (i.node == j.node) && (i.offset == j.offset);
    }
-#ifndef BOOST_RE_NO_NOT_EQUAL
+
    friend inline bool operator!=(const mapfile_iterator& i, const mapfile_iterator& j)
    {
       return !(i == j);
    }
-#endif
+
    friend inline bool operator<(const mapfile_iterator& i, const mapfile_iterator& j)
    {
       return i.position() < j.position();
@@ -311,7 +311,7 @@ public:
 #endif
 
 // _fi_sep determines the directory separator, either '\\' or '/'
-BOOST_RE_IX_DECL extern const char* _fi_sep;
+BOOST_REGEX_DECL extern const char* _fi_sep;
 
 struct file_iterator_ref
 {
@@ -321,7 +321,7 @@ struct file_iterator_ref
 };
 
 
-class BOOST_RE_IX_DECL file_iterator 
+class BOOST_REGEX_DECL file_iterator 
 {
    char* _root;
    char* _path;
@@ -353,12 +353,12 @@ public:
    {
       return ((f1.ref->hf == _fi_invalid_handle) && (f2.ref->hf == _fi_invalid_handle));
    }
-#ifndef BOOST_RE_NO_NOT_EQUAL
+
    friend inline bool operator != (const file_iterator& f1, const file_iterator& f2)
    {
       return !(f1 == f2);
    }
-#endif
+
 };
 
 // dwa 9/13/00 - suppress unused parameter warning
@@ -368,7 +368,7 @@ inline bool operator < (const file_iterator&, const file_iterator&)
 }
 
 
-class BOOST_RE_IX_DECL directory_iterator
+class BOOST_REGEX_DECL directory_iterator
 {
    char* _root;
    char* _path;
@@ -404,13 +404,13 @@ public:
       return ((f1.ref->hf == _fi_invalid_handle) && (f2.ref->hf == _fi_invalid_handle));
    }
 
-#ifndef BOOST_RE_NO_NOT_EQUAL
+
    friend inline bool operator != (const directory_iterator& f1, const directory_iterator& f2)
    {
       return !(f1 == f2);
    }
-#endif
-};
+
+   };
 
 inline bool operator < (const directory_iterator&, const directory_iterator&)
 {

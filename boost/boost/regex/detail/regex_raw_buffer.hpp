@@ -26,7 +26,7 @@
 #define BOOST_REGEX_RAW_BUFFER_HPP
 
 #ifndef BOOST_REGEX_CONFIG_HPP
-#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/config.hpp>
 #endif
 
 namespace boost{
@@ -105,7 +105,7 @@ class raw_storage
 {
 public:
    typedef Allocator allocator_type;
-   typedef typename boost::re_detail::rebind_allocator<unsigned char, allocator_type>::type alloc_inst_type;
+   typedef typename boost::detail::rebind_allocator<unsigned char, allocator_type>::type alloc_inst_type;
    typedef typename alloc_inst_type::size_type                                size_type;
    typedef typename alloc_inst_type::pointer                                  pointer;
 private:
@@ -127,9 +127,9 @@ public:
       alloc_inst.deallocate(start, (alloc_inst.last - start));
    }
 
-   void BOOST_RE_CALL resize(size_type n);
+   void BOOST_REGEX_CALL resize(size_type n);
    
-   void* BOOST_RE_CALL extend(size_type n)
+   void* BOOST_REGEX_CALL extend(size_type n)
    {
       if(size_type(alloc_inst.last - end) < n)
          resize(n + (end - start));
@@ -138,44 +138,44 @@ public:
       return result;
    }
 
-   void* BOOST_RE_CALL insert(size_type pos, size_type n);
+   void* BOOST_REGEX_CALL insert(size_type pos, size_type n);
 
-   size_type BOOST_RE_CALL size()
+   size_type BOOST_REGEX_CALL size()
    {
       return end - start;
    }
 
-   size_type BOOST_RE_CALL capacity()
+   size_type BOOST_REGEX_CALL capacity()
    {
       return alloc_inst.last - start;
    }
 
-   void* BOOST_RE_CALL data()const
+   void* BOOST_REGEX_CALL data()const
    {
       return start;
    }
 
-   size_type BOOST_RE_CALL index(void* ptr)
+   size_type BOOST_REGEX_CALL index(void* ptr)
    {
       return (unsigned char*)ptr - (unsigned char*)data();
    }
 
-   void BOOST_RE_CALL clear()
+   void BOOST_REGEX_CALL clear()
    {
       end = start;
    }
 
-   void BOOST_RE_CALL align()
+   void BOOST_REGEX_CALL align()
    {
       // move end up to a boundary:
       end = (unsigned char*)start + ((((unsigned char*)end - (unsigned char*)start) + padding_mask) & ~padding_mask);
    }
 
-   Allocator BOOST_RE_CALL allocator()const;
+   Allocator BOOST_REGEX_CALL allocator()const;
 };
 
 template <class Allocator>
-CONSTRUCTOR_INLINE raw_storage<Allocator>::raw_storage(const Allocator& a)
+raw_storage<Allocator>::raw_storage(const Allocator& a)
   : alloc_inst(a)
 {
   start = end = alloc_inst.allocate(1024);
@@ -183,7 +183,7 @@ CONSTRUCTOR_INLINE raw_storage<Allocator>::raw_storage(const Allocator& a)
 }
 
 template <class Allocator>
-CONSTRUCTOR_INLINE raw_storage<Allocator>::raw_storage(size_type n, const Allocator& a)
+raw_storage<Allocator>::raw_storage(size_type n, const Allocator& a)
   : alloc_inst(a)
 {
   start = end = alloc_inst.allocate(n);
@@ -191,13 +191,13 @@ CONSTRUCTOR_INLINE raw_storage<Allocator>::raw_storage(size_type n, const Alloca
 }
 
 template <class Allocator>
-Allocator BOOST_RE_CALL raw_storage<Allocator>::allocator()const
+Allocator BOOST_REGEX_CALL raw_storage<Allocator>::allocator()const
 {
   return alloc_inst;
 }
 
 template <class Allocator>
-void BOOST_RE_CALL raw_storage<Allocator>::resize(size_type n)
+void BOOST_REGEX_CALL raw_storage<Allocator>::resize(size_type n)
 {
    register size_type newsize = (alloc_inst.last - start) * 2;
    register size_type datasize = end - start;
@@ -220,7 +220,7 @@ void BOOST_RE_CALL raw_storage<Allocator>::resize(size_type n)
 }
 
 template <class Allocator>
-void* BOOST_RE_CALL raw_storage<Allocator>::insert(size_type pos, size_type n)
+void* BOOST_REGEX_CALL raw_storage<Allocator>::insert(size_type pos, size_type n)
 {
    jm_assert(pos <= size_type(end - start));
    if(size_type(alloc_inst.last - end) < n)

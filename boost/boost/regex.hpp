@@ -34,15 +34,12 @@
 
 // what follows is all C++ don't include in C builds!!
 
-#ifdef BOOST_RE_DEBUG
+#ifdef BOOST_REGEX_DEBUG
 # include <iosfwd>
 #endif
 
 #include <new>
-#include <boost/regex/detail/regex_config.hpp>
-#if !defined(BOOST_RE_NO_TYPEINFO)
-#include <typeinfo>
-#endif
+#include <boost/regex/config.hpp>
 #include <cstring>
 #include <boost/regex/detail/regex_stack.hpp>
 #include <boost/regex/detail/regex_raw_buffer.hpp>
@@ -81,13 +78,13 @@ public:
    typedef unsigned int size_type;
    typedef regex_traits<char> base_type;
 
-   char BOOST_RE_CALL translate(char c, bool)const
+   char BOOST_REGEX_CALL translate(char c, bool)const
    {
       return static_cast<const regex_traits<char>*>(this)->translate(c, true);
    }
 };
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 template<>
 class char_regex_traits_i<wchar_t> : public regex_traits<wchar_t>
 {
@@ -97,11 +94,11 @@ public:
    typedef unsigned int size_type;
    typedef regex_traits<wchar_t> base_type;
 
-   wchar_t BOOST_RE_CALL translate(wchar_t c, bool)const
+   wchar_t BOOST_REGEX_CALL translate(wchar_t c, bool)const
    {
       return static_cast<const regex_traits<wchar_t>*>(this)->translate(c, true);
    }
-   boost::uint_fast32_t BOOST_RE_CALL lookup_classname(const wchar_t* first, const wchar_t* last)const
+   boost::uint_fast32_t BOOST_REGEX_CALL lookup_classname(const wchar_t* first, const wchar_t* last)const
    {
       boost::uint_fast32_t result = static_cast<const regex_traits<wchar_t>*>(this)->lookup_classname(first, last);
       if((result & base_type::char_class_upper) == base_type::char_class_upper)
@@ -193,7 +190,7 @@ enum syntax_element_type
    syntax_element_restart_continue = syntax_element_soft_buffer_end + 1
 };
 
-#ifdef BOOST_RE_DEBUG
+#ifdef BOOST_REGEX_DEBUG
 // dwa 09/26/00 - This is needed to suppress warnings about an ambiguous conversion
 std::ostream& operator<<(std::ostream&, syntax_element_type);
 #endif
@@ -290,7 +287,7 @@ enum re_jump_size_type
 // class basic_regex
 // handles error codes and flags
 
-class BOOST_RE_IX_DECL regbase
+class BOOST_REGEX_DECL regbase
 {
 public:
    enum flag_type_
@@ -335,7 +332,7 @@ public:
       restart_fixed_lit = 6
    };
 
-   flag_type BOOST_RE_CALL flags()const
+   flag_type BOOST_REGEX_CALL flags()const
    {
       return _flags;
    }
@@ -359,7 +356,7 @@ struct regex_iterator_traits
 {
   typedef typename T::iterator_category iterator_category;
   typedef typename T::value_type        value_type;
-#ifndef BOOST_MSVC
+#if !defined(BOOST_NO_STD_ITERATOR)
   typedef typename T::difference_type   difference_type;
   typedef typename T::pointer           pointer;
   typedef typename T::reference         reference;
@@ -403,7 +400,7 @@ template<>
 struct regex_iterator_traits<std::string::iterator> : pointer_iterator_traits<char>{};
 template<>
 struct regex_iterator_traits<std::string::const_iterator> : const_pointer_iterator_traits<char>{};
-#ifndef BOOST_NO_WSTRING
+#ifndef BOOST_NO_STD_WSTRING
 template<>
 struct regex_iterator_traits<std::wstring::iterator> : pointer_iterator_traits<wchar_t>{};
 template<>
@@ -437,7 +434,7 @@ struct def_alloc_param_traits<const wchar_t*>
 
 }
 
-template <class iterator, class Allocator BOOST_RE_DEF_ALLOC_PARAM(typename re_detail::def_alloc_param_traits<iterator>::type) >
+template <class iterator, class Allocator = BOOST_DEFAULT_ALLOCATOR(re_detail::def_alloc_param_traits<iterator>::type) >
 class match_results;
 
 //
@@ -446,7 +443,7 @@ class match_results;
 // regular expression:
 //
 
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 //
 // Ugly ugly hack, 
 // template don't merge if they contain switch statements so declare these
@@ -455,7 +452,7 @@ class match_results;
 namespace{
 #endif
 
-template <class charT, class traits BOOST_RE_TRICKY_DEFAULT_PARAM(regex_traits<charT>), class Allocator BOOST_RE_DEF_ALLOC_PARAM(charT) >
+template <class charT, class traits = regex_traits<charT>, class Allocator = BOOST_DEFAULT_ALLOCATOR(charT) >
 class reg_expression : public regbase
 {
    typedef typename traits::size_type traits_size_type;
@@ -495,8 +492,8 @@ public:
    reg_expression(const charT* p, size_type len, flag_type f, const Allocator& a = Allocator());
    reg_expression(const reg_expression&);
    ~reg_expression();
-   reg_expression& BOOST_RE_CALL operator=(const reg_expression&);
-   reg_expression& BOOST_RE_CALL operator=(const charT* ptr)
+   reg_expression& BOOST_REGEX_CALL operator=(const reg_expression&);
+   reg_expression& BOOST_REGEX_CALL operator=(const charT* ptr)
    {
       set_expression(ptr, regbase::normal | regbase::use_except);
       return *this;
@@ -522,7 +519,7 @@ public:
 #ifndef BOOST_NO_MEMBER_TEMPLATES
 
    template <class ST, class SA>
-   unsigned int BOOST_RE_CALL set_expression(const std::basic_string<charT, ST, SA>& p, flag_type f = regbase::normal)
+   unsigned int BOOST_REGEX_CALL set_expression(const std::basic_string<charT, ST, SA>& p, flag_type f = regbase::normal)
    { return set_expression(p.data(), p.data() + p.size(), f); }
 
    template <class ST, class SA>
@@ -540,14 +537,14 @@ public:
    }
 
    template <class ST, class SA>
-   reg_expression& BOOST_RE_CALL operator=(const std::basic_string<charT, ST, SA>& p)
+   reg_expression& BOOST_REGEX_CALL operator=(const std::basic_string<charT, ST, SA>& p)
    {
       set_expression(p.c_str(), p.c_str() + p.size(), regbase::normal | regbase::use_except);
       return *this;
    }
 
    template <class string_traits, class A>
-   reg_expression& BOOST_RE_CALL assign(
+   reg_expression& BOOST_REGEX_CALL assign(
        const std::basic_string<charT, string_traits, A>& s,
        flag_type f = regbase::normal)
    {
@@ -556,7 +553,7 @@ public:
    }
 
    template <class fwd_iterator>
-   reg_expression& BOOST_RE_CALL assign(fwd_iterator first,
+   reg_expression& BOOST_REGEX_CALL assign(fwd_iterator first,
                           fwd_iterator last,
                           flag_type f = regbase::normal)
    {
@@ -566,20 +563,20 @@ public:
       set_expression(a.get(), a.get() + len, f | regbase::use_except);
       return *this;
    }
-#elif !defined(BOOST_RE_NO_STRING_DEF_ARGS)
-   unsigned int BOOST_RE_CALL set_expression(const std::basic_string<charT>& p, flag_type f = regbase::normal)
+#else
+   unsigned int BOOST_REGEX_CALL set_expression(const std::basic_string<charT>& p, flag_type f = regbase::normal)
    { return set_expression(p.data(), p.data() + p.size(), f | regbase::use_except); }
 
    reg_expression(const std::basic_string<charT>& p, flag_type f = regbase::normal, const Allocator& a = Allocator())
     : data(a), pkmp(0) { set_expression(p, f | regbase::use_except); }
 
-   reg_expression& BOOST_RE_CALL operator=(const std::basic_string<charT>& p)
+   reg_expression& BOOST_REGEX_CALL operator=(const std::basic_string<charT>& p)
    {
       set_expression(p.c_str(), p.c_str() + p.size(), regbase::normal | regbase::use_except);
       return *this;
    }
 
-   reg_expression& BOOST_RE_CALL assign(
+   reg_expression& BOOST_REGEX_CALL assign(
        const std::basic_string<charT>& s,
        flag_type f = regbase::normal)
    {
@@ -592,18 +589,18 @@ public:
 
    //
    // allocator access:
-   Allocator BOOST_RE_CALL get_allocator()const;
+   Allocator BOOST_REGEX_CALL get_allocator()const;
    //
    // locale:
-   locale_type BOOST_RE_CALL imbue(locale_type l){ return traits_inst.imbue(l); }
-   locale_type BOOST_RE_CALL getloc()const{ return traits_inst.getloc(); }
+   locale_type BOOST_REGEX_CALL imbue(locale_type l){ return traits_inst.imbue(l); }
+   locale_type BOOST_REGEX_CALL getloc()const{ return traits_inst.getloc(); }
    //
    // flags:
-   flag_type BOOST_RE_CALL getflags()const
+   flag_type BOOST_REGEX_CALL getflags()const
    { return flags(); }
    //
    // str:
-   std::basic_string<charT> BOOST_RE_CALL str()const
+   std::basic_string<charT> BOOST_REGEX_CALL str()const
    {
       std::basic_string<charT> result;
       if(this->error_code() == 0)
@@ -612,45 +609,46 @@ public:
    }
    //
    // begin, end:
-   const_iterator BOOST_RE_CALL begin()const
+   const_iterator BOOST_REGEX_CALL begin()const
    { return (this->error_code() ? 0 : _expression); }
-   const_iterator BOOST_RE_CALL end()const
+   const_iterator BOOST_REGEX_CALL end()const
    { return (this->error_code() ? 0 : _expression + _expression_len); }
    //
    // swap:
-   void BOOST_RE_CALL swap(reg_expression&)throw();
+   void BOOST_REGEX_CALL swap(reg_expression&)throw();
    //
    // size:
-   size_type BOOST_RE_CALL size()const
+   size_type BOOST_REGEX_CALL size()const
    { return (this->error_code() ? 0 : _expression_len); }
    //
    // max_size:
-   size_type BOOST_RE_CALL max_size()const
+   size_type BOOST_REGEX_CALL max_size()const
    { return UINT_MAX; }
    //
    // empty:
-   bool BOOST_RE_CALL empty()const
-   { return this->error_code(); }
+   bool BOOST_REGEX_CALL empty()const
+   { return 0 != this->error_code(); }
 
-   unsigned BOOST_RE_CALL mark_count()const { return (this->error_code() ? 0 : marks); }
-   bool BOOST_RE_CALL operator==(const reg_expression&)const;
-   bool BOOST_RE_CALL operator<(const reg_expression&)const;
+   unsigned BOOST_REGEX_CALL mark_count()const { return (this->error_code() ? 0 : marks); }
+   bool BOOST_REGEX_CALL operator==(const reg_expression&)const;
+   bool BOOST_REGEX_CALL operator<(const reg_expression&)const;
    //
    // The following are deprecated as public interfaces
    // but are available for compatibility with earlier versions.
-   allocator_type BOOST_RE_CALL allocator()const;
-   const charT* BOOST_RE_CALL expression()const { return (this->error_code() ? 0 : _expression); }
-   unsigned int BOOST_RE_CALL set_expression(const charT* p, const charT* end, flag_type f = regbase::normal);
-   unsigned int BOOST_RE_CALL set_expression(const charT* p, flag_type f = regbase::normal) { return set_expression(p, p + traits_type::length(p), f); }
+   allocator_type BOOST_REGEX_CALL allocator()const;
+   const charT* BOOST_REGEX_CALL expression()const { return (this->error_code() ? 0 : _expression); }
+   unsigned int BOOST_REGEX_CALL set_expression(const charT* p, const charT* end, flag_type f = regbase::normal);
+   unsigned int BOOST_REGEX_CALL set_expression(const charT* p, flag_type f = regbase::normal) { return set_expression(p, p + traits_type::length(p), f); }
    //
    // this should be private but template friends don't work:
    const traits_type& get_traits()const { return traits_inst; }
-   unsigned int BOOST_RE_CALL error_code()const
+   unsigned int BOOST_REGEX_CALL error_code()const
    {
       return error_code_;
    }
 
 private:
+   traits_type traits_inst;
    re_detail::raw_storage<Allocator> data;
    unsigned _restart_type;
    unsigned marks;
@@ -663,48 +661,47 @@ private:
    re_detail::kmp_info<charT>* pkmp;
    unsigned error_code_;
    charT* _expression;
-   traits_type traits_inst;
 
-   void BOOST_RE_CALL compile_maps();
-   void BOOST_RE_CALL compile_map(re_detail::re_syntax_base* node, unsigned char* _map, unsigned int* pnull, unsigned char mask, re_detail::re_syntax_base* terminal = 0)const;
-   bool BOOST_RE_CALL probe_start(re_detail::re_syntax_base* node, charT c, re_detail::re_syntax_base* terminal)const;
-   bool BOOST_RE_CALL probe_start_null(re_detail::re_syntax_base* node, re_detail::re_syntax_base* terminal)const;
-   void BOOST_RE_CALL fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces);
-   void BOOST_RE_CALL move_offsets(re_detail::re_syntax_base* j, unsigned size);
-   re_detail::re_syntax_base* BOOST_RE_CALL compile_set(const charT*& first, const charT* last);
-   re_detail::re_syntax_base* BOOST_RE_CALL compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_narrow_type&);
-   re_detail::re_syntax_base* BOOST_RE_CALL compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_wide_type&);
-   re_detail::re_syntax_base* BOOST_RE_CALL compile_set_simple(re_detail::re_syntax_base* dat, unsigned long cls, bool isnot = false);
-   unsigned int BOOST_RE_CALL parse_inner_set(const charT*& first, const charT* last);
+   void BOOST_REGEX_CALL compile_maps();
+   void BOOST_REGEX_CALL compile_map(re_detail::re_syntax_base* node, unsigned char* _map, unsigned int* pnull, unsigned char mask, re_detail::re_syntax_base* terminal = 0)const;
+   bool BOOST_REGEX_CALL probe_start(re_detail::re_syntax_base* node, charT c, re_detail::re_syntax_base* terminal)const;
+   bool BOOST_REGEX_CALL probe_start_null(re_detail::re_syntax_base* node, re_detail::re_syntax_base* terminal)const;
+   void BOOST_REGEX_CALL fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces);
+   void BOOST_REGEX_CALL move_offsets(re_detail::re_syntax_base* j, unsigned size);
+   re_detail::re_syntax_base* BOOST_REGEX_CALL compile_set(const charT*& first, const charT* last);
+   re_detail::re_syntax_base* BOOST_REGEX_CALL compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_narrow_type&);
+   re_detail::re_syntax_base* BOOST_REGEX_CALL compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_wide_type&);
+   re_detail::re_syntax_base* BOOST_REGEX_CALL compile_set_simple(re_detail::re_syntax_base* dat, unsigned long cls, bool isnot = false);
+   unsigned int BOOST_REGEX_CALL parse_inner_set(const charT*& first, const charT* last);
 
-   re_detail::re_syntax_base* BOOST_RE_CALL add_simple(re_detail::re_syntax_base* dat, re_detail::syntax_element_type type, unsigned int size = sizeof(re_detail::re_syntax_base));
-   re_detail::re_syntax_base* BOOST_RE_CALL add_literal(re_detail::re_syntax_base* dat, charT c);
-   charT BOOST_RE_CALL parse_escape(const charT*& first, const charT* last);
-   void BOOST_RE_CALL parse_range(const charT*& first, const charT* last, unsigned& min, unsigned& max);
-   bool BOOST_RE_CALL skip_space(const charT*& first, const charT* last);
-   unsigned int BOOST_RE_CALL probe_restart(re_detail::re_syntax_base* dat);
-   unsigned int BOOST_RE_CALL fixup_leading_rep(re_detail::re_syntax_base* dat, re_detail::re_syntax_base* end);
-   void BOOST_RE_CALL fail(unsigned int err);
+   re_detail::re_syntax_base* BOOST_REGEX_CALL add_simple(re_detail::re_syntax_base* dat, re_detail::syntax_element_type type, unsigned int size = sizeof(re_detail::re_syntax_base));
+   re_detail::re_syntax_base* BOOST_REGEX_CALL add_literal(re_detail::re_syntax_base* dat, charT c);
+   charT BOOST_REGEX_CALL parse_escape(const charT*& first, const charT* last);
+   void BOOST_REGEX_CALL parse_range(const charT*& first, const charT* last, unsigned& min, unsigned& max);
+   bool BOOST_REGEX_CALL skip_space(const charT*& first, const charT* last);
+   unsigned int BOOST_REGEX_CALL probe_restart(re_detail::re_syntax_base* dat);
+   unsigned int BOOST_REGEX_CALL fixup_leading_rep(re_detail::re_syntax_base* dat, re_detail::re_syntax_base* end);
+   void BOOST_REGEX_CALL fail(unsigned int err);
 
 protected:
-   static int BOOST_RE_CALL repeat_count(const reg_expression& e)
+   static int BOOST_REGEX_CALL repeat_count(const reg_expression& e)
    { return e.repeats; }
-   static unsigned int BOOST_RE_CALL restart_type(const reg_expression& e)
+   static unsigned int BOOST_REGEX_CALL restart_type(const reg_expression& e)
    { return e._restart_type; }
-   static const re_detail::re_syntax_base* BOOST_RE_CALL first(const reg_expression& e)
+   static const re_detail::re_syntax_base* BOOST_REGEX_CALL first(const reg_expression& e)
    { return (const re_detail::re_syntax_base*)e.data.data(); }
-   static const unsigned char* BOOST_RE_CALL get_map(const reg_expression& e)
+   static const unsigned char* BOOST_REGEX_CALL get_map(const reg_expression& e)
    { return e.startmap; }
-   static unsigned int BOOST_RE_CALL leading_length(const reg_expression& e)
+   static unsigned int BOOST_REGEX_CALL leading_length(const reg_expression& e)
    { return e._leading_len; }
    static const re_detail::kmp_info<charT>* get_kmp(const reg_expression& e)
    { return e.pkmp; }
-   static bool BOOST_RE_CALL can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_wide_type&);
-   static bool BOOST_RE_CALL can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_narrow_type&);
+   static bool BOOST_REGEX_CALL can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_wide_type&);
+   static bool BOOST_REGEX_CALL can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_narrow_type&);
 };
 
 template <class charT, class traits, class Allocator>
-void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::swap(reg_expression& that)throw()
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::swap(reg_expression& that)throw()
 {
    // this is not as efficient as it should be,
    // however swapping traits classes is problematic
@@ -715,7 +712,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::swap(reg_expression
 }
 
 
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace
 #endif
 
@@ -773,10 +770,10 @@ struct sub_match
    {
       return (first == that.first) && (second == that.second) && (matched == that.matched);
    }
-   bool BOOST_RE_CALL operator !=(const sub_match& that)const
+   bool BOOST_REGEX_CALL operator !=(const sub_match& that)const
    { return !(*this == that); }
 
-   difference_type BOOST_RE_CALL length()const
+   difference_type BOOST_REGEX_CALL length()const
    {
       difference_type n = boost::re_detail::distance((iterator)first, (iterator)second);
       return n;
@@ -840,12 +837,12 @@ sub_match<iterator>::operator unsigned int()const
 
 namespace re_detail{
 
-template <class iterator, class Allocator BOOST_RE_DEF_ALLOC_PARAM(typename def_alloc_param_traits<iterator>::type) >
+template <class iterator, class Allocator = BOOST_DEFAULT_ALLOCATOR(typename def_alloc_param_traits<iterator>::type) >
 class match_results_base
 {
 public:
    typedef Allocator                                                 alloc_type;
-   typedef typename boost::re_detail::rebind_allocator<iterator, Allocator>::type  iterator_alloc;
+   typedef typename boost::detail::rebind_allocator<iterator, Allocator>::type  iterator_alloc;
    typedef typename iterator_alloc::size_type                        size_type;
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
    typedef typename std::iterator_traits<iterator>::difference_type  difference_type;
@@ -858,7 +855,7 @@ public:
    typedef iterator                                                  iterator_type;
 
 protected:
-   typedef typename boost::re_detail::rebind_allocator<char, Allocator>::type c_alloc;
+   typedef typename boost::detail::rebind_allocator<char, Allocator>::type c_alloc;
    
    struct c_reference : public c_alloc
    {
@@ -884,11 +881,11 @@ protected:
 
    c_reference* ref;
 
-   void BOOST_RE_CALL cow();
+   void BOOST_REGEX_CALL cow();
 
    // protected contructor for derived class...
    match_results_base(bool){}
-   void BOOST_RE_CALL free();
+   void BOOST_REGEX_CALL free();
 
 public:
 
@@ -900,29 +897,29 @@ public:
       ++(ref->count);
    }
 
-   match_results_base& BOOST_RE_CALL operator=(const match_results_base& m);
+   match_results_base& BOOST_REGEX_CALL operator=(const match_results_base& m);
 
    ~match_results_base()
    {
       free();
    }
 
-   size_type BOOST_RE_CALL size()const
+   size_type BOOST_REGEX_CALL size()const
    {
       //return (*this)[0].matched ? ref->cmatches : 0;
       return ref->cmatches;
    }
 
-   const sub_match<iterator>& BOOST_RE_CALL operator[](int n) const
+   const sub_match<iterator>& BOOST_REGEX_CALL operator[](int n) const
    {
       if((n >= 0) && ((unsigned int)n < ref->cmatches))
          return *(sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>)*n);
       return (n == -1) ? ref->head : (n == -2) ? ref->tail : ref->null;
    }
 
-   Allocator BOOST_RE_CALL allocator()const;
+   Allocator BOOST_REGEX_CALL allocator()const;
 
-   difference_type BOOST_RE_CALL length(unsigned int sub = 0)const
+   difference_type BOOST_REGEX_CALL length(unsigned int sub = 0)const
    {
       jm_assert(ref->cmatches);
       const sub_match<iterator>& m = (*this)[sub];
@@ -937,12 +934,12 @@ public:
       return static_cast<std::basic_string<char_type> >((*this)[i]);
    }
 
-   unsigned int BOOST_RE_CALL line()const
+   unsigned int BOOST_REGEX_CALL line()const
    {
       return ref->lines;
    }
 
-   difference_type BOOST_RE_CALL position(unsigned int sub = 0)const
+   difference_type BOOST_REGEX_CALL position(unsigned int sub = 0)const
    {
       jm_assert(ref->cmatches);
       const sub_match<iterator>& s = (*this)[sub];
@@ -952,7 +949,7 @@ public:
       return n;
    }
 
-   iterator BOOST_RE_CALL line_start()const
+   iterator BOOST_REGEX_CALL line_start()const
    {
       return ref->line_pos;
    }
@@ -970,15 +967,15 @@ public:
 
    friend class match_results<iterator, Allocator>;
 
-   void BOOST_RE_CALL set_size(size_type n);
-   void BOOST_RE_CALL set_size(size_type n, iterator i, iterator j);
-   void BOOST_RE_CALL maybe_assign(const match_results_base& m);
-   void BOOST_RE_CALL init_fail(iterator i, iterator j);
+   void BOOST_REGEX_CALL set_size(size_type n);
+   void BOOST_REGEX_CALL set_size(size_type n, iterator i, iterator j);
+   void BOOST_REGEX_CALL maybe_assign(const match_results_base& m);
+   void BOOST_REGEX_CALL init_fail(iterator i, iterator j);
 
-   void BOOST_RE_CALL set_first(iterator i);
-   void BOOST_RE_CALL set_first(iterator i, std::size_t pos);
+   void BOOST_REGEX_CALL set_first(iterator i);
+   void BOOST_REGEX_CALL set_first(iterator i, std::size_t pos);
 
-   void BOOST_RE_CALL set_second(iterator i)
+   void BOOST_REGEX_CALL set_second(iterator i)
    {
       cow();
       ((sub_match<iterator>*)(ref+1))->second = i;
@@ -987,7 +984,7 @@ public:
       ref->tail.matched = (ref->tail.first == ref->tail.second) ? false : true;
    }
 
-   void BOOST_RE_CALL set_second(iterator i, std::size_t pos, bool m = true)
+   void BOOST_REGEX_CALL set_second(iterator i, std::size_t pos, bool m = true)
    {
       cow();
       ((sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>) * pos))->second = i;
@@ -999,20 +996,20 @@ public:
       }
    }
 
-   void BOOST_RE_CALL set_line(unsigned int i, iterator pos)
+   void BOOST_REGEX_CALL set_line(unsigned int i, iterator pos)
    {
       ref->lines = i;
       ref->line_pos = pos;
    }
 
-   void BOOST_RE_CALL set_base(iterator pos)
+   void BOOST_REGEX_CALL set_base(iterator pos)
    {
       ref->base = pos;
    }
 };
 
 template <class iterator, class Allocator>
-void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_first(iterator i)
+void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_first(iterator i)
 {
    cow();
    ref->head.second = i;
@@ -1032,7 +1029,7 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_first(iterator i
 }
 
 template <class iterator, class Allocator>
-void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_first(iterator i, std::size_t pos)
+void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_first(iterator i, std::size_t pos)
 {
    cow();
    ((sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>) * pos))->first = i;
@@ -1072,7 +1069,7 @@ match_results_base<iterator, Allocator>::match_results_base(const Allocator& a)
       }
       catch(...)
       { 
-         jm_destroy(ref); 
+         ::boost::re_detail::destroy(ref); 
          throw; 
       }
    }
@@ -1084,13 +1081,13 @@ match_results_base<iterator, Allocator>::match_results_base(const Allocator& a)
 }
 
 template <class iterator, class Allocator>
-Allocator BOOST_RE_CALL match_results_base<iterator, Allocator>::allocator()const
+Allocator BOOST_REGEX_CALL match_results_base<iterator, Allocator>::allocator()const
 {
   return *((c_alloc*)ref);
 }
 
 template <class iterator, class Allocator>
-inline match_results_base<iterator, Allocator>& BOOST_RE_CALL match_results_base<iterator, Allocator>::operator=(const match_results_base<iterator, Allocator>& m)
+inline match_results_base<iterator, Allocator>& BOOST_REGEX_CALL match_results_base<iterator, Allocator>::operator=(const match_results_base<iterator, Allocator>& m)
 {
    if(ref != m.ref)
    {
@@ -1103,7 +1100,7 @@ inline match_results_base<iterator, Allocator>& BOOST_RE_CALL match_results_base
 
 
 template <class iterator, class Allocator>
-void BOOST_RE_CALL match_results_base<iterator, Allocator>::free()
+void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::free()
 {
    if(--(ref->count) == 0)
    {
@@ -1113,10 +1110,10 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::free()
       p2 = p1 + ref->cmatches;
       while(p1 != p2)
       {
-         jm_destroy(p1);
+         ::boost::re_detail::destroy(p1);
          ++p1;
       }
-      jm_destroy(ref);
+      ::boost::re_detail::destroy(ref);
       a.deallocate((char*)(void*)ref, sizeof(sub_match<iterator>) * ref->cmatches + sizeof(c_reference));
    }
 }
@@ -1140,7 +1137,7 @@ bool match_results_base<iterator, Allocator>::operator==(const match_results_bas
 }
 
 template <class iterator, class Allocator>
-void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_size(size_type n)
+void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_type n)
 {
    if(ref->cmatches != n)
    {
@@ -1167,10 +1164,10 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_size(size_type n
             p2 = (sub_match<iterator>*)(newref+1);
             while(p2 != p1)
             {
-               jm_destroy(p2);
+               ::boost::re_detail::destroy(p2);
                ++p2;
             }
-            jm_destroy(ref);
+            ::boost::re_detail::destroy(ref);
             throw; 
          }
          ref = newref;
@@ -1184,7 +1181,7 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_size(size_type n
 }
 
 template <class iterator, class Allocator>
-void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_size(size_type n, iterator i, iterator j)
+void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_type n, iterator i, iterator j)
 {
    if(ref->cmatches != n)
    {
@@ -1209,10 +1206,10 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_size(size_type n
             p2 = (sub_match<iterator>*)(newref+1);
             while(p2 != p1)
             {
-               jm_destroy(p2);
+               ::boost::re_detail::destroy(p2);
                ++p2;
             }
-            jm_destroy(ref);
+            ::boost::re_detail::destroy(ref);
             throw; 
          }
          ref = newref;
@@ -1246,13 +1243,13 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::set_size(size_type n
 }
 
 template <class iterator, class Allocator>
-inline void BOOST_RE_CALL match_results_base<iterator, Allocator>::init_fail(iterator i, iterator j)
+inline void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::init_fail(iterator i, iterator j)
 {
    set_size(ref->cmatches, i, j);
 }
 
 template <class iterator, class Allocator>
-void BOOST_RE_CALL match_results_base<iterator, Allocator>::maybe_assign(const match_results_base<iterator, Allocator>& m)
+void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::maybe_assign(const match_results_base<iterator, Allocator>& m)
 {
    sub_match<iterator>* p1, *p2;
    p1 = (sub_match<iterator>*)(ref+1);
@@ -1290,7 +1287,7 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::maybe_assign(const m
 }
 
 template <class iterator, class Allocator>
-void BOOST_RE_CALL match_results_base<iterator, Allocator>::cow()
+void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::cow()
 {
    if(ref->count > 1)
    {
@@ -1314,10 +1311,10 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::cow()
             p2 = (sub_match<iterator>*)(newref+1);
             while(p2 != p1)
             {
-               jm_destroy(p2);
+               ::boost::re_detail::destroy(p2);
                ++p2;
             }
-            jm_destroy(ref);
+            ::boost::re_detail::destroy(ref);
             throw; 
          }
       --(ref->count);
@@ -1434,10 +1431,10 @@ match_results<iterator, Allocator>::match_results(const match_results<iterator, 
          p2 = (sub_match<iterator>*)(this->ref+1);
          while(p2 != p1)
          {
-            re_detail::jm_destroy(p2);
+            re_detail::destroy(p2);
             ++p2;
          }
-         re_detail::jm_destroy(this->ref);
+         re_detail::destroy(this->ref);
          throw; 
       }
    }
@@ -1458,7 +1455,7 @@ match_results<iterator, Allocator>& match_results<iterator, Allocator>::operator
 
 namespace re_detail{
 template <class iterator, class charT, class traits_type, class Allocator>
-iterator BOOST_RE_CALL re_is_set_member(iterator next, 
+iterator BOOST_REGEX_CALL re_is_set_member(iterator next, 
                           iterator last, 
                           re_set_long* set_, 
                           const reg_expression<charT, traits_type, Allocator>& e);
@@ -1474,14 +1471,16 @@ iterator BOOST_RE_CALL re_is_set_member(iterator next,
 
 namespace boost{
 
-typedef reg_expression<char, regex_traits<char>, BOOST_RE_DEF_ALLOC(char)> regex;
-#ifndef BOOST_RE_NO_WCSTRING
-typedef reg_expression<wchar_t, regex_traits<wchar_t>, BOOST_RE_DEF_ALLOC(wchar_t)> wregex;
+typedef reg_expression<char, regex_traits<char>, BOOST_DEFAULT_ALLOCATOR(char)> regex;
+#ifndef BOOST_NO_WREGEX
+typedef reg_expression<wchar_t, regex_traits<wchar_t>, BOOST_DEFAULT_ALLOCATOR(wchar_t)> wregex;
 #endif
 
 typedef match_results<const char*> cmatch;
-#ifndef BOOST_RE_NO_WCSTRING
+typedef match_results<std::string::const_iterator> smatch;
+#ifndef BOOST_NO_WREGEX
 typedef match_results<const wchar_t*> wcmatch;
+typedef match_results<std::wstring::const_iterator> wsmatch;
 #endif
 
 } // namespace boost

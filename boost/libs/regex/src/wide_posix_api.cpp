@@ -20,9 +20,11 @@
   *   DESCRIPTION: Implements the wide character POSIX API wrappers.
   */
 
-#include <boost/regex/detail/regex_config.hpp>
+#define BOOST_REGEX_SOURCE
 
-#ifndef BOOST_RE_NO_WCSTRING
+#include <boost/regex/config.hpp>
+
+#ifndef BOOST_NO_WREGEX
 
 #include <boost/regex.hpp>
 
@@ -45,7 +47,7 @@ const wchar_t* wnames[] = {L"REG_NOERROR", L"REG_NOMATCH", L"REG_BADPAT", L"REG_
 
 }
 
-BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompW(regex_tW* expression, const wchar_t* ptr, int f)
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompW(regex_tW* expression, const wchar_t* ptr, int f)
 {
    BOOST_RE_GUARD_STACK
    if(expression->re_magic != wmagic_value)
@@ -100,7 +102,7 @@ BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompW(regex_tW* expression, const wchar_t
 
 }
 
-BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorW(int code, const regex_tW* e, wchar_t* buf, unsigned int buf_size)
+BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorW(int code, const regex_tW* e, wchar_t* buf, unsigned int buf_size)
 {
    BOOST_RE_GUARD_STACK
    unsigned int result = 0;
@@ -116,7 +118,7 @@ BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorW(int code, const regex_tW*
       }
       return result;
    }
-#if !defined(BOOST_RE_NO_SWPRINTF)
+#if !defined(BOOST_NO_SWPRINTF)
    if(code == REG_ATOI)
    {
       wchar_t localbuf[5];
@@ -158,7 +160,7 @@ BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorW(int code, const regex_tW*
    return 0;
 }
 
-BOOST_RE_IX_DECL int BOOST_RE_CCALL regexecW(const regex_tW* expression, const wchar_t* buf, unsigned int n, regmatch_t* array, int eflags)
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecW(const regex_tW* expression, const wchar_t* buf, unsigned int n, regmatch_t* array, int eflags)
 {
    BOOST_RE_GUARD_STACK
    bool result = false;
@@ -214,7 +216,7 @@ BOOST_RE_IX_DECL int BOOST_RE_CCALL regexecW(const regex_tW* expression, const w
    return REG_NOMATCH;
 }
 
-BOOST_RE_IX_DECL void BOOST_RE_CCALL regfreeW(regex_tW* expression)
+BOOST_REGEX_DECL void BOOST_REGEX_CCALL regfreeW(regex_tW* expression)
 {
    BOOST_RE_GUARD_STACK
    if(expression->re_magic == wmagic_value)

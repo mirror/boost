@@ -26,7 +26,7 @@
 #define BOOST_REGEX_CSTRING_HPP
 
 #ifndef BOOST_REGEX_CONFIG_HPP
-#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/config.hpp>
 #endif
 
 #include <cstring>
@@ -43,7 +43,7 @@ namespace boost{
 //
 
 template <class charT>
-std::size_t BOOST_RE_CALL re_strlen(const charT *s)
+std::size_t BOOST_REGEX_CALL re_strlen(const charT *s)
 {
    std::size_t len = 0;
    while(*s)
@@ -54,27 +54,27 @@ std::size_t BOOST_RE_CALL re_strlen(const charT *s)
    return len;
 }
 
-inline std::size_t BOOST_RE_CALL re_strlen(const char *s)
+inline std::size_t BOOST_REGEX_CALL re_strlen(const char *s)
 {
    return std::strlen(s);
 }
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 
-inline std::size_t BOOST_RE_CALL re_strlen(const wchar_t *s)
+inline std::size_t BOOST_REGEX_CALL re_strlen(const wchar_t *s)
 {
    return std::wcslen(s);
 }
 
 #endif
 
-#ifndef BOOST_RE_NO_WCSTRING
-BOOST_RE_IX_DECL void BOOST_RE_CALL re_transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
+#ifndef BOOST_NO_WREGEX
+BOOST_REGEX_DECL void BOOST_REGEX_CALL re_transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
 #endif
-BOOST_RE_IX_DECL void BOOST_RE_CALL re_transform(std::string& out, const std::string& in);
+BOOST_REGEX_DECL void BOOST_REGEX_CALL re_transform(std::string& out, const std::string& in);
 
 template <class charT>
-void BOOST_RE_CALL re_trunc_primary(std::basic_string<charT>& s)
+void BOOST_REGEX_CALL re_trunc_primary(std::basic_string<charT>& s)
 {
    for(unsigned int i = 0; i < s.size(); ++i)
    {
@@ -86,7 +86,7 @@ void BOOST_RE_CALL re_trunc_primary(std::basic_string<charT>& s)
    }
 }
 
-inline char* BOOST_RE_CALL re_strcpy(char *s1, const char *s2)
+inline char* BOOST_REGEX_CALL re_strcpy(char *s1, const char *s2)
 {
    #if defined(__BORLANDC__) && defined(strcpy)
    return ::strcpy(s1, s2);
@@ -95,9 +95,9 @@ inline char* BOOST_RE_CALL re_strcpy(char *s1, const char *s2)
    #endif
 }
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 
-inline wchar_t* BOOST_RE_CALL re_strcpy(wchar_t *s1, const wchar_t *s2)
+inline wchar_t* BOOST_REGEX_CALL re_strcpy(wchar_t *s1, const wchar_t *s2)
 {
    return std::wcscpy(s1, s2);
 }
@@ -106,7 +106,7 @@ inline wchar_t* BOOST_RE_CALL re_strcpy(wchar_t *s1, const wchar_t *s2)
 
 
 template <class charT>
-charT* BOOST_RE_CALL re_strdup(const charT* p)
+charT* BOOST_REGEX_CALL re_strdup(const charT* p)
 {
    charT* buf = new charT[re_strlen(p) + 1];
    re_strcpy(buf, p);
@@ -114,7 +114,7 @@ charT* BOOST_RE_CALL re_strdup(const charT* p)
 }
 
 template <class charT>
-inline void BOOST_RE_CALL re_strfree(charT* p)
+inline void BOOST_REGEX_CALL re_strfree(charT* p)
 {
    delete[] p;
 }

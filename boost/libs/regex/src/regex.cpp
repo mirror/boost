@@ -21,6 +21,8 @@
   */
 
 
+#define BOOST_REGEX_SOURCE
+
 #include <boost/regex.hpp>
 
 

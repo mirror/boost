@@ -28,6 +28,7 @@ using std::endl;
 #include <algorithm>
 #include <string>
 #include <deque>
+#include <boost/config.hpp>
 #include <boost/regex.hpp>
 #include <boost/timer.hpp> 
 #include <boost/smart_ptr.hpp>
@@ -37,7 +38,7 @@ using std::endl;
 using namespace boost;
 #endif
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 ostream& operator << (ostream& os, const std::wstring& s)
 {
    std::wstring::const_iterator i, j;
@@ -90,7 +91,7 @@ int main()
 {
    boost::regex ex;
    boost::match_results<std::string::const_iterator> sm;
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
    std::wstring ws1, ws2;
    boost::wregex wex;
    boost::match_results<std::wstring::const_iterator> wsm;
@@ -112,13 +113,13 @@ int main()
       getline(cin, s1);
       if(s1 == "quit")
          break;
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
       ws1.erase();
       std::copy(s1.begin(), s1.end(), string_out_iterator<std::wstring>(ws1));
 #endif
       try{
          ex.assign(s1);
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
          wex.assign(ws1);
 #endif
       }
@@ -145,7 +146,7 @@ int main()
          if(s2 == "quit")
             break;
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
          ws2.erase();
          std::copy(s2.begin(), s2.end(), string_out_iterator<std::wstring>(ws2));
 #endif
@@ -156,7 +157,7 @@ int main()
          iters = 10;
          tim = 1.1;
 
-#if defined(_WIN32) && defined(BOOST_RE_LOCALE_W32)
+#if defined(_WIN32) && defined(BOOST_REGEX_USE_WIN32_LOCALE)
          MSG msg;
          PeekMessage(&msg, 0, 0, 0, 0);
          Sleep(0);
@@ -194,7 +195,7 @@ int main()
             cout << "\" (matched=" << sm[-2].matched << ")" << endl << endl;
          }
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
          // measure time interval for boost::wregex
          iters = 10;
          tim = 1.1;

@@ -25,7 +25,7 @@
 #ifndef _REGRESS_H
 #define _REGRESS_H
 
-#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/config.hpp>
 
 #ifdef BOOST_RE_OLD_IOSTREAM
 #include <iostream.h>
@@ -114,6 +114,69 @@ extern flag_info flag_data[];
 // class jm_debug_alloc
 // NB this is a byte based allocator
 //
+class jm_debug_alloc;
+
+template <class T, class Base>
+class allocator_binder : public Base
+{
+public:
+
+   typedef T              value_type;
+   typedef value_type *   pointer;
+   typedef const T*       const_pointer;
+   typedef T&             reference;
+   typedef const T&       const_reference;
+   typedef size_t         size_type;
+   typedef ptrdiff_t      difference_type;
+   typedef Base           base_type;
+
+   allocator_binder(){}
+   allocator_binder(const base_type& x) : Base(x){}
+   allocator_binder& operator=(const base_type& x)
+   {
+      *(static_cast<base_type*>(this)) = x;
+      return *this;
+   }
+
+   ~allocator_binder(){}
+
+   pointer address(reference x) { return &x; }
+
+   const_pointer address(const_reference x) const { return &x; }
+
+   pointer allocate(size_type n, const void* = 0) 
+   {
+      return n != 0 ?
+         reinterpret_cast<pointer>(base_type::allocate(n * sizeof(value_type)))
+         : 0;
+   }
+
+   void deallocate(pointer p, size_type n)
+   {
+      assert( (p == 0) == (n == 0) );
+      if (p != 0)
+         base_type::deallocate((void*)p, n * sizeof(value_type));
+   }
+
+   size_type max_size() const
+   { return size_t(-1) / sizeof(value_type); }
+
+   void construct(pointer p, const T& val) const
+   { allocator_construct(p, val); }
+
+   void destroy(pointer __p) const
+   { allocator_destroy(p); }
+
+#ifndef BOOST_NO_MEMBER_TEMPLATES
+   template <class U>
+   struct rebind
+   {
+      typedef allocator_binder<U, jm_debug_alloc> other;
+   };
+#endif
+
+};
+
 class jm_debug_alloc
 {
 private:
@@ -122,20 +185,21 @@ private:
 public:
    typedef std::size_t    size_type;
    typedef std::ptrdiff_t difference_type;
-   typedef char*        pointer;
-   typedef const char*  const_pointer;
-   typedef char&        reference;
-   typedef const char&  const_reference;
-   typedef char         value_type;
+   typedef char*          pointer;
+   typedef const char*    const_pointer;
+   typedef char&          reference;
+   typedef const char&    const_reference;
+   typedef char           value_type;
+   typedef jm_debug_alloc base_type;
 
 
-   #ifndef BOOST_NO_MEMBER_TEMPLATES
+#ifndef BOOST_NO_MEMBER_TEMPLATES
    template <class U>
    struct rebind
    {
-      typedef boost::re_detail::re_alloc_binder<U, jm_debug_alloc> other;
+      typedef allocator_binder<U, jm_debug_alloc> other;
    };
-   #endif
+#endif
 
    jm_debug_alloc();
 
@@ -156,8 +220,8 @@ public:
    {
       return i < j ? j : i;
    }
-   pointer allocate(size_type n, void* hint = 0);
-   void deallocate(pointer p, size_type n);
+   void* allocate(size_type n, void* hint = 0);
+   void deallocate(void* p, size_type n);
 
    static size_type max_size()
    {
@@ -188,6 +252,9 @@ public:
 //
 template <class T>
 struct debug_iterator
+#if !defined(BOOST_NO_STD_ITERATOR) || defined(BOOST_MSVC_STD_ITERATOR)
+: public std::iterator<std::random_access_iterator_tag, char_t>
+#endif
 {
    typedef std::ptrdiff_t                    difference_type;
    typedef char_t                            value_type;

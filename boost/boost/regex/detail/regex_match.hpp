@@ -31,15 +31,19 @@ namespace boost{
    namespace re_detail{
 
 #ifdef __BORLANDC__
-   #pragma option push -a4 -b -Ve -pc
+   #pragma option push -a4 -b -Ve -pc -w-8026
 #endif
 
 template <class iterator, class charT, class traits_type, class Allocator>
-iterator BOOST_RE_CALL re_is_set_member(iterator next, 
+iterator BOOST_REGEX_CALL re_is_set_member(iterator next, 
                           iterator last, 
                           re_set_long* set_, 
                           const reg_expression<charT, traits_type, Allocator>& e)
 {   
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4800)
+#endif
    const charT* p = (const charT*)(set_+1);
    iterator ptr;
    unsigned int i;
@@ -140,14 +144,17 @@ iterator BOOST_RE_CALL re_is_set_member(iterator next,
    if(traits_inst.is_class(col, set_->cclasses) == true)
       return set_->isnot ? next : ++next;
    return set_->isnot ? ++next : next;
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 }
 
 template <class iterator, class Allocator>
 class _priv_match_data
 {
 public:
-   typedef typename boost::re_detail::rebind_allocator<int, Allocator>::type i_alloc;
-   typedef typename boost::re_detail::rebind_allocator<iterator, Allocator>::type it_alloc;
+   typedef typename boost::detail::rebind_allocator<int, Allocator>::type i_alloc;
+   typedef typename boost::detail::rebind_allocator<iterator, Allocator>::type it_alloc;
 
    match_results_base<iterator, Allocator> temp_match;
    // failure stacks:
@@ -208,7 +215,7 @@ void _priv_match_data<iterator, Allocator>::free()
       i_alloc temp1(temp_match.allocator());
       temp1.deallocate(accumulators, caccumulators);
       for(unsigned i = 0; i < caccumulators; ++i)
-         jm_destroy(loop_starts + i);
+         ::boost::re_detail::destroy(loop_starts + i);
       it_alloc temp2(temp_match.allocator());
       temp2.deallocate(loop_starts, caccumulators);
    }
@@ -242,7 +249,7 @@ struct access_t : public reg_expression<charT, traits, Allocator>
 };
 
 
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 //
 // Ugly ugly hack,
 // template don't merge if they contain switch statements so declare these
@@ -260,6 +267,10 @@ bool query_match_aux(iterator first,
                      _priv_match_data<iterator, Allocator>& pd,
                      iterator* restart)
 {
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4800)
+#endif
    typedef access_t<charT, traits, Allocator2> access;
 
    if(e.flags() & regbase::failbit)
@@ -944,8 +955,11 @@ bool query_match_aux(iterator first,
    // if we get to here then everything has failed
    // and no match was found:
    return false;
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 }
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace
 #endif
 
@@ -1019,7 +1033,7 @@ struct grep_search_predicate
    }
 };
 
-#if !defined(BOOST_RE_NO_TEMPLATE_RETURNS) && !defined(BOOST_RE_NO_PARTIAL_FUNC_SPEC)
+#if !defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) && !defined(BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING)
 
 template <class iterator, class Allocator>
 inline const match_results_base<iterator, Allocator>& grep_out_type(const grep_search_predicate<iterator, Allocator>& o, const Allocator&)
@@ -1035,7 +1049,7 @@ inline const Allocator& grep_out_type(const T&, const Allocator& a)
    return a;
 }
 
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 //
 // Ugly ugly hack,
 // template don't merge if they contain switch statements so declare these
@@ -1051,6 +1065,10 @@ namespace{
 template <class Predicate, class I, class charT, class traits, class A, class A2>
 unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<charT, traits, A>& e, unsigned flags, A2 a)
 {
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4800)
+#endif
    typedef access_t<charT, traits, A> access;
 
    if(e.flags() & regbase::failbit)
@@ -1527,8 +1545,11 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
    }
 
    return cmatches;
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 }
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace {anon}
 #endif
 
@@ -1565,7 +1586,7 @@ bool regex_match(iterator first, iterator last, const reg_expression<charT, trai
 }
 //
 // query_match convenience interfaces:
-#ifndef BOOST_RE_NO_PARTIAL_FUNC_SPEC
+#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -1620,7 +1641,7 @@ inline bool regex_match(const char* str,
    match_results<const char*> m;
    return regex_match(str, str + regex::traits_type::length(str), m, e, flags);
 }
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 inline bool regex_match(const wchar_t* str, 
                         wcmatch& m, 
                         const wregex& e, 
@@ -1650,7 +1671,7 @@ inline bool regex_match(const std::string& s,
    match_results<std::string::const_iterator, regex::allocator_type> m;
    return regex_match(s.begin(), s.end(), m, e, flags);
 }
-#if !defined(BOOST_RE_NO_WCSTRING)
+#if !defined(BOOST_NO_WREGEX)
 inline bool regex_match(const std::basic_string<wchar_t>& s, 
                         match_results<std::basic_string<wchar_t>::const_iterator, wregex::allocator_type>& m,
                         const wregex& e, 
@@ -1672,6 +1693,10 @@ inline bool regex_match(const std::basic_string<wchar_t>& s,
 template <class iterator, class Allocator, class charT, class traits, class Allocator2>
 bool regex_search(iterator first, iterator last, match_results<iterator, Allocator>& m, const reg_expression<charT, traits, Allocator2>& e, unsigned flags = match_default)
 {
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4800)
+#endif
    if(e.flags() & regbase::failbit)
       return false;
 
@@ -1679,11 +1704,14 @@ bool regex_search(iterator first, iterator last, match_results<iterator, Allocat
    typedef typename traits::uchar_type traits_uchar_type;
 
    return re_detail::reg_grep2(re_detail::grep_search_predicate<iterator, Allocator>(&m), first, last, e, flags, m.allocator());
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 }
 
 //
 // regex_search convenience interfaces:
-#ifndef BOOST_RE_NO_PARTIAL_FUNC_SPEC
+#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -1713,7 +1741,7 @@ inline bool regex_search(const char* str,
 {
    return regex_search(str, str + regex::traits_type::length(str), m, e, flags);
 }
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 inline bool regex_search(const wchar_t* str, 
                         wcmatch& m, 
                         const wregex& e, 
@@ -1729,7 +1757,7 @@ inline bool regex_search(const std::string& s,
 {
    return regex_search(s.begin(), s.end(), m, e, flags);
 }
-#if !defined(BOOST_RE_NO_WCSTRING)
+#if !defined(BOOST_NO_WREGEX)
 inline bool regex_search(const std::basic_string<wchar_t>& s, 
                         match_results<std::basic_string<wchar_t>::const_iterator, wregex::allocator_type>& m,
                         const wregex& e, 
@@ -1754,7 +1782,7 @@ inline unsigned int regex_grep(Predicate foo, iterator first, iterator last, con
 
 //
 // regex_grep convenience interfaces:
-#ifndef BOOST_RE_NO_PARTIAL_FUNC_SPEC
+#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -1781,7 +1809,7 @@ inline unsigned int regex_grep(bool (*foo)(const cmatch&), const char* str,
 {
    return regex_grep(foo, str, str + regex::traits_type::length(str), e, flags);
 }
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 inline unsigned int regex_grep(bool (*foo)(const wcmatch&), const wchar_t* str, 
                         const wregex& e, 
                         unsigned flags = match_default)
@@ -1795,7 +1823,7 @@ inline unsigned int regex_grep(bool (*foo)(const match_results<std::string::cons
 {
    return regex_grep(foo, s.begin(), s.end(), e, flags);
 }
-#if !defined(BOOST_RE_NO_WCSTRING)
+#if !defined(BOOST_NO_WREGEX)
 inline unsigned int regex_grep(bool (*foo)(const match_results<std::basic_string<wchar_t>::const_iterator, wregex::allocator_type>&), 
                      const std::basic_string<wchar_t>& s, 
                         const wregex& e, 

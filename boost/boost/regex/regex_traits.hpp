@@ -43,20 +43,20 @@ struct mss
    const char* what;
 };
 
-BOOST_RE_IX_DECL bool BOOST_RE_CALL re_lookup_def_collate_name(std::string& buf, const char* name);
-BOOST_RE_IX_DECL unsigned int BOOST_RE_CALL re_get_default_message(char* buf, unsigned int len, unsigned int id);
-extern BOOST_RE_IX_DECL const char *re_default_error_messages[];
-BOOST_RE_IX_DECL bool BOOST_RE_CALL re_lookup_def_collate_name(std::string& buf, const char* name);
-BOOST_RE_IX_DECL bool BOOST_RE_CALL is_combining(wchar_t c);
-//extern BOOST_RE_IX_DECL const wchar_t combining_ranges[];
+BOOST_REGEX_DECL bool BOOST_REGEX_CALL re_lookup_def_collate_name(std::string& buf, const char* name);
+BOOST_REGEX_DECL unsigned int BOOST_REGEX_CALL re_get_default_message(char* buf, unsigned int len, unsigned int id);
+extern BOOST_REGEX_DECL const char *re_default_error_messages[];
+BOOST_REGEX_DECL bool BOOST_REGEX_CALL re_lookup_def_collate_name(std::string& buf, const char* name);
+BOOST_REGEX_DECL bool BOOST_REGEX_CALL is_combining(wchar_t c);
+//extern BOOST_REGEX_DECL const wchar_t combining_ranges[];
 
-#ifndef BOOST_RE_NO_WCSTRING
-extern BOOST_RE_IX_DECL wchar_t wide_lower_case_map[];
-extern BOOST_RE_IX_DECL unsigned short wide_unicode_classes[];
+#ifndef BOOST_NO_WREGEX
+extern BOOST_REGEX_DECL wchar_t wide_lower_case_map[];
+extern BOOST_REGEX_DECL unsigned short wide_unicode_classes[];
 #endif
 
 
-struct BOOST_RE_IX_DECL regex_traits_base
+struct BOOST_REGEX_DECL regex_traits_base
 {
    enum char_syntax_type
    {
@@ -121,7 +121,7 @@ struct BOOST_RE_IX_DECL regex_traits_base
    };
 };
 
-struct BOOST_RE_IX_DECL c_traits_base : public regex_traits_base
+struct BOOST_REGEX_DECL c_traits_base : public regex_traits_base
 {
 public:
    enum{
@@ -143,7 +143,7 @@ public:
       char_class_print = char_class_alpha | char_class_digit | char_class_punct | char_class_underscore | char_class_blank,
       char_class_word = char_class_alpha | char_class_digit | char_class_underscore
    };
-   static std::string BOOST_RE_CALL set_message_catalogue(const std::string& s);
+   static std::string BOOST_REGEX_CALL set_message_catalogue(const std::string& s);
 protected:
 #if defined(__MWERKS__) && __MWERKS__ <= 0x6000
    friend class c_regex_traits<char>;
@@ -160,20 +160,20 @@ protected:
    static unsigned short class_map[map_size];
    static char lower_case_map[map_size];
 
-   static boost::uint_fast32_t BOOST_RE_CALL do_lookup_class(const char* p);
-   static bool BOOST_RE_CALL do_lookup_collate(std::string& buf, const char* p);
-   static void BOOST_RE_CALL do_update_ctype();
-   static void BOOST_RE_CALL do_update_collate();
+   static boost::uint_fast32_t BOOST_REGEX_CALL do_lookup_class(const char* p);
+   static bool BOOST_REGEX_CALL do_lookup_collate(std::string& buf, const char* p);
+   static void BOOST_REGEX_CALL do_update_ctype();
+   static void BOOST_REGEX_CALL do_update_collate();
 public:
-   static std::string BOOST_RE_CALL error_string(unsigned id);
-   static char* BOOST_RE_CALL get_catalogue() { return regex_message_catalogue; }
+   static std::string BOOST_REGEX_CALL error_string(unsigned id);
+   static char* BOOST_REGEX_CALL get_catalogue() { return regex_message_catalogue; }
 };
 
 } // namespace re_detail
 
 
 template<>
-class BOOST_RE_IX_DECL c_regex_traits<char> : public re_detail::c_traits_base
+class BOOST_REGEX_DECL c_regex_traits<char> : public re_detail::c_traits_base
 {
    typedef re_detail::c_traits_base base_type;
 public:
@@ -183,54 +183,54 @@ public:
    typedef std::string string_type;
    typedef int locale_type;
 
-   static std::size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_REGEX_CALL length(const char_type* p)
    {
       return std::strlen(p);
    }
-   static unsigned int BOOST_RE_CALL syntax_type(size_type c)
+   static unsigned int BOOST_REGEX_CALL syntax_type(size_type c)
    {
       return syntax_map[c];
    }
-   static char BOOST_RE_CALL translate(char c, bool icase)
+   static char BOOST_REGEX_CALL translate(char c, bool icase)
    {
       return icase ? lower_case_map[(size_type)(uchar_type)c] : c;
    }
-   static void BOOST_RE_CALL transform(std::string& out, const std::string& in);
+   static void BOOST_REGEX_CALL transform(std::string& out, const std::string& in);
 
-   static void BOOST_RE_CALL transform_primary(std::string& out, const std::string& in);
+   static void BOOST_REGEX_CALL transform_primary(std::string& out, const std::string& in);
 
-   static bool BOOST_RE_CALL is_separator(char c)
+   static bool BOOST_REGEX_CALL is_separator(char c)
    {
-      return BOOST_RE_MAKE_BOOL((c == '\n') || (c == '\r'));
+      return BOOST_REGEX_MAKE_BOOL((c == '\n') || (c == '\r'));
    }
 
-   static bool BOOST_RE_CALL is_combining(char)
+   static bool BOOST_REGEX_CALL is_combining(char)
    {
       return false;
    }
    
-   static bool BOOST_RE_CALL is_class(char c, boost::uint_fast32_t f)
+   static bool BOOST_REGEX_CALL is_class(char c, boost::uint_fast32_t f)
    {
-      return BOOST_RE_MAKE_BOOL(class_map[(size_type)(uchar_type)c] & f);
+      return BOOST_REGEX_MAKE_BOOL(class_map[(size_type)(uchar_type)c] & f);
    }
 
-   static int BOOST_RE_CALL toi(char c);
-   static int BOOST_RE_CALL toi(const char*& first, const char* last, int radix);
+   static int BOOST_REGEX_CALL toi(char c);
+   static int BOOST_REGEX_CALL toi(const char*& first, const char* last, int radix);
 
-   static boost::uint_fast32_t BOOST_RE_CALL lookup_classname(const char* first, const char* last)
+   static boost::uint_fast32_t BOOST_REGEX_CALL lookup_classname(const char* first, const char* last)
    {
       std::string s(first, last);
       return do_lookup_class(s.c_str());
    }
 
-   static bool BOOST_RE_CALL lookup_collatename(std::string& buf, const char* first, const char* last)
+   static bool BOOST_REGEX_CALL lookup_collatename(std::string& buf, const char* first, const char* last)
    {
       std::string s(first, last);
       return do_lookup_collate(buf, s.c_str());
    }
 
-   static locale_type BOOST_RE_CALL imbue(locale_type l){ return l; }
-   locale_type BOOST_RE_CALL getloc()const{ return locale_type(); }
+   static locale_type BOOST_REGEX_CALL imbue(locale_type l){ return l; }
+   locale_type BOOST_REGEX_CALL getloc()const{ return locale_type(); }
 
    c_regex_traits()
    {
@@ -246,19 +246,19 @@ public:
       { c_regex_traits<char>::update(); }
       operator void*() { return this; }
    };
-   static void BOOST_RE_CALL update();
+   static void BOOST_REGEX_CALL update();
 private:
-   static void BOOST_RE_CALL init();
-   static void BOOST_RE_CALL free();
+   static void BOOST_REGEX_CALL init();
+   static void BOOST_REGEX_CALL free();
    static c_regex_traits<char> i;
 
    static unsigned sort_type;
    static char sort_delim;
 };
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 template<>
-class BOOST_RE_IX_DECL c_regex_traits<wchar_t> : public re_detail::c_traits_base
+class BOOST_REGEX_DECL c_regex_traits<wchar_t> : public re_detail::c_traits_base
 {
    typedef re_detail::c_traits_base base_type;
 public:
@@ -267,42 +267,42 @@ public:
    typedef unsigned int size_type;
    typedef std::basic_string<wchar_t> string_type;
    typedef int locale_type; 
-   static std::size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_REGEX_CALL length(const char_type* p)
    {
       return std::wcslen(p);
    }
-   static unsigned int BOOST_RE_CALL syntax_type(size_type c);
-   static wchar_t BOOST_RE_CALL translate(wchar_t c, bool icase)
+   static unsigned int BOOST_REGEX_CALL syntax_type(size_type c);
+   static wchar_t BOOST_REGEX_CALL translate(wchar_t c, bool icase)
    {
       return icase ? ((c < 256) ? re_detail::wide_lower_case_map[(uchar_type)c] : std::towlower(c)) : c;
    }
 
-   static void BOOST_RE_CALL transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
+   static void BOOST_REGEX_CALL transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
 
-   static void BOOST_RE_CALL transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
+   static void BOOST_REGEX_CALL transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
 
-   static bool BOOST_RE_CALL is_separator(wchar_t c)
+   static bool BOOST_REGEX_CALL is_separator(wchar_t c)
    {
-      return BOOST_RE_MAKE_BOOL((c == L'\n') || (c == L'\r') || (c == (wchar_t)0x2028) || (c == (wchar_t)0x2029));
+      return BOOST_REGEX_MAKE_BOOL((c == L'\n') || (c == L'\r') || (c == (wchar_t)0x2028) || (c == (wchar_t)0x2029));
    }
 
-   static bool BOOST_RE_CALL is_combining(wchar_t c)
+   static bool BOOST_REGEX_CALL is_combining(wchar_t c)
    { return re_detail::is_combining(c); }
    
-   static bool BOOST_RE_CALL is_class(wchar_t c, boost::uint_fast32_t f)
+   static bool BOOST_REGEX_CALL is_class(wchar_t c, boost::uint_fast32_t f)
    {
-      return BOOST_RE_MAKE_BOOL(((uchar_type)c < 256) ? (re_detail::wide_unicode_classes[(size_type)(uchar_type)c] & f) : do_iswclass(c, f));
+      return BOOST_REGEX_MAKE_BOOL(((uchar_type)c < 256) ? (re_detail::wide_unicode_classes[(size_type)(uchar_type)c] & f) : do_iswclass(c, f));
    }
 
-   static int BOOST_RE_CALL toi(wchar_t c);
-   static int BOOST_RE_CALL toi(const wchar_t*& first, const wchar_t* last, int radix);
+   static int BOOST_REGEX_CALL toi(wchar_t c);
+   static int BOOST_REGEX_CALL toi(const wchar_t*& first, const wchar_t* last, int radix);
 
-   static boost::uint_fast32_t BOOST_RE_CALL lookup_classname(const wchar_t* first, const wchar_t* last);
+   static boost::uint_fast32_t BOOST_REGEX_CALL lookup_classname(const wchar_t* first, const wchar_t* last);
 
-   static bool BOOST_RE_CALL lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last);
+   static bool BOOST_REGEX_CALL lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last);
 
-   static locale_type BOOST_RE_CALL imbue(locale_type l){ return l; }
-   locale_type BOOST_RE_CALL getloc()const{ return locale_type(); }
+   static locale_type BOOST_REGEX_CALL imbue(locale_type l){ return l; }
+   locale_type BOOST_REGEX_CALL getloc()const{ return locale_type(); }
    c_regex_traits<wchar_t>()
    { init(); }
    ~c_regex_traits<wchar_t>()
@@ -313,14 +313,14 @@ public:
       { c_regex_traits<wchar_t>::update(); }
       operator void*() { return this; }
    };
-   static void BOOST_RE_CALL update();
-   static unsigned int BOOST_RE_CALL strnarrow(char *s1, unsigned int len, const wchar_t *s2);
-   static unsigned int BOOST_RE_CALL strwiden(wchar_t *s1, unsigned int len, const char *s2);
+   static void BOOST_REGEX_CALL update();
+   static unsigned int BOOST_REGEX_CALL strnarrow(char *s1, unsigned int len, const wchar_t *s2);
+   static unsigned int BOOST_REGEX_CALL strwiden(wchar_t *s1, unsigned int len, const char *s2);
 private:
-   static bool BOOST_RE_CALL do_iswclass(wchar_t c, boost::uint_fast32_t f);
-   static void BOOST_RE_CALL free();
-   static void BOOST_RE_CALL init();
-   static bool BOOST_RE_CALL do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last);
+   static bool BOOST_REGEX_CALL do_iswclass(wchar_t c, boost::uint_fast32_t f);
+   static void BOOST_REGEX_CALL free();
+   static void BOOST_REGEX_CALL init();
+   static bool BOOST_REGEX_CALL do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last);
    static c_regex_traits<wchar_t> init_;
 
    static unsigned sort_type;
@@ -328,11 +328,11 @@ private:
 };
 #endif
 
-#if defined(_WIN32) && !defined(BOOST_RE_NO_W32)
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
 
 namespace re_detail{
 
-struct BOOST_RE_IX_DECL w32_traits_base : public regex_traits_base
+struct BOOST_REGEX_DECL w32_traits_base : public regex_traits_base
 {
    enum{
    char_class_none = 0,
@@ -354,7 +354,7 @@ struct BOOST_RE_IX_DECL w32_traits_base : public regex_traits_base
    char_class_win = C1_ALPHA | C1_CNTRL | C1_UPPER | C1_LOWER | C1_DIGIT | C1_PUNCT | C1_BLANK | C1_SPACE | C1_XDIGIT | C1_BLANK
    };
 public:
-   static std::string BOOST_RE_CALL set_message_catalogue(const std::string& s);
+   static std::string BOOST_REGEX_CALL set_message_catalogue(const std::string& s);
 protected:
    static char regex_message_catalogue[200];
    enum syntax_map_size
@@ -366,13 +366,13 @@ protected:
    static unsigned short class_map[map_size];
    static char lower_case_map[map_size];
 
-   static boost::uint_fast32_t BOOST_RE_CALL do_lookup_class(const char* p);
-   static bool BOOST_RE_CALL do_lookup_collate(std::string& buf, const char* p);
-   static void BOOST_RE_CALL do_free();
-   static void BOOST_RE_CALL do_init();
+   static boost::uint_fast32_t BOOST_REGEX_CALL do_lookup_class(const char* p);
+   static bool BOOST_REGEX_CALL do_lookup_collate(std::string& buf, const char* p);
+   static void BOOST_REGEX_CALL do_free();
+   static void BOOST_REGEX_CALL do_init();
 public:
-   static std::string BOOST_RE_CALL error_string(unsigned id);
-   static char* BOOST_RE_CALL get_catalogue() { return regex_message_catalogue; }
+   static std::string BOOST_REGEX_CALL error_string(unsigned id);
+   static char* BOOST_REGEX_CALL get_catalogue() { return regex_message_catalogue; }
 };
 
 } // namespace re_detail
@@ -381,7 +381,7 @@ template<class charT>
 class w32_regex_traits;
 
 template<>
-class BOOST_RE_IX_DECL w32_regex_traits<char> : public re_detail::w32_traits_base
+class BOOST_REGEX_DECL w32_regex_traits<char> : public re_detail::w32_traits_base
 {
    typedef re_detail::w32_traits_base base_type;
 public:
@@ -391,54 +391,54 @@ public:
    typedef std::string string_type;
    typedef int locale_type;
 
-   static std::size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_REGEX_CALL length(const char_type* p)
    {
       return std::strlen(p);
    }
-   static unsigned int BOOST_RE_CALL syntax_type(size_type c)
+   static unsigned int BOOST_REGEX_CALL syntax_type(size_type c)
    {
       return syntax_map[c];
    }
-   static char BOOST_RE_CALL translate(char c, bool icase)
+   static char BOOST_REGEX_CALL translate(char c, bool icase)
    {
       return icase ? lower_case_map[(size_type)(uchar_type)c] : c;
    }
-   static void BOOST_RE_CALL transform(std::string& out, const std::string& in);
+   static void BOOST_REGEX_CALL transform(std::string& out, const std::string& in);
 
-   static void BOOST_RE_CALL transform_primary(std::string& out, const std::string& in);
+   static void BOOST_REGEX_CALL transform_primary(std::string& out, const std::string& in);
 
-   static bool BOOST_RE_CALL is_separator(char c)
+   static bool BOOST_REGEX_CALL is_separator(char c)
    {
-      return BOOST_RE_MAKE_BOOL((c == '\n') || (c == '\r'));
+      return BOOST_REGEX_MAKE_BOOL((c == '\n') || (c == '\r'));
    }
 
-   static bool BOOST_RE_CALL is_combining(char)
+   static bool BOOST_REGEX_CALL is_combining(char)
    {
       return false;
    }
    
-   static bool BOOST_RE_CALL is_class(char c, boost::uint_fast32_t f)
+   static bool BOOST_REGEX_CALL is_class(char c, boost::uint_fast32_t f)
    {
-      return BOOST_RE_MAKE_BOOL(class_map[(size_type)(uchar_type)c] & f);
+      return BOOST_REGEX_MAKE_BOOL(class_map[(size_type)(uchar_type)c] & f);
    }
 
-   static int BOOST_RE_CALL toi(char c);
-   static int BOOST_RE_CALL toi(const char*& first, const char* last, int radix);
+   static int BOOST_REGEX_CALL toi(char c);
+   static int BOOST_REGEX_CALL toi(const char*& first, const char* last, int radix);
 
-   static boost::uint_fast32_t BOOST_RE_CALL lookup_classname(const char* first, const char* last)
+   static boost::uint_fast32_t BOOST_REGEX_CALL lookup_classname(const char* first, const char* last)
    {
       std::string s(first, last);
       return do_lookup_class(s.c_str());
    }
 
-   static bool BOOST_RE_CALL lookup_collatename(std::string& buf, const char* first, const char* last)
+   static bool BOOST_REGEX_CALL lookup_collatename(std::string& buf, const char* first, const char* last)
    {
       std::string s(first, last);
       return do_lookup_collate(buf, s.c_str());
    }
 
-   static locale_type BOOST_RE_CALL imbue(locale_type l){ return l; }
-   locale_type BOOST_RE_CALL getloc()const{ return locale_type(); }
+   static locale_type BOOST_REGEX_CALL imbue(locale_type l){ return l; }
+   locale_type BOOST_REGEX_CALL getloc()const{ return locale_type(); }
 
    struct sentry
    {
@@ -447,16 +447,16 @@ public:
       ~sentry(){}
       operator void*() { return this; }
    };
-   static void BOOST_RE_CALL update();
+   static void BOOST_REGEX_CALL update();
    w32_regex_traits();
    ~w32_regex_traits();
 private:
    static w32_regex_traits<char> i;
 };
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 template<>
-class BOOST_RE_IX_DECL w32_regex_traits<wchar_t> : public re_detail::w32_traits_base
+class BOOST_REGEX_DECL w32_regex_traits<wchar_t> : public re_detail::w32_traits_base
 {
    typedef re_detail::w32_traits_base base_type;
 public:
@@ -465,42 +465,42 @@ public:
    typedef unsigned int size_type;
    typedef std::basic_string<wchar_t> string_type;
    typedef int locale_type; 
-   static std::size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_REGEX_CALL length(const char_type* p)
    {
       return std::wcslen(p);
    }
-   static unsigned int BOOST_RE_CALL syntax_type(size_type c);
-   static wchar_t BOOST_RE_CALL translate(wchar_t c, bool icase)
+   static unsigned int BOOST_REGEX_CALL syntax_type(size_type c);
+   static wchar_t BOOST_REGEX_CALL translate(wchar_t c, bool icase)
    {
       return icase ? ((c < 256) ? re_detail::wide_lower_case_map[(uchar_type)c] : wtolower(c)) : c;
    }
 
-   static void BOOST_RE_CALL transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
+   static void BOOST_REGEX_CALL transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
 
-   static void BOOST_RE_CALL transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
+   static void BOOST_REGEX_CALL transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in);
 
-   static bool BOOST_RE_CALL is_separator(wchar_t c)
+   static bool BOOST_REGEX_CALL is_separator(wchar_t c)
    {
-      return BOOST_RE_MAKE_BOOL((c == L'\n') || (c == L'\r') || (c == (wchar_t)0x2028) || (c == (wchar_t)0x2029));
+      return BOOST_REGEX_MAKE_BOOL((c == L'\n') || (c == L'\r') || (c == (wchar_t)0x2028) || (c == (wchar_t)0x2029));
    }
 
-   static bool BOOST_RE_CALL is_combining(wchar_t c)
+   static bool BOOST_REGEX_CALL is_combining(wchar_t c)
    { return re_detail::is_combining(c); }
    
-   static bool BOOST_RE_CALL is_class(wchar_t c, boost::uint_fast32_t f)
+   static bool BOOST_REGEX_CALL is_class(wchar_t c, boost::uint_fast32_t f)
    {
-      return BOOST_RE_MAKE_BOOL(((uchar_type)c < 256) ? (wide_unicode_classes[(size_type)(uchar_type)c] & f) : do_iswclass(c, f));
+      return BOOST_REGEX_MAKE_BOOL(((uchar_type)c < 256) ? (wide_unicode_classes[(size_type)(uchar_type)c] & f) : do_iswclass(c, f));
    }
 
-   static int BOOST_RE_CALL toi(wchar_t c);
-   static int BOOST_RE_CALL toi(const wchar_t*& first, const wchar_t* last, int radix);
+   static int BOOST_REGEX_CALL toi(wchar_t c);
+   static int BOOST_REGEX_CALL toi(const wchar_t*& first, const wchar_t* last, int radix);
 
-   static boost::uint_fast32_t BOOST_RE_CALL lookup_classname(const wchar_t* first, const wchar_t* last);
+   static boost::uint_fast32_t BOOST_REGEX_CALL lookup_classname(const wchar_t* first, const wchar_t* last);
 
-   static bool BOOST_RE_CALL lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last);
+   static bool BOOST_REGEX_CALL lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last);
 
-   static locale_type BOOST_RE_CALL imbue(locale_type l){ return l; }
-   locale_type BOOST_RE_CALL getloc()const{ return locale_type(); }
+   static locale_type BOOST_REGEX_CALL imbue(locale_type l){ return l; }
+   locale_type BOOST_REGEX_CALL getloc()const{ return locale_type(); }
 
    struct sentry
    {
@@ -509,23 +509,23 @@ public:
       ~sentry(){}
       operator void*() { return this; }
    };
-   static void BOOST_RE_CALL update();
+   static void BOOST_REGEX_CALL update();
    w32_regex_traits();
    ~w32_regex_traits();
-   static unsigned int BOOST_RE_CALL strnarrow(char *s1, unsigned int len, const wchar_t *s2);
-   static unsigned int BOOST_RE_CALL strwiden(wchar_t *s1, unsigned int len, const char *s2);
+   static unsigned int BOOST_REGEX_CALL strnarrow(char *s1, unsigned int len, const wchar_t *s2);
+   static unsigned int BOOST_REGEX_CALL strwiden(wchar_t *s1, unsigned int len, const char *s2);
 
 private:
-   static bool BOOST_RE_CALL do_iswclass(wchar_t c, boost::uint_fast32_t f);
-   static bool BOOST_RE_CALL do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last);
+   static bool BOOST_REGEX_CALL do_iswclass(wchar_t c, boost::uint_fast32_t f);
+   static bool BOOST_REGEX_CALL do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last);
    static w32_regex_traits<wchar_t> init_;
-   static wchar_t BOOST_RE_CALL wtolower(wchar_t c);
+   static wchar_t BOOST_REGEX_CALL wtolower(wchar_t c);
    static unsigned short wide_unicode_classes[];
 };
 #endif // Wide strings
 #endif // Win32
 
-#ifndef BOOST_RE_NO_LOCALE_H
+#ifndef BOOST_NO_STD_LOCALE
 
 } // namspace boost
 
@@ -545,7 +545,7 @@ struct message_data<char>;
 template <>
 struct message_data<wchar_t>;
 
-struct BOOST_RE_IX_DECL cpp_regex_traits_base : public regex_traits_base
+struct BOOST_REGEX_DECL cpp_regex_traits_base : public regex_traits_base
 {
    enum char_class_type
    {
@@ -571,7 +571,7 @@ struct BOOST_RE_IX_DECL cpp_regex_traits_base : public regex_traits_base
                          | char_class_upper | char_class_xdigit
    };
 
-   static std::string BOOST_RE_CALL set_message_catalogue(const std::string& s);
+   static std::string BOOST_REGEX_CALL set_message_catalogue(const std::string& s);
 protected:
    static char regex_message_cat[200];
 };
@@ -582,7 +582,7 @@ template <class charT>
 class cpp_regex_traits;
 
 template<>
-class BOOST_RE_IX_DECL cpp_regex_traits<char> : public re_detail::cpp_regex_traits_base
+class BOOST_REGEX_DECL cpp_regex_traits<char> : public re_detail::cpp_regex_traits_base
 {
    typedef re_detail::cpp_regex_traits_base base_type;
 private:
@@ -608,36 +608,36 @@ public:
    cpp_regex_traits();
    ~cpp_regex_traits();
 
-   static std::size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_REGEX_CALL length(const char_type* p)
    {
       return std::strlen(p);
    }
-   unsigned int BOOST_RE_CALL syntax_type(size_type c)const
+   unsigned int BOOST_REGEX_CALL syntax_type(size_type c)const
    {
       return psyntax[c];
    }
-   char BOOST_RE_CALL translate(char c, bool icase)const
+   char BOOST_REGEX_CALL translate(char c, bool icase)const
    {
       return icase ? lower_map[(size_type)(uchar_type)c] : c;
    }
-   void BOOST_RE_CALL transform(std::string& out, const std::string& in)const
+   void BOOST_REGEX_CALL transform(std::string& out, const std::string& in)const
    {
       out = pcollate->transform(in.c_str(), in.c_str() + in.size()).c_str();
    }
 
-   void BOOST_RE_CALL transform_primary(std::string& out, const std::string& in)const;
+   void BOOST_REGEX_CALL transform_primary(std::string& out, const std::string& in)const;
 
-   static bool BOOST_RE_CALL is_separator(char c)
+   static bool BOOST_REGEX_CALL is_separator(char c)
    {
-      return BOOST_RE_MAKE_BOOL((c == '\n') || (c == '\r'));
+      return BOOST_REGEX_MAKE_BOOL((c == '\n') || (c == '\r'));
    }
 
-   static bool BOOST_RE_CALL is_combining(char)
+   static bool BOOST_REGEX_CALL is_combining(char)
    {
       return false;
    }
    
-   bool BOOST_RE_CALL is_class(char c, boost::uint_fast32_t f)const
+   bool BOOST_REGEX_CALL is_class(char c, boost::uint_fast32_t f)const
    {
       if(pctype->is((std::ctype<char>::mask)(f & char_class_all_base), c))
          return true;
@@ -648,15 +648,15 @@ public:
       return false;
    }
 
-   int BOOST_RE_CALL toi(char c)const;
-   int BOOST_RE_CALL toi(const char*& first, const char* last, int radix)const;
+   int BOOST_REGEX_CALL toi(char c)const;
+   int BOOST_REGEX_CALL toi(const char*& first, const char* last, int radix)const;
 
-   boost::uint_fast32_t BOOST_RE_CALL lookup_classname(const char* first, const char* last)const;
-   bool BOOST_RE_CALL lookup_collatename(std::string& s, const char* first, const char* last)const;
+   boost::uint_fast32_t BOOST_REGEX_CALL lookup_classname(const char* first, const char* last)const;
+   bool BOOST_REGEX_CALL lookup_collatename(std::string& s, const char* first, const char* last)const;
 
-   std::string BOOST_RE_CALL error_string(unsigned id)const;
-   locale_type BOOST_RE_CALL imbue(locale_type l);
-   locale_type BOOST_RE_CALL BOOST_RE_CALL getloc()const{ return locale_inst; }
+   std::string BOOST_REGEX_CALL error_string(unsigned id)const;
+   locale_type BOOST_REGEX_CALL imbue(locale_type l);
+   locale_type BOOST_REGEX_CALL getloc()const{ return locale_inst; }
 
    struct sentry
    {
@@ -665,9 +665,9 @@ public:
    };
 };
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 template<>
-class BOOST_RE_IX_DECL cpp_regex_traits<wchar_t> : public re_detail::cpp_regex_traits_base
+class BOOST_REGEX_DECL cpp_regex_traits<wchar_t> : public re_detail::cpp_regex_traits_base
 {
    typedef re_detail::cpp_regex_traits_base base_type;
 public:
@@ -685,7 +685,7 @@ private:
    const std::collate<wchar_t>* pcollate;
    const std::codecvt<wchar_t, char, std::mbstate_t>* pcdv;
    std::locale locale_inst;
-   unsigned int BOOST_RE_CALL do_syntax_type(size_type c)const;
+   unsigned int BOOST_REGEX_CALL do_syntax_type(size_type c)const;
    unsigned sort_type;
    wchar_t sort_delim;
 
@@ -694,34 +694,34 @@ private:
 
 public:
 
-   static std::size_t BOOST_RE_CALL length(const char_type* p)
+   static std::size_t BOOST_REGEX_CALL length(const char_type* p)
    {
       return std::wcslen(p);
    }
-   unsigned int BOOST_RE_CALL syntax_type(size_type c)const
+   unsigned int BOOST_REGEX_CALL syntax_type(size_type c)const
    {
       return (c < UCHAR_MAX) ? psyntax[c] : do_syntax_type(c);
    }
-   wchar_t BOOST_RE_CALL translate(wchar_t c, bool icase)const
+   wchar_t BOOST_REGEX_CALL translate(wchar_t c, bool icase)const
    {
       return icase ? (((uchar_type)c) <= UCHAR_MAX) ? lower_map[c] : pctype->tolower(c) : c;
    }
-   void BOOST_RE_CALL transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)const
+   void BOOST_REGEX_CALL transform(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)const
    {
       out = pcollate->transform(in.c_str(), in.c_str() + in.size());
    }
 
-   void BOOST_RE_CALL transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)const;
+   void BOOST_REGEX_CALL transform_primary(std::basic_string<wchar_t>& out, const std::basic_string<wchar_t>& in)const;
 
-   static bool BOOST_RE_CALL is_separator(wchar_t c)
+   static bool BOOST_REGEX_CALL is_separator(wchar_t c)
    {
-      return BOOST_RE_MAKE_BOOL((c == L'\n') || (c == L'\r') || (c == (wchar_t)0x2028) || (c == (wchar_t)0x2029));
+      return BOOST_REGEX_MAKE_BOOL((c == L'\n') || (c == L'\r') || (c == (wchar_t)0x2028) || (c == (wchar_t)0x2029));
    }
 
-   static bool BOOST_RE_CALL is_combining(wchar_t c)
+   static bool BOOST_REGEX_CALL is_combining(wchar_t c)
    { return re_detail::is_combining(c); }
    
-   bool BOOST_RE_CALL is_class(wchar_t c, boost::uint_fast32_t f)const
+   bool BOOST_REGEX_CALL is_class(wchar_t c, boost::uint_fast32_t f)const
    {
       if(pctype->is((std::ctype<wchar_t>::mask)(f & char_class_all_base), c))
          return true;
@@ -734,18 +734,18 @@ public:
       return false;
    }
 
-   int BOOST_RE_CALL toi(wchar_t c)const;
-   int BOOST_RE_CALL toi(const wchar_t*& first, const wchar_t* last, int radix)const;
+   int BOOST_REGEX_CALL toi(wchar_t c)const;
+   int BOOST_REGEX_CALL toi(const wchar_t*& first, const wchar_t* last, int radix)const;
 
-   boost::uint_fast32_t BOOST_RE_CALL lookup_classname(const wchar_t* first, const wchar_t* last)const;
-   bool BOOST_RE_CALL lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last)const;
+   boost::uint_fast32_t BOOST_REGEX_CALL lookup_classname(const wchar_t* first, const wchar_t* last)const;
+   bool BOOST_REGEX_CALL lookup_collatename(std::basic_string<wchar_t>& s, const wchar_t* first, const wchar_t* last)const;
 
-   std::string BOOST_RE_CALL error_string(unsigned id)const;
+   std::string BOOST_REGEX_CALL error_string(unsigned id)const;
    cpp_regex_traits();
    ~cpp_regex_traits();
-   locale_type BOOST_RE_CALL imbue(locale_type l);
-   locale_type BOOST_RE_CALL getloc()const{ return locale_inst; }
-   unsigned int BOOST_RE_CALL strwiden(wchar_t *s1, unsigned int len, const char *s2)const;
+   locale_type BOOST_REGEX_CALL imbue(locale_type l);
+   locale_type BOOST_REGEX_CALL getloc()const{ return locale_inst; }
+   unsigned int BOOST_REGEX_CALL strwiden(wchar_t *s1, unsigned int len, const char *s2)const;
 
    struct sentry
    {
@@ -753,25 +753,25 @@ public:
       operator void*() { return this; }
    };
 };
-#endif // BOOST_RE_NO_WCSTRING
+#endif // BOOST_NO_WREGEX
 
-#endif // BOOST_RE_NO_LOCALE_H
+#endif // BOOST_NO_STD_LOCALE
 
-#ifdef BOOST_RE_LOCALE_W32
+#ifdef BOOST_REGEX_USE_WIN32_LOCALE
 
 template <class charT>
 class regex_traits : public w32_regex_traits<charT>
 {
 };
 
-#elif defined(BOOST_RE_LOCALE_C)
+#elif defined(BOOST_REGEX_USE_C_LOCALE)
 
 template <class charT>
 class regex_traits : public c_regex_traits<charT>
 {
 };
 
-#elif defined(BOOST_RE_LOCALE_CPP)
+#elif defined(BOOST_REGEX_USE_CPP_LOCALE)
 
 template <class charT>
 class regex_traits : public cpp_regex_traits<charT>

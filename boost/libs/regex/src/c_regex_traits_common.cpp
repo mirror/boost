@@ -22,6 +22,8 @@
   */
 
 
+#define BOOST_REGEX_SOURCE
+
 #include <clocale>
 #include <cstdio>
 #include <list>
@@ -36,7 +38,7 @@ namespace boost{
 //
 // these are the POSIX collating names:
 //
-BOOST_RE_IX_DECL const char* def_coll_names[] = {
+BOOST_REGEX_DECL const char* def_coll_names[] = {
 "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "alert", "backspace", "tab", "newline", 
 "vertical-tab", "form-feed", "carriage-return", "SO", "SI", "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", 
 "SYN", "ETB", "CAN", "EM", "SUB", "ESC", "IS4", "IS3", "IS2", "IS1", "space", "exclamation-mark", 
@@ -57,7 +59,7 @@ BOOST_RE_IX_DECL const char* def_coll_names[] = {
 // little more - but this will have to do for
 // now:
 
-BOOST_RE_IX_DECL const char* def_multi_coll[] = {
+BOOST_REGEX_DECL const char* def_multi_coll[] = {
    "ae",
    "Ae",
    "AE",
@@ -84,7 +86,7 @@ BOOST_RE_IX_DECL const char* def_multi_coll[] = {
 
 
 
-BOOST_RE_IX_DECL bool BOOST_RE_CALL re_lookup_def_collate_name(std::string& buf, const char* name)
+BOOST_REGEX_DECL bool BOOST_REGEX_CALL re_lookup_def_collate_name(std::string& buf, const char* name)
 {
    BOOST_RE_GUARD_STACK
    unsigned int i = 0;
@@ -112,7 +114,7 @@ BOOST_RE_IX_DECL bool BOOST_RE_CALL re_lookup_def_collate_name(std::string& buf,
 
 //
 // messages:
-BOOST_RE_IX_DECL const char * re_default_error_messages[] =
+BOOST_REGEX_DECL const char * re_default_error_messages[] =
 {  "Success",             /* REG_NOERROR */
    "No match",             /* REG_NOMATCH */
    "Invalid regular expression",    /* REG_BADPAT */
@@ -195,7 +197,7 @@ const mss default_messages[] = {
                             { 0, "", },
                          };
 
-BOOST_RE_IX_DECL unsigned int BOOST_RE_CALL re_get_default_message(char* buf, unsigned int len, unsigned int id)
+BOOST_REGEX_DECL unsigned int BOOST_REGEX_CALL re_get_default_message(char* buf, unsigned int len, unsigned int id)
 {
    BOOST_RE_GUARD_STACK
    const mss* pm = default_messages;
@@ -255,7 +257,7 @@ const wchar_t combining_ranges[] = { 0x0300, 0x0361,
                            0xFE20, 0xFE23, 
                            0xffff, 0xffff, };
 
-BOOST_RE_IX_DECL bool BOOST_RE_CALL is_combining(wchar_t c)
+BOOST_REGEX_DECL bool BOOST_REGEX_CALL is_combining(wchar_t c)
 {
    BOOST_RE_GUARD_STACK
    const wchar_t* p = combining_ranges + 1;
@@ -266,7 +268,7 @@ BOOST_RE_IX_DECL bool BOOST_RE_CALL is_combining(wchar_t c)
    return false;
 }
 
-BOOST_RE_IX_DECL unsigned short wide_unicode_classes[] = {
+BOOST_REGEX_DECL unsigned short wide_unicode_classes[] = {
    c_traits_base::char_class_cntrl,        // ''  0
    c_traits_base::char_class_cntrl,        // ''  1
    c_traits_base::char_class_cntrl,        // ''  2
@@ -526,7 +528,7 @@ BOOST_RE_IX_DECL unsigned short wide_unicode_classes[] = {
    c_traits_base::char_class_alpha |  c_traits_base::char_class_lower,        // 'ÿ'  255
 };
 
-BOOST_RE_IX_DECL wchar_t wide_lower_case_map[] = {
+BOOST_REGEX_DECL wchar_t wide_lower_case_map[] = {
    0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb, 0xc, 0xd, 0xe, 0xf,
    0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 
    0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 

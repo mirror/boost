@@ -1,3 +1,8 @@
+Version 330:
+CHANGED:  Completely redesigned config support (now fully integrated with boost).
+FIXED:    Support for building with _UNICODE defined.
+FIXED:    Bug when running on Windows XP (character classification bitmaps wrong).
+
 Version 311:
 FIXED:    Support for STLPort 4.1b6.
 FIXED:    Library calling convention for VC6 debug builds.
@@ -226,6 +231,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 

@@ -20,15 +20,19 @@
   *   DESCRIPTION: Thread synch helper functions, for regular
   *                expression library.
   */
+
+
+#define BOOST_REGEX_SOURCE
+
 #include <boost/regex/detail/regex_synch.hpp>
 
 namespace boost{
    namespace re_detail{
 
-void BOOST_RE_CALL re_init_threads()
+void BOOST_REGEX_CALL re_init_threads()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    if(p_re_lock == 0)
       p_re_lock = new critical_section();
    cs_guard g(*p_re_lock);
@@ -36,10 +40,10 @@ void BOOST_RE_CALL re_init_threads()
 #endif
 }
 
-void BOOST_RE_CALL re_free_threads()
+void BOOST_REGEX_CALL re_free_threads()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    cs_guard g(*p_re_lock);
    --re_lock_count;
    if(re_lock_count == 0)
@@ -51,11 +55,11 @@ void BOOST_RE_CALL re_free_threads()
 #endif
 }
 
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
 
-BOOST_RE_IX_DECL critical_section* p_re_lock = 0;
+BOOST_REGEX_DECL critical_section* p_re_lock = 0;
 
-BOOST_RE_IX_DECL unsigned int re_lock_count = 0;
+BOOST_REGEX_DECL unsigned int re_lock_count = 0;
 
 #endif
 

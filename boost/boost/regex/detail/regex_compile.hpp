@@ -46,7 +46,7 @@ struct kmp_translator
 
 
 template <class charT, class traits_type, class Allocator>
-bool BOOST_RE_CALL re_maybe_set_member(charT c,
+bool BOOST_REGEX_CALL re_maybe_set_member(charT c,
                                  re_set_long* set_,
                                  const reg_expression<charT, traits_type, Allocator>& e)
 {
@@ -66,7 +66,7 @@ bool BOOST_RE_CALL re_maybe_set_member(charT c,
 
 } // namespace re_detail
 
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 //
 // Ugly ugly hack,
 // templates don't merge if they contain switch statements so declare these
@@ -76,41 +76,41 @@ namespace{
 #endif
 
 template <class charT, class traits, class Allocator>
-inline bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_wide_type&)
+inline bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_wide_type&)
 {
    if((traits_size_type)(traits_uchar_type)c >= 256)
       return true;
-   return BOOST_RE_MAKE_BOOL(_map[(traits_uchar_type)c] & mask);
+   return BOOST_REGEX_MAKE_BOOL(_map[(traits_uchar_type)c] & mask);
 }
 
 template <class charT, class traits, class Allocator>
-inline bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_narrow_type&)
+inline bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::can_start(charT c, const unsigned char* _map, unsigned char mask, const re_detail::_narrow_type&)
 {
-   return BOOST_RE_MAKE_BOOL(_map[(traits_uchar_type)c] & mask);
+   return BOOST_REGEX_MAKE_BOOL(_map[(traits_uchar_type)c] & mask);
 }
 
 template <class charT, class traits, class Allocator>
-CONSTRUCTOR_INLINE reg_expression<charT, traits, Allocator>::reg_expression(const Allocator& a)
+reg_expression<charT, traits, Allocator>::reg_expression(const Allocator& a)
     : regbase(), data(a), pkmp(0), error_code_(REG_EMPTY), _expression(0)
 {
 }
 
 template <class charT, class traits, class Allocator>
-CONSTRUCTOR_INLINE reg_expression<charT, traits, Allocator>::reg_expression(const charT* p, flag_type f, const Allocator& a)
+reg_expression<charT, traits, Allocator>::reg_expression(const charT* p, flag_type f, const Allocator& a)
     : data(a), pkmp(0), error_code_(REG_EMPTY), _expression(0)
 {
    set_expression(p, f | regbase::use_except);
 }
 
 template <class charT, class traits, class Allocator>
-CONSTRUCTOR_INLINE reg_expression<charT, traits, Allocator>::reg_expression(const charT* p1, const charT* p2, flag_type f, const Allocator& a)
+reg_expression<charT, traits, Allocator>::reg_expression(const charT* p1, const charT* p2, flag_type f, const Allocator& a)
     : data(a), pkmp(0), error_code_(REG_EMPTY), _expression(0)
 {
     set_expression(p1, p2, f | regbase::use_except);
 }
 
 template <class charT, class traits, class Allocator>
-CONSTRUCTOR_INLINE reg_expression<charT, traits, Allocator>::reg_expression(const charT* p, size_type len, flag_type f, const Allocator& a)
+reg_expression<charT, traits, Allocator>::reg_expression(const charT* p, size_type len, flag_type f, const Allocator& a)
     : data(a), pkmp(0), error_code_(REG_EMPTY), _expression(0)
 {
     set_expression(p, p + len, f | regbase::use_except);
@@ -143,7 +143,7 @@ reg_expression<charT, traits, Allocator>::~reg_expression()
 }
 
 template <class charT, class traits, class Allocator>
-reg_expression<charT, traits, Allocator>& BOOST_RE_CALL reg_expression<charT, traits, Allocator>::operator=(const reg_expression<charT, traits, Allocator>& e)
+reg_expression<charT, traits, Allocator>& BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::operator=(const reg_expression<charT, traits, Allocator>& e)
 {
    //
    // we do a deep copy only if e is a valid expression, otherwise fail.
@@ -157,7 +157,7 @@ reg_expression<charT, traits, Allocator>& BOOST_RE_CALL reg_expression<charT, tr
 }
 
 template <class charT, class traits, class Allocator>
-inline bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::operator==(const reg_expression<charT, traits, Allocator>& e)const
+inline bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::operator==(const reg_expression<charT, traits, Allocator>& e)const
 {
    return (_flags == e.flags())
            && (_expression_len == e._expression_len)
@@ -165,7 +165,7 @@ inline bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::operator==(c
 }
 
 template <class charT, class traits, class Allocator>
-bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::operator<(const reg_expression<charT, traits, Allocator>& e)const
+bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::operator<(const reg_expression<charT, traits, Allocator>& e)const
 {
    //
    // we can't offer a diffinitive ordering, but we can be consistant:
@@ -175,19 +175,19 @@ bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::operator<(const reg
 }
 
 template <class charT, class traits, class Allocator>
-Allocator BOOST_RE_CALL reg_expression<charT, traits, Allocator>::allocator()const
+Allocator BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::allocator()const
 {
     return data.allocator();
 }
 
 template <class charT, class traits, class Allocator>
-Allocator BOOST_RE_CALL reg_expression<charT, traits, Allocator>::get_allocator()const
+Allocator BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::get_allocator()const
 {
     return data.allocator();
 }
 
 template <class charT, class traits, class Allocator>
-unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_inner_set(const charT*& first, const charT* last)
+unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_inner_set(const charT*& first, const charT* last)
 {
    //
    // we have an inner [...] construct
@@ -214,7 +214,7 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_inner
 
 
 template <class charT, class traits, class Allocator>
-bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::skip_space(const charT*& first, const charT* last)
+bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::skip_space(const charT*& first, const charT* last)
 {
    //
    // returns true if we get to last:
@@ -227,7 +227,7 @@ bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::skip_space(const ch
 }
 
 template <class charT, class traits, class Allocator>
-void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_range(const charT*& ptr, const charT* end, unsigned& min, unsigned& max)
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_range(const charT*& ptr, const charT* end, unsigned& min, unsigned& max)
 {
    //
    // we have {x} or {x,} or {x,y} NB no spaces inside braces
@@ -305,7 +305,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_range(const c
 }
 
 template <class charT, class traits, class Allocator>
-charT BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_escape(const charT*& first, const charT* last)
+charT BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::parse_escape(const charT*& first, const charT* last)
 {
    charT c(*first);
    traits_size_type c_unsigned = (traits_size_type)(traits_uchar_type)*first;
@@ -408,7 +408,7 @@ charT BOOST_RE_CALL reg_expression<charT, traits, Allocator>::parse_escape(const
 }
 
 template <class charT, class traits, class Allocator>
-void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_maps()
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_maps()
 {
    re_detail::re_syntax_base* record = (re_detail::re_syntax_base*)data.data();
    // always compile the first _map:
@@ -436,7 +436,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_maps()
 }
 
 template <class charT, class traits, class Allocator>
-bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::probe_start(
+bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::probe_start(
                         re_detail::re_syntax_base* node, charT cc, re_detail::re_syntax_base* terminal) const
 {
    unsigned int c;
@@ -541,7 +541,7 @@ bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::probe_start(
 }
 
 template <class charT, class traits, class Allocator>
-bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::probe_start_null(re_detail::re_syntax_base* node, re_detail::re_syntax_base* terminal)const
+bool BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::probe_start_null(re_detail::re_syntax_base* node, re_detail::re_syntax_base* terminal)const
 {
    switch(node->type)
    {
@@ -590,7 +590,7 @@ bool BOOST_RE_CALL reg_expression<charT, traits, Allocator>::probe_start_null(re
 }
 
 template <class charT, class traits, class Allocator>
-void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_map(
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_map(
                         re_detail::re_syntax_base* node, unsigned char* _map,
                         unsigned int* pnull, unsigned char mask, re_detail::re_syntax_base* terminal)const
 {
@@ -607,7 +607,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_map(
 }
   
 template <class charT, class traits, class Allocator>
-void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::move_offsets(re_detail::re_syntax_base* j, unsigned size)
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::move_offsets(re_detail::re_syntax_base* j, unsigned size)
 {
    // move all offsets starting with j->link forward by size
    // called after an insert:
@@ -636,7 +636,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::move_offsets(re_det
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_set_simple(re_detail::re_syntax_base* dat, unsigned long cls, bool isnot)
+re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_set_simple(re_detail::re_syntax_base* dat, unsigned long cls, bool isnot)
 {
    re_detail::jstack<traits_string_type, Allocator> singles(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> ranges(64, data.allocator());
@@ -652,7 +652,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_set(const charT*& first, const charT* last)
+re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_set(const charT*& first, const charT* last)
 {
    re_detail::jstack<traits_string_type, Allocator> singles(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> ranges(64, data.allocator());
@@ -969,7 +969,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_wide_type&)
+re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_wide_type&)
 {
    size_type base = data.size();
    data.extend(sizeof(re_detail::re_set_long));
@@ -1048,7 +1048,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_narrow_type&)
+re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_narrow_type&)
 {
    re_detail::re_set* dat = (re_detail::re_set*)data.extend(sizeof(re_detail::re_set));
    std::memset(dat, 0, sizeof(re_detail::re_set));
@@ -1153,9 +1153,9 @@ inline
 
 
 template <class charT, class traits, class Allocator>
-void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces)
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces)
 {
-   typedef typename boost::re_detail::rebind_allocator<bool, Allocator>::type b_alloc;
+   typedef typename boost::detail::rebind_allocator<bool, Allocator>::type b_alloc;
    
    register unsigned char* base = (unsigned char*)b;
    register re_detail::re_syntax_base* ptr = b;
@@ -1175,7 +1175,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_deta
          {
          case re_detail::syntax_element_rep:
             ((re_detail::re_jump*)ptr)->alt.p = add_offset(base, ((re_detail::re_jump*)ptr)->alt.i);
-#ifdef BOOST_RE_DEBUG
+#ifdef BOOST_REGEX_DEBUG
             if((re_detail::padding_mask & (int)((re_detail::re_jump*)ptr)->alt.p) && (((re_detail::re_jump*)ptr)->alt.p != b))
             {
                jm_trace("padding mis-aligment in repeat jump to object type: " << ((re_detail::re_jump*)ptr)->alt.p->type)
@@ -1188,7 +1188,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_deta
          case re_detail::syntax_element_jump:
          case re_detail::syntax_element_alt:
             ((re_detail::re_jump*)ptr)->alt.p = add_offset(base, ((re_detail::re_jump*)ptr)->alt.i);
-#ifdef BOOST_RE_DEBUG
+#ifdef BOOST_REGEX_DEBUG
             if((re_detail::padding_mask & (int)((re_detail::re_jump*)ptr)->alt.p) && (((re_detail::re_jump*)ptr)->alt.p != b))
             {
                jm_trace("padding mis-aligment in alternation jump to object type: " << ((re_detail::re_jump*)ptr)->alt.p->type)
@@ -1210,7 +1210,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_deta
          default:
             rebase:
             ptr->next.p = add_offset(base, ptr->next.i);
-#ifdef BOOST_RE_DEBUG
+#ifdef BOOST_REGEX_DEBUG
             if((re_detail::padding_mask & (int)(ptr->next.p)) && (((re_detail::re_jump*)ptr)->alt.p != b))
             {
                jm_trace("padding mis-alignment in next record of type " << ptr->next.p->type)
@@ -1233,7 +1233,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_deta
 
 
 template <class charT, class traits, class Allocator>
-unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_expression(const charT* p, const charT* end, flag_type f)
+unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::set_expression(const charT* p, const charT* end, flag_type f)
 {
    if(p == expression())
    {
@@ -1883,7 +1883,7 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::add_simple(re_detail::re_syntax_base* dat, re_detail::syntax_element_type type, unsigned int size)
+re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::add_simple(re_detail::re_syntax_base* dat, re_detail::syntax_element_type type, unsigned int size)
 {
    if(dat)
    {
@@ -1899,7 +1899,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::add_literal(re_detail::re_syntax_base* dat, charT c)
+re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::add_literal(re_detail::re_syntax_base* dat, charT c)
 {
    if(dat && (dat->type == re_detail::syntax_element_literal))
    {
@@ -1920,7 +1920,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 }
 
 template <class charT, class traits, class Allocator>
-unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::probe_restart(re_detail::re_syntax_base* dat)
+unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::probe_restart(re_detail::re_syntax_base* dat)
 {
    switch(dat->type)
    {
@@ -1941,7 +1941,7 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::probe_resta
 }
 
 template <class charT, class traits, class Allocator>
-unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_leading_rep(re_detail::re_syntax_base* dat, re_detail::re_syntax_base* end)
+unsigned int BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_leading_rep(re_detail::re_syntax_base* dat, re_detail::re_syntax_base* end)
 {
    unsigned int len = 0;
    bool leading_lit = end ? false : true;
@@ -2015,7 +2015,7 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_leadi
 }
 
 template <class charT, class traits, class Allocator>
-void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fail(unsigned int err)
+void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fail(unsigned int err)
 {
    error_code_  = err;
    if(err)
@@ -2031,7 +2031,7 @@ void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fail(unsigned int e
 }
 
 
-#if defined(BOOST_RE_NO_TEMPLATE_SWITCH_MERGE) && !defined(BOOST_RE_NO_NAMESPACES)
+#if defined(BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE)
 } // namespace
 #endif
 

@@ -116,9 +116,7 @@ EOF
 #
 #	 now for the main target for this library:
 	echo ./$subdir/$libname.lib : $all_obj >> $tout
-	echo "	link @<<" >> $tout
-	echo "	kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:\"$subdir/$libname.pdb\" /debug /machine:I386 /out:\"$subdir/$libname.dll\" /implib:\"$subdir/$libname.lib\" /pdbtype:sept \$(XLFLAGS) $all_obj" >> $tout
-	echo "<<" >> $tout
+	echo "	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:\"$subdir/$libname.pdb\" /debug /machine:I386 /out:\"$subdir/$libname.dll\" /implib:\"$subdir/$libname.lib\" \$(XLFLAGS) $all_obj" >> $tout
 	echo "" >> $tout
 }
 
@@ -137,17 +135,17 @@ function vc6_gen()
 	if test "$is_stlport" == yes; then
 	prefix='vc6-stlport-'
 	else
-	prefix='vc6-'
+	prefix="$subdir-"
 	fi
 
 	if test "$no_single" != "yes"; then
 	libname="$prefix""re300"
-	opts="/c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD"
+	opts="/c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD"
 	vc6_gen_lib
 	fi
 	
 	libname="$prefix""re300m"
-	opts="/nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c"
+	opts="/nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c"
 	vc6_gen_lib
 	
 	if test "$no_single" != "yes"; then
@@ -162,23 +160,23 @@ function vc6_gen()
 	vc6_gen_lib
 	
 	libname="$prefix""re300dl"
-	opts="/nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c"
+	opts="/nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c"
 	vc6_gen_dll
 	
 	debug="no"
-	opts="/nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c"
+	opts="/nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c"
 	libname="$prefix""re300l"
 	vc6_gen_dll
 	
 	debug="no"
-	opts="/nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_STATIC_LIB /YX /FD /c"
+	opts="/nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c"
 	libname="$prefix""re300ls"
 	vc6_gen_lib
 	
 	if test "$is_stlport" == yes; then
 #  debug STLPort mode:
 	debug="yes"
-	opts="/nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c"
+	opts="/nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GZ  /c"
 	libname="$prefix""re300ddl"
 	vc6_gen_dll
 	libname="$prefix""re300ddm"
@@ -575,17 +573,17 @@ function bcb_gen()
 	bcb_gen_lib
 
 	libname="$subdir""re300lv"
-	opts="-DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	opts="-tWD -tWM -tWR -tWV -DJM_USE_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 	
 	fi
 
 	libname="$subdir""re300lm"
-	opts="-DBOOST_RE_BUILD_DLL -tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	opts="-tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 
 	libname="$subdir""re300l"
-	opts="-DBOOST_RE_BUILD_DLL -tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	opts="-tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 	
 	
@@ -936,7 +934,14 @@ EOF
 
 #
 # locate all the header dependencies:
-header="../../../boost/cregex.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex/regex_traits.hpp"
+for file in ../../boost/regex/*.hpp
+do
+
+if test $file != '../../boost/regex/*.hpp'; then
+	header="$header ../$file"
+fi
+
+done
 
 for file in ../../boost/regex/detail/*.hpp
 do
@@ -980,6 +985,13 @@ no_single="yes"
 subdir="vc6-stlport"
 vc6_gen
 #
+# generate vc7 makefile:
+is_stlport="no"
+out="build/vc7.mak"
+no_single="no"
+subdir="vc7"
+vc6_gen
+#
 # generate gcc makefile:
 gcc_gen
 gcc_shared="yes"
@@ -1013,6 +1025,14 @@ sun_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
+
+
+
+
+
+
+
 
 
 

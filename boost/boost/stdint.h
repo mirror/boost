@@ -14,11 +14,11 @@
 
 //  NOTE OF OBSOLESCENCE: In general, this header file cannot detect
 //  whether the current translation unit somewhere includes ISO C99
-//  <stdint.h> or not.  For example, in case BOOST_SYSTEM_HAS_STDINT_H
+//  <stdint.h> or not.  For example, in case BOOST_HAS_STDINT_H
 //  is not defined and ISO C99 <stdint.h> has been included before,
 //  this file will re-define ISO C99 reserved file-scope identifiers
 //  such as int8_t (see ISO C99 7.1.3 and 7.18).  Defining the macro
-//  BOOST_SYSTEM_HAS_STDINT_H is not sufficient in general, in
+//  BOOST_HAS_STDINT_H is not sufficient in general, in
 //  particular if a partly conformant <stdint.h> header is available
 //  on the platform, e.g. Comeau C++ with GNU glibc 2.1.2.
 //
@@ -40,7 +40,7 @@
 
 #include <boost/config.hpp>
 
-#ifdef BOOST_SYSTEM_HAS_STDINT_H
+#ifdef BOOST_HAS_STDINT_H
 #include <stdint.h>
 
 #else
@@ -150,7 +150,7 @@
      typedef uint32_t             uintmax_t;
 # endif
 
-#endif  // BOOST_SYSTEM_HAS_STDINT_H not defined
+#endif  // BOOST_HAS_STDINT_H not defined
 #endif  // BOOST_STDINT_H
 
 /****************************************************
@@ -167,7 +167,7 @@ Added 23rd September (John Maddock).
 
 ******************************************************/
 
-#if defined(__STDC_CONSTANT_MACROS) && !defined(BOOST__STDC_CONSTANT_MACROS_DEFINED)
+#if defined(__STDC_CONSTANT_MACROS) && !defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(BOOST_HAS_STDINT_H)
 #define BOOST__STDC_CONSTANT_MACROS_DEFINED
 #if (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
 //
@@ -252,7 +252,7 @@ Added 23rd September (John Maddock).
 
 #endif // Borland/MS specific
 
-#elif defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(__STDC_CONSTANT_MACROS)
+#elif defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(__STDC_CONSTANT_MACROS) && !defined(BOOST_HAS_STDINT_H)
 //
 // undef all the macros:
 //

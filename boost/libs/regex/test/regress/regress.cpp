@@ -248,15 +248,16 @@ void jm_debug_alloc::free_()
     }
 }
 
-jm_debug_alloc::pointer jm_debug_alloc::allocate(size_type n, void*)
+void* jm_debug_alloc::allocate(size_type n, void*)
 {
    pointer p = new char[n + maxi(sizeof(size_type), boost::re_detail::padding_size)];
    *(size_type*)p = n;
    ++(*blocks);
    return p + maxi(sizeof(size_type), boost::re_detail::padding_size);
 }
-void jm_debug_alloc::deallocate(pointer p, size_type n)
+void jm_debug_alloc::deallocate(void* pv, size_type n)
 {
+   char* p = (char*)pv;
    p -= maxi(sizeof(size_type), boost::re_detail::padding_size);
    if(*(size_type*)p != n)
    {

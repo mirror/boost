@@ -24,7 +24,7 @@
 #ifndef BOOST_RE_CREGEX_HPP
 #define BOOST_RE_CREGEX_HPP
 
-#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/config.hpp>
 
 #ifdef __BORLANDC__
    #pragma option push -a4 -b -Ve -pc
@@ -47,7 +47,7 @@ typedef struct
    unsigned int eflags;       /* none of your business :-) */
 } regex_tA;
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 typedef struct
 {
    unsigned int re_magic;
@@ -96,16 +96,16 @@ typedef enum{
    REG_STARTEND =  00004
 } reg_exec_flags;
 
-BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompA(regex_tA*, const char*, int);
-BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorA(int, const regex_tA*, char*, unsigned int);
-BOOST_RE_IX_DECL int BOOST_RE_CCALL regexecA(const regex_tA*, const char*, unsigned int, regmatch_t*, int);
-BOOST_RE_IX_DECL void BOOST_RE_CCALL regfreeA(regex_tA*);
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA*, const char*, int);
+BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorA(int, const regex_tA*, char*, unsigned int);
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA*, const char*, unsigned int, regmatch_t*, int);
+BOOST_REGEX_DECL void BOOST_REGEX_CCALL regfreeA(regex_tA*);
 
-#ifndef BOOST_RE_NO_WCSTRING
-BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompW(regex_tW*, const wchar_t*, int);
-BOOST_RE_IX_DECL unsigned int BOOST_RE_CCALL regerrorW(int, const regex_tW*, wchar_t*, unsigned int);
-BOOST_RE_IX_DECL int BOOST_RE_CCALL regexecW(const regex_tW*, const wchar_t*, unsigned int, regmatch_t*, int);
-BOOST_RE_IX_DECL void BOOST_RE_CCALL regfreeW(regex_tW*);
+#ifndef BOOST_NO_WREGEX
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompW(regex_tW*, const wchar_t*, int);
+BOOST_REGEX_DECL unsigned int BOOST_REGEX_CCALL regerrorW(int, const regex_tW*, wchar_t*, unsigned int);
+BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecW(const regex_tW*, const wchar_t*, unsigned int, regmatch_t*, int);
+BOOST_REGEX_DECL void BOOST_REGEX_CCALL regfreeW(regex_tW*);
 #endif
 
 #ifdef UNICODE
@@ -191,7 +191,7 @@ enum match_flags
 //
 // C++ high level wrapper goes here:
 //
-#if defined(__cplusplus) && !defined(BOOST_RE_NO_STRING_H)
+#if defined(__cplusplus)
 #include <string>
 #include <vector>
 namespace boost{
@@ -226,7 +226,7 @@ typedef bool (*GrepFileCallback)(const char* file, const RegEx& expression);
 typedef bool (*FindFilesCallback)(const char* file);
 #endif
 
-class BOOST_RE_IX_DECL RegEx
+class BOOST_REGEX_DECL RegEx
 {
 private:
    re_detail::RegExData* pdata;

@@ -32,7 +32,7 @@ namespace deprecated{
 // class reg_match:
 // old name for match_results, this ones just a thin wrapper:
 //
-template <class iterator, class Allocator  BOOST_RE_DEF_ALLOC_PARAM(typename boost::re_detail::def_alloc_param_traits<iterator>::type)>
+template <class iterator, class Allocator  = BOOST_DEFAULT_ALLOCATOR(typename boost::re_detail::def_alloc_param_traits<iterator>::type)>
 class reg_match : public boost::match_results<iterator, Allocator>
 {
    typedef boost::match_results<iterator, Allocator> base_type;
@@ -82,7 +82,7 @@ bool query_match(iterator first, iterator last, boost::match_results<iterator, A
 
 //
 // query_match convenience interfaces:
-#ifndef BOOST_RE_NO_PARTIAL_FUNC_SPEC
+#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -112,7 +112,7 @@ inline bool query_match(const char* str,
 {
    return query_match(str, str + regex::traits_type::length(str), m, e, flags);
 }
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 inline bool query_match(const wchar_t* str, 
                         wcmatch& m, 
                         const wregex& e, 
@@ -128,7 +128,7 @@ inline bool query_match(const std::string& s,
 {
    return query_match(s.begin(), s.end(), m, e, flags);
 }
-#if !defined(BOOST_RE_NO_WCSTRING)
+#if !defined(BOOST_NO_WREGEX)
 inline bool query_match(const std::basic_string<wchar_t>& s, 
                         boost::match_results<std::basic_string<wchar_t>::const_iterator, wregex::allocator_type>& m,
                         const wregex& e, 
@@ -155,7 +155,7 @@ bool reg_search(iterator first, iterator last, boost::match_results<iterator, Al
 
 //
 // reg_search convenience interfaces:
-#ifndef BOOST_RE_NO_PARTIAL_FUNC_SPEC
+#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -187,7 +187,7 @@ inline bool reg_search(const char* str,
 {
    return reg_search(str, str + regex::traits_type::length(str), m, e, flags);
 }
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 inline bool reg_search(const wchar_t* str, 
                         wcmatch& m, 
                         const wregex& e, 
@@ -204,7 +204,7 @@ inline bool reg_search(const std::string& s,
 {
    return reg_search(s.begin(), s.end(), m, e, flags);
 }
-#if !defined(BOOST_RE_NO_STRING_DEF_ARGS) && !defined(BOOST_RE_NO_WCSTRING)
+#if !defined(BOOST_NO_WREGEX)
 inline bool reg_search(const std::basic_string<wchar_t>& s, 
                         boost::match_results<std::basic_string<wchar_t>::const_iterator, wregex::allocator_type>& m,
                         const wregex& e, 
@@ -231,7 +231,7 @@ inline unsigned int reg_grep(Predicate foo, iterator first, iterator last, const
 
 //
 // reg_grep convenience interfaces:
-#ifndef BOOST_RE_NO_PARTIAL_FUNC_SPEC
+#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 //
 // this isn't really a partial specialisation, but template function
 // overloading - if the compiler doesn't support partial specialisation
@@ -260,7 +260,7 @@ inline unsigned int reg_grep(bool (*foo)(const cmatch&), const char* str,
 {
    return reg_grep(foo, str, str + regex::traits_type::length(str), e, flags);
 }
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 inline unsigned int reg_grep(bool (*foo)(const wcmatch&), const wchar_t* str, 
                         const wregex& e, 
                         unsigned flags = match_default)
@@ -275,8 +275,8 @@ inline unsigned int reg_grep(bool (*foo)(const boost::match_results<std::string:
 {
    return reg_grep(foo, s.begin(), s.end(), e, flags);
 }
-#if !defined(BOOST_RE_NO_STRING_DEF_ARGS) && !defined(BOOST_RE_NO_WCSTRING)
-inline unsigned int reg_grep(bool (*foo)(const boost::match_results<std::basic_string<wchar_t>::const_iterator, wregex::allocator_type>&), 
+#if !defined(BOOST_NO_WREGEX)
+inline unsigned int reg_grep(bool (*foo)(const boost::match_results<std::basic_string<wchar_t>::const_iterator, wregex::allocator_type>&),
                      const std::basic_string<wchar_t>& s, 
                         const wregex& e, 
                         unsigned flags = match_default)
@@ -349,7 +349,7 @@ inline unsigned int reg_grep_old(Out oi, iterator first, iterator last, const re
 }
 
 template <class OutputIterator, class iterator, class Allocator, class charT>
-OutputIterator BOOST_RE_CALL reg_format(OutputIterator out,
+OutputIterator BOOST_REGEX_CALL reg_format(OutputIterator out,
                           const boost::match_results<iterator, Allocator>& m,
                           const charT* fmt)
 {
@@ -359,28 +359,17 @@ OutputIterator BOOST_RE_CALL reg_format(OutputIterator out,
    return boost::re_detail::_reg_format_aux(out, m, fmt, 0);
 }
 
-#ifndef BOOST_RE_NO_STRING_DEF_ARGS
 template <class iterator, class Allocator, class charT>
-std::basic_string<charT> BOOST_RE_CALL reg_format(const boost::match_results<iterator, Allocator>& m, const charT* fmt)
+std::basic_string<charT> BOOST_REGEX_CALL reg_format(const boost::match_results<iterator, Allocator>& m, const charT* fmt)
 {
    std::basic_string<charT> result;
    boost::re_detail::string_out_iterator<std::basic_string<charT> > i(result);
    reg_format(i, m, fmt);
    return result;
 }
-#elif !defined(BOOST_RE_NO_STRING_H)
-template <class iterator, class Allocator>
-std::string BOOST_RE_CALL reg_format(const boost::match_results<iterator, Allocator>& m, const char* fmt)
-{
-   std::string result;
-   boost::re_detail::string_out_iterator<std::string> i(result);
-   reg_format(i, m, fmt);
-   return result;
-}
-#endif
 
 template <class OutputIterator, class iterator, class traits, class Allocator, class charT>
-OutputIterator BOOST_RE_CALL reg_merge(OutputIterator out, 
+OutputIterator BOOST_REGEX_CALL reg_merge(OutputIterator out, 
                          iterator first,
                          iterator last,
                          const reg_expression<charT, traits, Allocator>& e, 
@@ -398,10 +387,9 @@ OutputIterator BOOST_RE_CALL reg_merge(OutputIterator out,
    return copy ? boost::re_detail::re_copy_out(out, l, last) : out;
 }
 
-#ifndef BOOST_RE_NO_STRING_DEF_ARGS
 template <class traits, class Allocator, class charT>
-std::basic_string<charT> BOOST_RE_CALL reg_merge(const std::basic_string<charT>& s,
-                         const reg_expression<charT, traits, Allocator>& e, 
+std::basic_string<charT> BOOST_REGEX_CALL reg_merge(const std::basic_string<charT>& s,
+                         const reg_expression<charT, traits, Allocator>& e,
                          const charT* fmt, 
                          bool copy = true, 
                          unsigned int flags = match_default)
@@ -411,21 +399,6 @@ std::basic_string<charT> BOOST_RE_CALL reg_merge(const std::basic_string<charT>&
    reg_merge(i, s.begin(), s.end(), e, fmt, copy, flags);
    return result;
 }
-#elif !defined(BOOST_RE_NO_STRING_H)
-template <class traits, class Allocator>
-std::string BOOST_RE_CALL reg_merge(const std::string& s,
-                         const reg_expression<char, traits, Allocator>& e, 
-                         const char* fmt, 
-                         bool copy = true, 
-                         unsigned int flags = match_default)
-{
-   std::string result;
-   boost::re_detail::string_out_iterator<std::string> i(result);
-   reg_merge(i, s.begin(), s.end(), e, fmt, copy, flags);
-   return result;
-}
-#endif
-
 
 } // namespace deprecated
 
@@ -457,7 +430,7 @@ using boost::deprecated::reg_match;
 using boost::sub_match;
 using boost::regex;
 using boost::cmatch;
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 using boost::wregex;
 using boost::wcmatch;
 #endif

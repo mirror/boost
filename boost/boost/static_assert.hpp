@@ -62,7 +62,7 @@ template<int x> struct static_assert_test{};
 #define BOOST_STATIC_ASSERT( B ) \
    typedef ::boost::static_assert_test<\
       sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >)>\
-         BOOST_ASSERT_JOIN(boost_static_assert_typedef_, __LINE__)
+         BOOST_JOIN(boost_static_assert_typedef_, __LINE__)
 #else
 // __LINE__ macro broken when -ZI is used see Q199057
 // fortunately MSVC ignores duplicate typedef's.
@@ -74,19 +74,10 @@ template<int x> struct static_assert_test{};
 #else
 // alternative enum based implementation:
 #define BOOST_STATIC_ASSERT( B ) \
-   enum { BOOST_ASSERT_JOIN(boost_static_assert_enum_, __LINE__) \
+   enum { BOOST_JOIN(boost_static_assert_enum_, __LINE__) \
       = sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >) }
 #endif
 
-//
-// The following piece of macro magic joins the two 
-// arguments together, even when one of the arguments is
-// itself a macro (see 16.3.1 in C++ standard).  The key
-// is that macro expansion of macro arguments does not
-// occur in BOOST_DO_ASSERT_JOIN but does in BOOST_ASSERT_JOIN
-// provided it is called from within another macro.
-#define BOOST_ASSERT_JOIN( X, Y ) BOOST_DO_ASSERT_JOIN( X, Y )
-#define BOOST_DO_ASSERT_JOIN( X, Y ) X##Y
 
 #endif // BOOST_STATIC_ASSERT_HPP
 

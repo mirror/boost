@@ -23,7 +23,7 @@
 #ifndef BOOST_RE_PAT_EXCEPT_HPP
 #define BOOST_RE_PAT_EXCEPT_HPP
 
-#include <boost/regex/detail/regex_config.hpp>
+#include <boost/regex/config.hpp>
 
 namespace boost{
 
@@ -31,14 +31,14 @@ namespace boost{
    #pragma option push -a4 -b -Ve -pc
 #endif
 
-class BOOST_RE_IX_DECL bad_pattern : public std::runtime_error
+class BOOST_REGEX_DECL bad_pattern : public std::runtime_error
 {
 public:
    explicit bad_pattern(const std::string& s) : std::runtime_error(s){};
    ~bad_pattern() throw();
 };
 
-class BOOST_RE_IX_DECL bad_expression : public bad_pattern
+class BOOST_REGEX_DECL bad_expression : public bad_pattern
 {
 public:
    explicit bad_expression(const std::string& s) : bad_pattern(s) {}

@@ -61,6 +61,10 @@ template <class OutputIterator, class charT, class Traits1, class Alloc1, class 
 bool split_pred<OutputIterator, charT, Traits1, Alloc1, Alloc2>::operator()
    (const match_results<iterator_type, Alloc2>& what)
 {
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable: 4800)
+#endif
    *p_last = what[0].second;
    if(what.size() > 1)
    {
@@ -86,6 +90,9 @@ bool split_pred<OutputIterator, charT, Traits1, Alloc1, Alloc2>::operator()
    //
    // initial null, do nothing:
    return true;
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 }
 
 } // namespace re_detail

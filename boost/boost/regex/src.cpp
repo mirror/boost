@@ -20,20 +20,20 @@
   *   DESCRIPTION: Includes all the regex source files, include this
   *                file only if you need to build the regex library
   *                as a single file.  Before including this file you
-  *                must define BOOST_RE_NO_LIB, or include this file
+  *                must define BOOST_REGEX_NO_LIB, or include this file
   *                before any other regex header.
   */
 
-#if !defined(BOOST_RE_NO_LIB) && defined(BOOST_REGEX_CONFIG_HPP)
-#error too late you have already included a regex header - try defining BOOST_RE_NO_LIB when you build
+#if !defined(BOOST_REGEX_NO_LIB) && defined(BOOST_REGEX_CONFIG_HPP)
+#error too late you have already included a regex header - try defining BOOST_REGEX_NO_LIB when you build
 #endif
 
 //
 // include library source files:
 //
-#ifdef BOOST_RE_LOCALE_W32
+#ifdef BOOST_REGEX_USE_WIN32_LOCALE
 #include "libs/regex/src/w32_regex_traits.cpp"
-#elif defined(BOOST_RE_LOCALE_C)
+#elif defined(BOOST_REGEX_USE_C_LOCALE)
 #include "libs/regex/src/c_regex_traits.cpp"
 #else
 #include "libs/regex/src/cpp_regex_traits.cpp"

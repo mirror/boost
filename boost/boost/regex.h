@@ -65,7 +65,7 @@ using boost::regerrorA;
 using boost::regexecA;
 using boost::regfreeA;
 
-#ifndef BOOST_RE_NO_WCSTRING
+#ifndef BOOST_NO_WREGEX
 using boost::regcompW;
 using boost::regerrorW;
 using boost::regexecW;

@@ -24,6 +24,7 @@
 #include <list>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 #include <boost/regex.hpp>
 
 boost::regex e("<\\s*A\\s+[^>]*href\\s*=\\s*\"([^\"]*)\"",

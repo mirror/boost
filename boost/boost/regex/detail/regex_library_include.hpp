@@ -25,9 +25,9 @@
 
 #ifndef BOOST_REGEX_LIBRARY_INCLUDE_HPP
 #define BOOST_REGEX_LIBRARY_INCLUDE_HPP
-#ifndef BOOST_RE_NO_LIB
+#ifndef BOOST_REGEX_NO_LIB
 
-#if defined(BOOST_MSVC) && !defined(BOOST_RE_BUILD_DLL)
+#if defined(BOOST_MSVC) && !defined(BOOST_REGEX_BUILD_DLL)
 #ifdef __SGI_STL_PORT
    #ifdef _DLL
       // All these are multithreaded:
@@ -35,7 +35,7 @@
          #pragma comment(lib, "vc6-stlport-re300ddl.lib")
       #elif defined(_DEBUG)
          #pragma comment(lib, "vc6-stlport-re300dl.lib")
-      #elif defined(BOOST_RE_STATIC_LIB)
+      #elif defined(BOOST_REGEX_STATIC_LINK)
          // static regex lib, dll runtime
          #pragma comment(lib, "vc6-stlport-re300ls.lib")
       #else // DEBUG
@@ -55,12 +55,12 @@
          #error STLPort does not support single threaded builds
       #endif //_MT
    #endif //_DLL
-#else
+#elif _MSC_VER < 1300
    #ifdef _DLL
       // All these are multithreaded:
       #ifdef _DEBUG
          #pragma comment(lib, "vc6-re300dl.lib")
-      #elif defined(BOOST_RE_STATIC_LIB)
+      #elif defined(BOOST_REGEX_STATIC_LINK)
          // static regex lib, dll runtime
          #pragma comment(lib, "vc6-re300ls.lib")
       #else // DEBUG
@@ -81,15 +81,41 @@
          #endif //_DEBUG
       #endif //_MT
    #endif //_DLL
+#else
+   #ifdef _DLL
+      // All these are multithreaded:
+      #ifdef _DEBUG
+         #pragma comment(lib, "vc7-re300dl.lib")
+      #elif defined(BOOST_REGEX_STATIC_LINK)
+         // static regex lib, dll runtime
+         #pragma comment(lib, "vc7-re300ls.lib")
+      #else // DEBUG
+         #pragma comment(lib, "vc7-re300l.lib")
+      #endif // _DEBUG
+   #else // _DLL
+      #ifdef _MT
+         #ifdef _DEBUG
+            #pragma comment(lib, "vc7-re300dm.lib")
+         #else //_DEBUG
+            #pragma comment(lib, "vc7-re300m.lib")
+         #endif //_DEBUG
+      #else //_MT
+         #ifdef _DEBUG
+            #pragma comment(lib, "vc7-re300d.lib")
+         #else //_DEBUG
+            #pragma comment(lib, "vc7-re300.lib")
+         #endif //_DEBUG
+      #endif //_MT
+   #endif //_DLL
 #endif // __SGI_STL_PORT
 #endif //BOOST_MSVC
 
 
-#if defined(__BORLANDC__) && !defined(BOOST_RE_BUILD_DLL)
+#if defined(__BORLANDC__) && !defined(BOOST_REGEX_BUILD_DLL)
    
    #if __BORLANDC__ < 0x550
    
-   #ifdef BOOST_RE_USE_VCL
+   #ifdef BOOST_REGEX_USE_VCL
    
       #ifdef _RTLDLL
          #pragma comment(lib, "bcb4re300lv.lib")
@@ -117,7 +143,7 @@
    
    #else // C++ Builder 5:
 
-   #ifdef BOOST_RE_USE_VCL
+   #ifdef BOOST_REGEX_USE_VCL
    
       #ifdef _RTLDLL
          #pragma comment(lib, "bcb5re300lv.lib")
@@ -147,7 +173,7 @@
    
 #endif //__BORLANDC__
 
-#endif //BOOST_RE_NO_LIB
+#endif //BOOST_REGEX_NO_LIB
 
 #endif // BOOST_REGEX_LIBRARY_INCLUDE_HPP
 

@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 
 
-#ifdef BOOST_SYSTEM_HAS_STDINT_H
+#ifdef BOOST_HAS_STDINT_H
 
 // The following #include is an implementation artifact; not part of interface.
 # ifdef __hpux
@@ -79,7 +79,7 @@ namespace boost
 } // namespace boost
 
 
-#else  // BOOST_SYSTEM_HAS_STDINT_H
+#else  // BOOST_HAS_STDINT_H
 
 
 # include <limits.h> // implementation artifact; not part of interface
@@ -195,7 +195,7 @@ namespace boost
 } // namespace boost
 
 
-#endif // BOOST_SYSTEM_HAS_STDINT_H
+#endif // BOOST_HAS_STDINT_H
 
 #endif // BOOST_CSTDINT_HPP
 
@@ -210,11 +210,13 @@ __STDC_CONSTANT_MACROS is defined.
 Undefine the macros if __STDC_CONSTANT_MACROS is
 not defined and the macros are (cf <cassert>).
 
-Added 23rd September (John Maddock).
+Added 23rd September 2000 (John Maddock).
+Modified 11th September 2001 to be excluded when
+BOOST_HAS_STDINT_H is defined (John Maddock).
 
 ******************************************************/
 
-#if defined(__STDC_CONSTANT_MACROS) && !defined(BOOST__STDC_CONSTANT_MACROS_DEFINED)
+#if defined(__STDC_CONSTANT_MACROS) && !defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(BOOST_HAS_STDINT_H)
 # define BOOST__STDC_CONSTANT_MACROS_DEFINED
 # if (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
 //
@@ -296,7 +298,7 @@ Added 23rd September (John Maddock).
 # endif // Borland/Microsoft specific width suffixes
 
 
-#elif defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(__STDC_CONSTANT_MACROS)
+#elif defined(BOOST__STDC_CONSTANT_MACROS_DEFINED) && !defined(__STDC_CONSTANT_MACROS) && !defined(BOOST_HAS_STDINT_H)
 //
 // undef all the macros:
 //

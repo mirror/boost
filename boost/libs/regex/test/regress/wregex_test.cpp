@@ -24,7 +24,7 @@
   */
 
 // disable automatic selection of support library:
-#define BOOST_RE_NO_LIB
+#define BOOST_REGEX_NO_LIB
 
 #if defined(_MSC_VER) && defined(__STL_DEBUG) && defined(_DLL)
 //
@@ -41,7 +41,7 @@
 #include <boost/regex.hpp>
 #include <boost/regex/src.cpp>
 
-#ifdef BOOST_RE_NO_WCSTRING
+#ifdef BOOST_NO_WREGEX
 #error The regex library is not configured for wide character support
 #endif
 
@@ -122,7 +122,7 @@ template std::size_t regex_split(test_string_type*,
 
 template std::size_t regex_split(test_string_type*, test_string_type&);
 
-#ifndef BOOST_RE_NO_PARTIAL_FUNC_SPEC
+#ifndef BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 //
 // the following prototypes are only available if partial ordering
 // of template functions is supported:
@@ -181,9 +181,9 @@ template test_string_type regex_merge(const test_string_type&,
 //
 // include regression test source files:
 //
-#ifdef BOOST_RE_LOCALE_W32
+#ifdef BOOST_REGEX_USE_WIN32_LOCALE
 #define BOOST_RE_TEST_LOCALE_W32
-#elif !defined(BOOST_RE_LOCALE_C)
+#elif !defined(BOOST_REGEX_USE_C_LOCALE)
 #define BOOST_RE_TEST_LOCALE_CPP
 #endif
 #define TEST_UNICODE
