@@ -24,6 +24,6 @@
   if ( ++x is ill-formed )
       return ``pointee<Dereferenceable>::type&``
   else
-      std::iterator_traits<Dereferenceable>::value_type
+      std::iterator_traits<Dereferenceable>::reference
 
   
