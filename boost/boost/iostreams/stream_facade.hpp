@@ -29,15 +29,15 @@ struct stream_facade_traits {
     typedef Tr                                                 traits_type;
     typedef typename io_category<Device>::type                 mode;
     typedef typename
-            select<                 
-                mpl::and_< 
-                    is_convertible<mode, input>, 
-                    is_convertible<mode, output> 
-                >,          
+            select<
+                mpl::and_<
+                    is_convertible<mode, input>,
+                    is_convertible<mode, output>
+                >,
                 BOOST_IOSTREAMS_BASIC_IOSTREAM(char_type, traits_type),
-                is_convertible<mode, input>, 
+                is_convertible<mode, input>,
                 BOOST_IOSTREAMS_BASIC_ISTREAM(char_type, traits_type),
-                mpl::true_,        
+                mpl::true_,
                 BOOST_IOSTREAMS_BASIC_OSTREAM(char_type, traits_type)
             >::type type;
 };
@@ -74,7 +74,7 @@ public:
 
 #ifdef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 # include <boost/iostreams/detail/broken_overload_resolution/stream_facade.hpp>
-#else 
+#else
 
 namespace boost { namespace iostreams {
 

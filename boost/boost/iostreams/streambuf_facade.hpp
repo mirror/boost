@@ -9,7 +9,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <memory>            // allocator.
 #include <boost/config.hpp>  // BOOST_DEDUCED_TYPENAME.
@@ -30,10 +30,10 @@ namespace boost { namespace iostreams { namespace detail {
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
 struct streambuf_facade_traits {
-    typedef typename 
+    typedef typename
             mpl::if_<
                 is_convertible<
-                    BOOST_DEDUCED_TYPENAME io_category<T>::type, 
+                    BOOST_DEDUCED_TYPENAME io_category<T>::type,
                     direct_tag
                 >,
                 direct_streambuf<T, Tr>,
@@ -45,16 +45,16 @@ struct streambuf_facade_traits {
 
 #ifdef BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 # include <boost/iostreams/detail/broken_overload_resolution/streambuf_facade.hpp>
-#else 
+#else
 
 namespace boost { namespace iostreams {
 
-template< typename T, 
-          typename Tr = 
+template< typename T,
+          typename Tr =
               BOOST_IOSTREAMS_CHAR_TRAITS(
-                  BOOST_DEDUCED_TYPENAME io_char<T>::type 
+                  BOOST_DEDUCED_TYPENAME io_char<T>::type
               ),
-          typename Alloc = 
+          typename Alloc =
               std::allocator<
                   BOOST_DEDUCED_TYPENAME io_char<T>::type
               >,
@@ -68,7 +68,7 @@ private:
             BOOST_DEDUCED_TYPENAME iostreams::io_category<T>::type, Mode
         >::value
     ));
-    typedef typename 
+    typedef typename
             detail::streambuf_facade_traits<
                 T, Tr, Alloc, Mode
             >::type                           base_type;
@@ -91,27 +91,27 @@ public:
     //void open(const ::boost::reference_wrapper<T>& ref , int buffer_size = -1 , int pback_size = -1) {
        // this->open_impl(ref , buffer_size, pback_size);
     //}
-    //template< typename U0> 
+    //template< typename U0>
     //streambuf_facade ( const U0 &u0) {
        // this->open_impl ( T ( u0) );
     //}
-    //template< typename U100  > 
+    //template< typename U100  >
     //streambuf_facade ( U100& u100 ) {
        // this->open_impl ( T ( u100 ) );
     //}
-    //template< typename U0 , typename U1> 
+    //template< typename U0 , typename U1>
     //streambuf_facade ( const U0 &u0 , const U1 &u1) {
        // this->open_impl ( T ( u0 , u1) );
     //}
-    //template< typename U100 , typename U0 > 
+    //template< typename U100 , typename U0 >
     //streambuf_facade ( U100& u100 , const U0 &u0) {
        // this->open_impl ( T ( u100 , u0) );
     //}
-    //template< typename U0 , typename U1 , typename U2> 
+    //template< typename U0 , typename U1 , typename U2>
     //streambuf_facade ( const U0 &u0 , const U1 &u1 , const U2 &u2) {
        // this->open_impl ( T ( u0 , u1 , u2) );
     //}
-    //template< typename U100 , typename U0 , typename U1 > 
+    //template< typename U100 , typename U0 , typename U1 >
     //streambuf_facade ( U100& u100 , const U0 &u0 , const U1 &u1) {
        // this->open_impl ( T ( u100 , u0 , u1) );
     //}
@@ -140,10 +140,10 @@ public:
 private:
     void open_impl(const T& t BOOST_IOSTREAMS_PUSH_PARAMS())
         {   // Used for forwarding.
-            if (this->is_open()) 
+            if (this->is_open())
                 BOOST_IOSTREAMS_FAILURE("already open");
-            base_type::open(t BOOST_IOSTREAMS_PUSH_ARGS()); 
-        } 
+            base_type::open(t BOOST_IOSTREAMS_PUSH_ARGS());
+        }
 };
 
 } } // End namespaces iostreams, boost.
