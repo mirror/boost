@@ -38,14 +38,18 @@ template< class C >
 inline BOOST_DEDUCED_TYPENAME range_reverse_iterator<C>::type 
 rend( C& c )
 {
-    return BOOST_DEDUCED_TYPENAME range_reverse_iterator<C>::type( begin( c ) );
+    typedef BOOST_DEDUCED_TYPENAME range_reverse_iterator<C>::type 
+               iter_type;
+    return iter_type( begin( c ) );
 }
 
 template< class C >
 inline BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<C>::type 
 rend( const C& c )
 {
-    return BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<C>::type( begin( c ) );
+    typedef BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<C>::type
+        iter_type;
+    return iter_type( begin( c ) );
 }
 
 #endif

@@ -38,17 +38,21 @@ template< class C >
 inline BOOST_DEDUCED_TYPENAME range_reverse_iterator<C>::type 
 rbegin( C& c )
 {
-    return BOOST_DEDUCED_TYPENAME range_reverse_iterator<C>::type( end<C>( c ) );
+    typedef BOOST_DEDUCED_TYPENAME range_reverse_iterator<C>::type
+        iter_type;
+    return iter_type( end( c ) );
 }
 
 template< class C >
 inline BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<C>::type 
 rbegin( const C& c )
 {
-    return BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<C>::type( end<const C>( c ) );
+    typedef BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<C>::type
+        iter_type;
+    return iter_type( end( c ) );
 }
 
-
+/*
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 // BCB is not able to overload pointer when class overloads are also available
 template<>
@@ -64,7 +68,7 @@ inline range_const_reverse_iterator<const wchar_t*>::type rbegin<const wchar_t*>
 }
 
 #endif
-
+*/
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
