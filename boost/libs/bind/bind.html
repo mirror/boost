@@ -24,8 +24,8 @@
 				function pointers</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#with_function_objects">Using bind with function 
 				objects</a></h4>
-		<h4 style="MARGIN-LEFT: 40pt"><a href="#with_member_functions">Using bind with member 
-				function pointers</a></h4>
+		<h4 style="MARGIN-LEFT: 40pt"><a href="#with_member_pointers">Using bind with pointers 
+				to members</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#nested_binds">Using nested binds for function 
 				composition</a></h4>
 		<h3 style="MARGIN-LEFT: 20pt"><a href="#Examples">Examples</a></h3>
@@ -45,6 +45,8 @@
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Q_com">Does <b>bind</b> work with COM methods?</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Q_mac">Does <b>bind</b> work with Mac toolbox 
 				functions?</a></h4>
+		<h4 style="MARGIN-LEFT: 40pt"><a href="#Q_extern_C">Does <b>bind</b> work with extern 
+				&quot;C&quot; functions?</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Q_auto_stdcall">Why doesn't <b>bind</b> automatically 
 				recognize nonstandard functions?</a></h4>
 		<h3 style="MARGIN-LEFT: 20pt"><a href="#Troubleshooting">Troubleshooting</a></h3>
@@ -70,6 +72,7 @@
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#CommonRequirements">Common requirements</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#CommonDefinitions">Common definitions</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#bind">bind</a></h4>
+		<h4 style="MARGIN-LEFT: 40pt"><a href="#AdditionalOverloads">Additional overloads</a></h4>
 		<h3 style="MARGIN-LEFT: 20pt"><a href="#Implementation">Implementation</a></h3>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Files">Files</a></h4>
 		<h4 style="MARGIN-LEFT: 40pt"><a href="#Dependencies">Dependencies</a></h4>
@@ -198,13 +201,13 @@ bind(std::less&lt;int&gt;(), _1, 9)(x);	// x &lt; 9
 		<p>
 			[Note: the ability to omit the return type is not available on all compilers.]
 		</p>
-		<h3><a name="with_member_functions">Using bind with member function pointers</a></h3>
+		<h3><a name="with_member_pointers">Using bind with pointers to members</a></h3>
 		<p>
-			Pointers to member functions are not function objects, because they do not 
-			support <tt>operator()</tt>. For convenience, <b>bind</b> accepts member 
-			function pointers as its first argument, and the behavior is as if <a href="mem_fn.html">
-				boost::mem_fn</a> has been used to convert the member function pointer into 
-			a function object. In other words, the expression
+			Pointers to member functions and pointers to data members are not function 
+			objects, because they do not support <tt>operator()</tt>. For convenience, <b>bind</b>
+			accepts member pointers as its first argument, and the behavior is as if <a href="mem_fn.html">
+				boost::mem_fn</a> has been used to convert the member pointer into a 
+			function object. In other words, the expression
 		</p>
 		<pre>
 bind(&amp;X::f, <i>args</i>)
@@ -216,7 +219,8 @@ bind(&amp;X::f, <i>args</i>)
 bind&lt;R&gt;(<a href="mem_fn.html">mem_fn</a>(&amp;X::f), <i>args</i>)
 </pre>
 		<p>
-			where <b>R</b> is the return type of <b>X::f</b>.
+			where <b>R</b> is the return type of <b>X::f</b> (for member functions) or a 
+			const reference to the type of the member (for data members.)
 		</p>
 		<p>
 			[Note: <b>mem_fn</b> creates function objects that are able to accept a 
@@ -260,13 +264,13 @@ bind(&amp;X::f, p, _1)(i);			// (<i>internal copy of p</i>)-&gt;f(i)
 bind(f, bind(g, _1))(x);               // f(g(x))
 </pre>
 		<p>
-			The&nbsp;inner <STRONG>bind</STRONG> expressions&nbsp;are evaluated, in 
-			unspecified order,&nbsp;before the outer <STRONG>bind</STRONG> when the 
-			function object is called; the results of the evaluation are then substituted 
-			in their place when the outer <STRONG>bind</STRONG> is evaluated. In the 
-			example above, when the function object is called with the argument list <tt>(x)</tt>,
-			<tt>bind(g, _1)(x)</tt> is evaluated first, yielding <tt>g(x)</tt>, and then <tt>bind(f, 
-				g(x))(x)</tt> is evaluated, yielding the final result <tt>f(g(x))</tt>.
+			The inner <STRONG>bind</STRONG> expressions are evaluated, in unspecified 
+			order, before the outer <STRONG>bind</STRONG> when the function object is 
+			called; the results of the evaluation are then substituted in their place when 
+			the outer <STRONG>bind</STRONG> is evaluated. In the example above, when the 
+			function object is called with the argument list <tt>(x)</tt>, <tt>bind(g, _1)(x)</tt>
+			is evaluated first, yielding <tt>g(x)</tt>, and then <tt>bind(f, g(x))(x)</tt> is 
+			evaluated, yielding the final result <tt>f(g(x))</tt>.
 		</p>
 		<P>
 			This feature of <b>bind</b> can be used to perform function composition. See <a href="bind_as_compose.cpp">
@@ -289,8 +293,8 @@ std::for_each(v.begin(), v.end(), bind(_1, 5));
 			The desired effect can be achieved via a helper function object <STRONG>apply</STRONG>
 			that applies its first argument, as a function object, to the rest of its 
 			argument list. For convenience, an implementation of <STRONG>apply</STRONG> is 
-			provided in the <STRONG>boost/bind/apply.hpp</STRONG> header file. Here is 
-			how&nbsp;the modified version of the previous example looks like:
+			provided in the <STRONG>boost/bind/apply.hpp</STRONG> header file. Here is how 
+			the modified version of the previous example looks like:
 		</p>
 		<pre>
 typedef void (*pf)(int);
@@ -305,9 +309,9 @@ std::for_each(v.begin(), v.end(), bind(apply&lt;void&gt;(), _1, 5));
 				protect</STRONG>, that masks the type so that <STRONG>bind</STRONG> does 
 			not recognize and evaluate it. When called, <STRONG>protect</STRONG> simply 
 			forwards the argument list to the other function object unmodified.</P>
-		<P>The header <STRONG>boost/bind/protect.hpp</STRONG>&nbsp;contains an 
-			implementation of&nbsp;<STRONG>protect</STRONG>. To protect a <STRONG>bind</STRONG>
-			function object from evaluation, use <tt>protect(bind(f, ...))</tt>.</P>
+		<P>The header <STRONG>boost/bind/protect.hpp</STRONG> contains an implementation of <STRONG>
+				protect</STRONG>. To protect a <STRONG>bind</STRONG> function object from 
+			evaluation, use <tt>protect(bind(f, ...))</tt>.</P>
 		<h2><a name="Examples">Examples</a></h2>
 		<h3><a name="with_algorithms">Using bind with standard algorithms</a></h3>
 		<pre>
@@ -451,6 +455,15 @@ template&lt;class T&gt; void f(T const &amp; t);
 			alternative is to treat the function as a <a href="#with_function_objects">generic 
 				function object</a> and use the bind&lt;R&gt;(f, ...) syntax.
 		</p>
+		<h3><a name="Q_extern_C">Does <b>bind</b> work with extern &quot;C&quot; functions?</a></h3>
+		<p>
+			Sometimes. On some platforms, pointers to extern &quot;C&quot; functions are 
+			equivalent to &quot;ordinary&quot; function pointers, so they work fine. Other 
+			platforms treat them as different types. A platform-specific implementation of <b>bind</b>
+			is expected to handle the problem transparently; this implementation does not. 
+			As usual, the workaround is to treat the function as a <a href="#with_function_objects">
+				generic function object</a> and use the bind&lt;R&gt;(f, ...) syntax.
+		</p>
 		<h3><a name="Q_auto_stdcall">Why doesn't <b>bind</b> automatically recognize 
 				nonstandard functions?</a></h3>
 		<p>
@@ -570,10 +583,14 @@ int main()
 		<h3><a name="err_nonstd">Binding a nonstandard function</a></h3>
 		<p>
 			By default, the bind(f, a1, a2, ..., aN) <A href="#Q_forms">form</A> recognizes 
-			"ordinary" C++ functions and function pointers. <A href="#stdcall">Functions&nbsp;that&nbsp;use 
-				a&nbsp;different calling convention</A>, or variable-argument functions 
-			such as <STRONG>std::printf</STRONG>, do not work. The general bind&lt;R&gt;(f, 
-			a1, a2, ..., aN) <A href="#Q_forms">form</A> works with nonstandard functions.
+			"ordinary" C++ functions and function pointers. <A href="#stdcall">Functions that 
+				use a different calling convention</A>, or variable-argument functions such 
+			as <STRONG>std::printf</STRONG>, do not work. The general bind&lt;R&gt;(f, a1, 
+			a2, ..., aN) <A href="#Q_forms">form</A> works with nonstandard functions.
+		</p>
+		<p>
+			On some platforms, extern &quot;C&quot; functions, like <b>std::strcmp</b>, are not
+			recognized by the short form of bind.
 		</p>
 		<P>
 			See also <A href="#stdcall" name="stdcall">"__stdcall" and "pascal" Support</A>.</P>
@@ -641,35 +658,37 @@ namespace boost
 
 // no arguments
 
-template&lt;class R, class F&gt; <i>implementation-defined-1</i> <a href="#bind_1">bind</a>(F f);
+template&lt;class R, class F&gt; <i>unspecified-1</i> <a href="#bind_1">bind</a>(F f);
 
-template&lt;class F&gt; <i>implementation-defined-1-1</i> <a href="#bind_1_1">bind</a>(F f);
+template&lt;class F&gt; <i>unspecified-1-1</i> <a href="#bind_1_1">bind</a>(F f);
 
-template&lt;class R&gt; <i>implementation-defined-2</i> <a href="#bind_2">bind</a>(R (*f) ());
+template&lt;class R&gt; <i>unspecified-2</i> <a href="#bind_2">bind</a>(R (*f) ());
 
 // one argument
 
-template&lt;class R, class F, class A1&gt; <i>implementation-defined-3</i> <a href="#bind_3">bind</a>(F f, A1 a1);
+template&lt;class R, class F, class A1&gt; <i>unspecified-3</i> <a href="#bind_3">bind</a>(F f, A1 a1);
 
-template&lt;class F, class A1&gt; <i>implementation-defined-3-1</i> <a href="#bind_3_1">bind</a>(F f, A1 a1);
+template&lt;class F, class A1&gt; <i>unspecified-3-1</i> <a href="#bind_3_1">bind</a>(F f, A1 a1);
 
-template&lt;class R, class B1, class A1&gt; <i>implementation-defined-4</i> <a href="#bind_4">bind</a>(R (*f) (B1), A1 a1);
+template&lt;class R, class B1, class A1&gt; <i>unspecified-4</i> <a href="#bind_4">bind</a>(R (*f) (B1), A1 a1);
 
-template&lt;class R, class T, class A1&gt; <i>implementation-defined-5</i> <a href="#bind_5">bind</a>(R (T::*f) (), A1 a1);
+template&lt;class R, class T, class A1&gt; <i>unspecified-5</i> <a href="#bind_5">bind</a>(R (T::*f) (), A1 a1);
 
-template&lt;class R, class T, class A1&gt; <i>implementation-defined-6</i> <a href="#bind_6">bind</a>(R (T::*f) () const, A1 a1);
+template&lt;class R, class T, class A1&gt; <i>unspecified-6</i> <a href="#bind_6">bind</a>(R (T::*f) () const, A1 a1);
+
+template&lt;class R, class T, class A1&gt; <i>unspecified-6-1</i> <a href="#bind_6_1">bind</a>(R T::*f, A1 a1);
 
 // two arguments
 
-template&lt;class R, class F, class A1, class A2&gt; <i>implementation-defined-7</i> <a href="#bind_7">bind</a>(F f, A1 a1, A2 a2);
+template&lt;class R, class F, class A1, class A2&gt; <i>unspecified-7</i> <a href="#bind_7">bind</a>(F f, A1 a1, A2 a2);
 
-template&lt;class F, class A1, class A2&gt; <i>implementation-defined-7-1</i> <a href="#bind_7_1">bind</a>(F f, A1 a1, A2 a2);
+template&lt;class F, class A1, class A2&gt; <i>unspecified-7-1</i> <a href="#bind_7_1">bind</a>(F f, A1 a1, A2 a2);
 
-template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>implementation-defined-8</i> <a href="#bind_8">bind</a>(R (*f) (B1, B2), A1 a1, A2 a2);
+template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>unspecified-8</i> <a href="#bind_8">bind</a>(R (*f) (B1, B2), A1 a1, A2 a2);
 
-template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation-defined-9</i> <a href="#bind_9">bind</a>(R (T::*f) (B1), A1 a1, A2 a2);
+template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-9</i> <a href="#bind_9">bind</a>(R (T::*f) (B1), A1 a1, A2 a2);
 
-template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation-defined-10</i> <a href="#bind_10">bind</a>(R (T::*f) (B1) const, A1 a1, A2 a2);
+template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-10</i> <a href="#bind_10">bind</a>(R (T::*f) (B1) const, A1 a1, A2 a2);
 
 // implementation defined number of additional overloads for more arguments
 
@@ -678,11 +697,11 @@ template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation
 namespace
 {
 
-<i>implementation-defined-placeholder-type-1</i> _1;
+<i>unspecified-placeholder-type-1</i> _1;
 
-<i>implementation-defined-placeholder-type-2</i> _2;
+<i>unspecified-placeholder-type-2</i> _2;
 
-<i>implementation-defined-placeholder-type-3</i> _3;
+<i>unspecified-placeholder-type-3</i> _3;
 
 // implementation defined number of additional placeholder definitions
 
@@ -690,12 +709,11 @@ namespace
 </pre>
 		<h3><a name="CommonRequirements">Common requirements</a></h3>
 		<p>
-			All <tt><i>implementation-defined-N</i></tt> types returned by <b>bind</b> are <b>CopyConstructible</b>.
-			<tt><i>implementation-defined-N</i>::result_type</tt> is defined as the return 
-			type of <tt><i>implementation-defined-N</i>::operator()</tt>.
+			All <tt><i>unspecified-N</i></tt> types returned by <b>bind</b> are <b>CopyConstructible</b>.
+			<tt><i>unspecified-N</i>::result_type</tt> is defined as the return type of <tt><i>unspecified-N</i>::operator()</tt>.
 		</p>
 		<p>
-			All <tt><i>implementation-defined-placeholder-N</i></tt> types are <b>CopyConstructible</b>. 
+			All <tt><i>unspecified-placeholder-N</i></tt> types are <b>CopyConstructible</b>. 
 			Their copy constructors do not throw exceptions.
 		</p>
 		<h3><a name="CommonDefinitions">Common definitions</a></h3>
@@ -717,11 +735,10 @@ namespace
 				<tt>x</tt> otherwise.</li>
 		</ul>
 		<h3><a name="bind">bind</a></h3>
-		<h4><a name="bind_1">template&lt;class R, class F&gt; <i>implementation-defined-1</i> bind(F 
-				f)</a></h4>
+		<h4><a name="bind_1">template&lt;class R, class F&gt; <i>unspecified-1</i> bind(F f)</a></h4>
 		<blockquote>
 			<p>
-				<b>Returns:</b> a function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
+				<b>Returns:</b> A function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
 					v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to <tt><b>f</b>()</tt>, 
 				implicitly converted to <b>R</b>.
 			</p>
@@ -730,29 +747,31 @@ namespace
 				exception.
 			</p>
 		</blockquote>
-		<h4><a name="bind_1_1">template&lt;class F&gt; <i>implementation-defined-1-1</i> bind(F 
-				f)</a></h4>
+		<h4><a name="bind_1_1">template&lt;class F&gt; <i>unspecified-1-1</i> bind(F f)</a></h4>
 		<blockquote>
 			<p>
-				<b>Effects:</b> equivalent to <tt>bind&lt;typename F::result_type, F&gt;(f);</tt>
+				<b>Effects:</b> Equivalent to <tt>bind&lt;typename F::result_type, F&gt;(f);</tt>
+			</p>
+			<p>
+				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b>
+				via other means as an extension, without relying on the <tt>result_type</tt> member.
 			</p>
 		</blockquote>
-		<h4><a name="bind_2">template&lt;class R&gt; <i>implementation-defined-2</i> bind(R 
-				(*f) ())</a></h4>
+		<h4><a name="bind_2">template&lt;class R&gt; <i>unspecified-2</i> bind(R (*f) ())</a></h4>
 		<blockquote>
 			<p>
-				<b>Returns:</b> a function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
+				<b>Returns:</b> A function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
 					v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to <tt><b>f</b>()</tt>.
 			</p>
 			<p>
 				<b>Throws:</b> Nothing.
 			</p>
 		</blockquote>
-		<h4><a name="bind_3">template&lt;class R, class F, class A1&gt; <i>implementation-defined-3</i>
-				bind(F f, A1 a1)</a></h4>
+		<h4><a name="bind_3">template&lt;class R, class F, class A1&gt; <i>unspecified-3</i> bind(F 
+				f, A1 a1)</a></h4>
 		<blockquote>
 			<p>
-				<b>Returns:</b> a function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
+				<b>Returns:</b> A function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
 					v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to <tt><b>f</b>(µ(<b>a1</b>, 
 					v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>))</tt>, implicitly 
 				converted to <b>R</b>.
@@ -762,19 +781,23 @@ namespace
 				an exception.
 			</p>
 		</blockquote>
-		<h4><a name="bind_3_1">template&lt;class F, class A1&gt; <i>implementation-defined-3-1</i>
-				bind(F f, A1 a1)</a></h4>
+		<h4><a name="bind_3_1">template&lt;class F, class A1&gt; <i>unspecified-3-1</i> bind(F 
+				f, A1 a1)</a></h4>
 		<blockquote>
 			<p>
-				<b>Effects:</b> equivalent to <tt>bind&lt;typename F::result_type, F, A1&gt;(f, 
+				<b>Effects:</b> Equivalent to <tt>bind&lt;typename F::result_type, F, A1&gt;(f, 
 					a1);</tt>
 			</p>
+			<p>
+				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b>
+				via other means as an extension, without relying on the <tt>result_type</tt> member.
+			</p>
 		</blockquote>
-		<h4><a name="bind_4">template&lt;class R, class B1, class A1&gt; <i>implementation-defined-4</i>
-				bind(R (*f) (B1), A1 a1)</a></h4>
+		<h4><a name="bind_4">template&lt;class R, class B1, class A1&gt; <i>unspecified-4</i> bind(R 
+				(*f) (B1), A1 a1)</a></h4>
 		<blockquote>
 			<p>
-				<b>Returns:</b> a function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
+				<b>Returns:</b> A function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
 					v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to <tt><b>f</b>(µ(<b>a1</b>, 
 					v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>))</tt>.
 			</p>
@@ -783,27 +806,35 @@ namespace
 				exception.
 			</p>
 		</blockquote>
-		<h4><a name="bind_5">template&lt;class R, class T, class A1&gt; <i>implementation-defined-5</i>
-				bind(R (T::*f) (), A1 a1)</a></h4>
+		<h4><a name="bind_5">template&lt;class R, class T, class A1&gt; <i>unspecified-5</i> bind(R 
+				(T::*f) (), A1 a1)</a></h4>
 		<blockquote>
 			<p>
-				<b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
+				<b>Effects:</b> Equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
 					a1);</tt>
 			</p>
 		</blockquote>
-		<h4><a name="bind_6">template&lt;class R, class T, class A1&gt; <i>implementation-defined-6</i>
-				bind(R (T::*f) () const, A1 a1)</a></h4>
+		<h4><a name="bind_6">template&lt;class R, class T, class A1&gt; <i>unspecified-6</i> bind(R 
+				(T::*f) () const, A1 a1)</a></h4>
 		<blockquote>
 			<p>
-				<b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
+				<b>Effects:</b> Equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
 					a1);</tt>
 			</p>
 		</blockquote>
-		<h4><a name="bind_7">template&lt;class R, class F, class A1, class A2&gt; <i>implementation-defined-7</i>
+		<h4><a name="bind_6_1">template&lt;class R, class T, class A1&gt; <i>unspecified-6-1</i> bind(R 
+				T::*f, A1 a1)</a></h4>
+		<blockquote>
+			<p>
+				<b>Effects:</b> Equivalent to <tt>bind&lt;R const &amp;&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
+					a1);</tt>
+			</p>
+		</blockquote>
+		<h4><a name="bind_7">template&lt;class R, class F, class A1, class A2&gt; <i>unspecified-7</i>
 				bind(F f, A1 a1, A2 a2)</a></h4>
 		<blockquote>
 			<p>
-				<b>Returns:</b> a function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
+				<b>Returns:</b> A function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
 					v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to <tt><b>f</b>(µ(<b>a1</b>, 
 					v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>), µ(<b>a2</b>, v<sub>1</sub>, 
 					v<sub>2</sub>, ..., v<sub>m</sub>))</tt>, implicitly converted to <b>R</b>.
@@ -813,19 +844,23 @@ namespace
 				throw an exception.
 			</p>
 		</blockquote>
-		<h4><a name="bind_7_1">template&lt;class F, class A1, class A2&gt; <i>implementation-defined-7-1</i>
+		<h4><a name="bind_7_1">template&lt;class F, class A1, class A2&gt; <i>unspecified-7-1</i>
 				bind(F f, A1 a1, A2 a2)</a></h4>
 		<blockquote>
 			<p>
-				<b>Effects:</b> equivalent to <tt>bind&lt;typename F::result_type, F, A1, A2&gt;(f, 
+				<b>Effects:</b> Equivalent to <tt>bind&lt;typename F::result_type, F, A1, A2&gt;(f, 
 					a1, a2);</tt>
 			</p>
+			<p>
+				<b>Notes:</b> Implementations are allowed to infer the return type of <b>f</b>
+				via other means as an extension, without relying on the <tt>result_type</tt> member.
+			</p>
 		</blockquote>
-		<h4><a name="bind_8">template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>implementation-defined-8</i>
+		<h4><a name="bind_8">template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>unspecified-8</i>
 				bind(R (*f) (B1, B2), A1 a1, A2 a2)</a></h4>
 		<blockquote>
 			<p>
-				<b>Returns:</b> a function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
+				<b>Returns:</b> A function object <i>&#955;</i> such that the expression <tt>&#955;(v<sub>1</sub>, 
 					v<sub>2</sub>, ..., v<sub>m</sub>)</tt> is equivalent to <tt><b>f</b>(µ(<b>a1</b>, 
 					v<sub>1</sub>, v<sub>2</sub>, ..., v<sub>m</sub>), µ(<b>a2</b>, v<sub>1</sub>, 
 					v<sub>2</sub>, ..., v<sub>m</sub>))</tt>.
@@ -835,22 +870,27 @@ namespace
 				an exception.
 			</p>
 		</blockquote>
-		<h4><a name="bind_9">template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation-defined-9</i>
+		<h4><a name="bind_9">template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-9</i>
 				bind(R (T::*f) (B1), A1 a1, A2 a2)</a></h4>
 		<blockquote>
 			<p>
-				<b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
+				<b>Effects:</b> Equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
 					a1, a2);</tt>
 			</p>
 		</blockquote>
-		<h4><a name="bind_10">template&lt;class R, class T, class B1, class A1, class A2&gt; <i>implementation-defined-10</i>
+		<h4><a name="bind_10">template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-10</i>
 				bind(R (T::*f) (B1) const, A1 a1, A2 a2)</a></h4>
 		<blockquote>
 			<p>
-				<b>Effects:</b> equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
+				<b>Effects:</b> Equivalent to <tt>bind&lt;R&gt;(<a href="mem_fn.html">boost::mem_fn</a>(f), 
 					a1, a2);</tt>
 			</p>
 		</blockquote>
+		<h3><a name="AdditionalOverloads">Additional overloads</a></h3>
+		<p>
+			Implementations are allowed to provide additional <b>bind</b> overloads in order to
+			support more arguments or different function pointer variations.
+		</p>
 		<h2><a name="Implementation">Implementation</a></h2>
 		<h3><a name="Files">Files</a></h3>
 		<ul>
@@ -868,7 +908,7 @@ namespace
 			(used by bind.hpp, do not include directly)
 			<LI>
 				<A href="../../boost/bind/bind_template.hpp">boost/bind/arg.hpp</A>
-			(defines the type of the placeholder arguments)&nbsp;
+			(defines the type of the placeholder arguments)
 			<LI>
 				<A href="../../boost/bind/bind_template.hpp">boost/bind/placeholders.hpp</A>
 			(defines the _1, _2, ... _9 placeholders)
@@ -1009,9 +1049,9 @@ namespace
 		<p><br>
 			<br>
 			<br>
-			<small>Copyright © 2001, 2002&nbsp;by Peter Dimov and Multi Media Ltd. Permission 
-				to copy, use, modify, sell and distribute this document is granted provided 
-				this copyright notice appears in all copies. This document is provided "as is" 
+			<small>Copyright © 2001, 2002 by Peter Dimov and Multi Media Ltd. Permission to 
+				copy, use, modify, sell and distribute this document is granted provided this 
+				copyright notice appears in all copies. This document is provided "as is" 
 				without express or implied warranty, and with no claim as to its suitability 
 				for any purpose.</small></p>
 	</body>
