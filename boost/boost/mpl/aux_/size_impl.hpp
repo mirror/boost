@@ -21,22 +21,31 @@
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/distance.hpp"
 #include "boost/mpl/aux_/traits_lambda_spec.hpp"
+#include "boost/config.hpp"
 
 namespace boost {
 namespace mpl {
 
 // default implementation; conrete sequences might override it by 
-// specializing either the |size_traits| or the primary |size| template
+// specializing either the 'size_traits' or the primary 'size' template
 
 template< typename Tag >
 struct size_traits
 {
     template< typename Sequence > struct algorithm
+#if !defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG))
         : distance<
               typename begin<Sequence>::type
             , typename end<Sequence>::type
             >
     {
+#else
+    {
+        typedef typename distance<
+              typename begin<Sequence>::type
+            , typename end<Sequence>::type
+            >::type type;
+#endif
     };
 };
 
