@@ -87,7 +87,7 @@
 // Version 7.1
 #if BOOST_MSVC == 1310
 
-//#define BOOST_UBLAS_NO_DERIVED_HELPERS
+#define BOOST_UBLAS_NO_DERIVED_HELPERS
 
 // One of these workarounds is needed for MSVC 7.1 AFAIK
 // (thanks to John Maddock and Martin Lauer).
