@@ -729,19 +729,21 @@ namespace boost { namespace program_options { namespace detail {
         error_description_t e = m_error_description;
         m_error_description = ed_success;
 
-        invalid_command_line_syntax::kind_t re;
-
         // FIXME: have no idea why g++ 3.2 wants it.
         typedef boost::program_options::unknown_option unknown_option;
         typedef boost::program_options::ambiguous_option ambiguous_option;
 
         if (e) {
-            if (e == ed_unknown_option)
-                throw unknown_option(m_current);
-            if (e == ed_ambiguous_option)
-                throw ambiguous_option(m_current, vector<string>());
-
+            invalid_command_line_syntax::kind_t re;
+            if (e == ed_success) 
+                return;
             switch(e) {
+            case ed_unknown_option:
+                re = invalid_command_line_syntax::extra_parameter;
+                throw unknown_option(m_current);
+            case ed_ambiguous_option:
+                re = invalid_command_line_syntax::extra_parameter;
+                throw ambiguous_option(m_current, vector<string>());
             case ed_long_not_allowed:
                 re = invalid_command_line_syntax::long_not_allowed;
                 break;
@@ -760,8 +762,13 @@ namespace boost { namespace program_options { namespace detail {
             case ed_extra_parameter:
                 re = invalid_command_line_syntax::extra_parameter;
                 break;
+            // Needed to suppress gcc warning about uninitialized 're'
+            // We've enumerated all value, except for ed_success, handled
+            // before the switch. Unless we have default with return, gcc
+            // will complain about possibly uninitialized 're' below.
             default:
-                ; // do nothing
+                assert(false && "uknown error");
+                return;                
             }
             throw invalid_command_line_syntax(m_current, re);
         }        
