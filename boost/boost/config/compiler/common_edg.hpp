@@ -22,4 +22,8 @@
 #   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #endif
 
+#ifdef c_plusplus
+// EDG has "long long" in non-strict mode
+#define BOOST_HAS_LONG_LONG
+#endif
 
