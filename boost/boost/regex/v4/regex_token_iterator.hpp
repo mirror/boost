@@ -51,11 +51,7 @@ template <class BidirectionalIterator,
 class regex_token_iterator_implementation 
 {
    typedef basic_regex<charT, traits, Allocator> regex_type;
-#if 1
    typedef sub_match<BidirectionalIterator>      value_type;
-#else
-   typedef std::basic_string<charT>              value_type;
-#endif
 
    match_results<BidirectionalIterator> what;   // current match
    BidirectionalIterator                end;    // end of search area
