@@ -24,7 +24,12 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
+# include <boost/type_traits/is_base_and_derived.hpp>
+
+#endif 
 #include <boost/iterator/detail/config_def.hpp>
+
 
 namespace boost
 {
@@ -119,7 +124,9 @@ namespace boost
     transform_iterator(
          transform_iterator<OtherUnaryFunction, OtherIterator, OtherReference, OtherValue> const& t
        , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0
+#if 1 // !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
        , typename enable_if_convertible<OtherUnaryFunction, UnaryFunction>::type* = 0
+#endif 
     )
       : super_t(t.base()), m_f(t.functor())
    {}
