@@ -27,6 +27,7 @@
 
 #include <cstddef>
 #include <stdexcept>
+#include <boost/assert.hpp>
 
 // Handles broken standard libraries better than <iterator>
 #include <boost/detail/iterator.hpp>
@@ -85,22 +86,50 @@ namespace boost {
         }
 
         // operator[]
-        reference operator[](size_type i) { return elems[i]; }
-        const_reference operator[](size_type i) const { return elems[i]; }
+        reference operator[](size_type i) 
+        { 
+            BOOST_ASSERT( i < N && "out of range" ); 
+            return elems[i];
+        }
+        
+        const_reference operator[](size_type i) const 
+        {     
+            BOOST_ASSERT( i < N && "out of range" ); 
+            return elems[i]; 
+        }
 
         // at() with range check
         reference at(size_type i) { rangecheck(i); return elems[i]; }
         const_reference at(size_type i) const { rangecheck(i); return elems[i]; }
     
         // front() and back()
-        reference front() { return elems[0]; }
-        const_reference front() const { return elems[0]; }
-        reference back() { return elems[N-1]; }
-        const_reference back() const { return elems[N-1]; }
+        reference front() 
+        { 
+            BOOST_ASSERT( N > 0 && "logic error" );
+            return elems[0]; 
+        }
+        
+        const_reference front() const 
+        {
+            BOOST_ASSERT( N > 0 && "logic error" );
+            return elems[0];
+        }
+        
+        reference back() 
+        { 
+            BOOST_ASSERT( N > 0 && "logic error" );
+            return elems[N-1]; 
+        }
+        
+        const_reference back() const 
+        { 
+            BOOST_ASSERT( N > 0 && "logic error" );
+            return elems[N-1]; 
+        }
 
         // size is constant
         static size_type size() { return N; }
-        static bool empty() { return false; }
+        static bool empty() { return N == 0; }
         static size_type max_size() { return N; }
         enum { static_size = N };
 
