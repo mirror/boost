@@ -77,7 +77,11 @@ main()
     millisec ms(9);
     //  time_duration t_10(0,0,0,); //00:00:00.009
     std::cout << "time_resolution: " << time_duration::resolution() << std::endl;
+#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+  //sorry res_adjust() doesn't work on VC6
+#else
     std::cout << "res_adjust " << time_res_traits::res_adjust() << std::endl;
+#endif
     if (time_duration::resolution() == boost::date_time::nano) {
       check("millisec",  ms.fractional_seconds() == 9000000);
     }

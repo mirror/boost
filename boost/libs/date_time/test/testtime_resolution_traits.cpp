@@ -47,10 +47,12 @@ main()
 
   //skip io on VC6 b/c of lack of operator<< for int64
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#else
   std::cout << one_hour_micro << std::endl;
 #endif
   boost::int64_t one_hour_nano = one_hour_micro*1000;
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#else
   std::cout << one_hour_nano << std::endl;
 #endif
   check("nano tick calculations",  

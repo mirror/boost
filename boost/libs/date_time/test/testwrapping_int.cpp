@@ -1,6 +1,8 @@
 
 
 #include "boost/date_time/wrapping_int.hpp"
+//#define BOOST_INCLUDE_MAIN
+//#include <boost/test/test_tools.hpp>
 #include "boost/date_time/testfrmwk.hpp"
 #include "boost/cstdint.hpp"
 #include <iostream>
@@ -8,6 +10,8 @@
 
 int
 main() 
+// int 
+// test_main(int, char*[])
 {
   using namespace boost::date_time;
   
