@@ -93,7 +93,7 @@
     { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
                     BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     /**/
-# else    
+# else // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 #  define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
     BOOST_PP_EXPR_IF(has_return, result) \
     name(::std::streambuf& sb BOOST_IOSTREAMS_PUSH_PARAMS()) \
@@ -127,7 +127,7 @@
     { this->helper( ::boost::iostreams::detail::resolve<mode, ch>(t) \
                     BOOST_IOSTREAMS_PUSH_ARGS() ); } \
     /**/
-# endif
+# endif // # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES
 #else // #if VC6, VC7.0, Borland 5.x
 # define BOOST_IOSTREAMS_DEFINE_PUSH_IMPL(name, mode, ch, helper, has_return, result) \
     template<typename T> \
