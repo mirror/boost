@@ -143,6 +143,8 @@ class optional_base : public optional_tag
 
   protected :
 
+    typedef T value_type ;
+    
     typedef mpl::true_  is_reference_tag ;
     typedef mpl::false_ is_not_reference_tag ;
 
@@ -265,7 +267,7 @@ class optional_base : public optional_tag
     void construct ( Expr const& factory, InPlaceFactoryBase const* )
      {
        BOOST_STATIC_ASSERT ( ::boost::mpl::not_<is_reference_predicate>::value ) ;
-       factory.BOOST_OPTIONAL_NESTED_TEMPLATE apply<T>(m_storage.address()) ;
+       factory.BOOST_OPTIONAL_NESTED_TEMPLATE apply<value_type>(m_storage.address()) ;
        m_initialized = true ;
      }
 
@@ -369,8 +371,7 @@ class optional : public optional_detail::optional_base<T>
 
     typedef optional<T> this_type ;
 
-    typedef T value_type ;
-
+    typedef BOOST_DEDUCED_TYPENAME base::value_type           value_type ;
     typedef BOOST_DEDUCED_TYPENAME base::reference_type       reference_type ;
     typedef BOOST_DEDUCED_TYPENAME base::reference_const_type reference_const_type ;
     typedef BOOST_DEDUCED_TYPENAME base::pointer_type         pointer_type ;
