@@ -104,7 +104,8 @@ template<class T> void test_is_X(boost::shared_ptr<T> const & p)
 
 template<class T> void test_is_X(boost::weak_ptr<T> const & p)
 {
-    BOOST_TEST(p->id() == 1);
+    BOOST_TEST(p.get() != 0);
+    BOOST_TEST(p.get()->id() == 1);
 }
 
 template<class T> void test_is_Y(boost::shared_ptr<T> const & p)
@@ -115,7 +116,8 @@ template<class T> void test_is_Y(boost::shared_ptr<T> const & p)
 
 template<class T> void test_is_Y(boost::weak_ptr<T> const & p)
 {
-    BOOST_TEST(p->id() == 2);
+    BOOST_TEST(p.get() != 0);
+    BOOST_TEST(p.get()->id() == 2);
 }
 
 template<class T> void test_eq(T const & a, T const & b)
@@ -152,22 +154,10 @@ template<class T> void test_is_zero(boost::shared_ptr<T> const & p)
     BOOST_TEST(p.get() == 0);
 }
 
-template<class T> void test_is_zero(boost::weak_ptr<T> const & p)
-{
-    BOOST_TEST(!p);
-    test_is_zero(p.get());
-}
-
 template<class T> void test_is_nonzero(boost::shared_ptr<T> const & p)
 {
     BOOST_TEST(p);
     BOOST_TEST(p.get() != 0);
-}
-
-template<class T> void test_is_nonzero(boost::weak_ptr<T> const & p)
-{
-    BOOST_TEST(p);
-    test_is_nonzero(p.get());
 }
 
 int test_main(int, char * [])
@@ -228,35 +218,66 @@ int test_main(int, char * [])
         weak_ptr<X> wp1;
 
         BOOST_TEST(wp1.use_count() == 0);
-        test_is_zero(wp1);
+        BOOST_TEST(wp1.get() == 0);
+
+        try
+        {
+            shared_ptr<X> sp1(wp1);
+            BOOST_ERROR("shared_ptr<X> sp1(wp1) failed to throw");
+        }
+        catch(boost::use_count_is_zero const &)
+        {
+        }
+
+        test_is_zero(boost::make_shared(wp1));
 
         weak_ptr<X> wp2 = shared_static_cast<X>(p5);
 
         BOOST_TEST(wp2.use_count() == 1);
-        test_is_nonzero(wp2);
+        BOOST_TEST(wp2.get() != 0);
         test_is_Y(wp2);
         test_ne(wp1, wp2);
+
+        // Scoped to not affect the subsequent use_count() tests.
+        {
+            shared_ptr<X> sp2(wp2);
+            test_is_nonzero(boost::make_shared(wp2));
+        }
 
         weak_ptr<Y> wp3 = shared_dynamic_cast<Y>(wp2);
 
         BOOST_TEST(wp3.use_count() == 1);
-        test_is_nonzero(wp3);
+        BOOST_TEST(wp3.get() != 0);
         test_eq2(wp2, wp3);
 
         weak_ptr<X> wp4(wp3);
 
-        test_is_nonzero(wp4);
+        BOOST_TEST(wp4.use_count() == 1);
+        BOOST_TEST(wp4.get() != 0);
         test_eq(wp2, wp4);
 
         wp1 = p2;
-        test_is_zero(wp1);
+        BOOST_TEST(wp1.get() == 0);
+
+        // Note the following test. Construction succeeds,
+        // but make_shared() returns a null shared_ptr with
+        // use_count() == 2. 
+
+        shared_ptr<X> sp1(wp1);
+        test_is_zero(boost::make_shared(wp1));
+
+        BOOST_TEST(p2.use_count() == 2);
+        BOOST_TEST(sp1.use_count() == 2);
+        BOOST_TEST(wp1.use_count() == 2);
+
+        //
 
         wp1 = p4;
         wp1 = wp3;
         wp1 = wp2;
 
         BOOST_TEST(wp1.use_count() == 1);
-        test_is_nonzero(wp1);
+        BOOST_TEST(wp1.get() != 0);
         test_eq(wp1, wp2);
 
         weak_ptr<X> wp5;
@@ -265,16 +286,15 @@ int test_main(int, char * [])
         bool b2 = wp5 < wp1;
 
         p5.reset();
-        test_is_zero(wp5);
 
         BOOST_TEST(wp1.use_count() == 0);
-        test_is_zero(wp1);
+        BOOST_TEST(wp1.get() == 0);
 
         BOOST_TEST(wp2.use_count() == 0);
-        test_is_zero(wp2);
+        BOOST_TEST(wp2.get() == 0);
 
         BOOST_TEST(wp3.use_count() == 0);
-        test_is_zero(wp3);
+        BOOST_TEST(wp3.get() == 0);
 
         // Test operator< stability for std::set< weak_ptr<> >
         // Thanks to Joe Gottman for pointing this out

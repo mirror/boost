@@ -31,18 +31,18 @@
 namespace boost
 {
 
-namespace detail
-{
-
-class bad_weak_to_shared_cast: public std::exception
+class use_count_is_zero: public std::exception
 {
 public:
 
     virtual char const * what() const throw()
     {
-        return "bad_weak_to_shared_cast";
+        return "use_count_is_zero";
     }
 };
+
+namespace detail
+{
 
 class counted_base
 {
@@ -75,7 +75,7 @@ public:
     void add_ref()
     {
         lightweight_mutex::scoped_lock lock(mtx_);
-        if(use_count_ == 0) throw bad_weak_to_shared_cast();
+        if(use_count_ == 0) throw use_count_is_zero();
         ++use_count_;
         ++weak_count_;
     }

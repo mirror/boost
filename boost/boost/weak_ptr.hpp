@@ -30,7 +30,6 @@ private:
 
     // Borland 5.5.1 specific workarounds
     typedef weak_ptr<T> this_type;
-    typedef shared_ptr<T> shared_type;
 
 public:
 
@@ -96,51 +95,14 @@ public:
         this_type().swap(*this);
     }
 
-    shared_type get() const // never throws
+    T * get() const // never throws; unsafe in multithreaded programs!
     {
-        // optimization: avoid throw overhead
-        if(use_count() == 0)
-        {
-            return shared_type();
-        }
-
-        try
-        {
-            return shared_type(*this);
-        }
-        catch(boost::detail::bad_weak_to_shared_cast const &)
-        {
-            return shared_type();
-        }
+        return use_count() == 0? 0: px;
     }
 
-    // operator* has been removed; it's unsafe.
-
-    // operator-> retained for convenience, since it's safe
-    // in its current form.
-
-    shared_type operator-> () const // may throw
-    {
-        return shared_type(*this);
-    }
-    
     long use_count() const // never throws
     {
         return pn.use_count();
-    }
-
-    // implicit conversion to "bool"
-
-    typedef long (this_type::*bool_type)() const;
-
-    operator bool_type() const // never throws
-    {
-        return px == 0 || use_count() == 0? 0: &this_type::use_count;
-    }
-
-    bool operator! () const // never throws
-    {
-        return px == 0 || use_count() == 0;
     }
 
     void swap(this_type & other) // never throws
@@ -200,6 +162,24 @@ template<class T> inline bool operator<(weak_ptr<T> const & a, weak_ptr<T> const
 template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)
 {
     a.swap(b);
+}
+
+template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r) // never throws
+{
+    // optimization: avoid throw overhead
+    if(r.use_count() == 0)
+    {
+        return shared_ptr<T>();
+    }
+
+    try
+    {
+        return shared_ptr<T>(r);
+    }
+    catch(use_count_is_zero const &)
+    {
+        return shared_ptr<T>();
+    }
 }
 
 template<class T, class U> weak_ptr<T> shared_static_cast(weak_ptr<U> const & r)
