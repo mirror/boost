@@ -51,7 +51,8 @@
         "static-constant|typedef|enum|
          copy-assignment|constructor|destructor|method-group|
          free-function-group|function|method|overloaded-function|
-         overloaded-method|data-member">
+         overloaded-method|data-member|class|class-specialization|struct|
+         struct-specialization|union|union-specialization">
 
 <!ENTITY % boost.class.content
              "template?, inherit*, purpose?, description?, 

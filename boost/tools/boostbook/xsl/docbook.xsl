@@ -102,7 +102,7 @@
 
   <xsl:template name="highlight-comment">
     <xsl:param name="text"/>
-    <emphasis><xsl:value-of select="$text"/></emphasis>
+    <emphasis><xsl:copy-of select="$text"/></emphasis>
   </xsl:template>
 
   <xsl:template name="monospaced">

@@ -77,19 +77,35 @@
 
   <!-- Emit namespace reference -->
   <xsl:template match="namespace" mode="reference">
-    <xsl:apply-templates select="class|class-specialization|
-                                 struct|struct-specialization|
-                                 union|union-specialization|
-                                 namespace|typedef|enum|
-                                 free-function-group"
+    <xsl:apply-templates select="namespace|typedef|free-function-group"
       mode="reference">
       <xsl:with-param name="indentation" select="0"/>
     </xsl:apply-templates>
-    <xsl:apply-templates select="enum|function|overloaded-function"
+    <xsl:apply-templates select="class|class-specialization|
+                                 struct|struct-specialization|
+                                 union|union-specialization|enum|function|
+                                 overloaded-function"
       mode="namespace-reference"/>
   </xsl:template>
 
   <!-- Eat extra documentation when in the synopsis or reference sections -->
   <xsl:template match="para|section" mode="synopsis"/>
   <xsl:template match="para|section" mode="reference"/>
+
+  <!-- Comment mode tries to wipe out any extra spacing in the output -->
+  <xsl:template match="purpose" mode="comment">
+    <xsl:apply-templates mode="comment"/>
+  </xsl:template>
+
+  <xsl:template match="simpara|para" mode="comment">
+    <xsl:apply-templates select="text()|*" mode="comment"/>
+  </xsl:template>
+
+  <xsl:template match="text()" mode="comment">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="*" mode="comment">
+    <xsl:apply-templates select="." mode="annotation"/>
+  </xsl:template>
 </xsl:stylesheet>
