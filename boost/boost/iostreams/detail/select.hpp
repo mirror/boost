@@ -4,10 +4,8 @@
 
 // See http://www.boost.org/libs/iostreams for documentation.
 
-// Contains 
-//      (1) the metafunction select, which mimics the effect of a chain
-//          of nested mpl if_'s or eval_if's, and 
-//      (2) the template eval, for use with select.
+// Contains the metafunction select, which mimics the effect of a chain of
+// nested mpl if_'s.
 //
 // -----------------------------------------------------------------------------
 //
@@ -21,21 +19,7 @@
 //                  >::type selection;
 //
 // Here case1, case2, ... are models of MPL::IntegralConstant with value type
-// bool, and n <= 10 (the maxiumum number of cases used by this library is 8).
-// 
-// To get the effect of mpl::eval_if for a given type, wrap it with the 
-// template eval. E.g.:
-//
-// typedef typename select<
-//                      case1,  type1,
-//                      case2,  type2,
-//                      case3,  eval<type3>,
-//                      ...
-//                      true_,  typen
-//                  >::type selection;
-//                      
-// Here type3 is a metafunction which will be applied only if it is selected.
-//
+// bool, and n <= 10.
 
 #ifndef BOOST_IOSTREAMS_SELECT_HPP_INCLUDED
 #define BOOST_IOSTREAMS_SELECT_HPP_INCLUDED   
