@@ -25,10 +25,22 @@ bool operator<(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
   return proper_subset(x, y);
 }
 
+template<class T, class Policies> inline
+bool operator<(const interval<T, Policies>& x, const T& y)
+{
+  return empty(x);
+}
+
 template<class T, class Policies1, class Policies2> inline
 bool operator<=(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
 {
   return subset(x, y);
+}
+
+template<class T, class Policies> inline
+bool operator<=(const interval<T, Policies>& x, const T& y)
+{
+  return x.lower() == y && x.upper() == y;
 }
 
 template<class T, class Policies1, class Policies2> inline
@@ -37,10 +49,22 @@ bool operator>(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
   return proper_subset(y, x);
 }
 
+template<class T, class Policies> inline
+bool operator>(const interval<T, Policies>& x, const T& y)
+{
+  return in(y, x) && !singleton(x);
+}
+
 template<class T, class Policies1, class Policies2> inline
 bool operator>=(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
 {
   return subset(y, x);
+}
+
+template<class T, class Policies> inline
+bool operator>=(const interval<T, Policies>& x, const T& y)
+{
+  return in(y, x);
 }
 
 template<class T, class Policies1, class Policies2> inline
@@ -49,10 +73,22 @@ bool operator==(const interval<T, Policies1>& x, const interval<T, Policies2>& y
   return equal(y, x);
 }
 
+template<class T, class Policies> inline
+bool operator==(const interval<T, Policies>& x, const T& y)
+{
+  return x.lower() == y && x.upper() == y;
+}
+
 template<class T, class Policies1, class Policies2> inline
 bool operator!=(const interval<T, Policies1>& x, const interval<T, Policies2>& y)
 {
   return !equal(y, x);
+}
+
+template<class T, class Policies> inline
+bool operator!=(const interval<T, Policies>& x, const T& y)
+{
+  return x.lower() != y || x.upper() != y;
 }
 
 } // namespace set
