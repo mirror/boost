@@ -80,8 +80,8 @@ struct format_item
   string_t    res_;            //- result of the formatting of this item
   string_t    appendix_;       //- piece of string between this item and the next
 
-  stream_format_state state_;  // can be modified by manipulators
-  stream_format_state ref_state_;// set from the format_string, is only affected by modify_item
+  stream_format_state ref_state_;// set by parsing the format_string, is only affected by modify_item
+  stream_format_state state_;  // always same as ref_state, _unless_ modified by manipulators 'group(..)'
 
   // non-stream format-state parameters
   signed int truncate_;        //- is >=0 for directives like %.5s (take 5 chars from the string)
@@ -146,7 +146,7 @@ void stream_format_state<Ch,Tr> ::reset()
 template<class Ch, class Tr> inline
 void format_item<Ch, Tr> ::compute_states() 
   // reflect pad_scheme_   on  state_ and ref_state_ 
-  //   because some apd_schemes has complex consequences on several state params.
+  //   because some pad_schemes has complex consequences on several state params.
 {
   if(pad_scheme_ & zeropad) 
   {

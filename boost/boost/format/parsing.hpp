@@ -99,7 +99,7 @@ namespace detail {
     // Input   : a 'printf-directive' in the format-string, starting at buf[ *pos_p ]
     //           a stream merely to call 'widen' member function in the desired locale.
     //           a bitset'excpetions' telling whether to throw exceptions on errors.
-    // Returns : true if parse somehow succeded (possibly ignoring errors if exceptions disabled) 
+    // Returns : true if parse somehow succeeded (possibly ignoring errors if exceptions disabled) 
     //           false if it failed so bad that the directive should be printed verbatim
     // Effects : - *pos_p is incremented so that buf[*pos_p] is the first char after the directive
     //           - *fpar is set with the parameters read in the directive
@@ -400,7 +400,8 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
       if( ! parse_ok ) continue; // the directive will be printed verbatim
 
       i0=i1;
-      items_[cur_it].compute_states();
+      items_[cur_it].compute_states(); // process complex options, like zeropad, into stream params.
+
       int argN=items_[cur_it].argN_;
       if(argN == format_item_t::argN_ignored)
         continue;
