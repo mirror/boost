@@ -17,7 +17,8 @@ using namespace boost::posix_time;
 using boost::lexical_cast;
 
 int main(){
-#if defined(BOOST_NO_STD_WSTRING) || defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
+#if defined(BOOST_NO_STD_WSTRING) || defined(BOOST_NO_CWCHAR) || \
+    defined(BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS)
   check("No wstring/wstream support for this compiler", false);
 #else
   
