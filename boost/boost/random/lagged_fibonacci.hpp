@@ -39,29 +39,34 @@ class lagged_fibonacci
 {
 public:
   typedef UIntType result_type;
-  BOOST_STATIC_CONSTANT(bool, has_fixed_range = true);
+  BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
   BOOST_STATIC_CONSTANT(int, word_size = w);
-  BOOST_STATIC_CONSTANT(result_type, min_value = 0);
-  // will fail for w == 32
-  BOOST_STATIC_CONSTANT(result_type, max_value = (1u << w)-1);
   BOOST_STATIC_CONSTANT(unsigned int, long_lag = p);
   BOOST_STATIC_CONSTANT(unsigned int, short_lag = q);
 
-  result_type min() const { return min_value; }
-  result_type max() const { return max_value; }
+  result_type min() const { return 0; }
+  result_type max() const { return wordmask; }
 
-  lagged_fibonacci() { seed(); }
-  explicit lagged_fibonacci(uint32_t value) { seed(value); }
+  lagged_fibonacci() { init_wordmask(); seed(); }
+  explicit lagged_fibonacci(uint32_t value) { init_wordmask(); seed(value); }
   template<class It> lagged_fibonacci(It& first, It last)
-  { seed(first, last); }
+  { init_wordmask(); seed(first, last); }
   // compiler-generated copy ctor and assignment operator are fine
 
+private:
+  void init_wordmask()
+  {
+    wordmask = 0;
+    for(int i = 0; i < w; ++i)
+      wordmask |= (1u << i);
+  }
+
+public:
   void seed(uint32_t value = 331u)
   {
     minstd_rand0 gen(value);
-    UIntType mask = ~((~0) << w);
     for(unsigned int j = 0; j < long_lag; ++j)
-      x[j] = gen() & mask;
+      x[j] = gen() & wordmask;
     i = long_lag;
   }
 
@@ -69,10 +74,9 @@ public:
   void seed(It& first, It last)
   {
     // word size could be smaller than the seed values
-    UIntType mask = ~((~0) << w);
     unsigned int j;
     for(j = 0; j < long_lag && first != last; ++j, ++first)
-      x[j] = *first & mask;
+      x[j] = *first & wordmask;
     i = long_lag;
     if(first == last && j < long_lag)
       throw std::invalid_argument("lagged_fibonacci::seed");
@@ -125,6 +129,7 @@ public:
 
 private:
   void fill();
+  UIntType wordmask;
   unsigned int i;
   UIntType x[long_lag];
 };
@@ -133,12 +138,6 @@ private:
 //  A definition is required even for integral static constants
 template<class UIntType, int w, unsigned int p, unsigned int q, UIntType val>
 const bool lagged_fibonacci<UIntType, w, p, q, val>::has_fixed_range;
-template<class UIntType, int w, unsigned int p, unsigned int q, UIntType val>
-const typename lagged_fibonacci<UIntType, w, p, q, val>::result_type
-lagged_fibonacci<UIntType, w, p, q, val>::min_value;
-template<class UIntType, int w, unsigned int p, unsigned int q, UIntType val>
-const typename lagged_fibonacci<UIntType, w, p, q, val>::result_type
-lagged_fibonacci<UIntType, w, p, q, val>::max_value;
 template<class UIntType, int w, unsigned int p, unsigned int q, UIntType val>
 const unsigned int lagged_fibonacci<UIntType, w, p, q, val>::long_lag;
 template<class UIntType, int w, unsigned int p, unsigned int q, UIntType val>
@@ -149,13 +148,12 @@ template<class UIntType, int w, unsigned int p, unsigned int q, UIntType val>
 void lagged_fibonacci<UIntType, w, p, q, val>::fill()
 {
   // two loops to avoid costly modulo operations
-  UIntType mask = ~((~0) << w);
   {  // extra scope for MSVC brokenness w.r.t. for scope
   for(unsigned int j = 0; j < short_lag; ++j)
-    x[j] = (x[j] + x[j+(long_lag-short_lag)]) & mask;
+    x[j] = (x[j] + x[j+(long_lag-short_lag)]) & wordmask;
   }
   for(unsigned int j = short_lag; j < long_lag; ++j)
-    x[j] = (x[j] + x[j-short_lag]) & mask;
+    x[j] = (x[j] + x[j-short_lag]) & wordmask;
   i = 0;
 }
 
@@ -385,7 +383,7 @@ typedef random::lagged_fibonacci_01<double, 48, 4423, 2098> lagged_fibonacci4423
 typedef random::lagged_fibonacci_01<double, 48, 9689, 5502> lagged_fibonacci9689;
 typedef random::lagged_fibonacci_01<double, 48, 19937, 9842> lagged_fibonacci19937;
 typedef random::lagged_fibonacci_01<double, 48, 23209, 13470> lagged_fibonacci23209;
-typedef random::lagged_fibonacci_01<double, 48, 4497, 21034> lagged_fibonacci44497;
+typedef random::lagged_fibonacci_01<double, 48, 44497, 21034> lagged_fibonacci44497;
 
 
 // It is possible to partially specialize uniform_01<> on lagged_fibonacci_01<>
