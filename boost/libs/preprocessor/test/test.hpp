@@ -14,5 +14,5 @@
 
 #include <boost/preprocessor/cat.hpp>
 
-#define TEST(C) typedef BOOST_PP_CAT(test_,__LINE__)[((C)==1) ? 1 : -1];
+#define TEST(C) typedef int BOOST_PP_CAT(test_,__LINE__)[((C)==1) ? 1 : -1];
 #endif
