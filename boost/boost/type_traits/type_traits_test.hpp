@@ -110,6 +110,7 @@ struct type_checker<T,T>
 #define value_fail(v, x) \
       ++test_count; \
       ++failures; \
+      ++expected_failures;\
       std::cout << "checking value of " << #x << "...failed" << std::endl; \
       std::cout << "   " #x " does not compile on this compiler" << std::endl;
 

@@ -31,6 +31,11 @@
 #include <boost/type_traits/function_traits.hpp>
 #endif
 
+#ifdef BOOST_HAS_SGI_TYPE_TRAITS
+#  include <type_traits.h>
+#  include <boost/type_traits/same_traits.hpp>
+#endif
+
 namespace boost{
 
 /**********************************************
