@@ -17,12 +17,11 @@
   <xsl:param name="use.id.as.filename" select="1"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
-  <xsl:param name="html.extra.head.links" select="1"/>
   <xsl:param name="make.year.ranges" select="1"/>
   <xsl:param name="generate.manifest" select="1"/>
   <xsl:param name="generate.section.toc.level" select="3"/>
   <xsl:param name="doc.standalone">false</xsl:param>
-
+  <xsl:param name="chunker.output.indent">yes</xsl:param>
   <xsl:param name="toc.max.depth">2</xsl:param>
 
   <xsl:param name="generate.toc">
