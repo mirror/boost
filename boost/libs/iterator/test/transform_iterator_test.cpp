@@ -14,7 +14,6 @@
 //       to be in iterator_adaptor_test.cpp.
 
 #include <boost/config.hpp>
-#include <iostream>
 #include <algorithm>
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/iterator/iterator_concepts.hpp>
@@ -22,7 +21,6 @@
 #include <boost/pending/iterator_tests.hpp>
 #include <boost/bind.hpp>
 #include <boost/concept_check.hpp>
-
 
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 namespace boost { namespace detail
@@ -104,6 +102,7 @@ int mult_2(int arg)
 {
   return arg*2;
 }
+
 
 int
 main()
@@ -246,6 +245,5 @@ main()
     );
   }
 
-  std::cout << "test successful " << std::endl;
   return 0;
 }
