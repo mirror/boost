@@ -45,13 +45,13 @@ struct non_portable_tests
     // Unfortunately, the VC6 standard library doesn't supply these :(
     BOOST_STATIC_ASSERT((
         boost::is_same<
-        boost::detail::iterator_traits<Iterator>::pointer,
+        typename boost::detail::iterator_traits<Iterator>::pointer,
         pointer
         >::value));
     
     BOOST_STATIC_ASSERT((
         boost::is_same<
-        boost::detail::iterator_traits<Iterator>::reference,
+        typename boost::detail::iterator_traits<Iterator>::reference,
         reference
         >::value));
 };
@@ -62,13 +62,13 @@ struct portable_tests
 {
     BOOST_STATIC_ASSERT((
         boost::is_same<
-        boost::detail::iterator_traits<Iterator>::difference_type,
+        typename boost::detail::iterator_traits<Iterator>::difference_type,
         difference_type
         >::value));
     
     BOOST_STATIC_ASSERT((
         boost::is_same<
-        boost::detail::iterator_traits<Iterator>::iterator_category,
+        typename boost::detail::iterator_traits<Iterator>::iterator_category,
         category
         >::value));
 };
@@ -81,7 +81,7 @@ struct input_iterator_test
 {
     BOOST_STATIC_ASSERT((
         boost::is_same<
-        boost::detail::iterator_traits<Iterator>::value_type,
+        typename boost::detail::iterator_traits<Iterator>::value_type,
         value_type
         >::value));
 };
