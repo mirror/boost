@@ -56,6 +56,6 @@ struct BOOST_PP_CAT(Z, BOOST_PP_CAT(BOOST_PP_ITERATION(), BOOST_PP_RELATIVE_ITER
 
 # else
 #
-# error shouldn't get here!
+# error should not get here!
 #
 # endif
