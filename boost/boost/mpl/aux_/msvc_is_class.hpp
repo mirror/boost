@@ -14,10 +14,14 @@
 // $Date$
 // $Revision$
 
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
 #include <boost/mpl/aux_/yes_no.hpp>
 #include <boost/mpl/aux_/adl_barrier.hpp>
+
+#include <boost/type_traits/is_reference.hpp>
+
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
@@ -31,7 +35,7 @@ template< typename T > struct is_class_helper
 // MSVC 6.x-specific lightweight 'is_class' implementation; 
 // Distinguishing feature: does not instantiate the type being tested.
 template< typename T >
-struct msvc_is_class
+struct msvc_is_class_impl
 {
     template< typename U>
     static yes_tag  test(type_wrapper<U>*, /*typename*/ is_class_helper<U>::type = 0);
@@ -39,6 +43,18 @@ struct msvc_is_class
 
     enum { value = sizeof(test((type_wrapper<T>*)0)) == sizeof(yes_tag) };
     typedef bool_<value> type;
+};
+
+// agurt, 17/sep/04: have to check for 'is_reference' upfront to avoid ICEs in
+// complex metaprograms
+template< typename T >
+struct msvc_is_class
+    : if_<
+          is_reference<T>
+        , false_
+        , msvc_is_class_impl<T>
+        >::type
+{
 };
 
 } // namespace aux
