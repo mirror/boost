@@ -97,8 +97,6 @@ namespace boost{
 // conversion_traits.hpp:
 template <class From, class To>
 struct is_convertible;
-template <class Base, class Derived>
-struct is_base_and_derived;
 // alignment_traits.hpp:
 template <class T>
 struct alignment_of;
@@ -175,6 +173,8 @@ template <class T>
 struct has_nothrow_assign;
 template <class T>
 struct is_empty;
+template <class Base, class Derived>
+struct is_base_and_derived;
 
 // transform_traits.hpp:
 template <class T>
