@@ -337,6 +337,13 @@
         // a perfectly good implementation of std::iterator is supplied
 #   elif defined(__SGI_STL_ITERATOR)
 #     define BOOST_NO_STD_ITERATOR // No std::iterator in this case
+#   elif defined(_CPPLIB_VER) && (_CPPLIB_VER >= 306)
+#     // full dinkumware 3.06 and above
+#     define BOOST_NO_HASH
+#     define BOOST_NO_STD_ITERATOR_TRAITS
+#     ifndef _GLOBAL_USING   // can be defined in yvals.h
+#       define BOOST_NO_STDC_NAMESPACE
+#     endif
 #   else // assume using dinkumware's STL that comes with VC++ 6.0
 #     define BOOST_MSVC_STD_ITERATOR
 #     define BOOST_NO_STD_ITERATOR_TRAITS
@@ -432,6 +439,13 @@
         // a perfectly good implementation of std::iterator is supplied
 #     elif defined(__SGI_STL_ITERATOR)
 #       define BOOST_NO_STD_ITERATOR // No std::iterator in this case
+#     elif defined(_CPPLIB_VER) && (_CPPLIB_VER >= 306)
+        // full dinkumware 3.06 and above
+#       define BOOST_NO_HASH
+#       define BOOST_NO_STD_ITERATOR_TRAITS
+#       ifndef _GLOBAL_USING    // can be defined in yvals.h
+#         define BOOST_NO_STDC_NAMESPACE
+#       endif
 #     else
 #       define BOOST_MSVC_STD_ITERATOR 1
 #       define BOOST_NO_SLIST
@@ -495,6 +509,11 @@
 // with default template defining members out of line.
 // However, Compaq C++ also uses RogueWave (version 0x0203) and it's ok.
 #   define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#endif
+
+#if defined(__hpux)
+// HP-UX has a nice stdint.h in a different location, see boost/cstdint.hpp
+# define BOOST_SYSTEM_HAS_STDINT_H
 #endif
 
 #ifndef BOOST_STD_EXTENSION_NAMESPACE
