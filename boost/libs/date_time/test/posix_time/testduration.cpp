@@ -43,7 +43,7 @@ main()
 				 t_5.fractional_seconds() == 5));
   t_5 = time_duration(3,15,8,0) / 2;
   check("divide int", t_5 == time_duration(1,37,34,0));
-
+ 
   
   t_5 = t_2 + t_1;
   //VC6 goes ambiguous on the next line...
@@ -65,8 +65,10 @@ main()
 
   time_duration t_6(5,4,3); //05:04:03
   check("h-m-s 5-4-3 hours", t_6.hours() == 5);
-  check("h-m-s 5-4-3 hours", t_6.minutes() == 4);
-  check("h-m-s 5-4-3 hours", t_6.seconds() == 3);
+  check("h-m-s 5-4-3 minutes", t_6.minutes() == 4);
+  check("h-m-s 5-4-3 seconds", t_6.seconds() == 3);
+  std::cout << t_6.total_seconds() << std::endl;
+  check("h-m-s 5-4-3 total_seconds", t_6.total_seconds() == 18243);
 
   hours tenhours(10);
   minutes fivemin(5);
@@ -81,6 +83,7 @@ main()
     check("h-m-s 5-4-3.21 min  ",  t_9.minutes() == 4);
     check("h-m-s 5-4-3.21 sec  ",  t_9.seconds() == 3);
     check("h-m-s 5-4-3.21 fs   ",  t_9.fractional_seconds() == 9876);
+    check("h-m-s 5-4-3.21 total_seconds", t_9.total_seconds() == 18243);
     //  check("h-m-s 5-4-3.21 fs   ",  t_9.fs_as_double() == 0.9876);
     //std::cout << t_9.fs_as_double() << std::endl;
     std::cout << to_simple_string(t_9) << std::endl;
@@ -92,6 +95,7 @@ main()
     check("h-m-s 5-4-3.9 min  ",  t_10.minutes() == 4);
     check("h-m-s 5-4-3.9 sec  ",  t_10.seconds() == 3);
     check("h-m-s 5-4-3.9 fs   ",  t_10.fractional_seconds() == 9);
+    check("h-m-s 5-4-3.9 total_seconds", t_10.total_seconds() == 18243);
     std::cout << to_simple_string(t_10) << std::endl;
   }
 
@@ -106,9 +110,11 @@ main()
 #endif
     if (time_duration::resolution() == boost::date_time::nano) {
       check("millisec",  ms.fractional_seconds() == 9000000);
+      check("total_seconds - nofrac", ms.total_seconds() == 0);
     }
     else {
       check("millisec 9000",  ms.fractional_seconds() == 9000);
+      check("total_seconds - nofrac", ms.total_seconds() == 0);
     }
   }
 
@@ -123,17 +129,21 @@ main()
     std::cout << to_simple_string(ns18) << std::endl;
     nanosec ns2(1000000000); //one second
     check("nano to second compare",  ns2 == seconds(1));
+    check("check total seconds",  ns2.total_seconds() == 1);
     std::cout << to_simple_string(ns2) << std::endl;
   }
 #endif  
 
   time_duration t_11(3600,0,0); 
-  check("3601 hours   ",  t_11.hours() == 3600);
+  check("3600 hours   ",  t_11.hours() == 3600);
+  check("total seconds 3600 hours",  t_11.total_seconds() == 12960000);
+  
 
   using namespace boost::gregorian;
   ptime t1(date(2001,7,14));
   ptime t2(date(2002,7,14));
   check("One year of hours: 365*24=8760",  365*24 == ((t2-t1).hours()));
+  check("Total seconds in a year",  365*24*3600 == ((t2-t1).total_seconds()));
 
   std::cout << to_simple_string(time_duration(20000 * 24, 0, 0, 0)) << std::endl;
   std::cout << to_simple_string(time_duration(24855 * 24, 0, 0, 0)) << std::endl;
@@ -143,6 +153,9 @@ main()
   check("600000 hours", tdl1.hours() == 600000);
   time_duration tdl2(2000000, 0, 0, 0);
   check("2000000 hours", tdl2.hours() == 2000000);
+  long sec_in_200k_hours(7200000000); 
+  check("total sec in 2000000 hours", 
+        tdl2.total_seconds() == sec_in_200k_hours);
   std::cout << to_simple_string(time_duration(2000000, 0, 0, 0)) << std::endl;
 
   
