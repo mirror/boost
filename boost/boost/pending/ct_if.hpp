@@ -36,12 +36,23 @@ namespace boost {
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-  template <int cond, class A, class B>
+// agurt, 15/sep/02: in certain cases Borland has problems with
+// choosing the right 'ct_if' specialization even though 'cond' 
+// _does_ equal '1'; the easiest way to fix it is to make first 
+// 'ct_if' non-type template parameter boolean.
+#if !defined(__BORLANDC__)
+  template <bool cond, class A, class B>
   struct ct_if { typedef ct_if_error type; };
   template <class A, class B>
-  struct ct_if<1, A, B> { typedef A type; };
+  struct ct_if<true, A, B> { typedef A type; };
   template <class A, class B>
-  struct ct_if<0, A, B> { typedef B type; };
+  struct ct_if<false, A, B> { typedef B type; };
+#else
+  template <bool cond, class A, class B>
+  struct ct_if { typedef A type; };
+  template <class A, class B>
+  struct ct_if<false, A, B> { typedef B type; };
+#endif
 
   template <class cond, class A, class B>
   struct ct_if_t { typedef ct_if_error type; };
