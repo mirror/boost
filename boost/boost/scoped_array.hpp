@@ -75,12 +75,12 @@ public:
 
     operator unspecified_bool_type() const // never throws
     {
-        return px == 0? 0: &this_type::get;
+        return ptr == 0? 0: &this_type::get;
     }
 
     bool operator! () const // never throws
     {
-        return px == 0;
+        return ptr == 0;
     }
 
     void swap(scoped_array & b) // never throws
