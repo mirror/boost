@@ -433,9 +433,9 @@ iterator.
 |             |           |where *cv* is an optional          |
 |             |           |cv-qualification.                  |
 |             |           |pre: ``a`` is                      |
-|             |           |dereferenceable. If ``a            |
-|             |           |== b`` then ``*a`` is              |
-|             |           |equivalent to ``*b``.              |
+|             |           |dereferenceable. ``a == b`` if and |
+|             |           |only if ``*a`` is the same object  |
+|             |           |as ``*b``.                         |
 +-------------+-----------+-----------------------------------+
 
 
@@ -458,25 +458,25 @@ Constructible, the following expressions are valid and respect the
 stated semantics.
 
 
-+-------------------------------------------------------------------------------------+
-|Incrementable Iterator Requirements (in addition to Assignable, Copy Constructible)  |
-|                                                                                     |
-+--------------------------------+-------------------------------+--------------------+
-|Expression                      |Return Type                    |Assertion/Semantics |
-+================================+===============================+====================+
-|``++r``                         |``X&``                         |``&r == &++r``      |
-+--------------------------------+-------------------------------+--------------------+
-|``r++``                         |``X``                          |::                  |
-|                                |                               |                    |
-|                                |                               | {                  |
-|                                |                               |    X tmp = r;      |
-|                                |                               |    ++r;            |
-|                                |                               |    return tmp;     |
-|                                |                               | }                  |
-+--------------------------------+-------------------------------+--------------------+
-|``iterator_traversal<X>::type`` |Convertible to                 |                    |
-|                                |``incrementable_traversal_tag``|                    |
-+--------------------------------+-------------------------------+--------------------+
++-----------------------------------------------------------------------------------------------------------+
+|Incrementable Iterator Requirements (in addition to Assignable, Copy Constructible)                        |
+|                                                                                                           |
++--------------------------------+----------------------------------+---------------------------------------+
+|Expression                      |Return Type                       |Assertion/Semantics                    |
++================================+==================================+=======================================+
+|``++r``                         |``X&``                            |``&r == &++r``                         |
++--------------------------------+----------------------------------+---------------------------------------+
+|``r++``                         |if ``X`` is a *Writable Iterator* |if ``X`` is a *Writable Iterator* then |
+|                                |then convertible to ``const X&``  |``X a(r++);`` is equivalent to         |
+|                                |                                  |``X a(r); ++r;``                       |
++--------------------------------+----------------------------------+---------------------------------------+
+|``*r++``                        |if ``X`` is a *Readable Iterator* |if ``X`` is a *Readable Iterator* then |
+|                                |then ``T``                        |``T z(*r++);`` is equivalent to        |
+|                                |                                  |``T z(*r); ++r;``                      |
++--------------------------------+----------------------------------+---------------------------------------+
+|``iterator_traversal<X>::type`` |Convertible to                    |                                       |
+|                                |``incrementable_traversal_tag``   |                                       |
++--------------------------------+----------------------------------+---------------------------------------+
 
 .. TR1: incrementable_iterator_tag changed to
    incrementable_traversal_tag for consistency.
