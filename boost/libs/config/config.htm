@@ -49,9 +49,16 @@
       <p>Boost library implementations access configuration macros via <code>#include 
             &lt;boost/config.hpp&gt;</code>.
       </p>
-      <p>Boost library users are never required to <code>#include &lt;boost/config.hpp&gt;</code>, 
-         and are discouraged from doing so on their own. It is an implementation detail 
-         which is subject to change, and thus should not be depended upon by users.
+      <p>Boost library users are never required to <code>#include &lt;boost/config.hpp&gt;</code>
+         directly, unless they are using the Boost <A href="#info_macros">informational</A>
+         or <A href="#helpers">helper</A> macros&nbsp;which are designed for use by 
+         Boost users as well as for our own internal use.&nbsp; However, note that while 
+         all the Boost configuration macros are documented here, the <A href="#features">feature 
+            test</A> and <A href="#defects">defect test</A> macros are designed for 
+         internal use by Boost libraries.&nbsp; If you write code that depends upon 
+         these you should be aware that they are subject to the needs of 
+         Boost&nbsp;library developers, and while we will try to avoid gratuitous 
+         changes, subtle breaking changes are not entirely unknown.
       </p>
       <h4><a name="config_script">Using the configure script</a></h4>
       <p>If you know that boost is incorrectly configured for your particular setup, and 
