@@ -17,7 +17,8 @@
 subproject libs/signals/test ;
 
 # bring in rules for testing
-import testing ;
+SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
+include testing.jam ;
 
 # Make tests run by default.
 DEPENDS all : test ;
