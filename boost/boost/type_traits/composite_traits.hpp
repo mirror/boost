@@ -372,6 +372,7 @@ template <typename T, typename U> struct is_member_pointer<U T::*>
  **********************************************/
 template <typename T>
 struct is_member_function_pointer{ BOOST_STATIC_CONSTANT(bool, value = false); };
+
 template <class R, class T>
 struct is_member_function_pointer<R (T::*)(void)>{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <class R, class T, class A0>
@@ -432,6 +433,189 @@ template <class R, class T, class A0, class A1, class A2, class A3, class A4, cl
 struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27)>{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28>
 struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28)>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+
+template <class R, class T>
+struct is_member_function_pointer<R (T::*)(void)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0>
+struct is_member_function_pointer<R (T::*)(A0)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1>
+struct is_member_function_pointer<R (T::*)(A0, A1)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28)const>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+
+template <class R, class T>
+struct is_member_function_pointer<R (T::*)(void)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0>
+struct is_member_function_pointer<R (T::*)(A0)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1>
+struct is_member_function_pointer<R (T::*)(A0, A1)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28)volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+
+template <class R, class T>
+struct is_member_function_pointer<R (T::*)(void)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0>
+struct is_member_function_pointer<R (T::*)(A0)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1>
+struct is_member_function_pointer<R (T::*)(A0, A1)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
+template <class R, class T, class A0, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12, class A13, class A14, class A15, class A16, class A17, class A18, class A19, class A20, class A21, class A22, class A23, class A24, class A25, class A26, class A27, class A28>
+struct is_member_function_pointer<R (T::*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28)const volatile>{ BOOST_STATIC_CONSTANT(bool, value = true); };
 
 #else
 
