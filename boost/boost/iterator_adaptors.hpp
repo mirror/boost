@@ -12,6 +12,9 @@
 //
 // Revision History:
 
+// 19 Feb 2001   David Abrahams
+//      Rolled back reverse_iterator_pair_generator again, as it doesn't
+//      save typing on a conforming compiler.
 // 18 Feb 2001   David Abrahams
 //      Reinstated reverse_iterator_pair_generator
 // 16 Feb 2001   David Abrahams
@@ -861,21 +864,6 @@ struct reverse_iterator_generator
 {
     typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
         Value,Reference,Pointer,Category,Distance> type;
-};
-
-template <class BidirectionalIterator,
-    class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<BidirectionalIterator>::value_type>
-struct reverse_iterator_pair_generator
-{
-    typedef boost::detail::iterator_traits<BidirectionalIterator>::iterator_category category;
-    typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
-        Value, Value&, Value*,
-        typename boost::detail::iterator_traits<BidirectionalIterator>::iterator_category,
-        typename boost::detail::iterator_traits<BidirectionalIterator>::difference_type> iterator;
-    typedef iterator_adaptor<BidirectionalIterator,reverse_iterator_policies,
-        Value, const Value&, const Value*,
-        typename boost::detail::iterator_traits<BidirectionalIterator>::iterator_category,
-        typename boost::detail::iterator_traits<BidirectionalIterator>::difference_type> const_iterator;
 };
 
 template <class BidirectionalIterator>
