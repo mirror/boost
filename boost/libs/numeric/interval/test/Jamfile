@@ -24,7 +24,7 @@ DEPENDS all : test ;
   # look in BOOST_ROOT for sources first, just in this Jamfile
   local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
 
-  test-suite "interval" :
+  test-suite numeric/interval :
     [ compile libs/numeric/interval/test/integer.cpp ]
 
     [ run libs/numeric/interval/test/add.cpp      ]

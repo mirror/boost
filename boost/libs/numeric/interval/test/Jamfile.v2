@@ -20,7 +20,7 @@ project
 import testing ;
 
 {
-  test-suite "interval" :
+  test-suite numeric/interval :
     [ compile libs/numeric/interval/test/integer.cpp ]
 
     [ run libs/numeric/interval/test/add.cpp      ]

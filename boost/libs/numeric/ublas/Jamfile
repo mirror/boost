@@ -19,7 +19,7 @@ subproject libs/numeric/ublas ;
 # bring in rules for testing
 import testing ;
 
-test-suite uBLAS
+test-suite numeric/uBLAS
     : [ run test1/test1.cpp
             test1/test11.cpp
             test1/test12.cpp

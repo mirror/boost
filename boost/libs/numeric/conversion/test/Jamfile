@@ -13,7 +13,7 @@ DEPENDS all : test ;
   # look in BOOST_ROOT for sources first, just in this Jamfile
   local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
 
-  test-suite numeric_conversion :
+  test-suite numeric/conversion :
      [ run libs/numeric/conversion/test/bounds_test.cpp ]
      [ run libs/numeric/conversion/test/traits_test.cpp ]
      [ run libs/numeric/conversion/test/converter_test.cpp ]

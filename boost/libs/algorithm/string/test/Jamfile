@@ -16,7 +16,7 @@ import testing ;
 DEPENDS all : test ;
 
 {
-    test-suite string_algo
+    test-suite algorithm/string
         : [ run
                 container_test.cpp
               : :
