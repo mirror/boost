@@ -30,4 +30,12 @@ test-suite utility
         [ run ../compressed_pair_test.cpp <lib>../../test/build/boost_test_exec_monitor : -u ]
         [ run ../addressof_test.cpp <lib>../../test/build/boost_test_exec_monitor ]
         [ run ../ref_test.cpp <lib>../../test/build/boost_test_exec_monitor ]
+        [ run ../enable_if_constructors.cpp <lib>../../test/build/boost_test_exec_monitor ]
+        [ run ../enable_if_dummy_arg_disambiguation.cpp <lib>../../test/build/boost_test_exec_monitor ]
+        [ run ../enable_if_lazy.cpp <lib>../../test/build/boost_test_exec_monitor ]
+        [ run ../enable_if_lazy_test.cpp <lib>../../test/build/boost_test_exec_monitor ]
+        [ run ../enable_if_member_templates.cpp <lib>../../test/build/boost_test_exec_monitor ]
+        [ run ../enable_if_namespace_disambiguation.cpp <lib>../../test/build/boost_test_exec_monitor ]
+        [ run ../enable_if_no_disambiguation.cpp <lib>../../test/build/boost_test_exec_monitor ]
+        [ run ../enable_if_partial_specializations.cpp <lib>../../test/build/boost_test_exec_monitor ]
     ;
