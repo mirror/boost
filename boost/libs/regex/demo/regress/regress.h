@@ -201,6 +201,13 @@ struct debug_iterator : public BOOST_RE_RA_ITERATOR(T, std::ptrdiff_t)
   debug_iterator() : cur(), first(), last() {}
   debug_iterator(const debug_iterator& x)
     : cur(x.cur), first(x.first), last(x.last) {}
+  debug_iterator& operator=(const debug_iterator& x)
+  {
+     cur = x.cur;
+     first = x.first;
+     last = x.last;
+     return *this;
+  }
 
   reference operator*() const
   {

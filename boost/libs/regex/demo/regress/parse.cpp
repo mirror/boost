@@ -298,7 +298,7 @@ void expand_escapes(string_type& s)
                int val = 0;
                unsigned int pos = i;
                ++i;
-               while( (s[i] >= BOOST_RE_STR('0')) && (s[i] <= BOOST_RE_STR('9')) && (i < s.size()))
+               while((i < s.size()) && (s[i] >= BOOST_RE_STR('0')) && (s[i] <= BOOST_RE_STR('9')))
                {
                   val *= 10;
                   val += s[i] - BOOST_RE_STR('0');

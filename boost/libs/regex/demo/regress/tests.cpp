@@ -299,7 +299,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
                (m[-1].first - x) << "," << (m[-1].second - x) << ") expected (0" <<
                "," << matches[0] << ")" << endl;
          }
-         if(((m[-2].first != m[0].second) || (m[-2].second != y)) && ((flags[3] & match_partial) == 0))
+         if(((flags[3] & match_partial) == 0) && ((m[-2].first != m[0].second) || (m[-2].second != y)))
          {
             begin_error();
             cout << "regex++ API result mismatch in $' (match -2), found (" <<
