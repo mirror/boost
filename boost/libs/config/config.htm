@@ -1164,8 +1164,9 @@ namespace boost{
          <TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
             <TR>
                <TD>BOOST_LIB_NAME</TD>
-               <TD>Required: A string containing the basename of the library, for example 
-                  "boost_regex".</TD>
+               <TD>
+                  Required: An&nbsp;identifier containing the basename of the library, for 
+                  example 'boost_regex'.</TD>
             </TR>
             <TR>
                <TD>BOOST_DYN_LINK</TD>
@@ -1181,8 +1182,21 @@ namespace boost{
       <P>If the compiler supports this mechanism, then it will be told to link against 
          the appropriately named library, the actual algorithm used to mangle the name 
          of the library is documented inside &lt;boost/config/auto_link.hpp&gt; and has 
-         to match that used to create the libraries via bjam (see boost.regex Jamfile 
-         for an example: we're working on simplifying this).</P>
+         to match that used to create the libraries via bjam 's install rules.</P>
+      <P>Typical usage would be:</P>
+      <PRE>//
+// Don't include auto-linking code if the user has disabled it by
+// defining BOOST_WHATEVER_NO_LIB, or if this is one of our own
+// source files (signified by BOOST_WHATEVER_SOURCE):
+//
+#if !defined(BOOST_WHATEVER_NO_LIB) && !defined(BOOST_WHATEVER_SOURCE)
+#  define BOOST_LIB_NAME boost_whatever
+#  ifdef BOOST_WHATEVER_DYN_LINK
+#     define BOOST_DYN_LINK
+#  endif
+#  include &lt;boost/config/auto_link.hpp&gt;
+#endif
+</PRE>
       <H2>Guidelines for Boost Authors</H2>
       <p>The <a href="../../boost/config.hpp">boost/config.hpp</a> header is used to 
          pass configuration information to other boost files, allowing them to cope with 

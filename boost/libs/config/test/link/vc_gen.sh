@@ -69,7 +69,7 @@ EOF
 	echo "" >> $tout
 #  now the test program:
 	echo ./$subdir/$libname.exe : main.cpp ./$subdir/$libname.lib >> $tout
-	echo "	cl \$(INCLUDES) $opts \$(CXXFLAGS) -o ./$subdir/$libname.exe main.cpp /link /LIBPATH:./$subdir" >> $tout
+	echo "	cl \$(INCLUDES) $opts /DBOOST_LIB_DIAGNOSTIC=1 \$(CXXFLAGS) -o ./$subdir/$libname.exe main.cpp /link /LIBPATH:./$subdir" >> $tout
 	echo "   $subdir"'\'"$libname.exe" >> $tout
 	echo "" >> $tout
 }
@@ -124,7 +124,7 @@ EOF
 	echo "" >> $tout
 #  now the test program:
 	echo ./$subdir/$libname.exe : main.cpp ./$subdir/$libname.lib >> $tout
-	echo "	cl \$(INCLUDES) $opts \$(CXXFLAGS) -o ./$subdir/$libname.exe main.cpp /link /LIBPATH:./$subdir" >> $tout
+	echo "	cl \$(INCLUDES) $opts /DBOOST_LIB_DIAGNOSTIC=1 \$(CXXFLAGS) -o ./$subdir/$libname.exe main.cpp /link /LIBPATH:./$subdir" >> $tout
 	echo "   $subdir"'\'"$libname.exe" >> $tout
 	echo "" >> $tout
 }
@@ -142,41 +142,39 @@ function vc6_gen()
 	echo > $tout
 	rm -f $iout
 	
-	prefix="$subdir-"
-
-	libname="liblink_test_${subdir}_ss"
+	libname="liblink_test-${subdir}-s-${boost_version}"
 	opts='/nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD'
 	vc6_gen_lib
 	
-	libname="liblink_test_${subdir}_ms"
+	libname="liblink_test-${subdir}-mt-s-${boost_version}"
 	opts='/nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD '
 	vc6_gen_lib
 	
 	debug="yes"
-	libname="liblink_test_${subdir}_ssd"
+	libname="liblink_test-${subdir}-sgd-${boost_version}"
 	opts='/nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD '"$debug_extra"'  '
 	vc6_gen_lib
 	
-	libname="liblink_test_${subdir}_msd"
+	libname="liblink_test-${subdir}-mt-sgd-${boost_version}"
 	opts='/nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD '"$debug_extra"' '
 	vc6_gen_lib
 	
-	libname="link_test_${subdir}_mdd"
+	libname="link_test-${subdir}-mt-gd-${boost_version}"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I..\..\..\..\ /D_DEBUG /DBOOST_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD '"$debug_extra"' '
 	vc6_gen_dll
 	
 	debug="no"
 	opts='/nologo /MD /W3 /GX /O2 /GB /GF /Gy /I..\..\..\..\ /DBOOST_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD '
-	libname="link_test_${subdir}_md"
+	libname="link_test-${subdir}-mt-${boost_version}"
 	vc6_gen_dll
 	
 	debug="no"
 	opts='/nologo /MD /W3 /GX /O2 /GB /GF /Gy /I..\..\..\..\ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD '
-	libname="liblink_test_${subdir}_md"
+	libname="liblink_test-${subdir}-mt-${boost_version}"
 	vc6_gen_lib
 	
 	debug="yes"
-	libname="liblink_test_${subdir}_mdd"
+	libname="liblink_test-${subdir}-mt-gd-${boost_version}"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I..\..\..\..\ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD '"$debug_extra"' '
 	vc6_gen_lib
 	
@@ -247,46 +245,45 @@ function vc6_stlp_gen()
 	echo > $tout
 	rm -f $iout
 	
-	prefix="$subdir-"
-
-	libname="liblink_test_${subdir}_ms"
+	libname="liblink_test-${subdir}-mt-s-${boost_version}"
 	opts='/nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB '
 	vc6_gen_lib
 	
 	debug="true"
-	libname="liblink_test_${subdir}_msd"
+	libname="liblink_test-${subdir}-mt-sgd-${boost_version}"
 	opts='/nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB '"$debug_extra"' '
 	vc6_gen_lib
 	
-	libname="link_test_${subdir}_mdd"
+	libname="link_test-${subdir}-mt-gd-${boost_version}"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\..\ /DBOOST_DYN_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL '"$debug_extra"' '
 	vc6_gen_dll
 	
 	debug="no"
 	opts='/nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I..\..\..\..\ /DBOOST_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL '
-	libname="link_test_${subdir}_md"
+	libname="link_test-${subdir}-mt-${boost_version}"
 	vc6_gen_dll
 	
 	debug="no"
 	opts='/nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\..\ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL '
-	libname="liblink_test_${subdir}_md"
+	libname="liblink_test-${subdir}-mt-${boost_version}"
 	vc6_gen_lib
 	
 	debug="true"
-	libname="liblink_test_${subdir}_mdd"
+	libname="liblink_test-${subdir}-mt-gd-${boost_version}"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\..\ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL '"$debug_extra"' '
 	vc6_gen_lib
 
 #  debug STLPort mode:
+#  not yet supported by bjam?
 	debug="yes"
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\..\ /DBOOST_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL '"$debug_extra"' '
-	libname="link_test_${subdir}_mddd"
+	libname="link_test-${subdir}-mt-pgd-${boost_version}"
 	vc6_gen_dll
-	libname="liblink_test_${subdir}_msdd"
+	libname="liblink_test-${subdir}-mt-spgd-${boost_version}"
 	opts='/nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB '"$debug_extra"' '
 	vc6_gen_lib
 	opts='/nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\..\ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL '"$debug_extra"' '
-	libname="liblink_test_${subdir}_mddd"
+	libname="liblink_test-${subdir}-mt-pgd-${boost_version}"
 	vc6_gen_lib
 	
 	cat > $out << EOF

@@ -46,7 +46,7 @@ EOF
 		obj=`echo "$file" | sed 's/\(.*\)cpp/\1obj/g'`
 		obj="$subdir\\$libname\\$obj"
 		all_obj="$all_obj $obj"
-		all_lib_obj="$all_lib_obj -+$obj"
+		all_lib_obj="$all_lib_obj \"$obj\""
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
 		echo "	bcc32 @&&|" >> $tout
 		echo "-c \$(INCLUDES) $opts \$(CXXFLAGS) -o$obj $file" >> $tout
@@ -71,12 +71,13 @@ EOF
 #	 now for the main target for this library:
 	echo $subdir\\$libname.lib : $all_obj >> $tout
 	echo "	tlib @&&|" >> $tout
-	echo "/P128 /C /u /a \$(XSFLAGS) $subdir\\$libname.lib $all_lib_obj" >> $tout
+	echo "/P128 /C /u /a \$(XSFLAGS) \"$subdir\\$libname.lib\" $all_lib_obj" >> $tout
 	echo "|" >> $tout
 	echo "" >> $tout
 #  now the test program:
 	echo "$subdir\\$libname.exe : main.cpp $subdir\\$libname.lib" >> $tout
-	echo "	bcc32 \$(INCLUDES) $opts \$(CXXFLAGS) -L./$subdir -e./$subdir/$libname.exe main.cpp" >> $tout
+	echo "	bcc32 \$(INCLUDES) $opts /DBOOST_LIB_DIAGNOSTIC=1 \$(CXXFLAGS) -L./$subdir -e./$subdir/$libname.exe main.cpp" >> $tout
+	echo "   echo running test progam $subdir"'\'"$libname.exe" >> $tout
 	echo "   $subdir"'\'"$libname.exe" >> $tout
 	echo "" >> $tout
 }
@@ -135,7 +136,8 @@ EOF
 	echo "" >> $tout
 #  now the test program:
 	echo "$subdir\\$libname.exe : main.cpp $subdir\\$libname.lib" >> $tout
-	echo "	bcc32 \$(INCLUDES) $opts \$(CXXFLAGS) -DBOOST_DYN_LINK -L./$subdir -e./$subdir/$libname.exe main.cpp" >> $tout
+	echo "	bcc32 \$(INCLUDES) $opts /DBOOST_LIB_DIAGNOSTIC=1 \$(CXXFLAGS) -DBOOST_DYN_LINK -L./$subdir -e./$subdir/$libname.exe main.cpp" >> $tout
+	echo "   echo running test program $subdir"'\'"$libname.exe" >> $tout
 	echo "   $subdir"'\'"$libname.exe" >> $tout
 	echo "" >> $tout
 }
@@ -152,57 +154,55 @@ function bcb_gen()
 	echo > $tout
 	rm -f $iout
 
-	libname="liblink_test_${subdir}_ss"
+	libname="liblink_test-${subdir}-s-${boost_version}"
 	opts="-tWM- -D_NO_VCL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../../"
 	bcb_gen_lib
 
-	libname="liblink_test_${subdir}_ms"
+	libname="liblink_test-${subdir}-mt-s-${boost_version}"
 	opts="-tWM -D_NO_VCL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../"
 	bcb_gen_lib
 	
-	libname="link_test_${subdir}_md"
+	libname="link_test-${subdir}-mt-${boost_version}"
 	opts="-tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 
-	libname="link_test_${subdir}_sd"
+	libname="link_test-${subdir}-${boost_version}"
 	opts="-tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 	
-	libname="liblink_test_${subdir}_md"
+	libname="liblink_test-${subdir}-mt-${boost_version}"
 	opts="-tWD -tWM -tWR -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_lib
 
-	libname="liblink_test_${subdir}_sd"
+	libname="liblink_test-${subdir}-${boost_version}"
 	opts="-tWD -tWR -tWM- -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_lib
-	
-	if test "$has_stlport" = "yes"; then
-	
-	libname="liblink_test_${subdir}_ssdd"
-	opts="-tWM- -D_STLP_DEBUG -D_NO_VCL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../../"
+	#
+	# debug versions:
+	libname="liblink_test-${subdir}-sd-${boost_version}"
+	opts="-tWM- -D_NO_VCL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../../"
 	bcb_gen_lib
 
-	libname="liblink_test_${subdir}_msdd"
-	opts="-tWM -D_STLP_DEBUG -D_NO_VCL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../"
+	libname="liblink_test-${subdir}-mt-sd-${boost_version}"
+	opts="-tWM -D_NO_VCL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../"
 	bcb_gen_lib
 	
-	libname="link_test_${subdir}_mddd"
-	opts="-tWD -tWM -tWR -D_STLP_DEBUG -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	libname="link_test-${subdir}-mt-d-${boost_version}"
+	opts="-tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 
-	libname="link_test_${subdir}_sddd"
-	opts="-tWD -tWR -tWM- -D_STLP_DEBUG -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	libname="link_test-${subdir}-d-${boost_version}"
+	opts="-tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_dll
 	
-	libname="liblink_test_${subdir}_mddd"
-	opts="-tWD -tWM -tWR -D_STLP_DEBUG -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	libname="liblink_test-${subdir}-mt-d-${boost_version}"
+	opts="-tWD -tWM -tWR -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_lib
 
-	libname="liblink_test_${subdir}_sddd"
-	opts="-tWD -tWR -tWM- -D_STLP_DEBUG -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	libname="liblink_test-${subdir}-d-${boost_version}"
+	opts="-tWD -tWR -tWM- -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_lib
 	
-	fi	
 	
 	cat > $out << EOF
 #
@@ -262,19 +262,9 @@ EOF
 . common.sh
 
 #
-# generate C++ Builder 4 files:
-out="bcb4.mak"
-subdir="bcb4"
-bcb_gen
-#
-# generate C++ Builder 5 files:
-out="bcb5.mak"
-subdir="bcb5"
-bcb_gen
-#
 # generate C++ Builder 6 files:
-out="bcb6.mak"
-subdir="bcb6"
+out="borland.mak"
+subdir="borland"
 has_stlport="yes"
 bcb_gen
 

@@ -69,7 +69,7 @@ bool BOOST_CONFIG_DECL check_options(
 // set up automatic linking:
 //
 #if !defined(BOOST_CONFIG_SOURCE) && !defined(BOOST_CONFIG_NO_LIB)
-#  define BOOST_LIB_NAME "link_test"
+#  define BOOST_LIB_NAME link_test
 #  include <boost/config/auto_link.hpp>
 #endif
 
