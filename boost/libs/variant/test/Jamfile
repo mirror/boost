@@ -1,3 +1,19 @@
+#  Boost.Variant Library test Jamfile
+#
+#  Copyright (C) 2003, Eric Friedman, Itay Maman.
+#
+#  This material is provided "as is", with absolutely no warranty expressed
+#  or implied. Any use is at your own risk.
+#
+#  Permission to use or copy this software for any purpose is hereby granted
+#  without fee, provided the above notices are retained on all copies.
+#  Permission to modify the code and to distribute modified code is granted,
+#  provided the above notices are retained, and a notice that the code was
+#  modified is included with the above copyright notice.
+#
+
+subproject libs/variant/test ;
+
 # bring in rules for testing
 SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
 include testing.jam ;
@@ -6,15 +22,18 @@ include testing.jam ;
 DEPENDS all : test ;
 
 {
+   # look in BOOST_ROOT for sources first, just in this Jamfile
+   local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
+
    test-suite variant
      : 
-    [ run test1.cpp class_a.cpp ]
-    [ run test2.cpp ]
-    [ run test3.cpp ]
-    [ run test4.cpp class_a.cpp ]
-    [ run test5.cpp ]
-    [ run test6.cpp ]
-    [ run test7.cpp ]
-    [ run test8.cpp ]
+    [ run libs/variant/test/test1.cpp libs/variant/test/class_a.cpp ]
+    [ run libs/variant/test/test2.cpp ]
+    [ run libs/variant/test/test3.cpp ]
+    [ run libs/variant/test/test4.cpp libs/variant/test/class_a.cpp ]
+    [ run libs/variant/test/test5.cpp ]
+    [ run libs/variant/test/test6.cpp ]
+    [ run libs/variant/test/test7.cpp ]
+    [ run libs/variant/test/test8.cpp ]
    ; 
 }
