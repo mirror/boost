@@ -34,22 +34,15 @@ class linear_feedback_shift
 {
 public:
   typedef UIntType result_type;
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool has_fixed_range = true;
-  static const result_type min_value = 0;
-  static const result_type max_value = (sizeof(int) == 4 && w == 32 ?
-                                        (result_type)-1 : (1 << w) - 1);
-#else
+  // avoid the warning trouble when using (1<<w) on 32 bit machines
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
-#endif
   BOOST_STATIC_CONSTANT(int, word_size = w);
   BOOST_STATIC_CONSTANT(int, exponent1 = k);
   BOOST_STATIC_CONSTANT(int, exponent2 = q);
   BOOST_STATIC_CONSTANT(int, step_size = s);
 
   result_type min() const { return 0; }
-  result_type max() const { return (sizeof(int) == 4 && w == 32 ?
-                                    (result_type)-1 : (1 << w) -1); }
+  result_type max() const { return wordmask; }
 
   // MSVC 6 and possibly others crash when encountering complicated integral
   // constant expressions.  Avoid the checks for now.
@@ -64,9 +57,21 @@ public:
   BOOST_STATIC_ASSERT(!std::numeric_limits<UIntType>::is_signed);
 #endif
 
-  explicit linear_feedback_shift(UIntType s0 = 341) { seed(s0); }
-  template<class It> linear_feedback_shift(It& first, It last)
-  { seed(first, last); }
+  explicit linear_feedback_shift(UIntType s0 = 341) : wordmask(0)
+  {
+    // avoid "left shift count >= with of type" warning
+    for(int i = 0; i < w; ++i)
+      wordmask |= (1u << i);
+    seed(s0);
+  }
+
+  template<class It> linear_feedback_shift(It& first, It last) : wordmask(0)
+  {
+    // avoid "left shift count >= with of type" warning
+    for(int i = 0; i < w; ++i)
+      wordmask |= (1u << i);
+    seed(first, last);
+  }
 
   void seed(UIntType s0) { assert(s0 >= (1 << (w-k))); value = s0; }
   template<class It> void seed(It& first, It last)
@@ -79,8 +84,8 @@ public:
 
   result_type operator()()
   {
-    const UIntType b = (((value << q) ^ value) & ((1<<w)-1)) >> (k-s);
-    const UIntType mask = ( (~0) << (w-k) ) & ((1<<w)-1);
+    const UIntType b = (((value << q) ^ value) & wordmask) >> (k-s);
+    const UIntType mask = ( (~0) << (w-k) ) & wordmask;
     value = ((value & mask) << s) ^ b;
     return value;
   }
@@ -109,6 +114,7 @@ public:
   { return !(*this == rhs); }
 #endif
 private:
+  UIntType wordmask; // avoid "left shift count >= width of type" warnings
   UIntType value;
 };
 
@@ -116,10 +122,6 @@ private:
 //  A definition is required even for integral static constants
 template<class UIntType, int w, int k, int q, int s, UIntType val>
 const bool linear_feedback_shift<UIntType, w, k, q, s, val>::has_fixed_range;
-template<class UIntType, int w, int k, int q, int s, UIntType val>
-const typename linear_feedback_shift<UIntType, w, k, q, s, val>::result_type linear_feedback_shift<UIntType, w, k, q, s, val>::min_value;
-template<class UIntType, int w, int k, int q, int s, UIntType val>
-const typename linear_feedback_shift<UIntType, w, k, q, s, val>::result_type linear_feedback_shift<UIntType, w, k, q, s, val>::max_value;
 template<class UIntType, int w, int k, int q, int s, UIntType val>
 const int linear_feedback_shift<UIntType, w, k, q, s, val>::word_size;
 template<class UIntType, int w, int k, int q, int s, UIntType val>

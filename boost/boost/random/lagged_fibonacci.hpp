@@ -42,7 +42,8 @@ public:
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = true);
   BOOST_STATIC_CONSTANT(int, word_size = w);
   BOOST_STATIC_CONSTANT(result_type, min_value = 0);
-  BOOST_STATIC_CONSTANT(result_type, max_value = (1 << w)-1);
+  // will fail for w == 32
+  BOOST_STATIC_CONSTANT(result_type, max_value = (1u << w)-1);
   BOOST_STATIC_CONSTANT(unsigned int, long_lag = p);
   BOOST_STATIC_CONSTANT(unsigned int, short_lag = q);
 
@@ -258,7 +259,10 @@ public:
     // allow for Koenig lookup
     using std::fmod;
 #endif
-    const unsigned long mask = ~((~0) << w);
+    unsigned long mask = ~0u;
+    for(int i = 0; i < w; ++i)
+      mask <<= 1;
+    mask = ~mask;                // now lowest w bits set
     unsigned int j;
     for(j = 0; j < long_lag && first != last; ++j, ++first)
       x[j] = fmod((*first & mask) / _modulus, RealType(1.0));

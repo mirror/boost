@@ -52,13 +52,8 @@ public:
   BOOST_STATIC_CONSTANT(int, output_t = t);
   BOOST_STATIC_CONSTANT(UIntType, output_c = c);
   BOOST_STATIC_CONSTANT(int, output_l = l);
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  static const bool has_fixed_range = true;
-  static const result_type min_value = integer_traits<result_type>::const_min;
-  static const result_type max_value = integer_traits<result_type>::const_max;
-#else
+
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
-#endif
   
   mersenne_twister() { seed(); }
 
@@ -117,7 +112,14 @@ public:
   }
   
   result_type min() const { return 0; }
-  result_type max() const { return (1 << w)-1; }
+  result_type max() const
+  {
+    // avoid "left shift count >= with of type" warning
+    result_type res = 0;
+    for(int i = 0; i < w; ++i)
+      res |= (1u << i);
+    return res;
+  }
 
   result_type operator()();
   static bool validation(result_type v) { return val == v; }
@@ -144,7 +146,7 @@ public:
 
   friend bool operator==(const mersenne_twister& x, const mersenne_twister& y)
   {
-    for(unsigned int j = 0; j < state_size; ++j)
+    for(int j = 0; j < state_size; ++j)
       if(x.compute(j) != y.compute(j))
         return false;
     return true;
@@ -156,7 +158,7 @@ public:
   // Use a member function; Streamable concept not supported.
   bool operator==(const mersenne_twister& rhs) const
   {
-    for(unsigned int j = 0; j < state_size; ++j)
+    for(int j = 0; j < state_size; ++j)
       if(compute(j) != rhs.compute(j))
         return false;
     return true;
@@ -190,12 +192,6 @@ private:
 template<class UIntType, int w, int n, int m, int r, UIntType a, int u,
   int s, UIntType b, int t, UIntType c, int l, UIntType val>
 const bool mersenne_twister<UIntType,w,n,m,r,a,u,s,b,t,c,l,val>::has_fixed_range;
-template<class UIntType, int w, int n, int m, int r, UIntType a, int u,
-  int s, UIntType b, int t, UIntType c, int l, UIntType val>
-const typename mersenne_twister<UIntType,w,n,m,r,a,u,s,b,t,c,l,val>::result_type mersenne_twister<UIntType,w,n,m,r,a,u,s,b,t,c,l,val>::min_value;
-template<class UIntType, int w, int n, int m, int r, UIntType a, int u,
-  int s, UIntType b, int t, UIntType c, int l, UIntType val>
-const typename mersenne_twister<UIntType,w,n,m,r,a,u,s,b,t,c,l,val>::result_type mersenne_twister<UIntType,w,n,m,r,a,u,s,b,t,c,l,val>::max_value;
 template<class UIntType, int w, int n, int m, int r, UIntType a, int u,
   int s, UIntType b, int t, UIntType c, int l, UIntType val>
 const int mersenne_twister<UIntType,w,n,m,r,a,u,s,b,t,c,l,val>::state_size;

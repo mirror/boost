@@ -102,7 +102,7 @@ public:
 
 private:
   base_type _rng;
-  int _n;
+  unsigned int _n;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
