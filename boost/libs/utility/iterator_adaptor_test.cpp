@@ -416,7 +416,7 @@ main()
     static const int index_size = 4;
     
     element_range_type elements( element_range_size );
-    std::iota( elements.begin(), elements.end(), 0 );
+    for(element_range_type::iterator it = elements.begin(); it != elements.end(); ++it ) *it = std::distance( elements.begin(), it );
     
     index_type indices( index_size );
     std::iota( indices.begin(), indices.end(), element_range_size - index_size );
