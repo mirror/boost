@@ -18,7 +18,7 @@
 // Fixed return types for get_head/get_tail
 // ( and other bugs ) per suggestion of Jens Maurer
 // simplified element type accessors + bug fix  (Jeremy Siek)
-// Several changes/additions according to suggestions by Doug Gregor,
+// Several changes/additions according to suggestions by Douglas Gregor,
 // William Kempf, Vesa Karvonen, John Max Skaller, Ed Brey, Beman Dawes,
 // David Abrahams.
 
