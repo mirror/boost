@@ -16,10 +16,17 @@ Tool</h1>
 <p>It is not uncommon for various common errors or
 <a href="../../more/lib_guide.htm">guideline violations</a> to creep into the 
 Boost libraries. The <i>inspect</i> program detects and reports several common 
-problems.</p>
-<p>The <i>inspect</i> program is written in C++ to prevent toolchain 
+problems. It can be used to scan a proposed Boost submission to identify various 
+failures.</p>
+<p>The <i>inspect</i> program is written in C++ to limit tool chain 
 dependencies, and should be portable to any system.</p>
-<p>The program must be run from the Boost root directory.</p>
+<p>The program is run in the directory to be scanned for errors. Sub-directories 
+are also included in the scan.</p>
+<p>If the first program argument is <code>-cvs</code>, only files and 
+directories in the CVS tree of the current directory are scanned. Otherwise all 
+files and sub-directories are included in the scan.</p>
+<p>If the first program argument is <code>-help</code>, a usage message is 
+displayed, showing all available program options.</p>
 <p>The program sources include:</p>
 <ul>
   <li><a href="inspector.hpp">inspect.hpp</a> and <a href="inspect.cpp">
@@ -34,7 +41,7 @@ dependencies, and should be portable to any system.</p>
 <p>A <a href="build/Jamfile">Jamfile</a> is provided to build the program.</p>
 <hr>
 <p>Revised
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->02 October, 2003<!--webbot bot="Timestamp" endspan i-checksum="38549" --></p>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->29 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38523" --></p>
 
 <p>© Copyright Beman Dawes, 2003</p>
 <p> Use, modification, and distribution is subject to the Boost Software 

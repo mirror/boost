@@ -57,8 +57,6 @@ namespace
 
   boost::inspect::string_set content_signatures;
 
-  hack::cvs_iterator end_itr;
-
   struct error_msg
   {
     string library;
@@ -160,12 +158,14 @@ namespace
 
 //  visit_all  ---------------------------------------------------------------//
 
+  template< class DirectoryIterator >
   void visit_all( const string & lib,
     const path & dir_path, const inspector_list & insps )
   {
+    static DirectoryIterator end_itr;
     ++directory_count;
 
-    for ( hack::cvs_iterator itr( dir_path ); itr != end_itr; ++itr )
+    for ( DirectoryIterator itr( dir_path ); itr != end_itr; ++itr )
     {
 
       if ( fs::is_directory( *itr ) )
@@ -174,7 +174,7 @@ namespace
         {
           string cur_lib( boost::inspect::impute_library( *itr ) );
           check( cur_lib, *itr, "", insps );
-          visit_all( cur_lib, *itr, insps );
+          visit_all<DirectoryIterator>( cur_lib, *itr, insps );
         }
       }
       else
@@ -271,6 +271,18 @@ namespace
    std::cout << "</pre>\n";
   }
 
+  const char * options()
+  {
+    return
+         "  -license\n"
+         "  -copyright\n"
+         "  -crlf\n"
+         "  -link\n"
+         "  -long_name\n"
+         "  -tab\n"
+         "default is all checks on; otherwise options specify desired checks\n";
+  }
+
 } // unnamed namespace
 
 namespace boost
@@ -308,7 +320,8 @@ namespace boost
 
     string impute_library( const path & full_dir_path )
     {
-      path relative( relative_to( full_dir_path, fs::initial_path() ) );
+      path relative( relative_to( full_dir_path, fs::initial_path() ),
+        fs::no_check );
       if ( relative.empty() ) return "boost-root";
       string first( *relative.begin() );
       string second =  // borland 5.61 requires op=  
@@ -327,9 +340,20 @@ namespace boost
 
 //  cpp_main()  --------------------------------------------------------------//
 
+#include <boost/test/included/prg_exec_monitor.hpp>
+
 int cpp_main( int argc, char * argv[] )
 {
   fs::initial_path();
+
+  if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
+    || std::strcmp( argv[1], "--help" ) == 0 ) )
+  {
+    std::clog << "Usage: inspect [-cvs] [options...]\n"
+      "options:\n"
+      << options();
+    return 1;
+  }
 
   bool license_ck = true;
   bool copyright_ck = true;
@@ -337,6 +361,13 @@ int cpp_main( int argc, char * argv[] )
   bool link_ck = true;
   bool long_name_ck = true;
   bool tab_ck = true;
+  bool cvs = false;
+
+  if ( argc > 1 && std::strcmp( argv[1], "-cvs" ) == 0 )
+  {
+    cvs = true;
+    --argc; ++argv;
+  }
 
   if ( argc > 1 && *argv[1] == '-' )
   {
@@ -366,13 +397,7 @@ int cpp_main( int argc, char * argv[] )
     {
       std::cerr << "unknown option: " << argv[1]
       << "\nvalid options are:\n"
-         "  -license\n"
-         "  -copyright\n"
-         "  -crlf\n"
-         "  -link\n"
-         "  -long_name\n"
-         "  -tab\n"
-         "default is all checks on; otherwise options specify desired checks\n";
+      << options();
       return 1;
     }
   }
@@ -392,7 +417,13 @@ int cpp_main( int argc, char * argv[] )
   if ( tab_ck )
     inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
 
-  visit_all( "boost-root", fs::initial_path(), inspectors );
+  // perform the actual inspection, using the requested type of iteration
+  if ( cvs )
+    visit_all<hack::cvs_iterator>( "boost-root",
+      fs::initial_path(), inspectors );
+  else
+    visit_all<fs::directory_iterator>( "boost-root",
+      fs::initial_path(), inspectors );
 
   // close
   for ( inspector_list::iterator itr = inspectors.begin();

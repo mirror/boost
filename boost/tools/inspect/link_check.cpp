@@ -165,7 +165,7 @@ namespace boost
          && itr->first.rfind( "index.htm" ) == string::npos )
        {
          ++m_unlinked_errors;
-         path full_path( fs::initial_path() / itr->first );
+         path full_path( fs::initial_path() / path(itr->first, fs::no_check) );
          error( impute_library( full_path ), full_path, "unlinked file" );
        }
      }
