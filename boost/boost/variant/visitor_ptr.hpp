@@ -20,6 +20,9 @@
 #include "boost/variant/bad_visit.hpp"
 #include "boost/variant/static_visitor.hpp"
 
+#include "boost/mpl/apply_if.hpp"
+#include "boost/mpl/identity.hpp"
+#include "boost/type_traits/is_reference.hpp"
 #include "boost/type_traits/add_reference.hpp"
 
 namespace boost {
@@ -46,8 +49,11 @@ public: // typedefs
 
 private: // private typedefs
 
-    typedef typename add_reference<T>::type
-        argument_fwd_type;
+    typedef typename mpl::apply_if<
+          is_reference<T>
+        , mpl::identity<T>
+        , add_reference<const T>
+        >::type argument_fwd_type;
 
 public: // structors
 
