@@ -175,6 +175,7 @@ void print_compiler_macros()
   PRINT_MACRO(__hppa);
   // HP aCC:
   PRINT_MACRO(__HP_aCC);
+  PRINT_MACRO(_HPACC_);
   PRINT_MACRO(__LP64__);
   PRINT_MACRO(__RISC2_0__);
   PRINT_MACRO(__STDCPP__);
