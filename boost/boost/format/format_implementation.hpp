@@ -22,8 +22,8 @@
 
 #include <cassert>
 
-#include "boost/format/format_class.hpp"
-#include "boost/throw_exception.hpp"
+#include <boost/throw_exception.hpp>
+#include <boost/format/format_class.hpp>
 
 namespace boost {
 
@@ -38,6 +38,8 @@ basic_format<Ch, Tr> ::basic_format(const Ch* str)
     if( !str) str = emptyStr.c_str();
     parse( str );
 }
+
+#ifndef BOOST_NO_STD_LOCALE
 template< class Ch, class Tr>
 basic_format<Ch, Tr> ::basic_format(const Ch* str, const std::locale & loc)
     : style_(0), cur_arg_(0), num_args_(0), dumped_(false),
@@ -51,20 +53,21 @@ basic_format<Ch, Tr> ::basic_format(const Ch* str, const std::locale & loc)
 }
 
 template< class Ch, class Tr>
-basic_format<Ch, Tr> ::basic_format(const string_t& s)
-    : style_(0), cur_arg_(0), num_args_(0), dumped_(false),
-      items_(),  oss_(), exceptions_(io::all_error_bits)
-{
-    state0_.set_by_stream(oss_);
-    parse(s);  
-}
-
-template< class Ch, class Tr>
 basic_format<Ch, Tr> ::basic_format(const string_t& s, const std::locale & loc)
     : style_(0), cur_arg_(0), num_args_(0), dumped_(false),
       items_(),  oss_(), exceptions_(io::all_error_bits)
 {
     oss_.imbue( loc );
+    state0_.set_by_stream(oss_);
+    parse(s);  
+}
+#endif //BOOST_NO_STD_LOCALE
+
+template< class Ch, class Tr>
+basic_format<Ch, Tr> ::basic_format(const string_t& s)
+    : style_(0), cur_arg_(0), num_args_(0), dumped_(false),
+      items_(),  oss_(), exceptions_(io::all_error_bits)
+{
     state0_.set_by_stream(oss_);
     parse(s);  
 }

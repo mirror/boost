@@ -21,14 +21,12 @@
 #define BOOST_FORMAT_CLASS_HPP
 
 #include <vector>
-#include <sstream>
 #include <string>
-#include <ostream>
-#include <locale>
-#include "boost/format/format_fwd.hpp"
-#include "boost/format/internals_fwd.hpp"
 
-#include "boost/format/internals.hpp" 
+#include <boost/format/format_fwd.hpp>
+#include <boost/format/internals_fwd.hpp>
+
+#include <boost/format/internals.hpp>
 
 namespace boost {
 
@@ -49,9 +47,11 @@ private:
 
 public:
   basic_format(const Ch* str);
-  basic_format(const Ch* str, const std::locale & loc);
   basic_format(const string_t& s);
+#ifndef BOOST_NO_STD_LOCALE
+  basic_format(const Ch* str, const std::locale & loc);
   basic_format(const string_t& s, const std::locale & loc);
+#endif // no locale
   basic_format(const basic_format& x);
   basic_format& operator= (const basic_format& x);
 
