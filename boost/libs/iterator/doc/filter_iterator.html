@@ -3,204 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
 <title>Filter Iterator</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
 <meta name="date" content="2003-09-14" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
-<style type="text/css"><!--
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:date: $Date$
-:version: $Revision$
-:copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-*/
-
-.first {
-  margin-top: 0 }
-
-.last {
-  margin-bottom: 0 }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-dd {
-  margin-bottom: 0.5em }
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.attention, div.caution, div.danger, div.error, div.hint,
-div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.hint p.admonition-title, div.important p.admonition-title,
-div.note p.admonition-title, div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em }
-
-div.footer, div.header {
-  font-size: smaller }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr {
-  width: 75% }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.line-block {
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option-argument {
-  font-style: italic }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-table {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.citation {
-  border-left: solid thin gray ;
-  padding-left: 0.5ex }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.footnote {
-  border-left: solid thin black ;
-  padding-left: 0.5ex }
-
-td, th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-th.docinfo-name, th.field-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap }
-
-h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
-  font-size: 100% }
-
-tt {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
---></style>
+<link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="filter-iterator">
@@ -245,19 +54,22 @@ iterator and the end of the range.</p>
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#filter-iterator-requirements" id="id1" name="id1"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#filter-iterator-operations" id="id2" name="id2"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#filter-iterator-models" id="id2" name="id2"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#filter-iterator-operations" id="id3" name="id3"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#example" id="id4" name="id4">Example</a></li>
 </ul>
 </div>
 <pre class="literal-block">
 template &lt;class Predicate, class Iterator&gt;
 class filter_iterator
-    : public iterator_adaptor&lt;
-          filter_iterator&lt;Predicate, Iterator&gt;, Iterator
-        , use_default
-        , /* see details */
-      &gt;
 {
  public:
+    typedef iterator_traits&lt;Iterator&gt;::value_type value_type;
+    typedef iterator_traits&lt;Iterator&gt;::reference reference;
+    typedef iterator_traits&lt;Iterator&gt;::pointer pointer;
+    typedef iterator_traits&lt;Iterator&gt;::difference_type difference_type;
+    typedef /* see below */ iterator_category;
+
     filter_iterator();
     filter_iterator(Predicate f, Iterator x, Iterator end = Iterator());
     filter_iterator(Iterator x, Iterator end = Iterator());
@@ -268,43 +80,120 @@ class filter_iterator
         );
     Predicate predicate() const;
     Iterator end() const;
-
- private: // as-if specification
-    void increment()
-    {
-        ++(this-&gt;base_reference());
-        satisfy_predicate();
-    }
-
-    void satisfy_predicate()
-    {
-        while (this-&gt;base() != this-&gt;m_end &amp;&amp; !this-&gt;m_predicate(*this-&gt;base()))
-            ++(this-&gt;base_reference());
-    }
-
-    Predicate m_predicate;
-    Iterator m_end;
 };
 </pre>
+<p>The <tt class="literal"><span class="pre">iterator_category</span></tt> is a type convertible to the tags
+corresponding to each standard concept modeled by <tt class="literal"><span class="pre">filter_iterator</span></tt>,
+as described in the models section.</p>
 <div class="section" id="filter-iterator-requirements">
 <h1><a class="toc-backref" href="#id1" name="filter-iterator-requirements"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></h1>
-<p>The base <tt class="literal"><span class="pre">Iterator</span></tt> parameter must be a model of Readable
-Iterator and Single Pass Iterator. The resulting
-<tt class="literal"><span class="pre">filter_iterator</span></tt> will be a model of Forward Traversal Iterator
-if <tt class="literal"><span class="pre">Iterator</span></tt> is, otherwise the <tt class="literal"><span class="pre">filter_iterator</span></tt> will be a
-model of Single Pass Iterator. The access category of the
-<tt class="literal"><span class="pre">filter_iterator</span></tt> will be the same as the access category of
-<tt class="literal"><span class="pre">Iterator</span></tt>.</p>
-<!-- Thomas is going to try implementing filter_iterator so that
-it will be bidirectional if the underlying iterator is. -JGS -->
-<p>The <tt class="literal"><span class="pre">Predicate</span></tt> must be Assignable, Copy Constructible, and the
-expression <tt class="literal"><span class="pre">p(x)</span></tt> must be valid where <tt class="literal"><span class="pre">p</span></tt> is an object of type
+<p>The <tt class="literal"><span class="pre">Predicate</span></tt> argument must be Assignable, Copy Constructible, and
+the expression <tt class="literal"><span class="pre">p(x)</span></tt> must be valid where <tt class="literal"><span class="pre">p</span></tt> is an object of type
 <tt class="literal"><span class="pre">Predicate</span></tt>, <tt class="literal"><span class="pre">x</span></tt> is an object of type
 <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>, and where the type of
 <tt class="literal"><span class="pre">p(x)</span></tt> must be convertible to <tt class="literal"><span class="pre">bool</span></tt>.</p>
+<p>The <tt class="literal"><span class="pre">Iterator</span></tt> argument shall meet the requirements of Readable
+Iterator and Single Pass Iterator or it shall meet the requirements of
+Input Iterator.</p>
+</div>
+<div class="section" id="filter-iterator-models">
+<h1><a class="toc-backref" href="#id2" name="filter-iterator-models"><tt class="literal"><span class="pre">filter_iterator</span></tt> models</a></h1>
+<p>The concepts that <tt class="literal"><span class="pre">filter_iterator</span></tt> models are dependent on what
+concepts the <tt class="literal"><span class="pre">Iterator</span></tt> argument models, as specified in the
+following tables.</p>
+<table border class="table">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
+<th>then <tt class="literal"><span class="pre">filter_iterator</span></tt> models</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Single Pass Iterator</td>
+<td>Single Pass Iterator</td>
+</tr>
+<tr><td>Forward Traversal Iterator</td>
+<td>Forward Traversal Iterator</td>
+</tr>
+</tbody>
+</table>
+<table border class="table">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
+<th>then <tt class="literal"><span class="pre">filter_iterator</span></tt> models</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Readable Iterator</td>
+<td>Readable Iterator</td>
+</tr>
+<tr><td>Writable Iterator</td>
+<td>Writable Iterator</td>
+</tr>
+<tr><td>Lvalue Iterator</td>
+<td>Lvalue Iterator</td>
+</tr>
+</tbody>
+</table>
+<table border class="table">
+<colgroup>
+<col width="63%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
+<th>then <tt class="literal"><span class="pre">filter_iterator</span></tt> models</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Readable Iterator, Single Pass Iterator</td>
+<td>Input Iterator</td>
+</tr>
+<tr><td>Readable Lvalue Iterator, Forward Traversal Iterator</td>
+<td>Forward Iterator</td>
+</tr>
+<tr><td>Writable Lvalue Iterator, Forward Traversal Iterator</td>
+<td>Mutable Forward Iterator</td>
+</tr>
+</tbody>
+</table>
+<table border class="table">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th>If <tt class="literal"><span class="pre">Iterator</span></tt> models</th>
+<th>then <tt class="literal"><span class="pre">filter_iterator</span></tt> models</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Input Iterator</td>
+<td>Input Iterator, Readable Iterator, Single Pass Iterator</td>
+</tr>
+<tr><td>Forward Iterator</td>
+<td>Forward Iterator, Readable Lvalue Iterator,
+Forward Traversal Iterator</td>
+</tr>
+<tr><td>Mutable Forward Iterator</td>
+<td>Mutable Forward Iterator, Writable Lvalue Iterator,
+Forward Traversal Iterator</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="filter-iterator-operations">
-<h1><a class="toc-backref" href="#id2" name="filter-iterator-operations"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></h1>
+<h1><a class="toc-backref" href="#id3" name="filter-iterator-operations"><tt class="literal"><span class="pre">filter_iterator</span></tt> operations</a></h1>
+<p>In addition to those operations required by the concepts that
+<tt class="literal"><span class="pre">filter_iterator</span></tt> models, <tt class="literal"><span class="pre">filter_iterator</span></tt> provides the following
+operations.</p>
 <p><tt class="literal"><span class="pre">filter_iterator();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -372,17 +261,46 @@ filter_iterator(
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">The object <tt class="literal"><span class="pre">end</span></tt> used to construct <tt class="literal"><span class="pre">*this</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">A copy of the object <tt class="literal"><span class="pre">end</span></tt> used to construct <tt class="literal"><span class="pre">*this</span></tt>.</td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="section" id="example">
+<h1><a class="toc-backref" href="#id4" name="example">Example</a></h1>
+<p>This example uses <tt class="literal"><span class="pre">filter_iterator</span></tt> to output only the positive
+integers from an array of integers.</p>
+<pre class="literal-block">
+struct is_positive_number {
+  bool operator()(int x) { return 0 &lt; x; }
+};
+
+int main()
+{
+  int numbers_[] = { 0, -1, 4, -3, 5, 8, -2 };
+  const int N = sizeof(numbers_)/sizeof(int);
+
+  typedef int* base_iterator;
+  base_iterator numbers(numbers_);
+
+  typedef boost::filter_iterator&lt;is_positive_number, base_iterator&gt;
+    FilterIter;
+
+  is_positive_number predicate;
+  FilterIter filter_iter_first(predicate, numbers, numbers + N);
+  FilterIter filter_iter_last(predicate, numbers + N, numbers + N);
+
+  std::copy(filter_iter_first, filter_iter_last, std::ostream_iterator&lt;int&gt;(std::cout, &quot; &quot;));
+  std::cout &lt;&lt; std::endl;
+
+  return 0;
+}
+</pre>
+<p>The output is:</p>
+<pre class="literal-block">
+4 5 8
+</pre>
 </div>
-<hr class="footer" />
-<div class="footer">
-<a class="reference" href="filter_iterator.rst">View document source</a>.
-Generated on: 2003-11-24 05:00 UTC.
-Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>

@@ -2,13 +2,14 @@
 
   template <class Predicate, class Iterator>
   class filter_iterator
-      : public iterator_adaptor<
-            filter_iterator<Predicate, Iterator>, Iterator
-          , use_default
-          , /* see details */
-        >
   {
    public:
+      typedef iterator_traits<Iterator>::value_type value_type;
+      typedef iterator_traits<Iterator>::reference reference;
+      typedef iterator_traits<Iterator>::pointer pointer;
+      typedef iterator_traits<Iterator>::difference_type difference_type;
+      typedef /* see below */ iterator_category;
+
       filter_iterator();
       filter_iterator(Predicate f, Iterator x, Iterator end = Iterator());
       filter_iterator(Iterator x, Iterator end = Iterator());
@@ -19,50 +20,86 @@
           );
       Predicate predicate() const;
       Iterator end() const;
-
-   private: // as-if specification
-      void increment()
-      {
-          ++(this->base_reference());
-          satisfy_predicate();
-      }
-
-      void satisfy_predicate()
-      {
-          while (this->base() != this->m_end && !this->m_predicate(*this->base()))
-              ++(this->base_reference());
-      }
-
-      Predicate m_predicate;
-      Iterator m_end;
   };
+
+
+The ``iterator_category`` is a type convertible to the tags
+corresponding to each standard concept modeled by ``filter_iterator``,
+as described in the models section.
+
 
 
 ``filter_iterator`` requirements
 --------------------------------
 
-The base ``Iterator`` parameter must be a model of Readable
-Iterator and Single Pass Iterator. The resulting
-``filter_iterator`` will be a model of Forward Traversal Iterator
-if ``Iterator`` is, otherwise the ``filter_iterator`` will be a
-model of Single Pass Iterator. The access category of the
-``filter_iterator`` will be the same as the access category of
-``Iterator``.
-
-.. Thomas is going to try implementing filter_iterator so that
-   it will be bidirectional if the underlying iterator is. -JGS
-
-
-The ``Predicate`` must be Assignable, Copy Constructible, and the
-expression ``p(x)`` must be valid where ``p`` is an object of type
+The ``Predicate`` argument must be Assignable, Copy Constructible, and
+the expression ``p(x)`` must be valid where ``p`` is an object of type
 ``Predicate``, ``x`` is an object of type
 ``iterator_traits<Iterator>::value_type``, and where the type of
 ``p(x)`` must be convertible to ``bool``.
+
+The ``Iterator`` argument shall meet the requirements of Readable
+Iterator and Single Pass Iterator or it shall meet the requirements of
+Input Iterator.
+
+
+
+``filter_iterator`` models
+--------------------------
+
+The concepts that ``filter_iterator`` models are dependent on what
+concepts the ``Iterator`` argument models, as specified in the
+following tables.
+
++-----------------------------+----------------------------------------------------------+
+| If ``Iterator`` models      | then ``filter_iterator`` models                          |
++=============================+==========================================================+
+| Single Pass Iterator        | Single Pass Iterator                                     |
++-----------------------------+----------------------------------------------------------+
+| Forward Traversal Iterator  | Forward Traversal Iterator                               |
++-----------------------------+----------------------------------------------------------+
+
++--------------------------------+----------------------------------------------+
+| If ``Iterator`` models         | then ``filter_iterator`` models              |
++================================+==============================================+
+| Readable Iterator              | Readable Iterator                            |
++--------------------------------+----------------------------------------------+
+| Writable Iterator              | Writable Iterator                            |
++--------------------------------+----------------------------------------------+
+| Lvalue Iterator                | Lvalue Iterator                              |
++--------------------------------+----------------------------------------------+
+
++-------------------------------------------------------+---------------------------------+
+| If ``Iterator`` models                                | then ``filter_iterator`` models |
++=======================================================+=================================+
+| Readable Iterator, Single Pass Iterator               | Input Iterator                  |
++-------------------------------------------------------+---------------------------------+
+| Readable Lvalue Iterator, Forward Traversal Iterator  | Forward Iterator                |
++-------------------------------------------------------+---------------------------------+
+| Writable Lvalue Iterator, Forward Traversal Iterator  | Mutable Forward Iterator        |
++-------------------------------------------------------+---------------------------------+
+
++-----------------------------+----------------------------------------------------------+
+| If ``Iterator`` models      | then ``filter_iterator`` models                          |
++=============================+==========================================================+
+| Input Iterator              | Input Iterator, Readable Iterator, Single Pass Iterator  |
++-----------------------------+----------------------------------------------------------+
+| Forward Iterator            | Forward Iterator, Readable Lvalue Iterator,              |
+|                             | Forward Traversal Iterator                               |
++-----------------------------+----------------------------------------------------------+
+| Mutable Forward Iterator    | Mutable Forward Iterator, Writable Lvalue Iterator,      |
+|                             | Forward Traversal Iterator                               |
++-----------------------------+----------------------------------------------------------+
 
 
 
 ``filter_iterator`` operations
 ------------------------------
+
+In addition to those operations required by the concepts that
+``filter_iterator`` models, ``filter_iterator`` provides the following
+operations.
+
 
 ``filter_iterator();``
 
@@ -105,5 +142,5 @@ expression ``p(x)`` must be valid where ``p`` is an object of type
 
 ``Iterator end() const;``
 
-:Returns: The object ``end`` used to construct ``*this``.
+:Returns: A copy of the object ``end`` used to construct ``*this``.
 
