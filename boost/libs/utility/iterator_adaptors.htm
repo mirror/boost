@@ -170,7 +170,8 @@ struct iterator_adaptor;
         <td>The <tt>value_type</tt> of the resulting iterator, unless const. If
         Value is <tt>const X</tt> the
         <tt>value_type</tt> will be (<i>non-</i><tt>const</tt>) <tt>X</tt><a href=
-        "#1">[1]</a>.<br>
+        "#1">[1]</a>. If the <tt>value_type</tt> you wish to use is an abstract
+        base class see note <a href="#5">[5]</a>.<br>
          <b>Default:</b>
         <tt>std::iterator_traits&lt;BaseType&gt;::value_type</tt> <a href=
         "#2">[2]</a>
@@ -829,6 +830,20 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     returning a reference could cause serious memory problems due to the
     reference being bound to a temporary object whose lifetime ends inside of
     the <tt>operator[]</tt>.
+
+    <p><a name="5">[5]</a>
+    The <tt>value_type</tt> of an iterator may not be
+    an abstract base class, however many common uses of iterators
+    never need the <tt>value_type</tt>, only the <tt>reference</tt> type.
+    If you wish to create such an iterator adaptor, use a dummy
+    type such as <tt>char</tt> for the <tt>Value</tt> parameter,
+    and use a reference to your abstract base class for
+    the <tt>Reference</tt> parameter. Note that such an iterator
+    does not fulfill the C++ standards requirements for a
+    <a href= "http://www.sgi.com/tech/stl/ForwardIterator.html">
+    Forward Iterator</a>, so you will need to use a less restrictive
+    iterator category such as <tt>std::input_iterator_tag</tt>.
+
     <hr>
 
     <p>Revised 
