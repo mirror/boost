@@ -49,7 +49,7 @@
 // if tests for cv-qualified member functions don't 
 // work in is_member_function_pointer
 //
-#if !((defined(__MWERKS__) && __MWERKS__ < 0x3000) || (defined(__IBMCPP__) && __IBMCPP__ <= 600))
+#if (defined(__MWERKS__) && __MWERKS__ < 0x3000) || (defined(__IBMCPP__) && __IBMCPP__ <= 600)
 #  define BOOST_TT_NO_CV_FUNC_TEST
 #endif
 
