@@ -83,7 +83,7 @@ public:
    std::map<int, int, std::less<int> > positions;
    void update();
    void clean();
-   RegExData() e(), m(), fm, t(type_copy), pbase(0), line(0), fbase(), strings(), positions() {}
+   RegExData() : e(), m(), fm(), t(type_copy), pbase(0), line(0), fbase(), strings(), positions() {}
 };
 
 void RegExData::update()
