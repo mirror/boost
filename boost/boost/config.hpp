@@ -173,11 +173,13 @@
 //  Borland ------------------------------------------------------------------//
 
 #elif defined __BORLANDC__
+#   if __BORLANDC__ <= 0x0551
+#     define BOOST_NO_PRIVATE_IN_AGGREGATE
+#   endif
 #   if __BORLANDC__ <= 0x0550
 // Borland C++ Builder 4 and 5:
-#   define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-#   define BOOST_NO_USING_TEMPLATE
-#   define BOOST_NO_PRIVATE_IN_AGGREGATE
+#     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+#     define BOOST_NO_USING_TEMPLATE
 #     if __BORLANDC__ == 0x0550
 // Borland C++ Builder 5, command-line compiler 5.5:
 #       define BOOST_NO_OPERATORS_IN_NAMESPACE
@@ -187,9 +189,6 @@
 #     define BOOST_DECL __declspec(dllexport)
 #   else
 #     define BOOST_DECL __declspec(dllimport)
-#   endif
-#   if __BORLANDC__ == 0x550
-#   define BOOST_NO_OPERATORS_IN_NAMESPACE
 #   endif
 
 //  Intel  -------------------------------------------------------------------//
