@@ -77,6 +77,41 @@
 #include "boost/mpl/void.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
+// Temporary home-grown enable_if (until boost::enable_if is adopted)
+//
+#if BOOST_WORKAROUND(BOOST_MSVC,  <= 1300)                      \
+ || BOOST_WORKAROUND(__GNUC__, <= 2 && __GNUC_MINOR__ <= 95)    \
+ || BOOST_WORKAROUND(__MWERKS__, <= 0x3000)                     \
+ || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
+#   define BOOST_VARIANT_AUX_NO_SFINAE
+#endif
+
+#if !defined(BOOST_VARIANT_AUX_NO_SFINAE)
+
+namespace boost { namespace detail { namespace variant {
+
+template <bool Cond, typename T = void>
+struct enable_if_c
+{
+};
+
+template <typename T>
+struct enable_if_c< true,T >
+{
+    typedef T type;
+};
+
+template <typename C, typename T = void>
+struct enable_if
+    : enable_if_c< C::value, T >
+{
+};
+
+}}} // namespace boost::detail::variant
+
+#endif // !defined(BOOST_VARIANT_AUX_NO_SFINAE)
+
+///////////////////////////////////////////////////////////////////////////////
 // Implementation Macros:
 //
 // BOOST_VARIANT_VISITATION_UNROLLING_LIMIT
@@ -1051,16 +1086,14 @@ private: // helpers, for structors, below
 
 public: // structors, cont.
 
+#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
+ && !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+
     template <typename T>
     variant(const T& operand)
     {
         convert_construct(operand, 1L);
     }
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-    // Provide the following ONLY on compilers that properly distinguish
-    // between T& and const T& in function templates:
 
     template <typename T>
     variant(T& operand)
@@ -1068,7 +1101,41 @@ public: // structors, cont.
         convert_construct(operand, 1L);
     }
 
-#endif // MSVC6 exclusion
+#elif !defined(BOOST_VARIANT_AUX_NO_SFINAE)
+
+    // For compilers that cannot distinguish between T& and const T& in
+    // template constructors, but do support SFINAE, we can workaround:
+
+    template <typename T>
+    variant(const T& operand)
+    {
+        convert_construct(operand, 1L);
+    }
+
+    template <typename T>
+    variant(
+          T& operand
+        , typename detail::variant::enable_if<
+              mpl::not_< is_const<T> >
+            , void
+            >::type* = 0
+        )
+    {
+        convert_construct(operand, 1L);
+    }
+
+#else // defined(BOOST_NO_SFINAE)
+
+    // For compilers that cannot distinguish between T& and const T& in
+    // template constructors, and do NOT support SFINAE, we can't workaround:
+
+    template <typename T>
+    variant(const T& operand)
+    {
+        convert_construct(operand, 1L);
+    }
+
+#endif // CW8 and MSVC6 workarounds
 
 public: // structors, cont.
 
