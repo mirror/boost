@@ -1834,6 +1834,15 @@ to assign through a dereferenced iterator that f(x) has to work,
 and then only for the particular function object that the iterator
 holds and for the particular value that is being assigned.
 
+
+Addition from Jeremy:
+  The constructor for ``function_output_iterator`` is also
+  slightly overconstrained because it requires 
+  the ``UnaryFunction`` to have a default constructor
+  even when the default constructor of ``function_output_iterator``
+  is not used.
+
+
 :Proposed resolution: 
 
   Change:
@@ -1902,6 +1911,17 @@ holds and for the particular value that is being assigned.
 
           m_f(value); 
           return *this; 
+
+
+  Change::
+
+    explicit function_output_iterator(const UnaryFunction& f = UnaryFunction());
+
+  to::
+
+    explicit function_output_iterator();
+
+    explicit function_output_iterator(const UnaryFunction& f);
 
 
 
