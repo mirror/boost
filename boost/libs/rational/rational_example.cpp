@@ -6,18 +6,21 @@
 //  implied warranty, and with no claim as to its suitability for any purpose.
 
 //  Revision History
+//  20 Jan 01  Check BOOST_NO_LIMITS instead of __MINGW32__ where appropriate
+//             (Dave Abrahams)
 //  14 Dec 99  Initial version
 
 #include <iostream>
 #include <cassert>
 #include <cstdlib>
-#ifndef __MINGW32__
-#include <limits>
-#else
-#include <limits.h>
-#endif
 #include <exception>
 #include <boost/rational.hpp>
+#include <boost/config.hpp>
+#ifndef BOOST_NO_LIMITS
+# include <limits>
+#else
+# include <limits.h>
+#endif
 
 using std::cout;
 using std::endl;
@@ -65,7 +68,7 @@ int main ()
     assert(abs(minus_half) == half);
 
     // Do we avoid overflow?
-#ifndef __MINGW32__
+#ifndef BOOST_NO_LIMITS
     int maxint = std::numeric_limits<int>::max();
 #else
     int maxint = INT_MAX;
