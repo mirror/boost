@@ -12,6 +12,7 @@
 #endif
 
 #include <boost/config.hpp>         // BOOST_MSVC, make sure size_t is in std.
+#include <boost/detail/workaround.hpp>
 #include <cstddef>                  // std::size_t.
 #include <utility>                  // pair.
 #include <boost/iostreams/categories.hpp>
@@ -55,8 +56,17 @@ private:
 
 } // End namespace detail.
 
-// Local macro, #undef'd below.
-#define BOOST_IOSTREAMS_DECL_ARRAY(name, mode) \
+// Local macros, #undef'd below.
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+# define BOOST_IOSTREAMS_ARRAY_CTOR(name, ch) \
+    template<int N> \
+    BOOST_PP_CAT(basic_, name)(ch (&ar)[N]) \
+        : base_type(ar) { } \
+    /**/
+#else
+# define BOOST_IOSTREAMS_ARRAY_CTOR(name, ch)
+#endif
+#define BOOST_IOSTREAMS_ARRAY(name, mode) \
     template<typename Ch> \
     struct BOOST_PP_CAT(basic_, name) : detail::array_adapter<mode, Ch> { \
     private: \
@@ -72,17 +82,17 @@ private:
             : base_type(begin, end) { } \
         BOOST_PP_CAT(basic_, name)(const char_type* begin, std::size_t length) \
             : base_type(begin, length) { } \
-        template<typename T> \
-        BOOST_PP_CAT(basic_, name)(T& t) \
-            : base_type(t) { } \
+        BOOST_IOSTREAMS_ARRAY_CTOR(name, Ch) \
     }; \
     typedef BOOST_PP_CAT(basic_, name)<char>     name; \
     typedef BOOST_PP_CAT(basic_, name)<wchar_t>  BOOST_PP_CAT(w, name); \
     /**/
-BOOST_IOSTREAMS_DECL_ARRAY(array_source, input_seekable)
-BOOST_IOSTREAMS_DECL_ARRAY(array_sink, output_seekable)
-BOOST_IOSTREAMS_DECL_ARRAY(array, seekable)
-#undef BOOST_IOSTREAMS_DECL_ARRAY
+BOOST_IOSTREAMS_ARRAY(array_source, input_seekable)
+BOOST_IOSTREAMS_ARRAY(array_sink, output_seekable)
+BOOST_IOSTREAMS_ARRAY(array, seekable)
+#undef BOOST_IOSTREAMS_ARRAY_CTOR
+#undef BOOST_IOSTREAMS_ARRAY
+
 
 //------------------Implementation of array_adapter------------------------------//
 
