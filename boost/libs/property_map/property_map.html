@@ -41,7 +41,7 @@ Property Map Concepts
 The property map interface consists of a set of concepts (see
 definition of &quot;concept&quot; in <a
 href="../concept_check/concept_check.htm#introduction">[1]</a> and <a
-href="http://www.sgi.com/Technology/STL/stl_introduction.html">[2]</a>)
+href="http://www.sgi.com/tech/stl/stl_introduction.html">[2]</a>)
 that define a general purpose mechanism for mapping key objects to
 corresponding value objects, thereby hiding the details of how the
 mapping is implemented from algorithms that use property maps.  The
@@ -51,11 +51,23 @@ property map operations are global functions, it is possible to
 overload the map functions such that nearly arbitrary property map
 types and key types can be used. The interface for property maps
 consists of three functions: <tt>get()</tt>, <tt>put()</tt>, and
-<tt>operator[]</tt>. The following concrete example shows how the
-three functions could be used to access the addresses associated with
-various people.
+<tt>operator[]</tt>. The following concrete example from <a
+href="./example1.cpp">example1.cpp</a> shows how the three functions
+could be used to access the addresses associated with various people.
+We use a separate function template here to highlight the parts of the
+program that use the property map concept interface. In the
+<tt>main()</tt> function we use <tt>std::map</tt> and
+<tt>boost::associative_property_map</tt>, but it would have been OK to
+use any type (including a custom type that you create) that fulfills
+the property map requirements.
 
-<pre>template &lt;class AddressMap&gt;
+<pre>#include &lt;iostream&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+#include &lt;boost/property_map.hpp&gt;
+
+
+template &lt;typename AddressMap&gt;
 void foo(AddressMap address)
 {
   typedef typename boost::property_traits&lt;AddressMap&gt;::value_type value_type;
@@ -64,12 +76,33 @@ void foo(AddressMap address)
   value_type old_address, new_address;
   key_type fred = &quot;Fred&quot;;
   old_address = get(address, fred);
-  new_address = &quot;384 Fitzpatrick Street&quot;
+  new_address = &quot;384 Fitzpatrick Street&quot;;
   put(address, fred, new_address);
 
   key_type joe = &quot;Joe&quot;;
   value_type&amp; joes_address = address[joe];
   joes_address = &quot;325 Cushing Avenue&quot;;
+}
+
+int
+main()
+{
+  std::map&lt;std::string, std::string&gt; name2address;
+  boost::associative_property_map&lt; std::map&lt;std::string, std::string&gt; &gt;
+    address_map(name2address);
+
+  name2address.insert(make_pair(std::string(&quot;Fred&quot;), 
+				std::string(&quot;710 West 13th Street&quot;)));
+  name2address.insert(make_pair(std::string(&quot;Joe&quot;), 
+				std::string(&quot;710 West 13th Street&quot;)));
+
+  foo(address_map);
+  
+  for (std::map&lt;std::string, std::string&gt;::iterator i = name2address.begin();
+       i != name2address.end(); ++i)
+    std::cout &lt;&lt; i-&gt;first &lt;&lt; &quot;: &quot; &lt;&lt; i-&gt;second &lt;&lt; &quot;\n&quot;;
+
+  return EXIT_SUCCESS;
 }</pre>
 
 <p>
@@ -175,7 +208,7 @@ functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
 
 <PRE>namespace boost {
 
-  template &lt;class PropertyMap&gt;
+  template &lt;typename PropertyMap&gt;
   struct property_traits {
      typedef typename PropertyMap::key_type key_type;
      typedef typename PropertyMap::value_type value_type;
@@ -199,7 +232,7 @@ functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
 
 <PRE>namespace boost {
   // specialization for using pointers as property maps
-  template &lt;class T&gt;
+  template &lt;typename T&gt;
   struct property_traits&lt;T*&gt; {
     typedef T value_type;
     typedef std::ptrdiff_t key_type;
@@ -217,6 +250,8 @@ functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
   </li>
   <li><a href="./identity_property_map.html">identity_property_map</a> </li>
   <li><a href="./iterator_property_map.html">iterator_property_map</a></li>
+  <li><a href="./associative_property_map.html">associative_property_map</a></li>
+  <li><a href="./const_associative_property_map.html">const_associative_property_map</a></li>
 </ul>
 
 <h3>History</h3>
@@ -246,8 +281,8 @@ passed by value.
 <HR>
 <TABLE>
 <TR valign=top>
-<TD nowrap>Copyright &copy 2000</TD><TD>
-<a HREF="../../people/jeremy_siek.htm">Jeremy Siek</a>, Univ.of Notre Dame (<A HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
+<TD nowrap>Copyright &copy 2000-2002</TD><TD>
+<a HREF="../../people/jeremy_siek.htm">Jeremy Siek</a>, Indiana University (<A HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
 </TD></TR></TABLE>
 
 </BODY>
