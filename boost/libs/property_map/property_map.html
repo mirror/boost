@@ -11,7 +11,7 @@
   -- purpose.  It is provided "as is" without express or implied warranty.
   -->
 <Head>
-<Title>Property Map Concepts</Title>
+<Title>Property Map Library</Title>
 <BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
 	ALINK="#ff0000"> 
 <IMG SRC="../../c++boost.gif" 
@@ -19,10 +19,24 @@
 
 <BR Clear>
 
-
 <H1><A NAME="sec:property-maps"></A>
-Property Map Concepts
+Boost Property Map Library
 </H1>
+
+The Boost Property Map Library is a small library that addresses the
+need to provide a generic interface for mapping between objects.  Most
+of the library is the interface definition, captured as a <a
+href="#sec:property-map-concepts">set of concepts</a>. In addition
+there are supporting <a href="#sec:property-map-tags">category
+tags</a> and a <a href="#sec:property-map-traits">traits class</a>, as
+well as <a href="#sec:property-map-classes">some classes</a> that
+implement the property map interface. These classes are not meant to
+fulfill all mapping needs, but more to serve as an example of how to
+implement the interface.
+
+<h2><A NAME="sec:property-map-concepts"></A>
+Property Map Concepts
+</h2>
 
 The property map interface consists of a set of concepts (see
 definition of &quot;concept&quot; in <a
@@ -125,6 +139,8 @@ below, with links to the documentation for each of them.
 <li><a href="./LvaluePropertyMap.html">LvaluePropertyMap</a></li>
 </ul>
 
+<h2><a name="sec:property-map-tags">Property Map Category Tags</a></h2>
+
 <P>
 There is a tag struct for each of the categories of property
 maps, which is defined in the header
@@ -144,6 +160,8 @@ maps, which is defined in the header
     public read_write_property_map_tag { };
 
 }</PRE>
+
+<h2><a name="sec:property-map-traits">Property Map Traits</a></h2>
 
 <P>
 Similar to the <TT>std::iterator_traits</TT> class of the STL, there
@@ -181,6 +199,12 @@ functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
 
 }</PRE>
 
+<h2><a name="sec:property-map-classes">Property Map Classes</a></h2>
+
+<ul>
+  <li><a href="./identity_property_map.html">identity_property_map</a> </li>
+  <li><a href="./iterator_property_map.html">random_access_iterator_property_map</a></li>
+</ul>
 
 <h3>History</h3>
 
