@@ -79,47 +79,6 @@
 
 #endif
 
-#if BOOST_WORKAROUND(BOOST_MSVC,  <= 1300)                      \
- || BOOST_WORKAROUND(__GNUC__, <= 2 && __GNUC_MINOR__ <= 95)    \
- || BOOST_WORKAROUND(__MWERKS__, <= 0x3000)                     \
- || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-#  define BOOST_NO_SFINAE // "Substitution Failure Is Not An Error not implemented"
-
-#  if 0  // test code
-    template <bool x>
-    struct bar
-    {
-        typedef int type;
-    };
-
-    template <>
-    struct bar<false>
-    {
-    };
-
-
-    template <class T>
-    struct foo : bar<(sizeof(T) == 1)>
-    {
-    };
-
-    template <class T>
-    char* f(int, typename foo<T>::type = 0) { return 0; }
-
-    template <class T>
-    int f(...) { return 0; }
-
-    char* x = f<char>(0);
-    int y = f<char[2]>(0);
-
-    int main()
-    {
-        return 0;
-    }
-#  endif
-
-#endif
-
 #if BOOST_WORKAROUND(__MWERKS__, <=0x2407)
 #  define BOOST_NO_IS_CONVERTIBLE // "is_convertible doesn't work for simple types"
 #endif

@@ -25,6 +25,7 @@
 #  define BOOST_NO_CV_VOID_SPECIALIZATIONS
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  define BOOST_NO_DEDUCED_TYPENAME
+#  define BOOST_NO_SFINAE
 #endif
 
 // Version 7.0 (Kylix) and below:

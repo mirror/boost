@@ -32,6 +32,10 @@
 #     define BOOST_NO_UNREACHABLE_RETURN_DETECTION
 #   endif
 
+#   if(__MWERKS__ <= 0x3000)  
+#     define BOOST_NO_SFINAE
+#    endif
+
 #   if(__MWERKS__ <= 0x3003)  // 8.x
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #    endif

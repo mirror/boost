@@ -29,6 +29,10 @@
 #     endif
 #   endif
 
+#   if __GNUC__ == 2 && __GNUC_MINOR__ <= 95
+#     define BOOST_NO_SFINAE
+#   endif
+
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 97
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #     define BOOST_NO_OPERATORS_IN_NAMESPACE
