@@ -23,7 +23,7 @@
 // on the CRC's bit count.  This macro expresses that type in a compact
 // form, but also allows an alternate type for compilers that don't support
 // dependent types (in template value-parameters).
-#ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+#if !(defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS) || (defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)))
 #define BOOST_CRC_PARM_TYPE  typename ::boost::uint_t<Bits>::fast
 #else
 #define BOOST_CRC_PARM_TYPE  unsigned long
@@ -1059,3 +1059,4 @@ augmented_crc
 
 
 #endif  // BOOST_CRC_HPP
+
