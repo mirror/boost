@@ -44,7 +44,7 @@ int main()
                     mpl::not_< boost::is_same<_1, char> >
                   , mpl::not_< boost::is_float<_1> >
                   >
-            , mpl::greater< mpl::sizeof_<_1>, mpl::int_<8> >
+            , mpl::greater< mpl::sizeof_<_1>, mpl::size_t<8> >
             >
         >::type f1;
 
