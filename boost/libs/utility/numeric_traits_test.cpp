@@ -7,6 +7,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  11 Feb 2001 Fixes for Borland (David Abrahams)
 //  23 Jan 2001 Added test for wchar_t (David Abrahams)
 //  23 Jan 2001 Now statically selecting a test for signed numbers to avoid
 //              warnings with fancy compilers. Added commentary and
@@ -349,8 +350,15 @@ void test(Number* = 0)
               << "digits: " << std::numeric_limits<Number>::digits << "\n"
 #endif
               << "..." << std::flush;
-    typedef typename boost::detail::numeric_traits<Number>::difference_type difference_type;
-    BOOST_STATIC_ASSERT(boost::detail::is_signed<difference_type>::value);
+
+    // factoring out difference_type for the assert below confused Borland :(
+    typedef boost::detail::is_signed<
+#ifndef BOOST_MSVC
+        typename
+#endif
+        boost::detail::numeric_traits<Number>::difference_type
+        > is_signed;
+    BOOST_STATIC_ASSERT(is_signed::value);
 
     typedef typename boost::detail::if_true<
         boost::detail::is_signed<Number>::value
