@@ -1,6 +1,6 @@
 // Boost.Signals library
 //
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -17,6 +17,7 @@
 // to be included multiple times (one for each signalN class). The 
 // BOOST_SIGNALS_SIGNAL_TEMPLATE_HEADER_INCLUDED macro merely serves to
 // suppress reinclusion of the files that this header depends on.
+
 #ifndef BOOST_SIGNALS_SIGNAL_TEMPLATE_HEADER_INCLUDED
 #define BOOST_SIGNALS_SIGNAL_TEMPLATE_HEADER_INCLUDED
 #  include <boost/config.hpp>
