@@ -307,7 +307,7 @@ unsigned int expected_failures = 10;
 unsigned int expected_failures = 0;
 #elif defined(__HP_aCC)
 unsigned int expected_failures = 2;
-#elif defined(__EDG_VERSION__)
+#elif defined(__EDG_VERSION__) && __EDG_VERSION__ < 245
 unsigned int expected_failures = 3;
 #else
 unsigned int expected_failures = 0;
