@@ -61,7 +61,7 @@ main()
     d3 = from_string("2001-December-1");
     check("December", d == d2);
     check("December", d == d3);
-#if !(defined(BOOST_MSVC) && (_MSC_VER <= 1200))
+#if !defined(BOOST_NO_STD_ITERATOR_TRAITS)
     // from stream
     d = date(2000, 10, 31);
     std::stringstream ss("");
