@@ -49,8 +49,35 @@ struct arity< \
 }; \
 } \
 /**/
+#   define BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
+template<> \
+struct name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
+{ \
+    template< \
+          BOOST_MPL_PP_PARAMS(BOOST_MPL_METAFUNCTION_MAX_ARITY, typename T) \
+        > \
+    struct apply \
+        : name< BOOST_MPL_PP_PARAMS(i, T) > \
+    { \
+    }; \
+}; \
+/**/
 #else
 #   define BOOST_MPL_AUX_VOID_SPEC_ARITY(i, name) /**/
+#   define BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
+template<> \
+struct name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
+{ \
+    template< \
+          BOOST_MPL_PP_PARAMS(i, typename T) \
+        BOOST_MPL_PP_DEF_PARAMS_TAIL(i, typename T) \
+        > \
+    struct apply \
+        : name< BOOST_MPL_PP_PARAMS(i, T) > \
+    { \
+    }; \
+}; \
+/**/
 #endif
 
 #if defined(BOOST_EXTENDED_TEMPLATE_PARAMETERS_MATCHING) || \
@@ -79,20 +106,6 @@ struct template_arity< \
 #   define BOOST_MPL_AUX_VOID_SPEC_TEMPLATE_ARITY(i, j, name) /**/
 #endif
 
-#define BOOST_MPL_AUX_VOID_SPEC_MAIN(i, name) \
-template<> \
-struct name< BOOST_MPL_AUX_VOID_SPEC_PARAMS(i) > \
-{ \
-    template< \
-          BOOST_MPL_PP_PARAMS(i, typename T) \
-        BOOST_MPL_PP_DEF_PARAMS_TAIL(i, typename T) \
-        > \
-    struct apply \
-        : name< BOOST_MPL_PP_PARAMS(i, T) > \
-    { \
-    }; \
-}; \
-/**/
 
 #define BOOST_MPL_AUX_VOID_SPEC_PARAM(param) param = void_
 
