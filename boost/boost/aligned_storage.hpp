@@ -38,17 +38,22 @@ BOOST_STATIC_CONSTANT(
 
 template <
       std::size_t size_
-    , std::size_t alignment_ = -1
+    , std::size_t alignment_ = std::size_t(-1)
 >
 class aligned_storage
 {
-private: // helpers, for representation (below)
+private: // representation
 
-    typedef typename mpl::apply_if_c<
-          alignment_ == -1
+    union data_t
+    {
+        char buf[size_];
+
+        BOOST_DEDUCED_TYPENAME mpl::apply_if_c<
+          alignment_ == std::size_t(-1)
         , mpl::identity<detail::max_align>
         , type_with_alignment<alignment_>
-        >::type align_t;
+        > align_;
+    } data_;
 
 public: // constants
 
@@ -59,21 +64,11 @@ public: // constants
     BOOST_STATIC_CONSTANT(
           std::size_t
         , alignment = (
-              alignment_ == -1
+              alignment_ == std::size_t(-1)
             ? detail::alignment_of_max_align
             : alignment_
             )
         );
-
-private: // representation
-
-    union data_t
-    {
-        char buf[size];
-        align_t dummy_;
-    } data_;
-
-    friend union data_t;
 
 #if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(2))
 
