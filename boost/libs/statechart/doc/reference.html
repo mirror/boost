@@ -303,10 +303,10 @@ well-formed and have the indicated results:</p>
   </tr>
   <tr>
     <td width="15%"><code>InitialState</code></td>
-    <td width="51%">A most-derived direct or indirect subclass of either the
-    <code>simple_state</code> or the <code>state</code> class templates. The 
-    type that this class passes as <code>Context</code> to its base class 
-    template must be equal to <code>MostDerived</code>. That is, <code>
+    <td width="51%">A most-derived direct or indirect subclass of the
+    <code>simple_state</code> class template. The 
+    type that <code>InitialState</code> passes as <code>Context</code> to 
+	<code>simple_state&lt;&gt;</code> must be equal to <code>MostDerived</code>. That is, <code>
     InitialState</code> must be an <a href="definitions.html#Outermost state">
     outermost state</a> of this state machine</td>
     <td width="18%">The state that is entered when <code>state_machine&lt;&gt;::<br>
@@ -612,7 +612,9 @@ to Target<br>
 <pre>template&lt; class Target &gt;
 Target <a name="state_downcast">state_downcast</a>() const;</pre>
 <p><b>Requires</b>: For reference targets the compiler must support partial 
-specialization of class templates, otherwise a compile-time error will result<br>
+specialization of class templates, otherwise a compile-time error will result. 
+The type denoted by <code>Target</code> must be a most-derived direct or 
+indirect subtype of the <code>simple_state</code> class template<br>
 <b>Returns</b>: Depending on the form of <code>Target</code> either a 
 reference or a pointer to <code>const</code> if <code>Target</code> is equal 
 to the most-derived type of a currently active state. Returns <code>0</code> 
@@ -654,10 +656,10 @@ asynchronous_state_machine</code></a></h2>
   </tr>
   <tr>
     <td width="15%"><code>InitialState</code></td>
-    <td width="51%">A most-derived direct or indirect subclass of either the
-    <code>simple_state</code> or the <code>state</code> class templates. The 
-    type that this class passes as <code>Context</code> to its base class 
-    template must be equal to <code>MostDerived</code>. That is, <code>
+    <td width="51%">A most-derived direct or indirect subclass of the
+    <code>simple_state</code> class template. The 
+    type that <code>InitialState</code> passes as <code>Context</code> to 
+	<code>simple_state&lt;&gt;</code> must be equal to <code>MostDerived</code>. That is, <code>
     InitialState</code> must be an <a href="definitions.html#Outermost state">
     outermost state</a> of this state machine</td>
     <td width="18%">The state that is entered when the state machine is 
@@ -1160,8 +1162,8 @@ must derive from the <code>state</code> class template.</p>
   <tr>
     <td width="15%"><code>Context</code></td>
     <td width="51%">A most-derived direct or indirect subclass of either the
-    <code>state_machine</code>, <code>asynchronous_state_machine</code>, <code>
-    simple_state</code> or <code>state</code> class templates or an 
+    <code>state_machine</code>, <code>asynchronous_state_machine</code> or <code>
+    simple_state</code> class templates or an 
     instantiation of the <code>orthogonal</code> class template nested in the 
     state base classes. Must be a complete type</td>
     <td width="18%">Defines the states' position in the state hierarchy</td>
@@ -1182,8 +1184,7 @@ must derive from the <code>state</code> class template.</p>
   <tr>
     <td width="15%"><code>InnerInitial</code></td>
     <td width="51%">An <code>mpl::list&lt;&gt;</code> containing most-derived direct 
-    or indirect subclasses of either the <code>simple_state</code> or the
-    <code>state</code> class templates or instantiations of either the <code>
+    or indirect subclasses of the <code>simple_state</code> class template or instantiations of either the <code>
     shallow_history</code> or <code>deep_history</code> class templates. If 
     there is only a single inner initial state that is not a template 
     instantiation then it can also be passed directly, without wrapping it 
@@ -1592,8 +1593,10 @@ machine is <a href="definitions.html#Unstable state machine">unstable</a></p>
 Target <a name="simple_state::state_downcast">state_downcast</a>() const;</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
 subclass then the most-derived type must either directly or indirectly derive 
-from the <code>state</code> class template<b><br>
-Returns</b>: Has exactly the same semantics as <code>
+from the <code>state</code> class template. Moreover, <code>
+<a href="#state_downcast">state_machine&lt;&gt;::state_downcast</a>&lt;&gt;()</code> requirements 
+also apply<br>
+<b>Returns</b>: Has exactly the same semantics as <code>
 <a href="#state_downcast">state_machine&lt;&gt;::state_downcast</a>&lt;&gt;()</code><br>
 <b>Throws</b>: Has exactly the same semantics as <code>
 <a href="#state_downcast">state_machine&lt;&gt;::state_downcast</a>&lt;&gt;()</code><b><br>
@@ -1714,9 +1717,12 @@ or a shallow history inner initial state.</p>
   </tr>
   <tr>
     <td width="15%"><code>DefaultState</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of either the
-    <code><a href="#Class template simple_state">simple_state</a></code> or 
-    the <code><a href="#Class template state">state</a></code> class templates</td>
+    <td width="45%">A most-derived direct or indirect subclass of the
+    <code><a href="#Class template simple_state">simple_state</a></code> class. 
+	The type that <code>DefaultState</code> passes as <code>Context</code> to 
+	its base class template must itself specify <code>has_shallow_history</code> 
+	or <code>has_full_history</code> for the last parameter of its base class 
+	template</td>
     <td width="24%">The state that is entered if shallow history is not 
     available</td>
   </tr>
@@ -1747,9 +1753,12 @@ has some <a href="rationale.html#Limitations">limitations</a>.</p>
   </tr>
   <tr>
     <td width="15%"><code>DefaultState</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of either the
-    <code><a href="#Class template simple_state">simple_state</a></code> or 
-    the <code><a href="#Class template state">state</a></code> class templates</td>
+    <td width="45%">A most-derived direct or indirect subclass of the
+    <code><a href="#Class template simple_state">simple_state</a></code> class template. 
+	The type that <code>DefaultState</code> passes as <code>Context</code> to 
+	its base class template must itself specify <code>has_deep_history</code> 
+	or <code>has_full_history</code> for the last parameter of its base class 
+	template</td>
     <td width="24%">The state that is entered if deep history is not available</td>
   </tr>
 </table>
@@ -1892,9 +1901,8 @@ and <code><a href="#Class template state">state</a></code> class templates.</p>
   </tr>
   <tr>
     <td width="15%"><code>Destination</code></td>
-    <td width="45%">A most-derived direct or indirect subclass of either the
-    <code><a href="#Class template simple_state">simple_state</a></code> or 
-    the <code><a href="#Class template state">state</a></code> class templates 
+    <td width="45%">A most-derived direct or indirect subclass of the
+    <code><a href="#Class template simple_state">simple_state</a></code> class template 
     or an instantiation of either the <code>
     <a href="#Class template shallow_history">shallow_history</a></code> or
     <code><a href="#Class template deep_history">deep_history</a></code> class 
@@ -1906,7 +1914,7 @@ and <code><a href="#Class template state">state</a></code> class templates.</p>
   </tr>
   <tr>
     <td width="15%"><code>TransitionContext</code></td>
-    <td width="45%">A common outer state of the source and <code>Destination</code> 
+    <td width="45%">A common outer context of the source and <code>Destination</code> 
     state</td>
     <td width="24%">The state of which the transition action is a member</td>
     <td width="19%"><i><code>unspecified</code></i></td>
@@ -2092,7 +2100,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38839" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38840" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
