@@ -122,4 +122,37 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="*" mode="highlight">
+    <xsl:element name="{name(.)}">
+      <xsl:for-each select="./@*">
+        <xsl:choose>
+          <xsl:when test="local-name(.)='last-revision'">
+            <xsl:attribute
+              name="rev:last-revision"
+              namespace="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision"
+>
+              <xsl:value-of select="."/>
+            </xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="{name(.)}">
+              <xsl:value-of select="."/>
+            </xsl:attribute>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+      <xsl:apply-templates mode="highlight"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="text()" mode="highlight">
+    <xsl:call-template name="source-highlight">
+      <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="classname|methodname|functionname|libraryname|
+                       conceptname" mode="highlight">
+    <xsl:apply-templates select="." mode="annotation"/>
+  </xsl:template>
 </xsl:stylesheet>

@@ -245,11 +245,15 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
             <xsl:value-of select="@type"/>
           </xsl:when>
           <xsl:otherwise>
+            <xsl:apply-templates select="type/*|type/text()" 
+              mode="highlight"/>
+            <!--
             <xsl:call-template name="source-highlight">
               <xsl:with-param name="text">
                 <xsl:apply-templates select="type/*|type/text()"/>
               </xsl:with-param>
-            </xsl:call-template>
+            </xsl:call-template> 
+            -->
           </xsl:otherwise>
         </xsl:choose>
 
