@@ -233,6 +233,60 @@ export LIBS="-lpthread"
             <TD>A suffix header to include in place of whatever boost.config would normally 
                select, any replacement should undo the effects of the prefix header.</TD>
          </TR>
+         <TR>
+            <TD vAlign="top">BOOST_ALL_DYN_LINK</TD>
+            <TD>
+               <P>Forces all libraries that have separate source, to be linked as dll's rather 
+                  than static libraries on Microsoft Windows (this macro is used to turn on 
+                  __declspec(dllimport) modifiers, so that the compiler knows which symbols to 
+                  look for in a dll rather than in a static library).&nbsp;
+               </P>
+               <P>Note that there may be some libraries that can only be statically linked 
+                  (Boost.Test for example) and others which may only be dynamically linked 
+                  (Boost.Threads for example), in these cases this macro has no effect.</P>
+            </TD>
+         </TR>
+         <TR>
+            <TD vAlign="top">BOOST_WHATEVER_DYN_LINK</TD>
+            <TD>
+               <P>Forces library "whatever" to be linked as a dll rather than a static library on 
+                  Microsoft Windows: replace the WHATEVER part of the macro name with the name of 
+                  the library that you want to dynamically link to, for example use 
+                  BOOST_DATE_TIME_DYN_LINK or BOOST_REGEX_DYN_LINK etc&nbsp;(this macro is used 
+                  to turn on __declspec(dllimport) modifiers, so that the compiler knows which 
+                  symbols to look for in a dll rather than in a static library).&nbsp;
+               </P>
+               <P>Note that there may be some libraries that can only be statically linked 
+                  (Boost.Test for example) and others which may only be dynamically linked 
+                  (Boost.Threads for example), in these cases this macro is unsupported.</P>
+            </TD>
+         </TR>
+         <TR>
+            <TD vAlign="top">BOOST_ALL_NO_LIB</TD>
+            <TD>
+               <P>Tells the config system not to automatically select which libraries to link 
+                  against.&nbsp;
+               </P>
+               <P>Normally if a compiler supports #pragma lib, then the correct library build 
+                  variant will be automatically selected and linked against, simply by the act of 
+                  including one of that library's headers.&nbsp; This macro turns that feature 
+                  off.</P>
+            </TD>
+         </TR>
+         <TR>
+            <TD vAlign="top">BOOST_WHATEVER_NO_LIB</TD>
+            <TD>
+               <P>Tells the config system not to automatically select which library to link 
+                  against for library "whatever", replace WHATEVER in the macro name with the 
+                  name of the library; for example BOOST_DATE_TIME_NO_LIB or 
+                  BOOST_REGEX_NO_LIB.&nbsp;
+               </P>
+               <P>Normally if a compiler supports #pragma lib, then the correct library build 
+                  variant will be automatically selected and linked against, simply by the act of 
+                  including one of that library's headers.&nbsp; This macro turns that feature 
+                  off.</P>
+            </TD>
+         </TR>
       </table>
       <h4><a name="advanced_config"></a>Advanced configuration usage</h4>
       <p>By setting various macros on the compiler command line or by editing &lt;<a href="../../boost/config/user.hpp">boost/config/user.hpp</a>&gt;, 
@@ -389,9 +443,9 @@ export LIBS="-lpthread"
             <TD vAlign="top" width="16%">Compiler</TD>
             <TD vAlign="top" width="33%">Argument dependent lookup fails if there is a using 
                declaration for the symbol being looked up in the current scope.&nbsp;&nbsp;For 
-               example, <code>using boost::get_pointer;</code> prevents ADL from finding overloads of 
-               <code>get_pointer</code> in namespaces nested inside boost (but not elsewhere).&nbsp; 
-               Probably Borland specific.</TD>
+               example, <code>using boost::get_pointer;</code> prevents ADL from finding 
+               overloads of <code>get_pointer</code> in namespaces nested inside boost (but 
+               not elsewhere).&nbsp; Probably Borland specific.</TD>
          </TR>
          <tr>
             <td valign="top" width="51%">BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP</td>
