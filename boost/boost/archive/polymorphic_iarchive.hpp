@@ -28,6 +28,16 @@ namespace std{
 #include <string>
 #include <boost/cstdint.hpp>
 
+// determine if its necessary to handle _int64_t specifically
+#if !defined(BOOST_NO_INT64)
+#if ULONG_MAX != 0xffffffff
+#if ULONG_MAX == 18446744073709551615 // 2**64 - 1
+#define BOOST_NO_INTRINSIC_INT64_T
+#define BOOST_NO_INTRINSIC_UINT64_T
+#endif
+#endif
+#endif
+
 #include <boost/pfto.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/archive/detail/iserializer.hpp>
@@ -63,7 +73,7 @@ private:
     virtual void load(long & t) = 0;
     virtual void load(unsigned long & t) = 0;
 
-    #ifndef BOOST_NO_INT64
+    #if !defined(BOOST_NO_INT64) && !defined(BOOST_NO_INTRINSIC_INT64_T)
     virtual void load(int64_t & t) = 0;
     virtual void load(uint64_t & t) = 0;
     #endif
