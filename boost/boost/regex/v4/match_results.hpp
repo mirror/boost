@@ -148,12 +148,17 @@ public:
                          const string_type& fmt,
                          match_flag_type flags = format_default) const
    {
-      return regex_format(out, *this, fmt, flags);
+      re_detail::trivial_format_traits<char_type> traits;
+      return re_detail::regex_format_imp(out, *this, fmt.data(), fmt.data() + fmt.size(), flags, traits);
    }
    string_type format(const string_type& fmt,
                       match_flag_type flags = format_default) const
    {
-      return ::boost::regex_format(*this, fmt, flags);
+      string_type result;
+      re_detail::string_out_iterator<string_type> i(result);
+      re_detail::trivial_format_traits<char_type> traits;
+      re_detail::regex_format_imp(i, *this, fmt.data(), fmt.data() + fmt.size(), flags, traits);
+      return result;
    }
    // format with locale:
    template <class OutputIterator, class RegexT>
