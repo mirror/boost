@@ -1,4 +1,4 @@
-// Boost Lambda Library  - operator_lambda_functor_base.hpp -----------------
+// Boost Lambda Library  - operator_lambda_func_base.hpp -----------------
 //
 // Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
 //
@@ -15,8 +15,8 @@
 
 // ------------------------------------------------------------
 
-#ifndef BOOST_LAMBDA_OPERATOR_LAMBDA_FUNCTOR_BASE_HPP
-#define BOOST_LAMBDA_OPERATOR_LAMBDA_FUNCTOR_BASE_HPP
+#ifndef BOOST_LAMBDA_OPERATOR_LAMBDA_FUNC_BASE_HPP
+#define BOOST_LAMBDA_OPERATOR_LAMBDA_FUNC_BASE_HPP
 
 namespace boost { 
 namespace lambda {

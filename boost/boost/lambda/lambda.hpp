@@ -24,7 +24,7 @@
 #endif
 
 #include "boost/lambda/detail/operator_actions.hpp"
-#include "boost/lambda/detail/operator_lambda_functor_base.hpp"
+#include "boost/lambda/detail/operator_lambda_func_base.hpp"
 #include "boost/lambda/detail/operator_return_type_traits.hpp"
 
 
