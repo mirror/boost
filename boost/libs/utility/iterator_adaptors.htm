@@ -311,13 +311,13 @@ iterator_adaptor&lt;foo_iterator, foo_policies,
         <th>Required for Iterator Categories
 
       <tr>
-        <td><tt>dereference</tt> 
+        <td><tt>initialize</tt>
 
-        <td>returns an element of the iterator's <tt>reference</tt> type
-        
-        <td><tt>*p</tt>, <tt>p[n]</tt>
+        <td>optionally modify base iterator during iterator construction
 
-        <td rowspan="3"><a href=
+        <td>constructors
+
+        <td rowspan="4"><a href=
         "http://www.sgi.com/tech/stl/InputIterator.html">Input</a>/ <a href=
         "http://www.sgi.com/tech/stl/OutputIterator.html">Output</a>/ <a href=
         "http://www.sgi.com/tech/stl/ForwardIterator.html">Forward</a>/ <a
@@ -325,6 +325,15 @@ iterator_adaptor&lt;foo_iterator, foo_policies,
         "http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional</a>/
         <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
         Access</a> 
+
+	  
+      <tr>
+        <td><tt>dereference</tt> 
+
+        <td>returns an element of the iterator's <tt>reference</tt> type
+        
+        <td><tt>*p</tt>, <tt>p[n]</tt>
+
 
       <tr>
         <td><tt>equal</tt> 
@@ -405,6 +414,10 @@ iterator_adaptor&lt;foo_iterator, foo_policies,
 <pre>
 struct <a name="default_iterator_policies">default_iterator_policies</a>
 {
+  template &lt;class BaseType&gt;
+  void initialize(BaseType&amp;)
+    { }
+
   template &lt;class Reference, class BaseType&gt;
   Reference dereference(type&lt;Reference&gt;, const BaseType&amp; x) const
     { return *x; }
