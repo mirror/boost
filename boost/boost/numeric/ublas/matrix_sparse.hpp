@@ -3829,10 +3829,6 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class F, std::size_t IB, class IA, class TA>
     class coordinate_matrix:
         public matrix_expression<coordinate_matrix<T, F, IB, IA, TA> > {
-#if defined(BOOST_MSVC) && BOOST_MSVC == 1300
-        // Workaround VC7 inability to find index_array iterator operators in std::sort
-        index_triple_array<IA,IA,TA>::iterator instantiate_iterator_for_vc7;
-#endif
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<coordinate_matrix<T, F, IB, IA, TA> >::operator ();
