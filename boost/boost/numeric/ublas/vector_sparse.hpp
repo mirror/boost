@@ -467,7 +467,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void insert (size_type i, const_reference t) {
             BOOST_UBLAS_CHECK (data ().find (i) == data ().end (), bad_index ());
-            data ().insert (data ().end (), typename array_type::value_type (i, t));
+            data ().insert (data ().end (), BOOST_UBLAS_TYPENAME array_type::value_type (i, t));
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i) {

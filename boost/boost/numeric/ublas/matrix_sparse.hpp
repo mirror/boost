@@ -483,7 +483,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void insert (size_type i, size_type j, const_reference t) {
             BOOST_UBLAS_CHECK (data ().find (functor_type::element (i, size1_, j, size2_)) == data ().end (), bad_index ());
-            data ().insert (data ().end (), typename array_type::value_type (functor_type::element (i, size1_, j, size2_), t));
+            data ().insert (data ().end (), BOOST_UBLAS_TYPENAME array_type::value_type (functor_type::element (i, size1_, j, size2_), t));
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i, size_type j) {
@@ -1560,9 +1560,9 @@ namespace boost { namespace numeric { namespace ublas {
         void insert (size_type i, size_type j, const_reference t) {
             vector_iterator_type itv (data ().find (functor_type::element1 (i, size1_, j, size2_)));
             if (itv == data ().end ())
-                itv = data ().insert (data ().end (), typename array_type::value_type (functor_type::element1 (i, size1_, j, size2_), vector_data_value_type ()));
+                itv = data ().insert (data ().end (), BOOST_UBLAS_TYPENAME array_type::value_type (functor_type::element1 (i, size1_, j, size2_), vector_data_value_type ()));
             BOOST_UBLAS_CHECK ((*itv).second.find (functor_type::element2 (i, size1_, j, size2_)) == (*itv).second.end (), bad_index ());
-            (*itv).second.insert ((*itv).second.end (), typename array_type::value_type (functor_type::element2 (i, size1_, j, size2_), t));
+            (*itv).second.insert ((*itv).second.end (), BOOST_UBLAS_TYPENAME array_type::value_type (functor_type::element2 (i, size1_, j, size2_), t));
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i, size_type j) {
