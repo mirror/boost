@@ -72,6 +72,9 @@ Issue 9.41x
 +``value_type`` is ``Value``.
 +
 +
+
+Issue 9.37x
+
 +If ``Iterator`` models Readable Lvalue Iterator and if ``Iterator``
 +models Random Access Traversal Iterator, then ``iterator_category`` is
 +convertible to ``random_access_iterator_tag``. Otherwise, if
@@ -117,10 +120,15 @@ Issue 9.37x
  The ``transform_iterator`` models the most refined standard traversal
 -concept that is modeled by ``Iterator``.
 +concept that is modeled by the ``Iterator`` argument.
+
+Issue 9.41x
  
 -The ``reference`` type of ``transform_iterator`` is
 -``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
 -The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
+
+Issue 9.37x.
+
 +If ``transform_iterator`` is a model of Readable Lvalue Iterator then
 +it models the following original iterator concepts depending on what
 +the ``Iterator`` argument models.
