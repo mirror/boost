@@ -22,7 +22,7 @@ std::pair<const licence_info*, int> get_licences()
          "\\d[^[:alpha:]]+"
             "([[:alpha:]]"
                "(?:"
-                  "(?!Use\\b|Permission\\b|All\\b"
+               "(?!Use\\b|Permission\\b|All\\b|<P|\\w+(?:://|@)"
                ")[^\\n\\d]"
             ")+"
          ")"
