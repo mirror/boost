@@ -41,16 +41,16 @@
                     Unlike in the STL algorithms, parameters are not specified only in the form
                     of iterators. The STL convention allows for great flexibility,
                     but it has several limitations. It is not possible to <emphasis>stack</emphasis> algorithms together, 
-					because a container is passed in two parameters. Therefore it is not possible to use 
+                    because a container is passed in two parameters. Therefore it is not possible to use 
                     a return value from another algorithm. It is considerably easier to write
-					<code>to_lower(str1)</code>, than <code>to_lower(str1.begin(), str1.end())</code>.
+                    <code>to_lower(str1)</code>, than <code>to_lower(str1.begin(), str1.end())</code>.
                 </para>
                 <para>
                     The magic of <link linkend="string_algo.collection_traits">collection_traits</link> 
                     provides a uniform way of handling different string types. 
                     If there is a need to pass a pair of iterators, 
                     <link linkend="string_algo.iterator_range"><code>iterator_range</code></link>
-					can be used to package iterators into a structure with a compatible interface.
+                    can be used to package iterators into a structure with a compatible interface.
                 </para>
             </listitem>
             <listitem>
@@ -72,7 +72,7 @@
             <listitem>
                 <para><emphasis role="bold">Naming:</emphasis>
                     Naming follows the conventions from the Standard C++ Library. If there is a 
-					copy and a mutable version of the same algorithm, the mutable version has no suffix 
+                    copy and a mutable version of the same algorithm, the mutable version has no suffix 
                     and the copy version has the suffix <emphasis>_copy</emphasis>. 
                     Some algorithms have the prefix <emphasis>i</emphasis> 
                     (e.g. <functionname>ifind_first()</functionname>).
@@ -135,7 +135,7 @@
         &lt;&lt; endl; // prints "hello world! is written in the lower case"
         </programlisting>
         <para>
-			The predicates determine whether if a substring is contained in the input string
+            The predicates determine whether if a substring is contained in the input string
             under various conditions. The conditions are: a string starts with the substring, 
             ends with the substring, 
             simply contains the substring or if both strings are equal. See the reference for 
@@ -148,7 +148,7 @@
             useful string-related predicates and combinators ready for use.
             These are located in the <headername>boost/algorithm/string/classification.hpp</headername> header.
             Classification predicates can be combined using logical combinators to form
-			a more complex expressions. For example: <code>is_from_range('a','z') || is_digit()</code>
+            a more complex expressions. For example: <code>is_from_range('a','z') || is_digit()</code>
         </para>
     </section>
     <section>
@@ -190,13 +190,13 @@
     transform( result.begin(), result.end(), result.begin(), bind2nd(plus&lt;char&gt;(), 1) );
     // text = "hello dommy!"            
 
-	to_upper(result); // text == "hello doMMy!"
+    to_upper(result); // text == "hello doMMy!"
 
-	// iterator_range is convertible to bool
-	if(find_first(text, "dolly"))
-	{
-		cout &lt;&lt; "Dolly is there" &lt;&lt; endl;
-	}
+    // iterator_range is convertible to bool
+    if(find_first(text, "dolly"))
+    {
+        cout &lt;&lt; "Dolly is there" &lt;&lt; endl;
+    }
         </programlisting>
         <para>
             We have used <functionname>find_last()</functionname> to search the <code>text</code> for "ll".
@@ -208,10 +208,10 @@
             char[] because this type is supported by 
             <link linkend="string_algo.collection_traits">collection_traits</link>.
 
-			The following lines transform the result. Notice that 
-			<link linkend="string_algo.iterator_range"><code>iterator_range</code></link> has familiar 
-			<code>begin()</code> and <code>end()</code> methods, so it can be used like any other STL container.
-			Also it is convertible to bool therefore it is easy to use find algorithms for a simple containment checking.
+            The following lines transform the result. Notice that 
+            <link linkend="string_algo.iterator_range"><code>iterator_range</code></link> has familiar 
+            <code>begin()</code> and <code>end()</code> methods, so it can be used like any other STL container.
+            Also it is convertible to bool therefore it is easy to use find algorithms for a simple containment checking.
         </para>
         <para>
             Find algorithms are located in <headername>boost/algorithm/string/find.hpp</headername>.
@@ -261,8 +261,8 @@
         </para>
         <para>
             There are two iterators provided <classname>find_iterator</classname> and 
-			<classname>split_iterator</classname>. The former iterates over substrings that are found using the specified
-			Finder. The latter iterates over the gaps between these substrings.
+            <classname>split_iterator</classname>. The former iterates over substrings that are found using the specified
+            Finder. The latter iterates over the gaps between these substrings.
         </para>
         <programlisting>
     string str1("abc-*-ABC-*-aBc");
@@ -312,8 +312,8 @@
         <para>
             Split algorithms are an extension to the find iterator for one common usage scenario.
             These algorithms use a find iterator and store all matches into the provided
-			container. This container must be able to hold copies (e.g. <code>std::string</code>) or 
-			references (e.g. <code>iterator_range</code>) of the extracted substrings.
+            container. This container must be able to hold copies (e.g. <code>std::string</code>) or 
+            references (e.g. <code>iterator_range</code>) of the extracted substrings.
         </para>
         <para>
             Two algorithms are provided. <functionname>find_all()</functionname> finds all copies
@@ -328,7 +328,7 @@
     find_vector_type FindVec; // #1: Search for separators
     ifind_all( FindVec, str1, "abc" ); // FindVec == { [abc],[ABC],[aBc] }
 
-	typedef vector&lt; string &gt; split_vector_type;
+    typedef vector&lt; string &gt; split_vector_type;
     
     split_vector_type SplitVec; // #2: Search for tokens
     split( SplitVec, str1, is_any_of&lt;char&gt;("-*") ); // SplitVec == { "hello abc","ABC","aBc goodbye" }

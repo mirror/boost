@@ -44,8 +44,8 @@ namespace boost {
             \param Comp An element comparison predicate
             \return The result of the test
 
-  			\note This function provides the strong exception-safety guarantee
-		*/
+              \note This function provides the strong exception-safety guarantee
+        */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
             inline bool starts_with( 
             const Collection1T& Input, 
@@ -96,7 +96,7 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
             \return The result of the test
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline bool istarts_with( 
@@ -123,7 +123,7 @@ namespace boost {
             \param Comp An element comparison predicate
             \return The result of the test
 
-  			\note This function provides the strong exception-safety guarantee
+              \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool ends_with( 
@@ -170,7 +170,7 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
             \return The result of the test
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline bool iends_with( 
@@ -194,7 +194,7 @@ namespace boost {
             \param Comp An element comparison predicate
             \return The result of the test
 
-           	\note This function provides the strong exception-safety guarantee
+               \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool contains( 
@@ -233,7 +233,7 @@ namespace boost {
             \param Loc A locale used for case insensitive comparison
             \return The result of the test
 
-        	\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline bool icontains( 

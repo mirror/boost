@@ -56,7 +56,7 @@ namespace boost {
 
             \note Prior content of the result will be overwritten.
 
-           	\note This function provides the strong exception-safety guarantee
+               \note This function provides the strong exception-safety guarantee
         */
         template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
         inline SequenceSequenceT& find_all(
@@ -91,7 +91,7 @@ namespace boost {
 
             \note Prior content of the result will be overwritten.
 
-          	\note This function provides the strong exception-safety guarantee
+              \note This function provides the strong exception-safety guarantee
         */
         template< typename SequenceSequenceT, typename Collection1T, typename Collection2T >
         inline SequenceSequenceT& ifind_all(
@@ -134,7 +134,7 @@ namespace boost {
 
             \note Prior content of the result will be overwritten.
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template< typename SequenceSequenceT, typename CollectionT, typename PredicateT >
         inline SequenceSequenceT& split(

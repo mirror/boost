@@ -37,7 +37,7 @@ namespace boost {
         //! Left trim - parametric
         /*!
             Remove all leading spaces from the input. 
-			The supplied predicate is used to determine which characters are considered spaces.
+            The supplied predicate is used to determine which characters are considered spaces.
             The result is a trimmed copy of the input. It is returned as a sequence 
             or copied to the output iterator
 
@@ -48,7 +48,7 @@ namespace boost {
                 An output iterator pointing just after the last inserted character or
                 a copy of the input
 
-           	\note The second variant of this function provides the strong exception-safety guarantee
+               \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_left_copy_if( 
@@ -91,7 +91,7 @@ namespace boost {
             \param Loc a locale used for 'space' classification
             \return A trimmed copy of the input
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename SequenceT>
         inline SequenceT trim_left_copy(const SequenceT& Input, const std::locale& Loc=std::locale())
@@ -104,8 +104,8 @@ namespace boost {
 
         //! Left trim
         /*!
-			Remove all leading spaces from the input. The supplied predicate is 
-			used to determine which characters are considered spaces.
+            Remove all leading spaces from the input. The supplied predicate is 
+            used to determine which characters are considered spaces.
             The input sequence is modified in-place.
 
             \param Input An input sequence
@@ -142,8 +142,8 @@ namespace boost {
 
         //! Right trim - parametric
         /*!
-            Remove all trailing spaces from the input. 			
-			The supplied predicate is used to determine which characters are considered spaces.
+            Remove all trailing spaces from the input.             
+            The supplied predicate is used to determine which characters are considered spaces.
             The result is a trimmed copy of the input. It is returned as a sequence 
             or copied to the output iterator
 
@@ -154,7 +154,7 @@ namespace boost {
                 An output iterator pointing just after the last inserted character or
                 a copy of the input
 
-         	\note The second variant of this function provides the strong exception-safety guarantee
+             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_right_copy_if( 
@@ -198,8 +198,8 @@ namespace boost {
             \param Loc A locale used for 'space' classification
             \return A trimmed copy of the input
 
-			\note This function provides the strong exception-safety guarantee
-		*/
+            \note This function provides the strong exception-safety guarantee
+        */
         template<typename SequenceT>
         inline SequenceT trim_right_copy(const SequenceT& Input, const std::locale& Loc=std::locale())
         {
@@ -212,8 +212,8 @@ namespace boost {
             
         //! Right trim - parametric
         /*!
-			Remove all trailing spaces from the input.
-			The supplied predicate is used to determine which characters are considered spaces.
+            Remove all trailing spaces from the input.
+            The supplied predicate is used to determine which characters are considered spaces.
             The input sequence is modified in-place.
 
             \param Input An input sequence
@@ -253,7 +253,7 @@ namespace boost {
         //! Trim - parametric
         /*!
             Remove all trailing and leading spaces from the input. 
-			The supplied predicate is used to determine which characters are considered spaces.
+            The supplied predicate is used to determine which characters are considered spaces.
             The result is a trimmed copy of the input. It is returned as a sequence 
             or copied to the output iterator
 
@@ -264,7 +264,7 @@ namespace boost {
                 An output iterator pointing just after the last inserted character or
                 a copy of the input
 
-         	\note The second variant of this function provides the strong exception-safety guarantee
+             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_copy_if( 
@@ -321,7 +321,7 @@ namespace boost {
             \param Loc A locale used for 'space' classification
             \return A trimmed copy of the input
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename SequenceT>
         inline SequenceT trim_copy( const SequenceT& Input, const std::locale& Loc=std::locale() )
@@ -335,7 +335,7 @@ namespace boost {
         //! Trim
         /*!
             Remove all leading and trailing spaces from the input. 
-			The supplied predicate is used to determine which characters are considered spaces.
+            The supplied predicate is used to determine which characters are considered spaces.
             The input sequence is modified in-place.
 
             \param Input An input sequence

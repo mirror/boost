@@ -115,7 +115,7 @@ namespace boost {
                 An output iterator pointing just after the last inserted character or
                 a copy of the input
 
-			\note The second variant of this function provides the strong exception-safety guarantee
+            \note The second variant of this function provides the strong exception-safety guarantee
         */
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT 

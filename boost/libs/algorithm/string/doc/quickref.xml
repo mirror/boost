@@ -200,7 +200,7 @@
                     </row>                  
                     <row>
                         <entry>find_tail</entry>
-						<entry>Retrieve the tail of a string</entry>
+                        <entry>Retrieve the tail of a string</entry>
                         <entry>
                             <functionname>find_tail()</functionname>
                         </entry>
@@ -340,7 +340,7 @@
                     </row>
                     <row>
                         <entry>replace/erase_tail</entry>
-						<entry>Replace/Erase the tail of the input</entry>
+                        <entry>Replace/Erase the tail of the input</entry>
                         <entry>
                             <functionname>replace_tail()</functionname>
                             <sbr/>
@@ -650,7 +650,7 @@
                         <entry>
                             <functionname>is_lower()</functionname>
                         </entry>
-					</row>
+                    </row>
                     <row>
                         <entry>is_print</entry>
                         <entry>Recognize printable characters</entry>

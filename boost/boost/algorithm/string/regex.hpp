@@ -41,7 +41,7 @@ namespace boost {
                 \c InputContainerT::const_iterator, depending on the constness of 
                 the input parameter.
 
-          	\note This function provides the strong exception-safety guarantee
+              \note This function provides the strong exception-safety guarantee
         */
         template< 
             typename CollectionT, 
@@ -75,7 +75,7 @@ namespace boost {
             \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input   
 
-         	\note The second variant of this function provides the strong exception-safety guarantee
+             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
@@ -161,7 +161,7 @@ namespace boost {
             \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input     
 
-          	\note The second variant of this function provides the strong exception-safety guarantee
+              \note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
@@ -246,7 +246,7 @@ namespace boost {
             \return An output iterator pointing just after the last inserted character or
                        a modified copy of the input    
 
-         	\note The second variant of this function provides the strong exception-safety guarantee
+             \note The second variant of this function provides the strong exception-safety guarantee
        */
         template< 
             typename OutputIteratorT,
@@ -325,7 +325,7 @@ namespace boost {
             \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input                        
 
-         	\note The second variant of this function provides the strong exception-safety guarantee
+             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
@@ -410,8 +410,8 @@ namespace boost {
 
             \note Prior content of the result will be overwritten.
 
-         	\note This function provides the strong exception-safety guarantee
-		*/
+             \note This function provides the strong exception-safety guarantee
+        */
         template< 
             typename SequenceSequenceT, 
             typename CollectionT,         
@@ -451,7 +451,7 @@ namespace boost {
 
             \note Prior content of the result will be overwritten.
 
-           	\note This function provides the strong exception-safety guarantee
+               \note This function provides the strong exception-safety guarantee
         */
         template< 
             typename SequenceSequenceT, 

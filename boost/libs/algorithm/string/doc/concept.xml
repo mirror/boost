@@ -75,7 +75,7 @@
         </table>
 
         <para>
-			Various algorithms need to perform a search in a container and a Finder is a generalization of such
+            Various algorithms need to perform a search in a container and a Finder is a generalization of such
             search operations that allows algorithms to abstract from searching. For instance, generic replace
             algorithms can replace any part of the input, and the Finder is used to select the desired one.
         </para>
@@ -106,7 +106,7 @@ struct simple_finder
         </programlisting>
                 </listitem>
                 <listitem>
-					Function Finder. Finder can be any function object. That is, any ordinary function with the
+                    Function Finder. Finder can be any function object. That is, any ordinary function with the
                     required signature can be used as well. However, such a function can be used only for
                     a specific iterator type. 
                     
@@ -165,8 +165,8 @@ boost::iterator_range&lt;std::string&gt; simple_finder(
         <para> 
             <itemizedlist>
                 <listitem>
-					Formatter implemented as a class. This Formatter does not perform any formating and 
-					returns the match, repackaged. <code>operator()</code>
+                    Formatter implemented as a class. This Formatter does not perform any formating and 
+                    returns the match, repackaged. <code>operator()</code>
                     is templated, so that the Formatter can be used on any Finder type.
                     
                     <programlisting>

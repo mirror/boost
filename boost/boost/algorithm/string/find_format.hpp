@@ -43,7 +43,7 @@ namespace boost {
             \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
-			\note The second variant of this function provides the strong exception-safety guarantee
+            \note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,
@@ -154,7 +154,7 @@ namespace boost {
             \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
 
- 			\note The second variant of this function provides the strong exception-safety guarantee
+             \note The second variant of this function provides the strong exception-safety guarantee
         */
         template< 
             typename OutputIteratorT,

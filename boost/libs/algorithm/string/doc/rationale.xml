@@ -19,14 +19,14 @@
             C++ allows to work with multiple different instances of locales at once. If an algorithm
             manipulates some data in a way that requires the usage of locales, there must be a way
             to specify them. However, one instance of locales is sufficient for most of the applications,
-			and for a user it could be very tedious to specify which locales to use at every place 
+            and for a user it could be very tedious to specify which locales to use at every place 
             where it is needed. 
         </para> 
         <para>
             Fortunately, the C++ standard allows to specify the <emphasis>global</emphasis> locales (using static member
             function <code>std:locale::global()</code>). When instantiating an
             <code>std::locale</code> class without explicit information, the instance will 
-			be initialized with the <emphasis>global</emphasis> locale. This implies, that if an algorithm needs a locale,
+            be initialized with the <emphasis>global</emphasis> locale. This implies, that if an algorithm needs a locale,
             it should have an <code>std::locale</code> parameter defaulting to  <code>std::locale()</code>.
             If a user needs to specify locales explicitly, she can do so. Otherwise the <emphasis>global</emphasis>
             locales are used.

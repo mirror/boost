@@ -64,7 +64,7 @@ namespace boost {
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
 
-      		\note This function provides the strong exception-safety guarantee
+              \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -91,7 +91,7 @@ namespace boost {
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -119,7 +119,7 @@ namespace boost {
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -145,9 +145,9 @@ namespace boost {
                 Returned iterator is either \c Collection1T::iterator or 
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
-		
-			\note This function provides the strong exception-safety guarantee	
-		*/
+        
+            \note This function provides the strong exception-safety guarantee    
+        */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
             BOOST_STRING_TYPENAME result_iterator_of<Collection1T>::type>
@@ -204,7 +204,7 @@ namespace boost {
                 the input parameter.
 
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename Collection1T, typename Collection2T>
         inline iterator_range< 
@@ -235,7 +235,7 @@ namespace boost {
                 \c Collection1T::const_iterator, depending on the constness of 
                 the input parameter.
 
-			\note This function provides the strong exception-safety guarantee
+            \note This function provides the strong exception-safety guarantee
         */
         template<typename CollectionT>
         inline iterator_range< 
@@ -265,8 +265,8 @@ namespace boost {
                 the input parameter.
 
 
-			\note This function provides the strong exception-safety guarantee
-		*/
+            \note This function provides the strong exception-safety guarantee
+        */
         template<typename CollectionT>
         inline iterator_range< 
             BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
@@ -294,9 +294,9 @@ namespace boost {
                 Returned iterator is either \c CollectionT::iterator or 
                 \c CollectionT::const_iterator, depending on the constness of 
                 the input parameter.
-		
-			\note This function provides the strong exception-safety guarantee	
-		*/
+        
+            \note This function provides the strong exception-safety guarantee    
+        */
         template<typename CollectionT, typename PredicateT>
         inline iterator_range< 
             BOOST_STRING_TYPENAME result_iterator_of<CollectionT>::type>
