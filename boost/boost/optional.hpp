@@ -64,12 +64,21 @@
 #endif
 
 #if BOOST_WORKAROUND(__BORLANDC__, <= 0x564)
-// VC7.0 has the following bug:
-//   When both a non-template and a template copy-ctor exist
-//   and the templated version is made 'explicit', the explicit is also
-//   given to the non-templated version, making the class non-implicitely-copyable.
-//
+// BCB (up to 5.64) has the following bug:
+//   If there is a member function/operator template of the form
+//     template<class Expr> mfunc( Expr expr ) ;
+//   some calls are resolved to this even if there are other better matches.
+//   The effect of this bug is that calls to converting ctors and assignments
+//   are incrorrectly sink to this general catch-all member function template as shown above.
 #define BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
+#endif
+
+
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x560)
+// BCB (5.5.1) defines BOOST_NESTED_TEMPLATE as 'template' but in this context it produces an error.
+#define BOOST_OPTIONAL_NESTED_TEMPLATE
+#else
+#define BOOST_OPTIONAL_NESTED_TEMPLATE BOOST_NESTED_TEMPLATE
 #endif
 
 namespace boost {
@@ -80,7 +89,7 @@ class TypedInPlaceFactoryBase ;
 namespace optional_detail {
 
 // This local class is used instead of that in "aligned_storage.hpp"
-// because I've found the 'official' class to ICE BCB5.5 
+// because I've found the 'official' class to ICE BCB5.5
 // when some types are used with optional<>
 // (due to sizeof() passed down as a non-type template parameter)
 template <class T>
@@ -701,6 +710,7 @@ template<class T> inline void swap ( optional<T>& x, optional<T>& y )
   optional_detail::optional_swap(x,y);
 }
 
+#undef BOOST_OPTIONAL_NESTED_TEMPLATE
 
 } // namespace boost
 
