@@ -7,6 +7,7 @@
 #ifndef BOOST_PROPERTY_MAP_HPP
 #define BOOST_PROPERTY_MAP_HPP
 
+#include <cassert>
 #include <iterator>
 #include <boost/config.hpp>
 #include <boost/pending/cstddef.hpp>
