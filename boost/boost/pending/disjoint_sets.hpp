@@ -35,7 +35,7 @@ namespace boost {
   struct find_with_path_halving {
     template <class ParentPA, class Vertex>
     Vertex operator()(ParentPA p, Vertex v) { 
-      return detail::find_representative_with_path_halving(pc, v);
+      return detail::find_representative_with_path_halving(p, v);
     }
   };
 
