@@ -40,10 +40,10 @@
       <p>The following type traits templates identify which type category the type 
          belongs to. For any given type, exactly one of the following expressions will 
          evaluate to true. Note that this means that <code>is_integral&lt;T&gt;::value</code>
-         and <code>is_float&lt;T&gt;::value</code> will only every be true for built-in 
-         types; if you want to check for a user-defined type that may behave "as if" it 
-         is an integral or floating point type, then use the std::numeric_limits 
-         template instead.</p>
+         and <code>is_floating_point&lt;T&gt;::value</code> will only every be true for 
+         built-in types; if you want to check for a user-defined type that may behave 
+         "as if" it is an integral or floating point type, then use the 
+         std::numeric_limits template instead.</p>
       <table border="0" cellpadding="7" cellspacing="1" width="100%">
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
@@ -80,7 +80,7 @@
          </tr>
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
-            <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::is_float&lt;T&gt;::value</code></td>
+            <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::is_floating_point&lt;T&gt;::value</code></td>
             <td valign="top" width="26%" bgcolor="#c0c0c0">Evaluates to true only if T is a 
                cv-qualified floating point type.</td>
             <td valign="top" width="16%" bgcolor="#c0c0c0"><p align="center">3.9.1p8</p>
@@ -279,6 +279,19 @@
             <td bgcolor="#c0c0c0">&nbsp;</td>
             <td>&nbsp;</td>
          </tr>
+         <TR>
+            <TD></TD>
+            <TD bgColor="#c0c0c0"><CODE>::boost::is_member_object_pointer&lt;T&gt;::value</CODE></TD>
+            <TD bgColor="#c0c0c0">Evaluates to true only if T is a pointer to a member 
+               object(and not a pointer to a member function). This template splits 
+               is_member_pointer into two sub-categories.</TD>
+            <TD bgColor="#c0c0c0">
+               <P align="center">3.9.2</P>
+               <P align="center">8.3.3</P>
+            </TD>
+            <TD bgColor="#c0c0c0"></TD>
+            <TD></TD>
+         </TR>
       </table>
       <p>&nbsp;</p>
       <h2><a name="properties"></a>Type Properties</h2>
@@ -309,6 +322,28 @@
             <td valign="top" bgcolor="#c0c0c0">&nbsp;</td>
             <td valign="top" width="5%">&nbsp;</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="5%"></TD>
+            <TD vAlign="top" bgColor="#c0c0c0"><CODE>::boost::rank&lt;T&gt;::value</CODE></TD>
+            <TD vAlign="top" bgColor="#c0c0c0">The number of array dimentions in type T.&nbsp; 
+               Zero if T is not an array type.</TD>
+            <TD vAlign="top" bgColor="#c0c0c0"></TD>
+            <TD vAlign="top" bgColor="#c0c0c0">Requires partial specialisation of class 
+               templates.</TD>
+            <TD vAlign="top" width="5%"></TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="5%"></TD>
+            <TD vAlign="top" bgColor="#c0c0c0"><CODE>::boost::extent&lt;T, std::size_t N = 
+                  0&gt;::value</CODE></TD>
+            <TD vAlign="top" bgColor="#c0c0c0">The number of elements in the N'th array bound 
+               of T.&nbsp; If T has fewer than N bounds, or if the N'th array bound is 
+               incomplete, then zero.</TD>
+            <TD vAlign="top" bgColor="#c0c0c0"></TD>
+            <TD vAlign="top" bgColor="#c0c0c0">Requires partial specialisation of class 
+               templates.</TD>
+            <TD vAlign="top" width="5%"></TD>
+         </TR>
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" bgcolor="#c0c0c0"><code>::boost::is_empty&lt;T&gt;::value</code></td>
@@ -382,6 +417,18 @@
                actually seem to work with the majority of compilers though.</td>
             <td valign="top" width="5%">&nbsp;</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="5%"></TD>
+            <TD vAlign="top" bgColor="#c0c0c0"><CODE>::boost::has_virtual_destructor&lt;T&gt;::value</CODE></TD>
+            <TD vAlign="top" bgColor="#c0c0c0">Should evaluate to true whenever type T has a 
+               virtual destructor: currently evaluates to false in all cases, unless 
+               user-specialised.</TD>
+            <TD vAlign="top" bgColor="#c0c0c0">12.4</TD>
+            <TD vAlign="top" bgColor="#c0c0c0">There is currently no way to portably implement 
+               this trait, the default version provided always evaluates to false, and has to 
+               be explicity specialised for types with virtual destructors.</TD>
+            <TD vAlign="top" width="5%"></TD>
+         </TR>
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" bgcolor="#c0c0c0"><code>::boost::is_pod&lt;T&gt;::value</code></td>
@@ -588,7 +635,7 @@
          </tr>
          <tr>
             <td>&nbsp;</td>
-            <td valign="top" bgcolor="#c0c0c0"><code>::boost::is_base_and_derived&lt;T,U&gt;::value</code></td>
+            <td valign="top" bgcolor="#c0c0c0"><code>::boost::is_base_of&lt;T,U&gt;::value</code></td>
             <td bgcolor="#c0c0c0">Evaluates to true if type T is a base class to type U.<p>Will 
                   detect non-public base classes, and ambiguous base classes.</p>
                <p>Note that a class is not considered to be it's own base class, likewise, if 
@@ -603,13 +650,13 @@
             <td>&nbsp;</td>
          </tr>
       </table>
-      <p>Note that both <code>is_convertible</code>, and <code>is_base_and_derived</code>
-         can produce compiler errors if the convertion is ambiguous:</p>
+      <p>Note that both <code>is_convertible</code>, and <code>is_base_of</code> can 
+         produce compiler errors if the convertion is ambiguous:</p>
       <pre>struct A {};
 struct B : A {};
 struct C : A {};
 struct D : B, C {};
-bool const x = boost::is_base_and_derived&lt;A,D&gt;::value;  // error
+bool const x = boost::is_base_of&lt;A,D&gt;::value;  // error
 bool const y = boost::is_convertible&lt;D*,A*&gt;::value;     // error
 </pre>
       <h2><a name="transformations"></a>Transformations Between Types</h2>
@@ -684,7 +731,7 @@ bool const y = boost::is_convertible&lt;D*,A*&gt;::value;     // error
          </tr>
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
-            <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::remove_bounds&lt;T&gt;::type</code></td>
+            <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::remove_extent&lt;T&gt;::type</code></td>
             <td valign="top" width="28%" bgcolor="#c0c0c0">If T is an array type then removes 
                the top level array qualifier from T, otherwise leaves T unchanged. For example 
                "int[2][3]" becomes "int[3]".</td>
@@ -695,6 +742,19 @@ bool const y = boost::is_convertible&lt;D*,A*&gt;::value;     // error
             </td>
             <td valign="top" width="5%">&nbsp;</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="5%"></TD>
+            <TD vAlign="top" width="23%" bgColor="#c0c0c0"><FONT face="Courier New"><CODE>::boost::remove_all_extents&lt;T&gt;::type</CODE></FONT></TD>
+            <TD vAlign="top" width="28%" bgColor="#c0c0c0">If T is an array type then removes 
+               the all the array qualifiers from T, otherwise leaves T unchanged. For example 
+               "int[2][3]" becomes "int".</TD>
+            <TD vAlign="top" width="13%" bgColor="#c0c0c0">8.3.4</TD>
+            <TD width="25%" bgColor="#c0c0c0">
+               <P align="left">If the compiler does not support partial-specialization of class 
+                  templates, then this template will compile, but will have no effect.</P>
+            </TD>
+            <TD vAlign="top" width="5%"></TD>
+         </TR>
          <tr>
             <td valign="top" width="5%">&nbsp;</td>
             <td valign="top" width="23%" bgcolor="#c0c0c0"><code>::boost::remove_pointer&lt;T&gt;::type</code></td>
@@ -822,6 +882,15 @@ bool const y = boost::is_convertible&lt;D*,A*&gt;::value;     // error
             <td width="25%" bgcolor="#c0c0c0">&nbsp;</td>
             <td valign="top" width="5%">&nbsp;</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="5%"></TD>
+            <TD vAlign="top" width="23%" bgColor="#c0c0c0"><CODE>::boost::aligned_storage&lt;Size,Align&gt;::type</CODE></TD>
+            <TD vAlign="top" width="28%" bgColor="#c0c0c0">Attempts to find a POD type of size 
+               Size, and alignment Align.</TD>
+            <TD vAlign="top" width="13%" bgColor="#c0c0c0"></TD>
+            <TD width="25%" bgColor="#c0c0c0"></TD>
+            <TD vAlign="top" width="5%"></TD>
+         </TR>
       </table>
       <h2><a name="function_traits"></a>Function Traits</h2>
       <p>The <code>::boost::function_traits</code> class template extracts information 
