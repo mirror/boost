@@ -34,7 +34,7 @@ Since the property map operations are global functions, it is
 possible to overload the map functions such that nearly arbitrary
 property map types and key types can be used. The interface for
 property maps consists of three functions: <tt>get()</tt>,
-<tt>put()</tt>, and <tt>at()</tt>. The following concrete example
+<tt>put()</tt>, and <tt>operator[]</tt>. The following concrete example
 shows how the three functions could be used to access the addresses
 associated with various people.
 
@@ -52,7 +52,7 @@ void foo(AddressMap address)
   put(address, fred, new_address);
 
   key_type joe = &quot;Joe&quot;;
-  value_type& joes_address = at(address, joe);
+  value_type& joes_address = address[joe];
   joes_address = &quot;325 Cushing Avenue&quot;;
 }
 </pre>
@@ -182,12 +182,6 @@ namespace boost {
 
   template <class T>
   const T& get(const T* pmap, std::ptrdiff_t k) { return pmap[k]; }
-
-  template <class T>
-  T& at(T* pmap, std::ptrdiff_t k) { return pmap[k]; }
-
-  template <class T>
-  const T& at(const T* pmap, std::ptrdiff_t k) { return pmap[k]; }
 
 }
 </PRE>
