@@ -21,7 +21,7 @@
     <h1 align="center">The boost::fsm library</h1>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2004/11/25<!--webbot bot="Timestamp" endspan i-checksum="12382" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/01/18<!--webbot bot="Timestamp" endspan i-checksum="12363" --></font></td>
   </tr>
 </table>
 <hr>
@@ -55,36 +55,65 @@ include:</p>
 distribution 1.32.0:</p>
 <ul>
   <li>MSVC 7.1 (the compiler coming with MS Visual Studio 2003)</li>
-  <li>Intel 8.1 (Win32, MS Visual Studio 2003 std library)</li>
-  <li>GCC 3.3.1 (MinGW)</li>
+  <li>GCC 3.2.3 (MinGW 3.1.0)</li>
+	<li>GCC 3.3.1 (Dev-C++ 4.9.9.0)</li>
+	<li>GCC 3.4.2 (MinGW 3.2.0)</li>
 </ul>
-<p>In addition, the previous version of the library has also been tested on 
+<p>In addition, previous versions of the library have also been tested on 
 the following platforms (I expect the current version to work, but it hasn't 
 been tested yet):</p>
 <ul>
-  <li>GCC 3.2 (MinGW, Red Hat Linux)</li>
+  <li>GCC 3.2 (Red Hat Linux)</li>
   <li>
   <a href="configuration.html#Intel 7.0 (Win32, MS Visual Studio 6 std library)">
   Intel 7.0 (Win32, MS Visual Studio 6 std library)</a></li>
   <li>Intel 8.0 (Win32, MS Visual Studio 2003 std library)</li>
+  <li>Intel 8.1 (Win32, MS Visual Studio 2003 std library). All the examples 
+	worked as expected but some tests failed with an access violation inside the 
+	boost testing framework. Unfortunately, my evaluation license of the 
+	compiler expired before I managed to pin down the problem</li>
 </ul>
-<h3>Future directions</h3>
-<p>The library is functionally complete. However, the following is still in 
-the making:</p>
+<h3>Incompatible compilers</h3>
+<p>The following compilers are known to be unable to compile boost::fsm:</p>
+<ul>
+	<li>MSVC 6.0 &amp; 7.0</li>
+	<li>BCB (all versions)</li>
+</ul>
+<h3>To-do list</h3>
+<p>The library is functionally complete. However, there is still some work 
+left:</p>
 <ol>
   <li>Implement regression tests</li>
-	<li>Improve performance for state machines that use <code>null_exception_translator</code></li>
+	<li>Incorporate id_type changes proposed by Robert Geimann (a better 
+	std::type_info class)</li>
 	<li>Design a facility allowing to specially handle events that did not 
   trigger a reaction</li>
-	<li>Implement <code>priority_scheduler&lt;&gt;</code></li>
+	<li>Add allocator support for broken std libs when the workaround is 
+	available in boost::detail</li>
 	<li>Reimplement <code>fifo_scheduler&lt;&gt;::processor_handle</code> so that
   	<code>fifo_scheduler&lt;&gt;::create_processor&lt;&gt;()</code> and <code>fifo_scheduler&lt;&gt;::destroy_processor()</code> 
   no longer make (indirect) calls to global <code>operator new()</code> and
   	<code>operator delete()</code></li>
-	<li>Investigate whether <code>fifo_worker&lt;&gt;</code> should accept a policy 
-  parameter defining how to lock and wait</li>
+	<li>Link incomplete code-snippets in the tutorial to complete example code 
+	where available</li>
+	<li>Implement <code>priority_scheduler&lt;&gt;</code></li>
+	<li>Improve performance for state machines that use <code>null_exception_translator</code></li>
 	<li>Refactor the <code>state_machine</code> class template to reduce code 
   size in applications with many different state machines</li>
+	<li>Investigate whether and how <code>fifo_worker&lt;&gt;</code> should accept a policy 
+  parameter defining how to lock and wait</li>
+	<li>Add a diagram that helps to understand what an unstable state machine 
+	is</li>
+	<li>Comment MPL-heavy code</li>
+	<li>Comment <code>processor_holder_ptr_type</code></li>
+	<li>Add examples of often made mistakes</li>
+	<li>Eliminate code-duplication in <code>fifo_scheduler</code> with PP code 
+	submitted by Pavel Vozenilek</li>
+	<li>Add number and label to all diagrams in docs</li>
+	<li>Add <code>#prama once</code> to all headers (speeds up compilation 
+	with MS-compatible compilers)</li>
+	<li>Issue an error if <code>BOOST_FSM_USE_NATIVE_RTTI</code> is defined 
+	when C++ RTTI is turned off</li>
 </ol>
 <p>boost::fsm has been submitted for formal review. <b>All feedback is highly 
 welcome!</b></p>
@@ -277,9 +306,9 @@ welcome!</b></p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 November, 2004<!--webbot bot="Timestamp" endspan i-checksum="39364" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38837" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
