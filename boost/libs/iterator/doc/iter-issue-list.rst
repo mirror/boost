@@ -272,9 +272,9 @@ dereference by returning a reference to the base object. The other operations ar
 the base m_iterator, as per the inheritance from iterator_adaptor." 
 
 :Proposed resolution:
-  Change the introduction to: ``counting_iterator`` adapts an
-  arithmetic type, such as ``int``, by adding an ``operator*`` that
-  returns the current value of the object.
+  Change the introduction to: ``counting_iterator`` adapts an object by adding an ``operator*`` that
+  returns the current value of the object. All other iterator operations
+  are forwarded to the adapted object.
 
 
 
