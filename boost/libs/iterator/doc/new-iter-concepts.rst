@@ -249,7 +249,7 @@ Like the old iterator requirements, we provide tags for purposes of
 dispatching based on the traversal concepts.  The tags are related via
 inheritance so that a tag is convertible to another tag if the concept
 associated with the first tag is a refinement of the second tag.
-Since the access concepts are not related via refinment, but instead
+Since the access concepts are not related via refinement, but instead
 cover orthogonal issues, we do not use tags for the access concepts,
 but instead use the equivalent of a bitfield.
 
@@ -276,7 +276,7 @@ tags passed as template parameters.  The algorithm for determining the
 old tag or tags from the new tags picks the least-refined old concepts
 that include all of the requirements of the access and traversal
 concepts (that is, the closest fit), if any such category exists.  For
-example, a the category tag for a Readable Single Pass Iterator will
+example, the category tag for a Readable Single Pass Iterator will
 always be derived from ``input_iterator_tag``, while the category tag
 for a Single Pass Iterator that is both Readable and Writable will be
 derived from both ``input_iterator_tag`` and ``output_iterator_tag``.
@@ -288,6 +288,7 @@ helper classes work both for iterators whose ``iterator_category`` is
 categories.
 
 ::
+
   template <class Iterator> struct is_readable  { typedef ... type; };
   template <class Iterator> struct is_writable { typedef ... type; };
   template <class Iterator> struct is_swappable { typedef ... type; };
