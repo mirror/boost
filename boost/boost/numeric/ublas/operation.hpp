@@ -38,7 +38,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
 
-        for (size_type i = 0; i < e1.size1 (); ++ i) {
+        for (size_type i = 0; i < e1.filled1 (); ++ i) {
             size_type begin = e1.index1_data () [i];
             size_type end = e1.index1_data () [i + 1];
             value_type t (v (i));
@@ -57,7 +57,7 @@ namespace boost { namespace numeric { namespace ublas {
                V &v, column_major_tag) {
         typedef typename V::size_type size_type;
 
-        for (size_type j = 0; j < e1.size2 (); ++ j) {
+        for (size_type j = 0; j < e1.filled1 (); ++ j) {
             size_type begin = e1.index1_data () [j];
             size_type end = e1.index1_data () [j + 1];
             for (size_type i = begin; i < end; ++ i)
