@@ -26,6 +26,9 @@ namespace pool {
 //
 // assumes: A != 0 && B != 0
 //
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 namespace details {
 template <unsigned A, unsigned B, bool Bis0>
 struct ct_gcd_helper;
@@ -51,6 +54,33 @@ struct ct_gcd
   BOOST_STATIC_CONSTANT(unsigned, value =
       (::boost::details::pool::details::ct_gcd_helper<A, B, false>::value) );
 };
+
+#else
+
+// Thanks to Peter Dimov for providing this workaround!
+namespace details {
+template<unsigned A> struct ct_gcd2
+{
+  template<unsigned B>
+  struct helper
+  {
+    BOOST_STATIC_CONSTANT(unsigned, value = ct_gcd2<B>::helper<A % B>::value);
+  };
+  template<>
+  struct helper<0>
+  {
+    BOOST_STATIC_CONSTANT(unsigned, value = A);
+  };
+};
+} // namespace details
+
+template<unsigned A, unsigned B> struct ct_gcd
+{
+  BOOST_STATIC_ASSERT(A != 0 && B != 0);
+  enum { value = details::ct_gcd2<A>::helper<B>::value };
+};
+
+#endif
 
 //
 // ct_lcm is a compile-time algorithm that calculates the least common
