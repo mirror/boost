@@ -152,7 +152,14 @@
   </xsl:template>
 
   <xsl:template match="variablelist">
-    <p><xsl:apply-templates mode="boost.variablelist"/></p>
+    <xsl:choose>
+      <xsl:when test="title">
+        <xsl:apply-imports />
+      </xsl:when>
+      <xsl:otherwise>
+        <p><xsl:apply-templates mode="boost.variablelist"/></p>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="varlistentry" mode="boost.variablelist">
