@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  11 Feb 01 Borland fixes (David Abrahams)
 //  10 Feb 01 Use new adaptors interface. (David Abrahams)
 //  10 Feb 01 Use new filter_ interface. (David Abrahams)
 //  09 Feb 01 Use new reverse_ and indirect_ interfaces. Replace
@@ -210,6 +211,7 @@ main()
     boost::random_access_iterator_test(j, N, array);
     boost::const_nonconst_iterator_test(i, ++j);
   }
+
   // Test transform_iterator
   {
     int x[N], y[N];
@@ -285,6 +287,7 @@ main()
 
     boost::const_nonconst_iterator_test(i, ++j);
   }
+
   // Test reverse_iterator_generator
   {
     dummyT reversed[N];
@@ -297,12 +300,6 @@ main()
 #endif
       >::type reverse_iterator;
     
-    typedef boost::reverse_iterator_generator<const dummyT*
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        , const dummyT
-#endif
-      >::type const_reverse_iterator;
-    
     reverse_iterator i = reversed + N;
     boost::random_access_iterator_test(i, N, array);
 
@@ -310,6 +307,12 @@ main()
     boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
 #endif
 
+    typedef boost::reverse_iterator_generator<const dummyT*
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        , const dummyT
+#endif
+      >::type const_reverse_iterator;
+    
     const_reverse_iterator j = reversed + N;
     boost::random_access_iterator_test(j, N, array);
 
@@ -345,7 +348,7 @@ main()
     const std::deque<dummyT>::const_iterator const_reversed = reversed;
     boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N), N, array);
     
-#if !defined(__GNUC__) || defined(__SGI_STL_PORT)  // GCC deque iterators don't allow all const/non-const comparisons
+#if !defined(__GNUC__) && !defined(__BORLANDC__) || defined(__SGI_STL_PORT)  // GCC/Borland deque iterators don't allow all const/non-const comparisons
     boost::const_nonconst_iterator_test(i, ++j);
 #endif
   }
@@ -360,18 +363,21 @@ main()
 
   // Test filter iterator
   {
-    typedef boost::filter_iterator_generator<one_or_four, dummyT*
+    // Using typedefs for filter_gen::type and filter_gen::policies_type
+    // confused Borland terribly.
+    typedef boost::detail::non_bidirectional_category<dummyT*>::type category;
+    
+    typedef ::boost::filter_iterator_generator<one_or_four, dummyT*
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         , dummyT
 #endif
-        > FilterGen;
-    typedef FilterGen::type FilterIter;
-    typedef FilterGen::policies_type FilterPolicies;
-    FilterIter i(array, FilterPolicies(one_or_four(), array + N));
+        > filter_gen;
+    
+    filter_gen::type i(array, filter_gen::policies_type(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));
 
     enum { is_forward = boost::is_same<
-           FilterIter::iterator_category,
+           filter_gen::type::iterator_category,
            std::forward_iterator_tag>::value };
     BOOST_STATIC_ASSERT(is_forward);
 
