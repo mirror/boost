@@ -53,7 +53,7 @@ inline T forced_return( BOOST_EXPLICIT_TEMPLATE_TYPE(T) )
 }
 
 template <>
-inline void forced_return<void>( BOOST_EXPLICIT_TEMPLATE_TYPE(void) )
+inline void forced_return<void>( BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(void) )
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
