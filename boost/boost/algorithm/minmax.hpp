@@ -30,7 +30,8 @@
  */
 
 #include <utility> // for std::pair and std::make_pair
-#include <boost/ref.hpp> // for boost::cref
+#include <boost/ref.hpp> // for using pairs with boost::cref
+#include <boost/tuple/tuple.hpp> // for using pairs with boost::cref
 
 namespace boost {
 
@@ -56,15 +57,15 @@ namespace boost {
   } // namespace detail
 
   template <typename T>
-  std::pair< boost::reference_wrapper<T const>, reference_wrapper<T const> >
+  tuple< T const&, T const& >
   minmax(T const& a, T const& b) {
-    return (b<a) ? std::make_pair(cref(b),cref(a)) : std::make_pair(cref(a),cref(b));
+    return (b<a) ? make_tuple(cref(b),cref(a)) : make_tuple(cref(a),cref(b));
   }
 
   template <typename T, class BinaryPredicate>
-  std::pair< boost::reference_wrapper<T const>, reference_wrapper<T const> >
+  tuple< T const&, T const& >
   minmax(T const& a, T const& b, BinaryPredicate comp) {
-    return comp(b,a) ? std::make_pair(cref(b),cref(a)) : std::make_pair(cref(a),cref(b));
+    return comp(b,a) ? make_tuple(cref(b),cref(a)) : make_tuple(cref(a),cref(b));
   }
 
   namespace detail {  // common base for the two minmax_element overloads
