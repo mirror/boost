@@ -60,5 +60,7 @@ int main()
    }
    assert(matches[0].rm_so == matches[0].rm_eo == 1);
    regfree(&re);
+   printf("no errors found\n");
    return 0;
 }
+

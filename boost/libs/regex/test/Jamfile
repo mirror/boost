@@ -12,6 +12,7 @@ unit-test regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
         : 
@@ -24,6 +25,7 @@ unit-test wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
 		<define>TEST_UNICODE=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
         : 
@@ -35,10 +37,10 @@ unit-test posix_api_check_c : c_compiler_checks/posix_api_check.c
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
         : 
-                $(test-files)
 	;
 
 unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
@@ -46,10 +48,10 @@ unit-test wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
         : 
-                $(test-files)
 	;
 
 unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
@@ -57,10 +59,10 @@ unit-test posix_api_check : c_compiler_checks/posix_api_check.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
         : 
-                $(test-files)
 	;
 
 unit-test wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
@@ -68,11 +70,16 @@ unit-test wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
         : 
-                $(test-files)
 	;
+
+
+
+
+
 
 
 

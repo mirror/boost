@@ -7,7 +7,8 @@ SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
 lib libboost_regex$(SUFLIB) : ../src/$(SOURCES).cpp 
     : 
         <include>$(BOOST_ROOT)
-        <define>BOOST_RE_NO_LIB=1
+		  <define>BOOST_REGEX_NO_LIB=1
+        <define>BOOST_REGEX_STATIC_LINK=1
     : 
         debug release
     ;
@@ -20,6 +21,9 @@ dll libboost_regex$(SUFDLL[1]) : ../src/$(SOURCES).cpp
     : 
         debug release
     ;
+
+
+
 
 
 

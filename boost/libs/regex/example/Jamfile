@@ -6,6 +6,7 @@ exe timer : timer/regex_timer.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -15,6 +16,7 @@ exe jgrep : jgrep/jgrep.cpp jgrep/main.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -24,6 +26,7 @@ exe credit_card_example : snippets/credit_card_example.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -34,6 +37,7 @@ exe partial_regex_grep : snippets/partial_regex_grep.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -43,6 +47,7 @@ exe partial_regex_match : snippets/partial_regex_match.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -52,6 +57,7 @@ exe regex_grep_example_1 : snippets/regex_grep_example_1.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -61,6 +67,7 @@ exe regex_grep_example_2 : snippets/regex_grep_example_2.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -70,6 +77,7 @@ exe regex_grep_example_3 : snippets/regex_grep_example_3.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -79,6 +87,7 @@ exe regex_grep_example_4 : snippets/regex_grep_example_4.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -88,6 +97,7 @@ exe regex_match_example : snippets/regex_match_example.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -97,6 +107,7 @@ exe regex_merge_example : snippets/regex_merge_example.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -106,6 +117,7 @@ exe regex_search_example : snippets/regex_search_example.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -115,6 +127,7 @@ exe regex_split_example_1 : snippets/regex_split_example_1.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
@@ -124,9 +137,11 @@ exe regex_split_example_2 : snippets/regex_split_example_2.cpp
 	: 
 		<include>../../../
 		<define>BOOST_REGEX_NO_LIB=1
+		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
 	;
+
 
 
 
