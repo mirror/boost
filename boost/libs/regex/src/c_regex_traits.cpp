@@ -40,6 +40,12 @@
 #include <nl_types.h>
 #endif
 
+// Fixes a very strange bug in Comeau 4.2.45.2 that would otherwise result in
+// an instantiation loop
+#if defined(__COMO__) && __COMO_VERSION__ <= 4245
+void c_regex_adopted_no_longer_needed_loop_shutter_upper() { }
+#endif
+
 namespace{
 
 //
@@ -91,7 +97,6 @@ struct collate_name_t
 {
    std::string name;
    std::string value;
-   collate_name_t(){}
    collate_name_t(const char* p1, const char* p2, const char* p3, const char* p4)
       : name(p1, p2), value(p3, p4) {}
 };
@@ -1044,5 +1049,5 @@ unsigned int BOOST_REGEX_CALL c_regex_traits<wchar_t>::strwiden(wchar_t *s1, uns
 
 #endif // BOOST_NO_WREGEX
 
-
 } // namespace boost
+
