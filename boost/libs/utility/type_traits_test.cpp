@@ -440,6 +440,7 @@ int main()
    value_test(true, is_reference<volatile int &>::value)
    value_test(true, is_reference<r_type>::value)
    value_test(true, is_reference<cr_type>::value)
+   value_test(true, is_reference<const UDT&>::value)
 
    value_test(false, is_class<int>::value)
    value_test(false, is_class<const int>::value)
