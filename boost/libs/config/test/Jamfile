@@ -1,6 +1,6 @@
 #
 # Regression test Jamfile for boost configuration setup.
-# This file was automatically generated on Tue Nov 12 11:07:30  2002,
+# This file was automatically generated on Mon Dec  9 12:06:12  2002,
 # do not edit by hand...
 #
 subproject libs/config/test ;
@@ -102,6 +102,9 @@ test-suite "BOOST_NO_PRIVATE_IN_AGGREGATE" :
 test-suite "BOOST_NO_POINTER_TO_MEMBER_CONST" : 
 [ run no_ptr_mem_const_pass.cpp <lib>../../test/build/prg_exec_monitor ]
 [ link-fail no_ptr_mem_const_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;
+test-suite "BOOST_NO_UNREACHABLE_RETURN_DETECTION" : 
+[ run no_ret_det_pass.cpp <lib>../../test/build/prg_exec_monitor ]
+[ link-fail no_ret_det_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;
 test-suite "BOOST_NO_STRINGSTREAM" : 
 [ run no_sstream_pass.cpp <lib>../../test/build/prg_exec_monitor ]
 [ link-fail no_sstream_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;

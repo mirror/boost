@@ -309,6 +309,17 @@ namespace std {
 #  define BOOST_NESTED_TEMPLATE
 #endif
 
+// BOOST_UNREACHABLE_RETURN(x) workaround -------------------------------------//
+// Normally evaluates to nothing, unless BOOST_NO_UNREACHABLE_RETURN_DETECTION
+// is defined, in which case it evaluates to return x; Use when you have a return
+// statement that can never be reached.
+
+#ifdef BOOST_NO_UNREACHABLE_RETURN_DETECTION
+#  define BOOST_UNREACHABLE_RETURN(x) return x;
+#else
+#  define BOOST_UNREACHABLE_RETURN(x)
+#endif
+
 // BOOST_DEDUCED_TYPENAME workaround ------------------------------------------//
 //
 // Some compilers don't support the use of `typename' for dependent

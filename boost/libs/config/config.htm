@@ -803,6 +803,14 @@ f(&amp;bar); // should choose #2.</pre>
         parameters.</td>
     </tr>
     <tr>
+        <td>BOOST_NO_UNREACHABLE_RETURN_DETECTION</td>
+        <td>Compiler</td>
+        <td>If a return is unreachable, then no return statement
+        should be required, however some compilers insist on it,
+        while other issue a bunch of warnings if it is in fact
+        present.</td>
+    </tr>
+    <tr>
         <td valign="top" width="51%">BOOST_NO_USING_TEMPLATE</td>
         <td valign="top" width="16%">Compiler</td>
         <td valign="top" width="33%">The compiler will not accept
@@ -904,9 +912,9 @@ present.</p>
         <td>BOOST_HAS_NRVO</td>
         <td>Compiler</td>
         <td>Indicated that the compiler supports the named return
-        value optimization (NRVO). Used to select the most efficient
-        implementation for some function. See
-        <a href="../../boost/operators.hpp">boost/operators.hpp</a> 
+        value optimization (NRVO). Used to select the most
+        efficient implementation for some function. See <a
+        href="../../boost/operators.hpp">boost/operators.hpp</a>
         for example.</td>
     </tr>
     <tr>
@@ -1070,6 +1078,12 @@ provide workarounds for compiler/standard library defects.</p>
    BOOST_STATIC_CONSTANT(int, value = 2);
 };</pre>
         </td>
+    </tr>
+    <tr>
+        <td>BOOST_UNREACHABLE_RETURN(result)</td>
+        <td>Normally evaluates to nothing, but evaluates to <font
+        face="Courier New">return x;</font> if the compiler
+        requires a return, even when it can never be reached.</td>
     </tr>
     <tr>
         <td valign="top" width="50%">BOOST_USE_FACET(Type, loc)</td>
