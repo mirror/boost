@@ -10,6 +10,8 @@
 // see libs/utility/type_traits.htm
 
 /* Release notes:
+   21 Jan 2001:
+      Fixed tests for long long to detect its presence on GCC (David Abrahams)
    03 Oct 2000:
       Added gcc specific fixes for memeber pointers (JM).
    31st July 2000:
@@ -269,7 +271,7 @@ template <typename T> struct is_extension_unsigned_integral
 template <typename T> struct is_extension_signed_integral
 { static const bool value = false; };
 
-#ifdef ULLONG_MAX
+#if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)
 template <> struct is_extension_unsigned_integral<unsigned long long>
 { static const bool value = true; };
 template <> struct is_extension_signed_integral<long long>
