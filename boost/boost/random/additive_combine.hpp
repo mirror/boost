@@ -61,6 +61,12 @@ public:
   template<class It> additive_combine(It& first, It last)
     : _mlcg1(first, last), _mlcg2(first, last) { }
 
+  void seed()
+  {
+    _mlcg1.seed();
+    _mlcg2.seed();
+  }
+
   void seed(typename MLCG1::result_type seed1,
             typename MLCG2::result_type seed2)
   {

@@ -219,6 +219,7 @@ void instantiate_urng(const std::string & s, const URNG &, const ResultType &)
 {
   std::cout << "Basic tests for " << s;
   URNG urng;
+  urng.seed();                                  // seed() member function
   int a[URNG::has_fixed_range ? 5 : 10];        // compile-time constant
   (void) a;   // avoid "unused" warning
   typename URNG::result_type x1 = urng();

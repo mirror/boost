@@ -216,7 +216,7 @@ public:
   explicit rand48(uint64_t x0) : lcf(x0) { }
   template<class It> rand48(It& first, It last) : lcf(first, last) { }
   // compiler-generated copy ctor and assignment operator are fine
-  void seed(int32_t x0) { lcf.seed(cnv(x0)); }
+  void seed(int32_t x0 = 1) { lcf.seed(cnv(x0)); }
   void seed(uint64_t x0) { lcf.seed(x0); }
   template<class It> void seed(It& first, It last) { lcf.seed(first,last); }
 

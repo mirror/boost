@@ -61,7 +61,7 @@ public:
   template<class It> inversive_congruential(It& first, It last)
   { seed(first, last); }
 
-  void seed(IntType y0) { value = y0; if(b == 0) assert(y0 > 0); }
+  void seed(IntType y0 = 1) { value = y0; if(b == 0) assert(y0 > 0); }
   template<class It> void seed(It& first, It last)
   {
     if(first == last)

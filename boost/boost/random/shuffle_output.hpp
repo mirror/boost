@@ -61,6 +61,7 @@ public:
   explicit shuffle_output(const base_type & rng) : _rng(rng) { init(); }
   template<class It> shuffle_output(It& first, It last)
     : _rng(first, last) { init(); }
+  void seed() { _rng.seed(); init(); }
   template<class T>
   void seed(T s) { _rng.seed(s); init(); }
   template<class It> void seed(It& first, It last)
