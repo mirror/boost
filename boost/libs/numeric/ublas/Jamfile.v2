@@ -20,8 +20,6 @@ import testing ;
 
 project
     : requirements 
-      <toolset>borland:<cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
-      <toolset>kylix:<cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 
 test-suite uBLAS
@@ -29,6 +27,9 @@ test-suite uBLAS
             test1/test11.cpp
             test1/test12.cpp
             test1/test13.cpp
+        : # args
+        : # input files
+        : # requirements
       ]
       [ run test2/test2.cpp
             test2/test21.cpp
@@ -62,7 +63,6 @@ test-suite uBLAS
         : # args
         : # input files
         : # requirements
-
 	    <define>BOOST_UBLAS_USE_INTERVAL
       ]
       [ compile concepts.cpp
