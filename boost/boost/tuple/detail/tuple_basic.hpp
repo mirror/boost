@@ -83,7 +83,16 @@ struct default_arg {
 template <class T>
 struct default_arg<T&> {
   static T& f() { 
+#ifndef __sgi
     return generate_error<T>::no_default_values_for_reference_types;
+#else
+    // MIPSpro instantiates functions even when it should not, so
+    // this technique can not be used for error checking.
+    // The simple workaround is to just not have this error checking
+    // with MIPSpro.
+    static T x;
+    return x;
+#endif
   }
 };
 
