@@ -183,6 +183,9 @@ using std::distance;
 #  define BOOST_REGEX_USE_C_LOCALE
 #  define BOOST_REGEX_NO_W32
 #endif
+#if defined(__COMO__) && !defined(BOOST_REGEX_NO_W32) && !defined(_MSC_EXTENSIONS)
+#  define BOOST_REGEX_NO_W32
+#endif
 
 /*****************************************************************************
  *
