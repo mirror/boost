@@ -1,11 +1,13 @@
 subproject libs/regex/example ;
 
-              
+NOCARE user32.lib ;
+
 exe timer : timer/regex_timer.cpp 
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>$(BOOST_ROOT)
 		<define>BOOST_RE_NO_LIB=1
+		<msvc><*><find-library>user32.lib
 	: 
 		debug
       <runtime-link>dynamic
@@ -141,5 +143,6 @@ exe regex_split_example_2 : snippets/regex_split_example_2.cpp
 		debug
       <runtime-link>dynamic
 	;
+
 
 
