@@ -206,13 +206,13 @@ public:
   template<typename IndexIterator>
   void execute(IndexIterator first,IndexIterator last)const
   {
-    begin_algorithm();
+    super::begin_algorithm();
 
     for(IndexIterator it=first;it!=last;++it){
       add_node_to_algorithm(get_node(it));
     }
 
-    finish_algorithm();
+    super::finish_algorithm();
   }
 
   bool is_ordered(Node* node)const
