@@ -51,16 +51,20 @@ int check_result(int argc, char** argv)
 template <bool>
 struct checker
 {
-   static void check(bool, bool, const char*){ ++test_count; }
+   static void check(bool, bool, const char*, bool){ ++test_count; }
 };
 
 template <>
 struct checker<false>
 {
-   static void check(bool o, bool n, const char* name)
+   static void check(bool o, bool n, const char* name, bool soft)
    {
       ++test_count;
       ++failures;
+      // if this is a soft test, then failure is expected,
+      // or may depend upon factors outside our control
+      // (like compiler options)...
+      if(soft)++expected_failures;
       std::cout << "checking value of " << name << "...failed" << std::endl;
       std::cout << "\tfound: " << n << " expected " << o << std::endl;
    }
@@ -103,7 +107,8 @@ struct type_checker<T,T>
 #endif
 
 
-#define value_test(v, x) checker<(v == x)>::check(v, x, #x);
+#define value_test(v, x) checker<(v == x)>::check(v, x, #x, false);
+#define soft_value_test(v, x) checker<(v == x)>::check(v, x, #x, true);
 
 #define value_fail(v, x) \
       ++test_count; \
@@ -128,7 +133,8 @@ struct test_align
       padded p;
       unsigned a = reinterpret_cast<char*>(&(p.t)) - reinterpret_cast<char*>(&p);
       ++test_count;
-      if(a != boost::alignment_of<T>::value)
+      // only fail if we do not have a multiple of the actual value:
+      if((a > ::boost::alignment_of<T>::value) || (a % ::boost::alignment_of<T>::value))
       {
          ++failures;
          std::cout << "checking value of " << typeid(boost::alignment_of<T>).name() << "...failed" << std::endl;

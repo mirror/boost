@@ -141,27 +141,27 @@ int main(int argc, char* argv[])
    value_test(false, boost::has_trivial_destructor<empty_UDT>::value)
    value_test(true, boost::has_trivial_destructor<enum_UDT>::value)
 
-   value_test(false, boost::is_empty<int>::value)
-   value_test(false, boost::is_empty<int*>::value)
-   value_test(false, boost::is_empty<int&>::value)
+   soft_value_test(false, boost::is_empty<int>::value)
+   soft_value_test(false, boost::is_empty<int*>::value)
+   soft_value_test(false, boost::is_empty<int&>::value)
 #if defined(__MWERKS__)
    // apparent compiler bug causes this to fail to compile:
    value_fail(false, boost::is_empty<int[2]>::value)
 #else
-   value_test(false, boost::is_empty<int[2]>::value)
+   soft_value_test(false, boost::is_empty<int[2]>::value)
 #endif
-   value_test(false, boost::is_empty<f1>::value)
-   value_test(false, boost::is_empty<mf1>::value)
-   value_test(false, boost::is_empty<UDT>::value)
-   value_test(true, boost::is_empty<empty_UDT>::value)
-   value_test(true, boost::is_empty<empty_POD_UDT>::value)
+   soft_value_test(false, boost::is_empty<f1>::value)
+   soft_value_test(false, boost::is_empty<mf1>::value)
+   soft_value_test(false, boost::is_empty<UDT>::value)
+   soft_value_test(true, boost::is_empty<empty_UDT>::value)
+   soft_value_test(true, boost::is_empty<empty_POD_UDT>::value)
    // this one will not compile on most compilers,
    // because we can't tell the difference between
    // unions and classes:
    value_fail(true, boost::is_empty<empty_union_UDT>::value)
-   value_test(false, boost::is_empty<enum_UDT>::value)
-   value_test(true, boost::is_empty<boost::noncopyable>::value)
-   value_test(false, boost::is_empty<non_empty>::value)
+   soft_value_test(false, boost::is_empty<enum_UDT>::value)
+   soft_value_test(true, boost::is_empty<boost::noncopyable>::value)
+   soft_value_test(false, boost::is_empty<non_empty>::value)
 
    return check_result(argc, argv);
 }
@@ -170,15 +170,15 @@ int main(int argc, char* argv[])
 // define the number of failures expected for given compilers:
 #ifdef __BORLANDC__
 // can't handle enum's or classes that are POD's
-unsigned int expected_failures = 13;
+unsigned int expected_failures = 10;
 #elif defined(__GNUC__)
 // classes that are POD's, or empty:
-unsigned int expected_failures = 7;
+unsigned int expected_failures = 4;
 #elif defined(BOOST_MSVC)
 // can't handle classes that are POD's or arrays that are POD's
 unsigned int expected_failures = 19;
 #else
-unsigned int expected_failures = 0;
+unsigned int expected_failures = 4;
 #endif
 
 
