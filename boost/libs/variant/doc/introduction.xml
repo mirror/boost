@@ -65,7 +65,7 @@ destruction:</para>
 <para>Clearly another approach is required. Typical solutions
 feature the dynamic-allocation of objects, which are subsequently
 manipulated through a common base type (often a virtual base class
-    [<link linkend="variant.biblio.hen01">Hen01</link>]
+    [<link linkend="variant.refs.hen01">Hen01</link>]
 or, more dangerously, a <code>void*</code>). Objects of
 concrete type may be then retrieved by way of a polymorphic downcast
 construct (e.g., <code>dynamic_cast</code>).</para>

@@ -8,7 +8,7 @@
       <description>
         <simpara>The <code>variant</code> class template (inspired by Andrei
         Alexandrescu's class of the same name
-        [<link linkend="variant.biblio.ale01a">Ale01A</link>]) is an efficient,
+        [<link linkend="variant.refs.ale01a">Ale01A</link>]) is an efficient,
         <link linkend="variant.tutorial.recursive">recursive-capable</link>,
         bounded discriminated union value type capable of containing any value
         type (either POD or non-POD). It supports construction from any type
