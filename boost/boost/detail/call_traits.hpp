@@ -34,7 +34,7 @@ namespace boost{
 
 namespace detail{
 
-template <typename T, bool small>
+template <typename T, bool small_>
 struct ct_imp2
 {
    typedef const T& param_type;
