@@ -335,7 +335,7 @@ void instantiate_all()
   (void) std_rng(10);
 
   instantiate_urng("lagged_fibonacci",
-                   boost::random::lagged_fibonacci<uint32_t, 24, 607, 273>(),
+                   boost::random::lagged_fibonacci<boost::uint32_t, 24, 607, 273>(),
                    0u);
   instantiate_urng("lagged_fibonacci607", lagged_fibonacci607(), 0.0);
 
