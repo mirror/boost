@@ -171,7 +171,7 @@ namespace {
                                 fs::path(base, fs::native);
                             full_result = full_result + 
                                 expected.substr(pos, pos1-pos) + 
-                                escape_lit(fullpath.native_file_string());
+                                escape_lit(fullpath.normalize().native_file_string());
                             pos1 = expected.find_first_of ("$", 
                                 pos = pos1 + 4 + base.size());
                         }
