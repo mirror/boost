@@ -317,8 +317,7 @@ typedef random::linear_congruential<int32_t, 48271, 0, 2147483647,
   399268537> minstd_rand;
 
 
-#if !defined(BOOST_NO_INT64_T) && \
-    !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
 // emulate the lrand48() C library function; requires support for uint64_t
 class rand48 
 {
@@ -362,7 +361,7 @@ private:
   static uint64_t cnv(int32_t x) 
   { return (static_cast<uint64_t>(x) << 16) | 0x330e;  }
 };
-#endif /* !BOOST_NO_INT64_T && !BOOST_NO_INCLASS_MEMBER_INITIALIZATION */
+#endif /* !BOOST_NO_INT64_T && !BOOST_NO_INTEGRAL_INT64_T */
 
 
 namespace random {
@@ -684,8 +683,8 @@ template<class DataType, int n, int m, int r, DataType a, int u,
   int s, DataType b, int t, DataType c, int l, DataType val>
 void mersenne_twister<DataType,n,m,r,a,u,s,b,t,c,l,val>::twist()
 {
-  const int upper_mask = static_cast<data_type>(-1) << r;
-  const int lower_mask = ~upper_mask;
+  const data_type upper_mask = (~0u) << r;
+  const data_type lower_mask = ~upper_mask;
   /*
   for(int j = 0; j < n; j++) {
     // Step 2

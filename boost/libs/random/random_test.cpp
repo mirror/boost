@@ -17,6 +17,7 @@
 #include <fstream>
 #include <string>
 #include <cassert>
+#include <cmath>
 #include <boost/random.hpp>
 
 /*
@@ -55,8 +56,7 @@ void validate(const std::string & name, const PRNG &)
 void validate_all()
 {
   using namespace boost;
-#if !defined(BOOST_NO_INT64_T) && \
-    !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
   validate("rand48", rand48());
 #endif
   validate("minstd_rand", minstd_rand());
@@ -172,8 +172,7 @@ void instantiate_all()
 {
   using namespace boost;
 
-#if !defined(BOOST_NO_INT64_T) && \
-    !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
   instantiate_urng("rand48", rand48(), 0);
   rand48 rnd(5);
   rand48 rnd2(uint64_t(0x80000000) * 42);
@@ -276,7 +275,7 @@ void test_uniform_int(Generator & gen)
 #if defined(BOOST_MSVC) && _MSC_VER <= 1200
 
 // These explicit instantiations are necessary, otherwise MSVC does
-// find the boost/operators.hpp inline friends.
+// find the <boost/operators.hpp> inline friends.
 // We ease the typing with a suitable preprocessor macro.
 #define INSTANT(x) \
 template class boost::uniform_smallint<x>; \
