@@ -25,6 +25,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include <boost/type_traits/decay.hpp>
+#include <boost/type_traits/is_array.hpp>
 #include <boost/mpl/if.hpp>
 #include <deque>
 #include <cstddef>
@@ -62,17 +63,17 @@ namespace assign_detail
         // to support string literals properly
         //
         typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            is_array<T>,
+            ::boost::is_array<T>,
             ::boost::decay<const T>,
             ::boost::decay<T> >::type type;
     };
     
     template< class T, std::size_t sz >
-    type_traits::yes_type is_array( const array<T,sz>* );
-    type_traits::no_type is_array( ... );
+    type_traits::yes_type assign_is_array( const array<T,sz>* );
+    type_traits::no_type assign_is_array( ... );
     template< class T, class U >
-    type_traits::yes_type is_pair( const std::pair<T,U>* );
-    type_traits::no_type is_pair( ... ); 
+    type_traits::yes_type assign_is_pair( const std::pair<T,U>* );
+    type_traits::no_type assign_is_pair( ... ); 
 
 
     
@@ -116,7 +117,7 @@ namespace assign_detail
         operator Container() const
         {
             static Container* c = 0;
-            BOOST_STATIC_CONSTANT( bool, is_array_flag = sizeof( assign_detail::is_array( c ) ) 
+            BOOST_STATIC_CONSTANT( bool, is_array_flag = sizeof( assign_detail::assign_is_array( c ) ) 
                                    == sizeof( type_traits::yes_type ) );
 
             typedef BOOST_DEDUCED_TYPENAME mpl::if_c< is_array_flag,
@@ -375,13 +376,13 @@ namespace assign_detail
 
     template< class T, int N >
     struct static_generic_list : 
-        public converter< static_generic_list< BOOST_DEDUCED_TYPENAME assign_decay<T>::type ,N> >
+        public converter< static_generic_list<T,N> >
     {
     private:
-        typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
+        //typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
         //typedef BOOST_DEDUCED_TYPENAME 
         //    remove_reference<Ty>::type                internal_value_type; 
-        typedef Ty                                      internal_value_type;
+        typedef T                                      internal_value_type;
 
     public:
         typedef assign_reference<internal_value_type> value_type;
@@ -391,13 +392,13 @@ namespace assign_detail
         typedef std::ptrdiff_t                        difference_type;
 
     
-        static_generic_list( T r ) :
+        static_generic_list( T& r ) :
             current_(1)
         {
             refs_[0] = r;
         }
 
-        static_generic_list& operator()( T r )
+        static_generic_list& operator()( T& r )
         {
             refs_[current_] = r;
             ++current_;
@@ -450,17 +451,17 @@ namespace assign
     }
 
     template< int N, class T >
-    inline assign_detail::static_generic_list<T&,N>
+    inline assign_detail::static_generic_list< BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type,N>
     ref_list_of( T& t )
     {
-        return assign_detail::static_generic_list<T&,N>( t );
+        return assign_detail::static_generic_list<BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type,N>( t );
     }
     
     template< int N, class T >
-    inline assign_detail::static_generic_list<const T&,N>
+    inline assign_detail::static_generic_list<const BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type,N>
     cref_list_of( const T& t )
     {
-        return assign_detail::static_generic_list<const T&,N>( t );
+        return assign_detail::static_generic_list<const BOOST_DEDUCED_TYPENAME assign_detail::assign_decay<T>::type,N>( t );
     }
 
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
