@@ -12,16 +12,16 @@ __ ../../../index.htm
 
 
 :Authors:       David Abrahams, Jeremy Siek, Thomas Witt
-:Contact:       dave@boost-consulting.com, jsiek@osl.iu.edu, witt@ive.uni-hannover.de
+:Contact:       dave@boost-consulting.com, jsiek@osl.iu.edu, witt@styleadvisor.com
 :organizations: `Boost Consulting`_, Indiana University `Open Systems
-                Lab`_, University of Hanover `Institute for Transport
-                Railway Operation and Construction`_
+                Lab`_, `Zephyr Associates, Inc.`_
 :date:          $Date$
+
 :copyright:     Copyright David Abrahams, Jeremy Siek, Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu
-.. _`Institute for Transport Railway Operation and Construction`: http://www.ive.uni-hannover.de
+.. _`Zephyr Associates, Inc.`: http://www.styleadvisor.com
 
 :Abstract: The Boost Iterator Library contains two parts. The first
            is a system of concepts_ which extend the C++ standard
@@ -83,7 +83,7 @@ Writing standard-conforming iterators is tricky, but the need comes
 up often.  In order to ease the implementation of new iterators,
 the Boost.Iterator library provides the |facade| class template,
 which implements many useful defaults and compile-time checks
-designed to help the author iterator ensure that his iterator is
+designed to help the iterator author ensure that his iterator is
 correct.  
 
 It is also common to define a new iterator that is similar to some
