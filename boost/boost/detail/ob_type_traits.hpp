@@ -9,6 +9,11 @@
 //  Crippled version of type traits for compilers that don't
 //  support partial specialisation. (C) John Maddock 2000
 
+/* Release notes:
+   23rd July 2000:
+      Fixed is_void specialization. (JM)
+*/
+
 #ifndef BOOST_OB_TYPE_TRAITS_HPP
 #define BOOST_OB_TYPE_TRAITS_HPP
 
@@ -65,7 +70,7 @@ template <typename T>
 struct is_volatile{ enum{ value = false }; };
 template <typename T, typename U> struct is_same { enum{ value = false }; };
 template <typename T> struct is_void{ enum{ value = false }; };
-template <> struct is_void<void>{ enum{ value = false }; };
+template <> struct is_void<void>{ enum{ value = true }; };
 
 //* is a type T an unsigned integral type described in the standard (3.9.1p3)
 template <typename T> struct is_standard_unsigned_integral
@@ -230,7 +235,7 @@ template <typename T> struct is_member_pointer
 
 //* is type T an object type (allows cv-qual)
 template <typename T> struct is_object
-{ enum{ value = !is_reference<T>::type && !is_void<T>::value }; };
+{ enum{ value = !is_reference<T>::value && !is_void<T>::value }; };
 
 //* is type T a standard scalar type (allows cv-qual)
 template <typename T> struct is_standard_scalar

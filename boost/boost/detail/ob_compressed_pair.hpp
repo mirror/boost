@@ -6,7 +6,14 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 //
-// this version crippled for use with crippled compilers - John Maddock Jan 2000.
+/* Release notes:
+   23rd July 2000:
+      Additional comments added. (JM)
+   Jan 2000:
+      Original version: this version crippled for use with crippled compilers
+      - John Maddock Jan 2000.
+*/
+
 
 #ifndef BOOST_OB_COMPRESSED_PAIR_HPP
 #define BOOST_OB_COMPRESSED_PAIR_HPP
@@ -41,7 +48,8 @@ public:
             compressed_pair() : _first(), _second() {}
             compressed_pair(first_param_type x, second_param_type y) : _first(x), _second(y) {}
    explicit compressed_pair(first_param_type x) : _first(x), _second() {}
-   //explicit compressed_pair(second_param_type y) : _first(), _second(y) {}
+   // can't define this in case T1 == T2:
+   // explicit compressed_pair(second_param_type y) : _first(), _second(y) {}
 
    first_reference       first()       { return _first; }
    first_const_reference first() const { return _first; }

@@ -6,6 +6,11 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 
+/* Release notes:
+   23rd July 2000:
+      Added Borland specific fixes for reference types (Steve Cleary).
+*/
+
 #ifndef BOOST_DETAIL_TYPE_TRAITS_HPP
 #define BOOST_DETAIL_TYPE_TRAITS_HPP
 
@@ -135,7 +140,15 @@ template <typename T> struct remove_cv<T&>{ typedef T& type; };
 // * convert a type T to a non-reference if it is one - remove_reference<T>
 template <typename T> struct remove_reference{ typedef T type; };
 template <typename T> struct remove_reference<T&>{ typedef T type; };
-
+#if (defined(__BORLANDC__) && (__BORLANDC__ <= 0x550))
+// these are illegal specialisations; cv-qualifies applied to
+// references have no effect according to [8.3.2p1],
+// C++ Builder requires them though as it treats cv-qualified
+// references as distinct types...
+template <typename T> struct remove_reference<T&const>{ typedef T type; };
+template <typename T> struct remove_reference<T&volatile>{ typedef T type; };
+template <typename T> struct remove_reference<T&const volatile>{ typedef T type; };
+#endif
 // * convert a type T to a reference unless it is one - add_reference<T>
 template <typename T> struct add_reference{ typedef T& type; };
 template <typename T> struct add_reference<T&>{ typedef T& type; };
@@ -300,6 +313,15 @@ template <typename T> struct is_pointer<T*> { static const bool value = true; };
 //* is a type T a reference type - is_reference<T>
 template <typename T> struct is_reference { static const bool value = false; };
 template <typename T> struct is_reference<T&> { static const bool value = true; };
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x550)
+// these are illegal specialisations; cv-qualifies applied to
+// references have no effect according to [8.3.2p1],
+// C++ Builder requires them though as it treats cv-qualified
+// references as distinct types...
+template <typename T> struct is_reference<T&const> { static const bool value = true; };
+template <typename T> struct is_reference<T&volatile> { static const bool value = true; };
+template <typename T> struct is_reference<T&const volatile> { static const bool value = true; };
+#endif
 
 //*? is a type T a union type - is_union<T>
 template <typename T> struct is_union

@@ -24,6 +24,13 @@
  *
  */
 
+/* Release notes:
+   23rd July 2000:
+      Added explicit failure for broken compilers that don't support these examples.
+      Fixed broken gcc support (broken using directive).
+      Reordered tests slightly.
+*/
+
 #include <iostream>
 #include <typeinfo>
 #include <algorithm>
@@ -38,6 +45,10 @@
 using std::cout;
 using std::endl;
 using std::cin;
+
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#error "Sorry, without template partial specialisation support there isn't anything to test here..."
+#endif
 
 namespace opt{
 
@@ -221,6 +232,10 @@ struct swapper
    }
 };
 
+#ifdef __GNUC__
+using std::swap;
+#endif
+
 template <>
 struct swapper<true>
 {
@@ -295,6 +310,44 @@ int main()
    result = t.elapsed();
    cout << "destroy_array<int>(unoptimised#2): " << result << endl << endl;
 
+   cout << "testing fill(char)...\n"
+   "[Some standard library versions may already perform this optimisation.]" << endl;
+   /*cache load*/ opt::fill<char*, char>(c_array, c_array + array_size, (char)3);
+   t.restart();
+   for(i = 0; i < iter_count; ++i)
+   {
+      opt::fill<char*, char>(c_array, c_array + array_size, (char)3);
+   }
+   result = t.elapsed();
+   cout << "opt::fill<char*, char>: " << result << endl;
+   /*cache load*/ std::fill(c_array, c_array + array_size, (char)3);
+   t.restart();
+   for(i = 0; i < iter_count; ++i)
+   {
+      std::fill(c_array, c_array + array_size, (char)3);
+   }
+   result = t.elapsed();
+   cout << "std::fill<char*, char>: " << result << endl << endl;
+
+   cout << "testing fill(int)...\n"
+   "[Tests the effect of call_traits pass-by-value optimisation -\nthe value of this optimisation may depend upon hardware characteristics.]" << endl;
+   /*cache load*/ opt::fill<int*, int>(i_array, i_array + array_size, 3);
+   t.restart();
+   for(i = 0; i < iter_count; ++i)
+   {
+      opt::fill<int*, int>(i_array, i_array + array_size, 3);
+   }
+   result = t.elapsed();
+   cout << "opt::fill<int*, int>: " << result << endl;
+   /*cache load*/ std::fill(i_array, i_array + array_size, 3);
+   t.restart();
+   for(i = 0; i < iter_count; ++i)
+   {
+      std::fill(i_array, i_array + array_size, 3);
+   }
+   result = t.elapsed();
+   cout << "std::fill<int*, int>: " << result << endl << endl;
+
    cout << "testing copy...\n"
    "[Some standard library versions may already perform this optimisation.]" << endl;
    /*cache load*/ opt::copy<const int*, int*>(ci_array, ci_array + array_size, i_array);
@@ -347,43 +400,6 @@ int main()
    result = t.elapsed();
    cout << "standard \"unoptimised\" copy: " << result << endl << endl;
 
-   cout << "testing fill(char)...\n"
-   "[Some standard library versions may already perform this optimisation.]" << endl;
-   /*cache load*/ opt::fill<char*, char>(c_array, c_array + array_size, (char)3);
-   t.restart();
-   for(i = 0; i < iter_count; ++i)
-   {
-      opt::fill<char*, char>(c_array, c_array + array_size, (char)3);
-   }
-   result = t.elapsed();
-   cout << "opt::fill<char*, char>: " << result << endl;
-   /*cache load*/ std::fill(c_array, c_array + array_size, (char)3);
-   t.restart();
-   for(i = 0; i < iter_count; ++i)
-   {
-      std::fill(c_array, c_array + array_size, (char)3);
-   }
-   result = t.elapsed();
-   cout << "std::fill<char*, char>: " << result << endl << endl;
-
-   cout << "testing fill(int)...\n"
-   "[Tests the effect of call_traits pass-by-value optimisation -\nthe value of this optimisation may depend upon hardware characteristics.]" << endl;
-   /*cache load*/ opt::fill<int*, int>(i_array, i_array + array_size, 3);
-   t.restart();
-   for(i = 0; i < iter_count; ++i)
-   {
-      opt::fill<int*, int>(i_array, i_array + array_size, 3);
-   }
-   result = t.elapsed();
-   cout << "opt::fill<int*, int>: " << result << endl;
-   /*cache load*/ std::fill(i_array, i_array + array_size, 3);
-   t.restart();
-   for(i = 0; i < iter_count; ++i)
-   {
-      std::fill(i_array, i_array + array_size, 3);
-   }
-   result = t.elapsed();
-   cout << "std::fill<int*, int>: " << result << endl << endl;
 
    //
    // testing iter_swap
@@ -400,6 +416,7 @@ int main()
    cout << "Press any key to exit...";
    cin.get();
 }
+
 
 
 

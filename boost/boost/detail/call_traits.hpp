@@ -6,6 +6,13 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 
+/* Release notes:
+   23rd July 2000:
+      Fixed array specialization. (JM)
+      Added Borland specific fixes for reference types
+      (issue raised by Steve Cleary).
+*/
+
 #ifndef BOOST_DETAIL_CALL_TRAITS_HPP
 #define BOOST_DETAIL_CALL_TRAITS_HPP
 
@@ -66,6 +73,37 @@ struct call_traits<T&>
    typedef T& param_type;  // hh removed const
 };
 
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x550)
+// these are illegal specialisations; cv-qualifies applied to
+// references have no effect according to [8.3.2p1],
+// C++ Builder requires them though as it treats cv-qualified
+// references as distinct types...
+template <typename T>
+struct call_traits<T&const>
+{
+   typedef T& value_type;
+   typedef T& reference;
+   typedef const T& const_reference;
+   typedef T& param_type;  // hh removed const
+};
+template <typename T>
+struct call_traits<T&volatile>
+{
+   typedef T& value_type;
+   typedef T& reference;
+   typedef const T& const_reference;
+   typedef T& param_type;  // hh removed const
+};
+template <typename T>
+struct call_traits<T&const volatile>
+{
+   typedef T& value_type;
+   typedef T& reference;
+   typedef const T& const_reference;
+   typedef T& param_type;  // hh removed const
+};
+#endif
+
 template <typename T, std::size_t N>
 struct call_traits<T [N]>
 {
@@ -76,7 +114,7 @@ public:
    typedef const T* value_type;
    typedef array_type& reference;
    typedef const array_type& const_reference;
-   typedef const T* param_type;
+   typedef const T* const param_type;
 };
 
 template <typename T, std::size_t N>
@@ -89,7 +127,7 @@ public:
    typedef const T* value_type;
    typedef array_type& reference;
    typedef const array_type& const_reference;
-   typedef const T* param_type;
+   typedef const T* const param_type;
 };
 
 }
