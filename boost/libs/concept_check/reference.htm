@@ -57,10 +57,13 @@
 
 <pre>
   template &lt;class T&gt;
-  struct Integer_concept; // Is T a built-in integer type?
+  struct IntegerConcept; // Is T a built-in integer type?
 
   template &lt;class T&gt;
   struct SignedIntegerConcept; // Is T a built-in signed integer type?
+
+  template &lt;class T&gt;
+  struct UnsignedIntegerConcept; // Is T a built-in unsigned integer type?
 
   template &lt;class X, class Y&gt;
   struct ConvertibleConcept; // Is X convertible to Y?
