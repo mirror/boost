@@ -21,8 +21,8 @@
 
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include <boost/mpl/arg_fwd.hpp>
-#   include <boost/mpl/assert.hpp>
 #   include <boost/mpl/aux_/na.hpp>
+#   include <boost/mpl/aux_/na_assert.hpp>
 #   include <boost/mpl/aux_/arity_spec.hpp>
 #   include <boost/mpl/aux_/arg_typedef.hpp>
 #endif
@@ -103,7 +103,7 @@ template<> struct arg<i_>
     struct apply
     {
         typedef BOOST_PP_CAT(U,i_) type;
-        BOOST_MPL_ASSERT_NOT((is_na<type>));
+        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
     };
 };
 
@@ -121,7 +121,7 @@ template<> struct arg<-1>
     struct apply
     {
         typedef U1 type;
-        BOOST_MPL_ASSERT_NOT((is_na<type>));
+        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
     };
 };
 

@@ -24,7 +24,7 @@ template<> struct arg< -1 >
     struct apply
     {
         typedef U1 type;
-        BOOST_MPL_ASSERT_NOT((is_na<type>));
+        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
     };
 };
 
@@ -42,7 +42,7 @@ template<> struct arg<1>
     struct apply
     {
         typedef U1 type;
-        BOOST_MPL_ASSERT_NOT((is_na<type>));
+        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
     };
 };
 
@@ -60,7 +60,7 @@ template<> struct arg<2>
     struct apply
     {
         typedef U2 type;
-        BOOST_MPL_ASSERT_NOT((is_na<type>));
+        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
     };
 };
 
@@ -78,7 +78,7 @@ template<> struct arg<3>
     struct apply
     {
         typedef U3 type;
-        BOOST_MPL_ASSERT_NOT((is_na<type>));
+        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
     };
 };
 
@@ -96,7 +96,7 @@ template<> struct arg<4>
     struct apply
     {
         typedef U4 type;
-        BOOST_MPL_ASSERT_NOT((is_na<type>));
+        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
     };
 };
 
@@ -114,7 +114,7 @@ template<> struct arg<5>
     struct apply
     {
         typedef U5 type;
-        BOOST_MPL_ASSERT_NOT((is_na<type>));
+        BOOST_MPL_AUX_ASSERT_NOT_NA(type);
     };
 };
 
