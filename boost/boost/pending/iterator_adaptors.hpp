@@ -237,12 +237,12 @@ namespace detail {
 
   // Dummy version for iterators that don't support member access
   template <class Iter, class Diff, class Cat>
-  inline void advance_impl(const Iter&, Diff, Cat) { }
+  inline void advance_impl(Iter&, Diff, Cat) { }
 
   // Real version
   template <class Iter, class Diff>
   inline typename Iter::pointer
-  advance_impl(const Iter& i, Diff n, std::random_access_iterator_tag) {
+  advance_impl(Iter& i, Diff n, std::random_access_iterator_tag) {
 #ifdef __MWERKS__
         i.policies().advance<Iter>(i.iter(), n);
 #else
