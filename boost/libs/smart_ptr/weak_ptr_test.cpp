@@ -564,8 +564,35 @@ void conversion_assignment()
     }
 }
 
-void shared_ptr_assignment()
+template<class T, class U> void shared_ptr_assignment(boost::shared_ptr<U> sp, T * = 0)
 {
+    BOOST_TEST(sp.unique());
+
+    boost::weak_ptr<T> p1;
+    boost::weak_ptr<T> p2(p1);
+    boost::weak_ptr<T> p3(sp);
+    boost::weak_ptr<T> p4(p3);
+
+    p1 = sp;
+    BOOST_TEST(p1.use_count() == 1);
+
+    p2 = sp;
+    BOOST_TEST(p2.use_count() == 1);
+
+    p3 = sp;
+    BOOST_TEST(p3.use_count() == 1);
+
+    p4 = sp;
+    BOOST_TEST(p4.use_count() == 1);
+
+    sp.reset();
+
+    BOOST_TEST(p1.use_count() == 0);
+    BOOST_TEST(p2.use_count() == 0);
+    BOOST_TEST(p3.use_count() == 0);
+    BOOST_TEST(p4.use_count() == 0);
+
+    p1 = sp;
 }
 
 void test()
@@ -575,7 +602,13 @@ void test()
     copy_assignment(boost::shared_ptr<void>(new int));
     copy_assignment(create_incomplete());
     conversion_assignment();
-    shared_ptr_assignment();
+    shared_ptr_assignment<int>(boost::shared_ptr<int>(new int));
+    shared_ptr_assignment<void>(boost::shared_ptr<int>(new int));
+    shared_ptr_assignment<X>(boost::shared_ptr<X>(new X));
+    shared_ptr_assignment<void>(boost::shared_ptr<X>(new X));
+    shared_ptr_assignment<void>(boost::shared_ptr<void>(new int));
+    shared_ptr_assignment<incomplete>(create_incomplete());
+    shared_ptr_assignment<void>(create_incomplete());
 }
 
 } // namespace n_assignment
@@ -583,8 +616,47 @@ void test()
 namespace n_reset
 {
 
+template<class T, class U> void test2(boost::shared_ptr<U> sp, T * = 0)
+{
+    BOOST_TEST(sp.unique());
+
+    boost::weak_ptr<T> p1;
+    boost::weak_ptr<T> p2(p1);
+    boost::weak_ptr<T> p3(sp);
+    boost::weak_ptr<T> p4(p3);
+    boost::weak_ptr<T> p5(sp);
+    boost::weak_ptr<T> p6(p5);
+
+    p1.reset();
+    BOOST_TEST(p1.use_count() == 0);
+
+    p2.reset();
+    BOOST_TEST(p2.use_count() == 0);
+
+    p3.reset();
+    BOOST_TEST(p3.use_count() == 0);
+
+    p4.reset();
+    BOOST_TEST(p4.use_count() == 0);
+
+    sp.reset();
+
+    p5.reset();
+    BOOST_TEST(p5.use_count() == 0);
+
+    p6.reset();
+    BOOST_TEST(p6.use_count() == 0);
+}
+
 void test()
 {
+    test2<int>(boost::shared_ptr<int>(new int));
+    test2<void>(boost::shared_ptr<int>(new int));
+    test2<X>(boost::shared_ptr<X>(new X));
+    test2<void>(boost::shared_ptr<X>(new X));
+    test2<void>(boost::shared_ptr<void>(new int));
+    test2<incomplete>(create_incomplete());
+    test2<void>(create_incomplete());
 }
 
 } // namespace n_reset
