@@ -55,8 +55,7 @@ struct StateIterationTest : fsm::state_machine< StateIterationTest, A >
     BOOST_REQUIRE( stateNames.size() == stateNamesCache_.size() );
 
     for ( StateNamesCache::const_iterator actualName = stateNamesCache_.begin();
-      ( actualName != stateNamesCache_.end() && expectedName != stateNames.end() );
-      ++actualName, ++expectedName )
+      actualName != stateNamesCache_.end(); ++actualName, ++expectedName )
     {
       BOOST_REQUIRE( ( *actualName )[ 0 ] == *expectedName );
     }
@@ -91,7 +90,7 @@ struct A : fsm::simple_state< A, StateIterationTest,
 
 StateIterationTest::StateIterationTest()
 {
-  // We're not using custom type information to make this test work for when
+  // We're not using custom type information to make this test work even when
   // BOOST_FSM_USE_NATIVE_RTTI is defined
   stateNamesMap_[ A::static_type() ] = "A";
   stateNamesMap_[ B::static_type() ] = "B";
