@@ -203,9 +203,11 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::close()
 template<typename T, typename Tr, typename Alloc, typename Mode>
 void indirect_streambuf<T, Tr, Alloc, Mode>::imbue(const std::locale& loc)
 {
-    obj().imbue(loc);
-    if (next_)
-        next_->pubimbue(loc);
+    if (is_open()) {
+        obj().imbue(loc);
+        if (next_)
+            next_->pubimbue(loc);
+    }
 }
 
 template<typename T, typename Tr, typename Alloc, typename Mode>
