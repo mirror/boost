@@ -46,11 +46,7 @@ namespace detail {
         };
         template<class B, class D>
         struct reg{
-            static reg invoke(){
-                return instance;
-            }
-            static reg instance;
-            reg(){
+            static void invoke(){
                 void_cast_register<const D, const B>(
                     static_cast<const D *>(NULL),
                     static_cast<const B *>(NULL)
@@ -65,7 +61,6 @@ namespace detail {
             >::type::invoke();
         }
     };
-
     
     // get the base type for a given derived type
     // preserving the const-ness

@@ -53,7 +53,7 @@
 #elif defined(__MWERKS__) 
 //   Code Warrior
 #    if(__MWERKS__ >= 0x3003)  // 8.x
-#        define BOOST_FORCE_INCLUDE __declspec(noinline) __declspec(dllexport)
+#        define BOOST_FORCE_INCLUDE __declspec(dllexport) // __declspec(noinline)
 #    else
 #        define BOOST_FORCE_INCLUDE __declspec(dllexport)
 #    endif

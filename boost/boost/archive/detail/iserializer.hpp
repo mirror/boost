@@ -98,20 +98,11 @@ template<class Archive, class T>
 class iserializer : public basic_iserializer
 {
 private:
-    virtual void destroy(/*const*/ void *address) const {
-        boost::serialization::access::destroy(static_cast<T *>(address));
-    }
-public:
-    explicit iserializer() :
-        basic_iserializer(
-            * boost::serialization::type_info_implementation<T>::type::get_instance()
-        )
-    {}
-    virtual void BOOST_FORCE_INCLUDE load_object_data(
+    static void BOOST_FORCE_INCLUDE static_load_object_data(
         basic_iarchive & ar,
         void *x, 
         const unsigned int file_version
-    ) const {
+    ){
         // make sure call is routed through the higest interface that might
         // be specialized by the user.
         boost::serialization::serialize_adl(
@@ -119,6 +110,26 @@ public:
             * static_cast<T *>(x), 
             file_version
         );
+    }
+    virtual void destroy(/*const*/ void *address) const {
+        boost::serialization::access::destroy(static_cast<T *>(address));
+    }
+    // make sure appropriate member function is instantiated
+    void (*f)(basic_iarchive &, void *, const unsigned int);
+public:
+    explicit iserializer() :
+        basic_iserializer(
+            * boost::serialization::type_info_implementation<T>::type::get_instance()
+        )
+    {
+        f = static_load_object_data;
+    }
+    virtual void load_object_data(
+        basic_iarchive & ar,
+        void *x, 
+        const unsigned int file_version
+    ) const {
+        static_load_object_data(ar, x, file_version);
    }
     virtual bool class_info() const {
         return boost::serialization::implementation_level<T>::value 
@@ -152,6 +163,20 @@ template<class T, class Archive>
 class pointer_iserializer : public archive_pointer_iserializer<Archive> 
 {
 private:
+    static void BOOST_FORCE_INCLUDE static_load_object_ptr(
+        basic_iarchive & ar, 
+        void * & x,
+        const unsigned int file_version
+    ){
+        boost::serialization::load_ptr_adl(
+            boost::smart_cast_reference<Archive &>(ar),
+            reinterpret_cast<T * &>(x),
+            file_version
+        );
+    }
+    // make sure appropriate member function is instantiated
+    void (*f)(basic_iarchive &, void * &, const unsigned int);
+
     static const pointer_iserializer instance;
     virtual const basic_iserializer & get_basic_serializer() const {
         return iserializer<Archive, T>::instantiate();
@@ -161,11 +186,7 @@ private:
         void * & x,
         const unsigned int file_version
     ) const {
-        boost::serialization::load_ptr_adl(
-            boost::smart_cast_reference<Archive &>(ar),
-            reinterpret_cast<T * &>(x),
-            file_version
-        );
+        static_load_object_ptr(ar, x, file_version);
     }
 public:
     explicit pointer_iserializer() :
@@ -173,10 +194,11 @@ public:
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
     {
+        f = static_load_object_ptr;
         basic_iserializer & bis = iserializer<Archive, T>::instantiate();
         bis.set_bpis(this);
     }
-    static const BOOST_FORCE_INCLUDE pointer_iserializer & instantiate(){
+    static const pointer_iserializer & instantiate(){
         return instance;
     }
     virtual ~pointer_iserializer(){};
@@ -379,7 +401,7 @@ struct load_array_type {
 
 // note bogus arguments to workaround msvc 6 silent runtime failure
 template<class Archive, class T>
-inline const detail::basic_pointer_iserializer &
+inline const basic_pointer_iserializer &
 instantiate_pointer_iserializer(
     Archive * /* ar = NULL */,
     T * /* t = NULL */

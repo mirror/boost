@@ -156,12 +156,6 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
 #endif
 ;
 
-template<class T, class ASeq>
-const guid_initializer<T, ASeq> & 
-boost_template_instantiate(T &, ASeq &){
-    return guid_initializer<T, ASeq>::instance;
-}
-
 } // namespace detail
 } // namespace archive
 } // namespace boost
@@ -172,7 +166,6 @@ boost_template_instantiate(T &, ASeq &){
 #if ! defined(BOOST_ARCHIVE_EXPORT)
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)
 
-// in my view either of these should be ok 
 // gcc needs special treatment
 #elif defined(__GNUC__)
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
@@ -186,6 +179,16 @@ boost_template_instantiate(T &, ASeq &){
         } } }                                                        \
         /**/
 #else
+    namespace boost { namespace archive { namespace detail {
+    template<class T, class ASeq>
+    const guid_initializer<T, ASeq> & 
+    #if defined(__MWERKS__)
+    BOOST_FORCE_INCLUDE 
+    #endif
+    boost_template_instantiate(T &, ASeq &){
+        return guid_initializer<T, ASeq>::instance;
+    }
+    } } }
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
         namespace boost { namespace archive { namespace detail {     \
         template<>                                                   \
@@ -196,7 +199,7 @@ boost_template_instantiate(T &, ASeq &){
             guid_initializer<T, ASEQ>::instance(K);                  \
         template                                                     \
         const guid_initializer<T, ASEQ> &                            \
-        boost_template_instantiate(T &, ASEQ &); \
+        boost_template_instantiate(T &, ASEQ &);                     \
         } } }                                                        \
         /**/
 #endif

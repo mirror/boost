@@ -35,10 +35,10 @@ namespace serialization {
 
 // forward declarations
 namespace detail {
-template<class Archive, class T>
-struct member_saver;
-template<class Archive, class T>
-struct member_loader;
+    template<class Archive, class T>
+    struct member_saver;
+    template<class Archive, class T>
+    struct member_loader;
 } // namespace detail
 
 // use an "accessor class so that we can use: 

@@ -99,24 +99,35 @@ namespace detail {
 template<class Archive, class T>
 class oserializer : public basic_oserializer
 {
+private:
+    static void BOOST_FORCE_INCLUDE static_save_object_data(
+        basic_oarchive & ar,    
+        const void *x,
+        unsigned int version
+    ) {
+        // make sure call is routed through the highest interface that might
+        // be specialized by the user.
+        boost::serialization::serialize_adl(
+            boost::smart_cast_reference<Archive &>(ar),
+            * static_cast<T *>(const_cast<void *>(x)),
+            version
+        );
+    }
+    // make sure appropriate member function is instantiated
+    void (*f)(basic_oarchive &, const void *, unsigned int);
 public:
     explicit oserializer() :
         basic_oserializer(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
-    {}
-    // metrowerks needs the BOOST_FORCE_INCLUDE
-    virtual void BOOST_FORCE_INCLUDE save_object_data(
+    {
+        f = static_save_object_data;
+    }
+    virtual void save_object_data(
         basic_oarchive & ar,    
         const void *x
     ) const {
-        // make sure call is routed through the highest interface that might
-        // be specialized by the user.
-        boost::serialization::serialize_adl<Archive>(
-            boost::smart_cast_reference<Archive &>(ar),
-            * static_cast<T *>(const_cast<void *>(x)), 
-            static_cast<unsigned int>(version())
-        );
+        static_save_object_data(ar, x, static_cast<unsigned int>(version()));
     }
     virtual bool class_info() const {
         return boost::serialization::implementation_level<T>::value 
@@ -147,14 +158,10 @@ template<class T, class Archive>
 class pointer_oserializer : public archive_pointer_oserializer<Archive> 
 {
 private:
-    static const pointer_oserializer instance;
-    virtual const basic_oserializer & get_basic_serializer() const {
-        return oserializer<Archive, T>::instantiate();
-    }
-    virtual void save_object_ptr(
+    static void BOOST_FORCE_INCLUDE static_save_object_ptr(
         basic_oarchive & ar,
         const void * x
-    ) const {
+    ){
         assert(NULL != x);
         // make sure call is routed through the highest interface that might
         // be specialized by the user.
@@ -167,12 +174,27 @@ private:
             file_version
         );
     }
+    void (*f)(basic_oarchive &, const void *);
+
+    static const pointer_oserializer instance;
+    virtual const basic_oserializer & get_basic_serializer() const {
+        return oserializer<Archive, T>::instantiate();
+    }
+    virtual void save_object_ptr(
+        basic_oarchive & ar,
+        const void * x
+    ) const {
+        assert(NULL != x);
+        static_save_object_ptr(ar, x);
+    }
 public:
     explicit pointer_oserializer() :
         archive_pointer_oserializer<Archive>(
             * boost::serialization::type_info_implementation<T>::type::get_instance()
         )
     {
+        // make sure appropriate member function is instantiated
+        f = static_save_object_ptr;
         basic_oserializer & bos = oserializer<Archive, T>::instantiate();
         bos.set_bpos(this);
     }
@@ -461,14 +483,14 @@ struct save_array_type
 
 // note bogus arguments to workaround msvc 6 silent runtime failure
 template<class Archive, class T>
-inline const detail::basic_pointer_oserializer &
+inline const basic_pointer_oserializer &
 instantiate_pointer_oserializer(
     Archive * /* ar = NULL */,
     T * /* t = NULL */
 ){
     // note: reversal of order of arguments to work around msvc 6.0 bug
     // that manifests itself while trying to link.
-    return detail::pointer_oserializer<T, Archive>::instantiate();
+    return pointer_oserializer<T, Archive>::instantiate();
 }
 
 } // detail
