@@ -67,7 +67,25 @@
 #  if defined(BOOST_NO_LIMITS) \
       && !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS)
 #     define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+#     define BOOST_NO_MS_INT64_NUMERIC_LIMITS
+#     define BOOST_NO_LONG_LONG_NUMERIC_LIMITS
 #  endif
+
+//
+// if there is no long long then there is no specialisation
+// for numeric_limits<long long> either:
+//
+#if !defined(BOOST_HAS_LONG_LONG) && !defined(BOOST_NO_LONG_LONG_NUMERIC_LIMITS)
+#  define BOOST_NO_LONG_LONG_NUMERIC_LIMITS
+#endif
+
+//
+// if there is no __int64 then there is no specialisation
+// for numeric_limits<__int64> either:
+//
+#if !defined(BOOST_HAS_MS_INT64) && !defined(BOOST_NO_MS_INT64_NUMERIC_LIMITS)
+#  define BOOST_NO_MS_INT64_NUMERIC_LIMITS
+#endif
 
 //
 // if member templates are supported then so is the
@@ -126,6 +144,13 @@
 //
 #  if defined(BOOST_NO_STD_LOCALE) && !defined(BOOST_NO_STD_MESSAGES)
 #     define BOOST_NO_STD_MESSAGES
+#  endif
+
+//
+// We can't have a working std::wstreambuf if there is no std::locale:
+//
+#  if defined(BOOST_NO_STD_LOCALE) && !defined(BOOST_NO_STD_WSTREAMBUF)
+#     define BOOST_NO_STD_WSTREAMBUF
 #  endif
 
 //
@@ -344,4 +369,5 @@ namespace std {
 #  endif
 
 #endif
+
 

@@ -40,6 +40,13 @@
 #endif
 
 //
+// Borland version of numeric_limits lacks __int64 specialisation:
+//
+#ifdef __BORLANDC__
+#  define BOOST_NO_MS_INT64_NUMERIC_LIMITS
+#endif
+
+//
 // No std::iterator if it can't figure out default template args:
 //
 #if defined(_RWSTD_NO_SIMPLE_DEFAULT_TEMPLATES) || defined(RWSTD_NO_SIMPLE_DEFAULT_TEMPLATES) || (BOOST_RWSTD_VER < 0x020000)
