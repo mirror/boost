@@ -142,9 +142,8 @@ inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type begin( const T& r )
     return range_detail::begin( r );
 }
 
-
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-// BCB is not able to overload pointer when class overloads are also available
+#if BOOST_WORKAROUND(__MWERKS__, <= 3003 ) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+// BCB and CW are not able to overload pointer when class overloads are also available.
 template<>
 inline range_const_iterator<const char*>::type begin<const char*>( const char*& r )
 {
