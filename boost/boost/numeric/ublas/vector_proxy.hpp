@@ -146,7 +146,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_range &assign_temporary (vector_range &vr) {
             // FIXME: this is suboptimal.
             // return *this = vr;
-            vector_assign (scalar_assign<reference, value_type> (), *this, vr);
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vr);
             return *this;
         }
         template<class AE>
@@ -188,13 +188,13 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AT>
         BOOST_UBLAS_INLINE
         vector_range &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         vector_range &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -673,62 +673,62 @@ namespace boost { namespace numeric { namespace ublas {
         vector_slice &operator = (const vector_slice &vs) {
             // FIXME: the slices could be differently sized.
             // std::copy (vs.begin (), vs.end (), begin ());
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (vs));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (vs));
             return *this;
         }
         BOOST_UBLAS_INLINE
         vector_slice &assign_temporary (vector_slice &vs) {
             // FIXME: this is suboptimal.
             // return *this = vs;
-            vector_assign (scalar_assign<reference, value_type> (), *this, vs);
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vs);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (*this + ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (*this + ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (*this - ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (*this - ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         vector_slice &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         vector_slice &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -1214,62 +1214,62 @@ return true;
         vector_indirect &operator = (const vector_indirect &vi) {
             // FIXME: the indirect_arrays could be differently sized.
             // std::copy (vi.begin (), vi.end (), begin ());
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (vi));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (vi));
             return *this;
         }
         BOOST_UBLAS_INLINE
         vector_indirect &assign_temporary (vector_indirect &vi) {
             // FIXME: this is suboptimal.
             // return *this = vi;
-            vector_assign (scalar_assign<reference, value_type> (), *this, vi);
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vi);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (*this + ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (*this + ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (*this - ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (*this - ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         vector_indirect &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         vector_indirect &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
 

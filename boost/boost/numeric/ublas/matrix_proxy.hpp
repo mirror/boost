@@ -164,7 +164,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_row &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -176,19 +176,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_row &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_row &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_row &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -673,7 +673,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_column &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -685,19 +685,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_column &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_column &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_column &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -1192,7 +1192,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_range &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -1204,19 +1204,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_range &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -1696,7 +1696,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -1708,19 +1708,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -2203,7 +2203,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -2215,19 +2215,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator *= (const AT &at) {
-            vector_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_multiplies_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator /= (const AT &at) {
-            vector_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            vector_assign_scalar (scalar_divides_assign<typename iterator::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -2701,7 +2701,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_range &plus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<typename iterator1::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -2713,19 +2713,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_range &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_minus_assign<typename iterator1::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_range& operator *= (const AT &at) {
-            matrix_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_multiplies_assign<typename iterator1::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_range& operator /= (const AT &at) {
-            matrix_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_divides_assign<typename iterator1::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -3637,7 +3637,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_slice &plus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<typename iterator1::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -3649,19 +3649,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_slice &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_minus_assign<typename iterator1::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_slice& operator *= (const AT &at) {
-            matrix_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_multiplies_assign<typename iterator1::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_slice& operator /= (const AT &at) {
-            matrix_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_divides_assign<typename iterator1::reference, AT> (), *this, at);
             return *this;
         }
 
@@ -4582,7 +4582,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_indirect &plus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_plus_assign<typename iterator1::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
@@ -4594,19 +4594,19 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_indirect &minus_assign (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            matrix_assign (scalar_minus_assign<typename iterator1::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_indirect& operator *= (const AT &at) {
-            matrix_assign_scalar (scalar_multiplies_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_multiplies_assign<typename iterator1::reference, AT> (), *this, at);
             return *this;
         }
         template<class AT>
         BOOST_UBLAS_INLINE
         matrix_indirect& operator /= (const AT &at) {
-            matrix_assign_scalar (scalar_divides_assign<reference, AT> (), *this, at);
+            matrix_assign_scalar (scalar_divides_assign<typename iterator1::reference, AT> (), *this, at);
             return *this;
         }
 
