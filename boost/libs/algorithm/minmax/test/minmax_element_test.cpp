@@ -7,7 +7,6 @@
 #include <vector>
 #include <list>
 #include <set>
-#include <iostream>
 
 #include <boost/algorithm/minmax_element.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -16,7 +15,6 @@
 class custom {
   int m_x;
   friend bool operator<(custom const& x, custom const& y);
-  friend std::ostream& operator<<(std::ostream& str, custom const& x);
 public:
   explicit custom(int x = 0) : m_x(x) {}
   custom(custom const& y) : m_x(y.m_x) {}
@@ -27,12 +25,6 @@ public:
 bool operator< (custom const& x, custom const& y)
 {
   return x.m_x < y.m_x;
-}
-
-std::ostream& operator<<(std::ostream& str, custom const& x)
-{ 
-    str << x.m_x;
-    return str;
 }
 
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(custom)
@@ -189,49 +181,40 @@ void test_container(Iterator first, Iterator last, int n, Container* dummy = 0 )
 }
 
 template <class Iterator>
-void test_range(Iterator first, Iterator last, int n, char* /* name */)
+void test_range(Iterator first, Iterator last, int n)
 {
   typedef typename std::iterator_traits<Iterator>::value_type Value;
   // Test various containers with these values
-  // std::cout << "  vector<" << name << ">...";
   test_container< std::vector<Value>, Iterator, Value >(first, last, n);
-  // std::cout << "  list<" << name << ">...";
   test_container< std::list<Value>,   Iterator, Value >(first, last, n);
-  // std::cout << "  set<" << name << ">...";
   test_container< std::set<Value>,    Iterator, Value >(first, last, n);
-  // std::cout << "\n";
 }
 
 template <class Value>
-void test(int n, char* name)
+void test(int n)
 {
   // Populate test vector with identical values
-  // std::cout << " Identical values...   ";
   std::vector<Value> test_vector(n, Value(1));
   typename std::vector<Value>::iterator first( test_vector.begin() );
   typename std::vector<Value>::iterator last( test_vector.end() );
-  test_range(first, last, n, name);
+  test_range(first, last, n);
 
   // Populate test vector with two values
-  // std::cout << " Two distinct values...";
   typename std::vector<Value>::iterator middle( first + n/2 );
   std::fill(middle, last, Value(2));
-  test_range(first, last, n, name);
+  test_range(first, last, n);
 
   // Populate test vector with increasing values
-  // std::cout << " Increasing values...  ";
   std::accumulate(first, last, Value(0));
-  test_range(first, last, n, name);
+  test_range(first, last, n);
 
   // Populate test vector with decreasing values
-  // std::cout << " Decreasing values...  ";
   std::reverse(first, last);
-  test_range(first, last, n, name);
+  test_range(first, last, n);
 
   // Populate test vector with random values
-  // std::cout << " Random values...      ";
   std::random_shuffle(first, last);
-  test_range(first, last, n, name);
+  test_range(first, last, n);
 }
 
 int test_main( int argc, char* argv[] )
@@ -239,8 +222,8 @@ int test_main( int argc, char* argv[] )
   int n = 100;
   if (argc > 1) n = atoi(argv[1]);
 
-  test<int>(n, "builtin");
-  test<custom>(n, "custom ");
+  test<int>(n);
+  test<custom>(n);
 
   return 0;
 }

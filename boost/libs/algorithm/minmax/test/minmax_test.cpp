@@ -40,7 +40,7 @@ private:
 };
 
 template <class Value>
-void test(char*)
+void test()
 {
   using namespace boost;
   Value zero(0), one(1);
@@ -72,8 +72,8 @@ void test(char*)
 
 int test_main( int , char* [] )
 {
-  test<int>("builtin");
-  test<custom>("custom ");
+  test<int>(); // ("builtin");
+  test<custom>(); // ("custom ");
 
   return 0;
 }
