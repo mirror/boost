@@ -1,3 +1,19 @@
+/* boost random/detail/iterator_mixin.hpp header file
+ *
+ * Copyright Jens Maurer 2000-2001
+ * Permission to use, copy, modify, sell, and distribute this software
+ * is hereby granted without fee provided that the above copyright notice
+ * appears in all copies and that both that copyright notice and this
+ * permission notice appear in supporting documentation,
+ *
+ * Jens Maurer makes no representations about the suitability of this
+ * software for any purpose. It is provided "as is" without express or
+ * implied warranty.
+ *
+ * See http://www.boost.org for most recent version including documentation.
+ *
+ * Revision history
+ */
 
 #ifndef BOOST_ITERATOR_MIXIN_HPP
 #define BOOST_ITERATOR_MIXIN_HPP
