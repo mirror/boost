@@ -1,0 +1,36 @@
+/* Copyright (c) 2001 CrystalClear Software, Inc.
+ * Disclaimer & Full Copyright at end of file
+ * Author: Jeff Garland 
+ */
+
+
+/*! @mainpage Boost Date-Time Library Doxygen Reference Documentation
+ *  
+ *  
+ */
+namespace boost {
+
+//! Namespace for basic templates and components used to construct date-time systems
+/*!
+ This namespace encapsulates various types of templates and classes used 
+ to construct coherent date-time systems including date, time, etc.  These
+ components should be considered helper components to be utilized in the
+ construction of specific date-time system implementations.  See namespace
+ gregorian for one such example.
+*/
+namespace date_time {}
+
+}
+/* Copyright (c) 2001
+ * CrystalClear Software, Inc.
+ *
+ * Permission to use, copy, modify, distribute and sell this software
+ * and its documentation for any purpose is hereby granted without fee,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
+ * in supporting documentation.  CrystalClear Software makes no
+ * representations about the suitability of this software for any
+ * purpose.  It is provided "as is" without express or implied warranty.
+ */
+
+
