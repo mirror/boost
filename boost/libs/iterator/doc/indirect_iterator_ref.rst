@@ -3,7 +3,8 @@
   template <
       class Iterator
     , class Value = use_default
-    , class Category = use_default
+    , unsigned Access  = use_default_access
+    , class Traversal  = use_default
     , class Reference = use_default
     , class Difference = use_default
   >
@@ -15,12 +16,12 @@
       indirect_iterator();
       indirect_iterator(Iterator x);
       template <
-          class Iterator2, class Value2, class Category2
+          class Iterator2, class Value2, unsigned Access2, class Traversal2
         , class Reference2, class Difference2
       >
       indirect_iterator(
           indirect_iterator<
-               Iterator2, Value2, Category2, Reference2, Difference2
+               Iterator2, Value2, Access2, Traversal2, Reference2, Difference2
           > const& y
         , typename enable_if_convertible<Iterator2, Iterator>::type* = 0 // exposition
       );
@@ -53,9 +54,10 @@ iterator.
 The ``Reference`` parameter will be the ``reference`` type of the
 ``indirect_iterator``. The default is ``Value&``.
 
-The ``Category`` parameter is the ``iterator_category`` type for the
-``indirect_iterator``. The default is 
-``iterator_traits<Iterator>::iterator_category``.
+The ``Access`` and ``Traversal`` parameters are passed unchanged to
+the corresponding parameters of the ``iterator_adaptor`` base
+class, and  the ``Iterator`` parameter is passed unchanged as the
+``Base`` parameter to the ``iterator_adaptor`` base class.
 
 The indirect iterator will model the most refined standard traversal
 concept that is modeled by the ``Iterator`` type.  The indirect
@@ -81,12 +83,12 @@ modeled by the value type of ``Iterator``.
 ::
 
   template <
-      class Iterator2, class Value2, class Category2
+      class Iterator2, class Value2, unsigned Access, class Traversal
     , class Reference2, class Difference2
   >
   indirect_iterator(
       indirect_iterator<
-           Iterator2, Value2, Category2, Reference2, Difference2
+           Iterator2, Value2, Access, Traversal, Reference2, Difference2
       > const& y
     , typename enable_if_convertible<Iterator2, Iterator>::type* = 0 // exposition
   );

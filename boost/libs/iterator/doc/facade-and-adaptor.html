@@ -219,7 +219,7 @@ Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.un
 Railway Operation and Construction</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
 <td>2003-09-22</td></tr>
-<tr class="field"><th class="docinfo-name">Number:</th><td class="field-body"><strong>This document is a revised version of the official</strong> N1476=03-0059</td>
+<tr class="field"><th class="docinfo-name">Number:</th><td class="field-body">N1530=03-0113</td>
 </tr>
 <tr><th class="docinfo-name">Copyright:</th>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved</td></tr>
@@ -642,17 +642,18 @@ above. The <tt class="literal"><span class="pre">Base</span></tt> type need not 
 iterator. It need only support the operations used by the core
 interface functions of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> that have not been
 redefined in the user's derived class.</p>
-<p>Several of the template parameters of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> default to
-<tt class="literal"><span class="pre">use_default</span></tt>. This allows the user to make use of a default
-parameter even when the user wants to specify a parameter later in the
-parameter list.  Also, the defaults for the corresponding associated
-types are fairly complicated, so metaprogramming is required to
-compute them, and <tt class="literal"><span class="pre">use_default</span></tt> can help to simplify the
-implementation.  Finally, <tt class="literal"><span class="pre">use_default</span></tt> is not left unspecified
+<p>Several of the template parameters of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> default
+to <tt class="literal"><span class="pre">use_default</span></tt> (or <tt class="literal"><span class="pre">use_default_access</span></tt>). This allows the
+user to make use of a default parameter even when she wants to
+specify a parameter later in the parameter list.  Also, the
+defaults for the corresponding associated types are somewhat
+complicated, so metaprogramming is required to compute them, and
+<tt class="literal"><span class="pre">use_default</span></tt> can help to simplify the implementation.  Finally,
+the identity of the <tt class="literal"><span class="pre">use_default</span></tt> type is not left unspecified
 because specification helps to highlight that the <tt class="literal"><span class="pre">Reference</span></tt>
 template parameter may not always be identical to the iterator's
-<tt class="literal"><span class="pre">reference</span></tt> type, and will keep users making mistakes based on that
-assumption.</p>
+<tt class="literal"><span class="pre">reference</span></tt> type, and will keep users making mistakes based on
+that assumption.</p>
 </div>
 <div class="section" id="specialized-adaptors">
 <h2><a class="toc-backref" href="#id28" name="specialized-adaptors">Specialized Adaptors</a></h2>
@@ -697,13 +698,14 @@ Standard compliant iterators).</p>
 <h2><a class="toc-backref" href="#id30" name="header-iterator-helper-synopsis-lib-iterator-helper-synopsis">Header <tt class="literal"><span class="pre">&lt;iterator_helper&gt;</span></tt> synopsis    [lib.iterator.helper.synopsis]</a></h2>
 <pre class="literal-block">
 struct use_default;
+const unsigned use_default_access = -1;
 
 struct iterator_core_access { /* implementation detail */ };
 
 template &lt;
     class Derived
   , class Value
-  , class AccessCategory
+  , unsigned AccessCategory
   , class TraversalCategory
   , class Reference  = Value&amp;
   , class Difference = ptrdiff_t
@@ -714,7 +716,8 @@ template &lt;
     class Derived
   , class Base
   , class Value      = use_default
-  , class Category   = use_default
+  , unsigned Access  = use_default_access
+  , class Traversal  = use_default
   , class Reference  = use_default
   , class Difference = use_default
 &gt;
@@ -723,7 +726,8 @@ class iterator_adaptor;
 template &lt;
     class Iterator
   , class Value = use_default
-  , class Category = use_default
+  , unsigned Access  = use_default_access
+  , class Traversal  = use_default
   , class Reference = use_default
   , class Difference = use_default
 &gt;
@@ -745,7 +749,8 @@ class filter_iterator;
 
 template &lt;
     class Incrementable
-  , class Category = use_default
+  , unsigned Access  = use_default_access
+  , class Traversal  = use_default
   , class Difference = use_default
 &gt;
 class counting_iterator
@@ -765,7 +770,7 @@ and associated types, to be supplied by a derived iterator class.</p>
 template &lt;
     class Derived
   , class Value
-  , class AccessCategory
+  , unsigned AccessCategory
   , class TraversalCategory
   , class Reference  = /* see <a class="reference" href="#iterator-facade-requirements">below</a> */
   , class Difference = ptrdiff_t
@@ -855,11 +860,21 @@ out of the overload set when the types are not interoperable.]</p>
 title prevents an automatic link from being generated -->
 <a class="target" id="iterator-facade-requirements" name="iterator-facade-requirements"></a><div class="section" id="id13">
 <h4><a class="toc-backref" href="#id33" name="id13"><tt class="literal"><span class="pre">iterator_facade</span></tt> requirements</a></h4>
+<p>Some of the constraints on template parameters to
+<tt class="literal"><span class="pre">iterator_facade</span></tt> are expressed in terms of resulting nested
+types and should be viewed in the context of their impact on
+<tt class="literal"><span class="pre">iterator_traits&lt;Derived&gt;</span></tt>.</p>
 <p>The <tt class="literal"><span class="pre">Derived</span></tt> template parameter must be a class derived from
 <tt class="literal"><span class="pre">iterator_facade</span></tt>.</p>
-<p>The default for the <tt class="literal"><span class="pre">Reference</span></tt> parameter is <tt class="literal"><span class="pre">Value&amp;</span></tt> if the
-access category for <tt class="literal"><span class="pre">iterator_facade</span></tt> is implicitly convertible to
-<tt class="literal"><span class="pre">writable_iterator_tag</span></tt>, and <tt class="literal"><span class="pre">const</span> <span class="pre">Value&amp;</span></tt> otherwise.</p>
+<p>The nested <tt class="literal"><span class="pre">::value_type</span></tt> type will be the same as
+<tt class="literal"><span class="pre">remove_cv&lt;Value&gt;::type</span></tt>, so the <tt class="literal"><span class="pre">Value</span></tt> parameter must be
+an (optionally <tt class="literal"><span class="pre">const</span></tt>-qualified) non-reference type.</p>
+<p><tt class="literal"><span class="pre">AccessCategory</span></tt> must be an unsigned value which uses no more
+bits than the greatest value of <tt class="literal"><span class="pre">iterator_access</span></tt>.</p>
+<p>The nested <tt class="literal"><span class="pre">::reference</span></tt> will be the same as the <tt class="literal"><span class="pre">Reference</span></tt>
+parameter; it must be a suitable reference type for the resulting
+iterator.  The default for the <tt class="literal"><span class="pre">Reference</span></tt> parameter is
+<tt class="literal"><span class="pre">Value&amp;</span></tt>.</p>
 <p>The following table describes the other requirements on the
 <tt class="literal"><span class="pre">Derived</span></tt> parameter.  Depending on the resulting iterator's
 <tt class="literal"><span class="pre">iterator_category</span></tt>, a subset of the expressions listed in the table
@@ -973,8 +988,8 @@ of type <tt class="literal"><span class="pre">X::pointer</span></tt> equal to:</
 <p>Otherwise returns an object of unspecified type such that, given an
 object <tt class="literal"><span class="pre">a</span></tt> of type <tt class="literal"><span class="pre">X</span></tt>, <tt class="literal"><span class="pre">a-&gt;m</span></tt> is equivalent to <tt class="literal"><span class="pre">(w</span> <span class="pre">=</span> <span class="pre">*a,</span>
 <span class="pre">w.m)</span></tt> for some temporary object <tt class="literal"><span class="pre">w</span></tt> of type <tt class="literal"><span class="pre">X::value_type</span></tt>.</p>
-<p class="last">The type <tt class="literal"><span class="pre">X::pointer</span></tt> is <tt class="literal"><span class="pre">Value*</span></tt> if the access category for
-<tt class="literal"><span class="pre">X</span></tt> is implicitly convertible to <tt class="literal"><span class="pre">writable_iterator_tag</span></tt>, and
+<p class="last">The type <tt class="literal"><span class="pre">X::pointer</span></tt> is <tt class="literal"><span class="pre">Value*</span></tt> if
+<tt class="literal"><span class="pre">is_writable_iterator&lt;X&gt;::value</span></tt> is <tt class="literal"><span class="pre">true</span></tt>, and
 <tt class="literal"><span class="pre">Value</span> <span class="pre">const*</span></tt> otherwise.</p>
 </td>
 </tr>
@@ -1107,11 +1122,13 @@ core interface functions of <tt class="literal"><span class="pre">iterator_facad
 <div class="section" id="class-template-iterator-adaptor">
 <h3><a class="toc-backref" href="#id36" name="class-template-iterator-adaptor">Class template <tt class="literal"><span class="pre">iterator_adaptor</span></tt></a></h3>
 <pre class="literal-block">
+bool
 template &lt;
     class Derived
   , class Base
   , class Value      = use_default
-  , class Category   = use_default
+  , unsigned Access  = use_default_access
+  , class Traversal  = use_default
   , class Reference  = use_default
   , class Difference = use_default
 &gt;
@@ -1163,54 +1180,47 @@ parameters specify the types for the member typedefs in
 <tt class="literal"><span class="pre">iterator_facade</span></tt>.  The following pseudo-code specifies the
 traits types for <tt class="literal"><span class="pre">iterator_adaptor</span></tt>.</p>
 <pre class="literal-block">
-if (Value == use_default)
-    value_type = iterator_traits&lt;Base&gt;::value_type;
-else 
-    value_type = remove_cv&lt;Value&gt;::type;
-
-if (Reference == use_default) {
-    if (Value == use_default)
-        reference = iterator_traits&lt;Base&gt;::reference;
-    else 
-        reference = Value&amp;;
-} else
-    reference = Reference;
-
-if (Distance == use_default)
-    difference_type = iterator_traits&lt;Base&gt;::difference_type;
+if (Value != use_default)
+     value_type = remove_cv&lt;Value&gt;::type;
 else
-    difference_type = Distance;
+     value_type = iterator_traits&lt;Base&gt;::value_type;
 
-if (Category == use_default)
-    iterator_category = iterator_tag&lt; 
-        access_category&lt; Base &gt;,
-        traversal_category&lt; Base &gt;
-    &gt;
-else if (Category is convertible to a standard access tag)
-    iterator_category = iterator_tag&lt;
-        Category
-    else if (Category has a nested traversal type)
-         if (reference is not a reference-to-const)
-             Category::access
-         else
-             if (Category
-        
 
-else if (Category is convertable to a standard traversal tag)
-    ...
+if (Traversal != use_default)
+    traversal_category = Traversal
 else
-    iterator_category = Category;
-    // Actually the above is wrong.  See the use of
-    // access_category_tag and
-    // new_category_to_access/iter_category_to_access.
+    traversal_category = traversal_category&lt; Base &gt;::type
+
+iterator_category = iterator_tag&lt;
+                         access_category
+                       , traversal_category
+                     &gt;
+
+if (Access != use_default)
+{
+   access_category = Access
+}
+else
+{
+   access_category
+     = access_category&lt; Base &gt;::value
+
+   if (is_const&lt;Value&gt;)
+       access_category &amp;= ~writable_iterator;
+}
+
+iterator_category = iterator_tag&lt;
+                         access_category
+                       , traversal_category
+                     &gt;
+
+if (Reference != use_default)
+    reference = Reference
+else if (Value != use_default)
+    reference = Value&amp;
+else
+    reference = iterator_traits&lt;Base&gt;::reference
 </pre>
-<!-- Replaced with new semantics - -thw
-if (Category == use_default)
-    iterator_category = iterator_traits<Base>::iterator_category;
-else
-    iterator_category = Category;
-
-Fix this up!! -->
 </div>
 <div class="section" id="iterator-adaptor-public-operations">
 <h3><a class="toc-backref" href="#id38" name="iterator-adaptor-public-operations"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></h3>
@@ -1362,7 +1372,8 @@ iterators over smart pointers, which the impl handles. -JGS -->
 template &lt;
     class Iterator
   , class Value = use_default
-  , class Category = use_default
+  , unsigned Access  = use_default_access
+  , class Traversal  = use_default
   , class Reference = use_default
   , class Difference = use_default
 &gt;
@@ -1374,12 +1385,12 @@ class indirect_iterator
     indirect_iterator();
     indirect_iterator(Iterator x);
     template &lt;
-        class Iterator2, class Value2, class Category2
+        class Iterator2, class Value2, unsigned Access2, class Traversal2
       , class Reference2, class Difference2
     &gt;
     indirect_iterator(
         indirect_iterator&lt;
-             Iterator2, Value2, Category2, Reference2, Difference2
+             Iterator2, Value2, Access2, Traversal2, Reference2, Difference2
         &gt; const&amp; y
       , typename enable_if_convertible&lt;Iterator2, Iterator&gt;::type* = 0 // exposition
     );
@@ -1408,9 +1419,10 @@ specialization of <tt class="literal"><span class="pre">iterator_traits</span></
 iterator.</p>
 <p>The <tt class="literal"><span class="pre">Reference</span></tt> parameter will be the <tt class="literal"><span class="pre">reference</span></tt> type of the
 <tt class="literal"><span class="pre">indirect_iterator</span></tt>. The default is <tt class="literal"><span class="pre">Value&amp;</span></tt>.</p>
-<p>The <tt class="literal"><span class="pre">Category</span></tt> parameter is the <tt class="literal"><span class="pre">iterator_category</span></tt> type for the
-<tt class="literal"><span class="pre">indirect_iterator</span></tt>. The default is 
-<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::iterator_category</span></tt>.</p>
+<p>The <tt class="literal"><span class="pre">Access</span></tt> and <tt class="literal"><span class="pre">Traversal</span></tt> parameters are passed unchanged to
+the corresponding parameters of the <tt class="literal"><span class="pre">iterator_adaptor</span></tt> base
+class, and  the <tt class="literal"><span class="pre">Iterator</span></tt> parameter is passed unchanged as the
+<tt class="literal"><span class="pre">Base</span></tt> parameter to the <tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class.</p>
 <p>The indirect iterator will model the most refined standard traversal
 concept that is modeled by the <tt class="literal"><span class="pre">Iterator</span></tt> type.  The indirect
 iterator will model the most refined standard access concept that is
@@ -1442,12 +1454,12 @@ the <tt class="literal"><span class="pre">iterator_adaptor</span></tt> subobject
 </table>
 <pre class="literal-block">
 template &lt;
-    class Iterator2, class Value2, class Category2
+    class Iterator2, class Value2, unsigned Access, class Traversal
   , class Reference2, class Difference2
 &gt;
 indirect_iterator(
     indirect_iterator&lt;
-         Iterator2, Value2, Category2, Reference2, Difference2
+         Iterator2, Value2, Access, Traversal, Reference2, Difference2
     &gt; const&amp; y
   , typename enable_if_convertible&lt;Iterator2, Iterator&gt;::type* = 0 // exposition
 );
@@ -1733,12 +1745,13 @@ class filter_iterator
 </div>
 <div class="section" id="filter-iterator-requirements">
 <h3><a class="toc-backref" href="#id56" name="filter-iterator-requirements"><tt class="literal"><span class="pre">filter_iterator</span></tt> requirements</a></h3>
-<p>The base <tt class="literal"><span class="pre">Iterator</span></tt> parameter must be a model of Readable Iterator
-and Single Pass Iterator. The resulting <tt class="literal"><span class="pre">filter_iterator</span></tt> will be a
-model of Forward Traversal Iterator if <tt class="literal"><span class="pre">Iterator</span></tt> is, otherwise the
-<tt class="literal"><span class="pre">filter_iterator</span></tt> will be a model of Single Pass Iterator. The
-access category of the <tt class="literal"><span class="pre">filter_iterator</span></tt> will be the most refined
-standard access category that is modeled by <tt class="literal"><span class="pre">Iterator</span></tt>.</p>
+<p>The base <tt class="literal"><span class="pre">Iterator</span></tt> parameter must be a model of Readable
+Iterator and Single Pass Iterator. The resulting
+<tt class="literal"><span class="pre">filter_iterator</span></tt> will be a model of Forward Traversal Iterator
+if <tt class="literal"><span class="pre">Iterator</span></tt> is, otherwise the <tt class="literal"><span class="pre">filter_iterator</span></tt> will be a
+model of Single Pass Iterator. The access category of the
+<tt class="literal"><span class="pre">filter_iterator</span></tt> will be the same as the access category of
+<tt class="literal"><span class="pre">Iterator</span></tt>.</p>
 <!-- Thomas is going to try implementing filter_iterator so that
 it will be bidirectional if the underlying iterator is. -JGS -->
 <p>The <tt class="literal"><span class="pre">Predicate</span></tt> must be Assignable, Copy Constructible, and the
@@ -1830,13 +1843,19 @@ the base <tt class="literal"><span class="pre">m_iterator</span></tt>, as per th
 <div class="section" id="class-template-counting-iterator">
 <h4><a class="toc-backref" href="#id59" name="class-template-counting-iterator">Class template <tt class="literal"><span class="pre">counting_iterator</span></tt></a></h4>
 <pre class="literal-block">
-template &lt;class Incrementable, class Category = use_default, class Difference = use_default&gt;
+template &lt;
+    class Incrementable
+  , unsigned Access = use_default_access
+  , class Traversal = use_default
+  , class Difference = use_default
+&gt;
 class counting_iterator
   : public iterator_adaptor&lt;
-        counting_iterator&lt;Incrementable, Category, Difference&gt;
+        counting_iterator&lt;Incrementable, Access, Traversal, Difference&gt;
       , Incrementable
       , Incrementable
-      , /* see details for category */
+      , Access
+      , /* see details for traversal category */
       , Incrementable const&amp;
       , Incrementable const*
       , /* distance = Difference or a signed integral type */&gt;
@@ -1935,7 +1954,7 @@ template &lt;class UnaryFunction&gt;
 class function_output_iterator {
 public:
   typedef iterator_tag&lt;
-        writable_iterator_tag
+        writable_iterator
       , incrementable_traversal_tag
   &gt; iterator_category;
   typedef void                value_type;
@@ -2043,7 +2062,7 @@ LocalWords:  OtherIncrementable Coplien -->
 <hr class="footer" />
 <div class="footer">
 <a class="reference" href="facade-and-adaptor.rst">View document source</a>.
-Generated on: 2003-09-22 14:17 UTC.
+Generated on: 2003-09-22 16:48 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

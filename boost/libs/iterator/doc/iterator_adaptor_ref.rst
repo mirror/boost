@@ -1,10 +1,12 @@
 .. parsed-literal::
   
+  bool
   template <
       class Derived
     , class Base
     , class Value      = use_default
-    , class Category   = use_default
+    , unsigned Access  = use_default_access
+    , class Traversal  = use_default
     , class Reference  = use_default
     , class Difference = use_default
   >
@@ -60,55 +62,46 @@ traits types for ``iterator_adaptor``.
 
 ::
 
-    if (Value == use_default)
-        value_type = iterator_traits<Base>::value_type;
-    else 
+   if (Value != use_default)
         value_type = remove_cv<Value>::type;
-
-    if (Reference == use_default) {
-        if (Value == use_default)
-            reference = iterator_traits<Base>::reference;
-        else 
-            reference = Value&;
-    } else
-        reference = Reference;
-
-    if (Distance == use_default)
-        difference_type = iterator_traits<Base>::difference_type;
-    else
-        difference_type = Distance;
-
-    if (Category == use_default)
-        iterator_category = iterator_tag< 
-            access_category< Base >,
-            traversal_category< Base >
-        >
-    else if (Category is convertible to a standard access tag)
-        iterator_category = iterator_tag<
-            Category
-        else if (Category has a nested traversal type)
-             if (reference is not a reference-to-const)
-                 Category::access
-             else
-                 if (Category
-            
-    
-    else if (Category is convertable to a standard traversal tag)
-        ...
-    else
-        iterator_category = Category;
-        // Actually the above is wrong.  See the use of
-        // access_category_tag and
-        // new_category_to_access/iter_category_to_access.
+   else
+        value_type = iterator_traits<Base>::value_type;
 
 
-..  Replaced with new semantics --thw
-    if (Category == use_default)
-        iterator_category = iterator_traits<Base>::iterator_category;
-    else
-        iterator_category = Category;
+   if (Traversal != use_default)
+       traversal_category = Traversal
+   else
+       traversal_category = traversal_category< Base >::type
 
-    Fix this up!!
+   iterator_category = iterator_tag<
+                            access_category
+                          , traversal_category
+                        >
+
+   if (Access != use_default)
+   {
+      access_category = Access
+   }
+   else
+   {
+      access_category
+        = access_category< Base >::value
+
+      if (is_const<Value>)
+          access_category &= ~writable_iterator;
+   }
+
+   iterator_category = iterator_tag<
+                            access_category
+                          , traversal_category
+                        >
+
+   if (Reference != use_default)
+       reference = Reference
+   else if (Value != use_default)
+       reference = Value&
+   else
+       reference = iterator_traits<Base>::reference
 
 
 ``iterator_adaptor`` public operations

@@ -8,7 +8,7 @@
                Lab`_, University of Hanover `Institute for Transport
                Railway Operation and Construction`_
 :date: $Date$
-:Number: **This document is a revised version of the official** N1476=03-0059
+:Number: N1530=03-0113
 :copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
@@ -226,13 +226,14 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
 ::
 
   struct use_default;
+  const unsigned use_default_access = -1;
 
   struct iterator_core_access { /* implementation detail */ };
   
   template <
       class Derived
     , class Value
-    , class AccessCategory
+    , unsigned AccessCategory
     , class TraversalCategory
     , class Reference  = Value&
     , class Difference = ptrdiff_t
@@ -243,7 +244,8 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
       class Derived
     , class Base
     , class Value      = use_default
-    , class Category   = use_default
+    , unsigned Access  = use_default_access
+    , class Traversal  = use_default
     , class Reference  = use_default
     , class Difference = use_default
   >
@@ -252,7 +254,8 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
   template <
       class Iterator
     , class Value = use_default
-    , class Category = use_default
+    , unsigned Access  = use_default_access
+    , class Traversal  = use_default
     , class Reference = use_default
     , class Difference = use_default
   >
@@ -274,7 +277,8 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
 
   template <
       class Incrementable
-    , class Category = use_default
+    , unsigned Access  = use_default_access
+    , class Traversal  = use_default
     , class Difference = use_default
   >
   class counting_iterator

@@ -18,15 +18,16 @@ iterator. It need only support the operations used by the core
 interface functions of ``iterator_adaptor`` that have not been
 redefined in the user's derived class.
 
-Several of the template parameters of ``iterator_adaptor`` default to
-``use_default``. This allows the user to make use of a default
-parameter even when the user wants to specify a parameter later in the
-parameter list.  Also, the defaults for the corresponding associated
-types are fairly complicated, so metaprogramming is required to
-compute them, and ``use_default`` can help to simplify the
-implementation.  Finally, ``use_default`` is not left unspecified
+Several of the template parameters of ``iterator_adaptor`` default
+to ``use_default`` (or ``use_default_access``). This allows the
+user to make use of a default parameter even when she wants to
+specify a parameter later in the parameter list.  Also, the
+defaults for the corresponding associated types are somewhat
+complicated, so metaprogramming is required to compute them, and
+``use_default`` can help to simplify the implementation.  Finally,
+the identity of the ``use_default`` type is not left unspecified
 because specification helps to highlight that the ``Reference``
 template parameter may not always be identical to the iterator's
-``reference`` type, and will keep users making mistakes based on that
-assumption.
+``reference`` type, and will keep users making mistakes based on
+that assumption.
 

@@ -41,12 +41,13 @@
 ``filter_iterator`` requirements
 --------------------------------
 
-The base ``Iterator`` parameter must be a model of Readable Iterator
-and Single Pass Iterator. The resulting ``filter_iterator`` will be a
-model of Forward Traversal Iterator if ``Iterator`` is, otherwise the
-``filter_iterator`` will be a model of Single Pass Iterator. The
-access category of the ``filter_iterator`` will be the most refined
-standard access category that is modeled by ``Iterator``.
+The base ``Iterator`` parameter must be a model of Readable
+Iterator and Single Pass Iterator. The resulting
+``filter_iterator`` will be a model of Forward Traversal Iterator
+if ``Iterator`` is, otherwise the ``filter_iterator`` will be a
+model of Single Pass Iterator. The access category of the
+``filter_iterator`` will be the same as the access category of
+``Iterator``.
 
 .. Thomas is going to try implementing filter_iterator so that
    it will be bidirectional if the underlying iterator is. -JGS

@@ -1,12 +1,18 @@
 ::
 
-  template <class Incrementable, class Category = use_default, class Difference = use_default>
+  template <
+      class Incrementable
+    , unsigned Access = use_default_access
+    , class Traversal = use_default
+    , class Difference = use_default
+  >
   class counting_iterator
     : public iterator_adaptor<
-          counting_iterator<Incrementable, Category, Difference>
+          counting_iterator<Incrementable, Access, Traversal, Difference>
         , Incrementable
         , Incrementable
-        , /* see details for category */
+        , Access
+        , /* see details for traversal category */
         , Incrementable const&
         , Incrementable const*
         , /* distance = Difference or a signed integral type */>

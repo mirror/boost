@@ -3,7 +3,8 @@
   template< class ElementIterator
 	  , class IndexIterator
 	  , class ValueT        = use_default
-	  , class CategoryT     = use_default
+      , unsigned access     = use_default_access
+	  , class Traversal     = use_default
 	  , class ReferenceT    = use_default
 	  , class DifferenceT   = use_default >
   class permutation_iterator

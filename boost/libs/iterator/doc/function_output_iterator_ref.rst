@@ -4,7 +4,7 @@
   class function_output_iterator {
   public:
     typedef iterator_tag<
-          writable_iterator_tag
+          writable_iterator
         , incrementable_traversal_tag
     > iterator_category;
     typedef void                value_type;

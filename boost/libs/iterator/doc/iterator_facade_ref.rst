@@ -3,7 +3,7 @@
   template <
       class Derived
     , class Value
-    , class AccessCategory
+    , unsigned AccessCategory
     , class TraversalCategory
     , class Reference  = /* see below__ \*/
     , class Difference = ptrdiff_t
@@ -108,12 +108,25 @@ out of the overload set when the types are not interoperable.]
 ``iterator_facade`` requirements
 ................................
 
+Some of the constraints on template parameters to
+``iterator_facade`` are expressed in terms of resulting nested
+types and should be viewed in the context of their impact on
+``iterator_traits<Derived>``.
+
 The ``Derived`` template parameter must be a class derived from
 ``iterator_facade``.
 
-The default for the ``Reference`` parameter is ``Value&`` if the
-access category for ``iterator_facade`` is implicitly convertible to
-``writable_iterator_tag``, and ``const Value&`` otherwise.
+The nested ``::value_type`` type will be the same as
+``remove_cv<Value>::type``, so the ``Value`` parameter must be
+an (optionally ``const``\ -qualified) non-reference type.
+
+``AccessCategory`` must be an unsigned value which uses no more
+bits than the greatest value of ``iterator_access``.
+
+The nested ``::reference`` will be the same as the ``Reference``
+parameter; it must be a suitable reference type for the resulting
+iterator.  The default for the ``Reference`` parameter is
+``Value&``.
 
 The following table describes the other requirements on the
 ``Derived`` parameter.  Depending on the resulting iterator's
@@ -188,8 +201,8 @@ __ `operator arrow`_
   object ``a`` of type ``X``, ``a->m`` is equivalent to ``(w = *a,
   w.m)`` for some temporary object ``w`` of type ``X::value_type``.
 
-  The type ``X::pointer`` is ``Value*`` if the access category for
-  ``X`` is implicitly convertible to ``writable_iterator_tag``, and
+  The type ``X::pointer`` is ``Value*`` if
+  ``is_writable_iterator<X>::value`` is ``true``, and
   ``Value const*`` otherwise.
 
 
