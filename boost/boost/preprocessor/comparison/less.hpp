@@ -17,7 +17,7 @@
 #include <boost/preprocessor/comparison/not_equal.hpp>
 #include <boost/preprocessor/logical/and.hpp>
 
-/** <P>Expands to 1 if X<Y and 0 otherwise.</P>
+/** <P>Expands to 1 if X&lt;Y and 0 otherwise.</P>
 
 <H3>Uses</H3>
 <UL>

@@ -16,7 +16,7 @@
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/logical/not.hpp>
 
-/** <P>Expands to 1 if X<=Y and 0 otherwise.</P>
+/** <P>Expands to 1 if X&lt;=Y and 0 otherwise.</P>
 
 <H3>Uses</H3>
 <UL>

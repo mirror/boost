@@ -15,7 +15,7 @@
 
 #include <boost/preprocessor/comparison/less_equal.hpp>
 
-/** <P>Expands to 1 if X>=Y and 0 otherwise.</P>
+/** <P>Expands to 1 if X&gt;=Y and 0 otherwise.</P>
 
 <H3>Uses</H3>
 <UL>
