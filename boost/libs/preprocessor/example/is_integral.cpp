@@ -9,30 +9,27 @@
 
 // See http://www.boost.org for most recent version.
 
+// This example demonstrates the usage of preprocessor lists for generating C++ code.
+
 #include <boost/preprocessor/list/for_each.hpp>
 #include <boost/preprocessor/tuple/to_list.hpp>
+#include <boost/preprocessor/empty.hpp>
 
-// This is a list of integral types. Strictly speaking the following list
-// does not include all integral types, because some compilers do not yet
-// recognize all standard C++ integral types.
+// List of integral types. (Strictly speaking, wchar_t should be on the list.)
 #define INTEGRAL_TYPES\
-  BOOST_PP_TUPLE_TO_LIST\
-  ( 9\
-  , ( char, signed char, unsigned char,\
-      short, unsigned short,\
-      int, unsigned int,\
-      long, unsigned long )\
-  )
+  BOOST_PP_TUPLE_TO_LIST(9,(char, signed char, unsigned char, short, unsigned short, int, unsigned, long, unsigned long))
 
-// This is a template for testing is a type is an integral type.
-template<class T> struct is_integral {static const bool value = false;};
+// Template for testing whether a type is an integral type.
+template<class T> struct is_integral {enum {value = false};};
 
-#define INTEGRAL_TYPE_SPECIALIZATION(R,_,T)\
-  template<> struct is_integral<T> {static const bool value = true;};\
-  template<> struct is_integral<const T> {static const bool value = true;};\
-  template<> struct is_integral<volatile T> {static const bool value = true;};\
-  template<> struct is_integral<const volatile T> {static const bool value = true;};
+// Macro for defining a specialization of is_integral<> template.
+// NOTE: CV is invoked so that it is possible to pass empty cv-qualifiers.
+#define IS_INTEGRAL_SPECIALIZATION(_,CV,T)\
+  template<> struct is_integral<CV() T> {enum {value = true};};
 
-BOOST_PP_LIST_FOR_EACH(INTEGRAL_TYPE_SPECIALIZATION,_,INTEGRAL_TYPES)
-#undef INTEGRAL_TYPE_SPECIALIZATION
+BOOST_PP_LIST_FOR_EACH(IS_INTEGRAL_SPECIALIZATION, BOOST_PP_EMPTY, INTEGRAL_TYPES)
+BOOST_PP_LIST_FOR_EACH(IS_INTEGRAL_SPECIALIZATION, const BOOST_PP_EMPTY, INTEGRAL_TYPES)
+BOOST_PP_LIST_FOR_EACH(IS_INTEGRAL_SPECIALIZATION, volatile BOOST_PP_EMPTY, INTEGRAL_TYPES)
+BOOST_PP_LIST_FOR_EACH(IS_INTEGRAL_SPECIALIZATION, const volatile BOOST_PP_EMPTY, INTEGRAL_TYPES)
+#undef IS_INTEGRAL_SPECIALIZATION
 #undef INTEGRAL_TYPES
