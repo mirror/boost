@@ -1,0 +1,242 @@
+<!doctype html public "-//W3C//DTD HTML Transitional 4.0//EN">
+<html>
+<head>
+    <title>lexical_cast</title>
+    <meta name="author" content="Kevlin Henney, mailto:kevlin@curbralan.com">
+    <meta name="generator" content="Microsoft FrontPage 4.0">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">Header
+<a href="../../boost/lexical_cast.hpp">boost/lexical_cast.hpp</a></h1>
+
+<ul>
+    <li><a href="#motivation">Motivation</li>
+    <li></a><a href="#examples">Examples</li>
+    <li></a><a href="#synopsis">Synopsis</li>
+    <li></a><a href="#lexical_cast"><code>lexical_cast</code></li>
+    <li></a><a href="#bad_lexical_cast"><code>bad_lexical_cast</code></li>
+    <li></a><a href="#portability">Portability</li>
+    <li></a><a href="#future">Future directions</li>
+</ul>
+
+<hr>
+<h2><a name="motivation">Motivation</a></h2>
+
+Sometimes a value must be converted to a literal text form, such as an
+<code>int</code> represented as a <code>string</code>, or vice-versa, when
+a <code>string</code> is interpreted as an <code>int</code>. Such examples
+are common when converting between data types internal to a program and
+representation external to a program, such as windows and configuration files.
+<p>
+The standard C and C++ libraries offer a number of facilities for performing
+such conversions. However, they vary with their ease of use, extensibility,
+and safety.
+<p>
+For instance, there are a number of limitations with the family of standard C
+functions typified by <code>atoi</code>:
+<ul>
+	<li>
+	    Conversion is supported in one direction only: from text to
+		internal data type. Converting the other way using the C library
+		requires either the inconvenience and compromised safety of the
+		<code>sprintf</code> function, or the loss of portability associated
+		with non-standard functions such as <code>itoa</code>.
+	</li>
+	<li>
+	    The range of types supported is only a subset of the built-in numeric
+	    types, namely <code>int</code>, <code>long</code>,
+		and <code>double</code>.
+	</li>
+	<li>
+	    The range of types cannot be extended in a uniform manner. For
+	    instance, conversion from string representation to
+		<code>complex</code> or <code>rational</code>.
+	</li>
+</ul>
+The standard C functions typified by <code>strtol</code> have the same basic
+limitations, but offer finer control over the conversion process. However, for
+the common case such control is often either not required or not used. The
+<code>scanf</code> family of functions offer even greater control, but also
+lack safety and ease of use.
+<p>
+The standard C++ library offers <code>stringstream</code> for the kind of
+in-core formatting being discussed. It offers a great deal of control over the
+formatting and conversion of I/O to and from arbitrary types through text.
+However, for simple conversions direct use of <code>stringstream</code> can be
+either clumsy (with the introduction of extra local variables and the loss of
+infix-expression convenience) or obscure (where <code>stringstream</code>
+objects are created as temporary objects in an expression). Facets provide a
+comprehensive concept and facility for controlling textual representation, but
+their relatively high entry level requires an extreme degree of involvement
+for simple conversions.
+<p>
+The <code>lexical_cast</code> template function offers a convenient and consistent
+form for supporting common conversions to and from arbitrary types when they are
+represented as text. The simplification it offers is in expression-level
+convenience for such conversions. For more involved conversions, such as where
+precision or formatting need tighter control than is offered by the default
+behavior of <code>lexical_cast</code>, the conventional
+<code>stringstream</code> approach is recommended. Where the conversions are
+numeric to numeric, <code><a href="cast.htm#numeric_cast">numeric_cast</a></code> may offer more reasonable
+behavior than <code>lexical_cast</code>.
+<p>
+
+<hr>
+<h2><a name="examples">Examples</a></h2>
+
+The following example treats command line arguments as a sequence of numeric data:
+<blockquote>
+<pre>
+int main(int argc, char * argv[])
+{
+    using boost::lexical_cast;
+    using boost::bad_lexical_cast;
+
+    std::vector&lt;short&gt; args;
+
+    while(*++argv)
+    {
+        try
+        {
+            args.push_back(lexical_cast&lt;short&gt;(*argv));
+        }
+        catch(bad_lexical_cast &amp;)
+        {
+            args.push_back(0);
+        }
+    }
+    ...
+}
+</pre>
+</blockquote>
+
+The following example uses numeric data in a string expression:
+<blockquote>
+<pre>
+void log_message(const std::string &amp;);
+
+void log_errno(int yoko)
+{
+    log_message(&quot;Error &quot; + boost::lexical_cast&lt;std::string&gt;(yoko) + &quot;: &quot; + strerror(yoko));
+}
+</pre>
+</blockquote>
+
+<hr>
+<h2><a name="synopsis">Synopsis</a></h2>
+
+Library features defined in <a href="lexical_cast.hpp"><code>&quot;boost/lexical_cast.hpp&quot;</code></a>:
+
+<blockquote>
+<pre>
+namespace boost
+{
+    class <a href="#bad_lexical_cast">bad_lexical_cast</a>;
+    template&lt;typename Target, typename Source&gt;
+      Target <a href="#lexical_cast">lexical_cast</a>(Source arg);
+}
+</pre>
+</blockquote>
+
+Test harness defined in <a href="lexical_cast_test.cpp"><code>&quot;lexical_cast_test.cpp&quot;</code></a>.
+<p>
+
+<hr>
+<h2><a name="lexical_cast"><code>lexical_cast</code></a></h2>
+
+<blockquote>
+<pre>
+template&lt;typename Target, typename Source&gt;
+  Target lexical_cast(Source arg);
+</pre>
+</blockquote>
+
+Returns the result of streaming <code>arg</code> into a <code>std::stringstream</code> and then
+out as a <code>Target</code> object. The conversion is parameterized by the current
+<a href="#lexical_context"><code>lexical_context</code></a>, if set. If the conversion is
+unsuccessful, a <a href="#bad_lexical_cast"><code>bad_lexical_cast</code></a> exception is thrown
+if the current <a href="#lexical_context"><code>lexical_context</code></a> is set for throwing or
+if there is no current <a href="#lexical_context"><code>lexical_context</code></a> set, otherwise a
+<code>Target()</code> is returned.
+<p>
+The requirements on the argument and result types are:
+<ul>
+	<li>
+	    <code>Source</code> is <i>OutputStreamable</i>, meaning that an
+	    <code>operator&lt;&lt;</code> is defined that takes a
+		<code>std::ostream</code> object on the left hand side and an instance
+		of the argument type on the right.
+	</li>
+	<li>
+	    Both <code>Source</code> and <code>Target</code> are <i>CopyConstructible</i> [20.1.3].
+	</li>
+	<li>
+	    <code>Target</code> is <i>InputStreamable</i>, meaning that an
+	    <code>operator&gt;&gt;</code> is defined that takes a
+		<code>std::istream</code> object on the left hand side and an instance
+		of the result type on the right.
+	</li>
+	<li>
+	    <code>Target</code> is <i>DefaultConstructible</i>, meaning that it is
+	    possible to	<i>default-initialize</i> an object of that type [8.5, 20.1.3].
+	</li>
+	<li>
+	    <code>Target</code> is <i>Assignable</i> [23.1].
+	</li>
+</ul>
+<p>
+
+<hr>
+<h2><a name="bad_lexical_cast"><code>bad_lexical_cast</code></a></h2>
+
+<blockquote>
+<pre>
+class bad_lexical_cast : public std::bad_cast
+{
+public:
+    virtual const char * what() const throw();
+};
+</pre>
+</blockquote>
+
+Exception used to indicate runtime <a href="#lexical_cast"><code>lexical_cast</code></a> failure.
+<p>
+
+<hr>
+<h2><a name="portability">Portability</a></h2>
+
+To date the code and test harness have been compiled successfully using
+Microsoft Visual C++ 6.0, Borland C++ 5.5, and GNU g++ 2.91. Tests have run successfully for
+Microsoft Visual C++ 6.0 and Borland C++ 5.5. For g++ streams interpret any integer, rather than
+just <code>0</code> and <code>1</code>, as valid for <code>bool</code>; the other tests pass
+without problem. The deprecated standard header <code>&lt;strstream&gt;</code> is used in
+preference to the standard <code>&lt;sstream&gt;</code> header for out-of-the-box g++ support.
+<p>
+
+<hr>
+<h2><a name="future">Future directions</a></h2>
+
+<ul>
+    <li>
+        A mechanism for providing quality-of-service control is needed, e.g. formatting and exception
+        behavior. In the name of simplicity (and release), the current version strips out an earlier
+        experimental version.
+    </li>
+    <li>
+        Wide character and incompatible <code>std::basic_string</code> issues need to be catered for.
+    </li>
+    <li>
+        An <code>interpret_cast</code> that performs a <i>do-something-reasonable</i> conversion between
+        types. It would, for instance, select between <code>numeric_cast</code> and <code>lexical_cast</code>
+        based on <code>std::numeric_limits<>::is_specialized</code>.
+    </li>
+</ul>
+
+<hr>
+
+<div align="right"><small><i>&copy; Copyright Kevlin Henney, 2000</i></small></div>
+
+</body>
+</html>
