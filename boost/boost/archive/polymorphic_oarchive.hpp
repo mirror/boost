@@ -37,9 +37,9 @@ namespace std{
 // i.e. that its not a synonym for (unsigned) long
 // if there is no 64 bit int or if its the same as a long
 // we shouldn't define separate functions for int64 data types.
-#if defined(BOOST_NO_UINT64_T) \
-    || ULONG_MAX == 0xffffffffffffffff // 2**64 - 1
-#   define BOOST_NO_INTRINSIC_UINT64_T
+#if defined(BOOST_NO_INT64_T) \
+    || (ULONG_MAX != 0xffffffff && ULONG_MAX == 18446744073709551615) // 2**64 - 1
+#   define BOOST_NO_INTRINSIC_INT64_T
 #endif
 
 namespace boost { 
@@ -74,9 +74,9 @@ public:
     virtual void save(const unsigned int t) = 0;
     virtual void save(const long t) = 0;
     virtual void save(const unsigned long t) = 0;
-    #if !defined(BOOST_NO_INTRINSIC_UINT64_T)
-    virtual void save(const int64_t t) = 0;
-    virtual void save(const uint64_t t) = 0;
+    #if !defined(BOOST_NO_INTRINSIC_INT64_T)
+    virtual void save(const boost::int64_t t) = 0;
+    virtual void save(const boost::uint64_t t) = 0;
     #endif
     virtual void save(const float t) = 0;
     virtual void save(const double t) = 0;

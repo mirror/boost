@@ -101,11 +101,11 @@ private:
     virtual void save(const unsigned long t){
         ArchiveImplementation::save(t);
     }
-    #if !defined(BOOST_NO_INTRINSIC_UINT64_T)
-    virtual void save(const int64_t t){
+    #if !defined(BOOST_NO_INTRINSIC_INT64_T)
+    virtual void save(const boost::int64_t t){
         ArchiveImplementation::save(t);
     }
-    virtual void save(const uint64_t t){
+    virtual void save(const boost::uint64_t t){
         ArchiveImplementation::save(t);
     }
     #endif

@@ -107,11 +107,11 @@ private:
     virtual void load(unsigned long & t){
         ArchiveImplementation::load(t);
     }
-    #if !defined(BOOST_NO_INTRINSIC_UINT64_T)
-    virtual void load(int64_t & t){
+    #if !defined(BOOST_NO_INTRINSIC_INT64_T)
+    virtual void load(boost::int64_t & t){
         ArchiveImplementation::load(t);
     }
-    virtual void load(uint64_t & t){
+    virtual void load(boost::uint64_t & t){
         ArchiveImplementation::load(t);
     }
     #endif
