@@ -76,7 +76,7 @@
 // (the or _HPACC_ part is a hack - the library seems to define _RWSTD_ALLOCATOR
 // on HP aCC systems even though the allocator is in fact broken):
 //
-#if !defined(_RWSTD_ALLOCATOR) || defined(_HPACC_) || defined(__HP_aCC)
+#if !defined(_RWSTD_ALLOCATOR) || (defined(__HP_aCC) && __HP_aCC <= 33100)
 #  define BOOST_NO_STD_ALLOCATOR
 #endif
 
