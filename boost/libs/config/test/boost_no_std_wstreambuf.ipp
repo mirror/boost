@@ -88,9 +88,9 @@ parser_buf<charT, traits>::seekpos(pos_type sp, ::std::ios_base::openmode which)
       return pos_type(off_type(-1));
    int size = this->egptr() - this->eback();
    charT* g = this->eback();
-   if(sp <= size)
+   if(off_type(sp) <= size)
    {
-      this->setg(g, g + ::std::streamsize(sp), g + size);
+      this->setg(g, g + off_type(sp), g + size);
    }
    return pos_type(off_type(-1));
 }
