@@ -326,7 +326,7 @@ namespace boost {
     // Is this function empty?
     bool empty() const { return !manager; }
     
-  protected:
+  public: // should be protected, but GCC 2.95.3 will fail to allow access
     detail::function::any_pointer (*manager)(
                            detail::function::any_pointer, 
                            detail::function::functor_manager_operation_type);

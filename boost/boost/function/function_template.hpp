@@ -231,7 +231,7 @@ namespace boost {
       policy_type policy;
       policy.precall(this);
 
-      result_type result = invoker(functor BOOST_FUNCTION_COMMA
+      result_type result = invoker(function_base::functor BOOST_FUNCTION_COMMA
                                    BOOST_FUNCTION_ARGS);
 
       policy.postcall(this);
@@ -281,8 +281,8 @@ namespace boost {
       if (&other == this)
         return;
 
-      std::swap(manager, other.manager);
-      std::swap(functor, other.functor);
+      std::swap(function_base::manager, other.manager);
+      std::swap(function_base::functor, other.functor);
       std::swap(invoker, other.invoker);
       std::swap(static_cast<Mixin&>(*this), static_cast<Mixin&>(other));
     }
@@ -290,10 +290,10 @@ namespace boost {
     // Clear out a target, if there is one
     void clear()
     {
-      if (manager)
-        functor = manager(functor, detail::function::destroy_functor_tag);
+      if (function_base::manager)
+        function_base::functor = function_base::manager(function_base::functor, detail::function::destroy_functor_tag);
     
-      manager = 0;
+      function_base::manager = 0;
       invoker = 0;
     }
 
@@ -302,8 +302,8 @@ namespace boost {
     {
       if (!f.empty()) {
         invoker = f.invoker;
-        manager = f.manager;
-        functor = f.manager(f.functor, detail::function::clone_functor_tag);
+        function_base::manager = f.manager;
+        function_base::functor = f.manager(f.functor, detail::function::clone_functor_tag);
       }          
     }
 
@@ -328,9 +328,9 @@ namespace boost {
           invoker_type;
     
         invoker = &invoker_type::invoke;
-        manager = &detail::function::functor_manager<FunctionPtr, 
+        function_base::manager = &detail::function::functor_manager<FunctionPtr, 
                                                      Allocator>::manage;
-        functor = manager(detail::function::any_pointer(
+        function_base::functor = function_base::manager(detail::function::any_pointer(
 			    // should be a reinterpret cast, but some compilers
 			    // insist on giving cv-qualifiers to free functions
                             (void (*)())(f)
@@ -360,10 +360,10 @@ namespace boost {
           invoker_type;
     
         invoker = &invoker_type::invoke;
-        manager = &detail::function::functor_manager<FunctionObj, 
+        function_base::manager = &detail::function::functor_manager<FunctionObj, 
                                                      Allocator>::manage;
-        functor = 
-          manager(detail::function::any_pointer(const_cast<FunctionObj*>(&f)),
+        function_base::functor = 
+          function_base::manager(detail::function::any_pointer(const_cast<FunctionObj*>(&f)),
                   detail::function::clone_functor_tag);
       }
     }
@@ -382,9 +382,9 @@ namespace boost {
           invoker_type;
     
         invoker = &invoker_type::invoke;
-        manager = &detail::function::trivial_manager;
-        functor = 
-          manager(detail::function::any_pointer(
+        function_base::manager = &detail::function::trivial_manager;
+        function_base::functor = 
+          function_base::manager(detail::function::any_pointer(
 		    const_cast<FunctionObj*>(&f.get())),
                   detail::function::clone_functor_tag);
       }
