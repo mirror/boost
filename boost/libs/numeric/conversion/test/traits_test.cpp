@@ -271,10 +271,10 @@ struct generate_expected_traits
 // in expected_traits<>
 //
 #define TEST_TYPE_FIELD(Name) \
-        BOOST_CHECK_MESSAGE ( ( typeid(traits::Name) == typeid(expected::Name) ) , \
+        BOOST_CHECK_MESSAGE ( ( typeid( typename traits::Name) == typeid( typename expected::Name) ) , \
                               "conversion_traits<" << typeid(T).name() << "," << typeid(S).name() \
-                              << ">::" << #Name << " = " <<  typeid(traits::Name).name() \
-                              << ". Expected: "  << typeid(expected::Name).name() \
+                              << ">::" << #Name << " = " <<  typeid( typename traits::Name).name() \
+                              << ". Expected: "  << typeid( typename expected::Name).name() \
                             ) ;
 
 //

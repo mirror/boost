@@ -25,13 +25,17 @@
 enum PostCondition { c_converted, c_overflow, c_neg_overflow, c_pos_overflow } ;
 
 template<class Converter>
-struct ConversionInstance : boost::noncopyable
+struct ConversionInstance
 {
   typedef Converter converter ;
 
   typedef typename Converter::argument_type argument_type ;
   typedef typename Converter::result_type   result_type   ;
 
+  typedef typename Converter::traits traits ;
+  typedef typename traits::target_type target_type ;
+  typedef typename traits::source_type source_type ; 
+  
   ConversionInstance ( result_type a_result, argument_type a_source, PostCondition a_post)
     :
     source(a_source),
@@ -42,9 +46,9 @@ struct ConversionInstance : boost::noncopyable
   std::string to_string() const
     {
       return   std::string("converter<")
-             + typeid( typename Converter::traits::target_type).name()
+             + typeid(target_type).name()
              + std::string(",")
-             + typeid( typename Converter::traits::source_type).name()
+             + typeid(source_type).name()
              + std::string(">::convert(") ;
     }
 
