@@ -103,7 +103,7 @@ template <bool is_pointer> struct lvalue_test
 # endif
         BOOST_STATIC_ASSERT(boost::is_reference<reference>::value);
         BOOST_STATIC_ASSERT((boost::is_same<reference,value_type&>::value
-                             || boost::is_same<reference,value_type const&>::value
+                             || boost::is_same<reference,const value_type&>::value
             ));
     }
 };
