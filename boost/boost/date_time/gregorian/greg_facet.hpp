@@ -8,14 +8,14 @@
 #include "boost/date_time/gregorian/gregorian_types.hpp"
 #include "boost/date_time/date_formatting_locales.hpp" // sets BOOST_DATE_TIME_NO_LOCALE
 
-//This file basically becomes a noop if locales are not supported
+//This file is basically commented out if locales are not supported
 #ifndef BOOST_DATE_TIME_NO_LOCALE
 
 
 namespace boost {
 namespace gregorian {
 
-  //! Configuration of the output facet
+  //! Configuration of the output facet template
   struct greg_facet_config
   {
     typedef boost::gregorian::greg_month month_type;
@@ -28,6 +28,12 @@ namespace gregorian {
   typedef boost::date_time::date_names_put<greg_facet_config> greg_base_facet;
   
   //! ostream operator for gregorian::date
+  /*! Uses the date facet to determine various output parameters including:
+   *  - string values for the month (eg: Jan, Feb, Mar) (default: English)
+   *  - string values for special values (eg: not-a-date-time) (default: English)
+   *  - selection of long, short strings, or numerical month representation (default: short string)
+   *  - month day year order (default yyyy-mmm-dd)
+   */
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
@@ -38,6 +44,11 @@ namespace gregorian {
     return os;
   }
 
+  //! operator<< for gregorian::greg_month typically streaming: Jan, Feb, Mar...
+  /*! Uses the date facet to determine output string as well as selection of long or short strings.
+   *  Default if no facet is installed is to output a 2 wide numeric value for the month
+   *  eg: 01 == Jan, 02 == Feb, ... 12 == Dec.
+   */
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
@@ -57,6 +68,11 @@ namespace gregorian {
     return os;
   }
 
+  //! operator<< for gregorian::greg_weekday typically streaming: Sun, Mon, Tue, ...
+  /*! Uses the date facet to determine output string as well as selection of long or short string.
+   *  Default if no facet is installed is to output a 3 char english string for the
+   *  day of the week.
+   */
   template <class charT, class traits>
   inline
   std::basic_ostream<charT, traits>&
@@ -68,8 +84,8 @@ namespace gregorian {
       const greg_base_facet& f = std::use_facet<greg_base_facet>(locale);
       greg_weekday_formatter::format_weekday(wd.as_enum(), os, f, true);
     }
-    else { //default to numeric
-      os  << std::setw(2) << std::setfill('0') << wd.as_number();
+    else { //default to short English string eg: Sun, Mon, Tue, Wed...
+      os  << wd.as_short_string();
     }
 
     return os;
