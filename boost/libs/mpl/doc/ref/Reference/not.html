@@ -34,18 +34,18 @@ Returns the result of <em>logical not</em> (<code>!</code>) operation on its arg
 <p>
 <table border="1">
 <tr><th>&nbsp;Expression&nbsp;</th><th>&nbsp;Expression&nbsp;type&nbsp;</th><th>&nbsp;Precondition&nbsp;</th><th>&nbsp;Semantics&nbsp;</th><th>&nbsp;Postcondition&nbsp;</th></tr>
-<tr><td><code>typedef not_&lt;f&gt;::type c;</code></td><td>A model of <code>bool</code> <a href="../Integral_Constant.html">Integral Constant</a></td><td></td><td>Equivalent to <code>typedef bool_&lt;(!f::type::value)&gt; c;</code></td><td></td></tr>
+<tr><td><code>not_&lt;f&gt;</code></td><td>A model of <code>bool</code> <a href="../Integral_Constant.html">Integral Constant</a></td><td></td><td>Equivalent to <code>bool_&lt;(!f::type::value)&gt;</code></td><td></td></tr>
 </table>
 <p>
 <h3>Example</h3>
 <p>
 <pre>
-BOOST_STATIC_ASSERT(not_&lt;true_&gt;::type::value == false);
-BOOST_STATIC_ASSERT(not_&lt;false_&gt;::type::value == true);
+BOOST_STATIC_ASSERT(not_&lt;true_&gt;::value == false);
+BOOST_STATIC_ASSERT(not_&lt;false_&gt;::value == true);
 </pre>
 <p>
 <h3>See also</h3>
 <p>
 <a href="../Metafunctions.html">Metafunctions</a>, <code><a href="../Reference/and.html">and_</a></code>, <code><a href="../Reference/or.html">or_</a></code>
 <p><hr>
-<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited March 10, 2003 1:19 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited September 6, 2003 3:09 am</body></html>
