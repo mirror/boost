@@ -61,6 +61,9 @@ test-suite date_time_gregorian_dll
 
    test-suite date_time_posixtime
      : 
+   [ run posix_time/testfiletime_functions.cpp
+     <lib>../build/boost_date_time
+    : : :  $(DATE_TIME_PROPERTIES) ]
    [ run posix_time/testlocal_adjustor.cpp
      <lib>../build/boost_date_time
     : : :  $(DATE_TIME_PROPERTIES) ]
