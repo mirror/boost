@@ -1,4 +1,4 @@
-/* Copyright (c) 2001 CrystalClear Software, Inc.
+/* Copyright (c) 2001-2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
  * Author: Jeff Garland 
  */
@@ -26,6 +26,47 @@ namespace date_time {
     unsigned short d = (ymd.day + y + (y/4) - (y/100) + (y/400) + (31*m)/12) % 7;
     //std::cout << year << "-" << month << "-" << day << " is day: " << d << "\n";
     return d;
+  }
+
+  //!Return the iso week number for the date
+  /*!Implements the rules associated with the iso 8601 week number.
+    Basically the rule is that Week 1 of the year is the week that contains 
+    January 4th or the week that contains the first Thursday in January.
+    Reference for this algorithm is the Calendar FAQ by Claus Todering, April 2000.
+  */
+  template<typename ymd_type_, typename date_int_type_>
+  DATE_TIME_INLINE
+  int
+  gregorian_calendar_base<ymd_type_,date_int_type_>::week_number(const ymd_type& ymd)
+  { 
+    unsigned long julianbegin = julian_day_number(ymd_type(ymd.year,1,1));
+    unsigned long juliantoday = julian_day_number(ymd);
+    unsigned long day = (julianbegin + 3) % 7;
+    unsigned long week = (juliantoday + day - julianbegin + 4)/7;
+    
+    if ((week >= 1) && (week <= 52)) {
+      return week;
+    }
+    
+    if ((week == 53)) {
+      if((day==6) ||(day == 5 && is_leap_year(ymd.year))) {
+        return week; //under these circumstances week == 53.
+      }
+      else if (day != 5) {
+        return 1; //monday - thursday is in week 1 of next year
+      }
+    }
+    //if the week is not in current year recalculate using the previous year as the beginning year
+    else if (week == 0) {
+      julianbegin = julian_day_number(ymd_type((ymd.year-1),1,1));
+      juliantoday = julian_day_number(ymd);
+      day = (julianbegin + 3) % 7;
+      week = (juliantoday + day - julianbegin + 4)/7;
+      return week;
+    }
+
+    return week;  //not reachable -- well except if day == 5 and is_leap_year != true
+   
   }
   
   //! Convert a ymd_type into a day number
@@ -175,7 +216,7 @@ namespace date_time {
 
 } } //namespace gregorian
 
-/* Copyright (c) 2001
+/* Copyright (c) 2001-2002
  * CrystalClear Software, Inc.
  *
  * Permission to use, copy, modify, distribute and sell this software

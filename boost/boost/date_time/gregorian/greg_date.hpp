@@ -43,7 +43,11 @@ namespace gregorian {
     //! Main constructor with year, month, day
     date(year_type year, month_type month, day_type day) 
       : date_time::date<date, gregorian_calendar, date_duration>(year, month, day)
-    {}
+    {
+      if (gregorian_calendar::end_of_month_day(year, month) < day) {
+        throw bad_day_of_month();
+      }
+    }
     //! Constructor from a ymd_type structure
     explicit date(const ymd_type& ymd) 
       : date_time::date<date, gregorian_calendar, date_duration>(ymd)
@@ -71,6 +75,12 @@ namespace gregorian {
     {
       ymd_type ymd = year_month_day();
       return gregorian_calendar::modjulian_day_number(ymd);      
+    }
+    //!Return the iso 8601 week number
+    int week_number() const
+    {
+      ymd_type ymd = year_month_day();
+      return gregorian_calendar::week_number(ymd);      
     }
     //! Return the day number from the calendar
     date_int_type day_number() const
