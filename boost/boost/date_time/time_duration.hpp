@@ -13,8 +13,14 @@ namespace boost {
 namespace date_time {
   
   //! Represents some amount of elapsed time measure to a given resolution
-  /*! 
-    
+  /*! This class represents a standard set of capabilities for all
+      counted time durations.  Time duration implementations should derive
+      from this class passing their type as the first template parameter.
+      This design allows the subclass duration types to provide custom
+      construction policies or other custom features not provided here.
+
+      @param T The subclass type
+      @param rep_type The time resolution traits for this duration type.
   */
   template<class T, typename rep_type>
   class time_duration 
@@ -44,6 +50,7 @@ namespace date_time {
     {
       return duration_type(0,0,0,1);
     }
+    //! Provide the resolution of this duration type
     static time_resolutions resolution()
     {
       return rep_type::resolution();
@@ -97,7 +104,10 @@ namespace date_time {
     {
       return duration_type(ticks_ + d.ticks_);
     }
-    tick_type ticks() const { return ticks_;};
+    tick_type ticks() const 
+    { 
+      return ticks_;
+    }
 
   protected:
     explicit time_duration(tick_type in) : ticks_(in) {};
