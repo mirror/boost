@@ -81,7 +81,8 @@ namespace boost { namespace program_options {
             v = any(lexical_cast<T>(s));
         }
         catch(const bad_lexical_cast&) {
-            throw validation_error("invalid option value");
+            throw validation_error(std::string("invalid option value '")
+                                   .append(s).append("'"));
         }
     }
 
