@@ -90,12 +90,15 @@ class integer_traits<wchar_t>
 #elif defined(__BORLANDC__) || defined(__CYGWIN__) || defined(__MINGW32__) || (defined(__BEOS__) && defined(__GNUC__))
     // No WCHAR_MIN and WCHAR_MAX, whar_t is short and unsigned:
     public detail::integer_traits_base<wchar_t, 0, 0xffff>
-#elif defined(__sgi) && (!defined(__SGI_STL_PORT) || __SGI_STL_PORT < 0x400)
-    // SGI MIPSpro with native library doesn't have them, either
+#elif (defined(__sgi) && (!defined(__SGI_STL_PORT) || __SGI_STL_PORT < 0x400)) || (defined __APPLE__)
+    // No WCHAR_MIN and WCHAR_MAX, wchar_t has the same range as int.
+    // SGI MIPSpro with native library is one case like this.
+    // Mac OS X with native library is another.
     public detail::integer_traits_base<wchar_t, INT_MIN, INT_MAX>
 #elif defined(__hpux) && defined(__GNUC__) && !defined(__SGI_STL_PORT)
-    // GCC 2.95.2 doesn't have them on HP-UX, either
-    // (also, std::numeric_limits<wchar_t> appears to return the wrong values)
+    // No WCHAR_MIN and WCHAR_MAX, wchar_t has the same range as unsigned int.
+    // HP-UX GCC 2.95.2 is a case like this
+    // (also, std::numeric_limits<wchar_t> appears to return the wrong values).
     public detail::integer_traits_base<wchar_t, 0, UINT_MAX>
 #else
 #error No WCHAR_MIN and WCHAR_MAX present, please adjust integer_traits<> for your compiler.
