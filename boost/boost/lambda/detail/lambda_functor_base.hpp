@@ -310,7 +310,9 @@ template<class Args>
 class lambda_functor_base<do_nothing_action, Args> {
   //  Args args;
 public:
-  explicit lambda_functor_base(const Args& a) {}
+  //  explicit lambda_functor_base(const Args& a) {}
+  lambda_functor_base() {}
+
 
   template<class RET, CALL_TEMPLATE_ARGS> RET call(CALL_FORMAL_ARGS) const {
     CALL_USE_ARGS;
