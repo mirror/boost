@@ -6,7 +6,7 @@
 #ifndef BOOST_MPL_AUX_FULL_LAMBDA_HPP_INCLUDED
 #define BOOST_MPL_AUX_FULL_LAMBDA_HPP_INCLUDED
 
-// + file: boost/mpl/full_lambda.hpp
+// + file: boost/mpl/aux_/full_lambda.hpp
 // + last modified: 03/aug/03
 
 // Copyright (c) 2001-03

@@ -6,7 +6,7 @@
 #ifndef BOOST_MPL_AUX_LAMBDA_NO_CTPS_HPP_INCLUDED
 #define BOOST_MPL_AUX_LAMBDA_NO_CTPS_HPP_INCLUDED
 
-// + file: boost/mpl/lambda_no_ctps.hpp
+// + file: boost/mpl/aux_/lambda_no_ctps.hpp
 // + last modified: 03/aug/03
 
 // Copyright (c) 2001-03

@@ -74,7 +74,7 @@ def main( all_modes, src_dir, dst_dir ):
 if __name__ == '__main__':
     
     main(
-          ["msvc60", "msvc70", "bcc", "bcc551", "gcc", "mwcw", "no_ctps", "plain"]
+          ["bcc", "bcc551", "gcc", "msvc60", "msvc70", "mwcw", "no_ctps", "no_ttp", "plain"]
         , "src"
         , "boost\\mpl\\aux_\\preprocessed"
         )

@@ -1,4 +1,4 @@
-// preprocessed version of 'boost/mpl/lambda_no_ctps.hpp' header
+// preprocessed version of 'boost/mpl/aux_/lambda_no_ctps.hpp' header
 // see the original for copyright information
 
 namespace boost {
