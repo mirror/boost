@@ -42,6 +42,7 @@ struct alignment_of_hack
    alignment_of_hack();
 };
 
+
 template <unsigned A, unsigned S>
 struct alignment_logic
 {
@@ -98,11 +99,11 @@ typedef int (alignment_dummy::*member_function_ptr)();
  * The ct_if implementation is temporary code. It will be replaced with MPL
  * in the future...
  */
-struct select_then 
-{       
+struct select_then
+{
   template<typename Then, typename Else>
   struct result
-  {       
+  {
     typedef Then type;
   };
 };
@@ -165,6 +166,13 @@ union max_align
 #undef BOOST_TT_CHOOSE_LOWER_ALIGNMENT
 #undef BOOST_TT_CHOOSE_T
 
+template<int TAlign, int Align>
+struct is_aligned 
+{
+  BOOST_STATIC_CONSTANT(bool, 
+                        value = (TAlign >= Align) & (TAlign % Align == 0));
+};
+
 }
 
 // This alignment method originally due to Brian Parker, implemented by David
@@ -174,12 +182,10 @@ class type_with_alignment
 {
   typedef detail::lower_alignment<Align> t1;
 
-  BOOST_STATIC_CONSTANT(bool, t1_aligned =
-			(alignment_of<t1>::value >= Align)
-			& (alignment_of<t1>::value % Align == 0));
-  
+  typedef type_with_alignment<Align> this_type;
+
   typedef typename detail::ct_if<
-            t1_aligned
+              detail::is_aligned<alignment_of<t1>::value, Align>::value
             , t1
             , detail::max_align
           >::type align_t;
