@@ -23,7 +23,7 @@
    //
 #endif
 
-#if (_MSC_VER <= 1300)  // 1200 == VC++ 7.0
+#if (_MSC_VER <= 1300)  // 1300 == VC++ 7.0
 
 #if !defined(_MSC_EXTENSIONS) && !defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS)      // VC7 bug with /Za
 #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
@@ -115,6 +115,7 @@
 #     pragma message("Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
 
 
 
