@@ -10,7 +10,7 @@
 
 template <typename Array, typename Element, typename Functor>
 void for_each (const boost::type<Element>& type_dispatch,
-	       Array A, Functor& xform) {
+               Array A, Functor& xform) {
   for_each(type_dispatch,A.begin(),A.end(),xform);
 }
 
@@ -21,8 +21,8 @@ void for_each (const boost::type<Element>&,Element& Val, Functor& xform) {
 
 template <typename Element, typename Iterator, typename Functor>
 void for_each (const boost::type<Element>& type_dispatch,
-	       Iterator begin, Iterator end,
-	       Functor& xform) {
+               Iterator begin, Iterator end,
+               Functor& xform) {
   while (begin != end) {
     for_each(type_dispatch,*begin,xform);
     ++begin;

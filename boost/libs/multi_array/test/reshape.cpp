@@ -22,7 +22,7 @@ test_main(int,char**)
   boost::array<array::size_type,ndims> new_dims = {{4,3,2}};
 
   int data[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,
-		 14,15,16,17,18,19,20,21,22,23};
+                 14,15,16,17,18,19,20,21,22,23};
   const int data_size=24;
 
   // Basic reshape test
@@ -40,11 +40,11 @@ test_main(int,char**)
     int* ptr = data;
     for (array::index i = 0; i != 4; ++i)
       for (array::index j = 0; j != 3; ++j)
-	for (array::index k = 0; k != 2; ++k) {
-	  BOOST_TEST(A[i][j][k] == *ptr);
-	  BOOST_TEST(B[i][j][k] == *ptr);
-	  BOOST_TEST(C[i][j][k] == *ptr++);
-	}
+        for (array::index k = 0; k != 2; ++k) {
+          BOOST_TEST(A[i][j][k] == *ptr);
+          BOOST_TEST(B[i][j][k] == *ptr);
+          BOOST_TEST(C[i][j][k] == *ptr++);
+        }
   }
 
   // Ensure that index bases are preserved over reshape
@@ -68,11 +68,11 @@ test_main(int,char**)
     int* ptr = data;
     for (array::index i = 0; i != 4; ++i)
       for (array::index j = 1; j != 4; ++j)
-	for (array::index k = -1; k != 1; ++k) {
-	  BOOST_TEST(A[i][j][k] == *ptr);
-	  BOOST_TEST(B[i][j][k] == *ptr);
-	  BOOST_TEST(C[i][j][k] == *ptr++);
-	}
+        for (array::index k = -1; k != 1; ++k) {
+          BOOST_TEST(A[i][j][k] == *ptr);
+          BOOST_TEST(B[i][j][k] == *ptr);
+          BOOST_TEST(C[i][j][k] == *ptr++);
+        }
   }
   
   return boost::exit_success;

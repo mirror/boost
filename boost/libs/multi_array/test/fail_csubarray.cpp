@@ -23,7 +23,7 @@ test_main(int,char**)
   for (array::index i = 0; i != 2; ++i)
     for (array::index j = 0; j != 3; ++j)
       for (array::index k = 0; k != 4; ++k)
-	sma[i][j][k] = num++;
+        sma[i][j][k] = num++;
 
 
   array::const_subarray<ndims-1>::type csba = sma[0];

@@ -26,7 +26,7 @@ int main() {
 
 #if 0
   std::copy(A.data(),A.data()+A.num_elements(),
-	    std::ostream_iterator<double>(std::cout,","));
+            std::ostream_iterator<double>(std::cout,","));
 
   std::cout << "\n";
 #endif
@@ -34,7 +34,7 @@ int main() {
 
 #if 0  
   std::copy(A.data(),A.data()+A.num_elements(),
-	    std::ostream_iterator<double>(std::cout,","));
+            std::ostream_iterator<double>(std::cout,","));
  
   std::cout << "\n";
 #endif

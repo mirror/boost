@@ -12,9 +12,9 @@
 
 template <class Array>
 void check_shape(const Array& A, 
-		 unsigned int* sizes, 
-		 int* strides,
-		 unsigned int num_elements)
+                 unsigned int* sizes, 
+                 int* strides,
+                 unsigned int num_elements)
 {
   BOOST_TEST(A.num_elements() == num_elements);
   BOOST_TEST(A.size() == *sizes);

@@ -20,7 +20,7 @@ test_main(int,char**)
   boost::array<array::size_type,ndims> sma_dims = {{2,3,4}};
 
   int data[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,
-		 14,15,16,17,18,19,20,21,22,23};
+                 14,15,16,17,18,19,20,21,22,23};
   const int data_size = 24;
 
   array sma(sma_dims);
@@ -41,8 +41,8 @@ test_main(int,char**)
   for (array::index i = 0; i != 2; ++i)
     for (array::index j = 0; j != 2; ++j)
       for (array::index k = 0; k != 2; ++k)
-	// FAIL! csma2 cannot be assigned to.
-	csma2[i][j][k] = 0;
+        // FAIL! csma2 cannot be assigned to.
+        csma2[i][j][k] = 0;
   
   return boost::exit_success;
 }

@@ -32,7 +32,7 @@ typedef std::size_t size_type;
 
     explicit index_range(Index start, Index finish, Index stride=1)
       : start_(start), finish_(finish), stride_(stride),
-	degenerate_(start_ == finish_)
+        degenerate_(start_ == finish_)
     { }
 
 
@@ -59,7 +59,7 @@ typedef std::size_t size_type;
     Index get_start(Index low_index_range = 0) const
     { 
       if (start_ == from_start())
-	return low_index_range;
+        return low_index_range;
       return start_; 
     }
 
@@ -71,16 +71,16 @@ typedef std::size_t size_type;
     Index get_finish(Index high_index_range = 0) const
     {
       if (finish_ == to_end())
-	return high_index_range;
+        return high_index_range;
       return finish_;
     }
 
     unsigned int size(Index recommended_length = 0) const
     {
       if ((start_ == from_start()) || (finish_ == to_end()))
-	return recommended_length;
+        return recommended_length;
       else 
-	return (finish_ - start_) / stride_;
+        return (finish_ - start_) / stride_;
     }
 
     Index stride() const { return stride_; }
@@ -236,7 +236,7 @@ public:
 
   template <int ND>
   explicit index_gen(const index_gen<NumRanges-1,ND>& rhs,
-	    const index_range<Index,SizeType>& range)
+            const index_range<Index,SizeType>& range)
   {
     std::copy(rhs.ranges_.begin(),rhs.ranges_.end(),ranges_.begin());
     *ranges_.rbegin() = range;

@@ -87,7 +87,7 @@ public:
 
   template <class ExtentList>
   explicit multi_array(ExtentList const& extents,
-		       const general_storage_order<NumDims>& so,
+                       const general_storage_order<NumDims>& so,
                        Allocator const& alloc) :
     super_type((T*)initial_base_,extents,so), allocator_(alloc) {
     boost::function_requires<

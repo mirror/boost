@@ -27,12 +27,12 @@ test_main(int,char**)
   for (array_ref::index i = 0; i != 2; ++i)
     for (array_ref::index j = 0; j != 3; ++j)
       for (array_ref::index k = 0; k != 4; ++k)
-	sma[i][j][k] = num++;
+        sma[i][j][k] = num++;
 
   const array_ref& sma_const = sma;
 
   array_ref::subarray<ndims-1>::type sba = sma_const[0]; // FAIL!
-							 // preserve constness
+                                                         // preserve constness
 
   return boost::exit_success;
 }

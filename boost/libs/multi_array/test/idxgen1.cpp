@@ -14,12 +14,12 @@
 
 template <int NumRanges, int NumDims>
 void check(const boost::detail::multi_array::
-	   index_gen<NumRanges,NumDims>&) { }
+           index_gen<NumRanges,NumDims>&) { }
 
 bool operator==(const boost::detail::multi_array::
-		index_range<int,std::size_t>& lhs,
-		const boost::detail::multi_array::
-		index_range<int,std::size_t>& rhs) {
+                index_range<int,std::size_t>& lhs,
+                const boost::detail::multi_array::
+                index_range<int,std::size_t>& rhs) {
   return lhs.start_ == rhs.start_ &&
     lhs.finish_ == rhs.finish_ &&
     lhs.stride_ == rhs.stride_ &&

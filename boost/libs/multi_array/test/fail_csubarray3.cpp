@@ -23,7 +23,7 @@ test_main(int,char**)
   for (array::index i = 0; i != 2; ++i)
     for (array::index j = 0; j != 3; ++j)
       for (array::index k = 0; k != 4; ++k)
-	sma[i][j][k] = num++;
+        sma[i][j][k] = num++;
 
   const array& sma_const = sma;
 
@@ -31,8 +31,8 @@ test_main(int,char**)
 
     for (array::index j = 0; j != 3; ++j)
       for (array::index k = 0; k != 4; ++k)
-	// FAIL! sba cannot be assigned to.
-	sba[j][k] = num++;
+        // FAIL! sba cannot be assigned to.
+        sba[j][k] = num++;
 
   return boost::exit_success;
 }

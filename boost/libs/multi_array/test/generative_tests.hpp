@@ -72,7 +72,7 @@ void assign_if_not_const(Array& A, const mutable_array_tag&) {
   for (index i = idx0; i != idx0 + 2; ++i)
     for (index j = idx1; j != idx1 + 3; ++j)
       for (index k = idx2; k != idx2 + 4; ++k) 
-	A[i][j][k] = num++;
+        A[i][j][k] = num++;
 }
 #endif // MULTIARRAY_TEST_ASSIGN
 
@@ -89,8 +89,8 @@ void access(Array& A, const const_array_tag&);
 
 template <typename StorageOrder3,typename StorageOrder4,typename Modifier>
 int run_configuration(const StorageOrder3& so3,
-		      const StorageOrder4& so4,
-		      const Modifier& modifier) {
+                      const StorageOrder4& so4,
+                      const Modifier& modifier) {
   // multi_array
   {
     typedef boost::multi_array<int,3> array;
@@ -169,8 +169,8 @@ int run_configuration(const StorageOrder3& so3,
 
       typename array::template array_view<3>::type B =A[
         indices[range(idx0+1,idx0+3)]
-	       [range(idx1+1,idx1+4)]
-	       [range(idx2+1,idx2+5)]
+               [range(idx1+1,idx1+4)]
+               [range(idx2+1,idx2+5)]
       ];
       access(B,mutable_array_tag());
     }
@@ -192,8 +192,8 @@ int run_configuration(const StorageOrder3& so3,
 
       typename array::template array_view<3>::type B =A[
         indices[range(idx0+1,idx0+3)]
-	       [range(idx1+1,idx1+4)]
-	       [range(idx2+1,idx2+5)]
+               [range(idx1+1,idx1+4)]
+               [range(idx2+1,idx2+5)]
       ];
       assign(B);
 
@@ -207,15 +207,15 @@ int run_configuration(const StorageOrder3& so3,
 template <typename ArrayModifier>
 int run_storage_tests(const ArrayModifier& modifier) {
   run_configuration(boost::c_storage_order(),
-		    boost::c_storage_order(),modifier);
+                    boost::c_storage_order(),modifier);
   run_configuration(boost::fortran_storage_order(),
-		    boost::fortran_storage_order(),modifier);
+                    boost::fortran_storage_order(),modifier);
   
   std::size_t ordering[] = {2,0,1,3};
   bool ascending[] = {false,true,true,true};
   run_configuration(boost::general_storage_order<3>(ordering,ascending),
-		    boost::general_storage_order<4>(ordering,ascending),
-		    modifier); 
+                    boost::general_storage_order<4>(ordering,ascending),
+                    modifier); 
 
   return boost::exit_success;
 }

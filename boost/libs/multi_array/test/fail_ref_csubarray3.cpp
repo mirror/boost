@@ -27,7 +27,7 @@ test_main(int,char**)
   for (array_ref::index i = 0; i != 2; ++i)
     for (array_ref::index j = 0; j != 3; ++j)
       for (array_ref::index k = 0; k != 4; ++k)
-	sma[i][j][k] = num++;
+        sma[i][j][k] = num++;
 
   const array_ref& sma_const = sma;
 
@@ -35,7 +35,7 @@ test_main(int,char**)
 
     for (array_ref::index j = 0; j != 3; ++j)
       for (array_ref::index k = 0; k != 4; ++k)
-	sba[j][k] = num++; // FAIL! can't assign to const_subarray.
+        sba[j][k] = num++; // FAIL! can't assign to const_subarray.
 
   return boost::exit_success;
 }

@@ -20,7 +20,7 @@ test_main(int,char**)
   boost::array<array_ref::size_type,ndims> sma_dims = {{2,3,4}};
 
   int data[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,
-		 14,15,16,17,18,19,20,21,22,23};
+                 14,15,16,17,18,19,20,21,22,23};
 
   array_ref sma(data,sma_dims);
 
@@ -40,7 +40,7 @@ test_main(int,char**)
   for (array_ref::index i = 0; i != 2; ++i)
     for (array_ref::index j = 0; j != 2; ++j)
       for (array_ref::index k = 0; k != 2; ++k)
-	csma2[i][j][k] = 0; // FAIL! csma2 is read only.
+        csma2[i][j][k] = 0; // FAIL! csma2 is read only.
   
   return boost::exit_success;
 }

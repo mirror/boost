@@ -23,7 +23,7 @@ int main() {
 
 #if 0
   std::copy(A.begin(),A.end(),
-	    std::ostream_iterator<double>(std::cout,","));
+            std::ostream_iterator<double>(std::cout,","));
 
   std::cout << "\n";
 #endif
@@ -32,7 +32,7 @@ int main() {
 
 #if 0  
   std::copy(A.begin(),A.end(),
-	    std::ostream_iterator<double>(std::cout,","));
+            std::ostream_iterator<double>(std::cout,","));
  
   std::cout << "\n";
 #endif

@@ -51,13 +51,13 @@ test_main(int,char**)
     boost::array<int,3> bases = { { 1, 2, 3 } };
     for (size_type a = 0; a < A.shape()[0]; ++a)
       for (size_type b = 0; b < A.shape()[1]; ++b)
-	for (size_type c = 0; c < A[b].size(); ++c) {
-	  BOOST_TEST(A[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
-	  BOOST_TEST(C[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
-	  BOOST_TEST(D[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
-	  // Test that E does not inherit A's index_base
-	  BOOST_TEST(E[a][b][c] == B[a][b][c]);
-	}
+        for (size_type c = 0; c < A[b].size(); ++c) {
+          BOOST_TEST(A[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
+          BOOST_TEST(C[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
+          BOOST_TEST(D[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
+          // Test that E does not inherit A's index_base
+          BOOST_TEST(E[a][b][c] == B[a][b][c]);
+        }
   }
 
   // Reindex
@@ -88,12 +88,12 @@ test_main(int,char**)
 
     for (size_type a = 0; a < A.shape()[0]; ++a)
       for (size_type b = 0; b < A.shape()[1]; ++b)
-	for (size_type c = 0; c < A.shape()[2]; ++c) {
-	  BOOST_TEST(A[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
-	  BOOST_TEST(C[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
-	  BOOST_TEST(D[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
-	  BOOST_TEST(E[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
-	}
+        for (size_type c = 0; c < A.shape()[2]; ++c) {
+          BOOST_TEST(A[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
+          BOOST_TEST(C[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
+          BOOST_TEST(D[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
+          BOOST_TEST(E[a+bases[0]][b+bases[1]][c+bases[2]] == B[a][b][c]);
+        }
   }
 
   // Set Index Base
@@ -122,12 +122,12 @@ test_main(int,char**)
 
     for (size_type a = 0; a < A.shape()[0]; ++a)
       for (size_type b = 0; b < A.shape()[1]; ++b)
-	for (size_type c = 0; c < A.shape()[2]; ++c) {
-	  BOOST_TEST(A[a+1][b+1][c+1] == B[a][b][c]);
-	  BOOST_TEST(C[a+1][b+1][c+1] == B[a][b][c]);
-	  BOOST_TEST(D[a+1][b+1][c+1] == B[a][b][c]);
-	  BOOST_TEST(E[a+1][b+1][c+1] == B[a][b][c]);
-	}
+        for (size_type c = 0; c < A.shape()[2]; ++c) {
+          BOOST_TEST(A[a+1][b+1][c+1] == B[a][b][c]);
+          BOOST_TEST(C[a+1][b+1][c+1] == B[a][b][c]);
+          BOOST_TEST(D[a+1][b+1][c+1] == B[a][b][c]);
+          BOOST_TEST(E[a+1][b+1][c+1] == B[a][b][c]);
+        }
   }
 
   return boost::exit_success;

@@ -19,7 +19,7 @@ void assign_if_not_const(Array& A, const mutable_array_tag&) {
   for (iterator3 i = A.begin(); i != A.end(); ++i)
     for(iterator2 ii = (*i).begin(); ii != (*i).end(); ++ii)
       for(iterator1  iii = (*ii).begin(); iii != (*ii).end(); ++iii)
-	*iii = num++;
+        *iii = num++;
 }
 
 
@@ -136,8 +136,8 @@ void test_iterators(Array& A, const IterTraits&) {
     int vals = 0;
     for (iterator3 i = A.begin(); i != A.end(); ++i)
       for(iterator2 ii = (*i).begin(); ii != (*i).end(); ++ii)
-	for(iterator1  iii = (*ii).begin(); iii != (*ii).end(); ++iii)
-	  BOOST_TEST(*iii == vals++);
+        for(iterator1  iii = (*ii).begin(); iii != (*ii).end(); ++iii)
+          BOOST_TEST(*iii == vals++);
   }
 
   // Using operator->() on iterators
@@ -149,8 +149,8 @@ void test_iterators(Array& A, const IterTraits&) {
     int vals = 0;
     for (iterator3 i = A.begin(); i != A.end(); ++i)
       for(iterator2 ii = i->begin(); ii != i->end(); ++ii)
-	for(iterator1  iii = ii->begin(); iii != ii->end(); ++iii)
-	  BOOST_TEST(*iii == vals++);
+        for(iterator1  iii = ii->begin(); iii != ii->end(); ++iii)
+          BOOST_TEST(*iii == vals++);
   }
 
   // Reverse Iterator Hierarchy Test
@@ -162,9 +162,9 @@ void test_iterators(Array& A, const IterTraits&) {
     int check_iter_val = A.num_elements()-1;
     for (riterator3 i = A.rbegin(); i != (riterator3)A.rend(); ++i)
       for(riterator2 ii = (*i).rbegin(); ii != (riterator2)(*i).rend(); ++ii)
-	for(riterator1 iii = (*ii).rbegin(); iii != (riterator1)(*ii).rend();
-	    ++iii)
-	  BOOST_TEST(*iii == check_iter_val--);
+        for(riterator1 iii = (*ii).rbegin(); iii != (riterator1)(*ii).rend();
+            ++iii)
+          BOOST_TEST(*iii == check_iter_val--);
   }
   ++tests_run;
 }
