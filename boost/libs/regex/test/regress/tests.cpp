@@ -359,7 +359,7 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
                (m[-2].first - x) << "," << (m[-2].second - x) << ") expected (" <<
                matches[1] << "," << (y-x) << ")" << endl;
          }
-#if !(defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)) && !defined(BOOST_REGEX_V3)
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && !defined(BOOST_REGEX_V3) && !BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(55500))
          //
          // now try comparison operators:
          string_type s(m[0]);
@@ -593,7 +593,8 @@ hl_grep_test_proc(const RegEx& e)
    // check $`:
    start = e.Position(-1);
    end = start + e.Length(-1);
-   if(start == -1)
+
+   if(start == boost::RegEx::npos)
    {
       if(hl_match_id &&
          ( matches[hl_match_id] != matches[hl_match_id - 1] )
@@ -628,7 +629,7 @@ hl_grep_test_proc(const RegEx& e)
    // check $':
    start = e.Position(-2);
    end = start + e.Length(-2);
-   if(start == -1)
+   if(start == boost::RegEx::npos)
    {
       if(matches[hl_match_id + 1] != (int)search_text.size())
       {
@@ -641,7 +642,6 @@ hl_grep_test_proc(const RegEx& e)
       begin_error();
       cout << "class RegEx grep error in $': found [" << start << "," << end << "] expected [" << matches[hl_match_id + 1] << "," << (search_text.size()) << "]" << endl;
    }
-
    hl_match_id += 2;
    return true;
 }
