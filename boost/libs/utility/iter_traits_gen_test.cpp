@@ -21,7 +21,7 @@ main()
 {
   using boost::dummyT;
   dummyT array[] = { dummyT(0), dummyT(1), dummyT(2), 
-		     dummyT(3), dummyT(4), dummyT(5) };
+                     dummyT(3), dummyT(4), dummyT(5) };
   typedef boost::iterator_adaptor<dummyT*, 
     boost::default_iterator_policies, dummyT> my_iter;
   my_iter mi(array);

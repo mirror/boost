@@ -18,15 +18,15 @@ namespace boost {
   template <class Operation> 
   class binder1st
     : public std::unary_function<typename Operation::second_argument_type,
-			         typename Operation::result_type> {
+                                 typename Operation::result_type> {
   protected:
     Operation op;
     typename Operation::first_argument_type value;
   public:
     binder1st() { } // this had to be added!
     binder1st(const Operation& x,
-	      const typename Operation::first_argument_type& y)
-	: op(x), value(y) {}
+              const typename Operation::first_argument_type& y)
+        : op(x), value(y) {}
     typename Operation::result_type
     operator()(const typename Operation::second_argument_type& x) const {
       return op(value, x); 
@@ -66,8 +66,8 @@ main(int, char*[])
   std::cout << "adding 4 to each element in the array:" << std::endl;
 
   std::copy(boost::make_transform_iterator(x, boost::bind1st(std::plus<int>(), 4)),
-	    boost::make_transform_iterator(x + N, boost::bind1st(std::plus<int>(), 4)),
-	    std::ostream_iterator<int>(std::cout, " "));
+            boost::make_transform_iterator(x + N, boost::bind1st(std::plus<int>(), 4)),
+            std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
   
   return 0;

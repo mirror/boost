@@ -148,14 +148,14 @@ namespace boost {
   template <class Base>
   boolean_archetype
   operator==(const equality_comparable_archetype<Base>&,
-	     const equality_comparable_archetype<Base>&) 
+             const equality_comparable_archetype<Base>&) 
   { 
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
   template <class Base>
   boolean_archetype
   operator!=(const equality_comparable_archetype<Base>&,
-	     const equality_comparable_archetype<Base>&)
+             const equality_comparable_archetype<Base>&)
   {
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
@@ -176,14 +176,14 @@ namespace boost {
   template <class Base1, class Base2>
   boolean_archetype
   operator==(const equality_comparable2_first_archetype<Base1>&,
-	     const equality_comparable2_second_archetype<Base2>&) 
+             const equality_comparable2_second_archetype<Base2>&) 
   {
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
   template <class Base1, class Base2>
   boolean_archetype
   operator!=(const equality_comparable2_first_archetype<Base1>&,
-	     const equality_comparable2_second_archetype<Base2>&)
+             const equality_comparable2_second_archetype<Base2>&)
   {
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
@@ -197,7 +197,7 @@ namespace boost {
   template <class Base>
   boolean_archetype
   operator<(const less_than_comparable_archetype<Base>&,
-	    const less_than_comparable_archetype<Base>&)
+            const less_than_comparable_archetype<Base>&)
   {
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
@@ -212,28 +212,28 @@ namespace boost {
   template <class Base>
   boolean_archetype
   operator<(const comparable_archetype<Base>&,
-	    const comparable_archetype<Base>&)
+            const comparable_archetype<Base>&)
   {
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
   template <class Base>
   boolean_archetype
   operator<=(const comparable_archetype<Base>&,
-	     const comparable_archetype<Base>&)
+             const comparable_archetype<Base>&)
   {
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
   template <class Base>
   boolean_archetype
   operator>(const comparable_archetype<Base>&,
-	    const comparable_archetype<Base>&)
+            const comparable_archetype<Base>&)
   {
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
   template <class Base>
   boolean_archetype
   operator>=(const comparable_archetype<Base>&,
-	     const comparable_archetype<Base>&)
+             const comparable_archetype<Base>&)
   {
     return boolean_archetype(static_object<detail::dummy_constructor>::get());
   }
@@ -296,7 +296,7 @@ namespace boost {
   template <class Base> \
   NAME##_archetype<Base> \
   operator OP (const NAME##_archetype<Base>&,\
-	       const NAME##_archetype<Base>&)  \
+               const NAME##_archetype<Base>&)  \
   { \
     return \
      NAME##_archetype<Base>(static_object<detail::dummy_constructor>::get()); \

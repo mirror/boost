@@ -22,7 +22,7 @@ int main(int, char*[])
   base_iterator letters(letters_);
   
   std::cout << "original sequence of letters:\t"
-	    << letters_ << std::endl;
+            << letters_ << std::endl;
 
   std::sort(letters, letters + N);
 
@@ -35,7 +35,7 @@ int main(int, char*[])
 
   std::cout << "letters in descending order:\t";
   std::copy(reverse_letters_first, reverse_letters_last,
-	    std::ostream_iterator<char>(std::cout));
+            std::ostream_iterator<char>(std::cout));
   std::cout << std::endl;
 
   // Use make_reverse_iterator() to print the sequence
@@ -43,8 +43,8 @@ int main(int, char*[])
 
   std::cout << "letters in ascending order:\t";
   std::copy(boost::make_reverse_iterator(reverse_letters_last),
-	    boost::make_reverse_iterator(reverse_letters_first),
-	    std::ostream_iterator<char>(std::cout));
+            boost::make_reverse_iterator(reverse_letters_first),
+            std::ostream_iterator<char>(std::cout));
   std::cout << std::endl;
 
   return 0;

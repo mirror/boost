@@ -22,8 +22,8 @@ int main(int, char*[])
   // Example of using make_counting_iterator()
   std::cout << "counting from -5 to 4:" << std::endl;
   std::copy(boost::make_counting_iterator(-5),
-	    boost::make_counting_iterator(5),
-	    std::ostream_iterator<int>(std::cout, " "));
+            boost::make_counting_iterator(5),
+            std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
 
   // Example of using counting iterator to create an array of pointers.
@@ -31,7 +31,7 @@ int main(int, char*[])
   std::vector<int> numbers;
   // Fill "numbers" array with [0,N)
   std::copy(boost::make_counting_iterator(0), boost::make_counting_iterator(N),
-	    std::back_inserter(numbers));
+            std::back_inserter(numbers));
 
   std::vector<std::vector<int>::iterator> pointers;
 
@@ -39,16 +39,16 @@ int main(int, char*[])
 #if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
   // Use counting iterator to fill in the array of pointers.
   std::copy(boost::make_counting_iterator(numbers.begin()),
-	    boost::make_counting_iterator(numbers.end()),
-	    std::back_inserter(pointers));
+            boost::make_counting_iterator(numbers.end()),
+            std::back_inserter(pointers));
 
   // Use indirect iterator to print out numbers by accessing
   // them through the array of pointers.
   std::cout << "indirectly printing out the numbers from 0 to " 
-	    << N << std::endl;
+            << N << std::endl;
   std::copy(boost::make_indirect_iterator(pointers.begin()),
-	    boost::make_indirect_iterator(pointers.end()),
-	    std::ostream_iterator<int>(std::cout, " "));
+            boost::make_indirect_iterator(pointers.end()),
+            std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
 #endif
   return 0;

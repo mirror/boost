@@ -42,10 +42,10 @@ int main(int, char*[])
     const_indirect_last(pointers_to_chars + N);
 
   std::transform(const_indirect_first, const_indirect_last,
-		 mutable_indirect_first, std::bind1st(std::plus<char>(), 1));
+                 mutable_indirect_first, std::bind1st(std::plus<char>(), 1));
 
   std::copy(mutable_indirect_first, mutable_indirect_last,
-	    std::ostream_iterator<char>(std::cout, ","));
+            std::ostream_iterator<char>(std::cout, ","));
   std::cout << std::endl;
 
   
@@ -53,8 +53,8 @@ int main(int, char*[])
 
 #ifndef BOOST_MSVC
   std::copy(boost::make_indirect_iterator(pointers_to_chars), 
-	    boost::make_indirect_iterator(pointers_to_chars + N),
-	    std::ostream_iterator<char>(std::cout, ","));
+            boost::make_indirect_iterator(pointers_to_chars + N),
+            std::ostream_iterator<char>(std::cout, ","));
   std::cout << std::endl;
 #endif
   

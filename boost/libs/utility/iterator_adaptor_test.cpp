@@ -309,8 +309,8 @@ main()
     // Borland is choking on accessing the policies_type explicitly
     // from the filter_iter. 
     boost::forward_iterator_test(make_filter_iterator(array, array+N, 
-						      one_or_four()),
-				 dummyT(1), dummyT(4));
+                                                      one_or_four()),
+                                 dummyT(1), dummyT(4));
 #else
     filter_iter i(array, filter_iter::policies_type(one_or_four(), array + N));
     boost::forward_iterator_test(i, dummyT(1), dummyT(4));

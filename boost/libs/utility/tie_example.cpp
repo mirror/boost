@@ -41,9 +41,9 @@ main(int, char*[])
     for (int k = 0; k < 2; ++k) {
       boost::tie(i,inserted) = s.insert(new_vals[k]);
       if (!inserted)
-	std::cout << *i << " was already in the set." << std::endl;
+        std::cout << *i << " was already in the set." << std::endl;
       else
-	std::cout << *i << " successfully inserted." << std::endl;    
+        std::cout << *i << " successfully inserted." << std::endl;    
     }
   }    
   {
@@ -55,7 +55,7 @@ main(int, char*[])
 
     boost::tie(i,end) = std::equal_range(vals, vals + 6, 4);
     std::cout << "There were " << std::distance(i,end)
-	      << " occurrences of " << *i << "." << std::endl;
+              << " occurrences of " << *i << "." << std::endl;
     // Footnote: of course one would normally just use std::count()
     // to get this information, but that would spoil the example :)
   }

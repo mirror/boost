@@ -33,8 +33,8 @@ int main()
   
   // Example using make_filter_iterator()
   std::copy(boost::make_filter_iterator<is_positive_number>(numbers, numbers + N),
-	    boost::make_filter_iterator<is_positive_number>(numbers + N, numbers + N),
-	    std::ostream_iterator<int>(std::cout, " "));
+            boost::make_filter_iterator<is_positive_number>(numbers + N, numbers + N),
+            std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
 
   // Example using filter_iterator_generator
@@ -50,10 +50,10 @@ int main()
 
   // Another example using make_filter_iterator()
   std::copy(boost::make_filter_iterator(numbers, numbers + N, 
-					std::bind2nd(std::greater<int>(), -2)),
-	    boost::make_filter_iterator(numbers + N, numbers + N, 
-					std::bind2nd(std::greater<int>(), -2)),
-	    std::ostream_iterator<int>(std::cout, " "));
+                                        std::bind2nd(std::greater<int>(), -2)),
+            boost::make_filter_iterator(numbers + N, numbers + N, 
+                                        std::bind2nd(std::greater<int>(), -2)),
+            std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
   
   
