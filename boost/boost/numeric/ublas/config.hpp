@@ -144,7 +144,7 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 namespace std {
-	// Needed for ICC on Itanium?
+    // Needed for ICC on Itanium?
     template<class C, class IC>
     inline
     void iter_swap (boost::numeric::ublas::indexed_iterator<C, IC> it1,

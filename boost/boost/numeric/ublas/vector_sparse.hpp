@@ -75,7 +75,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator = (const sparse_vector_element &p) {
-        	// Overide the implict copy assignment
+            // Overide the implict copy assignment
             d_ = p.d_;
             dirty_ = true;
             return *this;
@@ -116,7 +116,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-		// Comparison
+        // Comparison
         template<class D>
         BOOST_UBLAS_INLINE
         bool operator == (const D &d) const {
