@@ -47,6 +47,12 @@
 #define BOOST_NO_OVERLOAD_FOR_NON_CONST
 #endif
 
+// gcc-2.95's stringstream is not usable, unless it's the one from STLPORT :
+#if BOOST_WORKAROUND(__GNUC__, < 3) && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) 
+#define BOOST_FORMAT_IGNORE_STRINGSTREAM  
+#endif
+
+
 // **** Workaround for io streams, stlport and msvc.
 #ifdef BOOST_IO_NEEDS_USING_DECLARATION
 namespace boost {

@@ -15,16 +15,15 @@
 namespace boost {
 namespace io {
 
-#if !defined( BOOST_NO_STRINGSTREAM)  & ! BOOST_WORKAROUND(__GNUC__, <3)
+#if !defined(BOOST_NO_STRINGSTREAM) && !defined(BOOST_FORMAT_IGNORE_STRINGSTREAM)
 
-template<class Ch, class Tr >  inline
-void
-basic_outsstream<Ch, Tr>:: clear_buffer() { 
-    const Ch * p = cur();
-    const Ch * b = begin();
+template<class Ch, class Tr> inline
+void steal_basic_stringbuf<Ch, Tr> :: clear_buffer() { 
+    const Ch * p = pptr();
+    const Ch * b = pbase();
     if(p != NULL && p != b) {
       typedef typename Tr::pos_type pos_type;
-      pos_type pos = buff_t::seekpos(0, std::ios_base::out); 
+      pos_type pos = seekpos(0, std::ios_base::out); 
       BOOST_ASSERT( pos != pos_type(std::streamoff(-1)) ); 
     }
 }

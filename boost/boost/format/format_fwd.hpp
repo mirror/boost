@@ -37,7 +37,7 @@ namespace boost {
 
 
 #if !defined(BOOST_NO_STD_WSTRING)  && !defined(BOOST_NO_STD_WSTREAMBUF) \
- && !defined(BOOST_NO_STRINGSTREAM)  
+ && !defined(BOOST_NO_STRINGSTREAM) && !defined(BOOST_FORMAT_IGNORE_STRINGSTREAM)
     //we use either sstream or strstream, and strstream doesnt support wchar
     typedef basic_format<wchar_t >  wformat;
 #endif

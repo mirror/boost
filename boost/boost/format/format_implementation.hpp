@@ -53,7 +53,6 @@ namespace boost {
           exceptions_(io::all_error_bits)
     {
         oss_.imbue( loc );
-        state0_.set_by_stream(oss_);
         parse(s);  
     }
 #endif //BOOST_NO_STD_LOCALE

@@ -20,9 +20,10 @@
 #define BOOST_FORMAT_OUTSSTREAM_H
 
 #include <boost/assert.hpp>
+#include <boost/utility/base_from_member.hpp>
 #include <boost/format/detail/config_macros.hpp>
 
-#if !defined( BOOST_NO_STRINGSTREAM)  & ! BOOST_WORKAROUND(__GNUC__, <3)
+#if !defined(BOOST_NO_STRINGSTREAM) && !defined(BOOST_FORMAT_IGNORE_STRINGSTREAM)
 #include <sstream>
 #else
 #include <strstream>
@@ -33,46 +34,65 @@
 namespace boost {
 namespace io {
 
-#if !defined( BOOST_NO_STRINGSTREAM)  & ! BOOST_WORKAROUND(__GNUC__, <3)
+#if !defined(BOOST_NO_STRINGSTREAM) && !defined(BOOST_FORMAT_IGNORE_STRINGSTREAM)
 
 
-//---- The stringstream way -------------------------------------------------
+//---- The stringstream way ---------------------------------------------------
 
 
-// ---   class basic_outsstream -------------------------------------------------
+// ---   class steal_basic_stringbuf : steals  pbase(), pptr() & co -----------
     template<class Ch, class Tr = std::char_traits<Ch> >
-    class basic_outsstream : private std::basic_stringbuf<Ch, Tr>, 
-                             public BOOST_IO_STD basic_ostream<Ch, Tr>
-    // derived from stringbuf to access pbase(), pptr() & co  (and uses the buffer)
-    // publicly derived from basic_ostream to make this class a stream.
+    class steal_basic_stringbuf : public std::basic_stringbuf<Ch, Tr>
     {
         typedef std::basic_stringbuf<Ch, Tr> buff_t;
-        typedef BOOST_IO_STD basic_ostream<Ch, Tr> stream_t;
     public:
         typedef std::basic_string<Ch,Tr>     string_type;
-        using stream_t::getloc;  // also in buff_t:: 
 
-        basic_outsstream() : std::basic_stringbuf<Ch,Tr>(),
-                             std::basic_ostream<Ch,Tr>(this) {}
+        // get [pbase, pptr[   from stringbuf::str(),  which returns [pbase, epptr[  :
+        string_type cur_str() const { return string_type(str(), 0, pcount()); } 
 
-        // buffer access via strings
-        string_type str()     const { return buff_t::str(); }  // [begin, end[
-        string_type cur_str() const { return string_type(str(), 0, pcount()); } // [begin, cur[
-        string_type p_str() const { return string_type(begin(), cur()); } // [begin, cur[
-
-        // copy-less access (note the pointers can be invalidated when modifying the stream)
-        std::streamsize pcount() const { return cur() - begin(); }
-        const Ch * begin() const { return buff_t::pbase(); } 
-        const Ch * cur()   const { return buff_t::pptr(); } 
-        const Ch * end()   const { return buff_t::epptr(); }
-
+        // publicize those functions (protected in stringbuf) :
+        std::streamsize pcount() const { return buff_t::pcount(); }
+        const Ch * pbase() const { return buff_t::pbase(); } 
+        const Ch * pptr()  const { return buff_t::pptr(); } 
+        const Ch * epptr() const { return buff_t::epptr(); }
+        // added convenience function :
         void clear_buffer();
     };
 
+
+// ---   class basic_outsstream -----------------------------------------------
+    template<class Ch, class Tr = std::char_traits<Ch> >
+    class basic_outsstream : boost::base_from_member<steal_basic_stringbuf<Ch, Tr> >, 
+                             public BOOST_IO_STD basic_ostream<Ch, Tr>
+    // use stringbuf with its stolen protected members, 
+    // publicly derived from basic_ostream to make this class a stream.
+    {
+    public:
+        typedef std::basic_string<Ch,Tr>     string_type;
+        basic_outsstream() : pbase_type(),
+                             std::basic_ostream<Ch,Tr>( & sb() ) {}
+        // buffer access via strings
+        string_type str()     const { return sb.str(); }  // [begin, end[
+        string_type cur_str() const { return string_type(sb().str(), 0,pcount());} // [begin, cur[
+            
+        // copy-less access (note the pointers can be invalidated when modifying the stream)
+        std::streamsize pcount() const { return cur() - begin(); }
+        const Ch * begin() const { return sb().pbase(); } 
+        const Ch * cur()   const { return sb().pptr(); } 
+        const Ch * end()   const { return sb().epptr(); }
+
+        void clear_buffer() { sb().clear_buffer(); }
+    private:
+        typedef boost::base_from_member<steal_basic_stringbuf<Ch, Tr> > pbase_type;
+        steal_basic_stringbuf<Ch, Tr>      &  sb()       { return pbase_type::member; }
+        steal_basic_stringbuf<Ch, Tr> const&  sb() const { return pbase_type::member; }
+    };
 #else // BOOST_NO_STRINGSTREAM
 
 
-//---- The strstream way -------------------------------------------------
+
+//---- The strstream way ------------------------------------------------------
 
     template <class Ch, 
 #if !( BOOST_WORKAROUND(__GNUC__, <3) &&  defined(__STL_CONFIG_H) )
@@ -82,7 +102,8 @@ namespace io {
 #endif
     class basic_outsstream; // we define only the <char> specialisaton
 
-// ---   class basic_outsstream -------------------------------------------------
+
+// ---   class basic_outsstream -----------------------------------------------
     template<class Tr>
     class basic_outsstream<char, Tr> : private BOOST_IO_STD  strstreambuf, 
                                        public std::basic_ostream<char, Tr>
