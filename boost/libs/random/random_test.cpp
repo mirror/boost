@@ -180,10 +180,10 @@ void instantiate_all()
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
   instantiate_urng("rand48", rand48(), 0);
-  rand48 rnd(int32_t(5));
-  rand48 rnd2(uint64_t(0x80000000) * 42);
-  rnd.seed(int32_t(17));
-  rnd2.seed(uint64_t(0x80000000) * 49);
+  rand48 rnd(boost::int32_t(5));
+  rand48 rnd2(boost::uint64_t(0x80000000) * 42);
+  rnd.seed(boost::int32_t(17));
+  rnd2.seed(boost::uint64_t(0x80000000) * 49);
 #endif
 
   instantiate_urng("minstd_rand0", minstd_rand0(), 0);
