@@ -164,6 +164,12 @@
 #     define BOOST_NO_MEMBER_TEMPLATES
 #   endif
 
+//  Kai C++ ------------------------------------------------------------------//
+
+#elif defined __KCC
+#   define BOOST_NO_SLIST
+#   define BOOST_NO_HASH
+
 //  Borland ------------------------------------------------------------------//
 
 #elif defined __BORLANDC__
