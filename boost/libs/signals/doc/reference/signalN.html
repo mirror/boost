@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Boost.Signals: class templates signalN</title>
+  </head>
+
+  <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+
+  <h1><IMG SRC="../../../../c++boost.gif" WIDTH="276" HEIGHT="86" ALT="Boost">Boost.Signals: class templates <code>signal<em>N</em></code></h1>
+
+<h2>Headers</h2>
+<p> <em>N</em> is the number of signal parameters supported. So the header <code>&lt;boost/signals/signal0.hpp&gt;</code> contains <code>signal0</code>, header <code>&lt;boost/signals/signal1.hpp&gt;</code> contains <code>signal1</code>, etc. The maximum number of signal parameters supported is implementation-defined, but must be at least 10.
+
+<pre>
+#include &lt;boost/signals/signal<em>N</em>.hpp&gt;
+</pre>
+
+<h2>Synopsis</h2>
+<p> This document covers several related classes <code>signal<em>0</em></code>,
+      <code>signal<em>1</em></code>, <code>signal<em>2</em></code>,
+      etc., where the number suffix describes the number of function
+      parameters the signal and its connected slots will take. Instead
+      of enumerating all classes, a single pattern
+      <code>signal<em>N</em></code> will be described, where
+      <em>N</em> represents the number of function parameters. 
+
+<pre>
+<b>namespace</b> boost {
+  <b>template</b>&lt;<b>typename</b> R,
+           <b>typename</b> T1,
+           <b>typename</b> T2,
+           ...
+           <b>typename</b> T<em>N</em>,
+           <b>typename</b> <a href="#combiner">Combiner</a> = <a href="last_value.html">last_value</a>&lt;R&gt;,
+           <b>typename</b> <a href="#slot_group">Group</a> = <b>int</b>,
+           <b>typename</b> <a href="#group_compare">GroupCompare</a> = std::less&lt;Group&gt;,
+           <b>typename</b> <a href="#slot_function_type">SlotFunction</a> = <a href="../../../function/doc/reference.html">boost::function<em>N</em></a>&lt;R, T1, T2, ..., T<em>N</em>&gt; &gt;
+  <b>class</b> signal<em>N</em> :
+    <a href="../../../utility/utility.htm#noncopyable">boost::noncopyable</a> <em>// exposition only: class meets <a href="../../../thread/doc/overview.html#NonCopyable">Noncopyable</a> requirement</em>,
+    <a href="trackable.html">boost::trackable</a>
+  {
+  <b>public</b>:
+    <b>typedef</b> <b>typename</b> Combiner::result_type result_type;
+    <b>typedef</b> Combiner combiner_type;
+    <b>typedef</b> Group group_type;
+    <b>typedef</b> GroupCompare group_compare_type;
+    <b>typedef</b> SlotFunction slot_function_type;
+    <b>typedef</b> <a href="slot.html">slot</a>&lt;slot_function_type&gt; slot_type;
+    <b>typedef</b> <em>implementation-defined</em> <a href="#slot_result_type">slot_result_type</a>; <em>// if SlotFunction has a <b>void</b> return type, may not be <b>void</b>; otherwise it is the SlotFunction return type</em>
+    <b>typedef</b> <em>implementation-defined</em> <a href="#slot_call_iterator">slot_call_iterator</a>; <em>// <a href="http://www.sgi.com/tech/stl/InputIterator.html">InputIterator</a> with <code>value_type R</code>.</em>
+    <b>typedef</b> T1 argument_type; <em>// If N == 1 then signal models <a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html">AdaptableUnaryFunction</a></em>
+    <b>typedef</b> T1 first_argument_type; <em>// If N==2 then signal models <a href="http://www.sgi.com/tech/stl/AdaptableBinaryFunction.html">AdaptableBinaryFunction</a></em>
+    <b>typedef</b> T2 second_argument_type; <em>// If N==2 then signal models <a href="http://www.sgi.com/tech/stl/AdaptableBinaryFunction.html">AdaptableBinaryFunction</a></em>
+    
+    <b>typedef</b> T1 arg1_type;
+    <b>typedef</b> T2 arg2_type;
+             .
+             .
+             .
+    <b>typedef</b> T<em>N</em> arg<em>N</em>_type;
+
+    <a href="#constructor"><b>explicit</b> signal<em>N</em>(<b>const</b> combiner_type&amp; = combiner_type(), <b>const</b> group_compare_type&amp; = group_compare_type())</a>;
+    <a href="#destructor">~signal()</a>;
+    <a href="#connect">signals::connection connect(<b>const</b> slot_type&amp;)</a>;
+    <a href="#group_connect">signals::connection connect(<b>const</b> group_type<b>&amp;</b>, <b>const</b> slot_type&amp; slot)</a>;
+    <a href="#group_disconnect"><b>void</b> disconnect(<B>const</b> group_type<b>&amp;</b>)</a>;
+    <a href="#disconnect_all"><b>void</b> disconnect_all_slots()</a>;
+    <a href="#empty"><b>bool</b> empty() <b>const</b></a>;
+    <a href="#function_call_operator">result_type <b>operator()</b>(T1 a1, T2 a2, ..., T<em>N</em> a<em>N</em>);</a>
+    <a href="#function_call_operator_const">result_type <b>operator()</b>(T1 a1, T2 a2, ..., T<em>N</em> a<em>N</em>) <b>const</b>;</a>
+
+  <b>private</b>:
+    combiner_type combiner; <em>// exposition only</em>
+  };
+}
+</pre>
+
+<hr><h2>Associated Types</h2>
+<h3><a name="combiner">Combiner</a></h3>
+<p>A Combiner is a function object that accepts an iterator sequence <code>[first, last)</code> and dereferences some number of the iterators within the sequence, then returns a value. The type of the iterators passed to the combiner will be the <a href="#slot_call_iterator">slot call iterator</a> type.
+
+<h3><a name="slot_group">Group</a></h3>
+<p> The slot group defines the type to be used to group connections. It must be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html"><code>DefaultConstructible</code></a> and <a href="http://www.sgi.com/tech/stl/CopyConstructible.html"><code>CopyConstructible</code></a>.
+
+<h3><a name="group_compare">Group comparison</a></h3>
+<p> The group comparison is a <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html"><code>BinaryPredicate</code></a> where the argument types coincide with the <a href="#slot_group">group type</a>. It defines an ordering relation on the connection groups.
+
+<h3><a name="slot_function_type">Slot Function</a></h3>
+<p>The slot function type must be a function object adaptor capable of being constructed with another compatible function object (where "compatible" is defined by the slot function type itself). The slot function type must accept parameters of types <code>T1, T2, ..., T<em>N</em></code> and must return a result that is convertible to the template type parameter <code>R</code> of the signal; note that when <code>R</code> is void, any slot function return type will be ignored.
+
+<p> For connections to other signals and to function object
+references, the slot function type must be able to accept <a
+href="../../../bind/ref.html"><code>reference_wrapper</code></a>
+objects. 
+
+<hr><h2>Members</h2>
+<h3><a name="slot_result_type">Slot Result Type</a></h3>
+<p>type <code>slot_result_type</code>: when the <code>SlotFunction</code> returns <code><b>void</b></code>, the slot result type may be an implementation-defined type; otherwise, the slot result type must be the type retuned by <code>SlotFunction</code> function objects.
+
+<h3><a name="slot_call_iterator">Slot Call Iterator</a></h3>
+<p>type <code>slot_call_iterator</code>: an <a href="http://www.sgi.com/tech/stl/InputIterator.html"><code>InputIterator</code></a> whose <code>value_type</code> is <code>R</code>. The dereference operator of the <code>slot_call_iterator</code> is responsible for invoking the underlying slot given a specific set of arguments, and returning its result. The result must be cached to ensure that multiple dereferences of an iterator do not invoke the slot multiple times.
+
+<hr><h3>Constructor</h3>
+<p><code><b>explicit</b> <a name="constructor">signal<em>N</em>(<b>const</b> combiner_type&amp; = combiner_type(), <b>const</b> group_compare_type&amp; = group_compare_type());</a></code>
+<ul>
+  <li><b>Effects</b>: initializes the signal to contain no slots, copies the given combiner into internal storage, and stores the given group comparison function object to compare groups.</li>
+  <li><b>Postconditions</b>: <code>this-&gt;empty();</code></li>
+</ul>
+
+<hr><h3>Destructor</h3>
+<p><code><a name="destructor">~signal()</a>;</code>
+<ul>
+  <li><b>Effects</b>: disconnects all slot connections.</li>
+</ul>
+
+<hr><h3>Connection Management</h3>
+<p><code><a href="connection.html">signals::connection</a> <a name="connect">connect(<b>const</b> slot_type&amp; slot)</a>;</code>
+<ul>
+  <li><b>Effects</b>: connects the signal <code>this</code> to the
+        incoming <code>slot</code>. If the slot is <em>inactive</em>,
+        i.e., any of the 
+        <a href="trackable.html"><code>trackable</code></a> objects
+        bound by the slot call have been destroyed, then the call to
+        <code>connect</code> is a no-op.</li> 
+  <li><b>Returns</b>: returns a
+        <a href="connection.html"><code>signals::connection</code></a>
+        object that 
+        references the newly-created connection between the signal and
+        the slot; if the <code>slot</code> is inactive, returns a
+        disconnected connection.</li>
+  <li><b>Throws</b>: strong exception guarantee, where any exception thrown will cause the slot to not be connected to the signal.</li>
+  <li><b>Complexity</b>: <em>O(lg n)</em> where <em>n</em> is the
+        number of slots known to the signal.</li>
+  <li><b>Notes</b>: it is unspecified whether connecting a slot while
+        the signal is calling will result in the slot being called
+        immediately.</li>
+</ul>
+
+<p><code><a href="connection.html">signals::connection</a> <a name="group_connect">connect(<b>const</b> group_type<b>&amp;</b> group, <b>const</b> slot_type&amp; slot);</a></code>
+<ul>
+  <li><b>Effects</b>: connects the given slot to the signal (i.e., <code>connect(slot)</code>), and associates this slot connection with the given group <code>group</code>. 
+  <li><b>Returns</b>: returns a <a
+  href="connection.html"><code>signals::connection</code></a> object
+  that references the newly-created connection between the signal and
+  the slot.</li> 
+  <li><b>Throws</b>: strong exception guarantee, where any exception
+  thrown will cause the slot to not be connected to the signal.</li> 
+  <li><b>Complexity</b>: <em>O(lg n)</em> where <em>n</em> is the
+        number of slots known to the signal.</li>
+  <li><b>Notes</b>: it is unspecified whether connecting a slot while
+  the signal is calling will result in the slot being called
+  immediately.</li> 
+</ul>
+
+<p><code><a name="group_disconnect"><b>void</b> disconnect(<b>const</b> group_type<b>&amp;</b> group);</a></code>
+<ul>
+  <li><b>Effects</b>: any slots in the given group are disconnected.</li>
+  <li><b>Throws</b>: will not throw unless a user destructor
+  throws. If a user destructor throws, not all slots in this group may
+  be disconnected. </li>
+  <li><b>Complexity</b>: <em>O(lg n) + k</em> where <em>n is the
+  number of slots known to the signal and <em>k</em> is the number of
+  .</li>
+</ul>
+
+<p><code><a name="disconnect_all"><b>void</b> disconnect_all_slots()</a>;</code>
+<ul>
+  <li><b>Effects</b>: disconnects all slots connected to the signal.</li>
+  <li><b>Postconditions</b>: <code>this-&gt;empty()</code>.</li>
+  <li><b>Throws</b>: if disconnecting a slot causes an exception to be
+  thrown, not all slots may be disconnected.</li>
+  <li><b>Complexity</b>: linear in the number of slots known to the signal.</li>
+  <li><b>Notes</b>: may be called at any time within the lifetime of
+  the signal, including during calls to the signal's slots.</li>
+</ul>
+
+<p><code><a name="empty"><b>bool</b> empty() <b>const</b></a>;</code>
+<ul>
+  <li><b>Returns</b>: returns <code><b>true</b></code> if no slots are connected to the signal, and <code><b>false</b></code> otherwise.</li>
+  <li><b>Throws</b>: will not throw.</li>
+  <li><b>Complexity</b>: linear in the number of slots known to the signal.</li>
+  <li><b>Rationale</b>: slots can disconnect at any point in time, including while those same slots are being invoked. It is therefore possible that the implementation must search through a list of disconnected slots to determine if any slots are still connected.</li>
+</ul>
+
+<hr><h3>Signal Invocation</h3>
+<p>
+<pre>
+<a name="function_call_operator">result_type <b>operator()</b>(T1 a1, T2 a2, ..., T<em>N</em> a<em>N</em>);</a>
+<a name="function_call_operator_const">result_type <b>operator()</b>(T1 a1, T2 a2, ..., T<em>N</em> a<em>N</em>) <b>const</b>;</a>
+</pre>
+<ul>
+  <li><b>Effects</b>: invokes the combiner with a
+  <code>slot_call_iterator</code> range <code>[first, last)</code>
+  (i.e., <code>combiner(first, last)</code>) that iterates over the
+  results of calling each slot with the given set of parameters
+  <code>a1, a2, ..., a<em>N</em></code>. Slots are called according to
+  the partial ordering given by the group comparison function object,
+  with ungrouped slots called last. </li>
+  <li><b>Returns</b>: the result returned by the combiner.</li>
+  <li><b>Throws</b>: if an exception is thrown by a slot call, or if the combiner does not dereference any slot past some given slot, all slots after that slot in the internal list of connected slots will not be invoked.</li>
+  <li><b>Notes</b>: the <code><b>const</b></code> version of the
+  function call operator will invoke the combiner as
+  <code><b>const</b></code>, whereas the non-<code><b>const</b></code>
+  version will invoke the combiner as non-<code><b>const</b></code>.
+  <p>Ordering between members of a  given group or between ungrouped
+  slots is unspecified.
+   <p> Calling the function call operator may invoke undefined behavior if no
+       slots are connected to the signal, depending on the combiner used. The
+       default combiner is well-defined for zero slots when the return type is
+       <code><b>void</b></code> but is undefined when the return type is any
+       other type (because there is no way to synthesize a return value).</li>
+
+</ul>
+    <hr>
+    <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
+<!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
+<!-- hhmts start -->
+Last modified: Fri May 17 10:18:50 EDT 2002
+<!-- hhmts end -->
+  </body>
+</html>

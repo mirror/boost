@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Boost.Signals</title>
+  </head>
+
+  <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+
+  <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86" ALT="Boost">Boost.Signals</h1>
+<p> The Boost.Signals library is an implementation of a managed signals and slots system. Signals represent callbacks with multiple targets, and are also called publishers or events in similar systems. Signals are connected to some set of slots, which are callback receivers (also called event targets or subscribers), which are called when the signal is "emitted."
+<p> Signals and slots are managed, in that signals and slots (or, more properly, objects that occur as part of the slots) track all connections and are capable of automatically disconnecting signal/slot connections when either is destroyed. This enables the user to make signal/slot connections without expending a great effort to manage the lifetimes of those connections with regard to the lifetimes of all objects involved.
+<p> When signals are connected to multiple slots, there is a question regarding the relationship between the return values of the slots and the return value of the signals. Boost.Signals allows the user to specify the manner in which multiple return values are combined.
+
+<h2>Table of Contents</h2>
+<ul>
+  <li><a href="tutorial.html">Tutorial</a></li>
+  <li>Reference
+  <ul>
+    <li> Class template <a href="reference/signal.html"><code>signal</code></a></li>
+    <li> Class templates <a href="reference/signalN.html"><code>signal<em>N</em></code></a></li>
+    <li> Class template <a href="reference/slot.html"><code>slot</code></a>
+</li>
+    <li> Class <a href="reference/trackable.html"><code>trackable</code></a></li>
+    <li> Class <a href="reference/connection.html"><code>connection</code></a></li>
+    <li> Class template <a href="reference/last_value.html"><code>last_value</code></a></li>
+    <li> Function template <a href="reference/visit_each.html"><code>visit_each</code></a></li>
+  </ul></li>
+  <li><a href="faq.html">Frequently Asked Questions</a></li>
+  <li><a href="design.html">Design of Boost.Signals</a></li>
+  <li><a href="design_rationale.html">Design Rationale and Comparisons with Other Signal/Slot Implementations</a></li>
+  <li><a href="history.html">Revision History</a>
+</ul>
+    <hr>
+    <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
+<!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
+<!-- hhmts start -->
+Last modified: Thu Feb 28 00:05:38 EST 2002
+<!-- hhmts end -->
+  </body>
+</html>

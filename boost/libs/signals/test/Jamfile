@@ -1,0 +1,37 @@
+subproject libs/signals/test ;
+
+exe signal_n_test : <lib>../build/boost_signals
+                    signal_n_test.cpp
+                  : <include>$(BOOST_ROOT)
+                  ;
+
+exe signal_test   : <lib>../build/boost_signals
+                    signal_test.cpp
+                  : <include>$(BOOST_ROOT)
+                  ;
+
+
+exe deletion_test : <lib>../build/boost_signals
+                    deletion_test.cpp
+                  : <include>$(BOOST_ROOT)
+                  ;
+
+exe trackable_test : <lib>../build/boost_signals
+                    trackable_test.cpp
+                  : <include>$(BOOST_ROOT)
+                  ;
+
+exe random_signal_system : <lib>../build/boost_signals
+                           random_signal_system.cpp
+                         : <include>$(BOOST_ROOT)
+                         ;
+
+exe dead_slot_test : <lib>../build/boost_signals
+                     dead_slot_test.cpp
+                   : <include>$(BOOST_ROOT)
+                   ;
+
+exe ordering_test : <lib>../build/boost_signals
+                    ordering_test.cpp
+                  : <include>$(BOOST_ROOT)
+                  ;

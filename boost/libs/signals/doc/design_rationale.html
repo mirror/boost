@@ -1,0 +1,374 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Boost.Signals Design Rationale</title>
+  </head>
+
+  <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+
+  <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86" ALT="Boost">Boost.Signals Design Rationale</h1>
+
+<p> This document describes the rationale behind some of the major
+  design decisions made for the Boost.Signals library. 
+
+<h2>Table of Contents</h2>
+<ul>
+  <li>Design Decisions and Rationale
+    <ul>
+      <li><a href="#slotdef">Choice of Slot Definitions</a></li>
+      <li><a href="#user_connect">User-level Connection Management</a></li>
+      <li><a href="#combiners">Combiner Interface</a></li>
+      <li><a href="#plus_equals">Connection Interfaces: += operator</a></li>
+      <li><a href="#trackable"><code>trackable</code> rationale</a></li>
+    </ul></li>
+  <li>Comparisons with other signals &amp; slots designs
+    <ul>
+      <li><a href="#libsigc">libsigc++</a></li>
+      <li><a href="#delegates">.NET delegates</a></li>
+    </ul></li>
+</ul>
+
+  <hr><h2><a name="slotdef">Choice of Slot Definitions</a></h2>
+  <p> The definition of a slot differs amongst signals and slots
+  libraries. Within Boost.Signals, a slot is defined in a very loose
+  manner: it can be any function object that is callable given
+  parameters of the types specified by the signal, and whose return
+  value is convertible to the result type expected by the
+  signal. However, alternative definitions have associated pros and
+  cons that were considered prior to the construction of
+  Boost.Signals.
+
+  <ul>
+    <li><b>Slots derive from a specific base class</b>: generally a
+    scheme such as this will require all user-defined slots to derive
+    from some library-specified <code>Slot</code> abstract class
+    that defines a virtual function calling the slot. Adaptors can be
+    used to convert a definition such as this to a definition similar
+    to that used by Boost.Signals, but in this case the original
+    specification ties the implementation to the use of virtual
+    functions internally. This approach does have the benefit of
+    simplicity of implementation and user interface, from an
+    object-oriented perspective.</li>
+
+    <li><b>Slots constructed from a set of primitives</b>: in this
+    scheme the slot can have a limited set of types (often derived
+    from a common abstract base class) that are constructed from some
+    library-defined set of primitives that often include conversions
+    from free function pointers and member function pointers, and a
+    limited set of binding capabilities. Such an approach is
+    reasonably simple and cover most common cases, but it does not
+    allow a large degree of flexibility in slot
+    construction. Libraries for function object composition have
+    become quite advanced and it is out of the scope of a signals and
+    slots library to encorporate such enhancements. Thus Boost.Signals
+    does not include argument binding or function object composition
+    primitives, but instead uses a set of well-defined interfaces to
+    discover information about the composition of arbitrary function
+    objects.</li>
+  </ul>
+
+  <p> Users not satisfied with the slot definition choice may opt to
+  replace the default slot function type with an alternative that
+  meets their specific needs.
+
+  <h2><a name="user_connect">User-level Connection Management</a></h2>
+  <p> Users need to have fine control over the connection of signals
+  to slots and their eventual disconnection. The approach taken by
+  Boost.Signals is to return a <a
+  href="reference/connection.html"><code>connection</code></a> object
+  that enables connected/disconnected query, manual disconnection, and
+  an automatic disconnection on destruction mode. Some other possible
+  interfaces include:
+  <ul>
+    <li><b>Pass slot to disconnect</b>: in this interface model, the
+    disconnection of a slot connected with
+    <code>sig.connect(slot)</code> is performed via
+    <code>sig.disconnect(slot)</code>. Internally, a linear search
+    using slot comparison is performed and the slot, if found, is
+    removed from the list. Unfortunately, querying connectedness will
+    generally also end up as linear-time operations. This model also
+    fails for implementation reasons when slots become more complex
+    than simple function pointers, member function pointers, and a
+    limited set of compositions and argument binders it is tough to
+    rely on comparison of function objects because arbitrary function
+    objects are not comparable.</li>
+    <li><b>Pass a token to disconnect</b>: this approach identifies
+    slots with a token that is easily comparable (e.g., a string),
+    enabling slots to be arbitrary function objects. While this
+    approach is essentially equivalent to the approach taken by
+    Boost.Signals, it is possibly more error-prone for several
+    reasons:
+    <ul>
+      <li>Connections and disconnections must be paired, so the
+      problem becomes similar to the problems incurred when pairing
+      <code>new</code> and <code>delete</code> for dynamic memory
+      allocation. While errors of this sort would not be catastrophic
+      for a signals and slots implementation, their detection is
+      generally nontrivial.</li>
+      <li>Tokens must be unique, otherwise two slots will have the
+      same name and will be indistinguishable. In environments where
+      many connections will be made dynamically, name generation
+      becomes an additional task for the user. Uniqueness of tokens
+      also results in an additional failure mode when attempting to
+      connect a slot using a token that has already been used. </li>
+      <li>More parameterization would be required, because the token
+      type must be user-defined. Additional parameterization steepens
+      the learning curver and overcomplicates a simple interface.</li>
+    </ul>
+    <p> This type of interface is supported in Boost.Signals via the
+          named connections mechanism. It augments the <a
+  href="reference/connection.html"><code>connection</code></a>
+          object-based connection management scheme.
+    </li>
+  </ul>
+
+  <h2><a name="combiners">Combiner Interface</a></h2>
+  <p> The Combiner interface was chosen to mimic a call to an
+  algorithm in the C++ standard library. It is felt that by viewing
+  slot call results as merely a sequence of values accessed by input
+  iterators, the combiner interface would be most natural to a
+  proficient C++ programmer. Competing interface design generally
+  required the combiners to be constructed to conform to an interface
+  that would be customized for (and limited to) the Signals
+  library. While these interfaces are generally enable more
+  straighforward implementation of the signals &amp; slots libraries,
+  the combiners are unfortunately not reusable (either in other
+  signals &amp; slots libraries or within other generic algorithms),
+  and the learning curve is steepened slightly to learn the specific
+  combiner interface.
+
+  <p> The Signals formulation of combiners is based on the combiner
+  using the "pull" mode of communication, instead of the more complex
+  "push" mechanism. With a "pull" mechanism, the combiner's state can
+  be kept on the stack and in the program counter, because whenever
+  new data is required (i.e., calling the next slot to retrieve its
+  return value), there is a simple interface to retrieve that data
+  immediately and without returning from the combiner's code. Contrast
+  this with the "push" mechanism, where the combiner must keep all
+  state in class members because the combiner's routines will be
+  invoked for each signal called. Compare, for example, a combiner
+  that returns the maximum element from calling the slots. If the
+  maximum element ever exceeds 100, no more slots are to be
+  called. 
+
+  <table border=1>
+    <tr>
+      <th>Pull</th>
+      <th>Push</th>
+    </tr>
+    <tr>
+      <td>
+  <pre>
+struct pull_max {
+  typedef int result_type;
+
+  template&lt;typename InputIterator&gt;
+  result_type operator()(InputIterator first,
+                         InputIterator last)
+  {
+    if (first == last)
+      throw std::runtime_error("Empty!");
+
+    int max_value = *first++;
+    while(first != last && *first &lt;= 100) {
+      if (*first &gt; max_value)
+        max_value = *first;
+      ++first;
+    }
+
+    return max_value;
+  }
+};
+  </pre>
+      </td>
+      <td>
+  <pre>
+struct push_max {
+  typedef int result_type;
+
+  push_max() : max_value(), got_first(false) {}
+
+  // returns false when we want to stop
+  bool operator()(int result) {
+    if (result &gt; 100)
+      return false;
+
+    if (!got_first) {
+      got_first = true;
+      max_value = result;
+      return true;
+    }
+
+    if (result &gt; max_value)
+      max_value = result;
+
+    return true;
+  }
+
+  int get_value() const 
+  { 
+    if (!got_first)
+      throw std::runtime_error("Empty!");
+    return max_value; 
+  }
+
+private:
+  int  max_value; 
+  bool got_first;
+};
+  </pre>
+      </td>
+    </tr>
+  </table>
+  <p>There are several points to note in these examples. The "pull"
+  version is a reusable function object that is based on an input
+  iterator sequence with an integer <code>value_type</code>, and is
+  very straightforward in design. The "push" model, on the other hand,
+  relies on an interface specific to the caller and is generally
+  reusable. It also requires extra state values to determine, for
+  instance, if any elements have been received. Though code quality
+  and ease-of-use is generally subjective, the "pull" model is clearly
+  shorter and more reusable and will often be construed as easier to
+  write and understand, even outside the context of a signals &amp;
+  slots library.
+
+  <p> The cost of the "pull" combiner interface is paid in the
+  implementation of the Signals library itself. To correctly handle
+  slot disconnections during calls (e.g., when the dereference
+  operator is invoked), one must construct the iterator to skip over
+  disconnected slots. Additionally, the iterator must carry with it
+  the set of arguments to pass to each slot (although a
+  reference to a structure containing those arguments suffices), and
+  must cache the result of calling the slot so that multiple
+  dereferences don't result in multiple calls. This apparently
+  requires a large degree of overhead, though if one considers the
+  entire process of invoking slots one sees that the overhead is
+  nearly equivalent to that in the "push" model, but we have inverted
+  the control structures to make iteration and dereference complex
+  (instead of making combiner state-finding complex).
+
+  <h2><a name="plus_equals">Connection Interfaces: +=  operator</a></h2>
+  <p> Boost.Signals supports a connection syntax with the form
+  <code>sig.connect(slot)</code>, but a more terse syntax <code>sig +=
+  slot</code> has been suggested (and has been used by other signals
+  &amp; slots implementations). There are several reasons as to why
+  this syntax has been rejected:
+  <ul>
+    <li><b>It's unnecessary</b>: the connection syntax supplied by
+    Boost.Signals is no less powerful that than supplied by the
+    signal. The savings in typing (<code>connect()</code>
+    vs. <code>+=</code>) is essentially negligible. Furthemore, one
+    could argue that calling <code>connect()</code> is more readable
+    than an overload of <code>+=</code>.
+
+    <li><b>Ambiguous return type</b>: 
+    there is an ambiguity concerning the return value of the
+    <code>+=</code> operation: should it be a reference to the signal
+    itself, to enable <code>sig += slot1 += slot2</code>, or should it
+    return a <code><a
+    href="reference/connection.html">connection</a></code> for the
+    newly-created signal/slot connection?</li>
+
+    <li><b>Gateway to operators -=, +</b>: when one has added a
+    connection operator <code>+=</code>, it seems natural to have a
+    disconnection operator <code>-=</code>. However, this presents
+    problems when the library allows arbitrary function objects to
+    implicitly become slots, because slots are no longer comparable
+    (see the discussion on this topic in <a
+    href="#user_connect">User-level Connection Management</a>). 
+
+    <p> The second obvious addition when one has
+    <code>operator+=</code> would be to add a <code>+</code> operator
+    that supports addition of multiple slots, followed by assignment
+    to a signal. However, this would require implementing
+    <code>+</code> such that it can accept any two function objects,
+    which is technically infeasible.
+  </ul>
+
+  <h2><a name="trackable"><code>trackable</code> rationale</a></h2>
+  <p> The <a href="doc/trackable.html"><code>trackable</code></a>
+      class is the primary user interface to automatic connection
+      lifetime management, and its design affects users directly. Two
+      issues stick out most: the odd copying behavior of
+      <code>trackable</code>, and the limitation requiring users to
+      derive from <code>trackable</code> to create types that can
+      participate in automatic connection management.
+
+    <h3><code>trackable</code> copying behavior</h3>
+    <p> The copying behavior of <code>trackable</code> is essentially
+      that <code>trackable</code> subobjects are never copied;
+      instead, the copy operation is merely a no-op. To understand
+      this, we look at the nature of a signal-slot connection and note
+      that the connection is based on the entities that are being
+      connected; when one of the entities is destroyed, the connection
+      is destroyed. Therefore, when a <code>trackable</code> subobject
+      is copied, we cannot copy the connections because the
+      connections don't refer to the target entity - they refer to the
+      source entity. This reason is dual to the reason signals are
+      noncopyable: the slots connected to them are connected to that
+      particular signal, not the data contained in the signal.
+
+    <h3>Why derivation from <code>trackable</code>?</h3>
+    <p> For <code>trackable</code> to work properly, there are two
+      constraints:
+      <ul>
+        <li><code>trackable</code> must have storage space to keep
+        track of all connections made to this object.</li>
+        <li><code>trackable</code> must be notified when the object is
+        being destructed so that it can disconnect its
+        connections.</li>
+      </ul>
+
+      Clearly, deriving from <code>trackable</code> meets these two
+    guidelines. We have not yet found a superior solution.
+
+  <hr><h2><a name="libsigc">libsigc++</a></h2>
+  <p> <a href="http://libsigc.sourceforge.net">libsigc++</a> is a C++ signals
+  &amp; slots library that originally started as part of an initiative
+  to wrap the C interfaces to <a href="http://www.gtk.org">GTK</a>
+  libraries in C++, and has grown to be a separate library maintained
+  by Karl Nelson. There are many similarities between libsigc++ and
+  Boost.Signals, and indeed Boost.Signals was strongly influenced by
+  Karl Nelson and libsigc++. A cursory inspection of each library will
+  find a similar syntax for the construction of signals and in the use
+  of connections and automatic connection lifetime management. There
+  are some major differences in design that separate these libraries:
+  <ul>
+    <li><b>Slot definitions</b>: slots in libsigc++ are created using
+    a set of primitives defined by the library. These primitives allow
+    binding of objects (as part of the library), explicit
+    adaptation from the argument and return types of the signal to the
+    argument and return types of the slot (libsigc++ is, by default, 
+    more strict about types than Boost.Signals). A discussion of this
+    approach with a comparison against the approach taken by 
+    Boost.Signals is given in 
+    <a href="#slotdef">Choice of Slot Definitions</a>.</li>
+
+    <li><b>Combiner/Marshaller interface</b>: the equivalent to
+    Boost.Signals combiners in libsigc++ are the
+    marshallers. Marshallers are similar to the "push" interface
+    described in <a href="#combiners">Combiner Interface</a>, and a
+    proper treatment of the topic is given there.</li>
+  </ul>
+
+   <h2><a name="delegates">.NET delegates</a></h2>
+   <p> <a href="http://www.microsoft.com">Microsoft</a> has introduced
+      the .NET Framework and an associated set of languages and language
+      extensions, one of which is the delgate. Delegates are similar
+      to signals and slots, but they are more limited than most C++
+      signals and slots implemetations in that they:
+   <ul>
+     <li>Require exact type matches between a delegate and what it is
+     calling</li>
+     <li>Do not allow return types</li>
+     <li>Must call a method with <code>this</code> already bound</li>
+   </ul>
+
+    <hr>
+    <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
+<!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
+<!-- hhmts start -->
+Last modified: Thu Feb 14 21:07:10 EST 2002
+<!-- hhmts end -->
+  </body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Boost.Signals Frequently Asked Questions</title>
+  </head>
+
+  <body>
+    <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86" ALT="Boost">Boost.Signals Frequently Asked Questions</h1>
+
+<h2>Q: Don't noncopyable signal semantics mean that a class with a signal member will be noncopyable as well?</h2>
+<p> No. The compiler will not be able to generate a copy
+      constructor or copy assignment operator for your class if it has
+      a signal as a member, but you are free to write your own copy
+      constructor and/or copy assignment operator. Just don't try to
+      copy the signal.</p>
+
+<h2>Q: Is Boost.Signals thread-safe?</h2>
+<p> No. Using Boost.Signals in a multithreaded concept is very
+      dangerous, and it is very likely that the results will be less
+      than satisfying. Boost.Signals will support thread safety in the
+      future.</p>
+
+    <hr>
+    <address><a href="mailto:gregod@cs.rpi.edu"></a></address>
+<!-- Created: Wed Feb 27 23:53:03 EST 2002 -->
+<!-- hhmts start -->
+Last modified: Thu Feb 28 00:05:16 EST 2002
+<!-- hhmts end -->
+  </body>
+</html>

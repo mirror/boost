@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Boost.Signals: header &lt;boost/signal.hpp&gt;</title>
+  </head>
+
+  <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
+
+  <h1><IMG SRC="../../../../c++boost.gif" WIDTH="276" HEIGHT="86" ALT="Boost">Boost.Signals: header <code>&lt;boost/signal.hpp&gt;</code></h1>
+
+<h2>Header</h2>
+<pre>
+#include &lt;<a href="../../../../boost/signal.hpp">boost/signal.hpp</a>&gt;
+</pre>
+<h2>Synopsis</h2>
+<p> The specification form for the <code>signal</code> class template uses two positive integers, <em>BOOST_SIGNALS_MAX_ARGS</em> and <em>N</em>. The former describes the maximum number of function parameters that may be passed onto the underlying slots, whereas the latter describes the number of function parameters for a given instantiation of <code>signal</code>. <em>BOOST_SIGNALS_MAX_ARGS</em> is present in the header as a preprocessor macro defining the maximum number of arguments supported by the implementation.
+<pre>
+<b>namespace</b> boost {
+  <b>template</b>&lt;<b>typename</b> R,
+           <b>typename</b> T1 = <em>implementation-defined</em>,
+           <b>typename</b> T2 = <em>implementation-defined</em>,
+           ...
+           <b>typename</b> T<em>BOOST_SIGNALS_MAX_ARGS</em> = <em>implementation-defined</em> &gt;
+  <b>class</b> signal : <b>public</b> <a href="signalN.html">signal<em>N</em></a>&lt;R, T1, T2, ..., T<em>N</em>&gt;
+  {
+    <b>template</b>&lt;<b>typename</b> Combiner&gt;
+    <b>struct</b> combiner {
+      <b>typedef</b> signal<em>N</em>&lt;R, T1, T2, ..., T<em>N</em>, Combiner&gt; type;
+    };
+  };
+}
+</pre>
+
+    <hr>
+    <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
+<!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
+<!-- hhmts start -->
+Last modified: Thu Feb 14 21:14:32 EST 2002
+<!-- hhmts end -->
+  </body>
+</html>
