@@ -16,5 +16,9 @@
 #  define BOOST_NO_STD_WSTRING
 #endif
  
-
+#ifndef _GLIBCPP_USE_LONG_LONG
+// May have been set by compiler/*.hpp, but "long long" without library
+// support is useless.
+#  undef BOOST_HAS_LONG_LONG
+#endif
 
