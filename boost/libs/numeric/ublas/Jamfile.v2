@@ -49,7 +49,6 @@ test-suite numeric/uBLAS
         : # input files
         : # requirements
             <define>$(UBLAS_TESTSET)
-            <toolset>intel-linux:<cxxflags>"-fpstkchk"	# Try and pick up runtime failures
             <toolset>vacpp:<define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test2/test2.cpp
@@ -100,6 +99,9 @@ test-suite numeric/uBLAS
 #            <define>$(UBLAS_TESTSET)
 #            <toolset>vacpp:<define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
 #      ]
+
+      [ run test/placement_new.cpp
+      ]
       [ compile concepts.cpp
         : # requirements
             <define>EXTERNAL
