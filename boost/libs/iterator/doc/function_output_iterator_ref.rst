@@ -9,7 +9,9 @@
     typedef void                     pointer;
     typedef void                     reference;
 
-    explicit function_output_iterator(const UnaryFunction& f = UnaryFunction());
+    explicit function_output_iterator();
+
+    explicit function_output_iterator(const UnaryFunction& f);
 
     /* see below */ operator*();
     function_output_iterator& operator++();
