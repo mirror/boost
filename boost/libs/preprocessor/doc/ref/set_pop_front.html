@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title>BOOST_PP_SET_POP_FRONT</title>
+	<link rel="stylesheet" type="text/css" href="../styles.css">
+</head>
+<body>
+	<div style="margin-left:  0px;">
+		The <b>BOOST_PP_SET_POP_FRONT</b> macro pops an element from the beginning of a <i>set</i>.
+	</div>
+	<h4>Usage</h4>
+		<div class="code">
+			<b>BOOST_PP_SET_POP_FRONT</b>(<i>set</i>)
+		</div>
+	<h4>Arguments</h4>
+		<dl>
+			<dt>set</dt>
+			<dd>
+				The <i>set</i> to pop an element from.
+			</dd>
+		</dl>
+	<h4>Remarks</h4>
+		<div>
+			This macro returns <i>set</i> after removing the first element.&nbsp;
+		</div>
+	<h4>See Also</h4>
+		<ul>
+			<li><a href="set_pop_back.html">BOOST_PP_SET_POP_BACK</a></li>
+		</ul>
+	<h4>Requirements</h4>
+		<div>
+			<b>Header:</b> &nbsp;<a href="../headers/set/pop_front.hpp.html">&lt;boost/preprocessor/set/pop_front.hpp&gt;</a>
+		</div>
+	<h4>Sample Code</h4>
+<div><pre>
+#include &lt;<a href="../headers/set/pop_front.hpp.html">boost/preprocessor/set/pop_front.hpp</a>&gt;
+
+#define SET (a)(b)(c)
+
+<a href="set_pop_front.html">BOOST_PP_SET_POP_FRONT</a>(SET) // expands to (b)(c)
+</pre></div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<html>
+<head>
+	<title>BOOST_PP_SET_ENUM</title>
+	<link rel="stylesheet" type="text/css" href="../styles.css">
+</head>
+<body>
+	<div style="margin-left:  0px;">
+		The <b>BOOST_PP_SET_ENUM</b> macro enumerates the elements in a <i>set</i>.
+	</div>
+	<h4>Usage</h4>
+		<div class="code">
+			<b>BOOST_PP_SET_ENUM</b>(<i>set</i>)
+		</div>
+	<h4>Arguments</h4>
+		<dl>
+			<dt>set</dt>
+			<dd>
+				The <i>set</i> from whose elements are to be enumerated.
+			</dd>
+		</dl>
+	<h4>Remarks</h4>
+		<div>
+			This macro expands to a comma-separated list of the elements in <i>set</i>.&nbsp;
+			For example, <b>BOOST_PP_SET_ENUM</b>((<i>x</i>)(<i>y</i>)(<i>z</i>)) expands to...
+			<div>
+				<i>x</i>, <i>y</i>, <i>z</i>
+			</div>
+		</div>
+	<h4>Requirements</h4>
+		<div>
+			<b>Header:</b> &nbsp;<a href="../headers/set/enum.hpp.html">&lt;boost/preprocessor/set/enum.hpp&gt;</a>
+		</div>
+	<h4>Sample Code</h4>
+<div><pre>
+#include &lt;<a href="../headers/set/enum.hpp.html">boost/preprocessor/set/enum.hpp</a>&gt;
+
+#define SET (B)(O)(O)(S)(T)
+
+<a href="set_enum.html">BOOST_PP_SET_ENUM</a>(SET) // expands to B, O, O, S, T
+</pre></div>
+</body>
+</html>

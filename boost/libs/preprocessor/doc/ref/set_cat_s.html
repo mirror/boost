@@ -1,0 +1,39 @@
+<html>
+<head>
+	<title>BOOST_PP_SET_CAT_S</title>
+	<link rel="stylesheet" type="text/css" href="../styles.css">
+</head>
+<body>
+	<div style="margin-left:  0px;">
+		The <b>BOOST_PP_SET_CAT_S</b> macro concatenates all elements in a <i>set</i>.&nbsp;
+		It reenters <b>BOOST_PP_SET_FOLD_LEFT</b> with maximum efficiency.
+	</div>
+	<h4>Usage</h4>
+		<div class="code">
+			<b>BOOST_PP_SET_CAT_S</b>(<i>s</i>, <i>list</i>)
+		</div>
+	<h4>Arguments</h4>
+		<dl>
+			<dt>s</dt>
+			<dd>
+				The next available <b>BOOST_PP_SET_FOLD_LEFT</b> fold step.
+			</dd>
+			<dt>set</dt>
+			<dd>
+				The <i>set</i> whose elements are to be concatenated.
+			</dd>
+		</dl>
+	<h4>Remarks</h4>
+		<div>
+			Elements are concatenated left-to-right starting with index <i>0</i>.
+		</div>
+	<h4>See Also</h4>
+		<ul>
+			<li><a href="set_cat.html">BOOST_PP_SET_CAT</a></li>
+		</ul>
+	<h4>Requirements</h4>
+		<div>
+			<b>Header:</b> &nbsp;<a href="../headers/set/cat.hpp.html">&lt;boost/preprocessor/set/cat.hpp&gt;</a>
+		</div>
+</body>
+</html>
