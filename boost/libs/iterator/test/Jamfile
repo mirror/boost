@@ -30,6 +30,8 @@ test-suite iterator
     [ run filter_iterator_test.cpp ]
     [ run reverse_iterator_test.cpp ]
     [ run counting_iterator_test.cpp ]
+    [ run permutation_iterator_test.cpp : : : # <stlport-iostream>on 
+    ]
       
     [ run ../../utility/iterator_adaptor_examples.cpp ]
     [ run ../../utility/counting_iterator_example.cpp ]

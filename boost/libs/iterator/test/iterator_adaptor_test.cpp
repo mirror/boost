@@ -30,13 +30,6 @@ struct my_iterator_tag : public std::random_access_iterator_tag { };
 
 using boost::dummyT;
 
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-typedef std::pair<int,int> intpair;
-BOOST_TT_BROKEN_COMPILER_SPEC(intpair)
-BOOST_TT_BROKEN_COMPILER_SPEC(dummyT)
-#endif
-
-
 struct mult_functor {
   typedef int result_type;
   typedef int argument_type;

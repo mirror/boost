@@ -50,12 +50,10 @@ int main(int, char*[])
   
   // Example of using make_indirect_iterator()
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
   std::copy(boost::make_indirect_iterator(pointers_to_chars), 
             boost::make_indirect_iterator(pointers_to_chars + N),
             std::ostream_iterator<char>(std::cout, ","));
   std::cout << std::endl;
-#endif
   
   return 0;
 }

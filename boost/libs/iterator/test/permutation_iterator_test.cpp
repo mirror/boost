@@ -9,6 +9,7 @@
 #include <boost/test/minimal.hpp>
 
 #include <boost/iterator/permutation_iterator.hpp>
+#include <boost/static_assert.hpp>
 
 #include <vector>
 #include <list>
@@ -23,8 +24,9 @@ void permutation_test()
   typedef std::list< int > index_type;
 
   const int element_range_size = 10;
-  const int index_size = 4;
+  const int index_size = 7;
 
+  BOOST_STATIC_ASSERT(index_size <= element_range_size);
   element_range_type elements( element_range_size );
   for( element_range_type::iterator el_it = elements.begin(); el_it != elements.end(); ++el_it )
     { *el_it = std::distance(elements.begin(), el_it); }
@@ -34,57 +36,42 @@ void permutation_test()
     { *i_it = element_range_size - index_size + std::distance(indices.begin(), i_it); }
   std::reverse( indices.begin(), indices.end() );
 
-#ifdef BOOST_MSVC
-
-  typedef boost::permutation_iterator< element_range_type::iterator
-                                     , index_type::iterator
-                                     , boost::use_default
-                                     , boost::use_default
-                                     , element_range_type::reference > permutation_type;
-
-  permutation_type begin( elements.begin(), indices.begin() );
-  permutation_type it = begin;
-  permutation_type end( elements.begin(), indices.end() );
-
-#else
-
   typedef boost::permutation_iterator< element_range_type::iterator, index_type::iterator > permutation_type;
   permutation_type begin = boost::make_permutation_iterator( elements.begin(), indices.begin() );
   permutation_type it = begin;
   permutation_type end = boost::make_permutation_iterator( elements.begin(), indices.end() );
-
-#endif
 
   BOOST_CHECK( it == begin );
   BOOST_CHECK( it != end );
 
   BOOST_CHECK( std::distance( begin, end ) == index_size );
 
-  for( index_type::iterator i_it = indices.begin(); it != end; ++i_it, ++it )
+  for( index_type::iterator i_it1 = indices.begin(); it != end; ++i_it1, ++it )
   {
-    BOOST_CHECK( *it == elements[ *i_it ] );
+    BOOST_CHECK( *it == elements[ *i_it1 ] );
   }
 
   it = begin;
-  for( int i = 0; i < index_size ; i+=2, it+=2 ) 
+  for( int i1 = 0; i1 < index_size - 1 ; i1+=2, it+=2 ) 
   {
-    index_type::iterator i_it = indices.begin(); std::advance( i_it, i );
-    BOOST_CHECK( *it == elements[ *i_it ] );
+    index_type::iterator i_it2 = indices.begin();
+    std::advance( i_it2, i1 );
+    BOOST_CHECK( *it == elements[ *i_it2 ] );
   }
 
 
   it = begin + (index_size);
-  BOOST_CHECK( it != begin );
-  for( index_type::iterator i_it = --indices.end(); it-- != begin; --i_it ) 
+  for( index_type::iterator i_it3 = indices.end(); it != begin; ) 
   {
-    BOOST_CHECK( *it == elements[ *i_it ] );
+    BOOST_CHECK( *--it == elements[ *--i_it3 ] );
   }
   
-  it = begin + (index_size - 1);
-  for( int i = 0; i < index_size; i+=2, it-=2 ) 
+  it = begin + index_size;
+  for( int i2 = 0; i2 < index_size - 1; i2+=2, --it ) 
   {
-    index_type::iterator i_it = --indices.end(); std::advance( i_it, -i );
-    BOOST_CHECK( *it == elements[ *i_it ] );
+    index_type::iterator i_it4 = --indices.end();
+    std::advance( i_it4, -i2 );
+    BOOST_CHECK( *--it == elements[ *i_it4 ] );
   }
 
 }
@@ -93,9 +80,5 @@ void permutation_test()
 int test_main(int, char *[])
 {
   permutation_test();
-
-  bool error_on_purpose = false;
-  //BOOST_CHECK( error_on_purpose );
-
   return 0;
 }
