@@ -13,6 +13,7 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <algorithm>
+#include <boost/detail/allocator.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/at.hpp>
@@ -22,7 +23,6 @@
 #include <boost/mpl/size.hpp>
 #include <boost/multi_index_container_fwd.hpp>
 #include <boost/multi_index/detail/access_specifier.hpp>
-#include <boost/multi_index/detail/allocator.hpp>
 #include <boost/multi_index/detail/base_type.hpp>
 #include <boost/multi_index/detail/converter.hpp>
 #include <boost/multi_index/detail/def_ctor_tuple_cons.hpp>
@@ -53,7 +53,7 @@ namespace multi_index{
 template<typename Value,typename IndexSpecifierList,typename Allocator>
 class multi_index_container:
   private base_from_member<
-    typename detail::allocator::rebind_to<
+    typename boost::detail::allocator::rebind_to<
       Allocator,
       typename detail::multi_index_node_type<
         Value,IndexSpecifierList,Allocator>::type
@@ -74,7 +74,7 @@ private:
   typedef typename detail::multi_index_base_type<
       Value,IndexSpecifierList,Allocator>::type   super;
   typedef base_from_member<
-    typename detail::allocator::rebind_to<
+    typename boost::detail::allocator::rebind_to<
       Allocator,
       typename super::node_type
     >::type>                                      bfm_allocator;

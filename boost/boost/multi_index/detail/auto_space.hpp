@@ -9,8 +9,8 @@
 #ifndef BOOST_MULTI_INDEX_DETAIL_AUTO_SPACE_HPP
 #define BOOST_MULTI_INDEX_DETAIL_AUTO_SPACE_HPP
 
+#include <boost/detail/allocator.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/multi_index/detail/allocator.hpp>
 #include <memory>
 
 namespace boost{
@@ -50,9 +50,10 @@ struct auto_space:private noncopyable
   T* data()const{return data_;}
     
 private:
-  typename allocator::rebind_to<Allocator,T>::type al_;
-  std::size_t                                      n_;
-  T*                                               data_;
+  typename boost::detail::allocator::rebind_to<
+    Allocator,T>::type                          al_;
+  std::size_t                                   n_;
+  T*                                            data_;
 };
 
 } /* namespace multi_index::detail */

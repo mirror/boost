@@ -43,9 +43,10 @@ protected:
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>       final_type;
   typedef tuples::null_type                   ctor_args_list;
-  typedef typename allocator::rebind_to<
-    Allocator,
-    typename Allocator::value_type>::type     final_allocator_type;
+  typedef typename 
+    boost::detail::allocator::rebind_to<
+      Allocator,
+      typename Allocator::value_type>::type   final_allocator_type;
   typedef mpl::vector0<>                      index_type_list;
   typedef mpl::vector0<>                      iterator_type_list;
   typedef mpl::vector0<>                      const_iterator_type_list;
@@ -65,19 +66,19 @@ protected:
 
   node_type* insert_(value_param_type v,node_type* x)
   {
-    detail::allocator::construct(&x->value,v);
+    boost::detail::allocator::construct(&x->value,v);
     return x;
   }
 
   node_type* insert_(value_param_type v,node_type*,node_type* x)
   {
-    detail::allocator::construct(&x->value,v);
+    boost::detail::allocator::construct(&x->value,v);
     return x;
   }
 
   void erase_(node_type* x)
   {
-    detail::allocator::destroy(&x->value);
+    boost::detail::allocator::destroy(&x->value);
   }
 
   void swap_(index_base<Value,IndexSpecifierList,Allocator>&){}

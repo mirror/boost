@@ -65,7 +65,7 @@ public:
   {
     if(!released){
       for(std::size_t i=0;i<n;++i){
-        allocator::destroy(&spc.data()[i].second->value);
+        boost::detail::allocator::destroy(&spc.data()[i].second->value);
         deallocate(spc.data()[i].second);
       }
     }
@@ -79,7 +79,8 @@ public:
     spc.data()[n].first=node;
     spc.data()[n].second=al_.allocate(1);
     BOOST_TRY{
-      allocator::construct(&spc.data()[n].second->value,node->value);
+      boost::detail::allocator::construct(
+        &spc.data()[n].second->value,node->value);
     }
     BOOST_CATCH(...){
       deallocate(spc.data()[n].second);
@@ -104,13 +105,14 @@ public:
   }
 
 private:
-  typename allocator::rebind_to<Allocator,Node>::type al_;
-  std::size_t                                         size_;
-  auto_space<copy_map_entry<Node>,Allocator>          spc;
-  std::size_t                                         n;
-  Node*                                               header_org_;
-  Node*                                               header_cpy_;
-  bool                                                released;
+  typename boost::detail::allocator::rebind_to<
+    Allocator,Node>::type                       al_;
+  std::size_t                                   size_;
+  auto_space<copy_map_entry<Node>,Allocator>    spc;
+  std::size_t                                   n;
+  Node*                                         header_org_;
+  Node*                                         header_cpy_;
+  bool                                          released;
 
   void deallocate(Node* node)
   {
