@@ -37,6 +37,7 @@
 #include <cstdio>
 #include <list>
 #include <cctype>
+#include <ios>
 #include <iostream>
 #include <map>
 #include <boost/regex/regex_traits.hpp>
