@@ -477,7 +477,7 @@
 
 //  end of compiler specific portion  ----------------------------------------//
 
-#if defined(BOOST_NO_LIMITS) || (defined(_RWSTD_VER) && defined(__BORLANDC__) && _RWSTD_VER < 0x020300) || (defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x410 && __STL_STATIC_CONST_INIT_BUG)
+#if defined(BOOST_NO_LIMITS) || (defined(_RWSTD_VER) && defined(__BORLANDC__) && _RWSTD_VER < 0x020300) || (defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x410 && defined(__STL_STATIC_CONST_INIT_BUG))
 // STLPort 4.0 doesn't define the static constants in numeric_limits<> so that they
 // can be used at compile time if the compiler bug indicated by
 // __STL_STATIC_CONST_INIT_BUG is present.
@@ -547,6 +547,7 @@ namespace std {
 #endif
 
 #endif  // BOOST_CONFIG_HPP
+
 
 
 
