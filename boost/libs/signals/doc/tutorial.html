@@ -26,6 +26,48 @@ working knowledge of the <em>Beginner</em> and <em>Intermediate</em>
 topics; most users will not need to read the <em>Advanced</em>
 sections. 
 
+<h2>Compatibility Note</h2>
+<p> Boost.Signals has two syntactical forms: the preferred form and
+the compatibility form. The preferred form fits more closely with the
+C++ language and reduces the number of separate template parameters
+that need to be considered, often improving readability; however, the
+preferred form is not supported on all platforms due to compiler
+bugs. The compatible form will work on all compilers supported by
+Boost.Signals. Consult the table below to determine which syntactic
+form to use for your compiler. Users of <a
+href="../../function/index.html">Boost.Function</a>, please note that
+the preferred syntactic form in Signals is equivalent to that of
+Function's preferred syntactic form.
+
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th bgcolor="#008080">Compatible Syntax</th></tr>
+          <tr>
+            <td>
+              <ul>
+                <li>GNU C++ 2.95.x, 3.0.x, 3.1.x</li>
+                <li>Comeau C++ 4.2.45.2</li>
+                <li>SGI MIPSpro 7.3.0</li>
+                <li>Intel C++ 5.0, 6.0</li>
+                <li>Compaq's cxx 6.2</li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li>Microsoft Visual C++ 6.0, 7.0</li>
+                <li>Borland C++ 5.5.1</li>
+                <li>Sun WorkShop 6 update 2 C++ 5.3</li>
+                <li>Metrowerks CodeWarrior 8.1</li>
+              </ul>
+            </td>
+          </tr>
+      </table>
+      </center>
+
+<p> If your compiler does not appear in this list, please try the
+preferred syntax and report your results to the Boost list so that we
+can keep this table up-to-date.
+
 <h2>Outline</h2>
 
 <ul>
@@ -41,7 +83,6 @@ sections.
     <ul>
       <li><em>Beginner:</em> <a href="#slot_arguments">Slot
       Arguments</a></li>
-      <li><em>Beginner:</em> <a href="#signalN">Numbered Signals</a></li>
       <li><em>Advanced:</em> <a href="#return_values">Signal Return
       Values</a></li>
     </ul></li>
@@ -55,14 +96,18 @@ sections.
 
 <h2><a name="hello_world">Hello, World!</a></h2>
 <p> The following example writes "Hello, World!" using signals and
-slots. First, we create a signal <code>sig</code> giving it the type
-<code>boost::signal&lt;void&gt;</code>, meaning "a signal that takes
-no arguments and has a void return value". Next, we connect the
+slots. First, we create a signal <code>sig</code>, a signal that takes
+no arguments and has a void return value. Next, we connect the
 <code>hello</code> function object to the signal using the
 <code>connect</code> method. Finally, use the signal <code>sig</code>
 like a function to call the slots, which in turns invokes
 <code>HelloWorld::operator()</code> to print "Hello, World!".
 
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th
+          bgcolor="#008080">Compatible Syntax</th></tr>
+<tr><td>
 <pre>
 struct HelloWorld 
 {
@@ -75,7 +120,7 @@ struct HelloWorld
 // ...
 
 // Signal with no arguments and a void return value
-boost::signal&lt;void&gt; sig;
+boost::signal&lt;void ()&gt; sig;
 
 // Connect a HelloWorld slot
 HelloWorld hello;
@@ -84,6 +129,30 @@ sig.connect(hello);
 // Call all of the slots
 sig();
 </pre>
+</td><td>
+<pre>
+struct HelloWorld 
+{
+  void operator()() const 
+  { 
+    std::cout &lt;&lt; "Hello, World!" &lt;&lt; std::endl;
+  } 
+};
+
+// ...
+
+// Signal with no arguments and a void return value
+boost::signal0&lt;void&gt; sig;
+
+// Connect a HelloWorld slot
+HelloWorld hello;
+sig.connect(hello);
+
+// Call all of the slots
+sig();
+</pre>
+</td></tr>
+</table></center>
 
 <hr><h1>Calling multiple slots</h1>
 <h2><a name="multiple_slots">Connecting multiple slots</a></h2>
