@@ -68,7 +68,9 @@ namespace std {
 # define BOOST_NO_PRIMARY_CODECVT_DEFINITION
 #endif
 
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION) || \
+    defined(__GLIBCPP__) || defined(__GLIBCXX__) \
+    /**/
 # define BOOST_EMPTY_PRIMARY_CODECVT_DEFINITION
 #endif
 
