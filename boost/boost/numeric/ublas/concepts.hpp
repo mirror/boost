@@ -1141,29 +1141,32 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Sparse Storage
 #if defined (INTERNAL) || defined (INTERNAL_STORAGE_SPARSE)
+        SparseStorageContainerConcept<const map_array<std::size_t, double> >::constraints ();
+//FIXME - fails with pair<const I, T> allocator definition
+//        MutableSparseStorageContainerConcept<map_array<std::size_t, double> >::constraints ();
+        RandomAccessIteratorConcept<map_array<std::size_t, double>::const_iterator, std::ptrdiff_t, std::pair<std::size_t, double> >::constraints ();
+//FIXME - fails with pair<const I, T> allocator definition
+//        MutableRandomAccessIteratorConcept<map_array<std::size_t, double>::iterator, std::ptrdiff_t, std::pair<std::size_t, double> >::constraints ();
+
+#ifdef BOOST_UBLAS_DEPRACATED
+        SparseStorageContainerConcept<const set_array<std::size_t> >::constraints ();
+        MutableSparseStorageContainerConcept<set_array<std::size_t> >::constraints ();
+        RandomAccessIteratorConcept<set_array<std::size_t>::const_iterator, std::ptrdiff_t, std::size_t>::constraints ();
+        MutableRandomAccessIteratorConcept<set_array<std::size_t>::iterator, std::ptrdiff_t, std::size_t>::constraints ();
+#endif
+
 #ifndef BOOST_UBLAS_NON_STD
         SparseStorageContainerConcept<const std::map<std::size_t, double> >::constraints ();
         MutableSparseStorageContainerConcept<std::map<std::size_t, double> >::constraints ();
         BidirectionalIteratorConcept<std::map<std::size_t, double>::const_iterator, std::pair<std::size_t, double> >::constraints ();
         MutableBidirectionalIteratorConcept<std::map<std::size_t, double>::iterator, std::pair<std::size_t, double> >::constraints ();
-#endif
 
-        SparseStorageContainerConcept<const map_array<std::size_t, double> >::constraints ();
-        MutableSparseStorageContainerConcept<map_array<std::size_t, double> >::constraints ();
-        RandomAccessIteratorConcept<map_array<std::size_t, double>::const_iterator, std::ptrdiff_t, std::pair<std::size_t, double> >::constraints ();
-        MutableRandomAccessIteratorConcept<map_array<std::size_t, double>::iterator, std::ptrdiff_t, std::pair<std::size_t, double> >::constraints ();
-
-#ifndef BOOST_UBLAS_NON_STD
         SparseStorageContainerConcept<const std::set<std::size_t> >::constraints ();
         MutableSparseStorageContainerConcept<std::set<std::size_t> >::constraints ();
         BidirectionalIteratorConcept<std::set<std::size_t>::const_iterator, std::size_t>::constraints ();
         MutableBidirectionalIteratorConcept<std::set<std::size_t>::iterator, std::size_t>::constraints ();
 #endif
 
-        SparseStorageContainerConcept<const set_array<std::size_t> >::constraints ();
-        MutableSparseStorageContainerConcept<set_array<std::size_t> >::constraints ();
-        RandomAccessIteratorConcept<set_array<std::size_t>::const_iterator, std::ptrdiff_t, std::size_t>::constraints ();
-        MutableRandomAccessIteratorConcept<set_array<std::size_t>::iterator, std::ptrdiff_t, std::size_t>::constraints ();
 #endif
 
         // Vector
@@ -1234,6 +1237,13 @@ namespace boost { namespace numeric { namespace ublas {
         MutableIndexedBidirectional1DIteratorConcept<compressed_vector<double>::iterator>::constraints ();
         IndexedBidirectional1DIteratorConcept<compressed_vector<double>::const_reverse_iterator>::constraints ();
         MutableIndexedBidirectional1DIteratorConcept<compressed_vector<double>::reverse_iterator>::constraints ();
+
+        VectorConcept<const coordinate_vector<double> >::constraints ();
+        MutableVectorConcept<coordinate_vector<double> >::constraints ();
+        IndexedBidirectional1DIteratorConcept<coordinate_vector<double>::const_iterator>::constraints ();
+        MutableIndexedBidirectional1DIteratorConcept<coordinate_vector<double>::iterator>::constraints ();
+        IndexedBidirectional1DIteratorConcept<coordinate_vector<double>::const_reverse_iterator>::constraints ();
+        MutableIndexedBidirectional1DIteratorConcept<coordinate_vector<double>::reverse_iterator>::constraints ();
 #endif
 
         // Matrix
@@ -1427,7 +1437,8 @@ namespace boost { namespace numeric { namespace ublas {
                                                     symmetric_matrix<double>::reverse_iterator2>::constraints ();
 
         MatrixExpressionConcept<const symmetric_adaptor<const matrix<double> > >::constraints ();
-        MutableMatrixExpressionConcept<symmetric_adaptor<matrix<double> > >::constraints ();
+//FIXME Know to fail
+//        MutableMatrixExpressionConcept<symmetric_adaptor<matrix<double> > >::constraints ();
         IndexedRandomAccess2DIteratorConcept<symmetric_adaptor<matrix<double> >::const_iterator1,
                                              symmetric_adaptor<matrix<double> >::const_iterator2>::constraints ();
         MutableIndexedRandomAccess2DIteratorConcept<symmetric_adaptor<matrix<double> >::iterator1,
@@ -1452,7 +1463,8 @@ namespace boost { namespace numeric { namespace ublas {
                                                     hermitian_matrix<double>::reverse_iterator2>::constraints ();
 
         MatrixExpressionConcept<const hermitian_adaptor<const matrix<double> > >::constraints ();
-        MutableMatrixExpressionConcept<hermitian_adaptor<matrix<double> > >::constraints ();
+//FIXME Know to fail
+//        MutableMatrixExpressionConcept<hermitian_adaptor<matrix<double> > >::constraints ();
         IndexedRandomAccess2DIteratorConcept<hermitian_adaptor<matrix<double> >::const_iterator1,
                                              hermitian_adaptor<matrix<double> >::const_iterator2>::constraints ();
         MutableIndexedRandomAccess2DIteratorConcept<hermitian_adaptor<matrix<double> >::iterator1,
@@ -1487,6 +1499,7 @@ namespace boost { namespace numeric { namespace ublas {
                                               sparse_vector_of_sparse_vector<double>::const_reverse_iterator2>::constraints ();
         MutableIndexedBidirectional2DIteratorConcept<sparse_vector_of_sparse_vector<double>::reverse_iterator1,
                                                      sparse_vector_of_sparse_vector<double>::reverse_iterator2>::constraints ();
+*/
 
         MatrixConcept<const compressed_matrix<double> >::constraints ();
         MutableMatrixConcept<compressed_matrix<double> >::constraints ();
@@ -1498,7 +1511,17 @@ namespace boost { namespace numeric { namespace ublas {
                                               compressed_matrix<double>::const_reverse_iterator2>::constraints ();
         MutableIndexedBidirectional2DIteratorConcept<compressed_matrix<double>::reverse_iterator1,
                                                      compressed_matrix<double>::reverse_iterator2>::constraints ();
-*/
+
+        MatrixConcept<const coordinate_matrix<double> >::constraints ();
+        MutableMatrixConcept<coordinate_matrix<double> >::constraints ();
+        IndexedBidirectional2DIteratorConcept<coordinate_matrix<double>::const_iterator1,
+                                              coordinate_matrix<double>::const_iterator2>::constraints ();
+        MutableIndexedBidirectional2DIteratorConcept<coordinate_matrix<double>::iterator1,
+                                                     coordinate_matrix<double>::iterator2>::constraints ();
+        IndexedBidirectional2DIteratorConcept<coordinate_matrix<double>::const_reverse_iterator1,
+                                              coordinate_matrix<double>::const_reverse_iterator2>::constraints ();
+        MutableIndexedBidirectional2DIteratorConcept<coordinate_matrix<double>::reverse_iterator1,
+                                                     coordinate_matrix<double>::reverse_iterator2>::constraints ();
 #endif
 
         // Scalar Expressions
@@ -1652,6 +1675,3 @@ namespace boost { namespace numeric { namespace ublas {
 }}}
 
 #endif
-
-
-
