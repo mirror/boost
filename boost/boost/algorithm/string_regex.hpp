@@ -16,7 +16,7 @@
 */
 
 #include <boost/regex.hpp>
-#include <boost/string_algo.hpp>
+#include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/regex.hpp>
 
 #endif  // BOOST_STRING_ALGO_REGEX_HPP
