@@ -1011,8 +1011,9 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename M::vector_temporary_type vector_temporary_type;
-        typedef typename M::matrix_temporary_type matrix_temporary_type;
+        // Replaced by _temporary_traits to avoid type requirements on M
+        //typedef typename M::vector_temporary_type vector_temporary_type;
+        //typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  packed_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -1927,6 +1928,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const value_type const_value_type;
         static const_value_type zero_;
     };
+
+    // Specialization for temporary_traits
+    template <class M>
+    struct vector_temporary_traits< banded_adaptor<M> >
+    : vector_temporary_traits< M > {} ;
+
+    template <class M>
+    struct matrix_temporary_traits< banded_adaptor<M> >
+    : matrix_temporary_traits< M > {} ;
+
 
     template<class M>
     typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_;

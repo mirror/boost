@@ -1139,6 +1139,7 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        // Replaced by _temporary_traits to avoid type requirements on M
         //typedef typename M::vector_temporary_type vector_temporary_type;
         //typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
