@@ -34,15 +34,16 @@ namespace boost {
 #endif
 
 // geometric distribution: p(i) = (1-p) * pow(p, i-1)   (integer)
-template<class UniformRandomNumberGenerator, class IntType = int>
+template<class UniformRandomNumberGenerator, class IntType = int,
+         class RealType = double>
 class geometric_distribution
 {
 public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  geometric_distribution(base_type & rng, double p)
-    : _rng(rng)
+  geometric_distribution(base_type & rng, const RealType& p)
+    : _rng(rng), _p(p)
   {
     assert(0.0 < p && p < 1.0);
 #ifndef BOOST_NO_STDC_NAMESPACE
@@ -53,6 +54,7 @@ public:
   // compiler-generated copy ctor is fine
   // uniform_01 cannot be assigned, neither can this class
 
+  RealType p() const { return _p; }
   base_type& base() const { return _rng.base(); }
   void reset() { _rng.reset(); }
 
@@ -75,8 +77,9 @@ public:
   { return _log_p == rhs._log_p && _rng == rhs._rng;  }
 #endif
 private:
-  uniform_01<base_type> _rng;
-  typename uniform_01<base_type>::result_type _log_p;
+  uniform_01<base_type, RealType> _rng;
+  RealType _p;
+  RealType _log_p;
 };
 
 } // namespace boost
