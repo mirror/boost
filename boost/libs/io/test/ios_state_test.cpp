@@ -1,9 +1,10 @@
 //  Boost ios_state_test.cpp test file  --------------------------------------//
 
-//  (C) Copyright Daryle Walker 2002, 2003.  Permission to copy, use, modify,
-//  sell and distribute this software is granted provided this copyright notice
-//  appears in all copies.  This software is provided "as is" without express or
-//  implied warranty, and with no claim as to its suitability for any purpose.
+//  Copyright 2002, 2003 Daryle Walker.  Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0.  (See accompanying file
+//  LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
+
+//  See <http://www.boost.org/libs/io/> for the library's home page.
 
 //  Revision History
 //   15 Jun 2003  Adjust to changes in Boost.Test (Daryle Walker)
