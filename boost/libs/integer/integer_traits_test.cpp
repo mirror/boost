@@ -18,15 +18,12 @@
  */
 
 #include <iostream>
-#include <cassert>
 #include <boost/integer_traits.hpp>
 // use int64_t instead of long long for better portability
 #include <boost/cstdint.hpp>
 
-#ifdef NDEBUG
-#error This test relies on assert() and thus makes no sense with NDEBUG defined
-#endif
-
+#define BOOST_INCLUDE_MAIN
+#include <boost/test/test_tools.hpp>
 
 /*
  * General portability note:
@@ -46,14 +43,14 @@ void runtest(const char * type, T)
 	    << "; min is " << traits::min()
             << ", max is " << traits::max()
 	    << std::endl;
-  assert(traits::is_specialized);
-  assert(traits::is_integer);
-  assert(traits::is_integral);
-  assert(traits::const_min == traits::min());
-  assert(traits::const_max == traits::max());
+  BOOST_TEST(traits::is_specialized);
+  BOOST_TEST(traits::is_integer);
+  BOOST_TEST(traits::is_integral);
+  BOOST_TEST(traits::const_min == traits::min());
+  BOOST_TEST(traits::const_max == traits::max());
 }
 
-int main()
+int test_main(int, char*[])
 {
   runtest("bool", bool());
   runtest("char", char());
@@ -61,6 +58,7 @@ int main()
   runtest("signed char", signed_char());
   typedef unsigned char unsigned_char;
   runtest("unsigned char", unsigned_char());
+  runtest("wchar_t", wchar_t());
   runtest("short", short());
   typedef unsigned short unsigned_short;
   runtest("unsigned short", unsigned_short());
@@ -76,6 +74,8 @@ int main()
   // BeOS doesn't have specialisations for long long in SGI's <limits> header.
   runtest("int64_t (possibly long long)", boost::int64_t());
   runtest("uint64_t (possibly unsigned long long)", boost::uint64_t());
+#else
+  std::cout << "Skipped int64_t and uint64_t" << std::endl;
 #endif
   // Some compilers don't pay attention to std:3.6.1/5 and issue a
   // warning here if "return 0;" is omitted.
