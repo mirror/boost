@@ -28,3 +28,5 @@
 /tools/build $CVSROOT/CVSROOT/syncmail -u %{sVv} boost-build@lists.sourceforge.net
 python $CVSROOT/CVSROOT/syncmail -u %{sVv} boost-python-cvs@lists.sourceforge.net
 /mpl/ $CVSROOT/CVSROOT/syncmail -u %{sVv} boost-mpl-cvs@lists.sourceforge.net
+
+ALL $CVSROOT/CVSROOT/syncmail -u %{sVv} boost-cvs@lists.sourceforge.net
