@@ -729,6 +729,14 @@ and calls <code>seed(value)</code>.
 
 <strong>Effects:</strong> Constructs a <code>mersenne_twister</code>
 and calls <code>seed(gen)</code>.
+<p>
+<em>Note:</em> When using direct-initialization syntax with an lvalue
+(e.g. in the variable definition <code>Gen gen2(gen);</code>), this
+templated constructor will be preferred over the compiler-generated
+copy constructor.  For variable definitions which should copy the
+state of another <code>mersenne_twister</code>, use e.g. <code>Gen
+gen2 = gen;</code>, which is copy-initialization syntax and guaranteed
+invoke the copy constructor.
 
 <h3>Seeding</h3>
 
