@@ -141,6 +141,16 @@ template<typename T>
 inline typename io_category<T>::type get_category(const T&) 
 { typedef typename io_category<T>::type category; return category(); }
 
+//----------Definition of io_int----------------------------------------------//
+
+template<typename T>
+struct io_int { 
+    typedef std::char_traits<
+                BOOST_DEDUCED_TYPENAME io_char<T>::type
+            > traits_type; 
+    typedef typename traits_type::int_type type; 
+};
+
 //------------------Definition of mode----------------------------------------//
 
 namespace detail {
@@ -186,21 +196,11 @@ struct is_smart
 
 //----------Definition of macros----------------------------------------------//
 
-namespace detail {
-
-template<typename T> // VC6 requires this intermediate traits template.
-struct get_int_type { 
-    typedef std::char_traits<BOOST_DEDUCED_TYPENAME io_char<T>::type>  traits_type; 
-    typedef typename traits_type::int_type                  type; 
-};
-                
-} // End namespace detail.
-
 #define BOOST_IOSTREAMS_CHAR_TYPE(T) typename boost::iostreams::io_char<T>::type
 #define BOOST_IOSTREAMS_CATEGORY(T) \
     typename boost::iostreams::io_category<T>::type \
     /**/
-#define BOOST_IOSTREAMS_INT_TYPE(T) typename detail::get_int_type<T>::type
+#define BOOST_IOSTREAMS_INT_TYPE(T) typename io_int<T>::type
 #define BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr) \
     typedef Tr traits_type; \
     typedef typename traits_type::int_type int_type; \
