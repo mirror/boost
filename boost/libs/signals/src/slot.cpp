@@ -1,16 +1,10 @@
 // Boost.Signals library
-//
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
-//
-// Permission to copy, use, sell and distribute this software is granted
-// provided this copyright notice appears in all copies.
-// Permission to modify the code and to distribute modified code is granted
-// provided this copyright notice appears in all copies, and a notice
-// that the code was modified is included with the copyright notice.
-//
-// This software is provided "as is" without express or implied warranty,
-// and with no claim as to its suitability for any purpose.
- 
+
+// Copyright Doug Gregor 2001-2003. Use, modification and
+// distribution is subject to the Boost Software License, Version
+// 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 // For more information, see http://www.boost.org
 
 #define BOOST_SIGNALS_IN_LIBRARY_SOURCE
@@ -26,19 +20,19 @@ namespace boost {
         basic_connection* con = new basic_connection();
 
         /* nothrow */ {
-          // The signal portion isn't really necessary, except that we need a 
+          // The signal portion isn't really necessary, except that we need a
           // signal for the connection to be connected.
           con->signal = static_cast<void*>(this);
           con->signal_data = 0;
           con->signal_disconnect = &bound_object_destructed;
         }
 
-        // This connection watches for destruction of bound objects. Note 
+        // This connection watches for destruction of bound objects. Note
         // that the reset routine will delete con if an allocation throws
         watch_bound_objects.reset(con);
 
         // We create a scoped connection, so that exceptions thrown while
-        // adding bound objects will cause a cleanup of the bound objects 
+        // adding bound objects will cause a cleanup of the bound objects
         // already connected.
         scoped_connection safe_connection(watch_bound_objects);
 
@@ -49,7 +43,7 @@ namespace boost {
           // Notify the object that the slot is connecting to it
           BOOST_SIGNALS_NAMESPACE::detail::bound_object binding;
           (*i)->signal_connected(watch_bound_objects, binding);
-        
+
           // This will notify the bound object that the connection just made
           // should be disconnected if an exception is thrown before the
           // end of this iteration

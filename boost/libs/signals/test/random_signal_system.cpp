@@ -1,16 +1,10 @@
 // Boost.Signals library
-//
-// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
-//
-// Permission to copy, use, sell and distribute this software is granted
-// provided this copyright notice appears in all copies.
-// Permission to modify the code and to distribute modified code is granted
-// provided this copyright notice appears in all copies, and a notice
-// that the code was modified is included with the copyright notice.
-//
-// This software is provided "as is" without express or implied warranty,
-// and with no claim as to its suitability for any purpose.
- 
+
+// Copyright Doug Gregor 2001-2003. Use, modification and
+// distribution is subject to the Boost Software License, Version
+// 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 // For more information, see http://www.boost.org
 
 #include <boost/signal.hpp>
@@ -62,7 +56,7 @@ std::map<signal_type*, int> min_signal_propagate_distance;
 void remove_disconnected_connections()
 {
   // remove disconnected connections
-  std::map<connection, edge_descriptor>::iterator i = 
+  std::map<connection, edge_descriptor>::iterator i =
     connection_to_descriptor.begin();
   while (i != connection_to_descriptor.end()) {
     if (!i->first.connected()) {
@@ -97,7 +91,7 @@ struct tracking_bridge {
     ++cur_dist;
 
     // Update the directed Bacon distance
-    if (min_signal_propagate_distance.find(sig) == 
+    if (min_signal_propagate_distance.find(sig) ==
           min_signal_propagate_distance.end()) {
       min_signal_propagate_distance[sig] = cur_dist;
     }
@@ -143,13 +137,13 @@ signal_type* add_signal()
   return sig;
 }
 
-connection add_connection(signal_type* sig1, signal_type* sig2, 
+connection add_connection(signal_type* sig1, signal_type* sig2,
                           minstd_rand& rand_gen)
 {
   std::cout << "  Adding connection: " << sig1 << " -> " << sig2 << std::endl;
 
   connection c = sig1->connect(tracking_bridge(sig2, rand_gen));
-  edge_descriptor e = 
+  edge_descriptor e =
     add_edge(signal_to_descriptor[sig1], signal_to_descriptor[sig2],
              signal_graph).first;
   connection_to_descriptor[c] = e;
@@ -160,11 +154,11 @@ connection add_connection(signal_type* sig1, signal_type* sig2,
 
 void remove_connection(connection c)
 {
-  signal_type* sig1 = get(signal_tag(), signal_graph, 
+  signal_type* sig1 = get(signal_tag(), signal_graph,
                           source(connection_to_descriptor[c], signal_graph));
-  signal_type* sig2 = get(signal_tag(), signal_graph, 
+  signal_type* sig2 = get(signal_tag(), signal_graph,
                           target(connection_to_descriptor[c], signal_graph));
-  std::cout << "  Removing connection: " << sig1 << " -> " << sig2 
+  std::cout << "  Removing connection: " << sig1 << " -> " << sig2
             << std::endl;
   c.disconnect();
   remove_edge(connection_to_descriptor[c], signal_graph);
@@ -196,9 +190,9 @@ bool signal_connection_exists(signal_type* sig1, signal_type* sig2)
 std::map<signal_type*, vertex_descriptor>::iterator
 choose_random_signal(minstd_rand& rand_gen)
 {
-  int signal_idx = uniform_int<minstd_rand>(rand_gen, 
+  int signal_idx = uniform_int<minstd_rand>(rand_gen,
                                         0, signal_to_descriptor.size() - 1)();
-  std::map<signal_type*, vertex_descriptor>::iterator result = 
+  std::map<signal_type*, vertex_descriptor>::iterator result =
     signal_to_descriptor.begin();
   for(; signal_idx; --signal_idx)
     ++result;
@@ -208,7 +202,7 @@ choose_random_signal(minstd_rand& rand_gen)
 
 void random_remove_signal(minstd_rand& rand_gen)
 {
-  std::map<signal_type*, vertex_descriptor>::iterator victim = 
+  std::map<signal_type*, vertex_descriptor>::iterator victim =
     choose_random_signal(rand_gen);
   std::cout << "  Removing signal " << victim->first << std::endl;
   remove_signal(victim->first);
@@ -216,7 +210,7 @@ void random_remove_signal(minstd_rand& rand_gen)
 
 void random_add_connection(minstd_rand& rand_gen)
 {
-  std::map<signal_type*, vertex_descriptor>::iterator source;  
+  std::map<signal_type*, vertex_descriptor>::iterator source;
   std::map<signal_type*, vertex_descriptor>::iterator target;
   do {
     source = choose_random_signal(rand_gen);
@@ -228,7 +222,7 @@ void random_add_connection(minstd_rand& rand_gen)
 
 void random_remove_connection(minstd_rand& rand_gen)
 {
-  int victim_idx = 
+  int victim_idx =
     uniform_int<minstd_rand>(rand_gen, 0, num_edges(signal_graph)-1)();
   signal_graph_type::edge_iterator e = edges(signal_graph).first;
   while (victim_idx--) {
@@ -252,7 +246,7 @@ void random_bacon_test(minstd_rand& rand_gen)
   // Propagate the signal out to the horizon
   int deletions_left = 0;
   (*kevin)(0, horizon, 0.0, deletions_left);
-  
+
   std::cout << "OK\n    Finding shortest paths...";
 
   // Initialize all colors to white
@@ -268,7 +262,7 @@ void random_bacon_test(minstd_rand& rand_gen)
     assert(num == num_vertices(signal_graph));
   }
 
-  // Perform a breadth-first search starting at kevin, and record the 
+  // Perform a breadth-first search starting at kevin, and record the
   // distances from kevin to each reachable node.
   std::map<vertex_descriptor, int> bacon_distance_map;
 
@@ -289,13 +283,13 @@ void random_bacon_test(minstd_rand& rand_gen)
   // Make sure the bacon distances agree (prior to the horizon)
   {
     std::map<signal_type*, int>::iterator i;
-    for (i = min_signal_propagate_distance.begin(); 
-         i != min_signal_propagate_distance.end(); 
+    for (i = min_signal_propagate_distance.begin();
+         i != min_signal_propagate_distance.end();
          ++i) {
       if (i->second != bacon_distance_map[signal_to_descriptor[i->first]]) {
-        std::cout << "Signal distance to " << i->first << " was " 
+        std::cout << "Signal distance to " << i->first << " was "
                   << i->second << std::endl;
-        std::cout << "Graph distance was " 
+        std::cout << "Graph distance was "
                   << bacon_distance_map[signal_to_descriptor[i->first]]
                   << std::endl;
       }
@@ -304,7 +298,7 @@ void random_bacon_test(minstd_rand& rand_gen)
   }
 }
 
-void randomly_create_connections(minstd_rand& rand_gen, double edge_probability) 
+void randomly_create_connections(minstd_rand& rand_gen, double edge_probability)
 {
   // Randomly create connections
   uniform_01<minstd_rand> random(rand_gen);
@@ -318,7 +312,7 @@ void randomly_create_connections(minstd_rand& rand_gen, double edge_probability)
                        rand_gen);
       }
     }
-  }  
+  }
 }
 
 void random_recursive_deletion(minstd_rand& rand_gen)
@@ -354,7 +348,7 @@ int main(int argc, char* argv[])
   else
     seed = time(0);
 
-  std::cout << "Number of initial signals: " << number_of_initial_signals 
+  std::cout << "Number of initial signals: " << number_of_initial_signals
             << std::endl;
   std::cout << "Edge probability: " << edge_probability << std::endl;
   std::cout << "Iterations: " << iterations << std::endl;
@@ -366,7 +360,7 @@ int main(int argc, char* argv[])
 
   for (int iter = 0; iter < iterations; ++iter) {
     if (num_vertices(signal_graph) < 2) {
-      for (int i = 0; i < number_of_initial_signals; ++i) 
+      for (int i = 0; i < number_of_initial_signals; ++i)
         add_signal();
     }
 
@@ -387,7 +381,7 @@ int main(int argc, char* argv[])
       break;
 
     case 2:
-      if (num_edges(signal_graph) < 
+      if (num_edges(signal_graph) <
             num_vertices(signal_graph)*num_vertices(signal_graph)) {
         random_add_connection(rand_gen);
       }

@@ -1,15 +1,9 @@
 // Boost.Signals library
-//
-// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
-//
-// Permission to copy, use, sell and distribute this software is granted
-// provided this copyright notice appears in all copies.
-// Permission to modify the code and to distribute modified code is granted
-// provided this copyright notice appears in all copies, and a notice
-// that the code was modified is included with the copyright notice.
-//
-// This software is provided "as is" without express or implied warranty,
-// and with no claim as to its suitability for any purpose.
+
+// Copyright Doug Gregor 2001-2003. Use, modification and
+// distribution is subject to the Boost Software License, Version
+// 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
 
 // For more information, see http://www.boost.org
 
@@ -160,7 +154,7 @@ test_signal_signal_connect()
   BOOST_TEST(s1(3) == -3);
 }
 
-struct EventCounter 
+struct EventCounter
 {
   EventCounter() : count(0) {}
 
@@ -183,7 +177,7 @@ test_ref()
     BOOST_TEST(ec.count == 0);
     s();
     BOOST_TEST(ec.count == 1);
-  }  
+  }
   s();
   BOOST_TEST(ec.count == 1);
 }
@@ -193,7 +187,7 @@ test_main(int, char* [])
 {
   test_zero_args();
   test_one_arg();
-  test_signal_signal_connect(); 
+  test_signal_signal_connect();
   test_ref();
   return 0;
 }

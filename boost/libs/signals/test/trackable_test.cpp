@@ -1,16 +1,10 @@
 // Boost.Signals library
-//
-// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
-//
-// Permission to copy, use, sell and distribute this software is granted
-// provided this copyright notice appears in all copies.
-// Permission to modify the code and to distribute modified code is granted
-// provided this copyright notice appears in all copies, and a notice
-// that the code was modified is included with the copyright notice.
-//
-// This software is provided "as is" without express or implied warranty,
-// and with no claim as to its suitability for any purpose.
- 
+
+// Copyright Doug Gregor 2001-2003. Use, modification and
+// distribution is subject to the Boost Software License, Version
+// 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 // For more information, see http://www.boost.org
 
 #define BOOST_INCLUDE_MAIN
@@ -48,8 +42,8 @@ int test_main(int, char*[])
 {
   typedef boost::signal1<int, int, max_or_default<int> > sig_type;
   sig_type s1;
- 
-  // Test auto-disconnection 
+
+  // Test auto-disconnection
   BOOST_TEST(s1(5) == 0);
   {
     short_lived shorty;
@@ -57,7 +51,7 @@ int test_main(int, char*[])
     BOOST_TEST(s1(5) == 5);
   }
   BOOST_TEST(s1(5) == 0);
-  
+
   // Test auto-disconnection of slot before signal connection
   {
     short_lived* shorty = new short_lived();

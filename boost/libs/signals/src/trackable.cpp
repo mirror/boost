@@ -1,16 +1,10 @@
 // Boost.Signals library
-//
-// Copyright (C) 2001, 2002 Doug Gregor (gregod@cs.rpi.edu)
-//
-// Permission to copy, use, sell and distribute this software is granted
-// provided this copyright notice appears in all copies.
-// Permission to modify the code and to distribute modified code is granted
-// provided this copyright notice appears in all copies, and a notice
-// that the code was modified is included with the copyright notice.
-//
-// This software is provided "as is" without express or implied warranty,
-// and with no claim as to its suitability for any purpose.
- 
+
+// Copyright Doug Gregor 2001-2003. Use, modification and
+// distribution is subject to the Boost Software License, Version
+// 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+
 // For more information, see http://www.boost.org
 
 #define BOOST_SIGNALS_IN_LIBRARY_SOURCE
@@ -23,7 +17,7 @@ namespace boost {
     void trackable::signal_disconnected(void* obj, void* data)
     {
       trackable* self = reinterpret_cast<trackable*>(obj);
-      connection_iterator* signal = 
+      connection_iterator* signal =
         reinterpret_cast<connection_iterator*>(data);
 
       // If we're dying, don't bother erasing the connection from the list;
@@ -36,12 +30,12 @@ namespace boost {
       delete signal;
     }
 
-    void 
-    trackable::signal_connected(connection c, 
+    void
+    trackable::signal_connected(connection c,
                                 BOOST_SIGNALS_NAMESPACE::detail::bound_object& binding) const
     {
       // Insert the connection
-      connection_iterator pos = 
+      connection_iterator pos =
         connected_signals.insert(connected_signals.end(), c);
 
       // Make this copy of the object disconnect when destroyed
