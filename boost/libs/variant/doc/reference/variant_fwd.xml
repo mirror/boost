@@ -2,16 +2,19 @@
 <header name="boost/variant/variant_fwd.hpp">
   <section id="variant.header.variant_fwd">
     <para>Provides a forward declaration of the
-      <code><classname>boost::variant</classname></code> class template. Also
-      defines the following preprocessor symbols:</para>
-      
+      <code><classname>boost::variant</classname></code> and
+      <code><classname>boost::recursive_variant</classname></code> class
+      templates and the
+      <code><classname>boost::recursive_variant_</classname></code> tag type.
+      Also defines the following preprocessor symbols:</para>
+
     <section id="variant.macro.BOOST_VARIANT_LIMIT_TYPES">
       <title>BOOST_VARIANT_LIMIT_TYPES</title>
 
       <para>Preprocessor macro. Expands to the length of the template
       parameter list for
       <code><classname alt="boost::variant">variant</classname></code>.</para>
-      
+
       <para><emphasis role="bold">Note</emphasis>: Conforming implementations
       of <code>variant</code> must allow at least ten bounded types. That is,
       <code>BOOST_VARIANT_LIMIT_TYPES &gt;= 10</code> must be
@@ -31,18 +34,8 @@
       simplifies for the user the process of declaring
       <code><classname alt="boost::variant">variant</classname></code> types
       in function templates or explicit partial specializations of class
-      templates, as shown in the following examples:</para>
-
-<programlisting>template &lt;typename T&gt; class some_class;
-
-// example: <emphasis>explicit partial specialization</emphasis>
-template &lt;BOOST_VARIANT_ENUM_PARAMS(typename T)&gt;
-class some_class&lt; boost::variant&lt;BOOST_VARIANT_ENUM_PARAMS(T)&gt; &gt;;
-
-// example: <emphasis>function template</emphasis>
-template &lt;BOOST_VARIANT_ENUM_PARAMS(typename T)&gt;
-void f(const boost::variant&lt;BOOST_VARIANT_ENUM_PARAMS(T)&gt; &amp;);</programlisting>
-
+      templates, as shown in the
+      <link linkend="variant.tutorial.preprocessor">tutorial section</link>.</para>
     </section>
 
     <section id="variant.macro.BOOST_VARIANT_ENUM_SHIFTED_PARAMS">
