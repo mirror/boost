@@ -27,8 +27,6 @@
 
 namespace std {
 
-#pragma auto_inline(off)
-
 template
 locale::locale(
     const locale& __loc, boost::archive::codecvt_null<char> * __f
@@ -38,8 +36,6 @@ template
 locale::locale(
     const locale& __loc, boost::archive::codecvt_null<wchar_t> * __f
 );
-
-#pragma auto_inline()
 
 } // namespace std
 
