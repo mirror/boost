@@ -74,9 +74,10 @@ namespace date_time {
                          ostream_type& os)
     {
       date_type d = t.date();
-      os << d << " "; //TODO: fix the separator here.
+      os << d;
       if(!d.is_infinity() && !d.is_not_a_date())
       {
+	os << " "; //TODO: fix the separator here.
         duration_formatter::duration_put(t.time_of_day(), os);
       }
       
