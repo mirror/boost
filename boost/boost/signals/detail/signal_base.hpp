@@ -69,17 +69,17 @@ namespace boost {
       // manages call depth
       class call_notification {
       public:
-	call_notification(const shared_ptr<signal_base_impl>&);
-	~call_notification();
-	
-	shared_ptr<signal_base_impl> impl;
+        call_notification(const shared_ptr<signal_base_impl>&);
+        ~call_notification();
+        
+        shared_ptr<signal_base_impl> impl;
       };
         
       // Implementation of base class for all signals. It handles the 
       // management of the underlying slot lists.
       class signal_base_impl {
       public:
-	friend class call_notification;
+        friend class call_notification;
 
         typedef function2<bool, any, any> compare_type;
 
@@ -101,7 +101,7 @@ namespace boost {
           signal_base_impl* base;
         };
 
-	friend class temporarily_set_clearing;
+        friend class temporarily_set_clearing;
 
         signal_base_impl(const compare_type&);
         ~signal_base_impl();
@@ -127,19 +127,19 @@ namespace boost {
         void remove_disconnected_slots() const;
 
       public:
-	// Our call depth when invoking slots (> 1 when we have a loop)
-	mutable int call_depth;
-	
-	struct {
-	  // True if some slots have disconnected, but we were not able to
-	  // remove them from the list of slots because there are valid 
-	  // iterators into the slot list
-	  mutable bool delayed_disconnect:1;
-	  
-	  // True if we are disconnecting all disconnected slots
-	  bool clearing:1;
-	} flags;
-	
+        // Our call depth when invoking slots (> 1 when we have a loop)
+        mutable int call_depth;
+        
+        struct {
+          // True if some slots have disconnected, but we were not able to
+          // remove them from the list of slots because there are valid 
+          // iterators into the slot list
+          mutable bool delayed_disconnect:1;
+          
+          // True if we are disconnecting all disconnected slots
+          bool clearing:1;
+        } flags;
+        
         // Slots
         typedef std::multimap<any, connection_slot_pair, compare_type>
           slot_container_type;
@@ -155,9 +155,9 @@ namespace boost {
         friend class call_notification;
 
         signal_base(const compare_type& comp) : impl()
-	{
+        {
           impl.reset(new signal_base_impl(comp));
-	}
+        }
 
         ~signal_base();
 
@@ -179,7 +179,7 @@ namespace boost {
         typedef signal_base_impl::slot_iterator slot_iterator;
         typedef signal_base_impl::stored_slot_type stored_slot_type;
 
-	shared_ptr<signal_base_impl> impl;
+        shared_ptr<signal_base_impl> impl;
       };
     } // end namespace detail
   } // end namespace BOOST_SIGNALS_NAMESPACE

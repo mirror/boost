@@ -20,8 +20,8 @@ namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       signal_base_impl::signal_base_impl(const compare_type& comp) : 
-	call_depth(0),
-	slots_(comp)
+        call_depth(0),
+        slots_(comp)
       {
         flags.delayed_disconnect = false;
         flags.clearing = false;
@@ -40,12 +40,12 @@ namespace boost {
         if (flags.clearing)
           return;
 
-	if (call_depth == 0) {
+        if (call_depth == 0) {
           // Clearing the slot list will disconnect all slots automatically
-	  temporarily_set_clearing set_clearing(this);
-	  slots_.clear();
-	}
-	else {
+          temporarily_set_clearing set_clearing(this);
+          slots_.clear();
+        }
+        else {
           // We can't actually remove elements from the slot list because there
           // are still iterators into the slot list that must not be
           // invalidated by this operation. So just disconnect each slot
@@ -53,10 +53,10 @@ namespace boost {
           // reach zero, the call list will be cleared.
           flags.delayed_disconnect = true;
           temporarily_set_clearing set_clearing(this);
-	  for (slot_iterator i = slots_.begin(); i != slots_.end(); ++i) {
-	    i->second.first.disconnect();
-	  }
-	}
+          for (slot_iterator i = slots_.begin(); i != slots_.end(); ++i) {
+            i->second.first.disconnect();
+          }
+        }
       }
 
       connection 
@@ -201,7 +201,7 @@ namespace boost {
 
       call_notification::
         call_notification(const shared_ptr<signal_base_impl>& b) :
-	  impl(b)
+          impl(b)
       {
         // A call will be made, so increment the call depth as a notification
         impl->call_depth++;
@@ -214,7 +214,7 @@ namespace boost {
         // If the call depth is zero and we have some slots that have been
         // disconnected during the calls, remove those slots from the list
         if (impl->call_depth == 0 && 
-	    impl->flags.delayed_disconnect) {
+            impl->flags.delayed_disconnect) {
           impl->remove_disconnected_slots();
           impl->flags.delayed_disconnect = false;
         }

@@ -37,12 +37,12 @@ namespace boost {
       // Determine the result type of a slot call
       template<typename R>
       struct slot_result_type {
-	typedef R type;
+        typedef R type;
       };
 
       template<>
       struct slot_result_type<void> {
-	typedef unusable type;
+        typedef unusable type;
       };
 
       // Determine if the given type T is a signal
@@ -50,8 +50,8 @@ namespace boost {
 
       template<typename T>
       struct is_signal {
-	BOOST_STATIC_CONSTANT(bool, 
-	  value = (is_convertible<T*, signal_base*>::value));
+        BOOST_STATIC_CONSTANT(bool, 
+          value = (is_convertible<T*, signal_base*>::value));
       };
 
       /*
@@ -102,13 +102,13 @@ namespace boost {
       template<typename T>
       struct is_ref
       {
-	BOOST_STATIC_CONSTANT(bool, value = false); 
+        BOOST_STATIC_CONSTANT(bool, value = false); 
       };
 
       template<typename T>
       struct is_ref<reference_wrapper<T> >
       {
-	BOOST_STATIC_CONSTANT(bool, value = true);
+        BOOST_STATIC_CONSTANT(bool, value = true);
       };
 #else // no partial specialization
       typedef char yes_type;
@@ -122,9 +122,9 @@ namespace boost {
       template<typename T>
       struct is_ref
       {
-	static T* t;
-	BOOST_STATIC_CONSTANT(bool, 
-	  value = (sizeof(is_ref_tester(t)) == sizeof(yes_type)));
+        static T* t;
+        BOOST_STATIC_CONSTANT(bool, 
+          value = (sizeof(is_ref_tester(t)) == sizeof(yes_type)));
       };
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
@@ -138,14 +138,14 @@ namespace boost {
       // standard slot
       template<typename S>
       class get_slot_tag {
-	typedef typename IF<(is_signal<S>::value),
-			    signal_tag,
-			    value_tag>::type signal_or_value;
+        typedef typename IF<(is_signal<S>::value),
+                            signal_tag,
+                            value_tag>::type signal_or_value;
 
-      public:	
-	typedef typename IF<(is_ref<S>::value),
-			    reference_tag,
-			    signal_or_value>::type type;
+      public:   
+        typedef typename IF<(is_ref<S>::value),
+                            reference_tag,
+                            signal_or_value>::type type;
       };
 
       // Forward declaration needed in lots of places

@@ -62,10 +62,10 @@ namespace boost {
                BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS
                typename Dummy = int>
       struct BOOST_SIGNALS_ARGS_STRUCT {
-	BOOST_SIGNALS_ARGS_STRUCT(BOOST_SIGNALS_COPY_PARMS)
-	  BOOST_SIGNALS_INIT_ARGS
-	{
-	}
+        BOOST_SIGNALS_ARGS_STRUCT(BOOST_SIGNALS_COPY_PARMS)
+          BOOST_SIGNALS_INIT_ARGS
+        {
+        }
 
         BOOST_SIGNALS_ARGS_AS_MEMBERS
       };
@@ -74,19 +74,19 @@ namespace boost {
       // the bound arguments along to that underlying function object
       template<typename R>
       struct BOOST_SIGNALS_CALL_BOUND {
-	template<BOOST_SIGNALS_TEMPLATE_PARMS
-	         BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS
+        template<BOOST_SIGNALS_TEMPLATE_PARMS
+                 BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS
                  typename F>
-	struct caller {
-	  typedef BOOST_SIGNALS_ARGS_STRUCT<BOOST_SIGNALS_TEMPLATE_ARGS>*
-    	    args_type;
+        struct caller {
+          typedef BOOST_SIGNALS_ARGS_STRUCT<BOOST_SIGNALS_TEMPLATE_ARGS>*
+            args_type;
 
           args_type args;
 
           typedef R result_type;
 
           caller() {}
-	  caller(args_type a) : args(a) {}
+          caller(args_type a) : args(a) {}
 
           template<typename Pair>
           R operator()(const Pair& slot) const
@@ -94,32 +94,32 @@ namespace boost {
             F* target = const_cast<F*>(any_cast<F>(&slot.second.second));
             return (*target)(BOOST_SIGNALS_BOUND_ARGS);
           }
-	};
+        };
       };
 
       template<>
       struct BOOST_SIGNALS_CALL_BOUND<void> {
-	template<BOOST_SIGNALS_TEMPLATE_PARMS
-	         BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS
+        template<BOOST_SIGNALS_TEMPLATE_PARMS
+                 BOOST_SIGNALS_COMMA_IF_NONZERO_ARGS
                  typename F>
-	struct caller {
-	  typedef BOOST_SIGNALS_ARGS_STRUCT<BOOST_SIGNALS_TEMPLATE_ARGS>*
-    	    args_type;
+        struct caller {
+          typedef BOOST_SIGNALS_ARGS_STRUCT<BOOST_SIGNALS_TEMPLATE_ARGS>*
+            args_type;
 
           args_type args;
 
           typedef unusable result_type;
 
-	  caller(args_type a) : args(a) {}
+          caller(args_type a) : args(a) {}
 
           template<typename Pair>
           unusable operator()(const Pair& slot) const
           {
             F* target = const_cast<F*>(any_cast<F>(&slot.second.second));
             (*target)(BOOST_SIGNALS_BOUND_ARGS);
-	    return unusable();
+            return unusable();
           }
-	};
+        };
       };
     } // namespace detail
   } // namespace BOOST_SIGNALS_NAMESPACE
@@ -299,9 +299,9 @@ namespace boost {
 
     // Let the combiner call the slots via a pair of input iterators
     return combiner(BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
-		      notification.impl->slots_.begin(), impl->slots_.end(), f),
-		    BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
-		      notification.impl->slots_.end(), impl->slots_.end(), f));
+                      notification.impl->slots_.begin(), impl->slots_.end(), f),
+                    BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
+                      notification.impl->slots_.end(), impl->slots_.end(), f));
   }
 
   template<
@@ -338,9 +338,9 @@ namespace boost {
 
     // Let the combiner call the slots via a pair of input iterators
     return combiner(BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
-		      notification.impl->slots_.begin(), impl->slots_.end(), f),
-		    BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
-		      notification.impl->slots_.end(), impl->slots_.end(), f));
+                      notification.impl->slots_.begin(), impl->slots_.end(), f),
+                    BOOST_SIGNALS_NAMESPACE::detail::make_slot_call_iterator(
+                      notification.impl->slots_.end(), impl->slots_.end(), f));
   }
 } // namespace boost
 

@@ -374,14 +374,14 @@ namespace boost {
   >
   class signal :
     public BOOST_SIGNALS_NAMESPACE::detail::get_signal_impl<R, T1, T2, T3, T4, T5, T6, T7,
-							    T8, T9, T10, boost::last_value<R> >::type
+                                                            T8, T9, T10, boost::last_value<R> >::type
   {
   public:
     template<typename Combiner>
     struct combiner {
     private:
       typedef BOOST_SIGNALS_NAMESPACE::detail::get_signal_impl<R, T1, T2, T3, T4, T5,
-							       T6, T7, T8, T9, T10, Combiner> t1;
+                                                               T6, T7, T8, T9, T10, Combiner> t1;
     public:
       typedef typename t1::type type;
     };
