@@ -19,9 +19,12 @@
 #include "boost/detail/workaround.hpp"
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
+#include "boost/type_traits/is_pod.hpp"
 
 #include "boost/mpl/eval_if.hpp"
 #include "boost/mpl/identity.hpp"
+
+#include "boost/type_traits/detail/bool_trait_def.hpp"
 
 namespace boost {
 
@@ -54,6 +57,8 @@ private: // representation
     } data_;
 
 public: // constants
+
+    typedef aligned_storage<size_, alignment_> type;
 
     BOOST_STATIC_CONSTANT(
           std::size_t
@@ -132,6 +137,18 @@ const void* aligned_storage<S,A>::address() const
 
 #endif // MSVC6 workaround
 
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+template <std::size_t size_, std::size_t alignment_>
+struct is_pod<boost::aligned_storage<size_,alignment_> >
+   BOOST_TT_AUX_BOOL_C_BASE(true)
+{ 
+    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(true)
+}; 
+#endif
+
+
 } // namespace boost
+
+#include "boost/type_traits/detail/bool_trait_undef.hpp"
 
 #endif // BOOST_ALIGNED_STORAGE_HPP
