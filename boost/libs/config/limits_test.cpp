@@ -66,17 +66,9 @@ void test_float_limits(const T &, const char * msg)
   BOOST_TEST(!lim::is_integer);
   BOOST_TEST(lim::is_signed);
   
-  BOOST_TEST(lim::epsilon() > 0);
-
-  BOOST_TEST(lim::has_infinity);
-  BOOST_TEST(lim::has_quiet_NaN);
-  BOOST_TEST(lim::has_signaling_NaN);
-  
   const T infinity = lim::infinity();
   const T qnan = lim::quiet_NaN();
   const T snan = lim::signaling_NaN();
-
-  // make sure those values are not 0 or similar nonsense
 
   std::cout << "IEEE-compatible: " << lim::is_iec559
 	    << ", traps: " << lim::traps
@@ -89,25 +81,44 @@ void test_float_limits(const T &, const char * msg)
   print_hex_val(qnan, "qnan");
   print_hex_val(snan, "snan");
 
-  // infinity is beyond the representable range
   BOOST_TEST(lim::max() > 1000);
-  BOOST_TEST(lim::infinity() > lim::max());
-  BOOST_TEST(-lim::infinity() < -lim::max());
-  BOOST_TEST(lim::min() < 0.001);
   BOOST_TEST(lim::min() > 0);
+  BOOST_TEST(lim::min() < 0.001);
+  BOOST_TEST(lim::epsilon() > 0);
 
-  // NaNs shall always compare "false" when compared for equality
-  // If one of these fail, your compiler may be optimizing incorrectly
-  BOOST_TEST(! (qnan == 42));
-  BOOST_TEST(! (qnan == qnan));
-  BOOST_TEST(qnan != 42);
-  BOOST_TEST(qnan != qnan);
+  if(lim::is_iec559) {
+    BOOST_TEST(lim::has_infinity);
+    BOOST_TEST(lim::has_quiet_NaN);
+    BOOST_TEST(lim::has_signaling_NaN);
+  } else {
+    std::cout << "Does not claim IEEE conformance" << std::endl;
+  }
 
-  // The following tests may cause arithmetic traps etc. Avoid for now.
-  // BOOST_TEST(! (qnan < 42));
-  // BOOST_TEST(! (qnan > 42));
-  // BOOST_TEST(! (qnan <= 42));
-  // BOOST_TEST(! (qnan >= 42));
+  if(lim::has_infinity) {
+    // make sure those values are not 0 or similar nonsense
+    // infinity is beyond the representable range
+    BOOST_TEST(infinity > lim::max());
+    BOOST_TEST(-infinity < -lim::max());
+  } else {
+    std::cout << "Does not have infinity" << std::endl;
+  }
+ 
+  if(lim::has_quiet_NaN) { 
+    // NaNs shall always compare "false" when compared for equality
+    // If one of these fail, your compiler may be optimizing incorrectly
+    BOOST_TEST(! (qnan == 42));
+    BOOST_TEST(! (qnan == qnan));
+    BOOST_TEST(qnan != 42);
+    BOOST_TEST(qnan != qnan);
+  
+    // The following tests may cause arithmetic traps etc. Avoid for now.
+    // BOOST_TEST(! (qnan < 42));
+    // BOOST_TEST(! (qnan > 42));
+    // BOOST_TEST(! (qnan <= 42));
+    // BOOST_TEST(! (qnan >= 42));
+  } else {
+    std::cout << "Does not have QNaN" << std::endl;
+  }
 }
 
 
