@@ -72,7 +72,7 @@ int main(int, char*[])
 
   boost::indirect_iterator<char* const*> mutable_indirect_first(pointers_to_mutable_chars),
     mutable_indirect_last(pointers_to_mutable_chars + N);
-  boost::indirect_iterator<char const* const*> const_indirect_first(pointers_to_chars),
+  boost::indirect_iterator<char* const*, char const> const_indirect_first(pointers_to_chars),
     const_indirect_last(pointers_to_chars + N);
 
   std::transform(const_indirect_first, const_indirect_last,

@@ -44,11 +44,16 @@ int main(int, char*[])
   std::cout << std::endl;
 
   // Example of using counting iterator to create an array of pointers.
-  const int N = 7;
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
+  const
+#endif 
+      int N = 7;
   std::vector<int> numbers;
   // Fill "numbers" array with [0,N)
-  std::copy(boost::make_counting_iterator(0), boost::make_counting_iterator(N),
-            std::back_inserter(numbers));
+  std::copy(
+      boost::make_counting_iterator(0)
+      , boost::make_counting_iterator(N)
+      , std::back_inserter(numbers));
 
   std::vector<std::vector<int>::iterator> pointers;
 
