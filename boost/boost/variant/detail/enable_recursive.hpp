@@ -89,7 +89,7 @@ struct enable_recursive_impl
           BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>) \
         > \
     { \
-        typedef RecursiveVariant type; \
+        typedef CV_ RecursiveVariant type; \
     }; \
     /**/
 
