@@ -8,6 +8,9 @@
 #define BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
 
 #include <boost/type_traits/conversion_traits.hpp>
+#if defined(__BORLANDC__)
+#include <boost/type_traits/ice.hpp>
+#endif
 
 namespace boost {
   namespace detail {
@@ -26,8 +29,14 @@ namespace boost {
      typedef detail::dummy_default_gen type;
    };
 
-    template <class T> struct is_default { enum { value = false };  };
-    template <> struct is_default<default_argument> { enum { value = true }; };
+    template <class T> struct is_default { 
+      enum { value = false };  
+      typedef type_traits::no_type type;
+    };
+    template <> struct is_default<default_argument> { 
+      enum { value = true }; 
+      typedef type_traits::yes_type type;
+    };
 
     struct choose_default {
       template <class Arg, class DefaultGen, class Base, class Traits>
@@ -42,17 +51,33 @@ namespace boost {
 	typedef Arg type;
       };
     };
+
+#if defined(__BORLANDC__)
+    template <class UseDefault>
+    struct choose_arg_or_default { typedef choose_arg type; };
+    template <>
+    struct choose_arg_or_default<type_traits::yes_type> {
+      typedef choose_default type;
+    };
+#else
     template <bool UseDefault>
     struct choose_arg_or_default { typedef choose_arg type; };
     template <>
     struct choose_arg_or_default<true> {
       typedef choose_default type;
     };
+#endif
     
     template <class Arg, class DefaultGen, class Base, class Traits>
     class resolve_default {
+#if defined(__BORLANDC__)
+      typedef typename choose_arg_or_default<typename is_default<Arg>::type>::type Selector;
+#else
+      // This usually works for Borland, but I'm seeing weird errors in
+      // iterator_adaptor_test.cpp when using this method.
       enum { is_def = is_default<Arg>::value };
       typedef typename choose_arg_or_default<is_def>::type Selector;
+#endif
     public:
       typedef typename Selector
 	::template bind<Arg, DefaultGen, Base, Traits>::type type;
@@ -75,6 +100,7 @@ namespace boost {
 	typedef detail::default_argument type;
       };
     };
+
     template <bool Named> struct choose_default_dispatch { };
     template <> struct choose_default_dispatch<true> {
       typedef choose_named_params type;
@@ -82,6 +108,7 @@ namespace boost {
     template <> struct choose_default_dispatch<false> {
       typedef choose_default_arg type;
     };
+
 
     template <class PreviousArg>
     struct choose_default_argument {
