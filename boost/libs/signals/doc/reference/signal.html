@@ -13,7 +13,20 @@
 #include &lt;<a href="../../../../boost/signal.hpp">boost/signal.hpp</a>&gt;
 </pre>
 <h2>Synopsis</h2>
-<p> The specification form for the <code>signal</code> class template uses two positive integers, <em>BOOST_SIGNALS_MAX_ARGS</em> and <em>N</em>. The former describes the maximum number of function parameters that may be passed onto the underlying slots, whereas the latter describes the number of function parameters for a given instantiation of <code>signal</code>. <em>BOOST_SIGNALS_MAX_ARGS</em> is present in the header as a preprocessor macro defining the maximum number of arguments supported by the implementation.
+<p> The specification form for the <code>signal</code> class template
+      uses two positive integers, <em>BOOST_SIGNALS_MAX_ARGS</em> and
+      <em>N</em>. The former describes the maximum number of function
+      parameters that may be passed onto the underlying slots, whereas
+      the latter describes the number of function parameters for a
+      given instantiation of
+      <code>signal</code>. <em>BOOST_SIGNALS_MAX_ARGS</em> is present
+      in the header as a preprocessor macro defining the maximum
+      number of arguments supported by the implementation. </p>
+
+<p> The <code>signal</code> class template is merely a syntactic
+      wrapper. The actual signal functionality resides in its
+      <a href="signalN.html">base class</a>.</p>
+
 <pre>
 <b>namespace</b> boost {
   <b>template</b>&lt;<b>typename</b> Signature, <em>// Function type R (T1, T2, ..., T<em>N</em></em>)
@@ -23,13 +36,13 @@
            <b>typename</b> SlotFunction = <a href="../../../function/index.html">function</a>&lt;Signature&gt; &gt;
   <b>class</b> signal : <b>public</b> <a href="signalN.html">signal<em>N</em></a>&lt;R, T1, T2, ..., T<em>N</em>, Combiner, Group, GroupCompare, SlotFunction&gt;
   {
-    <a href="#constructor"><b>explicit</b> signal(<b>const</b> Combiner&amp; = Combiner(), <b>const</b> GroupCompare&amp; = GroupCompare())</a>;
+    <a href="#constructor"><b>explicit</b> signal(Combiner = Combiner(), GroupCompare = GroupCompare())</a>;
   };
 }
 </pre>
 
 <h3>Constructor</h3>
-<p><code><a name="#constructor"><b>explicit</b> signal(<b>const</b> Combiner&amp; combiner = Combiner(), <b>const</b> GroupCompare&amp; group_compare = GroupCompare())</a>;</code>
+<p><code><a name="#constructor"><b>explicit</b> signal(Combiner combiner = Combiner(), GroupCompare group_compare = GroupCompare())</a>;</code>
 <ul>
   <li><b>Effects</b>: initializes base class with <code>combiner</code> and <code>group_compare</code>.</li>
 </ul>
@@ -37,7 +50,7 @@
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Wed Oct 30 09:28:59 EST 2002
+Last modified: Thu Oct 31 17:02:29 EST 2002
 <!-- hhmts end -->
   </body>
 </html>

@@ -158,9 +158,9 @@ objects.
   <li><b>Throws</b>: will not throw unless a user destructor
   throws. If a user destructor throws, not all slots in this group may
   be disconnected. </li>
-  <li><b>Complexity</b>: <em>O(lg n) + k</em> where <em>n is the
+  <li><b>Complexity</b>: <em>O(lg n) + k</em> where <em>n</em> is the
   number of slots known to the signal and <em>k</em> is the number of
-  .</li>
+          slots in the group. </li>
 </ul>
 
 <p><code><a name="disconnect_all"><b>void</b> disconnect_all_slots()</a>;</code>
@@ -215,7 +215,7 @@ objects.
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Wed Oct 30 09:28:34 EST 2002
+Last modified: Thu Oct 31 17:03:12 EST 2002
 <!-- hhmts end -->
   </body>
 </html>
