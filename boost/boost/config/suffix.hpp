@@ -76,7 +76,9 @@
 // Without member template support, we can't have a conforming
 // std::allocator template either:
 //
-#  if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_NO_STD_ALLOCATOR)
+#  if defined(BOOST_NO_MEMBER_TEMPLATES) \
+      && !defined(BOOST_MSVC6_MEMBER_TEMPLATES) \
+      && !defined(BOOST_NO_STD_ALLOCATOR)
 #     define BOOST_NO_STD_ALLOCATOR
 #  endif
 
@@ -135,7 +137,7 @@
 // from here then add to the appropriate compiler section):
 //
 #if (defined(__MT__) || defined(_MT) || defined(_REENTRANT) \
-    || defined(_PTHREADS)) && !defined(BOOST_DISABLE_THREADS)
+    || defined(_PTHREADS)) && !defined(BOOST_HAS_THREADS)
 #  define BOOST_HAS_THREADS
 #endif
 
