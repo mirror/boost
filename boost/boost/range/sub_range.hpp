@@ -44,7 +44,7 @@ namespace boost
         sub_range( ForwardRange2& r ) : 
             
 #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
-            base( impl::adl_begin( r ), impl::adl_end( r ) )
+            base( boost::begin( r ), boost::end( r ) )
 #else
             base( r )
 #endif        
@@ -54,7 +54,7 @@ namespace boost
         sub_range( const ForwardRange2& r ) : 
 
 #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
-            base( impl::adl_begin( r ), impl::adl_end( r ) )
+            base( boost::begin( r ), boost::end( r ) )
 #else
             base( r )
 #endif                

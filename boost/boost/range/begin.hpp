@@ -26,8 +26,11 @@
 
 namespace boost 
 {
+
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
 namespace range_detail 
 {
+#endif
     
     //////////////////////////////////////////////////////////////////////
     // primary template
@@ -35,14 +38,14 @@ namespace range_detail
     
     template< typename C >
     inline BOOST_DEDUCED_TYPENAME range_const_iterator<C>::type
-    begin( const C& c )
+    boost_range_begin( const C& c )
     {
         return c.begin(); 
     }
     
     template< typename C >
     inline BOOST_DEDUCED_TYPENAME range_iterator<C>::type
-    begin( C& c )
+    boost_range_begin( C& c )
     {
         return c.begin(); 
     }
@@ -52,13 +55,13 @@ namespace range_detail
     //////////////////////////////////////////////////////////////////////
     
     template< typename Iterator >
-    inline Iterator begin( const std::pair<Iterator,Iterator>& p )
+    inline Iterator boost_range_begin( const std::pair<Iterator,Iterator>& p )
     {
         return p.first;
     }
     
     template< typename Iterator >
-    inline Iterator begin( std::pair<Iterator,Iterator>& p )
+    inline Iterator boost_range_begin( std::pair<Iterator,Iterator>& p )
     {
         return p.first;
     }
@@ -68,13 +71,13 @@ namespace range_detail
     //////////////////////////////////////////////////////////////////////
     
     template< typename T, std::size_t sz >
-    inline const T* begin( const T (&array)[sz] )
+    inline const T* boost_range_begin( const T (&array)[sz] )
     {
         return array;
     }
     
     template< typename T, std::size_t sz >
-    inline T* begin( T (&array)[sz] )
+    inline T* boost_range_begin( T (&array)[sz] )
     {
         return array;
     }
@@ -86,60 +89,68 @@ namespace range_detail
 
 #if 1 || BOOST_WORKAROUND(__MWERKS__, <= 0x3204 ) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 // CW up to 9.3 and borland have troubles with function ordering
-    inline const char* begin( const char* s )
+    inline const char* boost_range_begin( const char* s )
     {
         return s;
     }
 
-    inline char* begin( char* s )
+    inline char* boost_range_begin( char* s )
     {
         return s;
     }
 
-    inline const wchar_t* begin( const wchar_t* s )
+    inline const wchar_t* boost_range_begin( const wchar_t* s )
     {
         return s;
     }
 
-    inline wchar_t* begin( wchar_t* s )
+    inline wchar_t* boost_range_begin( wchar_t* s )
     {
         return s;
     }
 #else
-    inline const char* begin( const char*& s )
+    inline const char* boost_range_begin( const char*& s )
     {
         return s;
     }
     
-    inline char* begin( char*& s )
+    inline char* boost_range_begin( char*& s )
     {
         return s;
     }
     
-    inline const wchar_t* begin( const wchar_t*& s )
+    inline const wchar_t* boost_range_begin( const wchar_t*& s )
     {
         return s;
     }
     
-    inline wchar_t* begin( wchar_t*& s )
+    inline wchar_t* boost_range_begin( wchar_t*& s )
     {
         return s;
     }
 #endif    
 
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
 } // namespace 'range_detail'
+#endif
 
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type begin( T& r )
 {
-    return range_detail::begin( r );
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    using namespace range_detail; 
+#endif    
+    return boost_range_begin( r );
 }
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type begin( const T& r )
 {
-    return range_detail::begin( r );
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
+    using namespace range_detail; 
+#endif    
+    return boost_range_begin( r );
 }
 
 #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003 ) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
@@ -168,7 +179,7 @@ namespace boost
     inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type
     const_begin( const T& r )
     {
-        return begin( r );
+        return boost::begin( r );
     }
 }
 

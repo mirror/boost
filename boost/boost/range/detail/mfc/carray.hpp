@@ -61,33 +61,33 @@ namespace boost
     };
 
     template< class T, class U >
-    T* begin( CArray<T,U>& r )
+    T* boost_range_begin( CArray<T,U>& r )
     {
         return r.GetData();
     }
         
     template< class T, class U >
-    const T* begin( const CArray<T,U>& r )
+    const T* boost_range_begin( const CArray<T,U>& r )
     {
         return r.GetData();
     }
 
     template< class T, class U >
-    int size( const CArray<T,U>& r )
+    int boost_range_size( const CArray<T,U>& r )
     {
         return r.GetSize();
     }
     
     template< class T, class U >
-    T* end( CArray<T,U>& r )
+    T* boost_range_end( CArray<T,U>& r )
     {
-        return begin( r ) + size( r );
+        return boost_range_begin( r ) + boost_range_size( r );
     }
         
     template< class T, class U >
-    const T* end( const CArray<T,U>& r )
+    const T* boost_range_end( const CArray<T,U>& r )
     {
-        return begin( r ) + size( r );
+        return boost_range_begin( r ) + boost_range_size( r );
     }
 
     // default 'empty()' ok

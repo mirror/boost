@@ -26,9 +26,12 @@
 #include <boost/range/const_iterator.hpp>
 
 namespace boost 
-{ 
+{
+    
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))     
 namespace range_detail
 {
+#endif   
 
         //////////////////////////////////////////////////////////////////////
         // primary template
@@ -36,14 +39,14 @@ namespace range_detail
         
         template< typename C >
         inline BOOST_DEDUCED_TYPENAME range_const_iterator<C>::type
-        end( const C& c )
+        boost_range_end( const C& c )
         {
             return c.end();
         }
                 
         template< typename C >
         inline BOOST_DEDUCED_TYPENAME range_iterator<C>::type
-        end( C& c )
+        boost_range_end( C& c )
         {
             return c.end();
         }
@@ -53,13 +56,13 @@ namespace range_detail
         //////////////////////////////////////////////////////////////////////
 
         template< typename Iterator >
-        inline Iterator end( const std::pair<Iterator,Iterator>& p )
+        inline Iterator boost_range_end( const std::pair<Iterator,Iterator>& p )
         {
             return p.second;
         }
         
         template< typename Iterator >
-        inline Iterator end( std::pair<Iterator,Iterator>& p )
+        inline Iterator boost_range_end( std::pair<Iterator,Iterator>& p )
         {
             return p.second;
         }
@@ -69,13 +72,13 @@ namespace range_detail
         //////////////////////////////////////////////////////////////////////
 
         template< typename T, std::size_t sz >
-        inline const T* end( const T (&array)[sz] )
+        inline const T* boost_range_end( const T (&array)[sz] )
         {
             return range_detail::array_end<T,sz>( array ); 
         }
         
         template< typename T, std::size_t sz >
-        inline T* end( T (&array)[sz] )
+        inline T* boost_range_end( T (&array)[sz] )
         {
             return range_detail::array_end<T,sz>( array ); 
         }
@@ -86,59 +89,67 @@ namespace range_detail
 
 #if 1 || BOOST_WORKAROUND(__MWERKS__, <= 0x3204 ) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 // CW up to 9.3 and borland have troubles with function ordering
-        inline char* end( char* s )
+        inline char* boost_range_end( char* s )
         {
             return range_detail::str_end( s );
         }
 
-        inline wchar_t* end( wchar_t* s )
+        inline wchar_t* boost_range_end( wchar_t* s )
         {
             return range_detail::str_end( s );
         }
 
-        inline const char* end( const char* s )
+        inline const char* boost_range_end( const char* s )
         {
             return range_detail::str_end( s );
         }
 
-        inline const wchar_t* end( const wchar_t* s )
+        inline const wchar_t* boost_range_end( const wchar_t* s )
         {
             return range_detail::str_end( s );
         }
 #else
-        inline char* end( char*& s )
+        inline char* boost_range_end( char*& s )
         {
             return range_detail::str_end( s );
         }
 
-        inline wchar_t* end( wchar_t*& s )
+        inline wchar_t* boost_range_end( wchar_t*& s )
         {
             return range_detail::str_end( s );
         }
 
-        inline const char* end( const char*& s )
+        inline const char* boost_range_end( const char*& s )
         {
             return range_detail::str_end( s );
         }
 
-        inline const wchar_t* end( const wchar_t*& s )
+        inline const wchar_t* boost_range_end( const wchar_t*& s )
         {
             return range_detail::str_end( s );
         }
 #endif
-        
+
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
 } // namespace 'range_detail'
+#endif
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type end( T& r )
 {
-    return range_detail::end( r );
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    using namespace range_detail;
+#endif        
+    return boost_range_end( r );
 }
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type end( const T& r )
 {
-    return range_detail::end( r );
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    using namespace range_detail;
+#endif        
+    return boost_range_end( r );
 }
 
 
@@ -172,7 +183,7 @@ namespace boost
     inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type
     const_end( const T& r )
     {
-        return end( r );
+        return boost::end( r );
     }
 }
 

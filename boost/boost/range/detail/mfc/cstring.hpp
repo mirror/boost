@@ -60,29 +60,29 @@ namespace boost
         typedef TCHAR type;
     };
 
-    TCHAR* begin( CString& r )
+    TCHAR* boost_range_begin( CString& r )
     {
         return r.GetBuffer(0);
     }
         
-    const TCHAR* begin( const CString& r )
+    const TCHAR* boost_range_begin( const CString& r )
     {
         return (LPCTSTR)r;
     }
 
-    int size( const CString& r )
+    int boost_range_size( const CString& r )
     {
         return r.GetLength();
     }
     
-    TCHAR* end( CString& r )
+    TCHAR* boost_range_end( CString& r )
     {
-        return begin( r ) + size( r );
+        return boost_range_begin( r ) + boost_range_size( r );
     }
         
-    const TCHAR* end( const CString& r )
+    const TCHAR* range_adl_end( const CString& r )
     {
-        return begin( r ) + size( r );
+        return boost_range_begin( r ) + boost_range_size( r );
     }
 
     // default 'empty()' ok
