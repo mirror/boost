@@ -27,9 +27,6 @@
 #endif
 #endif // MSVC workaround
 
-#include <locale>
-
-
 
 #include "boost/format/format_class.hpp"
 #include "boost/throw_exception.hpp"
@@ -44,7 +41,7 @@ namespace detail {
               BOOST_IO_STD basic_ios<Ch,Tr> &os,
               const Res = Res(0)  ) 
     // Input : char string, with starting index
-    //         a stream, so we can use its locale  and call narrow.
+    //         a basic_ios& merely to call its widen/narrow member function in the desired locale.
     // Effects : reads s[start:] and converts digits into an integral n, of type Res
     // Returns : n
   {
@@ -65,7 +62,7 @@ namespace detail {
                      BOOST_IO_STD basic_ios<Ch, Tr> &os)
     // skip printf's "asterisk-fields" directives in the format-string buf
     // Input : char string, with starting index *pos_p
-    //         a stream, so we can use its locale  and call narrow.
+    //         a basic_ios& merely to call its widen/narrow member function in the desired locale.
     // Effects : advance *pos_p by skipping printf's asterisk fields.
     // Returns : nothing
   {
@@ -97,7 +94,7 @@ namespace detail {
                               BOOST_IO_STD basic_ios<Ch,Tr> &os,
                               unsigned char exceptions)
     // Input   : a 'printf-directive' in the format-string, starting at buf[ *pos_p ]
-    //           a stream merely to call 'widen' member function in the desired locale.
+    //           a basic_ios& merely to call its widen/narrow member function in the desired locale.
     //           a bitset'excpetions' telling whether to throw exceptions on errors.
     // Returns : true if parse somehow succeeded (possibly ignoring errors if exceptions disabled) 
     //           false if it failed so bad that the directive should be printed verbatim
