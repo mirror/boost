@@ -8,6 +8,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 //  Revision History
+//   13 Jun 01 report_exception() made inline. (John Maddock, Jesse Jones)
 //   26 Feb 01 Numerous changes suggested during formal review. (Beman)
 //   25 Jan 01 catch_exceptions.hpp code factored out of cpp_main.cpp.
 //   22 Jan 01 Remove test_tools dependencies to reduce coupling.
@@ -37,8 +38,8 @@ namespace boost
   namespace detail
   {
     //  A separate reporting function was requested during formal review.
-    void report_exception( std::ostream & os, 
-                           const char * name, const char * info )
+    inline void report_exception( std::ostream & os, 
+                                  const char * name, const char * info )
       { os << "\n** uncaught exception: " << name << " " << info << std::endl; }
   }
 
