@@ -11,6 +11,7 @@
 
 // most of the workarounds and headers we need are already in here:
 #include <boost/regex.hpp> 
+#include <assert.h>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std{
@@ -38,6 +39,7 @@ template <class charT>
 void print_string(const std::basic_string<charT>& s)
 {
    typedef typename std::basic_string<charT>::size_type size_type;
+   std::cout.put(static_cast<unsigned char>('"'));
    for(size_type i = 0; i < s.size(); ++i)
    {
       if((s[i] > ' ') && (s[i] <= 'z'))
@@ -49,13 +51,15 @@ void print_string(const std::basic_string<charT>& s)
          std::cout << "\\x" << std::hex << make_int(s[i]);
       }
    }
+   std::cout.put(static_cast<unsigned char>('"'));
 }
 
 void print_c_char(char c)
 {
    char buf[50];
    const char cbuf[2] = { c, 0, };
-   std::strxfrm(buf, cbuf, 50);
+   std::size_t len = std::strxfrm(buf, cbuf, 50);
+   std:: cout << len << "   ";
    std::string s(buf);
    print_string(s);
 }
@@ -64,7 +68,8 @@ void print_c_char(wchar_t c)
 {
    wchar_t buf[50];
    const wchar_t cbuf[2] = { c, 0, };
-   std::wcsxfrm(buf, cbuf, 50);
+   std::size_t len = std::wcsxfrm(buf, cbuf, 50);
+   std:: cout << len << "   ";
    std::wstring s(buf);
    print_string(s);
 }
@@ -100,6 +105,7 @@ void print_cpp_char(charT c)
    std::locale l;
    const std::collate<charT>& col = BOOST_USE_FACET(std::collate<charT>, l);
    std::basic_string<charT> result = col.transform(&c, &c+1);
+   std::cout << result.size() << "   ";
    print_string(result);
 #endif
 }
@@ -177,6 +183,9 @@ void print_ctype_info(charT, const char* name)
    std::cout << "   Boost.Regex believes this facet to be correct..." << std::endl;
 #endif
    std::cout << "   Actual behavior, appears to be " << (result ? "correct." : "buggy.") << std::endl;
+   assert(ct.is(std::ctype<charT>::alnum, 'a'));
+   assert(ct.is(std::ctype<charT>::alnum, 'A'));
+   assert(ct.is(std::ctype<charT>::alnum, '0'));
 }
 #endif
 
