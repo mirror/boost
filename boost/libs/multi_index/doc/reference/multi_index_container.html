@@ -493,7 +493,9 @@ scheme outlined in the
   <li><code>IndexSpecifierList</code> specifies the indices that the
     <code>multi_index_container</code> is composed of. It must be a non-empty
     <a href="../../../../libs/mpl/doc/refmanual/forward-sequence.html">
-    <code>MPL Forward Sequence</code></a> of index specifiers. For
+    <code>MPL Forward Sequence</code></a> (and, preferrably,
+    an <a href="../../../../libs/mpl/doc/refmanual/random-access-sequence.html">
+    <code>MPL Random Access Sequence</code></a>) of index specifiers. For
     syntactic convenience, the
     <a href="indices.html#indexed_by"><code>indexed_by</code></a>
     MPL sequence can be used.
@@ -530,25 +532,28 @@ involved are default constructible.
 <code>index_specifier_type_list</code>
 
 <blockquote>
-<a href="../../../../libs/mpl/doc/refmanual/forward-sequence.html">
-<code>MPL Forward Sequence</code></a> containing the types of the index specifiers
-used in the instantiation of the <code>multi_index_container</code>, in the same order as
-they were provided.
+Same type as <code>IndexSpecifierList</code>.
 </blockquote>
 
 <code>index_type_list</code>
 
 <blockquote>
-<a href="../../../../libs/mpl/doc/refmanual/forward-sequence.html">
-<code>MPL Forward Sequence</code></a> containing the types of the indices held by
+Model of
+<a href="../../../../libs/mpl/doc/refmanual/random-access-sequence.html">
+<code>MPL Random Access Sequence</code></a> and
+<a href="../../../../libs/mpl/doc/refmanual/extensible-sequence.html">
+<code>MPL Extensible Sequence</code></a> containing the types of the indices held by
 the <code>multi_index_container</code>, in the same order as they were specified.
 </blockquote>
 
 <code>iterator_type_list</code>
 
 <blockquote>
-<a href="../../../../libs/mpl/doc/refmanual/forward-sequence.html">
-<code>MPL Forward Sequence</code></a> containing the types of the iterators of
+Model of
+<a href="../../../../libs/mpl/doc/refmanual/random-access-sequence.html">
+<code>MPL Random Access Sequence</code></a> and
+<a href="../../../../libs/mpl/doc/refmanual/extensible-sequence.html">
+<code>MPL Extensible Sequence</code></a> containing the types of the iterators of
 the indices held by the <code>multi_index_container</code>, in the same order as they were
 specified.
 </blockquote>
@@ -556,8 +561,11 @@ specified.
 <code>const_iterator_type_list</code>
 
 <blockquote>
-<a href="../../../../libs/mpl/doc/refmanual/forward-sequence.html">
-<code>MPL Forward Sequence</code></a> containing the types of the constant
+Model of
+<a href="../../../../libs/mpl/doc/refmanual/random-access-sequence.html">
+<code>MPL Random Access Sequence</code></a> and
+<a href="../../../../libs/mpl/doc/refmanual/extensible-sequence.html">
+<code>MPL Extensible Sequence</code></a> containing the types of the constant
 iterators of the indices held by the <code>multi_index_container</code>, in the same order
 as they were specified.
 </blockquote>
@@ -659,7 +667,7 @@ of the <code>multi_index_container</code> is preserved as well.<br>
 <blockquote>
 <b>Effects:</b> Destroys the <code>multi_index_container</code> and all the elements
 contained. The order in which the elements are destroyed is not specified.<br>
-<b>Complexity:</b> <code>O(n*D(n))</code>.
+<b>Complexity:</b> <code>O(n)</code>.
 </blockquote>
 
 <code>multi_index_container&lt;Value,IndexSpecifierList,Allocator>&amp; operator=(<br>
@@ -671,7 +679,7 @@ with copies from <code>x</code>.<br>
 <b>Postconditions:</b> <code>*this==x</code>. The order on every index
 of the <code>multi_index_container</code> is preserved as well.<br>
 <b>Returns:</b> <code>*this</code>.<br>
-<b>Complexity:</b> <code>O(n*D(n) + x.size()*log(x.size()) +
+<b>Complexity:</b> <code>O(n + x.size()*log(x.size()) +
 C(x.size()))</code>.<br>
 <b>Exception safety:</b> Strong, provided the copy and assignment operations
 of the types of <code>ctor_args_list</code> do not throw.
@@ -870,9 +878,9 @@ Index reference
 
 <br>
 
-<p>Revised December 13th 2004</p>
+<p>Revised March 10th 2005</p>
 
-<p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
