@@ -206,6 +206,8 @@ using std::distance;
 #  define BOOST_REGEX_NO_W32
 #endif
 
+#ifdef __COMO__
+
 
 /*****************************************************************************
  *
