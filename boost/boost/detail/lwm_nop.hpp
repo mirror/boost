@@ -24,30 +24,9 @@ namespace detail
 
 class lightweight_mutex
 {
-private:
-
-    lightweight_mutex(lightweight_mutex const &);
-    lightweight_mutex & operator=(lightweight_mutex const &);
-
 public:
 
-    lightweight_mutex()
-    {
-    }
-
-    class scoped_lock
-    {
-    private:
-
-        scoped_lock(scoped_lock const &);
-        scoped_lock & operator=(scoped_lock const &);
-
-    public:
-
-        explicit scoped_lock(lightweight_mutex &)
-        {
-        }
-    };
+    typedef lightweight_mutex scoped_lock;
 };
 
 } // namespace detail
