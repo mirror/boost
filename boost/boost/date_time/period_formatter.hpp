@@ -22,12 +22,15 @@ namespace boost { namespace date_time {
    *   - period_open_range_end_delimeter -- default ')' 
    *   - period_closed_range_end_delimeter -- default ']' 
    *   - display_as_open_range, display_as_closed_range -- default open_range
+   *
    *  Thus the default formatting for a period is as follows:
+   *@code
    *  [period.start()/period.last()]
+   *@endcode 
    *  So for a typical date_period this would be
    *@code
    *  [2004-Jan-04/2004-Feb-01]
-   *@code
+   *@endcode
    * where the date formatting is controlled by the date facet
    */
   template <class CharT, class OutItrT = std::ostreambuf_iterator<CharT, std::char_traits<CharT> > >
