@@ -22,9 +22,22 @@ int main()
   int numbers[] = { 0, -1, 4, -3, 5, 8, -2 };
   const int N = sizeof(numbers)/sizeof(int);
 
+  // Example using make_filter_iterator
   std::copy(boost::make_filter_iterator<is_positive_number>(numbers, numbers + N),
 	    boost::make_filter_iterator<is_positive_number>(numbers + N, numbers + N),
 	    std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
+
+  // Example using filter_iterator_generator
+  typedef boost::filter_iterator_generator<is_positive_number, int*, int> Gen;
+  is_positive_number predicate;
+  Gen::policies_type policies(predicate, numbers + N);
+  Gen::type filter_iter_first(numbers, policies);
+  Gen::type filter_iter_last(numbers + N, policies);
+
+  std::copy(filter_iter_first, filter_iter_last, std::ostream_iterator<int>(std::cout, " "));
+  std::cout << std::endl;
+  
+  
   return 0;
 }
