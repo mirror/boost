@@ -1029,6 +1029,20 @@ provide workarounds for compiler/standard library defects.</p>
         <td valign="top" width="50%"><p align="center"><b>Description</b></p>
         </td>
     </tr>
+
+    <tr>
+        <td valign="top" width="50%">BOOST_DEDUCED_TYPENAME</td>
+
+        <td valign="top" width="50%">Some compilers don't support the
+        use of <code>typename</code> for dependent types in deduced
+        contexts. This macro expands to nothing on those compilers,
+        and <code>typename</code> elsewhere.
+
+For example, replace:<pre>template <class T> void f(T, typename T::type);</pre>
+        <p>with:</p>
+        <pre>template <class T> void f(T, BOOST_DEDUCED_TYPENAME T::type);</pre>
+        </td>
+    </tr>
     <tr>
         <td valign="top" width="50%">BOOST_STATIC_CONSTANT(Type,
         assignment)</td>
