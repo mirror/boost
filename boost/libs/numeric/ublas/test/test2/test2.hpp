@@ -34,21 +34,21 @@ struct test_blas_1 {
     typedef typename V::value_type value_type;
     typedef typename ublas::type_traits<value_type>::real_type real_type;
 
-    void operator () ();
+    void test ();
 };
 
 template<class V, class M, int N>
 struct test_blas_2 {
     typedef typename V::value_type value_type;
 
-    void operator () ();
+    void test ();
 };
 
 template<class M, int N>
 struct test_blas_3 {
     typedef typename M::value_type value_type;
 
-    void operator () ();
+    void test ();
 };
 
 

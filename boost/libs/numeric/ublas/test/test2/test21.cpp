@@ -17,7 +17,7 @@
 #include "test2.hpp"
 
 template<class V, int N>
-void test_blas_1<V, N>::operator () () {
+void test_blas_1<V, N>::test () {
     {
         value_type t;
         real_type n;

@@ -17,7 +17,7 @@
 #include "test2.hpp"
 
 template<class M, int N>
-void test_blas_3<M, N>::operator () () {
+void test_blas_3<M, N>::test () {
     {
         M m1 (N, N), m2 (N, N), m3 (N, N);
 
