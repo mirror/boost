@@ -663,12 +663,12 @@ bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_iswclass(wchar_t c, boost::u
 {
    BOOST_RE_GUARD_STACK
    if((c & ~0xFF) == 0)
-      return BOOST_REGEX_MAKE_BOOL(re_detail::wide_unicode_classes[(uchar_type)c] & f);
+      return BOOST_REGEX_MAKE_BOOL(re_detail::wide_unicode_classes[(uchar_type)c] & f & char_class_win);
    WORD mask;
    if(f & char_class_unicode)
       return true;
    else if(isPlatformNT && GetStringTypeW(CT_CTYPE1, &c, 1, &mask))
-      return BOOST_REGEX_MAKE_BOOL(mask & f &char_class_win);
+      return BOOST_REGEX_MAKE_BOOL(mask & f & char_class_win);
    else if((f & char_class_graph) == char_class_graph)
       return true;  // all wide characters are considered "graphics"
    return false;

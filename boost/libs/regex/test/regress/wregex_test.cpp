@@ -192,5 +192,11 @@ template test_string_type regex_merge(const test_string_type&,
 #include "parse.cpp"
 #include "regress.cpp"
 
-
+//
+// Como goes into an infinite loop trying to link this,
+// just have it fail for now:
+//
+#if defined(__COMO__) && defined(_MSC_VER)
+#error "Comeau in VC6 mode goes into an infinite loop trying to link this program!!!"
+#endif
 

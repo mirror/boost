@@ -24,6 +24,7 @@
 #define BOOST_REGEX_TRAITS_HPP
 
 #include <boost/cregex.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/regex/detail/regex_cstring.hpp>
 
 namespace boost{
@@ -125,18 +126,23 @@ struct BOOST_REGEX_DECL c_traits_base : public regex_traits_base
 {
 public:
    enum{
+      //
+      // these values *must* have the same values as their Win32
+      // equivalents, in order to share data between the two traits
+      // classes (we will static-assert that later):
+      //
       char_class_none = 0,
-      char_class_alpha = 1,
-      char_class_cntrl = char_class_alpha << 1,
-      char_class_digit = char_class_cntrl << 1,
-      char_class_lower = char_class_digit << 1,
-      char_class_punct = char_class_lower << 1,
-      char_class_space = char_class_punct << 1,
-      char_class_upper = char_class_space << 1,
-      char_class_xdigit = char_class_upper << 1,
-      char_class_blank = char_class_xdigit << 1,
-      char_class_unicode = char_class_blank << 1,
-      char_class_underscore = char_class_unicode << 1,
+      char_class_alpha = 0x0100,
+      char_class_cntrl = 0x0020,
+      char_class_digit = 0x0004,
+      char_class_lower = 0x0002,
+      char_class_punct = 0x0010,
+      char_class_space = 0x0008,
+      char_class_upper = 0x0001,
+      char_class_xdigit = 0x0080,
+      char_class_blank = 0x0040,
+      char_class_unicode = 0x8000,
+      char_class_underscore = 0x4000,
 
       char_class_alnum = char_class_alpha | char_class_digit,
       char_class_graph = char_class_alpha | char_class_digit | char_class_punct | char_class_underscore,
@@ -348,11 +354,24 @@ struct BOOST_REGEX_DECL w32_traits_base : public regex_traits_base
    char_class_upper = C1_UPPER,
    char_class_xdigit = C1_XDIGIT,
    char_class_blank = C1_BLANK,
-   char_class_underscore = 0x0400,
+   char_class_underscore = 0x4000,
    char_class_word = C1_ALPHA | C1_DIGIT | char_class_underscore,
-   char_class_unicode = 0x0800,
-   char_class_win = C1_ALPHA | C1_CNTRL | C1_UPPER | C1_LOWER | C1_DIGIT | C1_PUNCT | C1_BLANK | C1_SPACE | C1_XDIGIT | C1_BLANK
+   char_class_unicode = 0x8000,
+   char_class_win = 0x01FF
    };
+
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_alpha == c_traits_base::char_class_alpha);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_cntrl == c_traits_base::char_class_cntrl);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_digit == c_traits_base::char_class_digit);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_lower == c_traits_base::char_class_lower);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_punct == c_traits_base::char_class_punct);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_space == c_traits_base::char_class_space);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_upper == c_traits_base::char_class_upper);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_xdigit == c_traits_base::char_class_xdigit);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_blank == c_traits_base::char_class_blank);
+   BOOST_STATIC_ASSERT(w32_traits_base::char_class_underscore == c_traits_base::char_class_underscore);
+
+
 public:
    static std::string BOOST_REGEX_CALL set_message_catalogue(const std::string& s);
 protected:
