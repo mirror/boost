@@ -22,6 +22,11 @@
 #include <boost/type_traits/transform_traits.hpp>
 #include <boost/static_assert.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4121) // alignment is sensitive to packing
+#endif
+
 namespace boost{
 template <class T> struct alignment_of;
 
@@ -189,5 +194,9 @@ public:
 };
 
 } // namespace boost
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
 #endif // ALIGNMENT_TYPE_TRAITS_HPP
