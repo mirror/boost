@@ -64,6 +64,10 @@ If ``IndexIterator`` models Random Access Traversal Iterator and
 ``ElementIterator`` models Readable Lvalue Iterator then
 ``permutation_iterator`` models Random Access Iterator.
 
+If iterator ``X`` is interoperable with iterator ``Y`` then
+``permutation_iterator<X, I1, V1, C2, R1, D1>`` is interoperable with
+``permutation_iterator<Y, I2, V2, C2, R2, D2>``.
+
 
 ``permutation_iterator`` operations
 -----------------------------------
