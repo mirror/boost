@@ -105,15 +105,10 @@ BOOST_LIB_VERSION:    The Boost version, in the form x_y, for Boost version x.y.
    // vc71:
 #  define BOOST_LIB_TOOLSET "vc71"
 
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x560)
+#elif defined(__BORLANDC__) 
 
    // CBuilder 6:
 #  define BOOST_LIB_TOOLSET "bcb"
-
-#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
-
-   // CBuilder 5:
-#  define BOOST_LIB_TOOLSET "bcb5"
 
 #endif
 
