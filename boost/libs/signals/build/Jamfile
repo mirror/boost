@@ -14,11 +14,11 @@ CPP_SOURCES =
     trackable connection signal_base slot ;
 
 dll boost_signals : ../src/$(CPP_SOURCES).cpp
-    : <include>$(BOOST_ROOT)
+    : <sysinclude>$(BOOST_ROOT)
     : debug release 
     ;
 
 lib boost_signals : ../src/$(CPP_SOURCES).cpp
-    : <include>$(BOOST_ROOT)
+    : <sysinclude>$(BOOST_ROOT)
     : debug release 
     ;
