@@ -32,8 +32,8 @@ namespace boost {
 namespace io {
 namespace detail {
 
-  template<class Ch, class Tr> inline
-  bool wrap_isdigit(Ch c, BOOST_IO_STD basic_ios<Ch,Tr> &os) 
+  template<class Ch, class Stream> inline
+  bool wrap_isdigit(Ch c, Stream &os) 
   {
 #ifndef BOOST_NO_STD_LOCALE
     return std::isdigit(c, os.rdbuf()->getloc() );
