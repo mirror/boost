@@ -32,13 +32,13 @@ class text_wiarchive_impl :
     public basic_text_iprimitive<std::wistream>,
     public basic_text_iarchive<Archive>
 {
-protected:
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend class detail::interface_iarchive<Archive>;
     friend class basic_text_iarchive<Archive>;
     friend class load_access;
+protected:
 #endif
     template<class T>
     void load(T & t){
@@ -58,7 +58,6 @@ public:
     void load_override(T & t, BOOST_PFTO int){
         basic_text_iarchive<Archive>::load_override(t, 0);
     }
-protected:
     text_wiarchive_impl(std::wistream & is, unsigned int flags = 0) :
         basic_text_iprimitive<std::wistream>(
             is, 

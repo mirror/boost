@@ -38,13 +38,13 @@ class xml_wiarchive_impl :
     public basic_text_iprimitive<std::wistream>,
     public basic_xml_iarchive<Archive>
 {
-protected:
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend class detail::interface_iarchive<Archive>;
     friend class basic_xml_iarchive<Archive>;
     friend class load_access;
+protected:
 #endif
     // instances of micro xml parser to parse start preambles
     // scoped_ptr doesn't play nice with borland - so use a naked pointer
@@ -70,7 +70,6 @@ public:
         basic_xml_iarchive<Archive>::load_override(t, 0);
     }
     void load_override(class_name_type & t, int);
-protected:
     void init();
     xml_wiarchive_impl(std::wistream & is, unsigned int flags = 0) ;
     ~xml_wiarchive_impl();

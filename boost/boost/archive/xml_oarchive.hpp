@@ -37,13 +37,13 @@ class xml_oarchive_impl :
     public basic_text_oprimitive<std::ostream>,
     public basic_xml_oarchive<Archive>
 {
-protected:
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend class detail::interface_oarchive<Archive>;
     friend class basic_xml_oarchive<Archive>;
     friend class save_access;
+protected:
 #endif
     void end_preamble(){
         basic_xml_oarchive<Archive>::end_preamble();
@@ -60,6 +60,7 @@ public:
     #ifndef BOOST_NO_STD_WSTRING
     void save(const std::wstring &ws);
     #endif
+    xml_oarchive_impl(std::ostream & os, unsigned int flags = 0);
 public:
     void save_binary(const void *address, std::size_t count){
         this->end_preamble();
@@ -73,8 +74,6 @@ public:
         );
         this->indent_next = true;
     }
-protected:
-    xml_oarchive_impl(std::ostream & os, unsigned int flags = 0);
 };
 
 // we use the following because we can't use

@@ -35,8 +35,8 @@ public:
     friend class detail::interface_oarchive<Archive>;
     friend class basic_binary_oarchive<Archive>;
     friend class save_access;
-#endif
 protected:
+#endif
     void init(){
         basic_binary_oarchive<Archive>::init();
         basic_binary_oprimitive<Archive, std::ostream>::init();

@@ -35,13 +35,13 @@ class xml_iarchive_impl :
     public basic_text_iprimitive<std::istream>,
     public basic_xml_iarchive<Archive>
 {
-protected:
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend class detail::interface_iarchive<Archive>;
     friend class basic_xml_iarchive<Archive>;
     friend class load_access;
+protected:
 #endif
     // flag indicationing whether or not a header was used
     bool header;
@@ -70,7 +70,6 @@ public:
         basic_xml_iarchive<Archive>::load_override(t, 0);
     }
     void load_override(class_name_type & t, int);
-protected:
     void init();
     xml_iarchive_impl(std::istream & is, unsigned int flags = 0) ;
     ~xml_iarchive_impl();

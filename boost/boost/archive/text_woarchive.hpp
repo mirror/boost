@@ -37,13 +37,13 @@ class text_woarchive_impl :
     public basic_text_oprimitive<std::wostream>,
     public basic_text_oarchive<Archive>
 {
-protected:
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend class detail::interface_oarchive<Archive>;
     friend class basic_text_oarchive<Archive>;
     friend class save_access;
+protected:
 #endif
     template<class T>
     void save(const T & t){
@@ -58,6 +58,12 @@ public:
     #ifndef BOOST_NO_STD_WSTRING
     void save(const std::wstring &ws);
     #endif
+    text_woarchive_impl(std::wostream & os, unsigned int flags = 0) :
+        basic_text_oprimitive<std::wostream>(
+            os, 
+            0 != (flags & no_codecvt)
+        )
+    {}
 public:
     void save_binary(const void *address, std::size_t count){
         put(L'\n');
@@ -74,13 +80,6 @@ public:
         this->delimiter = this->none;
     }
 
-protected:
-    text_woarchive_impl(std::wostream & os, unsigned int flags = 0) :
-        basic_text_oprimitive<std::wostream>(
-            os, 
-            0 != (flags & no_codecvt)
-        )
-    {}
 };
 
 // we use the following because we can't use
