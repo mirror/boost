@@ -49,7 +49,7 @@ namespace io {
         typedef std::basic_string<Ch,Tr>     string_type;
 
         // get [pbase, pptr[   from stringbuf::str(),  which returns [pbase, epptr[  :
-        string_type cur_str() const { return string_type(str(), 0, pcount()); } 
+        string_type cur_str() const { return string_type(this->str(), 0, pcount()); } 
 
         // publicize those functions (protected in stringbuf) :
         std::streamsize pcount() const { return pptr() - pbase(); }

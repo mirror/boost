@@ -158,7 +158,9 @@ namespace  {
                 if(oss_.pcount()== 0 || 
                    (res_beg[0] !=oss_.widen('+') && res_beg[0] !=oss_.widen('-')  ))
                     prefix_space = oss_.widen(' ');
-            std::streamsize res_size = std::min(specs.truncate_ - !!prefix_space, oss_.pcount());
+            std::streamsize res_size = std::min(
+              static_cast<std::streamsize>(specs.truncate_ - !!prefix_space),
+              oss_.pcount());
 
             mk_str(res, res_beg, res_size, w, oss_.fill(), fl, 
                    prefix_space, (specs.pad_scheme_ & format_item_t::centered) !=0 );
@@ -196,7 +198,8 @@ namespace  {
                 }
                 // minimal-length output
                 const Ch * tmp_beg = oss_.begin();
-                std::streamsize tmp_size = std::min(oss_.pcount(), specs.truncate_);
+                std::streamsize tmp_size = std::min(oss_.pcount(),
+                  static_cast<std::streamsize>(specs.truncate_));
                 std::streamsize d;
                 if( (d=w - tmp_size) <=0 ) { 
                     // minimal length is already >= w, so no padding (cool!)
@@ -208,13 +211,13 @@ namespace  {
                     //find where we should pad
                     //BOOST_ASSERT( static_cast<size_t>(tmp_size-prefix_space <= res.size() ));
                     std::streamsize sz = std::min(res_size+prefix_space, tmp_size);
-                    for(; i<sz && tmp_beg[i] == res[i-prefix_space]; ++i);
+                    for(; i<sz && tmp_beg[i] == res[i-prefix_space]; ++i){}
                     if(i>=tmp_size) i=prefix_space;
                     res.assign(tmp_beg, i);
                     if(d>0) res.append(static_cast<size_type>( d ), oss_.fill());
                     res.append(tmp_beg+i, tmp_size-i);
-                    assert(i+(tmp_size-i)+std::max(d,0) == w);
-                    assert(res.size() == (size_t)w);
+                    assert(i+(tmp_size-i)+std::max(d,(std::streamsize)0) == w);
+                    assert(res.size() == (std::size_t)w);
                 }
             }
         }

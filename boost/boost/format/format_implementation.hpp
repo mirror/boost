@@ -114,14 +114,14 @@ namespace boost {
     }
 
     template<class Ch, class Tr>
-    void basic_format<Ch, Tr>:: make_or_reuse_data(size_t nbitems) {
+      void basic_format<Ch, Tr>:: make_or_reuse_data(std::size_t nbitems) {
         Ch fill = oss_.widen(' ');
         if(items_.size() == 0)
             items_.assign( nbitems, format_item_t(fill) );
         else {
             items_.resize(nbitems, format_item_t(fill));
             bound_.resize(0);
-            for(size_t i=0; i < nbitems; ++i)
+            for(std::size_t i=0; i < nbitems; ++i)
                 items_[i].reset(fill); //  strings are resized, instead of reallocated
         }
     }

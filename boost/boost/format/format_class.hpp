@@ -106,7 +106,7 @@ namespace boost {
         enum style_values  { ordered = 1, // set only if all directives are  positional
                              special_needs = 4 };     
 
-        void make_or_reuse_data(size_t nbitems);// used for (re-)initialisation
+        void make_or_reuse_data(std::size_t nbitems);// used for (re-)initialisation
 
         std::vector<format_item_t>  items_; // each '%..' directive leads to a format_item
         std::vector<bool> bound_; // stores which arguments were bound. size() == 0 || num_args
