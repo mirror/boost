@@ -475,7 +475,7 @@
         <xsl:if test="purpose">
           <!-- Compact display outputs the purpose as a comment (if
                there is one) and the entire function declaration. -->
-          <xsl:text>&#10;</xsl:text>
+          <xsl:text>&#10;&#10;</xsl:text>
           <xsl:call-template name="indent">
             <xsl:with-param name="indentation" select="$indentation"/>
           </xsl:call-template>
