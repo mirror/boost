@@ -339,7 +339,7 @@ desc.add_options()
         parser to assign the names. The class specifies how many positional options
         are allowed, and for each allowed option, specifies the name. For example:
 <programlisting>
-positional_options_description pd; pd.add("input-file", 1, 1);
+positional_options_description pd; pd.add("input-file", 1);
 </programlisting> specifies that for exactly one, first, positional
         option the name will be "input-file".
       </para>
@@ -348,7 +348,7 @@ positional_options_description pd; pd.add("input-file", 1, 1);
         given the same name.
 <programlisting>
 positional_options_description pd;
-pd.add("output-file", 2, 2).add_optional("input-file", 0, -1);
+pd.add("output-file", 2).add_optional("input-file", -1);
 </programlisting>
         In the above example, the first two positional options will be associated
         with name "output-file", and any others with the name "input-file".
