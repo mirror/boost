@@ -88,12 +88,7 @@ namespace range_detail
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_size<T>::type size( const T& r )
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    using range_detail::size;
-    return size( r );
-#else
     return range_detail::size( r );
-#endif
 }
 
 } // namespace 'boost'

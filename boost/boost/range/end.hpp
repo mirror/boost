@@ -109,23 +109,13 @@ namespace range_detail
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type end( T& r )
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    using range_detail::end;
-    return end( r );
-#else
     return range_detail::end( r );
-#endif
 }
 
 template< class T >
 inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type end( const T& r )
 {
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    using range_detail::end;
-    return end( r );
-#else
     return range_detail::end( r );
-#endif
 }
 
 } // namespace 'boost'
