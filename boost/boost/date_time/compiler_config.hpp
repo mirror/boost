@@ -10,6 +10,13 @@
 
 #include "boost/date_time/locale_config.hpp" //set up locale configurations
 
+//Set up a configuration parameter for platforms that have 
+//GetTimeOfDay
+#ifdef BOOST_HAS_GETTIMEOFDAY
+#define BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
+#endif
+
+
 #if (defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION) || (defined(__BORLANDC__)))
 #define BOOST_DATE_TIME_NO_MEMBER_INIT
 #endif

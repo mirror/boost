@@ -6,7 +6,7 @@
  */
 
 #include "boost/date_time/time_clock.hpp"
-//#include "date_time/high_precision_clock.hpp"
+#include "boost/date_time/microsec_time_clock.hpp"
 #include "boost/date_time/posix_time/ptime.hpp"
 #include "boost/date_time/posix_time/posix_time_duration.hpp"
 #include "boost/date_time/posix_time/posix_time_system.hpp"
@@ -27,7 +27,13 @@ namespace posix_time {
   /*! \ingroup time_basics
    */
   typedef date_time::second_clock<ptime::date_type, ptime> second_clock;
-  //  typedef date_time::high_precision_clock<ptime::date_type, ptime> high_precision_clock;
+
+#ifdef BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
+  //! A time clock that has a resolution of one microsecond
+  /*! \ingroup time_basics
+   */
+  typedef date_time::microsec_clock<ptime> microsec_clock;
+#endif
 
   //! Define a dst null dst rule for the posix_time system
   typedef date_time::null_dst_rules<ptime::date_type, time_duration> no_dst;

@@ -65,10 +65,12 @@ DEPENDS all : test ;
    [ run posix_time/testtime.cpp
      <lib>../build/boost_date_time
     : : :  <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
+   [ run posix_time/testmicrosec_time_clock.cpp
+     <lib>../build/boost_date_time
+    : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG ]
  ;
 
 }
-
 
 # Copyright (c) 2000
 # CrystalClear Software, Inc.
@@ -80,4 +82,4 @@ DEPENDS all : test ;
 # in supporting documentation.  CrystalClear Software makes no
 # representations about the suitability of this software for any
 # purpose.  It is provided "as is" without express or implied warranty.
-      
+
