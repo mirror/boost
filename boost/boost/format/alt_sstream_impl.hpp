@@ -23,12 +23,12 @@ namespace boost {
             const Ch * p = pptr();
             const Ch * b = pbase();
             if(p != NULL && p != b) {
-                pos_type pos = seekpos(0, ::std::ios_base::out); 
+                seekpos(0, ::std::ios_base::out); 
             }
             p = gptr();
             b = eback();
             if(p != NULL && p != b) {
-                pos_type pos = seekpos(0, ::std::ios_base::in); 
+                seekpos(0, ::std::ios_base::in); 
             }
         }
 
@@ -141,9 +141,7 @@ namespace boost {
             off_type off = off_type(pos); // operation guaranteed by §27.4.3.2 table 88
             if(pptr() != NULL && putend_ < pptr())
                 putend_ = pptr();
-            if(off == off_type(-1))
-                BOOST_ASSERT(0); // §27.4.3.2 allows undefined-behaviour here
-            else {
+            if(off != off_type(-1))
                 if(which & ::std::ios_base::in && gptr() != NULL) {
                     // get area
                     if(0 <= off && off <= putend_ - eback()) {
@@ -166,6 +164,10 @@ namespace boost {
                 else // neither in nor out
                     off = off_type(-1);
                 return (pos_type(off));
+            }
+            else {
+                BOOST_ASSERT(0); // §27.4.3.2 allows undefined-behaviour here
+                return pos_type(off_type(-1));
             }
         }
         // -end seekpos(..)

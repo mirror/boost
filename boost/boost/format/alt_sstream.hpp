@@ -52,8 +52,8 @@ namespace boost {
             typedef ::std::streamsize streamsize;
 
 
-            explicit basic_altstringbuf(::std::ios_base::openmode mode
-                                        = ::std::ios_base::in | ::std::ios_base::out)
+            explicit basic_altstringbuf(std::ios_base::openmode mode
+                                        = std::ios_base::in | std::ios_base::out)
                 : putend_(NULL), is_allocated_(false), mode_(mode) 
                 {}
             explicit basic_altstringbuf(const string_type& s,
