@@ -3,7 +3,7 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. |(logo)| image:: ../../../c++boost.gif
-   :alt:
+   :alt: Boost
 
 __ ../../../index.htm
 
@@ -23,10 +23,12 @@ __ ../../../index.htm
 .. _`Open Systems Lab`: http://www.osl.iu.edu
 .. _`Institute for Transport Railway Operation and Construction`: http://www.ive.uni-hannover.de
 
-:Abstract: The Boost Iterator Library is a system of concepts_ which
-           extend the C++ standard iterator definition and a framework
+:Abstract: The Boost Iterator Library contains two parts. The first
+           is a system of concepts_ which extend the C++ standard
+           iterator requirements. The second is a framework
            of components for building iterators based on these
-           extended concepts.  The extended iterator concepts have
+           extended concepts and includes several useful iterator
+           adaptors. The extended iterator concepts have
            been carefully designed so that new-style iterators will be
            compatible with old-style algorithms, though algorithms may
            need to be updated if they want to take full advantage of
