@@ -294,9 +294,10 @@ inline T rational_cast(const rational<IntType>& src)
 }
 
 #ifdef __GNUC__
-// Workaround for a bug in gcc 2.95.2 - using statements at function scope are
-// silently ignored - to get around this, we need to include std::abs at
-// namespace scope.
+// Workaround for a bug in gcc 2.95.2 - using statements at function scope
+// within templates are silently ignored - to get around this, we need to
+// include std::abs at namespace scope.
+// (confirmed by gcc author Martin v. Loewis, says Jens Maurer)
 
 using std::abs;
 #endif
