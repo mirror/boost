@@ -49,7 +49,7 @@ struct fibonacci_validation
 template<> \
 struct fibonacci_validation<T, P, Q>  \
 {                                     \
-  enum { is_specialized = true };     \
+  BOOST_STATIC_CONSTANT(bool, is_specialized = true);     \
   static T value() { return V; }      \
   static T tolerance()                \
     { return std::max(E, 5*std::numeric_limits<T>::epsilon()); } \
