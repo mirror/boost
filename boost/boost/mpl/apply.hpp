@@ -215,13 +215,6 @@ struct BOOST_PP_CAT(apply,i)
 {
 };
 
-//: workaround for ETI bug
-template<>
-struct BOOST_PP_CAT(apply,i)<AUX_APPLY_N_SPEC_PARAMS(i, int)>
-{
-    typedef BOOST_PP_CAT(apply,i) type;
-};
-
 #   elif defined(BOOST_BROKEN_DEFAULT_TEMPLATE_PARAMETERS_IN_NESTED_TEMPLATES)
 // MWCW/Borland version
 
@@ -262,6 +255,15 @@ struct BOOST_PP_CAT(apply,i)
 };
 
 #   endif // workarounds
+
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
+//: workaround for ETI bug
+template<>
+struct BOOST_PP_CAT(apply,i)<AUX_APPLY_N_SPEC_PARAMS(i, int)>
+{
+    typedef BOOST_PP_CAT(apply,i) type;
+};
+#endif
 
 #if defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
