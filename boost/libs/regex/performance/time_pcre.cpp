@@ -69,7 +69,7 @@ double time_match(const std::string& re, const std::string& text, bool icase)
          erroffset = pcre_exec(ppcre, pe, text.c_str(), text.size(), 0, 0, what, sizeof(what)/sizeof(int));
       }
       run = tim.elapsed();
-      result = std::min(run, result);
+      result = (std::min)(run, result);
    }
    free(ppcre);
    free(pe);
@@ -152,7 +152,7 @@ double time_find_all(const std::string& re, const std::string& text, bool icase)
          }
       }
       run = tim.elapsed();
-      result = std::min(run, result);
+      result = (std::min)(run, result);
    }
    return result / iter;
 }

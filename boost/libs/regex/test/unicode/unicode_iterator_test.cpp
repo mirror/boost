@@ -110,10 +110,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    j = i;
    std::advance(j, (std::min)(v.size(), v32.size()));
    k = v32.begin();
-   BOOST_CHECK_EQUAL_COLLECTIONS(
-      i, 
-      j, 
-      k);
+   BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(), v.end(), v32.begin(), v32.end());
    //
    // test backward iteration, of 32-16 bit interconversions:
    //
@@ -133,10 +130,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    j = i;
    std::advance(j, (std::min)(v.size(), v32.size()));
    k = v32.begin();
-   BOOST_CHECK_EQUAL_COLLECTIONS(
-      i, 
-      j, 
-      k);
+   BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(), v.end(), v32.begin(), v32.end());
 #endif
    //
    // Test forward iteration, of 32-8 bit interconversions:
@@ -164,10 +158,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    j = i;
    std::advance(j, (std::min)(v.size(), v32.size()));
    k = v32.begin();
-   BOOST_CHECK_EQUAL_COLLECTIONS(
-      i, 
-      j, 
-      k);
+   BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(), v.end(), v32.begin(), v32.end());
    //
    // test backward iteration, of 32-8 bit interconversions:
    //
@@ -187,10 +178,7 @@ void test(const std::vector< ::boost::uint32_t>& v)
    j = i;
    std::advance(j, (std::min)(v.size(), v32.size()));
    k = v32.begin();
-   BOOST_CHECK_EQUAL_COLLECTIONS(
-      i, 
-      j, 
-      k);
+   BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(), v.end(), v32.begin(), v32.end());
 #endif
 }
 
