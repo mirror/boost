@@ -37,6 +37,22 @@ struct template_arity_impl
     };
 };
 
+#if defined(__BORLANDC__) && (__BORLANDC__ >= 0x561 && !defined(BOOST_STRICT_CONFIG))
+template< typename Rebind >
+struct template_arity_value
+{
+    BOOST_STATIC_CONSTANT(int, value = Rebind::arity);
+};
+
+template<>
+struct template_arity_impl<true>
+{
+    template< typename F > struct result_
+        : template_arity_value<typename F::rebind>
+    {
+    };
+};
+#else
 template<>
 struct template_arity_impl<true>
 {
@@ -46,6 +62,7 @@ struct template_arity_impl<true>
         BOOST_STATIC_CONSTANT(int, value = f_::arity);
     };
 };
+#endif
 
 template< typename F >
 struct template_arity
