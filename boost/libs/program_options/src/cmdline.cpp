@@ -380,7 +380,12 @@ namespace boost { namespace program_options { namespace detail {
        
         // Handle the case of '=' in name, which is not part of option name
         const char* eq = strchr(name, '=');
+        // Comeau reports ambiguity between C (global) and C++ (std::) versions.
+#if BOOST_WORKAROUND(__COMO__, BOOST_TESTED_AT(4303))
+        std::size_t n = eq ? eq - name : std::strlen(name);
+#else
         std::size_t n = eq ? eq - name : strlen(name);
+#endif
 
         int (*cmp)(const char*, const char*, size_t);
         cmp = (style & case_insensitive) 
