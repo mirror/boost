@@ -19,23 +19,13 @@
 
 #include "boost/config.hpp"
 
-// add this to Boost.Config, but for now:
-#if !defined(BOOST_NO_TEMPLATED_STREAMS)
-
-#if (defined(__GNUC__) && __GNUC__ == 2 && __GNUC_MINOR__ <= 97 && !defined(__SGI_STL_PORT)) \
- || (defined(BOOST_MSVC) && BOOST_MSVC <= 1200 && defined(__SGI_STL_PORT))
-#   define BOOST_NO_TEMPLATED_STREAMS
-#endif
-
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) BOOST_TEMPLATED_STREAM_* macros
 //
 // Provides workaround platforms without stream class templates.
 //
 
-#if !defined(BOOST_NO_TEMPLATED_STREAMS)
+#if !defined(BOOST_NO_STD_LOCALE)
 
 #define BOOST_TEMPLATED_STREAM_TEMPLATE(E,T) \
     template < typename E , typename T >
@@ -61,7 +51,7 @@
 #define BOOST_TEMPLATED_STREAM_WITH_ALLOC(X,E,T,A) \
     BOOST_JOIN(std::basic_,X)< E , T , A >
 
-#else // defined(BOOST_NO_TEMPLATED_STREAMS)
+#else // defined(BOOST_NO_STD_LOCALE)
 
 #define BOOST_TEMPLATED_STREAM_TEMPLATE(E,T) /**/
 
@@ -83,6 +73,6 @@
 #define BOOST_TEMPLATED_STREAM_WITH_ALLOC(X,E,T,A) \
     std::X
 
-#endif // BOOST_NO_TEMPLATED_STREAMS
+#endif // BOOST_NO_STD_LOCALE
 
 #endif // BOOST_DETAIL_TEMPLATED_STREAMS_HPP
