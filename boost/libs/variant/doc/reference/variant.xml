@@ -356,12 +356,12 @@
 
       <description>
         <simpara>Swaps <code>lhs</code> with <code>rhs</code> by application
-        of <code><functionname>variant::swap</functionname></code>.</simpara>
+        of <code><methodname>variant::swap</methodname></code>.</simpara>
       </description>
 
       <throws>
         <simpara>May fail with any exception arising from
-        <code><functionname>variant::swap</functionname></code>.</simpara>
+        <code><methodname>variant::swap</methodname></code>.</simpara>
       </throws>
     </function>
 
