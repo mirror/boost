@@ -37,63 +37,8 @@ namespace boost
   template <class Iter, class Value, class Category, class Reference, class Difference>
   class indirect_iterator;
 
-  template <class T>
-  struct referent;
-  
   namespace detail
   {
-    struct unspecified {};
-
-    //
-    // Detection for whether a type has a nested `element_type'
-    // typedef. Used to detect smart pointers. For compilers not
-    // supporting mpl's has_xxx, we supply specializations. However, we
-    // really ought to have a specializable is_pointer template which
-    // can be used instead with something like
-    // boost/python/pointee.hpp to find the value_type.
-    //
-# ifndef BOOST_MPL_NO_AUX_HAS_XXX
-    namespace aux
-    {
-      BOOST_MPL_HAS_XXX_TRAIT_DEF(element_type)
-      BOOST_MPL_HAS_XXX_TRAIT_DEF(type)
-    }
-
-    template <class T>
-    struct has_element_type
-        : mpl::bool_<
-              mpl::if_<
-                  is_class<T>
-                , ::boost::detail::aux::has_element_type<T>
-                , mpl::false_
-              >::type::value
-          >
-    {
-    };
-# else
-    template <class T>
-    struct has_element_type
-        : mpl::false_ {};
-    
-    template <class T>
-    struct has_element_type<boost::shared_ptr<T> >
-        : mpl::true_ {};
-    
-    template <class T>
-    struct has_element_type<boost::scoped_ptr<T> >
-        : mpl::true_ {};
-    
-    template <class T>
-    struct has_element_type<std::auto_ptr<T> >
-        : mpl::true_ {};
-# endif 
-  
-    // Metafunction accessing the nested ::element_type
-    template <class T>
-    struct element_type
-      : mpl::identity<typename T::element_type>
-    {};
-
     template <class T>
     struct iterator_is_mutable
         : mpl::not_<
@@ -104,65 +49,31 @@ namespace boost
     {
     };
 
-    template <class T>
-    struct not_int_impl
-    {
-        template <class U>
-        struct apply {
-            typedef T type;
-        };
-    };
-
-    template <>
-    struct not_int_impl<int> {};
-    
-    template <class T, class U>
-    struct not_int
-        : not_int_impl<T>::template apply<U> {};
-
-
-    template <class Dereferenceable>
-    struct class_has_element_type
-      : mpl::and_<
-            is_class<Dereferenceable>
-          , has_element_type<Dereferenceable>
-        >
-    {};
-
     // If the Value parameter is unspecified, we use this metafunction
-    // to deduce the default types
+    // to deduce the default type
     template <class Dereferenceable>
     struct default_indirect_value
     {
-#if 0
-        typedef typename remove_cv<
-            typename referent<Dereferenceable>::type
-        >::type referent_t;
-
         typedef typename mpl::if_<
-            mpl::or_<
-                class_has_element_type<Dereferenceable>
-	  , iterator_is_mutable<Dereferenceable> // This doesn't work when Dereferencable is not an iterator. -JGS
-            >
-          , referent_t
-          , referent_t const
-        >::type type;
-#else
-      template <class D>
-      struct get_from_iter {
-	typedef typename mpl::if_<
             iterator_is_mutable<Dereferenceable>
-	, typename iterator_value<Dereferenceable>::type
-	, typename iterator_value<Dereferenceable>::type const
-	>::type type;
-      };
+        , typename iterator_value<Dereferenceable>::type
+        , typename iterator_value<Dereferenceable>::type const
+        >::type type;
+    };
 
-      typedef typename mpl::apply_if<
-	aux::has_type< referent<Dereferenceable> >
-	, referent<Dereferenceable>
-        , get_from_iter<Dereferenceable>
-      >::type type;
-#endif
+    // If the Reference parameter is unspecified, we use this metafunction
+    // to deduce the default type
+    template <class Dereferenceable, class Value>
+    struct default_indirect_reference
+    {
+        struct use_value_ref { typedef Value& type; };
+
+        typedef typename 
+        mpl::apply_if<
+            is_same<Value, use_default>
+            , iterator_reference<Dereferenceable>
+            , use_value_ref
+        >::type type;
     };
     
     template <class Iter, class Value, class Category, class Reference, class Difference>
@@ -177,7 +88,9 @@ namespace boost
                 Value, default_indirect_value<dereferenceable>
             >::type
           , Category
-          , Reference
+          , typename ia_dflt_help<
+                Reference, default_indirect_reference<dereferenceable, Value>
+            >::type
           , Difference
         > type;
     };
@@ -186,34 +99,6 @@ namespace boost
     struct indirect_base<int, int, int, int, int> {};
   } // namespace detail
 
-  // User-specializable metafunction which returns the referent of a
-  // dereferenceable type.  The default implementation returns
-  // Dereferenceable::element_type if such a member exists (thus
-  // handling the boost smart pointers and auto_ptr), and
-  // iterator_traits<Dereferenceable>::value_type otherwise.
-#if 0
-  template <class Dereferenceable>
-  struct referent
-    : mpl::apply_if<
-          detail::class_has_element_type<Dereferenceable>
-        , detail::element_type<Dereferenceable>
-        , iterator_value<Dereferenceable>
-      >
-  {};
-#else
-  namespace detail {
-    struct has_no_type { };
-  }
-  template <class Dereferenceable>
-  struct referent
-    : mpl::if_<
-          detail::class_has_element_type<Dereferenceable>
-        , detail::element_type<Dereferenceable>
-        , detail::has_no_type
-    >::type
-  {};
-
-#endif
     
   template <
       class Iterator

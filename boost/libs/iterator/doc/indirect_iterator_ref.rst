@@ -42,12 +42,15 @@ following pseudo-code.  We use the abbreviation
       typedef remove_const<Value>::type value_type;
 
   if (Reference is use_default) then
-      typedef iterator_traits<V>::reference reference;
+      if (Value is use_default) then
+          typedef iterator_traits<V>::reference reference;
+      else
+          typedef Value& reference;
   else
       typedef Reference reference;
 
   if (Value is use_default) then
-      typedef iterator_traits<V>::pointer pointer;
+      typedef ?? pointer;
   else
       typedef Value* pointer;
 
