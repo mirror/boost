@@ -68,44 +68,49 @@ int main()
     // Adapting new-style iterators
     {
       typedef boost::iterator_archetype<
-	  const dummyT
-	, boost::iterator_archetypes::readable_iterator_t
-	, boost::single_pass_traversal_tag
+          const dummyT
+        , boost::iterator_archetypes::readable_iterator_t
+        , boost::single_pass_traversal_tag
       > BaseIter;
       typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::InputIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::SinglePassIteratorConcept<Iter> >();
     }
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // Causes Internal Error in linker.
     {
       typedef boost::iterator_archetype<
-	  dummyT
-	, boost::iterator_archetypes::readable_writable_iterator_t
-	, boost::single_pass_traversal_tag
+          dummyT
+        , boost::iterator_archetypes::readable_writable_iterator_t
+        , boost::single_pass_traversal_tag
       > BaseIter;
       typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
+
       boost::function_requires< boost::InputIteratorConcept<Iter> >();
       boost::function_requires< boost::OutputIteratorConcept<Iter, dummyT> >();
       boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::SinglePassIteratorConcept<Iter> >();
     }
+#endif 
     {
       typedef boost::iterator_archetype<
-	  const dummyT
-	, boost::iterator_archetypes::readable_iterator_t
-	, boost::forward_traversal_tag
+          const dummyT
+        , boost::iterator_archetypes::readable_iterator_t
+        , boost::forward_traversal_tag
       > BaseIter;
       typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::InputIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
     }
+    
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1200)  // Causes Internal Error in linker.
     {
       typedef boost::iterator_archetype<
-	  dummyT
-	, boost::iterator_archetypes::readable_writable_iterator_t
-	, boost::forward_traversal_tag
+          dummyT
+        , boost::iterator_archetypes::readable_writable_iterator_t
+        , boost::forward_traversal_tag
       > BaseIter;
       typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
@@ -114,9 +119,9 @@ int main()
     }
     {
       typedef boost::iterator_archetype<
-	  const dummyT
-	, boost::iterator_archetypes::readable_lvalue_iterator_t
-	, boost::forward_traversal_tag
+          const dummyT
+        , boost::iterator_archetypes::readable_lvalue_iterator_t
+        , boost::forward_traversal_tag
       > BaseIter;
       typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::ForwardIteratorConcept<Iter> >();
@@ -125,15 +130,16 @@ int main()
     }
     {
       typedef boost::iterator_archetype<
-	  dummyT
-	, boost::iterator_archetypes::writable_lvalue_iterator_t
-	, boost::forward_traversal_tag
+          dummyT
+        , boost::iterator_archetypes::writable_lvalue_iterator_t
+        , boost::forward_traversal_tag
       > BaseIter;
       typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::Mutable_ForwardIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
     }
+#endif 
 
     // Run-time tests
 
