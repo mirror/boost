@@ -32,6 +32,7 @@ std::string copyright(
 "//  See http://www.boost.org/libs/config for the most recent version.");
 
 std::stringstream config_test1;
+std::stringstream config_test1a;
 std::stringstream config_test2;
 std::stringstream jamfile;
 
@@ -49,6 +50,7 @@ void write_config_test()
       "#include <boost/config.hpp>\n#include <iostream>\n#include \"test.hpp\"\n\n"
       "int error_count = 0;\n\n";
    ofs << config_test1.str() << std::endl;
+   ofs << config_test1a.str() << std::endl;
    ofs << "int main( int, char *[] )\n{\n" << config_test2.str() << "   return error_count;\n}\n\n";
 }
 
@@ -174,11 +176,14 @@ void process_ipp_file(const fs::path& file, bool positive_test)
    write_test_file(positive_file, macro_name, namespace_name, file.leaf(), positive_test, true);
    write_test_file(negative_file, macro_name, namespace_name, file.leaf(), positive_test, false);
    
-   // always create config_test data:
-   config_test1 << "#if";
+   // always create config_test data,
+   // positive and negative tests go to separate streams, because for some
+   // reason some compilers choke unless we put them in a particular order...
+   std::ostream* pout = positive_test ? &config_test1a : &config_test1;
+   *pout << "#if";
    if(!positive_test)
-      config_test1 << "n";
-   config_test1 << "def " << macro_name 
+      *pout << "n";
+   *pout << "def " << macro_name 
       << "\n#include \"" << file.leaf() << "\"\n#else\nnamespace "
       << namespace_name << " = empty_boost;\n#endif\n";
 

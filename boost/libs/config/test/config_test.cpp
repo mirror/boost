@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sat Dec 04 10:44:19 2004
+//  This file was automatically generated on Fri Dec 17 11:13:11 2004
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -19,146 +19,6 @@
 
 int error_count = 0;
 
-#ifdef BOOST_HAS_TWO_ARG_USE_FACET
-#include "boost_has_2arg_use_facet.ipp"
-#else
-namespace boost_has_two_arg_use_facet = empty_boost;
-#endif
-#ifdef BOOST_HAS_BETHREADS
-#include "boost_has_bethreads.ipp"
-#else
-namespace boost_has_bethreads = empty_boost;
-#endif
-#ifdef BOOST_HAS_CLOCK_GETTIME
-#include "boost_has_clock_gettime.ipp"
-#else
-namespace boost_has_clock_gettime = empty_boost;
-#endif
-#ifdef BOOST_HAS_DIRENT_H
-#include "boost_has_dirent_h.ipp"
-#else
-namespace boost_has_dirent_h = empty_boost;
-#endif
-#ifdef BOOST_HAS_FTIME
-#include "boost_has_ftime.ipp"
-#else
-namespace boost_has_ftime = empty_boost;
-#endif
-#ifdef BOOST_HAS_GETTIMEOFDAY
-#include "boost_has_gettimeofday.ipp"
-#else
-namespace boost_has_gettimeofday = empty_boost;
-#endif
-#ifdef BOOST_HAS_HASH
-#include "boost_has_hash.ipp"
-#else
-namespace boost_has_hash = empty_boost;
-#endif
-#ifdef BOOST_HAS_LONG_LONG
-#include "boost_has_long_long.ipp"
-#else
-namespace boost_has_long_long = empty_boost;
-#endif
-#ifdef BOOST_HAS_MACRO_USE_FACET
-#include "boost_has_macro_use_facet.ipp"
-#else
-namespace boost_has_macro_use_facet = empty_boost;
-#endif
-#ifdef BOOST_HAS_MS_INT64
-#include "boost_has_ms_int64.ipp"
-#else
-namespace boost_has_ms_int64 = empty_boost;
-#endif
-#ifdef BOOST_HAS_NANOSLEEP
-#include "boost_has_nanosleep.ipp"
-#else
-namespace boost_has_nanosleep = empty_boost;
-#endif
-#ifdef BOOST_HAS_NL_TYPES_H
-#include "boost_has_nl_types_h.ipp"
-#else
-namespace boost_has_nl_types_h = empty_boost;
-#endif
-#ifdef BOOST_HAS_NRVO
-#include "boost_has_nrvo.ipp"
-#else
-namespace boost_has_nrvo = empty_boost;
-#endif
-#ifdef BOOST_HAS_PARTIAL_STD_ALLOCATOR
-#include "boost_has_part_alloc.ipp"
-#else
-namespace boost_has_partial_std_allocator = empty_boost;
-#endif
-#ifdef BOOST_HAS_PTHREADS
-#include "boost_has_pthreads.ipp"
-#else
-namespace boost_has_pthreads = empty_boost;
-#endif
-#ifdef BOOST_HAS_PTHREAD_DELAY_NP
-#include "boost_has_pthread_delay_np.ipp"
-#else
-namespace boost_has_pthread_delay_np = empty_boost;
-#endif
-#ifdef BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
-#include "boost_has_pthread_ma_st.ipp"
-#else
-namespace boost_has_pthread_mutexattr_settype = empty_boost;
-#endif
-#ifdef BOOST_HAS_PTHREAD_YIELD
-#include "boost_has_pthread_yield.ipp"
-#else
-namespace boost_has_pthread_yield = empty_boost;
-#endif
-#ifdef BOOST_HAS_SCHED_YIELD
-#include "boost_has_sched_yield.ipp"
-#else
-namespace boost_has_sched_yield = empty_boost;
-#endif
-#ifdef BOOST_HAS_SGI_TYPE_TRAITS
-#include "boost_has_sgi_type_traits.ipp"
-#else
-namespace boost_has_sgi_type_traits = empty_boost;
-#endif
-#ifdef BOOST_HAS_SIGACTION
-#include "boost_has_sigaction.ipp"
-#else
-namespace boost_has_sigaction = empty_boost;
-#endif
-#ifdef BOOST_HAS_SLIST
-#include "boost_has_slist.ipp"
-#else
-namespace boost_has_slist = empty_boost;
-#endif
-#ifdef BOOST_HAS_STDINT_H
-#include "boost_has_stdint_h.ipp"
-#else
-namespace boost_has_stdint_h = empty_boost;
-#endif
-#ifdef BOOST_HAS_STLP_USE_FACET
-#include "boost_has_stlp_use_facet.ipp"
-#else
-namespace boost_has_stlp_use_facet = empty_boost;
-#endif
-#ifdef BOOST_HAS_UNISTD_H
-#include "boost_has_unistd_h.ipp"
-#else
-namespace boost_has_unistd_h = empty_boost;
-#endif
-#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
-#include "boost_has_vc6_mem_templ.ipp"
-#else
-namespace boost_msvc6_member_templates = empty_boost;
-#endif
-#ifdef BOOST_MSVC_STD_ITERATOR
-#include "boost_has_vc_iterator.ipp"
-#else
-namespace boost_msvc_std_iterator = empty_boost;
-#endif
-#ifdef BOOST_HAS_WINTHREADS
-#include "boost_has_winthreads.ipp"
-#else
-namespace boost_has_winthreads = empty_boost;
-#endif
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #include "boost_no_arg_dep_lookup.ipp"
 #else
@@ -433,6 +293,147 @@ namespace boost_no_void_returns = empty_boost;
 #include "boost_no_wchar_t.ipp"
 #else
 namespace boost_no_intrinsic_wchar_t = empty_boost;
+#endif
+
+#ifdef BOOST_HAS_TWO_ARG_USE_FACET
+#include "boost_has_2arg_use_facet.ipp"
+#else
+namespace boost_has_two_arg_use_facet = empty_boost;
+#endif
+#ifdef BOOST_HAS_BETHREADS
+#include "boost_has_bethreads.ipp"
+#else
+namespace boost_has_bethreads = empty_boost;
+#endif
+#ifdef BOOST_HAS_CLOCK_GETTIME
+#include "boost_has_clock_gettime.ipp"
+#else
+namespace boost_has_clock_gettime = empty_boost;
+#endif
+#ifdef BOOST_HAS_DIRENT_H
+#include "boost_has_dirent_h.ipp"
+#else
+namespace boost_has_dirent_h = empty_boost;
+#endif
+#ifdef BOOST_HAS_FTIME
+#include "boost_has_ftime.ipp"
+#else
+namespace boost_has_ftime = empty_boost;
+#endif
+#ifdef BOOST_HAS_GETTIMEOFDAY
+#include "boost_has_gettimeofday.ipp"
+#else
+namespace boost_has_gettimeofday = empty_boost;
+#endif
+#ifdef BOOST_HAS_HASH
+#include "boost_has_hash.ipp"
+#else
+namespace boost_has_hash = empty_boost;
+#endif
+#ifdef BOOST_HAS_LONG_LONG
+#include "boost_has_long_long.ipp"
+#else
+namespace boost_has_long_long = empty_boost;
+#endif
+#ifdef BOOST_HAS_MACRO_USE_FACET
+#include "boost_has_macro_use_facet.ipp"
+#else
+namespace boost_has_macro_use_facet = empty_boost;
+#endif
+#ifdef BOOST_HAS_MS_INT64
+#include "boost_has_ms_int64.ipp"
+#else
+namespace boost_has_ms_int64 = empty_boost;
+#endif
+#ifdef BOOST_HAS_NANOSLEEP
+#include "boost_has_nanosleep.ipp"
+#else
+namespace boost_has_nanosleep = empty_boost;
+#endif
+#ifdef BOOST_HAS_NL_TYPES_H
+#include "boost_has_nl_types_h.ipp"
+#else
+namespace boost_has_nl_types_h = empty_boost;
+#endif
+#ifdef BOOST_HAS_NRVO
+#include "boost_has_nrvo.ipp"
+#else
+namespace boost_has_nrvo = empty_boost;
+#endif
+#ifdef BOOST_HAS_PARTIAL_STD_ALLOCATOR
+#include "boost_has_part_alloc.ipp"
+#else
+namespace boost_has_partial_std_allocator = empty_boost;
+#endif
+#ifdef BOOST_HAS_PTHREADS
+#include "boost_has_pthreads.ipp"
+#else
+namespace boost_has_pthreads = empty_boost;
+#endif
+#ifdef BOOST_HAS_PTHREAD_DELAY_NP
+#include "boost_has_pthread_delay_np.ipp"
+#else
+namespace boost_has_pthread_delay_np = empty_boost;
+#endif
+#ifdef BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#include "boost_has_pthread_ma_st.ipp"
+#else
+namespace boost_has_pthread_mutexattr_settype = empty_boost;
+#endif
+#ifdef BOOST_HAS_PTHREAD_YIELD
+#include "boost_has_pthread_yield.ipp"
+#else
+namespace boost_has_pthread_yield = empty_boost;
+#endif
+#ifdef BOOST_HAS_SCHED_YIELD
+#include "boost_has_sched_yield.ipp"
+#else
+namespace boost_has_sched_yield = empty_boost;
+#endif
+#ifdef BOOST_HAS_SGI_TYPE_TRAITS
+#include "boost_has_sgi_type_traits.ipp"
+#else
+namespace boost_has_sgi_type_traits = empty_boost;
+#endif
+#ifdef BOOST_HAS_SIGACTION
+#include "boost_has_sigaction.ipp"
+#else
+namespace boost_has_sigaction = empty_boost;
+#endif
+#ifdef BOOST_HAS_SLIST
+#include "boost_has_slist.ipp"
+#else
+namespace boost_has_slist = empty_boost;
+#endif
+#ifdef BOOST_HAS_STDINT_H
+#include "boost_has_stdint_h.ipp"
+#else
+namespace boost_has_stdint_h = empty_boost;
+#endif
+#ifdef BOOST_HAS_STLP_USE_FACET
+#include "boost_has_stlp_use_facet.ipp"
+#else
+namespace boost_has_stlp_use_facet = empty_boost;
+#endif
+#ifdef BOOST_HAS_UNISTD_H
+#include "boost_has_unistd_h.ipp"
+#else
+namespace boost_has_unistd_h = empty_boost;
+#endif
+#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
+#include "boost_has_vc6_mem_templ.ipp"
+#else
+namespace boost_msvc6_member_templates = empty_boost;
+#endif
+#ifdef BOOST_MSVC_STD_ITERATOR
+#include "boost_has_vc_iterator.ipp"
+#else
+namespace boost_msvc_std_iterator = empty_boost;
+#endif
+#ifdef BOOST_HAS_WINTHREADS
+#include "boost_has_winthreads.ipp"
+#else
+namespace boost_has_winthreads = empty_boost;
 #endif
 
 int main( int, char *[] )
