@@ -61,7 +61,7 @@ namespace boost {
       private equality_comparable1<connection>
     {
     public:
-      connection();
+      connection() : con(), controlling_connection(false) {}
       connection(const connection&);
       ~connection();
 
@@ -124,11 +124,6 @@ namespace boost {
     private:
       bool released;
     };
-
-    inline connection::connection() :
-      con(), controlling_connection(false)
-    {
-    }
 
     inline connection::connection(const connection& other) :
       con(other.con), controlling_connection(other.controlling_connection)
