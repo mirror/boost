@@ -83,7 +83,7 @@
 <!ELEMENT libraryinfo (author+, copyright*, legalnotice*, librarypurpose, librarycategory*)>
 <!ATTLIST libraryinfo %boost.common.attrib;>
 
-<!ELEMENT librarypurpose (#PCDATA|code|ulink|functionname|methodname|classname)*>
+<!ELEMENT librarypurpose (#PCDATA|code|ulink|functionname|methodname|classname|macroname|headername)*>
 <!ATTLIST librarypurpose %boost.common.attrib;>
 
 <!ELEMENT librarycategory (#PCDATA)>
@@ -288,6 +288,12 @@
 
 <!ELEMENT functionname (#PCDATA)>
 <!ATTLIST functionname %boost.common.attrib;>
+
+<!ELEMENT macroname (#PCDATA)>
+<!ATTLIST macroname %boost.common.attrib;>
+
+<!ELEMENT headername (#PCDATA)>
+<!ATTLIST headername %boost.common.attrib;>
 
 <!ELEMENT copy-assignment 
     (template?, type?, parameter*, %boost.function.semantics;)>

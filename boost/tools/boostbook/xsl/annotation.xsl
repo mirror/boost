@@ -6,6 +6,7 @@
   <xsl:key name="functions" match="function|overloaded-function" use="@name"/>
   <xsl:key name="libraries" match="library" use="@name"/>
   <xsl:key name="macros" match="macro" use="@name"/>
+  <xsl:key name="headers" match="header" use="@name"/>
 
   <xsl:template match="classname" mode="annotation">
     <!-- Determine the (possibly qualified) class name we are looking for -->
@@ -190,6 +191,42 @@
       <xsl:otherwise>
         <xsl:message>
           <xsl:text>error: macro `</xsl:text>
+          <xsl:value-of select="$name"/>
+          <xsl:text>' is multiply defined.</xsl:text>
+        </xsl:message>
+        <xsl:value-of select="$node"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="headername" mode="annotation">
+    <xsl:param name="name" select="text()"/>
+    
+    <xsl:variable name="node" select="key('headers', $name)"/>
+    <xsl:choose>
+      <xsl:when test="count($node) = 0">
+        <xsl:message>
+          <xsl:text>warning: cannot find header `</xsl:text>
+          <xsl:value-of select="$name"/>
+          <xsl:text>'</xsl:text>
+        </xsl:message>
+        <xsl:value-of select="$name"/>
+      </xsl:when>
+
+      <xsl:when test="count($node) = 1">
+        <xsl:call-template name="internal-link">
+          <xsl:with-param name="to">
+            <xsl:call-template name="generate.id">
+              <xsl:with-param name="node" select="$node"/>
+            </xsl:call-template>
+          </xsl:with-param>
+          <xsl:with-param name="text" select="$name"/>
+        </xsl:call-template>
+      </xsl:when>
+
+      <xsl:otherwise>
+        <xsl:message>
+          <xsl:text>error: header `</xsl:text>
           <xsl:value-of select="$name"/>
           <xsl:text>' is multiply defined.</xsl:text>
         </xsl:message>
