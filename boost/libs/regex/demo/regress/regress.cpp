@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.cpp
-  *   VERSION  3.03
+  *   VERSION  3.04
   *
   * main() and associated code for regress.
   *
@@ -101,7 +101,7 @@ int main(int argc, char * argv[])
          string_type s;
          get_line(is, s);
          ++line;
-         jm_trace("Reading test script line " << line << " " << s);
+         jm_trace("Reading test script line " << line << " " << make_narrow(s.c_str()));
          parse_input_line(s);
          if(do_test)
          {
@@ -117,20 +117,25 @@ int main(int argc, char * argv[])
 
 #ifdef TEST_UNICODE
 
-ostream& operator << (ostream& os, const wchar_t* s)
+std::string make_narrow(const wchar_t* ptr)
 {
-   while(*s)
+   std::string result;
+   while(*ptr)
    {
-      os.put((char)*s);
-      ++s;
+      if(*ptr & ~0x7F)
+      {
+         char buf[10];
+         std::sprintf(buf, "\\x%.4x", (int)*ptr);
+         result.append(buf);
+         ++ptr;
+      }
+      else
+      {
+         result.append(1, (char)*ptr);
+         ++ptr;
+      }
    }
-   return os;
-}
-
-ostream& operator << (ostream& os, const std::wstring& s)
-{
-   os << s.c_str();
-   return os;
+   return result;
 }
 
 istream& get_line(istream& is, nstring_type& s, char delim)

@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     parse.cpp
-  *   VERSION  3.03
+  *   VERSION  3.04
   *
   * Input parsing functions for regress.
   *
@@ -172,7 +172,7 @@ bool parse_function::operator()(const parse_grep& g)
       }
       cout << "Warning: Unknown flag: ";
       string_type t(i, j);
-      cout << t.c_str();
+      cout << make_narrow(t.c_str());
       cout << endl;
       return true;
    }
@@ -184,9 +184,9 @@ bool parse_function::operator()(const parse_grep& g)
    case 1:
       // set the text to match:
       search_text = string_type(i, j);
-      jm_trace("Initial search text: " << search_text);
+      jm_trace("Initial search text: " << make_narrow(search_text));
       expand_escapes(search_text);
-      jm_trace("Search text after escapes expanded: " << search_text);
+      jm_trace("Search text after escapes expanded: " << make_narrow(search_text));
       break;
    case 2:
       // maybe set format string:
@@ -232,8 +232,8 @@ void parse_input_line(const string_type& s)
    parse_function op;
    do_test = false;
    regex_grep(op, s.begin(), s.end(), parse_expression);
-   jm_trace("expression: " << expression);
-   jm_trace("search string: " << search_text);
+   jm_trace("expression: " << make_narrow(expression));
+   jm_trace("search string: " << make_narrow(search_text));
 }
 
 int to_int(string_type::const_iterator i, string_type::const_iterator j)

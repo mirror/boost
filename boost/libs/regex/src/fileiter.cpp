@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        fileiter.cpp
-  *   VERSION:     3.03
+  *   VERSION:     3.04
   *   DESCRIPTION: Implements file io primitives + directory searching for class boost::RegEx.
   */
 

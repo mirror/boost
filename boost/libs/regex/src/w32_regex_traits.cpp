@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        w32_regex_traits.cpp
-  *   VERSION:     3.03
+  *   VERSION:     3.04
   *   DESCRIPTION: Implements the w32_regex_traits<charT> traits class
   */
 
@@ -648,15 +648,15 @@ w32_regex_traits<wchar_t>::~w32_regex_traits()
 bool BOOST_RE_CALL w32_regex_traits<wchar_t>::do_iswclass(wchar_t c, jm_uintfast32_t f)
 {
    BOOST_RE_GUARD_STACK
-   if(c < 256)
-      return BOOST_RE_MAKE_BOOL(re_detail::wide_unicode_classes[c] & f);
+   if((c & ~0xFF) == 0)
+      return BOOST_RE_MAKE_BOOL(re_detail::wide_unicode_classes[(uchar_type)c] & f);
    WORD mask;
    if(f & char_class_unicode)
       return true;
-   else if((f & char_class_graph) == char_class_graph)
-      return true;  // all wide characters are considered "graphics"
    else if(isPlatformNT && GetStringTypeW(CT_CTYPE1, &c, 1, &mask))
       return BOOST_RE_MAKE_BOOL(mask & f);
+   else if((f & char_class_graph) == char_class_graph)
+      return true;  // all wide characters are considered "graphics"
    return false;
 }
 

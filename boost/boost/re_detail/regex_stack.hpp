@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_stack.hpp
-  *   VERSION      3.03
+  *   VERSION      3.04
   *   DESCRIPTION: Implements customised internal regex stacks.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.
@@ -53,7 +53,8 @@ class jstack
 {
 private:
    typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(unsigned char, Allocator) allocator_type;
-   typedef typename REBIND_TYPE(T, Allocator)::size_type size_type;
+   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(T, Allocator)             T_alloc_type;
+   typedef typename T_alloc_type::size_type                              size_type;
    typedef T value_type;
    struct node
    {

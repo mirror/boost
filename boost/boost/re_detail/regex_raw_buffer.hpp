@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_raw_buffer.hpp
-  *   VERSION      3.03
+  *   VERSION      3.04
   *   DESCRIPTION: Raw character buffer for regex code.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.
@@ -109,9 +109,9 @@ class raw_storage
 {
 public:
    typedef Allocator allocator_type;
-   typedef typename REBIND_TYPE(unsigned char, allocator_type)::size_type size_type;
    typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(unsigned char, allocator_type) alloc_inst_type;
-   typedef typename REBIND_TYPE(unsigned char, allocator_type)::pointer pointer;
+   typedef typename alloc_inst_type::size_type                                size_type;
+   typedef typename alloc_inst_type::pointer                                  pointer;
 private:
    //
    // empty member optimisation:

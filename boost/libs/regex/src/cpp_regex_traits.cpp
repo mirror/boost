@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        c_regex_traits.cpp
-  *   VERSION:     3.03
+  *   VERSION:     3.04
   *   DESCRIPTION: Implements the cpp_regex_traits<charT> traits class
   */
 #include <clocale>
@@ -109,9 +109,9 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
 {
    if(which & ::std::ios_base::out)
       return pos_type(off_type(-1));
-   int size = egptr() - eback();
-   int pos = gptr() - eback();
-   charT* g = eback();
+   int size = this->egptr() - this->eback();
+   int pos = this->gptr() - this->eback();
+   charT* g = this->eback();
    switch(way)
    {
    case ::std::ios_base::beg:
@@ -133,7 +133,7 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
          this->setg(g, g + newpos, g + size);
    }
    }
-   return gptr() - eback();
+   return this->gptr() - this->eback();
 }
 
 template<class charT, class traits>
@@ -142,8 +142,8 @@ parser_buf<charT, traits>::seekpos(pos_type sp, ::std::ios_base::openmode which)
 {
    if(which & ::std::ios_base::out)
       return pos_type(off_type(-1));
-   int size = egptr() - eback();
-   charT* g = eback();
+   int size = this->egptr() - this->eback();
+   charT* g = this->eback();
    if(sp <= size)
    {
       this->setg(g, g + ::std::streamsize(sp), g + size);

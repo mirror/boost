@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_format.hpp
-  *   VERSION      3.03
+  *   VERSION      3.04
   *   DESCRIPTION: Provides formatting output routines for search and replace
   *                operations.  Note this is an internal header file included
   *                by regex.hpp, do not include on its own.

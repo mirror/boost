@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         c_regex_traits.cpp
-  *   VERSION      3.03
+  *   VERSION      3.04
   *   DESCRIPTION: Implements the c_regex_traits<charT> traits class
   */
 
@@ -861,8 +861,8 @@ void BOOST_RE_CALL c_regex_traits<wchar_t>::free()
 bool BOOST_RE_CALL c_regex_traits<wchar_t>::do_iswclass(wchar_t c, jm_uintfast32_t f)
 {
    BOOST_RE_GUARD_STACK
-   if(c < 256)
-      return BOOST_RE_MAKE_BOOL(re_detail::wide_unicode_classes[c] & f);
+   if((c & ~0xFF) == 0)
+      return BOOST_RE_MAKE_BOOL(re_detail::wide_unicode_classes[(uchar_type)c] & f);
    if((f & char_class_alpha) && std::iswalpha(c))
       return true;
    if((f & char_class_cntrl) && std::iswcntrl(c))

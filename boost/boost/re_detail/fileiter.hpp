@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         fileiter.hpp
-  *   VERSION      3.03
+  *   VERSION      3.04
   *   DESCRIPTION: Declares various platform independent file and
   *                directory iterators, plus binary file input in
   *                the form of class map_file.

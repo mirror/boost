@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.h
-  *   VERSION  3.03
+  *   VERSION  3.04
   *
   * Function and data declarations for regress.
   *
@@ -44,32 +44,38 @@ using std::endl;
 #include <boost/regex.hpp>
 
 #if defined(TEST_UNICODE)
+
 #ifdef __GNUC__
 #define char_t wchar_t
 #else
 typedef wchar_t char_t;
 #endif
+
 #define NO_POSIX_TEST
 typedef std::basic_string<char_t> string_type;
 typedef std::basic_string<char> nstring_type;
 inline istream& get_line(istream& is, nstring_type& s, char delim = '\n');
 istream& get_line(istream& is, string_type& s, char delim = L'\n');
 #define BOOST_RE_STR(x) L##x
-ostream& operator << (ostream& os, const string_type& s);
+std::string make_narrow(const wchar_t* ptr);
+//ostream& operator << (ostream& os, const string_type& s);
 
-#else
+#else // TEST_UNICODE
+
 #ifdef __GNUC__
 #define char_t char
 #else
 typedef char char_t;
 #endif
+
 typedef std::basic_string<char_t> string_type;
 inline istream& get_line(istream& is, string_type& s, char delim = '\n');
 #define BOOST_RE_STR(x) x
+#define make_narrow(x) x
 
-#endif
+#endif // TEST_UNICODE
 
-ostream& operator << (ostream& os, const wchar_t* s);
+//ostream& operator << (ostream& os, const wchar_t* s);
 void parse_input_line(const string_type& s);
 void expand_escapes(string_type& s);
 void run_tests();

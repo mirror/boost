@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_cstring.hpp
-  *   VERSION      3.03
+  *   VERSION      3.04
   *   DESCRIPTION: This is an internal header file, do not include directly.
   *                String support and helper functions, for regular
   *                expression library.

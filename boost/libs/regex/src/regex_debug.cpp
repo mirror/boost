@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        regex_debug.cpp
-  *   VERSION:     3.03
+  *   VERSION:     3.04
   *   DESCRIPTION: Misc. debugging helpers.
   */
 

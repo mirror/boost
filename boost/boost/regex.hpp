@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex.cpp
-  *   VERSION      3.03
+  *   VERSION      3.04
   *   DESCRIPTION: Declares boost::reg_expression<> and associated
   *                functions and classes. This header is the main
   *                entry point for the template regex code.
@@ -836,7 +836,8 @@ class match_results_base
 {
 public:
    typedef Allocator                                                 alloc_type;
-   typedef typename REBIND_TYPE(iterator, Allocator)::size_type      size_type;
+   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(iterator, Allocator)  iterator_alloc;
+   typedef iterator_alloc::size_type                                 size_type;
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    typedef typename std::iterator_traits<iterator>::difference_type  difference_type;
    typedef typename std::iterator_traits<iterator>::value_type       char_type;
