@@ -148,8 +148,8 @@ public:
   explicit multi_index_container(
 
 #if BOOST_WORKAROUND(__IBMCPP__,<=600)
-    const ctor_args_list& args_list=default_ctor_args_list(),
-    const allocator_type& al=default_allocator()):
+    const ctor_args_list& args_list=multi_index_container::ctor_args_list(),
+    const allocator_type& al=multi_index_container::allocator_type()):
 #else
     const ctor_args_list& args_list=ctor_args_list(),
     const allocator_type& al=allocator_type()):
@@ -167,8 +167,8 @@ public:
     InputIterator first,InputIterator last,
 
 #if BOOST_WORKAROUND(__IBMCPP__,<=600)
-    const ctor_args_list& args_list=default_ctor_args_list(),
-    const allocator_type& al=default_allocator()):
+    const ctor_args_list& args_list=multi_index_container::ctor_args_list(),
+    const allocator_type& al=multi_index_container::allocator_type()):
 #else
     const ctor_args_list& args_list=ctor_args_list(),
     const allocator_type& al=allocator_type()):
