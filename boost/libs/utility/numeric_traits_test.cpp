@@ -7,6 +7,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  1  Apr 2001 Fixes for ICL; use BOOST_STATIC_CONSTANT
 //  11 Feb 2001 Fixes for Borland (David Abrahams)
 //  23 Jan 2001 Added test for wchar_t (David Abrahams)
 //  23 Jan 2001 Now statically selecting a test for signed numbers to avoid
@@ -30,13 +31,6 @@
 # include <limits>
 #endif
 
-// A macro for declaring class compile-time constants.
-#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-# define DECLARE_CLASS_CONST(type, init) static const type init
-#else
-# define DECLARE_CLASS_CONST(type, init) enum { init }
-#endif
-
 // =================================================================================
 // template class complement_traits<Number> --
 //
@@ -53,8 +47,8 @@ template <unsigned size> struct complement; // forward
 template <class Number, unsigned size>
 struct complement_traits_aux
 {
-    DECLARE_CLASS_CONST(Number, max = complement<size>::template traits<Number>::max);
-    DECLARE_CLASS_CONST(Number, min = complement<size>::template traits<Number>::min);
+    BOOST_STATIC_CONSTANT(Number, max = complement<size>::template traits<Number>::max);
+    BOOST_STATIC_CONSTANT(Number, min = complement<size>::template traits<Number>::min);
 };
 
 template <unsigned size>
@@ -67,11 +61,11 @@ struct complement
         // indirection through complement_traits_aux neccessary to keep MSVC happy
         typedef complement_traits_aux<Number, size - 1> prev;
      public:
-        DECLARE_CLASS_CONST(Number, max =
+        BOOST_STATIC_CONSTANT(Number, max =
                             Number(Number(prev::max) << CHAR_BIT)
                             + Number(UCHAR_MAX));
         
-        DECLARE_CLASS_CONST(Number, min = Number(Number(prev::min) << CHAR_BIT));
+        BOOST_STATIC_CONSTANT(Number, min = Number(Number(prev::min) << CHAR_BIT));
     };
 };
 
@@ -85,8 +79,8 @@ template <> struct complement_base<false>
     template <class Number>
     struct values
     {
-        DECLARE_CLASS_CONST(Number, min = 0);
-        DECLARE_CLASS_CONST(Number, max = UCHAR_MAX);
+        BOOST_STATIC_CONSTANT(Number, min = 0);
+        BOOST_STATIC_CONSTANT(Number, max = UCHAR_MAX);
     };
 };
 
@@ -95,8 +89,8 @@ template <> struct complement_base<true>
     template <class Number>
     struct values
     {
-        DECLARE_CLASS_CONST(Number, min = SCHAR_MIN);
-        DECLARE_CLASS_CONST(Number, max = SCHAR_MAX);
+        BOOST_STATIC_CONSTANT(Number, min = SCHAR_MIN);
+        BOOST_STATIC_CONSTANT(Number, max = SCHAR_MAX);
     };
 };
 
@@ -107,10 +101,10 @@ struct complement<1>
     template <class Number>
     struct traits
     {
-        DECLARE_CLASS_CONST(bool, is_signed = boost::detail::is_signed<Number>::value);
-        DECLARE_CLASS_CONST(Number, min =
+        BOOST_STATIC_CONSTANT(bool, is_signed = boost::detail::is_signed<Number>::value);
+        BOOST_STATIC_CONSTANT(Number, min =
                             complement_base<is_signed>::template values<Number>::min);
-        DECLARE_CLASS_CONST(Number, max =
+        BOOST_STATIC_CONSTANT(Number, max =
                             complement_base<is_signed>::template values<Number>::max);
     };
 };
@@ -121,8 +115,8 @@ struct complement<1>
 template <class Number>
 struct complement_traits
 {
-    DECLARE_CLASS_CONST(Number, max = (complement_traits_aux<Number, sizeof(Number)>::max));
-    DECLARE_CLASS_CONST(Number, min = (complement_traits_aux<Number, sizeof(Number)>::min));
+    BOOST_STATIC_CONSTANT(Number, max = (complement_traits_aux<Number, sizeof(Number)>::max));
+    BOOST_STATIC_CONSTANT(Number, min = (complement_traits_aux<Number, sizeof(Number)>::min));
 };
 
 // =================================================================================
@@ -151,9 +145,9 @@ template <> struct stream_as<signed char>  {
     typedef unsigned char t1; typedef unsigned t2;
 };
 
-#if defined(BOOST_MSVC) // No intmax streaming built-in
+#if defined(BOOST_MSVC_STD_ITERATOR) // No intmax streaming built-in
 
-// On this platform, __int64 and __uint64 get streamed as strings
+// With this library implementation, __int64 and __uint64 get streamed as strings
 template <> struct stream_as<boost::uintmax_t> {
     typedef std::string t1;
     typedef std::string t2;
@@ -174,7 +168,7 @@ template <class T> struct promote
     }
 };
 
-#if defined(BOOST_MSVC) // No intmax streaming built-in
+#if defined(BOOST_MSVC_STD_ITERATOR) // No intmax streaming built-in
 
 // On this platform, stream them as long/unsigned long if they fit.
 // Otherwise, write a string.
