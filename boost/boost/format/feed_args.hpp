@@ -181,8 +181,6 @@ void put( T x,
     } 
   else  // 2-stepped padding
     {
-      using std::hex;
-      using std::dec;
       put_last( oss_, x); // oss_.width() may result in padding.
       const Ch * res_beg = oss_.begin();
       std::streamsize res_size = oss_.pcount();
