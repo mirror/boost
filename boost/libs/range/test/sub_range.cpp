@@ -78,6 +78,16 @@ void check_iterator_range()
     BOOST_CHECK_EQUAL( r.size(), s.size() );
     BOOST_CHECK_EQUAL( r2.size(), s2.size() );
     
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    if( !(bool)r )
+        BOOST_CHECK( false );
+    if( !(bool)r2 )
+        BOOST_CHECK( false );
+    if( !(bool)s )
+        BOOST_CHECK( false );
+    if( !(bool)s2 )
+        BOOST_CHECK( false );    
+#else
     if( !r )
         BOOST_CHECK( false );
     if( !r2 )
@@ -86,6 +96,7 @@ void check_iterator_range()
         BOOST_CHECK( false );
     if( !s2 )
         BOOST_CHECK( false );
+#endif    
 
     cout << r << r2 << s << s2;
     
