@@ -119,21 +119,34 @@ letters in descending order:	wroolllhed!
 
 <TR>
 <TD><tt>Value</tt></TD>
-<TD>The value-type of the base iterator and the resulting reverse iterator.<br>
+
+<TD>The value-type of the base iterator and the resulting reverse
+iterator.<br>
 <b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::value_type</tt>
 </TD>
 
 <TR>
 <TD><tt>Reference</tt></TD>
-<TD>The corresponding reference type for the <tt>value_type</tt>.<br>
-<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::reference</tt>
+
+<TD>The <tt>reference</tt> type for the resulting iterator,
+and in particular, the result type of <tt>operator*()</tt>
+Typically the default for this parameter is the appropriate type.<br>
+<b>Default:</b> If <tt>Value</tt> is supplied, <tt>Value&amp;</tt> is
+used. Otherwise
+<tt>std::iterator_traits&lt;BidirectionalIterator&gt;::reference</tt> is used.
 </TD>
 
 <TR>
 <TD><tt>Pointer</tt></TD>
-<TD>The pointer type for the <tt>value_type</tt>.<br>
-<b>Default:</b><tt>std::iterator_traits&lt;BidirectionalIterator&gt;::pointer</tt>
-</TD>
+
+<TD>The <tt>pointer</tt> type of the resulting iterator, and in
+ particular, the result type of <tt>operator->()</tt>.  Typically the
+ default for this parameter is the appropriate type.<br>
+ <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>.
+ Otherwise
+ <tt>std::iterator_traits&lt;BidirectionalIterator&gt;::pointer</tt> is used.</TD>
+</TR>
+
 
 <TR>
 <TD><tt>Category</tt></TD>
