@@ -26,6 +26,7 @@
  *  2000-04-21  removed some optimizations for better BCC/MSVC compatibility
  *  2000-05-10  adapted to BCC and MSVC
  *  2000-06-13  incorporated review results
+ *  2000-07-06  moved basic templates from namespace detail to random
  */
 
 #ifndef BOOST_RANDOM_HPP
@@ -86,16 +87,16 @@ namespace boost {
   using std::tan;
 #endif
 
-
 /*
  * End of hacks for various namespace challenged compilers
  */
+
 
 /*
  * Some random number generators.
  */
 
-namespace detail {
+namespace random {
 
 /*
  * Some random number generators require modular arithmetic.  Put
@@ -304,12 +305,12 @@ private:
   IntType _x;
 };
 
-} // namespace detail
+} // namespace random
 
 // validation values from the publications
-typedef detail::linear_congruential<int32_t, 16807, 0, 2147483647, 
+typedef random::linear_congruential<int32_t, 16807, 0, 2147483647, 
   1043618065> minstd_rand0;
-typedef detail::linear_congruential<int32_t, 48271, 0, 2147483647,
+typedef random::linear_congruential<int32_t, 48271, 0, 2147483647,
   399268537> minstd_rand;
 
 
@@ -351,7 +352,7 @@ public:
   { return lcf == rhs.lcf; }
 #endif
 private:
-  detail::linear_congruential<uint64_t, 0x5DEECE66DULL, 0xB,
+  random::linear_congruential<uint64_t, 0x5DEECE66DULL, 0xB,
     uint64_t(1)<<48, /* unknown */ 0> lcf;
   static uint64_t cnv(int32_t x) 
   { return (static_cast<uint64_t>(x) << 16) | 0x330e;  }
@@ -359,7 +360,7 @@ private:
 #endif /*  BOOST_STDINT_H_HAS_UINT64_T */
 
 
-namespace detail {
+namespace random {
 
 // L'Ecuyer 1988
 template<class MLCG1, class MLCG2,
@@ -414,15 +415,15 @@ private:
   MLCG2 _mlcg2;
 };
 
-} // namespace detail
+} // namespace random
 
-typedef detail::additive_combine<
-    detail::linear_congruential<int32_t, 40014, 0, 2147483563, 0>,
-    detail::linear_congruential<int32_t, 40692, 0, 2147483399, 0>,
+typedef random::additive_combine<
+    random::linear_congruential<int32_t, 40014, 0, 2147483563, 0>,
+    random::linear_congruential<int32_t, 40692, 0, 2147483399, 0>,
   /* unknown */ 0> ecuyer1988;
 
 
-namespace detail {
+namespace random {
 
 // Carter Bays and S.D. Durham 1979
 template<class UniformRandomNumberGenerator, int k, 
@@ -517,15 +518,15 @@ private:
   result_type y;
 };
 
-} // namespace detail
+} // namespace random
 
 // validation by experiment from Harry Erwin's generator.h (private e-mail)
-typedef detail::shuffle_output<
-    detail::linear_congruential<uint32_t, 1366, 150889, 714025, 0>,
+typedef random::shuffle_output<
+    random::linear_congruential<uint32_t, 1366, 150889, 714025, 0>,
   97, uint32_t, 139726> kreutzer1986;
 
 
-namespace detail {
+namespace random {
 
 // Eichenauer and Lehn 1986
 template<class IntType, IntType a, IntType b, IntType p, IntType val>
@@ -583,12 +584,12 @@ private:
   IntType value;
 };
 
-} // namespace detail
+} // namespace random
 
-typedef detail::inversive_congruential<int32_t, 9102, 2147483647-36884165,
+typedef random::inversive_congruential<int32_t, 9102, 2147483647-36884165,
   2147483647, 0> hellekalek1995;
 
-namespace detail {
+namespace random {
 
 // http://www.math.keio.ac.jp/matumoto/emt.html
 template<class DataType, int n, int m, int r, DataType a, int u,
@@ -627,7 +628,7 @@ public:
   // compiler-generated copy ctor and assignment operator are fine
   void seed() { seed(4357u); }
   void seed(DataType value) {
-    detail::linear_congruential<uint32_t, 69069, 0, 0, /* unknown */ 0> 
+    random::linear_congruential<uint32_t, 69069, 0, 0, /* unknown */ 0> 
       gen(value);
     seed(gen);
   }
@@ -723,14 +724,14 @@ mersenne_twister<DataType,n,m,r,a,u,s,b,t,c,l,val>::operator()()
   return z;
 }
 
-} // namespace detail
+} // namespace random
 
 
-typedef detail::mersenne_twister<uint32_t,351,175,19,0xccab8ee7,11,
+typedef random::mersenne_twister<uint32_t,351,175,19,0xccab8ee7,11,
   7,0x31b6ab00,15,0xffe50000,17, /* unknown */ 0> mt11213b;
 
 // validation by experiment from mt19937.c
-typedef detail::mersenne_twister<uint32_t,624,397,31,0x9908b0df,11,
+typedef random::mersenne_twister<uint32_t,624,397,31,0x9908b0df,11,
   7,0x9d2c5680,15,0xefc60000,18, 3346425566U> mt19937;
 
 
@@ -738,6 +739,10 @@ typedef detail::mersenne_twister<uint32_t,624,397,31,0x9908b0df,11,
 /*
  * Some decorators providing additional interfaces and misc. functionality
  */
+
+namespace detail {
+
+// TODO: check out if this is really useful.
 
 template<class NumberGenerator>
 class generator_reference_t
@@ -766,6 +771,9 @@ generator_reference_t<Generator> generator_reference(Generator & gen)
   return generator_reference_t<Generator>(gen);
 }
 
+} // namespace detail
+
+
 template<class Generator>
 class generator_iterator
   : equality_comparable<generator_iterator<Generator> >,
@@ -786,7 +794,7 @@ public:
   reference operator*() const { return value; }
 
   friend bool operator==(const generator_iterator<Generator>& x, 
-			const generator_iterator<Generator>& y)
+			 const generator_iterator<Generator>& y)
   { return x.gen == y.gen; }
 private:
   Generator & gen;
@@ -799,7 +807,7 @@ private:
  * Some distribution functions
  */
 
-namespace detail {
+namespace random {
 
 /*
  * Correctly compare two numbers whose types possibly differ in signedness.
@@ -859,7 +867,7 @@ int lessthan_signed_unsigned(T1 x, T2 y)
   }
 }
 
-} // namespace detail
+} // namespace random
 
 // must be in boost namespace, otherwise the inline friend trick fails
 template<class Generator, class ResultType>
@@ -995,11 +1003,11 @@ private:
 template<class UniformRandomNumberGenerator, class IntType>
 inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
 {
-  if(detail::equal_signed_unsigned(_range, _brange)) {
+  if(random::equal_signed_unsigned(_range, _brange)) {
     // this will probably never happen in real life
     // basically nothing to do; just take care we don't overflow / underflow
     return static_cast<result_type>(_rng() - _bmin) + _min;
-  } else if(detail::lessthan_signed_unsigned(_brange, _range)) {
+  } else if(random::lessthan_signed_unsigned(_brange, _range)) {
     // use rejection method to handle things like 0..3 --> 0..4
     // note: this still does not have perfect efficiency
     for(;;) {
@@ -1157,7 +1165,7 @@ public:
   bernoulli_distribution(base_type & rng, double p) 
     : _rng(rng),
       _threshold(static_cast<base_result>
-		(p * (_rng.max() - _rng.min())) + _rng.min())
+		 (p * (_rng.max() - _rng.min())) + _rng.min())
   {
     // for p == 0, we can only set _threshold = 0, which is not enough
     assert(p > 0);
@@ -1168,7 +1176,7 @@ public:
   result_type operator()() { return _rng() <= _threshold; }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const bernoulli_distribution& x, 
-			const bernoulli_distribution& y)
+			 const bernoulli_distribution& y)
   { return x._threshold == y._threshold && x._rng == y._rng; }
 #else
   // Use a member function
@@ -1208,7 +1216,7 @@ public:
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const geometric_distribution& x, 
-			const geometric_distribution& y)
+			 const geometric_distribution& y)
   { return x._log_p == y._log_p && x._rng == y._rng; }
 #else
   // Use a member function
@@ -1253,7 +1261,7 @@ public:
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const triangle_distribution& x, 
-			const triangle_distribution& y)
+			 const triangle_distribution& y)
   { return x._a == y._a && x._b == y._b && x._c == y._c && x._rng == y._rng; }
 #else
   // Use a member function
@@ -1288,7 +1296,7 @@ public:
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const exponential_distribution& x, 
-			const exponential_distribution& y)
+			 const exponential_distribution& y)
   { return x._lambda == y._lambda && x._rng == y._rng; }
 #else
   // Use a member function
@@ -1324,7 +1332,7 @@ public:
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const cauchy_distribution& x, 
-			const cauchy_distribution& y)
+			 const cauchy_distribution& y)
   {
     return x._median == y._median && x._sigma == y._sigma && x._rng == y._rng; 
   }
@@ -1376,7 +1384,7 @@ public:
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const normal_distribution& x, 
-			const normal_distribution& y)
+			 const normal_distribution& y)
   {
     return x._mean == y._mean && x._sigma == y._sigma && 
       x._valid == y._valid && x._rng == y._rng;
@@ -1405,7 +1413,7 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
   lognormal_distribution(base_type & rng, result_type mean, 
-			result_type sigma)
+			 result_type sigma)
     : _rng(rng, std::log(mean*mean/std::sqrt(sigma*sigma + mean*mean)),
 	   std::sqrt(std::log(sigma*sigma/mean/mean+1)))
   { 
@@ -1422,7 +1430,7 @@ public:
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const lognormal_distribution& x, 
-			const lognormal_distribution& y)
+			 const lognormal_distribution& y)
   { return x._rng == y._rng; }
 #else
   // Use a member function
@@ -1467,7 +1475,7 @@ public:
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_on_sphere& x, 
-			const uniform_on_sphere& y)
+			 const uniform_on_sphere& y)
   { return x._dim == y._dim && x._rng == y._rng; }
 #else
   // Use a member function

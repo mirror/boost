@@ -36,7 +36,7 @@
 
 
 namespace boost {
-namespace detail {
+namespace random {
 
 // Wikramaratna 1989  ACORN
 template<class IntType, int k, IntType m, IntType val>
@@ -134,34 +134,35 @@ private:
   int current, lag;
 };
 
-}
-}
+} // namespace random
+} // namespace boost
 
 // distributions from Haertel's dissertation
+// (additional parameterizations of the basic templates)
 namespace Haertel {
-  typedef boost::detail::linear_congruential<boost::uint64_t, 45965, 453816691,
+  typedef boost::random::linear_congruential<boost::uint64_t, 45965, 453816691,
     (1ull<<31), 0> LCG_Af2;
-  typedef boost::detail::linear_congruential<boost::uint64_t, 211936855, 0,
+  typedef boost::random::linear_congruential<boost::uint64_t, 211936855, 0,
     (1ull<<29)-3, 0> LCG_Die1;
-  typedef boost::detail::linear_congruential<boost::uint32_t, 2824527309u, 0,
+  typedef boost::random::linear_congruential<boost::uint32_t, 2824527309u, 0,
     0, 0> LCG_Fis;
-  typedef boost::detail::linear_congruential<boost::uint64_t, 950706376u, 0,
+  typedef boost::random::linear_congruential<boost::uint64_t, 950706376u, 0,
     (1ull<<31)-1, 0> LCG_FM;
-  typedef boost::detail::linear_congruential<boost::int32_t, 51081, 0,
+  typedef boost::random::linear_congruential<boost::int32_t, 51081, 0,
     2147483647, 0> LCG_Hae;
-  typedef boost::detail::linear_congruential<boost::uint32_t, 69069, 1,
+  typedef boost::random::linear_congruential<boost::uint32_t, 69069, 1,
     0, 0> LCG_VAX;
-  typedef boost::detail::inversive_congruential<boost::int64_t, 240318, 197, 
+  typedef boost::random::inversive_congruential<boost::int64_t, 240318, 197, 
     1000081, 0> NLG_Inv1;
-  typedef boost::detail::inversive_congruential<boost::int64_t, 15707262,
+  typedef boost::random::inversive_congruential<boost::int64_t, 15707262,
     13262967, (1<<24)-17, 0> NLG_Inv2;
-  typedef boost::detail::inversive_congruential<boost::int32_t, 1, 1,
+  typedef boost::random::inversive_congruential<boost::int32_t, 1, 1,
     2147483647, 0> NLG_Inv4;
-  typedef boost::detail::inversive_congruential<boost::int32_t, 1, 2,
+  typedef boost::random::inversive_congruential<boost::int32_t, 1, 2,
     1<<30, 0> NLG_Inv5;
-  typedef boost::detail::additive_congruential<boost::int32_t, 6,
+  typedef boost::random::additive_congruential<boost::int32_t, 6,
     (1<<30)-35, 0> MRG_Acorn7;
-  typedef boost::detail::lagged_fibonacci<boost::uint32_t, 607, 273,
+  typedef boost::random::lagged_fibonacci<boost::uint32_t, 607, 273,
     0, 0> MRG_Fib2;
 
   template<class Gen, class T>
