@@ -125,7 +125,8 @@ struct is_convertible_impl
         == sizeof(::boost::type_traits::yes_type);
 };
 
-#elif 0
+#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1310))\
+      (defined(__EDG_VERSION__) && (__EDG_VERSION__ >= 245) && !defined(__ICL))
 //
 // This is *almost* an ideal world implementation as it doesn't rely
 // on undefined behaviour by passing UDT's through (...).
@@ -135,7 +136,9 @@ struct is_convertible_impl
 struct any_conversion
 {
     template <typename T> any_conversion(const volatile T&);
-    //template <typename T> any_conversion(T&);
+    // we need this constructor to catch references to functions
+    // (which can not be cv-qualified):
+    template <typename T> any_conversion(T&);
 };
 
 template <typename From, typename To>
