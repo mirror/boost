@@ -1,6 +1,6 @@
 // Boost.Signals library
 //
-// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2003 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -10,7 +10,7 @@
 //
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
- 
+
 // For more information, see http://www.boost.org
 
 #ifndef BOOST_SIGNALS_TRACKABLE_HPP
@@ -37,25 +37,25 @@ namespace BOOST_SIGNALS_NAMESPACE {
     friend class detail::signal_base_impl;
     friend class detail::slot_base;
     void signal_connected(connection, BOOST_SIGNALS_NAMESPACE::detail::bound_object&) const;
-    
+
   protected:
     trackable() : connected_signals(), dying(false) {}
     trackable(const trackable&) : connected_signals(), dying(false) {}
     ~trackable();
-    
+
     trackable& operator=(const trackable&)
     {
       connected_signals.clear();
       return *this;
     }
-    
+
   private:
     typedef std::list<connection> connection_list;
     typedef connection_list::iterator connection_iterator;
-    
+
     // List of connections that this object is part of
     mutable connection_list connected_signals;
-    
+
     // True when the object is being destroyed
     mutable bool dying;
   };
@@ -66,8 +66,8 @@ namespace BOOST_SIGNALS_NAMESPACE {
     // A visitor that adds each trackable object to a vector
     class bound_objects_visitor {
     public:
-      bound_objects_visitor(std::vector<const trackable*>& v) : 
-        bound_objects(v) 
+      bound_objects_visitor(std::vector<const trackable*>& v) :
+        bound_objects(v)
       {
       }
 
@@ -170,7 +170,7 @@ namespace BOOST_SIGNALS_NAMESPACE {
 
       template<typename R, typename T1, typename T2, typename T3, typename T4,
                typename T5, typename T6, typename T7, typename T8, typename T9>
-      inline void 
+      inline void
       add_if_trackable(R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9)) const
       {
       }
@@ -178,12 +178,12 @@ namespace BOOST_SIGNALS_NAMESPACE {
       template<typename R, typename T1, typename T2, typename T3, typename T4,
                typename T5, typename T6, typename T7, typename T8, typename T9,
                typename T10>
-      inline void 
+      inline void
       add_if_trackable(R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)) const
       {
       }
 
-      mutable std::vector<const trackable*>& bound_objects;
+      std::vector<const trackable*>& bound_objects;
     };
   } // end namespace detail
 } // end namespace BOOST_SIGNALS_NAMESPACE
