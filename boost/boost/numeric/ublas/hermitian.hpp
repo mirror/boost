@@ -2553,8 +2553,16 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class M, class F>
     typename hermitian_adaptor<M, F>::matrix_type hermitian_adaptor<M, F>::nil_;
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME hermitian_adaptor<M, F>::matrix_type()
+#endif
+    ;
     template<class M, class F>
     typename hermitian_adaptor<M, F>::value_type hermitian_adaptor<M, F>::conj_;
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME hermitian_adaptor<M, F>::value_type()
+#endif
+    ;
 
 }}}
 

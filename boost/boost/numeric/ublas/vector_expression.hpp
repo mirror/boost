@@ -103,7 +103,10 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     const typename scalar_const_reference<T>::value_type scalar_const_reference<T>::nil_
-        = BOOST_UBLAS_TYPENAME scalar_const_reference<T>::value_type ();
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME scalar_const_reference<T>::value_type ()
+#endif
+    ;
 
 
 
@@ -424,7 +427,11 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class E>
-    typename vector_reference<E>::expression_type vector_reference<E>::nil_;
+    typename vector_reference<E>::expression_type vector_reference<E>::nil_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME vector_reference<E>::expression_type ();
+#endif
+    ;
 
     template<class E, class F>
     class vector_unary:

@@ -1849,7 +1849,11 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class M, class F>
-    typename triangular_adaptor<M, F>::matrix_type triangular_adaptor<M, F>::nil_;
+    typename triangular_adaptor<M, F>::matrix_type triangular_adaptor<M, F>::nil_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME triangular_adaptor<M, F>::matrix_type ()
+#endif
+    ;
     template<class M, class F>
     const typename triangular_adaptor<M, F>::value_type triangular_adaptor<M, F>::zero_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT

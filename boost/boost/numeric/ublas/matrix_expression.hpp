@@ -335,7 +335,12 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class E>
-    const typename matrix_const_reference<E>::expression_type matrix_const_reference<E>::nil_;
+    const typename matrix_const_reference<E>::expression_type matrix_const_reference<E>::nil_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME matrix_const_reference<E>::expression_type()
+#endif
+    ;
+
 #endif
 
     template<class E>
@@ -620,7 +625,11 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class E>
-    typename matrix_reference<E>::expression_type matrix_reference<E>::nil_;
+    typename matrix_reference<E>::expression_type matrix_reference<E>::nil_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME matrix_reference<E>::expression_type()
+#endif
+    ;
 
     template<class E1, class E2, class F>
     class vector_matrix_binary:

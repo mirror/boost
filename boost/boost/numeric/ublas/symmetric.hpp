@@ -2183,7 +2183,12 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class M, class F>
-    typename symmetric_adaptor<M, F>::matrix_type symmetric_adaptor<M, F>::nil_;
+    typename symmetric_adaptor<M, F>::matrix_type symmetric_adaptor<M, F>::nil_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME symmetric_adaptor<M, F>::matrix_type ():
+#endif
+    ;
+
 
 }}}
 

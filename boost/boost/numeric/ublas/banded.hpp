@@ -2036,7 +2036,11 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class M>
-    typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_;
+    typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_
+#ifdef BOOST_UBLAS_STATIC_OLD_INIT
+        = BOOST_UBLAS_TYPENAME banded_adaptor<M>::matrix_type ()
+#endif
+    ;
     template<class M>
     typename banded_adaptor<M>::const_value_type banded_adaptor<M>::zero_
 #ifdef BOOST_UBLAS_STATIC_OLD_INIT
