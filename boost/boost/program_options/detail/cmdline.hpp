@@ -161,7 +161,7 @@ namespace boost { namespace program_options { namespace detail {
             /// 0 or more parameters
             allow_parameters,
             /// 1 or more parameters 
-            require_parameters,            
+            require_parameters
         };
 
         enum element_kind_t {
@@ -174,7 +174,7 @@ namespace boost { namespace program_options { namespace detail {
             no_error = 0,
             unknown_option,
             ambiguous_option,
-            invalid_syntax,
+            invalid_syntax
         };
 
         // Detailed error status.
@@ -187,7 +187,7 @@ namespace boost { namespace program_options { namespace detail {
             ed_missing_parameter,
             ed_extra_parameter,
             ed_unknown_option,
-            ed_ambiguous_option,
+            ed_ambiguous_option
         };
 
         struct option {

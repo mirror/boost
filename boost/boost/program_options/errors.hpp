@@ -105,7 +105,7 @@ namespace boost { namespace program_options {
             short_adjacent_not_allowed,
             empty_adjacent_parameter,
             missing_parameter,
-            extra_parameter,
+            extra_parameter
         };
 
         invalid_command_line_syntax(const std::string& tokens, kind_t kind);
