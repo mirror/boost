@@ -1,0 +1,118 @@
+#  (C) Copyright  2002. Permission to copy, use, modify, sell and
+#  distribute this software is granted provided this copyright notice appears
+#  in all copies. This software is provided "as is" without express or implied
+#  warranty, and with no claim as to its suitability for any purpose.
+#
+#
+# Boost.gdtl build and test Jamfile
+#
+#  Based on boost.python Jamfile
+#
+# To run all tests quietly: jam test
+#
+# Declares the following targets:
+#   1. libboost_gdtl, a static link library to be linked with all
+#      Boost.gdtl modules
+#
+
+# declare the location of this subproject relative to the root
+subproject libs/gdtl/build ;
+
+local GDTL_PROPERTIES = $(GDTL_PROPERTIES) <define>GDTL_INLINE <define>BOOST_GDTL_POSIX_TIME_STD_CONFIG ;
+
+# <include>../../../boost obviates need to change #includes
+# <include>../../.. is there because gdtl is not under BOOST_ROOT
+
+local GDTL_INCLUDES = <include>$(BOOST_ROOT)
+                      <include>../../..
+                      <include>../../../boost ;
+
+#######################
+rule gdtl-test ( test-name : sources + )
+{
+    unit-test $(test-name) : $(sources) <lib>libboost_gdtl
+                           : $(GDTL_INCLUDES) $(GDTL_PROPERTIES) ;
+}
+
+rule gdtl-example ( example-name : sources + )
+{
+    exe $(example-name) : $(sources) <lib>libboost_gdtl
+                        : $(GDTL_INCLUDES) $(GDTL_PROPERTIES) ;
+}
+
+#######################
+
+#
+# Declare the boost gdtl static link library
+#
+
+# Base names of the source files for libboost_gdtl
+local GREGORIAN_CPP_SOURCES = gregorian_types greg_month greg_weekday ;
+
+lib libboost_gdtl : ../src/gregorian/$(GREGORIAN_CPP_SOURCES).cpp
+    # requirements
+    : $(GDTL_INCLUDES)
+      $(GDTL_PROPERTIES) ;
+
+#dll libboost_gdtl
+#  # $(SUFDLL[1])
+#    :  ../gregorian/src/$(GREGORIAN_CPP_SOURCES).cpp
+#	# requirements
+#      : $(GDTL_INCLUDES)
+#	<shared-linkable>true
+#        <runtime-link>dynamic
+#	$(GDTL_PROPERTIES)
+#          ;
+
+############# tests ###########
+# Generic tests
+gdtl-test testconstrained_value : ../test/testconstrained_value.cpp ;
+gdtl-test testint_adapter : ../test/testint_adapter.cpp ;
+gdtl-test testwrapping_int : ../test/testwrapping_int.cpp ;
+gdtl-test testtime_resolution_traits : ../test/testtime_resolution_traits.cpp ;
+gdtl-test testgregorian_calendar : ../test/testgregorian_calendar.cpp ;
+gdtl-test testint64_range : ../test/testint64_range.cpp ;
+
+# Gregorian Date System 
+gdtl-test testdate_iterator : ../test/gregorian/testdate_iterator.cpp ;
+gdtl-test testgreg_month : ../test/gregorian/testgreg_month.cpp ;
+gdtl-test testcurrent_day : ../test/gregorian/testcurrent_day.cpp ;
+gdtl-test testformatters : ../test/gregorian/testformatters.cpp ;
+gdtl-test testparse_date : ../test/gregorian/testparse_date.cpp ;
+gdtl-test testdate : ../test/gregorian/testdate.cpp ;
+gdtl-test testgreg_cal : ../test/gregorian/testgreg_cal.cpp ;
+gdtl-test testgenerators : ../test/gregorian/testgenerators.cpp ;
+gdtl-test testdate_duration : ../test/gregorian/testdate_duration.cpp ;
+gdtl-test testgreg_day : ../test/gregorian/testgreg_day.cpp ;
+gdtl-test testperiod : ../test/gregorian/testperiod.cpp ;
+gdtl-test testfacet : ../test/gregorian/testfacet.cpp ;
+
+# Posix Time System Tests
+gdtl-test testtimeperiod   : ../test/posix_time/testperiod.cpp ;
+gdtl-test testtime         : ../test/posix_time/testtime.cpp ;
+gdtl-test testtimeduration : ../test/posix_time/testduration.cpp ;
+gdtl-test testtimeformat   : ../test/posix_time/testformatters.cpp ;
+gdtl-test testlocal_adjustor : ../test/posix_time/testlocal_adjustor.cpp ;
+gdtl-test testdst_rules      : ../test/posix_time/testdst_rules.cpp ;
+gdtl-test testiterator      : ../test/posix_time/testiterator.cpp ;
+gdtl-test testparse_time    : ../test/posix_time/testparse_time.cpp ;
+
+
+############# examples  ############
+
+gdtl-example dates_as_strings : ../example/gregorian/dates_as_strings.cpp ;
+gdtl-example end_of_month_day : ../example/gregorian/end_of_month_day.cpp ;
+gdtl-example dates_as_strings : ../example/gregorian/dates_as_strings.cpp ;
+gdtl-example period_calc : ../example/gregorian/period_calc.cpp ;
+gdtl-example days_alive : ../example/gregorian/days_alive.cpp ;
+gdtl-example print_holidays : ../example/gregorian/print_holidays.cpp ;
+gdtl-example days_since_year_start : ../example/gregorian/days_since_year_start.cpp ;
+gdtl-example print_month : ../example/gregorian/print_month.cpp ;
+gdtl-example days_till_new_year : ../example/gregorian/days_till_new_year.cpp ;
+
+#time examples
+gdtl-example time_math : ../example/posix_time/time_math.cpp ;
+gdtl-example local_utc_conversion : ../example/posix_time/local_utc_conversion.cpp ;
+gdtl-example print_hours : ../example/posix_time/print_hours.cpp ;
+gdtl-example time_periods : ../example/posix_time/time_periods.cpp ;
+
