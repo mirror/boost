@@ -330,9 +330,19 @@ namespace boost { namespace program_options { namespace detail {
         // Standard strncmp has "C" linkage and Comeau compiler
         // issues error when we select between strncmp_nocase
         // and strncmp using ?:, below
-        int strncmp(const char* s1, const char* s2, size_t n)        
+        int strncmp_case(const char* s1, const char* s2, size_t n)        
         {
+            // At least intel-win32-7.1-vc6 does not like "std::" prefix below,
+            // so add using directive make everyone happy
+            using namespace std;
+
+            // But some msvc version don't like using directive :-(
+#if BOOST_WORKAROUND(_MSC_FULL_VER, >= 13102292) &&\
+    BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13103077))
             return std::strncmp(s1, s2, n);
+#else
+            return strncmp(s1, s2, n);
+#endif            
         }
     }
 
@@ -360,7 +370,7 @@ namespace boost { namespace program_options { namespace detail {
 
         int (*cmp)(const char*, const char*, size_t);
         cmp = (style & case_insentitive) 
-            ? detail::strncmp_nocase : detail::strncmp;
+            ? detail::strncmp_nocase : detail::strncmp_case;
         const option* result(0);
         for (size_t i = 0; i < options.size(); ++i) {
             const char* known_name = options[i].long_name.c_str();
