@@ -14,9 +14,38 @@
 #include <algorithm>
 #include <cctype>
 
+#if !defined(BOOST_NO_STD_LOCALE)
+#include <locale>
+#endif
+
 namespace boost {
 
 namespace date_time {
+
+  //! A function to replace the std::transform( , , ,tolower) construct
+  /*! This function simply takes a string, and changes all the characters
+   * in that string to lowercase (according to the default system locale).
+   * In the event that a compiler does not support locales, the old 
+   * C style tolower() is used.
+   */
+  inline
+  std::string convert_to_lower(const std::string& inp)
+  {
+    std::string tmp("");
+    unsigned i = 0;
+#if defined(BOOST_NO_STD_LOCALE)
+    while(i < inp.length())
+    {
+      tmp += static_cast<char>(tolower(inp.at(i++)));
+#else
+    std::locale loc("");
+    while(i < inp.length())
+    {
+      tmp += std::tolower(inp.at(i++), loc);
+#endif
+    }
+    return std::string(tmp);
+  }
 
   //! Generic function to parse a delimited date (eg: 2002-02-10)
   /*! Accepted formats are: "2003-02-10" or " 2003-Feb-10" or
@@ -52,12 +81,7 @@ namespace date_time {
 	  else
           {
 	    typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
-#if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
-#else
-	    std::transform(s.begin(), s.end(),
-	                   s.begin(),
-			   tolower);
-#endif
+	    s = convert_to_lower(s);
 	    typename month_type::month_map_type::iterator iter = ptr->find(s);
 	    if(iter != ptr->end()) // required for STLport
 	    {

@@ -31,10 +31,6 @@
 #define INT64_C(value)  int64_t(value)
 #endif
 
-//Workaround for missing transform
-#if (defined(__BORLANDC__) || (defined(BOOST_MSVC) && (_MSC_VER <= 1200)))
-#define BOOST_DATE_TIME_NO_STD_TRANSFORM  1
-#endif
 
 /* Workaround for Borland iterator error. Error was "Cannot convert 'istream *' to 'wistream *' in function istream_iterator<>::istream_iterator() */
 #if defined(__BORLANDC__) && (__BORLANDC__ <= 0x0551)
