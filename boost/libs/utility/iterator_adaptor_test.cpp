@@ -9,6 +9,9 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  07 Feb 01 Replaced use of xxx_pair_generator with xxx_generator where
+//            possible (which was all but the projection iterator).
+//            (Jeremy Siek)
 //  06 Feb 01 Removed now-defaulted template arguments where possible
 //            Updated names to correspond to new generator naming convention.
 //            Added a trivial test for make_transform_iterator().
@@ -54,9 +57,11 @@ struct my_const_iter_traits {
   typedef std::ptrdiff_t difference_type;
 };
 
-typedef boost::iterator_adaptor_pair_generator
-  <dummyT*, const dummyT*, 
-   my_iter_traits, my_const_iter_traits> My;
+typedef boost::iterator_adaptor<dummyT*, 
+  boost::default_iterator_policies, my_iter_traits> my_iterator;
+
+typedef boost::iterator_adaptor<const dummyT*, 
+  boost::default_iterator_policies, my_const_iter_traits> const_my_iterator;
 
 struct mult_functor {
   typedef int result_type;
@@ -93,7 +98,7 @@ typedef std::vector<int> storage;
 typedef std::deque<int*> pointer_deque;
 typedef std::set<storage::iterator> iterator_set;
 
-void indirect_deque_tests(const storage& store, pointer_deque& ptr_deque)
+void indirect_deque_tests(const storage& , pointer_deque& )
 {
 }
 
@@ -113,21 +118,27 @@ void more_indirect_iterator_tests()
         iter_set.insert(p);
     }
 
-    typedef boost::indirect_iterator_pair_generator<
+    typedef boost::indirect_iterator_generator<
+        pointer_deque::iterator
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+        , int*
+        , boost::iterator<std::random_access_iterator_tag,int>
+#endif
+        >::type indirect_deque_iterator;
+
+    typedef boost::indirect_iterator_generator<
         pointer_deque::iterator,
         const int*
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , boost::iterator<std::random_access_iterator_tag,int,std::ptrdiff_t,const int*,const int&>
-        , int*
-        , boost::iterator<std::random_access_iterator_tag,int>
 #endif
-        > indirect_deque;
+        >::type const_indirect_deque_iterator;
 
-    indirect_deque::iterator db(ptr_deque.begin());
-    indirect_deque::iterator de(ptr_deque.end());
+    indirect_deque_iterator db(ptr_deque.begin());
+    indirect_deque_iterator de(ptr_deque.end());
     assert(static_cast<std::size_t>(de - db) == store.size());
     assert(db + store.size() == de);
-    indirect_deque::const_iterator dci(db);
+    const_indirect_deque_iterator dci(db);
     assert(db == dci);
     assert(dci == db);
     assert(dci != de);
@@ -143,18 +154,25 @@ void more_indirect_iterator_tests()
     *db = 999;
     assert(store.front() == 999);
 
-    typedef boost::indirect_iterator_pair_generator<
+    typedef boost::indirect_iterator_generator<
+        iterator_set::iterator
+# ifdef BOOST_NO_STD_ITERATOR_TRAITS
+        , storage::iterator
+        , boost::iterator<std::random_access_iterator_tag,int>
+# endif
+        >::type indirect_set_iterator;
+
+    typedef boost::indirect_iterator_generator<
         iterator_set::iterator,
         storage::const_iterator
 # ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , boost::iterator<std::random_access_iterator_tag,int,std::ptrdiff_t,const int*,const int&>
-        , storage::iterator
-        , boost::iterator<std::random_access_iterator_tag,int>
 # endif
-        > indirect_set;
-    indirect_set::iterator sb(iter_set.begin());
-    indirect_set::iterator se(iter_set.end());
-    indirect_set::const_iterator sci(iter_set.begin());
+        >::type const_indirect_set_iterator;
+
+    indirect_set_iterator sb(iter_set.begin());
+    indirect_set_iterator se(iter_set.end());
+    const_indirect_set_iterator sci(iter_set.begin());
     assert(sci == sb);
     assert(sci != se);
     sci = se;
@@ -188,12 +206,12 @@ main()
                       int*, int&>
       > >();
 
-  // Test the iterator_adaptor_pair_generator
+  // Test the iterator_adaptor
   {
-    My::iterator i = array;
+    my_iterator i = array;
     boost::random_access_iterator_test(i, N, array);
     
-    My::const_iterator j = array;
+    const_my_iterator j = array;
     boost::random_access_iterator_test(j, N, array);
     boost::const_nonconst_iterator_test(i, ++j);
   }
@@ -213,23 +231,29 @@ main()
     boost::input_iterator_test(boost::make_transform_iterator(&y[0], mult_functor(2)), x[0], x[1]);
   }
   
-  // Test indirect_iterator_pair_generator
+  // Test indirect_iterator_generator
   {
     dummyT* ptr[N];
     for (int k = 0; k < N; ++k)
       ptr[k] = array + k;
     
-    typedef boost::indirect_iterator_pair_generator<dummyT**, const dummyT*
+    typedef boost::indirect_iterator_generator<dummyT**
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
-        , boost::iterator<std::random_access_iterator_tag,dummyT,std::ptrdiff_t,const dummyT*,const dummyT&>
         , dummyT*
         , boost::iterator<std::random_access_iterator_tag,dummyT>
 #endif
-      > Indirect;
-    Indirect::iterator i = ptr;
+      >::type indirect_iterator;
+
+    typedef boost::indirect_iterator_generator<dummyT**, const dummyT*
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
+        , boost::iterator<std::random_access_iterator_tag,dummyT,std::ptrdiff_t,const dummyT*,const dummyT&>
+#endif
+      >::type const_indirect_iterator;
+
+    indirect_iterator i = ptr;
     boost::random_access_iterator_test(i, N, array);
 
-    Indirect::const_iterator j = ptr;
+    const_indirect_iterator j = ptr;
     boost::random_access_iterator_test(j, N, array);
 
     boost::const_nonconst_iterator_test(i, ++j);
@@ -257,20 +281,22 @@ main()
 
     boost::const_nonconst_iterator_test(i, ++j);
   }
-  // Test reverse_iterator_pair_generator
+  // Test reverse_iterator_generator
   {
     dummyT reversed[N];
     std::copy(array, array + N, reversed);
     std::reverse(reversed, reversed + N);
     
-    typedef boost::reverse_iterator_pair_generator<dummyT*, const dummyT*,
-      boost::iterator<std::random_access_iterator_tag,dummyT>,
+    typedef boost::reverse_iterator_generator<dummyT*, 
+      boost::iterator<std::random_access_iterator_tag,dummyT>
+      >::type reverse_iterator;
+    typedef boost::reverse_iterator_generator<const dummyT*,
       boost::iterator<std::random_access_iterator_tag,const dummyT>
-      > Reverse;
-    Reverse::iterator i = reversed + N;
+      >::type const_reverse_iterator;
+    reverse_iterator i = reversed + N;
     boost::random_access_iterator_test(i, N, array);
 
-    Reverse::const_iterator j = reversed + N;
+    const_reverse_iterator j = reversed + N;
     boost::random_access_iterator_test(j, N, array);
 
     boost::const_nonconst_iterator_test(i, ++j);    
