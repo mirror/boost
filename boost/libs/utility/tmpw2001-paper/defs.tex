@@ -1,0 +1,36 @@
+
+\usepackage{times}
+
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+   \pdffalse
+\else
+   \pdfoutput=1
+   \pdftrue
+\fi
+
+\ifpdf
+  \usepackage[
+              pdftex,
+              colorlinks=true,
+              linkcolor=blue,filecolor=blue,pagecolor=blue,urlcolor=blue
+              ]{hyperref}
+\fi
+
+\ifpdf
+  \newcommand{\concept}[1]{\hyperref[concept:#1]{\textsf{#1}}}
+  \newcommand{\stlconcept}[1]{\href{http://www.sgi.com/Technology/STL/#1.html}{\textsf{#1}}}
+  \newcommand{\link}[2]{\hyperref[#1]{#2}}
+\else
+  \newcommand{\concept}[1]{\textsf{#1}}
+  \newcommand{\stlconcept}[1]{\textsf{#1}}
+  \newcommand{\href}[2]{#2}
+  \newcommand{\link}[2]{#2}
+\fi
+
+\newcommand{\code}[1]{{\small \texttt{#1}}}
+
+\newcommand{\Note}[1]{\marginpar{\begin{flushleft}%
+  {%%\tiny %%\footnotesize
+  {\bf Note:}  #1}%
+\end{flushleft}}}

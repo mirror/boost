@@ -1,0 +1,423 @@
+
+% Introduction/Motivation, etc. (Dave & Jeremy)
+
+% iterator policies   (Dave)
+%   default policies
+%   type<> wrapper
+% \cite{alexandrescu01:_modern_cpp_design}
+
+% iterator_comparisons base (B&N) (Jeremy) \cite{Barton94}
+%  workaround for g++ compiler bug with friend functions?
+
+% operator_array_proxy (Dave)
+
+% default pointer/reference type selection (Dave)
+
+% wrapping non-iterators (count_iterator) (Jeremy)
+
+% named template parameters (Jeremy)
+
+% operator[] return type (Dave)
+
+% the static asserts (Dave)
+
+% generators (Jeremy)
+%   type generators
+%     tempting to try to use inheritance to replace
+%        templated typedef, but that doesn't work.
+%   object generators
+
+% const/non-const interoperability (Dave)
+
+% implementing const/mutable iterators with the same class
+%   common mistake is to make the return type of operator*()
+%     depend on whether the iterator object is const/non-const.
+%     See the transform iterator in \cite{TMPW00:Weiser}
+
+% custom iterators \cite{TMPW00:Baus}
+%   generating iterators 
+%     line iterator \cite{austern99:_gener_progr_stl}
+%     constant iterator \cite{koenig97:_rumin_cpp}
+
+% reverse iterator, front_insert_iterator, back_insert_iterator,
+% insert_iterator \cite{iso98:_cpp_final_draft_standard}
+
+% view iterators
+%   \cite{TMPW00:Weiser}
+
+% future work, container adaptors
+
+\documentclass{netobjectdays}
+
+\input{defs}
+
+\begin{document}
+
+\title{Generating Iterator Types}
+
+\author{David Abrahams$^\dag$ and Jeremy Siek$^\ddag$ \\
+\\
+$^\dag$ Altra Broadband \\
+\texttt{abrahams@altrabroadband.com}\\
+\\
+$^\ddag$ Computer Science Department \\
+Indiana University \\
+Lindley Hall \\
+150 S. Woodlawn Ave. \\
+Bloomington, IN\ \ 47405-7104\\
+\texttt{jsiek@cs.indiana.edu}
+}
+
+\maketitle
+
+
+\begin{abstract}
+The iterator abstraction is one of the most commonly used in
+programming and a considerable amount of time is spent building new
+iterator types. However, implementing an iterator type that satisfies
+the C++ Standard requirements for an iterator can be
+challenging. There are a number of common mistakes that people make,
+and there are necessary complexities in a C++ Standard conforming
+implementation that one would rather not have to think about. In this
+paper we present the iterator type generator in the Boost Iterator
+Adaptor Library. This generator simplifies the creation of iterators;
+it automates the error-prone and redundant parts of the implementation
+and greatly simplifies the creation of iterator types that are
+variations on other iterators (creating iterator adaptors).  The
+design of the Iterator Adaptor Library is an example of policy-based
+design, and the implementation employs template meta-programming.
+\end{abstract}
+
+
+\section{Introduction}
+
+%- defaults make it easy to adapt an iterator
+%- extensions from base operations to other operations make it
+%  easier to create iterators
+
+Iterators play an important role in modern C++ programing. The
+iterator is the central abstraction of the algorithms of the Standard
+Library and creating new iterator types and adapting old ones are
+common tasks for C++ programmers. There are plenty of examples of
+custom-made iterators in the literature: the
+\code{line\_iterator}~\cite{austern99:_gener_progr_stl},
+\code{Constant\_iterator}~\cite{koenig97:_rumin_cpp}, 
+\code{istream\_iterator} and
+\code{ostream\_iterator}~\cite{iso98:_cpp_final_draft_standard} to
+name a few. Also a growing number of generic iterator adaptors are
+available: \code{Checked\_iter}~\cite{stroustrup00:_cpp_prog_lang},
+iterators of the View Template Library~\cite{TMPW00:Weiser}, custom
+and smart iterators~\cite{becker98:_smart_iteraters,TMPW00:Baus},
+compound iterators~\cite{alexandrescu98:_compound_iters}, and several
+iterators in the MTL~\cite{siek99:_scitools}.
+
+For an iterator to be usable with the Standard algorithms (and other
+generic algorithms in third-party libraries), it must fulfill the
+Standard requirements for an iterator type, which range from the few
+requirements of an \stlconcept{InputIterator} to the many requirements
+of a \stlconcept{RandomAccessIterator}. Implementing an iterator class
+that meets these requirements is a tedious and error-prone task
+despite the fact that most iterators are conceptually simple.
+
+\subsection{Redundant Operators}
+
+Perhaps the most obvious of reasons that implementing an iterator can
+be tediuos is that there are lots of redundant operators.  That is,
+there are many operators that can be trivially defined in terms of
+other operators. For example, the \code{operator++(int)} is often best
+implemented in terms of \code{operator++()} as the example below
+shows.
+
+{\footnotesize
+\begin{verbatim}
+  class iter {
+    // ...
+    iter& operator++() { /* ... */ return *this; }
+    iter operator++(int) { iter tmp(*this); ++*this; return tmp; }
+  };
+\end{verbatim}
+}
+
+For a full \stlconcept{RandomAccessIterator}, there are a total of 17
+operators. 7 of the operators are fundamental while the other 10 are
+redundant.
+
+% 7 core operations
+% 10 derived operations
+ 
+% \code{operator->}
+% \code{operator[]}
+% \code{operator++(int)},
+% \code{operator--(int)},
+% \code{operator-=},
+% \code{operator+},
+% \code{operator!=},
+% \code{operator>}, 
+% \code{operator<=},
+% \code{operator>=}
+
+
+\subsection{Delagation of Operators for Iterator Adaptors}
+
+It is often the case that an iterator adaptor changes the meaning of
+one or two operators while leaving the rest of the operators defined
+in the same way as the underlying iterator.  This is typically
+implemented with delegating functions. The following example shows an
+excerpt from an \code{indirect\_iterator} adaptor, which takes an
+iterator over pointers and creates an iterator over the things pointed
+to. The \code{operator*} is changed to dereference twice but all the
+other operators stay the same. Writing all of the delegating functions
+for the \code{indirect\_iterator} would be a tedious task.
+
+{\footnotesize
+\begin{verbatim}
+  template <class Iterator> class indirect_iterator {
+  public:
+    // Adapt the meaning of dereference
+    reference operator*() const {
+      return **iter; // dereference twice
+    }
+    // Delegating the implementation to the underlying iterator.
+    iter_adaptor& operator++() { ++iter; return *this; }
+    iter_adaptor& operator--() { --iter; return *this; }
+    // delegate for all the other operators...
+  private:
+    Iterator iter;
+  };
+\end{verbatim}
+}
+
+\subsection{Iterator Complexities}
+
+In addition to the tedious aspects of iterator implementation, there
+are some complexities that trip up even the most experienced of
+programmers.
+
+\subsubsection{Constant/Mutable Iterator Interactions}
+
+One of the main situations in which iterators are used is inside
+containers. These iterators usually come in pairs: a constant iterator
+type and a mutable iterator type. It is desirable to allow the
+constant and mutable iterators to interoperate in terms of their
+binary operators. For example, suppose that you are implementing a
+container type \code{C}. Then you ought to define the following four
+version of \code{operator==}.
+
+{\footnotesize
+\begin{verbatim}
+  bool operator==(const C::iterator& x, const C::iterator& y);
+  bool operator==(const C::const_iterator& x, const C::iterator& y);
+  bool operator==(const C::iterator& x, const C::const_iterator& y);
+  bool operator==(const C::const_iterator& x, const C::const_iterator& y);
+\end{verbatim}
+}
+
+Implementers often forget to define the operators for const/mutable
+iterator interaction. In addition, iterator adaptors applied to these
+kinds of iterators should propagate the ability to interact. For
+example, a reverse iterator adaptor applied to \code{C::iterator} and
+\code{C::const\_iterator} should result in reverse iterator types that
+also have operators defined for the const/mutable interactions.
+
+
+\subsubsection{Constant/Mutable Iterator Implementation}
+
+Another subtlety in the implementation of iterators is how the the
+distinction between constant and mutable iterators affects the
+implementation. It is obvious that a constant iterator should have a
+const \code{reference} type, while a mutable iterator should have a
+non-const \code{reference}, though in other regards the constant and
+mutable versions of an iterator are the same. It is therefore
+desirable to implement both versions of the iterator with a single
+class. It is possible to do this, however some care must be taken.
+One common mistake is that the programmer will confuse the difference
+between a const iterator object and a constant iterator. Such a
+misunderstanding can, for example, lead to an iterator class that has
+two versions of \code{operator*}, one that is a const member function
+and one that is not.
+ 
+{\footnotesize
+\begin{verbatim}
+  // this is a mistake
+  reference operator*();
+  const_reference operator*() const;
+\end{verbatim}
+}
+
+The right way to implement both a constant and mutable iterators using
+the same class is to make the iterator a class template and make the
+reference type a parameter. To create the constant iterator a const
+reference would be used as the template argument and to create the
+mutable iterator a non-const reference would be used as the template
+argument. There should be only one \code{operator*} that returns the
+\code{reference} type and the member function should be const since
+dereferencing an iterator does not change the state of the iterator
+object itself (unlike \code{operator++}).
+
+{\footnotesize
+\begin{verbatim}
+  // this is right
+  reference operator*() const;
+\end{verbatim}
+}
+
+
+\subsubsection{Input Iterators and \code{operator->}}
+
+When creating an iterator adaptor that can accept an
+\stlconcept{InputIterator} as the adapted type some extra care must be
+taken in the implementation of \code{operator->}. \Note{Dave fills in
+the rest}
+
+
+
+% Automatic implementation of redundant operators
+% Default delegation to adapted iterator
+
+% complexities: 
+%   const-non const interaction
+%   const/mutable iterator distinction
+%   input iterator \code{operator->}
+
+\section{The Boost \code{iterator\_adaptor}}
+
+
+
+\subsection{Example}
+
+It is often useful to automatically apply some function to the value
+returned by dereferencing an iterator. The transform iterator of the
+Iterator Adaptor Library makes it easy to create an iterator adaptor
+which does just that. Here we will show how easy it is to implement
+the transform iterator using the
+\code{iterator\_adaptor} template.
+
+We want to be able to adapt a range of iterators and functions, so the
+policies class will have a template parameter for the function type
+and it will have a data member of that type. We know that the function
+takes one argument and that we'll need to be able to deduce the
+\code{result\_type} of the function so we can use it for the adapted
+iterator's \code{value\_type}. \stlconcept{AdaptableUnaryFunction} is
+the \textsf{concept}\cite{austern99:_gener_progr_stl} that fulfills
+those requirements.
+
+To implement a transform iterator we will only change one of the base
+iterator's behaviors, so the \code{transform\_iterator\_policies}
+class can inherit the rest from \code{default\_iterator\_policies}. We
+will define the \code{dereference()} member function, which is used
+to implement \code{operator*()} of the adapted iterator. The
+implementation will dereference the base iterator and apply the
+function object. The \code{type<Reference>} parameter is used
+to convey the appropriate return type. The complete code for
+\code{transform\_iterator\_policies} is:
+
+{\footnotesize
+\begin{verbatim}
+  template <class AdaptableUnaryFunction>
+  struct transform_iterator_policies : public default_iterator_policies
+  {
+    transform_iterator_policies() { }
+
+    transform_iterator_policies(const AdaptableUnaryFunction& f)
+      : m_f(f) { }
+
+    template <class Reference, class BaseIterator>
+    Reference dereference(type<Reference>, const BaseIterator& i) const
+      { return m_f(*i); }
+
+    AdaptableUnaryFunction m_f;
+  };
+\end{verbatim}
+}
+
+The next step is to use the \code{iterator\_adaptor} template to
+construct the transform iterator type. The nicest way to package the
+construction of the transform iterator is to create a \emph{type
+generator}, which is a class template whose sole purpose is to
+simplify the instantiation of some other complicated class
+template. It fulfills the same need as a templated typedef would if
+that were part of the {C++} language.
+
+The first template parameter to the generator will be the type of the
+function object and the second will be the base iterator type. We use
+\code{iterator\_adaptor} to define the transform iterator type as a
+nested \code{typedef} inside the
+\code{transform\_iterator\_generator} class.  Because the function may
+return by-value, we must limit the \code{iterator\_category} to 
+\stlconcept{InputIterator}, and the iterator's \code{reference} type cannot be a
+true reference (the standard allows this for input iterators), so in
+this case we can use few of \code{iterator\_adaptor}'s default template
+arguments.
+
+{\footnotesize
+\begin{verbatim}
+  template <class AdaptableUnaryFunction, class Iterator>
+  struct transform_iterator_generator
+  {
+      typedef typename AdaptableUnaryFunction::result_type value_type;
+  public:
+      typedef iterator_adaptor<Iterator, 
+          transform_iterator_policies<AdaptableUnaryFunction>,
+          value_type, value_type, value_type*, std::input_iterator_tag> type;
+  };
+\end{verbatim}
+}
+
+As a finishing touch, we will create an 
+\textsf{object generator} for the transform iterator, which
+ is a function that makes it more convenient to create objects of some
+class template.
+
+{\footnotesize
+\begin{verbatim}
+  template <class AdaptableUnaryFunction, class Iterator>
+  typename transform_iterator_generator<AdaptableUnaryFunction,
+      Iterator>::type
+  make_transform_iterator(Iterator base,
+      const AdaptableUnaryFunction& f = AdaptableUnaryFunction())
+  {
+      typedef typename transform_iterator_generator<AdaptableUnaryFunction,
+        Iterator>::type result_t;
+      return result_t(base, f);
+  }
+\end{verbatim}
+}
+
+Here is an example that shows how to use a transform iterator to
+iterate through a range of numbers, multiplying each of them by 2
+and printing the result to standard output.
+
+{\footnotesize
+\begin{verbatim}
+  #include <functional>
+  #include <algorithm>
+  #include <iostream>
+  #include <boost/iterator_adaptors.hpp>
+
+  int main(int, char*[])
+  {
+    int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    const int N = sizeof(x)/sizeof(int);
+    std::cout << "multiplying the array by 2:" << std::endl;
+    std::copy(boost::make_transform_iterator(x, 
+                std::bind1st(std::multiplies<int>(), 2)),
+              boost::make_transform_iterator(x + N, 
+                std::bind1st(std::multiplies<int>(), 2)),
+              std::ostream_iterator<int>(std::cout, " "));
+    std::cout << std::endl;
+    return 0;
+  }
+\end{verbatim}
+}
+
+\noindent This output is: 
+{\footnotesize
+\begin{verbatim}
+2 4 6 8 10 12 14 16
+\end{verbatim}
+}
+
+\bibliographystyle{abbrv}
+\bibliography{refs,tmpw00}
+
+\end{document}
