@@ -8,7 +8,7 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
-# line BOOST_PP_DETAIL_LINE()
+# line BOOST_PP_DETAIL_LINE(_)
 #
 # ifdef BOOST_PP_LOCAL_ITERATION_LIMITS
 #   define BOOST_PP_LOCAL_START BOOST_PP_TUPLE_ELEM(2, 0, BOOST_PP_LOCAL_ITERATION_LIMITS)
