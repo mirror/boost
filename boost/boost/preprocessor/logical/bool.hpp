@@ -22,7 +22,7 @@
 #
 # /* BOOST_PP_BOOL */
 #
-# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG && ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_BCC
+# if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_EDG && ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_BCC && ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
 #    if BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_IDEAL
 #        define BOOST_PP_BOOL(x) BOOST_PP_COMPL(BOOST_PP_IS_NULLARY(BOOST_PP_CAT(BOOST_PP_BOOL_, x)))
 #    else
@@ -36,8 +36,14 @@
 #    endif
 #    define BOOST_PP_BOOL_0 ()
 # else
-#    define BOOST_PP_BOOL(x) BOOST_PP_BOOL_D(x)
-#    define BOOST_PP_BOOL_D(x) BOOST_PP_BOOL_ ## x
+#    if ~BOOST_PP_CONFIG_FLAGS & BOOST_PP_CONFIG_MWCW
+#        define BOOST_PP_BOOL(x) BOOST_PP_BOOL_D(x)
+#        define BOOST_PP_BOOL_D(x) BOOST_PP_BOOL_ ## x
+#    else
+#        define BOOST_PP_BOOL(x) BOOST_PP_BOOL_I((x))
+#        define BOOST_PP_BOOL_I(par) BOOST_PP_BOOL_II ## par
+#        define BOOST_PP_BOOL_II(x) BOOST_PP_BOOL_ ## x
+#    endif
 #    define BOOST_PP_BOOL_0 0
 #    define BOOST_PP_BOOL_1 1
 #    define BOOST_PP_BOOL_2 1
