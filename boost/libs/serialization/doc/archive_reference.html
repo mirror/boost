@@ -173,7 +173,7 @@ implement partial function template ordering.  For more information see
 The serialization library injects bookkeeping data into the serialization archive.
 This data includes things like object ids, version numbers, class names etc.  Each
 of these objects is included in a wrapper so that the archive class can override the
-implemenation of <code style="white-space: normal">void load_override(T & t, int);</code>.
+implementation of <code style="white-space: normal">void load_override(T & t, int);</code>.
 For example, in the XML archive, the override for this type renders an object_id equal to 23 as
 "object_id=_23".  The following table lists the types used by the serialization library:
 <p>
@@ -284,7 +284,7 @@ typedef boost::archive::text_oarchive test_oarchive;
 typedef std::ofstream test_ostream;
 
 // repeat the above for input archive
-#include &lt;boost/archive/text_iarchive.hpp&gt
+#include &lt;boost/archive/text_iarchive.hpp&gt;
 typedef boost::archive::text_iarchive test_iarchive;
 typedef std::ifstream test_istream;
 
@@ -347,7 +347,7 @@ show how polymorphic archives are to be used. Note the following:
 <ul>
   <li><a target=demo_polymorphic_A_hpp href="../example/demo_polymorphic_A.hpp"><code style="white-space: normal">demo_polymorphic_A.hpp</code></a> and
 <a target=demo_polymorphic_A_cpp href="../example/demo_polymorphic_A.cpp"><code style="white-space: normal">demo_polymorphic_A.cpp</code></a>
-contain no templates and no reference to any specific archive implemenation.  That is, they will
+contain no templates and no reference to any specific archive implementation.  That is, they will
 only have to be compiled once for all archive implementations.  The even applies to archives classes
 created in the future.
   <li>The main program <a target=demo_polymorphic_cp href="../example/demo_polymorphic.cpp"><code style="white-space: normal">demo_polymorphic.cpp</code></a>
@@ -361,7 +361,7 @@ accomplished by the templates
 <a target=polymorphic_iarchive_impl_hpp href="../../../boost/archive/detail/polymorphic_iarchive_impl.hpp"><code style="white-space: normal">polymorphic_iarchive_impl.hpp</code></a>
 and
 <a target=polymorphic_oarchive_impl_hpp href="../../../boost/archive/detail/polymorphic_oarchive_impl.hpp"><code style="white-space: normal">polymorphic_oarchive_impl.hpp</code></a>.
-As these contain no code specific to the particular implemenation archive, they can be used to create
+As these contain no code specific to the particular implementation archive, they can be used to create
 a polymorphic archive implementation from any functioning templated archive implementation.
 <p>
 As a convenience, small header files have been included which contain 

@@ -434,7 +434,7 @@ private:
       has introduced the .NET Framework and an associated set of
       languages and language extensions, one of which is the
       delegate. Delegates are similar to signals and slots, but they
-      are more limited than most C++ signals and slots implemetations
+      are more limited than most C++ signals and slots implementations
       in that they:</para>
 
       <itemizedlist>

@@ -84,7 +84,7 @@
     It was suggested by Gennadiy Rozental that occurence of <tt>--help</tt>
     on command line results in throwing an exception. Actually, the 
     &quot;special&quot; option must have been configurable. This was not 
-    implemeneted, because applications might reasonable want to process
+    implemented, because applications might reasonable want to process
     the rest of command line even of <tt>--help</tt> was seen. For example,
     <tt>--verbose</tt> option can control how much help should be output, 
     or there may be several subcommand with different help screens.    

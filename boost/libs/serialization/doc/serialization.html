@@ -54,8 +54,8 @@ The first of these three templates is:
 <pre><code>
 template&lt;class Archive, class T&gt;
 inline void serialize(
-    Archive & ar, 
-    T & t, 
+    Archive &amp; ar, 
+    T &amp; t, 
     const unsigned long int file_version
 ){
     // invoke member function for class T
@@ -67,7 +67,7 @@ or loaded from an archive.   The default definition of this template presumes th
 existence of a class member function template of the following signature:
 <pre><code>
 template&lt;class Archive&gt;
-void serialize(Archive &ar, const unsigned int version){
+void serialize(Archive &amp;ar, const unsigned int version){
     ...
 }
 </code></pre>
@@ -88,14 +88,14 @@ saving data to an archive as well as loading data from the archive.
 The key is that the <code style="white-space: normal">&amp;</code> operator is 
 defined as <code style="white-space: normal">&lt;&lt;</code>
 for output archives and as <code style="white-space: normal">&gt;&gt;</code> input archives.  The
-"polymorphic" behavior of the <code style="white-space: normal">&</code> permits the same template
+"polymorphic" behavior of the <code style="white-space: normal">&amp;</code> permits the same template
 to be used for both save and load operations.  This is very convenient in that it
 saves a lot of typing and guarantees that the saving and loading of class
 data members are always in sync.  This is the key to the whole serialization
 system.
 
 <h3><a name="free">Free Function</a></h3>
-Of course we're not restricted to using the default implemenation described
+Of course we're not restricted to using the default implementation described
 above. We can override the default one with our own.  Doing this will
 permit us to implement serialization of a class without altering
 the class definition itself.  We call this <strong>non-intrusive</strong>
@@ -107,8 +107,8 @@ namespace serialization {
 
 template&lt;class Archive&gt;
 inline void serialize(
-    Archive & ar, 
-    my_class & t, 
+    Archive &amp; ar, 
+    my_class &amp; t, 
     const unsigned long int file_version
 ){
     ...
@@ -145,7 +145,7 @@ should be serialized with the following syntax:
 <pre><code>
 {
     // invoke serialization of the base class 
-    ar & boost::serialization::base_object&lt;base_class_of_T&gt;(*this);
+    ar &amp; boost::serialization::base_object&lt;base_class_of_T&gt;(*this);
     // save/load class member variables
     ar &amp; member1;
     ar &amp; member2;
@@ -173,7 +173,7 @@ The current version of the class is assigned as a
 <pre><code>
 {
     // invoke serialization of the base class 
-    ar & boost::serialization::base_object&lt;base_class_of_T&gt;(*this);
+    ar &amp; boost::serialization::base_object&lt;base_class_of_T&gt;(*this);
     // save/load class member variables
     ar &amp; member1;
     ar &amp; member2;
@@ -194,7 +194,7 @@ the header file <a href="../../../boost/serialization/split_member.hpp" target="
 boost/serialization/split_member.hpp</a> including code like this in the class:
 <pre><code>
 template&lt;class Archive&gt;
-void save(Archive & ar, const unsigned int version) const
+void save(Archive &amp; ar, const unsigned int version) const
 {
     // invoke serialization of the base class 
     ar &lt;&lt; boost::serialization::base_object&lt;const base_class_of_T&gt;(*this);
@@ -204,7 +204,7 @@ void save(Archive & ar, const unsigned int version) const
 }
 
 template&lt;class Archive&gt;
-void load(Archive & ar, const unsigned int version)
+void load(Archive &amp; ar, const unsigned int version)
 {
     // invoke serialization of the base class 
     ar &gt;&gt; boost::serialization::base_object&lt;base_class_of_T&gt;(*this);
@@ -216,7 +216,7 @@ void load(Archive & ar, const unsigned int version)
 
 template&lt;class Archive&gt;
 void serialize(
-    Archive & ar,
+    Archive &amp; ar,
     const unsigned int file_version 
 ){
     boost::serialization::split_member(ar, *this, file_version);
@@ -244,12 +244,12 @@ To use <code style="white-space: normal">save</code> and
 <pre><code>
 namespace boost { namespace serialization {
 template&lt;class Archive&gt;
-void save(Archive & ar, const my_class & t, unsigned int version)
+void save(Archive &amp; ar, const my_class &amp; t, unsigned int version)
 {
     ...
 }
 template&lt;class Archive&gt;
-void load(Archive & ar, my_class & t, unsigned int version)
+void load(Archive &amp; ar, my_class &amp; t, unsigned int version)
 {
     ...
 }
@@ -264,8 +264,8 @@ and override the free <code style="white-space: normal">serialize</code> functio
 namespace boost { namespace serialization {
 template&lt;class Archive&gt;
 inline void serialize(
-    Archive & ar,
-    my_class & t,
+    Archive &amp; ar,
+    my_class &amp; t,
     const unsigned int file_version
 ){
     split_free(ar, t, file_version); 
@@ -316,7 +316,7 @@ which is similar to the following:
 // load data required for construction and invoke constructor in place
 template&lt;class Archive, class T&gt;
 inline void load_construct_data(
-    Archive & ar, T * t, const unsigned int file_version
+    Archive &amp; ar, T * t, const unsigned int file_version
 ){
     // default just uses the default constructor to initialize
     // previously allocated memory. 
@@ -325,13 +325,13 @@ inline void load_construct_data(
 
 template&lt;class Archive, class T&gt;
 void load_object_ptr(
-    Archive & ar, 
-    T * & t,
+    Archive &amp; ar, 
+    T * &amp; t,
     const unsigned int file_version
 ){
     t = static_cast&lt;T *&gt;(operator new(sizeof(T));
     load_construct_data(ar, t, file_version);
-    ar >> * t;
+    ar &gt;&gt; * t;
 }
 </code></pre>
 This code
@@ -355,8 +355,8 @@ private:
     friend class boost::serialization::access;
     int member;
     template&lt;class Archive&gt;
-    void serialize(Archive &ar, const unsigned int file_version){
-        ar & member;
+    void serialize(Archive &amp;ar, const unsigned int file_version){
+        ar &amp; member;
     }
 public:
     my_class(int m) :
@@ -408,9 +408,9 @@ class my_class {
 private:
     friend class boost::serialization::access;
     int member1;
-    object & member2;
+    object &amp; member2;
     template&lt;class Archive&gt;
-    void serialize(Archive &ar, const unsigned int file_version);
+    void serialize(Archive &amp;ar, const unsigned int file_version);
 public:
     my_class(int m, object &amp; o) :
         member1(m), 
@@ -454,7 +454,7 @@ as for normal classes and requires no additional considerations.  Among
 other things, this implies that serialization of compositions of templates
 are automatically generateded when required if serialization of the 
 component templates is defined.  For example, this library includes
-definition of serialization for <code style="white-space: normal">boost::shared_ptr&lt;T></code> and for
+definition of serialization for <code style="white-space: normal">boost::shared_ptr&lt;T&gt;</code> and for
 <code style="white-space: normal">std::list&lt;T&gt;</code>. If I have defined serialization for my own
 class <code style="white-space: normal">my_t</code>, then serialization for 
 <code style="white-space: normal">std::list&lt; boost::shared_ptr&lt; my_t&gt; &gt;</code> is already available
@@ -503,9 +503,9 @@ serializable types. That is, if T is a serializable type, then the following
 is automatically available and will function as expected:
 <pre><code>
 T t[4];
-ar << t;
+ar &lt;&lt; t;
     ...
-ar >> t;
+ar &gt;&gt; t;
 </code></pre>
 The facilities described above are sufficient to implement 
 serialization for all STL containers.  In fact, this has been done

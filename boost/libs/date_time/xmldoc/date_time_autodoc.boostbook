@@ -516,7 +516,7 @@
             <simpara>A clock providing day level services based on C time_t capabilities. </simpara>
           </purpose>
           <description>
-            <para>This clock uses Posix interfaces as its implemenation and hence uses the timezone settings of the operating system. Incorrect user settings will result in incorrect results for the calls to local_day. </para>
+            <para>This clock uses Posix interfaces as its implementation and hence uses the timezone settings of the operating system. Incorrect user settings will result in incorrect results for the calls to local_day. </para>
           </description>
           <typedef name="ymd_type">
             <type>date_type::ymd_type</type>

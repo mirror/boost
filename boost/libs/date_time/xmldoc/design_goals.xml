@@ -26,7 +26,7 @@
 		iterators over time and date ranges 
 	      </listitem>
 	      <listitem>
-		allow date and time implemenations to be separate as much as possible
+		allow date and time implementations to be separate as much as possible
 	      </listitem>
 	    </itemizedlist>
 	  </entry> 
