@@ -27,13 +27,13 @@
 #include <list>
 #include <cctype>
 #include <cstdio>
-#include <boost/cregex.hpp>
 #include <boost/regex/regex_traits.hpp>
-#include <boost/regex/detail/regex_synch.hpp>
-#include <boost/regex/detail/regex_cstring.hpp>
+#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+#include <boost/cregex.hpp>
+#include <boost/regex/v3/regex_synch.hpp>
+#include <boost/regex/v3/regex_cstring.hpp>
 #include <boost/scoped_array.hpp>
 
-#if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
 
 //
 // VC6 needs to link to user32.lib, as do all compilers that
@@ -1098,6 +1098,7 @@ unsigned short w32_regex_traits<wchar_t>::wide_unicode_classes[] = {
 } // namespace boost
 
 #endif // #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+
 
 
 

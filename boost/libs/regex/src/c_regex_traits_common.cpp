@@ -29,7 +29,7 @@
 #include <list>
 #include <cctype>
 #include <boost/regex/regex_traits.hpp>
-#include <boost/regex/detail/regex_synch.hpp>
+#include <boost/regex/v3/regex_synch.hpp>
 
 
 namespace boost{
@@ -553,4 +553,5 @@ BOOST_REGEX_DECL wchar_t wide_lower_case_map[] = {
 
    } // namespace re_detail
 } // namespace boost
+
 

@@ -35,8 +35,8 @@
 #include <cstdio>
 #include <boost/cregex.hpp>
 #include <boost/regex/regex_traits.hpp>
-#include <boost/regex/detail/regex_synch.hpp>
-#include <boost/regex/detail/regex_cstring.hpp>
+#include <boost/regex/v3/regex_synch.hpp>
+#include <boost/regex/v3/regex_cstring.hpp>
 #include <boost/scoped_array.hpp>
 
 #include "primary_transform.hpp"
@@ -1057,5 +1057,6 @@ std::size_t BOOST_REGEX_CALL c_regex_traits<wchar_t>::strwiden(wchar_t *s1, std:
 #endif // BOOST_NO_WREGEX
 
 } // namespace boost
+
 
 

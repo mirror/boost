@@ -31,7 +31,7 @@
 #include <crtdbg.h>
 #endif
 
-#include <boost/regex/detail/regex_raw_buffer.hpp>
+#include <boost/regex/v3/regex_raw_buffer.hpp>
 #include <boost/regex.hpp>
 
 #ifndef BOOST_RE_OLD_IOSTREAM
@@ -213,6 +213,7 @@ debug_guard::~debug_guard()
 
 
 #endif
+
 
 
 
