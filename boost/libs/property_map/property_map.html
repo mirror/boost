@@ -178,16 +178,16 @@ namespace boost {
 
   // overloads of the property map functions for pointers
   template <class T>
-  void put(T* pa, std::ptrdiff_t k, const T& val) { pa[k] = val;  }
+  void put(T* pmap, std::ptrdiff_t k, const T& val) { pmap[k] = val;  }
 
   template <class T>
-  const T& get(const T* pa, std::ptrdiff_t k) { return pa[k]; }
+  const T& get(const T* pmap, std::ptrdiff_t k) { return pmap[k]; }
 
   template <class T>
-  T& at(T* pa, std::ptrdiff_t k) { return pa[k]; }
+  T& at(T* pmap, std::ptrdiff_t k) { return pmap[k]; }
 
   template <class T>
-  const T& at(const T* pa, std::ptrdiff_t k) { return pa[k]; }
+  const T& at(const T* pmap, std::ptrdiff_t k) { return pmap[k]; }
 
 }
 </PRE>
