@@ -421,7 +421,7 @@ Lvalue Iterators [lib.lvalue.iterators]
 
 The *Lvalue Iterator* concept adds the requirement that the return
 type of ``operator*`` type be a reference to the value type of the
-iterator.
+iterator.  
 
 +-------------------------------------------------------------+
 | Lvalue Iterator Requirements                                |
@@ -431,10 +431,13 @@ iterator.
 |``*a``       | ``T&``    |``T`` is *cv*                      |
 |             |           |``iterator_traits<X>::value_type`` |
 |             |           |where *cv* is an optional          |
-|             |           |cv-qualification.                  |
-|             |           |pre: ``a`` is                      |
-|             |           |dereferenceable. ``a == b`` if and |
-|             |           |only if ``*a`` is the same object  |
+|             |           |cv-qualification.  pre: ``a`` is   |
+|             |           |dereferenceable. If ``X`` is a     |
+|             |           |*Writable Iterator* then ``a == b``|
+|             |           |if and only if ``*a`` is the same  |
+|             |           |object as ``*b``.  If ``X`` is a   |
+|             |           |*Readable Iterator* then ``a == b``|
+|             |           |implies ``*a`` is the same object  |
 |             |           |as ``*b``.                         |
 +-------------+-----------+-----------------------------------+
 
@@ -458,26 +461,31 @@ Constructible, the following expressions are valid and respect the
 stated semantics.
 
 
-+-----------------------------------------------------------------------------------------------------------+
-|Incrementable Iterator Requirements (in addition to Assignable, Copy Constructible)                        |
-|                                                                                                           |
-+--------------------------------+----------------------------------+---------------------------------------+
-|Expression                      |Return Type                       |Assertion/Semantics                    |
-+================================+==================================+=======================================+
-|``++r``                         |``X&``                            |``&r == &++r``                         |
-+--------------------------------+----------------------------------+---------------------------------------+
-|``r++``                         |if ``X`` is a *Writable Iterator* |if ``X`` is a *Writable Iterator* then |
-|                                |then convertible to ``const X&``  |``X a(r++);`` is equivalent to         |
-|                                |                                  |``X a(r); ++r;`` otherwise ``r++``     |
-|                                |                                  |is equivalent to ``++r``               |
-+--------------------------------+----------------------------------+---------------------------------------+
-|``*r++``                        |if ``X`` is a *Readable Iterator* |if ``X`` is a *Readable Iterator* then |
-|                                |then ``T``                        |``T z(*r++);`` is equivalent to        |
-|                                |                                  |``T z(*r); ++r;``                      |
-+--------------------------------+----------------------------------+---------------------------------------+
-|``iterator_traversal<X>::type`` |Convertible to                    |                                       |
-|                                |``incrementable_traversal_tag``   |                                       |
-+--------------------------------+----------------------------------+---------------------------------------+
++----------------------------------------------------------------------------------------+
+|Incrementable Iterator Requirements (in addition to Assignable, Copy Constructible)     |
+|                                                                                        |
++--------------------------------+-------------------------------+-----------------------+
+|Expression                      |Return Type                    |Assertion/Semantics    |
++================================+===============================+=======================+
+|``++r``                         |``X&``                         |``&r == &++r``         |
++--------------------------------+-------------------------------+-----------------------+
+|``r++``                         |convertible to ``const X&``    |``X a(r++);`` is       |
+|                                |                               |equivalent to ``X a(r);|
+|                                |                               |++r;``                 |
++--------------------------------+-------------------------------+-----------------------+
+|``*r++``                        |if ``X`` is a *Readable        |If ``X`` is a *Readable|
+|                                |Iterator* then ``T``           |Iterator* then ``T     |
+|                                |                               |z(*r++);`` is          |
+|                                |                               |equivalent to ``T      |
+|                                |                               |z(*r); ++r;``. If ``X``|
+|                                |                               |is a *Writable         |
+|                                |                               |Iterator* then ``*r++ =|
+|                                |                               |o`` is equivalent to   |
+|                                |                               |``*r = o; ++r``.       |
++--------------------------------+-------------------------------+-----------------------+
+|``iterator_traversal<X>::type`` |Convertible to                 |                       |
+|                                |``incrementable_traversal_tag``|                       |
++--------------------------------+-------------------------------+-----------------------+
 
 .. TR1: incrementable_iterator_tag changed to
    incrementable_traversal_tag for consistency.
@@ -521,12 +529,7 @@ Forward Traversal Iterators [lib.forward.traversal.iterators]
 A class or built-in type ``X`` models the *Forward Traversal Iterator*
 concept if, in addition to ``X`` meeting the requirements of Default
 Constructible and Single Pass Iterator, the following expressions are
-valid and respect the stated semantics. Also, if ``X`` is a *Readable
-Iterator* with ``a`` and ``b`` dereferenceable, then ``a == b`` if and
-only if ``*a`` and ``*b`` are the same object.  If ``X`` is a
-*Writable Iterator*, then ``a == b`` if and only if ``*a = o`` and
-``*b = o`` write ``o`` to the same location.
-
+valid and respect the stated semantics. 
 
 +--------------------------------------------------------------------------------------------------------+
 |Forward Traversal Iterator Requirements (in addition to Default Constructible and Single Pass Iterator) |
