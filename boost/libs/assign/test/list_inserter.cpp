@@ -58,7 +58,16 @@ void check_list_inserter()
     //
     make_list_inserter( (void (*)(int))&function_ptr<int> )( 5 ),3;
     make_list_inserter( functor() )( 4 ),2;
+    
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+// BCB would crash
+    typedef void (vector<int>::* push_back_t)(const int&);
+    push_back_t push_back_func = &vector<int>::push_back;
+    make_list_inserter( bind( push_back_func, &v, _1 ) )( 6 ),4;
+#else
     make_list_inserter( bind( &vector<int>::push_back, &v, _1 ) )( 6 ),4;
+#endif 
+
     BOOST_CHECK_EQUAL( v.size(), 2u );
     BOOST_CHECK_EQUAL( v[0], 6 );
     BOOST_CHECK_EQUAL( v[1], 4 );
@@ -73,7 +82,7 @@ void check_list_inserter()
     BOOST_CHECK_EQUAL( v[8], 7 ); 
     BOOST_CHECK_EQUAL( v[16], 7 ); 
 
-#if !( defined(_MSC_VER) && (_MSC_VER >= 1020) )
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     push_back( v ) = repeat_fun( 10, &rand );
 #else
     push_back( v ).repeat_fun( 10, &rand );
@@ -81,14 +90,14 @@ void check_list_inserter()
 
     BOOST_CHECK_EQUAL( v.size(), 29u );
 
-#if !( defined(_MSC_VER) && (_MSC_VER >= 1020) )
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     push_back( v ) = 1,repeat( 10, 2 ),3;
 #else
     push_back( v )(1).repeat( 10, 2 )(3);
 #endif
     BOOST_CHECK_EQUAL( v.size(), 41u );
 
-#if !( defined(_MSC_VER) && (_MSC_VER >= 1020) )
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     push_back( v ) = 1,repeat_fun( 10, &rand ),2;
 #else
     push_back( v )(1).repeat_fun( 10, &rand )(2);
@@ -105,6 +114,9 @@ void check_list_inserter()
     BOOST_CHECK_EQUAL( m.size(), 2u );
     BOOST_CHECK_EQUAL( m["foo"], 2 );
 
+    
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#else
     typedef vector<int>                   score_type;
     typedef map<string,score_type>        team_score_map;
     typedef std::pair<string,score_type>  score_pair;
@@ -123,7 +135,7 @@ void check_list_inserter()
     BOOST_CHECK_EQUAL( team_score.size(), 3u );
     BOOST_CHECK_EQUAL( team_score[ "Team Foo" ][1], 1 );
     BOOST_CHECK_EQUAL( team_score[ "Team Bar" ][0], 0 );
-
+#endif
                         
 }
 

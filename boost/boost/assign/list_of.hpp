@@ -24,7 +24,6 @@
 #include <cstddef>
 #include <utility>
 
-//###
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/iteration/local.hpp>
@@ -85,14 +84,29 @@ namespace assign_detail
 
 
     template< class T > 
-    class generic_list : public std::deque<T> 
+    class generic_list
     {
-        typedef std::deque<T> base;
+        typedef std::deque<T>  impl_type;
+        impl_type              values_;
+        
     public:
-        using base::iterator;
-        using base::value_type;
-        using base::const_iterator;
-
+        typedef BOOST_DEDUCED_TYPENAME impl_type::iterator         iterator;
+        typedef BOOST_DEDUCED_TYPENAME impl_type::const_iterator   const_iterator;
+        typedef BOOST_DEDUCED_TYPENAME impl_type::value_type       value_type;
+        typedef BOOST_DEDUCED_TYPENAME impl_type::size_type        size_type;
+        typedef BOOST_DEDUCED_TYPENAME impl_type::difference_type  difference_type;
+        
+    public:
+        iterator begin()             { return values_.begin(); }
+        const_iterator begin() const { return values_.begin(); }
+        iterator end()               { return values_.end(); }
+        const_iterator end() const   { return values_.end(); }
+        bool empty() const           { return values_.empty(); }
+        size_type size() const       { return values_.size(); }
+        
+    private:
+        void push_back( value_type r ) { values_.push_back( r ); }
+        
     public:
         generic_list& operator()()
         {
@@ -107,8 +121,7 @@ namespace assign_detail
             return *this;
         }
         
-
-//###        
+       
 #ifndef BOOST_ASSIGNMENT_MAX_PARAMS // use user's value
 #define BOOST_ASSIGNMENT_MAX_PARAMS 4
 #endif        
@@ -161,16 +174,9 @@ namespace assign_detail
             BOOST_STATIC_CONSTANT( bool, is_array_flag = sizeof( is_array( c ) ) 
                                    == sizeof( type_traits::yes_type ) );
             
-//            BOOST_DEDUCED_TYPENAME Container::value_type* v = 0;
-//            BOOST_STATIC_CONSTANT( bool, is_pair_flag = sizeof( is_pair( v ) )
-//                                   == sizeof( type_traits::yes_type ) );
-                
             typedef BOOST_DEDUCED_TYPENAME mpl::if_c< is_array_flag,
                                                       array_type_tag,
                                              default_type_tag >::type tag_type;
-//            typedef BOOST_DEDUCED_TYPENAME mpl::if_c< is_pair_flag,
-//                                                      pair_type_tag,
-//                                          default_type_tag >::type pair_tag_type;
             
             return convert( c, tag_type() );
         }
@@ -195,32 +201,10 @@ namespace assign_detail
 #endif
         }
         
-        /*
-        template< class Container >
-        Container convert( Container*, default_type_tag, pair_type_tag ) const
-        {
-        
-            Container result;
-            BOOST_DEDUCED_TYPENAME std::deque<T>::const_iterator
-                 it = this->begin(), end = this->end();
-            while( it != end )
-            {
-                BOOST_DEDUCED_TYPENAME Container::key_type   
-                    key;
-                key   = it->first; 
-                BOOST_DEDUCED_TYPENAME Container::mapped_type 
-                    value;
-                value = it->second;
-                result.insert( result.end(), std::make_pair( key, value ) );
-            }
-        
-            return result;
-        }
-        */
-        
         template< class Array >
         Array convert( const Array*, array_type_tag ) const
         {
+            typedef BOOST_DEDUCED_TYPENAME Array::value_type value_type;
             Array array;
             if( array.size() < this->size() )
                 throw assign::assignment_exception( "array initialized with too many elements" );
@@ -230,7 +214,7 @@ namespace assign_detail
             for( ; i != end; ++i, ++n )
                 array[n] = *i;
             for( ; n < array.size(); ++n )
-                array[n] = BOOST_DEDUCED_TYPENAME Array::value_type();
+                array[n] = value_type();
             return array; 
         }
         
@@ -291,16 +275,6 @@ namespace assign_detail
         }
     };
     
-    /*
-    template< class T, class U >
-    inline generic_list<T> operator+( const generic_list<T>& l, const generic_list<U>& r )
-    {
-        generic_list<T> res( l );
-        res += r;
-        return res;
-    }
-    */
-    
 } // namespace 'assign_detail'
 
 namespace assign
@@ -345,7 +319,6 @@ namespace assign
 } // namespace 'boost'
 
 
-//###
 #undef BOOST_ASSIGNMENT_MAX_PARAMS         
 #undef BOOST_ASSIGNMENT_PARAMS1
 #undef BOOST_ASSIGNMENT_PARAMS2

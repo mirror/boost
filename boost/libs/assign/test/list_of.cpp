@@ -50,6 +50,7 @@ void test_sequence_list_of_string()
 template< class C >
 void test_sequence_list_of_int()
 {
+    using namespace std;
     const C c  = ba::list_of(1)(2)(3)(4);
     const C c2 = (ba::list_of(1),2,3,4);
     BOOST_CHECK_EQUAL( c.size(), 4u );
@@ -75,13 +76,14 @@ void test_vector_matrix()
     using namespace boost;
     using namespace boost::assign;
     using namespace std;
+
+#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)    
+#else    
       
     const int              sz = 3;
     typedef array<int,sz>   row3;
     typedef array<row3,sz>  matrix3x3;
     
-#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)    
-#else    
 
     matrix3x3 m = list_of( list_of(1)(2)(3) )
                          ( list_of(4)(5)(6) )

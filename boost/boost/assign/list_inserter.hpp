@@ -20,7 +20,6 @@
 #include <boost/config.hpp>
 #include <cstddef>
 
-//###
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -224,7 +223,6 @@ namespace assign
             return *this;
         }
 
-//###
 #ifndef BOOST_ASSIGNMENT_MAX_PARAMS // use user's value
 #define BOOST_ASSIGNMENT_MAX_PARAMS 4        
 #endif
@@ -336,7 +334,6 @@ namespace assign
 } // namespace 'assign'
 } // namespace 'boost'
 
-//###
 #undef BOOST_ASSIGNMENT_PARAMS1
 #undef BOOST_ASSIGNMENT_PARAMS2
 #undef BOOST_ASSIGNMENT_PARAMS3
