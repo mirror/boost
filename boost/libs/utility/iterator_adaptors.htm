@@ -98,18 +98,28 @@ classes and pass them in <a href="#1">[1]</a>.
 
 
 <p>The <tt>Policies</tt> class that you pass in will become the heart of
-the iterator adaptor. The policy class determines how your new adaptor
-class will behave. The <tt>Policies</tt> class must implement 3, 4, or
-7 of the core iterator operations depending on whether you wish the
+the iterator adaptor, supplying the core iterator operations that will determine how your new adaptor
+class will behave. The core iterator operations are:
+<ul>
+<li><code>dereference</code> - returns an element of the iterator's <code>reference</code> type
+<li><code>equal</code> - tests the iterator for equality
+<li><code>increment</code> - increments the iterator
+<li><code>decrement</code> - decrements bidirectional and random-access iterators
+<li><code>less</code> - imposes a strict weak ordering relation on random-access iterators
+<li><code>distance</code> - measures the distance between random-access iterators
+<li><code>advance</code> - adds an integer offset to random-access iterators
+</ul>
+The <tt>Policies</tt> class must implement three, four, or
+seven of the core iterator operations depending on whether you wish the
 new iterator adaptor class to be a
 <a href="http://www.sgi.com/Technology/STL/ForwardIterator.html">
 ForwardIterator</a>,
 <a href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">
 BidirectionalIterator</a>, or <a
 href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
-RandomAccessIterator</a>. Make sure that the
+RandomAccessIterator</a>. The
 <tt>iterator_category</tt> type of the traits class you pass in
-matches the category of iterator that you want to create. The default
+must match the category of iterator that you want to create. The default
 policy class, <tt>default_iterator_policies</tt>, implements all 7 of
 the core operations in the usual way. If you wish to create an
 iterator adaptor that only changes a few of the iterator's behaviors,
