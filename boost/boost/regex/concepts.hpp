@@ -27,6 +27,7 @@
 #include <boost/regex.hpp>
 #include <bitset>
 #include <vector>
+#include <iostream>
 
 namespace boost{
 
