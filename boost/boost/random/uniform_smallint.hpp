@@ -72,8 +72,10 @@ uniform_smallint(base_type & rng, IntType min, IntType max)
 #endif
   assert(min < max);
   
-  // check how many low bits we can ignore before we get too much
-  // quantization error
+  // LCGs get bad when only taking the low bits.
+  // (probably put this logic into a partial template specialization)
+  // Check how many low bits we can ignore before we get too much
+  // quantization error.
   base_result r_base = _rng.max() - _rng.min();
   if(r_base == std::numeric_limits<base_result>::max()) {
     _factor = 2;
@@ -81,7 +83,7 @@ uniform_smallint(base_type & rng, IntType min, IntType max)
   }
   r_base += 1;
   if(r_base % _range == 0) {
-    // no quantization effects, good
+    // No quantization effects, good
     _factor = r_base / _range;
   } else {
     const base_result r = 32*_range*_range;
