@@ -14,6 +14,7 @@
 #include <list>
 #include <algorithm>
 #include <boost/detail/binary_search.hpp>
+#include <boost/detail/workaround.hpp>
 
 #if defined(__SGI_STL_PORT) ? defined(__SGI_STL_OWN_IOSTREAMS) : (!defined(__GNUC__) || __GNUC__ > 2)
 # define USE_SSTREAM
@@ -27,7 +28,16 @@
 
 namespace {
 
-typedef std::vector<std::string> string_vector;
+// In order to get ADL to find the comparison operators defined below, they have
+struct mystring : std::string
+{
+    typedef std::string base;
+    
+    mystring(std::string const& x)
+        : base(x) {}
+};
+
+typedef std::vector<mystring> string_vector;
 
 const std::size_t sequence_length = 1000;
 
@@ -74,20 +84,21 @@ struct cmp
     }
 };
 
-inline bool operator<(const std::string& x, const unsigned y)
+inline bool operator<(const mystring& x, const unsigned y)
 {
     return to_int(x) < y;
 }
 
-inline bool operator<(const unsigned y, const std::string& x)
+inline bool operator<(const unsigned y, const mystring& x)
 {
     return y < to_int(x);
 }
 
-template <class T> void sort_by_value(T&);
+template <class T>
+void sort_by_value(T& x);
 
-template <>
-void sort_by_value(std::vector<std::string>& v)
+template <class T>
+void sort_by_value_(T& v, ...)
 {
     std::sort(v.begin(), v.end(), cmp());
 }
@@ -103,28 +114,26 @@ void random_sorted_sequence(T& seq)
     sort_by_value(seq);
 }
 
-# if defined(BOOST_MSVC) && BOOST_MSVC < 1300 && !defined(__SGI_STL_PORT)
+template <class T, class A>
+void sort_by_value_(std::list<T,A>& l, int)
+{
+# if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) && !defined(__SGI_STL_PORT)
 // VC6's standard lib doesn't have a template member function for list::sort()
-template <>
-void random_sorted_sequence(std::list<std::string>& result)
-{
-    std::vector<std::string> seq;
+    std::vector<T> seq;
     seq.reserve(sequence_length);
-    for (std::size_t i = 0; i < sequence_length; ++i)
-    {
-        push_back_random_number_string(seq);
-    }
+    std::copy(l.begin(), l.end(), std::back_inserter(seq));
     sort_by_value(seq);
-    result.resize(seq.size());
-    std::copy(seq.begin(), seq.end(), result.begin());
-}
-#else
-template <>
-void sort_by_value(std::list<std::string>& l)
-{
+    std::copy(seq.begin(), seq.end(), l.begin());
+# else
     l.sort(cmp());
-}
 # endif
+}
+
+template <class T>
+void sort_by_value(T& x)
+{
+    (sort_by_value_)(x, 1);
+}
 
 // A way to select the comparisons with/without a Compare parameter for testing.
 template <class Compare> struct searches
@@ -233,13 +242,13 @@ void test_loop(Sequence& x, Compare cmp, unsigned long test_count)
 
 int main()
 {
-    std::vector<std::string> x;
+    string_vector x;
     std::cout << "=== testing random-access iterators with <: ===\n";
     test_loop(x, no_compare(), 25);
     std::cout << "=== testing random-access iterators with compare: ===\n";
     test_loop(x, cmp(), 25);
     
-    std::list<std::string> y;
+    std::list<mystring> y;
     std::cout << "=== testing bidirectional iterators with <: ===\n";
     test_loop(y, no_compare(), 25);
     std::cout << "=== testing bidirectional iterators with compare: ===\n";
