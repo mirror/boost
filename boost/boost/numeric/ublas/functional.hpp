@@ -171,6 +171,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T1, class T2>
     struct scalar_binary_assign_functor {
+        // Remove reference to avoid reference to reference problems
         typedef typename type_traits<typename boost::remove_reference<T1>::type>::reference argument1_type;
         typedef typename type_traits<T2>::const_reference argument2_type;
     };
