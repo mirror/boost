@@ -24,9 +24,9 @@ main()
   check("1900-01-01 day is 01",     d1.day()   == 1);
   check("1900-01-01 month is 01",   d1.month() == 1);
   check("1900-01-01 year is 1900",  d1.year()  == 1900);
-  check("1900-12-31 day is 31",     d4.day()   == 31);
-  check("1900-12-31 month is 12",   d4.month() == 12);
-  check("1900-12-31 year is 2000",  d4.year()  == 2000);
+  check("2000-12-31 day is 31",     d4.day()   == 31);
+  check("2000-12-31 month is 12",   d4.month() == 12);
+  check("2000-12-31 year is 2000",  d4.year()  == 2000);
   //operator<
   check("1900-01-01 is less than 2000-01-01",          d1 < d2);
   check("2000-01-01 is NOT less than 2000-01-01",      !(d1 < d1));
@@ -140,6 +140,18 @@ main()
   date d15(1400,1,1);
   std::cout << d15.day_of_week().as_long_string() << std::endl;
   check("check infinity - min compare   ",      d10 < d15);
+
+  std::cout << d15.julian_day() << std::endl;
+  check("check julian day   ", d15.julian_day() == 2232400);
+  check("check modjulian day   ", d15.modjulian_day() == -167601);
+  date d16(2004,2,29);
+  check("check julian day   ", d16.julian_day() == 2453065);
+  check("check modjulian day   ", d16.modjulian_day() == 53064);
+
+//   std::cout << d16.julian_day() << std::endl;
+//   std::cout << d16.modjulian_day() << std::endl;
+
+
 
   printTestStats();
   return 0;
