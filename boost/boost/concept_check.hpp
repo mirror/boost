@@ -199,12 +199,14 @@ struct require_same { typedef T type; };
       a = a;              // require assignment operator
 #endif
       const_constraints(a);
+      ignore_unused_variable_warning(b);
     }
     void const_constraints(const TT& b) {
       TT c(b);
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
       a = b;              // const required for argument to assignment
 #endif
+      ignore_unused_variable_warning(c);
     }
     TT a;
   };
@@ -309,6 +311,7 @@ struct require_same { typedef T type; };
   {
     void constraints() {
       const Return& r = f();   // require operator() member function
+      ignore_unused_variable_warning(r);
     }
     Func f;
   };
