@@ -67,12 +67,20 @@ inline MyInt floor ( MyInt const& x ) { return x ; }
 
 inline MyFloat floor ( MyFloat const& x )
 {
+#if !defined(BOOST_NO_STDC_NAMESPACE)
   return MyFloat ( std::floor(x.to_builtin()) ) ;
+#else
+  return MyFloat ( ::floor(x.to_builtin()) ) ;
+#endif
 }
 
 inline MyFloat ceil ( MyFloat const& x )
 {
+#if !defined(BOOST_NO_STDC_NAMESPACE)
   return MyFloat ( std::ceil(x.to_builtin()) ) ;
+#else
+  return MyFloat ( ::ceil(x.to_builtin()) ) ;
+#endif
 }
 
 } // namespace MyUDT

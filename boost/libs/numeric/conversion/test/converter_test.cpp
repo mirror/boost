@@ -70,7 +70,9 @@ void test_conversions()
   using namespace numeric ;
 
   // To help the test found possible bugs a random numbers are used.
+#if !defined(BOOST_NO_STDC_NAMESPACE)
   using std::rand ;
+#endif
 
   boost::int16_t v16 ;
   boost::uint16_t uv16 ;

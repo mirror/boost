@@ -17,12 +17,7 @@
 // NOTE: specializations of boost::lexical_cast<> were not used since some compilers had
 // trouble dealing with such specializations for different enumerations.
 //
-#ifdef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-std::string to_string ( int arg )
-{
-  return MAKESTR(arg);
-}
-#else
+
 std::string to_string ( boost::numeric::int_float_mixture_enum arg )
 {
   switch ( arg )
@@ -59,7 +54,6 @@ std::string to_string ( boost::numeric::udt_builtin_mixture_enum arg )
   }
   return "(Unknown result!)" ;
 }
-#endif
 
 //
 ///////////////////////////////////////////////////////////////////////////////////////////////
