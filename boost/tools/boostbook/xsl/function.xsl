@@ -769,6 +769,8 @@
       <xsl:apply-templates select="purpose/*"/>
     </xsl:if>
 
+    <xsl:apply-templates select="description/*"/>
+
     <!-- Document parameters -->
     <xsl:if test="parameter/description|signature/parameter/description">
       <variablelist spacing="compact">
@@ -786,8 +788,6 @@
         </xsl:for-each>
       </variablelist>
     </xsl:if>
-
-    <xsl:apply-templates select="description/*"/>
 
     <xsl:if test="para">
       <xsl:message>
@@ -813,7 +813,6 @@
           <xsl:text>' for stylesheet parameter boost.generation.mode.</xsl:text>
         </xsl:otherwise>
       </xsl:choose>
-      
     </xsl:if>
   </xsl:template>
 
