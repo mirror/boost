@@ -240,7 +240,7 @@ namespace boost {
                 return boost::begin( r );
                 #else
                 using boost::begin;
-                return begin( r );
+                return iterator( begin( r ) );
                 #endif
             }
             
@@ -251,7 +251,7 @@ namespace boost {
                 return boost::end( r );
                 #else
                 using boost::end;
-                return end( r );
+                return iterator( end( r ) );
                 #endif
             }
             
