@@ -21,6 +21,7 @@
 #ifndef BOOST_CONFIG_HPP
 #include <boost/config.hpp>
 #endif
+#include <cstddef>
 
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/type_traits/is_pointer.hpp>
