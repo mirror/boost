@@ -8,9 +8,9 @@
 		<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="middle" width="277" height="86">weak_ptr 
 			class template</h1>
 		<p>The <b>weak_ptr</b> class template stores a pointer to an object that's already 
-			managed by a <b>shared_ptr</b>. When the object last <b>shared_ptr</b> to the 
-			object goes away and the object is deleted, all <b>weak_ptr</b> objects have 
-			their stored pointers set to 0.</p>
+			managed by a <b>shared_ptr</b>. When the last <b>shared_ptr</b> to the object 
+			goes away and the object is deleted, all <b>weak_ptr</b> objects have their 
+			stored pointers set to 0.</p>
 		<p>Every <b>weak_ptr</b> meets the <b>CopyConstructible</b> and <b>Assignable</b> requirements 
 			of the C++ Standard Library, and so can be used in standard library containers. 
 			Comparison operators are supplied so that <b>weak_ptr</b> works with the 
@@ -30,7 +30,7 @@ weak_ptr&lt;int&gt; q(p);
 
 if(int * r = q.get())
 {
-	// use *r
+    // use *r
 }
 </pre>
 		<P>Imagine that after the <STRONG>if</STRONG>, but immediately before <STRONG>r</STRONG>
@@ -46,7 +46,7 @@ weak_ptr&lt;int&gt; q(p);
 
 if(shared_ptr&lt;int&gt; r = <a href="#make_shared">make_shared</a>(q))
 {
-	// use *r
+    // use *r
 }
 </pre>
 		<p>Now <STRONG>r</STRONG> holds a reference to the object that was pointed by <STRONG>q</STRONG>. 
@@ -101,7 +101,7 @@ if(shared_ptr&lt;int&gt; r = <a href="#make_shared">make_shared</a>(q))
 			<p>Provides the type of the template parameter T.</p>
 		</blockquote>
 		<h3><a name="constructors">constructors</a></h3>
-		<pre>explicit weak_ptr();</pre>
+		<pre> weak_ptr();</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs a <b>weak_ptr</b>.</p>
 			<p><b>Postconditions:</b> <A href="#use_count">use count</A> is 0; the stored 
