@@ -253,6 +253,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef A array_type;
     private:
+        typedef T *pointer;
         typedef F1 functor1_type;
         typedef F2 functor2_type;
         typedef const hermitian_matrix<T, F1, F2, A> const_self_type;
@@ -575,7 +576,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename hermitian_matrix::value_type value_type;
             typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::const_reference reference;
-            typedef const typename hermitian_matrix::value_type *pointer;
+            typedef const typename hermitian_matrix::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -715,7 +716,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename hermitian_matrix::value_type value_type;
             typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::reference reference;
-            typedef typename hermitian_matrix::value_type *pointer;
+            typedef typename hermitian_matrix::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
@@ -856,7 +857,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename hermitian_matrix::value_type value_type;
             typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::const_reference reference;
-            typedef const typename hermitian_matrix::value_type *pointer;
+            typedef const typename hermitian_matrix::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -996,7 +997,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename hermitian_matrix::value_type value_type;
             typedef typename hermitian_matrix::difference_type difference_type;
             typedef typename hermitian_matrix::reference reference;
-            typedef typename hermitian_matrix::value_type *pointer;
+            typedef typename hermitian_matrix::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;

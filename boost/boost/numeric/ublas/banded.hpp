@@ -40,6 +40,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef A array_type;
     private:
+        typedef T *pointer;
         typedef F functor_type;
         typedef const banded_matrix<T, F, A> const_self_type;
         typedef banded_matrix<T, F, A> self_type;
@@ -399,7 +400,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename banded_matrix::value_type value_type;
             typedef typename banded_matrix::difference_type difference_type;
             typedef typename banded_matrix::const_reference reference;
-            typedef const typename banded_matrix::value_type *pointer;
+            typedef const typename banded_matrix::pointer pointer;
 #endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -539,7 +540,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename banded_matrix::value_type value_type;
             typedef typename banded_matrix::difference_type difference_type;
             typedef typename banded_matrix::reference reference;
-            typedef typename banded_matrix::value_type *pointer;
+            typedef typename banded_matrix::pointer pointer;
 #endif
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
@@ -680,7 +681,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename banded_matrix::value_type value_type;
             typedef typename banded_matrix::difference_type difference_type;
             typedef typename banded_matrix::const_reference reference;
-            typedef const typename banded_matrix::value_type *pointer;
+            typedef const typename banded_matrix::pointer pointer;
 #endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -820,7 +821,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename banded_matrix::value_type value_type;
             typedef typename banded_matrix::difference_type difference_type;
             typedef typename banded_matrix::reference reference;
-            typedef typename banded_matrix::value_type *pointer;
+            typedef typename banded_matrix::pointer pointer;
 #endif
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;
