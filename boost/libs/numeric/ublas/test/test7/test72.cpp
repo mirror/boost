@@ -14,15 +14,6 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#include <iostream>
-
-#include <boost/numeric/interval.hpp>
-#include <boost/numeric/interval/io.hpp>
-
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/io.hpp>
-
 #include "test7.hpp"
 
 // Test matrix & vector expression templates

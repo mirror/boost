@@ -32,8 +32,8 @@ struct test_my_matrix {
             std::cout << "default construct = " << default_constuct << std::endl;
             
             // Copy and swap
-            initialize_matrix (m1, ublas::lower_tag ());
-            initialize_matrix (m2, ublas::lower_tag ());
+            initialize_matrix (m1);
+            initialize_matrix (m2);
             m1 = m2;
             std::cout << "m1 = m2 = " << m1 << std::endl;
             m1.assign_temporary (m2);
@@ -42,15 +42,15 @@ struct test_my_matrix {
             std::cout << "m1.swap (m2) = " << m1 << " " << m2 << std::endl;
 
             // Unary matrix operations resulting in a matrix
-            initialize_matrix (m1, ublas::lower_tag ());
+            initialize_matrix (m1);
             m2 = - m1;
             std::cout << "- m1 = " << m2 << std::endl;
             m2 = ublas::conj (m1);
             std::cout << "conj (m1) = " << m2 << std::endl;
 
             // Binary matrix operations resulting in a matrix
-            initialize_matrix (m1, ublas::lower_tag ());
-            initialize_matrix (m2, ublas::lower_tag ());
+            initialize_matrix (m1);
+            initialize_matrix (m2);
             m3 = m1 + m2;
             std::cout << "m1 + m2 = " << m3 << std::endl;
             m3 = m1 - m2;
@@ -58,20 +58,20 @@ struct test_my_matrix {
 
             // Scaling a matrix
             t = N;
-            initialize_matrix (m1, ublas::lower_tag ());
+            initialize_matrix (m1);
             m2 = value_type (1.) * m1;
             std::cout << "1. * m1 = " << m2 << std::endl;
             m2 = t * m1;
             std::cout << "N * m1 = " << m2 << std::endl;
-            initialize_matrix (m1, ublas::lower_tag ());
+            initialize_matrix (m1);
             m2 = m1 * value_type (1.);
             std::cout << "m1 * 1. = " << m2 << std::endl;
             m2 = m1 * t;
             std::cout << "m1 * N = " << m2 << std::endl;
 
             // Some assignments
-            initialize_matrix (m1, ublas::lower_tag ());
-            initialize_matrix (m2, ublas::lower_tag ());
+            initialize_matrix (m1);
+            initialize_matrix (m2);
             m2 += m1;
             std::cout << "m2 += m1 = " << m2 << std::endl;
             m2 -= m1;
@@ -86,18 +86,18 @@ struct test_my_matrix {
             std::cout << "m1 *= N = " << m1 << std::endl;
 
             // Transpose
-            initialize_matrix (m1, ublas::lower_tag ());
+            initialize_matrix (m1);
             // Transpose of a triangular isn't triangular of the same kind
             std::cout << "trans (m1) = " << ublas::trans (m1) << std::endl;
 
             // Hermitian
-            initialize_matrix (m1, ublas::lower_tag ());
+            initialize_matrix (m1);
             // Hermitian of a triangular isn't hermitian of the same kind
             std::cout << "herm (m1) = " << ublas::herm (m1) << std::endl;
 
             // Matrix multiplication
-            initialize_matrix (m1, ublas::lower_tag ());
-            initialize_matrix (m2, ublas::lower_tag ());
+            initialize_matrix (m1);
+            initialize_matrix (m2);
             m3 = ublas::prod (m1, m2);
             std::cout << "prod (m1, m2) = " << m3 << std::endl;
         }

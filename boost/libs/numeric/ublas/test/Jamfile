@@ -117,7 +117,7 @@ test-suite numeric/uBLAS
 #            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
 #      ]
 
-      [ run test/placement_new.cpp
+      [ run placement_new.cpp
       ]
       [ compile concepts.cpp
         : # requirements

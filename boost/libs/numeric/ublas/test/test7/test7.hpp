@@ -17,23 +17,18 @@
 #ifndef TEST7_H
 #define TEST7_H
 
+#include <iostream>
+
+#include <boost/numeric/interval.hpp>
+#include <boost/numeric/interval/io.hpp>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
+
 namespace ublas = boost::numeric::ublas;
 
-template<class V>
-void initialize_vector (V &v) {
-    int size = v.size ();
-    for (int i = 0; i < size; ++ i)
-        v [i] = typename V::value_type (i + 1.f);
-}
-
-template<class M>
-void initialize_matrix (M &m) {
-    int size1 = m.size1 ();
-    int size2 = m.size2 ();
-    for (int i = 0; i < size1; ++ i)
-        for (int j = 0; j < size2; ++ j)
-            m (i, j) = typename M::value_type (i * size1 + j + 1.f);
-}
+#include "../common/init.hpp"
 
 void test_vector ();
 void test_matrix_vector ();

@@ -25,7 +25,7 @@ struct test_my_matrix_vector {
     void test_with (VP &v1, VP &v2, MP &m1) const {
         {
             // Rows and columns
-            initialize_matrix (m1, ublas::lower_tag ());
+            initialize_matrix (m1);
             for (int i = 0; i < N; ++ i) {
                 v2 = ublas::row (m1, i);
                 std::cout << "row (m, " << i << ") = " << v2 << std::endl;
@@ -42,7 +42,7 @@ struct test_my_matrix_vector {
             std::cout << "outer_prod (v1, v2) = " << m1 << std::endl;
 
             // Matrix vector product
-            initialize_matrix (m1, ublas::lower_tag ());
+            initialize_matrix (m1);
             initialize_vector (v1);
             v2 = ublas::prod (m1, v1);
             std::cout << "prod (m1, v1) = " << v2 << std::endl;
