@@ -1,6 +1,6 @@
 // Boost.Function library
 
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001, 2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -32,12 +32,17 @@
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
-#if defined (BOOST_MSVC) && (BOOST_MSVC >= 1300)
-#  define BOOST_FUNCTION_DEPRECATED_PRE __declspec(deprecated)
+#ifdef BOOST_FUNCTION_SILENT_DEPRECATED
+#  define BOOST_FUNCTION_DEPRECATED_PRE
 #  define BOOST_FUNCTION_DEPRECATED_INNER
 #else
-#  define BOOST_FUNCTION_DEPRECATED_PRE
-#  define BOOST_FUNCTION_DEPRECATED_INNER int deprecated;
+#  if defined (BOOST_MSVC) && (BOOST_MSVC >= 1300)
+#    define BOOST_FUNCTION_DEPRECATED_PRE __declspec(deprecated)
+#    define BOOST_FUNCTION_DEPRECATED_INNER
+#  else
+#    define BOOST_FUNCTION_DEPRECATED_PRE
+#    define BOOST_FUNCTION_DEPRECATED_INNER int deprecated;
+#  endif
 #endif
 
 namespace boost {
