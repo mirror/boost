@@ -78,10 +78,12 @@ stage run
     [ fsm-st-example-build KeyboardNormal : Keyboard : Keyboard ]
     [ fsm-st-example-build KeyboardNative : Keyboard : Keyboard
         : <define>BOOST_FSM_USE_NATIVE_RTTI ]
-    [ fsm-st-example-build PingPongSingle : PingPong : PingPong ]
-    [ fsm-mt-example-build PingPongMulti1 : PingPong : PingPong ]
-    [ fsm-mt-example-build PingPongMulti2
-        : PingPong : PingPong : <define>USE_TWO_THREADS ]
+    [ fsm-st-example-build PingPongSingle : PingPong : PingPong
+        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+    [ fsm-mt-example-build PingPongMulti1 : PingPong : PingPong
+        : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+    [ fsm-mt-example-build PingPongMulti2 : PingPong : PingPong
+        : <define>CUSTOMIZE_MEMORY_MANAGEMENT <define>USE_TWO_THREADS ]
     [ fsm-st-example-build StopWatch : StopWatch : StopWatch ]
     [ fsm-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
   : common-variant-tag
