@@ -165,7 +165,7 @@ public:
         return unwrap(f, 0)();
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A &) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A &) const
     {
         return unwrap(f, 0)();
     }
@@ -215,7 +215,7 @@ public:
         return unwrap(f, 0)(a[a1_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_]);
     }
@@ -273,7 +273,7 @@ public:
         return unwrap(f, 0)(a[a1_], a[a2_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_]);
     }
@@ -335,7 +335,7 @@ public:
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
     }
@@ -401,7 +401,7 @@ public:
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
@@ -473,7 +473,7 @@ public:
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
@@ -549,7 +549,7 @@ public:
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
@@ -629,7 +629,7 @@ public:
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
@@ -714,7 +714,7 @@ public:
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
@@ -803,7 +803,7 @@ public:
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
