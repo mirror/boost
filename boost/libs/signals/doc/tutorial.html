@@ -3,20 +3,485 @@
   <head>
     <title>Boost.Signals Tutorial</title>
   </head>
-  
+
   <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080">
-    
-    <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86" ALT="Boost">Boost.Signals Tutorial</h1>
-    
-    <h2>Outline</h2>
+
+  <h1><IMG SRC="../../../c++boost.gif" WIDTH="276" HEIGHT="86" ALT="Boost">Boost.Signals Tutorial</h1>
+
+<h2><a name="intro">How to Read This Tutorial</a></h2>
+<p> This tutorial is not meant to be read linearly. Its top-level
+structure roughly separates different concepts in the library (e.g.,
+handling calling multiple slots, passing values to and from slots) and
+in each of these concepts the basic ideas are presented first and then
+more complex uses of the library are described later. Each of the
+sections is marked <em>Beginner</em>, <em>Intermediate</em>, or
+<em>Advanced</em> to help guide the reader. The <em>Beginner</em>
+sections include information that all library users should know; one
+can make good use of the Signals library after having read only the
+<em>Beginner</em> sections. The <em>Intermediate</em> sections build
+on the <em>Beginner</em> sections with slightly more complex uses of
+the library. Finally, the <em>Advanced</em> sections detail very
+advanced uses of the Signals library, that often require a solid
+working knowledge of the <em>Beginner</em> and <em>Intermediate</em>
+topics; most users will not need to read the <em>Advanced</em>
+sections. 
+
+<h2>Outline</h2>
+
+<ul>
+  <li><em>Beginner:</em> <a href="#hello_world">Hello, World!</a></li>
+  <li><em>Intermediate:</em> <a href="#signalN">Signal classes</a></li>
+  <li>Calling multiple slots
     <ul>
-      <li>
-    </ul>
+      <li><em>Beginner:</em> <a href="#multiple_slots">Connecting multiple slots</a></li>
+      <li><em>Intermediate:</em> <a href="#ordering_slots">Ordering
+      slot call groups</a></li>
+    </ul></li>
+  <li>Passing values to and from slots
+    <ul>
+      <li><em>Beginner:</em> <a href="#slot_arguments">Slot
+      Arguments</a></li>
+      <li><em>Beginner:</em> <a href="#signalN">Numbered Signals</a></li>
+      <li><em>Advanced:</em> <a href="#return_values">Signal Return
+      Values</a></li>
+    </ul></li>
+  <li>Connection management
+    <ul>
+      <li><em>Beginner:</em> <a href="#disconnecting">Disconnecting
+      Slots</a></li>
+    </ul></li>
+</ul>
+<hr>
+
+<h2><a name="hello_world">Hello, World!</a></h2>
+<p> The following example writes "Hello, World!" using signals and
+slots. First, we create a signal <code>sig</code> giving it the type
+<code>boost::signal&lt;void&gt;</code>, meaning "a signal that takes
+no arguments and has a void return value". Next, we connect the
+<code>hello</code> function object to the signal using the
+<code>connect</code> method. Finally, use the signal <code>sig</code>
+like a function to call the slots, which in turns invokes
+<code>HelloWorld::operator()</code> to print "Hello, World!".
+
+<pre>
+struct HelloWorld 
+{
+  void operator()() const 
+  { 
+    std::cout &lt;&lt; "Hello, World!" &lt;&lt; std::endl;
+  } 
+};
+
+// ...
+
+// Signal with no arguments and a void return value
+boost::signal&lt;void&gt; sig;
+
+// Connect a HelloWorld slot
+HelloWorld hello;
+sig.connect(hello);
+
+// Call all of the slots
+sig();
+</pre>
+
+<hr><h1>Calling multiple slots</h1>
+<h2><a name="multiple_slots">Connecting multiple slots</a></h2>
+<p> Calling a single slot from a signal isn't very interesting, so we
+can make the Hello, World program more interesting by splitting the
+work of printing "Hello, World!" into two completely separate
+slots. The first slot will print "Hello" and may look like this:
+<pre>
+struct Hello 
+{
+  void operator()() const
+  {
+    std::cout &lt;&lt; "Hello";
+  }
+};
+</pre>
+
+<p> The second slot will print ", World!" and a newline, to complete
+the program. The second slot may look like this:
+<pre>
+struct World
+{
+  void operator()() const
+  {
+    std::cout &lt;&lt; ", World!" &lt;&lt; std::endl;
+  }
+};
+</pre>
+
+<p> Like in our previous example, we can create a signal
+<code>sig</code> that takes no arguments and has a <code>void</code>
+return value. This time, we connect both a <code>hello</code> and a
+<code>world</code> slot to the same signal, and when we call the
+signal both slots will be called.
+
+<pre>
+boost::signal&lt;void&gt; sig;
+
+sig.connect(Hello());
+sig.connect(World());
+
+sig();
+</pre>
+
+<p> Now, if you compile and run this program, you might see something
+strange. It is possible that the output will look like this:
+<pre>
+  , World!
+Hello
+</pre>
+
+<p> The underlying reason is that the ordering of signals isn't
+guaranteed. The signal is free to call either the <code>Hello</code>
+slot or the <code>World</code> slot first, but every slot will be
+called unless something bad (e.g., an exception) occurs. Read on to
+learn how to control the ordering so that "Hello, World!" always
+prints as expected.
+
+<h2><a name="ordering_slots">Ordering slot call groups</a></h2>
+<p> Slots are free to have side effects, and that can mean that some
+slots will have to be called before others. The Boost.Signals library
+allows slots to be placed into groups that are ordered in some
+way. For our Hello, World program, we want "Hello" to be printed
+before ", World!", so we put "Hello" into a group that must be
+executed before the group that ", World!" is in. To do this, we can
+supply an extra parameter at the beginning of the <code>connect</code>
+call that specifies the group. Group values are, by default,
+<code>int</code>s, and are ordered by the integer &lt;
+relation. Here's how we construct Hello, World:
+<pre>
+boost::signal&lt;void&gt; sig;
+sig.connect(0, Hello());
+sig.connect(1, World());
+sig();
+</pre>
+
+<p> This program will correctly print "Hello, World!", because the
+<code>Hello</code> object is in group 0, which precedes group 1 where
+the <code>World</code> object resides. 
+
+<p> The group parameter is, in fact, optional. We omitted it in the
+first Hello, World example because it was unnecessary when all of the
+slots are independent. So what happens if we mix calls to connect that
+use the group parameter and those that don't? The "unnamed" slots
+(i.e., those that have been connected without specifying a group name)
+go into a separate group that is special in that it follows all other
+groups. So if we add a new slot to our example like this:
+<pre>
+struct GoodMorning
+{
+  void operator()() const
+  {
+    std::cout &lt;&lt; "... and good morning!" &lt;&lt; std::endl;
+  }
+};
+
+sig.connect(GoodMorning());
+</pre>
+
+<p>... we will get the result we wanted:
+<pre>
+Hello, World!
+... and good morning!
+</pre>
+
+<p> The last interesting point with groups of slots is the behavior
+when multiple slots are connected in the same group. Within groups,
+calls to slots are unordered: if we connect slots <code>A</code> and
+<code>B</code> to the same signal with the same group name, either
+<code>A</code> or <code>B</code> will be called first (but both will
+be called). This is the same behavior we saw before with the second
+version of Hello, World, where the slots could be called in the wrong
+order, mangling the output.
+
+<hr><h1>Passing values to and from slots</h1>
+<h2><a name="slot_arguments">Slot Arguments</a></h2>
+<p> Signals can propagate arguments to each of the slots they
+call. For instance, a signal that propagates mouse motion events might
+want to pass along the new mouse coordinates and whether the mouse
+buttons are pressed. 
+
+<p> As an example, we'll create a signal that passes two
+<code>float</code> arguments to its slots. Then we'll create a few
+slots that print the results of various arithmetic operations on these
+values. 
+
+<pre>
+void print_sum(float x, float y)
+{
+  std::cout &lt;&lt; "The sum is " &lt;&lt; x+y &lt;&lt; std::endl;
+}
+
+void print_product(float x, float y)
+{
+  std::cout &lt;&lt; "The product is " &lt;&lt; x*y &lt;&lt; std::endl;
+}
+
+void print_difference(float x, float y)
+{
+  std::cout &lt;&lt; "The difference is " &lt;&lt; x-y &lt;&lt; std::endl;
+}
+
+void print_quotient(float x, float y)
+{
+  std::cout &lt;&lt; "The quotient is " &lt;&lt; x/y &lt;&lt; std::endl;
+}
+
+boost::signal&lt;void, float, float&gt; sig;
+
+sig.connect(&amp;print_sum);
+sig.connect(&amp;print_product);
+sig.connect(&amp;print_difference);
+sig.connect(&amp;print_quotient);
+
+sig(5, 3);
+</pre>
+
+<p> This program will print out something like the following, although
+the ordering of the lines may differ:
+<pre>
+The sum is 8
+The difference is 2
+The product is 15
+The quotient is 1.66667
+</pre>
+
+<p>So any values that are given to <code>sig</code> when it is called
+like a function are passed to each of the slots. We have to declare
+the types of these values up front when we create the signal. The type
+<code>boost::signal&lt;void, float, float&gt;</code> means that the
+signal has a <code>void</code> return value and takes two
+<code>float</code> values. Any slot connected to <code>sig</code> must
+therefore be able to take two <code>float</code> values.
+
+<h2><a name="signalN">Numbered Signals</a></h2>
+<p> The <code>boost::signal</code> class template takes a variable
+number of template arguments so that any number of slot arguments can
+be specified. In our "Hello, World!" program we specified no
+arguments, but with our arithmetic functions example we used two
+<code>float</code> arguments just by giving the argument types to the
+<code>boost::signal</code> class template. 
+
+<p> The variable number of template arguments is quite useful for
+simplicity, but it requires a large amount of code to be compiled
+(e.g., code to handle 0-10 arguments requires essentially 11 copies of
+similar code) and also makes specifying additional template parameters
+very verbose. For these reasons, the Signals library includes a set of
+"numbered" signal class templates that are functionally equivalent to
+the <code>boost::signal</code> class template. A signal such as
+<pre>
+boost::signal&lt;float, float, float&gt; sig;
+</pre>
+
+<p>takes two <code>float</code> arguments, so the corresponding
+numbered version uses the <code>boost::signal2</code> class template
+like so:
+<pre>
+boost::signal2&lt;float, float, float&gt; sig;
+</pre>
+
+<p> Similar class templates <code>boost:signal0</code>,
+<code>boost::signal1</code>, etc. exist for slots taking 0, 1, or more
+arguments. <p> The main header for Boost.Signals,
+<code>boost/signal.hpp</code>, 
+includes the <code>boost::signal</code> class template and all of
+the numbered variants. However, if only a few numbered variants will
+be used within a particular piece of code then only the appropriate
+header needs to be included: <code>boost/signals/signal0.hpp</code>
+includes the class template <code>boost::signal0</code>,
+<code>boost/signals/signal1.hpp</code> includes the class template
+<code>boost::signal1</code>, etc. 
+
+<h2><a name="return_values">Signal Return Values</a></h2>
+<p> Just as slots can receive arguments, they can also return
+values. These values can then be returned back to the caller of the
+signal through a <em>combiner</em>. The combiner is a mechanism that
+can take the results of calling slots (there many be no results or a
+hundred; we don't know until the program runs) and coalesces them into
+a single result to be returned to the caller. The single result is
+often a simple function of the results of the slot calls: the result
+of the last slot call, the maximum value returned by any slot, or a
+container of all of the results are some possibilities.
+
+<p> We can modify our previous arithmetic operations example slightly
+so that the slots all return the results of computing the product,
+quotient, sum, or difference. Then the signal itself can return a
+value based on these results to be printed:
+
+<pre>
+float compute_product(float x, float y) { return x*y; }
+float compute_quotient(float x, float y) { return x/y; }
+float compute_sum(float x, float y) { return x+y; }
+float compute_difference(float x, float y) { return x-y; }
+
+boost::signal&lt;float, float, float&gt; sig;
+
+sig.connect(&amp;compute_product);
+sig.connect(&amp;compute_quotient);
+sig.connect(&amp;compute_sum);
+sig.connect(&amp;compute_difference);
+
+std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
+</pre>
+
+<p> This example program will output either <code>8</code>,
+<code>1.6667</code>, <code>15</code>, or <code>2</code>, depending on
+the order that the signals are called. This is because the default
+behavior of a signal that has a return type (<code>float</code>, the
+first template argument given to the <code>boost::signal</code> class
+template) is to call all slots and then return the result returned by
+the last slot called. This behavior is admittedly silly for this
+example, because slots have no side effects and the result is
+essentially randomly chosen from the slots.
+
+<p> A more interesting signal result would be the maximum of the
+values returned by any slot. To do this, we create a custom combiner
+that looks like this:
+
+<pre>
+template&lt;typename T&gt;
+struct maximum
+{
+  typedef T result_type;
+
+  template&lt;typename InputIterator&gt;
+  T operator()(InputIterator first, InputIterator last) const
+  {
+    // If there are no slots to call, just return the
+    // default-constructed value
+    if (first == last)
+      return T();
+
+    T max_value = *first++;
+    while (first != last) {
+      if (max_value &lt; *first)
+        max_value = *first;
+      ++first;
+    }
+  
+    return max_value;
+  }
+};
+</pre>
+
+<p> The <code>maximum</code> class template acts as a function
+object. Its result type is given by its template parameter, and this
+is the type it expects to be computing the maximum based on (e.g.,
+<code>maximum&lt;float&gt;</code> would find the maximum
+<code>float</code> in a sequence of <code>float</code>s). When a
+<code>maximum</code> object is invoked, it is given an input iterator
+sequence <code>[first, last)</code> that includes the results of
+calling all of the slots. <code>maximum</code> uses this input
+iterator sequence to calculate the maximum element, and returns that
+maximum value. 
+
+<p> We actually use this new function object type by installing it as
+a combiner for our signal. It is supplied via a <em>named template
+parameter</em> like this:
+
+<pre>
+boost::signal&lt;float, float, float&gt;::with_combiner&lt;maximum&lt;float&gt; &gt;::type sig;
+</pre>
+
+<p> Or, alternatively, we could use a numbered signal class and supply
+our custom combiner as the first template parameter following the
+argument types:
+<pre>
+boost::signal2&lt;float, float, float, maximum&lt;float&gt; &gt; sig;
+</pre>
+
+<p> Now we can connect slots that perform arithmetic functions and use
+the signal:
+<pre>
+sig.connect(&amp;compute_quotient);
+sig.connect(&amp;compute_product);
+sig.connect(&amp;compute_sum);
+sig.connect(&amp;compute_difference);
+
+std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
+</pre>
+
+<p>The output of this program will be <code>15</code>, because regardless
+of the order in which the slots are called, the product of 5 and 3
+will be larger than the quotient, sum, or difference. 
+
+<p> In other cases we might want to return all of the values computed
+by the slots together, in one large data structure. This is easily
+done with a different combiner:
+<pre>
+template&lt;typename Container&gt;
+struct aggregate_values
+{
+  typedef Container result_type;
+
+  template&lt;typename InputIterator&gt;
+  Container operator()(InputIterator first, InputIterator last) const
+  {
+    return Container(first, last);
+  }
+};
+</pre>
+
+Again, we can create a signal with this new combiner:
+<pre>
+boost::signal&lt;float, float, float&gt;::with_combiner&lt;aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt;::type sig;
+
+sig.connect(&amp;compute_quotient);
+sig.connect(&amp;compute_product);
+sig.connect(&amp;compute_sum);
+sig.connect(&amp;compute_difference);
+
+std::vector&lt;float&gt; results = sig(5, 3);
+std::copy(results.begin(), results.end(), std::ostream_iterator&lt;float&gt;(cout, " "));
+</pre>
+
+<p>The output of this program will contain 15, 8, 1.6667, and 2 (but not
+necessarily in that order). It is interesting here that the first
+template argument for the <code>signal</code> class,
+<code>float</code>, is not actually the return type of the
+signal. Instead, it is the return type used by the connected slots and
+will also be the <code>value_type</code> of the input iterators passed
+to the combiner. The combiner itself is a function object and its
+<code>result_type</code> member type becomes the return type of the
+signal. 
+<hr>
+
+<h1>Connection Management</h1>
+<h2><a name="disconnecting">Disconnecting Slots</a></h2>
+<p> Slots aren't expected to exist indefinately after they are
+connected. Often slots are only used to receive a few events and are
+then disconnected, and the programmer needs control to decide when a
+slot should no longer be connected.
+
+<p> The entry point for managing connections explicitly is the
+<code>boost::signals::connection</code> class. The
+<code>connection</code> class uniquely represents the connection
+between a particular signal and a particular slot. The
+<code>connected()</code> method checks if the signal and slot are
+still connected, and the <code>disconnect()</code> method disconnects
+the signal and slot if they are connected before it is called. Each
+call to the signal's <code>connect()</code> method returns a
+connection object 
+
+<pre>
+struct Hello {
+  void operator()() const
+  {
+    std::cout &lt;&lt; "Hello" &lt;&lt; std::endl;
+  }
+};
+
+boost::signal&lt;void&gt; sig;
+
+sig.connect(Hello());
+
+</pre>
+
     <hr>
-    <address><a href="mailto:gregod@cs.rpi.edu"></a></address>
-    <!-- Created: Sat Apr 13 14:00:48 EDT 2002 -->
-    <!-- hhmts start -->
-Last modified: Sat Apr 13 14:13:52 EDT 2002
-<!-- hhmts end -->
+    <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
   </body>
 </html>
