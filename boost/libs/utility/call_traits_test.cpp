@@ -327,7 +327,7 @@ struct call_traits_test<T, true>
 };
 
 template <typename T>
-void call_traits_test<T, true>::assert_construct(boost::call_traits<T>::param_type val)
+void call_traits_test<T, true>::assert_construct(typename boost::call_traits<T>::param_type val)
 {
    //
    // this is to check that the call_traits assertions are valid:
