@@ -330,7 +330,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         explicit BOOST_UBLAS_INLINE
         bounded_array (size_type size):
-            size_ (size), data_ () {
+            size_ (size) /*, data_ ()*/ {
             if (size_ > N)
                 bad_size ().raise ();
             const value_type v = value_type();
@@ -338,13 +338,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         bounded_array (size_type size, no_init):
-            size_ (size), data_ () {
+            size_ (size) /*, data_ ()*/ {
             if (size_ > N)
                 bad_size ().raise ();
         }
         BOOST_UBLAS_INLINE
         bounded_array (const bounded_array &c):
-            size_ (c.size_), data_ (c.data_) {
+            size_ (c.size_)  {
+                std::copy (c.data_, c.data_ + c.size_, data_);
         }
         
         // Resizing
