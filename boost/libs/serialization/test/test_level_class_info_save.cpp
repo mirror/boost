@@ -18,6 +18,7 @@
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/nvp.hpp>
 
+#include <boost/archive/tmpdir.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include "test_tools.hpp"
 
@@ -80,6 +81,8 @@ test_main( int /* argc */, char* /* argv */[] )
     A a;
     B b;
     std::string filename;
+	filename += boost::archive::tmpdir();
+	filename += '/';
     filename += BOOST_PP_STRINGIZE(testfile_);
     filename += BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST);
     out(filename.c_str(), a, b);
