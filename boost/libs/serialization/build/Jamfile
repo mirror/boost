@@ -8,10 +8,16 @@
 
 subproject libs/serialization/build ;
 
+{
+
 SOURCES = 
     basic_archive
     basic_iarchive
     basic_oarchive
+    basic_iserializer
+    basic_oserializer
+    basic_pointer_iserializer
+    basic_pointer_oserializer
     basic_serializer_map
     basic_text_iprimitive
     basic_text_oprimitive
@@ -23,6 +29,7 @@ SOURCES =
     extended_type_info_typeid
     polymorphic_iarchive
     polymorphic_oarchive
+    stl_port
     text_iarchive
     text_oarchive
     void_cast
@@ -45,63 +52,161 @@ WSOURCES =
     utf8_codecvt_facet
 ;
 
+# building this library needs a working version of spirit
+rule spirit-support ( toolset variant : properties * )
+{
+    local requires-spirit ;
+    switch $(toolset) {
+    case "borland*" :
+        requires-spirit = true ;
+    case "msvc-stlport" :
+        requires-spirit = true ;
+    case "msvc*" :
+        requires-spirit = true ;
+    case "iw*" :
+        requires-spirit = true ;
+    case "vc7" :
+        requires-spirit = true ;
+    case "vc7-stlport" :
+        requires-spirit = true ;
+    }
+    if $(requires-spirit) {
+        if  $(SPIRIT_ROOT) # && ( exist $(SPIRIT_ROOT) )
+        {
+            properties += <include>$(SPIRIT_ROOT) ;
+        }
+        else {
+            echo spirit 1.6x required to build library with this compiler ;
+            properties += <build>no ;
+        }
+    }
+    return $(properties) ;
+}
+
+template boost_serialization_base
+    : ## sources ##
+    : ## requirements ##
+        # locale support required to build libraries
+        std::locale-support
+        # building this library needs a working version of spirit
+        spirit-support
+        # the common names rule ensures that the library will
+        # be named according to the rules used by the install
+        # and auto-link features:
+        common-variant-tag
+        # set include path for Boost headers:
+        <stlport-iostream>on 
+        <sysinclude>$(BOOST_ROOT)
+        <borland-5_5_1><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
+        <borland-5_6_4><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062"
+        <msvc><*><cxxflags>-Gy
+        <vc-7><*><cxxflags>-Gy
+        <vc-7_1><*><cxxflags>-Gy
+        <define>BOOST_LIB_DIAGNOSTIC=1
+    : ## default build 
+        debug release
+;
+
+# certain tool sets are known apriori not to support wide char i/o
+rule wide-char-io-support ( toolset variant : properties * )
+{
+    local requires-wchar ;
+    switch $(toolset) {
+    case "como*" :
+        requires-wchar = true ;
+    case "mingw*" :
+        requires-wchar = true ;
+    }
+    if $(requires_wchar) {
+        echo wide char i/o not supported by this standard library ;
+        properties += <build>no ;
+    }
+    return $(properties) ;
+}
+
 lib boost_serialization
     : ## sources ##
+        <template>boost_serialization_base
         ../src/$(SOURCES).cpp
-    : ## requirements ##
-        std::locale-support
-        <msvc><*><include>$(SPIRIT_ROOT) 
-        <msvc-stlport><*><include>$(SPIRIT_ROOT) 
-        <vc7><*><include>$(SPIRIT_ROOT) 
-        <borland><*><include>$(SPIRIT_ROOT) 
-        <borland-5_5_1><*><include>$(SPIRIT_ROOT) 
-        <borland-5_6_4><*><include>$(SPIRIT_ROOT) 
-        <sysinclude>$(BOOST_ROOT)
-        <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
-        <msvc><*><cxxflags>-Gy
-        <vc7><*><cxxflags>-Gy
-        <vc7_1><*><cxxflags>-Gy
-        <define>BOOST_TEST_NO_AUTO_LINK=1
-    : ## default-build
-        <runtime-link>static/dynamic <threading>single/multi
 ;
 
 lib boost_wserialization
     : ## sources ##
+        <template>boost_serialization_base
         ../src/$(WSOURCES).cpp
+        <lib>boost_serialization
+   : ## requirements ##
+       wide-char-io-support
+;
+
+# certain tool sets are known apriori not to support creation of DLLS
+rule shared-libraries-support ( toolset variant : properties * )
+{
+    switch $(toolset) {
+    case "como*" :
+        echo DLLs cannot be built with this compiler ;
+        properties += <build>no ;
+    }
+    return $(properties) ;
+}
+
+dll boost_serialization
+    : ## sources ##
+        <template>boost_serialization_base
+        ../src/$(SOURCES).cpp
     : ## requirements ##
-        std::locale-support
-        <msvc><*><include>$(SPIRIT_ROOT) 
-        <msvc-stlport><*><include>$(SPIRIT_ROOT) 
-        <vc7><*><include>$(SPIRIT_ROOT) 
-        <borland><*><include>$(SPIRIT_ROOT) 
-        <borland-5_5_1><*><include>$(SPIRIT_ROOT) 
-        <borland-5_6_4><*><include>$(SPIRIT_ROOT) 
-        <sysinclude>$(BOOST_ROOT)
-        <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
-        <msvc><*><cxxflags>-Gy
-        <vc7><*><cxxflags>-Gy
-        <vc7_1><*><cxxflags>-Gy
-        <define>BOOST_TEST_NO_AUTO_LINK=1
-        <vacpp><*><define>BOOST_MPL_USE_APPLY_INTERNALLY
-    : ## default-build
-        <runtime-link>static/dynamic <threading>single/multi
+        # this suppress the --a switch in the como toolset
+        # without this one gets compile errors ! with "dllexport"
+        # however, it doesn't link anyway so comment it out
+        # <como-4_3_3-vc7_1><*><no-warn>$(SOURCES).cpp
+        shared-libraries-support
+        <runtime-link>dynamic
+        <define>BOOST_SERIALIZATION_DYN_LINK=1
 ;
 
-install serialization lib :
-    <lib>boost_serialization
-    <lib>boost_wserialization
+dll boost_wserialization
+    : ## sources ##
+        <template>boost_serialization_base
+        ../src/$(WSOURCES).cpp
+        <dll>boost_serialization
+    : ## requirements ##
+        shared-libraries-support
+        wide-char-io-support
+        # this suppress the --a switch in the como toolset
+        # without this one gets compile errors ! with "dllexport"
+        # however, it doesn't link anyway so comment it out
+        # <como-4_3_3-vc7_1><*><no-warn>$(SOURCES).cpp
+        <runtime-link>dynamic
+        <define>BOOST_SERIALIZATION_DYN_LINK=1
+        <define>BOOST_WSERIALIZATION_DYN_LINK=1
 ;
 
-stage stage/lib :
+install serialization lib 
+    :
         <lib>boost_serialization
         <lib>boost_wserialization
+        <dll>boost_serialization
+        <dll>boost_wserialization
+;
+
+stage stage/lib 
     :
+        <lib>boost_serialization
+        <lib>boost_wserialization
+        <dll>boost_serialization
+        <dll>boost_wserialization
+    :
+        # copy to a path rooted at BOOST_ROOT:
         <locate>$(BOOST_ROOT)
-        common-stage-tag
-        <tag><postfix>-$(version-tag)
+        # the common names rule ensures that the library will
+        # be named according to the rules used by the install
+        # and auto-link features:
+        common-variant-tag
+        # add this target to the "stage" and "all" psuedo-targets:
         <target>stage
         <target>all
     :
         debug release
 ;
+
+}
