@@ -39,7 +39,7 @@ template< typename T, BOOST_MPL_AUX_NTTP_DECL(int, N) >
 struct single_iter_base
 {
     typedef ra_iter_tag_ category;
-    typedef int_<N> position;
+    typedef mpl::int_<N> position;
 
     template< typename D >
     struct BOOST_MPL_AUX_ITERATOR_ADVANCE
