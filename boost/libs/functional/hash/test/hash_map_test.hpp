@@ -9,7 +9,6 @@
 #else
 
 #include <boost/preprocessor/cat.hpp>
-#include <boost/assign/list_inserter.hpp>
 
 namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
 {
@@ -21,13 +20,15 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
 
         for(int i = 0; i < 5; ++i) {
             for(int j = 0; j < i; ++j)
-                boost::assign::insert(containers[i])(0,0);
+                containers[i].insert(std::make_pair(0, 0));
         }
 
-        boost::assign::insert(containers[6])(1,0);
-        boost::assign::insert(containers[7])(1,0)(1,0);
-        boost::assign::insert(containers[8])(-1,1);
-        boost::assign::insert(containers[9])(-1,3)(-1,3);
+        containers[6].insert(std::make_pair(1,0));
+        containers[7].insert(std::make_pair(1,0));
+        containers[7].insert(std::make_pair(1,0));
+        containers[8].insert(std::make_pair(-1,1));
+        containers[9].insert(std::make_pair(-1,3));
+        containers[9].insert(std::make_pair(-1,3));
 
         boost::hash<T> hasher;
 

@@ -9,28 +9,28 @@
 #else
 
 #include <boost/preprocessor/cat.hpp>
-#include <boost/assign/list_inserter.hpp>
 
 namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
 {
     template <class T>
     void integer_tests(T* = 0)
     {
-        using namespace boost::assign;
-
         const int number_of_containers = 11;
         T containers[number_of_containers];
 
         for(int i = 0; i < 5; ++i) {
             for(int j = 0; j < i; ++j)
-                boost::assign::insert(containers[i])(0);
+                containers[i].insert(0);
         }
 
-        boost::assign::insert(containers[6])(1);
-        boost::assign::insert(containers[7])(1)(1);
-        boost::assign::insert(containers[8])(-1);
-        boost::assign::insert(containers[9])(-1)(-1);
-        boost::assign::insert(containers[10])(-1)(1);
+        containers[6].insert(1);
+        containers[7].insert(1);
+        containers[7].insert(1);
+        containers[8].insert(-1);
+        containers[9].insert(-1);
+        containers[9].insert(-1);
+        containers[10].insert(-1);
+        containers[10].insert(1);
 
         boost::hash<T> hasher;
 

@@ -39,11 +39,12 @@ void numeric_test()
 
     // A hash function can legally fail these tests, but it'll not be a good
     // sign.
-    BOOST_CHECK_EQUAL((T(1) != T(-1)), (x1(T(1)) !=  x2(T(-1))));
-    BOOST_CHECK_EQUAL((T(1) != T(2)), (x1(T(1)) !=  x2(T(2))));
-    BOOST_CHECK_EQUAL(
-        ((limits::max)() != (limits::max)() - 1),
-        (x1((limits::max)()) != x2((limits::max)() - 1)));
+    if(T(1) != T(-1))
+        BOOST_CHECK(x1(T(1)) !=  x2(T(-1)));
+    if(T(1) != T(2))
+        BOOST_CHECK(x1(T(1)) !=  x2(T(2)));
+    if((limits::max)() != (limits::max)() - 1)
+        BOOST_CHECK(x1((limits::max)()) != x2((limits::max)() - 1));
 }
 
 #define NUMERIC_TEST(type, name) \
