@@ -2,6 +2,12 @@
 # Bart Garst - 7/1/2004 
 # additional comments at bottom of file
 
+#############################################################################
+#  Copyright (c) 2001-2004 CrystalClear Software, Inc.                      #
+#  Subject to the Boost Software License, Version 1.0.                      #
+#  (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0) #
+#############################################################################
+
 use strict;
 
 # key-value of file name and id attribute
@@ -62,6 +68,15 @@ sub rewrite_tags {
   
   # open & write new file w/ same name
   open(OTP, ">$filename") || die "File open (write) failed: $!";
+  print OTP shift(@new_file);
+
+  print OTP <<EO_LIC;
+<!-- Copyright (c) 2001-2004 CrystalClear Software, Inc.
+     Subject to the Boost Software License, Version 1.0. 
+     (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
+-->
+EO_LIC
+
   foreach(@new_file){
     print OTP "$_";
   }
@@ -78,4 +93,6 @@ Change log
 7/19/2004
         - rewrite library-reference tags as section tags and add title tags
         - renamed fix_id sub to rewrite_tags.
+8/31/2004
+        - added license to this file and writes license to boostbook files
         
