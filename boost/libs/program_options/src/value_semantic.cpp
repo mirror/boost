@@ -98,8 +98,8 @@ namespace boost { namespace program_options {
         Case is ignored. Regardless of name passed, parameter will always
         be optional.
     */
-    template<>
-    void validator<bool, char>::operator()(any& v, const vector<string>& xs)
+    void validate(any& v, const vector<string>& xs,
+                  bool*, int)
     {
         check_first_occurence(v);
         string s(get_single_string(xs, true));
@@ -119,8 +119,7 @@ namespace boost { namespace program_options {
     // since wstring can't be constructed/compared with char*. We'd need to
     // create auxilliary 'widen' routine to convert from char* into 
     // needed string type, and that's more work.
-    template<>
-    void validator<bool, wchar_t>::operator()(any& v, const vector<wstring>& xs)
+    void validate(any& v, const vector<wstring>& xs, bool*, int)
     {
         check_first_occurence(v);
         wstring s(get_single_string(xs, true));
@@ -136,13 +135,7 @@ namespace boost { namespace program_options {
             throw validation_error("invalid bool value");
     }
 
-
-
-    /* Input quoted with either ' or " will be unquoted.
-        All other input will be unchanged.
-    */
-    template<>
-    void validator<string, char>::operator()(any& v, const vector<string>& xs)
+    void validate(any& v, const vector<string>& xs, std::string*, int)
     {
         check_first_occurence(v);
         string s(get_single_string(xs));
@@ -153,8 +146,7 @@ namespace boost { namespace program_options {
             v = any(s);
     }
 
-    template<>
-    void validator<string, wchar_t>::operator()(any& v, const vector<wstring>& xs)
+    void validate(any& v, const vector<wstring>& xs, std::string*, int)
     {
         check_first_occurence(v);
         wstring s(get_single_string(xs));

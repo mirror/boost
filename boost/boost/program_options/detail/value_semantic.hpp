@@ -66,42 +66,34 @@ namespace boost { namespace program_options {
         @pre 'v' is either empty or in the state assigned by the previous
         invocation of 'validate'.
         Specializations are provided for bool, float, int, and string.
+        The target type is specified via a parameter of which has type of 
+        pointer to the desired type. This is workaround for compilers without
+        partial template ordering, just like the last 'long/int' parameter.
     */
     template<class T, class charT>
-    class validator {
-    public:
-        /// Method that does the job.
-        void operator()(boost::any& v, 
-                        const std::vector< std::basic_string<charT> >& xs)
-        {
-            validators::check_first_occurence(v);
-            std::basic_string<charT> s(validators::get_single_string(xs));
-            try {
-                v = any(lexical_cast<T>(s));
-            }
-            catch(const bad_lexical_cast&) {
-                throw validation_error("invalid option value");
-            }
+    void validate(boost::any& v, 
+                  const std::vector< std::basic_string<charT> >& xs, 
+                  T* target_type, long)
+    {
+        validators::check_first_occurence(v);
+        std::basic_string<charT> s(validators::get_single_string(xs));
+        try {
+            v = any(lexical_cast<T>(s));
         }
-    };
+        catch(const bad_lexical_cast&) {
+            throw validation_error("invalid option value");
+        }
+    }
 
-    /** Validates sequences. Allows multiple values per option occurence
-       and multiple occurences. */
-    template<class T, class charT>
-    class validator< std::vector<T>, charT > {
-    public:
-        void operator()(boost::any& v, 
-                        const std::vector<std::basic_string<charT> >& s);
-    };
+    void validate(boost::any& v, 
+                  const std::vector<std::string>& xs, 
+                  bool*,
+                  int);
 
-    template<>
-    void validator<bool, char>::operator()(boost::any& v, 
-                                           const std::vector<std::string>& xs);
-
-    template<>
-    void validator<bool, wchar_t>::operator()(
-        boost::any& v, const std::vector<std::wstring>& xs);
-
+    void validate(boost::any& v, 
+                  const std::vector<std::wstring>& xs, 
+                  bool*,
+                  int);
 
     // For some reason, this declaration, which is require by the standard,
     // cause gcc 3.2 to not generate code to specialization defined in
@@ -110,22 +102,24 @@ namespace boost { namespace program_options {
           BOOST_WORKAROUND(__GNUC_MINOR__, < 3) ) || \
         ( BOOST_WORKAROUND(BOOST_MSVC, == 1310) ) \
       ) 
-    template<>
-    void validator<std::string, char>::operator()(
-        boost::any& v, 
-        const std::vector<std::string>& xs);
+    void validate(boost::any& v, 
+                  const std::vector<std::string>& xs,
+                  std::string*,
+                  int);
 
-    template<>
-    void validator<std::string, wchar_t>::operator()(
-        boost::any& v, 
-        const std::vector<std::wstring>& xs);
+    void validate(boost::any& v, 
+                  const std::vector<std::wstring>& xs,
+                  std::string*,
+                  int);
 #endif
 
+    /** Validates sequences. Allows multiple values per option occurence
+       and multiple occurences. */
     template<class T, class charT>
-    void
-    validator<std::vector<T>, charT>
-    ::operator()(boost::any& v, 
-                 const std::vector<std::basic_string<charT> >& s)
+    void validate(boost::any& v, 
+                  const std::vector<std::basic_string<charT> >& s, 
+                  std::vector<T>*,
+                  int)
     {
         if (v.empty()) {
             v = boost::any(std::vector<T>());
@@ -144,18 +138,13 @@ namespace boost { namespace program_options {
         }
     }
 
-
     template<class T, class charT>
     void 
     typed_value<T, charT>::
     xparse(boost::any& value_store, 
            const std::vector<std::basic_string<charT> >& new_tokens) const
     {
-        // The only reason for using 'validator' class and
-        // therefore adding a new level of indirection is that
-        // we can't partically specialize 'parse' on vector<T>.
-        boost::program_options::validator<T, charT> validator;
-        validator(value_store, new_tokens);
+        validate(value_store, new_tokens, (T*)0, 0);
     }
 
     template<class T>
