@@ -243,6 +243,8 @@ namespace boost {
     typedef typename detail::function::function_return_type<R>::type
       internal_result_type;
 
+    struct clear_type {};
+
   public:
     BOOST_STATIC_CONSTANT(int, args = BOOST_FUNCTION_NUM_ARGS);
 
@@ -277,12 +279,22 @@ namespace boost {
     // MSVC chokes if the following two constructors are collapsed into
     // one with a default parameter.
     template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) :
+    BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+                            ,typename detail::function::enable_if<
+                                        (!is_same<Functor, int>::value),
+                                        int>::type = 0
+#endif // BOOST_FUNCTION_NO_ENABLE_IF
+                            ) :
       function_base(),
       invoker(0)
     {
       this->assign_to(f);
     }
+
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+    BOOST_FUNCTION_FUNCTION(clear_type*) : function_base(), invoker(0) {}
+#endif // BOOST_FUNCTION_NO_ENABLE_IF
 
     BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) :
       function_base(),
@@ -315,12 +327,26 @@ namespace boost {
     // handle BOOST_FUNCTION_FUNCTION as the type of the temporary to
     // construct.
     template<typename Functor>
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+    typename detail::function::enable_if<
+               (!is_same<Functor, int>::value),
+               BOOST_FUNCTION_FUNCTION&>::type
+#else
     BOOST_FUNCTION_FUNCTION&
+#endif
     operator=(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
       self_type(f).swap(*this);
       return *this;
     }
+
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+    BOOST_FUNCTION_FUNCTION& operator=(clear_type*)
+    {
+      this->clear();
+      return *this;
+    }
+#endif // BOOST_FUNCTION_NO_ENABLE_IF
 
     // Assignment from another BOOST_FUNCTION_FUNCTION
     BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
@@ -540,13 +566,28 @@ class function<BOOST_FUNCTION_PARTIAL_SPEC, Allocator>
                                   BOOST_FUNCTION_COMMA Allocator> base_type;
   typedef function self_type;
 
+  struct clear_type {};
+
 public:
   typedef typename base_type::allocator_type allocator_type;
 
   function() : base_type() {}
 
   template<typename Functor>
-  function(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) : base_type(f) {}
+  function(Functor f
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+           ,typename detail::function::enable_if<
+                       (!is_same<Functor, int>::value),
+                       int>::type = 0
+#endif
+           ) :
+    base_type(f)
+  {
+  }
+
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+  function(clear_type*) : base_type() {}
+#endif
 
   function(const self_type& f) : base_type(static_cast<const base_type&>(f)){}
 
@@ -559,11 +600,26 @@ public:
   }
 
   template<typename Functor>
-  self_type& operator=(Functor f)
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+  typename detail::function::enable_if<
+                      (!is_same<Functor, int>::value),
+                      self_type&>::type
+#else
+  self_type&
+#endif
+  operator=(Functor f)
   {
     self_type(f).swap(*this);
     return *this;
   }
+
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+  self_type& operator=(clear_type*)
+  {
+    this->clear();
+    return *this;
+  }
+#endif
 
   self_type& operator=(const base_type& f)
   {

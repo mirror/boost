@@ -13,8 +13,7 @@
 
 // For more information, see http://www.boost.org
 
-#define BOOST_INCLUDE_MAIN
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 #include <boost/function.hpp>
 #include <functional>
 #include <cassert>
@@ -97,8 +96,12 @@ test_zero_args()
   v1();
   BOOST_TEST(global_int == 5);
 
-  // clear()
+  // clear
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+  v1 = 0;
+#else
   v1.clear();
+#endif
   BOOST_TEST(v1.empty());
 
   // Assignment to an empty function from a free function
@@ -490,6 +493,19 @@ test_zero_args()
   global_int = 0;
   v8();
   BOOST_TEST(global_int == 2);
+
+  // Test construction from 0 and comparison to 0
+#ifndef BOOST_FUNCTION_NO_ENABLE_IF
+  func_void_type v9(0);
+#else
+  func_void_type v9; // just default construct
+#endif
+#if !defined(BOOST_MSVC)
+  BOOST_TEST(v9 == 0);
+  BOOST_TEST(0 == v9);
+#else
+  BOOST_TEST(v9.empty());
+#endif
 
   // Test return values
   typedef function0<int> func_int_type;

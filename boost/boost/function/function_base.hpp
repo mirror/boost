@@ -27,19 +27,25 @@
 #include <boost/ref.hpp>
 #include <boost/pending/ct_if.hpp>
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406 && !defined(BOOST_NO_CONFIG)
 #  define BOOST_FUNCTION_TARGET_FIX(x) x
 #else
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
-#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730
+#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_NO_CONFIG)
 // Work around a compiler bug.
 // boost::python::objects::function has to be seen by the compiler before the
 // boost::function class template.
 namespace boost { namespace python { namespace objects {
   class function;
 }}}
+#endif
+
+// GCC 3.2 doesn't seem to support enable_if, so we assume that
+// earlier versions have the same limitation
+#if defined(__GNUC__) && __GNUC__ < 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ <= 2 ) && !(BOOST_NO_CONFIG)
+#  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -252,6 +258,30 @@ namespace boost {
           typedef typename get_function_tag<functor_type>::type tag_type;
           return manager(functor_ptr, op, tag_type());
         }
+      };
+
+      template<bool>
+      struct enabled
+      {
+        template<typename T>
+        struct base
+        {
+          typedef T type;
+        };
+      };
+
+      template<>
+      struct enabled<false>
+      {
+        template<typename T>
+        struct base
+        {
+        };
+      };
+
+      template<bool Enabled, typename T>
+      struct enable_if : public enabled<Enabled>::template base<T>
+      {
       };
     } // end namespace function
   } // end namespace detail
