@@ -77,7 +77,7 @@ struct if_
 // MSVC6.5-specific version
 
 template<
-      bool C
+      bool C_
     , typename T1
     , typename T2
     >
@@ -88,13 +88,13 @@ struct if_c
     template<>     struct answer<false>	{ typedef T2 type; };
  
  public:
-    typedef typename answer< C >::type type;
+    typedef typename answer< C_ >::type type;
 };
 
 // (almost) copy & paste in order to save one more 
 // recursively nested template instantiation to user
 template<
-      typename C
+      typename C_
     , typename T1
     , typename T2
     >
@@ -106,12 +106,12 @@ struct if_
 
     // agurt, 17/sep/02: in some situations MSVC 7.0 doesn't 
     // handle 'answer<C::value>' expression very well
-    enum { c_ = C::value };
+    enum { c_ = C_::value };
 
  public:
     typedef typename answer< BOOST_MPL_AUX_ICE_CAST(bool, c_) >::type type;
 
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C,T1,T2))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,if_,(C_,T1,T2))
 };
 
 #else
