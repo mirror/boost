@@ -8,11 +8,10 @@
 
 /* Release notes:
    31 Jan 2001:
-      Added test case for is_convertible with UDT that brings out the
-      warning message bug with g++. Added a test for is_array
-      using a const array, and a test for is_convertible with
-      a user-defined implicit conversion. Changed signature
-      of main() so that this program will link under MSVC. (Jeremy Siek)
+      Added a test for is_array using a const array and a test for
+      is_convertible with a user-defined implicit conversion. Changed
+      signature of main() so that this program will link under
+      MSVC. (Jeremy Siek)
    20 Jan 2001:
       Suppress an expected warning for MSVC
       Added a test to prove that we can use void with is_same<>
@@ -25,8 +24,7 @@
       Removed all call_traits tests to call_traits_test.cpp
       Removed all compressed_pair tests to compressed_pair_tests.cpp
       Improved tests macros
-      Tidied up specialistions of type_types classes for test cases.
-*/
+      Tidied up specialistions of type_types classes for test cases.  */
 
 #include <iostream>
 #include <typeinfo>
@@ -617,7 +615,6 @@ int main(int, char*[])
    value_test(true, (boost::is_convertible<Derived,Base>::value));
    value_test(true, (boost::is_convertible<Derived,Derived>::value));
    value_test(true, (boost::is_convertible<Base,Base>::value));
-   value_test(false, (boost::is_convertible<UDT,int>::value));
    value_test(false, (boost::is_convertible<Base,Derived>::value));
    value_test(true, (boost::is_convertible<Derived,Derived>::value));
    value_test(false, (boost::is_convertible<NonDerived,Base>::value));
