@@ -20,7 +20,7 @@
 //  BOOST_VERSION / 100 % 1000 is the minor version
 //  BOOST_VERSION / 100000 is the major version
 
-#define BOOST_VERSION 102501
+#define BOOST_VERSION 102600
 
 #endif
 
