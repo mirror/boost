@@ -14,6 +14,7 @@
 // Include additional Boost libraries
 #include <boost/filesystem/path.hpp>
 #include <boost/timer.hpp>
+#include <boost/any.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Include Wave itself
@@ -62,9 +63,6 @@ using std::cerr;
 using std::endl;
 using std::ostream;
 using std::istreambuf_iterator;
-
-namespace po = boost::program_options;
-namespace fs = boost::filesystem;
 
 ///////////////////////////////////////////////////////////////////////////////
 // print the current version
@@ -123,6 +121,9 @@ namespace boost { namespace program_options
 
 ///////////////////////////////////////////////////////////////////////////////
 #include <boost/program_options.hpp>
+
+namespace po = boost::program_options;
+namespace fs = boost::filesystem;
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace cmd_line_util {
