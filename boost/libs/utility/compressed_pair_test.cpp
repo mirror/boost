@@ -199,7 +199,7 @@ struct compressed_pair_reference1_tester
 };
 
 template <class T1, class T2>
-void compressed_pair_reference1_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+void compressed_pair_reference1_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type, second_param_type)
 {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    // first param construct:
@@ -225,7 +225,7 @@ struct compressed_pair_reference2_tester
 };
 
 template <class T1, class T2>
-void compressed_pair_reference2_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+void compressed_pair_reference2_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type, second_param_type)
 {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    // second param construct:
@@ -252,7 +252,7 @@ struct compressed_pair_array1_tester
 };
 
 template <class T1, class T2>
-void compressed_pair_array1_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+void compressed_pair_array1_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type, second_param_type)
 {
   // default construct:
    boost::compressed_pair<T1,T2> cp1;
@@ -282,7 +282,7 @@ struct compressed_pair_array2_tester
 };
 
 template <class T1, class T2>
-void compressed_pair_array2_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+void compressed_pair_array2_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type, second_param_type)
 {
    // default construct:
    boost::compressed_pair<T1,T2> cp1;
@@ -312,7 +312,7 @@ struct compressed_pair_array_tester
 };
 
 template <class T1, class T2>
-void compressed_pair_array_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+void compressed_pair_array_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type, second_param_type)
 {
    // default construct:
    boost::compressed_pair<T1,T2> cp1;
@@ -329,7 +329,7 @@ void compressed_pair_array_tester<T1, T2>::test(first_param_type p1, second_para
    BOOST_TEST(sizeof(T2) == sizeof(cp1.second()));
 }
 
-int test_main(int argc, char *argv[ ])
+int test_main(int, char **)
 {
    // declare some variables to pass to the tester:
    non_empty1 ne1(2);

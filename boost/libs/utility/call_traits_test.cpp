@@ -17,6 +17,10 @@
 #include <boost/call_traits.hpp>
 
 #include <boost/type_traits/type_traits_test.hpp>
+
+// a way prevent warnings for unused variables
+template<class T> inline void unused_variable(const T&) {}
+
 //
 // struct contained models a type that contains a type (for example std::pair)
 // arrays are contained by value, and have to be treated as a special case:
@@ -44,7 +48,7 @@ struct contained
    reference get() { return v_; }
    const_reference const_get()const { return v_; }
    // pass value:
-   void call(param_type p){}
+   void call(param_type){}
 
 };
 
@@ -69,7 +73,7 @@ struct contained<T[N]>
    // return by_ref:
    reference get() { return v_; }
    const_reference const_get()const { return v_; }
-   void call(param_type p){}
+   void call(param_type){}
 };
 #endif
 
@@ -214,8 +218,8 @@ int main(int argc, char *argv[ ])
 #endif
 
    check_wrap(wrap(2), 2);
-   const char ca[4] = "abc";
    // compiler can't deduce this for some reason:
+   //const char ca[4] = "abc";
    //check_wrap(wrap(ca), ca);
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    check_wrap(wrap(a), a);
@@ -318,6 +322,19 @@ void call_traits_test<T, isarray>::assert_construct(typename call_traits_test<T,
    param_type p2(v);
    param_type p3(r);
    param_type p4(p);
+   
+   unused_variable(v2);
+   unused_variable(v3);
+   unused_variable(v4);
+   unused_variable(r2);
+   unused_variable(r3);
+   unused_variable(cr2);
+   unused_variable(cr3);
+   unused_variable(cr4);
+   unused_variable(cr5);
+   unused_variable(p2);
+   unused_variable(p3);
+   unused_variable(p4);
 }
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <typename T>
@@ -354,6 +371,17 @@ void call_traits_test<T, true>::assert_construct(typename boost::call_traits<T>:
    param_type p2(v);
    param_type p3(r);
    param_type p4(p);
+   
+   unused_variable(v2);
+   unused_variable(v3);
+   unused_variable(v4);
+   unused_variable(v5);
+   unused_variable(r2);
+   unused_variable(cr2);
+   unused_variable(cr3);
+   unused_variable(p2);
+   unused_variable(p3);
+   unused_variable(p4);
 }
 #endif //BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 //

@@ -13,7 +13,7 @@
 #include <boost/type_traits.hpp>
 
 template <class RandonAccessIterator >
-RandonAccessIterator foo(RandonAccessIterator from, RandonAccessIterator to)
+RandonAccessIterator foo(RandonAccessIterator from, RandonAccessIterator)
 {
    // this template can only be used with
    // random access iterators...

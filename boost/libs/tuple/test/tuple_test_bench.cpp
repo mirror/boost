@@ -405,7 +405,7 @@ void cons_test()
   BOOST_TEST(make_tuple(3,2,1)==c);
 
   cons<char, cons<int, cons<float, null_type> > > x;
-
+  dummy(x);
 #endif
 }
 

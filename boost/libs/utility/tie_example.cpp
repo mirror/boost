@@ -28,7 +28,7 @@ main(int, char*[])
 {
   {
     typedef std::set<int> SetT;
-    SetT::iterator i, end;
+    SetT::iterator i;
     bool inserted;
     
     int vals[5] = { 5, 2, 4, 9, 1 };
