@@ -536,7 +536,7 @@ test_one_arg()
   function<string, string> id(&identity_str);
   BOOST_TEST(id("str") == "str");
 
-  function<std::string, char*> id2(&identity_str);
+  function<std::string, const char*> id2(&identity_str);
   BOOST_TEST(id2("foo") == "foo");
 
   add_to_obj add_to(5);
