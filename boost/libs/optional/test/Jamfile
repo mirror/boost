@@ -13,5 +13,7 @@ DEPENDS all : test ;
   # look in BOOST_ROOT for sources first, just in this Jamfile
   local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
 
-  test-suite optional : [ run libs/optional/test/optional_test.cpp ] ;
+  test-suite optional :
+    [ run libs/optional/test/optional_test.cpp ]
+    ;
 }
