@@ -268,12 +268,13 @@ class numeric_limits<unsigned char>
   : public _Integer_limits<unsigned char, 0, UCHAR_MAX>
 {};
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__CYGWIN__)
 template<>
 class numeric_limits<wchar_t>
   : public _Integer_limits<wchar_t, INT_MIN, INT_MAX>
 {};
 #else
+template<>
 class numeric_limits<wchar_t>
   : public _Integer_limits<wchar_t, 0, USHRT_MAX>
 {};
