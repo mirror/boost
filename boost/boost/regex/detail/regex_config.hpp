@@ -79,6 +79,9 @@ full list of macros and their usage.
 #if (defined(__MSL_CPP__) && __MSL_CPP__ < 0x6209) || defined(__DECCXX)
 // no std::messages facet
 #define BOOST_RE_NO_MESSAGES
+#endif
+
+#if defined(__MSL__) || defined(__DECCXX)
 #define BOOST_RE_NO_CAT
 #endif
 
