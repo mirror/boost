@@ -57,6 +57,18 @@ std::pair<const licence_info*, int> get_licences()
          "LICENSE_1_0.txt or copy at <a href=\"http://www.boost.org/LICENSE_1_0.txt\">http://www.boost.org/LICENSE_1_0.txt)</a></P>"
        )
       ,
+      licence_info( boost::regex("Copyright\\W+(c)\\W+2001\\W+2002\\W+Python\\W+Software\\W+Foundation\\W+All\\W+Rights\\W+Reserved", boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "Python Software License"
+         ,
+         "<p>Copyright (c) 2001, 2002 Python Software Foundation;</p>"
+         "<P>All Rights Reserved</P>"
+       )
+      ,
       licence_info( boost::regex("Permission\\W+to\\W+use\\W+copy\\W+modify\\W+distribute\\W+and\\W+sell\\W+this\\W+software\\W+and\\W+its\\W+documentation"
          "\\W+for\\W+any\\W+purpose\\W+is\\W+hereby\\W+granted\\W+without\\W+fee"
          "\\W+provided\\W+that\\W+the\\W+above\\W+copyright\\W+notice\\W+appears?\\W+in\\W+all\\W+copies\\W+and"
@@ -460,6 +472,30 @@ std::pair<const licence_info*, int> get_licences()
          "that the code was modified is included with the copyright notice.</P>"
          "<P>This software is provided \"as is\" without express or implied warranty, "
          "and with no claim as to its suitability for any purpose.</P>"
+       )
+      ,
+      licence_info( boost::regex("Copyright\\W+Kevlin\\W+Henney\\W+2000\\W+All\\W+rights\\W+reserved\\W+"
+                                 "Permission\\W+to\\W+use\\W+copy\\W+modify\\W+and\\W+distribute\\W+this\\W+software\\W+for\\W+any"
+                                 "\\W+purpose\\W+is\\W+hereby\\W+granted\\W+without\\W+fee\\W+provided\\W+that\\W+this\\W+copyright\\W+and"
+                                 "\\W+permissions\\W+notice\\W+appear\\W+in\\W+all\\W+copies\\W+and\\W+derivatives\\W+and\\W+that\\W+no"
+                                 "\\W+charge\\W+may\\W+be\\W+made\\W+for\\W+the\\W+software\\W+and\\W+its\\W+documentation\\W+except\\W+to\\W+cover"
+                                 "\\W+cost\\W+of\\W+distribution"
+                                 "\\W+This\\W+software\\W+is\\W+provided\\W+as\\W+is\\W+without\\W+express\\W+or\\W+implied\\W+warranty\\W+"
+                     , boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "Old style Boost licence #14"
+         ,
+         "<P>Copyright The Author, The Date. All rights reserved.</P>"
+         "<P>Permission to use, copy, modify, and distribute this software for any"
+         " purpose is hereby granted without fee, provided that this copyright and"
+         " permissions notice appear in all copies and derivatives, and that no"
+         " charge may be made for the software and its documentation except to cover"
+         " cost of distribution.</P>"
+         "<P>This software is provided \"as is\" without express or implied warranty.</P>"
        )
       ,
    };
