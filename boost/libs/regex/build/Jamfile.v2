@@ -9,7 +9,7 @@ SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
 
 lib boost_regex : $(SOURCES).cpp 
     :         
-        <shared>false:<define>BOOST_REGEX_NO_LIB=1
-        <shared>false:<define>BOOST_REGEX_STATIC_LINK=1
-	<shared>true:<define>BOOST_RE_BUILD_DLL=1
+        <link>static:<define>BOOST_REGEX_NO_LIB=1
+        <link>static:<define>BOOST_REGEX_STATIC_LINK=1
+	<link>shared:<define>BOOST_RE_BUILD_DLL=1
     ;

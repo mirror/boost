@@ -16,24 +16,11 @@
 #
 
 project boost/date_time
-    : requirements $(DATE_TIME_PROPERTIES)
+    : requirements
         <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG 
-        #uncomment the line below and comment out the line above to change to 64 bit counted time implementation
-        <define>DATE_TIME_INLINE 
+    : use-requirements 	
+        <define>DATE_TIME_INLINE <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG     
     ;
-
-
-#######################
-# WARNING: this rule was not updated for V2
-rule date_time-test ( test-name : sources + )
-{
-    unit-test $(test-name) : $(sources) boost_date_time ;
-}
-
-rule date_time-example ( example-name : sources + )
-{
-    exe $(example-name) : $(sources) boost_date_time ;
-}
 
 #######################
 
@@ -46,56 +33,4 @@ local GREGORIAN_CPP_SOURCES = gregorian_types greg_month greg_weekday ;
 
 lib boost_date_time : ../src/gregorian/$(GREGORIAN_CPP_SOURCES).cpp ;
     
-############# tests ###########
-# Generic tests
-date_time-test testconstrained_value : ../test/testconstrained_value.cpp ;
-date_time-test testint_adapter : ../test/testint_adapter.cpp ;
-date_time-test testwrapping_int : ../test/testwrapping_int.cpp ;
-#date_time-test testtime_resolution_traits : ../test/testtime_resolution_traits.cpp ;
-date_time-test testgregorian_calendar : ../test/testgregorian_calendar.cpp ;
-date_time-test testint64_range : ../test/testint64_range.cpp ;
-
-# Gregorian Date System 
-date_time-test testdate_iterator : ../test/gregorian/testdate_iterator.cpp ;
-date_time-test testgreg_month : ../test/gregorian/testgreg_month.cpp ;
-date_time-test testcurrent_day : ../test/gregorian/testcurrent_day.cpp ;
-date_time-test testformatters : ../test/gregorian/testformatters.cpp ;
-date_time-test testparse_date : ../test/gregorian/testparse_date.cpp ;
-date_time-test testdate : ../test/gregorian/testdate.cpp ;
-date_time-test testgreg_cal : ../test/gregorian/testgreg_cal.cpp ;
-date_time-test testgenerators : ../test/gregorian/testgenerators.cpp ;
-date_time-test testdate_duration : ../test/gregorian/testdate_duration.cpp ;
-date_time-test testgreg_day : ../test/gregorian/testgreg_day.cpp ;
-date_time-test testperiod : ../test/gregorian/testperiod.cpp ;
-date_time-test testfacet : ../test/gregorian/testfacet.cpp ;
-
-# Posix Time System Tests
-date_time-test testtimeperiod   : ../test/posix_time/testperiod.cpp ;
-date_time-test testtime         : ../test/posix_time/testtime.cpp ;
-date_time-test testtimeduration : ../test/posix_time/testduration.cpp ;
-date_time-test testtimeformat   : ../test/posix_time/testformatters.cpp ;
-date_time-test testlocal_adjustor : ../test/posix_time/testlocal_adjustor.cpp ;
-date_time-test testdst_rules      : ../test/posix_time/testdst_rules.cpp ;
-date_time-test testiterator      : ../test/posix_time/testiterator.cpp ;
-date_time-test testtime_clock    : ../test/posix_time/testclock.cpp ;
-date_time-test testparse_time    : ../test/posix_time/testparse_time.cpp ;
-
-############# examples  ############
-
-
-date_time-example dates_as_strings : ../example/gregorian/dates_as_strings.cpp ;
-date_time-example end_of_month_day : ../example/gregorian/end_of_month_day.cpp ;
-date_time-example period_calc : ../example/gregorian/period_calc.cpp ;
-date_time-example days_alive : ../example/gregorian/days_alive.cpp ;
-date_time-example print_holidays : ../example/gregorian/print_holidays.cpp ;
-date_time-example days_since_year_start : ../example/gregorian/days_since_year_start.cpp ;
-date_time-example print_month : ../example/gregorian/print_month.cpp ;
-date_time-example days_till_new_year : ../example/gregorian/days_till_new_year.cpp ;
-date_time-example date_localization : ../example/gregorian/localization.cpp ;
-
 #time examples
-date_time-example time_math : ../example/posix_time/time_math.cpp ;
-date_time-example local_utc_conversion : ../example/posix_time/local_utc_conversion.cpp ;
-date_time-example print_hours : ../example/posix_time/print_hours.cpp ;
-date_time-example time_periods : ../example/posix_time/time_periods.cpp ;
-
