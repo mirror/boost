@@ -589,10 +589,9 @@ f(&amp;bar); // should choose #2.</pre>
         <td valign="top" width="51%">BOOST_NO_LIMITS</td>
         <td valign="top" width="16%">Standard library</td>
         <td valign="top" width="33%">The C++ implementation does
-        not provide the &lt;limits&gt; header.  Never check for this
-        symbol in library code; always include
-        &lt;boost/limits.hpp&gt;, which guarantees to provide
-        <code>std::numeric_limits</code>.</td>
+        not provide the &lt;limits&gt; header. Never check for
+        this symbol in library code; always include &lt;boost/limits.hpp&gt;,
+        which guarantees to provide <code>std::numeric_limits</code>.</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS</td>
@@ -788,10 +787,31 @@ present.</p>
         style threads.</td>
     </tr>
     <tr>
+        <td>BOOST_HAS_CLOCK_GETTIME</td>
+        <td>Platform</td>
+        <td>The platform has the POSIX API clock_gettime.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_FTIME</td>
+        <td>Platform</td>
+        <td>The platform has the Win32 API
+        GetSystemTimeAsFileTime.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_GETTIMEOFDAY</td>
+        <td>Platform</td>
+        <td>The platform has the POSIX API gettimeofday.</td>
+    </tr>
+    <tr>
         <td valign="top" width="48%">BOOST_HAS_HASH</td>
         <td valign="top" width="15%">Standard library</td>
         <td valign="top" width="37%">The C++ implementation
         provides the (SGI) hash_set or hash_map classes.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_LONG_LONG</td>
+        <td>Compiler</td>
+        <td>The compiler supports the long long data type.</td>
     </tr>
     <tr>
         <td valign="top" width="48%">BOOST_HAS_MACRO_USE_FACET</td>
@@ -802,16 +822,58 @@ present.</p>
         std lib.</td>
     </tr>
     <tr>
+        <td>BOOST_HAS_MS_INT64</td>
+        <td>Compiler</td>
+        <td>The compiler supports the __int64 data type.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_NANOSLEEP</td>
+        <td>Platform</td>
+        <td>The platform has the POSIX API nanosleep.</td>
+    </tr>
+    <tr>
         <td valign="top" width="48%">BOOST_HAS_NL_TYPES_H</td>
         <td valign="top" width="15%">Platform</td>
         <td valign="top" width="37%">The platform has an
         &lt;nl_types.h&gt;.</td>
     </tr>
     <tr>
+        <td>BOOST_HAS_PTHREAD_DELAY_NP</td>
+        <td>Platform</td>
+        <td>The platform has the POSIX API pthread_delay_np.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE</td>
+        <td>Platform</td>
+        <td>The platform has the POSIX API
+        pthread_mutexattr_settype.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_PTHREAD_YIELD</td>
+        <td>Platform</td>
+        <td>The platform has the POSIX API pthread_yield.</td>
+    </tr>
+    <tr>
         <td valign="top" width="48%">BOOST_HAS_PTHREADS</td>
         <td valign="top" width="15%">Platform</td>
         <td valign="top" width="37%">The platform support POSIX
         style threads.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_SCHED_YIELD</td>
+        <td>Platform</td>
+        <td>The platform has the POSIX API sched_yield.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_SGI_TYPE_TRAITS</td>
+        <td>Compiler/standard library</td>
+        <td>The compiler has native support for SGI style type
+        traits.</td>
+    </tr>
+    <tr>
+        <td>BOOST_HAS_STDINT_H</td>
+        <td>Platform</td>
+        <td>The platform has a &lt;stdint.h&gt;</td>
     </tr>
     <tr>
         <td valign="top" width="48%">BOOST_HAS_SLIST</td>
