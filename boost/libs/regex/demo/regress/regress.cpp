@@ -237,7 +237,7 @@ void jm_debug_alloc::free_()
     }
 }
 
-jm_debug_alloc::pointer jm_debug_alloc::allocate(size_type n, void* hint)
+jm_debug_alloc::pointer jm_debug_alloc::allocate(size_type n, void*)
 {
    pointer p = new char[n + maxi(sizeof(size_type), boost::re_detail::padding_size)];
    *(size_type*)p = n;

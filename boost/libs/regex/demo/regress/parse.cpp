@@ -311,7 +311,7 @@ void expand_escapes(string_type& s)
                   s[pos] = 0;
                }
                else
-                  s.insert(s.begin() + pos, val);
+                  s.insert(s.begin() + pos, (char)val);
                i = pos;
             }
             else

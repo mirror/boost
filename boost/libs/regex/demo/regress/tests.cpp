@@ -490,13 +490,13 @@ bool hl_grep_test_proc(const RegEx& e)
    end = start + e.Length(-2);
    if(start == -1)
    {
-      if(matches[hl_match_id + 1] != search_text.size())
+      if(matches[hl_match_id + 1] != (int)search_text.size())
       {
          begin_error();
          cout << "class RegEx grep error in $': found [" << start << "," << end << "] expected [" << matches[hl_match_id + 1] << "," << (search_text.size()) << "]" << endl;
       }
    }
-   else if((start != matches[hl_match_id + 1]) || (end != search_text.size()))
+   else if((start != matches[hl_match_id + 1]) || (end != (int)search_text.size()))
    {
       begin_error();
       cout << "class RegEx grep error in $': found [" << start << "," << end << "] expected [" << matches[hl_match_id + 1] << "," << (search_text.size()) << "]" << endl;
@@ -535,7 +535,7 @@ void cpp_hl_tests(RegEx& e, bool recurse = true)
          unsigned int j = 0;
          while(matches[j] != -2)
          {
-            if( (matches[j] != e.Position(i)) || (matches[j+1] - matches[j] != e.Length(i)) )
+            if( (matches[j] != (int)e.Position(i)) || (matches[j+1] - matches[j] != (int)e.Length(i)) )
             {
                begin_error();
                cout << "RegEx::Search error in subexpression " << i << ": found [" << e.Position(i) << "," << (e.Position(i) + e.Length(i)) << "] expected [" << matches[j] << "," << matches[j+1] << "]" << endl;
@@ -559,7 +559,7 @@ void cpp_hl_tests(RegEx& e, bool recurse = true)
          unsigned int j = 0;
          while(matches[j] != -2)
          {
-            if( (matches[j] != e.Position(i)) || (matches[j+1] - matches[j] != e.Length(i)) )
+            if( (matches[j] != (int)e.Position(i)) || (matches[j+1] - matches[j] != (int)e.Length(i)) )
             {
                begin_error();
                cout << "RegEx::Match error in subexpression " << i << ": found [" << e.Position(i) << "," << (e.Position(i) + e.Length(i)) << "] expected [" << matches[j] << "," << matches[j+1] << "]" << endl;
@@ -642,7 +642,7 @@ void run_tests()
          cpp_hl_tests(e, true);
       }
    }
-   catch(const std::exception& e)
+   catch(const std::exception& )
    {
       if(search_text != BOOST_RE_STR("!"))
       {

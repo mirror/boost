@@ -107,6 +107,8 @@ public:
 private:
    lock_type& mut;
    bool owned;
+   // VC6 warning suppression:
+   lock_guard& operator=(const lock_guard&);
 };
 
 
