@@ -29,6 +29,10 @@
 
 
 #include "boost/lambda/detail/operators.hpp"
+
+#ifndef BOOST_LAMBDA_FAILS_IN_TEMPLATE_KEYWORD_AFTER_SCOPE_OPER
 #include "boost/lambda/detail/member_ptr.hpp"
+#endif
+
 
 #endif
