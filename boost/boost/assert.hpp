@@ -10,9 +10,8 @@
 //
 //  Note: There are no include guards. This is intentional.
 //
-
-// See http://www.boost.org/libs/utility for Documentation.
-
+//  See http://www.boost.org/libs/utility/assert.html for documentation.
+//
 
 #undef BOOST_ASSERT
 
