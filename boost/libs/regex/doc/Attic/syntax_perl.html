@@ -132,6 +132,14 @@ aaaa</PRE>
       </P>
       <P>Parenthesis can be used to group alternations, for example: ab(d|ef) will match 
          either of "abd" or "abef".</P>
+      <P>Empty&nbsp;alternatives are not allowed (these are almost always a mistake), 
+         but if you really want an empty alternative use (?:) as a placeholder, for 
+         example:</P>
+      <BLOCKQUOTE dir="ltr" style="MARGIN-RIGHT: 0px">
+         <P>"|abc" is not a valid expression, but<BR>
+            "(?:)|abc" is and is equivalent, also the expression:<BR>
+            "(?:abc)??" has exactly the same effect.</P>
+      </BLOCKQUOTE>
       <H4>Character sets:</H4>
       <P>A character set is a bracket-expression starting with [ and ending with ], it 
          defines a set of characters, and matches any single character that is a member 
@@ -169,7 +177,7 @@ aaaa</PRE>
          <P>matches a NUL character.</P>
          <H5>Equivalence classes:</H5>
          <P>
-            An expression of theform[[=col=]], matches any character or collating element 
+            An expression oftheform[[=col=]], matches any character or collating element 
             whose primary sort key is the same as that for collating element <EM>col</EM>, 
             as with colating elements the name <EM>col</EM> may be a <A href="collating_names.html">
                symbolic name</A>.&nbsp; A primary sort key is one that ignores case, 
