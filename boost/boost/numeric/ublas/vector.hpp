@@ -30,27 +30,44 @@ namespace boost { namespace numeric { namespace ublas {
     namespace detail {
         using namespace boost::numeric::ublas;
 
-	template <class T>
-	struct resize_functor {
+        // Resizing helper. Allow 'preserve' parameter to be used where possible.
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        // ISSUE Overloaded free function templates fail on some compilers!
+        // Thanks to Karl Meerbergen for the functor workaround which we use by default
+        template <class T>
+        struct resize_functor {
            void operator() (T& a, typename T::size_type size, bool preserve) const {
               a.resize (size, preserve);
            }
-	};
+        };
 
         // Specialise for std::vector
-	template <class T>
-	struct resize_functor< std::vector<T> > {
+        template <class T>
+        struct resize_functor< std::vector<T> > {
            void operator() (std::vector<T>& a, typename std::vector<T>::size_type size, bool ) const {
               a.resize (size);
            }
-	};
+        };
 
-        // Resizing helpers, allow preserve parameter to be used where possible
         template<class T>
         BOOST_UBLAS_INLINE
         void resize (T& a, typename T::size_type size, bool preserve) {
             resize_functor<T>() (a, size, preserve);
         }
+#else
+        template<class T>
+        BOOST_UBLAS_INLINE
+        void resize (T& a, typename T::size_type size, bool preserve) {
+            a.resize (size, preserve);
+        }
+        // Specialise for std::vector
+        template<class T>
+        BOOST_UBLAS_INLINE
+        void resize (std::vector<T> &a, typename std::vector<T>::size_type size, bool /* preserve */) {
+            a.resize (size);
+        }
+#endif
     }
 
     // Array based vector class
@@ -65,7 +82,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
         typedef typename type_traits<T>::const_reference const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
@@ -587,8 +603,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
@@ -832,8 +847,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
@@ -1037,8 +1051,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
@@ -1267,8 +1280,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
-        // typedef const T &const_reference;
-        typedef typename type_traits<T>::const_reference const_reference;
+        typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
