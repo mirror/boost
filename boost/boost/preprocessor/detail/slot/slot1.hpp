@@ -8,7 +8,7 @@
 #  *                                                                          *
 #  ************************************************************************** */
 #
-# line BOOST_PP_DETAIL_LINE()
+# line BOOST_PP_DETAIL_LINE(slot 1 = (BOOST_PP_VALUE))
 #
 # ifndef BOOST_PP_VALUE
 #   error BOOST_PP:  BOOST_PP_VALUE must be set prior to including BOOST_PP_ASSIGN_SLOT(1)
