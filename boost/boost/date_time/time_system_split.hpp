@@ -3,7 +3,7 @@
 
 /* Copyright (c) 2002 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include <string>
@@ -81,7 +81,7 @@ namespace date_time {
                                                 const time_duration_type& td)
     {
       wrap_int_type  day_offset(base.time_of_day.ticks());
-      date_duration_type day_overflow(day_offset.subtract(td.ticks()));
+      date_duration_type day_overflow(static_cast<int_type>(day_offset.subtract(td.ticks())));
 //       std::cout << "sub: " << base.time_of_day.ticks() << "|"
 //                 << day_offset.as_int() << "|"
 //                 << day_overflow.days() << std::endl;
@@ -99,7 +99,7 @@ namespace date_time {
       int_type doff = day_offset.add(td.ticks());
 //       std::cout << "day overflow: " << doff << std::endl;
 //       std::cout << "ticks: "         << td.ticks() << std::endl;
-      date_duration_type day_overflow(doff);
+      date_duration_type day_overflow(static_cast<int_type>(doff));
 //       std::cout << "base: " << to_simple_string(base.day) << std::endl;
 //       std::cout << "overflow " << day_overflow.days() << std::endl;
       return time_rep_type(base.day+day_overflow,

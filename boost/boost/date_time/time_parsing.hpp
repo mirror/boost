@@ -131,12 +131,12 @@ namespace date_time {
         }
       case 1: 
         {
-          min = boost::lexical_cast<int>(*ti); 
+          min = boost::lexical_cast<short>(*ti); 
           break;
         }
       case 2: 
        {
-         sec = boost::lexical_cast<int>(*ti); 
+         sec = boost::lexical_cast<short>(*ti); 
          break;
         }
       };
