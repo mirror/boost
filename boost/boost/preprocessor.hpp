@@ -19,79 +19,19 @@
 Includes all PREPROCESSOR library headers.
 */
 
-#ifndef BOOST_PREPROCESSOR_ARITHMETIC_HPP
-#  include <boost/preprocessor/arithmetic.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ASSERT_MSG_HPP
-#  include <boost/preprocessor/assert_msg.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_CAT_HPP
-#  include <boost/preprocessor/cat.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMMA_HPP
-#  include <boost/preprocessor/comma.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMMA_IF_HPP
-#  include <boost/preprocessor/comma_if.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_COMPARISON_HPP
-#  include <boost/preprocessor/comparison.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_DEC_HPP
-#  include <boost/preprocessor/dec.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_EMPTY_HPP
-#  include <boost/preprocessor/empty.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ENUM_PARAMS_HPP
-#  include <boost/preprocessor/enum_params.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_A_DEFAULT_HPP
-#  include <boost/preprocessor/enum_params_with_a_default.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_DEFAULTS_HPP
-#  include <boost/preprocessor/enum_params_with_defaults.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS_HPP
-#  include <boost/preprocessor/enum_shifted_params.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_IDENTITY_HPP
-#  include <boost/preprocessor/identity.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_IF_HPP
-#  include <boost/preprocessor/if.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_INC_HPP
-#  include <boost/preprocessor/inc.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LIMITS_HPP
-#  include <boost/preprocessor/limits.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_LOGICAL_HPP
-#  include <boost/preprocessor/logical.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_MAX_HPP
-#  include <boost/preprocessor/max.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_MIN_HPP
-#  include <boost/preprocessor/min.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_REPEAT_HPP
-#  include <boost/preprocessor/repeat.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_REPEAT_2ND_HPP
-#  include <boost/preprocessor/repeat_2nd.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_REPEAT_3RD_HPP
-#  include <boost/preprocessor/repeat_3rd.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_STRINGIZE_HPP
-#  include <boost/preprocessor/stringize.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_TUPLE_HPP
-#  include <boost/preprocessor/tuple.hpp>
-#endif
-#ifndef BOOST_PREPROCESSOR_WHILE_HPP
-#  include <boost/preprocessor/while.hpp>
-#endif
+#include <boost/preprocessor/arithmetic.hpp>
+#include <boost/preprocessor/assert_msg.hpp>
+#include <boost/preprocessor/comparison.hpp>
+#include <boost/preprocessor/enum_params.hpp>
+#include <boost/preprocessor/enum_params_with_a_default.hpp>
+#include <boost/preprocessor/enum_params_with_defaults.hpp>
+#include <boost/preprocessor/enum_shifted_params.hpp>
+#include <boost/preprocessor/limits.hpp>
+#include <boost/preprocessor/logical.hpp>
+#include <boost/preprocessor/max.hpp>
+#include <boost/preprocessor/min.hpp>
+#include <boost/preprocessor/repeat.hpp>
+#include <boost/preprocessor/repeat_2nd.hpp>
+#include <boost/preprocessor/repeat_3rd.hpp>
+#include <boost/preprocessor/stringize.hpp>
 #endif
