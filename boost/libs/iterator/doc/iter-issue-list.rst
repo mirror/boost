@@ -811,6 +811,13 @@ c++std-lib-12333:
   and Lvalue Iterator. Change Lvalue Iterator to refer to ``T&`` instead of
   ``iterator_traits<X>::reference``.
 
+:Rationale: Ideally there should be requirements on the reference type, however,
+  since Readable Iterator is suppose to correspond to the current
+  standard iterator requirements (which do not place requirements
+  on the reference type) we will leave them off for now.
+  There is a DR in process with respect to the reference type in the
+  stadard iterator requirements. Once that is resolved we will revisit
+  this issue for Readable Iterator and Lvalue Iterator.
 
 
 9.34 iterator_facade free functions unspecified 
