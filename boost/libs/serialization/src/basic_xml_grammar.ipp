@@ -230,24 +230,31 @@ bool basic_xml_grammar<CharType>::parse_string(IStream & is, StringType & s) {
 template<class CharType>
 basic_xml_grammar<CharType>::basic_xml_grammar(){
     init_chset();
+
     S =
         +(Sch)
     ;
-    Name =
-        (Letter | '_' | ':')
-        >> *(NameChar)
-    ;
 
+	// refactoring to workaround template depth on darwin
+	NameHead = (Letter | '_' | ':');
+	NameTail = *NameChar ;
+    Name =
+      NameHead >> NameTail
+    ;
 
     Eq =
         !S >> '=' >> !S
     ;
 
+    AttributeList = 
+    	*(S >> Attribute)
+    ;
+    
     STag =
         !S
         >> '<'
         >> Name  [assign_obect(rv.object_name)]
-        >> *(S >> Attribute)
+        >> AttributeList
         >> !S
         >> '>'
     ;
@@ -260,8 +267,10 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         >> '>'
     ;
 
-    CharData = 
-        (*(anychar_p - chset_p(L"&<"))) [
+	// refactoring to workaround template depth on darwin
+    CharDataChars = *(anychar_p - chset_p(L"&<"));
+    CharData =  
+        CharDataChars [
             append_string<
                 StringType, 
                 BOOST_DEDUCED_TYPENAME std::basic_string<CharType>::const_iterator
@@ -299,25 +308,25 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
 
     ClassIDAttribute = 
-        str_p(CLASS_ID) >> *(NameChar)
-        >> Eq 
-        >> L'"'
-        >> int_p [assign_obect(rv.class_id.t)]
-        >> L'"'
-    ;
+		str_p(CLASS_ID()) >> NameTail
+		>> Eq 
+		>> L'"'
+		>> int_p [assign_obect(rv.class_id.t)]
+		>> L'"'
+      ;
 
     ObjectIDAttribute = 
-        ( str_p(OBJECT_ID) | str_p(OBJECT_REFERENCE) )
-        >> *(NameChar)
-        >> Eq 
-        >> L'"'
-        >> L'_'
-        >> uint_p [assign_obect(rv.object_id.t)]
-        >> L'"'
-    ;
+		(str_p(OBJECT_ID()) | str_p(OBJECT_REFERENCE()) )
+		>> NameTail
+		>> Eq 
+		>> L'"'
+		>> L'_'
+		>> uint_p [assign_obect(rv.object_id.t)]
+		>> L'"'
+	;
 
     ClassNameAttribute = 
-        str_p(CLASS_NAME) 
+        str_p(CLASS_NAME()) 
         >> Eq 
         >> L'"'
         >> Name [assign_obect(rv.class_name)]
@@ -325,7 +334,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
 
     TrackingAttribute = 
-        str_p(TRACKING)
+        str_p(TRACKING())
         >> Eq
         >> L'"'
         >> uint_p [assign_level(rv.tracking_level)]
@@ -333,7 +342,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
 
     VersionAttribute = 
-        str_p(VERSION)
+        str_p(VERSION())
         >> Eq
         >> L'"'
         >> uint_p [assign_obect(rv.version.t)]
@@ -357,6 +366,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         | UnusedAttribute
     ;
 
+    XMLDeclChars = *(anychar_p - chset_p(L"?>"));
     XMLDecl =
         !S
         >> str_p(L"<?xml")
@@ -364,15 +374,16 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         >> str_p(L"version")
         >> Eq
         >> str_p(L"\"1.0\"")
-        >> *(anychar_p - chset_p(L"?>"))
+        >> XMLDeclChars
         >> !S
         >> str_p(L"?>")
     ;
 
+    DocTypeDeclChars = *(anychar_p - chset_p(L">"));
     DocTypeDecl =
         !S
         >> str_p(L"<!DOCTYPE")
-        >> *(anychar_p - chset_p(L">"))
+		>> DocTypeDeclChars
         >> L'>'
     ;
 
@@ -411,7 +422,7 @@ void basic_xml_grammar<CharType>::init(IStream & is){
         boost::throw_exception(
             xml_archive_exception(xml_archive_exception::xml_archive_parsing_error)
         );
-    if(! std::equal(rv.class_name.begin(), rv.class_name.end(), ARCHIVE_SIGNATURE))
+    if(! std::equal(rv.class_name.begin(), rv.class_name.end(), ARCHIVE_SIGNATURE()))
         boost::throw_exception(
             archive_exception(archive_exception::invalid_signature)
         );
