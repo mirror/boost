@@ -174,7 +174,7 @@ time_duration(hours,
 	<tbody>
           <row>
 	    <entry valign="top" morerows="1"><screen>time_duration duration_from_string(std::string)</screen></entry>
-	    <entry>From delimited string.</entry>
+            <entry>From delimited string. NOTE: Excess digits in fractional seconds will be dropped. Ex: "1:02:03.123456999" =&gt; 1:02:03.123456. This behavior is affected by the precision the library is compiled with (see <link linkend="date_time.buildinfo">Build-Compiler Information</link>.</entry>
           </row>
           <row>
             <entry><screen>
@@ -295,6 +295,16 @@ td.invert_sign(); // --> 01:00:00</screen></entry>
 unsigned short secs;
 secs = time_duration::num_fractional_digits();
 // 9 for nano, 6 for micro, etc.</screen></entry>
+          </row>
+          
+	  <row>
+            <entry valign="top" morerows="1"><screen>time_duration::ticks_per_second()</screen></entry>
+            <entry>Return the number of ticks in a second.  For example, if the duration
+                   supports nanoseconds then the returned result will be 1000000.
+            </entry>
+	  </row>
+	  <row>
+            <entry><screen>std::cout &lt;&lt; time_duration::ticks_per_second()  &lt;&lt; std::endl; </screen></entry>
           </row>
           
 	  <row>

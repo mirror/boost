@@ -121,7 +121,7 @@ ptime d5(min_date_time);</screen></entry>
 	<tbody>
           <row>
 	    <entry valign="top" morerows="1"><screen>ptime time_from_string(std::string)</screen></entry>
-	    <entry>From delimited string.</entry>
+            <entry>From delimited string. NOTE: Excess digits in fractional seconds will be dropped. Ex: "1:02:03.123456999" =&gt; 1:02:03.123456. This behavior is affected by the precision the library is compiled with (see <link linkend="date_time.buildinfo">Build-Compiler Information</link>.</entry>
 	  </row>
 	  <row>
 	    <entry><screen>std::string ts("2002-01-20 23:59:59.000");
