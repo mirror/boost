@@ -11,6 +11,8 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   04 Mar 01  Factored EDG checks, added BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+//              for Intel C++ 5.0 (Dave Abrahams)
 //   17 Feb 01  BOOST_NO_CV_SPECIALIZATIONS
 //              BOOST_NO_CV_VOID_SPECIALIZATIONS (John Maddock)
 //   11 Feb 01  Added BOOST_STATIC_CONSTANT (Dave Abrahams)
@@ -203,6 +205,18 @@
 //  BOOST_NO_STD_MIN_MAX: The C++ standard library does not provide
 //  the min() and max() template functions that should be in <algorithm>.
 
+//  Common compiler front-ends precede all compiler checks  ------------------//
+
+//  Edison Design Group front-ends
+# if defined(__EDG_VERSION__)
+
+#   if __EDG_VERSION__ <= 240
+#     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#   endif
+
+# endif
+
+//  Compiler-specific checks -------------------------------------------------//
 //  Compilers are listed in alphabetic order (except VC++ last - see below)---//
 
 //  GNU CC (also known as GCC and G++)  --------------------------------------//
@@ -253,19 +267,11 @@
 
 #elif defined __sgi
 
-#   if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 240
-#     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-#   endif
-
 //  Compaq Tru64 Unix cxx ---------------------------------------------------
 
 #elif defined __DECCXX
 #   define BOOST_NO_SLIST
 #   define BOOST_NO_HASH
-
-#   if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 240
-#     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-#   endif
 
 //  Greenhills C++ -----------------------------------------------------------//
 
@@ -331,6 +337,8 @@
 #     define BOOST_NO_STD_MIN_MAX
 #   endif
 #   define BOOST_NO_INTRINSIC_WCHAR_T // tentative addition - required for VC6 compatibility? (added by JM 19 Feb 2001)
+
+#   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP // Apparently so :-(
 
 
 //  Metrowerks CodeWarrior  --------------------------------------------------//
