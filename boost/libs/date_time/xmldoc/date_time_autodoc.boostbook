@@ -3042,6 +3042,9 @@
       </namespace>
     </namespace>
   </header>
+  <header name="boost/date_time/filetime_functions.hpp">
+    <para>Function(s) for converting between a FILETIME structure and a time object. This file is only available on systems that have BOOST_HAS_FTIME defined.</para>
+  </header>
   <header name="boost/date_time/gregorian_calendar.hpp">
     <namespace name="boost">
       <namespace name="date_time">

@@ -20,6 +20,11 @@
         </row>
         <row>
           <entry>Feature</entry>
+          <entry>Free function for creating a ptime object from a FILETIME struct. This function is only available on platforms that define BOOST_HAS_FTIME.
+          </entry>
+        </row>
+        <row>
+          <entry>Feature</entry>
           <entry>Use of the boost::serialization library is now available with many of the date_time classes. Classes capable of serialization are: date_generator classes, date, days, date_period, greg_month, greg_weekday, greg_day, ptime, time_duration, and time_period. Thanks to Bart Garst for this change.
           </entry>
         </row>

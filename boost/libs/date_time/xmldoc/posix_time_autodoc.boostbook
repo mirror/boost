@@ -19,6 +19,7 @@
     </namespace>
   </header>
   <header name="boost/date_time/posix_time/date_duration_operators.hpp">
+    <para>Operators for ptime and optional gregorian types. Operators use snap-to-end-of-month behavior. Further details on this behavior can be found in reference for date_time/date_duration_types.hpp and documentation for month and year iterators.</para>
     <namespace name="boost">
       <namespace name="posix_time">
         <function name="operator+">
@@ -31,6 +32,9 @@
           <parameter name="m">
             <paramtype>const boost::gregorian::months &amp;</paramtype>
           </parameter>
+          <description>
+            <para>Adds a months object and a ptime. Result will be same day-of-month as ptime unless original day was the last day of month. see date_time::months_duration for more details </para>
+          </description>
         </function>
         <function name="operator+=">
           <type>
@@ -42,6 +46,9 @@
           <parameter name="m">
             <paramtype>const boost::gregorian::months &amp;</paramtype>
           </parameter>
+          <description>
+            <para>Adds a months object to a ptime. Result will be same day-of-month as ptime unless original day was the last day of month. see date_time::months_duration for more details </para>
+          </description>
         </function>
         <function name="operator-">
           <type>
@@ -53,6 +60,9 @@
           <parameter name="m">
             <paramtype>const boost::gregorian::months &amp;</paramtype>
           </parameter>
+          <description>
+            <para>Subtracts a months object and a ptime. Result will be same day-of-month as ptime unless original day was the last day of month. see date_time::months_duration for more details </para>
+          </description>
         </function>
         <function name="operator-=">
           <type>
@@ -64,6 +74,9 @@
           <parameter name="m">
             <paramtype>const boost::gregorian::months &amp;</paramtype>
           </parameter>
+          <description>
+            <para>Subtracts a months object from a ptime. Result will be same day-of-month as ptime unless original day was the last day of month. see date_time::months_duration for more details </para>
+          </description>
         </function>
         <function name="operator+">
           <type>
@@ -75,6 +88,9 @@
           <parameter name="y">
             <paramtype>const boost::gregorian::years &amp;</paramtype>
           </parameter>
+          <description>
+            <para>Adds a years object and a ptime. Result will be same month and day-of-month as ptime unless original day was the last day of month. see date_time::years_duration for more details </para>
+          </description>
         </function>
         <function name="operator+=">
           <type>
@@ -86,6 +102,9 @@
           <parameter name="y">
             <paramtype>const boost::gregorian::years &amp;</paramtype>
           </parameter>
+          <description>
+            <para>Adds a years object to a ptime. Result will be same month and day-of-month as ptime unless original day was the last day of month. see date_time::years_duration for more details </para>
+          </description>
         </function>
         <function name="operator-">
           <type>
@@ -97,6 +116,9 @@
           <parameter name="y">
             <paramtype>const boost::gregorian::years &amp;</paramtype>
           </parameter>
+          <description>
+            <para>Subtracts a years object and a ptime. Result will be same month and day-of-month as ptime unless original day was the last day of month. see date_time::years_duration for more details </para>
+          </description>
         </function>
         <function name="operator-=">
           <type>
@@ -108,6 +130,9 @@
           <parameter name="y">
             <paramtype>const boost::gregorian::years &amp;</paramtype>
           </parameter>
+          <description>
+            <para>Subtracts a years object from a ptime. Result will be same month and day-of-month as ptime unless original day was the last day of month. see date_time::years_duration for more details </para>
+          </description>
         </function>
       </namespace>
     </namespace>
