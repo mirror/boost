@@ -52,8 +52,11 @@ struct fibonacci_validation<T, P, Q>  \
   BOOST_STATIC_CONSTANT(bool, is_specialized = true);     \
   static T value() { return V; }      \
   static T tolerance()                \
-    { return std::max(E, 5*std::numeric_limits<T>::epsilon()); } \
+    { return std::max(E, static_cast<T>(5*std::numeric_limits<T>::epsilon())); } \
 };
+// (The extra static_cast<T> in the std::max call above is actually
+// unnecessary except for HP aCC 1.30, which claims that
+// numeric_limits<double>::epsilon() doesn't actually return a double.)
 
 BOOST_RANDOM_FIBONACCI_VAL(double, 607, 273, 0.4293817707235914, 1e-14)
 BOOST_RANDOM_FIBONACCI_VAL(double, 1279, 418, 0.9421630240437659, 1e-14)
