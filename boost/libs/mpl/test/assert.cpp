@@ -61,7 +61,9 @@ struct her
         BOOST_MPL_ASSERT_NOT(( boost::is_pointer<T> ));
         BOOST_MPL_ASSERT_RELATION( sizeof(T*), >, 1 );
         BOOST_MPL_ASSERT_RELATION( 1, <, sizeof(T*) );
+#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
         BOOST_MPL_ASSERT_MSG( true, GLOBAL_SCOPE_ERROR, (int,long) );
+#endif
         BOOST_MPL_ASSERT_MSG( true, MEMBER_FUNCTION_SCOPE_ERROR, () );
 #if !defined(BOOST_MPL_CFG_NO_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
         BOOST_MPL_ASSERT_MSG( true, ANOTHER_MEMBER_FUNCTION_SCOPE_ERROR, (types<int, T>) );
