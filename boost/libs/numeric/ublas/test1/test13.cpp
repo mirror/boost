@@ -47,6 +47,17 @@ struct test_my_matrix {
             m1.swap (m2);
             std::cout << "m1.swap (m2) = " << m1 << " " << m2 << std::endl;
 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+            // Project range and slice
+            initialize_matrix (m1);
+            initialize_matrix (m2);
+            project (m1, ublas::range(0,1),ublas::range(0,1)) = project (m2, ublas::range(0,1),ublas::range(0,1));
+            project (m1, ublas::range(0,1),ublas::range(0,1)) = project (m2, ublas::slice(0,1,1),ublas::slice(0,1,1));
+            project (m1, ublas::slice(2,-1,2),ublas::slice(2,-1,2)) = project (m2, ublas::slice(0,1,2),ublas::slice(0,1,2));
+            project (m1, ublas::slice(2,-1,2),ublas::slice(2,-1,2)) = project (m2, ublas::range(0,2),ublas::range(0,2));
+            std::cout << "m1 = range/slice " << m1 << std::endl;
+#endif
+
             // Unary matrix operations resulting in a matrix
             initialize_matrix (m1);
             m2 = - m1;

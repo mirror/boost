@@ -50,6 +50,17 @@ struct test_my_vector {
             v1.swap (v2);
             std::cout << "v1.swap (v2) = " << v1 << " " << v2 << std::endl;
 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+            // Project range and slice
+            initialize_vector (v1);
+            initialize_vector (v2);
+            project (v1, ublas::range(0,1)) = project (v2, ublas::range(0,1));
+            project (v1, ublas::range(0,1)) = project (v2, ublas::slice(0,1,1));
+            project (v1, ublas::slice(2,-1,2)) = project (v2, ublas::slice(0,1,2));
+            project (v1, ublas::slice(2,-1,2)) = project (v2, ublas::range(0,2));
+            std::cout << "v1 = range/slice " << v1 << std::endl;
+#endif
+
             // Unary vector operations resulting in a vector
             initialize_vector (v1);
             v2 = - v1;

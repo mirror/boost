@@ -19,8 +19,6 @@
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/vector_sparse.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/matrix_sparse.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
 #include "test3.hpp"
@@ -48,6 +46,17 @@ struct test_my_vector {
             std::cout << "v1.assign_temporary (v2) = " << v1 << std::endl;
             v1.swap (v2);
             std::cout << "v1.swap (v2) = " << v1 << " " << v2 << std::endl;
+
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+            // Project range and slice
+            initialize_vector (v1);
+            initialize_vector (v2);
+            project (v1, ublas::range(0,1)) = project (v2, ublas::range(0,1));
+            project (v1, ublas::range(0,1)) = project (v2, ublas::slice(0,1,1));
+            project (v1, ublas::slice(2,-1,2)) = project (v2, ublas::slice(0,1,2));
+            project (v1, ublas::slice(2,-1,2)) = project (v2, ublas::range(0,2));
+            std::cout << "v1 = range/slice " << v1 << std::endl;
+#endif
 
             // Unary vector operations resulting in a vector
             initialize_vector (v1);
@@ -194,23 +203,23 @@ void test_vector () {
 
 #ifdef USE_COMPRESSED_VECTOR
 #ifdef USE_FLOAT
-    std::cout << "float" << std::endl;
+    std::cout << "float compressed" << std::endl;
     test_my_vector<ublas::compressed_vector<float>, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "double" << std::endl;
+    std::cout << "double compressed" << std::endl;
     test_my_vector<ublas::compressed_vector<double>, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
-    std::cout << "std::complex<float>" << std::endl;
+    std::cout << "std::complex<float> compressed" << std::endl;
     test_my_vector<ublas::compressed_vector<std::complex<float> >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "std::complex<double>" << std::endl;
+    std::cout << "std::complex<double> compressed" << std::endl;
     test_my_vector<ublas::compressed_vector<std::complex<double> >, 3 > () ();
 #endif
 #endif
@@ -218,23 +227,23 @@ void test_vector () {
 
 #ifdef USE_COORDINATE_VECTOR
 #ifdef USE_FLOAT
-    std::cout << "float" << std::endl;
+    std::cout << "float coordinate" << std::endl;
     test_my_vector<ublas::coordinate_vector<float>, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "double" << std::endl;
+    std::cout << "double coordinate" << std::endl;
     test_my_vector<ublas::coordinate_vector<double>, 3 > () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
-    std::cout << "std::complex<float>" << std::endl;
+    std::cout << "std::complex<float> coordinate" << std::endl;
     test_my_vector<ublas::coordinate_vector<std::complex<float> >, 3 > () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "std::complex<double>" << std::endl;
+    std::cout << "std::complex<double> coordinate" << std::endl;
     test_my_vector<ublas::coordinate_vector<std::complex<double> >, 3 > () ();
 #endif
 #endif
