@@ -23,18 +23,21 @@
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/limits.hpp>
+#include <boost/utility.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/and.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_const.hpp>
 
-// Compiler specific problems
+// Compiler specific problems: default configuration
 #if defined (BOOST_STRICT_CONFIG) || ! (\
         defined (BOOST_MSVC) || \
         defined (__GNUC__) || \
         defined (__BORLANDC__) || \
         defined (_ICL) || \
         defined (_ICC) || \
-        defined (__COMO__))
+        defined (__COMO__) || \
+        defined (__MWERKS__))
 
 #define BOOST_UBLAS_TYPENAME typename
 #define BOOST_UBLAS_USING using
@@ -50,7 +53,10 @@
 
 
 // Microsoft Visual C++
-#if defined (BOOST_MSVC) && ! (BOOST_MSVC > 1300 && defined (BOOST_STRICT_CONFIG))
+#if defined (BOOST_MSVC) && ! defined (BOOST_STRICT_CONFIG)
+
+// Version 6.0 & 7.0
+#if BOOST_MSVC <= 1300
 
 // Disable some MSVC specific warnings.
 #pragma warning (disable: 4355)
@@ -102,6 +108,26 @@
 #define BOOST_MSVC_STD_ITERATOR
 #endif
 
+// Version 7.1
+#else
+
+#define BOOST_UBLAS_TYPENAME typename
+#define BOOST_UBLAS_USING using
+// This could be eliminated.
+#define BOOST_UBLAS_EXPLICIT explicit
+
+#define BOOST_UBLAS_USE_LONG_DOUBLE
+
+#define BOOST_UBLAS_USE_STREAM
+
+// One of these workarounds is needed for MSVC 7.1 AFAIK
+// (thanks to John Maddock and Martin Lauer).
+// The second workaround looks like BOOST_UBLAS_QUALIFIED_TYPENAME.
+// #define BOOST_UBLAS_NO_NESTED_CLASS_RELATION
+#define BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+
+#endif
+
 #endif
 
 
@@ -146,6 +172,7 @@
 #define BOOST_UBLAS_NO_SMART_PROXIES
 
 #define BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#define BOOST_UBLAS_NO_DERIVED_HELPERS
 
 // BCC's <complex> broken.
 // Thanks to John Maddock for providing a workaround.
@@ -190,6 +217,8 @@ namespace std {
 
 #define BOOST_UBLAS_USE_STREAM
 
+#define BOOST_UBLAS_USE_SIMD
+
 #endif
 
 
@@ -207,6 +236,23 @@ namespace std {
 #define BOOST_UBLAS_USE_LONG_DOUBLE
 
 #define BOOST_UBLAS_USE_STREAM
+
+#endif
+
+
+
+// Metrowerks Codewarrior
+#if defined (__MWERKS__) && ! defined (BOOST_STRICT_CONFIG)
+
+#define BOOST_UBLAS_TYPENAME typename
+#define BOOST_UBLAS_USING using
+#define BOOST_UBLAS_EXPLICIT explicit
+
+#define BOOST_UBLAS_USE_LONG_DOUBLE
+
+#define BOOST_UBLAS_USE_STREAM
+
+#define BOOST_UBLAS_NO_MEMBER_FRIENDS
 
 #endif
 
@@ -303,8 +349,25 @@ static bool disable_type_check = false;
 
 
 
+namespace boost {
+
+    // Borrowed from Dave Abraham's noncopyable.
+    // I believe this should be part of utility.hpp one day...
+    class nonassignable {
+    protected:
+        nonassignable(){}
+        ~nonassignable(){}
+    private:  // emphasize the following members are private
+        const nonassignable& operator=( const nonassignable& );
+    }; // nonassignable
+
+}
+
 // Forward declarations
 namespace boost { namespace numeric { namespace ublas {
+
+    struct concrete_tag {};
+    struct abstract_tag {};
 
     template<class T>
     class unbounded_array;
@@ -321,11 +384,15 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class E>
     struct vector_expression;
+    template<class E>
+    class vector_reference;
 
     struct matrix_tag {};
 
     template<class E>
     struct matrix_expression;
+    template<class E>
+    class matrix_reference;
 
     template<class E>
     class vector_range;
@@ -347,12 +414,17 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class A = unbounded_array<T> >
     class vector;
+    template<class T, std::size_t N>
+    class bounded_vector;
 
     template<class T>
     class unit_vector;
 
     template<class T>
     class scalar_vector;
+
+    template<class T, std::size_t N>
+    class c_vector;
 
     template<class T, class A = map_array<std::size_t, T> >
     class sparse_vector;
@@ -373,6 +445,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F = row_major, class A = unbounded_array<T> >
     class matrix;
+    template<class T, std::size_t M, std::size_t N, class F = row_major>
+    class bounded_matrix;
 
     template<class T>
     class identity_matrix;
@@ -380,11 +454,16 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T>
     class scalar_matrix;
 
+    template<class T, std::size_t M, size_t N>
+    class c_matrix;
+
     template<class T, class F = row_major, class A = unbounded_array<unbounded_array<T> > >
     class vector_of_vector;
 
     template<class T, class F = row_major, class A = unbounded_array<T> >
     class banded_matrix;
+    template<class T, class F = row_major, class A = unbounded_array<T> >
+    class diagonal_matrix;
 
     struct lower_tag {};
     struct lower;
@@ -427,6 +506,55 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class coordinate_matrix;
+
+    // Assignment proxy.
+    // Provides temporary free assigment when LHS has no alias on RHS
+    // Contributed by Michael Stevens.
+    template<class C>
+    class noalias_proxy:
+        private boost::nonassignable {
+    public:
+        typedef typename C::closure_type closure_type;
+
+        BOOST_UBLAS_INLINE
+        noalias_proxy (C& lval):
+            lval_ (lval) {}
+        BOOST_UBLAS_INLINE
+        noalias_proxy (const noalias_proxy& p):
+            lval_ (p.lval_) {}
+
+        template <class E>
+        BOOST_UBLAS_INLINE
+        closure_type &operator= (const E& e) {
+            lval_.expression ().assign (e);
+            return lval_;
+        }
+
+        template <class E>
+        BOOST_UBLAS_INLINE
+        closure_type &operator+= (const E& e) {
+            lval_.expression ().plus_assign (e);
+            return lval_;
+        }
+
+        template <class E>
+        BOOST_UBLAS_INLINE
+        closure_type &operator-= (const E& e) {
+            lval_.expression ().minus_assign (e);
+            return lval_;
+        }
+
+    private:
+        closure_type lval_;
+    };
+
+    // Improve syntax of effcient assignment where no aliases of LHS appear on the RHS
+    //  noalias(lhs) = rhs_expression
+    template <class C>
+    BOOST_UBLAS_INLINE
+    noalias_proxy<C> noalias (C& lvalue) {
+        return noalias_proxy<C> (lvalue);
+    }
 
     template<class V>
     typename V::size_type num_elements (const V &v) {

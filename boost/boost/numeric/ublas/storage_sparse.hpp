@@ -133,10 +133,10 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         sparse_storage_element (array_type &a, pointer it):
-            container_reference<array_type> (a), it_ (it), i_ (it->first), d_ (it->second) {}
+            container_reference<array_type> (a), it_ (it), i_ (it->first), d_ (it->second), dirty_ (false) {}
         BOOST_UBLAS_INLINE
         sparse_storage_element (array_type &a, index_type i):
-            container_reference<array_type> (a), it_ (), i_ (i), d_ () {
+            container_reference<array_type> (a), it_ (), i_ (i), d_ (), dirty_ (false) {
             pointer it = (*this) ().find (i_);
             if (it == (*this) ().end ())
                 it = (*this) ().insert ((*this) ().end (), value_type (i_, d_));
@@ -144,10 +144,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         ~sparse_storage_element () {
-            if (! it_)
-                it_ = (*this) ().find (i_);
-            BOOST_UBLAS_CHECK (it_ != (*this) ().end (), internal_logic ());
-            it_->second = d_;
+            if (dirty_) {
+                if (! it_)
+                    it_ = (*this) ().find (i_);
+                BOOST_UBLAS_CHECK (it_ != (*this) ().end (), internal_logic ());
+                it_->second = d_;
+            }
         }
 
         // Element access
@@ -162,6 +164,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         typename sparse_storage_element_traits<data_value_type>::data_reference
         operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) {
+            dirty_ = true;
             return d_ [i];
         }
 
@@ -170,55 +173,65 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator = (const D &d) {
             d_ = d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator = (const sparse_storage_element &p) {
             d_ = p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator += (const D &d) {
             d_ += d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator += (const sparse_storage_element &p) {
             d_ += p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator -= (const D &d) {
             d_ -= d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator -= (const sparse_storage_element &p) {
             d_ -= p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator *= (const D &d) {
             d_ *= d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator *= (const sparse_storage_element &p) {
             d_ *= p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator /= (const D &d) {
             d_ /= d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator /= (const sparse_storage_element &p) {
             d_ /= p.d_;
+            dirty_ = true;
             return *this;
         }
 
@@ -232,6 +245,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         BOOST_UBLAS_INLINE
         operator data_reference () {
+            dirty_ = true;
             return d_;
         }
 
@@ -239,6 +253,7 @@ namespace boost { namespace numeric { namespace ublas {
         pointer it_;
         index_type i_;
         data_value_type d_;
+        bool dirty_;
     };
 #endif
 

@@ -41,20 +41,35 @@ namespace boost { namespace numeric { namespace ublas {
 
         static
         BOOST_UBLAS_INLINE
-        real_type real (const_reference t);
+        real_type real (const_reference t) {
+            external_logic ().raise ();
+            return 0;
+        }
         static
         BOOST_UBLAS_INLINE
-        real_type imag (const_reference t);
+        real_type imag (const_reference t) {
+            external_logic ().raise ();
+            return 0;
+        }
         static
         BOOST_UBLAS_INLINE
-        value_type conj (const_reference t);
+        value_type conj (const_reference t) {
+            external_logic ().raise ();
+            return 0;
+        }
 
         static
         BOOST_UBLAS_INLINE
-        real_type abs (const_reference t);
+        real_type abs (const_reference t) {
+            external_logic ().raise ();
+            return 0;
+        }
         static
         BOOST_UBLAS_INLINE
-        value_type sqrt (const_reference t);
+        value_type sqrt (const_reference t) {
+            external_logic ().raise ();
+            return 0;
+        }
 
         static
         BOOST_UBLAS_INLINE
@@ -92,7 +107,11 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<float> {
         typedef type_traits<float> self_type;
         typedef float value_type;
+#ifndef BOOST_UBLAS_CONST_REFERENCE_AS_VALUE
+        typedef const float &const_reference;
+#else
         typedef float const_reference;
+#endif
         typedef float &reference;
         typedef float real_type;
         typedef double precision_type;
@@ -166,7 +185,11 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<double> {
         typedef type_traits<double> self_type;
         typedef double value_type;
+#ifndef BOOST_UBLAS_CONST_REFERENCE_AS_VALUE
+        typedef const double &const_reference;
+#else
         typedef double const_reference;
+#endif
         typedef double &reference;
         typedef double real_type;
 #ifndef BOOST_UBLAS_USE_LONG_DOUBLE
@@ -245,7 +268,11 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<long double> {
         typedef type_traits<long double> self_type;
         typedef long double value_type;
+#ifndef BOOST_UBLAS_CONST_REFERENCE_AS_VALUE
+        typedef const long double &const_reference;
+#else
         typedef long double const_reference;
+#endif
         typedef long double &reference;
         typedef long double real_type;
         typedef long double precision_type;

@@ -21,7 +21,10 @@ SOURCES = bench1 bench11 bench12 bench13 ;
 exe bench1
     : $(SOURCES).cpp
     : <include>$(BOOST_ROOT)
-#      <gcc><*><cxxflags>"-s -static -fomit-frame-pointer -fexpensive-optimizations -funroll-loops -malign-double -fschedule-insns2 -march=pentium4 -msse -mfpmath=sse -finline-functions -finline-limit=2048"
+      <sysinclude>$(BOOST_ROOT)
+#      <gcc><release><cxxflags>"-s -static -fomit-frame-pointer -fexpensive-optimizations -funroll-loops -malign-double -fschedule-insns2 -march=pentium4 -msse -mfpmath=sse -finline-functions -finline-limit=2048"
+#      <intel-linux><release><cxxflags>"-Xc"
+      <intel-linux><release><cxxflags>"-march=pentium4"
       <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
       <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;

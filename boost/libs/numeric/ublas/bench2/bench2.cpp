@@ -138,7 +138,7 @@ int main (int argc, char *argv []) {
 
     int scale = 1;
     if (argc > 1)
-        scale = atoi (argv [1]);
+        scale = std::atoi (argv [1]);
 
 #ifdef USE_FLOAT
     header ("float, 3");

@@ -124,7 +124,12 @@ struct test_my_matrix {
     }
     void operator () () const {
         try {
+#ifdef USE_BANDED
             M m1 (N, N, 1, 1), m2 (N, N, 1, 1), m3 (N, N, 1, 1);
+#endif
+#ifdef USE_DIAGONAL
+            M m1 (N, N), m2 (N, N), m3 (N, N);
+#endif
             (*this) (m1, m2, m3);
 
 #ifdef USE_RANGE
@@ -151,6 +156,7 @@ struct test_my_matrix {
     void operator () (int) const {
 #ifdef USE_ADAPTOR
         try {
+#ifdef USE_BANDED
             M m1 (N, N, 1, 1), m2 (N, N, 1, 1), m3 (N, N, 1, 1);
             ublas::banded_adaptor<M> bam1 (m1, 1, 1), bam2 (m2, 1, 1), bam3 (m3, 1, 1);
             (*this) (bam1, bam2, bam3);
@@ -168,6 +174,26 @@ struct test_my_matrix {
                                                            ms3 (bam3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
             (*this) (ms1, ms2, ms3);
 #endif
+#endif
+#ifdef USE_DIAGONAL
+            M m1 (N, N), m2 (N, N), m3 (N, N);
+            ublas::diagonal_adaptor<M> dam1 (m1), dam2 (m2), dam3 (m3);
+            (*this) (dam1, dam2, dam3);
+
+#ifdef USE_RANGE
+            ublas::matrix_range<ublas::diagonal_adaptor<M> > mr1 (dam1, ublas::range (0, N), ublas::range (0, N)),
+                                                             mr2 (dam2, ublas::range (0, N), ublas::range (0, N)),
+                                                             mr3 (dam3, ublas::range (0, N), ublas::range (0, N));
+            (*this) (mr1, mr2, mr3);
+#endif
+
+#ifdef USE_SLICE
+            ublas::matrix_slice<ublas::diagonal_adaptor<M> > ms1 (dam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
+                                                             ms2 (dam2, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
+                                                             ms3 (dam3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
+            (*this) (ms1, ms2, ms3);
+#endif
+#endif
         }
         catch (std::exception &e) {
             std::cout << e.what () << std::endl;
@@ -176,6 +202,7 @@ struct test_my_matrix {
             std::cout << "unknown exception" << std::endl;
         }
 #endif
+
     }
 };
 
@@ -183,6 +210,7 @@ struct test_my_matrix {
 void test_matrix () {
     std::cout << "test_matrix" << std::endl;
 
+#ifdef USE_BANDED
 #ifdef USE_BOUNDED_ARRAY
 #ifdef USE_FLOAT
     std::cout << "float, bounded_array" << std::endl;
@@ -263,6 +291,93 @@ void test_matrix () {
     std::cout << "std::complex<double>, std::vector" << std::endl;
     test_my_matrix<ublas::banded_matrix<std::complex<double>, ublas::row_major, std::vector<std::complex<double> > >, 3 > () ();
     test_my_matrix<ublas::banded_matrix<std::complex<double>, ublas::row_major, std::vector<std::complex<double> > >, 3 > () (0);
+#endif
+#endif
+#endif
+#endif
+
+#ifdef USE_DIAGONAL
+#ifdef USE_BOUNDED_ARRAY
+#ifdef USE_FLOAT
+    std::cout << "float, bounded_array" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<float, ublas::row_major, ublas::bounded_array<float, 3 * 3> >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<float, ublas::row_major, ublas::bounded_array<float, 3 * 3> >, 3 > () (0);
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "double, bounded_array" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<double, ublas::row_major, ublas::bounded_array<double, 3 * 3> >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<double, ublas::row_major, ublas::bounded_array<double, 3 * 3> >, 3 > () (0);
+#endif
+
+#ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
+    std::cout << "std::complex<float>, bounded_array" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<std::complex<float>, ublas::row_major, ublas::bounded_array<std::complex<float>, 3 * 3> >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<std::complex<float>, ublas::row_major, ublas::bounded_array<std::complex<float>, 3 * 3> >, 3 > () (0);
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "std::complex<double>, bounded_array" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<std::complex<double>, ublas::row_major, ublas::bounded_array<std::complex<double>, 3 * 3> >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<std::complex<double>, ublas::row_major, ublas::bounded_array<std::complex<double>, 3 * 3> >, 3 > () (0);
+#endif
+#endif
+#endif
+
+#ifdef USE_UNBOUNDED_ARRAY
+#ifdef USE_FLOAT
+    std::cout << "float, unbounded_array" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<float, ublas::row_major, ublas::unbounded_array<float> >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<float, ublas::row_major, ublas::unbounded_array<float> >, 3 > () (0);
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "double, unbounded_array" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<double, ublas::row_major, ublas::unbounded_array<double> >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<double, ublas::row_major, ublas::unbounded_array<double> >, 3 > () (0);
+#endif
+
+#ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
+    std::cout << "std::complex<float>, unbounded_array" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<std::complex<float>, ublas::row_major, ublas::unbounded_array<std::complex<float> > >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<std::complex<float>, ublas::row_major, ublas::unbounded_array<std::complex<float> > >, 3 > () (0);
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "std::complex<double>, unbounded_array" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<std::complex<double>, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<std::complex<double>, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3 > () (0);
+#endif
+
+#ifdef USE_STD_VECTOR
+#ifdef USE_FLOAT
+    std::cout << "float, std::vector" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<float, ublas::row_major, std::vector<float> >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<float, ublas::row_major, std::vector<float> >, 3 > () (0);
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "double, std::vector" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<double, ublas::row_major, std::vector<double> >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<double, ublas::row_major, std::vector<double> >, 3 > () (0);
+#endif
+#endif
+#endif
+
+#ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
+    std::cout << "std::complex<float>, std::vector" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<std::complex<float>, ublas::row_major, std::vector<std::complex<float> > >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<std::complex<float>, ublas::row_major, std::vector<std::complex<float> > >, 3 > () (0);
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "std::complex<double>, std::vector" << std::endl;
+    test_my_matrix<ublas::diagonal_matrix<std::complex<double>, ublas::row_major, std::vector<std::complex<double> > >, 3 > () ();
+    test_my_matrix<ublas::diagonal_matrix<std::complex<double>, ublas::row_major, std::vector<std::complex<double> > >, 3 > () (0);
+#endif
 #endif
 #endif
 #endif

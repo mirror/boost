@@ -306,8 +306,12 @@ namespace boost { namespace numeric { namespace ublas {
             difference_type size (std::min (difference_type (ite.index () - it.index ()), it_size));
             if (size > 0) {
                 it_size -= size;
-                while (-- size >= 0)
-                    functor_type () (*it, value_type ()), ++ it;
+                if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
+                    while (-- size >= 0)
+                        functor_type () (*it, value_type ()), ++ it;
+                } else {
+                    it += size;
+                }
             }
         }
         difference_type size (std::min (it_size, ite_size));
@@ -316,8 +320,12 @@ namespace boost { namespace numeric { namespace ublas {
         while (-- size >= 0)
             functor_type () (*it, *ite), ++ it, ++ ite;
         size = it_size;
-        while (-- size >= 0)
-            functor_type () (*it, value_type ()), ++ it;
+        if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
+            while (-- size >= 0)
+                functor_type () (*it, value_type ()), ++ it;
+        } else {
+            it += size;
+        }
 #ifdef BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check)
             BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
@@ -382,10 +390,17 @@ namespace boost { namespace numeric { namespace ublas {
                 // Sparse proxies don't need to be conformant.
                 // Thanks to Michael Stevens for suggesting this.
                 size_type index (ite.index ());
-                functor_type () (v (index), e () (index));
-                restart (v, index, it, it_end);
-                // The proxies could reference the same container.
-                restart (e, index, ite, ite_end);
+                // FIX: reduce fill in.
+                // functor_type () (v (index), e () (index));
+                value_type t (*ite);
+                if (t != value_type ()) {
+                    functor_type () (v (index), t);
+                    restart (v, index, it, it_end);
+                    // The proxies could reference the same container.
+                    restart (e, index, ite, ite_end);
+                } else {
+                    ++ ite;
+                }
 #else
                 ++ ite;
 #endif
@@ -396,15 +411,26 @@ namespace boost { namespace numeric { namespace ublas {
             // Sparse proxies don't need to be conformant.
             // Thanks to Michael Stevens for suggesting this.
             size_type index (ite.index ());
-            functor_type () (v (index), e () (index));
-            // The proxies could reference the same container.
-            restart (e, index, ite, ite_end);
-            restart (v, index, it, it_end);
+            // FIX: reduce fill in.
+            // functor_type () (v (index), e () (index));
+            value_type t (*ite);
+            if (t != value_type ()) {
+                functor_type () (v (index), t);
+                restart (v, index, it, it_end);
+                // The proxies could reference the same container.
+                restart (e, index, ite, ite_end);
+            } else {
+                ++ ite;
+            }
         }
 #endif
-        while (it != it_end) {
-            functor_type () (*it, value_type ());
-            ++ it;
+        if (boost::is_same<BOOST_UBLAS_TYPENAME functor_type::assign_category, assign_tag>::value) {
+            while (it != it_end) {
+                functor_type () (*it, value_type ());
+                ++ it;
+            }
+        } else {
+            it = it_end;
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check)
@@ -458,9 +484,27 @@ namespace boost { namespace numeric { namespace ublas {
     void vector_swap (const F &f, V &v, vector_expression<E> &e, packed_proxy_tag) {
         typedef F functor_type;
         typedef typename V::difference_type difference_type;
-        difference_type size (BOOST_UBLAS_SAME (v.size (), e ().size ()));
         typename V::iterator it (v.begin ());
+        typename V::iterator it_end (v.end ());
         typename E::iterator ite (e ().begin ());
+        typename E::iterator ite_end (e ().end ());
+        difference_type it_size (it_end - it);
+        difference_type ite_size (ite_end - ite);
+        if (it_size > 0 && ite_size > 0) {
+            difference_type size (std::min (difference_type (it.index () - ite.index ()), ite_size));
+            if (size > 0) {
+                ite += size;
+                ite_size -= size;
+            }
+        }
+        if (it_size > 0 && ite_size > 0) {
+            difference_type size (std::min (difference_type (ite.index () - it.index ()), it_size));
+            if (size > 0)
+                it_size -= size;
+        }
+        difference_type size (std::min (it_size, ite_size));
+        it_size -= size;
+        ite_size -= size;
         while (-- size >= 0)
             functor_type () (*it, *ite), ++ it, ++ ite;
     }
@@ -487,10 +531,17 @@ namespace boost { namespace numeric { namespace ublas {
                 // Sparse proxies don't need to be conformant.
                 // Thanks to Michael Stevens for suggesting this.
                 size_type index (it.index ());
-                functor_type () (v (index), e () (index));
-                restart (v, index, it, it_end);
-                // The proxies could reference the same container.
-                restart (e, index, ite, ite_end);
+                // FIX: reduce fill in.
+                // functor_type () (v (index), e () (index));
+                value_type t (*it);
+                if (t != value_type ()) {
+                    functor_type () (v (index), e () (index));
+                    restart (v, index, it, it_end);
+                    // The proxies could reference the same container.
+                    restart (e, index, ite, ite_end);
+                } else {
+                    ++ it;
+                }
 #else
                 ++ it;
 #endif
@@ -499,10 +550,17 @@ namespace boost { namespace numeric { namespace ublas {
                 // Sparse proxies don't need to be conformant.
                 // Thanks to Michael Stevens for suggesting this.
                 size_type index (ite.index ());
-                functor_type () (v (index), e () (index));
-                restart (e, index, ite, ite_end);
-                // The proxies could reference the same container.
-                restart (v, index, it, it_end);
+                // FIX: reduce fill in.
+                // functor_type () (v (index), e () (index));
+                value_type t (*ite);
+                if (t != value_type ()) {
+                    functor_type () (v (index), e () (index));
+                    restart (e, index, ite, ite_end);
+                    // The proxies could reference the same container.
+                    restart (v, index, it, it_end);
+                } else {
+                    ++ ite;
+                }
 #else
                 ++ ite;
 #endif
@@ -513,19 +571,33 @@ namespace boost { namespace numeric { namespace ublas {
             // Sparse proxies don't need to be conformant.
             // Thanks to Michael Stevens for suggesting this.
             size_type index (ite.index ());
-            functor_type () (v (index), e () (index));
-            // The proxies could reference the same container.
-            restart (e, index, ite, ite_end);
-            restart (v, index, it, it_end);
+            // FIX: reduce fill in.
+            // functor_type () (v (index), e () (index));
+            value_type t (*ite);
+            if (t != value_type ()) {
+                functor_type () (v (index), e () (index));
+                // The proxies could reference the same container.
+                restart (e, index, ite, ite_end);
+                restart (v, index, it, it_end);
+            } else {
+                ++ ite;
+            }
         }
         while (it != it_end) {
             // Sparse proxies don't need to be conformant.
             // Thanks to Michael Stevens for suggesting this.
             size_type index (it.index ());
-            functor_type () (v (index), e () (index));
-            // The proxies could reference the same container.
-            restart (v, index, it, it_end);
-            restart (e, index, ite, ite_end);
+            // FIX: reduce fill in.
+            // functor_type () (v (index), e () (index));
+            value_type t (*it);
+            if (t != value_type ()) {
+                functor_type () (v (index), e () (index));
+                // The proxies could reference the same container.
+                restart (v, index, it, it_end);
+                restart (e, index, ite, ite_end);
+            } else {
+                ++ it;
+            }
         }
 #endif
     }

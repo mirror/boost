@@ -27,7 +27,8 @@
 namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
-    struct scalar_expression {
+    struct scalar_expression:
+        private boost::nonassignable {
         typedef T value_type;
     };
 
@@ -83,9 +84,12 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Base class for the Barton Nackman trick
     template<class E>
-    struct vector_expression {
+    struct vector_expression:
+        private boost::nonassignable {
         typedef E expression_type;
         typedef vector_tag type_category;
+        typedef abstract_tag simd_category;
+        typedef noalias_proxy<E> noalias_proxy_type;
         typedef const vector_range<const E> const_vector_range_type;
         typedef vector_range<E> vector_range_type;
         typedef const vector_slice<const E> const_vector_slice_type;
@@ -107,6 +111,10 @@ namespace boost { namespace numeric { namespace ublas {
             return *static_cast<expression_type *> (this);
         }
 
+        BOOST_UBLAS_INLINE
+        noalias_proxy_type noalias () {
+            return noalias_proxy_type (operator () ());
+        }
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_vector_range_type operator () (const range &r) const {
@@ -173,6 +181,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_USING vector_expression<vector_const_reference<E> >::operator ();
 #endif
         typedef E expression_type;
+        typedef typename E::simd_category simd_category;
         typedef typename E::size_type size_type;
         typedef typename E::difference_type difference_type;
         typedef typename E::value_type value_type;
@@ -276,6 +285,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_USING vector_expression<vector_reference<E> >::operator ();
 #endif
         typedef E expression_type;
+        typedef typename E::simd_category simd_category;
         typedef typename E::size_type size_type;
         typedef typename E::difference_type difference_type;
         typedef typename E::value_type value_type;
@@ -1073,9 +1083,9 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     typename vector_binary_traits<E1, E2, scalar_plus<typename E1::value_type, 
                                                       typename E2::value_type> >::result_type
-    operator + (const vector_expression<E1> &e1, 
+    operator + (const vector_expression<E1> &e1,
                 const vector_expression<E2> &e2) {
-        typedef BOOST_UBLAS_TYPENAME vector_binary_traits<E1, E2, scalar_plus<BOOST_UBLAS_TYPENAME E1::value_type, 
+        typedef BOOST_UBLAS_TYPENAME vector_binary_traits<E1, E2, scalar_plus<BOOST_UBLAS_TYPENAME E1::value_type,
                                                                               BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
         return expression_type (e1 (), e2 ());
     }
@@ -1089,6 +1099,30 @@ namespace boost { namespace numeric { namespace ublas {
                 const vector_expression<E2> &e2) {
         typedef BOOST_UBLAS_TYPENAME vector_binary_traits<E1, E2, scalar_minus<BOOST_UBLAS_TYPENAME E1::value_type,
                                                                                BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
+        return expression_type (e1 (), e2 ());
+    }
+
+    // (v1 * v2) [i] = v1 [i] * v2 [i]
+    template<class E1, class E2>
+    BOOST_UBLAS_INLINE
+    typename vector_binary_traits<E1, E2, scalar_multiplies<typename E1::value_type,
+                                                            typename E2::value_type> >::result_type
+    element_prod (const vector_expression<E1> &e1,
+                  const vector_expression<E2> &e2) {
+        typedef BOOST_UBLAS_TYPENAME vector_binary_traits<E1, E2, scalar_multiplies<BOOST_UBLAS_TYPENAME E1::value_type,
+                                                                                    BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
+        return expression_type (e1 (), e2 ());
+    }
+
+    // (v1 / v2) [i] = v1 [i] / v2 [i]
+    template<class E1, class E2>
+    BOOST_UBLAS_INLINE
+    typename vector_binary_traits<E1, E2, scalar_divides<typename E1::value_type,
+                                                         typename E2::value_type> >::result_type
+    element_div (const vector_expression<E1> &e1,
+                 const vector_expression<E2> &e2) {
+        typedef BOOST_UBLAS_TYPENAME vector_binary_traits<E1, E2, scalar_divides<BOOST_UBLAS_TYPENAME E1::value_type,
+                                                                                 BOOST_UBLAS_TYPENAME E2::value_type> >::expression_type expression_type;
         return expression_type (e1 (), e2 ());
     }
 

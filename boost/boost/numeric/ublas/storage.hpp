@@ -169,7 +169,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Thanks to Michael Stevens for spotting this.
             // BOOST_UBLAS_CHECK (this != &a, external_logic ());
             if (this != &a) {
-                BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
+                // Precondition for container relaxed as requested during review.
+                // BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
+                resize (a.size_, false);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -390,7 +392,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Thanks to Michael Stevens for spotting this.
             // BOOST_UBLAS_CHECK (this != &a, external_logic ());
             if (this != &a) {
-                BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
+                // Precondition for container relaxed as requested during review.
+                // BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
+                resize (a.size_, false);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -654,7 +658,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Thanks to Michael Stevens for spotting this.
             // BOOST_UBLAS_CHECK (this != &a, external_logic ());
             if (this != &a) {
-                BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
+                // Precondition for container relaxed as requested during review.
+                // BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
+                resize (a.size_, false);
                 std::copy (a.data_, a.data_ + a.size_, data_);
             }
             return *this;
@@ -912,7 +918,9 @@ namespace boost { namespace numeric { namespace ublas {
             // Thanks to Michael Stevens for spotting this.
             // BOOST_UBLAS_CHECK (this != &a, external_logic ());
             if (this != &a) {
-                BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
+                // Precondition for container relaxed as requested during review.
+                // BOOST_UBLAS_CHECK (size_ == a.size_, bad_size ());
+                resize (a.size_, false);
                 std::copy (a.data_.get (), a.data_.get () + a.size_, data_.get ());
             }
             return *this;

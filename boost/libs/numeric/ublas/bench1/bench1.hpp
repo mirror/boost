@@ -53,7 +53,7 @@ struct initialize_c_vector  {
     void operator () (typename c_vector_traits<T, N>::type &v) {
 #endif
         for (int i = 0; i < N; ++ i)
-            v [i] = rand () * 1.f;
+            v [i] = std::rand () * 1.f;
 //            v [i] = 0.f;
         }
 };
@@ -62,7 +62,7 @@ BOOST_UBLAS_INLINE
 void initialize_vector (V &v) {
     int size = v.size ();
     for (int i = 0; i < size; ++ i)
-        v [i] = rand () * 1.f;
+        v [i] = std::rand () * 1.f;
 //      v [i] = 0.f;
 }
 
@@ -76,7 +76,7 @@ struct initialize_c_matrix  {
 #endif
         for (int i = 0; i < N; ++ i)
             for (int j = 0; j < M; ++ j)
-                m [i] [j] = rand () * 1.f;
+                m [i] [j] = std::rand () * 1.f;
 //                m [i] [j] = 0.f;
     }
 };
@@ -87,7 +87,7 @@ void initialize_matrix (M &m) {
     int size2 = m.size2 ();
     for (int i = 0; i < size1; ++ i)
         for (int j = 0; j < size2; ++ j)
-            m (i, j) = rand () * 1.f;
+            m (i, j) = std::rand () * 1.f;
 //          m (i, j) = 0.f;
 }
 

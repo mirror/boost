@@ -190,6 +190,34 @@ void test_matrix_vector () {
 #endif
 #endif
 
+#ifdef USE_BOUNDED_MATRIX
+#ifdef USE_FLOAT
+    std::cout << "float" << std::endl;
+    test_my_matrix_vector<ublas::bounded_vector<float, 3>,
+                          ublas::bounded_matrix<float, 3, 3>, 3> () ();
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "double" << std::endl;
+    test_my_matrix_vector<ublas::bounded_vector<double, 3>,
+                          ublas::bounded_matrix<double, 3, 3>, 3> () ();
+#endif
+
+#ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
+    std::cout << "std::complex<float>" << std::endl;
+    test_my_matrix_vector<ublas::bounded_vector<std::complex<float>, 3>,
+                          ublas::bounded_matrix<std::complex<float>, 3, 3>, 3> () ();
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "std::complex<double>" << std::endl;
+    test_my_matrix_vector<ublas::bounded_vector<std::complex<double>, 3>,
+                          ublas::bounded_matrix<std::complex<double>, 3, 3>, 3> () ();
+#endif
+#endif
+#endif
+
 #ifdef USE_VECTOR_OF_VECTOR
 #ifdef USE_BOUNDED_ARRAY
 #ifdef USE_FLOAT

@@ -21,8 +21,10 @@ SOURCES = test3 test31 test32 test33 ;
 exe test3
     : $(SOURCES).cpp
     : <include>$(BOOST_ROOT)
+      <sysinclude>$(BOOST_ROOT)
       <define>BOOST_UBLAS_SAFE
       <define>USE_RANGE
+      <intel-linux><*><cxxflags>"-Xc"
       <borland><*><cxxflags>"-w-8026 -w-8027 -w-8030 -w-8057 -w-8084 -w-8092"
       <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8030 -w-8057 -w-8084 -w-8092"
     ;

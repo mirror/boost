@@ -34,6 +34,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const V const_vector_type;
         typedef V vector_type;
+        typedef typename V::simd_category simd_category;
         typedef typename V::size_type size_type;
         typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
@@ -120,7 +121,7 @@ namespace boost { namespace numeric { namespace ublas {
             data_.reset (data);
         }
         BOOST_UBLAS_INLINE
-        void reset (vector_type &data, const range<> &r) {
+        void reset (vector_type &data, const range &r) {
             // data_ = data;
             data_.reset (data);
             r_ = r;
@@ -229,7 +230,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Swapping
         BOOST_UBLAS_INLINE
-        void swap (vector_range &vr) {
+        void swap (vector_range vr) {
             // Too unusual semantic.
             // BOOST_UBLAS_CHECK (this != &vr, external_logic ());
             if (this != &vr) {
@@ -241,7 +242,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
-        friend void swap (vector_range &vr1, vector_range &vr2) {
+        friend void swap (vector_range vr1, vector_range vr2) {
             vr1.swap (vr2);
         }
 #endif
@@ -590,6 +591,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const V const_vector_type;
         typedef V vector_type;
+        typedef typename V::simd_category simd_category;
         typedef typename V::size_type size_type;
         typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
@@ -673,7 +675,7 @@ namespace boost { namespace numeric { namespace ublas {
             data_.reset (data);
         }
         BOOST_UBLAS_INLINE
-        void reset (vector_type &data, const slice<> &s) {
+        void reset (vector_type &data, const slice &s) {
             // data_ = data;
             data_.reset (data);
             s_ = s;
@@ -786,7 +788,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Swapping
         BOOST_UBLAS_INLINE
-        void swap (vector_slice &vs) {
+        void swap (vector_slice vs) {
             // Too unusual semantic.
             // BOOST_UBLAS_CHECK (this != &vs, external_logic ());
             if (this != &vs) {
@@ -798,7 +800,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
-        friend void swap (vector_slice &vs1, vector_slice &vs2) {
+        friend void swap (vector_slice vs1, vector_slice vs2) {
             vs1.swap (vs2);
         }
 #endif
@@ -1339,7 +1341,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Swapping
         BOOST_UBLAS_INLINE
-        void swap (vector_indirect &vi) {
+        void swap (vector_indirect vi) {
             // Too unusual semantic.
             // BOOST_UBLAS_CHECK (this != &vi, external_logic ());
             if (this != &vi) {
@@ -1351,7 +1353,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
-        friend void swap (vector_indirect &vi1, vector_indirect &vi2) {
+        friend void swap (vector_indirect vi1, vector_indirect vi2) {
             vi1.swap (vi2);
         }
 #endif

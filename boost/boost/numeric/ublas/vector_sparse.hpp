@@ -42,28 +42,42 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         BOOST_UBLAS_INLINE
         sparse_vector_element (const value_type &d):
-            container_reference<vector_type> (), it_ (), i_ (), d_ (d) {
+            container_reference<vector_type> (), it_ (), i_ (), d_ (d), dirty_ (false) {
             // This constructor is only needed to enable compiling adaptors of sparse vectors.
             external_logic ().raise ();
         }
         BOOST_UBLAS_INLINE
         sparse_vector_element (vector_type &v, pointer it, size_type i):
-            container_reference<vector_type> (v), it_ (it), i_ (i), d_ (*it) {}
+            container_reference<vector_type> (v), it_ (it), i_ (i), d_ (*it), dirty_ (false) {}
         BOOST_UBLAS_INLINE
         sparse_vector_element (vector_type &v, size_type i):
-            container_reference<vector_type> (v), it_ (), i_ (i), d_ () {
-            pointer it = (*this) ().find_element (i_);
-            if (! it)
-                (*this) ().insert (i_, d_);
-            else
-                d_ = *it;
+            container_reference<vector_type> (v), it_ (), i_ (i), d_ (), dirty_ (false) {
+            // FIX: reduce fill in.
+            // pointer it = (*this) ().find_element (i_);
+            // if (! it)
+            //     (*this) ().insert (i_, d_);
+            // else
+            //     d_ = *it;
+            it_ = (*this) ().find_element (i_);
+            if (it_)
+                d_ = *it_;
         }
         BOOST_UBLAS_INLINE
         ~sparse_vector_element () {
-            if (! it_)
-                it_ = (*this) ().find_element (i_);
-            BOOST_UBLAS_CHECK (it_, internal_logic ());
-            *it_ = d_;
+            // FIX: reduce fill in.
+            // if (dirty_) {
+            //     if (! it_)
+            //         it_ = (*this) ().find_element (i_);
+            //     BOOST_UBLAS_CHECK (it_, internal_logic ());
+            //     *it_ = d_;
+            // }
+            if (dirty_) {
+                 if (! it_) {
+                     if (d_ != value_type ())
+                         (*this) ().insert (i_, d_);
+                 } else
+                     *it_ = d_;
+            }
         }
 
         // Assignment
@@ -71,85 +85,100 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator = (const D &d) {
             d_ = d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator = (const sparse_vector_element &p) {
             d_ = p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class OV>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator = (const sparse_vector_element<OV> &p) {
             d_ = p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator += (const D &d) {
             d_ += d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator += (const sparse_vector_element &p) {
             d_ += p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class OV>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator += (const sparse_vector_element<OV> &p) {
             d_ += p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator -= (const D &d) {
             d_ -= d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator -= (const sparse_vector_element &p) {
             d_ -= p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class OV>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator -= (const sparse_vector_element<OV> &p) {
             d_ -= p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator *= (const D &d) {
             d_ *= d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator *= (const sparse_vector_element &p) {
             d_ *= p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class OV>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator *= (const sparse_vector_element<OV> &p) {
             d_ *= p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator /= (const D &d) {
             d_ /= d;
+            dirty_ = true;
             return *this;
         }
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator /= (const sparse_vector_element &p) {
             d_ /= p.d_;
+            dirty_ = true;
             return *this;
         }
         template<class OV>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator /= (const sparse_vector_element<OV> &p) {
             d_ /= p.d_;
+            dirty_ = true;
             return *this;
         }
 
@@ -163,6 +192,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         BOOST_UBLAS_INLINE
         operator reference () {
+            dirty_ = true;
             return d_;
         }
 
@@ -170,6 +200,7 @@ namespace boost { namespace numeric { namespace ublas {
         pointer it_;
         size_type i_;
         value_type d_;
+        bool dirty_;
     };
 
 #endif
@@ -314,7 +345,8 @@ namespace boost { namespace numeric { namespace ublas {
             // Too unusual semantic.
             // BOOST_UBLAS_CHECK (this != &v, external_logic ());
             if (this != &v) {
-                BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
+                // Precondition for container relaxed as requested during review.
+                // BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
                 size_ = v.size_;
                 non_zeros_ = v.non_zeros_;
                 data () = v.data ();
@@ -840,7 +872,8 @@ namespace boost { namespace numeric { namespace ublas {
             // Too unusual semantic.
             // BOOST_UBLAS_CHECK (this != &v, external_logic ());
             if (this != &v) {
-                BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
+                // Precondition for container relaxed as requested during review.
+                // BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
                 size_ = v.size_;
                 non_zeros_ = v.non_zeros_;
                 filled_ = v.filled_;
@@ -1420,7 +1453,8 @@ namespace boost { namespace numeric { namespace ublas {
             // Too unusual semantic.
             // BOOST_UBLAS_CHECK (this != &v, external_logic ());
             if (this != &v) {
-                BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
+                // Precondition for container relaxed as requested during review.
+                // BOOST_UBLAS_CHECK (size_ == v.size_, bad_size ());
                 size_ = v.size_;
                 non_zeros_ = v.non_zeros_;
                 filled_ = v.filled_;

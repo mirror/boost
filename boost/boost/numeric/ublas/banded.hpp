@@ -172,10 +172,11 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         banded_matrix &operator = (const banded_matrix &m) {
-            BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
-            BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
-            BOOST_UBLAS_CHECK (lower_ == m.lower_, bad_size ());
-            BOOST_UBLAS_CHECK (upper_ == m.upper_, bad_size ());
+            // Precondition for container relaxed as requested during review.
+            // BOOST_UBLAS_CHECK (size1_ == m.size1_, bad_size ());
+            // BOOST_UBLAS_CHECK (size2_ == m.size2_, bad_size ());
+            // BOOST_UBLAS_CHECK (lower_ == m.lower_, bad_size ());
+            // BOOST_UBLAS_CHECK (upper_ == m.upper_, bad_size ());
             size1_ = m.size1_;
             size2_ = m.size2_;
             lower_ = m.lower_;
@@ -504,22 +505,36 @@ namespace boost { namespace numeric { namespace ublas {
                 return (*this) () (it1_, it2_);
             }
 
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_iterator2 begin () const {
                 return (*this) ().find_first2 (1, it1_, 0);
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_iterator2 end () const {
                 return (*this) ().find_first2 (1, it1_, (*this) ().size2 ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_reverse_iterator2 rbegin () const {
                 return const_reverse_iterator2 (end ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_reverse_iterator2 rend () const {
                 return const_reverse_iterator2 (begin ());
             }
+#endif
 
             // Indices
             BOOST_UBLAS_INLINE
@@ -627,22 +642,36 @@ namespace boost { namespace numeric { namespace ublas {
                 return (*this) () (it1_, it2_);
             }
 
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             iterator2 begin () const {
                 return (*this) ().find_first2 (1, it1_, 0);
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             iterator2 end () const {
                 return (*this) ().find_first2 (1, it1_, (*this) ().size2 ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             reverse_iterator2 rbegin () const {
                 return reverse_iterator2 (end ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             reverse_iterator2 rend () const {
                 return reverse_iterator2 (begin ());
             }
+#endif
 
             // Indices
             BOOST_UBLAS_INLINE
@@ -757,22 +786,36 @@ namespace boost { namespace numeric { namespace ublas {
                 return (*this) () (it1_, it2_);
             }
 
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_iterator1 begin () const {
                 return (*this) ().find_first1 (1, 0, it2_);
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_iterator1 end () const {
                 return (*this) ().find_first1 (1, (*this) ().size1 (), it2_);
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_reverse_iterator1 rbegin () const {
                 return const_reverse_iterator1 (end ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_reverse_iterator1 rend () const {
                 return const_reverse_iterator1 (begin ());
             }
+#endif
 
             // Indices
             BOOST_UBLAS_INLINE
@@ -880,22 +923,36 @@ namespace boost { namespace numeric { namespace ublas {
                 return (*this) () (it1_, it2_);
             }
 
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             iterator1 begin () const {
                 return (*this) ().find_first1 (1, 0, it2_);
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             iterator1 end () const {
                 return (*this) ().find_first1 (1, (*this) ().size1 (), it2_);
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             reverse_iterator1 rbegin () const {
                 return reverse_iterator1 (end ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             reverse_iterator1 rend () const {
                 return reverse_iterator1 (begin ());
             }
+#endif
 
             // Indices
             BOOST_UBLAS_INLINE
@@ -996,6 +1053,35 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F, class A>
     typename banded_matrix<T, F, A>::value_type banded_matrix<T, F, A>::zero_ = 0;
+
+    // Diagonal matrix class
+    template<class T, class F, class A>
+    class diagonal_matrix:
+        public banded_matrix<T, F, A> {
+    public:
+        BOOST_UBLAS_USING banded_matrix<T, F, A>::operator =;
+        typedef banded_matrix<T, F, A> matrix_type;
+
+        // Construction and destruction
+        BOOST_UBLAS_INLINE
+        diagonal_matrix ():
+            matrix_type () {}
+        BOOST_UBLAS_INLINE
+        diagonal_matrix (std::size_t size):
+            matrix_type (size, size) {}
+        BOOST_UBLAS_INLINE
+        diagonal_matrix (std::size_t size1, std::size_t size2):
+            matrix_type (size1, size2) {}
+        BOOST_UBLAS_INLINE
+        ~diagonal_matrix () {}
+
+        // Assignment
+        BOOST_UBLAS_INLINE
+        diagonal_matrix &operator = (const diagonal_matrix &m) {
+            matrix_type::operator = (m);
+            return *this;
+        }
+    };
 
     // Banded matrix adaptor class
     template<class M>
@@ -1368,12 +1454,18 @@ namespace boost { namespace numeric { namespace ublas {
             public random_access_iterator_base<packed_random_access_iterator_tag,
                                                const_iterator1, value_type> {
         public:
+#ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename iterator_restrict_traits<typename const_iterator1_type::iterator_category,
                                                       packed_random_access_iterator_tag>::iterator_category iterator_category;
             typedef typename const_iterator1_type::difference_type difference_type;
             typedef typename const_iterator1_type::value_type value_type;
             typedef typename const_iterator1_type::reference reference;
             typedef typename const_iterator1_type::pointer pointer;
+#else
+            typedef typename iterator_restrict_traits<typename M::const_iterator1::iterator_category,
+                                                      packed_random_access_iterator_tag>::iterator_category iterator_category;
+            typedef const_reference reference;
+#endif
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
 
@@ -1438,22 +1530,36 @@ namespace boost { namespace numeric { namespace ublas {
                 return (*this) () (i, j);
             }
 
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_iterator2 begin () const {
                 return (*this) ().find_first2 (1, index1 (), 0);
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_iterator2 end () const {
                 return (*this) ().find_first2 (1, index1 (), (*this) ().size2 ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_reverse_iterator2 rbegin () const {
                 return const_reverse_iterator2 (end ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_reverse_iterator2 rend () const {
                 return const_reverse_iterator2 (begin ());
             }
+#endif
 
             // Indices
             BOOST_UBLAS_INLINE
@@ -1505,12 +1611,17 @@ namespace boost { namespace numeric { namespace ublas {
             public random_access_iterator_base<packed_random_access_iterator_tag,
                                                iterator1, value_type> {
         public:
+#ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename iterator_restrict_traits<typename iterator1_type::iterator_category,
                                                       packed_random_access_iterator_tag>::iterator_category iterator_category;
             typedef typename iterator1_type::difference_type difference_type;
             typedef typename iterator1_type::value_type value_type;
             typedef typename iterator1_type::reference reference;
             typedef typename iterator1_type::pointer pointer;
+#else
+            typedef typename iterator_restrict_traits<typename M::iterator1::iterator_category,
+                                                      packed_random_access_iterator_tag>::iterator_category iterator_category;
+#endif
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
 
@@ -1572,22 +1683,36 @@ namespace boost { namespace numeric { namespace ublas {
                 return (*this) () (i, j);
             }
 
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             iterator2 begin () const {
                 return (*this) ().find_first2 (1, index1 (), 0);
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             iterator2 end () const {
                 return (*this) ().find_first2 (1, index1 (), (*this) ().size2 ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             reverse_iterator2 rbegin () const {
                 return reverse_iterator2 (end ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             reverse_iterator2 rend () const {
                 return reverse_iterator2 (begin ());
             }
+#endif
 
             // Indices
             BOOST_UBLAS_INLINE
@@ -1641,12 +1766,18 @@ namespace boost { namespace numeric { namespace ublas {
             public random_access_iterator_base<packed_random_access_iterator_tag,
                                                const_iterator2, value_type> {
         public:
+#ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename iterator_restrict_traits<typename const_iterator2_type::iterator_category,
                                                       packed_random_access_iterator_tag>::iterator_category iterator_category;
             typedef typename const_iterator2_type::difference_type difference_type;
             typedef typename const_iterator2_type::value_type value_type;
             typedef typename const_iterator2_type::reference reference;
             typedef typename const_iterator2_type::pointer pointer;
+#else
+            typedef typename iterator_restrict_traits<typename M::const_iterator2::iterator_category,
+                                                      packed_random_access_iterator_tag>::iterator_category iterator_category;
+            typedef const_reference reference;
+#endif
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
 
@@ -1711,22 +1842,36 @@ namespace boost { namespace numeric { namespace ublas {
                 return (*this) () (i, j);
             }
 
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_iterator1 begin () const {
                 return (*this) ().find_first1 (1, 0, index2 ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_iterator1 end () const {
                 return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_reverse_iterator1 rbegin () const {
                 return const_reverse_iterator1 (end ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             const_reverse_iterator1 rend () const {
                 return const_reverse_iterator1 (begin ());
             }
+#endif
 
             // Indices
             BOOST_UBLAS_INLINE
@@ -1778,12 +1923,17 @@ namespace boost { namespace numeric { namespace ublas {
             public random_access_iterator_base<packed_random_access_iterator_tag,
                                                iterator2, value_type> {
         public:
+#ifndef BOOST_MSVC_STD_ITERATOR
             typedef typename iterator_restrict_traits<typename iterator2_type::iterator_category,
                                                       packed_random_access_iterator_tag>::iterator_category iterator_category;
             typedef typename iterator2_type::difference_type difference_type;
             typedef typename iterator2_type::value_type value_type;
             typedef typename iterator2_type::reference reference;
             typedef typename iterator2_type::pointer pointer;
+#else
+            typedef typename iterator_restrict_traits<typename M::iterator2::iterator_category,
+                                                      packed_random_access_iterator_tag>::iterator_category iterator_category;
+#endif
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;
 
@@ -1845,22 +1995,36 @@ namespace boost { namespace numeric { namespace ublas {
                 return (*this) () (i, j);
             }
 
+#ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             iterator1 begin () const {
                 return (*this) ().find_first1 (1, 0, index2 ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             iterator1 end () const {
                 return (*this) ().find_first1 (1, (*this) ().size1 (), index2 ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             reverse_iterator1 rbegin () const {
                 return reverse_iterator1 (end ());
             }
             BOOST_UBLAS_INLINE
+#ifdef BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+            typename self_type::
+#endif
             reverse_iterator1 rend () const {
                 return reverse_iterator1 (begin ());
             }
+#endif
 
             // Indices
             BOOST_UBLAS_INLINE
@@ -1958,6 +2122,33 @@ namespace boost { namespace numeric { namespace ublas {
     typename banded_adaptor<M>::matrix_type banded_adaptor<M>::nil_;
     template<class M>
     typename banded_adaptor<M>::value_type banded_adaptor<M>::zero_ = 0;
+
+    // Diagonal matrix adaptor class
+    template<class M>
+    class diagonal_adaptor:
+        public banded_adaptor<M> {
+    public:
+        BOOST_UBLAS_USING banded_adaptor<M>::operator =;
+        typedef M matrix_type;
+        typedef banded_adaptor<M> adaptor_type;
+
+        // Construction and destruction
+        BOOST_UBLAS_INLINE
+        diagonal_adaptor ():
+            adaptor_type () {}
+        BOOST_UBLAS_INLINE
+        diagonal_adaptor (matrix_type &data):
+            adaptor_type (data) {}
+        BOOST_UBLAS_INLINE
+        ~diagonal_adaptor () {}
+
+        // Assignment
+        BOOST_UBLAS_INLINE
+        diagonal_adaptor &operator = (const diagonal_adaptor &m) {
+            adaptor_type::operator = (m);
+            return *this;
+        }
+    };
 
 }}}
 

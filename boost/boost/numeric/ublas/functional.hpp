@@ -23,6 +23,7 @@
 #include <boost/numeric/ublas/exception.hpp>
 #include <boost/numeric/ublas/traits.hpp>
 #include <boost/numeric/ublas/duff.hpp>
+#include <boost/numeric/ublas/raw.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 
@@ -595,10 +596,37 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class E1, class E2>
         BOOST_UBLAS_INLINE
-        result_type operator () (const vector_expression<E1> &e1, 
-                                 const vector_expression<E2> &e2) const { 
-            result_type t (0);
+        result_type operator () (const vector_expression<E1> &e1,
+                                 const vector_expression<E2> &e2,
+                                 concrete_tag) const {
             size_type size (BOOST_UBLAS_SAME (e1 ().size (), e2 ().size ()));
+            result_type t (0);
+            const T1 *data1 = data_const (e1 ());
+            const T2 *data2 = data_const (e2 ());
+            size_type s1 = stride (e1 ());
+            size_type s2 = stride (e2 ());
+            if (s1 == 1 && s2 == 1) {
+                for (size_type i = 0; i < size; ++ i)
+                    t += data1 [i] * data2 [i];
+            } else if (s2 == 1) {
+                for (size_type i = 0, i1 = 0; i < size; ++ i, i1 += s1)
+                    t += data1 [i1] * data2 [i];
+            } else if (s1 == 1) {
+                for (size_type i = 0, i2 = 0; i < size; ++ i, i2 += s2)
+                    t += data1 [i] * data2 [i2];
+            } else {
+                for (size_type i = 0, i1 = 0, i2 = 0; i < size; ++ i, i1 += s1, i2 += s2)
+                    t += data1 [i1] * data2 [i2];
+            }
+            return t;
+        }
+        template<class E1, class E2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (const vector_expression<E1> &e1,
+                                 const vector_expression<E2> &e2,
+                                 abstract_tag) const {
+            size_type size (BOOST_UBLAS_SAME (e1 ().size (), e2 ().size ()));
+            result_type t (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             for (size_type i = 0; i < size; ++ i)
                 t += e1 () (i) * e2 () (i);
@@ -606,12 +634,27 @@ namespace boost { namespace numeric { namespace ublas {
             size_type i (0);
             DD (size, 4, r, (t += e1 () (i) * e2 () (i), ++ i));
 #endif
-            return t; 
+            return t;
+        }
+        template<class E1, class E2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (const vector_expression<E1> &e1,
+                                 const vector_expression<E2> &e2) const {
+#ifdef BOOST_UBLAS_USE_SIMD
+            typedef typename boost::mpl::if_c<
+                boost::mpl::and_<boost::is_same<typename E1::simd_category, concrete_tag>,
+                                 boost::is_same<typename E2::simd_category, concrete_tag> >::value,
+                    concrete_tag,
+                    abstract_tag>::type simd_category;
+#else
+            typedef abstract_tag simd_category;
+#endif
+            return operator () (e1, e2, simd_category ());
         }
         // Dense case
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
-        result_type operator () (difference_type size, I1 it1, I2 it2) const { 
+        result_type operator () (difference_type size, I1 it1, I2 it2) const {
             result_type t (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             while (-- size >= 0)
@@ -619,7 +662,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
             DD (size, 4, r, (t += *it1 * *it2, ++ it1, ++ it2));
 #endif
-            return t; 
+            return t;
         }
         // Packed case
         template<class I1, class I2>
@@ -691,7 +734,33 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (const matrix_expression<E1> &e1,
                                  const vector_expression<E2> &e2,
-                                 size_type i) const {
+                                 size_type i, concrete_tag) const {
+            size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
+            result_type t (0);
+            const T1 *data1 = data_const (e1 ()) + i * stride1 (e1 ());
+            const T2 *data2 = data_const (e2 ());
+            size_type s1 = stride2 (e1 ());
+            size_type s2 = stride (e2 ());
+            if (s1 == 1 && s2 == 1) {
+                for (size_type j = 0; j < size; ++ j)
+                    t += data1 [j] * data2 [j];
+            } else if (s2 == 1) {
+                for (size_type j = 0, j1 = 0; j < size; ++ j, j1 += s1)
+                    t += data1 [j1] * data2 [j];
+            } else if (s1 == 1) {
+                for (size_type j = 0, j2 = 0; j < size; ++ j, j2 += s2)
+                    t += data1 [j] * data2 [j2];
+            } else {
+                for (size_type j = 0, j1 = 0, j2 = 0; j < size; ++ j, j1 += s1, j2 += s2)
+                    t += data1 [j1] * data2 [j2];
+            }
+            return t;
+        }
+        template<class E1, class E2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (const matrix_expression<E1> &e1,
+                                 const vector_expression<E2> &e2,
+                                 size_type i, abstract_tag) const {
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
             result_type t (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
@@ -702,6 +771,22 @@ namespace boost { namespace numeric { namespace ublas {
             DD (size, 4, r, (t += e1 () (i, j) * e2 () (j), ++ j));
 #endif
             return t;
+        }
+        template<class E1, class E2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (const matrix_expression<E1> &e1,
+                                 const vector_expression<E2> &e2,
+                                 size_type i) const {
+#ifdef BOOST_UBLAS_USE_SIMD
+            typedef typename boost::mpl::if_c<
+                boost::mpl::and_<boost::is_same<typename E1::simd_category, concrete_tag>,
+                                 boost::is_same<typename E2::simd_category, concrete_tag> >::value,
+                    concrete_tag,
+                    abstract_tag>::type simd_category;
+#else
+            typedef abstract_tag simd_category;
+#endif
+            return operator () (e1, e2, i, simd_category ());
         }
         // Dense case
         template<class I1, class I2>
@@ -796,7 +881,33 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (const vector_expression<E1> &e1,
                                  const matrix_expression<E2> &e2,
-                                 size_type i) const {
+                                 size_type i, concrete_tag) const {
+            size_type size = BOOST_UBLAS_SAME (e1 ().size (), e2 ().size1 ());
+            result_type t (0);
+            const T1 *data1 = data_const (e1 ());
+            const T2 *data2 = data_const (e2 ()) + i * stride2 (e2 ());
+            size_type s1 = stride (e1 ());
+            size_type s2 = stride1 (e2 ());
+            if (s1 == 1 && s2 == 1) {
+                for (size_type j = 0; j < size; ++ j)
+                    t += data1 [j] * data2 [j];
+            } else if (s2 == 1) {
+                for (size_type j = 0, j1 = 0; j < size; ++ j, j1 += s1)
+                    t += data1 [j1] * data2 [j];
+            } else if (s1 == 1) {
+                for (size_type j = 0, j2 = 0; j < size; ++ j, j2 += s2)
+                    t += data1 [j] * data2 [j2];
+            } else {
+                for (size_type j = 0, j1 = 0, j2 = 0; j < size; ++ j, j1 += s1, j2 += s2)
+                    t += data1 [j1] * data2 [j2];
+            }
+            return t;
+        }
+        template<class E1, class E2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (const vector_expression<E1> &e1,
+                                 const matrix_expression<E2> &e2,
+                                 size_type i, abstract_tag) const {
             size_type size = BOOST_UBLAS_SAME (e1 ().size (), e2 ().size1 ());
             result_type t (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
@@ -806,12 +917,28 @@ namespace boost { namespace numeric { namespace ublas {
             size_type j (0);
             DD (size, 4, r, (t += e1 () (j) * e2 () (j, i), ++ j));
 #endif
-            return t; 
+            return t;
+        }
+        template<class E1, class E2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (const vector_expression<E1> &e1,
+                                 const matrix_expression<E2> &e2,
+                                 size_type i) const {
+#ifdef BOOST_UBLAS_USE_SIMD
+            typedef typename boost::mpl::if_c<
+                boost::mpl::and_<boost::is_same<typename E1::simd_category, concrete_tag>,
+                                 boost::is_same<typename E2::simd_category, concrete_tag> >::value,
+                    concrete_tag,
+                    abstract_tag>::type simd_category;
+#else
+            typedef abstract_tag simd_category;
+#endif
+            return operator () (e1, e2, i, simd_category ());
         }
         // Dense case
         template<class I1, class I2>
         BOOST_UBLAS_INLINE
-        result_type operator () (difference_type size, I1 it1, I2 it2) const { 
+        result_type operator () (difference_type size, I1 it1, I2 it2) const {
             result_type t (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
             while (-- size >= 0)
@@ -910,7 +1037,33 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         result_type operator () (const matrix_expression<E1> &e1,
                                  const matrix_expression<E2> &e2,
-                                 size_type i, size_type j) const {
+                                 size_type i, size_type j, concrete_tag) const {
+            size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
+            result_type t (0);
+            const T1 *data1 = data_const (e1 ()) + i * stride1 (e1 ());
+            const T2 *data2 = data_const (e2 ()) + j * stride2 (e2 ());
+            size_type s1 = stride2 (e1 ());
+            size_type s2 = stride1 (e2 ());
+            if (s1 == 1 && s2 == 1) {
+                for (size_type k = 0; k < size; ++ k)
+                    t += data1 [k] * data2 [k];
+            } else if (s2 == 1) {
+                for (size_type k = 0, k1 = 0; k < size; ++ k, k1 += s1)
+                    t += data1 [k1] * data2 [k];
+            } else if (s1 == 1) {
+                for (size_type k = 0, k2 = 0; k < size; ++ k, k2 += s2)
+                    t += data1 [k] * data2 [k2];
+            } else {
+                for (size_type k = 0, k1 = 0, k2 = 0; k < size; ++ k, k1 += s1, k2 += s2)
+                    t += data1 [k1] * data2 [k2];
+            }
+            return t;
+        }
+        template<class E1, class E2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (const matrix_expression<E1> &e1,
+                                 const matrix_expression<E2> &e2,
+                                 size_type i, size_type j, abstract_tag) const {
             size_type size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ());
             result_type t (0);
 #ifndef BOOST_UBLAS_USE_DUFF_DEVICE
@@ -921,6 +1074,22 @@ namespace boost { namespace numeric { namespace ublas {
             DD (size, 4, r, (t += e1 () (i, k) * e2 () (k, j), ++ k));
 #endif
             return t;
+        }
+        template<class E1, class E2>
+        BOOST_UBLAS_INLINE
+        result_type operator () (const matrix_expression<E1> &e1,
+                                 const matrix_expression<E2> &e2,
+                                 size_type i, size_type j) const {
+#ifdef BOOST_UBLAS_USE_SIMD
+            typedef typename boost::mpl::if_c<
+                boost::mpl::and_<boost::is_same<typename E1::simd_category, concrete_tag>,
+                                 boost::is_same<typename E2::simd_category, concrete_tag> >::value,
+                    concrete_tag,
+                    abstract_tag>::type simd_category;
+#else
+            typedef abstract_tag simd_category;
+#endif
+            return operator () (e1, e2, i, j, simd_category ());
         }
         // Dense case
         template<class I1, class I2>

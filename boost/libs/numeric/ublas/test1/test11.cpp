@@ -67,9 +67,10 @@ struct test_my_vector {
             initialize_vector (v2);
             v3 = v1 + v2;
             std::cout << "v1 + v2 = " << v3 << std::endl;
-
             v3 = v1 - v2;
             std::cout << "v1 - v2 = " << v3 << std::endl;
+            v3 = ublas::element_prod (v1, v2);
+            std::cout << "element_prod (v1, v2) = " << v3 << std::endl;
 
             // Scaling a vector
             t = N;
@@ -230,6 +231,30 @@ void test_vector () {
 #ifdef USE_DOUBLE
     std::cout << "std::complex<double>, std::vector" << std::endl;
     test_my_vector<ublas::vector<std::complex<double>, std::vector<std::complex<double> > >, 3 > () ();
+#endif
+#endif
+#endif
+
+#ifdef USE_BOUNDED_VECTOR
+#ifdef USE_FLOAT
+    std::cout << "float" << std::endl;
+    test_my_vector<ublas::bounded_vector<float, 3>, 3> () ();
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "double" << std::endl;
+    test_my_vector<ublas::bounded_vector<double, 3>, 3> () ();
+#endif
+
+#ifdef USE_STD_COMPLEX
+#ifdef USE_FLOAT
+    std::cout << "std::complex<float>" << std::endl;
+    test_my_vector<ublas::bounded_vector<std::complex<float>, 3>, 3> () ();
+#endif
+
+#ifdef USE_DOUBLE
+    std::cout << "std::complex<double>" << std::endl;
+    test_my_vector<ublas::bounded_vector<std::complex<double>, 3>, 3> () ();
 #endif
 #endif
 #endif
