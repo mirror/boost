@@ -205,7 +205,7 @@ public:
   enum { has_fixed_range = false };
 #endif
   int32_t min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
-  int32_t max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (std::numeric_limits<int32_t>::max)(); }
+  int32_t max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::numeric_limits<int32_t>::max BOOST_PREVENT_MACRO_SUBSTITUTION (); }
   
   explicit rand48(int32_t x0 = 1) : lcf(cnv(x0)) { }
   explicit rand48(uint64_t x0) : lcf(x0) { }

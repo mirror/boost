@@ -474,13 +474,13 @@ INSTANT(boost::mt11213b)
 #endif
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
-// testcase by Mario Rütti
+// testcase by Mario Rï¿½tti
 class ruetti_gen
 {
 public:
   typedef boost::uint64_t result_type;
   result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return 0; }
-  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return (std::numeric_limits<result_type>::max)(); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::numeric_limits<result_type>::max BOOST_PREVENT_MACRO_SUBSTITUTION (); }
   result_type operator()() { return (max)()-1; }
 };
 
