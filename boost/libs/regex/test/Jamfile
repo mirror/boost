@@ -160,10 +160,12 @@ test-suite regex
       ]
       
       [ run unicode/unicode_iterator_test.cpp ]
+      
       [ regex-test static_mutex_test
-          : <template>test                      # sources
+          : <template>test-dll                  # sources
             static_mutex/static_mutex_test.cpp
             <dll>../../thread/build/boost_thread
+          : <define>BOOST_THREAD_USE_DLL=1
       ]
       [ regex-test object_cache_test
           : <template>test                      # sources
@@ -209,6 +211,8 @@ test-suite regex
  ]
 
 ;
+
+
 
 
 
