@@ -23,6 +23,14 @@ namespace boost {
 BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,T&)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,add_reference,T&,T&)
 
+// these full specialisations are always required:
+BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void,void)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void const,void const)
+BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void volatile,void volatile)
+BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void const volatile,void const volatile)
+#endif
+
 #elif defined(BOOST_MSVC6_MEMBER_TEMPLATES)
 
 namespace detail {
@@ -66,18 +74,6 @@ BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(add_reference,void const volatile,void const 
 } // namespace detail
 
 BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,typename detail::add_reference_impl<T>::type)
-
-#else
-
-// these full specialisations are always required:
-BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void,void)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void const,void const)
-BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void volatile,void volatile)
-BOOST_TT_AUX_TYPE_TRAIT_SPEC1(add_reference,void const volatile,void const volatile)
-#endif
-
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,T&)
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
