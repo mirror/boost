@@ -20,9 +20,9 @@
     <h2><a name="Cast Functions">Cast Functions</a></h2>
 
     <p>The header <a href="../../boost/cast.hpp">boost/cast.hpp</a> provides
-    <a href="#Polymorphic_cast"><b>polymorphic_cast</b></a>, <a href=
-    "#Polymorphic_cast"><b>polymorphic_downcast</b></a>, and <a href=
-    "#numeric_cast"><b>numeric_cast</b></a> function templates designed to
+    <a href="#Polymorphic_cast"><code>polymorphic_cast</code></a>, <a href=
+    "#Polymorphic_cast"><code>polymorphic_downcast</code></a>, and <a href=
+    "#numeric_cast"><code>numeric_cast</code></a> function templates designed to
     complement the C++ built-in casts.</p>
 
     <p>The program <a href="cast_test.cpp">cast_test.cpp</a> can be used to
@@ -34,43 +34,51 @@
     least one virtual function) are sometimes downcast or crosscast.
     Downcasting means casting from a base class to a derived class.
     Crosscasting means casting across an inheritance hierarchy diagram, such
-    as from one base to the other in a <b>Y</b> diagram hierarchy.</p>
+    as from one base to the other in a <code>Y</code> diagram hierarchy.</p>
 
     <p>Such casts can be done with old-style casts, but this approach is
     never to be recommended. Old-style casts are sorely lacking in type
     safety, suffer poor readability, and are difficult to locate with search
     tools.</p>
 
-    <p>The C++ built-in <b>static_cast</b> can be used for efficiently
+    <p>The C++ built-in <code>static_cast</code> can be used for efficiently
     downcasting pointers to polymorphic objects, but provides no error
     detection for the case where the pointer being cast actually points to
-    the wrong derived class. The <b>polymorphic_downcast</b> template retains
-    the efficiency of <b>static_cast</b> for non-debug compilations, but for
-    debug compilations adds safety via an assert() that a <b>dynamic_cast</b>
+    the wrong derived class. The <code>polymorphic_downcast</code> template retains
+    the efficiency of <code>static_cast</code> for non-debug compilations, but for
+    debug compilations adds safety via an assert() that a <code>dynamic_cast</code>
     succeeds.</p>
 
-    <p>The C++ built-in <b>dynamic_cast</b> can be used for downcasts and
+    <p>The C++ built-in <code>dynamic_cast</code> can be used for downcasts and
     crosscasts of pointers to polymorphic objects, but error notification in
     the form of a returned value of 0 is inconvenient to test, or worse yet,
-    easy to forget to test. The throwing form of <b>dynamic_cast</b>, which
+    easy to forget to test. The throwing form of <code>dynamic_cast</code>, which
     works on references, can be used on pointers through the ugly expression
     &amp;<code>dynamic_cast&lt;T&amp;&gt;(*p)</code>, which causes undefined
-    behavior if <code>p</code> is <code>0</code>. The <b>polymorphic_cast</b>
-    template performs a <b>dynamic_cast</b> on a pointer, and throws an
-    exception if the <b>dynamic_cast</b> returns 0.</p>
+    behavior if <code>p</code> is <code>0</code>. The <code>polymorphic_cast</code>
+    template performs a <code>dynamic_cast</code> on a pointer, and throws an
+    exception if the <code>dynamic_cast</code> returns 0.</p>
 
-    <p>A <b>polymorphic_downcast</b> is preferred when debug-mode tests will
-    cover 100% of the object types possibly cast and when non-debug-mode
-    efficiency is an issue. If these two conditions are not present,
-    <b>polymorphic_cast</b> is preferred. It must also be used for
-    crosscasts. It does an assert( dynamic_cast&lt;Derived&gt;(x) == x )
-    where x is the base pointer, ensuring that not only is a non-zero pointer
-    returned, but also that it correct in the presence of multiple
-    inheritance. <b>Warning:</b>: Because <b>polymorphic_downcast</b> uses
-    assert(), it violates the one definition rule (ODR) if NDEBUG is
-    inconsistently defined across translation units. [See ISO Std 3.2]</p>
+    <p>A <code>polymorphic_downcast</code> should be used for
+    downcasts that you are certain should succeed.  Error checking is
+    only performed in translation units where <code>NDEBUG</code> is
+    not defined, via 
+<pre>
+  assert( dynamic_cast&lt;Derived&gt;(x) == x )
+</pre> where <code>x</code> is the source pointer.  This approach
+    ensures that not only is a non-zero pointer returned, but also
+    that it is correct in the presence of multiple inheritance.
+    Attempts to crosscast using <code>polymorphic_downcast</code> will
+    fail to compile.
+    <b>Warning:</b> Because <code>polymorphic_downcast</code> uses assert(), it
+    violates the One Definition Rule (ODR) if NDEBUG is inconsistently
+    defined across translation units. [See ISO Std 3.2]
+</p><p>
+    For crosscasts, or when the success of a cast can only be known at
+    runtime, or when efficiency is not important,
+    <code>polymorphic_cast</code> is preferred. </p>
 
-    <p>The C++ built-in <b>dynamic_cast</b> must be used to cast references
+    <p>The C++ built-in <code>dynamic_cast</code> must be used to cast references
     rather than pointers. It is also the only cast that can be used to check
     whether a given interface is supported; in that case a return of 0 isn't
     an error condition.</p>
@@ -113,9 +121,9 @@ void f( Fruit * fruit ) {
 
     <h3><a name="numeric_cast">numeric_cast</a></h3>
 
-    <p>A <b>static_cast</b> or implicit conversion will not detect failure to
-    preserve range for numeric casts. The <b>numeric_cast</b> function
-    templates are similar to <b>static_cast</b> and certain (dubious)
+    <p>A <code>static_cast</code> or implicit conversion will not detect failure to
+    preserve range for numeric casts. The <code>numeric_cast</code> function
+    templates are similar to <code>static_cast</code> and certain (dubious)
     implicit conversions in this respect, except that they detect loss of
     numeric range. An exception is thrown when a runtime value-preservation
     check fails.</p>
@@ -132,7 +140,7 @@ void f( Fruit * fruit ) {
         true.</li>
 
         <li>The argument can be converted to the result type using
-        <b>static_cast</b>.</li>
+        <code>static_cast</code>.</li>
       </ul>
     </blockquote>
 
@@ -178,11 +186,11 @@ void ariane(double vx)
 
     <h3>History</h3>
 
-    <p><b>polymorphic_cast</b> was suggested by Bjarne Stroustrup in "The C++
+    <p><code>polymorphic_cast</code> was suggested by Bjarne Stroustrup in "The C++
     Programming Language".<br>
-     <b>polymorphic_downcast</b> was contributed by <a href=
-    "../../people/dave_abrahams.htm">Dave Abrahams</a>.<b><br>
-     numeric_cast</b> was contributed by <a href=
+     <code>polymorphic_downcast</code> was contributed by <a href=
+    "../../people/dave_abrahams.htm">Dave Abrahams</a>.<code><br>
+     numeric_cast</code> was contributed by <a href=
     "../../people/kevlin_henney.htm">Kevlin Henney</a>.</p>
     <hr>
 
