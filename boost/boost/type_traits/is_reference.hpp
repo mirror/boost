@@ -43,7 +43,7 @@ BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T& volatile,true
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T& const volatile,true)
 #endif
 
-#ifdef __GNUC__
+#if defined(__GNUC__) && (__GNUC__ < 3)
 // these allow us to work around illegally cv-qualified reference types.
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T const ,::boost::is_reference<T>::value)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T volatile ,::boost::is_reference<T>::value)
@@ -100,3 +100,4 @@ BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_reference,void const volatile,false)
 #include "boost/type_traits/detail/bool_trait_undef.hpp"
 
 #endif // BOOST_TT_IS_REFERENCE_HPP_INCLUDED
+
