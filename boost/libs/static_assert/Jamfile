@@ -1,3 +1,5 @@
+# copyright John Maddock 2003
+
 subproject libs/static_assert ;
 # bring in the rules for testing
 SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
