@@ -116,10 +116,11 @@ struct variant_impl {
         V & v,
         unsigned int version
     ){
-        mpl::eval_if<mpl::empty<S>,
+        typedef mpl::eval_if<mpl::empty<S>,
             mpl::identity<load_null>,
             mpl::identity<load_impl>
-        >::type::invoke(ar, which, v, version);
+        >::type typex;
+        typex::invoke(ar, which, v, version);
     }
 
 };
