@@ -20,6 +20,12 @@
 #include <cmath>
 #include <boost/random.hpp>
 
+#include <boost/config.hpp> // broken compiler workarounds
+# ifdef BOOST_NO_STDC_NAMESPACE
+    namespace std { using ::abs; }
+# endif
+
+
 /*
  * General portability note:
  * MSVC mis-compiles explicit function template instantiations.
