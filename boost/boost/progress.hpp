@@ -21,6 +21,9 @@
 #include <boost/utility.hpp>  // for noncopyable
 #include <boost/cstdint.hpp>  // for uintmax_t
 #include <iostream>
+#if defined(__GNUC__) && __GNUC__ == 2 && __GNUC_MINOR__ <= 95
+  namespace std { class ios_base : public ios{}; }
+#endif
 
 namespace boost {
 
