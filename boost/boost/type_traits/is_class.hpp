@@ -17,16 +17,16 @@
 
 #ifdef BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION
 #   include "boost/type_traits/detail/yes_no_type.hpp"
-#   ifdef __EDG_VERSION__
-#       include "boost/type_traits/is_const.hpp"
-#       include "boost/type_traits/is_volatile.hpp"
-#   endif
 #else
 #   include "boost/type_traits/is_scalar.hpp"
 #   include "boost/type_traits/is_array.hpp"
 #   include "boost/type_traits/is_reference.hpp"
 #   include "boost/type_traits/is_void.hpp"
 #   include "boost/type_traits/is_function.hpp"
+#endif
+
+#ifdef __EDG_VERSION__
+#   include "boost/type_traits/remove_cv.hpp"
 #endif
 
 // should be the last #include
@@ -81,25 +81,6 @@ struct is_class_impl
         );
 };
 
-# ifdef __EDG_VERSION__
-template <typename T>
-struct is_class_impl<T const>
-  : is_class_impl<T>
-{
-};
-
-template <typename T>
-struct is_class_impl<T volatile>
-  : is_class_impl<T>
-{
-};
-
-template <typename T>
-struct is_class_impl<T const volatile>
-  : is_class_impl<T>
-{
-};
-# endif
 #endif
 
 #else
@@ -133,8 +114,13 @@ struct is_class_impl
 
 } // namespace detail
 
+# ifdef __EDG_VERSION__
+BOOST_TT_AUX_BOOL_TRAIT_DEF1(
+    is_class,T, detail::is_class_impl<typename remove_cv<T>::type>::value)
+# else 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_class,T,::boost::detail::is_class_impl<T>::value)
-
+# endif
+    
 } // namespace boost
 
 #include "boost/type_traits/detail/bool_trait_undef.hpp"

@@ -21,6 +21,7 @@ TT_TEST_BEGIN(is_class)
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<int*>::value, false);
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<int* const>::value, false);
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<int[2]>::value, false);
+   BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<int const[2]>::value, false);
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<int&>::value, false);
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<mf4>::value, false);
    BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_class<f1>::value, false);
