@@ -92,14 +92,17 @@
 #endif
 
 //
-// If STLport thinks there are no wide functions, <cwchar> etc. is not working.
+// If STLport thinks there are no wide functions, <cwchar> etc. is not working; but
+// only if BOOST_NO_STDC_NAMESPACE is not defined (if it is then we do the import 
+// into std:: ourselves).
 //
-#if defined(_STLP_NO_NATIVE_WIDE_FUNCTIONS)
+#if defined(_STLP_NO_NATIVE_WIDE_FUNCTIONS) && !defined(BOOST_NO_STDC_NAMESPACE)
 #  define BOOST_NO_CWCHAR
 #  define BOOST_NO_CWTYPE
 #endif
 
 
 #define BOOST_STDLIB "STLPort standard library version " BOOST_STRINGIZE(__SGI_STL_PORT)
+
 
 
