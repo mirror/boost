@@ -31,6 +31,14 @@
 #   include <iostream> // workaround GNU missing ostream header
 # endif
 
+# if defined(__BORLANDC__) && (__BORLANDC__ <= 0x0551)
+#   define BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT 
+# endif
+
+#if defined(MPW_CPLUS) && (MPW_CPLUS <= 0x890)
+#   define BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT 
+    namespace std { class bad_typeid { }; }
+# endif
 
 namespace boost
 {
@@ -75,15 +83,15 @@ namespace boost
     catch ( const std::bad_alloc & ex )
       { detail::report_exception( out, "std::bad_alloc:", ex.what() ); }
 
-# if !defined(__BORLANDC__) || __BORLANDC__ > 0x0551
+# ifndef BOOST_BUILT_IN_EXCEPTIONS_MISSING_WHAT
     catch ( const std::bad_cast & ex )
       { detail::report_exception( out, "std::bad_cast:", ex.what() ); }
     catch ( const std::bad_typeid & ex )
       { detail::report_exception( out, "std::bad_typeid:", ex.what() ); }
 # else
-    catch ( const std::bad_cast & ex )
+    catch ( const std::bad_cast & )
       { detail::report_exception( out, "std::bad_cast", "" ); }
-    catch ( const std::bad_typeid & ex )
+    catch ( const std::bad_typeid & )
       { detail::report_exception( out, "std::bad_typeid", "" ); }
 # endif
 
