@@ -17,6 +17,7 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  05 Jul 01  Recode gcd(), avoiding std::swap (Helmut Zeisel)
 //  03 Mar 01  Workarounds for Intel C++ 5.0 (David Abrahams)
 //  05 Feb 01  Update operator>> to tighten up input syntax
 //  05 Feb 01  Final tidy up of gcd code prior to the new release
@@ -40,7 +41,6 @@
 #include <iostream>              // for std::istream and std::ostream
 #include <iomanip>               // for std::noskipws
 #include <stdexcept>             // for std::domain_error
-#include <algorithm>             // for std::swap
 #include <string>                // for std::string implicit constructor
 #include <boost/operators.hpp>   // for boost::addable etc
 #include <cstdlib>               // for std::abs
@@ -65,34 +65,17 @@ IntType gcd(IntType n, IntType m)
     if (m < zero)
         m = -m;
 
-    while (m != zero) {
-
-        // As n and m are now positive, we can be sure that r is positive (the
-        // standard guarantees this for built-in types, and we require it of
-        // user-defined types).
-        IntType r(n % m);
-
-#ifndef BOOST_RATIONAL_USE_STD_SWAP
-        n = m;
-        m = r;
-#else
-        // Using std::swap() as below is potentially more efficient in
-        // the case of a user-defined IntType, and generates identical code on
-        // most compilers (the swap call is inlined, and the unnecessary
-        // assignments are removed) with optimisation switched on.
-        // However, users are not allowed to implement std::swap() for IntType
-        // in the case where IntType is a template type, as this is an
-        // overload in std:: rather than a specialisation. Hence this code is
-        // specifically disabled unless the user makes a deliberate request
-        // for it by defining BOOST_RATIONAL_USE_STD_SWAP.
-        // For more details, see the "Design Notes" section of the
-        // documentation.
-        std::swap(n, m);
-        std::swap(m, r);
-#endif
+    // As n and m are now positive, we can be sure that %= returns a
+    // positive value (the standard guarantees this for built-in types,
+    // and we require it of user-defined types).
+    for(;;) {
+      if(m == zero)
+        return n;
+      n %= m;
+      if(n == zero)
+        return m;
+      m %= n;
     }
-
-    return n;
 }
 
 template <typename IntType>
