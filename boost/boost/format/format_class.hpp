@@ -36,12 +36,12 @@ namespace boost {
 template<class Ch, class Tr>
 class basic_format 
 {
-  typedef std::basic_ostream<Ch, Tr>               stream_t;
+  typedef BOOST_IO_STD basic_ostream<Ch, Tr>               stream_t;
   typedef io::detail::stream_format_state<Ch, Tr>  stream_format_state;
   typedef io::detail::format_item<Ch, Tr>          format_item_t;
 public:
   typedef std::basic_string<Ch, Tr>                string_t;
-  typedef std::basic_ostringstream<Ch, Tr>         internal_stream_t;
+  typedef BOOST_IO_STD basic_ostringstream<Ch, Tr>         internal_stream_t;
 
 public:
   basic_format(const Ch* str);
@@ -89,11 +89,11 @@ public:
 
   // final output
   string_t str() const;
-  friend std::basic_ostream<Ch, Tr>& 
+  friend BOOST_IO_STD basic_ostream<Ch, Tr>& 
 #ifndef BOOST_MSVC
-  operator<< <Ch, Tr> ( std::basic_ostream<Ch, Tr>& , const basic_format& ); 
+  operator<< <Ch, Tr> ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
 #else
-  operator<< ( std::basic_ostream<Ch, Tr>& , const basic_format& ); 
+  operator<< ( BOOST_IO_STD basic_ostream<Ch, Tr>& , const basic_format& ); 
 #endif
                       
 

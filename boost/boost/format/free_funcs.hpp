@@ -34,8 +34,8 @@ namespace io {
 }   // - namespace io
 
 template< class Ch, class Tr>
-std::basic_ostream<Ch, Tr>& 
-operator<<( std::basic_ostream<Ch, Tr>& os, 
+BOOST_IO_STD basic_ostream<Ch, Tr>& 
+operator<<( BOOST_IO_STD basic_ostream<Ch, Tr>& os, 
             const boost::basic_format<Ch, Tr>& f) 
   // effect: "return os << str(f);" but we can try to do it faster
 {

@@ -26,6 +26,7 @@
 #include <ostream>
 
 #include "boost/config.hpp"
+#include "boost/format/format_config.hpp"
 
 #ifndef BOOST_MSVC
 #define BOOST_OVERLOAD_FOR_NON_CONST

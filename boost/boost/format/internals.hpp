@@ -38,10 +38,10 @@ namespace detail {
 template<class Ch, class Tr> 
 struct stream_format_state 
 {
-  typedef std::basic_ios<Ch, Tr>   basic_ios;
+  typedef BOOST_IO_STD basic_ios<Ch, Tr>   basic_ios;
 
-  int width_;
-  int precision_;
+  std::streamsize width_;
+  std::streamsize precision_;
   Ch fill_; 
   std::ios_base::fmtflags flags_;
 
@@ -69,10 +69,10 @@ struct format_item
                     argN_tabulation = -2, // tabulation directive. (no argument read) 
                     argN_ignored    = -3  // ignored directive. (no argument read)
   };
-  typedef std::basic_ios<Ch, Tr>              basic_ios;
+  typedef BOOST_IO_STD basic_ios<Ch, Tr>              basic_ios;
   typedef stream_format_state<Ch, Tr>         stream_format_state;
   typedef std::basic_string<Ch, Tr>           string_t;
-  typedef std::basic_ostringstream<Ch, Tr>    internal_stream_t;
+  typedef BOOST_IO_STD basic_ostringstream<Ch, Tr>    internal_stream_t;
 
 
   int         argN_;           //- argument number (starts at 0,  eg : %1 => argN=0)
@@ -128,7 +128,7 @@ void apply_manip_body( stream_format_state<Ch, Tr>& self,
                        T manipulator) 
   // modify our params according to the manipulator
 {
-      std::basic_stringstream<Ch, Tr>  ss;
+      BOOST_IO_STD basic_stringstream<Ch, Tr>  ss;
       self.apply_on( ss );
       ss << manipulator;
       self.set_by_stream( ss );

@@ -15,6 +15,7 @@
 //  version $Id$
 // ----------------------------------------------------------------------------
 // msvc_disambiguater.hpp : msvc workarounds. (for put_{head|last} overloads)
+//                          the trick was described in boost's list  by Aleksey Gurtovoy
 // ----------------------------------------------------------------------------
 
 
@@ -34,19 +35,19 @@ template< class Ch, class Tr, class T >
 struct disambiguater
 {
    template< typename U >
-   static void put_head(std::basic_ostream<Ch, Tr>& os, group1<U> const& x, long)
+   static void put_head(BOOST_IO_STD basic_ostream<Ch, Tr>& os, group1<U> const& x, long)
    {
        os << group_head(x.a1_); 
    }
-   static void put_head(std::basic_ostream<Ch, Tr>& os, T const& x, int)
+   static void put_head(BOOST_IO_STD basic_ostream<Ch, Tr>& os, T const& x, int)
    {
    }
    template< typename U >
-   static void put_last(std::basic_ostream<Ch, Tr>& os, group1<U> const& x, long)
+   static void put_last(BOOST_IO_STD basic_ostream<Ch, Tr>& os, group1<U> const& x, long)
    {
        os << group_last(x.a1_); 
    }
-   static void put_last(std::basic_ostream<Ch, Tr>& os, T const& x, int)
+   static void put_last(BOOST_IO_STD basic_ostream<Ch, Tr>& os, T const& x, int)
    {
 	   os << x;
    }

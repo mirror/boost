@@ -177,7 +177,7 @@ std::basic_string<Ch,Tr> basic_format<Ch,Tr> ::str() const
   unsigned long i;
   for(i=0; i < items_.size(); ++i) 
     sz += items_[i].res_.size() + items_[i].appendix_.size();
-  typename basic_format<Ch, Tr> ::string_t res;
+  string_t res;
   res.reserve(sz);
 
   res += prefix_;
@@ -188,7 +188,7 @@ std::basic_string<Ch,Tr> basic_format<Ch,Tr> ::str() const
     if( item.argN_ == format_item_t::argN_tabulation) 
     { 
       assert( item.pad_scheme_ & format_item_t::tabulation);
-      int n=item.state_.width_ - res.size();
+      std::streamsize  n = item.state_.width_ - res.size();
       if( n > 0 )
         res.append( n, item.state_.fill_ );
     }

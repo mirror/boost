@@ -26,7 +26,7 @@
 
 namespace boost {
 
-template<class charT, class Traits = std::char_traits<charT> > class basic_format;
+template<class charT, class Traits = BOOST_IO_STD char_traits<charT> > class basic_format;
 
 // specialisation for char / wchar_t :
 typedef basic_format<char >     format;
@@ -47,8 +47,8 @@ std::basic_string<Ch, Tr>     str(const basic_format<Ch, Tr>& ) ;
 
 
 template< class Ch, class Tr> 
-std::basic_ostream<Ch, Tr>& 
-operator<<( std::basic_ostream<Ch, Tr>&, const basic_format<Ch, Tr>&);
+BOOST_IO_STD basic_ostream<Ch, Tr>& 
+operator<<( BOOST_IO_STD basic_ostream<Ch, Tr>&, const basic_format<Ch, Tr>&);
 
 
 } // namespace boost

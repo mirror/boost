@@ -38,14 +38,17 @@ namespace boost {
 namespace io {
 namespace detail {
 
-  template<class Ch, class Tr> inline
-  int str2int(const std::basic_string<Ch, Tr>& s, unsigned int start, std::basic_ios<Ch,Tr> &os) 
+  template<class Res, class Ch, class Tr> inline
+  Res str2int(const std::basic_string<Ch, Tr>& s, 
+              typename std::basic_string<Ch, Tr>::size_type start, 
+              std::basic_ios<Ch,Tr> &os,
+              const Res = Res(0)  ) 
     // Input : char string, with starting index
     //         a stream, so we can use its locale  and call narrow.
-    // Effects : reads s[start:] and converts digits into an int n.
+    // Effects : reads s[start:] and converts digits into an integral n, of type Res
     // Returns : n
   {
-    int n = 0;
+    Res n = 0;
     while(start<s.size() && std::isdigit(s[start], os.rdbuf()->getloc() ) ) {
       char cur_ch = os.narrow( s[start], 0);
       assert(cur_ch != 0 ); // since we called isdigit, this should not happen.
@@ -59,7 +62,7 @@ namespace detail {
   template<class Ch, class Tr>
   void skip_asterisk(const std::basic_string<Ch,Tr> & buf, 
                      typename std::basic_string<Ch,Tr>::size_type * pos_p,
-                     std::basic_ios<Ch, Tr> &os)
+                     BOOST_IO_STD basic_ios<Ch, Tr> &os)
     // skip printf's "asterisk-fields" directives in the format-string buf
     // Input : char string, with starting index *pos_p
     //         a stream, so we can use its locale  and call narrow.
@@ -76,7 +79,7 @@ namespace detail {
   }
 
 
-  void maybe_throw_exception( unsigned char exceptions)
+  inline void maybe_throw_exception( unsigned char exceptions)
     // auxiliary func called by parse_printf_directive
     // for centralising error handling
     // it either throws if user sets the corresponding flag, or does nothing.
@@ -91,7 +94,7 @@ namespace detail {
   bool parse_printf_directive(const std::basic_string<Ch, Tr> & buf,
                               typename std::basic_string<Ch, Tr>::size_type * pos_p,
                               detail::format_item<Ch, Tr> * fpar,
-                              std::basic_ios<Ch,Tr> &os,
+                              BOOST_IO_STD basic_ios<Ch,Tr> &os,
                               unsigned char exceptions)
     // Input   : a 'printf-directive' in the format-string, starting at buf[ *pos_p ]
     //           a stream merely to call 'widen' member function in the desired locale.
@@ -131,7 +134,7 @@ namespace detail {
           maybe_throw_exception(exceptions);
           return false;
         }
-        int n=str2int(buf,i0, os);
+        int n=str2int(buf,i0, os, int(0) );
         
         // %N% case : this is already the end of the directive
         if( buf[i1] == os.widen('%') ) 
@@ -207,7 +210,7 @@ namespace detail {
       i1++;
     
     if (i1!=i0) 
-      { fpar->ref_state_.width_ = str2int(buf,i0, os); }
+      { fpar->ref_state_.width_ = str2int( buf,i0, os, std::streamsize(0) ); }
 
   parse_precision:
     if( i1>=buf.size()) { 
@@ -226,7 +229,7 @@ namespace detail {
         if(i1==i0)
           fpar->ref_state_.precision_ = 0;
         else 
-          fpar->ref_state_.precision_ = str2int(buf,i0, os);
+          fpar->ref_state_.precision_ = str2int(buf,i0, os, std::streamsize(0) );
       }
     
     // handle  formatting-type flags :

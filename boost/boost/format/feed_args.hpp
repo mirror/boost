@@ -33,26 +33,26 @@ namespace detail {
 namespace  { 
 
   template<class Tr, class Ch> inline
-  void empty_buf(std::basic_ostringstream<Ch,Tr> & os) { 
+  void empty_buf(BOOST_IO_STD basic_ostringstream<Ch,Tr> & os) { 
     static const std::basic_string<Ch, Tr> emptyStr; // avoids 2 cases ( "" and  L"" )
     os.str(emptyStr); 
   }
 
   template<class Ch, class Tr>
   void do_fill( std::basic_string<Ch,Tr> & s, 
-                int w, 
+                std::streamsize w, 
                 const Ch c, 
                 std::ios_base::fmtflags f, 
                 bool center) 
   {
-    int n=w-s.size();
+    std::streamsize n=w-s.size();
     if(n<=0) {
       return;
     }
     if(center) 
       {
         s.reserve(w); // allocate once for the 2 inserts
-        const int n1 = n /2, n0 = n - n1; 
+        const std::streamsize n1 = n /2, n0 = n - n1; 
         s.insert(s.begin(), n0, c);
         s.append(n1, c);
       } 
@@ -70,31 +70,31 @@ namespace  {
 
 #ifndef BOOST_MSVC
   template< class Ch, class Tr, class T> inline
-  void put_head(std::basic_ostream<Ch, Tr>& , const T& ) {
+  void put_head(BOOST_IO_STD basic_ostream<Ch, Tr>& , const T& ) {
   }
 
   template< class Ch, class Tr, class T> inline
-  void put_head(std::basic_ostream<Ch, Tr>& os, const group1<T>& x ) {
+  void put_head( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const group1<T>& x ) {
     os << group_head(x.a1_); // send the first N-1 items, not the last
   }
 
   template< class Ch, class Tr, class T> inline
-  void put_last(std::basic_ostream<Ch, Tr>& os, const T& x ) {
+  void put_last( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
     os << x ;
   }
 
   template< class Ch, class Tr, class T> inline
-  void put_last(std::basic_ostream<Ch, Tr>& os, const group1<T>& x ) {
+  void put_last( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const group1<T>& x ) {
     os << group_last(x.a1_); // this selects the last element
   }
 
 #ifdef BOOST_OVERLOAD_FOR_NON_CONST 
   template< class Ch, class Tr, class T> inline
-  void put_head(std::basic_ostream<Ch, Tr>& , T& ) {
+  void put_head( BOOST_IO_STD basic_ostream<Ch, Tr>& , T& ) {
   }
 
   template< class Ch, class Tr, class T> inline
-  void put_last(std::basic_ostream<Ch, Tr>& os, T& x ) {
+  void put_last( BOOST_IO_STD basic_ostream<Ch, Tr>& os, T& x ) {
     os << x ;
   }
 #endif
@@ -103,11 +103,11 @@ namespace  {
        // the trick is in "boost/format/msvc_disambiguater.hpp"
   
   template< class Ch, class Tr, class T> inline
-  void put_head(std::basic_ostream<Ch, Tr>& os, const T& x ) {
+  void put_head( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
 	  disambiguater<Ch, Tr, T>::put_head(os, x, 1L);
   }
   template< class Ch, class Tr, class T> inline
-  void put_last(std::basic_ostream<Ch, Tr>& os, const T& x ) {
+  void put_last( BOOST_IO_STD basic_ostream<Ch, Tr>& os, const T& x ) {
 	  disambiguater<Ch, Tr, T>::put_last(os, x, 1L);
   }
 
@@ -120,7 +120,7 @@ namespace  {
   void put( T x, 
             const format_item<Ch, Tr>& specs, 
             std::basic_string<Ch, Tr> & res, 
-            std::basic_ostringstream<Ch, Tr>& oss_ )
+            BOOST_IO_STD basic_ostringstream<Ch, Tr>& oss_ )
   {
     // does the actual conversion of x, with given params, into a string
     // using the *supplied* strinstream. (the stream state is important)
@@ -137,7 +137,7 @@ namespace  {
     put_head( oss_, x );
     empty_buf( oss_);
 
-    const int w=oss_.width();
+    const std::streamsize w=oss_.width();
     const std::ios_base::fmtflags fl=oss_.flags();
     const bool internal = (fl & std::ios_base::internal) != 0;
     const bool two_phased_filling = internal
@@ -171,7 +171,7 @@ namespace  {
 
     if(two_phased_filling)
       {
-        if( (int)res.size() - w > 0)
+        if( res.size() - w > 0)
           { 
             // either it was one big arg and we have nothing to do about it,
             // either it was multi-output with first output filling up all width..
@@ -179,13 +179,14 @@ namespace  {
             oss_.width(0);
             put_last(oss_, x );
             string_t tmp = oss_.str();  // minimal-length output
-            int d;
-            if( (d=w - (int)tmp.size()) >0 ) // hum.. then we need to pad.
+            std::streamsize d;
+            if( (d=w - tmp.size()) >0 ) // hum.. then we need to pad.
               {
-                unsigned long  i = 0; 
+                typedef typename string_t::size_type size_type;
+                size_type i = 0;
                 while( i<tmp.size() && tmp[i] == res[i] ) // find where we should pad.
                   ++i; 
-                tmp.insert(i, d, oss_.fill());
+                tmp.insert(i, static_cast<size_type>( d ), oss_.fill());
                 std::swap(res, tmp );
               }
             else
