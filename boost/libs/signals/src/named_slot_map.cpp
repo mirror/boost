@@ -24,6 +24,7 @@ public:
   typedef group_list::iterator slot_pair_iterator;
   typedef std::map<any, group_list, compare_type> slot_container_type;
   typedef slot_container_type::iterator group_iterator;
+  typedef slot_container_type::const_iterator const_group_iterator;
 
   impl(const compare_type& compare) : groups(compare)
   {
@@ -42,7 +43,7 @@ public:
   slot_container_type groups;
   group_iterator back;
 
-  bool empty(group_iterator group) const
+  bool empty(const_group_iterator group) const
   {
     return (group->second.empty() && group != groups.begin() && group != back);
   }

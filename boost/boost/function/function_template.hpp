@@ -633,9 +633,9 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
   }
 #else
 
-#define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)           \
-  typename enable_if_c<(::boost::type_traits::ice_not<                \
-                         (is_integral<Functor>::value)>::value),      \
+#define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
+  typename ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
+                        (::boost::is_integral<Functor>::value)>::value), \
                        Type>::type
 
 // Comparisons between boost::function objects and arbitrary function objects
