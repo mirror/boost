@@ -131,34 +131,25 @@ const export_generator<T, ASeq>
     export_generator<T, ASeq>::instance;
 
 // instantiation of this template creates a static object.
-template<class T, class ASeq>
+template<class T>
 struct guid_initializer {
-    struct empty {
-        static void key_register(const char *key){}
-    };
-    struct non_empty {
-        typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type eti_type;
-        static void key_register(const char *key){
-            boost::serialization::extended_type_info * eti = eti_type::get_instance();
-            eti->key_register(key);
-        }
-    };
+    typedef BOOST_DEDUCED_TYPENAME boost::serialization::type_info_implementation<T>::type eti_type;
+    static void key_register(const char *key){
+        boost::serialization::extended_type_info * eti = eti_type::get_instance();
+        eti->key_register(key);
+    }
     static const guid_initializer instance;
     /* BOOST_DLLEXPORT */  guid_initializer(const char *key = NULL) BOOST_USED ;
 };
 
-template<class T, class ASeq>
-/* BOOST_DLLEXPORT */ guid_initializer<T, ASeq>::guid_initializer(const char *key){
-    typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
-        mpl::empty<ASeq>,
-        mpl::identity<empty>,
-        mpl::identity<non_empty>
-    >::type typex;
-    typex::key_register(key);
+template<class T>
+/* BOOST_DLLEXPORT */ guid_initializer<T>::guid_initializer(const char *key){
+    if(NULL != key)
+        key_register(key);
 }
 
-template<class T, class ASeq>
-const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance;
+template<class T>
+const guid_initializer<T> guid_initializer<T>::instance;
 
 } // namespace detail
 } // namespace archive
@@ -182,15 +173,15 @@ const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance;
     boost_template_instantiate(T &, ASeq &){
         return std::pair<const void *, const void *>(
             & export_generator<T, ASeq>::instance,
-            & guid_initializer<T, ASeq>::instance
+            & guid_initializer<T>::instance
         );
     }
     } } }
     #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
         namespace boost { namespace archive { namespace detail {     \
         template<>                                                   \
-        const guid_initializer<T, ASEQ>                              \
-            guid_initializer<T, ASEQ>::instance(K);                  \
+        const guid_initializer<T>                                    \
+            guid_initializer<T>::instance(K);                        \
         template                                                     \
         BOOST_DLLEXPORT std::pair<const void *, const void *>        \
         boost_template_instantiate(T &, ASEQ &);                     \

@@ -18,16 +18,17 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 #include <cassert>
 
-#include <boost/config.hpp>
-#include <cstring>
-#if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ using ::strcmp; }
-#endif
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_const.hpp>
 
 #include <boost/serialization/extended_type_info.hpp>
 #include <boost/mpl/bool.hpp>
+
+#include <boost/config/abi_prefix.hpp> // must be the last header
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4251 4231 4660 4275)
+#endif
 
 namespace boost {
 namespace serialization {
@@ -38,35 +39,29 @@ namespace serialization {
 
 // common base class to share type_info_key.  This is used to 
 // identify the method used to keep track of the extended type
-class extended_type_info_no_rtti_base : public extended_type_info
+class BOOST_SERIALIZATION_DECL extended_type_info_no_rtti_base : 
+    public extended_type_info
 {
 protected:
     virtual bool
-    less_than(const boost::serialization::extended_type_info &rhs) const {
-        return std::strcmp(key, rhs.key) < 0;
-    }
+    less_than(const boost::serialization::extended_type_info &rhs) const ;
     virtual bool
-    equal_to(const boost::serialization::extended_type_info &rhs) const{
-        return std::strcmp(key, rhs.key) == 0;
-    }
+    equal_to(const boost::serialization::extended_type_info &rhs) const;
     virtual bool
-    not_equal_to(const boost::serialization::extended_type_info &rhs) const {
-        return std::strcmp(key, rhs.key) != 0;
-    }
+    not_equal_to(const boost::serialization::extended_type_info &rhs) const;
 public:
-    static const char * type_info_key;
     struct is_polymorphic
     {
         typedef boost::mpl::bool_<true> type;
         BOOST_STATIC_CONSTANT(bool, value = is_polymorphic::type::value);
     };
-    extended_type_info_no_rtti_base() :
-        boost::serialization::extended_type_info(type_info_key)
-    {}
+    extended_type_info_no_rtti_base();
+    ~extended_type_info_no_rtti_base();
 };
 
 template<class T>
-class extended_type_info_no_rtti : public extended_type_info_no_rtti_base
+class extended_type_info_no_rtti : 
+    public extended_type_info_no_rtti_base
 {
 public:
     // Note: this version of extended_type_info
@@ -111,5 +106,10 @@ public:
     extended_type_info_no_rtti<const T>
 /**/
 #endif
+
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+#include <boost/config/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_EXTENDED_TYPE_INFO_NO_RTTI_HPP
