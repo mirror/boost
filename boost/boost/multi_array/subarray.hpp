@@ -228,8 +228,8 @@ struct disable_non_sub_array_impl<true>
 
 template <class T>
 struct disable_non_sub_array
-  : disable_non_sub_array_impl<is_sub_array<T>::value>
 {
+    typedef typename disable_non_sub_array_impl<is_sub_array<T>::value>::type type;
 };
 #endif
 

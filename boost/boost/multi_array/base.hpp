@@ -27,6 +27,8 @@
 #include "boost/config.hpp"
 #include "boost/mpl/apply_if.hpp"
 #include "boost/mpl/if.hpp"
+#include "boost/mpl/size_t.hpp"
+#include "boost/mpl/aux_/msvc_eti_base.hpp"
 #include "boost/iterator/reverse_iterator.hpp"
 #include "boost/static_assert.hpp"
 #include "boost/type.hpp"
@@ -78,7 +80,7 @@ class sub_array;
 template <typename T, std::size_t NumDims, typename TPtr = const T*>
 class const_sub_array;
 
-template <typename T, typename TPtr, std::size_t NumDims, typename Reference>
+template <typename T, typename TPtr, typename NumDims, typename Reference>
 class array_iterator;
 
 template <typename T, std::size_t NumDims, typename TPtr = const T*>
@@ -183,19 +185,59 @@ struct choose_value_accessor_n {
   typedef value_accessor_n<T,NumDims> type;
 };
 
-template <typename T, std::size_t NumDims>
+template <typename T>
 struct choose_value_accessor_one {
   typedef value_accessor_one<T> type;
 };
 
-template <typename T, std::size_t NumDims>
+template <typename T, typename NumDims>
 struct value_accessor_generator {
+    BOOST_STATIC_CONSTANT(std::size_t, dimensionality = NumDims::value);
+    
   typedef typename
-  mpl::apply_if_c<(NumDims == 1),
-    choose_value_accessor_one<T,NumDims>,
-    choose_value_accessor_n<T,NumDims>
+  mpl::apply_if_c<(dimensionality == 1),
+                  choose_value_accessor_one<T>,
+                  choose_value_accessor_n<T,dimensionality>
   >::type type;
 };
+
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+
+struct eti_value_accessor
+{
+  typedef int index;
+  typedef int size_type;
+  typedef int element;
+  typedef int index_range;
+  typedef int value_type;
+  typedef int reference;
+  typedef int const_reference;
+};
+    
+template <>
+struct value_accessor_generator<int,int>
+{
+  typedef eti_value_accessor type;
+};
+
+template <class T, class NumDims>
+struct associated_types
+  : mpl::aux::msvc_eti_base<
+        typename value_accessor_generator<T,NumDims>::type
+    >::type
+{};
+
+template <>
+struct associated_types<int,int> : eti_value_accessor {};
+
+#else
+
+template <class T, class NumDims>
+struct associated_types
+  : value_accessor_generator<T,NumDims>::type
+{};
+
+#endif
 
 //
 // choose value accessor ends
@@ -207,17 +249,25 @@ struct value_accessor_generator {
 // multi_array_base
 ////////////////////////////////////////////////////////////////////////
 template <typename T, std::size_t NumDims>
-class multi_array_impl_base :
-  public value_accessor_generator<T,NumDims>::type {
-  typedef typename value_accessor_generator<T,NumDims>::type super_type;
+class multi_array_impl_base
+  :
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+      public mpl::aux::msvc_eti_base<
+          typename value_accessor_generator<T,mpl::size_t<NumDims> >::type
+       >::type
+#else
+      public value_accessor_generator<T,mpl::size_t<NumDims> >::type
+#endif 
+{
+  typedef associated_types<T,mpl::size_t<NumDims> > types;
 public:
-  typedef typename super_type::index index;
-  typedef typename super_type::size_type size_type;
-  typedef typename super_type::element element;
-  typedef typename super_type::index_range index_range;
-  typedef typename super_type::value_type value_type;
-  typedef typename super_type::reference reference;
-  typedef typename super_type::const_reference const_reference;
+  typedef typename types::index index;
+  typedef typename types::size_type size_type;
+  typedef typename types::element element;
+  typedef typename types::index_range index_range;
+  typedef typename types::value_type value_type;
+  typedef typename types::reference reference;
+  typedef typename types::const_reference const_reference;
 
   template <std::size_t NDims>
   struct subarray {
@@ -243,8 +293,8 @@ public:
   //
   // iterator support
   //
-  typedef array_iterator<T,T*,NumDims,reference> iterator;
-  typedef array_iterator<T,T const*,NumDims,const_reference> const_iterator;
+  typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference> iterator;
+  typedef array_iterator<T,T const*,mpl::size_t<NumDims>,const_reference> const_iterator;
 
   typedef ::boost::reverse_iterator<iterator> reverse_iterator;
   typedef ::boost::reverse_iterator<const_iterator> const_reverse_iterator;

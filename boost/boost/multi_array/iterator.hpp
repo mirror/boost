@@ -20,6 +20,7 @@
 
 #include "boost/multi_array/base.hpp"
 #include "boost/iterator/iterator_facade.hpp"
+#include "boost/mpl/aux_/msvc_eti_base.hpp"
 #include <cstddef>
 #include <iterator>
 
@@ -42,33 +43,46 @@ struct operator_arrow_proxy
   mutable T value_;
 };
 
+template <typename T, typename TPtr, typename NumDims, typename Reference>
+class array_iterator;
 
-template <typename T, typename TPtr, std::size_t NumDims, typename Reference>
-class array_iterator :
-    public iterator_facade<
-             array_iterator<T,TPtr,NumDims,Reference>,
-             typename value_accessor_generator<T,NumDims>::type::value_type,
-             boost::random_access_traversal_tag,
-             Reference
-           >,
-    private value_accessor_generator<T,NumDims>::type
+template <typename T, typename TPtr, typename NumDims, typename Reference>
+class array_iterator
+  : public
+    iterator_facade<
+        array_iterator<T,TPtr,NumDims,Reference>
+      , typename associated_types<T,NumDims>::value_type
+      , boost::random_access_traversal_tag
+      , Reference
+    >
+    , private
+#if BOOST_WORKAROUND(BOOST_MSVC,==1200)
+      mpl::aux::msvc_eti_base<typename 
+#endif 
+          value_accessor_generator<T,NumDims>::type
+#if BOOST_WORKAROUND(BOOST_MSVC,==1200)
+      >::type
+#endif 
 {
   friend class iterator_core_access;
-  template <typename TT, typename TP, std::size_t N, typename R>
-    friend class array_iterator;
+  typedef detail::multi_array::associated_types<T,NumDims> access_t;
 
-  typedef typename value_accessor_generator<T,NumDims>::type access_t;
+  typedef iterator_facade<
+        array_iterator<T,TPtr,NumDims,Reference>
+      , typename detail::multi_array::associated_types<T,NumDims>::value_type
+      , boost::random_access_traversal_tag
+      , Reference
+    > facade_type;
 
-  typedef  iterator_facade<
-             array_iterator<T,TPtr,NumDims,Reference>,
-             typename access_t::value_type,
-             ::boost::random_access_traversal_tag,
-             Reference
-           > facade_type;
-
-  typedef typename value_accessor_generator<T,NumDims>::type access_t;
   typedef typename access_t::index index;
   typedef typename access_t::size_type size_type;
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+  template <typename, typename, typename, typename>
+    friend class array_iterator;
+#else
+ public:
+#endif 
 
   index idx_;
   TPtr base_;
@@ -107,8 +121,10 @@ public:
   }
   
 
-  reference dereference() const {
-    return access_t::access(boost::type<reference>(),
+  reference dereference() const
+  {
+    typedef typename value_accessor_generator<T,NumDims>::type accessor;
+    return accessor::access(boost::type<reference>(),
                             idx_,
                             base_,
                             extents_,
