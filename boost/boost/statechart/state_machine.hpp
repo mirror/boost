@@ -29,6 +29,7 @@
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
@@ -152,7 +153,7 @@ struct state_cast_impl_reference_target
   template< class Target, class IdType >
   static IdType type_id()
   {
-    return Target::static_type();
+    return remove_reference< Target >::type::static_type();
   }
 
   template< class Dummy >
@@ -971,9 +972,9 @@ class state_machine : noncopyable
       typename history_map_type::iterator pFoundSlot = historyMap.find(
         history_key_type::make_history_key< DefaultState >() );
       
-      if ( pFoundSlot == historyMap.end() )
+      if ( pFoundSlot == historyMap.end() || ( pFoundSlot->second == 0 ) )
       {
-        // We have never entered this state before.
+        // We have never entered this state before or history was cleared
         DefaultState::deep_construct(
           pContext, *polymorphic_downcast< MostDerived * >( this ) );
       }
