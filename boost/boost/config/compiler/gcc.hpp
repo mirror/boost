@@ -36,7 +36,7 @@
 #define BOOST_HAS_THREADS
 
 //
-// long long support: always turn this on here?
+// gcc has "long long"
 //
 #define BOOST_HAS_LONG_LONG
 
