@@ -78,6 +78,9 @@ inline void set_to_zero(cons&lt;H, T&gt;&amp; x) { x.get_head() = 0; set_to_zero
 <h4>Constructing cons lists</h4>
 
 <p>
+A cons list can be default constructed provided that all its elements can be default constructed.
+</p>
+<p>
 A cons list can be constructed from its head and tail. The prototype of the constructor is:
 <pre><code>cons(typename tuple_access_traits&lt;head_type&gt;::parameter_type h,
      const tail_type&amp; t)
@@ -87,6 +90,7 @@ The traits template for the head parameter selects correct parameter types for d
 <p>
 For a one-element cons list the tail argument (<code>null_type</code>) can be omitted.
 </p>
+
 
 <h2>Traits classes for tuple element types</h2>
 
