@@ -80,7 +80,7 @@ public:
 namespace detail
 {
 
-class counted_base
+class sp_counted_base
 {
 private:
 
@@ -88,11 +88,11 @@ private:
 
 public:
 
-    counted_base(): use_count_(1), weak_count_(1)
+    sp_counted_base(): use_count_(1), weak_count_(1)
     {
     }
 
-    virtual ~counted_base() // nothrow
+    virtual ~sp_counted_base() // nothrow
     {
     }
 
@@ -174,8 +174,8 @@ public:
 
 private:
 
-    counted_base(counted_base const &);
-    counted_base & operator= (counted_base const &);
+    sp_counted_base(sp_counted_base const &);
+    sp_counted_base & operator= (sp_counted_base const &);
 
     // inv: use_count_ <= weak_count_
 
@@ -189,31 +189,31 @@ private:
 
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
 
-template<class T> void cbi_call_constructor_hook(counted_base * pn, T * px, checked_deleter<T> const &, int)
+template<class T> void cbi_call_constructor_hook(sp_counted_base * pn, T * px, checked_deleter<T> const &, int)
 {
     boost::sp_scalar_constructor_hook(px, sizeof(T), pn);
 }
 
-template<class T> void cbi_call_constructor_hook(counted_base *, T * px, checked_array_deleter<T> const &, int)
+template<class T> void cbi_call_constructor_hook(sp_counted_base *, T * px, checked_array_deleter<T> const &, int)
 {
     boost::sp_array_constructor_hook(px);
 }
 
-template<class P, class D> void cbi_call_constructor_hook(counted_base *, P const &, D const &, long)
+template<class P, class D> void cbi_call_constructor_hook(sp_counted_base *, P const &, D const &, long)
 {
 }
 
-template<class T> void cbi_call_destructor_hook(counted_base * pn, T * px, checked_deleter<T> const &, int)
+template<class T> void cbi_call_destructor_hook(sp_counted_base * pn, T * px, checked_deleter<T> const &, int)
 {
     boost::sp_scalar_destructor_hook(px, sizeof(T), pn);
 }
 
-template<class T> void cbi_call_destructor_hook(counted_base *, T * px, checked_array_deleter<T> const &, int)
+template<class T> void cbi_call_destructor_hook(sp_counted_base *, T * px, checked_array_deleter<T> const &, int)
 {
     boost::sp_array_destructor_hook(px);
 }
 
-template<class P, class D> void cbi_call_destructor_hook(counted_base *, P const &, D const &, long)
+template<class P, class D> void cbi_call_destructor_hook(sp_counted_base *, P const &, D const &, long)
 {
 }
 
@@ -226,23 +226,23 @@ template<class P, class D> void cbi_call_destructor_hook(counted_base *, P const
 # pragma option push -Vx-
 #endif
 
-template<class P, class D> class counted_base_impl: public counted_base
+template<class P, class D> class sp_counted_base_impl: public sp_counted_base
 {
 private:
 
     P ptr; // copy constructor must not throw
     D del; // copy constructor must not throw
 
-    counted_base_impl(counted_base_impl const &);
-    counted_base_impl & operator= (counted_base_impl const &);
+    sp_counted_base_impl(sp_counted_base_impl const &);
+    sp_counted_base_impl & operator= (sp_counted_base_impl const &);
 
-    typedef counted_base_impl<P, D> this_type;
+    typedef sp_counted_base_impl<P, D> this_type;
 
 public:
 
     // pre: initial_use_count <= initial_weak_count, d(p) must not throw
 
-    counted_base_impl(P p, D d): ptr(p), del(d)
+    sp_counted_base_impl(P p, D d): ptr(p), del(d)
     {
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
         detail::cbi_call_constructor_hook(this, p, d, 0);
@@ -290,7 +290,7 @@ class shared_count
 {
 private:
 
-    counted_base * pi_;
+    sp_counted_base * pi_;
 
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
     int id_;
@@ -316,7 +316,7 @@ public:
 
         try
         {
-            pi_ = new counted_base_impl<P, D>(p, d);
+            pi_ = new sp_counted_base_impl<P, D>(p, d);
         }
         catch(...)
         {
@@ -326,7 +326,7 @@ public:
 
 #else
 
-        pi_ = new counted_base_impl<P, D>(p, d);
+        pi_ = new sp_counted_base_impl<P, D>(p, d);
 
         if(pi_ == 0)
         {
@@ -342,7 +342,7 @@ public:
     // auto_ptr<Y> is special cased to provide the strong guarantee
 
     template<class Y>
-    explicit shared_count(std::auto_ptr<Y> & r): pi_(new counted_base_impl< Y *, checked_deleter<Y> >(r.get(), checked_deleter<Y>()))
+    explicit shared_count(std::auto_ptr<Y> & r): pi_(new sp_counted_base_impl< Y *, checked_deleter<Y> >(r.get(), checked_deleter<Y>()))
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
         , id_(shared_count_id)
 #endif
@@ -369,7 +369,7 @@ public:
 
     shared_count & operator= (shared_count const & r) // nothrow
     {
-        counted_base * tmp = r.pi_;
+        sp_counted_base * tmp = r.pi_;
         if(tmp != 0) tmp->add_ref();
         if(pi_ != 0) pi_->release();
         pi_ = tmp;
@@ -379,7 +379,7 @@ public:
 
     void swap(shared_count & r) // nothrow
     {
-        counted_base * tmp = r.pi_;
+        sp_counted_base * tmp = r.pi_;
         r.pi_ = pi_;
         pi_ = tmp;
     }
@@ -401,7 +401,7 @@ public:
 
     friend inline bool operator<(shared_count const & a, shared_count const & b)
     {
-        return std::less<counted_base *>()(a.pi_, b.pi_);
+        return std::less<sp_counted_base *>()(a.pi_, b.pi_);
     }
 
     void * get_deleter(std::type_info const & ti) const
@@ -419,7 +419,7 @@ class weak_count
 {
 private:
 
-    counted_base * pi_;
+    sp_counted_base * pi_;
 
 #if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
     int id_;
@@ -459,7 +459,7 @@ public:
 
     weak_count & operator= (shared_count const & r) // nothrow
     {
-        counted_base * tmp = r.pi_;
+        sp_counted_base * tmp = r.pi_;
         if(tmp != 0) tmp->weak_add_ref();
         if(pi_ != 0) pi_->weak_release();
         pi_ = tmp;
@@ -469,7 +469,7 @@ public:
 
     weak_count & operator= (weak_count const & r) // nothrow
     {
-        counted_base * tmp = r.pi_;
+        sp_counted_base * tmp = r.pi_;
         if(tmp != 0) tmp->weak_add_ref();
         if(pi_ != 0) pi_->weak_release();
         pi_ = tmp;
@@ -479,7 +479,7 @@ public:
 
     void swap(weak_count & r) // nothrow
     {
-        counted_base * tmp = r.pi_;
+        sp_counted_base * tmp = r.pi_;
         r.pi_ = pi_;
         pi_ = tmp;
     }
@@ -496,7 +496,7 @@ public:
 
     friend inline bool operator<(weak_count const & a, weak_count const & b)
     {
-        return std::less<counted_base *>()(a.pi_, b.pi_);
+        return std::less<sp_counted_base *>()(a.pi_, b.pi_);
     }
 };
 

@@ -138,7 +138,7 @@ namespace
 
     struct count_layout
     {
-        boost::detail::counted_base * pi;
+        boost::detail::sp_counted_base * pi;
         int id;
     };
 
@@ -194,7 +194,7 @@ static void find_unreachable_objects(map_type const & m, map2_type & m2)
     {
         for(map_type::const_iterator i = m.begin(); i != m.end(); ++i)
         {
-            boost::detail::counted_base const * p = static_cast<boost::detail::counted_base const *>(i->first);
+            boost::detail::sp_counted_base const * p = static_cast<boost::detail::sp_counted_base const *>(i->first);
 
             BOOST_ASSERT(p->use_count() != 0); // there should be no inactive counts in the map
 
@@ -209,7 +209,7 @@ static void find_unreachable_objects(map_type const & m, map2_type & m2)
 
         for(map2_type::iterator i = m2.begin(); i != m2.end(); ++i)
         {
-            boost::detail::counted_base const * p = static_cast<boost::detail::counted_base const *>(i->first);
+            boost::detail::sp_counted_base const * p = static_cast<boost::detail::sp_counted_base const *>(i->first);
             if(p->use_count() != i->second) open.push_back(p);
         }
 
