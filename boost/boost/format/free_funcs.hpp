@@ -1,18 +1,14 @@
 // -*- C++ -*-
-//  Boost general library 'format'   ---------------------------
-//  See http://www.boost.org for updates, documentation, and revision history.
-
-//  (C) Samuel Krempp 2001
-//  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
-
-// ideas taken from Rüdiger Loos's format class
-// and Karl Nelson's ofstream (also took its parsing code as basis for printf parsing)
-
 // ------------------------------------------------------------------------------
-// free_funcs.hpp :  implementation of the free functions declared in namespace format
+// free_funcs.hpp :  implementation of the free functions declared in boost::format
+// ------------------------------------------------------------------------------
+
+//  Copyright Samuel Krempp 2003. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/format for library home page
+
 // ------------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_FUNCS_HPP
@@ -23,28 +19,29 @@
 
 namespace boost {
 
-namespace io {
-    template<class Ch, class Tr> inline 
-    std::basic_string<Ch, Tr> str(const basic_format<Ch, Tr>& f) {
-        // adds up all pieces of strings and converted items, and return the formatted string
-        return f.str();
-    }
+    namespace io {
+        template<class Ch, class Tr> inline 
+        std::basic_string<Ch, Tr> str(const basic_format<Ch, Tr>& f) {
+            // adds up all pieces of strings and converted items, and return the formatted string
+            return f.str();
+        }
 
-}   // - namespace io
+    }   // - namespace io
 
-    template< class Ch, class Tr>
-    BOOST_IO_STD basic_ostream<Ch, Tr>& 
-    operator<<( BOOST_IO_STD basic_ostream<Ch, Tr>& os, 
-                const boost::basic_format<Ch, Tr>& f) 
-        // effect: "return os << str(f);" but we can try to do it faster
+    template< class Ch, class Tr, class Alloc> 
+    typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string & 
+    operator<<( typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string& os,
+                const basic_format<Ch, Tr, Alloc>& f)
+        // effect: "return os << str(f);" but we can do it faster
     {
-        typedef boost::basic_format<Ch, Tr>   format_t;
+        typedef boost::basic_format<Ch, Tr, Alloc>   format_t;
         if(f.items_.size()==0) 
             os << f.prefix_;
         else {
             if(f.cur_arg_ < f.num_args_)
                 if( f.exceptions() & io::too_few_args_bit )
-                    boost::throw_exception(io::too_few_args()); // not enough variables supplied
+                    // not enough variables supplied
+                    boost::throw_exception(io::too_few_args(f.cur_arg_, f.num_args_)); 
             if(f.style_ & format_t::special_needs) 
                 os << f.str();
             else {

@@ -19,7 +19,8 @@
 #include <vector>
 #include <string>
 #include <boost/detail/workaround.hpp>
-#include <boost/format/detail/config_macros.hpp>
+
+#include <boost/format/detail/compat_workarounds.hpp>
 
 #ifndef BOOST_NO_STD_LOCALE
 #include <locale>

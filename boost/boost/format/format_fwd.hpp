@@ -1,18 +1,13 @@
-// -*- C++ -*-
-//  Boost general library 'format'   ---------------------------
-//  See http://www.boost.org for updates, documentation, and revision history.
-
-//  (C) Samuel Krempp 2001
-//  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
-
-// ideas taken from Rüdiger Loos's format class
-// and Karl Nelson's ofstream (also took its parsing code as basis for printf parsing)
-
 // ------------------------------------------------------------------------------
-// format_fwd.hpp :  forward declarations, for primary header format.hpp
+//  format_fwd.hpp :  forward declarations
+// ------------------------------------------------------------------------------
+
+//  Copyright Samuel Krempp 2003. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/format for library home page
+
 // ------------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_FWD_HPP
@@ -21,44 +16,55 @@
 #include <string>
 #include <iosfwd>
 
-#include <boost/format/detail/config_macros.hpp> 
+#include <boost/format/detail/compat_workarounds.hpp> 
 
 namespace boost {
 
     template <class Ch, 
 #if !( BOOST_WORKAROUND(__GNUC__, <3) &&  defined(__STL_CONFIG_H) )
-        class Tr = BOOST_IO_STD char_traits<Ch> > 
+        class Tr = BOOST_IO_STD char_traits<Ch>, class Alloc = std::allocator<Ch> > 
 #else
-    class Tr = std::string_char_traits<Ch> > 
+              class Tr = std::string_char_traits<Ch>, class Alloc = std::allocator<Ch> > 
 #endif
     class basic_format;
 
     typedef basic_format<char >     format;
 
-
 #if !defined(BOOST_NO_STD_WSTRING)  && !defined(BOOST_NO_STD_WSTREAMBUF) \
- && !defined(BOOST_NO_STRINGSTREAM) && !defined(BOOST_FORMAT_IGNORE_STRINGSTREAM)
-    //we use either sstream or strstream, and strstream doesnt support wchar
+    && !defined(BOOST_FORMAT_IGNORE_STRINGSTREAM)
     typedef basic_format<wchar_t >  wformat;
 #endif
 
-namespace io {
-    enum format_error_bits { bad_format_string_bit = 1, 
-                             too_few_args_bit = 2, too_many_args_bit = 4,
-                             out_of_range_bit = 8,
-                             all_error_bits = 255, no_error_bits=0 };
+    namespace io {
+        enum format_error_bits { bad_format_string_bit = 1, 
+                                 too_few_args_bit = 2, too_many_args_bit = 4,
+                                 out_of_range_bit = 8,
+                                 all_error_bits = 255, no_error_bits=0 };
                   
-    template<class Ch, class Tr> 
-    std::basic_string<Ch, Tr>     str(const basic_format<Ch, Tr>& ) ;
+        template<class Ch, class Tr, class Alloc> 
+        std::basic_string<Ch, Tr, Alloc> str (const basic_format<Ch, Tr, Alloc>& ) ;
 
-} // namespace io
+        namespace detail {
+#if !defined(BOOST_NO_STD_LOCALE)
+            typedef std::locale  locale_or_dummy_t;
+#else
+            typedef int          locale_or_dummy_t; // used to avoid placing ifdefs everywhere
+#endif
+        } // namespace detail
+
+    } // namespace io
 
 
-    template< class Ch, class Tr> 
-    BOOST_IO_STD basic_ostream<Ch, Tr>& 
-    operator<<( BOOST_IO_STD basic_ostream<Ch, Tr>&, const basic_format<Ch, Tr>&);
+    template< class Ch, class Tr, class Alloc> 
+    typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string & 
+    operator<<( typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string& ,
+                const basic_format<Ch, Tr, Alloc>&);
 
 
 } // namespace boost
 
 #endif // BOOST_FORMAT_FWD_HPP
+// class basic_ostream<char,string_char_traits<char> > & 
+// boost::operator <<<char, string_char_traits<char>, allocator<char> >
+//   (basic_ostream<char,string_char_traits<char> > &, 
+//    const boost::basic_format<char,string_char_traits<char>,allocator<char> > &)

@@ -1,17 +1,17 @@
 // -*- C++ -*-
-//  Boost general library 'format'   ---------------------------
-//  See http://www.boost.org for updates, documentation, and revision history.
-
-//  (C) Samuel Krempp 2001
-//  Permission to copy, use, modify, sell and
-//  distribute this software is granted provided this copyright notice appears
-//  in all copies. This software is provided "as is" without express or implied
-//  warranty, and with no claim as to its suitability for any purpose.
-
 // ------------------------------------------------------------------------------
 // config_macros.hpp : configuration macros for the format library
-//   only BOOST_IO_STD is absolutely needed. other are just used to trigger workaround
-//   codes here and there.
+// only BOOST_IO_STD is absolutely needed (since it should be 'std::' in general)
+// others are compiler-specific workaround macros used in #ifdef switches
+// ------------------------------------------------------------------------------
+
+//  Copyright Samuel Krempp 2003. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+// see http://www.boost.org/libs/format for library home page
+
+
 // ------------------------------------------------------------------------------
 
 #ifndef BOOST_FORMAT_CONFIG_MACROS_HPP
@@ -58,13 +58,11 @@
 namespace boost {
   using std::char_traits;
   using std::basic_ostream;
-  using std::basic_ostringstream;
   namespace io {
     using std::basic_ostream;
     namespace detail {
       using std::basic_ios;
       using std::basic_ostream;
-      using std::basic_ostringstream;
     }
   }
 }
