@@ -10,7 +10,7 @@
 				<td width="277">
 					<img src="../../boost.png" alt="boost.png (6897 bytes)" width="277" height="86">
 				</td>
-				<td align="middle">
+				<td align="center">
 					<h1>mem_fn.hpp</h1>
 				</td>
 			</tr>
@@ -139,7 +139,7 @@ void k(std::vector&lt;boost::shared_ptr&lt;X&gt; &gt; const &amp; v)
 		<p>
 			All function objects returned by <b>mem_fn</b> expose a <b>result_type</b> typedef 
 			that represents the return type of the member function. For data members, <STRONG>result_type</STRONG>
-			is defined as a const reference to the type of the member.
+			is defined as the type of the member.
 		</p>
 		<h2><a name="FAQ">Frequently Asked Questions</a></h2>
 		<h3><a name="Q1">Can <b>mem_fn</b> be used instead of the standard <b>std::mem_fun[_ref]</b>
@@ -206,7 +206,7 @@ template&lt;class R, class T, class A1, class A2&gt; <i>unspecified-6</i> <a hre
 			throw exceptions. <tt><i>unspecified-N</i>::result_type</tt> is defined as the 
 			return type of the member function pointer passed as an argument to <b>mem_fn</b>
 			(<b>R</b> in the Synopsis.) <tt><i>unspecified-2-1</i>::result_type</tt> is 
-			defined as <tt>R const &amp;</tt>.
+			defined as <tt>R</tt>.
 		</p>
 		<h3><a name="get_pointer">get_pointer</a></h3>
 		<h4><a name="get_pointer_1">template&lt;class T&gt; T * get_pointer(T * p)</a></h4>
@@ -333,8 +333,8 @@ template&lt;class R, class T, class A1, class A2&gt; <i>unspecified-6</i> <a hre
 				<a href="test/mem_fn_stdcall_test.cpp">libs/bind/test/mem_fn_stdcall_test.cpp</a>
 			(test for __stdcall)
 			<li>
-				<a href="test/mem_fn_void_test.cpp">libs/bind/test/mem_fn_void_test.cpp</a> (test for 
-				void returns)</li>
+				<a href="test/mem_fn_void_test.cpp">libs/bind/test/mem_fn_void_test.cpp</a> (test 
+				for void returns)</li>
 		</ul>
 		<h3><a name="Dependencies">Dependencies</a></h3>
 		<ul>

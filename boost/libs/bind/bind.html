@@ -9,7 +9,7 @@
 			<tr>
 				<td width="277"><IMG height="86" alt="boost.png (6897 bytes)" src="../../boost.png" width="277">
 				</td>
-				<td align="middle">
+				<td align="center">
 					<h1>bind.hpp</h1>
 				</td>
 			</tr>
@@ -192,14 +192,14 @@ bind(std::less&lt;int&gt;(), _1, 9)(x);	// x &lt; 9
 				boost::mem_fn</A> has been used to convert the member pointer into a 
 			function object. In other words, the expression
 		</p>
-		<pre>bind(&amp;X::f, <i>args</I>)
+		<pre>bind(&amp;X::f, <i>args</i>)
 </pre>
 		<p>is equivalent to
 		</p>
-		<pre>bind&lt;R&gt;(<A href="mem_fn.html" >mem_fn</A>(&amp;X::f), <i>args</I>)
+		<pre>bind&lt;R&gt;(<A href="mem_fn.html" >mem_fn</A>(&amp;X::f), <i>args</i>)
 </pre>
-		<p>where <b>R</b> is the return type of <b>X::f</b> (for member functions) or a 
-			const reference to the type of the member (for data members.)
+		<p>where <b>R</b> is the return type of <b>X::f</b> (for member functions) or the 
+			type of the member (for data members.)
 		</p>
 		<p>[Note: <b>mem_fn</b> creates function objects that are able to accept a pointer, 
 			a reference, or a smart pointer to an object as its first argument; for 
@@ -220,8 +220,8 @@ int i = 5;
 
 bind(&amp;X::f, ref(x), _1)(i);		// x.f(i)
 bind(&amp;X::f, &amp;x, _1)(i);			//(&amp;x)-&gt;f(i)
-bind(&amp;X::f, x, _1)(i);			// (<i>internal copy of x</I>).f(i)
-bind(&amp;X::f, p, _1)(i);			// (<i>internal copy of p</I>)-&gt;f(i)
+bind(&amp;X::f, x, _1)(i);			// (<i>internal copy of x</i>).f(i)
+bind(&amp;X::f, p, _1)(i);			// (<i>internal copy of p</i>)-&gt;f(i)
 </pre>
 		<p>The last two examples are interesting in that they produce "self-contained" 
 			function objects. <tt>bind(&amp;X::f, x, _1)</tt> stores a copy of <b>x</b>. <tt>bind(&amp;X::f, 
@@ -436,7 +436,7 @@ int main()
 int main()
 {
     boost::bind(&amp;X::f, 1);     // error, X::f takes two arguments
-    boost::bind(&amp;X::f, <b>_1</B>, 1); // OK
+    boost::bind(&amp;X::f, <b>_1</b>, 1); // OK
 }
 </pre>
 		<h3><a name="err_signature">The function object cannot be called with the specified 
@@ -552,37 +552,37 @@ int main()
 
 // no arguments
 
-template&lt;class R, class F&gt; <i>unspecified-1</I> <A href="#bind_1" >bind</A>(F f);
+template&lt;class R, class F&gt; <i>unspecified-1</i> <A href="#bind_1" >bind</A>(F f);
 
-template&lt;class F&gt; <i>unspecified-1-1</I> <A href="#bind_1_1" >bind</A>(F f);
+template&lt;class F&gt; <i>unspecified-1-1</i> <A href="#bind_1_1" >bind</A>(F f);
 
-template&lt;class R&gt; <i>unspecified-2</I> <A href="#bind_2" >bind</A>(R (*f) ());
+template&lt;class R&gt; <i>unspecified-2</i> <A href="#bind_2" >bind</A>(R (*f) ());
 
 // one argument
 
-template&lt;class R, class F, class A1&gt; <i>unspecified-3</I> <A href="#bind_3" >bind</A>(F f, A1 a1);
+template&lt;class R, class F, class A1&gt; <i>unspecified-3</i> <A href="#bind_3" >bind</A>(F f, A1 a1);
 
-template&lt;class F, class A1&gt; <i>unspecified-3-1</I> <A href="#bind_3_1" >bind</A>(F f, A1 a1);
+template&lt;class F, class A1&gt; <i>unspecified-3-1</i> <A href="#bind_3_1" >bind</A>(F f, A1 a1);
 
-template&lt;class R, class B1, class A1&gt; <i>unspecified-4</I> <A href="#bind_4" >bind</A>(R (*f) (B1), A1 a1);
+template&lt;class R, class B1, class A1&gt; <i>unspecified-4</i> <A href="#bind_4" >bind</A>(R (*f) (B1), A1 a1);
 
-template&lt;class R, class T, class A1&gt; <i>unspecified-5</I> <A href="#bind_5" >bind</A>(R (T::*f) (), A1 a1);
+template&lt;class R, class T, class A1&gt; <i>unspecified-5</i> <A href="#bind_5" >bind</A>(R (T::*f) (), A1 a1);
 
-template&lt;class R, class T, class A1&gt; <i>unspecified-6</I> <A href="#bind_6" >bind</A>(R (T::*f) () const, A1 a1);
+template&lt;class R, class T, class A1&gt; <i>unspecified-6</i> <A href="#bind_6" >bind</A>(R (T::*f) () const, A1 a1);
 
-template&lt;class R, class T, class A1&gt; <i>unspecified-6-1</I> <A href="#bind_6_1" >bind</A>(R T::*f, A1 a1);
+template&lt;class R, class T, class A1&gt; <i>unspecified-6-1</i> <A href="#bind_6_1" >bind</A>(R T::*f, A1 a1);
 
 // two arguments
 
-template&lt;class R, class F, class A1, class A2&gt; <i>unspecified-7</I> <A href="#bind_7" >bind</A>(F f, A1 a1, A2 a2);
+template&lt;class R, class F, class A1, class A2&gt; <i>unspecified-7</i> <A href="#bind_7" >bind</A>(F f, A1 a1, A2 a2);
 
-template&lt;class F, class A1, class A2&gt; <i>unspecified-7-1</I> <A href="#bind_7_1" >bind</A>(F f, A1 a1, A2 a2);
+template&lt;class F, class A1, class A2&gt; <i>unspecified-7-1</i> <A href="#bind_7_1" >bind</A>(F f, A1 a1, A2 a2);
 
-template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>unspecified-8</I> <A href="#bind_8" >bind</A>(R (*f) (B1, B2), A1 a1, A2 a2);
+template&lt;class R, class B1, class B2, class A1, class A2&gt; <i>unspecified-8</i> <A href="#bind_8" >bind</A>(R (*f) (B1, B2), A1 a1, A2 a2);
 
-template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-9</I> <A href="#bind_9" >bind</A>(R (T::*f) (B1), A1 a1, A2 a2);
+template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-9</i> <A href="#bind_9" >bind</A>(R (T::*f) (B1), A1 a1, A2 a2);
 
-template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-10</I> <A href="#bind_10" >bind</A>(R (T::*f) (B1) const, A1 a1, A2 a2);
+template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-10</i> <A href="#bind_10" >bind</A>(R (T::*f) (B1) const, A1 a1, A2 a2);
 
 // implementation defined number of additional overloads for more arguments
 
@@ -591,11 +591,11 @@ template&lt;class R, class T, class B1, class A1, class A2&gt; <i>unspecified-10
 namespace
 {
 
-<i>unspecified-placeholder-type-1</I> _1;
+<i>unspecified-placeholder-type-1</i> _1;
 
-<i>unspecified-placeholder-type-2</I> _2;
+<i>unspecified-placeholder-type-2</i> _2;
 
-<i>unspecified-placeholder-type-3</I> _3;
+<i>unspecified-placeholder-type-3</i> _3;
 
 // implementation defined number of additional placeholder definitions
 
@@ -784,11 +784,11 @@ namespace
 		<h3><a name="Dependencies">Dependencies</a></h3>
 		<ul>
 			<li>
-				<A href="../config/config.htm">Boost.Config</A></li>
+				<A href="../config/config.htm">Boost.Config</A>
 			<li>
-				<A href="ref.html">boost/ref.hpp</A></li>
+				<A href="ref.html">boost/ref.hpp</A>
 			<li>
-				<A href="mem_fn.html">boost/mem_fn.hpp</A></li>
+				<A href="mem_fn.html">boost/mem_fn.hpp</A>
 			<li>
 				<A href="../../boost/type.hpp">boost/type.hpp</A></li>
 		</ul>
@@ -826,8 +826,9 @@ namespace
 				The <a href="http://staff.cs.utu.fi/BL/">Binder Library</a>
 			by Jaakko Järvi;
 			<li>
-				The <a href="../lambda/">Lambda Library</a> (now part of Boost)
-			by Jaakko Järvi and Gary Powell (the successor to the Binder Library);
+				The <a href="../lambda/">Lambda Library</a>
+			(now part of Boost) by Jaakko Järvi and Gary Powell (the successor to the 
+			Binder Library);
 			<li>
 				<a href="http://matfys.lth.se/~petter/src/more/stlext/index.html">Extensions to the 
 					STL</a> by Petter Urkedal.</li></ul>
