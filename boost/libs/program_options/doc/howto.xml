@@ -20,7 +20,7 @@ options groups/hidden options
 
 -->
   <section>
-    <title>Non-convenional Syntax</title>
+    <title>Non-conventional Syntax</title>
     
     <para>Sometimes, standard command line syntaxes are not enough. For
     example, the gcc compiler has "-frtti" and -fno-rtti" options, and this
@@ -31,7 +31,7 @@ options groups/hidden options
     <para>For such cases, the library allows the user to provide an
     <firstterm>additional parser</firstterm> -- a function which will be called on each
     command line element, before any processing by the library. If the
-    additional parser recognizes the syntax, it returns the option name and
+    additional parser recognises the syntax, it returns the option name and
     value, which are used directly. The above example can be handled by the
     following code:
     </para>
@@ -65,11 +65,13 @@ store(command_line_parser(ac, av).options(desc).extra_parser(reg_foo)
     <title>Response Files</title>
 
     <indexterm><primary>response files</primary></indexterm> 
+
     <para>Some operating system have very low limits of the command line
       length. The common way to work around those limitations is using
-      <firstterm>response files</firstterm>. Response file is just
-      configuration file which uses the same syntax as the command line, and
-      which name can be specified on the command line.  The library does not
+      <firstterm>response files</firstterm>.  A response file is just a
+      configuration file which uses the same syntax as the command line. If
+      the command line specifies a name of response file to use, it's loaded
+      and parsed in addition to the command line.  The library does not
       provide direct support for response files, so you'll need to write some
       extra code.
     </para>
@@ -244,8 +246,8 @@ if (vm.count("num-threads")) {
 }                           
 ]]></programlisting>
       When parsing the command line, all options are allowed. The "--help"
-      message, however, does not includes the "Backend options" group -- the
-      options in that group are hidden. The user can explictly force the
+      message, however, does not include the "Backend options" group -- the
+      options in that group are hidden. The user can explicitly force the
       display of that options group by passing "--help-module backend"
       option. The complete example can be found in the
       "example/option_groups.cpp" file.
@@ -300,7 +302,7 @@ void validate(boost::any& v,
 </programlisting>The function takes four parameters. The first is the storage
       for the value, and in this case is either empty or contains an instance of
       the <code>magic_number</code> class. The second is the list of strings
-      found in the next occurence of the option. The remaining two parameters
+      found in the next occurrence of the option. The remaining two parameters
       are needed to workaround the lack of partial template specialization and
       partial function template ordering on some compilers.
     </para>
@@ -376,10 +378,10 @@ locale::global(locale(""));
       implementation, though. The quick test involves three steps:
       <orderedlist>
         <listitem>
-          <para>Go the the "test" directory and built the "test_convert" binary.</para>
+          <para>Go the the "test" directory and build the "test_convert" binary.</para>
         </listitem>
         <listitem>
-          <para>Set some non-ascii locale in the environemt. On Linux, one can
+          <para>Set some non-ascii locale in the environmemt. On Linux, one can
           run, for example: <screen>
 $ export LC_CTYPE=ru_RU.KOI8-R
 </screen>
@@ -387,7 +389,7 @@ $ export LC_CTYPE=ru_RU.KOI8-R
         </listitem>
         <listitem>
           <para>Run the "test_convert" binary with any non-ascii string in the
-            selected encoding as its parameterIf you see a list of Unicode codepoints,
+            selected encoding as its parameter. If you see a list of Unicode codepoints,
             everything's OK. Otherwise, locale support on your system might be
             broken.</para>
         </listitem>

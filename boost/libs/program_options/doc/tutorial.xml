@@ -12,9 +12,9 @@
   <para>In this section, we'll take a look at the most common usage scenarios
   of the program_options library, starting with the simplest one. The examples
   show only the interesting code parts, but the complete programs can be found
-  in the "example" directory. Through all the examples, we'll assume that the
-  following namespace alias is in effect:
-    <programlisting>namespace po = boost::program_options;</programlisting>    
+  in the "BOOST_ROOT/libs/program_options/example" directory. Through all the
+  examples, we'll assume that the following namespace alias is in effect:
+<programlisting>namespace po = boost::program_options;</programlisting>
   </para>
 
   <section>
@@ -97,7 +97,7 @@ Compression level was set to 10.
   complete version of the code snipped below can be found in
   "example/options_description.cpp".</para>
 
-  <para>Imagine we're writing a compiler. It should take the optimizaiton
+  <para>Imagine we're writing a compiler. It should take the optimization
     level, a number of include paths, and a number of input files, and perform some
     interesting work. Let's describe the options:
     <programlisting>

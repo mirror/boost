@@ -66,9 +66,9 @@
         options are described, all parsers can use that description.</para>
       </listitem>
       <listitem>
-        <para>The parsers are intended to be fairly dump. They just
+        <para>The parsers are intended to be fairly dumb. They just
           split the input into (name, value) pairs, using strings to represent
-          names and values. No meaningfull processing of values is done.
+          names and values. No meaningful processing of values is done.
         </para>
       </listitem>
       <listitem>
@@ -261,9 +261,10 @@ desc.add_options()
       description component to determine if the option is known and how its value
       is specified. In the simplest case, the name is explicitly specified,
       which allows the library to decide if such option is known. If it is known, the
-      &value_semantic; instance determines how the value is specified. Common
+      &value_semantic; instance determines how the value is specified. (If
+      it is not known, an exception is thrown.) Common
       cases are when the value is explicitly specified by the user, and when
-      the value cannot be specified by the user, but the presense of the
+      the value cannot be specified by the user, but the presence of the
       option implies some value (for example, <code>true</code>). So, the
       parser checks that the value is specified when needed and not specified
       when not needed, and returns new (name, value) pair.

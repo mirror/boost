@@ -99,3 +99,37 @@ Style of 'screen' in docs.
 > 2. addition or composition
 > 3. storage or insertion
 > 4. notification.
+
+
+> I think a few lines should be added to aid the library user with the test
+> programs.  You could place them here in howto.xml or elsewhere or in a new
+> section entirely.  Users will want to know if their compiler is known to
+> work with the library and should be directed to the Boost Compiler Status
+> Tables page (\status\compiler_status.html or similar) or directly to the
+> Compiler Status Summary (http://boost.sourceforge.net/regression-logs/).
+
+> Many users will want to run the test programs on their own computer.  Your
+> documentation should answer these questions:
+> Which libraries must be linked to build the programs? (Dynamic? Static?)
+> Are there any other special considerations or any compiler switches to be
+> set? For those without a full Boost package, which other Boost libraries
+> are "included" by the test programs and, therefore, must be available?
+
+Basically, it's assumed that test programs with be run with Boost.Build. 
+Maybe it's worth noting that if a user wants to compiler them himself, 
+he should link the program_options library.
+
+> If you decide to make a separate section to describe the implementation of
+> the test programs, you might move the "test_convert" paragraphs starting at
+> line 379 of howto.xml there and put a referring link in its place.
+
+> I thought there was a bit of correspondence on one of the Boost mailing
+> lists concerning the inability of program_options to show the stored
+> variables 'en masse' but I can't find it now.  You should include that in
+> the documentation. Most users will be searching for a method to verify that
+> command line and configuration file values were actually stored in place of
+> the default values, for instance.  You could put in a line or two stating
+> that there is no one function which will send the entire database to a file
+> for later review.  (I think it had something to do with the fact that
+> program_options doesn't "know" the type of each option.)  I think it will
+> acquire the status of a Frequently-Asked Question.)
