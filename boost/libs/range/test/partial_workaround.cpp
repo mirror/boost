@@ -8,7 +8,7 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
-
+#include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
@@ -16,8 +16,8 @@
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
-#define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION 1
-     
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 #include <boost/range/iterator.hpp>
 #include <boost/range/const_iterator.hpp>
 #include <boost/range/size_type.hpp>
@@ -54,12 +54,12 @@ void check_partial_workaround()
     const char*    cc_ptr;
     wchar_t*       w_ptr;
     const wchar_t* cw_ptr;
-        
-    BOOST_STATIC_ASSERT( sizeof( yes_type ) == sizeof( is_string_impl( c_ptr ) ) );
+
+	BOOST_STATIC_ASSERT( sizeof( yes_type ) == sizeof( is_string_impl( c_ptr ) ) );
     BOOST_STATIC_ASSERT( sizeof( yes_type ) == sizeof( is_string_impl( cc_ptr ) ) );
     BOOST_STATIC_ASSERT( sizeof( yes_type ) == sizeof( is_string_impl( w_ptr ) ) );
     BOOST_STATIC_ASSERT( sizeof( yes_type ) == sizeof( is_string_impl( cw_ptr ) ) );
-    
+
     BOOST_STATIC_ASSERT( sizeof( yes_type ) == sizeof( is_char_ptr_impl( c_ptr ) ) );
     BOOST_STATIC_ASSERT( sizeof( no_type ) == sizeof( is_char_ptr_impl( cc_ptr ) ) );
 
@@ -92,8 +92,6 @@ void check_partial_workaround()
 }
 
 
-
-
 #include <boost/test/included/unit_test_framework.hpp> 
 
 using boost::unit_test_framework::test_suite;
@@ -107,8 +105,9 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     return test;
 }
 
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
+int main() { return 0; }
 
-
-
+#endif
 
