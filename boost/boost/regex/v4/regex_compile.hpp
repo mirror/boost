@@ -721,6 +721,13 @@ re_detail::re_syntax_base* BOOST_REGEX_CALL reg_expression<charT, traits, Alloca
    re_detail::jstack<traits_string_type, Allocator> ranges(64, data.allocator());
    re_detail::jstack<boost::uint_fast32_t, Allocator> classes(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> equivalents(64, data.allocator());
+   if(_flags & regbase::icase)
+   {
+      if((cls == traits_type::char_class_upper) || (cls == traits_type::char_class_lower))
+      {
+         cls = traits_type::char_class_alpha;
+      }
+   }
    classes.push(cls);
    if(dat)
    {
