@@ -52,9 +52,12 @@ namespace detail {
 class polymorphic_oarchive :
     public detail::interface_oarchive<polymorphic_oarchive>
 {
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+public:
+#else
     friend class detail::interface_oarchive<polymorphic_oarchive>;
     friend class save_access;
-private:
+#endif
     // primitive types the only ones permitted by polymorphic archives
     virtual void save(const bool t) = 0;
 
@@ -85,7 +88,6 @@ private:
     virtual void save(const std::wstring & t) = 0;
     #endif
 
-public:
     // these are used by the serialization library implementation.
     // should be private but it aint that easy
     virtual void save_object(
@@ -102,7 +104,6 @@ public:
     virtual void save_end(const char * name) = 0;
     virtual void register_basic_serializer(const detail::basic_oserializer & bos) = 0;
 
-public:
     virtual unsigned int library_version() const = 0;
     virtual void end_preamble() = 0;
     // utility function implemented by all legal archives

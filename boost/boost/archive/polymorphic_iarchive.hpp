@@ -52,9 +52,12 @@ namespace detail {
 class polymorphic_iarchive :
     public detail::interface_iarchive<polymorphic_iarchive>
 {
+#ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+public:
+#else
     friend class detail::interface_iarchive<polymorphic_iarchive>;
     friend class load_access;
-private:
+#endif
     // primitive types the only ones permitted by polymorphic archives
     virtual void load(bool & t) = 0;
 
@@ -90,9 +93,8 @@ private:
     virtual void load_start(const char * name) = 0;
     virtual void load_end(const char * name) = 0;
     virtual void register_basic_serializer(const detail::basic_iserializer & bis) = 0;
-public:
+
     // these are used by the serialization library implementation.
-    // should be private but it aint that easy
     virtual void load_object(
         void *t, 
         const detail::basic_iserializer & bis
@@ -104,7 +106,7 @@ public:
             const boost::serialization::extended_type_info & type
         )
     ) = 0;
-public:
+
     // utility function implemented by all legal archives
     virtual unsigned int library_version() const = 0;
     virtual void load_binary(void * t, std::size_t size) = 0;

@@ -36,6 +36,7 @@ protected:
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
+    friend class detail::interface_iarchive<Archive>;
     friend class basic_text_iarchive<Archive>;
     friend class load_access;
 #endif

@@ -34,8 +34,14 @@ public:
     friend class basic_binary_iarchive<Archive>;
     friend class basic_binary_iprimitive<Archive, std::wistream>;
     friend class load_access;
-protected:
 #endif
+    // note: the following should not needed - but one compiler (vc 7.1)
+    // fails to compile one test (test_shared_ptr) without it !!!
+    template<class T>
+    void load_override(T & t, BOOST_PFTO int){
+        basic_binary_iarchive<Archive>::load_override(t, 0);
+    }
+protected:
     void init(){
         basic_binary_iarchive<Archive>::init();
         basic_binary_iprimitive<Archive, std::wistream>::init();
