@@ -27,7 +27,7 @@ local test_monitor = <lib>../../../libs/test/build/boost_test_exec_monitor ;
 
 rule fsm-run ( source : name : additional-options * )
 {
-  return [ run $(source).cpp $(test_monitor) <template>fsm-common-options : : 
+  return [ run $(source).cpp $(test_monitor) <template>fsm-common-options : :
     : $(additional-options) : $(name) ] ;
 }
 
@@ -51,8 +51,29 @@ rule fsm-st-run-variants ( source )
   return result ;
 }
 
+rule fsm-compile-fail ( source : name : additional-options * )
+{
+  return [ compile-fail $(source).cpp <template>fsm-common-options
+    : $(additional-options) : $(name) ] ;
+}
+
+rule fsm-compile-fail-variants ( source )
+{
+  local result ;
+  result += [ fsm-compile-fail $(source) : $(source)Normal : ] ;
+  result += [ fsm-compile-fail $(source) : $(source)Native
+    : <define>BOOST_FSM_USE_NATIVE_RTTI ] ;
+  result += [ fsm-compile-fail $(source) : $(source)Relaxed
+    : <define>BOOST_FSM_RELAX_TRANSITION_CONTEXT ] ;
+  result += [ fsm-compile-fail $(source) : $(source)Both
+    : <define>BOOST_FSM_USE_NATIVE_RTTI
+      <define>BOOST_FSM_RELAX_TRANSITION_CONTEXT ] ;
+  return result ;
+}
+
 test-suite fsm :
   [ fsm-st-run-variants TransitionTest ]
   [ fsm-st-run-variants DeferralTest ]
+  [ fsm-compile-fail-variants InvalidTransitionTest1 ]
 ;
       
