@@ -92,7 +92,7 @@ public:
             msg = "class name too long";
             break;
         case unregistered_cast:
-            msg = "invalid dynamic cast";
+            msg = "unregistered void cast";
             break;
         case other_exception:
             // if get here - it indicates a derived exception 
