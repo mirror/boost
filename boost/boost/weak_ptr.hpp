@@ -16,14 +16,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <boost/config.hpp>   // for broken compiler workarounds
-#include <boost/assert.hpp>
-
-#include <boost/detail/shared_count.hpp>
-
-#include <algorithm>          // for std::swap
-#include <typeinfo>           // for std::bad_cast
-
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
 # pragma warning(disable:4284) // odd return type for operator->
