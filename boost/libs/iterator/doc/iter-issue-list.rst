@@ -963,6 +963,13 @@ c++std-lib-12640:
 :Proposed resolution:   **Needs work** (Jeremy)
 
 
+:Rationale:
+
+iterator_facade just does remove_const<Value>::type, so value_type is
+volatile if Value is.
+
+
+
 Problem with transform_iterator requirements
 ============================================
 
