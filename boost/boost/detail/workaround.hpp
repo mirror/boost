@@ -23,17 +23,47 @@
 // When used for workarounds on the latest known version of a
 // compiler, the following convention should be observed:
 //
-//     #if BOOST_WORKAROUND(BOOST_MSVC, |0x1301)
+//     #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1301))
 //
 // The version number in this case corresponds to the last version in
 // which the workaround was known to have been required.  It only has
-// value as a comment, since the outcome of the test is always 1
-// unless BOOST_STRICT_CONFIG is defined.
+// value as a comment unless BOOST_DETECT_OUTDATED_WORKAROUNDS is
+// defined, in which case a compiler warning or error will be issued
+// when the compiler version exceeds the argument to BOOST_CHECKED_AT
 
 # ifndef BOOST_STRICT_CONFIG
-#  define BOOST_WORKAROUND(symbol, test) ((symbol) != 0 && ((symbol) test))
+
+#  define BOOST_WORKAROUND(symbol, test)                \
+        (symbol != 0) && (1 % (( (symbol test) ) + 1))
+//                             ^ ^           ^ ^
+// The extra level of parenthesis nesting above, along with the
+// BOOST_OPEN_PAREN indirection below, is required to satisfy the
+// broken preprocessor in MWCW 8.3 and earlier.
+//
+// The basic mechanism works as follows:
+//      (symbol test) + 1        =>   2 if the test passes, 1 otherwise
+//      1 % ((symbol test) + 1)  =>   1 if the test passes, 0 otherwise
+//
+// The complication with % is for cooperation with BOOST_TESTED_AT().
+// When "test" is BOOST_TESTED_AT(x) and
+// BOOST_DETECT_OUTDATED_WORKAROUNDS is #defined,
+//
+//      symbol test              =>   1 if symbol <= x, -1 otherwise
+//      (symbol test) + 1        =>   2 if symbol <= x, 0 otherwise
+//      1 % ((symbol test) + 1)  =>   1 if symbol <= x, zero divide otherwise
+//
+
+#  ifdef BOOST_DETECT_OUTDATED_WORKAROUNDS
+#   define BOOST_OPEN_PAREN (
+#   define BOOST_TESTED_AT(value)  > value) ?(-1): BOOST_OPEN_PAREN 1
+#  else
+#   define BOOST_TESTED_AT(value) != 0
+#  endif
+
 # else
+
 #  define BOOST_WORKAROUND(symbol, test) 0
+
 # endif 
 
 #endif // WORKAROUND_DWA2002126_HPP
