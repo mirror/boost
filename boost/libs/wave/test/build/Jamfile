@@ -52,7 +52,7 @@ template wave-test
     : 
         <runtime-link>static
         <threading>single
-        release                        # build variants
+        debug                          # build variants
     ;
 
 #
