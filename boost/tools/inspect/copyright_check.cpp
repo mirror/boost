@@ -21,6 +21,7 @@ namespace boost
      register_signature( ".hpp" );
      register_signature( ".hxx" );
      register_signature( "Jamfile" );
+     register_signature( ".jam" );
    }
      
    void copyright_check::inspect(
