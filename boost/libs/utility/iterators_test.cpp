@@ -100,7 +100,8 @@ public:
 
 private:
     // Test data
-    static  iter_type const  fruit_begin, fruit_end;
+    static iter_type const  fruit_begin;
+    static iter_type const  fruit_end;
 
     // Test parts
     static  void  post_increment_test();
@@ -123,12 +124,12 @@ test_opr_base::scratch_array_type
  test_opr_base::scratch = "";
 
 template <typename T, typename R, typename P>
-typename test_opr<T, R, P>::iter_type const
- test_opr<T, R, P>::fruit_begin( fruit );
+  typename test_opr<T, R, P>::iter_type const
+ test_opr<T, R, P>::fruit_begin = test_iter<T,R,P>( fruit );
 
 template <typename T, typename R, typename P>
 typename test_opr<T, R, P>::iter_type const
- test_opr<T, R, P>::fruit_end( fruit + fruit_length );
+ test_opr<T, R, P>::fruit_end = test_iter<T,R,P>( fruit + fruit_length );
 
 
 // Main testing function
