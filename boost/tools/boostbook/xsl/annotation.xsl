@@ -138,12 +138,14 @@
 
   <xsl:template match="libraryname" mode="annotation">
     <xsl:variable name="name">
-      <xsl:when test="@alt">
-        <xsl:value-of select="@alt"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="text()"/>
-      </xsl:otherwise>
+      <xsl:choose>
+        <xsl:when test="@alt">
+          <xsl:value-of select="@alt"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
 
     <xsl:variable name="node" select="key('libraries', $name)"/>
