@@ -32,6 +32,10 @@
 // boost::simple_segregated_storage
 #include <boost/pool/simple_segregated_storage.hpp>
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+ namespace std { using ::malloc; using ::free; }
+#endif
+
 // There are a few places in this file where the expression "this->m" is used.
 // This expression is used to force instantiation-time name lookup, which I am
 //   informed is required for strict Standard compliance.  It's only necessary
