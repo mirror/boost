@@ -56,7 +56,7 @@ namespace std {
 // Any of these compilers *should* work if used with StlPort's streams
 #if ((defined(__GNUC__) && (__GNUC__ < 3)) || \
      (defined(_MSC_VER) && (_MSC_VER <= 1200)) || \
-     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0551)) || \
+     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0564)) || \
      (defined(BOOST_NO_STD_WSTRING))) && \
      !defined(_STLP_OWN_IOSTREAMS)
 #define BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS
