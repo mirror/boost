@@ -294,6 +294,9 @@
 # elif defined __COMO__
 #   if __COMO_VERSION__ <= 4245
 #     define BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
+#     if defined(_MSC_VER) && _MSC_VER <= 1200
+#       define BOOST_NO_STDC_NAMESPACE
+#     endif
 #   endif
 
 //  Compaq Tru64 Unix cxx ---------------------------------------------------
