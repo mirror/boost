@@ -366,8 +366,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
     // If you receive a
     // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
-    // compiler error here then this state resides in a non-existent
-    // orthogonal region of the outer state.
+    // compiler error here then either this state resides in a non-existent
+    // orthogonal region of the outer state or the outer state does not have
+    // inner states.
     BOOST_STATIC_ASSERT( ( mpl::less<
       orthogonal_position,
       typename context_type::no_of_orthogonal_regions >::value ) );
