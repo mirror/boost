@@ -40,7 +40,7 @@ MPL_TEST_CASE()
 
     MPL_ASSERT_NOT(( has_key<s,char> ));
     MPL_ASSERT(( has_key<s,int> ));
-    MPL_ASSERT_RELATION( (order<s,int>::value), ==, 2 );
+    MPL_ASSERT_RELATION( (order<s,int>::value), ==, 3 );
     MPL_ASSERT(( is_same< order<s,char>::type, void_ >  ));
     
     typedef begin<s>::type first;
@@ -59,8 +59,8 @@ MPL_TEST_CASE()
 
     MPL_ASSERT(( has_key<s2,char> ));
     MPL_ASSERT_NOT(( has_key<s2,long> ));
-    MPL_ASSERT_RELATION( (order<s2,int>::value), ==, 2 );
-    MPL_ASSERT_RELATION( (order<s2,char>::value), ==, 1 );
+    MPL_ASSERT_RELATION( (order<s2,int>::value), ==, 3 );
+    MPL_ASSERT_RELATION( (order<s2,char>::value), ==, 2 );
 
     typedef begin<s2>::type first2;
     typedef end<s2>::type last2;

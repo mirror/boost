@@ -7,10 +7,23 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Preprocessed version of "boost/mpl/map/Attic/map40.hpp" header
+// Preprocessed version of "boost/mpl/map/map40.hpp" header
 // -- DO NOT modify by hand!
 
 namespace boost { namespace mpl {
+
+template< typename Map>
+struct m_at< Map,30 >
+{
+    typedef typename Map::item30 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 31,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item30;
+};
 
 template<
       typename P0, typename P1, typename P2, typename P3, typename P4
@@ -23,11 +36,25 @@ template<
     >
 struct map31
     : m_item<
-          typename P30::first
+          31
+        , typename P30::first
         , typename P30::second
         , map30< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,31 >
+{
+    typedef typename Map::item31 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 32,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item31;
 };
 
 template<
@@ -41,11 +68,25 @@ template<
     >
 struct map32
     : m_item<
-          typename P31::first
+          32
+        , typename P31::first
         , typename P31::second
         , map31< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,32 >
+{
+    typedef typename Map::item32 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 33,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item32;
 };
 
 template<
@@ -59,11 +100,25 @@ template<
     >
 struct map33
     : m_item<
-          typename P32::first
+          33
+        , typename P32::first
         , typename P32::second
         , map32< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30,P31 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,33 >
+{
+    typedef typename Map::item33 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 34,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item33;
 };
 
 template<
@@ -77,11 +132,25 @@ template<
     >
 struct map34
     : m_item<
-          typename P33::first
+          34
+        , typename P33::first
         , typename P33::second
         , map33< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30,P31,P32 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,34 >
+{
+    typedef typename Map::item34 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 35,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item34;
 };
 
 template<
@@ -95,11 +164,25 @@ template<
     >
 struct map35
     : m_item<
-          typename P34::first
+          35
+        , typename P34::first
         , typename P34::second
         , map34< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30,P31,P32,P33 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,35 >
+{
+    typedef typename Map::item35 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 36,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item35;
 };
 
 template<
@@ -114,11 +197,25 @@ template<
     >
 struct map36
     : m_item<
-          typename P35::first
+          36
+        , typename P35::first
         , typename P35::second
         , map35< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30,P31,P32,P33,P34 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,36 >
+{
+    typedef typename Map::item36 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 37,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item36;
 };
 
 template<
@@ -133,11 +230,25 @@ template<
     >
 struct map37
     : m_item<
-          typename P36::first
+          37
+        , typename P36::first
         , typename P36::second
         , map36< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30,P31,P32,P33,P34,P35 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,37 >
+{
+    typedef typename Map::item37 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 38,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item37;
 };
 
 template<
@@ -152,11 +263,25 @@ template<
     >
 struct map38
     : m_item<
-          typename P37::first
+          38
+        , typename P37::first
         , typename P37::second
         , map37< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30,P31,P32,P33,P34,P35,P36 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,38 >
+{
+    typedef typename Map::item38 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 39,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item38;
 };
 
 template<
@@ -171,11 +296,25 @@ template<
     >
 struct map39
     : m_item<
-          typename P38::first
+          39
+        , typename P38::first
         , typename P38::second
         , map38< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30,P31,P32,P33,P34,P35,P36,P37 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,39 >
+{
+    typedef typename Map::item39 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 40,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item39;
 };
 
 template<
@@ -190,7 +329,8 @@ template<
     >
 struct map40
     : m_item<
-          typename P39::first
+          40
+        , typename P39::first
         , typename P39::second
         , map39< P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P30,P31,P32,P33,P34,P35,P36,P37,P38 >
         >

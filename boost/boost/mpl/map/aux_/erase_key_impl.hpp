@@ -22,13 +22,11 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/base.hpp>
 #include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/aux_/config/typeof.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace mpl {
 
-#if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
 template<>
 struct erase_key_impl< aux::map_tag >
 {
@@ -49,7 +47,6 @@ struct erase_key_impl< aux::map_tag >
     {
     };
 };
-#endif
 
 }}
 

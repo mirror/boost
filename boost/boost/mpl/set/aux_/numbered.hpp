@@ -37,6 +37,7 @@ struct BOOST_PP_CAT(set,i_)
         , AUX778076_SET_TAIL(set,BOOST_PP_DEC(i_),T)
         >
 {
+    typedef BOOST_PP_CAT(set,i_) type;
 };
 #endif
 

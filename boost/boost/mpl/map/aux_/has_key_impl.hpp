@@ -19,18 +19,22 @@
 #include <boost/mpl/map/aux_/tag.hpp>
 #include <boost/mpl/map/aux_/at_impl.hpp>
 #include <boost/mpl/void.hpp>
+#include <boost/mpl/aux_/config/typeof.hpp>
 
-namespace boost {
-namespace mpl {
+namespace boost { namespace mpl {
 
 template<>
 struct has_key_impl< aux::map_tag >
 {
     template< typename Map, typename Key > struct apply
+#if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
         : is_not_void_< 
               typename at_impl<aux::map_tag>
                 ::apply<Map,Key>::type
             >
+#else
+        : bool_< ( x_order_impl<Map,Key>::value > 1 ) >
+#endif
     {
     };
 };

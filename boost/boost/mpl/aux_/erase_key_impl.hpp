@@ -25,7 +25,7 @@ struct erase_key_impl
     template< typename Sequence, typename Key > struct apply;
 };
 
-BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(1, erase_key_impl)
+BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(2, erase_key_impl)
 
 }}
 

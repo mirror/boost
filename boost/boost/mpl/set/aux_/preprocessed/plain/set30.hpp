@@ -7,7 +7,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Preprocessed version of "boost/mpl/set/Attic/set30.hpp" header
+// Preprocessed version of "boost/mpl/set/set30.hpp" header
 // -- DO NOT modify by hand!
 
 namespace boost { namespace mpl {
@@ -25,6 +25,7 @@ struct set21
         , set20< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19 >
         >
 {
+    typedef set21 type;
 };
 
 template<
@@ -40,6 +41,7 @@ struct set22
         , set21< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20 >
         >
 {
+    typedef set22 type;
 };
 
 template<
@@ -55,6 +57,7 @@ struct set23
         , set22< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21 >
         >
 {
+    typedef set23 type;
 };
 
 template<
@@ -70,6 +73,7 @@ struct set24
         , set23< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22 >
         >
 {
+    typedef set24 type;
 };
 
 template<
@@ -85,6 +89,7 @@ struct set25
         , set24< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23 >
         >
 {
+    typedef set25 type;
 };
 
 template<
@@ -101,6 +106,7 @@ struct set26
         , set25< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24 >
         >
 {
+    typedef set26 type;
 };
 
 template<
@@ -117,6 +123,7 @@ struct set27
         , set26< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25 >
         >
 {
+    typedef set27 type;
 };
 
 template<
@@ -133,6 +140,7 @@ struct set28
         , set27< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26 >
         >
 {
+    typedef set28 type;
 };
 
 template<
@@ -149,6 +157,7 @@ struct set29
         , set28< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27 >
         >
 {
+    typedef set29 type;
 };
 
 template<
@@ -165,6 +174,7 @@ struct set30
         , set29< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28 >
         >
 {
+    typedef set30 type;
 };
 
 }}

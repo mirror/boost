@@ -20,16 +20,20 @@
 #include <boost/mpl/next.hpp>
 #include <boost/mpl/prior.hpp>
 #include <boost/mpl/set/aux_/set0.hpp>
+#include <boost/mpl/aux_/overload_names.hpp>
 #include <boost/mpl/aux_/yes_no.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
 #include <boost/mpl/aux_/config/arrays.hpp>
 #include <boost/mpl/aux_/config/operators.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
+#include <boost/preprocessor/cat.hpp>
+
+
 namespace boost { namespace mpl {
 
-aux::no_tag operator/(set0<> const&, void*);
-aux::no_tag operator%(set0<> const&, void*);
+aux::no_tag  BOOST_MPL_AUX_OVERLOAD_ORDER_BY_KEY( set0<> const&, void const volatile* );
+aux::yes_tag BOOST_MPL_AUX_OVERLOAD_IS_MASKED( set0<> const&, void const volatile* );
 
 #if defined(BOOST_MPL_CFG_USE_OPERATORS_SPECIALIZATION)
 
@@ -39,22 +43,25 @@ template< typename T, typename Base > struct s_unmask;
 
 template< typename T, typename Base >
 typename s_item<T,Base>::order_tag_
-operator/(s_item<T,Base> const&, aux::type_wrapper<T>*);
+BOOST_MPL_AUX_OVERLOAD_ORDER_BY_KEY( s_item<T,Base> const&, aux::type_wrapper<T>* );
 
 template< typename T, typename Base >
-aux::yes_tag operator%(s_item<T,Base> const&, aux::type_wrapper<T>*);
+aux::no_tag
+BOOST_MPL_AUX_OVERLOAD_IS_MASKED( s_item<T,Base> const&, aux::type_wrapper<T>* );
 
 template< typename T, typename Base >
-aux::yes_tag operator%(s_unmask<T,Base> const&, aux::type_wrapper<T>*);
+aux::no_tag
+BOOST_MPL_AUX_OVERLOAD_IS_MASKED( s_unmask<T,Base> const&, aux::type_wrapper<T>* );
 
 template< typename T, typename Base >
-aux::no_tag operator%(s_mask<T,Base> const&, aux::type_wrapper<T>*);
+aux::yes_tag
+BOOST_MPL_AUX_OVERLOAD_IS_MASKED( s_mask<T,Base> const&, aux::type_wrapper<T>* );
 
-#   define MPL_AUX_SET_OPERATOR(x) operator x <>
+#       define AUX778076_SET_OVERLOAD(f) BOOST_PP_CAT(BOOST_MPL_AUX_OVERLOAD_,f)<>
 
-#else
-#   define MPL_AUX_SET_OPERATOR(x) operator x
-#endif
+#   else
+#       define AUX778076_SET_OVERLOAD(f) BOOST_PP_CAT(BOOST_MPL_AUX_OVERLOAD_,f)
+#   endif
 
 
 template< typename T, typename Base >
@@ -68,17 +75,16 @@ struct s_item
     typedef Base        base;
     
     typedef typename next< typename Base::size >::type  size;
-    
-    BOOST_STATIC_CONSTANT(long, order = Base::order + 1);
+    typedef typename next< typename Base::order >::type order;
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561))
-    typedef typename aux::weighted_tag<(Base::order + 1)>::type order_tag_;
+#if defined(BOOST_MPL_CFG_NO_DEPENDENT_ARRAY_TYPES)
+    typedef typename aux::weighted_tag<BOOST_MPL_AUX_MSVC_VALUE_WKND(order)::value>::type order_tag_;
 #else
-    typedef char (&order_tag_)[order];
+    typedef char (&order_tag_)[BOOST_MPL_AUX_MSVC_VALUE_WKND(order)::value];
 #endif
 
-    friend order_tag_   MPL_AUX_SET_OPERATOR(/)(s_item const&, aux::type_wrapper<T>*);
-    friend aux::yes_tag MPL_AUX_SET_OPERATOR(%)(s_item const&, aux::type_wrapper<T>*);
+    friend order_tag_   AUX778076_SET_OVERLOAD(ORDER_BY_KEY)( s_item const&, aux::type_wrapper<T>* );
+    friend aux::no_tag  AUX778076_SET_OVERLOAD(IS_MASKED)( s_item const&, aux::type_wrapper<T>* );
 };
 
 
@@ -91,7 +97,7 @@ struct s_mask
     typedef Base    base;
     typedef typename prior< typename Base::size >::type  size;
 
-    friend aux::no_tag MPL_AUX_SET_OPERATOR(%)(s_mask const&, aux::type_wrapper<T>*);
+    friend aux::yes_tag AUX778076_SET_OVERLOAD(IS_MASKED)( s_mask const&, aux::type_wrapper<T>* );
 };
 
 
@@ -104,10 +110,10 @@ struct s_unmask
     typedef Base    base;
     typedef typename next< typename Base::size >::type  size;
 
-    friend aux::yes_tag MPL_AUX_SET_OPERATOR(%)(s_unmask const&, aux::type_wrapper<T>*);
+    friend aux::no_tag AUX778076_SET_OVERLOAD(IS_MASKED)( s_unmask const&, aux::type_wrapper<T>* );
 };
 
-#undef MPL_AUX_SET_OPERATOR
+#undef AUX778076_SET_OVERLOAD
 
 }}
 

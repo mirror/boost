@@ -7,7 +7,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Preprocessed version of "boost/mpl/set/Attic/set10.hpp" header
+// Preprocessed version of "boost/mpl/set/set10.hpp" header
 // -- DO NOT modify by hand!
 
 namespace boost { namespace mpl {
@@ -21,6 +21,7 @@ struct set1
         , set0<  >
         >
 {
+    typedef set1 type;
 };
 
 template<
@@ -32,6 +33,7 @@ struct set2
         , set1<T0>
         >
 {
+    typedef set2 type;
 };
 
 template<
@@ -43,6 +45,7 @@ struct set3
         , set2< T0,T1 >
         >
 {
+    typedef set3 type;
 };
 
 template<
@@ -54,6 +57,7 @@ struct set4
         , set3< T0,T1,T2 >
         >
 {
+    typedef set4 type;
 };
 
 template<
@@ -65,6 +69,7 @@ struct set5
         , set4< T0,T1,T2,T3 >
         >
 {
+    typedef set5 type;
 };
 
 template<
@@ -77,6 +82,7 @@ struct set6
         , set5< T0,T1,T2,T3,T4 >
         >
 {
+    typedef set6 type;
 };
 
 template<
@@ -89,6 +95,7 @@ struct set7
         , set6< T0,T1,T2,T3,T4,T5 >
         >
 {
+    typedef set7 type;
 };
 
 template<
@@ -101,6 +108,7 @@ struct set8
         , set7< T0,T1,T2,T3,T4,T5,T6 >
         >
 {
+    typedef set8 type;
 };
 
 template<
@@ -113,6 +121,7 @@ struct set9
         , set8< T0,T1,T2,T3,T4,T5,T6,T7 >
         >
 {
+    typedef set9 type;
 };
 
 template<
@@ -125,6 +134,7 @@ struct set10
         , set9< T0,T1,T2,T3,T4,T5,T6,T7,T8 >
         >
 {
+    typedef set10 type;
 };
 
 }}

@@ -18,6 +18,7 @@
 #include <boost/mpl/set/aux_/tag.hpp>
 #include <boost/mpl/has_key_fwd.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/aux_/overload_names.hpp>
 #include <boost/mpl/aux_/static_cast.hpp>
 #include <boost/mpl/aux_/yes_no.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
@@ -30,27 +31,24 @@ template<>
 struct has_key_impl< aux::set_tag >
 {
     template< typename Set, typename T > struct apply
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561))
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400)) \
+    || BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
     {
         BOOST_STATIC_CONSTANT(bool, value = 
-              ( sizeof( 
-                  *BOOST_MPL_AUX_STATIC_CAST(Set*, 0)
-                    % BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<T>*, 0)
-                  ) == sizeof(aux::yes_tag) )
+              ( sizeof( BOOST_MPL_AUX_OVERLOAD_IS_MASKED(
+                   *BOOST_MPL_AUX_STATIC_CAST(Set*, 0)
+                  , BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<T>*, 0)
+                  ) ) == sizeof(aux::no_tag) )
             );
 
-#   if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561))
-        typedef bool_<(apply::value)> type;
-#   else
         typedef bool_<value> type;
-#   endif
 
 #else // ISO98 C++
         : bool_< 
-              ( sizeof( 
-                  aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Set*, 0))
-                    % BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<T>*, 0)
-                  ) == sizeof(aux::yes_tag) )
+              ( sizeof( BOOST_MPL_AUX_OVERLOAD_IS_MASKED(
+                    aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Set*, 0))
+                  , BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<T>*, 0)
+                  ) ) == sizeof(aux::no_tag) )
             >
     {
 #endif

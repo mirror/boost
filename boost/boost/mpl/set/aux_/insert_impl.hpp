@@ -39,13 +39,6 @@ template<  typename Set, typename T > struct set_insert_impl
             , identity< s_item<T,Set> >
             >
         >
-/*
-    : eval< if_<
-          has_key<Set,T>
-        , if_< is_same< T,typename Set::last_masked >, base< arg<Set> >, Set >
-        , Set
-        > >
-*/
 {
 };
 }

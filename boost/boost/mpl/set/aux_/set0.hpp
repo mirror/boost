@@ -17,20 +17,19 @@
 
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/void.hpp>
+#include <boost/mpl/aux_/na.hpp>
 #include <boost/mpl/set/aux_/tag.hpp>
-#include <boost/mpl/aux_/config/static_constant.hpp>
 
 namespace boost { namespace mpl {
 
-template< int dummy_ = 0 > struct set0
+template< typename Dummy = na > struct set0
 {
     typedef aux::set_tag    tag;
     typedef void_           last_masked_;
     typedef void_           item_type_;
     typedef item_type_      type;
     typedef long_<0>        size;
-    
-    BOOST_STATIC_CONSTANT(long, order = 0);
+    typedef long_<1>        order;
 };
 
 }}

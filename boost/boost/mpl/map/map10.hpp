@@ -34,7 +34,7 @@
 namespace boost { namespace mpl {
 
 #   define BOOST_PP_ITERATION_PARAMS_1 \
-    (3,(0, 10, <boost/mpl/map/aux_/numbered.hpp>))
+    (3,(1, 10, <boost/mpl/map/aux_/numbered.hpp>))
 #   include BOOST_PP_ITERATE()
 
 }}

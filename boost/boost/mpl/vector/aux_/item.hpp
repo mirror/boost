@@ -33,9 +33,9 @@ template<
 struct v_item
     : Base
 {
-    typedef typename Base::upper_bound_                 index_;
-    typedef typename next<index_>::type                 upper_bound_;
-    typedef typename next<typename Base::size>::type    size;
+    typedef typename Base::upper_bound_ index_;
+    typedef typename next<index_>::type upper_bound_;
+    typedef typename next<typename Base::size>::type size;
     typedef Base base;
 
     using Base::item_;
@@ -49,9 +49,9 @@ template<
 struct v_item<T,Base,1>
     : Base
 {
-    typedef typename prior<typename Base::lower_bound_>::type   index_;
-    typedef index_                                              lower_bound_;
-    typedef typename next<typename Base::size>::type            size;
+    typedef typename prior<typename Base::lower_bound_>::type index_;
+    typedef index_ lower_bound_;
+    typedef typename next<typename Base::size>::type size;
     typedef Base base;
 
     using Base::item_;
@@ -66,9 +66,9 @@ template<
 struct v_mask
     : Base
 {
-    typedef typename prior<typename Base::upper_bound_>::type   index_;
-    typedef index_                                              upper_bound_;
-    typedef typename prior<typename Base::size>::type           size;
+    typedef typename prior<typename Base::upper_bound_>::type index_;
+    typedef index_ upper_bound_;
+    typedef typename prior<typename Base::size>::type size;
     typedef Base base;
 
     using Base::item_;
@@ -81,9 +81,9 @@ template<
 struct v_mask<Base,1>
     : Base
 {
-    typedef typename Base::lower_bound_                 index_;
-    typedef typename next<index_>::type                 lower_bound_;
-    typedef typename prior<typename Base::size>::type   size;
+    typedef typename Base::lower_bound_ index_;
+    typedef typename next<index_>::type lower_bound_;
+    typedef typename prior<typename Base::size>::type size;
     typedef Base base;
 
     using Base::item_;

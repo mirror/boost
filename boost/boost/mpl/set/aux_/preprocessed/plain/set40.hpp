@@ -7,7 +7,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Preprocessed version of "boost/mpl/set/Attic/set40.hpp" header
+// Preprocessed version of "boost/mpl/set/set40.hpp" header
 // -- DO NOT modify by hand!
 
 namespace boost { namespace mpl {
@@ -27,6 +27,7 @@ struct set31
         , set30< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29 >
         >
 {
+    typedef set31 type;
 };
 
 template<
@@ -44,6 +45,7 @@ struct set32
         , set31< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30 >
         >
 {
+    typedef set32 type;
 };
 
 template<
@@ -61,6 +63,7 @@ struct set33
         , set32< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31 >
         >
 {
+    typedef set33 type;
 };
 
 template<
@@ -78,6 +81,7 @@ struct set34
         , set33< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32 >
         >
 {
+    typedef set34 type;
 };
 
 template<
@@ -95,6 +99,7 @@ struct set35
         , set34< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32,T33 >
         >
 {
+    typedef set35 type;
 };
 
 template<
@@ -113,6 +118,7 @@ struct set36
         , set35< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32,T33,T34 >
         >
 {
+    typedef set36 type;
 };
 
 template<
@@ -131,6 +137,7 @@ struct set37
         , set36< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32,T33,T34,T35 >
         >
 {
+    typedef set37 type;
 };
 
 template<
@@ -149,6 +156,7 @@ struct set38
         , set37< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32,T33,T34,T35,T36 >
         >
 {
+    typedef set38 type;
 };
 
 template<
@@ -167,6 +175,7 @@ struct set39
         , set38< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32,T33,T34,T35,T36,T37 >
         >
 {
+    typedef set39 type;
 };
 
 template<
@@ -185,6 +194,7 @@ struct set40
         , set39< T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,T21,T22,T23,T24,T25,T26,T27,T28,T29,T30,T31,T32,T33,T34,T35,T36,T37,T38 >
         >
 {
+    typedef set40 type;
 };
 
 }}

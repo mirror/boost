@@ -19,6 +19,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/has_key.hpp>
+#include <boost/mpl/aux_/overload_names.hpp>
 #include <boost/mpl/aux_/static_cast.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
 #include <boost/mpl/aux_/ptr_to_ref.hpp>
@@ -30,30 +31,27 @@
 namespace boost { namespace mpl {
 
 // default implementation; requires 'Seq' to provide corresponding overloads 
-// of 'operator/'
+// of BOOST_MPL_AUX_OVERLOAD_ORDER_BY_KEY
 
 template< typename Seq, typename Key > struct x_order_impl
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561))
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400)) \
+    || BOOST_WORKAROUND(__EDG_VERSION__, <= 245)
 {
     BOOST_STATIC_CONSTANT(long, value = 
-          sizeof( 
+          sizeof( BOOST_MPL_AUX_OVERLOAD_CALL_ORDER_BY_KEY(
               *BOOST_MPL_AUX_STATIC_CAST(Seq*, 0)
-                / BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<Key>*, 0)
-            )
+            , BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<Key>*, 0)
+            ) )
         );
 
-#   if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561))
-    typedef long_<(x_order_impl::value)> type;
-#   else
     typedef long_<value> type;
-#   endif
 
 #else // ISO98 C++
     : long_< 
-          sizeof( 
+          sizeof( BOOST_MPL_AUX_OVERLOAD_ORDER_BY_KEY(
               aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Seq*, 0))
-                / BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<Key>*, 0)
-            )
+            , BOOST_MPL_AUX_STATIC_CAST(aux::type_wrapper<Key>*, 0)
+            ) )
         >
 {
 #endif
@@ -63,7 +61,7 @@ template< typename Tag >
 struct order_impl
 {
     template< typename Seq, typename Key > struct apply
-        : if_< 
+        : if_<
               typename has_key_impl<Tag>::template apply<Seq,Key>
             , x_order_impl<Seq,Key>
             , void_

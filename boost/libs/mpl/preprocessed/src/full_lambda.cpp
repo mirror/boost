@@ -1,3 +1,16 @@
+
+// Copyright Aleksey Gurtovoy 2002-4004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
+
 #define BOOST_MPL_PREPROCESSING_MODE
-//#define BOOST_MPL_CFG_NO_LAMBDA_HEURISTIC
+#include <boost/config.hpp>
 #include <boost/mpl/aux_/full_lambda.hpp>

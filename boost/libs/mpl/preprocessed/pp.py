@@ -145,7 +145,11 @@ class pretty:
         self.reading_copyright = 0
         self.copyright = None
         
-        self.re_header_name_comment = re.compile( r'^\s*//\s+\$[S]ource: /cvsroot/boost/boost/(.*),v\s*\$$' )
+        self.re_header_name_comment = re.compile( 
+              r'^\s*//\s+\$[S]ource: /cvsroot/boost/boost/(.*?%s\.hpp),v\s*\$$'
+                % os.path.splitext( name )[0]
+            )
+        
         self.header_was_written = 0
 
         self.re_junk = re.compile(r'^\s*(#|//[^/]|////).*$')
@@ -189,15 +193,16 @@ class pretty:
             return
     
         # searching for header line
-        if not self.header_was_written and self.re_header_name_comment.match( line ):
-            self.header_was_written = 1
-            match = self.re_header_name_comment.match( line )
-            self.output.write( \
-                '\n%s\n' \
-                '// Preprocessed version of "%s" header\n' \
-                '// -- DO NOT modify by hand!\n\n' \
-                % ( self.copyright, match.group(1) )
-                )
+        if not self.header_was_written:
+            if self.re_header_name_comment.match( line ):
+                self.header_was_written = 1
+                match = self.re_header_name_comment.match( line )
+                self.output.write( \
+                    '\n%s\n' \
+                    '// Preprocessed version of "%s" header\n' \
+                    '// -- DO NOT modify by hand!\n\n' \
+                    % ( self.copyright, match.group(1) )
+                    )
             return
         
         # skipping preprocessor directives, comments, etc.

@@ -19,7 +19,6 @@
 #include <boost/mpl/void.hpp>
 #include <boost/mpl/map/aux_/tag.hpp>
 #include <boost/mpl/aux_/na.hpp>
-#include <boost/mpl/aux_/config/static_constant.hpp>
 
 namespace boost { namespace mpl {
 
@@ -28,9 +27,8 @@ template< typename Dummy = na > struct map0
     typedef map0            type;
     typedef aux::map_tag    tag;
     typedef void_           key_;
+    typedef long_<1>        order;
     typedef long_<0>        size;
-    
-    BOOST_STATIC_CONSTANT(long, order = 1);
 };
 
 }}

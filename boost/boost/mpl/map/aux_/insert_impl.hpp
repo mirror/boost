@@ -24,18 +24,26 @@
 
 namespace boost { namespace mpl {
 
-#if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
 namespace aux {
-template<  typename Map, typename Pair > 
+template< typename Map, typename Pair > 
 struct map_insert_impl
     : if_< 
           contains_impl<aux::map_tag>::apply<Map,Pair>
         , Map
+#if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
         , m_item<
               typename Pair::first
             , typename Pair::second
             , Map
             >
+#else
+        , m_item<
+              ( Map::size::value + 1 )
+            , typename Pair::first
+            , typename Pair::second
+            , Map
+            >
+#endif
         >
 {
 };
@@ -57,7 +65,6 @@ struct insert_impl< aux::map_tag >
     {
     };
 };
-#endif
 
 }}
 

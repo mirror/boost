@@ -7,21 +7,48 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 
-// Preprocessed version of "boost/mpl/map/Attic/map10.hpp" header
+// Preprocessed version of "boost/mpl/map/map10.hpp" header
 // -- DO NOT modify by hand!
 
 namespace boost { namespace mpl {
+
+template< typename Map>
+struct m_at< Map,0 >
+{
+    typedef typename Map::item0 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 1,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item0;
+};
 
 template<
       typename P0
     >
 struct map1
     : m_item<
-          typename P0::first
+          1
+        , typename P0::first
         , typename P0::second
         , map0<  >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,1 >
+{
+    typedef typename Map::item1 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 2,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item1;
 };
 
 template<
@@ -29,11 +56,25 @@ template<
     >
 struct map2
     : m_item<
-          typename P1::first
+          2
+        , typename P1::first
         , typename P1::second
         , map1<P0>
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,2 >
+{
+    typedef typename Map::item2 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 3,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item2;
 };
 
 template<
@@ -41,11 +82,25 @@ template<
     >
 struct map3
     : m_item<
-          typename P2::first
+          3
+        , typename P2::first
         , typename P2::second
         , map2< P0,P1 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,3 >
+{
+    typedef typename Map::item3 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 4,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item3;
 };
 
 template<
@@ -53,11 +108,25 @@ template<
     >
 struct map4
     : m_item<
-          typename P3::first
+          4
+        , typename P3::first
         , typename P3::second
         , map3< P0,P1,P2 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,4 >
+{
+    typedef typename Map::item4 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 5,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item4;
 };
 
 template<
@@ -65,11 +134,25 @@ template<
     >
 struct map5
     : m_item<
-          typename P4::first
+          5
+        , typename P4::first
         , typename P4::second
         , map4< P0,P1,P2,P3 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,5 >
+{
+    typedef typename Map::item5 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 6,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item5;
 };
 
 template<
@@ -78,11 +161,25 @@ template<
     >
 struct map6
     : m_item<
-          typename P5::first
+          6
+        , typename P5::first
         , typename P5::second
         , map5< P0,P1,P2,P3,P4 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,6 >
+{
+    typedef typename Map::item6 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 7,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item6;
 };
 
 template<
@@ -91,11 +188,25 @@ template<
     >
 struct map7
     : m_item<
-          typename P6::first
+          7
+        , typename P6::first
         , typename P6::second
         , map6< P0,P1,P2,P3,P4,P5 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,7 >
+{
+    typedef typename Map::item7 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 8,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item7;
 };
 
 template<
@@ -104,11 +215,25 @@ template<
     >
 struct map8
     : m_item<
-          typename P7::first
+          8
+        , typename P7::first
         , typename P7::second
         , map7< P0,P1,P2,P3,P4,P5,P6 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,8 >
+{
+    typedef typename Map::item8 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 9,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item8;
 };
 
 template<
@@ -117,11 +242,25 @@ template<
     >
 struct map9
     : m_item<
-          typename P8::first
+          9
+        , typename P8::first
         , typename P8::second
         , map8< P0,P1,P2,P3,P4,P5,P6,P7 >
         >
 {
+};
+
+template< typename Map>
+struct m_at< Map,9 >
+{
+    typedef typename Map::item9 type;
+};
+
+template< typename Key, typename T, typename Base >
+struct m_item< 10,Key,T,Base >
+    : m_item_< Key,T,Base >
+{
+    typedef pair< Key,T > item9;
 };
 
 template<
@@ -130,7 +269,8 @@ template<
     >
 struct map10
     : m_item<
-          typename P9::first
+          10
+        , typename P9::first
         , typename P9::second
         , map9< P0,P1,P2,P3,P4,P5,P6,P7,P8 >
         >

@@ -19,6 +19,7 @@
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/map/aux_/tag.hpp>
 #include <boost/mpl/aux_/order_impl.hpp>
+#include <boost/mpl/aux_/overload_names.hpp>
 #include <boost/mpl/aux_/type_wrapper.hpp>
 #include <boost/mpl/aux_/ptr_to_ref.hpp>
 #include <boost/mpl/aux_/static_cast.hpp>
@@ -38,8 +39,10 @@ template< typename Map, typename Key >
 struct m_at
 {
     typedef aux::type_wrapper<Key> key_;
-    typedef __typeof__( aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Map*, 0)) 
-        | BOOST_MPL_AUX_STATIC_CAST(key_*, 0) ) type;
+    typedef __typeof__( BOOST_MPL_AUX_OVERLOAD_CALL_VALUE_BY_KEY(
+          aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Map*, 0))
+        , BOOST_MPL_AUX_STATIC_CAST(key_*, 0)
+        ) ) type;
 };
 
 template<>
@@ -58,8 +61,10 @@ struct at_impl< aux::map_tag >
 template< typename Map, long order > 
 struct item_by_order_impl
 {
-    typedef __typeof__( aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Map*, 0)) 
-        || long_<order>() ) type;
+    typedef __typeof__( BOOST_MPL_AUX_OVERLOAD_CALL_ITEM_BY_ORDER(
+          aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Map*, 0)) 
+        , BOOST_MPL_AUX_STATIC_CAST(long_<order>*, 0)
+        ) ) type;
 };
 
 template< typename Map, long order >
@@ -77,55 +82,36 @@ template< typename Map, long n > struct m_at
     typedef void_ type;
 };
 
-template< typename Map>
-struct m_at<Map,2>
-{
-    typedef typename Map::type1 type;
-};
-
-template< typename Map>
-struct m_at<Map,3>
-{
-    typedef typename Map::type2 type;
-};
-
-template< typename Map>
-struct m_at<Map,4>
-{
-    typedef typename Map::type3 type;
-};
-
 template<>
 struct at_impl< aux::map_tag >
 {
     template< typename Map, typename Key > struct apply
     {
-        typedef typename m_at<
-              Map
-            , x_order_impl<Map,Key>::value
-            >::type type_;
-        
-        typedef typename eval_if< 
-              is_void_<type_>
+        typedef typename m_at< Map, (x_order_impl<Map,Key>::value - 2) >::type item_;       
+        typedef typename eval_if<
+              is_void_<item_>
             , void_
-            , second<type_> 
+            , second<item_>
             >::type type;
     };
 };
 
-template< typename Map, long order > struct item_by_order
+template< typename Map, long order > struct is_item_masked
 {
-    BOOST_STATIC_CONSTANT(bool, is_deleted_ = 
-          sizeof( 
-              *BOOST_MPL_AUX_STATIC_CAST(Map*, 0)
-                % BOOST_MPL_AUX_STATIC_CAST(long_<order>*, 0)
-            ) - 1
+    BOOST_STATIC_CONSTANT(bool, value = 
+          sizeof( BOOST_MPL_AUX_OVERLOAD_CALL_IS_MASKED(
+              aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Map*, 0))
+            , BOOST_MPL_AUX_STATIC_CAST(long_<order>*, 0)
+            ) ) == sizeof(aux::yes_tag)
         );
-    
+};
+
+template< typename Map, long order > struct item_by_order
+{    
     typedef typename eval_if_c< 
-          is_deleted_
+          is_item_masked<Map,order>::value
         , void_
-        , m_at<Map,order>
+        , m_at<Map,(order - 2)>
         >::type type;
 };
 
