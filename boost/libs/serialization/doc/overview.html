@@ -113,7 +113,7 @@ XML, or some other created by the user of this library.
       package would also benefit from having better documentation.
       So it fails to address 2, 3, 7, 8, and 9.
 
-      <li><u>Eternity</u><a href="bibliography.html#2">[2]</a> 
+      <li><u>Eternity</u> <a href="bibliography.html#2">[2]</a> 
       This is a bare bones package. It
       seems well coded but it really needs documentation and
       examples. It's not obvious how to use it without time
@@ -125,6 +125,19 @@ XML, or some other created by the user of this library.
       a serialization implementation. Interesting and worth
       the read if you can overlook the arrogant tone of the prose.
       This implementation fails 2, 3, 4, 5, and 6.
+
+      <li><u>s11n</u> <a href="bibliography.html#13">[13]</a>
+      This library has similar goals to this one. Some aspects of the
+      implemenation are also similar.  As of this writing, it would seem that:
+      <ul>
+          <li>Portability(1) is guarenteed only for recent versions of GCC.
+          <li>Versioning(3) of class definitions is not explicitly supported by
+          the library.
+          <li>it doesn't seem to automatically account for shared pointers(5).
+          I concluded this from the documentation as well as the statement that
+          serialization of graph like structures is not supported.
+      </ul>
+      Its has lots of differences - and lots in common with this implementation. 
     </ul>
 <hr>
 <p>Revised 

@@ -54,100 +54,66 @@ It's almost trivial:
 <pre><code>
 template&lt;class Archive, class T&gt;
 inline void serialize(
-    Archive & ar,
-    shared_ptr&lt;T&gt; &t,
+    Archive &amp; ar,
+    shared_ptr&lt;T&gt; &amp; t,
     const unsigned int file_version,
     int
 ){
-    ar & t.px; // save the raw pointer
-    ar & t.pn; // save the shared reference count
+    ar &amp; t.px; // save the raw pointer
+    ar &amp; t.pn; // save the shared reference count
 }
 </code></pre>
 So far so good.  Now for the serialization of <code style="white-space: normal">shared_count</code>:
 <pre><code>
-template<class Archive>
+template&lt;class Archive&gt;
 inline void save(
-    Archive & ar,
-    const boost::detail::shared_count &t,
+    Archive &amp; ar,
+    const boost::detail::shared_count &amp; t,
     const unsigned int file_version
 ){
-    // the following will fail because pi_ is private variable
-    // of shared_count
-    // ar << t.pi_;
-    // so employ the accessor class
-    ar << shared_ptr_access::pi(t);
+    ar &lt;&lt; t.pi_;
 }
 
-template<class Archive>
+template&lt;class Archive&gt;
 inline void load(
-    Archive & ar,
-    boost::detail::shared_count &t,
+    Archive &amp; ar,
+    boost::detail::shared_count &amp; t,
     const unsigned int file_version
 ){
-    // see above
-    // ar >> t.pi_;
-    ar >> shared_ptr_access::pi(t);
+    ar &gt;&gt; t.pi_;
 }
 </code></pre>
 A key feature of this library is the ability to specify serialization
 of a class or template without changing the class or template declaration
 or definition.  This is referred to as <i>non-intrusive</i> serialization.
 <p>
-In some cases, serialization of a class or template requires access
-to one or more of its private members.  In this cases, there will be
-no alternative but to alter the class or template to permit access. 
-The simplest way to do to this is just to make the required members
-public.  For <code style="white-space: normal">shared_count</code> and related classes we added 
-the statement:
-<pre><code>
-// grant access to serialization code
-friend class boost::serialization::shared_ptr_access;
-</code></pre>
-and defined an "accessor class":
-<pre><code>
-class shared_ptr_access {
-public:
-    // functions that need to access the private variables of shared_cnt
-    ...
-};
-</code></pre>
-The serialization of <code style="white-space: normal">shared_count</code>uses this "accessor class"
-to perform the normal serialization operations on the private member
-variables of the <code style="white-space: normal">shared_count</code> class.
-<p>
 The <code style="white-space: normal">pi_</code>member of shared count is a pointer to an 
 instance of <code style="white-space: normal">sp_counted_base_impl<T, ...></code>.  Since this class
 doesn't have a default constructor, serialization requires
 specification of the following overload:
 <pre><code>
-template<class Archive, class P, class D>
+template&lt;class Archive, class P, class D>
 inline void save_construct_data(
-    Archive & ar,
+    Archive &amp; ar,
     const boost::detail::sp_counted_base_impl<P, D> * t, 
     const unsigned int file_version
 ){
     // variables used for construction
-//  ar << t->ptr;
-    ar << shared_ptr_access::ptr(*t);
-    ar << *t;
+    ar &lt;&lt; t->ptr;
+    ar &lt;&lt; *t;
 }
 
 template<class Archive, class P, class D>
 inline void load_construct_data(
-    Archive & ar,
+    Archive &amp; ar,
     boost::detail::sp_counted_base_impl<P, D> * t, 
     const unsigned int file_version
 ){
     P ptr_;
-    ar >> ptr_;
+    ar &gt;&gt; ptr_;
     // placement new
     ::new(t)boost::detail::sp_counted_base_impl<P, D>(ptr_,  D());
-    ar >> *t;
-    // compensate for that fact that a new shared count always is 
-    // initialized with one. the add_ref below will increment it
-    // every time its serialized so without this adjustment
-    // the use counts will be off by one.
-    shared_ptr_access::use_count(*t) = 0;
+    ar &gt;&gt;; *t;
 }
 </code></pre>
 The statement <code style="white-space: normal">ar &gt;&gt; ptr_</code> is key. This deserializes
@@ -164,8 +130,8 @@ Since <code style="white-space: normal">sp_counted_base_impl&lt;P, D&gt;</code> 
 <pre><code>
 template&lt;class Archive, class P, class D&gt;
 inline void serialize(
-    Archive & ar,
-    boost::detail::sp_counted_base_impl&lt;P, D&gt; &t,
+    Archive &amp; ar,
+    boost::detail::sp_counted_base_impl&lt;P, D&gt; &amp; t,
     const unsigned int file_version,
     int
 ){
@@ -177,8 +143,8 @@ inline void serialize(
 which will in turn require serialization of its base class:
 <pre><code>
 inline void serialize(
-    Archive & ar,
-    boost::detail::sp_counted &t,
+    Archive &amp; ar,
+    boost::detail::sp_counted &amp; t,
     const unsigned int file_version,
     int
 ){
@@ -205,7 +171,7 @@ tracking, <code style="white-space: normal">sp_counted_base_impl&lt;P, D&gt;</co
 created once regardless of how many shared pointers point to the
 same object.  Of course, it has to be this way. The reference
 count starts at 1 and is never incrememented.  Code must be added
-to the serialiation functions to maintain the proper reference
+to the serialization functions to maintain the proper reference
 count.
 <p>
 The process of serialization of an empty base class - 
