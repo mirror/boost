@@ -10,7 +10,7 @@
 //
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
- 
+
 // For more information, see http://www.boost.org
 
 #ifndef BOOST_SIGNALS_SLOT_HEADER
@@ -26,14 +26,14 @@ namespace boost {
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       class slot_base {
-        // We would have to enumerate all of the signalN classes here as 
+        // We would have to enumerate all of the signalN classes here as
         // friends to make this private (as it otherwise should be). We can't
         // name all of them because we don't know how many there are.
       public:
         // Get the set of bound objects
-        std::vector<const trackable*>& get_bound_objects() const 
+        std::vector<const trackable*>& get_bound_objects() const
         { return bound_objects; }
-        
+
         // Determine if this slot is still "active", i.e., all of the bound
         // objects still exist
         bool is_active() const { return watch_bound_objects.connected(); }
@@ -43,12 +43,12 @@ namespace boost {
         void create_connection();
 
         // Get the slot so that it can be copied
-        template<typename F> 
-        reference_wrapper<const F> 
+        template<typename F>
+        reference_wrapper<const F>
         get_invocable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::signal_tag)
           { return reference_wrapper<const F>(f); }
 
-        template<typename F> 
+        template<typename F>
         const F& get_invocable_slot(const F& f, BOOST_SIGNALS_NAMESPACE::detail::reference_tag)
           { return f; }
 
@@ -57,13 +57,13 @@ namespace boost {
           { return f; }
 
         // Get the slot so that it can be inspected for trackable objects
-        template<typename F> 
+        template<typename F>
         const F& get_inspectable_slot(const F& f,
                                       BOOST_SIGNALS_NAMESPACE::detail::signal_tag)
           { return f; }
 
-        template<typename F> 
-        const F& get_inspectable_slot(const F& f, 
+        template<typename F>
+        const F& get_inspectable_slot(const reference_wrapper<F>& f,
                                       BOOST_SIGNALS_NAMESPACE::detail::reference_tag)
           { return f.get(); }
 
@@ -93,7 +93,7 @@ namespace boost {
   template<typename SlotFunction>
   class slot : public BOOST_SIGNALS_NAMESPACE::detail::slot_base {
   public:
-    template<typename F> 
+    template<typename F>
     slot(const F& f) : slot_function(get_invocable_slot(f, tag_type(f)))
     {
       // Visit each of the bound objects and store them for later use
@@ -117,7 +117,7 @@ namespace boost {
     // We would have to enumerate all of the signalN classes here as friends
     // to make this private (as it otherwise should be). We can't name all of
     // them because we don't know how many there are.
-  public: 
+  public:
     // Get the slot function to call the actual slot
     const SlotFunction& get_slot_function() const { return slot_function; }
 
