@@ -72,11 +72,16 @@ or
 <p>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
-<tr><td>ptime time_from_string(const std::string&)</td>
+<tr><td>ptime <font class="func">time_from_string</font>(const std::string&)</td>
         <td>From delimited string.</td>
 	<td>std::string ts("2002-01-20 23:59:59.000");
 <br>
-            date d(time_from_string(ts))</td></tr>
+            ptime t(time_from_string(ts))</td></tr>
+<tr><td>ptime <font class="func">from_iso_string</font>(const std::string&)</td>
+        <td>From non delimited iso form string.</td>
+	<td>std::string ts("20020131T235959");
+<br>
+            ptime t(from_iso_string(ts))</td></tr>
 </table>
 <p>
 
@@ -143,29 +148,29 @@ or
         <br> operator&gt;=, operator&lt;=</td>
         <td>A full complement of comparison operators</td>
 	<td>t1 == t2, etc</td></tr>
-<tr><td>ptime operator+(date_duration) const</td>
+<tr><td>ptime <font class="func">operator+</font>(date_duration) const</td>
         <td>Return a ptime adding a day offset</td>
 	<td>date d(2002,Jan,1);<br>
             ptime t(d,minutes(5));<br>
             date_duration dd(1); <br>
             ptime t2 = t + dd;</td></tr>
-<tr><td>ptime operator-(date_duration) const</td>
+<tr><td>ptime <font class="func">operator-</font>(date_duration) const</td>
         <td>Return a ptime subtracting a day offset</td>
 	<td>date d(2002,Jan,1);<br>
             ptime t(d,minutes(5));<br>
             date_duration dd(1); <br>
             ptime t2 = t - dd;</td></tr>
-<tr><td>ptime operator+(time_duration) const</td>
+<tr><td>ptime <font class="func">operator+</font>(time_duration) const</td>
         <td>Return a ptime adding a time duration</td>
 	<td>date d(2002,Jan,1);<br>
             ptime t(d,minutes(5));<br>
             ptime t2 = t + hours(1) + minutes(2);</td></tr>
-<tr><td>ptime operator-(time_duration) const</td>
+<tr><td>ptime <font class="func">operator-</font>(time_duration) const</td>
         <td>Return a ptime subtracting a time duration</td>
 	<td>date d(2002,Jan,1);<br>
             ptime t(d,minutes(5));<br>
             ptime t2 = t - minutes(2);</td></tr>
-<tr><td>time_duration operator-(ptime) const</td>
+<tr><td>time_duration <font class="func">operator-</font>(ptime) const</td>
         <td>Take the difference between two times.</td>
 	<td>date d(2002,Jan,1);<br>
             ptime t1(d,minutes(5));<br>
@@ -179,7 +184,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Wed Aug 21 15:20:18 MST 2002
+Last modified: Sun Oct 13 10:52:41 MST 2002
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>

@@ -73,14 +73,14 @@ or
 <p>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
-<tr><td>date from_string(const std::string&)</td>
+<tr><td>date <font class="func">from_string</font>(const std::string&)</td>
         <td>From delimited date string where with order year-month-day eg: 2002-1-25</td>
 	<td>std::string ds("2002/1/25");<br>
             date d(from_string(ds))</td></tr>
-<tr><td>date from_undelimited_string(const std::string&)</td>
+<tr><td>date <font class="func">from_undelimited_string</font>(const std::string&)</td>
         <td>From iso type date string where with order year-month-day eg: 20020125</td>
 	<td>std::string ds("20020125");<br>
-            date d(from_string(ds))</td></tr>
+            date d(from_undelimited_string(ds))</td></tr>
 
 </table>
 <p>
@@ -193,7 +193,7 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Wed Aug 28 17:52:03 MST 2002
+Last modified: Sun Oct 13 10:59:44 MST 2002
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
