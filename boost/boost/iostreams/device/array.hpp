@@ -18,6 +18,7 @@
 #include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace iostreams {
