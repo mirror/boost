@@ -848,7 +848,7 @@ private: // private typedefs
 
 private: // helpers, for typedefs (below)
 
-#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
     typedef variant wknd_self_t;
 
@@ -859,13 +859,13 @@ private: // helpers, for typedefs (below)
             >::type BOOST_PP_CAT(T,N);                      \
         /**/
 
-#   else // MSVC6
+#   else // MSVC7 and below
 
     #define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_TYPEDEFS(z,N,_)  \
         typedef BOOST_PP_CAT(T_,N) BOOST_PP_CAT(T,N);   \
         /**/
 
-#   endif // MSVC6 workaround
+#   endif // MSVC7 and below workaround
 
     BOOST_PP_REPEAT(
           BOOST_VARIANT_LIMIT_TYPES
