@@ -49,7 +49,9 @@
 #  endif
    // disable min/max macro defines on vc6:
    //
-#  define NOMINMAX
+#  ifndef NOMINMAX
+#     define NOMINMAX
+#  endif
 #endif
 
 #ifndef _NATIVE_WCHAR_T_DEFINED
