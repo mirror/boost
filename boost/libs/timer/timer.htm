@@ -117,7 +117,7 @@ a predefined goal at an appropriate place in an appropriate form.&nbsp; This
 meets a human need to know if a program is progressing.</p>
 <p>For example, if a lengthy computation must be done on a std::map&lt;&gt;
 named big_map, the follow code would display an indication of progress:</p>
-<pre>  progress_display( big_map.size() ) show_progress;
+<pre>  progress_display show_progress( big_map.size() );
   for ( big_map_t::iterator itr = big_map:begin();
         itr != big_map.end(); ++itr )
   {
@@ -207,7 +207,7 @@ all copies. The software described is provided &quot;as is&quot; without express
 or implied&nbsp; warranty, and with no claim as to its suitability for any
 purpose.</p>
 
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->December 01, 2001<!--webbot bot="Timestamp" i-checksum="39463" endspan -->
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->January 11, 2002<!--webbot bot="Timestamp" i-checksum="31071" endspan -->
 </p>
 
 </body>
