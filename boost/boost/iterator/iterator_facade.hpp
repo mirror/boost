@@ -417,12 +417,12 @@ namespace boost
 
       Derived& derived()
       {
-          return static_cast<Derived&>(*this);
+          return *static_cast<Derived*>(this);
       }
 
       Derived const& derived() const
       {
-          return static_cast<Derived const&>(*this);
+          return *static_cast<Derived const*>(this);
       }
 
       typedef detail::iterator_facade_types<
