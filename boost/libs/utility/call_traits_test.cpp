@@ -211,7 +211,7 @@ int main(int argc, char *argv[ ])
    c4(i);
    call_traits_checker<const int&> c5;
    c5(i);
-#if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__MWERKS__)
+#if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__MWERKS__) && !defined(__SUNPRO_CC)
    call_traits_checker<int[2]> c6;
    c6(a);
 #endif
@@ -221,7 +221,7 @@ int main(int argc, char *argv[ ])
    // compiler can't deduce this for some reason:
    //const char ca[4] = "abc";
    //check_wrap(wrap(ca), ca);
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC)
    check_wrap(wrap(a), a);
    check_make_pair(test::make_pair(a, a), a, a);
 #endif
@@ -392,7 +392,7 @@ template struct call_traits_test<int*>;
 #if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
 template struct call_traits_test<int&>;
 template struct call_traits_test<const int&>;
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC)
 template struct call_traits_test<int[2], true>;
 #endif
 #endif
@@ -400,7 +400,11 @@ template struct call_traits_test<int[2], true>;
 #ifdef BOOST_MSVC
 unsigned int expected_failures = 10;
 #elif defined(__SUNPRO_CC)
+#if(__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 11;
+#else
+unsigned int expected_failures = 6;
+#endif
 #elif defined(__BORLANDC__)
 unsigned int expected_failures = 2;
 #elif defined(__GNUC__)
