@@ -2,12 +2,15 @@
 .. subject to the Boost Software License, Version 1.0. (See accompanying
 .. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-Introduction
-------------
-
 In this section we'll walk through the implementation of a few
 iterators using ``iterator_facade``, based around the simple
-example of a linked list of polymorphic objects.
+example of a linked list of polymorphic objects.  This example was
+inspired by a `posting`__ by Keith Macdonald on the `Boost-Users`_
+mailing list.
+
+.. _`Boost-Users`: ../../../more/mailing_lists.htm#users
+
+__ http://thread.gmane.org/gmane.comp.lib.boost.user/5100
 
 The Problem
 -----------

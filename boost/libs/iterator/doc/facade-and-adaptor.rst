@@ -297,12 +297,18 @@ Iterator facade [lib.iterator.facade]
 
 .. include:: iterator_facade_abstract.rst
 
+Class template ``iterator_facade``
+----------------------------------
+
 .. include:: iterator_facade_ref.rst
 
 Iterator adaptor [lib.iterator.adaptor]
 =======================================
 
 .. include:: iterator_adaptor_abstract.rst
+
+Class template ``iterator_adaptor``
+-----------------------------------
 
 .. include:: iterator_adaptor_ref.rst
 

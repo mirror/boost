@@ -20,22 +20,21 @@
 
 .. contents:: Table of Contents
 
-Overview
-========
-
-Motivation
-----------
+A Facade for Iterator Implementation
+====================================
 
 .. include:: iterator_facade_body.rst
+
+
+Reference
+---------
+
+.. include:: iterator_facade_ref.rst
+
+.. _counting: counting_iterator.html
 
 Tutorial Example
 ================
 
 .. include:: iterator_facade_tutorial.rst
 
-Reference
-=========
-
-.. include:: iterator_facade_ref.rst
-
-.. _counting: counting_iterator.html

@@ -120,8 +120,8 @@ were defined to be::
   {};
 
 
-``iterator_facade`` usage
--------------------------
+``iterator_facade`` Requirements
+................................
 
 The following table describes the typical valid expressions on
 ``iterator_facade``\ 's ``Derived`` parameter, depending on the
@@ -138,40 +138,39 @@ interoperable with ``X``.
 
 .. _`core operations`:
 
-``iterator_facade`` Core Operations
-...................................
+.. topic:: ``iterator_facade`` Core Operations
 
-+--------------------+----------------------+-------------------------------------+---------------------------+
-|Expression          |Return Type           |Assertion/Note                       |Used to implement Iterator |
-|                    |                      |                                     |Concept(s)                 |
-+====================+======================+=====================================+===========================+
-|``c.dereference()`` |``F::reference``      |                                     |Readable Iterator, Writable|
-|                    |                      |                                     |Iterator                   |
-+--------------------+----------------------+-------------------------------------+---------------------------+
-|``c.equal(y)``      |convertible to bool   |true iff ``c`` and ``y`` refer to the|Single Pass Iterator       |
-|                    |                      |same position.  Implements ``c == y``|                           |
-|                    |                      |and ``c != y``.                      |                           |
-+--------------------+----------------------+-------------------------------------+---------------------------+
-|``a.increment()``   |unused                |                                     |Incrementable Iterator     |
-+--------------------+----------------------+-------------------------------------+---------------------------+
-|``a.decrement()``   |unused                |                                     |Bidirectional Traversal    |
-|                    |                      |                                     |Iterator                   |
-+--------------------+----------------------+-------------------------------------+---------------------------+
-|``a.advance(n)``    |unused                |                                     |Random Access Traversal    |
-|                    |                      |                                     |Iterator                   |
-+--------------------+----------------------+-------------------------------------+---------------------------+
-|``c.distance_to(b)``|convertible to        |equivalent to ``distance(c, b)``     |Random Access Traversal    |
-|                    |``F::difference_type``|                                     |Iterator                   |
-+--------------------+----------------------+-------------------------------------+---------------------------+
-|``c.distance_to(z)``|convertible to        |equivalent to ``distance(c, z)``.    |Random Access Traversal    |
-|                    |``F::difference_type``|Implements ``c - z``, ``c < z``, ``c |Iterator                   |
-|                    |                      |<= z``, ``c > z``, and ``c >= c``.   |                           |
-+--------------------+----------------------+-------------------------------------+---------------------------+
+   +--------------------+----------------------+-------------------------------------+---------------------------+
+   |Expression          |Return Type           |Assertion/Note                       |Used to implement Iterator |
+   |                    |                      |                                     |Concept(s)                 |
+   +====================+======================+=====================================+===========================+
+   |``c.dereference()`` |``F::reference``      |                                     |Readable Iterator, Writable|
+   |                    |                      |                                     |Iterator                   |
+   +--------------------+----------------------+-------------------------------------+---------------------------+
+   |``c.equal(y)``      |convertible to bool   |true iff ``c`` and ``y`` refer to the|Single Pass Iterator       |
+   |                    |                      |same position.  Implements ``c == y``|                           |
+   |                    |                      |and ``c != y``.                      |                           |
+   +--------------------+----------------------+-------------------------------------+---------------------------+
+   |``a.increment()``   |unused                |                                     |Incrementable Iterator     |
+   +--------------------+----------------------+-------------------------------------+---------------------------+
+   |``a.decrement()``   |unused                |                                     |Bidirectional Traversal    |
+   |                    |                      |                                     |Iterator                   |
+   +--------------------+----------------------+-------------------------------------+---------------------------+
+   |``a.advance(n)``    |unused                |                                     |Random Access Traversal    |
+   |                    |                      |                                     |Iterator                   |
+   +--------------------+----------------------+-------------------------------------+---------------------------+
+   |``c.distance_to(b)``|convertible to        |equivalent to ``distance(c, b)``     |Random Access Traversal    |
+   |                    |``F::difference_type``|                                     |Iterator                   |
+   +--------------------+----------------------+-------------------------------------+---------------------------+
+   |``c.distance_to(z)``|convertible to        |equivalent to ``distance(c, z)``.    |Random Access Traversal    |
+   |                    |``F::difference_type``|Implements ``c - z``, ``c < z``, ``c |Iterator                   |
+   |                    |                      |<= z``, ``c > z``, and ``c >= c``.   |                           |
+   +--------------------+----------------------+-------------------------------------+---------------------------+
 
 .. _facade iterator category:
 
 ``iterator_facade`` iterator category
--------------------------------------
+.....................................
 
 The ``iterator_category`` member of ``iterator_facade<X,V,R,C,D>``
 is a type which satisfies the following conditions:
@@ -219,7 +218,7 @@ is a type which satisfies the following conditions:
 
 
 ``iterator_facade`` operations
-------------------------------
+..............................
 
 The operations in this section are described in terms of operations on
 the core interface of ``Derived`` which may be inaccessible

@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
 <title>Iterator Facade</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -45,51 +45,44 @@ and associated types, to be supplied by a derived iterator class.</td>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#overview" id="id20" name="id20">Overview</a><ul>
-<li><a class="reference" href="#motivation" id="id21" name="id21">Motivation</a></li>
+<li><a class="reference" href="#a-facade-for-iterator-implementation" id="id21" name="id21">A Facade for Iterator Implementation</a><ul>
 <li><a class="reference" href="#usage" id="id22" name="id22">Usage</a></li>
 <li><a class="reference" href="#iterator-core-access" id="id23" name="id23">Iterator Core Access</a></li>
 <li><a class="reference" href="#operator" id="id24" name="id24"><tt class="literal"><span class="pre">operator[]</span></tt></a></li>
 <li><a class="reference" href="#id2" id="id25" name="id25"><tt class="literal"><span class="pre">operator-&gt;</span></tt></a></li>
+<li><a class="reference" href="#reference" id="id26" name="id26">Reference</a><ul>
+<li><a class="reference" href="#iterator-facade-requirements" id="id27" name="id27"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></li>
+<li><a class="reference" href="#iterator-facade-iterator-category" id="id28" name="id28"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></li>
+<li><a class="reference" href="#iterator-facade-operations" id="id29" name="id29"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#tutorial-example" id="id26" name="id26">Tutorial Example</a><ul>
-<li><a class="reference" href="#introduction" id="id27" name="id27">Introduction</a></li>
-<li><a class="reference" href="#the-problem" id="id28" name="id28">The Problem</a></li>
-<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id29" name="id29">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id30" name="id30">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
-<li><a class="reference" href="#derived" id="id31" name="id31"><tt class="literal"><span class="pre">Derived</span></tt></a></li>
-<li><a class="reference" href="#value" id="id32" name="id32"><tt class="literal"><span class="pre">Value</span></tt></a></li>
-<li><a class="reference" href="#categoryortraversal" id="id33" name="id33"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
-<li><a class="reference" href="#reference" id="id34" name="id34"><tt class="literal"><span class="pre">Reference</span></tt></a></li>
-<li><a class="reference" href="#difference" id="id35" name="id35"><tt class="literal"><span class="pre">Difference</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference" href="#constructors-and-data-members" id="id36" name="id36">Constructors and Data Members</a></li>
-<li><a class="reference" href="#core-operations" id="id37" name="id37">Core Operations</a></li>
+<li><a class="reference" href="#tutorial-example" id="id30" name="id30">Tutorial Example</a><ul>
+<li><a class="reference" href="#the-problem" id="id31" name="id31">The Problem</a></li>
+<li><a class="reference" href="#a-basic-iterator-using-iterator-facade" id="id32" name="id32">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference" href="#template-arguments-for-iterator-facade" id="id33" name="id33">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a><ul>
+<li><a class="reference" href="#derived" id="id34" name="id34"><tt class="literal"><span class="pre">Derived</span></tt></a></li>
+<li><a class="reference" href="#value" id="id35" name="id35"><tt class="literal"><span class="pre">Value</span></tt></a></li>
+<li><a class="reference" href="#categoryortraversal" id="id36" name="id36"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></li>
+<li><a class="reference" href="#id10" id="id37" name="id37"><tt class="literal"><span class="pre">Reference</span></tt></a></li>
+<li><a class="reference" href="#difference" id="id38" name="id38"><tt class="literal"><span class="pre">Difference</span></tt></a></li>
 </ul>
 </li>
-<li><a class="reference" href="#a-constant-node-iterator" id="id38" name="id38">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></li>
-<li><a class="reference" href="#interoperability" id="id39" name="id39">Interoperability</a></li>
-<li><a class="reference" href="#telling-the-truth" id="id40" name="id40">Telling the Truth</a></li>
-<li><a class="reference" href="#wrap-up" id="id41" name="id41">Wrap Up</a></li>
+<li><a class="reference" href="#constructors-and-data-members" id="id39" name="id39">Constructors and Data Members</a></li>
+<li><a class="reference" href="#id12" id="id40" name="id40">Core Operations</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#id14" id="id42" name="id42">Reference</a><ul>
-<li><a class="reference" href="#iterator-facade-usage" id="id43" name="id43"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a><ul>
-<li><a class="reference" href="#iterator-facade-core-operations" id="id44" name="id44"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</a></li>
-</ul>
-</li>
-<li><a class="reference" href="#iterator-facade-iterator-category" id="id45" name="id45"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></li>
-<li><a class="reference" href="#iterator-facade-operations" id="id46" name="id46"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></li>
+<li><a class="reference" href="#a-constant-node-iterator" id="id41" name="id41">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></li>
+<li><a class="reference" href="#interoperability" id="id42" name="id42">Interoperability</a></li>
+<li><a class="reference" href="#telling-the-truth" id="id43" name="id43">Telling the Truth</a></li>
+<li><a class="reference" href="#wrap-up" id="id44" name="id44">Wrap Up</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<div class="section" id="overview">
-<h1><a class="toc-backref" href="#id20" name="overview">Overview</a></h1>
-<div class="section" id="motivation">
-<h2><a class="toc-backref" href="#id21" name="motivation">Motivation</a></h2>
+<div class="section" id="a-facade-for-iterator-implementation">
+<h1><a class="toc-backref" href="#id21" name="a-facade-for-iterator-implementation">A Facade for Iterator Implementation</a></h1>
 <!-- Version 1.1 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -131,7 +124,6 @@ iterators, and a separate <tt class="literal"><span class="pre">iterator_adaptor
 impossible.</li>
 </ol>
 </blockquote>
-</div>
 <div class="section" id="usage">
 <h2><a class="toc-backref" href="#id22" name="usage">Usage</a></h2>
 <p>The user of <tt class="literal"><span class="pre">iterator_facade</span></tt> derives his iterator class from a
@@ -150,7 +142,7 @@ of the derived iterator type.  These member functions are described
 briefly below and in more detail in the iterator facade
 requirements.</p>
 <blockquote>
-<table class="table" frame="border" rules="all">
+<table border class="table">
 <colgroup>
 <col width="44%" />
 <col width="56%" />
@@ -269,485 +261,13 @@ specialization to meet the requirements of its <tt class="literal"><span class="
 <colgroup><col class="label" /><col /></colgroup>
 <col />
 <tbody valign="top">
-<tr><td class="label"><a name="cop95">[Cop95]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> [Coplien, 1995] Coplien, J., Curiously Recurring Template
+<tr><td class="label"><a name="cop95">[Cop95]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id8">2</a>)</em> [Coplien, 1995] Coplien, J., Curiously Recurring Template
 Patterns, C++ Report, February 1995, pp. 24-27.</td></tr>
 </tbody>
 </table>
 </div>
-</div>
-<div class="section" id="tutorial-example">
-<h1><a class="toc-backref" href="#id26" name="tutorial-example">Tutorial Example</a></h1>
-<!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
-<!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
-<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<div class="section" id="introduction">
-<h2><a class="toc-backref" href="#id27" name="introduction">Introduction</a></h2>
-<p>In this section we'll walk through the implementation of a few
-iterators using <tt class="literal"><span class="pre">iterator_facade</span></tt>, based around the simple
-example of a linked list of polymorphic objects.</p>
-</div>
-<div class="section" id="the-problem">
-<h2><a class="toc-backref" href="#id28" name="the-problem">The Problem</a></h2>
-<p>Say we've written a polymorphic linked list node base class:</p>
-<pre class="literal-block">
-# include &lt;iostream&gt;
-
-struct node_base
-{
-    node_base() : m_next(0) {}
-
-    // Each node manages all of its tail nodes
-    virtual ~node_base() { delete m_next; }
-
-    // Access the rest of the list
-    node_base* next() const { return m_next; }
-
-    // print to the stream
-    virtual void print(std::ostream&amp; s) const = 0;
-    
-    // double the value
-    virtual void double_me() = 0;
-
-    void append(node_base* p)
-    {
-        if (m_next) 
-            m_next-&gt;append(p); 
-        else
-            m_next = p; 
-    }
-
- private:
-    node_base* m_next;
-};
-</pre>
-<p>Lists can hold objects of different types by linking together
-specializations of the following template:</p>
-<pre class="literal-block">
-template &lt;class T&gt;
-struct node : node_base
-{
-    node(T x)
-      : m_value(x)
-    {}
-
-    void print(std::ostream&amp; s) const { s &lt;&lt; this-&gt;m_value; }
-    void double_me() { m_value += m_value; }
-
- private:
-    T m_value;
-};
-</pre>
-<p>And we can print any node using the following streaming operator:</p>
-<pre class="literal-block">
-inline std::ostream&amp; operator&lt;&lt;(std::ostream&amp; s, node_base const&amp; n)
-{
-    n.print(s);
-    return s;
-}
-</pre>
-<p>Our first challenge is to build an appropriate iterator over these
-lists.</p>
-</div>
-<div class="section" id="a-basic-iterator-using-iterator-facade">
-<h2><a class="toc-backref" href="#id29" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h2>
-<p>We will construct a <tt class="literal"><span class="pre">node_iterator</span></tt> class using inheritance from
-<tt class="literal"><span class="pre">iterator_facade</span></tt> to implement most of the iterator's operations.</p>
-<pre class="literal-block">
-# include &quot;node.hpp&quot;
-# include &lt;boost/iterator/iterator_facade.hpp&gt;
-
-class node_iterator
-  : public boost::iterator_facade&lt;...&gt;
-{
-   ...
-};
-</pre>
-<div class="section" id="template-arguments-for-iterator-facade">
-<h3><a class="toc-backref" href="#id30" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h3>
-<p><tt class="literal"><span class="pre">iterator_facade</span></tt> has several template parameters, so we must decide
-what types to use for the arguments. The parameters are <tt class="literal"><span class="pre">Derived</span></tt>,
-<tt class="literal"><span class="pre">Value</span></tt>, <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>, <tt class="literal"><span class="pre">Reference</span></tt>, and <tt class="literal"><span class="pre">Difference</span></tt>.</p>
-<div class="section" id="derived">
-<h4><a class="toc-backref" href="#id31" name="derived"><tt class="literal"><span class="pre">Derived</span></tt></a></h4>
-<p>Because <tt class="literal"><span class="pre">iterator_facade</span></tt> is meant to be used with the CRTP
-<a class="citation-reference" href="#cop95" id="id3" name="id3">[Cop95]</a> the first parameter is the iterator class name itself,
-<tt class="literal"><span class="pre">node_iterator</span></tt>.</p>
-</div>
-<div class="section" id="value">
-<h4><a class="toc-backref" href="#id32" name="value"><tt class="literal"><span class="pre">Value</span></tt></a></h4>
-<p>The <tt class="literal"><span class="pre">Value</span></tt> parameter determines the <tt class="literal"><span class="pre">node_iterator</span></tt>'s
-<tt class="literal"><span class="pre">value_type</span></tt>.  In this case, we are iterating over <tt class="literal"><span class="pre">node_base</span></tt>
-objects, so <tt class="literal"><span class="pre">Value</span></tt> will be <tt class="literal"><span class="pre">node_base</span></tt>.</p>
-</div>
-<div class="section" id="categoryortraversal">
-<h4><a class="toc-backref" href="#id33" name="categoryortraversal"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
-<p>Now we have to determine which <a class="reference" href="new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">iterator traversal concept</a> our
-<tt class="literal"><span class="pre">node_iterator</span></tt> is going to model.  Singly-linked lists only have
-forward links, so our iterator can't can't be a <a class="reference" href="new-iter-concepts.html#bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">bidirectional
-traversal iterator</a>.  Our iterator should be able to make multiple
-passes over the same linked list (unlike, say, an
-<tt class="literal"><span class="pre">istream_iterator</span></tt> which consumes the stream it traverses), so it
-must be a <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a>.  Therefore, we'll pass
-<tt class="literal"><span class="pre">boost::forward_traversal_tag</span></tt> in this position <a class="footnote-reference" href="#category" id="id4" name="id4"><sup>1</sup></a>.</p>
-<table class="footnote" frame="void" id="category" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4" name="category">[1]</a></td><td><tt class="literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
-tags, so we could have passed <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt> here;
-either way, the resulting iterator's <tt class="literal"><span class="pre">iterator_category</span></tt> will
-end up being <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt>.</td></tr>
-</tbody>
-</table>
-</div>
 <div class="section" id="reference">
-<h4><a class="toc-backref" href="#id34" name="reference"><tt class="literal"><span class="pre">Reference</span></tt></a></h4>
-<p>The <tt class="literal"><span class="pre">Reference</span></tt> argument becomes the type returned by
-<tt class="literal"><span class="pre">node_iterator</span></tt>'s dereference operation, and will also be the
-same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::reference</span></tt>.  The
-library's default for this parameter is <tt class="literal"><span class="pre">Value&amp;</span></tt>; since
-<tt class="literal"><span class="pre">node_base&amp;</span></tt> is a good choice for the iterator's <tt class="literal"><span class="pre">reference</span></tt>
-type, we can omit this argument, or pass <tt class="literal"><span class="pre">use_default</span></tt>.</p>
-</div>
-<div class="section" id="difference">
-<h4><a class="toc-backref" href="#id35" name="difference"><tt class="literal"><span class="pre">Difference</span></tt></a></h4>
-<p>The <tt class="literal"><span class="pre">Difference</span></tt> argument determines how the distance between
-two <tt class="literal"><span class="pre">node_iterator</span></tt>s will be measured and will also be the
-same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::difference_type</span></tt>.
-The library's default for <tt class="literal"><span class="pre">Difference</span></tt> is <tt class="literal"><span class="pre">std::ptrdiff_t</span></tt>, an
-appropriate type for measuring the distance between any two
-addresses in memory, and one that works for almost any iterator,
-so we can omit this argument, too.</p>
-<p>The declaration of <tt class="literal"><span class="pre">node_iterator</span></tt> will therefore look something
-like:</p>
-<pre class="literal-block">
-# include &quot;node.hpp&quot;
-# include &lt;boost/iterator/iterator_facade.hpp&gt;
-
-class node_iterator
-  : public boost::iterator_facade&lt;
-        node_iterator
-      , node_base
-      , boost::forward_traversal_tag
-    &gt;
-{
-   ...
-};
-</pre>
-</div>
-</div>
-<div class="section" id="constructors-and-data-members">
-<h3><a class="toc-backref" href="#id36" name="constructors-and-data-members">Constructors and Data Members</a></h3>
-<p>Next we need to decide how to represent the iterator's position.
-This representation will take the form of data members, so we'll
-also need to write constructors to initialize them.  The
-<tt class="literal"><span class="pre">node_iterator</span></tt>'s position is quite naturally represented using
-a pointer to a <tt class="literal"><span class="pre">node_base</span></tt>.  We'll need a constructor to build an
-iterator from a <tt class="literal"><span class="pre">node_base*</span></tt>, and a default constructor to
-satisfy the <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a> requirements <a class="footnote-reference" href="#default" id="id5" name="id5"><sup>2</sup></a>.
-Our <tt class="literal"><span class="pre">node_iterator</span></tt> then becomes:</p>
-<pre class="literal-block">
-# include &quot;node.hpp&quot;
-# include &lt;boost/iterator/iterator_facade.hpp&gt;
-
-class node_iterator
-  : public boost::iterator_facade&lt;
-        node_iterator
-      , node_base
-      , boost::forward_traversal_tag
-    &gt;
-{
- public:
-    node_iterator()
-      : m_node(0)
-    {}
-
-    explicit node_iterator(node_base* p)
-      : m_node(p)
-    {}
-
- private:
-    ...
-    node_base* m_node;
-};
-</pre>
-<table class="footnote" frame="void" id="default" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id5" name="default">[2]</a></td><td>Technically, the C++ standard places almost no
-requirements on a default-constructed iterator, so if we were
-really concerned with efficiency, we could've written the
-default constructor to leave <tt class="literal"><span class="pre">m_node</span></tt> uninitialized.</td></tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="core-operations">
-<h3><a class="toc-backref" href="#id37" name="core-operations">Core Operations</a></h3>
-<p>The last step is to implement the <a class="reference" href="#id18">core operations</a> required by
-the concepts we want our iterator to model.  Referring to the
-<a class="reference" href="#id18">table</a>, we can see that the first three rows are applicable
-because <tt class="literal"><span class="pre">node_iterator</span></tt> needs to satisfy the requirements for
-<a class="reference" href="new-iter-concepts.html#readable-iterators-lib-readable-iterators">readable iterator</a>, <a class="reference" href="new-iter-concepts.html#single-pass-iterators-lib-single-pass-iterators">single pass iterator</a>, and <a class="reference" href="new-iter-concepts.html#incrementable-iterators-lib-incrementable-iterators">incrementable
-iterator</a>.</p>
-<p>We therefore need to supply <tt class="literal"><span class="pre">dereference</span></tt>,
-<tt class="literal"><span class="pre">equal</span></tt>, and <tt class="literal"><span class="pre">increment</span></tt> members.  We don't want these members
-to become part of <tt class="literal"><span class="pre">node_iterator</span></tt>'s public interface, so we can
-make them private and grant friendship to
-<tt class="literal"><span class="pre">boost::iterator_core_access</span></tt>, a &quot;back-door&quot; that
-<tt class="literal"><span class="pre">iterator_facade</span></tt> uses to get access to the core operations:</p>
-<pre class="literal-block">
-# include &quot;node.hpp&quot;
-# include &lt;boost/iterator/iterator_facade.hpp&gt;
-
-class node_iterator
-  : public boost::iterator_facade&lt;
-        node_iterator
-      , node_base
-      , boost::forward_traversal_tag
-    &gt;
-{
- public:
-    node_iterator()
-      : m_node(0) {}
-
-    explicit node_iterator(node_base* p)
-      : m_node(p) {}
-
- private:
-    friend class boost::iterator_core_access;
-
-    void increment() { m_node = m_node-&gt;next(); }
-
-    bool equal(node_iterator const&amp; other) const
-    {
-        return this-&gt;m_node == other.m_node;
-    }
-
-    node_base&amp; dereference() const { return *m_node; }
-
-    node_base* m_node;
-};
-</pre>
-<p>Voilà; a complete and conforming readable, forward-traversal
-iterator!  For a working example of its use, see <a class="reference" href="../example/node_iterator1.cpp">this program</a>.</p>
-</div>
-</div>
-<div class="section" id="a-constant-node-iterator">
-<h2><a class="toc-backref" href="#id38" name="a-constant-node-iterator">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></h2>
-<div class="sidebar">
-<p class="sidebar-title">Constant and Mutable iterators</p>
-<p>The term <strong>mutable iterator</strong> means an iterator through which
-the object it references (its &quot;referent&quot;) can be modified.  A
-<strong>constant iterator</strong> is one which doesn't allow modification of
-its referent.</p>
-<p>The words <em>constant</em> and <em>mutable</em> don't refer to the ability to
-modify the iterator itself.  For example, an <tt class="literal"><span class="pre">int</span> <span class="pre">const*</span></tt> is a
-non-<tt class="literal"><span class="pre">const</span></tt> <em>constant iterator</em>, which can be incremented
-but doesn't allow modification of its referent, and <tt class="literal"><span class="pre">int*</span>
-<span class="pre">const</span></tt> is a <tt class="literal"><span class="pre">const</span></tt> <em>mutable iterator</em>, which cannot be
-modified but which allows modification of its referent.</p>
-<p>Confusing?  We agree, but those are the standard terms.  It
-probably doesn't help much that a container's constant iterator
-is called <tt class="literal"><span class="pre">const_iterator</span></tt>.</p>
-</div>
-<p>Now, our <tt class="literal"><span class="pre">node_iterator</span></tt> gives clients access to both <tt class="literal"><span class="pre">node</span></tt>'s <tt class="literal"><span class="pre">print(std::ostream&amp;)</span> <span class="pre">const</span></tt> member function, but also its
-mutating <tt class="literal"><span class="pre">double_me()</span></tt> member.  If we wanted to build a
-<em>constant</em> <tt class="literal"><span class="pre">node_iterator</span></tt>, we'd only have to make three
-changes:</p>
-<pre class="literal-block">
-class const_node_iterator
-  : public boost::iterator_facade&lt;
-        node_iterator
-      , node_base <strong>const</strong>
-      , boost::forward_traversal_tag
-    &gt;
-{
- public:
-    const_node_iterator()
-      : m_node(0) {}
-
-    explicit const_node_iterator(node_base* p)
-      : m_node(p) {}
-
- private:
-    friend class boost::iterator_core_access;
-
-    void increment() { m_node = m_node-&gt;next(); }
-
-    bool equal(const_node_iterator const&amp; other) const
-    {
-        return this-&gt;m_node == other.m_node;
-    }
-
-    node_base <strong>const</strong>&amp; dereference() const { return *m_node; }
-
-    node_base <strong>const</strong>* m_node;
-};
-</pre>
-<div class="sidebar">
-<p class="sidebar-title"><tt class="literal"><span class="pre">const</span></tt> and an iterator's <tt class="literal"><span class="pre">value_type</span></tt></p>
-<p>The C++ standard requires an iterator's <tt class="literal"><span class="pre">value_type</span></tt> <em>not</em> be
-<tt class="literal"><span class="pre">const</span></tt>-qualified, so <tt class="literal"><span class="pre">iterator_facade</span></tt> strips the
-<tt class="literal"><span class="pre">const</span></tt> from its <tt class="literal"><span class="pre">Value</span></tt> parameter in order to produce the
-iterator's <tt class="literal"><span class="pre">value_type</span></tt>.  Making the <tt class="literal"><span class="pre">Value</span></tt> argument
-<tt class="literal"><span class="pre">const</span></tt> provides a useful hint to <tt class="literal"><span class="pre">iterator_facade</span></tt> that the
-iterator is a <em>constant iterator</em>, and the default <tt class="literal"><span class="pre">Reference</span></tt>
-argument will be correct for all lvalue iterators.</p>
-</div>
-<p>As a matter of fact, <tt class="literal"><span class="pre">node_iterator</span></tt> and <tt class="literal"><span class="pre">const_node_iterator</span></tt>
-are so similar that it makes sense to factor the common code out
-into a template as follows:</p>
-<pre class="literal-block">
-template &lt;class Value&gt;
-class node_iter
-  : public boost::iterator_facade&lt;
-        node_iter&lt;Value&gt;
-      , Value
-      , boost::forward_traversal_tag
-    &gt;
-{
- public:
-    node_iter()
-      : m_node(0) {}
-
-    explicit node_iter(Value* p)
-      : m_node(p) {}
-
- private:
-    friend class boost::iterator_core_access;
-
-    bool equal(node_iter&lt;Value&gt; const&amp; other) const
-    {
-        return this-&gt;m_node == other.m_node;
-    }
-
-    void increment()
-    { m_node = m_node-&gt;next(); }
-
-    Value&amp; dereference() const
-    { return *m_node; }
-
-    Value* m_node;
-};
-typedef node_iter&lt;node_base&gt; node_iterator;
-typedef node_iter&lt;node_base const&gt; node_const_iterator;
-</pre>
-</div>
-<div class="section" id="interoperability">
-<h2><a class="toc-backref" href="#id39" name="interoperability">Interoperability</a></h2>
-<p>Our <tt class="literal"><span class="pre">const_node_iterator</span></tt> works perfectly well on its own, but
-taken together with <tt class="literal"><span class="pre">node_iterator</span></tt> it doesn't quite meet
-expectations.  For example, we'd like to be able to pass a
-<tt class="literal"><span class="pre">node_iterator</span></tt> where a <tt class="literal"><span class="pre">node_const_iterator</span></tt> was expected,
-just as you can with <tt class="literal"><span class="pre">std::list&lt;int&gt;</span></tt>'s <tt class="literal"><span class="pre">iterator</span></tt> and
-<tt class="literal"><span class="pre">const_iterator</span></tt>.  Furthermore, given a <tt class="literal"><span class="pre">node_iterator</span></tt> and a
-<tt class="literal"><span class="pre">node_const_iterator</span></tt> into the same list, we should be able to
-compare them for equality.</p>
-<p>This expected ability to use two different iterator types together
-is known as <strong>interoperability</strong>.  Achieving interoperability in
-our case is as simple as templatizing the <tt class="literal"><span class="pre">equal</span></tt> function and
-adding a templatized converting constructor <a class="footnote-reference" href="#broken" id="id8" name="id8"><sup>3</sup></a> <a class="footnote-reference" href="#random" id="id9" name="id9"><sup>4</sup></a>:</p>
-<pre class="literal-block">
-template &lt;class Value&gt;
-class node_iter
-  : public boost::iterator_facade&lt;
-        node_iter&lt;Value&gt;
-      , Value
-      , boost::forward_traversal_tag
-    &gt;
-{
- public:
-    node_iter()
-      : m_node(0) {}
-
-    explicit node_iter(Value* p)
-      : m_node(p) {}
-
-    template &lt;class OtherValue&gt;
-    node_iter(node_iter&lt;OtherValue&gt; const&amp; other)
-      : m_node(other.m_node) {}
-
- private:
-    friend class boost::iterator_core_access;
-    template &lt;class&gt; friend class node_iter;
-
-    template &lt;class OtherValue&gt;
-    bool equal(node_iter&lt;OtherValue&gt; const&amp; other) const
-    { 
-        return this-&gt;m_node == other.m_node;
-    }
-
-    void increment()
-    { m_node = m_node-&gt;next(); }
-
-    Value&amp; dereference() const
-    { return *m_node; }
-
-    Value* m_node;
-};
-typedef impl::node_iterator&lt;node_base&gt; node_iterator;
-typedef impl::node_iterator&lt;node_base const&gt; node_const_iterator;
-</pre>
-<table class="footnote" frame="void" id="broken" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id8" name="broken">[3]</a></td><td>If you're using an older compiler and it can't handle
-this example, see the <a class="reference" href="../example/node_iterator2.hpp">example code</a> for workarounds.</td></tr>
-</tbody>
-</table>
-<table class="footnote" frame="void" id="random" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id9" name="random">[4]</a></td><td>If <tt class="literal"><span class="pre">node_iterator</span></tt> had been a <a class="reference" href="new-iter-concepts.html#random-access-traversal-iterators-lib-random-access-traversal-iterators">random access
-traversal iterator</a>, we'd have had to templatize its
-<tt class="literal"><span class="pre">distance_to</span></tt> function as well.</td></tr>
-</tbody>
-</table>
-<p>You can see an example program which exercises our interoperable
-iterators <a class="reference" href="../example/node_iterator2.cpp">here</a>.</p>
-</div>
-<div class="section" id="telling-the-truth">
-<h2><a class="toc-backref" href="#id40" name="telling-the-truth">Telling the Truth</a></h2>
-<p>Now <tt class="literal"><span class="pre">node_iterator</span></tt> and <tt class="literal"><span class="pre">node_const_iterator</span></tt> behave exactly as
-you'd expect... almost.  We can compare them and we can convert in
-one direction: from <tt class="literal"><span class="pre">node_iterator</span></tt> to <tt class="literal"><span class="pre">node_const_iterator</span></tt>.
-If we try to convert from <tt class="literal"><span class="pre">node_const_iterator</span></tt> to
-<tt class="literal"><span class="pre">node_iterator</span></tt>, we'll get an error when the converting
-constructor tries to initialize <tt class="literal"><span class="pre">node_iterator</span></tt>'s <tt class="literal"><span class="pre">m_node</span></tt>, a
-<tt class="literal"><span class="pre">node*</span></tt> with a <tt class="literal"><span class="pre">node</span> <span class="pre">const*</span></tt>.  So what's the problem?</p>
-<p>The problem is that
-<tt class="literal"><span class="pre">boost::</span></tt><a class="reference" href="../../type_traits/index.html#relationships"><tt class="literal"><span class="pre">is_convertible</span></tt></a><tt class="literal"><span class="pre">&lt;node_const_iterator,node_iterator&gt;::value</span></tt>
-will be <tt class="literal"><span class="pre">true</span></tt>, but it should be <tt class="literal"><span class="pre">false</span></tt>.  <a class="reference" href="../../type_traits/index.html#relationships"><tt class="literal"><span class="pre">is_convertible</span></tt></a>
-lies because it can only see as far as the <em>declaration</em> of
-<tt class="literal"><span class="pre">node_iter</span></tt>'s converting constructor, but can't look inside at
-the <em>definition</em> to make sure it will compile.  A perfect solution
-would make <tt class="literal"><span class="pre">node_iter</span></tt>'s converting constructor disappear when
-the <tt class="literal"><span class="pre">m_node</span></tt> conversion would fail.</p>
-<p>In fact, that sort of magic is possible using
-<a class="reference" href="../../utility/enable_if.html"><tt class="literal"><span class="pre">boost::enable_if</span></tt></a>.  By rewriting the converting constructor as
-follows, we can remove it from the overload set when it's not
-appropriate:</p>
-<pre class="literal-block">
-template &lt;class OtherValue&gt;
-node_iter(
-    node_iter&lt;OtherValue&gt; const&amp; other
-  , typename boost::enable_if&lt;
-        boost::is_convertible&lt;OtherValue*,Value*&gt;
-      , enabler
-    &gt;::type = enabler()
-)
-  : m_node(other.m_node) {}
-</pre>
-</div>
-<div class="section" id="wrap-up">
-<h2><a class="toc-backref" href="#id41" name="wrap-up">Wrap Up</a></h2>
-<p>This concludes our <tt class="literal"><span class="pre">iterator_facade</span></tt> tutorial, but before you
-stop reading we urge you to take a look at <a class="reference" href="iterator_adaptor.html"><tt class="literal"><span class="pre">iterator_adaptor</span></tt></a>.
-There's another way to approach writing these iterators which might
-even be superior.</p>
-</div>
-</div>
-<div class="section" id="id14">
-<h1><a class="toc-backref" href="#id42" name="id14">Reference</a></h1>
+<h2><a class="toc-backref" href="#id26" name="reference">Reference</a></h2>
 <!-- Version 1.3 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -858,8 +378,8 @@ struct enable_if_interoperable
     &gt;
 {};
 </pre>
-<div class="section" id="iterator-facade-usage">
-<h2><a class="toc-backref" href="#id43" name="iterator-facade-usage"><tt class="literal"><span class="pre">iterator_facade</span></tt> usage</a></h2>
+<div class="section" id="iterator-facade-requirements">
+<h3><a class="toc-backref" href="#id27" name="iterator-facade-requirements"><tt class="literal"><span class="pre">iterator_facade</span></tt> Requirements</a></h3>
 <p>The following table describes the typical valid expressions on
 <tt class="literal"><span class="pre">iterator_facade</span></tt>'s <tt class="literal"><span class="pre">Derived</span></tt> parameter, depending on the
 iterator concept(s) it will model.  The operations in the first
@@ -871,9 +391,9 @@ object of type <tt class="literal"><span class="pre">X</span></tt>, <tt class="l
 object of a single pass iterator type interoperable with <tt class="literal"><span class="pre">X</span></tt>, and <tt class="literal"><span class="pre">z</span></tt>
 is a constant object of a random access traversal iterator type
 interoperable with <tt class="literal"><span class="pre">X</span></tt>.</p>
-<a class="target" id="id18" name="id18"></a><div class="section" id="iterator-facade-core-operations">
-<h3><a class="toc-backref" href="#id44" name="iterator-facade-core-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</a></h3>
-<table class="table" frame="border" rules="all">
+<a class="target" id="core-operations" name="core-operations"></a><div class="topic">
+<p class="topic-title"><tt class="literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
+<table border class="table">
 <colgroup>
 <col width="19%" />
 <col width="21%" />
@@ -937,10 +457,10 @@ Iterator</td>
 </tr>
 </tbody>
 </table>
-<a class="target" id="facade-iterator-category" name="facade-iterator-category"></a></div>
 </div>
+<a class="target" id="facade-iterator-category" name="facade-iterator-category"></a></div>
 <div class="section" id="iterator-facade-iterator-category">
-<h2><a class="toc-backref" href="#id45" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h2>
+<h3><a class="toc-backref" href="#id28" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h3>
 <p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade&lt;X,V,R,C,D&gt;</span></tt>
 is a type which satisfies the following conditions:</p>
 <blockquote>
@@ -993,7 +513,7 @@ convertible, and not to any more-derived traversal tag type.</p>
 </blockquote>
 </div>
 <div class="section" id="iterator-facade-operations">
-<h2><a class="toc-backref" href="#id46" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h2>
+<h3><a class="toc-backref" href="#id29" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h3>
 <p>The operations in this section are described in terms of operations on
 the core interface of <tt class="literal"><span class="pre">Derived</span></tt> which may be inaccessible
 (i.e. private).  The implementation should access these operations
@@ -1135,10 +655,481 @@ return tmp -= n;
 </div>
 </div>
 </div>
-<hr class="footer"/>
+<div class="section" id="tutorial-example">
+<h1><a class="toc-backref" href="#id30" name="tutorial-example">Tutorial Example</a></h1>
+<!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
+<!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
+<p>In this section we'll walk through the implementation of a few
+iterators using <tt class="literal"><span class="pre">iterator_facade</span></tt>, based around the simple
+example of a linked list of polymorphic objects.  This example was
+inspired by a <a class="reference" href="http://thread.gmane.org/gmane.comp.lib.boost.user/5100">posting</a> by Keith Macdonald on the <a class="reference" href="../../../more/mailing_lists.htm#users">Boost-Users</a>
+mailing list.</p>
+<div class="section" id="the-problem">
+<h2><a class="toc-backref" href="#id31" name="the-problem">The Problem</a></h2>
+<p>Say we've written a polymorphic linked list node base class:</p>
+<pre class="literal-block">
+# include &lt;iostream&gt;
+
+struct node_base
+{
+    node_base() : m_next(0) {}
+
+    // Each node manages all of its tail nodes
+    virtual ~node_base() { delete m_next; }
+
+    // Access the rest of the list
+    node_base* next() const { return m_next; }
+
+    // print to the stream
+    virtual void print(std::ostream&amp; s) const = 0;
+    
+    // double the value
+    virtual void double_me() = 0;
+
+    void append(node_base* p)
+    {
+        if (m_next) 
+            m_next-&gt;append(p); 
+        else
+            m_next = p; 
+    }
+
+ private:
+    node_base* m_next;
+};
+</pre>
+<p>Lists can hold objects of different types by linking together
+specializations of the following template:</p>
+<pre class="literal-block">
+template &lt;class T&gt;
+struct node : node_base
+{
+    node(T x)
+      : m_value(x)
+    {}
+
+    void print(std::ostream&amp; s) const { s &lt;&lt; this-&gt;m_value; }
+    void double_me() { m_value += m_value; }
+
+ private:
+    T m_value;
+};
+</pre>
+<p>And we can print any node using the following streaming operator:</p>
+<pre class="literal-block">
+inline std::ostream&amp; operator&lt;&lt;(std::ostream&amp; s, node_base const&amp; n)
+{
+    n.print(s);
+    return s;
+}
+</pre>
+<p>Our first challenge is to build an appropriate iterator over these
+lists.</p>
+</div>
+<div class="section" id="a-basic-iterator-using-iterator-facade">
+<h2><a class="toc-backref" href="#id32" name="a-basic-iterator-using-iterator-facade">A Basic Iterator Using <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h2>
+<p>We will construct a <tt class="literal"><span class="pre">node_iterator</span></tt> class using inheritance from
+<tt class="literal"><span class="pre">iterator_facade</span></tt> to implement most of the iterator's operations.</p>
+<pre class="literal-block">
+# include &quot;node.hpp&quot;
+# include &lt;boost/iterator/iterator_facade.hpp&gt;
+
+class node_iterator
+  : public boost::iterator_facade&lt;...&gt;
+{
+   ...
+};
+</pre>
+<div class="section" id="template-arguments-for-iterator-facade">
+<h3><a class="toc-backref" href="#id33" name="template-arguments-for-iterator-facade">Template Arguments for <tt class="literal"><span class="pre">iterator_facade</span></tt></a></h3>
+<p><tt class="literal"><span class="pre">iterator_facade</span></tt> has several template parameters, so we must decide
+what types to use for the arguments. The parameters are <tt class="literal"><span class="pre">Derived</span></tt>,
+<tt class="literal"><span class="pre">Value</span></tt>, <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>, <tt class="literal"><span class="pre">Reference</span></tt>, and <tt class="literal"><span class="pre">Difference</span></tt>.</p>
+<div class="section" id="derived">
+<h4><a class="toc-backref" href="#id34" name="derived"><tt class="literal"><span class="pre">Derived</span></tt></a></h4>
+<p>Because <tt class="literal"><span class="pre">iterator_facade</span></tt> is meant to be used with the CRTP
+<a class="citation-reference" href="#cop95" id="id8" name="id8">[Cop95]</a> the first parameter is the iterator class name itself,
+<tt class="literal"><span class="pre">node_iterator</span></tt>.</p>
+</div>
+<div class="section" id="value">
+<h4><a class="toc-backref" href="#id35" name="value"><tt class="literal"><span class="pre">Value</span></tt></a></h4>
+<p>The <tt class="literal"><span class="pre">Value</span></tt> parameter determines the <tt class="literal"><span class="pre">node_iterator</span></tt>'s
+<tt class="literal"><span class="pre">value_type</span></tt>.  In this case, we are iterating over <tt class="literal"><span class="pre">node_base</span></tt>
+objects, so <tt class="literal"><span class="pre">Value</span></tt> will be <tt class="literal"><span class="pre">node_base</span></tt>.</p>
+</div>
+<div class="section" id="categoryortraversal">
+<h4><a class="toc-backref" href="#id36" name="categoryortraversal"><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt></a></h4>
+<p>Now we have to determine which <a class="reference" href="new-iter-concepts.html#iterator-traversal-concepts-lib-iterator-traversal">iterator traversal concept</a> our
+<tt class="literal"><span class="pre">node_iterator</span></tt> is going to model.  Singly-linked lists only have
+forward links, so our iterator can't can't be a <a class="reference" href="new-iter-concepts.html#bidirectional-traversal-iterators-lib-bidirectional-traversal-iterators">bidirectional
+traversal iterator</a>.  Our iterator should be able to make multiple
+passes over the same linked list (unlike, say, an
+<tt class="literal"><span class="pre">istream_iterator</span></tt> which consumes the stream it traverses), so it
+must be a <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a>.  Therefore, we'll pass
+<tt class="literal"><span class="pre">boost::forward_traversal_tag</span></tt> in this position <a class="footnote-reference" href="#category" id="id9" name="id9"><sup>1</sup></a>.</p>
+<table class="footnote" frame="void" id="category" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9" name="category">[1]</a></td><td><tt class="literal"><span class="pre">iterator_facade</span></tt> also supports old-style category
+tags, so we could have passed <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt> here;
+either way, the resulting iterator's <tt class="literal"><span class="pre">iterator_category</span></tt> will
+end up being <tt class="literal"><span class="pre">std::forward_iterator_tag</span></tt>.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id10">
+<h4><a class="toc-backref" href="#id37" name="id10"><tt class="literal"><span class="pre">Reference</span></tt></a></h4>
+<p>The <tt class="literal"><span class="pre">Reference</span></tt> argument becomes the type returned by
+<tt class="literal"><span class="pre">node_iterator</span></tt>'s dereference operation, and will also be the
+same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::reference</span></tt>.  The
+library's default for this parameter is <tt class="literal"><span class="pre">Value&amp;</span></tt>; since
+<tt class="literal"><span class="pre">node_base&amp;</span></tt> is a good choice for the iterator's <tt class="literal"><span class="pre">reference</span></tt>
+type, we can omit this argument, or pass <tt class="literal"><span class="pre">use_default</span></tt>.</p>
+</div>
+<div class="section" id="difference">
+<h4><a class="toc-backref" href="#id38" name="difference"><tt class="literal"><span class="pre">Difference</span></tt></a></h4>
+<p>The <tt class="literal"><span class="pre">Difference</span></tt> argument determines how the distance between
+two <tt class="literal"><span class="pre">node_iterator</span></tt>s will be measured and will also be the
+same as <tt class="literal"><span class="pre">std::iterator_traits&lt;node_iterator&gt;::difference_type</span></tt>.
+The library's default for <tt class="literal"><span class="pre">Difference</span></tt> is <tt class="literal"><span class="pre">std::ptrdiff_t</span></tt>, an
+appropriate type for measuring the distance between any two
+addresses in memory, and one that works for almost any iterator,
+so we can omit this argument, too.</p>
+<p>The declaration of <tt class="literal"><span class="pre">node_iterator</span></tt> will therefore look something
+like:</p>
+<pre class="literal-block">
+# include &quot;node.hpp&quot;
+# include &lt;boost/iterator/iterator_facade.hpp&gt;
+
+class node_iterator
+  : public boost::iterator_facade&lt;
+        node_iterator
+      , node_base
+      , boost::forward_traversal_tag
+    &gt;
+{
+   ...
+};
+</pre>
+</div>
+</div>
+<div class="section" id="constructors-and-data-members">
+<h3><a class="toc-backref" href="#id39" name="constructors-and-data-members">Constructors and Data Members</a></h3>
+<p>Next we need to decide how to represent the iterator's position.
+This representation will take the form of data members, so we'll
+also need to write constructors to initialize them.  The
+<tt class="literal"><span class="pre">node_iterator</span></tt>'s position is quite naturally represented using
+a pointer to a <tt class="literal"><span class="pre">node_base</span></tt>.  We'll need a constructor to build an
+iterator from a <tt class="literal"><span class="pre">node_base*</span></tt>, and a default constructor to
+satisfy the <a class="reference" href="new-iter-concepts.html#forward-traversal-iterators-lib-forward-traversal-iterators">forward traversal iterator</a> requirements <a class="footnote-reference" href="#default" id="id11" name="id11"><sup>2</sup></a>.
+Our <tt class="literal"><span class="pre">node_iterator</span></tt> then becomes:</p>
+<pre class="literal-block">
+# include &quot;node.hpp&quot;
+# include &lt;boost/iterator/iterator_facade.hpp&gt;
+
+class node_iterator
+  : public boost::iterator_facade&lt;
+        node_iterator
+      , node_base
+      , boost::forward_traversal_tag
+    &gt;
+{
+ public:
+    node_iterator()
+      : m_node(0)
+    {}
+
+    explicit node_iterator(node_base* p)
+      : m_node(p)
+    {}
+
+ private:
+    ...
+    node_base* m_node;
+};
+</pre>
+<table class="footnote" frame="void" id="default" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id11" name="default">[2]</a></td><td>Technically, the C++ standard places almost no
+requirements on a default-constructed iterator, so if we were
+really concerned with efficiency, we could've written the
+default constructor to leave <tt class="literal"><span class="pre">m_node</span></tt> uninitialized.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id12">
+<h3><a class="toc-backref" href="#id40" name="id12">Core Operations</a></h3>
+<p>The last step is to implement the <a class="reference" href="#core-operations">core operations</a> required by
+the concepts we want our iterator to model.  Referring to the
+<a class="reference" href="#core-operations">table</a>, we can see that the first three rows are applicable
+because <tt class="literal"><span class="pre">node_iterator</span></tt> needs to satisfy the requirements for
+<a class="reference" href="new-iter-concepts.html#readable-iterators-lib-readable-iterators">readable iterator</a>, <a class="reference" href="new-iter-concepts.html#single-pass-iterators-lib-single-pass-iterators">single pass iterator</a>, and <a class="reference" href="new-iter-concepts.html#incrementable-iterators-lib-incrementable-iterators">incrementable
+iterator</a>.</p>
+<p>We therefore need to supply <tt class="literal"><span class="pre">dereference</span></tt>,
+<tt class="literal"><span class="pre">equal</span></tt>, and <tt class="literal"><span class="pre">increment</span></tt> members.  We don't want these members
+to become part of <tt class="literal"><span class="pre">node_iterator</span></tt>'s public interface, so we can
+make them private and grant friendship to
+<tt class="literal"><span class="pre">boost::iterator_core_access</span></tt>, a &quot;back-door&quot; that
+<tt class="literal"><span class="pre">iterator_facade</span></tt> uses to get access to the core operations:</p>
+<pre class="literal-block">
+# include &quot;node.hpp&quot;
+# include &lt;boost/iterator/iterator_facade.hpp&gt;
+
+class node_iterator
+  : public boost::iterator_facade&lt;
+        node_iterator
+      , node_base
+      , boost::forward_traversal_tag
+    &gt;
+{
+ public:
+    node_iterator()
+      : m_node(0) {}
+
+    explicit node_iterator(node_base* p)
+      : m_node(p) {}
+
+ private:
+    friend class boost::iterator_core_access;
+
+    void increment() { m_node = m_node-&gt;next(); }
+
+    bool equal(node_iterator const&amp; other) const
+    {
+        return this-&gt;m_node == other.m_node;
+    }
+
+    node_base&amp; dereference() const { return *m_node; }
+
+    node_base* m_node;
+};
+</pre>
+<p>Voilà; a complete and conforming readable, forward-traversal
+iterator!  For a working example of its use, see <a class="reference" href="../example/node_iterator1.cpp">this program</a>.</p>
+</div>
+</div>
+<div class="section" id="a-constant-node-iterator">
+<h2><a class="toc-backref" href="#id41" name="a-constant-node-iterator">A constant <tt class="literal"><span class="pre">node_iterator</span></tt></a></h2>
+<div class="sidebar">
+<p class="sidebar-title">Constant and Mutable iterators</p>
+<p>The term <strong>mutable iterator</strong> means an iterator through which
+the object it references (its &quot;referent&quot;) can be modified.  A
+<strong>constant iterator</strong> is one which doesn't allow modification of
+its referent.</p>
+<p>The words <em>constant</em> and <em>mutable</em> don't refer to the ability to
+modify the iterator itself.  For example, an <tt class="literal"><span class="pre">int</span> <span class="pre">const*</span></tt> is a
+non-<tt class="literal"><span class="pre">const</span></tt> <em>constant iterator</em>, which can be incremented
+but doesn't allow modification of its referent, and <tt class="literal"><span class="pre">int*</span>
+<span class="pre">const</span></tt> is a <tt class="literal"><span class="pre">const</span></tt> <em>mutable iterator</em>, which cannot be
+modified but which allows modification of its referent.</p>
+<p>Confusing?  We agree, but those are the standard terms.  It
+probably doesn't help much that a container's constant iterator
+is called <tt class="literal"><span class="pre">const_iterator</span></tt>.</p>
+</div>
+<p>Now, our <tt class="literal"><span class="pre">node_iterator</span></tt> gives clients access to both <tt class="literal"><span class="pre">node</span></tt>'s <tt class="literal"><span class="pre">print(std::ostream&amp;)</span> <span class="pre">const</span></tt> member function, but also its
+mutating <tt class="literal"><span class="pre">double_me()</span></tt> member.  If we wanted to build a
+<em>constant</em> <tt class="literal"><span class="pre">node_iterator</span></tt>, we'd only have to make three
+changes:</p>
+<pre class="literal-block">
+class const_node_iterator
+  : public boost::iterator_facade&lt;
+        node_iterator
+      , node_base <strong>const</strong>
+      , boost::forward_traversal_tag
+    &gt;
+{
+ public:
+    const_node_iterator()
+      : m_node(0) {}
+
+    explicit const_node_iterator(node_base* p)
+      : m_node(p) {}
+
+ private:
+    friend class boost::iterator_core_access;
+
+    void increment() { m_node = m_node-&gt;next(); }
+
+    bool equal(const_node_iterator const&amp; other) const
+    {
+        return this-&gt;m_node == other.m_node;
+    }
+
+    node_base <strong>const</strong>&amp; dereference() const { return *m_node; }
+
+    node_base <strong>const</strong>* m_node;
+};
+</pre>
+<div class="sidebar">
+<p class="sidebar-title"><tt class="literal"><span class="pre">const</span></tt> and an iterator's <tt class="literal"><span class="pre">value_type</span></tt></p>
+<p>The C++ standard requires an iterator's <tt class="literal"><span class="pre">value_type</span></tt> <em>not</em> be
+<tt class="literal"><span class="pre">const</span></tt>-qualified, so <tt class="literal"><span class="pre">iterator_facade</span></tt> strips the
+<tt class="literal"><span class="pre">const</span></tt> from its <tt class="literal"><span class="pre">Value</span></tt> parameter in order to produce the
+iterator's <tt class="literal"><span class="pre">value_type</span></tt>.  Making the <tt class="literal"><span class="pre">Value</span></tt> argument
+<tt class="literal"><span class="pre">const</span></tt> provides a useful hint to <tt class="literal"><span class="pre">iterator_facade</span></tt> that the
+iterator is a <em>constant iterator</em>, and the default <tt class="literal"><span class="pre">Reference</span></tt>
+argument will be correct for all lvalue iterators.</p>
+</div>
+<p>As a matter of fact, <tt class="literal"><span class="pre">node_iterator</span></tt> and <tt class="literal"><span class="pre">const_node_iterator</span></tt>
+are so similar that it makes sense to factor the common code out
+into a template as follows:</p>
+<pre class="literal-block">
+template &lt;class Value&gt;
+class node_iter
+  : public boost::iterator_facade&lt;
+        node_iter&lt;Value&gt;
+      , Value
+      , boost::forward_traversal_tag
+    &gt;
+{
+ public:
+    node_iter()
+      : m_node(0) {}
+
+    explicit node_iter(Value* p)
+      : m_node(p) {}
+
+ private:
+    friend class boost::iterator_core_access;
+
+    bool equal(node_iter&lt;Value&gt; const&amp; other) const
+    {
+        return this-&gt;m_node == other.m_node;
+    }
+
+    void increment()
+    { m_node = m_node-&gt;next(); }
+
+    Value&amp; dereference() const
+    { return *m_node; }
+
+    Value* m_node;
+};
+typedef node_iter&lt;node_base&gt; node_iterator;
+typedef node_iter&lt;node_base const&gt; node_const_iterator;
+</pre>
+</div>
+<div class="section" id="interoperability">
+<h2><a class="toc-backref" href="#id42" name="interoperability">Interoperability</a></h2>
+<p>Our <tt class="literal"><span class="pre">const_node_iterator</span></tt> works perfectly well on its own, but
+taken together with <tt class="literal"><span class="pre">node_iterator</span></tt> it doesn't quite meet
+expectations.  For example, we'd like to be able to pass a
+<tt class="literal"><span class="pre">node_iterator</span></tt> where a <tt class="literal"><span class="pre">node_const_iterator</span></tt> was expected,
+just as you can with <tt class="literal"><span class="pre">std::list&lt;int&gt;</span></tt>'s <tt class="literal"><span class="pre">iterator</span></tt> and
+<tt class="literal"><span class="pre">const_iterator</span></tt>.  Furthermore, given a <tt class="literal"><span class="pre">node_iterator</span></tt> and a
+<tt class="literal"><span class="pre">node_const_iterator</span></tt> into the same list, we should be able to
+compare them for equality.</p>
+<p>This expected ability to use two different iterator types together
+is known as <strong>interoperability</strong>.  Achieving interoperability in
+our case is as simple as templatizing the <tt class="literal"><span class="pre">equal</span></tt> function and
+adding a templatized converting constructor <a class="footnote-reference" href="#broken" id="id15" name="id15"><sup>3</sup></a> <a class="footnote-reference" href="#random" id="id16" name="id16"><sup>4</sup></a>:</p>
+<pre class="literal-block">
+template &lt;class Value&gt;
+class node_iter
+  : public boost::iterator_facade&lt;
+        node_iter&lt;Value&gt;
+      , Value
+      , boost::forward_traversal_tag
+    &gt;
+{
+ public:
+    node_iter()
+      : m_node(0) {}
+
+    explicit node_iter(Value* p)
+      : m_node(p) {}
+
+    template &lt;class OtherValue&gt;
+    node_iter(node_iter&lt;OtherValue&gt; const&amp; other)
+      : m_node(other.m_node) {}
+
+ private:
+    friend class boost::iterator_core_access;
+    template &lt;class&gt; friend class node_iter;
+
+    template &lt;class OtherValue&gt;
+    bool equal(node_iter&lt;OtherValue&gt; const&amp; other) const
+    { 
+        return this-&gt;m_node == other.m_node;
+    }
+
+    void increment()
+    { m_node = m_node-&gt;next(); }
+
+    Value&amp; dereference() const
+    { return *m_node; }
+
+    Value* m_node;
+};
+typedef impl::node_iterator&lt;node_base&gt; node_iterator;
+typedef impl::node_iterator&lt;node_base const&gt; node_const_iterator;
+</pre>
+<table class="footnote" frame="void" id="broken" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id15" name="broken">[3]</a></td><td>If you're using an older compiler and it can't handle
+this example, see the <a class="reference" href="../example/node_iterator2.hpp">example code</a> for workarounds.</td></tr>
+</tbody>
+</table>
+<table class="footnote" frame="void" id="random" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id16" name="random">[4]</a></td><td>If <tt class="literal"><span class="pre">node_iterator</span></tt> had been a <a class="reference" href="new-iter-concepts.html#random-access-traversal-iterators-lib-random-access-traversal-iterators">random access
+traversal iterator</a>, we'd have had to templatize its
+<tt class="literal"><span class="pre">distance_to</span></tt> function as well.</td></tr>
+</tbody>
+</table>
+<p>You can see an example program which exercises our interoperable
+iterators <a class="reference" href="../example/node_iterator2.cpp">here</a>.</p>
+</div>
+<div class="section" id="telling-the-truth">
+<h2><a class="toc-backref" href="#id43" name="telling-the-truth">Telling the Truth</a></h2>
+<p>Now <tt class="literal"><span class="pre">node_iterator</span></tt> and <tt class="literal"><span class="pre">node_const_iterator</span></tt> behave exactly as
+you'd expect... almost.  We can compare them and we can convert in
+one direction: from <tt class="literal"><span class="pre">node_iterator</span></tt> to <tt class="literal"><span class="pre">node_const_iterator</span></tt>.
+If we try to convert from <tt class="literal"><span class="pre">node_const_iterator</span></tt> to
+<tt class="literal"><span class="pre">node_iterator</span></tt>, we'll get an error when the converting
+constructor tries to initialize <tt class="literal"><span class="pre">node_iterator</span></tt>'s <tt class="literal"><span class="pre">m_node</span></tt>, a
+<tt class="literal"><span class="pre">node*</span></tt> with a <tt class="literal"><span class="pre">node</span> <span class="pre">const*</span></tt>.  So what's the problem?</p>
+<p>The problem is that
+<tt class="literal"><span class="pre">boost::</span></tt><a class="reference" href="../../type_traits/index.html#relationships"><tt class="literal"><span class="pre">is_convertible</span></tt></a><tt class="literal"><span class="pre">&lt;node_const_iterator,node_iterator&gt;::value</span></tt>
+will be <tt class="literal"><span class="pre">true</span></tt>, but it should be <tt class="literal"><span class="pre">false</span></tt>.  <a class="reference" href="../../type_traits/index.html#relationships"><tt class="literal"><span class="pre">is_convertible</span></tt></a>
+lies because it can only see as far as the <em>declaration</em> of
+<tt class="literal"><span class="pre">node_iter</span></tt>'s converting constructor, but can't look inside at
+the <em>definition</em> to make sure it will compile.  A perfect solution
+would make <tt class="literal"><span class="pre">node_iter</span></tt>'s converting constructor disappear when
+the <tt class="literal"><span class="pre">m_node</span></tt> conversion would fail.</p>
+<p>In fact, that sort of magic is possible using
+<a class="reference" href="../../utility/enable_if.html"><tt class="literal"><span class="pre">boost::enable_if</span></tt></a>.  By rewriting the converting constructor as
+follows, we can remove it from the overload set when it's not
+appropriate:</p>
+<pre class="literal-block">
+template &lt;class OtherValue&gt;
+node_iter(
+    node_iter&lt;OtherValue&gt; const&amp; other
+  , typename boost::enable_if&lt;
+        boost::is_convertible&lt;OtherValue*,Value*&gt;
+      , enabler
+    &gt;::type = enabler()
+)
+  : m_node(other.m_node) {}
+</pre>
+</div>
+<div class="section" id="wrap-up">
+<h2><a class="toc-backref" href="#id44" name="wrap-up">Wrap Up</a></h2>
+<p>This concludes our <tt class="literal"><span class="pre">iterator_facade</span></tt> tutorial, but before you
+stop reading we urge you to take a look at <a class="reference" href="iterator_adaptor.html"><tt class="literal"><span class="pre">iterator_adaptor</span></tt></a>.
+There's another way to approach writing these iterators which might
+even be superior.</p>
+</div>
+</div>
+</div>
+<hr class="footer" />
 <div class="footer">
 <a class="reference" href="iterator_facade.rst">View document source</a>.
-Generated on: 2004-01-12 15:06 UTC.
+Generated on: 2004-01-12 15:49 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
