@@ -131,13 +131,25 @@ main()
     check("nano to second compare",  ns2 == seconds(1));
     check("check total seconds",  ns2.total_seconds() == 1);
     std::cout << to_simple_string(ns2) << std::endl;
+    check("division of nanoseconds", (nanosec(3)/2) == nanosec(1));
+    check("multiplication of nanosec", nanosec(3)*1000 == microsec(3));
   }
 #endif  
 
   time_duration t_11(3600,0,0); 
   check("3600 hours   ",  t_11.hours() == 3600);
   check("total seconds 3600 hours",  t_11.total_seconds() == 12960000);
-  
+
+  time_duration td_12(1,2,3,10); 
+  std::cout << td_12.total_seconds() << std::endl;
+  check("total seconds 3723 hours",  td_12.total_seconds() == 3723);
+
+  check("division", (hours(2)/2) == hours(1));
+  check("division", (hours(3)/2) == time_duration(1,30,0));
+  check("division", (hours(3)/3) == hours(1));
+  check("multiplication", time_duration(3,0,0)*2 == hours(6));
+  check("multiplication", hours(3600)*1000 == hours(3600000));
+
 
   using namespace boost::gregorian;
   ptime t1(date(2001,7,14));
