@@ -65,7 +65,7 @@ public:
   template<class Generator>
   explicit mersenne_twister(Generator & gen) { seed(gen); }
   // compiler-generated copy ctor and assignment operator are fine
-  void seed() { seed(4357u); }
+  void seed() { seed(DataType(4357)); }      // exact match required for MSVC
   void seed(DataType value) {
     random::linear_congruential<uint32_t, 69069, 0, 0, /* unknown */ 0> 
       gen(value);
@@ -74,7 +74,7 @@ public:
 
   // For GCC, moving this function out-of-line prevents inlining, which may
   // reduce overall object code size.  However, MSVC does not grok
-  // out-of-line template member functions.
+  // out-of-line definitions of member function templates.
   template<class Generator>
   void seed(Generator & gen)
   {
