@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   17 Nov 00  BOOST_NO_AUTO_PTR (John Maddock)
 //    4 Oct 00  BOOST_NO_STD_MIN_MAX (Jeremy Siek)
 //   29 Sep 00  BOOST_NO_INTEGRAL_INT64_T (Jens Maurer)
 //   25 Sep 00  BOOST_NO_STD_ALLOCATOR (Jeremy Siek)
@@ -103,6 +104,9 @@
 //  BOOST_NO_USING_TEMPLATE: The compiler will not accept a using declaration
 //  that imports a template from the global namespace into a named namespace.
 //  Probably Borland specific.
+
+//  BOOST_NO_AUTO_PTR: If the compiler / library supplies non-standard or broken
+//  std::auto_ptr.
 
 //  Compiler Control or Information Macros  ----------------------------------//
 //
@@ -398,6 +402,7 @@ namespace std {
 #endif
 
 #endif  // BOOST_CONFIG_HPP
+
 
 
 
