@@ -34,7 +34,9 @@
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/cast.hpp> // boost::polymorphic_downcast
-#include <boost/config.hpp> // BOOST_MSVC
+// BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR,
+// BOOST_MSVC, BOOST_MSVC_STD_ITERATOR
+#include <boost/config.hpp>
 
 #ifdef BOOST_MSVC
 #  pragma warning( push )
@@ -340,8 +342,11 @@ class state_machine : noncopyable
 
     class state_iterator : public std::iterator<
       std::forward_iterator_tag,
-      state_base_type, std::ptrdiff_t, 
-      const state_base_type *, const state_base_type & >
+      state_base_type, std::ptrdiff_t
+      #ifndef BOOST_MSVC_STD_ITERATOR
+      , const state_base_type *, const state_base_type &
+      #endif
+    >
     {
       public:
         //////////////////////////////////////////////////////////////////////
@@ -915,9 +920,14 @@ class state_machine : noncopyable
 
     typedef std::map<
       history_key_type, void (*)(),
-      std::less< history_key_type >,
-      typename allocator_type::template rebind< 
-        std::pair< const history_key_type, void (*)() > >::other
+      std::less< history_key_type >
+      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
+        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
+      // TODO: Add allocator support for broken std libs when
+      // the workaround is available in boost::detail
+      , typename allocator_type::template rebind< 
+          std::pair< const history_key_type, void (*)() > >::other
+      #endif
     > history_map_type;
 
     void reserve_history_slot_impl(
@@ -976,15 +986,25 @@ class state_machine : noncopyable
     }
 
     typedef std::list<
-      event_base_ptr_type, 
-      typename allocator_type::template rebind< event_base_ptr_type >::other
+      event_base_ptr_type
+      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
+        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
+      // TODO: Add allocator support for broken std libs when
+      // the workaround is available in boost::detail
+      , typename allocator_type::template rebind< event_base_ptr_type >::other
+      #endif
     > event_queue_type;
 
     typedef std::map<
       const state_base_type *, event_queue_type,
-      std::less< const state_base_type * >,
-      typename allocator_type::template rebind<
-        std::pair< const state_base_type * const, event_queue_type > >::other
+      std::less< const state_base_type * >
+      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
+        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
+      // TODO: Add allocator support for broken std libs when
+      // the workaround is available in boost::detail
+      , typename allocator_type::template rebind<
+          std::pair< const state_base_type * const, event_queue_type > >::other
+      #endif
     > deferred_map_type;
 
 

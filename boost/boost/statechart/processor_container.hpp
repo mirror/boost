@@ -18,7 +18,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/bind.hpp>
-#include <boost/config.hpp> // BOOST_WORKAROUND, BOOST_INTEL
+// BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR,
+// BOOST_WORKAROUND, BOOST_TESTED_AT, BOOST_INTEL
+#include <boost/config.hpp>
 
 #include <set>
 #include <memory>   // std::allocator, std::auto_ptr
@@ -238,7 +240,8 @@ class processor_container : noncopyable
       const processor_context & context )
     {
       processorSet_.insert( pProcessor );
-      pProcessor->reset( new Processor( context ) );
+      processor_holder_type holder( new Processor( context ) );
+      *pProcessor = holder;
     }
 
     template< class Processor, typename Arg1 >
@@ -247,7 +250,8 @@ class processor_container : noncopyable
       const processor_context & context, Arg1 arg1 )
     {
       processorSet_.insert( pProcessor );
-      pProcessor->reset( new Processor( context, arg1 ) );
+      processor_holder_type holder( new Processor( context, arg1 ) );
+      *pProcessor = holder;
     }
 
     template< class Processor, typename Arg1, typename Arg2 >
@@ -256,7 +260,8 @@ class processor_container : noncopyable
       const processor_context & context, Arg1 arg1, Arg2 arg2 )
     {
       processorSet_.insert( pProcessor );
-      pProcessor->reset( new Processor( context, arg1, arg2 ) );
+      processor_holder_type holder( new Processor( context, arg1, arg2 ) );
+      *pProcessor = holder;
     }
 
     template< class Processor, typename Arg1, typename Arg2, typename Arg3 >
@@ -265,7 +270,9 @@ class processor_container : noncopyable
       const processor_context & context, Arg1 arg1, Arg2 arg2, Arg3 arg3 )
     {
       processorSet_.insert( pProcessor );
-      pProcessor->reset( new Processor( context, arg1, arg2, arg3 ) );
+      processor_holder_type holder(
+        new Processor( context, arg1, arg2, arg3 ) );
+      *pProcessor = holder;
     }
 
     template<
@@ -277,7 +284,9 @@ class processor_container : noncopyable
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4 )
     {
       processorSet_.insert( pProcessor );
-      pProcessor->reset( new Processor( context, arg1, arg2, arg3, arg4 ) );
+      processor_holder_type holder(
+        new Processor( context, arg1, arg2, arg3, arg4 ) );
+      *pProcessor = holder;
     }
 
     template<
@@ -289,8 +298,9 @@ class processor_container : noncopyable
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4, Arg5 arg5 )
     {
       processorSet_.insert( pProcessor );
-      pProcessor->reset(
+      processor_holder_type holder(
         new Processor( context, arg1, arg2, arg3, arg4, arg5 ) );
+      *pProcessor = holder;
     }
 
     template<
@@ -302,8 +312,9 @@ class processor_container : noncopyable
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4, Arg5 arg5, Arg6 arg6 )
     {
       processorSet_.insert( pProcessor );
-      pProcessor->reset(
+      processor_holder_type holder(
         new Processor( context, arg1, arg2, arg3, arg4, arg5, arg6 ) );
+      *pProcessor = holder;
     }
 
     void destroy_processor_impl( const processor_handle & processor )
@@ -349,8 +360,14 @@ class processor_container : noncopyable
 
     typedef std::set< 
       processor_holder_ptr_type, 
-      std::less< processor_holder_ptr_type >,
-      typename Allocator::template rebind< processor_holder_ptr_type >::other
+      std::less< processor_holder_ptr_type >
+      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
+        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
+      // TODO: Add allocator support for broken std libs when
+      // the workaround is available in boost::detail
+      , typename Allocator::template rebind<
+          processor_holder_ptr_type >::other
+      #endif
     > event_processor_set_type;
 
     event_processor_set_type processorSet_;

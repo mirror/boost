@@ -8,7 +8,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-const unsigned int noOfBits = 6;
+const unsigned int noOfBits = 5;
 #define CUSTOMIZE_MEMORY_MANAGEMENT
 // #define BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
@@ -31,20 +31,21 @@ const unsigned int noOfBits = 6;
 // .cpp file) can be deduced.
 //
 // NOTE: Due to the fact that the amount of generated code more than
-// *doubles* each time noOfBits is *incremented*, build times soar when
-// noOfBits > 6.
+// *doubles* each time noOfBits is *incremented*, build times on most
+// compilers soar when noOfBits > 6.
 //
-// Compiler      | max. noOfBits b | max. states s  | max. transitions t
-// --------------|-----------------|----------------|-------------------
-// MSVC 7.1      |      b < 7      |  64 < s < 128  |  384 < t <  896
-// GCC 3.2 *     |      b < 8      | 128 < s < 256  |  896 < t < 2048
-// Intel 8.0 **  |      b < 9      | 256 < s < 512  | 2048 < t < 4608
+// Compiler      | max. noOfBits b | max. states s  |
+// --------------|-----------------|----------------|
+// MSVC 7.1      |      b < 7      |  64 < s < 128  |
+// GCC 3.2 (1)   |      b < 8      | 128 < s < 256  |
+// Intel 7.0 (2) |      b < 8      | 128 < s < 256  |
+// Intel 8.0 (2) |      b < 9      | 256 < s < 512  |
 //
-// * ICE for b = 8
-// ** This is a practical rather than a hard limit, caused by a compiler
-//    memory footprint that was significantly larger than the 1GB physical
-//    memory installed in the test machine. The resulting frequent swapping
-//    led to compilation times of hours rather than minutes.
+// (1) ICE for b = 8
+// (2) These are practical rather than hard limits, caused by a compiler
+//     memory footprint that was significantly larger than the 1GB physical
+//     memory installed in the test machine. The resulting frequent swapping
+//     led to compilation times of hours rather than minutes.
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -316,14 +317,23 @@ int main()
           std::cout << "\nSending " << noOfEvents << " events. Please wait...\n";
 
           const unsigned long startEvents2 = eventsSentTotal;
+
+          #ifdef BOOST_NO_STDC_NAMESPACE
+          const clock_t startTime2 = clock();
+          #else
           const std::clock_t startTime2 = std::clock();
+          #endif
 
           for ( unsigned int lap = 0; lap < noOfLaps; ++lap )
           {
             VisitAllStates< noOfBits - 1, false >( bitMachine );
           }
 
+          #ifdef BOOST_NO_STDC_NAMESPACE
+          const clock_t elapsedTime2 = clock() - startTime2;
+          #else
           const std::clock_t elapsedTime2 = std::clock() - startTime2;
+          #endif
           const unsigned int eventsSent2 = eventsSentTotal - startEvents2;
           std::cout << "Time to dispatch one event and\n" <<
                        "perform the resulting transition: ";
@@ -342,5 +352,5 @@ int main()
     key = GetKey();
   }
 
- 	return 0;
+  return 0;
 }

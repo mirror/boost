@@ -9,7 +9,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 #define USE_TWO_THREADS // ignored for single-threaded builds
-#define CUSTOMIZE_MEMORY_MANAGEMENT
+// #define CUSTOMIZE_MEMORY_MANAGEMENT
 //////////////////////////////////////////////////////////////////////////////
 // The following example program demonstrates the use of asynchronous state
 // machines. First, it creates two objects of the same simple state machine
@@ -283,7 +283,11 @@ int main()
           noOfEvents << " times. Please wait...\n";
 
         const unsigned int prevCount = Player::TotalNoOfProcessedEvents();
+        #ifdef BOOST_NO_STDC_NAMESPACE
+        const clock_t startTime = clock();
+        #else
         const std::clock_t startTime = std::clock();
+        #endif
 
         #ifdef USE_TWO_THREADS
         #ifdef BOOST_HAS_THREADS
@@ -298,7 +302,11 @@ int main()
         scheduler1();
         #endif
 
+        #ifdef BOOST_NO_STDC_NAMESPACE
+        const clock_t elapsedTime = clock() - startTime;
+        #else
         const std::clock_t elapsedTime = std::clock() - startTime;
+        #endif
         std::cout << "Time to send and dispatch one event and\n" <<
                      "perform the resulting transition: ";
         std::cout << elapsedTime / static_cast< double >( CLOCKS_PER_SEC ) *

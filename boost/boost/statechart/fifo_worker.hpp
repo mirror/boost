@@ -13,7 +13,9 @@
 #include <boost/noncopyable.hpp>
 #include <boost/function/function0.hpp>
 #include <boost/bind.hpp>
-#include <boost/config.hpp> // BOOST_HAS_THREADS, BOOST_MSVC
+// BOOST_NO_STD_ALLOCATOR, BOOST_HAS_PARTIAL_STD_ALLOCATOR,
+// BOOST_HAS_THREADS, BOOST_MSVC
+#include <boost/config.hpp>
 
 #ifdef BOOST_HAS_THREADS
 #  ifdef BOOST_MSVC
@@ -166,8 +168,13 @@ class fifo_worker : noncopyable
 
 
     typedef std::list<
-      work_item, 
-      typename Allocator::template rebind< work_item >::other
+      work_item
+      #if !defined( BOOST_NO_STD_ALLOCATOR ) && \
+        !defined( BOOST_HAS_PARTIAL_STD_ALLOCATOR )
+      // TODO: Add allocator support for broken std libs when
+      // the workaround is available in boost::detail
+      , typename Allocator::template rebind< work_item >::other
+      #endif
     > work_queue_type;
 
     work_queue_type workQueue_;

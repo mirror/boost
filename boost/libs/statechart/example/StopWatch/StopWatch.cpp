@@ -94,7 +94,15 @@ struct Running :
     fsm::transition< EvStartStop, Stopped > >
 {
   public:
-    Running() : startTime_( std::time( 0 ) ) {}
+    Running() : startTime_(
+      #ifdef BOOST_NO_STDC_NAMESPACE
+      time( 0 ) 
+      #else
+      std::time( 0 ) 
+      #endif
+    )
+    {
+    }
 
     ~Running()
     {
@@ -104,11 +112,19 @@ struct Running :
     virtual double ElapsedTime() const
     {
       return context< Active >().ElapsedTime() +
+        #ifdef BOOST_NO_STDC_NAMESPACE
+        difftime( time( 0 ), startTime_ );
+        #else
         std::difftime( std::time( 0 ), startTime_ );
+        #endif
     }
 
   private:
+    #ifdef BOOST_NO_STDC_NAMESPACE
+    time_t startTime_;
+    #else
     std::time_t startTime_;
+    #endif
 };
 
 struct Stopped :
