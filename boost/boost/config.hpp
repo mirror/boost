@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   11 Feb 01  Added BOOST_STATIC_CONSTANT (Dave Abrahams)
 //   20 Jan 01  BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS moved here from
 //              cast.hpp. Added missing BOOST_NO_STRINGSTREAM which some
 //              boost code seemed to depend on. (Dave Abrahams)
@@ -501,6 +502,17 @@ namespace std {
   }
 #endif
 }
+#endif
+
+// BOOST_STATIC_CONSTANT workaround --------------------------------------- //
+// On compilers which don't allow in-class initialization of static integral
+// constant members, we must use enums as a workaround if we want the constants
+// to be available at compile-time. This macro gives us a convenient way to
+// declare such constants.
+#ifdef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+# define BOOST_STATIC_CONSTANT(type, assignment) enum { assignment }
+#else
+# define BOOST_STATIC_CONSTANT(type, assignment) static const type assignment
 #endif
 
 #endif  // BOOST_CONFIG_HPP
