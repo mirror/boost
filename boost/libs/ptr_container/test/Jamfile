@@ -8,7 +8,7 @@ rule sc-test ( name )
     return [ 
       run $(name).cpp 
       <lib>../../test/build/boost_unit_test_framework
-      : : : <include>$(BOOST_ROOT)/../boost_1_32_0 
+      : : :
            ]
     ;
 }
