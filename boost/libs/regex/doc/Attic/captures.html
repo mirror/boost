@@ -24,6 +24,11 @@
       </P>
       <HR>
       <p></p>
+      <P>Captures are the iterator ranges that are "captured" by marked sub-expressions 
+         as a regular expression gets matched.&nbsp; Each marked sub-expression can 
+         result in more than one capture, if it is matched more than once.&nbsp; This 
+         document explains how captures and marked sub-expressions in Boost.Regex are 
+         represented and accessed.</P>
       <H2>Marked sub-expressions</H2>
       <P>Every time a Perl regular expression contains a parenthesis group (), it spits 
          out an extra field, known as a marked sub-expression, for example the 
@@ -247,4 +252,3 @@ Text:        "now is the time for all good men to come to the aid of the party"
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
-
