@@ -21,15 +21,18 @@
        // wrong, especially where the value is computed
        // from other constants (J Maddock 6th May 2001)
 #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-       // although sunpro 5.2 supports the syntax for
+#    endif
+
+#    if (__SUNPRO_CC <= 0x530) || !defined(BOOST_STRICT_CONFIG)
+       // Although sunpro 5.2 supports the syntax for
        // partial specialization, it often seems to
        // bind to the wrong specialization.  Better
        // to disable it until suppport becomes more stable
        // (J Maddock 6th May 2001).
+       // SunPro 5.3 has better support for partial specialization,
+       // but breaks when compiling std::less<shared_ptr<T> >
+       // (Jens Maurer 4 Nov 2001).
 #      define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#    endif
-
-#    if (__SUNPRO_CC <= 0x530) || !defined(BOOST_STRICT_CONFIG)
        // integral constant expressions with 64 bit numbers fail
 #      define BOOST_NO_INTEGRAL_INT64_T
 #    endif
