@@ -65,7 +65,8 @@ class include_pathes
 public:
     include_pathes()
     :   was_sys_include_path(false),
-        current_dir(boost::filesystem::initial_path())
+        current_dir(boost::filesystem::initial_path()),
+        current_rel_dir(boost::filesystem::initial_path())
     {}
     
     bool add_include_path(char const *path_, bool is_system = false)
@@ -90,6 +91,7 @@ private:
     include_list_type system_include_pathes;
     bool was_sys_include_path;          // saw a set_sys_include_delimiter()
     boost::filesystem::path current_dir;
+    boost::filesystem::path current_rel_dir;
 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
 public:
@@ -172,7 +174,7 @@ bool include_pathes::find_include_file (std::string &s, std::string &dir,
             fs::path dirpath ((*it).second, fs::native);
             dirpath /= fs::path(s, fs::native);
             
-            dir = dirpath.normalize().string();
+            dir = dirpath.string();
             s = currpath.normalize().string();    // found the required file
             return true;
         }
@@ -199,10 +201,10 @@ include_pathes::find_include_file (std::string &s, std::string &dir,
             if (fs::exists(currpath) && 0 == current_file) {
             // if 0 != current_path (#include_next handling) it can't be
             // the file in the current directory
-                fs::path dirpath (current_dir.string(), fs::native);
+                fs::path dirpath (current_rel_dir.string(), fs::native);
                 dirpath /= fs::path(s, fs::native);
 
-                dir = dirpath.normalize().string();
+                dir = dirpath.string();
                 s = currpath.normalize().string();    // found in local directory
                 return true;
             }   
@@ -235,11 +237,16 @@ void include_pathes::set_current_directory(char const *path_)
 {
     namespace fs = boost::filesystem;
     
-    fs::path filename = fs::complete(fs::path(path_, fs::native), current_dir);
-    if (fs::exists(filename) && fs::is_directory(filename)) 
+    fs::path filepath (path_, fs::native);
+    fs::path filename = fs::complete(filepath, current_dir);
+    if (fs::exists(filename) && fs::is_directory(filename)) {
         current_dir = filename;
-    else
+        current_rel_dir = filepath;
+    }
+    else {
         current_dir = filename.branch_path();
+        current_rel_dir = filepath.branch_path();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

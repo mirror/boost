@@ -51,7 +51,9 @@ CHANGELOG
   doesn't exist) and which gets passed the (expanded) token sequence found 
   after the #include directive token.
 - The file names passed to the preprocessing hooks are now normalised.
-
+- Changed the opened_include_file() preprocessing hook to receive the correct
+  relative path even if the included file was found in the current directory.
+  
 Mon Feb 21 09:30:04 WEST 2005
 Version 1.1.14 (Fixes in response to the Boost review)
 
