@@ -52,14 +52,6 @@
        <a href="counting_iterator.htm">Counting Iterator Adaptor</a>
     </ul>
 
-<!-- not sure where this paragraph was going...
-    defines the <tt>iterator_adaptor</tt> class template and several <a href=
-    "../../more/generic_programming.html#type_generator">type generators</a>
-    and <a href="../../more/generic_programming.html#object_generator">object
-    generators</a> which allow you to easily create adapted iterator types. The
-    Iterator Adaptors 
--->
-
     <p><b><a href="http://www.boost.org/people/dave_abrahams.htm">Dave
     Abrahams</a></b> started the library, applying <a href=
     "../../more/generic_programming.html#policies">policies class</a> technique
@@ -109,16 +101,16 @@ struct iterator_adaptor;
     typedef Reference reference;
     typedef Category iterator_category;
     typedef Base base_type;
+    typedef Policies policies_type;
 
     iterator_adaptor();
     iterator_adaptor(const Base&amp;, const Policies&amp; = Policies());
 
     base_type base() const;
 
-    template &lt;class Iter2, class Value2, class Pointer2, class Reference2&gt;
+    template &lt;class B, class V, class R, class P&gt;
     iterator_adaptor (
-        const iterator_adaptor&lt;Iter2,Policies,Value2,Reference2,Pointer2,Category,Distance&gt;&amp;
-            : m_iter_p(src.iter(), src.policies());
+        const iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;);
 
     reference operator*() const;
     <i>operator_arrow_result_type</i> operator-&gt;() const; <a href="#2">[2]</a>
@@ -135,50 +127,27 @@ struct iterator_adaptor;
     iterator_adaptor&amp; operator-(Distance x) const;
 };
 
-template &lt;class B, class Policies, class V, class R, class P, 
+template &lt;class B, class P, class V, class R, class Ptr, 
     class C, class D1, class D2&gt;
-iterator_adaptor&lt;B,Policies,V,R,P,C,D1&gt;
-operator+(iterator_adaptor&lt;B,P,V,R,P,C,D1&gt;, D2);
+iterator_adaptor&lt;B,P,V,R,Ptr,C,D1&gt;
+operator+(iterator_adaptor&lt;B,P,V,R,Ptr,C,D1&gt;, D2);
 
-template &lt;class B, class Policies, class V, class R, class P,
+template &lt;class B, class P, class V, class R, class Ptr,
     class C, class D1, class D2&gt;
-iterator_adaptor&lt;B,Policies,V,R,P,C,D1&gt;
-operator+(D2, iterator_adaptor&lt;B,P,V,R,P,C,D1&gt; p);
+iterator_adaptor&lt;B,P,V,R,P,C,D1&gt;
+operator+(D2, iterator_adaptor&lt;B,P,V,R,Ptr,C,D1&gt; p);
 
-template &lt;class B1, class B2, class Policies, class V1, class V2,
+template &lt;class B1, class B2, class P, class V1, class V2,
     class R1, class R2, class P1, class P2, class C, class D&gt;
 Distance operator-(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
                    const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
 
-template &lt;class B1, class B2, class Policies, class V1, class V2,
+template &lt;class B1, class B2, class P, class V1, class V2,
     class R1, class R2, class P1, class P2, class C, class D&gt;
 bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
                 const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
 
-template &lt;class B1, class B2, class Policies, class V1, class V2,
-    class R1, class R2, class P1, class P2, class C, class D&gt;
-bool operator!=(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
-                const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
-
-template &lt;class B1, class B2, class Policies, class V1, class V2,
-    class R1, class R2, class P1, class P2, class C, class D&gt;
-bool operator&lt;(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
-                  const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
-
-template &lt;class B1, class B2, class Policies, class V1, class V2,
-    class R1, class R2, class P1, class P2, class C, class D&gt;
-bool operator&lt;=(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
-                   const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
-
-template &lt;class B1, class B2, class Policies, class V1, class V2,
-    class R1, class R2, class P1, class P2, class C, class D&gt;
-bool operator&gt;=(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
-                   const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
-
-template &lt;class B1, class B2, class Policies, class V1, class V2,
-    class R1, class R2, class P1, class P2, class C, class D&gt;
-bool operator&gt;(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
-                  const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
+// and similarly for operators !=, <, <=, >=, >
 </pre>
 
     <h3>Example</h3>
@@ -234,7 +203,7 @@ bool operator&gt;(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     policy class inherit from <tt>default_iterator_policies</tt> to avoid
     retyping the usual behaviors. You should also look at
     <tt>default_iterator_policies</tt> as the ``boiler-plate'' for your own
-    policy classes. The following is definition of the
+    policy classes. The following is the definition of the
     <tt>default_iterator_policies</tt> class: 
 
     <p>
@@ -276,7 +245,6 @@ struct default_iterator_policies
 </pre>
 </blockquote>
 
-    
     To implement a transform iterator we will only change one of the
     base iterator's behaviors, so the
     <tt>transform_iterator_policies</tt> class will inherit the rest
@@ -287,8 +255,9 @@ struct default_iterator_policies
     value type of the base iterator) and we will need to know the
     <tt>result_type</tt> of the function, so
     <a href="http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html">
-    AdaptableUnaryFunction</a> is the correct concept (set of
-    requirements) to choose for the function object type.  Inside of
+    AdaptableUnaryFunction</a> is the correct
+    <a href="../../more/generic_programming.html#concept">
+    concept</a> to choose for the function object type.  Inside of
     <tt>transform_iterator_policies</tt> we will implement the
     <tt>dereference()</tt> member function. This member function will
     dereference the base iterator (the second parameter of
@@ -321,13 +290,11 @@ struct default_iterator_policies
     construct the transform iterator type.  The nicest way to package
     up the construction of the transform iterator is to create a <a
     href="../../more/generic_programming.html#type_generator">type
-    generator</a>, which is a class whose sole purpose is to
-    create a typedef for some new type based on several template
-    parameters. The first template parameter will be the type of the
-    function object and the second will be the base iterator
-    type. Inside the <tt>transform_iterators</tt> class we use the
-    <tt>iterator_adaptor</tt> class to create the transform iterator
-    type.
+    generator</a>. The first template parameter of the generator will
+    be the type of the function object and the second will be the base
+    iterator type. Inside the <tt>transform_iterator_generator</tt>
+    class we use the <tt>iterator_adaptor</tt> class to create the
+    transform iterator type.
 
     <p>
 <blockquote>
@@ -405,18 +372,9 @@ This output is:
         <th>Description
 
       <tr>
-        <td><a href=
-        "http://www.sgi.com/tech/stl/Predicate.html"><tt>Predicate</tt></a>
+        <td><tt>Base</tt>
 
-        <td>The function object that determines which elements are retained and
-        which elements are skipped.
-
-      <tr>
-        <td><tt>BaseIterator</tt>
-
-        <td>The iterator type being wrapped. This type must at least be a model
-        of the <a href=
-        "http://www.sgi.com/tech/stl/InputIterator">InputIterator</a> concept.
+        <td>The type being wrapped.
 
       <tr>
         <td><tt>Value</tt>
@@ -451,10 +409,7 @@ This output is:
         <td><tt>Category</tt>
 
         <td>The <tt>iterator_category</tt> type for the resulting iterator.
-        Typically the default for this parameter is the appropriate type. If
-        you override this parameter, do not use
-        <tt>bidirectional_iterator_tag</tt> because filter iterators can not go
-        in reverse.<br>
+        Typically the default for this parameter is the appropriate type.<br>
         <b>Default:</b>
         <tt>std::iterator_traits&lt;BaseIterator&gt;::iterator_category</tt>
 
@@ -467,7 +422,66 @@ This output is:
         <tt>std::iterator_traits&lt;BaseIterator&gt;::difference_type</tt>
     </table>
 
+
+    <h3>Model of</h3>
+
+    Depending on the <tt>Base</tt> and <tt>Policies</tt> template
+    parameters, an <tt>iterator_adaptor</tt> can be a <a
+    href="http://www.sgi.com/tech/stl/InputIterator.html"> Input
+    Iterator</a>, <a
+    href="http://www.sgi.com/tech/stl/ForwardIterator.html"> Forward
+    Iterator</a>, <a
+    href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">
+    Bidirectional Iterator</a>, or <a
+    href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
+    Random Access Iterator</a>.
+
+    <h3>Members</h3>
+
+    In addition to all of the member functions required of a <a
+    href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
+    Random Access Iterator</a>, the <tt>iterator_adaptor</tt> class
+    template defines the following members.
+
+<p>
+<table border>
+<tr><td><tt>
+iterator_adaptor(const Base&amp;, const Policies&amp; = Policies())
+</tt><br>
+Construct an iterator adaptor from a base object and a policies object.
+</td></tr>
+
+<tr><td><tt>
+template &lt;class B, class V, class R, class P&gt;<br>
+iterator_adaptor(const iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;)
+</tt><br><br>
+This constructor allows for conversion from mutable to constant iterator
+adaptors. This assumes that the type <tt>B</tt> is convertible to the
+type <tt>Base</tt>.
+</td></tr>
+
+<tr><td><tt>
+base_type base() const;
+</tt><br><br>
+Return a copy of the base object.
+</td></tr>
+
+</table>
     
+    <h3>Operators</h3>
+    
+    The <tt>iterator_adaptor</tt> class defines all of the operators
+    required of a 
+    <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
+    Random Access Iterator</a>. Also, the operators of the
+    <tt>iterator_adaptor</tt> class that take two iterator adaptor
+    arguments (difference and comparisons) are defined in such a way
+    that the operators work on pairs of <tt>iterator_adaptor</tt>
+    types that have different template parameters, provided that the
+    base types of the iterator adaptors are interoperable. The reason
+    for this is so that mutable and constant versions of an iterator
+    adaptor can be created that will be interoperable with eachother.
+
     <h3>Challenge</h3>
 
     <p>There is an unlimited number of ways the the
@@ -489,6 +503,20 @@ This output is:
      is somewhat complicated to describe. But be assured, it works
      in a stardard conforming fashion, providing access to members
      of the objects pointed to by the iterator.
+
+    <h3>Implemenation Notes</h3>
+
+    <ul>
+       <li>The <tt>iterator_adaptor::operator[]</tt> returns by-value
+        instead of by-reference as might be expected. There are two
+        reasons for this. First, the C++ standard only requires that
+        the return type by ``convertible to T'' (Table 76). Second,
+        and more importantly, for certain kinds of iterators,
+        returning a reference could cause serious memory problems due
+        to the reference being bound to a temporary object whose
+        lifetime ends inside of the <tt>operator[]</tt>.</li>
+
+    </ul>    
 
     <hr>
 
