@@ -76,9 +76,10 @@ full list of macros and their usage.
    #define BOOST_RE_PLATFORM_W32
 #endif
 
-#ifdef __MWERKS__
-// no std::maessages facet
+#if defined(__MWERKS__) || defined(__DECCXX)
+// no std::messages facet
 #define BOOST_RE_NO_MESSAGES
+#define BOOST_RE_NO_CAT
 #endif
 
 #ifdef __BORLANDC__
