@@ -625,7 +625,8 @@ Addition to [lib.iterator.synopsis]
     : virtual readable_iterator_tag
     , virtual writable_iterator_tag
     , virtual swappable_iterator_tag { };
-  struct readable_lvalue_iterator_tag { };
+  struct readable_lvalue_iterator_tag 
+    : virtual readable_iterator_tag { };
   struct writable_lvalue_iterator_tag
     : virtual public readable_writable_iterator_tag
     , virtual public readable_lvalue_iterator_tag { };
@@ -644,7 +645,7 @@ Addition to [lib.iterator.traits]
 
 The ``iterator_tag`` class template is an iterator category tag that
 encodes the access and traversal tags in addition to being compatible
-with the original iterator tags. The ``iterator_tag`` class inherits
+with the original iterator tags.  The ``iterator_tag`` class inherits
 from one of the original iterator tags according to the following
 pseudo-code.
 
@@ -679,6 +680,12 @@ pseudo-code.
          else
              return null_category_tag;
      
+If the argument for the template parameter ``AccessTag`` is not
+convertible to one or more of: ``readable_iterator_tag``,
+``writable_iterator_tag``, ``swappable_iterator_tag``, or if the
+argument for ``TraversalTag`` is not convertible to
+``incrementable_iterator_tag`` then the behavior of ``iterator_tag``
+is not defined.
 
 The ``access_category`` and ``traversal_category`` class templates are
 traits classes. For iterators whose
