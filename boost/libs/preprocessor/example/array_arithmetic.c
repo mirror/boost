@@ -50,32 +50,26 @@
 
 /* List of applicative binary operators. */
 #define APPLICATIVE_BINARY_OPS\
-  BOOST_PP_LIST_APPEND\
-  ( BOOST_PP_TUPLE_TO_LIST\
-    ( 2\
-    , ( ( *  , mul           , 1 , 0 , 0 )\
-      , ( /  , div           , 1 , 0 , 0 )\
-      )\
-    )\
-  , BOOST_PP_TUPLE_TO_LIST\
-    ( 16\
-    , ( ( %  , mod           , 0 , 0 , 0 )\
-      , ( +  , add           , 1 , 0 , 0 )\
-      , ( -  , sub           , 1 , 0 , 0 )\
-      , ( << , shift_left    , 0 , 0 , 1 )\
-      , ( >> , shift_right   , 0 , 0 , 1 )\
-      , ( <  , less          , 1 , 1 , 0 )\
-      , ( <= , less_equal    , 1 , 1 , 0 )\
-      , ( >= , greater_equal , 1 , 1 , 0 )\
-      , ( >  , greater       , 1 , 1 , 0 )\
-      , ( == , equal         , 1 , 1 , 0 )\
-      , ( != , not_equal     , 1 , 1 , 0 )\
-      , ( &  , bitwise_and   , 0 , 0 , 0 )\
-      , ( |  , bitwise_or    , 0 , 0 , 0 )\
-      , ( ^  , bitwise_xor   , 0 , 0 , 0 )\
-      , ( && , logical_and   , 1 , 1 , 0 )\
-      , ( || , logical_or    , 1 , 1 , 0 )\
-      )\
+  BOOST_PP_TUPLE_TO_LIST\
+  ( 18\
+  , ( ( *  , mul           , 1 , 0 , 0 )\
+    , ( /  , div           , 1 , 0 , 0 )\
+    , ( %  , mod           , 0 , 0 , 0 )\
+    , ( +  , add           , 1 , 0 , 0 )\
+    , ( -  , sub           , 1 , 0 , 0 )\
+    , ( << , shift_left    , 0 , 0 , 1 )\
+    , ( >> , shift_right   , 0 , 0 , 1 )\
+    , ( <  , less          , 1 , 1 , 0 )\
+    , ( <= , less_equal    , 1 , 1 , 0 )\
+    , ( >= , greater_equal , 1 , 1 , 0 )\
+    , ( >  , greater       , 1 , 1 , 0 )\
+    , ( == , equal         , 1 , 1 , 0 )\
+    , ( != , not_equal     , 1 , 1 , 0 )\
+    , ( &  , bitwise_and   , 0 , 0 , 0 )\
+    , ( |  , bitwise_or    , 0 , 0 , 0 )\
+    , ( ^  , bitwise_xor   , 0 , 0 , 0 )\
+    , ( && , logical_and   , 1 , 1 , 0 )\
+    , ( || , logical_or    , 1 , 1 , 0 )\
     )\
   )
 
