@@ -281,7 +281,7 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename const_iterator_type::iterator_category>::template
                         iterator_base<const_iterator, value_type>::type {
 #else
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
             public random_access_iterator_base<typename const_iterator_type::iterator_category,
                                                const_iterator, value_type> {
 #else
@@ -394,7 +394,7 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename iterator_type::iterator_category>::template
                         iterator_base<iterator, value_type>::type {
 #else
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
             public random_access_iterator_base<typename iterator_type::iterator_category,
                                                iterator, value_type> {
 #else
@@ -1053,7 +1053,7 @@ return true;
             return reverse_iterator (begin ());
         }
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
 // VC++ 6.0 cannot access data_ from iterator
     private:
 #endif
@@ -1598,7 +1598,7 @@ return true;
             return reverse_iterator (begin ());
         }
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
 // VC++ 6.0 cannot access data_ from iterator
     private:
 #endif

@@ -18,7 +18,7 @@
 namespace boost { namespace numeric { namespace ublas {
 
 // MSVC 6.0 gets confused by the forward declarations.
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
 
     template < typename V >
     BOOST_UBLAS_INLINE
@@ -141,8 +141,8 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     typename c_vector<T, N>::const_pointer data( const c_vector<T, N> &v ) ;
 #endif
-#ifndef BOOST_MSVC
-    // We need data_const() mostly due to MSVC 6.0.
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+    // We need data_const() mostly due to MSVC
     // But how shall we write portable code otherwise?
     template < typename T, std::size_t N >
     BOOST_UBLAS_INLINE
@@ -194,8 +194,8 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     typename c_matrix<T, M, N>::const_pointer data( const c_matrix<T, M, N> &m ) ;
 #endif
-#ifndef BOOST_MSVC
-    // We need data_const() mostly due to MSVC 6.0.
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+    // We need data_const() mostly due to MSVC
     // But how shall we write portable code otherwise?
     template < typename T, std::size_t M, std::size_t N >
     BOOST_UBLAS_INLINE
@@ -284,8 +284,8 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     typename c_vector<T, N>::const_pointer base( const c_vector<T, N> &v ) ;
 #endif
-#ifndef BOOST_MSVC
-    // We need base_const() mostly due to MSVC 6.0.
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+    // We need base_const() mostly due to MSVC
     // But how shall we write portable code otherwise?
     template < typename T, std::size_t N >
     BOOST_UBLAS_INLINE
@@ -337,8 +337,8 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     typename c_matrix<T, M, N>::const_pointer base( const c_matrix<T, M, N> &m ) ;
 #endif
-#ifndef BOOST_MSVC
-    // We need base_const() mostly due to MSVC 6.0.
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+    // We need base_const() mostly due to MSVC
     // But how shall we write portable code otherwise?
     template < typename T, std::size_t M, std::size_t N >
     BOOST_UBLAS_INLINE
@@ -610,8 +610,8 @@ namespace boost { namespace numeric { namespace ublas {
         return v.data() ;
     }
 #endif
-#ifndef BOOST_MSVC
-    // We need data_const() mostly due to MSVC 6.0.
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+    // We need data_const() mostly due to MSVC
     // But how shall we write portable code otherwise?
     template < typename T, std::size_t N >
     BOOST_UBLAS_INLINE
@@ -687,8 +687,8 @@ namespace boost { namespace numeric { namespace ublas {
         return m.data() ;
     }
 #endif
-#ifndef BOOST_MSVC
-    // We need data_const() mostly due to MSVC 6.0.
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+    // We need data_const() mostly due to MSVC
     // But how shall we write portable code otherwise?
     template < typename T, std::size_t M, std::size_t N >
     BOOST_UBLAS_INLINE
@@ -819,8 +819,8 @@ namespace boost { namespace numeric { namespace ublas {
         return v.data() ;
     }
 #endif
-#ifndef BOOST_MSVC
-    // We need base_const() mostly due to MSVC 6.0.
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+    // We need base_const() mostly due to MSVC
     // But how shall we write portable code otherwise?
     template < typename T, std::size_t N >
     BOOST_UBLAS_INLINE
@@ -896,8 +896,8 @@ namespace boost { namespace numeric { namespace ublas {
         return m.data() ;
     }
 #endif
-#ifndef BOOST_MSVC
-    // We need base_const() mostly due to MSVC 6.0.
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+    // We need base_const() mostly due to MSVC
     // But how shall we write portable code otherwise?
     template < typename T, std::size_t M, std::size_t N >
     BOOST_UBLAS_INLINE

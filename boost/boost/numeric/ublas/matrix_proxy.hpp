@@ -2819,7 +2819,7 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename const_iterator1_type::iterator_category>::template
                         iterator_base<const_iterator1, value_type>::type {
 #else
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
             public random_access_iterator_base<typename const_iterator1_type::iterator_category,
                                                const_iterator1, value_type> {
 #else
@@ -2964,7 +2964,7 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename iterator1_type::iterator_category>::template
                         iterator_base<iterator1, value_type>::type {
 #else
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
             public random_access_iterator_base<typename iterator1_type::iterator_category,
                                                iterator1, value_type> {
 #else
@@ -3108,7 +3108,7 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename const_iterator2_type::iterator_category>::template
                         iterator_base<const_iterator2, value_type>::type {
 #else
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
             public random_access_iterator_base<typename const_iterator2_type::iterator_category,
                                                const_iterator2, value_type> {
 #else
@@ -3253,7 +3253,7 @@ namespace boost { namespace numeric { namespace ublas {
             public iterator_base_traits<typename iterator2_type::iterator_category>::template
                         iterator_base<iterator2, value_type>::type {
 #else
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
             public random_access_iterator_base<typename iterator2_type::iterator_category,
                                                iterator2, value_type> {
 #else

@@ -860,7 +860,7 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (double) {
         return 0.;
     }
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     template<>
     std::complex<float>
     ZeroElement (std::complex<float>) {
@@ -882,7 +882,7 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (vector<double>) {
         return zero_vector<double> ();
     }
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     template<>
     vector<std::complex<float> >
     ZeroElement (vector<std::complex<float> >) {
@@ -904,7 +904,7 @@ namespace boost { namespace numeric { namespace ublas {
     ZeroElement (matrix<double>) {
         return zero_matrix<double> ();
     }
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     template<>
     matrix<std::complex<float> >
     ZeroElement (matrix<std::complex<float> >) {
@@ -930,7 +930,7 @@ namespace boost { namespace numeric { namespace ublas {
     OneElement (double) {
         return 1.;
     }
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     template<>
     std::complex<float>
     OneElement (std::complex<float>) {
@@ -952,7 +952,7 @@ namespace boost { namespace numeric { namespace ublas {
     OneElement (matrix<double>) {
         return identity_matrix<double> ();
     }
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
     template<>
     matrix<std::complex<float> >
     OneElement (matrix<std::complex<float> >) {
@@ -1631,7 +1631,7 @@ namespace boost { namespace numeric { namespace ublas {
         VectorSpaceConcept<double, matrix<double> >::constraints ();
         LinearOperatorConcept<double, vector<double>, matrix<double> >::constraints ();
 
-#ifndef BOOST_MSVC
+#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
         AdditiveAbelianGroupConcept<std::complex<float> >::constraints ();
         CommutativeRingWithIdentityConcept<std::complex<float> >::constraints ();
         FieldConcept<std::complex<float> >::constraints ();
