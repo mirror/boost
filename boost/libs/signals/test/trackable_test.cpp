@@ -44,7 +44,7 @@ struct max_or_default {
   }
 };
 
-int test_main(int, char**)
+int test_main(int, char*[])
 {
   typedef boost::signal1<int, int, max_or_default<int> > sig_type;
   sig_type s1;
