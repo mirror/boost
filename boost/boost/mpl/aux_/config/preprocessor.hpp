@@ -1,9 +1,11 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/config/preprocessor.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
+
+#ifndef BOOST_MPL_AUX_CONFIG_PREPROCESSOR_HPP_INCLUDED
+#define BOOST_MPL_AUX_CONFIG_PREPROCESSOR_HPP_INCLUDED
+
+// + file: boost/mpl/aux_/config/preprocessor.hpp
+// + last modified: 23/jun/03
+
+// Copyright (c) 2000-03
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -13,16 +15,19 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#ifndef BOOST_MPL_AUX_CONFIG_PREPROCESSOR_HPP_INCLUDED
-#define BOOST_MPL_AUX_CONFIG_PREPROCESSOR_HPP_INCLUDED
+#include "boost/mpl/aux_/config/workaround.hpp"
 
-#include "boost/config.hpp"
+#if    !defined( BOOST_MPL_PREPROCESSING_MODE ) \
+    && (   BOOST_WORKAROUND( __MWERKS__, BOOST_TESTED_AT(0x3003) ) \
+        || BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x561) ) \
+        || BOOST_WORKAROUND( __IBMCPP__, BOOST_TESTED_AT(502) ) \
+        )
 
-#if defined(__MWERKS__) && (__MWERKS__ <= 0x3003 || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__IBMCPP__) && (__IBMCPP__ <= 502 || !defined(BOOST_STRICT_CONFIG))
 #   define BOOST_MPL_BROKEN_PP_MACRO_EXPANSION
+
 #endif
 
 //#define BOOST_MPL_NO_OWN_PP_PRIMITIVES

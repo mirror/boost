@@ -35,6 +35,7 @@
 #   include "boost/mpl/aux_/arity_spec.hpp"
 #   include "boost/mpl/aux_/type_wrapper.hpp"
 #   include "boost/mpl/aux_/yes_no.hpp"
+#   include "boost/mpl/aux_/common_name_wknd.hpp"
 #   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #       include "boost/type_traits/is_reference.hpp"
 #   endif 
@@ -70,6 +71,9 @@
 
 namespace boost {
 namespace mpl {
+
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind1st)
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind2nd)
 
 // local macros, #undef-ined at the end of the header
 #   define AUX_APPLY(args) \
@@ -366,6 +370,7 @@ struct bind
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 // bind1st/bind2nd, lightweight, for simple cases/backward compatibility
+
 template< typename F, typename T >
 struct bind1st
 {

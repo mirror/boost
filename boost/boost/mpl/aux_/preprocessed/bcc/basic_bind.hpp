@@ -4,6 +4,9 @@
 namespace boost {
 namespace mpl {
 
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind1st)
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind2nd)
+
 namespace aux {
 
 template<
@@ -16,7 +19,6 @@ struct resolve_bind_arg
 };
 
 } // namespace aux
-
 template< typename F, typename T > struct bind1st;
 template< typename F, typename T > struct bind2nd;
 
@@ -51,7 +53,6 @@ struct resolve_bind_arg< bind2nd<F,T>,U1,U2,U3,U4,U5 >
 };
 
 } // namespace aux
-
 BOOST_MPL_AUX_ARITY_SPEC(2, bind1st)
 BOOST_MPL_AUX_ARITY_SPEC(2, bind2nd)
 

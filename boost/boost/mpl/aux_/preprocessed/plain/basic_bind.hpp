@@ -4,6 +4,9 @@
 namespace boost {
 namespace mpl {
 
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind1st)
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind2nd)
+
 namespace aux {
 
 template<

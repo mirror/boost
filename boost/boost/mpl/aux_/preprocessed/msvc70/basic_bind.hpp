@@ -4,8 +4,10 @@
 namespace boost {
 namespace mpl {
 
-namespace aux {
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind1st)
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind2nd)
 
+namespace aux {
 template< bool >
 struct resolve_arg_impl
 {
@@ -19,7 +21,7 @@ struct resolve_arg_impl
     };
 };
 
-template<> 
+template<>
 struct resolve_arg_impl<true>
 {
     template<
@@ -34,7 +36,7 @@ struct resolve_arg_impl<true>
 
 template< typename T > struct is_bind_template;
 
-template< 
+template<
       typename T, typename U1, typename U2, typename U3, typename U4
     , typename U5
     >
@@ -45,12 +47,10 @@ struct resolve_bind_arg
 };
 
 } // namespace aux
-
 template< typename F, typename T > struct bind1st;
 template< typename F, typename T > struct bind2nd;
 
 namespace aux {
-
 template< int arity_ > struct bind_impl_chooser;
 
 aux::no_tag is_bind_helper(...);
@@ -80,6 +80,7 @@ struct is_bind_template_impl<false>
              sizeof(aux::is_bind_helper(static_cast<T*>(0))) ==
              sizeof(aux::yes_tag)
             };
+
     };
 };
 
@@ -90,7 +91,6 @@ template< typename T > struct is_bind_template
 };
 
 } // namespace aux
-
 BOOST_MPL_AUX_ARITY_SPEC(2, bind1st)
 BOOST_MPL_AUX_ARITY_SPEC(2, bind2nd)
 

@@ -159,6 +159,7 @@ class pretty:
         self.re_typedefs = re.compile(r'(\s*)((\s*typedef\s*.*?;)+)\s*$')
         self.re_closing_curly_brace = re.compile(r'^(}|struct\s+\w+);\s*$')
         self.re_namespace_scope_templ = re.compile(r'^template\s*<\s*$')
+        self.re_namespace = re.compile(r'^\n?namespace\s+\w+\s*{\s*\n?$')
 
     def process(self, line):
 
@@ -184,7 +185,10 @@ class pretty:
         # restoring some empty lines
         if self.re_templ_decl.match(line) and self.re_typedef.match(self.prev_line) \
            or not self.re_empty_line.match(line) and self.re_closing_curly_brace.match(self.prev_line) \
-           or self.re_namespace_scope_templ.match(line) and not self.re_empty_line.match(self.prev_line):
+           or not self.re_empty_line.match(self.prev_line) \
+              and ( self.re_namespace_scope_templ.match(line) \
+                    or self.re_namespace.match(line) and not self.re_namespace.match(self.prev_line) \
+                    ):
             line = '\n%s' % line
 
         # removing excessive empty lines

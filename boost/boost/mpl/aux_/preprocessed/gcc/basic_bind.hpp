@@ -4,6 +4,9 @@
 namespace boost {
 namespace mpl {
 
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind1st)
+BOOST_MPL_AUX_COMMON_NAME_WKND(bind2nd)
+
 namespace aux {
 
 template<
@@ -357,6 +360,7 @@ struct resolve_bind_arg<
 BOOST_MPL_AUX_ARITY_SPEC(6, bind5)
 
 // primary template (not a specialization!)
+
 template<
       typename F, typename T1, typename T2, typename T3, typename T4
     , typename T5
