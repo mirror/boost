@@ -76,11 +76,6 @@ public:
         this_type().swap(*this);
     }
 
-    T * get() const // never throws; deprecated, removal pending, don't use
-    {
-        return pn.use_count() == 0? 0: px;
-    }
-
     long use_count() const // never throws
     {
         return pn.use_count();
@@ -119,27 +114,6 @@ private:
 
 };  // weak_ptr
 
-template<class T, class U> inline bool operator==(weak_ptr<T> const & a, weak_ptr<U> const & b)
-{
-    return a.get() == b.get();
-}
-
-template<class T, class U> inline bool operator!=(weak_ptr<T> const & a, weak_ptr<U> const & b)
-{
-    return a.get() != b.get();
-}
-
-#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
-
-// Resolve the ambiguity between our op!= and the one in rel_ops
-
-template<class T> inline bool operator!=(weak_ptr<T> const & a, weak_ptr<T> const & b)
-{
-    return a.get() != b.get();
-}
-
-#endif
-
 template<class T> inline bool operator<(weak_ptr<T> const & a, weak_ptr<T> const & b)
 {
     return a.less(b);
@@ -152,6 +126,8 @@ template<class T> void swap(weak_ptr<T> & a, weak_ptr<T> & b)
 
 template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r) // never throws
 {
+#if defined(BOOST_HAS_THREADS)
+
     // optimization: avoid throw overhead
     if(r.use_count() == 0)
     {
@@ -162,15 +138,20 @@ template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r) // never thro
     {
         return shared_ptr<T>(r);
     }
-    catch(use_count_is_zero const &)
+    catch(bad_weak_ptr const &)
     {
+        // Q: how can we get here?
+        // A: another thread may have invalidated r after the use_count test above.
         return shared_ptr<T>();
     }
-}
 
-// Note: there is no get_pointer overload for weak_ptr.
-// This is intentional. Even get() will disappear in a
-// future release; these accessors are too error-prone.
+#else
+
+    // optimization: avoid try/catch overhead when single threaded
+    return r.use_count() == 0? shared_ptr<T>(): shared_ptr<T>(r);
+
+#endif
+}
 
 } // namespace boost
 

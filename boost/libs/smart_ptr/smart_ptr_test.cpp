@@ -24,11 +24,6 @@
 #include <iostream>
 #include <set>
 
-bool boost_error(char const *, char const *, char const *, long)
-{
-  return true; // fail with assert()
-}
-
 class Incomplete;
 
 Incomplete * get_ptr(  boost::shared_ptr<Incomplete>& incomplete )
@@ -164,7 +159,6 @@ void test()
     cp.reset();
     BOOST_TEST( cp2.use_count() == 2 );
     BOOST_TEST( cp3.use_count() == 2 );
-    BOOST_TEST( cp.use_count() == 1 );
     cp.reset( new int );
     *cp =  98765;
     BOOST_TEST( *cp == 98765 );

@@ -76,8 +76,14 @@ template<> struct shared_ptr_traits<void const>
 //  is destroyed or reset.
 //
 
+#if defined(BOOST_SP_ENABLE_CONSTRUCTOR_HOOK)
+
+void shared_ptr_constructor_hook(void * p);
+
+#endif
+
 template<class T> class weak_ptr;
-template<class T> class intrusive_ptr;
+template<class T> class enable_shared_from_this;
 
 template<class T> class shared_ptr
 {
@@ -87,18 +93,36 @@ private:
 //  typedef checked_deleter<T> deleter;
     typedef shared_ptr<T> this_type;
 
+    // enable_shared_from_this support
+
+    template<class Y> void sp_enable_shared_from_this(boost::enable_shared_from_this<Y> * q)
+    {
+        q->weak_this = *this;
+    }
+
+    void sp_enable_shared_from_this(void *)
+    {
+    }
+
 public:
 
     typedef T element_type;
     typedef T value_type;
+    typedef T * pointer;
+    typedef typename detail::shared_ptr_traits<T>::reference reference;
 
     shared_ptr(): px(0), pn()
     {
     }
 
     template<class Y>
-    explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>(), p) // Y must be complete
+    explicit shared_ptr(Y * p): px(p), pn(p, checked_deleter<Y>()) // Y must be complete
     {
+        sp_enable_shared_from_this(p);
+
+#if defined(BOOST_SP_ENABLE_CONSTRUCTOR_HOOK)
+        shared_ptr_constructor_hook(p);
+#endif
     }
 
     //
@@ -109,6 +133,7 @@ public:
 
     template<class Y, class D> shared_ptr(Y * p, D d): px(p), pn(p, d)
     {
+        sp_enable_shared_from_this(p);
     }
 
 //  generated copy constructor, assignment, destructor are fine
@@ -120,11 +145,6 @@ public:
 
     template<class Y>
     shared_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
-    {
-    }
-
-    template<class Y>
-    shared_ptr(intrusive_ptr<Y> const & r): px(r.get()), pn(r.get()) // never throws
     {
     }
 
@@ -154,8 +174,11 @@ public:
 #ifndef BOOST_NO_AUTO_PTR
 
     template<class Y>
-    explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn(r)
+    explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn()
     {
+        Y * tmp = r.get();
+        pn = detail::shared_count(r);
+        sp_enable_shared_from_this(tmp);
     }
 
 #endif
@@ -199,7 +222,7 @@ public:
         this_type(p, d).swap(*this);
     }
 
-    typename detail::shared_ptr_traits<T>::reference operator* () const // never throws
+    reference operator* () const // never throws
     {
         BOOST_ASSERT(px != 0);
         return *px;
@@ -246,6 +269,11 @@ public:
         pn.swap(other.pn);
     }
 
+    bool less(this_type const & rhs) const // implementation detail, never throws
+    {
+        return pn < rhs.pn;
+    }
+
 // Tasteless as this may seem, making all members public allows member templates
 // to work in the absence of member template friends. (Matthew Langston)
 
@@ -287,13 +315,25 @@ template<class T> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<T> 
 
 template<class T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T> const & b)
 {
-    return std::less<T*>()(a.get(), b.get());
+    return a.less(b);
 }
 
 template<class T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b)
 {
     a.swap(b);
 }
+
+template<class T, class U> shared_ptr<T> static_pointer_cast(shared_ptr<U> const & r)
+{
+    return shared_ptr<T>(r, detail::static_cast_tag());
+}
+
+template<class T, class U> shared_ptr<T> dynamic_pointer_cast(shared_ptr<U> const & r)
+{
+    return shared_ptr<T>(r, detail::dynamic_cast_tag());
+}
+
+// shared_*_cast names are deprecated. Use *_pointer_cast instead.
 
 template<class T, class U> shared_ptr<T> shared_static_cast(shared_ptr<U> const & r)
 {
@@ -321,28 +361,6 @@ template<class T, class U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<
 template<class T> inline T * get_pointer(shared_ptr<T> const & p)
 {
     return p.get();
-}
-
-// shared_from_this() creates a shared_ptr from a raw pointer (usually 'this')
-
-namespace detail
-{
-
-inline void sp_assert_counted_base(boost::counted_base const *)
-{
-}
-
-template<class T> inline T * sp_remove_const(T const * p)
-{
-    return const_cast<T *>(p);
-}
-
-} // namespace detail
-
-template<class T> shared_ptr<T> shared_from_this(T * p)
-{
-    detail::sp_assert_counted_base(p);
-    return shared_ptr<T>(detail::sp_remove_const(p));
 }
 
 } // namespace boost
