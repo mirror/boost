@@ -40,7 +40,7 @@ using std::getline;
 #include <boost/timer.hpp> 
 #include <boost/smart_ptr.hpp>
 
-#if defined(_MSC_VER) && (_MSC_VER <= 1300)
+#if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || defined(__sgi)
 // maybe no Koenig lookup, use using declaration instead:
 using namespace boost;
 #endif
