@@ -117,11 +117,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return data () (r_ (i));
+            return data_ (r_ (i));
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
-            return data () (r_ (i));
+            return data_ (r_ (i));
         }
 
         BOOST_UBLAS_INLINE
@@ -135,7 +135,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) const {
-            return data () (r_ (i));
+            return data_ (r_ (i));
         }
 
         BOOST_UBLAS_INLINE
@@ -216,13 +216,13 @@ namespace boost { namespace numeric { namespace ublas {
         // Closure comparison
         BOOST_UBLAS_INLINE
         bool same_closure (const vector_range &vr) const {
-            return (*this).data ().same_closure (vr.data ());
+            return (*this).data_.same_closure (vr.data_);
         }
 
         // Comparison
         BOOST_UBLAS_INLINE
         bool operator == (const vector_range &vr) const {
-            return (*this).data () == vr.data () && r_ == vr.r_;
+            return (*this).data_ == vr.data_ && r_ == vr.r_;
         }
 
         // Swapping
@@ -255,7 +255,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
-            const_iterator_type it (data ().find (start () + i));
+            const_iterator_type it (data_.find (start () + i));
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator (*this, it.index ());
 #else
@@ -264,7 +264,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator find (size_type i) {
-            iterator_type it (data ().find (start () + i));
+            iterator_type it (data_.find (start () + i));
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return iterator (*this, it.index ());
 #else
@@ -653,11 +653,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return data () (s_ (i));
+            return data_ (s_ (i));
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
-            return data () (s_ (i));
+            return data_ (s_ (i));
         }
 
         BOOST_UBLAS_INLINE
@@ -671,7 +671,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) const {
-            return data () (s_ (i));
+            return data_ (s_ (i));
         }
 
         BOOST_UBLAS_INLINE
@@ -762,7 +762,7 @@ return true;
         // Comparison
         BOOST_UBLAS_INLINE
         bool operator == (const vector_slice &vs) const {
-            return (*this).data () == vs.data () && s_ == vs.s_;
+            return (*this).data_ == vs.data_ && s_ == vs.s_;
         }
 
         // Swapping
@@ -877,7 +877,7 @@ return true;
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-                return (*this) ().data () (*it_);
+                return (*this) ().data_ (*it_);
             }
 
             // Index
@@ -976,7 +976,7 @@ return true;
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-                return (*this) ().data () (*it_);
+                return (*this) ().data_ (*it_);
             }
 
             // Index
@@ -1191,11 +1191,11 @@ return true;
 #ifndef BOOST_UBLAS_PROXY_CONST_MEMBER
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
-            return data () (ia_ (i));
+            return data_ (ia_ (i));
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) {
-            return data () (ia_ (i));
+            return data_ (ia_ (i));
         }
 
         BOOST_UBLAS_INLINE
@@ -1209,7 +1209,7 @@ return true;
 #else
         BOOST_UBLAS_INLINE
         reference operator () (size_type i) const {
-            return data () (ia_ (i));
+            return data_ (ia_ (i));
         }
 
         BOOST_UBLAS_INLINE
@@ -1304,7 +1304,7 @@ return true;
         // Comparison
         BOOST_UBLAS_INLINE
         bool operator == (const vector_indirect &vi) const {
-            return (*this).data () == vi.data () && ia_ == vi.ia_;
+            return (*this).data_ == vi.data_ && ia_ == vi.ia_;
         }
 
         // Swapping
@@ -1419,7 +1419,7 @@ return true;
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-                return (*this) ().data () (*it_);
+                return (*this) ().data_ (*it_);
             }
 
             // Index
@@ -1518,7 +1518,7 @@ return true;
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-                return (*this) ().data () (*it_);
+                return (*this) ().data_ (*it_);
             }
 
             // Index
