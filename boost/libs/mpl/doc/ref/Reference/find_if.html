@@ -1,8 +1,8 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/find if</title>
+<html><head><title>boost::mpl::find_if</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>find_if</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>find_if</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
@@ -22,7 +22,7 @@ Finds the first element in a <code>Sequence</code> that satisfies the predicate 
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/find_if.hpp">boost/mpl/find_if.hpp</a>"
+#include "<a href="../../../../../boost/mpl/find_if.hpp">boost/mpl/find_if.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -48,11 +48,11 @@ Linear. At most <code>size&lt;Sequence&gt;::value</code> applications of <code>P
 <pre>
 typedef <a href="../Reference/vector.html">vector</a>&lt;char,int,unsigned,long,unsigned_long&gt; types;
 typedef find_if&lt;types, is_same&lt;_1,unsigned&gt; &gt;::type iter;
-BOOST_STATIC_ASSERT(iter::position == 2);
+BOOST_STATIC_ASSERT(iter::pos::value == 2);
 </pre>
 <p>
 <h3>See also</h3>
 <p>
 <a href="../Algorithms.html">Algorithms</a>, <code><a href="../Reference/find.html">find</a></code>, <code><a href="../Reference/contains.html">contains</a></code>, <code><a href="../Reference/count.html">count</a></code>, <code><a href="../Reference/count_if.html">count_if</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 17, 2002 4:48 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited September 15, 2002 7:24 pm</body></html>

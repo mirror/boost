@@ -1,14 +1,14 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/equal</title>
+<html><head><title>boost::mpl::equal</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>equal</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>equal</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
       typename Sequence1
     , typename Sequence2
-    , typename Pred = is_same&lt;_,_&gt;
+    , typename Pred = is_same&lt;_1,_2&gt;
     &gt;
 struct equal
 {
@@ -18,12 +18,12 @@ struct equal
 <p>
 <h3>Description</h3>
 <p>
-Returns <code>true_c</code> if the two sequences <code>Sequence1</code> and <code>Sequence2</code> are identical when compared element-by-element, and otherwise returns <code>false_c</code>.
+Returns <code>true_</code> if the two sequences <code>Sequence1</code> and <code>Sequence2</code> are identical when compared element-by-element, and otherwise returns <code>false_</code>.
 <p>
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/equal.hpp">boost/mpl/equal.hpp</a>"
+#include "<a href="../../../../../boost/mpl/equal.hpp">boost/mpl/equal.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -56,4 +56,4 @@ BOOST_STATIC_ASSERT((equal&lt;s1,s2&gt;::type::value));
 <p>
 <a href="../Algorithms.html">Algorithms</a>, <code><a href="../Reference/count.html">count</a></code>, <code><a href="../Reference/count_if.html">count_if</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 17, 2002 4:54 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited March 10, 2003 5:39 am</body></html>

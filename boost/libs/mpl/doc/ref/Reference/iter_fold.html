@@ -1,8 +1,8 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/iter fold</title>
+<html><head><title>boost::mpl::iter_fold</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>iter_fold</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>iter_fold</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
@@ -23,7 +23,7 @@ Returns the result of the successive application of binary <code>ForwardOp</code
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/iter_fold.hpp">boost/mpl/iter_fold.hpp</a>"
+#include "<a href="../../../../../boost/mpl/iter_fold.hpp">boost/mpl/iter_fold.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -52,7 +52,7 @@ typedef <a href="../Reference/list_c.html">list_c</a>&lt;int,5,-1,0,7,2,0,-5,4&g
 typedef iter_fold&lt;
       numbers
     , <a href="../Reference/begin.html">begin</a>&lt;numbers&gt;::type
-    , if_&lt; <a href="../Reference/less.html">less</a>&lt; deref&lt;_1&gt;, deref&lt;_2&gt; &gt;,_2,_1 &gt;
+    , if_&lt; <a href="../Reference/less.html">less</a>&lt; <a href="../Reference/deref.html">deref</a>&lt;_1&gt;, <a href="../Reference/deref.html">deref</a>&lt;_2&gt; &gt;,_2,_1 &gt;
     &gt;::type max_element_iter;
 <p>
 BOOST_STATIC_ASSERT(max_element_iter::type::value == 7);
@@ -62,4 +62,4 @@ BOOST_STATIC_ASSERT(max_element_iter::type::value == 7);
 <p>
 <a href="../Algorithms.html">Algorithms</a>, <code><a href="../Reference/iter_fold_backward.html">iter_fold_backward</a></code>, <code><a href="../Reference/fold.html">fold</a></code>, <code><a href="../Reference/fold_backward.html">fold_backward</a></code>, <code><a href="../Reference/copy.html">copy</a></code>, <code><a href="../Reference/copy_backward.html">copy_backward</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 19, 2002 1:16 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited July 19, 2002 1:16 am</body></html>

@@ -1,8 +1,8 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/count if</title>
+<html><head><title>boost::mpl::count_if</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>count_if</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>count_if</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
@@ -22,7 +22,7 @@ Returns the number of elements in a <code>Sequence</code> that satisfy the predi
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/count_if.hpp">boost/mpl/count_if.hpp</a>"
+#include "<a href="../../../../../boost/mpl/count_if.hpp">boost/mpl/count_if.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -36,7 +36,7 @@ Returns the number of elements in a <code>Sequence</code> that satisfy the predi
 <p>
 <table border="1">
 <tr><th>&nbsp;Expression&nbsp;</th><th>&nbsp;Expression&nbsp;type&nbsp;</th><th>&nbsp;Precondition&nbsp;</th><th>&nbsp;Semantics&nbsp;</th><th>&nbsp;Postcondition&nbsp;</th></tr>
-<tr><td><code>typedef count_if&lt;Sequence,Pred&gt;::type n;</code></td><td>A model of <a href="../Integral_Constant.html">Integral Constant</a></td><td></td><td>Equivalent to <code> typedef lambda&lt;Pred&gt;::type pred; typedef <a href="../Reference/fold.html">fold</a>&lt; Sequence,integral_c&lt;unsigned long,0&gt;,if_&lt;pred,<a href="../Reference/next.html">next</a>&lt;_1&gt;,_1&gt; &gt;::type n;</code></td><td></td></tr>
+<tr><td><code>typedef count_if&lt;Sequence,Pred&gt;::type n;</code></td><td>A model of <a href="../Integral_Constant.html">Integral Constant</a></td><td></td><td>Equivalent to <code> typedef lambda&lt;Pred&gt;::type pred; typedef <a href="../Reference/fold.html">fold</a>&lt; Sequence,integral_c&lt;unsigned long,0&gt;,if_&lt;pred,next&lt;_1&gt;,_1&gt; &gt;::type n;</code></td><td></td></tr>
 </table>
 <p>
 <p>
@@ -58,4 +58,4 @@ BOOST_STATIC_ASSERT((count_if&lt; types,boost::is_same&lt;_,void&gt; &gt;::type:
 <p>
 <a href="../Algorithms.html">Algorithms</a>, <code><a href="../Reference/count.html">count</a></code>, <code><a href="../Reference/find_if.html">find_if</a></code>, <code><a href="../Reference/find.html">find</a></code>, <code><a href="../Reference/contains.html">contains</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 17, 2002 4:32 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited July 17, 2002 4:32 am</body></html>

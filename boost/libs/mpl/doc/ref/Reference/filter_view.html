@@ -1,8 +1,8 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/filter view</title>
+<html><head><title>boost::mpl::filter_view</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>filter_view</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>filter_view</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
@@ -11,6 +11,7 @@ template&lt;
     &gt;
 struct filter_view
 {
+    <span class="cxx-comment">// unspecified</span>
 };
 </pre>
 <p>
@@ -21,7 +22,7 @@ struct filter_view
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/filter_view.hpp">boost/mpl/filter_view.hpp</a>"
+#include "<a href="../../../../../boost/mpl/filter_view.hpp">boost/mpl/filter_view.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -48,7 +49,7 @@ Finds the largest floating type in a sequence.
 <p>
 <pre>
 typedef <a href="../Reference/list.html">list</a>&lt;int,float,long,float,char[50],long double,char&gt; types;
-typedef max_element&lt;
+typedef <a href="../Reference/max_element.html">max_element</a>&lt;
       <a href="../Reference/transform_view.html">transform_view</a>&lt; filter_view&lt; types,boost::is_float&lt;_&gt; &gt;, size_of&lt;_&gt; &gt;
     &gt;::type iter;
 <p>
@@ -57,6 +58,6 @@ BOOST_STATIC_ASSERT((is_same&lt;iter::base::type,long double&gt;::value));
 <p>
 <h3>See also</h3>
 <p>
-<a href="../Sequences.html">Sequences</a>, <code><a href="../Reference/transform_view.html">transform_view</a></code>, <code><a href="../Reference/list.html">list</a></code>, <code>max_element</code>
+<a href="../Sequences.html">Sequences</a>, <code><a href="../Reference/transform_view.html">transform_view</a></code>, <code><a href="../Reference/joint_view.html">joint_view</a></code>, <code><a href="../Reference/zip_view.html">zip_view</a></code>, <code><a href="../Reference/max_element.html">max_element</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 23, 2002 4:04 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited March 10, 2003 4:42 am</body></html>

@@ -1,8 +1,8 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/transform view</title>
+<html><head><title>boost::mpl::transform_view</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>transform_view</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>transform_view</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
@@ -11,6 +11,7 @@ template&lt;
     &gt;
 struct transform_view
 {
+    <span class="cxx-comment">// unspecified</span>
 };
 </pre>
 <p>
@@ -21,7 +22,7 @@ struct transform_view
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/transform_view.hpp">boost/mpl/transform_view.hpp</a>"
+#include "<a href="../../../../../boost/mpl/transform_view.hpp">boost/mpl/transform_view.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -48,7 +49,7 @@ Finds the largest type in a sequence.
 <p>
 <pre>
 typedef <a href="../Reference/list.html">list</a>&lt;int,long,char,char[50],double&gt; types;
-typedef max_element&lt;
+typedef <a href="../Reference/max_element.html">max_element</a>&lt;
       transform_view&lt; types, size_of&lt;_&gt; &gt;
     &gt;::type iter;
 BOOST_STATIC_ASSERT(iter::type::value == 50);
@@ -56,6 +57,6 @@ BOOST_STATIC_ASSERT(iter::type::value == 50);
 <p>
 <h3>See also</h3>
 <p>
-<a href="../Sequences.html">Sequences</a>, <code><a href="../Reference/filter_view.html">filter_view</a></code>, <code><a href="../Reference/list.html">list</a></code>, <code>max_element</code>
+<a href="../Sequences.html">Sequences</a>, <code><a href="../Reference/filter_view.html">filter_view</a></code>, <code><a href="../Reference/joint_view.html">joint_view</a></code>, <code><a href="../Reference/zip_view.html">zip_view</a></code>, <code><a href="../Reference/max_element.html">max_element</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 23, 2002 3:23 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited March 10, 2003 4:43 am</body></html>

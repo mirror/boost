@@ -1,8 +1,8 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/push back</title>
+<html><head><title>boost::mpl::push_back</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>push_back</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>push_back</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
@@ -22,7 +22,7 @@ struct push_back
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/push_back.hpp">boost/mpl/push_back.hpp</a>"
+#include "<a href="../../../../../boost/mpl/push_back.hpp">boost/mpl/push_back.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -47,17 +47,17 @@ Amortized constant time [<a href="#1">1</a>].
 <p>
 <pre>
 typedef <a href="../Reference/vector_c.html">vector_c</a>&lt;bool,false,false,false,true,true,true,false,false&gt; bools;
-typedef push_back&lt;bools,false_c&gt;::type message;
+typedef push_back&lt;bools,false_&gt;::type message;
 BOOST_STATIC_ASSERT(<a href="../Reference/back.html">back</a>&lt;message&gt;::type::value == false);
-BOOST_STATIC_ASSERT((<a href="../Reference/count_if.html">count_if</a>&lt;message, <a href="../Reference/equal_to.html">equal_to</a>&lt;_,false_c&gt; &gt;::type::value == 6));
+BOOST_STATIC_ASSERT((<a href="../Reference/count_if.html">count_if</a>&lt;message, <a href="../Reference/equal_to.html">equal_to</a>&lt;_1,false_&gt; &gt;::type::value == 6));
 </pre>
 <p>
 <h3>Notes</h3>
 <p>
-[<a name="1">1</a>]  The algorithm is can be viewed as a notational shorcut to more verbose <code>insert&lt; Sequence,end&lt;Sequence&gt;::type,T &gt;::type</code>, and is provided only if the sequence can meet the stated complexity requirements.<br>
+[<a name="1">1</a>]  The algorithm can be viewed as a notational shorcut to more verbose <code>insert&lt; Sequence,end&lt;Sequence&gt;::type,T &gt;::type</code>, and is provided only if the sequence can meet the stated complexity requirements.<br>
 <p>
 <h3>See also</h3>
 <p>
 <a href="../Extensible_Sequence.html">Extensible Sequence</a>, <code><a href="../Reference/insert.html">insert</a></code>, <code><a href="../Reference/back.html">back</a></code>, <code><a href="../Reference/pop_back.html">pop_back</a></code>, <code><a href="../Reference/push_front.html">push_front</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 17, 2002 3:57 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited March 12, 2003 6:34 am</body></html>

@@ -2,9 +2,9 @@
 <html><head><title>boost::mpl::Integral Constant</title>
 <link rel="stylesheet" href="./mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="./Table_of_Content.html"><img src="./mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>Integral Constant</h1><h3>Description</h3>
+<h1><a href="./Table_of_Contents.html"><img src="./mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>Integral Constant</h1><h3>Description</h3>
 <p>
-An Integral Constant is a class (or a template class) that represents a value of a built-in integral type (<code>bool</code>, <code>int</code>, <code>long</code>, etc.) in compile-time programs. An integral constant directly supports the increment/decrement operations within the range of the built-in integral type it wraps. Other arithmetic operations are supported through the external metafunctions.
+An Integral Constant is a class representing a value of a built-in integral type (<code>bool</code>, <code>int</code>, <code>long</code>, etc.) in compile-time programs. An integral constant directly supports the increment/decrement operations within the range of the built-in integral type it wraps. Other arithmetic operations are supported through the external metafunctions.
 <p>
 <h3>Valid expressions</h3>
 <p>
@@ -25,19 +25,19 @@ An Integral Constant is a class (or a template class) that represents a value of
 <tr><td><code>typename n::type</code></td><td>Amortized constant time</td><td></td><td>Self-reference.</td><td><code>is_same&lt;n::type,n&gt;::value == true</code> </td></tr>
 <tr><td><code>n::value</code></td><td>Amortized constant time</td><td></td><td>Value of <code>n</code>.</td><td></td></tr>
 <tr><td><code>typename n::next</code></td><td>Amortized constant time</td><td><code>n::value_type</code> supports an increment operation; <code>n::value</code> is incrementable</td><td>Increment operation</td><td><code>n::next::value == n::value + 1</code> </td></tr>
-<tr><td><code>typename n::prior</code></td><td>Amortized constant time</td><td><code>n::value_type</code> supports an decrement operation; <code>n::value</code> is decrementable</td><td>Decrement operation</td><td><code>n::next::value == n::value - 1</code> </td></tr>
+<tr><td><code>typename n::prior</code></td><td>Amortized constant time</td><td><code>n::value_type</code> supports an decrement operation; <code>n::value</code> is decrementable</td><td>Decrement operation</td><td><code>n::prior::value == n::value - 1</code> </td></tr>
 </table>
 <p>
 <h3>Models</h3>
 <p>
 <ul>
 <li><code>integral_c</code>
-<li><code>int_c</code>
-<li><code>bool_c</code>
+<li><code>int_</code>
+<li><code>bool_</code>
 </ul>
 <p>
 <h3>See also</h3>
 <p>
-<code><a href="./Reference/next.html">next</a></code>, <code><a href="./Reference/prior.html">prior</a></code>
+<code>next</code>, <code>prior</code>
 <p><hr>
-<a href="./Table_of_Content.html">Table of Content</a><br>Last edited July 17, 2002 7:05 am</body></html>
+<a href="./Table_of_Contents.html">Table of Contents</a><br>Last edited March 10, 2003 4:21 am</body></html>

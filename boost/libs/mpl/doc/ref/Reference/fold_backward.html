@@ -1,8 +1,8 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/fold backward</title>
+<html><head><title>boost::mpl::fold_backward</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>fold_backward</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>fold_backward</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
@@ -24,7 +24,7 @@ Returns the result of the successive application of binary <code>BackwardOp</cod
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/fold_backward.hpp">boost/mpl/fold_backward.hpp</a>"
+#include "<a href="../../../../../boost/mpl/fold_backward.hpp">boost/mpl/fold_backward.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -58,10 +58,10 @@ typedef <a href="../Reference/list_c.html">list_c</a>&lt;int,-1,-7,-2,-5&gt; neg
 typedef fold_backward&lt;
       numbers
     , <a href="../Reference/list_c.html">list_c</a>&lt;int&gt;
-    , if_&lt; <a href="../Reference/less.html">less</a>&lt; _2,int_c&lt;0&gt; &gt;, push_front&lt;_1,_2,&gt;, _1 &gt;
+    , if_&lt; <a href="../Reference/less.html">less</a>&lt; _2,int_&lt;0&gt; &gt;, push_front&lt;_1,_2,&gt;, _1 &gt;
     &gt;::type result;
 <p>
-BOOST_STATIC_ASSERT(<a href="../Reference/equal.html">equal</a>&lt; negatives,result,<a href="../Reference/equal_to.html">equal_to</a>&lt;_,_&gt; &gt;::type::value);
+BOOST_STATIC_ASSERT(<a href="../Reference/equal.html">equal</a>&lt; negatives,result &gt;::type::value);
 </pre>
 <p>
 <h3>Notes</h3>
@@ -72,4 +72,4 @@ BOOST_STATIC_ASSERT(<a href="../Reference/equal.html">equal</a>&lt; negatives,re
 <p>
 <a href="../Algorithms.html">Algorithms</a>, <code><a href="../Reference/fold.html">fold</a></code>, <code><a href="../Reference/iter_fold_backward.html">iter_fold_backward</a></code>, <code><a href="../Reference/iter_fold.html">iter_fold</a></code>, <code><a href="../Reference/copy.html">copy</a></code>, <code><a href="../Reference/copy_backward.html">copy_backward</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 19, 2002 1:58 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited March 12, 2003 6:30 am</body></html>

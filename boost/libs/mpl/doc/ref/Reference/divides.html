@@ -1,16 +1,16 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/divides</title>
+<html><head><title>boost::mpl::divides</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>divides</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>divides</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
       typename T1
-    , typaname T2
-    , typaname T3 = integral_c&lt;int,1&gt;
+    , typename T2
+    , typename T3 = integral_c&lt;int,1&gt;
     , ...
-    , typaname Tn = integral_c&lt;int,1&gt;
+    , typename Tn = integral_c&lt;int,1&gt;
     &gt;
 struct divides
 {
@@ -25,7 +25,7 @@ Returns the quotient of its arguments [<a href="#1">1</a>].
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/arithmetic/divides.hpp">boost/mpl/arithmetic/divides.hpp</a>"
+#include "<a href="../../../../../boost/mpl/divides.hpp">boost/mpl/divides.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -61,4 +61,4 @@ BOOST_MPL_ASSERT_IS_SAME(quot::value_type, long);
 <p>
 <a href="../Metafunctions.html">Metafunctions</a>, <code><a href="../Reference/multiplies.html">multiplies</a></code>, <code><a href="../Reference/modulus.html">modulus</a></code>, <code><a href="../Reference/plus.html">plus</a></code>, <code><a href="../Reference/minus.html">minus</a></code>, <code><a href="../Reference/negate.html">negate</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 17, 2002 4:08 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited March 10, 2003 6:32 am</body></html>

@@ -1,14 +1,14 @@
 <!doctype html public "-//ietf//dtd html//en">
-<html><head><title>boost::mpl::Reference/lower bound</title>
+<html><head><title>boost::mpl::lower_bound</title>
 <link rel="stylesheet" href="../mpl_wiki.css">
 </head><body bgcolor="white">
-<h1><a href="../Table_of_Content.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>lower_bound</h1><h3>Synopsis</h3>
+<h1><a href="../Table_of_Contents.html"><img src="../mpl_logo.jpg" alt="[Home]" border=0 align="right"></a>lower_bound</h1><h3>Synopsis</h3>
 <p>
 <pre>
 template&lt;
       typename Sequence
     , typename T
-    , typename Pred
+    , typename Pred = <a href="../Reference/less.html">less</a>&lt;_,_&gt;
     &gt;
 struct lower_bound
 {
@@ -23,7 +23,7 @@ Returns the first position in the sorted <code>Sequence</code> where <code>T</co
 <h3>Definition</h3>
 <p>
 <pre>
-#include "<a href="../../../../../\boost/mpl/lower_bound.hpp">boost/mpl/lower_bound.hpp</a>"
+#include "<a href="../../../../../boost/mpl/lower_bound.hpp">boost/mpl/lower_bound.hpp</a>"
 </pre>
 <p>
 <h3>Parameters</h3>
@@ -49,12 +49,13 @@ The number of comparisons is logarithmic: at most <code>log(size&lt;Sequence&gt;
 <p>
 <pre>
 typedef <a href="../Reference/list_c.html">list_c</a>&lt;int,1,2,3,3,3,5,8&gt; numbers;
-typedef lower_bound&lt; numbers, int_c&lt;3&gt;, <a href="../Reference/less.html">less</a>&lt;_,_&gt; &gt;::type iter;
+typedef lower_bound&lt; numbers, int_&lt;3&gt; &gt;::type iter;
 BOOST_STATIC_ASSERT((<a href="../Reference/distance.html">distance</a>&lt; <a href="../Reference/begin.html">begin</a>&lt;numbers&gt;::type,iter &gt;::type::value == 2));
+BOOST_STATIC_ASSERT(iter::type::value == 3);
 </pre>
 <p>
 <h3>See also</h3>
 <p>
-<a href="../Algorithms.html">Algorithms</a>, <code><a href="../Reference/sort.html">sort</a></code>, <code><a href="../Reference/upper_bound.html">upper_bound</a></code>
+<a href="../Algorithms.html">Algorithms</a>, <code>sort</code>, <code><a href="../Reference/upper_bound.html">upper_bound</a></code>
 <p><hr>
-<a href="../Table_of_Content.html">Table of Content</a> | <a href="../Reference.html">Reference</a><br>Last edited July 17, 2002 5:13 am</body></html>
+<a href="../Table_of_Contents.html">Table of Contents</a><br>Last edited March 10, 2003 5:43 am</body></html>
