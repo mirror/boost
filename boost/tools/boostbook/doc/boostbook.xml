@@ -135,6 +135,7 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
           <listitem>
             <para>If you have Fink, just get the <code>libxslt</code> and <code>doxygen</code> packages.</para>
             <para>Without Fink, you can <ulink url="http://www.zveno.com/open_source/libxml2xslt.html">download the libxslt binaries</ulink>.</para>
+          </listitem>
         </itemizedlist>
       </listitem>
     </itemizedlist>
