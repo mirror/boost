@@ -17,6 +17,7 @@
 #include <boost/test/test_tools.hpp>
 #include <boost/signal.hpp>
 #include <functional>
+#include <iostream>
 
 template<typename T>
 struct max_or_default {
