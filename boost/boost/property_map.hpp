@@ -135,18 +135,10 @@ namespace boost {
   template <class T>
   inline const T& get(const T* pa, std::ptrdiff_t k) { return pa[k]; }
 
-  // at() is deprecated, going with operator[] for lvalue property maps
-  template <class T>
-  inline T& at(T* pa, std::ptrdiff_t k) { return pa[k]; }
-
-  template <class T>
-  inline const T& at(const T* pa, std::ptrdiff_t k) { return pa[k]; }
-
 #ifndef BOOST_MSVC
 namespace boost {
   using ::put;
   using ::get;
-  using ::at;
 #endif
 
   //=========================================================================
@@ -303,28 +295,21 @@ namespace boost {
   // A helper class for constructing a property map
   // from a class that implements operator[]
 
-  template <class T, class PropertyMap>
-  struct put_get_at_helper { };
+  template <class Ref, class PropertyMap>
+  struct put_get_helper { };
 
-  template <class PropertyMap, class T, class K>
-  inline T 
-  get(const put_get_at_helper<T,PropertyMap>& pa, const K& k)
+  template <class PropertyMap, class Ref, class K>
+  inline Ref
+  get(const put_get_helper<Ref, PropertyMap>& pa, const K& k)
   {
-    T v = static_cast<const PropertyMap&>(pa)[k];
+    Ref v = static_cast<const PropertyMap&>(pa)[k];
     return v;
   }
-  template <class PropertyMap, class T, class K, class V>
+  template <class PropertyMap, class Ref, class K, class V>
   inline void
-  put(put_get_at_helper<T,PropertyMap>& pa, K k, const V& v)
+  put(put_get_helper<Ref, PropertyMap>& pa, K k, const V& v)
   {
     static_cast<PropertyMap&>(pa)[k] = v;
-  }
-  template <class PropertyMap, class T, class K>
-  inline T& 
-  at(put_get_at_helper<T,PropertyMap>& pa, K k)
-  {
-    T& v = static_cast<PropertyMap&>(pa)[k];
-    return v;
   }
 
   //=========================================================================
@@ -340,7 +325,7 @@ namespace boost {
 #endif
      >
   class iterator_property_map
-    : public boost::put_get_at_helper< T, 
+    : public boost::put_get_helper< R, 
         iterator_property_map<RandomAccessIterator, IndexMap,
         T, R> >
   {
@@ -390,8 +375,8 @@ namespace boost {
 
   template <typename UniquePairAssociativeContainer>
   class associative_property_map
-    : public boost::put_get_at_helper<
-       typename UniquePairAssociativeContainer::value_type::second_type,
+    : public boost::put_get_helper<
+       typename UniquePairAssociativeContainer::value_type::second_type&,
        associative_property_map<UniquePairAssociativeContainer> >
   {
     typedef UniquePairAssociativeContainer C;
@@ -417,8 +402,8 @@ namespace boost {
 
   template <typename UniquePairAssociativeContainer>
   class const_associative_property_map
-    : public boost::put_get_at_helper<
-       typename UniquePairAssociativeContainer::value_type::second_type,
+    : public boost::put_get_helper<
+       const typename UniquePairAssociativeContainer::value_type::second_type&,
        const_associative_property_map<UniquePairAssociativeContainer> >
   {
     typedef UniquePairAssociativeContainer C;
@@ -445,12 +430,12 @@ namespace boost {
   //=========================================================================
   // A property map that applies the identity function
   struct identity_property_map
-    : public boost::put_get_at_helper<std::size_t, 
+    : public boost::put_get_helper<std::size_t, 
         identity_property_map>
   {
     typedef void key_type;
     typedef std::size_t value_type; // ? -JGS
-    typedef void reference;
+    typedef std::size_t reference;
     typedef boost::readable_property_map_tag category;
 
     template <class Vertex>
@@ -461,7 +446,7 @@ namespace boost {
   // A property map that does not do anything, for
   // when you have to supply a property map, but don't need it.
   class dummy_property_map 
-    : public boost::put_get_at_helper< int, dummy_property_map  > 
+    : public boost::put_get_helper< const int&, dummy_property_map  > 
   {
   public:
     typedef void key_type; 
