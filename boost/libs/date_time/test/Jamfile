@@ -96,6 +96,16 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
     : : : $(DATE_TIME_PROPERTIES) ]
  ;
 
+   test-suite date_time_wide_streaming
+    :
+   [ run gregorian/testgreg_wstream.cpp
+     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) : test_greg_wstream ]
+   [ run posix_time/testtime_wstream.cpp
+     <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) : test_time_wstream_std_config ]
+   [ run posix_time/testtime_wstream.cpp
+     <lib>../build/boost_date_time : : : <define>BOOST_DATE_TIME_STATIC_LINK  : test_time_wstream ]
+ ;
+
 
 }
 
