@@ -23,7 +23,8 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;BOOST_TEST_NO_AUTO_LINK=1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				GeneratePreprocessedFile="0"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="FALSE"
@@ -42,7 +43,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/libboost_serialization.lib"/>
+				OutputFile="$(OutDir)/libboost_serialization-vc71-mt-gd-1_32.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -328,55 +329,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Archive Implementations"
-			Filter="">
-			<File
-				RelativePath="..\..\..\boost\archive\archive_exception.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\binary_iarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\binary_oarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\polymorphic_binary_iarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\polymorphic_binary_oarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\polymorphic_iarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\polymorphic_oarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\polymorphic_text_iarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\polymorphic_text_oarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\polymorphic_xml_iarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\polymorphic_xml_oarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\text_iarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\text_oarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\xml_iarchive.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\archive\xml_oarchive.hpp">
-			</File>
-		</Filter>
-		<Filter
 			Name="Serialization User Headers"
 			Filter="">
 			<File
@@ -387,15 +339,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\export.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\extended_type_info.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\extended_type_info_no_rtti.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\extended_type_info_typeid.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\is_abstract.hpp">
@@ -426,9 +369,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\version.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\boost\serialization\void_cast.hpp">
 			</File>
 		</Filter>
 		<Filter
@@ -486,15 +426,15 @@
 				RelativePath="..\..\..\boost\serialization\utility.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\variant.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\vector.hpp">
 			</File>
 		</Filter>
 		<Filter
 			Name="Archive Developer Headers"
 			Filter="">
-			<File
-				RelativePath="..\..\..\boost\archive\add_facet.hpp">
-			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\basic_archive.hpp">
 			</File>
@@ -540,6 +480,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\archive_pointer_oserializer.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\detail\auto_link_archive.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\basic_iarchive.hpp">
@@ -603,10 +546,34 @@
 			Name="Utility Headers"
 			Filter="">
 			<File
+				RelativePath="..\..\..\boost\archive\detail\abi_prefix.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\detail\abi_suffix.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\add_facet.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\codecvt_null.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\config.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\detail\decl.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\dinkumware.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\extended_type_info.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\extended_type_info_no_rtti.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\extended_type_info_typeid.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\force_include.hpp">
@@ -630,6 +597,9 @@
 				RelativePath="..\..\..\boost\archive\tmpdir.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\void_cast.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\wcslen.hpp">
 			</File>
 		</Filter>
@@ -643,7 +613,13 @@
 				RelativePath="..\..\..\boost\archive\impl\archive_pointer_oserializer.ipp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_binary_iarchive.ipp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\impl\basic_binary_iprimitive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_binary_oarchive.ipp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\basic_binary_oprimitive.ipp">
@@ -653,6 +629,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\basic_text_iprimitive.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\impl\basic_text_oarchive.ipp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\basic_text_oprimitive.ipp">
@@ -735,7 +714,19 @@
 				RelativePath="..\src\basic_iarchive.cpp">
 			</File>
 			<File
+				RelativePath="..\src\basic_iserializer.cpp">
+			</File>
+			<File
 				RelativePath="..\src\basic_oarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_oserializer.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_pointer_iserializer.cpp">
+			</File>
+			<File
+				RelativePath="..\src\basic_pointer_oserializer.cpp">
 			</File>
 			<File
 				RelativePath="..\src\basic_serializer_map.cpp">
@@ -777,9 +768,6 @@
 				RelativePath="..\src\binary_oarchive.cpp">
 			</File>
 			<File
-				RelativePath="..\src\codecvt_null.cpp">
-			</File>
-			<File
 				RelativePath="..\src\extended_type_info.cpp">
 			</File>
 			<File
@@ -793,6 +781,9 @@
 			</File>
 			<File
 				RelativePath="..\src\polymorphic_oarchive.cpp">
+			</File>
+			<File
+				RelativePath="..\src\stl_port.cpp">
 			</File>
 			<File
 				RelativePath="..\src\text_iarchive.cpp">
@@ -811,6 +802,55 @@
 			</File>
 			<File
 				RelativePath="..\src\xml_oarchive.cpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="Archive Implementations"
+			Filter="">
+			<File
+				RelativePath="..\..\..\boost\archive\archive_exception.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\binary_iarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\binary_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_binary_iarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_binary_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_iarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_text_iarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_text_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_xml_iarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\polymorphic_xml_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\text_iarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\text_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\xml_iarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\xml_oarchive.hpp">
 			</File>
 		</Filter>
 	</Files>

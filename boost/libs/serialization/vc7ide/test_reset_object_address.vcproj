@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_mult_archive_types"
+	Name="test_reset_object_address"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	RootNamespace="test_mult_archive_types"
+	RootNamespace="test_reset_object_address"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -352,7 +352,7 @@
 	</References>
 	<Files>
               <File
-                     RelativePath="..\test\test_mult_archive_types..cpp">
+                     RelativePath="..\test\test_reset_object_address.cpp">
               </File>
 	</Files>
 	<Globals>

@@ -36,10 +36,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/debug/threading-multi/libboost_test_exec_monitor.lib&quot;"
+				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/debug/runtime-link-dynamic&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-dynamic&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/boost_serialization.dll/vc-7_1/debug/runtime-link-dynamic&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool
@@ -94,10 +94,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/release/runtime-link-static/threading-multi/libboost_test_exec_monitor.lib&quot;"
+				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/release/runtime-link-dynamic/threading-multi&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.dll/vc-7_1/release/runtime-link-dynamic/threading-multi&quot;"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -152,10 +152,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-static/&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc-7_1/release/runtime-link-static/&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/release/runtime-link-static/&quot;"
+				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/release/runtime-link-dynamic&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-dynamic&quot;"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -210,10 +210,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/release/threading-multi/libboost_test_exec_monitor.lib&quot;"
+				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/release/runtime-link-dynamic&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/release/runtime-link-dynamic&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/boost_serialization.dll/vc-7_1/release/runtime-link-dynamic&quot;"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -264,10 +264,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/debug/runtime-link-static/libboost_test_exec_monitor.lib&quot;"
+				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/debug/runtime-link-dynamic&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-dynamic&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool
@@ -318,10 +318,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/debug/runtime-link-static/threading-multi/libboost_test_exec_monitor.lib&quot;"
+				AdditionalDependencies="libboost_test_exec_monitor.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories=""
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/debug/runtime-link-dynamic/threading-multi&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-dynamic/threading-multi&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool
@@ -351,12 +351,12 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\src\codecvt_null.cpp">
-		</File>
-		<File
-			RelativePath="..\test\test_codecvt_null.cpp">
-		</File>
+              <File
+                     RelativePath="..\test\test_codecvt_null.cpp">
+              </File>
+              <File
+                     RelativePath="..\test\../src/codecvt_null.cpp">
+              </File>
 	</Files>
 	<Globals>
 	</Globals>

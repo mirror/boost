@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="test_non_intrusive"
+	Name="test_recusion"
 	ProjectGUID="{A7D4CC95-F2AC-11D6-9E47-525400E2CF85}"
-	RootNamespace="test_non_intrusive"
+	RootNamespace="test_recusion"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -1696,7 +1696,7 @@
 	</References>
 	<Files>
               <File
-                     RelativePath="..\test\test_non_intrusive.cpp">
+                     RelativePath="..\test\test_recusion.cpp">
               </File>
 	</Files>
 	<Globals>
