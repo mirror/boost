@@ -18,6 +18,7 @@
 #define BOOST_VARIANT_VARIANT_FWD_HPP
 
 #include "boost/config.hpp"
+#include "boost/detail/workaround.hpp"
 #include "boost/empty_fwd.hpp"
 #include "boost/mpl/arg.hpp"
 #include "boost/mpl/void.hpp"
