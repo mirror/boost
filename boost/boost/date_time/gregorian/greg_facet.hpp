@@ -62,7 +62,7 @@ namespace gregorian {
 
     }
     else { //default to numeric
-      os  << std::setw(2) << std::setfill('0') << m;
+      os  << std::setw(2) << std::setfill('0') << m.as_number();
     }
 
     return os;
