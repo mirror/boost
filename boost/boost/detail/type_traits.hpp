@@ -471,6 +471,9 @@ template <typename T, std::size_t sz> struct is_POD<T[sz]>
 { static const bool value = is_POD<T>::value; };
 
 //
+// Thanks to Andrei Alexandrescu for the original version of this
+// conversion class!
+//
 // is one type convertable to another?
 template <class From, class To>
 struct is_convertible
