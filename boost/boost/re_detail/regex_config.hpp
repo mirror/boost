@@ -338,16 +338,22 @@ Do not change this file unless you really really have to, add options to
 
 #ifdef __sgi // SGI IRIX C++
 #define BOOST_RE_NO_SWPRINTF
-#if defined(__SGI_STL_PORT) && (__SGI_STL_PORT <= 0x400)
+#if defined(__SGI_STL_PORT)
 // STLPort on IRIX is misconfigured: <cwctype> does not compile
 // as a temporary fix include <wctype.h> instead and prevent inclusion
 // of STLPort version of <cwctype>
 #include <wctype.h>
 #define __STLPORT_CWCTYPE
+#define BOOST_RE_NO_WCTYPE_H
 #endif
 #endif
 
-
+#if defined __KCC
+// Kai 3.4 appears to have no wide character string support:
+#   if __KCC_VERSION <= 3499
+#    define BOOST_RE_NO_WCSTRING
+#   endif
+#endif
 
 #endif  // BOOST_RE_AUTO_CONFIGURE
 
@@ -1238,6 +1244,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 
