@@ -14,6 +14,10 @@
 //  GNU C++:
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/gcc.hpp"
 
+# elif defined __COMO__
+//  Comeau C++
+#   define BOOST_COMPILER_CONFIG "boost/config/compiler/comeau.hpp"
+
 #elif defined __KCC
 //  Kai C++
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/kai.hpp"
@@ -58,10 +62,6 @@
 //  IBM Visual Age
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/vacpp.hpp"
 
-# elif defined __COMO__
-//  Comeau C++
-#   define BOOST_COMPILER_CONFIG "boost/config/compiler/comeau.hpp"
-
 #elif defined _MSC_VER
 //  Microsoft Visual C++
 //
@@ -75,3 +75,4 @@
 #  error "Unknown compiler - please configure and report the results to boost.org"
 
 #endif
+
