@@ -94,7 +94,11 @@ namespace boost { namespace detail {
   template <class Number>
   struct is_signed
   {
-      enum { value = (Number(-1) < Number(0)) };
+#if defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(BOOST_MSVC)
+    enum { value = (Number(-1) < Number(0)) };
+#else
+    enum { value = std::numeric_limits<Number>::is_signed };
+#endif
   };
 
 # ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -156,16 +160,16 @@ namespace boost { namespace detail {
 #   endif
    public:
       typedef typename
-      if_true<(x::is_signed
-              && (!x::is_bounded
+      if_true<(!int(x::is_signed)
+              && (!int(x::is_bounded)
                  // digits is the number of no-sign bits
-                  || (x::digits + 1 >= digit_traits<boost::intmax_t>::digits)))>::template then<
+                  || (int(x::digits) + 1 >= digit_traits<boost::intmax_t>::digits)))>::template then<
         Integer,
           
-      typename if_true<(x::digits + 1 < digit_traits<signed int>::digits)>::template then<
+      typename if_true<(int(x::digits) + 1 < digit_traits<signed int>::digits)>::template then<
         signed int,
 
-      typename if_true<(x::digits + 1 < digit_traits<signed long>::digits)>::template then<
+      typename if_true<(int(x::digits) + 1 < digit_traits<signed long>::digits)>::template then<
         signed long,
 
    // else
