@@ -22,7 +22,11 @@
 # define BOOST_ITERATOR_CONFIG_DEF
 #endif 
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)           \
+// We enable this always now.  Otherwise, the simple case in
+// libs/iterator/test/constant_iterator_arrow.cpp fails to compile
+// because the operator-> return is improperly deduced as a non-const
+// pointer.
+#if 1 || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)           \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x531))
 
 // Recall that in general, compilers without partial specialization

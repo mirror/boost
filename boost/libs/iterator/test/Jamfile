@@ -38,6 +38,8 @@ test-suite iterator
     [ compile iterator_archetype_cc.cpp ]
     [ compile-fail iter_archetype_default_ctor.cpp ]
     [ compile-fail lvalue_concept_fail.cpp ]
+    [ compile constant_iterator_arrow.cpp ]
+    [ compile-fail constant_iterator_arrow_fail.cpp ]
     [ run transform_iterator_test.cpp ]
     [ run indirect_iterator_test.cpp ]
     [ compile indirect_iter_member_types.cpp ]
