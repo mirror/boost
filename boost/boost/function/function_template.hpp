@@ -254,6 +254,7 @@ namespace boost {
     {
       typedef internal_result_type type;
     };
+    friend struct sig;
 
 #if BOOST_FUNCTION_NUM_ARGS == 1
     typedef T0 argument_type;
