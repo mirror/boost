@@ -6,6 +6,7 @@
 
 #include <boost/type_traits/object_traits.hpp>
 #include <boost/utility.hpp>
+#include <boost/test/cpp_main.cpp>
 
 #ifdef __BORLANDC__
 #pragma hrdstop
@@ -18,7 +19,7 @@ NESTED_DECL(is_scalar)
 NESTED_DECL(is_compound)
 NESTED_DECL(is_POD)
 
-int main(int argc, char* argv[])
+int cpp_main(int argc, char* argv[])
 {
    NESTED_TEST(is_class, int)
    NESTED_TEST(is_class, UDT)

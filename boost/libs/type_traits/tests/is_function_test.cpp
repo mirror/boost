@@ -5,23 +5,42 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 #include <boost/type_traits.hpp>
+#include <boost/test/cpp_main.cpp>
 #include "boost/type_traits/type_traits_test.hpp"
 
 template <class T>
-#if !defined(__BORLANDC__) && !defined(__sgi) && !defined(__DECCXX) 
-void is_function_test(T& foo)
-#else
-void is_function_test(const T& foo)
-#endif
+struct is_function_tester
 {
-   value_test(true, ::boost::is_function<T>::value);
+   static void check();
+};
+
+template <class T>
+void is_function_tester<T>::check()
+{
+   if(false == ::boost::is_function<T>::value)
+   {
+      // if we're not a function then we must be a
+      // function pointer:
+      value_test(false, ::boost::is_function<T>::value);
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+      value_test(true, ::boost::is_pointer<T>::value);
+#endif
+   }
+   else
+   {
+      // if we're a function then we must not be a
+      // function pointer:
+      value_test(true, ::boost::is_function<T>::value);
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+      value_test(false, ::boost::is_pointer<T>::value);
+#endif
+   }
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    value_test(false, ::boost::is_void<T>::value);
    value_test(false, ::boost::is_integral<T>::value);
    value_test(false, ::boost::is_float<T>::value);
    value_test(false, ::boost::is_arithmetic<T>::value);
    value_test(false, ::boost::is_fundamental<T>::value);
-   value_test(false, ::boost::is_pointer<T>::value);
    value_test(false, ::boost::is_reference<T>::value);
    value_test(false, ::boost::is_member_pointer<T>::value);
    value_test(false, ::boost::is_enum<T>::value);
@@ -39,6 +58,20 @@ void is_function_test(const T& foo)
 #endif
 }
 
+template <class T>
+void is_function_test(T& foo)
+{
+   is_function_tester<T>::check();
+}
+#ifndef BOOST_MSVC
+template <class T>
+void is_function_test(const T& foo)
+{
+   is_function_tester<T>::check();
+}
+#endif
+
+
 void foo0(){}
 void foo1(int){}
 void foo2(int&, double){}
@@ -46,7 +79,7 @@ void foo3(int&, bool, int, int){}
 void foo4(int, bool, int*, int[], int, int, int, int, int){}
 
 
-int main(int argc, char* argv[])
+int cpp_main(int argc, char* argv[])
 {
    is_function_test(foo0);
    is_function_test(foo1);

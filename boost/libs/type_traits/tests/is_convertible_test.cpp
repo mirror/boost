@@ -6,10 +6,11 @@
 
 #include <boost/type_traits/conversion_traits.hpp>
 #include <boost/utility.hpp>
+#include <boost/test/cpp_main.cpp>
 #include "boost/type_traits/type_traits_test.hpp"
 
 
-int main(int argc, char* argv[])
+int cpp_main(int argc, char* argv[])
 {
    value_test(true, (boost::is_convertible<Deriverd,Base>::value));
    value_test(true, (boost::is_convertible<Deriverd,Deriverd>::value));

@@ -5,6 +5,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 
 #include <boost/type_traits/arithmetic_traits.hpp>
+#include <boost/test/cpp_main.cpp>
 #include <boost/utility.hpp>
 
 #ifdef __BORLANDC__
@@ -18,7 +19,7 @@ NESTED_DECL(is_float)
 NESTED_DECL(is_arithmetic)
 NESTED_DECL(is_fundamental)
 
-int main(int argc, char* argv[])
+int cpp_main(int argc, char* argv[])
 {
    NESTED_TEST(is_void, void)
    NESTED_TEST(is_void, int)

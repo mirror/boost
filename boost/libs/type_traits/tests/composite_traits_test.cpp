@@ -6,6 +6,7 @@
 
 #include <boost/type_traits/composite_traits.hpp>
 #include <boost/utility.hpp>
+#include <boost/test/cpp_main.cpp>
 
 #ifdef __BORLANDC__
 #pragma hrdstop
@@ -16,7 +17,7 @@ NESTED_DECL(is_array)
 NESTED_DECL(is_pointer)
 NESTED_DECL(is_reference)
 
-int main(int argc, char* argv[])
+int cpp_main(int argc, char* argv[])
 {
    NESTED_TEST(is_array, int)
    NESTED_TEST(is_array, int[2])

@@ -7,6 +7,7 @@
 #include <boost/type_traits/transform_traits.hpp>
 #include <boost/type_traits/cv_traits.hpp>
 #include <boost/utility.hpp>
+#include <boost/test/cpp_main.cpp>
 
 #ifdef __BORLANDC__
 #pragma hrdstop
@@ -434,7 +435,7 @@ void check_add_volatile()
 }
 
 
-int main(int argc, char* argv[])
+int cpp_main(int argc, char* argv[])
 {
    check_remove_const();
    check_remove_volatile();

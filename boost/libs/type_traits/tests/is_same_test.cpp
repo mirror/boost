@@ -6,13 +6,14 @@
 
 #include <boost/type_traits/same_traits.hpp>
 #include <boost/utility.hpp>
+#include <boost/test/cpp_main.cpp>
 
 #ifdef __BORLANDC__
 #pragma hrdstop
 #endif
 #include "boost/type_traits/type_traits_test.hpp"
 
-int main(int argc, char* argv[])
+int cpp_main(int argc, char* argv[])
 {
    value_test(true, (::boost::is_same<int, int>::value))
    value_test(false, (::boost::is_same<int, const int>::value))

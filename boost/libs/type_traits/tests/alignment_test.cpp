@@ -6,6 +6,7 @@
 
 #include <boost/type_traits/alignment_traits.hpp>
 #include <boost/utility.hpp>
+#include <boost/test/cpp_main.cpp>
 
 #ifdef __BORLANDC__
 #pragma hrdstop
@@ -14,7 +15,7 @@
 
 NESTED_DECL(alignment_of)
 
-int main(int argc, char* argv[])
+int cpp_main(int argc, char* argv[])
 {
    NESTED_TEST(alignment_of, int)
    NESTED_TEST(alignment_of, int_constructible)
