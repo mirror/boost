@@ -199,7 +199,7 @@ enum syntax_element_type
 
 #ifdef BOOST_RE_DEBUG
 // dwa 09/26/00 - This is needed to suppress warnings about an ambiguous conversion
-ostream& operator<<(ostream&, syntax_element_type);
+std::ostream& operator<<(std::ostream&, syntax_element_type);
 #endif
 
 union offset_type

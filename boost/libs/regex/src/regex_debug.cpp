@@ -33,7 +33,7 @@
 #ifdef BOOST_RE_DEBUG
 
 namespace boost { namespace re_detail {
-ostream& operator<<(ostream& s, syntax_element_type x)
+std::ostream& operator<<(std::ostream& s, syntax_element_type x)
 {
     return s << static_cast<unsigned long>(x);
 }
