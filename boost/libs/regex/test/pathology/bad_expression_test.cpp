@@ -24,7 +24,7 @@
 #include <boost/regex.hpp>
 #include <boost/test/test_tools.hpp>
 
-int test_main( int argc, char* argv[] )
+int test_main( int , char* [] )
 {
    std::string bad_text(1024, ' ');
    std::string good_text(200, ' ');

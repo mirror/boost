@@ -15,6 +15,10 @@
 
 #include <boost/regex.hpp>
 #include <boost/concept_archetype.hpp>
+#if defined(BOOST_MSVC)
+// this lets us compile at warning level 4 without seeing concept-check related warnings
+#  pragma warning(disable:4100)
+#endif
 #include <boost/concept_check.hpp>
 #include <boost/detail/workaround.hpp>
 

@@ -24,7 +24,7 @@
 #include <boost/regex.hpp>
 #include <boost/test/test_tools.hpp>
 
-int test_main( int argc, char* argv[] )
+int test_main( int , char* [] )
 {
    // this regex will recurse twice for each whitespace character matched:
    boost::regex e("([[:space:]]|.)+");
