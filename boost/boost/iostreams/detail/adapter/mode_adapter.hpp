@@ -64,28 +64,28 @@ public:
 
     template<typename Sink>
     void write(Sink& snk, const char_type* s, std::streamsize n)
-    { return iostreams::write(t_, snk, s, n); }
+    { iostreams::write(t_, snk, s, n); }
 
     template<typename Device>
-    void seek(Device& dev, std::streamoff off, std::ios::seekdir way)
+    std::streamoff seek(Device& dev, std::streamoff off, std::ios::seekdir way)
     { return iostreams::seek(t_, dev, off, way); }
 
     template<typename Device>
-    void seek( Device& dev, std::streamoff off, std::ios::seekdir way,
-               std::ios::openmode which  )
+    std::streamoff seek( Device& dev, std::streamoff off, std::ios::seekdir way,
+                         std::ios::openmode which  )
     { return iostreams::seek(t_, dev, off, way, which); }
 
     template<typename Device>
     void close(Device& dev)
-    { return iostreams::close(t_, dev); }
+    { iostreams::close(t_, dev); }
 
     template<typename Device>
     void close(Device& dev, std::ios::openmode which)
-    { return iostreams::close(t_, dev, which); }
+    { iostreams::close(t_, dev, which); }
 
     template<typename Locale>
     void imbue(const Locale& loc)
-    { return iostreams::imbue(t_, loc); }
+    { iostreams::imbue(t_, loc); }
 private:
     policy_type t_;
 };
