@@ -138,9 +138,15 @@ namespace quickbook
                     ;
 
                 preformatted =
-                    "pre" >> hard_space                 [assign_a(is_not_preformatted, false)]
+                    "pre" >> hard_space                 [assign_a(is_not_preformatted, 0)]
+                                                        // We don't use 'false' to
+                                                        // workaround a bug with some
+                                                        // compilers' optimizations.
                     >> !eol >> phrase                   [self.actions.preformatted]
-                    >> eps_p                            [assign_a(is_not_preformatted, true)]
+                    >> eps_p                            [assign_a(is_not_preformatted, 1)]
+                                                        // We don't use 'true' to
+                                                        // workaround a bug with some
+                                                        // compilers' optimizations.
                     ;
 
                 def_macro =
