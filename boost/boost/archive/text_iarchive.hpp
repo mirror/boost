@@ -19,8 +19,8 @@
 #include <istream>
 
 #include <boost/config.hpp>
-#include <boost/archive/basic_text_iprimitive.hpp>
 #include <boost/archive/basic_text_iarchive.hpp>
+#include <boost/archive/basic_text_iprimitive.hpp>
 
 namespace boost { 
 namespace archive {
@@ -50,6 +50,12 @@ public:
     #ifndef BOOST_NO_STD_WSTRING
     void load(std::wstring &ws);
     #endif
+    // note: the following should not needed - but one compiler (vc 7.1)
+    // fails to compile one test (test_shared_ptr) without it !!!
+    template<class T>
+    void load_override(T & t, BOOST_PFTO int){
+        basic_text_iarchive<Archive>::load_override(t, 0);
+    }
 protected:
     text_iarchive_impl(std::istream & is, unsigned int flags = 0) :
         basic_text_iprimitive<std::istream>(

@@ -18,8 +18,8 @@
 
 #include <istream>
 #include <boost/config.hpp>
-#include <boost/archive/basic_binary_iprimitive.hpp>
 #include <boost/archive/basic_binary_iarchive.hpp>
+#include <boost/archive/basic_binary_iprimitive.hpp>
 
 namespace boost { 
 namespace archive {
@@ -36,6 +36,10 @@ public:
     friend class basic_binary_iarchive<Archive>;
     friend class load_access;
 #endif
+    template<class T>
+    void load_override(T & t, BOOST_PFTO int){
+        basic_binary_iarchive<Archive>::load_override(t, 0);
+    }
 protected:
     void init(){
         basic_binary_iarchive<Archive>::init();
