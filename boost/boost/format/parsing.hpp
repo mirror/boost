@@ -21,19 +21,26 @@
 #ifndef BOOST_FORMAT_PARSING_HPP
 #define BOOST_FORMAT_PARSING_HPP
 
-#ifdef isdigit
-#undef isdigit
-#endif // many platforms have isdigit as a macro, mixes things up.
+
+#include <boost/format/format_class.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/assert.hpp>
 
 
-
-#include "boost/format/format_class.hpp"
-#include "boost/throw_exception.hpp"
 
 namespace boost {
 namespace io {
 namespace detail {
 
+  template<class Ch, class Tr> inline
+  bool wrap_isdigit(Ch c, BOOST_IO_STD basic_ios<Ch,Tr> &os) 
+  {
+#ifndef BOOST_NO_STD_LOCALE
+    return std::isdigit(c, os.rdbuf()->getloc() );
+#else
+    return isdigit(c);
+#endif // no no-locale
+  } //end- wrap_isdigit(..)
 
   template<class Res, class Ch, class Tr> inline
   Res str2int(const std::basic_string<Ch, Tr>& s, 
@@ -45,11 +52,10 @@ namespace detail {
     // Effects : reads s[start:] and converts digits into an integral n, of type Res
     // Returns : n
   {
-    using namespace std; 
     Res n = 0;
-    while(start<s.size() && isdigit(s[start], os.rdbuf()->getloc() ) ) {
+    while(start<s.size() && wrap_isdigit(s[start], os) ) {
       char cur_ch = os.narrow( s[start], 0);
-      assert(cur_ch != 0 ); // since we called isdigit, this should not happen.
+      BOOST_ASSERT(cur_ch != 0 ); // since we called isdigit, this should not happen.
       n *= 10;
       n += cur_ch - '0'; // 22.2.1.1.2 of the C++ standard
       ++start;
@@ -68,11 +74,11 @@ namespace detail {
     // Returns : nothing
   {
     using namespace std;
-    assert( pos_p != 0);
+    BOOST_ASSERT( pos_p != 0);
     if(*pos_p >= buf.size() ) return;
     if(buf[ *pos_p]==os.widen('*')) {
       ++ (*pos_p);
-      while (*pos_p < buf.size() && isdigit(buf[*pos_p],os.rdbuf()->getloc())) ++(*pos_p);
+      while (*pos_p < buf.size() && wrap_isdigit(buf[*pos_p],os)) ++(*pos_p);
       if(buf[*pos_p]==os.widen('$')) ++(*pos_p);
     }
   }
@@ -103,9 +109,8 @@ namespace detail {
     // Effects : - *pos_p is incremented so that buf[*pos_p] is the first char after the directive
     //           - *fpar is set with the parameters read in the directive
   {
-    using namespace std; // isdigit is better without 'std::' for borland 0x560
     typedef format_item<Ch, Tr>  format_item_t;
-    assert( pos_p != 0);
+    BOOST_ASSERT( pos_p != 0);
     typename std::basic_string<Ch, Tr>::size_type       &i1 = *pos_p,      
                                                         i0; 
     fpar->argN_ = format_item_t::argN_no_posit;  // if no positional-directive
@@ -126,7 +131,7 @@ namespace detail {
 
     // handle argument order (%2$d)  or possibly width specification: %2d
     i0 = i1;  // save position before digits
-    while (i1 < buf.size() && isdigit(buf[i1], os.rdbuf()->getloc()))
+    while (i1 < buf.size() && wrap_isdigit(buf[i1], os))
       ++i1;
     if (i1!=i0) 
       {
@@ -206,7 +211,7 @@ namespace detail {
     // handle width spec
     skip_asterisk(buf, &i1, os); // skips 'asterisk fields' :  *, or *N$
     i0 = i1;  // save position before digits
-    while (i1<buf.size() && isdigit(buf[i1], os.rdbuf()->getloc()))
+    while (i1<buf.size() && wrap_isdigit(buf[i1], os))
       i1++;
     
     if (i1!=i0) 
@@ -223,7 +228,7 @@ namespace detail {
         ++i1;
         skip_asterisk(buf, &i1, os);
         i0 = i1;  // save position before digits
-        while (i1<buf.size() && isdigit(buf[i1], os.rdbuf()->getloc()))
+        while (i1<buf.size() && wrap_isdigit(buf[i1], os))
           ++i1;
 
         if(i1==i0)
@@ -367,7 +372,7 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
       ++i1;
       
       // in case of %N% directives, dont count it double (wastes allocations..) :
-      while(i1 < buf.size() && isdigit(buf[i1],oss_.rdbuf()->getloc())) ++i1;
+      while(i1 < buf.size() && io::detail::wrap_isdigit(buf[i1],oss_)) ++i1;
       if( i1 < buf.size() && buf[i1] == arg_mark ) ++ i1;
 
       ++num_items;
@@ -390,7 +395,7 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
         i1+=2; i0=i1;
         continue; 
       }
-      assert(  static_cast<unsigned int>(cur_it) < items_.size() || cur_it==0);
+      BOOST_ASSERT(  static_cast<unsigned int>(cur_it) < items_.size() || cur_it==0);
 
       if(i1!=i0) piece += buf.substr(i0, i1-i0);
       ++i1;
@@ -412,7 +417,7 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
       ++num_items;
       ++cur_it;
     } // loop on %'s
-    assert(cur_it == num_items);
+    BOOST_ASSERT(cur_it == num_items);
     
     // store the final piece of string
     string_t & piece = (cur_it==0) ? prefix_ : items_[cur_it-1].appendix_;

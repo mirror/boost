@@ -1,6 +1,6 @@
 // -*- C++ -*-
 //  Boost general library 'format'   ---------------------------
-//  See http://www.boost.org/libs/format for documentation.
+//  See http://www.boost.org for updates, documentation, and revision history.
 
 //  (C) Samuel Krempp 2001
 //                  krempp@crans.ens-cachan.fr
@@ -21,20 +21,21 @@
 
 #include <vector>
 #include <string>
-
+#include <sstream>
 
 #include <boost/config.hpp>
 
-
-#include <sstream>
+#include <boost/format/macros_stlport.hpp>  // stlport workarounds
+#include <boost/format/macros_default.hpp> 
 
 #ifndef BOOST_NO_STD_LOCALE
 #include <locale>
+#ifdef isdigit
+#undef isdigit
+#endif // many platforms have isdigit as a macro, mixes things up.
+#else
+#include <ctype.h>  // for isdigit
 #endif //BOOST_NO_STD_LOCALE
-
-
-#include <boost/format/macros_stlport.hpp>  // stlport workarounds
-#include <boost/format/macros_default.hpp> 
 
 
 #if !defined(BOOST_MSVC) || BOOST_MSVC > 1300
