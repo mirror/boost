@@ -453,32 +453,32 @@ public:
    //
    const re_detail::re_syntax_base* get_first_state()const
    {
-      assert(0 != m_pimpl.get());
+      BOOST_ASSERT(0 != m_pimpl.get());
       return m_pimpl->get_first_state();
    }
    unsigned get_restart_type()const
    {
-      assert(0 != m_pimpl.get());
+      BOOST_ASSERT(0 != m_pimpl.get());
       return m_pimpl->get_restart_type();
    }
    const unsigned char* get_map()const
    {
-      assert(0 != m_pimpl.get());
+      BOOST_ASSERT(0 != m_pimpl.get());
       return m_pimpl->get_map();
    }
    const ::boost::regex_traits_wrapper<traits>& get_traits()const
    {
-      assert(0 != m_pimpl.get());
+      BOOST_ASSERT(0 != m_pimpl.get());
       return m_pimpl->get_traits();
    }
    bool can_be_null()const
    {
-      assert(0 != m_pimpl.get());
+      BOOST_ASSERT(0 != m_pimpl.get());
       return m_pimpl->can_be_null();
    }
    const re_detail::regex_data<charT, traits>& get_data()const
    {
-      assert(0 != m_pimpl.get());
+      BOOST_ASSERT(0 != m_pimpl.get());
       return m_pimpl->get_data();
    }
 

@@ -522,7 +522,7 @@ private:
       }
       // we now need to remove a few of the leftmost bits, but how many depends
       // upon how many extra bytes we've extracted:
-      static const boost::uint32_t masks[] = 
+      static const boost::uint32_t masks[4] = 
       {
          0x7Fu,
          0x7FFu,

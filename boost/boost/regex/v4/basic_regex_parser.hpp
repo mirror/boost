@@ -1848,7 +1848,7 @@ bool basic_regex_parser<charT, traits>::add_emacs_code(bool negate)
    if(negate)
       char_set.negate();
 
-   static const charT s_punct[] = { 'p', 'u', 'n', 'c', 't', };
+   static const charT s_punct[5] = { 'p', 'u', 'n', 'c', 't', };
 
    switch(*m_position)
    {

@@ -195,7 +195,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_startmark()
       }
    default:
    {
-      assert(index > 0);
+      BOOST_ASSERT(index > 0);
       if((m_match_flags & match_nosubs) == 0)
       {
          backup_subex<BidiIterator> sub(*m_presult, index);
@@ -499,7 +499,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_char_repeat()
 #pragma option push -w-8008 -w-8066 -w-8004
 #endif
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
-   assert(1 == static_cast<const re_literal*>(rep->next.p)->length);
+   BOOST_ASSERT(1 == static_cast<const re_literal*>(rep->next.p)->length);
    const char_type what = *reinterpret_cast<const char_type*>(static_cast<const re_literal*>(rep->next.p) + 1);
    unsigned count = 0;
    //

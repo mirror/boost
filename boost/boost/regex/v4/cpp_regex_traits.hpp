@@ -665,7 +665,7 @@ void cpp_regex_traits_implementation<charT>::init()
       // Custom class names:
       //
 #ifndef BOOST_REGEX_BUGGY_CTYPE_FACET
-      static const char_class_type masks[] = 
+      static const char_class_type masks[14] = 
       {
          std::ctype<charT>::alnum,
          std::ctype<charT>::alpha,
@@ -683,7 +683,7 @@ void cpp_regex_traits_implementation<charT>::init()
          cpp_regex_traits_implementation<charT>::mask_unicode,
       };
 #else
-      static const char_class_type masks[] = 
+      static const char_class_type masks[14] = 
       {
          ::boost::re_detail::char_class_alnum,
          ::boost::re_detail::char_class_alpha,
@@ -721,7 +721,7 @@ typename cpp_regex_traits_implementation<charT>::char_class_type
    cpp_regex_traits_implementation<charT>::lookup_classname_imp(const charT* p1, const charT* p2) const
 {
 #ifndef BOOST_REGEX_BUGGY_CTYPE_FACET
-   static const char_class_type masks[] = 
+   static const char_class_type masks[20] = 
    {
       0,
       std::ctype<char>::alnum, 
@@ -745,7 +745,7 @@ typename cpp_regex_traits_implementation<charT>::char_class_type
       std::ctype<char>::xdigit,
    };
 #else
-   static const char_class_type masks[] = 
+   static const char_class_type masks[20] = 
    {
       0,
       ::boost::re_detail::char_class_alnum, 
@@ -777,7 +777,7 @@ typename cpp_regex_traits_implementation<charT>::char_class_type
          return pos->second;
    }
    std::size_t id = 1 + re_detail::get_default_class_id(p1, p2);
-   assert(id < sizeof(masks) / sizeof(masks[0]));
+   BOOST_ASSERT(id < sizeof(masks) / sizeof(masks[0]));
    return masks[id];
 }
 

@@ -465,7 +465,7 @@ w32_regex_traits_implementation<charT>::w32_regex_traits_implementation(::boost:
       //
       // Custom class names:
       //
-      static const char_class_type masks[] = 
+      static const char_class_type masks[14] = 
       {
          0x0104u, // C1_ALPHA | C1_DIGIT
          0x0100u, // C1_ALPHA
@@ -500,7 +500,7 @@ template <class charT>
 typename w32_regex_traits_implementation<charT>::char_class_type 
    w32_regex_traits_implementation<charT>::lookup_classname_imp(const charT* p1, const charT* p2) const
 {
-   static const char_class_type masks[] = 
+   static const char_class_type masks[20] = 
    {
       0,
       0x0104u, // C1_ALPHA | C1_DIGIT
@@ -531,7 +531,7 @@ typename w32_regex_traits_implementation<charT>::char_class_type
          return pos->second;
    }
    std::size_t id = 1 + re_detail::get_default_class_id(p1, p2);
-   assert(id < sizeof(masks) / sizeof(masks[0]));
+   BOOST_ASSERT(id < sizeof(masks) / sizeof(masks[0]));
    return masks[id];
 }
 

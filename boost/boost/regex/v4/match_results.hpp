@@ -49,11 +49,11 @@ public:
    typedef typename vector_type::const_iterator                             const_iterator;
    typedef          const_iterator                                          iterator;
    typedef typename re_detail::regex_iterator_traits<
-                                    BidiIterator>::difference_type  difference_type;
+                                    BidiIterator>::difference_type          difference_type;
    typedef typename Allocator::size_type                                    size_type;
    typedef          Allocator                                               allocator_type;
    typedef typename re_detail::regex_iterator_traits<
-                                    BidiIterator>::value_type       char_type;
+                                    BidiIterator>::value_type               char_type;
    typedef          std::basic_string<char_type>                            string_type;
 
    // construct/copy/destroy:
@@ -153,7 +153,7 @@ public:
    string_type format(const string_type& fmt,
                       match_flag_type flags = format_default) const
    {
-      return regex_format<BidiIterator, char_type>(*this, fmt, flags);
+      return ::boost::regex_format(*this, fmt, flags);
    }
    // format with locale:
    template <class OutputIterator, class RegexT>
@@ -208,7 +208,7 @@ public:
    // private access functions:
    void BOOST_REGEX_CALL set_second(BidiIterator i)
    {
-      assert(m_subs.size() > 2);
+      BOOST_ASSERT(m_subs.size() > 2);
       m_subs[2].second = i;
       m_subs[2].matched = true;
       m_subs[0].first = i;
@@ -221,7 +221,7 @@ public:
    void BOOST_REGEX_CALL set_second(BidiIterator i, size_type pos, bool m = true)
    {
       pos += 2;
-      assert(m_subs.size() > pos);
+      BOOST_ASSERT(m_subs.size() > pos);
       m_subs[pos].second = i;
       m_subs[pos].matched = m;
       if(pos == 2)
@@ -274,7 +274,7 @@ public:
    }
    void BOOST_REGEX_CALL set_first(BidiIterator i, size_type pos)
    {
-      assert(pos+2 < m_subs.size());
+      BOOST_ASSERT(pos+2 < m_subs.size());
       if(pos)
          m_subs[pos+2].first = i;
       else

@@ -12,10 +12,10 @@
 #ifndef BOOST_DETAIL_ALLOCATOR_HPP
 #define BOOST_DETAIL_ALLOCATOR_HPP
 
-#include <boost/config.hpp>
 #include <cstdlib>
 #include <new>
-#include <assert.h>
+#include <boost/config.hpp>
+#include <boost/assert.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
 using ::ptrdiff_t;
@@ -133,11 +133,11 @@ public:
    void deallocate(pointer p, size_type n) 
    {
       #ifdef BOOST_HAVE_SGI_ALLOCATOR
-      assert( (p == 0) == (n == 0) );
+      BOOST_ASSERT( (p == 0) == (n == 0) );
       if (p != 0)
          alloc_type::deallocate((void*)p, n);
       #else
-      assert( (p == 0) == (n == 0) );
+      BOOST_ASSERT( (p == 0) == (n == 0) );
       if (p != 0)
          ::operator delete((void*)p);
       #endif
@@ -204,11 +204,11 @@ public:
    void deallocate(pointer p, size_type n) 
    {
       #ifdef BOOST_HAVE_SGI_ALLOCATOR
-      assert( (p == 0) == (n == 0) );
+      BOOST_ASSERT( (p == 0) == (n == 0) );
       if (p != 0)
          alloc_type::deallocate((void*)p, n);
       #else
-      assert( (p == 0) == (n == 0) );
+      BOOST_ASSERT( (p == 0) == (n == 0) );
       if (p != 0)
          ::operator delete((void*)p);
       #endif
@@ -252,7 +252,7 @@ public:
 
    void deallocate(pointer p, size_type n) 
    {
-      assert( (p == 0) == (n == 0) );
+      BOOST_ASSERT( (p == 0) == (n == 0) );
       if (p != 0)
          static_cast<base_type*>(this)->deallocate((void*)p, n * sizeof(value_type));
    }

@@ -246,9 +246,9 @@ basic_regex_creator<charT, traits>::basic_regex_creator(regex_data<charT, traits
    m_pdata->m_status = ::boost::regex_constants::error_ok;
    static const charT w = 'w';
    static const charT s = 's';
-   static const charT l[] = { 'l', 'o', 'w', 'e', 'r', };
-   static const charT u[] = { 'u', 'p', 'p', 'e', 'r', };
-   static const charT a[] = { 'a', 'l', 'p', 'h', 'a', };
+   static const charT l[5] = { 'l', 'o', 'w', 'e', 'r', };
+   static const charT u[5] = { 'u', 'p', 'p', 'e', 'r', };
+   static const charT a[5] = { 'a', 'l', 'p', 'h', 'a', };
    m_word_mask = m_traits.lookup_classname(&w, &w +1);
    m_mask_space = m_traits.lookup_classname(&s, &s +1);
    m_lower_mask = m_traits.lookup_classname(l, l + 5);
@@ -538,7 +538,7 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
          }
          for(unsigned i = 0; i < (1u << CHAR_BIT); ++i)
          {
-            charT c3[] = { static_cast<charT>(i), charT(0), };
+            charT c3[2] = { static_cast<charT>(i), charT(0), };
             string_type s3 = this->m_traits.transform(c3, c3 +1);
             if((s1 <= s3) && (s3 <= s2))
                result->_map[i] = true;

@@ -509,7 +509,7 @@ struct BaseRegexConcept
       ignore_unused_variable_warning(ti4);
       regex_token_iterator_type ti5(m_in, m_in, e, subs, m_mft);
       ignore_unused_variable_warning(ti5);
-      static const int i_array[] = { 1, 2, 3, };
+      static const int i_array[3] = { 1, 2, 3, };
       regex_token_iterator_type ti6(m_in, m_in, e, i_array);
       ignore_unused_variable_warning(ti6);
       regex_token_iterator_type ti7(m_in, m_in, e, i_array, m_mft);
