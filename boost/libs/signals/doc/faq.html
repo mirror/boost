@@ -20,11 +20,30 @@
       than satisfying. Boost.Signals will support thread safety in the
       future.</p>
 
+<h2>Q: How do I get Boost.Signals to work with Qt?</h2>
+<p> When building with Qt, the Moc keywords <code>signals</code> and
+      <code>slots</code> are defined using preprocessor macros,
+      causing programs using Boost.Signals and Qt together to fail to
+      compile. Although this is a problem with Qt and not
+      Boost.Signals, a user can use the two systems together by
+      defining the <code>BOOST_SIGNALS_NAMESPACE</code> macro to some other
+      identifier (e.g., <code>signalslib</code>) when building and
+      using the Boost.Signals library. Then the namespace of the
+      Boost.Signals library will be
+      <code>boost::BOOST_SIGNALS_NAMESPACE</code> instead of
+      <code>boost::signals</code>. To retain the original namespace
+      name in translation units that do not interact with Qt, you can
+      use a namespace alias:</p>
+<pre>
+  namespace boost {
+    namespace signals = BOOST_SIGNALS_NAMESPACE;
+  }
+</pre>
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu"></a></address>
 <!-- Created: Wed Feb 27 23:53:03 EST 2002 -->
 <!-- hhmts start -->
-Last modified: Thu Feb 28 00:05:16 EST 2002
+Last modified: Mon Jun 10 11:55:27 EDT 2002
 <!-- hhmts end -->
   </body>
 </html>
