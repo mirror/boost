@@ -1564,7 +1564,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template <class V>
     class index_pair :
-        private noncopyable,
+        private boost::noncopyable,
         public container_reference<V> {
     public:
         typedef index_pair<V> self_type;
@@ -1572,11 +1572,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         index_pair(V& v, size_type i) :
-            boost::noncopyable (), container_reference<V>(v), i_(i),
+            container_reference<V>(v), i_(i),
             v1_(v.data1_[i]), v2_(v.data2_[i]), dirty_(false) {}
         BOOST_UBLAS_INLINE
         index_pair(const self_type& rhs) :
-            boost::noncopyable (), container_reference<V>(rhs()), i_(rhs.i_),
+            container_reference<V>(rhs()), i_(rhs.i_),
             v1_(rhs.v1_), v2_(rhs.v2_), dirty_(false) {}
         BOOST_UBLAS_INLINE
         ~index_pair() {
@@ -1655,7 +1655,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template <class V1, class V2>
     class index_pair_array:
-        private noncopyable {
+        private boost::noncopyable {
     public:
         typedef index_pair_array<V1, V2> self_type;
         typedef typename V1::value_type value1_type;
@@ -1737,7 +1737,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template <class M>
     class index_triple :
-        private noncopyable,
+        private boost::noncopyable,
         public container_reference<M> {
     public:
         typedef index_triple<M> self_type;
@@ -1745,11 +1745,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         index_triple(M& m, size_type i) :
-            boost::noncopyable (), container_reference<M>(m), i_(i),
+            container_reference<M>(m), i_(i),
             v1_(m.data1_[i]), v2_(m.data2_[i]), v3_(m.data3_[i]), dirty_(false) {}
         BOOST_UBLAS_INLINE
         index_triple(const self_type& rhs) :
-            boost::noncopyable (), container_reference<M>(rhs()), i_(rhs.i_),
+            container_reference<M>(rhs()), i_(rhs.i_),
             v1_(rhs.v1_), v2_(rhs.v2_), v3_(rhs.v3_), dirty_(false) {}
         BOOST_UBLAS_INLINE
         ~index_triple() {
@@ -1833,7 +1833,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template <class V1, class V2, class V3>
     class index_triple_array:
-        private noncopyable {
+        private boost::noncopyable {
     public:
         typedef index_triple_array<V1, V2, V3> self_type;
         typedef typename V1::value_type value1_type;
