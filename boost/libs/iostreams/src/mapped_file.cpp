@@ -270,8 +270,10 @@ void mapped_file_source::open( const std::string& path,
 
     //--------------Create mapping--------------------------------------------//
 
-    void* data = ::mmap( 0, pimpl_->size_,
-                         readonly ? PROT_READ : PROT_WRITE,
+    int prot = ((mode & BOOST_IOS::in) ? PROT_READ : 0) |
+               ((mode & BOOST_IOS::out) ? PROT_WRITE : 0);
+
+    void* data = ::mmap( 0, pimpl_->size_, prot,
                          readonly ? MAP_PRIVATE : MAP_SHARED,
                          pimpl_->handle_, offset );
     if (data == MAP_FAILED) {
