@@ -203,6 +203,7 @@ int cpp_main(int argc, char* argv[])
 #endif
    soft_value_test(true, boost::is_empty<boost::noncopyable>::value)
    soft_value_test(false, boost::is_empty<non_empty>::value)
+   soft_value_test(false, boost::is_empty<const non_empty&>::value)
 
    return check_result(argc, argv);
 }

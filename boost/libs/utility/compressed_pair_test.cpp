@@ -15,6 +15,8 @@
 
 #include <boost/compressed_pair.hpp>
 #include <boost/type_traits/type_traits_test.hpp>
+#define BOOST_INCLUDE_MAIN
+#include <boost/test/test_tools.hpp>
 
 using namespace boost;
 
@@ -54,98 +56,326 @@ struct non_empty2
    { return a.i == b.i; }
 };
 
-int main(int argc, char *argv[ ])
-{
-   compressed_pair<int, double> cp1(1, 1.3);
-   assert(cp1.first() == 1);
-   assert(cp1.second() == 1.3);
-   compressed_pair<int, double> cp1b(2, 2.3);
-   assert(cp1b.first() == 2);
-   assert(cp1b.second() == 2.3);
-   swap(cp1, cp1b);
-   assert(cp1b.first() == 1);
-   assert(cp1b.second() == 1.3);
-   assert(cp1.first() == 2);
-   assert(cp1.second() == 2.3);
-   compressed_pair<non_empty1, non_empty2> cp1c(non_empty1(9));
-   assert(cp1c.second() == non_empty2());
-   assert(cp1c.first() == non_empty1(9));
-   compressed_pair<non_empty1, non_empty2> cp1d(non_empty2(9));
-   assert(cp1d.second() == non_empty2(9));
-   assert(cp1d.first() == non_empty1());
-
-   compressed_pair<int, double> cp1e(cp1);
-
-   compressed_pair<empty_UDT, int> cp2(2);
-   assert(cp2.second() == 2);
-   compressed_pair<int, empty_UDT> cp3(1);
-   assert(cp3.first() ==1);
-   compressed_pair<empty_UDT, empty_UDT> cp4;
-   compressed_pair<empty_UDT, empty_POD_UDT> cp5;
-   compressed_pair<int, empty_UDT> cp9(empty_UDT());
-   compressed_pair<int, empty_UDT> cp10(1);
-   assert(cp10.first() == 1);
-#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES) || !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-   int i = 0;
-   compressed_pair<int&, int&> cp6(i,i);
-   assert(cp6.first() == i);
-   assert(cp6.second() == i);
-   assert(&cp6.first() == &i);
-   assert(&cp6.second() == &i);
-   compressed_pair<int, double[2]> cp7;
-   cp7.first();
-   double* pd = cp7.second();
+#ifdef __GNUC__
+using std::swap;
 #endif
-   soft_value_test(true, (sizeof(compressed_pair<empty_UDT, int>) < sizeof(std::pair<empty_UDT, int>)))
-   soft_value_test(true, (sizeof(compressed_pair<int, empty_UDT>) < sizeof(std::pair<int, empty_UDT>)))
-   soft_value_test(true, (sizeof(compressed_pair<empty_UDT, empty_UDT>) < sizeof(std::pair<empty_UDT, empty_UDT>)))
-   soft_value_test(true, (sizeof(compressed_pair<empty_UDT, empty_POD_UDT>) < sizeof(std::pair<empty_UDT, empty_POD_UDT>)))
-   soft_value_test(true, (sizeof(compressed_pair<empty_UDT, compressed_pair<empty_POD_UDT, int> >) < sizeof(std::pair<empty_UDT, std::pair<empty_POD_UDT, int> >)))
 
-   return check_result(argc, argv);
+template <class T1, class T2>
+struct compressed_pair_tester
+{
+   // define the types we need:
+   typedef T1                                                 first_type;
+   typedef T2                                                 second_type;
+   typedef typename call_traits<first_type>::param_type       first_param_type;
+   typedef typename call_traits<second_type>::param_type      second_param_type;
+   // define our test proc:
+   static void test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4);
+};
+
+template <class T1, class T2>
+void compressed_pair_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+{
+   using std::swap;
+   // default construct:
+   boost::compressed_pair<T1,T2> cp1;
+   // first param construct:
+   boost::compressed_pair<T1,T2> cp2(p1);
+   BOOST_TEST(cp2.first() == p1);
+   cp2.second() = p2;
+   BOOST_TEST(cp2.second() == p2);
+   // second param construct:
+   boost::compressed_pair<T1,T2> cp3(p2);
+   BOOST_TEST(cp3.second() == p2);
+   cp3.first() = p1;
+   BOOST_TEST(cp3.first() == p1);
+   // both param construct:
+   boost::compressed_pair<T1,T2> cp4(p1, p2);
+   BOOST_TEST(cp4.first() == p1);
+   BOOST_TEST(cp4.second() == p2);
+   boost::compressed_pair<T1,T2> cp5(p3, p4);
+   BOOST_TEST(cp5.first() == p3);
+   BOOST_TEST(cp5.second() == p4);
+   // check const members:
+   const boost::compressed_pair<T1,T2>& cpr1 = cp4;
+   BOOST_TEST(cpr1.first() == p1);
+   BOOST_TEST(cpr1.second() == p2);
+
+   // copy construct:
+   boost::compressed_pair<T1,T2> cp6(cp4);
+   BOOST_TEST(cp6.first() == p1);
+   BOOST_TEST(cp6.second() == p2);
+   // assignment:
+   cp1 = cp4;
+   BOOST_TEST(cp1.first() == p1);
+   BOOST_TEST(cp1.second() == p2);
+   cp1 = cp5;
+   BOOST_TEST(cp1.first() == p3);
+   BOOST_TEST(cp1.second() == p4);
+   // swap:
+   cp4.swap(cp5);
+   BOOST_TEST(cp4.first() == p3);
+   BOOST_TEST(cp4.second() == p4);
+   BOOST_TEST(cp5.first() == p1);
+   BOOST_TEST(cp5.second() == p2);
+   swap(cp4,cp5);
+   BOOST_TEST(cp4.first() == p1);
+   BOOST_TEST(cp4.second() == p2);
+   BOOST_TEST(cp5.first() == p3);
+   BOOST_TEST(cp5.second() == p4);
 }
 
 //
-// instanciate some compressed pairs:
-#ifdef __MWERKS__
-template class compressed_pair<int, double>;
-template class compressed_pair<int, int>;
-template class compressed_pair<empty_UDT, int>;
-template class compressed_pair<int, empty_UDT>;
-template class compressed_pair<empty_UDT, empty_UDT>;
-template class compressed_pair<empty_UDT, empty_POD_UDT>;
-#else
-template class boost::compressed_pair<int, double>;
-template class boost::compressed_pair<int, int>;
-template class boost::compressed_pair<empty_UDT, int>;
-template class boost::compressed_pair<int, empty_UDT>;
-template class boost::compressed_pair<empty_UDT, empty_UDT>;
-template class boost::compressed_pair<empty_UDT, empty_POD_UDT>;
-#endif
+// tests for case where one or both 
+// parameters are reference types:
+//
+template <class T1, class T2>
+struct compressed_pair_reference_tester
+{
+   // define the types we need:
+   typedef T1                                                 first_type;
+   typedef T2                                                 second_type;
+   typedef typename call_traits<first_type>::param_type       first_param_type;
+   typedef typename call_traits<second_type>::param_type      second_param_type;
+   // define our test proc:
+   static void test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4);
+};
 
+template <class T1, class T2>
+void compressed_pair_reference_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+{
+   using std::swap;
+   // both param construct:
+   boost::compressed_pair<T1,T2> cp4(p1, p2);
+   BOOST_TEST(cp4.first() == p1);
+   BOOST_TEST(cp4.second() == p2);
+   boost::compressed_pair<T1,T2> cp5(p3, p4);
+   BOOST_TEST(cp5.first() == p3);
+   BOOST_TEST(cp5.second() == p4);
+   // check const members:
+   const boost::compressed_pair<T1,T2>& cpr1 = cp4;
+   BOOST_TEST(cpr1.first() == p1);
+   BOOST_TEST(cpr1.second() == p2);
+
+   // copy construct:
+   boost::compressed_pair<T1,T2> cp6(cp4);
+   BOOST_TEST(cp6.first() == p1);
+   BOOST_TEST(cp6.second() == p2);
+   // assignment:
+   cp4.first() = cp5.first();
+   cp4.second() = cp5.second();
+   BOOST_TEST(cp4.first() == p3);
+   BOOST_TEST(cp4.second() == p4);
+}
+//
+// supplimentary tests for case where first arg only is a reference type:
+//
+template <class T1, class T2>
+struct compressed_pair_reference1_tester
+{
+   // define the types we need:
+   typedef T1                                                 first_type;
+   typedef T2                                                 second_type;
+   typedef typename call_traits<first_type>::param_type       first_param_type;
+   typedef typename call_traits<second_type>::param_type      second_param_type;
+   // define our test proc:
+   static void test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4);
+};
+
+template <class T1, class T2>
+void compressed_pair_reference1_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+{
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#ifndef __MWERKS__
+   // first param construct:
+   boost::compressed_pair<T1,T2> cp2(p1);
+   BOOST_TEST(cp2.first() == p1);
+   cp2.second() = p2;
+   BOOST_TEST(cp2.second() == p2);
+#endif
+}
 //
-// now some for which only a few specific members can be instantiated,
-// first references:
-template double& compressed_pair<double, int&>::first();
-template int& compressed_pair<double, int&>::second();
-#if !(defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ < 95))
-template compressed_pair<double, int&>::compressed_pair(int&);
-#endif
-template compressed_pair<double, int&>::compressed_pair(call_traits<double>::param_type,int&);
+// supplimentary tests for case where second arg only is a reference type:
 //
-// and then arrays:
-#ifndef __BORLANDC__
-template call_traits<int[2]>::reference compressed_pair<double, int[2]>::second();
+template <class T1, class T2>
+struct compressed_pair_reference2_tester
+{
+   // define the types we need:
+   typedef T1                                                 first_type;
+   typedef T2                                                 second_type;
+   typedef typename call_traits<first_type>::param_type       first_param_type;
+   typedef typename call_traits<second_type>::param_type      second_param_type;
+   // define our test proc:
+   static void test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4);
+};
+
+template <class T1, class T2>
+void compressed_pair_reference2_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+{
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+   // second param construct:
+   boost::compressed_pair<T1,T2> cp3(p2);
+   BOOST_TEST(cp3.second() == p2);
+   cp3.first() = p1;
+   BOOST_TEST(cp3.first() == p1);
 #endif
-template call_traits<double>::reference compressed_pair<double, int[2]>::first();
-#if !(defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ < 95))
-template compressed_pair<double, int[2]>::compressed_pair(call_traits<double>::param_type);
-#endif
-template compressed_pair<double, int[2]>::compressed_pair();
-#endif // __MWERKS__
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+}
+
+//
+// tests for where one or the other parameter is an array:
+//
+template <class T1, class T2>
+struct compressed_pair_array1_tester
+{
+   // define the types we need:
+   typedef T1                                                 first_type;
+   typedef T2                                                 second_type;
+   typedef typename call_traits<first_type>::param_type       first_param_type;
+   typedef typename call_traits<second_type>::param_type      second_param_type;
+   // define our test proc:
+   static void test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4);
+};
+
+template <class T1, class T2>
+void compressed_pair_array1_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+{
+   using std::swap;
+   // default construct:
+   boost::compressed_pair<T1,T2> cp1;
+   // second param construct:
+   boost::compressed_pair<T1,T2> cp3(p2);
+   BOOST_TEST(cp3.second() == p2);
+   cp3.first()[0] = p1[0];
+   BOOST_TEST(cp3.first()[0] == p1[0]);
+   // check const members:
+   const boost::compressed_pair<T1,T2>& cpr1 = cp3;
+   BOOST_TEST(cpr1.first()[0] == p1[0]);
+   BOOST_TEST(cpr1.second() == p2);
+
+   BOOST_TEST(sizeof(T1) == sizeof(cp1.first()));
+}
+
+template <class T1, class T2>
+struct compressed_pair_array2_tester
+{
+   // define the types we need:
+   typedef T1                                                 first_type;
+   typedef T2                                                 second_type;
+   typedef typename call_traits<first_type>::param_type       first_param_type;
+   typedef typename call_traits<second_type>::param_type      second_param_type;
+   // define our test proc:
+   static void test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4);
+};
+
+template <class T1, class T2>
+void compressed_pair_array2_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+{
+   // default construct:
+   boost::compressed_pair<T1,T2> cp1;
+   // first param construct:
+   boost::compressed_pair<T1,T2> cp2(p1);
+   BOOST_TEST(cp2.first() == p1);
+   cp2.second()[0] = p2[0];
+   BOOST_TEST(cp2.second()[0] == p2[0]);
+   // check const members:
+   const boost::compressed_pair<T1,T2>& cpr1 = cp2;
+   BOOST_TEST(cpr1.first() == p1);
+   BOOST_TEST(cpr1.second()[0] == p2[0]);
+
+   BOOST_TEST(sizeof(T2) == sizeof(cp1.second()));
+}
+
+template <class T1, class T2>
+struct compressed_pair_array_tester
+{
+   // define the types we need:
+   typedef T1                                                 first_type;
+   typedef T2                                                 second_type;
+   typedef typename call_traits<first_type>::param_type       first_param_type;
+   typedef typename call_traits<second_type>::param_type      second_param_type;
+   // define our test proc:
+   static void test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4);
+};
+
+template <class T1, class T2>
+void compressed_pair_array_tester<T1, T2>::test(first_param_type p1, second_param_type p2, first_param_type p3, second_param_type p4)
+{
+   // default construct:
+   boost::compressed_pair<T1,T2> cp1;
+   cp1.first()[0] = p1[0];
+   BOOST_TEST(cp1.first()[0] == p1[0]);
+   cp1.second()[0] = p2[0];
+   BOOST_TEST(cp1.second()[0] == p2[0]);
+   // check const members:
+   const boost::compressed_pair<T1,T2>& cpr1 = cp1;
+   BOOST_TEST(cpr1.first()[0] == p1[0]);
+   BOOST_TEST(cpr1.second()[0] == p2[0]);
+
+   BOOST_TEST(sizeof(T1) == sizeof(cp1.first()));
+   BOOST_TEST(sizeof(T2) == sizeof(cp1.second()));
+}
+
+int test_main(int argc, char *argv[ ])
+{
+   // declare some variables to pass to the tester:
+   non_empty1 ne1(2);
+   non_empty1 ne2(3);
+   non_empty2 ne3(4);
+   non_empty2 ne4(5);
+   empty_POD_UDT  e1;
+   empty_UDT      e2;
+
+   // T1 != T2, both non-empty
+   compressed_pair_tester<non_empty1,non_empty2>::test(ne1, ne3, ne2, ne4);
+   // T1 != T2, T2 empty
+   compressed_pair_tester<non_empty1,empty_POD_UDT>::test(ne1, e1, ne2, e1);
+   // T1 != T2, T1 empty
+   compressed_pair_tester<empty_POD_UDT,non_empty2>::test(e1, ne3, e1, ne4);
+   // T1 != T2, both empty
+   compressed_pair_tester<empty_POD_UDT,empty_UDT>::test(e1, e2, e1, e2);
+   // T1 == T2, both non-empty
+   compressed_pair_tester<non_empty1,non_empty1>::test(ne1, ne1, ne2, ne2);
+   // T1 == T2, both empty
+   compressed_pair_tester<empty_UDT,empty_UDT>::test(e2, e2, e2, e2);
+
+
+   // test references:
+
+   // T1 != T2, both non-empty
+   compressed_pair_reference_tester<non_empty1&,non_empty2>::test(ne1, ne3, ne2, ne4);
+   compressed_pair_reference_tester<non_empty1,non_empty2&>::test(ne1, ne3, ne2, ne4);
+   compressed_pair_reference1_tester<non_empty1&,non_empty2>::test(ne1, ne3, ne2, ne4);
+   compressed_pair_reference2_tester<non_empty1,non_empty2&>::test(ne1, ne3, ne2, ne4);
+   // T1 != T2, T2 empty
+   compressed_pair_reference_tester<non_empty1&,empty_POD_UDT>::test(ne1, e1, ne2, e1);
+   compressed_pair_reference1_tester<non_empty1&,empty_POD_UDT>::test(ne1, e1, ne2, e1);
+   // T1 != T2, T1 empty
+   compressed_pair_reference_tester<empty_POD_UDT,non_empty2&>::test(e1, ne3, e1, ne4);
+   compressed_pair_reference2_tester<empty_POD_UDT,non_empty2&>::test(e1, ne3, e1, ne4);
+   // T1 == T2, both non-empty
+   compressed_pair_reference_tester<non_empty1&,non_empty1&>::test(ne1, ne1, ne2, ne2);
+
+   // tests arrays:
+   non_empty1 nea1[2];
+   non_empty1 nea2[2];
+   non_empty2 nea3[2];
+   non_empty2 nea4[2];
+   nea1[0] = non_empty1(5);
+   nea2[0] = non_empty1(6);
+   nea3[0] = non_empty2(7);
+   nea4[0] = non_empty2(8);
+   
+   // T1 != T2, both non-empty
+   compressed_pair_array1_tester<non_empty1[2],non_empty2>::test(nea1, ne3, nea2, ne4);
+   compressed_pair_array2_tester<non_empty1,non_empty2[2]>::test(ne1, nea3, ne2, nea4);
+   compressed_pair_array_tester<non_empty1[2],non_empty2[2]>::test(nea1, nea3, nea2, nea4);
+   // T1 != T2, T2 empty
+   compressed_pair_array1_tester<non_empty1[2],empty_POD_UDT>::test(nea1, e1, nea2, e1);
+   // T1 != T2, T1 empty
+   compressed_pair_array2_tester<empty_POD_UDT,non_empty2[2]>::test(e1, nea3, e1, nea4);
+   // T1 == T2, both non-empty
+   compressed_pair_array_tester<non_empty1[2],non_empty1[2]>::test(nea1, nea1, nea2, nea2);
+   return 0;
+}
+
 
 unsigned int expected_failures = 0;
 

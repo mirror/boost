@@ -311,7 +311,7 @@ private:
    typedef ::boost::detail::empty_helper_chooser<
       ::boost::type_traits::ice_and<
          ::boost::type_traits::ice_not< 
-            ::boost::is_convertible<T,int>::value>::value,
+            ::boost::is_reference<T>::value>::value,
          ::boost::type_traits::ice_not< 
             ::boost::is_convertible<T,double>::value>::value,
          ::boost::type_traits::ice_not< 

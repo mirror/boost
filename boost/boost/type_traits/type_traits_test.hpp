@@ -280,8 +280,17 @@ typedef const r_type cr_type;
 # endif // BOOST_MSVC
 
 struct POD_UDT { int x; };
-struct empty_UDT{ ~empty_UDT(){}; };
-struct empty_POD_UDT{};
+struct empty_UDT
+{
+   ~empty_UDT(){};
+   bool operator==(const empty_UDT&)const
+   { return true; }
+};
+struct empty_POD_UDT
+{
+   bool operator==(const empty_POD_UDT&)const
+   { return true; }
+};
 union union_UDT
 {
   int x;
