@@ -37,7 +37,4 @@ void test_matrix_vector ();
 void test_matrix ();
 
 
-// FIXME slice are failing in assignment to zero elements
-#undef USE_SLICE
-
 #endif
