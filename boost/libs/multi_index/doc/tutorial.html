@@ -720,7 +720,16 @@ of Boost.MultiIndex key extractors</a> in the advanced topics section.
 <p>
 
 <p>
-<code>identity</code>, <code>member</code> and <code>const_mem_fun</code> serve
+More complex scenarios may require the use of
+<i>composite keys</i> combining the results of several key extractors.
+Composite keys are supported by Boost.MultiIndex through the
+<a href="advanced_topics.html#composite_keys"><code>composite_key</code></a>
+construct.
+</p>
+
+<p>
+<code>identity</code>, <code>member</code> and <code>const_mem_fun</code>
+(occasionally combined with <code>composite_key</code>) serve
 most common situations in the design of a <code>multi_index_container</code>. However, the
 user is free to provide her own key extractors in more exotic situations, as long as
 these conform to the <a href="reference/key_extraction.html#key_extractors"><code>Key
@@ -1247,7 +1256,7 @@ Advanced topics
 
 <br>
 
-<p>Revised May 28th 2004</p>
+<p>Revised June 2nd 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
