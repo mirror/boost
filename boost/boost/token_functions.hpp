@@ -12,6 +12,8 @@
 
 // Revision History:
 
+// 06 Feb 2002   Jeremy Siek
+//      Added char_separator.
 // 02 Feb 2002   Jeremy Siek
 //      Removed tabs and a little cleanup.
 
@@ -246,9 +248,9 @@ namespace boost{
   public:
     explicit 
     char_separator(const Char* dropped_delims,
-                   const Char* kept_delims = "",
+                   const Char* kept_delims = 0,
                    empty_token_policy empty_tokens = drop_empty_tokens)
-      : m_kept_delims(kept_delims),
+      : m_kept_delims(kept_delims ? kept_delims : string_type()),
         m_dropped_delims(dropped_delims),
         m_use_ispunct(false),
         m_use_isspace(false),
