@@ -101,7 +101,6 @@ namespace program_options {
         option_description& name(const char* name);
 
         std::string m_short_name, m_long_name, m_description;
-        std::string m_default_value, m_default_parameter;
         // shared_ptr is needed to simplify memory management in
         // copy ctor and destructor.
         shared_ptr<const value_semantic> m_value_semantic;
