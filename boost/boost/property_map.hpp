@@ -329,7 +329,7 @@ namespace boost {
         T, R> >
   {
   public:
-    typedef void key_type; 
+    typedef typename property_traits<IndexMap>::key_type key_type;
     typedef T value_type;
     typedef R reference;
     typedef boost::lvalue_property_map_tag category;
@@ -338,8 +338,7 @@ namespace boost {
       RandomAccessIterator cc = RandomAccessIterator(), 
       const IndexMap& _id = IndexMap() ) 
       : iter(cc), index(_id) { }
-    template <class Key>
-    inline R operator[](Key v) const { return *(iter + get(index, v)) ; }
+    inline R operator[](key_type v) const { return *(iter + get(index, v)) ; }
   protected:
     RandomAccessIterator iter;
     IndexMap index;
@@ -383,7 +382,7 @@ namespace boost {
         T, R> >
   {
   public:
-    typedef void key_type; 
+    typedef typename property_traits<IndexMap>::key_type key_type; 
     typedef T value_type;
     typedef R reference;
     typedef boost::lvalue_property_map_tag category;
@@ -393,8 +392,7 @@ namespace boost {
       std::size_t n = 0, 
       const IndexMap& _id = IndexMap() ) 
       : iter(first), n(n), index(_id) { }
-    template <class Key>
-    inline R operator[](Key v) const {
+    inline R operator[](key_type v) const {
       assert(get(index, v) < n);
       return *(iter + get(index, v)) ;
     }
@@ -488,18 +486,17 @@ namespace boost {
   }
 
   //=========================================================================
-  // A property map that applies the identity function
+  // A property map that applies the identity function to integers
   struct identity_property_map
     : public boost::put_get_helper<std::size_t, 
         identity_property_map>
   {
-    typedef void key_type;
-    typedef std::size_t value_type; // ? -JGS
+    typedef std::size_t key_type;
+    typedef std::size_t value_type;
     typedef std::size_t reference;
     typedef boost::readable_property_map_tag category;
 
-    template <class Vertex>
-    inline Vertex operator[](const Vertex& v) const { return v; }
+    inline value_type operator[](const key_type& v) const { return v; }
   };
 
   //=========================================================================
