@@ -8,8 +8,8 @@
 <using-class name="boost::variant"/>
 
 <para>A discriminated union container on some set of types is defined by
-  instantiating the <code><classname>variant</classname></code> class template
-  with the desired types. These types are called
+  instantiating the <code><classname>boost::variant</classname></code> class
+  template with the desired types. These types are called
   <emphasis role="bold">bounded types</emphasis> and are subject to the
   requirements of the
   <link linkend="variant.concepts.bounded-type"><emphasis>BoundedType</emphasis></link>
@@ -18,7 +18,7 @@
   <code><link linkend="variant.macro.BOOST_VARIANT_LIMIT_TYPES">BOOST_VARIANT_LIMIT_TYPES</link></code>).</para>
 
 <para>For example, the following declares a discriminated union container on
-  <code>int</code> and <code>std::string</code>.:
+  <code>int</code> and <code>std::string</code>:
 
 <programlisting><classname>boost::variant</classname>&lt; int, std::string &gt; v;</programlisting>
 
@@ -38,7 +38,7 @@
 
 <para>Now <code>v</code> contains a <code>std::string</code> equal to
   <code>"hello"</code>. We can demonstrate this by
-  <emphasis role="bold">streaming</emphasis> <code>v</code> to standard
+  <emphasis role="bold">streaming</emphasis>&nbsp;<code>v</code> to standard
   output:
 
 <programlisting>std::cout &lt;&lt; v &lt;&lt; std::endl;</programlisting>
@@ -158,7 +158,7 @@ public:
 <para>In addition to enhanced robustness, visitation provides another
   important advantage over <code>get</code>: the ability to write generic
   visitors. For instance, the following visitor will &quot;double&quot; the
-  content of <emphasis>any</emphasis> <code>variant</code> (provided its
+  content of <emphasis>any</emphasis>&nbsp;<code>variant</code> (provided its
   bounded types each support operator+=):
 
 <programlisting>class times_two_generic
