@@ -433,7 +433,7 @@ private:
       <para> <ulink url="http://www.microsoft.com">Microsoft</ulink>
       has introduced the .NET Framework and an associated set of
       languages and language extensions, one of which is the
-      delgate. Delegates are similar to signals and slots, but they
+      delegate. Delegates are similar to signals and slots, but they
       are more limited than most C++ signals and slots implemetations
       in that they:</para>
 
