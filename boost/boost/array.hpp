@@ -11,6 +11,7 @@
  * This software is provided "as is" without express or implied
  * warranty, and with no claim as to its suitability for any purpose.
  *
+ * 23 Aug 2002 - fix for Non-MSVC compilers combined with MSVC libraries.
  * 05 Aug 2001 - minor update (Nico Josuttis)
  * 20 Jan 2001 - STLport fix (Beman Dawes)
  * 29 Sep 2000 - Initial Revision (Nico Josuttis)
@@ -20,7 +21,9 @@
 
 #include <cstddef>
 #include <stdexcept>
-#include <iterator>
+
+// Handles broken standard libraries better than <iterator>
+#include <boost/detail/iterator.hpp>
 #include <algorithm>
 
 // FIXES for broken compilers
