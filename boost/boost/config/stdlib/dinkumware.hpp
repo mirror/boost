@@ -29,10 +29,8 @@
 #     define BOOST_NO_STD_USE_FACET
 #     define BOOST_HAS_TWO_ARG_USE_FACET
 #  endif
-// 3.06 appears to have (non-sgi versions of) <hash_set> & <hash_map>, but no <slist>
-#  if _CPPLIB_VER >= 310
-#    define BOOST_HAS_SLIST
-#  endif
+// 3.06 appears to have (non-sgi versions of) <hash_set> & <hash_map>, 
+// and no <slist> at all
 #else
 #  define BOOST_MSVC_STD_ITERATOR 1
 #  define BOOST_NO_STD_ITERATOR
