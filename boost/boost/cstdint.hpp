@@ -228,9 +228,9 @@ namespace boost
 #    else
 #       error defaults not correct; you must hand modify boost/cstdint.hpp
 #    endif
-# elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
+# elif defined(BOOST_HAS_MS_INT64)
      //
-     // we have Borland/Microsoft __int64:
+     // we have Borland/Intel/Microsoft __int64:
      //
      typedef __int64             intmax_t;
      typedef unsigned __int64    uintmax_t;
