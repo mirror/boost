@@ -92,16 +92,21 @@ public:
                          BOOST_IOS::openmode which, Device* dev )
     { return any_impl::seek(t_, dev, off, way, which); }
 
-    void flush( BOOST_IOSTREAMS_BASIC_STREAMBUF(char_type,                
-                BOOST_IOSTREAMS_CHAR_TRAITS(char_type))* sb )
-    { if (sb) sb->BOOST_IOSTREAMS_PUBSYNC(); }
-
     void close(BOOST_IOS::openmode which)
     { this->close(which, (basic_null_device<char_type, seekable>*) 0); }
 
     template<typename Device>
     void close(BOOST_IOS::openmode which, Device* dev)
     { any_impl::close(t_, dev, which); }
+
+    bool flush( BOOST_IOSTREAMS_BASIC_STREAMBUF(char_type,                
+                BOOST_IOSTREAMS_CHAR_TRAITS(char_type))* sb )
+    { 
+        bool result = any_impl::flush(t_, sb);
+        if (sb) 
+            result = sb->BOOST_IOSTREAMS_PUBSYNC() && result; 
+        return result;
+    }
 
     template<typename Locale> // Avoid dependency on <locale>
     void imbue(const Locale& loc) { iostreams::imbue(t_, loc); }
@@ -142,6 +147,10 @@ struct device_wrapper_impl<any_tag> {
     template<typename Device, typename Dummy>
     static void close(Device& dev, Dummy*, BOOST_IOS::openmode which)
     { iostreams::close(dev, which); }
+
+    template<typename Device, typename Dummy>
+    static bool flush(Device& dev, Dummy*)
+    { return iostreams::flush(dev); }
 };
 
 
@@ -219,6 +228,10 @@ struct flt_wrapper_impl<any_tag> {
     template<typename Filter, typename Device>
     static void close(Filter& f, Device* dev, BOOST_IOS::openmode which)
     { iostreams::close(f, *dev, which); }
+
+    template<typename Filter, typename Device>
+    static bool flush(Filter& f, Device* dev)
+    { return iostreams::flush(f, *dev); }
 };
 
 template<>

@@ -17,6 +17,7 @@
 #ifndef BOOST_NO_STD_LOCALE
 # include <locale>
 #endif
+#include <boost/iostreams/detail/ios.hpp>   
 #include <boost/iostreams/detail/wrap_unwrap.hpp>       
 #include <boost/iostreams/traits.hpp>         
 #include <boost/iostreams/operations.hpp>        

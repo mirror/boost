@@ -71,7 +71,7 @@ public:
     std::streamsize read(char_type* s, std::streamsize n);
     void write(const char_type* s, std::streamsize n);
     off_type seek(off_type off, BOOST_IOS::seekdir way);
-    void flush() { list().front()->BOOST_IOSTREAMS_PUBSYNC(); }
+    bool flush() { return list().front()->BOOST_IOSTREAMS_PUBSYNC(); }
 
     //----------Container interface-------------------------------------------//
 

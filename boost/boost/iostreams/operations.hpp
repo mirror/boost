@@ -16,6 +16,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
+#include <boost/iostreams/detail/streambuf.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/mpl/bool.hpp>
@@ -53,6 +54,8 @@ template<typename T> struct filter_impl;
 template<typename T> struct direct_impl;
 template<typename T> struct seek_impl;
 template<typename T> struct close_impl;
+template<typename T> struct flush_device_impl;
+template<typename T> struct flush_filter_impl;
 template<typename T> struct imbue_impl;
 
 } // End namespace detail.
@@ -118,6 +121,14 @@ template<typename T, typename Sink>
 void close(T& t, Sink& snk, BOOST_IOS::openmode which)
 { detail::close_impl<T>::close(detail::unwrap(t), snk, which); }
 
+template<typename T>
+bool flush(T& t)
+{ return detail::flush_device_impl<T>::flush(detail::unwrap(t)); }
+
+template<typename T, typename Sink>
+bool flush(T& t, Sink& snk)
+{ return detail::flush_filter_impl<T>::flush(detail::unwrap(t), snk); }
+
 template<typename T, typename Locale>
 void imbue(T& t, const Locale& loc)
 { detail::imbue_impl<T>::imbue(detail::unwrap(t), loc); }
@@ -141,33 +152,6 @@ struct read_impl
           >
       >::type
     { };
-
-template<>
-struct read_impl<input> {
-    template<typename T>
-    static typename io_int<T>::type get(T& t)
-    {
-        typedef typename io_char<T>::type               char_type;
-        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
-        char_type c;
-        return t.read(&c, 1) == 1 ?
-            traits_type::to_int_type(c) :
-            traits_type::eof();
-    }
-
-    template<typename T>
-    static std::streamsize
-    read(T& t, typename io_char<T>::type* s, std::streamsize n)
-    { return t.read(s, n); }
-
-    template<typename T>
-    static void putback(T& t, typename io_char<T>::type c)
-    { 
-        typedef typename io_category<T>::type category;
-        BOOST_STATIC_ASSERT((is_convertible<category, peekable_tag>::value)); 
-        t.putback(c);
-    }
-};
 
 template<>
 struct read_impl<istream_tag> {
@@ -201,6 +185,33 @@ struct read_impl<streambuf_tag> {
     { t.sputbackc(c); }
 };
 
+template<>
+struct read_impl<input> {
+    template<typename T>
+    static typename io_int<T>::type get(T& t)
+    {
+        typedef typename io_char<T>::type               char_type;
+        typedef BOOST_IOSTREAMS_CHAR_TRAITS(char_type)  traits_type;
+        char_type c;
+        return t.read(&c, 1) == 1 ?
+            traits_type::to_int_type(c) :
+            traits_type::eof();
+    }
+
+    template<typename T>
+    static std::streamsize
+    read(T& t, typename io_char<T>::type* s, std::streamsize n)
+    { return t.read(s, n); }
+
+    template<typename T>
+    static void putback(T& t, typename io_char<T>::type c)
+    { 
+        typedef typename io_category<T>::type category;
+        BOOST_STATIC_ASSERT((is_convertible<category, peekable_tag>::value)); 
+        t.putback(c);
+    }
+};
+
 //------------------Definition of write_impl----------------------------------//
 
 template<typename T>
@@ -216,18 +227,6 @@ struct write_impl
           >
       >::type
     { };
-
-template<>
-struct write_impl<output> {
-    template<typename T>
-    static void put(T& t, typename io_char<T>::type c)
-    { t.write(&c, 1); }
-
-    template<typename T>
-    static void
-    write(T& t, const typename io_char<T>::type* s, std::streamsize n)
-    { t.write(s, n); }
-};
 
 template<>
 struct write_impl<ostream_tag> {
@@ -251,6 +250,18 @@ struct write_impl<streambuf_tag> {
     static void write
         (T& t, const typename io_char<T>::type* s, std::streamsize n)
     { t.sputn(s, n); }
+};
+
+template<>
+struct write_impl<output> {
+    template<typename T>
+    static void put(T& t, typename io_char<T>::type c)
+    { t.write(&c, 1); }
+
+    template<typename T>
+    static void
+    write(T& t, const typename io_char<T>::type* s, std::streamsize n)
+    { t.write(s, n); }
 };
 
 //------------------Definition of filter_impl---------------------------------//
@@ -350,13 +361,30 @@ struct seek_impl
       >::type
     { };
 
-template<>
-struct seek_impl<any_tag> {
+struct seek_impl_basic_ios {
     template<typename T>
     static std::streamoff seek( T& t, std::streamoff off, 
                                 BOOST_IOS::seekdir way,
-                                BOOST_IOS::openmode )
-    { return static_cast<std::streamoff>(t.seek(off, way)); }
+                                BOOST_IOS::openmode which )
+    { return t.rdbuf()->pubseekoff(off, way, which); }
+};
+
+template<>
+struct seek_impl<iostream_tag> : seek_impl_basic_ios { };
+
+template<>
+struct seek_impl<istream_tag> : seek_impl_basic_ios { };
+
+template<>
+struct seek_impl<ostream_tag> : seek_impl_basic_ios { };
+
+template<>
+struct seek_impl<streambuf_tag> {
+    template<typename T>
+    static std::streamoff seek( T& t, std::streamoff off, 
+                                BOOST_IOS::seekdir way,
+                                BOOST_IOS::openmode which )
+    { return t.pubseekoff(off, way, which); }
 };
 
 template<>
@@ -368,30 +396,13 @@ struct seek_impl<two_head> {
     { return static_cast<std::streamoff>(t.seek(off, way, which)); }
 };
 
-struct seek_impl_basic_ios {
+template<>
+struct seek_impl<any_tag> {
     template<typename T>
     static std::streamoff seek( T& t, std::streamoff off, 
                                 BOOST_IOS::seekdir way,
-                                BOOST_IOS::openmode which )
-    { return t.rdbuf()->pubseekoff(off, way, which); }
-};
-
-template<>
-struct seek_impl<istream_tag> : seek_impl_basic_ios { };
-
-template<>
-struct seek_impl<ostream_tag> : seek_impl_basic_ios { };
-
-template<>
-struct seek_impl<iostream_tag> : seek_impl_basic_ios { };
-
-template<>
-struct seek_impl<streambuf_tag> {
-    template<typename T>
-    static std::streamoff seek( T& t, std::streamoff off, 
-                                BOOST_IOS::seekdir way,
-                                BOOST_IOS::openmode which )
-    { return t.pubseekoff(off, way, which); }
+                                BOOST_IOS::openmode )
+    { return static_cast<std::streamoff>(t.seek(off, way)); }
 };
 
 //------------------Definition of close_impl----------------------------------//
@@ -462,6 +473,80 @@ struct close_impl<two_sequence> {
     template<typename T, typename Sink>
     static void close(T& t, Sink& snk, BOOST_IOS::openmode which)
     { t.close(snk, which); }
+};
+
+//------------------Definition of flush_device_impl---------------------------//
+
+template<typename T>
+struct flush_device_impl 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          flush_device_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, ostream_tag, streambuf_tag, flushable_tag, any_tag
+              >::type
+          >
+      >::type
+    { };
+
+template<>
+struct flush_device_impl<ostream_tag> {
+    template<typename T>
+    static bool flush(T& t)
+    { 
+        bool result;
+        if (!(result = t.flush()))
+            t.clear();
+        return result;
+    }
+};
+
+template<>
+struct flush_device_impl<streambuf_tag> {
+    template<typename T>
+    static bool flush(T& t) { return t.BOOST_IOSTREAMS_PUBSYNC(); }
+};
+
+template<>
+struct flush_device_impl<flushable_tag> {
+    template<typename T>
+    static bool flush(T& t) { return t.flush(); }
+};
+
+template<>
+struct flush_device_impl<any_tag> {
+    template<typename T>
+    static bool flush(T& t) { return false; }
+};
+
+//------------------Definition of flush_impl----------------------------------//
+
+template<typename T>
+struct flush_filter_impl 
+    : mpl::if_<
+          detail::is_custom<T>,
+          operations<T>,
+          flush_filter_impl<
+              BOOST_DEDUCED_TYPENAME 
+              detail::dispatch<
+                  T, flushable_tag, any_tag
+              >::type
+          >
+      >::type
+    { };
+
+template<>
+struct flush_filter_impl<flushable_tag> {
+    template<typename T, typename Sink>
+    static bool flush(T& t, Sink& snk) { return t.flush(snk); }
+};
+
+template<>
+struct flush_filter_impl<any_tag> {
+    template<typename T, typename Sink>
+    static bool flush(T& t, Sink& snk) { return false; }
 };
 
 //------------------Definition of imbue_impl----------------------------------//
