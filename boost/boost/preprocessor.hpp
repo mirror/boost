@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor.hpp">Click here to see the header.</a>
-
-Includes all PREPROCESSOR library headers.
-*/
+/** <p>Includes all Preprocessor library headers.</p> */
 
 #include <boost/preprocessor/arithmetic.hpp>
 #include <boost/preprocessor/assert_msg.hpp>
