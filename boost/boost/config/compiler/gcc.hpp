@@ -26,6 +26,7 @@
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 97
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #     define BOOST_NO_OPERATORS_IN_NAMESPACE
+#     define BOOST_NO_STRINGSTREAM
 #   endif
 
 //
