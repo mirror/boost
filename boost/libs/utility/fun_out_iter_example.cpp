@@ -15,12 +15,18 @@
 
 #include <boost/function_output_iterator.hpp>
 
-struct string_appender {
-  string_appender(std::string& s) : m_str(s) { }
-  void operator()(const std::string& x) const {
-    m_str += x;
-  }
-  std::string& m_str;
+struct string_appender
+{
+    string_appender(std::string& s)
+        : m_str(&s)
+    {}
+    
+    void operator()(const std::string& x) const
+    {
+        *m_str += x;
+    }
+
+    std::string* m_str;
 };
 
 int main(int, char*[])
