@@ -214,7 +214,7 @@ struct signed_tag {};
 // Tests for unsigned numbers. The extra default Number parameter works around
 // an MSVC bug.
 template <class Number>
-void test_aux(unsigned_tag, Number* = 0)
+void test_aux(unsigned_tag, Number*)
 {
     typedef typename boost::detail::numeric_traits<Number>::difference_type difference_type;
     BOOST_STATIC_ASSERT(!boost::detail::is_signed<Number>::value);
@@ -256,7 +256,7 @@ struct in_range_tag {};
 // This test morsel gets executed for numbers whose difference will always be
 // representable in intmax_t
 template <class Number>
-void signed_test(in_range_tag, Number* = 0)
+void signed_test(in_range_tag, Number*)
 {
     BOOST_STATIC_ASSERT(boost::detail::is_signed<Number>::value);
     typedef typename boost::detail::numeric_traits<Number>::difference_type difference_type;
@@ -277,7 +277,7 @@ void signed_test(in_range_tag, Number* = 0)
 // This test morsel gets executed for numbers whose difference may exceed the
 // capacity of intmax_t.
 template <class Number>
-void signed_test(out_of_range_tag, Number* = 0)
+void signed_test(out_of_range_tag, Number*)
 {
     BOOST_STATIC_ASSERT(boost::detail::is_signed<Number>::value);
     typedef typename boost::detail::numeric_traits<Number>::difference_type difference_type;
@@ -301,7 +301,7 @@ void signed_test(out_of_range_tag, Number* = 0)
 }
 
 template <class Number>
-void test_aux(signed_tag, Number* = 0)
+void test_aux(signed_tag, Number*)
 {
     typedef typename boost::detail::numeric_traits<Number>::difference_type difference_type;
     BOOST_STATIC_ASSERT(boost::detail::is_signed<Number>::value);
@@ -328,7 +328,7 @@ void test_aux(signed_tag, Number* = 0)
                           out_of_range_tag
                         >::type
         range_tag;
-    signed_test<Number>(range_tag());
+    signed_test<Number>(range_tag(), 0);
 }
 
 
@@ -358,7 +358,7 @@ void test(Number* = 0)
         boost::detail::is_signed<Number>::value
         >::template then<signed_tag, unsigned_tag>::type signedness;
     
-    test_aux<Number>(signedness());
+    test_aux<Number>(signedness(), 0);
     std::cout << "passed" << std::endl;
 }
 
