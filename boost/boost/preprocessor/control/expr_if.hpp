@@ -17,6 +17,7 @@
 #
 # include <boost/preprocessor/config/config.hpp>
 # include <boost/preprocessor/control/expr_iif.hpp>
+# include <boost/preprocessor/logical/bool.hpp>
 #
 # /* BOOST_PP_EXPR_IF */
 #
