@@ -80,13 +80,16 @@
 
 //
 // Verify that we have actually got BOOST_NO_INTRINSIC_WCHAR_T
-// set correctly:
+// set correctly, if we don't do this now, we will get errors later
+// in type_traits code among other things, getting this correct
+// for the Intel compiler is actually remarkably fragile and tricky:
 //
 #if defined(BOOST_NO_INTRINSIC_WCHAR_T)
 #include <cwchar>
 template< typename T > struct assert_no_intrinsic_wchar_t;
 template<> struct assert_no_intrinsic_wchar_t<wchar_t> { typedef void type; };
-// if you see an error here then you need to unset BOOST_NO_INTRINSIC_WCHAR_T:
+// if you see an error here then you need to unset BOOST_NO_INTRINSIC_WCHAR_T
+// where it is defined above:
 typedef assert_no_intrinsic_wchar_t<unsigned short>::type assert_no_intrinsic_wchar_t_;
 #else
 template< typename T > struct assert_intrinsic_wchar_t;
