@@ -13,7 +13,7 @@
 
 struct convertible_to_anything
 {
-	template<typename T> operator T() { return 0; }
+    template<typename T> operator T() { return 0; }
 };
 
 
@@ -22,10 +22,5 @@ TT_TEST_BEGIN(is_enum)
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_enum<convertible_to_anything>::value, false);
 
 TT_TEST_END
-
-
-
-
-
 
 
