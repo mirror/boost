@@ -22,8 +22,6 @@ include:</para>
 <itemizedlist>
   <listitem>Full value semantics, including adherence to standard
     overload resolution rules for conversion operations.</listitem>
-  <listitem>Minimum strong exception-safety guarantee with respect to
-    container state for all operations.</listitem>
   <listitem>Compile-time type-safe value visitation via
     <code><functionname>boost::apply_visitor</functionname></code>.</listitem>
   <listitem>Run-time checked explicit value retrieval via

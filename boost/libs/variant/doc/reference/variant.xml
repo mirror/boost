@@ -23,10 +23,9 @@
         <simpara><emphasis role="bold">Notes</emphasis>:</simpara>
         <itemizedlist>
           <listitem>All members of <code>variant</code> satisfy at least the
-            strong guarantee of exception-safety with respect to the type of
-            the contained value. That is, a failed operation on a
-            <code>variant</code> will never cause the type of the content to
-            change.</listitem>
+            basic guarantee of exception-safety. That is, all operations on
+            a <code>variant</code> remain defined even after previous
+            operations have failed.</listitem>
           <listitem>Each type specified as a template argument to
             <code>variant</code> must meet the requirements of the
             <emphasis><link linkend="variant.concepts.bounded-type">BoundedType</link></emphasis>

@@ -19,8 +19,8 @@ inspired the library's design.</para>
 
 <para>Anthony Williams suggested the method
     [<link linkend="variant.biblio.wil02">Wil02</link>]
-by which <classname alt="boost::variant"><code>variant</code></classname>
-generally guarantees strong exception-safety.</para>
+by which the current <code>variant</code> implementation generally guarantees
+its &quot;never empty&quot; invariant.</para>
 
 <para>Douglas Gregor, Dave Abrahams, Fernando Cacciola, Brad King, Giovanni
 Bajo, and others provided helpful feedback and suggestions to refine the
