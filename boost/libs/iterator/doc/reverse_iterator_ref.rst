@@ -48,8 +48,8 @@ tag given by the following algorithm.  Let ``T`` be
 ``reverse_iterator`` requirements
 .................................
 
-``Iterator`` must be a model of Bidirectional Traversal Iterator
-and Readable Iterator.
+``Iterator`` must be a model of Bidirectional Traversal Iterator.
+
 
 
 ``reverse_iterator`` models
