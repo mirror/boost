@@ -28,18 +28,11 @@ namespace boost { namespace numeric { namespace ublas {
     BOOST_UBLAS_INLINE
     bool equals (const vector_expression<E1> &e1, const vector_expression<E2> &e2) {
         typedef typename type_traits<typename promote_traits<typename E1::value_type,
-                                                                                     typename E2::value_type>::promote_type>::real_type real_type;
-#ifndef __GNUC__
+                                     typename E2::value_type>::promote_type>::real_type real_type;
         return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
                std::max<real_type> (std::max<real_type> (norm_inf (e1),
                                                          norm_inf (e2)),
                                     BOOST_UBLAS_TYPE_CHECK_MIN);
-#else
-        // GCC 3.1, oops?!
-        return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-               (std::max) (real_type ((std::max) (real_type (norm_inf (e1)), real_type (norm_inf (e2)))),
-                         real_type (BOOST_UBLAS_TYPE_CHECK_MIN));
-#endif
     }
 
 
