@@ -14,9 +14,10 @@
 //  http://www.boost.org/libs/smart_ptr/enable_shared_from_this.html
 //
 
-#include <boost/config.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/assert.hpp>
+#include <boost/config.hpp>
 
 namespace boost
 {
@@ -27,12 +28,16 @@ public:
 
     shared_ptr<T> shared_from_this()
     {
-        return shared_ptr<T>(weak_this);
+        shared_ptr<T> p(weak_this);
+        BOOST_ASSERT(p.get() == this);
+        return p;
     }
 
     shared_ptr<T const> shared_from_this() const
     {
-        return shared_ptr<T const>(weak_this);
+        shared_ptr<T const> p(weak_this);
+        BOOST_ASSERT(p.get() == this);
+        return p;
     }
 
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -43,7 +48,8 @@ private:
 
 #endif
 
-    weak_ptr<T> weak_this;
+    typedef T element_type; // for bcc 5.5.1
+    weak_ptr<element_type> weak_this;
 };
 
 } // namespace boost
