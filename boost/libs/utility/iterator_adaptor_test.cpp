@@ -116,27 +116,21 @@ void more_indirect_iterator_tests()
         iter_set.insert(p);
     }
 
-    typedef boost::indirect_iterator_generator<
-        pointer_deque::iterator
-#ifdef BOOST_NO_STD_ITERATOR_TRAITS
-        , int*
-        , boost::iterator<std::random_access_iterator_tag,int>
-#endif
-        >::type indirect_deque_iterator;
-
-    typedef boost::indirect_iterator_generator<
+    typedef boost::indirect_iterator_pair_generator<
         pointer_deque::iterator,
         const int*
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , boost::iterator<std::random_access_iterator_tag,int,std::ptrdiff_t,const int*,const int&>
+        , int*
+        , boost::iterator<std::random_access_iterator_tag,int> 
 #endif
-        >::type const_indirect_deque_iterator;
+    > IndirectDeque;
 
-    indirect_deque_iterator db(ptr_deque.begin());
-    indirect_deque_iterator de(ptr_deque.end());
+    IndirectDeque::iterator db(ptr_deque.begin());
+    IndirectDeque::iterator de(ptr_deque.end());
     assert(static_cast<std::size_t>(de - db) == store.size());
     assert(db + store.size() == de);
-    const_indirect_deque_iterator dci(db);
+    IndirectDeque::const_iterator dci(db);
     assert(db == dci);
     assert(dci == db);
     assert(dci != de);
