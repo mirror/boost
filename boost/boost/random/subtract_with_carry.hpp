@@ -362,7 +362,10 @@ public:
 # if BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13102292)) && BOOST_MSVC > 1300
       detail::extract_subtract_with_carry_01(is, f, f.carry, f.x, f._modulus);
 # else
-    RealType value;
+    // MSVC (up to 7.1) and Borland (up to 5.64) don't handle the template type
+    // parameter "RealType" available from the class template scope, so use
+    // the member typedef
+    typename subtract_with_carry_01::result_type value;
     for(unsigned int j = 0; j < long_lag; ++j) {
       is >> value >> std::ws;
       f.x[j] = value / f._modulus;
