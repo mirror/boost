@@ -23,7 +23,7 @@ else:
           for s in sources 
         ]
 
-    print 'make %s' % ' '.join(all)
-    syscmd('make %s' % ' '.join(all))
+    print 'make -k %s' % ' '.join(all)
+    syscmd('make -k %s' % ' '.join(all))
 
 

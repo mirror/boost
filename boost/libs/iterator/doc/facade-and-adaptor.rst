@@ -266,6 +266,12 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
   >
   class indirect_iterator;
   
+  template <class Dereferenceable>
+  struct pointee;
+
+  template <class Dereferenceable>
+  struct indirect_reference;
+
   template <class Iterator>
   class reverse_iterator;
 
@@ -351,6 +357,16 @@ Indirect iterator
 -----------------
 
 .. include:: indirect_iterator_abstract.rst
+
+Class template ``pointee``
+....................................
+
+.. include:: pointee_ref.rst
+
+Class template ``indirect_reference``
+.....................................
+
+.. include:: indirect_reference_ref.rst
 
 Class template ``indirect_iterator``
 ....................................

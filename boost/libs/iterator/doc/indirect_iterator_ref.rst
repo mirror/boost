@@ -44,21 +44,21 @@ following pseudo-code.  We use the abbreviation
 ``V=iterator_traits<Iterator>::value_type``.::
 
   if (Value is use_default) then
-      typedef iterator_traits<V>::value_type value_type;
+      typedef remove_const<pointee<V>::type>::type value_type;
   else
       typedef remove_const<Value>::type value_type;
 
   if (Reference is use_default) then
       if (Value is use_default) then
-          typedef iterator_traits<V>::reference reference;
+          typedef indirect_reference<V>::type reference;
       else
           typedef Value& reference;
   else
       typedef Reference reference;
 
-  if (Value is use_default) then
-      typedef iterator_traits<V>::value_type* pointer;
-  else
+  if (Value is use_default) then 
+      typedef pointee<V>::type* pointer;
+  else 
       typedef Value* pointer;
 
   if (Difference is use_default)
@@ -70,7 +70,7 @@ following pseudo-code.  We use the abbreviation
 If ``CategoryOrTraversal`` is not ``use_default`` then
 ``iterator_category`` is ``CategoryOrTraversal``.  Otherwise
 ``iterator_category`` is a type convertible to the tag determined by
-the following algorithm. Let ``C`` be ``traveral_category<Iterator>::type``.
+the following algorithm. Let ``C`` be ``traversal_category<Iterator>::type``.
 
 ::
 
@@ -83,8 +83,6 @@ the following algorithm. Let ``C`` be ``traveral_category<Iterator>::type``.
             forward_iterator_tag
     else
         input_iterator_tag
-
-
 
 
 ``indirect_iterator`` requirements
