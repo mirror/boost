@@ -84,5 +84,9 @@ test-suite regex
       ]
       [ compile concepts/wide_concept_check.cpp
       ]
+      [ run captures/captures_test.cpp captures//boost_regex_extra 
+            ../../test/build//boost_test_exec_monitor
+      : : : <define>BOOST_REGEX_MATCH_EXTRA=1
+      ]
       ;
       
