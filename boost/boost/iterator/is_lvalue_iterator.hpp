@@ -8,8 +8,10 @@
 #include <boost/detail/iterator.hpp>
 #include <boost/iterator.hpp>
 
-// should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
+#include <boost/iterator/detail/any_conversion_eater.hpp>
+
+// should be the last #include
 #include <boost/iterator/detail/config_def.hpp>
 
 namespace boost {
@@ -35,12 +37,6 @@ namespace detail
 # define BOOST_LVALUE_PRESERVER(expr) expr
   
 #endif 
-
-  struct any_conversion_eater
-  {
-      template <class T>
-      any_conversion_eater(T const&);
-  };
 
   // Guts of is_lvalue_iterator.  Value is the iterator's value_type
   // and the result is computed in the nested rebind template.
