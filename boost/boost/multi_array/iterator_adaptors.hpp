@@ -305,8 +305,8 @@ namespace detail {
       >::type type;
   };
 
+# if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_STD_ITERATOR_TRAITS)
 
-# ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
    // Select default pointer and reference types for adapted non-pointer
    // iterators based on the iterator and the value_type. Poor man's partial
@@ -781,7 +781,7 @@ struct iterator_adaptor :
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__BORLANDC__)
     // This is required to prevent a bug in how VC++ generates
-    // the assignment operator for compressed_pairv
+    // the assignment operator for compressed_pair
     iterator_adaptor& operator= (const iterator_adaptor& x) {
         m_iter_p = x.m_iter_p;
         return *this;
