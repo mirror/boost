@@ -12,110 +12,110 @@
 <p> Here <code><i>MAX_ARGS</i></code> is an implementation-defined constant that defines the maximum number of function arguments supported by Boost.Function and will be at least 10. The <code><i>MAX_ARGS</i></code> constant referred to in this document need not have any direct representation in the library.
 
 <pre>
-namespace boost {
-  class <a href="#function_base">function_base</a>
+<b>namespace</b> boost {
+  <b>class</b> <a href="#function_base">function_base</a>
   {
-    <a href="#empty">bool empty() const</a>;
-    <a href="#bool">operator bool() const</a>;
+    <a href="#empty"><b>bool</b> empty() <b>const</b></a>;
+    <a href="#bool"><b>operator</b> <b>bool</b>() <b>const</b></a>;
   };
 
   // For <i>N</i> in [0, <i>MAX_ARGS</i>]
-  template&lt;typename ResultType,
-           typename Arg1,
-	   typename Arg2,
+  <b>template</b>&lt;<b>typename</b> ResultType,
+           <b>typename</b> Arg1,
+	   <b>typename</b> Arg2,
            <i>...</i>
-           typename Arg<i>N</i>,
-	   typename Policy    = empty_function_policy,
-	   typename Mixin     = empty_function_mixin,
-	   typename Allocator = std::allocator&lt;function_base&gt; &gt;
-  class <a href="#functionN">function<i>N</i></a> : public <a href="#function_base">function_base</a>, public Mixin
+           <b>typename</b> Arg<i>N</i>,
+	   <b>typename</b> Policy    = empty_function_policy,
+	   <b>typename</b> Mixin     = empty_function_mixin,
+	   <b>typename</b> Allocator = std::allocator&lt;function_base&gt; &gt;
+  <b>class</b> <a href="#functionN">function<i>N</i></a> : <b>public</b> <a href="#function_base">function_base</a>, <b>public</b> Mixin
   {
-    typedef ResultType result_type;
-    typedef Policy     policy_type;
-    typedef Mixin      mixin_type;
-    typedef Allocator  allocator_type;
+    <b>typedef</b> ResultType result_type;
+    <b>typedef</b> Policy     policy_type;
+    <b>typedef</b> Mixin      mixin_type;
+    <b>typedef</b> Allocator  allocator_type;
 
-    typedef Arg1 argument_type;        <i>// If N == 1</i>
+    <b>typedef</b> Arg1 argument_type;        <i>// If N == 1</i>
 
-    typedef Arg1 first_argument_type;  <i>// If N == 2</i>
-    typedef Arg2 second_argument_type; <i>// If N == 2</i>
+    <b>typedef</b> Arg1 first_argument_type;  <i>// If N == 2</i>
+    <b>typedef</b> Arg2 second_argument_type; <i>// If N == 2</i>
 
     <i>// Construction</i>
-    <a href="#functionN_default">explicit function<i>N</i>(const Mixin& = Mixin())</a>;
-    <a href="#functionN_copy">function<i>N</i>(const function<i>N</i>&)</a>;
-    <a href="#functionN_target">template&lt;typename F&gt; function<i>N</i>(const F&, const Mixin& = Mixin())</a>;
+    <a href="#functionN_default"><b>explicit</b> function<i>N</i>(<b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
+    <a href="#functionN_copy">function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
+    <a href="#functionN_target"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<b>const</b> F<b>&amp;</b>, <b>const</b> Mixin<b>&amp;</b> = Mixin())</a>;
     
     <i>// Assignment</i>
-    <a href="#functionN_copy_assn">function<i>N</i>& operator=(const function<i>N</i>&)</a>;
-    <a href="#functionN_target_assn">template&lt;typename F&gt; function<i>N</i>& operator=(const F&)</a>;
-    <a href="#functionN_copy_set">void set(const function<i>N</i>&)</a>;
-    <a href="#functionN_target_set">template&lt;typename F&gt; void set(const F&)</a>;
-    <a href="#functionN_swap">void swap(function<i>N</i>&)</a>;
-    <a href="#functionN_clear">void clear()</a>;
+    <a href="#functionN_copy_assn">function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
+    <a href="#functionN_target_assn"><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> F<b>&amp;</b>)</a>;
+    <a href="#functionN_copy_set"><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b>)</a>;
+    <a href="#functionN_target_set"><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(<b>const</b> F<b>&amp;</b>)</a>;
+    <a href="#functionN_swap"><b>void</b> swap(function<i>N</i><b>&amp;</b>)</a>;
+    <a href="#functionN_clear"><b>void</b> clear()</a>;
 
     <i>// Invocation</i>
-    <a href="#functionN_call">result_type operator()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>)</a>;
-    <a href="#functionN_call_const">result_type operator()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>) const</a>;
+    <a href="#functionN_call">result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>)</a>;
+    <a href="#functionN_call_const">result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>) <b>const</b></a>;
   };
 
-  template&lt;typename ResultType,
-           typename Arg1,
-	   typename Arg2,
+  <b>template</b>&lt;<b>typename</b> ResultType,
+           <b>typename</b> Arg1,
+	   <b>typename</b> Arg2,
            <i>...</i>
-	   typename Arg<i>N</i>,
-           typename Policy,
-           typename Mixin,
-           typename Allocator&gt;
-  inline void <a href="#swap_functionN">swap</a>(const function&lt;Arg1, Arg2, <i>...</i>Arg<i>N</i>, Policy, Mixin, Allocator&gt;&,
-                   const function&lt;Arg1, Arg2, <i>...</i>Arg<i>N</i>, Policy, Mixin, Allocator&gt;&);
+	   <b>typename</b> Arg<i>N</i>,
+           <b>typename</b> Policy,
+           <b>typename</b> Mixin,
+           <b>typename</b> Allocator&gt;
+  <b>void</b> <a href="#swap_functionN">swap</a>(<b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>,
+            <b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b>);
 
   // For any <i>N</i> in [0, <i>MAX_ARGS</i>]
-  template&lt;typename ResultType,
-           typename Arg1,
-	   typename Arg2,
+  <b>template</b>&lt;<b>typename</b> ResultType,
+           <b>typename</b> Arg1,
+	   <b>typename</b> Arg2,
            <i>...</i>
-           typename Arg<i>N</i>,
-           typename Arg<i>N+1</i> = <i>implementation-defined</i>,
-           typename Arg<i>N+2</i> = <i>implementation-defined</i>,
+           <b>typename</b> Arg<i>N</i>,
+           <b>typename</b> Arg<i>N+1</i> = <i>implementation-defined</i>,
+           <b>typename</b> Arg<i>N+2</i> = <i>implementation-defined</i>,
 	   <i>...</i>
-	   typename Arg<i>MAX_ARGS</i> = <i>implementation-defined</i>&gt;
-  class <a href="#function">function</a> : public <a href="#functionN">function<i>N</i></a>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>&gt;
+	   <b>typename</b> Arg<i>MAX_ARGS</i> = <i>implementation-defined</i>&gt;
+  <b>class</b> <a href="#function">function</a> : <b>public</b> <a href="#functionN">function<i>N</i></a>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>&gt;
   {
     <i>// Construction</i>
     function();
-    function(const function&);
-    function<i>N</i>(const function<i>N</i>&);
-    template&lt;typename F&gt; function<i>N</i>(const F&);
+    function(<b>const</b> function<b>&amp;</b>);
+    function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b>);
+    <b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<b>const</b> F<b>&amp;</b>);
     
     <i>// Assignment</i>
-    function& operator=(const function&);
-    function<i>N</i>& operator=(const function<i>N</i>&);
-    template&lt;typename F&gt; function& operator=(const F&);
-    void set(const function&);
-    void set(const function<i>N</i>&);
-    template&lt;typename F&gt; void set(const F&);
+    function<b>&amp;</b> <b>operator</b>=(<b>const</b> function<b>&amp;</b>);
+    function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b>);
+    <b>template</b>&lt;<b>typename</b> F&gt; function<b>&amp;</b> <b>operator</b>=(<b>const</b> F<b>&amp;</b>);
+    <b>void</b> set(<b>const</b> function<b>&amp;</b>);
+    <b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b>);
+    <b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(<b>const</b> F<b>&amp;</b>);
   };
 
-  template&lt;typename ResultType,
-           typename Arg1,
-	   typename Arg2,
+  <b>template</b>&lt;<b>typename</b> ResultType,
+           <b>typename</b> Arg1,
+	   <b>typename</b> Arg2,
            <i>...</i>
-	   typename Arg<i>MAX_ARGS</i>&gt;
-  inline void <a href="#swap_function">swap</a>(const function&lt;Arg1, Arg2, <i>...</i>Arg<i>MAX_ARGS</i>&gt;&,
-                   const function&lt;Arg1, Arg2, <i>...</i>Arg<i>MAX_ARGS</i>&gt;&);
+	   <b>typename</b> Arg<i>MAX_ARGS</i>&gt;
+  <b>void</b> <a href="#swap_function">swap</a>(<b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b>,
+            <b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b>);
 }	   
 </pre>
 
 <h2><a name="function_base">Class <code>function_base</code></a></h2>
 <p> Class <code>function_base</code> is the common base class for all Boost.Function objects. Objects of type <code>function_base</code> may not be created directly. 
 
-<p> <a name="empty"><code>bool empty() const</code></a>
+<p> <a name="empty"><code><b>bool</b> empty() <b>const</b></code></a>
 <ul>
   <li><b>Returns</b>: <code>true</code> if the function object has a target, <code>false</code> otherwise.</li>
   <li><b>Throws</b>: will not throw.</li>
 </ul>
 
-<p> <a name="bool"><code>operator bool() const</code></a>
+<p> <a name="bool"><code><b>operator</b> <b>bool</b>() <b>const</b></code></a>
 <ul>
   <li><b>Returns</b>: <code>!<a href="#empty">empty</a>()</code></li>
   <li><b>Throws</b>: will not throw.</li>
@@ -124,66 +124,66 @@ namespace boost {
 <h2><a name="functionN">Class template <code>function<i>N</i></code></a></h2>
 <p> Class template <code>function<i>N</i></code> is actually a family of related classes <code>function0</code>, <code>function1</code>, etc., up to some implementation-defined maximum. In this context, <code><i>N</i></code> refers to the number of parameters and <code>f</code> refers to the implicit object parameter.
 
-<p> <a name="functionN_default"><code>explicit function<i>N</i>(const Mixin& = Mixin());</code></a>
+<p> <a name="functionN_default"><code><b>explicit</b> function<i>N</i>(<b>const</b> Mixin<b>&amp;</b> = Mixin());</code></a>
 <ul>
   <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject with the given mixin.</li>
   <li><b>Postconditions</b>: <code>f.<a href="#empty">empty</a>()</code>.</li>
   <li><b>Throws</b>: will not throw.</li>
 </ul>
 
-<p> <a name="functionN_copy"><code>function<i>N</i>(const function<i>N</i>& g);</code></a>
+<p> <a name="functionN_copy"><code>function<i>N</i>(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Postconditions</b>: <code>f</code> contains a copy of the <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for the <code>f</code> is copy-constructed from the mixin of <code>g</code>.</li>
 </ul>
 
-<p> <a name="functionN_target"><code>template&lt;typename F&gt; function<i>N</i>(const F& g, const Mixin& = Mixin());</code></a>
+<p> <a name="functionN_target"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i>(<b>const</b> F<b>&amp;</b> g, <b>const</b> Mixin<b>&amp;</b> = Mixin());</code></a>
 <ul>
   <li><b>Requires</b>: <code>g</code> is a compatible function object.</li>
   <li><b>Effects</b>: Constructs the <code>Mixin</code> subobject from the given mixin.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
-  <li><b>Rationale</b>: <code>g</code> is a reference-to-<code>const</code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code>const</code> pointer-to-function.</li>
+  <li><b>Rationale</b>: <code>g</code> is a reference-to-<code><b>const</b></code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code><b>const</b></code> pointer-to-function.</li>
 </ul>
 
-<p> <a name="functionN_copy_assn"><code>function<i>N</i>& operator=(const function<i>N</i>& g);</code></a>
+<p> <a name="functionN_copy_assn"><code>function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code>'s target, if it has one, or is empty if <code>g.<a href="#empty">empty</a>()</code>. The mixin for <code>f</code> is assigned the value of the mixin for <code>g</code>.</li>
   <li><b>Returns</b>: <code>*this</code>.</li>
 </ul>
 
-<p> <a name="functionN_target_assn"><code>template&lt;typename F&gt; function<i>N</i>& operator=(const F& g);</code></a>
+<p> <a name="functionN_target_assn"><code><b>template</b>&lt;<b>typename</b> F&gt; function<i>N</i><b>&amp;</b> <b>operator</b>=(<b>const</b> F<b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Requires</b>: <code>g</code> is a compatible function object.</li>
   <li><b>Postconditions</b>: <code>f</code> targets a copy of <code>g</code> if <code>g</code> is nonempty, or <code>f.<a href="#empty">empty</a>()</code> if <code>g</code> is empty.</li>
   <li><b>Returns</b>: <code>*this</code>.</li>
-  <li><b>Rationale</b>: <code>g</code> is a reference-to-<code>const</code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code>const</code> pointer-to-function.</li>
+  <li><b>Rationale</b>: <code>g</code> is a reference-to-<code><b>const</b></code> because it is a portable, efficient, and concise way to accept any function object or function pointer. In the case of a function pointer, the type of <code>g</code> is reference-to-<code><b>const</b></code> pointer-to-function.</li>
 </ul>
 
-<p> <a name="functionN_copy_set"><code>void set(const function<i>N</i>& g);</code></a>
+<p> <a name="functionN_copy_set"><code><b>void</b> set(<b>const</b> function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Effects</b>: <code><a href="#functionN_copy_assn">*this = g</a></code>.</li>
 </ul>
 
-<p> <a name="functionN_target_set"><code>template&lt;typename F&gt; void set(const F& g);</code></a>
+<p> <a name="functionN_target_set"><code><b>template</b>&lt;<b>typename</b> F&gt; <b>void</b> set(<b>const</b> F<b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Effects</b>: <code><a href="#functionN_target_assn">*this = g</a></code>.</li>
 </ul>
 
-<p> <a name="functionN_swap"><code>void swap(function<i>N</i>& g);</code></a>
+<p> <a name="functionN_swap"><code><b>void</b> swap(function<i>N</i><b>&amp;</b> g);</code></a>
 <ul>
   <li><b>Effects</b>: interchanges the targets of <code>f</code> and <code>g</code> and swaps the mixins of <code>f</code> and <code>g</code>.</li>
   <li><b>Throws</b>: will not throw.</li>
 </ul>
 
-<p> <a name="functionN_clear"><code>void clear(); </code></a>
+<p> <a name="functionN_clear"><code><b>void</b> clear(); </code></a>
 <ul>
   <li><b>Effects</b>: If <code>!<a href="#empty">empty</a>()</code>, deallocates current target.</li>
   <li><b>Postconditions</b>: <code><a href="#empty">empty</a>()</code>.</li>
 </ul>
 
-<p> <a name="functionN_call"><code> result_type operator()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>);</code></a>
+<p> <a name="functionN_call"><code> result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>);</code></a>
 <ul>
   <li><b>Requires</b>: <code>!<a href="#empty">empty</a>()</code>.</li>
-  <li><b>Effects</b>: <i>target</i> is the underlying function target. It is not <code>const</code> or <code>volatile</code> qualified.
+  <li><b>Effects</b>: <i>target</i> is the underlying function target. It is not <code><b>const</b></code> or <code>volatile</code> qualified.
     <ol>
       <li><code>policy_type policy;</code></li>
       <li><code>policy.precall(this);</code></li>
@@ -193,10 +193,10 @@ namespace boost {
   <li><b>Returns</b>: the value returned by <i>target</i>.</li>
 </ul>
 
-<p> <a name="functionN_call_const"><code> result_type operator()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>) const;</code></a>
+<p> <a name="functionN_call_const"><code> result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>) <b>const</b>;</code></a>
 <ul>
   <li><b>Requires</b>: <code>!<a href="#empty">empty</a>()</code>.</li>
-  <li><b>Effects</b>: <i>const-target</i> is the underlying function target. It is <code>const</code> qualified but not <code>volatile</code> qualified.
+  <li><b>Effects</b>: <i>const-target</i> is the underlying function target. It is <code><b>const</b></code> qualified but not <code>volatile</code> qualified.
     <ol>
       <li><code>policy_type policy;</code></li>
       <li><code>policy.precall(this);</code></li>
@@ -214,16 +214,16 @@ namespace boost {
 <h2><a name="operations">Operations</a></h2>
 <p>
 <pre>
-template&lt;typename ResultType,
-         typename Arg1,
-	 typename Arg2,
+<b>template</b>&lt;<b>typename</b> ResultType,
+         <b>typename</b> Arg1,
+	 <b>typename</b> Arg2,
          <i>...</i>
-	 typename Arg<i>N</i>,
-         typename Policy,
-         typename Mixin,
-         typename Allocator&gt;
-inline void <a name="swap_functionN">swap</a>(const function<i>N</i>&lt;Arg1, Arg2, <i>...</i>Arg<i>N</i>, Policy, Mixin, Allocator&gt;& f,
-                 const function<i>N</i>&lt;Arg1, Arg2, <i>...</i>Arg<i>N</i>, Policy, Mixin, Allocator&gt;& g);
+	 <b>typename</b> Arg<i>N</i>,
+         <b>typename</b> Policy,
+         <b>typename</b> Mixin,
+         <b>typename</b> Allocator&gt;
+<b>void</b> <a name="swap_functionN">swap</a>(<b>const</b> function<i>N</i>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> f,
+          <b>const</b> function<i>N</i>&lt;Arg1, Arg2, <i>...</i>, Arg<i>N</i>, Policy, Mixin, Allocator&gt;<b>&amp;</b> g);
 </pre>
 <ul>
   <li><b>Effects</b>: <code>f.<a href="#functionN_swap">swap</a>(g);</code></li>
@@ -231,13 +231,13 @@ inline void <a name="swap_functionN">swap</a>(const function<i>N</i>&lt;Arg1, Ar
 
 <p>
 <pre>
-template&lt;typename ResultType,
-         typename Arg1,
-	 typename Arg2,
+<b>template</b>&lt;<b>typename</b> ResultType,
+         <b>typename</b> Arg1,
+	 <b>typename</b> Arg2,
          <i>...</i>
-	 typename Arg<i>MAX_ARGS</i>&gt;
-inline void <a name="swap_function">swap</a>(const function&lt;Arg1, Arg2, <i>...</i>Arg<i>MAX_ARGS</i>&gt;& f,
-                 const function&lt;Arg1, Arg2, <i>...</i>Arg<i>MAX_ARGS</i>&gt;& g);
+	 <b>typename</b> Arg<i>MAX_ARGS</i>&gt;
+<b>void</b> <a name="swap_function">swap</a>(<b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b> f,
+          <b>const</b> function&lt;Arg1, Arg2, <i>...</i>, Arg<i>MAX_ARGS</i>&gt;<b>&amp;</b> g);
 </pre>
 <ul>
   <li><b>Effects</b>: <code>f.<a href="#functionN_swap">swap</a>(g);</code></li>
