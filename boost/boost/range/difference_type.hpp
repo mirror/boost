@@ -32,7 +32,7 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
     
     template< typename C >
-    struct difference_type_of
+    struct range_difference
     {
         typedef BOOST_DEDUCED_TYPENAME C::difference_type type;
     };
@@ -42,14 +42,14 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template< typename Iterator >
-    struct difference_type_of< std::pair<Iterator,Iterator> >
+    struct range_difference< std::pair<Iterator,Iterator> >
     {
         typedef BOOST_DEDUCED_TYPENAME 
             iterator_difference<Iterator>::type type;
     };
     
     template< typename Iterator >
-    struct difference_type_of< const std::pair<Iterator,Iterator> >
+    struct range_difference< const std::pair<Iterator,Iterator> >
     {
         typedef BOOST_DEDUCED_TYPENAME 
             iterator_difference<Iterator>::type type;
@@ -61,13 +61,13 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template< typename T, std::size_t sz >
-    struct difference_type_of< T[sz] >
+    struct range_difference< T[sz] >
     {
         typedef std::ptrdiff_t type;
     };
 
     template< typename T, std::size_t sz >
-    struct difference_type_of< const T[sz] >
+    struct range_difference< const T[sz] >
     {
         typedef std::ptrdiff_t type;
     };
@@ -77,25 +77,25 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template<>
-    struct difference_type_of< char* >
+    struct range_difference< char* >
     {
         typedef std::ptrdiff_t type;
     };
 
     template<>
-    struct difference_type_of< wchar_t* >
+    struct range_difference< wchar_t* >
     {
         typedef std::ptrdiff_t type;
     };
 
     template<>
-    struct difference_type_of< const char* >
+    struct range_difference< const char* >
     {
         typedef std::ptrdiff_t type;
     };
 
     template<>
-    struct difference_type_of< const wchar_t* >
+    struct range_difference< const wchar_t* >
     {
         typedef std::ptrdiff_t type;
     };

@@ -15,7 +15,7 @@
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
-#include <boost/range/functions.hpp >
+#include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
@@ -30,14 +30,14 @@ namespace
     // example: extrating bounds in a generic algorithm
     //
     template< typename Range, typename T >
-    inline typename boost::iterator_of<Range>::type
+    inline typename boost::range_iterator<Range>::type
     find( Range& c, const T& value )
     {
        return std::find( boost::begin( c ), boost::end( c ), value );
     }
     
     template< typename Range, typename T >
-    inline typename boost::const_iterator_of<Range>::type 
+    inline typename boost::range_const_iterator<Range>::type 
     find( const Range& c, const T& value )
     {
        return std::find( boost::begin( c ), boost::end( c ), value );
@@ -47,10 +47,10 @@ namespace
     // replace first value and return its index
     //                                
     template< class Range, class T >
-    inline typename boost::size_type_of< Range >::type
+    inline typename boost::range_size<Range>::type
     my_generic_replace( Range& c, const T& value, const T& replacement )
     {
-       typename boost::iterator_of<Range>::type found = find( c, value );
+       typename boost::range_iterator<Range>::type found = find( c, value );
        
        if( found != boost::end( c ) )
            *found = replacement;

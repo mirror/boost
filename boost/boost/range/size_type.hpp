@@ -31,7 +31,7 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
     
     template< typename C >
-    struct size_type_of
+    struct range_size
     {
         typedef BOOST_DEDUCED_TYPENAME C::size_type type;
     };
@@ -41,13 +41,13 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template< typename Iterator >
-    struct size_type_of< std::pair<Iterator,Iterator> >
+    struct range_size< std::pair<Iterator,Iterator> >
     {
         typedef std::size_t type;
     };
     
     template< typename Iterator >
-    struct size_type_of< const std::pair<Iterator,Iterator> >
+    struct range_size< const std::pair<Iterator,Iterator> >
     {
         typedef std::size_t type;
     };
@@ -57,13 +57,13 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template< typename T, std::size_t sz >
-    struct size_type_of< T[sz] >
+    struct range_size< T[sz] >
     {
         typedef std::size_t type;
     };
 
     template< typename T, std::size_t sz >
-    struct size_type_of< const T[sz] >
+    struct range_size< const T[sz] >
     {
         typedef std::size_t type;
     };
@@ -73,25 +73,25 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template<>
-    struct size_type_of< char* >
+    struct range_size< char* >
     {
         typedef std::size_t type;
     };
 
     template<>
-    struct size_type_of< wchar_t* >
+    struct range_size< wchar_t* >
     {
         typedef std::size_t type;
     };
 
     template<>
-    struct size_type_of< const char* >
+    struct range_size< const char* >
     {
         typedef std::size_t type;
     };
 
     template<>
-    struct size_type_of< const wchar_t* >
+    struct range_size< const wchar_t* >
     {
         typedef std::size_t type;
     };

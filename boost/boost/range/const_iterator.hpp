@@ -31,7 +31,7 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
     
     template< typename C >
-    struct const_iterator_of
+    struct range_const_iterator
     {
         typedef BOOST_DEDUCED_TYPENAME C::const_iterator type;
     };
@@ -41,13 +41,13 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template< typename Iterator >
-    struct const_iterator_of< std::pair<Iterator,Iterator> >
+    struct range_const_iterator< std::pair<Iterator,Iterator> >
     {
         typedef Iterator type;
     };
     
     template< typename Iterator >
-    struct const_iterator_of< const std::pair<Iterator,Iterator> >
+    struct range_const_iterator< const std::pair<Iterator,Iterator> >
     {
         typedef Iterator type;
     };
@@ -57,13 +57,13 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template< typename T, std::size_t sz >
-    struct const_iterator_of< T[sz] >
+    struct range_const_iterator< T[sz] >
     {
         typedef const T* type;
     };
 
     template< typename T, std::size_t sz >
-    struct const_iterator_of< const T[sz] >
+    struct range_const_iterator< const T[sz] >
     {
         typedef const T* type;
     };
@@ -73,25 +73,25 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template<>
-    struct const_iterator_of< char* >
+    struct range_const_iterator< char* >
     {
         typedef const char* type;
     };
 
     template<>
-    struct const_iterator_of< wchar_t* >
+    struct range_const_iterator< wchar_t* >
     {
         typedef const wchar_t* type;
     };
 
     template<>
-    struct const_iterator_of< const char* >
+    struct range_const_iterator< const char* >
     {
         typedef const char* type;
     };
 
     template<>
-    struct const_iterator_of< const wchar_t* >
+    struct range_const_iterator< const wchar_t* >
     {
         typedef const wchar_t* type;
     };

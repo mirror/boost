@@ -12,6 +12,7 @@
 #define BOOST_RANGE_DETAIL_VALUE_TYPE_HPP
 
 #include <boost/range/detail/common.hpp>
+#include <boost/type_traits/remove_bounds.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -51,7 +52,7 @@ namespace boost
             template< typename T >
             struct pts
             {
-                typedef void /*dummy*/ type;
+                typedef BOOST_DEDUCED_TYPENAME boost::remove_bounds<T>::type type;
             };
         };
         
@@ -108,7 +109,7 @@ namespace boost
     } 
     
     template< typename C >
-    class value_type_of
+    class range_value
     {
         typedef BOOST_DEDUCED_TYPENAME range_detail::range<C>::type c_type;
     public:

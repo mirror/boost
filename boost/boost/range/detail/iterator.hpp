@@ -110,7 +110,7 @@ namespace boost
     } 
     
     template< typename C >
-    class iterator_of
+    class range_iterator
     {
         typedef BOOST_DEDUCED_TYPENAME range_detail::range<C>::type c_type;
     public:

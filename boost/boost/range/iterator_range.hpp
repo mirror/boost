@@ -221,10 +221,10 @@ namespace boost {
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
         template< typename Range >
-        inline iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<Range>::type >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type >
         make_iterator_range( Range& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<Range>::type >
+            return iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type >
                 ( begin( r ), end( r ) );
         }
 
@@ -235,18 +235,18 @@ namespace boost {
             and end iterators.
         */
         template< class ForwardRange >
-        inline iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<ForwardRange>::type >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type >
         make_iterator_range( ForwardRange& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<ForwardRange>::type >
+            return iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type >
                 ( r );
         }
 
         template< class ForwardRange >
-        inline iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<ForwardRange>::type >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME range_const_iterator<ForwardRange>::type >
         make_iterator_range( const ForwardRange& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<ForwardRange>::type >
+            return iterator_range< BOOST_DEDUCED_TYPENAME range_const_iterator<ForwardRange>::type >
                 ( r );
         }
 #endif

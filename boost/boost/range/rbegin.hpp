@@ -26,26 +26,26 @@ namespace boost
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
 template< class C >
-inline BOOST_DEDUCED_TYPENAME reverse_result_iterator_of<C>::type 
+inline BOOST_DEDUCED_TYPENAME range_reverse_result_iterator<C>::type 
 rbegin( C& c )
 {
-    return BOOST_DEDUCED_TYPENAME reverse_result_iterator_of<C>::type( end( c ) );
+    return BOOST_DEDUCED_TYPENAME range_reverse_result_iterator<C>::type( end( c ) );
 }
 
 #else
 
 template< class C >
-inline BOOST_DEDUCED_TYPENAME reverse_iterator_of<C>::type 
+inline BOOST_DEDUCED_TYPENAME range_reverse_iterator<C>::type 
 rbegin( C& c )
 {
-    return BOOST_DEDUCED_TYPENAME reverse_iterator_of<C>::type( end( c ) );
+    return BOOST_DEDUCED_TYPENAME range_reverse_iterator<C>::type( end( c ) );
 }
 
 template< class C >
-inline BOOST_DEDUCED_TYPENAME const_reverse_iterator_of<C>::type 
+inline BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<C>::type 
 rbegin( const C& c )
 {
-    return BOOST_DEDUCED_TYPENAME const_reverse_iterator_of<C>::type( end( c ) );
+    return BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<C>::type( end( c ) );
 }
 
 #endif

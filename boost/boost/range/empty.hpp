@@ -25,7 +25,7 @@
 
 namespace boost 
 { 
-namespace range 
+namespace range_detail 
 {
 
         //////////////////////////////////////////////////////////////////////
@@ -52,16 +52,16 @@ namespace range
             return s == 0 || s[0] == 0;
         }
         
-} // namespace 'range'
+} // namespace 'range_detail'
 
 template< class T >
 inline bool empty( const T& r )
 {
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
-    using range::empty;
+    using range_detail::empty;
     return empty( r );
 #else
-    return range::empty( r );
+    return range_detail::empty( r );
 #endif
 }
 

@@ -27,10 +27,10 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
     
     template< typename C >
-    struct reverse_iterator_of
+    struct range_reverse_iterator
     {
         typedef reverse_iterator< 
-            BOOST_DEDUCED_TYPENAME iterator_of<C>::type > type;
+            BOOST_DEDUCED_TYPENAME range_iterator<C>::type > type;
     };
     
 

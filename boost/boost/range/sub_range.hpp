@@ -22,17 +22,17 @@ namespace boost
 {
     
     template< class ForwardRange > 
-    class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<ForwardRange>::type > 
+    class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type > 
     {
-        typedef BOOST_DEDUCED_TYPENAME result_iterator_of<ForwardRange>::type iterator_t;
+        typedef BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type iterator_t;
         typedef iterator_range< iterator_t  > base;
         
     public:
-        typedef BOOST_DEDUCED_TYPENAME value_type_of<ForwardRange>::type       value_type;
-        typedef BOOST_DEDUCED_TYPENAME result_iterator_of<ForwardRange>::type  iterator;
-        typedef BOOST_DEDUCED_TYPENAME const_iterator_of<ForwardRange>::type   const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME difference_type_of<ForwardRange>::type  difference_type;
-        typedef BOOST_DEDUCED_TYPENAME size_type_of<ForwardRange>::type        size_type;
+        typedef BOOST_DEDUCED_TYPENAME range_value<ForwardRange>::type            value_type;
+        typedef BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type  iterator;
+        typedef BOOST_DEDUCED_TYPENAME range_const_iterator<ForwardRange>::type   const_iterator;
+        typedef BOOST_DEDUCED_TYPENAME range_difference<ForwardRange>::type       difference_type;
+        typedef BOOST_DEDUCED_TYPENAME range_size<ForwardRange>::type             size_type;
 
     public:
         template< class ForwardRange2 >

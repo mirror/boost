@@ -33,7 +33,7 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
     
     template< typename C >
-    struct value_type_of
+    struct range_value
     {
         typedef BOOST_DEDUCED_TYPENAME C::value_type type;
     };
@@ -43,7 +43,7 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template< typename Iterator >
-    struct value_type_of< std::pair<Iterator,Iterator> >
+    struct range_value< std::pair<Iterator,Iterator> >
     {
         typedef BOOST_DEDUCED_TYPENAME 
             iterator_value<Iterator>::type type;
@@ -51,7 +51,7 @@ namespace boost
     
     
     template< typename Iterator >
-    struct value_type_of< const std::pair<Iterator,Iterator> >
+    struct range_value< const std::pair<Iterator,Iterator> >
     {
         typedef BOOST_DEDUCED_TYPENAME 
             iterator_value<Iterator>::type type;
@@ -62,13 +62,13 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template< typename T, std::size_t sz >
-    struct value_type_of< T[sz] >
+    struct range_value< T[sz] >
     {
         typedef T type;
     };
 
     template< typename T, std::size_t sz >
-    struct value_type_of< const T[sz] >
+    struct range_value< const T[sz] >
     {
         typedef const T type;
     };
@@ -78,25 +78,25 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
 
     template<>
-    struct value_type_of< char* >
+    struct range_value< char* >
     {
         typedef char type;
     };
 
     template<>
-    struct value_type_of< wchar_t* >
+    struct range_value< wchar_t* >
     {
         typedef wchar_t type;
     };
 
     template<>
-    struct value_type_of< const char* >
+    struct range_value< const char* >
     {
         typedef const char type;
     };
 
     template<>
-    struct value_type_of< const wchar_t* >
+    struct range_value< const wchar_t* >
     {
         typedef const wchar_t type;
     };

@@ -27,7 +27,7 @@
 
 namespace boost 
 { 
-namespace range
+namespace range_detail
 {
 
         //////////////////////////////////////////////////////////////////////
@@ -35,14 +35,14 @@ namespace range
         //////////////////////////////////////////////////////////////////////
         
         template< typename C >
-        inline BOOST_DEDUCED_TYPENAME const_iterator_of<C>::type
+        inline BOOST_DEDUCED_TYPENAME range_const_iterator<C>::type
         end( const C& c )
         {
             return c.end();
         }
                 
         template< typename C >
-        inline BOOST_DEDUCED_TYPENAME iterator_of<C>::type
+        inline BOOST_DEDUCED_TYPENAME range_iterator<C>::type
         end( C& c )
         {
             return c.end();
@@ -104,27 +104,27 @@ namespace range
             return range_detail::str_end( s );
         }
         
-} // namespace 'range'
+} // namespace 'range_detail'
 
 template< class T >
-inline BOOST_DEDUCED_TYPENAME iterator_of<T>::type end( T& r )
+inline BOOST_DEDUCED_TYPENAME range_iterator<T>::type end( T& r )
 {
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    using range::end;
+    using range_detail::end;
     return end( r );
 #else
-    return range::end( r );
+    return range_detail::end( r );
 #endif
 }
 
 template< class T >
-inline BOOST_DEDUCED_TYPENAME const_iterator_of<T>::type end( const T& r )
+inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type end( const T& r )
 {
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    using range::end;
+    using range_detail::end;
     return end( r );
 #else
-    return range::end( r );
+    return range_detail::end( r );
 #endif
 }
 

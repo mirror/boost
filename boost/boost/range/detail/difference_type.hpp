@@ -108,7 +108,7 @@ namespace boost
     } 
     
     template< typename C >
-    class difference_type_of
+    class range_difference
     {
         typedef BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type c_type;
     public:

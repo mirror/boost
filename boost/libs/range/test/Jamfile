@@ -82,7 +82,7 @@ test-suite range
         : adl_conformance
        ] 
      [ run
-             adl_conformance_no_using_declaration.cpp    
+             adl_conformance_no_using.cpp    
             : :
         :
         : adl_conformance_no_using_declaration

@@ -28,14 +28,14 @@
 #include <algorithm>
 
 template< typename Container, typename T >
-BOOST_DEDUCED_TYPENAME boost::iterator_of<Container>::type
+BOOST_DEDUCED_TYPENAME boost::range_iterator<Container>::type
 find( Container& c,  T value )
 {
     return std::find( boost::begin( c ), boost::end( c ), value );
 }
 
 template< typename Container, typename T >
-BOOST_DEDUCED_TYPENAME boost::const_iterator_of<Container>::type
+BOOST_DEDUCED_TYPENAME boost::range_const_iterator<Container>::type
 find( const Container& c, T value )
 {
     return std::find( boost::begin( c ), boost::end( c ), value );
@@ -59,28 +59,28 @@ void check_char()
     const unsigned   my_string_length = 14;
 
     
-    BOOST_STATIC_ASSERT(( is_same<  value_type_of<char_iterator_t>::type, 
+    BOOST_STATIC_ASSERT(( is_same<  range_value<char_iterator_t>::type, 
                                     detail::iterator_traits<char_iterator_t>::value_type>::value ));
-    BOOST_STATIC_ASSERT(( is_same<  iterator_of<char_iterator_t>::type, char_iterator_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  const_iterator_of<char_iterator_t>::type, const char* >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  difference_type_of<char_iterator_t>::type,                           
+    BOOST_STATIC_ASSERT(( is_same<  range_iterator<char_iterator_t>::type, char_iterator_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  range_const_iterator<char_iterator_t>::type, const char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  range_difference<char_iterator_t>::type,                           
                                     ::std::ptrdiff_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  size_type_of<char_iterator_t>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<char_iterator_t>::type, char_iterator_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<const char*>::type, const char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  range_size<char_iterator_t>::type, std::size_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  range_result_iterator<char_iterator_t>::type, char_iterator_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same<  range_result_iterator<const char*>::type, const char* >::value ));
     //
     // note: why does is_same<  result_iterator<const char_iterator_t>::type, const char* >::value
     // fail?!?
     
-    BOOST_STATIC_ASSERT(( is_same<  value_type_of<char_array_t>::type, 
+    BOOST_STATIC_ASSERT(( is_same< range_value<char_array_t>::type, 
                                     char>::value ));
-    BOOST_STATIC_ASSERT(( is_same<  iterator_of<char[10]>::type, char* >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  const_iterator_of<char[10]>::type, const char* >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  difference_type_of<char_array_t>::type,                           
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<char[10]>::type, char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<char[10]>::type, const char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_difference<char_array_t>::type,                           
                                     ::std::ptrdiff_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  size_type_of<char_array_t>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<char[10]>::type, char* >::value ));
-    BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<const char[10]>::type, const char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_size<char_array_t>::type, std::size_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<char[10]>::type, char* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const char[10]>::type, const char* >::value ));
 
     BOOST_CHECK_EQUAL( begin( char_s ), char_s );
     std::size_t sz = size( char_s );
@@ -90,8 +90,8 @@ void check_char()
     BOOST_CHECK_EQUAL( sz, std::char_traits<char>::length( char_s ) );
     
     BOOST_CHECK_EQUAL( begin( my_string ), my_string );
-    iterator_of<char[15]>::type end2 = begin( my_string ) + size( my_string );
-    iterator_of<char[15]>::type end3 = end( my_string );
+    range_iterator<char[15]>::type end2 = begin( my_string ) + size( my_string );
+    range_iterator<char[15]>::type end3 = end( my_string );
     BOOST_CHECK_EQUAL( end3, end2 );
     BOOST_CHECK_EQUAL( empty( my_string ), (my_string == 0 || my_string[0] == char()) );
     BOOST_CHECK_EQUAL( size( my_string ), my_string_length );
@@ -118,15 +118,15 @@ void check_string()
     const wchar_t*  char_ws      = L"a wide string";
     wchar_t         my_wstring[] = L"another wide string";
     
-    BOOST_STATIC_ASSERT(( is_same< value_type_of<wchar_iterator_t>::type, 
+    BOOST_STATIC_ASSERT(( is_same< range_value<wchar_iterator_t>::type, 
                                    detail::iterator_traits<wchar_iterator_t>::value_type>::value ));
-    BOOST_STATIC_ASSERT(( is_same< iterator_of<wchar_iterator_t>::type, wchar_iterator_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< const_iterator_of<wchar_iterator_t>::type, const wchar_t* >::value ));
-    BOOST_STATIC_ASSERT(( is_same< difference_type_of<wchar_iterator_t>::type,                           
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<wchar_iterator_t>::type, wchar_iterator_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<wchar_iterator_t>::type, const wchar_t* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_difference<wchar_iterator_t>::type,                           
                                    detail::iterator_traits<wchar_iterator_t>::difference_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< size_type_of<wchar_iterator_t>::type, std::size_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<wchar_iterator_t>::type, wchar_iterator_t >::value ));
-    BOOST_STATIC_ASSERT(( is_same< result_iterator_of<const wchar_t*>::type, const wchar_t* >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_size<wchar_iterator_t>::type, std::size_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<wchar_iterator_t>::type, wchar_iterator_t >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const wchar_t*>::type, const wchar_t* >::value ));
     
     std::size_t sz = size( char_ws );
     BOOST_CHECK_EQUAL( begin( char_ws ), char_ws );

@@ -28,12 +28,12 @@ namespace boost
     //////////////////////////////////////////////////////////////////////////
     
     template< typename C >
-    struct result_iterator_of
+    struct range_result_iterator
     {
         typedef BOOST_RANGE_DEDUCED_TYPENAME 
             mpl::if_< BOOST_DEDUCED_TYPENAME is_const<C>::type, 
-                      BOOST_DEDUCED_TYPENAME const_iterator_of<C>::type,
-                      BOOST_DEDUCED_TYPENAME iterator_of<C>::type >::type type;
+                      BOOST_DEDUCED_TYPENAME range_const_iterator<C>::type,
+                      BOOST_DEDUCED_TYPENAME range_iterator<C>::type >::type type;
     };
     
 } // namespace boost

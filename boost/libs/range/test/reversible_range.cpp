@@ -32,11 +32,11 @@ using namespace std;
 
 void check_iterator()
 {
-    typedef vector<char>                      vec_t;
-    typedef vec_t::iterator                   iterator;
-    typedef pair<iterator,iterator>           pair_t;
-    typedef reverse_iterator_of<pair_t>::type rev_iterator;
-    typedef pair<rev_iterator,rev_iterator>   rev_pair_t;
+    typedef vector<char>                          vec_t;
+    typedef vec_t::iterator                       iterator;
+    typedef pair<iterator,iterator>               pair_t;
+    typedef range_reverse_iterator<pair_t>::type  rev_iterator;
+    typedef pair<rev_iterator,rev_iterator>       rev_pair_t;
     
     vec_t                            vec;
     pair_t                           p    = make_pair( vec.begin(), vec.end() );
@@ -50,8 +50,8 @@ void check_iterator()
     wchar_t                          wa[] = L"mutable";
     const wchar_t                    cwa[]= L"not mutable";
          
-    BOOST_CHECK( rbegin( vec ) == reverse_iterator_of<vec_t>::type( vec.end() ) );
-    BOOST_CHECK( rend( vec ) == reverse_iterator_of<vec_t>::type( vec.begin() ) );
+    BOOST_CHECK( rbegin( vec ) == range_reverse_iterator<vec_t>::type( vec.end() ) );
+    BOOST_CHECK( rend( vec ) == range_reverse_iterator<vec_t>::type( vec.begin() ) );
     BOOST_CHECK( distance( rbegin( vec ), rend( vec ) ) == distance( begin( vec ), end( vec ) ) );
 
     BOOST_CHECK( rbegin( p ) == begin( rp ) );

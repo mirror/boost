@@ -102,12 +102,11 @@ namespace boost
             {
                 typedef std::size_t type;
             };         
-        };
-        
+        };  
     } 
     
     template< typename C >
-    class size_type_of
+    class range_size
     {
         typedef BOOST_DEDUCED_TYPENAME range_detail::range<C>::type c_type;
     public:
