@@ -28,9 +28,8 @@
   <li>BOOST_PP_LIMIT_TUPLE</li>
 </ul>
 */
-#define BOOST_PP_TUPLE_ELEM(SIZE_OF_TUPLE,INDEX,TUPLE) BOOST_PP_TUPLE_ELEM_DELAY(SIZE_OF_TUPLE,INDEX,TUPLE)
-
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
+#  define BOOST_PP_TUPLE_ELEM(SIZE_OF_TUPLE,INDEX,TUPLE) BOOST_PP_TUPLE_ELEM_DELAY(SIZE_OF_TUPLE,INDEX,TUPLE)
 /* This is a workaround for a CodeWarrior PP bug. Strictly speaking
  * this workaround invokes undefined behavior, but it works as desired.
  */
@@ -40,9 +39,11 @@
 /* This is a workaround for a MSVC++ PP bug. It should not be necessary
  * to use BOOST_PP_EXPAND(). Works on standard conforming compilers, too.
  */
-#  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_EXPAND(BOOST_PP_TUPLE##N##_ELEM##I T)
+#  define BOOST_PP_TUPLE_ELEM(SIZE_OF_TUPLE,INDEX,TUPLE) BOOST_PP_EXPAND(BOOST_PP_TUPLE_ELEM_DELAY(SIZE_OF_TUPLE,INDEX)TUPLE)
+#  define BOOST_PP_TUPLE_ELEM_DELAY(N,I) BOOST_PP_TUPLE##N##_ELEM##I
 #else
-#  define BOOST_PP_TUPLE_ELEM_DELAY(N,I,T) BOOST_PP_TUPLE##N##_ELEM##I T
+#  define BOOST_PP_TUPLE_ELEM(SIZE_OF_TUPLE,INDEX,TUPLE) BOOST_PP_TUPLE_ELEM_DELAY(SIZE_OF_TUPLE,INDEX)TUPLE
+#  define BOOST_PP_TUPLE_ELEM_DELAY(N,I) BOOST_PP_TUPLE##N##_ELEM##I
 #endif
 
 /* TUPLE_ELEM can be implemented in O(N*N) space and O(N) time instead
