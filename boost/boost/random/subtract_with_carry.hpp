@@ -249,12 +249,12 @@ public:
     // allow for Koenig lookup
     using std::fmod;
 #endif
-    const unsigned long mask = ~((~0) << w);
     random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> gen(value);
-    for(unsigned int j = 0; j < long_lag; ++j)
-      x[j] = fmod((gen() & mask) / _modulus, RealType(1));
-    carry = (x[long_lag-1] == 0) / _modulus;
-    k = 0;
+    unsigned long array[(w/32+1) * long_lag];
+    for(unsigned int j = 0; j < sizeof(array)/sizeof(unsigned long); ++j)
+      array[j] = gen();
+    unsigned long * start = array;
+    seed(start, array + sizeof(array)/sizeof(unsigned long));
   }
 
   template<class It>
@@ -263,16 +263,23 @@ public:
 #ifndef BOOST_NO_STDC_NAMESPACE
     // allow for Koenig lookup
     using std::fmod;
+    using std::pow;
 #endif
-    const unsigned long mask = ~((~0) << w);
+    unsigned long mask = ~((~0u) << (w%32));   // now lowest (w%32) bits set
+    RealType two32 = pow(RealType(2), 32);
     unsigned int j;
-    for(j = 0; j < long_lag && first != last; ++j, ++first)
-      x[j] = fmod((*first & mask) / _modulus, RealType(1));
+    for(j = 0; j < long_lag && first != last; ++j, ++first) {
+      x[j] = RealType(0);
+      for(int i = 0; i < w/32 && first != last; ++i, ++first)
+        x[j] += *first / pow(two32,i+1);
+      if(first != last && mask != 0)
+        x[j] += fmod((*first & mask) / _modulus, RealType(1));
+    }
     if(first == last && j < long_lag)
       throw std::invalid_argument("subtract_with_carry::seed");
     carry = (x[long_lag-1] == 0) / _modulus;
     k = 0;
-   }
+  }
 
   result_type min() const { return result_type(0); }
   result_type max() const { return result_type(1); }

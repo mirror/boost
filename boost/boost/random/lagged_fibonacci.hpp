@@ -256,14 +256,18 @@ public:
 #ifndef BOOST_NO_STDC_NAMESPACE
     // allow for Koenig lookup
     using std::fmod;
+    using std::pow;
 #endif
-    unsigned long mask = ~0u;
-    for(int k = 0; k < w; ++k)
-      mask <<= 1;
-    mask = ~mask;                // now lowest w bits set
+    unsigned long mask = ~((~0u) << (w%32));   // now lowest w bits set
+    RealType two32 = pow(RealType(2), 32);
     unsigned int j;
-    for(j = 0; j < long_lag && first != last; ++j, ++first)
-      x[j] = fmod((*first & mask) / _modulus, RealType(1));
+    for(j = 0; j < long_lag && first != last; ++j, ++first) {
+      x[j] = RealType(0);
+      for(int i = 0; i < w/32 && first != last; ++i, ++first)
+        x[j] += *first / pow(two32,i+1);
+      if(first != last && mask != 0)
+        x[j] += fmod((*first & mask) / _modulus, RealType(1));
+    }
     i = long_lag;
     if(first == last && j < long_lag)
       throw std::invalid_argument("lagged_fibonacci_01::seed");
