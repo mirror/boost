@@ -8,11 +8,13 @@
 		<h1><IMG height="86" alt="c++boost.gif (8819 bytes)" src="../../c++boost.gif" width="277" align="middle">shared_ptr 
 			class template</h1>
 		<p><A href="#Introduction">Introduction</A><br>
+			<a href="#BestPractices">Best Practices</a><br>
 			<A href="#Synopsis">Synopsis</A><br>
 			<A href="#Members">Members</A><br>
 			<A href="#functions">Free Functions</A><br>
 			<A href="#example">Example</A><br>
 			<A href="#Handle/Body">Handle/Body Idiom</A><br>
+			<a href="#ThreadSafety">Thread Safety</a><br>
 			<A href="#FAQ">Frequently Asked Questions</A><br>
 			<A href="smarttests.htm">Smart Pointer Timings</A></p>
 		<h2><a name="Introduction">Introduction</a></h2>
@@ -44,6 +46,43 @@
 			to <STRONG>shared_ptr&lt;T const&gt;</STRONG>, to <STRONG>shared_ptr&lt;U&gt;</STRONG>
 			where <STRONG>U</STRONG> is an accessible base of <STRONG>T</STRONG>, and to <STRONG>
 				shared_ptr&lt;void&gt;</STRONG>.</P>
+		<h2><a name="BestPractices">Best Practices</a></h2>
+		<P>A simple guideline that nearly eliminates&nbsp;the possibility of memory leaks 
+			is: always use a named smart pointer variable to hold the result of <STRONG>new. </STRONG>
+			Every occurence of the <STRONG>new</STRONG> keyword in the code should have the 
+			form:</P>
+		<PRE>shared_ptr&lt;T&gt; p(new Y);</PRE>
+		<P>It is, of course, acceptable to use another smart pointer in place of <STRONG>shared_ptr</STRONG>
+			above; having <STRONG>T</STRONG> and <STRONG>Y</STRONG> be the same type, or 
+			passing arguments to <STRONG>Y</STRONG>'s constructor&nbsp;is also OK.</P>
+		<P>If you observe this guideline, it naturally follows that you will have no 
+			explicit <STRONG>delete</STRONG>s; <STRONG>try/catch</STRONG> constructs will 
+			be rare.</P>
+		<P>Avoid using unnamed <STRONG>shared_ptr</STRONG> temporaries to save typing; to 
+			see why this is dangerous, consider this example:</P>
+		<PRE>
+void f(shared_ptr&lt;int&gt;, int);
+int g();
+
+void ok()
+{
+    shared_ptr&lt;int&gt; p(new int(2));
+    f(p, g());
+}
+
+void bad()
+{
+    f(shared_ptr&lt;int&gt;(new int(2)), g());
+}
+</PRE>
+		<P>The function <STRONG>ok</STRONG> follows the guideline to the letter, whereas <STRONG>
+				bad</STRONG> constructs the temporary <STRONG>shared_ptr</STRONG> in place, 
+			admitting the possibility of a memory leak. Since function arguments are 
+			evaluated in unspecified order, it is possible for <STRONG>new int(2)</STRONG> to 
+			be evaluated first, <STRONG>g()</STRONG> second, and we may never get to the <STRONG>
+				shared_ptr </STRONG>constructor if <STRONG>g</STRONG> throws an exception. 
+			See <A href="http://www.gotw.ca/gotw/056.htm">Herb Sutter's treatment</A> of 
+			the issue for more information.</P>
 		<h2><a name="Synopsis">Synopsis</a></h2>
 		<pre>namespace boost {
 
@@ -122,6 +161,22 @@
 			<p><b>Exception safety:</b> If an exception is thrown, the constructor has no 
 				effect.</p>
 		</blockquote>
+		<P><EM>[The poscondition of use_count() == 1 is too strong. Having the nothrow 
+				guarantee is important, since <STRONG>reset()</STRONG> is specified in terms of 
+				the default constructor, but the current specification requires that a count be 
+				allocated. Therefore, this postcondition will be dropped in a future release. 
+				The use count of a default-constructed <STRONG>shared_ptr</STRONG>, including 
+				all copies created from it, will probably be left unspecified.</EM></P>
+		<P><EM>There are two possible nothrow implementations, one stores 0 as a pointer to the 
+				reference count, the other uses a single statically allocated count for all 
+				default-constructed <STRONG>shared_ptr</STRONG>s. The second option is 
+				difficult to achieve in the current header-only reference implementation due to 
+				thread safety issues and initialization order, but it should not be precluded 
+				by the specification.</EM></P>
+		<P><EM>A future release may enable <STRONG>shared_ptr</STRONG> construction from a 
+				literal zero, for consistency with built-in pointers. It is not clear yet 
+				whether this constructor should be left implicit, enabling <STRONG>0</STRONG> to 
+				be used as a shorthand for <STRONG>shared_ptr&lt;T&gt;().</STRONG>]</EM></P>
 		<pre>template&lt;typename Y&gt; explicit shared_ptr(Y * p);</pre>
 		<blockquote>
 			<p><b>Requirements:</b> <b>p</b> must be convertible to <b>T *</b>. <STRONG>Y</STRONG>
@@ -138,6 +193,10 @@
 					use count</A> is 1 holds even if <b>p</b> is 0; invoking <STRONG>delete</STRONG>
 				on a pointer that has a value of 0 is harmless.</P>
 		</blockquote>
+		<P><EM>[This constructor has been changed to a template in order to remember the actual 
+				pointer type passed. The destructor will call <STRONG>delete</STRONG> with the 
+				same pointer, complete with its original type, even when <STRONG>T</STRONG> does 
+				not have a virtual destructor, or is <STRONG>void</STRONG>.]</EM></P>
 		<pre>template&lt;typename Y, typename D&gt; shared_ptr(Y * p, D d);</pre>
 		<blockquote>
 			<p><b>Requirements:</b> <B>p</B> must be convertible to <B>T *</B>. The copy 
@@ -152,6 +211,14 @@
 			<p><b>Notes:</b> When the the time comes to delete the object pointed to by <b>p</b>,
 				<code>d(p)</code> is invoked.</p>
 		</blockquote>
+		<P><EM>[Custom deallocators allow a factory function returning a <STRONG>shared_ptr</STRONG>
+				to insulate the user from its memory allocation strategy. Since the deallocator 
+				is not part of the type, changing the allocation strategy does not break source 
+				or binary compatibility, and does not require a client recompilation. For 
+				example, a "no-op" deallocator is useful when returning a <STRONG>shared_ptr</STRONG>
+				to a statically allocated object.</EM></P>
+		<P><EM>The support for custom deallocators does not impose significant overhead. Other <STRONG>
+					shared_ptr</STRONG> features still require a deallocator to be kept.]</EM></P>
 		<pre>shared_ptr(shared_ptr const &amp; r); // never throws
 template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 		<blockquote>
@@ -161,6 +228,8 @@ template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // nev
 				increased by one.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
+		<P><EM>[The postcondition will be relaxed when a default-constructed <STRONG>shared_ptr</STRONG>
+				is being copied.]</EM></P>
 		<pre>explicit shared_ptr(<A href="weak_ptr.htm" >weak_ptr</A> const &amp; r);</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>, as if by storing a copy of the 
@@ -171,6 +240,17 @@ template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // nev
 			<p><b>Exception safety:</b> If an exception is thrown, the constructor has no 
 				effect.</p>
 		</blockquote>
+		<P><EM>[This constructor is an optional part of the specification; it depends on the 
+				existence of <STRONG>weak_ptr</STRONG>. It is true that <STRONG>weak_ptr</STRONG>
+				support imposes overhead on every <STRONG>shared_ptr</STRONG> user, regardless 
+				of whether weak pointers are used.</EM></P>
+		<P><EM>On the other hand, cyclic references are a serious problem with all reference 
+				counted designs. Not providing a solution within the library is unacceptable; 
+				if users are forced to reinvent the weak pointer wheel, there is substantial 
+				probability that they will get it wrong, as designing a safe <STRONG>weak_ptr</STRONG>
+				interface is non-trivial.</EM></P>
+		<P><EM>My opinion is that the added functionality is worth the cost. <STRONG>weak_ptr</STRONG>
+				is provided in the reference implementation as a proof of concept.]</EM></P>
 		<pre>template&lt;typename Y&gt; shared_ptr(std::auto_ptr&lt;Y&gt; &amp; r);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Constructs a <B>shared_ptr</B>, as if by storing a copy of <STRONG>r.release()</STRONG>.</P>
@@ -180,6 +260,9 @@ template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // nev
 			<P><B>Exception safety:</B> If an exception is thrown, the constructor has no 
 				effect.</P>
 		</BLOCKQUOTE>
+		<P><EM>[This constructor takes a the source <STRONG>auto_ptr</STRONG> by reference and 
+				not by value, and cannot accept <STRONG>auto_ptr</STRONG> temporaries. This is 
+				by design, as the constructor offers the strong guarantee.]</EM></P>
 		<h3><a name="destructor">destructor</a></h3>
 		<pre>~shared_ptr(); // never throws</pre>
 		<BLOCKQUOTE>
@@ -211,6 +294,8 @@ q = p;
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr().swap(*this)</code>.</P>
 		</BLOCKQUOTE>
+		<P><EM>[<STRONG>reset()</STRONG> will offer the nothrow guarantee in a future 
+				implementation.]</EM></P>
 		<pre>template&lt;typename Y&gt; void reset(Y * p);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr(p).swap(*this)</code>.</P>
@@ -243,8 +328,12 @@ q = p;
 		<blockquote>
 			<p><b>Returns:</b> <code>use_count() == 1</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
-			<P><B>Notes:</B> <code>unique()</code> may be faster than <code>use_count()</code>.</P>
+			<P><B>Notes:</B> <code>unique()</code> may be faster than <code>use_count()</code>. 
+				If you are using <code>unique()</code> to implement copy on write, do not rely 
+				on a specific value when the stored pointer is zero.</P>
 		</blockquote>
+		<P><EM>[In a future release, <STRONG>unique()</STRONG> will return an unspecified value 
+				for a default-constructed <STRONG>shared_ptr.</STRONG>]</EM></P>
 		<h3><a name="use_count">use_count</a></h3>
 		<pre>long use_count() const; // never throws</pre>
 		<blockquote>
@@ -255,16 +344,19 @@ q = p;
 				for debugging and testing purposes, not for production code.</P>
 		</blockquote>
 		<h3><a name="conversions">conversions</a></h3>
-		<pre>operator <i>implementation-defined-type</i> () const; // never throws</pre>
+		<pre>operator <i>unspecified-bool-type</i> () const; // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an implementation defined value that, when used in boolean 
-				contexts, is equivalent to <code>get() != 0</code>.</p>
+			<p><b>Returns:</b> an&nbsp;unspecified value that, when used in boolean contexts, 
+				is equivalent to <code>get() != 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> This conversion operator allows <b>shared_ptr</b> objects to be 
 				used in boolean contexts, like <code>if (p &amp;&amp; p-&gt;valid()) {}</code>. 
-				The actual target type is typically a pointer to a member function, avloiding 
+				The actual target type is typically a pointer to a member function, avoiding 
 				many of the implicit conversion pitfalls.</P>
 		</blockquote>
+		<P><EM>[The conversion to bool is not merely syntactic sugar. It allows <STRONG>shared_ptr</STRONG>s 
+				to be declared in conditions when using <STRONG>shared_dynamic_cast </STRONG>or <STRONG>
+					make_shared</STRONG>.]</EM></P>
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(shared_ptr &amp; b); // never throws</pre>
 		<blockquote>
@@ -288,13 +380,19 @@ q = p;
 		<pre>template&lt;typename T&gt;
   bool operator&lt;(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an implementation-defined value such that <b>operator&lt;</b> is 
-				a strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
+			<p><b>Returns:</b> an&nbsp;unspecified value such that <b>operator&lt;</b> is a 
+				strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
 				of the C++ standard.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> Allows <STRONG>shared_ptr</STRONG> objects to be used as keys in 
 				associative containers.</P>
 		</blockquote>
+		<P><EM>[<STRONG>Operator&lt;</STRONG> has been preferred over a <STRONG>std::less </STRONG>
+				specialization for consistency and legality reasons, as <STRONG>std::less</STRONG>
+				is required to return the results of <STRONG>operator&lt;</STRONG>, and many 
+				standard algorithms use <STRONG>operator&lt;</STRONG> instead of <STRONG>std::less</STRONG>
+				for comparisons when a predicate is not supplied.</EM></P>
+		<P><EM>The rest of the comparison operators are omitted by design.]</EM></P>
 		<h3><a name="free-swap">swap</a></h3>
 		<pre>template&lt;typename T&gt;
   void swap(shared_ptr&lt;T&gt; &amp; a, shared_ptr&lt;T&gt; &amp; b) // never throws</pre>
@@ -304,6 +402,9 @@ q = p;
 			<P><B>Notes:</B> Matches the interface of <B>std::swap</B>. Provided as an aid to 
 				generic programming.</P>
 		</BLOCKQUOTE>
+		<P><EM>[<STRONG>swap</STRONG> is defined in the same namespace as <STRONG>shared_ptr</STRONG>
+				as this is currently the only legal way to supply a <STRONG>swap</STRONG> function 
+				that has a chance to be used by the standard library.]</EM></P>
 		<h3><a name="shared_static_cast">shared_static_cast</a></h3>
 		<pre>template&lt;typename T, typename U&gt;
   shared_ptr&lt;T&gt; shared_static_cast(shared_ptr&lt;U&gt; const &amp; r); // never throws</pre>
@@ -389,6 +490,65 @@ q = p;
 			implementation file. Note that there is no need for an explicit destructor. 
 			Unlike ~scoped_ptr, ~shared_ptr does not require that <b>T</b> be a complete 
 			type.</p>
+		<h2><a name="ThreadSafety">Thread Safety</a></h2>
+		<p><STRONG>shared_ptr</STRONG> objects offer the same level of thread safety as 
+			built-in types.&nbsp;A&nbsp;<STRONG>shared_ptr</STRONG> instance can be "read" 
+			(accessed using only const operations)&nbsp;simultaneously by multiple threads. 
+			Different <STRONG>shared_ptr</STRONG> instances can be "written to" (accessed 
+			using mutable operations such as <STRONG>operator= </STRONG>or <STRONG>reset</STRONG>) 
+			simultaneosly by multiple threads (even when these instances are copies, and 
+			share the same reference count underneath.)</p>
+		<P>Any other simultaneous accesses result in undefined behavior.</P>
+		<P>Examples:</P>
+		<pre>
+shared_ptr&lt;int&gt; p(new int(42));
+
+//--- Example 1 ---
+
+// thread A
+shared_ptr&lt;int&gt; p2(p); // reads p
+
+// thread B
+shared_ptr&lt;int&gt; p3(p); // OK, multiple reads are safe
+
+//--- Example 2 ---
+
+// thread A
+
+p.reset(new int(1912)); // writes p
+
+// thread B
+p2.reset(); // OK, writes p2
+
+//--- Example 3 ---
+
+// thread A
+p = p3; // reads p3, writes p
+
+// thread B
+p3.reset(); // writes p3; undefined, simultaneous read/write
+
+//--- Example 4 ---
+
+// thread A
+p3 = p2; // reads p2, writes p3
+
+// thread B
+// p2 goes out of scope: undefined, the destructor is considered a "write access"
+
+//--- Example 5 ---
+
+// thread A
+p3.reset(new int(1));
+
+// thread B
+p3.reset(new int(2)); // undefined, multiple writes
+</pre>
+		<p><STRONG>shared_ptr</STRONG> uses <A href="../config/config.htm">Boost.Config</A> 
+			to detect whether the implementation supports threads. If your program is 
+			single-threaded, but your platform is autodetected by <STRONG>Boost.Config</STRONG>
+			as supporting multiple threads, <STRONG>#define BOOST_DISABLE_THREADS</STRONG> to 
+			eliminate the thread safety overhead.</p>
 		<h2><a name="FAQ">Frequently Asked Questions</a></h2>
 		<P><B>Q.</B> There are several variations of shared pointers, with different 
 			tradeoffs; why does the smart pointer library supply only a single 
@@ -408,8 +568,8 @@ q = p;
 			pointer of choice for a wide range of applications. (Those interested in policy 
 			based smart pointers should read <A href="http://cseng.aw.com/book/0,,0201704315,00.html">
 				Modern C++ Design</A> by Andrei Alexandrescu.)</P>
-		<P><B>Q.</B> I am not convinced. Default parameters can be used where appropriate to 
-			hide the complexity. Again, why not policies?<BR>
+		<P><B>Q.</B> I am not convinced. Default parameters can be used where appropriate 
+			to hide the complexity. Again, why not policies?<BR>
 			<B>A.</B> Template parameters affect the type. See the answer to the first 
 			question above.</P>
 		<p><b>Q.</b> Why doesn't <b>shared_ptr</b> use a linked list implementation?<br>
@@ -445,8 +605,7 @@ int * p = a.release();
 			implementation or a linked list implementation, or some other specific 
 			implementation. This is not the intent.</p>
 		<hr>
-		<p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan --> 
-			04&nbsp;May 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
+		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->23 July 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 
