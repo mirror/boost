@@ -8,7 +8,7 @@
 #include "boost/type_traits/type_traits_test.hpp"
 
 template <class T>
-#ifndef __BORLANDC__
+#if !defined(__BORLANDC__) && !defined(__sgi) && !defined(__DECCXX) 
 void is_function_test(T& foo)
 #else
 void is_function_test(const T& foo)
