@@ -492,7 +492,6 @@ struct promotion_of_unsigned_int
 {
         typedef
         detail::IF<sizeof(long) <= sizeof(unsigned int),        
-// I had the logic reversed but ">" messes up the parsing.
                 unsigned long,
                 long>::RET type; 
 };
@@ -866,9 +865,19 @@ namespace std {
  template <class Key, class T, class Cmp, class Allocator> class map;
  template <class Key, class T, class Cmp, class Allocator> class multimap;
  template <class T, class Allocator> class vector;
- template <class T, class Allocator> class deque;
  template <class Char, class Traits, class Allocator> class basic_string;
 }
+
+// The GCC 2.95.x uses a non-conformant deque
+#if BOOST_WORKAROUND(__GNUC__, == 2) && __GNUC_MINOR__ <= 96
+#include <deque>
+#else
+
+namespace std {
+  template <class T, class Allocator> class deque;
+}
+
+#endif
 
 
 namespace boost { 
