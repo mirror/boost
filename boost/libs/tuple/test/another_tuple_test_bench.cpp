@@ -65,9 +65,8 @@ void foo2() {
   dummy(tuple<const double&>()); // likewise
 #endif
 
-  double dd = 5;
-
 #ifdef E5
+  double dd = 5;
   dummy(tuple<double&>(dd+3.14)); // should fail, temporary to non-const reference
 #endif
 }
