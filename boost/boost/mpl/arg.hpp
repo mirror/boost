@@ -25,6 +25,7 @@
 #   include "boost/mpl/arg_fwd.hpp"
 #   include "boost/mpl/void.hpp"
 #   include "boost/mpl/aux_/arity_spec.hpp"
+#   include "boost/mpl/aux_/arg_typedef.hpp"
 #   include "boost/static_assert.hpp"
 #endif
 
@@ -95,9 +96,7 @@ template<> struct arg<i>
 {
     BOOST_STATIC_CONSTANT(int, value = i);
     typedef arg<BOOST_PP_INC(i)> next;
-#if defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
-    typedef void_ tag;
-#endif
+    BOOST_MPL_AUX_ARG_TYPEDEF(void_, tag)
 
     template<
           AUX_ARG_N_DEFAULT_PARAMS(typename U, void_)
@@ -118,9 +117,7 @@ template<> struct arg<i>
 template<> struct arg<-1>
 {
     BOOST_STATIC_CONSTANT(int, value = -1);
-#if defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
-    typedef void_ tag;
-#endif
+    BOOST_MPL_AUX_ARG_TYPEDEF(void_, tag)
 
     template<
           AUX_ARG_N_DEFAULT_PARAMS(typename U, void_)
