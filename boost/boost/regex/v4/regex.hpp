@@ -60,7 +60,6 @@
 #ifndef BOOST_REGEX_TRAITS_HPP
 #include <boost/regex/regex_traits.hpp>
 #endif
-#include <boost/type_traits/remove_cv.hpp>
 #include <boost/scoped_array.hpp>
 
 #ifndef BOOST_REGEX_V4_CHAR_REGEX_TRAITS_HPP

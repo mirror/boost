@@ -377,9 +377,9 @@ private:
    repeater_count<BidiIterator> rep_obj;
 
    // table of functions to match states:
-   static const matcher_proc_type s_match_vtable[re_detail::syntax_element_count];
+   static const matcher_proc_type s_match_vtable[27];
    // table of functions to search for matching attempt start:
-   static const matcher_proc_type s_find_vtable[regbase::restart_count];
+   static const matcher_proc_type s_find_vtable[7];
 
 
 #ifdef BOOST_REGEX_NON_RECURSIVE
@@ -424,7 +424,7 @@ private:
    // how many memory blocks have we used up?:
    unsigned used_block_count;
    // table of pointers to unwind proceedures:
-   static const unwind_proc_type s_unwind_table[re_detail::saved_state_count];
+   static const unwind_proc_type s_unwind_table[14];
 #endif
 
    // these operations aren't allowed, so are declared private:
