@@ -21,7 +21,7 @@
 #  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 #endif
 
-#if (BOOST_INTEL_CXX_VERSION <= 600) || !defined(BOOST_STRICT_CONFIG)
+#if (BOOST_INTEL_CXX_VERSION <= 600) && !defined(BOOST_STRICT_CONFIG)
 
 #  if defined(_MSC_VER) && (_MSC_VER <= 1300) // added check for <= VC 7 (Peter Dimov)
 

@@ -30,7 +30,7 @@
 #      define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #    endif
 
-#    if (__SUNPRO_CC <= 0x530) || !defined(BOOST_STRICT_CONFIG)
+#    if (__SUNPRO_CC <= 0x530) && !defined(BOOST_STRICT_CONFIG)
        // SunPro 5.3 has better support for partial specialization,
        // but breaks when compiling std::less<shared_ptr<T> >
        // (Jens Maurer 4 Nov 2001).

@@ -25,7 +25,7 @@
 #endif
 
 // Version 7.0 (Kylix) and below:
-#if (__BORLANDC__ <= 0x570) || !defined(BOOST_STRICT_CONFIG)
+#if (__BORLANDC__ <= 0x570) && !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_NO_INTEGRAL_INT64_T
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE

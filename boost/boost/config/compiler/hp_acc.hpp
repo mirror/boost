@@ -16,7 +16,7 @@
 #  endif
 #endif
 
-#if (__HP_aCC <= 33300) || !defined(BOOST_STRICT_CONFIG)
+#if (__HP_aCC <= 33300) && !defined(BOOST_STRICT_CONFIG)
 // member templates are sufficiently broken that we disable them for now
 #    define BOOST_NO_MEMBER_TEMPLATES
 #    define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS

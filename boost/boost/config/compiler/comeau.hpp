@@ -9,7 +9,7 @@
 
 #include "boost/config/compiler/common_edg.hpp"
 
-#if (__COMO_VERSION__ <= 4245) || !defined(BOOST_STRICT_CONFIG)
+#if (__COMO_VERSION__ <= 4245) && !defined(BOOST_STRICT_CONFIG)
 #  if defined(_MSC_VER) && _MSC_VER <= 1300
 #     define BOOST_NO_STDC_NAMESPACE
 #     define BOOST_NO_SWPRINTF
