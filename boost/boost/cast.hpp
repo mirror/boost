@@ -156,7 +156,9 @@ namespace boost
        // Move to namespace boost in utility.hpp?
        template <class T>
        struct fixed_numeric_limits
-           : public numeric_min_select<std::numeric_limits<T>::is_signed>::limits<T>
+           : public numeric_min_select<
+                        std::numeric_limits<T>::is_signed
+                    >::template limits<T>
        {
        };
     }
