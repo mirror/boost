@@ -62,7 +62,8 @@ DEPENDS all : test ;
                 libs/iostreams/src/file_descriptor.cpp    
                 libs/iostreams/test/detail/utf8_codecvt_facet.cpp 
               : # build requirements 
-                std::locale-support ]   
+                std::locale-support
+                <msvc-stlport><debug><runtime-link>static ]   
           [ test-iostreams libs/iostreams/test/copy_test.cpp ]
           [ test-iostreams libs/iostreams/test/direct_adapter_test.cpp ]
           [ test-iostreams 
@@ -72,7 +73,10 @@ DEPENDS all : test ;
           [ test-iostreams 
                 libs/iostreams/test/mapped_file_test.cpp 
                 libs/iostreams/src/mapped_file.cpp ]
-          [ test-iostreams libs/iostreams/test/newline_filter_test.cpp ]
+          [ test-iostreams 
+				libs/iostreams/test/newline_filter_test.cpp
+              : # build requirements 
+                <msvc-stlport><debug><runtime-link>static ]
           [ test-iostreams libs/iostreams/test/pipable_test.cpp ]
           [ test-iostreams 
                 libs/iostreams/test/regex_filter_test.cpp     
@@ -81,7 +85,10 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/seekable_file_test.cpp ]
           [ test-iostreams libs/iostreams/test/seekable_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
-          [ test-iostreams libs/iostreams/test/wide_stream_test.cpp ]
+          [ test-iostreams 
+				libs/iostreams/test/wide_stream_test.cpp
+              : # build requirements 
+                <msvc-stlport><debug><runtime-link>static ]
           #[ test-iostreams 
           #      libs/iostreams/test/bzip2_test.cpp 
           #      <template>bzip2
