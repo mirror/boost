@@ -14,10 +14,13 @@
 // $Date$
 // $Revision$
 
-#include <boost/mpl/aux_/config/workaround.hpp>
 #include <boost/mpl/aux_/config/msvc.hpp>
+#include <boost/mpl/aux_/config/intel.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(__EDG_VERSION__, <= 244) && !defined(BOOST_INTEL_CXX_VERSION)
+#   include <boost/mpl/has_xxx.hpp>
+#elif BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 #   include <boost/mpl/has_xxx.hpp>
 #   include <boost/mpl/if.hpp>
 #   include <boost/mpl/bool.hpp>
@@ -34,7 +37,11 @@
 
 namespace boost { namespace mpl { namespace aux {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+#if BOOST_WORKAROUND(__EDG_VERSION__, <= 244) && !defined(BOOST_INTEL_CXX_VERSION)
+
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_rebind, rebind, false)
+
+#elif BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
 BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_rebind_impl, rebind, false)
 
@@ -48,7 +55,7 @@ struct has_rebind
 {
 };
 
-#else 
+#else // the rest
 
 template< typename T > struct has_rebind_tag {};
 yes_tag operator|(has_rebind_tag<int>, void const volatile*);
@@ -62,7 +69,7 @@ struct has_rebind
           sizeof(has_rebind_tag<int>() | get()) == sizeof(char)
         );
 };
-#   else
+#   else // __BORLANDC__
 template< typename T >
 struct has_rebind_impl
 {
@@ -81,9 +88,9 @@ struct has_rebind
         >::type
 {
 };
-#   endif
+#   endif // __BORLANDC__
 
-#endif // BOOST_MSVC
+#endif
 
 }}}
 
