@@ -1114,6 +1114,7 @@ namespace boost { namespace numeric { namespace ublas {
         public matrix_expression<hermitian_adaptor<M, TRI> > {
 
         typedef hermitian_adaptor<M, TRI> self_type;
+        typedef typename M::value_type &true_reference;
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         using matrix_expression<self_type>::operator ();
@@ -1132,7 +1133,7 @@ namespace boost { namespace numeric { namespace ublas {
 #else
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::value_type,
-                                          hermitian_matrix_element<const self_type> >::type reference;
+                                          hermitian_matrix_element<self_type> >::type reference;
 #endif
         typedef typename boost::mpl::if_<boost::is_const<M>,
                                           typename M::const_closure_type,
@@ -1217,20 +1218,20 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        void at (size_type i, size_type j, value_type t) {
+        true_reference insert_element (size_type i, size_type j, value_type t) {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
             // if (i == j)
             //     data () (i, i) = type_traits<value_type>::real (t);
             // else
             if (triangular_type::other (i, j))
-                data () (i, j) = t;
+                return data () (i, j) = t;
             else
-                data () (j, i) = type_traits<value_type>::conj (t);
+                return data () (j, i) = type_traits<value_type>::conj (t);
         }
 #else
         BOOST_UBLAS_INLINE
-        reference operator () (size_type i, size_type j) const {
+        reference operator () (size_type i, size_type j) {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
 #ifndef BOOST_UBLAS_STRICT_HERMITIAN
@@ -1248,16 +1249,16 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         }
         BOOST_UBLAS_INLINE
-        void at (size_type i, size_type j, value_type t) const {
+        true_reference insert_element (size_type i, size_type j, value_type t) {
             BOOST_UBLAS_CHECK (i < size1 (), bad_index ());
             BOOST_UBLAS_CHECK (j < size2 (), bad_index ());
             // if (i == j)
             //     data () (i, i) = type_traits<value_type>::real (t);
             // else
             if (triangular_type::other (i, j))
-                data () (i, j) = t;
+                return data () (i, j) = t;
             else
-                data () (j, i) = type_traits<value_type>::conj (t);
+                return data () (j, i) = type_traits<value_type>::conj (t);
         }
 #endif
 
