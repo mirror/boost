@@ -5,6 +5,9 @@
 // to its suitability for any purpose.
 //
 
+#ifndef boost_permutation_iterator_hpp
+#define boost_permutation_iterator_hpp
+
 #include <boost/iterator_adaptors.hpp>
 
 namespace boost {
@@ -64,3 +67,6 @@ namespace boost {
   }
 
 } // namespace boost
+
+#endif // boost_permutation_iterator_hpp
+
