@@ -34,7 +34,7 @@ void throw_exception(std::exception const & e); // user defined
 
 #else
 
-template<class E> void throw_exception(E const & e)
+template<class E> inline void throw_exception(E const & e)
 {
     throw e;
 }
