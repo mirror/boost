@@ -45,7 +45,7 @@ namespace boost { namespace program_options {
     basic_parsed_options<charT>
     parse_command_line(int argc, charT* argv[],
                        const options_description& desc,
-                       int style = 0,
+                       int style,
                        function1<std::pair<std::string, std::string>, 
                                  const std::string&> ext)
     {
