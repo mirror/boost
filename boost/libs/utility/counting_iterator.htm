@@ -131,6 +131,13 @@ The <tt>Incrementable</tt> type must be <a
 href="http://www.sgi.com/tech/stl/DefaultConstructible.html">Default
 Constructible</a>, <a href="./CopyConstructible.html">Copy
 Constructible</a>, and <a href="./Assignable.html">Assignable</a>.
+Also, the <tt>Incrementable</tt> type must provide access to an
+associated <tt>difference_type</tt> and <tt>iterator_category</tt>
+through the <a
+href="#counting_iterator_traits"><tt>counting_iterator_traits</tt></a>
+class.
+
+<p>
 Furthermore, if you wish to create a counting iterator that is a <a
 href="http://www.sgi.com/tech/stl/ForwardIterator.html"> Forward
 Iterator</a>, then the following expressions must be valid:
@@ -154,6 +161,8 @@ i += n
 n = i - j
 i < j
 </pre>
+
+
 
 <h3>Members</h3>
 
