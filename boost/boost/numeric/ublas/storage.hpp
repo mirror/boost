@@ -103,7 +103,10 @@ namespace boost { namespace numeric { namespace ublas {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
                 // ISSUE some compilers zero POD here
-                new (data_) value_type[size_];
+                // FIXME array form fails on some compilers, is it standard conforming?
+                // new (data_) value_type[size_];
+                for (pointer d = data_; d != data_ + size_; ++d)
+                    new (d) value_type;
             }
         }
         // No value initialised, but still be default constructed
@@ -165,7 +168,10 @@ namespace boost { namespace numeric { namespace ublas {
                     }
                     else {
                         // ISSUE some compilers zero POD here
-                        new (data) value_type[size];
+                        // FIXME array form fails on some compilers, is it standard conforming?
+                        // new (data) value_type[size];
+                        for (pointer d = data; d != data + size; ++d)
+                            new (d) value_type;
                     }                    
                 }
                 else
