@@ -450,7 +450,7 @@ std::string BOOST_REGEX_CALL to_narrow(const std::basic_string<wchar_t>& is, con
    // declare buffer first as VC6 workaround for internal compiler error!
    char* pc = new char[bufsize];
    scoped_array<char> t(pc);
-   #ifdef BOOST_MSVC
+   #if defined(BOOST_MSVC) && !defined(DINKUMWARE_CE)
    std::mbstate_t state = 0;
    #else
    std::mbstate_t state = std::mbstate_t();
@@ -490,7 +490,7 @@ std::wstring BOOST_REGEX_CALL to_wide(const std::string& is, const std::codecvt<
    // declare buffer first as VC6 workaround for internal compiler error!
    wchar_t* pc = new wchar_t[bufsize];
    scoped_array<wchar_t> t(pc);
-   #ifdef BOOST_MSVC
+   #if defined(BOOST_MSVC) && !defined(DINKUMWARE_CE)
    std::mbstate_t state = 0;
    #else
    std::mbstate_t state = std::mbstate_t();
