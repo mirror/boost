@@ -230,14 +230,14 @@ non-const iterators from the same container. </p>
 
 <p> 
 <a name="comparison"></a>
-<code>bool operator==( const Range1& l, const Range2& r );</code>
+<code>bool operator==( const ForwardRange1& l, const ForwardRange2& r );</code>
 <blockquote>
     <i>Returns</i> <code>size(l) != size(r) ? false : std::equal( begin(l), end(l), begin(r) );</code> </blockquote> </p>
-<code>bool operator!=( const Range1& l, const Range2& r );</code>
+<code>bool operator!=( const ForwardRange1& l, const ForwardRange2& r );</code>
 <blockquote>
     <i>Returns</i> <code>!( l == r );</code>
 </blockquote>
-<code>bool operator<( const Range1& l, const Range2& r );</code>
+<code>bool operator<( const ForwardRange1& l, const ForwardRange2& r );</code>
 <blockquote>
     <i>Returns</i> <code>std::lexicographical_compare( begin(l), end(l), begin(r), end(r) );</code> </blockquote>
 <p> 
