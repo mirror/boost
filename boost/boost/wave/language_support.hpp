@@ -25,7 +25,7 @@ enum language_support {
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 //  support flags for C99
     support_variadics = 0x02,
-    support_c99 = support_variadics,
+    support_c99 = support_variadics | 0x04,
 #endif 
 };
 

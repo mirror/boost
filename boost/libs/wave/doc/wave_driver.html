@@ -45,6 +45,7 @@
     -D [--define] macro[=[value]]:    specify a macro to define
     -P [--predefine] macro[=[value]]: specify a macro to predefine
     -U [--undefine] macro:       specify a macro to undefine
+    -u [--undefineall]:          undefine all macrodefinitions
     -n [--nesting] depth:        specify a new maximal include nesting depth
 	
   Extended options (allowed everywhere)
@@ -113,10 +114,10 @@
     that the latter predefines a macro such, that it is <b>not</b> undefinable 
     through an <tt>#undef</tt> directive from inside the preprocessed program.</p>
 </blockquote>
-<p dir="ltr">-U [--undefine] option</p>
+<p dir="ltr">-U [--undefine] macro </p>
 <blockquote> 
   <p dir="ltr">This allows to undefine some of the automatically predefined macros 
-    of the <tt>Wave</tt> library (see Predefined macros). The only exception are 
+    of the <tt>Wave</tt> library (see <a href="predefined_macros.html">Predefined macros</a>). The only exception are 
     the <code class="keyword">__LINE__</code>, <code class="keyword">__FILE__</code>, 
     <code class="keyword">__DATE__</code>, <code class="keyword">__TIME__</code>, 
     <code class="keyword">__STDC__</code> and <code class="keyword">__cplusplus</code> 
@@ -213,7 +214,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Friday, February 18, 2005  12:33<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, March 12, 2005  11:41<!-- #EndDate -->
 </span></p>
 </body>
 </html>
