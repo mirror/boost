@@ -21,6 +21,7 @@
 #include <memory>
 #include <new>
 #include <boost/config.hpp>
+#include <boost/assert.hpp>
 #include <boost/type_traits/arithmetic_traits.hpp>
 #include <boost/type_traits/composite_traits.hpp>
 #include <boost/type_traits/is_stateless.hpp>
