@@ -190,7 +190,11 @@ namespace boost { namespace numeric { namespace ublas {
         public scalar_binary_assign_functor<T1, T2> {
         typedef typename scalar_binary_assign_functor<T1, T2>::argument1_type argument1_type;
         typedef typename scalar_binary_assign_functor<T1, T2>::argument2_type argument2_type;
+#if BOOST_WORKAROUND( __IBMCPP__, <=600 )
+        static const bool computed ;
+#else
         static const bool computed = false ;
+#endif
 
         static BOOST_UBLAS_INLINE
         void apply (argument1_type t1, argument2_type t2) {
@@ -202,9 +206,11 @@ namespace boost { namespace numeric { namespace ublas {
             typedef scalar_assign<U1, U2> other;
         };
     };
-    /*template <class T1, class T2>
+
+#if BOOST_WORKAROUND( __IBMCPP__, <=600 )
+    template<class T1, class T2>
     const bool scalar_assign<T1,T2>::computed = false;
-*/
+#endif
 
     template<class T1, class T2>
     struct scalar_plus_assign:
