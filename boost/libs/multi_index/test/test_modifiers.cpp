@@ -104,8 +104,7 @@ void test_modifiers()
   i3.swap(get<3>(es2));
   BOOST_CHECK(es==es_backup&&es2==es2_backup);
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)||\
-    defined(BOOST_INTEL_CXX_VERSION)
+#if defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
   ::boost::multi_index::detail::swap(i2,get<2>(es2));
 #else
   using std::swap;
@@ -114,8 +113,7 @@ void test_modifiers()
 
   BOOST_CHECK(es==es2_backup&&es2==es_backup);
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)||\
-    defined(BOOST_INTEL_CXX_VERSION)
+#if defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
   ::boost::multi_index::detail::swap(i3,get<3>(es2));
 #else
   using std::swap;
