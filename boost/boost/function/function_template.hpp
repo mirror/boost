@@ -125,7 +125,6 @@ namespace boost {
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       };
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       template<
         typename FunctionPtr,
 #  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
@@ -155,7 +154,7 @@ namespace boost {
         virtual unusable call(BOOST_FUNCTION_PARMS) const
         {
           function_ptr(BOOST_FUNCTION_ARGS);
-          return unusable;
+          return unusable();
         }
 
         virtual BOOST_FUNCTION_VOID_FUNCTION_INVOKER* clone() const
@@ -211,91 +210,6 @@ namespace boost {
         }
 #  endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       };
-
-#else
-      template<
-        typename FunctionPtr,
-#  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-        typename Allocator,
-#  endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-        typename R BOOST_FUNCTION_COMMA
-        BOOST_FUNCTION_TEMPLATE_PARMS
-        >
-      struct BOOST_FUNCTION_VOID_FUNCTION_INVOKER
-#  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-        : public BOOST_FUNCTION_INVOKER_BASE<
-                   void BOOST_FUNCTION_COMMA
-                   BOOST_FUNCTION_TEMPLATE_ARGS
-                 >
-#  endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-      {
-#  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-        explicit BOOST_FUNCTION_VOID_FUNCTION_INVOKER(FunctionPtr f) : 
-          function_ptr(f) {}
-
-        virtual void call(BOOST_FUNCTION_PARMS)
-        {
-          function_ptr(BOOST_FUNCTION_ARGS);
-        }
-
-        virtual void call(BOOST_FUNCTION_PARMS) const
-        {
-          function_ptr(BOOST_FUNCTION_ARGS);
-        }
-
-        virtual BOOST_FUNCTION_VOID_FUNCTION_INVOKER* clone() const
-        {
-#    ifdef BOOST_NO_STD_ALLOCATOR
-          return new BOOST_FUNCTION_VOID_FUNCTION_INVOKER(function_ptr);
-#    else
-          typedef typename Allocator::
-            template rebind<BOOST_FUNCTION_VOID_FUNCTION_INVOKER>::other
-            allocator_type;
-          typedef typename allocator_type::pointer pointer_type;
-          allocator_type allocator;
-
-          pointer_type copy = allocator.allocate(1);
-          allocator.construct(copy, *this);
-          return static_cast<BOOST_FUNCTION_VOID_FUNCTION_INVOKER   *>(copy);
-#    endif // BOOST_NO_STD_ALLOCATOR
-        }
-
-        virtual void destroy(BOOST_FUNCTION_INVOKER_BASE<
-                               void BOOST_FUNCTION_COMMA
-                               BOOST_FUNCTION_TEMPLATE_ARGS
-                             >* p)
-        {
-#    ifdef BOOST_NO_STD_ALLOCATOR
-          delete p;
-#    else
-          BOOST_FUNCTION_VOID_FUNCTION_INVOKER* victim =
-            dynamic_cast<BOOST_FUNCTION_VOID_FUNCTION_INVOKER*>(p);
-
-          typedef typename Allocator::
-            template rebind<BOOST_FUNCTION_VOID_FUNCTION_INVOKER>::other
-            allocator_type;
-          typedef typename allocator_type::pointer pointer_type;
-          allocator_type allocator;
-
-          allocator.destroy(victim);
-          allocator.deallocate(victim, 1);
-#    endif // BOOST_NO_STD_ALLOCATOR
-        }
-
-      private:
-        FunctionPtr function_ptr;
-#  else
-        static void invoke(any_pointer function_ptr,
-                           bool BOOST_FUNCTION_COMMA
-                           BOOST_FUNCTION_PARMS)
-        {
-          FunctionPtr f = reinterpret_cast<FunctionPtr>(function_ptr.func_ptr);
-          f(BOOST_FUNCTION_ARGS);
-        }
-#  endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-      };
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
       template<
         typename FunctionObj,
@@ -386,7 +300,6 @@ namespace boost {
 #endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       };
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       template<
         typename FunctionObj,
 #  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
@@ -421,9 +334,9 @@ namespace boost {
 
         virtual BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER* clone() const
         {
-#ifdef BOOST_NO_STD_ALLOCATOR
+#  ifdef BOOST_NO_STD_ALLOCATOR
           return new BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER(function_obj);
-#else
+#  else
           typedef typename Allocator::
             template rebind<BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER>::other
             allocator_type;
@@ -433,7 +346,7 @@ namespace boost {
           pointer_type copy = allocator.allocate(1);
           allocator.construct(copy, *this);
           return static_cast<BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER*>(copy);
-#endif // BOOST_NO_STD_ALLOCATOR
+#  endif // BOOST_NO_STD_ALLOCATOR
         }
 
         virtual void destroy(BOOST_FUNCTION_INVOKER_BASE<
@@ -441,9 +354,9 @@ namespace boost {
                                BOOST_FUNCTION_TEMPLATE_ARGS
                              >* p)
         {
-#ifdef BOOST_NO_STD_ALLOCATOR
+#  ifdef BOOST_NO_STD_ALLOCATOR
           delete p;
-#else
+#  else
           BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER* victim =
             dynamic_cast<BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER*>(p);
 
@@ -455,7 +368,7 @@ namespace boost {
 
           allocator.destroy(victim);
           allocator.deallocate(victim, 1);
-#endif // BOOST_NO_STD_ALLOCATOR
+#  endif // BOOST_NO_STD_ALLOCATOR
         }
 
       private:
@@ -479,97 +392,6 @@ namespace boost {
         }
 #  endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       };
-#else
-      template<
-        typename FunctionObj,
-#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-        typename Allocator,
-#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-        typename R BOOST_FUNCTION_COMMA
-        BOOST_FUNCTION_TEMPLATE_PARMS
-        >
-      struct BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER
-#  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-        : public BOOST_FUNCTION_INVOKER_BASE<
-                   void BOOST_FUNCTION_COMMA
-                   BOOST_FUNCTION_TEMPLATE_ARGS
-                 >
-#  endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-      {
-#  ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-        explicit BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER(const FunctionObj& f)
-          : function_obj(f) {}
-
-        virtual void call(BOOST_FUNCTION_PARMS)
-        {
-          function_obj(BOOST_FUNCTION_ARGS);
-        }
-
-        virtual void call(BOOST_FUNCTION_PARMS) const
-        {
-          function_obj(BOOST_FUNCTION_ARGS);
-        }
-
-        virtual BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER * clone() const
-        {
-#    ifdef BOOST_NO_STD_ALLOCATOR
-          return new BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER   (function_obj);
-#    else
-          typedef typename Allocator::
-            template rebind<BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER>::other
-            allocator_type;
-          typedef typename allocator_type::pointer pointer_type;
-          allocator_type allocator;
-
-          pointer_type copy = allocator.allocate(1);
-          allocator.construct(copy, *this);
-          return static_cast<BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER*>(copy);
-#    endif // BOOST_NO_STD_ALLOCATOR
-        }
-
-        virtual void destroy(BOOST_FUNCTION_INVOKER_BASE<
-                               void BOOST_FUNCTION_COMMA
-                               BOOST_FUNCTION_TEMPLATE_ARGS
-                             >* p)
-        {
-#ifdef BOOST_NO_STD_ALLOCATOR
-          delete p;
-#else
-          BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER* victim =
-            dynamic_cast<BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER*>(p);
-
-          typedef typename Allocator::
-            template rebind<BOOST_FUNCTION_VOID_FUNCTION_OBJ_INVOKER>::other
-            allocator_type;
-          typedef typename allocator_type::pointer pointer_type;
-          allocator_type allocator;
-
-          allocator.destroy(victim);
-          allocator.deallocate(victim, 1);
-#endif // BOOST_NO_STD_ALLOCATOR
-        }
-
-      private:
-        FunctionObj function_obj;
-#  else
-        static void
-        invoke(any_pointer function_obj_ptr,
-               bool is_const BOOST_FUNCTION_COMMA
-               BOOST_FUNCTION_PARMS)
-
-        {
-          FunctionObj* f = static_cast<FunctionObj*>(function_obj_ptr.obj_ptr);
-          if (is_const) {
-            const FunctionObj* fc = f;
-            (*fc)(BOOST_FUNCTION_ARGS);
-          }
-          else {
-            (*f)(BOOST_FUNCTION_ARGS);
-          }
-        }
-#  endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-      };
-#endif
 
       template<
         typename FunctionPtr,
@@ -937,139 +759,6 @@ namespace boost {
       this->assign_to_own(f);
     }
   };
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-  template<
-    BOOST_FUNCTION_TEMPLATE_PARMS BOOST_FUNCTION_COMMA
-    typename Policy,
-    typename Mixin,
-    typename Allocator
-  >
-  class BOOST_FUNCTION_FUNCTION<
-          void BOOST_FUNCTION_COMMA
-          BOOST_FUNCTION_TEMPLATE_ARGS,
-          Policy,
-          Mixin,
-          Allocator> : 
-    public detail::function::BOOST_FUNCTION_BASE<void BOOST_FUNCTION_COMMA
-                                                 BOOST_FUNCTION_TEMPLATE_ARGS,
-                                                 Policy, Mixin, Allocator>
-  {
-    typedef detail::function::BOOST_FUNCTION_BASE<
-              void BOOST_FUNCTION_COMMA
-              BOOST_FUNCTION_TEMPLATE_ARGS,
-              Policy, Mixin, Allocator> base_type;
-
-  public:
-    typedef typename base_type::result_type result_type;
-    typedef typename base_type::policy_type policy_type;
-    typedef typename base_type::mixin_type mixin_type;
-    typedef typename base_type::allocator_type allocator_type;
-
-#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-    typedef typename base_type::impl_type impl_type;
-#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-
-    BOOST_FUNCTION_FUNCTION() : base_type() {}
-
-    template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(const Functor& f) : base_type() 
-    {
-      this->assign_to(f);
-    }
-
-#ifdef __BORLANDC__
-    template<typename Functor>
-    BOOST_FUNCTION_FUNCTION(Functor* f) : base_type() 
-    {
-      this->assign_to(f);
-    }
-#endif // __BORLANDC__
-
-    BOOST_FUNCTION_FUNCTION(const BOOST_FUNCTION_FUNCTION& f) : base_type()
-    {
-      this->assign_to_own(f);
-    }
-
-    // Invoke the target
-    result_type operator()(BOOST_FUNCTION_PARMS)
-    {
-      assert(!this->empty());
-      policy_type policy;
-      policy.precall(this);
-
-#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-      impl_type* i = reinterpret_cast<impl_type*>(this->impl);
-      i->call(BOOST_FUNCTION_ARGS);
-#else
-      this->invoker(functor, false BOOST_FUNCTION_COMMA BOOST_FUNCTION_ARGS);
-#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-
-      policy.postcall(this);
-    }
-
-    result_type operator()(BOOST_FUNCTION_PARMS) const
-    {
-      assert(!this->empty());
-
-      policy_type policy;
-      policy.precall(this);
-
-#ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-      const impl_type* i = reinterpret_cast<const impl_type*>(this->impl);
-      i->call(BOOST_FUNCTION_ARGS);
-#else
-      this->invoker(functor, true BOOST_FUNCTION_COMMA BOOST_FUNCTION_ARGS);
-#endif // BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
-
-      policy.postcall(this);
-    }
-
-    template<typename Functor>
-    BOOST_FUNCTION_FUNCTION& operator=(const Functor& f)
-    {
-      this->assign_to(f);
-      return *this;
-    }
-
-#ifdef __BORLANDC__
-    template<typename Functor>
-    BOOST_FUNCTION_FUNCTION& operator=(Functor* f)
-    {
-      this->assign_to(f);
-      return *this;
-    }
-#endif // __BORLANDC__
-
-    template<typename Functor>
-    void set(const Functor& f)
-    {
-      this->assign_to(f);
-    }
-
-#ifdef __BORLANDC__
-    template<typename Functor>
-    void set(Functor* f)
-    {
-      this->assign_to(f);
-    }
-#endif // __BORLANDC__
-
-    // Assignment from another BOOST_FUNCTION_FUNCTION
-    BOOST_FUNCTION_FUNCTION& operator=(const BOOST_FUNCTION_FUNCTION& f)
-    {
-      this->assign_to_own(f);
-      return *this;
-    }
-
-    // Assignment from another BOOST_FUNCTION_FUNCTION
-    void set(const BOOST_FUNCTION_FUNCTION& f)
-    {
-      this->assign_to_own(f);
-    }
-  };
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
   template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
            typename Policy, typename Mixin, typename Allocator>

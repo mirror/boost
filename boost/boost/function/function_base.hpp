@@ -103,13 +103,11 @@ namespace boost {
        */
       template<typename T> struct function_return_type { typedef T type; };
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       template<> 
       struct function_return_type<void> 
       {
         typedef unusable type;
       };
-#endif /* BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION */
 
       // The operation type to perform on the given functor/function pointer
       enum functor_manager_operation_type { clone_functor, destroy_functor };
