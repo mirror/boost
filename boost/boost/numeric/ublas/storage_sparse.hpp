@@ -546,7 +546,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I, class T, class ALLOC>
         BOOST_UBLAS_INLINE
         typename map_array<I, T, ALLOC>::size_type map_capacity (map_array<I, T, ALLOC> &m) {
-            m.capacity ();
+            return m.capacity ();
         }
     }
 
