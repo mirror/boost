@@ -28,9 +28,14 @@ identity_property_map
 This property map applies the identity function, that is, it just
 returns a copy of the key object that was input.
 
+<H3>Where Defined</H3>
+
+<P>
+<a href="../../boost/property_map.hpp"><TT>boost/property_map.hpp</TT></a>
+
 <h3>Model of</h3>
 
-<a href="./ReadablePropertyMap.html">ReadablePropertyMap</a>
+<a href="./ReadablePropertyMap.html">Readable Property Map</a>
 
 <h3>Associated Types</h3>
 
@@ -73,6 +78,25 @@ This type is <tt>boost::readable_op_bracket_tag</tt>.
 <table border>
 <tr>
 <th>Member</th><th>Description</th>
+</tr>
+
+
+<tr>
+<td><tt>
+identity_property_map()
+</tt></td>
+<td>
+Default constructor.
+</td>
+</tr>
+
+<tr>
+<td><tt>
+identity_property_map(const identity_property_map&amp; x)
+</tt></td>
+<td>
+Copy constructor.
+</td>
 </tr>
 
 <tr>
