@@ -58,7 +58,7 @@ main()<font class="keyword"> </font>
     date wont_construct(gdtl::parse_undelimited_date&lt;date&gt;(bad_date));
     <font class="comment">//use wont_construct so compiler doesn't complain, but you wont get here!</font>
     std::cout &lt;&lt; <font class="stringliteral">"oh oh, you should reach this line: "</font> 
-           &lt;&lt;to_iso_string(wont_construct) &lt;&lt; std::endl;
+           &lt;&lt; to_iso_string(wont_construct) &lt;&lt; std::endl;
   }
   <font class="keywordflow">catch</font>(std::exception&amp; e) {
     std::cout &lt;&lt; <font class="stringliteral">"  Exception: "</font> &lt;&lt;  e.what() &lt;&lt; std::endl;

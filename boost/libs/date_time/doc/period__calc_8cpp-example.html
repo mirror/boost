@@ -70,11 +70,11 @@ generateExclusion()<font class="keyword"></font>
   date_period_set::const_iterator i = ps.begin();
   <font class="comment">//print the periods, check for containment</font>
   <font class="keywordflow">for</font> (;i != ps.end(); i++) {
-    std::cout &lt;&lt; <a name="a1"></a><a class="code" href="group__time__format.html#a4">to_iso_string</a>(*i) &lt;&lt; std::endl;
+    std::cout &lt;&lt; to_iso_string(*i) &lt;&lt; std::endl;
     <font class="comment">//if date is in exclusion period then print it</font>
     <font class="keywordflow">if</font> (i-&gt;contains(d)) {
       std::cout &lt;&lt; <font class="stringliteral">"In Exclusion Period: "</font>
-          &lt;&lt; <a class="code" href="group__time__format.html#a4">to_iso_string</a>(d) &lt;&lt; <font class="stringliteral">" --&gt; "</font> &lt;&lt; <a class="code" href="group__time__format.html#a4">to_iso_string</a>(*i)
+          &lt;&lt; to_iso_string(d) &lt;&lt; <font class="stringliteral">" --&gt; "</font> &lt;&lt; to_iso_string(*i)
           &lt;&lt; std::endl;
     }
   }
