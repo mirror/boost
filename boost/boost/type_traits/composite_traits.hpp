@@ -141,20 +141,21 @@ template <class R, class A0, class A1, class A2, class A3, class A4, class A5, c
 ::boost::type_traits::yes_type is_function_tester(R (*)(A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, A15, A16, A17, A18, A19, A20, A21, A22, A23, A24, A25, A26, A27, A28, A29));
 
 
-   yes_type is_array_helper(const volatile void*, const volatile void*);
    template <class T>
-   no_type is_array_helper(T*const volatile*, const volatile void*);
+   yes_type is_array_helper(const volatile void*, const volatile void*, void (*)(T x[]));
+   template <class T>
+   no_type is_array_helper(T*const volatile*, const volatile void*, void (*)(T x[]));
    no_type BOOST_TT_DECL is_array_helper(...);
 } // namespace detail
 template <typename T> 
 struct is_array
 { 
 private:
-   static T t;
+    static T t;
 public:
    BOOST_STATIC_CONSTANT(bool, value = 
       (::boost::type_traits::ice_and<
-         (1 == sizeof(detail::is_array_helper(&t, t))),
+         (1 == sizeof(detail::is_array_helper(&t, t, (void(*)(T))0))),
          ::boost::type_traits::ice_not<
             ::boost::detail::is_reference_or_const_volatile<T>::value>::value,
          ::boost::type_traits::ice_not<
