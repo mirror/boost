@@ -13,6 +13,11 @@
  *
  */
 
+#include <string>
+#include <algorithm>
+#include <deque>
+#include <iterator>
+
 #ifdef BOOST_RE_OLD_IOSTREAM
 #include <iostream.h>
 #include <fstream.h>
@@ -30,10 +35,6 @@ using std::streambuf;
 using std::getline;
 #endif
 
-#include <algorithm>
-#include <string>
-#include <deque>
-#include <iterator>
 #include <boost/config.hpp>
 #include <boost/regex.hpp>
 #include <boost/timer.hpp> 
@@ -354,6 +355,7 @@ int main(int argc, char**argv)
 
    return 0;
 }
+
 
 
 
