@@ -66,9 +66,11 @@ namespace boost { namespace program_options {
 
 namespace boost { namespace program_options { namespace detail {
 
-    // vc6 needs this.
+    // vc6 needs this, but borland chokes when this is added.
+#if BOOST_WORKAROUND(_MSC_VER, <= 1200)
     using namespace std;
     using namespace program_options;
+#endif
 
     cmdline::cmdline(const std::vector<std::string>& args, int style,
                      bool allow_unregistered)
