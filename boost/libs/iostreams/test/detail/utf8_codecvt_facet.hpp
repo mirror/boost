@@ -1,6 +1,11 @@
 #ifndef BOOST_UTF8_CODECVT_FACET_HPP
 #define BOOST_UTF8_CODECVT_FACET_HPP
 
+#include <boost/iostreams/detail/config/wide_streams.hpp>
+#ifdef BOOST_IOSTREAMS_NO_WIDE_STREAMS 
+# error wide streams not supported on this platform
+#endif
+
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
