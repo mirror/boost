@@ -57,21 +57,21 @@ struct StateCastTest : fsm::state_machine< StateCastTest, A >
 template< class State, class FromState >
 void AssertInState( const FromState & theState )
 {
-  BOOST_REQUIRE( theState.state_downcast< const State * >() != 0 );
+  BOOST_REQUIRE( theState.template state_downcast< const State * >() != 0 );
   // TODO: Use BOOST_REQUIRE_NO_THROW as soon as it's available
-  BOOST_CHECK_NO_THROW( theState.state_downcast< const State & >() );
-  BOOST_REQUIRE( theState.state_cast< const State * >() != 0 );
-  BOOST_CHECK_NO_THROW( theState.state_cast< const State & >() );
+  BOOST_CHECK_NO_THROW( theState.template state_downcast< const State & >() );
+  BOOST_REQUIRE( theState.template state_cast< const State * >() != 0 );
+  BOOST_CHECK_NO_THROW( theState.template state_cast< const State & >() );
 }
 
 template< class State, class FromState >
 void AssertNotInState( const FromState & theState )
 {
-  BOOST_REQUIRE( theState.state_downcast< const State * >() == 0 );
+  BOOST_REQUIRE( theState.template state_downcast< const State * >() == 0 );
   // TODO: Use BOOST_REQUIRE_THROW as soon as it's available
-  BOOST_CHECK_THROW( theState.state_downcast< const State & >(), std::bad_cast );
-  BOOST_REQUIRE( theState.state_cast< const State * >() == 0 );
-  BOOST_CHECK_THROW( theState.state_cast< const State & >(), std::bad_cast );
+  BOOST_CHECK_THROW( theState.template state_downcast< const State & >(), std::bad_cast );
+  BOOST_REQUIRE( theState.template state_cast< const State * >() == 0 );
+  BOOST_CHECK_THROW( theState.template state_cast< const State & >(), std::bad_cast );
 }
 
 struct B;
