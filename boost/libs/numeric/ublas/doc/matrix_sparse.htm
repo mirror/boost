@@ -213,13 +213,13 @@ through a scalar.</td>
 <td>Swaps the contents of the sparse matrices.</td>
 </tr>
 <tr>
-<td><code>void insert (size_type i, size_type j, const_reference
+<td><code>true_refrence insert_element (size_type i, size_type j, const_reference
 t)</code></td>
 <td>Inserts the value <code>t</code> at the <code>j</code>-th
-element of the <code>i</code>-th row.</td>
+element of the <code>i</code>-th row. Duplicates elements are not allowed.</td>
 </tr>
 <tr>
-<td><code>void erase (size_type i, size_type j)</code></td>
+<td><code>void erase_element (size_type i, size_type j)</code></td>
 <td>Erases the value at the <code>j</code>-th element of the
 <code>i</code>-th row.</td>
 </tr>
@@ -531,13 +531,13 @@ through a scalar.</td>
 <td>Swaps the contents of the compressed matrices.</td>
 </tr>
 <tr>
-<td><code>void insert (size_type i, size_type j, const_reference
+<td><code>true_reference insert_element (size_type i, size_type j, const_reference
 t)</code></td>
 <td>Inserts the value <code>t</code> at the <code>j</code>-th
-element of the <code>i</code>-th row.</td>
+element of the <code>i</code>-th row. Duplicates elements are not allowed.</td>
 </tr>
 <tr>
-<td><code>void erase (size_type i, size_type j)</code></td>
+<td><code>void erase_element (size_type i, size_type j)</code></td>
 <td>Erases the value at the <code>j</code>-th element of the
 <code>i</code>-th row.</td>
 </tr>
@@ -852,13 +852,19 @@ through a scalar.</td>
 <td>Swaps the contents of the coordinate matrices.</td>
 </tr>
 <tr>
-<td><code>void insert (size_type i, size_type j, const_reference
+<td><code>true_reference insert_element (size_type i, size_type j, const_reference
 t)</code></td>
 <td>Inserts the value <code>t</code> at the <code>j</code>-th
-element of the <code>i</code>-th row.</td>
+element of the <code>i</code>-th row. Duplicates elements are not allowed.</td>
 </tr>
 <tr>
-<td><code>void erase (size_type i, size_type j)</code></td>
+<td><code>void append_element (size_type i, size_type j, const_reference t)</code></td>
+<td>Appends the value <code>t</code> at the <code>j</code>-th element of the <code>i</code>-th row.
+Duplicate elements can be appended to a <code>coordinate_matrix</code>. They are merged into a single
+arithmetically summed element by the <code>sort</code> function.</td>
+</tr>
+<tr>
+<td><code>void erase_element (size_type i, size_type j)</code></td>
 <td>Erases the value at the <code>j</code>-th element of the
 <code>i</code>-th row.</td>
 </tr>

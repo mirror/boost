@@ -197,12 +197,12 @@ through a scalar.</td>
 <td>Swaps the contents of the sparse vectors.</td>
 </tr>
 <tr>
-<td><code>void insert (size_type i, const_reference t)</code></td>
+<td><code>true_reference insert_element (size_type i, const_reference t)</code></td>
 <td>Inserts the value <code>t</code> at the <code>i</code>-th
-element.</td>
+element. Duplicates elements are not allowed.</td>
 </tr>
 <tr>
-<td><code>void erase (size_type i)</code></td>
+<td><code>void erase_element (size_type i)</code></td>
 <td>Erases the value at the <code>i</code>-th element.</td>
 </tr>
 <tr>
@@ -454,12 +454,12 @@ through a scalar.</td>
 <td>Swaps the contents of the compressed vectors.</td>
 </tr>
 <tr>
-<td><code>void insert (size_type i, const_reference t)</code></td>
+<td><code>true_reference insert_element (size_type i, const_reference t)</code></td>
 <td>Inserts the value <code>t</code> at the <code>i</code>-th
-element.</td>
+element. Duplicates elements are not allowed.</td>
 </tr>
 <tr>
-<td><code>void erase (size_type i)</code></td>
+<td><code>void erase_element (size_type i)</code></td>
 <td>Erases the value at the <code>i</code>-th element.</td>
 </tr>
 <tr>
@@ -714,12 +714,18 @@ through a scalar.</td>
 <td>Swaps the contents of the coordinate vectors.</td>
 </tr>
 <tr>
-<td><code>void insert (size_type i, const_reference t)</code></td>
+<td><code>true_reference insert_element (size_type i, const_reference t)</code></td>
 <td>Inserts the value <code>t</code> at the <code>i</code>-th
-element.</td>
+element. Duplicates elements are not allowed.</td>
 </tr>
 <tr>
-<td><code>void erase (size_type i)</code></td>
+<td><code>void append_element (size_type i, size_type j, const_reference t)</code></td>
+<td>Appends the value <code>t</code> at the <code>i</code>-th element.
+Duplicate elements can be appended to a <code>coordinate_vector</code>. They are merged into a single
+arithmetically summed element by the <code>sort</code> function.</td>
+</tr>
+<tr>
+<td><code>void erase_element (size_type i)</code></td>
 <td>Erases the value at the <code>i</code>-th element.</td>
 </tr>
 <tr>
