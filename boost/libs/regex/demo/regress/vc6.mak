@@ -3,7 +3,7 @@
 #
 # Visual C++ 6
 #
-CFLAGS= -O2 -GX -GR -I..\..\..\..\
+CFLAGS= /Oityb1 /GF /Gy -GX -GR -I..\..\..\..\
 
 LFLAGS= -link /LIBPATH:..\..\lib\vc6 user32.lib
 
@@ -164,6 +164,7 @@ r5lmd.exe : tests.cpp parse.cpp regress.cpp
 
 r6lmd.exe : tests.cpp parse.cpp regress.cpp
 	cl /MDd /D_MT /D_DLL $(CFLAGS) -o r6lmd.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(LFLAGS)
+
 
 
 

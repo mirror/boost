@@ -129,5 +129,3 @@ regex++debug_clean :
 ./gcc/libregex++debug.a : gcc/regex++debug/c_regex_traits.o gcc/regex++debug/c_regex_traits_common.o gcc/regex++debug/cpp_regex_traits.o gcc/regex++debug/cregex.o gcc/regex++debug/fileiter.o gcc/regex++debug/posix_api.o gcc/regex++debug/regex.o gcc/regex++debug/regex_debug.o gcc/regex++debug/regex_synch.o gcc/regex++debug/w32_regex_traits.o gcc/regex++debug/wide_posix_api.o
 	ar -r $(LINK) gcc/libregex++debug.a  gcc/regex++debug/c_regex_traits.o gcc/regex++debug/c_regex_traits_common.o gcc/regex++debug/cpp_regex_traits.o gcc/regex++debug/cregex.o gcc/regex++debug/fileiter.o gcc/regex++debug/posix_api.o gcc/regex++debug/regex.o gcc/regex++debug/regex_debug.o gcc/regex++debug/regex_synch.o gcc/regex++debug/w32_regex_traits.o gcc/regex++debug/wide_posix_api.o
 
-
-

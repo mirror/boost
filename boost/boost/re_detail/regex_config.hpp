@@ -1154,6 +1154,7 @@ namespace std{
    using ::strcmp;
    using ::strcpy;
    using ::strlen;
+   using ::strxfrm;
    using ::isalpha;
    using ::iscntrl;
    using ::isdigit;
@@ -1213,6 +1214,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 

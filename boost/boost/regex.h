@@ -33,7 +33,6 @@
 
 using boost::regoff_t;
 using boost::regex_tA;
-using boost::regex_tW;
 using boost::regmatch_t;
 using boost::REG_BASIC;
 using boost::REG_EXTENDED;
@@ -71,6 +70,7 @@ using boost::regcompW;
 using boost::regerrorW;
 using boost::regexecW;
 using boost::regfreeW;
+using boost::regex_tW;
 #endif
 
 using boost::REG_NOERROR;
@@ -98,4 +98,5 @@ using boost::reg_errcode_t;
 #endif // __cplusplus
 
 #endif // BOOST_RE_REGEX_H
+
 

@@ -2,7 +2,7 @@
 # very basic VC6 makefile for timer
 #
 CXX=cl
-CXXFLAGS=-O2 -MT -GX -DSTRICT -I../../../../ -I./ 
+CXXFLAGS=/Oityb1 /GF /Gy -MT -GX -DSTRICT -I../../../../ -I./ 
 LIBS=/link /LIBPATH:..\..\lib\vc6-stlport kernel32.lib user32.lib 
 EXE=.exe
 OBJ=.obj
@@ -17,6 +17,7 @@ regex_timer$(OBJ) : regex_timer.cpp $(LIBDEP)
 
 timer$(OBJ) : ../../../timer/timer.cpp $(LIBDEP)
 	$(CXX) -c $(CXXFLAGS) ../../../timer/timer.cpp
+
 
 
 

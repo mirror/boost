@@ -140,12 +140,12 @@ function vc6_gen()
 
 	if test "$no_single" != "yes"; then
 	libname="$prefix""re300"
-	opts="/c /nologo /ML /W3 /GX /O2 /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD"
+	opts="/c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD"
 	vc6_gen_lib
 	fi
 	
 	libname="$prefix""re300m"
-	opts="/nologo /MT /W3 /GX /O2 /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c"
+	opts="/nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c"
 	vc6_gen_lib
 	
 	if test "$no_single" != "yes"; then
@@ -164,7 +164,7 @@ function vc6_gen()
 	vc6_gen_dll
 	
 	debug="no"
-	opts="/nologo /MD /W3 /GX /O2 /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c"
+	opts="/nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c"
 	libname="$prefix""re300l"
 	vc6_gen_dll
 	
@@ -674,6 +674,7 @@ bcb_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

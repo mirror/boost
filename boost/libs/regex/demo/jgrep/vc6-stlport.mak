@@ -4,7 +4,8 @@
 #
 
 jgrep.exe: main.cpp jgrep.cpp jgrep.h
-	cl -GX -GR -O2 -MT -I..\..\..\..\ jgrep.cpp main.cpp /link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+	cl -GX -GR /Oityb1 /GF /Gy -MT -I..\..\..\..\ jgrep.cpp main.cpp /link /LIBPATH:..\..\lib\vc6-stlport user32.lib
+
 
 
 
