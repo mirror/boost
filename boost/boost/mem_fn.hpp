@@ -51,7 +51,7 @@ struct mf
     
 // mf0_
 
-    template<class T, class F = R (T::*) ()> class mf0_
+    template<class T, class F> class mf0_
     {
      public:
 
@@ -84,7 +84,7 @@ struct mf
 
 // cmf0_
 
-    template<class T, class F = R (T::*) () const> class cmf0_
+    template<class T, class F> class cmf0_
     {
      public:
 
@@ -112,7 +112,7 @@ struct mf
 
 // mf1_
 
-    template<class T, class A1, class F = R (T::*) (A1)> class mf1_
+    template<class T, class A1, class F> class mf1_
     {
      public:
 
@@ -146,7 +146,7 @@ struct mf
 
 // cmf1_
 
-    template<class T, class A1, class F = R (T::*) (A1) const> class cmf1_
+    template<class T, class A1, class F> class cmf1_
     {
      public:
 
@@ -175,7 +175,7 @@ struct mf
 
 // mf2_
 
-    template<class T, class A1, class A2, class F = R (T::*) (A1, A2)> class mf2_
+    template<class T, class A1, class A2, class F> class mf2_
     {
      public:
 
@@ -207,7 +207,7 @@ struct mf
 
 // cmf2_
 
-    template<class T, class A1, class A2, class F = R (T::*) (A1, A2) const> class cmf2_
+    template<class T, class A1, class A2, class F> class cmf2_
     {
      public:
 
@@ -234,7 +234,7 @@ struct mf
 
 // mf3_
 
-    template<class T, class A1, class A2, class A3, class F = R (T::*) (A1, A2, A3)> class mf3_
+    template<class T, class A1, class A2, class A3, class F> class mf3_
     {
      public:
 
@@ -266,7 +266,7 @@ struct mf
 
 // cmf3_
 
-    template<class T, class A1, class A2, class A3, class F = R (T::*) (A1, A2, A3) const> class cmf3_
+    template<class T, class A1, class A2, class A3, class F> class cmf3_
     {
      public:
 
@@ -293,7 +293,7 @@ struct mf
 
 // mf4_
 
-    template<class T, class A1, class A2, class A3, class A4, class F = R (T::*) (A1, A2, A3, A4)> class mf4_
+    template<class T, class A1, class A2, class A3, class A4, class F> class mf4_
     {
      public:
 
@@ -325,7 +325,7 @@ struct mf
 
 // cmf4_
 
-    template<class T, class A1, class A2, class A3, class A4, class F = R (T::*) (A1, A2, A3, A4) const> class cmf4_
+    template<class T, class A1, class A2, class A3, class A4, class F> class cmf4_
     {
      public:
 
@@ -352,7 +352,7 @@ struct mf
 
 // mf5_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class F = R (T::*) (A1, A2, A3, A4, A5)> class mf5_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class F> class mf5_
     {
      public:
 
@@ -384,7 +384,7 @@ struct mf
 
 // cmf5_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class F = R (T::*) (A1, A2, A3, A4, A5) const> class cmf5_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class F> class cmf5_
     {
      public:
 
@@ -411,7 +411,7 @@ struct mf
 
 // mf6_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class F = R (T::*) (A1, A2, A3, A4, A5, A6)> class mf6_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class F> class mf6_
     {
      public:
 
@@ -443,7 +443,7 @@ struct mf
 
 // cmf6_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class F = R (T::*) (A1, A2, A3, A4, A5, A6) const> class cmf6_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class F> class cmf6_
     {
      public:
 
@@ -470,7 +470,7 @@ struct mf
 
 // mf7_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7)> class mf7_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F> class mf7_
     {
      public:
 
@@ -502,7 +502,7 @@ struct mf
 
 // cmf7_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7) const> class cmf7_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F> class cmf7_
     {
      public:
 
@@ -529,7 +529,7 @@ struct mf
 
 // mf8_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7, A8)> class mf8_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F> class mf8_
     {
      public:
 
@@ -561,7 +561,7 @@ struct mf
 
 // cmf8_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7, A8) const> class cmf8_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F> class cmf8_
     {
      public:
 
@@ -600,7 +600,7 @@ struct mf<void>
     
 // mf0_
 
-    template<class T, class F = R (T::*) ()> class mf0_
+    template<class T, class F> class mf0_
     {
      public:
 
@@ -633,7 +633,7 @@ struct mf<void>
 
 // cmf0_
 
-    template<class T, class F = R (T::*) () const> class cmf0_
+    template<class T, class F> class cmf0_
     {
      public:
 
@@ -661,7 +661,7 @@ struct mf<void>
 
 // mf1_
 
-    template<class T, class A1, class F = R (T::*) (A1)> class mf1_
+    template<class T, class A1, class F> class mf1_
     {
      public:
 
@@ -695,7 +695,7 @@ struct mf<void>
 
 // cmf1_
 
-    template<class T, class A1, class F = R (T::*) (A1) const> class cmf1_
+    template<class T, class A1, class F> class cmf1_
     {
      public:
 
@@ -724,7 +724,7 @@ struct mf<void>
 
 // mf2_
 
-    template<class T, class A1, class A2, class F = R (T::*) (A1, A2)> class mf2_
+    template<class T, class A1, class A2, class F> class mf2_
     {
      public:
 
@@ -756,7 +756,7 @@ struct mf<void>
 
 // cmf2_
 
-    template<class T, class A1, class A2, class F = R (T::*) (A1, A2) const> class cmf2_
+    template<class T, class A1, class A2, class F> class cmf2_
     {
      public:
 
@@ -783,7 +783,7 @@ struct mf<void>
 
 // mf3_
 
-    template<class T, class A1, class A2, class A3, class F = R (T::*) (A1, A2, A3)> class mf3_
+    template<class T, class A1, class A2, class A3, class F> class mf3_
     {
      public:
 
@@ -815,7 +815,7 @@ struct mf<void>
 
 // cmf3_
 
-    template<class T, class A1, class A2, class A3, class F = R (T::*) (A1, A2, A3) const> class cmf3_
+    template<class T, class A1, class A2, class A3, class F> class cmf3_
     {
      public:
 
@@ -842,7 +842,7 @@ struct mf<void>
 
 // mf4_
 
-    template<class T, class A1, class A2, class A3, class A4, class F = R (T::*) (A1, A2, A3, A4)> class mf4_
+    template<class T, class A1, class A2, class A3, class A4, class F> class mf4_
     {
      public:
 
@@ -874,7 +874,7 @@ struct mf<void>
 
 // cmf4_
 
-    template<class T, class A1, class A2, class A3, class A4, class F = R (T::*) (A1, A2, A3, A4) const> class cmf4_
+    template<class T, class A1, class A2, class A3, class A4, class F> class cmf4_
     {
      public:
 
@@ -901,7 +901,7 @@ struct mf<void>
 
 // mf5_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class F = R (T::*) (A1, A2, A3, A4, A5)> class mf5_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class F> class mf5_
     {
      public:
 
@@ -933,7 +933,7 @@ struct mf<void>
 
 // cmf5_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class F = R (T::*) (A1, A2, A3, A4, A5) const> class cmf5_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class F> class cmf5_
     {
      public:
 
@@ -960,7 +960,7 @@ struct mf<void>
 
 // mf6_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class F = R (T::*) (A1, A2, A3, A4, A5, A6)> class mf6_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class F> class mf6_
     {
      public:
 
@@ -992,7 +992,7 @@ struct mf<void>
 
 // cmf6_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class F = R (T::*) (A1, A2, A3, A4, A5, A6) const> class cmf6_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class F> class cmf6_
     {
      public:
 
@@ -1019,7 +1019,7 @@ struct mf<void>
 
 // mf7_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7)> class mf7_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F> class mf7_
     {
      public:
 
@@ -1051,7 +1051,7 @@ struct mf<void>
 
 // cmf7_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7) const> class cmf7_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class F> class cmf7_
     {
      public:
 
@@ -1078,7 +1078,7 @@ struct mf<void>
 
 // mf8_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7, A8)> class mf8_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F> class mf8_
     {
      public:
 
@@ -1110,7 +1110,7 @@ struct mf<void>
 
 // cmf8_
 
-    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F = R (T::*) (A1, A2, A3, A4, A5, A6, A7, A8) const> class cmf8_
+    template<class T, class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class F> class cmf8_
     {
      public:
 
