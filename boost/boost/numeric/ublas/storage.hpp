@@ -68,9 +68,17 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
 
+    // Base class for the Barton Nackman trick
+    template<class E>
+    class storage_array:
+        private nonassignable {
+    };
+
+
     // Unbounded array - with allocator
     template<class T, class ALLOC>
-    class unbounded_array {
+    class unbounded_array:
+        public storage_array<unbounded_array<T, ALLOC> > {
     public:
         typedef typename ALLOC::size_type size_type;
         typedef typename ALLOC::difference_type difference_type;
@@ -292,7 +300,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Bounded array - with allocator for size_type and difference_type
     template<class T, std::size_t N, class ALLOC>
-    class bounded_array {
+    class bounded_array:
+        public storage_array<bounded_array<T, N, ALLOC> > {
     public:
         typedef typename ALLOC::size_type size_type;
         typedef typename ALLOC::difference_type difference_type;
@@ -453,7 +462,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Array adaptor with normal deep copy semantics of elements
     template<class T>
-    class array_adaptor {
+    class array_adaptor:
+        public storage_array<array_adaptor<T> > {
     public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -662,7 +672,8 @@ namespace boost { namespace numeric { namespace ublas {
     // shared_array are used maitain reference counting.
     // This class breaks the normal copy semantics for a storage container and is very dangerous!
     template<class T>
-    class shallow_array_adaptor {
+    class shallow_array_adaptor:
+        public storage_array<shallow_array_adaptor<T> > {
 
         template<class T>
         struct leaker {
@@ -865,22 +876,27 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
     // Range class
-    class range {
+    template <class I, class D>
+    class basic_range:
+        public storage_array<basic_range<I, D> > {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef I size_type;
+        typedef D difference_type;
         typedef size_type value_type;
         typedef value_type const_reference;
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef value_type *pointer;
+    private:
+        typedef basic_range<I, D> self_type;
 
+    public:
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        range ():
+        basic_range ():
             start_ (0), size_ (0) {}
         BOOST_UBLAS_INLINE
-        range (size_type start, size_type stop):
+        basic_range (size_type start, size_type stop):
             start_ (start), size_ (stop - start) {
             BOOST_UBLAS_CHECK (start_ <= stop, bad_index ());
         }
@@ -903,17 +919,17 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Composition
         BOOST_UBLAS_INLINE
-        range compose (const range &r) const {
-            return range (start_ + r.start_, start_ + r.start_ + r.size_);
+        basic_range compose (const basic_range &r) const {
+            return basic_range (start_ + r.start_, start_ + r.start_ + r.size_);
         }
 
         // Comparison
         BOOST_UBLAS_INLINE
-        bool operator == (const range &r) const {
+        bool operator == (const basic_range &r) const {
             return start_ == r.start_ && size_ == r.size_;
         }
         BOOST_UBLAS_INLINE
-        bool operator != (const range &r) const {
+        bool operator != (const basic_range &r) const {
             return ! (*this == r);
         }
 
@@ -924,29 +940,29 @@ namespace boost { namespace numeric { namespace ublas {
 
     public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-        typedef indexed_const_iterator<range, std::random_access_iterator_tag> const_iterator;
+        typedef indexed_const_iterator<self_type, std::random_access_iterator_tag> const_iterator;
 #else
         class const_iterator:
-            public container_const_reference<range>,
+            public container_const_reference<basic_range>,
             public random_access_iterator_base<std::random_access_iterator_tag,
                                                const_iterator, value_type> {
         public:
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef range::difference_type difference_type;
-            typedef range::value_type value_type;
-            typedef range::const_reference reference;
-            // DEPRECATED typedef range::const_pointer pointer;
+            typedef typename basic_range::value_type value_type;
+            typedef typename basic_range::difference_type difference_type;
+            typedef typename basic_range::const_reference reference;
+            typedef typename basic_range::const_pointer pointer;
 #endif
 
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator ():
-                container_const_reference<range> (), it_ () {}
+                container_const_reference<basic_range> (), it_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator (const range &r, const const_iterator_type &it):
-                container_const_reference<range> (r), it_ (it) {}
+            const_iterator (const basic_range &r, const const_iterator_type &it):
+                container_const_reference<basic_range> (r), it_ (it) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -1046,15 +1062,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         BOOST_UBLAS_INLINE
-        range preprocess (size_type size) const {
+        basic_range preprocess (size_type size) const {
             if (*this != all ())
                 return *this;
-            return range (0, size);
+            return basic_range (0, size);
         }
         static
         BOOST_UBLAS_INLINE
-        range all () {
-            return range (0, size_type (-1));
+        basic_range all () {
+            return basic_range (0, size_type (-1));
         }
 
     private:
@@ -1063,22 +1079,27 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     // Slice class
-    class slice {
+    template <class I, class D>
+    class basic_slice:
+        public storage_array<basic_slice<I, D> > {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef I size_type;
+        typedef D difference_type;
         typedef size_type value_type;
         typedef value_type const_reference;
         typedef const_reference reference;
         typedef const value_type *const_pointer;
         typedef value_type *pointer;
+    private:
+        typedef basic_slice<I, D> self_type;
 
+    public:
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        slice ():
+        basic_slice ():
             start_ (0), stride_ (0), size_ (0) {}
         BOOST_UBLAS_INLINE
-        slice (size_type start, difference_type stride, size_type size):
+        basic_slice (size_type start, difference_type stride, size_type size):
             start_ (start), stride_ (stride), size_ (size) {}
 
         BOOST_UBLAS_INLINE
@@ -1104,23 +1125,23 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Composition
         BOOST_UBLAS_INLINE
-        slice compose (const range &r) const {
+        basic_slice compose (const basic_range<size_type, difference_type> &r) const {
             BOOST_UBLAS_CHECK (start_ >= stride_ * r.start (), bad_index ());
-            return slice (start_ + stride_ * r.start (), stride_, r.size ());
+            return basic_slice (start_ + stride_ * r.start (), stride_, r.size ());
         }
         BOOST_UBLAS_INLINE
-        slice compose (const slice &s) const {
+        basic_slice compose (const basic_slice &s) const {
             BOOST_UBLAS_CHECK (start_ >= stride_ * s.start_, bad_index ());
-            return slice (start_ + stride_ * s.start_, stride_ * s.stride_, s.size_);
+            return basic_slice (start_ + stride_ * s.start_, stride_ * s.stride_, s.size_);
         }
 
         // Comparison
         BOOST_UBLAS_INLINE
-        bool operator == (const slice &s) const {
+        bool operator == (const basic_slice &s) const {
             return start_ == s.start_ && stride_ == s.stride_ && size_ == s.size_; 
         }
         BOOST_UBLAS_INLINE
-        bool operator != (const slice &s) const {
+        bool operator != (const basic_slice &s) const {
             return ! (*this == s);
         }
 
@@ -1131,29 +1152,29 @@ namespace boost { namespace numeric { namespace ublas {
 
     public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
-        typedef indexed_const_iterator<slice, std::random_access_iterator_tag> const_iterator;
+        typedef indexed_const_iterator<self_type, std::random_access_iterator_tag> const_iterator;
 #else
         class const_iterator:
-            public container_const_reference<slice>,
+            public container_const_reference<basic_slice>,
             public random_access_iterator_base<std::random_access_iterator_tag,
                                                const_iterator, value_type> {
         public:
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef slice::difference_type difference_type;
-            typedef slice::value_type value_type;
-            typedef slice::const_reference reference;
-            // DEPRECATED typedef slice::const_pointer pointer;
+            typedef typename basic_slice::value_type value_type;
+            typedef typename basic_slice::difference_type difference_type;
+            typedef typename basic_slice::const_reference reference;
+            typedef typename basic_slice::const_pointer pointer;
 #endif
 
             // Construction and destruction
             BOOST_UBLAS_INLINE
             const_iterator ():
-                container_const_reference<slice> (), it_ () {}
+                container_const_reference<basic_slice> (), it_ () {}
             BOOST_UBLAS_INLINE
-            const_iterator (const slice &s, const const_iterator_type &it):
-                container_const_reference<slice> (s), it_ (it) {}
+            const_iterator (const basic_slice &s, const const_iterator_type &it):
+                container_const_reference<basic_slice> (s), it_ (it) {}
 
             // Arithmetic
             BOOST_UBLAS_INLINE
@@ -1251,15 +1272,15 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         BOOST_UBLAS_INLINE
-        slice preprocess (size_type size) const {
+        basic_slice preprocess (size_type size) const {
             if (*this != all ())
                 return *this;
-            return slice (0, 1, size);
+            return basic_slice (0, 1, size);
         }
         static
         BOOST_UBLAS_INLINE
-        slice all () {
-            return slice (0, 1, size_type (-1));
+        basic_slice all () {
+            return basic_slice (0, 1, size_type (-1));
         }
 
     private:
@@ -1270,7 +1291,8 @@ namespace boost { namespace numeric { namespace ublas {
 
     // Indirect array class
     template<class A>
-    class indirect_array {
+    class indirect_array:
+        public storage_array<indirect_array<A> >  {
     public:
         typedef A array_type;
         typedef const A const_array_type;
@@ -1334,7 +1356,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Composition
         BOOST_UBLAS_INLINE
-        indirect_array compose (const range &r) const {
+        indirect_array compose (const basic_range<size_type, difference_type> &r) const {
             BOOST_UBLAS_CHECK (r.start () + r.size () <= size_, bad_size ());
             array_type data (r.size ());
             for (size_type i = 0; i < r.size (); ++ i)
@@ -1342,7 +1364,7 @@ namespace boost { namespace numeric { namespace ublas {
             return indirect_array (r.size (), data);
         }
         BOOST_UBLAS_INLINE
-        indirect_array compose (const slice &s) const {
+        indirect_array compose (const basic_slice<size_type, difference_type> &s) const {
             BOOST_UBLAS_CHECK (s.start () + s.stride () * (s.size () - (s.size () > 0)) <= size (), bad_size ());
             array_type data (s.size ());
             for (size_type i = 0; i < s.size (); ++ i)
@@ -1393,8 +1415,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_MSVC_STD_ITERATOR
             typedef const_reference reference;
 #else
-            typedef typename indirect_array::difference_type difference_type;
             typedef typename indirect_array::value_type value_type;
+            typedef typename indirect_array::difference_type difference_type;
             typedef typename indirect_array::const_reference reference;
             typedef typename indirect_array::const_pointer pointer;
 #endif
