@@ -14,12 +14,57 @@
     <title>Boost Iterator Traits</title>
   </head>
 
-  <body>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+	ALINK="#ff0000"> 
+<IMG SRC="../../c++boost.gif" 
+     ALT="C++ Boost" width="277" height="86"> 
+<BR Clear>
+
     <h1>Boost Iterator Traits</h1>
 Header <tt><a href="../../boost/iterator_traits.hpp">boost/iterator_traits.hpp</a></tt>
 
+<p>
+The <tt>boost::iterator_traits</tt> class provides access to the
+associated types of iterators that model the Boost <a
+href="./iterator_concepts.htm">Iterator Concepts</a>, which are a
+replacement for the iterator requirements in the C++ standard.
+The main difference between <tt>std::iterator_traits</tt> and
+<tt>boost::iterator_traits</tt> is that the <tt>iterator_category</tt>
+type has been removed, and replaced with two new types:
+
+<ul>
+  <li><tt>traversal_category</tt>:&nbsp;&nbsp; Can the iterator go forward, backward, etc.?
+  <li><tt>return_category</tt>:&nbsp;&nbsp; Is the iterator read or write only?
+    Is the dereferenced type an lvalue?
+</ul>
+
+
+<p>
+An important feature of the <tt>boost::iterator_traits</tt> is that it
+is <b>backwards compatible</b>, i.e., it will automatically work for
+iterators for which there are valid definitions of
+<tt>std::iterator_traits</tt>. The old <tt>iterator_category</tt> is
+mapped to the appropriate traversal and return categories.
+
+<p>
+When creating a new iterator type that is meant to work with
+<tt>boost::iterator_traits</tt>, you can either create a
+specialization of <tt>boost::iterator_traits</tt> for your iterator
+type, or you can provide all the necessary associated types as nested
+typedefs.  In this case, your iterator class will need to inherit from
+<tt>new_iterator_base</tt> to let <tt>boost::iterator_traits</tt> know
+that it will be able to find typedefs for <tt>traversal_category</tt>
+and <tt>return_category</tt> in you iterator class.
+
+
 <pre>
 namespace boost {
+
+  <i>// Inherit from iterator_base if your iterator defines its own
+  // return_category and traversal_category. Otherwise, the "old style"
+  // iterator category will be mapped to the return_category and
+  // traversal_category.</i>
+  struct new_iterator_base { };
 
   template &lt;typename Iterator&gt;
   struct iterator_traits
@@ -86,7 +131,7 @@ namespace boost {
     <address><a href="mailto:jsiek@lsc.nd.edu">jeremy siek</a></address>
 <!-- Created: Sun Mar 18 14:06:57 EST 2001 -->
 <!-- hhmts start -->
-Last modified: Sun Mar 18 17:10:26 EST 2001
+Last modified: Mon Mar 19 12:59:30 EST 2001
 <!-- hhmts end -->
   </body>
 </html>
