@@ -66,8 +66,11 @@ namespace boost
             void_ptr_iterator( VoidIter r ) : iter_(r)
             { }
 
+            //
+            // Remark: passing by value breaks vc7.1 
+            //
             template< class MutableIterator, class MutableT >
-            void_ptr_iterator( void_ptr_iterator<MutableIterator,MutableT> r )
+            void_ptr_iterator( const void_ptr_iterator<MutableIterator,MutableT>& r )
              : iter_(r.base())
             { }
 

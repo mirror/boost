@@ -11,8 +11,8 @@ void test_iterator()
     ptr_vector<int>::ptr_const_iterator const_ptr   = vec.ptr_begin();
     
     const ptr_vector<int>& rvec               = vec;
-//    const_i                                   = rvec.begin();
-//    const_ptr                                 = rvec.ptr_begin();
+    const_i                                   = rvec.begin();
+    const_ptr                                 = rvec.ptr_begin();
     
 }
 
