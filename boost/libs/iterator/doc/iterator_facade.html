@@ -407,14 +407,6 @@ traversal tags would add no information]</p>
 <!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
 <!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
 <!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
-<p>If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is <tt class="literal"><span class="pre">use_default</span></tt> then
-<tt class="literal"><span class="pre">iterator_traversal&lt;Derived&gt;::type</span></tt> is convertible to the most
-derived standard traversal tag type to which
-<tt class="literal"><span class="pre">iterator_traversal&lt;Iterator&gt;::type</span></tt> is also convertible, and not to
-any more-derived traversal tag type.  Otherwise
-<tt class="literal"><span class="pre">iterator_traversal&lt;Derived&gt;::type</span></tt> is convertible to the most
-derived standard traversal tag type to which <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>
-is also convertible, and not to any more-derived traversal tag type.</p>
 <p>The <tt class="literal"><span class="pre">enable_if_interoperable</span></tt> template used above is for exposition
 purposes.  The member operators should be only be in an overload set
 provided the derived types <tt class="literal"><span class="pre">Dr1</span></tt> and <tt class="literal"><span class="pre">Dr2</span></tt> are interoperable, 

@@ -21,7 +21,7 @@
    public:
       iterator_adaptor();
       explicit iterator_adaptor(Base iter);
-      Base base() const;
+      Base const base() const;
    protected:
       Base const& base_reference() const;
       Base& base_reference();
@@ -122,10 +122,14 @@ expression involving ``Derived`` in those concepts' requirements.
 :Returns: An instance of ``iterator_adaptor`` with
     ``m_iterator`` copy constructed from ``iter``.
 
-``Base base() const;``
+``Base const base() const;``
 
 :Returns: ``m_iterator``
 
+[Note: specifying ``Base const`` gives implementations license to
+return ``Base const&`` for efficiency's sake.  If ``base()``
+returned just ``Base``, it would be possible to call non-``const``
+member functions on the result object directly]
 
 ``iterator_adaptor`` protected member functions
 -----------------------------------------------
