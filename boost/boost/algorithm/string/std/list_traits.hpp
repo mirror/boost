@@ -23,11 +23,11 @@ namespace boost {
 
         // stable iterators tester
         template<typename T, typename AllocT>
-        yes_type has_stable_iterators_tester( const ::std::list<T,AllocT>* )
+        yes_type has_stable_iterators_tester( const ::std::list<T,AllocT>* );
 
         // const time insert tester
         template<typename T, typename AllocT>
-        yes_type has_const_time_insert_tester( const ::std::list<T,AllocT>* )
+        yes_type has_const_time_insert_tester( const ::std::list<T,AllocT>* );
 
         // const time erase tester
         template<typename T, typename AllocT>
