@@ -60,6 +60,30 @@ static void test_13_24() {
 # endif
 }
 
+// comparisons between [1,4] and [2,3]
+
+static void test_14_23() {
+  const I a(1,4), b(2,3);
+
+  BOOST_CHECK(!(a < b));
+  BOOST_CHECK(!(a <= b));
+  BOOST_CHECK(a > b);
+  BOOST_CHECK(a >= b);
+
+  BOOST_CHECK(b < a);
+  BOOST_CHECK(b <= a);
+  BOOST_CHECK(!(b > a));
+  BOOST_CHECK(!(b >= a));
+
+  BOOST_CHECK(!(a == b));
+  BOOST_CHECK(a != b);
+
+# ifdef __BORLANDC__
+  ::detail::ignore_unused_variable_warning(a);
+  ::detail::ignore_unused_variable_warning(b);
+# endif
+}
+
 // comparisons between [1,2] and [2,3]
 
 static void test_12_23() {
@@ -74,6 +98,74 @@ static void test_12_23() {
   BOOST_CHECK(!(b <= a));
   BOOST_CHECK(!(b > a));
   BOOST_CHECK(!(b >= a));
+
+  BOOST_CHECK(!(a == b));
+  BOOST_CHECK(a != b);
+
+# ifdef __BORLANDC__
+  ::detail::ignore_unused_variable_warning(a);
+  ::detail::ignore_unused_variable_warning(b);
+# endif
+}
+
+// comparisons between [1,2] and empty set
+
+static void test_12_E() {
+  I a(1, 2), b(I::empty());
+  
+  BOOST_CHECK(!(a < b));
+  BOOST_CHECK(!(a <= b));
+  BOOST_CHECK(a > b);
+  BOOST_CHECK(a >= b);
+
+  BOOST_CHECK(b < a);
+  BOOST_CHECK(b <= a);
+  BOOST_CHECK(!(b > a));
+  BOOST_CHECK(!(b >= a));
+
+  BOOST_CHECK(!(a == b));
+  BOOST_CHECK(a != b);
+
+# ifdef __BORLANDC__
+  ::detail::ignore_unused_variable_warning(a);
+  ::detail::ignore_unused_variable_warning(b);
+# endif
+}
+
+// comparisons between two empty sets
+
+static void test_E_E() {
+  I a(I::empty()), b(I::empty());
+  
+  BOOST_CHECK(!(a < b));
+  BOOST_CHECK(a <= b);
+  BOOST_CHECK(!(a > b));
+  BOOST_CHECK(a >= b);
+
+  BOOST_CHECK(!(b < a));
+  BOOST_CHECK(b <= a);
+  BOOST_CHECK(!(b > a));
+  BOOST_CHECK(b >= a);
+
+  BOOST_CHECK(a == b);
+  BOOST_CHECK(!(a != b));
+
+# ifdef __BORLANDC__
+  ::detail::ignore_unused_variable_warning(a);
+  ::detail::ignore_unused_variable_warning(b);
+# endif
+}
+
+// comparisons between empty set and 0
+
+static void test_E_0() {
+  I a(I::empty());
+  const int b = 0;
+  
+  BOOST_CHECK(a < b);
+  BOOST_CHECK(a <= b);
+  BOOST_CHECK(!(a > b));
+  BOOST_CHECK(!(a >= b));
 
   BOOST_CHECK(!(a == b));
   BOOST_CHECK(a != b);
@@ -235,7 +327,11 @@ static void test_11_1() {
 int test_main(int, char *[]) {
   test_12_34();
   test_13_24();
+  test_14_23();
   test_12_23();
+  test_12_E();
+  test_E_E();
+  test_E_0();
   test_12_0();
   test_12_1();
   test_12_2();
