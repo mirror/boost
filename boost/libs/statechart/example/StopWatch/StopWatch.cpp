@@ -138,7 +138,7 @@ int main()
   std::cout << "boost::fsm StopWatch example\n\n";
   std::cout << "s<CR>: Starts/Stops stop watch\n";
   std::cout << "r<CR>: Resets stop watch\n";
-  std::cout << "d<CR>: Displays the elapsed time in milliseconds\n";
+  std::cout << "d<CR>: Displays the elapsed time in seconds\n";
   std::cout << "e<CR>: Exits the program\n\n";
   std::cout << "You may chain commands, e.g. rs<CR> resets and starts stop watch\n\n";
   
