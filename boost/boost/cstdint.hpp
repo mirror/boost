@@ -134,8 +134,7 @@ namespace boost
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
 # if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX))
-#    if(defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) ||  \
-        (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U)
+#    if(defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) || (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U)
                                                                  // 2**64 - 1
      typedef long long            intmax_t;
      typedef unsigned long long   uintmax_t;
