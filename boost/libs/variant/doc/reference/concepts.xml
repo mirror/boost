@@ -39,6 +39,14 @@
         <emphasis>DefaultConstructible</emphasis> if and only if its first
         bounded type (i.e., <code>T1</code>) meets the requirements of the
         concept.</listitem>
+      <listitem><link linkend="variant.concepts.equality-comparable"><emphasis>EqualityComparable</emphasis></link>:
+        <code>variant</code> is itself <emphasis>EqualityComparable</emphasis>
+        if and only if every one of its bounded types meets the requirements
+        of the concept.</listitem>
+      <listitem><link linkend="variant.concepts.lessthan-comparable"><emphasis>LessThanComparable</emphasis></link>:
+        <code>variant</code> is itself <emphasis>LessThanComparable</emphasis>
+        if and only if every one of its bounded types meets the requirements
+        of the concept.</listitem>
       <listitem><link linkend="variant.concepts.output-streamable"><emphasis>OutputStreamable</emphasis></link>:
         <code>variant</code> is itself <emphasis>OutputStreamable</emphasis>
         if and only if every one of its bounded types meets the requirements
@@ -66,7 +74,7 @@
 
     <section id="variant.concepts.static-visitor.examples">
       <title>Examples</title>
-      
+
       <para>The following class satisfies the requirements of a static visitor
       of several types (i.e., explicitly: <code>int</code> and
       <code>std::string</code>; or, e.g., implicitly: <code>short</code> and
@@ -107,12 +115,28 @@ public:
 
     </section>
   </section>
-  
+
   <section id="variant.concepts.assignable">
     <title><emphasis>Assignable</emphasis></title>
 
     <para>See
     <ulink url="http://www.sgi.com/tech/stl/Assignable.html">external
+    documentation</ulink> for this concept.</para>
+  </section>
+
+  <section id="variant.concepts.equality-comparable">
+    <title><emphasis>EqualityComparable</emphasis></title>
+
+    <para>See
+    <ulink url="http://www.sgi.com/tech/stl/EqualityComparable.html">external
+    documentation</ulink> for this concept.</para>
+  </section>
+
+  <section id="variant.concepts.lessthan-comparable">
+    <title><emphasis>LessThanComparable</emphasis></title>
+
+    <para>See
+    <ulink url="http://www.sgi.com/tech/stl/LessThanComparable.html">external
     documentation</ulink> for this concept.</para>
   </section>
 
