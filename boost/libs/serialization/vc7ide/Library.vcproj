@@ -21,17 +21,19 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/Zm800"
 				Optimization="0"
-				AdditionalIncludeDirectories="c:\spirit161;&quot;$(ProjectDir)..\..\..&quot;"
+				AdditionalIncludeDirectories="$(ProjectDir)..\..\.."
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="TRUE"
-				RuntimeLibrary="5"
+				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
+				ObjectFile="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/$(OutDir)/threading-multi/"
+				ProgramDataBaseFileName="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/$(OutDir)/threading-multi/vc70.pdb"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="3"/>
@@ -39,7 +41,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/$(OutDir)/runtime-link-static/libboost_serialization.lib"/>
+				OutputFile="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7.1/$(OutDir)/threading-multi/libboost_serialization.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -397,9 +399,6 @@
 				RelativePath="..\..\..\boost\serialization\force_include.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\boost\type_traits\is_virtual_base_and_derived.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\boost\pfto.hpp">
 			</File>
 			<File
@@ -611,21 +610,6 @@
 			</File>
 			<File
 				RelativePath="..\src\binary_oarchive.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\codecvt_null.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
