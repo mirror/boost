@@ -61,7 +61,7 @@ template &lt;class Predicate, class BaseIterator,
 class filter_iterator_generator
 {
 public:
-  typedef <tt><a href="./iterator_adaptor.htm">iterator_adaptor</a>&lt...&gt;</tt> type; // the resulting filter iterator type 
+  typedef <tt><a href="./iterator_adaptors.htm#iterator_adaptor">iterator_adaptor</a>&lt...&gt;</tt> type; // the resulting filter iterator type 
   typedef ... policies_type;          // the policies type for the iterator adaptor
 }
 </pre>
@@ -125,20 +125,9 @@ appropriate type<a href="#1">[1]</a>.<br> <b>Default:</b>
 </TR>
 
 <TR>
-<TD><tt>Pointer</tt></TD>
-<TD>The <tt>pointer</tt> type of the resulting iterator, and in
- particular, the result type of operator->(). 
- Typically the default for
-this parameter is the appropriate type.<br>
-<b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
-otherwise <tt>std::iterator_traits&lt;BaseIterator&gt;::pointer</tt>.</TD>
-</TR>
-
-<TR>
 <TD><tt>Reference</tt></TD>
-
 <TD>The <tt>reference</tt> type of the resulting iterator, and in
-particular, the result type of operator*(). Typically the default for
+particular, the result type of <tt>operator*()</tt>. Typically the default for
 this parameter is the appropriate type.<br> <b>Default:</b> If
 <tt>Value</tt> is supplied, <tt>Value&amp;</tt> is used. Otherwise
 <tt>std::iterator_traits&lt;BaseIterator&gt;::reference</tt> is
@@ -146,8 +135,18 @@ used.</TD>
 </TR>
 
 <TR>
-<TD><tt>Category</tt></TD>
+<TD><tt>Pointer</tt></TD>
+<TD>The <tt>pointer</tt> type of the resulting iterator, and in
+ particular, the result type of <tt>operator->()</tt>. 
+ Typically the default for
+this parameter is the appropriate type.<br>
+<b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
+otherwise <tt>std::iterator_traits&lt;BaseIterator&gt;::pointer</tt>.</TD>
+</TR>
 
+
+<TR>
+<TD><tt>Category</tt></TD>
 <TD>The <tt>iterator_category</tt> type for the resulting iterator.
 Typically the
 default for this parameter is the appropriate type. If you override
