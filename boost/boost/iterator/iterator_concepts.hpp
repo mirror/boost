@@ -104,7 +104,7 @@ namespace boost_concepts {
       typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
       void constraints()
       {
-        const value_type& r = *i;
+        value_type& r = const_cast<value_type&>(*i);
         boost::ignore_unused_variable_warning(r);
       }
     Iterator i;
