@@ -1,54 +1,41 @@
-<?xml version='1.0' encoding="ISO-Latin-1" ?>
-<!DOCTYPE article 
-  PUBLIC  "-//OASIS//DTD DocBook XML MathML V4.1.2//EN" 
-  "/u/jajarvi/dtd/docbook-xml/docbookx.dtd"
->
-<article>
-  <articleinfo>
-    <title>
-      <inlinemediaobject>
-	<imageobject>
-	  <imagedata fileref="../../../c++boost.gif" format="gif"/>
-	</imageobject>
-	<textobject>
-	  <phrase>C++ BOOST</phrase>
-	</textobject>
-      </inlinemediaobject>
+<?xml version="1.0" encoding="ISO-Latin-1"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
+  "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<library name="Lambda" dirname="lambda" id="lambda" 
+         last-revision="$Date$" 
+         xmlns:xi="http://www.w3.org/2001/XInclude">
+<libraryinfo>
+  <author>
+    <firstname>Jaakko</firstname>
+    <surname>Järvi</surname>
+     <email>jarvi at cs tamu edu</email>
+  </author>
 
-      The Boost Lambda Library</title>
-    
-<!--    <author>
-      <surname>Järvi</surname><firstname>Jaakko</firstname>
-      <affiliation>
+  <copyright>
+    <year>1999</year>
+    <year>2000</year>
+    <year>2001</year>
+    <year>2002</year>
+    <year>2003</year>
+    <year>2004</year>
+    <holder>Jaakko Järvi</holder>
+    <holder>Gary Powell</holder>
+  </copyright>
 
-	<orgname>Indiana University</orgname>
-	<orgdiv></orgdiv>
-      </affiliation>
-    </author>
--->
-    <orgname>BOOST</orgname>
-    <copyright>
-      <year>1999-2002</year>
-      <holder>Jaakko Järvi</holder>
-      <holder>Gary Powell</holder>
-    </copyright>
-    <legalnotice>
-      <para>
-        The Boost Lambda Library is free software; Permission to copy,
-        use, modify and distribute this software and its documentation is granted, provided this copyright
-        notice appears in all copies. 
-      </para>
-    </legalnotice>
-  </articleinfo>
+  <legalnotice>
+    <para>Use, modification and distribution is subject to the Boost
+    Software License, Version 1.0. (See accompanying file
+    <filename>LICENSE_1_0.txt</filename> or copy at <ulink
+    url="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</ulink>)</para>
+  </legalnotice>
 
+  <librarypurpose>Define small unnamed function objects at the actual call site, and more</librarypurpose>
+  <librarycategory name="category:higher-order"/>
+</libraryinfo>
 
   <!--  -->
 
-  <ulink url="lambda_docs_as_one_file.html">Documentation as a one big HTML-file</ulink>
-
   <section id="introduction">
-
-
 
     <title>In a nutshell</title>
 
@@ -554,6 +541,11 @@ These functions are described more thoroughly in <xref linkend="sect:delaying_co
 
     <section id="sect:actual_arguments_to_lambda_functors">
       <title>About actual arguments to lambda functors</title>
+
+      <para><emphasis>This section is no longer (or currently) relevant;
+       acual arguments can be non-const rvalues.
+       The section can, however, become relevant again, if in the future BLL will support
+       lambda functors with higher arities than 3.</emphasis></para>
 
       <para>A general restriction for the actual arguments is that they cannot be non-const rvalues. 
 	For example:
@@ -2079,6 +2071,13 @@ was to allow nested STL algorithm invocations
 <section id="sect:rvalues_as_actual_arguments">
 <title>Rvalues as actual arguments to lambda functors</title>
 
+      <para><emphasis>This section and all of its subsections
+       are no longer (or currently) relevant;
+       acual arguments can be non-const rvalues and these workarounds are thus
+       not needed.
+       The section can, however, become relevant again, if in the future BLL will support
+       lambda functors with higher arities than 3.</emphasis></para>
+
 <para>
 Actual arguments to the lambda functors cannot be non-const rvalues.
 This is due to a deliberate design decision: either we have this restriction, 
@@ -3448,7 +3447,7 @@ was dropped.
 
 
 
-</article>
+</library>
 
 
 
