@@ -483,7 +483,8 @@
           <xsl:call-template name="highlight-comment">
             <xsl:with-param name="text">
               <xsl:text>// </xsl:text>
-              <xsl:apply-templates select="purpose" mode="annotation"/>
+              <xsl:apply-templates select="purpose/*|purpose/text()"
+                mode="annotation"/>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:if>
