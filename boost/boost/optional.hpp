@@ -20,9 +20,15 @@
 #include<new>
 #include<algorithm>
 
+#include "boost/config.hpp"
 #include "boost/assert.hpp"
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
+
+// MSVC6.0 doesn't like separated templated contructor/assignment,
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1200 ) // 1200 == VC++ 6.0
+#define BOOST_OPTIONAL_NO_CONVERTIONS
+#endif
 
 namespace boost
 {
@@ -84,6 +90,7 @@ class optional
         construct(*rhs);
     }
 
+#ifndef BOOST_OPTIONAL_NO_CONVERTIONS
     // Creates a deep copy of another convertible optional<U>
     // Requires a valid conversion from U to T.
     // Can throw if T::T(U const&) does
@@ -95,6 +102,7 @@ class optional
       if ( rhs )
         construct(*rhs);
     }
+#endif
 
     // No-throw (assuming T::~T() doesn't)
     ~optional() { destroy() ; }
@@ -114,6 +122,7 @@ class optional
         return *this ;
       }
 
+#ifndef BOOST_OPTIONAL_NO_CONVERTIONS
     // Assigns from another convertible optional<U> (converts && deep-copies the rhs value)
     // Requires a valid conversion from U to T.
     // Basic Guarantee: If T::T( U const& ) throws, this is left UNINITIALIZED
@@ -130,6 +139,7 @@ class optional
         }
         return *this ;
       }
+#endif
 
     // Destroys the current value, if any, leaving this UNINITIALIZED
     // No-throw (assuming T::~T() doesn't)

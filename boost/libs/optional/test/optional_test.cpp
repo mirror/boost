@@ -61,6 +61,12 @@ using boost::swap ;
 using boost::get_pointer ;
 #endif
 
+// MSVC6.0 does not support comparisons of optional against a literal null pointer value (0)
+// via the safe_bool operator.
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1200 ) // 1200 == VC++ 6.0
+#define BOOST_OPTIONAL_NO_NULL_COMPARE
+#endif
+
 #define ARG(T) (static_cast< T const* >(0))
 
 //
@@ -168,7 +174,9 @@ inline int  get_instance_count       (...) { return 0 ; }
 template<class T>
 inline void check_uninitialized_const ( optional<T> const& opt )
 {
+#ifndef BOOST_OPTIONAL_NO_NULL_COMPARE
   BOOST_CHECK( opt == 0 ) ;
+#endif  
   BOOST_CHECK( !opt ) ;
   BOOST_CHECK( !get_pointer(opt) ) ;
   BOOST_CHECK( !opt.get() ) ;
@@ -176,7 +184,9 @@ inline void check_uninitialized_const ( optional<T> const& opt )
 template<class T>
 inline void check_uninitialized ( optional<T>& opt )
 {
+#ifndef BOOST_OPTIONAL_NO_NULL_COMPARE
   BOOST_CHECK( opt == 0 ) ;
+#endif
   BOOST_CHECK( !opt ) ;
   BOOST_CHECK( !get_pointer(opt) ) ;
   BOOST_CHECK( !opt.get() ) ;
@@ -188,7 +198,11 @@ template<class T>
 inline void check_initialized_const ( optional<T> const& opt )
 {
   BOOST_CHECK( opt ) ;
+
+#ifndef BOOST_OPTIONAL_NO_NULL_COMPARE
   BOOST_CHECK( opt != 0 ) ;
+#endif
+
   BOOST_CHECK ( !!opt ) ;
   BOOST_CHECK ( get_pointer(opt) ) ;
   BOOST_CHECK ( opt.get() ) ;
@@ -198,7 +212,11 @@ template<class T>
 inline void check_initialized ( optional<T>& opt )
 {
   BOOST_CHECK( opt ) ;
+
+#ifndef BOOST_OPTIONAL_NO_NULL_COMPARE
   BOOST_CHECK( opt != 0 ) ;
+#endif
+
   BOOST_CHECK ( !!opt ) ;
   BOOST_CHECK ( get_pointer(opt) ) ;
   BOOST_CHECK ( opt.get() ) ;
@@ -219,7 +237,7 @@ inline void check_value_const ( optional<T> const& opt, T const& v, T const& z )
 template<class T>
 inline void check_value ( optional<T>& opt, T const& v, T const& z )
 {
-#ifdef _MSC_VER
+#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1200 ) // 1200 == VC++ 6.0
   // For some reason, VC6.0 is creating a temporary while evaluating (*opt == v),
   // so we need to turn throw on copy off first.
   reset_throw_on_copy( ARG(T) ) ;
@@ -291,7 +309,7 @@ void test_basics( T const* )
   // Assignment initialization.
   // T::T ( T const& x ) is used to copy new value.
   set_pending_copy( ARG(T) ) ;
-  optional<T> const oa2 = oa ;
+  optional<T> const oa2 ( oa ) ;
   check_is_not_pending_copy( ARG(T) ) ;
   check_initialized_const(oa2);
   check_value_const(oa2,a,z);
@@ -811,7 +829,7 @@ void test_with_builtin_types()
 void test_with_class_type()
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
+
   test_basics( ARG(X) );
   test_direct_value_manip( ARG(X) );
   test_uninitialized_access( ARG(X) );
@@ -848,7 +866,7 @@ void test_no_implicit_conversions_impl( T const& )
 void test_no_implicit_conversions()
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
-  
+
   char c = 0 ;
   int i = 0 ;
   void const* p = 0 ;
@@ -858,6 +876,7 @@ void test_no_implicit_conversions()
   test_no_implicit_conversions_impl(p);
 }
 
+#ifndef BOOST_OPTIONAL_NO_CONVERTIONS
 struct A {} ;
 void test_conversions()
 {
@@ -869,13 +888,14 @@ void test_conversions()
   optional<int> opt1(opt0);
   BOOST_CHECK(*opt1 == static_cast<int>(c));
 
-  float f = 1.234 ;
+  float f = 1.234f ;
   double d = f ;
   optional<float> opt2(f) ;
   optional<double> opt3 ;
   opt3 = opt2 ;
   BOOST_CHECK(*opt3 == d);
 }
+#endif
 
 int test_main( int, char* [] )
 {
@@ -884,9 +904,13 @@ int test_main( int, char* [] )
     test_with_class_type();
     test_with_builtin_types();
     test_no_implicit_conversions();
+
+#ifndef BOOST_OPTIONAL_NO_CONVERTIONS
     test_conversions();
+#endif
+
   }
-  catch (... )
+  catch ( ... )
   {
     BOOST_ERROR("Unexpected Exception caught!");
   }
