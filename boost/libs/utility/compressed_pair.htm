@@ -21,8 +21,8 @@ defined inside namespace boost.</p>
 
 <p>The class compressed pair is very similar to std::pair, but if
 either of the template arguments are empty classes, then the
-&quot;empty member optimisation&quot; is applied to compress the
-size of the pair.</p>
+&quot;empty base-class optimisation&quot; is applied to compress
+the size of the pair.</p>
 
 <pre>template &lt;class T1, class T2&gt;
 class compressed_pair
