@@ -7,9 +7,13 @@
 
 #include "boost/date_time/constrained_value.hpp"
 #include "boost/date_time/date_defs.hpp"
+#include "boost/shared_ptr.hpp"
+#include "boost/date_time/compiler_config.hpp"
 #include <stdexcept>
 #include <string>
-
+#include <map>
+#include <algorithm>
+#include <cctype>
 
 namespace boost {
 namespace gregorian {
@@ -47,6 +51,8 @@ namespace gregorian {
   class greg_month : public greg_month_rep {
   public:
     typedef date_time::months_of_year month_enum;
+    typedef std::map<std::string, unsigned short> month_map_type;
+    typedef boost::shared_ptr<month_map_type> month_map_ptr_type;
     //! Construct a month from the months_of_year enumeration
     greg_month(month_enum theMonth) : 
       greg_month_rep(static_cast<greg_month_rep::value_type>(theMonth)) {}
@@ -59,6 +65,8 @@ namespace gregorian {
     month_enum as_enum() const {return static_cast<month_enum>(value_);}
     const char* as_short_string() const;
     const char* as_long_string()  const;
+    //! Shared pointer to a map of Month strings (Names & Abbrev) & numbers
+    static month_map_ptr_type get_month_map_ptr();
   };
 
 } } //namespace gregorian

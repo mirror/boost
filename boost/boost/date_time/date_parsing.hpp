@@ -3,12 +3,16 @@
 #define _DATE_TIME_DATE_PARSING_HPP___
 /* Copyright (c) 2002, 2003 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/tokenizer.hpp"
 #include "boost/lexical_cast.hpp"
+#include "boost/date_time/compiler_config.hpp"
+#include <string>
 #include <iterator>
+#include <algorithm>
+#include <cctype>
 
 namespace boost {
 
@@ -16,12 +20,15 @@ namespace date_time {
 
   //! Generic function to parse a delimited date (eg: 2002-02-10)
   /*! Accepted formats are: "2003-02-10" or " 2003-Feb-10" or
-   * "2003-Feburary-10" */
+   * "2003-Feburary-10" 
+   * Note: Month names may be case in-sensitive, check compiler_config.hpp
+   * to see if case insensitivity is suppoerted for your compiler */
   template<class date_type>
   date_type
   parse_date(const std::string& s)
   {
     typedef typename date_type::year_type year_type;
+    typedef typename date_type::month_type month_type;
     int pos = 0;
     typename date_type::ymd_type ymd(year_type::min(),1,1);
     boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
@@ -44,15 +51,20 @@ namespace date_time {
 	  }
 	  else
           {
-	    for(int j = 1; j <= 12; ++j)
-            {
-	      typedef gregorian::greg_month::month_enum month_enum;
-	      gregorian::greg_month m(static_cast<month_enum>(j));
-	      if(s == m.as_long_string() || s == m.as_short_string()) 
-              {
-		i = static_cast<unsigned short>(j);
-		break;
-	      }
+	    typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
+#if defined(BOOST_DATE_TIME_NO_STD_TRANSFORM)
+#else
+	    std::transform(s.begin(), s.end(),
+	                   s.begin(),
+			   tolower);
+#endif
+	    typename month_type::month_map_type::iterator iter = ptr->find(s);
+	    if(iter != ptr->end()) // required for STLport
+	    {
+	      i = iter->second;
+	    }
+	    else{
+	      i = 13; // intentionally out of range - name not found
 	    }
 	  }
 	  ymd.month = i; 
@@ -95,28 +107,66 @@ namespace date_time {
   }
   
   
-  template<class date_type>
-  date_type
-  parse_date2(const std::string& s)
+  //! Helper function for 'date gregorian::from_stream()'
+  /*! Creates a string from the iterators that reference the 
+   * begining & end of a char[] or string. All elements are 
+   * used in output string */
+  template<class iterator_type>
+  inline std::string from_stream_type(iterator_type& beg, iterator_type& end,
+      char)
   {
-    //using namespace boost;
-    int pos = 0;
-    typedef typename date_type::year_type year_type;
-    typename date_type::ymd_type ymd(year_type::min(),1,1);
-    boost::char_delimiters_separator<char> delim("DT");
-    boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
-    for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg){
-      int i = boost::lexical_cast<int>(*beg);
-      switch(pos) {
-      case 0: ymd.year = i; break;
-      case 1: ymd.month = i; break;
-      case 2: ymd.day = i; break;
-      };
-      pos++;
+    std::stringstream ss("");
+    while(beg != end)
+    {
+      ss << *beg++;
     }
-    return date_type(ymd);
+    return ss.str();
+  }
+  //! Helper function for 'date gregorian::from_stream()'
+  /*! Returns the first string found in the stream referenced by the
+   * begining & end iterators */
+  template<class iterator_type>
+  inline std::string from_stream_type(iterator_type& beg, iterator_type& end,
+      std::string)
+  {
+    return *beg;
   }
 
+  /* I believe the wchar stuff would be best elsewhere, perhaps in 
+   * parse_date<>()? In the mean time this gets us started... */
+  //! Helper function for 'date gregorian::from_stream()'
+  /*! Creates a string from the iterators that reference the 
+   * begining & end of a wstring. All elements are 
+   * used in output string */
+  template<class iterator_type>
+  inline std::string from_stream_type(iterator_type& beg, iterator_type& end,
+      wchar_t)
+  {
+    std::stringstream ss("");
+    while(beg != end)
+    {
+      ss << ss.narrow(*beg++, 'X'); // 'X' will cause exception to be thrown
+    }
+    return ss.str();
+  }
+#ifndef BOOST_NO_STD_WSTRING
+  //! Helper function for 'date gregorian::from_stream()'
+  /*! Creates a string from the first wstring found in the stream 
+   * referenced by the begining & end iterators */
+  template<class iterator_type>
+  inline std::string from_stream_type(iterator_type& beg, iterator_type& end,
+      std::wstring)
+  {
+    std::wstring ws = *beg;
+    std::stringstream ss("");
+    std::wstring::iterator wsb = ws.begin(), wse = ws.end();
+    while(wsb != wse)
+    {
+      ss << ss.narrow(*wsb++, 'X'); // 'X' will cause exception to be thrown
+    }
+    return ss.str();
+  }
+#endif // BOOST_NO_STD_WSTRING
 
 } } //namespace date_time
 
