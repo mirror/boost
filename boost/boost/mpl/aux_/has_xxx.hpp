@@ -31,6 +31,32 @@
 // the implementation below is based on a USENET newsgroup's posting by  
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
 
+#    if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
+
+#      define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, unused)    \
+template< typename T >                                                  \
+boost::mpl::aux::yes_tag                                                \
+trait##_helper(                                                         \
+      boost::mpl::aux::type_wrapper<T> const volatile*                  \
+    , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME T::name>* = 0   \
+    );                                                                  \
+                                                                        \
+boost::mpl::aux::no_tag                                                 \
+trait##_helper(...);                                                    \
+                                                                        \
+template< typename T >                                                  \
+struct trait                                                            \
+{                                                                       \
+    typedef boost::mpl::aux::type_wrapper<T> t_;                        \
+    BOOST_STATIC_CONSTANT(bool, value =                                 \
+          sizeof((trait##_helper)(static_cast<t_*>(0)))                 \
+            == sizeof(boost::mpl::aux::yes_tag)                         \
+        );                                                              \
+};                                                                      \
+/**/
+
+#    else  // conforming compilers
+
 #      define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, unused)    \
 template< typename T >                                                      \
 struct trait                                                                \
@@ -57,6 +83,8 @@ struct trait                                                                \
     );                                                                      \
 };                                                                          \
 /**/
+
+#     endif
 
 #   else
 
