@@ -361,7 +361,7 @@ struct cons<HT, null_type> {
        const null_type&, const null_type&, const null_type&)
   : head (t1) {}
 
-  cons(const null_type& t1, 
+  cons(const null_type&, 
        const null_type&, const null_type&, const null_type&, 
        const null_type&, const null_type&, const null_type&, 
        const null_type&, const null_type&, const null_type&)
