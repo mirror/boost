@@ -39,7 +39,7 @@ maintains a collection <i>S = {S<sub>1</sub>, S<sub>2</sub>, ...,
 S<sub>k</sub>}</i> of disjoint sets. Each set is identified by a
 <I>representative</I> which is some member of of the set. Sets are
 represented by rooted trees which are encoded in the <TT>Parent</TT>
-property accessor. Two heuristics: &quot;union by rank&quot; and
+property map. Two heuristics: &quot;union by rank&quot; and
 &quot;path compression&quot; are used to speed up the
 operations&nbsp;[<a
 href="./bibliography.html#tarjan83:_data_struct_network_algo">1</a>, <a
@@ -56,12 +56,12 @@ href="./bibliography.html#clr90">2</a>].
 <P>
 <TABLE border>
 <TR><TD><TT>Rank</TT></TD> <TD>must be a model of <a
-href="../property_accessor/ReadWritePropertyAccessor.html">ReadWritePropertyAccessor</a>
+href="../property_map/ReadWritePropertyMap.html">ReadWritePropertyMap</a>
 with an integer value type and a key type equal to the set's element
 type.</TD>
 </TR>
 <TR><TD><TT>Parent</TT></TD> <TD>must be a model of <a
-href="../property_accessor/ReadWritePropertyAccessor.html">ReadWritePropertyAccessor</a>
+href="../property_map/ReadWritePropertyMap.html">ReadWritePropertyMap</a>
 and the key and value type the same as the set's element type.</TD>
 </TR>
 <TR><TD><TT>FindCompress</TT></TD>
@@ -245,17 +245,16 @@ does not provide a place to store vertex properties.
 
 <TR>
 <TD><TT>ID</TT></TD>
-<TD>must be a model of <I>ReadablePropertyAccessor</I>
+<TD>must be a model of <a href="../property_map/ReadablePropertyMap.html">ReadablePropertyMap</a>
  that maps elements to integers between zero 0 and N, the total
  number of elements in the sets.</TD>
-<TD><TT>boost::identity_property_accessor</TT></TD>
+<TD><TT>boost::identity_property_map</TT></TD>
 </TR>
 
 <TR>
 <TD><TT>InverseID</TT></TD>
-<TD>must be a model of <I>ReadablePropertyAccessor</I>
-     that maps integers to elements.</TD>
-<TD><TT>boost::identity_property_accessor</TT></TD>
+<TD>must be a model of <a href="../property_map/ReadablePropertyMap.html">ReadablePropertyMap</a> that maps integers to elements.</TD>
+<TD><TT>boost::identity_property_map</TT></TD>
 </TR>
 
 <TR><TD><TT>FindCompress</TT></TD>
