@@ -208,11 +208,10 @@ __ `operator arrow`_
 
 :Returns: an object convertible to ``value_type``. For constant
      objects ``v`` of type ``value_type``, and ``n`` of type
-     ``difference_type``, and reference ``p`` equal to
-     ``*static_cast<Derived const*>(this)``, ``(*this)[n] = v`` is
-     equivalent to ``*(p+ n) = v``, and ``static_cast<value_type
+     ``difference_type``, ``(*this)[n] = v`` is equivalent to
+     ``*(*this + n) = v``, and ``static_cast<value_type
      const&>((*this)[n])`` is equivalent to
-     ``static_cast<value_type const&>(*(p+n))`` 
+     ``static_cast<value_type const&>(*(*this + n))``
 
 
 
