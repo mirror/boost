@@ -244,9 +244,9 @@ namespace detail {
   inline typename Iter::pointer
   advance_impl(const Iter& i, Diff n, std::random_access_iterator_tag) {
 #ifdef __MWERKS__
-        i.policies().advance<Iter>(iter(), n);
+        i.policies().advance<Iter>(i.iter(), n);
 #else
-        i.policies().advance(iter(), n);
+        i.policies().advance(i.iter(), n);
 #endif
   }
 
