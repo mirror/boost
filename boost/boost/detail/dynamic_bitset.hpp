@@ -50,7 +50,7 @@ namespace boost {
     {
       typedef std::size_t size_type;
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-    public: // should be protected, see below
+    public:
 #endif
       enum { bits_per_block = CHAR_BIT * sizeof(Block) };
     public:
