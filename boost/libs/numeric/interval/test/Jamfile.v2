@@ -31,6 +31,10 @@ import testing ;
         ../../../test/build//boost_test_exec_monitor ]
     [ run libs/numeric/interval/test/cmp_lex.cpp
         ../../../test/build//boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/cmp_set.cpp
+        ../../../test/build//boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/cmp_tribool.cpp
+        ../../../test/build//boost_test_exec_monitor ]
     [ run libs/numeric/interval/test/test_float.cpp
         ../../../test/build//boost_test_exec_monitor ]
   ;

@@ -35,6 +35,10 @@ DEPENDS all : test ;
         <lib>../../../test/build/boost_test_exec_monitor ]
     [ run libs/numeric/interval/test/cmp_lex.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/cmp_set.cpp
+        <lib>../../../test/build/boost_test_exec_monitor ]
+    [ run libs/numeric/interval/test/cmp_tribool.cpp
+        <lib>../../../test/build/boost_test_exec_monitor ]
     [ run libs/numeric/interval/test/test_float.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
   ;
