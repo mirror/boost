@@ -355,19 +355,19 @@ implementing the same benchmark.</p>
 scenario:</p>
 <ul>
   <li>For both machines exactly one object of the only event is allocated 
-  before starting the test. This same object is then sent to the machines over 
-  and over.</li>
+	before starting the test. This same object is then sent to the machines 
+	over and over</li>
   <li>The Handcrafted machine employs GOF-visitor double dispatch. The states 
   are preallocated so that event dispatch &amp; transition amounts to nothing more 
-  than two virtual calls and one pointer assignment.</li>
+	than two virtual calls and one pointer assignment</li>
 </ul>
 <p>The Benchmarks - compiled with MSVC7.1 (single threaded), running on an 
-Intel Pentium M 1600 - produced the following results:</p>
+3.2GHz Intel Pentium 4 - produced the following results:</p>
 <ul>
   <li>Handcrafted: 10 nanoseconds to dispatch one event and make the resulting 
-  transition.</li>
-  <li>1-bit-BitMachine with customized memory management: 200 nanoseconds to 
-  dispatch one event and make the resulting transition.</li>
+	transition</li>
+  <li>1-bit-BitMachine with customized memory management: 130 nanoseconds to 
+	dispatch one event and make the resulting transition</li>
 </ul>
 <p>Although this is a big difference I still think it will not be noticeable 
 in most&nbsp;real-world applications. No matter whether an application uses 
@@ -375,21 +375,27 @@ handcrafted or boost::fsm machines it will...</p>
 <ul>
   <li>almost never run into a situation where a state machine is swamped with 
   as many events as in the benchmarks. Unless a state machine is abused for 
-  parsing, it will typically spend a good deal of time waiting for events</li>
+  parsing, it will almost always spend a good deal of time waiting for events 
+	(which typically come from a human operator, from machinery or 
+	electronic devices over often comparatively slow I/O channels)</li>
   <li>often run state machines in their own threads. This adds considerable 
   locking and thread-switching overhead. Performance tests with the PingPong 
   example, where two asynchronous state machines exchange events, gave the 
   following times to process one event and perform the resulting in-state 
   reaction (using the library with <code>boost::fast_pool_allocator&lt;&gt;</code>):<ul>
-    <li>Single-threaded (no locking and waiting): 760ns</li>
+    <li>Single-threaded (no locking and waiting): 840ns</li>
     <li>Multi-threaded with one thread (the scheduler uses mutex locking but 
-    never has to wait for events): 4500ns</li>
+    never has to wait for events): 6500ns</li>
     <li>Multi-threaded with two threads (both schedulers use mutex locking and 
-    exactly one always waits for an event): 7200ns</li>
+    exactly one always waits for an event): 14000ns</li>
   </ul>
-  <p>As mentioned above there definitely is some room to improve the 
-  multi-threaded timings. However, a quick test has shown that the MT overhead 
-  will always be well over 1000ns per event. Handcrafted machines will 
+  <p>As mentioned above, there definitely is some room to improve the 
+  timings for the asynchronous machines. Moreover, these are very crude 
+	benchmarks, designed to show the overhead of locking and thread context 
+	switching. The overhead in a real-world application will typically be 
+	smaller and other operating systems can certainly do better in this area. 
+	However, the fact remains that the threading overhead is typically larger 
+	than the time that boost::fsm spends for event dispatch and transition. Handcrafted machines will 
   inevitably have the same overhead, making raw single-threaded dispatch and 
   transition speed much less important</li>
   <li>almost always allocate events with <code>new</code> and destroy them 
@@ -409,7 +415,7 @@ optimization:</p>
     <td width="25%" rowspan="2"><b>Machine configuration<br>
     # states / # outgoing transitions per state</b></td>
     <td width="75%" colspan="3"><b>Event dispatch &amp; transition time 
-    [nanoseconds]</b></td>
+    MSVC 7.1 / GCC 3.4.2 [nanoseconds]</b></td>
   </tr>
   <tr>
     <td width="25%">Out of the box</td>
@@ -421,41 +427,35 @@ optimization:</p>
   </tr>
   <tr>
     <td width="25%">2 / 1</td>
-    <td width="25%">360</td>
-    <td width="25%">480</td>
-    <td width="25%">200</td>
+    <td width="25%">410 / 540</td>
+    <td width="25%">490 / 510</td>
+    <td width="25%">130 / 320</td>
   </tr>
   <tr>
     <td width="25%">4 / 2</td>
-    <td width="25%">390</td>
-    <td width="25%">540</td>
-    <td width="25%">210</td>
+    <td width="25%">440 / 560</td>
+    <td width="25%">530 / 570</td>
+    <td width="25%">160 / 330</td>
   </tr>
   <tr>
     <td width="25%">8 / 3</td>
-    <td width="25%">480</td>
-    <td width="25%">680</td>
-    <td width="25%">210</td>
+    <td width="25%">450 / 580</td>
+    <td width="25%">580 / 610</td>
+    <td width="25%">180 / 340</td>
   </tr>
   <tr>
     <td width="25%">16 / 4</td>
-    <td width="25%">380</td>
-    <td width="25%">670</td>
-    <td width="25%">220</td>
+    <td width="25%">490 / 710</td>
+    <td width="25%">720 / 770</td>
+    <td width="25%">230 / 460</td>
   </tr>
   <tr>
     <td width="25%">32 / 5</td>
-    <td width="25%">410</td>
-    <td width="25%">770</td>
-    <td width="25%">240</td>
+    <td width="25%">590 / 790</td>
+    <td width="25%">820 / 920</td>
+    <td width="25%">340 / 590</td>
   </tr>
-  <tr>
-    <td width="25%">64 / 6</td>
-    <td width="25%">600</td>
-    <td width="25%">910</td>
-    <td width="25%">300</td>
-  </tr>
-</table>
+  </table>
 <h2><a name="Memory management customization">Memory management customization</a></h2>
 <p>Out of the box, all internal data is allocated on the normal heap. This 
 should be satisfactory for applications where all the following prerequisites 
@@ -730,9 +730,9 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->24 November, 2004<!--webbot bot="Timestamp" endspan i-checksum="39362" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 January, 2005<!--webbot bot="Timestamp" endspan i-checksum="38839" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2004. <b><font color="#FF0000">Please remove the words spam and trap from 
+2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
 accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or 
