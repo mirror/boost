@@ -297,7 +297,7 @@ public:
     unsigned long mask = ~((~0u) << (w%32));   // now lowest (w%32) bits set
     RealType two32 = pow(RealType(2), 32);
     unsigned int j;
-    for(j = 0; j < long_lag && first != last; ++j, ++first) {
+    for(j = 0; j < long_lag && first != last; ++j) {
       x[j] = RealType(0);
       for(int i = 0; i < w/32 && first != last; ++i, ++first)
         x[j] += *first / pow(two32,i+1);
@@ -307,7 +307,7 @@ public:
       }
     }
     if(first == last && j < long_lag)
-      throw std::invalid_argument("subtract_with_carry::seed");
+      throw std::invalid_argument("subtract_with_carry_01::seed");
     carry = (x[long_lag-1] ? 0 : 1 / _modulus);
     k = 0;
   }
