@@ -320,19 +320,29 @@ namespace assign_detail
         {
             std::swap( *ref_, *r.ref_ );
         }
+
+        friend inline bool operator<( const assign_reference& l, 
+                                      const assign_reference& r )
+        {
+            return *l.ref_ < *r.ref_;
+        }
+        
+        friend inline bool operator>( const assign_reference& l,
+                                      const assign_reference& r )
+        {
+            return *l.ref_ > *r.ref_;
+        }
+
+        friend inline void swap( assign_reference& l, 
+                                 assign_reference& r )
+        {
+            l.swap( r );
+        }
         
     private:
         T* ref_;
     };
 
-    template< class T >
-    void swap( assign_reference<T>& l, assign_reference<T>& r )
-    {
-        l.swap( r );
-    }
-
-
-    
     template< class T, int N >
     struct static_generic_list : public converter< static_generic_list<T,N> >
     {
