@@ -77,6 +77,7 @@ struct has_rebind : T
     }; \
     /**/
 
+AUX_HAS_REBIND_SPEC(void)
 AUX_HAS_REBIND_SPEC(bool)
 AUX_HAS_REBIND_SPEC(char)
 AUX_HAS_REBIND_SPEC(signed char)
