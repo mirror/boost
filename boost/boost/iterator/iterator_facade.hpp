@@ -26,15 +26,13 @@
 #include <boost/type_traits/is_pod.hpp>
 
 #include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/always.hpp>
 #include <boost/mpl/apply.hpp>
-
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
-# include <boost/mpl/if.hpp>
-#endif
+#include <boost/mpl/identity.hpp>
 
 #include <boost/iterator/detail/config_def.hpp> // this goes last
 
@@ -125,16 +123,38 @@ namespace boost
     // value must be read and stored away before the increment occurs
     // so that *a++ yields the originally referenced element and not
     // the next one.
-    //
-    // In general, we can't determine that such an iterator isn't
-    // writable -- we also need to store a copy of the old iterator so
-    // that it can be written into.
     template <class Iterator>
     class postfix_increment_proxy
     {
         typedef typename iterator_value<Iterator>::type value_type;
      public:
         explicit postfix_increment_proxy(Iterator const& x)
+          : stored_value(*x)
+        {}
+
+        // Returning a mutable reference allows nonsense like
+        // (*r++).mutate(), but it imposes fewer assumptions about the
+        // behavior of the value_type.  In particular, recall taht
+        // (*r).mutate() is legal if operator* returns by value.
+        value_type&
+        operator*() const
+        {
+            return this->stored_value;
+        }
+     private:
+        mutable value_type stored_value;
+    };
+    
+    //
+    // In general, we can't determine that such an iterator isn't
+    // writable -- we also need to store a copy of the old iterator so
+    // that it can be written into.
+    template <class Iterator>
+    class writable_postfix_increment_proxy
+    {
+        typedef typename iterator_value<Iterator>::type value_type;
+     public:
+        explicit writable_postfix_increment_proxy(Iterator const& x)
           : stored_value(*x)
           , stored_iterator(x)
         {}
@@ -143,14 +163,14 @@ namespace boost
         // value_type(*r++) can work.  In this case, *r is the same as
         // *r++, and the conversion operator below is used to ensure
         // readability.
-        postfix_increment_proxy const&
+        writable_postfix_increment_proxy const&
         operator*() const
         {
             return *this;
         }
 
         // Provides readability of *r++
-        operator value_type const&() const
+        operator value_type&() const
         {
             return stored_value;
         }
@@ -171,16 +191,31 @@ namespace boost
             return x;
         }
      private:
-        value_type stored_value;
+        mutable value_type stored_value;
         Iterator stored_iterator;
     };
 
+    // A metafunction to choose the result type of postfix ++
+    //
+    // Because the C++98 input iterator requirements say that *r++ has
+    // type T (value_type), implementations of some standard
+    // algorithms like lexicographical_compare may use constructions
+    // like:
+    //
+    //          *r++ < *s++
+    //
+    // If *r++ returns a proxy (as required if r is writable but not
+    // multipass), this sort of expression will fail unless the proxy
+    // supports the operator<.  Since there are any number of such
+    // operations, we're not going to try to support them.  Therefore,
+    // even if r++ returns a proxy, *r++ will only return a proxy if
+    // CategoryOrTraversal is convertible to std::output_iterator_tag.
     template <class Iterator, class Value, class Reference, class CategoryOrTraversal>
     struct postfix_increment_result
-      : mpl::if_<
+      : mpl::apply_if<
             mpl::and_<
-                // This is only needed for readable iterators
-                is_convertible<Reference,Value>
+            // A proxy is only needed for readable iterators
+            is_convertible<Reference,Value>
                 
                 // No multipass iterator can have values that disappear
                 // before positions can be re-visited
@@ -191,8 +226,12 @@ namespace boost
                     >
                 >
             >
-          , postfix_increment_proxy<Iterator>
-          , Iterator
+          , mpl::if_<
+                is_convertible<CategoryOrTraversal,std::output_iterator_tag>
+              , writable_postfix_increment_proxy<Iterator>
+              , postfix_increment_proxy<Iterator>
+            >
+          , mpl::identity<Iterator>
         >
     {};
 

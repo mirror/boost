@@ -32,15 +32,31 @@
 
 namespace boost {
 
+
+// Do separate tests for *i++ so we can treat, e.g., smart pointers,
+// as readable and/or writable iterators.
 template <class Iterator, class T>
-void readable_iterator_test_aux(Iterator i1, T v, mpl::true_)
+void readable_iterator_traversal_test(Iterator i1, T v, mpl::true_)
 {
-    assert(v == *i1++);
+    T v2 = *i1++;
+    assert(v == v2);
 }
 
 template <class Iterator, class T>
-void readable_iterator_test_aux(const Iterator i1, T v, mpl::false_)
+void readable_iterator_traversal_test(const Iterator i1, T v, mpl::false_)
 {}
+
+template <class Iterator, class T>
+void writable_iterator_traversal_test(Iterator i1, T v, mpl::true_)
+{
+    ++i1;  // we just wrote into that position
+    *i1++ = v;
+}
+
+template <class Iterator, class T>
+void writable_iterator_traversal_test(const Iterator i1, T v, mpl::false_)
+{}
+
 
 // Preconditions: *i == v
 template <class Iterator, class T>
@@ -56,7 +72,7 @@ void readable_iterator_test(const Iterator i1, T v)
   assert(v2 == v);
 
 # if !BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
-  readable_iterator_test_aux(i1, v, detail::is_postfix_incrementable<Iterator>());
+  readable_iterator_traversal_test(i1, v, detail::is_postfix_incrementable<Iterator>());
       
   // I think we don't really need this as it checks the same things as
   // the above code.
@@ -65,10 +81,18 @@ void readable_iterator_test(const Iterator i1, T v)
 }
 
 template <class Iterator, class T>
-void writable_iterator_test(Iterator i, T v)
+void writable_iterator_test(Iterator i, T v, T v2)
 {
   Iterator i2(i); // Copy Constructible
   *i2 = v;
+
+# if !BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
+  writable_iterator_traversal_test(
+      i, v2, mpl::and_<
+          detail::is_incrementable<Iterator>
+        , detail::is_postfix_incrementable<Iterator>
+      >());
+# endif 
 }
 
 template <class Iterator>
