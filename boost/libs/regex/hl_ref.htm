@@ -15,8 +15,9 @@ content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
 
 <table border="0" cellpadding="7" cellspacing="0" width="100%">
     <tr>
-        <td valign="top" width="50%"><h3><img src="../../c++boost.gif"
-        alt="C++ Boost" width="276" height="86"></h3>
+        <td valign="top" width="50%"><h3><img
+        src="../../c++boost.gif" alt="C++ Boost" width="276"
+        height="86"></h3>
         </td>
         <td valign="top" width="50%"><h3 align="center">Regex++,
         RegEx Class Reference. </h3>
@@ -112,8 +113,8 @@ are allowed. </p>
     </tr>
     <tr>
         <td valign="top" width="7%">&nbsp;</td>
-        <td valign="top" width="43%">RegEx(<b>const</b> RegEx&amp;
-        o);</td>
+        <td valign="top" width="43%">RegEx(<b>const</b>
+        RegEx&amp; o);</td>
         <td valign="top" width="42%">Copy constructor, all the
         properties of parameter <i>o</i> are copied.</td>
         <td valign="top" width="7%">&nbsp;</td>
@@ -196,7 +197,8 @@ are allowed. </p>
     <tr>
         <td valign="top" width="7%">&nbsp;</td>
         <td valign="top" width="43%"><b>bool</b> Match(<b>const</b>
-        <b>char</b>* p, <b>unsigned</b> <b>int</b> flags = match_default);</td>
+        <b>char</b>* p, <b>unsigned</b> <b>int</b> flags =
+        match_default);</td>
         <td valign="top" width="42%">Attempts to match the
         current expression against the text <i>p</i> using the
         match flags <i>flags</i> - see <a
@@ -221,7 +223,8 @@ are allowed. </p>
     <tr>
         <td valign="top" width="7%">&nbsp;</td>
         <td valign="top" width="43%"><b>bool</b> Search(<b>const</b>
-        <b>char</b>* p, <b>unsigned</b> <b>int</b> flags = match_default);</td>
+        <b>char</b>* p, <b>unsigned</b> <b>int</b> flags =
+        match_default);</td>
         <td valign="top" width="42%">Attempts to find a match for
         the current expression somewhere in the text <i>p</i>
         using the match flags <i>flags </i>- see <a
@@ -306,7 +309,8 @@ are allowed. </p>
         <td valign="top" width="7%">&nbsp;</td>
         <td valign="top" width="43%"><b>unsigned</b> <b>int</b>
         Grep(std::vector&lt;<b>unsigned int</b>&gt;&amp; v, <b>const</b>
-        <b>char</b>* p, <b>unsigned</b> <b>int</b> flags = match_default);</td>
+        <b>char</b>* p, <b>unsigned</b> <b>int</b> flags =
+        match_default);</td>
         <td valign="top" width="42%">Finds all matches of the
         current expression in the text <i>p</i> using the match
         flags <i>flags </i>- see <a
@@ -435,11 +439,16 @@ are allowed. </p>
         replace operation: searches through the string <i>in</i>
         for all occurrences of the current expression, for each
         occurrence replaces the match with the format string <i>fmt</i>.
-        Uses <i>flags</i> to determine what gets matched. If <i>copy</i>
-        is true then all unmatched sections of input are copied
-        unchanged to output. Returns the new string. See <a
+        Uses <i>flags</i> to determine what gets matched, and how
+        the format string should be treated. If <i>copy</i> is
+        true then all unmatched sections of input are copied
+        unchanged to output, if the flag <em>format_first_only</em>
+        is set then only the first occurance of the pattern found
+        is replaced. Returns the new string. See <a
         href="format_string.htm#format_string">also format string
-        syntax</a>.</td>
+        syntax</a>, <a href="template_class_ref.htm#match_type">match
+        flags</a> and <a
+        href="template_class_ref.htm#format_flags">format flags</a>.</td>
         <td valign="top" width="7%">&nbsp;</td>
     </tr>
     <tr>
@@ -451,18 +460,23 @@ are allowed. </p>
         replace operation: searches through the string <i>in</i>
         for all occurrences of the current expression, for each
         occurrence replaces the match with the format string <i>fmt</i>.
-        Uses <i>flags</i> to determine what gets matched. If <i>copy</i>
-        is true then all unmatched sections of input are copied
-        unchanged to output. Returns the new string. See <a
+        Uses <i>flags</i> to determine what gets matched, and how
+        the format string should be treated. If <i>copy</i> is
+        true then all unmatched sections of input are copied
+        unchanged to output, if the flag <em>format_first_only</em>
+        is set then only the first occurance of the pattern found
+        is replaced. Returns the new string. See <a
         href="format_string.htm#format_string">also format string
-        syntax</a>.</td>
+        syntax</a>, <a href="template_class_ref.htm#match_type">match
+        flags</a> and <a
+        href="template_class_ref.htm#format_flags">format flags</a>.</td>
         <td valign="top" width="7%">&nbsp;</td>
     </tr>
     <tr>
         <td>&nbsp;</td>
         <td valign="top"><b>unsigned</b> Split(std::vector&lt;std::string&gt;&amp;
-        v, std::string&amp; s, <b>unsigned</b> flags = match_default,
-        <b>unsigned</b> max_count = ~0);</td>
+        v, std::string&amp; s, <b>unsigned</b> flags =
+        match_default, <b>unsigned</b> max_count = ~0);</td>
         <td valign="top">Splits the input string and pushes each
         one onto the vector. If the expression contains no marked
         sub-expressions, then one string is outputted for each

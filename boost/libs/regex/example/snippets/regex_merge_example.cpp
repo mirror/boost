@@ -57,8 +57,9 @@ void load_file(std::string& s, std::istream& is)
 
 int main(int argc, const char** argv)
 {
-   e1.set_expression(expression_text);
-   e2.set_expression(pre_expression);
+   try{
+   e1.assign(expression_text);
+   e2.assign(pre_expression);
    for(int i = 1; i < argc; ++i)
    {
       std::cout << "Processing file " << argv[i] << std::endl;
@@ -80,6 +81,9 @@ int main(int argc, const char** argv)
       boost::regex_merge(out, s.begin(), s.end(), e1, format_string);
       os << footer_text;
    }
+   }
+   catch(...)
+   { return -1; }
    return 0;
 }
 
@@ -121,6 +125,7 @@ const char* header_text = "<HTML>\n<HEAD>\n"
                           "<P> </P>\n<PRE>";
 
 const char* footer_text = "</PRE>\n</BODY>\n\n";
+
 
 
 

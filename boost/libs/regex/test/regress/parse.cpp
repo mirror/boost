@@ -82,6 +82,7 @@ flag_info flag_data[] = {
                           { BOOST_RE_STR("format_sed"), 10, format_sed, 3 },
                           { BOOST_RE_STR("format_perl"), 11, format_perl, 3 },
                           { BOOST_RE_STR("format_no_copy"), 14, format_no_copy, 3 },
+                          { BOOST_RE_STR("format_first_only"), 17, format_first_only, 3 },
 
                           { BOOST_RE_STR("REG_NO_POSIX_TEST"), 17, REG_NO_POSIX_TEST, 4 },
                           { BOOST_RE_STR("REG_UNICODE_ONLY"), 16, REG_UNICODE_ONLY, 4 },

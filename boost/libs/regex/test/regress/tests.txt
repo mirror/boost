@@ -813,6 +813,13 @@ a+(b+) "...aaabb,,,ab*abbb?" $1 "...bb,,,b*bbb?"
 (a+)|(b+) "...aaabb,,,ab*abbb?" (?1A:B)C "...ACBC,,,ACBC*ACBC?" 
 (a+)|(b+) "...aaabb,,,ab*abbb?" ?1:B "...B,,,B*B?" 
 
+- match_default normal REG_EXTENDED REG_STARTEND REG_MERGE format_first_only
+; move to copying unmatched data, but replace first occurance only:
+a+ "...aaa,,," bbb "...bbb,,," 
+a+(b+) "...aaabb,,," $1 "...bb,,," 
+a+(b+) "...aaabb,,,ab*abbb?" $1 "...bb,,,ab*abbb?" 
+(a+)|(b+) "...aaabb,,,ab*abbb?" (?1A)(?2B) "...Abb,,,ab*abbb?" 
+
 ;
 ; changes to newline handling with 2.11:
 ;
@@ -859,6 +866,7 @@ a+(?#b+)b+ xaaabbba 1 7
 (xyz)(.*)abc xyzaaab -1 -1 0 3 3 7
 (xyz)(.*)abc xyz -1 -1 0 3 3 3
 (xyz)(.*)abc xy -1 -1 -1 -1 -1 -1
+
 
 
 

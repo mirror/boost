@@ -33,7 +33,8 @@ enum format_flags_t{
    format_sed = match_max << 1,         // sed style replacement.
    format_perl = format_sed << 1,       // perl style replacement.
    format_no_copy = format_perl << 1,   // don't copy non-matching segments.
-   format_is_if = format_no_copy << 1   // internal use only.
+   format_first_only = format_no_copy << 1,   // Only replace first occurance.
+   format_is_if = format_first_only << 1   // internal use only.
 };
 
 namespace re_detail{
@@ -468,7 +469,7 @@ public:
          oi_assign(out, re_copy_out(*out, iterator(m[-1].first), iterator(m[-1].second)));
       oi_assign(out, _reg_format_aux(*out, m, f, flags, *pt));
       *last = m[-2].first;
-      return true;
+      return flags & format_first_only ? false : true;
    }
 };
 

@@ -3,6 +3,9 @@ FIXED:    Support for STLPort 4.1b6.
 FIXED:    Library calling convention for VC6 debug builds.
 FIXED:    Borland compiler support when using non-default calling convention.
 CHANGED:  Reorganised and simplified config setup.
+ADDED:    Support for replacing only the first occurance during a regex_merge 
+          using the format_first_only flag.
+CHANGED:  Removed use of deprecated api set_expression in one of the examples.
 
 Version 310:
 ADDED:    Support for static linking with VC6 + dynamic runtime.
@@ -223,6 +226,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 
