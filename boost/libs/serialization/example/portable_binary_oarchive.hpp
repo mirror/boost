@@ -90,13 +90,14 @@ public:
     {
         // use our own header checking
         if(0 != (flags & boost::archive::no_header)){
-            boost::archive::basic_binary_oarchive<derived_t>::init();
+            this->boost::archive::basic_binary_oarchive<derived_t>::init();
             // skip the following for "portable" binary archives
             // boost::archive::basic_binary_iprimitive<derived_t, std::ostream>::init();
         }
     }
 };
 
+#include <boost/archive/impl/basic_binary_oarchive.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
 
@@ -104,6 +105,7 @@ namespace boost {
 namespace archive {
 
 // explicitly instantiate for this type of binary stream
+template class basic_binary_oarchive<portable_binary_oarchive> ;
 template class basic_binary_oprimitive<portable_binary_oarchive, std::ostream> ;
 template class binary_oarchive_impl<portable_binary_oarchive> ;
 template class detail::archive_pointer_oserializer<portable_binary_oarchive> ;
