@@ -32,7 +32,10 @@ namespace date_time {
 #if (defined(BOOST_DATE_TIME_NO_MEMBER_INIT))  
     typedef date_time::wrapping_int<int_type, INT64_C(86400) * ticks_per_second > wrap_int_type;
 #else
-    typedef date_time::wrapping_int<int_type, INT64_C(86400) * config::tick_per_second > wrap_int_type;
+   private:
+     BOOST_STATIC_CONSTANT(int_type, ticks_per_day = INT64_C(86400) * config::tick_per_second);
+   public:
+    typedef date_time::wrapping_int<int_type, ticks_per_day> wrap_int_type;
 #endif
 
     static time_rep_type get_time_rep(const date_type& day,
