@@ -69,7 +69,35 @@ namespace boost {
     // To differentiate an unnamed parameter from a traits generator
     // we use is_convertible<X, iter_traits_gen_base>.
     struct named_template_param_base { };
+
+    template <class X>
+    struct is_named_param_list {
+      enum { value = is_convertible<X, named_template_param_base>::value };
+    };
     
+    struct choose_named_params {
+      template <class Prev> struct bind { typedef Prev type; };
+    };
+    struct choose_default_arg {
+      template <class Prev> struct bind { 
+	typedef detail::default_argument type;
+      };
+    };
+    template <bool Named> struct choose_default_dispatch { };
+    template <> struct choose_default_dispatch<true> {
+      typedef choose_named_params type;
+    };
+    template <> struct choose_default_dispatch<false> {
+      typedef choose_default_arg type;
+    };
+
+    template <class PreviousArg>
+    struct choose_default_argument {
+      enum { is_named = is_named_param_list<PreviousArg>::value };
+      typedef typename choose_default_dispatch<is_named>::type Selector;
+      typedef typename Selector::template bind<PreviousArg>::type type;
+    };
+
     // This macro assumes that there is a class named default_##TYPE
     // defined before the application of the macro.  This class should
     // have a single member class template named "bind" with two
@@ -85,9 +113,10 @@ namespace boost {
     struct get_##TYPE##_from_named { \
       template <class Base, class NamedParams, class Traits> \
       struct bind { \
-          typedef typename NamedParams::traits::TYPE TYPE; \
+          typedef typename NamedParams::traits NamedTraits; \
+          typedef typename NamedTraits::TYPE TYPE; \
           typedef typename resolve_default<TYPE, \
-            default_##TYPE, Base, NamedParams>::type type; \
+            default_##TYPE, Base, NamedTraits>::type type; \
       }; \
     }; \
     struct pass_thru_##TYPE { \
@@ -106,7 +135,7 @@ namespace boost {
     }; \
     template <class Base, class X, class Traits>  \
     class get_##TYPE { \
-      enum { is_named = is_convertible<X,named_template_param_base>::value }; \
+      enum { is_named = is_named_param_list<X>::value }; \
       typedef typename get_##TYPE##_dispatch<is_named>::type Selector; \
     public: \
       typedef typename Selector::template bind<Base, X, Traits>::type type; \
