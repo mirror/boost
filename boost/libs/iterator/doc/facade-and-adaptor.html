@@ -7,7 +7,7 @@
 <title>Iterator Facade and Adaptor</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
-<meta name="date" content="2004-01-12" />
+<meta name="date" content="2004-01-13" />
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
@@ -26,7 +26,7 @@
 Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.uni-hannover.de">Institute for Transport
 Railway Operation and Construction</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2004-01-12</td></tr>
+<td>2004-01-13</td></tr>
 <tr class="field"><th class="docinfo-name">Number:</th><td class="field-body">This is a revised version of <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html">N1530</a>=03-0113, which was
 accepted for Technical Report 1 by the C++ standard
 committee's library working group.</td>
@@ -802,8 +802,7 @@ Iterator</td>
 <div class="section" id="iterator-facade-iterator-category">
 <h3><a class="toc-backref" href="#id30" name="iterator-facade-iterator-category"><tt class="literal"><span class="pre">iterator_facade</span></tt> iterator category</a></h3>
 <p>The <tt class="literal"><span class="pre">iterator_category</span></tt> member of <tt class="literal"><span class="pre">iterator_facade&lt;X,V,R,C,D&gt;</span></tt>
-is a type which satisfies the following conditions:</p>
-<blockquote>
+satisfies the following conditions:</p>
 <ul>
 <li><p class="first">if <tt class="literal"><span class="pre">C</span></tt> is convertible to <tt class="literal"><span class="pre">std::input_iterator_tag</span></tt> or
 <tt class="literal"><span class="pre">C</span></tt> is convertible to <tt class="literal"><span class="pre">std::output_iterator_tag</span></tt>,
@@ -845,7 +844,9 @@ convertible, and not to any more-derived traversal tag type.</p>
 </ul>
 </li>
 </ul>
-</blockquote>
+<!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
+<!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
 </div>
 <div class="section" id="iterator-facade-operations">
 <h3><a class="toc-backref" href="#id31" name="iterator-facade-operations"><tt class="literal"><span class="pre">iterator_facade</span></tt> operations</a></h3>
@@ -1410,37 +1411,72 @@ if (Difference is use_default)
 else
     typedef Difference difference_type;
 </pre>
-<p>If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is not <tt class="literal"><span class="pre">use_default</span></tt> then
-<tt class="literal"><span class="pre">iterator_category</span></tt> is <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>.  Otherwise
-<tt class="literal"><span class="pre">iterator_category</span></tt> is a type convertible to the tag determined by
-the following algorithm. Let <tt class="literal"><span class="pre">C</span></tt> be <tt class="literal"><span class="pre">traversal_category&lt;Iterator&gt;::type</span></tt>.</p>
+<p><tt class="literal"><span class="pre">iterator_category</span></tt> satisfies the following conditions, where
+<tt class="literal"><span class="pre">R</span></tt> is <tt class="literal"><span class="pre">reference</span></tt> and <tt class="literal"><span class="pre">V</span></tt> is <tt class="literal"><span class="pre">value_type</span></tt>, and where: if
+<tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is <tt class="literal"><span class="pre">use_default</span></tt>, <tt class="literal"><span class="pre">C</span></tt> is
+<tt class="literal"><span class="pre">iterator_traversal&lt;Iterator&gt;::type</span></tt> and otherwise <tt class="literal"><span class="pre">C</span></tt> is
+<tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>:</p>
+<blockquote>
+<ul>
+<li><p class="first">if <tt class="literal"><span class="pre">C</span></tt> is convertible to <tt class="literal"><span class="pre">std::input_iterator_tag</span></tt> or
+<tt class="literal"><span class="pre">C</span></tt> is convertible to <tt class="literal"><span class="pre">std::output_iterator_tag</span></tt>,
+<tt class="literal"><span class="pre">iterator_category</span></tt> is the same as <tt class="literal"><span class="pre">C</span></tt>.</p>
+</li>
+<li><p class="first">Otherwise, if <tt class="literal"><span class="pre">C</span></tt> is not convertible to
+<tt class="literal"><span class="pre">incrementable_traversal_tag</span></tt>, the program is ill-formed</p>
+</li>
+<li><p class="first">Otherwise:</p>
+<ul>
+<li><p class="first"><tt class="literal"><span class="pre">iterator_category</span></tt> is convertible to the iterator
+category tag or tags given by the following algorithm, and
+not to any more-derived iterator category tag or tags:</p>
 <pre class="literal-block">
-if (reference is a reference to value_type) then
-    if (C is convertible to random_access_traversal_tag) then
+if (R is a reference type
+    &amp;&amp; C is convertible to forward_traversal_tag)
+{
+    if (C is convertible to random_access_traversal_tag)
         random_access_iterator_tag
-    else if (C is convertible to bidirectional_traversal_tag) then
+    else if (C is convertible to bidirectional_traversal_tag)
         bidirectional_iterator_tag
     else
         forward_iterator_tag
+}
 else
-    input_iterator_tag
+{
+    if (C is convertible to single_pass_traversal_tag
+        &amp;&amp; R is convertible to V)
+        input_iterator_tag
+    else
+        C
+}
 </pre>
+</li>
+<li><p class="first"><tt class="literal"><span class="pre">iterator_traversal&lt;X&gt;::type</span></tt> is convertible to the most
+derived traversal tag type to which <tt class="literal"><span class="pre">C</span></tt> is also
+convertible, and not to any more-derived traversal tag type.</p>
+</li>
+</ul>
+</li>
+</ul>
+<!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
+<!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
+</blockquote>
 </div>
 <div class="section" id="indirect-iterator-requirements">
 <h4><a class="toc-backref" href="#id45" name="indirect-iterator-requirements"><tt class="literal"><span class="pre">indirect_iterator</span></tt> requirements</a></h4>
-<p>The <tt class="literal"><span class="pre">Iterator</span></tt> argument shall meet the requirements of Readable
-Iterator. The <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> argument shall be one of the
-standard iterator tags or <tt class="literal"><span class="pre">use_default</span></tt>. If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>
-is an iterator tag, the template parameter <tt class="literal"><span class="pre">Iterator</span></tt> argument shall
-meet the requirements corresponding to the iterator tag.</p>
+<p><tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> argument shall be <tt class="literal"><span class="pre">use_default</span></tt> or it
+shall be convertible to one of the standard iterator or traversal
+tags. If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is not <tt class="literal"><span class="pre">use_default</span></tt>, it shall
+indicate the traversal category modeled by <tt class="literal"><span class="pre">Iterator</span></tt>.  If</p>
 <p>The expression <tt class="literal"><span class="pre">*v</span></tt>, where <tt class="literal"><span class="pre">v</span></tt> is an object of type
-<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>, must be a valid expression
-and must be convertible to <tt class="literal"><span class="pre">indirect_iterator::reference</span></tt>.  Also
+<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt>, shall be valid
+expression and convertible to <tt class="literal"><span class="pre">reference</span></tt>.  Also
 <tt class="literal"><span class="pre">indirect_iterator::reference</span></tt> must be convertible to
-<tt class="literal"><span class="pre">indirect_iterator::value</span></tt>.  There are further requirements on the
-<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt> if the <tt class="literal"><span class="pre">Value</span></tt> parameter
-is not <tt class="literal"><span class="pre">use_default</span></tt>, as implied by the algorithm for deducing the
-default for the <tt class="literal"><span class="pre">value_type</span></tt> member.</p>
+<tt class="literal"><span class="pre">indirect_iterator::value</span></tt>.  There are further requirements on
+the <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::value_type</span></tt> if the <tt class="literal"><span class="pre">Value</span></tt>
+parameter is not <tt class="literal"><span class="pre">use_default</span></tt>, as implied by the algorithm for
+deducing the default for the <tt class="literal"><span class="pre">value_type</span></tt> member.</p>
 </div>
 <div class="section" id="indirect-iterator-models">
 <h4><a class="toc-backref" href="#id46" name="indirect-iterator-models"><tt class="literal"><span class="pre">indirect_iterator</span></tt> models</a></h4>
@@ -2436,7 +2472,6 @@ LocalWords:  OtherIncrementable Coplien -->
 <hr class="footer" />
 <div class="footer">
 <a class="reference" href="facade-and-adaptor.rst">View document source</a>.
-Generated on: 2004-01-13 20:19 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

@@ -169,12 +169,19 @@ iterator templates based on the Boost `iterator facade and adaptor`_.
 Traits
 ------
 
+* |pointee|_: Provides the capability to deduce the referent types
+  of pointers, smart pointers and iterators in generic code.  Used
+  in |indirect|.
+
 * |iterator_traits|_: Provides MPL_\ -compatible metafunctions which
   retrieve an iterator's traits.  Also corrects for the deficiencies
   of broken implementations of ``std::iterator_traits``.
 
 * |interoperable|_: Provides an MPL_\ -compatible metafunction for
   testing iterator interoperability
+
+.. |pointee| replace:: ``pointee.hpp``
+.. _pointee: pointee.html
 
 .. |iterator_traits| replace:: ``iterator_traits.hpp``
 .. _iterator_traits: iterator_traits.html

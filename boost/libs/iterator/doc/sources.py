@@ -9,6 +9,7 @@ sources = [
 'function_output_iterator.rst',
 'index.rst',
 'indirect_iterator.rst',
+'pointee.rst',
 'iterator_adaptor.rst',
 'iterator_facade.rst',
 'new-iter-concepts.rst',

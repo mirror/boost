@@ -57,7 +57,7 @@ texcrap = *.mpx *.log *.aux *.blg *-print.brf *-print.tex *.out
 mpxcrap = mpxerr.tex mpxerr.pdf
 
 generated = *.out *.[0-9] *.[0-9][0-9] *.bbl *.brf \
-	    *.mp *.mmp *.pdf .depend *.ps TMP-*.pdf *.ftoc\
+	    *.mp *.mmp *.pdf *.ps TMP-*.pdf *.ftoc\
 	    ${PRINTZIP} ${SLIDEZIP} ${GENFILE} ${DEPENDFILES} \
 	    ${texcrap} ${mpxcrap} ${CUTFOILS} $(strip $(wildcard *---*.tex))
 
@@ -211,7 +211,7 @@ clean:
 	${RMRF} ${generated}
 
 # ... Target: create dependencies
-depend: .depend .depend-rst
+depend: .depend-rst
 
 # ... Target: dependency file (parse TEXFILES for multiinclude and includegraphics)
 .depend: GNUmakefile ${TEXFILES}
@@ -226,11 +226,11 @@ depend: .depend .depend-rst
 	${RMRF} $@
 	@for t in ${RSTSTEMS} ; do \
 		${ECHO} "Scanning $$t.rst"; \
-		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /^\.\. include::\s+(.*)/ && print "$$target: $$1\n";}' $$t.html < $$t.rst >> $@; \
-		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /^\.\. include::\s+(.*)/ && print "$$target: $$1\n";}' $$t.tex < $$t.rst >> $@; \
+		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /^\.\. (include|image)::\s+(.*)/ && print "$$target: $$2\n";}' $$t.html < $$t.rst >> $@; \
+		${PERL} -e 'my $$target = shift @ARGV;' -e 'while (<>) { /^\.\. (include|image)::\s+(.*)/ && print "$$target: $$2\n";}' $$t.tex < $$t.rst >> $@; \
 	done
 
 
 # ... include dependency files
--include .depend
+# -include .depend
 -include .depend-rst
