@@ -2174,7 +2174,7 @@ for file in $boost_base/libs/config/test/boost_no*.ipp; do
    basename=`echo $file | sed 's/.*boost_\(.*\)\.ipp/\1/'`
    macroname=`cat $file | grep '^//[]    []*MACRO:' | sed 's/.*MACRO:[]    []*\([]_A-Z0-9[]*\).*/\1/'`
    title=`cat $file | grep '^//[]  []*TITLE:' | sed 's/.*TITLE:[]    []*\([]^  [].*\)/\1/'`
-   namespace=`echo $macroname | tr [:upper:] [:lower:]`
+   namespace=`echo $macroname | tr [A-Z] [a-z]`
 
 #echo file      = $file
 #echo basename  = $basename
@@ -2315,7 +2315,7 @@ for file in $boost_base/libs/config/test/boost_has*.ipp; do
    basename=`echo $file | sed 's/.*boost_\(.*\)\.ipp/\1/'`
    macroname=`cat $file | grep '^//[]    []*MACRO:' | sed 's/.*MACRO:[]    []*\([]_A-Z0-9[]*\).*/\1/'`
    title=`cat $file | grep '^//[]  []*TITLE:' | sed 's/.*TITLE:[]    []*\([]^  [].*\)/\1/'`
-   namespace=`echo $macroname | tr [:upper:] [:lower:]`
+   namespace=`echo $macroname | tr [A-Z] [a-z]`
 
 #  echo $file
 #  echo $basename
@@ -3314,6 +3314,7 @@ fi
 
 
 fi
+
 
 
 
