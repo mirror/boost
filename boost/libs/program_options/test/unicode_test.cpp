@@ -46,7 +46,7 @@ void test_unicode_to_unicode()
 void test_unicode_to_native()
 {
     std::codecvt<wchar_t, char, mbstate_t>* facet = 
-        new boost::program_options::detail::utf8_codecvt_facet<wchar_t, char>;
+        new boost::program_options::detail::utf8_codecvt_facet;
     locale::global(locale(locale(), facet));
 
     options_description desc;
@@ -67,7 +67,7 @@ void test_unicode_to_native()
 void test_native_to_unicode()
 {
     std::codecvt<wchar_t, char, mbstate_t>* facet = 
-        new boost::program_options::detail::utf8_codecvt_facet<wchar_t, char>;
+        new boost::program_options::detail::utf8_codecvt_facet;
     locale::global(locale(locale(), facet));
 
     options_description desc;
@@ -132,7 +132,7 @@ void test_command_line()
 void test_config_file()
 {
     std::codecvt<wchar_t, char, mbstate_t>* facet = 
-        new boost::program_options::detail::utf8_codecvt_facet<wchar_t, char>;
+        new boost::program_options::detail::utf8_codecvt_facet;
     locale::global(locale(locale(), facet));
 
     options_description desc;

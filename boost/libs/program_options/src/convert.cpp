@@ -106,7 +106,7 @@ namespace boost {
 
 
     namespace {
-        boost::program_options::detail::utf8_codecvt_facet<wchar_t, char> 
+        boost::program_options::detail::utf8_codecvt_facet
             utf8_facet;
     }
     
