@@ -31,34 +31,34 @@
 #include <utility>
 #include <boost/config.hpp>
 
-#if defined(__GNUC__) || defined(__KCC)
-#define _FPTR &
+#if defined(__GNUC__) || defined(__KCC) || defined(__ghs)
+#define BOOST_FPTR &
 #else
-#define _FPTR
+#define BOOST_FPTR
 #endif
 
 #define REQUIRE(__type_var, __concept) \
 do { \
   void (__concept##_concept <__type_var>::*__x)() = \
-    _FPTR __concept##_concept <__type_var>::constraints; \
+    BOOST_FPTR __concept##_concept <__type_var>::constraints; \
   __x = __x; } while (0)
 
 #define REQUIRE2(__type_var1, __type_var2, __concept) \
 do { \
   void (__concept##_concept <__type_var1, __type_var2>::*__x)() = \
-    _FPTR __concept##_concept <__type_var1, __type_var2>::constraints; \
+    BOOST_FPTR __concept##_concept <__type_var1, __type_var2>::constraints; \
   __x = __x; } while (0)
 
 #define REQUIRE3(__type_var1, __type_var2, __type_var3,__concept) \
 do { \
   void (__concept##_concept <__type_var1, __type_var2, __type_var3>::*__x)() = \
-    _FPTR __concept##_concept <__type_var1, __type_var2, __type_var3>::constraints; \
+    BOOST_FPTR __concept##_concept <__type_var1, __type_var2, __type_var3>::constraints; \
   __x = __x; } while (0)
 
 #define REQUIRE4(__type_var1, __type_var2, __type_var3,__type_var4,__concept) \
 do { \
  void (__concept##_concept <__type_var1,__type_var2,__type_var3,__type_var4>::*__x)() = \
- _FPTR __concept##_concept <__type_var1, __type_var2, __type_var3, __type_var4>::constraints;\
+ BOOST_FPTR __concept##_concept <__type_var1, __type_var2, __type_var3, __type_var4>::constraints;\
   __x = __x; } while (0)
 
 
@@ -67,7 +67,7 @@ do { \
   template <__func##__tv##__concept _Tp1> \
   struct __dummy_struct_##__tv##__concept { }; \
   static __dummy_struct_##__tv##__concept< \
-    _FPTR __concept##_concept <__tv>::constraints>  \
+    BOOST_FPTR __concept##_concept <__tv>::constraints>  \
   __dummy_ptr_##__tv##__concept
 
 #define CLASS_REQUIRES2(__tv1, __tv2, __concept) \
@@ -75,7 +75,7 @@ do { \
   template <__func##__tv1##__tv2##__concept _Tp1> \
   struct __dummy_struct_##__tv1##__tv2##__concept { }; \
   static __dummy_struct_##__tv1##__tv2##__concept< \
-    _FPTR __concept##_concept <__tv1,__tv2>::constraints>  \
+    BOOST_FPTR __concept##_concept <__tv1,__tv2>::constraints>  \
   __dummy_ptr_##__tv1##__tv2##__concept
 
 #define CLASS_REQUIRES3(__tv1, __tv2, __tv3, __concept) \
@@ -83,7 +83,7 @@ do { \
   template <__func##__tv1##__tv2##__tv3##__concept _Tp1> \
   struct __dummy_struct_##__tv1##__tv2##__tv3##__concept { }; \
   static __dummy_struct_##__tv1##__tv2##__tv3##__concept< \
-    _FPTR __concept##_concept <__tv1,__tv2,__tv3>::constraints>  \
+    BOOST_FPTR __concept##_concept <__tv1,__tv2,__tv3>::constraints>  \
   __dummy_ptr_##__tv1##__tv2##__tv3##__concept
 
 #define CLASS_REQUIRES4(__tv1, __tv2, __tv3, __tv4, __concept) \
@@ -91,7 +91,7 @@ do { \
   template <__func##__tv1##__tv2##__tv3##__tv4##__concept _Tp1> \
   struct __dummy_struct_##__tv1##__tv2##__tv3##__tv4##__concept { }; \
   static __dummy_struct_##__tv1##__tv2##__tv3##__tv4##__concept< \
-    _FPTR __concept##_concept <__tv1,__tv2,__tv3,__tv4>::constraints>  \
+    BOOST_FPTR __concept##_concept <__tv1,__tv2,__tv3,__tv4>::constraints>  \
   __dummy_ptr_##__tv1##__tv2##__tv3##__tv4##__concept
 
 

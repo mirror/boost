@@ -175,6 +175,12 @@
 #   define BOOST_NO_SLIST
 #   define BOOST_NO_HASH
 
+//  Greenhills C++ -----------------------------------------------------------//
+
+#elif defined __ghs
+#   define BOOST_NO_SLIST
+#   define BOOST_NO_HASH
+
 //  Borland ------------------------------------------------------------------//
 
 #elif defined __BORLANDC__
