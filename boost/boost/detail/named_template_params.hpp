@@ -20,7 +20,7 @@ namespace boost {
     struct dummy_default_gen {
       template <class Base, class Traits>
       struct bind {
-	typedef default_argument type;
+        typedef default_argument type;
       };
     };
 
@@ -41,14 +41,14 @@ namespace boost {
     struct choose_default {
       template <class Arg, class DefaultGen, class Base, class Traits>
       struct bind {
-	typedef typename default_generator<DefaultGen>::type Gen;
-	typedef typename Gen::template bind<Base,Traits>::type type;
+        typedef typename default_generator<DefaultGen>::type Gen;
+        typedef typename Gen::template bind<Base,Traits>::type type;
       };
     };
     struct choose_arg {
       template <class Arg, class DefaultGen, class Base, class Traits>
       struct bind {
-	typedef Arg type;
+        typedef Arg type;
       };
     };
 
@@ -80,7 +80,7 @@ namespace boost {
 #endif
     public:
       typedef typename Selector
-	::template bind<Arg, DefaultGen, Base, Traits>::type type;
+        ::template bind<Arg, DefaultGen, Base, Traits>::type type;
     };
 
     // To differentiate an unnamed parameter from a traits generator
@@ -97,7 +97,7 @@ namespace boost {
     };
     struct choose_default_arg {
       template <class Prev> struct bind { 
-	typedef detail::default_argument type;
+        typedef detail::default_argument type;
       };
     };
 
