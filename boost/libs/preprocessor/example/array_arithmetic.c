@@ -15,6 +15,8 @@
  * lists and tuples, for storing metainformation to be used for generating
  * the actual C code.
  *
+ * Who needs templates anyway? :)
+ *
  * Compile with any C compiler with a standards conforming preprocessor.
  */
 
