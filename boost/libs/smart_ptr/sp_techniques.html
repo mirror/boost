@@ -1,0 +1,689 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Smart pointer programming techniques</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	</head>
+	<body text="#000000" bgColor="#ffffff">
+		<h1><IMG height="86" alt="c++boost.gif (8819 bytes)" src="../../c++boost.gif" width="277" align="middle">Smart 
+			pointer programming techniques</h1>
+		<p>
+			<A href="#incomplete">Using incomplete classes for implementation hiding</A><br>
+			<A href="#pimpl">The "Pimpl" idiom</A><br>
+			<A href="#abstract">Using abstract classes for implementation hiding</A><br>
+			<A href="#preventing_delete">Preventing <code>delete px.get()</code></A><br>
+			<A href="#array">Using a <code>shared_ptr</code> to hold a pointer to an array</A><br>
+			<A href="#encapsulation">Encapsulating allocation details, wrapping factory 
+				functions</A><br>
+			<A href="#static">Using a <code>shared_ptr</code> to hold a pointer to a statically allocated 
+				object</A><br>
+			<A href="#com">Using a <code>shared_ptr</code> to hold a pointer to a COM object</A><br>
+			<A href="#intrusive">Using a <code>shared_ptr</code> to hold a pointer to an object with an 
+				embedded reference count</A><br>
+			<A href="#another_sp">Using a <code>shared_ptr</code> to hold another shared ownership smart 
+				pointer</A><br>
+			<A href="#from_raw">Obtaining a <code>shared_ptr</code> from a raw pointer</A><br>
+			<A href="#in_constructor">Obtaining a <code>shared_ptr</code> (<code>weak_ptr</code>) to <code>this</code> in a 
+				constructor</A><br>
+			<A href="#from_this">Obtaining a <code>shared_ptr</code> to <code>this</code></A><br>
+			<A href="#handle">Using <code>shared_ptr</code> as a smart counted handle</A><br>
+			<A href="#on_block_exit">Using <code>shared_ptr</code> to execute code on block exit</A><br>
+			<A href="#pvoid">Using <code>shared_ptr&lt;void&gt;</code> to hold an arbitrary object</A><br>
+			<A href="#extra_data">Associating arbitrary data with heterogeneous <code>shared_ptr</code> 
+				instances</A><br>
+			<A href="#pre_destructor">Post-constructors and pre-destructors</A><br>
+			<A href="#as_lock">Using <code>shared_ptr</code> as a CopyConstructible mutex lock</A><br>
+			<A href="#wrapper">Using <code>shared_ptr</code> to wrap member function calls</A><br>
+			<A href="#delayed">Delayed deallocation</A><br>
+			<A href="#weak_without_shared">Weak pointers to objects not managed by a <code>shared_ptr</code></A><br>
+		</p>
+		<h2><A name="incomplete">Using incomplete classes for implementation hiding</A></h2>
+<p>[Old, proven technique; can be used in C]</p>
+<pre>
+class FILE;
+
+FILE * fopen(char const * name, char const * mode);
+void fread(FILE * f, void * data, size_t size);
+void fclose(FILE * f);
+</pre>
+<p>[Compare with]</p>
+<pre>
+class FILE;
+
+shared_ptr&lt;FILE&gt; fopen(char const * name, char const * mode);
+void fread(shared_ptr&lt;FILE&gt; f, void * data, size_t size);
+</pre>
+<p>Note that there is no <code>fclose</code> function; <code>shared_ptr</code>'s ability to execute a custom deleter makes it unnecessary.</p>
+
+<p>[<code>shared_ptr&lt;X&gt;</code> can be copied and destroyed when <code>X</code> is incomplete.]</p>
+		<h2><A name="pimpl">The "Pimpl" idiom</A></h2>
+		<p>[...]</p>
+<pre>
+// file.hpp:
+
+class file
+{
+private:
+
+    class impl;
+    shared_ptr&lt;impl&gt; pimpl_;
+
+public:
+
+    file(char const * name, char const * mode);
+
+    // compiler generated members are fine and useful
+
+    void read(void * data, size_t size);
+};
+</pre>
+<pre>
+// file.cpp:
+
+#include "file.hpp"
+
+class file::impl
+{
+private:
+
+    impl(impl const &amp;);
+    impl &amp; operator=(impl const &amp;);
+
+    // private data
+
+public:
+
+    impl(char const * name, char const * mode) { ... }
+    ~impl() { ... }
+    void read(void * data, size_t size) { ... }
+};
+
+file::file(char const * name, char const * mode): pimpl_(new impl(name, mode))
+{
+}
+
+void file::read(void * data, size_t size)
+{
+    pimpl_-&gt;read(data, size);
+}
+</pre>
+<p>[<code>file</code> is CopyConstructible and Assignable.]</p>
+		<h2><A name="abstract">Using abstract classes for implementation hiding</A></h2>
+<p>[Interface based programming]</p>
+<pre>
+// X.hpp:
+
+class X
+{
+public:
+
+    virtual void f() = 0;
+    virtual void g() = 0;
+
+protected:
+
+    ~X() {}
+};
+
+shared_ptr&lt;X&gt; createX();
+</pre>
+<pre>
+-- X.cpp:
+
+class X_impl: public X
+{
+private:
+
+    X_impl(X_impl const &amp;);
+    X_impl &amp; operator=(X_impl const &amp;);
+
+public:
+
+    virtual void f()
+    {
+      // ...
+    }
+
+    virtual void g()
+    {
+      // ...
+    }
+};
+
+shared_ptr&lt;X&gt; createX()
+{
+    shared_ptr&lt;X&gt; px(new X_impl);
+    return px;
+}
+</pre>
+<p>[Note protected and nonvirtual destructor; client cannot delete <code>X</code>; <code>shared_ptr</code> correctly calls <code>~X_impl</code> even when nonvirtual.]</p>
+		<h2><A name="preventing_delete">Preventing <code>delete px.get()</code></A></h2>
+<p>[Alternative 1, use the above.]</p>
+<p>[Alternative 2, use a private deleter:]</p>
+<pre>
+class X
+{
+private:
+
+    ~X();
+
+    class deleter;
+    friend class deleter;
+
+    class deleter
+    {
+    public:
+
+        void operator()(X * p) { delete p; }
+    };
+
+public:
+
+    static shared_ptr&lt;X&gt; create()
+    {
+        shared_ptr&lt;X&gt; px(new X, X::deleter());
+        return px;
+    }
+};
+</pre>
+		<h2><A name="array">Using a <code>shared_ptr</code> to hold a pointer to an array</A></h2>
+<p>[...]</p>
+<pre>
+shared_ptr&lt;X&gt; px(new X[1], checked_array_deleter&lt;X&gt;());
+</pre>
+<p>[<code>shared_array</code> is preferable, has a better interface; <code>shared_ptr</code> has *, -&gt;, derived to base conversions.]</p>
+		<h2><A name="encapsulation">Encapsulating allocation details, wrapping factory 
+				functions</A></h2>
+<p>[Existing interface, possibly allocates <code>X</code> from its own heap, <code>~X</code> is private, or <code>X</code> is incomplete.]</p>
+<pre>
+X * CreateX();
+void DestroyX(X *);
+</pre>
+<p>[Wrapper:]</p>
+<pre>
+shared_ptr&lt;X&gt; createX()
+{
+    shared_ptr&lt;X&gt; px(CreateX(), DestroyX);
+}
+</pre>
+<p>[Client remains blissfully oblivious of allocation details; doesn't need to remember to call <code>destroyX</code>.]</p>
+		<h2><A name="static">Using a <code>shared_ptr</code> to hold a pointer to a statically allocated 
+				object</A></h2>
+<p>[...]</p>
+<pre>
+shared_ptr&lt;X&gt; createX();
+</pre>
+<p>[Sometimes needs to return a pointer to a statically allocated <code>X</code> instance.]</p>
+<pre>
+struct null_deleter
+{
+    void operator()(void const *) const
+    {
+    }
+};
+
+static X x;
+
+shared_ptr&lt;X&gt; createX()
+{
+    shared_ptr&lt;X&gt; px(&amp;x, null_deleter());
+    return px;
+}
+</pre>
+<p>[The same technique works for any object known to outlive the pointer.]</p>
+		<h2><A name="com">Using a <code>shared_ptr</code> to hold a pointer to a COM Object</A></h2>
+<p>[COM objects have an embedded reference count, <code>AddRef()</code> and <code>Release()</code>, <code>Release()</code> self-destroys when reference count drops to zero.]</p>
+<pre>
+shared_ptr&lt;IWhatever&gt; make_shared_from_COM(IWhatever * p)
+{
+    p-&gt;AddRef();
+    shared_ptr&lt;IWhatever&gt; pw(p, mem_fn(&amp;IWhatever::Release));
+    return pw;
+}
+</pre>
+<p>[All pw copies will share a single reference.]</p>
+		<h2><A name="intrusive">Using a <code>shared_ptr</code> to hold a pointer to an object with an 
+				embedded reference count</A></h2>
+<p>[A generalization of the above. Example assumes <code>intrusive_ptr</code>-compatible object.]</p>
+<pre>
+template&lt;class T&gt; struct intrusive_deleter
+{
+    void operator()(T * p)
+    {
+        if(p) intrusive_ptr_release(p);
+    }
+};
+
+shared_ptr&lt;X&gt; make_shared_from_intrusive(X * p)
+{
+    if(p) intrusive_ptr_add_ref(p);
+    shared_ptr&lt;X&gt; px(p, intrusive_deleter&lt;X&gt;());
+    return px;
+}
+</pre>
+		<h2><A name="another_sp">Using a <code>shared_ptr</code> to hold another shared ownership smart 
+				pointer</A></h2>
+<p>[...]</p>
+<pre>
+template&lt;class P&gt; class smart_pointer_deleter
+{
+private:
+
+    P p_;
+
+public:
+
+    smart_pointer_deleter(P const &amp; p): p_(p)
+    {
+    }
+
+    void operator()(void const *)
+    {
+        p_.reset();
+    }
+};
+
+shared_ptr&lt;X&gt; make_shared_from_another(another_ptr&lt;X&gt; qx)
+{
+    shared_ptr&lt;X&gt; px(qx.get(), smart_pointer_deleter< another_ptr&lt;X&gt; >(qx));
+    return px;
+}
+</pre>
+<p>[If <code>p_.reset()</code> can throw - wrap in <code>try {} catch(...) {}</code> block, will release <code>p_</code> when all weak pointers are eliminated.]</p>
+		<h2><A name="from_raw">Obtaining a <code>shared_ptr</code> from a raw pointer</A></h2>
+<p>[...]</p>
+<pre>
+void f(X * p)
+{
+    shared_ptr&lt;X&gt; px(<i>???</i>);
+}
+</pre>
+<p>[Not possible in general, either switch to]</p>
+<pre>
+void f(shared_ptr&lt;X&gt; px);
+</pre>
+<p>[This transformation can be used for nonvirtual member functions, too; before:]</p>
+<pre>
+void X::f(int m);
+</pre>
+<p>[after]</p>
+<pre>
+void f(shared_ptr&lt;X&gt; this_, int m);
+</pre>
+<p>[If <code>f</code> cannot be changed, use knowledge about <code>p</code>'s lifetime and allocation details and apply one of the above.]</p>
+		<h2><A name="in_constructor">Obtaining a <code>shared_ptr</code> (<code>weak_ptr</code>) to <code>this</code> in a 
+				constructor</A></h2>
+<p>[...]</p>
+<pre>
+class X
+{
+public:
+
+    X()
+    {
+        shared_ptr&lt;X&gt; this_(<i>???</i>);
+    }
+};
+</pre>
+<p>[Not possible in general. If <code>X</code> can have automatic or static storage, and <code>this_</code> doesn't need to keep the object alive,
+use a <code>null_deleter</code>. If <code>X</code> is supposed to always live on the heap, and be managed by a <code>shared_ptr</code>, use:]</p>
+<pre>
+class X
+{
+private:
+
+    X() { ... }
+
+public:
+
+    static shared_ptr&lt;X&gt; create()
+    {
+        shared_ptr&lt;X&gt; px(new X);
+        // use px as 'this_'
+        return px;
+    }
+};
+</pre>
+		<h2><A name="from_this">Obtaining a <code>shared_ptr</code> to <code>this</code></A></h2>
+<p>[Sometimes it is needed to obtain a shared_ptr from this in a virtual member function.]</p>
+<p>[The transformations from above cannot be applied.]</p>
+<pre>
+class X
+{
+public:
+
+    virtual void f() = 0;
+
+protected:
+
+    ~X() {}
+};
+
+class Y
+{
+public:
+
+    virtual shared_ptr&lt;X&gt; getX() = 0;
+
+protected:
+
+    ~Y() {}
+};
+
+// --
+
+class impl: public X, public Y
+{
+public:
+
+    impl() { ... }
+
+    virtual void f() { ... }
+
+    virtual shared_ptr&lt;X&gt; getX()
+    {
+        shared_ptr&lt;X&gt; px(<i>???</i>);
+        return px;
+    }
+};
+</pre>
+<p>[Solution:]</p>
+<pre>
+class impl: public X, public Y
+{
+private:
+
+    weak_ptr&lt;impl&gt; weak_this;
+
+    impl(impl const &amp;);
+    impl &amp; operator=(impl const &amp;);
+
+    impl() { ... }
+
+public:
+
+    static shared_ptr&lt;impl&gt; create()
+    {
+        shared_ptr&lt;impl&gt; pi(new impl);
+        pi-&gt;weak_this = pi;
+        return pi;
+    }
+
+    virtual void f() { ... }
+
+    virtual shared_ptr&lt;X&gt; getX()
+    {
+        shared_ptr&lt;X&gt; px = make_shared(weak_this);
+        return px;
+    }
+};
+</pre>
+<p>[Future support planned, <code>impl: public enable_shared_from_this&lt;impl&gt;</code>.]</p>
+		<h2><A name="handle">Using <code>shared_ptr</code> as a smart counted handle</A></h2>
+<p>[Win32 API allusion]</p>
+<pre>
+typedef void * HANDLE;
+HANDLE CreateProcess();
+void CloseHandle(HANDLE);
+</pre>
+<p>[Quick wrapper]</p>
+<pre>
+typedef shared_ptr&lt;void&gt; handle;
+
+handle createProcess()
+{
+    shared_ptr&lt;void&gt; pv(CreateProcess(), CloseHandle);
+    return pv;
+}
+</pre>
+<p>[Better, typesafe:]</p>
+<pre>
+class handle
+{
+private:
+
+    shared_ptr&lt;void&gt; pv_;
+
+public:
+
+    explicit handle(HANDLE h): pv_(h, CloseHandle) {}
+    HANDLE get() { return pv_.get(); }
+};
+</pre>
+		<h2><A name="on_block_exit">Using <code>shared_ptr</code> to execute code on block exit</A></h2>
+<p>[1. Executing <code>f(p)</code>, where <code>p</code> is a pointer:]</p>
+<pre>
+    shared_ptr&lt;void&gt; guard(p, f);
+</pre>
+<p>[2. Executing arbitrary code: <code>f(x, y)</code>:]</p>
+<pre>
+    shared_ptr&lt;void&gt; guard(static_cast&lt;void*&gt;(0), bind(f, x, y));
+</pre>
+		<h2><A name="pvoid">Using <code>shared_ptr&lt;void&gt;</code> to hold an arbitrary object</A></h2>
+<p>[...]</p>
+<pre>
+    shared_ptr&lt;void&gt; pv(new X);
+</pre>
+<p>[Will correctly call <code>~X</code>.]</p>
+<p>[Can be used to strip type information: <code>shared_ptr&lt;X&gt;</code> -&gt; <code>(shared_ptr&lt;void&gt;, typeid(X))</code>]</p>
+		<h2><A name="extra_data">Associating arbitrary data with heterogeneous <code>shared_ptr</code> 
+				instances</A></h2>
+<p>[...]</p>
+<pre>
+typedef int Data;
+
+std::map&lt; shared_ptr&lt;void&gt;, Data &gt; userData;
+// or std::map&lt; weak_ptr&lt;void&gt;, Data &gt; userData; to not affect the lifetime
+
+shared_ptr&lt;X&gt; px(new X);
+shared_ptr&lt;int&gt; pi(new int(3));
+
+userData[px] = 42;
+userData[pi] = 91;
+</pre>
+		<h2><A name="pre_destructor">Post-constructors and pre-destructors</A></h2>
+<p>[...]</p>
+<pre>
+class X
+{
+public:
+
+    X();
+    virtual void postconstructor();
+    virtual void predestructor() throw();
+    ~X() throw();
+
+    struct deleter
+    {
+        void operator()(X * p)
+        {
+             p-&gt;predestructor();
+             delete p;
+        }
+    }
+
+    static shared_ptr&lt;X&gt; create()
+    {
+        shared_ptr&lt;X&gt; px(new X, X::deleter());
+        px-&gt;postconstructor(); // can throw
+        return px;
+    }
+};
+</pre>
+		<h2><A name="as_lock">Using <code>shared_ptr</code> as a CopyConstructible mutex lock</A></h2>
+<p>[Sometimes it's necessary to return a mutex lock from a function. A noncopyable lock cannot be used.]</p>
+<pre>
+class mutex
+{
+public:
+
+    void lock();
+    void unlock();
+};
+
+shared_ptr&lt;mutex&gt; lock(mutex &amp; m)
+{
+    m.lock();
+    return shared_ptr&lt;mutex&gt;(&amp;m, mem_fn(&amp;mutex::unlock));
+}
+</pre>
+<p>[Or to encapsulate it in a dedicated class:]</p>
+<pre>
+class shared_lock
+{
+private:
+
+    shared_ptr&lt;void&gt; pv;
+
+public:
+
+    template&lt;class Mutex&gt; explicit shared_lock(Mutex &amp; m): pv((m.lock(), &amp;m), mem_fn(&amp;Mutex::unlock)) {}
+};
+</pre>
+<p>[Usage:]</p>
+<pre>
+    shared_lock lock(m);
+</pre>
+<p>[Note that <code>shared_lock</code> is not templated on the mutex type, thanks to <code>shared_ptr&lt;void&gt;</code>'s ability to hide type information.]</p>
+		<h2><A name="wrapper">Using <code>shared_ptr</code> to wrap member function calls</A></h2>
+<p>[http://www.research.att.com/~bs/wrapper.pdf]</p>
+<pre>
+template&lt;class T&gt; class pointer
+{
+private:
+
+    T * p_;
+
+public:
+
+    explicit pointer(T * p): p_(p)
+    {
+    }
+
+    shared_ptr&lt;T&gt; operator-&gt;() const
+    {
+        p_-&gt;prefix();
+        return shared_ptr&lt;T&gt;(p_, mem_fn(&amp;T::suffix));
+    }
+};
+
+class X
+{
+private:
+
+    void prefix();
+    void suffix();
+    friend class pointer&lt;X&gt;;
+    
+public:
+
+    void f();
+    void g();
+};
+
+int main()
+{
+    X x;
+
+    pointer&lt;X&gt; px(&amp;x);
+
+    px-&gt;f();
+    px-&gt;g();
+}
+</pre>
+		<h2><A name="delayed">Delayed deallocation</A></h2>
+<p>[In some situations, a single <code>px.reset()</code> can trigger an expensive deallocation in a performance-critical region.]</p>
+<pre>
+class X; // ~X is expensive
+
+class Y
+{
+    shared_ptr&lt;X&gt; px;
+
+public:
+
+    void f()
+    {
+        px.reset();
+    }
+};
+</pre>
+<p>[Solution 1]</p>
+<pre>
+vector&lt; shared_ptr&lt;void&gt; &gt; free_list;
+
+class Y
+{
+    shared_ptr&lt;X&gt; px;
+
+public:
+
+    void f()
+    {
+        free_list.push_back(px);
+        px.reset();
+    }
+};
+
+// periodically invoke free_list.clear() when convenient
+</pre>
+<p>[Solution 2, as above, but use a delayed deleter]</p>
+<pre>
+struct delayed_deleter
+{
+    template&lt;class T&gt; void operator()(T * p)
+    {
+        try
+        {
+            shared_ptr&lt;void&gt; pv(p);
+            free_list.push_back(pv);
+        }
+        catch(...)
+        {
+        }
+    }
+};
+</pre>
+		<h2><A name="weak_without_shared">Weak pointers to objects not managed by a <code>shared_ptr</code></A></h2>
+<p>Make the object hold a <code>shared_ptr</code> to itself, using a <code>null_deleter</code>:</p>
+<pre>
+class X
+{
+private:
+
+    shared_ptr&lt;X&gt; this_;
+    int i_;
+
+public:
+
+    explicit X(int i): this_(this, null_deleter()), i_(i)
+    {
+    }
+
+    // repeat in all constructors (including the copy constructor!)
+
+    X(X const &amp; rhs): this_(this, null_deleter()), i_(rhs.i_)
+    {
+    }
+
+    // do not forget to not assign this_ in the copy assignment
+
+    X &amp; operator=(X const &amp; rhs)
+    {
+	    i_ = rhs.i_;
+    }
+
+    weak_ptr&lt;X&gt; get_weak_ptr() const { return this_; }
+};
+</pre>
+<p>When the object's lifetime ends, <code>X::this_</code> will be destroyed, and all weak pointers will automatically expire.</p>
+		<hr>
+		<p>
+			$Date$</p>
+		<p>
+			Copyright &copy; 2003 Peter Dimov. Permission to copy, use, modify, sell and 
+			distribute this document is granted provided this copyright notice appears in 
+			all copies. This document is provided "as is" without express or implied 
+			warranty, and with no claim as to its suitability for any purpose.</p>
+	</body>
+</html>
