@@ -65,8 +65,17 @@ void test_sequence_list_of_int()
     C c3 = ba::list_of(1).repeat( 1, 2 )(3);
     BOOST_CHECK_EQUAL( c3.size(), 3u );
         
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    // BCB fails to use operator=() directly, 
+    // it must be worked around using e.g. auxiliary variable
+    C aux = ba::list_of(1).repeat_fun( 10, &rand )(2)(3);
+    BOOST_CHECK_EQUAL( aux.size(), 13u );
+    c3 = aux;
+    BOOST_CHECK_EQUAL( c3.size(), 13u );
+#else
     c3 = ba::list_of(1).repeat_fun( 10, &rand )(2)(3);
     BOOST_CHECK_EQUAL( c3.size(), 13u );
+#endif
 }
 
 template< class C >
