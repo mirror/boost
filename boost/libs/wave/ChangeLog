@@ -23,6 +23,11 @@ TODO (known issues):
 
 CHANGELOG
 
+- Fixed a bug where the complete set of C99 predefined macros were pre-defined
+  when in C++ mode and variadics were enabled.
+- When in variadics of C99 mode the __BASE_FILE__ predefined macro expanded to
+  <Unknown>.
+
 Mon Feb 21 09:30:04 WEST 2005
 Version 1.1.14 (Fixes in response to the Boost review)
 

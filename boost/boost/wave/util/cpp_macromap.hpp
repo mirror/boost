@@ -190,6 +190,7 @@ private:
 
     token_type act_token;       // current token
     position_type main_pos;     // last token position in the pp_iterator
+    string_type base_name;      // the name to be expanded by __BASE_FILE__
     ContextT &ctx;              // context object associated with the macromap
     long macro_uid;
 };
@@ -1608,10 +1609,17 @@ position_type pos;
 #endif 
     }
 
-// predefine the __BASE_FILE__ macro which contains the main file name    
-    predefine_macro(current_scope, "__BASE_FILE__",
-        token_type(T_STRINGLIT, string_type("\"") + fname + "\"", pos));
-
+// predefine the __BASE_FILE__ macro which contains the main file name  
+    if (string_type(fname) != "<Unknown>") {
+        predefine_macro(current_scope, "__BASE_FILE__",
+            token_type(T_STRINGLIT, string_type("\"") + fname + "\"", pos));
+        base_name = fname;
+    }
+    else if (!base_name.empty()) {
+        predefine_macro(current_scope, "__BASE_FILE__",
+            token_type(T_STRINGLIT, string_type("\"") + base_name + "\"", pos));
+    }
+    
 // now add the dynamic macros
     for (int j = 0; 0 != dynamic_data(j).name; ++j) {
         predefine_macro(current_scope, dynamic_data(j).name,
