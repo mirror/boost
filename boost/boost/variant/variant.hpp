@@ -64,6 +64,7 @@
 #include "boost/mpl/bool.hpp"
 #include "boost/mpl/contains.hpp"
 #include "boost/mpl/distance.hpp"
+#include "boost/mpl/empty.hpp"
 #include "boost/mpl/find.hpp"
 #include "boost/mpl/find_if.hpp"
 #include "boost/mpl/front.hpp"
@@ -72,6 +73,7 @@
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iterator_range.hpp"
 #include "boost/mpl/logical.hpp"
+#include "boost/mpl/list/list10.hpp"
 #include "boost/mpl/max_element.hpp"
 #include "boost/mpl/protect.hpp"
 #include "boost/mpl/push_front.hpp"
@@ -866,7 +868,11 @@ private: // helpers, for typedefs (below)
 
     typedef typename mpl::apply_if<
           is_sequence_based_
-        , mpl::identity<unwrapped_T0_>
+        , mpl::if_<
+              mpl::empty<unwrapped_T0_>
+            , mpl::list1< boost::empty >
+            , unwrapped_T0_
+            >
         , detail::variant::make_variant_list<
               unwrapped_T0_
             , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(T)
