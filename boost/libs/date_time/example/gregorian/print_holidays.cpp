@@ -19,21 +19,11 @@ Number Holidays: 7
 #include <iostream>
 #include <set>
 
-namespace std {
-  //define an operator << for date so transform can call
-  std::ostream&
-  operator<<(std::ostream& os, const boost::gregorian::date& d)
-  {
-    os << boost::gregorian::to_simple_string(d);
-    return os;
-  }
-
-}
 
 void
 print_date(boost::gregorian::date d) 
 {
-  std::cout << d << " [" << d.day_of_week().as_short_string() << "]\n";
+  std::cout << d << " [" << d.day_of_week() << "]\n";
 }
 
 
