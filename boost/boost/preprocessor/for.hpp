@@ -55,6 +55,11 @@ still quite useful on its own.</p>
 
 <p>BOOST_PP_FOR() can be used for multidimensional repetition simply by
 invoking BOOST_PP_FOR##R() directly.</p>
+
+<h3>Test</h3>
+<ul>
+  <li><a href="../../test/for_test.cpp">for_test.cpp</a></li>
+</ul>
 */
 #define BOOST_PP_FOR(X,C,F,I) BOOST_PP_FOR0(X,C,F,I)
 
