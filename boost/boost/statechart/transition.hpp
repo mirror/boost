@@ -11,7 +11,10 @@
 
 #include <boost/fsm/result.hpp>
 
+#include <boost/mpl/if.hpp>
+
 #include <boost/cast.hpp> // boost::polymorphic_downcast
+#include <boost/type_traits/is_same.hpp>
 
 
 
@@ -46,21 +49,22 @@ struct transition
 {
   private:
     //////////////////////////////////////////////////////////////////////////
-    template< class State, class EventBase >
-    struct impl
+    struct react_with_transition_action_impl
     {
-      template< class TransitionContext2 >
+      template< class State, class EventBase >
       static result react( State & stt, const EventBase & toEvent )
       {
-        return stt.transit< Destination >( pTransitionAction,
+        return stt.template transit< Destination >( pTransitionAction,
           *polymorphic_downcast< const Event * >( &toEvent ) );
       }
+    };
 
-      template<>
-      static result react< detail::no_context >(
-        State & stt, const EventBase & )
+    struct react_without_transition_action_impl
+    {
+      template< class State, class EventBase >
+      static result react( State & stt, const EventBase & )
       {
-        return stt.transit< Destination >();
+        return stt.template transit< Destination >();
       }
     };
 
@@ -72,8 +76,12 @@ struct transition
     {
       if ( eventType == Event::static_type() )
       {
-        return impl< State, EventBase >::template react< TransitionContext >(
-          stt, evt );
+        typedef typename mpl::if_<
+          is_same< TransitionContext, detail::no_context >,
+          react_without_transition_action_impl,
+          react_with_transition_action_impl
+        >::type impl;
+        return impl::react( stt, evt );
       }
       else
       {

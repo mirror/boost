@@ -16,7 +16,7 @@
 #include <boost/fsm/detail/constructor.hpp>
 
 #include <boost/mpl/apply_if.hpp>
-#include <boost/mpl/apply.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/list.hpp>
@@ -31,6 +31,7 @@
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/clear.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/mpl/bool.hpp>
 
 #include <boost/get_pointer.hpp>
 #include <boost/intrusive_ptr.hpp>
@@ -215,13 +216,23 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     template< class OtherContext >
     OtherContext & context()
     {
-      return context_impl( static_cast< OtherContext * >( 0 ) );
+      typedef typename mpl::if_<
+        is_same< OtherContext, MostDerived >,
+        context_impl_this_context,
+        context_impl_other_context
+      >::type impl;
+      return impl::template context_impl< OtherContext >( *this );
     }
 
     template< class OtherContext >
     const OtherContext & context() const
     {
-      return context_impl( static_cast< OtherContext * >( 0 ) );
+      typedef typename mpl::if_<
+        is_same< OtherContext, MostDerived >,
+        context_impl_this_context,
+        context_impl_other_context
+      >::type impl;
+      return impl::template context_impl< OtherContext >( *this );
     }
 
     template< class Target >
@@ -378,8 +389,7 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     {
       state_base_type::enable_reaction();
       typedef typename detail::make_list< Reactions >::type reaction_list;
-      result reactionResult =
-        local_react_impl< reaction_list >( evt, eventType );
+      result reactionResult = local_react< reaction_list >( evt, eventType );
 
       if ( reactionResult == do_forward_event )
       {
@@ -396,17 +406,25 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
     virtual const state_base_type * outer_state_ptr() const
     {
-      return outer_state_ptr_impl<
-        is_same< outermost_context_type, context_type >::value >();
+      typedef typename mpl::if_<
+        is_same< outermost_context_type, context_type >,
+        outer_state_ptr_impl_outermost,
+        outer_state_ptr_impl_non_outermost
+      >::type impl;
+      return impl::outer_state_ptr_impl( *this );
     }
-
 
     template< class OtherContext >
     const typename OtherContext::inner_context_ptr_type & context_ptr() const
     {
-      return context_ptr_impl( typename OtherContext::inner_context_ptr_type() );
-    }
+      typedef typename mpl::if_<
+        is_same< OtherContext, context_type >,
+        context_ptr_impl_my_context,
+        context_ptr_impl_other_context
+      >::type impl;
 
+      return impl::template context_ptr_impl< OtherContext >( *this );
+    }
 
     static void initial_deep_construct(
       outermost_context_type & outermostContext )
@@ -445,23 +463,19 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       const inner_context_ptr_type & pInnerContext,
       outermost_context_type & outermostContext )
     {
-      deep_construct_inner_impl< InnerList >(
+      typedef typename mpl::if_<
+        mpl::empty< InnerList >,
+        deep_construct_inner_impl_leaf_state,
+        deep_construct_inner_impl_node_state
+      >::type impl;
+      impl::template deep_construct_inner_impl< InnerList >(
         pInnerContext, outermostContext );
     }
-
-    template<>
-    static void deep_construct_inner< detail::empty_list >(
-      const inner_context_ptr_type & pInnerContext,
-      outermost_context_type & outermostContext )
-    {
-      outermostContext.add( pInnerContext );
-    }
-
 
     static void reserve_history_slot(
       outermost_context_type & outermostContext )
     {
-      reserve_shallow_history_slot_impl< context_type::shallow_history >(
+      reserve_shallow_history_slot< context_type::shallow_history >(
         outermostContext );
       reserve_deep_history_slot_impl< context_type::deep_history >(
         outermostContext );
@@ -473,57 +487,82 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       if ( !state_base_type::termination_state() )
       {
         detail::deep_history_storer< 
-          context_type::inherited_deep_history, context_type::deep_history
-        >::template store_deep_history< MostDerived, LeafState >( *pContext_ );
+          context_type::inherited_deep_history,
+          context_type::deep_history
+        >::template store_deep_history< MostDerived, LeafState >(
+          *pContext_ );
       }
     }
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    template< class OtherContextPtr >
-    const OtherContextPtr & context_ptr_impl(
-      const OtherContextPtr & ) const
+    struct deep_construct_inner_impl_node_state
     {
-      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
-      return pContext_->context_ptr< OtherContextPtr >();
-    }
+      template< class InnerList >
+      static void deep_construct_inner_impl(
+        const inner_context_ptr_type & pInnerContext,
+        outermost_context_type & outermostContext )
+      {
+        node_state_deep_construct_inner< InnerList >(
+          pInnerContext, outermostContext );
+      }
+    };
 
-    template<>
-    const context_ptr_type & context_ptr_impl(
-      const context_ptr_type & ) const
+    struct deep_construct_inner_impl_leaf_state
     {
-      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
-      return pContext_;
-    }
+      template< class InnerList >
+      static void deep_construct_inner_impl(
+        const inner_context_ptr_type & pInnerContext,
+        outermost_context_type & outermostContext )
+      {
+        outermostContext.add( pInnerContext );
+      }
+    };
 
-
-    template< class OtherContext >
-    OtherContext & context_impl( OtherContext * )
+    struct context_ptr_impl_other_context
     {
-      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
-      return pContext_->context< OtherContext >();
-    }
+      template< class OtherContext, class State >
+      static const typename OtherContext::inner_context_ptr_type &
+      context_ptr_impl( const State & stt )
+      {
+        BOOST_ASSERT( get_pointer( stt.pContext_ ) != 0 );
+        return stt.pContext_->template context_ptr< OtherContext >();
+      }
+    };
+    friend struct context_ptr_impl_other_context;
 
-    template<>
-    MostDerived & context_impl( MostDerived * )
+    struct context_ptr_impl_my_context
     {
-      return *polymorphic_downcast< MostDerived * >( this );
-    }
+      template< class OtherContext, class State >
+      static const typename OtherContext::inner_context_ptr_type &
+      context_ptr_impl( const State & stt )
+      {
+        BOOST_ASSERT( get_pointer( stt.pContext_ ) != 0 );
+        return stt.pContext_;
+      }
+    };
+    friend struct context_ptr_impl_my_context;
 
-    template< class OtherContext >
-    const OtherContext & context_impl( OtherContext * ) const
+    struct context_impl_other_context
     {
-      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
-      const OtherContext & constContext( *pContext_ );
-      return constContext.context< OtherContext >();
-    }
+      template< class OtherContext, class State >
+      static OtherContext & context_impl( State & stt )
+      {
+        BOOST_ASSERT( get_pointer( stt.pContext_ ) != 0 );
+        return stt.pContext_->template context< OtherContext >();
+      }
+    };
+    friend struct context_impl_other_context;
 
-    template<>
-    const MostDerived & context_impl( MostDerived * ) const
+    struct context_impl_this_context
     {
-      return *polymorphic_downcast< const MostDerived * >( this );
-    }
-
+      template< class OtherContext, class State >
+      static OtherContext & context_impl( State & stt )
+      {
+        return *polymorphic_downcast< MostDerived * >( &stt );
+      }
+    };
+    friend struct context_impl_this_context;
 
     template< class DestinationState, class TransitionAction >
     result transit_impl( const TransitionAction & transitionAction )
@@ -557,8 +596,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
 
       termination_state_type & terminationState(
         context< termination_state_type >() );
-      const typename common_context_type::inner_context_ptr_type pCommonContext(
-        terminationState.context_ptr< common_context_type >() );
+      const typename
+        common_context_type::inner_context_ptr_type pCommonContext(
+          terminationState.context_ptr< common_context_type >() );
       outermost_context_type & outermostContext(
         pCommonContext->outermost_context() );
 
@@ -584,119 +624,241 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       return do_discard_event;
     }
 
+    struct local_react_impl_nonempty
+    {
+      template< class ReactionList, class State >
+      static result local_react_impl(
+        State & stt,
+        const event_base_type & evt,
+        typename rtti_policy_type::id_type eventType )
+      {
+        result reactionResult = mpl::front< ReactionList >::type::react(
+          *polymorphic_downcast< MostDerived * >( &stt ), evt, eventType );
+  
+        if ( reactionResult == no_reaction )
+        {
+          reactionResult = stt.template local_react<
+            typename mpl::pop_front< ReactionList >::type >( evt, eventType );
+        }
+  
+        return reactionResult;
+      }
+    };
+    friend struct local_react_impl_nonempty;
+    
+    struct local_react_impl_empty
+    {
+      template< class ReactionList, class State >
+      static result local_react_impl(
+        State &, const event_base_type &, typename rtti_policy_type::id_type )
+      {
+        return do_forward_event;
+      }
+    };
+
     template< class ReactionList >
-    result local_react_impl(
+    result local_react(
       const event_base_type & evt,
       typename rtti_policy_type::id_type eventType )
     {
-      result reactionResult = mpl::front< ReactionList >::type::react(
-        *polymorphic_downcast< MostDerived * >( this ), evt, eventType );
+      typedef typename mpl::if_<
+        mpl::empty< ReactionList >,
+        local_react_impl_empty,
+        local_react_impl_nonempty
+      >::type impl;
+      return impl::template local_react_impl< ReactionList >(
+        *this, evt, eventType );
+    }
 
-      if ( reactionResult == no_reaction )
+    struct outer_state_ptr_impl_non_outermost
+    {
+      template< class State >
+      static const state_base_type * outer_state_ptr_impl( const State & stt )
       {
-        reactionResult =
-          local_react_impl< typename mpl::pop_front< ReactionList >::type >(
-            evt, eventType );
+        return get_pointer( stt.pContext_ );
       }
+    };
+    friend struct outer_state_ptr_impl_non_outermost;
 
-      return reactionResult;
-    }
-
-    template<>
-    result local_react_impl< no_reactions >(
-      const event_base_type &, typename rtti_policy_type::id_type )
+    struct outer_state_ptr_impl_outermost
     {
-      return do_forward_event;
-    }
+      template< class State >
+      static const state_base_type * outer_state_ptr_impl( const State & )
+      {
+        return 0;
+      }
+    };
 
-    template< bool isOutermost >
-    const state_base_type * outer_state_ptr_impl() const
+    struct node_state_deep_construct_inner_impl_non_empty_list
     {
-      return get_pointer( pContext_ );
-    }
+      template< class InnerList >
+      static void node_state_deep_construct_inner_impl(
+        const inner_context_ptr_type & pInnerContext,
+        outermost_context_type & outermostContext )
+      {
+        typedef typename mpl::front< InnerList >::type current_inner;
+        
+        // If you receive a 
+        // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
+        // similar compiler error here then there is a mismatch between the
+        // orthogonal position of a state and its position in the inner initial
+        // list of its outer state.
+        BOOST_STATIC_ASSERT( ( is_same< 
+          current_inner,
+          typename mpl::at_c<
+            typename current_inner::context_type::inner_initial_list,
+            current_inner::orthogonal_position >::type >::value ) );
+        
+        current_inner::reserve_history_slot( outermostContext );
+        current_inner::deep_construct( pInnerContext, outermostContext );
 
-    template<>
-    const state_base_type * outer_state_ptr_impl< true >() const
+        typedef typename mpl::pop_front< InnerList >::type recurse_list;
+        node_state_deep_construct_inner_impl_holder< recurse_list >::
+          template node_state_deep_construct_inner_impl< recurse_list >(
+            pInnerContext, outermostContext );
+      }
+    };
+  
+    struct node_state_deep_construct_inner_impl_empty_list
     {
-      return 0;
-    }
-
+      template< class InnerList >
+      static void node_state_deep_construct_inner_impl(
+        const inner_context_ptr_type &, outermost_context_type & ) {}
+    };
 
     template< class InnerList >
-    static void deep_construct_inner_impl(
+    struct node_state_deep_construct_inner_impl_holder : mpl::if_<
+      mpl::empty< InnerList >,
+      node_state_deep_construct_inner_impl_empty_list,
+      node_state_deep_construct_inner_impl_non_empty_list >::type {};
+
+    template< class InnerList >
+    static void node_state_deep_construct_inner(
       const inner_context_ptr_type & pInnerContext,
       outermost_context_type & outermostContext )
     {
-      typedef typename mpl::front< InnerList >::type current_inner;
-      
-      // If you receive a 
-      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
-      // similar compiler error here then there is a mismatch between the
-      // orthogonal position of a state and its position in the inner initial
-      // list of its outer state.
-      BOOST_STATIC_ASSERT( ( is_same< 
-        current_inner,
-        typename mpl::at_c<
-          typename current_inner::context_type::inner_initial_list,
-          current_inner::orthogonal_position >::type >::value ) );
-      
-      current_inner::reserve_history_slot( outermostContext );
-      current_inner::deep_construct( pInnerContext, outermostContext );
-      deep_construct_inner_impl< typename mpl::pop_front< InnerList >::type >(
-        pInnerContext, outermostContext );
+      node_state_deep_construct_inner_impl_holder< InnerList >::
+        template node_state_deep_construct_inner_impl< InnerList >(
+          pInnerContext, outermostContext );
     }
 
-    template<>
-    static void deep_construct_inner_impl< detail::empty_list >(
-      const inner_context_ptr_type &, outermost_context_type & ) {}
-
-
+    struct reserve_shallow_history_slot_impl_no
+    {
+      static void reserve_shallow_history_slot_impl(
+        outermost_context_type & ) {}
+    };
+  
+    struct reserve_shallow_history_slot_impl_yes
+    {
+      static void reserve_shallow_history_slot_impl(
+        outermost_context_type & outermostContext )
+      {
+        outermostContext.template reserve_shallow_history_slot<
+          MostDerived >();
+      }
+    };
+    
     template< bool reserveShallowHistorySlot >
-    static void reserve_shallow_history_slot_impl(
-      outermost_context_type & ) {}
-
-    template<>
-    static void reserve_shallow_history_slot_impl< true >(
+    static void reserve_shallow_history_slot(
       outermost_context_type & outermostContext )
     {
-      outermostContext.template reserve_shallow_history_slot< MostDerived >();
+      typedef typename mpl::if_<
+        mpl::bool_< reserveShallowHistorySlot >,
+        reserve_shallow_history_slot_impl_yes,
+        reserve_shallow_history_slot_impl_no
+      >::type impl;
+
+      impl::reserve_shallow_history_slot_impl( outermostContext );
     }
+    
+    struct check_store_shallow_history_impl_no
+    {
+      template< class State >
+      static void check_store_shallow_history_impl( State & ) {}
+    };
+  
+    struct check_store_shallow_history_impl_yes
+    {
+      template< class State >
+      static void check_store_shallow_history_impl( State & stt )
+      {
+        // If we are not the termination state then it can only be one of our
+        // direct or indirect outer states
+        if ( !stt.state_base_type::termination_state() )
+        {
+          stt.outermost_context().template store_shallow_history<
+            MostDerived >();
+        }
+      }
+    };
+    friend struct check_store_shallow_history_impl_yes;
 
     template< bool storeShallowHistory >
-    void check_store_shallow_history() {}
-
-    template<>
-    void check_store_shallow_history< true >()
+    void check_store_shallow_history() 
     {
-      // If we are not the termination state then it can only be one of our
-      // direct or indirect outer states
-      if ( !state_base_type::termination_state() )
-      {
-        outermost_context().template store_shallow_history< MostDerived >();
-      }
+      typedef typename mpl::if_<
+        mpl::bool_< storeShallowHistory >,
+        check_store_shallow_history_impl_yes,
+        check_store_shallow_history_impl_no
+      >::type impl;
+      impl::check_store_shallow_history_impl( *this );
     }
 
+    struct reserve_deep_history_slot_impl_no
+    {
+      static void reserve_deep_history_slot_impl(
+        outermost_context_type & ) {}
+    };
+  
+    struct reserve_deep_history_slot_impl_yes
+    {
+      static void reserve_deep_history_slot_impl(
+        outermost_context_type & outermostContext )
+      {
+        outermostContext.template reserve_deep_history_slot<
+          MostDerived >();
+      }
+    };
 
     template< bool reserveDeepHistorySlot >
     static void reserve_deep_history_slot_impl(
-      outermost_context_type & ) {}
-
-    template<>
-    static void reserve_deep_history_slot_impl< true >(
       outermost_context_type & outermostContext )
     {
-      outermostContext.template reserve_deep_history_slot< MostDerived >();
+      typedef typename mpl::if_<
+        mpl::bool_< reserveDeepHistorySlot >,
+        reserve_deep_history_slot_impl_yes,
+        reserve_deep_history_slot_impl_no
+      >::type impl;
+
+      impl::reserve_deep_history_slot_impl( outermostContext );
     }
 
-    template< bool storeDeepHistory >
-    void check_store_deep_history() {}
-
-    template<>
-    void check_store_deep_history< true >()
+    struct check_store_deep_history_impl_no
     {
-      store_deep_history_impl< MostDerived >();
-      // If we are not the termination state then it can only be one of our
-      // direct or indirect outer states
+      template< class State >
+      static void check_store_deep_history_impl( State & ) {}
+    };
+  
+    struct check_store_deep_history_impl_yes {
+      template< class State >
+      static void check_store_deep_history_impl( State & stt )
+      {
+        stt.store_deep_history_impl< MostDerived >();
+        // If we are not the termination state then it can only be one of our
+        // direct or indirect outer states
+      }
+    };
+    friend struct check_store_deep_history_impl_yes;
+
+    template< bool storeDeepHistory >
+    void check_store_deep_history() 
+    {
+      typedef typename mpl::if_<
+        mpl::bool_< storeDeepHistory >,
+        check_store_deep_history_impl_yes,
+        check_store_deep_history_impl_no
+      >::type impl;
+      impl::check_store_deep_history_impl( *this );
     }
 
 

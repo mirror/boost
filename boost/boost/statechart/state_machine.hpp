@@ -19,6 +19,7 @@
 
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/clear.hpp>
+#include <boost/mpl/if.hpp>
 
 #include <boost/intrusive_ptr.hpp>
 #include <boost/type_traits/is_pointer.hpp>
@@ -99,76 +100,78 @@ class send_function
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class IdType >
-struct state_cast_impl
+struct state_cast_impl_pointer_target
 {
-  template< bool pointerTarget >
-  struct impl
-  {
-    public:
-      ////////////////////////////////////////////////////////////////////////
-      template< class StateBaseType >
-      static const StateBaseType * deref_if_necessary(
-        const StateBaseType * pState )
-      {
-        return pState;
-      }
-
-      template< class Target >
-      static IdType type()
-      {
-        Target p = 0;
-        return type_impl( p );
-      }
-
-      static bool found( const void * pFound )
-      {
-        return pFound != 0;
-      }
-
-      template< class Target >
-      static Target not_found()
-      {
-        return 0;
-      }
-
-    private:
-      ////////////////////////////////////////////////////////////////////////
-      template< class Type >
-      static IdType type_impl( const Type * )
-      {
-        return Type::static_type();
-      }
-  };
-
-  template<>
-  struct impl< false >
-  {
+  public:
+    //////////////////////////////////////////////////////////////////////////
     template< class StateBaseType >
-    static const StateBaseType & deref_if_necessary(
+    static const StateBaseType * deref_if_necessary(
       const StateBaseType * pState )
     {
-      return *pState;
+      return pState;
     }
 
-    template< class Target >
-    static IdType type()
+    template< class Target, class IdType >
+    static IdType type_id()
     {
-      return Target::static_type();
+      Target p = 0;
+      return type_id_impl< IdType >( p );
     }
 
-    static bool found( ... )
+    static bool found( const void * pFound )
     {
-      return true;
+      return pFound != 0;
     }
 
     template< class Target >
     static Target not_found()
     {
-      throw std::bad_cast();
+      return 0;
     }
-  };
+
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    template< class IdType, class Type >
+    static IdType type_id_impl( const Type * )
+    {
+      return Type::static_type();
+    }
 };
+
+struct state_cast_impl_reference_target
+{
+  template< class StateBaseType >
+  static const StateBaseType & deref_if_necessary(
+    const StateBaseType * pState )
+  {
+    return *pState;
+  }
+
+  template< class Target, class IdType >
+  static IdType type_id()
+  {
+    return Target::static_type();
+  }
+
+  template< class Dummy >
+  static bool found( const Dummy & )
+  {
+    return true;
+  }
+
+  template< class Target >
+  static Target not_found()
+  {
+    throw std::bad_cast();
+  }
+};
+
+template< class Target >
+struct state_cast_impl : public mpl::if_<
+  is_pointer< Target >,
+  state_cast_impl_pointer_target,
+  state_cast_impl_reference_target
+>::type {};
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -269,9 +272,7 @@ class state_machine : noncopyable
     template< class Target >
     Target state_cast() const
     {
-      typedef detail::state_cast_impl<
-        typename rtti_policy_type::id_type >::
-          impl< is_pointer< Target >::value > impl;
+      typedef detail::state_cast_impl< Target > impl;
 
       for ( typename state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
@@ -309,11 +310,10 @@ class state_machine : noncopyable
     template< class Target >
     Target state_downcast() const
     {
-      typedef detail::state_cast_impl<
-        typename rtti_policy_type::id_type >::
-          impl< is_pointer< Target >::value > impl;
+      typedef detail::state_cast_impl< Target > impl;
 
-      typename rtti_policy_type::id_type targetType = typename impl::type< Target >();
+      typename rtti_policy_type::id_type targetType =
+        impl::template type_id< Target, rtti_policy_type::id_type >();
 
       for ( typename state_list_type::const_iterator pCurrentLeafState =
               currentStates_.begin();
@@ -335,7 +335,7 @@ class state_machine : noncopyable
         }
       }
 
-      return typename impl::not_found< Target >();
+      return impl::template not_found< Target >();
     }
 
     typedef detail::state_base< allocator_type, rtti_policy_type >

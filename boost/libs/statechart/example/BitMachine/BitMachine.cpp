@@ -1,4 +1,4 @@
-//////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) Andreas Huber Doenni 2002-2004.
 // Use, modification and distribution are subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -8,7 +8,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-const unsigned int noOfBits = 5;
+const unsigned int noOfBits = 6;
 #define CUSTOMIZE_MEMORY_MANAGEMENT
 // #define BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ const unsigned int noOfBits = 5;
 
 // Compiler      | max. noOfBits b | max. states s  | max. transitions t
 // --------------|-----------------|----------------|-------------------
-// MSVC 7.1      |      b < 6      |  32 < s <  64  |  160 < t <  384
+// MSVC 7.1      |      b < 7      |  64 < s < 128  |  384 < t <  896
 // GCC 3.2 *     |      b < 8      | 128 < s < 256  |  896 < t < 2048
 //
 // * These are practical rather than hard limits, caused by a compiler memory
