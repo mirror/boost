@@ -18,12 +18,6 @@
 
 #include <boost/config.hpp>
 #include <cstdio> // remove, tmpnam
-#if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{ 
-    using ::tmpnam;
-    using ::remove;
-}
-#endif
 
 // win32 has a brain-dead tmpnam implementation.
 // which leaves temp files in root directory 
@@ -31,47 +25,57 @@ namespace std{
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 
 #include <cstdlib>
-#include <cstdio>
-#include <string>
+#include <cstring>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::remove;
+    using ::strcpy;
+    using ::strcat;
+    using ::tmpnam;
+}
+#endif // defined(BOOST_NO_STDC_NAMESPACE)
+
+#include <direct.h>
 #include <boost/archive/tmpdir.hpp>
 
-#if defined(__BORLANDC__) 
-namespace { 
-    // borland defines strcpy as a macro in release mode
-    #if ! defined(NDEBUG)
-    using std::strcpy;
-    #endif
-    using std::_tempnam;
-}
+#if defined(__COMO__)
+    #define chdir _chdir
 #endif
-
-#endif // BOOST_MSCV BORLAND
 
 namespace boost {
 namespace archive {
-
-#if defined(BOOST_MSVC) || defined(__BORLANDC__)
     char * tmpnam(char * buffer){
-        static char ibuffer [256];
-        char * dname = boost::archive::tmpdir();
-        char * tfilename = _tempnam(dname, "ser");
-        if(NULL == buffer){
-            strcpy(ibuffer, tfilename);
-            delete tfilename;
-            return ibuffer;
-        }
-        else{
-            strcpy(buffer, tfilename);
-            delete tfilename;
-            return buffer;
-        }
-    }
-#else
-    using std::tmpnam;
-#endif
+        char old_dir[256];
+        _getcwd(old_dir, sizeof(old_dir) - 1);
 
+        char * temp_dir = boost::archive::tmpdir();
+        chdir(temp_dir);
+
+        char temp_name[256];
+        std::tmpnam(temp_name);
+
+        chdir(old_dir);
+        static char ibuffer [512];
+
+        if(NULL == buffer)
+            buffer = ibuffer;
+
+        std::strcpy(buffer, temp_dir);
+        std::strcat(buffer, temp_name);
+        return buffer;
+    }
 } // archive
 } // boost
+
+#else
+
+namespace boost {
+namespace archive {
+    using std::tmpnam;
+} // archive
+} // boost
+
+#endif // defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 
 #if defined(BOOST_MSVC)
 
@@ -92,7 +96,7 @@ struct leak_reporter {
 };
 leak_reporter leak_reporter::instance;
 
-#endif
+#endif // defined(BOOST_MSVC)
 
 /////////////////////////////////////////////
 // invoke header for a custom archive test.
