@@ -159,7 +159,7 @@ assert_not_arg(void (*)(Pred), int);
 #   if !defined(BOOST_MPL_CFG_ASSERT_USE_RELATION_NAMES)
 template< long x, long y, bool (*r)(failed, failed) >
 typename assert_arg_type_impl< false,BOOST_MPL_AUX_ASSERT_RELATION(x,y,r) >::type
-assert_rel_arg( assert_relation<x,y,r> );
+assert_rel_arg( BOOST_MPL_AUX_ASSERT_RELATION(x,y,r) );
 #   else
 template< assert_::relations r, long x, long y >
 typename assert_arg_type_impl< false,assert_relation<r,x,y> >::type
