@@ -257,7 +257,7 @@ private:
             using namespace std;
             streamsize avail =
                 static_cast<streamsize>(str.size() - offset_);
-            streamsize amt = std::min(avail, n);
+            streamsize amt = (std::min)(avail, n);
             std::copy( str.data() + offset_,
                        str.data() + offset_ + amt,
                        s );

@@ -149,7 +149,7 @@ protected:
                            const Extern* first1, const Extern* last1,
                            std::size_t len2 ) const throw()
     {
-        return std::min(static_cast<std::size_t>(last1 - first1), len2);
+        return (std::min)(static_cast<std::size_t>(last1 - first1), len2);
     }
 };
 

@@ -56,7 +56,7 @@ public:
         if (!(state_ & f_eof))
             do_read(src);
         streamsize amt =
-            std::min(n, static_cast<streamsize>(data_.size() - ptr_));
+            (std::min)(n, static_cast<streamsize>(data_.size() - ptr_));
         if (amt) {
             BOOST_IOSTREAMS_CHAR_TRAITS(char_type)::copy(s, &data_[ptr_], amt);
             ptr_ += amt;
