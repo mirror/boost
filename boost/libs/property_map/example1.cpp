@@ -35,9 +35,9 @@ main()
     address_map(name2address);
 
   name2address.insert(make_pair(std::string("Fred"), 
-				std::string("710 West 13th Street")));
+                                std::string("710 West 13th Street")));
   name2address.insert(make_pair(std::string("Joe"), 
-				std::string("710 West 13th Street")));
+                                std::string("710 West 13th Street")));
 
   foo(address_map);
   

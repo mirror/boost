@@ -81,7 +81,7 @@ int main ()
     cout << one << "/" << half << "=" << two << endl;
     cout << "abs(" << minus_half << ")=" << half << endl;
     cout << "2 * " << big << "=" << maxint
-	 << " (rational: " << rational<int>(maxint) << ")" << endl;
+         << " (rational: " << rational<int>(maxint) << ")" << endl;
 
     // Some extras
     rational<int> pi(22,7);
@@ -96,7 +96,7 @@ int main ()
         cout << "Bad rational, as expected: " << e.what() << endl;
     }
     catch (...) {
-	cout << "Wrong exception raised!" << endl;
+        cout << "Wrong exception raised!" << endl;
     }
 
     return 0;

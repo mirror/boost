@@ -14,9 +14,9 @@
 
 // Configuration: for now, we just choose between pthread or Win32 mutexes or none
 
-#define BOOST_MUTEX_HELPER_NONE		0
-#define BOOST_MUTEX_HELPER_WIN32	1
-#define BOOST_MUTEX_HELPER_PTHREAD	2
+#define BOOST_MUTEX_HELPER_NONE         0
+#define BOOST_MUTEX_HELPER_WIN32        1
+#define BOOST_MUTEX_HELPER_PTHREAD      2
 
 #ifdef BOOST_NO_MT
   // No multithreading -> make locks into no-ops

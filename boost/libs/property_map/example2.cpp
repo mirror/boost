@@ -25,7 +25,7 @@ void display(ConstAddressMap address)
   value_type joes_address = get(address, joe);
   
   std::cout << fred << ": " << freds_address << "\n"
-	    << joe  << ": " << joes_address  << "\n";
+            << joe  << ": " << joes_address  << "\n";
 }
 
 int
@@ -36,9 +36,9 @@ main()
     address_map(name2address);
 
   name2address.insert(make_pair(std::string("Fred"), 
-				std::string("710 West 13th Street")));
+                                std::string("710 West 13th Street")));
   name2address.insert(make_pair(std::string("Joe"), 
-				std::string("710 West 13th Street")));
+                                std::string("710 West 13th Street")));
 
   display(address_map);
   
