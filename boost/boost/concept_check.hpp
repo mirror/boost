@@ -6,6 +6,7 @@
 // to its suitability for any purpose.
 //
 // Revision History:
+//   05 May   2001: Workarounds for HP aCC from Thomas Matelich. (Jeremy Siek)
 //   02 April 2001: Removed limits header altogether. (Jeremy Siek)
 //   01 April 2001: Modified to use new <boost/limits.hpp> header. (JMaddock)
 //
@@ -460,9 +461,7 @@ struct require_same { typedef T type; };
       typedef typename std::iterator_traits<TT>::reference R;
       typedef typename std::iterator_traits<TT>::pointer P;
       typedef typename std::iterator_traits<TT>::iterator_category C;
-      function_requires< ConvertibleConcept<
-        typename std::iterator_traits<TT>::iterator_category,
-        std::input_iterator_tag> >();
+      function_requires< ConvertibleConcept<C, std::input_iterator_tag> >();
 #endif
       ++i;                // require preincrement operator
       i++;                // require postincrement operator
@@ -489,9 +488,8 @@ struct require_same { typedef T type; };
     void constraints() {
       function_requires< InputIteratorConcept<TT> >();
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
-      function_requires< ConvertibleConcept<
-        typename std::iterator_traits<TT>::iterator_category,
-        std::forward_iterator_tag> >();
+      typedef typename std::iterator_traits<TT>::iterator_category C;
+      function_requires< ConvertibleConcept<C, std::forward_iterator_tag> >();
       typedef typename std::iterator_traits<TT>::reference reference;
       reference r = *i;
       ignore_unused_variable_warning(r);
@@ -516,8 +514,8 @@ struct require_same { typedef T type; };
     void constraints() {
       function_requires< ForwardIteratorConcept<TT> >();
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
-      function_requires< ConvertibleConcept<
-        typename std::iterator_traits<TT>::iterator_category,
+      typedef typename std::iterator_traits<TT>::iterator_category C;
+      function_requires< ConvertibleConcept<C, 
         std::bidirectional_iterator_tag> >();
 #endif
       --i;                // require predecrement operator
@@ -545,8 +543,8 @@ struct require_same { typedef T type; };
       function_requires< BidirectionalIteratorConcept<TT> >();
       function_requires< ComparableConcept<TT> >();
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
-      function_requires< ConvertibleConcept<
-        typename std::iterator_traits<TT>::iterator_category,
+      typedef typename std::iterator_traits<TT>::iterator_category C;
+      function_requires< ConvertibleConcept< C,
         std::random_access_iterator_tag> >();
       typedef typename std::iterator_traits<TT>::reference R;
 #endif
