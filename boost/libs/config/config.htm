@@ -5,13 +5,14 @@
 content="text/html; charset=iso-8859-1">
 <meta name="Template"
 content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
 <title></title>
 </head>
 
 <body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
 
-<p align="left"><img src="../../c++boost.gif" width="277" height="86"></p>
+<p align="left"><img src="../../c++boost.gif" width="277"
+height="86"></p>
 
 <h1 align="center">Boost Configuration Reference</h1>
 
@@ -41,29 +42,35 @@ content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
 <h4><a name="default_config"></a>Using the default boost
 configuration</h4>
 
-<p>Boost is comes already configured
-for most common compilers and platforms; you should be able to use boost &quot;as
-is&quot;. Since the compiler is
-configured separately from the standard library, the default configuration
-should work even if you replace the compiler's standard
-library with a third-party standard library (like <a href="http://www.stlport.org"> STLport</a>). </p>
+<p>Boost is comes already configured for most common compilers
+and platforms; you should be able to use boost &quot;as is&quot;.
+Since the compiler is configured separately from the standard
+library, the default configuration should work even if you
+replace the compiler's standard library with a third-party
+standard library (like <a href="http://www.stlport.org">STLport</a>).
+</p>
 
-<p>Using boost &quot;as is&quot; without trying to reconfigure is the recommended method
-for using boost. You can, however, run the configure script if you want to, and there are regression tests
+<p>Using boost &quot;as is&quot; without trying to reconfigure is
+the recommended method for using boost. You can, however, run the
+configure script if you want to, and there are regression tests
 provided that allow you to test the current boost configuration
 with your particular compiler setup.</p>
 
-<p>Boost library users can request support for additional compilers or platforms
-by visiting our <a href="http://sourceforge.net/tracker/?group_id=7586">
-Tracker</a> and submitting a support request. </p>
+<p>Boost library users can request support for additional
+compilers or platforms by visiting our <a
+href="http://sourceforge.net/tracker/?group_id=7586">Tracker</a>
+and submitting a support request. </p>
 
-<h4>The <a href="../../boost/config.hpp">&lt;boost/config.hpp&gt;</a> <a name="header">header</a></h4>
+<h4>The <a href="../../boost/config.hpp">&lt;boost/config.hpp&gt;</a>
+<a name="header">header</a></h4>
 
-<p>Boost library implementations access configuration macros via <code> #include &lt;boost/config.hpp&gt;</code>. </p>
+<p>Boost library implementations access configuration macros via <code>#include
+&lt;boost/config.hpp&gt;</code>. </p>
 
-<p>Boost library users are never required to <code> #include &lt;boost/config.hpp&gt;</code>,
-and are discouraged from doing so on their own. It is an implementation detail
-which is subject to change, and thus should not be depended upon by users. </p>
+<p>Boost library users are never required to <code>#include
+&lt;boost/config.hpp&gt;</code>, and are discouraged from doing
+so on their own. It is an implementation detail which is subject
+to change, and thus should not be depended upon by users. </p>
 
 <h4><a name="config_script">Using the configure script</a></h4>
 
@@ -484,8 +491,9 @@ the standard.</p>
         <td valign="top" width="51%">BOOST_NO_CTYPE_FUNCTIONS</td>
         <td valign="top" width="16%">Platform</td>
         <td valign="top" width="33%">The Platform does not
-        provide functions for the character-classifying operations
-        &lt;ctype.h&gt; and &lt;cctype&gt;, only macros.</td>
+        provide functions for the character-classifying
+        operations &lt;ctype.h&gt; and &lt;cctype&gt;, only
+        macros.</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_CV_SPECIALIZATIONS</td>
@@ -734,10 +742,9 @@ f(&amp;bar); // should choose #2.</pre>
     <tr>
         <td valign="top" width="51%">BOOST_NO_VOID_RETURNS</td>
         <td valign="top" width="16%">Compiler</td>
-        <td valign="top" width="33%">The compiler does not
-        allow a void function to return the result of calling
-        another void function. 
-<pre>void f() {}
+        <td valign="top" width="33%">The compiler does not allow
+        a void function to return the result of calling another
+        void function. <pre>void f() {}
 void g() { return f(); }</pre>
         </td>
     </tr>
@@ -969,6 +976,13 @@ user code.</p>
         <td valign="top" width="33%">Defined if int64_t as
         defined by &lt;boost/cstdint.hpp&gt; is not usable in
         integral constant expressions.</td>
+    </tr>
+    <tr>
+        <td valign="top">BOOST_MSVC</td>
+        <td valign="top">&lt;boost/config.hpp&gt;</td>
+        <td valign="top">Defined if the compiler is really
+        Microsoft Visual C++, as opposed to one of the many other
+        compilers that also define _MSC_VER.</td>
     </tr>
     <tr>
         <td valign="top" width="33%">BOOST_NO_WREGEX</td>
