@@ -27,6 +27,8 @@ using boost::unit_test::test_suite;
 
 void mapped_file_test()
 {
+    BOOST_MESSAGE("about to begin");
+
     //--------------Reading from a mapped_file_source-------------------------//
 
     {
@@ -42,7 +44,7 @@ void mapped_file_test()
         );
 
         BOOST_MESSAGE(
-            "suceeded reading from stream_facade<mapped_file_source> in chars"
+            "done reading from stream_facade<mapped_file_source> in chars"
         );
 
         first.close();
@@ -59,7 +61,7 @@ void mapped_file_test()
         );
 
         BOOST_MESSAGE(
-            "suceeded reading from stream_facade<mapped_file_source> in chunks"
+            "done reading from stream_facade<mapped_file_source> in chunks"
         );
     }
 
@@ -81,7 +83,7 @@ void mapped_file_test()
         );
 
         BOOST_MESSAGE(
-            "suceeded writing to stream_facade<mapped_file_source> in chars"
+            "done writing to stream_facade<mapped_file_source> in chars"
         );
 
         // Test writing to a stream_facade based on a mapped_file_sink, in 
@@ -95,7 +97,7 @@ void mapped_file_test()
         );
 
         BOOST_MESSAGE(
-            "suceeded writing to stream_facade<mapped_file_source> in chunks"
+            "done writing to stream_facade<mapped_file_source> in chunks"
         );
     }
 
@@ -113,7 +115,7 @@ void mapped_file_test()
         );
 
         BOOST_MESSAGE(
-            "suceeded seeking within stream_facade<mapped_file> in chars"
+            "done seeking within stream_facade<mapped_file> in chars"
         );
 
         io.close();
@@ -128,7 +130,7 @@ void mapped_file_test()
         );
 
         BOOST_MESSAGE(
-            "suceeded seeking within stream_facade<mapped_file> in chunks"
+            "done seeking within stream_facade<mapped_file> in chunks"
         );
     }
 }
