@@ -124,7 +124,9 @@ private:
   {
     // we are interested in the gcd factor for c, because this is our inverse
     BOOST_STATIC_ASSERT(m > 0);
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     BOOST_STATIC_ASSERT(boost::integer_traits<IntType>::is_signed);
+#endif
     assert(c > 0);
     IntType l1 = 0;
     IntType l2 = 1;
