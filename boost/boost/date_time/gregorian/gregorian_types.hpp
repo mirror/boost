@@ -59,6 +59,11 @@ namespace gregorian {
    */
   typedef date_time::date_itr<date_time::month_functor<date>,
                               date> month_iterator;
+  //! A year level iterator
+  /*!\ingroup date_basics
+   */
+  typedef date_time::date_itr<date_time::year_functor<date>,
+                              date> year_iterator;
 } } //namespace gregorian
 
 
