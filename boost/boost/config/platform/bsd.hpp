@@ -21,10 +21,10 @@
 
 //
 // is this the correct version check?
-// FreeBSD has <nl_type.h> but does not
+// FreeBSD has <nl_types.h> but does not
 // advertise the fact in <unistd.h>:
 //
-#if defined(__FreeBSD__) && (__FreeBSD__ >= 4)
+#if defined(__FreeBSD__) && (__FreeBSD__ >= 3)
 #  define BOOST_HAS_NL_TYPES_H
 #endif
 
