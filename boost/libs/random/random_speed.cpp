@@ -72,7 +72,7 @@ private:
   IntType _x, _a, _c, _m;
 };
 
-static void show_elapsed(double end, int iter, const std::string & name)
+void show_elapsed(double end, int iter, const std::string & name)
 {
   double usec = end/iter*1e6;
   double cycles = usec * cpu_frequency/1e6;
@@ -83,7 +83,7 @@ static void show_elapsed(double end, int iter, const std::string & name)
 }
 
 template<class Result, class RNG>
-static void timing(RNG & rng, int iter, const std::string& name, const Result&)
+void timing(RNG & rng, int iter, const std::string& name, const Result&)
 {
   volatile Result tmp; // make sure we're not optimizing too much
   boost::timer t;
@@ -93,7 +93,7 @@ static void timing(RNG & rng, int iter, const std::string& name, const Result&)
 }
 
 template<class RNG>
-static void timing_sphere(RNG & rng, int iter, const std::string & name)
+void timing_sphere(RNG & rng, int iter, const std::string & name)
 {
   boost::timer t;
   for(int i = 0; i < iter; i++) {
@@ -187,10 +187,10 @@ int main(int argc, char*argv[])
 #if !defined(BOOST_NO_INT64_T) && \
     !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
   run(iter, "rand48", boost::rand48());
-  linear_congruential<uint64_t>
-    lcg48(uint64_t(1)<<16 | 0x330e,
-	  uint64_t(0xDEECE66DUL) | (uint64_t(0x5) << 32), 0xB,
-	  uint64_t(1)<<48);
+  linear_congruential<boost::uint64_t>
+    lcg48(boost::uint64_t(1)<<16 | 0x330e,
+	  boost::uint64_t(0xDEECE66DUL) | (boost::uint64_t(0x5) << 32), 0xB,
+	  boost::uint64_t(1)<<48);
   timing(lcg48, iter, "lrand48 run-time", 0l);
 #endif
 
