@@ -5,6 +5,7 @@
 
 #define BOOST_PROGRAM_OPTIONS_SOURCE
 #include <boost/program_options/parsers.hpp>
+#include <cctype>
 
 #ifdef _WIN32
 namespace boost { namespace program_options {
@@ -22,7 +23,7 @@ namespace boost { namespace program_options {
 
         string::const_iterator i = input.begin(), e = input.end();
         for(;i != e; ++i)
-            if (!std::isspace(*i))
+            if (!isspace(*i))
                 break;
        
         if (i != e) {
