@@ -17,7 +17,9 @@ template<
     >
 struct less_impl
     : if_c<
-          ( Tag1::value > Tag2::value )
+          ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
+              > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
+            )
 
         , aux::cast2nd_impl< less_impl< Tag1,Tag2 >,Tag1, Tag2 >
         , aux::cast1st_impl< less_impl< Tag1,Tag2 >,Tag1, Tag2 >
@@ -25,7 +27,7 @@ struct less_impl
 {
 };
 
-/// for Digital Mars C++/compilers with no CTPS support
+/// for Digital Mars C++/compilers with no CTPS/TTP support
 template<> struct less_impl< na,na >
 {
     template< typename U1, typename U2 > struct apply
@@ -83,7 +85,7 @@ struct less_impl< integral_c_tag,integral_c_tag >
 {
     template< typename N1, typename N2 > struct apply
 
-        : bool_< ( BOOST_MPL_AUX_VALUE_WKND(N2)::value > BOOST_MPL_AUX_VALUE_WKND(N1)::value ) >
+        : bool_< ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2) > BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1) ) >
     {
     };
 };

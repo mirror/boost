@@ -85,7 +85,9 @@ struct AUX778076_OP_IMPL_NAME
     >
 struct AUX778076_OP_IMPL_NAME
     : if_c<
-          ( Tag1::value > Tag2::value )
+          ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
+              > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
+            )
 #endif
         , aux::cast2nd_impl< AUX778076_OP_IMPL_NAME<Tag1,Tag2>,Tag1,Tag2 >
         , aux::cast1st_impl< AUX778076_OP_IMPL_NAME<Tag1,Tag2>,Tag1,Tag2 >
@@ -93,7 +95,7 @@ struct AUX778076_OP_IMPL_NAME
 {
 };
 
-/// for Digital Mars C++/compilers with no CTPS support
+/// for Digital Mars C++/compilers with no CTPS/TTP support
 template<> struct AUX778076_OP_IMPL_NAME<na,na>
 {
     template< typename U1, typename U2 > struct apply 

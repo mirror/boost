@@ -18,7 +18,9 @@ template<
     >
 struct bitxor_impl
     : if_c<
-          ( Tag1::value > Tag2::value )
+          ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
+              > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
+            )
 
         , aux::cast2nd_impl< bitxor_impl< Tag1,Tag2 >,Tag1, Tag2 >
         , aux::cast1st_impl< bitxor_impl< Tag1,Tag2 >,Tag1, Tag2 >
@@ -26,7 +28,7 @@ struct bitxor_impl
 {
 };
 
-/// for Digital Mars C++/compilers with no CTPS support
+/// for Digital Mars C++/compilers with no CTPS/TTP support
 template<> struct bitxor_impl< na,na >
 {
     template< typename U1, typename U2 > struct apply
@@ -129,8 +131,9 @@ struct bitxor_impl< integral_c_tag,integral_c_tag >
                   typename N1::value_type
                 , typename N2::value_type
                 >::type
-            , ( BOOST_MPL_AUX_VALUE_WKND(N1)::value
-                ^ BOOST_MPL_AUX_VALUE_WKND(N2)::value )
+            , ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1)
+                  ^ BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2)
+                )
             >
     {
     };

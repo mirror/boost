@@ -15,7 +15,6 @@
 // $Revision$
 
 #include <boost/mpl/integral_c_fwd.hpp>
-#include <boost/mpl/aux_/ice_cast.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 

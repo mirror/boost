@@ -22,14 +22,13 @@ template<
 struct shift_left_impl
     : if_c<
           ( tag1_ > tag2_ )
-
         , aux::cast2nd_impl< shift_left_impl< Tag1,Tag2 >,Tag1, Tag2 >
         , aux::cast1st_impl< shift_left_impl< Tag1,Tag2 >,Tag1, Tag2 >
         >
 {
 };
 
-/// for Digital Mars C++/compilers with no CTPS support
+/// for Digital Mars C++/compilers with no CTPS/TTP support
 template<> struct shift_left_impl< na,na >
 {
     template< typename U1, typename U2 > struct apply
@@ -100,13 +99,12 @@ struct msvc_shift_left_impl
 template<>
 struct shift_left_impl< integral_c_tag,integral_c_tag >
 {
-    template< typename N, typename Shift > struct apply
-
+    template< typename N, typename S > struct apply
         : aux::msvc_shift_left_impl<
               typename N::value_type
-            , typename Shift::value_type
+            , typename S::value_type
             , N::value
-            , Shift::value
+            , S::value
             >::type
 
     {

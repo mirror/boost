@@ -22,14 +22,13 @@ template<
 struct bitxor_impl
     : if_c<
           ( tag1_ > tag2_ )
-
         , aux::cast2nd_impl< bitxor_impl< Tag1,Tag2 >,Tag1, Tag2 >
         , aux::cast1st_impl< bitxor_impl< Tag1,Tag2 >,Tag1, Tag2 >
         >
 {
 };
 
-/// for Digital Mars C++/compilers with no CTPS support
+/// for Digital Mars C++/compilers with no CTPS/TTP support
 template<> struct bitxor_impl< na,na >
 {
     template< typename U1, typename U2 > struct apply

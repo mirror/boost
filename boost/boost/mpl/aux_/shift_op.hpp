@@ -55,19 +55,20 @@ struct BOOST_PP_CAT(BOOST_PP_CAT(msvc_,AUX778076_OP_PREFIX),_impl)
 template<>
 struct AUX778076_OP_IMPL_NAME<integral_c_tag,integral_c_tag>
 {
-    template< typename N, typename Shift > struct apply
+    template< typename N, typename S > struct apply
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
         : integral_c<
               typename N::value_type
-            , ( BOOST_MPL_AUX_VALUE_WKND(N)::value
-                AUX778076_OP_TOKEN BOOST_MPL_AUX_VALUE_WKND(Shift)::value )
+            , ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N::value_type, N)
+                  AUX778076_OP_TOKEN BOOST_MPL_AUX_NESTED_VALUE_WKND(typename S::value_type, S)
+                )
             >
 #else
         : aux::BOOST_PP_CAT(BOOST_PP_CAT(msvc_,AUX778076_OP_NAME),_impl)<
               typename N::value_type
-            , typename Shift::value_type
+            , typename S::value_type
             , N::value
-            , Shift::value
+            , S::value
             >::type
 #endif
     {

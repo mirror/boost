@@ -61,8 +61,9 @@ struct AUX778076_OP_IMPL_NAME<integral_c_tag,integral_c_tag>
                   typename N1::value_type
                 , typename N2::value_type
                 >::type
-            , ( BOOST_MPL_AUX_VALUE_WKND(N1)::value
-                AUX778076_OP_TOKEN BOOST_MPL_AUX_VALUE_WKND(N2)::value )
+            , ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1)
+                  AUX778076_OP_TOKEN BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2)
+                )
             >
 #else
         : aux::BOOST_PP_CAT(BOOST_PP_CAT(msvc_,AUX778076_OP_PREFIX),_impl)<

@@ -43,12 +43,15 @@ namespace boost { namespace mpl {
 // MSVC workaround: implement less in terms of greater
 #if 0 AUX778076_OP_TOKEN 1 && !(1 AUX778076_OP_TOKEN 0) && !(0 AUX778076_OP_TOKEN 0)
 #   define AUX778076_OP(N1, N2) \
-    ( BOOST_MPL_AUX_VALUE_WKND(N2)::value > BOOST_MPL_AUX_VALUE_WKND(N1)::value ) \
+    ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2) \
+          > BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1) \
+        ) \
 /**/
 #else
 #   define AUX778076_OP(N1, N2) \
-    ( BOOST_MPL_AUX_VALUE_WKND(N1)::value \
-        AUX778076_OP_TOKEN BOOST_MPL_AUX_VALUE_WKND(N2)::value ) \
+    ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1) \
+          AUX778076_OP_TOKEN BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2) \
+        ) \
 /**/
 #endif
 

@@ -21,14 +21,13 @@ template<
 struct not_equal_to_impl
     : if_c<
           ( tag1_ > tag2_ )
-
         , aux::cast2nd_impl< not_equal_to_impl< Tag1,Tag2 >,Tag1, Tag2 >
         , aux::cast1st_impl< not_equal_to_impl< Tag1,Tag2 >,Tag1, Tag2 >
         >
 {
 };
 
-/// for Digital Mars C++/compilers with no CTPS support
+/// for Digital Mars C++/compilers with no CTPS/TTP support
 template<> struct not_equal_to_impl< na,na >
 {
     template< typename U1, typename U2 > struct apply
@@ -93,8 +92,8 @@ struct not_equal_to_impl< integral_c_tag,integral_c_tag >
 
     {
         enum { value =
-             ( BOOST_MPL_AUX_VALUE_WKND(N1)::value !=
-             BOOST_MPL_AUX_VALUE_WKND(N2)::value )
+             ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N1::value_type, N1) !=
+             BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N2::value_type, N2) )
             };
         typedef bool_<value> type;
     };

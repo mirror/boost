@@ -18,7 +18,9 @@ template<
     >
 struct shift_left_impl
     : if_c<
-          ( Tag1::value > Tag2::value )
+          ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
+              > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
+            )
 
         , aux::cast2nd_impl< shift_left_impl< Tag1,Tag2 >,Tag1, Tag2 >
         , aux::cast1st_impl< shift_left_impl< Tag1,Tag2 >,Tag1, Tag2 >
@@ -26,7 +28,7 @@ struct shift_left_impl
 {
 };
 
-/// for Digital Mars C++/compilers with no CTPS support
+/// for Digital Mars C++/compilers with no CTPS/TTP support
 template<> struct shift_left_impl< na,na >
 {
     template< typename U1, typename U2 > struct apply
@@ -79,12 +81,13 @@ namespace boost { namespace mpl {
 template<>
 struct shift_left_impl< integral_c_tag,integral_c_tag >
 {
-    template< typename N, typename Shift > struct apply
+    template< typename N, typename S > struct apply
 
         : integral_c<
               typename N::value_type
-            , ( BOOST_MPL_AUX_VALUE_WKND(N)::value
-                << BOOST_MPL_AUX_VALUE_WKND(Shift)::value )
+            , ( BOOST_MPL_AUX_NESTED_VALUE_WKND(typename N::value_type, N)
+                  << BOOST_MPL_AUX_NESTED_VALUE_WKND(typename S::value_type, S)
+                )
             >
     {
     };

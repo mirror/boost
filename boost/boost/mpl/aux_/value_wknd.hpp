@@ -14,8 +14,10 @@
 // $Date$
 // $Revision$
 
+#include <boost/mpl/aux_/static_cast.hpp>
 #include <boost/mpl/aux_/config/bcc_integral_constants.hpp>
 #include <boost/mpl/aux_/config/eti.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
 
 #if defined(BOOST_MPL_CFG_BCC_INTEGRAL_CONSTANTS) \
     || defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
@@ -58,6 +60,16 @@ BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 #   define BOOST_MPL_AUX_VALUE_WKND(C) C
 #   define BOOST_MPL_AUX_MSVC_VALUE_WKND(C) C
 
+#endif
+
+#if BOOST_WORKAROUND(__EDG_VERSION__, <= 238)
+#   define BOOST_MPL_AUX_NESTED_VALUE_WKND(T, C) \
+    BOOST_MPL_AUX_STATIC_CAST(T, C::value) \
+/**/
+#else
+#   define BOOST_MPL_AUX_NESTED_VALUE_WKND(T, C) \
+    BOOST_MPL_AUX_VALUE_WKND(C)::value \
+/**/
 #endif
 
 #endif // BOOST_MPL_AUX_VALUE_WKND_HPP_INCLUDED
