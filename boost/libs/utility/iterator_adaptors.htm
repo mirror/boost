@@ -307,12 +307,16 @@ typedef iterator_adaptor&lt;foo_iterator, foo_policies,
 
     <table border="1" summary="iterator_adaptor Policies operations">
       <caption>
-        <b>Core Iterator Operations</b><br>
-        <tt>T</tt>: adapted iterator type; <tt>p</tt>: object of type T; <tt>n</tt>: <tt>T::size_type</tt>; <tt>x</tt>: <tt>T::difference_type</tt>; <tt>p1</tt>, <tt>p2</tt>: iterators
+        <b>Policies Class Requirements</b><br>
+        <tt><b>T</b></tt>: adapted iterator type; <tt><b>x, y</b></tt>: objects of type
+        T; <tt><b>p</b></tt>: <tt>T::policies_type</tt>
+         <tt><b>d</b></tt>:
+        <tt>T::difference_type</tt>; <tt><b>i1</b></tt>, <tt><b>i2</b></tt>:
+        <tt>T::base_type</tt>
       </caption>
 
       <tr>
-        <th>Operation
+        <th>Expression
 
         <th>Effects
 
@@ -321,7 +325,7 @@ typedef iterator_adaptor&lt;foo_iterator, foo_policies,
         <th>Required for Iterator Categories
 
       <tr>
-        <td><tt>initialize</tt>
+        <td nowrap><tt>p.initialize(b)</tt>
 
         <td>optionally modify base iterator during iterator construction
 
@@ -333,79 +337,66 @@ typedef iterator_adaptor&lt;foo_iterator, foo_policies,
         "http://www.sgi.com/tech/stl/ForwardIterator.html">Forward</a>/ <a
         href=
         "http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional</a>/
-        <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
-        Access</a> 
+        <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random&nbsp;Access</a> 
 
 	  
       <tr>
-        <td><tt>dereference</tt> 
+        <td nowrap><tt>p.dereference(x)</tt>
 
         <td>returns an element of the iterator's <tt>reference</tt> type
         
-        <td><tt>*p</tt>, <tt>p[n]</tt>
+        <td><tt>*x</tt>, <tt>x[d]</tt>
 
 
       <tr>
-        <td><tt>equal</tt> 
+        <td nowrap><tt>p.equal(x, y)</tt> 
 
         <td>tests the iterator for equality
 
-        <td><tt>p1&nbsp;==&nbsp;p2</tt>, <tt>p1&nbsp;!=&nbsp;p2</tt>
+        <td><tt>i1&nbsp;==&nbsp;i2</tt>, <tt>i1&nbsp;!=&nbsp;i2</tt>
 
       <tr>
-        <td><tt>increment</tt> 
+        <td nowrap><tt>p.increment(x)</tt> 
 
         <td>increments the iterator
 
         <td><tt>++p</tt>, <tt>p++</tt>
 
       <tr>
-        <td><tt>decrement</tt> 
+        <td nowrap><tt>p.decrement(x)</tt> 
 
         <td>decrements the iterator
 
-        <td><tt>--p</tt>, <tt>p--</tt>
+        <td><tt>--x</tt>, <tt>x--</tt>
 
         <td><a href=
         "http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional</a>/
-        <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
-        Access</a> 
+        <a href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random&nbsp;Access</a> 
 
       <tr>
-        <td><tt>less</tt> 
-
-        <td>imposes a <a href=
-        "http://www.sgi.com/tech/stl/StrictWeakOrdering.html">Strict Weak
-        Ordering</a> relation on iterators
-
-        <td> 
-           <tt>p1&nbsp;&lt;&nbsp;p2</tt>,
-           <tt>p1&nbsp;&lt;=&nbsp;p2</tt>,
-           <tt>p1&nbsp;&gt;&nbsp;p2</tt>,
-           <tt>p1&nbsp;&gt;=&nbsp;p2</tt>
-
-        <td rowspan="3"><a href=
-        "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
-        Access</a> 
-
-      <tr>
-        <td><tt>distance</tt> 
+        <td nowrap><tt>p.distance(x, y)</tt> 
 
         <td>measures the distance between iterators
 
-        <td><tt>p1 - p2</tt>
+        <td><tt>y&nbsp;-&nbsp;x</tt>, <tt>x&nbsp;&lt;&nbsp;y</tt>
+
+       <td rowspan="2"><a href=
+         "http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
+         Access</a> 
 
       <tr>
-        <td><tt>advance</tt> 
+        <td nowrap><tt>p.advance(x, n)</tt> 
 
         <td>adds an integer offset to iterators
 
         <td>
-<tt>p&nbsp;+&nbsp;x</tt>,
-<tt>x&nbsp;+&nbsp;p</tt>,
-<tt>p&nbsp;+=&nbsp;x</tt>,
-<tt>p&nbsp;-&nbsp;x</tt>,
-<tt>p&nbsp;-=&nbsp;x</tt>
+<tt>x&nbsp;+&nbsp;d</tt>,
+<tt>d&nbsp;+&nbsp;x</tt>,
+
+<br>
+<tt>x&nbsp;+=&nbsp;d</tt>,
+<tt>x&nbsp;-&nbsp;d</tt>,<br>
+<tt>x&nbsp;-=&nbsp;d</tt>
         
     </table>
 
@@ -665,7 +656,7 @@ int main(int, char*[])
 
       <li>Interoperable iterators can be freely mixed in comparison expressions
       so long as the <tt>Policies</tt> class has <tt>equal</tt> (and, for
-      random access iterators, <tt>less</tt>) members that can accept both
+      random access iterators, <tt>distance</tt>) members that can accept both
       <tt>Base</tt> types in either order.
 
       <li>Interoperable iterators can be freely mixed in subtraction
@@ -719,11 +710,12 @@ they share the same <tt>Policies</tt> and since <tt>Category</tt> and
 the projection <tt>const_iterator</tt>.
 
 <li> Since <tt>projection_iterator_policies</tt> implements only the
-<tt>dereference</tt> operation, and inherits all other behaviors from <tt><a
-href="#default_iterator_policies">default_iterator_policies</a></tt>, which has
-fully-templatized <tt>equal</tt>, <tt>less</tt>, and <tt>distance</tt>
-operations, the <tt>iterator</tt> and <tt>const_iterator</tt> can be freely
-mixed in comparison and subtraction expressions.
+<tt>dereference</tt> operation, and inherits all other behaviors from
+<tt><a
+href="#default_iterator_policies">default_iterator_policies</a></tt>,
+which has fully-templatized <tt>equal</tt> and <tt>distance</tt>
+operations, the <tt>iterator</tt> and <tt>const_iterator</tt> can be
+freely mixed in comparison and subtraction expressions.
 
 </ul>
 
