@@ -22,6 +22,7 @@
 #include <boost/test/test_tools.hpp>
 #include <iostream>
 #include <string>
+#include <vector>
 
 // This should be included before "using namespace boost",
 // otherwise gcc headers will be confused with boost::iterator
@@ -90,9 +91,11 @@ void check_iterator_range()
     
     string res  = copy_range<string>( r );
     BOOST_CHECK( equal( res.begin(), res.end(), r.begin() ) );
-    res         = transform_range<string>( r, add_one() );
-    BOOST_CHECK( res[0] == 'i' );
-    BOOST_CHECK( *res.rbegin() == 'e' );
+    
+    typedef vector<char> string_type;
+    string_type res2 = transform_range<string_type>( r, add_one() );
+    BOOST_CHECK( res2[0] == 'i' );
+    BOOST_CHECK( *res2.rbegin() == 'e' );
      
     r.empty();
     s.empty();
