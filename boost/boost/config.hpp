@@ -11,6 +11,8 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   23 Jul 00  Fixed spelling of BOOST_NO_INCLASS_MEMBER_INITIALIZATION in
+//              comment (Dave Abrahams). 
 //   10 Jul 00  BOOST_NO_POINTER_TO_MEMBER_CONST added (Mark Rodgers)
 //   26 Jun 00  BOOST_NO_STD_ITERATOR, BOOST_MSVC_STD_ITERATOR,
 //              BOOST_NO_ITERATOR_TRAITS, BOOST_NO_USING_TEMPLATE,
@@ -47,7 +49,7 @@
 //  parameters cannot have a dependent type, for example
 //  "template<class T, typename T::type value> class X { ... };"
 
-//  BOOST_NO_INCLASS_MEMBER_INITIALIZER: Compiler violates std::9.4.2/4. 
+//  BOOST_NO_INCLASS_MEMBER_INITIALIZATION: Compiler violates std::9.4.2/4. 
 
 //  BOOST_NO_ITERATOR_TRAITS: The compiler does not provide a standard
 //  compliant implementation of std::iterator_traits. Note that
