@@ -19,7 +19,8 @@
 
 #include "boost/config.hpp"
 #include "boost/type_traits/is_base_and_derived.hpp"
-#include "boost/mpl/void.hpp"
+#include "boost/type_traits/is_same.hpp"
+#include "boost/mpl/if.hpp"
 
 #include "boost/mpl/aux_/lambda_support.hpp" // used by is_static_visitor
 
@@ -35,12 +36,7 @@ namespace boost {
 namespace detail {
 
     struct is_static_visitor_tag { };
-
-#if !defined(BOOST_NO_VOID_RETURNS)
-    typedef void static_visitor_default_return;
-#else
-    typedef ::boost::mpl::void_ static_visitor_default_return;
-#endif
+    struct static_visitor_default_return { };
 
 } // namespace detail
 
@@ -50,7 +46,12 @@ class static_visitor
 {
 public: // typedefs
 
-    typedef R result_type;
+    // for MSVC6 (and possibly others):
+    typedef typename mpl::if_<
+          is_same<R, detail::static_visitor_default_return>
+        , void
+        , R
+        >::type result_type;
 
 protected: // for use as base class only
 
