@@ -1,0 +1,240 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<title>The boost::fsm library - Definitions</title>
+</head>
+
+<body link="#0000ff" vlink="#800080">
+
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary="header">
+  <tr>
+    <td valign="top" width="300">
+    <h3><a href="../../../index.htm">
+    <img alt="C++ Boost" src="../../../c++boost.gif" border="0" width="277" height="86"></a></h3>
+    </td>
+    <td valign="top">
+    <h1 align="center">The boost::fsm library</h1>
+    <h2 align="center">UML to boost::fsm mapping summary</h2>
+    </td>
+  </tr>
+</table>
+<hr>
+<h2>Contents</h2>
+<dl class="page-index">
+  <dt><a href="#State machine">State machine</a></dt>
+  <dt><a href="#States">States</a></dt>
+  <dd><a href="#Normal state">Normal state</a></dd>
+  <dd><a href="#Initial pseudostate">Initial pseudostate</a></dd>
+  <dd><a href="#Final pseudostate">Final pseudostate</a></dd>
+  <dd><a href="#Shallow history pseudostate">Shallow history pseudostate</a></dd>
+  <dd><a href="#Deep history pseudostate">Deep history pseudostate</a></dd>
+  <dd><a href="#Junction point">Junction point</a></dd>
+  <dd><a href="#Dynamic choice point">Dynamic choice point</a></dd>
+  <dd><a href="#Join and fork bars">Join and fork bars</a></dd>
+  <dt><a href="#Events">Events</a></dt>
+  <dd><a href="#Call event">Call event</a></dd>
+  <dd><a href="#Signal event">Signal event</a></dd>
+  <dd><a href="#Time event">Time event</a></dd>
+  <dd><a href="#Change event">Change event</a></dd>
+  <dt><a href="#Reactions">Reactions</a></dt>
+  <dd><a href="#Guard">Guard</a></dd>
+  <dd><a href="#Transition">Transition</a></dd>
+  <dd><a href="#Deferral">Deferral</a></dd>
+  <dd><a href="#Internal transition (in-state reaction)">Internal transition 
+  (in-state reaction)</a></dd>
+  <dt><a href="#Actions">Actions</a></dt>
+  <dd><a href="#Entry action">Entry action</a></dd>
+  <dd><a href="#Exit action">Exit action</a></dd>
+  <dd><a href="#Transition action">Transition action</a></dd>
+  <dd><a href="#Do activity">Do activity</a></dd>
+</dl>
+<hr>
+<h2><a name="State machine">State machine</a></h2>
+<ul>
+  <li>A state machine is defined by deriving a class from either the <code>
+  <a href="reference.html#Class template state_machine">state_machine</a></code> 
+  or the <code>
+  <a href="reference.html#Class template asynchronous_state_machine">
+  asynchronous_state_machine</a></code> class templates;
+  <a href="tutorial.html#Defining states and events">example</a></li>
+</ul>
+<h2><a name="States">States</a></h2>
+<h3><a name="Normal state">Normal state</a></h3>
+<ul>
+  <li>A state is defined by deriving a class from either the <code>
+  <a href="reference.html#Class template simple_state">simple_state</a></code> 
+  or <code><a href="reference.html#Class template state">state</a></code> 
+  class templates; <a href="tutorial.html#Defining states and events">example</a></li>
+  <li>The position of a state in the state hierarchy is defined by what is 
+  passed as the <code>Context</code> template parameter.
+  <a href="definitions.html#Outermost state">Outermost states</a> pass the
+  <code><a href="reference.html#Class template state_machine">state_machine&lt;&gt;</a></code> 
+  or <code><a href="reference.html#Class template asynchronous_state_machine">
+  asynchronous_state_machine&lt;&gt;</a></code> subclass they belong to, inner 
+  states pass their direct outer state;
+  <a href="tutorial.html#Defining states and events">example</a></li>
+  <li>A state can be made a member of a particular orthogonal region by 
+  passing an instantiation of the <code>orthogonal</code> class template 
+  nested in its outer state; <a href="tutorial.html#Orthogonal states">example</a></li>
+</ul>
+<h3><a name="Initial pseudostate">Initial pseudostate</a></h3>
+<ul>
+  <li>The state that is initially entered is identified by template parameters 
+  rather than by a default transition from the initial pseudostate (there is 
+  no such thing in boost::fsm)</li>
+  <li>For <code><a href="reference.html#Class template state_machine">
+  state_machine&lt;&gt;</a></code> and <code>
+  <a href="reference.html#Class template asynchronous_state_machine">
+  asynchronous_state_machine&lt;&gt;</a></code> the state that is initially entered 
+  needs to be specified with the <code>InitialState</code> template parameter;
+  <a href="tutorial.html#Defining states and events">example</a></li>
+  <li>For <code><a href="reference.html#Class template simple_state">
+  simple_state&lt;&gt;</a></code> and <code>
+  <a href="reference.html#Class template state">state&lt;&gt;</a></code> the inner 
+  state(s) that is/are initially entered can be specified with the <code>
+  InnerInitial</code> template parameter;
+  <a href="tutorial.html#Defining states and events">example</a></li>
+</ul>
+<h3><a name="Final pseudostate">Final pseudostate</a></h3>
+<ul>
+  <li>There is no such thing as a final pseudostate in boost::fsm</li>
+  <li>This functionality is implemented with a special reaction (<code><a href="reference.html#Class template termination">termination&lt;&gt;</a></code>) 
+  and special reaction function (<code><a href="reference.html#simple_state::terminate">simple_state&lt;&gt;::terminate()</a></code>);
+  <a href="tutorial.html#State queries">example</a></li>
+</ul>
+<h3><a name="Shallow history pseudostate">Shallow history pseudostate</a></h3>
+<ul>
+  <li>A shallow history transition target or shallow history inner initial 
+  state can be specified with <code>
+  <a href="reference.html#Class template shallow_history">shallow_history&lt;&gt;</a></code></li>
+</ul>
+<h3><a name="Deep history pseudostate">Deep history pseudostate</a></h3>
+<ul>
+  <li>A deep history transition target or deep history inner initial state can 
+  be specified with <code>
+  <a href="reference.html#Class template deep_history">deep_history&lt;&gt;</a></code>;
+  <a href="tutorial.html#History">example</a></li>
+</ul>
+<h3><a name="Junction point">Junction point</a></h3>
+<ul>
+  <li>Does not exist in boost::fsm; <a href="rationale.html#Limitations">
+  rationale</a></li>
+</ul>
+<h3><a name="Dynamic choice point">Dynamic choice point</a></h3>
+<ul>
+  <li>Does not (yet?) exist in boost::fsm;
+  <a href="rationale.html#Limitations">rationale</a></li>
+</ul>
+<h3><a name="Join and fork bars">Join and fork bars</a></h3>
+<ul>
+  <li>Do not exist in boost::fsm; <a href="rationale.html#Limitations">
+  rationale</a></li>
+</ul>
+<h2><a name="Events">Events</a></h2>
+<ul>
+  <li>A event is defined by deriving a class from the
+  <a href="reference.html#Class template event"><code>event</code></a> class 
+  template; <a href="tutorial.html#Defining states and events">example</a></li>
+  <li>There is no distinction between signal and call events, see below</li>
+</ul>
+<h3><a name="Call event">Call event</a></h3>
+<ul>
+  <li>All events passed to <code><a href="reference.html#process_event">
+  state_machine&lt;&gt;::process_event()</a></code> are implicitly call events</li>
+</ul>
+<h3><a name="Signal event">Signal event</a></h3>
+<ul>
+  <li>All events passed to either <code><a href="reference.html#post_event">
+  simple_state&lt;&gt;::post_event()</a></code> or <code>
+  <a href="reference.html#queue_event">fifo_scheduler&lt;&gt;::queue_event()</a></code> 
+  are implicitly signal events</li>
+</ul>
+<h3><a name="Time event">Time event</a></h3>
+<ul>
+  <li>Does not exist in boost::fsm</li>
+  <li>A time event can be simulated with an external timer that is started in 
+  the entry action and stopped in the exit action of a particular state. When 
+  starting the timer, it is instructed to call <code>
+  <a href="reference.html#queue_event">fifo_scheduler&lt;&gt;::queue_event()</a></code> 
+  when the due time elapses</li>
+</ul>
+<h3><a name="Change event">Change event</a></h3>
+<ul>
+  <li>Does not exist in boost::fsm</li>
+  <li>A change event can be simulated by packing to be monitored variables 
+  into an external wrapper with <code>get</code> and <code>set</code> methods. 
+  Whenever <code>set</code> is called the wrapper posts and appropriate event</li>
+</ul>
+<h2><a name="Reactions">Reactions</a></h2>
+<h3><a name="Guard">Guard</a></h3>
+<ul>
+  <li>A guard can be implemented with <code>
+  <a href="reference.html#Class template custom_reaction">custom_reaction&lt;&gt;</a></code>;
+  <a href="tutorial.html#Guards">example</a></li>
+</ul>
+<h3><a name="Transition">Transition</a></h3>
+<ul>
+  <li>A transition is defined with either <code>
+  <a href="reference.html#Class template transition">transition&lt;&gt;</a></code> 
+  or <code><a href="reference.html#transit1">simple_state&lt;&gt;::transit&lt;&gt;</a></code>;
+  <a href="tutorial.html#Adding reactions">example</a></li>
+</ul>
+<h3><a name="Deferral">Deferral</a></h3>
+<ul>
+  <li>A deferral reaction is defined with either <code>
+  <a href="reference.html#Class template deferral">deferral&lt;&gt;</a></code> or
+  <code><a href="reference.html#defer_event">simple_state&lt;&gt;::defer_event()</a></code>;
+  <a href="tutorial.html#Deferring events">example</a></li>
+</ul>
+<h3><a name="Internal transition (in-state reaction)">Internal transition 
+(in-state reaction)</a></h3>
+<ul>
+  <li>In-state reactions are not directly supported (there is no separate 
+  reaction) but they can be implemented with <code>
+  <a href="reference.html#Class template custom_reaction">custom_reaction&lt;&gt;</a></code>;
+  <a href="tutorial.html#In-state reactions">example</a></li>
+</ul>
+<h2><a name="Actions">Actions</a></h2>
+<h3><a name="Entry action">Entry action</a></h3>
+<ul>
+  <li>A state entry action can be defined by adding a constructor to a state 
+  class; <a href="tutorial.html#Hello World!">example</a></li>
+</ul>
+<h3><a name="Exit action">Exit action</a></h3>
+<ul>
+  <li>A state exit action can be defined by adding a destructor to a state 
+  class; <a href="tutorial.html#Hello World!">example</a></li>
+</ul>
+<h3><a name="Transition action">Transition action</a></h3>
+<ul>
+  <li>A transition action can be defined by passing a function pointer 
+  referencing the action to either <code>
+  <a href="reference.html#Class template transition">transition&lt;&gt;</a></code> 
+  or <code><a href="reference.html#transit2">simple_state&lt;&gt;::transit&lt;&gt;()</a></code>;
+  <a href="tutorial.html#Transition actions">example</a></li>
+</ul>
+<h3><a name="Do activity">Do activity</a></h3>
+<ul>
+  <li>Not supported in boost::fsm</li>
+  <li>A do activity can be simulated with a separate thread that is started in 
+  the entry action and cancelled (!) in the exit action of a particular state</li>
+</ul>
+<hr>
+<p>Revised 
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->10 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29901" -->
+</p>
+<p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
+2003-2004. Use, modification and distribution are subject to the Boost 
+Software License, Version 1.0. (See accompanying file
+<a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at
+<a href="http://www.boost.org/LICENSE_1_0.txt">
+http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+
+</body>
+
+</html>

@@ -31,6 +31,7 @@ contributed by Mitsuo Fukasawa.</p>
 <h2>Contents</h2>
 <dl class="page-index">
   <dt><a href="#Introduction">Introduction</a></dt>
+  <dd><a href="#Audience">Audience</a></dd>
   <dd><a href="#How to read this tutorial">How to read this tutorial</a></dd>
   <dt><a href="#Hello World!">Hello World!</a></dt>
   <dt><a href="#A stop watch">A stop watch</a></dt>
@@ -42,6 +43,7 @@ contributed by Mitsuo Fukasawa.</p>
   <dt><a href="#A digital camera">A digital camera</a></dt>
   <dd><a href="#Spreading a state machine over multiple translation units">
   Spreading a state machine over multiple translation units</a></dd>
+  <dd><a href="#Deferring events">Deferring events</a></dd>
   <dd><a href="#Guards">Guards</a></dd>
   <dd><a href="#In-state reactions">In-state reactions</a></dd>
   <dd><a href="#Transition actions">Transition actions</a></dd>
@@ -49,7 +51,6 @@ contributed by Mitsuo Fukasawa.</p>
   <dd><a href="#Specifying multiple reactions for a state">Specifying multiple 
   reactions for a state</a></dd>
   <dd><a href="#Posting events">Posting events</a></dd>
-  <dd><a href="#Deferring events">Deferring events</a></dd>
   <dd><a href="#History">History</a></dd>
   <dd><a href="#Orthogonal states">Orthogonal states</a></dd>
   <dd><a href="#State queries">State queries</a></dd>
@@ -62,19 +63,10 @@ contributed by Mitsuo Fukasawa.</p>
 <hr>
 <h2><a name="Introduction">Introduction</a></h2>
 <p>The boost::fsm library is a framework that allows you to quickly transform 
-a UML state chart into executable C++ code. This tutorial requires some 
-familiarity with the state machine concept and UML state charts. A nice 
-introduction to both can be found in
-<a href="http://www.objectmentor.com/resources/articles/umlfsm.pdf">
-http://www.objectmentor.com/resources/articles/umlfsm.pdf</a>. David Harel, 
-the inventor of state charts, presents an excellent tutorial-like but still 
-thorough discussion in his original paper:
-<a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
-http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf</a>. 
-The UML specifications can be found at
-<a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
-http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
-3.74).</p>
+a UML state chart into executable C++ code, <b>without</b> needing to use a 
+code generator. Thanks to support for almost all UML features the 
+transformation is straight-forward and the resulting C++ code is a nearly 
+redundancy-free textual description of the state chart.</p>
 <p>All examples have been tested on the following platforms using boost 
 distribution 1.31.0:</p>
 <ul>
@@ -87,6 +79,30 @@ boost::fsm on Linux! Please see readme.txt in </font>
 <a href="http://boost-sandbox.sf.net/fsm.zip"><font color="#FF0000">
 http://boost-sandbox.sf.net/fsm.zip</font></a><font color="#FF0000"> on how to 
 fix this.</font></b></p>
+<h3><a name="Audience">Audience</a></h3>
+<p>Throughout all boost::fsm documentation it is assumed that the reader is 
+familiar with the state machine concept, UML state charts and most of the UML 
+state machine terminology. The following links might be interesting if this is 
+not the case:</p>
+<ul>
+  <li><a href="http://www.objectmentor.com/resources/articles/umlfsm.pdf">
+  http://www.objectmentor.com/resources/articles/umlfsm.pdf</a> introduces 
+  state machines and UML state charts</li>
+  <li>
+  <a href="http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf">
+  http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf</a> 
+  explains most of the UML state chart elements and terminology</li>
+  <li>The inventor of state charts, David Harel, presents a thorough but still 
+  very readable discussion in his original paper:
+  <a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
+  http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf</a></li>
+  <li>The UML specifications (formal) can be found here:
+  <a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">
+  http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
+  3.74)</li>
+</ul>
+<p>Some of the used terminology cannot be found in the UML specifications, 
+please see <a href="definitions.html">Definitions</a> for more information.</p>
 <h3><a name="How to read this tutorial">How to read this tutorial</a></h3>
 <p>This tutorial was designed to be read linearly. First time users should 
 start reading right at the beginning and stop as soon as they know enough for 
@@ -107,9 +123,10 @@ the task at hand. Specifically:</p>
   the Rationale is strongly suggested.</li>
 </ul>
 <h2><a name="Hello World!">Hello World!</a></h2>
-<p>We follow the tradition and use the simplest possible program to make our 
-first steps. We will implement the following state chart:</p>
+<p>We will use the simplest possible program to make our first steps. The 
+state chart ...</p>
 <p><img border="0" src="HelloWorld.gif" width="379" height="94"></p>
+<p>... is implemented with the following code:</p>
 <pre>#include &lt;boost/fsm/state_machine.hpp&gt;
 #include &lt;boost/fsm/simple_state.hpp&gt;
 #include &lt;iostream&gt;
@@ -131,7 +148,7 @@ int main()
   myMachine.initiate();
   return 0;
 }</pre>
-<p>This program prints <code>Hello World!</code> and <code>Bye Bye World!</code> 
+<p>This prints <code>Hello World!</code> and <code>Bye Bye World!</code> 
 before exiting. The first line is printed as a result of calling <code>
 initiate()</code>, which leads to the <code>Greeting</code> state begin 
 entered. At the end of <code>main()</code>, the <code>myMachine</code> object 
@@ -236,7 +253,7 @@ int main()
   <li>Because the context of a state must be a complete type (i.e. not forward 
   declared), a machine must be defined from &quot;outside to inside&quot;. That is, we 
   always start with the state machine, followed by outermost states, followed 
-  by the inner states of outermost states and so on. We can do so in a 
+  by the direct inner states of outermost states and so on. We can do so in a 
   breadth-first or depth-first way or employ a mixture of the two.<br>
   Since the source and destination state of a transition often have the same 
   nesting depth, the pure depth-first approach tends to require a lot of 
@@ -323,11 +340,11 @@ struct Running : fsm::simple_state&lt; Running, Active,
 
 // ...</pre>
 <p>Similar to when a derived class object accesses its base class portion,
-<code>context&lt;&gt;()</code> is used to gain access to a direct or indirect outer 
-state object. The same function could be used to access the state machine 
-(here <code>context&lt; StopWatch &gt;()</code>). The rest should be mostly 
-self-explanatory. The machine now measures the time, but we cannot yet 
-retrieve it from the main program.</p>
+<code>context&lt;&gt;()</code> is used to gain access to the direct or indirect 
+context of a state. This can either be a direct or indirect outer state (e.g.
+<code>context&lt; Active &gt;()</code>) or the state machine itself (<code>context&lt; 
+StopWatch &gt;()</code>). The rest should be mostly self-explanatory. The machine 
+now measures the time, but we cannot yet retrieve it from the main program.</p>
 <h3><a name="Getting state information out of the machine">Getting state 
 information out of the machine</a></h3>
 <p>To retrieve the measured time, we need a mechanism to get state information 
@@ -533,13 +550,18 @@ fsm::result Idle::react( const EvConfig &amp; )
 {
   return transit&lt; Configuring &gt;();
 }</pre>
+<p>Note that Shooting.hpp and Configuring.hpp are included only in Camera.cpp 
+but not in Camera.hpp. The Shooting and Configuring states can themselves 
+apply the same pattern to hide their inner implementation, which ensures that 
+the two teams working on the Camera state machine will never need to disturb 
+each other.</p>
 <p><b><font color="#FF0000">Caution: Any call to <code>simple_state&lt;&gt;::transit&lt;&gt;()</code> 
 or <code>simple_state&lt;&gt;::terminate()</code> (see
 <a href="reference.html#transit1">reference</a>) will inevitably destruct the 
 state object (similar to <code>delete this;</code>)! That is, code executed 
 after any of these calls may invoke undefined behavior!</font></b> That's why 
 these functions should only be called as part of a return statement.</p>
-<h3><a name="Guards">Guards</a></h3>
+<h3><a name="Deferring events">Deferring events</a></h3>
 <p>The inner workings of the Shooting state could look as follows:</p>
 <p><img border="0" src="Camera2.gif" width="427" height="427"></p>
 <p>When the user half-presses the shutter, Shooting and its inner initial 
@@ -561,6 +583,29 @@ when the Focusing state is exited.</p>
   Focusing( my_context ctx );
   fsm::result react( const EvInFocus &amp; );
 };</pre>
+<p>To avoid a number of overheads, event deferral has one limitation: Only 
+events allocated with <code>new</code> <b>and</b> pointed to by a <code>
+boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a 
+differently allocated event will result in a failing runtime assert. Example:</p>
+<pre>struct Event : fsm::event&lt; Event &gt; {};
+struct Initial;
+struct Machine : fsm::state_machine&lt;
+  Machine, Initial &gt; {};
+struct Initial : fsm::simple_state&lt; Initial, Machine,
+  fsm::deferral&lt; Event &gt; &gt; {};
+
+int main()
+{
+  Machine myMachine;
+  myMachine.initiate();
+  myMachine.process_event( Event() ); // error
+  myMachine.process_event(
+    *boost::shared_ptr&lt; Event &gt;( new Event() ) ); // error
+  myMachine.process_event(
+    *<b>boost::intrusive_ptr&lt; Event &gt;( new Event() )</b> ); // fine
+  return 0;
+}</pre>
+<h3><a name="Guards">Guards</a></h3>
 <p>Both transitions originating at the Focused state are triggered by the same 
 event but they have mutually exclusive guards. Here is an appropriate custom 
 reaction:</p>
@@ -738,29 +783,6 @@ an entry action makes one or more calls to the following functions:</p>
 </ul>
 <p>In my experience, these functions are needed only rarely in entry actions 
 so this workaround should not uglify user code too much.</p>
-<h3><a name="Deferring events">Deferring events</a></h3>
-<p>To avoid a number of overheads, event deferral has one limitation: Only 
-events allocated with <code>new</code> <b>and</b> pointed to by a <code>
-boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a 
-differently allocated event will result in a failing runtime assert. Example:</p>
-<pre>struct Event : fsm::event&lt; Event &gt; {};
-struct Initial;
-struct Machine : fsm::state_machine&lt;
-  Machine, Initial &gt; {};
-struct Initial : fsm::simple_state&lt; Initial, Machine,
-  fsm::deferral&lt; Event &gt; &gt; {};
-
-int main()
-{
-  Machine myMachine;
-  myMachine.initiate();
-  myMachine.process_event( Event() ); // error
-  myMachine.process_event(
-    *boost::shared_ptr&lt; Event &gt;( new Event() ) ); // error
-  myMachine.process_event(
-    *<b>boost::intrusive_ptr&lt; Event &gt;( new Event() )</b> ); // fine
-  return 0;
-}</pre>
 <h3><a name="History">History</a></h3>
 <p>Photographers testing beta versions of our
 <a href="#Spreading a state machine over multiple translation units">digital 
@@ -1225,9 +1247,9 @@ really happens in a single thread, that's why &quot;wait&quot; is in quotes.</p>
 member functions the <code>state_machine</code> class template has. Moreover,
 <code>asynchronous_state_machine&lt;&gt;</code> subclass objects cannot even be 
 created or destroyed directly. Instead, all these operations must be performed 
-through the <code>Worker</code> object each asynchronous state machine is 
-associated with. All these <code>Worker</code> member functions only push an 
-appropriate item into the schedulers' queue and then return immediately. A 
+through the <code>Scheduler</code> object each asynchronous state machine is 
+associated with. All these <code>Scheduler</code> member functions only push 
+an appropriate item into the schedulers' queue and then return immediately. A 
 dedicated thread will later pop the items out of the queue to have them 
 processed.</p>
 <p>Applications will usually first create a <code>fifo_scheduler&lt;&gt;</code> 
@@ -1244,7 +1266,7 @@ boost::thread</code> and the other in the main thread (see the PingPong
 example for the full source code):</p>
 <pre>struct Waiting;
 struct Player :
-fsm::asynchronous_state_machine&lt; Player, Waiting &gt;
+  fsm::asynchronous_state_machine&lt; Player, Waiting &gt;
 {
   // ...
 };
@@ -1326,7 +1348,7 @@ fifo_scheduler&lt;&gt;::terminate()</code>. The <code>Player</code> state machin
 calls this function on its scheduler object right before terminating.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 March, 2004<!--webbot bot="Timestamp" endspan i-checksum="28872" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 April, 2004<!--webbot bot="Timestamp" endspan i-checksum="29901" --></p>
 <p><i>Copyright © <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003-2004. Use, modification and distribution are subject to the Boost 
 Software License, Version 1.0. (See accompanying file
