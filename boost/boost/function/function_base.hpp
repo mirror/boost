@@ -31,6 +31,14 @@
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
+#if defined (BOOST_MSVC) && (BOOST_MSVC >= 1300)
+#  define BOOST_FUNCTION_DEPRECATED_PRE __declspec(deprecated)
+#  define BOOST_FUNCTION_DEPRECATED_INSIDE
+#else
+#  define BOOST_FUNCTION_DEPRECATED_PRE
+#  define BOOST_FUNCTION_DEPRECATED_INSIDE int deprecated;
+#endif
+
 namespace boost {
   namespace detail {
     namespace function {

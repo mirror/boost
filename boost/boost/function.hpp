@@ -538,7 +538,7 @@ namespace boost {
         typename InMixin = empty_function_mixin,
         typename InAllocator = std::allocator<function_base> 
       >
-      class get_function_impl
+      struct get_function_impl
       {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         typedef maybe_decode_function_args<(is_function<InR>::value),
@@ -576,7 +576,7 @@ namespace boost {
         typedef InMixin Mixin;
         typedef InAllocator Allocator;
 #endif // def BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      public:                       
+
         typedef typename real_get_function_impl<
           (count_used_args<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>::value)
           >::template params<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
@@ -739,21 +739,24 @@ namespace boost {
     }
 
     template<typename Functor>
-    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
+    BOOST_FUNCTION_DEPRECATED_PRE 
+	void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f) 
     {
-      int deprecated;
+      BOOST_FUNCTION_DEPRECATED_INNER
       self_type(f).swap(*this);
     }
 
-    void set(const base_type& f)
+	BOOST_FUNCTION_DEPRECATED_PRE
+    void set(const base_type& f) 
     {
-      int deprecated;
+      BOOST_FUNCTION_DEPRECATED_INNER
       self_type(f).swap(*this);
     }
 
+	BOOST_FUNCTION_DEPRECATED_PRE
     void set(const self_type& f)                             
     {
-      int deprecated;
+      BOOST_FUNCTION_DEPRECATED_INNER
       self_type(f).swap(*this);
     }   
   };
