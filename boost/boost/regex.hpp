@@ -842,6 +842,7 @@ public:
    typedef typename std::iterator_traits<iterator>::value_type       char_type;
 #else
    typedef std::ptrdiff_t                                            difference_type;
+   typedef typename re_detail::regex_iterator_traits<iterator>::value_type char_type;
 #endif
    typedef sub_match<iterator>                                       value_type;
    typedef iterator                                                  iterator_type;
@@ -922,17 +923,10 @@ public:
       return n;
    }
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-   std::basic_string<value_type> str(int i)const
+   std::basic_string<char_type> str(int i)const
    {
-      return static_cast<std::basic_string<value_type> >((*this)[i]);
+      return static_cast<std::basic_string<char_type> >((*this)[i]);
    }
-#else
-   std::basic_string<char> str(int i)const
-   {
-      return static_cast<std::basic_string<char> >((*this)[i]);
-   }
-#endif
 
    unsigned int BOOST_RE_CALL line()const
    {
@@ -1342,6 +1336,14 @@ class match_results : public re_detail::match_results_base<iterator, Allocator>
 {
    typedef re_detail::match_results_base<iterator, Allocator> base_type;
 public:
+
+   typedef typename base_type::alloc_type          alloc_type;
+   typedef typename base_type::size_type           size_type;
+   typedef typename base_type::char_type           char_type;
+   typedef typename base_type::value_type          value_type;
+   typedef typename base_type::difference_type     difference_type;
+   typedef typename base_type::iterator_type       iterator_type;
+
    explicit match_results(const Allocator& a = Allocator())
       : re_detail::match_results_base<iterator, Allocator>(a){}
 
@@ -1357,12 +1359,44 @@ public:
 
    match_results(const match_results& m);
    match_results& operator=(const match_results& m);
-   /*
+   //
+   // the following function definitions should *not* be required, except
+   // when this class is used as a template inside another template definition,
+   // in which members of the base class are not visible to the calling code.
+   // As a workaround we define simple forwarding functions:
+   //
+   size_type size()const
+   { return static_cast<const base_type*>(this)->size(); }
+
+   const sub_match<iterator>& operator[](int n) const
+   { return (*static_cast<const base_type*>(this))[n]; }
+
+   Allocator allocator()const
+   { return static_cast<const base_type*>(this)->allocator(); }
+
+   difference_type length(int sub = 0)const
+   { return static_cast<const base_type*>(this)->length(sub); }
+
+   difference_type position(unsigned int sub = 0)const
+   { return static_cast<const base_type*>(this)->position(sub); }
+
+   unsigned int line()const
+   { return static_cast<const base_type*>(this)->line(); }
+
+   iterator line_start()const
+   { return static_cast<const base_type*>(this)->line_start(); }
+
+   std::basic_string<char_type> str(int sub = 0)const
+   { return static_cast<const base_type*>(this)->str(sub); }
+
+   void swap(match_results& that)
+   { static_cast<base_type*>(this)->swap(that); }
+
    bool operator==(const match_results& that)const
-   { return re_detail::match_results_base<iterator, Allocator>::operator==(that); }
+   { return static_cast<const base_type&>(*this) == static_cast<const base_type&>(that); }
+
    bool operator<(const match_results& that) const
    { return position() < that.position(); }
-   */
 };
 
 template <class iterator, class Allocator>

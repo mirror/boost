@@ -29,18 +29,20 @@ int main()
 {
    string s[4] = { "0000111122223333", "0000 1111 2222 3333",
                    "0000-1111-2222-3333", "000-1111-2222-3333", };
-   for(int i = 0; i < 4; ++i)
+   int i;
+   for(i = 0; i < 4; ++i)
    {
       cout << "validate_card_format(\"" << s[i] << "\") returned " << validate_card_format(s[i]) << endl;
    }
-   for(int i = 0; i < 4; ++i)
+   for(i = 0; i < 4; ++i)
    {
       cout << "machine_readable_card_number(\"" << s[i] << "\") returned " << machine_readable_card_number(s[i]) << endl;
    }
-   for(int i = 0; i < 4; ++i)
+   for(i = 0; i < 4; ++i)
    {
       cout << "human_readable_card_number(\"" << s[i] << "\") returned " << human_readable_card_number(s[i]) << endl;
    }
    return 0;
 }
+
 

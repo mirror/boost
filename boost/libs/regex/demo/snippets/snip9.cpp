@@ -51,8 +51,8 @@ int main(int argc, char** argv)
 {
    std::string s;
    std::list<std::string> l;
-
-   for(int i = 1; i < argc; ++i)
+	int i;
+   for(i = 1; i < argc; ++i)
    {
       std::cout << "Findings URL's in " << argv[i] << ":" << std::endl;
       s.erase();
@@ -71,7 +71,7 @@ int main(int argc, char** argv)
    // split one match at a time and output direct to
    // cout via ostream_iterator<std::string>....
    //
-   for(int i = 1; i < argc; ++i)
+   for(i = 1; i < argc; ++i)
    {
       std::cout << "Findings URL's in " << argv[i] << ":" << std::endl;
       s.erase();
@@ -82,3 +82,4 @@ int main(int argc, char** argv)
 
    return 0;
 }
+

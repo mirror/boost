@@ -30,24 +30,25 @@
 #if defined(BOOST_MSVC) && !defined(BOOST_RE_BUILD_DLL)
 #ifdef __SGI_STL_PORT
    #ifdef _DLL
-      #ifdef _DEBUG
+      #if defined(_DEBUG) && defined(__STL_DEBUG)
+         #pragma comment(lib, "vc6-stlport-re300ddl.lib")
+      #elif defined(_DEBUG)
          #pragma comment(lib, "vc6-stlport-re300dl.lib")
       #else // DEBUG
          #pragma comment(lib, "vc6-stlport-re300l.lib")
       #endif // _DEBUG
    #else // _DLL
       #ifdef _MT
-         #ifdef _DEBUG
+         #if defined(_DEBUG) && defined(__STL_DEBUG)
+            #pragma comment(lib, "vc6-stlport-re300ddm.lib")
+         #elif defined(_DEBUG)
             #pragma comment(lib, "vc6-stlport-re300dm.lib")
          #else //_DEBUG
             #pragma comment(lib, "vc6-stlport-re300m.lib")
          #endif //_DEBUG
       #else //_MT
-         #ifdef _DEBUG
-            #pragma comment(lib, "vc6-stlport-re300d.lib")
-         #else //_DEBUG
-            #pragma comment(lib, "vc6-stlport-re300.lib")
-         #endif //_DEBUG
+         // STLPort does not support single threaded builds:
+         #error STLPort does not support single threaded builds
       #endif //_MT
    #endif //_DLL
 #else

@@ -170,6 +170,17 @@ function vc6_gen()
 	libname="$prefix""re300l"
 	vc6_gen_dll
 	
+	if test "$is_stlport" == yes; then
+#  debug STLPort mode:
+	debug="yes"
+	opts="/nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D__STL_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c"
+	libname="$prefix""re300ddl"
+	vc6_gen_dll
+	libname="$prefix""re300ddm"
+	opts="/nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /D__STL_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c"
+	vc6_gen_lib
+	fi
+	
 	cat > $out << EOF
 #
 # auto generated makefile for VC6 compiler
@@ -676,6 +687,7 @@ bcb_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
 
 
 

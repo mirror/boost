@@ -1,3 +1,7 @@
+FIXED:    Signed/unsigned conversions in regex_compile.hpp and regex_format.hpp
+ADDED:    Forwarder functions to match_results.
+FIXED:    More errors from Como in strict mode.
+
 Version 303:
 FIXED:    Code glitches for Como compiler in strict mode.
 FIXED:    Missing fixes for cstdio header.
@@ -198,6 +202,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 

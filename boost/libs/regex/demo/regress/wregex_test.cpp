@@ -25,7 +25,6 @@
 
 // disable automatic selection of support library:
 #define BOOST_RE_NO_LIB
-#define TEST_UNICODE
 
 #include <boost/regex.hpp>
 
@@ -171,6 +170,7 @@ template test_string_type regex_merge(const test_string_type&,
 #elif !defined(BOOST_RE_LOCALE_C)
 #define BOOST_RE_TEST_LOCALE_CPP
 #endif
+#define TEST_UNICODE
 #include "tests.cpp"
 #include "parse.cpp"
 #include "regress.cpp"
@@ -192,4 +192,5 @@ template test_string_type regex_merge(const test_string_type&,
 #include "libs/regex/src/regex_debug.cpp"
 #include "libs/regex/src/regex_synch.cpp"
 #include "libs/regex/src/wide_posix_api.cpp"
+
 

@@ -355,4 +355,3 @@ vc6-re300l_clean :
 	kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"vc6/vc6-re300l.pdb" /debug /machine:I386 /out:"vc6/vc6-re300l.dll" /implib:"vc6/vc6-re300l.lib" /pdbtype:sept $(XLFLAGS)  vc6/vc6-re300l/c_regex_traits.obj vc6/vc6-re300l/c_regex_traits_common.obj vc6/vc6-re300l/cpp_regex_traits.obj vc6/vc6-re300l/cregex.obj vc6/vc6-re300l/fileiter.obj vc6/vc6-re300l/posix_api.obj vc6/vc6-re300l/regex.obj vc6/vc6-re300l/regex_debug.obj vc6/vc6-re300l/regex_synch.obj vc6/vc6-re300l/w32_regex_traits.obj vc6/vc6-re300l/wide_posix_api.obj
 <<
 
-

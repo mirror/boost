@@ -16,10 +16,11 @@ IDE_LinkFLAGS32 =  -L$(BCROOT)\LIB
 COMPOPTS= -O2 -tWC -tWM- -D_NO_VCL; -I../../../../; -L..\..\lib\bcb4
 
 
-timer.exe : ..\..\..\timer\timer.cpp regex_timer.cpp
+timer.exe : regex_timer.cpp
   $(BCC32) @&&|
- $(COMPOPTS) -e$@ ..\..\..\timer\timer.cpp regex_timer.cpp
+ $(COMPOPTS) -e$@ regex_timer.cpp
 |
+
 
 
 

@@ -44,7 +44,7 @@ int process_ftp(const char* response, std::string* msg)
       // what[3] contains the text message.
       if(msg)
          msg->assign(what[3].first, what[3].second);
-      return std::atoi(what[1].first);
+      return atoi(what[1].first);
    }
    // failure did not match
    if(msg)
@@ -93,6 +93,7 @@ int main()
   }
   return 0;
 }
+
 
 
 

@@ -43,8 +43,7 @@ using std::endl;
 #include <iostream>
 #include <boost/regex.hpp>
 
-
-#ifdef TEST_UNICODE
+#if defined(TEST_UNICODE)
 #ifdef __GNUC__
 #define char_t wchar_t
 #else
