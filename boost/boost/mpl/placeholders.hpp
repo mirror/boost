@@ -6,7 +6,7 @@
 #ifndef BOOST_MPL_PLACEHOLDERS_HPP_INCLUDED
 #define BOOST_MPL_PLACEHOLDERS_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2001-2003
+// Copyright Aleksey Gurtovoy 2001-2004
 // Copyright Peter Dimov 2001-2003
 //
 // Distributed under the Boost Software License, Version 1.0. 
@@ -23,6 +23,15 @@
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include <boost/mpl/arg.hpp>
 #   include <boost/mpl/aux_/adl_barrier.hpp>
+
+#   if !defined(BOOST_MPL_CFG_NO_ADL_BARRIER_NAMESPACE)
+#       define BOOST_MPL_AUX_ARG_ADL_BARRIER_DECL(type) \
+        using ::BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::type; \
+        /**/
+#   else
+#       define BOOST_MPL_AUX_ARG_ADL_BARRIER_DECL(type) /**/
+#   endif
+
 #endif
 
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>
@@ -43,15 +52,18 @@
 // watch out for GNU gettext users, who #define _(x)
 #if !defined(_) || defined(BOOST_MPL_CFG_NO_UNNAMED_PLACEHOLDER_SUPPORT)
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
-
 typedef arg<-1> _;
-
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
-BOOST_MPL_AUX_ADL_BARRIER_DECL(_)
 
-namespace boost { namespace mpl { namespace placeholders {
+namespace boost { namespace mpl { 
+
+BOOST_MPL_AUX_ARG_ADL_BARRIER_DECL(_)
+
+namespace placeholders {
 using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_;
-}}}
+}
+
+}}
 #endif
 
 /// agurt, 17/mar/02: one more placeholder for the last 'apply#' 
@@ -66,18 +78,23 @@ using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_;
 ///// iteration
 
 #else
-#define i BOOST_PP_FRAME_ITERATION(1)
+#define i_ BOOST_PP_FRAME_ITERATION(1)
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
-typedef arg<i> BOOST_PP_CAT(_,i);
+typedef arg<i_> BOOST_PP_CAT(_,i_);
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
-BOOST_MPL_AUX_ADL_BARRIER_DECL(BOOST_PP_CAT(_,i))
 
-namespace boost { namespace mpl { namespace placeholders {
-using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::BOOST_PP_CAT(_,i);
-}}}
+namespace boost { namespace mpl { 
 
-#undef i
+BOOST_MPL_AUX_ARG_ADL_BARRIER_DECL(BOOST_PP_CAT(_,i_))
+
+namespace placeholders {
+using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::BOOST_PP_CAT(_,i_);
+}
+
+}}
+
+#undef i_
 #endif // BOOST_PP_IS_ITERATING
