@@ -2,7 +2,7 @@
 #define ISO_FORMAT_HPP___
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/parse_format_base.hpp"
@@ -22,17 +22,17 @@ public:
   //! String used printed is date is invalid
   static const char* not_a_date()
   {       //20010102
-    return "NotADate";
+    return "not-a-date-time";
   }
   //! String used to for positive infinity value
   static const char* pos_infinity()
   {
-    return "+infin  ";
+    return "+infinity";
   }
   //! String used to for positive infinity value
   static const char* neg_infinity()
   {
-    return "-infin  ";
+    return "-infinity";
   }
 
   //! ISO char for a year -- used in durations
