@@ -243,18 +243,20 @@ non-const iterators from the same container. </p>
 <p> 
 <a name="copy_range"></a> 
 <code>Sequence copy_range( const ForwardRange& r );</code>
-<blockquote><i>
-            Constructs a new sequence of the specified type from the elements
-            in the given range.</i>
+<blockquote>
+    <i>Returns</i> <code>Sequence( begin(r), end(r) );</code>
 </blockquote>
 </p>
 
 <p>
 <a name="transform_range"></a>
 <code>Sequence transform_range( const ForwardRange& r, Func func );</code>
-<blockquote><i>
-            Constructs a new sequence from the elements in the range,
-transformed by a function.</i>
+<blockquote>
+<i>Effects</i> <br>
+<code>Sequence seq;</code> <br>
+<code>std::transform( begin(r), end(r), std::back_inserter(seq), func );</code> 
+<br>
+<code>return seq;</code>
 </blockquote>
 </p>
 
