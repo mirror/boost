@@ -14,8 +14,8 @@ namespace boost_has_long_long{
 
 int test()
 {
-   long long int lli = 0LL;
-   unsigned long long int ulli = 0uLL;
+   long long lli = 0LL;
+   unsigned long long ulli = 0uLL;
    (void)lli;
    (void)ulli;
    return 0;

@@ -1801,9 +1801,9 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking for main in -lpthread" >&5
-echo $ECHO_N "checking for main in -lpthread... $ECHO_C" >&6
-if test "${ac_cv_lib_pthread_main+set}" = set; then
+echo "$as_me:$LINENO: checking for pthread_exit in -lpthread" >&5
+echo $ECHO_N "checking for pthread_exit in -lpthread... $ECHO_C" >&6
+if test "${ac_cv_lib_pthread_pthread_exit+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -1812,7 +1812,13 @@ cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
 
-
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char pthread_exit ();
 #ifdef F77_DUMMY_MAIN
 #  ifdef __cplusplus
      extern "C"
@@ -1822,7 +1828,7 @@ cat >conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-main ();
+pthread_exit ();
   ;
   return 0;
 }
@@ -1839,18 +1845,18 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_pthread_main=yes
+  ac_cv_lib_pthread_pthread_exit=yes
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-ac_cv_lib_pthread_main=no
+ac_cv_lib_pthread_pthread_exit=no
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_main" >&5
-echo "${ECHO_T}$ac_cv_lib_pthread_main" >&6
-if test $ac_cv_lib_pthread_main = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_lib_pthread_pthread_exit" >&5
+echo "${ECHO_T}$ac_cv_lib_pthread_pthread_exit" >&6
+if test $ac_cv_lib_pthread_pthread_exit = yes; then
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBPTHREAD 1
 _ACEOF
@@ -1858,12 +1864,11 @@ _ACEOF
   LIBS="-lpthread $LIBS"
 
 fi
-ac_cv_lib_pthread=ac_cv_lib_pthread_main
 
 
-echo "$as_me:$LINENO: checking for main in -lm" >&5
-echo $ECHO_N "checking for main in -lm... $ECHO_C" >&6
-if test "${ac_cv_lib_m_main+set}" = set; then
+echo "$as_me:$LINENO: checking for cos in -lm" >&5
+echo $ECHO_N "checking for cos in -lm... $ECHO_C" >&6
+if test "${ac_cv_lib_m_cos+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -1872,7 +1877,13 @@ cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
 
-
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char cos ();
 #ifdef F77_DUMMY_MAIN
 #  ifdef __cplusplus
      extern "C"
@@ -1882,7 +1893,7 @@ cat >conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-main ();
+cos ();
   ;
   return 0;
 }
@@ -1899,18 +1910,18 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_m_main=yes
+  ac_cv_lib_m_cos=yes
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-ac_cv_lib_m_main=no
+ac_cv_lib_m_cos=no
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_m_main" >&5
-echo "${ECHO_T}$ac_cv_lib_m_main" >&6
-if test $ac_cv_lib_m_main = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_lib_m_cos" >&5
+echo "${ECHO_T}$ac_cv_lib_m_cos" >&6
+if test $ac_cv_lib_m_cos = yes; then
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBM 1
 _ACEOF
@@ -1918,12 +1929,11 @@ _ACEOF
   LIBS="-lm $LIBS"
 
 fi
-ac_cv_lib_m=ac_cv_lib_m_main
 
 
-echo "$as_me:$LINENO: checking for main in -lrt" >&5
-echo $ECHO_N "checking for main in -lrt... $ECHO_C" >&6
-if test "${ac_cv_lib_rt_main+set}" = set; then
+echo "$as_me:$LINENO: checking for clock in -lrt" >&5
+echo $ECHO_N "checking for clock in -lrt... $ECHO_C" >&6
+if test "${ac_cv_lib_rt_clock+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -1932,7 +1942,13 @@ cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 #include "confdefs.h"
 
-
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char clock ();
 #ifdef F77_DUMMY_MAIN
 #  ifdef __cplusplus
      extern "C"
@@ -1942,7 +1958,7 @@ cat >conftest.$ac_ext <<_ACEOF
 int
 main ()
 {
-main ();
+clock ();
   ;
   return 0;
 }
@@ -1959,18 +1975,18 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_lib_rt_main=yes
+  ac_cv_lib_rt_clock=yes
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-ac_cv_lib_rt_main=no
+ac_cv_lib_rt_clock=no
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_rt_main" >&5
-echo "${ECHO_T}$ac_cv_lib_rt_main" >&6
-if test $ac_cv_lib_rt_main = yes; then
+echo "$as_me:$LINENO: result: $ac_cv_lib_rt_clock" >&5
+echo "${ECHO_T}$ac_cv_lib_rt_clock" >&6
+if test $ac_cv_lib_rt_clock = yes; then
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBRT 1
 _ACEOF
@@ -1978,7 +1994,6 @@ _ACEOF
   LIBS="-lrt $LIBS"
 
 fi
-ac_cv_lib_rt=ac_cv_lib_rt_main
 
 
 #
@@ -2369,7 +2384,9 @@ cat > user.hpp << EOF
 // setup is fully ISO complient, and has no
 // useful extentions, or for autoconf generated
 // setups:
-#define BOOST_NO_CONFIG
+#ifndef BOOST_NO_CONFIG
+#  define BOOST_NO_CONFIG
+#endif
 
 
 // define if you want to disable threading support, even
@@ -3018,6 +3035,8 @@ fi
 
 
 fi
+
+
 
 
 

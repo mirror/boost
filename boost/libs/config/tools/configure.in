@@ -129,9 +129,9 @@ fi
 dnl check for some standard libraries
 dnl without these some of the tests may fail:
 
-AC_HAVE_LIBRARY(pthread)
-AC_HAVE_LIBRARY(m)
-AC_HAVE_LIBRARY(rt)
+AC_CHECK_LIB(pthread, pthread_exit)
+AC_CHECK_LIB(m, cos)
+AC_CHECK_LIB(rt, clock)
 
 #
 # enumerate test files and test each one:
@@ -345,7 +345,9 @@ cat > user.hpp << EOF
 // setup is fully ISO complient, and has no
 // useful extentions, or for autoconf generated
 // setups:
-#define BOOST_NO_CONFIG
+#ifndef BOOST_NO_CONFIG
+#  define BOOST_NO_CONFIG
+#endif
 
 
 // define if you want to disable threading support, even
@@ -395,6 +397,8 @@ cat_conts="$cat_conts"
 )
 
 fi
+
+
 
 
 

@@ -18,18 +18,18 @@
 namespace boost_no_intrinsic_wchar_t{
 
 template <class T>
-struct is_int{};
+struct is_int{ int i; };
 
-template <> struct is_int<unsigned char>{};
-template <> struct is_int<signed char>{};
-template <> struct is_int<char>{};
-template <> struct is_int<unsigned short>{};
-template <> struct is_int<short>{};
-template <> struct is_int<unsigned int>{};
-template <> struct is_int<int>{};
-template <> struct is_int<unsigned long>{};
-template <> struct is_int<long>{};
-template <> struct is_int<wchar_t>{};
+template <> struct is_int<unsigned char>{ int i; };
+template <> struct is_int<signed char>{ int i; };
+template <> struct is_int<char>{ int i; };
+template <> struct is_int<unsigned short>{ int i; };
+template <> struct is_int<short>{ int i; };
+template <> struct is_int<unsigned int>{ int i; };
+template <> struct is_int<int>{ int i; };
+template <> struct is_int<unsigned long>{ int i; };
+template <> struct is_int<long>{ int i; };
+template <> struct is_int<wchar_t>{ int i; };
 
 int test()
 {
