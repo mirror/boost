@@ -303,20 +303,9 @@ public: // visitor interfaces
         // not meet the requirements of the Assignable concept. Thus,
         // variant is not Assignable.
         //
-        lhs_value = *static_cast<const T*>(rhs_storage_);
-        BOOST_VARIANT_AUX_RETURN_VOID;
-    }
-
-    template <typename T>
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
-    operator()(const T& lhs_value) const
-    {
-        // NOTE TO USER :
-        // Compile error here indicates one of variant's bounded types is top-
-        // level const, which does not meet the requirements of the Assignable
-        // concept. Thus, variant is not Assignable.
+        // Hint: Are any of the bounded types const-qualified?
         //
-        BOOST_STATIC_ASSERT(false);
+        lhs_value = *static_cast<const T*>(rhs_storage_);
         BOOST_VARIANT_AUX_RETURN_VOID;
     }
 
