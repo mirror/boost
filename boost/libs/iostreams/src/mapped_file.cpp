@@ -96,13 +96,13 @@ mapped_file_source::size_type mapped_file_source::size() const
 { return pimpl_->size_; }
 
 bool mapped_file_source::is_open() const
-{ return pimpl_ && pimpl_->handle_ != 0; }
+{ return !!pimpl_ && pimpl_->handle_ != 0; }
 
 void mapped_file_source::close() { pimpl_->close(); }
 
 mapped_file_source::operator mapped_file_source::safe_bool() const
 {
-    return pimpl_ && pimpl_->error_ == false ?
+    return !!pimpl_ && pimpl_->error_ == false ?
         &safe_bool_helper::x : 0;
 }
 
