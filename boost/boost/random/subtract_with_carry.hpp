@@ -77,8 +77,7 @@ public:
     for(unsigned int j = 0; j < long_lag; ++j)
       x[j] = gen() % modulus;
     carry = (x[long_lag-1] == 0);
-    // call fill() next time operator() is called
-    i = long_lag;
+    k = 0;
   }
 
   template<class It>
@@ -90,8 +89,7 @@ public:
     if(first == last && j < long_lag)
       throw std::invalid_argument("subtract_with_carry::seed");
     carry = (x[long_lag-1] == 0);
-    // call fill() next time operator() is called
-    i = long_lag;
+    k = 0;
    }
 
   result_type min() const { return min_value; }
@@ -99,11 +97,24 @@ public:
 
   result_type operator()()
   {
-    if(i >= long_lag)
-      fill();
-    return x[i++];
+    int short_index = k - short_lag;
+    if(short_index < 0)
+      short_index += long_lag;
+    IntType delta = x[short_index] - x[k] - carry;
+    if(delta < 0) {
+      delta += modulus;
+      carry = 1;
+    } else {
+      carry = 0;
+    }
+    x[k] = delta;
+    ++k;
+    if(k >= long_lag)
+      k = 0;
+    return delta;
   }
 
+public:
   static bool validation(result_type x) { return x == val; }
   
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
@@ -112,9 +123,9 @@ public:
   operator<<(std::basic_ostream<CharT,Traits>& os,
              const subtract_with_carry& f)
   {
-    os << f.i << " " << f.carry << " ";
-    for(unsigned int i = 0; i < long_lag; ++i)
-      os << f.x[i] << " ";
+    for(unsigned int j = 0; j < long_lag; ++j)
+      os << f.compute(j) << " ";
+    os << f.carry << " ";
     return os;
   }
 
@@ -122,29 +133,58 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, subtract_with_carry& f)
   {
-    is >> f.i >> std::ws >> f.carry >> std::ws;
-    for(unsigned int i = 0; i < long_lag; ++i)
-      is >> f.x[i] >> std::ws;
+    for(unsigned int j = 0; j < long_lag; ++j)
+      is >> f.x[j] >> std::ws;
+    is >> f.carry >> std::ws;
+    f.k = 0;
     return is;
   }
 
   friend bool operator==(const subtract_with_carry& x, const subtract_with_carry& y)
-  { return x.i == y.i && std::equal(x.x, x.x+long_lag, y.x); }
+  {
+    for(unsigned int j = 0; j < r; ++j)
+      if(x.compute(j) != y.compute(j))
+        return false;
+    return true;
+  }
+
   friend bool operator!=(const subtract_with_carry& x, const subtract_with_carry& y)
   { return !(x == y); }
 #else
   // Use a member function; Streamable concept not supported.
   bool operator==(const subtract_with_carry& rhs) const
-  { return i == rhs.i && std::equal(x, x+long_lag, rhs.x); }
+  {
+    for(unsigned int j = 0; j < r; ++j)
+      if(compute(j) != rhs.compute(j))
+        return false;
+    return true;
+  }
+
   bool operator!=(const subtract_with_carry& rhs) const
   { return !(*this == rhs); }
 #endif
 
 private:
-  void fill();
-  unsigned int i;
-  unsigned int carry;
+  // returns x(i-r+index), where index is in 0..r-1
+  IntType compute(unsigned int index) const;
+
+  // state representation; next output (state) is x(i)
+  //   x[0]  ... x[k] x[k+1] ... x[long_lag-1]     represents
+  //  x(i-k) ... x(i) x(i+1) ... x(i-k+long_lag-1)
+  // speed: base: 20-25 nsec
+  // ranlux_4: 230 nsec, ranlux_7: 430 nsec, ranlux_14: 810 nsec
+  // This state representation makes operator== and save/restore more
+  // difficult, because we've already computed "too much" and thus
+  // have to undo some steps to get at x(i-r) etc.
+
+  // state representation: next output (state) is x(i)
+  //   x[0]  ... x[k] x[k+1]          ... x[long_lag-1]     represents
+  //  x(i-k) ... x(i) x(i-long_lag+1) ... x(i-k-1)
+  // speed: base 28 nsec
+  // ranlux_4: 370 nsec, ranlux_7: 688 nsec, ranlux_14: 1343 nsec
   IntType x[long_lag];
+  unsigned int k;
+  unsigned int carry;
 };
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
@@ -164,32 +204,9 @@ const unsigned int subtract_with_carry<IntType, m, s, r, val>::short_lag;
 #endif
 
 template<class IntType, IntType m, unsigned int s, unsigned int r, IntType val>
-void subtract_with_carry<IntType, m, s, r, val>::fill()
+IntType subtract_with_carry<IntType, m, s, r, val>::compute(unsigned int index) const
 {
-  // two loops to avoid costly modulo operations
-  {  // extra scope for MSVC brokenness w.r.t. for scope
-  for(unsigned int j = 0; j < short_lag; ++j) {
-    IntType delta = x[j+(long_lag-short_lag)] - x[j] - carry;
-    if(delta < 0) {
-      delta += modulus;
-      carry = 1;
-    } else {
-      carry = 0;
-    }
-    x[j] = delta;
-  }
-  }
-  for(unsigned int j = short_lag; j < long_lag; ++j) {
-    IntType delta = x[j-short_lag] - x[j] - carry;
-    if(delta < 0) {
-      delta += modulus;
-      carry = 1;
-    } else {
-      carry = 0;
-    }
-    x[j] = delta;
-  }
-  i = 0;
+  return x[(k+index) % long_lag];
 }
 
 
@@ -236,8 +253,7 @@ public:
     for(unsigned int j = 0; j < long_lag; ++j)
       x[j] = fmod((gen() & mask) / _modulus, RealType(1.0));
     carry = (x[long_lag-1] == 0) / _modulus;
-    // call fill() next time operator() is called
-    i = long_lag;
+    k = 0;
   }
 
   template<class It>
@@ -254,8 +270,7 @@ public:
     if(first == last && j < long_lag)
       throw std::invalid_argument("subtract_with_carry::seed");
     carry = (x[long_lag-1] == 0) / _modulus;
-    // call fill() next time operator() is called
-    i = long_lag;
+    k = 0;
    }
 
   result_type min() const { return result_type(0.0); }
@@ -263,9 +278,21 @@ public:
 
   result_type operator()()
   {
-    if(i >= long_lag)
-      fill();
-    return x[i++];
+    int short_index = k - short_lag;
+    if(short_index < 0)
+      short_index += long_lag;
+    RealType delta = x[short_index] - x[k] - carry;
+    if(delta < 0) {
+      delta += RealType(1.0);
+      carry = RealType(1.0)/_modulus;
+    } else {
+      carry = 0;
+    }
+    x[k] = delta;
+    ++k;
+    if(k >= long_lag)
+      k = 0;
+    return delta;
   }
 
   static bool validation(result_type x) { return x == val/std::pow(2.0, word_size); }
@@ -281,9 +308,9 @@ public:
     using std::pow;
 #endif
     std::ios_base::fmtflags oldflags = os.flags(os.dec | os.fixed | os.left); 
-    os << f.i << " " << (f.carry * f._modulus) << " ";
-    for(unsigned int i = 0; i < long_lag; ++i)
-      os << (f.x[i] * f._modulus) << " ";
+    for(unsigned int j = 0; j < long_lag; ++j)
+      os << (f.compute(j) * f._modulus) << " ";
+    os << (f.carry * f._modulus);
     os.flags(oldflags);
     return os;
   }
@@ -293,32 +320,45 @@ public:
   operator>>(std::basic_istream<CharT,Traits>& is, subtract_with_carry_01& f)
   {
     RealType value;
-    is >> f.i >> std::ws >> value >> std::ws;
-    f.carry = value / f._modulus;
-    for(unsigned int i = 0; i < long_lag; ++i) {
+    for(unsigned int j = 0; j < long_lag; ++j) {
       is >> value >> std::ws;
-      f.x[i] = value / f._modulus;
+      f.x[j] = value / f._modulus;
     }
+    is >> value >> std::ws;
+    f.carry = value / f._modulus;
+    f.k = 0;
     return is;
   }
 
   friend bool operator==(const subtract_with_carry_01& x,
                          const subtract_with_carry_01& y)
-  { return x.i == y.i && std::equal(x.x, x.x+long_lag, y.x); }
+  {
+    for(unsigned int j = 0; j < r; ++j)
+      if(x.compute(j) != y.compute(j))
+        return false;
+    return true;
+  }
+
   friend bool operator!=(const subtract_with_carry_01& x,
                          const subtract_with_carry_01& y)
   { return !(x == y); }
 #else
   // Use a member function; Streamable concept not supported.
   bool operator==(const subtract_with_carry_01& rhs) const
-  { return i == rhs.i && std::equal(x, x+long_lag, rhs.x); }
+  { 
+    for(unsigned int j = 0; j < r; ++j)
+      if(compute(j) != rhs.compute(j))
+        return false;
+    return true;
+  }
+
   bool operator!=(const subtract_with_carry_01& rhs) const
   { return !(*this == rhs); }
 #endif
 
 private:
-  void fill();
-  unsigned int i;
+  RealType compute(unsigned int index) const;
+  unsigned int k;
   RealType carry;
   RealType x[long_lag];
   RealType _modulus;
@@ -337,32 +377,9 @@ const unsigned int subtract_with_carry_01<RealType, w, s, r, val>::short_lag;
 #endif
 
 template<class RealType, int w, unsigned int s, unsigned int r, int val>
-void subtract_with_carry_01<RealType, w, s, r, val>::fill()
+RealType subtract_with_carry_01<RealType, w, s, r, val>::compute(unsigned int index) const
 {
-  // two loops to avoid costly modulo operations
-  {  // extra scope for MSVC brokenness w.r.t. for scope
-  for(unsigned int j = 0; j < short_lag; ++j) {
-    RealType delta = x[j+(long_lag-short_lag)] - x[j] - carry;
-    if(delta < 0) {
-      delta += RealType(1.0);
-      carry = RealType(1.0)/_modulus;
-    } else {
-      carry = RealType(0);
-    }
-    x[j] = delta;
-  }
-  }
-  for(unsigned int j = short_lag; j < long_lag; ++j) {
-    RealType delta = x[j-short_lag] - x[j] - carry;
-    if(delta < 0) {
-      delta += RealType(1.0);
-      carry = RealType(1.0)/_modulus;
-    } else {
-      carry = RealType(0);
-    }
-    x[j] = delta;
-  }
-  i = 0;
+  return x[(k+index) % long_lag];
 }
 
 
