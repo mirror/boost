@@ -26,6 +26,8 @@
 #   define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
 
+#define BOOST_HAS_THREADS
+
 
 #define BOOST_COMPILER "Metrowerks CodeWarrior C++ version " BOOST_STRINGIZE(__MWERKS__)
 
