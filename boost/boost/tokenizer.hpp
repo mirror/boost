@@ -53,7 +53,11 @@ namespace boost {
       :first_(first), last_(last), f_(f) { }
 	
 	template<class Container>
-	tokenizer(const Container& c,const TokenizerFunc& f = TokenizerFunc())
+	tokenizer(const Container& c)
+	: first_(c.begin()), last_(c.end()), f_() { }
+
+	template<class Container>
+	tokenizer(const Container& c,const TokenizerFunc& f)
 	: first_(c.begin()), last_(c.end()), f_(f) { }
 
 	void assign(Iterator first, Iterator last){
