@@ -21,6 +21,14 @@
 #     define BOOST_HAS_STDINT_H
 #  endif
 
+//
+// BSD runtime has pthreads, sched_yield and gettimeofday,
+// of these only pthreads are advertised in <unistd.h>, so set the 
+// other options explicitly:
+//
+#  define BOOST_HAS_SCHED_YIELD
+#  define BOOST_HAS_GETTIMEOFDAY
+
 #  ifndef __APPLE_CC__
 
 // GCC strange "ignore std" mode works better if you pretend everything
@@ -30,3 +38,4 @@
 #  endif
 
 #endif
+
