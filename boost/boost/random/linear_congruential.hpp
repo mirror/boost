@@ -28,6 +28,7 @@
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/const_mod.hpp>
+#include <boost/detail/workaround.hpp>
 
 namespace boost {
 namespace random {
@@ -133,6 +134,24 @@ private:
   IntType _x;
 };
 
+// probably needs the "no native streams" caveat for STLPort
+#if !defined(__SGI_STL_PORT) && BOOST_WORKAROUND(__GNUC__, == 2)
+template<class IntType, IntType a, IntType c, IntType m, IntType val>
+std::ostream&
+operator<<(std::ostream& os,
+           const linear_congruential<IntType,a,c,m,val>& lcg)
+{
+    return os << lcg._x;
+}
+
+template<class IntType, IntType a, IntType c, IntType m, IntType val>
+std::istream&
+operator>>(std::istream& is,
+           linear_congruential<IntType,a,c,m,val>& lcg)
+{
+    return is >> lcg._x;
+}
+#else 
 template<class CharT, class Traits, class IntType, IntType a, IntType c, IntType m, IntType val>
 std::basic_ostream<CharT,Traits>&
 operator<<(std::basic_ostream<CharT,Traits>& os,
@@ -148,6 +167,7 @@ operator>>(std::basic_istream<CharT,Traits>& is,
 {
     return is >> lcg._x;
 }
+#endif
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 //  A definition is required even for integral static constants
