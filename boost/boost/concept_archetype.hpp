@@ -526,10 +526,30 @@ namespace boost {
   public:
     typedef std::forward_iterator_tag iterator_category;
     typedef T value_type;
-    typedef T& reference;
+    typedef const T& reference;
     typedef T* pointer;
     typedef std::ptrdiff_t difference_type;
     forward_iterator_archetype() { }
+    self& operator=(const self&) { return *this;  }
+    bool operator==(const self&) const { return true; }
+    bool operator!=(const self&) const { return true; }
+    reference operator*() const { return static_object<T>::get(); }
+    self& operator++() { return *this; }
+    self operator++(int) { return *this; }
+  };
+
+  template <class T>
+  class mutable_forward_iterator_archetype
+  {
+  public:
+    typedef mutable_forward_iterator_archetype self;
+  public:
+    typedef std::forward_iterator_tag iterator_category;
+    typedef T value_type;
+    typedef T& reference;
+    typedef T* pointer;
+    typedef std::ptrdiff_t difference_type;
+    mutable_forward_iterator_archetype() { }
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
@@ -546,10 +566,32 @@ namespace boost {
   public:
     typedef std::bidirectional_iterator_tag iterator_category;
     typedef T value_type;
-    typedef T& reference;
+    typedef const T& reference;
     typedef T* pointer;
     typedef std::ptrdiff_t difference_type;
     bidirectional_iterator_archetype() { }
+    self& operator=(const self&) { return *this;  }
+    bool operator==(const self&) const { return true; }
+    bool operator!=(const self&) const { return true; }
+    reference operator*() const { return static_object<T>::get(); }
+    self& operator++() { return *this; }
+    self operator++(int) { return *this; }
+    self& operator--() { return *this; }
+    self operator--(int) { return *this; }
+  };
+
+  template <class T>
+  class mutable_bidirectional_iterator_archetype
+  {
+  public:
+    typedef mutable_bidirectional_iterator_archetype self;
+  public:
+    typedef std::bidirectional_iterator_tag iterator_category;
+    typedef T value_type;
+    typedef T& reference;
+    typedef T* pointer;
+    typedef std::ptrdiff_t difference_type;
+    mutable_bidirectional_iterator_archetype() { }
     self& operator=(const self&) { return *this;  }
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
@@ -568,7 +610,7 @@ namespace boost {
   public:
     typedef std::random_access_iterator_tag iterator_category;
     typedef T value_type;
-    typedef T& reference;
+    typedef const T& reference;
     typedef T* pointer;
     typedef std::ptrdiff_t difference_type;
     random_access_iterator_archetype() { }
@@ -580,14 +622,14 @@ namespace boost {
     self operator++(int) { return *this; }
     self& operator--() { return *this; }
     self operator--(int) { return *this; }
-    reference operator[](difference_type) 
+    reference operator[](difference_type) const
       { return static_object<T>::get(); }
     self& operator+=(difference_type) { return *this; }
     self& operator-=(difference_type) { return *this; }
     difference_type operator-(const self&) const
       { return difference_type(); }
-    self operator+(difference_type) { return *this; }
-    self operator-(difference_type) { return *this; }
+    self operator+(difference_type) const { return *this; }
+    self operator-(difference_type) const { return *this; }
     bool operator<(const self&) { return true; }
     bool operator<=(const self&) { return true; }
     bool operator>(const self&) { return true; }
@@ -597,6 +639,47 @@ namespace boost {
   random_access_iterator_archetype<T> 
   operator+(typename random_access_iterator_archetype<T>::difference_type, 
             const random_access_iterator_archetype<T>& x) 
+    { return x; }
+
+
+  template <class T>
+  class mutable_random_access_iterator_archetype
+  {
+  public:
+    typedef mutable_random_access_iterator_archetype self;
+  public:
+    typedef std::random_access_iterator_tag iterator_category;
+    typedef T value_type;
+    typedef T& reference;
+    typedef T* pointer;
+    typedef std::ptrdiff_t difference_type;
+    mutable_random_access_iterator_archetype() { }
+    self& operator=(const self&) { return *this;  }
+    bool operator==(const self&) const { return true; }
+    bool operator!=(const self&) const { return true; }
+    reference operator*() const { return static_object<T>::get(); }
+    self& operator++() { return *this; }
+    self operator++(int) { return *this; }
+    self& operator--() { return *this; }
+    self operator--(int) { return *this; }
+    reference operator[](difference_type) const
+      { return static_object<T>::get(); }
+    self& operator+=(difference_type) { return *this; }
+    self& operator-=(difference_type) { return *this; }
+    difference_type operator-(const self&) const
+      { return difference_type(); }
+    self operator+(difference_type) const { return *this; }
+    self operator-(difference_type) const { return *this; }
+    bool operator<(const self&) { return true; }
+    bool operator<=(const self&) { return true; }
+    bool operator>(const self&) { return true; }
+    bool operator>=(const self&) { return true; }
+  };
+  template <class T>
+  mutable_random_access_iterator_archetype<T> 
+  operator+
+    (typename mutable_random_access_iterator_archetype<T>::difference_type, 
+     const mutable_random_access_iterator_archetype<T>& x) 
     { return x; }
 
 } // namespace boost
