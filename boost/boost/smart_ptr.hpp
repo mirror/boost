@@ -9,6 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  21 May 01  operator= fails if operand transitively owned by *this, as in a
+//             linked list (report by Ken Johnson, fix by Beman Dawes)
 //  21 Jan 01  Suppress some useless warnings with MSVC (David Abrahams)
 //  19 Oct 00  Make shared_ptr ctor from auto_ptr explicit. (Robert Vugts) 
 //  24 Jul 00  Change throw() to // never throws.  See lib guidelines
@@ -251,9 +253,11 @@ template<typename T> class shared_ptr {
 
    void share(T* rpx, long* rpn) {
       if (pn != rpn) { // Q: why not px != rpx? A: fails when both == 0
+         ++*rpn; // done before dispose() in case rpn transitively
+                 // dependent on *this (bug reported by Ken Johnson)
          dispose();
          px = rpx;
-         ++*(pn = rpn);
+         pn = rpn;
       }
    } // share
 };  // shared_ptr
@@ -288,9 +292,11 @@ template<typename T> class shared_array {
 
    shared_array& operator=(const shared_array& r) {
       if (pn != r.pn) { // Q: why not px != r.px? A: fails when both px == 0
+         ++*r.pn; // done before dispose() in case r.pn transitively
+                  // dependent on *this (bug reported by Ken Johnson)
          dispose();
          px = r.px;
-         ++*(pn = r.pn);
+         pn = r.pn;
       }
       return *this;
    } // operator=
