@@ -133,6 +133,10 @@ namespace boost { namespace program_options { namespace detail {
         get();
     }
 
+    template<>
+    bool
+    basic_config_file_iterator<wchar_t>::getline(std::string& s);
+
     template<class charT>
     bool
     basic_config_file_iterator<charT>::getline(std::string& s)
@@ -140,9 +144,7 @@ namespace boost { namespace program_options { namespace detail {
         return std::getline(*is, s);
     }
 
-    template<>
-    bool
-    basic_config_file_iterator<wchar_t>::getline(std::string& s);
+    
 
 }}}
 
