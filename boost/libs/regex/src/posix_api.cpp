@@ -43,12 +43,19 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
    if(expression->re_magic != magic_value)
    {
       expression->guts = 0;
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
       expression->guts = new regex();
+#ifndef BOOST_NO_EXCEPTIONS
       } catch(...)
       {
          return REG_ESPACE;
       }
+#else
+      if(0 == expression->guts)
+         return REG_E_MEMORY;
+#endif
    }
    // set default flags:
    boost::uint_fast32_t flags = (f & REG_EXTENDED) ? regbase::extended : regbase::basic;
@@ -77,15 +84,19 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char
 
    int result;
 
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
       expression->re_magic = magic_value;
       static_cast<regex*>(expression->guts)->set_expression(ptr, p2, flags);
       expression->re_nsub = static_cast<regex*>(expression->guts)->mark_count() - 1;
       result = static_cast<regex*>(expression->guts)->error_code();
+#ifndef BOOST_NO_EXCEPTIONS
    } catch(...)
    {
       result = REG_E_UNKNOWN;
    }
+#endif
    if(result)
       regfreeA(expression);
    return result;
@@ -174,17 +185,21 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecA(const regex_tA* expression, cons
       end = buf + std::strlen(buf);
    }
 
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    if(expression->re_magic == magic_value)
    {
       result = regex_search(start, end, m, *static_cast<regex*>(expression->guts), flags);
    }
    else
       return result;
+#ifndef BOOST_NO_EXCEPTIONS
    } catch(...)
    {
       return REG_E_UNKNOWN;
    }
+#endif
 
    if(result)
    {

@@ -51,12 +51,19 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompW(regex_tW* expression, const wcha
    if(expression->re_magic != wmagic_value)
    {
       expression->guts = 0;
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
       expression->guts = new wregex();
+#ifndef BOOST_NO_EXCEPTIONS
       } catch(...)
       {
          return REG_ESPACE;
       }
+#else
+      if(0 == expression->guts)
+         return REG_E_MEMORY;
+#endif
    }
    // set default flags:
    boost::uint_fast32_t flags = (f & REG_EXTENDED) ? regbase::extended : regbase::basic;
@@ -85,15 +92,19 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompW(regex_tW* expression, const wcha
 
    int result;
 
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
       expression->re_magic = wmagic_value;
       static_cast<wregex*>(expression->guts)->set_expression(ptr, p2, flags);
       expression->re_nsub = static_cast<wregex*>(expression->guts)->mark_count() - 1;
       result = static_cast<wregex*>(expression->guts)->error_code();
+#ifndef BOOST_NO_EXCEPTIONS
    } catch(...)
    {
       result = REG_E_UNKNOWN;
    }
+#endif
    if(result)
       regfreeW(expression);
    return result;
@@ -182,18 +193,21 @@ BOOST_REGEX_DECL int BOOST_REGEX_CCALL regexecW(const regex_tW* expression, cons
       end = buf + std::wcslen(buf);
    }
 
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    if(expression->re_magic == wmagic_value)
    {
       result = regex_search(start, end, m, *static_cast<wregex*>(expression->guts), flags);
    }
    else
       return result;
+#ifndef BOOST_NO_EXCEPTIONS
    } catch(...)
    {
       return REG_E_UNKNOWN;
    }
-
+#endif
    if(result)
    {
       // extract what matched:

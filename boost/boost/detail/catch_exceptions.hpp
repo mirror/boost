@@ -60,10 +60,13 @@ namespace boost
     int result = 0;               // quiet compiler warnings
     bool exception_thrown = true; // avoid setting result for each excptn type
 
+#ifndef BOOST_NO_EXCEPTIONS
     try
     {
+#endif
       result = function_object();
       exception_thrown = false;
+#ifndef BOOST_NO_EXCEPTIONS
     }
 
     //  As a result of hard experience with strangely interleaved output
@@ -120,6 +123,7 @@ namespace boost
 
     catch ( ... )
       { detail::report_exception( out, "unknown exception", "" ); }
+#endif // BOOST_NO_EXCEPTIONS
 
     if ( exception_thrown ) result = boost::exit_exception_failure;
 

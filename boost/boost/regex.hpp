@@ -794,7 +794,10 @@ int do_toi(iterator i, iterator j, char c, int radix)
    std::string s(i, j);
    char* p;
    int result = std::strtol(s.c_str(), &p, radix);
+#ifndef BOOST_NO_EXCEPTIONS
    if(*p)throw bad_pattern("Bad sub-expression");
+#endif
+   BOOST_REGEX_NOEH_ASSERT(0 == *p)
    return result;
 }
 
@@ -819,7 +822,10 @@ sub_match<iterator>::operator int()const
 {
    iterator i = first;
    iterator j = second;
+#ifndef BOOST_NO_EXCEPTIONS
    if(i == j)throw bad_pattern("Bad sub-expression");
+#endif
+   BOOST_REGEX_NOEH_ASSERT(i != j)
    int neg = 1;
    if((i != j) && (*i == '-'))
    {
@@ -827,7 +833,10 @@ sub_match<iterator>::operator int()const
       ++i;
    }
    neg *= re_detail::do_toi(i, j, *i);
+#ifndef BOOST_NO_EXCEPTIONS
    if(i != j)throw bad_pattern("Bad sub-expression");
+#endif
+   BOOST_REGEX_NOEH_ASSERT(i == j)
    return neg;
 }
 template <class iterator>
@@ -835,8 +844,11 @@ sub_match<iterator>::operator unsigned int()const
 {
    iterator i = first;
    iterator j = second;
+#ifndef BOOST_NO_EXCEPTIONS
    if(i == j)
       throw bad_pattern("Bad sub-expression");
+#endif
+   BOOST_REGEX_NOEH_ASSERT(i != j)
    return re_detail::do_toi(i, j, *first);
 }
 #endif
@@ -1063,27 +1075,33 @@ template <class iterator, class Allocator>
 match_results_base<iterator, Allocator>::match_results_base(const Allocator& a)
 {
    ref = (c_reference*)c_alloc(a).allocate(sizeof(sub_match<iterator>) + sizeof(c_reference));
+#ifndef BOOST_NO_EXCEPTIONS
    try
    {
+#endif
       new (ref) c_reference(a);
       ref->cmatches = 1;
       ref->count = 1;
       // construct the sub_match<iterator>:
+#ifndef BOOST_NO_EXCEPTIONS
       try
       {
+#endif
          new ((sub_match<iterator>*)(ref+1)) sub_match<iterator>();
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
-      { 
-         ::boost::re_detail::pointer_destroy(ref); 
-         throw; 
+      {
+         ::boost::re_detail::pointer_destroy(ref);
+         throw;
       }
    }
    catch(...)
-   { 
-      c_alloc(a).deallocate((char*)(void*)ref, sizeof(sub_match<iterator>) + sizeof(c_reference)); 
-      throw; 
+   {
+      c_alloc(a).deallocate((char*)(void*)ref, sizeof(sub_match<iterator>) + sizeof(c_reference));
+      throw;
    }
+#endif
 }
 
 template <class iterator, class Allocator>
@@ -1148,25 +1166,30 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
    if(ref->cmatches != n)
    {
       c_reference* newref = (c_reference*)ref->allocate(sizeof(sub_match<iterator>) * n + sizeof(c_reference));
+#ifndef BOOST_NO_EXCEPTIONS
       try
       {
+#endif
          new (newref) c_reference(*ref);
          newref->count = 1;
          newref->cmatches = n;
          sub_match<iterator>* p1, *p2;
          p1 = (sub_match<iterator>*)(newref+1);
          p2 = p1 + newref->cmatches;
+#ifndef BOOST_NO_EXCEPTIONS
          try
          {
+#endif
             while(p1 != p2)
             {
                new (p1) sub_match<iterator>();
                ++p1;
             }
             m_free();
+#ifndef BOOST_NO_EXCEPTIONS
          }
          catch(...)
-         { 
+         {
             p2 = (sub_match<iterator>*)(newref+1);
             while(p2 != p1)
             {
@@ -1174,15 +1197,18 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
                ++p2;
             }
             ::boost::re_detail::pointer_destroy(ref);
-            throw; 
+            throw;
          }
+#endif
          ref = newref;
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
-      { 
-         ref->deallocate((char*)(void*)newref, sizeof(sub_match<iterator>) * n + sizeof(c_reference)); 
-         throw; 
+      {
+         ref->deallocate((char*)(void*)newref, sizeof(sub_match<iterator>) * n + sizeof(c_reference));
+         throw;
       }
+#endif
    }
 }
 
@@ -1192,20 +1218,25 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
    if(ref->cmatches != n)
    {
       c_reference* newref = (c_reference*)ref->allocate(sizeof(sub_match<iterator>) * n + sizeof(c_reference));;
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
          new (newref) c_reference(*ref);
          newref->count = 1;
          newref->cmatches = n;
          sub_match<iterator>* p1 = (sub_match<iterator>*)(newref+1);
          sub_match<iterator>* p2 = p1 + newref->cmatches;
+#ifndef BOOST_NO_EXCEPTIONS
          try
          {
+#endif
             while(p1 != p2)
             {
                new (p1) sub_match<iterator>(j);
                ++p1;
             }
             m_free();
+#ifndef BOOST_NO_EXCEPTIONS
          }
          catch(...)
          { 
@@ -1218,13 +1249,16 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
             ::boost::re_detail::pointer_destroy(ref);
             throw; 
          }
+#endif
          ref = newref;
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
       { 
          ref->deallocate((char*)(void*)newref, sizeof(sub_match<iterator>) * n + sizeof(c_reference)); 
          throw; 
       }
+#endif
    }
    else
    {
@@ -1298,19 +1332,24 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::cow()
    if(ref->count > 1)
    {
       c_reference* newref = (c_reference*)ref->allocate(sizeof(sub_match<iterator>) * ref->cmatches + sizeof(c_reference));
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
          new (newref) c_reference(*ref);
          newref->count = 1;
          sub_match<iterator>* p1 = (sub_match<iterator>*)(newref+1);
          sub_match<iterator>* p2 = p1 + newref->cmatches;
          sub_match<iterator>* p3 = (sub_match<iterator>*)(ref+1);
+#ifndef BOOST_NO_EXCEPTIONS
          try{
+#endif
             while(p1 != p2)
             {
                new (p1) sub_match<iterator>(*p3);
                ++p1;
                ++p3;
             }
+#ifndef BOOST_NO_EXCEPTIONS
          }
          catch(...)
          { 
@@ -1323,14 +1362,17 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::cow()
             ::boost::re_detail::pointer_destroy(ref);
             throw; 
          }
+#endif
       --(ref->count);
       ref = newref;
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
       { 
          ref->deallocate((char*)(void*)newref, sizeof(sub_match<iterator>) * ref->cmatches + sizeof(c_reference)); 
          throw; 
       }
+#endif
    }
 }
 
@@ -1418,19 +1460,24 @@ match_results<iterator, Allocator>::match_results(const match_results<iterator, 
       reinterpret_cast<typename re_detail::match_results_base<iterator, Allocator>::c_reference *>
          (m.ref->allocate(sizeof(sub_match<iterator>) * m.ref->cmatches +
                           sizeof(typename re_detail::match_results_base<iterator, Allocator>::c_reference)));
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
       new (this->ref) typename re_detail::match_results_base<iterator, Allocator>::c_reference(*m.ref);
       this->ref->count = 1;
       sub_match<iterator>* p1 = (sub_match<iterator>*)(this->ref+1);
       sub_match<iterator>* p2 = p1 + this->ref->cmatches;
       sub_match<iterator>* p3 = (sub_match<iterator>*)(m.ref+1);
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
          while(p1 != p2)
          {
             new (p1) sub_match<iterator>(*p3);
             ++p1;
             ++p3;
          }
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
       { 
@@ -1449,6 +1496,7 @@ match_results<iterator, Allocator>::match_results(const match_results<iterator, 
       m.ref->deallocate((char*)(void*)this->ref, sizeof(sub_match<iterator>) * m.ref->cmatches + sizeof(typename re_detail::match_results_base<iterator, Allocator>::c_reference));
       throw; 
    }
+#endif
 }
 
 template <class iterator, class Allocator>

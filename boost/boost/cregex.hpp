@@ -242,6 +242,7 @@ public:
    unsigned int SetExpression(const char* p, bool icase = false);
    unsigned int SetExpression(const std::string& s, bool icase = false){ return SetExpression(s.c_str(), icase); }
    std::string Expression()const;
+   unsigned int error_code()const;
    //
    // now matching operators:
    //

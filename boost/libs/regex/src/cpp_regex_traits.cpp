@@ -197,11 +197,15 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
    {
       pm = &BOOST_USE_FACET(std::messages<char>, l);
       cat = pm->open(regex_message_catalogue, l);
+#ifndef BOOST_NO_EXCEPTIONS
       if(cat < 0)
       {
          std::string m("Unable to open message catalog: ");
          throw std::runtime_error(m + regex_message_catalogue);
       }
+#else
+      BOOST_REGEX_NOEH_ASSERT(cat >= 0);
+#endif
    } 
 #endif
    std::memset(syntax_map, cpp_regex_traits<char>::syntax_char, 256);
@@ -296,14 +300,19 @@ cpp_regex_traits<char>::cpp_regex_traits()
 {
    pmd = new re_detail::message_data<char>(locale_inst, regex_message_cat);
    psyntax = pmd->syntax_map;
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
       lower_map = new char[char_set_size];
+      BOOST_REGEX_NOEH_ASSERT(lower_map)
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
       delete pmd;
       throw;
    }
+#endif
    for(unsigned int i = 0; i < char_set_size; ++i)
       lower_map[i] = static_cast<char>(i);
    pctype = &BOOST_USE_FACET(std::ctype<char>, locale_inst);
@@ -565,11 +574,15 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    if(regex_message_catalogue.size())
    {
       cat = msgs.open(regex_message_catalogue, l);
+#ifndef BOOST_NO_EXCEPTIONS
       if(cat < 0)
       {
          std::string m("Unable to open message catalog: ");
          throw std::runtime_error(m + regex_message_catalogue);
       }
+#else
+      BOOST_REGEX_NOEH_ASSERT(cat >= 0);
+#endif
    }
 #endif
    scoped_array<char> a;
@@ -770,14 +783,19 @@ cpp_regex_traits<wchar_t>::cpp_regex_traits()
 {
    pmd = new re_detail::message_data<wchar_t>(locale_inst, std::string(regex_message_cat));
    psyntax = pmd->syntax_;
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
       lower_map = new wchar_t[char_set_size];
+      BOOST_REGEX_NOEH_ASSERT(lower_map)
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
       delete pmd;
       throw;
    }
+#endif
    for(unsigned int i = 0; i < char_set_size; ++i)
       lower_map[i] = static_cast<wchar_t>(i);
    pctype = &BOOST_USE_FACET(std::ctype<wchar_t>, locale_inst);

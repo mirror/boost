@@ -58,11 +58,14 @@ void cpp_eh_tests(const reg_expression<C, T, A>& )
 #ifndef __GNUC__
    bool thrown = false;
    // try set_expression form first:
+#ifndef BOOST_NO_EXCEPTIONS
    try
    {
+#endif
       A a;
       reg_expression<C, T, A> e(a);
       e.set_expression(expression.c_str(), flags[2] | regbase::use_except);
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(const boost::bad_expression&)
    {
@@ -74,14 +77,18 @@ void cpp_eh_tests(const reg_expression<C, T, A>& )
       begin_error();
       cout << "Error: expected exception not thrown" << endl;
    }
+#endif
 
    // now try constructor form:
    thrown = false;
+#ifndef BOOST_NO_EXCEPTIONS
    try
+#endif
    {
       A a;
       reg_expression<C, T, A> e(expression.c_str(), flags[2] | regbase::use_except, a);
    }
+#ifndef BOOST_NO_EXCEPTIONS
    catch(const boost::bad_expression&)
    {
       thrown = true;
@@ -92,6 +99,7 @@ void cpp_eh_tests(const reg_expression<C, T, A>& )
       begin_error();
       cout << "Error: expected exception not thrown" << endl;
    }
+#endif
 #endif
 }
 
@@ -515,6 +523,16 @@ void cpp_hl_tests(RegEx& e, bool recurse = true)
    if(flags[4] & REG_MERGE)
       return;
 
+   if(e.error_code())
+   {
+      if(search_text != BOOST_RE_STR("!"))
+      {
+         begin_error();
+         cout << "Expression did not compile with class RegEx" << endl;
+      }
+      return;
+   }
+
    if(recurse)
    {
       // copy and assign test:
@@ -611,13 +629,16 @@ void run_tests()
       return;
 #endif
 #ifndef NO_CPP_TEST
+#ifndef BOOST_NO_EXCEPTIONS
    try
    {
+#endif
       unsigned int f = flags[2] & ~regbase::use_except;
       if(flags[0] & REG_ICASE)
          f |= regbase::icase;
       re_type e(expression.c_str(), f);
       cpp_tests(e, true);
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(const std::exception& e)
    {
@@ -634,17 +655,21 @@ void run_tests()
       begin_error();
       cout << "Unexpected exception thrown from C++ library" << endl;
    }
+#endif // BOOST_NO_EXCEPTIONS
 #endif
 
 #if !defined(TEST_UNICODE)
+#ifndef BOOST_NO_EXCEPTIONS
    try
    {
+#endif
       if(((flags[3] & match_partial) == 0) && (flags[2] == regbase::normal) && (has_nulls(search_text.begin(), search_text.end()) == false))
       {
          RegEx e;
          e.SetExpression(expression.c_str(), flags[0] & REG_ICASE);
          cpp_hl_tests(e, true);
       }
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(const std::exception& )
    {
@@ -659,6 +684,7 @@ void run_tests()
       begin_error();
       cout << "Unexpected exception thrown from RegEx::SetExpression" << endl;
    }
+#endif // BOOST_NO_EXCEPTIONS
 #endif
 
    if(flags[4] & (REG_NO_POSIX_TEST | REG_GREP | REG_MERGE | REG_MERGE_COPY))

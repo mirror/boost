@@ -199,14 +199,19 @@ void BOOST_REGEX_CALL re_init_classes()
    if(classes_count == 0)
    {
       re_cls_name = new std::string("xxxxxxxx");
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
          pclasses = new std::string[re_classes_max];
+         BOOST_REGEX_NOEH_ASSERT(pclasses)
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
       {
          delete re_cls_name;
          throw;
       }
+#endif
    }
    ++classes_count;
 }
@@ -243,14 +248,19 @@ void BOOST_REGEX_CALL re_init_collate()
    if(collate_count == 0)
    {
       re_coll_name = new std::string("xxxxxxxx");
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
          pcoll_names = new std::list<collate_name_t>();
+         BOOST_REGEX_NOEH_ASSERT(pcoll_names)
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
       {
          delete re_coll_name;
          throw;
       }
+#endif
    }
    ++collate_count;
 }
@@ -345,11 +355,15 @@ void BOOST_REGEX_CALL re_message_update()
       if(*boost::re_detail::c_traits_base::get_catalogue())
       {
          message_cat = catopen(boost::re_detail::c_traits_base::get_catalogue(), 0);
+#ifndef BOOST_NO_EXCEPTIONS
          if(message_cat == (nl_catd)-1)
          {
             std::string m("Unable to open message catalog: ");
             throw std::runtime_error(m + boost::re_detail::c_traits_base::get_catalogue());
          }
+#else
+         BOOST_REGEX_NOEH_ASSERT(message_cat != (nl_catd)-1);
+#endif
       }
 #endif
       for(int i = 0; i < boost::REG_E_UNKNOWN; ++i)
@@ -592,14 +606,19 @@ void BOOST_REGEX_CALL c_regex_traits<char>::init()
    if(entry_count == 0)
    {
       ctype_name = new std::string("xxxxxxxxxxxxxxxx");
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
          collate_name = new std::string("xxxxxxxxxxxxxxxx");
+         BOOST_REGEX_NOEH_ASSERT(collate_name)
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
       {
          delete ctype_name;
          throw;
       }
+#endif
    }
    re_message_init();
    re_init_classes();
@@ -763,14 +782,19 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::init()
    if(nlsw_count == 0)
    {
       wlocale_name = new std::string("xxxxxxxxxxxxxxxx");
+#ifndef BOOST_NO_EXCEPTIONS
       try{
+#endif
          syntax = new std::list<syntax_map_t>();
+         BOOST_REGEX_NOEH_ASSERT(syntax)
+#ifndef BOOST_NO_EXCEPTIONS
       }
       catch(...)
       {
          delete wlocale_name;
          throw;
       }
+#endif
    }
    ++nlsw_count;
 }

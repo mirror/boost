@@ -1167,8 +1167,10 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
    register re_detail::re_syntax_base* ptr = b;
    bool* pb = 0;
    b_alloc a(data.allocator());
+#ifndef BOOST_NO_EXCEPTIONS
    try
    {
+#endif
       pb = a.allocate(cbraces);
       for(unsigned i = 0; i < cbraces; ++i)
          pb[i] = false;
@@ -1232,6 +1234,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
       }
       a.deallocate(pb, cbraces);
       pb = 0;
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
@@ -1239,6 +1242,7 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_d
          a.deallocate(pb, cbraces);
       throw;
    }
+#endif
 }
 
 
@@ -2053,10 +2057,12 @@ void BOOST_REGEX_CALL reg_expression<charT, traits, Allocator>::fail(unsigned in
    if(err)
    {
       _flags |= regbase::failbit;
+#ifndef BOOST_NO_EXCEPTIONS
       if(_flags & regbase::use_except)
       {
          throw bad_expression(traits_inst.error_string(err));
       }
+#endif
    }
    else
       _flags &= ~regbase::failbit;

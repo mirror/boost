@@ -275,6 +275,35 @@ using std::distance;
 
 /*****************************************************************************
  *
+ *  Error Handling for exception free compilers:
+ *
+ ****************************************************************************/
+
+#ifdef BOOST_NO_EXCEPTIONS
+//
+// If there are no exceptions then we must report critical-errors
+// the only way we know how; by terminating.
+//
+#ifdef __BORLANDC__
+// <cstdio> seems not to make stderr usable with Borland:
+#include <stdio.h>
+#endif
+#  define BOOST_REGEX_NOEH_ASSERT(x)\
+if(0 == (x))\
+{\
+   std::fprintf(stderr, "Error: critical regex++ failure in \"%s\"", #x);\
+   std::abort();\
+}
+#else
+//
+// With exceptions then error handling is taken care of and
+// there is no need for these checks:
+//
+#  define BOOST_REGEX_NOEH_ASSERT(x)
+#endif
+
+/*****************************************************************************
+ *
  *  Debugging / tracing support:
  *
  ****************************************************************************/
@@ -516,6 +545,10 @@ namespace std{
    using ::fopen;
    using ::fclose;
    using ::FILE;
+#ifdef BOOST_NO_EXCEPTIONS
+   using ::fprintf;
+   using ::abort;
+#endif
 }
 
 #endif

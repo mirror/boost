@@ -178,6 +178,12 @@ unsigned int RegEx::SetExpression(const char* p, bool icase)
    return pdata->e.set_expression(p, f);
 }
 
+unsigned int RegEx::error_code()const
+{
+   return pdata->e.error_code();
+}
+
+
 std::string RegEx::Expression()const
 {
    BOOST_RE_GUARD_STACK

@@ -81,7 +81,11 @@ void mapfile::open(const char* file)
          CloseHandle(hfile);
          hmap = 0;
          hfile = 0;
+#ifndef BOOST_NO_EXCEPTIONS
          throw std::runtime_error("Unable to create file mapping.");
+#else
+         BOOST_REGEX_NOEH_ASSERT(hmap != INVALID_HANDLE_VALUE);
+#endif
       }
       _first = static_cast<const char*>(MapViewOfFile(hmap, FILE_MAP_READ, 0, 0, 0));
       if(_first == 0)
@@ -90,14 +94,22 @@ void mapfile::open(const char* file)
          CloseHandle(hfile);
          hmap = 0;
          hfile = 0;
+#ifndef BOOST_NO_EXCEPTIONS
          throw std::runtime_error("Unable to create file mapping.");
+#else
+         BOOST_REGEX_NOEH_ASSERT(_first != 0);
+#endif
       }
       _last = _first + GetFileSize(hfile, 0);
    }
    else
    {
       hfile = 0;
+#ifndef BOOST_NO_EXCEPTIONS
       throw std::runtime_error("Unable to open file.");
+#else
+      BOOST_REGEX_NOEH_ASSERT(hfile != INVALID_HANDLE_VALUE);
+#endif
    }
 }
 
@@ -285,7 +297,9 @@ void mapfile::open(const char* file)
 {
    BOOST_RE_GUARD_STACK
    hfile = std::fopen(file, "rb");
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    if(hfile != 0)
    {
       _size = get_file_length(hfile);
@@ -306,10 +320,16 @@ void mapfile::open(const char* file)
    }
    else
    {
+#ifndef BOOST_NO_EXCEPTIONS
        throw std::runtime_error("Unable to open file.");
+#else
+       BOOST_REGEX_NOEH_ASSERT(hfile != 0);
+#endif
    }
+#ifndef BOOST_NO_EXCEPTIONS
    }catch(...)
    { close(); throw; }
+#endif
 }
 
 void mapfile::close()
@@ -342,15 +362,21 @@ file_iterator::file_iterator()
    BOOST_RE_GUARD_STACK
    _root = _path = 0;
    ref = 0;
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    _root = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_path)
    ptr = _path;
    *_path = 0;
    *_root = 0;
    ref = new file_iterator_ref();
+   BOOST_REGEX_NOEH_ASSERT(ref)
    ref->hf = _fi_invalid_handle;
    ref->count = 1;
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
@@ -359,6 +385,7 @@ file_iterator::file_iterator()
       delete ref;
       throw;
    }
+#endif
 }
 
 file_iterator::file_iterator(const char* wild)
@@ -366,9 +393,13 @@ file_iterator::file_iterator(const char* wild)
    BOOST_RE_GUARD_STACK
    _root = _path = 0;
    ref = 0;
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    _root = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_path)
    std::strcpy(_root, wild);
    ptr = _root;
    while(*ptr)++ptr;
@@ -399,6 +430,7 @@ file_iterator::file_iterator(const char* wild)
    #endif
 
    ref = new file_iterator_ref();
+   BOOST_REGEX_NOEH_ASSERT(ref)
    ref->hf = FindFirstFileA(wild, &(ref->_data));
    ref->count = 1;
 
@@ -413,6 +445,7 @@ file_iterator::file_iterator(const char* wild)
       if(ref->_data.dwFileAttributes & _fi_dir)
          next();
    }
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
@@ -421,6 +454,7 @@ file_iterator::file_iterator(const char* wild)
       delete ref;
       throw;
    }
+#endif
 }
 
 file_iterator::file_iterator(const file_iterator& other)
@@ -428,13 +462,18 @@ file_iterator::file_iterator(const file_iterator& other)
    BOOST_RE_GUARD_STACK
    _root = _path = 0;
    ref = 0;
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    _root = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_path)
    std::strcpy(_root, other._root);
    std::strcpy(_path, other._path);
    ptr = _path + (other.ptr - other._path);
    ref = other.ref;
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
@@ -442,6 +481,7 @@ file_iterator::file_iterator(const file_iterator& other)
       delete[] _path;
       throw;
    }
+#endif
    ++(ref->count);
 }
 
@@ -517,15 +557,21 @@ directory_iterator::directory_iterator()
    BOOST_RE_GUARD_STACK
    _root = _path = 0;
    ref = 0;
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    _root = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_path)
    ptr = _path;
    *_path = 0;
    *_root = 0;
    ref = new file_iterator_ref();
+   BOOST_REGEX_NOEH_ASSERT(ref)
    ref->hf = _fi_invalid_handle;
    ref->count = 1;
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
@@ -534,6 +580,7 @@ directory_iterator::directory_iterator()
       delete ref;
       throw;
    }
+#endif
 }
 
 directory_iterator::directory_iterator(const char* wild)
@@ -541,9 +588,13 @@ directory_iterator::directory_iterator(const char* wild)
    BOOST_RE_GUARD_STACK
    _root = _path = 0;
    ref = 0;
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    _root = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_path)
    std::strcpy(_root, wild);
    ptr = _root;
    while(*ptr)++ptr;
@@ -573,6 +624,7 @@ directory_iterator::directory_iterator(const char* wild)
    }
    #endif
    ref = new file_iterator_ref();
+   BOOST_REGEX_NOEH_ASSERT(ref)
    ref->count = 1;
    ref->hf = FindFirstFileA(wild, &(ref->_data));
    if(ref->hf == _fi_invalid_handle)
@@ -586,6 +638,7 @@ directory_iterator::directory_iterator(const char* wild)
       if(((ref->_data.dwFileAttributes & _fi_dir) == 0) || (std::strcmp(ref->_data.cFileName, ".") == 0) || (std::strcmp(ref->_data.cFileName, "..") == 0))
          next();
    }
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
@@ -594,6 +647,7 @@ directory_iterator::directory_iterator(const char* wild)
       delete ref;
       throw;
    }
+#endif
 }
 
 directory_iterator::~directory_iterator()
@@ -614,13 +668,18 @@ directory_iterator::directory_iterator(const directory_iterator& other)
    BOOST_RE_GUARD_STACK
    _root = _path = 0;
    ref = 0;
+#ifndef BOOST_NO_EXCEPTIONS
    try{
+#endif
    _root = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_root)
    _path = new char[MAX_PATH];
+   BOOST_REGEX_NOEH_ASSERT(_path)
    std::strcpy(_root, other._root);
    std::strcpy(_path, other._path);
    ptr = _path + (other.ptr - other._path);
    ref = other.ref;
+#ifndef BOOST_NO_EXCEPTIONS
    }
    catch(...)
    {
@@ -628,6 +687,7 @@ directory_iterator::directory_iterator(const directory_iterator& other)
       delete[] _path;
       throw;
    }
+#endif
    ++(ref->count);
 }
 
