@@ -40,9 +40,13 @@
 //
 //  Note to implementors: if you write a platform-specific lightweight_mutex
 //  for a platform that supports pthreads, be sure to test its performance
-//  against the pthreads-based version using smart_ptr_timing_test.cpp and
-//  smart_ptr_mt_test.cpp. Custom versions are usually not worth the trouble
+//  against the pthreads-based version using shared_ptr_timing_test.cpp and
+//  shared_ptr_mt_test.cpp. Custom versions are usually not worth the trouble
 //  _unless_ the performance gains are substantial.
+//
+//  Be sure to compare against a "real" pthreads library;
+//  shared_ptr_timing_test.cpp will compile succesfully with a stub do-nothing
+//  pthreads library, since it doesn't create any threads.
 //
 
 #ifndef BOOST_HAS_THREADS
@@ -57,6 +61,8 @@
 #  include <boost/detail/lwm_win32.hpp>
 #elif defined(__sgi)
 #  include <boost/detail/lwm_irix.hpp>
+#elif defined(__GLIBCPP__)
+#  include <boost/detail/lwm_gcc.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
 #  define BOOST_LWM_USE_PTHREADS
 #  include <boost/detail/lwm_pthreads.hpp>

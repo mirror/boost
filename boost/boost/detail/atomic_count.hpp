@@ -97,6 +97,8 @@ typedef long atomic_count;
 #  include <boost/detail/atomic_count_pthreads.hpp>
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__)
 #  include <boost/detail/atomic_count_win32.hpp>
+#elif defined(__GLIBCPP__)
+#  include <boost/detail/atomic_count_gcc.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
 #  define BOOST_AC_USE_PTHREADS
 #  include <boost/detail/atomic_count_pthreads.hpp>

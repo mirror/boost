@@ -1,14 +1,15 @@
-#ifndef BOOST_DETAIL_LWM_LINUX_HPP_INCLUDED
-#define BOOST_DETAIL_LWM_LINUX_HPP_INCLUDED
-
-#if _MSC_VER >= 1020
-#pragma once
-#endif
+#ifndef BOOST_DETAIL_LWM_GCC_HPP_INCLUDED
+#define BOOST_DETAIL_LWM_GCC_HPP_INCLUDED
 
 //
-//  boost/detail/lwm_linux.hpp
+//  boost/detail/lwm_gcc.hpp
+//
+//  lightweight_mutex for GNU libstdc++ v3
+//
+//  http://gcc.gnu.org/onlinedocs/porting/Thread-safety.html
 //
 //  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2002 Lars Gullik Bjønnes <larsbj@lyx.org>
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -16,17 +17,7 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
-//
-//  This implementation uses <asm/atomic.h>. This is a kernel header;
-//  using kernel headers in a user program may cause a number of problems,
-//  and not all flavors of Linux provide the atomic instructions.
-//
-//  This file is only provided because the performance of this implementation
-//  is about 3.5 times higher than the pthreads version. Use at your own risk
-//  (by defining BOOST_USE_ASM_ATOMIC_H.)
-//
-
-#include <asm/atomic.h>
+#include <bits/atomicity.h>
 #include <sched.h>
 
 namespace boost
@@ -39,17 +30,15 @@ class lightweight_mutex
 {
 private:
 
-    atomic_t a_;
+    _Atomic_word a_;
 
     lightweight_mutex(lightweight_mutex const &);
     lightweight_mutex & operator=(lightweight_mutex const &);
 
 public:
 
-    lightweight_mutex()
+    lightweight_mutex(): a_(1)
     {
-        atomic_t a = ATOMIC_INIT(1);
-        a_ = a;
     }
 
     class scoped_lock;
@@ -68,16 +57,16 @@ public:
 
         explicit scoped_lock(lightweight_mutex & m): m_(m)
         {
-            while( !atomic_dec_and_test(&m_.a_) )
+            while( !__exchange_and_add(&m_.a_, -1) )
             {
-                atomic_inc(&m_.a_);
+                __atomic_add(&m_.a_, 1);
                 sched_yield();
             }
         }
 
         ~scoped_lock()
         {
-            atomic_inc(&m_.a_);
+            __atomic_add(&m_.a_, 1);
         }
     };
 };
@@ -86,4 +75,4 @@ public:
 
 } // namespace boost
 
-#endif // #ifndef BOOST_DETAIL_LWM_LINUX_HPP_INCLUDED
+#endif // #ifndef BOOST_DETAIL_LWM_GCC_HPP_INCLUDED
