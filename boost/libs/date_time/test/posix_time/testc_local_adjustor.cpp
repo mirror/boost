@@ -35,5 +35,5 @@ main()
   std::cout << "A difference of: " << to_simple_string(td2)
             << std::endl;
 
-  return 0;
+  return printTestStats();
 }
