@@ -115,9 +115,9 @@ namespace boost { namespace detail {
   template <class T> struct digit_traits
   {
       enum {
-          digits = digit_traits_select<
+          digits = digit_traits_select<(
                 std::numeric_limits<T>::is_specialized
-          >::template traits<T>::digits
+              )>::template traits<T>::digits
       };
   };
 #endif  
