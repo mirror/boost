@@ -8,8 +8,8 @@
 
 /*
 
-  This file verifies that the boost::class_requires class of the Boost
-  Concept Checking Library do not cause errors when it is not suppose
+  This file verifies that the BOOST_CLASS_REQUIRES macro of the Boost
+  Concept Checking Library does not cause errors when it is not suppose
   to.
 
 */
