@@ -17,6 +17,7 @@
 #include <boost/range/result_iterator.hpp>
 #include <boost/range/size_type.hpp>
 #include <boost/range/difference_type.hpp>
+#include <boost/assert.hpp>
 
 namespace boost
 {

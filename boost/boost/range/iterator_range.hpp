@@ -14,7 +14,8 @@
 #include <boost/range/functions.hpp>
 #include <boost/range/result_iterator.hpp>
 #include <boost/range/difference_type.hpp>
-#include <boost/iterator/iterator_traits.hpp>
+#include <boost/iterator/iterator_traits.hpp>    
+#include <boost/assert.hpp>
 #include <iterator>
 #include <algorithm>
 #include <ostream>
