@@ -56,6 +56,7 @@
 #include "boost/type_traits/remove_reference.hpp"
 #include "boost/type_traits/remove_volatile.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
+#include "boost/type_traits/function_traits.hpp"
 
 #include "boost/type_traits/ice.hpp"
 
