@@ -16,7 +16,14 @@
 
 #include <boost/preprocessor/cat.hpp>
 
+/* Use of BOOST_PP_CAT() below allows macro expansion of __LINE__. */
 #define STATIC_ASSERT(EXPR)\
   typedef char BOOST_PP_CAT(static_assert_,__LINE__)[ (EXPR) ? 1 : -1 ]
 
 STATIC_ASSERT(sizeof(int) <= sizeof(long));
+
+/* This static assert is broken. The __LINE__ is not expanded as desired. */
+#define BROKEN_STATIC_ASSERT(EXPR)\
+  typedef char static_assert_##__LINE__[ (EXPR) ? 1 : -1 ]
+
+BROKEN_STATIC_ASSERT(sizeof(int) <= sizeof(long));
