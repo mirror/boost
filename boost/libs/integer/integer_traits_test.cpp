@@ -20,13 +20,12 @@
 #include <iostream>
 #include <cassert>
 #include <boost/integer_traits.hpp>
+// use int64_t instead of long long for better portability
+#include <boost/cstdint.hpp>
 
 #ifdef NDEBUG
 #error This test relies on assert() and thus makes no sense with NDEBUG defined
 #endif
-
-// enable if you have "long long" and the proper macros in <limits.h>
-#undef HAVE_LONG_LONG
 
 
 /*
@@ -71,11 +70,9 @@ int main()
   runtest("long", long());
   typedef unsigned long unsigned_long;
   runtest("unsigned long", unsigned_long());
-#ifdef HAVE_LONG_LONG
-  typedef long long long_long;
-  runtest("long long", long_long());
-  typedef unsigned long long unsigned_long_long;
-  runtest("unsigned long long", unsigned_long_long());
+#ifndef BOOST_NO_INT64_T
+  runtest("int64_t (possibly long long)", boost::int64_t());
+  runtest("uint64_t (possibly unsigned long long)", boost::uint64_t());
 #endif
   // Some compilers don't pay attention to std:3.6.1/5 and issue a
   // warning here if "return 0;" is omitted.
