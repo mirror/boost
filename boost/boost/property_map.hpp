@@ -155,12 +155,11 @@ namespace boost {
       REQUIRE2(PA, Key, ReadWritePropertyMap);
       REQUIRE2(Category, LvalueTag, Convertible);
 
-      val = at(pa, k);
-      at(pa, k) = val;
+      ref = pa[k];
     }
+    typename property_traits<PA>::value_type& ref;
     PA pa;
     Key k;
-    typename property_traits<PA>::value_type val;
   };
 
   struct identity_property_map;
