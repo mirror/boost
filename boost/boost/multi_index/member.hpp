@@ -208,11 +208,12 @@ struct member_offset:
 {
 };
 
-/* A proposal has been issued to add a defect macro in Boost.Config to detect
- * this problem with pointers to members as template arguments. While
- * the macro gets into the library, we follow our own heuristics in order to
- * define BOOST_MULTI_INDEX_MEMBER as a convenient wrapper of member<> and
- * member_offset<>
+/* BOOST_MULTI_INDEX_MEMBER resolves to member in the normal cases,
+ * and to member_offset as a workaround in those defective compilers for
+ * which BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS is defined.
+ * This latter defect macro was included in Boost.Config starting from
+ * Boost 1.32, but we keep some additional checking of our own to
+ * remain compatible with Boost 1.31.
  */
 
 #if defined(BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS) ||\
