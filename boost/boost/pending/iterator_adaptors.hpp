@@ -16,6 +16,7 @@
 #include <boost/iterator.hpp>
 #include <boost/utility.hpp>
 #include <boost/compressed_pair.hpp>
+#include <boost/concept_check.hpp>
 
 // I was having some problems with VC6. I couldn't tell whether our hack for
 // stock GCC was causing problems so I needed an easy way to turn it on and
@@ -30,6 +31,86 @@ namespace boost {
 // Just a "type envelope"; works around some MSVC deficiencies.
 template <class T>
 struct type {};
+
+
+//============================================================================
+// Concept checking classes that express the requirements for iterator
+// policies and adapted types. These classes are mostly for
+// documentation purposes, and are not used in this header file. They
+// merely provide a more succinct statement of what is expected of the
+// iterator policies.
+
+template <class Policies, class Adapted, class Traits>
+struct TrivialIteratorPoliciesConcept
+{
+  typedef typename Traits::reference Reference;
+  void constraints() {
+    function_requires< AssignableConcept<Policies> >();
+    function_requires< DefaultConstructibleConcept<Policies> >();
+    function_requires< AssignableConcept<Adapted> >();
+    function_requires< DefaultConstructibleConcept<Adapted> >();
+
+    const_constraints();
+  }
+  void const_constraints() const {
+    Reference r = p.dereference(type<Reference>(), x);
+    b = p.equal(x, x);
+  }
+  Policies p;
+  Adapted x;
+  mutable bool b;
+};
+
+template <class Policies, class Adapted, class Traits>
+struct ForwardIteratorPoliciesConcept
+{
+  void constraints() {
+    function_requires< 
+      TrivialIteratorPoliciesConcept<Policies, Adapted, Traits>
+      >();
+
+    p.increment(x);
+  }
+  Policies p;
+  Adapted x;
+};
+
+template <class Policies, class Adapted, class Traits>
+struct BidirectionalIteratorPoliciesConcept
+{
+  void constraints() {
+    function_requires< 
+      ForwardIteratorPoliciesConcept<Policies, Adapted, Traits>
+      >();
+
+    p.decrement(x);
+  }
+  Policies p;
+  Adapted x;
+};
+
+template <class Policies, class Adapted, class Traits>
+struct RandomAccessIteratorPoliciesConcept
+{
+  typedef typename Traits::difference_type DifferenceType;
+  void constraints() {
+    function_requires< 
+      BidirectionalIteratorPoliciesConcept<Policies, Adapted, Traits>
+      >();
+
+    p.advance(x, n);
+    const_constraints();
+  }
+  void const_constraints() const {
+    n = p.distance(type<DifferenceType>(), x, x);
+    b = p.less(x, x);
+  }
+  Policies p;
+  Adapted x;
+  mutable DifferenceType n;
+  mutable bool b;
+};
+
 
 //============================================================================
 // Default policies for iterator adaptors. You can use this as a base
