@@ -1,18 +1,3 @@
-//-----------------------------------------------------------------------------
-// boost mpl/list_c.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Permission to use, copy, modify, distribute and sell this software
-// and its documentation for any purpose is hereby granted without fee, 
-// provided that the above copyright notice appears in all copies and 
-// that both the copyright notice and this permission notice appear in 
-// supporting documentation. No representations are made about the 
-// suitability of this software for any purpose. It is provided "as is" 
-// without express or implied warranty.
 
 #if !defined(BOOST_PP_IS_ITERATING)
 
@@ -21,16 +6,37 @@
 #ifndef BOOST_MPL_LIST_C_HPP_INCLUDED
 #define BOOST_MPL_LIST_C_HPP_INCLUDED
 
+// Copyright (c) 2000-04 Aleksey Gurtovoy
+//
+// Use, modification and distribution are subject to the Boost Software 
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy 
+// at http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
+
+// no include guards, the header is intended for multiple inclusion!
+
 #if !defined(BOOST_MPL_PREPROCESSING_MODE)
 #   include "boost/mpl/limits/list.hpp"
+#   include "boost/mpl/aux_/config/preprocessor.hpp"
 
 #   include "boost/preprocessor/inc.hpp"
 #   include "boost/preprocessor/cat.hpp"
 #   include "boost/preprocessor/stringize.hpp"
 
+#if !defined(BOOST_NEEDS_TOKEN_PASTING_OP_FOR_TOKENS_JUXTAPOSING)
 #   define MPL_AUX_LIST_HEADER \
     BOOST_PP_CAT(BOOST_PP_CAT(list,BOOST_MPL_LIMIT_LIST_SIZE), _c).hpp \
     /**/
+#else
+#   define MPL_AUX_LIST_HEADER \
+    BOOST_PP_CAT(BOOST_PP_CAT(list,BOOST_MPL_LIMIT_LIST_SIZE), _c)##.hpp \
+    /**/
+#endif
 
 #   include BOOST_PP_STRINGIZE(boost/mpl/list/MPL_AUX_LIST_HEADER)
 #   undef MPL_AUX_LIST_HEADER
