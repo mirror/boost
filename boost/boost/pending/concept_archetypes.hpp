@@ -9,6 +9,7 @@
 #define BOOST_CONCEPT_ARCHETYPES_HPP
 
 #include <iterator>
+#include <functional>
 
 namespace boost {
 
@@ -99,21 +100,12 @@ namespace boost {
     sgi_assignable_archetype(const detail::dummy_constructor& x) : Base(x) { }
   };
 
-#if 0
-  // Careful, don't use same type for T and Base. That
-  // results in the conversion operator being invalid.
-  template <class T, class Base = null_archetype<> >
-  class convertible_to_archetype : public Base {
-  public:
-    convertible_to_archetype(detail::dummy_constructor x) : Base(x) { }
-    operator const T&() const { return static_object<T>::get(); }
-  };
-#else
-
   struct default_archetype_base {
     default_archetype_base(detail::dummy_constructor x) { }
   };
 
+  // Careful, don't use same type for T and Base. That
+  // results in the conversion operator being invalid.
   template <class T, class Base = default_archetype_base>
   class convertible_to_archetype : public Base {
   private:
@@ -125,7 +117,20 @@ namespace boost {
     convertible_to_archetype(detail::dummy_constructor x) : Base(x) { }
     operator const T&() const { return static_object<T>::get(); }
   };
-#endif
+
+  template <class T, class Base = default_archetype_base>
+  class convertible_from_archetype : public Base {
+  private:
+    convertible_from_archetype() { }
+    convertible_from_archetype(const convertible_from_archetype& ) { }
+    convertible_from_archetype& operator=(const convertible_from_archetype&)
+      { return *this; }
+  public:
+    convertible_from_archetype(detail::dummy_constructor x) : Base(x) { }
+    convertible_from_archetype(const T&) { }
+    convertible_from_archetype& operator=(const T&)
+      { return *this; }
+  };
 
   class boolean_archetype {
   public:
@@ -146,12 +151,12 @@ namespace boost {
   boolean_archetype
   operator==(const equality_comparable_archetype<Base>&,
 	     const equality_comparable_archetype<Base>&) 
-    { return boolean_archetype(dummy_cons);; }
+    { return boolean_archetype(dummy_cons); }
   template <class Base>
   boolean_archetype
   operator!=(const equality_comparable_archetype<Base>&,
 	     const equality_comparable_archetype<Base>&)
-    { return boolean_archetype(dummy_cons);; }
+    { return boolean_archetype(dummy_cons); }
 
 
   template <class Base = null_archetype<> >
@@ -170,12 +175,12 @@ namespace boost {
   boolean_archetype
   operator==(const equality_comparable2_first_archetype<Base1>&,
 	     const equality_comparable2_second_archetype<Base2>&) 
-    { return boolean_archetype(dummy_cons);; }
+    { return boolean_archetype(dummy_cons); }
   template <class Base1, class Base2>
   boolean_archetype
   operator!=(const equality_comparable2_first_archetype<Base1>&,
 	     const equality_comparable2_second_archetype<Base2>&)
-    { return boolean_archetype(dummy_cons);; }
+    { return boolean_archetype(dummy_cons); }
 
 
   template <class Base = null_archetype<> >
@@ -200,22 +205,22 @@ namespace boost {
   boolean_archetype
   operator<(const comparable_archetype<Base>&,
 	    const comparable_archetype<Base>&)
-    { return boolean_archetype(dummy_cons);; }
+    { return boolean_archetype(dummy_cons); }
   template <class Base>
   boolean_archetype
   operator<=(const comparable_archetype<Base>&,
 	     const comparable_archetype<Base>&)
-    { return boolean_archetype(dummy_cons);; }
+    { return boolean_archetype(dummy_cons); }
   template <class Base>
   boolean_archetype
   operator>(const comparable_archetype<Base>&,
 	    const comparable_archetype<Base>&)
-    { return boolean_archetype(dummy_cons);; }
+    { return boolean_archetype(dummy_cons); }
   template <class Base>
   boolean_archetype
   operator>=(const comparable_archetype<Base>&,
 	     const comparable_archetype<Base>&)
-    { return boolean_archetype(dummy_cons);; }
+    { return boolean_archetype(dummy_cons); }
   
 
 #define BOOST_DEFINE_BINARY_PREDICATE_ARCHETYPE(OP, NAME) \
@@ -246,12 +251,41 @@ namespace boost {
   BOOST_DEFINE_BINARY_PREDICATE_ARCHETYPE(>, greater_than_op)
   BOOST_DEFINE_BINARY_PREDICATE_ARCHETYPE(>=, greater_equal_op)
 
+#define BOOST_DEFINE_OPERATOR_ARCHETYPE(OP, NAME) \
+  template <class Base = null_archetype<> > \
+  class NAME##_archetype : public Base { \
+  public: \
+    NAME##_archetype(detail::dummy_constructor x) : Base(x) { } \
+    NAME##_archetype(const NAME##_archetype&)  \
+      : Base(dummy_cons) { } \
+    NAME##_archetype& operator=(const NAME##_archetype&) { return *this; } \
+  }; \
+  template <class Base> \
+  NAME##_archetype<Base> \
+  operator OP (const NAME##_archetype<Base>&,\
+	       const NAME##_archetype<Base>&)  \
+    { return NAME##_archetype<Base>(dummy_cons); }
+
+  BOOST_DEFINE_OPERATOR_ARCHETYPE(+, addable)
+  BOOST_DEFINE_OPERATOR_ARCHETYPE(-, subtractable)
+  BOOST_DEFINE_OPERATOR_ARCHETYPE(*, multipliable)
+  BOOST_DEFINE_OPERATOR_ARCHETYPE(/, dividable)
+  BOOST_DEFINE_OPERATOR_ARCHETYPE(%, modable)
+
+  // As is, these are useless because of the return type.
+  // Need to invent a better way...
 #define BOOST_DEFINE_BINARY_OPERATOR_ARCHETYPE(OP, NAME) \
   template <class Return, class Base = null_archetype<> > \
-  class NAME##_first_archetype : public Base { }; \
+  class NAME##_first_archetype : public Base { \
+  public: \
+    NAME##_first_archetype(detail::dummy_constructor x) : Base(x) { } \
+  }; \
   \
   template <class Return, class Base = null_archetype<> > \
-  class NAME##_second_archetype : public Base { }; \
+  class NAME##_second_archetype : public Base { \
+  public: \
+    NAME##_second_archetype(detail::dummy_constructor x) : Base(x) { } \
+  }; \
   \
   template <class Return, class BaseFirst, class BaseSecond> \
   Return \
@@ -318,7 +352,7 @@ namespace boost {
     }
   };
 
-  template <class Arg1, class Arg2>
+  template <class Arg1, class Arg2, class Base = null_archetype<> >
   class binary_predicate_archetype {
     typedef boolean_archetype Return;
     binary_predicate_archetype() { }
