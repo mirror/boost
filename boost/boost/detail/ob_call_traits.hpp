@@ -64,7 +64,8 @@ struct reference_call_traits
    typedef T const_reference;
    typedef T param_type;
 };
-template <bool simple, bool reference>
+
+template <bool pointer, bool arithmetic, bool reference>
 struct call_traits_chooser
 {
    template <class T>
@@ -73,8 +74,9 @@ struct call_traits_chooser
       typedef standard_call_traits<T> type;
    };
 };
+
 template <>
-struct call_traits_chooser<true, false>
+struct call_traits_chooser<true, false, false>
 {
    template <class T>
    struct rebind
@@ -82,8 +84,9 @@ struct call_traits_chooser<true, false>
       typedef simple_call_traits<T> type;
    };
 };
+
 template <>
-struct call_traits_chooser<false, true>
+struct call_traits_chooser<false, false, true>
 {
    template <class T>
    struct rebind
@@ -91,14 +94,52 @@ struct call_traits_chooser<false, true>
       typedef reference_call_traits<T> type;
    };
 };
+
+template <bool size_is_small> 
+struct call_traits_sizeof_chooser2
+{
+	template <class T>
+	struct small_rebind
+	{
+		typedef simple_call_traits<T> small_type;
+	};
+};
+
+template<> 
+struct call_traits_sizeof_chooser2<false>
+{
+	template <class T>
+	struct small_rebind
+	{
+		typedef standard_call_traits<T> small_type;
+	};
+};
+
+template <>
+struct call_traits_chooser<false, true, false>
+{
+   template <class T>
+   struct rebind
+   {
+	   enum { sizeof_choice = (sizeof(T) <= sizeof(void*)) };
+	   typedef call_traits_sizeof_chooser2<(sizeof(T) <= sizeof(void*))> chooser;
+	   typedef typename chooser::template small_rebind<T> bound_type;
+	   typedef typename bound_type::small_type type;
+   };
+};
+
 } // namespace detail
 template <typename T>
 struct call_traits
 {
 private:
-   typedef detail::call_traits_chooser<(is_pointer<T>::value || is_arithmetic<T>::value) && sizeof(T) <= sizeof(void*), is_reference<T>::value> chooser;
-   typedef typename chooser::template rebind<T> bound_type;
-   typedef typename bound_type::type call_traits_type;
+    typedef detail::call_traits_chooser<
+         ::boost::is_pointer<T>::value,
+         ::boost::is_arithmetic<T>::value, 
+         ::boost::is_reference<T>::value
+      > chooser;
+	typedef typename chooser::template rebind<T> bound_type;
+	typedef typename bound_type::type call_traits_type;
 public:
    typedef typename call_traits_type::value_type       value_type;
    typedef typename call_traits_type::reference        reference;
