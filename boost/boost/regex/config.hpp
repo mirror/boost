@@ -58,6 +58,7 @@
 #  include <boost/cstdint.hpp>
 #  include <boost/detail/allocator.hpp>
 #  include <boost/regex/config/cstring.hpp>
+#  include <boost/throw_exception.hpp>
 #else
    //
    // C build,
