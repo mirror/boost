@@ -170,7 +170,11 @@ boost_template_instantiate(T &, ASeq &){
 
 // in my view either of these should be ok 
 // but this one fails with gcc
-#elif defined(BOOST_MSVC) || defined(BOOST_INTEL) || defined(__BORLANDC__)
+#elif \
+    defined(BOOST_MSVC)       \
+    || defined(BOOST_INTEL)   \
+    || defined(__BORLANDC__)  \
+    || defined(__MWERK__)
 #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
     namespace boost { namespace archive { namespace detail {     \
     template<>                                                   \

@@ -7,12 +7,18 @@
 // without express or implied warranty, and with no claim as to its suitability
 // for any purpose.
 
-#include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
-
 #include <ostream>
 #include <iomanip>
 #include <algorithm>
 #include <string>
+
+#include <cstring> // strlen
+#include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::strlen; 
+} // namespace std
+#endif
 
 #include <boost/archive/wcslen.hpp>
 #include <boost/archive/iterators/xml_escape.hpp>
@@ -68,7 +74,7 @@ void xml_oarchive_impl<Archive>::save(const char * s){
     > xml_escape_translator;
     std::copy(
         xml_escape_translator(BOOST_MAKE_PFTO_WRAPPER(s)),
-        xml_escape_translator(BOOST_MAKE_PFTO_WRAPPER(s + strlen(s))), 
+        xml_escape_translator(BOOST_MAKE_PFTO_WRAPPER(s + std::strlen(s))), 
         boost::archive::iterators::ostream_iterator<char>(os)
     );
 }

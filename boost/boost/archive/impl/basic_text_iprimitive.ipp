@@ -9,7 +9,15 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+#include <cstddef> // size_t
+
 #include <boost/config.hpp>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #include <boost/throw_exception.hpp>
 #include <boost/pfto.hpp>
 
@@ -37,7 +45,7 @@ void basic_text_iprimitive<IStream>::load_binary(
         return;
         
     assert(
-        static_cast<size_t>(std::numeric_limits<std::streamsize>::max())
+        static_cast<std::size_t>(std::numeric_limits<std::streamsize>::max())
         > (count + sizeof(CharType) - 1)/sizeof(CharType)
     );
         

@@ -46,8 +46,13 @@ protected:
             0 != (flags & no_codecvt))
     {
         if(0 == (flags & no_header)){
-        	this->basic_binary_oarchive<Archive>::init();
-        	this->basic_binary_oprimitive<Archive, std::ostream>::init();
+            #if ! defined(__MWERKS__)
+        	    this->basic_binary_oarchive<Archive>::init();
+        	    this->basic_binary_oprimitive<Archive, std::ostream>::init();
+            #else
+        	    basic_binary_oarchive<Archive>::init();
+        	    basic_binary_oprimitive<Archive, std::ostream>::init();
+            #endif
         }
     }
 };

@@ -17,8 +17,15 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <cassert>
+#include <cstddef> // size_t
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #include <boost/pfto.hpp>
 
 #include <cstdlib> // for wctomb()
@@ -84,7 +91,7 @@ class mb_from_wchar
         wchar_t value = * this->base_reference();
         m_bend = std::wctomb(m_buffer, value);
         assert(-1 != m_bend);
-        assert((size_t)m_bend <= sizeof(m_buffer));
+        assert((std::size_t)m_bend <= sizeof(m_buffer));
         assert(m_bend > 0);
         m_bnext = 0;
     }

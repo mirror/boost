@@ -38,7 +38,7 @@ template<class Archive>
 void text_woarchive_impl<Archive>::save(const char *s)
 {
     // note: superfluous local variable fixes borland warning
-    std::size_t size = strlen(s);
+    std::size_t size = std::strlen(s);
     * this->This() << size;
     this->This()->newtoken();
     while(*s != '\0')

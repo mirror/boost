@@ -15,6 +15,14 @@
 #include <algorithm>
 #include <locale>
 
+#include <cstring> // strlen
+#include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::strlen; 
+} // namespace std
+#endif
+
 #include <boost/throw_exception.hpp>
 #include <boost/utf8_codecvt_facet.hpp>
 

@@ -68,7 +68,7 @@ namespace archive {
         }
     }
 #else
-    using ::tmpnam;
+    using std::tmpnam;
 #endif
 
 } // archive
