@@ -27,13 +27,13 @@
 #include <boost/ref.hpp>
 #include <boost/pending/ct_if.hpp>
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406 && !defined(BOOST_NO_CONFIG)
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406 && !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_TARGET_FIX(x) x
 #else
 #  define BOOST_FUNCTION_TARGET_FIX(x)
 #endif // not MSVC
 
-#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_NO_CONFIG)
+#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_STRICT_CONFIG)
 // Work around a compiler bug.
 // boost::python::objects::function has to be seen by the compiler before the
 // boost::function class template.
@@ -44,27 +44,27 @@ namespace boost { namespace python { namespace objects {
 
 // GCC 3.2 doesn't seem to support enable_if, so we assume that
 // earlier versions have the same limitation
-#if defined(__GNUC__) && __GNUC__ < 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ <= 2 ) && !(BOOST_NO_CONFIG)
+#if defined(__GNUC__) && __GNUC__ < 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ <= 2 ) && !(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
 // MIPSpro 7.3.1.3m doesn't support enable_if
-#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_NO_CONFIG)
+#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
 // MSVC 7.0 doesn't support enable_if
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 && !defined(BOOST_NO_CONFIG)
+#if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 && !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
 // Borland C++ 5.6.0 doesn't support enable_if
-#if defined(__BORLANDC__) && __BORLANDC__ <= 0x560 && !defined(BOOST_NO_CONFIG)
+#if defined(__BORLANDC__) && __BORLANDC__ <= 0x560 && !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
 // Metrowerks 7.2 doesn't support enable_if
-#if defined(__MWERKS__) && __MWERKS__ <= 0x2407 && !defined(BOOST_NO_CONFIG)
+#if defined(__MWERKS__) && __MWERKS__ <= 0x2407 && !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
@@ -288,7 +288,7 @@ namespace boost {
       template<bool>
 #  else
       template<bool x>
-#  endif 
+#  endif
       struct enabled
       {
         template<typename T>
