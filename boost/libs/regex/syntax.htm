@@ -134,10 +134,9 @@ the expression &quot;(ab)*&quot; would match all of the string
 &quot;ababab&quot;. The matching algorithms <a
 href="template_class_ref.htm#query_match">regex_match</a> and <a
 href="template_class_ref.htm#reg_search">regex_search</a> each
-take an instance of <a
-href="template_class_ref.htm#match_results">match_results</a>
+take an instance of <a href="template_class_ref.htm#reg_match">match_results</a>
 that reports what caused the match, on exit from these functions
-the <a href="template_class_ref.htm#match_results">match_results</a>
+the <a href="template_class_ref.htm#reg_match">match_results</a>
 contains information both on what the whole expression matched
 and on what each sub-expression matched. In the example above
 match_results[1] would contain a pair of iterators denoting the
