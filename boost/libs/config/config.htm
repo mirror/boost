@@ -539,6 +539,19 @@ class X { ... };</pre>
         instantiations.</td>
     </tr>
     <tr>
+        <td valign="top" width="51%">BOOST_NO_FUNCTION_TEMPLATE_ORDERING</td>
+        <td valign="top" width="16%">Compiler</td>
+        <td valign="top" width="33%">The compiler does not
+        perform function template ordering or its function
+        template ordering is incorrect. <pre>template&lt;typename T&gt; void f(T); // #1
+template&lt;typename T, typename U&gt; void f(T (*)(U)); // #2
+
+void bar(int);
+
+f(&amp;bar); // should choose #2.</pre>
+        </td>
+    </tr>
+    <tr>
         <td valign="top" width="51%">BOOST_NO_INCLASS_MEMBER_INITIALIZATION</td>
         <td valign="top" width="16%">Compiler</td>
         <td valign="top" width="33%">Compiler violates std::9.4.2/4.</td>
@@ -719,16 +732,13 @@ class X { ... };</pre>
         specific.</td>
     </tr>
     <tr>
-        <td valign="top" width="51%">BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING</td>
+        <td valign="top" width="51%">BOOST_NO_VOID_RETURNS</td>
         <td valign="top" width="16%">Compiler</td>
         <td valign="top" width="33%">The compiler does not
-        perform function template ordering or its function
-        template ordering is incorrect. <pre>template&lt;typename T&gt; void f(T); // #1
-template&lt;typename T, typename U&gt; void f(T (*)(U)); // #2
-
-void bar(int);
-
-f(&amp;bar); // should choose #2.</pre>
+        allow a void function to return the result of calling
+        another void function. 
+<pre>void f() {}
+void g() { return f(); }</pre>
         </td>
     </tr>
 </table>
@@ -790,7 +800,7 @@ present.</p>
         <td valign="top" width="48%">BOOST_HAS_STLP_USE_FACET</td>
         <td valign="top" width="15%">Standard library</td>
         <td valign="top" width="37%">The standard library lacks a
-        conforming std::use_facet, but has a workaound class-version
+        conforming std::use_facet, but has a workaround class-version
         that does the job. This is primarily for the STLport std
         lib.</td>
     </tr>
