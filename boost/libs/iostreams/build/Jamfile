@@ -16,8 +16,8 @@ SOURCES = file_descriptor mapped_file ;
 template iostreams
     : # sources
       ../src/$(SOURCES).cpp
-      <template>bzip2
-      <template>zlib
+      #<template>bzip2
+      #<template>zlib
     : # build requirements
     : # build variants
    ;    
@@ -26,8 +26,8 @@ lib boost_iostreams
     : # sources
       <template>iostreams
     : # build requirements
-      [ cond $(BZIP2_SOURCE) : <lib>boost_bzip2 : ]
-      [ cond $(ZLIB_SOURCE) : <lib>boost_zlib : ]
+      #[ cond $(BZIP2_SOURCE) : <lib>boost_bzip2 : ]
+      #[ cond $(ZLIB_SOURCE) : <lib>boost_zlib : ]
       [ common-names ] # magic for install and auto-link features
       <include>$(BOOST_ROOT) <sysinclude>$(BOOST_ROOT)
     : # build variants
@@ -52,11 +52,11 @@ install iostreams lib
 
 stage stage/lib 
     : <lib>boost_iostreams <dll>boost_iostreams 
-      [ cond $(BZIP2_SOURCE) 
-        : <lib>boost_bzip2 
-          #<dll>boost_bzip2 
-        : ] 
-      [ cond $(ZLIB_SOURCE) : <lib>boost_zlib <dll>boost_zlib : ] 
+      #[ cond $(BZIP2_SOURCE) 
+      #  : <lib>boost_bzip2 
+      #    #<dll>boost_bzip2 
+      #  : ] 
+      #[ cond $(ZLIB_SOURCE) : <lib>boost_zlib <dll>boost_zlib : ] 
     : # copy to a path rooted at BOOST_ROOT:
       <locate>$(BOOST_ROOT)
       [ common-names ] # magic for install and auto-link features
