@@ -32,6 +32,13 @@
 
 #if defined(_WIN32) && !defined(BOOST_RE_NO_W32)
 
+//
+// VC6 needs to link to user32.lib:
+//
+#ifdef BOOST_MSVC
+#pragma comment(lib, "user32.lib")
+#endif
+
 namespace{
 
 //
