@@ -77,8 +77,8 @@ namespace boost {
      // * Type requirements:
      //
      //   argument_type maybe any unsigned type with at least n_zero + 1
-     //   value bits. (Note: If larger types will be standardized -e.g
-     // . unsigned long long- then the argument_type typedef can be
+     //   value bits. (Note: If larger types will be standardized -e.g.
+     //   unsigned long long- then the argument_type typedef can be
      //   changed without affecting the rest of the code.)
      //
 
