@@ -474,7 +474,7 @@ unsigned int expected_failures = 84; // partial specialisation (fails for UDT's)
 #elif defined(__SUNPRO_CC)
 unsigned int expected_failures = 1; // cv-qualified references
 #elif defined(__GNUC__)
-#if __GNUC__==3 && __GNUC_MINOR__>=1
+#if (__GNUC__ > 3) || (__GNUC__ == 3 && __GNUC_MINOR__ >= 1)
 unsigned int expected_failures = 0;
 #else
 unsigned int expected_failures = 1; // cv-qualified references
@@ -486,4 +486,5 @@ unsigned int expected_failures = 1;
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
