@@ -76,14 +76,21 @@
 //
 // __int64 support:
 //
-#if _MSC_VER >= 1200
+#if (_MSC_VER >= 1200) && defined(_MSC_EXTENSIONS)
 #   define BOOST_HAS_MS_INT64
 #endif
 //
 // long long support:
 //
-#if _MSC_VER >= 1301
+#if (_MSC_VER >= 1301) && defined(_MSC_EXTENSIONS)
 #   define BOOST_HAS_LONG_LONG
+#endif
+//
+// disable Win32 API's if compiler extentions are
+// turned off:
+//
+#ifndef _MSC_EXTENSIONS
+#  define BOOST_DISABLE_WIN32
 #endif
 
 
@@ -97,7 +104,7 @@
 #error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 1300:
+// last known and checked version is 1301:
 #if (_MSC_VER > 1301)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"

@@ -48,7 +48,7 @@
 
 #endif
 
-#ifdef _MSC_VER
+#if _MSC_VER+0 >= 1000
 #  ifndef _NATIVE_WCHAR_T_DEFINED
 #     define BOOST_NO_INTRINSIC_WCHAR_T
 #  endif
@@ -56,6 +56,8 @@
 #     define BOOST_HAS_MS_INT64
 #  endif
 #  define BOOST_NO_SWPRINTF
+#elif defined(_WIN32)
+#  define BOOST_DISABLE_WIN32
 #endif
 
 
@@ -66,12 +68,12 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 500:
-#if (BOOST_INTEL_CXX_VERSION > 500)
+// last known and checked version is 600:
+#if (BOOST_INTEL_CXX_VERSION > 600)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  elif defined(_MSC_VER)
-#     warning "Unknown compiler version - please run the configure tests and report the results"
+#     pragma message("Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
 

@@ -45,16 +45,22 @@
 // std::DBL_MAX, as a fix we'll just include float.h and have done with:
 #include <float.h>
 #endif
-
+//
+// __int64:
+//
 #if __BORLANDC__ >= 0x530
 #  define BOOST_HAS_MS_INT64
 #endif
-
 //
 // check for exception handling support:
+//
 #ifndef _CPPUNWIND
 #  define BOOST_NO_EXCEPTIONS
 #endif
+//
+// Disable Win32 support in ANSI mode:
+//
+#pragma defineonoption BOOST_DISABLE_WIN32 -A
 
 #define BOOST_COMPILER "Borland C++ version " BOOST_STRINGIZE(__BORLANDC__)
 

@@ -134,6 +134,16 @@
 #  endif
 
 //
+// If Win32 support is turned off, then we must turn off
+// threading support also, unless there is some other
+// thread API enabled:
+//
+#if defined(BOOST_DISABLE_WIN32) && defined(_WIN32) \
+   && !defined(BOOST_DISABLE_THREADS) && !defined(BOOST_HAS_PTHREADS)
+#  define BOOST_DISABLE_THREADS
+#endif
+
+//
 // Turn on threading support if the compiler thinks that it's in
 // multithreaded mode.  We put this here because there are only a
 // limited number of macros that identify this (if there's any missing

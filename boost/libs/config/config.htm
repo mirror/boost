@@ -270,6 +270,15 @@ they are listed in the following table:&nbsp;</p>
         threading support, even if the compiler in its current
         translation mode supports multiple threads.</td>
     </tr>
+    <tr>
+        <td valign="top">BOOST_DISABLE_WIN32</td>
+        <td>When defined, disables the use of Win32 specific
+        API's, even when these are available. Also has the effect
+        of setting BOOST_DISABLE_THREADS unless
+        BOOST_HAS_PTHREADS is set. This option may be set
+        automatically by the config system when it detects that
+        the compiler is in &quot;strict mode&quot;.</td>
+    </tr>
 </table>
 
 <h4><a name="advanced_config"></a>Advanced configuration usage</h4>

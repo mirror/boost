@@ -24,6 +24,7 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
+#ifndef BOOST_DISABLE_WIN32
 //
 // Win32 will normally be using native Win32 threads,
 // but there is a pthread library avaliable as an option:
@@ -34,3 +35,5 @@
 
 // WEK: Added
 #define BOOST_HAS_FTIME
+
+#endif

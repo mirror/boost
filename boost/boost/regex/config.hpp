@@ -137,6 +137,14 @@
 
 #endif
 
+//
+// If Win32 support has been disabled for boost in general, then
+// it is for regex in particular:
+//
+#ifdef BOOST_DISABLE_WIN32
+#  define BOOST_REGEX_NO_W32
+#endif
+
 // some versions of gcc can't merge template instances:
 #if defined(__CYGWIN__)
 #  define BOOST_REGEX_NO_TEMPLATE_SWITCH_MERGE

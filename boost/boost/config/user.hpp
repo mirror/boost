@@ -61,4 +61,8 @@
 // when available:
 // #define BOOST_DISABLE_THREADS
 
+// define when you want to disable Win32 specific features
+// even when available:
+// #define BOOST_DISABLE_WIN32
+
 
