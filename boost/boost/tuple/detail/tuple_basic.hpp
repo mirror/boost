@@ -19,7 +19,7 @@
 // ( and other bugs ) per suggestion of Jens Maurer
 // simplified element type accessors + bug fix  (Jeremy Siek)
 // Several changes/additions according to suggestions by Doug Gregor, 
-// William Kempf, Vesa Karvonen, John Max Skaller, Ed Brey, Beman Davis,
+// William Kempf, Vesa Karvonen, John Max Skaller, Ed Brey, Beman Dawes,
 // David Abrahams.
 
 // Revision history:
