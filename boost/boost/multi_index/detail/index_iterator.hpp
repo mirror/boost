@@ -149,14 +149,14 @@ private:
   {
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
     node_base_type* bnode=node;
-    ar<<serialization::make_nvp("iterator",bnode);
+    ar<<serialization::make_nvp("position",bnode);
   }
 
   template<class Archive>
   void load(Archive& ar,const unsigned int version)
   {
     node_base_type* bnode;
-    ar>>serialization::make_nvp("iterator",bnode);
+    ar>>serialization::make_nvp("position",bnode);
     node=static_cast<Node*>(bnode);
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
