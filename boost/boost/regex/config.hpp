@@ -209,7 +209,7 @@ using std::distance;
 #  define BOOST_REGEX_HAS_DLL_RUNTIME
 #endif
 
-#if defined(BOOST_REGEX_HAS_DLL_RUNTIME) && defined(BOOST_REGEX_DYN_LINK)
+#if defined(BOOST_REGEX_HAS_DLL_RUNTIME) && defined(BOOST_REGEX_DYN_LINK) && !defined(BOOST_REGEX_STATIC_LINK)
 #  if defined(BOOST_REGEX_SOURCE)
 #     define BOOST_REGEX_DECL __declspec(dllexport)
 #     define BOOST_REGEX_BUILD_DLL

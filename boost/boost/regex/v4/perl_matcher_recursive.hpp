@@ -51,7 +51,7 @@ public:
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_all_states()
 {
-   static matcher_proc_type const s_match_vtable[] = 
+   static matcher_proc_type const s_match_vtable[26] = 
    {
       (&perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_startmark),
       &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_endmark,

@@ -117,7 +117,7 @@ struct saved_single_repeat : public saved_state
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_all_states()
 {
-   static matcher_proc_type const s_match_vtable[] = 
+   static matcher_proc_type const s_match_vtable[26] = 
    {
       (&perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_startmark),
       &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match_endmark,
@@ -737,7 +737,7 @@ unwinding does in the recursive implementation.
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind(bool have_match)
 {
-   static unwind_proc_type const s_unwind_table[] = 
+   static unwind_proc_type const s_unwind_table[14] = 
    {
       &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_end,
       &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_paren,

@@ -145,7 +145,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::match()
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find()
 {
-   static matcher_proc_type const s_find_vtable[] = 
+   static matcher_proc_type const s_find_vtable[7] = 
    {
       &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_any,
       &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::find_restart_word,
