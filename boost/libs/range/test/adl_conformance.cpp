@@ -15,6 +15,18 @@
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
+#include <boost/test/unit_test.hpp>
+#include <boost/test/test_tools.hpp>
+
+enum adl_types
+{
+    unused,
+    boost_namespace,
+    templated_namespace,
+    non_templated_namespace,
+    global_namespace
+};
+
 namespace boost
 {
     namespace range_detail
@@ -22,12 +34,26 @@ namespace boost
         template< class Range >
         inline typename Range::iterator begin( Range& r )
         {
-           return r.begin();  
+            return boost_namespace;  
         }
+        
+        template< class Range >
+        inline typename Range::iterator begin( const Range& r )
+        {
+            return boost_namespace;  
+        }
+
     }
     
     template< class Range >
     inline typename Range::iterator begin( Range& r )
+    {
+        using range_detail::begin; // create ADL hook
+        return begin( r );
+    }
+    
+    template< class Range >
+    inline typename Range::iterator begin( const Range& r )
     {
         using range_detail::begin; // create ADL hook
         return begin( r );
@@ -40,13 +66,13 @@ namespace find_templated
     template< class T >
     struct range
     {
-        typedef int* iterator;
+        typedef adl_types iterator;
 
         range()                { /* allow const objects */ }
-        iterator begin()       { return 0; }
-        iterator begin() const { return 0; }
-        iterator end()         { return 0; }
-        iterator end() const   { return 0; }
+        iterator begin()       { return unused; }
+        iterator begin() const { return unused; }
+        iterator end()         { return unused; }
+        iterator end() const   { return unused; }
     };
         
     //
@@ -56,43 +82,61 @@ namespace find_templated
     template< class T >
     inline typename range<T>::iterator begin( range<T>& r )
     {
-        return r.begin();
+        return templated_namespace;
     }
+    
+    template< class T >
+    inline typename range<T>::iterator begin( const range<T>& r )
+    {
+        return templated_namespace;
+    }
+
 }
 
 namespace find_non_templated
 {
     struct range
     {
-        typedef int* iterator;
+        typedef adl_types iterator;
         
         range()                { /* allow const objects */ }
-        iterator begin()       { return 0; }
-        iterator begin() const { return 0; }
-        iterator end()         { return 0; }
-        iterator end() const   { return 0; }
+        iterator begin()       { return unused; }
+        iterator begin() const { return unused; }
+        iterator end()         { return unused; }
+        iterator end() const   { return unused; }
     };
     
     inline range::iterator begin( range& r )
     {
-        return r.begin();
+        return non_templated_namespace;
+    }
+    
+    
+    inline range::iterator begin( const range& r )
+    {
+        return non_templated_namespace;
     }
 }
 
 struct range
 {
-    typedef int* iterator;
+    typedef adl_types iterator;
 
     range()                { /* allow const objects */ }
-    iterator begin()       { return 0; }
-    iterator begin() const { return 0; }
-    iterator end()         { return 0; }
-    iterator end() const   { return 0; }
+    iterator begin()       { return unused; }
+    iterator begin() const { return unused; }
+    iterator end()         { return unused; }
+    iterator end() const   { return unused; }
 };
 
 inline range::iterator begin( range& r )
 {
-    return r.begin();
+    return global_namespace;
+}   
+
+inline range::iterator begin( const range& r )
+{
+    return global_namespace;
 }   
 
 void check_adl_conformance()
@@ -109,32 +153,22 @@ void check_adl_conformance()
     // notation!
     //
     
-    boost::begin( r );
-    boost::begin( r2 );
-    boost::begin( r3 );
-    boost::begin( r4 );
-    boost::begin( r5 );
-    boost::begin( r6 );
-}
 
-#include <iostream>
-
-int main()
-{
-    try
-    {
-        check_adl_conformance();
-    }
-    catch( ... )
-    {
-        std::cout << "error in test" << std::endl;
-        return -1;
-    }
+    BOOST_CHECK( boost::begin( r )  != boost_namespace );
+    BOOST_CHECK( boost::begin( r2 ) != boost_namespace );
+    BOOST_CHECK( boost::begin( r3 ) != boost_namespace );
+    BOOST_CHECK( boost::begin( r4 ) != boost_namespace );
+    BOOST_CHECK( boost::begin( r5 ) != boost_namespace );
+    BOOST_CHECK( boost::begin( r6 ) != boost_namespace );
     
-    return 0;   
+    BOOST_CHECK_EQUAL( boost::begin( r ), templated_namespace ) ;
+    BOOST_CHECK_EQUAL( boost::begin( r2 ), templated_namespace );
+    BOOST_CHECK_EQUAL( boost::begin( r3 ), non_templated_namespace );
+    BOOST_CHECK_EQUAL( boost::begin( r4 ), non_templated_namespace );
+    BOOST_CHECK_EQUAL( boost::begin( r5 ), global_namespace );
+    BOOST_CHECK_EQUAL( boost::begin( r6 ), global_namespace );
 }
 
-/*
 #include <boost/test/included/unit_test_framework.hpp> 
 
 using boost::unit_test_framework::test_suite;
@@ -147,5 +181,5 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 
     return test;
 }
-*/
+
 
