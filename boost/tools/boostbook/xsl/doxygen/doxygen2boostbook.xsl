@@ -16,6 +16,7 @@
 
   <xsl:key name="compounds-by-kind" match="compounddef" use="@kind"/>
   <xsl:key name="compounds-by-id" match="compounddef" use="@id"/>
+  <xsl:key name="inner-classes" match="compounddef[not(attribute::kind='namespace')]/innerclass" use="@refid"/>
 
   <xsl:strip-space elements="briefdescription detaileddescription"/>
 
@@ -118,7 +119,10 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
     <xsl:param name="in-file"/>
     <xsl:param name="with-namespace-refs"/>
 
-    <xsl:if test="$in-file=string(includes)">
+    <xsl:if test="contains(string(location/attribute::file), 
+                           concat('/', $in-file)) and
+                  not (contains(string(compoundname), '&lt;')) and
+                  not (key('inner-classes', @id))">
       <!-- The short name of this class -->
       <xsl:variable name="name">
         <xsl:call-template name="strip-qualifiers">
@@ -134,19 +138,9 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         <xsl:apply-templates select="templateparamlist" mode="template"/>
         <xsl:apply-templates select="basecompoundref" mode="inherit"/>
 
-        <xsl:if test="briefdescription/text()|briefdescription/*">
-          <purpose>
-            <xsl:apply-templates select="briefdescription" mode="passthrough"/>
-          </purpose>
-        </xsl:if>
-        
-        <xsl:if test="detaileddescription/text()|detaileddescription/*">
-          <xsl:apply-templates select="detaileddescription" 
-            mode="passthrough"/>
-        </xsl:if>
-
+        <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+        <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
         <xsl:apply-templates/>
-
       </xsl:element>
     </xsl:if>
   </xsl:template>
@@ -165,15 +159,8 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
 
       <xsl:apply-templates select="enumvalue"/>
 
-      <xsl:if test="briefdescription/text()|briefdescription/*">
-        <purpose>
-          <xsl:apply-templates select="briefdescription" mode="passthrough"/>
-        </purpose>
-      </xsl:if>
-
-      <xsl:if test="detaileddescription/text()|detaileddescription/*">
-        <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
-      </xsl:if>
+      <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+      <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
     </enum>
   </xsl:template>
 
@@ -245,9 +232,8 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
                                        string(compoundname))"/>
         </xsl:attribute>
         
-        <xsl:apply-templates 
-          select="detaileddescription/*|detaileddescription/text()" 
-          mode="passthrough"/>
+        <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+        <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
         
         <xsl:apply-templates mode="toplevel">
           <xsl:with-param name="with-namespace-refs"
@@ -493,12 +479,8 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         <xsl:value-of select="name/text()"/>
       </xsl:attribute>
       
-      <!-- Comment for the type -->
-      <xsl:if test="briefdescription/text()|briefdescription/*">
-        <xsl:attribute name="comment">
-          <xsl:value-of select="briefdescription/text()"/>
-        </xsl:attribute>
-      </xsl:if>
+      <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+      <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
       
       <type>
         <xsl:apply-templates select="type/text()|type/*"
@@ -539,16 +521,9 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <xsl:apply-templates select="param" mode="function"/>
     
     <!-- The description -->
-    <xsl:if test="briefdescription/text()|briefdescription/*">
-      <purpose>
-        <xsl:apply-templates select="briefdescription" mode="passthrough"/>
-      </purpose>
-    </xsl:if>
-
-    <xsl:if test="detaileddescription/text()|detaileddescription/*">
-      <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
-    </xsl:if>
-
+    <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+    <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+      
     <xsl:apply-templates 
       select="detaileddescription/para/simplesect[@kind='post']"
       mode="function-clauses"/>
@@ -669,6 +644,22 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <emphasis role="bold">
       <xsl:apply-templates mode="passthrough"/>
     </emphasis>
+  </xsl:template>
+
+  <xsl:template match="briefdescription" mode="passthrough">
+    <xsl:if test="text()|*">
+      <purpose>
+        <xsl:apply-templates mode="passthrough"/>
+      </purpose>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="detaileddescription" mode="passthrough">
+    <xsl:if test="text()|*">
+      <description>
+        <xsl:apply-templates mode="passthrough"/>
+      </description>
+    </xsl:if>
   </xsl:template>
 
   <!-- Handle function clauses -->
