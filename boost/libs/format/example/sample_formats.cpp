@@ -43,7 +43,6 @@ namespace MyNS_Manips {
 int main(){
     using namespace MyNS_ForOutput;
     using namespace MyNS_Manips;
-    std::stringstream oss;
 
     
     // Reordering :
