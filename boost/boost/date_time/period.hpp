@@ -59,6 +59,9 @@ namespace date_time {
     > >
   {
   public:
+    typedef point_rep point_type;
+    typedef duration_rep duration_type;
+
     period(point_rep begin, point_rep last);
     period(point_rep begin, duration_rep len);
     point_rep begin() const;
