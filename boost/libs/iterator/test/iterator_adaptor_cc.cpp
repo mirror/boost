@@ -10,7 +10,8 @@ int main()
     typedef boost::reverse_iterator<int*>       rev_iter;
     typedef boost::reverse_iterator<int const*> c_rev_iter;
 
-    boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<rev_iter> >();
+    boost::function_requires< boost_concepts::WritableIteratorConcept<rev_iter> >();
+    boost::function_requires< boost_concepts::LvalueIteratorConcept<rev_iter> >();
     boost::function_requires< boost_concepts::RandomAccessTraversalConcept<rev_iter> >();
     boost::function_requires< boost::RandomAccessIteratorConcept<rev_iter> >();
     boost::function_requires< boost_concepts::InteroperableIteratorConcept<rev_iter, c_rev_iter> >();
@@ -28,7 +29,8 @@ int main()
     typedef boost::reverse_iterator<std::list<int>::iterator>       rev_iter;
     typedef boost::reverse_iterator<std::list<int>::const_iterator> c_rev_iter;
 
-    boost::function_requires< boost_concepts::ReadableLvalueIteratorConcept<c_rev_iter> >();
+    boost::function_requires< boost_concepts::ReadableIteratorConcept<c_rev_iter> >();
+    boost::function_requires< boost_concepts::LvalueIteratorConcept<c_rev_iter> >();
     boost::function_requires< boost_concepts::BidirectionalTraversalConcept<c_rev_iter> >();
     boost::function_requires< boost::BidirectionalIteratorConcept<c_rev_iter> >();
     boost::function_requires< boost_concepts::InteroperableIteratorConcept<rev_iter, c_rev_iter> >();

@@ -125,7 +125,8 @@ int main()
       > BaseIter;
       typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::ForwardIteratorConcept<Iter> >();
-      boost::function_requires< boost_concepts::ReadableLvalueIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::LvalueIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
     }
     {
@@ -136,7 +137,8 @@ int main()
       > BaseIter;
       typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::Mutable_ForwardIteratorConcept<Iter> >();
-      boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
+      boost::function_requires< boost_concepts::LvalueIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
     }
 #endif 

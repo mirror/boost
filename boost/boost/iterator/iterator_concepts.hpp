@@ -98,38 +98,17 @@ namespace boost_concepts {
   };
 
   template <typename Iterator>
-  class ReadableLvalueIteratorConcept
+  class LvalueIteratorConcept
   {
    public:
       typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
-
       void constraints()
       {
-          boost::function_requires< ReadableIteratorConcept<Iterator> >();
-          const value_type& v = *i;
-          boost::ignore_unused_variable_warning(v);
-    }
+        const value_type& r = *i;
+      }
     Iterator i;
   };
 
-  template <typename Iterator>
-  class WritableLvalueIteratorConcept {
-  public:
-    typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
-    typedef typename boost::detail::iterator_traits<Iterator>::reference reference;
-
-    void constraints() {
-      boost::function_requires< 
-        ReadableLvalueIteratorConcept<Iterator> >();
-      boost::function_requires< 
-        WritableIteratorConcept<Iterator, value_type> >();
-      boost::function_requires< 
-        SwappableIteratorConcept<Iterator> >();
-      
-
-      BOOST_STATIC_ASSERT((boost::is_same<reference, value_type&>::value));
-    }
-  };
   
   //===========================================================================
   // Iterator Traversal Concepts

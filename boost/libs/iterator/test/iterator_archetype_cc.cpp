@@ -41,7 +41,8 @@ int main()
       , boost::random_access_traversal_tag
     > iter;
 
-    boost::function_requires< boost_concepts::ReadableLvalueIteratorConcept<iter> >();
+    boost::function_requires< boost_concepts::ReadableIteratorConcept<iter> >();
+    boost::function_requires< boost_concepts::LvalueIteratorConcept<iter> >();
     boost::function_requires< boost_concepts::RandomAccessTraversalConcept<iter> >();
   } 
   {
@@ -51,7 +52,8 @@ int main()
       , boost::random_access_traversal_tag
     > iter;
 
-    boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<iter> >();
+    boost::function_requires< boost_concepts::WritableIteratorConcept<iter> >();
+    boost::function_requires< boost_concepts::LvalueIteratorConcept<iter> >();
     boost::function_requires< boost_concepts::RandomAccessTraversalConcept<iter> >();
   } 
 
