@@ -132,11 +132,13 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
          return pos_type(off_type(-1));
       else
          this->setg(g, g + off, g + size);
+      break;
    case ::std::ios_base::end:
       if((off < 0) || (off > size))
          return pos_type(off_type(-1));
       else
          this->setg(g, g + size - off, g + size);
+      break;
    case ::std::ios_base::cur:
    {
       std::ptrdiff_t newpos = pos + off;
@@ -144,6 +146,7 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
          return pos_type(off_type(-1));
       else
          this->setg(g, g + newpos, g + size);
+      break;
    }
    default: ;
    }
