@@ -1,5 +1,5 @@
 /* Boost example/newton-raphson.cpp
- * Newton iteration for intervals (partial: 0/0 is missing)
+ * Newton iteration for intervals
  *
  * Copyright Guillaume Melquiond 2003
  * Permission to use, copy, modify, sell, and distribute this software
@@ -47,8 +47,8 @@ std::vector<I1> newton_raphson(const I1& xs) {
     l.pop_back();
     bool x2_used;
     double xx = median(x);
-    vf = f(xx);
-    vd = f_diff(x);
+    vf = f<I1>(xx);
+    vd = f_diff<I1>(x);
     if (in_zero(vf) && in_zero(vd)) {
       x1 = I1::whole();
       x2_used = false;
@@ -74,7 +74,7 @@ std::vector<I1> newton_raphson(const I1& xs) {
       x2_used = true;
     } else l.push_back(x1);
     if (x2_used && in_zero(f(x2)))
-      if (width(x2) < max_width) res.push_back(x1);
+      if (width(x2) < max_width) res.push_back(x2);
       else l.push_back(x2);
   }
   return res;
@@ -93,8 +93,8 @@ std::vector<I2> newton_raphson(const I2& xs) {
     x = l.back();
     l.pop_back();
     double xx = median(x);
-    vf = f(xx);
-    vd = f_diff(x);
+    vf = f<I2>(xx);
+    vd = f_diff<I2>(x);
     if (in_zero(vf) && in_zero(vd)) {
       x1 = x;
       x2 = I2::empty();
@@ -114,7 +114,7 @@ std::vector<I2> newton_raphson(const I2& xs) {
       x2 = p.second;
     } else l.push_back(x1);
     if (!empty(x2) && in_zero(f(x2)))
-      if (width(x2) < max_width) res.push_back(x1);
+      if (width(x2) < max_width) res.push_back(x2);
       else l.push_back(x2);
   }
   return res;
