@@ -34,56 +34,44 @@
 #define BOOST_IOSTREAMS_PIPABLE(filter, arity) \
     template<BOOST_IOSTREAMS_PIPABLE_TEMPLATE_PARAMS(arity) typename Concept> \
     ::boost::iostreams::detail::piper< \
-        ::boost::iostreams::detail::piper< \
-             ::boost::iostreams::detail::null_piper, \
-             filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity) \
+        ::boost::iostreams::detail::concept_piper< \
+            filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity) \
         >, \
         Concept \
-    > operator|( const \
-                 ::boost::iostreams::detail::piper< \
-                     ::boost::iostreams::detail::null_piper, \
-                     filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity) \
-                 >& p, \
-                 const Concept& concept ) \
+    > operator|( const filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity)& f, \
+        const Concept& c ) \
     { \
-        return \
-        ::boost::iostreams::detail::piper< \
-            ::boost::iostreams::detail::piper< \
-                ::boost::iostreams::detail::null_piper, \
-                filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity) \
-            >, \
-            Concept \
-        >(p, concept); \
+        return ::boost::iostreams::detail::piper< \
+                   ::boost::iostreams::detail::concept_piper< \
+                       filter BOOST_IOSTREAMS_PIPABLE_TEMPLATE_ARGS(arity) \
+                   >, \
+                   Concept \
+               >(f, c); \
     } \
     /**/
 
 namespace boost { namespace iostreams { namespace detail {
 
-struct null_piper {
+template<typename Concept>
+struct concept_piper {
+    concept_piper(const Concept& concept) : concept_(concept) { }
     template<typename Chain>
-    void push(Chain&) const { }
+    void push(Chain& chn) const { chn.push(concept_); }
+    const Concept& concept_;
 };
 
 template<typename Piper, typename Concept>
-struct piper {
-    piper(const Concept& concept)
-        : p_(0), concept_(&concept)
-        {
-            BOOST_STATIC_ASSERT((is_same<Piper, null_piper>::value));
-        }
+struct piper : Piper {
     piper(const Piper& p, const Concept& concept)
-        : p_(&p), concept_(&concept)
-        {
-            BOOST_STATIC_ASSERT((!is_same<Piper, null_piper>::value));
-        }
+        : Piper(p), concept_(concept)
+        { }
     template<typename Chain>
     void push(Chain& chn) const
-        {
-            if (p_) p_->push(chn);
-            chn.push(*concept_);
-        }
-    const Piper*    p_;
-    const Concept*  concept_;
+    {
+        Piper::push(chn);
+        chn.push(concept_);
+    }
+    const Concept& concept_;
 };
 
 template<typename Piper, typename Filter, typename Concept>
