@@ -10,7 +10,7 @@
 #define BOOST_PLATFORM "Mac OS"
 
 // If __MACH__, we're using the BSD standard C library, not the MSL:
-#if defined(__MACH__)
+#if __MACH__
 
 #  define BOOST_NO_CTYPE_FUNCTIONS
 #  define BOOST_NO_CWCHAR
