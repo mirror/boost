@@ -47,14 +47,14 @@
 			where <STRONG>U</STRONG> is an accessible base of <STRONG>T</STRONG>, and to <STRONG>
 				shared_ptr&lt;void&gt;</STRONG>.</P>
 		<h2><a name="BestPractices">Best Practices</a></h2>
-		<P>A simple guideline that nearly eliminates&nbsp;the possibility of memory leaks 
+		<P>A simple guideline that nearly eliminates the possibility of memory leaks 
 			is: always use a named smart pointer variable to hold the result of <STRONG>new. </STRONG>
 			Every occurence of the <STRONG>new</STRONG> keyword in the code should have the 
 			form:</P>
 		<PRE>shared_ptr&lt;T&gt; p(new Y);</PRE>
 		<P>It is, of course, acceptable to use another smart pointer in place of <STRONG>shared_ptr</STRONG>
 			above; having <STRONG>T</STRONG> and <STRONG>Y</STRONG> be the same type, or 
-			passing arguments to <STRONG>Y</STRONG>'s constructor&nbsp;is also OK.</P>
+			passing arguments to <STRONG>Y</STRONG>'s constructor is also OK.</P>
 		<P>If you observe this guideline, it naturally follows that you will have no 
 			explicit <STRONG>delete</STRONG>s; <STRONG>try/catch</STRONG> constructs will 
 			be rare.</P>
@@ -96,23 +96,23 @@ void bad()
 
       typedef T <A href="#element_type" >element_type</A>;
 
-      <A href="#constructors" >shared_ptr</A>();
+      <A href="#constructors">shared_ptr</A>();
       template&lt;typename Y&gt; explicit <A href="#constructors" >shared_ptr</A>(Y * p);
       template&lt;typename Y, typename D&gt; <A href="#constructors" >shared_ptr</A>(Y * p, D d);
-      <A href="#destructor" >~shared_ptr</A>(); // never throws
+      <A href="#destructor">~shared_ptr</A>(); // never throws
 
-      <A href="#constructors" >shared_ptr</A>(shared_ptr const &amp; r); // never throws
-      template&lt;typename Y&gt; <A href="#constructors" >shared_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
-      explicit <A href="#constructors" >shared_ptr</A>(<A href="weak_ptr.htm" >weak_ptr</A> const &amp; r);
-      template&lt;typename Y&gt; <A href="#constructors" >shared_ptr</A>(std::auto_ptr&lt;Y&gt; &amp; r);
+      <A href="#constructors">shared_ptr</A>(shared_ptr const &amp; r); // never throws
+      template&lt;typename Y&gt; <A href="#constructors">shared_ptr</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
+      template&lt;typename Y&gt; explicit <A href="#constructors">shared_ptr</A>(<A href="weak_ptr.htm" >weak_ptr</A>&lt;Y&gt; const &amp; r);
+      template&lt;typename Y&gt; explicit <A href="#constructors" >shared_ptr</A>(std::auto_ptr&lt;Y&gt; &amp; r);
 
       shared_ptr &amp; <A href="#assignment" >operator=</A>(shared_ptr const &amp; r); // never throws  
       template&lt;typename Y&gt; shared_ptr &amp; <A href="#assignment" >operator=</A>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
       template&lt;typename Y&gt; shared_ptr &amp; <A href="#assignment" >operator=</A>(std::auto_ptr&lt;Y&gt; &amp; r);
 
-      void <A href="#reset" >reset</A> ();
-      template&lt;typename Y&gt; void <A href="#reset" >reset</A> (Y * p);
-      template&lt;typename Y&gt; template&lt;typename D&gt; void <A href="#reset" >reset</A>(Y * p, D d);
+      void <A href="#reset" >reset</A>();
+      template&lt;typename Y&gt; void <A href="#reset" >reset</A>(Y * p);
+      template&lt;typename Y, typename D&gt; void <A href="#reset" >reset</A>(Y * p, D d);
 
       T &amp; <A href="#indirection" >operator*</A>() const; // never throws
       T * <A href="#indirection" >operator-&gt;</A>() const; // never throws
@@ -121,9 +121,9 @@ void bad()
       bool <A href="#unique" >unique</A>() const; // never throws
       long <A href="#use_count" >use_count</A>() const; // never throws
 
-      operator <a href="#conversions"><i>unspecified-bool-type</i></a> () const; // never throws
+      operator <a href="#conversions"><i>unspecified-bool-type</i></a>() const; // never throws
 
-      void <A href="#swap" >swap</A>(shared_ptr&lt;T&gt; &amp; b); // never throws
+      void <A href="#swap" >swap</A>(shared_ptr &amp; b); // never throws
   };
 
   template&lt;typename T, typename U&gt;
@@ -147,12 +147,12 @@ void bad()
     shared_ptr&lt;T&gt; <A href="#shared_polymorphic_downcast" >shared_polymorphic_downcast</A>(shared_ptr&lt;U&gt; const &amp; r); // never throws
 
 }</pre>
-		<P><EM>[It might be&nbsp;convenient to relax the requirements on <STRONG>shared_ptr</STRONG>'s 
+		<P><EM>[It might be convenient to relax the requirements on <STRONG>shared_ptr</STRONG>'s 
 				signature, allowing an additional, defaulted, template parameter; the parameter 
 				can encode the threading model, for example. This would help in detecting 
 				possible ODR violations.</EM></P>
-		<P><EM> On the other hand, using <STRONG>shared_ptr</STRONG> as an argument to 
-				a&nbsp;template template parameter requires an exact signature match. </EM><EM>Metaprogramming 
+		<P><EM> On the other hand, using <STRONG>shared_ptr</STRONG> as an argument to a 
+				template template parameter requires an exact signature match. </EM><EM>Metaprogramming 
 				experts tend to deemphasize template template parameters as they are too 
 				inflexible, but the alternative is typically an std::allocator::rebind-type 
 				"hack".]</EM></P>
@@ -222,13 +222,13 @@ void bad()
 				of intrusive counting. <STRONG>shared_from_this</STRONG> would no longer be 
 				O(1), which is a concern for some users, although I do not expect any 
 				performance problems, since the operation is rare. Maintaining a global 
-				map&nbsp;is difficult; it needs to be initialized before any <STRONG>shared_ptr</STRONG>
-				instances are constructed, and the initialization needs to be&nbsp;thread safe. 
+				map is difficult; it needs to be initialized before any <STRONG>shared_ptr</STRONG>
+				instances are constructed, and the initialization needs to be thread safe. 
 				In addition, under the Windows dynamic library model, it is possible for 
 				several maps to exist.</EM></P>
 		<P><EM> It is not yet clear which implementation should be used, or whether the 
-				specification should allow both; nevertheless,&nbsp;the ability to make a <STRONG>shared_ptr</STRONG>
-				from <STRONG>this</STRONG> is considered essential&nbsp;by experienced smart 
+				specification should allow both; nevertheless, the ability to make a <STRONG>shared_ptr</STRONG>
+				from <STRONG>this</STRONG> is considered essential by experienced smart 
 				pointer users.</EM><EM>]</EM></P>
 		<pre>template&lt;typename Y, typename D&gt; shared_ptr(Y * p, D d);</pre>
 		<blockquote>
@@ -253,9 +253,18 @@ void bad()
 				to a statically allocated object.</EM></P>
 		<P><EM>The support for custom deallocators does not impose significant overhead. Other <STRONG>
 					shared_ptr</STRONG> features still require a deallocator to be kept.</EM></P>
-		<P><EM>The requirement that the copy constructor of <b>D</b> does not throw is too 
-				strong. It will be removed when some core language issues are resolved 
-				(cv-qualified function types, partial ordering clarifications.)]</EM></P>
+		<P><EM>The requirement that the copy constructor of <b>D</b> does not throw comes from 
+				the pass by value. If the copy constructor throws, the pointer is leaked. 
+				Removing the requirement requires a pass by (const) reference. The problems are 
+				that (1) pass by value conveniently changes functions (function references) to 
+				function pointers (this has to be performed manually otherwise and some 
+				compilers may not be able to do it) and (2) const references don't currently 
+				(per the standard) bind to functions. This can be solved (I think) but it 
+				requires an overload set that breaks on many compilers due to 14.5.5.2 problems 
+				(and of course it will break on compilers that don't do partial ordering at 
+				all.)</EM></P>
+		<P><EM>The requrement will be removed when the aforementioned issues are 
+				resolved.]</EM></P>
 		<pre>shared_ptr(shared_ptr const &amp; r); // never throws
 template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 		<blockquote>
@@ -267,7 +276,7 @@ template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // nev
 		</blockquote>
 		<P><EM>[The postcondition will be relaxed when a default-constructed <STRONG>shared_ptr</STRONG>
 				is being copied.]</EM></P>
-		<pre>explicit shared_ptr(<A href="weak_ptr.htm" >weak_ptr</A> const &amp; r);</pre>
+		<pre>template&lt;typename Y&gt; explicit shared_ptr(<A href="weak_ptr.htm">weak_ptr</A>&lt;Y&gt; const &amp; r);</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b>, as if by storing a copy of the 
 				pointer stored in <STRONG>r</STRONG>.</p>
@@ -389,7 +398,7 @@ q = p;
 		<h3><a name="conversions">conversions</a></h3>
 		<pre>operator <i>unspecified-bool-type</i> () const; // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an&nbsp;unspecified value that, when used in boolean contexts, 
+			<p><b>Returns:</b> an unspecified value that, when used in boolean contexts, 
 				is equivalent to <code>get() != 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<P><B>Notes:</B> This conversion operator allows <b>shared_ptr</b> objects to be 
@@ -423,7 +432,7 @@ q = p;
 		<pre>template&lt;typename T&gt;
   bool operator&lt;(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an&nbsp;unspecified value such that <b>operator&lt;</b> is a 
+			<p><b>Returns:</b> an unspecified value such that <b>operator&lt;</b> is a 
 				strict weak ordering as described in section 25.3 <code>[lib.alg.sorting]</code>
 				of the C++ standard.</p>
 			<p><b>Throws:</b> nothing.</p>
@@ -436,7 +445,7 @@ q = p;
 				standard algorithms use <STRONG>operator&lt;</STRONG> instead of <STRONG>std::less</STRONG>
 				for comparisons when a predicate is not supplied. Composite objects, like <STRONG>std::pair</STRONG>, 
 				also implement their <STRONG>operator&lt;</STRONG> in terms of their contained 
-				subobjects'&nbsp;<STRONG>operator&lt;</STRONG>.</EM></P>
+				subobjects' <STRONG>operator&lt;</STRONG>.</EM></P>
 		<P><EM>The rest of the comparison operators are omitted by design.]</EM></P>
 		<h3><a name="free-swap">swap</a></h3>
 		<pre>template&lt;typename T&gt;
@@ -546,8 +555,8 @@ q = p;
 			type.</p>
 		<h2><a name="ThreadSafety">Thread Safety</a></h2>
 		<p><STRONG>shared_ptr</STRONG> objects offer the same level of thread safety as 
-			built-in types.&nbsp;A&nbsp;<STRONG>shared_ptr</STRONG> instance can be "read" 
-			(accessed using only const operations)&nbsp;simultaneously by multiple threads. 
+			built-in types. A <STRONG>shared_ptr</STRONG> instance can be "read" 
+			(accessed using only const operations) simultaneously by multiple threads. 
 			Different <STRONG>shared_ptr</STRONG> instances can be "written to" (accessed 
 			using mutable operations such as <STRONG>operator= </STRONG>or <STRONG>reset</STRONG>) 
 			simultaneosly by multiple threads (even when these instances are copies, and 
@@ -659,8 +668,7 @@ int * p = a.release();
 			implementation or a linked list implementation, or some other specific 
 			implementation. This is not the intent.</p>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->
-			23 July 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
+		<p>Revised $Date$</p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 
