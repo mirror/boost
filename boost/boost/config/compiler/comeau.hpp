@@ -15,6 +15,13 @@
 #     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #     define BOOST_NO_SWPRINTF
 #  endif
+
+// Void returns don't work when emulating VC 6 (Peter Dimov)
+
+#  if defined(_MSC_VER) && (_MSC_VER <= 1200)
+#     define BOOST_NO_VOID_RETURNS
+#  endif
+
 #endif
 
 #define BOOST_COMPILER "Comeau compiler version " BOOST_STRINGIZE(__COMO_VERSION__)

@@ -23,7 +23,8 @@
 
 #if (BOOST_INTEL_CXX_VERSION <= 600) || !defined(BOOST_STRICT_CONFIG)
 
-#  if defined(_MSC_VER)
+#  if defined(_MSC_VER) && (_MSC_VER <= 1300) // added check for <= VC 7 (Peter Dimov)
+
       // Intel C++ 5.0.1 uses EDG 2.45, but fails to activate Koenig lookup
       // in the frontend even in "strict" mode, unless you use 
       // -Qoption,cpp,--arg_dep_lookup.  (reported by Kirk Klobe & Thomas Witt)
@@ -36,6 +37,13 @@
 #     endif
 #     define BOOST_NO_SWPRINTF
 #     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+#  endif
+
+// Void returns, 64 bit integrals don't work when emulating VC 6 (Peter Dimov)
+
+#  if defined(_MSC_VER) && (_MSC_VER <= 1200)
+#     define BOOST_NO_VOID_RETURNS
+#     define BOOST_NO_INTEGRAL_INT64_T
 #  endif
 
 #endif
