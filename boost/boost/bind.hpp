@@ -1448,6 +1448,8 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 // data member pointers
 
+/*
+
 #if defined(__GNUC__) && (__GNUC__ == 2)
 
 namespace _bi
@@ -1491,6 +1493,17 @@ _bi::bind_t< R const &, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
 }
 
 #endif
+
+*/
+
+template<class R, class T, class A1>
+_bi::bind_t< R, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
+    BOOST_BIND(R T::*f, A1 a1)
+{
+    typedef _mfi::dm<R, T> F;
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<R, F, list_type>( F(f), list_type(a1) );
+}
 
 } // namespace boost
 
