@@ -46,7 +46,13 @@ The above expands to:
 #define BOOST_PREPROCESSOR_TUPLE_ELEM(N,I,T) BOOST_PREPROCESSOR_TUPLE_ELEM_DELAY(N,I,T)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PREPROCESSOR_TUPLE_ELEM_DELAY(N,I,T) BOOST_PREPROCESSOR_IDENTITY(BOOST_PREPROCESSOR_TUPLE##N##_ELEM##I T)()
+#if defined(__MWERKS__) && __MWERKS__ <= 0x2405
+// This is a workaround for a CodeWarrior preprocessor bug. Strictly speaking
+// this workaround invokes undefined behavior, but it works as desired.
+#  define BOOST_PREPROCESSOR_TUPLE_ELEM_DELAY(N,I,T) BOOST_PREPROCESSOR_TUPLE##N##_ELEM##I##T
+#else
+#  define BOOST_PREPROCESSOR_TUPLE_ELEM_DELAY(N,I,T) BOOST_PREPROCESSOR_IDENTITY(BOOST_PREPROCESSOR_TUPLE##N##_ELEM##I T)()
+#endif
 
 #define BOOST_PREPROCESSOR_TUPLE1_ELEM0(E0) E0
 
