@@ -25,7 +25,7 @@
 
 
 
-#if defined BOOST_NO_STD_WSTRING
+#if defined BOOST_NO_STD_WSTRING || defined BOOST_NO_STD_LOCALE
 # define BOOST_DYNAMIC_BITSET_NO_WCHAR_T_TESTS
 #endif
 

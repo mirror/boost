@@ -64,7 +64,7 @@ const char * test_file_name()
   return "boost_dynamic_bitset_tests";
 }
 
-#if defined BOOST_OLD_IOSTREAMS
+#if defined BOOST_OLD_IOSTREAMS || defined BOOST_NO_STD_LOCALE
 template <typename Stream>
 bool is_one_or_zero(const Stream & /*s*/, char c)
 {
