@@ -122,10 +122,16 @@ AC_LANG_CPLUSPLUS
 
 OLD_CXXFLAGS="$CXXFLAGS"
 
+
 if test $enable_test = 'yes'; then
    CXXFLAGS="-I$boost_base -I$boost_base/libs/config/test $CXXFLAGS"
 else
    CXXFLAGS="-I$boost_base -I$boost_base/libs/config/test $CXXFLAGS -DBOOST_NO_CONFIG"
+fi
+
+# add the -AA conformance option to CXXFLAGS for HP aCC only
+if test $CXX = 'aCC'
+   CXXFLAGS="-AA $CXXFLAGS"
 fi
 
 dnl check for some standard libraries
