@@ -411,7 +411,7 @@ unsigned int expected_failures = 14;
 #elif defined(__SUNPRO_CC)
 #if(__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 18;
-#elif(__SUNPRO_CC <= 0x530)
+#elif(__SUNPRO_CC < 0x530)
 unsigned int expected_failures = 17;
 #else
 unsigned int expected_failures = 6;
@@ -425,9 +425,4 @@ unsigned int expected_failures = 24;
 #else
 unsigned int expected_failures = 0;
 #endif
-
-
-
-
-
 
