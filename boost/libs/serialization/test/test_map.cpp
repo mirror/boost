@@ -59,7 +59,7 @@ struct random_key {
     }
 };  
 
-#if defined(__COMO__) || (defined(__BORLANDC__) && defined(__SGI_STL_PORT))
+#if defined(__LIBCOMO__) || (defined(__BORLANDC__) && defined(__SGI_STL_PORT))
 namespace std {
   template<>
   struct equal_to<random_key>

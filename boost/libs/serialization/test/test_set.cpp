@@ -31,7 +31,7 @@ namespace std{
 
 #include "A.hpp"
 
-#if defined(__COMO__) || (defined(__BORLANDC__) && defined(__SGI_STL_PORT))
+#if defined(__LIBCOMO__) || (defined(__BORLANDC__) && defined(__SGI_STL_PORT))
 namespace std {
     template<>
     struct less<A>
@@ -45,6 +45,13 @@ namespace std {
     {
         bool operator()(const A & lhs, const A & rhs) {
             return lhs == rhs;
+        }
+    };
+    template<>
+    struct hash<A>
+    {
+        std::size_t operator()(const A& a) const {
+            return (std::size_t)a;
         }
     };
 }
