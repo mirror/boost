@@ -17,10 +17,6 @@
 #ifndef BOOST_CONFIG_SUFFIX_HPP
 #define BOOST_CONFIG_SUFFIX_HPP
 
-# ifndef BOOST_DECL
-#   define BOOST_DECL  // default for compilers not needing this decoration.
-# endif
-
 //
 // look for long long by looking for the appropriate macros in <limits.h>.
 // Note that we use limits.h rather than climits for maximal portability,
