@@ -94,7 +94,9 @@ namespace boost { namespace program_options {
     {
     public:
         invalid_option_value(const std::string& value);
+#ifndef BOOST_NO_STD_WSTRING
         invalid_option_value(const std::wstring& value);
+#endif
     };
 
     /** Class thrown when there are too many positional options. */

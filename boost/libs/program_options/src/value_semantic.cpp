@@ -178,6 +178,14 @@ namespace boost { namespace program_options {
     }
 
 
+    invalid_option_value::
+    invalid_option_value(const std::string& bad_value)
+    : validation_error(string("invalid option value '")
+                       .append(bad_value).append("'"))
+    {}
+
+#ifndef BOOST_NO_STD_WSTRING
+
     namespace
     {
         std::string convert_value(const std::wstring& s)
@@ -191,20 +199,13 @@ namespace boost { namespace program_options {
         }
     }
 
-
-    invalid_option_value::
-    invalid_option_value(const std::string& bad_value)
-    : validation_error(string("invalid option value '")
-                       .append(bad_value).append("'"))
-    {}
-
     invalid_option_value::
     invalid_option_value(const std::wstring& bad_value)
     : validation_error(string("invalid option value '")
                        .append(convert_value(bad_value))
                        .append("'"))
     {}
-                       
+#endif                       
 
 
 
