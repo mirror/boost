@@ -242,7 +242,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e_.size2 ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors - const correct
         BOOST_UBLAS_INLINE
         const refered_type &expression () const {
@@ -519,7 +521,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
@@ -1045,7 +1049,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e_.size2 ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression_closure_type &expression () const {
@@ -1523,7 +1529,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e_.size1 ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression_closure_type &expression () const {
@@ -1979,7 +1987,9 @@ namespace boost { namespace numeric { namespace ublas {
             return BOOST_UBLAS_SAME (e1_.size2 (), e2_.size2 ());
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
@@ -2733,7 +2743,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size2 ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
@@ -3192,7 +3204,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e1_.size2 ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
@@ -3656,7 +3670,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e1_.size1 ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
@@ -4058,7 +4074,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size2 (); 
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
@@ -4466,7 +4484,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_.size2 ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression1_closure_type &expression1 () const {
@@ -5154,7 +5174,9 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_scalar_unary (const expression_type &e):
             e_ (e) {}
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression_closure_type &expression () const {

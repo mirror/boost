@@ -243,7 +243,9 @@ namespace boost { namespace numeric { namespace ublas {
             return expression ().size ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors - const correct
         BOOST_UBLAS_INLINE
         const refered_type &expression () const {
@@ -475,7 +477,9 @@ namespace boost { namespace numeric { namespace ublas {
             return e_.size ();
         }
 
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
         // Expression accessors
         BOOST_UBLAS_INLINE
         const expression_closure_type &expression () const {
@@ -1663,8 +1667,10 @@ namespace boost { namespace numeric { namespace ublas {
         vector_scalar_unary (const expression_type &e):
             e_ (e) {}
 
-        // Expression accessors
+#ifndef BOOST_UBLAS_NESTED_CLASS_DR45
     private:
+#endif
+        // Expression accessors
         BOOST_UBLAS_INLINE
         const expression_closure_type &expression () const {
             return e_;
