@@ -72,7 +72,6 @@ can keep this table up-to-date.
 
 <ul>
   <li><em>Beginner:</em> <a href="#hello_world">Hello, World!</a></li>
-  <li><em>Intermediate:</em> <a href="#signalN">Signal classes</a></li>
   <li>Calling multiple slots
     <ul>
       <li><em>Beginner:</em> <a href="#multiple_slots">Connecting multiple slots</a></li>
@@ -90,7 +89,12 @@ can keep this table up-to-date.
     <ul>
       <li><em>Beginner:</em> <a href="#disconnecting">Disconnecting
       Slots</a></li>
+      <li><em>Intermediate:</em> <a href="#scoped">Scoped
+      connections</a></li>
+      <li><em>Intermediate:</em> <a href="#tracking">Automatic
+      connection management</li>
     </ul></li>
+  <li><a href="#passing_slots">Passing slots</a></li>
 </ul>
 <hr>
 
@@ -188,14 +192,33 @@ return value. This time, we connect both a <code>hello</code> and a
 <code>world</code> slot to the same signal, and when we call the
 signal both slots will be called.
 
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th
+          bgcolor="#008080">Compatible Syntax</th></tr>
+<tr><td>
 <pre>
-boost::signal&lt;void&gt; sig;
+boost::signal&lt;void ()&gt; sig;
 
 sig.connect(Hello());
 sig.connect(World());
 
 sig();
 </pre>
+</td>
+<td>
+<pre>
+boost::signal0&lt;void&gt; sig;
+
+sig.connect(Hello());
+sig.connect(World());
+
+sig();
+</pre>
+</td>
+</tr>
+</table>
+</center>
 
 <p> Now, if you compile and run this program, you might see something
 strange. It is possible that the output will look like this:
@@ -222,12 +245,25 @@ supply an extra parameter at the beginning of the <code>connect</code>
 call that specifies the group. Group values are, by default,
 <code>int</code>s, and are ordered by the integer &lt;
 relation. Here's how we construct Hello, World:
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th
+          bgcolor="#008080">Compatible Syntax</th></tr>
+<tr><td>
 <pre>
-boost::signal&lt;void&gt; sig;
+boost::signal&lt;void ()&gt; sig;
 sig.connect(0, Hello());
 sig.connect(1, World());
 sig();
 </pre>
+</td><td>
+<pre>
+boost::signal0&lt;void&gt; sig;
+sig.connect(0, Hello());
+sig.connect(1, World());
+sig();
+</pre>
+</td></tr></table></center>
 
 <p> This program will correctly print "Hello, World!", because the
 <code>Hello</code> object is in group 0, which precedes group 1 where
@@ -327,44 +363,6 @@ signal has a <code>void</code> return value and takes two
 <code>float</code> values. Any slot connected to <code>sig</code> must
 therefore be able to take two <code>float</code> values.
 
-<h2><a name="signalN">Numbered Signals</a></h2>
-<p> The <code>boost::signal</code> class template takes a variable
-number of template arguments so that any number of slot arguments can
-be specified. In our "Hello, World!" program we specified no
-arguments, but with our arithmetic functions example we used two
-<code>float</code> arguments just by giving the argument types to the
-<code>boost::signal</code> class template. 
-
-<p> The variable number of template arguments is quite useful for
-simplicity, but it requires a large amount of code to be compiled
-(e.g., code to handle 0-10 arguments requires essentially 11 copies of
-similar code) and also makes specifying additional template parameters
-very verbose. For these reasons, the Signals library includes a set of
-"numbered" signal class templates that are functionally equivalent to
-the <code>boost::signal</code> class template. A signal such as
-<pre>
-boost::signal&lt;float, float, float&gt; sig;
-</pre>
-
-<p>takes two <code>float</code> arguments, so the corresponding
-numbered version uses the <code>boost::signal2</code> class template
-like so:
-<pre>
-boost::signal2&lt;float, float, float&gt; sig;
-</pre>
-
-<p> Similar class templates <code>boost:signal0</code>,
-<code>boost::signal1</code>, etc. exist for slots taking 0, 1, or more
-arguments. <p> The main header for Boost.Signals,
-<code>boost/signal.hpp</code>, 
-includes the <code>boost::signal</code> class template and all of
-the numbered variants. However, if only a few numbered variants will
-be used within a particular piece of code then only the appropriate
-header needs to be included: <code>boost/signals/signal0.hpp</code>
-includes the class template <code>boost::signal0</code>,
-<code>boost/signals/signal1.hpp</code> includes the class template
-<code>boost::signal1</code>, etc. 
-
 <h2><a name="return_values">Signal Return Values</a></h2>
 <p> Just as slots can receive arguments, they can also return
 values. These values can then be returned back to the caller of the
@@ -381,13 +379,18 @@ so that the slots all return the results of computing the product,
 quotient, sum, or difference. Then the signal itself can return a
 value based on these results to be printed:
 
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th
+          bgcolor="#008080">Compatible Syntax</th></tr>
+<tr><td>
 <pre>
 float compute_product(float x, float y) { return x*y; }
 float compute_quotient(float x, float y) { return x/y; }
 float compute_sum(float x, float y) { return x+y; }
 float compute_difference(float x, float y) { return x-y; }
 
-boost::signal&lt;float, float, float&gt; sig;
+boost::signal&lt;float (float x, float y)&gt; sig;
 
 sig.connect(&amp;compute_product);
 sig.connect(&amp;compute_quotient);
@@ -396,6 +399,23 @@ sig.connect(&amp;compute_difference);
 
 std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
 </pre>
+</td><td>
+<pre>
+float compute_product(float x, float y) { return x*y; }
+float compute_quotient(float x, float y) { return x/y; }
+float compute_sum(float x, float y) { return x+y; }
+float compute_difference(float x, float y) { return x-y; }
+
+boost::signal2&lt;float, float, float&gt; sig;
+
+sig.connect(&amp;compute_product);
+sig.connect(&amp;compute_quotient);
+sig.connect(&amp;compute_sum);
+sig.connect(&amp;compute_difference);
+
+std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
+</pre>
+</td></tr></table></center>
 
 <p> This example program will output either <code>8</code>,
 <code>1.6667</code>, <code>15</code>, or <code>2</code>, depending on
@@ -452,16 +472,21 @@ maximum value.
 a combiner for our signal. It is supplied via a <em>named template
 parameter</em> like this:
 
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th
+          bgcolor="#008080">Compatible Syntax</th></tr>
+<tr><td>
 <pre>
-boost::signal&lt;float, float, float&gt;::with_combiner&lt;maximum&lt;float&gt; &gt;::type sig;
+boost::signal&lt;float (float x, float y), 
+              maximum&lt;float&gt; &gt sig;
 </pre>
-
-<p> Or, alternatively, we could use a numbered signal class and supply
-our custom combiner as the first template parameter following the
-argument types:
+</td><td>
 <pre>
-boost::signal2&lt;float, float, float, maximum&lt;float&gt; &gt; sig;
+boost::signal2&lt;float, float, float, 
+               maximum&lt;float&gt; &gt; sig;
 </pre>
+</td></tr></table></center>
 
 <p> Now we can connect slots that perform arithmetic functions and use
 the signal:
@@ -496,8 +521,14 @@ struct aggregate_values
 </pre>
 
 Again, we can create a signal with this new combiner:
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th
+          bgcolor="#008080">Compatible Syntax</th></tr>
+<tr><td>
 <pre>
-boost::signal&lt;float, float, float&gt;::with_combiner&lt;aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt;::type sig;
+boost::signal&lt;float (float, float), 
+              aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt; sig;
 
 sig.connect(&amp;compute_quotient);
 sig.connect(&amp;compute_product);
@@ -505,8 +536,24 @@ sig.connect(&amp;compute_sum);
 sig.connect(&amp;compute_difference);
 
 std::vector&lt;float&gt; results = sig(5, 3);
-std::copy(results.begin(), results.end(), std::ostream_iterator&lt;float&gt;(cout, " "));
+std::copy(results.begin(), results.end(), 
+          std::ostream_iterator&lt;float&gt;(cout, " "));
 </pre>
+</td><td>
+<pre>
+boost::signal2&lt;float, float, float,
+               aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt; sig;
+
+sig.connect(&amp;compute_quotient);
+sig.connect(&amp;compute_product);
+sig.connect(&amp;compute_sum);
+sig.connect(&amp;compute_difference);
+
+std::vector&lt;float&gt; results = sig(5, 3);
+std::copy(results.begin(), results.end(), 
+          std::ostream_iterator&lt;float&gt;(cout, " "));
+</pre>
+</td></tr></table></center>
 
 <p>The output of this program will contain 15, 8, 1.6667, and 2 (but not
 necessarily in that order). It is interesting here that the first
@@ -534,21 +581,170 @@ between a particular signal and a particular slot. The
 still connected, and the <code>disconnect()</code> method disconnects
 the signal and slot if they are connected before it is called. Each
 call to the signal's <code>connect()</code> method returns a
-connection object 
+connection object, which can be used to determine if the connection
+still exists or to disconnect the signal and slot.
 
 <pre>
-struct Hello {
-  void operator()() const
+boost::signals::connection c = sig.connect(HelloWorld());
+if (c.connected()) {
+  <em>// c is still connected to the signal</em>
+  sig(); <em>// Prints "Hello, World!"</em>
+}
+
+c.disconnect(); <em>// Disconnect the HelloWorld object</em>
+assert(!c.connected()); <em>c isn't connected any more</em>
+
+sig(); <em>// Does nothing: there are no connected slots</em>
+</pre>
+
+<h2><a name="scoped">Scoped connections</a></h2>
+<p> The <code>boost::signals::scoped_connection</code> class
+references a signal/slot connection that will be disconnected when the
+<code>scoped_connection</code> class goes out of scope. This ability
+is useful when a connection need only be temporary, e.g.,
+
+<pre>
+{
+  boost::signals::scoped_connection c = sig.connect(ShortLived());
+  sig(); <em>// will call ShortLived function object</em>
+}
+sig(); <em>// ShortLived function object no longer connected to sig</em>
+</pre>
+
+<h2><a name="tracking">Automatic connection management</a></h2>
+Boost.Signals can automatically track the lifetime of objects involved
+in signal/slot connections, including automatic disconnection of slots
+when objects involved in the slot call are destroyed. For instance,
+consider a simple news delivery service, where clients connect to a
+news provider that then sends news to all connected clients as
+information arrives. The news delivery service may be constructed like
+this:
+
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th
+          bgcolor="#008080">Compatible Syntax</th></tr>
+<tr><td>
+<pre>
+class NewsItem { /* ... */ };
+
+boost::signal&lt;void (const NewsItem& latestNews)&gt; deliverNews;
+</pre>
+</td><td>
+<pre>
+class NewsItem { /* ... */ };
+
+boost::signal1&lt;void, const NewsItem&&gt; deliverNews;
+</pre>
+</td></tr></table></center>
+
+<p> Clients that wish to receive news updates need only connect a
+function object that can receive news items to the
+<code>deliverNews</code> signal. For instance, we may have a special
+message area in our application specifically for news, e.g.,:
+
+<pre>
+struct NewsMessageArea : public MessageArea
+{
+public:
+  // ...
+
+  void displayNews(const NewsItem&amp; news) const
   {
-    std::cout &lt;&lt; "Hello" &lt;&lt; std::endl;
+    messageText = news.text();
+    update();
   }
 };
 
-boost::signal&lt;void&gt; sig;
-
-sig.connect(Hello());
-
+// ...
+NewsMessageArea newsMessageArea = new NewsMessageArea(/* ... */);
+// ...
+deliverNews.connect(boost::bind(&amp;NewsMessageArea::displayNews, 
+                                newsMessageArea, _1));
 </pre>
+
+<p> However, what if the user closes the news message area, destroying
+the <code>newsMessageArea</code> object that <code>deliverNews</code>
+knows about? Most likely, a segmentation fault will occur. However,
+with Boost.Signals one need only make <code>NewsMessageArea</code>
+<em>trackable</em>, and the slot involving
+<code>newsMessageArea</code> will be disconnected when
+<code>newsMessageArea</code> is destroyed. The
+<code>NewsMessageArea</code> class is made trackable by deriving
+publicly from the <code>boost::signals::trackable</code> class, e.g.:
+
+<pre>
+struct NewsMessageArea : public MessageArea, public boost::signals::trackable
+{
+  // ...
+};
+</pre>
+
+<p> At this time there is a significant limitation to the use of
+<code>trackable</code> objects in making slot connections: function
+objects built using Boost.Bind are understood, so that any place a
+<code>trackable</code> object appears in a bind expression. However,
+user-defined function objects and function objects from other
+libraries (e.g., Boost.Function or Boost.Lambda) do not implement the
+required interfaces for <code>trackable</code> object detection, and
+<em>will silently ignore any bound trackable objects</em>. Future
+versions of the Boost libraries will address this limitation.
+
+<h2><a name="passing_slots">Passing slots</a></h2>
+<p> Slots in the Boost.Signals library are created from arbitrary
+function objects, and therefore have no fixed type. However, it is
+commonplace to require that slots be passed through interfaces that
+cannot be templates. Slots can be passed via the
+<code>slot_type</code> for each particular signal type and any valid
+function object can be passed to a <code>slot_type</code>
+parameter. For instance:
+
+    <center>
+      <table border=1 cellspacing=1>
+          <tr><th bgcolor="#008080">Preferred Syntax</th><th
+          bgcolor="#008080">Compatible Syntax</th></tr>
+<tr><td>
+<pre>
+class Button 
+{
+  typedef boost::signal&lt;void (int x, int y)&gt; OnClick;
+
+public:
+  void doOnClick(const OnClick::slot_type& slot);
+
+private:
+  OnClick onClick;
+};
+
+void Button::doOnClick(const OnClick::slot_type& slot)
+{
+  onClick.connect(slot);
+}
+</pre>
+</td><td>
+<pre>
+class Button 
+{
+  typedef boost::signal2&lt;void, int x, int y&gt; OnClick;
+
+public:
+  void doOnClick(const OnClick::slot_type& slot);
+
+private:
+  OnClick onClick;
+};
+
+void Button::doOnClick(const OnClick::slot_type& slot)
+{
+  onClick.connect(slot);
+}
+</pre>
+</td></tr></table></center>
+
+<p> The <code>doOnClick</code> method is now functionally equivalent
+to the <code>connect</code> method of the <code>onClick</code> signal,
+but the details of the <code>doOnClick</code> method can be hidden in
+an implementation detail file.
 
     <hr>
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
