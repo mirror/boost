@@ -40,9 +40,7 @@
 
 <title>Boost.Variant</title>
   <xi:include href="introduction.xml"/>
-<!--
-  <xi:include href="tutorial.xml"/>
--->
+  <xi:include href="tutorial/tutorial.xml"/>
   <xi:include href="reference/reference.xml"/>
 <!--
   <xi:include href="design.xml"/>
