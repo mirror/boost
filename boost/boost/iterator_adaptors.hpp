@@ -842,12 +842,12 @@ struct iterator_adaptor :
         { return *(*this + n); }
     
     self& operator++() {
-#ifdef __MWERKS__
+#if !defined(__MWERKS__) || __MWERKS__ >= 0x2405
+        policies().increment(*this);
+#else
         // Odd bug, MWERKS couldn't  deduce the type for the member template
         // Workaround by explicitly specifying the type.
         policies().increment<self>(*this);
-#else
-        policies().increment(*this);
 #endif
         return *this;
     }
@@ -855,10 +855,10 @@ struct iterator_adaptor :
     self operator++(int) { self tmp(*this); ++*this; return tmp; }
     
     self& operator--() {
-#ifdef __MWERKS__
-        policies().decrement<self>(*this);
-#else
+#if !defined(__MWERKS__) || __MWERKS__ >= 0x2405
         policies().decrement(*this);
+#else
+        policies().decrement<self>(*this);
 #endif
         return *this;
     }
@@ -1314,7 +1314,7 @@ namespace detail {
   template <class Iterator>
   struct non_bidirectional_category
   {
-# if !defined(__MWERKS__) || __MWERKS__ > 0x4000
+# if !defined(__MWERKS__) || __MWERKS__ > 0x2405
       typedef typename reduce_to_base_class<
               std::forward_iterator_tag,
                    typename iterator_traits<Iterator>::iterator_category
