@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Tab-expanding OutputFilter Example Output</TITLE>
+</HEAD>
+<BODY>
+<PRE>**** Code with tabs ****
+
+class tab_expanding_output_filter : public output_filter {
+public:
+        explicit tab_expanding_output_filter(int tab_size = 8)
+                : tab_size_(tab_size), col_no_(0)
+                { assert(tab_size &gt; 0); }
+
+        template&lt;typename Sink&gt;
+        void put(Sink& dest, int c)
+                {
+                        if (c == '\t') {
+                                do {
+                                        this->put(dest, ' ');
+                                } while(col_no_ % tab_size_ != 0);
+                        } else {
+                                boost::iostreams::put(dest, c);
+                                if (c == '\n')
+                                        col_no_ = 0;
+                                else
+                                        ++col_no_;
+                        }
+                }
+        templatetypename Sink
+        void close(Sink&) { col_no_ = 0; }
+private:
+        int     tab_size_;
+        int     col_no_;
+};
+
+
+**** Code with tabs replaced ****
+
+class tab_expanding_output_filter : public output_filter {
+public:
+  explicit tab_expanding_output_filter(int tab_size = 8)
+    : tab_size_(tab_size), col_no_(0)
+    { assert(tab_size &gt; 0); }
+
+  template&lt;typename Sink&gt;
+  void put(Sink& dest, int c)
+    {
+      if (c == '\t') {
+        do {
+          this->put(dest, ' ');
+        } while(col_no_ % tab_size_ != 0);
+      } else {
+        boost::iostreams::put(dest, c);
+        if (c == '\n')
+          col_no_ = 0;
+        else
+          ++col_no_;
+      }
+    }
+  template&lt;typename Sink&gt;
+  void close(Sink&) { col_no_ = 0; }
+private:
+  int tab_size_;
+  int col_no_;
+};
+</PRE>
+</BODY>
+</HTML>

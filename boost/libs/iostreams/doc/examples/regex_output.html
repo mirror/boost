@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Regex OutputFilter Example Output</TITLE>
+</HEAD>
+<BODY>
+<PRE>
+**** Code unfiltered ****
+
+/*
+ *
+ * Copyright (c) 1998-2002
+ * Dr John Maddock
+ *
+ * Permission to use, copy, modify, distribute and sell this software
+ * and its documentation for any purpose is hereby granted without fee,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
+ * in supporting documentation.  Dr John Maddock makes no representations
+ * about the suitability of this software for any purpose.
+ * It is provided "as is" without express or implied warranty.
+ *
+ */
+
+ /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         regex_format.hpp
+  *   VERSION      see &lt;boost/version.hpp&gt;
+  *   DESCRIPTION: Provides formatting output routines for search and replace
+  *                operations.  Note this is an internal header file included
+  *                by regex.hpp, do not include on its own.
+  */
+
+#ifndef BOOST_REGEX_FORMAT_HPP
+#define BOOST_REGEX_FORMAT_HPP
+
+
+namespace boost{
+
+enum format_flags_t{
+   format_all = 0,                      // enable all extentions to sytax
+   format_sed = match_max &lt;&lt; 1,         // sed style replacement.
+   format_perl = format_sed &lt;&lt; 1,       // perl style replacement.
+   format_no_copy = format_perl &lt;&lt; 1,   // don't copy non-matching segments.
+   format_first_only = format_no_copy &lt;&lt; 1,   // Only replace first occurance.
+   format_is_if = format_first_only &lt;&lt; 1   // internal use only.
+};
+
+
+**** Code with comments removed ****
+
+
+
+
+
+#ifndef BOOST_REGEX_FORMAT_HPP
+#define BOOST_REGEX_FORMAT_HPP
+
+
+namespace boost{
+
+enum format_flags_t{
+   format_all = 0,
+   format_sed = match_max &lt;&lt; 1,
+   format_perl = format_sed &lt;&lt; 1,
+   format_no_copy = format_perl &lt;&lt; 1,
+   format_first_only = format_no_copy &lt;&lt; 1,
+   format_is_if = format_first_only &lt;&lt; 1
+};
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE>Uncommenting InputFilter Example Output</TITLE>
+</HEAD>
+<BODY>
+<PRE>**** Script with comments ****
+
+# Be Bourne compatible
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+emulate sh
+NULLCMD=:
+# Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
+# is contrary to our usage.  Disable this feature.
+alias -g '${1+"$@"}'='"$@"'
+elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+set -o posix
+fi
+
+# Support unset when possible.
+if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
+as_unset=unset
+else
+as_unset=false
+fi
+
+**** Script with comments removed ****
+
+
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+emulate sh
+NULLCMD=:
+
+
+alias -g '${1+"$@"}'='"$@"'
+elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
+set -o posix
+fi
+
+
+if (FOO=FOO; unset FOO) >/dev/null 2>&1; then
+as_unset=unset
+else
+as_unset=false
+fi
+
+</PRE>
+</BODY>
+</HTML>

@@ -1,0 +1,365 @@
+// (C) Copyright Jonathan Turkanis 2003.
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt.)
+
+// See http://www.boost.org/libs/iostreams for documentation.
+
+#ifndef BOOST_IOSTREAMS_BZIP2_HPP_INCLUDED
+#define BOOST_IOSTREAMS_BZIP2_HPP_INCLUDED
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
+#endif
+
+#include <cassert>                            
+#include <memory>                         // allocator.
+#include <ios>                            // failure.
+#include <new>                            // bad_alloc.
+#include <boost/config.hpp>               // BOOST_MSVC, BOOST_STATIC_CONSTANT.
+#include <boost/detail/workaround.hpp>
+#include <boost/iostreams/constants.hpp>  // buffer size.
+#include <boost/iostreams/detail/config/auto_link.hpp>
+#include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/config/bzip2.hpp>
+#include <boost/iostreams/filter/symmetric_filter_adapter.hpp>               
+#include <boost/iostreams/pipable.hpp>       
+#include <boost/type_traits/is_same.hpp>     
+
+// Must come last.
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable:4251 4231 4660)
+#endif
+#include <boost/config/abi_prefix.hpp>           
+
+// Temporary fix.
+#undef small
+
+namespace boost { namespace iostreams {
+
+namespace bzip2 {
+
+                    // Typedefs.
+
+typedef void* alloc_func(void*, int, int);
+typedef void free_func(void*, void*);
+
+                    // Status codes
+
+BOOST_IOSTREAMS_DECL extern const int ok;
+BOOST_IOSTREAMS_DECL extern const int run_ok;
+BOOST_IOSTREAMS_DECL extern const int flush_ok;
+BOOST_IOSTREAMS_DECL extern const int finish_ok;
+BOOST_IOSTREAMS_DECL extern const int stream_end;    
+BOOST_IOSTREAMS_DECL extern const int sequence_error;
+BOOST_IOSTREAMS_DECL extern const int param_error;
+BOOST_IOSTREAMS_DECL extern const int mem_error;
+BOOST_IOSTREAMS_DECL extern const int data_error;
+BOOST_IOSTREAMS_DECL extern const int data_error_magic;
+BOOST_IOSTREAMS_DECL extern const int io_error;
+BOOST_IOSTREAMS_DECL extern const int unexpected_eof;
+BOOST_IOSTREAMS_DECL extern const int outbuff_full;
+BOOST_IOSTREAMS_DECL extern const int config_error;
+
+                    // Action codes
+
+BOOST_IOSTREAMS_DECL extern const int finish;
+BOOST_IOSTREAMS_DECL extern const int run;
+
+                    // Default values
+
+const int default_block_size   = 9;
+const int default_work_factor  = 30;
+const bool default_small       = false;
+
+} // End namespace bzip2. 
+
+//
+// Class name: bzip2_params.
+// Description: Encapsulates the parameters passed to deflateInit2
+//      to customize compression.
+//
+struct bzip2_params {
+
+    // Non-explicit constructor for compression.
+    bzip2_params( int block_size   = bzip2::default_block_size,
+                  int work_factor  = bzip2::default_work_factor )
+        : block_size(block_size), work_factor(work_factor)
+        { }
+
+    // Constructor for decompression.
+    bzip2_params(bool small)
+        : small(small), work_factor(0)
+        { }
+
+    union {
+        int   block_size;    // For compression.
+        bool  small;         // For decompression.
+    };
+    int       work_factor;
+};
+
+//
+// Class name: bzip2_error.
+// Description: Subclass of std::ios_base::failure thrown to indicate
+//     bzip2 errors other than out-of-memory conditions.
+//
+class BOOST_IOSTREAMS_DECL bzip2_error : public std::ios_base::failure {
+public:
+    bzip2_error(int error);
+    int error() const { return error_; }
+    static void check(int error);
+private:
+    int error_;
+};
+
+namespace detail {
+
+template<typename Alloc>
+struct bzip2_allocator_traits {
+    typedef typename Alloc::template rebind<char>::other type;
+};
+
+template<typename Alloc>
+struct bzip2_allocator : private bzip2_allocator_traits<Alloc>::type {
+private:
+    typedef typename bzip2_allocator_traits<Alloc>::type  base_type;
+    typedef typename base_type::size_type                 size_type;
+public:
+    BOOST_STATIC_CONSTANT(bool, custom = 
+        (!is_same<std::allocator<char>, base_type>::value));
+    typedef typename bzip2_allocator_traits<Alloc>::type allocator_type;
+    static void* alloc(void* self, int items, int size);
+    static void free(void* self, void* address);
+};
+
+class BOOST_IOSTREAMS_DECL bzip2_base  { 
+public:
+    typedef char                    char_type;
+protected:
+    bzip2_base(const bzip2_params& params);
+    ~bzip2_base();
+    bzip2_params& params() { return params_; }
+    bool& ready() { return ready_; }
+    template<typename Alloc> 
+    void init( bool compress,
+               bzip2_allocator<Alloc>& alloc )
+        {
+            bool custom = bzip2_allocator<Alloc>::custom;
+            do_init( compress,
+                     custom ? bzip2_allocator<Alloc>::alloc : 0,
+                     custom ? bzip2_allocator<Alloc>::free : 0,
+                     custom ? &alloc : 0 );
+        }
+    void before( const char*& src_begin, const char* src_end,
+                 char*& dest_begin, char* dest_end );
+    void after(const char*& src_begin, char*& dest_begin);
+    int compress(int action);
+    int decompress();
+    void end(bool compress);
+private:
+    void do_init( bool compress, bzip2::alloc_func, 
+                  bzip2::free_func, void* derived );
+    bzip2_params  params_;
+    void*         stream_; // Actual type: bz_stream*.
+    bool          ready_;
+};
+
+//
+// Template name: bzip2_compressor_impl
+// Description: Model of C-Style Filte implementing compression by
+//      delegating to the libbzip2 function BZ_bzCompress.
+//
+template<typename Alloc = std::allocator<char> >
+class bzip2_compressor_impl 
+    : public bzip2_base, 
+      #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+          public
+      #endif
+      bzip2_allocator<Alloc> 
+{
+public: 
+    bzip2_compressor_impl(const bzip2_params&);
+    bool filter( const char*& src_begin, const char* src_end,
+                 char*& dest_begin, char* dest_end, bool flush );
+    void close();
+private:
+    void init();
+};
+
+//
+// Template name: bzip2_compressor
+// Description: Model of C-Style Filte implementing decompression by
+//      delegating to the libbzip2 function BZ_bzDecompress.
+//
+template<typename Alloc = std::allocator<char> >
+class bzip2_decompressor_impl 
+    : public bzip2_base, 
+      #if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+          public
+      #endif
+      bzip2_allocator<Alloc> 
+{ 
+public:
+    bzip2_decompressor_impl(bool small = bzip2::default_small);
+    bool filter( const char*& begin_in, const char* end_in,
+                 char*& begin_out, char* end_out, bool flush );
+    void close();
+private:
+    void init();
+};
+
+} // End namespace detail.
+
+//
+// Template name: bzip2_compressor
+// Description: Model of InputFilter and OutputFilter implementing
+//      compression using libbzip2.
+//
+template<typename Alloc = std::allocator<char> >
+struct basic_bzip2_compressor 
+    : symmetric_filter_adapter<detail::bzip2_compressor_impl<Alloc>, Alloc> 
+{
+private:
+    typedef detail::bzip2_compressor_impl<Alloc>        impl_type;
+    typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
+public:
+    typedef typename base_type::char_type               char_type;
+    typedef typename base_type::category                category;
+    basic_bzip2_compressor( const bzip2_params& = bzip2::default_block_size, 
+                            std::streamsize buffer_size = 
+                                default_buffer_size );
+                                // Note: use large buffer.
+};
+BOOST_IOSTREAMS_PIPABLE(basic_bzip2_compressor, 1)
+
+typedef basic_bzip2_compressor<> bzip2_compressor;
+
+//
+// Template name: bzip2_decompressor
+// Description: Model of InputFilter and OutputFilter implementing
+//      decompression using libbzip2.
+//
+template<typename Alloc = std::allocator<char> >
+struct basic_bzip2_decompressor 
+    : symmetric_filter_adapter<detail::bzip2_decompressor_impl<Alloc>, Alloc> 
+{
+private:
+    typedef detail::bzip2_decompressor_impl<Alloc>      impl_type;
+    typedef symmetric_filter_adapter<impl_type, Alloc>  base_type;
+public:
+    typedef typename base_type::char_type               char_type;
+    typedef typename base_type::category                category;
+    basic_bzip2_decompressor( bool small = bzip2::default_small,
+                              std::streamsize buffer_size = 
+                                  default_buffer_size );
+    // Note: use large buffer.
+};
+BOOST_IOSTREAMS_PIPABLE(basic_bzip2_decompressor, 1)
+
+typedef basic_bzip2_decompressor<> bzip2_decompressor;
+
+//----------------------------------------------------------------------------//
+
+//------------------Implementation of bzip2_allocator-------------------------//
+
+namespace detail {
+
+template<typename Alloc>
+void* bzip2_allocator<Alloc>::alloc(void* self, int items, int size)
+{ 
+    size_type len = items * size;
+    char* ptr = 
+        static_cast<allocator_type*>(self)->allocate(len + sizeof(size_type)); 
+    *reinterpret_cast<size_type*>(ptr) = len;
+    return ptr + sizeof(size_type);
+}
+
+template<typename Alloc>
+void bzip2_allocator<Alloc>::free(void* self, void* address)
+{ 
+    char* ptr = reinterpret_cast<char*>(address) - sizeof(size_type);
+    size_type len = *reinterpret_cast<size_type*>(ptr) + sizeof(size_type);
+    static_cast<allocator_type*>(self)->deallocate(ptr, len); 
+}
+
+//------------------Implementation of bzip2_compressor_impl-------------------//
+
+template<typename Alloc>
+bzip2_compressor_impl<Alloc>::bzip2_compressor_impl(const bzip2_params& p)
+    : bzip2_base(p) { }
+
+template<typename Alloc>
+bool bzip2_compressor_impl<Alloc>::filter
+    ( const char*& src_begin, const char* src_end,
+      char*& dest_begin, char* dest_end, bool flush )
+{
+    if (!ready()) init();
+    before(src_begin, src_end, dest_begin, dest_end);
+    int result = compress(flush ? bzip2::finish : bzip2::run);
+    after(src_begin, dest_begin);
+    bzip2_error::check(result);
+    return result != bzip2::stream_end;
+}
+
+template<typename Alloc>
+void bzip2_compressor_impl<Alloc>::close() 
+{ 
+    end(true); 
+}
+
+template<typename Alloc>
+inline void bzip2_compressor_impl<Alloc>::init() 
+{ bzip2_base::init(true, static_cast<bzip2_allocator<Alloc>&>(*this)); }
+
+//------------------Implementation of bzip2_decompressor_impl-----------------//
+
+template<typename Alloc>
+bzip2_decompressor_impl<Alloc>::bzip2_decompressor_impl(bool small)
+    : bzip2_base(bzip2_params(small)) { }
+
+template<typename Alloc>
+bool bzip2_decompressor_impl<Alloc>::filter
+    ( const char*& src_begin, const char* src_end,
+      char*& dest_begin, char* dest_end, bool flush )
+{
+    if (!ready()) init();
+    before(src_begin, src_end, dest_begin, dest_end);
+    int result = decompress();
+    after(src_begin, dest_begin);
+    bzip2_error::check(result);
+    return result != bzip2::stream_end; 
+}
+
+template<typename Alloc>
+void bzip2_decompressor_impl<Alloc>::close() { end(false); }
+
+template<typename Alloc>
+inline void bzip2_decompressor_impl<Alloc>::init()
+{ bzip2_base::init(false, static_cast<bzip2_allocator<Alloc>&>(*this)); }
+} // End namespace detail.
+
+//------------------Implementation of bzip2_decompressor----------------------//
+
+template<typename Alloc>
+basic_bzip2_compressor<Alloc>::basic_bzip2_compressor
+    (const bzip2_params& p, std::streamsize buffer_size) 
+    : base_type(new impl_type(p), buffer_size) { }
+
+//------------------Implementation of bzip2_decompressor----------------------//
+
+template<typename Alloc>
+basic_bzip2_decompressor<Alloc>::basic_bzip2_decompressor
+    (bool small, std::streamsize buffer_size) 
+    : base_type(new impl_type(small), buffer_size) { }
+
+//----------------------------------------------------------------------------//
+
+} } // End namespaces iostreams, boost.
+
+#include <boost/config/abi_suffix.hpp> // Pops abi_suffix.hpp pragmas.
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
+
+#endif // #ifndef BOOST_IOSTREAMS_BZIP2_HPP_INCLUDED
