@@ -45,6 +45,7 @@ test-suite type_traits :
 [ type-traits-run has_trivial_constr_test.cpp ]
 [ type-traits-run has_trivial_copy_test.cpp ]
 [ type-traits-run has_trivial_destructor_test.cpp ]
+[ type-traits-run is_abstract_test.cpp ]
 [ type-traits-run is_arithmetic_test.cpp ]
 [ type-traits-run is_array_test.cpp ]
 [ type-traits-run is_base_and_derived_test.cpp ]
