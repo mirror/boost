@@ -3033,8 +3033,8 @@ For example:
 <![CDATA[boost::function<int(int, int)> f = _1 + _2;
 boost::function<int&(int&)> g = (_1 += 10);
 int i = 1, j = 2;
-f(i); // returns 3
-g(i); // sets i to = 11;]]>
+f(i, j); // returns 3
+g(i);    // sets i to = 11;]]>
 </programlisting>
 
 The return and parameter types of the wrapped function object must be written explicilty as the template argument to the wrapper template <literal>boost::function</literal>; even when lambda functors, which otherwise have generic parameters, are wrapped.
