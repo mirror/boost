@@ -283,6 +283,38 @@ public: // visitor interfaces
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// (detail) class assign_to
+//
+// Generic static visitor that assigns the value it visits to the given
+// storage (which must be a constructed value of the same type).
+//
+struct assign_to
+    : public static_visitor<>
+{
+private: // representation
+
+    void* storage_;
+
+public: // structors
+
+    explicit assign_to(void* storage)
+        : storage_(storage)
+    {
+    }
+
+public: // visitor interfaces
+
+    template <typename T>
+        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(result_type)
+    operator()(const T& operand) const
+    {
+        *static_cast<T*>(storage_) = operand;
+        BOOST_VARIANT_AUX_RETURN_VOID;
+    }
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
 // (detail) class swap_with
 //
 // Generic static visitor that swaps the value it visits with the given value.
@@ -1279,10 +1311,21 @@ private: // helpers, for modifiers (below)
 
     friend class assign_into;
 
-    void assign(const variant& operand)
+    void assign(const variant& rhs)
     {
-        assign_into visitor(*this, operand.which());
-        operand.raw_apply_visitor(visitor); 
+        // If the types are the same...
+        if (which() == rhs.which())
+        {
+            // ...then assign the value directly:
+            detail::variant::assign_to visitor(active_storage());
+            rhs.raw_apply_visitor(visitor);
+        }
+        else
+        {
+            // Otherwise, perform general variant assignment:
+            assign_into visitor(*this, rhs.which());
+            rhs.raw_apply_visitor(visitor); 
+        }
     }
 
 public: // modifiers
@@ -1294,10 +1337,8 @@ public: // modifiers
         // variant allows T as any type convertible to a bounded type (i.e.,
         // opposed to an exact match) without excessive code redundancy.
         //
-        // TODO: When variant is moveable, move-assign temp into *this.
-        //
         variant temp(rhs);
-        assign(temp);
+        assign( detail::variant::move(temp) );
         return *this;
     }
 
