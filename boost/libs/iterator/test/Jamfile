@@ -37,6 +37,7 @@ test-suite iterator
     [ run iterator_adaptor_test.cpp ]
     [ compile iterator_archetype_cc.cpp ]
     [ compile-fail iterator_archetype_default_ctor.cpp ]
+    [ compile-fail lvalue_concept_fail_expected.cpp ]
     [ run transform_iterator_test.cpp ]
     [ run indirect_iterator_test.cpp ]
     [ compile indirect_iterator_member_types.cpp ]
