@@ -30,6 +30,16 @@ namespace multi_index{
  * arbitrary combinations of these (vg. T** or auto_ptr<T*>.)
  */
 
+/* NB. Some overloads of operator() have an extra dummy parameter int=0.
+ * This disambiguator serves several purposes:
+ *  - Without it, MSVC++ 6.0 incorrectly regards some overloads as
+ *    specializations of a previous member function template.
+ *  - MSVC++ 6.0/7.0 seem to incorrectly treat some different memfuns
+ *    as if they have the same signature.
+ *  - If remove_const is broken due to lack of PTS, int=0 avoids the
+ *    declaration of memfuns with identical signature.
+ */
+
 template<class Class,typename Type,Type (Class::*PtrToMemberFunction)()const>
 struct const_mem_fun
 {
