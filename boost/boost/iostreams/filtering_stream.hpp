@@ -106,7 +106,7 @@ private:
         typedef Mode                              mode; \
         typedef chain_type_<Mode, Ch, Tr, Alloc>  chain_type; \
         name_() { } \
-        BOOST_IOSTREAMS_DEFINE_PUSH_CONSTRUCTOR(mode, Ch, name_, push_impl) \
+        BOOST_IOSTREAMS_DEFINE_PUSH_CONSTRUCTOR(name_, mode, Ch, push_impl) \
         ~name_() { if (this->is_complete()) this->rdbuf()->pubsync(); } \
         void clear(std::ios::iostate state = std::ios::goodbit) \
         { std::basic_ios<char_type, traits_type>::clear(state); } \
