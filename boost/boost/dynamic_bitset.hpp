@@ -242,6 +242,7 @@ public:
     dynamic_bitset& operator&=(const dynamic_bitset& b);
     dynamic_bitset& operator|=(const dynamic_bitset& b);
     dynamic_bitset& operator^=(const dynamic_bitset& b);
+    dynamic_bitset& operator-=(const dynamic_bitset& b);
     dynamic_bitset& operator<<=(size_type n);
     dynamic_bitset& operator>>=(size_type n);
     dynamic_bitset operator<<(size_type n) const;
@@ -375,6 +376,11 @@ operator|(const dynamic_bitset<Block, Allocator>& b1,
 template <typename Block, typename Allocator>
 dynamic_bitset<Block, Allocator>
 operator^(const dynamic_bitset<Block, Allocator>& b1,
+          const dynamic_bitset<Block, Allocator>& b2);
+
+template <typename Block, typename Allocator>
+dynamic_bitset<Block, Allocator>
+operator-(const dynamic_bitset<Block, Allocator>& b1,
           const dynamic_bitset<Block, Allocator>& b2);
 
 
@@ -577,6 +583,17 @@ dynamic_bitset<Block, Allocator>::operator^=(const dynamic_bitset& rhs)
     assert(size() == rhs.size());
     for (size_type i = 0; i < this->m_num_blocks; ++i)
         this->m_bits[i] ^= rhs.m_bits[i];
+    cleanup();
+    return *this;
+}
+
+template <typename Block, typename Allocator>
+dynamic_bitset<Block, Allocator>&
+dynamic_bitset<Block, Allocator>::operator-=(const dynamic_bitset& rhs)
+{
+    assert(size() == rhs.size());
+    for (size_type i = 0; i < this->m_num_blocks; ++i)
+        this->m_bits[i] = this->m_bits[i] && !rhs.m_bits[i];
     cleanup();
     return *this;
 }
@@ -1066,6 +1083,15 @@ operator^(const dynamic_bitset<Block, Allocator>& x,
 {
     dynamic_bitset<Block, Allocator> b(y);
     return b ^= x;
+}
+
+template <typename Block, typename Allocator>
+dynamic_bitset<Block, Allocator>
+operator-(const dynamic_bitset<Block, Allocator>& x,
+          const dynamic_bitset<Block, Allocator>& y)
+{
+    dynamic_bitset<Block, Allocator> b(y);
+    return b -= x;
 }
 
 
