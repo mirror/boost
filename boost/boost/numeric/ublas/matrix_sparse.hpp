@@ -238,6 +238,7 @@ namespace boost { namespace numeric { namespace ublas {
 
 #endif
 
+
     // Array based sparse matrix class
     template<class T, class F, class A>
     class sparse_matrix:
@@ -2510,6 +2511,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         (0);
 
+
     // Array based sparse matrix class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
     template<class T, class F, std::size_t IB, class IA, class TA>
@@ -2553,7 +2555,7 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ (0), size2_ (0), non_zeros_ (0),
             filled1_ (1), filled2_ (0),
             index1_data_ (1),
-            index2_data_ (), value_data_ () {
+            index2_data_ (0), value_data_ (0) {
             index1_data_ [filled1_ - 1] = k_based (filled2_);
         }
         BOOST_UBLAS_INLINE
@@ -3850,6 +3852,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         (0);
 
+
     // Array based sparse matrix class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
     template<class T, class F, std::size_t IB, class IA, class TA>
@@ -3892,8 +3895,8 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_expression<self_type> (),
             size1_ (0), size2_ (0), non_zeros_ (0),
             filled_ (0),
-            sorted_ (true), index1_data_ (),
-            index2_data_ (), value_data_ () {}
+            sorted_ (true), index1_data_ (0),
+            index2_data_ (0), value_data_ (0) {}
         BOOST_UBLAS_INLINE
         coordinate_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
             matrix_expression<self_type> (),

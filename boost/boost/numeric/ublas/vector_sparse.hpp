@@ -226,6 +226,7 @@ namespace boost { namespace numeric { namespace ublas {
 
 #endif
 
+
     // Array based sparse vector class
     template<class T, class A>
     class sparse_vector:
@@ -716,6 +717,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         (0);
 
+
     // Array based sparse vector class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
     template<class T, std::size_t IB, class IA, class TA>
@@ -755,8 +757,8 @@ namespace boost { namespace numeric { namespace ublas {
         compressed_vector ():
             vector_expression<self_type> (),
             size_ (0), non_zeros_ (0), filled_ (0),
-            index_data_ (), value_data_ () {}
-        BOOST_UBLAS_INLINE
+            index_data_ (0), value_data_ (0) {}
+        explicit BOOST_UBLAS_INLINE
         compressed_vector (size_type size, size_type non_zeros = 0):
             vector_expression<self_type> (),
             size_ (size), non_zeros_ (non_zeros), filled_ (0),
@@ -1279,6 +1281,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         (0);
 
+
     // Array based sparse vector class
     // Thanks to Kresimir Fresl for extending this to cover different index bases.
     template<class T, std::size_t IB, class IA, class TA>
@@ -1318,8 +1321,8 @@ namespace boost { namespace numeric { namespace ublas {
         coordinate_vector ():
             vector_expression<self_type> (),
             size_ (0), non_zeros_ (0), filled_ (0),
-            sorted_ (true), index_data_ (), value_data_ () {}
-        BOOST_UBLAS_INLINE
+            sorted_ (true), index_data_ (0), value_data_ (0) {}
+        explicit BOOST_UBLAS_INLINE
         coordinate_vector (size_type size, size_type non_zeros = 0):
             vector_expression<self_type> (),
             size_ (size), non_zeros_ (non_zeros), filled_ (0),
