@@ -10,12 +10,9 @@
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif                    
- 
-#include <iosfwd> // streamsize.
 
 #define BOOST_IOSTREAMS_PUSH_PARAMS() \
-    , std::streamsize buffer_size = -1 \
-    , std::streamsize pback_size = -1 \
+    , int buffer_size = -1 , int pback_size = -1 \
     /**/
 
 #define BOOST_IOSTREAMS_PUSH_ARGS() , buffer_size, pback_size     

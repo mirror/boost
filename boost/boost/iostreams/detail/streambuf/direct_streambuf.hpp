@@ -46,8 +46,8 @@ private:
             )                                             streambuf_type;
 public: // stream_facade needs access.
     void open( const T& t,
-               std::streamsize,   // buffer size -- not used.
-               std::streamsize ); // pback_size -- not used.
+               int /* buffer_size */,
+               int /* pback_size */ );
     bool is_open();
     void close();
 protected:
@@ -87,7 +87,7 @@ direct_streambuf<T, Tr>::direct_streambuf()
     : ibeg_(0), iend_(0), obeg_(0), oend_(0) { }
 
 template<typename T, typename Tr>
-void direct_streambuf<T, Tr>::open(const T& t, std::streamsize, std::streamsize)
+void direct_streambuf<T, Tr>::open(const T& t, int, int)
 {
     storage_ = t;
     init_input(io_category());

@@ -79,21 +79,17 @@ public:
 public:
     streambuf_facade() { }
     // BEGIN DEBUG
-    streambuf_facade( typename detail::param_type<T>::type t, 
-                      std::streamsize buffer_size = -1, 
-                      std::streamsize pback_size = -1 ) 
+    streambuf_facade( typename detail::param_type<T>::type t,
+                     int buffer_size = -1, int pback_size = -1 ) 
     { this->open_impl(detail::wrap(t), buffer_size, pback_size); }
     streambuf_facade( const reference_wrapper<T>& ref,
-                      std::streamsize buffer_size = -1, 
-                      std::streamsize pback_size = -1 ) 
+                      int buffer_size = -1, int pback_size = -1 ) 
     { this->open_impl(ref , buffer_size, pback_size); }
-    void open( typename detail::param_type<T>::type t, 
-               std::streamsize buffer_size = -1, 
-               std::streamsize pback_size = -1 ) 
+    void open( typename detail::param_type<T>::type t,
+               int buffer_size = -1, int pback_size = -1 ) 
     { this->open_impl(detail::wrap(t), buffer_size, pback_size); }
-    void open( const reference_wrapper<T>& ref , 
-               std::streamsize buffer_size = -1, 
-               std::streamsize pback_size = -1 ) 
+    void open( const reference_wrapper<T>& ref,
+               int buffer_size = -1, int pback_size = -1 ) 
     { this->open_impl(ref , buffer_size, pback_size); }
     template<typename U0> 
     streambuf_facade(const U0& u0) 
