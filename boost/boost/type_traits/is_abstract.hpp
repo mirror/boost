@@ -65,10 +65,14 @@ struct is_abstract_imp
    template<class U>
    static type_traits::yes_type check(...);
 
+   // GCC2 won't even parse this template if we embed the computation
+   // of s1 in the computation of value.
+   BOOST_STATIC_CONSTANT(unsigned, s1 = sizeof(check<T>(0)));
+    
    BOOST_STATIC_CONSTANT(bool, value = 
       (::boost::type_traits::ice_and<
          ::boost::is_class<T>::value,
-         (sizeof(check<T>(0)) == sizeof(type_traits::yes_type))
+         (s1 == sizeof(type_traits::yes_type))
       >::value));
 };
 
