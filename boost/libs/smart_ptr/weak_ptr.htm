@@ -36,7 +36,7 @@ pointed to. <b>T</b> must meet the smart pointer
     public:
       typedef T <a href="#element_type">element_type</a>;
 
-      explicit <a href="#constructors">weak_ptr</a>();
+      <a href="#constructors">weak_ptr</a>();
       template&lt;typename Y&gt; <a href="#constructors">weak_ptr</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
       <a href="#destructor">~weak_ptr</a>(); // never throws
 
@@ -59,11 +59,11 @@ pointed to. <b>T</b> must meet the smart pointer
   };
 
   template&lt;typename T, typename U&gt;
-    bool <a href="#operator==">operator==</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
+    bool <a href="#comparison">operator==</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
   template&lt;typename T, typename U&gt;
-    bool <a href="#operator!=">operator!=</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
+    bool <a href="#comparison">operator!=</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
   template&lt;typename T&gt;
-    bool <a href="#operator&lt;">operator&lt;</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws
+    bool <a href="#comparison">operator&lt;</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws
 
   template&lt;typename T&gt; void <a href="#free-swap">swap</a>(weak_ptr&lt;T&gt; &amp; a, weak_ptr&lt;T&gt; &amp; b); // never throws
 
@@ -171,11 +171,11 @@ See the smart pointer
 
 <h3><a name="comparison">comparison</a></h3>
 <pre>template&lt;typename T, typename U&gt;
-  bool <a href="#operator==">operator==</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
+  bool operator==(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
 template&lt;typename T, typename U&gt;
-  bool <a href="#operator!=">operator!=</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
+  bool operator!=(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;U&gt; const &amp; b); // never throws
 template&lt;typename T&gt;
-  bool <a href="#operator&lt;">operator&lt;</a>(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws</pre>
+  bool operator&lt;(weak_ptr&lt;T&gt; const &amp; a, weak_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 <p>Compares the stored pointers of the two smart pointers.
 <b>T</b> need not be a complete type.
 See the smart pointer
@@ -227,7 +227,7 @@ The resulting smart pointer will share its use count with the original pointer.<
 
 <hr>
 
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->1 February 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->8 February 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
 
 <p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler.
 Permission to copy, use, modify, sell and distribute this document is granted

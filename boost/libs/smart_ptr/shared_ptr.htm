@@ -85,11 +85,11 @@ function must be passed in, or the pointed-to object must have a trivial destruc
   };
 
   template&lt;typename T, typename U&gt;
-    bool <a href="#operator==">operator==</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
+    bool <a href="#comparison">operator==</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
   template&lt;typename T, typename U&gt;
-    bool <a href="#operator!=">operator!=</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
+    bool <a href="#comparison">operator!=</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
   template&lt;typename T&gt;
-    bool <a href="#operator&lt;">operator&lt;</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws
+    bool <a href="#comparison">operator&lt;</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws
 
   template&lt;typename T&gt; void <a href="#free-swap">swap</a>(shared_ptr&lt;T&gt; &amp; a, shared_ptr&lt;T&gt; &amp; b); // never throws
 
@@ -223,11 +223,11 @@ See the smart pointer
 
 <h3><a name="comparison">comparison</a></h3>
 <pre>template&lt;typename T, typename U&gt;
-  bool <a href="#operator==">operator==</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
+  bool operator==(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
 template&lt;typename T, typename U&gt;
-  bool <a href="#operator!=">operator!=</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
+  bool operator!=(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
 template&lt;typename T&gt;
-  bool <a href="#operator&lt;">operator&lt;</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
+  bool operator&lt;(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;T&gt; const &amp; b); // never throws</pre>
 <p>Compares the stored pointers of the two smart pointers.
 <b>T</b> need not be a complete type.
 See the smart pointer
@@ -363,7 +363,7 @@ This is not the intent.</p>
 
 <hr>
 
-<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->1 February 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
+<p>Revised <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->8 February 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
 
 <p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler.
 Permission to copy, use, modify, sell and distribute this document is granted
