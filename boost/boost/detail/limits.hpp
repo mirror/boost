@@ -19,7 +19,11 @@
  */
 
 /*
- * Modified by Jens Maurer for gcc 2.95 on x86.
+ * Revision history:
+ * 5 Apr 2001:
+ *    Added sparc (big endian) processor support (John Maddock).
+ * Initial sub:
+ * 	Modified by Jens Maurer for gcc 2.95 on x86.
  */
 
 #ifndef BOOST_SGI_CPP_LIMITS
@@ -29,8 +33,10 @@
 #include <cfloat>
 #include <boost/config.hpp>
 
-#ifndef __i386__
-#error This file is intended to be used with x86 CPUs.
+#if defined(__sparc) || defined(__sparc__)
+#define BOOST_BIG_ENDIAN
+#elif !defined(__i386__)
+#error This file is not correctly set up for your cpu type.
 #endif
 
 namespace std {
@@ -152,17 +158,31 @@ public:
   BOOST_STL_DECLARE_LIMITS_MEMBER(bool, is_modulo, true);
 };
 
- template<class __number, unsigned int __Word>
+#if defined(BOOST_BIG_ENDIAN)
+
+ template<class Number, unsigned int Word>
  struct float_helper{
-  static __number __get_word() throw() {
-    // sizeof(long double) == 12, but only 10 bytes significant
-    const unsigned int _S_word[4] = { 0, 0, 0, __Word };
-    return *reinterpret_cast<const __number*>(
-        reinterpret_cast<const char *>(&_S_word)+16-
-		(sizeof(__number) == 12 ? 10 : sizeof(__number)));
+  static Number get_word() throw() {
+    // sizeof(long double) == 16
+    const unsigned int _S_word[4] = { Word, 0, 0, 0 };
+    return *reinterpret_cast<const Number*>(&_S_word);
   } 
 };
 
+#else
+
+ template<class Number, unsigned int Word>
+ struct float_helper{
+  static Number get_word() throw() {
+    // sizeof(long double) == 12, but only 10 bytes significant
+    const unsigned int _S_word[4] = { 0, 0, 0, Word };
+    return *reinterpret_cast<const Number*>(
+        reinterpret_cast<const char *>(&_S_word)+16-
+		(sizeof(Number) == 12 ? 10 : sizeof(Number)));
+  } 
+};
+
+#endif
 
 // Base class for floating-point numbers.
 template <class __number,
@@ -200,13 +220,13 @@ public:
 
  
   static __number infinity() throw() {
-    return float_helper<__number, __InfinityWord>::__get_word();
+    return float_helper<__number, __InfinityWord>::get_word();
   }
   static __number quiet_NaN() throw() {
-    return float_helper<__number,__QNaNWord>::__get_word();
+    return float_helper<__number,__QNaNWord>::get_word();
   }
   static __number signaling_NaN() throw() {
-    return float_helper<__number,__SNaNWord>::__get_word();
+    return float_helper<__number,__SNaNWord>::get_word();
   }
 
   BOOST_STL_DECLARE_LIMITS_MEMBER(bool, is_iec559,       __IsIEC559);
@@ -323,9 +343,15 @@ template<> class numeric_limits<float>
                             FLT_MAX_EXP,    // Maximum exponent
                             FLT_MIN_10_EXP, // Minimum base 10 exponent
                             FLT_MAX_10_EXP, // Maximum base 10 exponent
+#if defined(BOOST_BIG_ENDIAN)
+                            0x7f80 << (sizeof(int)*CHAR_BIT-16),    // Last word of +infinity
+                            0x7f81 << (sizeof(int)*CHAR_BIT-16),    // Last word of quiet NaN
+                            0x7fc1 << (sizeof(int)*CHAR_BIT-16),    // Last word of signaling NaN
+#else
                             0x7f800000u,    // Last word of +infinity
                             0x7f810000u,    // Last word of quiet NaN
                             0x7fc10000u,    // Last word of signaling NaN
+#endif
                             true,           // conforms to iec559
                             round_to_nearest>
 {
@@ -345,9 +371,15 @@ template<> class numeric_limits<double>
                             DBL_MAX_EXP,    // Maximum exponent
                             DBL_MIN_10_EXP, // Minimum base 10 exponent
                             DBL_MAX_10_EXP, // Maximum base 10 exponent
+#if defined(BOOST_BIG_ENDIAN)
+                            0x7ff0 << (sizeof(int)*CHAR_BIT-16),    // Last word of +infinity
+                            0x7ff1 << (sizeof(int)*CHAR_BIT-16),    // Last word of quiet NaN
+                            0x7ff9 << (sizeof(int)*CHAR_BIT-16),    // Last word of signaling NaN
+#else
                             0x7ff00000u,    // Last word of +infinity
                             0x7ff10000u,    // Last word of quiet NaN
                             0x7ff90000u,    // Last word of signaling NaN
+#endif
                             true,           // conforms to iec559
                             round_to_nearest>
 {
@@ -367,9 +399,15 @@ template<> class numeric_limits<long double>
                             LDBL_MAX_EXP,   // Maximum exponent
                             LDBL_MIN_10_EXP,// Minimum base 10 exponent
                             LDBL_MAX_10_EXP,// Maximum base 10 exponent
+#if defined(BOOST_BIG_ENDIAN)
+                            0x7ff0 << (sizeof(int)*CHAR_BIT-16),    // Last word of +infinity
+                            0x7ff1 << (sizeof(int)*CHAR_BIT-16),    // Last word of quiet NaN
+                            0x7ff9 << (sizeof(int)*CHAR_BIT-16),    // Last word of signaling NaN
+#else
                             0x7fff8000u,    // Last word of +infinity
                             0x7fffc000u,    // Last word of quiet NaN
                             0x7fff9000u,    // Last word of signaling NaN
+#endif
                             false,          // Doesn't conform to iec559
                             round_to_nearest>
 {
@@ -388,3 +426,6 @@ public:
 // Local Variables:
 // mode:C++
 // End:
+
+
+
