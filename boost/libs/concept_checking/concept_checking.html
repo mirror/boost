@@ -1,0 +1,166 @@
+<HTML>
+<!--
+  -- Copyright (c) Jeremy Siek, Lie-Quan Lee, and Andrew Lumsdaine 2000
+  --
+  -- Permission to use, copy, modify, distribute and sell this software
+  -- and its documentation for any purpose is hereby granted without fee,
+  -- provided that the above copyright notice appears in all copies and
+  -- that both that copyright notice and this permission notice appear
+  -- in supporting documentation.  We make no
+  -- representations about the suitability of this software for any
+  -- purpose.  It is provided "as is" without express or implied warranty.
+  -->
+<Head>
+<Title>Concept Checking</Title>
+<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
+	ALINK="#ff0000"> 
+<IMG SRC="../../c++boost.gif" 
+     ALT="C++ Boost"> 
+
+<BR Clear>
+
+<H2><A NAME="SECTION00744000000000000000"></A>
+<A NAME="sec:concept-checking"></A>
+<BR>
+Concept Checking
+</H2>
+
+<p>
+header <a href="../../boost/pending/concept_checks.hpp"><tt>boost/concept_checks.hpp</tt></a>
+
+<P>
+The C++ language does not provide direct support for ensuring that
+template arguments meet the requirements demanded of them by the
+generic algorithm or template class. This means that if the user makes
+an error, the resulting compiler error will point to somewhere deep
+inside the implementation of the generic algorithm, giving an error
+that may not be easy to match with the cause.
+
+<P>
+We have developed a method for forcing the compiler to give better
+error messages. The idea is to exercise all the requirements placed on
+the template arguments at the very beginning of the generic algorithm.
+We have created some macros and a methodology for how to do this.
+
+<P>
+Suppose we wish to add concept checks to the STL <a
+href="http://www.sgi.com/Technology/STL/copy.html"><TT>copy()</TT></a>
+algorithm, which has the following prototype.
+<PRE>
+  template &lt;class InIter, class OutIter&gt;
+  OutIter copy(InIter first, InIter last, OutIter result);
+</PRE>
+We will need to make sure the <TT>InIter</TT> is a model of <a
+href="http://www.sgi.com/Technology/STL/InputIterator.html">InputIterator</a>
+and that <TT>OutIter</TT> is a model of <a
+href="http://www.sgi.com/Technology/STL/OutputIterator.html">OutputIterator</a>. The
+first step is to create the code that will exercise the expressions
+associated with each of these concepts.  The following is the concept
+checking class for <a
+href="http://www.sgi.com/Technology/STL/OutputIterator.html">OutputIterator</a>.
+The iterator objects <TT>i</TT> and <TT>j</TT> are data members of the
+concept checking class which would normally require the <TT>Iter</TT>
+type to be <a
+href="http://www.sgi.com/Technology/STL/DefaultConstructible.html">DefaultConstructible</a>. However,
+we never create instances of concept checking classes so this
+requirement is not induced.
+
+<P>
+<PRE>
+  template &lt;class Iter&gt;
+  struct OutputIterator {
+    CLASS_REQUIRES(Iter, Assignable);
+    void constraints() {
+      (void)*i;        // require dereference operator
+      ++i;             // require preincrement operator
+      i++;             // require postincrement operator
+      *i++ = *j;       // require postincrement and assignment
+    }
+    Iter i, j;
+  };
+</PRE>
+
+<P>
+Once the concept checking classes are complete, one simply needs to
+invoke them at the beginning of the generic algorithm using our
+<TT>REQUIRE</TT> macro. Here's what the STL <TT>copy()</TT> algorithm
+looks like with the concept checks inserted.
+
+<P>
+<PRE>
+  template &lt;class InIter, class OutIter&gt;
+  OutIter copy(InIter first, InIter last, OutIter result)
+  { 
+    REQUIRE(OutIter, OutputIterator); 
+    REQUIRE(InIter, InputIterator); 
+    return copy_aux(first, last, result, VALUE_TYPE(first)); 
+  }
+</PRE>
+
+<P>
+Looking back at the <TT>OutputIterator</TT> concept checking class, you
+might wonder why we used the <TT>CLASS_REQUIRES</TT> macro instead of
+just <TT>REQUIRE</TT>. The reason for this is that different tricks are
+needed to force compilation of the checking code when invoking the
+macro from inside a class definition instead of a function.
+
+<P>
+For the most part, the user does not need to know how to create
+concept checks and insert them in generic algorithms, however it is
+good to know what they are. This will make the error messages coming
+from libraries that use concept checks easier to understand. Also if
+you are unsure about whether you can use a certain class with a
+particular algorithm, or whether some custom-made class of your own is
+compatible, a good first check is to invoke the appropriate concept
+checker.
+
+<P>
+Here's a quick example program that one could write to see if the
+types <a
+href="../graph/adjacency_list.html"><TT>adjacency_list</TT></a> and <a
+href="../graph/edge_list.html"><TT>edge_list</TT></a> really model the
+concepts they claim to.
+
+<P>
+<PRE>
+  #include &lt;boost/graph/graph_concepts.hpp&gt;
+  #include &lt;boost/graph/adjacency_list.hpp&gt;
+  #include &lt;boost/graph/edge_list.hpp&gt;
+
+  using namespace boost;
+
+  int main(int,char*[])
+  {
+    typedef adjacency_list&lt;listS,vecS,bidirectionalS&gt; AdjList;
+    REQUIRE(AdjList, VertexAndEdgeListGraph);
+    REQUIRE(AdjList, BidirectionalGraph);
+
+    typedef std::pair&lt;int, int&gt; E;
+    typedef edge_list&lt;E*, E, int&gt; EdgeList;
+    REQUIRE(EdgeList, EdgeListGraph);
+
+    return 0;
+  }
+</PRE>
+
+<P>
+If you create your own generic algorithms we highly encourage you to use
+and publish the corresponding concept checks.
+
+
+<br>
+<HR>
+<TABLE>
+<TR valign=top>
+<TD nowrap>Copyright &copy 2000</TD><TD>
+<A HREF=http://www.boost.org/people/jeremy_siek.htm>Jeremy Siek</A>,
+Univ.of Notre Dame (<A
+HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)<br>
+<A HREF=http://www.lsc.nd.edu/~llee1>Lie-Quan Lee</A>, Univ.of Notre Dame (<A HREF="mailto:llee1@lsc.nd.edu">llee1@lsc.nd.edu</A>)<br>
+<A HREF=http://www.lsc.nd.edu/~lums>Andrew Lumsdaine</A>,
+Univ.of Notre Dame (<A
+HREF="mailto:lums@lsc.nd.edu">lums@lsc.nd.edu</A>)
+</TD></TR></TABLE>
+
+</BODY>
+</HTML> 
