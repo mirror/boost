@@ -507,7 +507,7 @@ test_zero_args()
   BOOST_TEST(i0() == 3);
   BOOST_TEST(i0? true : false);
   i0.clear();
-  BOOST_TEST(!i0);
+  BOOST_TEST(!i0? true : false);
 
   // Test return values with compatible types
   typedef function0<long> func_long_type;
