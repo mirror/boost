@@ -14,11 +14,13 @@
 # pragma once
 #endif              
 
+#include <boost/config.hpp> // BOOST_MSVC.
 #include <boost/detail/workaround.hpp>
 
 #if !defined(BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION)
 # if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) || \
-     BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+     BOOST_WORKAROUND(__BORLANDC__, < 0x600) || \
+     BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 #  define BOOST_IOSTREAMS_BROKEN_OVERLOAD_RESOLUTION
 # endif
 #endif
