@@ -29,6 +29,10 @@
           > const& y
         , typename enable_if_convertible<Iterator2, Iterator>::type* = 0 // exposition
       );
+
+      Iterator base() const;
+  private:
+     Iterator m_iterator; // exposition
   };
 
 
@@ -108,13 +112,13 @@ the ``Iterator`` argument.
 
 :Requires: ``Iterator`` must be Default Constructible.
 :Returns: An instance of ``indirect_iterator`` with 
-   a default-constructed ``iterator_adaptor`` subobject.
+   a default-constructed ``m_iterator``.
 
 
 ``indirect_iterator(Iterator x);``
 
 :Returns: An instance of ``indirect_iterator`` with
-    the ``iterator_adaptor`` subobject copy constructed from ``x``.
+    ``m_iterator`` copy constructed from ``x``.
 
 ::
 
@@ -131,6 +135,9 @@ the ``Iterator`` argument.
 
 :Requires: ``Iterator2`` is implicitly convertible to ``Iterator``.
 :Returns: An instance of ``indirect_iterator`` whose 
-    ``iterator_adaptor`` subobject is constructed from ``y.base()``.
+    ``m_iterator`` subobject is constructed from ``y.base()``.
 
 
+``Iterator base() const;``
+
+:Returns: ``m_iterator``

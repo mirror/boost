@@ -1,6 +1,6 @@
 
 Example
--------
+.......
 
 This example fills an array with numbers and a second array with
 pointers into the first array, using ``counting_iterator`` for both

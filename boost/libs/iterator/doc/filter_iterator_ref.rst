@@ -20,8 +20,13 @@
           );
       Predicate predicate() const;
       Iterator end() const;
+      Iterator base() const;
       reference operator*() const;
       filter_iterator& operator++();
+  private:
+      Predicate m_pred; // exposition
+      Iterator m_iter;  // exposition
+      Iterator m_end;   // exposition
   };
 
 
@@ -32,7 +37,7 @@ as described in the models section.
 
 
 ``filter_iterator`` requirements
---------------------------------
+................................
 
 The ``Predicate`` argument must be Assignable, Copy Constructible, and
 the expression ``p(x)`` must be valid where ``p`` is an object of type
@@ -47,7 +52,7 @@ Input Iterator.
 
 
 ``filter_iterator`` models
---------------------------
+..........................
 
 The concepts that ``filter_iterator`` models are dependent on what
 concepts the ``Iterator`` argument models, as specified in the
@@ -83,7 +88,7 @@ following tables.
 
 
 ``filter_iterator`` operations
-------------------------------
+..............................
 
 In addition to those operations required by the concepts that
 ``filter_iterator`` models, ``filter_iterator`` provides the following
@@ -93,28 +98,25 @@ operations.
 ``filter_iterator();``
 
 :Requires: ``Predicate`` and ``Iterator`` must be Default Constructible.
-:Returns: a ``filter_iterator`` whose
-    predicate is a default constructed ``Predicate`` and
-    whose ``end`` is a default constructed ``Iterator``.
+:Returns: a ``filter_iterator`` whose``m_pred``,  ``m_iter``, and ``m_end`` 
+  members are a default constructed.
 
 
 ``filter_iterator(Predicate f, Iterator x, Iterator end = Iterator());``
 
-:Returns: A ``filter_iterator`` at the first position in the range ``[x,end)``
-    such that ``f(*this->base()) == true`` or else at position ``end``.
+:Returns: A ``filter_iterator`` where ``m_iter`` is either
+    the first position in the range ``[x,end)`` such that ``f(*m_iter) == true`` 
+    or else``m_iter == end``. The member ``m_pred`` is constructed from
+    ``f`` and ``m_end`` from ``end``.
+
 
 
 ``filter_iterator(Iterator x, Iterator end = Iterator());``
 
 :Requires: ``Predicate`` must be Default Constructible.
-:Returns: A ``filter_iterator`` at the first position in the range ``[x,end)``
-    such that ``f(*this->base()) == true``, where ``f`` is a default
-    constructed ``Predicate``, or else at position ``end``.
-
-
-:Returns: A ``filter_iterator`` at position ``x`` that filters 
-    according to a default constructed ``Predicate``
-    and that will not increment past ``end``.
+:Returns: A ``filter_iterator`` where ``m_iter`` is either
+    the first position in the range ``[x,end)`` such that ``m_pred(*m_iter) == true`` 
+    or else``m_iter == end``. The member ``m_pred`` is default constructed.
 
 
 ::
@@ -126,29 +128,33 @@ operations.
         );``
 
 :Requires: ``OtherIterator`` is implicitly convertible to ``Iterator``.
-:Returns: A filter iterator at the same position as iterator ``t`` 
-  whose predicate and end are copies of ``t.predicate`` and ``t.end()`` . 
+:Returns: A filter iterator whose members are copied from ``t``.
 
 
 ``Predicate predicate() const;``
 
-:Returns: A copy of the predicate object used to construct ``*this``.
+:Returns: ``m_pred``
 
 
 ``Iterator end() const;``
 
-:Returns: A copy of the object ``end`` used to construct ``*this``.
+:Returns: ``m_end``
+
+
+``Iterator base() const;``
+
+:Returns: ``m_iterator``
 
 
 
 ``reference operator*() const;``
 
-:Returns: ``*(this->base())``
+:Returns: ``*m_iter``
 
 
 ``filter_iterator& operator++();``
 
-:Effects: Increments ``*this`` and then continues to
-  increment ``*this`` until either ``this->base() == this->end()``
-  or ``f(**this) == true``.
+:Effects: Increments ``m_iter`` and then continues to
+  increment ``m_iter`` until either ``m_iter == m_end``
+  or ``m_pred(*m_iter) == true``.
 :Returns: ``*this``  

@@ -25,7 +25,7 @@
 
 
 ``function_output_iterator`` requirements
------------------------------------------
+.........................................
 
 The ``UnaryFunction`` must be Assignable, Copy Constructible, and the
 expression ``f(x)`` must be valid, where ``f`` is an object of type
@@ -35,7 +35,7 @@ and Incrementable Iterator concepts.
 
 
 ``function_output_iterator`` operations
----------------------------------------
+.......................................
 
 ``explicit function_output_iterator(const UnaryFunction& f = UnaryFunction());``
 
@@ -60,7 +60,7 @@ and Incrementable Iterator concepts.
 
 
 ``function_output_iterator::output_proxy`` operations
------------------------------------------------------
+.....................................................
 
 ``output_proxy(UnaryFunction& f);``
 

@@ -3,240 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
 <title>Reverse Iterator</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
 <meta name="date" content="2004-01-12" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
-<style type="text/css"><!--
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:date: $Date$
-:version: $Revision$
-:copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-*/
-
-.first {
-  margin-top: 0 }
-
-.last {
-  margin-bottom: 0 }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-dd {
-  margin-bottom: 0.5em }
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.attention, div.caution, div.danger, div.error, div.hint,
-div.important, div.note, div.tip, div.warning, div.admonition {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.hint p.admonition-title, div.important p.admonition-title,
-div.note p.admonition-title, div.tip p.admonition-title,
-div.admonition p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em }
-
-div.footer, div.header {
-  font-size: smaller }
-
-div.sidebar {
-  margin-left: 1em ;
-  border: medium outset ;
-  padding: 0em 1em ;
-  background-color: #ffffee ;
-  width: 40% ;
-  float: right ;
-  clear: right }
-
-div.sidebar p.rubric {
-  font-family: sans-serif ;
-  font-size: medium }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr {
-  width: 75% }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.attribution {
-  text-align: right ;
-  margin-left: 50% }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.rubric {
-  font-weight: bold ;
-  font-size: larger ;
-  color: maroon ;
-  text-align: center }
-
-p.sidebar-title {
-  font-family: sans-serif ;
-  font-weight: bold ;
-  font-size: larger }
-
-p.sidebar-subtitle {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.line-block {
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option {
-  white-space: nowrap }
-
-span.option-argument {
-  font-style: italic }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-table {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.citation {
-  border-left: solid thin gray ;
-  padding-left: 0.5ex }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.footnote {
-  border-left: solid thin black ;
-  padding-left: 0.5ex }
-
-td, th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-th.docinfo-name, th.field-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap }
-
-h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
-  font-size: 100% }
-
-tt {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
---></style>
+<link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="reverse-iterator">
@@ -274,11 +47,13 @@ invoking <tt class="literal"><span class="pre">operator--()</span></tt> moves th
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#reverse-iterator-synopsis" id="id1" name="id1"><tt class="literal"><span class="pre">reverse_iterator</span></tt> synopsis</a></li>
+<li><a class="reference" href="#reverse-iterator-synopsis" id="id1" name="id1"><tt class="literal"><span class="pre">reverse_iterator</span></tt> synopsis</a><ul>
 <li><a class="reference" href="#reverse-iterator-requirements" id="id2" name="id2"><tt class="literal"><span class="pre">reverse_iterator</span></tt> requirements</a></li>
 <li><a class="reference" href="#reverse-iterator-models" id="id3" name="id3"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></li>
 <li><a class="reference" href="#reverse-iterator-operations" id="id4" name="id4"><tt class="literal"><span class="pre">reverse_iterator</span></tt> operations</a></li>
 <li><a class="reference" href="#example" id="id5" name="id5">Example</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="section" id="reverse-iterator-synopsis">
@@ -296,27 +71,27 @@ public:
       reverse_iterator&lt;OtherIterator&gt; const&amp; r
     , typename enable_if_convertible&lt;OtherIterator, Iterator&gt;::type* = 0 // exposition
   );
+  Iterator base() const;
   reference operator*() const;
   reverse_iterator&amp; operator++();
 private:
-  Iterator current; // exposition
+  Iterator m_iterator; // exposition
 };
 </pre>
-</div>
 <div class="section" id="reverse-iterator-requirements">
-<h1><a class="toc-backref" href="#id2" name="reverse-iterator-requirements"><tt class="literal"><span class="pre">reverse_iterator</span></tt> requirements</a></h1>
+<h2><a class="toc-backref" href="#id2" name="reverse-iterator-requirements"><tt class="literal"><span class="pre">reverse_iterator</span></tt> requirements</a></h2>
 <p>The base <tt class="literal"><span class="pre">Iterator</span></tt> must be a model of Bidirectional Traversal
 Iterator and Readable Iterator.</p>
 </div>
 <div class="section" id="reverse-iterator-models">
-<h1><a class="toc-backref" href="#id3" name="reverse-iterator-models"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></h1>
+<h2><a class="toc-backref" href="#id3" name="reverse-iterator-models"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></h2>
 <p><tt class="literal"><span class="pre">reverse_iterator</span></tt> models Bidirectional Traversal Iterator and
 Readable Iterator.  In addition, <tt class="literal"><span class="pre">reverse_iterator</span></tt> models the same
 standard iterator access concepts that the <tt class="literal"><span class="pre">Iterator</span></tt>
 argument models.</p>
 </div>
 <div class="section" id="reverse-iterator-operations">
-<h1><a class="toc-backref" href="#id4" name="reverse-iterator-operations"><tt class="literal"><span class="pre">reverse_iterator</span></tt> operations</a></h1>
+<h2><a class="toc-backref" href="#id4" name="reverse-iterator-operations"><tt class="literal"><span class="pre">reverse_iterator</span></tt> operations</a></h2>
 <p><tt class="literal"><span class="pre">reverse_iterator();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -324,7 +99,7 @@ argument models.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">Requires:</th><td class="field-body"><tt class="literal"><span class="pre">Iterator</span></tt> must be Default Constructible.</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">reverse_iterator</span></tt> with <tt class="literal"><span class="pre">current</span></tt> 
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">reverse_iterator</span></tt> with <tt class="literal"><span class="pre">m_iterator</span></tt> 
 default constructed.</td>
 </tr>
 </tbody>
@@ -335,7 +110,7 @@ default constructed.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">reverse_iterator</span></tt> with a
-<tt class="literal"><span class="pre">current</span></tt> constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
+<tt class="literal"><span class="pre">m_iterator</span></tt> constructed from <tt class="literal"><span class="pre">x</span></tt>.</td>
 </tr>
 </tbody>
 </table>
@@ -356,6 +131,15 @@ reverse_iterator(
 </tr>
 </tbody>
 </table>
+<p><tt class="literal"><span class="pre">Iterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">m_iterator</span></tt></td>
+</tr>
+</tbody>
+</table>
 <p><tt class="literal"><span class="pre">reference</span> <span class="pre">operator*()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -366,15 +150,15 @@ reverse_iterator(
 </tbody>
 </table>
 <pre class="literal-block">
-Iterator tmp = current;
-return *--tmp;
+Iterator tmp = m_iterator;
+return *..tmp;
 </pre>
 <p><tt class="literal"><span class="pre">reverse_iterator&amp;</span> <span class="pre">operator++();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="literal"><span class="pre">--current</span></tt></td>
+<tr class="field"><th class="field-name">Effects:</th><td class="field-body"><tt class="literal"><span class="pre">--m_iterator</span></tt></td>
 </tr>
 <tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">*this</span></tt></td>
 </tr>
@@ -396,7 +180,7 @@ with a <tt class="literal"><span class="pre">current</span></tt> constructed fro
 </table>
 </div>
 <div class="section" id="example">
-<h1><a class="toc-backref" href="#id5" name="example">Example</a></h1>
+<h2><a class="toc-backref" href="#id5" name="example">Example</a></h2>
 <p>The following example prints an array of characters in reverse order
 using <tt class="literal"><span class="pre">reverse_iterator</span></tt>.</p>
 <pre class="literal-block">
@@ -429,11 +213,6 @@ sequence in double-reversed (normal) order:     hello world!
 </pre>
 </div>
 </div>
-<hr class="footer" />
-<div class="footer">
-<a class="reference" href="reverse_iterator.rst">View document source</a>.
-Generated on: 2004-01-12 02:46 UTC.
-Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>

@@ -30,7 +30,7 @@
 
 
 ``transform_iterator`` requirements
------------------------------------
+...................................
 
 The type ``UnaryFunction`` must be Assignable, Copy Constructible, and
 the expression ``f(*i)`` must be valid where ``f`` is an object of
@@ -42,7 +42,7 @@ The type ``Iterator`` must at least model Readable Iterator.
 
 
 ``transform_iterator`` models
------------------------------
+.............................
 
 The resulting ``transform_iterator`` models the most refined of the
 following options that is also modeled by ``Iterator``.
@@ -64,7 +64,7 @@ The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
 
 
 ``transform_iterator`` operations
----------------------------------
+.................................
 
 ``transform_iterator();``
 

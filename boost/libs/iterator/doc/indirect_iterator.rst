@@ -21,3 +21,4 @@
 .. contents:: Table of Contents
 
 .. include:: indirect_iterator_ref.rst
+.. include:: indirect_iterator_eg.rst

@@ -21,3 +21,4 @@
 .. contents:: Table of Contents
 
 .. include:: function_output_iterator_ref.rst
+.. include:: function_output_iterator_eg.rst

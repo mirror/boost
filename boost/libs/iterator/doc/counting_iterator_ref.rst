@@ -22,7 +22,7 @@
   the cases when the ``Incrementable`` type is a numeric type.]
 
 ``counting_iterator`` requirements
-----------------------------------
+..................................
 
 The ``Incrementable`` type must be Default Constructible, Copy
 Constructible, and Assignable.  The default distance is
@@ -30,7 +30,7 @@ an implementation defined signed integral type.
 
 
 ``counting_iterator`` models
-----------------------------
+............................
 
 ``counting_iterator`` models Readable Lvalue Iterator.
 
@@ -59,7 +59,7 @@ required::
 
 
 ``counting_iterator`` operations
---------------------------------
+................................
 
 ``counting_iterator();``
 

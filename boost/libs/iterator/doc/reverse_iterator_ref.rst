@@ -12,22 +12,23 @@
         reverse_iterator<OtherIterator> const& r
       , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0 // exposition
     );
+    Iterator base() const;
     reference operator*() const;
     reverse_iterator& operator++();
   private:
-    Iterator current; // exposition
+    Iterator m_iterator; // exposition
   };
 
 
 ``reverse_iterator`` requirements
----------------------------------
+.................................
 
 The base ``Iterator`` must be a model of Bidirectional Traversal
 Iterator and Readable Iterator.
 
 
 ``reverse_iterator`` models
----------------------------
+...........................
 
 ``reverse_iterator`` models Bidirectional Traversal Iterator and
 Readable Iterator.  In addition, ``reverse_iterator`` models the same
@@ -37,18 +38,18 @@ argument models.
 
 
 ``reverse_iterator`` operations
--------------------------------
+...............................
 
 ``reverse_iterator();``
 
 :Requires: ``Iterator`` must be Default Constructible.
-:Returns: An instance of ``reverse_iterator`` with ``current`` 
+:Returns: An instance of ``reverse_iterator`` with ``m_iterator`` 
   default constructed.
 
 ``explicit reverse_iterator(Iterator x);``
 
 :Returns: An instance of ``reverse_iterator`` with a
-  ``current`` constructed from ``x``.
+  ``m_iterator`` constructed from ``x``.
 
 
 ::
@@ -63,17 +64,24 @@ argument models.
 :Returns: An instance of ``reverse_iterator`` that is a copy of ``r``.
 
 
+
+
+``Iterator base() const;``
+
+:Returns: ``m_iterator``
+
+
 ``reference operator*() const;``
 
 :Effects: 
 
 ::
 
-    Iterator tmp = current;
-    return *--tmp;
+    Iterator tmp = m_iterator;
+    return *..tmp;
 
 
 ``reverse_iterator& operator++();``
 
-:Effects: ``--current``
+:Effects: ``--m_iterator``
 :Returns: ``*this``

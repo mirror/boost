@@ -3,240 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
 <title>Permutation Iterator</title>
 <meta name="author" content="Toon Knapen, David Abrahams, Roland Richter, Jeremy Siek" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab" />
-<meta name="date" content="2003-09-14" />
+<meta name="date" content="2004-01-12" />
 <meta name="copyright" content="Copyright Toon Knapen, David Abrahams, Roland Richter, and Jeremy Siek 2003. All rights reserved" />
-<style type="text/css"><!--
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:date: $Date$
-:version: $Revision$
-:copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-*/
-
-.first {
-  margin-top: 0 }
-
-.last {
-  margin-bottom: 0 }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-dd {
-  margin-bottom: 0.5em }
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.attention, div.caution, div.danger, div.error, div.hint,
-div.important, div.note, div.tip, div.warning, div.admonition {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.hint p.admonition-title, div.important p.admonition-title,
-div.note p.admonition-title, div.tip p.admonition-title,
-div.admonition p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em }
-
-div.footer, div.header {
-  font-size: smaller }
-
-div.sidebar {
-  margin-left: 1em ;
-  border: medium outset ;
-  padding: 0em 1em ;
-  background-color: #ffffee ;
-  width: 40% ;
-  float: right ;
-  clear: right }
-
-div.sidebar p.rubric {
-  font-family: sans-serif ;
-  font-size: medium }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr {
-  width: 75% }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.attribution {
-  text-align: right ;
-  margin-left: 50% }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.rubric {
-  font-weight: bold ;
-  font-size: larger ;
-  color: maroon ;
-  text-align: center }
-
-p.sidebar-title {
-  font-family: sans-serif ;
-  font-weight: bold ;
-  font-size: larger }
-
-p.sidebar-subtitle {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.line-block {
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option {
-  white-space: nowrap }
-
-span.option-argument {
-  font-style: italic }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-table {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.citation {
-  border-left: solid thin gray ;
-  padding-left: 0.5ex }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.footnote {
-  border-left: solid thin black ;
-  padding-left: 0.5ex }
-
-td, th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-th.docinfo-name, th.field-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap }
-
-h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
-  font-size: 100% }
-
-tt {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
---></style>
+<link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="permutation-iterator">
@@ -253,7 +26,7 @@ ul.auto-toc {
 <td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="last reference" href="http://www.osl.iu.edu">Open Systems
 Lab</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2003-09-14</td></tr>
+<td>2004-01-12</td></tr>
 <tr><th class="docinfo-name">Copyright:</th>
 <td>Copyright Toon Knapen, David Abrahams, Roland Richter, and Jeremy Siek 2003. All rights reserved</td></tr>
 </tbody>
@@ -278,6 +51,7 @@ in a potentially different order.</p>
 <li><a class="reference" href="#permutation-iterator-operations" id="id7" name="id7"><tt class="literal"><span class="pre">permutation_iterator</span></tt> operations</a></li>
 </ul>
 </li>
+<li><a class="reference" href="#example" id="id8" name="id8">Example</a></li>
 </ul>
 </div>
 <div class="section" id="introduction">
@@ -306,15 +80,11 @@ past-the-end iterator to the indices.</p>
 template&lt; class ElementIterator
         , class IndexIterator
         , class ValueT        = use_default
-    , unsigned access     = use_default_access
-        , class Traversal     = use_default
+        , class CategoryT     = use_default
         , class ReferenceT    = use_default
         , class DifferenceT   = use_default &gt;
 class permutation_iterator
-  : public iterator_adaptor&lt;...&gt;
 {
-  typedef iterator_adaptor&lt;...&gt;
-  friend class iterator_core_access;
 public:
   permutation_iterator();
   explicit permutation_iterator(ElementIterator x, IndexIterator y);
@@ -325,7 +95,14 @@ public:
       , typename enable_if_convertible&lt;OEIter, ElementIterator&gt;::type* = 0
       , typename enable_if_convertible&lt;OIIter, IndexIterator&gt;::type* = 0
       );
+  ElementIterator base() const;
+private:
+  ElementIterator m_iterator; // exposition
 };
+
+template &lt;class ElementIterator, class IndexIterator&gt;
+permutation_iterator&lt;ElementIterator, IndexIterator&gt; 
+make_permutation_iterator( ElementIterator e, IndexIterator i);
 </pre>
 <div class="section" id="permutation-iterator-requirements">
 <h2><a class="toc-backref" href="#id6" name="permutation-iterator-requirements"><tt class="literal"><span class="pre">permutation_iterator</span></tt> requirements</a></h2>
@@ -343,14 +120,96 @@ same concept as the IndexIterator. Thus for instance, although the
 permutation iterator provides <tt class="literal"><span class="pre">operator+=(distance)</span></tt>, this operation
 will take linear time in case the IndexIterator is a model of
 ForwardIterator instead of amortized constant time.</p>
+<pre class="literal-block">
+template &lt;class ElementIterator, class IndexIterator&gt;
+permutation_iterator&lt;ElementIterator, IndexIterator&gt; 
+make_permutation_iterator(ElementIterator e, IndexIterator i);
+</pre>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">An instance of <tt class="literal"><span class="pre">permutation_iterator&lt;ElementIterator,</span> <span class="pre">IndexIterator&gt;</span></tt>
+that views the range of elements starting at <tt class="literal"><span class="pre">e`</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">order</span> <span class="pre">given</span>
+<span class="pre">by</span> <span class="pre">``i</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+<p><tt class="literal"><span class="pre">ElementIterator</span> <span class="pre">base()</span> <span class="pre">const;</span></tt></p>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><tt class="literal"><span class="pre">m_iterator</span></tt></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
+<div class="section" id="example">
+<h1><a class="toc-backref" href="#id8" name="example">Example</a></h1>
+<pre class="literal-block">
+using namespace boost;
+int i = 0;
+
+typedef std::vector&lt; int &gt; element_range_type;
+typedef std::list&lt; int &gt; index_type;
+
+static const int element_range_size = 10;
+static const int index_size = 4;
+
+element_range_type elements( element_range_size );
+for(element_range_type::iterator el_it = elements.begin() ; el_it != elements.end() ; ++el_it)
+  *el_it = std::distance(elements.begin(), el_it);
+
+index_type indices( index_size );
+for(index_type::iterator i_it = indices.begin() ; i_it != indices.end() ; ++i_it ) 
+  *i_it = element_range_size - index_size + std::distance(indices.begin(), i_it);
+std::reverse( indices.begin(), indices.end() );
+
+typedef permutation_iterator&lt; element_range_type::iterator, index_type::iterator &gt; permutation_type;
+permutation_type begin = make_permutation_iterator( elements.begin(), indices.begin() );
+permutation_type it = begin;
+permutation_type end = make_permutation_iterator( elements.begin(), indices.end() );
+
+std::cout &lt;&lt; &quot;The original range is : &quot;;
+std::copy( elements.begin(), elements.end(), std::ostream_iterator&lt; int &gt;( std::cout, &quot; &quot; ) );
+std::cout &lt;&lt; &quot;\n&quot;;
+
+std::cout &lt;&lt; &quot;The reindexing scheme is : &quot;;
+std::copy( indices.begin(), indices.end(), std::ostream_iterator&lt; int &gt;( std::cout, &quot; &quot; ) );
+std::cout &lt;&lt; &quot;\n&quot;;
+
+std::cout &lt;&lt; &quot;The permutated range is : &quot;;
+std::copy( begin, end, std::ostream_iterator&lt; int &gt;( std::cout, &quot; &quot; ) );
+std::cout &lt;&lt; &quot;\n&quot;;
+
+std::cout &lt;&lt; &quot;Elements at even indices in the permutation : &quot;;
+it = begin;
+for(i = 0; i &lt; index_size / 2 ; ++i, it+=2 ) std::cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+std::cout &lt;&lt; &quot;\n&quot;;
+
+std::cout &lt;&lt; &quot;Permutation backwards : &quot;;
+it = begin + (index_size);
+assert( it != begin );
+for( ; it-- != begin ; ) std::cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+std::cout &lt;&lt; &quot;\n&quot;;
+
+std::cout &lt;&lt; &quot;Iterate backward with stride 2 : &quot;;
+it = begin + (index_size - 1);
+for(i = 0 ; i &lt; index_size / 2 ; ++i, it-=2 ) std::cout &lt;&lt; *it &lt;&lt; &quot; &quot;;
+std::cout &lt;&lt; &quot;\n&quot;;
+</pre>
+<p>The output is:</p>
+<pre class="literal-block">
+The original range is : 0 1 2 3 4 5 6 7 8 9 
+The reindexing scheme is : 9 8 7 6 
+The permutated range is : 9 8 7 6 
+Elements at even indices in the permutation : 9 7 
+Permutation backwards : 6 7 8 9 
+Iterate backward with stride 2 : 6 8 
+</pre>
 </div>
-<hr class="footer" />
-<div class="footer">
-<a class="reference" href="permutation_iterator.rst">View document source</a>.
-Generated on: 2004-01-12 02:46 UTC.
-Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>

@@ -18,6 +18,9 @@
 	, typename enable_if_convertible<OEIter, ElementIterator>::type* = 0
 	, typename enable_if_convertible<OIIter, IndexIterator>::type* = 0
 	);
+    ElementIterator base() const;
+  private:
+    ElementIterator m_iterator; // exposition
   };
 
   template <class ElementIterator, class IndexIterator>
@@ -64,3 +67,8 @@ __ http://www.sgi.com/tech/stl/RandomAccessIterator.html
 :Returns: An instance of ``permutation_iterator<ElementIterator, IndexIterator>``
   that views the range of elements starting at ``e` in the order given
   by ``i``.
+
+
+``ElementIterator base() const;``
+
+:Returns: ``m_iterator``

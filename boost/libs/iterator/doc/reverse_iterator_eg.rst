@@ -1,6 +1,6 @@
 
 Example
--------
+.......
 
 The following example prints an array of characters in reverse order
 using ``reverse_iterator``.

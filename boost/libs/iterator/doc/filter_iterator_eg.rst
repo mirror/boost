@@ -1,6 +1,6 @@
 
 Example
--------
+.......
 
 This example uses ``filter_iterator`` and then
 ``make_filter_iterator`` to output only the positive integers from an
