@@ -91,7 +91,7 @@ public:
 
 // return types of casting lambda_functors (all "T" type.)
 
-template<template <class T> class cast_type, class T, class A>
+template<template <class> class cast_type, class T, class A>
 struct return_type_N<cast_action< cast_type<T> >, A> { 
   typedef T type;
 };
