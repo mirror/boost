@@ -209,7 +209,7 @@ using std::distance;
 #  define BOOST_REGEX_HAS_DLL_RUNTIME
 #endif
 
-#if defined(BOOST_REGEX_HAS_DLL_RUNTIME) && !defined(BOOST_REGEX_STATIC_LINK)
+#if defined(BOOST_REGEX_HAS_DLL_RUNTIME) && defined(BOOST_REGEX_DYN_LINK)
 #  if defined(BOOST_REGEX_SOURCE)
 #     define BOOST_REGEX_DECL __declspec(dllexport)
 #     define BOOST_REGEX_BUILD_DLL
@@ -233,11 +233,7 @@ using std::distance;
  ****************************************************************************/
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200) && defined(_MSC_EXTENSIONS)
-#  if defined(_DEBUG)
-#     define BOOST_REGEX_CALL __cdecl
-#  else
-#     define BOOST_REGEX_CALL __fastcall
-#  endif
+#  define BOOST_REGEX_CALL __fastcall
 #  define BOOST_REGEX_CCALL __cdecl
 #endif
 
@@ -570,5 +566,40 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void*);
 
 }} // namespaces
 #endif
+
+/*****************************************************************************
+ *
+ *  Diagnostics:
+ *
+ ****************************************************************************/
+
+#if defined(BOOST_REGEX_DIAG)
+#  pragma message ("BOOST_REGEX_DECL set as: " BOOST_STRINGIZE(BOOST_REGEX_DECL))
+#  pragma message ("BOOST_REGEX_CALL set as: " BOOST_STRINGIZE(BOOST_REGEX_CALL))
+#  pragma message ("BOOST_REGEX_CCALL set as: " BOOST_STRINGIZE(BOOST_REGEX_CCALL))
+#ifdef BOOST_REGEX_USE_C_LOCALE
+#  pragma message ("Using C locale in regex traits class")
+#elif BOOST_REGEX_USE_CPP_LOCALE
+#  pragma message ("Using C++ locale in regex traits class")
+#else
+#  pragma message ("Using Win32 locale in regex traits class")
+#endif
+#ifdef BOOST_REGEX_DYN_LINK
+#  pragma message ("Dynamic linking enabled")
+#endif
+#ifdef BOOST_REGEX_NO_LIB
+#  pragma message ("Auto-linking disabled")
+#endif
+#ifdef BOOST_REGEX_NO_EXTERNAL_TEMPLATES
+#  pragma message ("Extern templates disabled")
+#endif
+#ifdef BOOST_REGEX_V3
+#  pragma message ("Using Version 3 regex code")
+#else
+#  pragma message ("Using Version 4 regex code")
+#endif
+
+#endif
+
 #endif
 

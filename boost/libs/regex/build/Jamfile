@@ -20,7 +20,7 @@ lib boost_regex : ../src/$(SOURCES).cpp
 dll boost_regex : ../src/$(SOURCES).cpp 
     : 
         <sysinclude>$(BOOST_ROOT)
-        <define>BOOST_RE_BUILD_DLL=1
+        <define>BOOST_REGEX_DYN_LINK=1
         <runtime-link>dynamic
         <no-warn>$(SOURCES).cpp
     : 

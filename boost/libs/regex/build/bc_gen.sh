@@ -101,7 +101,7 @@ EOF
 		all_obj="$all_obj $obj"
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
 		echo "	bcc32 @&&|" >> $tout
-		echo "-c \$(INCLUDES) $opts \$(CXXFLAGS) -o$obj $file" >> $tout
+		echo "-c \$(INCLUDES) $opts \$(CXXFLAGS) -DBOOST_REGEX_DYN_LINK -o$obj $file" >> $tout
 		echo "|" >> $tout
 		echo "" >> $tout
 	done

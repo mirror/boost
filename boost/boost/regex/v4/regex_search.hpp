@@ -103,7 +103,6 @@ inline bool regex_search(const std::basic_string<wchar_t>& s,
 
 #endif
 
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template <class BidiIterator, class charT, class traits, class Allocator2>
 bool regex_search(BidiIterator first, BidiIterator last, 
                   const reg_expression<charT, traits, Allocator2>& e, 
@@ -117,6 +116,8 @@ bool regex_search(BidiIterator first, BidiIterator last,
    re_detail::perl_matcher<BidiIterator, match_alloc_type, traits, Allocator2> matcher(first, last, m, e, flags);
    return matcher.find();
 }
+
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
 template <class charT, class traits, class Allocator2>
 inline bool regex_search(const charT* str, 

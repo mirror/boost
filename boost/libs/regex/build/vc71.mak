@@ -36,7 +36,7 @@ NULL=nul
 !ENDIF
 
 
-ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v3/cregex.hpp ../../../boost/regex/v3/fileiter.hpp ../../../boost/regex/v3/instances.hpp ../../../boost/regex/v3/regex.hpp ../../../boost/regex/v3/regex_compile.hpp ../../../boost/regex/v3/regex_cstring.hpp ../../../boost/regex/v3/regex_format.hpp ../../../boost/regex/v3/regex_fwd.hpp ../../../boost/regex/v3/regex_kmp.hpp ../../../boost/regex/v3/regex_library_include.hpp ../../../boost/regex/v3/regex_match.hpp ../../../boost/regex/v3/regex_raw_buffer.hpp ../../../boost/regex/v3/regex_split.hpp ../../../boost/regex/v3/regex_stack.hpp ../../../boost/regex/v3/regex_synch.hpp ../../../boost/regex/v3/regex_traits.hpp
+ALL_HEADER= ../../../boost/regex/config.hpp ../../../boost/regex/pattern_except.hpp ../../../boost/regex/regex_traits.hpp ../../../boost/regex/user.hpp ../../../boost/regex/v3/cregex.hpp ../../../boost/regex/v3/fileiter.hpp ../../../boost/regex/v3/instances.hpp ../../../boost/regex/v3/regex.hpp ../../../boost/regex/v3/regex_compile.hpp ../../../boost/regex/v3/regex_cstring.hpp ../../../boost/regex/v3/regex_format.hpp ../../../boost/regex/v3/regex_fwd.hpp ../../../boost/regex/v3/regex_kmp.hpp ../../../boost/regex/v3/regex_library_include.hpp ../../../boost/regex/v3/regex_match.hpp ../../../boost/regex/v3/regex_raw_buffer.hpp ../../../boost/regex/v3/regex_split.hpp ../../../boost/regex/v3/regex_stack.hpp ../../../boost/regex/v3/regex_synch.hpp ../../../boost/regex/v3/regex_traits.hpp ../../../boost/regex/v4/basic_regex.hpp ../../../boost/regex/v4/char_regex_traits.hpp ../../../boost/regex/v4/cregex.hpp ../../../boost/regex/v4/fileiter.hpp ../../../boost/regex/v4/instances.hpp ../../../boost/regex/v4/iterator_category.hpp ../../../boost/regex/v4/iterator_traits.hpp ../../../boost/regex/v4/match_flags.hpp ../../../boost/regex/v4/match_results.hpp ../../../boost/regex/v4/mem_block_cache.hpp ../../../boost/regex/v4/perl_matcher.hpp ../../../boost/regex/v4/perl_matcher_common.hpp ../../../boost/regex/v4/perl_matcher_non_recursive.hpp ../../../boost/regex/v4/perl_matcher_recursive.hpp ../../../boost/regex/v4/regbase.hpp ../../../boost/regex/v4/regex.hpp ../../../boost/regex/v4/regex_compile.hpp ../../../boost/regex/v4/regex_cstring.hpp ../../../boost/regex/v4/regex_format.hpp ../../../boost/regex/v4/regex_fwd.hpp ../../../boost/regex/v4/regex_grep.hpp ../../../boost/regex/v4/regex_iterator.hpp ../../../boost/regex/v4/regex_kmp.hpp ../../../boost/regex/v4/regex_match.hpp ../../../boost/regex/v4/regex_merge.hpp ../../../boost/regex/v4/regex_raw_buffer.hpp ../../../boost/regex/v4/regex_replace.hpp ../../../boost/regex/v4/regex_search.hpp ../../../boost/regex/v4/regex_split.hpp ../../../boost/regex/v4/regex_stack.hpp ../../../boost/regex/v4/regex_synch.hpp ../../../boost/regex/v4/regex_token_iterator.hpp ../../../boost/regex/v4/regex_traits.hpp ../../../boost/regex/v4/states.hpp ../../../boost/regex/v4/sub_match.hpp ../../../boost/regex/config/borland.hpp ../../../boost/regex/config/cstring.hpp ../../../boost/regex/config/cwchar.hpp ../../../boost/regex/config/regex_library_include.hpp
 
 all : main_dir libboost_regex_vc71_ss_dir ./vc71/libboost_regex_vc71_ss.lib libboost_regex_vc71_ms_dir ./vc71/libboost_regex_vc71_ms.lib libboost_regex_vc71_ssd_dir ./vc71/libboost_regex_vc71_ssd.lib libboost_regex_vc71_msd_dir ./vc71/libboost_regex_vc71_msd.lib boost_regex_vc71_mdd_dir ./vc71/boost_regex_vc71_mdd.lib boost_regex_vc71_md_dir ./vc71/boost_regex_vc71_md.lib libboost_regex_vc71_md_dir ./vc71/libboost_regex_vc71_md.lib libboost_regex_vc71_mdd_dir ./vc71/libboost_regex_vc71_mdd.lib
 
@@ -68,43 +68,43 @@ main_dir :
 #
 ########################################################
 vc71/libboost_regex_vc71_ss/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/c_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ss/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/c_regex_traits_common.cpp
 
 vc71/libboost_regex_vc71_ss/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/cpp_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ss/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/cregex.cpp
 
 vc71/libboost_regex_vc71_ss/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/fileiter.cpp
 
 vc71/libboost_regex_vc71_ss/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/instances.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/instances.cpp
 
 vc71/libboost_regex_vc71_ss/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/posix_api.cpp
 
 vc71/libboost_regex_vc71_ss/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/regex.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/regex.cpp
 
 vc71/libboost_regex_vc71_ss/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/regex_debug.cpp
 
 vc71/libboost_regex_vc71_ss/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/regex_synch.cpp
 
 vc71/libboost_regex_vc71_ss/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/w32_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ss/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/wide_posix_api.cpp
 
 vc71/libboost_regex_vc71_ss/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ss/libboost_regex_vc71_ss.pch -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ss/ -Fdvc71/libboost_regex_vc71_ss.pdb ../src/winstances.cpp
 
 libboost_regex_vc71_ss_dir :
 	@if not exist "vc71\libboost_regex_vc71_ss\$(NULL)" mkdir vc71\libboost_regex_vc71_ss
@@ -124,43 +124,43 @@ libboost_regex_vc71_ss_clean :
 #
 ########################################################
 vc71/libboost_regex_vc71_ms/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/c_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ms/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/c_regex_traits_common.cpp
 
 vc71/libboost_regex_vc71_ms/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/cpp_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ms/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/cregex.cpp
 
 vc71/libboost_regex_vc71_ms/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/fileiter.cpp
 
 vc71/libboost_regex_vc71_ms/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/instances.cpp
 
 vc71/libboost_regex_vc71_ms/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/posix_api.cpp
 
 vc71/libboost_regex_vc71_ms/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/regex.cpp
 
 vc71/libboost_regex_vc71_ms/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/regex_debug.cpp
 
 vc71/libboost_regex_vc71_ms/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/regex_synch.cpp
 
 vc71/libboost_regex_vc71_ms/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/w32_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ms/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/wide_posix_api.cpp
 
 vc71/libboost_regex_vc71_ms/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ms/libboost_regex_vc71_ms.pch -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ms/ -Fdvc71/libboost_regex_vc71_ms.pdb ../src/winstances.cpp
 
 libboost_regex_vc71_ms_dir :
 	@if not exist "vc71\libboost_regex_vc71_ms\$(NULL)" mkdir vc71\libboost_regex_vc71_ms
@@ -180,43 +180,43 @@ libboost_regex_vc71_ms_clean :
 #
 ########################################################
 vc71/libboost_regex_vc71_ssd/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/c_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ssd/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/c_regex_traits_common.cpp
 
 vc71/libboost_regex_vc71_ssd/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/cpp_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ssd/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/cregex.cpp
 
 vc71/libboost_regex_vc71_ssd/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/fileiter.cpp
 
 vc71/libboost_regex_vc71_ssd/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/instances.cpp
 
 vc71/libboost_regex_vc71_ssd/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/posix_api.cpp
 
 vc71/libboost_regex_vc71_ssd/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/regex.cpp
 
 vc71/libboost_regex_vc71_ssd/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/regex_debug.cpp
 
 vc71/libboost_regex_vc71_ssd/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/regex_synch.cpp
 
 vc71/libboost_regex_vc71_ssd/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/w32_regex_traits.cpp
 
 vc71/libboost_regex_vc71_ssd/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/wide_posix_api.cpp
 
 vc71/libboost_regex_vc71_ssd/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_ssd/libboost_regex_vc71_ssd.pch -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c  $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_ssd/ -Fdvc71/libboost_regex_vc71_ssd.pdb ../src/winstances.cpp
 
 libboost_regex_vc71_ssd_dir :
 	@if not exist "vc71\libboost_regex_vc71_ssd\$(NULL)" mkdir vc71\libboost_regex_vc71_ssd
@@ -236,43 +236,43 @@ libboost_regex_vc71_ssd_clean :
 #
 ########################################################
 vc71/libboost_regex_vc71_msd/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/c_regex_traits.cpp
 
 vc71/libboost_regex_vc71_msd/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/c_regex_traits_common.cpp
 
 vc71/libboost_regex_vc71_msd/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/cpp_regex_traits.cpp
 
 vc71/libboost_regex_vc71_msd/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/cregex.cpp
 
 vc71/libboost_regex_vc71_msd/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/fileiter.cpp
 
 vc71/libboost_regex_vc71_msd/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/instances.cpp
 
 vc71/libboost_regex_vc71_msd/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/posix_api.cpp
 
 vc71/libboost_regex_vc71_msd/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/regex.cpp
 
 vc71/libboost_regex_vc71_msd/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/regex_debug.cpp
 
 vc71/libboost_regex_vc71_msd/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/regex_synch.cpp
 
 vc71/libboost_regex_vc71_msd/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/w32_regex_traits.cpp
 
 vc71/libboost_regex_vc71_msd/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/wide_posix_api.cpp
 
 vc71/libboost_regex_vc71_msd/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_msd/libboost_regex_vc71_msd.pch -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_msd/ -Fdvc71/libboost_regex_vc71_msd.pdb ../src/winstances.cpp
 
 libboost_regex_vc71_msd_dir :
 	@if not exist "vc71\libboost_regex_vc71_msd\$(NULL)" mkdir vc71\libboost_regex_vc71_msd
@@ -292,43 +292,43 @@ libboost_regex_vc71_msd_clean :
 #
 ########################################################
 vc71/boost_regex_vc71_mdd/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/c_regex_traits.cpp
 
 vc71/boost_regex_vc71_mdd/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/c_regex_traits_common.cpp
 
 vc71/boost_regex_vc71_mdd/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/cpp_regex_traits.cpp
 
 vc71/boost_regex_vc71_mdd/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/cregex.cpp
 
 vc71/boost_regex_vc71_mdd/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/fileiter.cpp
 
 vc71/boost_regex_vc71_mdd/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/instances.cpp
 
 vc71/boost_regex_vc71_mdd/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/posix_api.cpp
 
 vc71/boost_regex_vc71_mdd/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/regex.cpp
 
 vc71/boost_regex_vc71_mdd/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/regex_debug.cpp
 
 vc71/boost_regex_vc71_mdd/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/regex_synch.cpp
 
 vc71/boost_regex_vc71_mdd/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/w32_regex_traits.cpp
 
 vc71/boost_regex_vc71_mdd/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/wide_posix_api.cpp
 
 vc71/boost_regex_vc71_mdd/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_mdd/boost_regex_vc71_mdd.pch -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DBOOST_REGEX_DYN_LINK /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_mdd/ -Fdvc71/boost_regex_vc71_mdd.pdb ../src/winstances.cpp
 
 boost_regex_vc71_mdd_dir :
 	@if not exist "vc71\boost_regex_vc71_mdd\$(NULL)" mkdir vc71\boost_regex_vc71_mdd
@@ -348,43 +348,43 @@ boost_regex_vc71_mdd_clean :
 #
 ########################################################
 vc71/boost_regex_vc71_md/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/c_regex_traits.cpp
 
 vc71/boost_regex_vc71_md/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/c_regex_traits_common.cpp
 
 vc71/boost_regex_vc71_md/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/cpp_regex_traits.cpp
 
 vc71/boost_regex_vc71_md/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/cregex.cpp
 
 vc71/boost_regex_vc71_md/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/fileiter.cpp
 
 vc71/boost_regex_vc71_md/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/instances.cpp
 
 vc71/boost_regex_vc71_md/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/posix_api.cpp
 
 vc71/boost_regex_vc71_md/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/regex.cpp
 
 vc71/boost_regex_vc71_md/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/regex_debug.cpp
 
 vc71/boost_regex_vc71_md/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/regex_synch.cpp
 
 vc71/boost_regex_vc71_md/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/w32_regex_traits.cpp
 
 vc71/boost_regex_vc71_md/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/wide_posix_api.cpp
 
 vc71/boost_regex_vc71_md/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/boost_regex_vc71_md/boost_regex_vc71_md.pch -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/boost_regex_vc71_md/ -Fdvc71/boost_regex_vc71_md.pdb ../src/winstances.cpp
 
 boost_regex_vc71_md_dir :
 	@if not exist "vc71\boost_regex_vc71_md\$(NULL)" mkdir vc71\boost_regex_vc71_md
@@ -404,43 +404,43 @@ boost_regex_vc71_md_clean :
 #
 ########################################################
 vc71/libboost_regex_vc71_md/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/c_regex_traits.cpp
 
 vc71/libboost_regex_vc71_md/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/c_regex_traits_common.cpp
 
 vc71/libboost_regex_vc71_md/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/cpp_regex_traits.cpp
 
 vc71/libboost_regex_vc71_md/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/cregex.cpp
 
 vc71/libboost_regex_vc71_md/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/fileiter.cpp
 
 vc71/libboost_regex_vc71_md/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/instances.cpp
 
 vc71/libboost_regex_vc71_md/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/posix_api.cpp
 
 vc71/libboost_regex_vc71_md/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/regex.cpp
 
 vc71/libboost_regex_vc71_md/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/regex_debug.cpp
 
 vc71/libboost_regex_vc71_md/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/regex_synch.cpp
 
 vc71/libboost_regex_vc71_md/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/w32_regex_traits.cpp
 
 vc71/libboost_regex_vc71_md/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/wide_posix_api.cpp
 
 vc71/libboost_regex_vc71_md/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /YX /FD /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_md/libboost_regex_vc71_md.pch -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /FD /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_md/ -Fdvc71/libboost_regex_vc71_md.pdb ../src/winstances.cpp
 
 libboost_regex_vc71_md_dir :
 	@if not exist "vc71\libboost_regex_vc71_md\$(NULL)" mkdir vc71\libboost_regex_vc71_md
@@ -460,43 +460,43 @@ libboost_regex_vc71_md_clean :
 #
 ########################################################
 vc71/libboost_regex_vc71_mdd/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/c_regex_traits.cpp
 
 vc71/libboost_regex_vc71_mdd/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/c_regex_traits_common.cpp
 
 vc71/libboost_regex_vc71_mdd/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/cpp_regex_traits.cpp
 
 vc71/libboost_regex_vc71_mdd/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/cregex.cpp
 
 vc71/libboost_regex_vc71_mdd/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/fileiter.cpp
 
 vc71/libboost_regex_vc71_mdd/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/instances.cpp
 
 vc71/libboost_regex_vc71_mdd/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/posix_api.cpp
 
 vc71/libboost_regex_vc71_mdd/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/regex.cpp
 
 vc71/libboost_regex_vc71_mdd/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/regex_debug.cpp
 
 vc71/libboost_regex_vc71_mdd/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/regex_synch.cpp
 
 vc71/libboost_regex_vc71_mdd/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/w32_regex_traits.cpp
 
 vc71/libboost_regex_vc71_mdd/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/wide_posix_api.cpp
 
 vc71/libboost_regex_vc71_mdd/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc71/libboost_regex_vc71_mdd/libboost_regex_vc71_mdd.pch -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /DBOOST_REGEX_STATIC_LINK /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /FD /GX /RTC1 /c $(CXXFLAGS) -Y- -Fo./vc71/libboost_regex_vc71_mdd/ -Fdvc71/libboost_regex_vc71_mdd.pdb ../src/winstances.cpp
 
 libboost_regex_vc71_mdd_dir :
 	@if not exist "vc71\libboost_regex_vc71_mdd\$(NULL)" mkdir vc71\libboost_regex_vc71_mdd

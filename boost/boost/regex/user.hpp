@@ -28,8 +28,14 @@
 // locale:
 // #define BOOST_REGEX_USE_CPP_LOCALE
 
+// define this if the runtime library is a dll, and you
+// want BOOST_REGEX_DYN_LINK to set up dll exports/imports
+// with __declspec(dllexport)/__declspec(dllimport.)
+// #define BOOST_REGEX_HAS_DLL_RUNTIME
+
 // define this if you want to dynamically link to regex,
-// if the runtime library is also a dll (Probably Win32 specific):
+// if the runtime library is also a dll (Probably Win32 specific,
+// and has no effect unless BOOST_REGEX_HAS_DLL_RUNTIME is set):
 // #define BOOST_REGEX_DYN_LINK
 
 // define this if you don't want the lib to automatically

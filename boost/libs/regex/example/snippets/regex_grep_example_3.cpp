@@ -25,6 +25,7 @@
 #include <map>
 #include <boost/regex.hpp>
 #include <functional>
+#include <boost/detail/workaround.hpp>
 
 // purpose:
 // takes the contents of a file in the form of a string
@@ -87,10 +88,17 @@ void class_index::IndexClasses(const std::string& file)
    start = file.begin();
    end = file.end();
    base = start;
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) && !defined(_STLP_VERSION)
+   boost::regex_grep(std::bind1st(std::mem_fun1(&class_index::grep_callback), this),
+            start,
+            end,
+            expression);
+#else
    boost::regex_grep(std::bind1st(std::mem_fun(&class_index::grep_callback), this),
             start,
             end,
             expression);
+#endif
 }
 
 
@@ -134,6 +142,7 @@ int main(int argc, const char** argv)
    }
    return 0;
 }
+
 
 
 

@@ -166,7 +166,9 @@ BOOST_LIB_DEBUG_OPT:  nothing for release builds,
       && defined(BOOST_LIB_DEBUG_OPT)
 
 #  pragma comment(lib, BOOST_LIB_PREFIX BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_DEBUG_OPT ".lib")
-//#  pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_DEBUG_OPT ".lib")
+#ifdef BOOST_REGEX_DIAG
+#  pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_LIB_NAME "_" BOOST_LIB_TOOLSET "_" BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT BOOST_LIB_DEBUG_OPT ".lib")
+#endif
 
 #endif
 

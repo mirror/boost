@@ -18,6 +18,30 @@ for file in ../../../boost/regex/v3/*.hxx; do
 	fi
 done
 
+for file in ../../../boost/regex/v4/*.hpp; do
+	if [ -f $file ]; then
+		header="$header $file"
+	fi
+done
+
+for file in ../../../boost/regex/v4/*.hxx; do
+	if [ -f $file ]; then
+		header="$header $file"
+	fi
+done
+
+for file in ../../../boost/regex/config/*.hpp; do
+	if [ -f $file ]; then
+		header="$header $file"
+	fi
+done
+
+for file in ../../../boost/regex/config/*.hxx; do
+	if [ -f $file ]; then
+		header="$header $file"
+	fi
+done
+
 #
 # locate all the source files:
 for file in ../src/*.cpp; do
@@ -25,5 +49,6 @@ for file in ../src/*.cpp; do
 		src="$src $file"
 	fi
 done
+
 
 

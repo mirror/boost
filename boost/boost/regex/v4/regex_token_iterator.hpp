@@ -25,10 +25,21 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/detail/workaround.hpp>
+#if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
+      || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+//
+// Borland C++ Builder 6, and Visual C++ 6,
+// can't cope with the array template constructor
+// so we have a template member that will accept any type as 
+// argument, and then assert that is really is an array:
+//
+#include <boost/static_assert.hpp>
+#include <boost/type_traits/is_array.hpp>
+#endif
 
 namespace boost{
 
-template <class BidirectionalIterator, 
+template <class BidirectionalIterator,
           class charT,
           class traits,
           class Allocator>
@@ -50,13 +61,29 @@ public:
       : end(last), pre(p), flags(f){ subs.push_back(sub); }
    regex_token_iterator_implementation(const regex_type* p, BidirectionalIterator last, const std::vector<int>& v, match_flag_type f)
       : end(last), pre(p), subs(v), flags(f){}
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
+      || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+   template <class T>
+   regex_token_iterator_implementation(const regex_type* p, BidirectionalIterator last, const T& submatches, match_flag_type f)
+      : end(last), pre(p), flags(f)
+   {
+      // assert that T really is an array:
+      BOOST_STATIC_ASSERT(::boost::is_array<T>::value);
+      const std::size_t array_size = sizeof(T) / sizeof(submatches[0]);
+      for(std::size_t i = 0; i < array_size; ++i)
+      {
+         subs.push_back(submatches[i]);
+      }
+   }
+#else
    template <std::size_t CN>
    regex_token_iterator_implementation(const regex_type* p, BidirectionalIterator last, const int (&submatches)[CN], match_flag_type f)
       : end(last), pre(p), flags(f)
-   { 
+   {
       for(std::size_t i = 0; i < CN; ++i)
-         subs.push_back(submatches[i]); 
+      {
+         subs.push_back(submatches[i]);
+      }
    }
 #endif
 
@@ -110,7 +137,7 @@ public:
       else if((last_end != end) && (subs[0] == -1))
       {
          N =-1;
-         result =value_type(last_end, end);
+         result = value_type(last_end, end);
          return true;
       }
       return false;
@@ -150,9 +177,19 @@ public:
       if(!pdata->init(a))
          pdata.reset();
    }
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
+      || BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+   template <class T>
+   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
+                        const T& submatches, match_flag_type m = match_default)
+                        : pdata(new impl(&re, b, submatches, m))
+   {
+      if(!pdata->init(a))
+         pdata.reset();
+   }
+#else
    template <std::size_t N>
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re, 
+   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
                         const int (&submatches)[N], match_flag_type m = match_default)
                         : pdata(new impl(&re, b, submatches, m))
    {
