@@ -141,7 +141,7 @@ namespace boost {
             off_type off = off_type(pos); // operation guaranteed by §27.4.3.2 table 88
             if(pptr() != NULL && putend_ < pptr())
                 putend_ = pptr();
-            if(off != off_type(-1))
+            if(off != off_type(-1)) {
                 if(which & ::std::ios_base::in && gptr() != NULL) {
                     // get area
                     if(0 <= off && off <= putend_ - eback()) {
