@@ -89,7 +89,7 @@ namespace boost {
 
     template <class X>
     struct is_named_param_list {
-      enum { value = is_convertible<X, named_template_param_base>::value };
+      enum { value = is_convertible<X*, named_template_param_base*>::value };
     };
     
     struct choose_named_params {
