@@ -35,7 +35,7 @@ namespace boost {
         typedef typename io::CompatAlloc<Alloc>::type_for_string stringAlloc;  
 
         typedef std::basic_string<Ch, stringTr, stringAlloc>  string_type;
-        typename string_type::size_type                       size_type;
+        typedef typename string_type::size_type               size_type;
         typedef io::detail::format_item<Ch, Tr, Alloc>        format_item_t;
         typedef io::basic_altstringbuf<Ch, Tr, Alloc>         internal_streambuf_t;
         
