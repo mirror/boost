@@ -3,7 +3,9 @@
 
 // This is meant to be the beginnings of a comprehensive, generic
 // test suite for STL concepts such as iterators and containers.
-
+//
+// Revision History:
+// 04 Feb 2001  Added lvalue test (David Abrahams)
 #include <iterator>
 #include <assert.h>
 
@@ -87,6 +89,10 @@ template <class Iterator, class T>
 void forward_iterator_test(Iterator i, T v1, T v2) 
 {
   input_iterator_test(i, v1, v2);
+  
+  // Test for lvalue
+  const T* p = &*i;
+  (void)p;
 }
 
 // Preconditions: *i == v1, *++i == v2
