@@ -172,7 +172,6 @@ namespace boost {
     typename basic_format<Ch, Tr, Alloc>::string_type 
     basic_format<Ch,Tr, Alloc>:: 
     str () const {
-        dumped_=true;
         if(items_.size()==0)
             return prefix_;
         if( cur_arg_ < num_args_)
@@ -180,13 +179,9 @@ namespace boost {
                 // not enough variables supplied
                 boost::throw_exception(io::too_few_args(cur_arg_, num_args_)); 
 
-        unsigned long sz = prefix_.size();
         unsigned long i;
-        for(i=0; i < items_.size(); ++i) 
-            sz += items_[i].res_.size() + items_[i].appendix_.size();
         string_type res;
-        res.reserve(sz);
-
+        res.reserve(size());
         res += prefix_;
         for(i=0; i < items_.size(); ++i) {
             const format_item_t& item = items_[i];
@@ -199,7 +194,22 @@ namespace boost {
             }
             res += item.appendix_;
         }
+        dumped_=true;
         return res;
+    }
+    template< class Ch, class Tr, class Alloc>
+    typename basic_format<Ch, Tr, Alloc>::string_type::size_type  basic_format<Ch,Tr, Alloc>:: 
+    size () const {
+        std::streamsize sz = prefix_.size();
+        unsigned long i;
+        for(i=0; i < items_.size(); ++i) {
+            const format_item_t& item = items_[i];
+            sz += item.res_.size();
+            if( item.argN_ == format_item_t::argN_tabulation)
+                sz = std::max(sz, item.fmtstate_.width_);
+            sz +=  + item.appendix_.size();
+        }
+        return static_cast<typename string_type::size_type> (sz);
     }
 
 namespace io {

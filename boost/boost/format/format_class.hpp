@@ -1,4 +1,3 @@
-// -*- C++ -*-
 // ------------------------------------------------------------------------------
 //  format_class.hpp :  class interface
 // ------------------------------------------------------------------------------
@@ -35,7 +34,6 @@ namespace boost {
         typedef Ch  CharT;   // borland fails in operator% if we use Ch and Tr directly
         typedef typename io::CompatTraits<Tr>::type_for_string   stringTr;  
         typedef typename io::CompatAlloc<Alloc>::type_for_string stringAlloc;  
-        typedef typename io::CompatOStream<std::basic_ostream<Ch, Tr> >::type_for_string   stream_t;
 
         typedef std::basic_string<Ch, stringTr, stringAlloc>  string_type;
         typedef io::detail::format_item<Ch, Tr, Alloc>        format_item_t;
@@ -54,11 +52,16 @@ namespace boost {
 #endif
         io::detail::locale_or_dummy_t  getloc() const;
 
-        basic_format& clear(); // empty all converted string buffers
-        basic_format& clear_notbound(); // same, except the ones marked bound are left
+
+        typename string_type::size_type 
+                    size() const;            // sum of the current string pieces sizes
+        string_type str()  const;            // final string 
+
+        basic_format& clear();               // empty all converted string buffers
+        basic_format& clear_notbound();      // same, except the ones marked bound are left
         basic_format& parse(const string_type&); // resets buffers and parse a new format string
 
-        // pass arguments through those operators :
+        // ** arguments passing ** //
         template<class T>  
         basic_format&   operator%(const T& x)
             { return io::detail::feed<CharT, Tr, Alloc, const T&>(*this,x); }
@@ -67,7 +70,8 @@ namespace boost {
         template<class T>  basic_format&   operator%(T& x) 
             { return io::detail::feed<CharT, Tr, Alloc, T&>(*this,x); }
 #endif
-        // modifying a format object
+
+        // ** object modifying **//
         template<class T>
         basic_format&  bind_arg(int argN, const T& val) 
             { return io::detail::bind_arg_body(*this, argN, val); }
@@ -80,9 +84,6 @@ namespace boost {
         unsigned char exceptions() const;
         unsigned char exceptions(unsigned char newexcept);
 
-        // final output
-        string_type str() const;
-                      
 #if !defined( BOOST_NO_MEMBER_TEMPLATE_FRIENDS )  \
     && !BOOST_WORKAROUND(__BORLANDC__, <= 0x570) \
     && !BOOST_WORKAROUND( _CRAYC, != 0)
