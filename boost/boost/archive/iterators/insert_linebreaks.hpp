@@ -45,7 +45,6 @@ class insert_linebreaks :
         Base,
         CharType,
         single_pass_traversal_tag,
-        CharType,
         CharType
     >
 {
@@ -56,7 +55,6 @@ private:
         Base,
         CharType,
         single_pass_traversal_tag,
-        CharType,
         CharType
     > super_t;
 

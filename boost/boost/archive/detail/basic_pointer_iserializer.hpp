@@ -31,9 +31,9 @@ class basic_iserializer;
 class basic_pointer_iserializer : public basic_serializer {
 protected:
     explicit basic_pointer_iserializer(
-        const boost::serialization::extended_type_info & type
+        const boost::serialization::extended_type_info & type_
     ) :
-        basic_serializer(type)
+        basic_serializer(type_)
     {}
     virtual ~basic_pointer_iserializer(){};
 public:

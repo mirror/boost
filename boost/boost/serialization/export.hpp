@@ -150,7 +150,11 @@ struct guid_initializer {
 };
 
 template<class T, class ASeq>
-const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance(NULL);
+const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance
+#if defined(__MWERKS__)
+(NULL)
+#endif
+;
 
 template<class T, class ASeq>
 BOOST_FORCE_INCLUDE const guid_initializer<T, ASeq> & 
@@ -174,7 +178,7 @@ boost_template_instantiate(T &, ASeq &){
     defined(BOOST_MSVC)       \
     || defined(BOOST_INTEL)   \
     || defined(__BORLANDC__)  \
-    || defined(__MWERK__)
+    || defined(__MWERKS__)
 #define BOOST_CLASS_EXPORT_GUID_ARCHIVE_LIST(T, K, ASEQ)         \
     namespace boost { namespace archive { namespace detail {     \
     template<>                                                   \
@@ -232,7 +236,7 @@ boost_template_instantiate(T &, ASeq &){
         T,                                                       \
         BOOST_PP_STRINGIZE(T),                                   \
         boost::archive::detail::known_archive_types<false>::type \
-    )
+    )                                                            \
     /**/
 
 #endif // BOOST_SERIALIZATION_EXPORT_HPP

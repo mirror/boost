@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 #include <string>
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/static_warning.hpp>
@@ -97,29 +98,29 @@ public:
         Archive & operator<<(T & t){
             // if trap here, we're saving a tracted non-const
             // value - this could be a stack variable with the same
-            // address for multiple items. This would be the source of very 
+            // address for multiple items. This would be the source of very
             // subtle errors and should be double checked
             // BOOST_STATIC_WARNING(
             //     serialization::tracking_level == serialization::track_never
             // );
             // BCB has problems with arrays degrading to pointers
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) 
+            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
                 const T* aux = (const T*)&t;
                 return *this << *aux;
             #else
-                return *this << const_cast<const T &>(t); 
+                return *this << const_cast<const T &>(t);
             #endif 
         }
-        // the & operator 
+        // the & operator
         template<class T>
         Archive & operator&(T & t){
-             // BCB has problems with arrays degrading to pointers
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) 
+            // BCB has problems with arrays degrading to pointers
+            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
                 const T* aux = (const T*)&t;
                 return *this << *aux;
             #else
-                return *this << const_cast<const T &>(t); 
-            #endif 
+                return *this << const_cast<const T &>(t);
+            #endif
         }
     #endif
 };

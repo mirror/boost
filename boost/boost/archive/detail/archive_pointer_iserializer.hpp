@@ -40,7 +40,7 @@ public:
     virtual const basic_iserializer & get_basic_serializer() const 
     // mscvc 6.0 requires template functions to be implemented. For this
     // reason we can't make abstract.
-    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || defined(__MWERKS__)
     {
         assert(false);
         return *static_cast<const basic_iserializer *>(NULL);
@@ -53,7 +53,7 @@ public:
         void * & x,
         const unsigned int file_version
     ) const 
-    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || defined(__MWERKS__)
     {
         assert(false);
     }

@@ -40,44 +40,54 @@ struct implementation_level {
     struct traits_class_level {
         typedef  BOOST_DEDUCED_TYPENAME U::level type;
     };
-    typedef
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            is_base_and_derived<basic_traits, T>,
-            traits_class_level<T>,
-        //else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            is_fundamental<T>,
-            mpl::int_<primitive_type>,
-        //else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            is_class<T>,
-            mpl::int_<object_class_info>,
-        //else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            is_array<T>,
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-                mpl::int_<not_serializable>,
-            #else
-                mpl::int_<object_serializable>,
-            #endif
-        //else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
-            is_enum<T>,
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-                mpl::int_<not_serializable>,
-            #else
-                mpl::int_<object_serializable>,
-            #endif
-        //else
-            mpl::int_<not_serializable>
-        >::type
-        >::type
-        >::type
-        >::type
-        >::type type;
-        // vc 7.1 doesn't like enums here
+//    #if BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
+//        typedef
+//            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+//                is_base_and_derived<basic_traits, T>,
+//                traits_class_level<T>,
+//                mpl::int_<object_serializable>
+//            >::type type;
+//    #else
+        typedef
+            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                is_base_and_derived<basic_traits, T>,
+                traits_class_level<T>,
+            //else
+            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                is_fundamental<T>,
+                mpl::int_<primitive_type>,
+            //else
+            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                is_class<T>,
+                mpl::int_<object_class_info>,
+            //else
+            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                is_array<T>,
+                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+                    mpl::int_<not_serializable>,
+                #else
+                    mpl::int_<object_serializable>,
+                #endif
+            //else
+            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                is_enum<T>,
+                #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+                    mpl::int_<not_serializable>,
+                #else
+                    mpl::int_<object_serializable>,
+                #endif
+            //else
+                mpl::int_<not_serializable>
+            >
+            >
+            >
+            >
+            >::type type;
+            // vc 7.1 doesn't like enums here
+//    #endif
     BOOST_STATIC_CONSTANT(int, value = implementation_level::type::value);
 };
+
 
 template<class T, enum level_type L>
 inline bool operator>=(implementation_level<T> t, enum level_type l)

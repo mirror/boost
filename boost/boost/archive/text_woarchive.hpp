@@ -65,7 +65,11 @@ public:
     void save_binary(const void *address, std::size_t count){
         put(L'\n');
         this->end_preamble();
-        basic_text_oprimitive<std::wostream>::save_binary(
+        #if ! defined(__MWERKS__)
+        this->basic_text_oprimitive<std::wostream>::save_binary(
+        #else
+        this->basic_text_oprimitive::save_binary(
+        #endif
             address, 
             count
         );
