@@ -17,43 +17,57 @@
 
 #include <afx.h> // for CString
 #include <boost/range/config.hpp>
-#include <boost/range/difference_type.hpp>
+#include <boost/range/metafunctions.hpp>
 
 namespace boost
 {
-    struct iterator_of< CString >
+    template<>
+    struct range_iterator< CString >
     {
         typedef TCHAR* type;
     };
-    
-    struct const_iterator_of< CString >
+
+    //
+    // Why is this needed?!?
+    //
+    template<>
+    struct range_iterator< const CString >
+    {
+        typedef TCHAR* type;
+    };
+
+    template<>
+    struct range_const_iterator< CString >
     {
         typedef const TCHAR* type;
     };
-    
-    struct difference_type_of< CString >
+
+    template<>
+    struct range_difference< CString >
     {
         typedef std::ptrdiff_t type;
     };
-    
-    struct size_type_of< CString >
+
+    template<>
+    struct range_size< CString >
     {
         typedef int type;
     };
 
-    struct value_type_of< CString >
+    template<>
+    struct range_value< CString >
     {
         typedef TCHAR type;
     };
 
     TCHAR* begin( CString& r )
     {
-        return &r[0];
+        return r.GetBuffer(0);
     }
         
     const TCHAR* begin( const CString& r )
     {
-        return &r[0];
+        return (LPCTSTR)r;
     }
 
     int size( const CString& r )
@@ -61,12 +75,12 @@ namespace boost
         return r.GetLength();
     }
     
-    T* end( CString& r )
+    TCHAR* end( CString& r )
     {
         return begin( r ) + size( r );
     }
         
-    const T* end( const CString& r )
+    const TCHAR* end( const CString& r )
     {
         return begin( r ) + size( r );
     }

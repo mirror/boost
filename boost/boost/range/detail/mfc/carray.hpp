@@ -15,38 +15,47 @@
 # pragma once
 #endif
 
-#include <mfc/include/afxtempl.h> // for CArray
+#include <afxtempl.h> // for CArray
 #include <boost/range/config.hpp>
 #include <boost/range/metafunctions.hpp>
 
 namespace boost
 {
     template< class T, class U >
-    struct iterator_of< CArray<T,U> >
+    struct range_iterator< CArray<T,U> >
     {
         typedef T* type;
     };
-    
+
+    //
+    // Why is this needed?!?
+    //
     template< class T, class U >
-    struct const_iterator_of< CArray<T,U> >
+    struct range_iterator< const CArray<T,U> >
+    {
+        typedef T* type;
+    };
+
+    template< class T, class U >
+    struct range_const_iterator< CArray<T,U> >
     {
         typedef const T* type;
     };
     
     template< class T, class U >
-    struct difference_type_of< CArray<T,U> >
+    struct range_difference< CArray<T,U> >
     {
         typedef std::ptrdiff_t type;
     };
     
     template< class T, class U >
-    struct size_type_of< CArray<T,U> >
+    struct range_size< CArray<T,U> >
     {
         typedef int type;
     };
 
     template< class T, class U >
-    struct value_type_of< CArray<T,U> >
+    struct range_value< CArray<T,U> >
     {
         typedef T type;
     };
