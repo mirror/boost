@@ -31,10 +31,12 @@
     xmlns:xi   CDATA   #FIXED   "http://www.w3.org/2001/XInclude">
  -->
 
-<!ENTITY % local.common.attrib "xml:base  CDATA  #IMPLIED">
+<!ENTITY % local.common.attrib "xml:base      CDATA  #IMPLIED
+                                last-revision CDATA  #IMPLIED">
 
 <!--========== Define the BoostBook extensions ==========-->
-<!ENTITY % boost.common.attrib "%local.common.attrib;">
+<!ENTITY % boost.common.attrib "%local.common.attrib;
+                                id            CDATA  #IMPLIED">
 
 <!ENTITY % boost.namespace.mix 
         "class|class-specialization|struct|struct-specialization|
@@ -47,7 +49,7 @@
 
 <!ENTITY % boost.class.mix
         "static-constant|typedef|enum|
-         copy-assignment|constructor|destructor|member-function-group|
+         copy-assignment|constructor|destructor|method-group|
          free-function-group|function|method|overloaded-function|
          overloaded-method|data-member">
 
@@ -72,7 +74,6 @@
     dirname   CDATA   #REQUIRED
     html-only CDATA   #IMPLIED
     url       CDATA   #IMPLIED
-    id        CDATA   #IMPLIED
     %boost.common.attrib;>
 
 <!ELEMENT boostbook (title, (chapter|library)*)>
@@ -207,13 +208,10 @@
     name   CDATA  #REQUIRED
     %boost.common.attrib;>
 
-<!ELEMENT data-member (type)>
+<!ELEMENT data-member (type, purpose?, description?)>
 <!ATTLIST data-member 
     name   CDATA  #REQUIRED
     %boost.common.attrib;>
-
-<!ELEMENT constructor (template?, parameter*, %boost.function.semantics;)>
-<!ATTLIST constructor %boost.common.attrib;>
 
 <!ELEMENT paramtype ANY>
 <!ATTLIST paramtype %boost.common.attrib;>
@@ -224,12 +222,32 @@
 <!ELEMENT postconditions ANY>
 <!ATTLIST postconditions %boost.common.attrib;>
 
-<!ELEMENT destructor (%boost.function.semantics;)>
-<!ATTLIST destructor %boost.common.attrib;>
-
-<!ELEMENT member-function-group (method|overloaded-method)*>
-<!ATTLIST member-function-group
+<!ELEMENT method-group (method|overloaded-method)*>
+<!ATTLIST method-group
     name  CDATA  #REQUIRED
+    %boost.common.attrib;>
+
+<!ELEMENT constructor (template?, parameter*, %boost.function.semantics;)>
+<!ATTLIST constructor 
+    specifiers   CDATA  #IMPLIED
+    %boost.common.attrib;>
+
+<!ELEMENT destructor (%boost.function.semantics;)>
+<!ATTLIST destructor 
+    specifiers   CDATA  #IMPLIED
+    %boost.common.attrib;>
+
+<!ELEMENT method (template?, type, parameter*, %boost.function.semantics;)>
+<!ATTLIST method
+    name         CDATA  #REQUIRED
+    cv           CDATA  #IMPLIED
+    specifiers   CDATA  #IMPLIED
+    %boost.common.attrib;>
+
+<!ELEMENT function (template?, type, parameter*, %boost.function.semantics;)>
+<!ATTLIST function
+    name         CDATA  #REQUIRED
+    specifiers   CDATA  #IMPLIED
     %boost.common.attrib;>
 
 <!ELEMENT overloaded-method (signature*, %boost.function.semantics;)>
@@ -237,10 +255,15 @@
     name  CDATA  #REQUIRED
     %boost.common.attrib;>
 
-<!ELEMENT signature (template?, type?, parameter)*>
+<!ELEMENT overloaded-function (signature*, %boost.function.semantics;)>
+<!ATTLIST overloaded-function 
+    name  CDATA  #REQUIRED
+    %boost.common.attrib;>
+
+<!ELEMENT signature (template?, type, parameter*)>
 <!ATTLIST signature
-    return-type  CDATA  #IMPLIED
     cv           CDATA  #IMPLIED
+    specifiers   CDATA  #IMPLIED
     %boost.common.attrib;>
 
 <!ELEMENT requires ANY>
@@ -258,25 +281,6 @@
 <!ELEMENT notes ANY>
 <!ATTLIST notes %boost.common.attrib;>
 
-<!ELEMENT method (template?, type?, parameter*, %boost.function.semantics;)>
-<!ATTLIST method
-    name         CDATA  #REQUIRED
-    return-type  CDATA  #IMPLIED
-    cv           CDATA  #IMPLIED
-    %boost.common.attrib;>
-
-<!ELEMENT function 
-         (template?, type?, parameter*, %boost.function.semantics;)>
-<!ATTLIST function
-    name         CDATA  #REQUIRED
-    return-type  CDATA  #IMPLIED
-    %boost.common.attrib;>
-
-<!ELEMENT overloaded-function (signature*, %boost.function.semantics;)>
-<!ATTLIST overloaded-function 
-    name  CDATA  #REQUIRED
-    %boost.common.attrib;>
-
 <!ELEMENT rationale ANY>
 <!ATTLIST rationale %boost.common.attrib;>
 
@@ -285,7 +289,10 @@
 
 <!ELEMENT copy-assignment 
     (template?, type?, parameter*, %boost.function.semantics;)>
-<!ATTLIST copy-assignment %boost.common.attrib;>
+<!ATTLIST copy-assignment 
+    cv           CDATA  #IMPLIED
+    specifiers   CDATA  #IMPLIED
+    %boost.common.attrib;>
 
 <!ELEMENT free-function-group (function|overloaded-function)*>
 <!ATTLIST free-function-group
@@ -306,7 +313,6 @@
 <!ELEMENT using-class EMPTY>
 <!ATTLIST using-class
      name        CDATA #REQUIRED
-     conformance CDATA #IMPLIED
      %boost.common.attrib;>
 
 <!--========== Boost Testsuite Extensions ==========-->
@@ -369,9 +375,7 @@
 
 <!ELEMENT programlisting ANY>
 <!ATTLIST programlisting
-     name        CDATA #IMPLIED
-     format      CDATA #IMPLIED
-     conformance CDATA #IMPLIED>
+     name        CDATA #IMPLIED>
 
 <!--========== Customize the DocBook DTD ==========-->
 <!ENTITY % local.tech.char.class "|functionname|libraryname|code">
