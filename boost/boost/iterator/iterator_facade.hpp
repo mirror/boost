@@ -7,14 +7,15 @@
 #ifndef BOOST_ITERATOR_FACADE_23022003THW_HPP
 #define BOOST_ITERATOR_FACADE_23022003THW_HPP
 
-#include <boost/static_assert.hpp>
-
 #include <boost/iterator.hpp>
 #include <boost/iterator/interoperable.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 
 #include <boost/iterator/detail/facade_iterator_category.hpp>
 #include <boost/iterator/detail/enable_if.hpp>
+
+#include <boost/implicit_cast.hpp>
+#include <boost/static_assert.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/add_const.hpp>
@@ -322,7 +323,7 @@ namespace boost
 
         static type make(Reference x)
         {
-            return type(&x);
+            return implicit_cast<type>(&x);
         }
     };
 
