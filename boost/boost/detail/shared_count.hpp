@@ -58,14 +58,13 @@ void sp_array_destructor_hook(void * px);
 #endif
 
 
-// The standard library that comes with Borland C++ 5.5.1
+// The standard library that comes with Borland C++ 5.5.1, 5.6.4
 // defines std::exception and its members as having C calling
 // convention (-pc). When the definition of bad_weak_ptr
 // is compiled with -ps, the compiler issues an error.
-// Hence, the temporary #pragma option -pc below. The version
-// check is deliberately conservative.
+// Hence, the temporary #pragma option -pc below.
 
-#if defined(__BORLANDC__) && __BORLANDC__ == 0x551
+#if defined(__BORLANDC__) && __BORLANDC__ <= 0x564
 # pragma option push -pc
 #endif
 
@@ -79,7 +78,7 @@ public:
     }
 };
 
-#if defined(__BORLANDC__) && __BORLANDC__ == 0x551
+#if defined(__BORLANDC__) && __BORLANDC__ <= 0x564
 # pragma option pop
 #endif
 
