@@ -83,6 +83,11 @@ public:
     typedef boost::detail::multi_array::multi_array_view<T,NDims> type;
   };
 
+  explicit multi_array() :
+    super_type((T*)initial_base_) {
+    allocate_space();
+  }
+
   template <class ExtentList>
   explicit multi_array(ExtentList const& extents) :
     super_type((T*)initial_base_,extents) {
