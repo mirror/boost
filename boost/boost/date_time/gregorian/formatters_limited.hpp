@@ -23,7 +23,7 @@ namespace gregorian {
   /*!\ingroup date_format
    */
   inline std::string to_simple_string(const date& d) {
-    return date_time::date_formatter<date,date_time::simple_format>::date_to_string(d);
+    return date_time::date_formatter<date,date_time::simple_format<char> >::date_to_string(d);
   }
 
   //! Convert date period to simple string. Example: [2002-Jan-01/2002-Jan-02]
@@ -31,8 +31,8 @@ namespace gregorian {
    */
   inline std::string to_simple_string(const date_period& d) {
     std::string s("[");
-    std::string d1(date_time::date_formatter<date,date_time::simple_format>::date_to_string(d.begin()));
-    std::string d2(date_time::date_formatter<date,date_time::simple_format>::date_to_string(d.last()));
+    std::string d1(date_time::date_formatter<date,date_time::simple_format<char> >::date_to_string(d.begin()));
+    std::string d2(date_time::date_formatter<date,date_time::simple_format<char> >::date_to_string(d.last()));
     return std::string("[" + d1 + "/" + d2 + "]");
   }
 
@@ -40,8 +40,8 @@ namespace gregorian {
   /*!\ingroup date_format
    */
   inline std::string to_iso_string(const date_period& d) {
-    std::string s(date_time::date_formatter<date,date_time::iso_format>::date_to_string(d.begin()));
-    return s + "/" + date_time::date_formatter<date,date_time::iso_format>::date_to_string(d.last());
+    std::string s(date_time::date_formatter<date,date_time::iso_format<char> >::date_to_string(d.begin()));
+    return s + "/" + date_time::date_formatter<date,date_time::iso_format<char> >::date_to_string(d.last());
   }
 
 
@@ -49,14 +49,14 @@ namespace gregorian {
   /*!\ingroup date_format
    */
   inline std::string to_iso_extended_string(const date& d) {
-    return date_time::date_formatter<date,date_time::iso_extended_format>::date_to_string(d);
+    return date_time::date_formatter<date,date_time::iso_extended_format<char> >::date_to_string(d);
   }
 
   //! Convert to iso standard string YYYYMMDD. Example: 20021231
   /*!\ingroup date_format
    */
   inline std::string to_iso_string(const date& d) {
-    return date_time::date_formatter<date,date_time::iso_format>::date_to_string(d);
+    return date_time::date_formatter<date,date_time::iso_format<char> >::date_to_string(d);
   }
   
   

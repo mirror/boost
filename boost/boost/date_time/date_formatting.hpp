@@ -11,7 +11,6 @@
 
 #include "boost/date_time/iso_format.hpp"
 #include "boost/date_time/compiler_config.hpp"
-#include "boost/lexical_cast.hpp"
 #include <string>
 #include <sstream>
 #include <iomanip>
@@ -106,13 +105,13 @@ namespace date_time {
     {
       typedef typename date_type::ymd_type ymd_type;
       if (d.is_not_a_date()) {
-        return lexical_cast<string_type>(format_type::not_a_date());
+        return string_type(format_type::not_a_date());
       }
       if (d.is_neg_infinity()) {
-        return lexical_cast<string_type>(format_type::neg_infinity());
+        return string_type(format_type::neg_infinity());
       }
       if (d.is_pos_infinity()) {
-        return lexical_cast<string_type>(format_type::pos_infinity());
+        return string_type(format_type::pos_infinity());
       }
       ymd_type ymd = d.year_month_day();
       return ymd_formatter<ymd_type, format_type, charT>::ymd_to_string(ymd);

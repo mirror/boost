@@ -32,7 +32,7 @@ namespace gregorian {
   template<class charT>
   inline 
   std::basic_string<charT> to_simple_string_type(const date& d) {
-    return date_time::date_formatter<date,date_time::simple_format,charT>::date_to_string(d);
+    return date_time::date_formatter<date,date_time::simple_format<charT>,charT>::date_to_string(d);
   }
   //! To YYYY-mmm-DD string where mmm 3 char month name. Example:  2002-Jan-01
   /*!\ingroup date_format
@@ -48,8 +48,8 @@ namespace gregorian {
     typedef std::basic_string<charT> string_type;
     charT b = '[', m = '/', e=']';
 
-    string_type d1(date_time::date_formatter<date,date_time::simple_format,charT>::date_to_string(d.begin()));
-    string_type d2(date_time::date_formatter<date,date_time::simple_format,charT>::date_to_string(d.last()));
+    string_type d1(date_time::date_formatter<date,date_time::simple_format<charT>,charT>::date_to_string(d.begin()));
+    string_type d2(date_time::date_formatter<date,date_time::simple_format<charT>,charT>::date_to_string(d.last()));
     return string_type(b + d1 + m + d2 + e);
   }
   //! Convert date period to simple string. Example: [2002-Jan-01/2002-Jan-02]
@@ -63,8 +63,8 @@ namespace gregorian {
   template<class charT>
   inline std::basic_string<charT> to_iso_string_type(const date_period& d) {
     charT sep = '/';
-    std::basic_string<charT> s(date_time::date_formatter<date,date_time::iso_format,charT>::date_to_string(d.begin()));
-    return s + sep + date_time::date_formatter<date,date_time::iso_format,charT>::date_to_string(d.last());
+    std::basic_string<charT> s(date_time::date_formatter<date,date_time::iso_format<charT>,charT>::date_to_string(d.begin()));
+    return s + sep + date_time::date_formatter<date,date_time::iso_format<charT>,charT>::date_to_string(d.last());
   }
   //! Date period to iso standard format CCYYMMDD/CCYYMMDD. Example: 20021225/20021231
   /*!\ingroup date_format
@@ -77,7 +77,7 @@ namespace gregorian {
   // wrapper function for to_iso_extended_(w)string(date)
   template<class charT>
   inline std::basic_string<charT> to_iso_extended_string_type(const date& d) {
-    return date_time::date_formatter<date,date_time::iso_extended_format,charT>::date_to_string(d);
+    return date_time::date_formatter<date,date_time::iso_extended_format<charT>,charT>::date_to_string(d);
   }
   //! Convert to iso extended format string CCYY-MM-DD. Example 2002-12-31
   /*!\ingroup date_format
@@ -89,7 +89,7 @@ namespace gregorian {
   // wrapper function for to_iso_(w)string(date)
   template<class charT>
   inline std::basic_string<charT> to_iso_string_type(const date& d) {
-    return date_time::date_formatter<date,date_time::iso_format,charT>::date_to_string(d);
+    return date_time::date_formatter<date,date_time::iso_format<charT>,charT>::date_to_string(d);
   }
   //! Convert to iso standard string YYYYMMDD. Example: 20021231
   /*!\ingroup date_format
