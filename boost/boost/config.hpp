@@ -235,7 +235,7 @@
        // egcs 1.1 won't parse smart_ptr.hpp without this:
 #      define BOOST_NO_AUTO_PTR
 #   endif
-#   if __GNUC__ == 2 && __GNUC_MINOR__ <= 95
+#   if __GNUC__ == 2 && __GNUC_MINOR__ <= 97
 #     include <iterator>  // not sure this is the right way to do this -JGS
 #     if !defined(_CXXRT_STD) && !defined(__SGI_STL) // need to ask Dietmar about this -JGS
 #       define BOOST_NO_STD_ITERATOR
@@ -250,7 +250,7 @@
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 8
 #     define BOOST_NO_MEMBER_TEMPLATES
 #   endif
-#   if (__GNUC__ == 2 && __GNUC_MINOR__ > 95) || __GNUC__ > 2
+#   if (__GNUC__ == 2 && __GNUC_MINOR__ > 97) || __GNUC__ > 2
       // upcoming gcc 3.0
 #     include <iterator>
 #     if defined(__GLIBCPP__)
