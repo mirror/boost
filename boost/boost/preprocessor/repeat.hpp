@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <p>Repeats the macro <code>M(I,P)</code> for I = [0,N-1[.</p>
+/** <p>Repeats the macro <code>M(I,P)</code> for I = [0,N[.</p>
 
 <p>In other words, expands to the sequence:</p>
 
