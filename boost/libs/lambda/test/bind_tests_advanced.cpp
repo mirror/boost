@@ -172,21 +172,21 @@ void test_protect()
   for(int j=0; j<3; ++j) a[j] = b[j];
 
   std::for_each(a, a+3, 
-	   bind(ll::for_each(), _1, _1 + 5, protect(_1 = ++var(i))));
+           bind(ll::for_each(), _1, _1 + 5, protect(_1 = ++var(i))));
 
   // This is how you could output the values (it is uncommented, no output
   // from a regression test file):
   //  std::for_each(a, a+3, 
   //                bind(ll::for_each(), _1, _1 + 5,
   //                     std::cout << constant("\nLine ") << (&_1 - a) << " : "
-  //		     << protect(_1)
-  //		     )
+  //                     << protect(_1)
+  //                     )
   //               );
 
   int sum = 0;
   
   std::for_each(a, a+3, 
-	   bind(ll::for_each(), _1, _1 + 5, 
+           bind(ll::for_each(), _1, _1 + 5, 
                 protect(sum += _1))
                );
   BOOST_TEST(sum == (1+15)*15/2);
@@ -194,7 +194,7 @@ void test_protect()
   sum = 0;
 
   std::for_each(a, a+3, 
-	   bind(ll::for_each(), _1, _1 + 5, 
+           bind(ll::for_each(), _1, _1 + 5, 
                 sum += 1 + protect(_1)) // add element count 
                );
   BOOST_TEST(sum == (1+15)*15/2 + 15);

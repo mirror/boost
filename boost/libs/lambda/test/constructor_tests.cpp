@@ -234,7 +234,7 @@ void delayed_construction()
   vector<pair<int, int> > v;
 
   transform(x.begin(), x.end(), y.begin(), back_inserter(v),
-	    bind(constructor<pair<int, int> >(), _1, _2) );
+            bind(constructor<pair<int, int> >(), _1, _2) );
 }
 
 int test_main(int, char *[]) {

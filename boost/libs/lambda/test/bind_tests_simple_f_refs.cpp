@@ -121,14 +121,14 @@ int test_main(int, char *[]) {
   result = 
     bind(sum_of_args_1,                        // 12
        bind(sum_of_args_4,                     // 12
-	    bind(sum_of_args_2,                // 3
-		 bind(sum_of_args_1,           // 1
-		      bind(sum_of_args_1, _1)  // 1
-		      ), 
-		 _2),
-	    _2,
-	    _3,
-	    4)
+            bind(sum_of_args_2,                // 3
+                 bind(sum_of_args_1,           // 1
+                      bind(sum_of_args_1, _1)  // 1
+                      ), 
+                 _2),
+            _2,
+            _3,
+            4)
      )(i, j, k);
    BOOST_TEST(result == 12);
 

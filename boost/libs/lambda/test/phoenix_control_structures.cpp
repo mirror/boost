@@ -68,7 +68,7 @@ int test_main(int, char *[]) {
             ]
             .else_
             [
-	        ++var(lt)
+                ++var(lt)
             ]
         ]
     );
@@ -104,7 +104,7 @@ int test_main(int, char *[]) {
         (
             do_
             [
-	     ++var(counta)
+             ++var(counta)
             ]
             .while_(_1--),
             ++var(countb)
@@ -123,7 +123,7 @@ int test_main(int, char *[]) {
         (
             for_(var(iii) = 0, var(iii) < _1, ++var(iii))
             [
-	      ++var(counta)
+              ++var(counta)
             ],
             ++var(countb)
         )
