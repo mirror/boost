@@ -15,7 +15,7 @@
             Using the algorithms is straightforward. Let us have a look at the first example:
         </para>
         <programlisting>
-    #include &lt;boost/string_algo.hpp&gt;
+    #include &lt;boost/algorithm/string.hpp&gt;
     using namespace std;
     using namespace boost;
     
@@ -331,7 +331,7 @@
     typedef vector&lt; string &gt; split_vector_type;
     
     split_vector_type SplitVec; // #2: Search for tokens
-    split( SplitVec, str1, is_any_of&lt;char&gt;("-*") ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
+    split( SplitVec, str1, is_any_of("-*") ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
         </programlisting>
         <para>
             <code>[hello]</code> designates an <code>iterator_range</code> delimiting this substring.                       
