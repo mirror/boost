@@ -240,7 +240,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef A array_type;
         typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
-        typedef BOOST_UBLAS_TYPENAME detail::map_traits<A>::reference reference;
+        typedef BOOST_UBLAS_TYPENAME detail::map_traits<A, T>::reference reference;
 #else
         typedef sparse_matrix_element<sparse_matrix<T, F, A> > reference;
 #endif
@@ -1295,7 +1295,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
-        typedef typename detail::map_traits<typename A::data_value_type>::reference reference;
+        typedef typename detail::map_traits<typename A::data_value_type, T>::reference reference;
 #else
         typedef sparse_matrix_element<sparse_vector_of_sparse_vector<T, F, A> > reference;
 #endif

@@ -235,7 +235,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef A array_type;
         typedef const value_type &const_reference;
 #ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
-        typedef BOOST_UBLAS_TYPENAME detail::map_traits<A>::reference reference;
+        typedef BOOST_UBLAS_TYPENAME detail::map_traits<A,T>::reference reference;
 #else
         typedef sparse_vector_element<sparse_vector<T, A> > reference;
 #endif

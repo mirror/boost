@@ -562,17 +562,24 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     namespace detail {
-        template<class A>
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        template<class A, class T>
         struct map_traits {
             typedef BOOST_UBLAS_TYPENAME A::mapped_type &reference;
         };
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class I, class T, class ALLOC>
-        struct map_traits<map_array<I, T, ALLOC> > {
+        struct map_traits<map_array<I, T, ALLOC>, T > {
             typedef typename map_array<I, T, ALLOC>::data_reference reference;
         };
-#elif defined (BOOST_UBLAS_STRICT_MAP_ARRAY)
+#else
+#if defined (BOOST_UBLAS_STRICT_MAP_ARRAY)
 #error BOOST_UBLAS_STRICT_MAP_ARRAY require partial template speciazation
+#endif
+        // ISSUE: T is actually only required for VC6 as it can't find mapped_type
+        template<class A, class T>
+        struct map_traits {
+            typedef T &reference;
+        };
 #endif
 
         // reserve helpers for map_array and generic maps
