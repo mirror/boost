@@ -68,10 +68,10 @@ void test_binary() {
     static bool validate(const I& a) { return val; } \
   }
 
-#ifndef BOOST_NO_STDC_NAMESPACE
+//#ifndef BOOST_NO_STDC_NAMESPACE
 using std::abs;
 using std::sqrt;
-#endif
+//#endif
 
 new_unary_bunch(bunch_pos, +, true);
 new_unary_bunch(bunch_neg, -, true);
