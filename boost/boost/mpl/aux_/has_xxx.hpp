@@ -32,22 +32,22 @@
 // the implementation below is based on a USENET newsgroup's posting by  
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
 
-#   define BOOST_MPL_HAS_XXX_TRAIT_DEF(name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name) \
 template< typename T > \
 boost::mpl::aux::yes_tag \
-has_##name##_helper( \
+trait##_helper( \
       T const volatile* \
     , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME T::name>* = 0 \
     ); \
 \
 boost::mpl::aux::no_tag \
-has_##name##_helper(...); \
+trait##_helper(...); \
 \
 template< typename T > \
-struct has_##name \
+struct trait \
 { \
      BOOST_STATIC_CONSTANT(bool, value = \
-        sizeof((has_##name##_helper)(static_cast<T*>(0))) \
+        sizeof((trait##_helper)(static_cast<T*>(0))) \
             == sizeof(boost::mpl::aux::yes_tag) \
         ); \
 }; \
@@ -66,9 +66,9 @@ namespace boost { namespace mpl { namespace aux {
 struct has_xxx_tag;
 }}}
 
-#   define BOOST_MPL_HAS_XXX_TRAIT_DEF_(name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name) \
 template< typename T, typename name = ::boost::mpl::aux::has_xxx_tag > \
-struct has_##name : T \
+struct trait : T \
 { \
  private: \
     static boost::mpl::aux::no_tag test(void(*)(::boost::mpl::aux::has_xxx_tag)); \
@@ -81,37 +81,37 @@ struct has_##name : T \
         ); \
 }; \
 \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, void) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, bool) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, char) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, signed char) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, unsigned char) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, signed short) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, unsigned short) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, signed int) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, unsigned int) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, signed long) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, unsigned long) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, float) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, double) \
-BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, long double) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, void) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, bool) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, char) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, signed char) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, unsigned char) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, signed short) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, unsigned short) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, signed int) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, unsigned int) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, signed long) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, unsigned long) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, float) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, double) \
+BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, long double) \
 /**/
 
-#   define BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, T) \
-template<> struct has_##name<T,boost::mpl::aux::has_xxx_tag> \
+#   define BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, T) \
+template<> struct trait<T,boost::mpl::aux::has_xxx_tag> \
 { \
     enum { value = false }; \
 }; \
 /**/
 
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-#   define BOOST_MPL_HAS_XXX_TRAIT_DEF(name) \
-    BOOST_MPL_HAS_XXX_TRAIT_DEF_(name) \
-    BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(name, wchar_t) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name) \
+    BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name) \
+    BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, wchar_t) \
     /**/
 #else
-#   define BOOST_MPL_HAS_XXX_TRAIT_DEF(name) \
-    BOOST_MPL_HAS_XXX_TRAIT_DEF_(name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name) \
+    BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name) \
     /**/
 #endif
 
@@ -119,14 +119,18 @@ template<> struct has_##name<T,boost::mpl::aux::has_xxx_tag> \
 
 #else 
 
-#   define BOOST_MPL_HAS_XXX_TRAIT_DEF(name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name) \
 template< typename T > \
-struct has_##name \
+struct trait \
 { \
      BOOST_STATIC_CONSTANT(bool, value = false); \
 }; \
 /**/
 
 #endif // BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION
+
+#define BOOST_MPL_HAS_XXX_TRAIT_DEF(name) \
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_##name, name) \
+/**/
 
 #endif // BOOST_MPL_AUX_HAS_XXX_HPP_INCLUDED
