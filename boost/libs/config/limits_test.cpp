@@ -14,13 +14,9 @@
  */
 
 #include <boost/limits.hpp>
-#include <math.h>
-#include <cassert>
+#define BOOST_INCLUDE_MAIN
+#include <boost/test/test_tools.hpp>
 #include <iostream>
-
-#ifdef NDEBUG
-#error This test relies on assert() and thus makes no sense with NDEBUG defined
-#endif
 
 /*
  * General portability note:
@@ -35,51 +31,50 @@
 template<class T>
 void test_integral_limits(const T &, const char * msg)
 {
-  std::cout << "Testing " << msg << " (size " << sizeof(T) << ")" << std::endl;
   typedef std::numeric_limits<T> lim;
+  std::cout << "Testing " << msg
+            << " (size " << sizeof(T) << ")" 
+            << " min: " << lim::min() << ", max: " << lim::max()
+            << std::endl;
 
-  assert(lim::is_specialized);
-  assert(lim::is_integer);
-  // assert(lim::is_modulo);
-
-  std::cout << "min: " << lim::min() << ", max: " << lim::max() << '\n';
+  BOOST_TEST(lim::is_specialized);
+  BOOST_TEST(lim::is_integer);
+  // BOOST_TEST(lim::is_modulo);
 }
 
 template <class T>
 void print_hex_val(T t, const char* name)
 {
-	const unsigned char* p = (const unsigned char*)&t;
-	std::cout << "hex value of " << name << " is: ";
-	for (int i = 0; i < sizeof(T); ++i)
-	{
-		if(p[i] <= 0xF)
-			std::cout << "0";
-		std:: cout << std::hex << (int)p[i];
-	}
-	std::cout << endl;
+  const unsigned char* p = (const unsigned char*)&t;
+  std::cout << "hex value of " << name << " is: ";
+  for (unsigned int i = 0; i < sizeof(T); ++i) {
+    if(p[i] <= 0xF)
+      std::cout << "0";
+    std::cout << std::hex << (int)p[i];
+  }
+  std::cout << std::dec << std::endl;
 }
 
 template<class T>
 void test_float_limits(const T &, const char * msg)
 {
-  std::cout << "Testing " << msg << std::endl;
+  std::cout << "\nTesting " << msg << std::endl;
   typedef std::numeric_limits<T> lim;
 
-  assert(lim::is_specialized);
-  assert(!lim::is_modulo);
-  assert(!lim::is_integer);
-  assert(lim::is_signed);
+  BOOST_TEST(lim::is_specialized);
+  BOOST_TEST(!lim::is_modulo);
+  BOOST_TEST(!lim::is_integer);
+  BOOST_TEST(lim::is_signed);
   
-  assert(lim::epsilon() > 0);
+  BOOST_TEST(lim::epsilon() > 0);
 
-  assert(lim::has_infinity);
-  assert(lim::has_quiet_NaN);
-  assert(lim::has_signaling_NaN);
+  BOOST_TEST(lim::has_infinity);
+  BOOST_TEST(lim::has_quiet_NaN);
+  BOOST_TEST(lim::has_signaling_NaN);
   
   const T infinity = lim::infinity();
   const T qnan = lim::quiet_NaN();
   const T snan = lim::signaling_NaN();
-  (void) snan;
 
   // make sure those values are not 0 or similar nonsense
 
@@ -89,28 +84,29 @@ void test_float_limits(const T &, const char * msg)
 	    << ", exact: " << lim::is_exact << '\n'
 	    << "min: " << lim::min() << ", max: " << lim::max() << '\n'
 	    << "infinity: " << infinity << ", QNaN: " << qnan << '\n';
-	print_hex_val(lim::max(), "max");
-	print_hex_val(infinity, "infinity");
-	print_hex_val(qnan, "qnan");
-	print_hex_val(snan, "snan");
+  print_hex_val(lim::max(), "max");
+  print_hex_val(infinity, "infinity");
+  print_hex_val(qnan, "qnan");
+  print_hex_val(snan, "snan");
+
   // infinity is beyond the representable range
-  assert(lim::max() > 1000);
-  assert(lim::infinity() > lim::max());
-  assert(-lim::infinity() < -lim::max());
-  assert(lim::min() < 0.001);
-  assert(lim::min() > 0);
+  BOOST_TEST(lim::max() > 1000);
+  BOOST_TEST(lim::infinity() > lim::max());
+  BOOST_TEST(-lim::infinity() < -lim::max());
+  BOOST_TEST(lim::min() < 0.001);
+  BOOST_TEST(lim::min() > 0);
 
   // NaNs shall always compare "false"
   // If one of these fail, your compiler may be optimizing incorrectly
-  assert(! (qnan < 42));
-  assert(! (qnan > 42));
-  assert(! (qnan <= 42));
-  assert(! (qnan >= 42));
-  assert(! (qnan == qnan));
+  BOOST_TEST(! (qnan < 42));
+  BOOST_TEST(! (qnan > 42));
+  BOOST_TEST(! (qnan <= 42));
+  BOOST_TEST(! (qnan >= 42));
+  BOOST_TEST(! (qnan == qnan));
 }
 
 
-int main()
+int test_main(int, char*[])
 {
   test_integral_limits(bool(), "bool");
   test_integral_limits(char(), "char");
