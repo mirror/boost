@@ -13,25 +13,22 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/at.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/rest_n.hpp>
 
-/** Expands to the I:th element of the list L. The first element is at index 0.
+/** <P>Expands to the I:th element of the list L. The first element is at index 0.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_AT(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)),1)
-\endverbatim</PRE>
+</PRE>
 
-expands to B.
+<P>expands to B.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LIST_AT(L,I) BOOST_PP_LIST_AT_D(0,L,I)
 

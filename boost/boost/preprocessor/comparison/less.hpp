@@ -30,6 +30,6 @@
 #define BOOST_PP_LESS_D(D,X,Y) BOOST_PP_AND(BOOST_PP_NOT_EQUAL_D(D,X,Y),BOOST_PP_LESS_EQUAL_D(D,X,Y))
 #endif
 
-/** Obsolete. Use BOOST_PP_LESS(). */
+/** <P>Obsolete. Use BOOST_PP_LESS().</P> */
 #define BOOST_PREPROCESSOR_LESS(X,Y) BOOST_PP_LESS(X,Y)
 #endif

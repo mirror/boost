@@ -30,6 +30,6 @@
 #define BOOST_PP_NOT_EQUAL_D(D,X,Y) BOOST_PP_BOOL(BOOST_PP_ADD_D(D,BOOST_PP_SUB_D(D,X,Y),BOOST_PP_SUB_D(D,Y,X)))
 #endif
 
-/** Obsolete. Use BOOST_PP_NOT_EQUAL(). */
+/** <P>Obsolete. Use BOOST_PP_NOT_EQUAL().</P> */
 #define BOOST_PREPROCESSOR_NOT_EQUAL(X,Y) BOOST_PP_NOT_EQUAL(X,Y)
 #endif

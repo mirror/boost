@@ -13,51 +13,48 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/for.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
 
-/** Repeats I(R,X) and iterates F(R,X) while C(R,X) is true.
+/** <P>Repeats I(R,X) and iterates F(R,X) while C(R,X) is true.</P>
 
-In other words, expands to the sequence:
+<P>In other words, expands to the sequence:</P>
 
-<PRE>\verbatim
+<PRE>
   I(R,X)  I(R,F(R,X))  I(R,F(R,F(R,X)))  ...  I(R,F(R,F(...F(R,X)...)))
-\endverbatim</PRE>
+</PRE>
 
-The length of the sequence is determined by C(R,X).
+<P>The length of the sequence is determined by C(R,X).</P>
 
 <H3>Legend</H3>
-
-- <B>X</B> is the current state of iteration. The state is usually a tuple.
-- <B>C</B> is the condition for iteration. It must expand to a decimal integer
-literal.
-- <B>F</B> is the iterated macro. Note that if the state is a tuple, then
-F(R,X) usually expands to a tuple of the same number of elements.
-- <B>I</B> is the state instantiation macro.
-- <B>R</B> is the recursion depth and should only be used as a parameter to
-other macros using BOOST_PP_FOR() or for invoking BOOST_PP_FOR##R() directly.
-For each macro using BOOST_PP_FOR(), there is a version of the macro,
-distinguished by the R suffix, that accepts an additional recursion depth as
-the first parameter. This technique is necessary to avoid recursively
-expanding the same macro again, which is not permitted by the C++ preprocessor.
+<UL>
+  <LI><B>X</B> is the current state of iteration. The state is usually a tuple.
+  <LI><B>C</B> is the condition for iteration. It must expand to a decimal
+      integer literal.
+  <LI><B>F</B> is the iterated macro. Note that if the state is a tuple, then
+      F(R,X) usually expands to a tuple of the same number of elements.
+  <LI><B>I</B> is the state instantiation macro.
+  <LI><B>R</B> is the recursion depth and should only be used as a parameter to
+      other macros using BOOST_PP_FOR() or for invoking BOOST_PP_FOR##R()
+      directly. For each macro using BOOST_PP_FOR(), there is a version of the
+      macro, distinguished by the R suffix, that accepts an additional
+      recursion depth as the first parameter. This technique is necessary to
+      avoid recursively expanding the same macro again, which is not permitted
+      by the C++ preprocessor.
+</UL>
 
 <H3>BOOST_PP_REPEAT() vs BOOST_PP_FOR()</H3>
 
-BOOST_PP_FOR() is a generalization of BOOST_PP_REPEAT(). This means that
+<P>BOOST_PP_FOR() is a generalization of BOOST_PP_REPEAT(). This means that
 BOOST_PP_REPEAT() can be implemented using BOOST_PP_FOR(). Unfortunately,
 BOOST_PP_FOR() is slower than BOOST_PP_REPEAT(). In addition,
 BOOST_PP_REPEAT() was introduced earlier, is generally easier to use, and is
-still quite useful on its own.
+still quite useful on its own.</P>
 
 <H3>2D and 3D repetition</H3>
 
-BOOST_PP_FOR() can be used for multidimensional repetition simply by invoking
-BOOST_PP_FOR##R() directly.
+<P>BOOST_PP_FOR() can be used for multidimensional repetition simply by
+invoking BOOST_PP_FOR##R() directly.</P>
 */
 #define BOOST_PP_FOR(X,C,F,I) BOOST_PP_FOR0(X,C,F,I)
 

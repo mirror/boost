@@ -37,6 +37,6 @@
 #endif
 #endif
 
-/** Obsolete. Use BOOST_PP_MUL(). */
+/** <P>Obsolete. Use BOOST_PP_MUL().</P> */
 #define BOOST_PREPROCESSOR_MUL(X,Y) BOOST_PP_MUL(X,Y)
 #endif

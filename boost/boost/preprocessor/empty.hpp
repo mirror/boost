@@ -13,41 +13,36 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
+/** <P>Expands to nothing. Used with BOOST_PP_IF() and as an unused parameter.</P>
 
-<a href="../../../../boost/preprocessor/empty.hpp">Click here to see the header.</a>
-*/
+<P>Example usage as the implementation of BOOST_PP_COMMA_IF(C):</P>
 
-/** Expands to nothing. Used with BOOST_PP_IF() and as an unused parameter.
-
-Example usage as the implementation of BOOST_PP_COMMA_IF(C):
-
-<PRE>\verbatim
+<PRE>
   #define BOOST_PP_COMMA_IF(C)\
     BOOST_PP_IF(C,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
-\endverbatim</PRE>
+</PRE>
 
-Example usage as an unused macro parameter:
+<P>Example usage as an unused macro parameter:</P>
 
-<PRE>\verbatim
+<PRE>
   #define BOOST_PP_DEF(CV)\
-    template<class base>            \
-    CV typename implement_subscript_using_begin_subscript<base>::value_type&\
+    template<class base>\
+    CV() typename implement_subscript_using_begin_subscript<base>::value_type&\
       implement_subscript_using_begin_subscript<base>::operator[]\
-      ( index_type                  \
-          i                         \
-      ) CV                          \
-    { return base::begin()[i];      \
+      ( index_type\
+          i\
+      ) CV()\
+    { return base::begin()[i];\
     }
 
-  BOOST_PP_DEF(BOOST_PP_EMPTY())
-  BOOST_PP_DEF(const)
+  BOOST_PP_DEF(BOOST_PP_EMPTY)
+  BOOST_PP_DEF(const BOOST_PP_EMPTY)
   #undef BOOST_PP_DEF
-\endverbatim</PRE>
+</PRE>
 
-The above expands to:
+<P>The above expands to:</P>
 
-<PRE>\verbatim
+<PRE>
   template<class base>
   typename implement_subscript_using_begin_subscript<base>::value_type&
     implement_subscript_using_begin_subscript<base>::operator[]
@@ -65,13 +60,13 @@ The above expands to:
     ) const
   { return base::begin()[i];
   }
-\endverbatim</PRE>
+</PRE>
 
-In case you wonder, the above code is part of a generalized layer for
-implementing the subscripting operators of a random access container.
+<P>In case you wonder, the above code is part of a generalized layer for
+implementing the subscripting operators of a random access container.</P>
 */
 #define BOOST_PP_EMPTY()
 
-/** Obsolete. Use BOOST_PP_EMPTY(). */
+/** <P>Obsolete. Use BOOST_PP_EMPTY().</P> */
 #define BOOST_PREPROCESSOR_EMPTY()
 #endif

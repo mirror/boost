@@ -13,30 +13,29 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/for_each.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/for.hpp>
 
-/** Repeats F(R,P,BOOST_PP_LIST_AT(L,I)) for each I = [0,BOOST_PP_LIST_SIZE(L)[.
+/** <P>Repeats F(R,P,BOOST_PP_LIST_AT(L,I)) for each I = [0,BOOST_PP_LIST_SIZE(L)[.</P>
 
-In other words, expands to the sequence:
+<P>In other words, expands to the sequence:</P>
 
-<PRE>\verbatim
+<PRE>
   F(R,P,BOOST_PP_LIST_AT(L,0))
   F(R,P,BOOST_PP_LIST_AT(L,1))
   ...
   F(R,P,BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L))))
-\endverbatim</PRE>
+</PRE>
 
 <H3>Example</H3>
-- <a href="../../example/catch_builtin.cpp">catch_builtin.cpp</a>
+<UL>
+  <LI><a href="../../example/catch_builtin.cpp">catch_builtin.cpp</a>
+</UL>
 
 <H3>Uses</H3>
-- BOOST_PP_FOR()
+<UL>
+  <LI>BOOST_PP_FOR()
+</UL>
 */
 #define BOOST_PP_LIST_FOR_EACH(F,P,L) BOOST_PP_LIST_FOR_EACH_R(0,F,P,L)
 

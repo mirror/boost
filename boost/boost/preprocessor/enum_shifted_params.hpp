@@ -13,28 +13,27 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/enum_shifted_params.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/enum_shifted.hpp>
 
-/** Generates a comma separated list of shifted actual parameters.
+/** <P>Generates a comma separated list of shifted actual parameters.</P>
 
-In other words, expands to the sequence:
+<P>In other words, expands to the sequence:</P>
 
-<PRE>\verbatim
+<PRE>
   P##1, P##2, ..., P##N-1
-\endverbatim</PRE>
+</PRE>
 
 <H3>Uses</H3>
-- BOOST_PP_REPEAT()
+<UL>
+  <LI>BOOST_PP_REPEAT()
+</UL>
 
 <H3>Rationale</H3>
-- This macro facilitates a typical usage of the library. Shifted parameter
-lists are common in template metaprograms. 
+<UL>
+  <LI>This macro facilitates a typical usage of the library. Shifted parameter
+      lists are common in template metaprograms.
+</UL>
 */
 #define BOOST_PP_ENUM_SHIFTED_PARAMS(N,P) BOOST_PP_ENUM_SHIFTED(N,BOOST_PP_ENUM_SHIFTED_PARAMS_F,P)
 
@@ -42,6 +41,6 @@ lists are common in template metaprograms.
 #define BOOST_PP_ENUM_SHIFTED_PARAMS_F(I,P) BOOST_PP_CAT(P,I)
 #endif
 
-/** Obsolete. Use BOOST_PP_ENUM_SHIFTED_PARAMS(). */
+/** <P>Obsolete. Use BOOST_PP_ENUM_SHIFTED_PARAMS().</P> */
 #define BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS(N,P) BOOST_PP_ENUM_SHIFTED_PARAMS(N,P)
 #endif

@@ -13,25 +13,22 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/filter.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/fold_right.hpp>
 
-/** Expands to a list containing all the elements X of the list for which F(D,P,X) is true.
+/** <P>Expands to a list containing all the elements X of the list for which F(D,P,X) is true.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_FILTER(BOOST_PP_NOT_EQUAL_D,2,BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
-\endverbatim</PRE>
+</PRE>
 
-expands to a list containing 1 and 3.
+<P>expands to a list containing 1 and 3.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LIST_FILTER(F,P,L) BOOST_PP_LIST_FILTER_D(0,F,P,L)
 

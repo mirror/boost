@@ -13,37 +13,32 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
+/** <P>Delays the stringization of X.</P>
 
-<a href="../../../../boost/preprocessor/stringize.hpp">Click here to see the header.</a>
-*/
+<P>For example,</P>
 
-/** Delays the stringization of X.
+<PRE>
+  #define NOTE(STR)\
+    message(__FILE__ "(" BOOST_PP_STRINGIZE(__LINE__) ") : " STR)
 
-For example,
+  // ...
 
-<PRE>\verbatim
-#define NOTE(STR)\
-  message(__FILE__ "(" BOOST_PP_STRINGIZE(__LINE__) ") : " STR)
+  #pragma NOTE("TBD!")
+</PRE>
 
-// ...
+<P>expands to:</P>
 
-#pragma NOTE("TBD!")
-\endverbatim</PRE>
-
-expands to:
-
-<PRE>\verbatim
+<PRE>
   #pragma message("examples.cpp" "(" "20" ") : " "TBD!")
-\endverbatim</PRE>
+</PRE>
 
-The use of BOOST_PP_STRINGIZE() above lets the PP expand the __LINE__
+<P>The use of BOOST_PP_STRINGIZE() above lets the PP expand the __LINE__
 before stringizing it. If # would be used directly, the code would
-expand to:
+expand to:</P>
 
-<PRE>\verbatim
+<PRE>
   #pragma message("examples.cpp" "(" "__LINE__" ") : " "TBD!")
-\endverbatim</PRE>
+</PRE>
 */
 #define BOOST_PP_STRINGIZE(X) BOOST_PP_STRINGIZE_DELAY(X)
 
@@ -52,6 +47,6 @@ expand to:
 #define BOOST_PP_DO_STRINGIZE(X) #X
 #endif
 
-/** Obsolete. Use BOOST_PP_STRINGIZE(). */
+/** <P>Obsolete. Use BOOST_PP_STRINGIZE().</P> */
 #define BOOST_PREPROCESSOR_STRINGIZE(E) BOOST_PP_STRINGIZE(E)
 #endif

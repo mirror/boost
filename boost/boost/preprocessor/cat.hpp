@@ -13,16 +13,11 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
+/** <P>Delays the catenation of X and Y.</P>
 
-<a href="../../../../boost/preprocessor/cat.hpp">Click here to see the header.</a>
-*/
+<P>For example,</P>
 
-/** Delays the catenation of X and Y.
-
-For example,
-
-<PRE>\verbatim
+<PRE>
   #define STATIC_ASSERT(EXPR)\
     enum\
     { BOOST_PP_CAT(static_check_,__LINE__) = (EXPR) ? 1 : -1\
@@ -35,11 +30,11 @@ For example,
   // ...
 
   STATIC_ASSERT(sizeof(int) <= sizeof(long));
-\endverbatim</PRE>
+</PRE>
 
-expands to:
+<P>expands to:</P>
 
-<PRE>\verbatim
+<PRE>
   enum
   { static_check_152 = (sizeof(int) <= sizeof(long)) ? 1 : -1
   };
@@ -47,13 +42,13 @@ expands to:
     static_assert_152
     [ static_check_152
     ];
-\endverbatim</PRE>
+</PRE>
 
-Using BOOST_PP_CAT() above lets the PP expand the __LINE__. If the above code
-would use the ## operator directly then __LINE__ would not be expanded and
-the above would expand to:
+<P>Using BOOST_PP_CAT() above lets the PP expand the __LINE__. If the above
+code would use the ## operator directly then __LINE__ would not be expanded and
+the above would expand to:</P>
 
-<PRE>\verbatim
+<PRE>
   enum
   { static_check___LINE__ = (sizeof(int) <= sizeof(long)) ? 1 : -1
   };
@@ -61,7 +56,7 @@ the above would expand to:
     static_assert___LINE__
     [ static_check___LINE__
     ];
-\endverbatim</PRE>
+</PRE>
 */
 #define BOOST_PP_CAT(X,Y) BOOST_PP_CAT_DELAY(X,Y)
 
@@ -70,6 +65,6 @@ the above would expand to:
 #define BOOST_PP_DO_CAT(X,Y) X##Y
 #endif
 
-/** Obsolete. Use BOOST_PP_CAT(). */
+/** <P>Obsolete. Use BOOST_PP_CAT().</P> */
 #define BOOST_PREPROCESSOR_CAT(X,Y) BOOST_PP_CAT(X,Y)
 #endif

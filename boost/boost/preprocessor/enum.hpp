@@ -13,25 +13,22 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/enum.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/comma_if.hpp>
 #include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/tuple.hpp>
 
-/** Generates a comma separated list.
+/** <P>Generates a comma separated list.</P>
 
-In other words, expands to the sequence:
+<P>In other words, expands to the sequence:</P>
 
-<PRE>\verbatim
+<PRE>
   F(0,P), F(1,P), ..., F(N-1,P)
-\endverbatim</PRE>
+</PRE>
 
 <H3>Uses</H3>
-- BOOST_PP_REPEAT()
+<UL>
+  <LI>BOOST_PP_REPEAT()
+</UL>
 */
 #define BOOST_PP_ENUM(N,F,P) BOOST_PP_REPEAT(N,BOOST_PP_ENUM_F,(F,P))
 

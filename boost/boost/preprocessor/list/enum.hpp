@@ -13,30 +13,27 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/enum.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/comma_if.hpp>
 #include <boost/preprocessor/list/for_each.hpp>
 
-/** Converts the list to a comma separated list.
+/** <P>Converts the list to a comma separated list.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_ENUM(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
-\endverbatim</PRE>
+</PRE>
 
-expands to:
+<P>expands to:</P>
 
-<PRE>\verbatim
+<PRE>
   A, B, C
-\endverbatim</PRE>
+</PRE>
 
 <H3>Uses</H3>
-- BOOST_PP_FOR().
+<UL>
+  <LI>BOOST_PP_FOR()
+</UL>
 */
 #define BOOST_PP_LIST_ENUM(L) BOOST_PP_LIST_ENUM_R(0,L)
 

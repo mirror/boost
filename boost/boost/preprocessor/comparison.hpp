@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/comparison.hpp">Click here to see the header.</a>
-
-Includes all comparison headers.
-*/
+/** <P>Includes all comparison headers.</P> */
 
 #include <boost/preprocessor/comparison/equal.hpp>
 #include <boost/preprocessor/comparison/greater.hpp>

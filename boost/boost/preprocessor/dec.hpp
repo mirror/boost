@@ -13,19 +13,14 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
+/** <P>Decrements X expanding to a single token.</P>
 
-<a href="../../../../boost/preprocessor/dec.hpp">Click here to see the header.</a>
-*/
+<P>For example, BOOST_PP_DEC(3) expands to 2 (a single token).</P>
 
-/** Decrements X expanding to a single token.
+<P>BOOST_PP_DEC() uses saturation arithmetic. Decrementing 0 yeilds a 0.</P>
 
-For example, BOOST_PP_DEC(3) expands to 2 (a single token).
-
-BOOST_PP_DEC() uses saturation arithmetic. Decrementing 0 yeilds a 0.
-
-Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG] are
-supported.
+<P>Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG] are
+supported.</P>
 */
 #define BOOST_PP_DEC(X) BOOST_PP_DEC_DELAY(X)
 
@@ -162,6 +157,6 @@ supported.
 #define BOOST_PP_DEC128 127
 #endif
 
-/** Obsolete. Use BOOST_PP_DEC(). */
+/** <P>Obsolete. Use BOOST_PP_DEC().</P> */
 #define BOOST_PREPROCESSOR_DEC(X) BOOST_PP_DEC(X)
 #endif

@@ -13,27 +13,24 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/rest_n.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/while.hpp>
 
-/** Expands to a list of all but the first N elements of the list.
+/** <P>Expands to a list of all but the first N elements of the list.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_REST_N(2,BOOST_PP_TUPLE_TO_LIST(4,(+,-,*,/)))
-\endverbatim</PRE>
+</PRE>
 
-expands to a list containing * and /.
+<P>expands to a list containing * and /.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LIST_REST_N(N,L) BOOST_PP_LIST_REST_N_D(0,N,L)
 

@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/arithmetic.hpp">Click here to see the header.</a>
-
-Includes all arithmetic headers.
-*/
+/** <P>Includes all arithmetic headers.</P> */
 
 #include <boost/preprocessor/arithmetic/div.hpp>
 #include <boost/preprocessor/arithmetic/mod.hpp>

@@ -29,6 +29,6 @@
 #define BOOST_PP_EQUAL_D(D,X,Y) BOOST_PP_NOT(BOOST_PP_NOT_EQUAL_D(D,X,Y))
 #endif
 
-/** Obsolete. Use BOOST_PP_EQUAL(). */
+/** <P>Obsolete. Use BOOST_PP_EQUAL().</P> */
 #define BOOST_PREPROCESSOR_EQUAL(X,Y) BOOST_PP_EQUAL(X,Y)
 #endif

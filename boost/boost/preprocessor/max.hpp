@@ -13,20 +13,17 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/max.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/comparison/less_equal.hpp>
 #include <boost/preprocessor/if.hpp>
 
-/** Expands to the maximum of X and Y.
+/** <P>Expands to the maximum of X and Y.</P>
 
-For example, BOOST_PP_MAX(5,7) expands to 7 (a single token).
+<P>For example, BOOST_PP_MAX(5,7) expands to 7 (a single token).</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_MAX(X,Y) BOOST_PP_MAX_D(0,X,Y)
 
@@ -34,6 +31,6 @@ For example, BOOST_PP_MAX(5,7) expands to 7 (a single token).
 #define BOOST_PP_MAX_D(D,X,Y) BOOST_PP_IF(BOOST_PP_LESS_EQUAL_D(D,X,Y),Y,X)
 #endif
 
-/** Obsolete. Use BOOST_PP_MAX(). */
+/** <P>Obsolete. Use BOOST_PP_MAX().</P> */
 #define BOOST_PREPROCESSOR_MAX(X,Y) BOOST_PP_MAX(X,Y)
 #endif

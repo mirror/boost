@@ -13,18 +13,15 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/comma.hpp">Click here to see the header.</a>
-*/
-
-/** Expands to a comma. Can be used with BOOST_PP_IF().
+/** <P>Expands to a comma. Can be used with BOOST_PP_IF().</P>
 
 <H3>See</H3>
-- BOOST_PP_COMMA_IF()
+<UL>
+  <LI>BOOST_PP_COMMA_IF()
+</UL>
 */
 #define BOOST_PP_COMMA() ,
 
-/** Obsolete. Use BOOST_PP_COMMA(). */
+/** <P>Obsolete. Use BOOST_PP_COMMA().</P> */
 #define BOOST_PREPROCESSOR_COMMA() ,
 #endif

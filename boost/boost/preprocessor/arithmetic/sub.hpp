@@ -39,6 +39,6 @@
 #endif
 #endif
 
-/** Obsolete. Use BOOST_PP_SUB(X,Y). */
+/** <P>Obsolete. Use BOOST_PP_SUB(X,Y).</P> */
 #define BOOST_PREPROCESSOR_SUB(X,Y) BOOST_PP_SUB(X,Y)
 #endif

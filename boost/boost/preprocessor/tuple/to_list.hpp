@@ -13,18 +13,15 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/tuple/to_list.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/adt.hpp>
 
-/** Converts a tuple to a list.
+/** <P>Converts a tuple to a list.</P>
 
 <H3>See</H3>
-- BOOST_PP_LIST_CONS()
-- BOOST_PP_LIMIT_TUPLE
+<UL>
+  <LI>BOOST_PP_LIST_CONS()
+  <LI>BOOST_PP_LIMIT_TUPLE
+</UL>
 */
 #define BOOST_PP_TUPLE_TO_LIST(N,T) BOOST_PP_TUPLE_TO_LIST_DELAY(N,T)
 

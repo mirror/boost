@@ -13,26 +13,23 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/size.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/fold_left.hpp>
 #include <boost/preprocessor/inc.hpp>
 
-/** Expands to the number of elements in the list.
+/** <P>Expands to the number of elements in the list.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_SIZE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
-\endverbatim</PRE>
+</PRE>
 
-expands to 3.
+<P>expands to 3.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LIST_SIZE(L) BOOST_PP_LIST_SIZE_D(0,L)
 

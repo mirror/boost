@@ -40,6 +40,6 @@
 #endif
 #endif
 
-/** Obsolete. Use BOOST_PP_ADD(). */
+/** <P>Obsolete. Use BOOST_PP_ADD().</P> */
 #define BOOST_PREPROCESSOR_ADD(X,Y) BOOST_PP_ADD(X,Y)
 #endif

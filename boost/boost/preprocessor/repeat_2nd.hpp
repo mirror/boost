@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/repeat_2nd.hpp">Click here to see the header.</a>
-*/
-
-/** Same as BOOST_PP_REPEAT(), but implemented independently. */
+/** <P>Same as BOOST_PP_REPEAT(), but implemented independently.</P> */
 #define BOOST_PP_REPEAT_2ND(N,M,P) BOOST_PP_REPEAT_2ND_DELAY(N,M,P)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -154,6 +149,6 @@
 #define BOOST_PP_REPEAT_2ND128(M,P) BOOST_PP_REPEAT_2ND127(M,P) M(127,P)
 #endif
 
-/** Obsolete. Use BOOST_PP_REPEAT_2ND(). */
+/** <P>Obsolete. Use BOOST_PP_REPEAT_2ND().</P> */
 #define BOOST_PREPROCESSOR_REPEAT_2ND(N,M,P) BOOST_PP_REPEAT_2ND(N,M,P)
 #endif

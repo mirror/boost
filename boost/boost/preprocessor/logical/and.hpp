@@ -13,19 +13,14 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/logical/and.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/logical/not.hpp>
 
-/** Expands to the logical AND of the operands.
+/** <P>Expands to the logical AND of the operands.</P>
 
-For example, BOOST_PP_AND(0,5) expands to 0 (a single token).
+<P>For example, BOOST_PP_AND(0,5) expands to 0 (a single token).</P>
 */
 #define BOOST_PP_AND(X,Y) BOOST_PP_NOR(BOOST_PP_NOT(X),BOOST_PP_NOT(Y))
 
-/** Obsolete. Use BOOST_PP_AND(). */
+/** <P>Obsolete. Use BOOST_PP_AND().</P> */
 #define BOOST_PREPROCESSOR_AND(X,Y) BOOST_PP_AND(X,Y)
 #endif

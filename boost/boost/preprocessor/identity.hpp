@@ -13,34 +13,30 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/identity.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/empty.hpp>
 
-/** Expands to X once invoked.
+/** <P>Expands to X once invoked.</P>
 
-Designed to be used with BOOST_PP_IF(), when one of the clauses need to be invoked.
+<P>Designed to be used with BOOST_PP_IF(), when one of the clauses need to be
+invoked.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
-  BOOST_PP_IDENTITY(X)()
-  //                  ^^ NOTE!
-\endverbatim</PRE>
+<PRE>
+  BOOST_PP_IDENTITY(X)<B>()</B>
+</PRE>
 
-expands to:
+<P>expands to:</P>
 
-<PRE>\verbatim
+<PRE>
   X
-\endverbatim</PRE>
+</PRE>
 
-NOTE: If BOOST_PP_IDENTITY() is not invoked, the expansion will not be usable.
+<P>NOTE: If BOOST_PP_IDENTITY() is not invoked, the expansion will not be
+usable.</P>
 */
 #define BOOST_PP_IDENTITY(X) X BOOST_PP_EMPTY
 
-/** Obsolete. Use BOOST_PP_IDENTITY(). */
+/** <P>Obsolete. Use BOOST_PP_IDENTITY().</P> */
 #define BOOST_PREPROCESSOR_IDENTITY(X) BOOST_PP_IDENTITY(X)
 #endif

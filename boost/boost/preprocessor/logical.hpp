@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/logical.hpp">Click here to see the header.</a>
-
-Includes all logical headers.
-*/
+/** <P>Includes all logical headers.</P> */
 
 #include <boost/preprocessor/logical/or.hpp>
 #include <boost/preprocessor/logical/xor.hpp>

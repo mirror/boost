@@ -13,18 +13,13 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/comma_if.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/comma.hpp>
 #include <boost/preprocessor/empty.hpp>
 #include <boost/preprocessor/if.hpp>
 
-/** Expands to a comma if C != 0 and nothing if C == 0. */
+/** <P>Expands to a comma if C != 0 and nothing if C == 0.</P> */
 #define BOOST_PP_COMMA_IF(C) BOOST_PP_IF(C,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 
-/** Obsolete. Use BOOST_PP_COMMA_IF(). */
+/** <P>Obsolete. Use BOOST_PP_COMMA_IF().</P> */
 #define BOOST_PREPROCESSOR_COMMA_IF(C) BOOST_PP_COMMA_IF(C)
 #endif

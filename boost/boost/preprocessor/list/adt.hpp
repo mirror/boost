@@ -13,55 +13,55 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
+/** <P>This header defines the fundamental list operations.</P>
 
-<a href="../../../../boost/preprocessor/list/adt.hpp">Click here to see the header.</a>
-
-This header defines the fundamental list operations.
-
-NOTE: The internal representation of lists is hidden. Although there aren't
-compelling reasons to change the representation, you should avoid writing
-code that depends on the internal representation details.
+<P>NOTE: The internal representation of lists is hidden. Although there
+aren't compelling reasons to change the representation, you should avoid
+writing code that depends on the internal representation details.</P>
 */
 
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/logical/not.hpp>
 
-/** List constructor.
+/** <P>List constructor.</P>
 
-Lists are build using list constructors BOOST_PP_LIST_NIL and
-BOOST_PP_LIST_CONS(). For example,
+<P>Lists are build using list constructors BOOST_PP_LIST_NIL and
+BOOST_PP_LIST_CONS(). For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_CONS(1,
   BOOST_PP_LIST_CONS(2,
   BOOST_PP_LIST_CONS(3,
   BOOST_PP_LIST_CONS(4,
   BOOST_PP_LIST_CONS(5,
   BOOST_PP_LIST_NIL)))))
-\endverbatim</PRE>
+</PRE>
 
-Short lists can also be build from tuples:
+<P>Short lists can also be build from tuples:</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5))
-\endverbatim</PRE>
+</PRE>
 
-Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.
+<P>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</P>
 */
 #define BOOST_PP_LIST_CONS(H,T) (H,T,1)
 
-/** List nil constructor.
+/** <P>List nil constructor.</P>
 
 <H3>See</H3>
-- BOOST_PP_LIST_CONS()
+<UL>
+  <LI>BOOST_PP_LIST_CONS()
+</UL>
 */
 #define BOOST_PP_LIST_NIL (_,_,0)
 
-/** Expands to 1 if the list is not nil and 0 otherwise.
+/** <P>Expands to 1 if the list is not nil and 0 otherwise.</P>
 
 <H3>See</H3>
-- BOOST_PP_LIST_IS_NIL()
+<UL>
+  <LI>BOOST_PP_LIST_IS_NIL()
+</UL>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE_ELEM(3,2,L)
@@ -69,10 +69,12 @@ Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.
 #  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE3_ELEM2 L
 #endif
 
-/** Expands to 1 if the list is nil and 0 otherwise.
+/** <P>Expands to 1 if the list is nil and 0 otherwise.</P>
 
 <H3>See</H3>
-- BOOST_PP_LIST_IS_CONS()
+<UL>
+  <LI>BOOST_PP_LIST_IS_CONS()
+</UL>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE_ELEM(3,2,L))
@@ -80,18 +82,20 @@ Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.
 #  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE3_ELEM2 L)
 #endif
 
-/** Expands to the first element of the list. The list must not be nil.
+/** <P>Expands to the first element of the list. The list must not be nil.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_FIRST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
-\endverbatim</PRE>
+</PRE>
 
-expands to 1.
+<P>expands to 1.</P>
 
 <H3>See</H3>
-- BOOST_PP_LIST_REST()
+<UL>
+  <LI>BOOST_PP_LIST_REST()
+</UL>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE_ELEM(3,0,L)
@@ -99,18 +103,20 @@ expands to 1.
 #  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE3_ELEM0 L
 #endif
 
-/** Expands to a list of all but the first element of the list. The list must not be nil.
+/** <P>Expands to a list of all but the first element of the list. The list must not be nil.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_REST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
-\endverbatim</PRE>
+</PRE>
 
-expands to a list containing 2, 3, 4 and 5.
+<P>expands to a list containing 2, 3, 4 and 5.</P>
 
 <H3>See</H3>
-- BOOST_PP_LIST_FIRST()
+<UL>
+  <LI>BOOST_PP_LIST_FIRST()
+</UL>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_REST(L) BOOST_PP_TUPLE_ELEM(3,1,L)

@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/repeat_3rd.hpp">Click here to see the header.</a>
-*/
-
-/** Same as BOOST_PP_REPEAT(), but implemented independently. */
+/** <P>Same as BOOST_PP_REPEAT(), but implemented independently.</P> */
 #define BOOST_PP_REPEAT_3RD(N,M,P) BOOST_PP_REPEAT_3RD_DELAY(N,M,P)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -154,6 +149,6 @@
 #define BOOST_PP_REPEAT_3RD128(M,P) BOOST_PP_REPEAT_3RD127(M,P) M(127,P)
 #endif
 
-/** Obsolete. Use BOOST_PP_REPEAT_3RD(). */
+/** <P>Obsolete. Use BOOST_PP_REPEAT_3RD().</P> */
 #define BOOST_PREPROCESSOR_REPEAT_3RD(N,M,P) BOOST_PP_REPEAT_3RD(N,M,P)
 #endif

@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/logical/bool.hpp">Click here to see the header.</a>
-*/
-
-/** Expands to 0 if X == 0 and 1 if X != 0. */
+/** <P>Expands to 0 if X == 0 and 1 if X != 0.</P> */
 #define BOOST_PP_BOOL(X) BOOST_PP_BOOL_DELAY(X)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -157,6 +152,6 @@
 #define BOOST_PP_BOOL128 1
 #endif
 
-/** Obsolete. Use BOOST_PP_BOOL(). */
+/** <P>Obsolete. Use BOOST_PP_BOOL().</P> */
 #define BOOST_PREPROCESSOR_BOOL(X) BOOST_PP_BOOL(X)
 #endif

@@ -13,28 +13,25 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/append.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/fold_right.hpp>
 
-/** Catenates two lists together.
+/** <P>Catenates two lists together.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_APPEND
   ( BOOST_PP_TUPLE_TO_LIST(2,(1,2))
   , BOOST_PP_TUPLE_TO_LIST(2,(3,4))
   )
-\endverbatim</PRE>
+</PRE>
 
-produces a list containing 1, 2, 3 and 4.
+<P>produces a list containing 1, 2, 3 and 4.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LIST_APPEND(L,P) BOOST_PP_LIST_APPEND_D(0,L,P)
 

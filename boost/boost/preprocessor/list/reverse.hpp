@@ -13,25 +13,22 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/reverse.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/fold_left.hpp>
 
-/** List reversal.
+/** <P>List reversal.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_REVERSE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
-\endverbatim</PRE>
+</PRE>
 
-expands to a list containing C, B and A.
+<P>expands to a list containing C, B and A.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LIST_REVERSE(L) BOOST_PP_LIST_REVERSE_D(0,L)
 

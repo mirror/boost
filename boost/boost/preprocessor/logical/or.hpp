@@ -13,19 +13,14 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/logical/or.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/logical/not.hpp>
 
-/** Expands to the logical OR of the operands.
+/** <P>Expands to the logical OR of the operands.</P>
 
-For example, BOOST_PP_OR(0,2) expands to 1 (a single token).
+<P>For example, BOOST_PP_OR(0,2) expands to 1 (a single token).</P>
 */
 #define BOOST_PP_OR(X,Y) BOOST_PP_NOT(BOOST_PP_NOR(X,Y))
 
-/** Obsolete. Use BOOST_PP_OR(). */
+/** <P>Obsolete. Use BOOST_PP_OR().</P> */
 #define BOOST_PREPROCESSOR_OR(X,Y) BOOST_PP_OR(X,Y)
 #endif

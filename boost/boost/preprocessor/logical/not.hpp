@@ -13,19 +13,14 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/logical/not.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/logical/nor.hpp>
 
-/** Expands to the logical NOT of the operand.
+/** <P>Expands to the logical NOT of the operand.</P>
 
-For example, BOOST_PP_NOT(0) expands to 1 (a single token).
+<P>For example, BOOST_PP_NOT(0) expands to 1 (a single token).</P>
 */
 #define BOOST_PP_NOT(X) BOOST_PP_NOR(X,X)
 
-/** Obsolete. Use BOOST_PP_NOT(). */
+/** <P>Obsolete. Use BOOST_PP_NOT().</P> */
 #define BOOST_PREPROCESSOR_NOT(X) BOOST_PP_NOT(X)
 #endif

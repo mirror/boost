@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list.hpp">Click here to see the header.</a>
-
-Includes all list headers.
-*/
+/** <P>Includes all list headers.</P> */
 
 #include <boost/preprocessor/list/append.hpp>
 #include <boost/preprocessor/list/at.hpp>

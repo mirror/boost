@@ -28,6 +28,6 @@
 #define BOOST_PP_GREATER_D(D,X,Y) BOOST_PP_LESS_D(D,Y,X)
 #endif
 
-/** Obsolete. Use BOOST_PP_GREATER(). */
+/** <P>Obsolete. Use BOOST_PP_GREATER().</P> */
 #define BOOST_PREPROCESSOR_GREATER(X,Y) BOOST_PP_GREATER(X,Y)
 #endif

@@ -13,13 +13,8 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/expand.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/identity.hpp>
 
-/** Essentially macro expands the parameter X twice. */
+/** <P>Essentially macro expands the parameter X twice.</P> */
 #define BOOST_PP_EXPAND(X) X
 #endif

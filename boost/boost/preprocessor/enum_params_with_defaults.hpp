@@ -13,24 +13,21 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/enum_params_with_defaults.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/enum.hpp>
 
-/** Generates a comma separated list of parameters with defaults.
+/** <P>Generates a comma separated list of parameters with defaults.</P>
 
-In other words, expands to the sequence:
+<P>In other words, expands to the sequence:</P>
 
-<PRE>\verbatim
+<PRE>
   P##0 = D##0, P##1 = D##1, ..., P##N-1 = D##N-1
-\endverbatim</PRE>
+</PRE>
 
 <H3>Uses</H3>
-- BOOST_PP_REPEAT()
+<UL>
+  <LI>BOOST_PP_REPEAT()
+</UL>
 */
 #define BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(N,P,D) BOOST_PP_ENUM(N,BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS_F,(P,D))
 
@@ -42,6 +39,6 @@ In other words, expands to the sequence:
 #endif
 #endif
 
-/** Obsolete. Use BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(). */
+/** <P>Obsolete. Use BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS().</P> */
 #define BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_DEFAULTS(N,P,D) BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS(N,P,D)
 #endif

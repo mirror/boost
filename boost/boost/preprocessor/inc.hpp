@@ -13,20 +13,15 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
+/** <P>Increments X expanding to a single token.</P>
 
-<a href="../../../../boost/preprocessor/inc.hpp">Click here to see the header.</a>
-*/
+<P>For example, BOOST_PP_INC(3) expands to 4 (a single token).</P>
 
-/** Increments X expanding to a single token. 
+<P>BOOST_PP_INC() uses saturation arithmetic. Incrementing a
+BOOST_PP_LIMIT_MAG yields a BOOST_PP_LIMIT_MAG.</P>
 
-For example, BOOST_PP_INC(3) expands to 4 (a single token).
-
-BOOST_PP_INC() uses saturation arithmetic. Incrementing a
-BOOST_PP_LIMIT_MAG yields a BOOST_PP_LIMIT_MAG.
-
-Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG] are
-supported.
+<P>Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG] are
+supported.</P>
 */
 #define BOOST_PP_INC(X) BOOST_PP_INC_DELAY(X)
 
@@ -163,6 +158,6 @@ supported.
 #define BOOST_PP_INC128 128
 #endif
 
-/** Obsolete. Use BOOST_PP_INC(). */
+/** <P>Obsolete. Use BOOST_PP_INC().</P> */
 #define BOOST_PREPROCESSOR_INC(X) BOOST_PP_INC(X)
 #endif

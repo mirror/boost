@@ -13,24 +13,19 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/fold_right.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/reverse.hpp>
 
-/** Iterates F(D,X,P) for each element X of the list L (from the right or the end of the list).
+/** <P>Iterates F(D,X,P) for each element X of the list L (from the right or the end of the list).</P>
 
-In other words,
+<P>In other words,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_FOLD_RIGHT(F,L,P)
-\endverbatim</PRE>
+</PRE>
 
-expands to:
+<P>expands to:</P>
 
-<PRE>\verbatim
+<PRE>
   F
   ( D
   , BOOST_PP_LIST_AT(L,0)
@@ -44,13 +39,17 @@ expands to:
           )
         ) ...
   )
-\endverbatim</PRE>
+</PRE>
 
 <H3>See</H3>
-- BOOST_PP_LIST_FOLD_LEFT()
+<UL>
+  <LI>BOOST_PP_LIST_FOLD_LEFT()
+</UL>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LIST_FOLD_RIGHT(F,L,P) BOOST_PP_LIST_FOLD_RIGHT_D(0,F,L,P)
 

@@ -13,26 +13,23 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/cat.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/list/fold_left.hpp>
 
-/** Catenates all elements of the list.
+/** <P>Catenates all elements of the list.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_CAT(BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
-\endverbatim</PRE>
+</PRE>
 
-expands to 123.
+<P>expands to 123.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_WHILE()
+<UL>
+  <LI>BOOST_PP_WHILE()
+</UL>
 */
 #define BOOST_PP_LIST_CAT(L) BOOST_PP_LIST_CAT_D(0,L)
 

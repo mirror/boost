@@ -13,12 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/tuple.hpp">Click here to see the header.</a>
-
-Includes all tuple headers.
-*/
+/** <P>Includes all tuple headers.</P> */
 
 #include <boost/preprocessor/tuple/eat.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>

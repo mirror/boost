@@ -13,56 +13,54 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/while.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
 
-/** Iterates F(D,X) while C(D,X) is true.
+/** <P>Iterates F(D,X) while C(D,X) is true.</P>
 
-In other words, expands to:
+<P>In other words, expands to:</P>
 
-<PRE>\verbatim
+<PRE>
   F(D, ... F(D, F(D,X) ) ... )
-\endverbatim</PRE>
+</PRE>
 
-The depth of iteration is determined by C(D,X).
+<P>The depth of iteration is determined by C(D,X).</P>
 
 <H3>Legend</H3>
+<UL>
+  <LI><B>X</B> is the current state of iteration. The state is usually a tuple.
+  <LI><B>C</B> is the condition for iteration. It must expand to a decimal
+      integer literal.
+  <LI><B>F</B> is the iterated macro. Note that if the state is a tuple, then
+      F(D,X) usually expands to a tuple of the same number of elements.
+  <LI><B>D</B> is the recursion depth and should only be used as a parameter
+      to other macros using BOOST_PP_WHILE(). Such macros include
+      BOOST_PP_ADD() and other arithmetic operations. For each macro using
+      BOOST_PP_WHILE(), there is a version of the macro, distinguished by the
+      D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion
+      depth as the first parameter. This technique is necessary to avoid
+      recursively expanding the same macro again, which is not permitted by the
+      C++ preprocessor.
+</UL>
 
-- <B>X</B> is the current state of iteration. The state is usually a tuple.
-- <B>C</B> is the condition for iteration. It must expand to a decimal
-integer literal.
-- <B>F</B> is the iterated macro. Note that if the state is a tuple, then
-F(D,X) usually expands to a tuple of the same number of elements.
-- <B>D</B> is the recursion depth and should only be used as a parameter
-to other macros using BOOST_PP_WHILE(). Such macros include BOOST_PP_ADD()
-and other arithmetic operations. For each macro using BOOST_PP_WHILE(),
-there is a version of the macro, distinguished by the D suffix (e.g.
-BOOST_PP_ADD_D()), that accepts an additional recursion depth as the first
-parameter. This technique is necessary to avoid recursively expanding the
-same macro again, which is not permitted by the C++ preprocessor.
-
-NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.
+<P>NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.</P>
 
 <H3>Caveat</H3>
 
-Using BOOST_PP_WHILE() is a bit tricky. This is due to the C++ preprocessor
+<P>Using BOOST_PP_WHILE() is a bit tricky. This is due to the C++ preprocessor
 limitations. It is recommended to take a look at the implementations of the
 various PREPROCESSOR library primitives such as BOOST_PP_ADD() for additional
-examples.
+examples.</P>
 
 <H3>Example</H3>
+<UL>
+  <LI><a href="../../example/count_down.c">count_down.c</a>
+</UL>
 
-- <a href="../../example/count_down.c">count_down.c</a>
+<P>For a more complex example, let's take a look at an implementation of
+BOOST_PP_MUL().</P>
 
-For a more complex example, let's take a look at an implementation of
-BOOST_PP_MUL().
-
-<PRE>\verbatim
+<PRE>
   #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
   // Since the macro is implemented using WHILE, the actual implementation
   // takes a depth as a parameter so that it can be called inside a WHILE.
@@ -95,12 +93,13 @@ BOOST_PP_MUL().
   // , The multiplier is retained without change.
   // , The counter is decreased.
   // )
-\endverbatim</PRE>
+</PRE>
 
 <H3>Implementation rationale</H3>
-
-- The maximum iteration depth is greater than 2*BOOST_PP_LIMIT_MAG to make
-it possible to compute N*N functions.
+<UL>
+  <LI>The maximum iteration depth is greater than 2*BOOST_PP_LIMIT_MAG to make
+      it possible to compute N*N functions.
+</UL>
 */
 #define BOOST_PP_WHILE(C,F,X) BOOST_PP_WHILE_C(C(1,X),0,X)(C,F,F(1,X))
 

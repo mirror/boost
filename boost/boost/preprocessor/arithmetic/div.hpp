@@ -38,6 +38,6 @@
 #endif
 #endif
 
-/** Obsolete. Use BOOST_PP_DIV(). */
+/** <P>Obsolete. Use BOOST_PP_DIV().</P> */
 #define BOOST_PREPROCESSOR_DIV(X,Y) BOOST_PP_DIV(X,Y)
 #endif

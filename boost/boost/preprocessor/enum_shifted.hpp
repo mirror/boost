@@ -13,25 +13,22 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/enum_shifted.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/enum.hpp>
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/inc.hpp>
 
-/** Generates a comma separated shifted list.
+/** <P>Generates a comma separated shifted list.</P>
 
-In other words, expands to the sequence:
+<P>In other words, expands to the sequence:</P>
 
-<PRE>\verbatim
+<PRE>
   F(1,P), F(2,P), ..., F(N-1,P)
-\endverbatim</PRE>
+</PRE>
 
 <H3>Uses</H3>
-- BOOST_PP_REPEAT()
+<UL>
+  <LI>BOOST_PP_REPEAT()
+</UL>
 */
 #define BOOST_PP_ENUM_SHIFTED(N,F,P) BOOST_PP_ENUM(BOOST_PP_DEC(N),BOOST_PP_ENUM_SHIFTED_F,(F,P))
 

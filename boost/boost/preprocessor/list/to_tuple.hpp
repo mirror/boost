@@ -13,29 +13,26 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/to_tuple.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/comma_if.hpp>
 #include <boost/preprocessor/list/enum.hpp>
 
-/** Converts the list to a tuple.
+/** <P>Converts the list to a tuple.</P>
 
-For example,
+<P>For example,</P>
 
-<PRE>\verbatim
+<PRE>
   BOOST_PP_LIST_TO_TUPLE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
-\endverbatim</PRE>
+</PRE>
 
-expands to (A,B,C).
+<P>expands to (A,B,C).</P>
 
-NOTE: The supported size of the list being converted to a tuple is limited by
-BOOST_PP_LIMIT_MAG rather than BOOST_PP_LIMIT_TUPLE.
+<P>NOTE: The supported size of the list being converted to a tuple is limited by
+BOOST_PP_LIMIT_MAG rather than BOOST_PP_LIMIT_TUPLE.</P>
 
 <H3>Uses</H3>
-- BOOST_PP_FOR()
+<UL>
+  <LI>BOOST_PP_FOR()
+</UL>
 */
 #define BOOST_PP_LIST_TO_TUPLE(L) BOOST_PP_LIST_TO_TUPLE_R(0,L)
 

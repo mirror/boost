@@ -13,19 +13,14 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/logical/xor.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/logical/and.hpp>
 
-/** Expands to the logical EXCLUSIVE OR of the operands.
+/** <P>Expands to the logical EXCLUSIVE OR of the operands.</P>
 
-For example, BOOST_PP_XOR(1,2) expands to 0 (a single token).
+<P>For example, BOOST_PP_XOR(1,2) expands to 0 (a single token).</P>
 */
 #define BOOST_PP_XOR(X,Y) BOOST_PP_NOR(BOOST_PP_NOR(X,Y),BOOST_PP_AND(X,Y))
 
-/** Obsolete. Use BOOST_PP_XOR(). */
+/** <P>Obsolete. Use BOOST_PP_XOR().</P> */
 #define BOOST_PREPROCESSOR_XOR(X,Y) BOOST_PP_XOR(X,Y)
 #endif

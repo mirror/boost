@@ -13,30 +13,30 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** \file
-
-<a href="../../../../boost/preprocessor/list/for_each_product.hpp">Click here to see the header.</a>
-*/
-
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/for.hpp>
 
-/** THIS IS NOT YET FULLY DOCUMENTED - DO NOT USE!
+/** <H3>THIS IS NOT YET FULLY DOCUMENTED - DO NOT USE!</H3>
 
-Repeats F(R,P,X) for each element X of the cartesian product of the lists LL.
+<P>Repeats F(R,P,X) for each element X of the cartesian product of the lists LL.</P>
 
-This macro is useful for generating code to avoid combinatorial explosion.
+<P>This macro is useful for generating code to avoid combinatorial explosion.</P>
 
-<B>LL</B> is a list of lists.
-
-<B>X</B> is an element of the cartesian product of the lists LL.
+<UL>
+  <LI><B>LL</B> is a list of lists.
+  <LI><B>X</B> is an element of the cartesian product of the lists LL.
+</UL>
 
 <H3>Example</H3>
-- <a href="../../example/is_integral.cpp">is_integral.cpp</a>
-- <a href="../../example/array_arithmetic.c">array_arithmetic.c</a>
+<UL>
+  <LI><a href="../../example/is_integral.cpp">is_integral.cpp</a>
+  <LI><a href="../../example/array_arithmetic.c">array_arithmetic.c</a>
+</UL>
 
 <H3>Uses</H3>
-- BOOST_PP_FOR()
+<UL>
+  <LI>BOOST_PP_FOR()
+</UL>
 */
 #define BOOST_PP_LIST_FOR_EACH_PRODUCT(F,P,LL) BOOST_PP_LIST_FOR_EACH_PRODUCT_R(0,F,P,LL)
 
