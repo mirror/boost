@@ -178,6 +178,9 @@ public:
     unsigned long <a href="#to_ulong">to_ulong</a>() const;
   
     size_type <a href="#size">size</a>() const;
+
+    bool <a href="#is_subset_of">is_subset_of</a>(const dynamic_bitset& a) const;
+    bool <a href="#is_proper_subset_of">is_proper_subset_of</a>(const dynamic_bitset& a) const;
 };
 
 template &lt;typename B, typename A&gt;
@@ -1055,6 +1058,31 @@ in the bitset that are set to 1 at a position greater than
 
 <b>Throws:</b> <tt>std::overflow_error</tt> if the value of the bitset
 can not be represented in an <tt>unsigned long</tt>.
+
+<hr>
+
+<pre>
+bool <a name="is_subset_of">is_subset_of</a>(const dynamic_bitset&amp; a) const
+</pre>
+<b>Requires:</b> <tt>this->size() == a.size()</tt><br>
+<b>Returns:</b> true if this bitset is a subset of bitset <tt>a</tt>.
+That is, it returns true if, for every bit in this bitset, the
+corresponding bit in bitset <tt>a</tt> is also set. Otherwise this
+function returns false.<br>
+<b>Throws:</b> nothing.
+
+<hr>
+
+<pre>
+bool <a name="is_proper_subset_of">is_proper_subset_of</a>(const dynamic_bitset&amp; a) const
+</pre>
+<b>Requires:</b> <tt>this->size() == a.size()</tt><br>
+<b>Returns:</b> true if this bitset is a proper subset of bitset <tt>a</tt>.
+That is, it returns true if, for every bit in this bitset, the
+corresponding bit in bitset <tt>a</tt> is also set and if
+<tt>this->count() < a.count()</tt>. Otherwise this
+function returns false.<br>
+<b>Throws:</b> nothing.
 
 <hr>
 
