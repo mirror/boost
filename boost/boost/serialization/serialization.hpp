@@ -81,7 +81,9 @@ inline void serialize(
 // save data required for construction
 template<class Archive, class T>
 inline void save_construct_data(
-    Archive & /*ar*/, const T * /*t*/, const BOOST_PFTO unsigned int /*file_version */
+    Archive & /*ar*/, 
+    const T * /*t*/, 
+    const BOOST_PFTO unsigned int /*file_version */
 ){
     // default is to save no data because default constructor
     // requires no arguments.
@@ -90,7 +92,9 @@ inline void save_construct_data(
 // load data required for construction and invoke constructor in place
 template<class Archive, class T>
 inline void load_construct_data(
-    Archive & ar, T * t, const BOOST_PFTO unsigned int /*file_version*/
+    Archive & ar, 
+    T * t, 
+    const BOOST_PFTO unsigned int /*file_version*/
 ){
     // default just uses the default constructor.  going
     // through access permits usage of otherwise private default
@@ -172,22 +176,6 @@ private:
 // may be necessary to permit usage of class factories or other
 // unforseen circumstances.
 template<class Archive, class T>
-void load_ptr(Archive & ar, T * & t, const BOOST_PFTO unsigned int file_version)
-{
-    auto_ptr_with_deleter<T> ap(heap_allocator<T>::invoke());
-    if(NULL == ap.get())
-        boost::throw_exception(std::bad_alloc()) ;
-    t = ap.get();
-    load_construct_data(
-        ar, 
-        t, 
-        static_cast<unsigned int>(file_version)
-    );
-    ar >> make_nvp(NULL, * t);
-    ap.release();
-}
-
-template<class Archive, class T>
 void save_ptr(
     Archive & ar, 
     const T * t,
@@ -204,6 +192,25 @@ void save_ptr(
     // in order to sneak past the archive code that requires
     // names on all variable not primitives
     static_cast<Archive &>(ar) << make_nvp(NULL, *t);
+}
+
+template<class Archive, class T>
+void load_ptr(
+    Archive & ar, 
+    T * & t, 
+    const BOOST_PFTO unsigned int file_version
+){
+    auto_ptr_with_deleter<T> ap(heap_allocator<T>::invoke());
+    if(NULL == ap.get())
+        boost::throw_exception(std::bad_alloc()) ;
+    t = ap.get();
+    load_construct_data(
+        ar, 
+        t, 
+        static_cast<unsigned int>(file_version)
+    );
+    ar >> make_nvp(NULL, * t);
+    ap.release();
 }
 
 /////////////////////////////////////////////////////////////////////////////
