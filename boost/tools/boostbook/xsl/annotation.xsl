@@ -137,19 +137,30 @@
   </xsl:template>
 
   <xsl:template match="libraryname" mode="annotation">
-    <xsl:variable name="name" select="text()"/>
+    <xsl:variable name="name">
+      <xsl:when test="@alt">
+        <xsl:value-of select="@alt"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="text()"/>
+      </xsl:otherwise>
+    </xsl:variable>
+
     <xsl:variable name="node" select="key('libraries', $name)"/>
     
     <xsl:choose>
       <xsl:when test="count($node)=0">
         <xsl:message>
-          Cannot find library '<xsl:value-of select="$name"/>'
+          <xsl:text>warning: Cannot find library '</xsl:text>
+          <xsl:value-of select="$name"/>
+          <xsl:text>'</xsl:text>
         </xsl:message>
         <xsl:value-of select="$name"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="library.link">
           <xsl:with-param name="node" select="$node"/>
+          <xsl:with-param name="name" select="text()"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>

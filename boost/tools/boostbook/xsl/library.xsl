@@ -15,6 +15,7 @@
 
   <xsl:template name="library.link">
     <xsl:param name="node" select="."/>
+    <xsl:param name="name" select="$node/attribute::name"/>
 
     <xsl:choose>
       <xsl:when test="$node/attribute::html-only = 1">
@@ -34,7 +35,7 @@
           <xsl:attribute name="url">
             <xsl:value-of select="$url"/>
           </xsl:attribute>
-          <xsl:value-of select="$node/attribute::name"/>
+          <xsl:value-of select="$name"/>
         </ulink>
       </xsl:when>
       <xsl:otherwise>
@@ -51,7 +52,7 @@
               </xsl:otherwise>
             </xsl:choose>                 
           </xsl:with-param>
-          <xsl:with-param name="text" select="string($node/attribute::name)"/>
+          <xsl:with-param name="text" select="$name"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>    
