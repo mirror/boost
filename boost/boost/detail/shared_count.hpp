@@ -50,14 +50,14 @@ private:
 public:
 
     counted_base():
-        use_count_(0), weak_count_(0), self_deleter_(&self_delete)
+        use_count_(0), weak_count_(0)
     {
     }
 
     // pre: initial_use_count <= initial_weak_count
 
     explicit counted_base(long initial_use_count, long initial_weak_count):
-        use_count_(initial_use_count), weak_count_(initial_weak_count), self_deleter_(&self_delete)
+        use_count_(initial_use_count), weak_count_(initial_weak_count)
     {
     }
 
@@ -76,6 +76,13 @@ public:
 
     virtual void dispose() // nothrow
     {
+    }
+
+    // destruct() is called when weak_count_ drops to zero.
+
+    virtual void destruct() // nothrow
+    {
+        delete this;
     }
 
     void add_ref()
@@ -108,9 +115,7 @@ public:
 
         if(new_weak_count == 0)
         {
-            // not a direct 'delete this', because the inlined
-            // release() may use a different heap manager
-            self_deleter_(this);
+            destruct();
         }
     }
 
@@ -135,7 +140,7 @@ public:
 
         if(new_weak_count == 0)
         {
-            self_deleter_(this);
+            destruct();
         }
     }
 
@@ -152,19 +157,14 @@ private:
     counted_base(counted_base const &);
     counted_base & operator= (counted_base const &);
 
-    static void self_delete(counted_base * p)
-    {
-        delete p;
-    }
-
     // inv: use_count_ <= weak_count_
 
     long use_count_;
     long weak_count_;
+
 #ifdef BOOST_HAS_THREADS
     mutable mutex_type mtx_;
 #endif
-    void (*self_deleter_) (counted_base *);
 };
 
 inline void intrusive_ptr_add_ref(counted_base * p)
