@@ -22,7 +22,10 @@ namespace std{
 } // namespace std
 #endif
 
-#include <boost/archive/wcslen.hpp>
+#include <cwchar>
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{ using ::wcslen; }
+#endif
 
 #include <boost/test/test_tools.hpp>
 #include <boost/archive/iterators/istream_iterator.hpp>
