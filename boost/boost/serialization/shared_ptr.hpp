@@ -161,13 +161,20 @@ inline void serialize(
 
 // This macro is used to export GUIDS for shared pointers to allow
 // the serialization system to export them properly. David Tonge
-#define BOOST_SHARED_POINTER_EXPORT(T)                                        \
-    typedef boost::detail::sp_counted_base_impl<                              \
-        T *,                                                                  \
-        boost::checked_deleter< T >                                           \
-    > __shared_ptr_ ## T;                                                     \
-    BOOST_CLASS_EXPORT(__shared_ptr_ ## T)                                    \
-    BOOST_CLASS_EXPORT(T)                                                     \
-/**/
+#define BOOST_SHARED_POINTER_EXPORT_GUID(T, K)    \
+    typedef boost::detail::sp_counted_base_impl<  \
+        T *,                                      \
+        boost::checked_deleter< T >               \
+    > __shared_ptr_ ## T;                         \
+    BOOST_CLASS_EXPORT_GUID(__shared_ptr_ ## T, "__shared_ptr_" K)\
+    BOOST_CLASS_EXPORT_GUID(T, K)                 \
+    /**/
+
+#define BOOST_SHARED_POINTER_EXPORT(T)            \
+    BOOST_SHARED_POINTER_EXPORT_GUID(             \
+        T,                                        \
+        BOOST_PP_STRINGIZE(T)                     \
+    )                                             \
+    /**/
 
 #endif
