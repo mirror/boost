@@ -22,7 +22,7 @@
     permutation_iterator& operator++();
     ElementIterator base() const;
   private:
-    ElementIterator m_iterator; // exposition only
+    ElementIterator m_elt;      // exposition only
     IndexIterator m_order;      // exposition only
   };
 
@@ -79,12 +79,12 @@ following operations.
 
 ``permutation_iterator();``
 
-:Effects: Default constructs ``m_iterator`` and ``m_order``.
+:Effects: Default constructs ``m_elt`` and ``m_order``.
 
 
 ``explicit permutation_iterator(ElementIterator x, IndexIterator y);``
 
-:Effects: Constructs ``m_iterator`` from ``x`` and ``m_order`` from ``y``.
+:Effects: Constructs ``m_elt`` from ``x`` and ``m_order`` from ``y``.
 
 
 ::
@@ -96,13 +96,13 @@ following operations.
 	, typename enable_if_convertible<OIIter, IndexIterator>::type* = 0
 	);
 
-:Effects: Constructs ``m_iterator`` from ``r.m_iterator`` and
+:Effects: Constructs ``m_elt`` from ``r.m_elt`` and
   ``m_order`` from ``y.m_order``.
 
 
 ``reference operator*() const;``
 
-:Returns: ``*(m_iterator + *m_order)``
+:Returns: ``*(m_elt + *m_order)``
 
 
 ``permutation_iterator& operator++();``
@@ -113,7 +113,7 @@ following operations.
 
 ``ElementIterator base() const;``
 
-:Returns: ``m_iterator``
+:Returns: ``m_order``
 
 
 ::
