@@ -384,7 +384,7 @@ luckily enough, most compilers accept it nevertheless, so
 </p>
 
 <blockquote><pre>
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>class</span> <span class=identifier>Class</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Type</span><span class=special>,</span><span class=identifier>Type</span> <span class=identifier>Class</span><span class=special>::*</span><span class=identifier>PtrToMember</span><span class=special>&gt;</span>
+<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>class</span> <span class=identifier>Class</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Type</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>size_t</span> <span class=identifier>OffsetOfMember</span><span class=special>&gt;</span>
 <span class=keyword>struct</span> <span class=identifier>member_offset</span>
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=identifier>Type</span> <span class=identifier>result_type</span><span class=special>;</span>
@@ -1490,7 +1490,7 @@ Compiler specifics
 
 <br>
 
-<p>Revised July 16th 2004</p>
+<p>Revised September 3rd 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
