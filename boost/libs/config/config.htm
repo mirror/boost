@@ -58,7 +58,7 @@
          you are on a UNIX like platform, then you may want to try and improve things by 
          running the boost configure script. From a shell command prompt you will need 
          to cd into &lt;boost-root&gt;/libs/config/ and type:</p>
-      <pre>./configure</pre>
+      <pre>sh ./configure</pre>
       <p>you will see a list of the items being checked as the script works it way 
          through the regression tests. Note that the configure script only really 
          auto-detects your compiler if it's called g++, c++ or CC. If you are using some 
@@ -91,9 +91,10 @@
       <p>For example to run the configure script with HP aCC, you might use something 
          like:</p>
       <pre>export CXX="aCC"
-export CXXFLAGS="-Aa -DAportable -D__HPACC_THREAD_SAFE_RB_TREE -DRWSTD_MULTI_THREAD -DRW_MULTI_THREAD -D_REENTRANT -D_THREAD_SAFE"
-export LDFLAGS="-DAportable"
-export LIBS="-lpthread"
+export CXXFLAGS="-Aa
+-DAportable -D__HPACC_THREAD_SAFE_RB_TREE -DRWSTD_MULTI_THREAD -DRW_MULTI_THREAD -D_REENTRANT -D_THREAD_SAFE" export LDFLAGS="-DAportable"
+export LIBS=
+"-lpthread" sh
 ./configure</pre>
       <p>However you run the configure script, when it finishes you will find a new 
          header - user.hpp - located in the &lt;boost-root/libs/config/&gt; directory. <b><i>Note 
@@ -636,6 +637,12 @@ f(&amp;bar); // should choose #2.</pre>
             <td valign="top" width="33%">The compiler misreads 8.5.1, treating classes as 
                non-aggregate if they contain private or protected member functions.</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="51%">BOOST_NO_SFINAE</TD>
+            <TD vAlign="top" width="16%">Compiler</TD>
+            <TD vAlign="top" width="33%">The compiler does not support the "Substitution 
+               Failure Is Not An Error" meta-programming idiom.</TD>
+         </TR>
          <tr>
             <td valign="top" width="51%">BOOST_NO_STD_ALLOCATOR</td>
             <td valign="top" width="16%">Standard library</td>
