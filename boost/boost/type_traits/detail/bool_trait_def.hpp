@@ -152,6 +152,7 @@ template< param > struct trait##_impl< sp1,sp2 > \
 
 #ifndef BOOST_TT_INTEGRAL_CONSTANT
 #define BOOST_TT_INTEGRAL_CONSTANT
+#include <boost/mpl/integral_c.hpp>
 
 //
 // this is not a TR1 conforming integral_constant,
@@ -162,14 +163,21 @@ namespace boost{
 
 template <class T, T val>
 struct integral_constant
-{
-   typedef T value_type;
-   typedef integral_constant<T, val> type;
-   BOOST_STATIC_CONSTANT(value_type, value = val);
-};
+: public mpl::integral_c<T,val> {};
 
-BOOST_TT_AUX_BOOL_TRAIT_SPEC2(integral_constant, bool, true, true);
-BOOST_TT_AUX_BOOL_TRAIT_SPEC2(integral_constant, bool, false, false);
+
+template<> struct integral_constant< bool, true > \
+    BOOST_TT_AUX_BOOL_C_BASE(true) \
+{ \
+    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(true) \
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,integral_constant,(bool)) \
+};
+template<> struct integral_constant< bool, false > \
+    BOOST_TT_AUX_BOOL_C_BASE(false) \
+{ \
+    BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(false) \
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(1,integral_constant,(bool)) \
+};
 
 typedef integral_constant<bool, true> true_type;
 typedef integral_constant<bool, false> false_type;
