@@ -147,26 +147,26 @@ namespace boost {
 
     template <typename BlockInputIterator>
     std::size_t initial_num_blocks(BlockInputIterator first,
-				   BlockInputIterator last,
-				   std::input_iterator_tag)
+                                   BlockInputIterator last,
+                                   std::input_iterator_tag)
     {
       return 0;
     }
 
     template <typename BlockForwardIterator>
     std::size_t initial_num_blocks(BlockForwardIterator first,
-				   BlockForwardIterator last,
-				   std::forward_iterator_tag)
+                                   BlockForwardIterator last,
+                                   std::forward_iterator_tag)
     {
       std::size_t n = 0;
       while (first != last)
-	++first, ++n;
+        ++first, ++n;
       return n;
     }
 
     template <typename BlockInputIterator>
     std::size_t initial_num_blocks(BlockInputIterator first,
-				   BlockInputIterator last)
+                                   BlockInputIterator last)
     {
       typename detail::iterator_traits<BlockInputIterator>::iterator_category cat;
       return initial_num_blocks(first, last, cat);

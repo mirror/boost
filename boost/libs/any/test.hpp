@@ -45,7 +45,7 @@ namespace test // failure exception used to indicate checked test failures
         {
         }
 
-	      ~failure() throw() {}
+              ~failure() throw() {}
 
     public: // usage
 
