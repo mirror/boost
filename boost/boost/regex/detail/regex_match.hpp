@@ -163,9 +163,9 @@ public:
    
    ~_priv_match_data()
    {
-      free();
+      m_free();
    }
-   void free();
+   void m_free();
    void set_accumulator_size(unsigned int size);
    int* get_accumulators()
    {
@@ -191,7 +191,7 @@ void _priv_match_data<iterator, Allocator>::set_accumulator_size(unsigned int si
 {
    if(size > caccumulators)
    {
-      free();
+      m_free();
       caccumulators = size;
       accumulators = i_alloc(temp_match.allocator()).allocate(caccumulators);
       loop_starts = it_alloc(temp_match.allocator()).allocate(caccumulators);
@@ -201,7 +201,7 @@ void _priv_match_data<iterator, Allocator>::set_accumulator_size(unsigned int si
 }
 
 template <class iterator, class Allocator>
-void _priv_match_data<iterator, Allocator>::free()
+void _priv_match_data<iterator, Allocator>::m_free()
 {
    if(caccumulators)
    {

@@ -239,7 +239,7 @@ public:
    }
    ~c_regex_traits()
    {
-      free();
+      m_free();
    }
    struct sentry
    {
@@ -250,7 +250,7 @@ public:
    static void BOOST_REGEX_CALL update();
 private:
    static void BOOST_REGEX_CALL init();
-   static void BOOST_REGEX_CALL free();
+   static void BOOST_REGEX_CALL m_free();
    static c_regex_traits<char> i;
 
    static unsigned sort_type;
@@ -307,7 +307,7 @@ public:
    c_regex_traits<wchar_t>()
    { init(); }
    ~c_regex_traits<wchar_t>()
-   { free(); }
+   { m_free(); }
    struct sentry
    {
       sentry(const c_regex_traits<wchar_t>&)
@@ -319,7 +319,7 @@ public:
    static unsigned int BOOST_REGEX_CALL strwiden(wchar_t *s1, unsigned int len, const char *s2);
 private:
    static bool BOOST_REGEX_CALL do_iswclass(wchar_t c, boost::uint_fast32_t f);
-   static void BOOST_REGEX_CALL free();
+   static void BOOST_REGEX_CALL m_free();
    static void BOOST_REGEX_CALL init();
    static bool BOOST_REGEX_CALL do_lookup_collate(std::basic_string<wchar_t>& out, const wchar_t* first, const wchar_t* last);
    static c_regex_traits<wchar_t> init_;

@@ -890,7 +890,7 @@ protected:
 
    // protected contructor for derived class...
    match_results_base(bool){}
-   void BOOST_REGEX_CALL free();
+   void BOOST_REGEX_CALL m_free();
 
 public:
 
@@ -906,7 +906,7 @@ public:
 
    ~match_results_base()
    {
-      free();
+      m_free();
    }
 
    size_type BOOST_REGEX_CALL size()const
@@ -1096,7 +1096,7 @@ inline match_results_base<iterator, Allocator>& BOOST_REGEX_CALL match_results_b
 {
    if(ref != m.ref)
    {
-      free();
+      m_free();
       ref = m.ref;
       ++(ref->count);
    }
@@ -1105,7 +1105,7 @@ inline match_results_base<iterator, Allocator>& BOOST_REGEX_CALL match_results_b
 
 
 template <class iterator, class Allocator>
-void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::free()
+void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::m_free()
 {
    if(--(ref->count) == 0)
    {
@@ -1162,7 +1162,7 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
                new (p1) sub_match<iterator>();
                ++p1;
             }
-            free();
+            m_free();
          }
          catch(...)
          { 
@@ -1204,7 +1204,7 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
                new (p1) sub_match<iterator>(j);
                ++p1;
             }
-            free();
+            m_free();
          }
          catch(...)
          { 
