@@ -24,7 +24,6 @@
 #include <boost/numeric/interval/policies.hpp>
 #include <algorithm>
 #include <cmath>
-#include <utility>
 
 namespace boost {
 namespace numeric {
