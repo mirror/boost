@@ -161,7 +161,7 @@ struct list_wrapper:List
   pair<iterator,bool> insert(const value_type& v)
   {
     List::push_back(v);
-    return pair<iterator,bool>(--end(),true);
+    return pair<iterator,bool>(--List::end(),true);
   }
 };
 
@@ -348,7 +348,11 @@ void run_tests(
     double indexed_t=measure(IndexedTest(n));
     double manual_t=measure(ManualTest(n));
     cout<<"  10^"<<i+3<<" elmts: "
-        <<setw(6)<<100.0*indexed_t/manual_t<<"%"<<endl;
+        <<setw(6)<<100.0*indexed_t/manual_t<<"% "
+        <<"("
+          <<setw(6)<<1000.0*indexed_t/CLOCKS_PER_SEC<<" ms / "
+          <<setw(6)<<1000.0*manual_t/CLOCKS_PER_SEC<<" ms)"
+        <<endl;
     n*=10;
   }
 
