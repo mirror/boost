@@ -21,9 +21,10 @@
 #include <boost/detail/workaround.hpp>
 
 // does STLport uses native STL for locales?
-#if (defined _STLPORT_VERSION) && !(defined _STLP_NO_OWN_IOSTREAMS)
+#if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) \
+&& defined(_STLP_NO_OWN_IOSTREAMS)
 // and this native STL lib is old Dinkumware (has not defined _CPPLIB_VER)
-#  if defined(_YVALS) && defined(__IBMCPP__) && ! defined(_CPPLIB_VER)
+#  if (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
 #    define BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT
 #  endif
 #endif
@@ -36,17 +37,10 @@ inline std::locale *
 add_facet(const std::locale &l, Facet * f){
     return
         #if defined BOOST_ARCHIVE_OLD_DINKUMWARE_BENEATH_STLPORT 
-            #if (defined _STLP_USE_OWN_NAMESPACE) && !(defined _STLP_NO_IMPORT_LOCALE)
-                // namespace was relocated
-                #ifndef _STLP_NEW_IO_NAMESPACE
-                #  error Unhandled STLport configuration - please change code and report problem
-                #endif
-                new std::locale(_STLP_NEW_IO_NAMESPACE::_Addfac(l, f));
-            #else
-                // std namespace used for native locale
-                new std::locale(std::_Addfac(l, f));
-            #endif 
-        #elif BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) // old Dinkumware
+            // std namespace used for native locale
+            new std::locale(std::_Addfac(l, f));
+        #elif BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) // old Dinkumwar
+            // std namespace used for native locale
             new std::locale(std::_Addfac(l, f));
         #else
             // standard compatible
