@@ -63,8 +63,6 @@ main()
   std::cout << to_simple_string(p2) << std::endl;
 
 
-  printTestStats();
-
-  return 0;
+  return printTestStats();
 
 }

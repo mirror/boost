@@ -188,8 +188,6 @@ main()
 
 #endif //BOOST_DATE_TIME_NO_LOCALE
 
-  printTestStats();
+  return printTestStats();
 
-
-  return 0;
 }

@@ -33,6 +33,6 @@ void test_date_duration()
 
 int main() {
   test_date_duration();
-  printTestStats();
-  return 0;
+  return printTestStats();
+
 };

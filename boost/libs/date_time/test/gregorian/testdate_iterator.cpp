@@ -219,5 +219,5 @@ main()
     }
 }
 
-  printTestStats();
+  return printTestStats();
 }
