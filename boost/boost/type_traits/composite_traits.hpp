@@ -864,6 +864,8 @@ template <class R, class T>
 
 }
 
+#ifndef __BORLANDC__
+
 namespace detail
 {
   template <bool maybe = false>
@@ -878,10 +880,11 @@ namespace detail
       template <class T>
       struct apply
       {
-          static T& make_t();
+          static T& make_t;
+          typedef apply<T> self_type;
 
           BOOST_STATIC_CONSTANT(
-              bool, value = (1 == sizeof(detail::is_member_function_pointer_helper(make_t()))) );
+              bool, value = (1 == sizeof(detail::is_member_function_pointer_helper(self_type::make_t))) );
       };
   };
 }
@@ -891,6 +894,25 @@ struct is_member_function_pointer : ::boost::detail::is_member_function_pointer_
     ::boost::detail::neither_array_nor_reference<T>::value
 >::template apply<T>
 {};
+
+#else // Borland C++
+
+template <typename T>
+struct is_member_function_pointer
+{
+   static T& m_t;
+   BOOST_STATIC_CONSTANT(
+              bool, value =
+               (1 == sizeof(detail::is_member_function_pointer_helper(m_t))) );
+};
+
+template <typename T>
+struct is_member_function_pointer<T&>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+
+#endif
 
 template <>
 struct is_member_function_pointer<void>
