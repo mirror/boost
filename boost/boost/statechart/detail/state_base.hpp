@@ -150,7 +150,7 @@ class state_base :
 
     virtual void remove_from_state_list(
       state_list_type & states,
-      typename state_list_type::iterator & pUnstableState ) = 0;
+      state_base_ptr_type & pUnstableState ) = 0;
 
   private:
     //////////////////////////////////////////////////////////////////////////

@@ -64,14 +64,11 @@ class node_state : public state_base< Allocator, RttiPolicy >
       pInnerStates[ position ] = 0;
     }
 
-    typedef typename base_type::state_list_type state_list_type;
-
     virtual void remove_from_state_list(
-      state_list_type & states,
-      typename state_list_type::iterator & pUnstableState )
+      typename base_type::state_list_type & states,
+      typename base_type::state_base_ptr_type & pUnstableState )
     {
-      if ( ( pUnstableState != states.end() ) &&
-           ( get_pointer( *pUnstableState ) == this ) )
+      if ( get_pointer( pUnstableState ) == this )
       {
         for ( base_type ** pState = &pInnerStates[ 0 ]; 
               pState != &pInnerStates[ NoOfOrthogonalRegions::value ]; ++pState )
@@ -79,8 +76,7 @@ class node_state : public state_base< Allocator, RttiPolicy >
           BOOST_ASSERT( *pState == 0 );
         }
 
-        states.erase( pUnstableState );
-        pUnstableState = states.end();
+        pUnstableState = 0;
       }
       else
       {

@@ -41,15 +41,15 @@ class leaf_state : public state_base< Allocator, RttiPolicy >
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    typedef typename base_type::state_list_type state_list_type;
-
-    void set_list_position( typename state_list_type::iterator listPosition )
+    void set_list_position(
+      typename base_type::state_list_type::iterator listPosition )
     {
       listPosition_ = listPosition;
     }
 
     virtual void remove_from_state_list(
-      state_list_type & states, typename state_list_type::iterator & )
+      typename base_type::state_list_type & states,
+      typename base_type::state_base_ptr_type & )
     {
       // Because the list owns the leaf_state, this leads to the immediate
       // termination of this state.

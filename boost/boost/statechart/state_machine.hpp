@@ -388,11 +388,6 @@ class state_machine : noncopyable
 
   protected:
     //////////////////////////////////////////////////////////////////////////
-    state_machine() :
-      pUnstableState_( currentStates_.end() )
-    {
-    }
-
     // This destructor was only made virtual so that that
     // polymorphic_downcast can be used to cast to MostDerived.
     virtual ~state_machine() {}
@@ -459,7 +454,7 @@ class state_machine : noncopyable
 
     void terminate( state_machine & )
     {
-      pUnstableState_ = currentStates_.end();
+      pUnstableState_ = 0;
       currentStates_.clear(); // this also empties the deferredMap_
       // there is no longer any use for possibly remaining events
       eventQueue_.clear();
@@ -494,16 +489,7 @@ class state_machine : noncopyable
     template< class State >
     void add( const intrusive_ptr< State > & pState )
     { 
-      if ( machine_status() == unstable )
-      {
-        *pUnstableState_ = pState;
-      }
-      else
-      {
-        pUnstableState_ =
-          currentStates_.insert( currentStates_.end(), pState );
-      }
-
+      pUnstableState_ = pState;
       add_impl( *pState );
     }
 
@@ -834,7 +820,7 @@ class state_machine : noncopyable
       {
         return no_state;
       }
-      else if ( pUnstableState_ != currentStates_.end() )
+      else if ( get_pointer( pUnstableState_ ) != 0 )
       {
         return unstable;
       }
@@ -847,7 +833,7 @@ class state_machine : noncopyable
     state_base_type & unstable_state()
     {
       BOOST_ASSERT( machine_status() == unstable );
-      return **pUnstableState_;
+      return *pUnstableState_;
     }
 
     template< class NoOfOrthogonalRegions >
@@ -857,8 +843,9 @@ class state_machine : noncopyable
     void add_impl(
       detail::leaf_state< allocator_type, rtti_policy_type > & theState )
     {
-      theState.set_list_position( pUnstableState_ );
-      pUnstableState_ = currentStates_.end();
+      theState.set_list_position( 
+        currentStates_.insert( currentStates_.end(), pUnstableState_ ) );
+      pUnstableState_ = 0;
     }
 
 
@@ -942,7 +929,7 @@ class state_machine : noncopyable
     event_queue_type eventQueue_;
     deferred_map_type deferredMap_;
     state_list_type currentStates_;
-    typename state_list_type::iterator pUnstableState_;
+    state_base_ptr_type pUnstableState_;
     history_map_type shallowHistoryMap_;
     history_map_type deepHistoryMap_;
     ExceptionTranslator translator_;
