@@ -80,7 +80,7 @@ int main()
     mpl::for_each< numbers >(value_printer(std::cout));
     
     for (unsigned i = 0; i < v.size(); ++i)
-        assert(v[i] == i);
+        assert(v[i] == (int)i);
 
     return 0;
 }
