@@ -62,8 +62,19 @@ class multi_index_container:
     typename detail::multi_index_node_type<
       Value,IndexSpecifierList,Allocator>::type,
     multi_index_container<Value,IndexSpecifierList,Allocator> >,
-  public detail::multi_index_base_type<Value,IndexSpecifierList,Allocator>::type
+  public detail::multi_index_base_type<
+    Value,IndexSpecifierList,Allocator>::type
 {
+#if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)&&\
+    BOOST_WORKAROUND(__MWERKS__,<=0x3003)
+/* The "ISO C++ Template Parser" option in CW8.3 has a problem with the
+ * lifetime of const references bound to temporaries --precisely what
+ * scopeguards are.
+ */
+
+#pragma parse_mfunc_templ off
+#endif
+
 private:
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
   template <typename,typename,typename> friend class  detail::index_base;
@@ -513,6 +524,11 @@ private:
   }
 
   std::size_t node_count;
+
+#if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)&&\
+    BOOST_WORKAROUND(__MWERKS__,<=0x3003)
+#pragma parse_mfunc_templ reset
+#endif
 };
 
 /* retrieval of indices by number */

@@ -105,6 +105,16 @@ class ordered_index:
 #endif
 
 { 
+#if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)&&\
+    BOOST_WORKAROUND(__MWERKS__,<=0x3003)
+/* The "ISO C++ Template Parser" option in CW8.3 has a problem with the
+ * lifetime of const references bound to temporaries --precisely what
+ * scopeguards are.
+ */
+
+#pragma parse_mfunc_templ off
+#endif
+
 protected:
   typedef ordered_index_node<
       typename Super::node_type>                     node_type;
@@ -966,6 +976,11 @@ private:
 
   key_from_value key;
   key_compare    comp;
+
+#if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)&&\
+    BOOST_WORKAROUND(__MWERKS__,<=0x3003)
+#pragma parse_mfunc_templ reset
+#endif
 };
 
 /* comparison */
