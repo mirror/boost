@@ -67,30 +67,22 @@ class node_state : public state_base< Allocator, RttiPolicy >
       typename base_type::state_list_type & states,
       typename base_type::state_base_ptr_type & pUnstableState )
     {
+      // Destroy inner states in the reverse order of construction
+      for ( base_type ** pState = &pInnerStates[ NoOfOrthogonalRegions::value ]; 
+            pState != &pInnerStates[ 0 ]; )
+      {
+        --pState;
+        // An inner orthogonal state might have been terminated long before,
+        // that's why we have to check for 0 pointers
+        if ( *pState != 0 )
+        {
+          ( *pState )->remove_from_state_list( states, pUnstableState );
+        }
+      }
+
       if ( get_pointer( pUnstableState ) == this )
       {
-        for ( base_type ** pState = &pInnerStates[ 0 ]; 
-              pState != &pInnerStates[ NoOfOrthogonalRegions::value ]; ++pState )
-        {
-          BOOST_ASSERT( *pState == 0 );
-        }
-
         pUnstableState = 0;
-      }
-      else
-      {
-        // Destroy inner states in the reverse order of construction
-        for ( base_type ** pState = &pInnerStates[ NoOfOrthogonalRegions::value ]; 
-              pState != &pInnerStates[ 0 ]; )
-        {
-          --pState;
-          // An inner orthogonal state might have been terminated long before,
-          // that's why we have to check for 0 pointers
-          if ( *pState != 0 )
-          {
-            ( *pState )->remove_from_state_list( states, pUnstableState );
-          }
-        }
       }
     }
 
