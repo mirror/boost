@@ -165,7 +165,7 @@ namespace boost { namespace numeric { namespace ublas {
         typename I::container_type::size_type
         index (const I& i) {
             typedef typename I::container_type container_type;
-            return dimension_properties<dimension>::BOOST_UBLAS_TEMPLATE index<container_type> (i);
+            return dimension_properties<dimension>::template index<container_type> (i);
         }
 #endif
 

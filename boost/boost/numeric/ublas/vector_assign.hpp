@@ -320,7 +320,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
-        indexing_vector_assign (functor_type::BOOST_UBLAS_TEMPLATE make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+        indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
 #else
         indexing_vector_assign (scalar_assign<value_type&, value_type> (), cv, v);
         indexing_vector_assign (functor_type (), cv, e);
@@ -380,7 +380,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
-        indexing_vector_assign (functor_type::BOOST_UBLAS_TEMPLATE make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+        indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
 #else
         indexing_vector_assign (scalar_assign<value_type&, value_type> (), cv, v);
         indexing_vector_assign (functor_type (), cv, e);
@@ -415,7 +415,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> cv (v.size ());
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign (scalar_assign<typename vector<value_type>::reference, value_type> (), cv, v);
-        indexing_vector_assign (functor_type::BOOST_UBLAS_TEMPLATE make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
+        indexing_vector_assign (functor_type::template make_debug_functor<typename vector<value_type>::reference, value_type> (), cv, e);
 #else
         indexing_vector_assign (scalar_assign<value_type&, value_type> (), cv, v);
         indexing_vector_assign (functor_type (), cv, e);
