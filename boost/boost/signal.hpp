@@ -341,12 +341,11 @@ namespace boost {
                        SlotFunction>::type base_type;
 
   public:
-    signal(const Combiner& combiner = Combiner(),
+    explicit signal(const Combiner& combiner = Combiner(),
            const GroupCompare& group_compare = GroupCompare()) :
       base_type(combiner, group_compare)
     {
     }
-
   };
 #endif // ndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
