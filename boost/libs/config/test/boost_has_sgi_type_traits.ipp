@@ -24,6 +24,9 @@ int test()
    typedef ::__type_traits<char>::has_trivial_default_constructor tdc;
    typedef ::__type_traits<foo_type>::is_POD_type isp;
 
+   (void) &t;   // avoid "unused variable" warnings
+   (void) &f;
+
    return 0;
 }
 
