@@ -38,6 +38,16 @@
 namespace boost
 {
 
+// Debug hooks
+
+#if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
+
+void shared_ptr_constructor_hook(void * p);
+void shared_ptr_destructor_hook(void * p);
+
+#endif
+
+
 // The standard library that comes with Borland C++ 5.5.1
 // defines std::exception and its members as having C calling
 // convention (-pc). When the definition of bad_weak_ptr
@@ -74,15 +84,7 @@ private:
 
 public:
 
-    counted_base():
-        use_count_(0), weak_count_(0)
-    {
-    }
-
-    // pre: initial_use_count <= initial_weak_count
-
-    explicit counted_base(long initial_use_count, long initial_weak_count):
-        use_count_(initial_use_count), weak_count_(initial_weak_count)
+    counted_base(): use_count_(1), weak_count_(1)
     {
     }
 
@@ -92,16 +94,8 @@ public:
 
     // dispose() is called when use_count_ drops to zero, to release
     // the resources managed by *this.
-    //
-    // counted_base doesn't manage any resources except itself, and
-    // the default implementation is a no-op.
-    //
-    // dispose() is not pure virtual since weak_ptr instantiates a
-    // counted_base in its default constructor.
 
-    virtual void dispose() // nothrow
-    {
-    }
+    virtual void dispose() = 0; // nothrow
 
     // destruct() is called when weak_count_ drops to zero.
 
@@ -187,6 +181,28 @@ private:
 #endif
 };
 
+#if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
+
+template<class T> void cbi_call_constructor_hook(T * p, checked_deleter<T> const &, int)
+{
+    boost::shared_ptr_constructor_hook(p);
+}
+
+template<class P, class D> void cbi_call_constructor_hook(P const &, D const &, long)
+{
+}
+
+template<class T> void cbi_call_destructor_hook(T * p, checked_deleter<T> const &, int)
+{
+    boost::shared_ptr_destructor_hook(p);
+}
+
+template<class P, class D> void cbi_call_destructor_hook(P const &, D const &, long)
+{
+}
+
+#endif
+
 //
 // Borland's Codeguard trips up over the -Vx- option here:
 //
@@ -210,13 +226,18 @@ public:
 
     // pre: initial_use_count <= initial_weak_count, d(p) must not throw
 
-    counted_base_impl(P p, D d, long initial_use_count, long initial_weak_count):
-        counted_base(initial_use_count, initial_weak_count), ptr(p), del(d)
+    counted_base_impl(P p, D d): ptr(p), del(d)
     {
+#if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
+        detail::cbi_call_constructor_hook(p, d, 0);
+#endif
     }
 
     virtual void dispose() // nothrow
     {
+#if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
+        detail::cbi_call_destructor_hook(ptr, del, 0);
+#endif
         del(ptr);
     }
 
@@ -245,11 +266,9 @@ private:
 
     friend class weak_count;
 
-    template<class P, class D> shared_count(P, D, counted_base const *);
-
 public:
 
-    shared_count(): pi_(0) // (new counted_base(1, 1))
+    shared_count(): pi_(0) // nothrow
     {
     }
 
@@ -259,7 +278,7 @@ public:
 
         try
         {
-            pi_ = new counted_base_impl<P, D>(p, d, 1, 1);
+            pi_ = new counted_base_impl<P, D>(p, d);
         }
         catch(...)
         {
@@ -269,7 +288,7 @@ public:
 
 #else
 
-        pi_ = new counted_base_impl<P, D>(p, d, 1, 1);
+        pi_ = new counted_base_impl<P, D>(p, d);
 
         if(pi_ == 0)
         {
@@ -285,7 +304,7 @@ public:
     // auto_ptr<Y> is special cased to provide the strong guarantee
 
     template<class Y>
-    explicit shared_count(std::auto_ptr<Y> & r): pi_(new counted_base_impl< Y *, checked_deleter<Y> >(r.get(), checked_deleter<Y>(), 1, 1))
+    explicit shared_count(std::auto_ptr<Y> & r): pi_(new counted_base_impl< Y *, checked_deleter<Y> >(r.get(), checked_deleter<Y>()))
     {
         r.release();
     }
@@ -357,7 +376,7 @@ private:
 
 public:
 
-    weak_count(): pi_(0) // nothrow // (new counted_base(0, 1)) // can throw
+    weak_count(): pi_(0) // nothrow
     {
     }
 
