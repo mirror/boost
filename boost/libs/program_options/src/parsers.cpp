@@ -107,7 +107,7 @@ namespace boost { namespace program_options {
     basic_command_line_parser<char>::run() const
     {
         parsed_options result(m_desc);
-        detail::cmdline cmd(m_args, m_style, true);
+        detail::cmdline cmd(m_args, m_style);
         cmd.set_additional_parser(m_ext);
 
         if (m_desc) {
