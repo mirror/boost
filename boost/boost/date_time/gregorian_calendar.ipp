@@ -119,7 +119,7 @@ namespace date_time {
     date_int_type m = (5*e + 2)/153;
     unsigned short day = static_cast<unsigned short>(e - ((153*m + 2)/5) + 1);
     unsigned short month = static_cast<unsigned short>(m + 3 - 12 * (m/10));
-    year_type year = static_cast<year_type>(100*b + d - 4800 + (m/10));
+    year_type year = static_cast<unsigned short>(100*b + d - 4800 + (m/10));
     //std::cout << year << "-" << month << "-" << day << "\n";
 
     return ymd_type(static_cast<unsigned short>(year),month,day);
@@ -137,8 +137,8 @@ namespace date_time {
     date_int_type d = (4*c + 3)/1461;
     date_int_type e = c - ((1461*d)/4);
     date_int_type m = (5*e + 2)/153;
-    unsigned short day = e - ((153*m + 2)/5) + 1;
-    unsigned short month = m + 3 - 12 * (m/10);
+    unsigned short day = static_cast<unsigned short>(e - ((153*m + 2)/5) + 1);
+    unsigned short month = static_cast<unsigned short>(m + 3 - 12 * (m/10));
     year_type year = static_cast<year_type>(100*b + d - 4800 + (m/10));
     //std::cout << year << "-" << month << "-" << day << "\n";
     

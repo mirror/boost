@@ -159,13 +159,13 @@ namespace date_time {
     year_functor(int f) : f_(f) {}
     duration_type get_offset(const date_type& d) const 
     {
-      year_type y = static_cast<year_type>(d.year()+f_);
+      year_type y = static_cast<unsigned short>(d.year()+f_);
       date_type new_date(y, d.month(), d.day());
       return new_date-d;
     }
     duration_type get_neg_offset(const date_type& d) const 
     {
-      year_type y = static_cast<year_type>(d.year()-f_);
+      year_type y = static_cast<unsigned short>(d.year()-f_);
       date_type new_date(y, d.month(), d.day());
       return new_date-d;
     }
