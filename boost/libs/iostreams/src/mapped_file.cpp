@@ -44,26 +44,26 @@ struct mapped_file_impl {
         mode_ = BOOST_IOS::openmode();
         error_ = error;
         handle_ = 0;
-        #ifdef BOOST_IOSTREAMS_WINDOWS
-            mapped_handle_ = 0;
-        #endif
+    #ifdef BOOST_IOSTREAMS_WINDOWS
+        mapped_handle_ = 0;
+    #endif
     }
     void close()
     {
         if (!handle_)
             return;
-        #ifdef BOOST_IOSTREAMS_WINDOWS
-            ::SetLastError(0);
-            ::UnmapViewOfFile(data_);
-            ::CloseHandle(mapped_handle_);
-            ::CloseHandle(handle_);
-            error_ = ::GetLastError() != 0;
-        #else
-            errno = 0;
-            ::munmap(reinterpret_cast<char *>(data_), size_);
-            ::close(handle_);
-            error_ = errno != 0;
-        #endif
+    #ifdef BOOST_IOSTREAMS_WINDOWS
+        ::SetLastError(0);
+        ::UnmapViewOfFile(data_);
+        ::CloseHandle(mapped_handle_);
+        ::CloseHandle(handle_);
+        error_ = ::GetLastError() != NO_ERROR;
+    #else
+        errno = 0;
+        ::munmap(reinterpret_cast<char *>(data_), size_);
+        ::close(handle_);
+        error_ = errno != 0;
+    #endif
     }
     char*                data_;
     std::size_t          size_;
@@ -165,7 +165,7 @@ void mapped_file_source::open( const std::string& path,
     void* data =
         ::MapViewOfFileEx( pimpl_->mapped_handle_,
                            readonly ? FILE_MAP_READ : FILE_MAP_WRITE,
-                           (DWORD) (offset >> (sizeof(DWORD) * 8)),
+                           (DWORD) (offset >> 32),
                            (DWORD) (offset & 0xffffffff),
                            length != max_length ? length : 0, 0 );
     if (!data) {
