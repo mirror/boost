@@ -7,10 +7,15 @@
 	<body bgcolor="#ffffff" text="#000000">
 		<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="middle" width="277" height="86">weak_ptr 
 			class template</h1>
-		<p>The <b>weak_ptr</b> class template stores a pointer to an object that's already 
-			managed by a <b>shared_ptr</b>. When the last <b>shared_ptr</b> to the object 
-			goes away and the object is deleted, all <b>weak_ptr</b> objects have their 
-			stored pointers set to 0.</p>
+		<p>The <b>weak_ptr</b> class template stores a&nbsp;"weak reference"&nbsp;to an 
+			object that's already managed by a <b>shared_ptr</b>. To access the object, a <STRONG>
+				weak_ptr</STRONG> can be converted to a <STRONG>shared_ptr</STRONG> using <A href="shared_ptr.htm#constructors">
+				the <STRONG>shared_ptr</STRONG> constructor</A> or the function <STRONG><A href="#make_shared">
+					make_shared</A></STRONG>. When the last <b>shared_ptr</b> to the object 
+			goes away and the object is deleted,&nbsp;the attempt to obtain a <STRONG>shared_ptr</STRONG>
+			&nbsp;from the <b>weak_ptr</b> instances that refer to the deleted object will 
+			fail: the constructor will throw an exception of type <STRONG>boost::use_count_is_zero</STRONG>, 
+			and <STRONG>make_shared</STRONG> will return a default constructed (null) <STRONG>shared_ptr</STRONG>.</p>
 		<p>Every <b>weak_ptr</b> meets the <b>CopyConstructible</b> and <b>Assignable</b> requirements 
 			of the C++ Standard Library, and so can be used in standard library containers. 
 			Comparison operators are supplied so that <b>weak_ptr</b> works with the 
@@ -20,8 +25,9 @@
 				common requirements</a>.</p>
 		<P>Compared to&nbsp;<STRONG>shared_ptr</STRONG>, <STRONG>weak_ptr</STRONG> provides 
 			a very limited subset of operations since accessing its stored pointer is 
-			unsafe in multithreaded&nbsp;programs (that is, it may invoke undefined 
-			behavior.) Consider, for example, this innocent piece of code:</P>
+			often&nbsp;dangerous in multithreaded&nbsp;programs, and sometimes unsafe even 
+			within a single thread&nbsp;(that is, it may invoke undefined behavior.) 
+			Consider, for example, this innocent piece of code:</P>
 		<pre>
 shared_ptr&lt;int&gt; p(new int(5));
 weak_ptr&lt;int&gt; q(p);
@@ -72,7 +78,7 @@ if(shared_ptr&lt;int&gt; r = <a href="#make_shared">make_shared</a>(q))
       template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(shared_ptr&lt;Y&gt; const &amp; r); // never throws
 
       void <a href="#reset">reset</a>();
-      T * <a href="#get">get</a>() const; // never throws; unsafe in multithreaded code!
+      T * <a href="#get">get</a>() const; // never throws; deprecated, will disappear
 
       long <a href="#use_count">use_count</a>() const; // never throws
       bool <a href="#expired">expired</a>() const; // never throws
@@ -164,6 +170,11 @@ template&lt;typename Y&gt; weak_ptr &amp; <a href="#assignment">operator=</a>(sh
 				function returns, the pointed-to object may be destroyed by a different thread, 
 				since the <b>weak_ptr</b> doesn't affect its <b>use_count</b>.</P>
 		</blockquote>
+		<P><EM>[<b>get</b> is&nbsp;very error-prone. Even single-threaded code may experience 
+				problems, as the returned pointer may be invalidated at any time, for example, 
+				indirectly by a member function of the pointee.</EM></P>
+		<P><EM><STRONG>get</STRONG>&nbsp;is deprecated, and it will disappear in a future 
+				release. Do not use it.]</EM></P>
 		<h3><a name="use_count">use_count</a></h3>
 		<pre>long use_count() const; // never throws</pre>
 		<blockquote>
@@ -231,8 +242,12 @@ template&lt;typename T, typename U&gt;
 			<P><B>Returns:</B> <code>r.expired()? shared_ptr&lt;T&gt;(): shared_ptr&lt;T&gt;(r)</code>.</P>
 			<P><B>Throws:</B> nothing.</P>
 		</BLOCKQUOTE>
+		<P><EM>[The current implementation of <STRONG>make_shared</STRONG> can&nbsp;propagate 
+				an exception&nbsp;thrown by the <STRONG>shared_ptr</STRONG> default 
+				constructor, so it doesn't meet the stated requirements</EM><EM>. In a future 
+				release, this default constructor will not throw.]</EM></P>
 		<hr>
-		<p>Revised 12 March 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
+		<p>Revised 29 August 2002<!--webbot bot="Timestamp" i-checksum="38439" endspan --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
 			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 

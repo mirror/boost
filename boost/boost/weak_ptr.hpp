@@ -76,7 +76,7 @@ public:
         this_type().swap(*this);
     }
 
-    T * get() const // never throws; unsafe in multithreaded programs!
+    T * get() const // never throws; deprecated, removal pending, don't use
     {
         return pn.use_count() == 0? 0: px;
     }
@@ -167,6 +167,10 @@ template<class T> shared_ptr<T> make_shared(weak_ptr<T> const & r) // never thro
         return shared_ptr<T>();
     }
 }
+
+// Note: there is no get_pointer overload for weak_ptr.
+// This is intentional. Even get() will disappear in a
+// future release; these accessors are too error-prone.
 
 } // namespace boost
 
