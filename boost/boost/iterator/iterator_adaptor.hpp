@@ -261,7 +261,7 @@ namespace boost
       {
       }
 
-      Base base() const
+      Base const& base() const
         { return m_iterator; }
 
    protected:
