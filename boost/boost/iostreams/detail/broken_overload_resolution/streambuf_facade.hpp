@@ -9,7 +9,8 @@
 
 #include <boost/iostreams/detail/disable_warnings.hpp>  // MSVC.
 
-#include <memory>                                       // allocator.
+#include <memory>                                       // allocator.       
+#include <boost/iostreams/detail/broken_overload_resolution/forward.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/iostreams/detail/param_type.hpp>
 #include <boost/iostreams/traits.hpp>
@@ -33,20 +34,6 @@ private:
                 T, Tr, Alloc, Mode
             >::type                               base_type;
     typedef T                                     policy_type;
-    template<typename U>
-    struct forward_impl {
-        BOOST_STATIC_CONSTANT(bool, value = 
-            ( !is_same< 
-                  const U&,
-                  typename detail::param_type<T>::type
-              >::value &&
-              !is_same< 
-                  const U&,
-                  const reference_wrapper<T>
-              >::value ));
-    };
-    template<typename U>
-    struct forward : mpl::bool_<forward_impl<U>::value> { };
 public:
     typedef BOOST_IOSTREAMS_CHAR_TYPE(T)          char_type;
     BOOST_IOSTREAMS_STREAMBUF_TYPEDEFS(Tr)
@@ -54,62 +41,62 @@ public:
     template<typename U0>
     streambuf_facade(const U0& u0)
     {
-        open_impl(forward<U0>(), u0);
+        open_impl(detail::forward<T, U0>(), u0);
     }
     template<typename U0, typename U1>
     streambuf_facade(const U0& u0, const U1& u1)
     {
-        open_impl(forward<U0>(), u0, u1);
+        open_impl(detail::forward<T, U0>(), u0, u1);
     }
     template<typename U0, typename U1, typename U2>
     streambuf_facade(const U0& u0, const U1& u1, const U2& u2)
     {
-        open_impl(forward<U0>(), u0, u1, u2);
+        open_impl(detail::forward<T, U0>(), u0, u1, u2);
     }
     template<typename U0>
     streambuf_facade(U0& u0)
     {
-        open_impl(forward<U0>(), u0);
+        open_impl(detail::forward<T, U0>(), u0);
     }
     template<typename U0, typename U1>
     streambuf_facade(U0& u0, const U1& u1)
     {
-        open_impl(forward<U0>(), u0, u1);
+        open_impl(detail::forward<T, U0>(), u0, u1);
     }
     template<typename U0, typename U1, typename U2>
     streambuf_facade(U0& u0, const U1& u1, const U2& u2)
     {
-        open_impl(forward<U0>(), u0, u1, u2);
+        open_impl(detail::forward<T, U0>(), u0, u1, u2);
     }
     template<typename U0>
     void open(const U0& u0)
     {
-        open_impl(forward<U0>(), u0);
+        open_impl(detail::forward<T, U0>(), u0);
     }
     template<typename U0, typename U1>
     void open(const U0& u0, const U1& u1)
     {
-        open_impl(forward<U0>(), u0, u1);
+        open_impl(detail::forward<T, U0>(), u0, u1);
     }
     template<typename U0, typename U1, typename U2>
     void open(const U0& u0, const U1& u1, const U2& u2)
     {
-        open_impl(forward<U0>(), u0, u1, u2);
+        open_impl(detail::forward<T, U0>(), u0, u1, u2);
     }
     template<typename U0>
     void open(U0& u0)
     {
-        open_impl(forward<U0>(), u0);
+        open_impl(detail::forward<T, U0>(), u0);
     }
     template<typename U0, typename U1>
     void open(U0& u0, const U1& u1)
     {
-        open_impl(forward<U0>(), u0, u1);
+        open_impl(detail::forward<T, U0>(), u0, u1);
     }
     template<typename U0, typename U1, typename U2>
     void open(U0& u0, const U1& u1, const U2& u2)
     {
-        open_impl(forward<U0>(), u0, u1, u2);
+        open_impl(detail::forward<T, U0>(), u0, u1, u2);
     }
 private:
     template<typename U0>

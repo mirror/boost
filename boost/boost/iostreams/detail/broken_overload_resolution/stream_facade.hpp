@@ -8,7 +8,8 @@
 // within include guards.
 
 #include <boost/config.hpp>                     // BOOST_STATIC_CONSANT.
-#include <boost/iostreams/constants.hpp>
+#include <boost/iostreams/constants.hpp>                             
+#include <boost/iostreams/detail/broken_overload_resolution/forward.hpp>
 #include <boost/iostreams/detail/forward.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -34,82 +35,68 @@ private:
                 Device, Tr
             >::stream_type                           stream_type;
     typedef Device                                   policy_type;
-    template<typename U>
-    struct forward_impl {
-        BOOST_STATIC_CONSTANT(bool, value = 
-            ( !is_same< 
-                   const U&,
-                   typename detail::param_type<Device>::type
-              >::value &&
-              !is_same< 
-                  const U&,
-                  const reference_wrapper<Device>
-              >::value ));
-    };
-    template<typename U>
-    struct forward : mpl::bool_<forward_impl<U>::value> { };
 public:
     stream_facade() { }
 
     template<typename U0>
     stream_facade(const U0& u0)
     {
-        open_impl(forward<U0>(), u0);
+        open_impl(detail::forward<Device, U0>(), u0);
     }
     template<typename U0, typename U1>
     stream_facade(const U0& u0, const U1& u1)
     {
-        open_impl(forward<U0>(), u0, u1);
+        open_impl(detail::forward<Device, U0>(), u0, u1);
     }
     template<typename U0, typename U1, typename U2>
     stream_facade(const U0& u0, const U1& u1, const U2& u2)
     {
-        open_impl(forward<U0>(), u0, u1, u2);
+        open_impl(detail::forward<Device, U0>(), u0, u1, u2);
     }
     template<typename U0>
     stream_facade(U0& u0)
     {
-        open_impl(forward<U0>(), u0);
+        open_impl(detail::forward<Device, U0>(), u0);
     }
     template<typename U0, typename U1>
     stream_facade(U0& u0, const U1& u1)
     {
-        open_impl(forward<U0>(), u0, u1);
+        open_impl(detail::forward<Device, U0>(), u0, u1);
     }
     template<typename U0, typename U1, typename U2>
     stream_facade(U0& u0, const U1& u1, const U2& u2)
     {
-        open_impl(forward<U0>(), u0, u1, u2);
+        open_impl(detail::forward<Device, U0>(), u0, u1, u2);
     }
     template<typename U0>
     void open(const U0& u0)
     {
-        open_impl(forward<U0>(), u0);
+        open_impl(detail::forward<Device, U0>(), u0);
     }
     template<typename U0, typename U1>
     void open(const U0& u0, const U1& u1)
     {
-        open_impl(forward<U0>(), u0, u1);
+        open_impl(detail::forward<Device, U0>(), u0, u1);
     }
     template<typename U0, typename U1, typename U2>
     void open(const U0& u0, const U1& u1, const U2& u2)
     {
-        open_impl(forward<U0>(), u0, u1, u2);
+        open_impl(detail::forward<Device, U0>(), u0, u1, u2);
     }
     template<typename U0>
     void open(U0& u0)
     {
-        open_impl(forward<U0>(), u0);
+        open_impl(detail::forward<Device, U0>(), u0);
     }
     template<typename U0, typename U1>
     void open(U0& u0, const U1& u1)
     {
-        open_impl(forward<U0>(), u0, u1);
+        open_impl(detail::forward<Device, U0>(), u0, u1);
     }
     template<typename U0, typename U1, typename U2>
     void open(U0& u0, const U1& u1, const U2& u2)
     {
-        open_impl(forward<U0>(), u0, u1, u2);
+        open_impl(detail::forward<Device, U0>(), u0, u1, u2);
     }
     bool is_open() const { return this->member.is_open(); }
     void close() { this->member.close(); }
