@@ -36,14 +36,15 @@ interval<T, Policies> exp(const interval<T, Policies>& x)
   if (interval_lib::detail::test_input(x))
     return I::empty();
   typename Policies::rounding rnd;
-  return I(rnd.exp_down(x.lower()), rnd.exp_up  (x.upper()), true);
+  return I(rnd.exp_down(x.lower()), rnd.exp_up(x.upper()), true);
 }
 
 template<class T, class Policies> inline
 interval<T, Policies> log(const interval<T, Policies>& x)
 {
   typedef interval<T, Policies> I;
-  if (interval_lib::detail::test_input(x) || x.upper() <= static_cast<T>(0))
+  if (interval_lib::detail::test_input(x) ||
+      !interval_lib::user::is_pos(x.upper()))
     return I::empty();
   typename Policies::rounding rnd;
   typedef typename Policies::checking checking;

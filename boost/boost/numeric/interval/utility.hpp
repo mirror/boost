@@ -109,7 +109,8 @@ template<class T, class Policies> inline
 bool in_zero(const interval<T, Policies>& x)
 {
   if (interval_lib::detail::test_input(x)) return false;
-  return x.lower() <= static_cast<T>(0) && static_cast<T>(0) <= x.upper();
+  return (!interval_lib::user::is_pos(x.lower())) &&
+         (!interval_lib::user::is_neg(x.upper()));
 }
 
 template<class T, class Policies> inline
