@@ -425,7 +425,27 @@ namespace boost {
     self operator++(int) { return *this; }
   };
 
- template <class T>
+  template <class T>
+  class input_iterator_archetype_no_proxy
+  {
+  private:
+    typedef input_iterator_archetype_no_proxy self;
+  public:
+    typedef std::input_iterator_tag iterator_category;
+    typedef T value_type;
+    typedef const T& reference;
+    typedef const T* pointer;
+    typedef std::ptrdiff_t difference_type;
+    input_iterator_archetype_no_proxy() { }
+    self& operator=(const self&) { return *this;  }
+    bool operator==(const self&) const { return true; }
+    bool operator!=(const self&) const { return true; }
+    reference operator*() const { return static_object<T>::get(); }
+    self& operator++() { return *this; }
+    self operator++(int) { return *this; }
+  };
+
+  template <class T>
   struct output_proxy {
     output_proxy& operator=(const T&) { return *this; }
   };
