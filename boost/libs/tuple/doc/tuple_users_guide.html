@@ -202,7 +202,7 @@ Array arguments to <code>make_tuple</code> functions are deduced to reference to
 <pre><code>make_tuple(&quot;Donald&quot;, &quot;Daisy&quot;);
 </code></pre>
 
-This creates an object of type <code>tuple&lt;const char (&amp;)[5], const char (&amp;)[6]&gt;</code> 
+This creates an object of type <code>tuple&lt;const char (&amp;)[7], const char (&amp;)[6]&gt;</code> 
 (note that the type of a string literal is an array of const characters, not <code>const char*</code>). 
 However, to get <code>make_tuple</code> to create a tuple with an element of a
 non-const array type one must use the <code>ref</code> wrapper.
@@ -500,12 +500,12 @@ The idea for the tie mechanism came from an old usenet article by Ian McCulloch,
 
 <p>
 <a name="publ_1"></a>[1]
-J&auml;rvi J.: <i>Tuples and multiple return values in C++</i>, TUCS Technical Report No 249, 1999 (<a href="http://www.tucs.fi/publications">http://www.tucs.fi/publications</a>).
+J&auml;rvi J.: <i>Tuples and multiple return values in C++</i>, TUCS Technical Report No 249, 1999 (<a href="http://www.tucs.fi/Publications">http://www.tucs.fi/Publications</a>).
 </p>
 
 <p>
 <a name="publ_2"></a>[2]
-J&auml;rvi J.: <i>ML-Style Tuple Assignment in Standard C++ - Extending the Multiple Return Value Formalism</i>, TUCS Technical Report No 267, 1999 (<a href="http://www.tucs.fi/publications">http://www.tucs.fi/publications</a>).
+J&auml;rvi J.: <i>ML-Style Tuple Assignment in Standard C++ - Extending the Multiple Return Value Formalism</i>, TUCS Technical Report No 267, 1999 (<a href="http://www.tucs.fi/Publications">http://www.tucs.fi/Publications</a>).
 </p>
 
 <p>
