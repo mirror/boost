@@ -82,6 +82,22 @@ private:
   IntType value;
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class IntType, IntType a, IntType b, IntType p, IntType val>
+const bool inversive_congruential<IntType, a, b, p, val>::has_fixed_range;
+template<class IntType, IntType a, IntType b, IntType p, IntType val>
+const typename inversive_congruential<IntType, a, b, p, val>::result_type inversive_congruential<IntType, a, b, p, val>::min_value;
+template<class IntType, IntType a, IntType b, IntType p, IntType val>
+const typename inversive_congruential<IntType, a, b, p, val>::result_type inversive_congruential<IntType, a, b, p, val>::max_value;
+template<class IntType, IntType a, IntType b, IntType p, IntType val>
+const typename inversive_congruential<IntType, a, b, p, val>::result_type inversive_congruential<IntType, a, b, p, val>::multiplier;
+template<class IntType, IntType a, IntType b, IntType p, IntType val>
+const typename inversive_congruential<IntType, a, b, p, val>::result_type inversive_congruential<IntType, a, b, p, val>::increment;
+template<class IntType, IntType a, IntType b, IntType p, IntType val>
+const typename inversive_congruential<IntType, a, b, p, val>::result_type inversive_congruential<IntType, a, b, p, val>::modulus;
+#endif
+
 } // namespace random
 
 typedef random::inversive_congruential<int32_t, 9102, 2147483647-36884165,

@@ -67,6 +67,12 @@ private:
   base_type & _rng;
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class UniformRandomNumberGenerator, class RealType>
+const bool uniform_01<UniformRandomNumberGenerator, RealType>::has_fixed_range;
+#endif
+
 } // namespace boost
 
 #endif // BOOST_RANDOM_UNIFORM_01_HPP

@@ -122,6 +122,29 @@ private:
   result_type y;
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class UniformRandomNumberGenerator, int k, 
+  class IntType,
+#ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+  typename UniformRandomNumberGenerator::result_type 
+#else
+  uint32_t
+#endif
+  val>
+const bool shuffle_output<UniformRandomNumberGenerator, k, IntType, val>::has_fixed_range;
+
+template<class UniformRandomNumberGenerator, int k, 
+  class IntType,
+#ifndef BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
+  typename UniformRandomNumberGenerator::result_type 
+#else
+  uint32_t
+#endif
+  val>
+const int shuffle_output<UniformRandomNumberGenerator, k, IntType, val>::buffer_size;
+#endif
+
 } // namespace random
 
 // validation by experiment from Harry Erwin's generator.h (private e-mail)

@@ -61,6 +61,12 @@ private:
   int _factor;
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class UniformRandomNumberGenerator, class IntType>
+const bool uniform_smallint<UniformRandomNumberGenerator, IntType>::has_fixed_range;
+#endif
+
 template<class UniformRandomNumberGenerator, class IntType>
 uniform_smallint<UniformRandomNumberGenerator, IntType>::
 uniform_smallint(base_type & rng, IntType min, IntType max) 

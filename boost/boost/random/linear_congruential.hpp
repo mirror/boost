@@ -83,6 +83,16 @@ private:
   IntType _x;
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class IntType, IntType a, IntType c, IntType m, IntType val>
+const bool linear_congruential<IntType, a, c, m, val>::has_fixed_range;
+template<class IntType, IntType a, IntType c, IntType m, IntType val>
+const typename linear_congruential<IntType, a, c, m, val>::result_type linear_congruential<IntType, a, c, m, val>::min_value;
+template<class IntType, IntType a, IntType c, IntType m, IntType val>
+const typename linear_congruential<IntType, a, c, m, val>::result_type linear_congruential<IntType, a, c, m, val>::max_value;
+#endif
+
 } // namespace random
 
 // validation values from the publications

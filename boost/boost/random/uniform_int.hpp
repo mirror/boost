@@ -74,6 +74,12 @@ private:
   int _range_comparison;
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class UniformRandomNumberGenerator, class IntType>
+const bool uniform_int<UniformRandomNumberGenerator, IntType>::has_fixed_range;
+#endif
+
 template<class UniformRandomNumberGenerator, class IntType>
 inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
 {

@@ -45,6 +45,12 @@ struct fibonacci_validation
   static T tolerance() { return 0; }
 };
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class T, unsigned int p, unsigned int q>
+const bool fibonacci_validation<T, p, q>::is_specialized;
+#endif
+
 #define BOOST_RANDOM_FIBONACCI_VAL(T,P,Q,V,E) \
 template<> \
 struct fibonacci_validation<T, P, Q>  \
@@ -156,6 +162,17 @@ private:
   unsigned int i;
   FloatType x[long_lag];
 };
+
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+template<class FloatType, unsigned int p, unsigned int q>
+const bool lagged_fibonacci<FloatType, p, q>::has_fixed_range;
+template<class FloatType, unsigned int p, unsigned int q>
+const unsigned int lagged_fibonacci<FloatType, p, q>::long_lag;
+template<class FloatType, unsigned int p, unsigned int q>
+const unsigned int lagged_fibonacci<FloatType, p, q>::short_lag;
+
+#endif
 
 template<class FloatType, unsigned int p, unsigned int q>
 void lagged_fibonacci<FloatType, p, q>::fill()

@@ -16,6 +16,15 @@
 
 #include <boost/nondet_random.hpp>
 #include <string>
+#include <cassert>
+
+
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//  A definition is required even for integral static constants
+const bool boost::random_device::has_fixed_range;
+const boost::random_device::result_type boost::random_device::min_value;
+const boost::random_device::result_type boost::random_device::max_value;
+#endif
 
 
 #ifdef __linux__
