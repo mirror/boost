@@ -26,7 +26,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/iterator/iterator_adaptor.hpp> // for enable_if_convertible
 #include <boost/iterator/iterator_categories.hpp>
-#include <boost/detail/iterator_traits.hpp>
+#include <boost/detail/iterator.hpp>
 
 #include <boost/tuple/tuple.hpp>
 
