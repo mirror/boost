@@ -1129,6 +1129,7 @@ namespace detail {
 # else
       // is_convertible doesn't work with MWERKS
       typedef typename iterator_traits<Iterator>::iterator_category input_category;
+  public:
       typedef typename if_true<(
           boost::is_same<input_category,std::random_access_iterator_tag>::value
           || boost::is_same<input_category,std::bidirectional_iterator_tag>::value
