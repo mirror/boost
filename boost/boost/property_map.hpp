@@ -306,9 +306,9 @@ namespace boost {
   }
   template <class PropertyMap, class Reference, class K, class V>
   inline void
-  put(put_get_helper<Reference, PropertyMap>& pa, K k, const V& v)
+  put(const put_get_helper<Reference, PropertyMap>& pa, K k, const V& v)
   {
-    static_cast<PropertyMap&>(pa)[k] = v;
+    static_cast<const PropertyMap&>(pa)[k] = v;
   }
 
   //=========================================================================
