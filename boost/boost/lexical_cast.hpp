@@ -39,8 +39,8 @@ namespace boost
     class bad_lexical_cast : public std::bad_cast
     {
     public:
-        bad_lexical_cast()
-        : source(&typeid(void)), target(&typeid(void))
+        bad_lexical_cast() :
+        source(&typeid(void)), target(&typeid(void))
         {
         }
         bad_lexical_cast(
@@ -57,7 +57,7 @@ namespace boost
         {
             return *target;
         }
-        virtual const char *what() throw()
+        virtual const char *what() const throw()
         {
             return "bad lexical cast: "
                    "source type value could not be interpreted as target";
