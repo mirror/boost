@@ -40,6 +40,8 @@
 #  include <boost/detail/lwm_win32.hpp>
 #elif defined(linux) || defined(__linux) || defined(__linux__)
 #  include <boost/detail/lwm_linux.hpp>
+#elif defined(__sgi)
+#  include <boost/detail/lwm_irix.hpp>
 #elif defined(BOOST_HAS_PTHREADS)
 #  include <boost/detail/lwm_pthreads.hpp>
 #else

@@ -1,14 +1,15 @@
-#ifndef BOOST_DETAIL_LWM_WIN32_HPP_INCLUDED
-#define BOOST_DETAIL_LWM_WIN32_HPP_INCLUDED
+#ifndef BOOST_DETAIL_LWM_IRIX_HPP_INCLUDED
+#define BOOST_DETAIL_LWM_IRIX_HPP_INCLUDED
 
 #if _MSC_VER >= 1020
 #pragma once
 #endif
 
 //
-//  boost/detail/lwm_win32.hpp
+//  boost/detail/lwm_irix.hpp
 //
 //  Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2002 Dan Gohman
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
@@ -16,22 +17,21 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
+#include <sgidefs.h>
+#include <mutex.h>
+#include <sched.h>
+
 namespace boost
 {
 
 namespace detail
 {
 
-// avoid including <windows.h>
-
-extern "C" __declspec(dllimport) long __stdcall InterlockedExchange(long volatile *, long);
-extern "C" __declspec(dllimport) void __stdcall Sleep(unsigned long);
-
 class lightweight_mutex
 {
 private:
 
-    long l_;
+    __uint32_t l_;
 
     lightweight_mutex(lightweight_mutex const &);
     lightweight_mutex & operator=(lightweight_mutex const &);
@@ -58,18 +58,15 @@ public:
 
         explicit scoped_lock(lightweight_mutex & m): m_(m)
         {
-            while( InterlockedExchange(&m_.l_, 1) ) Sleep(0);
+            while( test_and_set32(&m_.l_, 1) )
+            {
+                sched_yield();
+            }
         }
 
         ~scoped_lock()
         {
-            InterlockedExchange(&m_.l_, 0);
-
-            // Note: adding a Sleep(0) here will make
-            // the mutex more fair and will increase the overall
-            // performance of some applications substantially in
-            // high contention situations, but will penalize the
-            // low contention / single thread case up to 5x
+            m_.l_ = 0;
         }
     };
 };
@@ -78,4 +75,4 @@ public:
 
 } // namespace boost
 
-#endif // #ifndef BOOST_DETAIL_LWM_WIN32_HPP_INCLUDED
+#endif // #ifndef BOOST_DETAIL_LWM_IRIX_HPP_INCLUDED
