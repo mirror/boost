@@ -249,9 +249,9 @@ with foo: <tt>EqualityComparableConcept&lt;foo&gt;</tt> and then find
 a way to get the compiler to compile the <tt>constraints()</tt>
 function without actually calling it. The Boost Concept Checking
 Library defines two utilities that make this easy:
-<tt>function_requires()</tt> and <tt>class_requires</tt>.
+<tt>function_requires()</tt> and <tt>BOOST_CLASS_REQUIRES</tt>.
 <tt>function_requires()</tt> function can be used in function bodies
-and the <tt>class_requires</tt> class can be used inside class
+and the <tt>BOOST_CLASS_REQUIRES</tt> macro can be used inside class
 bodies. The <tt>function_requires()</tt> function takes no arguments,
 but has a template parameter for the concept checking class. This
 means that the instantiated concept checking class must be given as an
@@ -264,14 +264,12 @@ explicit template argument, as shown below.
   };
 </pre>
 
-The <tt>class_requires</tt> is a class template with a template
-parameter for the concept checking class. Accessing the nested
-<tt>check</tt> type within <tt>class_requires</tt> triggers the the
-concept checking.
+The <tt>BOOST_CLASS_REQUIRES</tt> macro can be used inside a class
+definition to check whether some type models a concept. 
 
 <pre>
   struct some_class_using_foo {
-    typedef class_requires&lt; EqualityComparableConcept&lt;foo&gt; &gt;::check req1;
+    BOOST_CLASS_REQUIRES(foo, EqualityComparableConcept);
   };
 </pre>
 
