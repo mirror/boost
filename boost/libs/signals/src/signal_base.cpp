@@ -59,7 +59,7 @@ namespace boost {
 
       connection
       signal_base_impl::
-        connect_slot(const any& slot,
+        connect_slot(const any& slot_,
                      const any& name,
 		     shared_ptr<slot_base::data_t> data,
                      connect_position at)
@@ -76,7 +76,7 @@ namespace boost {
 
         // Add the slot to the list.
         iterator pos = 
-	  slots_.insert(name, data->watch_bound_objects, slot, at);
+	  slots_.insert(name, data->watch_bound_objects, slot_, at);
 
         // The assignment operation here absolutely must not throw, which
         // intuitively makes sense (because any container's insert method
