@@ -60,7 +60,7 @@ bool check(int x, const boost::minstd_rand&) { return x == 399268537; }
 bool check(unsigned long x, const boost::rand48&) { return x == 1993516219; }
 
 // ????
-bool check(unsigned long x, const boost::taus88&) { return x == 3535848941; }
+bool check(unsigned long x, const boost::taus88&) { return x == 3535848941U; }
 
 // ????
 bool check(int x, const boost::ecuyer1988&) { return x == 2060321752; }
