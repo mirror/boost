@@ -13,7 +13,7 @@
 #include <boost/config.hpp>
 
 #if defined(__INTEL_COMPILER)
-#pragma warning(disable: 383 488 981 1418 1419)
+#pragma warning(disable: 193 383 488 981 1418 1419)
 #elif defined(BOOST_MSVC)
 #pragma warning(disable: 4097 4100 4121 4127 4146 4244 4245 4511 4512 4701 4800)
 #endif
@@ -21,10 +21,12 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/included/unit_test_framework.hpp>
+#include <boost/detail/workaround.hpp>
 
 #if defined(BOOST_NO_STRINGSTREAM) || \
     defined(BOOST_NO_STD_WSTRING) || \
-    defined(BOOST_NO_INTRINSIC_WCHAR_T)
+    defined(BOOST_NO_STD_LOCALE) || \
+    defined(BOOST_NO_CWCHAR)
 #define DISABLE_WIDE_CHAR_SUPPORT
 #endif
 
@@ -74,10 +76,6 @@ void test_conversion_to_char()
     BOOST_CHECK_EQUAL(' ', lexical_cast<char>(" "));
     BOOST_CHECK_THROW(lexical_cast<char>(""), boost::bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<char>("Test"), boost::bad_lexical_cast);
-    BOOST_CHECK_EQUAL('A', lexical_cast<char>("A"));
-    BOOST_CHECK_EQUAL(' ', lexical_cast<char>(" "));
-    BOOST_CHECK_THROW(lexical_cast<char>(""), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<char>("Test"), boost::bad_lexical_cast);
     BOOST_CHECK_EQUAL('A', lexical_cast<char>(std::string("A")));
     BOOST_CHECK_EQUAL(' ', lexical_cast<char>(std::string(" ")));
     BOOST_CHECK_THROW(
@@ -108,8 +106,6 @@ void test_conversion_to_int()
     BOOST_CHECK_THROW(lexical_cast<int>(""), boost::bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<int>("Test"), boost::bad_lexical_cast);
     BOOST_CHECK_EQUAL(123, lexical_cast<int>("123"));
-    BOOST_CHECK_THROW(lexical_cast<int>(""), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<int>("Test"), boost::bad_lexical_cast);
     BOOST_CHECK_EQUAL(123,lexical_cast<int>(std::string("123")));
     BOOST_CHECK_THROW(
         lexical_cast<int>(std::string(" 123")), boost::bad_lexical_cast);
@@ -131,9 +127,6 @@ void test_conversion_to_double()
         std::numeric_limits<double>::epsilon());
     BOOST_CHECK_EQUAL(1.0, lexical_cast<double>(true));
     BOOST_CHECK_EQUAL(0.0, lexical_cast<double>(false));
-    BOOST_CHECK_EQUAL(1.23, lexical_cast<double>("1.23"));
-    BOOST_CHECK_THROW(lexical_cast<double>(""), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<double>("Test"), boost::bad_lexical_cast);
     BOOST_CHECK_EQUAL(1.23, lexical_cast<double>("1.23"));
     BOOST_CHECK_THROW(lexical_cast<double>(""), boost::bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<double>("Test"), boost::bad_lexical_cast);
@@ -162,8 +155,6 @@ void test_conversion_to_bool()
     BOOST_CHECK_THROW(lexical_cast<bool>("Test"), boost::bad_lexical_cast);
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>("1"));
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>("0"));
-    BOOST_CHECK_THROW(lexical_cast<bool>(""), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<bool>("Test"), boost::bad_lexical_cast);
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>(std::string("1")));
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>(std::string("0")));
     BOOST_CHECK_THROW(
@@ -181,9 +172,6 @@ void test_conversion_to_string()
     BOOST_CHECK_EQUAL("1.111111111", lexical_cast<std::string>(1.111111111));
     BOOST_CHECK_EQUAL("1",lexical_cast<std::string>(true));
     BOOST_CHECK_EQUAL("0",lexical_cast<std::string>(false));
-    BOOST_CHECK_EQUAL("Test", lexical_cast<std::string>("Test"));
-    BOOST_CHECK_EQUAL(" ", lexical_cast<std::string>(" "));
-    BOOST_CHECK_EQUAL("", lexical_cast<std::string>(""));
     BOOST_CHECK_EQUAL("Test", lexical_cast<std::string>("Test"));
     BOOST_CHECK_EQUAL(" ", lexical_cast<std::string>(" "));
     BOOST_CHECK_EQUAL("", lexical_cast<std::string>(""));
@@ -209,9 +197,6 @@ void test_conversion_from_wchar_t()
     BOOST_CHECK_EQUAL(123, lexical_cast<int>(L"123"));
     BOOST_CHECK_THROW(lexical_cast<int>(L""), boost::bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<int>(L"Test"), boost::bad_lexical_cast);
-    BOOST_CHECK_EQUAL(123, lexical_cast<int>(L"123"));
-    BOOST_CHECK_THROW(lexical_cast<int>(L""), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<int>(L"Test"), boost::bad_lexical_cast);
 
     BOOST_CHECK_EQUAL(1.0, lexical_cast<double>(L'1'));
     BOOST_CHECK_THROW(lexical_cast<double>(L'A'), boost::bad_lexical_cast);
@@ -219,17 +204,10 @@ void test_conversion_from_wchar_t()
     BOOST_CHECK_EQUAL(1.23, lexical_cast<double>(L"1.23"));
     BOOST_CHECK_THROW(lexical_cast<double>(L""), boost::bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<double>(L"Test"), boost::bad_lexical_cast);
-    BOOST_CHECK_EQUAL(1.23, lexical_cast<double>(L"1.23"));
-    BOOST_CHECK_THROW(lexical_cast<double>(L""), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<double>(L"Test"), boost::bad_lexical_cast);
 
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>(L'1'));
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>(L'0'));
     BOOST_CHECK_THROW(lexical_cast<bool>(L'A'), boost::bad_lexical_cast);
-    BOOST_CHECK_EQUAL(true, lexical_cast<bool>(L"1"));
-    BOOST_CHECK_EQUAL(false, lexical_cast<bool>(L"0"));
-    BOOST_CHECK_THROW(lexical_cast<bool>(L""), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<bool>(L"Test"), boost::bad_lexical_cast);
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>(L"1"));
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>(L"0"));
     BOOST_CHECK_THROW(lexical_cast<bool>(L""), boost::bad_lexical_cast);
@@ -242,7 +220,9 @@ void test_conversion_to_wchar_t()
     #ifndef DISABLE_WIDE_CHAR_SUPPORT
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(1));
     BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>(0));
+    #if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1200))
     BOOST_CHECK_THROW(lexical_cast<wchar_t>(123), boost::bad_lexical_cast);
+    #endif
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(1.0));
     BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>(0.0));
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(true));
@@ -252,17 +232,17 @@ void test_conversion_to_wchar_t()
     BOOST_CHECK_EQUAL(L'A', lexical_cast<wchar_t>(L"A"));
     BOOST_CHECK_EQUAL(L' ', lexical_cast<wchar_t>(L" "));
     BOOST_CHECK_THROW(lexical_cast<wchar_t>(L""), boost::bad_lexical_cast);
+    #if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1200))
     BOOST_CHECK_THROW(lexical_cast<wchar_t>(L"Test"), boost::bad_lexical_cast);
-    BOOST_CHECK_EQUAL(L'A', lexical_cast<wchar_t>(L"A"));
-    BOOST_CHECK_EQUAL(L' ', lexical_cast<wchar_t>(L" "));
-    BOOST_CHECK_THROW(lexical_cast<wchar_t>(L""), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<wchar_t>(L"Test"), boost::bad_lexical_cast);
+    #endif
     BOOST_CHECK_EQUAL(L'A', lexical_cast<wchar_t>(std::wstring(L"A")));
     BOOST_CHECK_EQUAL(L' ', lexical_cast<wchar_t>(std::wstring(L" ")));
     BOOST_CHECK_THROW(
         lexical_cast<wchar_t>(std::wstring(L"")), boost::bad_lexical_cast);
+    #if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1200))
     BOOST_CHECK_THROW(
         lexical_cast<wchar_t>(std::wstring(L"Test")), boost::bad_lexical_cast);
+    #endif
     #endif
 }
 
@@ -274,12 +254,6 @@ void test_conversion_from_wstring()
         lexical_cast<int>(std::wstring(L"")), boost::bad_lexical_cast);
     BOOST_CHECK_THROW(
         lexical_cast<int>(std::wstring(L"Test")), boost::bad_lexical_cast);
-
-    BOOST_CHECK_EQUAL(1.23, lexical_cast<double>(std::wstring(L"1.23")));
-    BOOST_CHECK_THROW(
-        lexical_cast<double>(std::wstring(L"")), boost::bad_lexical_cast);
-    BOOST_CHECK_THROW(
-        lexical_cast<double>(std::wstring(L"Test")), boost::bad_lexical_cast);
 
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>(std::wstring(L"1")));
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>(std::wstring(L"0")));
@@ -300,9 +274,6 @@ void test_conversion_to_wstring()
     BOOST_CHECK(L"0" == lexical_cast<std::wstring>(false));
     BOOST_CHECK(L"A" == lexical_cast<std::wstring>(L'A'));
     BOOST_CHECK(L" " == lexical_cast<std::wstring>(L' '));
-    BOOST_CHECK(L"Test" == lexical_cast<std::wstring>(L"Test"));
-    BOOST_CHECK(L" " == lexical_cast<std::wstring>(L" "));
-    BOOST_CHECK(L"" == lexical_cast<std::wstring>(L""));
     BOOST_CHECK(L"Test" == lexical_cast<std::wstring>(L"Test"));
     BOOST_CHECK(L" " == lexical_cast<std::wstring>(L" "));
     BOOST_CHECK(L"" == lexical_cast<std::wstring>(L""));
