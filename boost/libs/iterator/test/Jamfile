@@ -10,7 +10,17 @@ SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
 include testing.jam ;
 
 test-suite iterator
-  : [ run unit_tests.cpp ]
+  : 
+    # These first two tests will run last, and are expected to fail
+    # for many less-capable compilers.
+  
+    [ compile-fail interoperable_fail.cpp ]
+    # test uses expected success, so that we catch unrelated
+    # compilation problems.
+    [ run is_convertible_fail.cpp ]  
+
+    # These tests should work for just about everything.
+    [ run unit_tests.cpp ]
     [ run concept_tests.cpp ]
     [ run iterator_adaptor_cc.cpp ]
     [ run iterator_adaptor_test.cpp ]
@@ -30,7 +40,4 @@ test-suite iterator
     [ run ../../utility/reverse_iterator_example.cpp ]
     [ run ../../utility/transform_iterator_example.cpp ]
       
-    [ run is_convertible_fail.cpp ]  # test changed to expected success, so that we catch compilation failures.
-      
-    [ compile-fail interoperable_fail.cpp ]
 ;

@@ -14,7 +14,12 @@
 
 #include <boost/iterator/iterator_traits.hpp>
 
+#include <boost/type_traits/remove_cv.hpp>
+
 #include <boost/python/detail/indirect_traits.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/mpl/apply_if.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/aux_/has_xxx.hpp>
 
@@ -32,6 +37,9 @@ namespace boost
   template <class Iter, class Value, class Category, class Reference, class Difference>
   struct indirect_iterator;
 
+  template <class T>
+  struct referent;
+  
   namespace detail
   {
     struct unspecified {};
@@ -79,9 +87,10 @@ namespace boost
         : mpl::true_ {};
 # endif 
   
-    // Metafunction returning the nested element_type typedef
+    // Metafunction accessing the nested ::element_type
     template <class T>
-    struct smart_pointer_value : remove_const<typename T::element_type>
+    struct element_type
+      : mpl::identity<typename T::element_type>
     {};
 
     template <class T>
@@ -110,37 +119,45 @@ namespace boost
     struct not_int
         : not_int_impl<T>::template apply<U> {};
 
+
+    template <class Dereferenceable>
+    struct class_has_element_type
+      : mpl::and_<
+            is_class<Dereferenceable>
+          , has_element_type<Dereferenceable>
+        >
+    {};
+
     // If the Value parameter is unspecified, we use this metafunction
     // to deduce the default types
-    template <class Iter, class Value, class Category, class Reference, class Difference>
-    struct indirect_base
+    template <class Dereferenceable>
+    struct default_indirect_value
     {
-        typedef typename iterator_value<Iter>::type dereferenceable;
-
-        typedef mpl::and_<
-            is_class<dereferenceable>
-          , has_element_type<dereferenceable>
-        > is_smart_ptr;
-
-        typedef typename mpl::apply_if<
-            is_smart_ptr
-          , smart_pointer_value<dereferenceable>
-          , iterator_value<dereferenceable>
-        >::type value_type;
+        typedef typename remove_cv<
+            typename referent<Dereferenceable>::type
+        >::type referent_t;
 
         typedef typename mpl::if_<
             mpl::or_<
-                is_smart_ptr
-              , iterator_is_mutable<dereferenceable>
+                class_has_element_type<Dereferenceable>
+              , iterator_is_mutable<Dereferenceable>
             >
-          , value_type
-          , value_type const
-        >::type cv_value_type;
-           
+          , referent_t
+          , referent_t const
+        >::type type;
+    };
+    
+    template <class Iter, class Value, class Category, class Reference, class Difference>
+    struct indirect_base
+    {
+        typedef typename iterator_traits<Iter>::value_type dereferenceable;
+        
         typedef iterator_adaptor<
             indirect_iterator<Iter, Value, Category, Reference, Difference>
           , Iter
-          , cv_value_type
+          , typename ia_dflt_help<
+                Value, default_indirect_value<dereferenceable>
+            >::type
           , Category
           , Reference
           , Difference
@@ -151,6 +168,20 @@ namespace boost
     struct indirect_base<int, int, int, int, int> {};
   } // namespace detail
 
+  // User-specializable metafunction which returns the referent of a
+  // dereferenceable type.  The default implementation returns
+  // Dereferenceable::element_type if such a member exists (thus
+  // handling the boost smart pointers and auto_ptr), and
+  // iterator_traits<Dereferenceable>::value_type otherwise.
+  template <class Dereferenceable>
+  struct referent
+    : mpl::apply_if<
+          detail::class_has_element_type<Dereferenceable>
+        , detail::element_type<Dereferenceable>
+        , iterator_value<Dereferenceable>
+      >
+  {};
+    
   template <
       class Iterator
     , class Value = use_default
