@@ -27,26 +27,43 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
+            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test2/test2.cpp
             test2/test21.cpp
             test2/test22.cpp
             test2/test23.cpp
+        : # args
+        : # input files
+        : # requirements
+            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test3/test3.cpp
             test3/test31.cpp
             test3/test32.cpp
             test3/test33.cpp
+        : # args
+        : # input files
+        : # requirements
+            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test4/test4.cpp
             test4/test41.cpp
             test4/test42.cpp
             test4/test43.cpp
+        : # args
+        : # input files
+        : # requirements
+            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test5/test5.cpp
             test5/test51.cpp
             test5/test52.cpp
             test5/test53.cpp
+        : # args
+        : # input files
+        : # requirements
+            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test6/test6.cpp
             test6/test61.cpp
@@ -55,6 +72,7 @@ test-suite numeric/uBLAS
         : # args
         : # input files
         : # requirements
+            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
 # Test7 check uBLAS operation with interval types.
 # This causes to much compiler badness, issues need to be addressed for VC7.1 VC8 CW9 and Intel 8 (windows)
@@ -71,5 +89,6 @@ test-suite numeric/uBLAS
         : # requirements
             <define>EXTERNAL
             <intel-linux><*><cxxflags>"-Xc"
+            <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
     ;
