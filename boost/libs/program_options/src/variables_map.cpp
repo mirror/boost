@@ -71,7 +71,14 @@ namespace boost { namespace program_options {
                 // Explicit assignment here erases defaulted value
                 v = variable_value();
             }
-            d.semantic()->parse(v.value(), options.options[i].value, utf8);
+            try {
+                d.semantic()->parse(v.value(), options.options[i].value, utf8);
+            }
+            catch(validation_error& e)
+            {
+                e.set_option_name(name);
+                throw;
+            }
             v.m_value_semantic = d.semantic();
         }
         

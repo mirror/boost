@@ -80,6 +80,13 @@ namespace boost { namespace program_options {
     class BOOST_PROGRAM_OPTIONS_DECL validation_error : public error {
     public:
         validation_error(const std::string& what) : error(what) {}
+        ~validation_error() throw() {}
+        void set_option_name(const std::string& option);
+    private:
+        mutable std::string m_message; // For on-demand formatting in 'what'
+        std::string m_option_name; // The name of the option which
+                                   // caused the exception.
+        const char* what() const throw();  
     };
 
     /** Class thrown when there are too many positional options. */

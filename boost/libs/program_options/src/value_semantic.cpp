@@ -177,6 +177,26 @@ namespace boost { namespace program_options {
         }
     }
 
+    void validation_error::set_option_name(const std::string& option_name)
+    {
+        m_option_name = option_name;
+    }
+
+    const char* validation_error::what() const throw()
+    {
+        if (!m_option_name.empty())
+        {
+            m_message = "in option '" + m_option_name + "': " 
+                + logic_error::what();
+            return m_message.c_str();
+
+        }
+        else
+        {
+            return logic_error::what();
+        }
+    }
+
 
 
 
