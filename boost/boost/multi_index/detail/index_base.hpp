@@ -1,4 +1,4 @@
-/* Copyright 2003-2004 Joaquín M López Muñoz.
+/* Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -8,6 +8,10 @@
 
 #ifndef BOOST_MULTI_INDEX_DETAIL_INDEX_BASE_HPP
 #define BOOST_MULTI_INDEX_DETAIL_INDEX_BASE_HPP
+
+#if defined(_MSC_VER)&&(_MSC_VER>=1200)
+#pragma once
+#endif
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/call_traits.hpp>
@@ -96,6 +100,13 @@ protected:
     boost::detail::allocator::destroy(&x->value);
   }
 
+  void delete_node_(node_type* x)
+  {
+    boost::detail::allocator::destroy(&x->value);
+  }
+
+  void clear_(){}
+
   void swap_(index_base<Value,IndexSpecifierList,Allocator>&){}
 
   bool replace_(value_param_type v,node_type* x)
@@ -140,6 +151,11 @@ protected:
     {return final().insert_(x,position);}
 
   void final_erase_(final_node_type* x){final().erase_(x);}
+
+  void final_delete_node_(final_node_type* x){final().delete_node_(x);}
+  void final_delete_all_nodes_(){final().delete_all_nodes_(x);}
+  void final_clear_(){final().clear_();}
+
   void final_swap_(final_type& x){final().swap_(x);}
   bool final_replace_(
     value_param_type k,final_node_type* x)
