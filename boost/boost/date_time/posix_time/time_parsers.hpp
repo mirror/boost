@@ -14,6 +14,11 @@ namespace boost {
 
 namespace posix_time {
 
+  //! Creates a time_duration object from a delimited string
+  /*! Expected format for string is "[-]h[h][:mm][:ss][.fff]".
+   * A negative duration will be created if the first character in
+   * string is a '-', all other '-' will be treated as delimiters.
+   * Accepted delimiters are "-:,.". */
   inline time_duration duration_from_string(const std::string& s) {
     return date_time::parse_delimited_time_duration<time_duration>(s);
   }
