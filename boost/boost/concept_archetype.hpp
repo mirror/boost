@@ -57,7 +57,12 @@ namespace boost {
   public:
       static T& get()
       {
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
           return *reinterpret_cast<T*>(0);
+#else 
+          static char d[sizeof(T)];
+          return *reinterpret_cast<T*>(d);
+#endif 
       }
   };
 
