@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_SIMPLE_STATE_HPP_INCLUDED
 #define BOOST_FSM_SIMPLE_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -725,11 +725,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         pCommonContext->outermost_context_base() );
 
       #ifdef BOOST_FSM_RELAX_TRANSITION_CONTEXT
-      #ifdef BOOST_MSVC
-      #  pragma warning( push )
-      #  pragma warning( disable: 4127 ) // conditional expression is constant
-      #endif
-
       typedef typename mpl::distance<
         typename mpl::begin< possible_transition_contexts >::type,
         typename mpl::find<
@@ -752,6 +747,10 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         possible_transition_contexts,
         real_transition_context_position >::type real_transition_context_type;
 
+      #ifdef BOOST_MSVC
+      #  pragma warning( push )
+      #  pragma warning( disable: 4127 ) // conditional expression is constant
+      #endif
       if ( ( proposed_transition_context_position::value == 0 ) &&
            ( inner_initial_list_size::value == 0 ) )
       {
