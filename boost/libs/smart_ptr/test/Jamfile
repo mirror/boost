@@ -27,7 +27,7 @@ DEPENDS all : smart_ptr ;
     # boost/status, so it's guarded from that case.  It will only be
     # built from this directory when the targets "test" (all tests) or
     # "shared_ptr_alloc_test" are requested.
-    if ! $(gIN_LIB_INCLUDE)
+    if [ in-invocation-subdir ]
     {
         run shared_ptr_alloc_test.cpp ;
     }
