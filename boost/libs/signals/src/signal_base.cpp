@@ -61,13 +61,13 @@ namespace boost {
       signal_base_impl::
         connect_slot(const any& slot_,
                      const any& name,
-		     shared_ptr<slot_base::data_t> data,
+                     shared_ptr<slot_base::data_t> data,
                      connect_position at)
       {
-	// Transfer the burden of ownership to a local, scoped
-	// connection.
-	data->watch_bound_objects.set_controlling(false);
-	scoped_connection safe_connection(data->watch_bound_objects);
+        // Transfer the burden of ownership to a local, scoped
+        // connection.
+        data->watch_bound_objects.set_controlling(false);
+        scoped_connection safe_connection(data->watch_bound_objects);
 
         // Allocate storage for an iterator that will hold the point of
         // insertion of the slot into the list. This is used to later remove
@@ -76,7 +76,7 @@ namespace boost {
 
         // Add the slot to the list.
         iterator pos = 
-	  slots_.insert(name, data->watch_bound_objects, slot_, at);
+          slots_.insert(name, data->watch_bound_objects, slot_, at);
 
         // The assignment operation here absolutely must not throw, which
         // intuitively makes sense (because any container's insert method
@@ -88,13 +88,13 @@ namespace boost {
         // operations can throw
         data->watch_bound_objects.get_connection()->signal = this;
         data->watch_bound_objects.get_connection()->signal_data = 
-	  saved_iter.release();
+          saved_iter.release();
         data->watch_bound_objects.get_connection()->signal_disconnect = 
-	  &signal_base_impl::slot_disconnected;
+          &signal_base_impl::slot_disconnected;
 
         // Make the copy of the connection in the list disconnect when it is
         // destroyed. The local, scoped connection is then released
-	// because ownership has been transferred.
+        // because ownership has been transferred.
         pos->first.set_controlling();
         return safe_connection.release();
       }

@@ -27,11 +27,11 @@ class IntValueHolder
 {
 public:
     IntValueHolder()
-        :	value(0)
+        : value(0)
     {}
 
     IntValueHolder(int newvalue)
-        :	value(newvalue)
+        : value(newvalue)
     {}
 
     int GetValue() const { return value; }
@@ -52,11 +52,11 @@ class FloatValueHolder
 {
 public:
     FloatValueHolder()
-        :	value(0)
+        : value(0)
     {}
 
     FloatValueHolder(float newvalue)
-        :	value(newvalue)
+        : value(newvalue)
     {}
 
     float GetValue() const { return value; }
@@ -77,7 +77,7 @@ class A
 {
 public:
     A(const IntValueHolder& initialValue)
-        :	value(initialValue), floatValue(new FloatValueHolder(10.0f))
+        : value(initialValue), floatValue(new FloatValueHolder(10.0f))
     {}
 
     ~A()
