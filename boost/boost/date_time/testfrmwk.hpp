@@ -61,7 +61,7 @@ bool check(const std::string& testname, bool testcond)
     std::cout << "FAIL :: " << testname << " " <<  std::endl;
     return false;
   }
-};
+}
 
 
 int printTestStats() 
@@ -69,6 +69,6 @@ int printTestStats()
   TestStats& stat = TestStats::instance();
   stat.print();
   return stat.testcount() - stat.passcount();
-};
+}
 
 #endif
