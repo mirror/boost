@@ -32,12 +32,12 @@ void test_function() {
   boost::function<int (int, int)> f;
   f = _1 + _2;
 
- BOOST_TEST(f(1, 2)== 3);
+ BOOST_CHECK(f(1, 2)== 3);
 
  int i=1; int j=2;
  boost::function<int& (int&, int)> g = _1 += _2;
  g(i, j);
- BOOST_TEST(i==3);
+ BOOST_CHECK(i==3);
 
 
 
@@ -45,7 +45,7 @@ void test_function() {
   *sum = 0;
   boost::function<int& (int)> counter = *sum += _1;
   counter(5); // ok, sum* = 5;
-  BOOST_TEST(*sum == 5);
+  BOOST_CHECK(*sum == 5);
   delete sum; 
   
   // The next statement would lead to a dangling reference

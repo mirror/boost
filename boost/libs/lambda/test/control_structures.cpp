@@ -50,41 +50,41 @@ void simple_loops() {
   int i;
   int arithmetic_series = 0;
   for_loop(_1 = 0, _1 < 10, _1++, arithmetic_series += _1)(i);
-  BOOST_TEST(arithmetic_series == 45);
+  BOOST_CHECK(arithmetic_series == 45);
 
   // no body case
   for_loop(boost::lambda::var(i) = 0, boost::lambda::var(i) < 100, ++boost::lambda::var(i))();
-  BOOST_TEST(i == 100);
+  BOOST_CHECK(i == 100);
  
   // while loops -------------------------------------------------------
   int a = 0, b = 0, c = 0;
 
   while_loop((_1 + _2) >= (_1 * _2), (++_1, ++_2, ++_3))(a, b, c); 
-  BOOST_TEST(c == 3);
+  BOOST_CHECK(c == 3);
 
   int count;
   count = 0; i = 0;
   while_loop(_1++ < 10, ++boost::lambda::var(count))(i);
-  BOOST_TEST(count == 10);
+  BOOST_CHECK(count == 10);
 
   // note that the first parameter of do_while_loop is the condition
   count = 0; i = 0;
   do_while_loop(_1++ < 10, ++boost::lambda::var(count))(i);
-  BOOST_TEST(count == 11);
+  BOOST_CHECK(count == 11);
 
   a = 0;
   do_while_loop(constant(false), _1++)(a);
-  BOOST_TEST(a == 1);
+  BOOST_CHECK(a == 1);
  
   // no body cases
   a = 40; b = 30;
   while_loop(--_1 > _2)(a, b);
-  BOOST_TEST(a == b);
+  BOOST_CHECK(a == b);
 
   // (the no body case for do_while_loop is pretty redundant)
   a = 40; b = 30;
   do_while_loop(--_1 > _2)(a, b);
-  BOOST_TEST(a == b);
+  BOOST_CHECK(a == b);
 
 
 }
@@ -93,25 +93,25 @@ void simple_ifs () {
 
   int value = 42;
   if_then(_1 < 0, _1 = 0)(value);
-  BOOST_TEST(value == 42);
+  BOOST_CHECK(value == 42);
 
   value = -42;
   if_then(_1 < 0, _1 = -_1)(value);
-  BOOST_TEST(value == 42);
+  BOOST_CHECK(value == 42);
 
   int min;
   if_then_else(_1 < _2, boost::lambda::var(min) = _1, boost::lambda::var(min) = _2)
      (make_const(1), make_const(2));
-  BOOST_TEST(min == 1);
+  BOOST_CHECK(min == 1);
 
   if_then_else(_1 < _2, boost::lambda::var(min) = _1, boost::lambda::var(min) = _2)
      (make_const(5), make_const(3));
-  BOOST_TEST(min == 3);
+  BOOST_CHECK(min == 3);
 
   int x, y;
   x = -1; y = 1;
-  BOOST_TEST(if_then_else_return(_1 < _2, _2, _1)(x, y) == (std::max)(x ,y));
-  BOOST_TEST(if_then_else_return(_1 < _2, _2, _1)(y, x) == (std::max)(x ,y));
+  BOOST_CHECK(if_then_else_return(_1 < _2, _2, _1)(x, y) == (std::max)(x ,y));
+  BOOST_CHECK(if_then_else_return(_1 < _2, _2, _1)(y, x) == (std::max)(x ,y));
 }
 
 

@@ -60,7 +60,7 @@ int test_main(int, char *[]) {
         ]
     );
 
-    BOOST_TEST(sum == 4+5+6+7+8);
+    BOOST_CHECK(sum == 4+5+6+7+8);
 
     int gt = 0, eq = 0, lt = 0;
     //////////////////////////////////
@@ -82,9 +82,9 @@ int test_main(int, char *[]) {
         ]
     );
 
-    BOOST_TEST(lt==4);
-    BOOST_TEST(eq==1);
-    BOOST_TEST(gt==5);
+    BOOST_CHECK(lt==4);
+    BOOST_CHECK(eq==1);
+    BOOST_CHECK(gt==5);
 
     vector<int> t = v;
 
@@ -101,8 +101,8 @@ int test_main(int, char *[]) {
         )
     );
     
-    BOOST_TEST(counta == 55);
-    BOOST_TEST(countb == 10);
+    BOOST_CHECK(counta == 55);
+    BOOST_CHECK(countb == 10);
 
 
     v = t;
@@ -120,8 +120,8 @@ int test_main(int, char *[]) {
         )
     );
 
-    BOOST_TEST(counta == (2+11)*10/2);
-    BOOST_TEST(countb == 10);
+    BOOST_CHECK(counta == (2+11)*10/2);
+    BOOST_CHECK(countb == 10);
 
 
     v = t;
@@ -138,8 +138,8 @@ int test_main(int, char *[]) {
         )
     );
 
-    BOOST_TEST(counta == (1+10)*10/2);
-    BOOST_TEST(countb == 10);
+    BOOST_CHECK(counta == (1+10)*10/2);
+    BOOST_CHECK(countb == 10);
 
     v = t;
 

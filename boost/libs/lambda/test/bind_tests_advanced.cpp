@@ -60,16 +60,16 @@ void test_nested_binds()
   bool condition;
 
   condition = true;
-  BOOST_TEST(bind(bind(&sum_or_product, _1), 1, 2)(condition)==3);
-  BOOST_TEST(bind(bind(&sum_or_product, _1), _2, _3)(condition, j, k)==5);
+  BOOST_CHECK(bind(bind(&sum_or_product, _1), 1, 2)(condition)==3);
+  BOOST_CHECK(bind(bind(&sum_or_product, _1), _2, _3)(condition, j, k)==5);
 
   condition = false;   
-  BOOST_TEST(bind(bind(&sum_or_product, _1), 1, 2)(condition)==2);
-  BOOST_TEST(bind(bind(&sum_or_product, _1), _2, _3)(condition, j, k)==6);
+  BOOST_CHECK(bind(bind(&sum_or_product, _1), 1, 2)(condition)==2);
+  BOOST_CHECK(bind(bind(&sum_or_product, _1), _2, _3)(condition, j, k)==6);
 
 
   which_one wo; 
-  BOOST_TEST(bind(bind(bind(wo), _1), _2, _3)(condition, j, k)==6);   
+  BOOST_CHECK(bind(bind(bind(wo), _1), _2, _3)(condition, j, k)==6);   
 
 
   return;
@@ -109,14 +109,14 @@ void test_unlambda() {
 
   int i = 1;
 
-  BOOST_TEST(unlambda(_1 + _2)(i, i) == 2);
-  BOOST_TEST(unlambda(++var(i))() == 2); 
-  BOOST_TEST(call_with_100(_1 + 1) == 101);
+  BOOST_CHECK(unlambda(_1 + _2)(i, i) == 2);
+  BOOST_CHECK(unlambda(++var(i))() == 2); 
+  BOOST_CHECK(call_with_100(_1 + 1) == 101);
 
 
-  BOOST_TEST(call_with_101(_1 + 1) == 102);
+  BOOST_CHECK(call_with_101(_1 + 1) == 102);
 
-  BOOST_TEST(call_with_100(bind(std_functor(std::bind1st(std::plus<int>(), 1)), _1)) == 101);
+  BOOST_CHECK(call_with_100(bind(std_functor(std::bind1st(std::plus<int>(), 1)), _1)) == 101);
 
   // std_functor insturcts LL that the functor defines a result_type typedef
   // rather than a sig template.
@@ -200,7 +200,7 @@ void test_protect()
            bind(ll::for_each(), _1, _1 + 5, 
                 protect(sum += _1))
                );
-  BOOST_TEST(sum == (1+15)*15/2);
+  BOOST_CHECK(sum == (1+15)*15/2);
 
   sum = 0;
 
@@ -208,17 +208,17 @@ void test_protect()
            bind(ll::for_each(), _1, _1 + 5, 
                 sum += 1 + protect(_1)) // add element count 
                );
-  BOOST_TEST(sum == (1+15)*15/2 + 15);
+  BOOST_CHECK(sum == (1+15)*15/2 + 15);
 
   (1 + protect(_1))(sum);
 
   int k = 0; 
   ((k += constant(1)) += protect(constant(2)))();
-  BOOST_TEST(k==1);
+  BOOST_CHECK(k==1);
 
   k = 0; 
   ((k += constant(1)) += protect(constant(2)))()();
-  BOOST_TEST(k==3);
+  BOOST_CHECK(k==3);
 
   // note, the following doesn't work:
 
@@ -276,10 +276,10 @@ void test_lambda_functors_as_arguments_to_lambda_functors() {
     // sum_0() + 7, but rather
     // bind(sum_0) + 7, which results in another lambda functor
     // (lambda functor + int) and can be called again
-  BOOST_TEST((_1 + _2)(bind(&sum_0), make_const(7))() == 7); 
+  BOOST_CHECK((_1 + _2)(bind(&sum_0), make_const(7))() == 7); 
    
   int i = 3, j = 12; 
-  BOOST_TEST((_1 - _2)(_2, _1)(i, j) == j - i);
+  BOOST_CHECK((_1 - _2)(_2, _1)(i, j) == j - i);
 
   // also, note that lambda functor are no special case for bind if received
   // as a parameter. In oder to be bindable, the functor must
@@ -292,12 +292,12 @@ void test_lambda_functors_as_arguments_to_lambda_functors() {
   int a = 5, b = 6;
 
   // Let type deduction find out the return type
-  BOOST_TEST(bind(_1, _2, _3)(unlambda(_1 + _2), a, b) == 11);
+  BOOST_CHECK(bind(_1, _2, _3)(unlambda(_1 + _2), a, b) == 11);
 
   //specify it yourself:
-  BOOST_TEST(bind(_1, _2, _3)(ret<int>(_1 + _2), a, b) == 11);
-  BOOST_TEST(ret<int>(bind(_1, _2, _3))(_1 + _2, a, b) == 11);
-  BOOST_TEST(bind<int>(_1, _2, _3)(_1 + _2, a, b) == 11);
+  BOOST_CHECK(bind(_1, _2, _3)(ret<int>(_1 + _2), a, b) == 11);
+  BOOST_CHECK(ret<int>(bind(_1, _2, _3))(_1 + _2, a, b) == 11);
+  BOOST_CHECK(bind<int>(_1, _2, _3)(_1 + _2, a, b) == 11);
 
   bind(_1,1.0)(_1+_1);
   return; 
@@ -310,10 +310,10 @@ void test_const_parameters() {
   //  (_1 + _2)(1, 2); // this would fail, 
 
   // Either make arguments const:
-  BOOST_TEST((_1 + _2)(make_const(1), make_const(2)) == 3); 
+  BOOST_CHECK((_1 + _2)(make_const(1), make_const(2)) == 3); 
 
   // Or use const_parameters:
-  BOOST_TEST(const_parameters(_1 + _2)(1, 2) == 3);
+  BOOST_CHECK(const_parameters(_1 + _2)(1, 2) == 3);
 
 
 
@@ -323,7 +323,7 @@ void test_rvalue_arguments()
 {
   // Not quite working yet.
   // Problems with visual 7.1
-  // BOOST_TEST((_1 + _2)(1, 2) == 3);
+  // BOOST_CHECK((_1 + _2)(1, 2) == 3);
 }
 
 void test_break_const() 
@@ -348,7 +348,7 @@ void test_break_const()
   //  OLD COMMENT: (_1 += _2)(i, 2) // fails, 2 is a non-const rvalue  
   //  OLD COMMENT:  const_parameters(_1 += _2)(i, 2) // fails, side-effect to i
   break_const(_1 += _2)(i, 2); // ok
-  BOOST_TEST(i == 3);
+  BOOST_CHECK(i == 3);
 }
 
 int test_main(int, char *[]) {

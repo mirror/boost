@@ -52,7 +52,7 @@ int test_main(int argc, char * argv[] ) {
   os1 << set_close(']');
   os1 << set_delimiter(',');
   os1 << make_tuple(1, 2, 3);
-  BOOST_TEST (os1.str() == std::string("[1,2,3]") );
+  BOOST_CHECK (os1.str() == std::string("[1,2,3]") );
 
   {
   useThisOStringStream os2;
@@ -62,13 +62,13 @@ int test_main(int argc, char * argv[] ) {
   os2 << set_delimiter(':');
 #if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   os2 << make_tuple("TUPU", "HUPU", "LUPU", 4.5);
-  BOOST_TEST (os2.str() == std::string("(TUPU:HUPU:LUPU:4.5)") );
+  BOOST_CHECK (os2.str() == std::string("(TUPU:HUPU:LUPU:4.5)") );
 #endif
   }
 
   // The format is still [a, b, c] for os1
   os1 << make_tuple(1, 2, 3);
-  BOOST_TEST (os1.str() == std::string("[1,2,3][1,2,3]") );
+  BOOST_CHECK (os1.str() == std::string("[1,2,3][1,2,3]") );
 
   ofstream tmp("temp.tmp");
 
@@ -86,13 +86,13 @@ int test_main(int argc, char * argv[] ) {
 
 #if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   tmp3 >> j; 
-  BOOST_TEST (tmp3.good() ); 
+  BOOST_CHECK (tmp3.good() ); 
 #endif
    
   tmp3 >> set_delimiter(':');
   tuple<int, int, int> i;
   tmp3 >> i; 
-  BOOST_TEST (tmp3.good() ); 
+  BOOST_CHECK (tmp3.good() ); 
    
   tmp3.close(); 
 
@@ -101,8 +101,8 @@ int test_main(int argc, char * argv[] ) {
   useThisIStringStream is("(100 200 300)"); 
    
   tuple<int, int, int> ti; 
-  BOOST_TEST(bool(is >> ti));
-  BOOST_TEST(ti == make_tuple(100, 200, 300));
+  BOOST_CHECK(bool(is >> ti));
+  BOOST_CHECK(ti == make_tuple(100, 200, 300));
    
 
   // Note that strings are problematic:

@@ -107,32 +107,32 @@ construction_test()
   // MSVC 6.0 just cannot find get without the namespace qualifier
 
   tuple<int> t1;
-  BOOST_TEST(get<0>(t1) == int());
+  BOOST_CHECK(get<0>(t1) == int());
 
   tuple<float> t2(5.5f);
-  BOOST_TEST(get<0>(t2) > 5.4f && get<0>(t2) < 5.6f);
+  BOOST_CHECK(get<0>(t2) > 5.4f && get<0>(t2) < 5.6f);
 
   tuple<foo> t3(foo(12));
-  BOOST_TEST(get<0>(t3) == foo(12));
+  BOOST_CHECK(get<0>(t3) == foo(12));
 
   tuple<double> t4(t2);
-  BOOST_TEST(get<0>(t4) > 5.4 && get<0>(t4) < 5.6);
+  BOOST_CHECK(get<0>(t4) > 5.4 && get<0>(t4) < 5.6);
 
   tuple<int, float> t5;
-  BOOST_TEST(get<0>(t5) == int());
-  BOOST_TEST(get<1>(t5) == float());
+  BOOST_CHECK(get<0>(t5) == int());
+  BOOST_CHECK(get<1>(t5) == float());
 
   tuple<int, float> t6(12, 5.5f);
-  BOOST_TEST(get<0>(t6) == 12);
-  BOOST_TEST(get<1>(t6) > 5.4f && get<1>(t6) < 5.6f);
+  BOOST_CHECK(get<0>(t6) == 12);
+  BOOST_CHECK(get<1>(t6) > 5.4f && get<1>(t6) < 5.6f);
 
   tuple<int, float> t7(t6);
-  BOOST_TEST(get<0>(t7) == 12);
-  BOOST_TEST(get<1>(t7) > 5.4f && get<1>(t7) < 5.6f);
+  BOOST_CHECK(get<0>(t7) == 12);
+  BOOST_CHECK(get<1>(t7) > 5.4f && get<1>(t7) < 5.6f);
 
   tuple<long, double> t8(t6);
-  BOOST_TEST(get<0>(t8) == 12);
-  BOOST_TEST(get<1>(t8) > 5.4f && get<1>(t8) < 5.6f);
+  BOOST_CHECK(get<0>(t8) == 12);
+  BOOST_CHECK(get<1>(t8) > 5.4f && get<1>(t8) < 5.6f);
 
   dummy(
     tuple<no_def_constructor, no_def_constructor, no_def_constructor>(
@@ -175,27 +175,27 @@ void element_access_test()
   int i  = get<0>(t);
   int i2 = get<3>(t);
 
-  BOOST_TEST(i == 1 && i2 == 2);
+  BOOST_CHECK(i == 1 && i2 == 2);
 
   int j  = get<0>(ct);
-  BOOST_TEST(j == 1);
+  BOOST_CHECK(j == 1);
    
   get<0>(t) = 5;
-  BOOST_TEST(t.head == 5);
+  BOOST_CHECK(t.head == 5);
    
   //  get<0>(ct) = 5; // can't assign to const
 
   double e = get<1>(t);
-  BOOST_TEST(e > 2.69 && e < 2.71);
+  BOOST_CHECK(e > 2.69 && e < 2.71);
      
   get<1>(t) = 3.14+i;
-  BOOST_TEST(get<1>(t) > 4.13 && get<1>(t) < 4.15);
+  BOOST_CHECK(get<1>(t) > 4.13 && get<1>(t) < 4.15);
 
   //  get<4>(t) = A(); // can't assign to const
   //  dummy(get<5>(ct)); // illegal index
 
   ++get<0>(t);
-  BOOST_TEST(get<0>(t) == 6);
+  BOOST_CHECK(get<0>(t) == 6);
 
   BOOST_STATIC_ASSERT((boost::is_const<boost::tuples::element<0, tuple<int, float> >::type>::value != true));
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -224,13 +224,13 @@ copy_test()
   tuple<int, char> t1(4, 'a');
   tuple<int, char> t2(5, 'b');
   t2 = t1;
-  BOOST_TEST(get<0>(t1) == get<0>(t2));
-  BOOST_TEST(get<1>(t1) == get<1>(t2));
+  BOOST_CHECK(get<0>(t1) == get<0>(t2));
+  BOOST_CHECK(get<1>(t1) == get<1>(t2));
 
   tuple<long, std::string> t3(2, "a");
   t3 = t1;
-  BOOST_TEST((double)get<0>(t1) == get<0>(t3));
-  BOOST_TEST(get<1>(t1) == get<1>(t3)[0]);
+  BOOST_CHECK((double)get<0>(t1) == get<0>(t3));
+  BOOST_CHECK(get<1>(t1) == get<1>(t3)[0]);
 
 // testing copy and assignment with implicit conversions between elements
 // testing tie
@@ -242,9 +242,9 @@ copy_test()
   int i; char c; double d;
   tie(i, c, d) = make_tuple(1, 'a', 5.5);
   
-  BOOST_TEST(i==1);
-  BOOST_TEST(c=='a');
-  BOOST_TEST(d>5.4 && d<5.6);
+  BOOST_CHECK(i==1);
+  BOOST_CHECK(c=='a');
+  BOOST_CHECK(d>5.4 && d<5.6);
 }
 
 void
@@ -256,10 +256,10 @@ mutate_test()
   get<2>(t1) = false;
   get<3>(t1) = foo(5);
 
-  BOOST_TEST(get<0>(t1) == 6);
-  BOOST_TEST(get<1>(t1) > 2.1f && get<1>(t1) < 2.3f);
-  BOOST_TEST(get<2>(t1) == false);
-  BOOST_TEST(get<3>(t1) == foo(5));
+  BOOST_CHECK(get<0>(t1) == 6);
+  BOOST_CHECK(get<1>(t1) > 2.1f && get<1>(t1) < 2.3f);
+  BOOST_CHECK(get<2>(t1) == false);
+  BOOST_CHECK(get<3>(t1) == foo(5));
 }
 
 // ----------------------------------------------------------------------------
@@ -270,13 +270,13 @@ void
 make_tuple_test()
 {
   tuple<int, char> t1 = make_tuple(5, 'a');
-  BOOST_TEST(get<0>(t1) == 5);
-  BOOST_TEST(get<1>(t1) == 'a');
+  BOOST_CHECK(get<0>(t1) == 5);
+  BOOST_CHECK(get<1>(t1) == 'a');
 
   tuple<int, std::string> t2;
   t2 = make_tuple((short int)2, std::string("Hi"));
-  BOOST_TEST(get<0>(t2) == 2);
-  BOOST_TEST(get<1>(t2) == "Hi");
+  BOOST_CHECK(get<0>(t2) == 2);
+  BOOST_CHECK(get<1>(t2) == "Hi");
 
 
     A a = A(); B b;
@@ -288,7 +288,7 @@ make_tuple_test()
     make_tuple(boost::ref(ca));
      
 // the result of make_tuple is assignable:
-   BOOST_TEST(make_tuple(2, 4, 6) == 
+   BOOST_CHECK(make_tuple(2, 4, 6) == 
              (make_tuple(1, 2, 3) = make_tuple(2, 4, 6)));
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -336,19 +336,19 @@ tie_test()
   foo c(5);
 
   tie(a, b, c) = make_tuple(2, 'a', foo(3));
-  BOOST_TEST(a == 2);
-  BOOST_TEST(b == 'a');
-  BOOST_TEST(c == foo(3));
+  BOOST_CHECK(a == 2);
+  BOOST_CHECK(b == 'a');
+  BOOST_CHECK(c == foo(3));
 
   tie(a, tuples::ignore, c) = make_tuple((short int)5, false, foo(5));
-  BOOST_TEST(a == 5);
-  BOOST_TEST(b == 'a');
-  BOOST_TEST(c == foo(5));
+  BOOST_CHECK(a == 5);
+  BOOST_CHECK(b == 'a');
+  BOOST_CHECK(c == foo(5));
 
 // testing assignment from std::pair
    int i, j; 
    tie (i, j) = std::make_pair(1, 2);
-   BOOST_TEST(i == 1 && j == 2);
+   BOOST_CHECK(i == 1 && j == 2);
 
    tuple<int, int, float> ta;
 #ifdef E11
@@ -368,13 +368,13 @@ equality_test()
 {
   tuple<int, char> t1(5, 'a');
   tuple<int, char> t2(5, 'a');
-  BOOST_TEST(t1 == t2);
+  BOOST_CHECK(t1 == t2);
 
   tuple<int, char> t3(5, 'b');
   tuple<int, char> t4(2, 'a');
-  BOOST_TEST(t1 != t3);
-  BOOST_TEST(t1 != t4);
-  BOOST_TEST(!(t1 != t2));
+  BOOST_CHECK(t1 != t3);
+  BOOST_CHECK(t1 != t4);
+  BOOST_CHECK(!(t1 != t2));
 }
 
 
@@ -388,14 +388,14 @@ ordering_test()
   tuple<int, float> t1(4, 3.3f);
   tuple<short, float> t2(5, 3.3f);
   tuple<long, double> t3(5, 4.4);
-  BOOST_TEST(t1 < t2);
-  BOOST_TEST(t1 <= t2);
-  BOOST_TEST(t2 > t1);
-  BOOST_TEST(t2 >= t1);
-  BOOST_TEST(t2 < t3);
-  BOOST_TEST(t2 <= t3);
-  BOOST_TEST(t3 > t2);
-  BOOST_TEST(t3 >= t2);
+  BOOST_CHECK(t1 < t2);
+  BOOST_CHECK(t1 <= t2);
+  BOOST_CHECK(t2 > t1);
+  BOOST_CHECK(t2 >= t1);
+  BOOST_CHECK(t2 < t3);
+  BOOST_CHECK(t2 <= t3);
+  BOOST_CHECK(t3 > t2);
+  BOOST_CHECK(t3 >= t2);
 
 }
 
@@ -412,7 +412,7 @@ void cons_test()
   cons<const int, cons<volatile float, null_type> > b(2,a);
   int i = 3;
   cons<int&, cons<const int, cons<volatile float, null_type> > > c(i, b);
-  BOOST_TEST(make_tuple(3,2,1)==c);
+  BOOST_CHECK(make_tuple(3,2,1)==c);
 
   cons<char, cons<int, cons<float, null_type> > > x;
   dummy(x);
@@ -424,8 +424,8 @@ void cons_test()
 void const_tuple_test()
 {
   const tuple<int, float> t1(5, 3.3f);
-  BOOST_TEST(get<0>(t1) == 5);
-  BOOST_TEST(get<1>(t1) == 3.3f);
+  BOOST_CHECK(get<0>(t1) == 5);
+  BOOST_CHECK(get<1>(t1) == 3.3f);
 }
 
 // ----------------------------------------------------------------------------

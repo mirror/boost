@@ -41,7 +41,7 @@ void test_foreach() {
                 bind(ll::for_each(), _1, _1 + 20, 
                      protect((sum += _1))));
 
-  BOOST_TEST(sum == (199 + 1)/ 2 * 199);
+  BOOST_CHECK(sum == (199 + 1)/ 2 * 199);
 }
 
 // More tests needed (for all algorithms)

@@ -53,25 +53,25 @@ using boost::lambda::is_instance_of_3;
 using boost::lambda::is_instance_of_4;
 
 
-BOOST_TEST((is_instance_of_1<B1, A1>::value == true));
-BOOST_TEST((is_instance_of_1<A1<float>, A1>::value == true));
-BOOST_TEST((is_instance_of_1<int, A1>::value == false));
-BOOST_TEST((is_instance_of_1<C1, A1>::value == false));
+BOOST_CHECK((is_instance_of_1<B1, A1>::value == true));
+BOOST_CHECK((is_instance_of_1<A1<float>, A1>::value == true));
+BOOST_CHECK((is_instance_of_1<int, A1>::value == false));
+BOOST_CHECK((is_instance_of_1<C1, A1>::value == false));
 
-BOOST_TEST((is_instance_of_2<B2, A2>::value == true));
-BOOST_TEST((is_instance_of_2<A2<int, float>, A2>::value == true));
-BOOST_TEST((is_instance_of_2<int, A2>::value == false));
-BOOST_TEST((is_instance_of_2<C2, A2>::value == false));
+BOOST_CHECK((is_instance_of_2<B2, A2>::value == true));
+BOOST_CHECK((is_instance_of_2<A2<int, float>, A2>::value == true));
+BOOST_CHECK((is_instance_of_2<int, A2>::value == false));
+BOOST_CHECK((is_instance_of_2<C2, A2>::value == false));
 
-BOOST_TEST((is_instance_of_3<B3, A3>::value == true));
-BOOST_TEST((is_instance_of_3<A3<int, float, char>, A3>::value == true));
-BOOST_TEST((is_instance_of_3<int, A3>::value == false));
-BOOST_TEST((is_instance_of_3<C3, A3>::value == false));
+BOOST_CHECK((is_instance_of_3<B3, A3>::value == true));
+BOOST_CHECK((is_instance_of_3<A3<int, float, char>, A3>::value == true));
+BOOST_CHECK((is_instance_of_3<int, A3>::value == false));
+BOOST_CHECK((is_instance_of_3<C3, A3>::value == false));
 
-BOOST_TEST((is_instance_of_4<B4, A4>::value == true));
-BOOST_TEST((is_instance_of_4<A4<int, float, char, double>, A4>::value == true));
-BOOST_TEST((is_instance_of_4<int, A4>::value == false));
-BOOST_TEST((is_instance_of_4<C4, A4>::value == false));
+BOOST_CHECK((is_instance_of_4<B4, A4>::value == true));
+BOOST_CHECK((is_instance_of_4<A4<int, float, char, double>, A4>::value == true));
+BOOST_CHECK((is_instance_of_4<int, A4>::value == false));
+BOOST_CHECK((is_instance_of_4<C4, A4>::value == false));
 
 return 0;
 

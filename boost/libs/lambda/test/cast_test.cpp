@@ -53,46 +53,46 @@ void do_test() {
   (var(b) = ll_static_cast<base *>(p_derived))();
   (var(d) = ll_static_cast<derived *>(b))();
   
-  BOOST_TEST(b->class_name() == "derived");
-  BOOST_TEST(d->class_name() == "derived");
+  BOOST_CHECK(b->class_name() == "derived");
+  BOOST_CHECK(d->class_name() == "derived");
 
   (var(b) = ll_dynamic_cast<derived *>(b))();
-  BOOST_TEST(b != 0);
-  BOOST_TEST(b->class_name() == "derived");
+  BOOST_CHECK(b != 0);
+  BOOST_CHECK(b->class_name() == "derived");
 
   (var(d) = ll_dynamic_cast<derived *>(p_base))();
-  BOOST_TEST(d == 0);
+  BOOST_CHECK(d == 0);
 
   
 
   const derived* p_const_derived = p_derived;
 
-  BOOST_TEST(p_const_derived->class_name() == "const derived");
+  BOOST_CHECK(p_const_derived->class_name() == "const derived");
   (var(d) = ll_const_cast<derived *>(p_const_derived))();
-  BOOST_TEST(d->class_name() == "derived");
+  BOOST_CHECK(d->class_name() == "derived");
 
   int i = 10;
   char* cp = reinterpret_cast<char*>(&i);
 
   int* ip;
   (var(ip) = ll_reinterpret_cast<int *>(cp))();
-  BOOST_TEST(*ip == 10);
+  BOOST_CHECK(*ip == 10);
 
 
   // typeid 
 
-  BOOST_TEST(string(ll_typeid(d)().name()) == string(typeid(d).name()));
+  BOOST_CHECK(string(ll_typeid(d)().name()) == string(typeid(d).name()));
 
  
   // sizeof
 
-  BOOST_TEST(ll_sizeof(_1)(p_derived) == sizeof(p_derived));
-  BOOST_TEST(ll_sizeof(_1)(*p_derived) == sizeof(*p_derived));
-  BOOST_TEST(ll_sizeof(_1)(p_base) == sizeof(p_base));
-  BOOST_TEST(ll_sizeof(_1)(*p_base) == sizeof(*p_base));
+  BOOST_CHECK(ll_sizeof(_1)(p_derived) == sizeof(p_derived));
+  BOOST_CHECK(ll_sizeof(_1)(*p_derived) == sizeof(*p_derived));
+  BOOST_CHECK(ll_sizeof(_1)(p_base) == sizeof(p_base));
+  BOOST_CHECK(ll_sizeof(_1)(*p_base) == sizeof(*p_base));
 
   int an_array[100];
-  BOOST_TEST(ll_sizeof(_1)(an_array) == 100 * sizeof(int));
+  BOOST_CHECK(ll_sizeof(_1)(an_array) == 100 * sizeof(int));
 
   delete p_derived;
   delete p_base;

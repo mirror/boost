@@ -96,7 +96,7 @@ void test_unary_operators()
   ok((&_1)(a));
   ok((*_1)(a));
 
-  BOOST_TEST((*_1)(make_const(&i)) == 1);
+  BOOST_CHECK((*_1)(make_const(&i)) == 1);
 }
 
 class X {};

@@ -50,65 +50,65 @@ void pointer_to_data_member_tests() {
   //  int i = 0;
   my_struct *y = &x;
 
-  BOOST_TEST((_1 ->* &my_struct::mem)(y) == 3);
+  BOOST_CHECK((_1 ->* &my_struct::mem)(y) == 3);
 
   (_1 ->* &my_struct::mem)(y) = 4;
-  BOOST_TEST(x.mem == 4);
+  BOOST_CHECK(x.mem == 4);
 
   ((_1 ->* &my_struct::mem) = 5)(y);
-  BOOST_TEST(x.mem == 5);
+  BOOST_CHECK(x.mem == 5);
 
   // &my_struct::mem is a temporary, must be constified
   ((y ->* _1) = 6)(make_const(&my_struct::mem));
-  BOOST_TEST(x.mem == 6);
+  BOOST_CHECK(x.mem == 6);
 
   ((_1 ->* _2) = 7)(y, make_const(&my_struct::mem));
-  BOOST_TEST(x.mem == 7);
+  BOOST_CHECK(x.mem == 7);
 
 }
 
 void pointer_to_member_function_tests() {  
 
   my_struct *y = new my_struct(1);
-  BOOST_TEST( (_1 ->* &my_struct::foo)(y)() == (y->mem));
-  BOOST_TEST( (_1 ->* &my_struct::fooc)(y)() == (y->mem));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo))() == (y->mem));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::fooc))() == (y->mem));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo))() == (y->mem));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::fooc))() == (y->mem));
+  BOOST_CHECK( (_1 ->* &my_struct::foo)(y)() == (y->mem));
+  BOOST_CHECK( (_1 ->* &my_struct::fooc)(y)() == (y->mem));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo))() == (y->mem));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::fooc))() == (y->mem));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo))() == (y->mem));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::fooc))() == (y->mem));
 
-  BOOST_TEST( (_1 ->* &my_struct::foo1)(y)(1) == (y->mem+1));
-  BOOST_TEST( (_1 ->* &my_struct::foo1c)(y)(1) == (y->mem+1));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo1))(1) == (y->mem+1));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo1c))(1) == (y->mem+1));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo1))(1) == (y->mem+1));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo1c))(1) == (y->mem+1));
+  BOOST_CHECK( (_1 ->* &my_struct::foo1)(y)(1) == (y->mem+1));
+  BOOST_CHECK( (_1 ->* &my_struct::foo1c)(y)(1) == (y->mem+1));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo1))(1) == (y->mem+1));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo1c))(1) == (y->mem+1));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo1))(1) == (y->mem+1));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo1c))(1) == (y->mem+1));
 
-  BOOST_TEST( (_1 ->* &my_struct::foo2)(y)(1,2) == (y->mem+1+2));
-  BOOST_TEST( (_1 ->* &my_struct::foo2c)(y)(1,2) == (y->mem+1+2));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo2))(1,2) == (y->mem+1+2));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo2c))(1,2) == (y->mem+1+2));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo2))(1,2) == (y->mem+1+2));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo2c))(1,2) == (y->mem+1+2));
+  BOOST_CHECK( (_1 ->* &my_struct::foo2)(y)(1,2) == (y->mem+1+2));
+  BOOST_CHECK( (_1 ->* &my_struct::foo2c)(y)(1,2) == (y->mem+1+2));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo2))(1,2) == (y->mem+1+2));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo2c))(1,2) == (y->mem+1+2));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo2))(1,2) == (y->mem+1+2));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo2c))(1,2) == (y->mem+1+2));
 
-  BOOST_TEST( (_1 ->* &my_struct::foo3)(y)(1,2,3) == (y->mem+1+2+3));
-  BOOST_TEST( (_1 ->* &my_struct::foo3c)(y)(1,2,3) == (y->mem+1+2+3));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo3))(1,2,3) == (y->mem+1+2+3));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo3c))(1,2,3) == (y->mem+1+2+3));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo3))(1,2,3) == (y->mem+1+2+3));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo3c))(1,2,3) == (y->mem+1+2+3));
+  BOOST_CHECK( (_1 ->* &my_struct::foo3)(y)(1,2,3) == (y->mem+1+2+3));
+  BOOST_CHECK( (_1 ->* &my_struct::foo3c)(y)(1,2,3) == (y->mem+1+2+3));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo3))(1,2,3) == (y->mem+1+2+3));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo3c))(1,2,3) == (y->mem+1+2+3));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo3))(1,2,3) == (y->mem+1+2+3));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo3c))(1,2,3) == (y->mem+1+2+3));
 
-  BOOST_TEST( (_1 ->* &my_struct::foo4)(y)(1,2,3,4) == (y->mem+1+2+3+4));
-  BOOST_TEST( (_1 ->* &my_struct::foo4c)(y)(1,2,3,4) == (y->mem+1+2+3+4));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo4))(1,2,3,4) == (y->mem+1+2+3+4));
-  BOOST_TEST( (y ->* _1)(make_const(&my_struct::foo4c))(1,2,3,4) == (y->mem+1+2+3+4));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo4))(1,2,3,4) == (y->mem+1+2+3+4));
-  BOOST_TEST( (_1 ->* _2)(y, make_const(&my_struct::foo4c))(1,2,3,4) == (y->mem+1+2+3+4));
+  BOOST_CHECK( (_1 ->* &my_struct::foo4)(y)(1,2,3,4) == (y->mem+1+2+3+4));
+  BOOST_CHECK( (_1 ->* &my_struct::foo4c)(y)(1,2,3,4) == (y->mem+1+2+3+4));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo4))(1,2,3,4) == (y->mem+1+2+3+4));
+  BOOST_CHECK( (y ->* _1)(make_const(&my_struct::foo4c))(1,2,3,4) == (y->mem+1+2+3+4));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo4))(1,2,3,4) == (y->mem+1+2+3+4));
+  BOOST_CHECK( (_1 ->* _2)(y, make_const(&my_struct::foo4c))(1,2,3,4) == (y->mem+1+2+3+4));
 
 
 
   // member functions with default values do not work (inherent language issue)
-  //  BOOST_TEST( (_1 ->* &my_struct::foo3default)(y)() == (y->mem+1+2+3));
+  //  BOOST_CHECK( (_1 ->* &my_struct::foo3default)(y)() == (y->mem+1+2+3));
 
 }
 
@@ -163,21 +163,21 @@ void test_overloaded_pointer_to_member()
   A a; B b;
 
   // this won't work, can't deduce the return type
-  //  BOOST_TEST((_1->*_2)(a, b) == false); 
+  //  BOOST_CHECK((_1->*_2)(a, b) == false); 
 
   // ret<bool> gives the return type
-  BOOST_TEST(ret<bool>(_1->*_2)(a, b) == false);
-  BOOST_TEST(ret<bool>(a->*_1)(b) == false);
-  BOOST_TEST(ret<bool>(_1->*b)(a) == false);
-  BOOST_TEST((ret<bool>((var(a))->*b))() == false);
-  BOOST_TEST((ret<bool>((var(a))->*var(b)))() == false);
+  BOOST_CHECK(ret<bool>(_1->*_2)(a, b) == false);
+  BOOST_CHECK(ret<bool>(a->*_1)(b) == false);
+  BOOST_CHECK(ret<bool>(_1->*b)(a) == false);
+  BOOST_CHECK((ret<bool>((var(a))->*b))() == false);
+  BOOST_CHECK((ret<bool>((var(a))->*var(b)))() == false);
 
 
   // this is ok without ret<bool> due to the return_type_2 spcialization above
-  BOOST_TEST((_1->*_2)(b, a) == true);
-  BOOST_TEST((b->*_1)(a) == true);
-  BOOST_TEST((_1->*a)(b) == true);
-  BOOST_TEST((var(b)->*a)() == true);
+  BOOST_CHECK((_1->*_2)(b, a) == true);
+  BOOST_CHECK((b->*_1)(a) == true);
+  BOOST_CHECK((_1->*a)(b) == true);
+  BOOST_CHECK((var(b)->*a)() == true);
   return;
 }
 
