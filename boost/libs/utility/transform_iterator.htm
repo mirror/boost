@@ -71,8 +71,11 @@ public:
 
 <p>
 The following is an example of how to use the
-<tt>transform_iterator_generator</tt> class to iterate through a range of
-numbers, multiplying each of them by 2 when they are dereferenced.
+<tt>transform_iterator_generator</tt> class to iterate through a range
+of numbers, multiplying each of them by 2 when they are dereferenced.
+The <tt>boost::binder1st</tt> class is used instead of the standard
+one because tranform iterator requires the function object to be
+Default Constructible.
 
 <p>
 <PRE>
@@ -80,16 +83,18 @@ numbers, multiplying each of them by 2 when they are dereferenced.
 #include &lt;iostream&gt;
 #include &lt;boost/iterator_adaptors.hpp&gt;
 
+// definition of class boost::binder1st and function boost::bind1st() ...
+
 int
 main(int, char*[])
 {
   int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
-  typedef std::binder1st&lt; std::multiplies&lt;int&gt; &gt; Function;
+  typedef boost::binder1st&lt; std::multiplies&lt;int&gt; &gt; Function;
   typedef boost::transform_iterator_generator&lt;Function, int*&gt;::type doubling_iterator;
 
-  doubling_iterator i(x, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
-    i_end(x + sizeof(x)/sizeof(int), std::bind1st(std::multiplies&lt;int&gt;(), 2));
+  doubling_iterator i(x, boost::bind1st(std::multiplies&lt;int&gt;(), 2)),
+    i_end(x + sizeof(x)/sizeof(int), boost::bind1st(std::multiplies&lt;int&gt;(), 2));
 
   std::cout &lt;&lt; "multiplying the array by 2:" &lt;&lt; std::endl;
   while (i != i_end)
@@ -111,14 +116,17 @@ The output from this part is:
 </TR>
 
 <TR>
-<TD><a href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html"><tt>AdaptableUnaryFunction</tt></a></TD>
+<TD><a
+href="http://www.sgi.com/tech/stl/AdaptableUnaryFunction.html"><tt>AdaptableUnaryFunction</tt></a></TD>
 <TD>The function object that transforms each element in the iterator
 range.  The <tt>argument_type</tt> of the function object must match
 the value type of the base iterator.  The <tt>result_type</tt> of the
 function object will be the resulting iterator's
 <tt>value_type</tt>. If you want the resulting iterator to behave as
 an iterator, the result of the function should be solely a function of
-its argument.</TD>
+its argument. Also, the function object must be <a
+href="http://www.sgi.com/tech/stl/DefaultConstructible.html"> Default
+Constructible</a> (which many of the standard function objects are not).</TD>
 </TR>
 
 <TR>
@@ -173,8 +181,8 @@ function to add four to each element of the array.
 <pre>
   std::cout << "adding 4 to each element in the array:" << std::endl;
 
-  std::copy(boost::make_transform_iterator(x, std::bind1st(std::plus<int>(), 4)),
-	    boost::make_transform_iterator(x + N, std::bind1st(std::plus<int>(), 4)),
+  std::copy(boost::make_transform_iterator(x, boost::bind1st(std::plus<int>(), 4)),
+	    boost::make_transform_iterator(x + N, boost::bind1st(std::plus<int>(), 4)),
 	    std::ostream_iterator<int>(std::cout, " "));
   std::cout << std::endl;
 
