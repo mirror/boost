@@ -9,8 +9,8 @@
        be output. -->
   <xsl:param name="boost.doxygen.headers" select="''"/>
 
-  <!-- Prefix all of the headers output with this string -->
-  <xsl:param name="boost.doxygen.header.prefix" select="''"/>
+  <!-- The common prefix to all headers -->
+  <xsl:param name="boost.doxygen.header.prefix" select="'boost'"/>
 
   <!-- The text that Doxygen places in overloaded functions. Damn them
        for forcing us to compare TEXT just to figure out what's overloaded
@@ -276,14 +276,9 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
     <xsl:if test="$include-header='yes'">
       <header>
         <xsl:attribute name="name">
-          <xsl:value-of select="$boost.doxygen.header.prefix"/>
-          <xsl:if 
-            test="not(substring($boost.doxygen.header.prefix, 
-                                string-length($boost.doxygen.header.prefix))
-                      = '/')">
-            <xsl:text>/</xsl:text>
-          </xsl:if>
-          <xsl:value-of select="string(compoundname)"/>
+          <xsl:call-template name="shorten.header.name">
+            <xsl:with-param name="header" select="location/attribute::file"/>
+          </xsl:call-template>
         </xsl:attribute>
         
         <xsl:if test="briefdescription/*|detaileddescription/*">
@@ -299,6 +294,35 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
       </header>
     </xsl:if>
   </xsl:template>
+
+  <xsl:template name="shorten.header.name">
+    <xsl:param name="header"/>
+
+    <xsl:variable name="prefix">
+      <xsl:value-of select="concat($boost.doxygen.header.prefix, '/')"/>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="contains($header, $prefix)">
+        <xsl:variable name="rest" select="substring-after($header, $prefix)"/>
+        <xsl:choose>
+          <xsl:when test="contains($rest, $prefix)">
+            <xsl:call-template name="shorten.header.name">
+              <xsl:with-param name="header" select="$rest"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$prefix"/>
+            <xsl:value-of select="$rest"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$header"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 
   <xsl:template match="innernamespace">
     <xsl:param name="with-namespace-refs"/>
