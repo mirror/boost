@@ -10,17 +10,8 @@ include testing.jam ;
 DEPENDS all : test ;
 
 {
-    # look in BOOST_ROOT for sources first, just in this Jamfile
-    local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
+  # look in BOOST_ROOT for sources first, just in this Jamfile
+  local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
 
-   test-suite Optional :
-     [ run optional_test.cpp ]
-     [ compile-fail optional_test.cpp <define>SHOW_COMPILATION_FAIL_1]
-     [ compile-fail optional_test.cpp <define>SHOW_COMPILATION_FAIL_2]
-     [ compile-fail optional_test.cpp <define>SHOW_COMPILATION_FAIL_3]
-     [ compile-fail optional_test.cpp <define>SHOW_COMPILATION_FAIL_4a]
-     [ compile-fail optional_test.cpp <define>SHOW_COMPILATION_FAIL_4b]
-     [ compile-fail optional_test.cpp <define>SHOW_COMPILATION_FAIL_5a]
-     [ compile-fail optional_test.cpp <define>SHOW_COMPILATION_FAIL_5b]
-     ;
+  test-suite optional : [ run libs/optional/test/optional_test.cpp ] ;
 }
