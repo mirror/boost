@@ -235,18 +235,33 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Conversion
-        // FIXME: GCC 3.1 warn's, if enabled
-#ifndef __GNUC__
         BOOST_UBLAS_INLINE
         operator data_const_reference () const {
             return d_;
         }
-#endif
+#ifdef BOOST_UBLAS_DEPRECATED
         BOOST_UBLAS_INLINE
         operator data_reference () {
             dirty_ = true;
             return d_;
         }
+#endif
+
+        // Swapping
+        BOOST_UBLAS_INLINE
+        void swap (sparse_storage_element p) {
+            if (this != &p) {
+                dirty_ = true;
+                p.dirty_ = true;
+                std::swap (d_, p.d_);
+            }
+        }
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
+        BOOST_UBLAS_INLINE
+        friend void swap (sparse_storage_element p1, sparse_storage_element p2) {
+            p1.swap (p2);
+        }
+#endif
 
     private:
         pointer it_;

@@ -994,8 +994,15 @@ namespace boost { namespace numeric { namespace ublas {
                                   > builtins;
         typedef typename boost::mpl::find<builtins, T1>::type iter1;
         typedef typename boost::mpl::find<builtins, T2>::type iter2;
-        BOOST_STATIC_CONSTANT (int, index1 = iter1::pos::value);
-        BOOST_STATIC_CONSTANT (int, index2 = iter2::pos::value);
+        typedef typename iter1::pos pos1;
+        typedef typename iter2::pos pos2;
+#ifndef __BORLANDC__
+        BOOST_STATIC_CONSTANT (int, index1 = pos1::value);
+        BOOST_STATIC_CONSTANT (int, index2 = pos2::value);
+#else
+        enum { index1 = pos1::value };
+        enum { index2 = pos2::value };
+#endif
         typedef typename boost::mpl::if_c<index1 >= index2,
                                           iter1,
                                           iter2>::type::type builtin_promote_type;

@@ -186,17 +186,19 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Swapping
         BOOST_UBLAS_INLINE
-        void swap (hermitian_matrix_element &p) {
+        void swap (hermitian_matrix_element p) {
             if (this != &p) {
                 dirty_ = true;
                 p.dirty_ = true;
                 std::swap (d_, p.d_);
             }
         }
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
-        friend void swap (hermitian_matrix_element &p1, hermitian_matrix_element &p2) {
+        friend void swap (hermitian_matrix_element p1, hermitian_matrix_element p2) {
             p1.swap (p2);
         }
+#endif
 
     private:
         size_type i_;
