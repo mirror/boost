@@ -10,20 +10,20 @@
 #
 # /* See http://www.boost.org for most recent version. */
 #
-# ifndef BOOST_PREPROCESSOR_SET_TO_ARRAY_HPP
-# define BOOST_PREPROCESSOR_SET_TO_ARRAY_HPP
+# ifndef BOOST_PREPROCESSOR_SEQ_INSERT_HPP
+# define BOOST_PREPROCESSOR_SEQ_INSERT_HPP
 #
 # include <boost/preprocessor/config/config.hpp>
-# include <boost/preprocessor/set/enum.hpp>
-# include <boost/preprocessor/set/size.hpp>
+# include <boost/preprocessor/seq/first_n.hpp>
+# include <boost/preprocessor/seq/rest_n.hpp>
 #
-# /* BOOST_PP_SET_TO_ARRAY */
+# /* BOOST_PP_SEQ_INSERT */
 #
 # if ~BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
-#    define BOOST_PP_SET_TO_ARRAY(set) (BOOST_PP_SET_SIZE(set), (BOOST_PP_SET_ENUM(set)))
+#    define BOOST_PP_SEQ_INSERT(seq, i, elem) BOOST_PP_SEQ_FIRST_N(i, seq) (elem) BOOST_PP_SEQ_REST_N(i, seq)
 # else
-#    define BOOST_PP_SET_TO_ARRAY(set) BOOST_PP_SET_TO_ARRAY_I(set)
-#    define BOOST_PP_SET_TO_ARRAY_I(set) (BOOST_PP_SET_SIZE(set), (BOOST_PP_SET_ENUM(set)))
+#    define BOOST_PP_SEQ_INSERT(seq, i, elem) BOOST_PP_SEQ_INSERT_I(seq, i, elem)
+#    define BOOST_PP_SEQ_INSERT_I(seq, i, elem) BOOST_PP_SEQ_FIRST_N(i, seq) (elem) BOOST_PP_SEQ_REST_N(i, seq)
 # endif
 #
 # endif
