@@ -446,7 +446,7 @@
 //  end of compiler specific portion  ----------------------------------------//
 
 #if defined(BOOST_NO_LIMITS) || \
-  (defined(_RWSTD_VER) && _RWSTD_VER < 0x020300) || \
+  (defined(_RWSTD_VER) && defined(__BORLANDC__) && _RWSTD_VER < 0x020300) || \
   (defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x410 && __STL_STATIC_CONST_INIT_BUG)
 // STLPort 4.0 doesn't define the static constants in numeric_limits<> so that they
 // can be used at compile time if the compiler bug indicated by
@@ -454,7 +454,7 @@
 
 // Rogue wave STL (C++ Builder) also has broken numeric_limits
 // with default template defining members out of line.
-// However, Compaq C++ also uses RogueWave (version 2.03) and it's ok.
+// However, Compaq C++ also uses RogueWave (version 0x0203) and it's ok.
 #   define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #endif
 
