@@ -24,7 +24,6 @@ test_main(int,char*[])
   const array_ref& csma = sma;
 
   // FAIL! data() returns const int*.
-  int* cdptr = csma.data();
-  (void)cdptr; // suppress compiler warnings
+  *csma.data() = 0;
   return boost::exit_success;
 }
