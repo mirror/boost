@@ -9,6 +9,17 @@
 #
 
 #
+# the following environment variables are recognised:
+# CXXFLAGS= extra compiler options - note applies to all build variants
+# INCLUDES= additional include directories
+# LDFLAGS=  additional linker options
+# LIBS=     additional library files
+
+# compiler:
+CXX=g++
+LINKER=g++ -shared
+
+#
 # compiler options for release build:
 #
 C1=-c -O2 -I../../../ -fPIC
@@ -16,23 +27,16 @@ C1=-c -O2 -I../../../ -fPIC
 # compiler options for debug build:
 #
 C2=-c -g -I../../../ -fPIC
-#
-# compiler options for link:
-LINK=-shared
-#
-# Linker to use:
-LINKER=ld
-
 
 
 ALL_HEADER=../../../boost/cregex.hpp ../../../boost/pattern_except.hpp ../../../boost/regex.hpp ../../../boost/regex_traits.hpp ../../../boost/re_detail/fileiter.hpp ../../../boost/re_detail/regex_compile.hpp ../../../boost/re_detail/regex_config.hpp ../../../boost/re_detail/regex_cstring.hpp ../../../boost/re_detail/regex_format.hpp ../../../boost/re_detail/regex_kmp.hpp ../../../boost/re_detail/regex_library_include.hpp ../../../boost/re_detail/regex_match.hpp ../../../boost/re_detail/regex_options.hpp ../../../boost/re_detail/regex_raw_buffer.hpp ../../../boost/re_detail/regex_split.hpp ../../../boost/re_detail/regex_stack.hpp ../../../boost/re_detail/regex_synch.hpp
 
-all : gcc  gcc gcc/regex++ ./gcc/libregex++.so gcc gcc/regex++debug ./gcc/libregex++debug.so
+all : gcc  gcc gcc/boost_regex_shared ./gcc/libboost_regex.so gcc gcc/boost_regex_debug_shared ./gcc/libboost_regex_debug.so
 
 gcc :
 	mkdir -p gcc
 
-clean :  regex++_clean regex++debug_clean
+clean :  boost_regex_clean boost_regex_debug_clean
 
 install : all
 
@@ -40,95 +44,95 @@ install : all
 
 ########################################################
 #
-# section for libregex++.a
+# section for libboost_regex.a
 #
 ########################################################
-gcc/regex++/c_regex_traits.o: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/c_regex_traits.o $(C1) $(XCFLAGS) ../src/c_regex_traits.cpp
+gcc/boost_regex_shared/c_regex_traits.o: ../src/c_regex_traits.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/c_regex_traits.o $(C1) $(CXXFLAGS) ../src/c_regex_traits.cpp
 
-gcc/regex++/c_regex_traits_common.o: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/c_regex_traits_common.o $(C1) $(XCFLAGS) ../src/c_regex_traits_common.cpp
+gcc/boost_regex_shared/c_regex_traits_common.o: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/c_regex_traits_common.o $(C1) $(CXXFLAGS) ../src/c_regex_traits_common.cpp
 
-gcc/regex++/cpp_regex_traits.o: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/cpp_regex_traits.o $(C1) $(XCFLAGS) ../src/cpp_regex_traits.cpp
+gcc/boost_regex_shared/cpp_regex_traits.o: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/cpp_regex_traits.o $(C1) $(CXXFLAGS) ../src/cpp_regex_traits.cpp
 
-gcc/regex++/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/cregex.o $(C1) $(XCFLAGS) ../src/cregex.cpp
+gcc/boost_regex_shared/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/cregex.o $(C1) $(CXXFLAGS) ../src/cregex.cpp
 
-gcc/regex++/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/fileiter.o $(C1) $(XCFLAGS) ../src/fileiter.cpp
+gcc/boost_regex_shared/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/fileiter.o $(C1) $(CXXFLAGS) ../src/fileiter.cpp
 
-gcc/regex++/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/posix_api.o $(C1) $(XCFLAGS) ../src/posix_api.cpp
+gcc/boost_regex_shared/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/posix_api.o $(C1) $(CXXFLAGS) ../src/posix_api.cpp
 
-gcc/regex++/regex.o: ../src/regex.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/regex.o $(C1) $(XCFLAGS) ../src/regex.cpp
+gcc/boost_regex_shared/regex.o: ../src/regex.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/regex.o $(C1) $(CXXFLAGS) ../src/regex.cpp
 
-gcc/regex++/regex_debug.o: ../src/regex_debug.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/regex_debug.o $(C1) $(XCFLAGS) ../src/regex_debug.cpp
+gcc/boost_regex_shared/regex_debug.o: ../src/regex_debug.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/regex_debug.o $(C1) $(CXXFLAGS) ../src/regex_debug.cpp
 
-gcc/regex++/regex_synch.o: ../src/regex_synch.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/regex_synch.o $(C1) $(XCFLAGS) ../src/regex_synch.cpp
+gcc/boost_regex_shared/regex_synch.o: ../src/regex_synch.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/regex_synch.o $(C1) $(CXXFLAGS) ../src/regex_synch.cpp
 
-gcc/regex++/w32_regex_traits.o: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/w32_regex_traits.o $(C1) $(XCFLAGS) ../src/w32_regex_traits.cpp
+gcc/boost_regex_shared/w32_regex_traits.o: ../src/w32_regex_traits.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/w32_regex_traits.o $(C1) $(CXXFLAGS) ../src/w32_regex_traits.cpp
 
-gcc/regex++/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++/wide_posix_api.o $(C1) $(XCFLAGS) ../src/wide_posix_api.cpp
+gcc/boost_regex_shared/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_shared/wide_posix_api.o $(C1) $(CXXFLAGS) ../src/wide_posix_api.cpp
 
-gcc/regex++ : 
-	mkdir -p gcc/regex++
+gcc/boost_regex_shared : 
+	mkdir -p gcc/boost_regex_shared
 
-regex++_clean :
-	rm -f gcc/regex++/*.o
+boost_regex_clean :
+	rm -f gcc/boost_regex_shared/*.o
 
-./gcc/libregex++.so : gcc/regex++/c_regex_traits.o gcc/regex++/c_regex_traits_common.o gcc/regex++/cpp_regex_traits.o gcc/regex++/cregex.o gcc/regex++/fileiter.o gcc/regex++/posix_api.o gcc/regex++/regex.o gcc/regex++/regex_debug.o gcc/regex++/regex_synch.o gcc/regex++/w32_regex_traits.o gcc/regex++/wide_posix_api.o
-	$(LINKER) $(LINK) -o gcc/libregex++.so  gcc/regex++/c_regex_traits.o gcc/regex++/c_regex_traits_common.o gcc/regex++/cpp_regex_traits.o gcc/regex++/cregex.o gcc/regex++/fileiter.o gcc/regex++/posix_api.o gcc/regex++/regex.o gcc/regex++/regex_debug.o gcc/regex++/regex_synch.o gcc/regex++/w32_regex_traits.o gcc/regex++/wide_posix_api.o
+./gcc/libboost_regex.so : gcc/boost_regex_shared/c_regex_traits.o gcc/boost_regex_shared/c_regex_traits_common.o gcc/boost_regex_shared/cpp_regex_traits.o gcc/boost_regex_shared/cregex.o gcc/boost_regex_shared/fileiter.o gcc/boost_regex_shared/posix_api.o gcc/boost_regex_shared/regex.o gcc/boost_regex_shared/regex_debug.o gcc/boost_regex_shared/regex_synch.o gcc/boost_regex_shared/w32_regex_traits.o gcc/boost_regex_shared/wide_posix_api.o
+	$(LINKER) -o gcc/libboost_regex.so $(LDFLAGS)  gcc/boost_regex_shared/c_regex_traits.o gcc/boost_regex_shared/c_regex_traits_common.o gcc/boost_regex_shared/cpp_regex_traits.o gcc/boost_regex_shared/cregex.o gcc/boost_regex_shared/fileiter.o gcc/boost_regex_shared/posix_api.o gcc/boost_regex_shared/regex.o gcc/boost_regex_shared/regex_debug.o gcc/boost_regex_shared/regex_synch.o gcc/boost_regex_shared/w32_regex_traits.o gcc/boost_regex_shared/wide_posix_api.o $(LIBS)
 
 ########################################################
 #
-# section for libregex++debug.a
+# section for libboost_regex_debug.a
 #
 ########################################################
-gcc/regex++debug/c_regex_traits.o: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/c_regex_traits.o $(C2) $(XCFLAGS) ../src/c_regex_traits.cpp
+gcc/boost_regex_debug_shared/c_regex_traits.o: ../src/c_regex_traits.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/c_regex_traits.o $(C2) $(CXXFLAGS) ../src/c_regex_traits.cpp
 
-gcc/regex++debug/c_regex_traits_common.o: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/c_regex_traits_common.o $(C2) $(XCFLAGS) ../src/c_regex_traits_common.cpp
+gcc/boost_regex_debug_shared/c_regex_traits_common.o: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/c_regex_traits_common.o $(C2) $(CXXFLAGS) ../src/c_regex_traits_common.cpp
 
-gcc/regex++debug/cpp_regex_traits.o: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/cpp_regex_traits.o $(C2) $(XCFLAGS) ../src/cpp_regex_traits.cpp
+gcc/boost_regex_debug_shared/cpp_regex_traits.o: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/cpp_regex_traits.o $(C2) $(CXXFLAGS) ../src/cpp_regex_traits.cpp
 
-gcc/regex++debug/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/cregex.o $(C2) $(XCFLAGS) ../src/cregex.cpp
+gcc/boost_regex_debug_shared/cregex.o: ../src/cregex.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/cregex.o $(C2) $(CXXFLAGS) ../src/cregex.cpp
 
-gcc/regex++debug/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/fileiter.o $(C2) $(XCFLAGS) ../src/fileiter.cpp
+gcc/boost_regex_debug_shared/fileiter.o: ../src/fileiter.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/fileiter.o $(C2) $(CXXFLAGS) ../src/fileiter.cpp
 
-gcc/regex++debug/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/posix_api.o $(C2) $(XCFLAGS) ../src/posix_api.cpp
+gcc/boost_regex_debug_shared/posix_api.o: ../src/posix_api.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/posix_api.o $(C2) $(CXXFLAGS) ../src/posix_api.cpp
 
-gcc/regex++debug/regex.o: ../src/regex.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/regex.o $(C2) $(XCFLAGS) ../src/regex.cpp
+gcc/boost_regex_debug_shared/regex.o: ../src/regex.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/regex.o $(C2) $(CXXFLAGS) ../src/regex.cpp
 
-gcc/regex++debug/regex_debug.o: ../src/regex_debug.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/regex_debug.o $(C2) $(XCFLAGS) ../src/regex_debug.cpp
+gcc/boost_regex_debug_shared/regex_debug.o: ../src/regex_debug.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/regex_debug.o $(C2) $(CXXFLAGS) ../src/regex_debug.cpp
 
-gcc/regex++debug/regex_synch.o: ../src/regex_synch.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/regex_synch.o $(C2) $(XCFLAGS) ../src/regex_synch.cpp
+gcc/boost_regex_debug_shared/regex_synch.o: ../src/regex_synch.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/regex_synch.o $(C2) $(CXXFLAGS) ../src/regex_synch.cpp
 
-gcc/regex++debug/w32_regex_traits.o: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/w32_regex_traits.o $(C2) $(XCFLAGS) ../src/w32_regex_traits.cpp
+gcc/boost_regex_debug_shared/w32_regex_traits.o: ../src/w32_regex_traits.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/w32_regex_traits.o $(C2) $(CXXFLAGS) ../src/w32_regex_traits.cpp
 
-gcc/regex++debug/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	g++ -o gcc/regex++debug/wide_posix_api.o $(C2) $(XCFLAGS) ../src/wide_posix_api.cpp
+gcc/boost_regex_debug_shared/wide_posix_api.o: ../src/wide_posix_api.cpp $(ALL_HEADER)
+	$(CXX) $(INCLUDES) -o gcc/boost_regex_debug_shared/wide_posix_api.o $(C2) $(CXXFLAGS) ../src/wide_posix_api.cpp
 
-gcc/regex++debug : 
-	mkdir -p gcc/regex++debug
+gcc/boost_regex_debug_shared : 
+	mkdir -p gcc/boost_regex_debug_shared
 
-regex++debug_clean :
-	rm -f gcc/regex++debug/*.o
+boost_regex_debug_clean :
+	rm -f gcc/boost_regex_debug_shared/*.o
 
-./gcc/libregex++debug.so : gcc/regex++debug/c_regex_traits.o gcc/regex++debug/c_regex_traits_common.o gcc/regex++debug/cpp_regex_traits.o gcc/regex++debug/cregex.o gcc/regex++debug/fileiter.o gcc/regex++debug/posix_api.o gcc/regex++debug/regex.o gcc/regex++debug/regex_debug.o gcc/regex++debug/regex_synch.o gcc/regex++debug/w32_regex_traits.o gcc/regex++debug/wide_posix_api.o
-	$(LINKER) $(LINK) -o gcc/libregex++debug.so  gcc/regex++debug/c_regex_traits.o gcc/regex++debug/c_regex_traits_common.o gcc/regex++debug/cpp_regex_traits.o gcc/regex++debug/cregex.o gcc/regex++debug/fileiter.o gcc/regex++debug/posix_api.o gcc/regex++debug/regex.o gcc/regex++debug/regex_debug.o gcc/regex++debug/regex_synch.o gcc/regex++debug/w32_regex_traits.o gcc/regex++debug/wide_posix_api.o
+./gcc/libboost_regex_debug.so : gcc/boost_regex_debug_shared/c_regex_traits.o gcc/boost_regex_debug_shared/c_regex_traits_common.o gcc/boost_regex_debug_shared/cpp_regex_traits.o gcc/boost_regex_debug_shared/cregex.o gcc/boost_regex_debug_shared/fileiter.o gcc/boost_regex_debug_shared/posix_api.o gcc/boost_regex_debug_shared/regex.o gcc/boost_regex_debug_shared/regex_debug.o gcc/boost_regex_debug_shared/regex_synch.o gcc/boost_regex_debug_shared/w32_regex_traits.o gcc/boost_regex_debug_shared/wide_posix_api.o
+	$(LINKER) -o gcc/libboost_regex_debug.so $(LDFLAGS)  gcc/boost_regex_debug_shared/c_regex_traits.o gcc/boost_regex_debug_shared/c_regex_traits_common.o gcc/boost_regex_debug_shared/cpp_regex_traits.o gcc/boost_regex_debug_shared/cregex.o gcc/boost_regex_debug_shared/fileiter.o gcc/boost_regex_debug_shared/posix_api.o gcc/boost_regex_debug_shared/regex.o gcc/boost_regex_debug_shared/regex_debug.o gcc/boost_regex_debug_shared/regex_synch.o gcc/boost_regex_debug_shared/w32_regex_traits.o gcc/boost_regex_debug_shared/wide_posix_api.o $(LIBS)
 

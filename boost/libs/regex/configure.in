@@ -1013,12 +1013,23 @@ AC_TRY_COMPILE(
 #include <memory>
 #include "confdefs.h"
 
+template <class A>
+struct tester
+{
+	typedef typename A::BOOST_RE_NESTED_TEMPLATE_DECL rebind<int> binder;
+	typedef typename binder::other alloc_type;
+	alloc_type a;
+	tester(A al): a(al) {}
+};
+
 std::allocator<char> a;
 std::allocator<double> d(a);
 
 typedef std::allocator<char> alloc_type;
 
 alloc_type::BOOST_RE_NESTED_TEMPLATE_DECL rebind<int>::other o(a);
+
+tester<std::allocator<char> > t(a);
 ],
 [
 ],
@@ -1683,6 +1694,7 @@ cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/re_detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/re_detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 

@@ -11,7 +11,11 @@
 #
 # Add additional compiler options here:
 #
-XCFLAGS=
+CXXFLAGS=
+#
+# Add additional include directories here:
+#
+INCLUDES=
 #
 # add additional linker flags here:
 #
@@ -57,37 +61,37 @@ main_dir :
 #
 ########################################################
 vc6/vc6-re300/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/c_regex_traits.cpp
 
 vc6/vc6-re300/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/c_regex_traits_common.cpp
 
 vc6/vc6-re300/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/cpp_regex_traits.cpp
 
 vc6/vc6-re300/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/cregex.cpp
 
 vc6/vc6-re300/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/fileiter.cpp
 
 vc6/vc6-re300/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/posix_api.cpp
 
 vc6/vc6-re300/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/regex.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/regex.cpp
 
 vc6/vc6-re300/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/regex_debug.cpp
 
 vc6/vc6-re300/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/regex_synch.cpp
 
 vc6/vc6-re300/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/w32_regex_traits.cpp
 
 vc6/vc6-re300/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(XCFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /c /nologo /ML /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD $(CXXFLAGS) -Fpvc6/vc6-re300/vc6-re300.pch -Fo./vc6/vc6-re300/ -Fdvc6/vc6-re300.pdb ../src/wide_posix_api.cpp
 
 vc6-re300_dir :
 	if not exist "vc6\vc6-re300\$(NULL)" mkdir vc6\vc6-re300
@@ -107,37 +111,37 @@ vc6-re300_clean :
 #
 ########################################################
 vc6/vc6-re300m/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/c_regex_traits.cpp
 
 vc6/vc6-re300m/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/c_regex_traits_common.cpp
 
 vc6/vc6-re300m/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/cpp_regex_traits.cpp
 
 vc6/vc6-re300m/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/cregex.cpp
 
 vc6/vc6-re300m/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/fileiter.cpp
 
 vc6/vc6-re300m/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/posix_api.cpp
 
 vc6/vc6-re300m/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/regex.cpp
 
 vc6/vc6-re300m/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/regex_debug.cpp
 
 vc6/vc6-re300m/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/regex_synch.cpp
 
 vc6/vc6-re300m/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/w32_regex_traits.cpp
 
 vc6/vc6-re300m/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /Oityb1 /GF /Gy /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300m/vc6-re300m.pch -Fo./vc6/vc6-re300m/ -Fdvc6/vc6-re300m.pdb ../src/wide_posix_api.cpp
 
 vc6-re300m_dir :
 	if not exist "vc6\vc6-re300m\$(NULL)" mkdir vc6\vc6-re300m
@@ -157,37 +161,37 @@ vc6-re300m_clean :
 #
 ########################################################
 vc6/vc6-re300d/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/c_regex_traits.cpp
 
 vc6/vc6-re300d/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/c_regex_traits_common.cpp
 
 vc6/vc6-re300d/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/cpp_regex_traits.cpp
 
 vc6/vc6-re300d/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/cregex.cpp
 
 vc6/vc6-re300d/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/fileiter.cpp
 
 vc6/vc6-re300d/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/posix_api.cpp
 
 vc6/vc6-re300d/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/regex.cpp
 
 vc6/vc6-re300d/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/regex_debug.cpp
 
 vc6/vc6-re300d/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/regex_synch.cpp
 
 vc6/vc6-re300d/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/w32_regex_traits.cpp
 
 vc6/vc6-re300d/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(XCFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MLd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c  $(CXXFLAGS) -Fpvc6/vc6-re300d/vc6-re300d.pch -Fo./vc6/vc6-re300d/ -Fdvc6/vc6-re300d.pdb ../src/wide_posix_api.cpp
 
 vc6-re300d_dir :
 	if not exist "vc6\vc6-re300d\$(NULL)" mkdir vc6\vc6-re300d
@@ -207,37 +211,37 @@ vc6-re300d_clean :
 #
 ########################################################
 vc6/vc6-re300dm/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/c_regex_traits.cpp
 
 vc6/vc6-re300dm/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/c_regex_traits_common.cpp
 
 vc6/vc6-re300dm/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/cpp_regex_traits.cpp
 
 vc6/vc6-re300dm/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/cregex.cpp
 
 vc6/vc6-re300dm/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/fileiter.cpp
 
 vc6/vc6-re300dm/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/posix_api.cpp
 
 vc6/vc6-re300dm/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/regex.cpp
 
 vc6/vc6-re300dm/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/regex_debug.cpp
 
 vc6/vc6-re300dm/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/regex_synch.cpp
 
 vc6/vc6-re300dm/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/w32_regex_traits.cpp
 
 vc6/vc6-re300dm/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I..\..\..\ /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dm/vc6-re300dm.pch -Fo./vc6/vc6-re300dm/ -Fdvc6/vc6-re300dm.pdb ../src/wide_posix_api.cpp
 
 vc6-re300dm_dir :
 	if not exist "vc6\vc6-re300dm\$(NULL)" mkdir vc6\vc6-re300dm
@@ -257,37 +261,37 @@ vc6-re300dm_clean :
 #
 ########################################################
 vc6/vc6-re300dl/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/c_regex_traits.cpp
 
 vc6/vc6-re300dl/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/c_regex_traits_common.cpp
 
 vc6/vc6-re300dl/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/cpp_regex_traits.cpp
 
 vc6/vc6-re300dl/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/cregex.cpp
 
 vc6/vc6-re300dl/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/fileiter.cpp
 
 vc6/vc6-re300dl/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/posix_api.cpp
 
 vc6/vc6-re300dl/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/regex.cpp
 
 vc6/vc6-re300dl/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/regex_debug.cpp
 
 vc6/vc6-re300dl/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/regex_synch.cpp
 
 vc6/vc6-re300dl/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/w32_regex_traits.cpp
 
 vc6/vc6-re300dl/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(XCFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I../../../ /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /GZ  /c $(CXXFLAGS) -Fpvc6/vc6-re300dl/vc6-re300dl.pch -Fo./vc6/vc6-re300dl/ -Fdvc6/vc6-re300dl.pdb ../src/wide_posix_api.cpp
 
 vc6-re300dl_dir :
 	if not exist "vc6\vc6-re300dl\$(NULL)" mkdir vc6\vc6-re300dl
@@ -309,37 +313,37 @@ vc6-re300dl_clean :
 #
 ########################################################
 vc6/vc6-re300l/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/c_regex_traits.cpp
 
 vc6/vc6-re300l/c_regex_traits_common.obj: ../src/c_regex_traits_common.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/c_regex_traits_common.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/c_regex_traits_common.cpp
 
 vc6/vc6-re300l/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/cpp_regex_traits.cpp
 
 vc6/vc6-re300l/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/cregex.cpp
 
 vc6/vc6-re300l/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/fileiter.cpp
 
 vc6/vc6-re300l/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/posix_api.cpp
 
 vc6/vc6-re300l/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/regex.cpp
 
 vc6/vc6-re300l/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/regex_debug.cpp
 
 vc6/vc6-re300l/regex_synch.obj: ../src/regex_synch.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/regex_synch.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/regex_synch.cpp
 
 vc6/vc6-re300l/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/w32_regex_traits.cpp
 
 vc6/vc6-re300l/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(XCFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /Oityb1 /GF /Gy /I../../../ /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /DBOOST_RE_DLL_EXPORTS /DBOOST_RE_BUILD_DLL /YX /FD /c $(CXXFLAGS) -Fpvc6/vc6-re300l/vc6-re300l.pch -Fo./vc6/vc6-re300l/ -Fdvc6/vc6-re300l.pdb ../src/wide_posix_api.cpp
 
 vc6-re300l_dir :
 	if not exist "vc6\vc6-re300l\$(NULL)" mkdir vc6\vc6-re300l
