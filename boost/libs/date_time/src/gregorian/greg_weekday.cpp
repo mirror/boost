@@ -2,9 +2,12 @@
 
 /* Copyright (c) 2000 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
+#ifndef BOOST_DATE_TIME_SOURCE
+#define BOOST_DATE_TIME_SOURCE
+#endif
 #include "boost/date_time/gregorian/greg_weekday.hpp"
 
 namespace boost {

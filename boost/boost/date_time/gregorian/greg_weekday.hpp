@@ -2,11 +2,12 @@
 #define GREG_WEEKDAY_HPP___
 /* Copyright (c) 2000 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/constrained_value.hpp"
 #include "boost/date_time/date_defs.hpp"
+#include "boost/date_time/compiler_config.hpp"
 #include <stdexcept>
 #include <string>
 
@@ -33,7 +34,7 @@ namespace gregorian {
 
 
   //! Represent a day within a week (range 0==Sun to 6==Sat)
-  class greg_weekday : public greg_weekday_rep {
+  class BOOST_DATE_TIME_DECL greg_weekday : public greg_weekday_rep {
   public:
     typedef boost::date_time::weekdays weekday_enum;
     greg_weekday(unsigned short day_of_week_num) :

@@ -5,6 +5,9 @@
  * Author: Jeff Garland, Bart Garst 
  */
 
+#ifndef BOOST_DATE_TIME_SOURCE
+#define BOOST_DATE_TIME_SOURCE
+#endif
 #include "boost/date_time/date_generators.hpp"
 
 namespace boost {
@@ -14,8 +17,7 @@ namespace date_time {
     "third", "fourth", "fifth"};
     
   //! Returns nth arg as string. 1 -> "first", 2 -> "second", max is 5.
-  const char*
-  nth_as_str(const int ele)
+  BOOST_DATE_TIME_DECL const char* nth_as_str(const int ele)
   {
     if(ele >= 1 || ele <= 5) {
       return _nth_as_str[ele];
@@ -41,3 +43,4 @@ namespace date_time {
  * representations about the suitability of this software for any
  * purpose.  It is provided "as is" without express or implied warranty.
  */
+

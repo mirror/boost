@@ -7,8 +7,10 @@
 /*! @file date_generators.hpp
   Definition and implementation of date algorithm templates
 */
-
+#include <stdexcept>
+#include <sstream>
 #include "boost/date_time/date.hpp"
+#include "boost/date_time/compiler_config.hpp"
 
 namespace boost {
 namespace date_time {
@@ -34,7 +36,9 @@ namespace date_time {
     Example usage: 
     @code
      partial_date pd(1, Jan);
+     partial_date pd2(70);
      date d = pd.get_date(2002); //2002-Jan-01
+     date d2 = pd2.get_date(2002); //2002-Mar-10
     @endcode
     \ingroup date_alg
    */
@@ -46,18 +50,61 @@ namespace date_time {
     typedef typename calendar_type::month_type       month_type;
     typedef typename calendar_type::year_type        year_type;
     typedef typename date_type::duration_type        duration_type;
+    typedef typename duration_type::duration_rep     duration_rep;
     partial_date(day_type d, month_type m) :
       day_(d),
       month_(m)
     {}
+    //! Partial date created from number of days into year. Range 1-366
+    /*! Allowable values range from 1 to 366. 1=Jan1, 366=Dec31. If argument
+     * exceeds range, partial_date will be created with closest in-range value.
+     * 60 will always be Feb29, if get_date() is called with a non-leap year
+     * an exception will be thrown */
+    partial_date(duration_rep days) :
+      day_(1), // default values
+      month_(1)
+    {
+      date_type d1(2000,1,1);
+      if(days > 1)
+      {
+	if(days > 366) // prevents wrapping
+	{
+	  days = 366;
+	}
+	days = days - 1;
+        duration_type dd(days);
+	d1 = d1 + dd;
+      }
+      day_ = d1.day();
+      month_ = d1.month();
+    }
     //! Return a concrete date when provided with a year specific year.
+    /*! Will throw an 'invalid_argument' exception if a partial_date object,
+     * instantiated with Feb-29, has get_date called with a non-leap year.
+     * Example:
+     * @code
+     * partial_date pd(29, Feb);
+     * pd.get_date(2003); // throws invalid_argument exception
+     * pg.get_date(2000); // returns 2000-2-29
+     * @endcode
+     */
     date_type get_date(year_type y) const
     {
-      return date_type(y, month_, day_);
+      if((day_ == 29) && (month_ == 2) && !(calendar_type::is_leap_year(y)))
+      {
+	std::stringstream ss("");
+	ss << "No Feb 29th in given year of " << y << ".";
+	throw std::invalid_argument(ss.str());
+	//return date_type(1,1,1); // should never reach
+      }
+      else{
+        return date_type(y, month_, day_);
+      }
     }
     date_type operator()(year_type y) const
     {
-      return date_type(y, month_, day_);
+      return get_date(y);
+      //return date_type(y, month_, day_);
     }
     bool operator==(const partial_date& rhs) const
     {
@@ -158,7 +205,7 @@ namespace date_time {
   };
 
   //! Returns nth arg as string. 1 -> "first", 2 -> "second", max is 5.
-  const char* nth_as_str(int n);
+  BOOST_DATE_TIME_DECL const char* nth_as_str(int n);
   
   //! Useful generator functor for finding holidays and daylight savings 
   /*! Similar to nth_kday_of_month, but requires less paramters

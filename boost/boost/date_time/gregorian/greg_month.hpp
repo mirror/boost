@@ -48,7 +48,7 @@ namespace gregorian {
 
   
   //! Wrapper class to represent months in gregorian based calendar
-  class greg_month : public greg_month_rep {
+  class BOOST_DATE_TIME_DECL greg_month : public greg_month_rep {
   public:
     typedef date_time::months_of_year month_enum;
     typedef std::map<std::string, unsigned short> month_map_type;
