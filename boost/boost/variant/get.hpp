@@ -26,6 +26,7 @@
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 #   include "boost/mpl/bool.hpp"
+#   include "boost/mpl/or.hpp"
 #   include "boost/type_traits/is_same.hpp"
 #endif
 
@@ -74,15 +75,15 @@ public: // visitor interfaces
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
-    template <typename U>
-    T* operator()(U&) const
-    {
-        return static_cast<T*>(0);
-    }
-
     T* operator()(T& operand) const
     {
         return boost::addressof(operand);
+    }
+
+    template <typename U>
+    T* operator()(const U&) const
+    {
+        return static_cast<T*>(0);
     }
 
 #else // MSVC6
@@ -95,7 +96,7 @@ private: // helpers, for visitor interfaces (below)
     }
 
     template <typename U>
-    T* execute_impl(U& operand, mpl::false_) const
+    T* execute_impl(const U& operand, mpl::false_) const
     {
         return static_cast<T*>(0);
     }
@@ -108,8 +109,10 @@ public: // visitor interfaces
         // MSVC6 finds normal implementation (above) ambiguous,
         // so we must explicitly disambiguate
 
-        typedef typename is_same<U,T>::type
-            U_is_T;
+        typedef typename mpl::or_<
+              is_same<U, T>
+            , is_same<const U, T>
+            >::type U_is_T;
 
         return execute_impl(operand, U_is_T());
     }

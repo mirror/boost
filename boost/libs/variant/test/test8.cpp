@@ -85,8 +85,8 @@ int test_main(int , char* [])
    // check get on non-const variant
    {
       int& r1 = check_pass<int>(v1, 800);
-      
-      check_fail<const int>(v1);
+      const int& cr1 = check_pass<const int>(v1, 800);
+
       check_fail<float>(v1);
       check_fail<const float>(v1);
       check_fail<short>(v1);
@@ -97,6 +97,7 @@ int test_main(int , char* [])
 
       r1 = 920; // NOTE: modifies content of v1
       apply_visitor(acc, v1);
+      BOOST_CHECK(cr1 == 920);
       BOOST_CHECK(acc.result_ == 800 + 920);
    }
 
