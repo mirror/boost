@@ -110,9 +110,9 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E>
     class vector_expression:
         private nonassignable {
-//FIXME        public expression_base<typename E::value_type> {
+        //FIXME        public expression_base<typename E::value_type> {
     public:
-        BOOST_STATIC_CONSTANT (int, complexity = 0);
+        BOOST_STATIC_CONSTANT (unsigned, complexity = 0);
         typedef E expression_type;
         typedef vector_tag type_category;
         typedef abstract_tag simd_category;
@@ -1780,7 +1780,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_scalar_binary:
         public scalar_expression<typename F::result_type> {
     public:
-        BOOST_STATIC_CONSTANT (int, complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, complexity = 1);
         typedef typename F::size_type size_type;
         typedef typename F::difference_type difference_type;
         typedef typename F::result_type value_type;

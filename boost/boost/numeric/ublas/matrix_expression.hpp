@@ -28,11 +28,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class E>
     struct matrix_expression:
         private nonassignable {
-        BOOST_STATIC_CONSTANT (int, complexity = 0);
+        //FIXME        public expression_base<typename E::value_type> {
+        BOOST_STATIC_CONSTANT (unsigned, complexity = 0);
         typedef E expression_type;
         typedef matrix_tag type_category;
         typedef abstract_tag simd_category;
-        // FIXME: Why doesn't this work?
+        // FIXME: Template instantiation order problem
         // typedef typename E::size_type size_type;
         typedef std::size_t size_type;
         typedef noalias_proxy<E> noalias_proxy_type;
@@ -3636,7 +3637,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_binary1<E1, E2, F> >::operator ();
 #endif
-        BOOST_STATIC_CONSTANT (int, complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, complexity = 1);
         typedef typename promote_traits<typename E1::size_type, typename E2::size_type>::promote_type size_type;
         typedef typename promote_traits<typename E1::difference_type, typename E2::difference_type>::promote_type difference_type;
         typedef typename F::result_type value_type;
@@ -4040,7 +4041,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_binary2<E1, E2, F> >::operator ();
 #endif
-        BOOST_STATIC_CONSTANT (int, complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, complexity = 1);
         typedef typename promote_traits<typename E1::size_type, typename E2::size_type>::promote_type size_type;
         typedef typename promote_traits<typename E1::difference_type, typename E2::difference_type>::promote_type difference_type;
         typedef typename F::result_type value_type;
@@ -4444,7 +4445,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_matrix_binary<E1, E2, F> >::operator ();
 #endif
-        BOOST_STATIC_CONSTANT (int, complexity = 1);
+        BOOST_STATIC_CONSTANT (unsigned, complexity = 1);
         typedef typename promote_traits<typename E1::size_type, typename E2::size_type>::promote_type size_type;
         typedef typename promote_traits<typename E1::difference_type, typename E2::difference_type>::promote_type difference_type;
         typedef typename F::result_type value_type;
