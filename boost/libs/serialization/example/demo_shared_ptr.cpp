@@ -62,6 +62,7 @@ public:
     B::B() : A() {};
     virtual B::~B() {};
 };
+
 /////////////////
 
 int A::count = 0;

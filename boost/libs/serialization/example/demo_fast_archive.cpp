@@ -13,18 +13,21 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/pfto.hpp>
 
+#define BOOST_ARCHIVE
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
-
-using namespace boost::archive;
 
 // include template definitions for base classes used.  Otherwise
 // you'll get link failure with undefined symbols
 #include <boost/archive/impl/basic_binary_oprimitive.ipp>
 #include <boost/archive/impl/basic_binary_iprimitive.ipp>
+#include <boost/archive/impl/basic_binary_oarchive.ipp>
+#include <boost/archive/impl/basic_binary_iarchive.ipp>
 
 #include <boost/archive/impl/archive_pointer_iserializer.ipp>
 #include <boost/archive/impl/archive_pointer_oserializer.ipp>
+
+using namespace boost::archive;
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // "Fast" output binary archive.  This is a variation of the native binary 
