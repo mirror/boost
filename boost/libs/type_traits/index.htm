@@ -121,7 +121,7 @@ template instead.</p>
         <p align="center">8.3.2</p>
         </td>
         <td valign="top" width="25%" bgcolor="#C0C0C0">If the
-        compiler does not support partial-specialisation of class
+        compiler does not support partial-specialization of class
         templates, then references to types that are both const
         and volatile qualified will not be correctly identified.</td>
         <td valign="top" width="5%">&nbsp;</td>
@@ -151,7 +151,7 @@ template instead.</p>
         <p align="center">8.3.4</p>
         </td>
         <td valign="top" width="25%" bgcolor="#C0C0C0">If the
-        compiler does not support partial-specialisation of class
+        compiler does not support partial-specialization of class
         templates, then some types may be incorrectly identified
         as arrays (mainly function types).</td>
         <td valign="top" width="5%">&nbsp;</td>
@@ -524,11 +524,22 @@ transformation to the template argument T:</p>
         qualifier removed. For example &quot;volatile int&quot;
         would become &quot;int&quot;.</td>
         <td valign="top" width="13%" bgcolor="#C0C0C0"><p
-        align="center">3.9.3</p>
+        align="left">3.9.3</p>
         </td>
         <td width="25%" bgcolor="#C0C0C0"><p align="center">P</p>
         </td>
         <td valign="top" width="5%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td bgcolor="#C0C0C0"><code>::boost::remove_cv&lt;T&gt;::type</code></td>
+        <td bgcolor="#C0C0C0">Creates a type the same as T but
+        with any top level cv-qualifiers removed. For example
+        &quot;const volatile int&quot; would become &quot;int&quot;.</td>
+        <td bgcolor="#C0C0C0">3.9.3</td>
+        <td bgcolor="#C0C0C0"><p align="center">P</p>
+        </td>
+        <td>&nbsp;</td>
     </tr>
     <tr>
         <td valign="top" width="5%">&nbsp;</td>
@@ -650,9 +661,9 @@ built-in type, but for they own types too:</p>
 
 <pre>// etc.</pre>
 
-<p>Note that the maco
+<p>Note that the macro
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION evaluates to
-nothing on those compilers that do support partial specialisation.</p>
+nothing on those compilers that do support partial specialization.</p>
 
 <h2><a name="compiler"></a>Compiler Support Information</h2>
 
@@ -664,7 +675,7 @@ meanings:</p>
         <td valign="top" width="50%"><p align="center">P</p>
         </td>
         <td valign="top" width="90%">Denotes that the class
-        requires support for partial specialisation of class
+        requires support for partial specialization of class
         templates to work correctly.</td>
     </tr>
     <tr>
