@@ -359,7 +359,7 @@ shared_ptr&lt;X&gt; make_shared_from_another(another_ptr&lt;X&gt; qx)
 			instance. Example:</p>
 		<pre>void f(X * p)
 {
-    shared_ptr&lt;X&gt; px(<i>???</I>);
+    shared_ptr&lt;X&gt; px(<i>???</i>);
 }
 </pre>
 		<p>Inside <code>f</code>, we'd like to create a <code>shared_ptr</code> to <code>*p</code>.</p>
@@ -389,7 +389,7 @@ public:
 
     X()
     {
-        shared_ptr&lt;X&gt; this_(<i>???</I>);
+        shared_ptr&lt;X&gt; this_(<i>???</i>);
     }
 };
 </pre>
@@ -461,7 +461,7 @@ public:
 
     virtual shared_ptr&lt;X&gt; getX()
     {
-        shared_ptr&lt;X&gt; px(<i>???</I>);
+        shared_ptr&lt;X&gt; px(<i>???</i>);
         return px;
     }
 };
@@ -496,8 +496,9 @@ public:
     }
 };
 </pre>
-		<p>The library now includes a helper class template <code>enable_shared_from_this</code>
-			that can be used to encapsulate the solution:</p>
+		<p>The library now includes a helper class template <code><A href="enable_shared_from_this.html">
+					enable_shared_from_this</A></code> that can be used to encapsulate the 
+			solution:</p>
 		<pre>class impl: public X, public Y, public enable_shared_from_this&lt;impl&gt;
 {
 public:
@@ -751,9 +752,9 @@ public:
 			all weak pointers will automatically expire.</p>
 		<hr>
 		<p>$Date$</p>
-		<p>Copyright © 2003 Peter Dimov. Permission to copy, use, modify, sell and 
+		<p><small>Copyright © 2003 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 
 			all copies. This document is provided "as is" without express or implied 
-			warranty, and with no claim as to its suitability for any purpose.</p>
+			warranty, and with no claim as to its suitability for any purpose.</small></p>
 	</body>
 </html>
