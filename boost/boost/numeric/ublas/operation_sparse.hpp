@@ -38,7 +38,8 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> temporary (e2 ().size2 ());
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         typename expression1_type::const_iterator1 it1 (e1 ().begin1 ());
@@ -81,7 +82,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it1;
         }
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -102,7 +103,8 @@ namespace boost { namespace numeric { namespace ublas {
         vector<value_type> temporary (e1 ().size1 ());
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         typename expression2_type::const_iterator2 it2 (e2 ().begin2 ());
@@ -145,7 +147,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it2;
         }
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }

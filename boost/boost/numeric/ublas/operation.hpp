@@ -78,12 +78,13 @@ namespace boost { namespace numeric { namespace ublas {
             v.assign (zero_vector<value_type> (e1.size1 ()));
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
-        value_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, orientation_category ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<value_type>::epsilon () * verrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<real_type>::epsilon () * verrorbound, internal_logic ());
 #endif
         return v;
     }
@@ -229,12 +230,13 @@ namespace boost { namespace numeric { namespace ublas {
             v.assign (zero_vector<value_type> (e1 ().size1 ()));
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
-        value_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, iterator_category ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<value_type>::epsilon () * verrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<real_type>::epsilon () * verrorbound, internal_logic ());
 #endif
         return v;
     }
@@ -302,12 +304,13 @@ namespace boost { namespace numeric { namespace ublas {
             v.assign (zero_vector<value_type> (e2 ().size2 ()));
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
-        value_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, orientation_category ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<value_type>::epsilon () * verrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<real_type>::epsilon () * verrorbound, internal_logic ());
 #endif
         return v;
     }
@@ -453,12 +456,13 @@ namespace boost { namespace numeric { namespace ublas {
             v.assign (zero_vector<value_type> (e2 ().size2 ()));
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v);
-        value_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type verrorbound (norm_1 (v) + norm_1 (e1) * norm_1 (e2));
         indexing_vector_assign (scalar_plus_assign<typename vector<value_type>::reference, value_type> (), cv, prod (e1, e2));
 #endif
         axpy_prod (e1, e2, v, iterator_category ());
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<value_type>::epsilon () * verrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (v - cv) <= 2 * std::numeric_limits<real_type>::epsilon () * verrorbound, internal_logic ());
 #endif
         return v;
     }
@@ -490,7 +494,8 @@ namespace boost { namespace numeric { namespace ublas {
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         size_type size1 (e1 ().size1 ());
@@ -499,7 +504,7 @@ namespace boost { namespace numeric { namespace ublas {
             for (size_type j = 0; j < size2; ++ j)
                 row (m, i).plus_assign (e1 () (i, j) * row (e2 (), j));
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -519,7 +524,8 @@ namespace boost { namespace numeric { namespace ublas {
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         typename expression1_type::const_iterator1 it1 (e1 ().begin1 ());
@@ -547,7 +553,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it1;
         }
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -567,7 +573,8 @@ namespace boost { namespace numeric { namespace ublas {
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         size_type size1 (e2 ().size1 ());
@@ -576,7 +583,7 @@ namespace boost { namespace numeric { namespace ublas {
             for (size_type i = 0; i < size1; ++ i)
                 column (m, j).plus_assign (e2 () (i, j) * column (e1 (), i));
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -596,7 +603,8 @@ namespace boost { namespace numeric { namespace ublas {
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         typename expression2_type::const_iterator2 it2 (e2 ().begin2 ());
@@ -624,7 +632,7 @@ namespace boost { namespace numeric { namespace ublas {
             ++ it2;
         }
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -726,7 +734,8 @@ namespace boost { namespace numeric { namespace ublas {
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, row_major>::reference, value_type> (), cm, prod (e1, e2), row_major_tag ());
 #endif
         size_type size (BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ()));
@@ -736,7 +745,7 @@ namespace boost { namespace numeric { namespace ublas {
             m.plus_assign (outer_prod (ce1, re2));
         }
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
@@ -756,7 +765,8 @@ namespace boost { namespace numeric { namespace ublas {
 
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-        value_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
+        typedef type_traits<value_type>::real_type real_type;
+        real_type merrorbound (norm_1 (m) + norm_1 (e1) * norm_1 (e2));
         indexing_matrix_assign (scalar_assign<typename matrix<value_type, column_major>::reference, value_type> (), cm, prod (e1, e2), column_major_tag ());
 #endif
         size_type size (BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size1 ()));
@@ -766,7 +776,7 @@ namespace boost { namespace numeric { namespace ublas {
             m.plus_assign (outer_prod (ce1, re2));
         }
 #if BOOST_UBLAS_TYPE_CHECK
-        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<value_type>::epsilon () * merrorbound, internal_logic ());
+        BOOST_UBLAS_CHECK (norm_1 (m - cm) <= 2 * std::numeric_limits<real_type>::epsilon () * merrorbound, internal_logic ());
 #endif
         return m;
     }
