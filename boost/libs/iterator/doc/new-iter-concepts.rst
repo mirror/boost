@@ -350,17 +350,9 @@ Writable Iterators [lib.writable.iterators]
 
 A class or built-in type ``X`` models the *Writable Iterator* concept
 if the following expressions are valid and respect the stated
-semantics.  
-
-.. A type ``T`` belongs to the *set of value types* of ``X``
-   if, for an object ``v`` of type ``T``, ``*a = v`` is valid.
-   
-   ** This appears to be a mutual recursion which ends up meaning
-      nothing.  Kill the assertion column?  
-
-      Separate but related question: Is a writable iterator required
-      to have a meaningful value_type? If not, we need to use a
-      different name from ``v`` in this table -DWA
+semantics.  In addition, a model of *Writable Iterator* must include
+in its documentation the *set of value types* that it allows for
+output.
 
  +---------------------------------------------------------------------------------------------+
  |Writable Iterator Requirements (in addition to CopyConstructible)                            |
@@ -370,11 +362,12 @@ semantics.
  |``access_category<X>::type``          |Convertible to           |                            |
  |                                      |``writable_iterator_tag``|                            |
  +--------------------------------------+-------------------------+----------------------------+
- |``*a = v``                            |                         |.. ** pre: The type of ``v``|
- |                                      |                         |   is in the set            |
- |                                      |                         |   of value types of ``X``  |
+ |``*a = o``                            |                         | pre: The type of ``o``     |
+ |                                      |                         | is in the set of           |
+ |                                      |                         | value types of ``X``       |
  +--------------------------------------+-------------------------+----------------------------+
 
+   
 
 Swappable Iterators [lib.swappable.iterators]
 ---------------------------------------------
