@@ -214,9 +214,7 @@ struct spec
 template<typename VariantType, typename S>
 inline void verify(const VariantType& vari, spec<S>, std::string str = "")
 {
-   using namespace boost;
-
-   BOOST_CHECK(apply_visitor(total_sizeof(), vari) == sizeof(S));
+   BOOST_CHECK(boost::apply_visitor(total_sizeof(), vari) == sizeof(S));
    BOOST_CHECK(vari.type() == typeid(S));
 
    VariantType& mut_vari = const_cast<VariantType&>(vari);
@@ -234,7 +232,7 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
       const S& r = boost::get<const S>(vari);
       ptr1 = &r;
    }
-   catch(bad_get& )
+   catch(boost::bad_get& )
    {
       count += 1;
    }
@@ -244,7 +242,7 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
       S& mut_r = boost::get<S>(mut_vari);
       ptr2 = &mut_r;
    }
-   catch(bad_get& )
+   catch(boost::bad_get& )
    {
       count += 1;
    }
@@ -257,7 +255,7 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
    //
    if(str.length() > 0)
    {
-      std::string temp = apply_visitor(to_text(), vari);
+      std::string temp = boost::apply_visitor(to_text(), vari);
       std::cout << "temp = " << temp << ", str = " << str << std::endl;
       BOOST_CHECK(temp == str);         
    }
@@ -267,8 +265,6 @@ inline void verify(const VariantType& vari, spec<S>, std::string str = "")
 template<typename VariantType, typename S>
 inline void verify_not(const VariantType& vari, spec<S>)
 {
-   using namespace boost;
-
    BOOST_CHECK(vari.type() != typeid(S));
    
    //
@@ -287,7 +283,7 @@ inline void verify_not(const VariantType& vari, spec<S>)
       const S& r = boost::get<const S>(vari);
       ptr1 = &r;
    }
-   catch(bad_get& )
+   catch(boost::bad_get& )
    {
       count += 1;
    }
@@ -297,7 +293,7 @@ inline void verify_not(const VariantType& vari, spec<S>)
       S& mut_r = boost::get<S>(mut_vari);
       ptr2 = &mut_r;
    }
-   catch(bad_get& )
+   catch(boost::bad_get& )
    {
       count += 1;
    }

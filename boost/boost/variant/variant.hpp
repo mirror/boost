@@ -1001,9 +1001,12 @@ private: // helpers, for modifiers, cont. (below)
         template <typename T>
         void operator()(T& rhs_content)
         {
+            typedef typename detail::variant::has_nothrow_move_constructor<T>::type
+                has_nothrow_move_constructor;
+
             swap_impl(
                   rhs_content
-                , typename detail::variant::has_nothrow_move_constructor<T>::type()
+                , has_nothrow_move_constructor()
                 );
         }
 
