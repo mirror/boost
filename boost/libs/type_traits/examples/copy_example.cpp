@@ -27,6 +27,7 @@
 
 #include <boost/timer.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/test/cpp_main.cpp>
 
 using std::cout;
 using std::endl;
@@ -149,7 +150,7 @@ const char* cc_array = cc_array_;
 
 const int iter_count = 1000000;
 
-int main()
+int cpp_main(int argc, char* argv[])
 {
    boost::timer t;
    double result;

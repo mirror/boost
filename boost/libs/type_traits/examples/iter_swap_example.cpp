@@ -29,6 +29,7 @@
 #include <memory>
 
 #include <boost/type_traits.hpp>
+#include <boost/test/cpp_main.cpp>
 
 using std::cout;
 using std::endl;
@@ -89,7 +90,7 @@ inline void iter_swap(I1 one, I2 two)
 
 };   // namespace opt
 
-int main()
+int cpp_main(int argc, char* argv[])
 {
    //
    // testing iter_swap
