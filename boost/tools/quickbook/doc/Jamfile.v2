@@ -1,0 +1,9 @@
+project boost/quickbook/doc ;
+import boostbook : boostbook ;
+
+boostbook quickbook
+    :
+        quickbook.xml
+    :
+        <xsl:param>boost.root=../../../..
+    ;

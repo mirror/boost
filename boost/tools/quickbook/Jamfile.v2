@@ -1,0 +1,6 @@
+
+exe quickbook
+    :   detail/quickbook.cpp
+    :   <include>$(BOOST_ROOT)
+    ;
+
