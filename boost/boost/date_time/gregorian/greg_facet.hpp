@@ -201,15 +201,20 @@ namespace gregorian {
 
   /**************** Input Streaming ******************/
   
+#if !defined(BOOST_NO_STD_ITERATOR_TRAITS)
   //! operator>> for gregorian::date
   template<class charT>
   inline 
   std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is, date& d)
   {
     std::istream_iterator<std::basic_string<charT>, charT> beg(is), eos;
-    d = from_stream(beg, eos);
+    //std::locale loc = is.getloc();
+    
+    typedef boost::date_time::all_date_names_put<greg_facet_config, charT> facet_def;
+    d = from_stream(beg, eos);//, &loc);
     return is;
   }
+#endif // BOOST_NO_STD_ITERATOR_TRAITS
 
   //! operator>> for gregorian::date_duration
   template<class charT>
@@ -236,10 +241,10 @@ namespace gregorian {
   }
 
   //! generates a locale with the set of gregorian name-strings of type char*
-  std::locale generate_locale(std::locale& loc, char type);
+  BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, char type);
 #ifndef BOOST_NO_CWCHAR
   //! generates a locale with the set of gregorian name-strings of type wchar_t*
-  std::locale generate_locale(std::locale& loc, wchar_t type);
+  BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, wchar_t type);
 #endif // BOOST_NO_CWCHAR
 
   //! operator>> for gregorian::greg_month - throws exception if invalid month given
