@@ -123,9 +123,18 @@ namespace boost {
                     ForwardIteratorT InsertIt,
                     ForwardIteratorT SegmentBegin,
                     ForwardIteratorT SegmentEnd )
+
                 {
-                    // Call replace to do the job
-                    replace( Input, InsertIt, SegmentBegin, Storage );
+                    if(InsertIt!=SegmentEnd)
+                    {
+                        // Call replace to do the job
+                        replace( Input, InsertIt, SegmentBegin, Storage );
+                    }
+                    else
+                    {
+                        // Call insert to do the job
+                        insert( Input, InsertIt, Storage );
+                    }
                     // Empty the storage
                     Storage.clear();
                     // Iterators were not changed, simply return the end of segment
