@@ -786,21 +786,21 @@ namespace boost {
     }
 
     template<typename Functor>
-    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f,
-             int deprecated = 0)
+    void set(Functor BOOST_FUNCTION_TARGET_FIX(const &) f)
     {
+      int deprecated;
       self_type(f).swap(*this);
     }
 
-    void set(const base_type& f,
-             int deprecated = 0)
+    void set(const base_type& f)
     {
+      int deprecated;
       self_type(f).swap(*this);
     }
 
-    void set(const self_type& f,
-             int deprecated = 0)                             
+    void set(const self_type& f)                             
     {
+      int deprecated;
       self_type(f).swap(*this);
     }   
   };
