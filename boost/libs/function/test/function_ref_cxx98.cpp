@@ -15,4 +15,6 @@ int main()
 
   boost::function<int (int)> f2(f);
 
+
+    return 0;
 }

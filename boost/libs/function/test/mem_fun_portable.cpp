@@ -21,4 +21,6 @@ f = &X::foo;
 X x;
 f(&x, 5);
 
+
+    return 0;
 }

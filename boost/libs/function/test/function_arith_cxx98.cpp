@@ -36,4 +36,6 @@ f = 0;
     
   f = &mul_ints;
 
+  
+    return 0;
 }

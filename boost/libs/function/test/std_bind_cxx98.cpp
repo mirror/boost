@@ -20,4 +20,6 @@ int main()
 
   f(5); // Call x.foo(5)
 
+
+    return 0;
 }
