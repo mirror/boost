@@ -24,6 +24,7 @@
 #include <boost/mpl/prior.hpp>
 #include <boost/mpl/aux_/iterator_names.hpp>
 #include <boost/mpl/aux_/nttp_decl.hpp>
+#include <boost/mpl/aux_/value_wknd.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 
@@ -85,7 +86,7 @@ struct advance< v_iter<Vector,n_>,Distance>
 {
     typedef v_iter<
           Vector
-        , (n_ + Distance::value)
+        , (n_ + BOOST_MPL_AUX_NESTED_VALUE_WKND(long, Distance::value))
         > type;
 };
 
