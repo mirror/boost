@@ -30,16 +30,16 @@ inline Any& select(Any& any, CALL_FORMAL_ARGS) { CALL_USE_ARGS; return any; }
 template<class Arg, CALL_TEMPLATE_ARGS>
 inline typename Arg::template sig<tuple<CALL_REFERENCE_TYPES> >::type
 select ( const lambda_functor<Arg>& op, CALL_FORMAL_ARGS ) { 
-    return op.template call<
-      typename Arg::template sig<tuple<CALL_REFERENCE_TYPES> >::type
-    >(CALL_ACTUAL_ARGS); 
+  return op.template call<
+    typename Arg::template sig<tuple<CALL_REFERENCE_TYPES> >::type
+  >(CALL_ACTUAL_ARGS); 
 }
 template<class Arg, CALL_TEMPLATE_ARGS>
 inline typename Arg::template sig<tuple<CALL_REFERENCE_TYPES> >::type
 select ( lambda_functor<Arg>& op, CALL_FORMAL_ARGS) { 
-    return op.template call<
-      typename Arg::template sig<tuple<CALL_REFERENCE_TYPES> >::type
-    >(CALL_ACTUAL_ARGS); 
+  return op.template call<
+    typename Arg::template sig<tuple<CALL_REFERENCE_TYPES> >::type
+  >(CALL_ACTUAL_ARGS); 
 }
 
 // ------------------------------------------------------------------------
