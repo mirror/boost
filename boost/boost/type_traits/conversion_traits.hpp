@@ -53,7 +53,7 @@ namespace detail{
 
   struct from_not_void_conversion {
     template <class From, class To>
-    struct bind {
+    struct n_bind {
       static no_type _m_check(...);
       static yes_type _m_check(To);
     public:
@@ -64,7 +64,7 @@ namespace detail{
   };
   struct from_is_void_conversion {
     template <class From, class To>
-    struct bind {
+    struct n_bind {
        enum { exists = ::boost::is_void<To>::value };
     };
   };
@@ -83,7 +83,7 @@ template <class From, class To>
 struct is_convertible
 {
  typedef typename detail::conversion_helper<From>::type Selector;
- typedef Selector::template bind<From,To> Conversion;
+ typedef Selector::template n_bind<From,To> Conversion;
 public:
  enum { value = Conversion::exists };
 };
