@@ -254,6 +254,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class T, class ALLOC>
     class map_array {
     public:
+        typedef ALLOC allocator_type;
         typedef typename ALLOC::size_type size_type;
         typedef typename ALLOC::difference_type difference_type;
         typedef std::pair<I,T> value_type;
@@ -549,6 +550,11 @@ namespace boost { namespace numeric { namespace ublas {
             return reverse_iterator (begin ());
         }
 
+        // Allocator
+        allocator_type get_allocator () {
+            return alloc_;
+        }
+
     private:
         // Provide destroy as a non member function
         BOOST_UBLAS_INLINE
@@ -560,6 +566,7 @@ namespace boost { namespace numeric { namespace ublas {
         pointer data_;
         size_type size_;
     };
+
 
     namespace detail {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -618,6 +625,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class ALLOC>
     class set_array {
     public:
+        typedef ALLOC allocator_type;
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef I index_type;
@@ -860,6 +868,11 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         reverse_iterator rend () {
             return reverse_iterator (begin ());
+        }
+
+        // Allocator
+        allocator_type get_allocator () {
+            return alloc_;
         }
 
     private:
