@@ -141,7 +141,8 @@ void random_access_iterator_test(Iterator i, int N, TrueVals vals)
     assert(i == k - c);
     assert(*i == vals[N - 1 - c]);
     assert(*i == j[N - 1 - c]);
-    assert(*i == *(k - c));
+    Iterator q = k - c; 
+    assert(*i == *q);
     assert(i > j);
     assert(i >= j);
     assert(j <= i);

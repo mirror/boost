@@ -399,9 +399,9 @@ As an example of how to create a concept checking class, we look
 at how to create the corresponding checks for the
 <a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
 RandomAccessIterator</a> concept. First, as a convention we name the
-concept checking class after the concept, and add the prefix
+concept checking class after the concept, and add the suffix
 ``<tt>_concept</tt>''. Note that the <tt>REQUIRE</tt> macro expects
-the prefix to be there. Next we must define a member function named
+the suffix to be there. Next we must define a member function named
 <tt>constraints()</tt> in which we will exercise the valid expressions
 of the concept. The <tt>REQUIRE</tt> macro expects this function's
 signature to appear exactly as it is appears below: a <tt>void</tt>

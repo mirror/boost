@@ -22,51 +22,6 @@ main()
   using namespace boost;
 
   //===========================================================================
-  // First verify that the archetype classes model the concepts they
-  // are suppose to.
-  {
-    REQUIRE2(boolean_archetype, bool, Convertible);
-  }
-  {
-    typedef unary_function_archetype<int, int> F;
-    REQUIRE3(F, int, int, UnaryFunction);
-  }
-  {
-    typedef binary_function_archetype<int, int, int> F;
-    REQUIRE4(F, int, int, int, BinaryFunction);
-  }
-  {
-    typedef unary_predicate_archetype<int> F;
-    REQUIRE2(F, int, UnaryPredicate);
-  }
-  {
-    typedef binary_predicate_archetype<int, int> F;
-    REQUIRE3(F, int, int, BinaryPredicate);
-    typedef const_binary_predicate_archetype<int, int> const_F;
-    REQUIRE3(const_F, int, int, Const_BinaryPredicate);
-  }
-  {
-    typedef input_iterator_archetype<null_archetype> Iter;
-    REQUIRE(Iter, InputIterator);
-  }
-  {
-    typedef output_iterator_archetype Iter;
-    REQUIRE2(Iter, int, OutputIterator);
-  }
-  {
-    typedef forward_iterator_archetype<null_archetype> Iter;
-    REQUIRE(Iter, ForwardIterator);
-  }
-  {
-    typedef bidirectional_iterator_archetype<null_archetype> Iter;
-    REQUIRE(Iter, BidirectionalIterator);
-  }
-  {
-    typedef random_access_iterator_archetype<null_archetype> Iter;
-    REQUIRE(Iter, RandomAccessIterator);
-  }
-
-  //===========================================================================
   // Non-mutating Algorithms
   {
     input_iterator_archetype< convertible_to_archetype< null_archetype > > in;
@@ -75,17 +30,17 @@ main()
   }
   {
     /*
-      SGI STL Docs and the C++ standard (25.1.2) requirements for
+      SGI STL Docs and the C++ standard (25.1.2) BOOST_FUNCTION_REQUIRESments for
       std::for_each() are broken. They should be specified as follows:
 
       template <class InputIterator, class LeftEqualityComparable>
       InputIterator find(InputIterator first, InputIterator last,
                          const LeftEqualityComparable& value)
       {
-        REQUIRE(InputIterator, InputIterator);
+        BOOST_FUNCTION_REQUIRES(InputIterator, InputIterator);
         typedef typename std::iterator_traits<InputIterator>::value_type 
           value_type;
-        REQUIRE(LeftEqualityComparable, value_type, LeftEqualityComparable);
+        BOOST_FUNCTION_REQUIRES(LeftEqualityComparable, value_type, LeftEqualityComparable);
         ...
       }
     */
@@ -119,10 +74,11 @@ main()
   {
     typedef input_iterator_archetype<null_archetype> InIter;
     InIter in;
-    REQUIRE(InIter, InputIterator);
+    BOOST_FUNCTION_REQUIRES(InIter, InputIteratorConcept);
     left_equality_comparable_archetype<null_archetype> value(dummy_cons);
     std::iterator_traits<InIter>::difference_type
       n = std::count(in, in, value);
+    ignore_unused_variable_warning(n);
   }
   {
     typedef input_iterator_archetype<null_archetype> InIter;
@@ -137,6 +93,7 @@ main()
     unary_predicate_archetype<null_archetype> pred;
     std::iterator_traits<InIter>::difference_type
       n = std::count_if(in, in, pred);
+    ignore_unused_variable_warning(n);
   }
   {
     input_iterator_archetype< convertible_to_archetype<null_archetype> > in;
@@ -154,12 +111,14 @@ main()
     typedef input_iterator_archetype<Right> InIter2;
     InIter2 in2;
     std::pair<InIter1, InIter2> p = std::mismatch(in1, in1, in2);
+    ignore_unused_variable_warning(p);
   }
   {
     typedef input_iterator_archetype< convertible_to_archetype<null_archetype> > InIter;
     InIter in1, in2;
     binary_predicate_archetype<null_archetype, null_archetype> pred;
     std::pair<InIter, InIter> p = std::mismatch(in1, in1, in2, pred);
+    ignore_unused_variable_warning(p);
   }
   {
     // SGI STL docs: EqualityComparable not needed
@@ -167,11 +126,13 @@ main()
     typedef left_equality_comparable_archetype<null_archetype> Right;
     input_iterator_archetype<Right> in2;
     bool b = std::equal(in1, in1, in2);
+    ignore_unused_variable_warning(b);
   }
   {
     input_iterator_archetype< convertible_to_archetype<null_archetype> > in1, in2;
     binary_predicate_archetype<null_archetype, null_archetype> pred;
     bool b = std::equal(in1, in1, in2, pred);
+    ignore_unused_variable_warning(b);
   }
   {
     // SGI STL docs: EqualityComparable not needed

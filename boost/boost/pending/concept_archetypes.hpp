@@ -89,6 +89,7 @@ namespace boost {
   operator!=(const Left&, const left_equality_comparable_archetype<Left>&)
     { return boolean_archetype(dummy_cons); }
 
+
   template <class Base = null_archetype>
   class equality_comparable_archetype : public Base {
   public:
@@ -105,6 +106,25 @@ namespace boost {
 	     const equality_comparable_archetype<Base>&)
     { return boolean_archetype(dummy_cons);; }
 
+
+  template <class XX = null_archetype, class YY = null_archetype>
+  class equality_comparable2_archetype {
+  public:
+    friend boolean_archetype operator==(const XX& x, const YY& y) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator!=(const XX& x, const YY& y) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator==(const YY& y, const XX& x) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator!=(const YY& y, const XX& x) { 
+      return boolean_archetype(dummy_cons);
+    }
+  };
+
+
   template <class Base = null_archetype>
   class less_than_comparable_archetype : public Base {
   public:
@@ -115,28 +135,72 @@ namespace boost {
   operator<(const less_than_comparable_archetype<Base>&,
 	    const less_than_comparable_archetype<Base>&)
     { return boolean_archetype(dummy_cons);; }
+
+
+  template <class Base = null_archetype>
+  class comparable_archetype : public Base {
+  public:
+    comparable_archetype(detail::dummy_constructor x) : Base(x) { }
+  };
   template <class Base>
   boolean_archetype
-  operator<=(const less_than_comparable_archetype<Base>&,
-	     const less_than_comparable_archetype<Base>&)
+  operator<(const comparable_archetype<Base>&,
+	    const comparable_archetype<Base>&)
     { return boolean_archetype(dummy_cons);; }
   template <class Base>
   boolean_archetype
-  operator>(const less_than_comparable_archetype<Base>&,
-	    const less_than_comparable_archetype<Base>&)
+  operator<=(const comparable_archetype<Base>&,
+	     const comparable_archetype<Base>&)
     { return boolean_archetype(dummy_cons);; }
   template <class Base>
   boolean_archetype
-  operator>=(const less_than_comparable_archetype<Base>&,
-	     const less_than_comparable_archetype<Base>&)
+  operator>(const comparable_archetype<Base>&,
+	    const comparable_archetype<Base>&)
+    { return boolean_archetype(dummy_cons);; }
+  template <class Base>
+  boolean_archetype
+  operator>=(const comparable_archetype<Base>&,
+	     const comparable_archetype<Base>&)
     { return boolean_archetype(dummy_cons);; }
   
+
+  template <class XX = null_archetype, class YY = null_archetype>
+  class comparable2_archetype {
+  public:
+    friend boolean_archetype operator<(const XX& x, const YY& y) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator<=(const XX& x, const YY& y) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator>(const XX& x, const YY& y) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator>=(const XX& x, const YY& y) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator<(const YY& y, const XX& x) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator<=(const YY& y, const XX& x) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator>(const YY& y, const XX& x) { 
+      return boolean_archetype(dummy_cons);
+    }
+    friend boolean_archetype operator>=(const YY& y, const XX& x) { 
+      return boolean_archetype(dummy_cons);
+    }
+  };
+
+
   template <class Base = null_archetype>
   class default_constructible_archetype : public Base {
   public:
     default_constructible_archetype() : Base(dummy_cons) { }
     default_constructible_archetype(detail::dummy_constructor x) : Base(x) { }
   };
+
 
   template <class Base = null_archetype>
   class copy_constructible_archetype : public Base {
@@ -155,7 +219,7 @@ namespace boost {
     }
     assignable_archetype(detail::dummy_constructor x) : Base(x) { }
   };
-  
+
 
   //===========================================================================
   // Function Object Archetype Classes
@@ -245,8 +309,7 @@ namespace boost {
   template <class T>
   struct input_output_proxy {
     input_output_proxy<T>& operator=(const T&) { return *this; }
-    operator T() { return t; }
-    T t;
+    operator const T&() { return static_object<T>::get(); }
   };
   template <class T>
   class mutable_trivial_iterator_archetype
@@ -265,7 +328,6 @@ namespace boost {
     bool operator==(const self&) const { return true; }
     bool operator!=(const self&) const { return true; }
     input_output_proxy<T> operator*() { return input_output_proxy<T>(); }
-    T x;
   };
 } // namespace boost
 
