@@ -35,27 +35,25 @@
   };
 
 
-The ``reference`` type of ``transform_iterator`` is
+If ``Reference`` is ``use_default`` then the ``reference`` member of
+``transform_iterator`` is
 ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
-The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
+Otherwise, ``reference`` is ``Reference``.
 
-The ``iterator_category`` member is a type convertible to the iterator
-tag given by the following algorithm. Let ``C`` be
-``traveral_category<Iterator>::type``.
-
-::
-
-    if (reference is a reference to value_type) then
-        if (C is convertible to random_access_traversal_tag) then
-            random_access_iterator_tag
-        else if (C is convertible to bidirectional_traversal_tag) then
-            bidirectional_iterator_tag
-        else
-            forward_iterator_tag
-    else
-        input_iterator_tag
+If ``Value`` is ``use_default`` then the ``value_type`` member is
+``remove_cv<remove_reference<reference> >::type``.  Otherwise,
+``value_type`` is ``Value``.
 
 
+If ``Iterator`` models Readable Lvalue Iterator and if ``Iterator``
+models Random Access Traversal Iterator, then ``iterator_category`` is
+convertible to ``random_access_iterator_tag``. Otherwise, if
+``Iterator`` models Bidirectional Traversal Iterator, then
+``iterator_category`` is convertible to
+``bidirectional_iterator_tag``.  Otherwise ``iterator_category`` is
+convertible to ``forward_iterator_tag``. If ``Iterator`` does not
+model Readable Lvalue Iterator then ``iterator_category`` is
+convertible to ``input_iterator_tag``.
 
 
 ``transform_iterator`` requirements

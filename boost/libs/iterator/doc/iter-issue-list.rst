@@ -1074,7 +1074,24 @@ c++std-lib-12641:
   been at this too long, and it's all turning into a maze of twisty passages,
   all alike.
 
-:Proposed resolution:   **Needs work** (Jeremy)
+:Proposed resolution:
+
+Replace:
+
+      The reference type of transform_iterator is
+      ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``. The
+      ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
+
+with:
+
+      If ``Reference`` is ``use_default`` then the ``reference`` member of
+      ``transform_iterator`` is
+      ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
+      Otherwise, ``reference`` is ``Reference``.
+
+      If ``Value`` is ``use_default`` then the ``value_type`` member is
+      ``remove_cv<remove_reference<reference> >::type``.  Otherwise,
+      ``value_type`` is ``Value``.
 
 
 filter_iterator details unspecified
