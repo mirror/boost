@@ -32,6 +32,7 @@ otherwise.</p>
 */
 #define BOOST_PP_NOT_EQUAL(X,Y) BOOST_PP_NOT_EQUAL_D(0,X,Y)
 
+/** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_NOT_EQUAL_D(D,X,Y) BOOST_PP_BOOL(BOOST_PP_ADD_D(D,BOOST_PP_SUB_D(D,X,Y),BOOST_PP_SUB_D(D,Y,X)))
 
 /** <p>Obsolete. Use BOOST_PP_NOT_EQUAL().</p> */

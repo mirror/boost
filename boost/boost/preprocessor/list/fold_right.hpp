@@ -48,6 +48,7 @@ list <code>L</code> (from the right or the end of the list).</p>
 */
 #define BOOST_PP_LIST_FOLD_RIGHT(F,L,P) BOOST_PP_LIST_FOLD_RIGHT_D(0,F,L,P)
 
+/** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_LIST_FOLD_RIGHT_D(D,F,L,P) BOOST_PP_TUPLE_ELEM(2,1,BOOST_PP_LIST_FOLD_LEFT_D(D,BOOST_PP_LIST_FOLD_RIGHT_F,(F,P),BOOST_PP_LIST_REVERSE_D(D,L)))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_FOLD_RIGHT_F(D,P,H) (BOOST_PP_TUPLE_ELEM(2,0,P),BOOST_PP_TUPLE_ELEM(2,0,P)(D,H,BOOST_PP_TUPLE_ELEM(2,1,P)))

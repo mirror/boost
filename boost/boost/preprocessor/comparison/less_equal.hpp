@@ -31,6 +31,7 @@ otherwise.</p>
 */
 #define BOOST_PP_LESS_EQUAL(X,Y) BOOST_PP_LESS_EQUAL_D(0,X,Y)
 
+/** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_LESS_EQUAL_D(D,X,Y) BOOST_PP_NOT(BOOST_PP_SUB_D(D,X,Y))
 
 /** <p>Obsolete. Use BOOST_PP_LESS_EQUAL().</p> */

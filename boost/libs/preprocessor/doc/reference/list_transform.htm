@@ -43,7 +43,7 @@ of the list producing a new list.</p>
 <p>For example,</p>
 
 <pre>
-  <a href="list_transform.htm#BOOST_PP_LIST_TRANSFORM">BOOST_PP_LIST_TRANSFORM</a>(BOOST_PP_ADD_D,2,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(2,(1,2)))
+  <a href="list_transform.htm#BOOST_PP_LIST_TRANSFORM">BOOST_PP_LIST_TRANSFORM</a>(<a href="arithmetic_add.htm#BOOST_PP_ADD_D">BOOST_PP_ADD_D</a>,2,<a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(2,(1,2)))
 </pre>
 
 <p>expands to the same as:</p>
@@ -62,6 +62,10 @@ of the list producing a new list.</p>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 
+<hr>
+
+<h2><a name="BOOST_PP_LIST_TRANSFORM_D">#define BOOST_PP_LIST_TRANSFORM_D</a>(D,F,P,L)</h2>
+ <p>Can be used inside <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>().</p> 
 <hr>
 
 <a href="list_to_tuple.htm">Prev</a> <a href="logical.htm">Next</a> <a href="index.htm#Macros">Macros</a> <a href="index.htm#Headers">Headers</a>

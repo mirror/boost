@@ -33,6 +33,7 @@ single token).</p>
 */
 #define BOOST_PP_DIV(X,Y) BOOST_PP_DIV_D(0,X,Y)
 
+/** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_DIV_D(D,X,Y) BOOST_PP_TUPLE_ELEM(3,0,BOOST_PP_WHILE##D(BOOST_PP_DIV_C,BOOST_PP_DIV_F,(0,X,Y)))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_DIV_C(D,P) BOOST_PP_LESS_EQUAL_D(D,BOOST_PP_TUPLE_ELEM(3,2,P),BOOST_PP_TUPLE_ELEM(3,1,P))

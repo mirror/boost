@@ -30,6 +30,7 @@ otherwise.</p>
 */
 #define BOOST_PP_GREATER_EQUAL(X,Y) BOOST_PP_GREATER_EQUAL_D(0,X,Y)
 
+/** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_GREATER_EQUAL_D(D,X,Y) BOOST_PP_LESS_EQUAL_D(D,Y,X)
 
 /** <p>Obsolete. Use BOOST_PP_GREATER_EQUAL().</p> */

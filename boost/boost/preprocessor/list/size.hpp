@@ -38,6 +38,7 @@
 */
 #define BOOST_PP_LIST_SIZE(L) BOOST_PP_LIST_SIZE_D(0,L)
 
+/** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_LIST_SIZE_D(D,L) BOOST_PP_LIST_FOLD_LEFT_D(D,BOOST_PP_LIST_SIZE_F,0,L)
 #define BOOST_PP_LIST_SIZE_F(D,P,H) BOOST_PP_INC(P)
 #endif

@@ -35,6 +35,7 @@ single token).</p>
 */
 #define BOOST_PP_ADD(X,Y) BOOST_PP_ADD_D(0,X,Y)
 
+/** <p>Can be used inside BOOST_PP_WHILE().</p> */
 #define BOOST_PP_ADD_D(D,X,Y) BOOST_PP_TUPLE_ELEM(2,0,BOOST_PP_WHILE##D(BOOST_PP_ADD_C,BOOST_PP_ADD_F,(X,Y)))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_ADD_C(D,P) BOOST_PP_TUPLE_ELEM(2,1,P)
