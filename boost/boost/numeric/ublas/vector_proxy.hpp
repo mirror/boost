@@ -139,7 +139,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_range &operator = (const vector_range &vr) {
             // FIXME: the ranges could be differently sized.
             // std::copy (vr.begin (), vr.end (), begin ());
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (vr));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (vr));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -152,37 +152,37 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (*this + ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (*this + ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &plus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_plus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_plus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (*this - ae));
+            vector_assign (scalar_assign<typename iterator::reference, value_type> (), *this, vector_type (*this - ae));
             return *this;
         }
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &minus_assign (const vector_expression<AE> &ae) {
-            vector_assign (scalar_minus_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
+            vector_assign (scalar_minus_assign<typename iterator::reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
             return *this;
         }
         template<class AT>
@@ -515,11 +515,11 @@ namespace boost { namespace numeric { namespace ublas {
     private:
         vector_closure_type data_;
         range r_;
-        static const_vector_type nil_;
+        static vector_type nil_;
     };
 
     template<class V>
-    typename vector_range<V>::const_vector_type vector_range<V>::nil_;
+    typename vector_range<V>::vector_type vector_range<V>::nil_;
 
     // Projections
     template<class V>
@@ -673,7 +673,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_slice &operator = (const vector_slice &vs) {
             // FIXME: the slices could be differently sized.
             // std::copy (vs.begin (), vs.end (), begin ());
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (vs));
+            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (vs));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -686,7 +686,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (ae));
+            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (ae));
             return *this;
         }
         template<class AE>
@@ -698,7 +698,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (*this + ae));
+            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -710,7 +710,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (*this - ae));
+            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1042,11 +1042,11 @@ return true;
 #endif
         vector_closure_type data_;
         slice s_;
-        static const_vector_type nil_;
+        static vector_type nil_;
     };
 
     template<class V>
-    typename vector_slice<V>::const_vector_type vector_slice<V>::nil_;
+    typename vector_slice<V>::vector_type vector_slice<V>::nil_;
 
     // Projections
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
@@ -1214,7 +1214,7 @@ return true;
         vector_indirect &operator = (const vector_indirect &vi) {
             // FIXME: the indirect_arrays could be differently sized.
             // std::copy (vi.begin (), vi.end (), begin ());
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (vi));
+            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (vi));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1227,7 +1227,7 @@ return true;
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (ae));
+            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (ae));
             return *this;
         }
         template<class AE>
@@ -1239,7 +1239,7 @@ return true;
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (*this + ae));
+            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -1251,7 +1251,7 @@ return true;
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<reference, value_type> (), *this, vector<value_type> (*this - ae));
+            vector_assign (scalar_assign<reference, value_type> (), *this, vector_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1584,11 +1584,11 @@ return true;
 #endif
         vector_closure_type data_;
         indirect_array_type ia_;
-        static const_vector_type nil_;
+        static vector_type nil_;
     };
 
     template<class V, class IA>
-    typename vector_indirect<V, IA>::const_vector_type vector_indirect<V, IA>::nil_;
+    typename vector_indirect<V, IA>::vector_type vector_indirect<V, IA>::nil_;
 
     // Projections
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
