@@ -23,12 +23,13 @@
 #     define NOMINMAX
 #  endif
 #endif
-#endif
 
-#if (_MSC_VER <= 1300) || !defined(BOOST_STRICT_CONFIG) // VC7 Beta 2 or later
+#if (_MSC_VER <= 1300) // || !defined(BOOST_STRICT_CONFIG) // VC7 Beta 2 or later
+
 #if !defined(_MSC_EXTENSIONS) && !defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS)		// VC7 bug with /Za
 #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #endif
+
 #  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #  define BOOST_NO_PRIVATE_IN_AGGREGATE
 #  define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
@@ -56,6 +57,12 @@
 #     undef max
 #  endif
 
+#endif
+
+#if _MSC_VER <= 1301
+#  define BOOST_NO_SWPRINTF
+#endif
+
 #ifndef _NATIVE_WCHAR_T_DEFINED
 #  define BOOST_NO_INTRINSIC_WCHAR_T
 #endif
@@ -77,7 +84,7 @@
 #endif
 //
 // last known and checked version is 1300:
-#if (_MSC_VER > 1300)
+#if (_MSC_VER > 1301)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
