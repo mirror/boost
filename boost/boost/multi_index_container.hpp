@@ -125,30 +125,13 @@ public:
 
   /* construct/copy/destroy */
 
-#if BOOST_WORKAROUND(__IBMCPP__,<=600)
-  /* Visual Age seems to have an ETI issue with the default values
-   * for arguments args_list and al in the ctors below.
-   */
-
-private:
-  static const ctor_args_list& default_ctor_args_list()
-  {
-    static ctor_args_list cal;
-    return cal;
-  }
-
-  static const allocator_type& default_allocator()
-  {
-    static allocator_type al;
-    return al;
-  }
-
-public:
-#endif
-
   explicit multi_index_container(
 
 #if BOOST_WORKAROUND(__IBMCPP__,<=600)
+    /* VisualAge seems to have an ETI issue with the default values
+     * for arguments args_list and al.
+     */
+
     const ctor_args_list& args_list=
       typename mpl::identity<multi_index_container>::type::
         ctor_args_list(),
@@ -172,6 +155,10 @@ public:
     InputIterator first,InputIterator last,
 
 #if BOOST_WORKAROUND(__IBMCPP__,<=600)
+    /* VisualAge seems to have an ETI issue with the default values
+     * for arguments args_list and al.
+     */
+
     const ctor_args_list& args_list=
       typename mpl::identity<multi_index_container>::type::
         ctor_args_list(),
