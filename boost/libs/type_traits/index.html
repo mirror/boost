@@ -16,7 +16,7 @@
 <a href="#transformations">Transformations Between Types</a>
 <a href="#synthesized">Synthesizing Types</a>
 <a href="#function_traits">Function Traits</a>
-<a href="#headers">Type traits headers</a>
+<a href="#headers">Type traits headers</a><BR><A href="#specializations">User defined specializations</A>
 <a href="#example">Example Code</a></pre>
       <h2><a name="intro"></a>Introduction</h2>
       <p>The contents of &lt;boost/type_traits.hpp&gt; are declared in namespace boost.</p>
@@ -850,7 +850,40 @@ bool const y = boost::is_convertible&lt;D*,A*&gt;::value;     // error
          boost/type_traits/.&nbsp; So if for example some code requires 
          is_class&lt;&gt;, then just include:</p>
       <pre>&lt;boost/type_traits/is_class.hpp&gt;</pre>
-      <h2><a name="example"></a>Example code</h2>
+      <h2><A name="specializations"></A>User defined specializations</h2>
+      <P>Occationally the end user may need to provide their own specialization for one 
+         of the type traits - typically where intrinsic compiler support is required to 
+         implement a specific trait fully.&nbsp; These specializations should derive 
+         from boost::true_type or boost::false_type as appropriate:</P>
+      <PRE>#  include &lt;boost/type_traits/is_pod.hpp&gt;
+#  include &lt;boost/type_traits/is_class.hpp&gt;
+#  include &lt;boost/type_traits/is_union.hpp&gt;
+
+struct my_pod{};
+struct my_union
+{
+   char c;
+   int i;
+};
+
+namespace boost
+{
+template&lt;&gt;
+struct is_pod&lt;my_pod&gt; 
+   : public true_type{};
+template&lt;&gt;
+struct is_pod&lt;my_union&gt; 
+   : public true_type{};
+template&lt;&gt;
+struct is_union&lt;my_union&gt; 
+   : public true_type{};
+template&lt;&gt;
+struct is_class&lt;my_union&gt; 
+   : public false_type{};
+}
+
+      </PRE>
+      <H2>Example code</H2>
       <p>Type-traits comes with four example programs that illustrate some of the ways 
          in which the type traits templates may be used:</p>
       <h4>Copy_example.cpp</h4>

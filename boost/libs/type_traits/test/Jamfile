@@ -84,8 +84,10 @@ test-suite type_traits :
 [ type-traits-run tricky_is_enum_test.cpp ]
 [ type-traits-run tricky_partial_spec_test.cpp ]
 [ type-traits-run type_with_alignment_test.cpp ]
+[ type-traits-run udt_specialisations.cpp ]
 
 ; # type traits suite
+
 
 
 
