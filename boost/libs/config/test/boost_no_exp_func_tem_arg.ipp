@@ -1,13 +1,13 @@
-//  (C) Copyright John Maddock 2001. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org/libs/config for most recent version.
 
 //  MACRO:         BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 //  TITLE:         non-deduced function template parameters
-//  DESCRIPTION:   Can only use deduced template arguments when 
+//  DESCRIPTION:   Can only use deduced template arguments when
 //                 calling function template instantiations.
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC <= 1200)
@@ -38,8 +38,8 @@ bool foo_17041(int j)
 int test()
 {
    foo f;
-   int a = f.template bar<char>();
-   int b = f.template bar<2>();
+   int a = f.bar<char>();
+   int b = f.bar<2>();
    if((a !=0) || (b != 1))return -1;
 
    if(0 == foo_17041<8>(8)) return -1;
