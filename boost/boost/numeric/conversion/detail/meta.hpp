@@ -21,10 +21,7 @@
 
 namespace boost { namespace numeric { namespace convdetail
 {
-   template<
-         typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T1)
-       , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T2)
-       >
+   template< class T1, class T2>
    struct equal_to
    {
    #if !defined(__BORLANDC__)
