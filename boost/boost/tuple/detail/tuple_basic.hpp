@@ -153,6 +153,21 @@ struct element<0,T>
   typedef typename T::head_type type;
 };
 
+template<int N, class T>
+struct element<N, const T>
+{
+private:
+  typedef typename T::tail_type Next;
+  typedef typename element<N-1, Next>::type unqualified_type;
+public:
+  typedef typename boost::add_const<unqualified_type>::type type;
+};
+template<class T>
+struct element<0,const T>
+{
+  typedef typename boost::add_const<typename T::head_type>::type type;
+};
+
 // -get function templates -----------------------------------------------
 // Usage: get<N>(aTuple)
 

@@ -20,7 +20,9 @@ Suppose <code>T</code> is a tuple type, and <code>N</code> is a constant integra
 
 <code><pre>element&lt;N, T&gt;::type</pre></code>
 
-gives the type of the <code>N</code>th element in the tuple type <code>T</code>.
+gives the type of the <code>N</code>th element in the tuple type <code>T</code>. If <code>T</code> is const, the resulting type is const qualified as well. 
+Note that the constness of <code>T</code> does not affect reference type
+elements.
 </p>
 
 <code><pre>length&lt;T&gt;::value</pre></code>
