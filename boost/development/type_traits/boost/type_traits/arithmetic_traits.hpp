@@ -55,7 +55,7 @@ template <> struct is_integral<wchar_t>
 template <> struct is_integral<bool>
 { BOOST_DECL_MC(bool, value, true); };
 
-#ifdef ULLONG_MAX
+#if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)
 template <> struct is_integral<unsigned long long>
 { BOOST_DECL_MC(bool, value, true); };
 template <> struct is_integral<long long>
@@ -116,7 +116,7 @@ template <> struct is_integral<const wchar_t>
 template <> struct is_integral<const bool>
 { BOOST_DECL_MC(bool, value, true); };
 
-#ifdef ULLONG_MAX
+#if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX)
 template <> struct is_integral<const unsigned long long>
 { BOOST_DECL_MC(bool, value, true); };
 template <> struct is_integral<const long long>
