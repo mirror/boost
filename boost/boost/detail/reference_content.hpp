@@ -19,7 +19,11 @@
 
 #include "boost/config.hpp"
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#   include "boost/mpl/bool.hpp"
+#   include "boost/type_traits/has_nothrow_constructor.hpp"
+#   include "boost/type_traits/has_nothrow_copy.hpp"
+#else
 #   include "boost/utility/addressof.hpp"
 #   include "boost/type.hpp"
 #   include "boost/mpl/if.hpp"
@@ -29,6 +33,7 @@
 #include "boost/mpl/void.hpp"
 
 namespace boost {
+
 namespace detail {
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -175,6 +180,31 @@ struct make_reference_content< mpl::void_ >
 };
 
 } // namespace detail
+
+///////////////////////////////////////////////////////////////////////////////
+// reference_content<T&> type traits specializations
+//
+
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
+template <typename T>
+struct has_nothrow_constructor<
+      ::boost::detail::reference_content< T& >
+    >
+    : mpl::true_
+{
+};
+
+template <typename T>
+struct has_nothrow_copy<
+      ::boost::detail::reference_content< T& >
+    >
+    : mpl::true_
+{
+};
+
+#endif // !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
 } // namespace boost
 
 #endif // BOOST_DETAIL_REFERENCE_CONTENT_HPP
