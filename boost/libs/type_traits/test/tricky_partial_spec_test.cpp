@@ -19,6 +19,7 @@
 #include <boost/type_traits/is_polymorphic.hpp>
 #endif
 #include <stdexcept>
+#include <new>
 #include <exception>
 
 //

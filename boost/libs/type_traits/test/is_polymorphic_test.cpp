@@ -13,6 +13,7 @@
 #endif
 
 #include <exception>
+#include <new>
 #include <stdexcept>
 
 #if defined(BOOST_WINDOWS) && !defined(BOOST_DISABLE_WIN32)
