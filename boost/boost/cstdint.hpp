@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   23 Jan 01  prefer "long" over "int" for int32_t and intmax_t (Jens Maurer)
 //   12 Nov 00  Merged <boost/stdint.h> (Jens Maurer)
 //   23 Sep 00  Added INTXX_C macro support (John Maddock).
 //   22 Sep 00  Better 64-bit support (John Maddock)
@@ -112,20 +113,20 @@ namespace boost
 
 //  32-bit types  -----------------------------------------------------------//
 
-# if UINT_MAX == 0xffffffff
-     typedef int             int32_t;
-     typedef int             int_least32_t;
-     typedef int             int_fast32_t;
-     typedef unsigned int    uint32_t;
-     typedef unsigned int    uint_least32_t;
-     typedef unsigned int    uint_fast32_t;
-# elif ULONG_MAX == 0xffffffff
+# if ULONG_MAX == 0xffffffff
      typedef long            int32_t;
      typedef long            int_least32_t;
      typedef long            int_fast32_t;
      typedef unsigned long   uint32_t;
      typedef unsigned long   uint_least32_t;
      typedef unsigned long   uint_fast32_t;
+# elif UINT_MAX == 0xffffffff
+     typedef int             int32_t;
+     typedef int             int_least32_t;
+     typedef int             int_fast32_t;
+     typedef unsigned int    uint32_t;
+     typedef unsigned int    uint_least32_t;
+     typedef unsigned int    uint_fast32_t;
 # else
 #    error defaults not correct; you must hand modify boost/cstdint.hpp
 # endif
