@@ -26,10 +26,14 @@ main()
   {
     for (int j=0; j<100000; j++)
     {
-#if defined(BOOST_HAS_FTIME)
-      // non-posix systems loop too fast so "last is less" tests fail
-      // due to 'last' & 't2' being equal. These two calls slow
+      // some systems loop too fast so "last is less" tests fail
+      // due to 'last' & 't2' being equal. These calls slow
       // it down enough to make 'last' & 't2' different
+#if defined(BOOST_HAS_GETTIMEOFDAY)
+      timeval tv;
+      gettimeofday(&tv, 0);
+#endif
+#if defined(BOOST_HAS_FTIME)
       SYSTEMTIME st;
       GetSystemTime(&st);
 #endif
@@ -46,7 +50,10 @@ main()
     check("seconds match", 
           t1.time_of_day().minutes() == t2.time_of_day().minutes());
     check("hours date", t1.date() == t2.date());
-    check("last is less", last < t2);
+    if( !check("last is less", last < t2) ) {
+      std::cout << to_simple_string(last) << " < " 
+        << to_simple_string(t2) << std::endl;
+    }
     last = t2;
 
     
@@ -59,10 +66,14 @@ main()
   {
     for (int j=0; j<100000; j++)
     {
-#if defined(BOOST_HAS_FTIME)
-      // non-posix systems loop too fast so "last is less" tests fail
-      // due to 'last' & 't2' being equal. These two calls slow
+      // some systems loop too fast so "last is less" tests fail
+      // due to 'last' & 't2' being equal. These calls slow
       // it down enough to make 'last' & 't2' different
+#if defined(BOOST_HAS_GETTIMEOFDAY)
+      timeval tv;
+      gettimeofday(&tv, 0);
+#endif
+#if defined(BOOST_HAS_FTIME)
       SYSTEMTIME st;
       GetSystemTime(&st);
 #endif
@@ -79,7 +90,11 @@ main()
     check("seconds match", 
           t1.time_of_day().minutes() == t2.time_of_day().minutes());
     check("hours date", t1.date() == t2.date());
-    check("last is less", last < t2);
+    //check("last is less", last < t2);
+    if( !check("last is less", last < t2) ) {
+      std::cout << to_simple_string(last) << " < " 
+        << to_simple_string(t2) << std::endl;
+    }
     last = t2;
 
     
