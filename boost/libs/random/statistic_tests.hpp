@@ -504,7 +504,7 @@ public:
 
   double operator()() const
   {
-    double res = ke.run(generator<base_type>(f, t), 
+    double res = ke.run(generator(f, t), 
 		  std::bind2nd(std::ptr_fun(static_cast<double (*)(double, double)>(&std::pow)), t));
     return res;
   }

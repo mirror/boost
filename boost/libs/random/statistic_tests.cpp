@@ -210,11 +210,14 @@ double normal_density(double x)
   return 1/std::sqrt(2*pi) * std::exp(-x*x/2);
 }
 
-#ifdef _CXXRTCF_H__
 namespace std {
+#ifdef _CXXRTCF_H__
   using _CS_swamp::lgamma;
-}
+#elif defined __SGI_STL_PORT
+  using ::lgamma;
 #endif
+}
+
 
 class chi_square_density : public std::unary_function<double, double>
 {
@@ -326,7 +329,8 @@ public:
   {
     using namespace boost;
     std::cout << "KS: " << std::flush;
-    generator_reference_t<RNG> gen_ref(rng);
+    // generator_reference_t<RNG> gen_ref(rng);
+    RNG& gen_ref(rng);
     kolmogorov_experiment ks(n1);
     uniform_distribution ud(rng.min_value, rng.max_value);
     check(run_experiment(test_distrib_chi_square,
@@ -353,7 +357,8 @@ public:
     using namespace boost;
     std::cout << "runs: up: " << std::flush;
     runs_experiment<true> r_up(classes);
-    generator_reference_t<RNG> gen_ref(rng);
+    // generator_reference_t<RNG> gen_ref(rng);
+    RNG& gen_ref(rng);
     check(run_experiment(test_distrib_chi_square,
 			 experiment_generator(r_up, gen_ref, n1), n2));
     check(run_experiment(test_distrib_chi_square,
@@ -388,7 +393,8 @@ public:
     using namespace boost;
     std::cout << "gaps: " << std::flush;
     gap_experiment gap(classes, 0.2, 0.8);
-    generator_reference_t<RNG> gen_ref(rng);
+    // generator_reference_t<RNG> gen_ref(rng);
+    RNG& gen_ref(rng);
     check(run_experiment(test_distrib_chi_square,
 			 experiment_generator(gap, gen_ref, n1), n2));
     check(run_experiment(test_distrib_chi_square,
@@ -473,7 +479,8 @@ public:
     std::cout << "permutation: " << std::flush;
     permutation_experiment perm(classes);
     
-    generator_reference_t<RNG> gen_ref(rng);
+    // generator_reference_t<RNG> gen_ref(rng);
+    RNG& gen_ref(rng);
     check(run_experiment(test_distrib_chi_square,
 			 experiment_generator(perm, gen_ref, n1), n2));
     check(run_experiment(test_distrib_chi_square,
