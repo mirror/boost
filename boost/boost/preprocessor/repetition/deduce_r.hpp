@@ -10,14 +10,14 @@
 #
 # /* See http://www.boost.org for most recent version. */
 #
-# ifndef BOOST_PREPROCESSOR_CONTROL_HPP
-# define BOOST_PREPROCESSOR_CONTROL_HPP
+# ifndef BOOST_PREPROCESSOR_REPETITION_DEDUCE_R_HPP
+# define BOOST_PREPROCESSOR_REPETITION_DEDUCE_R_HPP
 #
-# include <boost/preprocessor/control/deduce_d.hpp>
-# include <boost/preprocessor/control/expr_if.hpp>
-# include <boost/preprocessor/control/expr_iif.hpp>
-# include <boost/preprocessor/control/if.hpp>
-# include <boost/preprocessor/control/iif.hpp>
-# include <boost/preprocessor/control/while.hpp>
+# include <boost/preprocessor/detail/auto_rec.hpp>
+# include <boost/preprocessor/repetition/for.hpp>
+#
+# /* BOOST_PP_DEDUCE_R */
+#
+# define BOOST_PP_DEDUCE_R() BOOST_PP_AUTO_REC(BOOST_PP_FOR_P, 256)
 #
 # endif
