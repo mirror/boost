@@ -53,21 +53,26 @@ void sequence_traits_test()
 // Combine tests for all variants of the algorithm
 #define TEST_ALGO( Algo, Input, Params, Output ) \
 {\
-    BOOST_CHECKPOINT( #Input );\
+    BOOST_CHECKPOINT( #Algo " - Copy" );\
 \
     string str1(Input);\
 \
     /* Copy test */ \
     BOOST_CHECK( Algo##_copy( str1, BOOST_PP_SEQ_ENUM( Params ) )==Output );\
 \
+    BOOST_CHECKPOINT( #Algo " - Iterator" );\
     /* Iterator test */\
     string strout;\
     Algo##_copy( back_inserter(strout), str1, BOOST_PP_SEQ_ENUM( Params ) );\
     BOOST_CHECK( strout==Output ); \
 \
     /* In-place test */\
+    BOOST_CHECKPOINT( #Algo " - Inplace(vector)" );\
     vector<char> vec1( str1.begin(), str1.end() );\
+\
+    BOOST_CHECKPOINT( #Algo " - Inplace(list)" );\
     list<char> list1( str1.begin(), str1.end() );\
+\
     Algo( str1, BOOST_PP_SEQ_ENUM( Params ) ); \
     BOOST_CHECK( equals( str1, Output ) );\
     Algo( vec1, BOOST_PP_SEQ_ENUM( Params ) ); \

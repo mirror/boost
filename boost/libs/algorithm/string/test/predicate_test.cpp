@@ -101,7 +101,7 @@ void classification_test()
     TEST_CLASS( is_digit(), "1234567890", "abc" );
     TEST_CLASS( is_graph(), "123abc.,", "  \t" );
     TEST_CLASS( is_lower(), "abc", "Aasdf" );
-    TEST_CLASS( is_print(), "abs", "\nasdf" );
+    TEST_CLASS( is_print(), "abs", "\003\004asdf" );
     TEST_CLASS( is_punct(), ".,;\"", "abc" );
     TEST_CLASS( is_upper(), "ABC", "aBc" );
     TEST_CLASS( is_xdigit(), "ABC123", "XFD" );

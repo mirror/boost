@@ -16,56 +16,56 @@ import testing ;
 DEPENDS all : test ;
 
 {
-	test-suite string_algo
-		: [ run
-				container_test.cpp
-			  : :
-				:
-				: container
-			]
-		  [ run 
-				trim_test.cpp
-			  : :
-				:
-				: trim
-			]
-		  [ run 
-				conv_test.cpp
-			  : :
-				:
-				: conv
-			]
-		  [ run 
-				predicate_test.cpp
-			  : :
-				:
-				: predicate
-			]
-		  [ run 
-				find_test.cpp
-			  : :
-				:
-				: find
-			]
-		  [ run
-				split_test.cpp
-			  : :
-				:
-				: split
-			]
-		  [ run 
-				replace_test.cpp
-			  : :
-				:
-				: replace
-			]
-		  [ run 
-				regex_test.cpp
-				<lib>../../../regex/build/boost_regex
-			  : :
-				:   
-				: regex
-			]
-		;
+    test-suite string_algo
+        : [ run
+                container_test.cpp
+              : :
+                :
+                : container
+            ]
+          [ run 
+                trim_test.cpp
+              : :
+                :
+                : trim
+            ]
+          [ run 
+                conv_test.cpp
+              : :
+                :
+                : conv
+            ]
+          [ run 
+                predicate_test.cpp
+              : :
+                :
+                : predicate
+            ]
+          [ run 
+                find_test.cpp
+              : :
+                :
+                : find
+            ]
+          [ run
+                split_test.cpp
+              : :
+                :
+                : split
+            ]
+          [ run 
+                replace_test.cpp
+              : :
+                :
+                : replace
+            ]
+          [ run 
+                regex_test.cpp
+                <lib>../../../regex/build/boost_regex
+              : :
+                :   
+                : regex
+            ]
+        ;
 }
 

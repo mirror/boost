@@ -11,8 +11,8 @@
 #include <boost/test/included/test_exec_monitor.hpp>
 
 #include <string>
-#include <string.h>
 #include <iostream>
+#include <algorithm>
 #include <boost/algorithm/string/case_conv.hpp>
 #include <boost/test/test_tools.hpp>
 
@@ -24,8 +24,13 @@ void conv_test()
     string str1("AbCdEfG 123 xxxYYYzZzZ");
     string str2("AbCdEfG 123 xxxYYYzZzZ");
     string str3("");
-    char* pch1=strdup("AbCdEfG 123 xxxYYYzZzZ");
-    char* pch2=strdup("AbCdEfG 123 xxxYYYzZzZ");
+    const char pch[]="AbCdEfG 123 xxxYYYzZzZ";    
+    unsigned int pchlen=sizeof(pch);
+
+    char* pch1=new char[pchlen];
+    std::copy(pch, pch+pchlen, pch1);
+    char* pch2=new char[pchlen];
+    std::copy(pch, pch+pchlen, pch2);
 
     // *** iterator tests *** //
 
