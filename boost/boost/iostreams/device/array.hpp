@@ -16,7 +16,6 @@
 #include <cstddef>                  // std::size_t.
 #include <utility>                  // pair.
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -94,7 +93,7 @@ BOOST_IOSTREAMS_ARRAY(array, seekable)
 #undef BOOST_IOSTREAMS_ARRAY
 
 
-//------------------Implementation of array_adapter------------------------------//
+//------------------Implementation of array_adapter---------------------------//
 
 namespace detail {
 

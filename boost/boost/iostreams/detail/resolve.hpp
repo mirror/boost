@@ -20,7 +20,6 @@
 #include <boost/iostreams/detail/adapter/range_adapter.hpp>
 #include <boost/iostreams/detail/config/overload_resolution.hpp>
 #include <boost/iostreams/detail/enable_if_stream.hpp>
-#include <boost/iostreams/detail/ios_traits.hpp>  // is_std_io.  
 #include <boost/iostreams/detail/is_dereferenceable.hpp>
 #include <boost/iostreams/detail/is_iterator_range.hpp>
 #include <boost/iostreams/detail/select.hpp>

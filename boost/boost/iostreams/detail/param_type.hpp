@@ -11,7 +11,7 @@
 # pragma once
 #endif              
 
-#include <boost/iostreams/detail/ios_traits.hpp>
+#include <boost/iostreams/traits.hpp>
 #include <boost/mpl/if.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
