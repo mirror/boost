@@ -9,6 +9,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  11 Feb 01 Added test of operator-> for forward and input iterators.
+//            (Jeremy Siek)
 //  11 Feb 01 Borland fixes (David Abrahams)
 //  10 Feb 01 Use new adaptors interface. (David Abrahams)
 //  10 Feb 01 Use new filter_ interface. (David Abrahams)
@@ -52,6 +54,8 @@
 struct my_iterator_tag : public std::random_access_iterator_tag { };
 
 using boost::dummyT;
+
+std::istream& operator>>(std::istream& is, dummyT&) { return is; }
 
 struct my_iter_traits {
   typedef dummyT value_type;
@@ -249,6 +253,9 @@ main()
     boost::random_access_iterator_test(boost::make_indirect_iterator(ptr), N, array);
 #endif
     
+    // check operator->
+    assert((*i).m_x == i->foo());
+
     const_indirect_iterator j = ptr;
     boost::random_access_iterator_test(j, N, array);
 
@@ -416,6 +423,23 @@ main()
 
 #endif
   }
+
+  // check operator-> with a forward iterator
+  {
+    my_iterator i = array;
+    assert((*i).m_x == i->foo());
+  }
+  // check operator-> with an input iterator
+  {
+    typedef boost::iterator_adaptor<std::istream_iterator<dummyT>,
+      boost::default_iterator_policies> adaptor_type;
+    std::istream_iterator<dummyT> input_iter(std::cin);
+    adaptor_type i(input_iter);
+    if (0) // don't do this (and hang the test waiting for input), 
+           // just make sure it compiles
+      assert((*i).m_x == i->foo());      
+  }
+
   std::cout << "test successful " << std::endl;
   return 0;
 }
