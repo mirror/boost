@@ -206,7 +206,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (size () == mr.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
                 // std::swap_ranges (begin (), end (), mr.begin ());
-                vector_swap (scalar_swap<reference, reference> (), *this, mr);
+                vector_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME iterator::reference> (), *this, mr);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -714,7 +714,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (size () == mc.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
                 // std::swap_ranges (begin (), end (), mc.begin ());
-                vector_swap (scalar_swap<reference, reference> (), *this, mc);
+                vector_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME iterator::reference> (), *this, mc);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -1231,7 +1231,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (size () == mvr.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
                 // std::swap_ranges (begin (), end (), mvr.begin ());
-                vector_swap (scalar_swap<reference, reference> (), *this, mvr);
+                vector_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME iterator::reference> (), *this, mvr);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -1738,7 +1738,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (size () == mvs.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
                 // std::swap_ranges (begin (), end (), mvs.begin ());
-                vector_swap (scalar_swap<reference, reference> (), *this, mvs);
+                vector_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME iterator::reference> (), *this, mvs);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -2246,7 +2246,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (size () == mvi.size (), bad_size ());
                 // Sparse ranges may be nonconformant now.
                 // std::swap_ranges (begin (), end (), mvi.begin ());
-                vector_swap (scalar_swap<reference, reference> (), *this, mvi);
+                vector_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME iterator::reference> (), *this, mvi);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -2749,7 +2749,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &mr) {
                 BOOST_UBLAS_CHECK (size1 () == mr.size1 (), bad_size ());
                 BOOST_UBLAS_CHECK (size2 () == mr.size2 (), bad_size ());
-                matrix_swap (scalar_swap<reference, reference> (), *this, mr);
+                matrix_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME iterator1::reference> (), *this, mr);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -3691,7 +3691,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &ms) {
                 BOOST_UBLAS_CHECK (size1 () == ms.size1 (), bad_size ());
                 BOOST_UBLAS_CHECK (size2 () == ms.size2 (), bad_size ());
-                matrix_swap (scalar_swap<reference, reference> (), *this, ms);
+                matrix_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME iterator1::reference> (), *this, ms);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
@@ -4647,7 +4647,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &mi) {
                 BOOST_UBLAS_CHECK (size1 () == mi.size1 (), bad_size ());
                 BOOST_UBLAS_CHECK (size2 () == mi.size2 (), bad_size ());
-                matrix_swap (scalar_swap<reference, reference> (), *this, mi);
+                matrix_swap (scalar_swap<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME iterator1::reference> (), *this, mi);
             }
         }
 #ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
