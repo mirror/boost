@@ -233,10 +233,10 @@ namespace boost {
     void constraints() {
       function_requires< ReadablePropertyMapConcept<PMap, Key> >();
       function_requires< ConvertibleConcept<Category, LvalueTag> >();
-      
+
+      typedef typename property_traits<PMap>::value_type value_type;
       typedef typename require_same<
-        const typename property_traits<PMap>::value_type&,
-        reference>::type req;
+        const value_type&, reference>::type req;
 
       reference ref = pmap[k];
       ignore_unused_variable_warning(ref);
@@ -266,8 +266,10 @@ namespace boost {
     void constraints() { 
       boost::function_requires< ReadWritePropertyMapConcept<PMap, Key> >();
       boost::function_requires<ConvertibleConcept<Category, LvalueTag> >();
+      
+      typedef typename property_traits<PMap>::value_type value_type;
       typedef typename require_same<
-        typename property_traits<PMap>::value_type&,
+        value_type&,
         reference>::type req;
 
       reference ref = pmap[k];
