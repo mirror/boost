@@ -21,8 +21,6 @@
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/or.hpp>
 
-#include <boost/python/detail/is_xxx.hpp>
-
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
