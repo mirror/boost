@@ -44,7 +44,7 @@ public:
   result_type operator()(argument_type n)
   {
     typedef uniform_int<IntType> dist_type;
-    return variate_generator<base_type, dist_type>(_rng, dist_type(0, n-1))();
+    return variate_generator<base_type&, dist_type>(_rng, dist_type(0, n-1))();
   }
 
 private:
