@@ -16,7 +16,7 @@ void special_values_tests()
   using namespace boost::gregorian;
 
   time_duration td_pi(pos_infin), td_ni(neg_infin), td_ndt(not_a_date_time);
-  date_duration dd_pi(pos_infin), /*dd_ni(neg_infin),*/ dd_ndt(not_a_date_time);
+  date_duration dd_pi(pos_infin), dd_ni(neg_infin), dd_ndt(not_a_date_time);
   date d_pi(pos_infin), d_ni(neg_infin), d_ndt(not_a_date_time);
   time_duration td(1,2,3,4);
   date_duration dd(1234);
@@ -33,12 +33,30 @@ void special_values_tests()
     ptime p_sv1(pos_infin);
     std::string s("+infinity");
     check("from special value +infinity", to_simple_string(p_sv1) == s);
+    ptime result = p_sv1 + dd;
+    check("Special value (pos infin) + date_duration = +infinity", to_iso_extended_string(result) == s);
+    result = p_sv1 - dd;
+    check("Special value (pos infin) - date_duration = +infinity", to_iso_extended_string(result) == s);
+    result = p_sv1 - dd_ni;
+    check("Special value (pos infin) - date_duration (neg infin) = +infinity", to_iso_extended_string(result) == s);
     ptime p_sv2(neg_infin);
     s = "-infinity";
     check("from special value -infinity", to_iso_string(p_sv2) == s);
+    result = p_sv2 - td_pi;
+    check("Special value (neg infin) - special time_duration (pos infin) = -infinity", to_iso_extended_string(result) == s);
     ptime p_sv3(not_a_date_time);
     s = "not-a-date-time";
     check("from special value NADT", to_iso_extended_string(p_sv3) == s);
+    result = p_sv3 + td;
+    check("Special value (NADT) + time_duration = NADT", to_iso_extended_string(result) == s);
+    result = p_sv3 - td;
+    check("Special value (NADT) - time_duration = NADT", to_iso_extended_string(result) == s);
+    result = p_sv2 + td_pi;
+    check("Special value (neg infin) + special time_duration (pos infin) = NADT", to_iso_extended_string(result) == s);
+    result = p_sv1 + dd_ni;
+    check("Special value (pos infin) + date_duration (neg infin) = NADT", to_iso_extended_string(result) == s);
+    result = p_sv1 + dd_ndt;
+    check("Special value (pos infin) - date_duration (NADT) = NADT", to_iso_extended_string(result) == s);
   }
   { // special values construction tests
     ptime p_sv1(d_pi, td);
