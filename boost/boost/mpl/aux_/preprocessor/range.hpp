@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost mpl/aux_/config/use_preprocessed.hpp header file
+// boost mpl/aux_/preprocessor/range.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -14,9 +14,13 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_MPL_AUX_CONFIG_USE_PREPROCESSED_HPP_INCLUDED
-#define BOOST_MPL_AUX_CONFIG_USE_PREPROCESSED_HPP_INCLUDED
+#ifndef BOOST_MPL_AUX_PREPROCESSOR_RANGE_HPP_INCLUDED
+#define BOOST_MPL_AUX_PREPROCESSOR_RANGE_HPP_INCLUDED
 
-//#define BOOST_MPL_NO_PREPROCESSED_HEADERS
+#include "boost/preprocessor/seq/subseq.hpp"
 
-#endif // BOOST_MPL_AUX_CONFIG_USE_PREPROCESSED_HPP_INCLUDED
+#define BOOST_MPL_PP_RANGE(first, length) \
+    BOOST_PP_SEQ_SUBSEQ((0)(1)(2)(3)(4)(5)(6)(7)(8)(9), first, length) \
+/**/
+
+#endif // BOOST_MPL_AUX_PREPROCESSOR_RANGE_HPP_INCLUDED

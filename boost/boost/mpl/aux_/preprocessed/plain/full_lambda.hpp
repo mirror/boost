@@ -65,6 +65,15 @@ struct lambda_impl<
         > type;
 };
 
+template<
+      template< typename P1 > class F
+    , typename T1
+    >
+struct lambda< F<T1> >
+    : lambda_impl< F<T1>,true >
+{
+};
+
 namespace aux {
 
 template<
@@ -109,15 +118,6 @@ struct le_result1< true,true,F,L1 >
 template<
       template< typename P1 > class F
     , typename T1
-    >
-struct lambda< F<T1> >
-    : lambda_impl< F<T1>,true >
-{
-};
-
-template<
-      template< typename P1 > class F
-    , typename T1
     , bool Protect
     >
 struct lambda_impl< F<T1>,Protect >
@@ -149,6 +149,15 @@ struct lambda_impl<
           F
         , T1
         > type;
+};
+
+template<
+      template< typename P1, typename P2 > class F
+    , typename T1, typename T2
+    >
+struct lambda< F<T1,T2> >
+    : lambda_impl< F<T1,T2>,true >
+{
 };
 
 namespace aux {
@@ -195,15 +204,6 @@ struct le_result2< true,true,F,L1,L2 >
 template<
       template< typename P1, typename P2 > class F
     , typename T1, typename T2
-    >
-struct lambda< F<T1,T2> >
-    : lambda_impl< F<T1,T2>,true >
-{
-};
-
-template<
-      template< typename P1, typename P2 > class F
-    , typename T1, typename T2
     , bool Protect
     >
 struct lambda_impl< F<T1,T2>,Protect >
@@ -237,6 +237,15 @@ struct lambda_impl<
           F
         , T1, T2
         > type;
+};
+
+template<
+      template< typename P1, typename P2, typename P3 > class F
+    , typename T1, typename T2, typename T3
+    >
+struct lambda< F<T1,T2,T3> >
+    : lambda_impl< F<T1,T2,T3>,true >
+{
 };
 
 namespace aux {
@@ -283,15 +292,6 @@ struct le_result3< true,true,F,L1,L2,L3 >
 template<
       template< typename P1, typename P2, typename P3 > class F
     , typename T1, typename T2, typename T3
-    >
-struct lambda< F<T1,T2,T3> >
-    : lambda_impl< F<T1,T2,T3>,true >
-{
-};
-
-template<
-      template< typename P1, typename P2, typename P3 > class F
-    , typename T1, typename T2, typename T3
     , bool Protect
     >
 struct lambda_impl< F<T1,T2,T3>,Protect >
@@ -326,6 +326,15 @@ struct lambda_impl<
           F
         , T1, T2, T3
         > type;
+};
+
+template<
+      template< typename P1, typename P2, typename P3, typename P4 > class F
+    , typename T1, typename T2, typename T3, typename T4
+    >
+struct lambda< F<T1,T2,T3,T4> >
+    : lambda_impl< F<T1,T2,T3,T4>,true >
+{
 };
 
 namespace aux {
@@ -375,15 +384,6 @@ struct le_result4< true,true,F,L1,L2,L3,L4 >
 template<
       template< typename P1, typename P2, typename P3, typename P4 > class F
     , typename T1, typename T2, typename T3, typename T4
-    >
-struct lambda< F<T1,T2,T3,T4> >
-    : lambda_impl< F<T1,T2,T3,T4>,true >
-{
-};
-
-template<
-      template< typename P1, typename P2, typename P3, typename P4 > class F
-    , typename T1, typename T2, typename T3, typename T4
     , bool Protect
     >
 struct lambda_impl< F<T1,T2,T3,T4>,Protect >
@@ -420,6 +420,19 @@ struct lambda_impl<
           F
         , T1, T2, T3, T4
         > type;
+};
+
+template<
+      template<
+          typename P1, typename P2, typename P3, typename P4
+        , typename P5
+        >
+      class F
+    , typename T1, typename T2, typename T3, typename T4, typename T5
+    >
+struct lambda< F<T1,T2,T3,T4,T5> >
+    : lambda_impl< F<T1,T2,T3,T4,T5>,true >
+{
 };
 
 namespace aux {
@@ -473,19 +486,6 @@ struct le_result5< true,true,F,L1,L2,L3,L4,L5 >
 };
 
 } // namespace aux
-
-template<
-      template<
-          typename P1, typename P2, typename P3, typename P4
-        , typename P5
-        >
-      class F
-    , typename T1, typename T2, typename T3, typename T4, typename T5
-    >
-struct lambda< F<T1,T2,T3,T4,T5> >
-    : lambda_impl< F<T1,T2,T3,T4,T5>,true >
-{
-};
 
 template<
       template<
@@ -548,7 +548,10 @@ template<
     , typename T5
     , bool Protect
     >
-struct lambda_impl< bind<F,T1,T2,T3,T4,T5>,Protect >
+struct lambda_impl<
+      bind< F,T1,T2,T3,T4,T5 >
+    , Protect 
+    >
 {
     typedef false_c is_le;
     typedef bind< F,T1,T2,T3,T4,T5 > type;

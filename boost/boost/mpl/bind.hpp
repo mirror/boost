@@ -42,7 +42,7 @@
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
 
-#if defined(BOOST_MPL_USE_PREPROCESSED_HEADERS) && \
+#if !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS) && \
     !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   if defined(BOOST_MPL_NO_UNNAMED_PLACEHOLDER_SUPPORT)

@@ -19,11 +19,14 @@
 
 #include "boost/mpl/aux_/arity.hpp"
 #include "boost/mpl/aux_/config/dtp.hpp"
+#include "boost/mpl/aux_/void_spec.hpp"
 
 namespace boost {
 namespace mpl {
 
-template< typename T >
+template<
+      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
+    >
 struct protect : T
 {
     typedef protect type;
@@ -37,6 +40,11 @@ struct arity< protect<T>, N >
 { 
 };
 } // namespace aux
+#endif
+
+BOOST_MPL_AUX_VOID_SPEC_MAIN(1, protect)
+#if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
+BOOST_MPL_AUX_VOID_SPEC_TEMPLATE_ARITY(1, 1, protect)
 #endif
 
 } // namespace mpl

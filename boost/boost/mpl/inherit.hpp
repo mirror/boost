@@ -29,7 +29,7 @@
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
 
-#if 0 //defined(BOOST_MPL_USE_PREPROCESSED_HEADERS)
+#if 0 //!defined(BOOST_MPL_NO_PREPROCESSED_HEADERS)
  //&& !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   define BOOST_MPL_PREPROCESSED_HEADER inherit.hpp

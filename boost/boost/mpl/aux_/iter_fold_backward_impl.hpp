@@ -30,7 +30,7 @@
 
 #include "boost/mpl/aux_/config/use_preprocessed.hpp"
 
-#if defined(BOOST_MPL_USE_PREPROCESSED_HEADERS) && \
+#if !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS) && \
     !defined(BOOST_MPL_PREPROCESSING_MODE)
 
 #   define BOOST_MPL_PREPROCESSED_HEADER iter_fold_backward_impl.hpp
