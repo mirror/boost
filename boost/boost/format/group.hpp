@@ -302,7 +302,7 @@ group1<T1>
 group_head( group2<T1,T2> const& x)
 {
    return group1<T1> (x.a1_); 
-};
+}
 
 template <class T1,class T2>
 inline
@@ -310,7 +310,7 @@ group1<T2>
 group_last( group2<T1,T2> const& x)
 {
    return group1<T2> (x.a2_); 
-};
+}
 
 
 
@@ -320,7 +320,7 @@ group2<T1,T2>
 group_head( group3<T1,T2,T3> const& x)
 {
    return group2<T1,T2> (x.a1_,x.a2_); 
-};
+}
 
 template <class T1,class T2,class T3>
 inline
@@ -328,7 +328,7 @@ group1<T3>
 group_last( group3<T1,T2,T3> const& x)
 {
    return group1<T3> (x.a3_); 
-};
+}
 
 
 
@@ -338,7 +338,7 @@ group3<T1,T2,T3>
 group_head( group4<T1,T2,T3,T4> const& x)
 {
    return group3<T1,T2,T3> (x.a1_,x.a2_,x.a3_); 
-};
+}
 
 template <class T1,class T2,class T3,class T4>
 inline
@@ -346,7 +346,7 @@ group1<T4>
 group_last( group4<T1,T2,T3,T4> const& x)
 {
    return group1<T4> (x.a4_); 
-};
+}
 
 
 
@@ -356,7 +356,7 @@ group4<T1,T2,T3,T4>
 group_head( group5<T1,T2,T3,T4,T5> const& x)
 {
    return group4<T1,T2,T3,T4> (x.a1_,x.a2_,x.a3_,x.a4_); 
-};
+}
 
 template <class T1,class T2,class T3,class T4,class T5>
 inline
@@ -364,7 +364,7 @@ group1<T5>
 group_last( group5<T1,T2,T3,T4,T5> const& x)
 {
    return group1<T5> (x.a5_); 
-};
+}
 
 
 
@@ -374,7 +374,7 @@ group5<T1,T2,T3,T4,T5>
 group_head( group6<T1,T2,T3,T4,T5,T6> const& x)
 {
    return group5<T1,T2,T3,T4,T5> (x.a1_,x.a2_,x.a3_,x.a4_,x.a5_); 
-};
+}
 
 template <class T1,class T2,class T3,class T4,class T5,class T6>
 inline
@@ -382,7 +382,7 @@ group1<T6>
 group_last( group6<T1,T2,T3,T4,T5,T6> const& x)
 {
    return group1<T6> (x.a6_); 
-};
+}
 
 
 
@@ -392,7 +392,7 @@ group6<T1,T2,T3,T4,T5,T6>
 group_head( group7<T1,T2,T3,T4,T5,T6,T7> const& x)
 {
    return group6<T1,T2,T3,T4,T5,T6> (x.a1_,x.a2_,x.a3_,x.a4_,x.a5_,x.a6_); 
-};
+}
 
 template <class T1,class T2,class T3,class T4,class T5,class T6,class T7>
 inline
@@ -400,7 +400,7 @@ group1<T7>
 group_last( group7<T1,T2,T3,T4,T5,T6,T7> const& x)
 {
    return group1<T7> (x.a7_); 
-};
+}
 
 
 
@@ -410,7 +410,7 @@ group7<T1,T2,T3,T4,T5,T6,T7>
 group_head( group8<T1,T2,T3,T4,T5,T6,T7,T8> const& x)
 {
    return group7<T1,T2,T3,T4,T5,T6,T7> (x.a1_,x.a2_,x.a3_,x.a4_,x.a5_,x.a6_,x.a7_); 
-};
+}
 
 template <class T1,class T2,class T3,class T4,class T5,class T6,class T7,class T8>
 inline
@@ -418,7 +418,7 @@ group1<T8>
 group_last( group8<T1,T2,T3,T4,T5,T6,T7,T8> const& x)
 {
    return group1<T8> (x.a8_); 
-};
+}
 
 
 
@@ -428,7 +428,7 @@ group8<T1,T2,T3,T4,T5,T6,T7,T8>
 group_head( group9<T1,T2,T3,T4,T5,T6,T7,T8,T9> const& x)
 {
    return group8<T1,T2,T3,T4,T5,T6,T7,T8> (x.a1_,x.a2_,x.a3_,x.a4_,x.a5_,x.a6_,x.a7_,x.a8_); 
-};
+}
 
 template <class T1,class T2,class T3,class T4,class T5,class T6,class T7,class T8,class T9>
 inline
@@ -436,7 +436,7 @@ group1<T9>
 group_last( group9<T1,T2,T3,T4,T5,T6,T7,T8,T9> const& x)
 {
    return group1<T9> (x.a9_); 
-};
+}
 
 
 
@@ -446,7 +446,7 @@ group9<T1,T2,T3,T4,T5,T6,T7,T8,T9>
 group_head( group10<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10> const& x)
 {
    return group9<T1,T2,T3,T4,T5,T6,T7,T8,T9> (x.a1_,x.a2_,x.a3_,x.a4_,x.a5_,x.a6_,x.a7_,x.a8_,x.a9_); 
-};
+}
 
 template <class T1,class T2,class T3,class T4,class T5,class T6,class T7,class T8,class T9,class T10>
 inline
@@ -454,7 +454,7 @@ group1<T10>
 group_last( group10<T1,T2,T3,T4,T5,T6,T7,T8,T9,T10> const& x)
 {
    return group1<T10> (x.a10_); 
-};
+}
 
 
 
