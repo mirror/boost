@@ -1140,15 +1140,18 @@ public:
 #undef wcsxfrm
 #endif
 
-#if defined(BOOST_NO_STDC_NAMESPACE) || (defined(__STL_NO_USING_FOR_GLOBAL_FUNCTIONS) && defined(__SGI_STL_PORT))
+#if defined(BOOST_NO_STDC_NAMESPACE) || (defined(std) && defined(__SGI_STL_PORT))
 //
-// fix namespaces:
+// fix namespaces,
+// note that we almost always do this for STLPort, as it doesn't always
+// catch all the wide character functions:
 namespace std{
    using ::ptrdiff_t;
    using ::size_t;
    using ::memcpy;
    using ::memmove;
    using ::memset;
+   using ::memcmp;
    using ::sprintf;
    using ::strcat;
    using ::strcmp;
@@ -1214,6 +1217,8 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
+
 
 
 
