@@ -121,7 +121,9 @@ public:
   }
   bool operator==(const int& rhs) const
   {
-    if(!std::numeric_limits<int_type>::is_signed)
+    // quiets compiler warnings
+    bool is_signed = std::numeric_limits<int_type>::is_signed;
+    if(!is_signed)
     {
       if(is_neg_infinity(value_) && rhs == 0)
       {
@@ -136,7 +138,9 @@ public:
   }
   bool operator!=(const int& rhs) const
   {
-    if(!std::numeric_limits<int_type>::is_signed)
+    // quiets compiler warnings
+    bool is_signed = std::numeric_limits<int_type>::is_signed;
+    if(!is_signed)
     {
       if(is_neg_infinity(value_) && rhs == 0)
       {
@@ -151,7 +155,9 @@ public:
   }
   bool operator<(const int& rhs) const
   {
-    if(!std::numeric_limits<int_type>::is_signed)
+    // quiets compiler warnings
+    bool is_signed = std::numeric_limits<int_type>::is_signed;
+    if(!is_signed)
     {
       if(is_neg_infinity(value_) && rhs == 0)
       {
@@ -366,7 +372,9 @@ private:
   int_adapter mult_div_specials(const int_adapter& rhs)const
   {
     int min; 
-    if(std::numeric_limits<int_type>::is_signed)
+    // quiets compiler warnings
+    bool is_signed = std::numeric_limits<int_type>::is_signed;
+    if(is_signed)
     {
       min = 0;
     }
@@ -397,7 +405,9 @@ private:
   int_adapter mult_div_specials(const int& rhs)const
   {
     int min; 
-    if(std::numeric_limits<int_type>::is_signed)
+    // quiets compiler warnings
+    bool is_signed = std::numeric_limits<int_type>::is_signed;
+    if(is_signed)
     {
       min = 0;
     }
@@ -426,10 +436,11 @@ private:
   /*! Expected output is either a numeric representation 
    * or a special values representation.<BR> 
    * Ex. "12", "+infinity", "not-a-number", etc. */
-  template<typename int_type>
+  //template<class charT = char, class traits = std::traits<charT>, typename int_type>
+  template<class charT, class traits, typename int_type>
   inline
-  std::ostream& operator<<(std::ostream& os, 
-                           const int_adapter<int_type>& ia)
+  std::basic_ostream<charT, traits>& 
+  operator<<(std::basic_ostream<charT, traits>& os, const int_adapter<int_type>& ia)
   {
     if(ia.is_special())
     {
