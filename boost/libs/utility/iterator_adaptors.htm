@@ -92,6 +92,8 @@
 
               <li><a href="#declaration_synopsis">Declaration Synopsis</a>
 
+              <li><a href="#portability">Portability</a>
+
               <li><a href="#notes">Notes</a>
             </ul>
 
@@ -811,6 +813,19 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
 
 // and similarly for operators !=, &lt;, &lt;=, &gt;=, &gt;
 </pre>
+
+    <h3><a name="portability">Portability</a></h3>
+
+    <p>Generally, the iterator adaptors library can be compiled with all compilers
+    supporting iterator traits and type traits.</p>
+
+    <p>Microsoft VC++ is not able to handle iterator adaptors based on a 
+    <code>vector<T>::iterator</code> without specifying all template paramters explicitly.
+    In case not all template parameters are specified explicitly, the iterator adaptors
+    library will deduce these types using iterator_traits. But since in VC++ a
+    <code>vector<T>::iterator</code> is a <code>T*</code>, VC++ can't handle using 
+    iterator_traits due to the lack of partial template specialization.</p> 
+    
 
     <h3><a name="notes">Notes</a></h3>
 
