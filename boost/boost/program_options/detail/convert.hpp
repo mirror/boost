@@ -56,6 +56,17 @@ namespace boost {
     std::wstring
     from_local_8_bit(const std::string& s);
 
+    namespace program_options
+    {
+        /** Convert the input string into internal encoding used by
+            program_options. Presense of this function allows to avoid
+            specializing all methods which access input on wchar_t.
+        */
+        std::string to_internal(const std::string&);
+        /** @overload */
+        std::string to_internal(const std::wstring&);
+    }
+
 
   
 }

@@ -135,7 +135,18 @@ namespace boost {
                         BOOST_USE_FACET(facet_type, locale()));                        
     }
 
+    namespace program_options
+    {
+        std::string to_internal(const std::string& s)
+        {
+            return s;
+        }
 
+        std::string to_internal(const std::wstring& s)
+        {
+            return to_utf8(s);
+        }
+    }
 
 
 }

@@ -141,32 +141,29 @@ namespace boost { namespace program_options { namespace detail {
         get();
     }
 
-    template<>
-    bool
-    basic_config_file_iterator<wchar_t>::getline(std::string& s)
-#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
-    {
-        // When the function is out-of-line, Metrowerks tries to use
-        // the unspecialized version below, which causes an error.
-        std::wstring ws;
-        if (std::getline(*is, ws)) {
-            s = to_utf8(ws);
-            return true;
-        } else {
-            return false;
-        }                    
-    }
-#else
-;
-#endif
-
-
+    // Specializing this function for wchar_t causes problems on
+    // borland and vc7, as well as on metrowerks. On the first two
+    // I don't know a workaround, so make use of 'to_internal' to
+    // avoid specialization.
     template<class charT>
     bool
     basic_config_file_iterator<charT>::getline(std::string& s)
     {
-        return std::getline(*is, s);
+        std::basic_string<charT> in;
+        if (std::getline(*is, in)) {
+            s = to_internal(in);
+            return true;
+        } else {
+            return false;
+        }
     }
+
+    // Specialization is needed to workaround getline bug on Comeau.
+#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303))
+    template<>
+    bool
+    basic_config_file_iterator<wchar_t>::getline(std::string& s);
+#endif
 
     
 

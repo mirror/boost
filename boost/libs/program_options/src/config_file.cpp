@@ -138,8 +138,8 @@ namespace boost { namespace program_options { namespace detail {
     }
 
 // On Metrowerks, the function is defined inline.
-#if ! BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3202))
-#ifndef BOOST_NO_STD_WSTRING
+
+#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303))
     template<>
     bool
     basic_config_file_iterator<wchar_t>::getline(std::string& s)
@@ -148,11 +148,8 @@ namespace boost { namespace program_options { namespace detail {
         // On Comeau, using two-argument version causes
         // call to some internal function with std::wstring, and '\n'
         // (not L'\n') and compile can't resolve that call.
-#if BOOST_WORKAROUND(__COMO_VERSION__, BOOST_TESTED_AT(4303))
+
         if (std::getline(*is, ws, L'\n')) {
-#else
-        if (std::getline(*is, ws)) {
-#endif
             s = to_utf8(ws);
             return true;
         } else {
@@ -160,7 +157,6 @@ namespace boost { namespace program_options { namespace detail {
         }            
     }
 #endif    
-#endif
 
 }}}
 
