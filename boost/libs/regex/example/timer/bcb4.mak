@@ -13,13 +13,14 @@ BCROOT=$(MAKEDIR)\..
 BCC32   = $(BCROOT)\bin\Bcc32.exe 
 
 IDE_LinkFLAGS32 =  -L$(BCROOT)\LIB
-COMPOPTS= -O2 -tWC -tWM- -D_NO_VCL; -I../../../../; -L..\..\build\bcb4
+COMPOPTS= -O2 -tWC -tWM- -Vx -Ve -D_NO_VCL; -I../../../../; -L..\..\build\bcb4
 
 
 timer.exe : regex_timer.cpp
   $(BCC32) @&&|
  $(COMPOPTS) -e$@ regex_timer.cpp
 |
+
 
 
 

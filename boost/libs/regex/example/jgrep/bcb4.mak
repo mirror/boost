@@ -14,7 +14,7 @@ LIBPATH="..\..\build\bcb4"
 
 IDE_LinkFLAGS32 =  -L$(BCROOT)\LIB
 LINKOPTS= -ap -Tpe -x
-COMPOPTS= -O2 -tWM- -DSTRICT; -I$(BCROOT)\include;../../../../; -D_NO_VCL
+COMPOPTS= -O2 -tWM- -Vx -Ve -DSTRICT; -I$(BCROOT)\include;../../../../; -D_NO_VCL
 
 
 
@@ -32,6 +32,7 @@ main.obj :  main.cpp
   $(BCC32) -c @&&|
  $(COMPOPTS) -o$@ main.cpp
 |
+
 
 
 

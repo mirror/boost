@@ -14,7 +14,7 @@ TLINK32 = $(BCROOT)\bin\ILink32.exe
 
 IDE_LinkFLAGS32 =  -L$(BCROOT)\LIB
 LINKOPTS= -ap -Tpe -x
-CFLAGS= -O2 -tWC -DSTRICT; -w-inl -w-aus -w-csu -w-eff -w-rch -I$(BCROOT)\include;..\..\..\..\; -L$(BCROOT)\lib\obj -L$(BCROOT)\lib\release -L..\..\build\bcb5 $(CXXFLAGS)
+CFLAGS= -O2 -tWC -DSTRICT; -Vx -Ve -w-inl -w-aus -w-csu -w-eff -w-rch -I$(BCROOT)\include;..\..\..\..\; -L$(BCROOT)\lib\obj -L$(BCROOT)\lib\release -L..\..\build\bcb5 $(CXXFLAGS)
 
 BPI= vcl.bpi rtl.bpi vclx.bpi vcle.lib
 
@@ -178,6 +178,7 @@ r5lv.exe : tests.cpp parse.cpp regress.cpp
 
 r6lv.exe : tests.cpp parse.cpp regress.cpp
 	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE tests.cpp parse.cpp regress.cpp $(BPI)
+
 
 
 
