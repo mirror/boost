@@ -200,7 +200,7 @@ namespace boost {
         return res;
     }
     template< class Ch, class Tr, class Alloc>
-    typename basic_format<Ch, Tr, Alloc>::size_type  basic_format<Ch,Tr, Alloc>:: 
+    typename std::basic_string<Ch, Tr, Alloc>::size_type  basic_format<Ch,Tr, Alloc>:: 
     size () const {
         BOOST_USING_STD_MAX();
         std::streamsize sz = prefix_.size();
