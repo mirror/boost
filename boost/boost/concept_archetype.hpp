@@ -7,6 +7,7 @@
 //
 // Revision History:
 //
+//   17 July  2001: Added const to some member functions. (Jeremy Siek) 
 //   05 May   2001: Removed static dummy_cons object. (Jeremy Siek)
 
 #ifndef BOOST_CONCEPT_ARCHETYPES_HPP
@@ -630,10 +631,10 @@ namespace boost {
       { return difference_type(); }
     self operator+(difference_type) const { return *this; }
     self operator-(difference_type) const { return *this; }
-    bool operator<(const self&) { return true; }
-    bool operator<=(const self&) { return true; }
-    bool operator>(const self&) { return true; }
-    bool operator>=(const self&) { return true; }
+    bool operator<(const self&) const { return true; }
+    bool operator<=(const self&) const { return true; }
+    bool operator>(const self&) const { return true; }
+    bool operator>=(const self&) const { return true; }
   };
   template <class T>
   random_access_iterator_archetype<T> 
@@ -670,10 +671,10 @@ namespace boost {
       { return difference_type(); }
     self operator+(difference_type) const { return *this; }
     self operator-(difference_type) const { return *this; }
-    bool operator<(const self&) { return true; }
-    bool operator<=(const self&) { return true; }
-    bool operator>(const self&) { return true; }
-    bool operator>=(const self&) { return true; }
+    bool operator<(const self&) const { return true; }
+    bool operator<=(const self&) const { return true; }
+    bool operator>(const self&) const { return true; }
+    bool operator>=(const self&) const { return true; }
   };
   template <class T>
   mutable_random_access_iterator_archetype<T> 
