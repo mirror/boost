@@ -32,7 +32,7 @@
 // the implementation below is based on a USENET newsgroup's posting by  
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
 
-#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, unused) \
 template< typename T > \
 boost::mpl::aux::yes_tag \
 trait##_helper( \
@@ -66,7 +66,7 @@ namespace boost { namespace mpl { namespace aux {
 struct has_xxx_tag;
 }}}
 
-#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name, unused) \
 template< typename T, typename name = ::boost::mpl::aux::has_xxx_tag > \
 struct trait : T \
 { \
@@ -105,13 +105,13 @@ template<> struct trait<T,boost::mpl::aux::has_xxx_tag> \
 /**/
 
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
-#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name) \
-    BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, unused) \
+    BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name, unused) \
     BOOST_MPL_AUX_HAS_XXX_TRAIT_SPEC(trait, wchar_t) \
     /**/
 #else
-#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name) \
-    BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, unused) \
+    BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF_(trait, name, unused) \
     /**/
 #endif
 
@@ -119,18 +119,18 @@ template<> struct trait<T,boost::mpl::aux::has_xxx_tag> \
 
 #else 
 
-#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name) \
+#   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, default_value) \
 template< typename T > \
 struct trait \
 { \
-     BOOST_STATIC_CONSTANT(bool, value = false); \
+     BOOST_STATIC_CONSTANT(bool, value = default_value); \
 }; \
 /**/
 
 #endif // BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION
 
 #define BOOST_MPL_HAS_XXX_TRAIT_DEF(name) \
-BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_##name, name) \
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_##name, name, false) \
 /**/
 
 #endif // BOOST_MPL_AUX_HAS_XXX_HPP_INCLUDED

@@ -18,6 +18,7 @@
 #define BOOST_MPL_AUX_BEGIN_END_IMPL_HPP_INCLUDED
 
 #include "boost/mpl/begin_end_fwd.hpp"
+#include "boost/mpl/sequence_tag_fwd.hpp"
 #include "boost/mpl/aux_/traits_lambda_spec.hpp"
 #include "boost/mpl/aux_/config/eti.hpp"
 
@@ -25,8 +26,8 @@ namespace boost {
 namespace mpl {
 
 // default implementation; conrete sequences might override it by 
-// specializing either the |begin_traits/end_traits| or the primary 
-// |begin/end| templates
+// specializing either the 'begin_traits/end_traits' or the primary 
+// 'begin/end' templates
 
 template< typename Tag >
 struct begin_traits
@@ -46,23 +47,36 @@ struct end_traits
     };
 };
 
-#if defined(BOOST_MPL_MSVC_ETI_BUG)
-template<> struct begin_traits<int>
-{
-    template< typename Sequence > struct algorithm
-    {
-        typedef int type;
-    };
-};
+// specialize 'begin_trait/end_trait' for two pre-defined tags
 
-template<> struct end_traits<int>
-{
-    template< typename Sequence > struct algorithm
-    {
-        typedef int type;
-    };
-};
+#   define AUX_AGLORITM_TRAIT_SPEC(name, tag, result) \
+template<> \
+struct name##_traits<tag> \
+{ \
+    template< typename Sequence > struct algorithm  \
+    { \
+        typedef result type; \
+    }; \
+}; \
+/**/
+
+// a sequence with nested 'begin/end' typedefs; just query them
+AUX_AGLORITM_TRAIT_SPEC(begin, nested_begin_end_tag, typename Sequence::begin)
+AUX_AGLORITM_TRAIT_SPEC(end, nested_begin_end_tag, typename Sequence::end)
+
+// if a type 'T' does not contain 'begin/end' or 'tag' members 
+// and doesn't specialize either 'begin/end' or 'begin_traits/end_traits' 
+// templates, then we end up here
+AUX_AGLORITM_TRAIT_SPEC(begin, non_sequence_tag, non_sequence_tag)
+AUX_AGLORITM_TRAIT_SPEC(end, non_sequence_tag, non_sequence_tag)
+
+#if defined(BOOST_MPL_MSVC_ETI_BUG)
+AUX_AGLORITM_TRAIT_SPEC(begin, int, non_sequence_tag)
+AUX_AGLORITM_TRAIT_SPEC(end, int, non_sequence_tag)
 #endif
+
+#   undef AUX_AGLORITM_TRAIT_SPEC
+
 
 BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(1,begin_traits)
 BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(1,end_traits)

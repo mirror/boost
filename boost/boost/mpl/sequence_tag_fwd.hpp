@@ -1,9 +1,9 @@
 //-----------------------------------------------------------------------------
-// boost mpl/aux_/sequence_tag.hpp header file
+// boost mpl/sequence_tag_fwd.hpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2001-02
+// Copyright (c) 2000-02
 // Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
@@ -14,26 +14,16 @@
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
 
-#ifndef BOOST_MPL_AUX_SEQUENCE_TAG_HPP_INCLUDED
-#define BOOST_MPL_AUX_SEQUENCE_TAG_HPP_INCLUDED
+#ifndef BOOST_MPL_SEQUENCE_TAG_FWD_HPP_INCLUDED
+#define BOOST_MPL_SEQUENCE_TAG_FWD_HPP_INCLUDED
 
-//#include "boost/mpl/aux_/config/internal.hpp"
-#include "boost/config.hpp"
+namespace boost { namespace mpl {
 
-#if !defined(BOOST_MPL_INTERNAL_USE_SEQUENCE_TAG)
-#   define BOOST_MPL_INTERNAL_USE_SEQUENCE_TAG
-#endif
+struct nested_begin_end_tag;
+struct non_sequence_tag;
 
-#if defined(BOOST_MPL_INTERNAL_USE_SEQUENCE_TAG) \
- || defined(BOOST_MSVC) && BOOST_MSVC < 1300
+template< typename Sequence > struct sequence_tag;
 
-#   include "boost/mpl/sequence_tag.hpp"
-#   define BOOST_MPL_AUX_SEQUENCE_TAG(seq) sequence_tag<seq>::type
+}} // namespace boost::mpl
 
-#else
-
-#   define BOOST_MPL_AUX_SEQUENCE_TAG(seq) seq::tag
-
-#endif
-
-#endif // BOOST_MPL_AUX_SEQUENCE_TAG_HPP_INCLUDED
+#endif // BOOST_MPL_SEQUENCE_TAG_FWD_HPP_INCLUDED

@@ -24,7 +24,7 @@
 
 namespace boost { namespace mpl { namespace aux {
 
-BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_rebind_impl, rebind)
+BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(has_rebind_impl, rebind, false)
 
 template< typename T >
 struct has_rebind
