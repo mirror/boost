@@ -36,8 +36,8 @@ main()
     day_iterator ditr(date(year,month,1));
     //loop thru the days and print each one
     for (; ditr <= endOfMonth; ++ditr) {
-      std::cout << to_simple_string(*ditr) << " ["
-                << ditr->day_of_week().as_short_string() << "]"
+      std::cout << *ditr << " ["
+                << ditr->day_of_week() << "]"
                 << std::endl; 
     }
   }
