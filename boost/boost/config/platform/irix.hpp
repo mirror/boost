@@ -16,6 +16,10 @@
 #define BOOST_HAS_GETTIMEOFDAY
 #define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 
+#ifdef __GNUC__
+   // GNU C on IRIX does not support threads (checked up to gcc 3.3)
+#  define BOOST_DISABLE_THREADS
+#endif
 
 // boilerplate code:
 #define BOOST_HAS_UNISTD_H
