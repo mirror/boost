@@ -46,12 +46,12 @@ namespace boost {
 Generator</a></h2>
 
 The class <tt>filter_iterator_generator</tt> is a helper class who's
-purpose is to construct a filter iterator adaptor type.  The template
+purpose is to construct a filter iterator type.  The template
 parameters for this class are the <tt>Predicate</tt> function object
-type and the <tt>BaseIterator</tt> type that is being wrapped.  In most
-cases the associated types for the wrapped iterator can be deduced
-from <tt>std::iterator_traits</tt>, but in some situations the user
-may want to override these types, so there are also template
+type and the <tt>BaseIterator</tt> type that is being wrapped.  In
+most cases the associated types for the wrapped iterator can be
+deduced from <tt>std::iterator_traits</tt>, but in some situations the
+user may want to override these types, so there are also template
 parameters for each of the iterator's associated types.
 
 <pre>
@@ -60,10 +60,11 @@ template &lt;class Predicate, class BaseIterator,
 class filter_iterator_generator
 {
 public:
-  typedef ... type;          // the resulting filter <a href="./iterator_adaptor.htm"><tt>iterator_adaptor</tt></a> type
+  typedef ... type;          // the resulting filter iterator type which is <a href="./iterator_adaptor.htm"><tt>iterator_adaptor</tt></a>
   typedef ... policies_type; // the policies type for the iterator adaptor
 }
 </pre>
+
 
 <h3>Example</h3>
 
@@ -172,8 +173,22 @@ href="www.sgi.com/tech/stl/InputIterator.html">InputIterator</a> or <a
 href="www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>
 depending on the adapted iterator type.
 
-<p>
 
+<h3>Members</h3>
+
+The filter iterator type implements all of the member functions and
+operators required of the <a
+href="http://www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterator</a>
+concept.  In addition it has the following constructor:
+
+<pre>filter_iterator_generator::type(const BaseIterator& it, const Policies& p = Policies())</pre>
+
+<p>
+The policies type has only one public function, which is its constructor:
+
+<pre>filter_iterator_generator::policies_type(const Predicate& p, const BaseIterator& end)</pre>
+
+<p>
 <hr>
 <p>
 
