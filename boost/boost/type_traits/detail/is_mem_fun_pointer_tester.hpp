@@ -267,7 +267,7 @@ yes_type is_mem_fun_pointer_tester(R (T::*)(T0,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T1
 #else
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
-    (0, 25, "boost/type_traits/detail/is_mem_fun_pointer_tester.hpp")
+    (3, (0, 25, "boost/type_traits/detail/is_mem_fun_pointer_tester.hpp"))
 #include BOOST_PP_ITERATE()
 
 #endif // BOOST_TT_PREPROCESSING_MODE
