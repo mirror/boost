@@ -20,8 +20,6 @@ content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
         </td>
         <td valign="top"><h3 align="center">Regex++, Traits Class
         Reference. </h3>
-        <p align="left"><i>(Version 3.20, 29th Sept 2001)</i>&nbsp;
-        </p>
         <p align="left"><i>Copyright (c) 1998-2001 </i></p>
         <p align="left"><i>Dr John Maddock</i></p>
         <p align="left"><i>Permission to use, copy, modify,
@@ -996,12 +994,23 @@ class does not contain instance data:<br>
     </tr>
 </table>
 
-<p><a name="intro"></a><br>
+<p>There is also an example of a custom traits class supplied by <a
+href="mailto:christian.engstrom@glindra.org">Christian Engström</a>,
+see <a
+href="example/iso8859_1_regex_traits/iso8859_1_regex_traits.cpp">iso8859_1_regex_traits.cpp</a>
+and <a
+href="example/iso8859_1_regex_traits/iso8859_1_regex_traits.hpp">iso8859_1_regex_traits.hpp</a>.
+This example inherits from c_regex_traits and provides it's own
+implementations of two locale specific functions. This ensures
+that the class gives consistent behaviour (albeit tied to one
+locale) on all platforms. A fuller desciption by the author is
+available in the <a
+href="example/iso8859_1_regex_traits/readme.txt">readme file</a>.<br>
 </p>
 
 <hr>
 
 <p><i>Copyright</i> <a href="mailto:John_Maddock@compuserve.com"><i>Dr
-John Maddock</i></a> <i>1998-2000 all rights reserved.</i> </p>
+John Maddock</i></a> <i>1998-2001 all rights reserved.</i> </p>
 </body>
 </html>
