@@ -572,7 +572,7 @@ public:
     return result_type(*this,x.get());
   }
 
-  result_type operator()(const reference_wrapper<value_type>& x)const
+  result_type operator()(const reference_wrapper<value_type>& x,int=0)const
   {
     return result_type(*this,x.get());
   }

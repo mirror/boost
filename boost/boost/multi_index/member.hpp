@@ -59,7 +59,7 @@ struct const_member_base
     return operator()(x.get());
   }
 
-  Type& operator()(const reference_wrapper<Class> x)const
+  Type& operator()(const reference_wrapper<Class> x,int=0)const
   { 
     return operator()(x.get());
   }
@@ -148,7 +148,7 @@ struct const_member_offset_base
     return operator()(x.get());
   }
 
-  Type& operator()(const reference_wrapper<Class>& x)const
+  Type& operator()(const reference_wrapper<Class>& x,int=0)const
   {
     return operator()(x.get());
   }

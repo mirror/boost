@@ -61,7 +61,7 @@ struct const_identity_base
   }
 
   Type& operator()(
-    const reference_wrapper<typename remove_const<Type>::type>& x)const
+    const reference_wrapper<typename remove_const<Type>::type>& x,int=0)const
   { 
     return x.get();
   }

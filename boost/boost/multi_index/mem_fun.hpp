@@ -51,7 +51,7 @@ struct const_mem_fun
     return operator()(x.get());
   }
 
-  Type operator()(const reference_wrapper<Class>& x)const
+  Type operator()(const reference_wrapper<Class>& x,int=0)const
   { 
     return operator()(x.get());
   }
@@ -112,7 +112,7 @@ struct const_mem_fun_explicit
     return operator()(x.get());
   }
 
-  Type operator()(const reference_wrapper<Class>& x)const
+  Type operator()(const reference_wrapper<Class>& x,int=0)const
   { 
     return operator()(x.get());
   }
