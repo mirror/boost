@@ -12,6 +12,8 @@
 //
 // Revision History:
 
+// 11 Feb 2001   David Abrahams
+//      Switch to use of BOOST_STATIC_CONSTANT where possible
 // 11 Feb 2001   Jeremy Siek
 //      Removed workaround for older MIPSpro compiler. The workaround
 //        was preventing the proper functionality of the underlying
@@ -338,8 +340,11 @@ namespace detail {
   {
       typedef operator_arrow_proxy<Value> proxy;
       
-      enum { is_input_iter = boost::is_convertible<Category,std::input_iterator_tag>::value
-             & !boost::is_convertible<Category,std::forward_iterator_tag>::value };
+      // Borland chokes unless it's an actual enum (!)
+      enum { is_input_iter
+            = (boost::is_convertible<Category*,std::input_iterator_tag*>::value
+               & !boost::is_convertible<Category*,std::forward_iterator_tag*>::value)
+      };
       
       typedef typename boost::detail::if_true<(is_input_iter)>::template
       then<
@@ -385,7 +390,7 @@ namespace detail {
    template <class Iterator,class Value>
    struct iterator_defaults
    {
-       enum { is_ptr = boost::is_pointer<Iterator>::value };
+       BOOST_STATIC_CONSTANT(bool, is_ptr = boost::is_pointer<Iterator>::value);
 
        typedef iterator_defaults_select<is_ptr>::template traits<Iterator,Value> traits;
        typedef typename traits::pointer pointer;
@@ -470,7 +475,7 @@ struct iterator_adaptor :
 #endif
 {
     typedef iterator_adaptor<Base,Policies,Value,Reference,Pointer,Category,Distance> self;
-public:
+ public:
     typedef Distance difference_type;
     typedef typename boost::remove_const<Value>::type value_type;
     typedef Pointer pointer;
@@ -478,20 +483,23 @@ public:
     typedef Category iterator_category;
     typedef Base base_type;
 
-    enum { is_input_or_output_iter = 
-           boost::is_convertible<iterator_category*,std::input_iterator_tag*>::value
-           || boost::is_convertible<iterator_category*,std::output_iterator_tag*>::value };
+ private:
+    BOOST_STATIC_CONSTANT(bool, is_input_or_output_iter
+          = (boost::is_convertible<iterator_category*,std::input_iterator_tag*>::value
+             || boost::is_convertible<iterator_category*,std::output_iterator_tag*>::value));
 
     // Iterators should satisfy one of the known categories
     BOOST_STATIC_ASSERT(is_input_or_output_iter);
 
     // Iterators >= ForwardIterator must produce real references.
-    enum { forward_iter_with_real_reference =
+    BOOST_STATIC_CONSTANT(bool, forward_iter_with_real_reference =
            (!boost::is_convertible<iterator_category*,std::forward_iterator_tag*>::value
            || boost::is_same<reference,value_type&>::value
-           || boost::is_same<reference,const value_type&>::value) };
+           || boost::is_same<reference,const value_type&>::value));
+    
     BOOST_STATIC_ASSERT(forward_iter_with_real_reference);
-
+    
+ public:
     iterator_adaptor() { }
 
     iterator_adaptor(const Base& it, const Policies& p = Policies())
@@ -976,7 +984,9 @@ namespace detail {
       >::type type;
    private:
       // For some reason, putting this assertion in filter_iterator_generator fails inexplicably under MSVC
-    enum { is_bidirectional = (!boost::is_convertible<type*, std::bidirectional_iterator_tag*>::value) };
+      BOOST_STATIC_CONSTANT(
+          bool, is_bidirectional
+          = (!boost::is_convertible<type*, std::bidirectional_iterator_tag*>::value));
       BOOST_STATIC_ASSERT(is_bidirectional);
 # else
       // is_convertible doesn't work with MWERKS
@@ -1000,17 +1010,8 @@ template <class Predicate, class Iterator,
     class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Iterator>::difference_type
          >
 class filter_iterator_generator {
-#ifndef __BORLANDC__
-    enum {
-#else
-        static const bool
-#endif
-        is_bidirectional
-           = boost::is_convertible<Category*, std::bidirectional_iterator_tag*>::value
-#ifndef __BORLANDC__
-    }
-#endif
-    ;
+    BOOST_STATIC_CONSTANT(bool, is_bidirectional
+        = (boost::is_convertible<Category*, std::bidirectional_iterator_tag*>::value));
 #ifndef BOOST_MSVC // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
     BOOST_STATIC_ASSERT(!is_bidirectional);
 #endif
