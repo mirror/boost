@@ -1,7 +1,7 @@
 #ifndef BOOST_FSM_DETAIL_NODE_STATE_HPP_INCLUDED
 #define BOOST_FSM_DETAIL_NODE_STATE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2004
+// (c) Copyright Andreas Huber Doenni 2002-2005
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ class node_state_base : public state_base< Allocator, RttiPolicy >
 };
 
 //////////////////////////////////////////////////////////////////////////////
-template< class NoOfOrthogonalRegions, class Allocator, class RttiPolicy >
+template< class OrthogonalRegionCount, class Allocator, class RttiPolicy >
 class node_state : public node_state_base< Allocator, RttiPolicy >
 {
   typedef node_state_base< Allocator, RttiPolicy > base_type;
@@ -61,7 +61,7 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
       base_type( idProvider )
     {
       for ( orthogonal_position_type pos = 0; 
-            pos < NoOfOrthogonalRegions::value; ++pos )
+            pos < OrthogonalRegionCount::value; ++pos )
       {
         pInnerStates[ pos ] = 0;
       }
@@ -79,14 +79,14 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
     void add_inner_state( orthogonal_position_type position,
                           state_base_type * pInnerState )
     {
-      BOOST_ASSERT( ( position < NoOfOrthogonalRegions::value ) &&
+      BOOST_ASSERT( ( position < OrthogonalRegionCount::value ) &&
                     ( pInnerStates[ position ] == 0 ) );
       pInnerStates[ position ] = pInnerState;
     }
 
     void remove_inner_state( orthogonal_position_type position )
     {
-      BOOST_ASSERT( position < NoOfOrthogonalRegions::value );
+      BOOST_ASSERT( position < OrthogonalRegionCount::value );
       pInnerStates[ position ] = 0;
     }
 
@@ -100,7 +100,7 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
 
       // Destroy inner states in the reverse order of construction
       for ( state_base_type ** pState =
-              &pInnerStates[ NoOfOrthogonalRegions::value ]; 
+              &pInnerStates[ OrthogonalRegionCount::value ]; 
             pState != &pInnerStates[ 0 ]; )
       {
         --pState;
@@ -128,7 +128,7 @@ class node_state : public node_state_base< Allocator, RttiPolicy >
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    state_base_type * pInnerStates[ NoOfOrthogonalRegions::value ];
+    state_base_type * pInnerStates[ OrthogonalRegionCount::value ];
 };
 
 
