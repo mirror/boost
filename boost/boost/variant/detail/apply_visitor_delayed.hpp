@@ -66,7 +66,7 @@ public: // unary function operators
           CV__ Visitable& visitable                     \
         )                                               \
     {                                                   \
-        apply_visitor(visitor_, visitable);             \
+        return apply_visitor(visitor_, visitable);      \
     }                                                   \
     /**/
 
@@ -86,7 +86,7 @@ public: // binary function operators
         , CV2__ Visitable2& visitable2                          \
         )                                                       \
     {                                                           \
-        apply_visitor(visitor_, visitable1, visitable2);        \
+        return apply_visitor(visitor_, visitable1, visitable2); \
     }                                                           \
     /**/
 
