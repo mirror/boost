@@ -3,13 +3,14 @@
 #
 # GNU compiler g++
 #
-CXX= -O2 -I../../../../ -I./
+CXX= $(INCLUDES) -O2 -I../../../../ -I./ $(CXXFLAGS) $(LDFLAGS)
 
 jgrep : jgrep.cpp main.cpp
-	g++ -ojgrep $(CXX) jgrep.cpp main.cpp -L../../lib/gcc -lregex++
+	g++ -ojgrep $(CXX) jgrep.cpp main.cpp -L../../lib/gcc -lregex++ $(LIBS)
 
 debug : jgrep.cpp main.cpp
-	g++ -ojgrep -I../../../../ -I./ -g jgrep.cpp main.cpp -L../../lib/gcc -lregex++debug
+	g++ -ojgrep -I../../../../ -I./ -g jgrep.cpp main.cpp -L../../lib/gcc -lregex++debug $(LIBS)
+
 
 
 
