@@ -795,7 +795,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         static size_type index_base () {
-            return index_base_;
+            return IB;
         }
         BOOST_UBLAS_INLINE
         const index_array_type &index_data () const {
@@ -1252,7 +1252,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        BOOST_STATIC_CONSTANT (size_type, index_base_ = IB);
         size_type size_;
         size_type non_zeros_;
         size_type filled_;
@@ -1262,11 +1261,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         static size_type zero_based (size_type k_based_index) {
-            return k_based_index - index_base_;
+            return k_based_index - IB;
         }
         BOOST_UBLAS_INLINE
         static size_type k_based (size_type zero_based_index) {
-            return zero_based_index + index_base_;
+            return zero_based_index + IB;
         }
 
         friend class iterator;
@@ -1282,10 +1281,6 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, std::size_t IB, class IA, class TA>
     class coordinate_vector:
         public vector_expression<coordinate_vector<T, IB, IA, TA> > {
-#if defined(BOOST_MSVC) && BOOST_MSVC == 1300
-        // Workaround VC7 inability to find index_array iterator operators in std::sort
-        index_pair_array<IA,TA>::iterator instantiate_iterator_for_vc7;
-#endif
     public:
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<coordinate_vector<T, IB, IA, TA> >::operator ();
@@ -1358,7 +1353,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         static size_type index_base () {
-            return index_base_;
+            return IB;
         }
         BOOST_UBLAS_INLINE
         const index_array_type &index_data () const {
@@ -1845,7 +1840,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        BOOST_STATIC_CONSTANT (size_type, index_base_ = IB);
         size_type size_;
         size_type non_zeros_;
         mutable size_type filled_;
@@ -1856,11 +1850,11 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         static size_type zero_based (size_type k_based_index) {
-            return k_based_index - index_base_;
+            return k_based_index - IB;
         }
         BOOST_UBLAS_INLINE
         static size_type k_based (size_type zero_based_index) {
-            return zero_based_index + index_base_;
+            return zero_based_index + IB;
         }
 
         friend class iterator;
