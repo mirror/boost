@@ -73,16 +73,18 @@ test_zero_args()
   v1 = three;
   BOOST_TEST(!v1.empty());
 
-  // Invocation
+  // Invocation and self-assignment
   global_int = 0;
+  v1 = v1;
   v1();
   BOOST_TEST(global_int == 3);
 
   // Assignment to a non-empty function
   v1 = five;
 
-  // Invocation
+  // Invocation and self-assignment
   global_int = 0;
+  v1.set(v1);
   v1();
   BOOST_TEST(global_int == 5);
 
