@@ -51,6 +51,9 @@
 #ifndef BOOST_TT_ARRAY_TRAITS_HPP
 # include <boost/type_traits/array_traits.hpp>
 #endif 
+#ifndef BOOST_TYPE_TRAITS_IS_CLASS_HPP
+# include <boost/type_traits/is_class.hpp>
+#endif 
 
 namespace boost{
 
@@ -246,7 +249,7 @@ namespace detail
 
   // Don't evaluate convertibility to int_convertible unless the type
   // is non-arithmetic. This suppresses warnings with GCC.
-  template <bool arithmetic_or_reference>
+  template <bool is_class_arithmetic_or_reference = true>
   struct is_enum_helper
   {
       template <class T>
@@ -271,11 +274,26 @@ template <typename T> struct is_enum
 {
 private:
    typedef typename ::boost::add_reference<T>::type r_type;
+       
+# if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || BOOST_MSVC > 1300 || defined(BOOST_NO_COMPILER_CONFIG)
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
-         ::boost::is_arithmetic<T>::value
+           ::boost::is_arithmetic<T>::value
          , ::boost::is_reference<T>::value
+       // We MUST do this on conforming compilers in order to
+       // correctly deduce that noncopyable types are not enums (dwa
+       // 2002/04/15)...
+         , ::boost::is_class<T>::value
       >::value));
+# else 
+   BOOST_STATIC_CONSTANT(bool, selector =
+      (::boost::type_traits::ice_or<
+           ::boost::is_arithmetic<T>::value
+         , ::boost::is_reference<T>::value
+       // However, not doing this on non-conforming compilers prevents
+       // a dependency recursion.
+      >::value));
+# endif
     typedef typename ::boost::detail::is_enum_helper<selector>::template type<r_type> helper;
 public:
     BOOST_STATIC_CONSTANT(bool, value = helper::value);
