@@ -93,7 +93,7 @@ namespace std
 #elif defined(ULLONG_MAX) && defined(ULLONG_MIN)
       static unsigned BOOST_LLT min(){ return ULLONG_MIN; }
       static unsigned BOOST_LLT max(){ return ULLONG_MAX; }
-#elif defined(ULONGLONG_MAX) && defined(ULONG_LONG_MIN)
+#elif defined(ULONGLONG_MAX) && defined(ULONGLONG_MIN)
       static unsigned BOOST_LLT min(){ return ULONGLONG_MIN; }
       static unsigned BOOST_LLT max(){ return ULONGLONG_MAX; }
 #else
