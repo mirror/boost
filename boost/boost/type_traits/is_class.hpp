@@ -10,7 +10,7 @@
 #ifndef BOOST_TYPE_TRAITS_IS_CLASS_HPP
 # define BOOST_TYPE_TRAITS_IS_CLASS_HPP
 
-# if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || BOOST_MSVC > 1300 || defined(BOOST_NO_COMPILER_CONFIG)
+# if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || BOOST_MSVC > 1301 || defined(BOOST_NO_COMPILER_CONFIG)
 # ifndef BOOST_ICE_TYPE_TRAITS_HPP
 #  include <boost/type_traits/ice.hpp>
 # endif

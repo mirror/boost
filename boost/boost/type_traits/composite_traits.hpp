@@ -275,7 +275,7 @@ template <typename T> struct is_enum
 private:
    typedef typename ::boost::add_reference<T>::type r_type;
        
-# if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || BOOST_MSVC > 1300 || defined(BOOST_NO_COMPILER_CONFIG)
+# if (defined(__MWERKS__) && __MWERKS__ >= 0x3000) || BOOST_MSVC > 1301 || defined(BOOST_NO_COMPILER_CONFIG)
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
