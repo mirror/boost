@@ -32,27 +32,30 @@
 // Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
 
 #      define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, unused)    \
-template< typename T >                                                  \
-struct trait                                                            \
-{                                                                       \
-    template< typename U >                                              \
-    static boost::mpl::aux::yes_tag                                     \
-    helper(                                                             \
-        boost::mpl::aux::type_wrapper<U> const volatile*                \
-      , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME U::name>* = 0 \
-    );                                                                  \
-                                                                        \
-    static boost::mpl::aux::no_tag                                      \
-    helper(...);                                                        \
-                                                                        \
-    typedef boost::mpl::aux::type_wrapper<T> t_;                        \
-                                                                        \
-    BOOST_STATIC_CONSTANT(                                              \
-        bool, value =                                                   \
-        sizeof(trait<T>::helper(static_cast<t_*>(0)))                   \
-        == sizeof(boost::mpl::aux::yes_tag)                             \
-    );                                                                  \
-};                                                                      \
+template< typename T >                                                      \
+struct trait                                                                \
+{                                                                           \
+    struct helpers                                                          \
+    {                                                                       \
+        template< typename U >                                              \
+        static boost::mpl::aux::yes_tag                                     \
+        test(                                                               \
+            boost::mpl::aux::type_wrapper<U> const volatile*                \
+          , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME U::name>* = 0 \
+        );                                                                  \
+                                                                            \
+        static boost::mpl::aux::no_tag                                      \
+        test(...);                                                          \
+    };                                                                      \
+                                                                            \
+    typedef boost::mpl::aux::type_wrapper<T> t_;                            \
+                                                                            \
+    BOOST_STATIC_CONSTANT(                                                  \
+        bool, value =                                                       \
+        sizeof(helpers::test(static_cast<t_*>(0)))                          \
+        == sizeof(boost::mpl::aux::yes_tag)                                 \
+    );                                                                      \
+};                                                                          \
 /**/
 
 #   else
