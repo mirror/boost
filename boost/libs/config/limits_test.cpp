@@ -96,13 +96,18 @@ void test_float_limits(const T &, const char * msg)
   BOOST_TEST(lim::min() < 0.001);
   BOOST_TEST(lim::min() > 0);
 
-  // NaNs shall always compare "false"
+  // NaNs shall always compare "false" when compared for equality
   // If one of these fail, your compiler may be optimizing incorrectly
-  BOOST_TEST(! (qnan < 42));
-  BOOST_TEST(! (qnan > 42));
-  BOOST_TEST(! (qnan <= 42));
-  BOOST_TEST(! (qnan >= 42));
+  BOOST_TEST(! (qnan == 42));
   BOOST_TEST(! (qnan == qnan));
+  BOOST_TEST(qnan != 42);
+  BOOST_TEST(qnan != qnan);
+
+  // The following tests may cause arithmetic traps etc. Avoid for now.
+  // BOOST_TEST(! (qnan < 42));
+  // BOOST_TEST(! (qnan > 42));
+  // BOOST_TEST(! (qnan <= 42));
+  // BOOST_TEST(! (qnan >= 42));
 }
 
 
