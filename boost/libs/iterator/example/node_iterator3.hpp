@@ -45,7 +45,7 @@ class node_iter
         >::type = enabler()
 # endif 
     )
-      : m_node(other.m_node) {}
+      : super_t(other.base()) {}
 
  private:
     friend class boost::iterator_core_access;

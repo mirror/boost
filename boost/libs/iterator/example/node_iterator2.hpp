@@ -5,7 +5,7 @@
 # define NODE_ITERATOR2_DWA2004110_HPP
 
 # include "node.hpp"
-# include <boost/iterator/iterator_adaptor.hpp>
+# include <boost/iterator/iterator_facade.hpp>
 
 # ifndef BOOST_NO_SFINAE
 #  include <boost/type_traits/is_convertible.hpp>
@@ -14,26 +14,21 @@
 
 template <class Value>
 class node_iter
-  : public boost::iterator_adaptor<
-        node_iter<Value>                // Derived
-      , Value*                          // Base
-      , boost::use_default              // Value
-      , boost::forward_traversal_tag    // CategoryOrTraversal
+  : public boost::iterator_facade<
+        node_iter<Value>
+      , Value
+      , boost::forward_traversal_tag
     >
 {
  private:
     struct enabler {};  // a private type avoids misuse
 
-    typedef boost::iterator_adaptor<
-        node_iter<Value>, Value*, boost::use_default, boost::forward_traversal_tag
-    > super_t;
-    
  public:
     node_iter()
-      : super_t(0) {}
+      : m_node(0) {}
 
     explicit node_iter(Value* p)
-      : super_t(p) {}
+      : m_node(p) {}
 
     template <class OtherValue>
     node_iter(
@@ -47,9 +42,29 @@ class node_iter
     )
       : m_node(other.m_node) {}
 
- private:
+
+# if !BOOST_WORKAROUND(__GNUC__, == 2)
+ private: // GCC2 can't even grant that friendship to template member functions
+# endif 
     friend class boost::iterator_core_access;
+
+    template <class OtherValue>
+    bool equal(node_iter<OtherValue> const& other) const
+    {
+        return this->m_node == other.m_node;
+    }
+
+ private:
     void increment() { m_node = m_node->next(); }
+
+    Value& dereference() const { return *m_node; }
+
+# ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
+ public:
+# else 
+    template <class> friend class node_iter;
+# endif 
+    Value* m_node;
 };
 
 typedef node_iter<node_base> node_iterator;
