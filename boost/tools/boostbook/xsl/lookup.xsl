@@ -10,6 +10,7 @@
 
   <xsl:template match="*" mode="generate.id">
     <xsl:value-of select="generate-id(.)"/>
+    <xsl:text>-bb</xsl:text>
   </xsl:template>
 
   <!-- Strip the qualifiers off a qualified name and return the unqualified

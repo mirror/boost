@@ -46,7 +46,9 @@
     </xsl:param>
 
     <!-- The id we should link to or anchor as -->
-    <xsl:param name="link-to" select="generate-id(.)"/>
+    <xsl:param name="link-to">
+      <xsl:call-template name="generate.id"/>
+    </xsl:param>
 
     <!-- If we are printing a constructor -->
     <xsl:param name="constructor-for"/>
@@ -518,7 +520,9 @@
         </xsl:for-each>
       </xsl:when>
       <xsl:when test="local-name(..)='namespace'">
-        <xsl:variable name="link-to" select="generate-id(.)"/>
+        <xsl:variable name="link-to">
+          <xsl:call-template name="generate.id"/>
+        </xsl:variable>
 
         <xsl:for-each select="signature">
           <xsl:call-template name="function">
@@ -564,8 +568,10 @@
       <emphasis>
         <xsl:text>// </xsl:text>
         <xsl:call-template name="internal-link">
-          <xsl:with-param name="to"              
-            select="concat(generate-id(.),'construct-copy-destruct')"/> 
+          <xsl:with-param name="to">
+            <xsl:call-template name="generate.id"/>
+            <xsl:text>construct-copy-destruct</xsl:text>
+          </xsl:with-param>
           <xsl:with-param name="text" select="'construct/copy/destruct'"/>
         </xsl:call-template>
       </emphasis>
@@ -586,8 +592,10 @@
       <xsl:call-template name="member-documentation">
         <xsl:with-param name="name">
           <xsl:call-template name="anchor">
-            <xsl:with-param name="to"  
-              select="concat(generate-id(.),'construct-copy-destruct')"/>
+            <xsl:with-param name="to">
+              <xsl:call-template name="generate.id"/>
+              <xsl:text>construct-copy-destruct</xsl:text>
+            </xsl:with-param>
             <xsl:with-param name="text" select="''"/>
           </xsl:call-template>
           <xsl:call-template name="monospaced">
@@ -917,7 +925,9 @@
           </xsl:call-template>
         </xsl:with-param>
         <xsl:with-param name="purpose" select="purpose"/>
-        <xsl:with-param name="anchor" select="generate-id(.)"/>
+        <xsl:with-param name="anchor">
+          <xsl:call-template name="generate.id"/>
+        </xsl:with-param>
         <xsl:with-param name="synopsis">
           <xsl:call-template name="function">
             <xsl:with-param name="indentation" select="0"/>
@@ -948,7 +958,7 @@
         <xsl:with-param name="text">
           <para>
             <xsl:attribute name="id">
-              <xsl:value-of select="generate-id(.)"/>
+              <xsl:call-template name="generate.id"/>
             </xsl:attribute>
             
             <xsl:call-template name="preformatted">
@@ -996,7 +1006,9 @@
           </xsl:call-template>
         </xsl:with-param>
         <xsl:with-param name="purpose" select="purpose"/>
-        <xsl:with-param name="anchor" select="generate-id(.)"/>
+        <xsl:with-param name="anchor">
+          <xsl:call-template name="generate.id"/>
+        </xsl:with-param>
         <xsl:with-param name="synopsis">
           <xsl:for-each select="signature">
             <xsl:call-template name="function">
@@ -1030,7 +1042,7 @@
         <xsl:with-param name="text">
           <para>
             <xsl:attribute name="id">
-              <xsl:value-of select="generate-id(.)"/>
+              <xsl:call-template name="generate.id"/>
             </xsl:attribute>
             
             <xsl:call-template name="preformatted">
@@ -1063,7 +1075,9 @@
     <emphasis>
       <xsl:text>// </xsl:text>
       <xsl:call-template name="internal-link">
-        <xsl:with-param name="to" select="generate-id(.)"/>
+        <xsl:with-param name="to">
+          <xsl:call-template name="generate.id"/>
+        </xsl:with-param>
         <xsl:with-param name="text" select="string(@name)"/>
       </xsl:call-template>
     </emphasis>
@@ -1078,7 +1092,9 @@
     <xsl:call-template name="member-documentation">
       <xsl:with-param name="name">
         <xsl:call-template name="anchor">
-          <xsl:with-param name="to" select="generate-id(.)"/>
+          <xsl:with-param name="to">
+            <xsl:call-template name="generate.id"/>
+          </xsl:with-param>
           <xsl:with-param name="text" select="''"/>
         </xsl:call-template>
         <xsl:call-template name="monospaced">
@@ -1108,7 +1124,9 @@
     <emphasis>
       <xsl:text>// </xsl:text>
       <xsl:call-template name="internal-link">
-        <xsl:with-param name="to" select="generate-id(.)"/>
+        <xsl:with-param name="to">
+          <xsl:call-template name="generate.id"/>
+        </xsl:with-param>
         <xsl:with-param name="text" select="string(@name)"/>
       </xsl:call-template>
     </emphasis>

@@ -45,7 +45,9 @@
                 <xsl:value-of select="$node/attribute::id"/>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="generate-id($node)"/>
+                <xsl:call-template name="generate.id">
+                  <xsl:with-param name="node" select="$node"/>
+                </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>                 
           </xsl:with-param>
