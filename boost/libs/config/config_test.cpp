@@ -23,10 +23,6 @@ int main()
         cout << "BOOST_NO_INCLASS_MEMBER_INITIALIZER defined\n";
 #   endif
 
-#   ifdef BOOST_NO_ITERATOR_TRAITS
-        cout << "BOOST_NO_ITERATOR_TRAITS defined\n";
-#   endif
-
 #   ifdef BOOST_NO_MEMBER_TEMPLATES
         cout << "BOOST_NO_MEMBER_TEMPLATES defined\n";
 #   endif
@@ -41,6 +37,10 @@ int main()
 
 #   ifdef BOOST_NO_STD_ITERATOR
         cout << "BOOST_NO_STD_ITERATOR defined\n";
+#   endif
+
+#   ifdef BOOST_NO_STD_ITERATOR_TRAITS
+        cout << "BOOST_NO_STD_ITERATOR_TRAITS defined\n";
 #   endif
 
 #   ifdef BOOST_NO_STDC_NAMESPACE
