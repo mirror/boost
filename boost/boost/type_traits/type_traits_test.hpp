@@ -42,7 +42,7 @@ int check_result(int argc, char** argv)
       std::cout << "Press any key to continue...";
       std::cin.get();
    }
-   return (failures <= expected_failures) ? 0 : failures;
+   return (failures == expected_failures) ? 0 : (failures != 0) ? failures : -1;
 }
 
 

@@ -133,21 +133,98 @@ template <typename T> struct is_compound
  * is_POD
  *
  **********************************************/
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <typename T> struct is_POD
 { 
-   BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_or<
+    BOOST_STATIC_CONSTANT(
+        bool, value =
+        (::boost::type_traits::ice_or<
          ::boost::is_scalar<T>::value,
          ::boost::is_void<T>::value,
          BOOST_IS_POD(T)
-      >::value));
+         >::value));
 };
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 template <typename T, std::size_t sz>
 struct is_POD<T[sz]>
 {
    BOOST_STATIC_CONSTANT(bool, value = ::boost::is_POD<T>::value);
 };
+#else
+namespace detail
+{
+  template <bool is_array = false> struct is_POD_helper;
+}
+
+template <typename T> struct is_POD
+{ 
+   BOOST_STATIC_CONSTANT(
+       bool, value = (
+           ::boost::detail::is_POD_helper<
+              ::boost::is_array<T>::value
+           >::template apply<T>::value
+           )
+       );
+};
+
+namespace detail
+{
+  template <bool is_array>
+  struct is_POD_helper
+  {
+      template <typename T> struct apply
+      {
+          BOOST_STATIC_CONSTANT(
+              bool, value =
+              (::boost::type_traits::ice_or<
+               ::boost::is_scalar<T>::value,
+               ::boost::is_void<T>::value,
+               BOOST_IS_POD(T)
+               >::value));
+      };
+  };
+
+  template <bool b>
+  struct bool_to_type
+  {
+      typedef ::boost::type_traits::no_type type;
+  };
+
+  template <>
+  struct bool_to_type<true>
+  {
+      typedef ::boost::type_traits::yes_type type;
+  };
+  
+  template <class ArrayType>
+  struct is_POD_array_helper
+  {
+      typedef
+#if !defined(__BORLANDC__) || __BORLANDC__ > 0x551
+      typename
+#endif 
+      ::boost::detail::bool_to_type<(::boost::is_POD<ArrayType>::value)>::type type;
+      
+      type instance() const;
+  };
+  
+  template <class T>
+  is_POD_array_helper<T> is_POD_array(T*);
+
+  template <>
+  struct is_POD_helper<true>
+  {
+      template <typename T> struct apply
+      {
+          static T& help();
+
+          BOOST_STATIC_CONSTANT(
+              bool, value =
+              sizeof(is_POD_array(help()).instance()) > 1);
+      };
+  };
+}
 #endif
 
 /**********************************************

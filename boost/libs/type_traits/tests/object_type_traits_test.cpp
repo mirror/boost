@@ -305,7 +305,7 @@ unsigned int expected_failures = 25;
 unsigned int expected_failures = 10;
 #elif defined(BOOST_MSVC)
 // can't handle classes that are POD's or arrays that are POD's
-unsigned int expected_failures = 24;
+unsigned int expected_failures = 16;
 #elif defined(__HP_aCC)
 unsigned int expected_failures = 2;
 #elif defined(__EDG_VERSION__)
