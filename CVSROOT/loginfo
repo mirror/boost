@@ -26,4 +26,5 @@
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
                                               
 /tools/build $CVSROOT/CVSROOT/syncmail -u %{sVv} boost-build@lists.sourceforge.net
-python $CVSROOT/CVSROOT/syncmail -u %{sVv} david_abrahams@users.sourceforge.net
+python $CVSROOT/CVSROOT/syncmail -u %{sVv} boost-python-cvs@lists.sourceforge.net
+
