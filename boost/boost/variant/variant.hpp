@@ -62,20 +62,20 @@
 #include "boost/mpl/apply_if.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/bool.hpp"
-#include "boost/mpl/contains.hpp"
 #include "boost/mpl/empty.hpp"
 #include "boost/mpl/find_if.hpp"
 #include "boost/mpl/front.hpp"
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/if.hpp"
-#include "boost/mpl/index_of.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iterator_range.hpp"
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
+#include "boost/mpl/pair.hpp"
 #include "boost/mpl/protect.hpp"
 #include "boost/mpl/push_front.hpp"
+#include "boost/mpl/same_as.hpp"
 #include "boost/mpl/sizeof.hpp"
 #include "boost/mpl/transform.hpp"
 #include "boost/mpl/void.hpp"
@@ -142,16 +142,17 @@ public: // metafunction result
 
 class no_fallback_type;
 
-template <typename FallbackFirst, typename Last>
-struct find_blank
-    : mpl::apply_if<
-          typename mpl::contains<
-              mpl::iterator_range<FallbackFirst,Last>, boost::blank
-            >::type
-        , mpl::identity< boost::blank >
-        , FallbackFirst // dereference
-        >
+struct find_fallback_type_pred
 {
+    template <typename Iterator>
+    struct apply
+    {
+    private:
+        typedef typename BOOST_MPL_AUX_DEREF_WNKD(Iterator) t_;
+
+    public:
+        typedef mpl::not_< has_nothrow_constructor<t_> > type;
+    };
 };
 
 template <typename Types>
@@ -161,18 +162,38 @@ private: // helpers, for metafunction result (below)
 
     typedef typename mpl::end<Types>::type end_it;
 
-    typedef typename mpl::find_if<
-          Types, has_nothrow_constructor<mpl::_1>
-        >::type fallback_type_it;
+    // [Find the first suitable fallback type...]
+
+    typedef typename mpl::iter_fold_if<
+          Types
+        , mpl::int_<0>, mpl::protect< mpl::next<> >
+        , mpl::protect< find_fallback_type_pred >
+        >::type first_result_;
+
+    typedef typename first_result_::first first_result_index;
+    typedef typename first_result_::second first_result_it;
+
+    // [...now search the rest of the sequence for boost::blank...]
+
+    typedef typename mpl::iter_fold_if<
+          mpl::iterator_range< first_result_it,end_it >
+        , first_result_index, mpl::protect< mpl::next<> >
+        , mpl::protect< mpl::not_same_as<boost::blank> >
+        >::type second_result_;
+
+    typedef typename second_result_::second second_result_it;
 
 public: // metafunction result
 
+    // [...and return the results of the search:]
     typedef typename mpl::apply_if<
-          is_same< fallback_type_it, end_it >
-        , mpl::identity< no_fallback_type >
-        , find_blank<
-              fallback_type_it, end_it
+          is_same< second_result_it,end_it >
+        , mpl::if_<
+              is_same< first_result_it,end_it >
+            , mpl::pair< no_fallback_type,no_fallback_type >
+            , first_result_
             >
+        , mpl::identity< second_result_ >
         >::type type;
 
 };
@@ -182,7 +203,7 @@ public: // metafunction result
 template<>
 struct find_fallback_type<int>
 {
-    typedef no_fallback_type type;
+    typedef mpl::pair< no_fallback_type,no_fallback_type > type;
 };
 
 #endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
@@ -1041,7 +1062,12 @@ private: // helpers, for representation (below)
 
     typedef typename detail::variant::find_fallback_type<
           internal_types
-        >::type fallback_type_;
+        >::type fallback_type_result_;
+
+    typedef typename fallback_type_result_::first
+        fallback_type_index_;
+    typedef typename fallback_type_result_::second
+        fallback_type_;
 
     struct has_fallback_type_
         : mpl::not_<
@@ -1049,13 +1075,6 @@ private: // helpers, for representation (below)
             >
     {
     };
-
-    // [TODO: Index of fallback type could be determined *during* search.]
-    typedef typename mpl::apply_if<
-          has_fallback_type_
-        , mpl::index_of< internal_types, fallback_type_ >
-        , mpl::identity< detail::variant::no_fallback_type >
-        >::type fallback_type_index_;
 
     typedef has_fallback_type_
         never_uses_backup_flag;
