@@ -50,9 +50,9 @@
 #  endif
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER <= 1200) || !defined(_CPPLIB_VER) || _CPPLIB_VER < 306
+#if (defined(_MSC_VER) && (_MSC_VER <= 1300)) || !defined(_CPPLIB_VER) || _CPPLIB_VER < 306
    // if we're using a dinkum lib that's
-   // been configured for VC6 then there is
+   // been configured for VC6/7 then there is
    // no iterator traits (true even for icl)
 #  define BOOST_NO_STD_ITERATOR_TRAITS
 #endif
