@@ -209,6 +209,7 @@ All of the above plus:<br>
 </ul>
 <h4><a name="Intel80">Intel C++ 8.0</a></h4>
 No known issues. All tests compile and run in debug and release modes.
+
 <h4><a name="vc71">Visual C++ 7.1</a></h4>
 Derivation from an archive class defined in a DLL as described in ... will not work.
 This is due to the way that VC++ handles templeted code with __decl(dllexport) and
@@ -217,6 +218,48 @@ instantiations have the same specification - even though they have different
 template arguments. The example <code style="white-space: normal">
 demo_portable_iarchive.cpp</code> would have to reformulated as a library or dll
 similar to the pre-defined archives in order to function.
+
+<h5>Using the Visual C++ IDE</h5>
+The library includes a VC++ 7.1 "Solution" - <code style="white-space: normal">BoostSerializationLibrary</code>
+along with of a set of project files - one for each demo and test. Consider the following if you
+decided to use these configurations.
+<ul>
+    <li>The projects assume that the tests have been built with bjam using the default
+    locations.  This will result in a <code style="white-space: normal">bin</code> subdirectory
+    within one's main boost directory.  Below this there is a whole structure which maintains 
+    object and library files according to the type of build.  The easiest way to build this is to
+    invoke the runtest script which uses bjam. (see below)  If the libraries are not in these locations,
+    the projects will have to be modified accordingly.
+    <li>There are project configurations for all the combinations of build variants that boost
+    supports. That is for release, debug, static, static multi-threading, etc..
+    <li>If you want to use/debug the DLL versions of libraries and corresponding tests, alter
+    the project file to define <code style="white-space: normal">BOOST_ALL_DYN_LINK=1</code>.
+    Note that for the executables to run, the <code style="white-space: normal">PATH</code>
+    environmental variable will have to include the directories that contain the DLL versions of
+    the boost libraries.
+    <li>If you have difficulties building your own projects and linking with the boost libraries, 
+    compare the project settings of your own projects with the ones here.  VC sometimes requires
+    consistent settings between projects and the libraries they use in order to link properly.
+    In particular, check support for exceptions, runtime typing(RTTI), and intrinsic support for
+    wide characters.
+    <li>Frequently when trying to build a project or view project properties, one is presented with
+    a message box with the message "unspecified error".  This seems to occur when one changes the
+    build configuration selection.  It turns out this can be "fixed" by going to the "Build" 
+    menu item, selecting "Configuration Manager" and selecting a build configuration for the project
+    you're working with.
+    <li>To test that boost libraries are built correctly, one can build and test them the way we do.
+    This entails:
+    <ol>
+        <li>downloading a copy of bjam.exe
+        <li>building process_jam_log
+        <li>building compiler_status
+	<li>invoking runtest.bat
+    </ol>
+    This will build the serialization library and run the tests on your system. If there are more than a
+    a couple of test failures, you likely won't be able to get your own projects working.  If most of the
+    tests pass, you can be confident that your own projects will work once you get your project settings
+    in sync with those included here.
+</ul>
 
 <h4><a name="vc70">Visual C++ 7.0</a></h4>
 <ul>
