@@ -9,6 +9,10 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  20 Jan 01  Moved BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS to config.hpp.
+//             Removed unused BOOST_EXPLICIT_TARGET macro. Moved
+//             boost::detail::type to boost/type.hpp. Made it compile with
+//             stock gcc again (Dave Abrahams)
 //  29 Nov 00  Remove nested namespace cast, cleanup spacing before Formal
 //             Review (Beman Dawes)
 //  19 Oct 00  Fix numeric_cast for floating-point types (Dave Abrahams)
@@ -34,8 +38,11 @@
 
 # include <boost/config.hpp>
 # include <cassert>
-# include <typeinfo> 
-# include <limits>
+# include <typeinfo>
+# include <boost/type.hpp>
+# ifndef BOOST_NO_LIMITS
+#  include <limits>
+# endif
 
 //  It has been demonstrated numerous times that MSVC 6.0 fails silently at link
 //  time if you use a template function which has template parameters that don't
@@ -43,20 +50,13 @@
 //
 //  TODO: Add this to config.hpp?
 # if defined(BOOST_MSVC) && BOOST_MSVC <= 1200 // 1200 = VC6
-#  define BOOST_EXPLICIT_DEFAULT_TARGET , ::boost::detail::type_wrapper<Target>* = 0
-#  define BOOST_EXPLICIT_TARGET ,::boost::detail::type_wrapper<Target>*
+#  define BOOST_EXPLICIT_DEFAULT_TARGET , ::boost::type<Target>* = 0
 # else
 #  define BOOST_EXPLICIT_DEFAULT_TARGET
-#  define BOOST_EXPLICIT_TARGET
 # endif
 
 namespace boost
 {
-  namespace detail
-  {
-    template <class T> struct type_wrapper {};
-  }
-
 //  See the documentation for descriptions of how to choose between
 //  static_cast<>, dynamic_cast<>, polymorphic_cast<> and polymorphic_downcast<>
 
@@ -115,17 +115,6 @@ namespace boost
     };
 
 //  numeric_cast  ------------------------------------------------------------//
-
-// Move to config.hpp?
-#if defined(_RWSTD_VER) || (defined(__SGI_STL_PORT) && __SGI_STL_PORT <= 0x400 && __STL_STATIC_CONST_INIT_BUG)
-// STLPort 4.0 doesn't define the static constants in numeric_limits<> so that they
-// can be used at compile time if the compiler bug indicated by
-// __STL_STATIC_CONST_INIT_BUG is present.
-
-// Rogue wave STL (C++ Builder) also has broken numeric_limits
-// with default template defining members out of line.
-# define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-#endif
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
   
@@ -271,8 +260,10 @@ namespace boost
 #  pragma warning(disable : 4018)
 #  pragma warning(disable : 4146)
 #elif defined(__BORLANDC__)
-#pragma option push -w-8041
+#  pragma option push -w-8041
 # endif
+
+# ifndef BOOST_NO_LIMITS
        // Move to namespace boost in utility.hpp?
        template <class T>
        struct fixed_numeric_limits : public std::numeric_limits<T>
@@ -283,10 +274,12 @@ namespace boost
                    ? T(-std::numeric_limits<T>::max()) : std::numeric_limits<T>::min();
            }
        };
+# endif // BOOST_NO_LIMITS
+  
 # if BOOST_MSVC
 #  pragma warning(pop)
 #elif defined(__BORLANDC__)
-#pragma option pop
+#  pragma option pop
 # endif
   } // namespace detail
   
@@ -295,11 +288,11 @@ namespace boost
     template<typename Target, typename Source>
     inline Target numeric_cast(Source arg BOOST_EXPLICIT_DEFAULT_TARGET)
     {
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         // typedefs abbreviating respective trait classes
         typedef std::numeric_limits<Source> arg_traits;
         typedef detail::fixed_numeric_limits<Target> result_traits;
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         // typedefs that act as compile time assertions
         // (to be replaced by boost compile time assertions
         // as and when they become available and are stable)
@@ -338,7 +331,6 @@ namespace boost
     } // numeric_cast
 
 #  undef BOOST_EXPLICIT_DEFAULT_TARGET
-#  undef BOOST_EXPLICIT_TARGET
 
 } // namespace boost
 
