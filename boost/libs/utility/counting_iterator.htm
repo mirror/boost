@@ -15,7 +15,7 @@ align="center" width="277" height="86">
 <h1>Counting Iterator Adaptor</h1>
 
 Defined in header
-<a href="../../boost/couting_iterator.hpp">boost/counting_iterator.hpp</a>
+<a href="../../boost/counting_iterator.hpp">boost/counting_iterator.hpp</a>
 
 <p>
 Sometimes it would be nice if one could treat an integer like an
@@ -27,9 +27,9 @@ only iterator operation missing from builtin integer types is an
 value of the integer.  The counting iterator adaptor provides this
 functionality, though it is a bit more generalized. One can use the
 counting iterator adaptor not only with integer types, but with any
-type that is incrementable (has <tt>operator++()</tt>).  The following
-<b>pseudo-code</b> shows the general idea of how the counting iterator is
-implemented.
+type that is incrementable (see type requirements below).  The
+following <b>pseudo-code</b> shows the general idea of how the
+counting iterator is implemented.
 </p>
 
 <pre>
@@ -48,12 +48,45 @@ fashion as the incrementable base type.
 <pre>
 namespace boost {
   template &lt;class Incrementable&gt;
+  struct counting_iterator_traits;
+
+  template &lt;class Incrementable&gt;
   struct counting_iterator_generator;
 
   template &lt;class Incrementable&gt;
   typename counting_iterator_generator&lt;Incrementable&gt;::type
   make_counting_iterator(Incrementable x);
 }
+</pre>
+
+<hr>
+
+<h2><a name="counting_iterator_traits">Counting Iterator Traits</a></h2>
+
+The counting iterator adaptor needs to know the appropriate
+<tt>difference_type</tt> and <tt>iterator_category</tt> to use
+depending on the <tt>Incrementable</tt> type supplied by the user.
+The <tt>counting_iterator_traits</tt> class provides these types.  If
+the <tt>Incrementable</tt> type is a numeric type or is an iterator
+then these types will be correctly deduced by the below counting
+iterator traits. Otherwise, the user must specialize
+<tt>counting_iterator_traits</tt> for their type, or add nested
+typedefs to their type to fulfill the needs of
+<a href="http://www.sgi.com/tech/stl/iterator_traits.html">
+<tt>std::iterator_traits</tt></a>.
+
+<pre>
+template &lt;class Incrementable&gt;
+struct counting_iterator_traits
+{
+  <i>if (numeric_limits&lt;Incrementable&gt::is_specialized == true) {</i>
+    typedef <i>detail::numeric_traits</i>&lt;Incrementable&gt;::difference_type difference_type;
+    typedef std::random_access_iterator_tag iterator_category;   
+  <i>} else {</i>
+    typedef std::iterator_traits&lt;Incrementable&gt;::difference_type difference_type;
+    typedef std::iterator_traits&lt;Incrementable&gt;::iterator_category iterator_category;
+  <i>}</i>    
+};
 </pre>
 
 <hr>
@@ -125,6 +158,36 @@ href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">Random
 Access Iterator</a>. If the <tt>Incrementable</tt> type has less
 functionality, then the counting iterator will have correspondingly
 less functionality.
+
+<h3>Type Requirements</h3>
+
+The <tt>Incrementable</tt> type must be <a
+href="http://www.sgi.com/tech/stl/DefaultConstructible.html">Default
+Constructible</a>, <a href="./CopyConstructible.html">Copy
+Constructible</a>, and <a href="./Assignable.html">Assignable</a>.
+Furthermore, if you wish to create a counting iterator that is a <a
+href="http://www.sgi.com/tech/stl/ForwardIterator.html"> Forward
+Iterator</a>, then the following expressions must be valid:
+<pre>
+Incrementable i, j;
+++i         // pre-increment
+i == j      // operator equal
+</pre>
+If you wish to create a counting iterator that is a <a
+href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">
+Bidirectional Iterator</a>, then pre-decrement is also required:
+<pre>
+--i
+</pre>
+If you wish to create a counting iterator that is a <a
+href="http://www.sgi.com/tech/stl/RandomAccessIterator.html"> Random
+Access Iterator</a>, then these additional expressions are also required:
+<pre>
+counting_iterator_traits&lt;Incrementable&gt;::difference_type n;
+i += n
+n = i - j
+i < j
+</pre>
 
 <h3>Members</h3>
 
@@ -231,5 +294,5 @@ any purpose.</p>
 </html>
 <!--  LocalWords:  html charset alt gif hpp incrementable const namespace htm
  -->
-<!--  LocalWords:  struct  typename iostream int Siek
+<!--  LocalWords:  struct  typename iostream int Siek CopyConstructible pre
  -->

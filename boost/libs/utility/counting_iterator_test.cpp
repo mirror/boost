@@ -21,6 +21,7 @@
 #include <boost/pending/iterator_tests.hpp>
 #include <boost/counting_iterator.hpp>
 #include <boost/detail/iterator.hpp>
+#include <iostream>
 #include <climits>
 #include <iterator>
 #include <stdlib.h>
@@ -162,8 +163,68 @@ void test_container(Container* = 0)  // default arg works around MSVC bug
     test(const_iterator(start), const_iterator(finish));
 }
 
+class my_int1 {
+public:
+  my_int1() { }
+  my_int1(int x) : m_int(x) { }
+  my_int1& operator++() { ++m_int; return *this; }
+  bool operator==(const my_int1& x) const { return m_int == x.m_int; }
+private:
+  int m_int;
+};
+
+namespace boost {
+  template <>
+  struct counting_iterator_traits<my_int1> {
+    typedef std::ptrdiff_t difference_type;
+    typedef std::forward_iterator_tag iterator_category;
+  };
+}
+
+class my_int2 {
+public:
+  typedef void value_type;
+  typedef void pointer;
+  typedef void reference;
+  typedef std::ptrdiff_t difference_type;
+  typedef std::bidirectional_iterator_tag iterator_category;
+
+  my_int2() { }
+  my_int2(int x) : m_int(x) { }
+  my_int2& operator++() { ++m_int; return *this; }
+  my_int2& operator--() { ++m_int; return *this; }
+  bool operator==(const my_int2& x) const { return m_int == x.m_int; }
+private:
+  int m_int;
+};
+
+class my_int3 {
+public:
+  typedef void value_type;
+  typedef void pointer;
+  typedef void reference;
+  typedef std::ptrdiff_t difference_type;
+  typedef std::random_access_iterator_tag iterator_category;
+
+  my_int3() { }
+  my_int3(int x) : m_int(x) { }
+  my_int3& operator++() { ++m_int; return *this; }
+  my_int3& operator+=(std::ptrdiff_t n) { m_int += n; return *this; }
+  std::ptrdiff_t operator-(const my_int3& x) { return m_int - x.m_int; }
+  my_int3& operator--() { ++m_int; return *this; }
+  bool operator==(const my_int3& x) const { return m_int == x.m_int; }
+  bool operator<(const my_int3& x) const { return m_int < x.m_int; }
+private:
+  int m_int;
+};
+
 int main()
 {
+    // Test user-defined type.
+    test_integer<my_int1>();
+    test_integer<my_int2>();
+    test_integer<my_int3>();
+
     // Test the built-in integer types.
     test_integer<char>();
     test_integer<unsigned char>();
@@ -195,5 +256,6 @@ int main()
     int array[2000];
     test(boost::make_counting_iterator(array), boost::make_counting_iterator(array+2000-1));
 #endif
+    std::cout << "test successful " << std::endl;
     return 0;
 }
