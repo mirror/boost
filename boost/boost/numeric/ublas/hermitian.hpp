@@ -322,14 +322,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         hermitian_matrix (size_type size):
             matrix_expression<self_type> (),
-            size_ (BOOST_UBLAS_SAME (size, size)), data_ (0) {
-            resize (size);
+            size_ (BOOST_UBLAS_SAME (size, size)), data_ (functor1_type::packed_size (size, size)) {
         }
         BOOST_UBLAS_INLINE
         hermitian_matrix (size_type size1, size_type size2):
             matrix_expression<self_type> (),
-            size_ (BOOST_UBLAS_SAME (size1, size2)), data_ (0) {
-            resize (size1, size2);
+            size_ (BOOST_UBLAS_SAME (size1, size2)), data_ (functor1_type::packed_size (size1, size2)) {
         }
         BOOST_UBLAS_INLINE
         hermitian_matrix (size_type size, const array_type &data):

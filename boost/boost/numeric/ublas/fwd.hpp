@@ -39,8 +39,11 @@ namespace boost { namespace numeric { namespace ublas {
     struct concrete_tag {};
     struct abstract_tag {};
 
-    template<class T>
+    template<class T, class A = std::allocator<T> >
     class unbounded_array;
+
+    template<class T, std::size_t N, class A = std::allocator<T> >
+    class bounded_array;
 
     class range;
     class slice;

@@ -17,6 +17,7 @@
 #ifndef BOOST_UBLAS_CONFIG_H
 #define BOOST_UBLAS_CONFIG_H
 
+#include <memory>
 #include <cassert>
 #include <cstddef>
 

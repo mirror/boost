@@ -64,8 +64,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         triangular_matrix (size_type size1, size_type size2):
             matrix_expression<self_type> (),
-            size1_ (size1), size2_ (size2), data_ (0) {
-            resize (size1, size2);
+            size1_ (size1), size2_ (size2), data_ (functor1_type::packed_size (size1, size2)) {
         }
         BOOST_UBLAS_INLINE
         triangular_matrix (size_type size1, size_type size2, const array_type &data):

@@ -63,57 +63,72 @@ namespace boost { namespace numeric { namespace ublas {
 
     struct no_init {};
 
-    // Unbounded array
-    template<class T>
+    // Unbounded array - with allocator
+    template<class T, class A>
     class unbounded_array {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
 
-        // Construction and destruction
-        BOOST_UBLAS_INLINE
-        unbounded_array ():
-            size_ (0), data_ (new value_type [0]) {
-            std::fill (data_, data_ + size_, value_type ());
-        }
+        // Construction and destruction, no default constructor
         explicit BOOST_UBLAS_INLINE
-        unbounded_array (no_init):
-            size_ (0), data_ (new value_type [0]) {
-        }
-        explicit BOOST_UBLAS_INLINE
-        unbounded_array (size_type size):
-            size_ (size), data_ (new value_type [size]) {
-            std::fill (data_, data_ + size_, value_type ());
+        unbounded_array (size_type size, const A&a = A()):
+            size_ (size), data_ (alloc.allocate (size)) {
+            value_type v = value_type();
+            for (iterator i = begin(); i != end(); ++i) {
+                alloc.construct (&(*i), v);
+            }
         }
         BOOST_UBLAS_INLINE
         unbounded_array (size_type size, no_init):
-            size_ (size), data_ (new value_type [size]) {
+            size_ (size), data_ (alloc.allocate (size)) {
         }
         BOOST_UBLAS_INLINE
         unbounded_array (const unbounded_array &a):
-            size_ (a.size_), data_ (new value_type [a.size_]) {
-            *this = a;
+            size_ (a.size_), data_ (alloc.allocate (a.size_)) {
+            const_iterator ai = a.begin();
+            for (iterator i = begin(); i != end(); ++i) {
+                alloc.construct (&(*i), *ai);
+                ++ai;
+            }
         }
         BOOST_UBLAS_INLINE
         ~unbounded_array () {
-            delete [] data_;
+            alloc.deallocate (data_, size_);
         }
 
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             if (size != size_) {
-                pointer data = new value_type [size];
+                pointer data = alloc.allocate (size);
                 if (preserve) {
-                    std::copy (data_, data_ + (std::min) (size, size_), data);
-                    std::fill (data + (std::min) (size, size_), data + size, value_type ());
+                    const_iterator si = begin();
+                    pointer di = data;
+                    if (size < size_) {
+                        for (; di != data + size; ++di) {
+                            alloc.construct (&(*di), *si);
+                            ++si;
+                        }
+                    }
+                    else {
+                        for (; si != end(); ++si) {
+                            alloc.construct (&(*di), *si);
+                            ++di;
+                        }
+                        value_type v = value_type();
+                        for (; di != data + size; ++di) {
+                            alloc.construct (&(*di), v);
+                        }
+                    }
+            
                 }
-                delete [] data_;
+                alloc.deallocate (data_, size_);
                 size_ = size;
                 data_ = data;
             }
@@ -258,16 +273,17 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
+        A alloc;
         size_type size_;
         pointer data_;
     };
 
-    // Bounded array
-    template<class T, std::size_t N>
+    // Bounded array - with allocator for size_type and difference_type
+    template<class T, std::size_t N, class A>
     class bounded_array {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;

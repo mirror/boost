@@ -64,8 +64,7 @@ namespace boost { namespace numeric { namespace ublas {
         banded_matrix (size_type size1, size_type size2, size_type lower = 0, size_type upper = 0):
             matrix_expression<self_type> (),
             size1_ (size1), size2_ (size2),
-            lower_ (lower), upper_ (upper), data_ (0) {
-            resize (size1, size2, lower, upper);
+            lower_ (lower), upper_ (upper), data_ ((std::max) (size1, size2) * (lower + 1 + upper)) {
         }
         BOOST_UBLAS_INLINE
         banded_matrix (size_type size1, size_type size2, size_type lower, size_type upper, const array_type &data):
