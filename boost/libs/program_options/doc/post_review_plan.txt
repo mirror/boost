@@ -151,7 +151,7 @@
    - test additional parser
    - Show default values in help output
    - Adaptive field width
-   - Mandatory options
+   - Mandatory options (2 votes (second Jonathan Graehl))
    - (new) return vector from parsers by auto_ptr, not by value?
    - (new) rename value_semantic into value_description
    - (new) output for positional_options_description

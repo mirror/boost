@@ -1,4 +1,16 @@
 
+Document handling of positional options which depends on precedding options. 
+I.e scanning the parsed options and creating new variables_map when we see
+a positional option. (Email from Tony).
+
+> My instinctive reaction is to provide both via an options argument to
+> split_command_line (a name that would now be more appropriate). But I
+> haven't devoted much time to thinking this through, so I may be wrong. :-)
+> 
+> In any event, the tokenization isn't much fun. I'd expect the library to
+> provide a convenient mechanism for parsing a response file.
+
+
 > Similarly, is there some easy to use hook for customizing the "arg" to
 > indicate the type of the data (similar to how the textual representation
 > of the default argument can be changed, e.g.
@@ -201,3 +213,22 @@ More visibility for bool_switch.
 > as what can be achieved with the po::command_line_style::style_t enum. I
 > think most users will need this information sooner or later. A few
 > examples would be fine... But then again time is such a precious thing
+
+> Does the library supports sections in config files
+
+> What about the combination of (if some user-settable switch is thrown,
+> but not by default):
+> 
+> * allowing unknown options -- these are considered positional parameters
+> * rearranging the argument list such that all positional parameters
+> are moved to the end
+> 
+> This way:
+> 
+> program --unknown 42 --known-flag --known-arg value
+> 
+> is handled as if it were (in standard UNIX command-line-ese):
+> 
+> program --known-flag --known-arg value -- --unknown 42
+
+

@@ -194,9 +194,9 @@ desc.add_options()
 <programlisting>
 options_description desc;
 desc.add_options()
-    ("compression", value&lt;int&gt;()->default(10), "compression level")
+    ("compression", value&lt;int&gt;()->default_value(10), "compression level")
     ("email", value&lt; vector&lt;string&gt; &gt;()
-        ->composing()->notify(&amp;your_function), "email")
+        ->composing()->notifier(&amp;your_function), "email")
     ;
 </programlisting>      
         These declarations specify that default value of the first option is 10,
@@ -363,6 +363,58 @@ notify(vm);
   </section>
 
   <section>
+    <title>Specific parsers</title>
+
+    <section>
+      <title>Environment variables</title>
+
+      <para><firstterm>Environment variables</firstterm> are string variables
+      which are available to all programs via the <code>getenv</code> function
+      of C runtime library. The operating system allows to set initial values
+      for a given user, and the values can be further changed on the command
+      line.  For example, on Windows one can use the the <filename>Control
+      Panel/System/Advanced/Environment Variables</filename> dialog, and on
+      Unix &#x2014;, the <filename>/etc/profile</filename>,
+      <filename>~/profile</filename> and <filename>~/bash_profile</filename>
+      files. Because environment variables can be set for the entire system,
+      they are particularly suitable for options which apply to all programs.
+      </para>
+
+      <para>The environment variables can be parsed with the
+      &parse_environment; function. The function have several overloaded
+      version. The first parameter is always an &options_description;
+      instance, and the second specifies what variables must be processed, and
+      what option names must correspond to it. To describe the second
+      parameter we need to consider naming conventions for environment
+      variables.</para>
+      
+      <para>If you have an option that should be specified via environment
+      variable, you need make up the variable's name. To avoid name clashes,
+      we suggest that you use a sufficiently unique prefix for environment
+      variables. Also, while option names are most likely in lower case,
+      environment variables conventionally use upper case. So, for an option
+      name <literal>proxy</literal> the environment variable might be called
+      <envar>BOOST_PROXY</envar>. During parsing, we need to perform reverse
+      conversion of the names. This is accomplished by passing the choosen
+      prefix as the second parameter of the &parse_environment; function.
+      Say, if you pass <literal>BOOST_</literal> as the prefix, and there are
+      two variables, <envar>CVSROOT</envar> and <envar>BOOST_PROXY</envar>, the
+      first variable will be ignored, and the second one will be converted to
+      option <literal>proxy</literal>. 
+      </para>
+      
+      <para>Thet above logic is many cases, but it is also possible to pass,
+      as the second parameter of the &parse_environment; function, any
+      function taking an <code>std::string</code> and returning
+      <code>std::string</code>. That function will be called for each
+      environment variable and should return either the name of the option, or
+      empty string if the variable should be ignored.
+      </para>
+            
+    </section>
+  </section>
+
+  <section>
     <title>Annotated List of Symbols</title>
     
     <para>The following table describes all the important symbols in the
@@ -434,7 +486,7 @@ notify(vm);
 
 <!--
      Local Variables:
-     mode: xml
+     mode: nxml
      sgml-indent-data: t     
      sgml-parent-document: ("program_options.xml" "section")
      sgml-set-face: t

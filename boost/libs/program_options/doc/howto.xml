@@ -138,7 +138,7 @@ if (vm.count("response-file")) {
     compilers, it is possible to obtain
     the split command line, but it's not clear if all compilers support the
     same mechanism on all versions of the operating system. The
-    <code>split_command_line</code> function is a portable mechanism provided
+    <code>split_winmain</code> function is a portable mechanism provided
     by the library.</para>
 
     <para>Here's an example of use:
