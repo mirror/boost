@@ -38,10 +38,10 @@
 namespace boost {
   namespace detail {
     namespace function {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
       template<typename Signature> 
       struct function_traits
       {
-        BOOST_STATIC_CONSTANT(int, arity = 0);
         typedef void result_type;
         typedef void arg1_type;
         typedef void arg2_type;
@@ -58,7 +58,6 @@ namespace boost {
       template<typename R>
       struct function_traits<R (*)(void)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 0);
         typedef R result_type;
         typedef unusable arg1_type;
         typedef unusable arg2_type;
@@ -75,7 +74,6 @@ namespace boost {
       template<typename R, typename T1>
       struct function_traits<R (*)(T1)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 1);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef unusable arg2_type;
@@ -92,7 +90,6 @@ namespace boost {
       template<typename R, typename T1, typename T2>
       struct function_traits<R (*)(T1, T2)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 2);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -109,7 +106,6 @@ namespace boost {
       template<typename R, typename T1, typename T2, typename T3>
       struct function_traits<R (*)(T1, T2, T3)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 3);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -126,7 +122,6 @@ namespace boost {
       template<typename R, typename T1, typename T2, typename T3, typename T4>
       struct function_traits<R (*)(T1, T2, T3, T4)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 4);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -144,7 +139,6 @@ namespace boost {
                typename T5>
       struct function_traits<R (*)(T1, T2, T3, T4, T5)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 5);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -162,7 +156,6 @@ namespace boost {
                typename T5, typename T6>
       struct function_traits<R (*)(T1, T2, T3, T4, T5, T6)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 6);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -180,7 +173,6 @@ namespace boost {
                typename T5, typename T6, typename T7>
       struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 7);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -198,7 +190,6 @@ namespace boost {
                typename T5, typename T6, typename T7, typename T8>
       struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 8);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -216,7 +207,6 @@ namespace boost {
                typename T5, typename T6, typename T7, typename T8, typename T9>
       struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 9);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -235,7 +225,6 @@ namespace boost {
                typename T10>
       struct function_traits<R (*)(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)>
       {
-        BOOST_STATIC_CONSTANT(int, arity = 10);
         typedef R result_type;
         typedef T1 arg1_type;
         typedef T2 arg2_type;
@@ -248,6 +237,7 @@ namespace boost {
         typedef T9 arg9_type;
         typedef T10 arg10_type;
       };
+#endif
 
       // Choose the appropriate underlying implementation
       template<int Args> struct real_get_function_impl {};
@@ -536,7 +526,7 @@ namespace boost {
       template<typename T1, typename T2>
       struct is_not_same
       {
-	BOOST_STATIC_CONSTANT(bool, value = !(is_same<T1, T2>::value));
+  	    BOOST_STATIC_CONSTANT(bool, value = !(is_same<T1, T2>::value));
       };
 
       template<
@@ -557,6 +547,7 @@ namespace boost {
       >
       class get_function_impl
       {
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         BOOST_STATIC_CONSTANT(bool, encoded_param = is_function<InR>::value);
         typedef function_traits<InR*> traits;
       public:                       
@@ -617,7 +608,23 @@ namespace boost {
 	                    >::value),
                            InT3,
                            InAllocator>::type Allocator;
-
+#else
+      public:                       
+		typedef InR R;
+		typedef InT1 T1;
+		typedef InT2 T2;
+		typedef InT3 T3;
+		typedef InT4 T4;
+		typedef InT5 T5;
+		typedef InT6 T6;
+		typedef InT7 T7;
+		typedef InT8 T8;
+		typedef InT9 T9;
+		typedef InT10 T10;
+		typedef InPolicy Policy;
+		typedef InMixin Mixin;
+		typedef InAllocator Allocator;
+#endif
         typedef typename real_get_function_impl<
           (count_used_args<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>::value)
           >::template params<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, 
@@ -812,6 +819,6 @@ namespace boost {
   {
     f1.swap(f2);
   }
-}
+} // end namespace boost
 
 #endif
