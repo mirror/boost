@@ -31,7 +31,7 @@ Motivation
 Tutorial Example
 ================
 
-I'm working on a Tutorial example to go here.
+.. include:: iterator_facade_tutorial.rst
 
 Reference
 =========

@@ -1,1 +1,9 @@
-unit-test ia1 : reverse_iterator.cpp : <sysinclude>../../.. <sysinclude>$(BOOST) ;
+subproject libs/iterator/example ;
+
+import testing ;
+
+test-suite iterator_examples
+  : [ run reverse_iterator.cpp ]
+    [ run node_iterator1.cpp ]
+    [ run node_iterator2.cpp ]
+      ;
