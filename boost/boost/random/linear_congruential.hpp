@@ -55,7 +55,7 @@ public:
   BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 
   explicit linear_congruential(IntType x0 = 1)
-    : _x(m ? (x0 % m) : x0)
+    : _modulus(modulus), _x(_modulus ? (x0 % _modulus) : x0)
   { 
     assert(c || x0); /* if c == 0 and x(0) == 0 then x(n) = 0 for all n */
     // overflow check
@@ -112,7 +112,9 @@ public:
   bool operator!=(const linear_congruential& rhs) const
   { return !(*this == rhs); }
 #endif
+
 private:
+  IntType _modulus;   // work-around for gcc "divide by zero" warning in ctor
   IntType _x;
 };
 
