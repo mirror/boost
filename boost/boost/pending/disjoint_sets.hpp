@@ -167,7 +167,7 @@ namespace boost {
     link(Element x, Element y)
     {
       extend_sets(x,y);
-      detail::link_sets(parent.begin(), rank.begin(), 
+      detail::link_sets(&parent[0], &rank[0], 
 			get(id,x), get(id,y), rep);
     }
     template <class Element>
@@ -179,7 +179,7 @@ namespace boost {
     }
     template <class Element>
     inline Element find_set(Element x) {
-      return id_to_vertex[rep(parent.begin(), get(id,x))];
+      return id_to_vertex[rep(&parent[0], get(id,x))];
     }
 
     template <class ElementIterator>
@@ -196,14 +196,14 @@ namespace boost {
     inline void normalize_sets(ElementIterator first, ElementIterator last)
     {
       for (; first != last; ++first) 
-        detail::normalize_node(parent.begin(), *first);
+        detail::normalize_node(&parent[0], *first);
     }    
     
     template <class ElementIterator>
     inline void compress_sets(ElementIterator first, ElementIterator last)
     {
       for (; first != last; ++first) 
-        detail::find_representative_with_full_compression(parent.begin(),
+        detail::find_representative_with_full_compression(&parent[0],
                                                           *first);
     }    
 
