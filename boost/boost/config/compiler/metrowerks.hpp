@@ -36,6 +36,8 @@
 #     define BOOST_COMPILER_VERSION 8.0
 #   elif __MWERKS__ == 0x3001
 #     define BOOST_COMPILER_VERSION 8.1
+#   elif __MWERKS__ == 0x3002
+#     define BOOST_COMPILER_VERSION 8.2
 #   else
 #     define BOOST_COMPILER_VERSION __MWERKS__
 #   endif 
@@ -49,8 +51,8 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 0x3001:
-#if (__MWERKS__ > 0x3001)
+// last known and checked version:
+#if (__MWERKS__ > 0x3002)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
