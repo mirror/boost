@@ -56,12 +56,12 @@ namespace boost {
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
         typedef std::reverse_iterator<iterator> reverse_iterator;
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
-#elif defined(BOOST_MSVC) && (BOOST_MSVC == 1300) || (defined(__ICL) && defined(_CPPLIB_VER) && (_CPPLIB_VER == 310) && defined(_ITERATOR_))
+#elif (defined(BOOST_MSVC) && (BOOST_MSVC == 1300) || (defined(__ICL) && defined(_CPPLIB_VER) && (_CPPLIB_VER == 310))) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
         // workaround for broken reverse_iterator in VC7
         typedef std::reverse_iterator<std::_Ptrit<value_type, difference_type, iterator,
                                       reference, iterator, reference> > reverse_iterator;
         typedef std::reverse_iterator<std::_Ptrit<value_type, difference_type, const_iterator,
-		                                const_reference, iterator, reference> > const_reverse_iterator;
+                                      const_reference, iterator, reference> > const_reverse_iterator;
 #else
         // workaround for broken reverse_iterator implementations
         typedef std::reverse_iterator<iterator,T> reverse_iterator;
@@ -163,6 +163,7 @@ namespace boost {
 } /* namespace boost */
 
 #endif /*BOOST_ARRAY_HPP*/
+
 
 
 
