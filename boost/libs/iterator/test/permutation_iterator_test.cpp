@@ -20,7 +20,7 @@
 void permutation_test()
 {
   // Example taken from documentation of old permutation_iterator.
-  typedef std::vector< int > element_range_type;
+  typedef std::vector< double > element_range_type;
   typedef std::list< int > index_type;
 
   const int element_range_size = 10;
