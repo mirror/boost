@@ -54,8 +54,12 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename V::const_closure_type,
                                           typename V::closure_type>::type vector_closure_type;
 #endif
+    private:
+        // FIXME build vector_temp_type from base type of all closures
+        typedef vector_type vector_temp_type;
         typedef const vector_range<vector_type> const_self_type;
         typedef vector_range<vector_type> self_type;
+    public:
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
@@ -73,7 +77,7 @@ namespace boost { namespace numeric { namespace ublas {
             //                   r_.start () + r_.size () <= data_.size (), bad_index ());
         }
         BOOST_UBLAS_INLINE
-        vector_range (const vector_closure_type &data, const range &r, int):
+        vector_range (const vector_closure_type &data, const range &r, bool):
             data_ (data), r_ (r.preprocess (data.size ())) {
             // Early checking of preconditions here.
             // BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
@@ -129,9 +133,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // ISSUE can this be done in free project function?
+        // Although a const function can create a non-const proxy to a non-const object
+        // Critical is that vector_type and data_ (vector_closure_type) are const correct
         BOOST_UBLAS_INLINE
         vector_range<vector_type> project (const range &r) const {
-            return vector_range<vector_type> (data_, r_.compose (r.preprocess (data_.size ())), 0);
+            return vector_range<vector_type> (data_, r_.compose (r.preprocess (data_.size ())), false);
         }
 
         // Assignment
@@ -139,7 +146,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_range &operator = (const vector_range &vr) {
             // FIXME: the ranges could be differently sized.
             // std::copy (vr.begin (), vr.end (), begin ());
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (vr));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (vr));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -152,7 +159,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (ae));
             return *this;
         }
         template<class AE>
@@ -164,7 +171,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (*this + ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -176,7 +183,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_range &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (*this - ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -531,16 +538,18 @@ namespace boost { namespace numeric { namespace ublas {
     vector_range<V> project (V &data, const range &r) {
         return vector_range<V> (data, r);
     }
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_range<const V> project_const (const V &data, const range &r) {
+    const vector_range<const V> project_const (const V &data, const range &r) {
         return vector_range<const V> (data, r);
     }
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+#else
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_range<V> project (const V &data, const range &r) {
-        return vector_range<V> (const_cast<V &> (data), r);
+    const vector_range<const V> project (const V &data, const range &r) {
+        // ISSUE was: return vector_range<V> (const_cast<V &> (data), r);
+        return vector_range<const V> (data, r);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -549,7 +558,7 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_range<V> project (const vector_range<V> &data, const range &r) {
+    const vector_range<V> project (const vector_range<V> &data, const range &r) {
         return data.project (r);
     }
 #endif
@@ -584,10 +593,14 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename V::const_closure_type,
                                           typename V::closure_type>::type vector_closure_type;
 #endif
+    private:
+        // FIXME build vector_temp_type from base type of all closures
+        typedef vector_type vector_temp_type;
         typedef const vector_slice<vector_type> const_self_type;
         typedef vector_slice<vector_type> self_type;
-        typedef const vector_slice<vector_type> const_closure_type;
-        typedef vector_slice<vector_type> closure_type;
+    public:
+        typedef const_self_type const_closure_type;
+        typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -663,13 +676,16 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // ISSUE can this be done in free project function?
+        // Although a const function can create a non-const proxy to a non-const object
+        // Critical is that vector_type and data_ (vector_closure_type) are const correct
         BOOST_UBLAS_INLINE
         vector_slice<vector_type> project (const range &r) const {
-            return vector_slice<vector_type>  (data_, s_.compose (r.preprocess (data_.size ())), 0);
+            return vector_slice<vector_type>  (data_, s_.compose (r.preprocess (data_.size ())), false);
         }
         BOOST_UBLAS_INLINE
         vector_slice<vector_type> project (const slice &s) const {
-            return vector_slice<vector_type>  (data_, s_.compose (s.preprocess (data_.size ())), 0);
+            return vector_slice<vector_type>  (data_, s_.compose (s.preprocess (data_.size ())), false);
         }
 
         // Assignment
@@ -677,7 +693,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_slice &operator = (const vector_slice &vs) {
             // FIXME: the slices could be differently sized.
             // std::copy (vs.begin (), vs.end (), begin ());
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (vs));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (vs));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -690,7 +706,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (ae));
             return *this;
         }
         template<class AE>
@@ -702,7 +718,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (*this + ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -714,7 +730,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (*this - ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1057,33 +1073,23 @@ namespace boost { namespace numeric { namespace ublas {
     ;
     
     // Projections
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_slice<V> project (vector_slice<V> &data, const range &r) {
-        return data.project (r);
-    }
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_slice<V> project (const vector_slice<V> &data, const range &r) {
-        return data.project (r);
-    }
-#endif
     template<class V>
     BOOST_UBLAS_INLINE
     vector_slice<V> project (V &data, const slice &s) {
         return vector_slice<V> (data, s);
     }
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<const V> project_const (const V &data, const slice &s) {
+    const vector_slice<const V> project_const (const V &data, const slice &s) {
         return vector_slice<const V> (data, s);
     }
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+#else
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<V> project (const V &data, const slice &s) {
-        return vector_slice<V> (const_cast<V &> (data), s);
+    const vector_slice<const V> project (const V &data, const slice &s) {
+        // ISSUE was: return vector_slice<V> (const_cast<V &> (data), s);
+        return vector_slice<const V> (data, s);
     }
     template<class V>
     BOOST_UBLAS_INLINE
@@ -1092,8 +1098,18 @@ namespace boost { namespace numeric { namespace ublas {
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<V> project (const vector_slice<V> &data, const slice &s) {
+    const vector_slice<V> project (const vector_slice<V> &data, const slice &s) {
         return data.project (s);
+    }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    vector_slice<V> project (vector_slice<V> &data, const range &r) {
+        return data.project (r);
+    }
+    template<class V>
+    BOOST_UBLAS_INLINE
+    const vector_slice<V> project (const vector_slice<V> &data, const range &r) {
+        return data.project (r);
     }
 #endif
 
@@ -1130,8 +1146,12 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename V::const_closure_type,
                                           typename V::closure_type>::type vector_closure_type;
 #endif
+    private:
+        // FIXME build vector_temp_type from base type of all closures
+        typedef vector_type vector_temp_type;
         typedef const vector_indirect<vector_type, indirect_array_type> const_self_type;
         typedef vector_indirect<vector_type, indirect_array_type> self_type;
+    public:
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
@@ -1204,6 +1224,9 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
+        // ISSUE can this be done in free project function?
+        // Although a const function can create a non-const proxy to a non-const object
+        // Critical is that vector_type and data_ (vector_closure_type) are const correct
         BOOST_UBLAS_INLINE
         vector_indirect<vector_type, indirect_array_type> project (const range &r) const {
             return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (r.preprocess (data_.size ())), 0);
@@ -1222,7 +1245,7 @@ namespace boost { namespace numeric { namespace ublas {
         vector_indirect &operator = (const vector_indirect &vi) {
             // FIXME: the indirect_arrays could be differently sized.
             // std::copy (vi.begin (), vi.end (), begin ());
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (vi));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (vi));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1235,7 +1258,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (ae));
             return *this;
         }
         template<class AE>
@@ -1247,7 +1270,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (*this + ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -1259,7 +1282,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_indirect &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_type (*this - ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1603,7 +1626,56 @@ return true;
     ;
 
     // Projections
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+    // These signatures are too general for MSVC
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // vector_indirect<V, IA> project (V &data, const IA &ia) {
+    //     return vector_indirect<V, IA> (data, ia);
+    // }
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // const vector_indirect<const V, IA> project_const (const V &data, const IA &ia) {
+    //     return vector_indirect<const V, IA> (data, ia);
+    // }
+#else
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // const vector_indirect<const V, IA> project (const V &data, const IA &ia) {
+    //     // ISSUE was: return vector_indirect<V, IA> (const_cast<V &> (data), ia)
+    //     return vector_indirect<const V, IA> (data, ia);
+    // }
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const IA &ia) {
+    //     return data.project (ia);
+    // }
+    // template<class V, class IA>
+    // BOOST_UBLAS_INLINE
+    // const vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const IA &ia) {
+    //     return data.project (ia);
+    // }
+#endif
+
+    template<class V, class A>
+    BOOST_UBLAS_INLINE
+    vector_indirect<V, indirect_array<A> > project (V &data, const indirect_array<A> &ia) {
+        return vector_indirect<V, indirect_array<A> > (data, ia);
+    }
+#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+    template<class V, class A>
+    BOOST_UBLAS_INLINE
+    const vector_indirect<const V, indirect_array<A> > project_const (const V &data, const indirect_array<A> &ia) {
+        return vector_indirect<const V, indirect_array<A> > (data, ia);
+    }
+#else
+    template<class V, class A>
+    BOOST_UBLAS_INLINE
+    const vector_indirect<const V, indirect_array<A> > project (const V &data, const indirect_array<A> &ia) {
+        // ISSUE was: return vector_indirect<V, indirect_array<A> > (const_cast<V &> (data), ia)
+        return vector_indirect<const V, indirect_array<A> > (data, ia);
+    }
     template<class V, class IA>
     BOOST_UBLAS_INLINE
     vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const range &r) {
@@ -1611,7 +1683,7 @@ return true;
     }
     template<class V, class IA>
     BOOST_UBLAS_INLINE
-    vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const range &r) {
+    const vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const range &r) {
         return data.project (r);
     }
     template<class V, class IA>
@@ -1621,53 +1693,8 @@ return true;
     }
     template<class V, class IA>
     BOOST_UBLAS_INLINE
-    vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const slice &s) {
+    const vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const slice &s) {
         return data.project (s);
-    }
-#endif
-    // These signatures are too general for MSVC
-    // template<class V, class IA>
-    // BOOST_UBLAS_INLINE
-    // vector_indirect<V, IA > project (V &data, const IA &ia) {
-    //     return vector_indirect<V, IA > (data, ia);
-    // }
-    // template<class V, class IA>
-    // BOOST_UBLAS_INLINE
-    // vector_indirect<const V, IA > project_const (const V &data, const IA &ia) {
-    //     return vector_indirect<const V, IA > (data, ia);
-    // }
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    // template<class V, class IA>
-    // BOOST_UBLAS_INLINE
-    // vector_indirect<V, IA> project (const V &data, const IA &ia) {
-    //     return vector_indirect<V, IA> (const_cast<V &> (data), ia);
-    // }
-    // template<class V, class IA>
-    // BOOST_UBLAS_INLINE
-    // vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const IA &ia) {
-    //     return data.project (ia);
-    // }
-    // template<class V, class IA>
-    // BOOST_UBLAS_INLINE
-    // vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const IA &ia) {
-    //     return data.project (ia);
-    // }
-#endif
-    template<class V, class A>
-    BOOST_UBLAS_INLINE
-    vector_indirect<V, indirect_array<A> > project (V &data, const indirect_array<A> &ia) {
-        return vector_indirect<V, indirect_array<A> > (data, ia);
-    }
-    template<class V, class A>
-    BOOST_UBLAS_INLINE
-    vector_indirect<const V, indirect_array<A> > project_const (const V &data, const indirect_array<A> &ia) {
-        return vector_indirect<const V, indirect_array<A> > (data, ia);
-    }
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class V, class A>
-    BOOST_UBLAS_INLINE
-    vector_indirect<V, indirect_array<A> > project (const V &data, const indirect_array<A> &ia) {
-        return vector_indirect<V, indirect_array<A> > (const_cast<V &> (data), ia);
     }
     template<class V, class A>
     BOOST_UBLAS_INLINE
@@ -1676,7 +1703,7 @@ return true;
     }
     template<class V, class A>
     BOOST_UBLAS_INLINE
-    vector_indirect<V, indirect_array<A> > project (const vector_indirect<V, indirect_array<A> > &data, const indirect_array<A> &ia) {
+    const vector_indirect<V, indirect_array<A> > project (const vector_indirect<V, indirect_array<A> > &data, const indirect_array<A> &ia) {
         return data.project (ia);
     }
 #endif
