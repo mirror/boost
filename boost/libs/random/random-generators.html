@@ -52,40 +52,40 @@ measure, higher numbers mean faster random number generation.
 <tr>
 <th>generator</th>
 <th>length of cycle</th>
-<th>memory requirements</th>
-<th>approximate relative speed</th>
+<th>approx. memory requirements</th>
+<th>approx. relative speed</th>
 <th>comment</th>
 </tr>
 
 <tr>
 <td><a href="#minstd_rand"><code>minstd_rand</code></a></td>
-<td>2**31-2</td>
+<td>2<sup>31</sup>-2</td>
 <td><code>sizeof(int32_t)</code></td>
-<td>0.4</td>
+<td>40</td>
 <td>-</td>
 </tr>
 
 <tr>
 <td><a href="#rand48"><code>rand48</code></a></td>
-<td>2**48-1</td>
+<td>2<sup>48</sup>-1</td>
 <td><code>sizeof(uint64_t)</code></td>
-<td>0.8</td>
+<td>80</td>
 <td>-</td>
 </tr>
 
 <tr>
 <td><code>lrand48</code> (C library)</td>
-<td>2**48-1</td>
+<td>2<sup>48</sup>-1</td>
 <td>-</td>
-<td>0.2</td>
+<td>20</td>
 <td>global state</td>
 </tr>
 
 <tr>
 <td><a href="#ecuyer1988"><code>ecuyer1988</code></a></td>
-<td>approx. 2**61</td>
+<td>approx. 2<sup>61</sup></td>
 <td><code>2*sizeof(int32_t)</code></td>
-<td>0.2</td>
+<td>20</td>
 <td>-</td>
 </tr>
 
@@ -93,31 +93,31 @@ measure, higher numbers mean faster random number generation.
 <td><code><a href="#kreutzer1986">kreutzer1986</a></code></td>
 <td>?</td>
 <td><code>1368*sizeof(uint32_t)</code></td>
-<td>0.6</td>
+<td>60</td>
 <td>-</td>
 </tr>
 
 <tr>
 <td><code><a href="#hellekalek1995">hellekalek1995</a></code></td>
-<td>2**31-1</td>
+<td>2<sup>31</sup>-1</td>
 <td><code>sizeof(int32_t)</code></td>
-<td>0.03</td>
+<td>3</td>
 <td>good uniform distribution in several dimensions</td>
 </tr>
 
 <tr>
-<td><code><a href="#mt11213b">mt11213b</a></code></</td>
-<td>2**11213-1</td>
+<td><code><a href="#mt11213b">mt11213b</a></code></td>
+<td>2<sup>11213</sup>-1</td>
 <td><code>352*sizeof(uint32_t)</code></td>
-<td>1</td>
+<td>100</td>
 <td>good uniform distribution in up to 350 dimensions</td>
 </tr>
 
 <tr>
-<td><code><a href="#mt19937">mt19937</a></code></</td>
-<td>2**19937-1</td>
+<td><code><a href="#mt19937">mt19937</a></code></td>
+<td>2<sup>19937</sup>-1</td>
 <td><code>625*sizeof(uint32_t)</code></td>
-<td>1</td>
+<td>100</td>
 <td>good uniform distribution in up to 623 dimensions</td>
 </tr>
 
@@ -132,6 +132,12 @@ trade-off with regard to his application domain.  Additionally,
 employing several fundamentally different random number generators for
 a given application of Monte Carlo simulation will improve the
 confidence in the results.
+<p>
+
+If the names of the generators don't ring any bell and you have no
+idea which generator to use, it is reasonable to employ
+<code>mt19937</code> for a start: It is fast and usually has
+acceptable quality.
 
 <p>
 <em>Note:</em> These random number generators are not indended for use
@@ -163,7 +169,7 @@ namespace boost {
   namespace random {
     template&lt;class DataType, int n, int m, int r, DataType a, int u,
         int s, DataType b, int t, DataType c, int l, IntType val&gt;
-  class mersenne_twister;
+    class mersenne_twister;
   }
   typedef random::mersenne_twister&lt; /* ... */ &gt; mt11213b;
   typedef random::mersenne_twister&lt; /* ... */ &gt; mt19937;
@@ -359,7 +365,10 @@ parameters a = 0x5DEECE66D, c = 0xB, m = 2**48.  It delivers identical
 results to the <code>lrand48()</code> function available on some
 systems (assuming <code>lcong48</code> has not been called).
 <p>
-It is only available on systems where <code>uint64_t</code> is provided.
+It is only available on systems where <code>uint64_t</code> is
+provided as an integral type, so that for example static in-class
+constants and/or enum definitions with large <code>uint64_t</code>
+numbers work.
 
 <h3>Constructors</h3>
 
@@ -742,7 +751,8 @@ invocations of <code>gen</code>.
 
 <p>
 
-<strong>Complexity:</strong> Exactly <code>n</code> invocations of <code>gen</code>.
+<strong>Complexity:</strong> Exactly <code>n</code> invocations of
+<code>gen</code>.
 
 <h3><a name="mt11213b"></a><a name="mt19937">Specializations</a></h3>
 
@@ -779,7 +789,7 @@ The measurement error is estimated at +/- 10 nsec.
 
 <p>
 <hr>
-Jens Maurer, 2000-06-13
+Jens Maurer, 2000-10-01
 
 </body>
 </html>
