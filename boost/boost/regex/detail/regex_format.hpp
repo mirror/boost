@@ -104,8 +104,8 @@ void BOOST_REGEX_CALL re_skip_format(const charT*& fmt, const traits_type& trait
 template <class T>
 inline void oi_assign(T* p, T v)
 {
-   ::boost::re_detail::destroy(p);
-   construct(p, v);
+   ::boost::re_detail::pointer_destroy(p);
+   pointer_construct(p, v);
 }
 
 #else

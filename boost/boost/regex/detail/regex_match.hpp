@@ -215,7 +215,7 @@ void _priv_match_data<iterator, Allocator>::free()
       i_alloc temp1(temp_match.allocator());
       temp1.deallocate(accumulators, caccumulators);
       for(unsigned i = 0; i < caccumulators; ++i)
-         ::boost::re_detail::destroy(loop_starts + i);
+         ::boost::re_detail::pointer_destroy(loop_starts + i);
       it_alloc temp2(temp_match.allocator());
       temp2.deallocate(loop_starts, caccumulators);
    }

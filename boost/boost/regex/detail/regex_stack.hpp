@@ -119,7 +119,7 @@ public:
    {
       if(m_stack->start == m_stack->end)
          pop_aux();
-      ::boost::re_detail::destroy(m_stack->end);
+      ::boost::re_detail::pointer_destroy(m_stack->end);
       ++(m_stack->end);
    }
 
@@ -128,7 +128,7 @@ public:
       if(m_stack->start == m_stack->end)
          pop_aux();
       t = *m_stack->end;
-      ::boost::re_detail::destroy(m_stack->end);
+      ::boost::re_detail::pointer_destroy(m_stack->end);
       ++(m_stack->end);
    }
 
@@ -137,7 +137,7 @@ public:
       if(m_stack->end == m_stack->last)
          push_aux();
       --(m_stack->end);
-      construct(m_stack->end, t);
+      pointer_construct(m_stack->end, t);
    }
 
 };

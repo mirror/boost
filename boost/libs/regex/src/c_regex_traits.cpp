@@ -277,13 +277,13 @@ void BOOST_REGEX_CALL re_update_collate()
       {
          char* p1, *p2, *p3, *p4;;
          p1 = buf;
-         while(*p1 && std::isspace(*p1))++p1;
+         while(*p1 && std::isspace((unsigned char)*p1))++p1;
          p2 = p1;
-         while(*p2 && !std::isspace(*p2))++p2;
+         while(*p2 && !std::isspace((unsigned char)*p2))++p2;
          p3 = p2;
-         while(*p3 && std::isspace(*p3))++p3;
+         while(*p3 && std::isspace((unsigned char)*p3))++p3;
          p4 = p3;
-         while(*p4 && !std::isspace(*p4))++p4;
+         while(*p4 && !std::isspace((unsigned char)*p4))++p4;
          pcoll_names->push_back(collate_name_t(p1, p2, p3, p4));
          ++i;
          re_get_message(buf, 256, i);
@@ -456,21 +456,21 @@ void BOOST_REGEX_CALL c_traits_base::do_update_ctype()
    std::memset(class_map, 0, map_size);
    for(i = 0; i < map_size; ++i)
    {
-      if(std::isalpha((char)i))
+      if(std::isalpha(i))
          class_map[i] |= char_class_alpha;
-      if(std::iscntrl((char)i))
+      if(std::iscntrl(i))
          class_map[i] |= char_class_cntrl;
-      if(std::isdigit((char)i))
+      if(std::isdigit(i))
          class_map[i] |= char_class_digit;
-      if(std::islower((char)i))
+      if(std::islower(i))
          class_map[i] |= char_class_lower;
-      if(std::isupper((char)i))
+      if(std::isupper(i))
          class_map[i] |= char_class_upper;
-      if(std::ispunct((char)i))
+      if(std::ispunct(i))
          class_map[i] |= char_class_punct;
-      if(std::isspace((char)i))
+      if(std::isspace(i))
          class_map[i] |= char_class_space;
-      if(std::isxdigit((char)i))
+      if(std::isxdigit(i))
          class_map[i] |= char_class_xdigit;
    }
    class_map['_'] |= char_class_underscore;

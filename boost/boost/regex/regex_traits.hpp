@@ -132,17 +132,17 @@ public:
       // classes (we will static-assert that later):
       //
       char_class_none = 0,
-      char_class_alpha = 0x0100,
-      char_class_cntrl = 0x0020,
+      char_class_alpha = 0x0001,
+      char_class_cntrl = 0x0002,
       char_class_digit = 0x0004,
-      char_class_lower = 0x0002,
+      char_class_lower = 0x0008,
       char_class_punct = 0x0010,
-      char_class_space = 0x0008,
-      char_class_upper = 0x0001,
+      char_class_space = 0x0020,
+      char_class_upper = 0x0040,
       char_class_xdigit = 0x0080,
-      char_class_blank = 0x0040,
-      char_class_unicode = 0x8000,
+      char_class_blank = 0x0100,
       char_class_underscore = 0x4000,
+      char_class_unicode = 0x8000,
 
       char_class_alnum = char_class_alpha | char_class_digit,
       char_class_graph = char_class_alpha | char_class_digit | char_class_punct | char_class_underscore,
@@ -360,17 +360,6 @@ struct BOOST_REGEX_DECL w32_traits_base : public regex_traits_base
    char_class_win = 0x01FF
    };
 
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_alpha == c_traits_base::char_class_alpha);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_cntrl == c_traits_base::char_class_cntrl);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_digit == c_traits_base::char_class_digit);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_lower == c_traits_base::char_class_lower);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_punct == c_traits_base::char_class_punct);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_space == c_traits_base::char_class_space);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_upper == c_traits_base::char_class_upper);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_xdigit == c_traits_base::char_class_xdigit);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_blank == c_traits_base::char_class_blank);
-   BOOST_STATIC_ASSERT(w32_traits_base::char_class_underscore == c_traits_base::char_class_underscore);
-
 
 public:
    static std::string BOOST_REGEX_CALL set_message_catalogue(const std::string& s);
@@ -393,6 +382,7 @@ public:
    static std::string BOOST_REGEX_CALL error_string(unsigned id);
    static char* BOOST_REGEX_CALL get_catalogue() { return regex_message_catalogue; }
 };
+
 
 } // namespace re_detail
 

@@ -226,8 +226,8 @@ treated as &quot;unknown&quot; graphic characters. </p>
 an operating system other than Win32, and is encapsulated by the
 traits class <a href="template_class_ref.htm#regex_char_traits"><i>c_regex_traits</i></a>,
 Win32 users can force this model to take effect by defining the
-pre-processor symbol BOOST_REGEX_USE_C_LOCALE. When this model is in
-effect there is a single global locale, as set by <i>setlocale</i>.
+pre-processor symbol BOOST_REGEX_USE_C_LOCALE. When this model is
+in effect there is a single global locale, as set by <i>setlocale</i>.
 All settings are acquired from your run time library,
 consequently Unicode support is dependent upon your run time
 library implementation. Front end localization requires a POSIX
@@ -261,11 +261,11 @@ regular expression libraries including version 1 of this library.
 </p>
 
 <p>This model is only in effect if the library is built with the
-pre-processor symbol BOOST_REGEX_USE_CPP_LOCALE defined. When this model
-is in effect each instance of reg_expression&lt;&gt; has its own
-instance of std::locale, class reg_expression&lt;&gt; also has a
-member function <i>imbue</i> which allows the locale for the
-expression to be set on a per-instance basis. Front end
+pre-processor symbol BOOST_REGEX_USE_CPP_LOCALE defined. When
+this model is in effect each instance of reg_expression&lt;&gt;
+has its own instance of std::locale, class reg_expression&lt;&gt;
+also has a member function <i>imbue</i> which allows the locale
+for the expression to be set on a per-instance basis. Front end
 localization requires a POSIX message catalogue, which will be
 loaded via the std::messages facet of the expression's locale,
 the traits class exports the symbol: </p>
@@ -293,9 +293,9 @@ or &quot;POSIX&quot;. </p>
 
 <p>Finally note that if you build the library with a non-default
 localization model, then the appropriate pre-processor symbol (BOOST_REGEX_USE_C_LOCALE
-or BOOST_REGEX_USE_CPP_LOCALE) must be defined both when you build the
-support library, and when you include &lt;boost/regex.hpp&gt; or
-&lt;boost/cregex.hpp&gt; in your code. The best way to ensure
+or BOOST_REGEX_USE_CPP_LOCALE) must be defined both when you
+build the support library, and when you include &lt;boost/regex.hpp&gt;
+or &lt;boost/cregex.hpp&gt; in your code. The best way to ensure
 this is to add the #define to &lt;boost/regex/detail/regex_options.hpp&gt;.
 </p>
 
@@ -1241,9 +1241,10 @@ regex++ dll's are as follows: <br>
 </table>
 
 <p>Note: you can disable automatic library selection by defining
-the symbol BOOST_REGEX_NO_LIB when compiling, this is useful if you
-want to statically link even though you're using the dll version
-of your run time library, or if you need to debug regex++. </p>
+the symbol BOOST_REGEX_NO_LIB when compiling, this is useful if
+you want to statically link even though you're using the dll
+version of your run time library, or if you need to debug regex++.
+</p>
 
 <hr>
 
@@ -1299,10 +1300,10 @@ Dennerline, Edward Diener, Peter Dimov, Robert Dunn, Fabio Forno,
 Tobias Gabrielsson, Rob Gillen, Marc Gregoire, Chris Hecker, Nick
 Hodapp, Jesse Jones, Martin Jost, Boris Krasnovskiy, Jan
 Hermelink, Max Leung, Wei-hao Lin, Jens Maurer, Heiko Schmidt,
-Scobie Smith, Alexander Sokolovsky, Hervé Poirier, Marc Recht,
-Bruno Voigt, Alexey Voinov, Jerry Waldorf, Rob Ward, Lealon
-Watts, Thomas Witt and Yuval Yosef. I am also grateful to the
-manuals supplied with the Henry Spencer, Perl and GNU regular
+Jason Shirk, Scobie Smith, Alexander Sokolovsky, Hervé Poirier,
+Marc Recht, Bruno Voigt, Alexey Voinov, Jerry Waldorf, Rob Ward,
+Lealon Watts, Thomas Witt and Yuval Yosef. I am also grateful to
+the manuals supplied with the Henry Spencer, Perl and GNU regular
 expression libraries - wherever possible I have tried to maintain
 compatibility with these libraries and with the POSIX standard -
 the code however is entirely my own, including any bugs! I can

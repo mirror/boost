@@ -252,8 +252,8 @@ a[[:]:]]b !
 a[[:-:]]b !
 a[[:alph:]] !
 a[[:alphabet:]] !
-[[:alnum:]]+ -%@a0X- 3 6
-[[:alpha:]]+ -%@aX0- 3 5
+[[:alnum:]]+ -%@a0X_- 3 6
+[[:alpha:]]+ -%@aX_0- 3 5
 [[:blank:]]+ "a  \tb" 1 4
 [[:cntrl:]]+ a\n\tb 1 3
 [[:digit:]]+ a019b 1 4
@@ -866,6 +866,7 @@ a+(?#b+)b+ xaaabbba 1 7
 (xyz)(.*)abc xyzaaab -1 -1 0 3 3 7
 (xyz)(.*)abc xyz -1 -1 0 3 3 3
 (xyz)(.*)abc xy -1 -1 -1 -1 -1 -1
+
 
 
 

@@ -523,7 +523,7 @@ namespace std{
 
 /*****************************************************************************
  *
- *  helper functions construct/destroy:
+ *  helper functions pointer_construct/pointer_destroy:
  *
  ****************************************************************************/
 
@@ -531,11 +531,11 @@ namespace std{
 namespace boost{ namespace re_detail{
 
 template <class T>
-inline void destroy(T* p)
+inline void pointer_destroy(T* p)
 { p->~T(); }
 
 template <class T>
-inline void construct(T* p, const T& t)
+inline void pointer_construct(T* p, const T& t)
 { new (p) T(t); }
 
 }} // namespaces

@@ -1074,7 +1074,7 @@ match_results_base<iterator, Allocator>::match_results_base(const Allocator& a)
       }
       catch(...)
       { 
-         ::boost::re_detail::destroy(ref); 
+         ::boost::re_detail::pointer_destroy(ref); 
          throw; 
       }
    }
@@ -1115,10 +1115,10 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::free()
       p2 = p1 + ref->cmatches;
       while(p1 != p2)
       {
-         ::boost::re_detail::destroy(p1);
+         ::boost::re_detail::pointer_destroy(p1);
          ++p1;
       }
-      ::boost::re_detail::destroy(ref);
+      ::boost::re_detail::pointer_destroy(ref);
       a.deallocate((char*)(void*)ref, sizeof(sub_match<iterator>) * ref->cmatches + sizeof(c_reference));
    }
 }
@@ -1169,10 +1169,10 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
             p2 = (sub_match<iterator>*)(newref+1);
             while(p2 != p1)
             {
-               ::boost::re_detail::destroy(p2);
+               ::boost::re_detail::pointer_destroy(p2);
                ++p2;
             }
-            ::boost::re_detail::destroy(ref);
+            ::boost::re_detail::pointer_destroy(ref);
             throw; 
          }
          ref = newref;
@@ -1211,10 +1211,10 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
             p2 = (sub_match<iterator>*)(newref+1);
             while(p2 != p1)
             {
-               ::boost::re_detail::destroy(p2);
+               ::boost::re_detail::pointer_destroy(p2);
                ++p2;
             }
-            ::boost::re_detail::destroy(ref);
+            ::boost::re_detail::pointer_destroy(ref);
             throw; 
          }
          ref = newref;
@@ -1316,10 +1316,10 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::cow()
             p2 = (sub_match<iterator>*)(newref+1);
             while(p2 != p1)
             {
-               ::boost::re_detail::destroy(p2);
+               ::boost::re_detail::pointer_destroy(p2);
                ++p2;
             }
-            ::boost::re_detail::destroy(ref);
+            ::boost::re_detail::pointer_destroy(ref);
             throw; 
          }
       --(ref->count);
@@ -1436,10 +1436,10 @@ match_results<iterator, Allocator>::match_results(const match_results<iterator, 
          p2 = (sub_match<iterator>*)(this->ref+1);
          while(p2 != p1)
          {
-            re_detail::destroy(p2);
+            re_detail::pointer_destroy(p2);
             ++p2;
          }
-         re_detail::destroy(this->ref);
+         re_detail::pointer_destroy(this->ref);
          throw; 
       }
    }
