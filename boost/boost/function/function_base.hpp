@@ -307,6 +307,10 @@ namespace boost {
   public: // should be protected, but GCC 2.95.3 will fail to allow access
     detail::function::any_pointer (*manager)(
                            detail::function::any_pointer, 
+#if (defined __SUNPRO_CC) && (__SUNPRO_CC <= 0x530) && !(defined BOOST_NO_COMPILER_CONFIG)
+    // Sun C++ 5.3 can't handle the safe_bool idiom, so don't use it
+    operator bool () const { return !this->empty(); }
+#else
                            detail::function::functor_manager_operation_type);
     detail::function::any_pointer functor;
 
@@ -320,6 +324,7 @@ namespace boost {
   public:
     operator safe_bool () const 
       { return (this->empty())? 0 : &dummy::nonnull; }
+#endif
 
     safe_bool operator!() const
       { return (this->empty())? &dummy::nonnull : 0; }
