@@ -1,0 +1,234 @@
+<HTML><HEAD>
+<!!---------------------------------------------------------------------->
+<!! Copyright (C) 1998 Dietmar Kuehl, Claas Solutions GmbH >
+<!!>
+<!! Permission to use, copy, modify, distribute and sell this >
+<!! software for any purpose is hereby granted without fee, provided >
+<!! that the above copyright notice appears in all copies and that >
+<!! both that copyright notice and this permission notice appear in >
+<!! supporting documentation. Dietmar Kuehl and Claas Solutions make no >
+<!! representations about the suitability of this software for any >
+<!! purpose. It is provided "as is" without express or implied warranty. >
+<!!---------------------------------------------------------------------->
+<TITLE>array-article.3</TITLE>
+</HEAD>
+<BODY BGCOLOR=white LINK="0000FF" VLINK="800080">
+<IMG src=../../c++boost.gif alt="c++boost.gif (8819 bytes)" align=center width=277 height=86><BR>
+<BR>
+<SPACER TYPE=VERTICAL SIZE=40>
+<H1>STL and Built-in Arrays</H1>
+<H1>Abstract</H1>
+
+Built-in arrays are supposed to fit into the STL framework. However,
+in the rare case where built-in array are suitable at all, it is not
+that easy to use them because there is no obvious way to determine
+their size. This can, however, be changed using a bunch of simple
+template classes.
+
+
+  <A NAME="Introduction"><H1>Introduction</H1></A>
+
+
+The Standard Template Library (STL; originally specified and
+implemented by Alexander Stepanov and Meng Lee; see eg.
+"The STL Tutorial and Reference Guide", D.Musser & A.Saini, Addison-Wesley, for
+a tutorial) was designed to be applicable to all sequences, as long as
+a small set of requirements is fulfilled. Especially, the STL was
+designed to be applicable to built-in arrays (a "built-in array" is
+the kind of array supported by the core language. Other kinds of
+arrays, like e.g. <nobr><tt>vector</tt></nobr> or <nobr><tt>deque</tt></nobr>, are supported by some
+library like the standard C++ library.)  Unfortunately, there is no
+way to define member functions for built-in arrays such that there is
+no way to provide complete STL support for built-in arrays. In this
+article this problem is addressed together with a discussion where
+this is in fact a problem. Also a potential solution is proposed.
+	
+	<A NAME="Background"><H1>Background</H1></A>
+
+
+Before discussing how to apply STL algorithms to built-in arrays, a
+brief discussion of the utility of built-in arrays is appropriate.
+This is because often there is neither a need nor an advantage to use
+built-in arrays in favor of some array class. The C++ built-in arrays
+are inherited from C and they are incorportated into the C++ language
+such that compatibility to C is not broken.  Due to this problem and
+to some other design decisions, built-in arrays in C++ have some
+problems (note that these are not present in C):
+
+	<UL>
+<LI>
+
+		For C compatility it is necessary that there is a conversion from
+		a built-in array to a pointer. This turns into a problem if objects of
+		a derived class are stored in the array: It is possible to assign a
+		pointer to the array to a pointer to a base object. However, pointer
+		arithmetic with such a pointer will fail miserably and the compiler
+		has in general no way to detect this problem to issue a diagnostic.
+	
+<LI>
+
+
+    <nobr><tt>delete[]</tt></nobr> has to be used to release built-in arrays
+    alloated with new. Since non-array objects have to be released with
+    <nobr><tt>delete</tt></nobr> this is rather error prone and there is again no complete
+    compiler support possible. One implication of the necessity to release
+    array objects with <nobr><tt>delete[]</tt></nobr> instead of <nobr><tt>delete</tt></nobr> is that the class
+    <nobr><tt>auto_ptr</tt></nobr> cannot be used to release dynamically allocated built-in
+		arrays.
+
+	
+<LI>
+
+		To store objects of some class in a built-in array, the class has to
+		have a default constructor (unless the array is explicitly initialized;
+		see below).
+	
+</UL>
+
+
+Due to these problems it is advisable to avoid the use of built-in
+arrays and to use some array classes instead. The main application of
+built-in arrays, especially if they are dynamically sized and thus
+stored on the free store, is the representation of array classes (even
+there the use of built-in array is often limited to the use of the
+pointer arithmetic to avoid requiring a default constructor; but the
+implementation of array classes is not topic of this article). If
+built-in arrays are used as the representation of some array classes,
+there is no real problem with the lacking support for some STL stuff
+since this can easily be added by the implementation of the array
+class.
+
+However, there is another important application of built-in arrays
+which cannot be substituted conveniently using array classes:
+Explicitly initialized arrays. Here is an example
+
+         <P>
+
+	 <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+  class T {
+  public:
+    T(int);
+    // ...
+  };
+
+  T tarray[] = { T(1), T(2), T(3) };
+	 </PRE></TD></TABLE>
+
+
+The notation is extremely convient, especially since it it not
+required to explicitly provide the number of elements. Still, it has a
+problem: It is not immediately apparent how to figure out the number
+of elements.  Normally, the size of a statically sized built-in array
+is determined using some macro like this:
+
+                <P>
+
+		<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+  #define array_size(array) (sizeof(array)/sizeof(array[0]))
+		</PRE></TD></TABLE>
+
+
+But this macro has a problem itself: It can be applied to a pointer
+where it does not compute what might be expected. The sizeof operator
+returns the size of its argument even if its argument is a pointer to
+an array object. Hence the macro will not determine the number of
+elements in the array although it is syntactically correct. It does
+return the size of the pointer divided by the size of an array
+element. Thus, the <nobr><tt>array_size</tt></nobr> macro will return zero in most cases if
+it is applied to a pointer since in most cases the size of a pointer
+will be smaller than the size of the object pointed to. Actually,
+thing can become even worse: It is possible to allocate an array
+without elements. Applying this macro to an array without elements
+will result in undefined behavior.
+
+  
+  <A NAME="The Solution"><H1>The Solution</H1></A>
+
+
+Fortunately, there is a less error prone approach to determine the
+size of a built-in array: A template function which only accepts
+built-in arrays as argument can be used to determine the size of a
+statically sized array. Here is such a template function:
+
+    <P>
+
+    <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+  template &lt;class T, int sz&gt;
+  int size(T (&array)[sz])
+  { return sz; }
+    </PRE></TD></TABLE>
+
+
+This template function can be applied to all statically sized array
+objects but not to mere pointers or to dynamically allocated
+arrays. In contrast to the macro, the compiler can detect attempts for
+false applications and reports an error. Of course, templates
+functions <nobr><tt>begin()</tt></nobr> and <nobr><tt>end()</tt></nobr> yielding pointers to the beginning and
+the end of an array can also be defined. This makes it easy to apply
+STL algorithms to statically sized built-in arrays.
+
+Actually, nearly all of the requirements for containers can be changed
+to turn built-in array into containers. The type definitions can be
+implemented using traits classes like it is done in the standard C++
+library e.g. for iterators. Functions can be implemented as global
+functions instead of (or for real container classes in addtion to)
+member functions. Only the operators cannot be implemented for
+built-in arrays.
+  
+  <A NAME="What Happened Since this Article was Written?"><H1>What Happened Since this Article was Written?</H1></A>
+
+After writing this article I discussed some variations with people
+on UseNet. The basic result is that it would be reasonable to have
+global template functions <nobr><tt>size()</tt></nobr>, <nobr><tt>begin()</tt></nobr>, and
+<nobr><tt>end()</tt></nobr> which map to the corresponding container functions. These
+functions would then be specialized for the array case. This makes it
+possible to use containers and built-in array identically.
+
+In the UseNet discussions in comp.lang.c++.moderated it was
+observed that the <nobr><tt>size()</tt></nobr> function cannot be used to
+produce a constant integral expression, as needed in some
+situations. However, this can be done with a slightly different
+approach:
+
+    <P>
+
+    <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+      template &lt;class T, int sz&gt;
+      char[sz] sizer(T (&array)[sz]);
+    </PRE></TD></TABLE>
+
+
+With this definition, a constant integral expression with the
+size of an array can be obtained like this:
+
+    <P>
+
+    <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
+<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
+<PRE>
+      sizeof(sizer(array));
+    </PRE></TD></TABLE>
+
+
+I have packaged and documented all this stuff and have submitted
+it to the <A HREF="http://www.boost.org/">Boost library</A>.
+  
+  <A NAME="See Also"><H1>See Also</H1></A>
+
+    <A HREF="array_traits.html">array_traits(3)</A>
+  
+<HR>
+
+Copyright &copy 1998 <A HREF=http://www.claas-solutions.de/kuehl>Dietmar K&uuml;hl</A> (<A HREF="mailto:dietmar.kuehl@claas-solutions.de">dietmar.kuehl@claas-solutions.de</A>)<BR>
+<a href="http://www.claas-solutions.de/">Claas Solutions GmbH</a>
+</FONT></FONT>
+</BODY></HTML>
+
