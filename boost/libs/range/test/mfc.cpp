@@ -35,7 +35,7 @@ void check_mfc()
     CString s = "hello world";
     BOOST_CHECK( boost::begin( s ) + boost::size( s ) == boost::end( s ) );
     BOOST_CHECK( boost::size( s ) == boost::size( "hello world" ) );
-    BOOST_CHECK( !empty( s ) );
+    BOOST_CHECK( !boost::empty( s ) );
 
     
 }
