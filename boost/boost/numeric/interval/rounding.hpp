@@ -88,10 +88,10 @@ struct save_state: Rounding
 {
   typename Rounding::rounding_mode mode;
   save_state() {
-    get_rounding_mode(mode);
-    init();
+    this->get_rounding_mode(mode);
+    this->init();
   }
-  ~save_state() { set_rounding_mode(mode); }
+  ~save_state() { this->set_rounding_mode(mode); }
   typedef detail::save_state_unprotected<Rounding> unprotected_rounding;
 };
   

@@ -56,7 +56,7 @@ T checked_lower(const interval<T, Policies>& x)
     typedef typename Policies::checking checking;
     return checking::nan();
   }
-  return low;
+  return x.lower();
 }
 
 template<class T, class Policies> inline
@@ -66,7 +66,7 @@ T checked_upper(const interval<T, Policies>& x)
     typedef typename Policies::checking checking;
     return checking::nan();
   }
-  return up;
+  return x.upper();
 }
 
 template<class T, class Policies> inline
