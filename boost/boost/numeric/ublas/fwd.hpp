@@ -39,10 +39,10 @@ namespace boost { namespace numeric { namespace ublas {
     struct concrete_tag {};
     struct abstract_tag {};
 
-    template<class T, class A = std::allocator<T> >
+    template<class T, class ALLOC = std::allocator<T> >
     class unbounded_array;
 
-    template<class T, std::size_t N, class A = std::allocator<T> >
+    template<class T, std::size_t N, class ALLOC = std::allocator<T> >
     class bounded_array;
 
     class range;
@@ -50,9 +50,9 @@ namespace boost { namespace numeric { namespace ublas {
     template<class A = unbounded_array<std::size_t> >
     class indirect_array;
 
-    template<class I, class T>
+    template<class I, class T, class ALLOC = std::allocator<T> >
     class map_std;
-    template<class I, class T>
+    template<class I, class T, class ALLOC = std::allocator<T> >
     class map_array;
 
     struct vector_tag {};

@@ -17,13 +17,9 @@
 #ifndef BOOST_UBLAS_STORAGE_SPARSE_H
 #define BOOST_UBLAS_STORAGE_SPARSE_H
 
-#include <algorithm>
 #include <map>
 #include <set>
 
-#include <boost/numeric/ublas/config.hpp>
-#include <boost/numeric/ublas/exception.hpp>
-#include <boost/numeric/ublas/iterator.hpp>
 #include <boost/numeric/ublas/storage.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
@@ -245,17 +241,19 @@ namespace boost { namespace numeric { namespace ublas {
     };
 #endif
 
+
     // Default map type is simply forwarded to std::map
-    template<class I, class T>
-    class map_std : public std::map<I,T> {
+    template<class I, class T, class ALLOC>
+    class map_std : public std::map<I, T, ALLOC> {
     };
 
+
     // Map array
-    template<class I, class T>
+    template<class I, class T, class ALLOC>
     class map_array {
     public:
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef I index_type;
         typedef T data_value_type;
         typedef const T &data_const_reference;
@@ -272,52 +270,84 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        map_array ():
-            capacity_ (0), data_ (new value_type [0]), size_ (0) {
+        map_array (const ALLOC &a = ALLOC()):
+            alloc_(a), capacity_ (0), size_ (0) {
+                data_ = 0;
         }
         BOOST_UBLAS_INLINE
-        map_array (const map_array &a):
-            capacity_ (a.size_), data_ (new value_type [a.size_]), size_ (a.size_) {
-            *this = a;
+        map_array (const map_array &c):
+            alloc_ (c.alloc_), capacity_ (c.size_), size_ (c.size_) {
+            if (capacity_) {
+                data_ = alloc_.allocate (capacity_ BOOST_UBLAS_ALLOCATOR_HINT);
+                std::uninitialized_copy (data_, data_ + capacity_, c.data_);
+                // capacity != size_ requires uninitialized_fill (size_ to capacity_)
+            }
+            else
+                data_ = 0;
         }
         BOOST_UBLAS_INLINE
         ~map_array () {
-            delete [] data_;
+            if (capacity_) {
+                std::for_each (data_, data_ + capacity_, static_destroy);
+                alloc_.deallocate (data_, capacity_);
+            }
         }
 
-        // Resizing
+    private:
+        // Resizing - implicitly exposses uninitialized (but default constructed) data_value_type
         BOOST_UBLAS_INLINE
         void resize (size_type size) {
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
             if (size > capacity_) {
-                pointer data = new value_type [size << 1];
-                std::copy (data_, data_ + (std::min) (size, size_), data);
-                std::fill (data + (std::min) (size, size_), data + size, value_type ());
-                delete [] data_;
-                capacity_ = size << 1;
+                const size_type capacity = size << 1;
+                BOOST_UBLAS_CHECK (capacity, internal_logic ());
+                pointer data = alloc_.allocate (capacity BOOST_UBLAS_ALLOCATOR_HINT);
+                std::uninitialized_copy (data_, data_ + (std::min) (size, size_), data);
+                std::uninitialized_fill (data + (std::min) (size, size_), data + capacity, value_type ());
+
+                if (capacity_) {
+                    std::for_each (data_, data_ + capacity_, static_destroy);
+                    alloc_.deallocate (data_, capacity_);
+                }
+                capacity_ = capacity;
                 data_ = data;
             }
             size_ = size;
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
         }
+    public:
 
         // Reserving
         BOOST_UBLAS_INLINE
         void reserve (size_type capacity) {
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
-            if (capacity > capacity_) {
-                pointer data = new value_type [capacity];
-                std::copy (data_, data_ + size_, data);
-                delete [] data_;
-                capacity_ = capacity;
-                data_ = data;
+            // Reduce capacity_ if size_ allows
+            BOOST_UBLAS_CHECK (capacity >= size_, bad_size ());
+            pointer data;
+            if (capacity) {
+                data = alloc_.allocate (capacity BOOST_UBLAS_ALLOCATOR_HINT);
+                std::uninitialized_copy (data_, data_ + size_, data);
+                std::uninitialized_fill (data + size_, data + capacity, value_type ());
             }
+            else
+                data = 0;
+                
+            if (capacity_) {
+                std::for_each (data_, data_ + capacity_, static_destroy);
+                alloc_.deallocate (data_, capacity_);
+            }
+            capacity_ = capacity;
+            data_ = data;
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
         }
 
         BOOST_UBLAS_INLINE
         size_type size () const {
             return size_;
+        }
+        BOOST_UBLAS_INLINE
+        size_type capacity () const {
+            return capacity_;
         }
 
         // Element access
@@ -326,7 +356,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
             pointer it = find (i);
             if (it == end ())
-                it = insert (end (), value_type (i, data_value_type ()));
+                it = insert (end (), value_type (i, data_value_type (0)));
             BOOST_UBLAS_CHECK (it != end (), internal_logic ());
             return it->second;
 #else
@@ -410,7 +440,7 @@ namespace boost { namespace numeric { namespace ublas {
         void erase (pointer it) {
             BOOST_UBLAS_CHECK (begin () <= it && it < end (), bad_index ());
             // Fixed by George Katsirelos.
-            // (*it).second = data_value_type ();
+            // (*it).second = data_value_type (0);
             std::copy (it + 1, end (), it);
             resize (size () - 1);
         }
@@ -421,7 +451,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Fixed by George Katsirelos.
             // while (it1 != it2) {
             //     BOOST_UBLAS_CHECK (begin () <= it1 && it1 < end (), bad_index ());
-            //     (*it1).second = data_value_type ();
+            //     (*it1).second = data_value_type (0);
             //     ++ it1;
             // }
             std::copy (it2, end (), it1);
@@ -437,7 +467,7 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         const_pointer find (index_type i) const {
-            const_pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ()));
+            const_pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type (0)), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
@@ -445,7 +475,7 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         pointer find (index_type i) {
-            pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ()));
+            pointer it (detail::lower_bound (begin (), end (), value_type (i, data_value_type (0)), detail::less_pair<value_type> ()));
             if (it == end () || it->first != i)
                 it = end ();
             return it;
@@ -453,12 +483,12 @@ namespace boost { namespace numeric { namespace ublas {
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         const_pointer lower_bound (index_type i) const {
-            return detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
+            return detail::lower_bound (begin (), end (), value_type (i, data_value_type (0)), detail::less_pair<value_type> ());
         }
         // This function seems to be big. So we do not let the compiler inline it.
         // BOOST_UBLAS_INLINE
         pointer lower_bound (index_type i) {
-            return detail::lower_bound (begin (), end (), value_type (i, data_value_type ()), detail::less_pair<value_type> ());
+            return detail::lower_bound (begin (), end (), value_type (i, data_value_type (0)), detail::less_pair<value_type> ());
         }
 
         // Iterators simply are pointers.
@@ -518,6 +548,12 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
+        // Provide destroy as a non member function
+        BOOST_UBLAS_INLINE
+        void static static_destroy (pointer p) {
+            p -> ~value_type();
+        }
+        ALLOC alloc_;
         size_type capacity_;
         pointer data_;
         size_type size_;
@@ -582,6 +618,12 @@ namespace boost { namespace numeric { namespace ublas {
             a1.swap (a2);
     }
 
+
+#ifdef BOOST_UBLAS_DEPRACATED
+// Depracted due to:
+//  no allocator interface
+//  inconsitent value_type zero init
+
     // Set array
     template<class I>
     class set_array {
@@ -617,7 +659,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (size > capacity_) {
                 pointer data = new value_type [size << 1];
                 std::copy (data_, data_ + (std::min) (size, size_), data);
-                std::fill (data + (std::min) (size, size_), data + size, value_type ());
+                std::fill (data + (std::min) (size, size_), data + size, value_type (0));
                 delete [] data_;
                 capacity_ = size << 1;
                 data_ = data;
@@ -843,6 +885,7 @@ namespace boost { namespace numeric { namespace ublas {
         if (&a1 != &a2)
             a1.swap (a2);
     }
+#endif
 
 }}}
 
