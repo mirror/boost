@@ -67,13 +67,13 @@ public: // constants
 
 private: // representation
 
-    friend union data_t;
-
     union data_t
     {
         char buf[size];
         align_t dummy_;
     } data_;
+
+    friend union data_t;
 
 #if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(2))
 

@@ -772,8 +772,6 @@ private: // helpers, for modifiers (below)
     // given, maintaining the strong guarantee of exception safety.
     //
 
-    friend class assign_into;
-
     class assign_into
         : public static_visitor<>
     {
@@ -846,6 +844,8 @@ private: // helpers, for modifiers (below)
 
     };
 
+    friend class assign_into;
+
     void assign(const variant& operand)
     {
         assign_into visitor(*this, operand.which());
@@ -879,8 +879,6 @@ private: // helpers, for modifiers, cont. (below)
     //
     // NOTE: Must be applied to the rhs variant.
     //
-
-    friend class swap_variants;
 
     class swap_variants
         : public static_visitor<>
@@ -989,6 +987,8 @@ private: // helpers, for modifiers, cont. (below)
         }
 
     };
+
+    friend class swap_variants;
 
 public: // modifiers, cont.
 
