@@ -42,12 +42,12 @@ protected:
         {}
 
     template< typename T1, typename T2 >
-    explicit  base_from_member( T1 x1, T2 x2 )
+    base_from_member( T1 x1, T2 x2 )
         : member( x1, x2 )
         {}
 
     template< typename T1, typename T2, typename T3 >
-    explicit  base_from_member( T1 x1, T2 x2, T3 x3 )
+    base_from_member( T1 x1, T2 x2, T3 x3 )
         : member( x1, x2, x3 ) 
         {}
 
