@@ -37,12 +37,7 @@ namespace boost
     // verify that types are complete for increased safety
 
     template< typename T >
-# if (!defined(BOOST_MSVC) || BOOST_MSVC > 1200) && \
-     (!defined(__SUNPRO_CC) || __SUNPRO_CC > 0x520)
-    inline void checked_delete(T const volatile * x)
-# else
-    inline void checked_delete(T  /*const volatile*/ * x)
-# endif
+    inline void checked_delete(T * x)
     {
 # if !((defined(__BORLANDC__) && __BORLANDC__ <= 0x0551) || (defined(__ICL) && __ICL <= 500))
         BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
@@ -54,12 +49,7 @@ namespace boost
     }
 
     template< typename T >
-# if (!defined(BOOST_MSVC) || BOOST_MSVC > 1200) && \
-     (!defined(__SUNPRO_CC) || __SUNPRO_CC > 0x520)
-    inline void checked_array_delete(T const volatile * x)
-# else
-    inline void checked_array_delete(T  /*const volatile*/ * x)
-# endif
+    inline void checked_array_delete(T  * x)
     {
 # if !((defined(__BORLANDC__) && __BORLANDC__ <= 0x0551) || (defined(__ICL) && __ICL <= 500))
         BOOST_STATIC_ASSERT( sizeof(T) ); // assert type complete at point
