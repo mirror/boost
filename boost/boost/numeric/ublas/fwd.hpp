@@ -45,8 +45,12 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, std::size_t N, class ALLOC = std::allocator<T> >
     class bounded_array;
 
-    class range;
-    class slice;
+    template <class I = std::size_t, class D = std::ptrdiff_t>
+    class basic_range;
+    template <class I = std::size_t, class D = std::ptrdiff_t>
+    class basic_slice;
+    typedef basic_range<> range;
+    typedef basic_slice<> slice;
     template<class A = unbounded_array<std::size_t> >
     class indirect_array;
 
