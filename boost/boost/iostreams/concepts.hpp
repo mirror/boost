@@ -13,7 +13,7 @@
 
 #include <locale>
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/assert_convertible.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -28,10 +28,19 @@ struct device {
           closable_tag,
           localizable_tag
         { };
+
     void close()
-        { BOOST_IOSTREAMS_ASSERT_NOT_CONVERTIBLE(Mode, detail::two_sequence); }
+    {
+        using namespace detail;
+        BOOST_STATIC_ASSERT((!is_convertible<Mode, two_sequence>::value));
+    }
+
     void close(std::ios_base::openmode)
-        { BOOST_IOSTREAMS_ASSERT_CONVERTIBLE(Mode, detail::two_sequence); }
+    {
+        using namespace detail;
+        BOOST_STATIC_ASSERT((is_convertible<Mode, two_sequence>::value));
+    }
+
     void imbue(const std::locale&) { }
 };
 
@@ -54,13 +63,20 @@ struct filter {
           closable_tag,
           localizable_tag
         { };
+
     template<typename Device>
     void close(Device&)
-    { BOOST_IOSTREAMS_ASSERT_NOT_CONVERTIBLE(Mode, detail::two_sequence); }
+    {
+        using namespace detail;
+        BOOST_STATIC_ASSERT((!is_convertible<Mode, two_sequence>::value));
+    }
 
     template<typename Device>
     void close(Device&, std::ios_base::openmode)
-    { BOOST_IOSTREAMS_ASSERT_CONVERTIBLE(Mode, detail::two_sequence); }
+    {
+        using namespace detail;
+        BOOST_STATIC_ASSERT((is_convertible<Mode, two_sequence>::value));
+    }
 
     void imbue(const std::locale&) { }
 };

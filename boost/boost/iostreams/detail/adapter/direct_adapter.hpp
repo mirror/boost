@@ -17,7 +17,6 @@
 #include <iosfwd>                 // streamsize.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/categories.hpp>
-#include <boost/iostreams/detail/assert_convertible.hpp>    
 #include <boost/iostreams/detail/config/limits.hpp>       // forwarding.
 #include <boost/iostreams/detail/double_object.hpp>
 #include <boost/iostreams/detail/error.hpp>
@@ -28,6 +27,7 @@
 #include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 namespace boost { namespace iostreams { namespace detail {
                     
@@ -245,14 +245,14 @@ inline std::streamoff direct_adapter<Direct>::seek
 template<typename Direct>
 void direct_adapter<Direct>::close() 
 { 
-    BOOST_IOSTREAMS_ASSERT_NOT_CONVERTIBLE(io_category, two_sequence); 
+    BOOST_STATIC_ASSERT((!is_convertible<io_category, two_sequence>::value));
     boost::iostreams::close(d_, std::ios::in | std::ios::out);
 }
 
 template<typename Direct>
 void direct_adapter<Direct>::close(std::ios_base::openmode which) 
 { 
-    BOOST_IOSTREAMS_ASSERT_CONVERTIBLE(io_category, two_sequence); 
+    BOOST_STATIC_ASSERT((is_convertible<io_category, two_sequence>::value));
     boost::iostreams::close(d_, which);
 }
 
