@@ -8,14 +8,14 @@
 //  Metrowerks C++ compiler setup:
 
 #   if __MWERKS__ <= 0x2301  // 5.3
-#     define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+#     define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #     define BOOST_NO_POINTER_TO_MEMBER_CONST
 #     define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #     define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #   endif
 
 #   if __MWERKS__ <= 0x2401  // 6.2
-//#     define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+//#     define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #   endif
 
 #   if(__MWERKS__ <= 0x2405) || !defined(BOOST_STRICT_CONFIG)  // 7.0

@@ -18,7 +18,6 @@
 #endif
 
 #if (BOOST_INTEL_CXX_VERSION <= 600) || !defined(BOOST_STRICT_CONFIG)
-//#  define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 
 #  if defined(_MSC_VER)
       // Intel C++ 5.0.1 uses EDG 2.45, but fails to activate Koenig lookup
