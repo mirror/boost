@@ -35,7 +35,7 @@ namespace boost {
           template<typename Then, typename Else>
           struct Result
           {       
-            typedef Then RET;
+            typedef Then type;
           };
         };
  
@@ -44,29 +44,28 @@ namespace boost {
           template<typename Then, typename Else>
           struct Result
           { 
-            typedef Else RET;
+            typedef Else type;
           };
         };
  
         template<bool Condition>
         struct Selector
         {
-          typedef SelectThen RET;
+          typedef SelectThen type;
         };
  
         template<>
         struct Selector<false>
         {
-          typedef SelectElse RET;
+          typedef SelectElse type;
         };
       } // end namespace intimate 
  
       template<bool Condition, typename Then, typename Else>
       struct IF
       {
-        typedef typename intimate::Selector<Condition>::RET select;
-        typedef typename select::template Result<Then,Else>::RET RET;
-        typedef RET type;
+        typedef typename intimate::Selector<Condition>::type select;
+        typedef typename select::template Result<Then,Else>::type type;
       };
 
       /**
@@ -200,8 +199,8 @@ namespace boost {
         manage(any_pointer functor_ptr, functor_manager_operation_type op)
         {
           typedef typename IF<(is_pointer<functor_type>::value),
-            function_ptr_tag,
-            function_obj_tag>::RET tag_type;
+                              function_ptr_tag,
+                              function_obj_tag>::type tag_type;
 
           return manager(functor_ptr, op, tag_type());
         }
