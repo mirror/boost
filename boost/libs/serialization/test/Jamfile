@@ -49,7 +49,7 @@ rule run-invoke ( test-name : sources * : defn * )
         : # input files
         : # requirements
             # <threading>single
-            <runtime-link>static
+            # <runtime-link>static
             <stlport-iostream>on 
             <borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
             <borland-5.5.1><*><cxxflags>"-w-8080 -w-8071 -w-8057"
@@ -75,7 +75,7 @@ rule run-invoke ( test-name : sources * : defn * )
             : # input files
             : # requirements
             	# <threading>single
-            	<runtime-link>static
+            	# <runtime-link>static
             	<stlport-iostream>on 
             	<borland><*><cxxflags>"-w-8080 -w-8071 -w-8057"
                 <borland-5.5.1><*><cxxflags>"-w-8080 -w-8071 -w-8057"
