@@ -30,26 +30,37 @@ public:
 
     typedef atomic_count count_type;
 
+    // pre: initial_use_count <= initial_weak_count
+
     explicit counted_base(long initial_use_count, long initial_weak_count):
         use_count_(initial_use_count), weak_count_(initial_weak_count), self_deleter_(&self_delete)
     {
     }
 
-    virtual ~counted_base()
+    virtual ~counted_base() // nothrow
     {
     }
 
-    virtual void dispose()
+    // dispose() is called when use_count_ drops to zero, to release
+    // the resources managed by *this.
+    //
+    // counted_base doesn't manage any resources except itself, and
+    // the default implementation is a no-op.
+    //
+    // dispose() is not pure virtual since weak_ptr instantiates a
+    // counted_base in its default constructor.
+
+    virtual void dispose() // nothrow
     {
     }
 
-    void add_ref()
+    void add_ref() // nothrow
     {
         ++use_count_;
         ++weak_count_;
     }
 
-    void release()
+    void release() // nothrow
     {
         if(--use_count_ == 0)
         {
@@ -64,12 +75,12 @@ public:
         }
     }
 
-    void weak_add_ref()
+    void weak_add_ref() // nothrow
     {
         ++weak_count_;
     }
 
-    void weak_release()
+    void weak_release() // nothrow
     {
         if(--weak_count_ == 0)
         {
@@ -77,7 +88,7 @@ public:
         }
     }
 
-    long use_count() const
+    long use_count() const // nothrow
     {
         return use_count_;
     }
@@ -91,6 +102,8 @@ private:
     {
         delete p;
     }
+
+    // inv: use_count_ <= weak_count_
 
     count_type use_count_;
     count_type weak_count_;
@@ -110,12 +123,14 @@ private:
 
 public:
 
+    // pre: initial_use_count <= initial_weak_count, d(p) must not throw
+
     counted_base_impl(P p, D d, long initial_use_count, long initial_weak_count):
         counted_base(initial_use_count, initial_weak_count), ptr(p), del(d)
     {
     }
 
-    virtual void dispose()
+    virtual void dispose() // nothrow
     {
         del(ptr);
     }
