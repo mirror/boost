@@ -232,7 +232,7 @@ public:
     {
         assert(first != last);
         block_width_type r = count_extra_bits();
-        std::size_t d = std::distance(first, last);
+        std::size_t d = boost::detail::distance(first, last);
         m_bits.reserve(num_blocks() + d);
         if (r == 0) {
             for( ; first != last; ++first)
