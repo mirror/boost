@@ -142,10 +142,10 @@ namespace date_time {
           default: {} //quiet compilers that want all cases covered here (eg: gcc 3.1)
         }
       }
-      virtual void do_put_weekday_short(iter_type& oitr, weekday_enum wd) const
+      virtual void do_put_weekday_short(iter_type&, weekday_enum) const
       {
       }
-      virtual void do_put_weekday_long(iter_type& oitr, weekday_enum wd) const
+      virtual void do_put_weekday_long(iter_type&, weekday_enum) const
       {
       }
       virtual bool do_has_date_sep_chars() const

@@ -78,20 +78,20 @@ namespace gregorian {
 
     /* parameterized as_*_string functions are intended to be called
      * from a template function: "... as_short_string(charT c='\0');" */
-    const char* as_short_string(char c) const
+    const char* as_short_string(char) const
     {
       return as_short_string();
     }
-    const char* as_long_string(char c) const
+    const char* as_long_string(char) const
     {
       return as_long_string();
     }
 #ifndef BOOST_NO_STD_WSTRING
-    const wchar_t* as_short_string(wchar_t c) const
+    const wchar_t* as_short_string(wchar_t) const
     {
       return as_short_wstring();
     }
-    const wchar_t* as_long_string(wchar_t c) const
+    const wchar_t* as_long_string(wchar_t) const
     {
       return as_long_wstring();
     }
