@@ -117,6 +117,11 @@ template<class F> inline F & unwrap(F & f, long)
     return f;
 }
 
+template<class F> inline F * unwrap(F * f, int)
+{
+    return f;
+}
+
 template<class F> inline F & unwrap(reference_wrapper<F> & f, int)
 {
     return f;
