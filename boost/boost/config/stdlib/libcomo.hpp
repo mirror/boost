@@ -30,5 +30,5 @@
 //
 #define BOOST_HAS_SGI_TYPE_TRAITS
 
-#define BOOST_STDLIB "Comeau standard library" BOOST_STRINGIZE(__LIBCOMO_VERSION__)
+#define BOOST_STDLIB "Comeau standard library " BOOST_STRINGIZE(__LIBCOMO_VERSION__)
 
