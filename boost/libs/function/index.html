@@ -50,7 +50,7 @@ And, of course, function pointers have several advantages over Boost.Function:
 <p> Function object wrappers will be the size of two function pointers plus one function pointer or data pointer (whichever is larger). On common 32-bit platforms, this amounts to 12 bytes per wrapper. Additionally, the function object target will be allocated on the heap.
 
 <h3>Copying efficiency</h3>
-<p> Copying function object wrappers requires allocating member for a copy of the function object target. The default allocator may be replaced with a faster custom allocator if the cost of this cloning becomes prohibitive.
+<p> Copying function object wrappers may require allocating memory for a copy of the function object target. The default allocator may be replaced with a faster custom allocator or one may choose to allow the function object wrappers to only store function object targets by reference (using <a href="../bind/ref.html"><code>ref</code></a>) if the cost of this cloning becomes prohibitive.
 
 <h3>Invocation efficiency</h3>
 <p> With a properly inlining compiler, an invocation of a function object requires one call through a function pointer. If the call is to a free function pointer, an additional call must be made to that function pointer (unless the compiler has very powerful interprocedural analysis).
