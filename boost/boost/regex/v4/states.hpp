@@ -110,7 +110,6 @@ enum syntax_element_type
    syntax_element_char_rep = syntax_element_dot_rep + 1,
    syntax_element_short_set_rep = syntax_element_char_rep + 1,
    syntax_element_long_set_rep = syntax_element_short_set_rep + 1, 
-   syntax_element_count = syntax_element_long_set_rep +1
 };
 
 #ifdef BOOST_REGEX_DEBUG

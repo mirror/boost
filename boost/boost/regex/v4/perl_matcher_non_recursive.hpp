@@ -1184,7 +1184,7 @@ bool perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_non_greed
 
 template <class BidiIterator, class Allocator, class traits, class Allocator2>
 typename perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_proc_type const
-perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_unwind_table[14] = 
+perl_matcher<BidiIterator, Allocator, traits, Allocator2>::s_unwind_table[] = 
 {
    &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_end,
    &perl_matcher<BidiIterator, Allocator, traits, Allocator2>::unwind_paren,
