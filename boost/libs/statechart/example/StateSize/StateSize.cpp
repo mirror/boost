@@ -27,10 +27,10 @@ namespace mpl = boost::mpl;
 //////////////////////////////////////////////////////////////////////////////
 // Displays the runtime sizes of states
 //////////////////////////////////////////////////////////////////////////////
-class DummyEvent1 : public fsm::event< DummyEvent1 > {};
-class DummyEvent2 : public fsm::event< DummyEvent2 > {};
-class DummyEvent3 : public fsm::event< DummyEvent3 > {};
-class DummyEvent4 : public fsm::event< DummyEvent4 > {};
+class DummyEvent1 : public fsm::event {};
+class DummyEvent2 : public fsm::event {};
+class DummyEvent3 : public fsm::event {};
+class DummyEvent4 : public fsm::event {};
 
 
 class UnconnectedOuterState;

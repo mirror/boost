@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_EVENT_HANDLER_HPP_INCLUDED
-#define BOOST_FSM_EVENT_HANDLER_HPP_INCLUDED
+#ifndef BOOST_FSM_DEFERAL_HPP_INCLUDED
+#define BOOST_FSM_DEFERAL_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -10,7 +10,10 @@
 
 
 
+#include <boost/fsm/event.hpp>
 #include <boost/fsm/result.hpp>
+
+#include <typeinfo> // std::type_info
 
 
 
@@ -20,36 +23,28 @@ namespace fsm
 {
 
 
-  
-template< class Derived >
-class event;
-
-
-
-namespace detail
-{
-
-
 
 //////////////////////////////////////////////////////////////////////////////
 template< class Event >
-class reaction
+struct deferal
 {
-  protected:
-    //////////////////////////////////////////////////////////////////////////
-    reaction() {}
-    ~reaction() {}
-
-  private:
-    //////////////////////////////////////////////////////////////////////////
-    virtual result react( const Event & toEvent ) = 0;
-
-    friend class event< Event >;
+  template< class State >
+  static result react(
+    State & stt, const event &, const std::type_info & eventType )
+  {
+    if ( eventType == typeid( const Event ) )
+    {
+      return stt.defer_event();
+    }
+    else
+    {
+      return no_reaction;
+    }
+  };
 };
 
 
 
-} // namespace detail
 } // namespace fsm
 } // namespace boost
 

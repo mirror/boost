@@ -50,6 +50,11 @@ class counted_base : private locked_base< NeedsLocking >
     //////////////////////////////////////////////////////////////////////////
     virtual ~counted_base() {}
 
+    bool ref_counted() const
+    {
+      return count_ != 0;
+    }
+
   protected:
     //////////////////////////////////////////////////////////////////////////
     counted_base() : count_( 0 ) {}

@@ -13,14 +13,13 @@
 #include <boost/fsm/detail/leaf_state.hpp>
 #include <boost/fsm/detail/node_state.hpp>
 
-#include <boost/fsm/event_base.hpp>
+#include <boost/fsm/event.hpp>
 
 #include <boost/mpl/apply_if.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/inherit.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/size.hpp>
@@ -33,19 +32,17 @@
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/clear.hpp>
 #include <boost/mpl/erase.hpp>
-#include <boost/mpl/transform.hpp>
 #include <boost/mpl/reverse.hpp>
-#include <boost/mpl/fold.hpp>
 #include <boost/mpl/placeholders.hpp>
-
-#include <boost/mpl/aux_/msvc_eti_base.hpp>
 
 #include <boost/get_pointer.hpp>
 #include <boost/intrusive_ptr.hpp>
+#include <boost/assert.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/cast.hpp>   // boost::polymorphic_downcast
 #include <boost/config.hpp> // BOOST_STATIC_CONSTANT
-#include <boost/assert.hpp> // BOOST_ASSERT
 
+#include <typeinfo> // std::type_info
 
 
 namespace boost
@@ -59,6 +56,7 @@ namespace detail
   
 typedef mpl::clear< mpl::list<> >::type empty_list;
 
+//////////////////////////////////////////////////////////////////////////////
 template< class T >
 struct make_list : public mpl::apply_if<
   mpl::is_sequence< T >,
@@ -67,7 +65,8 @@ struct make_list : public mpl::apply_if<
 
 using namespace mpl::placeholders;
 
-template< class Derived, class Context, class Reactions, class InnerInitial >
+//////////////////////////////////////////////////////////////////////////////
+template< class Context, class InnerInitial >
 struct state_base_type
 {
   private:
@@ -75,24 +74,18 @@ struct state_base_type
     // orthogonal_position
     typedef typename detail::make_list< InnerInitial >::type
       inner_initial_list;
+
+  public:
     typedef typename mpl::apply_if<
       mpl::empty< inner_initial_list >,
       mpl::identity< leaf_state< typename Context::state_list_type > >,
       mpl::identity< node_state<
         mpl::size< inner_initial_list >::type::value,
-        typename Context::state_list_type > > >::type base;
-
-    typedef typename detail::make_list< Reactions >::type reaction_list;
-    typedef typename mpl::transform<
-      reaction_list, mpl::apply1< _, Derived > >::type handler_list;
-
-  public:
-    typedef typename mpl::fold<
-      typename mpl::reverse< typename mpl::push_front< handler_list, base >::type >::type,
-      mpl::empty_base, mpl::inherit2< _1, _2 > >::type type;
+        typename Context::state_list_type > > >::type type;
 };
 
 
+//////////////////////////////////////////////////////////////////////////////
 struct no_transition_function
 {
   template< class CommonContext >
@@ -173,6 +166,7 @@ struct get_orthogonal_position< int >
 };
 
 
+//////////////////////////////////////////////////////////////////////////////
 template< class ContextList, class TopContext >
 struct outer_constructor
 {
@@ -238,19 +232,17 @@ typedef detail::empty_list no_reactions;
 
 
 
-// Base class for all states
+//////////////////////////////////////////////////////////////////////////////
 template< class Derived,
           class Context, // either an outer state or a state_machine
           class Reactions = no_reactions,
           class InnerInitial = detail::empty_list > // initial inner state
-class simple_state : public // mpl::aux::msvc_eti_base<
-  /*typename*/ detail::state_base_type<
-    Derived, typename Context::inner_context_type,
-    Reactions, InnerInitial >::type //>::type
+class simple_state : public detail::state_base_type<
+  typename Context::inner_context_type, InnerInitial >::type
 {
   typedef typename detail::state_base_type<
-    Derived, typename Context::inner_context_type,
-    Reactions, InnerInitial >::type base_type;
+    typename Context::inner_context_type,
+    InnerInitial >::type base_type;
 
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -289,6 +281,25 @@ class simple_state : public // mpl::aux::msvc_eti_base<
       return context_impl( static_cast< OtherContext * >( 0 ) );
     }
 
+    void post_event( const event_ptr_type & pEvent )
+    {
+      top_context().post_event( pEvent );
+    }
+
+    // see state_machine class for documentation
+    template< class Target >
+    Target state_cast() const
+    {
+      return top_context().state_cast< Target >();
+    }
+
+    // see state_machine class for documentation
+    template< class Target >
+    Target state_downcast() const
+    {
+      return top_context().state_downcast< Target >();
+    }
+
     
     result discard_event()
     {
@@ -305,7 +316,7 @@ class simple_state : public // mpl::aux::msvc_eti_base<
     result defer_event()
     {
       state_base::reaction_initiated();
-      defer_event();
+      state_base::defer_event();
       return do_defer_event;
     }
     
@@ -340,12 +351,6 @@ class simple_state : public // mpl::aux::msvc_eti_base<
       return do_discard_event;
     }
 
-
-    void post_event( const event_ptr_type & pEvent )
-    {
-      top_context().post_event( pEvent );
-    }
-
   protected:
     //////////////////////////////////////////////////////////////////////////
     simple_state() {}
@@ -356,6 +361,11 @@ class simple_state : public // mpl::aux::msvc_eti_base<
       // can be called before the context is set.
       if ( get_pointer( pContext_ ) != 0 )
       {
+        if ( deferred_events() )
+        {
+          top_context().release_events( this );
+        }
+
         pContext_->remove_inner_state( orthogonal_position );
       }
     }
@@ -382,7 +392,38 @@ class simple_state : public // mpl::aux::msvc_eti_base<
       context_type >::type context_type_list;
 
 
+    virtual result react_impl(
+      const event & evt, const std::type_info & eventType )
+    {
+      enable_reaction();
+      typedef detail::make_list< Reactions >::type reaction_list;
+      result reactionResult =
+        local_react_impl< reaction_list >( evt, eventType );
+
+      if ( reactionResult == do_forward_event )
+      {
+        // we can only safely access pCurrentState if the handler did not
+        // return do_discard_event!
+        reactionResult = pContext_->Context::react_impl( evt, eventType );
+      }
+
+      return reactionResult;
+    }
+
+    virtual detail::state_base * outer_state_ptr() const
+    {
+      return outer_state_ptr_impl<
+        is_same< top_context_type, Context >::value >();
+    }
+
+
     top_context_type & top_context()
+    {
+      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
+      return pContext_->top_context();
+    }
+
+    const top_context_type & top_context() const
     {
       BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
       return pContext_->top_context();
@@ -543,6 +584,42 @@ class simple_state : public // mpl::aux::msvc_eti_base<
         pCommonContext, topContext );
 
       return do_discard_event;
+    }
+
+    template< class ReactionList >
+    result local_react_impl(
+      const event & evt, const std::type_info & eventType )
+    {
+      result reactionResult = mpl::front< ReactionList >::type::react(
+        *polymorphic_downcast< Derived * >( this ), evt, eventType );
+
+      if ( reactionResult == no_reaction )
+      {
+        reactionResult =
+          local_react_impl< mpl::pop_front< ReactionList >::type >(
+            evt, eventType );
+      }
+
+      return reactionResult;
+    }
+
+    template<>
+    result local_react_impl< no_reactions >(
+      const event &, const std::type_info & )
+    {
+      return do_forward_event;
+    }
+
+    template< bool isOutermost >
+    detail::state_base * outer_state_ptr_impl() const
+    {
+      return get_pointer( pContext_ );
+    }
+
+    template<>
+    detail::state_base * outer_state_ptr_impl< true >() const
+    {
+      return 0;
     }
 
 

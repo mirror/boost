@@ -10,6 +10,9 @@
 
 
 
+#include <boost/type_traits/alignment_of.hpp>
+#include <boost/type_traits/type_with_alignment.hpp>
+
 #include <cstddef> // size_t
 
 

@@ -22,10 +22,12 @@ namespace fsm
 
 
 
-class exception_thrown : public event< exception_thrown > {};
+//////////////////////////////////////////////////////////////////////////////
+class exception_thrown : public event {};
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 struct exception_translator
 {
   template< class Action, class ExceptionEventHandler >

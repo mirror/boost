@@ -35,7 +35,6 @@ class universal_state : public state_base
     template< class Context >
     void set_context( orthogonal_position_type position, Context * pContext )
     {
-      base_type::set_context( pContext );
       pContext->add_inner_state( position, this );
     }
 

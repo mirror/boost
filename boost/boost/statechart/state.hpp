@@ -25,8 +25,7 @@ template< class Derived,
           class Context, // either an outer state or a state_machine
           class Reactions = no_reactions,
           class InnerInitial = detail::empty_list > // initial inner state
-class state :
-  public simple_state< Derived, Context, Reactions, InnerInitial >
+class state : public simple_state< Derived, Context, Reactions, InnerInitial >
 {
   typedef simple_state< Derived, Context, Reactions, InnerInitial >
     base_type;

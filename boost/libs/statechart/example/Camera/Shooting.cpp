@@ -54,8 +54,6 @@ fsm::result Focused::react( const EvShutterFull & )
 }
 
 
-struct EvInFocus : public fsm::event< EvInFocus > {};
-
 Focusing::Focusing( my_context ctx ) : my_base( ctx )
 {
   post_event( boost::intrusive_ptr< EvInFocus >( new EvInFocus() ) );

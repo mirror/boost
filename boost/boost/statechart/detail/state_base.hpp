@@ -10,10 +10,13 @@
 
 
 
+#include <boost/fsm/result.hpp>
 #include <boost/fsm/detail/counted_base.hpp>
 
 #include <boost/utility.hpp> // boost::noncopyable
 #include <boost/assert.hpp>  // BOOST_ASSERT
+
+#include <typeinfo> // std::type_info
 
 
 
@@ -33,7 +36,7 @@ namespace fsm
 
 
 
-class event_base;
+class event;
 
 
 
@@ -54,20 +57,24 @@ class state_base : private noncopyable,
 {
   public:
     //////////////////////////////////////////////////////////////////////////
+    virtual result react_impl(
+      const event & evt, const std::type_info & eventType ) = 0;
+
     // returns a pointer to the immediate outer state _if_ there is one,
     // returns 0 otherwise (this is the outermost state then)
-    state_base * outer_state_ptr() const
-    {
-      return pOuterState_;
-    }
+    virtual state_base * outer_state_ptr() const = 0;
 
   protected:
     //////////////////////////////////////////////////////////////////////////
     state_base() :
       reactionEnabled_( false ),
-      deferredEvents_( false ),
-      pOuterState_( 0 )
+      deferredEvents_( false )
     {
+    }
+
+    void enable_reaction()
+    {
+      reactionEnabled_ = true;
     }
 
     void reaction_initiated()
@@ -92,39 +99,10 @@ class state_base : private noncopyable,
       return deferredEvents_;
     }
 
-    void set_context( state_base * pOuterState )
-    {
-      // Context must only be set once
-      BOOST_ASSERT( ( pOuterState != 0 ) && ( pOuterState_ == 0 ) );
-      pOuterState_ = pOuterState;
-    }
-
-    void set_context( void * pMachine )
-    {
-      // Context must only be set once
-      BOOST_ASSERT( ( pMachine != 0 ) && ( pOuterState_ == 0 ) );
-      pMachine;
-    }
-
   private:
     //////////////////////////////////////////////////////////////////////////
-    friend class ::boost::fsm::event_base;
-
-    void enable_reaction()
-    {
-      reactionEnabled_ = true;
-    }
-
     bool reactionEnabled_;
     bool deferredEvents_;
-    // Storing another pointer to our outer state looks like a bit of a waste
-    // but the alternatives are not really appealing either. To begin with,
-    // there is a tiny difference between the two pointers: The subclass
-    // pointer references the context of a state which can be another state
-    // or the state machine. This pointer however only points to our outer
-    // state _if_ there is one. It is 0 if the outer context of this state
-    // is the state machine itself.
-    state_base * pOuterState_;
 };
 
 

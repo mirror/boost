@@ -48,8 +48,8 @@ namespace mpl = boost::mpl;
 
 
 
-class EvStartStop : public fsm::event< EvStartStop > {};
-class EvReset : public fsm::event< EvReset > {};
+class EvStartStop : public fsm::event {};
+class EvReset : public fsm::event {};
 
 struct IElapsedTime
 {
@@ -161,7 +161,7 @@ int main( int argc, char * argv[] )
       case 'd':
       {
         std::cout << "Elapsed time: " <<
-          stopWatch.current_state< IElapsedTime >().ElapsedTime() << "\n";
+          stopWatch.state_cast< const IElapsedTime & >().ElapsedTime() << "\n";
       }
       break;
 

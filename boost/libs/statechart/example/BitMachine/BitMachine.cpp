@@ -9,7 +9,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-const unsigned int noOfBits = 1;
+const unsigned int noOfBits = 6;
 //////////////////////////////////////////////////////////////////////////////
 // This program demonstrates the fact that measures must be taken to hide some
 // of the complexity (e.g. in separate .cpp file) of a boost::fsm state
@@ -29,10 +29,10 @@ const unsigned int noOfBits = 1;
 // (i.e. no attempt is made to hide inner state implementation in a .cpp file)
 // can be deduced.
 //
-// Compiler      | max. noOfBits b | max. states s | max. transitions t
-// --------------|-----------------|---------------|-------------------
-// MSVC 7.0      |      b < 5      |  16 < s < 32  |  64 < t < 120
-// MSVC 7.1      |      b < 6      |  32 < s < 64  |  120 < t < 384
+// Compiler      | max. noOfBits b | max. states s  | max. transitions t
+// --------------|-----------------|----------------|-------------------
+// MSVC 7.0      |      b < 5      |  16 < s < 32   |  64 < t < 120
+// MSVC 7.1      |      b < 7      |  64 < s < 128  |  384 < t < 896
 //
 // CAUTION: Due to the fact that the amount of generated code more than
 // *doubles* each time noOfBits is *incremented*, build times soar when
@@ -50,6 +50,7 @@ const unsigned int noOfBits = 1;
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/push_front.hpp>
 #include <boost/mpl/reverse.hpp>
+#include <boost/mpl/transform.hpp>
 #include <boost/mpl/fold.hpp>
 #include <boost/mpl/integral_c.hpp>
 #include <boost/mpl/range_c.hpp>
@@ -57,8 +58,6 @@ const unsigned int noOfBits = 1;
 
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
-#include <boost/type_traits/alignment_of.hpp>
-#include <boost/type_traits/type_with_alignment.hpp>
 
 #ifdef BOOST_MSVC
 #pragma warning( push )
@@ -114,7 +113,7 @@ void DisplayBits( unsigned int number )
 
 //////////////////////////////////////////////////////////////////////////////
 template< unsigned int bitNo >
-class EvFlipBit : public fsm::event< EvFlipBit > {};
+class EvFlipBit : public fsm::event {};
 const EvFlipBit< 0 > flip0;
 const EvFlipBit< 1 > flip1;
 const EvFlipBit< 2 > flip2;
@@ -125,7 +124,7 @@ const EvFlipBit< 6 > flip6;
 const EvFlipBit< 7 > flip7;
 const EvFlipBit< 8 > flip8;
 const EvFlipBit< 9 > flip9;
-const fsm::event_base * const pFlipBitEvents[] =
+const fsm::event * const pFlipBitEvents[] =
   { &flip0, &flip1, &flip2, &flip3, &flip4, &flip5, &flip6, &flip7, &flip8, &flip9 };
 
 
@@ -207,7 +206,7 @@ void VisitAllStates( BitMachine & bitMachine )
 #endif
   if ( display )
   {
-    bitMachine.current_state< IDisplay >().DisplayBits();
+    bitMachine.state_cast< const IDisplay & >().DisplayBits();
   }
 #ifdef BOOST_MSVC
 #pragma warning( pop )
@@ -228,7 +227,7 @@ void VisitAllStates< 0, true >( BitMachine & bitMachine )
 {
   bitMachine.process_event( *pFlipBitEvents[ 0 ] );
   ++eventsSentTotal;
-  bitMachine.current_state< IDisplay >().DisplayBits();
+  bitMachine.state_cast< const IDisplay & >().DisplayBits();
 }
 
 
@@ -246,9 +245,12 @@ int main( int argc, char * argv[] )
   argc;
   argv;
 
+  BOOST_ASSERT( noOfBits <= 10 );
+
   std::cout << "boost::fsm BitMachine example\n";
   std::cout << "Machine configuration: " << noOfStates <<
     " states interconnected with " << noOfTransitions << " transitions.\n\n";
+
   for ( unsigned int bit = 0; bit < noOfBits; ++bit )
   {
     std::cout << bit - 0 << "<CR>: Flips bit " << bit - 0 << "\n";
@@ -271,7 +273,7 @@ int main( int argc, char * argv[] )
     {
       bitMachine.process_event( *pFlipBitEvents[ key - '0' ] );
       ++eventsSentTotal;
-      bitMachine.current_state< IDisplay >().DisplayBits();
+      bitMachine.state_cast< const IDisplay & >().DisplayBits();
     }
     else
     {

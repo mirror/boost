@@ -148,10 +148,10 @@
 				RelativePath="..\..\..\..\boost\fsm\custom_reaction.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\event.hpp">
+				RelativePath="..\..\..\..\boost\fsm\deferal.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\event_base.hpp">
+				RelativePath="..\..\..\..\boost\fsm\event.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">

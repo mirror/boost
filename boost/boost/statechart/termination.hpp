@@ -10,9 +10,10 @@
 
 
 
-#include <boost/fsm/detail/reaction.hpp>
+#include <boost/fsm/event.hpp>
+#include <boost/fsm/result.hpp>
 
-#include <boost/cast.hpp> // boost::polymorphic_downcast
+#include <typeinfo> // std::type_info
 
 
 
@@ -20,34 +21,25 @@ namespace boost
 {
 namespace fsm
 {
-namespace detail
-{
 
 
 
-template< class Derived, class Event >
-class termination_reaction : public reaction< Event >
-{
-  private:
-    virtual result react( const Event & )
-    {
-      return polymorphic_downcast< Derived * >( this )->terminate();
-    }
-};
-
-
-
-} // namespace detail
-
-
-
+//////////////////////////////////////////////////////////////////////////////
 template< class Event >
 struct termination
 {
-  template< class Derived >
-  struct apply
+  template< class State >
+  static result react(
+    State & stt, const event &, const std::type_info & eventType )
   {
-    typedef detail::termination_reaction< Derived, Event > type;
+    if ( eventType == typeid( const Event ) )
+    {
+      return stt.terminate();
+    }
+    else
+    {
+      return no_reaction;
+    }
   };
 };
 

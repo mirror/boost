@@ -19,10 +19,10 @@ namespace fsm = boost::fsm;
 
 
 
-class EvShutterHalf : public fsm::event< EvShutterHalf > {};
-class EvShutterFull : public fsm::event< EvShutterFull > {};
-class EvShutterRelease : public fsm::event< EvShutterRelease > {};
-class EvConfig : public fsm::event< EvConfig > {};
+class EvShutterHalf : public fsm::event {};
+class EvShutterFull : public fsm::event {};
+class EvShutterRelease : public fsm::event {};
+class EvConfig : public fsm::event {};
 
 
 struct NotShooting;
@@ -40,7 +40,7 @@ struct NotShooting : public fsm::simple_state< NotShooting, Camera,
   NotShooting();
   ~NotShooting();
 
-  virtual fsm::result react( const EvShutterHalf & );
+  fsm::result react( const EvShutterHalf & );
 };
 
 struct Idle : public fsm::simple_state< Idle, NotShooting,
@@ -49,7 +49,7 @@ struct Idle : public fsm::simple_state< Idle, NotShooting,
   Idle();
   ~Idle();
 
-  virtual fsm::result react( const EvConfig & );
+  fsm::result react( const EvConfig & );
 };
 
 

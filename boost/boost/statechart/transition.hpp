@@ -10,9 +10,12 @@
 
 
 
-#include <boost/fsm/detail/reaction.hpp>
+#include <boost/fsm/event.hpp>
+#include <boost/fsm/result.hpp>
 
-#include <boost/cast.hpp>
+#include <boost/cast.hpp> // boost::polymorphic_downcast
+
+#include <typeinfo> // std::type_info
 
 
 
@@ -25,6 +28,7 @@ namespace detail
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 struct no_context
 {
   template< class Event >
@@ -33,51 +37,52 @@ struct no_context
 
 
 
-template< class Derived, class Event, class Destination,
-          class TransitionContext,
-          void ( TransitionContext::*pTransitionAction )( const Event & ) >
-class transition_reaction : public reaction< Event >
-{
-  private:
-    virtual result react( const Event & toEvent )
-    {
-      return react_impl< TransitionContext >( toEvent );
-    }
-
-    template< class TransitionContext >
-    result react_impl( const Event & toEvent )
-    {
-      return polymorphic_downcast< Derived * >( this )->
-        transit< Destination >( pTransitionAction, toEvent );
-    }
-
-    template<>
-    result react_impl< no_context >( const Event & )
-    {
-      return polymorphic_downcast< Derived * >( this )->
-        transit< Destination >();
-    }
-};
-
-
-
 } // namespace detail
 
 
 
+//////////////////////////////////////////////////////////////////////////////
 template< class Event, class Destination,
           class TransitionContext = detail::no_context,
           void ( TransitionContext::*pTransitionAction )( const Event & ) =
             &detail::no_context::no_function< Event > >
 struct transition
 {
-  template< class Derived >
-  struct apply
-  {
-    typedef detail::transition_reaction<
-      Derived, Event, Destination,
-      TransitionContext, pTransitionAction > type;
-  };
+  private:
+    //////////////////////////////////////////////////////////////////////////
+    template< class State >
+    struct impl
+    {
+      template< class TransitionContext2 >
+      static result react( State & stt, const event & toEvent )
+      {
+        return stt.transit< Destination >( pTransitionAction,
+          *polymorphic_downcast< const Event * >( &toEvent ) );
+      }
+
+      template<>
+      static result react< detail::no_context >(
+        State & stt, const event & )
+      {
+        return stt.transit< Destination >();
+      }
+    };
+
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    template< class State >
+    static result react(
+      State & stt, const event & evt, const std::type_info & eventType )
+    {
+      if ( eventType == typeid( const Event ) )
+      {
+        return impl< State >::react< TransitionContext >( stt, evt );
+      }
+      else
+      {
+        return no_reaction;
+      }
+    }
 };
 
 
