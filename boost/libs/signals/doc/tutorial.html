@@ -343,7 +343,7 @@ void print_quotient(float x, float y)
   std::cout &lt;&lt; "The quotient is " &lt;&lt; x/y &lt;&lt; std::endl;
 }
 
-boost::signal&lt;void, float, float&gt; sig;
+boost::signal&lt;void (float, float)&gt; sig;
 
 sig.connect(&amp;print_sum);
 sig.connect(&amp;print_product);
