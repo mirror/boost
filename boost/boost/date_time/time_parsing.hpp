@@ -99,7 +99,7 @@ namespace date_time {
   {
     int offsets[] = {2,2,2};
     int pos = 0;
-    short hours, min, sec;
+    short hours=0, min=0, sec=0;
     boost::offset_separator osf(offsets, offsets+3); 
     boost::tokenizer<boost::offset_separator> tok(s, osf);
     for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti){
