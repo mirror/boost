@@ -1,32 +1,29 @@
 //  boost::dynamic_bitset timing test ---------------------------------------//
 
-//  (C) Copyright Gennaro Prota 2002.
-//      Permission to copy, use, modify, sell and distribute this software
-//      is granted provided this copyright notice appears in all copies.
-//      This software is provided "as is" without express or implied warranty,
-//      and with no claim as to its suitability for any purpose.
+//  (C) Copyright Gennaro Prota 2002. Permission to copy, use, modify,
+//  sell and distribute this software is granted provided this copyright
+//  notice appears in all copies. This software is provided "as is" without
+//  express or implied warranty, and with no claim as to its suitability
+//  for any purpose.
 
-// -------------------------------------
+// -----------------------------------
 
 //  NOTE:
 //  ~~~~~
 //   This is a preliminary, incomplete version.
 //
-//   If you are interested in this program or any other sorts of
-//   benchmarks for dynamic_bitset please make a request on the
-//   boost list, which could encourage me to continue working on
-//   these things.
+//   If you are interested in having more benchmarks please make a
+//   request on the boost list, which could encourage me to continue
+//   this work.
 
-//   If you have a platform with CHAR_BIT >= 9 and are using
-//   boost::dynamic_bitset<> with it I also suggest you to experiment
-//   with the size of the count table in detail/dynamic_bitset.hpp and
-//   see if you can achieve any significant speed gain.
-//
-//   In that case, you can post to the list, or contact me by mail,
-//   and we'll likely tweak the code to arrange your platform as well.
+//   Also, if you use boost::dynamic_bitset on a platform where
+//   CHAR_BIT >= 9 I suggest experimenting with the size of the count
+//   table in detail/dynamic_bitset.hpp and report any interesting
+//   discovery on the list as well.
+
 //
 //
-//   LAST MODIFIED: 20 Mar 2003
+//   LAST MODIFIED: 19 Apr 2003
 // -----------------------------------------------------------------------//
 
 #include "boost/config.hpp"
@@ -52,7 +49,7 @@
 
 namespace {
 
-    // use m_ prefixes because 'major' and 'minor' are macros with g++:
+    // the m_ prefixes below, are mainly to avoid problems with g++;
     // see http://gcc.gnu.org/ml/gcc-bugs/1999-03n/msg00884.html
     //
     class boost_version {
