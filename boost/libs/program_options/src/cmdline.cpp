@@ -326,6 +326,14 @@ namespace boost { namespace program_options { namespace detail {
                 else
                     return 0;
         }
+
+        // Standard strncmp has "C" linkage and Comeau compiler
+        // issues error when we select between strncmp_nocase
+        // and strncmp using ?:, below
+        int strncmp(const char* s1, const char* s2, size_t n)        
+        {
+            return std::strncmp(s1, s2, n);
+        }
     }
 
     
@@ -345,18 +353,14 @@ namespace boost { namespace program_options { namespace detail {
     {
         // some systems does not have strchr et.al. in namespace std
         using namespace std;
-        
+       
         // Handle the case of '=' in name, which is not part of option name
         const char* eq = strchr(name, '=');
         std::size_t n = eq ? eq - name : strlen(name);
 
         int (*cmp)(const char*, const char*, size_t);
-#if BOOST_WORKAROUND(_MSC_FULL_VER, >= 13102292) &&\
-    BOOST_WORKAROUND(_MSC_FULL_VER, BOOST_TESTED_AT(13103077))
-        cmp = (style & case_insentitive) ? detail::strncmp_nocase : std::strncmp;
-#else
-        cmp = (style & case_insentitive) ? detail::strncmp_nocase : strncmp;
-#endif
+        cmp = (style & case_insentitive) 
+            ? detail::strncmp_nocase : detail::strncmp;
         const option* result(0);
         for (size_t i = 0; i < options.size(); ++i) {
             const char* known_name = options[i].long_name.c_str();
