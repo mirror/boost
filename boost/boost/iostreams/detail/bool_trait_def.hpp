@@ -20,23 +20,22 @@
 //      etc.
 //
 #define BOOST_IOSTREAMS_BOOL_TRAIT_DEF(trait, type, arity) \
-    namespace boost { namespace iostreams { namespace detail { \
+    namespace BOOST_PP_CAT(trait, impl_) { \
       template<BOOST_PP_ENUM_PARAMS(arity, typename T)> \
-      type_traits::yes_type BOOST_PP_CAT(trait, _helper) \
+      type_traits::yes_type helper \
           (const volatile type<BOOST_PP_ENUM_PARAMS(arity, T)>*); \
-      type_traits::no_type BOOST_PP_CAT(trait, _helper)(...); \
+      type_traits::no_type helper(...); \
       template<typename T> \
-      struct BOOST_PP_CAT(trait, _impl) { \
+      struct impl { \
            BOOST_STATIC_CONSTANT(bool, value = \
-               (sizeof(BOOST_PP_CAT(trait, _helper)(static_cast<T*>(0))) == \
+               (sizeof(helper(static_cast<T*>(0))) == \
                 sizeof(type_traits::yes_type))); \
       }; \
     } \
     template<typename T> \
     struct trait \
-        : mpl::bool_<detail::BOOST_PP_CAT(trait, _impl)<T>::value> \
+        : mpl::bool_<BOOST_PP_CAT(trait, impl_)::impl<T>::value> \
     { BOOST_MPL_AUX_LAMBDA_SUPPORT(1, trait, (T)) }; \
-    } } \
     /**/
 
 #endif // #ifndef BOOST_IOSTREAMS_DETAIL_BOOL_TRAIT_DEF_HPP_INCLUDED

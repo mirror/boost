@@ -11,14 +11,14 @@
 #include <boost/iostreams/detail/bool_trait_def.hpp>      
 #include <boost/mpl/or.hpp>                         
 
+namespace boost { namespace iostreams { 
+
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_istream, std::basic_istream, 2)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_ostream, std::basic_ostream, 2)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iostream, std::basic_iostream, 2)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_streambuf, std::basic_streambuf, 2)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringstream, std::basic_stringstream, 3)
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringbuf, std::basic_stringbuf, 3)
-
-namespace boost { namespace iostreams { 
 
 //
 // Template name: is_stream.

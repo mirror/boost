@@ -34,7 +34,12 @@
 //     is_same< T, iterator_range<typename iterator_value<T>::type> >
 //
 // Currently it does not seem to be worth the trouble.
+
+namespace boost { namespace iostreams {
+
 BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iterator_range, boost::iterator_range, 1)
+
+} } // End namespaces iostreams, boost.
 
 //#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-------------------------//
 
