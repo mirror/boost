@@ -1776,16 +1776,32 @@ namespace boost { namespace numeric { namespace ublas {
         bool compare(const self_type& rhs) const {
             return (v1_ < rhs.v1_);
         }
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend bool operator < (const self_type& lhs, const self_type& rhs) {
             return lhs.compare(rhs);
         }
+#endif
 
     private:
         size_type i_;
         typename V::value1_type v1_;
         typename V::value2_type v2_;
     };
+
+#ifdef BOOST_UBLAS_NO_MEMBER_FRIENDS
+    template<class V>
+    BOOST_UBLAS_INLINE
+    void swap(index_pair<V> lhs, index_pair<V> rhs) {
+        lhs.swap(rhs);
+    }
+
+    template<class V>
+    BOOST_UBLAS_INLINE
+    bool operator < (const index_pair<V>& lhs, const index_pair<V>& rhs) {
+        return lhs.compare(rhs);
+    }
+#endif
 
     template <class V1, class V2>
     class index_pair_array:
@@ -1912,10 +1928,12 @@ namespace boost { namespace numeric { namespace ublas {
             return ((v1_ < rhs.v1_) ||
                     (v1_ == rhs.v1_ && v2_ < rhs.v2_));
         }
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend bool operator < (const self_type& lhs, const self_type& rhs) {
             return lhs.compare(rhs);
         }
+#endif
 
     private:
         size_type i_;
@@ -1923,6 +1941,20 @@ namespace boost { namespace numeric { namespace ublas {
         typename M::value2_type v2_;
         typename M::value3_type v3_;
     };
+
+#ifdef BOOST_UBLAS_NO_MEMBER_FRIENDS
+    template<class M>
+    BOOST_UBLAS_INLINE
+    void swap(index_triple<M> lhs, index_triple<M> rhs) {
+        lhs.swap(rhs);
+    }
+
+    template<class M>
+    BOOST_UBLAS_INLINE
+    bool operator < (const index_triple<M>& lhs, const index_triple<M>& rhs) {
+        return lhs.compare(rhs);
+    }
+#endif
 
     template <class V1, class V2, class V3>
     class index_triple_array:
