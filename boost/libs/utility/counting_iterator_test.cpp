@@ -192,7 +192,7 @@ public:
   my_int2() { }
   my_int2(int x) : m_int(x) { }
   my_int2& operator++() { ++m_int; return *this; }
-  my_int2& operator--() { ++m_int; return *this; }
+  my_int2& operator--() { --m_int; return *this; }
   bool operator==(const my_int2& x) const { return m_int == x.m_int; }
 private:
   int m_int;
@@ -211,7 +211,7 @@ public:
   my_int3& operator++() { ++m_int; return *this; }
   my_int3& operator+=(std::ptrdiff_t n) { m_int += n; return *this; }
   std::ptrdiff_t operator-(const my_int3& x) { return m_int - x.m_int; }
-  my_int3& operator--() { ++m_int; return *this; }
+  my_int3& operator--() { --m_int; return *this; }
   bool operator==(const my_int3& x) const { return m_int == x.m_int; }
   bool operator<(const my_int3& x) const { return m_int < x.m_int; }
 private:
