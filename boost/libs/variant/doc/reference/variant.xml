@@ -43,7 +43,7 @@
           <listitem>The following syntax is also supported:
             <code>variant&lt; <emphasis>type-sequence</emphasis> &gt;</code>,
             where <emphasis>type-sequence</emphasis> must meet the requirements
-            of the <libraryname>MPL</libraryname>'s <emphasis>Sequence</emphasis>
+            of the <libraryname>MPL</libraryname> <emphasis>Sequence</emphasis>
             concept. For instance,
             <code>variant&lt; mpl::list&lt;int, std::string&gt; &gt;</code> is
             functionally equivalent to
@@ -291,18 +291,6 @@
       </method-group>
       
       <method-group name="queries">
-        <method name="empty">
-          <type>bool</type>
-
-          <returns>
-            <simpara>Returns <code>true</code> if and only if the type of the
-            content is
-            <code><classname>boost::empty</classname></code>.</simpara>
-          </returns>
-
-          <throws>Will not throw.</throws>
-        </method>
-
         <method name="which">
           <type>int</type>
 
@@ -316,7 +304,19 @@
 
           <throws>Will not throw.</throws>
         </method>
-        
+
+        <method name="empty">
+          <type>bool</type>
+
+          <returns>
+            <simpara>Returns <code>true</code> if and only if the type of the
+            content is
+            <code><classname>boost::empty</classname></code>.</simpara>
+          </returns>
+
+          <throws>Will not throw.</throws>
+        </method>
+
         <method name="type">
           <type>const <classname>std::type_info</classname> &amp;</type>
           
