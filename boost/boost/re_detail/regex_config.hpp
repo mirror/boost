@@ -338,6 +338,13 @@ Do not change this file unless you really really have to, add options to
 
 #ifdef __sgi // SGI IRIX C++
 #define BOOST_RE_NO_SWPRINTF
+#if defined(__SGI_STL_PORT) && (__SGI_STL_PORT <= 0x400)
+// STLPort on IRIX is misconfigured: <cwctype> does not compile
+// as a temporary fix include <wctype.h> instead and prevent inclusion
+// of STLPort version of <cwctype>
+#include <wctype.h>
+#define __STLPORT_CWCTYPE
+#endif
 #endif
 
 
@@ -1196,7 +1203,7 @@ namespace std{
    using ::wcsxfrm;
    using ::wcstombs;
    using ::mbstowcs;
-#ifndef BOOST_RE_NO_LOCALE_H
+#if !defined(BOOST_RE_NO_LOCALE_H) && !defined (__STL_NO_NATIVE_MBSTATE_T)
    using ::mbstate_t;
 #endif
    using ::fseek;
