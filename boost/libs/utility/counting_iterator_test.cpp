@@ -213,6 +213,7 @@ public:
   std::ptrdiff_t operator-(const my_int3& x) { return m_int - x.m_int; }
   my_int3& operator--() { --m_int; return *this; }
   bool operator==(const my_int3& x) const { return m_int == x.m_int; }
+  bool operator!=(const my_int3& x) const { return m_int != x.m_int; }
   bool operator<(const my_int3& x) const { return m_int < x.m_int; }
 private:
   int m_int;
