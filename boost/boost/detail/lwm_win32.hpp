@@ -57,7 +57,12 @@ public:
         {
             while( winapi::InterlockedExchange(&m_.l_, 1) )
             {
-                winapi::Sleep(0);
+                // Note: changed to Sleep(1) from Sleep(0).
+                // According to MSDN, Sleep(0) will never yield
+                // to a lower-priority thread, whereas Sleep(1)
+                // will. Performance seems not to be affected.
+
+                winapi::Sleep(1);
             }
         }
 
@@ -65,8 +70,8 @@ public:
         {
             winapi::InterlockedExchange(&m_.l_, 0);
 
-            // Note: adding a Sleep(0) here will make
-            // the mutex more fair and will increase the overall
+            // Note: adding a yield here will make
+            // the spinlock more fair and will increase the overall
             // performance of some applications substantially in
             // high contention situations, but will penalize the
             // low contention / single thread case up to 5x
