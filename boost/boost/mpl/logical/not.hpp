@@ -49,6 +49,10 @@ struct logical_not
 
 BOOST_MPL_AUX_VOID_SPEC(1,logical_not)
 
+namespace v2_1 {
+struct not_ : mpl::logical_not<> {};
+}
+
 } // namespace mpl
 } // namespace boost
 

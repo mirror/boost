@@ -121,6 +121,10 @@ struct logical_and
 
 BOOST_MPL_AUX_VOID_SPEC_EXT(2,5,logical_and)
 
+namespace v2_1 {
+struct and_ : mpl::logical_and<> {};
+}
+
 } // namespace mpl
 } // namespace boost
 

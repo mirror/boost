@@ -17,77 +17,32 @@
 #ifndef BOOST_MPL_FILTER_VIEW_HPP_INCLUDED
 #define BOOST_MPL_FILTER_VIEW_HPP_INCLUDED
 
-#include "boost/mpl/find_if.hpp"
-#include "boost/mpl/iterator_range.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/lambda.hpp"
-#include "boost/mpl/apply.hpp"
+#include "boost/mpl/aux_/filter_iter.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
-#include "boost/mpl/aux_/lambda_spec.hpp"
 
 namespace boost {
 namespace mpl {
 
-// forward declaration for next_filter_iter
-template< typename Iterator, typename LastIterator, typename F >
-struct filter_iter;
-
-namespace aux {
-template<
-      typename Iterator
-    , typename LastIterator
-    , typename F
-    >
-struct next_filter_iter
-{
- private:
-    typedef typename find_if<
-          iterator_range<Iterator,LastIterator>
-        , F
-        >::type base_iter_;
- 
- public:
-    typedef filter_iter<base_iter_,LastIterator,F> type;
-};
-} // namespace aux
-
-template<
-      typename Iterator
-    , typename LastIterator
-    , typename F
-    >
-struct filter_iter
-{
-    typedef Iterator base;
-    typedef typename base::category category;
-    typedef typename aux::next_filter_iter<
-          typename base::next
-        , LastIterator
-        , F
-        >::type next;
-    
-    typedef typename base::type type;
-};
-
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(F)
+    , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Predicate)
     >
 struct filter_view
 {
  private:    
-    typedef typename lambda<F>::type f_;
+    typedef typename lambda<Predicate>::type pred_;
     typedef typename begin<Sequence>::type first_;
     typedef typename end<Sequence>::type last_;
 
  public:
     struct tag;
     typedef filter_view type;
-    typedef typename aux::next_filter_iter< first_,last_,f_ >::type begin;
-    typedef filter_iter< last_,last_,f_ > end;
+    typedef typename aux::next_filter_iter< first_,last_,pred_ >::type begin;
+    typedef aux::filter_iter< last_,last_,pred_ > end;
 };
 
-BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(3,filter_iter)
 BOOST_MPL_AUX_VOID_SPEC(2, filter_view)
 
 } // namespace mpl

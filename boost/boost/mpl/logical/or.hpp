@@ -121,6 +121,10 @@ struct logical_or
 
 BOOST_MPL_AUX_VOID_SPEC_EXT(2,5,logical_or)
 
+namespace v2_1 {
+struct or_ : mpl::logical_or<> {};
+}
+
 } // namespace mpl
 } // namespace boost
 
