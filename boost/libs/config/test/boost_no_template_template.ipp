@@ -16,26 +16,26 @@ template<class T>
 class foo
 {
 public:
-	foo(){};
-	foo(const T&){};
-	const foo& bar()const{ return *this; }
-	foo& operator=(const foo&){ return *this; }
+   foo(){};
+   foo(const T&){};
+   const foo& bar()const{ return *this; }
+   foo& operator=(const foo&){ return *this; }
 };
 
 template<typename T, template<typename> class U>
 U<T> sinhc_pi(const U<T> x)
 {
-	return x.bar();
+   return x.bar();
 }
 
 
 int test()
 {
-	foo<double> f1;
-	foo<int> f2;
-	f1 = sinhc_pi(f1);
-	f2 = sinhc_pi(f2);
-	return 0;
+   foo<double> f1;
+   foo<int> f2;
+   f1 = sinhc_pi(f1);
+   f2 = sinhc_pi(f2);
+   return 0;
 }
 
 

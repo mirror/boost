@@ -16,10 +16,10 @@ template<class T>
 class foo
 {
 public:
-	foo();
-	foo(const T&);
-	~foo();
-	int bar();
+   foo();
+   foo(const T&);
+   ~foo();
+   int bar();
 };
 
 // declare specialisations:
@@ -43,11 +43,11 @@ template<> int foo<int>::bar(){ return 1; }
 
 int test()
 {
-	foo<double> f1;
-	foo<int> f2;
-	f1.bar();
-	f2.bar();
-	return 0;
+   foo<double> f1;
+   foo<int> f2;
+   f1.bar();
+   f2.bar();
+   return 0;
 }
 
 
