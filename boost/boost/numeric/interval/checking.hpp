@@ -123,12 +123,6 @@ struct checking_strict:
   checking_no_nan<T, checking_no_empty<T> >
 {};
 
-namespace detail {
-
-template <class T> inline bool is_nan(const T& x) { return x != x; }
-
-} // namespace detail
-
 } // namespace interval_lib
 } // namespace numeric
 } // namespace boost
