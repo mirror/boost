@@ -180,7 +180,8 @@ namespace boost { namespace program_options {
     options_description&
     options_description::add(const options_description& desc)
     {
-        groups.push_back(desc);
+        shared_ptr<options_description> d(new options_description(desc));
+        groups.push_back(d);
 
         for (size_t i = 0; i < desc.options.size(); ++i) {
             add(desc.options[i]);
@@ -324,7 +325,7 @@ namespace boost { namespace program_options {
         }
 
         for (unsigned j = 0; j < groups.size(); ++j) {            
-            os << "\n" << groups[j];
+            os << "\n" << *groups[j];
         }
     }
 

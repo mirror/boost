@@ -229,7 +229,7 @@ namespace program_options {
         std::vector<bool> belong_to_group;
 #endif
 
-        std::vector<options_description> groups;
+        std::vector< shared_ptr<options_description> > groups;
 
     };
 
