@@ -18,7 +18,6 @@
 
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
 #include "test1.hpp"
@@ -224,23 +223,23 @@ void test_vector () {
 
 #ifdef USE_BOUNDED_VECTOR
 #ifdef USE_FLOAT
-    std::cout << "float" << std::endl;
+    std::cout << "float, bounded" << std::endl;
     test_my_vector<ublas::bounded_vector<float, 3>, 3> () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "double" << std::endl;
+    std::cout << "double, bounded" << std::endl;
     test_my_vector<ublas::bounded_vector<double, 3>, 3> () ();
 #endif
 
 #ifdef USE_STD_COMPLEX
 #ifdef USE_FLOAT
-    std::cout << "std::complex<float>" << std::endl;
+    std::cout << "std::complex<float>, bounded" << std::endl;
     test_my_vector<ublas::bounded_vector<std::complex<float>, 3>, 3> () ();
 #endif
 
 #ifdef USE_DOUBLE
-    std::cout << "std::complex<double>" << std::endl;
+    std::cout << "std::complex<double>, bounded" << std::endl;
     test_my_vector<ublas::bounded_vector<std::complex<double>, 3>, 3> () ();
 #endif
 #endif
