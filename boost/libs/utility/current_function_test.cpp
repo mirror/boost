@@ -35,4 +35,6 @@ void message(char const * file, long line, char const * func, char const * msg)
 int main()
 {
     MESSAGE("assertion failed");
+
+    return 0;
 }
