@@ -59,23 +59,26 @@ struct random_key {
     }
 };  
 
-#if defined(__LIBCOMO__) || (defined(__BORLANDC__) && defined(__SGI_STL_PORT))
+#if defined(__LIBCOMO__) || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
+
 namespace std {
-  template<>
-  struct equal_to<random_key>
-  {
-    bool operator()(const random_key& lhs, const random_key& rhs) {
-      return lhs.operator==(rhs);
-    }
-  };
-  template<>
-  struct hash<random_key>
-  {
-    std::size_t operator()(const random_key& r) const {
-        return (std::size_t)r;
-    }
-  };
-}
+    template<>
+    struct equal_to<random_key> {
+        bool operator()(const random_key& lhs, const random_key& rhs) const {
+            return lhs.operator==(rhs);
+        }
+    };
+} // namespace std
+
+namespace BOOST_STD_EXTENSION_NAMESPACE {
+    template<>
+    struct hash<random_key> {
+        std::size_t operator()(const random_key& r) const {
+            return (std::size_t)r;
+        }
+    };
+} // namespace BOOST_STD_EXTENSION_NAMESPACE 
+
 #endif
 
 int test_main( int /* argc */, char* /* argv */[] )

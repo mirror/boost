@@ -31,30 +31,32 @@ namespace std{
 
 #include "A.hpp"
 
-#if defined(__LIBCOMO__) || (defined(__BORLANDC__) && defined(__SGI_STL_PORT))
+#if defined(__LIBCOMO__) || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
+
 namespace std {
     template<>
-    struct less<A>
-    {
-        bool operator()(const A & lhs, const A & rhs) {
+    struct less<A> {
+        bool operator()(const A & lhs, const A & rhs) const {
             return lhs < rhs;
         }
     };
     template<>
-    struct equal_to<A>
-    {
-        bool operator()(const A & lhs, const A & rhs) {
+    struct equal_to<A> {
+        bool operator()(const A & lhs, const A & rhs) const {
             return lhs == rhs;
         }
     };
+}   // namespace std
+
+namespace BOOST_STD_EXTENSION_NAMESPACE {
     template<>
-    struct hash<A>
-    {
+    struct hash<A> {
         std::size_t operator()(const A& a) const {
             return (std::size_t)a;
         }
     };
-}
+}   // BOOST_STD_EXTENSION_NAMESPACE
+
 #endif
 
 int test_main( int /* argc */, char* /* argv */[] )
