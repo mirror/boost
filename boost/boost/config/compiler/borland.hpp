@@ -58,7 +58,10 @@
 // Post 0x561 we have long long and stdint.h:
 #if __BORLANDC__ >= 0x561
 #  define BOOST_HAS_LONG_LONG
-#  define BOOST_HAS_STDINT_H
+   // On non-Win32 platforms let the platform config figure this out:
+#  ifdef _WIN32
+#      define BOOST_HAS_STDINT_H
+#  endif
 #endif
 
 // Borland C++Builder 6 defaults to using STLPort.  If _USE_OLD_RW_STL is

@@ -59,6 +59,12 @@
 #  define BOOST_NO_STD_ITERATOR_TRAITS
 #endif
 
+#if defined(_ICL) && defined(_CPPLIB_VER) && (_CPPLIB_VER <= 310)
+// Intel C++ chokes over any non-trivial use of <locale>
+// this may be an overly restrictive define, but regex fails without it:
+#  define BOOST_NO_STD_LOCALE
+#endif
+
 #ifdef _CPPLIB_VER
 #  define BOOST_STDLIB "Dinkumware standard library version " BOOST_STRINGIZE(_CPPLIB_VER)
 #else
