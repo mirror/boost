@@ -24,14 +24,14 @@ struct to_text : boost::static_visitor<std::string>
    }
 };
 
-
 template<typename T0, typename T1, typename T2, typename T3>
 inline std::ostream& operator<<(
       std::ostream& out
     , const boost::variant<T0, T1, T2, T3>& a
     )
 {
-   out << boost::apply_visitor(to_text(), a);
+   to_text vis;
+   out << boost::apply_visitor(vis, a);
    return out;
 }
 

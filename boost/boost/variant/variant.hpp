@@ -160,6 +160,7 @@ public: // visitor interfaces
     void operator()(T& operand) const
     {
         operand.~T();
+        operand; // suppresses warnings
     }
 
 };

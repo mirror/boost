@@ -14,14 +14,19 @@
 
 #include "varout.h"
 
+#include "boost/detail/workaround.hpp"
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
+#    pragma warn -lvc
+#endif
+
 struct total_sizeof : boost::static_visitor<int>
 {
    total_sizeof() : total_(0) { }
 
    template<class Value>
-   int operator()(const Value& value) const
+   int operator()(const Value&) const
    {
-      total_ += sizeof(value);
+      total_ += sizeof(Value);
       return total_;
    }
 
