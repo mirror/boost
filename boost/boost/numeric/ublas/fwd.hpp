@@ -32,13 +32,10 @@ namespace boost { namespace numeric { namespace ublas {
             const nonassignable& operator=( const nonassignable& );
         }; // nonassignable
     }
-    
     typedef nonassignable_::nonassignable nonassignable;
 
 
-    struct concrete_tag {};
-    struct abstract_tag {};
-
+	// Storage types
     template<class T, class ALLOC = std::allocator<T> >
     class unbounded_array;
 
@@ -59,17 +56,23 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class T, class ALLOC = std::allocator<std::pair<I, T> > >
     class map_array;
 
+	// Expression types
+    struct scalar_tag {};
+    
+    template<class E>
+    class vector_expression;
+
     struct vector_tag {};
 
     template<class E>
-    struct vector_expression;
+    class vector_expression;
     template<class E>
     class vector_reference;
 
     struct matrix_tag {};
 
     template<class E>
-    struct matrix_expression;
+    class matrix_expression;
     template<class E>
     class matrix_reference;
 
@@ -185,6 +188,10 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T, class F = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class coordinate_matrix;
+
+	// Evaluation tags
+    struct concrete_tag {};
+    struct abstract_tag {};
 
     // Some syntactic sugar. I'd like to drop it ;-)
     template<class V>

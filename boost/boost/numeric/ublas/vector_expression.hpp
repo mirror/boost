@@ -27,24 +27,25 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-    // Base class for linear algebra expression's
+    // Base class for linear algebra expression's numeric properties
     template<class T>
     class expression_base:
         private nonassignable {
-        typedef const T const_value_type;
     public:
     };
 
 
-    template<class T>
-    struct scalar_expression:
-        public expression_base<T> {
-        typedef T value_type;
+    // Base class for Scalar Expressions - see the Barton Nackman trick
+    template<class E>
+    class scalar_expression:
+        public expression_base<E> {
+    public:
+        typedef scalar_tag type_category;
     };
 
     template<class T>
     class scalar_value:
-        public scalar_expression<T> {
+        public scalar_expression<scalar_value<T> > {
     public:
         typedef T value_type;
 
@@ -73,7 +74,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     class scalar_const_reference:
-        public scalar_expression<T> {
+        public scalar_expression<scalar_const_reference<T> > {
     public:
         typedef T value_type;
 
@@ -106,7 +107,7 @@ namespace boost { namespace numeric { namespace ublas {
         = BOOST_UBLAS_TYPENAME scalar_const_reference<T>::value_type ();
 
 
-    // Base class for the Barton Nackman trick
+    // Base class for Vector Expressions - see the Barton Nackman trick
     template<class E>
     class vector_expression:
         private nonassignable {
