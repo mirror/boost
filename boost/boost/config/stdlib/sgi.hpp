@@ -49,6 +49,13 @@
 #endif
 
 //
+// SGI's new iostreams have missing "const" in messages<>::open
+//
+#if defined(__sgi) && (_COMPILER_VERSION <= 730) && defined(__SGI_STL_OWN_IOSTREAMS)
+#  define BOOST_NO_STD_MESSAGES
+#endif
+
+//
 // No template iterator constructors, or std::allocator
 // without member templates:
 //
