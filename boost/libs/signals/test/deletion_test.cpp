@@ -50,14 +50,14 @@ test_remove_self()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "0123");
+  BOOST_CHECK(test_output == "0123");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "013");
+  BOOST_CHECK(test_output == "013");
 
   s0.disconnect_all_slots();
-  BOOST_TEST(s0.empty());
+  BOOST_CHECK(s0.empty());
 
   connections[0] = s0.connect(remove_connection(0));
   connections[1] = s0.connect(remove_connection(1));
@@ -68,14 +68,14 @@ test_remove_self()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "0123");
+  BOOST_CHECK(test_output == "0123");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "012");
+  BOOST_CHECK(test_output == "012");
 
   s0.disconnect_all_slots();
-  BOOST_TEST(s0.num_slots() == 0);
+  BOOST_CHECK(s0.num_slots() == 0);
 
   connections[0] = s0.connect(remove_connection(0, 0));
   connections[1] = s0.connect(remove_connection(1));
@@ -86,14 +86,14 @@ test_remove_self()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "0123");
+  BOOST_CHECK(test_output == "0123");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "123");
+  BOOST_CHECK(test_output == "123");
 
   s0.disconnect_all_slots();
-  BOOST_TEST(s0.empty());
+  BOOST_CHECK(s0.empty());
 
   connections[0] = s0.connect(remove_connection(0, 0));
   connections[1] = s0.connect(remove_connection(1, 1));
@@ -104,11 +104,11 @@ test_remove_self()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "0123");
+  BOOST_CHECK(test_output == "0123");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "");
+  BOOST_CHECK(test_output == "");
 }
 
 static void
@@ -125,14 +125,14 @@ test_remove_prior()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "0123");
+  BOOST_CHECK(test_output == "0123");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "123");
+  BOOST_CHECK(test_output == "123");
 
   s0.disconnect_all_slots();
-  BOOST_TEST(s0.empty());
+  BOOST_CHECK(s0.empty());
 
   connections[0] = s0.connect(remove_connection(0));
   connections[1] = s0.connect(remove_connection(1));
@@ -143,11 +143,11 @@ test_remove_prior()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "0123");
+  BOOST_CHECK(test_output == "0123");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "013");
+  BOOST_CHECK(test_output == "013");
 }
 
 static void
@@ -164,14 +164,14 @@ test_remove_after()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "023");
+  BOOST_CHECK(test_output == "023");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "023");
+  BOOST_CHECK(test_output == "023");
 
   s0.disconnect_all_slots();
-  BOOST_TEST(s0.empty());
+  BOOST_CHECK(s0.empty());
 
   connections[0] = s0.connect(remove_connection(0));
   connections[1] = s0.connect(remove_connection(1, 3));
@@ -182,11 +182,11 @@ test_remove_after()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "012");
+  BOOST_CHECK(test_output == "012");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "012");
+  BOOST_CHECK(test_output == "012");
 }
 
 static void
@@ -203,11 +203,11 @@ test_bloodbath()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "023");
+  BOOST_CHECK(test_output == "023");
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "3");
+  BOOST_CHECK(test_output == "3");
 }
 
 static void
@@ -224,7 +224,7 @@ test_disconnect_equal()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "0123");
+  BOOST_CHECK(test_output == "0123");
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1700)
   connections[2].disconnect();
@@ -234,7 +234,7 @@ test_disconnect_equal()
 
   test_output = "";
   s0(); std::cout << std::endl;
-  BOOST_TEST(test_output == "013");
+  BOOST_CHECK(test_output == "013");
 }
 
 int test_main(int, char* [])

@@ -269,17 +269,17 @@ namespace
     template <class X1, class Y1, class X2, class Y2>
     void sanity_check(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_TEST( true_value(y1) == true_value(y2) );
-        BOOST_TEST( true_value(x1) == true_value(x2) );
+        BOOST_CHECK( true_value(y1) == true_value(y2) );
+        BOOST_CHECK( true_value(x1) == true_value(x2) );
     }
 
     template <class X1, class Y1, class X2, class Y2>
     void test_less_than_comparable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_TEST( (x1 < y1) == (x2 < y2) );
-        BOOST_TEST( (x1 <= y1) == (x2 <= y2) );
-        BOOST_TEST( (x1 >= y1) == (x2 >= y2) );
-        BOOST_TEST( (x1 > y1) == (x2 > y2) );
+        BOOST_CHECK( (x1 < y1) == (x2 < y2) );
+        BOOST_CHECK( (x1 <= y1) == (x2 <= y2) );
+        BOOST_CHECK( (x1 >= y1) == (x2 >= y2) );
+        BOOST_CHECK( (x1 > y1) == (x2 > y2) );
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -293,8 +293,8 @@ namespace
     template <class X1, class Y1, class X2, class Y2>
     void test_equality_comparable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_TEST( (x1 == y1) == (x2 == y2) );
-        BOOST_TEST( (x1 != y1) == (x2 != y2) );
+        BOOST_CHECK( (x1 == y1) == (x2 == y2) );
+        BOOST_CHECK( (x1 != y1) == (x2 != y2) );
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -308,7 +308,7 @@ namespace
     template <class X1, class Y1, class X2, class Y2>
     void test_multipliable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_TEST( (x1 * y1).value() == (x2 * y2) );
+        BOOST_CHECK( (x1 * y1).value() == (x2 * y2) );
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -322,7 +322,7 @@ namespace
   template <class A, class B>
   void test_value_equality(A a, B b)
   {
-      BOOST_TEST(a.value() == b);
+      BOOST_CHECK(a.value() == b);
   }
   
 #define TEST_OP_R(op) test_value_equality(x1 op y1, x2 op y2)
@@ -448,16 +448,16 @@ namespace
     void test_incrementable(X1 x1, X2 x2)
     {
         sanity_check( x1, x1, x2, x2 );
-        BOOST_TEST( (x1++).value() == x2++ );
-        BOOST_TEST( x1.value() == x2 );
+        BOOST_CHECK( (x1++).value() == x2++ );
+        BOOST_CHECK( x1.value() == x2 );
     }
     
     template <class X1, class X2>
     void test_decrementable(X1 x1, X2 x2)
     {
         sanity_check( x1, x1, x2, x2 );
-        BOOST_TEST( (x1--).value() == x2-- );
-        BOOST_TEST( x1.value() == x2 );
+        BOOST_CHECK( (x1--).value() == x2-- );
+        BOOST_CHECK( x1.value() == x2 );
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -561,7 +561,7 @@ template Wrapped6<unsigned long, unsigned char>;
 template Wrapped6<unsigned int, unsigned char>;
 #endif
 
-#define PRIVATE_EXPR_TEST(e, t)  BOOST_TEST( ((e), (t)) )
+#define PRIVATE_EXPR_TEST(e, t)  BOOST_CHECK( ((e), (t)) )
 
 int
 test_main( int , char * [] )
@@ -606,22 +606,22 @@ test_main( int , char * [] )
     MyInt i2(2);
     MyInt i;
 
-    BOOST_TEST( i1.value() == 1 );
-    BOOST_TEST( i2.value() == 2 );
-    BOOST_TEST( i.value() == 0 );
+    BOOST_CHECK( i1.value() == 1 );
+    BOOST_CHECK( i2.value() == 2 );
+    BOOST_CHECK( i.value() == 0 );
 
     cout << "Created MyInt objects.\n";
 
     PRIVATE_EXPR_TEST( (i = i2), (i.value() == 2) );
 
-    BOOST_TEST( i2 == i );
-    BOOST_TEST( i1 != i2 );
-    BOOST_TEST( i1 <  i2 );
-    BOOST_TEST( i1 <= i2 );
-    BOOST_TEST( i <= i2 );
-    BOOST_TEST( i2 >  i1 );
-    BOOST_TEST( i2 >= i1 );
-    BOOST_TEST( i2 >= i );
+    BOOST_CHECK( i2 == i );
+    BOOST_CHECK( i1 != i2 );
+    BOOST_CHECK( i1 <  i2 );
+    BOOST_CHECK( i1 <= i2 );
+    BOOST_CHECK( i <= i2 );
+    BOOST_CHECK( i2 >  i1 );
+    BOOST_CHECK( i2 >= i1 );
+    BOOST_CHECK( i2 >= i );
 
     PRIVATE_EXPR_TEST( (i = i1 + i2), (i.value() == 3) );
     PRIVATE_EXPR_TEST( (i = i + i2), (i.value() == 5) );
@@ -645,86 +645,86 @@ test_main( int , char * [] )
     MyLong j2(2);
     MyLong j;
 
-    BOOST_TEST( j1.value() == 1 );
-    BOOST_TEST( j2.value() == 2 );
-    BOOST_TEST( j.value() == 0 );
+    BOOST_CHECK( j1.value() == 1 );
+    BOOST_CHECK( j2.value() == 2 );
+    BOOST_CHECK( j.value() == 0 );
 
     cout << "Created MyLong objects.\n";
 
     PRIVATE_EXPR_TEST( (j = j2), (j.value() == 2) );
     
-    BOOST_TEST( j2 == j );
-    BOOST_TEST( 2 == j );
-    BOOST_TEST( j2 == 2 );    
-    BOOST_TEST( j == j2 );
-    BOOST_TEST( j1 != j2 );
-    BOOST_TEST( j1 != 2 );
-    BOOST_TEST( 1 != j2 );
-    BOOST_TEST( j1 <  j2 );
-    BOOST_TEST( 1 <  j2 );
-    BOOST_TEST( j1 <  2 );
-    BOOST_TEST( j1 <= j2 );
-    BOOST_TEST( 1 <= j2 );
-    BOOST_TEST( j1 <= j );
-    BOOST_TEST( j <= j2 );
-    BOOST_TEST( 2 <= j2 );
-    BOOST_TEST( j <= 2 );
-    BOOST_TEST( j2 >  j1 );
-    BOOST_TEST( 2 >  j1 );
-    BOOST_TEST( j2 >  1 );
-    BOOST_TEST( j2 >= j1 );
-    BOOST_TEST( 2 >= j1 );
-    BOOST_TEST( j2 >= 1 );
-    BOOST_TEST( j2 >= j );
-    BOOST_TEST( 2 >= j );
-    BOOST_TEST( j2 >= 2 );
+    BOOST_CHECK( j2 == j );
+    BOOST_CHECK( 2 == j );
+    BOOST_CHECK( j2 == 2 );    
+    BOOST_CHECK( j == j2 );
+    BOOST_CHECK( j1 != j2 );
+    BOOST_CHECK( j1 != 2 );
+    BOOST_CHECK( 1 != j2 );
+    BOOST_CHECK( j1 <  j2 );
+    BOOST_CHECK( 1 <  j2 );
+    BOOST_CHECK( j1 <  2 );
+    BOOST_CHECK( j1 <= j2 );
+    BOOST_CHECK( 1 <= j2 );
+    BOOST_CHECK( j1 <= j );
+    BOOST_CHECK( j <= j2 );
+    BOOST_CHECK( 2 <= j2 );
+    BOOST_CHECK( j <= 2 );
+    BOOST_CHECK( j2 >  j1 );
+    BOOST_CHECK( 2 >  j1 );
+    BOOST_CHECK( j2 >  1 );
+    BOOST_CHECK( j2 >= j1 );
+    BOOST_CHECK( 2 >= j1 );
+    BOOST_CHECK( j2 >= 1 );
+    BOOST_CHECK( j2 >= j );
+    BOOST_CHECK( 2 >= j );
+    BOOST_CHECK( j2 >= 2 );
 
-    BOOST_TEST( (j1 + 2) == 3 );
-    BOOST_TEST( (1 + j2) == 3 );
+    BOOST_CHECK( (j1 + 2) == 3 );
+    BOOST_CHECK( (1 + j2) == 3 );
     PRIVATE_EXPR_TEST( (j = j1 + j2), (j.value() == 3) );
     
-    BOOST_TEST( (j + 2) == 5 );
-    BOOST_TEST( (3 + j2) == 5 );
+    BOOST_CHECK( (j + 2) == 5 );
+    BOOST_CHECK( (3 + j2) == 5 );
     PRIVATE_EXPR_TEST( (j = j + j2), (j.value() == 5) );
     
-    BOOST_TEST( (j - 1) == 4 );
+    BOOST_CHECK( (j - 1) == 4 );
     PRIVATE_EXPR_TEST( (j = j - j1), (j.value() == 4) );
     
-    BOOST_TEST( (j * 2) == 8 );
-    BOOST_TEST( (4 * j2) == 8 );
+    BOOST_CHECK( (j * 2) == 8 );
+    BOOST_CHECK( (4 * j2) == 8 );
     PRIVATE_EXPR_TEST( (j = j * j2), (j.value() == 8) );
     
-    BOOST_TEST( (j / 2) == 4 );
+    BOOST_CHECK( (j / 2) == 4 );
     PRIVATE_EXPR_TEST( (j = j / j2), (j.value() == 4) );
     
-    BOOST_TEST( (j % 3) == 1 );
+    BOOST_CHECK( (j % 3) == 1 );
     PRIVATE_EXPR_TEST( (j = j % ( j - j1 )), (j.value() == 1) );
     
     PRIVATE_EXPR_TEST( (j = j2 + j2), (j.value() == 4) );
     
-    BOOST_TEST( (1 | j2 | j) == 7 );
-    BOOST_TEST( (j1 | 2 | j) == 7 );
-    BOOST_TEST( (j1 | j2 | 4) == 7 );
+    BOOST_CHECK( (1 | j2 | j) == 7 );
+    BOOST_CHECK( (j1 | 2 | j) == 7 );
+    BOOST_CHECK( (j1 | j2 | 4) == 7 );
     PRIVATE_EXPR_TEST( (j = j1 | j2 | j), (j.value() == 7) );
     
-    BOOST_TEST( (7 & j2) == 2 );
-    BOOST_TEST( (j & 2) == 2 );
+    BOOST_CHECK( (7 & j2) == 2 );
+    BOOST_CHECK( (j & 2) == 2 );
     PRIVATE_EXPR_TEST( (j = j & j2), (j.value() == 2) );
     
     PRIVATE_EXPR_TEST( (j = j | j1), (j.value() == 3) );
     
-    BOOST_TEST( (3 ^ j1) == 2 );
-    BOOST_TEST( (j ^ 1) == 2 );
+    BOOST_CHECK( (3 ^ j1) == 2 );
+    BOOST_CHECK( (j ^ 1) == 2 );
     PRIVATE_EXPR_TEST( (j = j ^ j1), (j.value() == 2) );
     
     PRIVATE_EXPR_TEST( (j = ( j + j1 ) * ( j2 | j1 )), (j.value() == 9) );
 
-    BOOST_TEST( (j1 << 2) == 4 );
-    BOOST_TEST( (j2 << 1) == 4 );
+    BOOST_CHECK( (j1 << 2) == 4 );
+    BOOST_CHECK( (j2 << 1) == 4 );
     PRIVATE_EXPR_TEST( (j = j1 << j2), (j.value() == 4) );
 
-    BOOST_TEST( (j >> 2) == 1 );
-    BOOST_TEST( (j2 >> 1) == 1 );
+    BOOST_CHECK( (j >> 2) == 1 );
+    BOOST_CHECK( (j2 >> 1) == 1 );
     PRIVATE_EXPR_TEST( (j = j2 >> j1), (j.value() == 1) );
     
     cout << "Performed tests on MyLong objects.\n";
@@ -733,22 +733,22 @@ test_main( int , char * [] )
     MyChar k2(2);
     MyChar k;
 
-    BOOST_TEST( k1.value() == 1 );
-    BOOST_TEST( k2.value() == 2 );
-    BOOST_TEST( k.value() == 0 );
+    BOOST_CHECK( k1.value() == 1 );
+    BOOST_CHECK( k2.value() == 2 );
+    BOOST_CHECK( k.value() == 0 );
 
     cout << "Created MyChar objects.\n";
 
     PRIVATE_EXPR_TEST( (k = k2), (k.value() == 2) );
 
-    BOOST_TEST( k2 == k );
-    BOOST_TEST( k1 != k2 );
-    BOOST_TEST( k1 <  k2 );
-    BOOST_TEST( k1 <= k2 );
-    BOOST_TEST( k <= k2 );
-    BOOST_TEST( k2 >  k1 );
-    BOOST_TEST( k2 >= k1 );
-    BOOST_TEST( k2 >= k );
+    BOOST_CHECK( k2 == k );
+    BOOST_CHECK( k1 != k2 );
+    BOOST_CHECK( k1 <  k2 );
+    BOOST_CHECK( k1 <= k2 );
+    BOOST_CHECK( k <= k2 );
+    BOOST_CHECK( k2 >  k1 );
+    BOOST_CHECK( k2 >= k1 );
+    BOOST_CHECK( k2 >= k );
     
     cout << "Performed tests on MyChar objects.\n";
 
@@ -756,39 +756,39 @@ test_main( int , char * [] )
     MyShort l2(2);
     MyShort l;
 
-    BOOST_TEST( l1.value() == 1 );
-    BOOST_TEST( l2.value() == 2 );
-    BOOST_TEST( l.value() == 0 );
+    BOOST_CHECK( l1.value() == 1 );
+    BOOST_CHECK( l2.value() == 2 );
+    BOOST_CHECK( l.value() == 0 );
 
     cout << "Created MyShort objects.\n";
 
     PRIVATE_EXPR_TEST( (l = l2), (l.value() == 2) );
     
-    BOOST_TEST( l2 == l );
-    BOOST_TEST( 2 == l );
-    BOOST_TEST( l2 == 2 );    
-    BOOST_TEST( l == l2 );
-    BOOST_TEST( l1 != l2 );
-    BOOST_TEST( l1 != 2 );
-    BOOST_TEST( 1 != l2 );
-    BOOST_TEST( l1 <  l2 );
-    BOOST_TEST( 1 <  l2 );
-    BOOST_TEST( l1 <  2 );
-    BOOST_TEST( l1 <= l2 );
-    BOOST_TEST( 1 <= l2 );
-    BOOST_TEST( l1 <= l );
-    BOOST_TEST( l <= l2 );
-    BOOST_TEST( 2 <= l2 );
-    BOOST_TEST( l <= 2 );
-    BOOST_TEST( l2 >  l1 );
-    BOOST_TEST( 2 >  l1 );
-    BOOST_TEST( l2 >  1 );
-    BOOST_TEST( l2 >= l1 );
-    BOOST_TEST( 2 >= l1 );
-    BOOST_TEST( l2 >= 1 );
-    BOOST_TEST( l2 >= l );
-    BOOST_TEST( 2 >= l );
-    BOOST_TEST( l2 >= 2 );
+    BOOST_CHECK( l2 == l );
+    BOOST_CHECK( 2 == l );
+    BOOST_CHECK( l2 == 2 );    
+    BOOST_CHECK( l == l2 );
+    BOOST_CHECK( l1 != l2 );
+    BOOST_CHECK( l1 != 2 );
+    BOOST_CHECK( 1 != l2 );
+    BOOST_CHECK( l1 <  l2 );
+    BOOST_CHECK( 1 <  l2 );
+    BOOST_CHECK( l1 <  2 );
+    BOOST_CHECK( l1 <= l2 );
+    BOOST_CHECK( 1 <= l2 );
+    BOOST_CHECK( l1 <= l );
+    BOOST_CHECK( l <= l2 );
+    BOOST_CHECK( 2 <= l2 );
+    BOOST_CHECK( l <= 2 );
+    BOOST_CHECK( l2 >  l1 );
+    BOOST_CHECK( 2 >  l1 );
+    BOOST_CHECK( l2 >  1 );
+    BOOST_CHECK( l2 >= l1 );
+    BOOST_CHECK( 2 >= l1 );
+    BOOST_CHECK( l2 >= 1 );
+    BOOST_CHECK( l2 >= l );
+    BOOST_CHECK( 2 >= l );
+    BOOST_CHECK( l2 >= 2 );
     
     cout << "Performed tests on MyShort objects.\n";
     
@@ -798,44 +798,44 @@ test_main( int , char * [] )
     MyDoubleInt di;
     MyDoubleInt tmp;
 
-    BOOST_TEST( di1.value() == 1 );
-    BOOST_TEST( di2.value() == 2 );
-    BOOST_TEST( di2.value() == 2 );
-    BOOST_TEST( di.value() == 0 );
+    BOOST_CHECK( di1.value() == 1 );
+    BOOST_CHECK( di2.value() == 2 );
+    BOOST_CHECK( di2.value() == 2 );
+    BOOST_CHECK( di.value() == 0 );
 
     cout << "Created MyDoubleInt objects.\n";
 
     PRIVATE_EXPR_TEST( (di = di2), (di.value() == 2) );
     
-    BOOST_TEST( di2 == di );
-    BOOST_TEST( 2 == di );
-    BOOST_TEST( di == 2 );
-    BOOST_TEST( di1 < di2 );
-    BOOST_TEST( 1 < di2 );
-    BOOST_TEST( di1 <= di2 );
-    BOOST_TEST( 1 <= di2 );
-    BOOST_TEST( di2 > di1 );
-    BOOST_TEST( di2 > 1 );
-    BOOST_TEST( di2 >= di1 );
-    BOOST_TEST( di2 >= 1 );
-    BOOST_TEST( di1 / di2 == half );
-    BOOST_TEST( di1 / 2 == half );
-    BOOST_TEST( 1 / di2 == half );
+    BOOST_CHECK( di2 == di );
+    BOOST_CHECK( 2 == di );
+    BOOST_CHECK( di == 2 );
+    BOOST_CHECK( di1 < di2 );
+    BOOST_CHECK( 1 < di2 );
+    BOOST_CHECK( di1 <= di2 );
+    BOOST_CHECK( 1 <= di2 );
+    BOOST_CHECK( di2 > di1 );
+    BOOST_CHECK( di2 > 1 );
+    BOOST_CHECK( di2 >= di1 );
+    BOOST_CHECK( di2 >= 1 );
+    BOOST_CHECK( di1 / di2 == half );
+    BOOST_CHECK( di1 / 2 == half );
+    BOOST_CHECK( 1 / di2 == half );
     PRIVATE_EXPR_TEST( (tmp=di1), ((tmp/=2) == half) );
     PRIVATE_EXPR_TEST( (tmp=di1), ((tmp/=di2) == half) );
-    BOOST_TEST( di1 * di2 == di2 );
-    BOOST_TEST( di1 * 2 == di2 );
-    BOOST_TEST( 1 * di2 == di2 );
+    BOOST_CHECK( di1 * di2 == di2 );
+    BOOST_CHECK( di1 * 2 == di2 );
+    BOOST_CHECK( 1 * di2 == di2 );
     PRIVATE_EXPR_TEST( (tmp=di1), ((tmp*=2) == di2) );
     PRIVATE_EXPR_TEST( (tmp=di1), ((tmp*=di2) == di2) );
-    BOOST_TEST( di2 - di1 == di1 );
-    BOOST_TEST( di2 - 1 == di1 );
-    BOOST_TEST( 2 - di1 == di1 );
+    BOOST_CHECK( di2 - di1 == di1 );
+    BOOST_CHECK( di2 - 1 == di1 );
+    BOOST_CHECK( 2 - di1 == di1 );
     PRIVATE_EXPR_TEST( (tmp=di2), ((tmp-=1) == di1) );
     PRIVATE_EXPR_TEST( (tmp=di2), ((tmp-=di1) == di1) );
-    BOOST_TEST( di1 + di1 == di2 );
-    BOOST_TEST( di1 + 1 == di2 );
-    BOOST_TEST( 1 + di1 == di2 );
+    BOOST_CHECK( di1 + di1 == di2 );
+    BOOST_CHECK( di1 + 1 == di2 );
+    BOOST_CHECK( 1 + di1 == di2 );
     PRIVATE_EXPR_TEST( (tmp=di1), ((tmp+=1) == di2) );
     PRIVATE_EXPR_TEST( (tmp=di1), ((tmp+=di1) == di2) );
 
@@ -846,48 +846,48 @@ test_main( int , char * [] )
     MyLongInt li;
     MyLongInt tmp2;
 
-    BOOST_TEST( li1.value() == 1 );
-    BOOST_TEST( li2.value() == 2 );
-    BOOST_TEST( li.value() == 0 );
+    BOOST_CHECK( li1.value() == 1 );
+    BOOST_CHECK( li2.value() == 2 );
+    BOOST_CHECK( li.value() == 0 );
 
     cout << "Created MyLongInt objects.\n";
 
     PRIVATE_EXPR_TEST( (li = li2), (li.value() == 2) );
     
-    BOOST_TEST( li2 == li );
-    BOOST_TEST( 2 == li );
-    BOOST_TEST( li == 2 );
-    BOOST_TEST( li1 < li2 );
-    BOOST_TEST( 1 < li2 );
-    BOOST_TEST( li1 <= li2 );
-    BOOST_TEST( 1 <= li2 );
-    BOOST_TEST( li2 > li1 );
-    BOOST_TEST( li2 > 1 );
-    BOOST_TEST( li2 >= li1 );
-    BOOST_TEST( li2 >= 1 );
-    BOOST_TEST( li1 % li2 == li1 );
-    BOOST_TEST( li1 % 2 == li1 );
-    BOOST_TEST( 1 % li2 == li1 );
+    BOOST_CHECK( li2 == li );
+    BOOST_CHECK( 2 == li );
+    BOOST_CHECK( li == 2 );
+    BOOST_CHECK( li1 < li2 );
+    BOOST_CHECK( 1 < li2 );
+    BOOST_CHECK( li1 <= li2 );
+    BOOST_CHECK( 1 <= li2 );
+    BOOST_CHECK( li2 > li1 );
+    BOOST_CHECK( li2 > 1 );
+    BOOST_CHECK( li2 >= li1 );
+    BOOST_CHECK( li2 >= 1 );
+    BOOST_CHECK( li1 % li2 == li1 );
+    BOOST_CHECK( li1 % 2 == li1 );
+    BOOST_CHECK( 1 % li2 == li1 );
     PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2%=2) == li1) );
     PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2%=li2) == li1) );
-    BOOST_TEST( li1 / li2 == 0 );
-    BOOST_TEST( li1 / 2 == 0 );
-    BOOST_TEST( 1 / li2 == 0 );
+    BOOST_CHECK( li1 / li2 == 0 );
+    BOOST_CHECK( li1 / 2 == 0 );
+    BOOST_CHECK( 1 / li2 == 0 );
     PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2/=2) == 0) );
     PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2/=li2) == 0) );
-    BOOST_TEST( li1 * li2 == li2 );
-    BOOST_TEST( li1 * 2 == li2 );
-    BOOST_TEST( 1 * li2 == li2 );
+    BOOST_CHECK( li1 * li2 == li2 );
+    BOOST_CHECK( li1 * 2 == li2 );
+    BOOST_CHECK( 1 * li2 == li2 );
     PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2*=2) == li2) );
     PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2*=li2) == li2) );
-    BOOST_TEST( li2 - li1 == li1 );
-    BOOST_TEST( li2 - 1 == li1 );
-    BOOST_TEST( 2 - li1 == li1 );
+    BOOST_CHECK( li2 - li1 == li1 );
+    BOOST_CHECK( li2 - 1 == li1 );
+    BOOST_CHECK( 2 - li1 == li1 );
     PRIVATE_EXPR_TEST( (tmp2=li2), ((tmp2-=1) == li1) );
     PRIVATE_EXPR_TEST( (tmp2=li2), ((tmp2-=li1) == li1) );
-    BOOST_TEST( li1 + li1 == li2 );
-    BOOST_TEST( li1 + 1 == li2 );
-    BOOST_TEST( 1 + li1 == li2 );
+    BOOST_CHECK( li1 + li1 == li2 );
+    BOOST_CHECK( li1 + 1 == li2 );
+    BOOST_CHECK( 1 + li1 == li2 );
     PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2+=1) == li2) );
     PRIVATE_EXPR_TEST( (tmp2=li1), ((tmp2+=li1) == li2) );
 

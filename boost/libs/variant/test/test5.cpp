@@ -58,14 +58,14 @@ void run()
    verify(v3, spec<int>());
 
 
-   BOOST_TEST(apply_visitor(sum_int(), v2) == c0);
-   BOOST_TEST(apply_visitor(sum_int(), v3) == c0);
+   BOOST_CHECK(apply_visitor(sum_int(), v2) == c0);
+   BOOST_CHECK(apply_visitor(sum_int(), v3) == c0);
 
    sum_int adder;
    apply_visitor(adder, v2);
    apply_visitor(adder, v3);
 
-   BOOST_TEST(adder.result() == 2*c0);
+   BOOST_CHECK(adder.result() == 2*c0);
 
    //
    // A variant holding a variant

@@ -25,7 +25,7 @@ struct emit_int {
 
   void operator()() const
   {
-    BOOST_TEST(value == 42 || (!ungrouped1 && !ungrouped2 && !ungrouped3));
+    BOOST_CHECK(value == 42 || (!ungrouped1 && !ungrouped2 && !ungrouped3));
     valuesOutput.push_back(value);
     std::cout << value << ' ';
   }
@@ -37,7 +37,7 @@ private:
 struct write_ungrouped1 {
   void operator()() const
   {
-    BOOST_TEST(!ungrouped1);
+    BOOST_CHECK(!ungrouped1);
     ungrouped1 = true;
     std::cout << "(Ungrouped #1)" << ' ';
   }
@@ -46,7 +46,7 @@ struct write_ungrouped1 {
 struct write_ungrouped2 {
   void operator()() const
   {
-    BOOST_TEST(!ungrouped2);
+    BOOST_CHECK(!ungrouped2);
     ungrouped2 = true;
     std::cout << "(Ungrouped #2)" << ' ';
   }
@@ -55,7 +55,7 @@ struct write_ungrouped2 {
 struct write_ungrouped3 {
   void operator()() const
   {
-    BOOST_TEST(!ungrouped3);
+    BOOST_CHECK(!ungrouped3);
     ungrouped3 = true;
     std::cout << "(Ungrouped #3)" << ' ';
   }
@@ -96,9 +96,9 @@ int test_main(int, char* [])
   sig();
   std::cout << std::endl;
 
-  BOOST_TEST(valuesOutput == sortedValues);
-  BOOST_TEST(ungrouped1);
-  BOOST_TEST(ungrouped2);
-  BOOST_TEST(ungrouped3);
+  BOOST_CHECK(valuesOutput == sortedValues);
+  BOOST_CHECK(ungrouped1);
+  BOOST_CHECK(ungrouped2);
+  BOOST_CHECK(ungrouped3);
   return 0;
 }

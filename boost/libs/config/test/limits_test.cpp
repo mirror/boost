@@ -64,10 +64,10 @@ void test_integral_limits(const T &, const char * msg)
             << ", max: " << make_char_numeric_for_streaming((lim::max)())
             << std::endl;
 
-  BOOST_TEST(lim::is_specialized);
-  BOOST_TEST(lim::is_integer);
-  // BOOST_TEST(lim::is_modulo);
-  BOOST_TEST((lim::min)() < (lim::max)());
+  BOOST_CHECK(lim::is_specialized);
+  BOOST_CHECK(lim::is_integer);
+  // BOOST_CHECK(lim::is_modulo);
+  BOOST_CHECK((lim::min)() < (lim::max)());
 }
 
 template <class T>
@@ -89,10 +89,10 @@ void test_float_limits(const T &, const char * msg)
   std::cout << "\nTesting " << msg << std::endl;
   typedef std::numeric_limits<T> lim;
 
-  BOOST_TEST(lim::is_specialized);
-  BOOST_TEST(!lim::is_modulo);
-  BOOST_TEST(!lim::is_integer);
-  BOOST_TEST(lim::is_signed);
+  BOOST_CHECK(lim::is_specialized);
+  BOOST_CHECK(!lim::is_modulo);
+  BOOST_CHECK(!lim::is_integer);
+  BOOST_CHECK(lim::is_signed);
 
   const T infinity = lim::infinity();
   const T qnan = lim::quiet_NaN();
@@ -109,15 +109,15 @@ void test_float_limits(const T &, const char * msg)
   print_hex_val(qnan, "qnan");
   print_hex_val(snan, "snan");
 
-  BOOST_TEST((lim::max)() > 1000);
-  BOOST_TEST((lim::min)() > 0);
-  BOOST_TEST((lim::min)() < 0.001);
-  BOOST_TEST(lim::epsilon() > 0);
+  BOOST_CHECK((lim::max)() > 1000);
+  BOOST_CHECK((lim::min)() > 0);
+  BOOST_CHECK((lim::min)() < 0.001);
+  BOOST_CHECK(lim::epsilon() > 0);
 
   if(lim::is_iec559) {
-    BOOST_TEST(lim::has_infinity);
-    BOOST_TEST(lim::has_quiet_NaN);
-    BOOST_TEST(lim::has_signaling_NaN);
+    BOOST_CHECK(lim::has_infinity);
+    BOOST_CHECK(lim::has_quiet_NaN);
+    BOOST_CHECK(lim::has_signaling_NaN);
   } else {
     std::cout << "Does not claim IEEE conformance" << std::endl;
   }
@@ -125,8 +125,8 @@ void test_float_limits(const T &, const char * msg)
   if(lim::has_infinity) {
     // Make sure those values are not 0 or similar nonsense.
     // Infinity must compare as if larger than the maximum representable value.
-    BOOST_TEST(infinity > (lim::max)());
-    BOOST_TEST(-infinity < -(lim::max)());
+    BOOST_CHECK(infinity > (lim::max)());
+    BOOST_CHECK(-infinity < -(lim::max)());
   } else {
     std::cout << "Does not have infinity" << std::endl;
   }
@@ -135,16 +135,16 @@ void test_float_limits(const T &, const char * msg)
     // NaNs shall always compare "false" when compared for equality
     // If one of these fail, your compiler may be optimizing incorrectly,
     // or the standard library is incorrectly configured.
-    BOOST_TEST(! (qnan == 42));
-    BOOST_TEST(! (qnan == qnan));
-    BOOST_TEST(qnan != 42);
-    BOOST_TEST(qnan != qnan);
+    BOOST_CHECK(! (qnan == 42));
+    BOOST_CHECK(! (qnan == qnan));
+    BOOST_CHECK(qnan != 42);
+    BOOST_CHECK(qnan != qnan);
 
     // The following tests may cause arithmetic traps.
-    // BOOST_TEST(! (qnan < 42));
-    // BOOST_TEST(! (qnan > 42));
-    // BOOST_TEST(! (qnan <= 42));
-    // BOOST_TEST(! (qnan >= 42));
+    // BOOST_CHECK(! (qnan < 42));
+    // BOOST_CHECK(! (qnan > 42));
+    // BOOST_CHECK(! (qnan <= 42));
+    // BOOST_CHECK(! (qnan >= 42));
   } else {
     std::cout << "Does not have QNaN" << std::endl;
   }

@@ -53,11 +53,11 @@ void runtest(const char * type, T)
             << "; min is " << make_char_numeric_for_streaming((traits::min)())
             << ", max is " << make_char_numeric_for_streaming((traits::max)())
             << std::endl;
-  BOOST_TEST(traits::is_specialized);
-  BOOST_TEST(traits::is_integer);
-  BOOST_TEST(traits::is_integral);
-  BOOST_TEST(traits::const_min == (traits::min)());
-  BOOST_TEST(traits::const_max == (traits::max)());
+  BOOST_CHECK(traits::is_specialized);
+  BOOST_CHECK(traits::is_integer);
+  BOOST_CHECK(traits::is_integral);
+  BOOST_CHECK(traits::const_min == (traits::min)());
+  BOOST_CHECK(traits::const_max == (traits::max)());
 }
 
 int test_main(int, char*[])

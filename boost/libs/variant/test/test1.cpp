@@ -115,11 +115,11 @@ void run()
    v1 = 3.4f;
    apply_visitor(ts, v1);
 
-   BOOST_TEST(ts.result() == sizeof(int) + sizeof(double)*2);
+   BOOST_CHECK(ts.result() == sizeof(int) + sizeof(double)*2);
 
    v11 = 5;
    string res_s = apply_visitor(int_printer(), v11);
-   BOOST_TEST(res_s == "5");
+   BOOST_CHECK(res_s == "5");
 
    //
    // A variant object holding an std::vector 
@@ -132,7 +132,7 @@ void run()
 
    v11 = int_vec_1;
    res_s = apply_visitor(int_printer(), v11);
-   BOOST_TEST(res_s == ",512,256,128,64");
+   BOOST_CHECK(res_s == ",512,256,128,64");
 }
 
 

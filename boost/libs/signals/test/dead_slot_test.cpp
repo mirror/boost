@@ -31,7 +31,7 @@ void do_delayed_connect(with_constant* wc,
   delete wc;
 
   boost::BOOST_SIGNALS_NAMESPACE::connection c = sig.connect(slot);
-  BOOST_TEST(!c.connected());
+  BOOST_CHECK(!c.connected());
 }
 
 int test_main(int, char*[])

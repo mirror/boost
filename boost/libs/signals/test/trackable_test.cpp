@@ -43,13 +43,13 @@ int test_main(int, char*[])
   sig_type s1;
 
   // Test auto-disconnection
-  BOOST_TEST(s1(5) == 0);
+  BOOST_CHECK(s1(5) == 0);
   {
     short_lived shorty;
     s1.connect(boost::bind<int>(swallow(), &shorty, _1));
-    BOOST_TEST(s1(5) == 5);
+    BOOST_CHECK(s1(5) == 5);
   }
-  BOOST_TEST(s1(5) == 0);
+  BOOST_CHECK(s1(5) == 0);
 
   // Test auto-disconnection of slot before signal connection
   {
@@ -58,7 +58,7 @@ int test_main(int, char*[])
     sig_type::slot_type slot(boost::bind<int>(swallow(), shorty, _1));
     delete shorty;
 
-    BOOST_TEST(s1(5) == 0);
+    BOOST_CHECK(s1(5) == 0);
   }
 
   return 0;

@@ -12,7 +12,7 @@
 //   10 Mar 01  Boost Test Library now used for tests (Beman Dawes)
 //   31 Aug 99  Initial version
 
-#include <boost/test/minimal.hpp>  // for main, BOOST_TEST
+#include <boost/test/minimal.hpp>  // for main, BOOST_CHECK
 
 #include <boost/config.hpp>   // for BOOST_NO_USING_TEMPLATE
 #include <boost/cstdlib.hpp>  // for boost::exit_success
@@ -128,7 +128,7 @@ namespace boost
 
 
 // Test if a constant can fit within a certain type
-#define PRIVATE_FIT_TEST(Template, Number, Type, Value)  BOOST_TEST( Template < Number > :: Type ( Value ) == Value )
+#define PRIVATE_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < Number > :: Type ( Value ) == Value )
 
 #define PRIVATE_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; PRIVATE_FIT_TEST(Template, 32, Type, v); v >>= 1; \
  PRIVATE_FIT_TEST(Template, 31, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 30, Type, v); v >>= 1; \
@@ -148,7 +148,7 @@ namespace boost
  PRIVATE_FIT_TEST(Template, 3, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 2, Type, v); v >>= 1; \
  PRIVATE_FIT_TEST(Template, 1, Type, v); v >>= 1; PRIVATE_FIT_TEST(Template, 0, Type, v); } while ( false )
 
-#define PRIVATE_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_TEST( Template < (ULONG_MAX >> Number) > :: Type ( Value ) == Value )
+#define PRIVATE_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < (ULONG_MAX >> Number) > :: Type ( Value ) == Value )
 
 #define PRIVATE_SHIFTED_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
  PRIVATE_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
@@ -168,7 +168,7 @@ namespace boost
  PRIVATE_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
  PRIVATE_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
 
-#define PRIVATE_POS_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_TEST( Template < (LONG_MAX >> Number) > :: Type ( Value ) == Value )
+#define PRIVATE_POS_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < (LONG_MAX >> Number) > :: Type ( Value ) == Value )
 
 #define PRIVATE_POS_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
  PRIVATE_POS_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \
@@ -188,7 +188,7 @@ namespace boost
  PRIVATE_POS_SHIFTED_FIT_TEST(Template, 28, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 29, Type, v); v >>= 1; \
  PRIVATE_POS_SHIFTED_FIT_TEST(Template, 30, Type, v); v >>= 1; PRIVATE_POS_SHIFTED_FIT_TEST(Template, 31, Type, v); } while ( false )
 
-#define PRIVATE_NEG_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_TEST( Template < (LONG_MIN >> Number) > :: Type ( Value ) == Value )
+#define PRIVATE_NEG_SHIFTED_FIT_TEST(Template, Number, Type, Value)  BOOST_CHECK( Template < (LONG_MIN >> Number) > :: Type ( Value ) == Value )
 
 #define PRIVATE_NEG_FIT_TESTS(Template, Type, ValType, InitVal)  do { ValType v = InitVal ; \
  PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 0, Type, v); v >>= 1; PRIVATE_NEG_SHIFTED_FIT_TEST(Template, 1, Type, v); v >>= 1; \

@@ -67,30 +67,30 @@ test_zero_args()
     boost::BOOST_SIGNALS_NAMESPACE::connection c62 = s0.connect(60, i62);
     boost::BOOST_SIGNALS_NAMESPACE::connection c42 = s0.connect(i42);
 
-    BOOST_TEST(s0() == 72);
+    BOOST_CHECK(s0() == 72);
 
     s0.disconnect(72);
-    BOOST_TEST(s0() == 62);
+    BOOST_CHECK(s0() == 62);
 
     c72.disconnect(); // Double-disconnect should be safe
-    BOOST_TEST(s0() == 62);
+    BOOST_CHECK(s0() == 62);
 
     s0.disconnect(72); // Triple-disconect should be safe
-    BOOST_TEST(s0() == 62);
+    BOOST_CHECK(s0() == 62);
 
     // Also connect 63 in the same group as 62
     s0.connect(60, i63);
-    BOOST_TEST(s0() == 63);
+    BOOST_CHECK(s0() == 63);
 
     // Disconnect all of the 60's
     s0.disconnect(60);
-    BOOST_TEST(s0() == 42);
+    BOOST_CHECK(s0() == 42);
 
     c42.disconnect();
-    BOOST_TEST(s0() == 2);
+    BOOST_CHECK(s0() == 2);
 
     c2.disconnect();
-    BOOST_TEST(s0() == 0);
+    BOOST_CHECK(s0() == 0);
   }
 
   {
@@ -101,7 +101,7 @@ test_zero_args()
     boost::BOOST_SIGNALS_NAMESPACE::connection c42 = s0.connect(i42);
 
     const boost::signal<int (), max_or_default<int> >& cs0 = s0;
-    BOOST_TEST(cs0() == 72);
+    BOOST_CHECK(cs0() == 72);
   }
 
   {
@@ -112,8 +112,8 @@ test_zero_args()
     boost::BOOST_SIGNALS_NAMESPACE::connection c7 = s0.connect(i7);
     boost::BOOST_SIGNALS_NAMESPACE::connection c10 = s0.connect(i10);
 
-    BOOST_TEST(s0() == 10);
-    BOOST_TEST(s0() == 11);
+    BOOST_CHECK(s0() == 10);
+    BOOST_CHECK(s0() == 11);
   }
 }
 
@@ -125,8 +125,8 @@ test_one_arg()
   s1.connect(std::negate<int>());
   s1.connect(std::bind1st(std::multiplies<int>(), 2));
 
-  BOOST_TEST(s1(1) == 2);
-  BOOST_TEST(s1(-1) == 1);
+  BOOST_CHECK(s1(1) == 2);
+  BOOST_CHECK(s1(-1) == 1);
 }
 
 static void
@@ -136,7 +136,7 @@ test_signal_signal_connect()
 
   s1.connect(std::negate<int>());
 
-  BOOST_TEST(s1(3) == -3);
+  BOOST_CHECK(s1(3) == -3);
 
   {
     boost::signal<int (int value), max_or_default<int> > s2;
@@ -144,11 +144,11 @@ test_signal_signal_connect()
     s2.connect(std::bind1st(std::multiplies<int>(), 2));
     s2.connect(std::bind1st(std::multiplies<int>(), -3));
 
-    BOOST_TEST(s2(-3) == 9);
-    BOOST_TEST(s1(3) == 6);
+    BOOST_CHECK(s2(-3) == 9);
+    BOOST_CHECK(s1(3) == 6);
   } // s2 goes out of scope and disconnects
 
-  BOOST_TEST(s1(3) == -3);
+  BOOST_CHECK(s1(3) == -3);
 }
 
 int
