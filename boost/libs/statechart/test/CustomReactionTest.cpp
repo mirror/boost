@@ -62,8 +62,6 @@ struct CustomReactionTest : fsm::state_machine< CustomReactionTest, A >
 
     void AssertVisitedAll( const std::string & stateNames ) const
     {
-      VisitedStates::const_iterator actualName = visitedStates_.begin();
-
       for ( std::string::const_iterator expectedName = stateNames.begin();
         expectedName != stateNames.end(); ++expectedName )
       {
