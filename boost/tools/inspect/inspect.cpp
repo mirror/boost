@@ -35,6 +35,7 @@
 #include "link_check.hpp"
 #include "long_name_check.hpp"
 #include "tab_check.hpp"
+#include "minmax_check.hpp"
 #include "cvs_iterator.hpp"
 
 namespace fs = boost::filesystem;
@@ -281,6 +282,7 @@ namespace
          "  -link\n"
          "  -long_name\n"
          "  -tab\n"
+         "  -minmax\n"
          "default is all checks on; otherwise options specify desired checks\n";
   }
 
@@ -416,6 +418,7 @@ int cpp_main( int argc, char * argv[] )
   bool link_ck = true;
   bool long_name_ck = true;
   bool tab_ck = true;
+  bool minmax_ck = true;
   bool cvs = false;
 
   if ( argc > 1 && std::strcmp( argv[1], "-cvs" ) == 0 )
@@ -432,6 +435,7 @@ int cpp_main( int argc, char * argv[] )
     link_ck = false;
     long_name_ck = false;
     tab_ck = false;
+    minmax_ck = false;
   }
 
   for(; argc > 1; --argc, ++argv )
@@ -441,13 +445,15 @@ int cpp_main( int argc, char * argv[] )
     else if ( std::strcmp( argv[1], "-copyright" ) == 0 )
       copyright_ck = true;
     else if ( std::strcmp( argv[1], "-crlf" ) == 0 )
-      crlf_ck = true;
+        crlf_ck = true;
     else if ( std::strcmp( argv[1], "-link" ) == 0 )
       link_ck = true;
     else if ( std::strcmp( argv[1], "-long_name" ) == 0 )
       long_name_ck = true;
     else if ( std::strcmp( argv[1], "-tab" ) == 0 )
       tab_ck = true;
+    else if ( std::strcmp( argv[1], "-minmax" ) == 0 )
+        minmax_ck = true;
     else
     {
       std::cerr << "unknown option: " << argv[1]
@@ -470,7 +476,9 @@ int cpp_main( int argc, char * argv[] )
   if ( long_name_ck )
     inspectors.push_back( inspector_element( new boost::inspect::long_name_check ) );
   if ( tab_ck )
-    inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
+      inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
+  if ( minmax_ck )
+      inspectors.push_back( inspector_element( new boost::inspect::minmax_check ) );
 
   // perform the actual inspection, using the requested type of iteration
   if ( cvs )
