@@ -33,8 +33,13 @@
 #include <windows.h>
 #endif
 
-#if !defined(BOOST_RE_PLATFORM_W32) && defined(BOOST_RE_THREADS)
+#if !defined(BOOST_RE_PLATFORM_W32) && defined(BOOST_RE_THREADS) 
+#if defined(__BEOS__)
+#include <OS.h>
+#include <cassert>
+#else
 #include <pthread.h>
+#endif
 #endif
 
 
@@ -51,6 +56,35 @@ void BOOST_RE_CALL re_free_threads();
 #ifdef BOOST_RE_THREADS
 
 #ifndef BOOST_RE_PLATFORM_W32
+#ifdef __BEOS__
+
+typedef sem_id CRITICAL_SECTION;
+
+inline void BOOST_RE_CALL InitializeCriticalSection(CRITICAL_SECTION* ps)
+{
+    *ps = create_sem(1, "regex++");
+    assert(*ps > 0);
+}
+
+inline void BOOST_RE_CALL DeleteCriticalSection(CRITICAL_SECTION* ps)
+{
+    int t = delete_sem(*ps);
+    assert(t == B_NO_ERROR);
+}
+
+inline void BOOST_RE_CALL EnterCriticalSection(CRITICAL_SECTION* ps)
+{
+   status_t t = acquire_sem(*ps);
+   assert(t == B_NO_ERROR);
+}
+
+inline void BOOST_RE_CALL LeaveCriticalSection(CRITICAL_SECTION* ps)
+{
+    status_t t = release_sem(*ps);
+    assert(t == B_NO_ERROR);
+}
+
+#else // __BEOS__
 
 typedef pthread_mutex_t CRITICAL_SECTION;
 
@@ -73,7 +107,7 @@ inline void BOOST_RE_CALL LeaveCriticalSection(CRITICAL_SECTION* ps)
 {
    pthread_mutex_unlock(ps);
 }
-
+#endif // __BEOS__
 #endif
 
 template <class Lock>
@@ -136,7 +170,7 @@ public:
    typedef lock_guard<critical_section> ro_guard;
    typedef lock_guard<critical_section> rw_guard;
 
-   friend lock_guard<critical_section>;
+   friend class lock_guard<critical_section>;
 };
 
 inline bool BOOST_RE_CALL operator==(const critical_section&, const critical_section&)

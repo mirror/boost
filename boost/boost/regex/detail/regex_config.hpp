@@ -307,7 +307,7 @@ full list of macros and their usage.
 #   endif
 #endif
 
-#if (defined(_REENTRANT) || defined(_PTHREADS)) && !defined(_NOTHREADS)
+#if (defined(_REENTRANT) || defined(_PTHREADS) || defined(__BEOS__)) && !defined(_NOTHREADS)
 //
 // Several compilers define _REENTRANT or 
 // _PTHREADS when threading support is turned on:
@@ -967,7 +967,7 @@ public:
 #undef wcsxfrm
 #endif
 
-#if defined(BOOST_NO_STDC_NAMESPACE) || (defined(std) && defined(__SGI_STL_PORT))
+#if defined(BOOST_NO_STDC_NAMESPACE) || (defined(std) && defined(__SGI_STL_PORT)) || defined(_STLP_IMPORT_VENDOR_CSTD) || defined(__STL_IMPORT_VENDOR_CSTD)
 //
 // fix namespaces,
 // note that we almost always do this for STLPort, as it doesn't always
