@@ -224,7 +224,12 @@ bool grep_test_predicate<iterator, Alloc>::operator()(const boost::match_results
 template <class C, class T, class A>
 void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
 {
-   typedef typename basic_regex<C, T, A>::allocator_type allocator_type;
+   typedef typename basic_regex<C, T, A>::allocator_type base_allocator_type;
+#ifdef BOOST_REGEX_V3
+   typedef base_allocator_type allocator_type;
+#else
+   typedef typename detail::rebind_allocator<boost::sub_match<debug_iterator<string_type::iterator> >, base_allocator_type>::type allocator_type;
+#endif
    if(flags[4] & REG_MERGE)
    {
       //
@@ -278,9 +283,9 @@ void cpp_tests(const basic_regex<C, T, A>& e, bool recurse = true)
       {
          unsigned len = search_text.size();
          const std::basic_string<char_t>& s = search_text;
-         grep_test_predicate<std::basic_string<char_t>::const_iterator, allocator_type> oi2(s.begin(), s.end());
+         grep_test_predicate<std::basic_string<char_t>::const_iterator, base_allocator_type> oi2(s.begin(), s.end());
          regex_grep(oi2, s, e, static_cast<boost::match_flag_type>(flags[3]));
-         grep_test_predicate<const char_t*, allocator_type> oi3(s.c_str(), s.c_str()+s.size());
+         grep_test_predicate<const char_t*, base_allocator_type> oi3(s.c_str(), s.c_str()+s.size());
          regex_grep(oi3, s.c_str(), e, static_cast<boost::match_flag_type>(flags[3]));
          assert(s.size() == len);
          assert(s.end() - s.begin() == (std::basic_string<char_t>::difference_type)len);
