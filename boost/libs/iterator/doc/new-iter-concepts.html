@@ -270,11 +270,11 @@ given in the following diagram.</p>
 dispatching based on the traversal concepts.  The tags are related via
 inheritance so that a tag is convertible to another tag if the concept
 associated with the first tag is a refinement of the second tag.
-Since the access concepts are not related via refinment, but instead
+Since the access concepts are not related via refinement, but instead
 cover orthogonal issues, we do not use tags for the access concepts,
-but instead use the equivalent of a bitfield.</p>
+but instead use the equivalent of a bit field.</p>
 <p>We provide an access mechanism for mapping iterator types to the new
-traversal tags and access bitfield. Our design reuses
+traversal tags and access bit field. Our design reuses
 <tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt> as the access
 mechanism. To that end, the access and traversal information is
 bundled into a single type using the following <cite>iterator_tag</cite> class.</p>
@@ -284,17 +284,28 @@ enum iterator_access { readable_iterator = 1, writable_iterator = 2,
 
 template &lt;unsigned int access_bits, class TraversalTag&gt;
 struct iterator_tag : /* appropriate old category or categories */ {
-  static const iterator_access access = (iterator_access)access_bits;
+  static const iterator_access access =
+    (iterator_access)access_bits &amp; 
+      (readable_iterator | writable_iterator | swappable_iterator);
   typedef TraversalTag traversal;
 };
 </pre>
+<p>The <tt class="literal"><span class="pre">access_bits</span></tt> argument is declared to be <tt class="literal"><span class="pre">unsigned</span> <span class="pre">int</span></tt>
+instead of the enum <tt class="literal"><span class="pre">iterator_access</span></tt> for convenience of use. For
+example, the expression <tt class="literal"><span class="pre">(readable_iterator</span> <span class="pre">|</span> <span class="pre">writable_iterator)</span></tt>
+produces an unsigned int, not an <tt class="literal"><span class="pre">iterator_access</span></tt>.  The purpose of
+the <tt class="literal"><span class="pre">lvalue_iterator</span></tt> part of the <tt class="literal"><span class="pre">iterator_access</span></tt> enum is to
+communicate to <tt class="literal"><span class="pre">iterator_tag</span></tt> whether the reference type is an
+lvalue so that the appropriate old category can be chosen for the base
+class. The <tt class="literal"><span class="pre">lvalue_iterator</span></tt> bit is not recorded in the
+<tt class="literal"><span class="pre">iterator_tag::access</span></tt> data member.</p>
 <p>The <tt class="literal"><span class="pre">iterator_tag</span></tt> class template is derived from the appropriate
 iterator tag or tags from the old requirements based on the new-style
 tags passed as template parameters.  The algorithm for determining the
 old tag or tags from the new tags picks the least-refined old concepts
 that include all of the requirements of the access and traversal
 concepts (that is, the closest fit), if any such category exists.  For
-example, a the category tag for a Readable Single Pass Iterator will
+example, the category tag for a Readable Single Pass Iterator will
 always be derived from <tt class="literal"><span class="pre">input_iterator_tag</span></tt>, while the category tag
 for a Single Pass Iterator that is both Readable and Writable will be
 derived from both <tt class="literal"><span class="pre">input_iterator_tag</span></tt> and <tt class="literal"><span class="pre">output_iterator_tag</span></tt>.</p>
@@ -303,14 +314,12 @@ obtain the access and traversal characteristics of an iterator. These
 helper classes work both for iterators whose <tt class="literal"><span class="pre">iterator_category</span></tt> is
 <tt class="literal"><span class="pre">iterator_tag</span></tt> and also for iterators using the original iterator
 categories.</p>
-<dl>
-<dt>::</dt>
-<dd><p class="last">template &lt;class Iterator&gt; struct is_readable  { typedef ... type; };
+<pre class="literal-block">
+template &lt;class Iterator&gt; struct is_readable  { typedef ... type; };
 template &lt;class Iterator&gt; struct is_writable { typedef ... type; };
 template &lt;class Iterator&gt; struct is_swappable { typedef ... type; };
-template &lt;class Iterator&gt; struct traversal_category { typedef ... type; };</p>
-</dd>
-</dl>
+template &lt;class Iterator&gt; struct traversal_category { typedef ... type; };
+</pre>
 <p>We do not include a helper class <tt class="literal"><span class="pre">is_lvalue_iterator</span></tt> because that
 can easily be deduced by checking whether
 <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::reference</span></tt> is a real reference.</p>
@@ -860,12 +869,8 @@ inherit-category(access, traversal-tag) =
      else
          return null_category_tag;
 </pre>
-<p>The access argument is declared to be <tt class="literal"><span class="pre">unsigned</span> <span class="pre">int</span></tt> instead of the
-enum <tt class="literal"><span class="pre">iterator_access</span></tt> for convenience of use. For example, the
-expression <tt class="literal"><span class="pre">(readable_iterator</span> <span class="pre">|</span> <span class="pre">writable_iterator)</span></tt> produces an
-unsigned int, not <tt class="literal"><span class="pre">iterator_access</span></tt>.  If the argument for
-<tt class="literal"><span class="pre">TraversalTag</span></tt> is not convertible to <tt class="literal"><span class="pre">incrementable_iterator_tag</span></tt>
-then the programm is ill-formed.</p>
+<p>If the argument for <tt class="literal"><span class="pre">TraversalTag</span></tt> is not convertible to
+<tt class="literal"><span class="pre">incrementable_iterator_tag</span></tt> then the program is ill-formed.</p>
 <p>The <tt class="literal"><span class="pre">is_readable</span></tt>, <tt class="literal"><span class="pre">is_writable</span></tt>, <tt class="literal"><span class="pre">is_swappable</span></tt>, and
 <tt class="literal"><span class="pre">traversal_category</span></tt> class templates are traits classes. For
 iterators whose <tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt> type is
@@ -953,7 +958,7 @@ LocalWords:  ConstantLvalueIterator MutableLvalueIterator CopyConstructible TR
 LocalWords:  ForwardTraversalIterator BidirectionalTraversalIterator lvalue
 LocalWords:  RandomAccessTraversalIterator dereferenceable Incrementable tmp
 LocalWords:  incrementable xxx min prev inplace png oldeqnew AccessTag struct
-LocalWords:  TraversalTag typename lvalues DWA Hmm JGS -->
+LocalWords:  TraversalTag typename lvalues DWA Hmm JGS mis enum -->
 </div>
 </div>
 </div>

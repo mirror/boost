@@ -251,10 +251,10 @@ inheritance so that a tag is convertible to another tag if the concept
 associated with the first tag is a refinement of the second tag.
 Since the access concepts are not related via refinement, but instead
 cover orthogonal issues, we do not use tags for the access concepts,
-but instead use the equivalent of a bitfield.
+but instead use the equivalent of a bit field.
 
 We provide an access mechanism for mapping iterator types to the new
-traversal tags and access bitfield. Our design reuses
+traversal tags and access bit field. Our design reuses
 ``iterator_traits<Iter>::iterator_category`` as the access
 mechanism. To that end, the access and traversal information is
 bundled into a single type using the following `iterator_tag` class.
@@ -266,9 +266,21 @@ bundled into a single type using the following `iterator_tag` class.
 
   template <unsigned int access_bits, class TraversalTag>
   struct iterator_tag : /* appropriate old category or categories */ {
-    static const iterator_access access = (iterator_access)access_bits;
+    static const iterator_access access =
+      (iterator_access)access_bits & 
+        (readable_iterator | writable_iterator | swappable_iterator);
     typedef TraversalTag traversal;
   };
+
+The ``access_bits`` argument is declared to be ``unsigned int``
+instead of the enum ``iterator_access`` for convenience of use. For
+example, the expression ``(readable_iterator | writable_iterator)``
+produces an unsigned int, not an ``iterator_access``.  The purpose of
+the ``lvalue_iterator`` part of the ``iterator_access`` enum is to
+communicate to ``iterator_tag`` whether the reference type is an
+lvalue so that the appropriate old category can be chosen for the base
+class. The ``lvalue_iterator`` bit is not recorded in the
+``iterator_tag::access`` data member.
 
 The ``iterator_tag`` class template is derived from the appropriate
 iterator tag or tags from the old requirements based on the new-style
@@ -280,6 +292,7 @@ example, the category tag for a Readable Single Pass Iterator will
 always be derived from ``input_iterator_tag``, while the category tag
 for a Single Pass Iterator that is both Readable and Writable will be
 derived from both ``input_iterator_tag`` and ``output_iterator_tag``.
+
 
 We also provide several helper classes that make it convenient to
 obtain the access and traversal characteristics of an iterator. These
@@ -698,12 +711,8 @@ pseudo-code.
          else
              return null_category_tag;
 
-The access argument is declared to be ``unsigned int`` instead of the
-enum ``iterator_access`` for convenience of use. For example, the
-expression ``(readable_iterator | writable_iterator)`` produces an
-unsigned int, not ``iterator_access``.  If the argument for
-``TraversalTag`` is not convertible to ``incrementable_iterator_tag``
-then the programm is ill-formed.
+If the argument for ``TraversalTag`` is not convertible to
+``incrementable_iterator_tag`` then the program is ill-formed.
 
 The ``is_readable``, ``is_writable``, ``is_swappable``, and
 ``traversal_category`` class templates are traits classes. For
@@ -800,4 +809,4 @@ category tags for pointer types.
  LocalWords:  ForwardTraversalIterator BidirectionalTraversalIterator lvalue
  LocalWords:  RandomAccessTraversalIterator dereferenceable Incrementable tmp
  LocalWords:  incrementable xxx min prev inplace png oldeqnew AccessTag struct
- LocalWords:  TraversalTag typename lvalues DWA Hmm JGS
+ LocalWords:  TraversalTag typename lvalues DWA Hmm JGS mis enum
