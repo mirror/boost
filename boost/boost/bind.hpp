@@ -141,6 +141,11 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
+    template<class R, class F, class A> R operator()(type<R>, F f, A &)
+    {
+        return unwrap(f, 0)();
+    }
+
     template<class R, class F, class A> R operator()(type<R>, F f, A &) const
     {
         return unwrap(f, 0)();
@@ -180,6 +185,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -228,6 +238,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_], a[a2_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -280,6 +295,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -336,6 +356,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -396,6 +421,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -460,6 +490,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -528,6 +563,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -600,6 +640,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -676,6 +721,11 @@ public:
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+
+    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    {
+        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+    }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
