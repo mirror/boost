@@ -1,12 +1,15 @@
 //  Boost CRC test program file  ---------------------------------------------//
 
-//  Copyright 2001, 2003 Daryle Walker.  Use, modification, and distribution are
-//  subject to the Boost Software License, Version 1.0.  (See accompanying file
-//  LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
+//  Copyright 2001, 2003, 2004 Daryle Walker.  Use, modification, and
+//  distribution are subject to the Boost Software License, Version 1.0.  (See
+//  accompanying file LICENSE_1_0.txt or a copy at
+//  <http://www.boost.org/LICENSE_1_0.txt>.)
 
 //  See <http://www.boost.org/libs/crc/> for the library's home page.
 
 //  Revision History
+//  28 Aug 2004  Added CRC tests for polynominals shorter than 8 bits
+//               (Daryle Walker, by patch from Bert Klaps)
 //  23 Aug 2003  Adjust to updated Test framework (Daryle Walker)
 //  14 May 2001  Initial version (Daryle Walker)
 
@@ -91,6 +94,9 @@ double           time_trial( char const *name,
 void             augmented_tests();
 boost::uint32_t  native_to_big( boost::uint32_t x );
 boost::uint32_t  big_to_native( boost::uint32_t x );
+
+void  small_crc_test1();
+void  small_crc_test2();
 
 
 // Macro to compact code
@@ -597,6 +603,108 @@ augmented_tests
 }
 
 
+// Run tests on CRCs below a byte in size (here, 3 bits)
+void
+small_crc_test1
+(
+)
+{
+    std::cout << "Doing short-CRC (3-bit augmented) message tests."
+     << std::endl;
+
+    // The CRC standard is a SDH/SONET Low Order LCAS control word with CRC-3
+    // taken from ITU-T G.707 (12/03) XIII.2.
+
+    // Four samples, each four bytes; should all have a CRC of zero
+    unsigned char const  samples[4][4]
+      = {
+            { 0x3A, 0xC4, 0x08, 0x06 },
+            { 0x42, 0xC5, 0x0A, 0x41 },
+            { 0x4A, 0xC5, 0x08, 0x22 },
+            { 0x52, 0xC4, 0x08, 0x05 }
+        };
+
+    // Basic computer
+    boost::crc_basic<3>  tester1( 0x03 );
+
+    tester1.process_bytes( samples[0], 4 );
+    BOOST_CHECK( tester1.checksum() == 0 );
+
+    tester1.reset();
+    tester1.process_bytes( samples[1], 4 );
+    BOOST_CHECK( tester1.checksum() == 0 );
+
+    tester1.reset();
+    tester1.process_bytes( samples[2], 4 );
+    BOOST_CHECK( tester1.checksum() == 0 );
+
+    tester1.reset();
+    tester1.process_bytes( samples[3], 4 );
+    BOOST_CHECK( tester1.checksum() == 0 );
+
+    // Optimal computer
+    #define PRIVATE_CRC_FUNC   boost::crc<3, 0x03, 0, 0, false, false>
+    #define PRIVATE_ACRC_FUNC  boost::augmented_crc<3, 0x03>
+
+    BOOST_CHECK( 0 == PRIVATE_CRC_FUNC(samples[0], 4) );
+    BOOST_CHECK( 0 == PRIVATE_CRC_FUNC(samples[1], 4) );
+    BOOST_CHECK( 0 == PRIVATE_CRC_FUNC(samples[2], 4) );
+    BOOST_CHECK( 0 == PRIVATE_CRC_FUNC(samples[3], 4) );
+
+    // maybe the fix to CRC functions needs to be applied to augmented CRCs?
+
+    #undef PRIVATE_ACRC_FUNC
+    #undef PRIVATE_CRC_FUNC
+}
+
+// Run tests on CRCs below a byte in size (here, 7 bits)
+void
+small_crc_test2
+(
+)
+{
+    std::cout << "Doing short-CRC (7-bit augmented) message tests."
+     << std::endl;
+
+    // The CRC standard is a SDH/SONET J0/J1/J2/N1/N2/TR TTI (trace message)
+    // with CRC-7, o.a. ITU-T G.707 Annex B, G.832 Annex A.
+
+    // Two samples, each sixteen bytes
+    // Sample 1 is '\x80' + ASCII("123456789ABCDEF")
+    // Sample 2 is '\x80' + ASCII("TTI UNAVAILABLE")
+    unsigned char const  samples[2][16]
+      = {
+            { 0x80, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41,
+              0x42, 0x43, 0x44, 0x45, 0x46 },
+            { 0x80, 0x54, 0x54, 0x49, 0x20, 0x55, 0x4E, 0x41, 0x56, 0x41, 0x49,
+              0x4C, 0x41, 0x42, 0x4C, 0x45 }
+        };
+    unsigned const       results[2] = { 0x62, 0x23 };
+
+    // Basic computer
+    boost::crc_basic<7>  tester1( 0x09 );
+
+    tester1.process_bytes( samples[0], 16 );
+    BOOST_CHECK( tester1.checksum() == results[0] );
+
+    tester1.reset();
+    tester1.process_bytes( samples[1], 16 );
+    BOOST_CHECK( tester1.checksum() == results[1] );
+
+    // Optimal computer
+    #define PRIVATE_CRC_FUNC   boost::crc<7, 0x09, 0, 0, false, false>
+    #define PRIVATE_ACRC_FUNC  boost::augmented_crc<7, 0x09>
+
+    BOOST_CHECK( results[0] == PRIVATE_CRC_FUNC(samples[0], 16) );
+    BOOST_CHECK( results[1] == PRIVATE_CRC_FUNC(samples[1], 16) );
+
+    // maybe the fix to CRC functions needs to be applied to augmented CRCs?
+
+    #undef PRIVATE_ACRC_FUNC
+    #undef PRIVATE_CRC_FUNC
+}
+
+
 #ifndef BOOST_MSVC
 // Explicit template instantiations
 // (needed to fix a link error in Metrowerks CodeWarrior Pro 5.3)
@@ -632,6 +740,10 @@ test_main
     // Test using augmented messages
     augmented_tests();
 
+    // Test with CRC types smaller than a byte
+    small_crc_test1();
+    small_crc_test2();
+
     // Try a CRC based on the (x + 1) polynominal, which is a factor in
     // many real-life polynominals and doesn't fit evenly in a byte.
     cout << "Doing one-bit polynominal CRC test." << endl;
@@ -647,4 +759,3 @@ test_main
 
     return boost::exit_success;
 }
-
