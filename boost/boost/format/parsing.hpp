@@ -35,6 +35,7 @@ namespace boost {
 namespace io {
 namespace detail {
 
+
   template<class Res, class Ch, class Tr> inline
   Res str2int(const std::basic_string<Ch, Tr>& s, 
               typename std::basic_string<Ch, Tr>::size_type start, 
@@ -45,8 +46,9 @@ namespace detail {
     // Effects : reads s[start:] and converts digits into an integral n, of type Res
     // Returns : n
   {
+    using namespace std; // isdigit is better without 'std::' for borland 0x560
     Res n = 0;
-    while(start<s.size() && std::isdigit(s[start], os.rdbuf()->getloc() ) ) {
+    while(start<s.size() && isdigit(s[start], os.rdbuf()->getloc() ) ) {
       char cur_ch = os.narrow( s[start], 0);
       assert(cur_ch != 0 ); // since we called isdigit, this should not happen.
       n *= 10;
@@ -66,11 +68,12 @@ namespace detail {
     // Effects : advance *pos_p by skipping printf's asterisk fields.
     // Returns : nothing
   {
+    using namespace std; // isdigit is better without 'std::' for borland 0x560
     assert( pos_p != 0);
     if(*pos_p >= buf.size() ) return;
     if(buf[ *pos_p]==os.widen('*')) {
       ++ (*pos_p);
-      while (*pos_p < buf.size() && std::isdigit(buf[*pos_p],os.rdbuf()->getloc())) ++(*pos_p);
+      while (*pos_p < buf.size() && isdigit(buf[*pos_p],os.rdbuf()->getloc())) ++(*pos_p);
       if(buf[*pos_p]==os.widen('$')) ++(*pos_p);
     }
   }
@@ -101,6 +104,7 @@ namespace detail {
     // Effects : - *pos_p is incremented so that buf[*pos_p] is the first char after the directive
     //           - *fpar is set with the parameters read in the directive
   {
+    using namespace std; // isdigit is better without 'std::' for borland 0x560
     typedef format_item<Ch, Tr>  format_item_t;
     assert( pos_p != 0);
     typename std::basic_string<Ch, Tr>::size_type       &i1 = *pos_p,      
@@ -123,7 +127,7 @@ namespace detail {
 
     // handle argument order (%2$d)  or possibly width specification: %2d
     i0 = i1;  // save position before digits
-    while (i1 < buf.size() && std::isdigit(buf[i1], os.rdbuf()->getloc()))
+    while (i1 < buf.size() && isdigit(buf[i1], os.rdbuf()->getloc()))
       ++i1;
     if (i1!=i0) 
       {
@@ -203,7 +207,7 @@ namespace detail {
     // handle width spec
     skip_asterisk(buf, &i1, os); // skips 'asterisk fields' :  *, or *N$
     i0 = i1;  // save position before digits
-    while (i1<buf.size() && std::isdigit(buf[i1], os.rdbuf()->getloc()))
+    while (i1<buf.size() && isdigit(buf[i1], os.rdbuf()->getloc()))
       i1++;
     
     if (i1!=i0) 
@@ -220,7 +224,7 @@ namespace detail {
         ++i1;
         skip_asterisk(buf, &i1, os);
         i0 = i1;  // save position before digits
-        while (i1<buf.size() && std::isdigit(buf[i1], os.rdbuf()->getloc()))
+        while (i1<buf.size() && isdigit(buf[i1], os.rdbuf()->getloc()))
           ++i1;
 
         if(i1==i0)
@@ -364,7 +368,7 @@ void basic_format<Ch, Traits> ::parse(const string_t & buf)
       ++i1;
       
       // in case of %N% directives, dont count it double (wastes allocations..) :
-      while(i1 < buf.size() && std::isdigit(buf[i1],oss_.rdbuf()->getloc())) ++i1;
+      while(i1 < buf.size() && isdigit(buf[i1],oss_.rdbuf()->getloc())) ++i1;
       if( i1 < buf.size() && buf[i1] == arg_mark ) ++ i1;
 
       ++num_items;
