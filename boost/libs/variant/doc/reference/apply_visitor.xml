@@ -10,10 +10,10 @@
           function object. This is useful, for example, when one needs to
           operate on each element of a sequence of variant objects using a
           standard library algorithm such as
-          <code><functionname>std::for_each</functionname></code>.</simpara>
-        <simpara>See <code><functionname>apply_visitor</functionname></code>
-          for a simple way to create <code>apply_visitor_delayed_t</code>
-          objects.</simpara>
+          <code>std::for_each</code>.</simpara>
+        <simpara>See the &quot;visitor-only&quot; form of
+          <code><functionname>apply_visitor</functionname></code> for a simple
+          way to create <code>apply_visitor_delayed_t</code> objects.</simpara>
       </description>
 
       <template>
@@ -83,13 +83,29 @@
         <type>typename Visitor::result_type</type>
 
         <parameter name="visitor">
-          <paramtype>[const] Visitor &amp;</paramtype>
+          <paramtype>Visitor &amp;</paramtype>
         </parameter>
         <parameter name="operand">
-          <paramtype>[const] Variant &amp;</paramtype>
+          <paramtype>Variant &amp;</paramtype>
         </parameter>
       </signature>
       
+      <signature>
+        <template>
+          <template-type-parameter name="Visitor"/>
+          <template-type-parameter name="Variant"/>
+        </template>
+
+        <type>typename Visitor::result_type</type>
+
+        <parameter name="visitor">
+          <paramtype>const Visitor &amp;</paramtype>
+        </parameter>
+        <parameter name="operand">
+          <paramtype>Variant &amp;</paramtype>
+        </parameter>
+      </signature>
+
       <signature>
         <template>
           <template-type-parameter name="BinaryVisitor"/>
@@ -100,16 +116,36 @@
         <type>typename BinaryVisitor::result_type</type>
 
         <parameter name="visitor">
-          <paramtype>[const] BinaryVisitor &amp;</paramtype>
+          <paramtype>BinaryVisitor &amp;</paramtype>
         </parameter>
         <parameter name="operand1">
-          <paramtype>[const] Variant1 &amp;</paramtype>
+          <paramtype>Variant1 &amp;</paramtype>
         </parameter>
         <parameter name="operand2">
-          <paramtype>[const] Variant2 &amp;</paramtype>
+          <paramtype>Variant2 &amp;</paramtype>
         </parameter>
       </signature>
-      
+
+      <signature>
+        <template>
+          <template-type-parameter name="BinaryVisitor"/>
+          <template-type-parameter name="Variant1"/>
+          <template-type-parameter name="Variant2"/>
+        </template>
+
+        <type>typename BinaryVisitor::result_type</type>
+
+        <parameter name="visitor">
+          <paramtype>const BinaryVisitor &amp;</paramtype>
+        </parameter>
+        <parameter name="operand1">
+          <paramtype>Variant1 &amp;</paramtype>
+        </parameter>
+        <parameter name="operand2">
+          <paramtype>Variant2 &amp;</paramtype>
+        </parameter>
+      </signature>
+
       <signature>
         <template>
           <template-type-parameter name="Visitor"/>
@@ -131,38 +167,31 @@
       <description>
         <simpara>The behavior of <code>apply_visitor</code> is dependent on
         the number of arguments on which it operates (i.e., other than the
-        visitor). The function behaves as follows:</simpara>
-        
-        <itemizedlist>
-          <listitem>Overloads accepting one operand invoke the unary function
-            call operator of the given visitor on the content of the given
-            <code><classname>variant</classname></code> operand.</listitem>
+        visitor). The function behaves as follows:
 
-          <listitem>Overloads accepting two operands invoke the binary function
-            call operator of the given visitor on the content of the given
-            <code><classname>variant</classname></code> operands.</listitem>
+          <itemizedlist>
+            <listitem>Overloads accepting one operand invoke the unary function
+              call operator of the given visitor on the content of the given
+              <code><classname>variant</classname></code> operand.</listitem>
 
-          <listitem>The overload accepting only a visitor returns a
-            <classname alt="boost::apply_visitor_delayed_t">generic function object</classname>
-            that accepts either one or two arguments and invokes
-            <code><functionname>apply_visitor</functionname></code> using
-            these arguments and <code>visitor</code>, thus behaving as
-            specified above. (This behavior is particularly useful, for
-            example, when one needs to operate on each element of a sequence
-            of variant objects using a standard library algorithm.)</listitem>
-        </itemizedlist>
+            <listitem>Overloads accepting two operands invoke the binary
+              function call operator of the given visitor on the content of
+              the given <code><classname>variant</classname></code>
+              operands.</listitem>
+
+            <listitem>The overload accepting only a visitor returns a
+              <classname alt="boost::apply_visitor_delayed_t">generic function object</classname>
+              that accepts either one or two arguments and invokes
+              <code><functionname>apply_visitor</functionname></code> using
+              these arguments and <code>visitor</code>, thus behaving as
+              specified above. (This behavior is particularly useful, for
+              example, when one needs to operate on each element of a sequence
+              of variant objects using a standard library
+              algorithm.)</listitem>
+          </itemizedlist>
+
+        </simpara>
       </description>
-
-      <notes>
-        <simpara>The nonstandard <code>[const]</code> notation above simply
-        indicates that both unqualified and <code>const</code>-qualifed
-        arguments are accepted. This allows usage such as
-        <code>apply_visitor( my_visitor(), var )</code>. However, the overload
-        accepting only a visitor does not accept a
-        <code>const</code>-qualified argument precisely because it would allow
-        passing a temporary, which would then lead to a dead reference in the
-        returned function object.</simpara>
-      </notes>
 
       <returns>
         <simpara>The overloads acccepting operands return the result of
