@@ -20,7 +20,7 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-	// Storage types
+    // Storage types
     template<class T, class ALLOC = std::allocator<T> >
     class unbounded_array;
 
@@ -41,7 +41,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class I, class T, class ALLOC = std::allocator<std::pair<I, T> > >
     class map_array;
 
-	// Expression types
+    // Expression types
     struct scalar_tag {};
     
     template<class E>
@@ -168,7 +168,7 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, class F = row_major, std::size_t IB = 0, class IA = unbounded_array<std::size_t>, class TA = unbounded_array<T> >
     class coordinate_matrix;
 
-	// Evaluation tags
+    // Evaluation tags
     struct concrete_tag {};
     struct abstract_tag {};
 
