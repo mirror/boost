@@ -44,7 +44,7 @@
 //
 // Original native SGI streams have non-standard std::messages facet:
 //
-#if defined(__sgi) && !defined(__SGI_STL_OWN_IOSTREAMS)
+#if defined(__sgi) && (_COMPILER_VERSION <= 650) && !defined(__SGI_STL_OWN_IOSTREAMS)
 #  define BOOST_NO_STD_LOCALE
 #endif
 
@@ -82,3 +82,4 @@
 #endif
 
 #define BOOST_STDLIB "SGI standard library"
+
