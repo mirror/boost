@@ -29,6 +29,9 @@
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/aux_/msvc_eti_base.hpp>
+#ifdef BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
+# include <boost/mpl/placeholders.hpp>
+#endif
 
 #include <iterator>
 
@@ -339,6 +342,29 @@ namespace boost {
       >
   {
   };
+
+# ifdef BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
+  // Hack because BOOST_MPL_AUX_LAMBDA_SUPPORT doesn't seem to work
+  // out well.  Instantiating the nested apply template also
+  // requires instantiating iterator_traits on the
+  // placeholder. Instead we just specialize it as a metafunction
+  // class.
+template <>
+  struct access_category<mpl::_1>
+  {
+      template <class T>
+      struct apply : access_category<T>
+      {};
+  };
+
+  template <>
+  struct traversal_category<mpl::_1>
+  {
+      template <class T>
+      struct apply : traversal_category<T>
+      {};
+  };
+# endif
 
 # if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
