@@ -15,9 +15,9 @@
 #include <boost/config.hpp> // BOOST_JOIN
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
-#include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // openmodes, failure.
 #include <boost/iostreams/device/file_descriptor.hpp>
+#include <boost/limits.hpp>
 
     // OS-specific headers for low-level i/o.
 
@@ -28,6 +28,8 @@
 #include <sys/stat.h>    // file access permissions.
 #ifdef BOOST_IOSTREAMS_WINDOWS
 # include <io.h>         // low-level file i/o.
+# define WINDOWS_LEAN_AND_MEAN
+# include <windows.h>
 #else
 # include <sys/types.h>  // mode_t.
 # include <unistd.h>     // low-level file i/o.
@@ -54,6 +56,46 @@ void file_descriptor::open
 {
     using namespace std;
     m |= base;
+#ifdef BOOST_IOSTREAMS_WINDOWS //---------------------------------------------//
+    DWORD dwDesiredAccess;
+    DWORD dwCreationDisposition;
+    if ( (m & (BOOST_IOS::in | BOOST_IOS::out)) 
+             == 
+         (BOOST_IOS::in | BOOST_IOS::out) ) 
+    {
+        assert(!(m & BOOST_IOS::app));
+        dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
+        dwCreationDisposition = 
+            (m & BOOST_IOS::trunc) ?
+                OPEN_ALWAYS :
+                OPEN_EXISTING;
+    } else if (m & BOOST_IOS::in) {
+        assert(!(m & (BOOST_IOS::app |BOOST_IOS::trunc)));
+        dwDesiredAccess = GENERIC_READ;
+        dwCreationDisposition = OPEN_EXISTING;
+    } else if (m & BOOST_IOS::out) {
+        dwDesiredAccess = GENERIC_WRITE;
+        dwCreationDisposition = OPEN_ALWAYS;
+        if (m & BOOST_IOS::app)
+            pimpl_->flags_ |= impl::append;
+    }
+
+    HANDLE handle = 
+        ::CreateFileA( path.c_str(),
+                       dwDesiredAccess, 
+                       0,                      // dwShareMode
+                       NULL,                   // lpSecurityAttributes
+                       dwCreationDisposition,
+                       FILE_ATTRIBUTE_NORMAL,
+                       NULL );                 // hTemplateFile
+    if (handle != INVALID_HANDLE_VALUE) {
+        pimpl_->handle_ = handle;
+        pimpl_->flags_ |= impl::close_on_exit | impl::has_handle;
+    } else {
+        pimpl_->flags_ = 0;
+        throw BOOST_IOSTREAMS_FAILURE("bad open");
+    }
+#else // #ifdef BOOST_IOSTREAMS_WINDOWS //------------------------------------//
 
         // Calculate oflag argument to open.
 
@@ -75,80 +117,132 @@ void file_descriptor::open
     }
     if (m & BOOST_IOS::trunc)
         oflag |= O_CREAT;
-    #ifdef BOOST_IOSTREAMS_WINDOWS
-        if (m & BOOST_IOS::binary)
-            oflag |= O_BINARY;
-    #endif
 
         // Calculate pmode argument to open.
 
-    #if defined(BOOST_IOSTREAMS_POSIX) || defined(__CYGWIN__)
-        mode_t pmode = S_IRUSR | S_IWUSR |
-                       S_IRGRP | S_IWGRP |
-                       S_IROTH | S_IWOTH;
-    #else
-    # if !defined(__BORLANDC__)
-        int pmode = _S_IREAD | _S_IWRITE;
-    # endif
-    #endif
+    mode_t pmode = S_IRUSR | S_IWUSR |
+                   S_IRGRP | S_IWGRP |
+                   S_IROTH | S_IWOTH;
 
         // Open file.
 
-    #ifndef __BORLANDC__
-        fd_ = BOOST_RTL(open)(path.c_str(), oflag, pmode);
-    #else
-        fd_ = (m & BOOST_IOS::out) && 
-              (!(m & BOOST_IOS::in) || (m & BOOST_IOS::trunc)) 
-                  ?
-              BOOST_RTL(creat)(path.c_str(), 0) :
-              BOOST_RTL(open)(path.c_str(), oflag);
-    #endif
-
-    if (fd_ == -1)
+    int fd = BOOST_RTL(open)(path.c_str(), oflag, pmode);
+    if (fd == -1) {
         throw BOOST_IOSTREAMS_FAILURE("bad open");
-    close_ = true;
+    } else {
+        pimpl_->fd_ = fd;
+        pimpl_->flags_ = impl::close_on_exit;
+    }
+#endif // #ifndef BOOST_IOSTREAMS_WINDOWS //----------------------------------//
 }
 
 std::streamsize file_descriptor::read(char_type* s, std::streamsize n)
 {
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    if (pimpl_->flags_ & impl::has_handle) {
+        DWORD result;
+        if (!::ReadFile(pimpl_->handle_, s, n, &result, NULL))
+            throw detail::bad_read();
+        return static_cast<std::streamsize>(result);
+    }
+#endif
     errno = 0;
-    std::streamsize result = BOOST_RTL(read)(fd_, s, n);
+    std::streamsize result = BOOST_RTL(read)(pimpl_->fd_, s, n);
     if (errno != 0)
-        throw BOOST_IOSTREAMS_FAILURE("bad open");
+        throw detail::bad_read();
     return result;
 }
 
 void file_descriptor::write(const char_type* s, std::streamsize n)
 {
-    int result = BOOST_RTL(write)(fd_, s, n);
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    if (pimpl_->flags_ & impl::has_handle) {
+        if (pimpl_->flags_ & impl::append) {
+            ::SetFilePointer(pimpl_->handle_, 0, NULL, FILE_END);
+            if (::GetLastError() != NO_ERROR)
+                throw detail::bad_seek();
+        }
+        DWORD ignore;
+        if (!::WriteFile(pimpl_->handle_, s, n, &ignore, NULL))
+            throw detail::bad_write();
+        return;
+    }
+#endif
+    int result = BOOST_RTL(write)(pimpl_->fd_, s, n);
     if (result < n)
         throw detail::bad_write();
 }
 
-std::streamoff file_descriptor::seek
-    (std::streamoff off, BOOST_IOS::seekdir way)
+boost::intmax_t file_descriptor::seek
+    (boost::intmax_t off, BOOST_IOS::seekdir way)
 {
     using namespace std;
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    if (pimpl_->flags_ & impl::has_handle) {
+        LONG lDistanceToMove = static_cast<LONG>(off & 0xffffffff);
+        LONG lDistanceToMoveHigh = 
+            off < 0xffffffff ? 
+                static_cast<LONG>(off >> 32) :
+                0;
+        DWORD dwResultLow = 
+            ::SetFilePointer( pimpl_->handle_,
+                              lDistanceToMove,
+                              &lDistanceToMoveHigh,
+                              way == BOOST_IOS::beg ?
+                                  FILE_BEGIN :
+                                  way == BOOST_IOS::cur ?
+                                    FILE_CURRENT :
+                                    FILE_END );
+        if (::GetLastError() != NO_ERROR) {
+            throw detail::bad_seek();
+        } else {
+            return (static_cast<boost::intmax_t>(lDistanceToMoveHigh) << 32) + 
+                   dwResultLow;
+        }
+    }
+#endif
+    if ( off > (numeric_limits<long>::max)() ||
+         off < (numeric_limits<long>::min)() )
+    {
+        throw BOOST_IOSTREAMS_FAILURE("bad offset");
+    }
     std::streamoff result =
         #if !defined(__BORLANDC__)
             BOOST_RTL(lseek)
         #else
             lseek
         #endif
-            (fd_, off, way == BOOST_IOS::beg ?
-                           SEEK_SET :
-                           way == BOOST_IOS::cur ?
-                               SEEK_CUR :
-                               SEEK_END );
+            ( pimpl_->fd_, 
+              static_cast<long>(off), 
+              way == BOOST_IOS::beg ?
+                  SEEK_SET :
+                      way == BOOST_IOS::cur ?
+                          SEEK_CUR :
+                          SEEK_END );
     if (result == -1)
         throw detail::bad_seek();
     return result;
 }
 
-void file_descriptor::close()
+void file_descriptor::close() { close_impl(*pimpl_); }
+
+void file_descriptor::close_impl(impl& i)
 {
-    if (close_ && fd_ != -1 && BOOST_RTL(close)(fd_) == -1)
-        throw BOOST_IOSTREAMS_FAILURE("bad close");
+#ifdef BOOST_IOSTREAMS_WINDOWS
+    if (i.flags_ & impl::has_handle) {
+        if (!::CloseHandle(i.handle_))
+            throw BOOST_IOSTREAMS_FAILURE("bad close");
+        i.fd_ = -1;
+        i.flags_ = 0;
+        return;
+    } 
+#endif
+    if (i.fd_ != -1) {
+        if (BOOST_RTL(close)(i.fd_) == -1)
+            throw BOOST_IOSTREAMS_FAILURE("bad close");
+        i.fd_ = -1;
+        i.flags_ = 0;
+    }
 }
 
 } } // End namespaces iostreams, boost.
