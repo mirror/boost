@@ -12,6 +12,7 @@
         have some easier way to parse strings instead of files (done) 
 =============================================================================*/
 
+#include <ctime>
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
