@@ -43,6 +43,9 @@
 #endif 
 
 
+template <class T> struct see_type;
+template <int I> struct see_val;
+
 struct my_iterator_tag : public std::random_access_iterator_tag { };
 
 using boost::dummyT;
@@ -195,7 +198,6 @@ main()
 
       const_indirect_iterator j(ptr);
       boost::random_access_iterator_test(j, N, array);
-
     
       dummyT const*const* const_ptr = ptr;
       boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr), N, array);
