@@ -336,11 +336,12 @@
 //  Metrowerks CodeWarrior  --------------------------------------------------//
 
 # elif defined  __MWERKS__
-#   if __MWERKS__ <= 0x4000
+#   if __MWERKS__ <= 0x2400  // 6.0
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #   endif
-#   if __MWERKS__ <= 0x2301
+#   if __MWERKS__ <= 0x2301  // 5.3?
 #     define BOOST_NO_POINTER_TO_MEMBER_CONST
+#     define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #   endif
 #   if __MWERKS__ >= 0x2300
 #     define BOOST_SYSTEM_HAS_STDINT_H
