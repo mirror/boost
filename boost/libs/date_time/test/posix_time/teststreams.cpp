@@ -76,9 +76,77 @@ main()
   check("check time period output: "+ ss.str(), 
         ss.str() == std::string("[2002-May-01 12:10:05/2002-May-01 23:00:00]"));
 
+  ss.imbue(german); 
+  ss.str("");
+  ss << tp;
+  check("check time period output - german: "+ ss.str(), 
+        ss.str() == std::string("[01.Mai.2002 12:10:05/01.Mai.2002 23:00:00]"));
+
+  /****** test streaming in for time classes ******/
+  {
+    std::istringstream iss("01:02:03.000004 garbage");
+    iss >> td;
+    check("Stream in time_duration", td == time_duration(1,2,3,4));
+#ifndef BOOST_NO_CWCHAR
+    std::wistringstream wiss(L"01:02:03");//.000004");
+    wiss >> td;
+    check("Wide stream in time_duration", td == time_duration(1,2,3));
+#else
+    check("Wide stream in time_duration not supported by this compiler", false);
+#endif
+  }
+  {
+    std::istringstream iss("2003-May-13 01:02:03");
+    iss >> t1;
+    check("Stream in ptime", t1 == ptime(date(2003,May,13), time_duration(1,2,3)));
+    std::istringstream iss2("2003-January-13 01:02:03");
+    iss2 >> t1;
+    check("Stream in ptime2", t1 == ptime(date(2003,Jan,13), time_duration(1,2,3)));
+    std::istringstream iss3("2003-feb-13 11:10:09");
+    iss3 >> t1;
+    check("Stream in ptime3", t1 == ptime(date(2003,Feb,13), time_duration(11,10,9)));
+
+    try {
+          std::istringstream iss4("2003-xxx-13 11:10:09");
+          iss3 >> t1;
+          check("Stream bad ptime", false); //never reach here, bad month exception
+    }
+    catch(std::exception& e) {
+      std::cout << "Got expected exception: " << e.what() << std::endl;
+      check("Stream bad ptime", true); 
+    }
+
+#ifndef BOOST_NO_CWCHAR
+    std::wistringstream wiss(L"2003-May-23 03:20:10");
+    wiss >> t1;
+    check("Wide stream in ptime", t1 == ptime(date(2003,May,23), time_duration(3,20,10)));
+#else
+    check("Wide stream in ptime not supported by this compiler", false);
+#endif
+  }
+  {
+    date d1(2001,Aug,1), d2(2003,May,13);
+    time_duration td1(15,32,18,20304), td2(1,2,3);
+    time_period result(ptime(d1,td1), ptime(d2,td2));
+    std::istringstream iss("[2001-Aug-01 15:32:18.020304/2003-May-13 01:02:03]");
+    iss >> tp;
+    check("Stream in time_period", tp == result);
+#ifndef BOOST_NO_CWCHAR
+    d1 = date(2004,Jan,1);
+    d2 = date(2004,May,13);
+    td1 = time_duration(2,3,4);
+    td2 = time_duration(1,0,0);
+    result = time_period(ptime(d1,td1), ptime(d2,td2));
+    std::wistringstream wiss(L"[2004-Jan-01 02:03:04/2004-May-13 01:00:00]");
+    wiss >> tp;
+    check("Wide stream in time_period", tp == result);
+#else
+    check("Wide stream in time_period not supported by this compiler", false);
+#endif
+  }
 
 #else
-  check("All pass, no tests executed - Locales not supported", true);
+  check("No tests executed - Locales not supported by this compiler", false);
 
 #endif //BOOST_DATE_TIME_NO_LOCALE
 
