@@ -104,19 +104,8 @@ typedef long atomic_count;
 #  include <boost/detail/atomic_count_pthreads.hpp>
 #else
 
-// #warning Unrecognized platform, detail::atomic_count will not be thread safe
-
-namespace boost
-{
-
-namespace detail
-{
-
-typedef long atomic_count;
-
-}
-
-}
+// Use #define BOOST_DISABLE_THREADS to avoid the error
+#error Unrecognized threading platform
 
 #endif
 

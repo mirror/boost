@@ -82,7 +82,8 @@
 #  define BOOST_LWM_USE_PTHREADS
 #  include <boost/detail/lwm_pthreads.hpp>
 #else
-#  include <boost/detail/lwm_nop.hpp>
+// Use #define BOOST_DISABLE_THREADS to avoid the error
+#  error Unrecognized threading platform
 #endif
 
 #endif // #ifndef BOOST_DETAIL_LIGHTWEIGHT_MUTEX_HPP_INCLUDED
