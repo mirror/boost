@@ -79,60 +79,72 @@ namespace boost { namespace numeric { namespace ublas {
         // Construction and destruction
         explicit BOOST_UBLAS_INLINE
         unbounded_array (const A&a = A()):
-            size_ (0), data_ (alloc.allocate (0)) {
+            size_ (0), data_ (0) {
         }
         explicit BOOST_UBLAS_INLINE
         unbounded_array (size_type size, const A&a = A()):
-            size_ (size), data_ (alloc.allocate (size)) {
-            const value_type v = value_type();
-            for (iterator i = begin(); i != end(); ++i) {
-                alloc.construct (&(*i), v);
+            size_ (size) {
+            if (size_) {
+                data_ = alloc.allocate (size_);
+                const value_type v = value_type();
+                for (iterator i = begin(); i != end(); ++i) {
+                alloc.construct (&(*i), v); 
+                }
             }
         }
         BOOST_UBLAS_INLINE
         unbounded_array (size_type size, no_init):
-            size_ (size), data_ (alloc.allocate (size)) {
+            size_ (size) {
+            if (size_)
+                data_ = alloc.allocate (size_);
         }
         BOOST_UBLAS_INLINE
         unbounded_array (const unbounded_array &a):
-            size_ (a.size_), data_ (alloc.allocate (a.size_)) {
-            const_iterator ai = a.begin();
-            for (iterator i = begin(); i != end(); ++i) {
-                alloc.construct (&(*i), *ai);
-                ++ai;
+            size_ (a.size_) {
+            data_ = alloc.allocate (a.size_);
+            if (size_) {
+                const_iterator ai = a.begin();
+                for (iterator i = begin(); i != end(); ++i) {
+                    alloc.construct (&(*i), *ai);
+                    ++ai;
+                }
             }
         }
         BOOST_UBLAS_INLINE
         ~unbounded_array () {
-            alloc.deallocate (data_, size_);
+            if (size_)
+                alloc.deallocate (data_, size_);
         }
 
         // Resizing
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             if (size != size_) {
-                pointer data = alloc.allocate (size);
-                if (preserve) {
-                    const_iterator si = begin();
-                    pointer di = data;
-                    if (size < size_) {
-                        for (; di != data + size; ++di) {
-                            alloc.construct (&(*di), *si);
-                            ++si;
+                if  (size) {
+                    pointer data = alloc.allocate (size);
+                    if (preserve) {
+                        const_iterator si = begin();
+                        pointer di = data;
+                        if (size < size_) {
+                            for (; di != data + size; ++di) {
+                                alloc.construct (&(*di), *si);
+                                ++si;
+                            }
                         }
-                    }
-                    else {
-                        for (; si != end(); ++si) {
-                            alloc.construct (&(*di), *si);
-                            ++di;
+                        else {
+                            for (; si != end(); ++si) {
+                                alloc.construct (&(*di), *si);
+                                ++di;
+                            }
+                            const value_type v = value_type();
+                            for (; di != data + size; ++di) {
+                                alloc.construct (&(*di), v);
+                            }
                         }
-                        const value_type v = value_type();
-                        for (; di != data + size; ++di) {
-                            alloc.construct (&(*di), v);
-                        }
-                    }
-            
+                    }            
                 }
+                else
+                    data = 0;
                 alloc.deallocate (data_, size_);
                 size_ = size;
                 data_ = data;
