@@ -1,6 +1,8 @@
-#  (C) Copyright Andreas Huber Doenni 2004
+##############################################################################
+# (c) Copyright Andreas Huber Doenni 2004
 # Distributed under the Boost Software License, Version 1.0. (See accompany-
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+##############################################################################
 
 subproject libs/fsm/example ;
 
@@ -65,14 +67,18 @@ rule fsm-bitmachine-build ( tag : no-of-bits-list + : additional-options * )
 
 stage run
   : [ fsm-bitmachine-build Normal : $(no-of-bits-list) ]
-    [ fsm-bitmachine-build Custom : $(no-of-bits-list) : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
-    [ fsm-bitmachine-build Native : $(no-of-bits-list) : <define>BOOST_FSM_USE_NATIVE_RTTI ]
-    [ fsm-st-example-build Camera : Camera : Camera Configuring Main Shooting ]
+    [ fsm-bitmachine-build Custom
+        : $(no-of-bits-list) : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+    [ fsm-bitmachine-build Native
+        : $(no-of-bits-list) : <define>BOOST_FSM_USE_NATIVE_RTTI ]
+    [ fsm-st-example-build Camera
+        : Camera : Camera Configuring Main Shooting ]
     [ fsm-st-example-build Handcrafted : Handcrafted : Handcrafted ]
     [ fsm-st-example-build Keyboard : Keyboard : Keyboard ]
     [ fsm-st-example-build PingPongSingle : PingPong : PingPong ]
     [ fsm-mt-example-build PingPongMulti1 : PingPong : PingPong ]
-    [ fsm-mt-example-build PingPongMulti2 : PingPong : PingPong : <define>USE_TWO_THREADS ]
+    [ fsm-mt-example-build PingPongMulti2
+        : PingPong : PingPong : <define>USE_TWO_THREADS ]
     [ fsm-st-example-build StopWatch : StopWatch : StopWatch ]
     [ fsm-st-example-build StopWatch2 : StopWatch : StopWatch2 ]
   : common-variant-tag
