@@ -35,6 +35,9 @@ namespace detail{
  *   - Removed static make_guard's and make_obj_guard's, so that the code
  *     will work even if BOOST_NO_MEMBER_TEMPLATES is defined. This forces
  *     us to move some private ctors to public, though.
+ *
+ * NB: CodeWarrior Pro 8 seems to have problems looking up safe_execute
+ * without an explicit qualification.
  */
 
 class scope_guard_impl_base
@@ -73,7 +76,7 @@ class scope_guard_impl0:public scope_guard_impl_base
 {
 public:
   scope_guard_impl0(F fun):fun_(fun){}
-  ~scope_guard_impl0(){safe_execute(*this);}
+  ~scope_guard_impl0(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){fun_();}
 
 protected:
@@ -92,7 +95,7 @@ class scope_guard_impl1:public scope_guard_impl_base
 {
 public:
   scope_guard_impl1(F fun,P1 p1):fun_(fun),p1_(p1){}
-  ~scope_guard_impl1(){safe_execute(*this);}
+  ~scope_guard_impl1(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){fun_(p1_);}
 
 protected:
@@ -111,7 +114,7 @@ class scope_guard_impl2:public scope_guard_impl_base
 {
 public:
   scope_guard_impl2(F fun,P1 p1,P2 p2):fun_(fun),p1_(p1),p2_(p2){}
-  ~scope_guard_impl2(){safe_execute(*this);}
+  ~scope_guard_impl2(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){fun_(p1_,p2_);}
 
 protected:
@@ -131,7 +134,7 @@ class scope_guard_impl3:public scope_guard_impl_base
 {
 public:
   scope_guard_impl3(F fun,P1 p1,P2 p2,P3 p3):fun_(fun),p1_(p1),p2_(p2),p3_(p3){}
-  ~scope_guard_impl3(){safe_execute(*this);}
+  ~scope_guard_impl3(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){fun_(p1_,p2_,p3_);}
 
 protected:
@@ -153,7 +156,7 @@ class scope_guard_impl4:public scope_guard_impl_base
 public:
   scope_guard_impl4(F fun,P1 p1,P2 p2,P3 p3,P4 p4):
     fun_(fun),p1_(p1),p2_(p2),p3_(p3),p4_(p4){}
-  ~scope_guard_impl4(){safe_execute(*this);}
+  ~scope_guard_impl4(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){fun_(p1_,p2_,p3_,p4_);}
 
 protected:
@@ -176,7 +179,7 @@ class obj_scope_guard_impl0:public scope_guard_impl_base
 {
 public:
   obj_scope_guard_impl0(Obj& obj,MemFun mem_fun):obj_(obj),mem_fun_(mem_fun){}
-  ~obj_scope_guard_impl0(){safe_execute(*this);}
+  ~obj_scope_guard_impl0(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){(obj_.*mem_fun_)();}
 
 protected:
@@ -196,7 +199,7 @@ class obj_scope_guard_impl1:public scope_guard_impl_base
 public:
   obj_scope_guard_impl1(Obj& obj,MemFun mem_fun,P1 p1):
     obj_(obj),mem_fun_(mem_fun),p1_(p1){}
-  ~obj_scope_guard_impl1(){safe_execute(*this);}
+  ~obj_scope_guard_impl1(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){(obj_.*mem_fun_)(p1_);}
 
 protected:
@@ -219,7 +222,7 @@ public:
   obj_scope_guard_impl2(Obj& obj,MemFun mem_fun,P1 p1,P2 p2):
     obj_(obj),mem_fun_(mem_fun),p1_(p1),p2_(p2)
   {}
-  ~obj_scope_guard_impl2(){safe_execute(*this);}
+  ~obj_scope_guard_impl2(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){(obj_.*mem_fun_)(p1_,p2_);}
 
 protected:
@@ -243,7 +246,7 @@ public:
   obj_scope_guard_impl3(Obj& obj,MemFun mem_fun,P1 p1,P2 p2,P3 p3):
     obj_(obj),mem_fun_(mem_fun),p1_(p1),p2_(p2),p3_(p3)
   {}
-  ~obj_scope_guard_impl3(){safe_execute(*this);}
+  ~obj_scope_guard_impl3(){scope_guard_impl_base::safe_execute(*this);}
   void execute(){(obj_.*mem_fun_)(p1_,p2_,p3_);}
 
 protected:
