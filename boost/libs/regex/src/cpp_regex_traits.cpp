@@ -21,7 +21,7 @@
 
 #include <boost/regex/config.hpp>
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC >= 1300) && !defined(_NATIVE_WCHAR_T_DEFINED)
+#if defined(BOOST_REGEX_HAS_SHORT_WCHAR_T) && !defined(_NATIVE_WCHAR_T_DEFINED)
 #  pragma message ("disabling support for class cpp_regex_traits<wchar_t> - rebuild with /Zc:wchar_t if you really need this")
 #  define BOOST_NO_WREGEX
 #endif
