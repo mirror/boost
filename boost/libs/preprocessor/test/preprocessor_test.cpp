@@ -11,6 +11,7 @@
  */
 
 #include <boost/preprocessor/empty.hpp>
+#include <boost/preprocessor/identity.hpp>
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -22,12 +23,12 @@
 struct Container
 {
 #define BOOST_PP_DEF(CV)\
-  CV int& operator[](int i) CV;
+  CV() int& operator[](int i) CV();
 
-  BOOST_PP_DEF(BOOST_PP_EMPTY())
-  BOOST_PP_DEF(const)
-  BOOST_PP_DEF(volatile)
-  BOOST_PP_DEF(const volatile)
+  BOOST_PP_DEF(BOOST_PP_EMPTY)
+  BOOST_PP_DEF(BOOST_PP_IDENTITY(const))
+  BOOST_PP_DEF(BOOST_PP_IDENTITY(volatile))
+  BOOST_PP_DEF(BOOST_PP_IDENTITY(const volatile))
 
 #undef BOOST_PP_DEF
 };
