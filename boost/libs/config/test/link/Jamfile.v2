@@ -1,0 +1,7 @@
+# copyright John Maddock 2003
+
+lib link_test : link_test.cpp 
+    : <link>shared <link-runtime>shared
+    : 
+        debug release
+    ;
