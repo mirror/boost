@@ -1,12 +1,5 @@
-#ifndef BOOST_ASSERT_HPP_INCLUDED
-#define BOOST_ASSERT_HPP_INCLUDED
-
-#if _MSC_VER >= 1020
-#pragma once
-#endif
-
 //
-//  boost/assert.hpp
+//  boost/assert.hpp - BOOST_ASSERT(expr)
 //
 //  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
 //
@@ -15,38 +8,29 @@
 //  This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 //
-
-//
-//  When BOOST_DEBUG is not defined, it defaults to 0 (off)
-//  for compatibility with programs that do not expect asserts
-//  in the smart pointer class templates.
-//
-//  This default may be changed after an initial transition period.
+//  Note: There are no include guards. This is intentional.
 //
 
-#ifndef BOOST_DEBUG
-#define BOOST_DEBUG 0
-#endif
+#undef BOOST_ASSERT
 
-#if BOOST_DEBUG
+#if defined(BOOST_DISABLE_ASSERTS)
 
-#include <assert.h>
+# define BOOST_ASSERT(expr) ((void)0)
 
-#ifndef BOOST_ASSERT
+#elif defined(BOOST_ENABLE_ASSERT_HANDLER)
 
 #include <boost/current_function.hpp>
 
-bool boost_error(char const * expr, char const * func, char const * file, long line);
+namespace boost
+{
 
-# define BOOST_ASSERT(expr) ((expr) || !boost_error(#expr, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__) || (assert(expr), true))
+void assertion_failed(char const * expr, char const * function, char const * file, long line); // user defined
 
-#endif // #ifndef BOOST_ASSERT
+} // namespace boost
 
-#else // #if BOOST_DEBUG
+#define BOOST_ASSERT(expr) ((expr)? ((void)0): ::boost::assertion_failed(#expr, BOOST_CURRENT_FUNCTION, __FILE__, __LINE__))
 
-#undef BOOST_ASSERT
-#define BOOST_ASSERT(expr) ((void)0)
-
-#endif // #if BOOST_DEBUG
-
-#endif // #ifndef BOOST_ASSERT_HPP_INCLUDED
+#else
+# include <assert.h>
+# define BOOST_ASSERT(expr) assert(expr)
+#endif

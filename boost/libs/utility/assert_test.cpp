@@ -1,10 +1,3 @@
-#if defined(_MSC_VER) && !defined(__ICL)
-#pragma warning(disable: 4786)  // identifier truncated in debug info
-#pragma warning(disable: 4710)  // function not inlined
-#pragma warning(disable: 4711)  // function selected for automatic inline expansion
-#pragma warning(disable: 4514)  // unreferenced inline removed
-#endif
-
 //
 //  assert_test.cpp - a test for boost/assert.hpp
 //
@@ -16,18 +9,97 @@
 //  warranty, and with no claim as to its suitability for any purpose.
 //
 
-#define BOOST_DEBUG 1
+#include <boost/detail/lightweight_test.hpp>
 
+#include <boost/assert.hpp>
+
+void test_default()
+{
+    int x = 1;
+
+    BOOST_ASSERT(1);
+    BOOST_ASSERT(x);
+    BOOST_ASSERT(x == 1);
+    BOOST_ASSERT(&x);
+}
+
+#define BOOST_DISABLE_ASSERTS
+#include <boost/assert.hpp>
+
+void test_disabled()
+{
+    int x = 1;
+
+    BOOST_ASSERT(1);
+    BOOST_ASSERT(x);
+    BOOST_ASSERT(x == 1);
+    BOOST_ASSERT(&x);
+
+    BOOST_ASSERT(0);
+    BOOST_ASSERT(!x);
+    BOOST_ASSERT(x == 0);
+
+    void * p = 0;
+
+    BOOST_ASSERT(p);
+
+    // supress warnings
+    p = &x;
+    p = &p;
+}
+
+#undef BOOST_DISABLE_ASSERTS
+
+#define BOOST_ENABLE_ASSERT_HANDLER
 #include <boost/assert.hpp>
 #include <cstdio>
 
-bool boost_error(char const * expr, char const * func, char const * file, long line)
+int handler_invoked = 0;
+
+void boost::assertion_failed(char const * expr, char const * function, char const * file, long line)
 {
-    std::printf("%s(%ld): Assertion '%s' failed in function '%s'\n", file, line, expr, func);
-    return true; // fail w/ standard assert()
+    std::printf("Expression: %s\nFunction: %s\nFile: %s\nLine: %ld\n\n", expr, function, file, line);
+    ++handler_invoked;
 }
+
+struct X
+{
+    static void f()
+    {
+        BOOST_ASSERT(0);
+    }
+};
+
+void test_handler()
+{
+    int x = 1;
+
+    BOOST_ASSERT(1);
+    BOOST_ASSERT(x);
+    BOOST_ASSERT(x == 1);
+    BOOST_ASSERT(&x);
+
+    BOOST_ASSERT(0);
+    BOOST_ASSERT(!x);
+    BOOST_ASSERT(x == 0);
+
+    void * p = 0;
+
+    BOOST_ASSERT(p);
+
+    X::f();
+
+    BOOST_ASSERT(handler_invoked == 5);
+    BOOST_TEST(handler_invoked == 5);
+}
+
+#undef BOOST_ENABLE_ASSERT_HANDLER
 
 int main()
 {
-    BOOST_ASSERT(0 == 1);
+    test_default();
+    test_disabled();
+    test_handler();
+
+    return boost::report_errors();
 }
