@@ -69,8 +69,9 @@ bool split_pred<OutputIterator, charT, Traits1, Alloc1, Alloc2>::operator()
       {
          *(*p_out) = static_cast<string_type>(what[i]);
          ++(*p_out);
-         return --*p_max;
+         if(0 == --*p_max) return false;
       }
+      return *p_max != 0;
    }
    else
    {
