@@ -74,6 +74,15 @@ public:
     }
 
     template<typename Y>
+    weak_ptr(weak_ptr<Y> const & r, detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
+    {
+        if (px == 0)
+        {
+            throw std::bad_cast();
+        }
+    }
+
+    template<typename Y>
     weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
     {
         px = r.px;
@@ -168,6 +177,17 @@ template<class T, class U> weak_ptr<T> shared_static_cast(weak_ptr<U> const & r)
 template<class T, class U> weak_ptr<T> shared_dynamic_cast(weak_ptr<U> const & r)
 {
     return weak_ptr<T>(r, detail::dynamic_cast_tag());
+}
+
+template<typename T, typename U> weak_ptr<T> shared_polymorphic_cast(weak_ptr<U> const & r)
+{
+    return weak_ptr<T>(r, detail::polymorphic_cast_tag());
+}
+
+template<typename T, typename U> weak_ptr<T> shared_polymorphic_downcast(weak_ptr<U> const & r)
+{
+    BOOST_ASSERT(dynamic_cast<T *>(r.get()) == r.get());
+    return shared_static_cast<T>(r);
 }
 
 // get_pointer() enables boost::mem_fn to recognize weak_ptr

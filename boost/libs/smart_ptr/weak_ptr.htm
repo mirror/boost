@@ -71,6 +71,10 @@ pointed to. <b>T</b> must meet the smart pointer
     weak_ptr&lt;T&gt <a href="#shared_static_cast">shared_static_cast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws
   template&lt;typename T, typename U&gt;
     weak_ptr&lt;T&gt <a href="#shared_dynamic_cast">shared_dynamic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);
+  template&lt;typename T, typename U&gt;
+    weak_ptr&lt;T&gt <a href="#shared_polymorphic_cast">shared_polymorphic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);
+  template&lt;typename T, typename U&gt;
+    weak_ptr&lt;T&gt <a href="#shared_polymorphic_downcast">shared_polymorphic_downcast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws
 
 }</pre>
 
@@ -192,18 +196,34 @@ Provided as an aid to generic programming.</p>
 
 <h3><a name="shared_static_cast">shared_static_cast</a></h3>
 <pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt <a href="#shared_static_cast">shared_static_cast</a>(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
+  weak_ptr&lt;T&gt shared_static_cast(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
 <p>Perform a <b>static_cast</b> on the stored pointer, returning another <b>weak_ptr</b>.
 The resulting smart pointer will share its use count with the original pointer.</p>
 
 <h3><a name="shared_dynamic_cast">shared_dynamic_cast</a></h3>
 <pre>template&lt;typename T, typename U&gt;
-  weak_ptr&lt;T&gt <a href="#shared_dynamic_cast">shared_dynamic_cast</a>(weak_ptr&lt;U&gt; const &amp; r);</pre>
+  weak_ptr&lt;T&gt shared_dynamic_cast(weak_ptr&lt;U&gt; const &amp; r);</pre>
 <p>Perform a <b>dynamic_cast</b> on the stored pointer, returning another <b>weak_ptr</b>.
 The resulting smart pointer will share its use count with the original pointer unless the result of the
 cast is 0. The only exception which may be thrown is <b>std::bad_alloc</b>, which may be thrown during the
 construction of the new <b>weak_ptr</b> if the result of the cast is 0. If an exception is thrown, the
 cast has no effect.</p>
+
+<h3><a name="shared_polymorphic_cast">shared_polymorphic_cast</a></h3>
+<pre>template&lt;typename T, typename U&gt;
+  weak_ptr&lt;T&gt shared_polymorphic_cast(weak_ptr&lt;U&gt; const &amp; r);</pre>
+<p>Perform a <a href="../conversion/cast.htm#Polymorphic_cast"><b>polymorphic_cast</b><a> on the stored pointer,
+returning another <b>weak_ptr</b>.
+The resulting smart pointer will share its use count with the original pointer.
+The only exception which may be thrown is <b>std::bad_cast</b>, if the pointer type can not be converted.
+If an exception is thrown, the cast has no effect.</p>
+
+<h3><a name="shared_polymorphic_downcast">shared_polymorphic_downcast</a></h3>
+<pre>template&lt;typename T, typename U&gt;
+  weak_ptr&lt;T&gt shared_polymorphic_downcast(weak_ptr&lt;U&gt; const &amp; r); // never throws</pre>
+<p>Perform a <a href="../conversion/cast.htm#Polymorphic_cast"><b>polymorphic_downcast</b><a> on the stored pointer,
+returning another <b>weak_ptr</b>.
+The resulting smart pointer will share its use count with the original pointer.</p>
 
 <hr>
 

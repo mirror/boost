@@ -43,6 +43,7 @@ namespace detail
 
 struct static_cast_tag {};
 struct dynamic_cast_tag {};
+struct polymorphic_cast_tag {};
 
 template<typename T> struct shared_ptr_traits
 {
@@ -111,6 +112,15 @@ public:
         if (px == 0) // need to allocate new counter -- the cast failed
         {
             pn = detail::shared_count(static_cast<element_type *>(0), deleter());
+        }
+    }
+
+    template<typename Y>
+    shared_ptr(shared_ptr<Y> const & r, detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
+    {
+        if (px == 0)
+        {
+            throw std::bad_cast();
         }
     }
 
@@ -219,7 +229,7 @@ template<typename T> inline bool operator<(shared_ptr<T> const & a, shared_ptr<T
     return std::less<T*>()(a.get(), b.get());
 }
 
-template<typename T> void swap(shared_ptr<T> & a, shared_ptr<T> & b)
+template<typename T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b)
 {
     a.swap(b);
 }
@@ -232,6 +242,17 @@ template<typename T, typename U> shared_ptr<T> shared_static_cast(shared_ptr<U> 
 template<typename T, typename U> shared_ptr<T> shared_dynamic_cast(shared_ptr<U> const & r)
 {
     return shared_ptr<T>(r, detail::dynamic_cast_tag());
+}
+
+template<typename T, typename U> shared_ptr<T> shared_polymorphic_cast(shared_ptr<U> const & r)
+{
+    return shared_ptr<T>(r, detail::polymorphic_cast_tag());
+}
+
+template<typename T, typename U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<U> const & r)
+{
+    BOOST_ASSERT(dynamic_cast<T *>(r.get()) == r.get());
+    return shared_static_cast<T>(r);
 }
 
 // get_pointer() enables boost::mem_fn to recognize shared_ptr

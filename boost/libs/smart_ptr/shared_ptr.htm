@@ -97,6 +97,10 @@ function must be passed in, or the pointed-to object must have a trivial destruc
     shared_ptr&lt;T&gt <a href="#shared_static_cast">shared_static_cast</a>(shared_ptr&lt;U&gt; const &amp; r); // never throws
   template&lt;typename T, typename U&gt;
     shared_ptr&lt;T&gt <a href="#shared_dynamic_cast">shared_dynamic_cast</a>(shared_ptr&lt;U&gt; const &amp; r);
+  template&lt;typename T, typename U&gt;
+    shared_ptr&lt;T&gt <a href="#shared_polymorphic_cast">shared_polymorphic_cast</a>(shared_ptr&lt;U&gt; const &amp; r);
+  template&lt;typename T, typename U&gt;
+    shared_ptr&lt;T&gt <a href="#shared_polymorphic_downcast">shared_polymorphic_downcast</a>(shared_ptr&lt;U&gt; const &amp; r); // never throws
 
 }</pre>
 
@@ -244,7 +248,7 @@ Provided as an aid to generic programming.</p>
 
 <h3><a name="shared_static_cast">shared_static_cast</a></h3>
 <pre>template&lt;typename T, typename U&gt;
-  shared_ptr&lt;T&gt <a href="#shared_static_cast">shared_static_cast</a>(shared_ptr&lt;U&gt; const &amp; r); // never throws</pre>
+  shared_ptr&lt;T&gt shared_static_cast(shared_ptr&lt;U&gt; const &amp; r); // never throws</pre>
 <p>Perform a <b>static_cast</b> on the stored pointer, returning another <b>shared_ptr</b>.
 The resulting smart pointer will share its use count with the original pointer.</p>
 <p>Note that the seemingly equivalent expression</p>
@@ -253,7 +257,7 @@ The resulting smart pointer will share its use count with the original pointer.<
 
 <h3><a name="shared_dynamic_cast">shared_dynamic_cast</a></h3>
 <pre>template&lt;typename T, typename U&gt;
-  shared_ptr&lt;T&gt <a href="#shared_dynamic_cast">shared_dynamic_cast</a>(shared_ptr&lt;U&gt; const &amp; r);</pre>
+  shared_ptr&lt;T&gt shared_dynamic_cast(shared_ptr&lt;U&gt; const &amp; r);</pre>
 <p>Perform a <b>dynamic_cast</b> on the stored pointer, returning another <b>shared_ptr</b>.
 The resulting smart pointer will share its use count with the original pointer unless the result of the
 cast is 0. The only exception which may be thrown is <b>std::bad_alloc</b>, which may be thrown during the
@@ -262,6 +266,22 @@ cast has no effect.</p>
 <p>Note that the seemingly equivalent expression</p>
 <blockquote><code>shared_ptr&lt;T&gt;(dynamic_cast&lt;T*&gt;(r.get()))</code></blockquote>
 <p>will eventually result in undefined behavior, attempting to delete the same object twice.</p>
+
+<h3><a name="shared_polymorphic_cast">shared_polymorphic_cast</a></h3>
+<pre>template&lt;typename T, typename U&gt;
+  shared_ptr&lt;T&gt shared_polymorphic_cast(shared_ptr&lt;U&gt; const &amp; r);</pre>
+<p>Perform a <a href="../conversion/cast.htm#Polymorphic_cast"><b>polymorphic_cast</b><a> on the stored pointer,
+returning another <b>shared_ptr</b>.
+The resulting smart pointer will share its use count with the original pointer.
+The only exception which may be thrown is <b>std::bad_cast</b>, if the pointer type can not be converted.
+If an exception is thrown, the cast has no effect.</p>
+
+<h3><a name="shared_polymorphic_downcast">shared_polymorphic_downcast</a></h3>
+<pre>template&lt;typename T, typename U&gt;
+  shared_ptr&lt;T&gt shared_polymorphic_downcast(shared_ptr&lt;U&gt; const &amp; r); // never throws</pre>
+<p>Perform a <a href="../conversion/cast.htm#Polymorphic_cast"><b>polymorphic_downcast</b><a> on the stored pointer,
+returning another <b>shared_ptr</b>.
+The resulting smart pointer will share its use count with the original pointer.</p>
 
 <h2><a name="example">Example</a></h2>
 
