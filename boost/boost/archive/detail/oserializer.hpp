@@ -472,13 +472,13 @@ struct save_pointer_type {
         #else
             // otherwise remove the const
         #endif
+        const basic_pointer_oserializer * bpos_ptr =  register_type(ar, * t);
         if(NULL == t){
             basic_oarchive & boa = boost::smart_cast_reference<basic_oarchive &>(ar);
             boa.save_null_pointer();
             save_access::end_preamble(ar);
             return;
         }
-        const basic_pointer_oserializer * bpos_ptr =  register_type(ar, * t);
         save(ar, * t, bpos_ptr);
     };
 };
