@@ -218,7 +218,8 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
          ++i;
          continue;
       }
-      if(fs::exists(m_boost_path / p.branch_path() / include_file))
+      fs::path test_file(m_boost_path / p.branch_path() / include_file);
+      if(fs::exists(test_file) && !fs::is_directory(test_file) && (p.branch_path().string() != "boost"))
       {
          if(!m_dependencies.count(p.branch_path() / include_file)) 
             m_dependencies[p.branch_path() / include_file] = p;
@@ -250,7 +251,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
    //
    // this regex catches boost/libname.hpp or boost/libname/whatever:
    //
-   static const boost::regex lib1("boost/([^\\./]+).*");
+   static const boost::regex lib1("boost/([^\\./]+)(?!detail).*");
    boost::smatch swhat;
    if(boost::regex_match(p.string(), swhat, lib1))
    {
@@ -259,7 +260,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
    //
    // and this one catches boost/x/y/whatever (for example numeric/ublas):
    //
-   static const boost::regex lib2("boost/([^/]+/[^/]+)/.*");
+   static const boost::regex lib2("boost/([^/]+/[^/]+)/(?!detail).*");
    if(boost::regex_match(p.string(), swhat, lib2))
    {
       add_dependent_lib(swhat.str(1), p);
