@@ -110,6 +110,10 @@ int main( int argc, char * argv[] )
     c = numeric_cast<signed char>( small_negative_value );
     assert( c == -1 );
 
+    // These tests courtesy of Joe R NWP Swatosh<joe.r.swatosh@usace.army.mil>
+    assert( 0.0f == numeric_cast<float>( 0.0 ) );
+    assert( 0.0 == numeric_cast<double>( 0.0 ) );
+    
     //  tests which should result in errors being detected
 
     caught_exception = false;
