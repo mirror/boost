@@ -22,6 +22,13 @@ void special_values_tests()
   date_duration dd(1234);
   date d(2003,Oct,31);
 
+#if !defined(DATE_TIME_NO_DEFAULT_CONSTRUCTOR)
+  { // default constructor
+    ptime def;
+    check("Default constructor", def == ptime(not_a_date_time));
+  }
+#endif // DATE_TIME_NO_DEFAULT_CONSTRUCTOR
+
   { // special values construction tests
     ptime p_sv1(pos_infin);
     std::string s("+infinity");

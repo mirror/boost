@@ -16,6 +16,10 @@ main()
   using namespace boost::gregorian;
 
   //various constructors
+#if !defined(DATE_TIME_NO_DEFAULT_CONSTRUCTOR)
+  date def;
+  check("Default constructor", def == date(not_a_date_time));
+#endif
   date d(2000,1,1);
   date d1(1900,1,1);
   date d2 = d;
