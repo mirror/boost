@@ -73,6 +73,7 @@ public:
                          const geometric_distribution& y)
   { return x._log_p == y._log_p && x._rng == y._rng; }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const geometric_distribution& gd)
@@ -89,6 +90,8 @@ public:
     gd.init();
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const geometric_distribution& rhs) const

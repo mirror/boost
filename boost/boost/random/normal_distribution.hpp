@@ -94,6 +94,7 @@ public:
       x._valid == y._valid && x._rng == y._rng;
   }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const normal_distribution& nd)
@@ -112,6 +113,8 @@ public:
        >> std::ws >> nd._r1;
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const normal_distribution& rhs) const

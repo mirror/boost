@@ -71,6 +71,7 @@ public:
                          const uniform_on_sphere& y)
   { return x._dim == y._dim && x._rng == y._rng; }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_on_sphere& sd)
@@ -87,6 +88,8 @@ public:
     sd._container.resize(sd._dim);
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const uniform_on_sphere& rhs) const

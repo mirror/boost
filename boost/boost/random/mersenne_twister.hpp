@@ -125,6 +125,8 @@ public:
   static bool validation(result_type v) { return val == v; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const mersenne_twister& mt)
@@ -143,6 +145,7 @@ public:
     mt.i = n;
     return is;
   }
+#endif
 
   friend bool operator==(const mersenne_twister& x, const mersenne_twister& y)
   {

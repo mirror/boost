@@ -103,6 +103,7 @@ public:
     return x._alpha == y._alpha && x._rng == y._rng;
   }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const gamma_distribution& gd)
@@ -119,6 +120,8 @@ public:
     gd.init();
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const gamma_distribution& rhs) const

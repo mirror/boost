@@ -69,6 +69,7 @@ public:
     return x._t == y._t && x._rng == y._rng;
   }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const binomial_distribution& bd)
@@ -90,6 +91,8 @@ public:
   {
     return _t == rhs._t && _rng == rhs._rng;
   }
+#endif
+
 #endif
 private:
   adaptor_type _rng;

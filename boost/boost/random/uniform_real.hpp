@@ -65,6 +65,7 @@ public:
   friend bool operator==(const uniform_real& x, const uniform_real& y)
   { return x._min == y._min && x._max == y._max && x._rng == y._rng; }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_real& ud)
@@ -80,6 +81,8 @@ public:
     is >> std::ws >> ud._min >> std::ws >> ud._max;
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const uniform_real& rhs) const

@@ -56,10 +56,12 @@ public:
   { return _p > RealType(0) && (*_rng)() <= _threshold; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
   friend bool operator==(const bernoulli_distribution& x, 
                          const bernoulli_distribution& y)
   { return x._threshold == y._threshold && *x._rng == *y._rng; }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const bernoulli_distribution& bd)
@@ -76,6 +78,8 @@ public:
     bd.init();
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const bernoulli_distribution& rhs) const

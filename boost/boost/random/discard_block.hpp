@@ -72,6 +72,8 @@ public:
   static bool validation(result_type x) { return true; }  // dummy
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const discard_block& s)
@@ -87,6 +89,7 @@ public:
     is >> s._rng >> std::ws >> s._n >> std::ws;
     return is;
   }
+#endif
 
   friend bool operator==(const discard_block& x, const discard_block& y)
   { return x._rng == y._rng && x._n == y._n; }

@@ -87,6 +87,8 @@ public:
   static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const shuffle_output& s)
@@ -106,6 +108,7 @@ public:
       is >> s.v[i] >> std::ws;
     return is;
   }
+#endif
 
   friend bool operator==(const shuffle_output& x, const shuffle_output& y)
   { return x._rng == y._rng && x.y == y.y && std::equal(x.v, x.v+k, y.v); }

@@ -71,6 +71,7 @@ public:
     return x._median == y._median && x._sigma == y._sigma && x._rng == y._rng; 
   }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const cauchy_distribution& cd)
@@ -86,6 +87,8 @@ public:
     is >> std::ws >> cd._median >> std::ws >> cd._sigma;
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const cauchy_distribution& rhs) const

@@ -82,6 +82,8 @@ public:
   static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const additive_combine& r)
@@ -91,6 +93,7 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, additive_combine& r)
   { is >> r._mlcg1 >> std::ws >> r._mlcg2; return is; }
+#endif
 
   friend bool operator==(const additive_combine& x, const additive_combine& y)
   { return x._mlcg1 == y._mlcg1 && x._mlcg2 == y._mlcg2; }

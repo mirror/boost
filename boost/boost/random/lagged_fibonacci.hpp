@@ -95,6 +95,8 @@ public:
   }
   
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const lagged_fibonacci& f)
@@ -114,6 +116,8 @@ public:
       is >> f.x[i] >> std::ws;
     return is;
   }
+#endif
+
   friend bool operator==(const lagged_fibonacci& x, const lagged_fibonacci& y)
   { return x.i == y.i && std::equal(x.x, x.x+long_lag, y.x); }
   friend bool operator!=(const lagged_fibonacci& x,
@@ -295,6 +299,8 @@ public:
   }
   
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const lagged_fibonacci_01&f)
@@ -323,6 +329,7 @@ public:
     }
     return is;
   }
+#endif
 
   friend bool operator==(const lagged_fibonacci_01& x,
                          const lagged_fibonacci_01& y)

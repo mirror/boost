@@ -80,6 +80,8 @@ public:
   static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const xor_combine& s)
@@ -95,6 +97,7 @@ public:
     is >> s._rng1 >> std::ws >> s._rng2 >> std::ws;
     return is;
   }
+#endif
 
   friend bool operator==(const xor_combine& x, const xor_combine& y)
   { return x._rng1 == y._rng1 && x._rng2 == y._rng2; }

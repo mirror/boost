@@ -239,6 +239,7 @@ public:
   friend bool operator==(const uniform_int& x, const uniform_int& y)
   { return x.min() == y.min() && x.max() == y.max() && x.base() == y.base(); }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_int& ud)
@@ -256,6 +257,8 @@ public:
     ud.impl.set(min, max);
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const uniform_int& rhs) const

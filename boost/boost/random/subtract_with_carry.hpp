@@ -122,6 +122,8 @@ public:
   static bool validation(result_type x) { return x == val; }
   
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os,
@@ -143,6 +145,7 @@ public:
     f.k = 0;
     return is;
   }
+#endif
 
   friend bool operator==(const subtract_with_carry& x, const subtract_with_carry& y)
   {
@@ -309,6 +312,8 @@ public:
   { return x == val/pow(RealType(2), word_size); }
   
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os,
@@ -340,6 +345,7 @@ public:
     f.k = 0;
     return is;
   }
+#endif
 
   friend bool operator==(const subtract_with_carry_01& x,
                          const subtract_with_carry_01& y)

@@ -70,6 +70,7 @@ public:
                          const triangle_distribution& y)
   { return x._a == y._a && x._b == y._b && x._c == y._c && x._rng == y._rng; }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const triangle_distribution& td)
@@ -86,6 +87,8 @@ public:
     td.init();
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const triangle_distribution& rhs) const

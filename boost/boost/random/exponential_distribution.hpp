@@ -66,6 +66,7 @@ public:
                          const exponential_distribution& y)
   { return x._lambda == y._lambda && x._rng == y._rng; }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const exponential_distribution& ed)
@@ -81,6 +82,8 @@ public:
     is >> std::ws >> ed._lambda;
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const exponential_distribution& rhs) const

@@ -98,7 +98,9 @@ public:
 
   static bool validation(IntType x) { return val == x; }
 
-#ifndef  BOOST_NO_OPERATORS_IN_NAMESPACE
+#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os,
@@ -109,6 +111,7 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, linear_congruential& lcg)
   { is >> lcg._x; return is; }
+#endif
 
   friend bool operator==(const linear_congruential& x,
                          const linear_congruential& y)
@@ -177,6 +180,8 @@ public:
   static bool validation(int32_t x) { return x == 1993516219; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT,class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const rand48& r)
@@ -186,6 +191,7 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, rand48& r)
   { is >> r.lcf; return is; }
+#endif
 
   friend bool operator==(const rand48& x, const rand48& y)
   { return x.lcf == y.lcf; }

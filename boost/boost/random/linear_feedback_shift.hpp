@@ -99,6 +99,8 @@ public:
   bool validation(result_type x) const { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
+
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, linear_feedback_shift x)
@@ -108,6 +110,7 @@ public:
   friend std::basic_istream<CharT,Traits>&
   operator>>(std::basic_istream<CharT,Traits>& is, linear_feedback_shift& x)
   { is >> x.value; return is; }
+#endif
 
   friend bool operator==(linear_feedback_shift x, linear_feedback_shift y)
   { return x.value == y.value; }

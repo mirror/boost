@@ -67,6 +67,7 @@ public:
   friend bool operator==(const uniform_01& x, const uniform_01& y)
   { return *x._rng == *y._rng; }
 
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
   template<class CharT, class Traits>
   friend std::basic_ostream<CharT,Traits>&
   operator<<(std::basic_ostream<CharT,Traits>& os, const uniform_01&)
@@ -80,6 +81,8 @@ public:
   {
     return is;
   }
+#endif
+
 #else
   // Use a member function
   bool operator==(const uniform_01& rhs) const
