@@ -2,7 +2,30 @@
 
 subproject libs/regex/build ;
 
-import ../base ;
+#
+# this template defines the options common to
+# all regex builds and tests:
+#
+template regex-options
+   : # sources
+   : # requirements
+     <define>BOOST_REGEX_NO_LIB=1        
+     <debug><define>BOOST_REGEX_CONFIG_INFO=1
+     <sysinclude>$(BOOST_ROOT)
+     # como requires this:
+     <como-win32><*><define>BOOST_REGEX_NO_W32=1
+   ;
+
+#
+# this template defines the options common to
+# all regex dll builds and tests:
+#
+template regex-dll-options
+   : <template>regex-options # sources
+   : # requirements
+     <define>BOOST_REGEX_DYN_LINK=1      
+     <runtime-link>dynamic
+   ;
 
 SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
        cregex fileiter posix_api regex regex_debug
@@ -134,6 +157,7 @@ stage bin-stage : <lib>boost_regex <dll>boost_regex
     :
         debug release
     ;
+
 
 
 

@@ -3,7 +3,7 @@
 subproject libs/regex/example ;
 
 # bring in the rules for testing
-import testing ../base ;
+import testing  ;
 
 rule regex-test-run ( sources + : input * )
 {
@@ -11,7 +11,7 @@ rule regex-test-run ( sources + : input * )
            run
              # sources
              $(sources)
-             <template>regex-options
+             <template>../build/regex-options
 
              # dependencies
              <lib>../build/boost_regex
@@ -46,6 +46,7 @@ test-suite regex-examples :
 [ regex-test-run snippets/regex_iterator_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 
 ;
+
 
 
 

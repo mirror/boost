@@ -3,14 +3,14 @@
 subproject libs/regex/test ;
 
 # bring in the rules for testing
-import testing ../base ;
+import testing ;
 
 #
 # this template defines the options common to
 # all regex tests:
 #
 template test 
-   : <template>regex-options 
+   : <template>../build/regex-options 
      <lib>../build/boost_regex            # sources
    : <threading>multi
    ;
@@ -44,7 +44,7 @@ rule regex-test ( name : sources + : requirements * : input-files * )
 # all regex dll tests:
 #
 template test-dll 
-   : <template>regex-dll-options 
+   : <template>../build/regex-dll-options 
      <dll>../build/boost_regex            # sources
    : <threading>multi
    ;
@@ -129,6 +129,7 @@ test-suite regex
       [ compile concepts/wide_concept_check.cpp
       ]
 ;
+
 
 
 
