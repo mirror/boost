@@ -1,5 +1,5 @@
 
-LIBNAME=regex++
+LIBNAME=boost_regex
 
 CPP=@CXX@
 AR=ar

@@ -1513,7 +1513,7 @@ AC_TRY_LINK(
 [AC_DEFINE(BOOST_RE_NO_TEMPLATE_MERGE, [])
 AC_MSG_RESULT(no)
 AC_MSG_RESULT([    Warning - $0 has determined that your compiler can not merge]) 
-AC_MSG_RESULT([    template instances, you may have problems linking to libregex++.a - ])
+AC_MSG_RESULT([    template instances, you may have problems linking to libboost_regex.a - ])
 AC_MSG_RESULT([    see the FAQ for further details.])
 ]
 )
@@ -1536,7 +1536,7 @@ AC_TRY_LINK(
 AC_MSG_RESULT(no)
 AC_MSG_RESULT([    Warning - $0 has determined that your compiler can not merge ])
 AC_MSG_RESULT([    template instances, if these are located inside an archive file,])
-AC_MSG_RESULT([    you may have problems linking to libregex++.a - see the FAQ for])
+AC_MSG_RESULT([    you may have problems linking to libboost_regex.a - see the FAQ for])
 AC_MSG_RESULT([    further details.])
 ]
 )
@@ -1663,7 +1663,7 @@ AC_TRY_LINK(
 AC_MSG_RESULT(no)
 AC_MSG_RESULT([    Warning - $0 has determined that your compiler can not merge]) 
 AC_MSG_RESULT([    template instances, if those instances contain switch statements, ])
-AC_MSG_RESULT([    you may have problems linking to libregex++.a - ])
+AC_MSG_RESULT([    you may have problems linking to libboost_regex.a - ])
 AC_MSG_RESULT([    see the FAQ for further details.])
 ]
 )

@@ -1,5 +1,5 @@
 
-LIBNAME=regex++
+LIBNAME=boost_regex
 
 CPP=@CXX@
 AR=ar
@@ -10,6 +10,7 @@ ALL_O=@ac_all_o@
 ALL_H=@ac_all_h@
 
 lib$(LIBNAME).a : $(ALL_O)
+
 
 
 

@@ -1,9 +1,9 @@
 
 ALL_DEP=@ac_all_dep@
 
-base: ./lib/libregex++.a
+base: ./lib/libboost_regex.a
 
-./lib/libregex++.a: $(ALL_DEP)
+./lib/libboost_regex.a: $(ALL_DEP)
 	sh dmi.sh lib
 
 

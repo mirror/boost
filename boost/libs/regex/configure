@@ -3553,7 +3553,7 @@ EOF
 
 echo "$ac_t""no" 1>&6
 echo "$ac_t""    Warning - $0 has determined that your compiler can not merge" 1>&6 
-echo "$ac_t""    template instances, you may have problems linking to libregex++.a - " 1>&6
+echo "$ac_t""    template instances, you may have problems linking to libboost_regex.a - " 1>&6
 echo "$ac_t""    see the FAQ for further details." 1>&6
 
 
@@ -3593,7 +3593,7 @@ EOF
 echo "$ac_t""no" 1>&6
 echo "$ac_t""    Warning - $0 has determined that your compiler can not merge " 1>&6
 echo "$ac_t""    template instances, if these are located inside an archive file," 1>&6
-echo "$ac_t""    you may have problems linking to libregex++.a - see the FAQ for" 1>&6
+echo "$ac_t""    you may have problems linking to libboost_regex.a - see the FAQ for" 1>&6
 echo "$ac_t""    further details." 1>&6
 
 
@@ -3737,7 +3737,7 @@ EOF
 echo "$ac_t""no" 1>&6
 echo "$ac_t""    Warning - $0 has determined that your compiler can not merge" 1>&6 
 echo "$ac_t""    template instances, if those instances contain switch statements, " 1>&6
-echo "$ac_t""    you may have problems linking to libregex++.a - " 1>&6
+echo "$ac_t""    you may have problems linking to libboost_regex.a - " 1>&6
 echo "$ac_t""    see the FAQ for further details." 1>&6
 
 

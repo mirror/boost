@@ -9,10 +9,10 @@ total : r2
 	./r2 tests.txt
 
 r2 : tests.cpp parse.cpp regress.cpp
-	$(CXX) -O2 -o r2 tests.cpp parse.cpp regress.cpp -lregex++ $(LIBS)
+	$(CXX) -O2 -o r2 tests.cpp parse.cpp regress.cpp -lboost_regex $(LIBS)
 
 debug : tests.cpp parse.cpp regress.cpp
-	$(CXX) -g -o r2 tests.cpp parse.cpp regress.cpp -lregex++debug $(LIBS)
+	$(CXX) -g -o r2 tests.cpp parse.cpp regress.cpp -lboost_regex_debug $(LIBS)
 
 
 
