@@ -29,41 +29,33 @@ namespace boost {
 namespace mpl {
 
 template<
-      typename T, T N1, T N2, T N3 = 0, T N4 = 0, T N5 = 0
+      typename T, T N1, T N2
     >
 struct bitxor_c
 {
-    BOOST_STATIC_CONSTANT(T, value = (N1 ^ N2 ^ N3 ^ N4 ^ N5));
+    BOOST_STATIC_CONSTANT(T, value = (N1 ^ N2));
 #if !defined(__BORLANDC__)
     typedef integral_c<T,value> type;
 #else
-    typedef integral_c<T,(N1 ^ N2 ^ N3 ^ N4 ^ N5)> type;
+    typedef integral_c<T,(N1 ^ N2)> type;
 #endif
 };
 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T1)
     , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T2)
-    , typename T3 = integral_c<int,0>
-    , typename T4 = integral_c<int,0>
-    , typename T5 = integral_c<int,0>
     >
 struct bitxor_
     : bitxor_c<
-          BOOST_MPL_AUX_TYPEOF(T1,
-             T1::value ^ T2::value ^ T3::value ^ T4::value ^ T5::value
-            )
+          BOOST_MPL_AUX_TYPEOF(T1, T1::value ^ T2::value)
         , BOOST_MPL_AUX_MSVC_VALUE_WKND(T1)::value
         , BOOST_MPL_AUX_MSVC_VALUE_WKND(T2)::value
-        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T3)::value
-        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T4)::value
-        , BOOST_MPL_AUX_MSVC_VALUE_WKND(T5)::value
         >
 {
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(5, bitxor_, (T1,T2,T3,T4,T5))
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, bitxor_, (T1,T2))
 };
 
-BOOST_MPL_AUX_VOID_SPEC_EXT(2,5,bitxor_)
+BOOST_MPL_AUX_VOID_SPEC(2,bitxor_)
 
 } // namespace mpl
 } // namespace boost
