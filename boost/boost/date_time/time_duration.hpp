@@ -93,7 +93,7 @@ namespace date_time {
     //! Returns normalized number of seconds (0..60)
     sec_type seconds() const
     {
-      return static_cast<sec_type>(ticks()/ticks_per_second()) % 60;
+      return static_cast<sec_type>((ticks()/ticks_per_second()) % 60);
     }
     //! Returns total number of seconds truncating any fractional seconds
     sec_type total_seconds() const
@@ -104,7 +104,7 @@ namespace date_time {
     tick_type total_milliseconds() const
     {
       if (ticks_per_second() < 1000) {
-        return ticks() * (1000 / ticks_per_second());
+        return ticks() * (static_cast<tick_type>(1000) / ticks_per_second());
       }
       return ticks() / (ticks_per_second() / static_cast<tick_type>(1000)) ;
     }
