@@ -24,17 +24,25 @@
 #endif
 
 #ifdef BOOST_NO_STDC_NAMESPACE
-#  define BOOST_NUMERIC_INTERVAL_using_max(a) using ::a
 #  define BOOST_NUMERIC_INTERVAL_using_math(a) using ::a
 #  ifdef BOOST_HAS_INV_HYPERBOLIC
 #    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) using ::a
 #  endif
 #else
-#  define BOOST_NUMERIC_INTERVAL_using_max(a) using std::a
 #  define BOOST_NUMERIC_INTERVAL_using_math(a) using std::a
 #  ifdef BOOST_HAS_INV_HYPERBOLIC
 #    define BOOST_NUMERIC_INTERVAL_using_ahyp(a) using std::a
 #  endif
+#endif
+
+#if defined(__COMO__)
+#  define BOOST_NUMERIC_INTERVAL_using_max(a) using std::a
+#elif defined(__MWERKS__)
+#  define BOOST_NUMERIC_INTERVAL_using_max(a) using ::a
+#elif defined(BOOST_NO_STDC_NAMESPACE)
+#  define BOOST_NUMERIC_INTERVAL_using_max(a) using ::a
+#else
+#  define BOOST_NUMERIC_INTERVAL_using_max(a) using std::a
 #endif
 
 #ifndef BOOST_NUMERIC_INTERVAL_using_ahyp
