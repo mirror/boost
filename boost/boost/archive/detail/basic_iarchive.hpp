@@ -53,6 +53,9 @@ class basic_iarchive
     virtual void vload(class_name_type &t) = 0;
     virtual void vload(tracking_type &t) = 0;
     version_type archive_library_version;
+public: // note: not part of the public API.
+    void
+    next_object_pointer(void *t);
 protected:
     void init(unsigned int archive_library_version_){
         archive_library_version = archive_library_version_;

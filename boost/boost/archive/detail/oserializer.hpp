@@ -145,7 +145,7 @@ inline BOOST_DLLEXPORT void oserializer<Archive, T>::save_object_data(
 ) const {
     // make sure call is routed through the highest interface that might
     // be specialized by the user.
-    boost::serialization::serialize_adl(
+    boost::serialization::serialize_adl<Archive, T>(
         boost::smart_cast_reference<Archive &>(ar),
         * static_cast<T *>(const_cast<void *>(x)),
         version()
@@ -182,6 +182,13 @@ public:
     virtual ~pointer_oserializer(){}
 };
 
+// note: instances of this template to be constructed before the main
+// is called in order for things to be initialized properly.  For this
+// reason, hiding the instance in a static function as was done above
+// won't work here so we created a free instance here.
+template<class T, class Archive>
+const pointer_oserializer<T, Archive> pointer_oserializer<T, Archive>::instance;
+
 template<class T, class Archive>
 BOOST_DLLEXPORT void pointer_oserializer<T, Archive>::save_object_ptr(
     basic_oarchive & ar,
@@ -191,21 +198,15 @@ BOOST_DLLEXPORT void pointer_oserializer<T, Archive>::save_object_ptr(
     // make sure call is routed through the highest interface that might
     // be specialized by the user.
     T * t = static_cast<T *>(const_cast<void *>(x));
-    const unsigned int file_version =
-        boost::serialization::version<T>::value;
-    boost::serialization::save_ptr_adl(
-        boost::smart_cast_reference<Archive &>(ar), 
+    const unsigned int file_version = boost::serialization::version<T>::value;
+    Archive & ar_impl = boost::smart_cast_reference<Archive &>(ar);
+    boost::serialization::save_construct_data_adl<Archive, T>(
+        ar_impl, 
         t, 
         file_version
     );
+    ar_impl << boost::serialization::make_nvp(NULL, * t);
 }
-
-// note: instances of this template to be constructed before the main
-// is called in order for things to be initialized properly.  For this
-// reason, hiding the instance in a static function as was done above
-// won't work here so we created a free instance here.
-template<class T, class Archive>
-const pointer_oserializer<T, Archive> pointer_oserializer<T, Archive>::instance;
 
 template<class Archive, class T>
 struct save_non_pointer_type {
@@ -413,12 +414,13 @@ struct save_pointer_type {
         const basic_pointer_oserializer * bpos_ptr
     ){
         typedef BOOST_DEDUCED_TYPENAME remove_const<T>::type typex;
-        mpl::eval_if<
+        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
             BOOST_DEDUCED_TYPENAME boost::serialization::
                 type_info_implementation<T>::type::is_polymorphic,
             mpl::identity<polymorphic<typex> >,
             mpl::identity<non_polymorphic<typex> >
-        >::type::save(ar, const_cast<typex &>(t), bpos_ptr);
+        >::type typey;
+        typey::save(ar, const_cast<typex &>(t), bpos_ptr);
     }
 
     template<class T>

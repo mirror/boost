@@ -22,8 +22,8 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <new>    // for placement new
-#include <memory> // for auto_ptr
+#include <new>     // for placement new
+#include <memory>  // for auto_ptr
 #include <cstddef> // size_t
 
 #include <boost/config.hpp>
@@ -152,7 +152,7 @@ BOOST_DLLEXPORT void iserializer<Archive, T>::load_object_data(
 ) const {
     // make sure call is routed through the higest interface that might
     // be specialized by the user.
-    boost::serialization::serialize_adl(
+    boost::serialization::serialize_adl<Archive, T>(
         boost::smart_cast_reference<Archive &>(ar),
         * static_cast<T *>(x), 
         file_version
@@ -188,25 +188,116 @@ public:
     virtual ~pointer_iserializer(){};
 };
 
-template<class T, class Archive>
-BOOST_DLLEXPORT void pointer_iserializer<T, Archive>::load_object_ptr(
-    basic_iarchive & ar, 
-    void * & x,
-    const unsigned int file_version
-) const {
-    boost::serialization::load_ptr_adl(
-        boost::smart_cast_reference<Archive &>(ar),
-        reinterpret_cast<T * &>(x),
-        file_version
-    );
-}
-
 // note: instances of this template to be constructed before the main
 // is called in order for things to be initialized properly.  For this
 // reason, hiding the instance in a static function as was done above
 // won't work here so we created a free instance here.
 template<class T, class Archive>
 const pointer_iserializer<T, Archive> pointer_iserializer<T, Archive>::instance;
+
+// note trick to be sure that operator new is using class specific
+// version if such exists. Due to Peter Dimov.
+// note: the following fails if T has no default constructor.
+// otherwise it would have been ideal
+//struct heap_allocator : public T 
+//{
+//    T * invoke(){
+//        return ::new(sizeof(T));
+//    }
+//}
+
+// note: this should really be a member of the load_ptr function
+// below but some compilers still complain about this.
+template<class T>
+struct heap_allocator
+{
+    #if 0
+        // note: this fails on msvc 7.0 and gcc 3.2
+        template <class U, U x> struct test;
+        typedef char* yes;
+        typedef int* no;
+        template <class U>
+        yes has_op_new(U*, test<void* (*)(std::size_t), &U::operator new>* = 0);
+        no has_op_new(...);
+
+        template<class U>
+        T * new_operator(U);
+
+        T * new_operator(yes){
+            return (T::operator new)(sizeof(T));
+        }
+        T * new_operator(no){
+            return static_cast<T *>(operator new(sizeof(T)));
+        }
+        static T * invoke(){
+            return new_operator(has_op_new(static_cast<T *>(NULL)));
+        }
+    #else
+        // while this doesn't handle operator new overload for class T
+        static T * invoke(){
+            return static_cast<T *>(operator new(sizeof(T)));
+        }
+    #endif
+};
+
+// due to Martin Ecker
+template <typename T>
+class auto_ptr_with_deleter
+{
+public:
+    explicit auto_ptr_with_deleter(T* p) :
+        m_p(p)
+    {}
+    ~auto_ptr_with_deleter(){
+        if (m_p)
+            boost::serialization::access::destroy(m_p);
+    }
+    T* get() const {
+        return m_p;
+    }
+
+    T* release() {
+        T* p = m_p;
+        m_p = NULL;
+        return p;
+    }
+private:
+    T* m_p;
+};
+
+template<class Archive, class T>
+void load_ptr(
+    Archive & ar, 
+    T * & t, 
+    const BOOST_PFTO unsigned int file_version
+){
+}
+
+template<class T, class Archive>
+BOOST_DLLEXPORT void pointer_iserializer<T, Archive>::load_object_ptr(
+    basic_iarchive & ar, 
+    void * & x,
+    const unsigned int file_version
+) const {
+    auto_ptr_with_deleter<T> ap(heap_allocator<T>::invoke());
+    if(NULL == ap.get())
+        boost::throw_exception(std::bad_alloc()) ;
+    T * t = ap.get();
+    x = t;
+
+    // this addresses an obscure situtation that occurs when load_constructor
+    // de-serializes something through and a pointer.
+    ar.next_object_pointer(t);
+
+    Archive & ar_impl = boost::smart_cast_reference<Archive &>(ar);
+    boost::serialization::load_construct_data_adl<Archive, T>(
+        ar_impl,
+        t, 
+        file_version
+    );
+    ar_impl >> boost::serialization::make_nvp(NULL, * t);
+    ap.release();
+}
 
 template<class Archive, class T>
 struct load_non_pointer_type {
@@ -244,7 +335,7 @@ struct load_non_pointer_type {
                 mpl::int_<boost::serialization::primitive_type>
             >::value
         ));
-        mpl::eval_if<
+        typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 // if its primitive
                 mpl::equal_to<
                     boost::serialization::implementation_level<T>,
@@ -271,7 +362,8 @@ struct load_non_pointer_type {
                 // do standard load
                 mpl::identity<load>
             >
-        >::type::invoke(ar, t);
+        >::type typex;
+        typex::invoke(ar, t);
     }
 };
 
@@ -328,12 +420,13 @@ struct load_pointer_type {
         // class pointer.  Inhibiting code generation for this
         // permits abstract base classes to be used - note: exception
         // virtual serialize functions used for plug-ins
-        return 
+        typedef BOOST_DEDUCED_TYPENAME
             mpl::eval_if<
                 is_abstract<T>,
                 mpl::identity<abstract<T> >,
                 mpl::identity<non_abstract<T> >    
-            >::type::register_type(ar);
+            >::type typex;
+        return typex::register_type(ar);
     }
 
     template<class T>
