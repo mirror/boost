@@ -114,6 +114,11 @@ int main()
   // After that, both generators are equivalent
   assert(generator == saved_generator);
 
+  // as a degenerate case, you can set min = max for uniform_int
+  boost::uniform_int<> degen_dist(4,4);
+  boost::variate_generator<base_generator_type&, boost::uniform_int<> > deg(generator, degen_dist);
+  std::cout << deg() << " " << deg() << " " << deg() << std::endl;
+  
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   {
     // You can save the generator state for future use.  You can read the
