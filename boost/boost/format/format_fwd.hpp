@@ -43,9 +43,6 @@ namespace boost {
                   
     } // namespace io
 
-    template<class Ch, class Tr, class Alloc> 
-    std::basic_string<Ch, Tr, Alloc> str (const basic_format<Ch, Tr, Alloc>& ) ;
-
 } // namespace boost
 
 #endif // BOOST_FORMAT_FWD_HPP

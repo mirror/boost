@@ -18,8 +18,8 @@
 
 namespace boost {
 
-    template<class Ch, class Tr> inline 
-    std::basic_string<Ch, Tr> str(const basic_format<Ch, Tr>& f) {
+    template<class Ch, class Tr, class Alloc> inline 
+    std::basic_string<Ch, Tr, Alloc> str(const basic_format<Ch, Tr, Alloc>& f) {
         // adds up all pieces of strings and converted items, and return the formatted string
         return f.str();
     }
