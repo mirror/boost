@@ -23,7 +23,6 @@
 #define BOOST_RANDOM_UNIFORM_INT_HPP
 
 #include <cassert>
-#include <limits>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
