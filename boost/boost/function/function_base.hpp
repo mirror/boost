@@ -493,6 +493,117 @@ inline bool operator!=(detail::function::useless_clear_type*,
 }
 #endif
 
+#ifdef BOOST_NO_SFINAE
+// Comparisons between boost::function objects and arbitrary function objects
+template<typename Functor>
+  inline bool operator==(const function_base& f, Functor g)
+  {
+    typedef mpl::bool_<(is_integral<Functor>::value)> integral;
+    return detail::function::compare_equal(f, g, 0, integral());
+  }
+
+template<typename Functor>
+  inline bool operator==(Functor g, const function_base& f)
+  {
+    typedef mpl::bool_<(is_integral<Functor>::value)> integral;
+    return detail::function::compare_equal(f, g, 0, integral());
+  }
+
+template<typename Functor>
+  inline bool operator!=(const function_base& f, Functor g)
+  {
+    typedef mpl::bool_<(is_integral<Functor>::value)> integral;
+    return detail::function::compare_not_equal(f, g, 0, integral());
+  }
+
+template<typename Functor>
+  inline bool operator!=(Functor g, const function_base& f)
+  {
+    typedef mpl::bool_<(is_integral<Functor>::value)> integral;
+    return detail::function::compare_not_equal(f, g, 0, integral());
+  }
+#else
+
+#define BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor,Type)              \
+  typename ::boost::enable_if_c<(::boost::type_traits::ice_not<          \
+                        (::boost::is_integral<Functor>::value)>::value), \
+                       Type>::type
+
+// Comparisons between boost::function objects and arbitrary function objects
+template<typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator==(const function_base& f, Functor g)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return function_equal(*fp, g);
+    else return false;
+  }
+
+template<typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator==(Functor g, const function_base& f)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return function_equal(g, *fp);
+    else return false;
+  }
+
+template<typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator!=(const function_base& f, Functor g)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return !function_equal(*fp, g);
+    else return true;
+  }
+
+template<typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator!=(Functor g, const function_base& f)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return !function_equal(g, *fp);
+    else return true;
+  }
+
+template<typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator==(const function_base& f, reference_wrapper<Functor> g)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return fp == g.get_pointer();
+    else return false;
+  }
+
+template<typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator==(reference_wrapper<Functor> g, const function_base& f)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return g.get_pointer() == fp;
+    else return false;
+  }
+
+template<typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator!=(const function_base& f, reference_wrapper<Functor> g)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return fp != g.get_pointer();
+    else return true;
+  }
+
+template<typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator!=(reference_wrapper<Functor> g, const function_base& f)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return g.get_pointer() != fp;
+    else return true;
+  }
+#undef BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL
+#endif // Compiler supporting SFINAE
+
 namespace detail {
   namespace function {
     inline bool has_empty_target(const function_base* f)
