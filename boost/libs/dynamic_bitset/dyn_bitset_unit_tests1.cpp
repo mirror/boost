@@ -1,3 +1,10 @@
+// (C) Copyright Jeremy Siek 2001. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all
+// copies. This software is provided "as is" without express or
+// implied warranty, and with no claim as to its suitability for any
+// purpose.
+
 #include <iostream>
 #include <fstream>
 #include <cmath> // for pow
@@ -29,7 +36,7 @@ void run_test_cases()
   std::size_t N, ul_size = CHAR_BIT * sizeof(unsigned long), 
     block_size = CHAR_BIT * sizeof(Block);
   unsigned long numbers[] = { 0, 40247,
-			      std::numeric_limits<unsigned long>::max() };
+                              std::numeric_limits<unsigned long>::max() };
 
   //=====================================================================
   // Test construction from unsigned long

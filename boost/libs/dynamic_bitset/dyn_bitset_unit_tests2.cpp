@@ -1,3 +1,10 @@
+// (C) Copyright Jeremy Siek 2001. 
+// Permission to copy, use, modify, sell and distribute this software
+// is granted provided this copyright notice appears in all
+// copies. This software is provided "as is" without express or
+// implied warranty, and with no claim as to its suitability for any
+// purpose.
+ 
 #include <iostream>
 #include <fstream>
 #include <cmath> // for pow
@@ -230,3 +237,4 @@ test_main(int argc, char*[])
   run_test_cases<unsigned long>();
   return EXIT_SUCCESS;
 }
+ 

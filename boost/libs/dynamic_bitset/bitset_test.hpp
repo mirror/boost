@@ -66,7 +66,7 @@ struct bitset_test {
         if (! (str[i] == '0' || str[i] == '1'))
           any_non_zero_or_one = true;
       if (any_non_zero_or_one) {
-	// Input does not satisfy precondition.
+        // Input does not satisfy precondition.
       } else {
         // Construct an object, initializing the first M bit position to
         // values determined from the corresponding characters in the
@@ -97,10 +97,10 @@ struct bitset_test {
       Bitset bset(blocks.begin(), blocks.end());
       std::size_t n = blocks.size();
       for (std::size_t b = 0; b < n; ++b) {
-	for (std::size_t i = 0; i < sizeof(Block) * CHAR_BIT; ++i) {
-	  std::size_t bit = b * sizeof(Block) * CHAR_BIT + i;
-	  BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
-	}
+        for (std::size_t i = 0; i < sizeof(Block) * CHAR_BIT; ++i) {
+          std::size_t bit = b * sizeof(Block) * CHAR_BIT + i;
+          BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
+        }
       }
     }
     {
@@ -108,10 +108,10 @@ struct bitset_test {
       boost::from_block_range(blocks.begin(), blocks.end(), bset);
       std::size_t n = blocks.size();
       for (std::size_t b = 0; b < n; ++b) {
-	for (std::size_t i = 0; i < sizeof(Block) * CHAR_BIT; ++i) {
-	  std::size_t bit = b * sizeof(Block) * CHAR_BIT + i;
-	  BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
-	}
+        for (std::size_t i = 0; i < sizeof(Block) * CHAR_BIT; ++i) {
+          std::size_t bit = b * sizeof(Block) * CHAR_BIT + i;
+          BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
+        }
       }
     }
   }
@@ -531,15 +531,15 @@ struct bitset_test {
   {
     if (a.is_subset_of(b)) {
       for (std::size_t I = 0; I < a.size(); ++I)
-	if (a[I])
-	  BOOST_CHECK(b[I]);
+        if (a[I])
+          BOOST_CHECK(b[I]);
     } else {
       bool is_subset = true;
       for (std::size_t I = 0; I < a.size(); ++I)
-	if (a[I] && !b[I]) {
-	  is_subset = false;
-	  break;
-	}
+        if (a[I] && !b[I]) {
+          is_subset = false;
+          break;
+        }
       BOOST_CHECK(is_subset == false);
     }
   }
@@ -548,16 +548,16 @@ struct bitset_test {
   {
     if (a.is_proper_subset_of(b)) {
       for (std::size_t I = 0; I < a.size(); ++I)
-	if (a[I])
-	  BOOST_CHECK(b[I]);
+        if (a[I])
+          BOOST_CHECK(b[I]);
       BOOST_CHECK(a.count() < b.count());
     } else {
       bool is_subset = true;
       for (std::size_t I = 0; I < a.size(); ++I)
-	if (a[I] && !b[I]) {
-	  is_subset = false;
-	  break;
-	}
+        if (a[I] && !b[I]) {
+          is_subset = false;
+          break;
+        }
       BOOST_CHECK(is_subset == false || a.count() >= b.count());
     }
   }
