@@ -26,17 +26,22 @@ Reference
 <h2>Contents</h2>
 
 <ul>
-  <li><a href="#composite_keys">Composite keys</a></li>
-  <li><a href="#advanced_key_extractors">Advanced features of Boost.MultiIndex key
-    extractors</a>
+  <li><a href="#hashed_indices">Hashed indices</a>
     <ul>
-      <li><a href="#member_offset">Use of <code>member_offset</code></a></li>
-      <li><a href="#mem_fun_explicit">Use of <code>const_mem_fun_explicit</code> and
-        <code>mem_fun_explicit</code></a></li>
-      <li><a href="#composite_key_no_pts"><code>composite_key</code> in compilers
-        without partial template specialization</a></li>
+      <li><a href="#hash_unique_non_unique">Unique and non-unique variants</a></li>
+      <li><a href="#hash_spec">Specification</a></li>
+      <li><a href="#hash_lookup">Lookup</a></li>
+      <li><a href="#hash_updating">Updating</a></li>
+      <li><a href="#guarantees">Guarantees on iterator validity and exception safety</a></li>
     </ul>
   </li>
+  <li><a href="#composite_keys">Composite keys</a>
+    <ul>
+      <li><a href="#composite_keys_hash">Composite keys and hashed indices</a></li>
+    </ul>
+  </li>
+  <li><a href="#advanced_key_extractors">Advanced features of Boost.MultiIndex key
+    extractors</a></li>
   <li><a href="#ctor_args_list">Use of <code>ctor_args_list</code></a></li>
   <li><a href="#serialization">Serialization</a></li>
   <li><a href="#debugging_support">Debugging support</a>
@@ -49,12 +54,12 @@ Reference
       <li><a href="#invariant_check">Invariant-checking mode</a></li>
     </ul>
   </li>
-  <li><a href="#simulate_std_containers">Simulating standard containers with
+  <li><a href="#emulate_std_containers">Emulating standard containers with
     <code>multi_index_container</code></a>
     <ul>
-      <li><a href="#simulate_assoc_containers">Simulation of associative
+      <li><a href="#emulate_assoc_containers">Emulation of associative
        containers</a></li>
-      <li><a href="#simulate_std_list">Simulation of <code>std::list</code></a></li>
+      <li><a href="#emulate_std_list">Emulation of <code>std::list</code></a></li>
     </ul>
   </li>
   <li><a href="#metaprogrammming">Metaprogramming and <code>multi_index_container</code></a>
@@ -64,6 +69,263 @@ Reference
     </ul>
   </li>
 </ul>
+
+<h2><a name="hashed_indices">Hashed indices</a></h2>
+
+<p>
+Hashed indices constitute a trade-off with respect to ordered indices: if correctly used,
+they provide much faster lookup of elements, at the expense of losing sorting
+information. 
+Let us revisit our <code>employee_set</code> example: suppose a field for storing
+the Social Security number is added, with the requisite that lookup by this
+number should be as fast as possible. Instead of the usual ordered index, a
+hashed index can be resorted to:
+</p>
+
+<blockquote><pre>
+<span class=keyword>struct</span> <span class=identifier>employee</span>
+<span class=special>{</span>
+  <span class=keyword>int</span>         <span class=identifier>id</span><span class=special>;</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span> <span class=identifier>name</span><span class=special>;</span>
+  <span class=keyword>int</span>         <span class=identifier>ssnumber</span><span class=special>;</span>
+
+  <span class=identifier>employee</span><span class=special>(</span><span class=keyword>int</span> <span class=identifier>id</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&amp;</span> <span class=identifier>name</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>ssnumber</span><span class=special>):</span>
+    <span class=identifier>id</span><span class=special>(</span><span class=identifier>id</span><span class=special>),</span><span class=identifier>name</span><span class=special>(</span><span class=identifier>name</span><span class=special>),</span><span class=identifier>ssnumber</span><span class=special>(</span><span class=identifier>ssnumber</span><span class=special>){}</span>
+
+  <span class=keyword>bool</span> <span class=keyword>operator</span><span class=special>&lt;(</span><span class=keyword>const</span> <span class=identifier>employee</span><span class=special>&amp;</span> <span class=identifier>e</span><span class=special>)</span><span class=keyword>const</span><span class=special>{</span><span class=keyword>return</span> <span class=identifier>id</span><span class=special>&lt;</span><span class=identifier>e</span><span class=special>.</span><span class=identifier>id</span><span class=special>;}</span>
+<span class=special>};</span>
+
+<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=identifier>employee</span><span class=special>,</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
+    <span class=comment>// sort by employee::operator&lt;</span>
+    <span class=identifier>ordered_unique</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
+    
+    <span class=comment>// sort by less&lt;string&gt; on name</span>
+    <span class=identifier>ordered_non_unique</span><span class=special>&lt;</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>employee</span><span class=special>::</span><span class=identifier>name</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
+    
+    <span class=comment>// hashed on ssnumber</span>
+    <span class=identifier>hashed_unique</span><span class=special>&lt;</span><span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>employee</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>employee</span><span class=special>::</span><span class=identifier>ssnumber</span><span class=special>&gt;</span> <span class=special>&gt;</span>
+  <span class=special>&gt;</span>
+<span class=special>&gt;</span> <span class=identifier>employee_set</span>
+</pre></blockquote>
+
+<p>
+Note that the hashed index does not guarantee any particular ordering of the
+elements: so, for instance, we cannot efficiently query the employees whose SSN is
+greater than a given number. Usually, you must consider these restrictions when
+determining whether a hashed index is preferred over an ordered one.
+</p>
+
+<p>
+If you are familiar with non-standard <code>hash_set</code>s provided
+by some compiler vendors, then learning to use hashed indices should be straightforward.
+However, the interface of hashed indices is modeled after the specification
+for unordered containers by the C++ Standard Library Technical Report (TR1),
+which differs in some significant aspects from existing pre-standard
+implementations:
+<ul>
+  <li>As there is no notion of ordering between keys, the <a href="#hash_lookup">lookup
+    interface</a> does not offer <code>lower_bound</code> or <code>upper_bound</code>
+    member functions (unlike Dinkumware's solution.)</li>
+  <li>A set of member functions is provided for handling the internal
+    bucket structure on which hashed indices rely. This includes facilities
+    for <a href="reference/hash_indices.html#hash_policy">rehashing</a>,
+    control of the load factor (number of elements divided by number of buckets),
+    and inspection of the buckets contents. Pre-standard implementations
+    do not have such an extensive functionality.</li> 
+</ul>
+Check the <a href="reference/hash_indices.html">reference</a> for a
+complete specification of the interface of hashed indices,
+and <a href="examples.html#example8">example 8</a> and
+<a href="examples.html#example9">example 9</a> for practical applications.
+</p>
+
+</p>
+
+<h3><a name="hash_unique_non_unique">Unique and non-unique variants</a></h3>
+
+<p>
+Just like ordered indices, hashed indices have unique and non-unique variants, selected
+with the specifiers <code>hashed_unique</code> and <code>hashed_non_unique</code>,
+respectively. In the latter case, elements with equivalent keys are kept together and can
+be jointly retrieved by means of the <code>equal_range</code> member function.
+</p>
+
+<h3><a name="hash_spec">Specification</a></h3>
+
+<p>
+Hashed indices specifiers have two alternative syntaxes, depending on whether
+<a href="tutorial.html#tagging">tags</a> are provided or not:
+</p>
+
+<blockquote><pre>
+<span class=special>(</span><span class=identifier>hashed_unique</span> <span class=special>|</span> <span class=identifier>hashed_non_unique</span><span class=special>)
+  </span><span class=special>&lt;[</span><i>(tag)</i><span class=special>[,</span><i>(key extractor)</i><span class=special>[,</span><i>(hash function)</i><span class=special>[,</span><i>(equality predicate)</i><span class=special>]]]]&gt;</span>
+
+<span class=special>(</span><span class=identifier>hashed_unique</span> <span class=special>|</span> <span class=identifier>hashed_non_unique</span><span class=special>)</span>
+  <span class=special>&lt;[</span><i>(key extractor)</i><span class=special>[,</span><i>(hash function)</i><span class=special>[,</span><i>(equality predicate)</i><span class=special>]]]&gt;</span>
+</pre></blockquote>
+
+<p>
+The key extractor parameter works in exactly the same way as for
+<a href="tutorial.html#key_extraction">ordered indices</a>; lookup, insertion,
+etc., are based on the key returned by the extractor rather than the whole
+element.
+</p>
+
+<p>
+The hash function is the very core of the fast lookup capabilities of this type of
+indices: a hasher
+is just a <a href="http://www.sgi.com/tech/stl/UnaryFunction.html"><code>Unary
+Function</code></a> returning an <code>std::size_t</code> value for any given
+key. In general, it is impossible that every key map to a different hash value, for
+the space of keys can be greater than the number of permissible hash codes: what
+makes for a good hasher is that the probability of a collision (two different
+keys with the same hash value) is as close to zero as possible. This is a statistical
+property depending on the typical distribution of keys in a given application, so
+it is not feasible to have a general-purpose hash function with excellent results
+in <i>every</i> possible scenario; the default value for this parameter uses
+Boost.Hash (MISSING LINK), which often provides good enough results.
+</p>
+
+<p>
+The equality predicate is used to determine wether two keys are to be treated
+as the same. The default
+value <code>std::equal_to&lt;KeyFromValue::result_type&gt;</code> is in most
+cases exactly what is needed, so very rarely will you have to provide
+your own predicate. Note that hashed indices require that two
+equivalent keys have the same hash value, which
+in practice greatly reduces the freedom in choosing an equality predicate.
+</p>
+
+<h3><a name="hash_lookup">Lookup</a></h3>
+
+<p>
+The lookup interface of hashed indices consists in member functions
+<code>find</code>, <code>count</code> and <code>equal_range</code>.
+Note that <code>lower_bound</code> and <code>upper_bound</code> are not
+provided, as there is no intrinsic ordering of keys in this type of indices.
+</p>
+
+<p>
+Just as with ordered indices, these member functions take keys
+as their search arguments, rather than entire objects. Remember that
+ordered indices lookup operations are further augmented to accept
+<i>compatible keys</i>, which can roughly be regarded as "subkeys".
+For hashed indices, a concept of
+<a href="reference/hash_indices.html#lookup">compatible key</a> is also
+supported, though its usefulness is much more limited: basically,
+a compatible key is an object which is entirely equivalent to
+a native object of <code>key_type</code> value, though maybe with
+a different internal representation:
+</p>
+
+<blockquote><pre>
+<span class=comment>// US SSN numbering scheme</span>
+<span class=keyword>struct</span> <span class=identifier>ssn</span>
+<span class=special>{</span>
+  <span class=identifier>ssn</span><span class=special>(</span><span class=keyword>int</span> <span class=identifier>area_no</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>group_no</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>serial_no</span><span class=special>):</span>
+    <span class=identifier>area_no</span><span class=special>(</span><span class=identifier>area_no</span><span class=special>),</span><span class=identifier>group_no</span><span class=special>(</span><span class=identifier>group_no</span><span class=special>),</span><span class=identifier>serial_no</span><span class=special>(</span><span class=identifier>serial_no</span><span class=special>)</span>
+  <span class=special>{}</span>
+
+  <span class=keyword>int</span> <span class=identifier>to_int</span><span class=special>()</span><span class=keyword>const</span>
+  <span class=special>{</span>
+    <span class=keyword>return</span> <span class=identifier>serial_no</span><span class=special>+</span><span class=number>10000</span><span class=special>*</span><span class=identifier>group_no</span><span class=special>+</span><span class=number>1000000</span><span class=special>*</span><span class=identifier>area_no</span><span class=special>;</span>
+  <span class=special>}</span>
+
+<span class=keyword>private</span><span class=special>:</span>
+  <span class=keyword>int</span> <span class=identifier>area_no</span><span class=special>;</span>
+  <span class=keyword>int</span> <span class=identifier>group_no</span><span class=special>;</span>
+  <span class=keyword>int</span> <span class=identifier>serial_no</span><span class=special>;</span>
+<span class=special>};</span>
+
+<span class=comment>// interoperability with SSNs in raw int form</span>
+
+<span class=keyword>struct</span> <span class=identifier>ssn_equal</span>
+<span class=special>{</span>
+  <span class=keyword>bool</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ssn</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>y</span><span class=special>)</span><span class=keyword>const</span>
+  <span class=special>{</span>
+    <span class=keyword>return</span> <span class=identifier>x</span><span class=special>.</span><span class=identifier>to_int</span><span class=special>()==</span><span class=identifier>y</span><span class=special>;</span>
+  <span class=special>}</span>
+
+  <span class=keyword>bool</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>int</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>ssn</span><span class=special>&amp;</span> <span class=identifier>y</span><span class=special>)</span><span class=keyword>const</span>
+  <span class=special>{</span>
+    <span class=keyword>return</span> <span class=identifier>x</span><span class=special>==</span><span class=identifier>y</span><span class=special>.</span><span class=identifier>to_int</span><span class=special>();</span>
+  <span class=special>}</span>
+<span class=special>};</span>
+
+<span class=keyword>struct</span> <span class=identifier>ssn_hash</span>
+<span class=special>{</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>size_t</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ssn</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span>
+  <span class=special>{</span>
+    <span class=keyword>return</span> <span class=identifier>boost</span><span class=special>::</span><span class=identifier>hash</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;()(</span><span class=identifier>x</span><span class=special>.</span><span class=identifier>to_int</span><span class=special>());</span>
+  <span class=special>}</span>
+
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>size_t</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>int</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span>
+  <span class=special>{</span>
+    <span class=keyword>return</span> <span class=identifier>boost</span><span class=special>::</span><span class=identifier>hash</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;()(</span><span class=identifier>x</span><span class=special>);</span>
+  <span class=special>}</span>
+<span class=special>};</span>
+
+<span class=keyword>typedef</span> <span class=identifier>employee_set</span><span class=special>::</span><span class=identifier>nth_index</span><span class=special>&lt;</span><span class=number>2</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>employee_set_by_ssn</span><span class=special>;</span>
+
+<span class=identifier>employee_set</span>         <span class=identifier>es</span><span class=special>;</span>
+<span class=identifier>employee_set_by_ssn</span><span class=special>&amp;</span> <span class=identifier>ssn_index</span><span class=special>=</span><span class=identifier>es</span><span class=special>.</span><span class=identifier>get</span><span class=special>&lt;</span><span class=number>2</span><span class=special>&gt;();</span>
+<span class=special>...</span>
+<span class=comment>// find an employee by ssn</span>
+<span class=identifier>employee</span> <span class=identifier>e</span><span class=special>=*(</span><span class=identifier>ssn_index</span><span class=special>.</span><span class=identifier>find</span><span class=special>(</span><span class=identifier>ssn</span><span class=special>(</span><span class=number>12</span><span class=special>,</span><span class=number>1005</span><span class=special>,</span><span class=number>20678</span><span class=special>),</span><span class=identifier>ssn_hash</span><span class=special>(),</span><span class=identifier>ssn_equal</span><span class=special>()));</span>
+</pre></blockquote>
+
+<p>
+In the example, we provided a hash functor <code>ssn_hash</code> and an
+equality predicate <code>ssn_equal</code> allowing for interoperability
+between <code>ssn</code> objects and the raw <code>int</code>s stored as
+<code>SSN</code>s in <code>employee_set</code>.
+</p>
+
+<p>
+By far, the most useful application of compatible keys in the context
+of hashed indices lies in the fact that they allow for seamless usage of
+<a href="#composite_keys">composite keys</a>.
+</p>
+
+<h3><a name="hash_updating">Updating</a></h3>
+
+<p>
+Hashed indices have
+<a href=reference/hash_indices.html#replace><code>replace</code></a>, 
+<a href=reference/hash_indices.html#modify><code>modify</code></a> and
+<a href=reference/hash_indices.html#modify_key><code>modify_key</code></a>
+member functions, with the same functionality as in ordered indices.
+</p>
+
+<h3><a name="guarantees">Guarantees on iterator validity and exception safety</a></h3>
+
+<p>
+Due to the internal constraints imposed by the Boost.MultiIndex framework,
+hashed indices provide guarantees on iterator validity and
+exception safety that are actually stronger than required by the
+C++ Standard Library Technical Report (TR1) with respect
+to unordered associative containers:
+<ul>
+  <li>Iterator validity is preserved in any case during insertion or rehashing:
+    TR1 allows for iterator invalidation when a rehash (implicit or explicit)
+    is performed.</li>
+  <li>Erasing an element or range of elements via iterators does not throw ever,
+    as the internal hash function and equality predicate objects are not actually
+    invoked.</li>
+  <li><code>rehash</code> provides the strong exception safety guarantee
+    unconditionally. TR1 only warrants it if the internal hash function and
+    equality predicate objects do not throw. The somewhat surprising consequence
+    is that a TR1-compliant unordered associative container might erase
+    elements if an exception is thrown during rehashing!</li>
+</ul>
+In general, these stronger guarantees play in favor of the user's convenience,
+specially that which refers to iterator stability. A (hopefully minimal)
+degradation in performance might result in exchange for these commodities,
+though.
+</p>
 
 <h2><a name="composite_keys">Composite keys</a></h2>
 
@@ -175,8 +437,121 @@ be specified with <a href="reference/key_extraction.html#composite_key_compare">
 </pre></blockquote>
 
 <p>
-See <a href="examples.html#example7">Example 7</a> in the examples section
+See <a href="examples.html#example7">example 7</a> in the examples section
 for an application of <code>composite_key</code>.
+</p>
+
+<h3><a name="composite_keys_hash">Composite keys and hashed indices</a></h3>
+
+<p>
+Composite keys can also be used with hashed indices in a straightforward manner:
+</p>
+
+<blockquote><pre>
+<span class=keyword>struct</span> <span class=identifier>street_entry</span>
+<span class=special>{</span>
+  <span class=comment>// quadrant coordinates</span>
+  <span class=keyword>int</span> <span class=identifier>x</span><span class=special>;</span>
+  <span class=keyword>int</span> <span class=identifier>y</span><span class=special>;</span>
+
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span> <span class=identifier>name</span><span class=special>;</span>
+
+  <span class=identifier>street_entry</span><span class=special>(</span><span class=keyword>int</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>y</span><span class=special>,</span><span class=keyword>const</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&amp;</span> <span class=identifier>name</span><span class=special>):</span><span class=identifier>x</span><span class=special>(</span><span class=identifier>x</span><span class=special>),</span><span class=identifier>y</span><span class=special>(</span><span class=identifier>y</span><span class=special>),</span><span class=identifier>name</span><span class=special>(</span><span class=identifier>name</span><span class=special>){}</span>
+<span class=special>};</span>
+
+<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=identifier>street_entry</span><span class=special>,</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
+    <span class=identifier>hashed_non_unique</span><span class=special>&lt;</span> <span class=comment>// indexed by quadrant coordinates</span>
+      <span class=identifier>composite_key</span><span class=special>&lt;</span>
+        <span class=identifier>street_entry</span><span class=special>,</span>
+        <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>street_entry</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>street_entry</span><span class=special>::</span><span class=identifier>x</span><span class=special>&gt;,</span>
+        <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>street_entry</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>street_entry</span><span class=special>::</span><span class=identifier>y</span><span class=special>&gt;</span>
+      <span class=special>&gt;</span>
+    <span class=special>&gt;,</span>
+    <span class=identifier>hashed_non_unique</span><span class=special>&lt;</span> <span class=comment>// indexed by street name</span>
+      <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>street_entry</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>street_entry</span><span class=special>::</span><span class=identifier>name</span><span class=special>&gt;</span>
+    <span class=special>&gt;</span>
+  <span class=special>&gt;</span>
+<span class=special>&gt;</span> <span class=identifier>street_locator</span><span class=special>;</span>
+
+<span class=identifier>street_locator</span> <span class=identifier>sl</span><span class=special>;</span>
+<span class=special>...</span>
+<span class=keyword>void</span> <span class=identifier>streets_in_quadrant</span><span class=special>(</span><span class=keyword>int</span> <span class=identifier>x</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>y</span><span class=special>)</span>
+<span class=special>{</span>
+  <span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>street_locator</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>,</span><span class=identifier>street_locator</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>&gt;</span> <span class=identifier>p</span><span class=special>=</span>
+    <span class=identifier>sl</span><span class=special>.</span><span class=identifier>equal_range</span><span class=special>(</span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>make_tuple</span><span class=special>(</span><span class=identifier>x</span><span class=special>,</span><span class=identifier>y</span><span class=special>));</span>
+
+  <span class=keyword>while</span><span class=special>(</span><span class=identifier>p</span><span class=special>.</span><span class=identifier>first</span><span class=special>!=</span><span class=identifier>p</span><span class=special>.</span><span class=identifier>second</span><span class=special>){</span>
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=identifier>p</span><span class=special>.</span><span class=identifier>first</span><span class=special>-&gt;</span><span class=identifier>name</span><span class=special>&lt;&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>endl</span><span class=special>;</span>
+    <span class=special>++</span><span class=identifier>p</span><span class=special>.</span><span class=identifier>first</span><span class=special>;</span>
+  <span class=special>}</span>
+<span class=special>}</span>
+</pre></blockquote>
+
+<p>
+Note that hashing is automatically taken care of: <code>boost::hash</code> is
+specialized to hash a composite key as a function of the <code>boost::hash</code>
+values of its elements. Should we need to specify different hash functions for the
+elements of a composite key, we can explicitly do so by using the
+<a href="reference/key_extraction.html#composite_key_hash"><code>composite_key_hash</code></a>
+utility:
+</p>
+
+<blockquote><pre>
+<span class=keyword>struct</span> <span class=identifier>tuned_int_hash</span>
+<span class=special>{</span>
+  <span class=keyword>int</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>int</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span>
+  <span class=special>{</span>
+    <span class=comment>// specially tuned hash for this application</span>
+  <span class=special>}</span>
+<span class=special>};</span>
+
+<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
+  <span class=identifier>street_entry</span><span class=special>,</span>
+  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
+    <span class=identifier>hashed_non_unique</span><span class=special>&lt;</span> <span class=comment>// indexed by quadrant coordinates</span>
+      <span class=identifier>composite_key</span><span class=special>&lt;</span>
+        <span class=identifier>street_entry</span><span class=special>,</span>
+        <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>street_entry</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>street_entry</span><span class=special>::</span><span class=identifier>x</span><span class=special>&gt;,</span>
+        <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>street_entry</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>street_entry</span><span class=special>::</span><span class=identifier>y</span><span class=special>&gt;</span>
+      <span class=special>&gt;,</span>
+      <span class=identifier>composite_key_hash</span><span class=special>&lt;</span>
+        <span class=identifier>tuned_int_hash</span><span class=special>,</span>
+        <span class=identifier>tuned_int_hash</span>
+      <span class=special>&gt;</span>
+    <span class=special>&gt;,</span>
+    <span class=identifier>hashed_non_unique</span><span class=special>&lt;</span> <span class=comment>// indexed by street name</span>
+      <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>street_entry</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>street_entry</span><span class=special>::</span><span class=identifier>name</span><span class=special>&gt;</span>
+    <span class=special>&gt;</span>
+  <span class=special>&gt;</span>
+<span class=special>&gt;</span> <span class=identifier>street_locator</span><span class=special>;</span>
+</pre></blockquote>
+
+<p>
+Also, equality of composite keys can be tuned with
+<a href="reference/key_extraction.html#composite_key_equal_to"><code>composite_key_equal_to</code></a>,
+though in most cases the default equality predicate (relying on
+the <code>std::equal_to</code> instantiations for the element types)
+will be the right choice.
+</p>
+
+<p>
+Unlike with ordered indices, we cannot perform partial searches specifying
+only the first elements of a composite key:
+</p>
+
+<blockquote><pre>
+<span class=comment>// try to locate streets in quadrants with x==0
+// compile-time error: hashed indices do not allow such operations</span>
+<span class=identifier>std</span><span class=special>::</span><span class=identifier>pair</span><span class=special>&lt;</span><span class=identifier>street_locator</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>,</span><span class=identifier>street_locator</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>&gt;</span> <span class=identifier>p</span><span class=special>=</span>
+  <span class=identifier>sl</span><span class=special>.</span><span class=identifier>equal_range</span><span class=special>(</span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>make_tuple</span><span class=special>(</span><span class=number>0</span><span class=special>));</span>
+</pre></blockquote>
+
+<p>
+The reason for this limitation is quite logical: as the hash value of a composite
+key depends on all of its elements, it is impossible to calculate it from
+partial information.
 </p>
 
 <h2><a name="advanced_key_extractors">Advanced features of Boost.MultiIndex key
@@ -279,7 +654,7 @@ each of its members.
   <caption><b>Use cases for Boost.MultiIndex key extractors.</b></caption>
 <tr>
   <th>element type</th>
-  <th>sorted by</th>
+  <th>&nbsp;key&nbsp;</th>
   <th>key extractor</th>
   <th>applicable to<br><code>const</code> elements?</th>
   <th>read/write?</th>
@@ -450,229 +825,6 @@ For practical demonstrations of use of these key extractors, refer to
 <a href="examples.html#example6">example 6</a> in the examples section.
 </p>
 
-<h3><a name="member_offset">Use of <code>member_offset</code></a></h3>
-
-<p>
-The <code>member</code> key extractor poses some problems in compilers
-that do not properly support pointers to members as non-type
-template arguments, as indicated by the
-<a href="../../../libs/config/config.htm">Boost Configuration Library</a>
-defect macro <code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code>.
-The following compilers have been confirmed not
-to work correctly with <code>member</code>:
-<ul>
-  <li>MSVC++ 6.0/7.0,</li>
-  <li>Intel C++ 7.0/7.1 for Windows,</li>
-  <li>VisualAge 6.0 for AIX.</li>
-</ul>
-This program can help determine if your compiler
-properly supports pointers to members as non-type template parameters:
-</p>
-
-<blockquote><pre>
-<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>iostream</span><span class=special>&gt;</span>
-
-<span class=keyword>struct</span> <span class=identifier>pair</span>
-<span class=special>{</span>
-  <span class=keyword>int</span> <span class=identifier>x</span><span class=special>,</span><span class=identifier>y</span><span class=special>;</span>
-
-  <span class=identifier>pair</span><span class=special>(</span><span class=keyword>int</span> <span class=identifier>x_</span><span class=special>,</span><span class=keyword>int</span> <span class=identifier>y_</span><span class=special>):</span><span class=identifier>x</span><span class=special>(</span><span class=identifier>x_</span><span class=special>),</span><span class=identifier>y</span><span class=special>(</span><span class=identifier>y_</span><span class=special>){}</span>
-<span class=special>};</span>
-
-<span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>int</span> <span class=identifier>pair</span><span class=special>::*</span> <span class=identifier>PtrToPairMember</span><span class=special>&gt;</span>
-<span class=keyword>struct</span> <span class=identifier>foo</span>
-<span class=special>{</span>
-  <span class=keyword>int</span> <span class=identifier>bar</span><span class=special>(</span><span class=identifier>pair</span><span class=special>&amp;</span> <span class=identifier>p</span><span class=special>){</span><span class=keyword>return</span> <span class=identifier>p</span><span class=special>.*</span><span class=identifier>PtrToPairMember</span><span class=special>;}</span>
-<span class=special>};</span>
-
-<span class=keyword>int</span> <span class=identifier>main</span><span class=special>()</span>
-<span class=special>{</span>
-  <span class=identifier>pair</span> <span class=identifier>p</span><span class=special>(</span><span class=number>0</span><span class=special>,</span><span class=number>1</span><span class=special>);</span>
-  <span class=identifier>foo</span><span class=special>&lt;&amp;</span><span class=identifier>pair</span><span class=special>::</span><span class=identifier>x</span><span class=special>&gt;</span> <span class=identifier>fx</span><span class=special>;</span>
-  <span class=identifier>foo</span><span class=special>&lt;&amp;</span><span class=identifier>pair</span><span class=special>::</span><span class=identifier>y</span><span class=special>&gt;</span> <span class=identifier>fy</span><span class=special>;</span>
-
-  <span class=keyword>if</span><span class=special>(</span><span class=identifier>fx</span><span class=special>.</span><span class=identifier>bar</span><span class=special>(</span><span class=identifier>p</span><span class=special>)!=</span><span class=number>0</span><span class=special>||</span><span class=identifier>fy</span><span class=special>.</span><span class=identifier>bar</span><span class=special>(</span><span class=identifier>p</span><span class=special>)!=</span><span class=number>1</span><span class=special>)</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=string>&quot;KO&quot;</span><span class=special>&lt;&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>endl</span><span class=special>;</span>
-  <span class=keyword>else</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>cout</span><span class=special>&lt;&lt;</span><span class=string>&quot;OK&quot;</span><span class=special>&lt;&lt;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>endl</span><span class=special>;</span>
-
-  <span class=keyword>return</span> <span class=number>0</span><span class=special>;</span>
-<span class=special>}</span>
-
-</pre></blockquote>
-
-<p>
-If you find a compiler that does not pass the test, and for which
-<code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code> is <i>not</i> defined,
-please report to the Boost developers mailing list.
-</p>
-<p>To overcome this defect, a replacement utility
-<a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a>
-has been provided that does the work of <code>member</code> at the
-expense of less convenient notation and the possibility of
-non-conformance with the standard. Please consult
-the reference for further information on <code>member_offset</code>.
-As an example of use, given the class
-</p>
-
-<blockquote><pre>
-<span class=keyword>class</span> <span class=identifier>A</span>
-<span class=special>{</span>
-  <span class=keyword>int</span> <span class=identifier>x</span><span class=special>;</span>
-<span class=special>}</span>
-</pre></blockquote>
-
-<p>
-the instantiation <code>member&lt;A,int,&amp;A::x></code> can be simulated then
-as <code>member_offset&lt;A,int,offsetof(A,x)></code>.
-</p>
-
-<p>
-For those writing portable code, Boost.MultiIndex provides the ternary macro
-<code>BOOST_MULTI_INDEX_MEMBER</code>. Continuing with the example above, the
-expression
-</p>
-
-<blockquote><pre>
-<span class=identifier>BOOST_MULTI_INDEX_MEMBER</span><span class=special>(</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,</span><span class=identifier>x</span><span class=special>)</span>
-</pre></blockquote>
-
-<p>
-expands by default to
-</p>
-
-<blockquote><pre>
-<span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>A</span><span class=special>::</span><span class=identifier>x</span><span class=special>&gt;</span>
-</pre></blockquote>
-
-<p>
-or alternatively to
-</p>
-
-<blockquote><pre>
-<span class=identifier>member_offset</span><span class=special>&lt;</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,</span><span class=identifier>offsetof</span><span class=special>(</span><span class=identifier>A</span><span class=special>,</span><span class=identifier>x</span><span class=special>)&gt;</span>
-</pre></blockquote>
-
-<p>
-if <code>BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS</code> is defined.
-</p>
-
-<h3><a name="mem_fun_explicit">Use of <code>const_mem_fun_explicit</code> and
-<code>mem_fun_explicit</code></a></h3>
-
-<p>
-MSVC++ 6.0 has problems with <code>const</code> member functions as non-type
-template parameters, and thus does not accept the <code>const_mem_fun</code>
-key extractor. A simple workaround, fortunately, has been found, consisting
-in specifying the <i>type</i> of these pointers as an additional template
-parameter. The alternative <code>const_mem_fun_explicit</code> extractor
-adopts this solution; for instance, given the type
-</p>
-
-<blockquote><pre>
-<span class=keyword>struct</span> <span class=identifier>A</span>
-<span class=special>{</span>
-  <span class=keyword>int</span> <span class=identifier>f</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
-<span class=special>};</span>
-</pre></blockquote>
-
-<p>
-the extractor <code>const_mem_fun&lt;A,int,&amp;A::f></code> can be replaced by
-<code>const_mem_fun_explicit&lt;A,int,int (A::*)()const,&amp;A::f></code>. A similar
-<code>mem_fun_explicit</code> class template is provided for non-constant
-member functions.
-</p>
-
-<p>
-If you are writing cross-platform code, the selection of either key extractor
-is transparently handled by the macro <code>BOOST_MULTI_INDEX_CONST_MEM_FUN</code>,
-so that
-</p>
-
-<blockquote><pre>
-<span class=identifier>BOOST_MULTI_INDEX_CONST_MEM_FUN</span><span class=special>(</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,</span><span class=identifier>f</span><span class=special>)</span>
-</pre></blockquote>
-
-<p>
-expands by default to
-</p>
-
-<blockquote><pre>
-<span class=identifier>const_mem_fun</span><span class=special>&lt;</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,&amp;</span><span class=identifier>A</span><span class=special>::</span><span class=identifier>f</span><span class=special>&gt;</span>
-</pre></blockquote>
-
-<p>
-but resolves to 
-</p>
-
-<blockquote><pre>
-<span class=identifier>const_mem_fun_explicit</span><span class=special>&lt;</span><span class=identifier>A</span><span class=special>,</span><span class=keyword>int</span><span class=special>,</span><span class=keyword>int</span> <span class=special>(</span><span class=identifier>A</span><span class=special>::*)()</span><span class=keyword>const</span><span class=special>,&amp;</span><span class=identifier>A</span><span class=special>::</span><span class=identifier>f</span><span class=special>&gt;</span>
-</pre></blockquote>
-
-<p>
-in MSVC++ 6.0. An analogous macro <code>BOOST_MULTI_INDEX_MEM_FUN</code> is
-provided as well.
-</p>
-
-<h3><a name="composite_key_no_pts"><code>composite_key</code> in compilers
-without partial template specialization</a></h3>
-
-<p>
-Much of the power of <code>composite_key</code> derives from the ability
-to perform searches when only the first elements of the compound key are
-given. In order to enable this functionality, <code>std::less</code> and
-<code>std::greater</code> are specialized for
-<a href="reference/key_extraction.html#composite_key_result">
-<code>composite_key_result</code></a> instantiations to provide
-overloads accepting tuples of values.
-</p>
-
-<p>
-In those compilers that do not support partial template specialization,
-tuple-based comparisons are not available by default. In this case,
-<code>multi_index_container</code> instantiations using composite keys
-will work as expected (elements are sorted lexicographically on the
-results of the combined keys), except that lookup operations will not
-accept tuples as an argument. The most obvious workaround
-to this deficiency involves explicitly specifying the comparison
-predicate with <code>composite_key_compare</code>: this is tedious as
-the comparison predicates for all the element key extractors must be
-explicitly typed. For this reason, Boost.MultiIndex provides the replacement
-class template
-<a href="reference/key_extraction.html#composite_key_result_less">
-<code>composite_key_result_less</code></a>, that
-acts as the missing specialization of <code>std::less</code> for
-<code>composite_key_result</code>s:
-</p>
-
-<blockquote><pre>
-<span class=keyword>typedef</span> <span class=identifier>composite_key</span><span class=special>&lt;</span>
-  <span class=identifier>phonebook_entry</span><span class=special>,</span>
-  <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>phonebook_entry</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>phonebook_entry</span><span class=special>::</span><span class=identifier>family_name</span><span class=special>&gt;,</span>
-  <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>phonebook_entry</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>phonebook_entry</span><span class=special>::</span><span class=identifier>given_name</span><span class=special>&gt;</span>
-<span class=special>&gt;</span> <span class=identifier>ckey_t</span><span class=special>;</span>
-
-<span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
-  <span class=identifier>phonebook_entry</span><span class=special>,</span>
-  <span class=identifier>indexed_by</span><span class=special>&lt;</span>
-    <span class=identifier>ordered_non_unique</span><span class=special>&lt;</span> 
-      <span class=identifier>ckey_t</span><span class=special>,</span>
-      <span class=comment>// composite_key_result_less plays the role of
-      // std::less&lt;ckey_t::result_type&gt;</span>
-      <span class=identifier>composite_key_result_less</span><span class=special>&lt;</span><span class=identifier>ckey_t</span><span class=special>::</span><span class=identifier>result_type</span><span class=special>&gt;</span>
-    <span class=special>&gt;,</span>
-    <span class=identifier>ordered_unique</span><span class=special>&lt;</span>
-      <span class=identifier>member</span><span class=special>&lt;</span><span class=identifier>phonebook_entry</span><span class=special>,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,&amp;</span><span class=identifier>phonebook_entry</span><span class=special>::</span><span class=identifier>phone_number</span><span class=special>&gt;</span>
-    <span class=special>&gt;</span>
-  <span class=special>&gt;</span>
-<span class=special>&gt;</span> <span class=identifier>phonebook</span><span class=special>;</span>
-</pre></blockquote>
-
-<p>
-There is also an analogous 
-<a href="reference/key_extraction.html#composite_key_result_greater">
-<code>composite_key_result_greater</code></a> class to substitute for
-specializations of <code>std::greater</code>.
-</p>
-
 <h2><a name="ctor_args_list">Use of <code>ctor_args_list</code></a></h2>
 
 <p>
@@ -743,15 +895,16 @@ where <code>I</code> is the number of indices, and <code>C<sub>i</sub></code> is
 that is, the nested type <code>ctor_args</code> of the <code>i</code>-th index. Each
 <code>ctor_args</code> type is in turn a tuple holding values for constructor
 arguments of the associated index: so, ordered indices demand a key extractor object
-and a comparison predicate, while sequenced indices do not need any construction
-argument. For instance, given the definition
+and a comparison predicate, hashed indices take an initial number of buckets,
+a key extractor, a hash function and an equality predicate; while sequenced indices do
+not need any construction argument. For instance, given the definition
 </p>
 
 <blockquote><pre>
 <span class=keyword>typedef</span> <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
   <span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>,</span>
   <span class=identifier>indexed_by</span><span class=special>&lt;</span>
-    <span class=identifier>ordered_unique</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
+    <span class=identifier>hashed_unique</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
     <span class=identifier>ordered_non_unique</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;,</span> <span class=identifier>modulo_less</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
     <span class=identifier>sequenced</span><span class=special>&lt;&gt;</span>
   <span class=special>&gt;</span>
@@ -765,10 +918,16 @@ the corresponding <code>ctor_args_list</code> type is equivalent to
 <blockquote><pre>
 <span class=identifier>boost</span><span class=special>::</span><span class=identifier>tuple</span><span class=special>&lt;</span>
   <span class=comment>// ctr_args of index #0</span>
-  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>tuple</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;,</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>less</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
-    
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>tuple</span><span class=special>&lt;</span>
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>size_t</span><span class=special>,</span> <span class=comment>// initial number of buckets; 0 if unspecified</span>
+    <span class=identifier>identity</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;,</span>
+    <span class=identifier>boost</span><span class=special>::</span><span class=identifier>hash</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;,</span>
+    <span class=identifier>std</span><span class=special>::</span><span class=identifier>equal_to</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;</span> <span class=special>&gt;,</span>    
+
   <span class=comment>// ctr_args of index #1</span>
-  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>tuple</span><span class=special>&lt;</span><span class=identifier>identity</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;,</span><span class=identifier>modulo_less</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
+  <span class=identifier>boost</span><span class=special>::</span><span class=identifier>tuple</span><span class=special>&lt;</span>
+    <span class=identifier>identity</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;,</span>
+    <span class=identifier>modulo_less</span><span class=special>&lt;</span><span class=keyword>unsigned</span> <span class=keyword>int</span><span class=special>&gt;</span> <span class=special>&gt;,</span>
   
   <span class=comment>// sequenced indices do not have any construction argument</span>
   <span class=identifier>boost</span><span class=special>::</span><span class=identifier>tuple</span><span class=special>&lt;&gt;</span>
@@ -853,7 +1012,11 @@ case: elements with different keys are sorted in ascending order, but
 there is no implicit traversal order for elements with the same key.
 Serialization of <code>multi_index_container</code> addresses this issue,
 so that restored ordered non-unique indices are sorted in exactly the
-same way as their originals.
+same way as their originals. As for hashed indices, no guarantee is made
+about the order in which elements will be iterated in the restored
+container: in general, it is unwise to rely on the ordering of elements
+of a hashed index, since it can change in arbitrary ways during
+insertion or rehashing.
 </p>
 
 <p>
@@ -863,7 +1026,7 @@ its corresponding container.
 </p>
 
 <p>
-<a href="examples.html#example8">Example 8</a> in the examples section shows
+<a href="examples.html#example9">Example 9</a> in the examples section shows
 the serialization capabilities of Boost.MultiIndex.
 </p>
 
@@ -1052,21 +1215,21 @@ It is recommended that users of Boost.MultiIndex always set the
 invariant-checking mode in debug builds.
 </p>
 
-<h2><a name="simulate_std_containers">Simulating standard containers with
+<h2><a name="emulate_std_containers">Emulating standard containers with
   <code>multi_index_container</code></a></h2>
 
-<h3><a name="simulate_assoc_containers">Simulation of associative
+<h3><a name="emulate_assoc_containers">Emulation of associative
 containers</a></h3>
 
 <p>
-Academic movitations aside, there is a practical interest in simulating standard
+Academic movitations aside, there is a practical interest in emulating standard
 associative containers by means of <code>multi_index_container</code>, namely to take
 advantage of extended functionalities provided by <code>multi_index_container</code> for
 lookup, range querying and updating.
 </p>
 
 <p>
-In order to simulate a <code>std::set</code> one can follow the substitution
+In order to emulate a <code>std::set</code> one can follow the substitution
 rule:
 </p>
 
@@ -1096,7 +1259,7 @@ principle it is a drop-in replacement needing no further adjustments.
 </p>
 
 <p>
-<code>std::multiset</code> can be simulated in a similar manner, according to the
+<code>std::multiset</code> can be emulated in a similar manner, according to the
 following rule:
 </p>
 
@@ -1122,7 +1285,7 @@ When default values are taken into consideration, the rule takes the form
 </pre></blockquote>
 
 <p>
-The simulation of <code>std::multiset</code>s with <code>multi_index_container</code>
+The emulation of <code>std::multiset</code>s with <code>multi_index_container</code>
 results in a slight difference with respect to the interface offered: the member
 function <code>insert(const value_type&amp;)</code> does not return an
 <code>iterator</code> as in <code>std::multiset</code>s, but rather a
@@ -1133,7 +1296,7 @@ pair is always <code>true</code>.
 
 <p>
 The case of <code>std::map</code>s and <code>std::multimap</code>s does not lend
-itself to such a direct simulation by means of <code>multi_index_container</code>. The main
+itself to such a direct emulation by means of <code>multi_index_container</code>. The main
 problem lies in the fact that elements of a <code>multi_index_container</code> are treated
 as constant, while the <code>std::map</code> and <code>std::multimap</code> handle
 objects of type <code>std::pair&lt;const Key,T></code>, thus allowing for free
@@ -1204,29 +1367,29 @@ If default values are considered, the rules take the form:
 </pre></blockquote>
 
 <p>
-Unlike as with standard sets, the interface of these <code>multi_index_container</code>-simulated
+Unlike as with standard sets, the interface of these <code>multi_index_container</code>-emulated
 maps does not exactly conform to that of <code>std::map</code>s and
 <code>std::multimap</code>s. The most obvious difference is the lack of
 <code>operator []</code>, either in read or write mode; this, however, can be
-simulated with appropriate use of <code>find</code> and <code>insert</code>.
+emulated with appropriate use of <code>find</code> and <code>insert</code>.
 </p>
 
 <p>
-These simulations of standard associative containers with <code>multi_index_container</code>
+These emulations of standard associative containers with <code>multi_index_container</code>
 are comparable to the original constructs in terms of space and time efficiency.
 See the <a href="performance.html">performance section</a> for further details.
 </p>
 
-<h3><a name="simulate_std_list">Simulation of <code>std::list</code></a></h3>
+<h3><a name="emulate_std_list">Emulation of <code>std::list</code></a></h3>
 
 <p>
-Unlike the case of associative containers, simulating <code>std::list</code>
+Unlike the case of associative containers, emulating <code>std::list</code>
 in Boost.MultiIndex does not add any significant functionality, so the following
 is presented merely for completeness sake.
 </p>
 
 <p>
-Much as with standard maps, the main difficulty to overcome when simulating
+Much as with standard maps, the main difficulty to overcome when emulating
 <code>std::list</code> derives from the constant nature of elements of a
 <code>multi_index_container</code>. Again, some sort of adaption class is needed, like
 for instance the following:
@@ -1288,8 +1451,7 @@ definition of the <code>multi_index_container</code>:
   <li><code>iterator_type_list</code>,</li>
   <li><code>const_iterator_type_list</code>.</li>
 </ul>
-Each of these types is a <a href="../../../libs/mpl/doc/refmanual/forward-sequence.html">
-<code>MPL Forward Sequence</code></a> with as many elements as indices
+Each of these types is an MPL sequence with as many elements as indices
 comprise the <code>multi_index_container</code>: for instance, the <code>n</code>-th
 element of <code>iterator_type_list</code> is the same as
 <code>nth_index_iterator&lt;n>::type</code>.
@@ -1335,7 +1497,9 @@ while <code>indexed_t::index_type_list</code> holds the types
 </pre></blockquote>
 
 <p>
-so the typelists are radically different.
+so the typelists are radically different. Check the
+<a href="reference/multi_index_container.html#types">reference</a>
+for the exact MPL sequence concepts modeled by these type lists.
 </p>
 
 <h3><a name="mpl_synthesis">MPL synthesis</a></h3>
@@ -1397,7 +1561,7 @@ Reference
 
 <br>
 
-<p>Revised January 24th 2005</p>
+<p>Revised March 10th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
