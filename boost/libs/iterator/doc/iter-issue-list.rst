@@ -927,11 +927,14 @@ provide rather than how they're implemented.
 
 :Proposed resolution:   **Needs work**
 
-Remove the specfication of inheritance, and add lots of specification
-to make up for it. In iterator_adaptor, that means duplicating a lot of
-function prototypes. In the other adaptors, that means making sure we
-state what concepts are modeled. Also, we will need an Interoperable
-Iterator concept to accomplish this.
+Remove the specfication of inheritance, and explicit specification of
+all the functionality that was inherited. In iterator_adaptor, that
+means adding a lot of function prototypes. In the other adaptors, that
+means making sure we state what concepts are modeled, in addition to
+specifying the semantics of some core operations. Also, the
+Interoperable Iterators concept is added to the new iterator concepts,
+and this concept is used in the specification of the iterator
+adaptors.
 
 I'll start on the work of changing the specification for the
 specialized adaptors. -Jeremy
