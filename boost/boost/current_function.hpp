@@ -22,7 +22,7 @@ namespace boost
 namespace detail
 {
 
-void current_function_helper()
+inline void current_function_helper()
 {
 
 #if defined(__GNUC__)
