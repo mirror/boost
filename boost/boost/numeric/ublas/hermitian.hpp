@@ -1487,9 +1487,10 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-        // Comparison
-        bool operator == (const hermitian_adaptor &ha) const {
-            return (*this).data () == ha.data ();
+        // Closure comparison
+        BOOST_UBLAS_INLINE
+        bool same_closure (const hermitian_adaptor &ha) const {
+            return (*this).data ().same_closure (ha.data ());
         }
 
         // Swapping

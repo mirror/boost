@@ -1145,9 +1145,10 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-        // Comparison
-        bool operator == (const triangular_adaptor &ta) const {
-            return (*this).data () == ta.data ();
+        // Closure comparison
+        BOOST_UBLAS_INLINE
+        bool same_closure (const triangular_adaptor &ta) const {
+            return (*this).data ().same_closure (ta.data ());
         }
 
         // Swapping

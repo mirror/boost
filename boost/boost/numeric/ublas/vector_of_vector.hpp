@@ -625,7 +625,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator1 &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // BOOST_UBLAS_CHECK (rank_ == it.rank_, internal_logic ());
                 if (rank_ == 1 || it.rank_ == 1) {
                     return it_ == it.it_;
@@ -796,7 +796,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const iterator1 &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // BOOST_UBLAS_CHECK (rank_ == it.rank_, internal_logic ());
                 if (rank_ == 1 || it.rank_ == 1) {
                     return it_ == it.it_;
@@ -970,7 +970,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator2 &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // BOOST_UBLAS_CHECK (rank_ == it.rank_, internal_logic ());
                 if (rank_ == 1 || it.rank_ == 1) {
                     return it_ == it.it_;
@@ -1141,7 +1141,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const iterator2 &it) const {
-                BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // BOOST_UBLAS_CHECK (rank_ == it.rank_, internal_logic ());
                 if (rank_ == 1 || it.rank_ == 1) {
                     return it_ == it.it_;

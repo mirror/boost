@@ -75,6 +75,12 @@ namespace boost { namespace numeric { namespace ublas {
             return t_;
         }
 
+        // Closure comparison
+        BOOST_UBLAS_INLINE
+        bool same_closure (const scalar_const_reference &sr) const {
+            return &t_ == &sr.t_;
+        }
+
     private:
         const value_type &t_;
         static value_type nil_;
@@ -223,10 +229,10 @@ namespace boost { namespace numeric { namespace ublas {
             return expression () [i];
         }
 
-        // Comparison
+        // Closure comparison
         BOOST_UBLAS_INLINE
-        bool operator == (const vector_const_reference &vr) const {
-            return &(*this).expression () == &vr.expression ();
+        bool same_closure (const vector_const_reference &vr) const {
+            return &(*this).e_ == &vr.e_;
         }
 
         typedef const_iterator_type const_iterator;
@@ -445,10 +451,10 @@ namespace boost { namespace numeric { namespace ublas {
             return *this;
         }
 
-        // Comparison
+        // Closure comparison
         BOOST_UBLAS_INLINE
-        bool operator == (const vector_reference &vr) const {
-            return &(*this).expression () == &vr.expression ();
+        bool same_closure (const vector_reference &vr) const {
+            return &(*this).e_ == &vr.e_;
         }
 
         typedef const_iterator_type const_iterator;
@@ -597,10 +603,10 @@ namespace boost { namespace numeric { namespace ublas {
             return e_ [i];
         }
 
-        // Comparison
+        // Closure comparison
         BOOST_UBLAS_INLINE
-        bool operator == (const vector_unary &vu) const {
-            return (*this).expression () == vu.expression ();
+        bool same_closure (const vector_unary &vu) const {
+            return (*this).expression ().same_closure (vu.expression ());
         }
 
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -677,7 +683,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 return it_ - it.it_;
             }
 
@@ -704,12 +710,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 return it_ == it.it_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 return it_ < it.it_;
             }
 
@@ -880,11 +886,11 @@ namespace boost { namespace numeric { namespace ublas {
             return functor_type () (e1_ [i], e2_ [i]);
         }
 
-        // Comparison
+        // Closure comparison
         BOOST_UBLAS_INLINE
-        bool operator == (const vector_binary &vb) const {
-            return (*this).expression1 () == vb.expression1 () &&
-                   (*this).expression2 () == vb.expression2 ();
+        bool same_closure (const vector_binary &vb) const {
+            return (*this).expression1 ().same_closure (vb.expression1 ()) &&
+                   (*this).expression2 ().same_closure (vb.expression2 ());
         }
 
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1071,7 +1077,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 return index () - it.index ();
             }
 
@@ -1102,12 +1108,12 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 return index () == it.index ();
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 return index () < it.index ();
             }
 
@@ -1269,11 +1275,11 @@ namespace boost { namespace numeric { namespace ublas {
             return functor_type () (e1_, e2_ [i]);
         }
 
-        // Comparison
+        // Closure comparison
         BOOST_UBLAS_INLINE
-        bool operator == (const vector_binary_scalar1 &vbs1) const {
-            return (*this).expression1 () == vbs1.expression1 () &&
-                   (*this).expression2 () == vbs1.expression2 ();
+        bool same_closure (const vector_binary_scalar1 &vbs1) const {
+            return (*this).expression1 ().same_closure (vbs1.expression1 ()) &&
+                   (*this).expression2 ().same_closure (vbs1.expression2 ());
         }
 
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1350,7 +1356,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // FIXME: we shouldn't compare floats
                 // BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
                 return it2_ - it.it2_;
@@ -1380,14 +1386,14 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // FIXME: we shouldn't compare floats
                 // BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
                 return it2_ == it.it2_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // FIXME: we shouldn't compare floats
                 // BOOST_UBLAS_CHECK (it1_ == it.it1_, external_logic ());
                 return it2_ < it.it2_;
@@ -1510,11 +1516,11 @@ namespace boost { namespace numeric { namespace ublas {
             return functor_type () (e1_ [i], e2_);
         }
 
-        // Comparison
+        // Closure comparison
         BOOST_UBLAS_INLINE
-        bool operator == (const vector_binary_scalar2 &vbs2) const {
-            return (*this).expression1 () == vbs2.expression1 () &&
-                   (*this).expression2 () == vbs2.expression2 ();
+        bool same_closure (const vector_binary_scalar2 &vbs2) const {
+            return (*this).expression1 ().same_closure (vbs2.expression1 ()) &&
+                   (*this).expression2 ().same_closure (vbs2.expression2 ());
         }
 
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1591,7 +1597,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // FIXME: we shouldn't compare floats
                 // BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
                 return it1_ - it.it1_;
@@ -1621,14 +1627,14 @@ namespace boost { namespace numeric { namespace ublas {
             // Comparison
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // FIXME: we shouldn't compare floats
                 // BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
                 return it1_ == it.it1_;
             }
             BOOST_UBLAS_INLINE
             bool operator < (const const_iterator &it) const {
-                BOOST_UBLAS_CHECK ((*this) () == it (), external_logic ());
+                BOOST_UBLAS_CHECK ((*this) ().same_closure (it ()), external_logic ());
                 // FIXME: we shouldn't compare floats
                 // BOOST_UBLAS_CHECK (it2_ == it.it2_, external_logic ());
                 return it1_ < it.it1_;

@@ -82,6 +82,12 @@ namespace boost { namespace numeric { namespace ublas {
             c_ = c;
             return *this;
         }
+        
+        // Closure comparison
+        BOOST_UBLAS_INLINE
+        bool same_closure (const container_const_reference &cr) const {
+            return c_ == cr.c_;
+        }
 
     private:
         const container_type *c_;
