@@ -374,7 +374,7 @@
         <template-type-parameter name="TN"/>
       </template>
 
-      <type><classname>std::basic_ostream</classname>&lt;ElemType,Traits&gt;</type>
+      <type><classname>std::basic_ostream</classname>&lt;ElemType,Traits&gt; &amp;</type>
 
       <parameter name="out">
         <paramtype><classname>std::basic_ostream</classname>&lt;ElemType,Traits&gt; &amp;</paramtype>
