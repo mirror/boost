@@ -1040,6 +1040,8 @@ private: // helpers, for structors (below)
 
     };
 
+    friend class preprocessor_list_initializer;
+
     typedef preprocessor_list_initializer
         initializer;
 
@@ -1148,7 +1150,8 @@ private: // helpers, for structors, cont. (below)
             );
     }
 
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) \
+ && !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
 
 public: // structors, cont.
 
@@ -1487,14 +1490,15 @@ public: // queries
 
     bool empty() const
     {
+        typedef typename mpl::begin<types>::type
+            begin_it;
+
         typedef typename mpl::find<
-              types
-            , boost::empty
+              types, boost::empty
             >::type empty_it;
 
         typedef typename mpl::distance<
-              typename mpl::begin<types>::type
-            , empty_it
+              begin_it, empty_it
             >::type empty_index;
 
         return which() == empty_index::value;
