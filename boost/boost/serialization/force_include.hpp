@@ -35,7 +35,7 @@
 // release mode.
 
 // Intel compiler
-#if (defined __INTEL_COMPILER)
+#if defined(__INTEL_COMPILER)
 //   Intel C++ 7.0+ on Windows
 #    if (__INTEL_COMPILER >= 700) && (defined_WIN32)
 #        define BOOST_FORCE_INCLUDE __declspec(noinline) __declspec(dllexport)
@@ -43,9 +43,16 @@
 #        define BOOST_FORCE_INCLUDE
 #    endif
 // MSVC
-#elif (defined BOOST_MSVC)
+#elif defined(BOOST_MSVC)
 //   VC 7.0 & higher
 #    if (BOOST_MSVC >= 1300)
+#        define BOOST_FORCE_INCLUDE __declspec(noinline) __declspec(dllexport)
+#    else
+#        define BOOST_FORCE_INCLUDE __declspec(dllexport)
+#    endif
+#elif defined(__MWERKS__) 
+//   Code Warrior
+#    if(__MWERKS__ >= 0x3003)  // 8.x
 #        define BOOST_FORCE_INCLUDE __declspec(noinline) __declspec(dllexport)
 #    else
 #        define BOOST_FORCE_INCLUDE __declspec(dllexport)

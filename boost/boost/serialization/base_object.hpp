@@ -46,7 +46,11 @@ namespace detail {
         };
         template<class B, class D>
         struct reg{
-            static void invoke(){
+            static reg invoke(){
+                return instance;
+            }
+            static reg instance;
+            reg(){
                 void_cast_register<const D, const B>(
                     static_cast<const D *>(NULL),
                     static_cast<const B *>(NULL)
@@ -61,6 +65,8 @@ namespace detail {
             >::type::invoke();
         }
     };
+
+    
     // get the base type for a given derived type
     // preserving the const-ness
     template<class Base, class Derived>
@@ -79,25 +85,26 @@ namespace detail {
     };
 } // namespace detail
 
-#if ! BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
+// BORLAND
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
 template<class Base, class Derived>
-BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & base_object(Derived &d)
+const Base & 
+base_object(const Derived & d)
+{
+    BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
+    detail::base_register<Base, Derived>::invoke();
+    return static_cast<const Base &>(d);
+}
+#else
+template<class Base, class Derived>
+BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type & 
+base_object(Derived &d)
 {
     BOOST_STATIC_ASSERT(( is_base_and_derived<Base,Derived>::value));
     BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
     detail::base_register<Base, Derived>::invoke();
     typedef BOOST_DEDUCED_TYPENAME detail::base_cast<Base, Derived>::type type;
     return static_cast<type &>(d);
-}
-
-#else
-// BORLAND
-template<class Base, class Derived>
-const Base & base_object(const Derived & d)
-{
-    BOOST_STATIC_ASSERT(! is_pointer<Derived>::value);
-    detail::base_register<Base, Derived>::invoke();
-    return static_cast<const Base &>(d);
 }
 #endif
 

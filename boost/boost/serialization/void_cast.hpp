@@ -185,7 +185,7 @@ struct static_initializer
     static_initializer(){
         static void_caster_primitive<const Derived, const Base> instance1;
     }
-    BOOST_FORCE_INCLUDE static const static_initializer & instantiate(){
+    static const BOOST_FORCE_INCLUDE static_initializer & instantiate(){
         return instance;
     }
 };
