@@ -20,8 +20,10 @@
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
 #include <boost/iostreams/detail/chain.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/filter/one_step_filter.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -56,7 +58,7 @@ protected:
         {
             detail::chain<output, char_type> out;
             out.push(filter_);
-            out.push(adapt(std::back_inserter(dest)));
+            out.push(iostreams::back_inserter(dest));
             out.write(&src[0], (std::streamsize) src.size());
         }
 private:
@@ -90,8 +92,8 @@ protected:
         {
             detail::chain<input, char_type> in;
             in.push(filter_);
-            in.push(src.begin(), src.end());
-            copy(in, adapt(std::back_inserter(dest)));
+            in.push(make_iterator_range(src));
+            copy(in, iostreams::back_inserter(dest));
         }
 private:
     InputFilter filter_;
