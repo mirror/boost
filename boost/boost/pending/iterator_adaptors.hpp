@@ -37,8 +37,11 @@ struct type {};
 // class if you want to customize particular policies.
 struct default_iterator_policies
 {
+    // Some of these members were defined static, but Borland got confused
+    // and thought they were non-const.
+
     template <class Reference, class Iterator>
-    static Reference dereference(type<Reference>, const Iterator& x)
+    Reference dereference(type<Reference>, const Iterator& x) const
         { return *x; }
 
     template <class Iterator>
@@ -54,15 +57,15 @@ struct default_iterator_policies
         { x += n; }
 
     template <class Difference, class Iterator1, class Iterator2>
-    static Difference distance(type<Difference>, const Iterator1& x, const Iterator2& y)
+    Difference distance(type<Difference>, const Iterator1& x, const Iterator2& y) const
         { return y - x; }
 
     template <class Iterator1, class Iterator2>
-    static bool equal(const Iterator1& x, const Iterator2& y)
+    bool equal(const Iterator1& x, const Iterator2& y) const
         { return x == y; }
 
     template <class Iterator1, class Iterator2>
-    static bool less(const Iterator1& x, const Iterator2& y)
+    bool less(const Iterator1& x, const Iterator2& y) const
         { return x < y; }
 };
 

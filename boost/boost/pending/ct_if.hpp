@@ -12,14 +12,43 @@
 
 #include <boost/config.hpp>
 
+/*
+  There is a bug in the Borland compiler with regards to using
+  integers to specialize templates. This made it hard to use ct_if in
+  the graph library. Changing from 'ct_if' to 'ct_if_t' fixed the
+  problem.
+*/
+
 namespace boost {
+
+  struct ct_if_error { };
+
+  struct true_type { enum { value = true }; };
+  struct false_type { enum { value = false }; };
+
+  template <class A, class B>
+  struct ct_and { typedef false_type type; };
+  template <> struct ct_and<true_type,true_type> { typedef true_type type; };
+
+  template <class A> struct ct_not { typedef ct_if_error type; };
+  template <> struct ct_not<true_type> { typedef false_type type; };
+  template <> struct ct_not<false_type> { typedef true_type type; };
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
   template <int cond, class A, class B>
-  struct ct_if { typedef A type; };
+  struct ct_if { typedef ct_if_error type; };
+  template <class A, class B>
+  struct ct_if<1, A, B> { typedef A type; };
   template <class A, class B>
   struct ct_if<0, A, B> { typedef B type; };
+
+  template <class cond, class A, class B>
+  struct ct_if_t { typedef ct_if_error type; };
+  template <class A, class B>
+  struct ct_if_t<true_type, A, B> { typedef A type; };
+  template <class A, class B>
+  struct ct_if_t<false_type, A, B> { typedef B type; };
 
 #else
 
@@ -59,6 +88,11 @@ namespace boost {
     typedef typename Selector::template Template<A, B>::type type;
   };
   
+  template <class cond, class A, class B>
+  struct ct_if_t { 
+    typedef typename ct_if<cond::value, A, B>::type type;
+  };
+
 #endif
 
 } // namespace boost
