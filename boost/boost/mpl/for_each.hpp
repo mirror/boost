@@ -29,56 +29,57 @@ namespace mpl {
 
 namespace aux {
 
-template<
+template <bool done = true>
+struct for_each_impl
+{
+    template<
       typename Iterator
     , typename LastIterator
     , typename TransformFunc
     , typename F
     >
-inline
-void for_each_impl(
-      F
-    , true_c
-#if defined(BOOST_MSVC) && BOOST_MSVC < 1301
-    , Iterator* = 0
-    , LastIterator* = 0
-    , TransformFunc* = 0
-#endif
-    )
+    static void execute(
+        Iterator*
+        , LastIterator*
+        , TransformFunc*
+        , F
+        )
+    {
+    }
+};
+
+template <>
+struct for_each_impl<false>
 {
-}
+    template<
+      typename Iterator
+    , typename LastIterator
+    , typename TransformFunc
+    , typename F
+    >
+    static void execute(
+        Iterator*
+        , LastIterator*
+        , TransformFunc* 
+        , F f
+        )
+    {
+        typedef typename Iterator::type item;
+        typedef typename apply1<TransformFunc,item>::type arg;
+    
+        // dwa 2002/9/10 -- make sure not to invoke undefined behavior
+        // when we pass arg.
+        value_initialized<arg> x;
+        f(get(x));
+        
+        typedef typename Iterator::next iter;
+        for_each_impl<boost::is_same<iter,LastIterator>::value>::execute(
+            (iter*)0, (LastIterator*)0, (TransformFunc*)0, f);
+    }
+};
 
 // agurt, 17/mar/02: pointer default parameters are necessary to workaround 
 // MSVC 6.5 function template signature's mangling bug
-template<
-      typename Iterator
-    , typename LastIterator
-    , typename TransformFunc
-    , typename F
-    >
-inline
-void for_each_impl(
-      F f
-    , false_c
-#if defined(BOOST_MSVC) && BOOST_MSVC < 1301
-    , Iterator* = 0
-    , LastIterator* = 0
-    , TransformFunc* = 0
-#endif
-    )
-{
-    typedef typename Iterator::type item;
-    typedef typename Iterator::next iter;
-    typedef bool_c< boost::is_same<iter,LastIterator>::value > is_last;
-    typedef typename apply1<TransformFunc,item>::type arg;
-    
-    // dwa 2002/9/10 -- make sure not to invoke undefined behavior
-    // when we pass arg.
-    value_initialized<arg> x;
-    f(get(x));
-    for_each_impl< iter,LastIterator,TransformFunc >(f, is_last());
-}
-
 } // namespace aux
 
 template<
@@ -92,8 +93,9 @@ void for_each(F f, Sequence* = 0, TransformOp* = 0)
     typedef typename begin<Sequence>::type first;
     typedef typename end<Sequence>::type last;
     typedef typename lambda<TransformOp>::type transform_op;
-    typedef bool_c< boost::is_same<first,last>::value > is_last;
-    aux::for_each_impl< first,last,transform_op >(f, is_last());
+
+    aux::for_each_impl< boost::is_same<first,last>::value >::execute(
+        (first*)0, (last*)0, (transform_op*)0, f);
 }
 
 } // namespace mpl
