@@ -50,6 +50,9 @@ public:
   // uniform_01 cannot be assigned, neither can this class
 
   base_type& base() const { return _rng.base(); }
+  RealType mean() const { return _mean; }
+  RealType sigma() const { return _sigma; }
+
   void reset() { _valid = false; }
 
   result_type operator()()
