@@ -1,21 +1,19 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/has_xxx.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2002-2003
-// Aleksey Gurtovoy and David Abrahams
-//
-// Permission to use, copy, modify, distribute and sell this software
-// and its documentation for any purpose is hereby granted without fee, 
-// provided that the above copyright notice appears in all copies and 
-// that both the copyright notice and this permission notice appear in 
-// supporting documentation. No representations are made about the 
-// suitability of this software for any purpose. It is provided "as is" 
-// without express or implied warranty.
 
 #ifndef BOOST_MPL_AUX_HAS_XXX_HPP_INCLUDED
 #define BOOST_MPL_AUX_HAS_XXX_HPP_INCLUDED
+
+// Copyright (C) Aleksey Gurtovoy 2002-2003
+// Copyright (C) David Abrahams 2002-2003
+//
+// Use, modification and distribution are subject to the Boost Software 
+// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy 
+// at http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
 
 #include "boost/mpl/aux_/type_wrapper.hpp"
 #include "boost/mpl/aux_/yes_no.hpp"
@@ -24,7 +22,9 @@
 #include "boost/mpl/aux_/config/static_constant.hpp"
 #include "boost/detail/workaround.hpp"
 
-#if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION) && !BOOST_WORKAROUND(__GNUC__, <= 2)
+#if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION) \
+    && !BOOST_WORKAROUND(__GNUC__, <= 2) \
+    && !BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x833))
 
 #   if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
