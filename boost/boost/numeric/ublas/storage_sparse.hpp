@@ -66,53 +66,6 @@ namespace boost { namespace numeric { namespace ublas {
     }
 
 #ifdef BOOST_UBLAS_STRICT_MAP_ARRAY
-    template<class D>
-    struct sparse_storage_element_traits {
-        typedef typename D::key_type index_type;
-        typedef typename D::data_const_reference data_const_reference;
-        typedef typename D::data_reference data_reference;
-    };
-    template<>
-    struct sparse_storage_element_traits<float> {
-        typedef std::size_t index_type;
-        typedef void data_const_reference;
-        typedef void data_reference;
-    };
-    template<>
-    struct sparse_storage_element_traits<double> {
-        typedef std::size_t index_type;
-        typedef void data_const_reference;
-        typedef void data_reference;
-    };
-#ifndef BOOST_UBLAS_NO_LONG_DOUBLE
-    template<>
-    struct sparse_storage_element_traits<long double> {
-        typedef std::size_t index_type;
-        typedef void data_const_reference;
-        typedef void data_reference;
-    };
-#endif
-    template<>
-    struct sparse_storage_element_traits<std::complex<float> > {
-        typedef std::size_t index_type;
-        typedef void data_const_reference;
-        typedef void data_reference;
-    };
-    template<>
-    struct sparse_storage_element_traits<std::complex<double> > {
-        typedef std::size_t index_type;
-        typedef void data_const_reference;
-        typedef void data_reference;
-    };
-#ifndef BOOST_UBLAS_NO_LONG_DOUBLE
-    template<>
-    struct sparse_storage_element_traits<std::complex<long double> > {
-        typedef std::size_t index_type;
-        typedef void data_const_reference;
-        typedef void data_reference;
-    };
-#endif
-
     template<class A>
     class sparse_storage_element:
        public container_reference<A> {
@@ -148,10 +101,10 @@ namespace boost { namespace numeric { namespace ublas {
             }
         }
 
-        // Element access
+        // Element access - only if data_const_reference is defined
         BOOST_UBLAS_INLINE
-        typename sparse_storage_element_traits<data_value_type>::data_const_reference
-        operator [] (typename sparse_storage_element_traits<data_value_type>::index_type i) const {
+        typename data_value_type::data_const_reference
+        operator [] (index_type i) const {
             return d_ [i];
         }
 
