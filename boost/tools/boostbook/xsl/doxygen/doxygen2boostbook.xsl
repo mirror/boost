@@ -12,6 +12,13 @@
   <!-- Prefix all of the headers output with this string -->
   <xsl:param name="boost.doxygen.header.prefix" select="''"/>
 
+  <!-- The text that Doxygen places in overloaded functions. Damn them
+       for forcing us to compare TEXT just to figure out what's overloaded
+       and what isn't. -->
+  <xsl:param name="boost.doxygen.overload">
+    This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts.
+  </xsl:param>
+
   <xsl:output method="xml" indent="yes" standalone="yes"/>
 
   <xsl:key name="compounds-by-kind" match="compounddef" use="@kind"/>
@@ -624,12 +631,16 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
   <!-- Handle function children -->
   <xsl:template name="function.children">
-    <!-- Emit template header -->
-    <xsl:apply-templates select="templateparamlist" mode="template"/>
+    <xsl:param name="is-overloaded" select="false()"/>
 
-    <!-- Emit function parameters -->
-    <xsl:apply-templates select="param" mode="function"/>
-    
+    <xsl:if test="not($is-overloaded)">
+      <!-- Emit template header -->
+      <xsl:apply-templates select="templateparamlist" mode="template"/>
+      
+      <!-- Emit function parameters -->
+      <xsl:apply-templates select="param" mode="function"/>
+    </xsl:if>
+
     <!-- The description -->
     <xsl:apply-templates select="briefdescription" mode="passthrough"/>
     <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
@@ -656,20 +667,87 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   <xsl:template name="function">
     <xsl:param name="in-file" select="''"/>
 
-    <xsl:if test="contains(string(location/attribute::file), $in-file)">
-      <function>
-        <xsl:attribute name="name">
-          <xsl:value-of select="name/text()"/>
-        </xsl:attribute>
-        
-        <!-- Return type -->
-        <type>
-          <xsl:value-of select="type"/>
-        </type>
+    <xsl:variable name="firstpara" 
+      select="normalize-space(detaileddescription/para[1])"/>
+    <xsl:if test="contains(string(location/attribute::file), $in-file)
+                  and 
+                  not($firstpara=normalize-space($boost.doxygen.overload))">
 
-        <xsl:call-template name="function.children"/>
-      </function>
+      <xsl:variable name="next-node" select="following-sibling::*[1]"/>
+      <xsl:variable name="has-overload">
+        <xsl:if test="not(local-name($next-node)='memberdef')">
+          false
+        </xsl:if>
+        <xsl:if test="not(string($next-node/name/text())=string(name/text()))">
+          false
+        </xsl:if>
+        <xsl:if 
+          test="not(normalize-space($next-node/detaileddescription/para[1])
+                    =normalize-space($boost.doxygen.overload))">
+          false
+        </xsl:if>
+      </xsl:variable>
+
+      <xsl:choose>
+        <xsl:when test="not(contains($has-overload, 'false'))">
+          <overloaded-function>
+            <xsl:attribute name="name">
+              <xsl:value-of select="name/text()"/>
+            </xsl:attribute>
+
+            <xsl:call-template name="overload-signatures"/>
+            <xsl:call-template name="function.children">
+              <xsl:with-param name="is-overloaded" select="true()"/>
+            </xsl:call-template>
+          </overloaded-function>
+        </xsl:when>
+        <xsl:otherwise>
+          <function>
+            <xsl:attribute name="name">
+              <xsl:value-of select="name/text()"/>
+            </xsl:attribute>
+            
+            <!-- Return type -->
+            <type>
+              <xsl:value-of select="type"/>
+            </type>
+            
+            <xsl:call-template name="function.children"/>
+          </function>          
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
+  </xsl:template>
+
+  <!-- Emit overload signatures -->
+  <xsl:template name="overload-signatures">
+    <xsl:param name="node" select="."/>
+    <xsl:param name="name" select="string(name/text())"/>
+    <xsl:param name="first" select="true()"/>
+
+    <xsl:choose>
+      <xsl:when test="not(local-name($node)='memberdef')"/>
+      <xsl:when test="not(string($node/name/text())=$name)"/>
+      <xsl:when test="not(normalize-space($node/detaileddescription/para[1])
+                          =normalize-space($boost.doxygen.overload))
+                      and not($first)"/>
+      <xsl:otherwise>
+        <signature>
+          <type>
+            <xsl:value-of select="$node/type"/>
+          </type>
+          <xsl:apply-templates select="$node/templateparamlist" 
+            mode="template"/>
+          <xsl:apply-templates select="$node/param" mode="function"/>
+        </signature>
+
+        <xsl:call-template name="overload-signatures">
+          <xsl:with-param name="node" select="$node/following-sibling::*[1]"/>
+          <xsl:with-param name="name" select="$name"/>
+          <xsl:with-param name="first" select="false()"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- Handle constructors -->
@@ -822,11 +900,21 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   <xsl:template match="parameterlist" mode="function-clauses">
     <xsl:if test="@kind='exception'">
       <simpara>
-        <classname><xsl:value-of select="parametername/text()"/></classname>
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates 
-          select="parameterdescription/para/text()|parameterdescription/para/*"
-          mode="passthrough"/>
+        <xsl:choose>
+          <xsl:when test="normalize-space(parametername/text())='nothrow'">
+            <xsl:text>Will not throw.</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <classname>
+              <xsl:value-of select="parametername/text()"/>
+            </classname>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates 
+              select="parameterdescription/para/text()
+                      |parameterdescription/para/*"
+              mode="passthrough"/>
+          </xsl:otherwise>
+        </xsl:choose>
       </simpara>
     </xsl:if>
   </xsl:template>
