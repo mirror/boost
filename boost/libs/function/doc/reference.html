@@ -54,7 +54,6 @@
     <a href="#functionN_clear"><b>void</b> clear()</a>;
 
     <i>// Invocation</i>
-    <a href="#functionN_call">result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>)</a>;
     <a href="#functionN_call_const">result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>) <b>const</b></a>;
   };
 
@@ -180,10 +179,10 @@
   <li><b>Postconditions</b>: <code><a href="#empty">empty</a>()</code>.</li>
 </ul>
 
-<p> <a name="functionN_call"><code> result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>);</code></a>
+<p> <a name="functionN_call_const"><code> result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>) <b>const</b>;</code></a>
 <ul>
   <li><b>Requires</b>: <code>!<a href="#empty">empty</a>()</code>.</li>
-  <li><b>Effects</b>: <i>target</i> is the underlying function target. It is not <code><b>const</b></code> or <code>volatile</code> qualified.
+  <li><b>Effects</b>: <i>target</i> is the underlying function target. It is not <code><b>const</b></code> or <code><b>volatile</b></code> qualified.
     <ol>
       <li><code>policy_type policy;</code></li>
       <li><code>policy.precall(this);</code></li>
@@ -191,19 +190,6 @@
       <li><code>policy.postcall(this);</code></li>
     </ol>
   <li><b>Returns</b>: the value returned by <i>target</i>.</li>
-</ul>
-
-<p> <a name="functionN_call_const"><code> result_type <b>operator</b>()(Arg1 a1, Arg2 a2, <i>...</i>, Arg<i>N</i> a<i>N</i>) <b>const</b>;</code></a>
-<ul>
-  <li><b>Requires</b>: <code>!<a href="#empty">empty</a>()</code>.</li>
-  <li><b>Effects</b>: <i>const-target</i> is the underlying function target. It is <code><b>const</b></code> qualified but not <code>volatile</code> qualified.
-    <ol>
-      <li><code>policy_type policy;</code></li>
-      <li><code>policy.precall(this);</code></li>
-      <li><code><i>const-target</i>(a1, a2, <i>...</i>, a<i>N</i>);</code></li>
-      <li><code>policy.postcall(this);</code></li>
-    </ol>
-  <li><b>Returns</b>: the value returned by <i>const-target</i>.</li>
 </ul>
 
 <h2><a name="function">Class template <code>function</code></a></h2>
@@ -247,7 +233,7 @@
     <address><a href="mailto:gregod@cs.rpi.edu">Douglas Gregor</a></address>
 <!-- Created: Fri Jul 13 10:57:20 EDT 2001 -->
 <!-- hhmts start -->
-Last modified: Sat Jul 14 16:05:46 EDT 2001
+Last modified: Sun Jul 22 01:29:50 EDT 2001
 <!-- hhmts end -->
   </body>
 </html>
