@@ -10,7 +10,7 @@
 //
 //  bind.hpp - binds function objects to arguments
 //
-//  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2001-2004 Peter Dimov and Multi Media Ltd.
 //  Copyright (c) 2001 David Abrahams
 //
 //  Permission to copy, use, modify, sell and distribute this software
@@ -26,6 +26,7 @@
 #include <boost/mem_fn.hpp>
 #include <boost/type.hpp>
 #include <boost/bind/arg.hpp>
+#include <boost/detail/workaround.hpp>
 
 // Borland-specific bug, visit_each() silently fails to produce code
 
@@ -112,42 +113,22 @@ template<class T> class type {};
 
 // unwrap
 
-template<class F> inline F & unwrap(F & f, long)
+template<class F> inline F & unwrap(F * f, long)
 {
-    return f;
+    return *f;
 }
 
-template<class F> inline F * unwrap(F * f, int)
+template<class F> inline F & unwrap(reference_wrapper<F> * f, int)
 {
-    return f;
+    return f->get();
 }
 
-template<class F> inline F & unwrap(reference_wrapper<F> & f, int)
+template<class F> inline F & unwrap(reference_wrapper<F> const * f, int)
 {
-    return f;
-}
-
-template<class F> inline F & unwrap(reference_wrapper<F> const & f, int)
-{
-    return f;
+    return f->get();
 }
 
 // listN
-
-#ifdef BOOST_NO_VOID_RETURNS
-
-template <class R> struct evaluator0;
-template <class R> struct evaluator1;
-template <class R> struct evaluator2;
-template <class R> struct evaluator3;
-template <class R> struct evaluator4;
-template <class R> struct evaluator5;
-template <class R> struct evaluator6;
-template <class R> struct evaluator7;
-template <class R> struct evaluator8;
-template <class R> struct evaluator9;
-
-#endif
 
 class list0
 {
@@ -165,14 +146,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A &)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A &, long)
     {
-        return unwrap(f, 0)();
+        return unwrap(&f, 0)();
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A &) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A &, long) const
     {
-        return unwrap(f, 0)();
+        return unwrap(&f, 0)();
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A &, int)
+    {
+        unwrap(&f, 0)();
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A &, int) const
+    {
+        unwrap(&f, 0)();
     }
 
     template<class V> void accept(V &) const
@@ -183,16 +174,6 @@ public:
     {
         return true;
     }
-
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator0<R> type;
-    };
-
-#endif
-
 };
 
 template<class A1> class list1
@@ -215,14 +196,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_]);
+        return unwrap(&f, 0)(a[a1_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_]);
+        return unwrap(&f, 0)(a[a1_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_]);
     }
 
     template<class V> void accept(V & v) const
@@ -235,18 +226,7 @@ public:
         return ref_compare(a1_, rhs.a1_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator1<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
 };
@@ -273,14 +253,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_], a[a2_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_], a[a2_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_]);
     }
 
     template<class V> void accept(V & v) const
@@ -294,18 +284,7 @@ public:
         return ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator2<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
     A2 a2_;
@@ -335,14 +314,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_]);
     }
 
     template<class V> void accept(V & v) const
@@ -357,18 +346,7 @@ public:
         return ref_compare(a1_, rhs.a1_, 0) && ref_compare(a2_, rhs.a2_, 0) && ref_compare(a3_, rhs.a3_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator3<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
     A2 a2_;
@@ -401,14 +379,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
 
     template<class V> void accept(V & v) const
@@ -426,18 +414,7 @@ public:
             ref_compare(a4_, rhs.a4_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator4<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
     A2 a2_;
@@ -473,14 +450,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
 
     template<class V> void accept(V & v) const
@@ -499,18 +486,7 @@ public:
             ref_compare(a4_, rhs.a4_, 0) && ref_compare(a5_, rhs.a5_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator5<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
     A2 a2_;
@@ -549,14 +525,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
 
     template<class V> void accept(V & v) const
@@ -576,18 +562,7 @@ public:
             ref_compare(a4_, rhs.a4_, 0) && ref_compare(a5_, rhs.a5_, 0) && ref_compare(a6_, rhs.a6_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator6<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
     A2 a2_;
@@ -629,14 +604,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
 
     template<class V> void accept(V & v) const
@@ -658,18 +643,7 @@ public:
             ref_compare(a7_, rhs.a7_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator7<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
     A2 a2_;
@@ -714,14 +688,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
 
     template<class V> void accept(V & v) const
@@ -744,18 +728,7 @@ public:
             ref_compare(a7_, rhs.a7_, 0) && ref_compare(a8_, rhs.a8_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator8<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
     A2 a2_;
@@ -803,14 +776,24 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+    }
+
+    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
+    {
+        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
 
     template<class V> void accept(V & v) const
@@ -834,18 +817,7 @@ public:
             ref_compare(a7_, rhs.a7_, 0) && ref_compare(a8_, rhs.a8_, 0) && ref_compare(a9_, rhs.a9_, 0);
     }
 
-#ifdef BOOST_NO_VOID_RETURNS
-
-    template<class R> struct evaluator
-    {
-        typedef evaluator9<R> type;
-    };
-
-#else
-
 private:
-
-#endif
 
     A1 a1_;
     A2 a2_;
@@ -857,190 +829,6 @@ private:
     A8 a8_;
     A9 a9_;
 };
-
-#ifdef BOOST_NO_VOID_RETURNS
-
-template <class R> struct evaluator0
-{
-    template<class L, class F, class A>
-    static R eval(L &, F & f, A &)
-    {
-        return unwrap(f, 0)();
-    }
-};
-
-template <> struct evaluator0<void>
-{
-    template<class L, class F, class A>
-    static void eval(L &, F & f, A &)
-    {
-        unwrap(f, 0)();
-    }
-};
-
-template <class R> struct evaluator1
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_]);
-    }
-};
-
-template <> struct evaluator1<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_]);
-    }
-};
-
-template <class R> struct evaluator2
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_], a[l.a2_]);
-    }
-};
-
-template <> struct evaluator2<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_], a[l.a2_]);
-    }
-};
-
-template <class R> struct evaluator3
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_]);
-    }
-};
-
-template <> struct evaluator3<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_]);
-    }
-};
-
-template <class R> struct evaluator4
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_]);
-    }
-};
-
-template <> struct evaluator4<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_]);
-    }
-};
-
-template <class R> struct evaluator5
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_]);
-    }
-};
-
-template <> struct evaluator5<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_]);
-    }
-};
-
-template <class R> struct evaluator6
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_]);
-    }
-};
-
-template <> struct evaluator6<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_]);
-    }
-};
-
-template <class R> struct evaluator7
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_]);
-    }
-};
-
-template <> struct evaluator7<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_]);
-    }
-};
-
-template <class R> struct evaluator8
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_]);
-    }
-};
-
-template <> struct evaluator8<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_]);
-    }
-};
-
-template <class R> struct evaluator9
-{
-    template<class L, class F, class A>
-    static R eval(L & l, F & f, A & a)
-    {
-        return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_], a[l.a9_]);
-    }
-};
-
-template <> struct evaluator9<void>
-{
-    template<class L, class F, class A>
-    static void eval(L & l, F & f, A & a)
-    {
-        unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_], a[l.a9_]);
-    }
-};
-
-#endif
 
 // bind_t
 
@@ -1054,9 +842,9 @@ public:
 
     bind_t(F f, L const & l): f_(f), l_(l) {}
 
-#define BOOST_BIND_EVALUATE return l_(type<result_type>(), f_, a)
+#define BOOST_BIND_RETURN return
 #include <boost/bind/bind_template.hpp>
-#undef BOOST_BIND_EVALUATE
+#undef BOOST_BIND_RETURN
 
 };
 
@@ -1073,9 +861,9 @@ public:
 
     implementation(F f, L const & l): f_(f), l_(l) {}
 
-#define BOOST_BIND_EVALUATE return L::BOOST_NESTED_TEMPLATE evaluator<result_type>::type::eval(l_, f_, a);
+#define BOOST_BIND_RETURN return
 #include <boost/bind/bind_template.hpp>
-#undef BOOST_BIND_EVALUATE
+#undef BOOST_BIND_RETURN
 
 };
 
@@ -1096,9 +884,9 @@ public:
 
     implementation(F f, L const & l): f_(f), l_(l) {}
 
-#define BOOST_BIND_EVALUATE L::BOOST_NESTED_TEMPLATE evaluator<result_type>::type::eval(l_, f_, a);
+#define BOOST_BIND_RETURN
 #include <boost/bind/bind_template.hpp>
-#undef BOOST_BIND_EVALUATE
+#undef BOOST_BIND_RETURN
 
 };
 
