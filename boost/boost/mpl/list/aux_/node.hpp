@@ -19,6 +19,8 @@
 
 #include "boost/mpl/integral_c.hpp"
 #include "boost/mpl/list/aux_/tag.hpp"
+#include "boost/mpl/aux_/config/msvc.hpp"
+#include "boost/mpl/aux_/config/workaround.hpp"
 
 namespace boost {
 namespace mpl {
@@ -30,6 +32,10 @@ template<
     >
 struct list_node
 {
+// agurt, 17/jul/03: to facilitate the deficient 'is_sequence' implementation 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    typedef int begin;
+#endif
     typedef aux::list_tag tag;
     typedef list_node type;
 
@@ -40,6 +46,9 @@ struct list_node
 
 struct null_node
 {
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    typedef int begin;
+#endif
     typedef aux::list_tag tag;
     typedef null_node type;
     typedef integral_c<long,0> size;

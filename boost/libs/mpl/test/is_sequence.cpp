@@ -34,7 +34,9 @@ int main()
     BOOST_STATIC_ASSERT(!is_sequence< UDT* >::value);
     BOOST_STATIC_ASSERT((is_sequence< range_c<int,0,0> >::value));
     BOOST_STATIC_ASSERT(is_sequence< list<> >::value);
+    BOOST_STATIC_ASSERT(is_sequence< list<int> >::value);
     BOOST_STATIC_ASSERT(is_sequence< vector<> >::value);
+    BOOST_STATIC_ASSERT(is_sequence< vector<int> >::value);
 
     return 0;
 }
