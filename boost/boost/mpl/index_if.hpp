@@ -18,18 +18,16 @@
 #define BOOST_MPL_INDEX_IF_HPP_INCLUDED
 
 #include "boost/mpl/aux_/config/workaround.hpp"
+#include "boost/mpl/aux_/find_if_pred.hpp"
 #include "boost/mpl/aux_/iter_fold_if_impl.hpp"
-#include "boost/mpl/aux_/iter_apply.hpp"
 #include "boost/mpl/always.hpp"
-#include "boost/mpl/apply.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/bool.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/lambda.hpp"
 #include "boost/mpl/next.hpp"
-#include "boost/mpl/not.hpp"
-#include "boost/mpl/or.hpp"
+#include "boost/mpl/void.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/type_traits/is_same.hpp"
@@ -38,21 +36,6 @@ namespace boost {
 namespace mpl {
 
 namespace aux {
-
-// slight modification of Aleksey Gurtovoy's find_if_pred
-//   (could replace find_if_pred)
-template< typename Predicate, typename LastIterator >
-struct index_if_pred
-{
-    template< typename State, typename Iterator >
-    struct apply
-    {
-        typedef not_< or_<
-              is_same<Iterator,LastIterator>
-            , aux::iter_apply1<Predicate,Iterator>
-            > > type;
-    };
-};
 
 struct index_if_op
 {
@@ -88,7 +71,7 @@ struct index_if
           first_
         , int_<0>
         , aux::index_if_op
-        , aux::index_if_pred<pred_,last_>
+        , aux::find_if_pred<pred_,last_>
         , void
         , always<false_>
         >
@@ -104,7 +87,7 @@ struct index_if
  public:
     typedef typename if_<
           is_same< result_iterator_,last_ >
-        , int_<-1>
+        , void_
         , result_index_
         >::type type;
 

@@ -18,6 +18,7 @@
 
 #include "boost/static_assert.hpp"
 #include "boost/mpl/list.hpp"
+#include "boost/mpl/void.hpp"
 
 namespace mpl = boost::mpl;
 
@@ -30,10 +31,11 @@ int test_main(int , char* [])
     typedef mpl::index_of< types, float  >::type index_of_float;
     typedef mpl::index_of< types, char   >::type index_of_char;
 
-    BOOST_STATIC_ASSERT( index_of_int::value    == 0 );
-    BOOST_STATIC_ASSERT( index_of_double::value == 1 );
-    BOOST_STATIC_ASSERT( index_of_float::value  == 2 );
-    BOOST_STATIC_ASSERT( index_of_char::value   == -1 ); // 'not found'
+    BOOST_STATIC_ASSERT(( index_of_int::value    == 0 ));
+    BOOST_STATIC_ASSERT(( index_of_double::value == 1 ));
+    BOOST_STATIC_ASSERT(( index_of_float::value  == 2 ));
+
+    BOOST_STATIC_ASSERT(( mpl::is_void_< index_of_char >::value ));
 
     return 0;
 }
