@@ -17,6 +17,8 @@
 #ifndef BOOST_UBLAS_VECTOR_H
 #define BOOST_UBLAS_VECTOR_H
 
+#include <vector>
+
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
@@ -44,7 +46,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Specialise for std::vector
         template <class T>
-        struct resize_functor< std::vector<T> > {
+        struct resize_functor<std::vector<T> > {
            void operator() (std::vector<T>& a, typename std::vector<T>::size_type size, bool ) const {
               a.resize (size);
            }
@@ -65,9 +67,9 @@ namespace boost { namespace numeric { namespace ublas {
          * however compilers without template partial specialization (MSVC-6/7)
          * also think this is bjam uBLAS_test ambiguous when std::vector is used!
          */
-        template<class T>
+        template<class T, class ALLOC>
         BOOST_UBLAS_INLINE
-        void resize (std::vector<T> &a, typename std::vector<T>::size_type size, bool /* preserve */) {
+        void resize (std::vector<T, ALLOC> &a, typename std::vector<T>::size_type size, bool /* preserve */) {
             a.resize (size);
         }
 #endif
