@@ -9,13 +9,13 @@
         <simpara>The <code>variant</code> class template (inspired by Andrei
         Alexandrescu's class of the same name
         [<link linkend="variant.biblio.ale01a">Ale01A</link>]) is an efficient,
-        recursive-capable, bounded discriminated union value type capable of
-        containing any value type (either POD or non-POD). It supports
-        construction from any type convertible to one of its bounded types or
-        from a source <code>variant</code> whose bounded types are each
-        convertible to one of the destination <code>variant</code>'s bounded
-        types. As well, through
-        <code><functionname>apply_visitor</functionname></code>,
+        <classname alt="boost::recursive_variant">recursive-capable</classname>,
+        bounded discriminated union value type capable of containing any value
+        type (either POD or non-POD). It supports construction from any type
+        convertible to one of its bounded types or from a source
+        <code>variant</code> whose bounded types are each convertible to one
+        of the destination <code>variant</code>'s bounded types. As well,
+        through <code><functionname>apply_visitor</functionname></code>,
         <code>variant</code> supports compile-time checked, type-safe
         visitation; and through <code><functionname>get</functionname></code>,
         <code>variant</code> supports run-time checked, type-safe value
