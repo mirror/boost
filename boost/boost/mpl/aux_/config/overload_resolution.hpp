@@ -18,11 +18,15 @@
 #define BOOST_MPL_AUX_CONFIG_OVERLOAD_RESOLUTION_HPP_INCLUDED
 
 #include "boost/config.hpp"
+#include "boost/detail/workaround.hpp"
 
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__MWERKS__) && __MWERKS__ < 0x3001 \
- && !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION)
-#   define BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION
+#if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION)
+
+#   if BOOST_WORKAROUND(__BORLANDC__, <= 0x561) || BOOST_WORKAROUND(__MWERKS__, < 0x3001)
+                            
+#      define BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION
+
+#   endif
 #endif
 
 #endif // BOOST_MPL_AUX_CONFIG_OVERLOAD_RESOLUTION_HPP_INCLUDED
