@@ -88,5 +88,13 @@
 #  define BOOST_NO_STD_ITERATOR
 #endif
 
+//
+// Intrinsic type_traits support.
+// The SGI STL has it's own __type_traits class, which
+// has intrinsic compiler support with SGI's compilers.
+// Whatever map SGI style type traits to boost equivalents:
+//
+#define BOOST_HAS_SGI_TYPE_TRAITS
+
 #define BOOST_STDLIB "SGI standard library"
 
