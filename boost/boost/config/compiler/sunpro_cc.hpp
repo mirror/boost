@@ -31,6 +31,14 @@
 #    endif
 
 #    if (__SUNPRO_CC <= 0x530) || !defined(BOOST_STRICT_CONFIG)
+       // Requesting debug info (-g) with Boost.Python results
+       // in an internal compiler error for "static const"
+       // initialized in-class.
+       //    >> Assertion:   (../links/dbg_cstabs.cc, line 611)
+       //         while processing ../test.cpp at line 0.
+       // (Jens Maurer according to Gottfried Ganﬂauge 04 Mar 2002)
+#      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+
        // SunPro 5.3 has better support for partial specialization,
        // but breaks when compiling std::less<shared_ptr<T> >
        // (Jens Maurer 4 Nov 2001).
