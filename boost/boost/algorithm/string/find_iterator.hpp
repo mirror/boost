@@ -136,14 +136,10 @@ namespace boost {
             // comparison
             bool equal( const find_iterator& Other ) const
             {
-                return 
+                return eof() || Other.eof() ? eof() == Other.eof() :
                     (
                         m_Match==Other.m_Match &&
                         m_End==Other.m_End 
-                    ) 
-                    ||
-                    ( 
-                        eof() && Other.eof() 
                     );
             }
 
@@ -301,15 +297,11 @@ namespace boost {
             // comparison
             bool equal( const split_iterator& Other ) const
             {
-                return
+                return eof() || Other.eof() ? eof() == Other.eof() :
                     (
                         m_Match==Other.m_Match &&
                         m_Next==Other.m_Next &&
                         m_End==Other.m_End 
-                    ) 
-                    ||
-                    ( 
-                        eof() && Other.eof() 
                     );
             }
 
