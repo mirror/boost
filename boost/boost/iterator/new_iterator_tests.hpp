@@ -2,6 +2,8 @@
 # define BOOST_NEW_ITERATOR_TESTS_HPP
 
 //
+// Copyright (c) David Abrahams 2001.
+// Copyright (c) Jeremy Siek 2001-2003.
 // Copyright (c) Thomas Witt 2002.
 //
 // Use, modification and distribution is subject to the
