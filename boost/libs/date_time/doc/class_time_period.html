@@ -48,7 +48,7 @@ or
 <p>
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
-<tr><td>time_period(ptime begin, ptime last)</td>
+<tr><td class="nowrap">time_period(ptime begin, ptime last)</td>
         <td>
 	  Create a period as [begin, last).  If last is <= begin then
           the period will be defined as null.
@@ -56,7 +56,7 @@ or
 	<td>date d(2002,Jan,01);<br>
             ptime t(d, seconds(10)); //10 sec after midnight<br>
 	    time_period tp(t, hours(3));</td></tr>
-<tr><td>time_period(ptime start, ptime end)</td>
+<tr><td class="nowrap">time_period(ptime start, ptime end)</td>
         <td>
 	  Create a period as [begin, begin+len).  If len is <= zero then
           the period will be defined as null.
@@ -65,7 +65,7 @@ or
             ptime t1(d, seconds(10)); //10 sec after midnight<br>
             ptime t2(d, hours(10)); //10 hours after midnight<br>
 	    time_period tp(t1, t2);</td></tr>
-<tr><td>time_period(time_period rhs)</td>
+<tr><td class="nowrap">time_period(time_period rhs)</td>
         <td>Copy constructor</td>
 	<td>time_period tp1(tp)</td></tr>
 </table>
@@ -125,7 +125,7 @@ or
             tp2.contains(tp1) --> false</td></tr>
 <tr><td>bool <font class="func">intersects</font>(time_period) const</td>
         <td>True if periods overlap</td>
-	<td>time_period tp1(ptime(d,hours(1)), ptime(d,hours(12)));<br>
+	<td class="nowrap">time_period tp1(ptime(d,hours(1)), ptime(d,hours(12)));<br>
 	    time_period tp2(ptime(d,hours(2)), ptime(d,hours(4)));<br>
             tp2.intersects(tp1) --> true</td></tr>
 <tr><td>time_period <font class="func">intersection</font>(time_period) const</td>
@@ -133,6 +133,10 @@ or
 	<td></td></tr>
 <tr><td>time_period <font class="func">merge</font>(time_period) const</td>
         <td>Returns union of two periods. Null if no intersection.</td>
+	<td></td></tr>
+<tr><td>time_period <font class="func">merge_inclusive</font>(time_period) const</td>
+        <td>Combines two periods and any gap between them such that start = min(p1.start, p2.start) and end   = max(p1.end  , p2.end).
+        </td>
 	<td></td></tr>
 <tr><td>time_period <font class="func">shift</font>(date_duration)</td>
         <td>Add duration to both start and end.</td>
@@ -187,9 +191,9 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Sat Nov  2 16:01:32 MST 2002
+Last modified: Fri Aug 15 05:59:54 MST 2003
 <!-- hhmts end -->
- by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
+ by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2003
 </small></address>
 </body>
 </html>
