@@ -26,6 +26,7 @@
 #include <boost/type_traits/is_stateless.hpp>
 #include <boost/ref.hpp>
 #include <boost/pending/ct_if.hpp>
+#include <boost/detail/workaround.hpp>
 
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300 || defined(__ICL) && __ICL <= 600 || defined(__MWERKS__) && __MWERKS__ < 0x2406 && !defined(BOOST_STRICT_CONFIG)
 #  define BOOST_FUNCTION_TARGET_FIX(x) x
@@ -42,9 +43,8 @@ namespace boost { namespace python { namespace objects {
 }}}
 #endif
 
-// GCC 3.2 doesn't seem to support enable_if, so we assume that
-// earlier versions have the same limitation
-#if defined(__GNUC__) && __GNUC__ < 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ <= 2 ) && !(BOOST_STRICT_CONFIG)
+// GCC 2.95.3 (or earlier) doesn't support enable_if
+#if BOOST_WORKAROUND(__GNUC__, < 3)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
 
@@ -284,6 +284,12 @@ namespace boost {
         }
       };
 
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    template<bool, typename> struct enable_if;
+
+    template<typename T> struct enable_if<true, T>  { typedef T type; };
+    template<typename T> struct enable_if<false, T> {};
+#else
 #  if defined(BOOST_STRICT_CONFIG) || !defined(__HP_aCC) || __HP_aCC > 33900
       template<bool>
 #  else
@@ -311,6 +317,8 @@ namespace boost {
       struct enable_if : public enabled<Enabled>::template base<T>
       {
       };
+#endif
+
     } // end namespace function
   } // end namespace detail
 
