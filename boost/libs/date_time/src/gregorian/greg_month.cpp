@@ -83,6 +83,25 @@ namespace gregorian {
 #endif // BOOST_NO_STD_WSTRING
   
 #ifndef BOOST_DATE_TIME_NO_LOCALE
+  /*! creates an all_date_names_put object with the correct set of names.
+   * This function is only called in the event of an exception where
+   * the imbued locale containing the needed facet is for some reason 
+   * unreachable.
+   */
+  BOOST_DATE_TIME_DECL 
+  boost::date_time::all_date_names_put<greg_facet_config, char>* 
+  create_facet_def(char type)
+  {
+    typedef 
+      boost::date_time::all_date_names_put<greg_facet_config, char> facet_def;
+    
+    return new facet_def(short_month_names,
+                         long_month_names,
+                         special_value_names,
+                         short_weekday_names,
+                         long_weekday_names);
+  }
+  
   //! generates a locale with the set of gregorian name-strings of type char*
   BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, char type){
     typedef boost::date_time::all_date_names_put<greg_facet_config, char> facet_def;
@@ -95,6 +114,25 @@ namespace gregorian {
   }
   
 #ifndef BOOST_NO_STD_WSTRING
+  /*! creates an all_date_names_put object with the correct set of names.
+   * This function is only called in the event of an exception where
+   * the imbued locale containing the needed facet is for some reason 
+   * unreachable.
+   */
+  BOOST_DATE_TIME_DECL 
+  boost::date_time::all_date_names_put<greg_facet_config, wchar_t>* 
+  create_facet_def(wchar_t type)
+  {
+    typedef 
+      boost::date_time::all_date_names_put<greg_facet_config,wchar_t> facet_def;
+    
+    return new facet_def(w_short_month_names,
+                         w_long_month_names,
+                         w_special_value_names,
+                         w_short_weekday_names,
+                         w_long_weekday_names);
+  }
+
   //! generates a locale with the set of gregorian name-strings of type wchar_t*
   BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, wchar_t type){
     typedef boost::date_time::all_date_names_put<greg_facet_config, wchar_t> facet_def;

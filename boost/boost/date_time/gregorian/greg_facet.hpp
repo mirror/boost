@@ -13,6 +13,7 @@
 #include "boost/date_time/date_formatting_locales.hpp" // sets BOOST_DATE_TIME_NO_LOCALE
 #include "boost/date_time/gregorian/parsers.hpp"
 #include <string>
+#include <exception>
 
 //This file is basically commented out if locales are not supported
 #ifndef BOOST_DATE_TIME_NO_LOCALE
@@ -241,9 +242,19 @@ namespace gregorian {
 
   //! generates a locale with the set of gregorian name-strings of type char*
   BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, char type);
+
+  //! Returns a pointer to a facet with a default set of names (English)
+  /* Necessary in the event an exception is thrown from op>> for 
+   * weekday or month. See comments in those functions for more info */
+  BOOST_DATE_TIME_DECL boost::date_time::all_date_names_put<greg_facet_config, char>* create_facet_def(char type);
+
 #ifndef BOOST_NO_STD_WSTRING
   //! generates a locale with the set of gregorian name-strings of type wchar_t*
   BOOST_DATE_TIME_DECL std::locale generate_locale(std::locale& loc, wchar_t type);
+  //! Returns a pointer to a facet with a default set of names (English)
+  /* Necessary in the event an exception is thrown from op>> for 
+   * weekday or month. See comments in those functions for more info */
+  BOOST_DATE_TIME_DECL boost::date_time::all_date_names_put<greg_facet_config, wchar_t>* create_facet_def(wchar_t type);
 #endif // BOOST_NO_STD_WSTRING
 
   //! operator>> for gregorian::greg_month - throws exception if invalid month given
@@ -255,17 +266,36 @@ namespace gregorian {
 
     std::basic_string<charT> s;
     is >> s;
-
+    
     if(!std::has_facet<facet_def>(is.getloc())) {
       std::locale loc = is.getloc();
       charT a = '\0';
       is.imbue(generate_locale(loc, a));
     }
 
-    const facet_def& f = std::use_facet<facet_def>(is.getloc());
-    short num = date_time::find_match(f.get_short_month_names(), f.get_long_month_names(), greg_month::max(),s); 
+    short num = 0;
+
+    try{
+      const facet_def& f = std::use_facet<facet_def>(is.getloc());
+      num = date_time::find_match(f.get_short_month_names(), 
+                                  f.get_long_month_names(), 
+                                  greg_month::max(), s); 
+    }
+    /* bad_cast will be thrown if the desired facet is not accessible
+     * so we can generate the facet. This has the drawback of using english
+     * names as a default. */
+    catch(std::bad_cast bc){
+      std::cout << "Month exception caught" << std::endl;
+      charT a = '\0';
+      const facet_def* f = create_facet_def(a);
+      num = date_time::find_match(f->get_short_month_names(), 
+                                  f->get_long_month_names(), 
+                                  greg_month::max(), s); 
+      delete(f);
+    }
    
     m = greg_month(num +1); // months numbered 1-12
+
     return is;
   }
 
@@ -285,8 +315,25 @@ namespace gregorian {
       is.imbue(generate_locale(loc, a));
     }
 
-    const facet_def& f = std::use_facet<facet_def>(is.getloc());
-    short num = date_time::find_match(f.get_short_weekday_names(), f.get_long_weekday_names(), greg_weekday::max(),s);
+    short num = 0;
+    try{
+      const facet_def& f = std::use_facet<facet_def>(is.getloc());
+      num = date_time::find_match(f.get_short_weekday_names(), 
+                                  f.get_long_weekday_names(), 
+                                  greg_weekday::max(), s); 
+    }
+    /* bad_cast will be thrown if the desired facet is not accessible
+     * so we can generate the facet. This has the drawback of using english
+     * names as a default. */
+    catch(std::bad_cast bc){
+      //std::cout << "Weekday exception caught" << std::endl;
+      charT a = '\0';
+      const facet_def* f = create_facet_def(a);
+      num = date_time::find_match(f->get_short_weekday_names(), 
+                                  f->get_long_weekday_names(), 
+                                  greg_weekday::max(), s); 
+      delete(f);
+    }
    
     wd = greg_weekday(num); // weekdays numbered 0-6
     return is;
