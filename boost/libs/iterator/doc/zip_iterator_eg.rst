@@ -110,8 +110,3 @@ sequence containing the products of the elements of ``vect_1`` and
         ),
       tuple_multiplies<double>()
       );
-
-
-The source code for these examples can be found `here`__.
-
-__ ../example/zip_iterator_examples.cpp

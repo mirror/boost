@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.6: http://docutils.sourceforge.net/" />
 <title>Zip Iterator</title>
 <meta name="author" content="David Abrahams, Thomas Becker" />
 <meta name="organization" content="Boost Consulting, Zephyr Associates, Inc." />
@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
-<div class="document" id="zip-iterator">
 <h1 class="title">Zip Iterator</h1>
 <table class="docinfo" frame="void" rules="none">
 <col class="docinfo-name" />
@@ -30,6 +29,7 @@
 <td>Copyright David Abrahams and Thomas Becker 2003. All rights reserved</td></tr>
 </tbody>
 </table>
+<div class="document" id="zip-iterator">
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -44,17 +44,17 @@ the results of dereferencing the individual iterators.</td>
 </tbody>
 </table>
 <div class="contents topic" id="table-of-contents">
-<p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
+<p class="topic-title first"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#zip-iterator-synopsis" id="id2" name="id2"><tt class="literal"><span class="pre">zip_iterator</span></tt> synopsis</a></li>
-<li><a class="reference" href="#zip-iterator-requirements" id="id3" name="id3"><tt class="literal"><span class="pre">zip_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#zip-iterator-models" id="id4" name="id4"><tt class="literal"><span class="pre">zip_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#zip-iterator-operations" id="id5" name="id5"><tt class="literal"><span class="pre">zip_iterator</span></tt> operations</a></li>
-<li><a class="reference" href="#examples" id="id6" name="id6">Examples</a></li>
+<li><a class="reference" href="#zip-iterator-synopsis" id="id1" name="id1"><tt class="literal"><span class="pre">zip_iterator</span></tt> synopsis</a></li>
+<li><a class="reference" href="#zip-iterator-requirements" id="id2" name="id2"><tt class="literal"><span class="pre">zip_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#zip-iterator-models" id="id3" name="id3"><tt class="literal"><span class="pre">zip_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#zip-iterator-operations" id="id4" name="id4"><tt class="literal"><span class="pre">zip_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#examples" id="id5" name="id5">Examples</a></li>
 </ul>
 </div>
 <div class="section" id="zip-iterator-synopsis">
-<h1><a class="toc-backref" href="#id2" name="zip-iterator-synopsis"><tt class="literal"><span class="pre">zip_iterator</span></tt> synopsis</a></h1>
+<h1><a class="toc-backref" href="#id1" name="zip-iterator-synopsis"><tt class="literal"><span class="pre">zip_iterator</span></tt> synopsis</a></h1>
 <pre class="literal-block">
 template&lt;typename IteratorTuple&gt;
 class zip_iterator
@@ -102,11 +102,11 @@ iterators, then <tt class="literal"><span class="pre">iterator_category</span></
 but no longer to <tt class="literal"><span class="pre">boost::random_access_traversal_tag</span></tt>.</p>
 </div>
 <div class="section" id="zip-iterator-requirements">
-<h1><a class="toc-backref" href="#id3" name="zip-iterator-requirements"><tt class="literal"><span class="pre">zip_iterator</span></tt> requirements</a></h1>
+<h1><a class="toc-backref" href="#id2" name="zip-iterator-requirements"><tt class="literal"><span class="pre">zip_iterator</span></tt> requirements</a></h1>
 <p>All iterator types in the argument <tt class="literal"><span class="pre">IteratorTuple</span></tt> shall model Readable Iterator.</p>
 </div>
 <div class="section" id="zip-iterator-models">
-<h1><a class="toc-backref" href="#id4" name="zip-iterator-models"><tt class="literal"><span class="pre">zip_iterator</span></tt> models</a></h1>
+<h1><a class="toc-backref" href="#id3" name="zip-iterator-models"><tt class="literal"><span class="pre">zip_iterator</span></tt> models</a></h1>
 <p>The resulting <tt class="literal"><span class="pre">zip_iterator</span></tt> models Readable Iterator.</p>
 <p>The fact that the <tt class="literal"><span class="pre">zip_iterator</span></tt> models only Readable Iterator does not 
 prevent you from modifying the values that the individual iterators point
@@ -128,7 +128,7 @@ models the least refined standard traversal concept in this set.</p>
 is interoperable with <tt class="literal"><span class="pre">IteratorTuple2</span></tt>.</p>
 </div>
 <div class="section" id="zip-iterator-operations">
-<h1><a class="toc-backref" href="#id5" name="zip-iterator-operations"><tt class="literal"><span class="pre">zip_iterator</span></tt> operations</a></h1>
+<h1><a class="toc-backref" href="#id4" name="zip-iterator-operations"><tt class="literal"><span class="pre">zip_iterator</span></tt> operations</a></h1>
 <p>In addition to the operations required by the concepts modeled by
 <tt class="literal"><span class="pre">zip_iterator</span></tt>, <tt class="literal"><span class="pre">zip_iterator</span></tt> provides the following
 operations.</p>
@@ -242,7 +242,7 @@ initialized to <tt class="literal"><span class="pre">t</span></tt>.</td>
 </table>
 </div>
 <div class="section" id="examples">
-<h1><a class="toc-backref" href="#id6" name="examples">Examples</a></h1>
+<h1><a class="toc-backref" href="#id5" name="examples">Examples</a></h1>
 <p>There are two main types of applications of the <tt class="literal"><span class="pre">zip_iterator</span></tt>. The first
 one concerns runtime efficiency: If one has several controlled sequences
 of the same length that must be somehow processed, e.g., with the 
@@ -340,7 +340,6 @@ the_transform_iterator it_end(
   tuple_multiplies&lt;double&gt;()
   );
 </pre>
-<p>The source code for these examples can be found <a class="reference" href="../example/zip_iterator_examples.cpp">here</a>.</p>
 </div>
 </div>
 <hr class="footer" />
