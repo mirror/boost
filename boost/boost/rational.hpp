@@ -491,7 +491,7 @@ std::istream& operator>> (std::istream& is, rational<IntType>& r)
     if (c != '/')
         is.clear(std::istream::badbit);  // old GNU c++ lib has no ios_base
 
-#if !defined(__GNUC__) || defined __SGI_STL_PORT
+#if !defined(__GNUC__) || (defined(__GNUC__) && (__GNUC__ >= 3)) || defined __SGI_STL_PORT
     is >> std::noskipws;
 #else
     is.unsetf(ios::skipws); // compiles, but seems to have no effect.
