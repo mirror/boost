@@ -260,6 +260,8 @@
 //  Compaq Tru64 Unix cxx ---------------------------------------------------
 
 #elif defined __DECCXX
+#   define BOOST_NO_SLIST
+#   define BOOST_NO_HASH
 
 #   if defined(__EDG_VERSION__) && __EDG_VERSION__ <= 240
 #     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
