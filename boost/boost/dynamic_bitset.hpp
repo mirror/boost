@@ -985,7 +985,7 @@ dump_to_string(const dynamic_bitset<B, A>& b,
     std::size_t const len = b.m_num_blocks * (dynamic_bitset<B, A>::bits_per_block);
     s.assign(len, '0');
     for (std::size_t i = 0; i != len; ++i)
-        if (b.test_(i))
+      if (b[i])// could use test_ here, but we have friend issues.-JGS
             s[len - 1 - i] = '1';
 }
 
@@ -1355,7 +1355,7 @@ template <typename Block, typename Allocator>
 inline void dynamic_bitset<Block, Allocator>::
 set_block_(size_type blocknum, Block value)
 {
-    m_bits[blocknum] = value;
+    this->m_bits[blocknum] = value;
 }
 
 template <typename Block, typename Allocator>
