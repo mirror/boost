@@ -27,6 +27,10 @@
 #include <functional>
 #include <utility>
 
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+#include <boost/bind.hpp>
+#endif
+
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)
 #define BOOST_MULTI_INDEX_SEQ_INDEX_CHECK_INVARIANT                          \
   detail::scope_guard BOOST_JOIN(check_invariant_,__LINE__)=                 \
@@ -105,7 +109,7 @@ public:
     boost::reverse_iterator<iterator>                reverse_iterator;
   typedef typename
     boost::reverse_iterator<const_iterator>          const_reverse_iterator;
-  typedef typename TagList::type                     tag_list;
+  typedef TagList                                    tag_list;
 
 protected:
   typedef typename Super::final_node_type     final_node_type;
@@ -122,6 +126,11 @@ protected:
     typename Super::const_iterator_type_list,
     const_iterator>::type                     const_iterator_type_list;
   typedef typename Super::copy_map_type       copy_map_type;
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  typedef typename Super::index_saver_type    index_saver_type;
+  typedef typename Super::index_loader_type   index_loader_type;
+#endif
 
 private:
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
@@ -578,6 +587,28 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     BOOST_CATCH_END
   }
 
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  /* serialization */
+
+  template<typename Archive>
+  void save_(
+    Archive& ar,const unsigned int version,const index_saver_type& sm)const
+  {
+    sm.save(begin(),end(),ar,version);
+    Super::save_(ar,version,sm);
+  }
+
+  template<typename Archive>
+  void load_(
+    Archive& ar,const unsigned int version,const index_loader_type& lm)
+  {
+    lm.load(
+      ::boost::bind(&sequenced_index::rearranger,this,_1,_2),
+      ar,version);
+    Super::load_(ar,version,lm);
+  }
+#endif
+
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)
   /* invariant stuff */
 
@@ -630,6 +661,15 @@ private:
     sequenced_index_node_impl::relink(
       position->impl(),first->impl(),last->impl());
   }
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  void rearranger(node_type* position,node_type *x)
+  {
+    if(!position)position=header();
+    node_type::increment(position);
+    if(position!=x)relink(position,x);
+  }
+#endif
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
   void detach_iterators(node_type* x)
@@ -741,7 +781,7 @@ struct sequenced
   template<typename Super>
   struct index_class
   {
-    typedef detail::sequenced_index<Super,TagList> type;
+    typedef detail::sequenced_index<Super,typename TagList::type> type;
   };
 };
 

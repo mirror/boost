@@ -58,6 +58,12 @@
 #include <boost/tuple/tuple.hpp>
 #include <utility>
 
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+#include <boost/bind.hpp>
+#include <boost/multi_index/detail/duplicates_iterator.hpp>
+#include <boost/throw_exception.hpp> 
+#endif
+
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)
 #define BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT                          \
   detail::scope_guard BOOST_JOIN(check_invariant_,__LINE__)=                 \
@@ -154,7 +160,7 @@ public:
     boost::reverse_iterator<iterator>                reverse_iterator;
   typedef typename
     boost::reverse_iterator<const_iterator>          const_reverse_iterator;
-  typedef typename TagList::type                     tag_list;
+  typedef TagList                                    tag_list;
 
 protected:
   typedef typename Super::final_node_type            final_node_type;
@@ -171,6 +177,11 @@ protected:
     typename Super::const_iterator_type_list,
     const_iterator>::type                            const_iterator_type_list;
   typedef typename Super::copy_map_type              copy_map_type;
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  typedef typename Super::index_saver_type           index_saver_type;
+  typedef typename Super::index_loader_type          index_loader_type;
+#endif
 
 private:
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
@@ -721,6 +732,23 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     BOOST_CATCH_END
   }
 
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  /* serialization */
+
+  template<typename Archive>
+  void save_(
+    Archive& ar,const unsigned int version,const index_saver_type& sm)const
+  {
+    save_(ar,version,sm,Category());
+  }
+
+  template<typename Archive>
+  void load_(Archive& ar,const unsigned int version,const index_loader_type& lm)
+  {
+    load_(ar,version,lm,Category());
+  }
+#endif
+
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)
   /* invariant stuff */
 
@@ -979,6 +1007,75 @@ private:
     return end();
   }
 
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  template<typename Archive>
+  void save_(
+    Archive& ar,const unsigned int version,const index_saver_type& sm,
+    ordered_unique_tag)const
+  {
+    Super::save_(ar,version,sm);
+  }
+
+  template<typename Archive>
+  void load_(
+    Archive& ar,const unsigned int version,const index_loader_type& lm,
+    ordered_unique_tag)
+  {
+    Super::load_(ar,version,lm);
+  }
+
+  template<typename Archive>
+  void save_(
+    Archive& ar,const unsigned int version,const index_saver_type& sm,
+    ordered_non_unique_tag)const
+  {
+    typedef duplicates_iterator<node_type,value_compare> dup_iterator;
+
+    sm.save(
+      dup_iterator(begin().get_node(),end().get_node(),value_comp()),
+      dup_iterator(end().get_node(),value_comp()),
+      ar,version);
+    Super::save_(ar,version,sm);
+  }
+
+  template<typename Archive>
+  void load_(
+    Archive& ar,const unsigned int version,const index_loader_type& lm,
+    ordered_non_unique_tag)
+  {
+    lm.load(
+      ::boost::bind(&ordered_index::rearranger,this,_1,_2),
+      ar,version);
+    Super::load_(ar,version,lm);
+  }
+
+  void rearranger(node_type* position,node_type *x)
+  {
+    node_type* before;
+    if(!position){
+      before=position=lower_bound(key(x->value)).get_node();
+      node_type::decrement(before);
+    }
+    else{
+      before=position;
+      node_type::increment(position);
+    }
+    if(position!=x){
+      /* check the rearrangement is consistent */
+      if(!in_place(x->value,position,Category())){
+        throw_exception(
+          archive::archive_exception(
+            archive::archive_exception::other_exception));
+      }
+
+      ordered_index_node_impl::rebalance_for_erase(
+        x->impl(),header()->parent(),header()->left(),header()->right());
+      ordered_index_node_impl::restore(
+        x->impl(),before->impl(),position->impl(),header()->impl());
+    }
+  }
+#endif /* serialization */
+
   key_from_value key;
   key_compare    comp;
 
@@ -1090,7 +1187,7 @@ struct ordered_unique
 {
   typedef typename detail::ordered_index_args<
     Arg1,Arg2,Arg3>                                index_args;
-  typedef typename index_args::tag_list_type       tag_list_type;
+  typedef typename index_args::tag_list_type::type tag_list_type;
   typedef typename index_args::key_from_value_type key_from_value_type;
   typedef typename index_args::compare_type        compare_type;
 
@@ -1114,7 +1211,7 @@ struct ordered_non_unique
 {
   typedef detail::ordered_index_args<
     Arg1,Arg2,Arg3>                                index_args;
-  typedef typename index_args::tag_list_type       tag_list_type;
+  typedef typename index_args::tag_list_type::type tag_list_type;
   typedef typename index_args::key_from_value_type key_from_value_type;
   typedef typename index_args::compare_type        compare_type;
 
