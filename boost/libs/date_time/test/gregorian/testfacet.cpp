@@ -269,7 +269,7 @@ main()
     catch(...) {
       check("Caught unexpected exception during Stream in greg_month", false);
     }
-#ifndef BOOST_NO_CWCHAR
+#ifndef BOOST_NO_STD_WSTRING
     std::wstringstream ws1(L"Dec");
     try {
       ws1 >> m;
@@ -280,7 +280,7 @@ main()
     }
 #else
     check("Wide Stream in not supported by this compiler", false);
-#endif // BOOST_NO_CWCHAR
+#endif // BOOST_NO_STD_WSTRING
     german >> m;
     check("Stream in German month", m == greg_month(Oct));
     try{
@@ -307,7 +307,7 @@ main()
     catch(...) {
       check("Caught unexpected exception during Stream in greg_weekday", false);
     }
-#ifndef BOOST_NO_CWCHAR
+#ifndef BOOST_NO_STD_WSTRING
     std::wstringstream ws1(L"Saturday");
     try {
       ws1 >> wd;
@@ -319,7 +319,7 @@ main()
 
 #else
     check("Wide Stream in not supported by this compiler", false);
-#endif // BOOST_NO_CWCHAR
+#endif // BOOST_NO_STD_WSTRING
     german >> wd;
     check("Stream in German weekday", wd == greg_weekday(Wednesday));
     try{
