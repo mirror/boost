@@ -35,15 +35,15 @@ public:
   typedef RealType result_type;
 
   explicit gamma_distribution(base_type & rng,
-                              const result_type& alpha = result_type(1.0))
-    : _rng(rng), _exp(rng, result_type(1.0)), _alpha(alpha)
+                              const result_type& alpha = result_type(1))
+    : _rng(rng), _exp(rng, result_type(1)), _alpha(alpha)
   {
-    assert(alpha > result_type(0.0));
+    assert(alpha > result_type(0));
  #ifndef BOOST_NO_STDC_NAMESPACE
     // allow for Koenig lookup
     using std::exp;
 #endif
-   _p = exp(result_type(1.0)) / (_alpha + exp(result_type(1.0)));
+   _p = exp(result_type(1)) / (_alpha + exp(result_type(1)));
   }
 
   // compiler-generated copy ctor and assignment operator are fine
@@ -60,22 +60,22 @@ public:
     using std::tan; using std::sqrt; using std::exp; using std::log;
     using std::pow;
 #endif
-    if(_alpha == result_type(1.0)) {
+    if(_alpha == result_type(1)) {
       return _exp();
-    } else if(_alpha > result_type(1.0)) {
+    } else if(_alpha > result_type(1)) {
       // Can we have a boost::mathconst please?
       const result_type pi = result_type(3.14159265358979323846);
       for(;;) {
         result_type y = tan(pi * _rng());
-        result_type x = sqrt(result_type(2.0)*_alpha-result_type(1.0))*y
-          + _alpha-result_type(1.0);
-        if(x <= result_type(0.0))
+        result_type x = sqrt(result_type(2)*_alpha-result_type(1))*y
+          + _alpha-result_type(1);
+        if(x <= result_type(0))
           continue;
         if(_rng() >
-           (result_type(1.0)+y*y) * exp((_alpha-result_type(1.0))
-                                        *log(x/(_alpha-result_type(1.0)))
-                                        - sqrt(result_type(2.0)*_alpha
-                                               -result_type(1.0))*y))
+           (result_type(1)+y*y) * exp((_alpha-result_type(1))
+                                        *log(x/(_alpha-result_type(1)))
+                                        - sqrt(result_type(2)*_alpha
+                                               -result_type(1))*y))
           continue;
         return x;
       }
@@ -88,8 +88,8 @@ public:
           x = exp(-y/_alpha);
           q = _p*exp(-x);
         } else {
-          x = result_type(1.0)+y;
-          q = _p + (result_type(1.0)-_p) * pow(x, _alpha-result_type(1.0));
+          x = result_type(1)+y;
+          q = _p + (result_type(1)-_p) * pow(x, _alpha-result_type(1));
         }
         if(u >= q)
           continue;

@@ -40,15 +40,15 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
 
-  cauchy_distribution(base_type & rng, result_type median = result_type(0.0), 
-                      result_type sigma = result_type(1.0))
+  cauchy_distribution(base_type & rng, result_type median = result_type(0), 
+                      result_type sigma = result_type(1))
     : _rng(rng), _median(median), _sigma(sigma) { }
 
   // compiler-generated copy ctor and assignment operator are fine
 
   base_type& base() const { return _rng.base(); }
-  RealType median() const { return _median; }
-  RealType sigma() const { return _sigma; }
+  result_type median() const { return _median; }
+  result_type sigma() const { return _sigma; }
   void reset() { _rng.reset(); }
 
   result_type operator()()

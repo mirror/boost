@@ -237,7 +237,7 @@ private:
     // allow for Koenig lookup
     using std::pow;
 #endif
-    _modulus = pow(RealType(2.0), word_size);
+    _modulus = pow(RealType(2), word_size);
   }
 
 public:
@@ -252,7 +252,7 @@ public:
     const unsigned long mask = ~((~0) << w);
     random::linear_congruential<int32_t, 40014, 0, 2147483563, 0> gen(value);
     for(unsigned int j = 0; j < long_lag; ++j)
-      x[j] = fmod((gen() & mask) / _modulus, RealType(1.0));
+      x[j] = fmod((gen() & mask) / _modulus, RealType(1));
     carry = (x[long_lag-1] == 0) / _modulus;
     k = 0;
   }
@@ -267,15 +267,15 @@ public:
     const unsigned long mask = ~((~0) << w);
     unsigned int j;
     for(j = 0; j < long_lag && first != last; ++j, ++first)
-      x[j] = fmod((*first & mask) / _modulus, RealType(1.0));
+      x[j] = fmod((*first & mask) / _modulus, RealType(1));
     if(first == last && j < long_lag)
       throw std::invalid_argument("subtract_with_carry::seed");
     carry = (x[long_lag-1] == 0) / _modulus;
     k = 0;
    }
 
-  result_type min() const { return result_type(0.0); }
-  result_type max() const { return result_type(1.0); }
+  result_type min() const { return result_type(0); }
+  result_type max() const { return result_type(1); }
 
   result_type operator()()
   {
@@ -284,8 +284,8 @@ public:
       short_index += long_lag;
     RealType delta = x[short_index] - x[k] - carry;
     if(delta < 0) {
-      delta += RealType(1.0);
-      carry = RealType(1.0)/_modulus;
+      delta += RealType(1);
+      carry = RealType(1)/_modulus;
     } else {
       carry = 0;
     }
@@ -296,7 +296,8 @@ public:
     return delta;
   }
 
-  static bool validation(result_type x) { return x == val/std::pow(2.0, word_size); }
+  static bool validation(result_type x)
+  { return x == val/pow(RealType(2), word_size); }
   
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   template<class CharT, class Traits>

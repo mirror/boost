@@ -36,11 +36,11 @@ public:
   typedef RealType result_type;
 
   explicit normal_distribution(base_type & rng,
-                               const result_type& mean = result_type(0.0),
-                               const result_type& sigma = result_type(1.0))
+                               const result_type& mean = result_type(0),
+                               const result_type& sigma = result_type(1))
     : _rng(rng), _mean(mean), _sigma(sigma), _valid(false)
   {
-    assert(sigma >= result_type(0.0));
+    assert(sigma >= result_type(0));
   }
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
@@ -70,7 +70,7 @@ public:
     if(!_valid) {
       _r1 = _rng();
       _r2 = _rng();
-      _cached_rho = sqrt(-result_type(2.0) * log(result_type(1.0)-_r2));
+      _cached_rho = sqrt(-result_type(2) * log(result_type(1)-_r2));
       _valid = true;
     } else {
       _valid = false;
@@ -79,8 +79,8 @@ public:
     const result_type pi = result_type(3.14159265358979323846);
     
     return _cached_rho * (_valid ?
-                          cos(result_type(2.0)*pi*_r1) :
-                          sin(result_type(2.0)*pi*_r1))
+                          cos(result_type(2)*pi*_r1) :
+                          sin(result_type(2)*pi*_r1))
       * _sigma + _mean;
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE

@@ -227,7 +227,7 @@ private:
     // allow for Koenig lookup
     using std::pow;
 #endif
-    _modulus = pow(RealType(2.0), word_size);
+    _modulus = pow(RealType(2), word_size);
   }
 
 public:
@@ -263,14 +263,14 @@ public:
     mask = ~mask;                // now lowest w bits set
     unsigned int j;
     for(j = 0; j < long_lag && first != last; ++j, ++first)
-      x[j] = fmod((*first & mask) / _modulus, RealType(1.0));
+      x[j] = fmod((*first & mask) / _modulus, RealType(1));
     i = long_lag;
     if(first == last && j < long_lag)
       throw std::invalid_argument("lagged_fibonacci_01::seed");
   }
 
-  result_type min() const { return result_type(0.0); }
-  result_type max() const { return result_type(1.0); }
+  result_type min() const { return result_type(0); }
+  result_type max() const { return result_type(1); }
 
   result_type operator()()
   {
@@ -359,15 +359,15 @@ void lagged_fibonacci_01<RealType, w, p, q>::fill()
   {  // extra scope for MSVC brokenness w.r.t. for scope
   for(unsigned int j = 0; j < short_lag; ++j) {
     RealType t = x[j] + x[j+(long_lag-short_lag)];
-    if(t >= RealType(1.0))
-      t -= RealType(1.0);
+    if(t >= RealType(1))
+      t -= RealType(1);
     x[j] = t;
   }
   }
   for(unsigned int j = short_lag; j < long_lag; ++j) {
     RealType t = x[j] + x[j-short_lag];
-    if(t >= RealType(1.0))
-      t -= RealType(1.0);
+    if(t >= RealType(1))
+      t -= RealType(1);
     x[j] = t;
   }
   i = 0;

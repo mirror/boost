@@ -86,11 +86,11 @@ inline IntType uniform_int_integer<UniformRandomNumberGenerator, IntType>::opera
       // take extra care to avoid overflows
       result_type limit;
       if(_range == std::numeric_limits<result_type>::max()) {
-        limit = _range/(static_cast<result_type>(_brange)+1);
-        if(_range % static_cast<result_type>(_brange)+1 == static_cast<result_type>(_brange))
+        limit = _range/(result_type(_brange)+1);
+        if(_range % result_type(_brange)+1 == result_type(_brange))
           ++limit;
       } else {
-        limit = (_range+1)/(static_cast<result_type>(_brange)+1);
+        limit = (_range+1)/(result_type(_brange)+1);
       }
       // we consider "result" as expressed to base (_brange+1)
       // for every power of (_brange+1), we determine a random factor

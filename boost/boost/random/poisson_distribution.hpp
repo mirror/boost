@@ -54,7 +54,7 @@ public:
   result_type operator()()
   {
     // TODO: This is O(_mean), but it should be O(log(_mean)) for large _mean
-    RealType product = RealType(1.0);
+    RealType product = RealType(1);
     for(int m = 0; ; ++m) {
       product *= _rng();
       if(product <= _exp_mean)

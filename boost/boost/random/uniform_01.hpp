@@ -45,15 +45,15 @@ public:
 
   explicit uniform_01(base_type & rng)
     : _rng(&rng),
-      _factor(result_type(1.0) /
+      _factor(result_type(1) /
               (result_type(_rng->max()-_rng->min()) +
-               result_type(std::numeric_limits<base_result>::is_integer ? 1.0 : 0.0)))
+               result_type(std::numeric_limits<base_result>::is_integer ? 1 : 0)))
   {
   }
   // compiler-generated copy ctor and copy assignment are fine
 
-  result_type min() const { return result_type(0.0); }
-  result_type max() const { return result_type(1.0); }
+  result_type min() const { return result_type(0); }
+  result_type max() const { return result_type(1); }
   base_type& base() const { return *_rng; }
   void reset() { }
 

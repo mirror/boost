@@ -45,7 +45,7 @@ public:
   geometric_distribution(base_type & rng, const RealType& p)
     : _rng(rng), _p(p)
   {
-    assert(RealType(0.0) < p && p < RealType(1.0));
+    assert(RealType(0) < p && p < RealType(1));
 #ifndef BOOST_NO_STDC_NAMESPACE
     using std::log;
 #endif
@@ -64,7 +64,7 @@ public:
     using std::log;
     using std::floor;
 #endif
-    return IntType(floor(log(RealType(1.0)-_rng()) / _log_p)) + IntType(1);
+    return IntType(floor(log(RealType(1)-_rng()) / _log_p)) + IntType(1);
   }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
