@@ -115,7 +115,7 @@ main()
   check("time_t conversion of 500000000", 
         t18 == ptime(date(1985,11,5), time_duration(0,53,20)));
 
-  time_t tt1(1060483634); 
+  std::time_t tt1(1060483634); 
   t18 = from_time_t(tt1); //2003-08-10 2:47:14
   check("time_t conversion of 1060483634", 
         t18 == ptime(date(2003,8,10), time_duration(2,47,14)));
