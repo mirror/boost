@@ -76,7 +76,7 @@ typedef regex_token_iterator&lt;const char*&gt;                   cregex_token_i
 typedef regex_token_iterator&lt;std::string::const_iterator&gt;   sregex_token_iterator;
 #ifndef BOOST_NO_WREGEX
 typedef regex_token_iterator&lt;const wchar_t*&gt;                wcregex_token_iterator;
-typedef regex_token_iterator<&lt;std::wstring::const_iterator&gt; wsregex_token_iterator;
+typedef regex_token_iterator&lt;&lt;std::wstring::const_iterator&gt; wsregex_token_iterator;
 #endif
 </PRE>
       <H3><A name="description"></A>Description</H3>
@@ -84,7 +84,8 @@ typedef regex_token_iterator<&lt;std::wstring::const_iterator&gt; wsregex_token_
       <P><B> Effects:</B> constructs an end of sequence iterator.</P>
       <PRE><A name=c2></A>regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
                      int submatch = 0, match_flag_type m = match_default);</PRE>
-      <P><B> Preconditions: </B><CODE>!re.empty()</CODE>.</P>
+      <P><B> Preconditions: </B><CODE>!re.empty()</CODE>.&nbsp; Object re shall exist 
+         for the lifetime of the iterator constructed from it.</P>
       <P><B> Effects:</B> constructs a regex_token_iterator that will enumerate one 
          string for each regular expression match of the expression <EM>re</EM> found 
          within the sequence <EM>[a,b)</EM>, using match flags <EM>m</EM>.&nbsp; The 
@@ -99,7 +100,8 @@ typedef regex_token_iterator<&lt;std::wstring::const_iterator&gt; wsregex_token_
             configured</A> in non-recursive mode).</P>
       <PRE><A name=c3></A>regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
                      const std::vector&lt;int&gt;&amp; submatches, match_flag_type m = match_default);</PRE>
-      <P><B> Preconditions:</B> <CODE>submatches.size() &amp;&amp; !re.empty()</CODE>.</P>
+      <P><B> Preconditions:</B> <CODE>submatches.size() &amp;&amp; !re.empty()</CODE>.&nbsp; 
+         Object re shall exist for the lifetime of the iterator constructed from it.</P>
       <P><B> Effects:</B> constructs a regex_token_iterator that will enumerate <EM>submatches.size()</EM>
          strings for each regular expression match of the expression <EM>re</EM> found 
          within the sequence <EM>[a,b)</EM>, using match flags <EM>m</EM>.&nbsp; For 
@@ -118,7 +120,8 @@ typedef regex_token_iterator<&lt;std::wstring::const_iterator&gt; wsregex_token_
       <PRE><A name=c4></A>template &lt;std::size_t N&gt;
 regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
                      const int (&amp;submatches)[R], match_flag_type m = match_default);</PRE>
-      <P><B> Preconditions: </B><CODE>!re.empty()</CODE>.</P>
+      <P><B> Preconditions: </B><CODE>!re.empty()</CODE>.&nbsp; Object re shall exist 
+         for the lifetime of the iterator constructed from it.</P>
       <P><STRONG>Effects:</STRONG></B> constructs a regex_token_iterator that will 
          enumerate&nbsp;<EM>R</EM> strings for each regular expression match of the 
          expression <EM>re</EM> found within the sequence <EM>[a,b)</EM>, using match 

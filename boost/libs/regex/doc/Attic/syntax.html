@@ -91,18 +91,18 @@
       <P>Parentheses serve two purposes, to group items together into a sub-expression, 
          and to mark what generated the match. For example the expression "(ab)*" would 
          match all of the string "ababab". The matching algorithms <A href="regex_match.html">
-            regex_match</A> and <A href="regex_search.html">regex_search</A>
-         each take an instance of <A href="match_results.html">match_results</A>
-         that reports what caused the match, on exit from these functions the <A href="match_results.html">
-            match_results</A> contains information both on what the whole expression 
-         matched and on what each sub-expression matched. In the example above 
-         match_results[1] would contain a pair of iterators denoting the final "ab" of 
-         the matching string. It is permissible for sub-expressions to match null 
-         strings. If a sub-expression takes no part in a match - for example if it is 
-         part of an alternative that is not taken - then both of the iterators that are 
-         returned for that sub-expression point to the end of the input string, and the <I>matched</I>
-         parameter for that sub-expression is <I>false</I>. Sub-expressions are indexed 
-         from left to right starting from 1, sub-expression 0 is the whole expression.
+            regex_match</A> and <A href="regex_search.html">regex_search</A> each take 
+         an instance of <A href="match_results.html">match_results</A> that reports what 
+         caused the match, on exit from these functions the <A href="match_results.html">match_results</A>
+         contains information both on what the whole expression matched and on what each 
+         sub-expression matched. In the example above match_results[1] would contain a 
+         pair of iterators denoting the final "ab" of the matching string. It is 
+         permissible for sub-expressions to match null strings. If a sub-expression 
+         takes no part in a match - for example if it is part of an alternative that is 
+         not taken - then both of the iterators that are returned for that 
+         sub-expression point to the end of the input string, and the <I>matched</I> parameter 
+         for that sub-expression is <I>false</I>. Sub-expressions are indexed from left 
+         to right starting from 1, sub-expression 0 is the whole expression.
       </P>
       <H3>Non-Marking Parenthesis
       </H3>
@@ -143,7 +143,7 @@
       <P>A set is a set of characters that can match any single character that is a 
          member of the set. Sets are delimited by "[" and "]" and can contain literals, 
          character ranges, character classes, collating elements and equivalence 
-         classes. Set declarations that start with "^" contain the compliment of the 
+         classes. Set declarations that start with "^" contain the complement of the 
          elements that follow.
       </P>
       <P>Examples:
@@ -293,7 +293,7 @@
          [^[.ae.]] would only match one character.&nbsp;
       </P>
       <P>
-         Equivalence classes take the general form[=tagname=] inside a set declaration, 
+         Equivalence classes take the generalform[=tagname=] inside a set declaration, 
          where <I>tagname</I> is either a single character, or a name of a collating 
          element, and matches any character that is a member of the same primary 
          equivalence class as the collating element [.tagname.]. An equivalence class is 
@@ -302,7 +302,7 @@
          typically collated by character, then by accent, and then by case; the primary 
          sort key then relates to the character, the secondary to the accentation, and 
          the tertiary to the case). If there is no equivalence class corresponding to <I>tagname</I>
-         , then[=tagname=] is exactly the same as [.tagname.]. Unfortunately there is no 
+         ,then[=tagname=] is exactly the same as [.tagname.]. Unfortunately there is no 
          locale independent method of obtaining the primary sort key for a character, 
          except under Win32. For other operating systems the library will "guess" the 
          primary sort key from the full sort key (obtained from <I>strxfrm</I>), so 
@@ -666,106 +666,103 @@
       <H3>What gets matched?
       </H3>
       <P>
-      When the expression is compiled as a Perl-compatible regex then the matching 
-      algorithms will perform a depth first search on the state machine and report 
-      the first match found.</P>
+         When the expression is compiled as a Perl-compatible regex then the matching 
+         algorithms will perform a depth first search on the state machine and report 
+         the first match found.</P>
       <P>
-      When the expression is compiled as a POSIX-compatible regex then the matching 
-      algorithms will match the first possible matching string, if more than one 
-      string starting at a given location can match then it matches the longest 
-      possible string, unless the flag match_any is set, in which case the first 
-      match encountered is returned. Use of the match_any option can reduce the time 
-      taken to find the match - but is only useful if the user is less concerned 
-      about what matched - for example it would not be suitable for search and 
-      replace operations. In cases where their are multiple possible matches all 
-      starting at the same location, and all of the same length, then the match 
-      chosen is the one with the longest first sub-expression, if that is the same 
-      for two or more matches, then the second sub-expression will be examined and so 
-      on.
-      </P><P>
-      The following table examples illustrate the main differences between Perl and 
-      POSIX regular expression matching rules:
+         When the expression is compiled as a POSIX-compatible regex then the matching 
+         algorithms will match the first possible matching string, if more than one 
+         string starting at a given location can match then it matches the longest 
+         possible string, unless the flag match_any is set, in which case the first 
+         match encountered is returned. Use of the match_any option can reduce the time 
+         taken to find the match - but is only useful if the user is less concerned 
+         about what matched - for example it would not be suitable for search and 
+         replace operations. In cases where their are multiple possible matches all 
+         starting at the same location, and all of the same length, then the match 
+         chosen is the one with the longest first sub-expression, if that is the same 
+         for two or more matches, then the second sub-expression will be examined and so 
+         on.
       </P>
       <P>
-                  <TABLE id="Table5" cellSpacing="1" cellPadding="7" width="624" border="1">
-                     <TBODY>
-                        <TR>
-                           <TD vAlign="top" width="25%">
-                              <P>Expression</P>
-                           </TD>
-                           <TD vAlign="top" width="25%">
-                              <P>Text</P>
-                           </TD>
-                           <TD vAlign="top" width="25%">
-                              <P>POSIX leftmost longest match</P>
-                           </TD>
-                           <TD vAlign="top" width="25%">
-                              <P>ECMAScript depth first search match</P>
-                           </TD>
-                        </TR>
-                        <TR>
-                           <TD vAlign="top" width="25%">
-                                 <P><CODE>a|ab</CODE></P>
-            </TD>
-            <TD vAlign="top" width="25%">
-                  <P><CODE>
-                  xaby</CODE>
+         The following table examples illustrate the main differences between Perl and 
+         POSIX regular expression matching rules:
       </P>
-      </TD>
-      <TD vAlign="top" width="25%">
-            <P><CODE>
-            "ab"</CODE></P></TD>
-      <TD vAlign="top" width="25%">
-            <P><CODE>
-            "a"</CODE></P></TD>
-      </TR>
-      <TR>
-         <TD vAlign="top" width="25%">
-               <P><CODE>
-               .*([[:alnum:]]+).*</CODE></P></TD>
-         <TD vAlign="top" width="25%">
-               <P><CODE>
-               " abc def xyz "</CODE></P></TD>
-         <TD vAlign="top" width="25%">
-            <P>$0 = " abc def xyz "<BR>
-               $1 = "abc"</P>
-         </TD>
-         <TD vAlign="top" width="25%">
-            <P>$0 = " abc def xyz "<BR>
-               $1 = "z"</P>
-         </TD>
-      </TR>
-      <TR>
-         <TD vAlign="top" width="25%">
-               <P><CODE>
-               .*(a|xayy)</CODE></P></TD>
-         <TD vAlign="top" width="25%">
-               <P><CODE>
-               zzxayyzz</CODE></P></TD>
-         <TD vAlign="top" width="25%">
-               <P><CODE>
-               "zzxayy"</CODE></P></TD>
-         <TD vAlign="top" width="25%">
-               <P><CODE>"zzxa"</CODE></P>
-         </TD>
-      </TR>
-      </TBODY></CODE></TD></TR></TABLE>
+      <P>
+         <TABLE id="Table5" cellSpacing="1" cellPadding="7" width="624" border="1">
+            <TBODY>
+               <TR>
+                  <TD vAlign="top" width="25%">
+                     <P>Expression</P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P>Text</P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P>POSIX leftmost longest match</P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P>ECMAScript depth first search match</P>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE>a|ab</CODE></P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE> xaby</CODE>
+                     </P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE> "ab"</CODE></P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE> "a"</CODE></P>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE> .*([[:alnum:]]+).*</CODE></P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE> " abc def xyz "</CODE></P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P>$0 = " abc def xyz "<BR>
+                        $1 = "abc"</P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P>$0 = " abc def xyz "<BR>
+                        $1 = "z"</P>
+                  </TD>
+               </TR>
+               <TR>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE> .*(a|xayy)</CODE></P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE> zzxayyzz</CODE></P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE> "zzxayy"</CODE></P>
+                  </TD>
+                  <TD vAlign="top" width="25%">
+                     <P><CODE>"zzxa"</CODE></P>
+                  </TD>
+               </TR>
+            </TBODY></CODE></TD></TR></TABLE>
       <P>These differences between Perl matching rules, and POSIX matching rules, mean 
          that these two regular expression syntaxes differ not only in the features 
          offered, but also in the form that the state machine takes and/or the 
-         algorithms used to traverse the state machine.</p>
-         <HR>
+         algorithms used to traverse the state machine.</P>
+      <HR>
       <p>Revised 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
          24 Oct 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
-
-
