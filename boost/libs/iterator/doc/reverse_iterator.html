@@ -90,7 +90,9 @@ convertible to <tt class="literal"><span class="pre">input_iterator_tag</span></
 </div>
 <div class="section" id="reverse-iterator-requirements">
 <h1><a class="toc-backref" href="#id3" name="reverse-iterator-requirements"><tt class="literal"><span class="pre">reverse_iterator</span></tt> requirements</a></h1>
-<p><tt class="literal"><span class="pre">Iterator</span></tt> must be a model of Bidirectional Traversal Iterator.</p>
+<p><tt class="literal"><span class="pre">Iterator</span></tt> must be a model of Bidirectional Traversal Iterator.  The
+type <tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::reference</span></tt> must be the type of
+<tt class="literal"><span class="pre">*i</span></tt>, where <tt class="literal"><span class="pre">i</span></tt> is an object of type <tt class="literal"><span class="pre">Iterator</span></tt>.</p>
 </div>
 <div class="section" id="reverse-iterator-models">
 <h1><a class="toc-backref" href="#id4" name="reverse-iterator-models"><tt class="literal"><span class="pre">reverse_iterator</span></tt> models</a></h1>

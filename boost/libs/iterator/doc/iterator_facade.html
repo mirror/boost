@@ -674,8 +674,14 @@ operator ==(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
-<tt class="literal"><span class="pre">lhs.equal(rhs)</span></tt>.  Otherwise, <tt class="literal"><span class="pre">rhs.equal(lhs)</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last">
+<dt>then </dt>
+<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).equal((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
+<dt>Otherwise, </dt>
+<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).equal((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -690,8 +696,14 @@ operator !=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
-<tt class="literal"><span class="pre">!lhs.equal(rhs)</span></tt>.  Otherwise, <tt class="literal"><span class="pre">!rhs.equal(lhs)</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last">
+<dt>then </dt>
+<dd><tt class="literal"><span class="pre">!((Dr1</span> <span class="pre">const&amp;)lhs).equal((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
+<dt>Otherwise, </dt>
+<dd><tt class="literal"><span class="pre">!((Dr2</span> <span class="pre">const&amp;)rhs).equal((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -706,9 +718,14 @@ operator &lt;(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
-<tt class="literal"><span class="pre">lhs.distance_to(rhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>. Otherwise, <tt class="literal"><span class="pre">rhs.distance_to(lhs)</span> <span class="pre">&gt;</span>
-<span class="pre">0</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last">
+<dt>then </dt>
+<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</dd>
+<dt>Otherwise, </dt>
+<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>.</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -723,9 +740,14 @@ operator &lt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
-<tt class="literal"><span class="pre">lhs.distance_to(rhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>. Otherwise, <tt class="literal"><span class="pre">rhs.distance_to(lhs)</span>
-<span class="pre">&gt;=</span> <span class="pre">0</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last">
+<dt>then </dt>
+<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>.</dd>
+<dt>Otherwise, </dt>
+<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>.</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -740,9 +762,14 @@ operator &gt;(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
-<tt class="literal"><span class="pre">lhs.distance_to(rhs)</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>. Otherwise,
-<tt class="literal"><span class="pre">rhs.distance_to(lhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last">
+<dt>then </dt>
+<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&gt;</span> <span class="pre">0</span></tt>.</dd>
+<dt>Otherwise, </dt>
+<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&lt;</span> <span class="pre">0</span></tt>.</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
@@ -757,16 +784,21 @@ operator &gt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
-<tt class="literal"><span class="pre">lhs.distance_to(rhs)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>. Otherwise,
-<tt class="literal"><span class="pre">rhs.distance_to(lhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last">
+<dt>then </dt>
+<dd><tt class="literal"><span class="pre">((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span> <span class="pre">&gt;=</span> <span class="pre">0</span></tt>.</dd>
+<dt>Otherwise, </dt>
+<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span> <span class="pre">&lt;=</span> <span class="pre">0</span></tt>.</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
 <a class="target" id="minus" name="minus"></a><pre class="literal-block">
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
-typename enable_if_interoperable&lt;Dr1,Dr2,difference_type&gt;::type
+typename enable_if_interoperable&lt;Dr1,Dr2,difference&gt;::type
 operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
            iterator_facade&lt;Dr2,V2,TC2,R2,D2&gt; const&amp; rhs);
 </pre>
@@ -774,14 +806,26 @@ operator -(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Return Type:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then <tt class="literal"><span class="pre">difference_type</span></tt> shall be
-<tt class="literal"><span class="pre">iterator_traits&lt;Dr1&gt;::difference_type</span></tt>.  Otherwise,
-<tt class="literal"><span class="pre">difference_type</span></tt> shall be
-<tt class="literal"><span class="pre">iterator_traits&lt;Dr2&gt;::difference_type</span></tt>.</td>
+<tr class="field"><th class="field-name">Return Type:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<blockquote class="last">
+<dl>
+<dt>then </dt>
+<dd><tt class="literal"><span class="pre">difference</span></tt> shall be
+<tt class="literal"><span class="pre">iterator_traits&lt;Dr1&gt;::difference_type</span></tt>.</dd>
+<dt>Otherwise </dt>
+<dd><tt class="literal"><span class="pre">difference</span></tt> shall be <tt class="literal"><span class="pre">iterator_traits&lt;Dr2&gt;::difference_type</span></tt></dd>
+</dl>
+</blockquote>
+</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt>, then
-<tt class="literal"><span class="pre">-lhs.distance_to(rhs)</span></tt>. Otherwise,
-<tt class="literal"><span class="pre">rhs.distance_to(lhs)</span></tt>.</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">if <tt class="literal"><span class="pre">is_convertible&lt;Dr2,Dr1&gt;::value</span></tt></p>
+<dl class="last">
+<dt>then </dt>
+<dd><tt class="literal"><span class="pre">-((Dr1</span> <span class="pre">const&amp;)lhs).distance_to((Dr2</span> <span class="pre">const&amp;)rhs)</span></tt>.</dd>
+<dt>Otherwise, </dt>
+<dd><tt class="literal"><span class="pre">((Dr2</span> <span class="pre">const&amp;)rhs).distance_to((Dr1</span> <span class="pre">const&amp;)lhs)</span></tt>.</dd>
+</dl>
+</td>
 </tr>
 </tbody>
 </table>
