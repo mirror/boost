@@ -3154,7 +3154,6 @@ int main()
     n_spt_intrusive::test();
     n_spt_another_sp::test();
     n_spt_shared_from_this::test();
-//  n_spt_post_constructors::test();
     n_spt_wrap::test();
 
     return boost::report_errors();
