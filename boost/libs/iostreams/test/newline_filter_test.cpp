@@ -5,11 +5,10 @@
 // See http://www.boost.org/libs/iostreams for documentation.
 
 #include <algorithm>  // count.
-#include <iterator>   // back_inserter.
 #include <string>
 #include <string.h>
 #include <boost/iostreams/copy.hpp>
-//#include <boost/iostreams/device/back_inserter.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/filter/newline_filter.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -76,7 +75,7 @@ bool test_input_options(int flags, int count)
     io::filtering_istreambuf in;
     in.push(io::newline_filter(flags));
     in.push(boost::make_iterator_range(text, text + strlen(text)));
-    io::copy(in, std::back_inserter(result));
+    io::copy(in, boost::iostreams::back_inserter(result));
     return count_lines(result, flags & io::newline::print_mask) == count;
 }
 
@@ -86,7 +85,7 @@ bool test_output_options(int flags, int count)
     string result;
     io::filtering_ostreambuf out;
     out.push(io::newline_filter(flags));
-    out.push(std::back_inserter(result));
+    out.push(boost::iostreams::back_inserter(result));
     io::copy(boost::make_iterator_range(text, text + strlen(text)), out);
     out.reset();
     return count_lines(result, flags & io::newline::print_mask) == count;
