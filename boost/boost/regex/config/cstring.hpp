@@ -25,6 +25,9 @@
 
 #include <cstring>
 #include <cctype>
+#ifdef __KCC
+#include <ios>
+#endif
 #include <boost/config.hpp>
 
 namespace std{
