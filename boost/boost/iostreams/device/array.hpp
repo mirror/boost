@@ -29,7 +29,7 @@ class array_adapter {
 public:
     typedef Ch                                 char_type;
     typedef std::pair<char_type*, char_type*>  pair_type;
-    struct category
+    struct io_category
         : public Mode,
           public device_tag,
           public direct_tag
@@ -61,8 +61,8 @@ private:
     private: \
         typedef detail::array_adapter<mode, Ch> base_type; \
     public: \
-        typedef typename base_type::char_type   char_type; \
-        typedef typename base_type::category    category; \
+        typedef typename base_type::char_type    char_type; \
+        typedef typename base_type::io_category  io_category; \
         BOOST_PP_CAT(basic_, name)(char_type* begin, char_type* end) \
             : base_type(begin, end) { } \
         BOOST_PP_CAT(basic_, name)(char_type* begin, std::size_t length) \
@@ -71,6 +71,9 @@ private:
             : base_type(begin, end) { } \
         BOOST_PP_CAT(basic_, name)(const char_type* begin, std::size_t length) \
             : base_type(begin, length) { } \
+        template<typename T> \
+        BOOST_PP_CAT(basic_, name)(T& t) \
+            : base_type(t) { } \
     }; \
     typedef BOOST_PP_CAT(basic_, name)<char>     name; \
     typedef BOOST_PP_CAT(basic_, name)<wchar_t>  BOOST_PP_CAT(w, name); \
