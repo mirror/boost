@@ -14,6 +14,7 @@
 #include <typeinfo>
 
 #include "boost/config.hpp"
+#include "boost/throw_exception.hpp"
 
 namespace boost
 {
@@ -171,7 +172,7 @@ namespace boost
     {
         const ValueType * result = any_cast<ValueType>(&operand);
         if(!result)
-            throw bad_any_cast();
+            boost::throw_exception(bad_any_cast());
         return *result;
     }
 
