@@ -500,7 +500,11 @@ bool query_match_aux(iterator first,
       case syntax_element_word_boundary:
       {
          // prev and this character must be opposites:
+#if defined(BOOST_REGEX_USE_C_LOCALE) && defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ < 95)
+         bool b = traits::is_class(*first, traits::char_class_word);
+#else
          bool b = traits_inst.is_class(*first, traits::char_class_word);
+#endif
          if((first == temp_match[0].first)  && ((flags & match_prev_avail) == 0))
          {
             if(flags & match_not_bow)
