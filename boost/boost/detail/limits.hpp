@@ -337,14 +337,16 @@ class numeric_limits<unsigned long>
 // Some compilers have long long, but don't define the
 // LONGLONG_MIN and LONGLONG_MAX macros in limits.h.  This
 // assumes that long long is 64 bits.
-#if !defined(LONGLONG_MIN) && !defined(LONGLONG_MAX) \
-                           && !defined(ULONGLONG_MAX)
+#if !defined(LONGLONG_MAX) && !defined(ULONGLONG_MAX)
 
-#define ULONGLONG_MAX 0xffffffffffffffffLLU
-#define LONGLONG_MAX 0x7fffffffffffffffLL
-#define LONGLONG_MIN (-LONGLONG_MAX - 1)
+# define ULONGLONG_MAX 0xffffffffffffffffLLU
+# define LONGLONG_MAX 0x7fffffffffffffffLL
 
 #endif
+
+#if !defined(LONGLONG_MIN)
+# define LONGLONG_MIN (-LONGLONG_MAX - 1)
+#endif 
 
 template<>
 class numeric_limits<long long>
