@@ -60,6 +60,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const vector_range<vector_type> const_self_type;
         typedef vector_range<vector_type> self_type;
     public:
+        typedef basic_range<size_type, difference_type> range_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
@@ -70,14 +71,14 @@ namespace boost { namespace numeric { namespace ublas {
         vector_range ():
             data_ (nil_), r_ () {}
         BOOST_UBLAS_INLINE
-        vector_range (vector_type &data, const range &r):
+        vector_range (vector_type &data, const range_type &r):
             data_ (data), r_ (r.preprocess (data.size ())) {
             // Early checking of preconditions here.
             // BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
             //                   r_.start () + r_.size () <= data_.size (), bad_index ());
         }
         BOOST_UBLAS_INLINE
-        vector_range (const vector_closure_type &data, const range &r, bool):
+        vector_range (const vector_closure_type &data, const range_type &r, bool):
             data_ (data), r_ (r.preprocess (data.size ())) {
             // Early checking of preconditions here.
             // BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
@@ -137,7 +138,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Although a const function can create a non-const proxy to a non-const object
         // Critical is that vector_type and data_ (vector_closure_type) are const correct
         BOOST_UBLAS_INLINE
-        vector_range<vector_type> project (const range &r) const {
+        vector_range<vector_type> project (const range_type &r) const {
             return vector_range<vector_type> (data_, r_.compose (r.preprocess (data_.size ())), false);
         }
 
@@ -521,7 +522,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         vector_closure_type data_;
-        range r_;
+        range_type r_;
         static vector_type nil_;
     };
 
@@ -535,30 +536,30 @@ namespace boost { namespace numeric { namespace ublas {
     // Projections
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_range<V> project (V &data, const range &r) {
+    vector_range<V> project (V &data, const typename vector_range<V>::range_type &r) {
         return vector_range<V> (data, r);
     }
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
-    const vector_range<const V> project_const (const V &data, const range &r) {
+    const vector_range<const V> project_const (const V &data, const typename vector_range<V>::range_type &r) {
         return vector_range<const V> (data, r);
     }
 #else
     template<class V>
     BOOST_UBLAS_INLINE
-    const vector_range<const V> project (const V &data, const range &r) {
+    const vector_range<const V> project (const V &data, const typename vector_range<V>::range_type &r) {
         // ISSUE was: return vector_range<V> (const_cast<V &> (data), r);
         return vector_range<const V> (data, r);
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_range<V> project (vector_range<V> &data, const range &r) {
+    vector_range<V> project (vector_range<V> &data, const typename vector_range<V>::range_type &r) {
         return data.project (r);
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    const vector_range<V> project (const vector_range<V> &data, const range &r) {
+    const vector_range<V> project (const vector_range<V> &data, const typename vector_range<V>::range_type &r) {
         return data.project (r);
     }
 #endif
@@ -599,6 +600,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const vector_slice<vector_type> const_self_type;
         typedef vector_slice<vector_type> self_type;
     public:
+        typedef basic_range<size_type, difference_type> range_type;
+        typedef basic_slice<size_type, difference_type> slice_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
@@ -609,14 +612,14 @@ namespace boost { namespace numeric { namespace ublas {
         vector_slice ():
             data_ (nil_), s_ () {}
         BOOST_UBLAS_INLINE
-        vector_slice (vector_type &data, const slice &s):
+        vector_slice (vector_type &data, const slice_type &s):
             data_ (data), s_ (s.preprocess (data.size ())) {
             // Early checking of preconditions here.
             // BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
             //                    s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
         }
         BOOST_UBLAS_INLINE
-        vector_slice (const vector_closure_type &data, const slice &s, int):
+        vector_slice (const vector_closure_type &data, const slice_type &s, int):
             data_ (data), s_ (s.preprocess (data.size ())) {
             // Early checking of preconditions here.
             // BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
@@ -680,11 +683,11 @@ namespace boost { namespace numeric { namespace ublas {
         // Although a const function can create a non-const proxy to a non-const object
         // Critical is that vector_type and data_ (vector_closure_type) are const correct
         BOOST_UBLAS_INLINE
-        vector_slice<vector_type> project (const range &r) const {
+        vector_slice<vector_type> project (const range_type &r) const {
             return vector_slice<vector_type>  (data_, s_.compose (r.preprocess (data_.size ())), false);
         }
         BOOST_UBLAS_INLINE
-        vector_slice<vector_type> project (const slice &s) const {
+        vector_slice<vector_type> project (const slice_type &s) const {
             return vector_slice<vector_type>  (data_, s_.compose (s.preprocess (data_.size ())), false);
         }
 
@@ -784,8 +787,8 @@ namespace boost { namespace numeric { namespace ublas {
         // Iterator types
     private:
         // Use slice as an index - FIXME this fails for packed assignment
-        typedef slice::const_iterator const_iterator_type;
-        typedef slice::const_iterator iterator_type;
+        typedef BOOST_UBLAS_TYPENAME slice_type::const_iterator const_iterator_type;
+        typedef BOOST_UBLAS_TYPENAME slice_type::const_iterator iterator_type;
 
     public:
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -1061,7 +1064,7 @@ namespace boost { namespace numeric { namespace ublas {
     private:
 #endif
         vector_closure_type data_;
-        slice s_;
+        slice_type s_;
         static vector_type nil_;
     };
 
@@ -1075,40 +1078,40 @@ namespace boost { namespace numeric { namespace ublas {
     // Projections
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<V> project (V &data, const slice &s) {
+    vector_slice<V> project (V &data, const typename vector_slice<V>::slice_type &s) {
         return vector_slice<V> (data, s);
     }
 #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
-    const vector_slice<const V> project_const (const V &data, const slice &s) {
+    const vector_slice<const V> project_const (const V &data, const typename vector_slice<V>::slice_type &s) {
         return vector_slice<const V> (data, s);
     }
 #else
     template<class V>
     BOOST_UBLAS_INLINE
-    const vector_slice<const V> project (const V &data, const slice &s) {
+    const vector_slice<const V> project (const V &data, const typename vector_slice<V>::slice_type &s) {
         // ISSUE was: return vector_slice<V> (const_cast<V &> (data), s);
         return vector_slice<const V> (data, s);
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<V> project (vector_slice<V> &data, const slice &s) {
+    vector_slice<V> project (vector_slice<V> &data, const typename vector_slice<V>::slice_type &s) {
         return data.project (s);
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    const vector_slice<V> project (const vector_slice<V> &data, const slice &s) {
+    const vector_slice<V> project (const vector_slice<V> &data, const typename V::slice_type &s) {
         return data.project (s);
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    vector_slice<V> project (vector_slice<V> &data, const range &r) {
+    vector_slice<V> project (vector_slice<V> &data, const typename vector_slice<V>::range_type &r) {
         return data.project (r);
     }
     template<class V>
     BOOST_UBLAS_INLINE
-    const vector_slice<V> project (const vector_slice<V> &data, const range &r) {
+    const vector_slice<V> project (const vector_slice<V> &data, const typename vector_slice<V>::range_type &r) {
         return data.project (r);
     }
 #endif
@@ -1152,6 +1155,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const vector_indirect<vector_type, indirect_array_type> const_self_type;
         typedef vector_indirect<vector_type, indirect_array_type> self_type;
     public:
+        typedef basic_range<size_type, difference_type> range_type;
+        typedef basic_slice<size_type, difference_type> slice_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
@@ -1228,11 +1233,11 @@ namespace boost { namespace numeric { namespace ublas {
         // Although a const function can create a non-const proxy to a non-const object
         // Critical is that vector_type and data_ (vector_closure_type) are const correct
         BOOST_UBLAS_INLINE
-        vector_indirect<vector_type, indirect_array_type> project (const range &r) const {
+        vector_indirect<vector_type, indirect_array_type> project (const range_type &r) const {
             return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (r.preprocess (data_.size ())), 0);
         }
         BOOST_UBLAS_INLINE
-        vector_indirect<vector_type, indirect_array_type> project (const slice &s) const {
+        vector_indirect<vector_type, indirect_array_type> project (const slice_type &s) const {
             return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (s.preprocess (data_.size ())), 0);
         }
         BOOST_UBLAS_INLINE
@@ -1678,22 +1683,22 @@ return true;
     }
     template<class V, class IA>
     BOOST_UBLAS_INLINE
-    vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const range &r) {
+    vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const typename vector_indirect<V, IA>::range_type &r) {
         return data.project (r);
     }
     template<class V, class IA>
     BOOST_UBLAS_INLINE
-    const vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const range &r) {
+    const vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const typename vector_indirect<V, IA>::range_type &r) {
         return data.project (r);
     }
     template<class V, class IA>
     BOOST_UBLAS_INLINE
-    vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const slice &s) {
+    vector_indirect<V, IA> project (vector_indirect<V, IA> &data, const typename vector_indirect<V, IA>::slice_type &s) {
         return data.project (s);
     }
     template<class V, class IA>
     BOOST_UBLAS_INLINE
-    const vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const slice &s) {
+    const vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const typename vector_indirect<V, IA>::slice_type &s) {
         return data.project (s);
     }
     template<class V, class A>
