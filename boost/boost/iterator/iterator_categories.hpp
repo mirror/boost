@@ -31,19 +31,39 @@ namespace boost {
 struct no_traversal_tag {};
 
 struct incrementable_traversal_tag 
-  : no_traversal_tag {};
+  : no_traversal_tag
+{
+//     incrementable_traversal_tag() {}
+//     incrementable_traversal_tag(std::output_iterator_tag const&) {};
+};
   
 struct single_pass_traversal_tag
-  : incrementable_traversal_tag {};
+  : incrementable_traversal_tag
+{
+//     single_pass_traversal_tag() {}
+//     single_pass_traversal_tag(std::input_iterator_tag const&) {};
+};
   
 struct forward_traversal_tag
-  : single_pass_traversal_tag {};
+  : single_pass_traversal_tag
+{
+//     forward_traversal_tag() {}
+//     forward_traversal_tag(std::forward_iterator_tag const&) {};
+};
   
 struct bidirectional_traversal_tag
-  : forward_traversal_tag {};
+  : forward_traversal_tag
+{
+//     bidirectional_traversal_tag() {};
+//     bidirectional_traversal_tag(std::bidirectional_iterator_tag const&) {};
+};
   
 struct random_access_traversal_tag
-  : bidirectional_traversal_tag {};
+  : bidirectional_traversal_tag
+{
+//     random_access_traversal_tag() {};
+//     random_access_traversal_tag(std::random_access_iterator_tag const&) {};
+};
 
 namespace detail
 {  

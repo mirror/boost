@@ -28,8 +28,19 @@
 # include <boost/iterator/is_lvalue_iterator.hpp>
 
 # include <boost/iterator/detail/config_def.hpp>
+# include <boost/detail/is_incrementable.hpp>
 
 namespace boost {
+
+template <class Iterator, class T>
+void readable_iterator_test_aux(Iterator i1, T v, mpl::true_)
+{
+    assert(v == *i1++);
+}
+
+template <class Iterator, class T>
+void readable_iterator_test_aux(const Iterator i1, T v, mpl::false_)
+{}
 
 // Preconditions: *i == v
 template <class Iterator, class T>
@@ -45,6 +56,8 @@ void readable_iterator_test(const Iterator i1, T v)
   assert(v2 == v);
 
 # if !BOOST_WORKAROUND(__MWERKS__, <= 0x2407)
+  readable_iterator_test_aux(i1, v, detail::is_postfix_incrementable<Iterator>());
+      
   // I think we don't really need this as it checks the same things as
   // the above code.
   BOOST_STATIC_ASSERT(is_readable_iterator<Iterator>::value);
