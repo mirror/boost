@@ -22,6 +22,8 @@
 #include <cstdlib>
 // std::invalid_argument
 #include <exception>
+// std::max
+#include <algorithm>
 
 #include <boost/pool/poolfwd.hpp>
 
