@@ -65,7 +65,7 @@ int main(int argc, const char** argv)
       std::ifstream fs(argv[i]);
       std::string in;
       load_file(in, fs);
-      std::string out_name(std::string(argv[i]) + std::string(".htm"));
+      std::string out_name = std::string(argv[i]) + std::string(".htm");
       std::ofstream os(out_name.c_str());
       os << header_text;
       // strip '<' and '>' first by outputting to a
