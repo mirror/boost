@@ -61,6 +61,8 @@ int main(int argc, char*argv[])
 #ifdef __linux__
   boost::random_device dev;
   timing<unsigned int>(dev, iter, "random_device");
+#else
+#error The non-deterministic random device is currently available on Linux only.
 #endif
 
   return 0;
