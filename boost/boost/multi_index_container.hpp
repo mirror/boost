@@ -19,6 +19,7 @@
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/find_if.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/size.hpp>
 #include <boost/multi_index_container_fwd.hpp>
@@ -149,9 +150,11 @@ public:
 
 #if BOOST_WORKAROUND(__IBMCPP__,<=600)
     const ctor_args_list& args_list=
-      BOOST_DEDUCED_TYPENAME multi_index_container::ctor_args_list(),
+      typename mpl::identity<multi_index_container>::type::
+        ctor_args_list(),
     const allocator_type& al=
-      BOOST_DEDUCED_TYPENAME multi_index_container::allocator_type()):
+      typename mpl::identity<multi_index_container>::type::
+        allocator_type()):
 #else
     const ctor_args_list& args_list=ctor_args_list(),
     const allocator_type& al=allocator_type()):
@@ -170,9 +173,11 @@ public:
 
 #if BOOST_WORKAROUND(__IBMCPP__,<=600)
     const ctor_args_list& args_list=
-      BOOST_DEDUCED_TYPENAME multi_index_container::ctor_args_list(),
+      typename mpl::identity<multi_index_container>::type::
+        ctor_args_list(),
     const allocator_type& al=
-      BOOST_DEDUCED_TYPENAME multi_index_container::allocator_type()):
+      typename mpl::identity<multi_index_container>::type::
+        allocator_type()):
 #else
     const ctor_args_list& args_list=ctor_args_list(),
     const allocator_type& al=allocator_type()):
