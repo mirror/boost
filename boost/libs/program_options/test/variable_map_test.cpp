@@ -120,7 +120,7 @@ void test_semantic_values()
     ("bar", po::value<int>())
     ("biz", po::value< vector<string> >())
     ("baz", po::value< vector<string> >()->multitoken())
-    ("int", po::value< vector<int> >()->notifier(notifier))
+    ("int", po::value< vector<int> >()->notifier(&notifier))
     ;
 
        
