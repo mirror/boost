@@ -235,8 +235,8 @@ Bidirectional Iterator (2) -&gt; Bidirectional Traversal Iterator and Writable I
 </div>
 <div class="section" id="design">
 <h1><a class="toc-backref" href="#id3" name="design">Design</a></h1>
-<p>The iterator requirements are to be separated into two hierarchies. One
-set of concepts handles the syntax and semantics of value access:</p>
+<p>The iterator requirements are to be separated into two groups. One set
+of concepts handles the syntax and semantics of value access:</p>
 <ul class="simple">
 <li>Readable Iterator</li>
 <li>Writable Iterator</li>
@@ -276,8 +276,8 @@ but instead use the equivalent of a bitfield.</p>
 <p>We provide an access mechanism for mapping iterator types to the new
 traversal tags and access bitfield. Our design reuses
 <tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt> as the access
-mechanism. To that end, a pair of access and traversal tags are
-combined into a single type using the following <cite>iterator_tag</cite> class.</p>
+mechanism. To that end, the access and traversal information is
+bundled into a single type using the following <cite>iterator_tag</cite> class.</p>
 <pre class="literal-block">
 enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
     swappable_iterator = 4, lvalue_iterator = 8 };

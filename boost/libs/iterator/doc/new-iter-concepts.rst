@@ -208,8 +208,8 @@ Input Iterator (2) -> Incrementable Iterator and Readable Iterator
  Design
 ========
 
-The iterator requirements are to be separated into two hierarchies. One
-set of concepts handles the syntax and semantics of value access:
+The iterator requirements are to be separated into two groups. One set
+of concepts handles the syntax and semantics of value access:
 
 - Readable Iterator
 - Writable Iterator
@@ -256,8 +256,8 @@ but instead use the equivalent of a bitfield.
 We provide an access mechanism for mapping iterator types to the new
 traversal tags and access bitfield. Our design reuses
 ``iterator_traits<Iter>::iterator_category`` as the access
-mechanism. To that end, a pair of access and traversal tags are
-combined into a single type using the following `iterator_tag` class.
+mechanism. To that end, the access and traversal information is
+bundled into a single type using the following `iterator_tag` class.
 
 ::
 
