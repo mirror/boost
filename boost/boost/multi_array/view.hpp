@@ -76,13 +76,13 @@ public:
   void reindex(const BaseList& values) {
     boost::copy_n(values.begin(),num_dimensions(),index_base_list_.begin());
     origin_offset_ =
-      super_type::calculate_indexing_offset(stride_list_,index_base_list_);
+      calculate_indexing_offset(stride_list_,index_base_list_);
   }
 
   void reindex(index value) {
     index_base_list_.assign(value);
     origin_offset_ =
-      super_type::calculate_indexing_offset(stride_list_,index_base_list_);
+      calculate_indexing_offset(stride_list_,index_base_list_);
   }
 
   size_type num_dimensions() const { return NumDims; }
@@ -291,9 +291,9 @@ public:
       ConstMultiArrayConcept<ConstMultiArray,NumDims> >();
 
     // make sure the dimensions agree
-    assert(other.num_dimensions() == num_dimensions());
-    assert(std::equal(other.shape(),other.shape()+num_dimensions(),
-                      shape()));
+    assert(other.num_dimensions() == this->num_dimensions());
+    assert(std::equal(other.shape(),other.shape()+this->num_dimensions(),
+                      this->shape()));
     // iterator-based copy
     std::copy(other.begin(),other.end(),begin());
     return *this;
@@ -303,30 +303,30 @@ public:
   multi_array_view& operator=(const multi_array_view& other) {
     if (&other != this) {
       // make sure the dimensions agree
-      assert(other.num_dimensions() == super_type::num_dimensions());
-      assert(std::equal(other.shape(),other.shape()+super_type::num_dimensions(),
-                        super_type::shape()));
+      assert(other.num_dimensions() == this->num_dimensions());
+      assert(std::equal(other.shape(),other.shape()+this->num_dimensions(),
+                        this->shape()));
       // iterator-based copy
       std::copy(other.begin(),other.end(),begin());
     }
     return *this;
   }
 
-  element* origin() { return super_type::base_+super_type::origin_offset_; }
+  element* origin() { return this->base_+this->origin_offset_; }
 
   template <class IndexList>
   element& operator()(const IndexList& indices) {
     return super_type::access_element(boost::type<element&>(),
                                       origin(),
-                                      indices,strides());
+                                      indices,this->strides());
   }
 
 
   reference operator[](index idx) {
     return super_type::access(boost::type<reference>(),
                               idx,origin(),
-                              super_type::shape(),super_type::strides(),
-                              super_type::index_bases());
+                              this->shape(),this->strides(),
+                              this->index_bases());
   }
 
 
@@ -343,21 +343,23 @@ public:
     return
       super_type::generate_array_view(boost::type<return_type>(),
                                       indices,
-                                      shape(),
-                                      strides(),
-                                      index_bases(),
+                                      this->shape(),
+                                      this->strides(),
+                                      this->index_bases(),
                                       origin());
   }
   
   
   iterator begin() {
-    return iterator(iter_base(*super_type::index_bases(),origin(),
-                                   super_type::shape(),super_type::strides(),super_type::index_bases()));
+    return iterator(iter_base(*this->index_bases(),origin(),
+                              this->shape(),this->strides(),
+                              this->index_bases()));
   }
 
   iterator end() {
-    return iterator(iter_base(*super_type::index_bases()+*super_type::shape(),origin(),
-                                   super_type::shape(),super_type::strides(),super_type::index_bases()));
+    return iterator(iter_base(*this->index_bases()+*this->shape(),origin(),
+                              this->shape(),this->strides(),
+                              this->index_bases()));
   }
 
   reverse_iterator rbegin() {
