@@ -12,7 +12,7 @@
   </para>
 
   <xi:include href="date_time_autodoc.boostbook"/>
-  <xi:include href="date_time_gregorian_autodoc.boostbook"/>
-  <xi:include href="date_time_posix_time_autodoc.boostbook"/>
+  <xi:include href="gregorian_autodoc.boostbook"/>
+  <xi:include href="posix_time_autodoc.boostbook"/>
 </section>
 

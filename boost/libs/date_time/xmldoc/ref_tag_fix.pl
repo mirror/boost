@@ -11,9 +11,9 @@ use strict;
 # if the attributes are changed here it would be a good idea to
 # also change the links in doxy.xml
 my %files = (
-  'date_time_autodoc.boostbook' 	   => 'date_time_reference',
-  'date_time_gregorian_autodoc.boostbook'  => 'gregorian_reference',
-  'date_time_posix_time_autodoc.boostbook' => 'posix_time_reference'
+  'date_time_autodoc.boostbook'  => 'date_time_reference',
+  'gregorian_autodoc.boostbook'  => 'gregorian_reference',
+  'posix_time_autodoc.boostbook' => 'posix_time_reference'
 );
 
 
