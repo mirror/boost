@@ -31,10 +31,12 @@ namespace boost {
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_array,T,false)
+#if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,is_array,T[N],true)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,is_array,T const[N],true)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,is_array,T volatile[N],true)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,is_array,T const volatile[N],true)
+#endif
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

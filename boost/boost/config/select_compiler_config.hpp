@@ -16,6 +16,10 @@
 //  Comeau C++
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/comeau.hpp"
 
+#elif defined __DMC__
+//  Digital Mars C++
+#   define BOOST_COMPILER_CONFIG "boost/config/compiler/digitalmars.hpp"
+
 #elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)
 //  Intel
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/intel.hpp"
@@ -77,5 +81,3 @@
 #  error "Unknown compiler - please configure and report the results to boost.org"
 
 #endif
-
-

@@ -99,7 +99,7 @@
 // BCB6 does cause problems. If we detect C++ Builder, then don't define 
 // BOOST_NO_STDC_NAMESPACE
 //
-#if !defined(__BORLANDC__)
+#if !defined(__BORLANDC__) && !defined(__DMC__)
 //
 // If STLport is using it's own namespace, and the real names are in
 // the global namespace, then we duplicate STLport's using declarations
@@ -114,7 +114,7 @@
 #     define BOOST_NO_STDC_NAMESPACE
 #     define BOOST_NO_EXCEPTION_STD_NAMESPACE
 #  endif
-#elif __BORLANDC__ < 0x560
+#elif defined(__BORLANDC__) && __BORLANDC__ < 0x560
 // STLport doesn't import std::abs correctly:
 #include <stdlib.h>
 namespace std { using ::abs; }
