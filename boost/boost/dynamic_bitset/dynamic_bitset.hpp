@@ -137,46 +137,32 @@ public:
     // NOTE:
     // Leave the parentheses around std::basic_string<CharT, Traits, Alloc>::npos.
     // g++ 3.2 requires them and probably the standard will - see core issue 325
+    // NOTE 2: 
+    // split into two constructors because of bugs in MSVC 6.0sp5 with STLport
+
     template <typename CharT, typename Traits, typename Alloc>
-    explicit
     dynamic_bitset(const std::basic_string<CharT, Traits, Alloc>& s,
-        typename std::basic_string<CharT, Traits, Alloc>::size_type pos = 0,
-        typename std::basic_string<CharT, Traits, Alloc>::size_type n   =
-                   (std::basic_string<CharT, Traits, Alloc>::npos),
+        typename std::basic_string<CharT, Traits, Alloc>::size_type pos,
+        typename std::basic_string<CharT, Traits, Alloc>::size_type n,
         size_type num_bits = npos,
         const Allocator& alloc = Allocator())
 
     :m_bits(alloc),
      m_num_bits(0)
     {
-        assert(pos <= s.size());
+      init_from_string(s, pos, n, num_bits, alloc);
+    }
 
-        typedef typename std::basic_string<CharT, Traits, Alloc> StrT;
-        typedef typename StrT::traits_type Tr;
+    template <typename CharT, typename Traits, typename Alloc>
+    explicit
+    dynamic_bitset(const std::basic_string<CharT, Traits, Alloc>& s,
+      typename std::basic_string<CharT, Traits, Alloc>::size_type pos = 0)
 
-        const typename StrT::size_type rlen = (std::min)(n, s.size() - pos); // gps
-        const size_type sz = ( num_bits != npos? num_bits : rlen);
-        m_bits.resize(calc_num_blocks(sz));
-        m_num_bits = sz;
-
-
-        BOOST_DYNAMIC_BITSET_CTYPE_FACET(CharT, fac, std::locale());
-        const CharT one = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '1');
-
-        const size_type m = num_bits < rlen ? num_bits : rlen; // [gps]
-        typename StrT::size_type i = 0;
-        for( ; i < m; ++i) {
-
-            const CharT c = s[(pos + m - 1) - i];
-
-            assert( Tr::eq(c, one)
-                    || Tr::eq(c, BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '0')) );
-
-            if (Tr::eq(c, one))
-                set(i);
-
-        }
-
+    :m_bits(Allocator()),
+     m_num_bits(0)
+    {
+      init_from_string(s, pos, (std::basic_string<CharT, Traits, Alloc>::npos),
+                       npos, Allocator());
     }
 
     // The first bit in *first is the least significant bit, and the
@@ -337,7 +323,42 @@ private:
     static block_width_type bit_index(size_type pos) { return static_cast<int>(pos % bits_per_block); }
     static Block bit_mask(size_type pos) { return Block(1) << bit_index(pos); }
 
+    template <typename CharT, typename Traits, typename Alloc>
+    void init_from_string(const std::basic_string<CharT, Traits, Alloc>& s,
+        typename std::basic_string<CharT, Traits, Alloc>::size_type pos,
+        typename std::basic_string<CharT, Traits, Alloc>::size_type n,
+        size_type num_bits,
+        const Allocator& alloc)
+    {
+        assert(pos <= s.size());
 
+        typedef typename std::basic_string<CharT, Traits, Alloc> StrT;
+        typedef typename StrT::traits_type Tr;
+
+        const typename StrT::size_type rlen = (std::min)(n, s.size() - pos); // gps
+        const size_type sz = ( num_bits != npos? num_bits : rlen);
+        m_bits.resize(calc_num_blocks(sz));
+        m_num_bits = sz;
+
+
+        BOOST_DYNAMIC_BITSET_CTYPE_FACET(CharT, fac, std::locale());
+        const CharT one = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '1');
+
+        const size_type m = num_bits < rlen ? num_bits : rlen; // [gps]
+        typename StrT::size_type i = 0;
+        for( ; i < m; ++i) {
+
+            const CharT c = s[(pos + m - 1) - i];
+
+            assert( Tr::eq(c, one)
+                    || Tr::eq(c, BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '0')) );
+
+            if (Tr::eq(c, one))
+                set(i);
+
+        }
+
+    }
 
 BOOST_DYNAMIC_BITSET_PRIVATE:
 
