@@ -13,6 +13,7 @@
 
 #include <boost/config.hpp>
 #include <boost/iterator/counting_iterator.hpp>
+#include <algorithm>
 
 namespace boost {
 
