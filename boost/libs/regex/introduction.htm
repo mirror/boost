@@ -111,7 +111,10 @@ href="template_class_ref.htm#reg_expression">boost::regex</a> e(&quot;(\\d{4}[- 
 remember that the escape is seen once by the C++ compiler, before
 it gets to be seen by the regular expression engine, consequently
 escapes in regular expressions have to be doubled up when
-embedding them in C/C++ code.</p>
+embedding them in C/C++ code. Also note that all the examples
+assume that your compiler supports Koenig lookup, if yours
+doesn't (for example VC6), then you will have to add some boost::
+prefixes to some of the function calls in the examples.</p>
 
 <p>Those of you who are familiar with credit card processing,
 will have realised that while the format used above is suitable
