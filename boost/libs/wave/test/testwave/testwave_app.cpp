@@ -13,7 +13,6 @@
 
 // include boost
 #include <boost/config.hpp>
-#include <boost/program_options.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 

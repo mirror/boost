@@ -12,9 +12,26 @@
 
 #include <string>
 #include <fstream>
+#include <vector>
 
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
+#include <boost/any.hpp>
+
+///////////////////////////////////////////////////////////////////////////////
+// forward declarations only
+namespace cmd_line_utils 
+{
+    class include_paths;
+}
+
+namespace boost { namespace program_options 
+{
+    void validate(boost::any &v, std::vector<std::string> const &s,
+        cmd_line_utils::include_paths *, int);
+}} // boost::program_options
+
+///////////////////////////////////////////////////////////////////////////////
 #include <boost/program_options.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
