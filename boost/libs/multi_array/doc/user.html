@@ -52,8 +52,6 @@ alternate views of the contained data.
 
       <li><a href="#sec_assignment">Construction and Assignment</a>
 
-      <li><a href="#sec_types">Associated Types</a>
-
       <li><a href="#sec_generators">Array View and Subarray Type Generators</a>
 
       <li><a href="#sec_dimensions">Specifying Array Dimensions</a>
@@ -68,7 +66,7 @@ alternate views of the contained data.
 
       <li><a href="#sec_reshape">Changing an Array's Shape</a>
 
-      <li><a href="#sec_concepts">MultiArray Concepts</a>
+      <li><a href="#sec_concepts">MultiArray Concept</a>
 
       <li><a href="#sec_testcases">Test Cases</a>
 </ol>  
@@ -103,7 +101,7 @@ interface for N-dimensional containers.  The primary components of
 <a name="sec_related"></a>
 <h2>Related Work</h2>
 
-<a href="../../array/index.html">boost::array</a>
+<a href="../../array/index.htm">boost::array</a>
  and <a href="http://www.sgi.com/tech/stl/Vector.html">std::vector</a> are
     one-dimensional containers of user data.  Both manage their own
     memory. <tt>std::valarray</tt> is a low-level 
@@ -165,13 +163,13 @@ main () {
 Boost.MultiArray provides three user-level class templates:
 
 <ol>
-      <li><a href="multi_array.html"><tt>multi_array</tt></a> -
+      <li><a href="./reference.html#multi_array"><tt>multi_array</tt></a> -
       defined in "boost/multi_array.hpp",
 
-      <li><a href="multi_array_ref.html"><tt>multi_array_ref</tt></a> -
+      <li><a href="./reference.html#multi_array_ref"><tt>multi_array_ref</tt></a> -
       defined in "boost/multi_array_ref.hpp", and
 
-      <li><a href="const_multi_array_ref.html"><tt>const_multi_array_ref</tt></a>  -
+      <li><a href="./reference.html#const_multi_array_ref"><tt>const_multi_array_ref</tt></a>  -
       defined in "boost/multi_array_ref.hpp"
 </ol>
 
@@ -199,9 +197,9 @@ of the <tt>multi_array_ref</tt> interface.
 <a name="sec_assignment"></a>
 <h2>Construction and Assignment</h2>
 <p>Each of the array types - 
-<a href="multi_array.html"><tt>multi_array</tt></a>, 
-<a href="multi_array_ref.html"><tt>multi_array_ref</tt></a>, and
-<a href="const_multi_array_ref.html"><tt>const_multi_array_ref</tt></a> - 
+<a href="./reference.html#multi_array"><tt>multi_array</tt></a>, 
+<a href="./reference.html#multi_array_ref"><tt>multi_array_ref</tt></a>, and
+<a href="./reference.html#const_multi_array_ref"><tt>const_multi_array_ref</tt></a> - 
 provides a specialized set of constructors.  For further information,
 consult their reference pages.
 
@@ -308,7 +306,7 @@ from the Collection for the N dimensions of the container.
 This can be useful for writing dimension-independent code, and under
 some compilers may yield higher performance than <tt>operator[].</tt>
 
-<a name="sec_views:"></a>
+<a name="sec_views"></a>
 <h2>Creating Views</h2>
 Boost.MultiArray provides the facilities for creating a sub-view of an 
 already existing array component.  It allows you to create a sub-view that
@@ -560,18 +558,10 @@ elements contained remains the same.
 Note that reshaping an array does not affect the indexing.
 
 <a name="sec_concepts"></a>
-<h2>MultiArray Concepts</h2>
-Boost.MultiArray defines and uses several concepts throughout:
-<ul> 
-   <li><a href="Mutable_Multi_Array.html">Mutable Multi-Array</a> -
-   Specifies N-dimensional containers whose values can be
-   altered. Both <tt>multi_array</tt> and <tt>multi_array_ref</tt>
-   model this.
-
-   <li><a href="Const_Multi_Array.html">Const Multi-Array</a> -
-   Specifies N-dimensional containers whose contents cannot be
-   modified.  <tt>const_multi_array_ref</tt> models this.
-</ul>
+<h2>MultiArray Concept</h2>
+Boost.MultiArray defines and uses the 
+<a href="./reference.html#MultiArray">MultiArray</a>
+concept.  It specifies an interface for N-dimensional containers.
 
 <a name="sec_testcases"></a>
 <h2>Test Cases</h2>
@@ -617,7 +607,7 @@ cases can be found <a href="./test_cases.html">here</a>.
 </address>
 <!-- Created: Fri Jun 29 10:53:07 EST 2001 -->
 <!-- hhmts start -->
-Last modified: Mon May  6 14:48:18 EST 2002
+Last modified: Fri Jul 26 12:56:22 EST 2002
 <!-- hhmts end -->
 
 </body>
