@@ -48,7 +48,7 @@
 #if defined(__MWERKS__)
 #include <crtl.h>
 #else
-#ifndef _WIN32
+#if !defined(_WIN32) || defined(__COMO_VERSION__)
 extern char** environ;
 #endif
 #endif
