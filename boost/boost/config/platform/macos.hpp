@@ -19,7 +19,9 @@
 #    define BOOST_HAS_UNISTD_H
 #  endif
 // boilerplate code:
-#  include <boost/config/posix_features.hpp>
+#  ifndef TARGET_CARBON
+#     include <boost/config/posix_features.hpp>
+#  endif
 #  ifndef BOOST_HAS_STDINT_H
 #     define BOOST_HAS_STDINT_H
 #  endif
@@ -60,3 +62,4 @@
 #  endif
 
 #endif
+
