@@ -23,7 +23,7 @@ struct equal_to_impl
           ( tag1_ > tag2_ )
         , aux::cast2nd_impl< equal_to_impl< Tag1,Tag1 >,Tag1, Tag2 >
         , aux::cast1st_impl< equal_to_impl< Tag2,Tag2 >,Tag1, Tag2 >
-        >
+        >::type
 {
 };
 

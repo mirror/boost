@@ -24,7 +24,7 @@ struct bitand_impl
           ( tag1_ > tag2_ )
         , aux::cast2nd_impl< bitand_impl< Tag1,Tag1 >,Tag1, Tag2 >
         , aux::cast1st_impl< bitand_impl< Tag2,Tag2 >,Tag1, Tag2 >
-        >
+        >::type
 {
 };
 

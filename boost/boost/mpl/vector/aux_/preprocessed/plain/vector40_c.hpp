@@ -31,6 +31,8 @@ struct vector31_c
         , integral_c< T,C28 >, integral_c< T,C29 >, integral_c< T,C30 > 
  >
 {
+    typedef vector31_c type;
+    typedef T value_type;
 };
 
 template<
@@ -55,6 +57,8 @@ struct vector32_c
         , C31> 
  >
 {
+    typedef vector32_c type;
+    typedef T value_type;
 };
 
 template<
@@ -79,6 +83,8 @@ struct vector33_c
         , integral_c< T,C31 >, integral_c< T,C32 > 
  >
 {
+    typedef vector33_c type;
+    typedef T value_type;
 };
 
 template<
@@ -103,6 +109,8 @@ struct vector34_c
         , integral_c< T,C31 >, integral_c< T,C32 >, integral_c< T,C33 > 
  >
 {
+    typedef vector34_c type;
+    typedef T value_type;
 };
 
 template<
@@ -128,6 +136,8 @@ struct vector35_c
         , C34> 
  >
 {
+    typedef vector35_c type;
+    typedef T value_type;
 };
 
 template<
@@ -153,6 +163,8 @@ struct vector36_c
         , integral_c< T,C34 >, integral_c< T,C35 > 
  >
 {
+    typedef vector36_c type;
+    typedef T value_type;
 };
 
 template<
@@ -178,6 +190,8 @@ struct vector37_c
         , integral_c< T,C34 >, integral_c< T,C35 >, integral_c< T,C36 > 
  >
 {
+    typedef vector37_c type;
+    typedef T value_type;
 };
 
 template<
@@ -204,6 +218,8 @@ struct vector38_c
         , C37> 
  >
 {
+    typedef vector38_c type;
+    typedef T value_type;
 };
 
 template<
@@ -230,6 +246,8 @@ struct vector39_c
         , integral_c< T,C37 >, integral_c< T,C38 > 
  >
 {
+    typedef vector39_c type;
+    typedef T value_type;
 };
 
 template<
@@ -256,6 +274,8 @@ struct vector40_c
         , integral_c< T,C37 >, integral_c< T,C38 >, integral_c< T,C39 > 
  >
 {
+    typedef vector40_c type;
+    typedef T value_type;
 };
 
 }}

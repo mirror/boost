@@ -18,6 +18,8 @@ template<
 struct vector1_c
     : vector1< integral_c< T,C0 > >
 {
+    typedef vector1_c type;
+    typedef T value_type;
 };
 
 template<
@@ -27,6 +29,8 @@ template<
 struct vector2_c
     : vector2< integral_c< T,C0 >, integral_c< T,C1 > >
 {
+    typedef vector2_c type;
+    typedef T value_type;
 };
 
 template<
@@ -36,6 +40,8 @@ template<
 struct vector3_c
     : vector3< integral_c< T,C0 >, integral_c< T,C1 >, integral_c< T,C2 > >
 {
+    typedef vector3_c type;
+    typedef T value_type;
 };
 
 template<
@@ -48,6 +54,8 @@ struct vector4_c
         , C3> 
  >
 {
+    typedef vector4_c type;
+    typedef T value_type;
 };
 
 template<
@@ -60,6 +68,8 @@ struct vector5_c
         , integral_c< T,C3 >, integral_c< T,C4 > 
  >
 {
+    typedef vector5_c type;
+    typedef T value_type;
 };
 
 template<
@@ -72,6 +82,8 @@ struct vector6_c
         , integral_c< T,C3 >, integral_c< T,C4 >, integral_c< T,C5 > 
  >
 {
+    typedef vector6_c type;
+    typedef T value_type;
 };
 
 template<
@@ -85,6 +97,8 @@ struct vector7_c
         , C6> 
  >
 {
+    typedef vector7_c type;
+    typedef T value_type;
 };
 
 template<
@@ -98,6 +112,8 @@ struct vector8_c
         , integral_c< T,C7 > 
  >
 {
+    typedef vector8_c type;
+    typedef T value_type;
 };
 
 template<
@@ -111,6 +127,8 @@ struct vector9_c
         , integral_c< T,C7 >, integral_c< T,C8 > 
  >
 {
+    typedef vector9_c type;
+    typedef T value_type;
 };
 
 template<
@@ -124,6 +142,8 @@ struct vector10_c
         , integral_c< T,C7 >, integral_c< T,C8 >, integral_c< T,C9 > 
  >
 {
+    typedef vector10_c type;
+    typedef T value_type;
 };
 
 }}

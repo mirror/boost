@@ -26,6 +26,7 @@ struct list41_c
         >
 {
     typedef list41_c type;
+    typedef T value_type;
 };
 
 template<
@@ -44,6 +45,7 @@ struct list42_c
         >
 {
     typedef list42_c type;
+    typedef T value_type;
 };
 
 template<
@@ -62,6 +64,7 @@ struct list43_c
         >
 {
     typedef list43_c type;
+    typedef T value_type;
 };
 
 template<
@@ -80,6 +83,7 @@ struct list44_c
         >
 {
     typedef list44_c type;
+    typedef T value_type;
 };
 
 template<
@@ -98,6 +102,7 @@ struct list45_c
         >
 {
     typedef list45_c type;
+    typedef T value_type;
 };
 
 template<
@@ -116,6 +121,7 @@ struct list46_c
         >
 {
     typedef list46_c type;
+    typedef T value_type;
 };
 
 template<
@@ -134,6 +140,7 @@ struct list47_c
         >
 {
     typedef list47_c type;
+    typedef T value_type;
 };
 
 template<
@@ -152,6 +159,7 @@ struct list48_c
         >
 {
     typedef list48_c type;
+    typedef T value_type;
 };
 
 template<
@@ -170,6 +178,7 @@ struct list49_c
         >
 {
     typedef list49_c type;
+    typedef T value_type;
 };
 
 template<
@@ -188,6 +197,7 @@ struct list50_c
         >
 {
     typedef list50_c type;
+    typedef T value_type;
 };
 
 }}

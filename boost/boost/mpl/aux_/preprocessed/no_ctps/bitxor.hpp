@@ -24,7 +24,7 @@ struct bitxor_impl
 
         , aux::cast2nd_impl< bitxor_impl< Tag1,Tag1 >,Tag1, Tag2 >
         , aux::cast1st_impl< bitxor_impl< Tag2,Tag2 >,Tag1, Tag2 >
-        >
+        >::type
 {
 };
 

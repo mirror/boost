@@ -22,6 +22,7 @@ struct vector1_c
         >
 {
     typedef vector1_c type;
+    typedef T value_type;
 };
 
 template<
@@ -35,6 +36,7 @@ struct vector2_c
         >
 {
     typedef vector2_c type;
+    typedef T value_type;
 };
 
 template<
@@ -48,6 +50,7 @@ struct vector3_c
         >
 {
     typedef vector3_c type;
+    typedef T value_type;
 };
 
 template<
@@ -61,6 +64,7 @@ struct vector4_c
         >
 {
     typedef vector4_c type;
+    typedef T value_type;
 };
 
 template<
@@ -74,6 +78,7 @@ struct vector5_c
         >
 {
     typedef vector5_c type;
+    typedef T value_type;
 };
 
 template<
@@ -87,6 +92,7 @@ struct vector6_c
         >
 {
     typedef vector6_c type;
+    typedef T value_type;
 };
 
 template<
@@ -100,6 +106,7 @@ struct vector7_c
         >
 {
     typedef vector7_c type;
+    typedef T value_type;
 };
 
 template<
@@ -113,6 +120,7 @@ struct vector8_c
         >
 {
     typedef vector8_c type;
+    typedef T value_type;
 };
 
 template<
@@ -126,6 +134,7 @@ struct vector9_c
         >
 {
     typedef vector9_c type;
+    typedef T value_type;
 };
 
 template<
@@ -139,6 +148,7 @@ struct vector10_c
         >
 {
     typedef vector10_c type;
+    typedef T value_type;
 };
 
 }}
