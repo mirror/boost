@@ -42,7 +42,7 @@ void test_variable_map()
         ("output,o", new untyped_value(), "")
         ;
     char* cmdline3_[] = { "--foo='12'", "--bar=11", "-z3", "-ofoo" };
-    vector<string> cmdline3((char*)cmdline3_,
+    vector<string> cmdline3((char**)cmdline3_,
                             cmdline3_ + sizeof(cmdline3_)/sizeof(cmdline3_[0]));
     parsed_options a3 = command_line_parser(cmdline3).options(desc).run();
     variables_map vm;
@@ -63,7 +63,7 @@ void test_variable_map()
     ("opt", bool_switch(), "");
 
     char* cmdline4_[] = { "--zee=On", "--zoo", "--zak=13" };
-    vector<string> cmdline4((char*)cmdline4_,
+    vector<string> cmdline4((char**)cmdline4_,
                             cmdline4_ + sizeof(cmdline4_)/sizeof(cmdline4_[0]));
     parsed_options a4 = command_line_parser(cmdline4).options(desc).run();
 
@@ -84,7 +84,7 @@ void test_variable_map()
     ("iii", value<int>()->default_value(123))
     ;
     char* cmdline5_[] = {  "--voo=1" };
-    vector<string> cmdline5((char*)cmdline5_,
+    vector<string> cmdline5((char**)cmdline5_,
                             cmdline5_ + sizeof(cmdline5_)/sizeof(cmdline5_[0]));
     parsed_options a5 = command_line_parser(cmdline5).options(desc2).run();
 
@@ -178,13 +178,13 @@ void test_priority()
     ;
 
     char* cmdline1_[] = { "--first=1", "--aux=10", "--first=3", "--include=1" };
-    vector<string> cmdline1((char*)cmdline1_, 
+    vector<string> cmdline1((char**)cmdline1_, 
                             cmdline1_ + sizeof(cmdline1_)/sizeof(cmdline1_[0]));
 
     parsed_options p1 = command_line_parser(cmdline1).options(desc).run();
 
     char* cmdline2_[] = { "--first=12", "--second=7", "--include=7" };
-    vector<string> cmdline2((char*)cmdline2_, 
+    vector<string> cmdline2((char**)cmdline2_, 
                             cmdline2_ + sizeof(cmdline2_)/sizeof(cmdline2_[0]));
 
     parsed_options p2 = command_line_parser(cmdline2).options(desc).run();
