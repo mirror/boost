@@ -57,9 +57,9 @@ public:
     template<class Archive, class T>
     friend struct detail::member_loader;
     template<class Archive, class T>
-    friend class boost::archive::detail::iserializer;
+    friend class archive::detail::iserializer;
     template<class Archive, class T>
-    friend class boost::archive::detail::oserializer;
+    friend class archive::detail::oserializer;
     template<class Archive, class T>
     friend inline void serialize(
         Archive & ar, 
