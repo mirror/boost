@@ -52,7 +52,7 @@ namespace boost {
     template <class PMapCategory>
     struct choose_pmap_iter {
       template <class PMap, class Iter>
-      struct bind {     
+      struct bind_ {     
         typedef typename property_traits<PMap>::value_type value;
         typedef iterator_adaptor<Iter,
           readable_pmap_iter_policies<PMap>, value, value,
@@ -63,7 +63,7 @@ namespace boost {
     template <>
     struct choose_pmap_iter<lvalue_property_map_tag> {
       template <class PMap, class Iter>
-      struct bind {
+      struct bind_ {
         typedef typename property_traits<PMap>::value_type value;
         typedef typename property_traits<PMap>::reference ref;
         typedef iterator_adaptor<Iter,
@@ -79,7 +79,7 @@ namespace boost {
   public:
     typedef typename property_traits<PropertyMap>::category Cat; 
     typedef typename detail::choose_pmap_iter<Cat>::
-      template bind<PropertyMap, Iterator>::type type;
+      template bind_<PropertyMap, Iterator>::type type;
   };
 
   template <class PropertyMap, class Iterator>
