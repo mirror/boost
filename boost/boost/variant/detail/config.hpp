@@ -21,19 +21,6 @@
 #include "boost/detail/workaround.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// macro BOOST_VARIANT_AUX_NO_SFINAE
-//
-// Temporary -- until BOOST_NO_SFINAE is adopted.
-//
-#if BOOST_WORKAROUND(BOOST_MSVC,  <= 1300) \
- || BOOST_WORKAROUND(__GNUC__, <= 2 && __GNUC_MINOR__ <= 95) \
- || BOOST_WORKAROUND(__MWERKS__, <= 0x3000) \
- || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551)) \
- && !defined(BOOST_VARIANT_AUX_NO_SFINAE)
-#   define BOOST_VARIANT_AUX_NO_SFINAE
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_AUX_BROKEN_CONSTRUCTOR_TEMPLATE_ORDERING
 //
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
@@ -46,7 +33,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_AUX_HAS_CONSTRUCTOR_TEMPLATE_ORDERING_SFINAE_WKND
 //
-#if !defined(BOOST_VARIANT_AUX_NO_SFINAE) \
+#if !defined(BOOST_NO_SFINAE) \
  && !BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(700)) \
  && !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
  && !defined(BOOST_VARIANT_AUX_HAS_CONSTRUCTOR_TEMPLATE_ORDERING_SFINAE_WKND)

@@ -23,6 +23,8 @@
 
 #include "boost/variant/detail/apply_visitor_unary.hpp"
 
+#include "boost/utility/enable_if.hpp"
+
 namespace boost {
 
 //////////////////////////////////////////////////////////////////////////
@@ -119,7 +121,7 @@ public: // visitor interfaces
 #else // EDG-based compilers
 
 #   define BOOST_VARIANT_AUX_APPLY_VISITOR_NON_CONST_RESULT_TYPE(V) \
-    typename detail::variant::enable_if< \
+    typename enable_if< \
           mpl::not_< is_const< V > > \
         , BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename V::result_type) \
         >::type \

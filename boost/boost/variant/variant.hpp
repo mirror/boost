@@ -34,7 +34,6 @@
 #include "boost/variant/detail/over_sequence.hpp"
 #include "boost/variant/detail/visitation_impl.hpp"
 
-#include "boost/variant/detail/enable_if.hpp"
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/has_nothrow_move.hpp"
 #include "boost/variant/detail/move.hpp"
@@ -51,6 +50,7 @@
 #include "boost/type_traits/has_nothrow_copy.hpp"
 #include "boost/type_traits/is_const.hpp"
 #include "boost/type_traits/is_same.hpp"
+#include "boost/utility/enable_if.hpp"
 #include "boost/variant/recursive_wrapper_fwd.hpp"
 #include "boost/variant/static_visitor.hpp"
 
@@ -1356,7 +1356,7 @@ public: // structors, cont.
 #elif defined(BOOST_VARIANT_AUX_HAS_CONSTRUCTOR_TEMPLATE_ORDERING_SFINAE_WKND)
 
     // For compilers that cannot distinguish between T& and const T& in
-    // template constructors, but do support SFINAE, we can workaround:
+    // template constructors, but do fully support SFINAE, we can workaround:
 
     template <typename T>
     variant(const T& operand)
@@ -1367,7 +1367,7 @@ public: // structors, cont.
     template <typename T>
     variant(
           T& operand
-        , typename detail::variant::enable_if<
+        , typename enable_if<
               mpl::not_< is_const<T> >
             , void
             >::type* = 0
