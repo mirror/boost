@@ -123,8 +123,8 @@
 // One of these workarounds is needed for MSVC 7.1 AFAIK
 // (thanks to John Maddock and Martin Lauer).
 // The second workaround looks like BOOST_UBLAS_QUALIFIED_TYPENAME.
-// #define BOOST_UBLAS_NO_NESTED_CLASS_RELATION
-#define BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
+#define BOOST_UBLAS_NO_NESTED_CLASS_RELATION
+// #define BOOST_UBLAS_MSVC_NESTED_CLASS_RELATION
 
 #endif
 

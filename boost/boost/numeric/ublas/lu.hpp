@@ -52,7 +52,8 @@ namespace boost { namespace numeric { namespace ublas {
 
         size_type size = pm.size ();
         for (size_type i = 0; i < size; ++ i) {
-            std::swap (mv (i), mv (pm (i)));
+            if (i != pm (i))
+                std::swap (mv (i), mv (pm (i)));
         }
     }
     template<class PM, class MV>
@@ -63,7 +64,8 @@ namespace boost { namespace numeric { namespace ublas {
 
         size_type size = pm.size ();
         for (size_type i = 0; i < size; ++ i) {
-            row (mv, i).swap (row (mv, pm (i)));
+            if (i != pm (i))
+                row (mv, i).swap (row (mv, pm (i)));
         }
     }
     // Dispatcher
@@ -95,6 +97,8 @@ namespace boost { namespace numeric { namespace ublas {
                 if (i_norm_inf != i) {
                     pm (i) = i_norm_inf;
                     row (m, i_norm_inf).swap (mri);
+                } else {
+                    BOOST_UBLAS_CHECK (pm (i) == i_norm_inf, external_logic ());
                 }
                 project (mci, range (i + 1, size1)) *= value_type (1) / m (i, i);
             } else if (singular == 0) {
@@ -145,6 +149,8 @@ namespace boost { namespace numeric { namespace ublas {
                     pm (i) = i_norm_inf;
                     std::swap (v (i_norm_inf), v (i));
                     project (row (m, i_norm_inf), range (i + 1, size2)).swap (project (row (m, i), range (i + 1, size2)));
+                } else {
+                    BOOST_UBLAS_CHECK (pm (i) == i_norm_inf, external_logic ());
                 }
                 project (column (mr, i), range (i + 1, size1)).assign (
                     project (v, range (i + 1, size1)) / v (i));
@@ -178,6 +184,8 @@ namespace boost { namespace numeric { namespace ublas {
                     pm (i) = i_norm_inf;
                     std::swap (v (i_norm_inf), v (i));
                     project (row (m, i_norm_inf), range (i + 1, size2)).swap (project (row (m, i), range (i + 1, size2)));
+                } else {
+                    BOOST_UBLAS_CHECK (pm (i) == i_norm_inf, external_logic ());
                 }
                 project (column (lr, i), range (i + 1, size1)).assign (
                     project (v, range (i + 1, size1)) / v (i));
@@ -204,7 +212,9 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class PMT, class PMA, class MV>
     void lu_substitute (const M &m, const permutation_matrix<PMT, PMA> &pm, MV &mv) {
         typedef const M const_matrix_type;
-        typedef MV matrix_vector_type;
+        typedef typename boost::mpl::if_c<boost::is_same<typename MV::type_category, vector_tag>::value,
+                                          vector<typename MV::value_type>,
+                                          matrix<typename MV::value_type> >::type matrix_vector_type;
 
         swap_rows (pm, mv);
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -223,7 +233,9 @@ namespace boost { namespace numeric { namespace ublas {
     template<class MV, class M, class PMT, class PMA>
     void lu_substitute (MV &mv, const M &m, const permutation_matrix<PMT, PMA> &pm) {
         typedef const M const_matrix_type;
-        typedef MV matrix_vector_type;
+        typedef typename boost::mpl::if_c<boost::is_same<typename MV::type_category, vector_tag>::value,
+                                          vector<typename MV::value_type>,
+                                          matrix<typename MV::value_type> >::type matrix_vector_type;
 
         swap_rows (pm, mv);
 #ifdef BOOST_UBLAS_TYPE_CHECK

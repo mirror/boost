@@ -52,31 +52,19 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         sparse_vector_element (vector_type &v, size_type i):
             container_reference<vector_type> (v), it_ (), i_ (i), d_ (), dirty_ (false) {
-            // FIX: reduce fill in.
-            // pointer it = (*this) ().find_element (i_);
-            // if (! it)
-            //     (*this) ().insert (i_, d_);
-            // else
-            //     d_ = *it;
-            it_ = (*this) ().find_element (i_);
-            if (it_)
-                d_ = *it_;
+            pointer it = (*this) ().find_element (i_);
+            if (! it)
+                (*this) ().insert (i_, d_);
+            else
+                d_ = *it;
         }
         BOOST_UBLAS_INLINE
         ~sparse_vector_element () {
-            // FIX: reduce fill in.
-            // if (dirty_) {
-            //     if (! it_)
-            //         it_ = (*this) ().find_element (i_);
-            //     BOOST_UBLAS_CHECK (it_, internal_logic ());
-            //     *it_ = d_;
-            // }
             if (dirty_) {
-                 if (! it_) {
-                     if (d_ != value_type ())
-                         (*this) ().insert (i_, d_);
-                 } else
-                     *it_ = d_;
+                if (! it_)
+                    it_ = (*this) ().find_element (i_);
+                BOOST_UBLAS_CHECK (it_, internal_logic ());
+                *it_ = d_;
             }
         }
 
