@@ -34,7 +34,7 @@ Synopsis
 Description
 -----------
 
-``quoten`` is a higher-order primitive that wraps an *n*-ary |Metafunction| to create 
+``quote``\ *n* is a higher-order primitive that wraps an *n*-ary |Metafunction| to create 
 a corresponding |Metafunction Class|.
 
 
