@@ -62,6 +62,7 @@ main()
 
   std::cout << "Now do the same test for universal time -- a few less iterations" << std::endl;
   max = 10;
+  last = microsec_clock::universal_time();
   for (i = 0; i<max; i++)
   {
     for (int j=0; j<100000; j++)
