@@ -8,7 +8,7 @@
  * Author: Jeff Garland, Bart Garst
  * $Date$
  */
- 
+
 /*! @file c_local_time_adjustor.hpp
   Time adjustment calculations based on machine
 */
@@ -24,8 +24,7 @@ namespace date_time {
    *  machine are correct.  This can be a very dangerous assumption.
    */
   template<class time_type>
-  class c_local_adjustor
-  {
+  class c_local_adjustor {
   public:
     typedef typename time_type::time_duration_type time_duration_type;
     typedef typename time_type::date_type date_type;
@@ -43,13 +42,13 @@ namespace date_time {
       std::time_t t2 = dd.days()*86400 + td.hours()*3600 + td.minutes()*60 + td.seconds();
       std::tm* tms = std::localtime(&t2);
       date_type d(static_cast<unsigned short>(tms->tm_year + 1900),
-                  static_cast<unsigned short>(tms->tm_mon + 1), 
+                  static_cast<unsigned short>(tms->tm_mon + 1),
                   static_cast<unsigned short>(tms->tm_mday));
       time_duration_type td2(tms->tm_hour,
                              tms->tm_min,
-			     tms->tm_sec,
+                             tms->tm_sec,
                              t.time_of_day().fractional_seconds());
-
+      
       return time_type(d,td2);
     }
   };
