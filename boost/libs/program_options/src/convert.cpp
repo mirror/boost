@@ -11,6 +11,8 @@
 #include <locale>
 #include <stdexcept>
 
+#include <boost/config.hpp>
+
 #include <boost/program_options/detail/convert.hpp>
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 #include <boost/bind.hpp>
@@ -120,17 +122,17 @@ namespace boost {
     std::wstring
     from_local_8_bit(const std::string& s)
     {
+        typedef codecvt<wchar_t, char, mbstate_t> facet_type;
         return from_8_bit(s, 
-                         use_facet< codecvt<wchar_t, char, mbstate_t> >(
-                             locale()));
+                          BOOST_USE_FACET(facet_type, locale()));
     }
 
     std::string
     to_local_8_bit(const std::wstring& s)
     {
+        typedef codecvt<wchar_t, char, mbstate_t> facet_type;
         return to_8_bit(s, 
-                        use_facet< codecvt<wchar_t, char, mbstate_t> >(
-                            locale()));
+                        BOOST_USE_FACET(facet_type, locale()));                        
     }
 
 
