@@ -229,12 +229,16 @@ rational<IntType>& rational<IntType>::operator+= (const rational<IntType>& r)
     // Which proves that instead of normalizing the result, it is better to
     // divide num and den by gcd((a*d1 + c*b1), g)
 
-    IntType g = gcd(den, r.den);
+    // Protect against self-modification
+    IntType r_num = r.num;
+    IntType r_den = r.den;
+
+    IntType g = gcd(den, r_den);
     den /= g;  // = b1 from the calculations above
-    num = num * (r.den / g) + r.num * den;
+    num = num * (r_den / g) + r_num * den;
     g = gcd(num, g);
     num /= g;
-    den *= r.den/g;
+    den *= r_den/g;
 
     return *this;
 }
@@ -242,14 +246,18 @@ rational<IntType>& rational<IntType>::operator+= (const rational<IntType>& r)
 template <typename IntType>
 rational<IntType>& rational<IntType>::operator-= (const rational<IntType>& r)
 {
+    // Protect against self-modification
+    IntType r_num = r.num;
+    IntType r_den = r.den;
+
     // This calculation avoids overflow, and minimises the number of expensive
     // calculations. It corresponds exactly to the += case above
-    IntType g = gcd(den, r.den);
+    IntType g = gcd(den, r_den);
     den /= g;
-    num = num * (r.den / g) - r.num * den;
+    num = num * (r_den / g) - r_num * den;
     g = gcd(num, g);
     num /= g;
-    den *= r.den/g;
+    den *= r_den/g;
 
     return *this;
 }
@@ -257,31 +265,39 @@ rational<IntType>& rational<IntType>::operator-= (const rational<IntType>& r)
 template <typename IntType>
 rational<IntType>& rational<IntType>::operator*= (const rational<IntType>& r)
 {
+    // Protect against self-modification
+    IntType r_num = r.num;
+    IntType r_den = r.den;
+
     // Avoid overflow and preserve normalization
-    IntType gcd1 = gcd<IntType>(num, r.den);
-    IntType gcd2 = gcd<IntType>(r.num, den);
-    num = (num/gcd1) * (r.num/gcd2);
-    den = (den/gcd2) * (r.den/gcd1);
+    IntType gcd1 = gcd<IntType>(num, r_den);
+    IntType gcd2 = gcd<IntType>(r_num, den);
+    num = (num/gcd1) * (r_num/gcd2);
+    den = (den/gcd2) * (r_den/gcd1);
     return *this;
 }
 
 template <typename IntType>
 rational<IntType>& rational<IntType>::operator/= (const rational<IntType>& r)
 {
+    // Protect against self-modification
+    IntType r_num = r.num;
+    IntType r_den = r.den;
+
     // Avoid repeated construction
     IntType zero(0);
 
     // Trap division by zero
-    if (r.num == zero)
+    if (r_num == zero)
         throw bad_rational();
     if (num == zero)
         return *this;
 
     // Avoid overflow and preserve normalization
-    IntType gcd1 = gcd<IntType>(num, r.num);
-    IntType gcd2 = gcd<IntType>(r.den, den);
-    num = (num/gcd1) * (r.den/gcd2);
-    den = (den/gcd2) * (r.num/gcd1);
+    IntType gcd1 = gcd<IntType>(num, r_num);
+    IntType gcd2 = gcd<IntType>(r_den, den);
+    num = (num/gcd1) * (r_den/gcd2);
+    den = (den/gcd2) * (r_num/gcd1);
     return *this;
 }
 
