@@ -6,8 +6,6 @@
 #ifndef WORKAROUND_DWA2002126_HPP
 # define WORKAROUND_DWA2002126_HPP
 
-# include <boost/config.hpp>
-
 // Compiler/library version workaround macro
 //
 // Usage:
@@ -18,15 +16,22 @@
 //
 // When BOOST_STRICT_CONFIG is defined, expands to 0. Otherwise, the
 // first argument must be undefined or expand to a numeric
-// value. The above expands to the moral equivalent of:
+// value. The above expands to:
 //
-//     defined(BOOST_MSVC) && BOOST_MSVC <= 1200
+//     (BOOST_MSVC) != 0 && (BOOST_MSVC) <= 1200
 //
+// When used for workarounds on the latest known version of a
+// compiler, the following convention should be observed:
+//
+//     #if BOOST_WORKAROUND(BOOST_MSVC, |0x1301)
+//
+// The version number in this case corresponds to the last version in
+// which the workaround was known to have been required.  It only has
+// value as a comment, since the outcome of the test is always 1
+// unless BOOST_STRICT_CONFIG is defined.
 
 # ifndef BOOST_STRICT_CONFIG
-#  include <boost/preprocessor/cat.hpp>
-#  define BOOST_NUMERIC_DEFINED_SUFFIX 1
-#  define BOOST_WORKAROUND(symbol, test) (BOOST_PP_CAT(symbol,BOOST_NUMERIC_DEFINED_SUFFIX) && symbol test)
+#  define BOOST_WORKAROUND(symbol, test) ((symbol) != 0 && ((symbol) test))
 # else
 #  define BOOST_WORKAROUND(symbol, test) 0
 # endif 
