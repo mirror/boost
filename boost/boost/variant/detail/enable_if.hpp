@@ -17,19 +17,13 @@
 #ifndef BOOST_VARIANT_DETAIL_ENABLE_IF_HPP
 #define BOOST_VARIANT_DETAIL_ENABLE_IF_HPP
 
-#include "boost/config.hpp"
-#include "boost/detail/workaround.hpp"
+#include "boost/variant/detail/config.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// Temporary enable_if and NO_SFINAE macro (until boost::enable_if is adopted)
+// enable_if, enable_if_c
 //
-
-#if BOOST_WORKAROUND(BOOST_MSVC,  <= 1300)                      \
- || BOOST_WORKAROUND(__GNUC__, <= 2 && __GNUC_MINOR__ <= 95)    \
- || BOOST_WORKAROUND(__MWERKS__, <= 0x3000)                     \
- || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-#   define BOOST_VARIANT_AUX_NO_SFINAE
-#endif
+// Temporary -- until boost::enable_if is adopted.
+//
 
 #if !defined(BOOST_VARIANT_AUX_NO_SFINAE)
 
