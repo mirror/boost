@@ -404,7 +404,7 @@ public: // should be protected, but GCC 2.95.3 will fail to allow access
 private:
   template<typename Functor>
     Functor* get_functor_pointer(detail::function::function_ptr_tag, int)
-    { return &reinterpret_cast<Functor>(functor.func_ptr); }
+    { return reinterpret_cast<Functor*>(&functor.func_ptr); }
 
   template<typename Functor, typename Tag>
     Functor* get_functor_pointer(Tag, long)
@@ -413,7 +413,7 @@ private:
   template<typename Functor>
     const Functor*
     get_functor_pointer(detail::function::function_ptr_tag, int) const
-    { return &reinterpret_cast<const Functor>(functor.func_ptr); }
+    { return reinterpret_cast<const Functor*>(&functor.func_ptr); }
 
   template<typename Functor, typename Tag>
     const Functor* get_functor_pointer(Tag, long) const
