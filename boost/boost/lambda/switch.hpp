@@ -129,7 +129,7 @@ return
       lambda_functor_base< 
         do_nothing_action, 
         null_type 
-      > (cnull_type()) ;
+      > () ;
 }
 
 
@@ -392,7 +392,7 @@ switch_statement() {
         do_nothing_action, 
         null_type
       > 
-  ( null_type());
+  ();
 }
 
 // 1 argument case, this is useless as well, just the condition part

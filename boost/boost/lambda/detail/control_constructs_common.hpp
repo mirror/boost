@@ -39,7 +39,7 @@ public:
     : lambda_functor<Args>(a) {}
 
   // for the no body cases in control structures.
-  explicit tagged_lambda_functor() : lambda_functor<Args>( null_type() ) {}
+  tagged_lambda_functor() : lambda_functor<Args>() {}
 };
 
 } // lambda
