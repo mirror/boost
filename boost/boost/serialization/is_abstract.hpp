@@ -21,19 +21,23 @@
 #include <boost/type_traits/is_class.hpp>
 #include <boost/mpl/bool_fwd.hpp>
 
-// provokes ICE on microsoft VC 7.0 and maybe gcc 3.2
-// so make sure its skipped
-#define BOOST_TT_IS_ABSTRACT_CLASS_HPP
-// #include <boost/type_traits/is_abstract.hpp>
-
-// so default to false until the above is really fixed
-namespace boost {
-template<class T>
-struct is_abstract {
-    typedef mpl::bool_<false> type;
-    BOOST_STATIC_CONSTANT(bool, value = is_abstract::type::value); 
-};
-} // namespace boost
+#ifndef BOOST_TT_IS_ABSTRACT_CLASS_HPP
+#if    defined(__GNUC__) && (34 <= _GNUC__ * 10 + __GNU_MINOR)  \
+    || defined(__MSVC_VER) && (1310 <= __MSVC_VER)              \
+    || defined(__EDG_VERSION__)                                 \
+    /**/
+    #include <boost/type_traits/is_abstract.hpp>
+#else
+// default to false if not supported
+    namespace boost {
+    template<class T>
+    struct is_abstract {
+        typedef mpl::bool_<false> type;
+        BOOST_STATIC_CONSTANT(bool, value = is_abstract::type::value); 
+    };
+    } // namespace boost
+#endif
+#endif // BOOST_TT_IS_ABSTRACT_CLASS_HPP
 
 // define a macro to make explicit designation of this more transparent
 #define BOOST_IS_ABSTRACT(T)                   \
