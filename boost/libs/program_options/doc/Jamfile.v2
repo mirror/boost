@@ -5,4 +5,4 @@ toolset.using doxygen ;
 boostbook program_option : program_options.xml ;
 
 doxygen autodoc 
-    : [ GLOB ../../../boost/program_options : *.hpp ] ;
+    : [ glob ../../../boost/program_options/*.hpp ] ;
