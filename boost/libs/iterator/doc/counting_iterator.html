@@ -95,12 +95,13 @@ type. Otherwise <tt class="literal"><span class="pre">difference_type</span></tt
 <p>If <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt> is not <tt class="literal"><span class="pre">use_default</span></tt> then the member
 <tt class="literal"><span class="pre">iterator_category</span></tt> is <tt class="literal"><span class="pre">CategoryOrTraversal</span></tt>.  Otherwise, if
 <tt class="literal"><span class="pre">numeric_limits&lt;Incrementable&gt;::is_specialized</span></tt>, then
-<tt class="literal"><span class="pre">iterator_category</span></tt> is a type convertible to
-<tt class="literal"><span class="pre">random_access_iterator_tag</span></tt>.  Otherwise, <tt class="literal"><span class="pre">iterator_category</span></tt> is
-unspecified.</p>
+<tt class="literal"><span class="pre">iterator_category</span></tt> is a 
+<tt class="literal"><span class="pre">facade_iterator_category(random_access_traversal_tag,</span> <span class="pre">Incrementable,</span> <span class="pre">const</span> <span class="pre">Incrementable&amp;)</span></tt>.
+Otherwise, <tt class="literal"><span class="pre">iterator_category</span></tt> is
+<tt class="literal"><span class="pre">facade_iterator_category(iterator_traversal&lt;Incrementable&gt;::type,</span> <span class="pre">Incrementable,</span> <span class="pre">const</span> <span class="pre">Incrementable&amp;)</span></tt>.</p>
 <dl>
 <dt>[<em>Note:</em> implementers are encouraged to provide an implementation of</dt>
-<dd><tt class="literal"><span class="pre">operator-</span></tt> and a <tt class="literal"><span class="pre">difference_type</span></tt> that avoids overflows in
+<dd><tt class="literal"><span class="pre">operator-</span></tt> and the default <tt class="literal"><span class="pre">difference_type</span></tt> that avoids overflows in
 the cases when the <tt class="literal"><span class="pre">Incrementable</span></tt> type is a numeric type.]</dd>
 </dl>
 </div>

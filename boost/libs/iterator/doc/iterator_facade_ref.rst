@@ -89,12 +89,29 @@
   Derived operator+ (iterator_facade<Derived, V, TC, R, D> const&,
                      typename Derived::difference_type n)
 
-
-__ `facade iterator category`_
+__ `iterator category`_
 
 __ `operator arrow`_
 
 __ brackets_
+
+.. _`iterator category`:
+
+The ``iterator_category`` member of ``iterator_facade`` is 
+``facade_iterator_category(CategoryOrTraversal, value_type,
+reference)``, as specified by the following pseudo-code:
+
+.. include:: facade_iterator_category.rst
+
+If ``CategoryOrTraversal`` is ``use_default`` then
+``iterator_traversal<Derived>::type`` is convertible to the most
+derived standard traversal tag type to which
+``iterator_traversal<Iterator>::type`` is also convertible, and not to
+any more-derived traversal tag type.  Otherwise
+``iterator_traversal<Derived>::type`` is convertible to the most
+derived standard traversal tag type to which ``CategoryOrTraversal``
+is also convertible, and not to any more-derived traversal tag type.
+
 
 The ``enable_if_interoperable`` template used above is for exposition
 purposes.  The member operators should be only be in an overload set
@@ -162,15 +179,7 @@ interoperable with ``X``.
    |                    |``F::difference_type``|                                     |Iterator                   |
    +--------------------+----------------------+-------------------------------------+---------------------------+
 
-.. _facade iterator category:
 
-``iterator_facade`` iterator category
--------------------------------------
-
-The ``iterator_category`` member of ``iterator_facade<X,V,R,C,D>``
-satisfies the following conditions:
-
-.. include:: facade_iterator_category.rst
 
 ``iterator_facade`` operations
 ------------------------------

@@ -66,13 +66,13 @@ following pseudo-code.  We use the abbreviation
   else
       typedef Difference difference_type;
 
-``iterator_category`` satisfies the following conditions, where
-``R`` is ``reference`` and ``V`` is ``value_type``, and where: if
-``CategoryOrTraversal`` is ``use_default``, ``C`` is
-``iterator_traversal<Iterator>::type`` and otherwise ``C`` is
-``CategoryOrTraversal``.
 
-  .. include:: facade_iterator_category.rst
+
+The ``iterator_category`` member is ``facade_iterator_category(C,
+value_type, reference)`` where if ``CategoryOrTraversal`` is
+``use_default``, ``C`` is ``iterator_traversal<Iterator>::type`` and
+otherwise ``C`` is ``CategoryOrTraversal``.
+
 
 ``indirect_iterator`` requirements
 ..................................

@@ -373,9 +373,9 @@ the stated semantics. <tt class="literal"><span class="pre">U</span></tt> is the
 type <tt class="literal"><span class="pre">T</span></tt>.</p>
 <table border class="table">
 <colgroup>
-<col width="30%" />
+<col width="28%" />
 <col width="20%" />
-<col width="50%" />
+<col width="52%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th colspan="3">Readable Iterator Requirements (in addition to Assignable and Copy Constructible)</th>
@@ -401,10 +401,7 @@ non-cv-qualified type</td>
 </tr>
 <tr><td><tt class="literal"><span class="pre">a-&gt;m</span></tt></td>
 <td><tt class="literal"><span class="pre">U&amp;</span></tt></td>
-<td>pre: <tt class="literal"><span class="pre">static_cast&lt;T</span> <span class="pre">const&amp;&gt;(*a).m</span></tt> is well-defined.  If
-<tt class="literal"><span class="pre">static_cast&lt;T&amp;&gt;(*a).m</span></tt> is well-defined, equivalent to
-<tt class="literal"><span class="pre">static_cast&lt;T&amp;&gt;(*a).m</span></tt>; otherwise, equivalent to
-<tt class="literal"><span class="pre">static_cast&lt;T</span> <span class="pre">const&amp;&gt;(*a).m</span></tt>.</td>
+<td>pre: <tt class="literal"><span class="pre">pre:</span> <span class="pre">(*a).m</span></tt> is well-defined. Equivalent to <tt class="literal"><span class="pre">(*a).m</span></tt>.</td>
 </tr>
 </tbody>
 </table>
