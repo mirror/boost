@@ -8,7 +8,7 @@
 //
 //  shared_ptr_test.cpp - a test for shared_ptr.hpp and weak_ptr.hpp
 //
-//  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
+//  Copyright (c) 2001, 2002 Peter Dimov and Multi Media Ltd.
 //
 //  Permission to copy, use, modify, sell and distribute this software
 //  is granted provided this copyright notice appears in all copies.
