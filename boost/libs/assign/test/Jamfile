@@ -36,6 +36,11 @@ test-suite "assign"
             my_vector_example.cpp
         : my_vector
        ] 
+    : [ run 
+            multi_index_container.cpp
+        : multi_index_container
+      ]
+             
        ;
 
 
