@@ -379,7 +379,7 @@ protected:
       index start = current_range.get_start(default_start);
       index finish = current_range.get_finish(default_finish);
       index index_factor = current_range.stride();
-      index len = (finish - start) / index_factor;
+      index len = (finish - start + (index_factor - 1)) / index_factor;
 
       // the array data pointer is modified to account for non-zero
       // bases during slicing (see [Garcia] for the math involved)
