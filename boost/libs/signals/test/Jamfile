@@ -1,37 +1,44 @@
 subproject libs/signals/test ;
 
-exe signal_n_test : <lib>../build/boost_signals
+exe signal_n_test : <lib>../build/boost_signals 
+                    <lib>../../test/build/test_exec_monitor
                     signal_n_test.cpp
                   : <include>$(BOOST_ROOT)
                   ;
 
 exe signal_test   : <lib>../build/boost_signals
+                    <lib>../../test/build/test_exec_monitor
                     signal_test.cpp
                   : <include>$(BOOST_ROOT)
                   ;
 
 
 exe deletion_test : <lib>../build/boost_signals
+                    <lib>../../test/build/test_exec_monitor
                     deletion_test.cpp
                   : <include>$(BOOST_ROOT)
                   ;
 
 exe trackable_test : <lib>../build/boost_signals
+                     <lib>../../test/build/test_exec_monitor
                     trackable_test.cpp
                   : <include>$(BOOST_ROOT)
                   ;
 
 exe random_signal_system : <lib>../build/boost_signals
+                           <lib>../../test/build/test_exec_monitor
                            random_signal_system.cpp
                          : <include>$(BOOST_ROOT)
                          ;
 
 exe dead_slot_test : <lib>../build/boost_signals
+                     <lib>../../test/build/test_exec_monitor
                      dead_slot_test.cpp
                    : <include>$(BOOST_ROOT)
                    ;
 
 exe ordering_test : <lib>../build/boost_signals
+                    <lib>../../test/build/test_exec_monitor
                     ordering_test.cpp
                   : <include>$(BOOST_ROOT)
                   ;

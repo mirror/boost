@@ -1,6 +1,6 @@
 // Boost.Signals library
 //
-// Copyright (C) 2001 Doug Gregor (gregod@cs.rpi.edu)
+// Copyright (C) 2001-2002 Doug Gregor (gregod@cs.rpi.edu)
 //
 // Permission to copy, use, sell and distribute this software is granted
 // provided this copyright notice appears in all copies.
@@ -35,7 +35,7 @@ struct connection_tag {
   typedef edge_property_tag kind;
 };
 
-typedef signal<void, int, int, double, int&> signal_type;
+typedef signal4<void, int, int, double, int&> signal_type;
 typedef adjacency_list<listS, listS, directedS,
                        // Vertex properties
                        property<signal_tag, signal_type*,
