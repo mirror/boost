@@ -83,35 +83,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_column_type column (size_type j) {
             return matrix_column_type (operator () (), j);
         }
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        const_matrix_range_type operator () (const range<> &r1, const range<> &r2) const {
-            return const_matrix_range_type (operator () (), r1, r2);
-        }
-        BOOST_UBLAS_INLINE
-        matrix_range_type operator () (const range<> &r1, const range<> &r2) {
-            return matrix_range_type (operator () (), r1, r2);
-        }
-        BOOST_UBLAS_INLINE
-        const_matrix_slice_type operator () (const slice<> &s1, const slice<> &s2) const {
-            return const_matrix_slice_type (operator () (), s1, s2);
-        }
-        BOOST_UBLAS_INLINE
-        matrix_slice_type operator () (const slice<> &s1, const slice<> &s2) {
-            return matrix_slice_type (operator () (), s1, s2);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        const_matrix_indirect_type operator () (const indirect_array<A> &ia1, const indirect_array<A> &ia2) const {
-            return const_matrix_indirect_type (operator () (), ia1, ia2);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        matrix_indirect_type operator () (const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
-            return matrix_indirect_type (operator () (), ia1, ia2);
-        }
-#else
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_matrix_range_type operator () (const range &r1, const range &r2) const {
             return const_matrix_range_type (operator () (), r1, r2);
@@ -136,35 +108,6 @@ namespace boost { namespace numeric { namespace ublas {
         template<class A>
         BOOST_UBLAS_INLINE
         matrix_indirect_type operator () (const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
-            return matrix_indirect_type (operator () (), ia1, ia2);
-        }
-#endif
-#else
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        const_matrix_range_type project (const range<> &r1, const range<> &r2) const {
-            return const_matrix_range_type (operator () (), r1, r2);
-        }
-        BOOST_UBLAS_INLINE
-        matrix_range_type project (const range<> &r1, const range<> &r2) {
-            return matrix_range_type (operator () (), r1, r2);
-        }
-        BOOST_UBLAS_INLINE
-        const_matrix_slice_type project (const slice<> &s1, const slice<> &s2) const {
-            return const_matrix_slice_type (operator () (), s1, s2);
-        }
-        BOOST_UBLAS_INLINE
-        matrix_slice_type project (const slice<> &s1, const slice<> &s2) {
-            return matrix_slice_type (operator () (), s1, s2);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        const_matrix_indirect_type project (const indirect_array<A> &ia1, const indirect_array<A> &ia2) const {
-            return const_matrix_indirect_type (operator () (), ia1, ia2);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        matrix_indirect_type project (const indirect_array<A> &ia1, const indirect_array<A> &ia2) {
             return matrix_indirect_type (operator () (), ia1, ia2);
         }
 #else
@@ -195,7 +138,6 @@ namespace boost { namespace numeric { namespace ublas {
             return matrix_indirect_type (operator () (), ia1, ia2);
         }
 #endif
-#endif
     };
 
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
@@ -203,7 +145,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_const_reference:
         public matrix_expression<matrix_const_reference<E> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_const_reference<E> >::operator ();
 #endif
         typedef E expression_type;
@@ -347,7 +289,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_reference:
         public matrix_expression<matrix_reference<E> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_reference<E> >::operator ();
 #endif
         typedef E expression_type;
@@ -592,7 +534,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_matrix_binary:
         public matrix_expression<vector_matrix_binary<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<vector_matrix_binary<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -1115,7 +1057,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_unary1:
         public matrix_expression<matrix_unary1<E, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_unary1<E, F> >::operator ();
 #endif
         typedef E expression_type;
@@ -1549,7 +1491,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_unary2:
         public matrix_expression<matrix_unary2<E, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_unary2<E, F> >::operator ();
 #endif
         typedef E expression_type;
@@ -1965,7 +1907,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_binary:
         public matrix_expression<matrix_binary<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_binary<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -2682,7 +2624,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_binary_scalar1:
         public matrix_expression<matrix_binary_scalar1<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_binary_scalar1<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -3114,7 +3056,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_binary_scalar2:
         public matrix_expression<matrix_binary_scalar2<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_binary_scalar2<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -3556,7 +3498,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_vector_binary1:
         public vector_expression<matrix_vector_binary1<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_binary1<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -3939,7 +3881,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_vector_binary2:
         public vector_expression<matrix_vector_binary2<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_binary2<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -4324,7 +4266,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix_matrix_binary:
         public matrix_expression<matrix_matrix_binary<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_matrix_binary<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -5036,9 +4978,9 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class E>
     BOOST_UBLAS_INLINE
-    typename matrix_scalar_unary_traits<E, matrix_norm_2<typename E::value_type> >::result_type
-    norm_2 (const matrix_expression<E> &e) {
-        typedef BOOST_UBLAS_TYPENAME matrix_scalar_unary_traits<E, matrix_norm_2<BOOST_UBLAS_TYPENAME E::value_type> >::expression_type expression_type;
+    typename matrix_scalar_unary_traits<E, matrix_norm_frobenius<typename E::value_type> >::result_type
+    norm_frobenius (const matrix_expression<E> &e) {
+        typedef BOOST_UBLAS_TYPENAME matrix_scalar_unary_traits<E, matrix_norm_frobenius<BOOST_UBLAS_TYPENAME E::value_type> >::expression_type expression_type;
         return expression_type (e ());
     }
 

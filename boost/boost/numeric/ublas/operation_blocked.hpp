@@ -40,16 +40,6 @@ namespace boost { namespace numeric { namespace ublas {
         size_type j_size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
         for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
             size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            vector_range<vector_type> v_range (v, range<> (i_begin, i_end));
-            v_range.assign (zero_vector<value_type> (i_end - i_begin));
-            for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
-                size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
-                const matrix_range<expression1_type> e1_range (e1 (), range<> (i_begin, i_end), range<> (j_begin, j_end));
-                const vector_range<expression2_type> e2_range (e2 (), range<> (j_begin, j_end));
-                v_range.plus_assign (prod (e1_range, e2_range));
-            }
-#else
             vector_range<vector_type> v_range (v, range (i_begin, i_end));
             v_range.assign (zero_vector<value_type> (i_end - i_begin));
             for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
@@ -58,7 +48,6 @@ namespace boost { namespace numeric { namespace ublas {
                 const vector_range<expression2_type> e2_range (e2 (), range (j_begin, j_end));
                 v_range.plus_assign (prod (e1_range, e2_range));
             }
-#endif
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
@@ -87,16 +76,6 @@ namespace boost { namespace numeric { namespace ublas {
         size_type j_size = BOOST_UBLAS_SAME (e1 ().size2 (), e2 ().size ());
         for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
             size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            vector_range<vector_type> v_range (v, range<> (i_begin, i_end));
-            v_range.assign (zero_vector<value_type> (i_end - i_begin));
-            for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
-                size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
-                const matrix_range<expression1_type> e1_range (e1 (), range<> (i_begin, i_end), range<> (j_begin, j_end));
-                const vector_range<expression2_type> e2_range (e2 (), range<> (j_begin, j_end));
-                v_range.plus_assign (prec_prod (e1_range, e2_range));
-            }
-#else
             vector_range<vector_type> v_range (v, range (i_begin, i_end));
             v_range.assign (zero_vector<value_type> (i_end - i_begin));
             for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
@@ -105,7 +84,6 @@ namespace boost { namespace numeric { namespace ublas {
                 const vector_range<expression2_type> e2_range (e2 (), range (j_begin, j_end));
                 v_range.plus_assign (prec_prod (e1_range, e2_range));
             }
-#endif
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
@@ -134,16 +112,6 @@ namespace boost { namespace numeric { namespace ublas {
         size_type j_size = e2 ().size2 ();
         for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
             size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            vector_range<vector_type> v_range (v, range<> (j_begin, j_end));
-            v_range.assign (zero_vector<value_type> (j_end - j_begin));
-            for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
-                size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
-                const vector_range<expression1_type> e1_range (e1 (), range<> (i_begin, i_end));
-                const matrix_range<expression2_type> e2_range (e2 (), range<> (i_begin, i_end), range<> (j_begin, j_end));
-                v_range.plus_assign (prod (e1_range, e2_range));
-            }
-#else
             vector_range<vector_type> v_range (v, range (j_begin, j_end));
             v_range.assign (zero_vector<value_type> (j_end - j_begin));
             for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
@@ -152,7 +120,6 @@ namespace boost { namespace numeric { namespace ublas {
                 const matrix_range<expression2_type> e2_range (e2 (), range (i_begin, i_end), range (j_begin, j_end));
                 v_range.plus_assign (prod (e1_range, e2_range));
             }
-#endif
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
@@ -181,16 +148,6 @@ namespace boost { namespace numeric { namespace ublas {
         size_type j_size = e2 ().size2 ();
         for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
             size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            vector_range<vector_type> v_range (v, range<> (j_begin, j_end));
-            v_range.assign (zero_vector<value_type> (j_end - j_begin));
-            for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
-                size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
-                const vector_range<expression1_type> e1_range (e1 (), range<> (i_begin, i_end));
-                const matrix_range<expression2_type> e2_range (e2 (), range<> (i_begin, i_end), range<> (j_begin, j_end));
-                v_range.plus_assign (prec_prod (e1_range, e2_range));
-            }
-#else
             vector_range<vector_type> v_range (v, range (j_begin, j_end));
             v_range.assign (zero_vector<value_type> (j_end - j_begin));
             for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
@@ -199,7 +156,6 @@ namespace boost { namespace numeric { namespace ublas {
                 const matrix_range<expression2_type> e2_range (e2 (), range (i_begin, i_end), range (j_begin, j_end));
                 v_range.plus_assign (prec_prod (e1_range, e2_range));
             }
-#endif
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
         BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
@@ -233,16 +189,6 @@ namespace boost { namespace numeric { namespace ublas {
             size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
             for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
                 size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-                matrix_range<matrix_type> m_range (m, range<> (i_begin, i_end), range<> (j_begin, j_end));
-                m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
-                for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
-                    size_type k_end = k_begin + std::min (k_size - k_begin, block_size);
-                    const matrix_range<expression1_type> e1_range (e1 (), range<> (i_begin, i_end), range<> (k_begin, k_end));
-                    const matrix_range<expression2_type> e2_range (e2 (), range<> (k_begin, k_end), range<> (j_begin, j_end));
-                    m_range.plus_assign (prod (e1_range, e2_range));
-                }
-#else
                 matrix_range<matrix_type> m_range (m, range (i_begin, i_end), range (j_begin, j_end));
                 m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
                 for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
@@ -251,7 +197,6 @@ namespace boost { namespace numeric { namespace ublas {
                     const matrix_range<expression2_type> e2_range (e2 (), range (k_begin, k_end), range (j_begin, j_end));
                     m_range.plus_assign (prod (e1_range, e2_range));
                 }
-#endif
             }
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -286,16 +231,6 @@ namespace boost { namespace numeric { namespace ublas {
             size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
             for (size_type j_begin = 0; j_begin < j_size; j_begin += block_size) {
                 size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-                matrix_range<matrix_type> m_range (m, range<> (i_begin, i_end), range<> (j_begin, j_end));
-                m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
-                for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
-                    size_type k_end = k_begin + std::min (k_size - k_begin, block_size);
-                    const matrix_range<expression1_type> e1_range (e1 (), range<> (i_begin, i_end), range<> (k_begin, k_end));
-                    const matrix_range<expression2_type> e2_range (e2 (), range<> (k_begin, k_end), range<> (j_begin, j_end));
-                    m_range.plus_assign (prec_prod (e1_range, e2_range));
-                }
-#else
                 matrix_range<matrix_type> m_range (m, range (i_begin, i_end), range (j_begin, j_end));
                 m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
                 for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
@@ -304,7 +239,6 @@ namespace boost { namespace numeric { namespace ublas {
                     const matrix_range<expression2_type> e2_range (e2 (), range (k_begin, k_end), range (j_begin, j_end));
                     m_range.plus_assign (prec_prod (e1_range, e2_range));
                 }
-#endif
             }
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -340,16 +274,6 @@ namespace boost { namespace numeric { namespace ublas {
             size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
             for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
                 size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-                matrix_range<matrix_type> m_range (m, range<> (i_begin, i_end), range<> (j_begin, j_end));
-                m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
-                for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
-                    size_type k_end = k_begin + std::min (k_size - k_begin, block_size);
-                    const matrix_range<expression1_type> e1_range (e1 (), range<> (i_begin, i_end), range<> (k_begin, k_end));
-                    const matrix_range<expression2_type> e2_range (e2 (), range<> (k_begin, k_end), range<> (j_begin, j_end));
-                    m_range.plus_assign (prod (e1_range, e2_range));
-                }
-#else
                 matrix_range<matrix_type> m_range (m, range (i_begin, i_end), range (j_begin, j_end));
                 m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
                 for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
@@ -358,7 +282,6 @@ namespace boost { namespace numeric { namespace ublas {
                     const matrix_range<expression2_type> e2_range (e2 (), range (k_begin, k_end), range (j_begin, j_end));
                     m_range.plus_assign (prod (e1_range, e2_range));
                 }
-#endif
             }
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK
@@ -393,16 +316,6 @@ namespace boost { namespace numeric { namespace ublas {
             size_type j_end = j_begin + std::min (j_size - j_begin, block_size);
             for (size_type i_begin = 0; i_begin < i_size; i_begin += block_size) {
                 size_type i_end = i_begin + std::min (i_size - i_begin, block_size);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-                matrix_range<matrix_type> m_range (m, range<> (i_begin, i_end), range<> (j_begin, j_end));
-                m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
-                for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
-                    size_type k_end = k_begin + std::min (k_size - k_begin, block_size);
-                    const matrix_range<expression1_type> e1_range (e1 (), range<> (i_begin, i_end), range<> (k_begin, k_end));
-                    const matrix_range<expression2_type> e2_range (e2 (), range<> (k_begin, k_end), range<> (j_begin, j_end));
-                    m_range.plus_assign (prec_prod (e1_range, e2_range));
-                }
-#else
                 matrix_range<matrix_type> m_range (m, range (i_begin, i_end), range (j_begin, j_end));
                 m_range.assign (zero_matrix<value_type> (i_end - i_begin, j_end - j_begin));
                 for (size_type k_begin = 0; k_begin < k_size; k_begin += block_size) {
@@ -411,7 +324,6 @@ namespace boost { namespace numeric { namespace ublas {
                     const matrix_range<expression2_type> e2_range (e2 (), range (k_begin, k_end), range (j_begin, j_end));
                     m_range.plus_assign (prec_prod (e1_range, e2_range));
                 }
-#endif
             }
         }
 #ifdef BOOST_UBLAS_TYPE_CHECK

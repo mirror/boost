@@ -179,7 +179,7 @@ namespace boost { namespace numeric { namespace ublas {
     class sparse_vector:
         public vector_expression<sparse_vector<T, A> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<sparse_vector<T, A> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -684,7 +684,7 @@ namespace boost { namespace numeric { namespace ublas {
     class compressed_vector:
         public vector_expression<compressed_vector<T, IB, IA, TA> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<compressed_vector<T, IB, IA, TA> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -1260,7 +1260,7 @@ namespace boost { namespace numeric { namespace ublas {
     class coordinate_vector:
         public vector_expression<coordinate_vector<T, IB, IA, TA> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<coordinate_vector<T, IB, IA, TA> >::operator ();
 #endif
         typedef std::size_t size_type;

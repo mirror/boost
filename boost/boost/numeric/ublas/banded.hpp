@@ -30,7 +30,7 @@ namespace boost { namespace numeric { namespace ublas {
     class banded_matrix:
         public matrix_expression<banded_matrix<T, F, A> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<banded_matrix<T, F, A> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -1002,7 +1002,7 @@ namespace boost { namespace numeric { namespace ublas {
     class banded_adaptor:
         public matrix_expression<banded_adaptor<M> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<banded_adaptor<M> >::operator ();
 #endif
         typedef const M const_matrix_type;

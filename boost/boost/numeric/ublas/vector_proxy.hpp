@@ -29,7 +29,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_range:
         public vector_expression<vector_range<V> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_range<V> >::operator ();
 #endif
         typedef const V const_vector_type;
@@ -79,37 +79,20 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_range ():
             data_ (nil_), r_ () {}
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        vector_range (vector_type &data, const range<> &r):
-            data_ (data), r_ (r.preprocess (data.size ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
-                               r_.start () + r_.size () <= data_.size (), bad_index ());
-        }
-        BOOST_UBLAS_INLINE
-        vector_range (const vector_closure_type &data, const range<> &r, int):
-            data_ (data), r_ (r.preprocess (data.size ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
-                               r_.start () + r_.size () <= data_.size (), bad_index ());
-        }
-#else
         BOOST_UBLAS_INLINE
         vector_range (vector_type &data, const range &r):
-            data_ (data), r_ (r) {
+            data_ (data), r_ (r.preprocess (data.size ())) {
             // Early checking of preconditions.
             BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
                                r_.start () + r_.size () <= data_.size (), bad_index ());
         }
         BOOST_UBLAS_INLINE
         vector_range (const vector_closure_type &data, const range &r, int):
-            data_ (data), r_ (r) {
+            data_ (data), r_ (r.preprocess (data.size ())) {
             // Early checking of preconditions.
             BOOST_UBLAS_CHECK (r_.start () <= data_.size () &&
                                r_.start () + r_.size () <= data_.size (), bad_index ());
         }
-#endif
 
         // Accessors
         BOOST_UBLAS_INLINE
@@ -175,17 +158,10 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        vector_range<vector_type> project (const range<> &r) const {
-            return vector_range<vector_type> (data_, r_.compose (r), 0);
-        }
-#else
         BOOST_UBLAS_INLINE
         vector_range<vector_type> project (const range &r) const {
-            return vector_range<vector_type> (data_, r_.compose (r), 0);
+            return vector_range<vector_type> (data_, r_.compose (r.preprocess (data_.size ())), 0);
         }
-#endif
 
         // Assignment
         BOOST_UBLAS_INLINE
@@ -573,11 +549,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         vector_closure_type data_;
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        range<> r_;
-#else
         range r_;
-#endif
         static vector_type nil_;
     };
 
@@ -585,30 +557,6 @@ namespace boost { namespace numeric { namespace ublas {
     typename vector_range<V>::vector_type vector_range<V>::nil_;
 
     // Projections
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_range<V> project (V &data, const range<> &r) {
-        return vector_range<V> (data, r);
-    }
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_range<const V> project_const (const V &data, const range<> &r) {
-        return vector_range<const V> (data, r);
-    }
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_range<V> project (const V &data, const range<> &r) {
-        return vector_range<V> (const_cast<V &> (data), r);
-    }
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_range<V> project (const vector_range<V> &data, const range<> &r) {
-        return data.project (r);
-    }
-#endif
-#else
     template<class V>
     BOOST_UBLAS_INLINE
     vector_range<V> project (V &data, const range &r) {
@@ -631,14 +579,13 @@ namespace boost { namespace numeric { namespace ublas {
         return data.project (r);
     }
 #endif
-#endif
 
     // Vector based slice class
     template<class V>
     class vector_slice:
         public vector_expression<vector_slice<V> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_slice<V> >::operator ();
 #endif
         typedef const V const_vector_type;
@@ -672,13 +619,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_slice<vector_type> self_type;
         typedef const vector_slice<vector_type> const_closure_type;
         typedef vector_slice<vector_type> closure_type;
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        typedef slice<>::const_iterator const_iterator_type;
-        typedef slice<>::const_iterator iterator_type;
-#else
         typedef slice::const_iterator const_iterator_type;
         typedef slice::const_iterator iterator_type;
-#endif
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -686,37 +628,20 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_slice ():
             data_ (nil_), s_ () {}
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        vector_slice (vector_type &data, const slice<> &s):
-            data_ (data), s_ (s.preprocess (data.size ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
-                               s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
-        }
-        BOOST_UBLAS_INLINE
-        vector_slice (const vector_closure_type &data, const slice<> &s, int):
-            data_ (data), s_ (s.preprocess (data.size ())) {
-            // Early checking of preconditions.
-            BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
-                               s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
-        }
-#else
         BOOST_UBLAS_INLINE
         vector_slice (vector_type &data, const slice &s):
-            data_ (data), s_ (s) {
+            data_ (data), s_ (s.preprocess (data.size ())) {
             // Early checking of preconditions.
             BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
                                s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
         }
         BOOST_UBLAS_INLINE
         vector_slice (const vector_closure_type &data, const slice &s, int):
-            data_ (data), s_ (s) {
+            data_ (data), s_ (s.preprocess (data.size ())) {
             // Early checking of preconditions.
             BOOST_UBLAS_CHECK (s_.start () <= data_.size () &&
                                s_.start () + s_.stride () * (s_.size () - (s_.size () > 0)) <= data_.size (), bad_index ());
         }
-#endif
 
         // Accessors
         BOOST_UBLAS_INLINE
@@ -786,25 +711,14 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        vector_slice<vector_type> project (const range<> &r) const {
-            return vector_slice<vector_type>  (data_, s_.compose (r), 0);
-        }
-        BOOST_UBLAS_INLINE
-        vector_slice<vector_type> project (const slice<> &s) const {
-            return vector_slice<vector_type>  (data_, s_.compose (s), 0);
-        }
-#else
         BOOST_UBLAS_INLINE
         vector_slice<vector_type> project (const range &r) const {
-            return vector_slice<vector_type>  (data_, s_.compose (r), 0);
+            return vector_slice<vector_type>  (data_, s_.compose (r.preprocess (data_.size ())), 0);
         }
         BOOST_UBLAS_INLINE
         vector_slice<vector_type> project (const slice &s) const {
-            return vector_slice<vector_type>  (data_, s_.compose (s), 0);
+            return vector_slice<vector_type>  (data_, s_.compose (s.preprocess (data_.size ())), 0);
         }
-#endif
 
         // Assignment
         BOOST_UBLAS_INLINE
@@ -1178,11 +1092,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         vector_closure_type data_;
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        slice<> s_;
-#else
         slice s_;
-#endif
         static vector_type nil_;
     };
 
@@ -1190,37 +1100,6 @@ namespace boost { namespace numeric { namespace ublas {
     typename vector_slice<V>::vector_type vector_slice<V>::nil_;
 
     // Projections
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_slice<V> project (const vector_slice<V> &data, const range<> &r) {
-        return data.project (r);
-    }
-#endif
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_slice<V> project (V &data, const slice<> &s) {
-        return vector_slice<V> (data, s);
-    }
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_slice<const V> project_const (const V &data, const slice<> &s) {
-        return vector_slice<const V> (data, s);
-    }
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_slice<V> project (const V &data, const slice<> &s) {
-        return vector_slice<V> (const_cast<V &> (data) s);
-    }
-    template<class V>
-    BOOST_UBLAS_INLINE
-    vector_slice<V> project (const vector_slice<V> &data, const slice<> &s) {
-        return data.project (s);
-    }
-#endif
-#else
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V>
     BOOST_UBLAS_INLINE
@@ -1250,7 +1129,6 @@ namespace boost { namespace numeric { namespace ublas {
         return data.project (s);
     }
 #endif
-#endif
 
     // Vector based indirection class
     // Contributed by Toon Knapen.
@@ -1259,7 +1137,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_indirect:
         public vector_expression<vector_indirect<V, IA> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_indirect<V, IA> >::operator ();
 #endif
         typedef const V const_vector_type;
@@ -1307,21 +1185,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_indirect (vector_type &data, size_type size):
             data_ (data), ia_ (size) {}
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
         BOOST_UBLAS_INLINE
         vector_indirect (vector_type &data, const indirect_array_type &ia):
             data_ (data), ia_ (ia.preprocess (data.size ())) {}
         BOOST_UBLAS_INLINE
         vector_indirect (const vector_closure_type &data, const indirect_array_type &ia, int):
             data_ (data), ia_ (ia.preprocess (data.size ())) {}
-#else
-        BOOST_UBLAS_INLINE
-        vector_indirect (vector_type &data, const indirect_array_type &ia):
-            data_ (data), ia_ (ia) {}
-        BOOST_UBLAS_INLINE
-        vector_indirect (const vector_closure_type &data, const indirect_array_type &ia, int):
-            data_ (data), ia_ (ia) {}
-#endif
 
         // Accessors
         BOOST_UBLAS_INLINE
@@ -1391,28 +1260,17 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
 
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        vector_indirect<vector_type, indirect_array_type> project (const range<> &r) const {
-            return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (r), 0);
-        }
-        BOOST_UBLAS_INLINE
-        vector_indirect<vector_type, indirect_array_type> project (const slice<> &s) const {
-            return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (s), 0);
-        }
-#else
         BOOST_UBLAS_INLINE
         vector_indirect<vector_type, indirect_array_type> project (const range &r) const {
-            return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (r), 0);
+            return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (r.preprocess (data_.size ())), 0);
         }
         BOOST_UBLAS_INLINE
         vector_indirect<vector_type, indirect_array_type> project (const slice &s) const {
-            return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (s), 0);
+            return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (s.preprocess (data_.size ())), 0);
         }
-#endif
         BOOST_UBLAS_INLINE
         vector_indirect<vector_type, indirect_array_type> project (const indirect_array_type &ia) const {
-            return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (ia), 0);
+            return vector_indirect<vector_type, indirect_array_type> (data_, ia_.compose (ia.preprocess (data_.size ())), 0);
         }
 
         // Assignment
@@ -1795,20 +1653,6 @@ namespace boost { namespace numeric { namespace ublas {
     typename vector_indirect<V, IA>::vector_type vector_indirect<V, IA>::nil_;
 
     // Projections
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-    template<class V, class IA>
-    BOOST_UBLAS_INLINE
-    vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const range<> &r) {
-        return data.project (r);
-    }
-    template<class V, class IA>
-    BOOST_UBLAS_INLINE
-    vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const slice<> &s) {
-        return data.project (s);
-    }
-#endif
-#else
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template<class V, class IA>
     BOOST_UBLAS_INLINE
@@ -1820,7 +1664,6 @@ namespace boost { namespace numeric { namespace ublas {
     vector_indirect<V, IA> project (const vector_indirect<V, IA> &data, const slice &s) {
         return data.project (s);
     }
-#endif
 #endif
     // These signatures are too general for MSVC
     // template<class V, class IA>

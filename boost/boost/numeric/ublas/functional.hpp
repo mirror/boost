@@ -1020,7 +1020,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
     template<class T>
-    struct matrix_norm_2: 
+    struct matrix_norm_frobenius:
         public matrix_scalar_real_unary_functor<T> {
         typedef typename matrix_scalar_real_unary_functor<T>::size_type size_type;
         typedef typename matrix_scalar_real_unary_functor<T>::difference_type difference_type;
@@ -1054,7 +1054,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         template<class E>
         BOOST_UBLAS_INLINE
-        result_type operator () (const matrix_expression<E> &e) const { 
+        result_type operator () (const matrix_expression<E> &e) const {
             real_type t (0);
             size_type size1 (e ().size1 ());
             for (size_type i = 0; i < size1; ++ i) {
@@ -1092,7 +1092,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         size_type address (size_type i, size_type size1, size_type j, size_type size2) {
             // Guarding against overflow.
-            BOOST_UBLAS_CHECK ((size1 * size2) / size1 == size2, bad_size ());
+            BOOST_UBLAS_CHECK (size1 == 0 || (size1 * size2) / size1 == size2, bad_size ());
             BOOST_UBLAS_CHECK (i <= size1, bad_index ());
             BOOST_UBLAS_CHECK (j <= size2, bad_index ());
             return i * size2 + j;
@@ -1252,7 +1252,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         size_type address (size_type i, size_type size1, size_type j, size_type size2) {
             // Guarding against overflow.
-            BOOST_UBLAS_CHECK ((size1 * size2) / size1 == size2, bad_size ());
+            BOOST_UBLAS_CHECK (size1 == 0 || (size1 * size2) / size1 == size2, bad_size ());
             BOOST_UBLAS_CHECK (i <= size1, bad_index ());
             BOOST_UBLAS_CHECK (j <= size2, bad_index ());
             return i + j * size1;

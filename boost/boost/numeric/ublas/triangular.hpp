@@ -30,7 +30,7 @@ namespace boost { namespace numeric { namespace ublas {
     class triangular_matrix:
         public matrix_expression<triangular_matrix<T, F1, F2, A> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<triangular_matrix<T, F1, F2, A> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -926,7 +926,7 @@ namespace boost { namespace numeric { namespace ublas {
     class triangular_adaptor:
         public matrix_expression<triangular_adaptor<M, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<triangular_adaptor<M, F> >::operator ();
 #endif
         typedef const M const_matrix_type;

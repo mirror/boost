@@ -84,17 +84,6 @@ struct test_my_matrix_vector {
             ublas::matrix_column<M> mc1 (m1, 1), mc2 (m1, 1);
             (*this) (mc1, mc2, m1);
 
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-#ifdef USE_RANGE_AND_SLICE
-            ublas::matrix_vector_range<M> mvr1 (m1, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                          mvr2 (m1, ublas::range<> (0, N), ublas::range<> (0, N));
-            (*this) (mvr1, mvr2, m1);
-
-            ublas::matrix_vector_slice<M> mvs1 (m1, ublas::slice<> (0, 1, N), ublas::slice<> (0, 1, N)),
-                                          mvs2 (m1, ublas::slice<> (0, 1, N), ublas::slice<> (0, 1, N));
-            (*this) (mvs1, mvs2, m1);
-#endif
-#else
 #ifdef USE_RANGE_AND_SLICE
             ublas::matrix_vector_range<M> mvr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                           mvr2 (m1, ublas::range (0, N), ublas::range (0, N));
@@ -103,7 +92,6 @@ struct test_my_matrix_vector {
             ublas::matrix_vector_slice<M> mvs1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                           mvs2 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
             (*this) (mvs1, mvs2, m1);
-#endif
 #endif
         }
         catch (std::exception &e) {
@@ -127,17 +115,6 @@ struct test_my_matrix_vector {
             ublas::matrix_column<ublas::banded_adaptor<M> > mc1 (bam1, 1), mc2 (bam1, 1);
             (*this) (mc1, mc2, bam1);
 
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-#ifdef USE_RANGE_AND_SLICE
-            ublas::matrix_vector_range<ublas::banded_adaptor<M> > mvr1 (bam1, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                                                  mvr2 (bam1, ublas::range<> (0, N), ublas::range<> (0, N));
-            (*this) (mvr1, mvr2, bam1);
-
-            ublas::matrix_vector_slice<ublas::banded_adaptor<M> > mvs1 (bam1, ublas::slice<> (0, 1, N), ublas::slice<> (0, 1, N)),
-                                                                  mvs2 (bam1, ublas::slice<> (0, 1, N), ublas::slice<> (0, 1, N));
-            (*this) (mvs1, mvs2, bam1);
-#endif
-#else
 #ifdef USE_RANGE_AND_SLICE
             ublas::matrix_vector_range<ublas::banded_adaptor<M> > mvr1 (bam1, ublas::range (0, N), ublas::range (0, N)),
                                                                   mvr2 (bam1, ublas::range (0, N), ublas::range (0, N));
@@ -146,7 +123,6 @@ struct test_my_matrix_vector {
             ublas::matrix_vector_slice<ublas::banded_adaptor<M> > mvs1 (bam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
                                                                   mvs2 (bam1, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
             (*this) (mvs1, mvs2, bam1);
-#endif
 #endif
         }
         catch (std::exception &e) {

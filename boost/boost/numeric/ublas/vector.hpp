@@ -32,7 +32,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector:
         public vector_expression<vector<T, A> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector<T, A> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -531,7 +531,7 @@ namespace boost { namespace numeric { namespace ublas {
     class unit_vector:
         public vector_expression<unit_vector<T> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<unit_vector<T> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -776,7 +776,7 @@ namespace boost { namespace numeric { namespace ublas {
     class zero_vector:
         public vector_expression<zero_vector<T> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<zero_vector<T> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -984,7 +984,7 @@ namespace boost { namespace numeric { namespace ublas {
     class scalar_vector:
         public vector_expression<scalar_vector<T> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<scalar_vector<T> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -1222,7 +1222,7 @@ namespace boost { namespace numeric { namespace ublas {
     class c_vector:
         public vector_expression<c_vector<T, N> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<c_vector<T, N> >::operator ();
 #endif
         typedef std::size_t size_type;

@@ -69,21 +69,13 @@ struct bench_my_inner_prod {
 
     void operator () (int runs) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
             static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N));
-#else
-            static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
-                                   vr2 (v2, ublas::range (0, N));
-#endif
-            initialize_vector (vr1);
-            initialize_vector (vr2);
+            initialize_vector (v1);
+            initialize_vector (v2);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
                 static value_type s (0);
-                s = ublas::inner_prod (vr1, vr2);
+                s = ublas::inner_prod (v1, v2);
 //                sink_scalar (s);
             }
             footer<value_type> () (N, N - 1, runs, t.elapsed ());
@@ -154,24 +146,13 @@ struct bench_my_vector_add {
 
     void operator () (int runs, safe_tag) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
             static V v1 (N), v2 (N), v3 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N)),
-                                   vr3 (v2, ublas::range<> (0, N));
-#else
-            static V v1 (N), v2 (N), v3 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
-                                   vr2 (v2, ublas::range (0, N)),
-                                   vr3 (v2, ublas::range (0, N));
-#endif
-            initialize_vector (vr1);
-            initialize_vector (vr2);
-            initialize_vector (vr3);
+            initialize_vector (v1);
+            initialize_vector (v2);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
-                vr3 = - (vr1 + vr2);
-//                sink_vector (vr3);
+                v3 = - (v1 + v2);
+//                sink_vector (v3);
             }
             footer<value_type> () (0, 2 * N, runs, t.elapsed ());
         }
@@ -184,23 +165,13 @@ struct bench_my_vector_add {
     }
     void operator () (int runs, fast_tag) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
             static V v1 (N), v2 (N), v3 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N)),
-                                   vr3 (v2, ublas::range<> (0, N));
-#else
-            static V v1 (N), v2 (N), v3 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
-                                   vr2 (v2, ublas::range (0, N)),
-                                   vr3 (v2, ublas::range (0, N));
-#endif
-            initialize_vector (vr1);
-            initialize_vector (vr2);
+            initialize_vector (v1);
+            initialize_vector (v2);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
-                vr3.assign (- (vr1 + vr2));
-//                sink_vector (vr3);
+                v3.assign (- (v1 + v2));
+//                sink_vector (v3);
             }
             footer<value_type> () (0, 2 * N, runs, t.elapsed ());
         }

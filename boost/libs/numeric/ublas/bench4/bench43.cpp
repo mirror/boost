@@ -74,21 +74,12 @@ struct bench_my_matrix_prod {
     void operator () (int runs, safe_tag) const {
         try {
             static M m1 (N, N), m2 (N, N), m3 (N, N);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            ublas::matrix_range<M> mr1 (m1, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                   mr2 (m2, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                   mr3 (m3, ublas::range<> (0, N), ublas::range<> (0, N));
-#else
-            ublas::matrix_range<M> mr1 (m1, ublas::range (0, N), ublas::range (0, N)),
-                                   mr2 (m2, ublas::range (0, N), ublas::range (0, N)),
-                                   mr3 (m3, ublas::range (0, N), ublas::range (0, N));
-#endif
-            initialize_matrix (mr1);
-            initialize_matrix (mr2);
+            initialize_matrix (m1);
+            initialize_matrix (m2);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
-                mr3 = ublas::prod (mr1, mr2);
-//                sink_matrix (mr3);
+                m3 = ublas::prod (m1, m2);
+//                sink_matrix (m3);
             }
             footer<value_type> () (N * N * N, N * N * (N - 1), runs, t.elapsed ());
         }
@@ -102,21 +93,12 @@ struct bench_my_matrix_prod {
     void operator () (int runs, fast_tag) const {
         try {
             static M m1 (N, N), m2 (N, N), m3 (N, N);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            ublas::matrix_range<M> mr1 (m1, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                   mr2 (m2, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                   mr3 (m3, ublas::range<> (0, N), ublas::range<> (0, N));
-#else
-            ublas::matrix_range<M> mr1 (m1, ublas::range (0, N), ublas::range (0, N)),
-                                   mr2 (m2, ublas::range (0, N), ublas::range (0, N)),
-                                   mr3 (m3, ublas::range (0, N), ublas::range (0, N));
-#endif
-            initialize_matrix (mr1);
-            initialize_matrix (mr2);
+            initialize_matrix (m1);
+            initialize_matrix (m2);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
-                mr3.assign (ublas::prod (mr1, mr2));
-//                sink_matrix (mr3);
+                m3.assign (ublas::prod (m1, m2));
+//                sink_matrix (m3);
             }
             footer<value_type> () (N * N * N, N * N * (N - 1), runs, t.elapsed ());
         }

@@ -1141,19 +1141,11 @@ namespace boost { namespace numeric { namespace ublas {
         RandomAccessIteratorConcept<array_adaptor<double>::const_iterator, std::ptrdiff_t, double>::constraints ();
         MutableRandomAccessIteratorConcept<array_adaptor<double>::iterator, std::ptrdiff_t, double>::constraints ();
 
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        IndexSetConcept<range<> >::constraints ();
-        RandomAccessIteratorConcept<range<>::const_iterator, std::ptrdiff_t, std::size_t>::constraints ();
-
-        IndexSetConcept<slice<> >::constraints ();
-        RandomAccessIteratorConcept<slice<>::const_iterator, std::ptrdiff_t, std::size_t>::constraints ();
-#else
         IndexSetConcept<range>::constraints ();
         RandomAccessIteratorConcept<range::const_iterator, std::ptrdiff_t, std::size_t>::constraints ();
 
         IndexSetConcept<slice>::constraints ();
         RandomAccessIteratorConcept<slice::const_iterator, std::ptrdiff_t, std::size_t>::constraints ();
-#endif
 
         IndexSetConcept<indirect_array<> >::constraints ();
         RandomAccessIteratorConcept<indirect_array<>::const_iterator, std::ptrdiff_t, std::size_t>::constraints ();
@@ -1630,7 +1622,7 @@ namespace boost { namespace numeric { namespace ublas {
                                              matrix_matrix_binary<matrix<double>, matrix<double>, matrix_matrix_prod<double, double, double> >::const_reverse_iterator2>::constraints ();
 
         ScalarExpressionConcept<matrix_scalar_unary<matrix<double>, matrix_norm_1<double> > >::constraints ();
-        ScalarExpressionConcept<matrix_scalar_unary<matrix<double>, matrix_norm_2<double> > >::constraints ();
+        ScalarExpressionConcept<matrix_scalar_unary<matrix<double>, matrix_norm_frobenius<double> > >::constraints ();
         ScalarExpressionConcept<matrix_scalar_unary<matrix<double>, matrix_norm_inf<double> > >::constraints ();
 #endif
 

@@ -71,25 +71,14 @@ struct bench_my_outer_prod {
 
     void operator () (int runs, safe_tag) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
             static M m (N, N);
-            ublas::matrix_range<M> mr (m, ublas::range<> (0, N), ublas::range<> (0, N));
             static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N));
-#else
-            static M m (N, N);
-            ublas::matrix_range<M> mr (m, ublas::range (0, N), ublas::range (0, N));
-            static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
-                                   vr2 (v2, ublas::range (0, N));
-#endif
-            initialize_vector (vr1);
-            initialize_vector (vr2);
+            initialize_vector (v1);
+            initialize_vector (v2);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
-                mr = - ublas::outer_prod (vr1, vr2);
-//                sink_matrix (mr);
+                m = - ublas::outer_prod (v1, v2);
+//                sink_matrix (m);
             }
             footer<value_type> () (N * N, N * N, runs, t.elapsed ());
         }
@@ -102,25 +91,14 @@ struct bench_my_outer_prod {
     }
     void operator () (int runs, fast_tag) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
             static M m (N, N);
-            ublas::matrix_range<M> mr (m, ublas::range<> (0, N), ublas::range<> (0, N));
             static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N));
-#else
-            static M m (N, N);
-            ublas::matrix_range<M> mr (m, ublas::range (0, N), ublas::range (0, N));
-            static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
-                                   vr2 (v2, ublas::range (0, N));
-#endif
-            initialize_vector (vr1);
-            initialize_vector (vr2);
+            initialize_vector (v1);
+            initialize_vector (v2);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
-                mr.assign (- ublas::outer_prod (vr1, vr2));
-//                sink_matrix (mr);
+                m.assign (- ublas::outer_prod (v1, v2));
+//                sink_matrix (m);
             }
             footer<value_type> () (N * N, N * N, runs, t.elapsed ());
         }
@@ -198,25 +176,14 @@ struct bench_my_matrix_vector_prod {
 
     void operator () (int runs, safe_tag) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
             static M m (N, N);
-            ublas::matrix_range<M> mr (m, ublas::range<> (0, N), ublas::range<> (0, N));
             static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N));
-#else
-            static M m (N, N);
-            ublas::matrix_range<M> mr (m, ublas::range (0, N), ublas::range (0, N));
-            static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
-                                   vr2 (v2, ublas::range (0, N));
-#endif
-            initialize_matrix (mr);
-            initialize_vector (vr1);
+            initialize_matrix (m);
+            initialize_vector (v1);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
-                vr2 = ublas::prod (mr, vr1);
-//                sink_vector (vr2);
+                v2 = ublas::prod (m, v1);
+//                sink_vector (v2);
             }
             footer<value_type> () (N * N, N * (N - 1), runs, t.elapsed ());
         }
@@ -229,25 +196,14 @@ struct bench_my_matrix_vector_prod {
     }
     void operator () (int runs, fast_tag) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
             static M m (N, N);
-            ublas::matrix_range<M> mr (m, ublas::range<> (0, N), ublas::range<> (0, N));
             static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N));
-#else
-            static M m (N, N);
-            ublas::matrix_range<M> mr (m, ublas::range (0, N), ublas::range (0, N));
-            static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
-                                   vr2 (v2, ublas::range (0, N));
-#endif
-            initialize_matrix (mr);
-            initialize_vector (vr1);
+            initialize_matrix (m);
+            initialize_vector (v1);
             boost::timer t;
             for (int i = 0; i < runs; ++ i) {
-                vr2.assign (ublas::prod (mr, vr1));
-//                sink_vector (vr2);
+                v2.assign (ublas::prod (m, v1));
+//                sink_vector (v2);
             }
             footer<value_type> () (N * N, N * (N - 1), runs, t.elapsed ());
         }

@@ -33,7 +33,7 @@ namespace boost { namespace numeric { namespace ublas {
     class matrix:
         public matrix_expression<matrix<T, F, A> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix<T, F, A> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -900,7 +900,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_of_vector:
         public matrix_expression<vector_of_vector<T, F, A> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<vector_of_vector<T, F, A> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -1842,7 +1842,7 @@ namespace boost { namespace numeric { namespace ublas {
     class identity_matrix:
         public matrix_expression<identity_matrix<T> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<identity_matrix<T> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -2293,7 +2293,7 @@ namespace boost { namespace numeric { namespace ublas {
     class zero_matrix:
         public matrix_expression<zero_matrix<T> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<zero_matrix<T> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -2727,7 +2727,7 @@ namespace boost { namespace numeric { namespace ublas {
     class scalar_matrix:
         public matrix_expression<scalar_matrix<T> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<scalar_matrix<T> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -3158,7 +3158,7 @@ namespace boost { namespace numeric { namespace ublas {
     class c_matrix:
         public matrix_expression<c_matrix<T, N, M> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<c_matrix<T, N, M> >::operator ();
 #endif
         typedef std::size_t size_type;

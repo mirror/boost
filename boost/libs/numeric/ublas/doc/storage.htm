@@ -476,11 +476,14 @@ the end of the reversed <code>slice</code>. </td>
 <h4>Interface</h4>
 <pre><code>    // Slice class<br>    class slice {<br>    public:<br>        typedef std::size_t size_type;<br>        typedef std::ptrdiff_t difference_type;<br>        typedef difference_type value_type;<br>        typedef value_type const_reference;<br>        typedef const_reference reference;<br>        typedef const difference_type *const_pointer;<br>        typedef difference_type *pointer;<br>        typedef size_type const_iterator_type;<br><br>        // Construction and destruction<br>        slice ();<br>        slice (size_type start, size_type stride, size_type size);<br><br>        size_type start () const;<br>        size_type stride () const;<br>        size_type size () const;<br><br>        // Element access<br>        const_reference operator () (size_type i) const;<br><br>        // Composition<br>        slice compose (const range &amp;r) const;<br>        slice compose (const slice &amp;s) const;<br><br>        // Comparison<br>        bool operator == (const slice &amp;s) const;<br>        bool operator != (const slice &amp;s) const;<br><br>        // Iterator simply is a index.<br><br>        class const_iterator:<br>            public container_const_reference&lt;slice&gt;,<br>            public random_access_iterator_base&lt;const_iterator, value_type&gt; {<br>        public:<br><br>            // Construction and destruction<br>            const_iterator ();<br>            const_iterator (const slice &amp;s, const const_iterator_type &amp;it);<br><br>            // Arithmetic<br>            const_iterator &amp;operator ++ ();<br>            const_iterator &amp;operator -- ();<br>            const_iterator &amp;operator += (difference_type n);<br>            const_iterator &amp;operator -= (difference_type n);<br>            difference_type operator - (const const_iterator &amp;it) const;<br><br>            // Dereference<br>            const_reference operator * () const;<br><br>            // Index<br>            size_type index () const;<br><br>            // Assignment<br>            const_iterator &amp;operator = (const const_iterator &amp;it);<br><br>            // Comparison<br>            bool operator == (const const_iterator &amp;it) const;<br>        };<br><br>        const_iterator begin () const;<br>        const_iterator end () const;<br><br>        // Reverse iterator<br><br>        typedef std::reverse_iterator&lt;const_iterator&gt; const_reverse_iterator;<br><br>        const_reverse_iterator rbegin () const;<br>        const_reverse_iterator rend () const;<br>    };</code></pre>
 <hr>
+
 <p>Copyright (&copy;) 2000-2002 Joerg Walter, Mathias Koch <br>
   Permission to copy, use, modify, sell and distribute this document is granted
  provided this copyright notice appears in all copies. This document is provided
- ``as is'' without express or implied warranty, and with no claim as to its 
+ ``as is'' without express or implied warranty, and with no claim as to its
 suitability for any purpose.</p>
-<p>Last revised: 8/3/2002</p>
+
+<p>Last revised: 1/15/2003</p>
+
 </body>
 </html>

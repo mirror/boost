@@ -125,6 +125,10 @@
 
 #define BOOST_UBLAS_USE_STREAM
 
+#if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
+#define BOOST_UBLAS_NO_PROXY_SHORTCUTS
+#endif
+
 #endif
 
 
@@ -142,6 +146,8 @@
 
 #define BOOST_UBLAS_NO_ELEMENT_PROXIES
 #define BOOST_UBLAS_NO_SMART_PROXIES
+
+#define BOOST_UBLAS_NO_PROXY_SHORTCUTS
 
 // BCC's <complex> broken.
 // Thanks to John Maddock for providing a workaround.
@@ -305,19 +311,10 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T>
     class unbounded_array;
 
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-    template<class S = std::size_t, class D = std::ptrdiff_t>
-    class range;
-    template<class S = std::size_t, class D = std::ptrdiff_t>
-    class slice;
-    template<class A = unbounded_array<std::size_t>, class S = std::size_t, class D = std::ptrdiff_t>
-    class indirect_array;
-#else
     class range;
     class slice;
     template<class A = unbounded_array<std::size_t> >
     class indirect_array;
-#endif
 
     template<class I, class T>
     class map_array;

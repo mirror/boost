@@ -181,7 +181,7 @@ namespace boost { namespace numeric { namespace ublas {
     class sparse_matrix:
         public matrix_expression<sparse_matrix<T, F, A> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<sparse_matrix<T, F, A> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -1267,7 +1267,7 @@ namespace boost { namespace numeric { namespace ublas {
     class sparse_vector_of_sparse_vector:
         public matrix_expression<sparse_vector_of_sparse_vector<T, F, A> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<sparse_vector_of_sparse_vector<T, F, A> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -2401,7 +2401,7 @@ namespace boost { namespace numeric { namespace ublas {
     class compressed_matrix:
         public matrix_expression<compressed_matrix<T, F, IB, IA, TA> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<compressed_matrix<T, F, IB, IA, TA> >::operator ();
 #endif
         typedef std::size_t size_type;
@@ -3684,7 +3684,7 @@ namespace boost { namespace numeric { namespace ublas {
     class coordinate_matrix:
         public matrix_expression<coordinate_matrix<T, F, IB, IA, TA> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<coordinate_matrix<T, F, IB, IA, TA> >::operator ();
 #endif
         typedef std::size_t size_type;

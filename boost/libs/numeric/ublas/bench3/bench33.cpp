@@ -71,15 +71,9 @@ struct bench_my_matrix_prod {
     void operator () (int runs, safe_tag) const {
         try {
             static M m1 (N, N), m2 (N, N), m3 (N, N);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            ublas::matrix_range<M> mr1 (m1, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                   mr2 (m2, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                   mr3 (m3, ublas::range<> (0, N), ublas::range<> (0, N));
-#else
             ublas::matrix_range<M> mr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                    mr2 (m2, ublas::range (0, N), ublas::range (0, N)),
                                    mr3 (m3, ublas::range (0, N), ublas::range (0, N));
-#endif
             initialize_matrix (mr1);
             initialize_matrix (mr2);
             boost::timer t;
@@ -99,15 +93,9 @@ struct bench_my_matrix_prod {
     void operator () (int runs, fast_tag) const {
         try {
             static M m1 (N, N), m2 (N, N), m3 (N, N);
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            ublas::matrix_range<M> mr1 (m1, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                   mr2 (m2, ublas::range<> (0, N), ublas::range<> (0, N)),
-                                   mr3 (m3, ublas::range<> (0, N), ublas::range<> (0, N));
-#else
             ublas::matrix_range<M> mr1 (m1, ublas::range (0, N), ublas::range (0, N)),
                                    mr2 (m2, ublas::range (0, N), ublas::range (0, N)),
                                    mr3 (m3, ublas::range (0, N), ublas::range (0, N));
-#endif
             initialize_matrix (mr1);
             initialize_matrix (mr2);
             boost::timer t;

@@ -107,35 +107,7 @@ namespace boost { namespace numeric { namespace ublas {
             return *static_cast<expression_type *> (this);
         }
 
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        const_vector_range_type operator () (const range<> &r) const {
-            return const_vector_range_type (operator () (), r);
-        }
-        BOOST_UBLAS_INLINE
-        vector_range_type operator () (const range<> &r) {
-            return vector_range_type (operator () (), r);
-        }
-        BOOST_UBLAS_INLINE
-        const_vector_slice_type operator () (const slice<> &s) const {
-            return const_vector_slice_type (operator () (), s);
-        }
-        BOOST_UBLAS_INLINE
-        vector_slice_type operator () (const slice<> &s) {
-            return vector_slice_type (operator () (), s);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        const_vector_indirect_type operator () (const indirect_array<A> &ia) const {
-            return const_vector_indirect_type (operator () (), ia);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        vector_indirect_type operator () (const indirect_array<A> &ia) {
-            return vector_indirect_type (operator () (), ia);
-        }
-#else
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_INLINE
         const_vector_range_type operator () (const range &r) const {
             return const_vector_range_type (operator () (), r);
@@ -160,35 +132,6 @@ namespace boost { namespace numeric { namespace ublas {
         template<class A>
         BOOST_UBLAS_INLINE
         vector_indirect_type operator () (const indirect_array<A> &ia) {
-            return vector_indirect_type (operator () (), ia);
-        }
-#endif
-#else
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-        BOOST_UBLAS_INLINE
-        const_vector_range_type project (const range<> &r) const {
-            return const_vector_range_type (operator () (), r);
-        }
-        BOOST_UBLAS_INLINE
-        vector_range_type project (const range<> &r) {
-            return vector_range_type (operator () (), r);
-        }
-        BOOST_UBLAS_INLINE
-        const_vector_slice_type project (const slice<> &s) const {
-            return const_vector_slice_type (operator () (), s);
-        }
-        BOOST_UBLAS_INLINE
-        vector_slice_type project (const slice<> &s) {
-            return vector_slice_type (operator () (), s);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        const_vector_indirect_type project (const indirect_array<A> &ia) const {
-            return const_vector_indirect_type (operator () (), ia);
-        }
-        template<class A>
-        BOOST_UBLAS_INLINE
-        vector_indirect_type project (const indirect_array<A> &ia) {
             return vector_indirect_type (operator () (), ia);
         }
 #else
@@ -219,7 +162,6 @@ namespace boost { namespace numeric { namespace ublas {
             return vector_indirect_type (operator () (), ia);
         }
 #endif
-#endif
     };
 
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
@@ -227,7 +169,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_const_reference:
         public vector_expression<vector_const_reference<E> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_const_reference<E> >::operator ();
 #endif
         typedef E expression_type;
@@ -330,7 +272,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_reference:
         public vector_expression<vector_reference<E> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_reference<E> >::operator ();
 #endif
         typedef E expression_type;
@@ -511,7 +453,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_unary:
         public vector_expression<vector_unary<E, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_unary<E, F> >::operator ();
 #endif
         typedef E expression_type;
@@ -782,7 +724,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_binary:
         public vector_expression<vector_binary<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_binary<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -1154,7 +1096,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_binary_scalar1:
         public vector_expression<vector_binary_scalar1<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_binary_scalar1<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;
@@ -1397,7 +1339,7 @@ namespace boost { namespace numeric { namespace ublas {
     class vector_binary_scalar2:
         public vector_expression<vector_binary_scalar2<E1, E2, F> > {
     public:
-#ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
+#ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector_binary_scalar2<E1, E2, F> >::operator ();
 #endif
         typedef E1 expression1_type;

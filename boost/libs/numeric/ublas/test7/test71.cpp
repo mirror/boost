@@ -138,21 +138,6 @@ struct test_my_vector {
             V v1 (N), v2 (N), v3 (N);
             (*this) (v1, v2, v3);
 
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-#ifdef USE_RANGE
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N)),
-                                   vr3 (v3, ublas::range<> (0, N));
-            (*this) (vr1, vr2, vr3);
-#endif
-
-#ifdef USE_SLICE
-            ublas::vector_slice<V> vs1 (v1, ublas::slice<> (0, 1, N)),
-                                   vs2 (v2, ublas::slice<> (0, 1, N)),
-                                   vs3 (v3, ublas::slice<> (0, 1, N));
-            (*this) (vs1, vs2, vs3);
-#endif
-#else
 #ifdef USE_RANGE
             ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
                                    vr2 (v2, ublas::range (0, N)),
@@ -165,7 +150,6 @@ struct test_my_vector {
                                    vs2 (v2, ublas::slice (0, 1, N)),
                                    vs3 (v3, ublas::slice (0, 1, N));
             (*this) (vs1, vs2, vs3);
-#endif
 #endif
         }
         catch (std::exception &e) {

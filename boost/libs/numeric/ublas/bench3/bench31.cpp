@@ -66,15 +66,9 @@ struct bench_my_inner_prod {
 
     void operator () (int runs) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            static V v1 (N), v2 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N));
-#else
             static V v1 (N), v2 (N);
             ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
                                    vr2 (v2, ublas::range (0, N));
-#endif
             initialize_vector (vr1);
             initialize_vector (vr2);
             boost::timer t;
@@ -151,17 +145,10 @@ struct bench_my_vector_add {
 
     void operator () (int runs, safe_tag) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            static V v1 (N), v2 (N), v3 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N)),
-                                   vr3 (v2, ublas::range<> (0, N));
-#else
             static V v1 (N), v2 (N), v3 (N);
             ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
                                    vr2 (v2, ublas::range (0, N)),
                                    vr3 (v2, ublas::range (0, N));
-#endif
             initialize_vector (vr1);
             initialize_vector (vr2);
             initialize_vector (vr3);
@@ -181,17 +168,10 @@ struct bench_my_vector_add {
     }
     void operator () (int runs, fast_tag) const {
         try {
-#ifdef BOOST_UBLAS_ENABLE_INDEX_SET_ALL
-            static V v1 (N), v2 (N), v3 (N);
-            ublas::vector_range<V> vr1 (v1, ublas::range<> (0, N)),
-                                   vr2 (v2, ublas::range<> (0, N)),
-                                   vr3 (v2, ublas::range<> (0, N));
-#else
             static V v1 (N), v2 (N), v3 (N);
             ublas::vector_range<V> vr1 (v1, ublas::range (0, N)),
                                    vr2 (v2, ublas::range (0, N)),
                                    vr3 (v2, ublas::range (0, N));
-#endif
             initialize_vector (vr1);
             initialize_vector (vr2);
             boost::timer t;

@@ -22,6 +22,78 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
+    template<class V, class T1, class IA1, class TA1, class E2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const compressed_matrix<T1, row_major, 0, IA1, TA1> &e1,
+               const vector_expression<E2> &e2,
+               V &v, row_major_tag) {
+        typedef typename V::size_type size_type;
+        typedef typename V::value_type value_type;
+
+        for (size_type i = 0; i < e1.size1 (); ++ i) {
+            size_type begin = e1.index1_data () [i];
+            size_type end = e1.index1_data () [i + 1];
+            value_type t (v (i));
+            for (size_type j = begin; j < end; ++ j)
+                t += e1.value_data () [j] * e2 () (e1.index2_data () [j]);
+            v (i) = t;
+        }
+        return v;
+    }
+
+    template<class V, class T1, class IA1, class TA1, class E2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const compressed_matrix<T1, column_major, 0, IA1, TA1> &e1,
+               const vector_expression<E2> &e2,
+               V &v, row_major_tag) {
+        typedef typename V::size_type size_type;
+
+        for (size_type j = 0; j < e1.size2 (); ++ j) {
+            size_type begin = e1.index1_data () [j];
+            size_type end = e1.index1_data () [j + 1];
+            for (size_type i = begin; i < end; ++ i)
+                v (e1.index2_data () [i]) += e1.value_data () [i] * e2 () (j);
+        }
+        return v;
+    }
+
+    // Dispatcher
+    template<class V, class T1, class F1, class IA1, class TA1, class E2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const compressed_matrix<T1, F1, 0, IA1, TA1> &e1,
+               const vector_expression<E2> &e2,
+               V &v, bool init = true) {
+        typedef typename V::value_type value_type;
+        typedef typename F1::orientation_category orientation_category;
+
+        if (init)
+            v.assign (zero_vector<value_type> (e1.size1 ()));
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        vector<value_type> cv (v.size ());
+        indexing_vector_assign (scalar_assign<value_type, value_type> (), cv, prod (e1, e2));
+#endif
+        axpy_prod (e1, e2, v, orientation_category ());
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
+#endif
+        return v;
+    }
+    template<class V, class T1, class F, class IA1, class TA1, class E2>
+    BOOST_UBLAS_INLINE
+    V
+    axpy_prod (const compressed_matrix<T1, F, 0, IA1, TA1> &e1,
+               const vector_expression<E2> &e2) {
+        typedef V vector_type;
+
+        vector_type v (e1.size1 ());
+        // FIXME: needed for c_matrix?!
+        // return axpy_prod (e1, e2, v, false);
+        return axpy_prod (e1, e2, v, true);
+    }
+
     template<class V, class E1, class E2>
     BOOST_UBLAS_INLINE
     V &
@@ -102,6 +174,78 @@ namespace boost { namespace numeric { namespace ublas {
         typedef V vector_type;
 
         vector_type v (e1 ().size1 ());
+        // FIXME: needed for c_matrix?!
+        // return axpy_prod (e1, e2, v, false);
+        return axpy_prod (e1, e2, v, true);
+    }
+
+    template<class V, class E1, class T2, class IA2, class TA2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const vector_expression<E1> &e1,
+               const compressed_matrix<T2, column_major, 0, IA2, TA2> &e2,
+               V &v, column_major_tag) {
+        typedef typename V::size_type size_type;
+        typedef typename V::value_type value_type;
+
+        for (size_type j = 0; j < e2.size2 (); ++ j) {
+            size_type begin = e2.index1_data () [j];
+            size_type end = e2.index1_data () [j + 1];
+            value_type t (v (j));
+            for (size_type i = begin; i < end; ++ i)
+                t += e2.value_data () [i] * e1 () (e2.index2_data () [i]);
+            v (j) = t;
+        }
+        return v;
+    }
+
+    template<class V, class E1, class T2, class IA2, class TA2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const vector_expression<E1> &e1,
+               const compressed_matrix<T2, row_major, 0, IA2, TA2> &e2,
+               V &v, row_major_tag) {
+        typedef typename V::size_type size_type;
+
+        for (size_type i = 0; i < e2.size1 (); ++ i) {
+            size_type begin = e2.index1_data () [i];
+            size_type end = e2.index1_data () [i + 1];
+            for (size_type j = begin; j < end; ++ j)
+                v (e2.index2_data () [j]) += e2.value_data () [j] * e1 () (i);
+        }
+        return v;
+    }
+
+    // Dispatcher
+    template<class V, class E1, class T2, class F2, class IA2, class TA2>
+    BOOST_UBLAS_INLINE
+    V &
+    axpy_prod (const vector_expression<E1> &e1,
+               const compressed_matrix<T2, F2, 0, IA2, TA2> &e2,
+               V &v, bool init = true) {
+        typedef typename V::value_type value_type;
+        typedef typename F2::orientation_category orientation_category;
+
+        if (init)
+            v.assign (zero_vector<value_type> (e2 ().size2 ()));
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        vector<value_type> cv (v.size ());
+        indexing_vector_assign (scalar_assign<value_type, value_type> (), cv, prod (e1, e2));
+#endif
+        axpy_prod (e1, e2, v, orientation_category ());
+#ifdef BOOST_UBLAS_TYPE_CHECK
+        BOOST_UBLAS_CHECK (equals (v, cv), internal_logic ());
+#endif
+        return v;
+    }
+    template<class V, class E1, class T2, class F2, class IA2, class TA2>
+    BOOST_UBLAS_INLINE
+    V
+    axpy_prod (const vector_expression<E1> &e1,
+               const compressed_matrix<T2, F2, 0, IA2, TA2> &e2) {
+        typedef V vector_type;
+
+        vector_type v (e2 ().size2 ());
         // FIXME: needed for c_matrix?!
         // return axpy_prod (e1, e2, v, false);
         return axpy_prod (e1, e2, v, true);
