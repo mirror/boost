@@ -21,7 +21,6 @@
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #   include "boost/mpl/bool.hpp"
-#   include "boost/type_traits/has_nothrow_constructor.hpp"
 #   include "boost/type_traits/has_nothrow_copy.hpp"
 #else
 #   include "boost/utility/addressof.hpp"
@@ -186,14 +185,6 @@ struct make_reference_content< mpl::void_ >
 //
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-template <typename T>
-struct has_nothrow_constructor<
-      ::boost::detail::reference_content< T& >
-    >
-    : mpl::true_
-{
-};
 
 template <typename T>
 struct has_nothrow_copy<
