@@ -39,7 +39,6 @@ namespace detail {
 
     template<class Ch, class Facet> inline
     char wrap_narrow(const Facet& fac, Ch c, char deflt) {
-
         return const_or_not(fac).narrow(c, deflt);
     }
 
@@ -51,7 +50,7 @@ namespace detail {
         using namespace std;
         return isdigit(c); 
 #endif 
-    } 
+    }
  
     template<class Iter, class Facet> 
     Iter wrap_scan_notdigit(const Facet & fac, Iter beg, Iter end) {
