@@ -474,11 +474,12 @@ the underlying iterator object of a <tt class="literal"><span class="pre">revers
 </table>
 <p>The user of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> creates a class derived from an
 instantiation of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> and then selectively
-redefines some of the core member functions described in the table
-above. The <tt class="literal"><span class="pre">Base</span></tt> type need not meet the full requirements for an
-iterator. It need only support the operations used by the core
-interface functions of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> that have not been
-redefined in the user's derived class.</p>
+redefines some of the core member functions described in the
+<tt class="literal"><span class="pre">iterator_facade</span></tt> core requirements table. The <tt class="literal"><span class="pre">Base</span></tt> type need
+not meet the full requirements for an iterator; it need only
+support the operations used by the core interface functions of
+<tt class="literal"><span class="pre">iterator_adaptor</span></tt> that have not been redefined in the user's
+derived class.</p>
 <p>Several of the template parameters of <tt class="literal"><span class="pre">iterator_adaptor</span></tt> default
 to <tt class="literal"><span class="pre">use_default</span></tt>. This allows the
 user to make use of a default parameter even when she wants to

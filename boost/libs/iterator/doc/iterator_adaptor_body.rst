@@ -18,11 +18,12 @@ instance of the ``Base`` type, which it stores as a member.
 
 The user of ``iterator_adaptor`` creates a class derived from an
 instantiation of ``iterator_adaptor`` and then selectively
-redefines some of the core member functions described in the table
-above. The ``Base`` type need not meet the full requirements for an
-iterator. It need only support the operations used by the core
-interface functions of ``iterator_adaptor`` that have not been
-redefined in the user's derived class.
+redefines some of the core member functions described in the
+``iterator_facade`` core requirements table. The ``Base`` type need
+not meet the full requirements for an iterator; it need only
+support the operations used by the core interface functions of
+``iterator_adaptor`` that have not been redefined in the user's
+derived class.
 
 Several of the template parameters of ``iterator_adaptor`` default
 to ``use_default``. This allows the

@@ -1287,6 +1287,10 @@ appropriate:</p>
 
   ...
 
+private: 
+  struct enabler {};
+
+public:
   template &lt;class OtherValue&gt;
   node_iter(
       node_iter&lt;OtherValue&gt; const&amp; other
