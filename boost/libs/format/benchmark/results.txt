@@ -1,0 +1,86 @@
+// This benchmark is provided purely for information.
+// It might not even compile as-is, 
+//   or not give any sensible results. 
+//      (e.g., it expects sprintf to be POSIX compliant)
+
+ new results ( with  outsstream vs. stringstream)
+
+bjam -sTOOLS="gcc intel-linux-7.1" -sBUILD="release"
+
+( -sBUILD="profile"  for profiling..)
+
+
+
+for comp in "gcc" "intel-linux-7.1"; do 
+   echo -n "\n------------------- Compiler  $comp : ---------------- \n"
+   for var in "_normal" "_no_reuse_stream" "_stringstr";  do
+     echo "-- Variant " $var :
+      $EXEDIR/libs/format/benchmark/bench_format${var}/${comp}/release/runtime-link-dynamic/bench_format${var} ;
+   done
+done
+
+
+
+------------------- Compiler  gcc : ----------------
+-- Variant  _normal :
+printf time         :2.15
+ostream time        :4.42,  = 2.05581 * printf
+stored format time  :5.85,  = 1.32353 * stream
+format time         :11.53,  = 2.6086 * stream
+-- Variant  _no_reuse_stream :
+printf time         :2.13
+ostream time        :4.4,  = 2.06573 * printf
+stored format time  :11.1,  = 2.52273 * stream
+format time         :14.3,  = 3.25 * stream
+-- Variant  _stringstr :
+printf time         :2.01
+ostream time        :4.42,  = 2.199 * printf
+stored format time  :7.92,  = 1.79186 * stream
+format time         :12.8,  = 2.89593 * stream
+
+------------------- Compiler  intel-linux-7.1 : ----------------
+-- Variant  _normal :
+printf time         :2.08
+ostream time        :4.49,  = 2.15865 * printf
+stored format time  :5.3,  = 1.1804 * stream
+format time         :17.8,  = 3.96437 * stream
+-- Variant  _no_reuse_stream :
+printf time         :2.09
+ostream time        :4.37,  = 2.09091 * printf
+stored format time  :10.07,  = 2.30435 * stream
+format time         :14.46,  = 3.30892 * stream
+-- Variant  _stringstr :
+printf time         :1.99
+ostream time        :5.16,  = 2.59296 * printf
+stored format time  :5.83,  = 1.12984 * stream
+format time         :17.42,  = 3.37597 * stream
+
+
+
+
+// older Result with gcc-3.03 on linux :
+
+// With flag -g :
+
+/***
+printf time         :1.2
+ostream time        :2.84,  = 2.36667 * printf 
+stored format time  :8.91,  = 3.13732 * stream 
+format time         :15.35, = 5.40493 * stream 
+format3 time        :21.83, = 7.68662 * stream 
+***/
+
+
+// With flag -O
+
+/***
+printf time         :1.16
+ostream time        :1.94,  = 1.67241 * printf 
+stored format time  :3.68,  = 1.89691 * stream 
+format time         :6.31,  = 3.25258 * stream 
+format3 time        :9.04,  = 4.65979 * stream 
+***/
+
+//  ==> that's quite acceptable.
+
+// ------------------------------------------------------------------------------
