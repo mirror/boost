@@ -766,6 +766,9 @@ namespace tuples {
     }
     // "ignore" allows tuple positions to be ignored when using "tie". 
     namespace {
+#if (defined(BOOST_MSVC) && BOOST_MSVC <= 1300) || (defined(__DECCXX_VER) && __DECCXX_VER <= 60590031)
+      static
+#endif 
       detail::swallow_assign ignore;
     }
 
