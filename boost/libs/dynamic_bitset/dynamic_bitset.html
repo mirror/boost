@@ -179,6 +179,7 @@ public:
     unsigned long <a href="#to_ulong">to_ulong</a>() const;
   
     size_type <a href="#size">size</a>() const;
+    size_type <a href="#num_blocks">num_blocks</a>() const;
 
     bool <a href="#is_subset_of">is_subset_of</a>(const dynamic_bitset& a) const;
     bool <a href="#is_proper_subset_of">is_proper_subset_of</a>(const dynamic_bitset& a) const;
@@ -223,7 +224,7 @@ void <a href="#to_string">to_string</a>(const dynamic_bitset&lt;Block, Allocator
           std::basic_string&lt;CharT, Alloc&gt;&amp; s);
 
 template &lt;typename Block, typename Allocator, typename BlockOutputIterator&gt;
-void to_block_range(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b, 
+void <a href="#to_block_range">to_block_range</a>(const dynamic_bitset&lt;Block, Allocator&gt;&amp; b, 
                     BlockOutputIterator result);
 
 template &lt;typename CharT, typename Traits, typename Block, typename Allocator&gt;
@@ -997,6 +998,13 @@ size_type <a name="size">size</a>() const
 <hr>
 
 <pre>
+size_type <a name="num_blocks">num_blocks</a>() const
+</pre>
+<b>Returns:</b> the number of blocks in this bitset.<br>
+<b>Throws:</b> nothing.
+<hr>
+
+<pre>
 size_type <a name="count">count</a>() const
 </pre>
 <b>Returns:</b> the number of bits in this bitset that are set.<br>
@@ -1250,6 +1258,28 @@ position <tt>i</tt> in the string corresponds to bit position
   template parameters, and some C++ compilers do not handle them
   properly.
 
+
+<hr>
+<pre>
+template &lt;typename Block, typename Alloc, typename BlockOutputIterator&gt;
+void <a name="to_block_range">to_block_range</a>(const dynamic_bitset&lt;Block, Alloc&gt;&amp; b, BlockOutputIterator result)
+</pre>
+<b>Effects:</b> Writes the bits of the bitset into the iterator
+<tt>result</tt> a block at a time. The first block written represents
+the bits in the position range <tt>[0,bits_per_block)</tt> in the
+bitset, the second block written the bits in the range
+<tt>[bits_pre_block,2*bits_per_block)</tt>, and so on.  For each block
+<tt>bval</tt> written, the bit <tt>(bval >> i) &amp; 1</tt>
+corresponds to the bit at position <tt>(b * bits_per_block + i)</tt>
+in the bitset.<br>
+
+<b>Requires:</b> The type <tt>BlockOutputIterator</tt> must be a model
+of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output
+Iterator</a> and its <tt>value_type</tt> must be the same type as
+<tt>Block</tt>. Further, the size of the output range must be greater
+or equal <tt>b.num_blocks()</tt>.
+
+
 <hr>
 <pre>
 template &lt;typename Char, typename Traits, typename Block, typename Alloc&gt;
@@ -1268,9 +1298,10 @@ os &lt;&lt; s;
   (<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
  Also will throw <tt>std::ios_base::failure</tt> if there is a problem
  writing to the stream.
+
+
+
 <hr>
-
-
 <pre>
 template &lt;typename Char, typename Traits, typename Block, typename Alloc&gt;
 basic_istream&lt;Char,Traits&gt;&amp;
