@@ -273,12 +273,18 @@ typedef int (UDT::*cmf)(int) const;
 # ifdef BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable: 4181)
-# endif // BOOST_MSVC
+# elif defined(__ICL)
+#  pragma warning(push)
+#  pragma warning(disable: 21)
+# endif
 typedef int& r_type;
 typedef const r_type cr_type;
 # ifdef BOOST_MSVC
 #  pragma warning(pop)
-# endif // BOOST_MSVC
+# elif defined(__ICL)
+#  pragma warning(pop)
+#  pragma warning(disable: 985) // identifier truncated in debug information
+# endif
 
 struct POD_UDT { int x; };
 struct empty_UDT
