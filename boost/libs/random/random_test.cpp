@@ -477,6 +477,26 @@ INSTANT(boost::mt11213b)
 #undef INSTANT
 #endif
 
+// testcase by Mario Rütti
+class ruetti_gen
+{
+public:
+  typedef uint64_t result_type;
+  result_type min() const { return 0; }
+  result_type max() const { return std::numeric_limits<result_type>::max(); }
+  result_type operator()() { return max()-1; }
+};
+
+
+void test_overflow_range()
+{
+  ruetti_gen gen;
+  boost::variate_generator<ruetti_gen, boost::uniform_int<> >
+    rng(gen, boost::uniform_int<>(0, 10));
+  for (int i=0;i<10;i++)
+    (void) rng();
+}
+
 int test_main(int, char*[])
 {
 
@@ -503,6 +523,8 @@ int test_main(int, char*[])
   boost::variate_generator<boost::minstd_rand, boost::uniform_int<> > y(mr, boost::uniform_int<>(1,1));
   std::cout << "uniform_int(1,1) " << y() << ", " << y() << ", " << y()
             << std::endl;
+
+  test_overflow_range();
 
   return 0;
 #else
