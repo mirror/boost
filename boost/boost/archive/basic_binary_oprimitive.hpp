@@ -65,11 +65,11 @@ public:
     }
     // native binary streams are handled as bytes
     OStream &os;
+    boost::scoped_ptr<std::locale> archive_locale;
     io::basic_ios_locale_saver<
         BOOST_DEDUCED_TYPENAME OStream::char_type, 
         BOOST_DEDUCED_TYPENAME OStream::traits_type
     > locale_saver;
-    boost::scoped_ptr<std::locale> archive_locale;
 
     // default saving of primitives.
     template<class T>

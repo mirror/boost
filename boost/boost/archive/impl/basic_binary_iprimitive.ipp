@@ -127,8 +127,8 @@ basic_binary_iprimitive<Archive, IStream>::basic_binary_iprimitive(
     bool no_codecvt
 ) :
     is(is_),
-    locale_saver(is),
-    archive_locale(NULL)
+    archive_locale(NULL),
+    locale_saver(is)
 {
     if(! no_codecvt){
         archive_locale.reset(

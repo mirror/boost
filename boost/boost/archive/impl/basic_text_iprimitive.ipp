@@ -90,8 +90,8 @@ basic_text_iprimitive<IStream>::basic_text_iprimitive(
     is(is_),
     flags_saver(is_),
     precision_saver(is_),
-    locale_saver(is_),
-    archive_locale(NULL)
+    archive_locale(NULL),
+    locale_saver(is_)
 {
     if(! no_codecvt){
         archive_locale.reset(

@@ -113,8 +113,7 @@ BOOST_CLASS_IMPLEMENTATION(boost::archive::tracking_type, primitive_type)
 // serialization/archive types.
 
 #ifdef BOOST_SERIALIZATION_EXPORT_HPP
-#include <boost/static_assert.hpp>
-BOOST_STATIC_ASSERT(false);
+#error "export.hpp must not be included before any archive header"
 #endif
 
 #endif //BOOST_ARCHIVE_BASIC_ARCHIVE_HPP

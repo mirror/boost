@@ -131,8 +131,11 @@ public:
         return ::boost::serialization::version<T>::value;
     }
     virtual bool is_polymorphic() const {
-        return boost::serialization::type_info_implementation<T>::type::
-            is_polymorphic::value;
+        typedef BOOST_DEDUCED_TYPENAME 
+            boost::serialization::type_info_implementation<
+                T
+            >::type::is_polymorphic::type typex;
+        return typex::value;
     }
     static iserializer & instantiate(){
         static iserializer instance;
@@ -278,10 +281,10 @@ struct load_pointer_type {
     struct abstract
     {
         static const basic_pointer_iserializer * register_type(Archive & /* ar */){
+            typedef BOOST_DEDUCED_TYPENAME 
+                boost::serialization::type_info_implementation<T>::type::is_polymorphic typex;
             // it has? to be polymorphic
-            BOOST_STATIC_ASSERT(
-                boost::serialization::type_info_implementation<T>::type::is_polymorphic::value
-            );
+            BOOST_STATIC_ASSERT(typex::value);
             return static_cast<basic_pointer_iserializer *>(NULL);
          }
     };

@@ -67,13 +67,13 @@ public:
     }
     // native streams are always handled as bytes
     IStream &is;
-    io::basic_ios_locale_saver<
-        BOOST_DEDUCED_TYPENAME IStream::char_type, BOOST_DEDUCED_TYPENAME IStream::traits_type
-    > locale_saver;
     boost::scoped_ptr<std::locale> archive_locale;
 //    boost::scoped_ptr<
 //        codecvt_null<BOOST_DEDUCED_TYPENAME IStream::char_type> 
 //    > archive_codecvt;
+    io::basic_ios_locale_saver<
+        BOOST_DEDUCED_TYPENAME IStream::char_type, BOOST_DEDUCED_TYPENAME IStream::traits_type
+    > locale_saver;
 
     // main template for serilization of primitive types
     template<class T>

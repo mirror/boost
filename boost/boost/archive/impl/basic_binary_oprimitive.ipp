@@ -95,8 +95,8 @@ basic_binary_oprimitive<Archive, OStream>::basic_binary_oprimitive(
     bool no_codecvt
 ) : 
     os(os_),
-    locale_saver(os),
-    archive_locale(NULL)
+    archive_locale(NULL),
+    locale_saver(os)
 {
     if(! no_codecvt){
         archive_locale.reset(
