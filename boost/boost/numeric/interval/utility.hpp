@@ -264,7 +264,7 @@ interval<T, Policies> abs(const interval<T, Policies>& x)
     return I::empty();
   if (!interval_lib::detail::is_neg(x.lower())) return x;
   if (interval_lib::detail::is_neg(x.upper())) return -x;
-  return I(0, max(-x.lower(), x.upper()), true);
+  return I(static_cast<T>(0), max(-x.lower(), x.upper()), true);
 }
 
 template<class T, class Policies> inline
