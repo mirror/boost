@@ -46,7 +46,7 @@ void more_indirect_iterator_tests()
 
     typedef boost::indirect_iterator_pair_generator<
         pointer_deque::iterator
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , int
 #endif
     > IndirectDeque;
@@ -75,7 +75,7 @@ void more_indirect_iterator_tests()
 
     typedef boost::indirect_iterator_generator<
         iterator_set::iterator
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , int
 #endif
         >::type indirect_set_iterator;
@@ -117,7 +117,7 @@ main()
       ptr[k] = array + k;
 
     typedef boost::indirect_iterator_generator<dummyT**
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
         , dummyT
 #endif
       >::type indirect_iterator;
@@ -127,7 +127,7 @@ main()
     indirect_iterator i(ptr);
     boost::random_access_iterator_test(i, N, array);
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
     boost::random_access_iterator_test(boost::make_indirect_iterator(ptr), N, array);
 #endif
     
@@ -139,7 +139,7 @@ main()
 
     dummyT*const* const_ptr = ptr;
     
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_NO_STD_ITERATOR_TRAITS
     boost::random_access_iterator_test(boost::make_indirect_iterator(const_ptr), N, array);
 #endif
     boost::const_nonconst_iterator_test(i, ++j);

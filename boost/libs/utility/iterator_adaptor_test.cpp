@@ -224,7 +224,7 @@ main()
     std::reverse(reversed, reversed + N);
     
     typedef boost::reverse_iterator_generator<dummyT*
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_STD_ITERATOR_TRAITS)
         , dummyT
 #endif
       >::type reverse_iterator;
@@ -232,12 +232,12 @@ main()
     reverse_iterator i(reversed + N);
     boost::random_access_iterator_test(i, N, array);
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
     boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
 #endif
 
     typedef boost::reverse_iterator_generator<const dummyT*
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_STD_ITERATOR_TRAITS)
       , dummyT, const dummyT&, const dummyT
 #endif
       >::type const_reverse_iterator;
@@ -247,7 +247,7 @@ main()
 
     const dummyT* const_reversed = reversed;
     
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
     boost::random_access_iterator_test(boost::make_reverse_iterator(const_reversed + N), N, array);
 #endif
     
@@ -300,7 +300,7 @@ main()
     typedef boost::detail::non_bidirectional_category<dummyT*>::type category;
     
     typedef boost::filter_iterator_generator<one_or_four, dummyT*
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_STD_ITERATOR_TRAITS)
         , dummyT
 #endif
         >::type filter_iter;
@@ -348,7 +348,7 @@ main()
         dummyT(4), dummyT(1));
 #endif
     
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
     boost::forward_iterator_test(
         boost::make_filter_iterator(array+0, array+N, one_or_four()),
         dummyT(1), dummyT(4));

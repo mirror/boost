@@ -22,7 +22,7 @@ int main()
   int numbers_[] = { 0, -1, 4, -3, 5, 8, -2 };
   const int N = sizeof(numbers_)/sizeof(int);
   
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
   // Assume there won't be proper iterator traits for pointers. This
   // is just a wrapper for int* which has the right traits.
   typedef boost::iterator_adaptor<int*, boost::default_iterator_policies, int> base_iterator;

@@ -12,7 +12,7 @@ int main(int, char*[])
 {
   char letters_[] = "hello world!";
   const int N = sizeof(letters_)/sizeof(char) - 1;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifdef BOOST_NO_STD_ITERATOR_TRAITS
   // Assume there won't be proper iterator traits for pointers. This
   // is just a wrapper for char* which has the right traits.
   typedef boost::iterator_adaptor<char*, boost::default_iterator_policies, char> base_iterator;
