@@ -19,7 +19,7 @@ local test_monitor = <lib>@boost/libs/test/build/boost_test_exec_monitor ;
 # Please keep the tests ordered by filename
 test-suite utility
     :
-        [ run ../addressof_test.cpp $(test_monitor) ]
+        [ run ../addressof_test.cpp ]
         [ run ../assert_test.cpp ]
         [ run ../base_from_member_test.cpp ]
         [ run ../binary_search_test.cpp ]
