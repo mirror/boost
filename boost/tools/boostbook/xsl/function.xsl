@@ -194,45 +194,14 @@
         </xsl:call-template>
       </xsl:when>
 
-      <!-- Check if we can put the entire declaration on a single line, and
-           the entire line will be a link.-->
-      <xsl:when test="not($end-column &gt; $max-columns) 
-                      and not($suppress-template)">
-        <xsl:call-template name="link-or-anchor">
-          <xsl:with-param name="to" select="$link-to"/>
-          <xsl:with-param name="text">
-            <xsl:apply-templates select="template" mode="synopsis">
-              <xsl:with-param name="indentation" select="$indentation"/>
-              <xsl:with-param name="wrap" select="false()"/>
-              <xsl:with-param name="highlight" select="false()"/>
-            </xsl:apply-templates>
-            <xsl:value-of select="$type"/>
-            <xsl:value-of select="$function-name"/>
-            <xsl:text>(</xsl:text>
-            <xsl:call-template name="function-parameters">
-              <xsl:with-param name="include-names" select="$include-names"/>
-              <xsl:with-param name="indentation" 
-                select="$indentation + $template-length + string-length($type)
-                        + string-length($function-name) + 1"/>
-              <xsl:with-param name="final" select="false()"/>
-            </xsl:call-template>                
-            <xsl:text>)</xsl:text>
-            <xsl:value-of select="$postdeclarator"/>
-          </xsl:with-param>
-          <xsl:with-param name="link-type" select="$link-type"/>
-          <xsl:with-param name="highlight" select="true()"/>
-        </xsl:call-template>
-        <xsl:text>;</xsl:text>    
-      </xsl:when>
-
       <!-- Check if we can put the entire declaration on a single
-           line, but only highlight the name. -->
+           line. -->
       <xsl:when test="not($end-column &gt; $max-columns)">
         <xsl:if test="not($suppress-template)">
           <xsl:apply-templates select="template" mode="synopsis">
             <xsl:with-param name="indentation" select="$indentation"/>
             <xsl:with-param name="wrap" select="false()"/>
-            <xsl:with-param name="highlight" select="false()"/>
+            <xsl:with-param name="highlight" select="true()"/>
           </xsl:apply-templates>
         </xsl:if>
 
