@@ -23,7 +23,7 @@ struct id_mixin
 {	
   id_mixin(const id_mixin& rhs) : id(rhs.id) {}
   id_mixin& operator=(const id_mixin& rhs){id = rhs.id; return *this;}
-  id_mixin(){ id = 0;}
+  id_mixin(int i = 0){ id = i;}
   int id;
 };
 
@@ -31,9 +31,9 @@ typedef boost::function<int,int,int>::mixin<id_mixin>::type func;
 
 int test_main(int, char*[])
 {
-  func f;  
+  func f(id_mixin(3));  
   f = std::plus<int>();
-  BOOST_TEST(f.id == 0);
+  BOOST_TEST(f.id == 3);
   
   f.clear();
   f.id = 7;    
