@@ -893,7 +893,7 @@ protected:
    {
       std::size_t cmatches;
       unsigned count;
-      sub_match<iterator> head, tail, null;
+      sub_match<iterator> head, tail, re_null;
       unsigned int lines;
       iterator line_pos, base;
       c_reference(const Allocator& a)
@@ -947,7 +947,7 @@ public:
    {
       if((n >= 0) && ((unsigned int)n < ref->cmatches))
          return *(sub_match<iterator>*)((char*)ref + sizeof(c_reference) + sizeof(sub_match<iterator>)*n);
-      return (n == -1) ? ref->head : (n == -2) ? ref->tail : ref->null;
+      return (n == -1) ? ref->head : (n == -2) ? ref->tail : ref->re_null;
    }
 
    Allocator BOOST_REGEX_CALL allocator()const;
@@ -1296,8 +1296,8 @@ void BOOST_REGEX_CALL match_results_base<iterator, Allocator>::set_size(size_typ
    ref->head.first = i;
    ref->tail.second = j;
    ref->head.matched = ref->tail.matched = true;
-   ref->null.first = ref->null.second = j;
-   ref->null.matched = false;
+   ref->re_null.first = ref->re_null.second = j;
+   ref->re_null.matched = false;
 }
 
 template <class iterator, class Allocator>
