@@ -4,7 +4,7 @@
 // without express or implied warranty, and with no claim as to its suitability
 // for any purpose.
 //
-//  See http://www.boost.org for most recent version including documentation.
+// See http://www.boost.org for most recent version including documentation.
 //
 // Supplies:
 //
@@ -15,16 +15,21 @@
 //     value progresses through consecutive values of Incrementable when the
 //     iterator is derferenced.
 //
+//   template <class Incrementable> struct counting_iterator_generator;
+//
+//     A "type generator" whose nested type "type" is a counting iterator as
+//     described above.
+//
 //   template <class Incrementable>
-//     iterator_adaptor<Incrementable,
-//                      counting_iterator_policies<Incrementable>,
-//                      counting_iterator_traits<Incrementable> >
-//   counting_iterator(Incrementable);
+//     typename counting_iterator_generator<Incrementable>::type
+//     counting_iterator(Incrementable);
 //
 //     A function which produces an adapted counting iterator over values of
 //     Incrementable.
 // 
 // Revision History
+// 04 Feb 2001  Added counting_iterator_generator; updated comments
+//              (David Abrahams)
 // 24 Jan 2001  initial revision, based on Jeremy Siek's
 //              boost/pending/integer_range.hpp (David Abrahams)
 
@@ -33,7 +38,7 @@
 
 # include <boost/config.hpp>
 # include <boost/detail/iterator.hpp>
-# include <boost/pending/iterator_adaptors.hpp>
+# include <boost/iterator_adaptors.hpp>
 # include <boost/type_traits.hpp>
 # include <boost/detail/numeric_traits.hpp>
 # ifndef BOOST_NO_LIMITS
@@ -161,17 +166,25 @@ struct counting_iterator_policies : public default_iterator_policies
     }
 };
 
+// A type generator for counting iterators
+template <class Incrementable>
+struct counting_iterator_generator
+{
+    typedef iterator_adaptor<Incrementable,
+        counting_iterator_policies<Incrementable>,
+        counting_iterator_traits<Incrementable> > type;
+};
+
 // Manufacture a counting iterator for an arbitrary incrementable type
 template <class Incrementable>
-inline iterator_adaptor<Incrementable,
-    counting_iterator_policies<Incrementable>,
-    counting_iterator_traits<Incrementable> >
+inline typename counting_iterator_generator<Incrementable>::type
 counting_iterator(Incrementable x)
 {
     return iterator_adaptor<Incrementable,
         counting_iterator_policies<Incrementable>,
         counting_iterator_traits<Incrementable> >(x);
 }
+
 
 } // namespace boost
 
