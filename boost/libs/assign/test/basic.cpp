@@ -18,7 +18,7 @@ using namespace boost::assign;
 
 void check_basic_usage()
 {
-    vector<int> v = list_of(1)(2);
+    vector<int> v;
     v += 3,4,5,6,7,8,9;
     push_back( v )(10)(11);
     map<string,int> m;
