@@ -218,6 +218,11 @@ namespace test // tester is the driver class for a sequence of tests
         tester &operator=(const tester &);
 
     };
+    
+#if defined(__GNUC__) && defined(__SGI_STL_PORT) && (__GNUC__ < 3)
+    // function scope using declarations don't work:
+    using namespace std;
+#endif
 
     template<typename test_iterator>
     bool tester<test_iterator>::operator()()
