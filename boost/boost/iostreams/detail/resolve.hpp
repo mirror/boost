@@ -57,8 +57,9 @@ template<typename Mode, typename Ch, typename T>
 typename resolve_traits<Mode, Ch, T>::type
 resolve( const T& t 
          BOOST_IOSTREAMS_DISABLE_IF_STREAM(T)
-         #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800) || \
-             BOOST_WORKAROUND(__GNUC__, == 3) && !defined(BOOST_INTEL)
+         #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= BOOST_TESTED_AT(810)) || \
+             BOOST_WORKAROUND(__GNUC__, == 3) && !defined(BOOST_INTEL) \
+             /**/
          , typename disable_if< is_iterator_range<T> >::type* = 0
          #endif
          )
