@@ -122,7 +122,7 @@ int main()
     std::cout &lt;&lt; u; // output: hello world
 
     int result = <functionname>boost::apply_visitor</functionname>( my_visitor(), u );
-    std::cout &lt;&lt; result; // output: 11
+    std::cout &lt;&lt; result; // output: 11 (i.e. length of "hello world")
 }
 </programlisting>
 
