@@ -128,47 +128,6 @@ public: // metafunction result
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) class null_storage
-//
-// Simulates aligned_storage's interface, but with nothing underneath.
-//
-struct null_storage
-{
-public: // queries
-
-    void* address()
-    {
-        return 0;
-    }
-
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-    const void* address() const
-    {
-        return 0;
-    }
-
-#else // MSVC6
-
-    const void* address() const;
-
-#endif // MSVC6 workaround
-
-};
-
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-
-// MSVC6 seems not to like inline functions with const void* returns, so we
-// declare the following here:
-
-const void* null_storage::address() const
-{
-    return 0;
-}
-
-#endif // MSVC6 workaround
-
-///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction make_storage
 //
 // Provides an aligned storage type capable of holding any of the types
