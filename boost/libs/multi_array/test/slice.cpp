@@ -16,6 +16,8 @@
 
 #include "generative_tests.hpp"
 #include "boost/array.hpp"
+#include "boost/mpl/if.hpp"
+#include "boost/type_traits/is_same.hpp"
 
 template <typename Array>
 struct view_traits_mutable {
@@ -43,6 +45,7 @@ struct view_traits_const {
 // choose view_traits begins
 //
 
+#if 0
 struct choose_view_traits_const {
   template <typename Array>
   struct bind {
@@ -76,6 +79,16 @@ public:
   typedef typename Choice::template bind<Array>::type type;
 };
 
+#else
+
+template <typename Array, typename ConstTag>
+struct view_traits_generator :
+  boost::mpl::if_< boost::is_same<ConstTag,const_array_tag>,
+                   view_traits_const<Array>,
+                   view_traits_mutable<Array> >
+{};
+
+#endif // 0
 //
 // choose view_traits ends
 /////////////////////////////////////////////////////////////////////////
