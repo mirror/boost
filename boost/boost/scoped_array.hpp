@@ -13,6 +13,7 @@
 //
 
 #include <boost/assert.hpp>
+#include <boost/checked_delete.hpp>
 #include <boost/config.hpp>   // in case ptrdiff_t not in std
 #include <cstddef>            // for std::ptrdiff_t
 
@@ -42,17 +43,14 @@ public:
 
     ~scoped_array() // never throws
     {
-        typedef char type_must_be_complete[sizeof(T)];
-        delete [] ptr;
+        checked_array_delete(ptr);
     }
 
     void reset(T * p = 0) // never throws
     {
-        typedef char type_must_be_complete[sizeof(T)];
-
         if (ptr != p)
         {
-            delete [] ptr;
+            checked_array_delete(ptr);
             ptr = p;
         }
     }

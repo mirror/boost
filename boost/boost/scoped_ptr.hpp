@@ -13,6 +13,7 @@
 //
 
 #include <boost/assert.hpp>
+#include <boost/checked_delete.hpp>
 
 namespace boost
 {
@@ -41,17 +42,14 @@ public:
 
     ~scoped_ptr() // never throws
     {
-        typedef char type_must_be_complete[sizeof(T)];
-        delete ptr;
+        checked_delete(ptr);
     }
 
     void reset(T * p = 0) // never throws
     {
-        typedef char type_must_be_complete[sizeof(T)];
-
         if (ptr != p)
         {
-            delete ptr;
+            checked_delete(ptr);
             ptr = p;
         }
     }
