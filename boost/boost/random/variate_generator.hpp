@@ -94,7 +94,7 @@ public:
   typedef typename Distribution::result_type result_type;
 
   variate_generator(Engine e, Distribution d)
-    : _eng(decorated_engine(e)), _dist(d) { };
+    : _eng(decorated_engine(e)), _dist(d) { }
 
   result_type operator()() { return _dist(_eng); }
   template<class T>
