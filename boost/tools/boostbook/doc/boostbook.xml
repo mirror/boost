@@ -350,6 +350,6 @@ boostbook any : any.doxygen ;</programlisting>
   </section>
 
   <xi:include href="documenting.xml"/>
-  <xi:include href="reference_doc.xml"/>
   <xi:include href="together.xml"/>
+  <xi:include href="reference.xml"/>
 </chapter>
