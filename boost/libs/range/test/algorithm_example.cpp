@@ -15,8 +15,8 @@
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
-#include <boost/range/functions.hpp>
-#include <boost/range/types.hpp>
+#include <boost/range/functions.hpp >
+#include <boost/range/metafunctions.hpp>
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -24,38 +24,45 @@
 
 namespace
 {
-   template< typename ExternalRange, typename T >
-   inline typename boost::iterator_of<ExternalRange>::type
-   find( ExternalRange& c, const T& value )
-   {
+    
+    //
+    // example: extrating bounds in a generic algorithm
+    //
+    template< typename Range, typename T >
+    inline typename boost::iterator_of<Range>::type
+    find( Range& c, const T& value )
+    {
        return std::find( boost::begin( c ), boost::end( c ), value );
-   }
-
-   template< typename ExternalRange, typename T >
-   inline typename boost::const_iterator_of<ExternalRange>::type 
-   find( const ExternalRange& c, const T& value )
-   {
+    }
+    
+    template< typename Range, typename T >
+    inline typename boost::const_iterator_of<Range>::type 
+    find( const Range& c, const T& value )
+    {
        return std::find( boost::begin( c ), boost::end( c ), value );
-   }
+    }
                    
-   // 
-   // replace first value and return its index
-   //                                
-   template< class XRange, class T >
-   inline typename boost::size_type_of< XRange >::type
-   my_generic_replace( XRange& c, const T& value, const T& replacement )
-   {
-       typename boost::iterator_of<XRange>::type found = find( c, value );
+    // 
+    // replace first value and return its index
+    //                                
+    template< class Range, class T >
+    inline typename boost::size_type_of< Range >::type
+    my_generic_replace( Range& c, const T& value, const T& replacement )
+    {
+       typename boost::iterator_of<Range>::type found = find( c, value );
        
        if( found != boost::end( c ) )
            *found = replacement;
        return std::distance( boost::begin( c ), found );
-   }                  
+    }                  
 }
 
 
 int main()
 {
+    //
+    // usage
+    //
     const int N = 5;                     
     std::vector<int> my_vector;
     int values[] = { 1,2,3,4,5,6,7,8,9 };

@@ -25,10 +25,11 @@
 
 namespace boost 
 { 
-namespace range
+namespace range 
 {
+
         //////////////////////////////////////////////////////////////////////
-        // default
+        // primary template
         //////////////////////////////////////////////////////////////////////
 
         template< typename C >
@@ -53,7 +54,16 @@ namespace range
         
 } // namespace 'range'
 
-using range::empty;
+template< class T >
+inline bool empty( const T& r )
+{
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
+    using range::empty;
+    return empty( r );
+#else
+    return range::empty( r );
+#endif
+}
 
 } // namepace 'boost'
 

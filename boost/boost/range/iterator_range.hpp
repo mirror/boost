@@ -92,16 +92,16 @@ namespace boost {
             iterator_range( Range& r ) : 
             m_Begin( begin_impl( r ) ), m_End( end_impl( r ) ) {}
             
-            template< class XRange >
-            iterator_range& operator=( XRange& r )
+            template< class ForwardRange >
+            iterator_range& operator=( ForwardRange& r )
             {
                 m_Begin = begin_impl( r ); 
                 m_End   = end_impl( r );
                 return *this;
             }
 
-            template< class XRange >
-            iterator_range& operator=( const XRange& r )
+            template< class ForwardRange >
+            iterator_range& operator=( const ForwardRange& r )
             {
                 m_Begin = begin_impl( r ); 
                 m_End   = end_impl( r );
@@ -140,16 +140,6 @@ namespace boost {
                 return m_Begin == m_End;
             }
 
-            //! Swap
-            /*!
-                Swap two ranges
-            */
-            void swap( iterator_range& Other )
-            {
-                std::swap( m_Begin, Other.m_Begin );
-                std::swap( m_End, Other.m_End );
-            }
-            
             //! Safe bool conversion
             /*!
                 Check whenever the range is empty.
@@ -168,30 +158,32 @@ namespace boost {
                 return empty() ? 0: &iterator_range::end;
             }
             
-            /*
-            inline operator t_type() const
-            {
-                return make_tuple( m_Begin, m_End );
-            }*/
-
         private:
             // begin and end iterators
             IteratorT m_Begin;
             IteratorT m_End;
             
         private:
-            template< class XRange >
-            iterator end_impl( XRange& r ) const
+            template< class ForwardRange >
+            iterator end_impl( ForwardRange& r ) const
             {
+                #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
                 using boost::end;
                 return end( r );
+                #else
+                return boost::end( r );
+                #endif
             }
             
-            template< class XRange >
-            iterator begin_impl( XRange& r ) const
+            template< class ForwardRange >
+            iterator begin_impl( ForwardRange& r ) const
             {
+                #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
                 using boost::begin;
                 return begin( r );
+                #else
+                return boost::begin( r );
+                #endif
             }
 
         };
@@ -267,19 +259,19 @@ namespace boost {
             Construct an \c iterator_range from a \c Range containing the begin
             and end iterators.
         */
-        template< class XRange >
-        inline iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<XRange>::type >
-        make_iterator_range( XRange& r ) 
+        template< class ForwardRange >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<ForwardRange>::type >
+        make_iterator_range( ForwardRange& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<XRange>::type >
+            return iterator_range< BOOST_DEDUCED_TYPENAME iterator_of<ForwardRange>::type >
                 ( r );
         }
 
-        template< class XRange >
-        inline iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<XRange>::type >
-        make_iterator_range( const XRange& r ) 
+        template< class ForwardRange >
+        inline iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<ForwardRange>::type >
+        make_iterator_range( const ForwardRange& r ) 
         {   
-            return iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<XRange>::type >
+            return iterator_range< BOOST_DEDUCED_TYPENAME const_iterator_of<ForwardRange>::type >
                 ( r );
         }
 #endif

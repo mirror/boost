@@ -31,7 +31,7 @@ namespace range
 {
 
         //////////////////////////////////////////////////////////////////////
-        // default
+        // primary template
         //////////////////////////////////////////////////////////////////////
         
         template< typename C >
@@ -106,7 +106,27 @@ namespace range
         
 } // namespace 'range'
 
-using range::end;
+template< class T >
+inline BOOST_DEDUCED_TYPENAME iterator_of<T>::type end( T& r )
+{
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    using range::end;
+    return end( r );
+#else
+    return range::end( r );
+#endif
+}
+
+template< class T >
+inline BOOST_DEDUCED_TYPENAME const_iterator_of<T>::type end( const T& r )
+{
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    using range::end;
+    return end( r );
+#else
+    return range::end( r );
+#endif
+}
 
 } // namespace 'boost'
 

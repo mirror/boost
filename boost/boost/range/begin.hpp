@@ -30,7 +30,7 @@ namespace range
 {
     
     //////////////////////////////////////////////////////////////////////
-    // default
+    // primary template
     //////////////////////////////////////////////////////////////////////
     
     template< typename C >
@@ -106,7 +106,28 @@ namespace range
 
 } // namespace 'range'
 
-using range::begin;
+
+template< class T >
+inline BOOST_DEDUCED_TYPENAME iterator_of<T>::type begin( T& r )
+{
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    using range::begin;
+    return begin( r );
+#else
+    return range::begin( r );
+#endif
+}
+
+template< class T >
+inline BOOST_DEDUCED_TYPENAME const_iterator_of<T>::type begin( const T& r )
+{
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    using range::begin;
+    return begin( r );
+#else
+    return range::begin( r );
+#endif
+}
 
 } // namespace boost
 
