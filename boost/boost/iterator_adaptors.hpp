@@ -658,39 +658,100 @@ struct indirect_iterator_policies : public default_iterator_policies
         { return **x; }
 };
 
+// This macro definition is only temporary in this file
+# if !defined(BOOST_MSVC)
+#  define BOOST_ARG_DEPENDENT_TYPENAME typename
+# else
+#  define BOOST_ARG_DEPENDENT_TYPENAME
+# endif
+
+namespace detail {
+#if !defined(BOOST_MSVC)
+  template <class T>
+  struct value_type_of_value_type {
+      typedef typename boost::detail::iterator_traits<T>::value_type outer_value;
+      typedef typename boost::detail::iterator_traits<outer_value>::value_type type;
+  };
+#else // Even this workaround doesn't fly :(
+  template <class Value>
+  struct inner_traits_select {
+      template <class Iter,class Pointer, class Reference>
+      struct rebind {
+          struct traits {
+              typedef typename boost::remove_const<Value>::type value_type;
+              typedef Pointer pointer;
+              typedef Reference reference;
+          };
+      };
+  };
+
+  struct no_value_type {};
+  template <>
+  struct inner_traits_select<no_value_type> {
+      template <class Iter,class Pointer, class Reference>
+      struct rebind {
+        typedef typename boost::detail::iterator_traits<Iter>::value_type outer_value;
+        typedef typename boost::detail::iterator_traits<outer_value> traits;
+      };
+  };
+#endif
+}
+
 template <class OuterIterator,      // Mutable or Immutable, does not matter
-          // Mutable reference and pointer type in traits class -> mutable indirect iterator;  
-          // Immutable reference and pointer type in traits class -> immutable indirect iterator
-          class InnerTraits = boost::detail::iterator_traits<typename boost::detail::iterator_traits<OuterIterator>::value_type>
+          class Value =
+#if !defined(BOOST_MSVC)
+                BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type,
+#else
+                detail::no_value_type,                                                                                              
+#endif
+          class Pointer = Value*,
+          class Reference = Value&
          >
 class indirect_iterator_generator
 {
-    typedef boost::detail::iterator_traits<OuterIterator> OuterTraits;
-    typedef typename OuterTraits::difference_type difference_type;
-    typedef typename OuterTraits::iterator_category iterator_category;
+    typedef boost::detail::iterator_traits<OuterIterator> outer_traits;
+    typedef typename outer_traits::difference_type difference_type;
+    typedef typename outer_traits::iterator_category iterator_category;
 
-    typedef typename InnerTraits::value_type value_type;
-    typedef typename InnerTraits::pointer pointer;
-    typedef typename InnerTraits::reference reference;
+#if !defined(BOOST_MSVC)
+    typedef typename boost::remove_const<Value>::type value_type;
+    typedef Pointer pointer;
+    typedef Reference reference;
+#else
+    typedef detail::inner_traits_select<Value>::template
+        rebind<OuterIterator,Pointer,Reference> inner_traits;
+    typedef typename inner_traits::value_type value_type;
+    typedef typename inner_traits::pointer pointer;
+    typedef typename inner_traits::reference reference;
+#endif
 public:
     typedef boost::iterator<iterator_category, value_type, difference_type, pointer, reference> indirect_traits;
     typedef iterator_adaptor<OuterIterator, indirect_iterator_policies, indirect_traits> type;
 };
 
 template <class OuterIterator,      // Mutable or Immutable, does not matter
-          class ConstInnerIterator, // Immutable
-          class ConstInnerTraits = boost::detail::iterator_traits<ConstInnerIterator>,
-          class InnerTraits = boost::detail::iterator_traits<typename boost::detail::iterator_traits<OuterIterator>::value_type>
+          class Value =
+#if !defined(BOOST_MSVC)
+                BOOST_ARG_DEPENDENT_TYPENAME detail::value_type_of_value_type<OuterIterator>::type,
+#else
+                detail::no_value_type,                                                                                              
+#endif
+          class Pointer = Value*,
+          class Reference = Value&,
+          class ConstPointer = const Value*,
+          class ConstReference = const Value&
            >
 struct indirect_iterator_pair_generator
 {
   typedef typename indirect_iterator_generator<OuterIterator,
-    InnerTraits>::type iterator;
+    Value, Pointer, Reference>::type iterator;
   typedef typename indirect_iterator_generator<OuterIterator,
-    ConstInnerTraits>::type const_iterator;
+    Value, ConstPointer, ConstReference>::type const_iterator;
 };
 
-#ifndef BOOST_NO_STD_ITERATOR_TRAITS
+# undef BOOST_ARG_DEPENDENT_TYPENAME
+
+# ifndef BOOST_NO_STD_ITERATOR_TRAITS
 template <class OuterIterator>
 inline typename indirect_iterator_generator<OuterIterator>::type
 make_indirect_iterator(OuterIterator base)
@@ -699,7 +760,7 @@ make_indirect_iterator(OuterIterator base)
         <OuterIterator>::type result_t;
     return result_t(base);
 }
-#endif
+# endif
 
 // Tried to allow InnerTraits to be provided by explicit template
 // argument to the function, but could not get it to work. -Jeremy Siek
