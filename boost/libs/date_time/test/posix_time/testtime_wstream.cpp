@@ -1,8 +1,9 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2003-2004 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
  * Author: Bart Garst
+ * $Date$
  */
 #include <iostream>
 #include <sstream>
@@ -16,7 +17,11 @@ using namespace boost::posix_time;
 using boost::lexical_cast;
 
 int main(){
-  std::wstring res;
+#ifdef BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS
+  check("No tests run for this compiler", true);
+#else
+  
+  std::wstring res, ws;
   std::wstringstream wss;
   /* time_period was used because all the time-type objects
    * that have operator<< can be easily accessed from it.
@@ -26,23 +31,58 @@ int main(){
 
   // ptime
   wss << tp.begin(); 
-  res = lexical_cast<std::wstring>("2003-Jan-20 01:00:00");
-  check("ptime", res == wss.str());
-  wss.str(lexical_cast<std::wstring>(""));
+  res = L"2003-Jan-20 01:00:00";
+  check("ptime op<<", res == wss.str());
+  wss.str(L"");
+  ws = to_simple_wstring(tp.begin());
+  check("ptime to_simple_wstring", res == ws);
+  res = L"20030120T010000";
+  ws = to_iso_wstring(tp.begin());
+  check("ptime to_iso_wstring", res == ws);
+  res = L"2003-01-20T01:00:00";
+  ws = to_iso_extended_wstring(tp.begin());
+  check("ptime to_iso_extended_wstring", res == ws);
+  
   // time_duration
   wss << tp.length(); 
-  res = lexical_cast<std::wstring>("2654:00:00");
+  res = L"2654:00:00";
   check("time_duration", res == wss.str());
-  wss.str(lexical_cast<std::wstring>(""));
+  wss.str(L"");
+  ws = to_simple_wstring(tp.length());
+  check("time_duration to_simple_wstring", res == ws);
+  res = L"26540000";
+  ws = to_iso_wstring(tp.length());
+  check("time_duration to_iso_wstring", res == ws);
+
   // time_period
   wss << tp;
 #ifdef BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
-  res = lexical_cast<std::wstring>("[2003-Jan-20 01:00:00/2003-May-10 14:59:59.999999999]");
+  res = L"[2003-Jan-20 01:00:00/2003-May-10 14:59:59.999999999]";
 #else
-  res = lexical_cast<std::wstring>("[2003-Jan-20 01:00:00/2003-May-10 14:59:59.999999]");
+  res = L"[2003-Jan-20 01:00:00/2003-May-10 14:59:59.999999]";
 #endif
   check("time_period", res == wss.str());
-  wss.str(lexical_cast<std::wstring>(""));
+  wss.str(L"");
+  ws = to_simple_wstring(tp);
+  check("time_period to_simple_wstring", res == ws);
 
+  // special values
+  time_duration sv_td(neg_infin);
+  date sv_d(pos_infin);
+  ptime sv_tp(sv_d,hours(1));
+  res = L"+infinity";
+  wss << sv_tp;
+  check("ptime op<< special value", res == wss.str());
+  wss.str(L"");
+  ws = to_simple_wstring(sv_tp);
+  check("ptime to_simple_wstring special value", res == ws);
+  res = L"-infinity";
+  wss << sv_td;
+  check("time_duration op<< special value", res == wss.str());
+  wss.str(L"");
+  ws = to_simple_wstring(sv_td);
+  check("time_duration to_simple_wstring special value", res == ws);
+  
+#endif
   return printTestStats();
 }
