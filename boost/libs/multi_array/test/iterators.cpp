@@ -113,7 +113,7 @@ void construct_iterators(Array&) {
 #endif
     typename Array::const_iterator ci2 = i1;
     typename Array::const_reverse_iterator cr2 = cr1;
-    ignore_unused_variable_warning(cr2);
+    boost::ignore_unused_variable_warning(cr2);
   }
 }
 
