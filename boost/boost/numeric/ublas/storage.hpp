@@ -1580,7 +1580,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template <class V>
     class index_pair :
-        private boost::noncopyable,
+        private noncopyable,
         public container_reference<V> {
     public:
         typedef index_pair<V> self_type;
@@ -1671,7 +1671,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template <class V1, class V2>
     class index_pair_array:
-        private boost::noncopyable {
+        private noncopyable {
     public:
         typedef index_pair_array<V1, V2> self_type;
         typedef typename V1::value_type value1_type;
@@ -1753,7 +1753,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template <class M>
     class index_triple :
-        private boost::noncopyable,
+        private noncopyable,
         public container_reference<M> {
     public:
         typedef index_triple<M> self_type;
@@ -1849,7 +1849,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template <class V1, class V2, class V3>
     class index_triple_array:
-        private boost::noncopyable {
+        private noncopyable {
     public:
         typedef index_triple_array<V1, V2, V3> self_type;
         typedef typename V1::value_type value1_type;
