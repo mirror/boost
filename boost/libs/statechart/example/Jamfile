@@ -74,7 +74,9 @@ stage run
     [ fsm-st-example-build Camera
         : Camera : Camera Configuring Main Shooting ]
     [ fsm-st-example-build Handcrafted : Handcrafted : Handcrafted ]
-    [ fsm-st-example-build Keyboard : Keyboard : Keyboard ]
+    [ fsm-st-example-build KeyboardNormal : Keyboard : Keyboard ]
+    [ fsm-st-example-build KeyboardNative : Keyboard : Keyboard
+        : <define>BOOST_FSM_USE_NATIVE_RTTI ]
     [ fsm-st-example-build PingPongSingle : PingPong : PingPong ]
     [ fsm-mt-example-build PingPongMulti1 : PingPong : PingPong ]
     [ fsm-mt-example-build PingPongMulti2
