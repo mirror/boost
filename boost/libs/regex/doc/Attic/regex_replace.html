@@ -29,7 +29,7 @@
       <H3><A name="synopsis"></A>Synopsis</H3>
       <PRE>#include &lt;<A href="../../../boost/regex.hpp">boost/regex.hpp</A>&gt; </PRE>
       <P>The algorithm regex_replace&nbsp;searches&nbsp;through&nbsp;a string finding 
-         all the matches to the regular expression: for each match it then calls <A href="match_results.html">
+         all the matches to the regular expression: for each match it then calls <A href="match_results.html#format">
             match_results::format</A> to format the string and sends the result to the 
          output iterator. Sections of text that do not match are copied to the output 
          unchanged only if the <EM>flags</EM> parameter does not have the flag <A href="match_flag_type.html">
@@ -37,39 +37,87 @@
          is set then only the first occurrence is replaced rather than all 
          occurrences.&nbsp;<PRE>template &lt;class OutputIterator, class BidirectionalIterator, class traits,
           class Allocator, class charT&gt;
-OutputIterator regex_replace(OutputIterator out,
+OutputIterator <A href="#f1">regex_replace</A>(OutputIterator out,
                            BidirectionalIterator first,
                            BidirectionalIterator last,
-                           const basic_regex&lt;charT, traits, Allocator&gt;&amp; e,
+                           const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;&amp; e,
                            const basic_string&lt;charT&gt;&amp; fmt,
-                           match_flag_type flags = match_default);
+                           <A href="match_flag_type.html">match_flag_type flags = match_default</A>);
 
 template &lt;class traits, class Allocator, class charT&gt;
-basic_string&lt;charT&gt; regex_replace(const basic_string&lt;charT&gt;&amp; s,
-                            const basic_regex&lt;charT, traits, Allocator&gt;&amp; e,
+basic_string&lt;charT&gt; <A href="#f2">regex_replace</A>(const basic_string&lt;charT&gt;&amp; s,
+                            const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;&amp; e,
                             const basic_string&lt;charT&gt;&amp; fmt,
-                            match_flag_type flags = match_default);
+                            <A href="match_flag_type.html">match_flag_type flags = match_default</A>);
 
 </PRE>
          <H3><A name="description"></A>Description</H3>
-         <PRE>template &lt;class OutputIterator, class BidirectionalIterator, class traits,
+         <PRE><A name=f1></A>template &lt;class OutputIterator, class BidirectionalIterator, class traits,
           class Allocator, class charT&gt;
 OutputIterator regex_replace(OutputIterator out,
                            BidirectionalIterator first,
                            BidirectionalIterator last,
-                           const basic_regex&lt;charT, traits, Allocator&gt;&amp; e,
+                           const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;&amp; e,
                            const basic_string&lt;charT&gt;&amp; fmt,
-                           match_flag_type flags = match_default);</PRE>
-      <P><B> Effects:</B> Finds all the non-overlapping matches <I>m</I> of type <CODE>match_results&lt;BidirectionalIterator&gt;
-         </CODE>that occur within the sequence [first, last). If no such matches are 
-         found and <CODE>!(flags &amp; format_no_copy)</CODE> then calls <CODE>std::copy(first, 
-            last, out)</CODE>. Otherwise, for each match found, if <CODE>!(flags &amp; 
-            format_no_copy)</CODE> calls <CODE>std::copy(m.prefix().first, m.prefix().last, 
-            out)</CODE>, and then calls <CODE>m.format(out, fmt, flags)</CODE>. Finally 
-         if <CODE>!(flags &amp; format_no_copy)</CODE> calls <CODE>std::copy(last_m.suffix().first, 
-            last_m,suffix().last, out) </CODE>where <CODE>last_m</CODE> is a copy of the 
-         last match found. If <CODE>flags &amp; format_first_only</CODE> is non-zero 
-         then only the first match found is replaced.</P>
+                           <A href="match_flag_type.html">match_flag_type flags = match_default</A>);</PRE>
+      <P>Enumerates all the occurences of expression <EM>e</EM> in the sequence [first, 
+         last), replacing each occurence with the string that results by merging the 
+         match found with the format string <EM>fmt</EM>, and copies the resulting 
+         string to <EM>out</EM>.&nbsp;</P>
+      <P>If the flag format_no_copy is set in <EM>flags</EM> then unmatched sections of 
+         text are not copied to output.&nbsp;
+      </P>
+      <P>If the flag format_first_only is set in <EM>flags</EM> then only the first 
+         occurence of <EM>e</EM> is replaced.&nbsp;
+      </P>
+      <P>The manner in which the format string <EM>fmt</EM> is interpretted, along with 
+         the rules used&nbsp;for finding matches,&nbsp;are determined by the <A href="match_flag_type.html">
+            flags</A> set in <EM>flags</EM></P>
+      <P><B>Effects:</B> Constructs an
+         <SPAN class="spelle">regex_iterator</SPAN>
+         object:
+      </P>
+      <PRE><SPAN style="FONT-SIZE: 10pt">regex_iterator&lt;</SPAN><SPAN class=spelle><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">BidirectionalIterator</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt">, </SPAN><SPAN class=spelle><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">charT</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt">, traits, Allocator&gt; <BR>                                            </SPAN><SPAN class=grame><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">i(</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt">first, last, e, flags)</SPAN>, </PRE>
+      <P>and uses
+         <SPAN class="spelle">
+            <I>i</I></SPAN>
+         to enumerate through all of the matches <I>m</I> of type
+         <SPAN class="spelle">
+            <SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">match_results</SPAN>
+         </SPAN><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">&lt;<SPAN class="spelle">BidirectionalIterator</SPAN>&gt; </SPAN>that 
+         occur within the sequence [first, last).
+      </P>
+      <P>If no such matches are found
+         <SPAN class="grame">and </SPAN></P>
+      <PRE><SPAN class=grame></SPAN><SPAN class=grame><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">!</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">(flags &amp; <SPAN class=spelle>format_no_copy</SPAN>)</SPAN> </PRE>
+      <P>then calls
+      </P>
+      <PRE><SPAN class=spelle><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">std::copy</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">(first, last, out)</SPAN>. </PRE>
+      <P>Otherwise, for each match found,
+         <SPAN class="grame">if </SPAN></P>
+      <PRE><SPAN class=grame></SPAN><SPAN class=grame><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">!</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">(flags &amp; <SPAN class=spelle>format_no_copy</SPAN>)</SPAN> </PRE>
+      <P>calls
+      </P>
+      <PRE><SPAN class=spelle><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">std::copy</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">(<SPAN class=spelle>m.prefix</SPAN>().first, <SPAN class=spelle>m.prefix</SPAN>().last, out)</SPAN>, </PRE>
+      <P>and then calls
+      </P>
+      <PRE><SPAN class=spelle><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">m.format</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">(out, <SPAN class=spelle>fmt</SPAN>, flags)</SPAN>. </PRE>
+      <P>Finally
+         <SPAN class="grame">if </SPAN></P>
+      <PRE><SPAN class=grame></SPAN><SPAN class=grame><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">!</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">(flags &amp; <SPAN class=spelle>format_no_copy</SPAN>)</SPAN> </PRE>
+      <P>calls
+      </P>
+      <PRE><SPAN class=spelle><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">std::copy</SPAN></SPAN><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">(<SPAN class=spelle>last_m.suffix</SPAN>().first, <SPAN class=spelle>last_m,suffix</SPAN>().last, out) </SPAN></PRE>
+      <P><SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'"></SPAN>where
+         <SPAN class="spelle">
+            <SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">last_m</SPAN>
+         </SPAN>
+         is a copy of the last match found.
+      </P>
+      <P>If
+         <SPAN style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">flags &amp; 
+<SPAN class="spelle">format_first_only</SPAN></SPAN>
+         is non-zero then only the first match found is replaced.</P>
       <P><STRONG>Throws:</STRONG> <CODE>std::runtime_error</CODE> if the complexity of 
          matching the expression against an N character string begins to exceed O(N<SUP>2</SUP>), 
          or if the program runs out of stack space while matching the expression (if 
@@ -78,11 +126,11 @@ OutputIterator regex_replace(OutputIterator out,
             configured</A> in non-recursive mode).</P>
       <P><B> Returns:</B> <CODE>out</CODE>.
       </P>
-      <PRE>template &lt;class traits, class Allocator, class charT&gt;
+      <PRE><A name=f2></A>template &lt;class traits, class Allocator, class charT&gt;
 basic_string&lt;charT&gt; regex_replace(const basic_string&lt;charT&gt;&amp; s,
-                            const basic_regex&lt;charT, traits, Allocator&gt;&amp; e,
+                            const <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;&amp; e,
                             const basic_string&lt;charT&gt;&amp; fmt,
-                            match_flag_type flags = match_default);</PRE>
+                            <A href="match_flag_type.html">match_flag_type flags = match_default</A>);</PRE>
       <P><B> Effects:</B> Constructs an object <CODE>basic_string&lt;charT&gt; result</CODE>, 
          calls <CODE>regex_replace(back_inserter(result), s.begin(), s.end(), e, fmt, 
             flags)</CODE>, and then returns <CODE>result</CODE>.

@@ -23,6 +23,11 @@
          </TABLE>
       </P>
       <HR>
+      <P>The regex library is thread safe when Boost is: you can verify that Boost is in 
+         thread safe mode by checking to see if BOOST_HAS_THREADS is defined: this macro 
+         is set automatically by the config system when threading support is turned on 
+         in your compiler.
+      </P>
       <P>Class <A href="basic_regex.html">basic_regex</A>&lt;&gt; and its typedefs regex 
          and wregex are thread safe, in that compiled regular expressions can safely be 
          shared between threads. The matching algorithms <A href="regex_match.html">regex_match</A>,
@@ -65,4 +70,3 @@
             for any purpose. It is provided "as is" without express or implied warranty.</I></P>
    </body>
 </html>
-

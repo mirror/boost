@@ -25,14 +25,15 @@
       <HR>
       <p></p>
       <P>If you are using Microsoft or Borland C++ and link to a dll version of the run 
-         time library, then you will also link to one of the dll versions of 
-         boost.regex. While these dll's are redistributable, there are no "standard" 
-         versions, so when installing on the users PC, you should place these in a 
-         directory private to your application, and not in the PC's directory path. Note 
-         that if you link to a static version of your run time library, then you will 
-         also link to a static version of boost.regex and no dll's will need to be 
-         distributed. The possible boost.regex dll and library names are computed 
-         according to the following formula:<BR>
+         time library, then you can choose to also link to a dll version of boost.regex 
+         by defining the symbol BOOST_REGEX_DYN_LINK when you compile your code. While 
+         these dll's are redistributable, there are no "standard" versions, so when 
+         installing on the users PC, you should place these in a directory private to 
+         your application, and not in the PC's directory path. Note that if you link to 
+         a static version of your run time library, then you will also link to a static 
+         version of boost.regex and no dll's will need to be distributed. The possible 
+         boost.regex dll and library names are computed according to the following 
+         formula:<BR>
       </P>
       <P></P>
       <P>BOOST_LIB_PREFIX<BR>

@@ -45,35 +45,35 @@ template &lt;class BidirectionalIterator,
 class regex_token_iterator 
 {
 public:
-   typedef          basic_regex&lt;charT, traits, Allocator&gt;                   regex_type;
+   typedef          <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;                   regex_type;
    typedef          basic_string&lt;charT&gt;                                     value_type;
    typedef typename iterator_traits&lt;BidirectionalIterator&gt;::difference_type difference_type;
    typedef          const value_type*                                       pointer;
    typedef          const value_type&amp;                                       reference;
    typedef          std::forward_iterator_tag                               iterator_category;
    
-   regex_token_iterator();
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
-                        int submatch = 0, match_flag_type m = match_default);
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
+   <A href="#c1">regex_token_iterator</A>();
+   <A href="#c2">regex_token_iterator</A>(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
+                        int submatch = 0, <A href="match_flag_type.html">match_flag_type</A> m = match_default);
+   <A href="#c3">regex_token_iterator</A>(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
                         const std::vector&lt;int&gt;&amp; submatches, match_flag_type m = match_default);
    template &lt;std::size_t N&gt;
-   regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
+   <A href="#c4">regex_token_iterator</A>(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
                         const int (&amp;submatches)[N], match_flag_type m = match_default);
-   regex_token_iterator(const regex_token_iterator&amp;);
-   regex_token_iterator&amp; operator=(const regex_token_iterator&amp;);
-   bool operator==(const regex_token_iterator&amp;);
-   bool operator!=(const regex_token_iterator&amp;);
-   const value_type&amp; operator*();
-   const value_type* operator-&gt;();
-   regex_token_iterator&amp; operator++();
-   regex_token_iterator operator++(int);
+   <A href="#c5">regex_token_iterator</A>(const regex_token_iterator&amp;);
+   regex_token_iterator&amp; <A href="#o1">operator</A>=(const regex_token_iterator&amp;);
+   bool <A href="#o2">operator</A>==(const regex_token_iterator&amp;)const;
+   bool <A href="#o3">operator</A>!=(const regex_token_iterator&amp;)const;
+   const value_type&amp; <A href="#o4">operator</A>*()const;
+   const value_type* <A href="#o5">operator</A>-&gt;()const;
+   regex_token_iterator&amp; <A href="#o6">operator</A>++();
+   regex_token_iterator <A href="#o7">operator</A>++(int);
 };
 </PRE>
       <H3><A name="description"></A>Description</H3>
-      <PRE>regex_token_iterator();</PRE>
+      <PRE><A name=c1></A>regex_token_iterator();</PRE>
       <P><B> Effects:</B> constructs an end of sequence iterator.</P>
-      <PRE>regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
+      <PRE><A name=c2></A>regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
                      int submatch = 0, match_flag_type m = match_default);</PRE>
       <P><B> Preconditions: </B><CODE>!re.empty()</CODE>.</P>
       <P><B> Effects:</B> constructs a regex_token_iterator that will enumerate one 
@@ -88,7 +88,7 @@ public:
          Boost.regex is <A href="configuration.html">configured</A> in recursive mode), 
          or if the matcher exhausts it's permitted memory allocation (if Boost.regex is <A href="configuration.html">
             configured</A> in non-recursive mode).</P>
-      <PRE>regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
+      <PRE><A name=c3></A>regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
                      const std::vector&lt;int&gt;&amp; submatches, match_flag_type m = match_default);</PRE>
       <P><B> Preconditions:</B> <CODE>submatches.size() &amp;&amp; !re.empty()</CODE>.</P>
       <P><B> Effects:</B> constructs a regex_token_iterator that will enumerate <EM>submatches.size()</EM>
@@ -106,7 +106,7 @@ public:
          Boost.regex is <A href="configuration.html">configured</A> in recursive mode), 
          or if the matcher exhausts it's permitted memory allocation (if Boost.regex is <A href="configuration.html">
             configured</A> in non-recursive mode).</P>
-      <PRE>template &lt;std::size_t N&gt;
+      <PRE><A name=c4></A>template &lt;std::size_t N&gt;
 regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type&amp; re, 
                      const int (&amp;submatches)[R], match_flag_type m = match_default);</PRE>
       <P><B> Preconditions: </B><CODE>!re.empty()</CODE>.</P>
@@ -126,25 +126,25 @@ regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const reg
          Boost.regex is <A href="configuration.html">configured</A> in recursive mode), 
          or if the matcher exhausts it's permitted memory allocation (if Boost.regex is <A href="configuration.html">
             configured</A> in non-recursive mode).</P>
-      <PRE>regex_token_iterator(const regex_token_iterator&amp; that);</PRE>
+      <PRE><A name=c5></A>regex_token_iterator(const regex_token_iterator&amp; that);</PRE>
       <P><B> Effects: </B>constructs a copy of <CODE>that</CODE>.</P>
       <P><B> Postconditions:</B> <CODE>*this == that</CODE>.</P>
-      <PRE>regex_token_iterator&amp; operator=(const regex_token_iterator&amp; that);</PRE>
+      <PRE><A name=o1></A>regex_token_iterator&amp; operator=(const regex_token_iterator&amp; that);</PRE>
       <P><B> Effects: </B>sets <CODE>*this</CODE> to be equal to&nbsp;<CODE>that</CODE>.</P>
       <P><B> Postconditions:</B> <CODE>*this == that</CODE>.</P>
-      <PRE>bool operator==(const regex_token_iterator&amp;);</PRE>
+      <PRE><A name=o2></A>bool operator==(const regex_token_iterator&amp;)const;</PRE>
       <P>
          <B>Effects: </B>returns true if *this is the same position as that.</P>
-      <PRE>bool operator!=(const regex_token_iterator&amp;);</PRE>
+      <PRE><A name=o3></A>bool operator!=(const regex_token_iterator&amp;)const;</PRE>
       <P>
          <B>Effects: </B>returns <CODE>!(*this == that)</CODE>.</P>
-      <PRE>const value_type&amp; operator*();</PRE>
+      <PRE><A name=o4></A>const value_type&amp; operator*()const;</PRE>
       <P>
          <B>Effects: </B>returns the current string being enumerated.</P>
-      <PRE>const value_type* operator-&gt;();</PRE>
+      <PRE><A name=o5></A>const value_type* operator-&gt;()const;</PRE>
       <P>
          <B>Effects: </B>returns <CODE>&amp;(*this)</CODE>.</P>
-      <PRE>regex_token_iterator&amp; operator++();</PRE>
+      <PRE><A name=o6></A>regex_token_iterator&amp; operator++();</PRE>
       <P>
          <B>Effects: </B>Moves on to the next string to be enumerated.</P>
       <P><STRONG>Throws:</STRONG> <CODE>std::runtime_error</CODE> if the complexity of 
@@ -155,7 +155,7 @@ regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const reg
             configured</A> in non-recursive mode).</P>
       <B>
          <P>
-         Returns:</B><CODE> *this</CODE>.</P><PRE>regex_token_iterator&amp; operator++(int);</PRE>
+         Returns:</B><CODE> *this</CODE>.</P><PRE><A name=o7></A>regex_token_iterator&amp; operator++(int);</PRE>
       <P><B> Effects:</B> constructs a copy <CODE>result</CODE> of <CODE>*this</CODE>, 
          then calls <CODE>++(*this)</CODE>.</P>
       <P><B> Returns:</B> <CODE>result</CODE>.<A name="examples"></A>

@@ -42,40 +42,39 @@ template &lt;class BidirectionalIterator,
 class regex_iterator 
 {
 public:
-   typedef          basic_regex&lt;charT, traits, Allocator&gt;                   regex_type;
-   typedef          match_results&lt;BidirectionalIterator&gt;                    value_type;
+   typedef          <A href="basic_regex.html">basic_regex</A>&lt;charT, traits, Allocator&gt;                   regex_type;
+   typedef          <A href="match_results.html">match_results</A>&lt;BidirectionalIterator&gt;                    value_type;
    typedef typename iterator_traits&lt;BidirectionalIterator&gt;::difference_type difference_type;
    typedef          const value_type*                                       pointer;
    typedef          const value_type&amp;                                       reference;
    typedef          std::forward_iterator_tag                               iterator_category;
    
-   regex_iterator();
-   regex_iterator(BidirectionalIterator a, BidirectionalIterator b, 
+   <A href="#c1">regex_iterator</A>();
+   <A href="#c2">regex_iterator</A>(BidirectionalIterator a, BidirectionalIterator b, 
                   const regex_type&amp; re, 
-                  match_flag_type m = match_default);
-   regex_iterator(const regex_iterator&amp;);
-   regex_iterator&amp; operator=(const regex_iterator&amp;);
-   bool operator==(const regex_iterator&amp;);
-   bool operator!=(const regex_iterator&amp;);
-   const value_type&amp; operator*();
-   const value_type* operator-&gt;();
-   regex_iterator&amp; operator++();
-   regex_iterator operator++(int);
+                  <A href="match_flag_type.html">match_flag_type</A> m = match_default);
+   <A href="#c3">regex_iterator</A>(const regex_iterator&amp;);
+   regex_iterator&amp; <A href="#o1">operator</A>=(const regex_iterator&amp;);
+   bool <A href="#o2">operator</A>==(const regex_iterator&amp;)const;
+   bool <A href="#o3">operator</A>!=(const regex_iterator&amp;)const;
+   const value_type&amp; <A href="#o4">operator</A>*()const;
+   const value_type* <A href="#o5">operator</A>-&gt;()const;
+   regex_iterator&amp; <A href="#o6">operator</A>++();
+   regex_iterator <A href="#o7">operator</A>++(int);
 };
 
 </pre>
       <h3><a name="description"></a>Description</h3>
       <p>A regex_iterator is constructed from a pair of iterators, and enumerates all 
          occurrences of a regular expression within that iterator range.</p>
-      <pre>
+      <pre><A name=c1></A>
 regex_iterator();
 </pre>
       <b></b>
       <p><b>Effects:</b> constructs an end of sequence regex_iterator.</p>
-      <pre>
-regex_iterator(BidirectionalIterator a, BidirectionalIterator b, 
+      <pre><A name=c2></A>regex_iterator(BidirectionalIterator a, BidirectionalIterator b, 
                const regex_type&amp; re, 
-               match_flag_type m = match_default);
+               <A href="match_flag_type.html">match_flag_type</A> m = match_default);
 </pre>
       <b></b>
       <p><b>Effects:</b> constructs a regex_iterator that will enumerate all occurrences 
@@ -88,32 +87,32 @@ regex_iterator(BidirectionalIterator a, BidirectionalIterator b,
          Boost.regex is <A href="configuration.html">configured</A> in recursive mode), 
          or if the matcher exhausts it's permitted memory allocation (if Boost.regex is <A href="configuration.html">
             configured</A> in non-recursive mode).</P>
-      <pre>
+      <pre><A name=c3></A>
 regex_iterator(const regex_iterator&amp; that);
 </pre>
       <b></b>
       <p><b>Effects:</b> constructs a copy of <code>that</code>.</p>
       <b></b>
       <p><b>Postconditions:</b> <code>*this == that</code>.</p>
-      <pre>
+      <pre><A name=o1></A>
 regex_iterator&amp; operator=(const regex_iterator&amp;);
 </pre>
       <b></b>
       <p><b>Effects:</b> sets&nbsp;<code>*this</code> equal to those in <code>that</code>.</p>
       <b></b>
       <p><b>Postconditions:</b> <code>*this == that</code>.</p>
-      <pre>
-bool operator==(const regex_iterator&amp; that);
+      <pre><A name=o2></A>
+bool operator==(const regex_iterator&amp; that)const;
 </pre>
       <b></b>
       <p><b>Effects:</b> returns true if *this is equal to that.</p>
-      <pre>
-bool operator!=(const regex_iterator&amp;);
+      <pre><A name=o3></A>
+bool operator!=(const regex_iterator&amp;)const;
 </pre>
       <b></b>
       <p><b>Effects:</b> returns <code>!(*this == that)</code>.</p>
-      <pre>
-const value_type&amp; operator*();
+      <pre><A name=o4></A>
+const value_type&amp; operator*()const;
 </pre>
       <p><b>Effects:</b> dereferencing a regex_iterator object <em>it</em> yields a 
          const reference to a <a href="match_results.html">match_results</a> object, 
@@ -159,7 +158,8 @@ const value_type&amp; operator*();
                   <p>(*it).prefix().last</p>
                </td>
                <td valign="top" width="50%">
-                  <p>(*it)[0].first</p>
+                  <p>The same as the start of the match found:<BR>
+                     (*it)[0].first</p>
                </td>
             </tr>
             <tr>
@@ -167,7 +167,8 @@ const value_type&amp; operator*();
                   <p>(*it).prefix().matched</p>
                </td>
                <td valign="top" width="50%">
-                  <p>(*it).prefix().first != (*it).prefix().second</p>
+                  <p>True if the prefix did not match an empty string:<BR>
+                     (*it).prefix().first != (*it).prefix().second</p>
                </td>
             </tr>
             <tr>
@@ -175,7 +176,8 @@ const value_type&amp; operator*();
                   <p>(*it).suffix().first</p>
                </td>
                <td valign="top" width="50%">
-                  <p>(*it)[0].second</p>
+                  <p>The same as the end of the match found:<BR>
+                     (*it)[0].second</p>
                </td>
             </tr>
             <tr>
@@ -191,7 +193,8 @@ const value_type&amp; operator*();
                   <p>(*it).suffix().matched</p>
                </td>
                <td valign="top" width="50%">
-                  <p>(*it).suffix().first != (*it).suffix().second</p>
+                  <p>True if the suffix did not match an empty string:<BR>
+                     (*it).suffix().first != (*it).suffix().second</p>
                </td>
             </tr>
             <tr>
@@ -259,12 +262,12 @@ const value_type&amp; operator*();
       </table>
       <br>
       <br>
-      <pre>
-const value_type* operator-&gt;();
+      <pre><A name=o5></A>
+const value_type* operator-&gt;()const;
 </pre>
       <b></b>
       <p><b>Effects:</b> returns <code>&amp;(*this)</code>.</p>
-      <pre>
+      <pre><A name=o6></A>
 regex_iterator&amp; operator++();
 </pre>
       <p><strong>Effects:</strong> moves the iterator to the next match in the 
@@ -282,7 +285,7 @@ regex_iterator&amp; operator++();
             configured</A> in non-recursive mode).</P>
       <b></b>
       <p><b>Returns:</b> <code>*this</code>.</p>
-      <pre>
+      <pre><A name=o7></A>
 regex_iterator operator++(int);
 </pre>
       <b></b>

@@ -1,46 +1,36 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
-<head>
-<meta name="generator" content="HTML Tidy, see www.w3.org">
-<title>Boost.Regex: match_flag_type</title>
-<meta http-equiv="Content-Type" content=
-"text/html; charset=iso-8859-1">
-<link rel="stylesheet" type="text/css" href="../../../boost.css">
-</head>
-<body>
-<p></p>
-
-<table id="Table1" cellspacing="1" cellpadding="1" width="100%"
-border="0">
-<tr>
-<td valign="top" width="300">
-<h3><a href="../../../index.htm"><img height="86" width="277" alt=
-"C++ Boost" src="../../../c++boost.gif" border="0"></a></h3>
-</td>
-<td width="353">
-<h1 align="center">Boost.Regex</h1>
-
-<h2 align="center">match_flag_type</h2>
-</td>
-<td width="50">
-<h3><a href="index.html"><img height="45" width="43" alt=
-"Boost.Regex Index" src="uarrow.gif" border="0"></a></h3>
-</td>
-</tr>
-</table>
-
-<br>
-<br>
- 
-
-<hr>
-<h3>Synopsis</h3>
-
-<p>The type <code>match_flag_type</code> is an implementation
-defined bitmask type (17.3.2.1.2) that controls how a regular
-expression is matched against a character sequence.</p>
-
-<pre>
+   <head>
+      <title>Boost.Regex: match_flag_type</title>
+      <meta name="generator" content="HTML Tidy, see www.w3.org">
+      <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+      <link rel="stylesheet" type="text/css" href="../../../boost.css">
+   </head>
+   <body>
+      <p></p>
+      <table id="Table1" cellspacing="1" cellpadding="1" width="100%" border="0">
+         <tr>
+            <td valign="top" width="300">
+               <h3><a href="../../../index.htm"><img height="86" width="277" alt="C++ Boost" src="../../../c++boost.gif" border="0"></a></h3>
+            </td>
+            <td width="353">
+               <h1 align="center">Boost.Regex</h1>
+               <h2 align="center">match_flag_type</h2>
+            </td>
+            <td width="50">
+               <h3><a href="index.html"><img height="45" width="43" alt="Boost.Regex Index" src="uarrow.gif" border="0"></a></h3>
+            </td>
+         </tr>
+      </table>
+      <br>
+      <br>
+      <hr>
+      <h3>Synopsis</h3>
+      <p>The type <code>match_flag_type</code> is an implementation defined bitmask type 
+         (17.3.2.1.2) that controls how a regular expression is matched against a 
+         character sequence.&nbsp; The behavior of the format flags is descibed in more 
+         detail in the <A href="format_syntax.html">format syntax guide</A>.</p>
+      <pre>
 namespace std{ namespace regex_constants{
 
 typedef bitmask_type match_flag_type;
@@ -70,261 +60,213 @@ static const match_flag_type format_all;
 } // namespace regex_constants
 } // namespace std
 </pre>
-
-<h3>Description</h3>
-
-<p>The type <code>match_flag_type</code> is an implementation
-defined bitmask type (17.3.2.1.2). When matching a regular
-expression against a sequence of characters [first, last) then
-setting its elements has the effects listed in the table below:</p>
-
-<p></p>
-
-<table id="Table2" cellspacing="1" cellpadding="7" width="100%"
-border="0">
-<tr>
-<td valign="top" width="50%">
-<p>Element</p>
-</td>
-<td valign="top" width="50%">
-<p>Effect if set</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_default</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that matching of regular expressions proceeds without
-any modification of the normal rules used in ECMA-262, ECMAScript
-Language Specification, Chapter 15 part 10, RegExp (Regular
-Expression) Objects (FWD.1)</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">match_not_bob</td>
-<td valign="top" width="50%">Specifies that the expression "\A"
-should not match against the sub-sequence [first,first).</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">match_not_eob</td>
-<td valign="top" width="50%">Specifies that the expressions "\z"
-and "\Z"&nbsp;should not match against the sub-sequence
-[last,last).</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_not_bol</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that the expression "^" should not be matched against
-the sub-sequence [first,first).</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_not_eol</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that the expression "$" should not be matched against
-the sub-sequence [last,last).</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_not_bow</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that the expression "\b" should not be matched against
-the sub-sequence [first,first).</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_not_eow</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that the expression "\b" should not be matched against
-the sub-sequence [last,last).</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_any</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that if more than one match is possible then any match
-is an acceptable result.</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_not_null</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that the expression can not be matched against an
-empty sequence.</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_continuous</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that the expression must match a sub-sequence that
-begins at <i>first</i>.</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_partial</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that if no match can be found, then it is acceptable
-to return a match [from, last) where from!=last, if there exists
-some sequence of characters [from,to) of which [from,last) is a
-prefix, and which would result in a full match.</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>match_prev_avail</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that <code>--first</code> is a valid iterator
-position, when this flag is set then the flags <code>
-match_not_bol</code> and <code>match_not_bow</code> are ignored by
-the regular expression algorithms (RE.7) and iterators (RE.8).</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">match_not_dot_newline</td>
-<td valign="top" width="50%">Specifies that the expression "." does
-not match a newline character.</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">match_not_dot_null</td>
-<td valign="top" width="50%">Specified that the expression "." does
-not match a character null '\0'.</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>format_default</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that when a regular expression match is to be replaced
-by a new string, that the new string is constructed using the rules
-used by the ECMAScript replace function in ECMA-262, ECMAScript
-Language Specification, Chapter 15 part 5.4.11
-String.prototype.replace. (FWD.1). In addition during search and
-replace operations then all non-overlapping occurrences of the
-regular expression are located and replaced, and sections of the
-input that did not match the expression, are copied unchanged to
-the output string.</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>format_sed</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that when a regular expression match is to be replaced
-by a new string, that the new string is constructed using the rules
-used by the Unix sed utility in IEEE Std 1003.1-2001, Portable
-Operating SystemInterface (POSIX ), Shells and Utilities..</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>format_perl</p>
-</td>
-<td valign="top" width="50%">
-<p>Specifies that when a regular expression match is to be replaced
-by a new string, that the new string is constructed using an
-implementation defined superset of the rules used by the ECMAScript
-replace function in ECMA-262, ECMAScript Language Specification,
-Chapter 15 part 5.4.11 String.prototype.replace (FWD.1).</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%" height="32">format_all</td>
-<td valign="top" width="50%" height="32">Specifies that all syntax
-extensions are enabled, including conditional
-(?ddexpression1:expression2) replacements.</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>format_no_copy</p>
-</td>
-<td valign="top" width="50%">
-<p>When specified during a search and replace operation, then
-sections of the character container sequence being searched that do
-match the regular expression, are not copied to the output
-string.</p>
-</td>
-</tr>
-
-<tr>
-<td valign="top" width="50%">
-<p>format_first_only</p>
-</td>
-<td valign="top" width="50%">
-<p>When specified during a search and replace operation, then only
-the first occurrence of the regular expression is replaced.</p>
-</td>
-</tr>
-</table>
-
-<br>
-<br>
- 
-
-<p></p>
-
-<hr>
-<br>
-<br>
- 
-
-<p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->
-17 May 2003 
-<!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
-
-<p><i>&copy; Copyright <a href="mailto:jm@regex.fsnet.co.uk">John
-Maddock</a>&nbsp;1998-
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->
-2003
-<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
-
-<p align="left"><i>Permission to use, copy, modify, distribute and
-sell this software and its documentation for any purpose is hereby
-granted without fee, provided that the above copyright notice
-appear in all copies and that both that copyright notice and this
-permission notice appear in supporting documentation. Dr John
-Maddock makes no representations about the suitability of this
-software for any purpose. It is provided "as is" without express or
-implied warranty.</i></p>
-</body>
+      <h3>Description</h3>
+      <p>The type <code>match_flag_type</code> is an implementation defined bitmask type 
+         (17.3.2.1.2). When matching a regular expression against a sequence of 
+         characters [first, last) then setting its elements has the effects listed in 
+         the table below:</p>
+      <p></p>
+      <table id="Table2" cellspacing="1" cellpadding="7" width="100%" border="0">
+         <tr>
+            <td valign="top" width="50%">
+               <p>Element</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Effect if set</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_default</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that matching of regular expressions proceeds without any 
+                  modification of the normal rules used in ECMA-262, ECMAScript Language 
+                  Specification, Chapter 15 part 10, RegExp (Regular Expression) Objects (FWD.1)</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">match_not_bob</td>
+            <td valign="top" width="50%">Specifies that the expression "\A" should not match 
+               against the sub-sequence [first,first).</td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">match_not_eob</td>
+            <td valign="top" width="50%">Specifies that the expressions "\z" and 
+               "\Z"&nbsp;should not match against the sub-sequence [last,last).</td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_not_bol</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that the expression "^" should not be matched against the 
+                  sub-sequence [first,first).</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_not_eol</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that the expression "$" should not be matched against the 
+                  sub-sequence [last,last).</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_not_bow</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that the expression "\b" should not be matched against the 
+                  sub-sequence [first,first).</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_not_eow</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that the expression "\b" should not be matched against the 
+                  sub-sequence [last,last).</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_any</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that if more than one match is possible then any match is an 
+                  acceptable result.</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_not_null</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that the expression can not be matched against an empty sequence.</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_continuous</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that the expression must match a sub-sequence that begins at <i>first</i>.</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_partial</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that if no match can be found, then it is acceptable to return a 
+                  match [from, last) where from!=last, if there exists some sequence of 
+                  characters [from,to) of which [from,last) is a prefix, and which would result 
+                  in a full match.</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>match_prev_avail</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that <code>--first</code> is a valid iterator position, when this 
+                  flag is set then the flags <code>match_not_bol</code> and <code>match_not_bow</code>
+                  are ignored by the regular expression algorithms (RE.7) and iterators (RE.8).</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">match_not_dot_newline</td>
+            <td valign="top" width="50%">Specifies that the expression "." does not match a 
+               newline character.</td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">match_not_dot_null</td>
+            <td valign="top" width="50%">Specified that the expression "." does not match a 
+               character null '\0'.</td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>format_default</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that when a regular expression match is to be replaced by a new 
+                  string, that the new string is constructed using the rules used by the 
+                  ECMAScript replace function in ECMA-262, ECMAScript Language Specification, 
+                  Chapter 15 part 5.4.11 String.prototype.replace. (FWD.1). In addition during 
+                  search and replace operations then all non-overlapping occurrences of the 
+                  regular expression are located and replaced, and sections of the input that did 
+                  not match the expression, are copied unchanged to the output string.</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>format_sed</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>Specifies that when a regular expression match is to be replaced by a new 
+                  string, that the new string is constructed using the rules used by the Unix sed 
+                  utility in IEEE Std 1003.1-2001, Portable Operating SystemInterface (POSIX ), 
+                  Shells and Utilities..</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>format_perl</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>
+                  Specifies that when a regular expression match is to be replaced by a new 
+                  string, that the new string is constructed using the same rules as Perl 5.</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%" height="32">format_all</td>
+            <td valign="top" width="50%" height="32">Specifies that all syntax extensions are 
+               enabled, including conditional (?ddexpression1:expression2) replacements: see 
+               the <A href="format_syntax.html">format string guide</A> for more details.</td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>format_no_copy</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>When specified during a search and replace operation, then sections of the 
+                  character container sequence being searched that do match the regular 
+                  expression, are not copied to the output string.</p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">
+               <p>format_first_only</p>
+            </td>
+            <td valign="top" width="50%">
+               <p>When specified during a search and replace operation, then only the first 
+                  occurrence of the regular expression is replaced.</p>
+            </td>
+         </tr>
+      </table>
+      <br>
+      <br>
+      <p></p>
+      <hr>
+      <br>
+      <br>
+      <p>Revised 
+         <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
+         17 May 2003 
+         <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
+      <p><i>© Copyright <a href="mailto:jm@regex.fsnet.co.uk">John Maddock</a>&nbsp;1998- 
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
+            2003 
+            <!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+      <p align="left"><i>Permission to use, copy, modify, distribute and sell this software 
+            and its documentation for any purpose is hereby granted without fee, provided 
+            that the above copyright notice appear in all copies and that both that 
+            copyright notice and this permission notice appear in supporting documentation. 
+            Dr John Maddock makes no representations about the suitability of this software 
+            for any purpose. It is provided "as is" without express or implied warranty.</i></p>
+   </body>
 </html>
-
-

@@ -62,7 +62,7 @@
          to be hard-coded to the C-locale, consequently this was not an issue for them). 
          That leaves us with the following regular expression to validate credit card 
          number formats:</P>
-      <P>(\d{4}[- ]){3}\d{4}</P>
+      <PRE>(\d{4}[- ]){3}\d{4}</PRE>
       <P>Here the parenthesis act to group (and mark for future reference) 
          sub-expressions, and the {4} means "repeat exactly 4 times". This is an example 
          of the extended regular expression syntax used by Perl, awk and egrep. Regex++ 
@@ -93,8 +93,9 @@
          need two strings - one a regular expression - the other a "<A href="format_syntax.html">format 
             string</A>" that provides a description of the text to replace the match 
          with. In regex++ this search and replace operation is performed with the 
-         algorithm regex_replace, for our credit card example we can write two algorithms 
-         like this to provide the format conversions:</P>
+         algorithm<A href="regex_replace.html"> regex_replace</A>, for our credit card 
+         example we can write two algorithms like this to provide the format 
+         conversions:</P>
       <PRE><I>// match any format with the regular expression:
 </I><B>const</B> boost::regex e("\\A(\\d{3,4})[- ]?(\\d{4})[- ]?(\\d{4})[- ]?(\\d{4})\\z");
 <B>const</B> std::string machine_format("\\1\\2\\3\\4");
@@ -126,22 +127,31 @@ std::string human_readable_card_number(<B>const</B> std::string s)
 <STRONG>typedef</STRONG> match_results&lt;std::string::const_iterator&gt; smatch;
 <STRONG>typedef</STRONG> match_results&lt;std::wstring::const_iterator&gt; wsmatch; 
 }</PRE>
-      <P>The algorithms <A href="regex_search.html">regex_search</A> and <A href="regex_grep.html">
-            regex_grep</A> (i.e. finding all matches in a string) make use of 
-         match_results to report what matched.</P>
+      <P>The algorithms <A href="regex_search.html">regex_search</A> and&nbsp;<A href="regex_match.html">regex_match</A>
+         make use of match_results to report what matched; the difference between these 
+         algorithms is that <A href="regex_match.html">regex_match</A> will only find 
+         matches that consume <EM>all</EM> of the input text, where as <A href="regex_search.html">
+            regex_search</A> will <EM>search</EM> for a match anywhere within the text 
+         being matched.</P>
       <P>Note that these algorithms are not restricted to searching regular C-strings, 
          any bidirectional iterator type can be searched, allowing for the possibility 
          of seamlessly searching almost any kind of data.
       </P>
-      <P>For search and replace operations in addition to the algorithm <A href="regex_replace.html">
-            regex_replace</A> that we have already seen, the algorithm <A href="regex_format.html">
-            regex_format</A> takes the result of a match and a format string, and 
-         produces a new string by merging the two.</P>
+      <P>For search and replace operations, in addition to the algorithm <A href="regex_replace.html">
+            regex_replace</A> that we have already seen, the <A href="match_results.html">match_results</A>
+         class has a format member that takes the result of a match and a format string, 
+         and produces a new string by merging the two.</P>
+      <P>For iterating through all occurences of an expression within a text, there are 
+         two iterator types: <A href="regex_iterator.html">regex_iterator</A> will 
+         enumerate over the <A href="match_results.html">match_results</A> objects 
+         found, while <A href="regex_token_iterator.html">regex_token_iterator</A> will 
+         enumerate a series of strings (similar to perl style split operations).</P>
       <P>For those that dislike templates, there is a high level wrapper class RegEx 
          that is an encapsulation of the lower level template code - it provides a 
          simplified interface for those that don't need the full power of the library, 
          and supports only narrow characters, and the "extended" regular expression 
-         syntax.
+         syntax. This class is now deprecated as it does not form part of the regular 
+         expressions C++ standard library proposal.
       </P>
       <P>The <A href="posix_api.html">POSIX API</A> functions: regcomp, regexec, regfree 
          and regerror, are available in both narrow character and Unicode versions, and 
@@ -162,7 +172,7 @@ std::string human_readable_card_number(<B>const</B> std::string s)
          17 May 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" -->
       </p>
-      <P><I>© Copyright <a href="mailto:jm@regex.fsnet.co.uk">John Maddock</a>&nbsp;1998-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></I></P>
+      <P><I>© Copyright <a href="mailto:jm@regex.fsnet.co.uk">John Maddock</a>&nbsp;1998-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></I></P>
       <P align="left"><I>Permission to use, copy, modify, distribute and sell this software 
             and its documentation for any purpose is hereby granted without fee, provided 
             that the above copyright notice appear in all copies and that both that 
@@ -171,6 +181,3 @@ std::string human_readable_card_number(<B>const</B> std::string s)
             for any purpose. It is provided "as is" without express or implied warranty.</I></P>
    </body>
 </html>
-
-
-
