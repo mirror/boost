@@ -185,6 +185,9 @@ public:
   virtual const std::type_info& key()   const { return typeid(key_type); }
   virtual const std::type_info& value() const { return typeid(value_type); }
 
+  PropertyMap&       base()       { return property_map; }
+  const PropertyMap& base() const { return property_map; }
+
 private:
   PropertyMap property_map;
 };
