@@ -34,7 +34,11 @@ struct printer
     printer(std::ostream& s) : f_stream(&s) {}
     template< typename U > void operator()(mpl::identity<U>)
     {
+#if defined(__GNUC__) && (__GNUC__ >= 3 && !defined(BOOST_STRICT_CONFIG))
+        *f_stream << reinterpret_cast<wchar_t const*>(typeid(U).name()) << '\n';
+#else
         *f_stream << typeid(U).name() << '\n';
+#endif
     }
 
  private:
