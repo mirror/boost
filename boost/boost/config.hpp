@@ -146,6 +146,9 @@
 //  BOOST_NO_HASH: The C++ implementation does not provide the hash_set
 //  or hash_map classes.
 
+//  BOOST_STD_EXTENSION_NAMESPACE: The name of the namespace in which the slist,
+//  hash_set and/or hash_map templates are defined in this implementation (if any).
+
 //  BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS: The standard library does not provide
 //  templated iterator constructors for its containers.
 
@@ -252,6 +255,8 @@
 #     define BOOST_DECL __declspec(dllimport)
 #   endif
 
+#   define BOOST_STD_EXTENSION_NAMESPACE Metrowerks
+
 //  Sun Workshop Compiler C++ ------------------------------------------------//
 
 # elif defined  __SUNPRO_CC
@@ -331,6 +336,10 @@
 # endif
 
 //  end of compiler specific portion  ----------------------------------------//
+
+#ifndef BOOST_STD_EXTENSION_NAMESPACE
+# define BOOST_STD_EXTENSION_NAMESPACE std
+#endif
 
 // Check for old name "BOOST_NMEMBER_TEMPLATES" for compatibility  -----------//
 // Don't use BOOST_NMEMBER_TEMPLATES. It is deprecated and will be removed soon.
