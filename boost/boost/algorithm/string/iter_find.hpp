@@ -81,14 +81,20 @@ namespace boost {
             
             input_iterator_type InputEnd=end(Input);
 
-            SequenceSequenceT Tmp(
+            typedef transform_iterator<copy_range_type, find_iterator_type>
+                transform_iter_type;
+    
+            transform_iter_type itBegin=
                 make_transform_iterator( 
                     find_iterator_type( begin(Input), InputEnd, Finder ),
-                    copy_range_type() ),
+                    copy_range_type());
+            transform_iter_type itEnd=
                 make_transform_iterator( 
                     find_iterator_type(),
-                    copy_range_type() ) );
+                    copy_range_type());
 
+            SequenceSequenceT Tmp(itBegin, itEnd);
+                        
             Result.swap(Tmp);
             return Result;
         }
@@ -141,14 +147,21 @@ namespace boost {
             
             input_iterator_type InputEnd=end(Input);
 
-            SequenceSequenceT Tmp(
+            typedef transform_iterator<copy_range_type, find_iterator_type>
+                transform_iter_type;
+    
+            transform_iter_type itBegin=
                 make_transform_iterator( 
                     find_iterator_type( begin(Input), InputEnd, Finder ),
-                    copy_range_type() ),
+                    copy_range_type() );
+
+            transform_iter_type itEnd=
                 make_transform_iterator( 
                     find_iterator_type(),
-                    copy_range_type() ) );
+                    copy_range_type() );
             
+            SequenceSequenceT Tmp(itBegin, itEnd);
+
             Result.swap(Tmp);
             return Result;
         }
