@@ -20,28 +20,28 @@
 namespace boost
 {
     
-    template< class XRange > 
-    class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<XRange>::type > 
+    template< class ForwardRange > 
+    class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME result_iterator_of<ForwardRange>::type > 
     {
         sub_range(); // not implemented
         
-        typedef BOOST_DEDUCED_TYPENAME result_iterator_of<XRange>::type iterator_t;
+        typedef BOOST_DEDUCED_TYPENAME result_iterator_of<ForwardRange>::type iterator_t;
         typedef iterator_range< iterator_t  > base;
         
     public:
         using base::iterator;
         using base::const_iterator;
         using base::value_type;
-        typedef BOOST_DEDUCED_TYPENAME difference_type_of<XRange>::type difference_type;
-        typedef BOOST_DEDUCED_TYPENAME size_type_of<XRange>::type size_type;
+        typedef BOOST_DEDUCED_TYPENAME difference_type_of<ForwardRange>::type difference_type;
+        typedef BOOST_DEDUCED_TYPENAME size_type_of<ForwardRange>::type size_type;
 
     public:
-        template< class XRange2 >
-        sub_range( XRange2& r ) : base( r )
+        template< class ForwardRange2 >
+        sub_range( ForwardRange2& r ) : base( r )
         { }
         
-        template< class XRange2 >
-        sub_range( const XRange2& r ) : base( r )
+        template< class ForwardRange2 >
+        sub_range( const ForwardRange2& r ) : base( r )
         { }
 
         template< class Iter >
@@ -49,15 +49,15 @@ namespace boost
             base( first, last )
         { }
         
-        template< class XRange2 >
-        sub_range& operator=( XRange2& r )
+        template< class ForwardRange2 >
+        sub_range& operator=( ForwardRange2& r )
         {
             base::operator=( r );
             return *this;
         }
 
-        template< class XRange2 >
-        sub_range& operator=( const XRange2& r )
+        template< class ForwardRange2 >
+        sub_range& operator=( const ForwardRange2& r )
         {
             base::operator=( r );
             return *this;

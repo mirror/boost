@@ -85,26 +85,26 @@ namespace boost {
             //! Constructor from a Range
             template< class Range >
             iterator_range( const Range& r ) : 
-                m_Begin( begin_impl( r ) ), m_End( end_impl( r ) ) {}
+                m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
 
             //! Constructor from a Range
             template< class Range >
             iterator_range( Range& r ) : 
-            m_Begin( begin_impl( r ) ), m_End( end_impl( r ) ) {}
+            m_Begin( boost::begin( r ) ), m_End( boost::end( r ) ) {}
             
             template< class ForwardRange >
             iterator_range& operator=( ForwardRange& r )
             {
-                m_Begin = begin_impl( r ); 
-                m_End   = end_impl( r );
+                m_Begin = boost::begin( r ); 
+                m_End   = boost::end( r );
                 return *this;
             }
 
             template< class ForwardRange >
             iterator_range& operator=( const ForwardRange& r )
             {
-                m_Begin = begin_impl( r ); 
-                m_End   = end_impl( r );
+                m_Begin = boost::begin( r ); 
+                m_End   = boost::end( r );
                 return *this;
             }
 
@@ -163,29 +163,6 @@ namespace boost {
             IteratorT m_Begin;
             IteratorT m_End;
             
-        private:
-            template< class ForwardRange >
-            iterator end_impl( ForwardRange& r ) const
-            {
-                #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
-                using boost::end;
-                return end( r );
-                #else
-                return boost::end( r );
-                #endif
-            }
-            
-            template< class ForwardRange >
-            iterator begin_impl( ForwardRange& r ) const
-            {
-                #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))        
-                using boost::begin;
-                return begin( r );
-                #else
-                return boost::begin( r );
-                #endif
-            }
-
         };
 
 //  iterator range free-standing operators ---------------------------//

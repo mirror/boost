@@ -22,16 +22,18 @@
 #else
 
 #include <boost/range/detail/implementation_help.hpp>
+#include <boost/range/size_type.hpp>
 #include <cstddef>
 #include <iterator>
 #include <utility>
 
-namespace boost { 
+namespace boost 
+{
 namespace range 
 {
 
         //////////////////////////////////////////////////////////////////////
-        // default
+        // primary template
         //////////////////////////////////////////////////////////////////////
         
         template< typename C >
@@ -83,7 +85,16 @@ namespace range
         
 } // namespace 'range'
 
-using range::size;
+template< class T >
+inline BOOST_DEDUCED_TYPENAME size_type_of<T>::type size( const T& r )
+{
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    using range::size;
+    return size( r );
+#else
+    return range::size( r );
+#endif
+}
 
 } // namespace 'boost'
 
