@@ -88,7 +88,7 @@ namespace boost {
 namespace detail {
 
 // Helmut Zeisel, empty base class optimization bug with GCC 3.0.0
-#if defined(__GNUCC__) && __GNUC__==3 && __GNUC_MINOR__==0 && __GNU_PATCHLEVEL__==0
+#if defined(__GNUC__) && __GNUC__==3 && __GNUC_MINOR__==0 && __GNU_PATCHLEVEL__==0
 class empty_base {
   bool dummy; 
 };
