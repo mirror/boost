@@ -51,7 +51,7 @@ public:
 
 
 template< class C >
-range_inserter<C> make_range_inserter( C& c )
+inline range_inserter<C> make_range_inserter( C& c )
 {
     return range_inserter<C>( c );
 }
@@ -72,7 +72,7 @@ public:
     ba::list_inserter< range_inserter< vector_t >, T >
     operator=( T r )
     {
-        return ba::make_list_inserter( range_inserter< vector_t >( data_ ), &r )( r );
+        return ba::make_list_inserter( make_range_inserter( data_ ) )( r );
     }
     
     size_type size() const

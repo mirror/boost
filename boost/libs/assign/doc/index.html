@@ -28,9 +28,8 @@
   </p>
   <h3>Table of Contents</h3>
   <ul>
-    <li><a href="#intro">Introduction</a>
+    <li><a href="#intro">Introduction</a></li>
     <li>     
-        <p align="left" >
         <a href="#tutorial" >Tutorial</a>
         <ul>
             <li>Function <a href="#operator+="><code>operator+=()</code></a>
@@ -41,7 +40,6 @@
             <li>A <a href="#complicated">"complicated"</a> example    
         </ul>
       <li>          
-        <p align="left">
         <a href="#reference">Reference</a>
       <ul>
         <li><a href="#headers">Headers</a> </li>
@@ -54,6 +52,7 @@
      </ul>
     <li> <a href="#exceptions">Exceptions and exception-safety </a></li>
     <li> <a href="#extensions">Extending the library</a>            
+    <li> <a href="#boost_libs">Supported libraries </a>        
     <li> <a href="#examples">Examples</a></li> <ul></ul>
     <li><a href="#portability">Portability</a></li>
     <li><a href="#history">History and Acknowledgment</a>    
@@ -75,7 +74,7 @@ container: </p> <ul> <li> A comma-separated list: <p>
 <pre><span 
 class=identifier>vector</span><span class=special><</span><span 
 class=keyword>int</span><span class=special>></span><span 
-class=identifier>v</span><span class=special>; </span>
+class=identifier> v</span><span class=special>; </span>
 <span class=identifier>v </span><span class=special>+= </span><span 
 class=number>1</span><span
 class=special>,</span><span class=number>2</span><span 
@@ -102,10 +101,12 @@ compliant container. The library also makes it possible to extend user
   defined types so for example a member function can be called for a list of 
 values instead of its normal arguments. </p>
    <hr>
+   
+   <a name="tutorial"></a>
    <h2>Tutorial</h2>
    <p>
    Within two minutes you should be able to use this library. The main 
-components are:
+components are explained in these sections:
    <ul>
         <li>Function <a href="#operator+="><code>operator+=()</code></a>
         <li>Function <a href="#operator()"><code>operator()()</code></a>
@@ -123,7 +124,7 @@ components are:
     To fill a vector (or any standard container) with values using 
     <code>operator+=()</code> you write   
     <blockquote><pre>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>std</span><span class=special>/</span><span class=identifier>vector</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;; </span><span class=comment>// for 'operator+=()'
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>std</span><span class=special>/</span><span class=identifier>vector</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; </span><span class=comment>// for 'operator+=()'
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assert</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;; 
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>; </span><span class=comment>// bring 'operator+=()' into scope
@@ -140,6 +141,8 @@ components are:
     consists of arbitrary expressions as long as the result of each  
 expression is convertible to the <code>value_type</code> of the container.
    </p> 
+   
+   
    <h3>Function <code>operator()()</code> <a name="operator()"></h3>
    <p>
    We do not call <code>operator()()</code> directly, but instead we call a 
@@ -148,7 +151,11 @@ expression is convertible to the <code>value_type</code> of the container.
    function that is used to copy the values in the list into the container.
    So to fill a map with pairs of values you write 
    <blockquote><pre>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>std</span><span class=special>/</span><span class=identifier>map</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; </span><span class=comment>// for 'insert()'
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span 
+class=identifier>boost</span><span class=special>/</span><span 
+class=identifier>assign</span><span class=special>/</span><span 
+class=identifier>list_inserter</span><span class=special>.</span><span 
+class=identifier>hpp</span><span class=special>&gt; </span><span class=comment>// for 'insert()'
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assert</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; 
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>&gt;
 </span><span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
@@ -166,12 +173,16 @@ expression is convertible to the <code>value_type</code> of the container.
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>m</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>12 </span><span class=special>);    
     </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>m</span><span class=special>[</span><span class=string>&quot;january&quot;</span><span class=special>] </span><span class=special>== </span><span class=number>31 </span><span class=special>);
 </span><span class=special>}</span> </pre></blockquote>
+
    Note that <code>operator()()</code> is much more handy when
    we need to construct objects using several arguments
    (up to five arguments are supported by default, but the limit can be <a href="#limit">customized</a>).
     This is also true for sequences:
-   <blockquote><pre>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>std</span><span class=special>/</span><span class=identifier>deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; </span><span class=comment>// for 'push_front()'
+
+      <blockquote><pre>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span 
+class=identifier>boost</span><span class=special>/</span><span 
+class=identifier>assign</span><span class=special>/</span>list_inserter</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; </span><span class=comment>// for 'push_front()'
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assert</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt; 
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>&gt;
 </span><span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>utility</span><span class=special>&gt;
@@ -262,7 +273,8 @@ list with <code>list_of()</code> if we add parenthesis around the
  <p>
  Please notice that <code>list_of()</code> can even convert to a 
  <code>boost::<a 
-href="../../array/index.html">array</a>&lt;T,sz></code>.
+href="../../array/index.html">array</a>&lt;T,sz></code> and see also the list 
+of <a href="#boost_libs">supported libraries </a>.
  
  <h3>Function <code>map_list_of()</code> <a name="map_list_of"></h3>
  This function is defined for pure convenience when working with
@@ -368,7 +380,11 @@ like this:
 <blockquote>
     <pre>
 <span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>list_of</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>std</span><span class=special>/</span><span class=identifier>map</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include </span><span class=special>&lt;</span><span 
+class=identifier>boost</span><span class=special>/</span><span 
+class=identifier>assign</span><span class=special>/</span><span 
+class=identifier>list_inserter</span><span class=special>.</span><span 
+class=identifier>hpp</span><span class=special>&gt;</span>
 <span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assert</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
 <span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>&gt;</span>
 <span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>vector</span><span class=special>&gt;
@@ -436,8 +452,16 @@ object does the insertion or assignment by overloading <code>operator,()</code>
   of <code>operator,()</code> is discouraged because it can lead to surprising
   results, but the approach taken in this library is safe since the
   user never deals with objects that have overloaded <code>operator,()</code>
-  directly.
+  directly. However, you should be aware of this:
   </p>
+  
+  <p><i>
+  The 
+  expressions in a comma-separated list no longer follow the rules of the 
+  built-in comma-operator. This means that the order of evaluation of 
+  expressions in a comma-separated list is undefined like when one specifies 
+  a list of function arguments.
+  </i></p>
   
     <p>
   Most of the code in this document use <code>int</code> in the examples, 
@@ -452,7 +476,7 @@ object does the insertion or assignment by overloading <code>operator,()</code>
   All forwarding is done by passing objects by value. Originally
   <code>const</code> references was used, but it lead to many problems
   with string-literals. One thing to remember is that references 
-  can be passed by using <code>boost::<a href=../../utility/index.html>ref</a></code>.
+  can be passed by using <code>boost::<a href=http://www.boost.org/doc/html/ref.html>ref</a></code>.
   </p>
   
   <p>
@@ -468,12 +492,16 @@ object does the insertion or assignment by overloading <code>operator,()</code>
         <li>Functions <a href="#repeat_ref"><code>repeat()</code> and <code>repeat_fun()</code></a></li>
         <li>Class <a href="#list_inserter"><code>list_inserter</code></a></li>
         <li>Function <a href="#make_list_inserter"><code>make_list_inserter()</code></a></li>
-        <li><a href="#limit">Cutomizing</a> argument list sizes </li>
+        <li><a href="#limit">Customizing</a> argument list sizes </li>
      </ul>
   <h3>Headers <a name="headers"></h3>      
   
-  <table cellpadding=5 border=1 >
-     <tr>
+  <p>
+  An overview of the headers in this library 
+is given below. Please notice <code>&lt;boost/assign/list_inserter.hpp></code> 
+is included for each header that defines <code>operator+=()</code>.</p>
+
+<table cellpadding=5 border=1 > <tr>
          <th>  Header                      </th>
          <th>        Includes              </th> 
      <tr>
@@ -496,16 +524,16 @@ containers (see below)</td> <tr> <td>  &lt;boost/assign/std/deque.hpp> </td>
     <tr> 
         <td>  &lt;boost/assign/std/map.hpp> </td>
         <td>  <code>operator+=()</code> for 
-              <code>std::map, std::multimap</code> , <code>&lt;map></code> 
-    <tr> 
+              <code>std::map</code> and <code>std::multimap</code> , 
+<code>&lt;map></code> <tr> 
         <td>  &lt;boost/assign/std/queue.hpp> </td>
         <td>  <code>operator+=()</code> for 
-              <code>std::queue, std::priority_queue</code>, 
+              <code>std::queue</code> and <code>std::priority_queue</code>, 
 <code>&lt;queue></code> <tr> 
         <td>  &lt;boost/assign/std/set.hpp> </td>
         <td>  <code>operator+=()</code> for 
-              <code>std::set, std::multiset</code>, <code>&lt;set></code>  
-    <tr> 
+              <code>std::set</code> and <code>std::multiset</code>, 
+<code>&lt;set></code> <tr> 
         <td>  &lt;boost/assign/std/slist.hpp> </td>
         <td>  <code>operator+=()</code> for 
               <code>std::slist</code> if the class is available , 
@@ -536,10 +564,9 @@ be thrown by the proxy returned by <code>list_of()</code>
   <h3>Standard containers <a name="std"> </h3>
    <p> In the following three dots (...) will mean
        implementation defined.  
-       <code>operator+=()</code> returns a proxy that makes it 
-       possible to call either
-       <code>push_back()</code>,<code>insert()</code>, or <code>push()</code>. 
-</p> <b>Synopsis</b>
+       <code>operator+=()</code> returns a proxy that forwards calls to either
+       <code>push_back()</code>,<code>insert()</code>, or <code>push()</code>  
+       depending on which operation the container supports. </p> <b>Synopsis</b>
   <p>
 <blockquote>
 <pre>
@@ -590,11 +617,11 @@ be thrown by the proxy returned by <code>list_of()</code>
     necessary to allow for types convertible to <code>V</code>.   
      
   <h3>Functions <code>list_of()</code> and 
-      <code>map_list_of()</code> <a name="#list_of_ref"> </h3>
+      <code>map_list_of()</code> <a name=list_of_ref> </h3>
     <p>  
   These two functions are used to construct anonymous    
   list which can be converted to any standard container
-  and <code>boost::<a href=../../array/index.html>array</a>&ltT,sz>.</code> 
+  and <code>boost::<a href=../../array/index.html>array</a>&lt;T,sz>.</code> 
 The object returned by the two
   functions is guaranteed to have the interface described below. 
   </p>
@@ -628,7 +655,7 @@ The object returned by the two
         //
         
         //
-        // Convert to a 'Container'. 'Container' must have have a constructor 
+        // Convert to a 'Container'. 'Container' must have a constructor 
         // which takes two iterators.  
         //
         </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>Container </span><span class=special>&gt;
@@ -643,7 +670,7 @@ The object returned by the two
         //
         // Convert to eg. 'boost::array&lt;T,std::size_t&gt;'. If the  
         // assigned variable is too small, 
-        // a '&lt;a href=&quot;#assignment_exception&quot;&gt;assignment_exception&lt;/a&gt;' is thrown.
+        // a <a href="#assignment_exception">assignment_exception</a> is thrown.
         // If the assigned variable it is too big, the rest of the 
         // values are  default-constructed.
         //
@@ -651,6 +678,9 @@ The object returned by the two
         </span><span class=keyword>operator </span><span class=identifier>Array</span><span class=special>&lt;</span><span class=identifier>U</span><span class=special>,</span><span class=identifier>sz</span><span class=special>&gt;() </span><span class=keyword>const</span><span class=special>;
     </span><span class=special>};
     
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=identifier>Implementation</span><span class=special>-</span><span class=identifier>defined</span>   </span><span class=identifier>list_of</span><span class=special>(</span><span class=special>);
+
     </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
     </span><span class=identifier>Implementation</span><span class=special>-</span><span class=identifier>defined</span>   </span><span class=identifier>list_of</span><span class=special>( </span><span class=identifier>T </span><span class=identifier>t </span><span class=special>);
     
@@ -675,7 +705,7 @@ The object returned by the two
 <span class=special>} </span><span class=comment>// namespace 'boost'</span>  </pre></blockquote>
 
   <h3>Functions <code>repeat()</code> and 
-     <code>repeat_fun()</code> <a name="#repeat_ref"> </h3>
+     <code>repeat_fun()</code> <a name="repeat_ref"> </h3>
   <p>
       These two function exist both as free-standing functions and as member functions of the object returned by 
       <code>list_of()</code> and of <code>list_inserter</code>. The free-standing versions are used to create a
@@ -854,25 +884,53 @@ class=keyword>class </span><span class=identifier>C </span><span class=special>&
   This code shows how to use <code>operator+=()</code> with 
   a container:
   <blockquote><pre>
-<span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>V</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>A</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>V2 </span><span class=special>&gt;</span>
-<span class=keyword>inline </span><span class=identifier>list_inserter</span><span class=special>&lt; </span><span class=identifier>function</span><span class=special>&lt; </span><span class=keyword>void </span><span class=special>(</span><span class=identifier>V</span><span class=special>) </span><span class=special>&gt;, </span><span class=identifier>V </span><span class=special>&gt; </span>
-<span class=keyword>operator</span><span class=special>+=( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=identifier>V</span><span class=special>,</span><span class=identifier>A</span><span class=special>&gt;&amp; </span><span class=identifier>c</span><span class=special>, </span><span class=identifier>V2 </span><span class=identifier>v </span><span class=special>)</span>
-<span class=special>{
-    </span><span class=keyword>return </span><span 
-class=identifier>make_list_inserter</span><span class=special>( </span><span 
-class=identifier>boost::bind</span><span class=special>( </span><span 
-class=special>&amp;</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=identifier>V</span><span class=special>,</span><span class=identifier>A</span><span class=special>&gt;::</span><span class=identifier>push_back</span><span class=special>, </span><span class=special>&amp;</span><span class=identifier>c</span><span class=special>, </span><span class=identifier>_1 </span><span class=special>) </span><span class=special>)( </span><span class=identifier>v </span><span class=special>);</span>
-<span class=special>}</span>  </pre></blockquote>
-  Notice that we use <code>boost::function</code> to avoid troubles with
-  specifying the return-type of <code>bind()</code>. Also note that we pass
+<span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>V</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>A</span><span class=special>, </span><span class=keyword>class </span><span class=identifier>V2 </span><span class=special>&gt;
+</span><span class=keyword>inline </span><span class=identifier>list_inserter</span><span class=special>&lt; </span><span class=identifier>assign_detail</span><span class=special>::</span><span class=identifier>call_push_back</span><span class=special>&lt; </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=identifier>V</span><span class=special>,</span><span class=identifier>A</span><span class=special>&gt; </span><span class=special>&gt;, </span><span class=identifier>V </span><span class=special>&gt; 
+</span><span class=keyword>operator</span><span class=special>+=( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=identifier>V</span><span class=special>,</span><span class=identifier>A</span><span class=special>&gt;&amp; </span><span class=identifier>c</span><span class=special>, </span><span class=identifier>V2 </span><span class=identifier>v </span><span class=special>)
+</span><span class=special>{
+    </span><span class=keyword>return </span><span class=identifier>make_list_inserter</span><span class=special>( </span><span class=identifier>assign_detail</span><span class=special>::</span><span class=identifier>call_push_back</span><span class=special>&lt; </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=identifier>V</span><span class=special>,</span><span class=identifier>A</span><span class=special>&gt; </span><span class=special>&gt;( </span><span class=identifier>c </span><span class=special>) </span><span class=special>)( </span><span class=identifier>v </span><span class=special>);
+</span><span class=special>}
+</span></pre>
+</blockquote>      
+
+
+where <code>call_push_back</code> is defined as    
+      
+<blockquote>      
+<pre>
+<span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>C </span><span class=special>&gt;
+</span><span class=keyword>class </span><span class=identifier>call_push_back
+</span><span class=special>{
+    </span><span class=identifier>C</span><span class=special>&amp; </span><span class=identifier>c_</span><span class=special>;
+</span><span class=keyword>public</span><span class=special>:
+
+    </span><span class=identifier>call_push_back</span><span class=special>( </span><span class=identifier>C</span><span class=special>&amp; </span><span class=identifier>c </span><span class=special>) </span><span class=special>: </span><span class=identifier>c_</span><span class=special>( </span><span class=identifier>c </span><span class=special>)
+    </span><span class=special>{ </span><span class=special>}
+    
+    </span><span class=keyword>template</span><span class=special>&lt; </span><span class=keyword>class </span><span class=identifier>T </span><span class=special>&gt;
+    </span><span class=keyword>void </span><span class=keyword>operator</span><span class=special>()( </span><span class=identifier>T </span><span class=identifier>r </span><span class=special>) 
+    </span><span class=special>{
+        </span><span class=identifier>c_</span><span class=special>.</span><span class=identifier>push_back</span><span class=special>( </span><span class=identifier>r </span><span class=special>);
+    </span><span class=special>}
+</span><span class=special>};</span></pre>    
+</blockquote>
+      
+      Note that we pass
   a second template argument to <code>list_inserter</code> so argument 
   lists will be used to construct a <code>V</code> object. Otherwise we
   could end up trying to call <code>push_back()</code> with <i>n</i> arguments 
   instead of one.
   </p>
-  
+      
+  <p>    
+  An alternative way would be to use <code>boost::function</code> and 
+  <code>boost::bind()</code> in combination. However, in this case one must
+  remember that it is illegal to take the address of a function in
+  the standard library.
+  </p>
+      
   <p>
-  On the other hand, calling a function with more that one argument can be
+  Calling a function with more that one argument can be
   very useful too. This small example shows how we take advantage of this 
   functionality:
   </p>
@@ -891,44 +949,51 @@ class=special>&amp;</span><span class=identifier>std</span><span class=special>:
     </span>
 <span class=keyword>private</span><span class=special>:
 
+    </span><span class=keyword>typedef </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>map</span><span class=special>&lt; </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,</span><span class=identifier>address_option </span><span class=special>&gt;  </span><span class=identifier>address_map</span><span class=special>;
+    
     </span><span class=comment>//
     // Store list of persons that must be cc'ed
     //
-    </span><span class=keyword>mutable </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>map</span><span class=special>&lt; </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>,</span><span class=identifier>address_option </span><span class=special>&gt; </span><span class=identifier>cc_list</span><span class=special>;
+    </span><span class=keyword>mutable </span><span class=identifier>address_map </span><span class=identifier>cc_list</span><span class=special>;
         
     </span><span class=comment>//
-    // This extra function is necessary since we cannot 
-    // use the same function for both returning the 'list_inserter'
-    // and doing the work. This one does the work. 
+    // This extra function-object will take care of the 
+    // insertion for us. It stores a reference to a 
+    // map and 'operator()()' does the work. 
     //
-    </span><span class=keyword>void </span><span class=identifier>add_cc_impl</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&amp; </span><span class=identifier>name</span><span class=special>, </span><span class=identifier>address_option </span><span class=identifier>ao </span><span class=special>)
+    </span><span class=keyword>struct </span><span class=identifier>add_to_map
     </span><span class=special>{
-        </span><span class=identifier>cc_list</span><span class=special>[ </span><span class=identifier>name </span><span class=special>] </span><span class=special>= </span><span class=identifier>ao</span><span class=special>;
-    </span><span class=special>}
+        </span><span class=identifier>address_map</span><span class=special>&amp; </span><span class=identifier>m</span><span class=special>;
+    
+        </span><span class=identifier>add_to_map</span><span class=special>( </span><span class=identifier>address_map</span><span class=special>&amp; </span><span class=identifier>m </span><span class=special>) </span><span class=special>: </span><span class=identifier>m</span><span class=special>(</span><span class=identifier>m</span><span class=special>)        
+        </span><span class=special>{}
+    
+        </span><span class=keyword>void </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&amp; </span><span class=identifier>name</span><span class=special>, </span><span class=identifier>address_option </span><span class=identifier>ao </span><span class=special>)
+        </span><span class=special>{
+            </span><span class=identifier>m</span><span class=special>[ </span><span class=identifier>name </span><span class=special>] </span><span class=special>= </span><span class=identifier>ao</span><span class=special>; 
+        </span><span class=special>}
+    </span><span class=special>};
 </span>
 <span class=keyword>public</span><span class=special>:
     
     </span><span class=comment>//
     // This function constructs the appropriate 'list_inserter'.
-    // Again we use 'boost::function' because it is easy,
-    // though it is not required. 
+    // Again we could have use 'boost::function', but it is
+    // trivial to use a function object.
     //
-    </span><span class=identifier>list_inserter</span><span class=special>&lt; </span><span class=identifier>function</span><span class=special>&lt; </span><span class=keyword>void </span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>, </span><span class=identifier>address_option </span><span class=special>) </span><span class=special>&gt; </span><span class=special>&gt;
+    // Notice that we do not specify an extra template
+    // parameter to 'list_inserter'; this means we forward
+    // all parameters directly to the function without 
+    // calling any constructor.
+    //
+    </span><span class=identifier>list_inserter</span><span class=special>&lt; </span><span class=identifier>add_to_map </span><span class=special>&gt;
     </span><span class=identifier>add_cc</span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>name</span><span class=special>, </span><span class=identifier>address_option </span><span class=identifier>ao </span><span class=special>)
     </span><span class=special>{
         </span><span class=comment>//
-        // Remember to insert first pair.
+        // Notice how we pass the arguments 'name' and 'ao' to
+        // the 'list_inserter'.
         //
-        </span><span class=identifier>add_cc_impl</span><span class=special>( </span><span class=identifier>name</span><span class=special>, </span><span class=identifier>ao </span><span class=special>);
-        
-        </span><span class=comment>//
-        // Then construct 'list_inserter'.
-        // Notice how the conversion constructor in 'list_inserter'
-        // allows for conversion as long as the two stored function
-        // objects can be assigned. Everything can be assigned to
-        // to 'boost::function'.
-        //
-        </span><span class=keyword>return </span><span class=identifier>make_list_inserter</span><span class=special>( </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>bind</span><span class=special>( </span><span class=special>&amp;</span><span class=identifier>email</span><span class=special>::</span><span class=identifier>add_cc_impl</span><span class=special>, </span><span class=keyword>this</span><span class=special>, </span><span class=identifier>_1</span><span class=special>, </span><span class=identifier>_2 </span><span class=special>) </span><span class=special>);
+        </span><span class=keyword>return </span><span class=identifier>make_list_inserter</span><span class=special>( </span><span class=identifier>add_to_map</span><span class=special>( </span><span class=identifier>cc_list </span><span class=special>) </span><span class=special>)( </span><span class=identifier>name</span><span class=special>, </span><span class=identifier>ao </span><span class=special>);
     </span><span class=special>}</span>
 <span class=special>};
 </span>
@@ -938,23 +1003,41 @@ class=special>&amp;</span><span class=identifier>std</span><span class=special>:
 <span class=identifier>email </span><span class=identifier>e</span><span class=special>;</span>
 <span class=identifier>e</span><span class=special>.</span><span class=identifier>add_cc</span><span class=special>( </span><span class=string>&quot;Mr. Foo&quot;</span><span class=special>, </span><span class=identifier>email</span><span class=special>::</span><span class=identifier>dont_check_addr_book </span><span class=special>)
         </span><span class=special>( </span><span class=string>&quot;Mr. Bar&quot;</span><span class=special>, </span><span class=identifier>email</span><span class=special>::</span><span class=identifier>check_addr_book </span><span class=special>)
-        </span><span class=special>( </span><span class=string>&quot;Mrs. FooBar&quot;</span><span class=special>, </span><span class=identifier>email</span><span class=special>::</span><span class=identifier>check_addr_book </span><span class=special>);</span>  </pre></blockquote>
-  The full example can be seen in <a href="../test/email_example.cpp">email_example.cpp</a>      
-      </p>
+        </span><span class=special>( </span><span class=string>&quot;Mrs. FooBar&quot;</span><span class=special>, </span><span class=identifier>email</span><span class=special>::</span><span class=identifier>check_addr_book </span><span class=special>);  </span>
+</pre></blockquote>
+      
+   
+  The full example can be seen in <a href="email_example.html">email_example.cpp</a> </p>
   <hr>
   <h2>Examples <a name="examples"></h2>
   <p>
   Additional examples can be found in the test files:
   <ul>
+      <li> <a href="email_example.html">email_example.cpp</a>          
+      <li> <a href="my_vector_example.html">my_vector_example.cpp</a>               
+      <li> <a href="multi_index_container.html">multi_index_container.cpp</a> 
       <li> <a href="../test/array.cpp">array.cpp</a>      
       <li> <a href="../test/list_of.cpp">list_of.cpp</a>      
       <li> <a href="../test/std.cpp">std.cpp</a>      
       <li> <a href="../test/list_inserter.cpp">list_inserter.cpp</a>      
       <li> <a href="../test/list_of_workaround.cpp">list_of_work_around.cpp</a>      
-      <li> <a href="../test/email_example.cpp">email_example.cpp</a>          
-      <li> <a href="../test/my_vector_example.cpp">my_vector_example.cpp</a>               
-  </ul>
+</ul> </p>
+  
+  
+  <hr>
+  <h2><a name="boost_libs">Supported libraries</a></h2> 
+  Here is a list libraries has been tested with Boost.Assign:
+  
+  <ol>
+      <li> <code>boost::<a href=../../array/index.html>array</a></code>
+      <li> <code>boost::<a href=../../multi_index/index.html>multi_index_container</a></code>
+      
+  </ol>
+  <p>
+
   </p>
+  
+  
   <hr>
   <h2><a name="portability">Portability</a></h2>
   <p>
