@@ -329,6 +329,8 @@ namespace boost {
       };
 #endif
 
+      // A type that is only used for comparisons against zero
+      struct useless_clear_type {};
     } // end namespace function
   } // end namespace detail
 
@@ -374,6 +376,32 @@ public:
  */
 void operator==(const function_base&, const function_base&);
 void operator!=(const function_base&, const function_base&);
+
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+inline bool operator==(const function_base& f, 
+                       detail::function::useless_clear_type*)
+{
+  return f.empty();
+}
+  
+inline bool operator!=(const function_base& f, 
+                       detail::function::useless_clear_type*)
+{
+  return !f.empty();
+}
+
+inline bool operator==(detail::function::useless_clear_type*, 
+                       const function_base& f)
+{
+  return f.empty();
+}
+  
+inline bool operator!=(detail::function::useless_clear_type*, 
+                       const function_base& f)
+{
+  return !f.empty();
+}
+#endif
 
 namespace detail {
   namespace function {
