@@ -115,23 +115,13 @@ namespace boost
     transform_iterator(Iterator const& x, UnaryFunction f)
       : super_t(x), m_f(f) { }
 
-    // don't provide this constructor if UnaryFunction is a
-    // function pointer type.  Too dangerous.
-    transform_iterator(
-      // Sadly, GCC 3.2 seems to choke on the enable_if when
-      // UnaryFunction is a plain function pointer
-#if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(3)) \
-     && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(2))
-        Iterator const& x
-#else 
-      typename iterators::enable_if<
-          is_class<UnaryFunction>
-        , Iterator const&
-      >::type x
-#endif 
-    )
+    transform_iterator(Iterator const& x)
       : super_t(x)
-    {}
+    {
+        // don't provide this constructor if UnaryFunction is a
+        // function pointer type, since it will be 0.  Too dangerous.
+        BOOST_STATIC_ASSERT(is_class<UnaryFunction>::value);
+    }
 
     template<class OtherIterator>
     transform_iterator(

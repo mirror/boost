@@ -28,7 +28,13 @@
 
 namespace boost
 {
+  // This forward declaration is required for the friend declaration
+  // in iterator_core_access
+  template <class I, class V, class AC, class TC, class R, class D> class iterator_facade;
 
+  // Used as a default template argument internally, merely to
+  // indicate "use the default", this can also be passed by users
+  // explicitly in order to specify that the default should be used.
   struct use_default;
   
   namespace detail
@@ -362,7 +368,7 @@ namespace boost
     , class Value
     , class AccessCategory
     , class TraversalCategory
-    , class Reference   = BOOST_ARG_DEPENDENT_TYPENAME detail::const_qualified_ref<Value, AccessCategory>::type
+    , class Reference   = BOOST_DEDUCED_TYPENAME detail::const_qualified_ref<Value, AccessCategory>::type
     , class Difference  = std::ptrdiff_t
   >
   class iterator_facade

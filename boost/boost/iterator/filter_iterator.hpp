@@ -56,16 +56,12 @@ namespace boost
           satisfy_predicate();
       }
 
-      // don't provide this constructor if UnaryFunction is a
-      // function pointer type.  Too dangerous.
-      filter_iterator(
-          typename iterators::enable_if<
-              is_class<Predicate>
-            , Iterator
-          >::type x
-        , Iterator end = Iterator())
+      filter_iterator(Iterator x, Iterator end = Iterator())
         : super_t(x), m_predicate(), m_end(end)
       {
+          // Don't allow use of this constructor if Predicate is a
+          // function pointer type, since it will be 0.
+          BOOST_STATIC_ASSERT(is_class<Predicate>::value);
           satisfy_predicate();
       }
 
