@@ -25,8 +25,7 @@
 #if defined(BOOST_NO_STRINGSTREAM) || \
     defined(BOOST_NO_STD_WSTRING) || \
     defined(BOOST_NO_STD_LOCALE) || \
-    defined(BOOST_NO_CWCHAR) || \
-    defined(BOOST_MSVC) && (BOOST_MSVC <= 1200)
+    defined(BOOST_NO_INTRINSIC_WCHAR_T)
 #define DISABLE_WIDE_CHAR_SUPPORT
 #endif
 
