@@ -182,7 +182,10 @@ namespace std {
 // Metrowerks Codewarrior
 #if defined (__MWERKS__) && ! defined (BOOST_STRICT_CONFIG)
 
+// 8.x
+#if __MWERKS__ <= 0x3003
 #define BOOST_UBLAS_NO_MEMBER_FRIENDS
+#endif
 
 #endif
 
@@ -201,7 +204,6 @@ namespace std {
 
 
 // Enable assignment of non conformant proxies
-// Thanks to Michael Stevens for spotting this.
 #define BOOST_UBLAS_NON_CONFORMANT_PROXIES
 
 // Enable different sparse element proxies
@@ -295,7 +297,9 @@ bool disable_type_check<Dummy>::value = false;
 // #define BOOST_UBLAS_USE_DUFF_DEVICE
 
 // Choose evaluation method for dense vectors and matrices
+#if !(defined(BOOST_UBLAS_USE_INDEXING) || defined(BOOST_UBLAS_USE_ITERATING))
 #define BOOST_UBLAS_USE_INDEXING
+#endif
 // #define BOOST_UBLAS_USE_ITERATING
 // #define BOOST_UBLAS_ITERATOR_THRESHOLD 0
 // #define BOOST_UBLAS_ITERATOR_THRESHOLD ((std::numeric_limits<std::ptrdiff_t>::max) ())
@@ -303,9 +307,8 @@ bool disable_type_check<Dummy>::value = false;
 // Use indexed iterators.
 // #define BOOST_UBLAS_USE_INDEXED_ITERATOR
 
-// 16 byte aligned arrays (for ICC)
-// #define BOOST_UBLAS_ALIGN_16 __declspec (align (16))
-#define BOOST_UBLAS_ALIGN_16
+// Alignment of bounded arrays. align(16) possible useful for ICC
+#define BOOST_UBLAS_BOUNDED_ARRAY_ALIGN
 
 #include <boost/numeric/ublas/fwd.hpp>
 
