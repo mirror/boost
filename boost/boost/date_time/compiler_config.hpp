@@ -137,7 +137,7 @@ namespace std {
 #endif  // auto-linking disabled
 
 #if defined(BOOST_HAS_THREADS) 
-#  if defined(_MSC_VER) || defined(__MWERKS__) 
+#  if defined(_MSC_VER) || defined(__MWERKS__) || defined(__MINGW32__)
      //no reentrant posix functions (eg: localtime_r)
 #  else
 #   define BOOST_DATE_TIME_HAS_REENTRANT_STD_FUNCTIONS
