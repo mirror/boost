@@ -21,13 +21,13 @@
 #include "boost/variant/detail/enable_recursive.hpp"
 #include "boost/variant/detail/substitute_fwd.hpp"
 #include "boost/variant/detail/make_variant_list.hpp"
+#include "boost/variant/detail/over_sequence.hpp"
 
 #include "boost/mpl/aux_/lambda_arity_param.hpp"
 
 #if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
 #   include "boost/mpl/apply_if.hpp"
 #   include "boost/mpl/identity.hpp"
-#   include "boost/mpl/is_sequence.hpp"
 #   include "boost/mpl/protect.hpp"
 #   include "boost/mpl/transform.hpp"
 #else
@@ -36,6 +36,7 @@
 #endif
 
 #include "boost/mpl/bool.hpp"
+#include "boost/mpl/is_sequence.hpp"
 #include "boost/variant/variant.hpp"
 
 namespace boost {
@@ -89,7 +90,7 @@ struct substitute<
 private: // helpers, for metafunction result (below)
 
     typedef typename mpl::apply_if<
-          mpl::is_sequence<T0>
+          ::boost::detail::variant::is_over_sequence<T0>
         , mpl::identity< T0 >
         , make_variant_list< BOOST_VARIANT_ENUM_PARAMS(T) >
         >::type initial_types;
@@ -142,12 +143,12 @@ public: // metafunction result
 }} // namespace detail::variant
 
 ///////////////////////////////////////////////////////////////////////////////
-// metafunction recursive_variant
+// metafunction make_recursive_variant
 //
 // See docs and boost/variant/variant_fwd.hpp for more information.
 //
 template < BOOST_VARIANT_ENUM_PARAMS(typename T) >
-struct recursive_variant
+struct make_recursive_variant
 {
 public: // metafunction result
 
@@ -155,6 +156,26 @@ public: // metafunction result
           detail::variant::recursive_flag< T0 >
         , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(T)
         > type;
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// metafunction make_recursive_variant_over
+//
+// See docs and boost/variant/variant_fwd.hpp for more information.
+//
+template <typename Types>
+struct make_recursive_variant_over
+{
+private: // precondition assertions
+
+    BOOST_STATIC_ASSERT(( ::boost::mpl::is_sequence<Types>::value ));
+
+public: // metafunction result
+
+    typedef typename make_recursive_variant<
+          detail::variant::over_sequence< Types >
+        >::type type;
 
 };
 

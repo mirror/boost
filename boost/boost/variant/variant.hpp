@@ -27,6 +27,7 @@
 #include "boost/variant/detail/forced_return.hpp"
 #include "boost/variant/detail/initializer.hpp"
 #include "boost/variant/detail/make_variant_list.hpp"
+#include "boost/variant/detail/over_sequence.hpp"
 #include "boost/variant/detail/visitation_impl.hpp"
 
 #include "boost/variant/detail/enable_if.hpp"
@@ -907,7 +908,7 @@ private: // helpers, for typedefs (below)
         >::type unwrapped_T0_;
 
     struct is_sequence_based_
-        : mpl::is_sequence<unwrapped_T0_>
+        : detail::variant::is_over_sequence<unwrapped_T0_>
     {
     };
 
@@ -917,7 +918,7 @@ private: // helpers, for typedefs (below)
 
     typedef typename mpl::apply_if<
           is_sequence_based_
-        , mpl::identity< unwrapped_T0_ >
+        , unwrapped_T0_ // over_sequence<...>::type
         , detail::variant::make_variant_list<
               unwrapped_T0_
             , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(T)
@@ -1769,6 +1770,26 @@ public: // visitation support
     }
 
 }; // class variant
+
+///////////////////////////////////////////////////////////////////////////////
+// metafunction make_variant_over
+//
+// See docs and boost/variant/variant_fwd.hpp for more information.
+//
+template <typename Types>
+struct make_variant_over
+{
+private: // precondition assertions
+
+    BOOST_STATIC_ASSERT(( ::boost::mpl::is_sequence<Types>::value ));
+
+public: // metafunction result
+
+    typedef variant<
+          detail::variant::over_sequence< Types >
+        > type;
+
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // function template swap

@@ -202,12 +202,12 @@ BOOST_PP_REPEAT(
 template < BOOST_VARIANT_AUX_DECLARE_PARAMS > class variant;
 
 ///////////////////////////////////////////////////////////////////////////////
-// metafunction recursive_variant
+// metafunction make_recursive_variant
 //
 // Exposes a boost::variant with recursive_variant_ tags (below) substituted
 // with the variant itself (wrapped as needed with boost::recursive_wrapper).
 //
-template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct recursive_variant;
+template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct make_recursive_variant;
 
 #undef BOOST_VARIANT_AUX_DECLARE_PARAMS_IMPL
 #undef BOOST_VARIANT_AUX_DECLARE_PARAMS
@@ -222,6 +222,20 @@ template < BOOST_VARIANT_AUX_DECLARE_PARAMS > struct recursive_variant;
 #else
     typedef mpl::arg<1> recursive_variant_;
 #endif
+
+///////////////////////////////////////////////////////////////////////////////
+// metafunction make_variant_over
+//
+// Results in a variant w/ bounded types by specified type sequence.
+//
+template <typename Types> struct make_variant_over;
+
+///////////////////////////////////////////////////////////////////////////////
+// metafunction make_recursive_variant_over
+//
+// Results in a recursive variant w/ bounded types by specified type sequence.
+//
+template <typename Types> struct make_recursive_variant_over;
 
 } // namespace boost
 
