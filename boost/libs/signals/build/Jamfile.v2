@@ -12,7 +12,7 @@ project boost/signals
     ;
 
 # Base names of the source files for libboost_signals
-SOURCES = trackable connection signal_base slot ;
+SOURCES = trackable connection named_slot_map signal_base slot ;
 
 lib boost_signals : $(SOURCES).cpp 
     :         
