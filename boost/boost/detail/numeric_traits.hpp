@@ -160,7 +160,7 @@ namespace boost { namespace detail {
 #   endif
    public:
       typedef typename
-      if_true<(!int(x::is_signed)
+      if_true<(int(x::is_signed)
               && (!int(x::is_bounded)
                  // digits is the number of no-sign bits
                   || (int(x::digits) + 1 >= digit_traits<boost::intmax_t>::digits)))>::template then<
