@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   06 Mar 01  Refactored EDG checks for Intel C++ (Dave Abrahams)
 //   04 Mar 01  Factored EDG checks, added BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 //              for Intel C++ 5.0 (Dave Abrahams)
 //   17 Feb 01  BOOST_NO_CV_SPECIALIZATIONS
@@ -210,7 +211,7 @@
 //  Edison Design Group front-ends
 # if defined(__EDG_VERSION__)
 
-#   if __EDG_VERSION__ <= 240
+#   if __EDG_VERSION__ <= 241
 #     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #   endif
 
@@ -337,9 +338,6 @@
 #     define BOOST_NO_STD_MIN_MAX
 #   endif
 #   define BOOST_NO_INTRINSIC_WCHAR_T // tentative addition - required for VC6 compatibility? (added by JM 19 Feb 2001)
-
-#   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP // Apparently so :-(
-
 
 //  Metrowerks CodeWarrior  --------------------------------------------------//
 
