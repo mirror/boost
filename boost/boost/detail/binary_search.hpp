@@ -40,8 +40,8 @@ ForwardIter lower_bound(ForwardIter first, ForwardIter last,
 {
     typedef detail::iterator_traits<ForwardIter> traits;
     
-    traits::difference_type len = boost::detail::distance(first, last);
-    traits::difference_type half;
+    typename traits::difference_type len = boost::detail::distance(first, last);
+    typename traits::difference_type half;
     ForwardIter middle;
 
     while (len > 0) {
@@ -65,8 +65,8 @@ ForwardIter lower_bound(ForwardIter first, ForwardIter last,
 {
   typedef detail::iterator_traits<ForwardIter> traits;
 
-  traits::difference_type len = boost::detail::distance(first, last);
-  traits::difference_type half;
+  typename traits::difference_type len = boost::detail::distance(first, last);
+  typename traits::difference_type half;
   ForwardIter middle;
 
   while (len > 0) {
@@ -90,8 +90,8 @@ ForwardIter upper_bound(ForwardIter first, ForwardIter last,
 {
   typedef detail::iterator_traits<ForwardIter> traits;
 
-  traits::difference_type len = boost::detail::distance(first, last);
-  traits::difference_type half;
+  typename traits::difference_type len = boost::detail::distance(first, last);
+  typename traits::difference_type half;
   ForwardIter middle;
 
   while (len > 0) {
@@ -115,8 +115,8 @@ ForwardIter upper_bound(ForwardIter first, ForwardIter last,
 {
   typedef detail::iterator_traits<ForwardIter> traits;
 
-  traits::difference_type len = boost::detail::distance(first, last);
-  traits::difference_type half;
+  typename traits::difference_type len = boost::detail::distance(first, last);
+  typename traits::difference_type half;
   ForwardIter middle;
 
   while (len > 0) {
@@ -140,8 +140,8 @@ equal_range(ForwardIter first, ForwardIter last, const Tp& val)
 {
   typedef detail::iterator_traits<ForwardIter> traits;
 
-  traits::difference_type len = boost::detail::distance(first, last);
-  traits::difference_type half;
+  typename traits::difference_type len = boost::detail::distance(first, last);
+  typename traits::difference_type half;
   ForwardIter middle, left, right;
 
   while (len > 0) {
@@ -172,8 +172,8 @@ equal_range(ForwardIter first, ForwardIter last, const Tp& val,
 {
   typedef detail::iterator_traits<ForwardIter> traits;
 
-  traits::difference_type len = boost::detail::distance(first, last);
-  traits::difference_type half;
+  typename traits::difference_type len = boost::detail::distance(first, last);
+  typename traits::difference_type half;
   ForwardIter middle, left, right;
 
   while (len > 0) {
