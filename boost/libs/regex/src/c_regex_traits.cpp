@@ -619,7 +619,7 @@ void BOOST_REGEX_CALL c_regex_traits<char>::update()
    sort_type = re_detail::find_sort_syntax(&i, &sort_delim);
 }
 
-void BOOST_REGEX_CALL c_regex_traits<char>::free()
+void BOOST_REGEX_CALL c_regex_traits<char>::m_free()
 {
    BOOST_RE_GUARD_STACK
    #ifdef BOOST_RE_THREADS
@@ -838,7 +838,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
    }
 }
 
-void BOOST_REGEX_CALL c_regex_traits<wchar_t>::free()
+void BOOST_REGEX_CALL c_regex_traits<wchar_t>::m_free()
 {
    BOOST_RE_GUARD_STACK
 #ifdef BOOST_RE_THREADS
