@@ -22,6 +22,7 @@ DEPENDS all : test ;
               : :
                 :
                 std::locale-support
+                std::facet-support
                 : container
             ]
           [ run 
@@ -29,6 +30,7 @@ DEPENDS all : test ;
               : :
                 :
                 std::locale-support
+                std::facet-support
                 : trim
             ]
           [ run 
@@ -36,6 +38,7 @@ DEPENDS all : test ;
               : :
                 :
                 std::locale-support
+                std::facet-support
                 : conv
             ]
           [ run 
@@ -43,6 +46,7 @@ DEPENDS all : test ;
               : :
                 :
                 std::locale-support
+                std::facet-support
                 : predicate
             ]
           [ run 
@@ -50,6 +54,7 @@ DEPENDS all : test ;
               : :
                 :
                 std::locale-support
+                std::facet-support
                 : find
             ]
           [ run
@@ -57,14 +62,16 @@ DEPENDS all : test ;
               : :
                 :
                 std::locale-support
-               : split
+                std::facet-support
+                : split
             ]
           [ run 
                 replace_test.cpp
               : :
                 :
                 std::locale-support
-               : replace
+                std::facet-support
+                : replace
             ]
           [ run 
                 regex_test.cpp
