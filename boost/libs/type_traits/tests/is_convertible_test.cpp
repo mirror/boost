@@ -15,6 +15,12 @@ struct convertible_from
     convertible_from(T);
 };
 
+#ifndef __BORLANDC__
+#  define maybe_value_test value_test
+#else
+#  define maybe_value_test value_fail
+#endif
+
 int cpp_main(int argc, char* argv[])
 {
    value_test(true, (boost::is_convertible<Derived,Base>::value));
@@ -26,24 +32,6 @@ int cpp_main(int argc, char* argv[])
    value_test(false, (boost::is_convertible<boost::noncopyable, int>::value));
    value_test(true, (boost::is_convertible<float,int>::value));
    
-   value_test(true, (boost::is_convertible<float,convertible_from<float> >::value));
-   value_test(true, (boost::is_convertible<float,convertible_from<float const&> >::value));
-   value_test(true, (boost::is_convertible<float,convertible_from<float&> >::value));
-
-   value_test(true, (boost::is_convertible<float,convertible_from<char> >::value));
-   value_test(true, (boost::is_convertible<float,convertible_from<char const&> >::value));
-   value_test(false, (boost::is_convertible<float,convertible_from<char&> >::value));
-
-   value_test(true, (boost::is_convertible<char,convertible_from<char> >::value));
-   value_test(true, (boost::is_convertible<char,convertible_from<char const&> >::value));
-   value_test(true, (boost::is_convertible<char,convertible_from<char&> >::value));
-
-   value_test(true, (boost::is_convertible<float&,convertible_from<float> >::value));
-   value_test(true, (boost::is_convertible<float const&,convertible_from<float> >::value));
-   value_test(true, (boost::is_convertible<float&,convertible_from<float&> >::value));
-   value_test(true, (boost::is_convertible<float const&,convertible_from<float const&> >::value));
-   value_test(true, (boost::is_convertible<float&,convertible_from<float const&> >::value));
-
 #ifdef BOOST_MSVC6_MEMBER_TEMPLATES
    value_test(false, (boost::is_convertible<float,void>::value));
    value_test(false, (boost::is_convertible<void,float>::value));
@@ -76,12 +64,32 @@ int cpp_main(int argc, char* argv[])
    value_test(false, (boost::is_convertible<non_pointer, int*>::value));
    value_test(true, (boost::is_convertible<non_int_pointer, int*>::value));
    value_test(true, (boost::is_convertible<non_int_pointer, void*>::value));
-   #ifndef __BORLANDC__
-   value_test(true, (boost::is_convertible<int, int_constructible>::value));
-   #endif
    value_test(false, (boost::is_convertible<test_abc1&, test_abc2&>::value));
    value_test(false, (boost::is_convertible<test_abc1&, int_constructible>::value));
    value_test(false, (boost::is_convertible<int_constructible, test_abc1&>::value));
+
+   //
+   // the following tests all involve user defined conversions which do
+   // not compile with Borland C++ Builder:
+   //
+   maybe_value_test(true, (boost::is_convertible<int, int_constructible>::value));
+   maybe_value_test(true, (boost::is_convertible<float,convertible_from<float> >::value));
+   maybe_value_test(true, (boost::is_convertible<float,convertible_from<float const&> >::value));
+   maybe_value_test(true, (boost::is_convertible<float,convertible_from<float&> >::value));
+
+   maybe_value_test(true, (boost::is_convertible<float,convertible_from<char> >::value));
+   maybe_value_test(true, (boost::is_convertible<float,convertible_from<char const&> >::value));
+   maybe_value_test(false, (boost::is_convertible<float,convertible_from<char&> >::value));
+
+   maybe_value_test(true, (boost::is_convertible<char,convertible_from<char> >::value));
+   maybe_value_test(true, (boost::is_convertible<char,convertible_from<char const&> >::value));
+   maybe_value_test(true, (boost::is_convertible<char,convertible_from<char&> >::value));
+
+   maybe_value_test(true, (boost::is_convertible<float&,convertible_from<float> >::value));
+   maybe_value_test(true, (boost::is_convertible<float const&,convertible_from<float> >::value));
+   maybe_value_test(true, (boost::is_convertible<float&,convertible_from<float&> >::value));
+   maybe_value_test(true, (boost::is_convertible<float const&,convertible_from<float const&> >::value));
+   maybe_value_test(true, (boost::is_convertible<float&,convertible_from<float const&> >::value));
 
    return check_result(argc, argv);
 }
@@ -93,7 +101,6 @@ unsigned int expected_failures = 1;
 #else
 unsigned int expected_failures = 0;
 #endif
-
 
 
 
