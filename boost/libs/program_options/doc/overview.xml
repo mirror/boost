@@ -154,25 +154,26 @@ desc.add_options()
         and some methods of the
         <classname>boost::program_options::value_semantic</classname> class.
         The simplest usage is illustrated below:
-        <programlisting>
-          options_description desc;
-          desc.add_options()
-          ("help", "produce help message")
-          ;
-        </programlisting>
+<programlisting>
+options_description desc;
+desc.add_options()
+    ("help", "produce help message")
+    ;
+</programlisting>
         This declares one option named "help" and associates a description with
         it. The user is not allowed to specify any value.
       </para>
       
       <para>To make an option accept a value, you'd need the
         <code>value</code> function mentioned above:
-        <programlisting>
-          options_description desc;
-          desc.add_options()
-          ("compression", "compression level", value&lt;string&gt;())
-          ("verbose", "verbosity level", value&lt;string&gt;()->implicit())
-          ("email", "email to send to", value&lt;string&gt;()->multitoken());
-        </programlisting>
+<programlisting>
+options_description desc;
+desc.add_options()
+    ("compression", value&lt;string&gt;(), "compression level")
+    ("verbose", value&lt;string&gt;()->implicit(), "verbosity level")
+    ("email", value&lt;string&gt;()->multitoken(), "email to send to")
+    ;
+</programlisting>
         With these declarations, the user must specify a value for
         the first option, using a single token. For the second option, the user
         may either provide a single token for the value, or no token at
@@ -193,9 +194,10 @@ desc.add_options()
 <programlisting>
 options_description desc;
 desc.add_options()
-    ("compression", "compression level", value&lt;int&gt;()->default(10));
-    ("email", "email", value&lt; vector&lt;string&gt; &gt;()
-        ->composing()->notify(&amp;your_function);
+    ("compression", value&lt;int&gt;()->default(10), "compression level")
+    ("email", value&lt; vector&lt;string&gt; &gt;()
+        ->composing()->notify(&amp;your_function), "email")
+    ;
 </programlisting>      
         These declarations specify that default value of the first option is 10,
         that the second option can appear several times and all instances should
@@ -231,18 +233,18 @@ desc.add_options()
       <para>The &positional_options_desc; class allows the command line
         parser to assign the names. The class specifies how many positional options
         are allowed, and for each allowed option, specifies the name. For example:
-        <programlisting>
-          positional_options_description pd; pd.add("input-file", 1, 1);
-        </programlisting> specifies that for exactly one, first, positional
+<programlisting>
+positional_options_description pd; pd.add("input-file", 1, 1);
+</programlisting> specifies that for exactly one, first, positional
         option the name will be "input-file".
       </para>
       
       <para>It's possible to specify that a number, or even all positional options, be
         given the same name.
-        <programlisting>
-          positional_options_description pd;
-          pd.add("output-file", 2, 2).add_optional("input-file", 0, -1);
-        </programlisting>
+<programlisting>
+positional_options_description pd;
+pd.add("output-file", 2, 2).add_optional("input-file", 0, -1);
+</programlisting>
         In the above example, the first two positional options will be associated
         with name "output-file", and any others with the name "input-file".
       </para>
@@ -334,12 +336,12 @@ desc.add_options()
     </para>
 
     <para>Let's consider an example:
-      <programlisting>
-        variables_map vm;
-        store(parse_command_line(argc, argv, desc), vm);
-        store(parse_config_file("example.cfg", desc), vm);
-        notify(vm);
-      </programlisting>
+<programlisting>
+variables_map vm;
+store(parse_command_line(argc, argv, desc), vm);
+store(parse_config_file("example.cfg", desc), vm);
+notify(vm);
+</programlisting>
       The <code>variables_map</code> class is used to store the option
       values. The two calls to the <code>store</code> function add values
       found on the command line and in the config file. Finally the call to
