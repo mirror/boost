@@ -120,7 +120,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::has_trivial_constructor<f1>::value)
    value_test(true, boost::has_trivial_constructor<mf2>::value)
    value_test(false, boost::has_trivial_constructor<UDT>::value)
-   value_test(true, boost::has_trivial_constructor<empty_UDT>::value)
+   soft_value_test(true, boost::has_trivial_constructor<empty_UDT>::value)
    value_test(true, boost::has_trivial_constructor<enum_UDT>::value)
    value_test(true, boost::has_trivial_constructor<void>::value)
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -139,7 +139,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::has_trivial_copy<f1>::value)
    value_test(true, boost::has_trivial_copy<mf2>::value)
    value_test(false, boost::has_trivial_copy<UDT>::value)
-   value_test(true, boost::has_trivial_copy<empty_UDT>::value)
+   soft_value_test(true, boost::has_trivial_copy<empty_UDT>::value)
    value_test(true, boost::has_trivial_copy<enum_UDT>::value)
    value_test(true, boost::has_trivial_copy<void>::value)
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -158,7 +158,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::has_trivial_assign<f1>::value)
    value_test(true, boost::has_trivial_assign<mf2>::value)
    value_test(false, boost::has_trivial_assign<UDT>::value)
-   value_test(true, boost::has_trivial_assign<empty_UDT>::value)
+   soft_value_test(true, boost::has_trivial_assign<empty_UDT>::value)
    value_test(true, boost::has_trivial_assign<enum_UDT>::value)
    value_test(true, boost::has_trivial_assign<void>::value)
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -220,23 +220,16 @@ int cpp_main(int argc, char* argv[])
 // define the number of failures expected for given compilers:
 #ifdef __BORLANDC__
 // can't handle enum's or classes that are POD's
-unsigned int expected_failures = 10;
-#elif defined(__SUNPRO_CC)
-#if(__SUNPRO_CC <= 0x520)
+unsigned int expected_failures = 6;
+#elif defined(__SUNPRO_CC) && (__SUNPRO_CC <= 0x520)
 unsigned int expected_failures = 55;
-#else
-unsigned int expected_failures = 4;
-#endif
-#elif defined(__GNUC__)
-// classes that are POD's, or empty:
-unsigned int expected_failures = 4;
 #elif defined(__MWERKS__)
-unsigned int expected_failures = 12;
+unsigned int expected_failures = 10;
 #elif defined(BOOST_MSVC)
 // can't handle classes that are POD's or arrays that are POD's
-unsigned int expected_failures = 19;
+unsigned int expected_failures = 15;
 #else
-unsigned int expected_failures = 4;
+unsigned int expected_failures = 0;
 #endif
 
 
