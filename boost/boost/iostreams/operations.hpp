@@ -15,6 +15,7 @@
 #include <boost/config.hpp>  // NO_STD_LOCALE, DEDUCED_TYPENAME, MSVC.
 #include <boost/detail/workaround.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
+#include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/iostreams/detail/wrap_unwrap.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/mpl/bool.hpp>

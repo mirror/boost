@@ -23,6 +23,7 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/bool_trait_def.hpp> 
 #include <boost/iostreams/detail/is_iterator_range.hpp>    
+#include <boost/iostreams/detail/ios_traits.hpp>   
 #include <boost/iostreams/detail/select.hpp>            
 #include <boost/iostreams/detail/wrap_unwrap.hpp> 
 #include <boost/mpl/eval_if.hpp>
@@ -35,23 +36,7 @@
 #define BOOST_SELECT_BY_SIZE_MAX_CASE 9     
 #include <boost/iostreams/detail/select_by_size.hpp>    
 
-//------------------Definitions of predicates for stream types----------------//
-
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_istream, std::basic_istream, 2)
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_ostream, std::basic_ostream, 2)
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_iostream, std::basic_iostream, 2)
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_streambuf, std::basic_streambuf, 2)
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringstream, std::basic_stringstream, 3)
-BOOST_IOSTREAMS_BOOL_TRAIT_DEF(is_stringbuf, std::basic_stringbuf, 3)
-
 namespace boost { namespace iostreams {          
-
-//------------------Definitions of is_std_io----------------------------------//
-
-template<typename T>
-struct is_std_io
-    : mpl::or_< is_istream<T>, is_ostream<T>, is_streambuf<T> >
-    { };
 
 //------------------Definitions of io_char------------------------------------//
 

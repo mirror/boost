@@ -14,6 +14,7 @@
 #include <boost/iostreams/categories.hpp>
 #include <boost/iostreams/detail/dispatch.hpp>
 #include <boost/iostreams/detail/error.hpp>
+#include <boost/iostreams/detail/ios_traits.hpp>
 #include <boost/iostreams/device/null.hpp>
 #include <boost/iostreams/traits.hpp>
 #include <boost/iostreams/is_device.hpp>
