@@ -56,7 +56,7 @@ template <class T>
 struct alignment_of<T&>
 {
 public:
-   BOOST_STATIC_CONSTANT(std::size_t, value = alignment_of<T*>::value);
+   BOOST_STATIC_CONSTANT(std::size_t, value = ::boost::alignment_of<T*>::value);
 };
 #endif
 //

@@ -41,7 +41,7 @@ int check_result(int argc, char** argv)
       std::cout << "Press any key to continue...";
       std::cin.get();
    }
-   return (failures == expected_failures) ? 0 : failures;
+   return (failures <= expected_failures) ? 0 : failures;
 }
 
 
@@ -72,28 +72,23 @@ struct checker<false>
    }
 };
 
+template <class T>
+struct typify{};
+
 template <class T, class U>
 struct type_checker
 {
    static void check(const char* TT, const char* TU, const char* expression)
    {
       ++test_count;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      if((typeid(T) != typeid(U))
-         || (::boost::is_reference<T>::value != ::boost::is_reference<U>::value)
-         || (::boost::is_const<T>::value != ::boost::is_const<U>::value)
-         || (::boost::is_volatile<T>::value != ::boost::is_volatile<U>::value))
+      if(typeid(typify<T>) != typeid(typify<U>))
       {
-#endif
          ++failures;
          std::cout << "checking type of " << expression << "...failed" << std::endl;
-         std::cout << "   expected type was " << TT << std::endl;
-         std::cout << "   typeid(" << TT << ") was: " << typeid(T).name() << std::endl;
-         std::cout << "   typeid(" << TU << ") was: " << typeid(U).name() << std::endl;
-         std::cout << "   In template class " << typeid(type_checker<T,U>).name() << std::endl;
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+         std::cout << "   evaluating:  type_checker<" << TT << "," << expression << ">" << std::endl;
+         std::cout << "   expected:    type_checker<" << TT << "," << TT << ">" << std::endl;
+         std::cout << "   but got:     " << typeid(type_checker<T,U>).name() << std::endl;
       }
-#endif
    }
 };
 
