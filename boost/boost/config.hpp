@@ -381,7 +381,7 @@
 
 // Determine if the standard library implementation is already pulling names
 // into std.  STLport defines the following if so. (Ed Brey 5 Jun 00)
-#     ifndef __STL_IMPORT_VENDOR_CSTD
+#     if !defined( __STL_IMPORT_VENDOR_CSTD ) || defined( __STL_NO_CSTD_FUNCTION_IMPORTS )
 #       define BOOST_NO_STDC_NAMESPACE
 #     endif
 
