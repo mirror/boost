@@ -1253,3 +1253,16 @@ a(bbb+|bb+|b)bb abbb 0 4
 (.*).* abcdef 0 6
 (a*)* bc 0 0
 
+; new merge tests for case convertions:
+- match_default normal REG_PERL REG_STARTEND REG_MERGE
+abc "xyzabcCD" "\u$&" "xyzAbcCD"
+abc "xyzabcCD" "\U$&\E" "xyzABCCD"
+ABC "xyzABCCD" "\l$&" "xyzaBCCD"
+ABC "xyzABCCD" "\L$&\E" "xyzabcCD"
+
+- match_default normal REG_EXTENDED REG_STARTEND REG_MERGE format_sed
+abc "xyzabcCD" "\u\0" "xyzuabcCD"
+abc "xyzabcCD" "\U\0\E" "xyzUabcECD"
+ABC "xyzABCCD" "\l\0" "xyzlABCCD"
+ABC "xyzABCCD" "\L\0\E" "xyzLABCECD"
+
