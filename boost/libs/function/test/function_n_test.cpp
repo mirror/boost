@@ -579,6 +579,37 @@ test_emptiness()
   BOOST_TEST(f3.empty());
 }
 
+struct X {
+  X(int v) : value(v) {}
+
+  int twice() const { return 2*value; }
+  int plus(int v) { return value + v; }
+
+  int value;
+};
+
+static void
+test_member_functions()
+{
+  boost::function1<int, X*> f1(&X::twice);
+  
+  X one(1);
+  X five(5);
+
+  BOOST_TEST(f1(&one) == 2);
+  BOOST_TEST(f1(&five) == 10);
+
+  boost::function1<int, X*> f1_2;
+  f1_2 = &X::twice;
+
+  BOOST_TEST(f1_2(&one) == 2);
+  BOOST_TEST(f1_2(&five) == 10);
+
+  boost::function2<int, X&, int> f2(&X::plus);
+  BOOST_TEST(f2(one, 3) == 4);
+  BOOST_TEST(f2(five, 4) == 9);
+}
+
 int
 test_main(int, char* [])
 {
@@ -586,5 +617,6 @@ test_main(int, char* [])
   test_one_arg();
   test_two_args();
   test_emptiness();
+  test_member_functions();
   return 0;
 }
