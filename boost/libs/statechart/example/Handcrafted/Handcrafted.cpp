@@ -9,32 +9,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-// This program demonstrates the fact that measures must be taken to hide some
-// of the complexity (e.g. in separate .cpp file) of a boost::fsm state
-// machine once a certain size is reached.
-// For this purpose, a state machine with exactly 2^noOfBits states (i.e.
-// BitState< 0 > .. BitState< 2^noOfBits - 1 >) is generated . For the events
-// EvFlipBit< 0 > .. EvFlipBit< noOfBits - 1 > there is a transition from each
-// state to the state with the corresponding bit toggled. That is, there is a
-// total of 2^noOfBits * noOfBits transitions.
-// E.g. if the state machine is currently in state BitState< 5 > and receives
-// EvFlipBit< 2 >, it transitions to state BitState< 1 >. If it is in
-// BitState< 15 > and receives EvFlipBit< 4 > it transitions to BitState< 31 >
-// etc.
-// The maximum size of such a state machine depends on your compiler. The
-// following table gives upper limits for noOfBits. From this, rough
-// estimates for the maximum size of any "naively" implemented boost::fsm
-// (i.e. no attempt is made to hide inner state implementation in a .cpp file)
-// can be deduced.
-//
-// Compiler      | max. noOfBits b | max. states s | max. transitions t
-// --------------|-----------------|---------------|-------------------
-// MSVC 7.0      |      b < 5      |  16 < s < 32  |  64 < t < 160
-// MSVC 7.1      |      b < 6      |  32 < s < 64  |  160 < t < 384
-//
-// CAUTION: Due to the fact that the amount of generated code more than
-// *doubles* each time noOfBits is *incremented*, build times soar when
-// noOfBits > 6.
+// This is a quick-and-dirty handcrafted state machine with two states and two
+// transitions employing GOF-visitation (two virtual calls per event).
+// It is used to make speed comparisons with boost::fsm machines.
 //////////////////////////////////////////////////////////////////////////////
 
 
@@ -101,9 +78,6 @@ class event_base
 
   public:
     //////////////////////////////////////////////////////////////////////////
-    // CAUTION: The following declarations should be private.
-    // They are only public because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
     virtual const state_base & send( const state_base & toState ) const = 0;
 };
 
@@ -129,9 +103,11 @@ class EvFlipBit : public event< EvFlipBit > {};
 const EvFlipBit flip;
 
 
+//////////////////////////////////////////////////////////////////////////////
 class BitMachine
 {
   public:
+    //////////////////////////////////////////////////////////////////////////
     BitMachine() : pCurrentState_( &Off::instance() ) {}
 
     void process_event( const event_base & evt )
@@ -140,6 +116,7 @@ class BitMachine
     }
 
   private:
+    //////////////////////////////////////////////////////////////////////////
     struct On : public state< On >
     {
       virtual const state_base & react( const EvFlipBit & ) const
@@ -174,7 +151,10 @@ int main( int argc, char * argv[] )
   argc;
   argv;
 
-  std::cout << "boost::fsm Handcrafted example\n\n";
+  std::cout << "boost::fsm Handcrafted example\n";
+  std::cout << "Machine configuration: " << noOfStates <<
+    " states interconnected with " << noOfTransitions << " transitions.\n\n";
+
   std::cout << "p<CR>: Performance test\n";
   std::cout << "e<CR>: Exits the program\n\n";
   std::cout <<
