@@ -35,7 +35,8 @@ template signals-dll-options
 SOURCES = trackable connection signal_base slot ;
        
 lib boost_signals : ../src/$(SOURCES).cpp <template>signals-options
-    : 
+    :
+        [ common-names ]
     : 
         debug release
     ;
@@ -43,18 +44,15 @@ lib boost_signals : ../src/$(SOURCES).cpp <template>signals-options
 
 dll boost_signals : ../src/$(SOURCES).cpp <template>signals-dll-options
     : 
+       [ common-names ]
     : 
         debug release
     ;
     
-local version-tag = [ MATCH "^([^.]+).([^.]+)" : $(BOOST_VERSION) ] ;
-version-tag = $(version-tag:J="_") ;
-
 stage stage/lib : <lib>boost_signals <dll>boost_signals
     :
         <locate>$(BOOST_ROOT)
-        common-stage-tag
-        <tag><postfix>-$(version-tag)
+        [ common-names ]
         <target>stage
         <target>all
     :

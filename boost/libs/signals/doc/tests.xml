@@ -4,8 +4,7 @@
 <testsuite last-revision="$Date$">
   <run-test filename="dead_slot_test.cpp">
     <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
-    <lib>../../../libs/signals/build/boost_signals</lib>
-    <requirement name="define">BOOST_SIGNALS_STATIC_LINK</requirement>
+    <lib>../build/boost_signals</lib>
     <purpose>
 <para>Ensure that calling <methodname>connect</methodname> with a slot
 that has already been disconnected via deletion does not actually
@@ -15,8 +14,7 @@ connect to the slot.</para>
 
   <run-test filename="deletion_test.cpp">
     <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
-    <lib>../../../libs/signals/build/boost_signals</lib>
-    <requirement name="define">BOOST_SIGNALS_STATIC_LINK</requirement>
+    <lib>../build/boost_signals</lib>
     <purpose>
 <para>Test deletion of slots.</para>
     </purpose>
@@ -24,15 +22,13 @@ connect to the slot.</para>
 
   <run-test filename="ordering_test.cpp">
     <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
-    <lib>../../../libs/signals/build/boost_signals</lib>
-    <requirement name="define">BOOST_SIGNALS_STATIC_LINK</requirement>
+    <lib>../build/boost_signals</lib>
     <purpose><para>Test slot group ordering.</para></purpose>
   </run-test>
 
   <run-test filename="signal_n_test.cpp">
     <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
-    <lib>../../../libs/signals/build/boost_signals</lib>
-    <requirement name="define">BOOST_SIGNALS_STATIC_LINK</requirement>
+    <lib>../build/boost_signals</lib>
     <purpose>
 <para>Basic test of signal/slot connections and invocation using the
 <classname>boost::signalN</classname> class templates.</para>
@@ -41,8 +37,7 @@ connect to the slot.</para>
 
   <run-test filename="signal_test.cpp">
     <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
-    <lib>../../../libs/signals/build/boost_signals</lib>
-    <requirement name="define">BOOST_SIGNALS_STATIC_LINK</requirement>
+    <lib>../build/boost_signals</lib>
     <purpose>
 <para>Basic test of signal/slot connections and invocation using the
 <classname>boost::signal</classname> class template.</para>
@@ -57,8 +52,7 @@ usable.</para>
 
   <run-test filename="trackable_test.cpp">
     <lib>../../../libs/test/build/boost_test_exec_monitor</lib>
-    <lib>../../../libs/signals/build/boost_signals</lib>
-    <requirement name="define">BOOST_SIGNALS_STATIC_LINK</requirement>
+    <lib>../build/boost_signals</lib>
     <purpose>
       <para>Test automatic lifetime management using
       <classname>boost::trackable</classname> objects.</para>

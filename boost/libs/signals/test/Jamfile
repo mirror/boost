@@ -25,17 +25,17 @@ DEPENDS all : test ;
 
   test-suite signals
     : 
-  [ run libs/signals/test/dead_slot_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../../../libs/signals/build/boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run libs/signals/test/dead_slot_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../build/boost_signals :  :  :  :  ]
 
-  [ run libs/signals/test/deletion_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../../../libs/signals/build/boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run libs/signals/test/deletion_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../build/boost_signals :  :  :  :  ]
 
-  [ run libs/signals/test/ordering_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../../../libs/signals/build/boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run libs/signals/test/ordering_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../build/boost_signals :  :  :  :  ]
 
-  [ run libs/signals/test/signal_n_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../../../libs/signals/build/boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run libs/signals/test/signal_n_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../build/boost_signals :  :  :  :  ]
 
-  [ run libs/signals/test/signal_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../../../libs/signals/build/boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run libs/signals/test/signal_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../build/boost_signals :  :  :  :  ]
 
-  [ run libs/signals/test/trackable_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../../../libs/signals/build/boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run libs/signals/test/trackable_test.cpp <lib>../../../libs/test/build/boost_test_exec_monitor <lib>../build/boost_signals :  :  :  :  ]
  ;
 }
       
