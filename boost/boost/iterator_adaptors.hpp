@@ -436,16 +436,6 @@ public:
       policies().initialize(iter());
     }
 
-#if 0 // ndef BOOST_MSVC
-    // To allow construction of const adaptor from non-const adaptee.
-    // However, when this is defined MSVC gives ambiguous error.
-    template <class OtherIterator>
-    iterator_adaptor(const OtherIterator& it, const Policies& p = Policies())
-        : m_iter_p(it, p) {
-      policies().initialize(iter());
-    }
-#endif
-
     template <class OtherIter, class OtherTraits>
     iterator_adaptor (const iterator_adaptor<OtherIter, Policies,
             OtherTraits>& src)
