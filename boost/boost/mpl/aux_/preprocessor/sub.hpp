@@ -47,7 +47,7 @@
 #define BOOST_MPL_PP_SUB_4 (0,0,0,0,0,1,2,3,4,5,6)
 #define BOOST_MPL_PP_SUB_5 (0,0,0,0,0,0,1,2,3,4,5)
 #define BOOST_MPL_PP_SUB_6 (0,0,0,0,0,0,0,1,2,3,4)
-#define BOOST_MPL_PP_SUB_7 (0,0,0,0,0,0,0,0 1,2,3)
+#define BOOST_MPL_PP_SUB_7 (0,0,0,0,0,0,0,0,1,2,3)
 #define BOOST_MPL_PP_SUB_8 (0,0,0,0,0,0,0,0,0,1,2)
 #define BOOST_MPL_PP_SUB_9 (0,0,0,0,0,0,0,0,0,0,1)
 #define BOOST_MPL_PP_SUB_10 (0,0,0,0,0,0,0,0,0,0,0)
