@@ -136,7 +136,10 @@
       </class>
 
       <class name="scoped_connection">
-        <inherit access="private"><classname>noncopyable</classname></inherit>
+        <inherit access="private">
+          <type><classname>noncopyable</classname></type>
+          <purpose>Exposition only</purpose>
+        </inherit>
         <purpose>Limits a signal-slot connection lifetime to a particular scope.</purpose>
 
         <constructor>

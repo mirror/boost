@@ -24,7 +24,10 @@
         </template-type-parameter>
       </template>
       <inherit access="public"><classname>signals::trackable</classname></inherit>
-      <inherit access="private"><classname>noncopyable</classname></inherit>
+      <inherit access="private">
+        <type><classname>noncopyable</classname></type>
+	<purpose>Exposition only</purpose>
+      </inherit>
 
       <purpose>Set of safe multicast callback types.</purpose>
 
