@@ -22,7 +22,7 @@ namespace boost
         template< class Range >
         inline typename Range::iterator begin( Range& r )
         {
-           return begin( r );  
+           return r.begin();  
         }
     }
     
