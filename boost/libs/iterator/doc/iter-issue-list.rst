@@ -1,23 +1,43 @@
-9 Iterator concept and adapter issues 
++++++++++++++++++++++++++++++++++++++
+ Iterator concept and adapter issues 
++++++++++++++++++++++++++++++++++++++
+
+:date: $Date$
+:copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003.
+
+===================================
+ Issues from Matt's TR issues list
+===================================
+
+.. contents:: Index
 
 9.1 iterator_access overspecified?
-Submitter: Pete Becker 
-Status: New 
-The proposal includes: 
-enum iterator_access { readable_iterator = 1, writable_iterator = 2, swappable_iterator = 4, 
-lvalue_iterator = 8 }; 
+==================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
+The proposal includes::
+
+  enum iterator_access { 
+     readable_iterator = 1, writable_iterator = 2,
+     swappable_iterator = 4, lvalue_iterator = 8
+  }; 
+
 In general, the standard specifies thing like this as a bitmask type with a list of defined names, 
 and specifies neither the exact type nor the specific values. Is there a reason for iterator_access to 
 be more specific? 
 
-Proposed resolution: 
-The iterator_access enum will be removed, so this is no longer an
-issue.  See the resolution to 9.15.
+:Proposed resolution: The iterator_access enum will be removed, so
+   this is no longer an issue.  See the resolution to 9.15.
 
 
 9.2 operators of iterator_facade overspecified 
-Submitter: Pete Becker 
-Status: New 
+==============================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 In general, we've provided operational semantics for things like operator++. That is, we've said 
 that ++iter must work, without requiring either a member function or a non-member function. 
 iterator_facade specifies most operators as member functions. There's no inherent reason for 
@@ -28,41 +48,50 @@ operator++(int), operator--(), operator--(int), operator+=, operator-=, operator
 operator-(iterator_facade instance), and operator+ should be specified with operational semantics 
 and not explicitly required to be members or non-members. 
 
-Proposed resolution:
-Not a defect. 
+:Proposed resolution: Not a defect. 
 
-Rationale:
-We are following the approach in the standard. Classes such
-as reverse_iterator are specified by listing the function prototypes
-for the various operators. Further, the prototype specification does
-not prevent the implementor from using members or non-members.
+:Rationale: We are following the approach in the standard. Classes
+  such as reverse_iterator are specified by listing the function
+  prototypes for the various operators. Further, the prototype
+  specification does not prevent the implementor from using members
+  or non-members.
 
 
-9.3 enable_if_interoperable needs standardese 
-Submitter: Pete Becker 
-Status: New 
+9.3 enable_if_interoperable needs standardese
+=============================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 The only discussion of what this means is in a note, so is non-normative. Further, the note seems 
 to be incorrect. It says that enable_if_interoperable only works for types that "are 
 interoperable, by which we mean they are convertible to each other." This requirement is too 
 strong: it should be that one of the types is convertible to the other. 
 N1541 48 
 
-Proposed resolution:  **** Needs work ****
+:Proposed resolution: **Needs work**
+
 Remove the enable_if_interoperable stuff, and just write all the comparisons to return bool. Then 
 add a blanket statement that the behavior of these functions is undefined if the two types aren't 
 interoperable. 
 
 
 9.4 enable_if_convertible unspecified, conflicts with requires 
-Submitter: Pete Becker 
-Status: New 
-In every place where enable_if_convertible is used it's used like this (simplified): 
-template<class T>
-struct C
-{
-template<class T1>
-C(T1, enable_if_convertible<T1, T>::type* = 0);
-};
+==============================================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
+In every place where enable_if_convertible is used it's used like
+this (simplified)::
+
+  template<class T>
+  struct C
+  {
+    template<class T1>
+    C(T1, enable_if_convertible<T1, T>::type* = 0);
+  };
+
 The idea being that this constructor won't compile if T1 isn't convertible to T. As a result, the 
 constructor won't be considered as a possible overload when constructing from an object x where 
 the type of x isn't convertible to T. In addition, however, each of these constructors has a requires 
@@ -85,134 +114,165 @@ There was more discussion on the reflector: c++std-lib-12312, c++std-lib-12325, 
 12330, c++std-lib-12334, c++std-lib-12335, c++std-lib-12336, c++std-lib-12338, c++std-lib-
 12362. 
 
-Proposed resolution: 
-Specify enable_if_convertible to be as-if: 
-template <bool> enable_if_convertible_impl
-{};
-N1541 49 
+:Proposed resolution: Specify enable_if_convertible to be as-if
+  ::
 
-template <> enable_if_convertible_impl<true>
-{ struct type; };
-template<typename From, typename To>
-struct enable_if_convertible
-: enable_if_convertible_impl<
-is_convertible<From, To>::value
-{};
+    template <bool> enable_if_convertible_impl
+    {};
+
+    template <> enable_if_convertible_impl<true>
+    { struct type; };
+
+    template<typename From, typename To>
+    struct enable_if_convertible
+      : enable_if_convertible_impl<
+          is_convertible<From, To>::value>
+    {};
 
 
-9.5 iterator_adaptor has an extraneous 'bool' at the start of the 
-template definition 
-Submitter: Pete Becker 
-Status: New 
+9.5 iterator_adaptor has an extraneous 'bool' at the start of the template definition 
+=====================================================================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 The title says it all; this is probably just a typo. 
 
-Proposed resolution:
-Remove the 'bool'.
+:Proposed resolution: Remove the 'bool'.
 
 9.6 Name of private member shouldn't be normative 
-Submitter: Pete Becker 
-Status: New 
+=================================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 iterator_adaptor has a private member named m_iterator. Presumably this is for exposition only, 
 since it's an implementation detail. It needs to be marked as such. 
 
-Proposed resolution:
-Mark the member m_iterator as exposition only.
+:Proposed resolution: Mark the member m_iterator as exposition only.
 
 
 9.7 iterator_adaptor operations specifications are a bit inconsistent 
-Submitter: Pete Becker 
-Status: New 
+=====================================================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 iterator_adpator() has a Requires clause, that Base must be default constructible. 
 iterator_adaptor(Base) has no Requires clause, although the Returns clause says that the Base 
 member is copy construced from the argument (this may actually be an oversight in N1550, 
 which doesn't require iterators to be copy constructible or assignable). 
 
-Proposed resolution:  **** Needs work **** (Jeremy)
-Add a requirements section for the template parameters of
-iterator_adaptor, and state that Base must be Copy Constructible and
-Assignable.
+:Proposed resolution: **Needs work** (Jeremy)
+  Add a requirements section for the template parameters of
+  iterator_adaptor, and state that Base must be Copy Constructible and
+  Assignable.
 
 
 9.8 Specialized adaptors text should be normative 
-Submitter: Pete Becker 
-Status: New 
+=================================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 similar to 9.3, "Specialized Adaptors" has a note describing enable_if_convertible. This should 
 be normative text. 
 
-Proposed resolution:
+:Proposed resolution: **Needs work**
+
 Change it to normative text.
 
 
 9.9 Reverse_iterator text is too informal 
-Submitter: Pete Becker 
-Status: New 
+=========================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 reverse iterator "flips the direction of the base iterator's motion". This needs to be more formal, 
 as in the current standard. Something like: "iterates through the controlled sequence in the 
 opposite direction" 
-N1541 50 
 
-Proposed resolution:  **** Needs work **** (Jeremy)
-We agree and need to find wording.
-
-
+:Proposed resolution: **Needs work** (Jeremy)
+  We agree and need to find wording.
 
 9.10 'prior' is undefined 
-Submitter: Pete Becker 
-Status: New 
+=========================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 reverse_iterator::dereference is specified as calling a function named 'prior' which has no 
 specification. 
 
-Proposed resolution:  **** Needs work ****(Jeremy)
+:Proposed resolution: **Needs work** (Jeremy)
+
 Replace use of prior with what it does.
 
 
 9.11 "In other words" is bad wording 
-Submitter: Pete Becker 
-Status: New 
+====================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 Transform iterator has a two-part specification: it does this, in other words, it does that. "In other 
 words" always means "I didn't say it right, so I'll try again." We need to say it once. 
 
-Proposed resolution:  **** Needs work ****(Jeremy)
+:Proposed resolution: **Needs work** (Jeremy)
+
 Reword.
 
-9.12 Transform_iterator shouldnÂ’t mandate private member 
-Submitter: Pete Becker 
-Status: New 
+9.12 Transform_iterator shouldn’t mandate private member 
+========================================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 transform_iterator has a private member named 'm_f' which should be marked "exposition only." 
 
-Proposed resolution:
-Mark the member m_f as exposition only.
+:Proposed resolution: Mark the member m_f as exposition only.
 
 
 9.13 Unclear description of counting iterator 
-Submitter: Pete Becker 
-Status: New 
+=============================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 The description of Counting iterator is unclear. "The counting iterator adaptor implements 
 dereference by returning a reference to the base object. The other operations are implemented by 
 the base m_iterator, as per the inheritance from iterator_adaptor." 
 
-Proposed resolution:  **** Needs work ****(Jeremy)
-Reword.
+:Proposed resolution:   **Needs work** (Jeremy) Reword.
 
 
 9.14 Counting_iterator's difference type 
-Submitter: Pete Becker 
-Status: New 
+========================================
+:Submitter: Pete Becker 
+:Status: New 
+
 Counting iterator has the following note: 
-[Note: implementers are encouraged to provide an implementation of distance_to and a 
-difference_type that avoids overflows in the cases when the Incrementable type is a numeric 
-type.] 
+
+  [Note: implementers are encouraged to provide an implementation
+  of distance_to and a difference_type that avoids overflows in the
+  cases when the Incrementable type is a numeric type.]
+
 I'm not sure what this means. The user provides a template argument named Difference, but 
 there's no difference_type. I assume this is just a glitch in the wording. But if implementors are 
 encouraged to ignore this argument if it won't work right, why is it there? 
 
-Proposed resolution:  **** Needs work ****(Jeremy)
+:Proposed resolution: **Needs work** (Jeremy)
+
 Reword.
 
 
 9.15 How to detect lvalueness? 
-Submitter: Dave Abrahams 
-Status: New 
+==============================
+
+:Submitter: Dave Abrahams 
+:Status: New 
+
 Shortly after N1550 was accepted, we discovered that an iterator's lvalueness can be determined 
 knowing only itsvalue_type. This predicate can be calculated even for old-style iterators (on 
 N1541 51 
@@ -224,45 +284,47 @@ Thus, any interface which asks the user to explicitly describe an iterator's lva
 readability seems to introduce needless complexity. 
 
 
-Proposed resolution:
-1. Remove the ``is_writable`` and ``is_swappable`` traits, and remove the
-   requirements in the Writable Iterator and Swappable Iterator concepts
-   that require their models to support these traits.
+:Proposed resolution: 
 
-2. Change the ``is_readable`` specification to be:
-   ``is_readable<X>::type`` is ``true_type`` if the
-   result type of ``X::operator*`` is convertible to
-   ``iterator_traits<X>::value_type`` and is ``false_type``
-   otherwise. Also, ``is_readable`` is required to satisfy
-   the requirements for the UnaryTypeTrait concept
-   (defined in the type traits proposal).
-   
-   Remove the requirement for support of the ``is_readable`` trait from
-   the Readable Iterator concept.
+  1. Remove the ``is_writable`` and ``is_swappable`` traits, and remove the
+     requirements in the Writable Iterator and Swappable Iterator concepts
+     that require their models to support these traits.
+
+  2. Change the ``is_readable`` specification to be:
+     ``is_readable<X>::type`` is ``true_type`` if the
+     result type of ``X::operator*`` is convertible to
+     ``iterator_traits<X>::value_type`` and is ``false_type``
+     otherwise. Also, ``is_readable`` is required to satisfy
+     the requirements for the UnaryTypeTrait concept
+     (defined in the type traits proposal).
+
+     Remove the requirement for support of the ``is_readable`` trait from
+     the Readable Iterator concept.
 
 
-3. Remove the ``iterator_tag`` class.
+  3. Remove the ``iterator_tag`` class.
 
-4. Change the specification of ``traversal_category`` to::
+  4. Change the specification of ``traversal_category`` to::
 
-    traversal-category(Iterator) =
-        let cat = iterator_traits<Iterator>::iterator_category
-        if (cat is convertible to incrementable_iterator_tag)
-          return cat; // Iterator is a new iterator
-        else if (cat is convertible to random_access_iterator_tag)
-            return random_access_traversal_tag;
-        else if (cat is convertible to bidirectional_iterator_tag)
-            return bidirectional_traversal_tag;
-        else if (cat is convertible to forward_iterator_tag)
-            return forward_traversal_tag;
-        else if (cat is convertible to input_iterator_tag)
-            return single_pass_iterator_tag;
-        else if (cat is convertible to output_iterator_tag)
-            return incrementable_iterator_tag;
-        else
-            return null_category_tag;
+      traversal-category(Iterator) =
+          let cat = iterator_traits<Iterator>::iterator_category
+          if (cat is convertible to incrementable_iterator_tag)
+            return cat; // Iterator is a new iterator
+          else if (cat is convertible to random_access_iterator_tag)
+              return random_access_traversal_tag;
+          else if (cat is convertible to bidirectional_iterator_tag)
+              return bidirectional_traversal_tag;
+          else if (cat is convertible to forward_iterator_tag)
+              return forward_traversal_tag;
+          else if (cat is convertible to input_iterator_tag)
+              return single_pass_iterator_tag;
+          else if (cat is convertible to output_iterator_tag)
+              return incrementable_iterator_tag;
+          else
+              return null_category_tag;
 
-Rationale:
+:Rationale: 
+
 1. There are two reasons for removing ``is_writable``
    and ``is_swappable``. The first is that we do not know of
    a way to fix the specification so that it gives the correct
@@ -305,8 +367,11 @@ Rationale:
 
 
 9.16 is_writable_iterator returns false positives 
-Submitter: Dave Abrahams 
-Status: New 
+=================================================
+
+:Submitter: Dave Abrahams 
+:Status: New 
+
 is_writable_iterator returns false positives for forward iterators whose value_type has a private 
 assignment operator, or whose reference type is not a reference (currently legal). 
 
@@ -315,8 +380,8 @@ See the resolution to 9.15.
 
 
 9.17 is_swappable_iterator returns false positives 
-Submitter: Dave Abrahams 
-Status: New 
+:Submitter: Dave Abrahams 
+:Status: New 
 is_swappable_iterator has the same problems as is_writable_iterator. In addition, if we allow 
 users to write their own iter_swap functions it's easy to imagine old-style iterators for which 
 is_swappable returns false negatives. 
@@ -326,8 +391,8 @@ See the resolution to 9.15.
 
 
 9.18 Are is_readable, is_writable, and is_swappable useful? 
-Submitter: Dave Abrahams 
-Status: New 
+:Submitter: Dave Abrahams 
+:Status: New 
 I am concerned that there is little use for any of is_readable, is_writable, or is_swappable, and 
 that not only do they unduly constrain iterator implementors but they add overhead to 
 iterator_facade and iterator_adaptor in the form of a template parameter which would otherwise 
@@ -339,8 +404,8 @@ See the resolution to 9.15.
 
 
 9.19 Non-Uniformity of the "lvalue_iterator Bit" 
-Submitter: Dave Abrahams 
-Status: New 
+:Submitter: Dave Abrahams 
+:Status: New 
 The proposed iterator_tag class template accepts an "access bits" parameter which includes a bit 
 to indicate the iterator's lvalueness (whether its dereference operator returns a reference to its 
 value_type. The relevant part of N1550 says: 
@@ -358,8 +423,8 @@ See the resolution to 9.15.
 
 
 9.20 Traversal Concepts and Tags 
-Submitter: Dave Abrahams 
-Status: New 
+:Submitter: Dave Abrahams 
+:Status: New 
 Howard Hinnant pointed out some inconsistencies with the naming of these tag types: 
 incrementable_iterator_tag // ++r, r++ 
 single_pass_iterator_tag // adds a == b, a != b 
@@ -374,18 +439,19 @@ equality comparable. Forward traversal iterators really distinguish themselves b
 multi-pass capability. Without entering a "Parkinson's Bicycle Shed" type of discussion, it might 
 be worth giving the names of these tags (and the associated concepts) some extra attention. 
 
-Proposed resolution:
-Change the names of the traversal tags to the following names.
- incrementable_traversal_tag
- single_pass_traversal_tag
- forward_traversal_tag
- bidirectional_traversal_tag
- random_access_traversal_tag
+:Proposed resolution: Change the names of the traversal tags to the
+  following names::
+
+    incrementable_traversal_tag
+    single_pass_traversal_tag
+    forward_traversal_tag
+    bidirectional_traversal_tag
+    random_access_traversal_tag
 
 
 9.21 iterator_facade Derived template argument underspecified 
-Submitter: Pete Becker 
-Status: New 
+:Submitter: Pete Becker 
+:Status: New 
 The first template argument to iterator_facade is named Derived, and the proposal says: 
 The Derived template parameter must be a class derived from iterator_facade. 
 First, iterator_facade is a template, so cannot be derived from. Rather, the class must be derived 
@@ -399,15 +465,16 @@ like "when using iterator_facade to define an iterator class Iter, the class Ite
 from a specialization of iterator_facade whose first template argument is Iter." That's a bit 
 awkward, but at the moment I don't see a better way of phrasing it. 
 
-Proposed resolution:  **** Needs work ****
+:Proposed resolution:   **Needs work**
+
 Reword.
 
 
 
 
 9.22 return type of Iterator difference for iterator facade 
-Submitter: Pete Becker 
-Status: New 
+:Submitter: Pete Becker 
+:Status: New 
 N1541 53 
 
 The proposal says: 
@@ -420,104 +487,119 @@ Shouldn't the return type be one of the two iterator types? Which one? The idea 
 the iterator types can be converted to the other type, then the subtraction is okay. Seems like the 
 return type should then be the type that was converted to. Is that right? 
 
-Proposed resolution:
-Change the return type from 
-  typename enable_if_interoperable<Dr1, Dr2, bool>::type
-to
-  typename enable_if_interoperable<Dr1, Dr2, D1>::type
+:Proposed resolution: 
+  Change the return type from ::
+
+    typename enable_if_interoperable<Dr1, Dr2, bool>::type
+
+  to ::
+
+    typename enable_if_interoperable<Dr1, Dr2, D1>::type
 
 
 9.23 Iterator_facade: minor wording Issue 
-Submitter: Pete Becker 
-Status: New 
+:Submitter: Pete Becker 
+:Status: New 
 In the table that lists the required (sort of) member functions of iterator types that are based on 
 iterator_facade, the entry for c.equal(y) says: 
 true iff c and y refer to the same position. Implements c == y and c != y. 
 The second sentence is inside out. c.equal(y) does not implement either of these operations. It is 
 used to implement them. Same thing in the description of c.distance_to(z). 
 
-Proposed resolution:  **** Needs work ****
+:Proposed resolution:   **Needs work**
+
 Reword.
 
 
 9.24 Use of undefined name in iterator_facade table 
-Submitter: Pete Becker 
-Status: New 
+:Submitter: Pete Becker 
+:Status: New 
 Several of the descriptions use the name X without defining it. This seems to be a carryover from 
 the table immediately above this section, but the text preceding that table says "In the table 
 below, X is the derived iterator type." Looks like the X:: qualifiers aren't really needed; 
 X::reference can simply be reference, since that's defined by the iterator_facade specialization 
 itself. 
 
-Proposed resolution:  **** Needs work ****
+:Proposed resolution:   **Needs work**
+
 Remove the use of X.
 
 
 9.25 Iterator_facade: wrong return type 
-Submitter: Pete Becker 
-Status: New 
+:Submitter: Pete Becker 
+:Status: New 
 Several of the member functions return a Derived object or a Derived&. Their Effects clauses 
 end with: 
 return *this;
 This should be 
 return *static_cast<Derived*>(this);
 
-Proposed resolution:
-Change the returns clause to
-return *static_cast<Derived*>(this);
+:Proposed resolution: 
+  Change the returns clause to::
+
+    return *static_cast<Derived*>(this);
 
 
 
 9.26 Iterator_facade: unclear returns clause for operator[] 
-Submitter: Pete Becker 
+:Submitter: Pete Becker 
 N1541 54 
 
-Status: New 
-The returns clause for operator[](difference_type n) const says: 
-Returns: an object convertible to X::reference and holding a copy p of a+n such that, for a 
-constant object v of type X::value_type, X::reference(a[n] = v) is equivalent to p = v. 
-This needs to define 'a', but assuming it's supposed to be *this (or maybe *(Derived*)this), it still 
-isn't clear what this says. Presumably, the idea is that you can index off of an iterator and assign 
-to the result. But why the requirement that it hold a copy of a+n? Granted, that's probably how 
-it's implemented, but it seems over-constrained. And the last phrase seems wrong. p is an 
-iterator; there's no requirement that you can assign a value_type object to it. Should that be *p = 
-v? But why the cast in reference(a[n] = v)? 
+:Status: New 
 
-Proposed resolution:  **** Needs work ****
+The returns clause for ``operator[](difference_type n)`` const
+says: 
+
+  Returns: an object convertible to X::reference and holding a copy
+  p of a+n such that, for a constant object v of type
+  X::value_type, X::reference(a[n] = v) is equivalent to p = v.
+  This needs to define 'a', but assuming it's supposed to be
+  ``*this`` (or maybe ``*(Derived*)this``), it still isn't clear
+  what this says. Presumably, the idea is that you can index off of
+  an iterator and assign to the result. But why the requirement
+  that it hold a copy of a+n? Granted, that's probably how it's
+  implemented, but it seems over-constrained. And the last phrase
+  seems wrong. p is an iterator; there's no requirement that you
+  can assign a value_type object to it. Should that be ``*p = v``?
+  But why the cast in reference(a[n] = v)?
+
+:Proposed resolution:   **Needs work**
+
 Change *this to *static_cast<Derived*>(this). Also reword the stuff
 about X::reference(a[n] = v) is equivalent to p = v.
 
 
 
 9.27 Iterator_facade: redundant clause 
-Submitter: Pete Becker 
-Status: New 
+:Submitter: Pete Becker 
+:Status: New 
 operator- has both an effects clause and a returns clause. Looks like the returns clause should be 
 removed. 
 
-Proposed resolution:
-Remove the returns clause.
+:Proposed resolution: Remove the returns clause.
 
 
 9.28 indirect_iterator: incorrect specification of default constructor 
-Submitter: Pete Becker 
-Status: New 
+:Submitter: Pete Becker 
+:Status: New 
 The default constructor returns "An instance of indirect_iterator with a default constructed base 
 object", but the constructor that takes an Iterator object returns "An instance of indirect_iterator 
 with the iterator_adaptor subobject copy constructed from x." The latter is the correct form, since 
 it does not reach inside the base class for its semantics. So the default constructor shoudl return 
 "An instance of indirect_iterator with a default-constructed iterator_adaptor subobject." 
 
-Proposed resolution:
-Change the effects clause to 
-Effects: Constructs an instance of indirect_iterator with a default
-constructed iterator_adaptor subobject.
+:Proposed resolution: Change the effects clause to
 
+  Effects: Constructs an instance of indirect_iterator with a default
+  constructed iterator_adaptor subobject.
 
 
 9.29 indirect_iterator: unclear specification of template constructor 
-Submitter: Pete Becker 
-Status: New 
+=====================================================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 The templated constructor that takes an indirect_iterator with a different set of template 
 arguments says that it returns "An instance of indirect_iterator that is a copy of [the argument]". 
 But the type of the argument is different from the type of the object being constructed, and there 
@@ -529,31 +611,38 @@ Is that what's meant here?
 constructor like this: the constructor returns "a copy" of the argument without saying what a 
 copy is.) 
 
-Proposed resolution:
-Change the effects clause to 
-Effects: Constructs an instance of indirect_iterator whose
-iterator_adaptor subobject is constructed from y.base().
+:Proposed resolution: Change the effects clause to 
+
+
+  Effects: Constructs an instance of indirect_iterator whose
+  iterator_adaptor subobject is constructed from y.base().
 
 
 
 9.30 transform_iterator argument irregularity 
-Submitter: Pete Becker 
-Status: New 
+=============================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 The specialized adaptors that take both a Value and a Reference template argument all take them 
 in that order, i.e. Value precedes Reference in the template argument list, with the exception of 
 transform_iterator, where Reference precedes Value. This seems like a possible source of 
 confusion. Is there a reason why this order is preferable? 
 
-Proposed resolution:
-Change the argument order so that Value precedes reference.
+:Proposed resolution: Change the argument order so that Value precedes reference.
 
 
 9.31 function_output_iterator overconstrained 
-Submitter: Pete Becker 
-Status: New 
+=============================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 function_output_iterator requirements says: "The UnaryFunction must be Assignable, Copy 
 Constructible, and the expression f(x) must be valid, where f is an object of type UnaryFunction 
 and x is an object of a type accepted by f." 
+
 Everything starting with "and," somewhat reworded, is actually a constraint on 
 output_proxy::operator=. All that's needed to create a function_output_iterator object is that the 
 UnaryFunction type be Assignable and CopyConstructible. That's also sufficient to dereference 
@@ -561,110 +650,137 @@ and to increment such an object. It's only when you try to assign through a dere
 that f(x) has to work, and then only for the particular function object that the iterator holds and 
 for the particular value that is being assigned. 
 
-Proposed resolution:  **** Needs work ****(Jeremy)
-Agree, need to find wording.
+:Proposed resolution:   **Needs work** (Jeremy)  Agree, need to find wording.
 
 
 
-9.32 Should output_proxy real 
-y be a named type? 
-Submitter: Pete Becker 
-Status: New 
+9.32 Should output_proxy really be a named type? 
+================================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 This means someone can store an output_proxy object for later use, whatever that means. It also 
 constrains output_proxy to hold a copy of the function object, rather than a pointer to the iterator 
 object. Is all this mechanism really necessary? 
 
-Proposed resolution:  **** Needs work ****(Jeremy)
-Agree, need to find wording.
+:Proposed resolution:   **Needs work** (Jeremy) Agree, need to find wording.
 
 
 
 9.33 istreambuf_iterator isn't a Readable Iterator 
-Submitter: Pete Becker 
-Status: New 
-c++std-lib-12333: 
-N1550 requires that for a Readable Iterator a of type X, *a returns an object of type 
-iterator_traits<X>::reference. istreambuf_iterator::operator* returns charT, but 
-istreambuf_iterator::reference is charT&. So am I overlooking something, or is 
-istreambuf_iterator not Readable 
+==================================================
 
-Proposed resolution:  **** Needs work ****(Jeremy)
+:Submitter: Pete Becker 
+:Status: New 
+
+c++std-lib-12333: 
+
+  N1550 requires that for a Readable Iterator a of type X, *a returns an object of type 
+  iterator_traits<X>::reference. istreambuf_iterator::operator* returns charT, but 
+  istreambuf_iterator::reference is charT&. So am I overlooking something, or is 
+  istreambuf_iterator not Readable 
+
+:Proposed resolution:   **Needs work** (Jeremy)
+
 Remove requirements on the reference type from Readable Iterator.
 
 
 
 9.34 iterator_facade free functions unspecified 
-Submitter: Pete Becker 
-Status: New 
-c++std-lib-12562:
-The template functions operator==, operator!=, operator<, operator<=, operator>, operator>=,
-and operator- that take two arguments that are specializations of iterator_facade have no
-specification. The template function operator+ that takes an argument that is a specialization of
-iterator_facade and an argument of type difference_type has no specification.
+===============================================
 
-Proposed resolution:  **** Needs work ****
-Add the missing specifications.
+:Submitter: Pete Becker 
+:Status: New 
+
+c++std-lib-12562:
+
+  The template functions operator==, operator!=, operator<, operator<=, operator>, operator>=,
+  and operator- that take two arguments that are specializations of iterator_facade have no
+  specification. The template function operator+ that takes an argument that is a specialization of
+  iterator_facade and an argument of type difference_type has no specification.
+
+:Proposed resolution:   **Needs work** Add the missing specifications.
 
 
 9.35 iterator_facade: too many equals? 
-Submitter: Pete Becker 
-Status: New 
-c++std-lib-12563:
-The table listing the functions required for types derived from iterator_facade has two functions
-named equal and two named distance_to:
-c.equal(b)
-c.equal(y)
-c.distance_to(b)
-c.distance_to(z)
-where b and c are const objects of the derived type, y and z are constant objects of certain iterator 
-types that are interoperable with the derived type. 
-Seems like the 'b' versions are redundant: in both cases, the other version will take a 'b'. In fact, 
-iterator_adaptor is specified to use iterator_facade, but does not provide the 'b' versions of these 
-functions. 
-Are the 'b' versions needed? 
+======================================
 
-Proposed resolution:
-Remove the 'b' versions.
+:Submitter: Pete Becker 
+:Status: New 
+
+c++std-lib-12563:
+
+  The table listing the functions required for types derived from iterator_facade has two functions
+  named equal and two named distance_to::
+
+    c.equal(b)
+    c.equal(y)
+    c.distance_to(b)
+    c.distance_to(z)
+
+  where b and c are const objects of the derived type, y and z are constant objects of certain iterator 
+  types that are interoperable with the derived type. 
+  Seems like the 'b' versions are redundant: in both cases, the other version will take a 'b'. In fact, 
+  iterator_adaptor is specified to use iterator_facade, but does not provide the 'b' versions of these 
+  functions. 
+
+  Are the 'b' versions needed? 
+
+:Proposed resolution:  Remove the 'b' versions.
 
 
 9.36 iterator_facade function requirements 
-Submitter: Pete Becker 
-Status: New 
+==========================================
+
+:Submitter: Pete Becker 
+:Status: New 
+
 c++std-lib-12636:
-The table that lists required functions for the derived type X passed to iterator_facade lists,
-among others:
-for a single pass iterator:
-c.equal(b)
-c.equal(y)
-where b and c are const X objects, and y is a const object of a single pass iterator that is
-interoperable with X. Since X is interoperable with itself, c.equal(b) is redundant. There is a
-difference in their descriptions, but its meaning isn't clear. The first is "true iff b and c are
-equivalent", and the second is "true iff c and y refer to the same position." Is there a difference
-between the undefined term "equivalent" and "refer to the same position"?
 
-Similarly, for a random access traversal iterator:
-c.distance_to(b)
-c.distance_to(z)
-where z is a constant object of a random access traversal iterator that is interoperable with X.
-Again, X is interoperable with itself, so c.distance_to(b) is redundant.
-Also, the specification for c.distance_to(z) isn't valid. It's written as "equivalent to distance(c,
-z)". The template function distance takes two arguments of the same type, so distance(c, z) isn't
-valid if c and z are different types. Should it be distance(c, (X)z)?
+  The table that lists required functions for the derived type X passed to iterator_facade lists,
+  among others:
+  for a single pass iterator::
 
-Proposed resolution:  **** Needs work ****
+    c.equal(b)
+    c.equal(y)
+
+  where b and c are const X objects, and y is a const object of a single pass iterator that is
+  interoperable with X. Since X is interoperable with itself, c.equal(b) is redundant. There is a
+  difference in their descriptions, but its meaning isn't clear. The first is "true iff b and c are
+  equivalent", and the second is "true iff c and y refer to the same position." Is there a difference
+  between the undefined term "equivalent" and "refer to the same position"?
+
+  Similarly, for a random access traversal iterator::
+
+    c.distance_to(b)
+    c.distance_to(z)
+
+  where z is a constant object of a random access traversal iterator that is interoperable with X.
+  Again, X is interoperable with itself, so c.distance_to(b) is redundant.
+  Also, the specification for c.distance_to(z) isn't valid. It's written as "equivalent to distance(c,
+  z)". The template function distance takes two arguments of the same type, so distance(c, z) isn't
+  valid if c and z are different types. Should it be distance(c, (X)z)?
+
+:Proposed resolution:   **Needs work**
+
 We need to define what "same position" means for iterators. This also
 needs to be part of the definition of an Interoperable Iterator
 concept.
 
 
-========================================================================================
-More Issues (not from Matt's list)
-========================================================================================
+====================================
+ More Issues (not from Matt's list)
+====================================
+
 
 
 Inheritance in iterator_adaptor and other adaptors is an overspecification
-Submitter: Pete Becker
-Status: New 
+==========================================================================
+
+:Submitter: Pete Becker
+:Status: New 
+
 c++std-lib-12696:
 The paper requires that iterator_adaptor be derived from an
 appropriate instance of iterator_facade, and that most of the specific
@@ -673,7 +789,8 @@ iterator_adaptor. That seems like overspecification, and we ought to
 look at specifying these things in terms of what the various templates
 provide rather than how they're implemented.
 
-Proposed resolution:  **** Needs work ****
+:Proposed resolution:   **Needs work**
+
 Remove the specfication of inheritance, and add lots of specification
 to make for it. In iterator_adaptor, that means duplicating a lot of
 function prototypes. In the other adaptors, that means making sure we
@@ -685,139 +802,155 @@ specialized adaptors. -Jeremy
 
 
 Problem with specification of a->m in Readable Iterator
-Submitter: Howard Hinnant
-Status: New
+=======================================================
+
+:Submitter: Howard Hinnant
+:Status: New
+
 c++std-lib-12585:
 
-Readable Iterator Requirements says
+Readable Iterator Requirements says::
+
     a->m      U&        pre: (*a).m is well-defined. Equivalent to (*a).m
+
 Do we mean to outlaw iterators with proxy references from meeting the  
 readable requirements?
-Would it be better for the requirements to read static_cast<T>(*a).m  
-instead of (*a).m ?
 
-Proposed resolution:
-Change the requirement to
-pre: static_cast<T const&>(*a).m is well-defined.  If
-static_cast<T&>(*a).m is well-defined, equivalent to
-static_cast<T&>(*a).m; otherwise, equivalent to
-static_cast<T const&>(*a).m.
+Would it be better for the requirements to read ``static_cast<T>(*a).m``
+instead of ``(*a).m`` ?
 
+:Proposed resolution: Change the requirement to
 
+  :pre: ``static_cast<T const&>(*a).m`` is well-defined.  If
+    ``static_cast<T&>(*a).m`` is well-defined, equivalent to
+    ``static_cast<T&>(*a).m``; otherwise, equivalent to
+    ``static_cast<T const&>(*a).m``.
 
 
 counting_iterator Traversal argument unspecified
-Submitter: Pete Becker
+================================================
+
+:Submitter: Pete Becker
+
 c++std-lib-12635:
  
-counting_iterator takes an argument for its Traversal type, with a default
-value of use_default. It is derived from an instance of iterator_adaptor,
-where the argument passed for the Traversal type is described as "/* see
-details for traversal category */". The details for counting_iterator
-describe constraints on the Incrementable type imposed by various traversal
+counting_iterator takes an argument for its Traversal type, with a
+default value of use_default. It is derived from an instance of
+iterator_adaptor, where the argument passed for the Traversal type
+is described as "\ ``/* see details for traversal category
+*/``". The details for counting_iterator describe constraints on
+the Incrementable type imposed by various traversal
 categories. There is no description of what the argument to
 iterator_adaptor should be.
 
 
-Proposed resolution:  **** Needs work **** (Jeremy)
+:Proposed resolution:   **Needs work** (Jeremy)
 
 
 
 
 indirect_iterator requirements muddled
-Submitter: Pete Becker
-c++std-lib-12640
+======================================
 
->The value_type of the Iterator template parameter should itself be 
->dereferenceable. The return type of the operator* for the value_type must 
->be the same type as the Reference template parameter.
+:Submitter: Pete Becker
 
-I'd say this a bit differently, to emphasize what's required:
-iterator_traits<Iterator>::value_type must be dereferenceable.
-The Reference template parameter must be the same type as 
-*iterator_traits<Iterator>::value_type().
+c++std-lib-12640::
 
->The Value template parameter will be the value_type for the 
->indirect_iterator, unless Value is const. If Value is const X, then 
->value_type will be non- const X.
+  >The value_type of the Iterator template parameter should itself be 
+  >dereferenceable. The return type of the operator* for the value_type must 
+  >be the same type as the Reference template parameter.
 
-Also non-volatile, right? In other words, if Value isn't use_default, it 
-just gets passed as the Value argument for iterator_adaptor.
+  I'd say this a bit differently, to emphasize what's required:
+  iterator_traits<Iterator>::value_type must be dereferenceable.
+  The Reference template parameter must be the same type as 
+  ``*iterator_traits<Iterator>::value_type()``.
 
->The default for Value is
->
->iterator_traits< iterator_traits<Iterator>::value_type >::value_type
->
->If the default is used for Value, then there must be a valid 
->specialization of iterator_traits for the value type of the base iterator.
+  >The Value template parameter will be the value_type for the 
+  >indirect_iterator, unless Value is const. If Value is const X, then 
+  >value_type will be non- const X.
 
-The earlier requirement is that iterator_traits<Iterator>::value_type must 
-be dereferenceable. Now it's being treated as an iterator. Is this just a 
-pun, or is iterator_traits<Iterator>::value_type required to be some form 
-of iterator? If it's the former we need to find a different way to say it. 
-If it's the latter we need to say so.
+  Also non-volatile, right? In other words, if Value isn't use_default, it 
+  just gets passed as the Value argument for iterator_adaptor.
 
-Proposed resolution:  **** Needs work ****(Jeremy)
+  >The default for Value is
+  >
+  >iterator_traits< iterator_traits<Iterator>::value_type >::value_type
+  >
+  >If the default is used for Value, then there must be a valid 
+  >specialization of iterator_traits for the value type of the base iterator.
+
+  The earlier requirement is that iterator_traits<Iterator>::value_type must 
+  be dereferenceable. Now it's being treated as an iterator. Is this just a 
+  pun, or is iterator_traits<Iterator>::value_type required to be some form 
+  of iterator? If it's the former we need to find a different way to say it. 
+  If it's the latter we need to say so.
+
+:Proposed resolution:   **Needs work** (Jeremy)
 
 
 
 Problem with transform_iterator requirements
-Submitter: Pete Becker
-c++std-lib-12641:
->The reference type of transform_iterator is
->result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type. The
->value_type is remove_cv<remove_reference<reference> >::type.
- 
-These are the defaults, right? If the user supplies their own types that's
-what gets passed to iterator_adaptor. And again, the specification should
-be in terms of the specialization of iterator_adaptor, and not in terms of
-the result:
- 
-Reference argument to iterator_adaptor:
+============================================
 
-    if (Reference != use_default)
-	Reference
-    else
-	result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type
+:Submitter: Pete Becker
 
-Value argument to iterator_adaptor:
+c++std-lib-12641::
 
-    if (Value != use_default)
-	Value
-    else if (Reference != use_default)
-	remove_reference<reference>::type
-    else
-	remove_reference<result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type>::type
- 
-There's probably a better way to specify that last alternative, but I've
-been at this too long, and it's all turning into a maze of twisty passages,
-all alike.
+  >The reference type of transform_iterator is
+  >result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type. The
+  >value_type is remove_cv<remove_reference<reference> >::type.
 
-Proposed resolution:  **** Needs work ****(Jeremy)
+  These are the defaults, right? If the user supplies their own types that's
+  what gets passed to iterator_adaptor. And again, the specification should
+  be in terms of the specialization of iterator_adaptor, and not in terms of
+  the result:
 
+  Reference argument to iterator_adaptor::
 
+      if (Reference != use_default)
+        Reference
+      else
+        result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type
+
+  Value argument to iterator_adaptor::
+
+      if (Value != use_default)
+        Value
+      else if (Reference != use_default)
+        remove_reference<reference>::type
+      else
+        remove_reference<result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type>::type
+
+  There's probably a better way to specify that last alternative, but I've
+  been at this too long, and it's all turning into a maze of twisty passages,
+  all alike.
+
+:Proposed resolution:   **Needs work** (Jeremy)
 
 
 filter_iterator details unspecified
-Submitter: Pete Becker
+===================================
+
+:Submitter: Pete Becker
+
 c++std-lib-12642:
 
-The paper says:
+The paper says::
 
     template<class Predicate, class Iterator>
     class filter_iterator
-	     : public iterator_adaptor<
-		     filter_iterator<Predicate, Iterator>,
-		     Iterator,
-		     use_default,
-		     /* see details */ >
+         : public iterator_adaptor<
+             filter_iterator<Predicate, Iterator>,
+             Iterator,
+             use_default,
+             /* see details */ >
  
 That comment covers the Access, Traversal, Reference, and Difference
-arguments. The only specification for any of these in the details is:
+arguments. The only specification for any of these in the details is::
  
->The access category of the filter_iterator will be the same as the access
->category of Iterator.
+  >The access category of the filter_iterator will be the same as
+  >the access category of Iterator.
  
 Needs more.
 
-Proposed resolution:  **** Needs work ****(Jeremy)
+:Proposed resolution:   **Needs work** (Jeremy)
