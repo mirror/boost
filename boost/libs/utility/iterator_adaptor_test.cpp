@@ -207,10 +207,10 @@ main()
 
   // Test the iterator_adaptor
   {
-    my_iterator i = array;
+    my_iterator i(array);
     boost::random_access_iterator_test(i, N, array);
     
-    const_my_iterator j = array;
+    const_my_iterator j(array);
     boost::random_access_iterator_test(j, N, array);
     boost::const_nonconst_iterator_test(i, ++j);
   }
@@ -245,7 +245,7 @@ main()
 
     typedef boost::indirect_iterator_generator<dummyT**, const dummyT>::type const_indirect_iterator;
 
-    indirect_iterator i = ptr;
+    indirect_iterator i(ptr);
     boost::random_access_iterator_test(i, N, array);
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -255,7 +255,7 @@ main()
     // check operator->
     assert((*i).m_x == i->foo());
 
-    const_indirect_iterator j = ptr;
+    const_indirect_iterator j(ptr);
     boost::random_access_iterator_test(j, N, array);
 
     dummyT*const* const_ptr = ptr;
@@ -285,7 +285,7 @@ main()
     boost::random_access_iterator_test(boost::make_projection_iterator(pair_array, select1st_<Pair>()), N, array);    
     boost::random_access_iterator_test(boost::make_projection_iterator< select1st_<Pair> >(pair_array), N, array);    
 
-    Projection::const_iterator j = pair_array;
+    Projection::const_iterator j(pair_array);
     boost::random_access_iterator_test(j, N, array);
 
     boost::random_access_iterator_test(boost::make_const_projection_iterator(pair_array, select1st_<Pair>()), N, array);
@@ -306,7 +306,7 @@ main()
 #endif
       >::type reverse_iterator;
     
-    reverse_iterator i = reversed + N;
+    reverse_iterator i(reversed + N);
     boost::random_access_iterator_test(i, N, array);
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -319,7 +319,7 @@ main()
 #endif
       >::type const_reverse_iterator;
     
-    const_reverse_iterator j = reversed + N;
+    const_reverse_iterator j(reversed + N);
     boost::random_access_iterator_test(j, N, array);
 
     const dummyT* const_reversed = reversed;
@@ -344,7 +344,7 @@ main()
     typedef boost::reverse_iterator_generator<
         std::deque<dummyT>::const_iterator, const dummyT>::type const_reverse_iterator;
 
-    reverse_iterator i = reversed + N;
+    reverse_iterator i(reversed + N);
     boost::random_access_iterator_test(i, N, array);
     boost::random_access_iterator_test(boost::make_reverse_iterator(reversed + N), N, array);
 
