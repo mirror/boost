@@ -7,6 +7,8 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  07 Feb 2001 More comprehensive testing; factored out static tests for
+//              better reuse (David Abrahams)
 //  21 Jan 2001 Quick fix to my_iterator, which wasn't returning a
 //              reference type from operator* (David Abrahams)
 //  19 Jan 2001 Initial version with iterator operators (David Abrahams)
@@ -35,91 +37,103 @@ struct my_iterator
     const char* m_p;
 };
 
-// Test difference_type and iterator_category
 
-// istream_iterator (forward_iterator_tag, ptrdiff_t)
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<std::istream_iterator<int> >::iterator_category,
-      std::input_iterator_tag
-    >::value));
+template <class Iterator,
+    class value_type, class difference_type, class pointer, class reference, class category>
+struct non_portable_tests
+{
+    // Unfortunately, the VC6 standard library doesn't supply these :(
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+        boost::detail::iterator_traits<Iterator>::pointer,
+        pointer
+        >::value));
+    
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+        boost::detail::iterator_traits<Iterator>::reference,
+        reference
+        >::value));
+};
 
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<std::istream_iterator<int> >::difference_type,
-      std::ptrdiff_t
-    >::value));
+template <class Iterator,
+    class value_type, class difference_type, class pointer, class reference, class category>
+struct portable_tests
+{
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+        boost::detail::iterator_traits<Iterator>::difference_type,
+        difference_type
+        >::value));
+    
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+        boost::detail::iterator_traits<Iterator>::iterator_category,
+        category
+        >::value));
+};
 
-// ostream_iterator (output_iterator_tag, void)
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<std::ostream_iterator<int> >::iterator_category,
-      std::output_iterator_tag
-    >::value));
+// Test iterator_traits
+template <class Iterator,
+    class value_type, class difference_type, class pointer, class reference, class category>
+struct input_iterator_test
+    : portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
+{
+    BOOST_STATIC_ASSERT((
+        boost::is_same<
+        boost::detail::iterator_traits<Iterator>::value_type,
+        value_type
+        >::value));
+};
 
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<std::ostream_iterator<int> >::difference_type,
-      void
-    >::value));
+template <class Iterator,
+    class value_type, class difference_type, class pointer, class reference, class category>
+struct non_pointer_test
+    : input_iterator_test<Iterator,value_type,difference_type,pointer,reference,category>
+#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+      , non_portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
+#endif
+{
+};
 
-// list<int>::iterator (bidirectional_iterator_tag, ptrdiff_t)
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<std::list<int>::iterator>::iterator_category,
-      std::bidirectional_iterator_tag
-    >::value));
+template <class Iterator,
+    class value_type, class difference_type, class pointer, class reference, class category>
+struct maybe_pointer_test
+    : portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+      , non_portable_tests<Iterator,value_type,difference_type,pointer,reference,category>
+#endif
+{
+};
+
+input_iterator_test<std::istream_iterator<int>, int, std::ptrdiff_t, int*, int&, std::input_iterator_tag>
+        istream_iterator_test;
+
+non_pointer_test<std::ostream_iterator<int>,
+#if !defined(BOOST_MSVC) || defined(__SGI_STL_PORT)
+    void,
+#else // the VC6 standard lib gives ostream_iterator an incorrect value_type
+    int,
+#endif
+    void, void, void, std::output_iterator_tag>
+        ostream_iterator_test;
 
 #ifdef __KCC
   typedef long std_list_diff_type;
 #else
   typedef std::ptrdiff_t std_list_diff_type;
 #endif
+non_pointer_test<std::list<int>::iterator, int, std_list_diff_type, int*, int&, std::bidirectional_iterator_tag>
+        list_iterator_test;
 
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<std::list<int>::iterator>::difference_type,
-      std_list_diff_type
-    >::value));
+maybe_pointer_test<std::vector<int>::iterator, int, std::ptrdiff_t, int*, int&, std::random_access_iterator_tag>
+        vector_iterator_test;
 
-// vector<int>::iterator (random_access_iterator_tag, ptrdiff_t)
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<std::vector<int>::iterator>::iterator_category,
-      std::random_access_iterator_tag
-    >::value));
-                    
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<std::vector<int>::iterator>::difference_type,
-      std::ptrdiff_t
-    >::value));
-                    
-// int* (random_access_iterator_tag, ptrdiff_t)
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<int*>::iterator_category,
-      std::random_access_iterator_tag
-    >::value));
-                    
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<int*>::difference_type,
-    std::ptrdiff_t
-    >::value));
-                    
-// my_iterator (forward_iterator_tag, long)
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<my_iterator>::iterator_category,
-      std::forward_iterator_tag
-    >::value));
-                    
-BOOST_STATIC_ASSERT((
-    boost::is_same<
-      boost::detail::iterator_traits<my_iterator>::difference_type,
-      long
-    >::value));
+maybe_pointer_test<int*, int, std::ptrdiff_t, int*, int&, std::random_access_iterator_tag>
+        int_pointer_test;
+
+non_pointer_test<my_iterator, const char, long, const char*, const char&, std::forward_iterator_tag>
+       my_iterator_test;
                     
 int main()
 {
