@@ -30,6 +30,7 @@
 #include <cassert>
 #include <string>
 #include <cctype>
+#include <algorithm> // for find_if
 
 //
 // the following must not be macros if we are to prefix them
