@@ -8,7 +8,8 @@
 
 //  See http://www.boost.org for most recent version including documentation.
 
-//  NOTE WELL: C++ programs are advised to use <boost/cstdint.hpp> rather than
+//  NOTE WELL: This is an implementation of the ISO C Standard (1999) stdint.h
+//  header.  C++ programs are advised to use <boost/cstdint.hpp> rather than
 //  this header.
 
 //  Revision History
@@ -26,28 +27,24 @@
 
 #else
 
-//  This is not a complete implementation of the 1999 C Standard stdint.h
-//  header; it doesn't supply various macros which are not advisable for use in
-//  C++ programs.
-
 #include <limits.h> // implementation artifact; not part of interface
 
 //  These are fairly safe guesses for some 16-bit, and most 32-bit and 64-bit
 //  platforms.  For other systems, they will have to be hand tailored.
-//  Because the fast types are assumed to be the same as the undecorated types,
-//  it may be possible to hand tailor a more efficient implementation.
+//  It may also be possible to hand tailor a more efficient implementation
+//  if the asumptions below about fast type are not correct of your processor.
 
 //  8-bit types  -------------------------------------------------------------//
 
 # if UCHAR_MAX == 0xff
      typedef signed char     int8_t;
      typedef signed char     int_least8_t;
-     typedef signed char     int_fast8_t;
+     typedef int             int_fast8_t;   // assume int faster than char
      typedef unsigned char   uint8_t;
      typedef unsigned char   uint_least8_t;
-     typedef unsigned char   uint_fast8_t;
+     typedef unsigned int    uint_fast8_t;  // assume int faster than char
 # else
-#    error defaults not correct; you must hand modify boost/stdint.hpp
+#    error defaults not correct; you must hand modify boost/stdint.h
 # endif
 
 //  16-bit types  ------------------------------------------------------------//
@@ -55,12 +52,12 @@
 # if USHRT_MAX == 0xffff
      typedef short           int16_t;
      typedef short           int_least16_t;
-     typedef short           int_fast16_t;
+     typedef int             int_fast16_t;  // assume int faster than short
      typedef unsigned short  uint16_t;
      typedef unsigned short  uint_least16_t;
-     typedef unsigned short  uint_fast16_t;
+     typedef unsigned int    uint_fast16_t; // assume int faster than short
 # else
-#    error defaults not correct; you must hand modify boost/stdint.hpp
+#    error defaults not correct; you must hand modify boost/stdint.h
 # endif
 
 //  32-bit types  ------------------------------------------------------------//
@@ -80,7 +77,7 @@
      typedef unsigned long   uint_least32_t;
      typedef unsigned long   uint_fast32_t;
 # else
-#    error defaults not correct; you must hand modify boost/stdint.hpp
+#    error defaults not correct; you must hand modify boost/stdint.h
 # endif
 
 //  64-bit types + intmax_t and uintmax_t  -----------------------------------//
@@ -98,7 +95,7 @@
      typedef unsigned long long   uint_least64_t;
      typedef unsigned long long   uint_fast64_t;
 #    else
-#       error defaults not correct; you must hand modify boost/stdint.hpp
+#       error defaults not correct; you must hand modify boost/stdint.h
 #    endif
 # elif ULONG_MAX != 0xffffffff
 
@@ -112,7 +109,7 @@
      typedef unsigned long        uint_least64_t;
      typedef unsigned long        uint_fast64_t;
 #    else
-#       error defaults not correct; you must hand modify boost/stdint.hpp
+#       error defaults not correct; you must hand modify boost/stdint.h
 #    endif
 # elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
      //
@@ -205,7 +202,7 @@ Added 23rd September (John Maddock).
 #define INT64_C(value) value##LL
 #define UINT64_C(value) value##uLL
 #    else
-#       error defaults not correct; you must hand modify boost/stdint.hpp
+#       error defaults not correct; you must hand modify boost/stdint.h
 #    endif
 # elif ULONG_MAX != 0xffffffff
 
@@ -213,7 +210,7 @@ Added 23rd September (John Maddock).
 #define INT64_C(value) value##L
 #define UINT64_C(value) value##uL
 #    else
-#       error defaults not correct; you must hand modify boost/stdint.hpp
+#       error defaults not correct; you must hand modify boost/stdint.h
 #    endif
 # elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1100)) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x520))
      //
