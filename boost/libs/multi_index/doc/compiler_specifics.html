@@ -105,12 +105,12 @@ Boost.MultiIndex does not work with versions 3.1 and prior of GCC.
 <h3><a name="gcc_tru64">GNU GCC for Tru64 UNIX</a></h3>
 
 <p>
-When compiling heavily templatized code, as is often the case
-with Boost.MultiIndex, GCC produces debug symbols which are too long to handle for
-the system assembler on Alpha platforms. This results in the error message
-<code>mips-tfile, ... string too big</code>. The problem can be overcome
-by omitting the compiler option <code>-g</code> (generate debugging information.)
-Alternatively, you can restrict the maximum number of elements accepted by 
+On this platform, GCC is not able to handle debug symbol names whose length
+exceeds 32,768 bytes, resulting in the error <code>mips-tfile, ... string
+too big</code>. You may encounter this issue with heavily templatized
+code like Boost.MultiIndex, which typically produces long symbol names. The problem
+can be overcome by omitting the compiler option <code>-g</code> (generate debugging
+information.) Alternatively, you can restrict the maximum number of elements accepted by 
 <a href="reference/indices.html#indexed_by"><code>indexed_by</code></a>,
 <a href="reference/indices.html#tag"><code>tag</code></a> and
 <a href="reference/key_extraction.html#composite_key"><code>composite_key</code></a>
@@ -456,7 +456,7 @@ Performance
 
 <br>
 
-<p>Revised October 14th 2004</p>
+<p>Revised October 18th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
