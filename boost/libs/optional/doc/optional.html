@@ -4,7 +4,7 @@
 
 <HEAD>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<LINK REL="stylesheet" TYPE="text/css" HREF="../../../../boost.css">
+<LINK REL="stylesheet" TYPE="text/css" HREF="../../../boost.css">
 <TITLE>Header </TITLE>
 </HEAD>
 
@@ -92,7 +92,7 @@ if ( p.second )
 <h3>The model</h3>
 <P>In C++, we can <i>declare</i> an object (a variable) of type T, and we can give this variable
   an <i>initial value</i> (through an <i>initializer</i>. (c.f. 8.5)).<br>
-  When a declaration includes a non-empty inilializer (an initial value is given), it is said that
+  When a declaration includes a non-empty initializer (an initial value is given), it is said that
   the object has been <i><b>initialized</b></i>.<br>
   If the declaration uses an empty initializer (no initial value is given),
   and neither default nor value initialization applies, it is said that the object is
@@ -103,7 +103,7 @@ if ( p.second )
   the value of an uninitialized object is undefined behaviour. That is,
   when a variable is declared as optional&lt;T&gt; and no initial value is given,
   the variable is formally uninitialized. A formally uninitialized optional object has conceptually
-  no value at all and this situation can be tested at runtime. It is formally <i>undefined behvaiour</i>
+  no value at all and this situation can be tested at runtime. It is formally <i>undefined behaviour</i>
   to try to access the value of an uninitialized optional. An uninitialized optional can be <i>assigned</i> a value, in which case its
   initialization state changes to initialized. And given the formal treatment of initialization
   states in optional objects, it is even possible to
@@ -114,7 +114,7 @@ if ( p.second )
   information to tell if an object has been effectively initialized.<br>
   One of the typical ways in which this has been historically
   dealt with is via a special value: EOF,npos,-1, etc... This is equivalent to adding
-  the special value to the set of possibles values of a given type.
+  the special value to the set of possible values of a given type.
   On modern languages, this can be modeled with a <b>discriminated
   union</b> of T and something else such as a trivial POD or enum.
   Discriminated unions are often called <i>variants</i>.
@@ -126,7 +126,7 @@ if ( p.second )
 <p>A discriminated union, which can be seen as a <b>container</b> which has an object of either
   type T or something else, has <i>exactly</i> the semantics required for a wrapper of optional values:</p>
 <li><b>deep-copy</b> semantics:  copies of the variant implies copies of the contained value.</li>
-<li><b>deep-relational</b> semantics: comparions between variants matches both current types and values</li>
+<li><b>deep-relational</b> semantics: comparisons between variants matches both current types and values</li>
 <li>If the variant's current type is T, it is modeling an <i>initialized</i> optional.</li>
 <li>If the variant's current type is not T, it is modeling an <i>uninitialized</i> optional.</li>
 <li>Testing if the variant's current type is T models testing if the optional is initialized</li>
@@ -180,24 +180,24 @@ bool operator != ( optional&lt;T&gt; const&amp; lhs, optional&lt;T&gt; const&amp
   copies of pointers do not involve copies of pointees. This effect results in <i>aliasing</i>:
   different pointers can refer to the same object.
   The particular semantic that a copy of a pointer does not involve
-  a copy of the pointee is called <b>shallow-copy</b>, which is opossed to <b>deep-copy</b> were
+  a copy of the pointee is called <b>shallow-copy</b>, which is oppossed to <b>deep-copy</b> were
   a copy of a wrapper involves a copy of the wrapped object (as with optional&lt;&gt;)<br>
   Since this is the semantic followed by pointers (and references), shallow-copy
   (and therefore aliasing) is implied in <b>pointer semantics</b>.</p>
 <p>The other relevant feature of a pointer is that a pointer can have a <b>null
   pointer value</b>. This is a <i>special</i> value which is used to indicate that the
   pointer is not referring to any object at all. In other words, null pointer
-  values convey the notion of inexisting objects.</P>
+  values convey the notion of inexistent objects.</P>
 <P>This meaning of the null pointer value allowed pointers to became a defacto standard
   for handling optional objects because all you have to do to refer to a value which you
   don't really have is to use a null pointer value of the appropriate type.
   Pointers have been used for decades -from the days of C APIs to modern C++ libraries-
-  to <i>refer</i> to optional (that is, possibly inexisting) objects; particularly 
+  to <i>refer</i> to optional (that is, possibly inexistent) objects; particularly 
   as optional arguments to a function, but also quite often as optional data members.</P>
 <P>The possible presence of a null pointer value makes the operations that access the
   pointee's value possibly undefined, therefore, expressions which use dereference
   and access operators, such as: <code>( *p = 2 )</code> and <code>( p-&gt;foo())</code>,
-  implicitely convey the notion of optionality, and this information is tied to
+  implicitly convey the notion of optionality, and this information is tied to
   the <i>syntax</i> of the expressions. That is, the presence of operators * and -&gt; tell by
   themselves -without any additional context-, that the expression will be undefined unless
   the implied pointee actually exist.<br>
@@ -206,7 +206,7 @@ bool operator != ( optional&lt;T&gt; const&amp; lhs, optional&lt;T&gt; const&amp
   the form: if ( p != 0 ), or if ( p ) to be used to test for the existence of the pointee.</P>
 <p>Such a defacto idiom for referring to optional objects can be formalized in the form of a
 concept: the <a href="../../utility/OptionalPointee.html">OptionalPointee</a> concept.<br>
-This concept captures the syntatic usage of operatos *, -> and conversion to bool to convey
+This concept captures the syntactic usage of operatos *, -> and conversion to bool to convey
 the notion of optionality.</p>
 <P>However, pointers are good to <u>refer</u> to optional objects, but not particularly good
 to handle the optional objects in all other respects, such as initializing or moving/copying
@@ -223,7 +223,7 @@ them. The problem resides in the shallow-copy of pointer semantics: if you need 
   a builtin or small POD, this technique is very poor in terms of required resources.
   Optional objects are essentially values so it is very convenient to be able to use automatic
   storage and deep-copy semantics to manipulate optional values just as we do with ordinary
-  values. Pointers do not have this semantics so are unapprorpiate for the initialization and
+  values. Pointers do not have this semantics, so are unapprorpiate for the initialization and
   transport of optional values, yet are quite convenient for handling the access to the
   possible undefined value because of the idiomatic aid present in the OptionalPointee
   concept incarnated by pointers. <br>
@@ -807,7 +807,8 @@ class Fred
 <H2><A NAME="bool">A note about optional&lt;bool&gt;</A></H2>
 <p><code>optional&ltbool&gt</code> should be used with special caution and consideration.</p>
 <p>First, it is functionally similar to a tristate boolean (false,maybe,true)
--such as <u>boost::tribool</u>-, except that in a tristate boolean, the <i>maybe</i> state
+-such as <u>boost::tribool</u> (not yet formally in boost)-,
+except that in a tristate boolean, the <i>maybe</i> state
 <u>represents a valid value</u>, unlike the corresponding state
 of an uninitialized optional&lt;bool&gt;.<br>
 It should be carefully considered if an optional bool instead of a tribool is really needed</p>
@@ -907,9 +908,9 @@ T <u>is not</u> required to be
   <code>type_with_alignment</code> (both from Type Traits).
   It uses a separate boolean flag to indicate the initialization state.<br>
   Placement new with T's copy constructor and T's destructor
-  are explicitely used to initialize,copy and destroy optional values.<br>
+  are explicitly used to initialize,copy and destroy optional values.<br>
   As a result, T's default constructor is effectively by-passed, but the exception
-  guarantess are basic.<br>
+  guarantees are basic.<br>
   It is planned to replace the current implementation with another with
   stronger exception safety, such as a future boost::variant<T,nil_t>.
 </p>
@@ -918,8 +919,8 @@ T <u>is not</u> required to be
 
 <H2><A NAME="porta">Dependencies and Portability</A></H2>
 
-<p>The implementation uses <code>type_traits/alignement_of.hpp</code>
-and <code>type_traits/type_with_alignement.hpp</code></p>
+<p>The implementation uses <code>type_traits/alignment_of.hpp</code>
+and <code>type_traits/type_with_alignment.hpp</code></p>
 <p>It has been tested on bcc5.5.1, vc6.0 and gcc2.95.2</p>
 
 <HR>
@@ -945,7 +946,7 @@ and <code>type_traits/type_with_alignement.hpp</code></p>
 </blockquote>
 <p>Post-formal review:</p>
 <blockquote>
-<p>William Kempf carrefully considered the originally proposed interface
+<p>William Kempf carefully considered the originally proposed interface
 and suggested the new interface which is currently used. He also started
 and fueled the discussion about the analogy optional&lt;&gt;/smart pointer
 and about relational operators.<br>
