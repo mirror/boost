@@ -21,7 +21,7 @@
 #  if !(defined(_GLOBAL_USING) && (_GLOBAL_USING+0 > 0)) && !defined(_STD)   // can be defined in yvals.h
 #     define BOOST_NO_STDC_NAMESPACE
 #  endif
-#  if !(defined(_HAS_MEMBER_TEMPLATES_REBIND) && (_HAS_MEMBER_TEMPLATES_REBIND+0 > 0))
+#  if !(defined(_HAS_MEMBER_TEMPLATES_REBIND) && (_HAS_MEMBER_TEMPLATES_REBIND+0 > 0) && !(defined(_MSC_VER) && (_MSC_VER > 1300)))
 #     define BOOST_NO_STD_ALLOCATOR
 #  endif
 #  if defined(_MSC_VER) && (_MSC_VER < 1300)
@@ -70,6 +70,7 @@
 #else
 #  define BOOST_STDLIB "Dinkumware standard library version 1.x"
 #endif
+
 
 
 

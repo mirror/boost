@@ -21,7 +21,7 @@
    //
 #endif
 
-#if (_MSC_VER <= 1300) // || !defined(BOOST_STRICT_CONFIG) // VC7 Beta 2 or later
+#if (_MSC_VER <= 1300)
 
 #if !defined(_MSC_EXTENSIONS) && !defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS)      // VC7 bug with /Za
 #  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
@@ -51,7 +51,7 @@
 
 #endif
 
-#if _MSC_VER <= 1301
+#if _MSC_VER <= 1310
 #  define BOOST_NO_SWPRINTF
 #endif
 
@@ -71,6 +71,9 @@
 #if (_MSC_VER >= 1200) && defined(_MSC_EXTENSIONS)
 #   define BOOST_HAS_MS_INT64
 #endif
+#if (_MSC_VER >= 1310) && defined(_MSC_EXTENSIONS)
+#   define BOOST_HAS_LONG_LONG
+#endif
 //
 // disable Win32 API's if compiler extentions are
 // turned off:
@@ -83,6 +86,8 @@
 #   define BOOST_COMPILER_VERSION 6.0
 # elif _MSC_VER == 1300
 #   define BOOST_COMPILER_VERSION 7.0
+# elif _MSC_VER == 1310
+#   define BOOST_COMPILER_VERSION 7.1
 # else
 #   define BOOST_COMPILER_VERSION _MSC_VER
 # endif
@@ -104,6 +109,8 @@
 #     pragma message("Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
+
 
 
 
