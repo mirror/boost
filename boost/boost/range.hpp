@@ -8,8 +8,8 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
-#ifndef BOOST_RANGE_HPP
-#define BOOST_RANGE_HPP
+#ifndef BOOST_RANGE_HPP_27_07_04
+#define BOOST_RANGE_HPP_27_07_04
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1200)
 # pragma once
