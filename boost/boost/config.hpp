@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//    4 Oct 00  BOOST_NO_STD_MIN_MAX (Jeremy Siek)
 //   29 Sep 00  BOOST_NO_INTEGRAL_INT64_T (Jens Maurer)
 //   25 Sep 00  BOOST_NO_STD_ALLOCATOR (Jeremy Siek)
 //   18 SEP 00  BOOST_NO_SLIST, BOOST_NO_HASH, 
@@ -158,6 +159,9 @@
 //  BOOST_NO_STD_ALLOCATOR: The C++ standard library does not provide
 //  a standards conforming std::allocator.
 
+//  BOOST_NO_STD_MIN_MAX: The C++ standard library does not provide
+//  the min() and max() template functions that should be in <algorithm>.
+
 //  Compilers are listed in alphabetic order (except VC++ last - see below)---//
 
 //  GNU CC (also known as GCC and G++)  --------------------------------------//
@@ -226,6 +230,7 @@
 #     define BOOST_NO_HASH
 #     define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #     define BOOST_NO_STD_ALLOCATOR
+#     define BOOST_NO_STD_MIN_MAX
 #   endif
 
 
@@ -295,6 +300,7 @@
 #       define BOOST_NO_HASH
 #       define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #       define BOOST_NO_STD_ALLOCATOR
+#       define BOOST_NO_STD_MIN_MAX
 #     endif
 #     define BOOST_NO_STD_ITERATOR_TRAITS
 
@@ -348,5 +354,17 @@
     // using ::wchar_t; removed since wchar_t is a C++ built-in type (Ed Brey)
 # endif
 
+#ifdef BOOST_NO_STD_MIN_MAX
+namespace std {
+  template <class _Tp>
+  inline const _Tp& min(const _Tp& __a, const _Tp& __b) {
+    return __b < __a ? __b : __a;
+  }
+  template <class _Tp>
+  inline const _Tp& max(const _Tp& __a, const _Tp& __b) {
+    return  __a < __b ? __b : __a;
+  }
+}
+#endif
 
 #endif  // BOOST_CONFIG_HPP
