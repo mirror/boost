@@ -48,6 +48,7 @@
 #   define BOOST_NO_EXCEPTIONS
 #endif
 
+#if (__INTEL__ && _WIN32) || (__POWERPC__ && macintosh)
 #   if __MWERKS__ == 0x3000
 #     define BOOST_COMPILER_VERSION 8.0
 #   elif __MWERKS__ == 0x3001
@@ -56,11 +57,18 @@
 #     define BOOST_COMPILER_VERSION 8.2
 #   elif __MWERKS__ == 0x3003
 #     define BOOST_COMPILER_VERSION 8.3
+#   elif __MWERKS__ == 0x3200
+#     define BOOST_COMPILER_VERSION 9.0
+#   elif __MWERKS__ == 0x3201
+#     define BOOST_COMPILER_VERSION 9.1
 #   elif __MWERKS__ == 0x3202
 #     define BOOST_COMPILER_VERSION 9.2
 #   else
 #     define BOOST_COMPILER_VERSION __MWERKS__
-#   endif 
+#   endif
+#else
+#  define BOOST_COMPILER_VERSION __MWERKS__
+#endif
 
 #define BOOST_COMPILER "Metrowerks CodeWarrior C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
 

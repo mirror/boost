@@ -35,7 +35,7 @@
 #  include <boost/config/posix_features.hpp>
 #endif
 
-#if _MWMT
+#if defined(_MWMT) || defined(_MSL_THREADSAFE)
 #  define BOOST_HAS_THREADS
 #endif
 
