@@ -45,6 +45,7 @@ int main()
     check("got range exception max", false);
   }
   catch(range_error& e) {
+    e = e; // removes compiler warning
     check("got range exception max", true);
   }
 
@@ -54,6 +55,7 @@ int main()
     check("got range exception min", false);
   }
   catch(range_error& e) {
+    e = e; // removes compiler warning
     check("got range exception min", true);
   }
 
@@ -63,6 +65,7 @@ int main()
     check("range exception on assign", false);
   }
   catch(range_error& e) {
+    e = e; // removes compiler warning
     check("range exception on assign", true);
   }
 
