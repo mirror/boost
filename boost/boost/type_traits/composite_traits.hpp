@@ -9,12 +9,13 @@
 //  defines traits classes for composite types:
 //  is_array, is_pointer, is_reference, is_member_pointer, is_enum, is_union.
 //
+//    Fixed is_pointer, is_reference, is_const, is_volatile, is_same, 
+//    is_member_pointer based on the Simulated Partial Specialization work 
+//    of Mat Marcus and Jesse Jones. See 	http://opensource.adobe.com or 
+//    http://groups.yahoo.com/group/boost/message/5441 
 //    Some workarounds in here use ideas suggested from "Generic<Programming>: 
 //    Mappings between Types and Values" 
 //    by Andrei Alexandrescu (see http://www.cuj.com/experts/1810/alexandr.html).
-//    Mat Marcus and Jesse Jones posted a version of is_pointer very similar to this one
-//    on the boost list (Copyright 2000 Adobe Systems Incorporated and others. 
-//    All rights reserved.).
 //    Fixes for is_array are based on a newgroup posting by Jonathan Lundquist.
 
 //
