@@ -66,10 +66,10 @@ public:
 //               << " value: "  << value_ << std::endl;
     return underflow;
   }
-		    
+            
 private:
   int_type value_;
-			      
+                  
 };
 
 
@@ -125,10 +125,10 @@ public:
     }
     return underflow;
   }
-		    
+            
 private:
   int_type value_;
-			      
+                  
 };
 
 

@@ -41,7 +41,7 @@ void special_values_tests()
     check("date & NADT", to_iso_string(p_sv2) == s);
     ptime p_sv3(d_pi, td_ni);
     check("+infinity_date & -infinity_duration", 
-	to_iso_extended_string(p_sv3) == s);
+    to_iso_extended_string(p_sv3) == s);
 
   }
   { // special values tests
@@ -53,13 +53,13 @@ void special_values_tests()
     s = "-infinity";
     check("special_duration & date", to_iso_string(p_sv2) == s);
     check("ptime::time_of_day() -infinity", 
-	to_simple_string(p_sv2.time_of_day()) == s);
+    to_simple_string(p_sv2.time_of_day()) == s);
     ptime p_sv3(d, td_ndt);
     s = "not-a-date-time";
     check("special_duration & date", to_iso_extended_string(p_sv3) == s);
     check("ptime::date() - NADT", to_simple_string(p_sv3.date()) == s);
     check("ptime::time_of_day() - NADT", 
-	to_simple_string(p_sv3.time_of_day()) == s);
+    to_simple_string(p_sv3.time_of_day()) == s);
     check("-infinity less than ...", p_sv2 < p_sv1);
     check("-infinity less than ...", p_sv2 < pt);
     check("+infinity greater than ...", pt < p_sv1);
@@ -128,16 +128,16 @@ main()
     ptime t6b(date(2003,Oct,31),time_duration(10,0,0,0));
     t6b += date_duration(55);
     check("operator +=(date_duration)", t6b ==
-	ptime(date(2003,Dec,25), time_duration(10,0,0,0)));
+          ptime(date(2003,Dec,25), time_duration(10,0,0,0)));
     t6b += hours(6);
     check("operator +=(time_duration)", t6b ==
-	ptime(date(2003,Dec,25), time_duration(16,0,0,0)));
+          ptime(date(2003,Dec,25), time_duration(16,0,0,0)));
     t6b -= date_duration(55);
     check("operator -=(date_duration)", t6b ==
-	ptime(date(2003,Oct,31), time_duration(16,0,0,0)));
+          ptime(date(2003,Oct,31), time_duration(16,0,0,0)));
     t6b -= hours(6);
     check("operator -=(time_duration)", t6b ==
-	ptime(date(2003,Oct,31), time_duration(10,0,0,0)));
+          ptime(date(2003,Oct,31), time_duration(10,0,0,0)));
   }
   time_duration td2(1,2,3); 
   ptime t8(date(2001,Dec,1)); //midnight
@@ -154,11 +154,11 @@ main()
         == ptime(date(2001,Dec,2), time_duration(0,0,1)));
   //looks like this fails b/c limits are exceeded now that we have subseconds..
   time_duration td5(168,0,1);  //one week 24X7
-   check("add 2001-Dec-01 0:0:0 + 168:00:01", t8+td5
-         == ptime(date(2001,Dec,8), time_duration(0,0,1)));
-
-//   ptime t10a = t8+td5;
-//   std::cout << to_simple_string(t10a) << std::endl;
+  check("add 2001-Dec-01 0:0:0 + 168:00:01", t8+td5
+        == ptime(date(2001,Dec,8), time_duration(0,0,1)));
+  
+  //   ptime t10a = t8+td5;
+  //   std::cout << to_simple_string(t10a) << std::endl;
 
   //Subtraction of time duration -- add more!!
   ptime t11(date(2001,Dec,1), time_duration(12,0,0)); //noon
@@ -166,12 +166,12 @@ main()
   ptime t12 = t11-td6;
   check("sub 2001-Dec-01 12:0:0 - 12:00:01", 
         t12 == ptime(date(2001,Nov,30), time_duration(23,59,59)));
-
+  
   check("sub 2001-Dec-01 12:0:0 - 13:00:00", 
         (t11-time_duration(13,0,0))== ptime(date(2001,Nov,30), 
                                             time_duration(23,0,0)));
   //  std::cout << to_simple_string(t12.date()) << std::endl;
-
+  
   ptime t13(d, hours(3));
   ptime t14(d, hours(4));
   ptime t14a(d+date_duration(1), hours(4));
@@ -193,40 +193,40 @@ main()
         t15 + time_duration::unit() == t16);
   check("time subsecond sub test", 
         t16 - time_duration::unit() == t15);
- 
+  
   ptime t17 = ptime(d) - time_duration::unit();
   std::cout << to_simple_string(t17) << std::endl;
-
+  
   ptime t18(d, hours(25));
   std::cout << to_simple_string(t18) << std::endl;
-
+  
   //time_t conversions:
   t18 = from_time_t(0); //1970-1-1 0:0:0
   check("time_t conversion of 0", t18 == ptime(date(1970,1,1)));
-
+  
   std::time_t tt(500000000); 
   t18 = from_time_t(tt); //1985-11-5 0:53:20
   check("time_t conversion of 500000000", 
         t18 == ptime(date(1985,11,5), time_duration(0,53,20)));
-
+  
   std::time_t tt1(1060483634); 
   t18 = from_time_t(tt1); //2003-08-10 2:47:14
   check("time_t conversion of 1060483634", 
         t18 == ptime(date(2003,8,10), time_duration(2,47,14)));
-
+  
   std::time_t tt2(1760483634); 
   t18 = from_time_t(tt2); //2025-10-14 23:13:54
   check("time_t conversion of 1760483634", 
         t18 == ptime(date(2025,10,14), time_duration(23,13,54)));
-
+  
   std::time_t tt3(1960483634); 
   t18 = from_time_t(tt3); //2032-2-15 18:47:14
   check("time_t conversion of 1960483634", 
         t18 == ptime(date(2032,2,15), time_duration(18,47,14)));
-
+  
   special_values_tests();
-
+  
   return printTestStats();
-
+  
 }
 

@@ -105,7 +105,7 @@ main()
   
 #else 
   std::cout << "Sorry, localization is not supported by this compiler/library" 
-	    << std::endl;
+            << std::endl;
 #endif
   return 0;
 

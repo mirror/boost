@@ -50,9 +50,9 @@ main()
   time_duration t_5(1,30,20,10); // 1hr, 30min, 20sec, 10 frac sec
   t_5 /= 2;
   check("divide equal",         (t_5.hours() == 0 &&
-	                         t_5.minutes() == 45 &&
-				 t_5.seconds() == 10 &&
-				 t_5.fractional_seconds() == 5));
+                                 t_5.minutes() == 45 &&
+                                 t_5.seconds() == 10 &&
+                                 t_5.fractional_seconds() == 5));
   t_5 = time_duration(3,15,8,0) / 2;
   check("divide int", t_5 == time_duration(1,37,34,0));
   {
@@ -84,9 +84,9 @@ main()
   time_duration utd2 = -utd;
   //std::cout << td_d << '\n' << utd2 << std::endl;
   check("unary-", ((utd2.hours() == -1) &&
-	           (utd2.minutes() == -2) &&
-		   (utd2.seconds() == -3) &&
-		   (utd2.fractional_seconds() == -4)) );
+                   (utd2.minutes() == -2) &&
+                   (utd2.seconds() == -3) &&
+                   (utd2.fractional_seconds() == -4)) );
   utd2 = -hours(5);
   check("unary-", utd2.hours() == -5);
   utd2 = -utd2;
