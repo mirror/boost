@@ -19,6 +19,8 @@
 
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 #include <boost/config.hpp>
 #include <cstddef>
 

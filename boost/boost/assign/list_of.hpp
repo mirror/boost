@@ -17,6 +17,8 @@
 #endif
 
 #include <boost/assign/assignment_exception.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
 #include <boost/config.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/remove_const.hpp>
