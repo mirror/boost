@@ -337,6 +337,72 @@ namespace std {
 #  define BOOST_DEDUCED_TYPENAME
 #endif
 
+// BOOST_[APPEND_]TEMPLATE_EXPLICITLY_SPECIFIED_[NON_]TYPE macros -------------//
+//
+// Some compilers have problems with function templates whose
+// template parameters don't appear in the function parameter list.
+//
+// Basically they just link one instantiation of the template in
+// the final executable.
+
+// Example:
+//
+//  #include <iostream>
+//  #include <ostream>
+//
+//  template <int n>
+//  void f() { std::cout << n << '\n'; }
+
+//  int main() {
+//      f<1>();
+//      f<2>();
+//  }
+//
+// OUTPUT is:
+//
+//  2
+//  2
+//
+// Write the definition of f as
+//
+//  template <int n>
+//  void f(BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(int, n))
+//    { std::cout << n << '\n'; }
+
+#if defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+
+# include "boost/type.hpp"
+# include "boost/non_type.hpp"
+
+// For type parameters
+
+#define BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)                \
+                                    boost::type<t>* = 0
+#define BOOST_APPEND_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)         \
+             , BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)
+
+// For non-type parameters
+//
+#define BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)         \
+                                    boost::non_type<t, v>* = 0
+#define BOOST_APPEND_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)  \
+             , BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)
+
+
+#else
+
+// no workaround needed: expand to nothing
+
+#define BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)
+#define BOOST_APPEND_TEMPLATE_EXPLICITLY_SPECIFIED_TYPE(t)
+
+#define BOOST_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)
+#define BOOST_APPEND_TEMPLATE_EXPLICITLY_SPECIFIED_NON_TYPE(t, v)
+
+
+#endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+
+
 // ---------------------------------------------------------------------------//
 
 //
