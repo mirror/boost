@@ -20,14 +20,10 @@
 // boost::singleton_pool
 #include <boost/pool/singleton_pool.hpp>
 
-#if defined(_RWSTD_VER) && (_RWSTD_VER <= 0x020101)
- // Needed, as of BCB5 & cl 5.5
- #define BOOST_POOL_ALLOC_ALLOW_NULL_DEALLOCATE
-#endif
-
-#if defined(__SGI_STL_PORT) && (__SGI_STL_PORT <= 0x400)
- // Needed, as of STLport 4.0
- #define BOOST_POOL_ALLOC_ALLOW_NULL_DEALLOCATE
+// The following code will be put into Boost.Config in a later revision
+#if defined(_RWSTD_VER) || defined(__SGI_STL_PORT)
+ // Needed, as of bcc 5.5 and STLPort 4.5b8
+ #define BOOST_NO_PROPER_STL_DEALLOCATE
 #endif
 
 namespace boost {
@@ -102,7 +98,7 @@ class pool_allocator
     { return allocate(n); }
     static void deallocate(const pointer ptr, const size_type n)
     {
-#ifdef BOOST_POOL_ALLOC_ALLOW_NULL_DEALLOCATE
+#ifdef BOOST_NO_PROPER_STL_DEALLOCATE
       if (ptr == 0 || n == 0)
         return;
 #endif
@@ -195,7 +191,7 @@ class fast_pool_allocator
     }
     static void deallocate(const pointer ptr, const size_type n)
     {
-#ifdef BOOST_POOL_ALLOC_ALLOW_NULL_DEALLOCATE
+#ifdef BOOST_NO_PROPER_STL_DEALLOCATE
       if (ptr == 0 || n == 0)
         return;
 #endif
@@ -214,7 +210,5 @@ class fast_pool_allocator
 };
 
 } // namespace boost
-
-#undef BOOST_POOL_ALLOC_ALLOW_NULL_DEALLOCATE
 
 #endif
