@@ -50,9 +50,9 @@ public:
 
     //----------Buffer sizing-------------------------------------------------//
 
-    void set_buffer_size(std::streamsize n)
+    void set_device_buffer_size(std::streamsize n)
         { 
-            chain_.set_buffer_size(n);
+            chain_.set_device_buffer_size(n);
             cvt_->set_buffer_size(n);
         }
     void set_filter_buffer_size(std::streamsize n)

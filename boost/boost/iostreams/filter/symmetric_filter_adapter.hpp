@@ -188,8 +188,8 @@ public:
     typedef typename impl_type::char_type           char_type;
     typedef typename impl_type::category            io_category;
     symmetric_filter_adapter( SymmetricFilter* filter,     // Takes ownership.
-                              int buffer_size =
-                                  default_buffer_size )    // Use large buffer.
+                              int buffer_size =            // Use large buffer.
+                                  default_device_buffer_size )
         : pimpl_(new impl_type(filter, buffer_size)) { }
 
     template<typename Source>

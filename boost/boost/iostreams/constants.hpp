@@ -13,28 +13,28 @@
 # pragma once
 #endif              
 
-#ifndef BOOST_IOSTREAMS_DEFAULT_BUFFER_SIZE
-# define BOOST_IOSTREAMS_DEFAULT_BUFFER_SIZE 4096
-#endif
-
-#ifndef BOOST_IOSTREAMS_DEFAULT_PBACK_BUFFER_SIZE
-# define BOOST_IOSTREAMS_DEFAULT_PBACK_BUFFER_SIZE 4
+#ifndef BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE
+# define BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE 4096
 #endif
 
 #ifndef BOOST_IOSTREAMS_DEFAULT_FILTER_BUFFER_SIZE
 # define BOOST_IOSTREAMS_DEFAULT_FILTER_BUFFER_SIZE 128
 #endif
 
+#ifndef BOOST_IOSTREAMS_DEFAULT_PBACK_BUFFER_SIZE
+# define BOOST_IOSTREAMS_DEFAULT_PBACK_BUFFER_SIZE 4
+#endif
+
 #include <boost/iostreams/detail/ios.hpp>  // streamsize.
 
 namespace boost { namespace iostreams {
 
-const std::streamsize default_buffer_size = 
-    BOOST_IOSTREAMS_DEFAULT_BUFFER_SIZE; 
-const std::streamsize default_pback_buffer_size = 
-    BOOST_IOSTREAMS_DEFAULT_PBACK_BUFFER_SIZE;
+const std::streamsize default_device_buffer_size = 
+    BOOST_IOSTREAMS_DEFAULT_DEVICE_BUFFER_SIZE; 
 const std::streamsize default_filter_buffer_size = 
     BOOST_IOSTREAMS_DEFAULT_FILTER_BUFFER_SIZE;
+const std::streamsize default_pback_buffer_size = 
+    BOOST_IOSTREAMS_DEFAULT_PBACK_BUFFER_SIZE;
 
 } } // End namespaces iostreams, boost.
 

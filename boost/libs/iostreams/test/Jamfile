@@ -28,7 +28,7 @@ DEPENDS all : test ;
           <lib>../build/boost_iostreams
           <lib>../build/boost_bzip2
         : # build requirements
-            <define>BOOST_IOSTREAMS_NO_LIB
+          <define>BOOST_IOSTREAMS_NO_LIB
         : # build variants
         ;
 
@@ -38,7 +38,7 @@ DEPENDS all : test ;
           <lib>../build/boost_iostreams
           <lib>../build/boost_zlib
         : # build requirements
-            <define>BOOST_IOSTREAMS_NO_LIB
+          <define>BOOST_IOSTREAMS_NO_LIB
         : # build variants
        ;
 
@@ -84,20 +84,20 @@ DEPENDS all : test ;
           [ test-iostreams libs/iostreams/test/seekable_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/symmetric_filter_test.cpp ]
           [ test-iostreams libs/iostreams/test/wide_stream_test.cpp ]
-          #[ test-iostreams 
-          #      libs/iostreams/test/bzip2_test.cpp 
-          #      <template>bzip2
-          #    : # build requirements
-          #      <define>BOOST_IOSTREAMS_NO_LIB ]   
-          #[ test-iostreams 
-          #      libs/iostreams/test/gzip_test.cpp 
-          #      <template>zlib
-          #    : # build requirements
-          #      <define>BOOST_IOSTREAMS_NO_LIB ]   
-          #[ test-iostreams 
-          #      libs/iostreams/test/zlib_test.cpp 
-          #      <template>zlib
-          #    : # build requirements
-          #      <define>BOOST_IOSTREAMS_NO_LIB ]   
+          [ test-iostreams 
+                libs/iostreams/test/bzip2_test.cpp 
+                <template>bzip2 
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]   
+          [ test-iostreams 
+                libs/iostreams/test/gzip_test.cpp 
+                <template>zlib
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]   
+          [ test-iostreams 
+                libs/iostreams/test/zlib_test.cpp 
+                <template>zlib
+              : # build requirements
+                <define>BOOST_IOSTREAMS_NO_LIB ]   
        ;
 }

@@ -242,7 +242,7 @@ public:
     typedef typename base_type::char_type               char_type;
     typedef typename base_type::io_category             io_category;
     basic_bzip2_compressor( const bzip2_params& = bzip2::default_block_size, 
-                            int buffer_size =  default_buffer_size );
+                            int buffer_size =  default_device_buffer_size );
 };
 BOOST_IOSTREAMS_PIPABLE(basic_bzip2_compressor, 1)
 
@@ -264,7 +264,7 @@ public:
     typedef typename base_type::char_type               char_type;
     typedef typename base_type::io_category             io_category;
     basic_bzip2_decompressor( bool small = bzip2::default_small,
-                              int buffer_size = default_buffer_size );
+                              int buffer_size = default_device_buffer_size );
 };
 BOOST_IOSTREAMS_PIPABLE(basic_bzip2_decompressor, 1)
 

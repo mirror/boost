@@ -106,7 +106,7 @@ public:
     // Sets the size of the buffer created for the devices to be added to this
     // chain. Does not affect the size of the buffer for devices already
     // added.
-    void set_buffer_size(int n) { pimpl_->device_buffer_size_ = n; }
+    void set_device_buffer_size(int n) { pimpl_->device_buffer_size_ = n; }
 
     // Sets the size of the buffer created for the filters to be added
     // to this chain. Does not affect the size of the buffer for filters already
@@ -159,9 +159,7 @@ private:
             buffer_size = 
                 buffer_size != -1 ? 
                     buffer_size : 
-                    is_filter<policy_type>::value ?
-                        pimpl_->filter_buffer_size_ :
-                        pimpl_->device_buffer_size_;
+                    iostreams::optimal_buffer_size(t);
             pback_size = 
                 pback_size != -1 ? 
                     pback_size : 
@@ -208,7 +206,7 @@ private:
 
     struct chain_impl {
         chain_impl()
-            : client_(0), device_buffer_size_(default_buffer_size),
+            : client_(0), device_buffer_size_(default_device_buffer_size),
               filter_buffer_size_(default_filter_buffer_size),
               pback_size_(default_pback_buffer_size),
               flags_(f_auto_close)
@@ -320,7 +318,8 @@ public:
     bool is_complete() const { return chain_->is_complete(); }
     bool auto_close() const { return chain_->auto_close(); }
     void set_auto_close(bool close) { chain_->set_auto_close(close); }
-    void set_buffer_size(std::streamsize n) { chain_->set_buffer_size(n); }
+    void set_device_buffer_size(std::streamsize n) 
+        { chain_->set_device_buffer_size(n); }
     void set_filter_buffer_size(std::streamsize n)
         { chain_->set_filter_buffer_size(n); }
     void set_pback_size(std::streamsize n) { chain_->set_pback_size(n); }

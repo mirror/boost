@@ -57,6 +57,7 @@ struct peekable_tag : virtual any_tag { };        // Devices.
 struct closable_tag : virtual any_tag { };
 struct flushable_tag : virtual any_tag { };
 struct localizable_tag : virtual any_tag { };
+struct optimally_buffered_tag : virtual any_tag { };
 struct direct_tag : virtual any_tag { };          // Devices.
 struct multichar_tag : virtual any_tag { };       // Filters.
 

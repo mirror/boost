@@ -23,7 +23,7 @@ void putback_test()
 
     {
         filtering_istream is;
-        is.set_buffer_size(0);
+        is.set_device_buffer_size(0);
         is.push(file_source(test.name()));
         BOOST_CHECK_MESSAGE(
             unbuffered_putback_test(is),

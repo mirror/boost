@@ -152,9 +152,7 @@ void indirect_streambuf<T, Tr, Alloc, Mode>::open
     buffer_size =
         (buffer_size != -1) ?
         buffer_size :
-        is_filter<T>::value ?
-            default_filter_buffer_size :
-            default_buffer_size;
+        iostreams::optimal_buffer_size(t);
     pback_size =
         (pback_size != -1) ?
         pback_size :

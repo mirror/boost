@@ -100,13 +100,14 @@ private:
     template<typename Source>
     void do_read(Source& src)
     {
-        Ch buf[default_buffer_size];
+        Ch buf[default_device_buffer_size];
         vector_type data;
         while (true) {
             std::streamsize n = 
-                boost::iostreams::read(src, buf, default_buffer_size);
+                boost::iostreams::read(src, buf, default_device_buffer_size);
             data.insert(data.end(), buf, buf + n);
-            if (n < default_buffer_size) break;
+            if (n < default_device_buffer_size)
+                break;
         }
         do_filter(data, data_);
         state_ |= f_eof;

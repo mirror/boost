@@ -177,7 +177,7 @@ public:
           closable_tag
         { };
     basic_gzip_compressor( const gzip_params& = gzip::default_compression,
-                           int buffer_size = default_buffer_size );
+                           int buffer_size = default_device_buffer_size );
 
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
@@ -317,7 +317,7 @@ public:
           closable_tag
         { };
     basic_gzip_decompressor( int window_bits = gzip::default_window_bits,
-                             int buffer_size = default_buffer_size );
+                             int buffer_size = default_device_buffer_size );
     template<typename Source>
     std::streamsize read(Source& src, char_type* s, std::streamsize n)
         {

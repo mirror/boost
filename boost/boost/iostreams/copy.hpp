@@ -132,7 +132,7 @@ std::streamsize copy_impl(Source src, Sink snk, std::streamsize buffer_size)
 template<typename Source, typename Sink>
 std::streamsize
 copy( const Source& src, const Sink& snk,
-      std::streamsize buffer_size = default_buffer_size
+      std::streamsize buffer_size = default_device_buffer_size
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Source)
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Sink) )
 { 
@@ -146,7 +146,7 @@ copy( const Source& src, const Sink& snk,
 template<typename Source, typename Sink>
 std::streamsize
 copy( Source& src, const Sink& snk,
-      std::streamsize buffer_size = default_buffer_size
+      std::streamsize buffer_size = default_device_buffer_size
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Source)
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Sink) ) 
 { 
@@ -159,7 +159,7 @@ copy( Source& src, const Sink& snk,
 template<typename Source, typename Sink>
 std::streamsize
 copy( const Source& src, Sink& snk,
-      std::streamsize buffer_size = default_buffer_size
+      std::streamsize buffer_size = default_device_buffer_size
       BOOST_IOSTREAMS_DISABLE_IF_STREAM(Source)
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Sink) ) 
 { 
@@ -171,7 +171,7 @@ copy( const Source& src, Sink& snk,
 template<typename Source, typename Sink>
 std::streamsize
 copy( Source& src, Sink& snk,
-      std::streamsize buffer_size = default_buffer_size
+      std::streamsize buffer_size = default_device_buffer_size
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Source)
       BOOST_IOSTREAMS_ENABLE_IF_STREAM(Sink) ) 
 { 

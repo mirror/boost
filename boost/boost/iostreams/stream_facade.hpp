@@ -116,7 +116,10 @@ public:
     Device* operator->() { return &*this->member; }
 private:
     void open_impl(const Device& dev BOOST_IOSTREAMS_PUSH_PARAMS()) // For forwarding.
-    { this->clear(); this->member.open(dev BOOST_IOSTREAMS_PUSH_ARGS()); }
+    { 
+        this->clear(); 
+        this->member.open(dev BOOST_IOSTREAMS_PUSH_ARGS()); 
+    }
 };
 
 } } // End namespaces iostreams, boost.

@@ -10,11 +10,12 @@
 // Define BOOST_IOSTREAMS_SOURCE so that <boost/iostreams/detail/config.hpp>
 // knows that we are building the library (possibly exporting code), rather
 // than using it (possibly importing code).
-#define BOOST_IOSTREAMS_SOURCE 
+#define BOOST_IOSTREAMS_SOURCE
 
 #include <boost/config.hpp> // BOOST_JOIN
 #include <boost/iostreams/detail/error.hpp>
 #include <boost/iostreams/detail/config/dyn_link.hpp>
+#include <boost/iostreams/detail/config/windows_posix.hpp>
 #include <boost/iostreams/detail/ios.hpp>  // openmodes, failure.
 #include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/limits.hpp>
@@ -59,13 +60,13 @@ void file_descriptor::open
 #ifdef BOOST_IOSTREAMS_WINDOWS //---------------------------------------------//
     DWORD dwDesiredAccess;
     DWORD dwCreationDisposition;
-    if ( (m & (BOOST_IOS::in | BOOST_IOS::out)) 
-             == 
-         (BOOST_IOS::in | BOOST_IOS::out) ) 
+    if ( (m & (BOOST_IOS::in | BOOST_IOS::out))
+             ==
+         (BOOST_IOS::in | BOOST_IOS::out) )
     {
         assert(!(m & BOOST_IOS::app));
         dwDesiredAccess = GENERIC_READ | GENERIC_WRITE;
-        dwCreationDisposition = 
+        dwCreationDisposition =
             (m & BOOST_IOS::trunc) ?
                 OPEN_ALWAYS :
                 OPEN_EXISTING;
@@ -80,9 +81,9 @@ void file_descriptor::open
             pimpl_->flags_ |= impl::append;
     }
 
-    HANDLE handle = 
+    HANDLE handle =
         ::CreateFileA( path.c_str(),
-                       dwDesiredAccess, 
+                       dwDesiredAccess,
                        0,                      // dwShareMode
                        NULL,                   // lpSecurityAttributes
                        dwCreationDisposition,
@@ -100,9 +101,9 @@ void file_descriptor::open
         // Calculate oflag argument to open.
 
     int oflag = 0;
-    if ( (m & (BOOST_IOS::in | BOOST_IOS::out)) 
-             == 
-         (BOOST_IOS::in | BOOST_IOS::out) ) 
+    if ( (m & (BOOST_IOS::in | BOOST_IOS::out))
+             ==
+         (BOOST_IOS::in | BOOST_IOS::out) )
     {
         assert(!(m & BOOST_IOS::app));
         oflag |= O_RDWR;
@@ -180,11 +181,11 @@ boost::intmax_t file_descriptor::seek
 #ifdef BOOST_IOSTREAMS_WINDOWS
     if (pimpl_->flags_ & impl::has_handle) {
         LONG lDistanceToMove = static_cast<LONG>(off & 0xffffffff);
-        LONG lDistanceToMoveHigh = 
-            off < 0xffffffff ? 
+        LONG lDistanceToMoveHigh =
+            off < 0xffffffff ?
                 static_cast<LONG>(off >> 32) :
                 0;
-        DWORD dwResultLow = 
+        DWORD dwResultLow =
             ::SetFilePointer( pimpl_->handle_,
                               lDistanceToMove,
                               &lDistanceToMoveHigh,
@@ -196,7 +197,7 @@ boost::intmax_t file_descriptor::seek
         if (::GetLastError() != NO_ERROR) {
             throw detail::bad_seek();
         } else {
-            return (static_cast<boost::intmax_t>(lDistanceToMoveHigh) << 32) + 
+            return (static_cast<boost::intmax_t>(lDistanceToMoveHigh) << 32) +
                    dwResultLow;
         }
     }
@@ -212,8 +213,8 @@ boost::intmax_t file_descriptor::seek
         #else
             lseek
         #endif
-            ( pimpl_->fd_, 
-              static_cast<long>(off), 
+            ( pimpl_->fd_,
+              static_cast<long>(off),
               way == BOOST_IOS::beg ?
                   SEEK_SET :
                       way == BOOST_IOS::cur ?
@@ -235,7 +236,7 @@ void file_descriptor::close_impl(impl& i)
         i.fd_ = -1;
         i.flags_ = 0;
         return;
-    } 
+    }
 #endif
     if (i.fd_ != -1) {
         if (BOOST_RTL(close)(i.fd_) == -1)

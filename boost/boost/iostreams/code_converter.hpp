@@ -24,7 +24,7 @@
 #include <cstring>                         // memcpy.
 #include <exception>
 #include <boost/config.hpp>                // DEDUCED_TYPENAME.
-#include <boost/iostreams/constants.hpp>   // default_buffer_size.
+#include <boost/iostreams/constants.hpp>   // default_filter_buffer_size.
 #include <boost/iostreams/detail/adapter/concept_adapter.hpp>
 #include <boost/iostreams/detail/adapter/direct_adapter.hpp>
 #include <boost/iostreams/detail/buffer.hpp>
