@@ -58,20 +58,16 @@ void is_function_tester<T>::check()
 #endif
 }
 
-#ifndef __SUNPRO_CC
 template <class T>
-void is_function_test(T& foo)
+void is_function_test(T* foo)
 {
    is_function_tester<T>::check();
 }
-#endif
-#ifndef BOOST_MSVC
 template <class T>
-void is_function_test(const T& foo)
+void is_function_test(T foo)
 {
    is_function_tester<T>::check();
 }
-#endif
 
 
 void foo0(){}
@@ -83,11 +79,11 @@ void foo4(int, bool, int*, int[], int, int, int, int, int){}
 
 int cpp_main(int argc, char* argv[])
 {
-   is_function_test(foo0);
-   is_function_test(foo1);
-   is_function_test(foo2);
-   is_function_test(foo3);
-   is_function_test(foo4);
+   is_function_test(&foo0);
+   is_function_test(&foo1);
+   is_function_test(&foo2);
+   is_function_test(&foo3);
+   is_function_test(&foo4);
 
    value_test(false, ::boost::is_function<void>::value);
    value_test(false, ::boost::is_function<int>::value);
