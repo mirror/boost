@@ -9,4 +9,5 @@
 #  include <boost/preprocessor/enum_params.hpp>
 #  include <boost/preprocessor/cat.hpp>
 #  include <boost/preprocessor/repeat.hpp>
+#  include <boost/preprocessor/inc.hpp>
 #endif // BOOST_FUNCTION_PROLOGUE_HPP
