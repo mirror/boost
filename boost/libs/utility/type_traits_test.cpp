@@ -7,6 +7,12 @@
 // standalone test program for <boost/type_traits.hpp>
 
 /* Release notes:
+   20 Jan 2001:
+      Suppress an expected warning for MSVC
+      Added a test to prove that we can use void with is_same<>
+      Removed "press any key to exit" as it interferes with testing in large
+      batches.
+      (David Abahams)
    31st July 2000:
       Added extra tests for is_empty, is_convertible, alignment_of.
    23rd July 2000:
@@ -194,7 +200,14 @@ int main()
    // cv-qualifiers applied to reference types should have no effect
    // declare these here for later use with is_reference and remove_reference:
    typedef int& r_type;
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable:4181) // qualifier applied to reference type ignored
+#endif
    typedef const r_type cr_type;
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif
 
    type_test(int, remove_reference<int>::type)
    type_test(const int, remove_reference<const int>::type)
@@ -232,6 +245,9 @@ int main()
 
    std::cout << std::endl << "Checking type properties..." << std::endl << std::endl;
 
+   value_test(true, (is_same<void, void>::value))
+   value_test(false, (is_same<int, void>::value))
+   value_test(false, (is_same<void, int>::value))
    value_test(true, (is_same<int, int>::value))
    value_test(false, (is_same<int, const int>::value))
    value_test(false, (is_same<int, int&>::value))
@@ -634,8 +650,7 @@ int main()
    align_test(VB);
    align_test(VD);
 
-   std::cout << std::endl << test_count << " tests completed (" << failures << " failures)... press any key to exit";
-   std::cin.get();
+   std::cout << std::endl << test_count << " tests completed (" << failures << " failures)";
    return failures;
 }
 
