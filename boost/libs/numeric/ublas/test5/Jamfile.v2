@@ -3,6 +3,8 @@
 # License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+# test5 - basic tests for triangular matrices.
+
 exe test5
     : test5.cpp test51.cpp test52.cpp test53.cpp
     ;

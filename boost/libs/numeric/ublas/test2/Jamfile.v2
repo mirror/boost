@@ -3,6 +3,8 @@
 # License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+# test2 - BLAS equivalent functions implemented with uBLAS
+
 exe test2
     : test2.cpp test21.cpp test22.cpp test23.cpp
     ;

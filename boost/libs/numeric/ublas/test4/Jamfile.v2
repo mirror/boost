@@ -3,6 +3,8 @@
 # License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+# test4 - basic tests for banded matrices.
+
 exe test4
     : test4.cpp test41.cpp test42.cpp test43.cpp
 ;

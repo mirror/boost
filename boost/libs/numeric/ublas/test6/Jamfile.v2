@@ -3,6 +3,8 @@
 # License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
 
+# test6 - basic tests for symmetric matrices.
+
 exe test6
     : test6.cpp test61.cpp test62.cpp test63.cpp
     ;
