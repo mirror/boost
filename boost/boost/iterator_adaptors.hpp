@@ -12,6 +12,8 @@
 //
 // Revision History:
 
+// 20 Dec 2001   David Abrahams
+//      Adjusted is_convertible workarounds for __MWERKS__ == 0x2406
 // 03 Nov 2001   Jeremy Siek
 //      Changed the named template parameter interface and internal.
 // 04 Oct 2001   Jeremy Siek
@@ -615,7 +617,7 @@ namespace detail {
       enum { value = is_convertible<Value, named_template_param_base>::value };
   };
 
-#if defined(__MWERKS__) && __MWERKS__ <= 0x2405 // workaround for broken is_convertible implementation
+#if defined(__MWERKS__) && __MWERKS__ <= 0x2406 // workaround for broken is_convertible implementation
   template <class T> struct is_named_parameter<value_type_is<T> > { enum { value = true }; };
   template <class T> struct is_named_parameter<reference_is<T> > { enum { value = true }; };
   template <class T> struct is_named_parameter<pointer_is<T> > { enum { value = true }; };
@@ -767,11 +769,11 @@ template <class T> struct undefined;
 //   Distance - the difference_type of the resulting iterator. If not
 //      supplied, iterator_traits<Base>::difference_type is used.
 template <class Base, class Policies, 
-    class Value = detail::default_argument,
-    class Reference = detail::default_argument,
-    class Pointer = detail::default_argument,
-    class Category = detail::default_argument,
-    class Distance = detail::default_argument
+    class Value = ::boost::detail::default_argument,
+    class Reference = ::boost::detail::default_argument,
+    class Pointer = ::boost::detail::default_argument,
+    class Category = ::boost::detail::default_argument,
+    class Distance = ::boost::detail::default_argument
          >
 struct iterator_adaptor :
 #ifdef BOOST_RELOPS_AMBIGUITY_BUG
