@@ -40,7 +40,7 @@ namespace boost {
 
 int test_main(int, char*[])
 {
-  boost::function<int, int, int> f;
+  boost::function2<int, int, int> f;
   f = stateless_integer_add();
 
   return 0;
