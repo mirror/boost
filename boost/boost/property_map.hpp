@@ -10,7 +10,7 @@
 #include <iterator>
 #include <boost/config.hpp>
 #include <boost/pending/cstddef.hpp>
-#include <boost/pending/concept_checks.hpp>
+#include <boost/concept_check.hpp>
 
 namespace boost {
 
