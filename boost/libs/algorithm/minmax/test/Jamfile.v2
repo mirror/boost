@@ -11,7 +11,7 @@ import testing ;
 
 {
   test-suite minmax:
-    [ run minmax_test.cpp ]
+    [ run minmax_element_test.cpp ]
   ;
 }
 
