@@ -213,8 +213,11 @@ namespace date_time {
     {
       std::stringstream ss("");
       while(beg != end) {
+#if !defined(BOOST_DATE_TIME_NO_LOCALE)
 		  ss << std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(*beg++, 'X'); // 'X' will cause exception to be thrown
-		  //ss << ss.narrow(*beg++, 'X');
+#else
+		  ss << ss.narrow(*beg++, 'X');
+#endif
       }
       return parse_date<date_type>(ss.str());
     }
@@ -232,8 +235,11 @@ namespace date_time {
       std::stringstream ss("");
       std::wstring::iterator wsb = ws.begin(), wse = ws.end();
       while(wsb != wse) {
+#if !defined(BOOST_DATE_TIME_NO_LOCALE)
 		ss << std::use_facet<std::ctype<wchar_t> >(std::locale()).narrow(*wsb++, 'X'); // 'X' will cause exception to be thrown
-        //ss << ss.narrow(*wsb++, 'X'); // 'X' will cause exception to be thrown
+#else
+        ss << ss.narrow(*wsb++, 'X'); // 'X' will cause exception to be thrown
+#endif
       }
       return parse_date<date_type>(ss.str());
     }
