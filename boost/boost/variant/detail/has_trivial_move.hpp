@@ -10,6 +10,7 @@
 #ifndef BOOST_VARIANT_DETAIL_HAS_TRIVIAL_MOVE_HPP_INCLUDED
 #define BOOST_VARIANT_DETAIL_HAS_TRIVIAL_MOVE_HPP_INCLUDED
 
+#include "boost/config.hpp" // for STATIC_CONSTANT
 #include "boost/type_traits/has_trivial_copy.hpp"
 #include "boost/type_traits/has_trivial_assign.hpp"
 

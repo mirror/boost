@@ -10,6 +10,7 @@
 #ifndef BOOST_VARIANT_DETAIL_HAS_NOTHROW_MOVE_HPP_INCLUDED
 #define BOOST_VARIANT_DETAIL_HAS_NOTHROW_MOVE_HPP_INCLUDED
 
+#include "boost/config.hpp" // for STATIC_CONSTANT
 #include "boost/variant/detail/has_trivial_move.hpp"
 #include "boost/type_traits/has_nothrow_copy.hpp"
 #include "boost/type_traits/has_nothrow_assign.hpp"
