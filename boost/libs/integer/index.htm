@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Boost Integer Library</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<table border="1" bgcolor="#007F7F" cellpadding="2">
+  <tr>
+    <td bgcolor="#FFFFFF"><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" width="277" height="86"></td>
+    <td><a href="../../index.htm"><font face="Arial" color="#FFFFFF"><big>Home </big></font></a></td>
+    <td><a href="../../libraries.htm"><font face="Arial" color="#FFFFFF"><big>Libraries </big></font></a></td>
+    <td><a href="../../people.htm"><font face="Arial" color="#FFFFFF"><big>People </big></font></a></td>
+    <td><a href="../../more/faq.htm"><font face="Arial" color="#FFFFFF"><big>FAQ </big></font></a></td>
+    <td><a href="../../more/index.htm"><font face="Arial" color="#FFFFFF"><big>More </big></font></a></td>
+  </tr>
+</table>
+
+<h1>Boost Integer Library</h1>
+
+<table border="1" cellpadding="5">
+  <tr>
+    <td align="center"><b><i>Header / Docs</i></b></td>
+    <td align="center"><b><i>Contents</i></b></td>
+    <td align="center"><b><i>Use</i></b></td>
+  </tr>
+  <tr>
+    <td align="center"><code><a href="../../boost/cstdint.hpp">&lt;boost/cstdint.hpp&gt;<br>
+      </a></code><a href="cstdint.htm"><br>
+      documentation</a>
+    </td>
+    <td valign="top">Contents of <code>&lt;boost/stdint.h&gt;</code> wrapped in namespace boost.</td>
+    <td valign="top">Supplies typedefs for standard integer types such as <code> int32_t</code> or <code>uint_least16_t</code>.
+      Use in preference to &lt;<code>stdint.h&gt;</code> or<code> &lt;boost/stdint.h&gt;</code>
+      because the names are safely placed in the boost namespace.</td>
+  </tr>
+  <tr>
+    <td align="center"><code><a href="../../boost/stdint.h">&lt;boost/stdint.h&gt;</a></code></td>
+    <td valign="top">Typedefs as defined in the C99 standard header &lt;<code>stdint.h&gt;</code>.
+      This implementation #includes the compiler
+      supplied &lt;<code>stdint.h&gt;</code>, if present.</td>
+    <td valign="top"> Supplied
+      for use in the implementation of &lt;boost/cstdint.hpp&gt; and to ease transition to the C99 standard.
+      Other uses are not recommended because this header places its names in the global namespace.&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center"><code><a href="../../boost/integer_traits.hpp">&lt;boost/integer_traits.hpp&gt;</a></code><br>
+    <br>
+    <a href="integer_traits.html">documentation</a>
+    </td>
+    <td valign="top">Template class <code>boost::integer_traits</code>, derived from <code>std::numeric_limits</code>.&nbsp;
+      Adds <code>const_min</code> and <code>const_max</code> members.</td>
+    <td valign="top">Use to obtain the characteristics of a known integer type.</td>
+  </tr>
+  <tr>
+    <td align="center"><code><a href="../../boost/integer.hpp">&lt;boost/integer.hpp&gt;</a><br>
+      <br>
+      </code><a href="integer.htm">documentation</a></td>
+    <td valign="top">Templates for integer type selection based on properties such as
+      maximum value or number of bits.</td>
+    <td valign="top">Use to select the type an integer when some property such as maximum value or number of bits is known.
+      Useful for generic programming. </td>
+  </tr>
+</table>
+
+<h2>Rationale</h2>
+<p>The organization of boost integer headers and classes is designed to take
+advantage of <code>&lt;stdint.h&gt;</code> types from in the 1999 C standard
+without resorting to undefined behavior in terms of
+the 1998 C++ standard.&nbsp; The header <code>&lt;boost/cstdint.hpp&gt;</code>
+makes the standard integer types safely available in namespace boost without placing any names in the
+global namespace or namespace std. As always, the intension is to complement rather than
+compete with the C++ Standard Library.&nbsp; Should some future C++ standard
+include <code>&lt;stdint.h&gt;</code> and <code>&lt;cstdint&gt;</code>, then <code>&lt;boost/stdint.h&gt;</code> and <code>&lt;boost/cstdint.hpp&gt;</code>
+will continue to function, but will become redundant and may be safely deprecated.</p>
+<p>Because these are boost headers, their names conform to boost header naming
+conventions rather than C++ Standard Library header naming conventions.&nbsp; An
+exception is <code>&lt;boost/stdint.h&gt; </code>which uses a <b> .h</b> extension to indicate its C rather than C++ heritage.</p>
+<h2>Caveat emptor</h2>
+<p>As an
+      implementation artifact, certain C &lt;limits.h&gt; macro names may possibly be
+visible to users of &lt;boost/cstdint.hpp&gt;.&nbsp; Don't use these macros; they are not part of
+any Boost specified interface.&nbsp;
+      Use boost:: integer_traits&lt;&gt; or std::numeric_limits&lt;&gt; instead.</p>
+
+<hr>
+
+<p>Revised: <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %b %Y" startspan -->05 Mar 2000<!--webbot bot="Timestamp" endspan i-checksum="14882" -->
+</p>
+
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Integer Type Selection Templates</title>
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<h1><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align="center" width="277" height="86">Integer
+Type Selection Templates</h1>
+<p>The <code><a href="../../boost/integer.hpp">&lt;boost/integer.hpp&gt;</a></code>
+type selection templates allow integer types to be selected based on desired
+characteristics such as number of bits or maximum value.&nbsp; This facility is
+particularly useful for solving generic programming problems.</p>
+
+<p>The templates <b>int_t&lt;&gt;</b> and <b>uint_t&lt;&gt;</b> supply typedefs <b>least</b>
+and <b>fast</b>.&nbsp; The <b>least</b> type be the smallest type which holds at
+least the number of bits (including sign) specified. The <b>fast</b> type will
+be at least as large as the <b>least</b> type, but may possible be larger.&nbsp;
+There is no guarantee that the <b>fast</b> type will actually be faster than
+other possible types.</p>
+
+<h2>Alternative</h2>
+
+<p>If the number of bits required is known beforehand, it may be more
+appropriate to use the types supplied in <code><a href="../../boost/cstdint.hpp">&lt;boost/cstdint.hpp&gt;</a></code>.</p>
+
+<h2>Synopsis</h2>
+
+<blockquote>
+<pre>namespace boost
+{
+  //  fast integers from least integers
+  template&lt; typename LeastInt &gt;  // Required: LeastInt is integral type, not bool
+  struct int_fast_t { typedef LeastInt fast; }; // implementations may specialize
+
+  //  signed
+  template&lt; int Bits &gt;   // bits (including sign) required, 0-32 valid
+  struct int_t 
+  {
+      typedef <i>implementation-supplied</i>  least;
+      typedef int_fast_t&lt;least&gt;::fast  fast;
+  };
+
+  //  unsigned
+  template&lt; int Bits &gt;   // bits required, 0-32 valid
+  struct uint_t 
+  {
+      typedef <i>implementation-supplied</i>  least;
+      typedef int_fast_t&lt;least&gt;::fast  fast;
+  };
+} // namespace boost
+</pre>
+
+</blockquote>
+<p>[Templates to select type based on maximum value are under development.]
+</p>
+
+<h2>Example</h2>
+
+<blockquote>
+  <pre>#include &lt;boost/integer.hpp&gt;
+using boost::int_t;
+
+...
+int_t&lt;24&gt;::least my_var;  </pre>
+
+</blockquote>
+<h2>Demonstration Program</h2>
+
+<p>The program <a href="integer_test.cpp">integer_test.cpp</a> is a not very
+smart demonstration of the results from instantiating various <b>int_t&lt;&gt;</b>
+and <b>uint_t&lt;&gt;</b> examples.</p>
+
+<h2>Rationale</h2>
+
+<p>The rationale for the design of the templates in this header includes:</p>
+
+<ul>
+  <li>Avoid&nbsp; recursion because of concern about C++'s limited guaranteed
+    recursion depth (17).</li>
+  <li>Avoid macros on general principles.</li>
+  <li>Try to keep the design as simple as possible.</li>
+</ul>
+
+<h2>Credits</h2>
+
+<p>The author of the Boost integer type choosing templates is <a href="../../people/beman_dawes.html">Beman
+Dawes</a>.&nbsp; He thanks to <a href="../../people/valentin_bonnard.htm"> Valentin Bonnard</a> and
+<a href="../../people/kevlin_henney.htm"> Kevlin Henney</a> for sharing their designs for  similar templates.</p>
+
+<hr>
+
+<p>Revised&nbsp; August 31, 1999</p>
+
+<p>© Copyright Beman Dawes 1999. Permission to copy, use, modify, sell
+and distribute this document is granted provided this copyright notice appears in all
+copies. This document is provided &quot;as is&quot; without express or implied warranty,
+and with no claim as to its suitability for any purpose.</p>
+
+<p></p>
+
+<p>&nbsp;</p>
+
+</body>
+
+</html>
