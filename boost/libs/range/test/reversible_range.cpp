@@ -52,12 +52,12 @@ void check_iterator()
          
     BOOST_CHECK( rbegin( vec ) == range_reverse_iterator<vec_t>::type( vec.end() ) );
     BOOST_CHECK( rend( vec ) == range_reverse_iterator<vec_t>::type( vec.begin() ) );
-    BOOST_CHECK( distance( rbegin( vec ), rend( vec ) ) == distance( begin( vec ), end( vec ) ) );
+    BOOST_CHECK( std::distance( rbegin( vec ), rend( vec ) ) == std::distance( begin( vec ), end( vec ) ) );
 
     BOOST_CHECK( rbegin( p ) == begin( rp ) );
     BOOST_CHECK( rend( p ) == end( rp ) );
-    BOOST_CHECK( distance( rbegin( p ), rend( p ) ) == distance( begin( rp ), end( rp ) ) );
-    BOOST_CHECK( distance( begin( p ), end( p ) ) == distance( rbegin( rp ), rend( rp ) ) );
+    BOOST_CHECK( std::distance( rbegin( p ), rend( p ) ) == std::distance( begin( rp ), end( rp ) ) );
+    BOOST_CHECK( std::distance( begin( p ), end( p ) ) == std::distance( rbegin( rp ), rend( rp ) ) );
 
     BOOST_CHECK_EQUAL( &*begin( str ), &*( rend( str ) - 1 ) );
     BOOST_CHECK_EQUAL( &*( end( str ) - 1 ), &*rbegin( str ) );
