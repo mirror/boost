@@ -166,25 +166,43 @@ namespace boost
   //    between signed and unsigned values.
   //
   //    "poor man's partial specialization" is in use here.
-    template <bool same_sign>
+    template <bool same_sign, bool x_is_signed>
     struct greater_than_type_max;
 
     template<>
-    struct greater_than_type_max<true>
+    struct greater_than_type_max<true, true>
     {
         template <class X, class Y>
-        static bool check(X x, Y y_max)
+        static inline bool check(X x, Y y_max)
             { return x > y_max; }
     };
 
     template <>
-    struct greater_than_type_max<false>
+    struct greater_than_type_max<false, true>
     {
         // What does the standard say about this? I think it's right, and it
         // will work with every compiler I know of.
         template <class X, class Y>
-        static bool check(X x, Y)
+        static inline bool check(X x, Y)
             { return x >= 0 && static_cast<X>(static_cast<Y>(x)) != x; }
+    };
+
+    template<>
+    struct greater_than_type_max<true, false>
+    {
+        template <class X, class Y>
+        static inline bool check(X x, Y y_max)
+            { return x > y_max; }
+    };
+
+    template <>
+    struct greater_than_type_max<false, false>
+    {
+        // What does the standard say about this? I think it's right, and it
+        // will work with every compiler I know of.
+        template <class X, class Y>
+        static inline bool check(X x, Y)
+            { return static_cast<X>(static_cast<Y>(x)) != x; }
     };
 #endif
   
@@ -207,7 +225,7 @@ namespace boost
         const bool same_sign = arg_is_signed == result_is_signed;
 
         if (less_than_type_min<arg_is_signed, result_is_signed>::check(arg, result_traits::min())
-            || greater_than_type_max<same_sign>::check(arg, result_traits::max())
+            || greater_than_type_max<same_sign, arg_is_signed>::check(arg, result_traits::max())
             )
             
 #else // We need to use #pragma hacks if available
