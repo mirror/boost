@@ -28,17 +28,27 @@
 namespace boost {
 
 namespace detail {
+  template<typename T>
+  struct type_is_pointer
+  {
+    typedef typename ct_if<(is_pointer<T>::value), 
+                           type_traits::yes_type, 
+                           type_traits::no_type>::type type;
+  };
+
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
   template<typename T>
-  typename ct_if<(is_pointer<T>::value), 
-                 type_traits::yes_type, 
-                 type_traits::no_type>::type
+  typename type_is_pointer<T>::type
   is_pointerlike_helper(const T&, int); 
+
+#ifdef __BORLANDC__
+  template<typename T>
+  type_traits::yes_type is_pointerlike_helper(T*, int);
+#endif // __BORLANDC__
+
 #else
   template<typename T>
-  typename ct_if<(is_pointer<T>::value), 
-                 type_traits::yes_type, 
-                 type_traits::no_type>::type
+  typename type_is_pointer<T>::type
   is_pointerlike_helper(const T&, long); 
 #endif 
 
