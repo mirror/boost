@@ -36,7 +36,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix<T, F, A> >::operator ();
 #endif
-        typedef concrete_tag simd_category;
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -62,6 +61,7 @@ namespace boost { namespace numeric { namespace ublas {
         // typedef typename unknown_orientation_tag orientation_category;
         // but others depend on the orientation information...
         typedef typename functor_type::orientation_category orientation_category;
+        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -979,7 +979,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<vector_of_vector<T, F, A> >::operator ();
 #endif
-        typedef concrete_tag simd_category;
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -1007,6 +1006,7 @@ namespace boost { namespace numeric { namespace ublas {
         // typedef typename unknown_orientation_tag orientation_category;
         // but others depend on the orientation information...
         typedef typename functor_type::orientation_category orientation_category;
+        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -3288,7 +3288,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<c_matrix<T, N, M> >::operator ();
 #endif
-        typedef concrete_tag simd_category;
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -3311,6 +3310,7 @@ namespace boost { namespace numeric { namespace ublas {
         // typedef typename unknown_orientation_tag orientation_category;
         // but others depend on the orientation information...
         typedef row_major_tag orientation_category;
+        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE

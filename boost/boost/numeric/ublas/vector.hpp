@@ -81,7 +81,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector<T, A> >::operator ();
 #endif
-        typedef concrete_tag simd_category;
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -102,6 +101,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename A::const_iterator const_iterator_type;
         typedef typename A::iterator iterator_type;
         typedef dense_tag storage_category;
+        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
@@ -1279,7 +1279,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<c_vector<T, N> >::operator ();
 #endif
-        typedef concrete_tag simd_category;
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
@@ -1298,6 +1297,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T *const_iterator_type;
         typedef T *iterator_type;
         typedef dense_tag storage_category;
+        typedef concrete_tag simd_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
