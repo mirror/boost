@@ -59,12 +59,12 @@ void is_function_tester<T>::check()
 }
 
 template <class T>
-void is_function_test(T* foo)
+void is_function_test(T*)
 {
    is_function_tester<T>::check();
 }
 template <class T>
-void is_function_test(T foo)
+void is_function_test(T)
 {
    is_function_tester<T>::check();
 }
