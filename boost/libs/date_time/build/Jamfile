@@ -32,8 +32,8 @@ dll boost_date_time : ../src/gregorian/$(CPP_SOURCES).cpp
     ;
 
 lib boost_date_time : ../src/gregorian/$(CPP_SOURCES).cpp
-    : <sysinclude>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) 
-    : debug release 
+    : <sysinclude>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) <define>BOOST_DATE_TIME_STATIC_LINK
+    : debug release <runtime-link>static 
     ;
 
 install data_time lib
