@@ -199,15 +199,20 @@ struct counting_iterator_policies : public default_iterator_policies
 template <class Incrementable>
 struct counting_iterator_generator
 {
-    typedef counting_iterator_traits<Incrementable> traits;
+    typedef typename boost::remove_const<
+        Incrementable
+    >::type value_type;
     
-    typedef iterator_adaptor<Incrementable,
-        counting_iterator_policies<Incrementable>,
-        Incrementable,
-        const Incrementable&,
-        const Incrementable*,
-        typename traits::iterator_category,
-        typename traits::difference_type
+    typedef counting_iterator_traits<value_type> traits;
+    
+    typedef iterator_adaptor<
+        value_type
+        , counting_iterator_policies<value_type>
+        , value_type
+        , value_type const&
+        , value_type const*
+        , typename traits::iterator_category
+        , typename traits::difference_type
     > type;
 };
 
