@@ -896,7 +896,7 @@ public:
 template <class AdaptableUnaryFunction, class Iterator, class ConstIterator>
 struct projection_iterator_pair_generator {
     typedef typename projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type iterator;
-    typedef typename const_projection_iterator_generator<AdaptableUnaryFunction, Iterator>::type const_iterator;
+    typedef typename const_projection_iterator_generator<AdaptableUnaryFunction, ConstIterator>::type const_iterator;
 };
 
 
