@@ -23,7 +23,11 @@ template regression
 
 rule regex-test ( name : sources + : requirements * : input-files * )
 {
-    return [ run $(sources) : : $(input-files) : $(requirements) : $(name) ] ;
+    return [ run $(sources)
+               :
+               : $(input-files)
+               : $(requirements) <no-warn>parse.cpp <no-warn>regress.cpp <no-warn>tests.cpp
+               : $(name) ] ;
 }
 
 test-suite regex
