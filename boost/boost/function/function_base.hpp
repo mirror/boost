@@ -78,6 +78,8 @@ namespace boost {
 
 #if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_STRICT_CONFIG)
 // The library shipping with MIPSpro 7.3.1.3m has a broken allocator<void>
+class function_base;
+
 template<typename Signature,
          typename Allocator = std::allocator<function_base> >
 class function;
