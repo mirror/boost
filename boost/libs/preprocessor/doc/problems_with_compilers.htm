@@ -15,10 +15,12 @@
 <h2>Contents</h2>
 <ul>
   <li><a href="#Metrowerks Codewarrior 7.0">Metrowerks Codewarrior 7.0</a></li>
+  <li><a href="#Comeau C/C++ 4.2.45.2">Comeau C/C++ 4.2.45.2 for Windows</a></li>
 </ul>
 <HR>
+
 <h3><a name="Metrowerks Codewarrior 7.0">Metrowerks Codewarrior 7.0</a></h3>
-<p>Bad news - Metrowerks Codewarrior 7.0 has a bug in preprocessor (to be more 
+<p>Metrowerks Codewarrior 7.0 has a bug in preprocessor (to be more 
   concrete, in function-like macro replacement mechanism) that restricts usage 
   of the library to only very simple cases, at least if you don't write code that 
   specifically address this issue; for example, the above NUMBERED_EXPRESSION 
@@ -36,8 +38,8 @@ int c IDENTITY_MACRO(IDENTITY_MACRO(COMMA_TOKEN))() d; // this doesn't
   expanded _inside_ of the nested IDENTITY_MACRO call - even although it's NOT 
   followed by a '(' as the next preprocessing token - which is a clearly an incorrect 
   behavior (see 16.3 [cpp.replace] para 9 for the detailed description of the 
-  function-like macro replacement process). I haven't submitted bug report yet, 
-  but I am going to.</p>
+  function-like macro replacement process). I've submitted a bug report, but they 
+  haven't confirmed it yet.</p>
 <p>So, this is not a problem of the library, but probably something that needs 
   to be mentioned in the documentation, may be with some examples of how to workaround 
   the issue. Just to show one possible way around the problem, here is a NUMBERED_EXPRESSION 
@@ -53,6 +55,65 @@ int c IDENTITY_MACRO(IDENTITY_MACRO(COMMA_TOKEN))() d; // this doesn't
 /**/
 </pre></blockquote>
 <p align="right"><i>Reported by Aleksey Gurtovoy</i></p>
+
+<h3><a name="Comeau C/C++ 4.2.45.2">Comeau C/C++ 4.2.45.2 for Windows</a></h3>
+<p>It appears that their algorithm of macro call invocation is quite far 
+  from ideal, because for the following code fragment (which is a part of 
+  <a href="../test/preprocessor_test.cpp">preprocessor_test.cpp</a>), the 
+  linear increasing of IS_FUNCTION_HELPER_TEST_MAX value leads to not even 
+  quadratic, but something like exponential increasing of compilation time! 
+  (see the timing data below). This behavior may or may not be problematic
+  for you, depending on how intense is your usage of the library.
+
+<blockquote>
+  <pre>#ifndef IS_FUNCTION_HELPER_TEST_MAX
+#define IS_FUNCTION_HELPER_TEST_MAX 40
+#endif
+
+typedef char yes_type;
+
+#define IS_FUNCTION_HELPER(I,A)\
+  template\
+  &ltBOOST_PREPROCESSOR_ENUM_PARAMS(BOOST_PREPROCESSOR_INC(I),class P)&gt;\
+  yes_type is_function_helper(\
+    P0 (*)(BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS(BOOST_PREPROCESSOR_INC(I),P)));
+
+BOOST_PREPROCESSOR_REPEAT_2ND(BOOST_PREPROCESSOR_INC(IS_FUNCTION_HELPER_TEST_MAX),IS_FUNCTION_HELPER,A)
+
+#undef IS_FUNCTION_HELPER
+</pre></blockquote>
+
+<h4>Timing data:</h4>
+<table border="1">
+<tr align="center">
+  <th>&nbsp;</th>
+  <th>Comeau C/C++ 4.2.45.2</th>
+  <th>Microsoft Visual C++ 6.0 SP5</th>
+</tr>
+<tr align="center">
+  <td>10 parameters</td>
+  <td><font color="red">&lt; 1 sec</font></td>
+  <td>&lt; 1 sec</td>
+</tr>
+<tr align="center">
+  <td>20 parameters</td>
+  <td><font color="red">~ 2 sec</font></td>
+  <td>&lt; 1 sec</td>
+</tr>
+<tr align="center">
+  <td>30 parameters</td>
+  <td><font color="red">~ 15 sec</font></td>
+  <td>&lt; 1 sec</td>
+</tr>
+<tr align="center">
+  <td>40 parameters</td>
+  <td><font color="red">~ 50 sec</font></td>
+  <td>&lt; 1 sec</td>
+</tr>
+</table>
+
+<p align="right"><i>Reported by Aleksey Gurtovoy</i></p>
+
 <hr>
 <P>© Copyright Housemarque, Inc. 2001</P>
 <p>Permission to copy, use, modify, sell and distribute this document is granted 
