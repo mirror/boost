@@ -252,7 +252,7 @@ struct BOOST_PP_CAT(apply,i)
     // Metafunction forwarding confuses vc7
     typedef typename F::template apply<
        AUX_APPLY_N_PARAMS(i, T)
-    >::type
+    >::type type;
         
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           BOOST_PP_INC(i)
