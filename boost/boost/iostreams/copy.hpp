@@ -157,6 +157,7 @@ copy( const Source& src, const Sink& snk,
                       buffer_size ); 
 }
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
 template<typename Source, typename Sink>
 std::streamsize
 copy( Source& src, const Sink& snk,
@@ -191,6 +192,7 @@ copy( Source& src, Sink& snk,
     using namespace detail;
     return copy_impl(wrap(src), wrap(snk), buffer_size);
 }
+#endif // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //-----------------------//
 
 } } // End namespaces iostreams, boost.
 

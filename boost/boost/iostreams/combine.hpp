@@ -13,10 +13,11 @@
 # pragma once
 #endif              
 
-#include <boost/config.hpp>                      // BOOST_NO_STD_LOCALE.
+#include <boost/config.hpp> // NO_STD_LOCALE, DEDUCED_TYPENAME.
 #ifndef BOOST_NO_STD_LOCALE
 # include <locale>
 #endif
+//#include <boost/detail/workaround.hpp>       
 #include <boost/iostreams/detail/wrap_unwrap.hpp>       
 #include <boost/iostreams/traits.hpp>         
 #include <boost/iostreams/is_device.hpp>     
@@ -138,6 +139,23 @@ struct combined_view : detail::combined_traits<In, Out>::type {
         : base_type(in, out) { }
 };
 
+//#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+//template<> struct combined_view<int, int> { };
+//#endif
+
+namespace detail {
+
+// Workaround for VC6 ETI bug.
+template<typename In, typename Out>
+struct combine_traits {
+    typedef combined_view<
+                BOOST_DEDUCED_TYPENAME detail::unwrapped_type<In>::type, 
+                BOOST_DEDUCED_TYPENAME detail::unwrapped_type<Out>::type
+            > type;
+};
+
+} // End namespace detail.
+
 //
 // Template name: combine.
 // Description: Takes a Source/Sink pair or InputFilter/OutputFilter pair and
@@ -148,16 +166,11 @@ struct combined_view : detail::combined_traits<In, Out>::type {
 //      Out - A model of Sink or OutputFilter, with the same char_type as In.
 //
 template<typename In, typename Out>
-combined_view<
-    typename detail::unwrapped_type<In>::type, 
-    typename detail::unwrapped_type<Out>::type
->
+typename detail::combine_traits<In, Out>::type
 combine(const In& in, const Out& out) 
 { 
-    return combined_view<
-        typename detail::unwrapped_type<In>::type, 
-        typename detail::unwrapped_type<Out>::type
-    >(in, out); 
+    typedef typename detail::combine_traits<In, Out>::type return_type;
+    return return_type(in, out); 
 }
 
 //----------------------------------------------------------------------------//
