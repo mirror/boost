@@ -19,12 +19,12 @@
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 #   define INTEGRAL_WRAPPER_RUNTIME_TEST(i, T) \
-    assert(WRAPPER(T,i)() == i); \
-    assert(WRAPPER(T,i)::value == i); \
+    assert(( WRAPPER(T,i)() == i )); \
+    assert(( WRAPPER(T,i)::value == i )); \
     /**/
 #else
 #   define INTEGRAL_WRAPPER_RUNTIME_TEST(i, T) \
-    assert(WRAPPER(T,i)::value == i); \
+    assert(( WRAPPER(T,i)::value == i )); \
     /**/
 #endif
 
