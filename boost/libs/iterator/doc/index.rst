@@ -2,7 +2,7 @@
  The Boost.Iterator Library |(logo)|__
 +++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. |(logo)| image:: ../../../c++boost.gif
+.. |(logo)| image:: ../../../boost.png
    :alt: Boost
 
 __ ../../../index.htm
