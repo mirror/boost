@@ -245,7 +245,11 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
             <xsl:value-of select="@type"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:apply-templates select="type/*|type/text()"/>
+            <xsl:call-template name="source-highlight">
+              <xsl:with-param name="text">
+                <xsl:apply-templates select="type/*|type/text()"/>
+              </xsl:with-param>
+            </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
 
@@ -315,72 +319,34 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:param name="indentation"/>
     <xsl:text>&#10;</xsl:text>
 
-    <xsl:variable name="type">
-      <xsl:choose>
-        <xsl:when test="@type">
-          <xsl:value-of select="@type"/>
-          <xsl:message>
-            <xsl:text>Warning: `type' attribute of `static-constant' element is deprecated. Use 'type' element instead.</xsl:text>
-          </xsl:message>
-          <xsl:call-template name="print.warning.context"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="type/*|type/text()"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
-    <xsl:variable name="default">
-      <xsl:choose>
-        <xsl:when test="@value">
-          <xsl:value-of select="@value"/>
-          <xsl:message>
-            <xsl:text>Warning: `value' attribute of `static-constant' element is deprecated. Use 'default' element instead.</xsl:text>
-          </xsl:message>
-          <xsl:call-template name="print.warning.context"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="default/*|default/text()"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
-    <xsl:variable name="purpose">
-      <xsl:choose>
-        <xsl:when test="@comment">
-          <xsl:value-of select="@comment"/>
-          <xsl:message>
-            <xsl:text>Warning: `comment' attribute of `static-constant' element is deprecated. Use 'purpose' element instead.</xsl:text>
-          </xsl:message>
-          <xsl:call-template name="print.warning.context"/>      
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="purpose/*|purpose/text()"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
     <xsl:call-template name="indent">
       <xsl:with-param name="indentation" select="$indentation"/>
     </xsl:call-template>
     <xsl:call-template name="source-highlight">
       <xsl:with-param name="text" select="'static const '"/>
     </xsl:call-template>
-    
-    <xsl:copy-of select="$type"/>
 
+    <xsl:call-template name="source-highlight">
+      <xsl:with-param name="text">
+        <xsl:apply-templates select="type/*|type/text()"/>    
+      </xsl:with-param>
+    </xsl:call-template>
+    
     <xsl:text> = </xsl:text>
 
-    <xsl:copy-of select="$default"/>
-
+    <xsl:call-template name="source-highlight">
+      <xsl:with-param name="text">
+        <xsl:apply-templates select="default/*|default/text()"/>
+      </xsl:with-param>
+    </xsl:call-template>
     <xsl:text>;</xsl:text>
 
-    <xsl:if test="not(string($purpose)='')">
+    <xsl:if test="purpose">
       <xsl:text>  </xsl:text>
       <xsl:call-template name="highlight-comment">
         <xsl:with-param name="text">
           <xsl:text>// </xsl:text>
-          <xsl:copy-of select="$purpose"/>
+          <xsl:apply-templates select="purpose/*|purpose/text()"/>
         </xsl:with-param>
       </xsl:call-template>
     </xsl:if>
