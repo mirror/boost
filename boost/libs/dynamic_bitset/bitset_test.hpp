@@ -17,10 +17,6 @@
 # include <locale>
 #endif
 
-#if defined (__STL_CONFIG_H) && !defined (__STL_USE_NEW_IOSTREAMS)
-# define BOOST_OLD_IOSTREAMS // gps
-#endif
-
 #include <vector>
 #include <fstream> // used for operator<< :( - gps
 #include <string>    // for (basic_string and) getline()
