@@ -33,10 +33,12 @@ namespace date_time {
   class time_duration : private
       boost::less_than_comparable<T 
     , boost::equality_comparable<T
-    , boost::addable<T
-    , boost::subtractable<T
-    , boost::dividable<time_duration<T, rep_type>, int
-    > > > > >
+    > >
+  /* dividable, addable, and subtractable operator templates
+   * won't work with this class (MSVC++ 6.0). return type 
+   * from '+=' is different than expected return type 
+   * from '+'. multipliable probably wont work 
+   * either (haven't tried) */
   {
   public:
     typedef T duration_type;  //the subclass
@@ -111,6 +113,17 @@ namespace date_time {
     {
       return ticks_ ==  rhs.ticks_;
     }
+    duration_type operator-(const duration_type& d) const
+    {
+      return duration_type(ticks_ - d.ticks_);
+    }
+    duration_type operator+(const duration_type& d) const
+    {
+      return duration_type(ticks_ + d.ticks_);
+    }
+	duration_type operator/(int divisor){
+	  return duration_type(ticks_ / divisor);
+	}
     time_duration operator-=(const duration_type& d)
     {
       ticks_ -= d.ticks_;
@@ -204,3 +217,4 @@ namespace date_time {
 
 
 #endif
+
