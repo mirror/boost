@@ -12,7 +12,7 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
-#endif              
+#endif
 
 #include <string>                          // file pathnames.
 #include <boost/cstdint.hpp>               // intmax_t.
@@ -24,7 +24,7 @@
 #include <boost/shared_ptr.hpp>
 
 // Must come last.
-#include <boost/config/abi_prefix.hpp>     
+#include <boost/config/abi_prefix.hpp>
 
 namespace boost { namespace iostreams {
 
@@ -34,27 +34,27 @@ public:
     typedef void*  handle_type;
 #endif
     typedef char   char_type;
-    struct io_category 
+    struct io_category
         : seekable_device_tag,
-          closable_tag 
+          closable_tag
         { };
     file_descriptor() : pimpl_(new impl) { }
-    explicit file_descriptor(int fd, bool close_on_exit = false) 
-        : pimpl_(new impl(fd, close_on_exit)) 
+    explicit file_descriptor(int fd, bool close_on_exit = false)
+        : pimpl_(new impl(fd, close_on_exit))
         { }
 #ifdef BOOST_IOSTREAMS_WINDOWS
     explicit file_descriptor(handle_type handle, bool close_on_exit = false)
-        : pimpl_(new impl(handle, close_on_exit)) 
+        : pimpl_(new impl(handle, close_on_exit))
         { }
 #endif
-    explicit file_descriptor( const std::string& path, 
+    explicit file_descriptor( const std::string& path,
                               BOOST_IOS::openmode mode =
                                   BOOST_IOS::in | BOOST_IOS::out,
                               BOOST_IOS::openmode base_mode =
                                   BOOST_IOS::in | BOOST_IOS::out )
-        : pimpl_(new impl) 
+        : pimpl_(new impl)
     { open(path, mode, base_mode); }
-    void open( const std::string& path, 
+    void open( const std::string& path,
                BOOST_IOS::openmode =
                    BOOST_IOS::in | BOOST_IOS::out,
                BOOST_IOS::openmode base_mode =
@@ -66,16 +66,16 @@ public:
 private:
     struct impl {
         impl() : fd_(-1), flags_(0) { }
-        impl(int fd, bool close_on_exit) 
-            : fd_(fd), flags_(0) 
+        impl(int fd, bool close_on_exit)
+            : fd_(fd), flags_(0)
         { if (close_on_exit) flags_ |= impl::close_on_exit; }
     #ifdef BOOST_IOSTREAMS_WINDOWS
-        impl(handle_type handle, bool close_on_exit) 
-            : handle_(handle), flags_(has_handle) 
+        impl(handle_type handle, bool close_on_exit)
+            : handle_(handle), flags_(has_handle)
         { if (close_on_exit) flags_ |= impl::close_on_exit; }
     #endif
-        ~impl() { 
-            if (flags_ & close_on_exit) close_impl(*this); 
+        ~impl() {
+            if (flags_ & close_on_exit) close_impl(*this);
         }
         enum flags {
             close_on_exit = 1,
@@ -104,19 +104,19 @@ struct file_descriptor_source : private file_descriptor {
     using file_descriptor::read;
     using file_descriptor::open;
     using file_descriptor::close;
-    file_descriptor_source() { } 
+    file_descriptor_source() { }
     explicit file_descriptor_source(int fd, bool close_on_exit = false)
-        : file_descriptor(fd, close_on_exit) 
+        : file_descriptor(fd, close_on_exit)
         { }
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    explicit file_descriptor_source( handle_type handle, 
+    explicit file_descriptor_source( handle_type handle,
                                      bool close_on_exit = false )
-        : file_descriptor(handle, close_on_exit) 
+        : file_descriptor(handle, close_on_exit)
         { }
 #endif
-    explicit file_descriptor_source( const std::string& path, 
+    explicit file_descriptor_source( const std::string& path,
                                      BOOST_IOS::openmode m = BOOST_IOS::in )
-        : file_descriptor(path, m & ~BOOST_IOS::out, BOOST_IOS::in) 
+        : file_descriptor(path, m & ~BOOST_IOS::out, BOOST_IOS::in)
         { }
 };
 
@@ -129,19 +129,19 @@ struct file_descriptor_sink : private file_descriptor {
     using file_descriptor::write;
     using file_descriptor::open;
     using file_descriptor::close;
-    file_descriptor_sink() { } 
-    explicit file_descriptor_sink(int fd, bool close_on_exit = false) 
-        : file_descriptor(fd, close_on_exit) 
+    file_descriptor_sink() { }
+    explicit file_descriptor_sink(int fd, bool close_on_exit = false)
+        : file_descriptor(fd, close_on_exit)
         { }
 #ifdef BOOST_IOSTREAMS_WINDOWS
-    explicit file_descriptor_sink( handle_type handle, 
+    explicit file_descriptor_sink( handle_type handle,
                                    bool close_on_exit = false )
-        : file_descriptor(handle, close_on_exit) 
+        : file_descriptor(handle, close_on_exit)
         { }
 #endif
-    explicit file_descriptor_sink( const std::string& path, 
+    explicit file_descriptor_sink( const std::string& path,
                                    BOOST_IOS::openmode m = BOOST_IOS::out )
-        : file_descriptor(path, m & ~BOOST_IOS::in, BOOST_IOS::out) 
+        : file_descriptor(path, m & ~BOOST_IOS::in, BOOST_IOS::out)
         { }
 };
 
