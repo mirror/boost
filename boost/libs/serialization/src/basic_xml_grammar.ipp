@@ -92,7 +92,7 @@ struct assign_impl<std::wstring> {
 #endif
 
 template<class T>
-assign_impl<T> assign_obect(T &t){
+assign_impl<T> assign_object(T &t){
     return assign_impl<T>(t);
 } 
 
@@ -196,6 +196,7 @@ bool basic_xml_grammar<CharType>::parse_start_tag(
             archive_exception(archive_exception::stream_error)
         );
     }
+    rv.class_name.resize(0);
     return my_parse(is, STag);
 }
 
@@ -253,7 +254,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     STag =
         !S
         >> '<'
-        >> Name  [assign_obect(rv.object_name)]
+        >> Name  [assign_object(rv.object_name)]
         >> AttributeList
         >> !S
         >> '>'
@@ -262,7 +263,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ETag =
         !S
         >> "</"
-        >> Name [assign_obect(rv.object_name)]
+        >> Name [assign_object(rv.object_name)]
         >> !S 
         >> '>'
     ;
@@ -287,11 +288,11 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
     ;
     CharRef = CharRef1 | CharRef2 ;
 
-    AmpRef = str_p(L"&amp;")[append_lit<StringType, '&'>(rv.contents)];
-    LTRef = str_p(L"&lt;")[append_lit<StringType, '<'>(rv.contents)];
-    GTRef = str_p(L"&gt;")[append_lit<StringType, '>'>(rv.contents)];
-    AposRef = str_p(L"&apos;")[append_lit<StringType, '\''>(rv.contents)];
-    QuoteRef = str_p(L"&quot;")[append_lit<StringType, '"'>(rv.contents)];
+    AmpRef = str_p(L"&amp;")[append_lit<StringType, L'&'>(rv.contents)];
+    LTRef = str_p(L"&lt;")[append_lit<StringType, L'<'>(rv.contents)];
+    GTRef = str_p(L"&gt;")[append_lit<StringType, L'>'>(rv.contents)];
+    AposRef = str_p(L"&apos;")[append_lit<StringType, L'\''>(rv.contents)];
+    QuoteRef = str_p(L"&quot;")[append_lit<StringType, L'"'>(rv.contents)];
 
     Reference =
         AmpRef
@@ -311,7 +312,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
 		str_p(CLASS_ID()) >> NameTail
 		>> Eq 
 		>> L'"'
-		>> int_p [assign_obect(rv.class_id.t)]
+		>> int_p [assign_object(rv.class_id.t)]
 		>> L'"'
       ;
 
@@ -321,15 +322,29 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
 		>> Eq 
 		>> L'"'
 		>> L'_'
-		>> uint_p [assign_obect(rv.object_id.t)]
+		>> uint_p [assign_object(rv.object_id.t)]
 		>> L'"'
 	;
-
+	    
+    AmpName = str_p(L"&amp;")[append_lit<StringType, L'&'>(rv.class_name)];
+    LTName = str_p(L"&lt;")[append_lit<StringType, L'<'>(rv.class_name)];
+    GTName = str_p(L"&gt;")[append_lit<StringType, L'>'>(rv.class_name)];
+    ClassNameChar = 
+        AmpName
+        | LTName
+        | GTName
+        | (anychar_p - chset_p(L"\"")) [append_char<StringType>(rv.class_name)]
+    ;
+    
+    ClassName =
+        * ClassNameChar
+    ;
+    
     ClassNameAttribute = 
         str_p(CLASS_NAME()) 
         >> Eq 
         >> L'"'
-        >> Name [assign_obect(rv.class_name)]
+        >> ClassName
         >> L'"'
     ;
 
@@ -345,7 +360,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         str_p(VERSION())
         >> Eq
         >> L'"'
-        >> uint_p [assign_obect(rv.version.t)]
+        >> uint_p [assign_object(rv.version.t)]
         >> L'"'
     ;
 
@@ -391,7 +406,7 @@ basic_xml_grammar<CharType>::basic_xml_grammar(){
         str_p(L"signature") 
         >> Eq 
         >> L'"'
-        >> Name [assign_obect(rv.class_name)]
+        >> Name [assign_object(rv.class_name)]
         >> L'"'
     ;
     
