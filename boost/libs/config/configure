@@ -1550,6 +1550,58 @@ EOF
 fi
 ac_cv_lib_m=ac_cv_lib_m_main
 
+echo "$as_me:1553: checking for main in -lrt" >&5
+echo $ECHO_N "checking for main in -lrt... $ECHO_C" >&6
+if test "${ac_cv_lib_rt_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lrt  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line 1561 "configure"
+#include "confdefs.h"
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:1573: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:1576: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:1579: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:1582: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_rt_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+cat conftest.$ac_ext >&5
+ac_cv_lib_rt_main=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:1593: result: $ac_cv_lib_rt_main" >&5
+echo "${ECHO_T}$ac_cv_lib_rt_main" >&6
+if test $ac_cv_lib_rt_main = yes; then
+  cat >>confdefs.h <<EOF
+#define HAVE_LIBRT 1
+EOF
+
+  LIBS="-lrt $LIBS"
+
+fi
+ac_cv_lib_rt=ac_cv_lib_rt_main
+
 #
 # enumerate test files and test each one:
 #
@@ -1568,14 +1620,14 @@ for file in ./test/boost_no*.cxx; do
 
 	ac_ext=$use_ac_ext
 	if test $enable_test = 'yes'; then
-		echo "$as_me:1571: checking $title (pass expected) " >&5
+		echo "$as_me:1623: checking $title (pass expected) " >&5
 echo $ECHO_N "checking $title (pass expected) ... $ECHO_C" >&6
 	else
-		echo "$as_me:1574: checking $title " >&5
+		echo "$as_me:1626: checking $title " >&5
 echo $ECHO_N "checking $title ... $ECHO_C" >&6
 	fi
 	cat >conftest.$ac_ext <<_ACEOF
-#line 1578 "configure"
+#line 1630 "configure"
 #include "confdefs.h"
 
 #include <boost/config.hpp>
@@ -1603,24 +1655,24 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:1606: \"$ac_link\"") >&5
+if { (eval echo "$as_me:1658: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:1609: \$? = $ac_status" >&5
+  echo "$as_me:1661: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:1612: \"$ac_try\"") >&5
+  { (eval echo "$as_me:1664: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:1615: \$? = $ac_status" >&5
+  echo "$as_me:1667: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:1617: result: OK" >&5
+  echo "$as_me:1669: result: OK" >&5
 echo "${ECHO_T}OK" >&6
 
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-echo "$as_me:1623: result: Failed" >&5
+echo "$as_me:1675: result: Failed" >&5
 echo "${ECHO_T}Failed" >&6
 	required_defs="$macroname $required_defs"
 
@@ -1630,10 +1682,10 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 	if test $enable_test = 'yes'; then
 
 	ac_ext=$use_ac_ext
-	echo "$as_me:1633: checking $title (fail expected) " >&5
+	echo "$as_me:1685: checking $title (fail expected) " >&5
 echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
 	cat >conftest.$ac_ext <<_ACEOF
-#line 1636 "configure"
+#line 1688 "configure"
 #include "confdefs.h"
 
 #include <boost/config.hpp>
@@ -1661,25 +1713,25 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:1664: \"$ac_link\"") >&5
+if { (eval echo "$as_me:1716: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:1667: \$? = $ac_status" >&5
+  echo "$as_me:1719: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:1670: \"$ac_try\"") >&5
+  { (eval echo "$as_me:1722: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:1673: \$? = $ac_status" >&5
+  echo "$as_me:1725: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:1675: result: failed" >&5
+  echo "$as_me:1727: result: failed" >&5
 echo "${ECHO_T}failed" >&6
 	required_undefs="$macroname $required_undefs"
 
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-echo "$as_me:1682: result: OK" >&5
+echo "$as_me:1734: result: OK" >&5
 echo "${ECHO_T}OK" >&6
 
 fi
@@ -1706,10 +1758,10 @@ for file in ./test/boost_has*.cxx; do
 
 	ac_ext=$use_ac_ext
 	if test $enable_test = 'yes'; then
-	echo "$as_me:1709: checking $title (pass expected) " >&5
+	echo "$as_me:1761: checking $title (pass expected) " >&5
 echo $ECHO_N "checking $title (pass expected) ... $ECHO_C" >&6
 	cat >conftest.$ac_ext <<_ACEOF
-#line 1712 "configure"
+#line 1764 "configure"
 #include "confdefs.h"
 
 #include <boost/config.hpp>
@@ -1737,34 +1789,34 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:1740: \"$ac_link\"") >&5
+if { (eval echo "$as_me:1792: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:1743: \$? = $ac_status" >&5
+  echo "$as_me:1795: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:1746: \"$ac_try\"") >&5
+  { (eval echo "$as_me:1798: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:1749: \$? = $ac_status" >&5
+  echo "$as_me:1801: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  echo "$as_me:1751: result: OK" >&5
+  echo "$as_me:1803: result: OK" >&5
 echo "${ECHO_T}OK" >&6
 
 else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
-echo "$as_me:1757: result: Failed" >&5
+echo "$as_me:1809: result: Failed" >&5
 echo "${ECHO_T}Failed" >&6
 	required_undefs="$macroname $required_undefs"
 
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 
-	echo "$as_me:1764: checking $title (fail expected) " >&5
+	echo "$as_me:1816: checking $title (fail expected) " >&5
 echo $ECHO_N "checking $title (fail expected) ... $ECHO_C" >&6
 	cat >conftest.$ac_ext <<_ACEOF
-#line 1767 "configure"
+#line 1819 "configure"
 #include "confdefs.h"
 
 #include <boost/config.hpp>
@@ -1792,19 +1844,19 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:1795: \"$ac_link\"") >&5
+if { (eval echo "$as_me:1847: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:1798: \$? = $ac_status" >&5
+  echo "$as_me:1850: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:1801: \"$ac_try\"") >&5
+  { (eval echo "$as_me:1853: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:1804: \$? = $ac_status" >&5
+  echo "$as_me:1856: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
 
-	echo "$as_me:1807: result: failed" >&5
+	echo "$as_me:1859: result: failed" >&5
 echo "${ECHO_T}failed" >&6
 	required_defs="$macroname $required_defs"
 
@@ -1812,7 +1864,7 @@ else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
 
-	echo "$as_me:1815: result: OK" >&5
+	echo "$as_me:1867: result: OK" >&5
 echo "${ECHO_T}OK" >&6
 
 fi
@@ -1821,10 +1873,10 @@ rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
 	else
 
 	ac_ext=$use_ac_ext
-	echo "$as_me:1824: checking $title" >&5
+	echo "$as_me:1876: checking $title" >&5
 echo $ECHO_N "checking $title... $ECHO_C" >&6
 	cat >conftest.$ac_ext <<_ACEOF
-#line 1827 "configure"
+#line 1879 "configure"
 #include "confdefs.h"
 
 #include <boost/config.hpp>
@@ -1848,19 +1900,19 @@ main ()
 }
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:1851: \"$ac_link\"") >&5
+if { (eval echo "$as_me:1903: \"$ac_link\"") >&5
   (eval $ac_link) 2>&5
   ac_status=$?
-  echo "$as_me:1854: \$? = $ac_status" >&5
+  echo "$as_me:1906: \$? = $ac_status" >&5
   (exit $ac_status); } &&
          { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:1857: \"$ac_try\"") >&5
+  { (eval echo "$as_me:1909: \"$ac_try\"") >&5
   (eval $ac_try) 2>&5
   ac_status=$?
-  echo "$as_me:1860: \$? = $ac_status" >&5
+  echo "$as_me:1912: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
 
-		echo "$as_me:1863: result: Yes" >&5
+		echo "$as_me:1915: result: Yes" >&5
 echo "${ECHO_T}Yes" >&6
 		required_defs="$macroname $required_defs"
 
@@ -1868,7 +1920,7 @@ else
   echo "$as_me: failed program was:" >&5
 cat conftest.$ac_ext >&5
 
-		echo "$as_me:1871: result: no" >&5
+		echo "$as_me:1923: result: no" >&5
 echo "${ECHO_T}no" >&6
 
 fi
@@ -1944,17 +1996,6 @@ for name in $required_defs; do
 echo '#define '"$name" >> user.hpp
 done
 
-cat << EOF
-
-Adjustments to boost configuration have been written to
-user.hpp, copy this to boost/config/user.hpp to use "as is",
-or define BOOST_SITE_CONFIG to point to its location.
-
-TREAT THIS FILE WITH CARE.
-Autoconf generated options are not infallible!
-
-EOF
-
 cat_conts=`cat user.hpp`
 
 ac_config_commands="$ac_config_commands default"
@@ -2013,7 +2054,7 @@ rm -f confdef2opt.sed
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:2016: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:2057: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
@@ -2178,7 +2219,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:2181: error: ambiguous option: $1
+    { { echo "$as_me:2222: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -2197,7 +2238,7 @@ Try \`$0 --help' for more information." >&2;}
     ac_need_defaults=false;;
 
   # This is an error.
-  -*) { { echo "$as_me:2200: error: unrecognized option: $1
+  -*) { { echo "$as_me:2241: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -2242,7 +2283,7 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "default" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default" ;;
-  *) { { echo "$as_me:2245: error: invalid argument: $ac_config_target" >&5
+  *) { { echo "$as_me:2286: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
   esac

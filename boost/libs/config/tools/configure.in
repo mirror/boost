@@ -85,6 +85,7 @@ dnl without these some of the tests may fail:
 
 AC_HAVE_LIBRARY(pthread)
 AC_HAVE_LIBRARY(m)
+AC_HAVE_LIBRARY(rt)
 
 #
 # enumerate test files and test each one:
@@ -351,17 +352,6 @@ for name in $required_defs; do
 echo '#define '"$name" >> user.hpp
 done
 
-cat << EOF
-
-Adjustments to boost configuration have been written to
-user.hpp, copy this to boost/config/user.hpp to use "as is",
-or define BOOST_SITE_CONFIG to point to its location.
-
-TREAT THIS FILE WITH CARE.
-Autoconf generated options are not infallible!
-
-EOF
-
 cat_conts=`cat user.hpp`
 
 AC_OUTPUT(
@@ -387,6 +377,7 @@ cat_conts="$cat_conts"
 )
 
 fi
+
 
 
 
