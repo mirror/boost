@@ -518,12 +518,19 @@ Currently, Boost.MultiIndex provides the following index types:
     provide a similar interface. There are <i>unique</i> and <i>non-unique</i>
     variants: the former do not allow for duplicates, while the latter permit
     them (like <code>std::multiset</code>.)</li>
+  <li>Hashed indices provide fast access to the elements through hashing
+    tecnhiques, in a similar way as non-standard <code>hash_set</code>s provided
+    by some vendors. Recently, <i>unordered associative containers</i> has been
+    proposed as part of an extension of the C++ standard library known
+    in the standardization commitee as TR1. Hashed indices closely model this
+    proposal.</li>
   <li>Sequenced indices are modeled after the semantics and interface of
     <code>std::list</code>: they arrange the elements as if in a bidirectional
     list.</li>
 </ul>
-The examples in the <a href="#intro">introduction</a> exercise all of these
-indices.
+The examples in the <a href="#intro">introduction</a> exercise ordered and sequenced
+indices, which are the most commonly used; hashed indices are presented in the
+<a href="advanced_topics.html#hashed_indices">advanced topics</a> section.
 </p>
 
 <h3>
@@ -728,7 +735,7 @@ provides a complete program showing how to use <code>const_mem_fun</code>.
 Almost always you will want to use a <code>const</code> member function,
 since elements in a <code>multi_index_container</code> are treated as constant, much
 as elements of an <code>std::set</code>. However, a
-<a href="reference/key_extraction.html#const_mem_fun"><code>mem_fun</code></a>
+<a href="reference/key_extraction.html#mem_fun"><code>mem_fun</code></a>
 counterpart is provided for use with non-constant member functions, whose
 applicability is discussed on the paragraph on
 <a href="advanced_topics.html#advanced_key_extractors">advanced features
@@ -1272,9 +1279,9 @@ Advanced topics
 
 <br>
 
-<p>Revised July 26th 2004</p>
+<p>Revised March 4th 2005</p>
 
-<p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
