@@ -26,7 +26,8 @@
 #   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #endif
 
-#if (__EDG_VERSION__ <= 245) && !defined(BOOST_NO_TEMPLATE_TEMPLATES)
+#if (__EDG_VERSION__ <= 244) && !defined(BOOST_NO_TEMPLATE_TEMPLATES) \
+ && !defined(BOOST_STRICT_CONFIG)
 #   define BOOST_NO_TEMPLATE_TEMPLATES
 #endif 
 
