@@ -69,7 +69,7 @@ class some_class&lt; <classname>boost::variant</classname>&lt;<macroname>BOOST_V
     <code>make_variant_over&lt; <emphasis>Sequence</emphasis> &gt;</code>
     exposes a <code>variant</code> whose bounded types are the elements of
     <code>Sequence</code> (where <code>Sequence</code> is any type fulfilling
-    the requirements of the <libraryname>MPL</libraryname>
+    the requirements of <libraryname>MPL</libraryname>'s
     <emphasis>Sequence</emphasis> concept). For instance,
 
 <programlisting>typedef <classname>mpl::vector</classname>&lt; std::string &gt; types_initial;

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE header PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <header name="boost/variant/recursive_variant.hpp">
@@ -95,8 +95,8 @@
 
         <simpara><emphasis role="bold">Notes</emphasis>:</simpara>
         <itemizedlist>
-          <listitem><code>Sequence</code> must meet the requirements of the
-            <libraryname>MPL</libraryname> <emphasis>Sequence</emphasis>
+          <listitem><code>Sequence</code> must meet the requirements of
+            <libraryname>MPL</libraryname>'s <emphasis>Sequence</emphasis>
             concept.</listitem>
           <listitem>Due to standard conformance problems in several compilers,
             <code>make_recursive_variant_over</code> may not be supported on

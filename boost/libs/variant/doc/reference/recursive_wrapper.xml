@@ -223,8 +223,9 @@
         <simpara>Value is true iff <code>T</code> is a specialization of
           <code><classname>recursive_wrapper</classname></code>.</simpara>
         <simpara><emphasis role="bold">Note</emphasis>:
-          <code>is_recursive_wrapper</code> is a model of the
-          <libraryname>MPL</libraryname> IntegralConstant concept.</simpara>
+          <code>is_recursive_wrapper</code> is a model of
+          <libraryname>MPL</libraryname>'s
+          <emphasis>IntegralConstant</emphasis> concept.</simpara>
       </description>
 
       <typedef name="type">
