@@ -140,9 +140,9 @@ namespace{
 // is sent to an OutputIterator,
 // _reg_format_aux does the actual work:
 //
-template <class OutputIterator, class iterator, class Allocator, class charT, class traits_type>
+template <class OutputIterator, class Iterator, class Allocator, class charT, class traits_type>
 OutputIterator BOOST_REGEX_CALL _reg_format_aux(OutputIterator out, 
-                          const match_results<iterator, Allocator>& m, 
+                          const match_results<Iterator, Allocator>& m, 
                           const charT*& fmt,
                           unsigned flags, const traits_type& traits_inst)
 {
@@ -175,25 +175,25 @@ OutputIterator BOOST_REGEX_CALL _reg_format_aux(OutputIterator out,
          switch(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)(*fmt)))
          {
          case traits_type::syntax_start_buffer:
-            oi_assign(&out, re_copy_out(out, iterator(m[-1].first), iterator(m[-1].second)));
+            oi_assign(&out, re_copy_out(out, Iterator(m[-1].first), Iterator(m[-1].second)));
             ++fmt;
             continue;
          case traits_type::syntax_end_buffer:
-            oi_assign(&out, re_copy_out(out, iterator(m[-2].first), iterator(m[-2].second)));
+            oi_assign(&out, re_copy_out(out, Iterator(m[-2].first), Iterator(m[-2].second)));
             ++fmt;
             continue;
          case traits_type::syntax_digit:
          {
 expand_sub:
             unsigned int index = traits_inst.toi(fmt, fmt_end, 10);
-            oi_assign(&out, re_copy_out(out, iterator(m[index].first), iterator(m[index].second)));
+            oi_assign(&out, re_copy_out(out, Iterator(m[index].first), Iterator(m[index].second)));
             continue;
          }
          }
          // anything else:
          if(*fmt == '&')
          {
-            oi_assign(&out, re_copy_out(out, iterator(m[0].first), iterator(m[0].second)));
+            oi_assign(&out, re_copy_out(out, Iterator(m[0].first), Iterator(m[0].second)));
             ++fmt;
          }
          else
@@ -415,7 +415,7 @@ expand_sub:
 default_opt:
          if((flags & format_sed) && (*fmt == '&'))
          {
-            oi_assign(&out, re_copy_out(out, iterator(m[0].first), iterator(m[0].second)));
+            oi_assign(&out, re_copy_out(out, Iterator(m[0].first), Iterator(m[0].second)));
             ++fmt;
             continue;
          }
@@ -448,25 +448,25 @@ public:
    }
 };
 
-template <class OutputIterator, class iterator, class charT, class Allocator, class traits_type>
+template <class OutputIterator, class Iterator, class charT, class Allocator, class traits_type>
 class merge_out_predicate
 {
    OutputIterator* out;
-   iterator* last;
+   Iterator* last;
    const charT* fmt;
    unsigned flags;
    const traits_type* pt;
 
 public:
-   merge_out_predicate(OutputIterator& o, iterator& pi, const charT* f, unsigned format_flags, const traits_type& p)
+   merge_out_predicate(OutputIterator& o, Iterator& pi, const charT* f, unsigned format_flags, const traits_type& p)
       : out(&o), last(&pi), fmt(f), flags(format_flags), pt(&p){}
 
    ~merge_out_predicate() {}
-   bool BOOST_REGEX_CALL operator()(const boost::match_results<iterator, Allocator>& m)
+   bool BOOST_REGEX_CALL operator()(const boost::match_results<Iterator, Allocator>& m)
    {
       const charT* f = fmt;
       if(0 == (flags & format_no_copy))
-         oi_assign(out, re_copy_out(*out, iterator(m[-1].first), iterator(m[-1].second)));
+         oi_assign(out, re_copy_out(*out, Iterator(m[-1].first), Iterator(m[-1].second)));
       oi_assign(out, _reg_format_aux(*out, m, f, flags, *pt));
       *last = m[-2].first;
       return flags & format_first_only ? false : true;
@@ -475,9 +475,9 @@ public:
 
 } // namespace re_detail
 
-template <class OutputIterator, class iterator, class Allocator, class charT>
+template <class OutputIterator, class Iterator, class Allocator, class charT>
 OutputIterator regex_format(OutputIterator out,
-                          const match_results<iterator, Allocator>& m,
+                          const match_results<Iterator, Allocator>& m,
                           const charT* fmt,
                           unsigned flags = 0
                          )
@@ -486,9 +486,9 @@ OutputIterator regex_format(OutputIterator out,
    return re_detail::_reg_format_aux(out, m, fmt, flags, t);
 }
 
-template <class OutputIterator, class iterator, class Allocator, class charT>
+template <class OutputIterator, class Iterator, class Allocator, class charT>
 OutputIterator regex_format(OutputIterator out,
-                          const match_results<iterator, Allocator>& m,
+                          const match_results<Iterator, Allocator>& m,
                           const std::basic_string<charT>& fmt,
                           unsigned flags = 0
                          )
@@ -498,8 +498,8 @@ OutputIterator regex_format(OutputIterator out,
    return re_detail::_reg_format_aux(out, m, start, flags, t);
 }  
 
-template <class iterator, class Allocator, class charT>
-std::basic_string<charT> regex_format(const match_results<iterator, Allocator>& m, const charT* fmt, unsigned flags = 0)
+template <class Iterator, class Allocator, class charT>
+std::basic_string<charT> regex_format(const match_results<Iterator, Allocator>& m, const charT* fmt, unsigned flags = 0)
 {
    std::basic_string<charT> result;
    re_detail::string_out_iterator<std::basic_string<charT> > i(result);
@@ -507,8 +507,8 @@ std::basic_string<charT> regex_format(const match_results<iterator, Allocator>& 
    return result;
 }
 
-template <class iterator, class Allocator, class charT>
-std::basic_string<charT> regex_format(const match_results<iterator, Allocator>& m, const std::basic_string<charT>& fmt, unsigned flags = 0)
+template <class Iterator, class Allocator, class charT>
+std::basic_string<charT> regex_format(const match_results<Iterator, Allocator>& m, const std::basic_string<charT>& fmt, unsigned flags = 0)
 {
    std::basic_string<charT> result;
    re_detail::string_out_iterator<std::basic_string<charT> > i(result);
@@ -516,24 +516,24 @@ std::basic_string<charT> regex_format(const match_results<iterator, Allocator>& 
    return result;
 }
 
-template <class OutputIterator, class iterator, class traits, class Allocator, class charT>
+template <class OutputIterator, class Iterator, class traits, class Allocator, class charT>
 OutputIterator regex_merge(OutputIterator out,
-                         iterator first,
-                         iterator last,
+                         Iterator first,
+                         Iterator last,
                          const reg_expression<charT, traits, Allocator>& e, 
                          const charT* fmt, 
                          unsigned int flags = match_default)
 {
-   iterator l = first;
-   re_detail::merge_out_predicate<OutputIterator, iterator, charT, Allocator, traits> oi(out, l, fmt, flags, e.get_traits());
+   Iterator l = first;
+   re_detail::merge_out_predicate<OutputIterator, Iterator, charT, Allocator, traits> oi(out, l, fmt, flags, e.get_traits());
    regex_grep(oi, first, last, e, flags);
    return (flags & format_no_copy) ? out : re_detail::re_copy_out(out, l, last);
 }
 
-template <class OutputIterator, class iterator, class traits, class Allocator, class charT>
+template <class OutputIterator, class Iterator, class traits, class Allocator, class charT>
 inline OutputIterator regex_merge(OutputIterator out,
-                         iterator first,
-                         iterator last,
+                         Iterator first,
+                         Iterator last,
                          const reg_expression<charT, traits, Allocator>& e, 
                          const std::basic_string<charT>& fmt,
                          unsigned int flags = match_default)
