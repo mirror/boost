@@ -19,14 +19,13 @@
 
 #include "boost/mpl/aux_/config/workaround.hpp"
 #include "boost/mpl/aux_/find_if_pred.hpp"
-#include "boost/mpl/aux_/iter_fold_if_impl.hpp"
-#include "boost/mpl/always.hpp"
 #include "boost/mpl/begin_end.hpp"
-#include "boost/mpl/bool.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/int.hpp"
+#include "boost/mpl/iter_fold_if.hpp"
 #include "boost/mpl/lambda.hpp"
 #include "boost/mpl/next.hpp"
+#include "boost/mpl/protect.hpp"
 #include "boost/mpl/void.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
@@ -56,35 +55,24 @@ template<
     >
 struct index_if
 {
- private:
+private:
+
     typedef typename begin<Sequence>::type first_;
     typedef typename end<Sequence>::type last_;
     typedef typename lambda<Predicate>::type pred_;
 
-// cwpro8 doesn't like 'cut-off' type here (use typedef instead)
-#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
-    struct result_ :
-#else
-    typedef
-#endif
-        aux::iter_fold_if_impl<
+    typedef typename iter_fold_if<
           first_
         , int_<0>
-        , aux::index_if_op
-        , aux::find_if_pred<pred_,last_>
-        , void
-        , always<false_>
-        >
-#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
-    { };
-#else
-    result_;
-#endif
+        , protect< aux::index_if_op >
+        , protect< aux::find_if_pred<pred_,last_> >
+        >::type result_;
 
-    typedef typename result_::state result_index_;
-    typedef typename result_::iterator result_iterator_;
+    typedef typename result_::first result_index_;
+    typedef typename result_::second result_iterator_;
 
- public:
+public:
+
     typedef typename if_<
           is_same< result_iterator_,last_ >
         , void_
