@@ -332,7 +332,7 @@ namespace boost {
     unary_function_archetype() { }
   public:
     unary_function_archetype(detail::dummy_constructor) { }
-    const Return& operator()(const Arg&) {
+    const Return& operator()(const Arg&) const {
       return static_object<Return>::get(); 
     }
   };
@@ -343,7 +343,7 @@ namespace boost {
     binary_function_archetype() { }
   public:
     binary_function_archetype(detail::dummy_constructor) { }
-    const Return& operator()(const Arg1&, const Arg2&) {
+    const Return& operator()(const Arg1&, const Arg2&) const {
       return static_object<Return>::get(); 
     }
   };
@@ -354,7 +354,7 @@ namespace boost {
     unary_predicate_archetype() { }
   public:
     unary_predicate_archetype(detail::dummy_constructor) { }
-    const Return& operator()(const Arg&) {
+    const Return& operator()(const Arg&) const {
       return static_object<Return>::get(); 
     }
   };
@@ -365,22 +365,10 @@ namespace boost {
     binary_predicate_archetype() { }
   public:
     binary_predicate_archetype(detail::dummy_constructor) { }
-    const Return& operator()(const Arg1&, const Arg2&) {
-      return static_object<Return>::get(); 
-    }
-  };
-
-  template <class Arg1, class Arg2>
-  class const_binary_predicate_archetype {
-    typedef boolean_archetype Return;
-    const_binary_predicate_archetype() { }
-  public:
-    const_binary_predicate_archetype(detail::dummy_constructor) { }
     const Return& operator()(const Arg1&, const Arg2&) const {
       return static_object<Return>::get(); 
     }
   };
-
 
   //===========================================================================
   // Iterator Archetype Classes
