@@ -174,7 +174,7 @@ namespace boost { namespace numeric { namespace ublas {
             data () = v.data ();
             return *this;
         }
-#ifndef BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class A2>          // Generic vector assignment without temporary
         BOOST_UBLAS_INLINE
         vector &operator = (const vector<T, A2> &v) {
@@ -582,7 +582,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         bounded_vector (const bounded_vector &v):
             vector_type (v) {}
-#ifndef BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class A2>              // Allow vector<T,bounded_array<N> construction
         BOOST_UBLAS_INLINE
         bounded_vector (const vector<T, A2> &v):

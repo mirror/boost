@@ -149,7 +149,7 @@ namespace boost { namespace numeric { namespace ublas {
             data () = m.data ();
             return *this;
         }
-#ifndef BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class A2, class F2>          // Generic matrix assignment without temporary
         BOOST_UBLAS_INLINE
         matrix &operator = (const matrix<T, A2, F2> &m) {
@@ -978,7 +978,7 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_type::operator = (m);
             return *this;
         }
-#ifdef BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         template<class A2, class F2>        // Generic matrix assignment
         BOOST_UBLAS_INLINE
         bounded_matrix &operator = (const matrix<T, A2, F2> &m) {
