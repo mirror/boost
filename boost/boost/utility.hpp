@@ -1,8 +1,8 @@
 //  boost utility.hpp header file  -------------------------------------------//
 
-//  (C) Copyright boost.org 1999-2001.  Permission to copy, use, modify, sell
+//  (C) Copyright boost.org 1999. Permission to copy, use, modify, sell
 //  and distribute this software is granted provided this copyright
-//  notice appears in all copies.  This software is provided "as is" without
+//  notice appears in all copies. This software is provided "as is" without
 //  express or implied warranty, and with no claim as to its suitability for
 //  any purpose.
 
@@ -11,7 +11,6 @@
 //  Classes appear in alphabetical order
 
 //  Revision History
-//  29 May 01  Ron's member idiom base class templates added (Daryle Walker)
 //  21 May 01  checked_delete() and checked_array_delete() added (Beman Dawes,
 //             suggested by Dave Abrahams, generalizing idea from Vladimir Prus)
 //  21 May 01  made next() and prior() inline (Beman Dawes)  
@@ -26,8 +25,10 @@
 #ifndef BOOST_UTILITY_HPP
 #define BOOST_UTILITY_HPP
 
-#include <boost/static_assert.hpp>  // for BOOST_STATIC_ASSERT
-#include <utility>                  // for std::pair
+#include <boost/config.hpp>        // broken compiler workarounds 
+#include <boost/static_assert.hpp> 
+#include <cstddef>                 // for size_t
+#include <utility>                 // for std::pair
 
 namespace boost
 {
@@ -86,58 +87,10 @@ namespace boost
         const noncopyable& operator=( const noncopyable& );
     }; // noncopyable
 
-
-//  Ron's member idiom base class templates  ---------------------------------//
-
-    // Helpers to initialize a base object so a derived class can use this
-    // object in the initialization of another base class.  Used by
-    // Dietmar Kuehl from ideas by Ron Klatcho to solve the problem of a
-    // base class needing to be initialized by a member.
-
-    // Contributed by Daryle Walker
-
-    template < typename MemberType, int UniqueID = 0 >
-    class nullary_rons_member
-    {
-    protected:
-        nullary_rons_member()
-            : ron_()
-            {}
-
-        MemberType  ron_;
-
-    };  // nullary_rons_member
-
-    template < typename MemberType, typename InitializerType, int UniqueID = 0 >
-    class unary_rons_member
-    {
-    protected:
-        explicit  unary_rons_member( InitializerType x )
-            : ron_( x )
-            {}
-
-        MemberType  ron_;
-
-    };  // unary_rons_member
-
-    template < typename MemberType, typename InitializerType1,
-               typename InitializerType2, int UniqueID = 0 >
-    class binary_rons_member
-    {
-    protected:
-        binary_rons_member( InitializerType1 x, InitializerType2 y )
-            : ron_( x, y )
-            {}
-
-        MemberType  ron_;
-
-    };  // binary_rons_member
-
-
-//  class tied  --------------------------------------------------------------//
+//  class tied  -------------------------------------------------------//
 
     // A helper for conveniently assigning the two values from a pair
-    // into separate variables. The idea for this comes from Jaakko JŠrvi's
+    // into separate variables. The idea for this comes from Jaakko J„rvi's
     // Binder/Lambda Library.
 
     // Constributed by Jeremy Siek
@@ -163,3 +116,4 @@ namespace boost
 } // namespace boost
 
 #endif  // BOOST_UTILITY_HPP
+
