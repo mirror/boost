@@ -28,7 +28,8 @@ namespace gdtl {
     typedef v_type  min_type;
     typedef v_type  sec_type;
 
-    static const fractional_seconds_type ticks_per_second = resolution_adjust;
+    //Would like this to be frac_sec_type, but some compilers complain
+    static const boost::int32_t ticks_per_second = resolution_adjust;
 
     static time_resolutions resolution()
     {
