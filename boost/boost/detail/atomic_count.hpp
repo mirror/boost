@@ -111,7 +111,7 @@ namespace boost
 namespace detail
 {
 
-typedef long atomic_counter;
+typedef long atomic_count;
 
 }
 
