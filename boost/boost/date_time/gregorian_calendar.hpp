@@ -60,7 +60,7 @@ namespace date_time {
 } } //namespace
   
 #ifndef NO_BOOST_DATE_TIME_INLINE
-#include "gregorian_calendar.ipp"
+#include "boost/date_time/gregorian_calendar.ipp"
 #endif
 
 
