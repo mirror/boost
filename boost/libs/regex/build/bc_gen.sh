@@ -46,7 +46,7 @@ EOF
 		obj=`echo "$file" | sed 's/.*src\/\(.*\)cpp/\1obj/g'`
 		obj="$subdir\\$libname\\$obj"
 		all_obj="$all_obj $obj"
-		all_lib_obj="$all_lib_obj -+\"$obj\""
+		all_lib_obj="$all_lib_obj +\"$obj\""
 		echo "$obj: $file \$(ALL_HEADER)" >> $tout
 		echo "	bcc32 @&&|" >> $tout
 		echo "-c \$(INCLUDES) $opts \$(CXXFLAGS) -o$obj $file" >> $tout
@@ -70,6 +70,7 @@ EOF
 #
 #	 now for the main target for this library:
 	echo $subdir\\$libname.lib : $all_obj >> $tout
+	echo "	if exist $subdir\\$libname.lib del $subdir\\$libname.lib " >> $tout
 	echo "	tlib @&&|" >> $tout
 	echo "/P128 /C /u /a \$(XSFLAGS) \"$subdir\\$libname.lib\" $all_lib_obj" >> $tout
 	echo "|" >> $tout
@@ -166,6 +167,30 @@ function bcb_gen()
 	opts="-tWD -tWR -tWM- -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -O2 -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
 	bcb_gen_lib
 	
+	libname="libboost_regex-${subdir}-sd-${boost_version}"
+	opts="-tWM- -D_NO_VCL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8037 -w-8057 -DSTRICT; -I\$(BCROOT)\include;../../../"
+	bcb_gen_lib
+
+	libname="libboost_regex-${subdir}-mt-sd-${boost_version}"
+	opts="-tWM -D_NO_VCL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../"
+	bcb_gen_lib
+	
+	libname="boost_regex-${subdir}-mt-d-${boost_version}"
+	opts="-tWD -tWM -tWR -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	bcb_gen_dll
+
+	libname="boost_regex-${subdir}-d-${boost_version}"
+	opts="-tWD -tWR -tWM- -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	bcb_gen_dll
+	
+	libname="libboost_regex-${subdir}-mt-d-${boost_version}"
+	opts="-tWD -tWM -tWR -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	bcb_gen_lib
+
+	libname="libboost_regex-${subdir}-d-${boost_version}"
+	opts="-tWD -tWR -tWM- -DBOOST_REGEX_STATIC_LINK -D_NO_VCL -D_RTLDLL -v -Ve -Vx -w-inl -w-aus -w-rch -w-8012 -w-8057 -w-8037 -DSTRICT; -I\$(BCROOT)\include;../../../ -L\$(BCROOT)\lib;\$(BCROOT)\lib\release;"
+	bcb_gen_lib
+	
 	cat > $out << EOF
 #
 # auto generated makefile for C++ Builder
@@ -223,11 +248,6 @@ EOF
 
 . common.sh
 
-#
-# generate C++ Builder 5 files:
-out="bcb5.mak"
-subdir="bcb5"
-bcb_gen
 #
 # generate C++ Builder 6 files:
 out="bcb6.mak"

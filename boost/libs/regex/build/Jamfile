@@ -33,7 +33,7 @@ SOURCES = c_regex_traits c_regex_traits_common cpp_regex_traits
        
 lib boost_regex : ../src/$(SOURCES).cpp <template>regex-options
     : 
-        [ common-names ]
+        common-variant-tag
     : 
         debug release
     ;
@@ -41,7 +41,7 @@ lib boost_regex : ../src/$(SOURCES).cpp <template>regex-options
 
 dll boost_regex : ../src/$(SOURCES).cpp <template>regex-dll-options
     : 
-        [ common-names ]
+        common-variant-tag
     : 
         debug release
     ;
@@ -49,7 +49,7 @@ dll boost_regex : ../src/$(SOURCES).cpp <template>regex-dll-options
 stage stage/lib : <lib>boost_regex <dll>boost_regex
     :
         <locate>$(BOOST_ROOT)
-        [ common-names ]
+        common-variant-tag
         <target>stage
         <target>all
     :

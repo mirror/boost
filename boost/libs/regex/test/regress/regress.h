@@ -182,7 +182,7 @@ public:
    void destroy(pointer p) const
    { boost::detail::allocator_destroy(p); }
 
-#ifndef BOOST_NO_MEMBER_TEMPLATES
+#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
    template <class U>
    struct rebind
    {
@@ -208,7 +208,7 @@ public:
    typedef jm_debug_alloc base_type;
 
 
-#ifndef BOOST_NO_MEMBER_TEMPLATES
+#ifdef BOOST_MSVC6_MEMBER_TEMPLATES
    template <class U>
    struct rebind
    {
