@@ -52,13 +52,14 @@ public:
   // BOOST_STATIC_ASSERT(0 < 2*q && 2*q < k);
   // BOOST_STATIC_ASSERT(0 < s && s <= k-q);
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  BOOST_STATIC_ASSERT(std::numeric_limits<UIntType>::is_integer);
-  BOOST_STATIC_ASSERT(!std::numeric_limits<UIntType>::is_signed);
-#endif
-
   explicit linear_feedback_shift(UIntType s0 = 341) : wordmask(0)
   {
+    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    BOOST_STATIC_ASSERT(std::numeric_limits<UIntType>::is_integer);
+    BOOST_STATIC_ASSERT(!std::numeric_limits<UIntType>::is_signed);
+#endif
+
     // avoid "left shift count >= with of type" warning
     for(int i = 0; i < w; ++i)
       wordmask |= (1u << i);
@@ -67,6 +68,12 @@ public:
 
   template<class It> linear_feedback_shift(It& first, It last) : wordmask(0)
   {
+    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    BOOST_STATIC_ASSERT(std::numeric_limits<UIntType>::is_integer);
+    BOOST_STATIC_ASSERT(!std::numeric_limits<UIntType>::is_signed);
+#endif
+
     // avoid "left shift count >= with of type" warning
     for(int i = 0; i < w; ++i)
       wordmask |= (1u << i);

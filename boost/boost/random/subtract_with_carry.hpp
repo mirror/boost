@@ -50,12 +50,14 @@ public:
   BOOST_STATIC_CONSTANT(unsigned int, long_lag = r);
   BOOST_STATIC_CONSTANT(unsigned int, short_lag = s);
 
+  subtract_with_carry() {
+    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_signed);
-  BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_integer);
+    BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_signed);
+    BOOST_STATIC_ASSERT(std::numeric_limits<result_type>::is_integer);
 #endif
-
-  subtract_with_carry() { seed(); }
+    seed();
+  }
   explicit subtract_with_carry(uint32_t value) { seed(value); }
   template<class Generator>
   explicit subtract_with_carry(Generator & gen) { seed(gen); }

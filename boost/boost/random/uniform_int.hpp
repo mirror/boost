@@ -205,7 +205,7 @@ class uniform_int
 {
 private:
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  typedef typename detail::uniform_int<std::numeric_limits<typename UniformRandomNumberGenerator::result_type>::is_integer>::impl<UniformRandomNumberGenerator, IntType>::type impl_type;
+  typedef typename detail::uniform_int<std::numeric_limits<typename UniformRandomNumberGenerator::result_type>::is_integer>::BOOST_NESTED_TEMPLATE impl<UniformRandomNumberGenerator, IntType>::type impl_type;
 #else
   BOOST_STATIC_CONSTANT(bool, base_float = (boost::is_float<typename UniformRandomNumberGenerator::result_type>::value == false));
   typedef typename detail::uniform_int<base_float>::BOOST_NESTED_TEMPLATE impl<UniformRandomNumberGenerator, IntType>::type impl_type;
@@ -218,13 +218,14 @@ public:
 
   BOOST_STATIC_CONSTANT(bool, has_fixed_range = false);
 
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
-#endif
-
   explicit uniform_int(base_type & rng, IntType min = 0, IntType max = 9)
     : impl(rng, min, max)
-  { }
+  {
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
+    BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+#endif
+  }
 
   result_type min() const { return impl.min(); }
   result_type max() const { return impl.max(); }

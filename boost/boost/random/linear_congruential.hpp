@@ -53,9 +53,6 @@ public:
   // constant expressions.  Avoid the check for now.
   // BOOST_STATIC_ASSERT(m == 0 || a < m);
   // BOOST_STATIC_ASSERT(m == 0 || c < m);
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
-#endif
 
   explicit linear_congruential(IntType x0 = 1)
     : _modulus(modulus), _x(_modulus ? (x0 % _modulus) : x0)
@@ -64,6 +61,11 @@ public:
     // overflow check
     // disabled because it gives spurious "divide by zero" gcc warnings
     // assert(m == 0 || (a*(m-1)+c) % m == (c < a ? c-a+m : c-a)); 
+
+    // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+    BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
+#endif
   }
 
   template<class It>
