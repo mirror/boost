@@ -76,13 +76,13 @@ public:
   void reindex(const BaseList& values) {
     boost::copy_n(values.begin(),num_dimensions(),index_base_list_.begin());
     origin_offset_ =
-      calculate_indexing_offset(stride_list_,index_base_list_);
+      this->calculate_indexing_offset(stride_list_,index_base_list_);
   }
 
   void reindex(index value) {
     index_base_list_.assign(value);
     origin_offset_ =
-      calculate_indexing_offset(stride_list_,index_base_list_);
+      this->calculate_indexing_offset(stride_list_,index_base_list_);
   }
 
   size_type num_dimensions() const { return NumDims; }

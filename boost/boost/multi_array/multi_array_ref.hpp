@@ -142,14 +142,14 @@ public:
       detail::multi_array::CollectionConcept<BaseList> >();
     boost::copy_n(values.begin(),num_dimensions(),index_base_list_.begin());
     origin_offset_ =
-      calculate_origin_offset(stride_list_,extent_list_,
+      this->calculate_origin_offset(stride_list_,extent_list_,
                               storage_,index_base_list_);
   }
 
   void reindex(index value) {
     index_base_list_.assign(value);
     origin_offset_ =
-      calculate_origin_offset(stride_list_,extent_list_,
+      this->calculate_origin_offset(stride_list_,extent_list_,
                               storage_,index_base_list_);
   }
 
@@ -162,10 +162,10 @@ public:
                             size_type(1),std::multiplies<size_type>()));
 
     std::copy(extents.begin(),extents.end(),extent_list_.begin());
-    compute_strides(stride_list_,extent_list_,storage_);
+    this->compute_strides(stride_list_,extent_list_,storage_);
 
     origin_offset_ =
-      calculate_origin_offset(stride_list_,extent_list_,
+      this->calculate_origin_offset(stride_list_,extent_list_,
                               storage_,index_base_list_);
   }
 
