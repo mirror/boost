@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
-  <xsl:key name="classes" match="class" use="@name"/>
+  <xsl:key name="classes" match="class|struct|union" use="@name"/>
   <xsl:key name="methods" match="method|overloaded-method" use="@name"/>
   <xsl:key name="functions" match="function|overloaded-function" use="@name"/>
   <xsl:key name="libraries" match="library" use="@name"/>
