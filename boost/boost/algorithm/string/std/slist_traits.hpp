@@ -18,6 +18,8 @@ namespace boost {
 
 //  SGI's std::slist<> traits  -----------------------------------------------//
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
         // stable iterators tester
         template<typename T, typename AllocT>
         yes_type has_stable_iterators_tester( const std::slist<T,AllocT>* );
@@ -29,6 +31,37 @@ namespace boost {
         // const time erase tester
         template<typename T, typename AllocT>
         yes_type has_const_time_erase_tester( const std::slist<T,AllocT>* );
+
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    
+    // stable iterators trait
+        template<typename T, typename AllocT>
+        class has_stable_iterators< std::slist<T,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+
+    // const time insert trait
+        template<typename T, typename AllocT>
+        class has_const_time_insert< std::slist<T,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+
+    // const time erase trait
+        template<typename T, typename AllocT>
+        class has_const_time_erase< std::slist<T,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+#endif
+
 
     } // namespace algorithm
 } // namespace boost

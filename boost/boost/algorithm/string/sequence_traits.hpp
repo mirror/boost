@@ -35,6 +35,8 @@ namespace boost {
 
 //  sequence traits  -----------------------------------------------//
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
         //! Native replace tester
         /*!
             Declare an override of this tester function with return 
@@ -44,21 +46,6 @@ namespace boost {
             method.
         */
         no_type has_native_replace_tester(...);
-
-        //! Native replace trait
-        /*!
-            This trait specifies that the sequence has \c std::string like replace method
-        */
-        template< typename T >
-        class has_native_replace
-        {
-        private:
-            static T* t;
-        public:
-            BOOST_STATIC_CONSTANT(bool, value=( 
-                sizeof(has_native_replace_tester(t))==sizeof(yes_type) ) );
-            typedef mpl::bool_<value> type;     
-        };
 
         //! Stable iterators tester
         /*!
@@ -70,23 +57,6 @@ namespace boost {
         */
         no_type has_stable_iterators_tester(...);                     
 
-        //! Stable iterators trait
-        /*!
-            This trait specifies that the sequence has stable iterators. It means,
-            that operations like insert/erase/replace do not invalidate iterators.
-        */
-        template< typename T >
-        class has_stable_iterators
-        {
-        private:
-            static T* t;
-        public:
-
-            BOOST_STATIC_CONSTANT(bool, value=( 
-                sizeof(has_stable_iterators_tester(t))==sizeof(yes_type) ) );
-            typedef mpl::bool_<value> type;
-        };
-
         //! const time insert tester
         /*!
             Declare an override of this tester function with return 
@@ -95,22 +65,6 @@ namespace boost {
             \return yes_type if the sequence's insert method is working in constant time
         */
         no_type has_const_time_insert_tester(...);                        
-
-        //! Const time insert trait
-        /*!
-            This trait specifies that the sequence's insert method has 
-            constant time complexity.
-        */
-        template< typename T >
-        class has_const_time_insert
-        {
-        private:
-            static T* t;
-        public:
-            BOOST_STATIC_CONSTANT(bool, value=( 
-                sizeof(has_const_time_insert_tester(t))==sizeof(yes_type) ) );
-            typedef mpl::bool_<value> type;
-        };
 
         //! const time erase tester
         /*!
@@ -121,6 +75,78 @@ namespace boost {
         */
         no_type has_const_time_erase_tester(...);                        
 
+#endif //BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+        //! Native replace trait
+        /*!
+            This trait specifies that the sequence has \c std::string like replace method
+        */
+        template< typename T >
+        class has_native_replace
+        {
+
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        private:
+            static T* t;
+        public:
+            BOOST_STATIC_CONSTANT(bool, value=( 
+                sizeof(has_native_replace_tester(t))==sizeof(yes_type) ) );
+#else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    public:
+            BOOST_STATIC_CONSTANT(bool, value=false);
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    
+
+            typedef mpl::bool_<value> type;     
+        };
+
+
+        //! Stable iterators trait
+        /*!
+            This trait specifies that the sequence has stable iterators. It means,
+            that operations like insert/erase/replace do not invalidate iterators.
+        */
+        template< typename T >
+        class has_stable_iterators
+        {
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        private:
+            static T* t;
+        public:
+            BOOST_STATIC_CONSTANT(bool, value=( 
+                sizeof(has_stable_iterators_tester(t))==sizeof(yes_type) ) );
+#else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    public:
+            BOOST_STATIC_CONSTANT(bool, value=false);
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+            typedef mpl::bool_<value> type;
+        };
+
+
+        //! Const time insert trait
+        /*!
+            This trait specifies that the sequence's insert method has 
+            constant time complexity.
+        */
+        template< typename T >
+        class has_const_time_insert
+        {
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        private:
+            static T* t;
+        public:
+            BOOST_STATIC_CONSTANT(bool, value=( 
+                sizeof(has_const_time_insert(t))==sizeof(yes_type) ) );
+#else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    public:
+            BOOST_STATIC_CONSTANT(bool, value=false);
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+            typedef mpl::bool_<value> type;
+        };
+
+
         //! Const time erase trait
         /*!
             This trait specifies that the sequence's erase method has 
@@ -129,11 +155,17 @@ namespace boost {
         template< typename T >
         class has_const_time_erase
         {
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         private:
             static T* t;
         public:
             BOOST_STATIC_CONSTANT(bool, value=( 
-                sizeof(has_const_time_erase_tester(t))==sizeof(yes_type) ) );
+                sizeof(has_const_time_erase))==sizeof(yes_type) ) );
+#else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    public:
+            BOOST_STATIC_CONSTANT(bool, value=false);
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
             typedef mpl::bool_<value> type;
         };
 

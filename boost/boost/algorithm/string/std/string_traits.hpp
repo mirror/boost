@@ -18,9 +18,25 @@ namespace boost {
 
 //  std::basic_string<> traits  -----------------------------------------------//
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
         // native replace tester
         template<typename T, typename TraitsT, typename AllocT>
         yes_type has_native_replace_tester( const std::basic_string<T, TraitsT, AllocT>* );
+
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+    // native replace trait
+        template<typename T, typename TraitsT, typename AllocT>
+        class has_native_replace< std::basic_string<T, TraitsT, AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+
+
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
     } // namespace algorithm
 } // namespace boost

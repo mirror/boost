@@ -18,18 +18,52 @@ namespace boost {
 
 //  std::list<> traits  -----------------------------------------------//
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
         // stable iterators tester
         template<typename T, typename AllocT>
-        yes_type has_stable_iterators_tester( const std::list<T,AllocT>* );
+        yes_type has_stable_iterators_tester( const ::std::list<T,AllocT>* )
 
         // const time insert tester
         template<typename T, typename AllocT>
-        yes_type has_const_time_insert_tester( const std::list<T,AllocT>* );
+        yes_type has_const_time_insert_tester( const ::std::list<T,AllocT>* )
 
         // const time erase tester
         template<typename T, typename AllocT>
-        yes_type has_const_time_erase_tester( const std::list<T,AllocT>* );
+        yes_type has_const_time_erase_tester( const ::std::list<T,AllocT>* );
 
+        
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        
+    // stable iterators trait
+        template<typename T, typename AllocT>
+        class has_stable_iterators< ::std::list<T,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+
+    // const time insert trait
+        template<typename T, typename AllocT>
+        class has_const_time_insert< ::std::list<T,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+
+    // const time erase trait
+        template<typename T, typename AllocT>
+        class has_const_time_erase< ::std::list<T,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+#endif
+
+        
     } // namespace algorithm
 } // namespace boost
 

@@ -18,6 +18,8 @@ namespace boost {
 
 //  SGI's std::rope<> traits  -----------------------------------------------//
 
+#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
         // native replace tester
         template<typename T, typename TraitsT, typename AllocT>
         yes_type has_native_replace_tester( const std::rope<T, TraitsT, AllocT>* );
@@ -33,6 +35,46 @@ namespace boost {
         // const time erase tester
         template<typename T, typename TraitsT, typename AllocT>
         yes_type has_const_time_erase_tester( const std::rope<T, TraitsT, AllocT>* );
+
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    
+    // native replace trait
+        template<typename T, typename TraitsT, typename AllocT>
+        class has_native_replace< std::rope<T,TraitsT,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+
+    // stable iterators trait
+        template<typename T, typename TraitsT, typename AllocT>
+        class has_stable_iterators< std::rope<T,TraitsT,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+
+    // const time insert trait
+        template<typename T, typename TraitsT, typename AllocT>
+        class has_const_time_insert< std::rope<T,TraitsT,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+
+    // const time erase trait
+        template<typename T, typename TraitsT, typename AllocT>
+        class has_const_time_erase< std::rope<T,TraitsT,AllocT> >
+        {
+           public:
+            BOOST_STATIC_CONSTANT(bool, value=true);
+            typedef mpl::bool_<value> type;     
+        };
+#endif
+
 
     } // namespace algorithm
 } // namespace boost
