@@ -675,10 +675,6 @@ of type ``X``, ``y`` is an object of type ``Y``, ``Distance`` is
 ``iterator_traits<Y>::difference_type``, and ``n`` represents a
 constant object of type ``Distance``.
 
-If the traversal tags for ``X`` and ``Y`` are convertible to
-``single_pass_traversal_tag`` then the following requirements must be
-met.
-
 +-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
 |Expression                                 |Return Type                                      |Assertion/Precondition/Postcondition               |
 +===========================================+=================================================+===================================================+
@@ -695,9 +691,8 @@ met.
 |``y != x``                                 |convertible to ``bool``                          |``bool(a==b) != bool(a!=b)`` over its domain.      |
 +-------------------------------------------+-------------------------------------------------+---------------------------------------------------+
 
-If the traversal tags for ``X`` and ``Y`` are convertible to
-``random_access_traversal_tag`` then the following requirements must
-be met.
+If ``X`` and ``Y`` both model Random Access Traversal Iterator then
+the following additional requirements must be met.
 
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 |Expression                                 |Return Type                                      |Operational Semantics    |Assertion/            |
@@ -723,15 +718,15 @@ be met.
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 |``y <= x``                                 |convertible to ``bool``                          |``!(y > x)``             |                      |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
-|``y - x``                                  |``Distance``                                     |``x < y ?                |pre: there exists a   |
-|                                           |                                                 |distance(Y(x),y)         |value ``n`` of        |
-|                                           |                                                 |: -distance(y,Y(x))``    |``Distance`` such that|
+|``y - x``                                  |``Distance``                                     |``distance(Y(x),y)``     |pre: there exists a   |
+|                                           |                                                 |                         |value ``n`` of        |
+|                                           |                                                 |                         |``Distance`` such that|
 |                                           |                                                 |                         |``x + n == y``.  ``y  |
 |                                           |                                                 |                         |== x + (y - x)``.     |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
-|``x - y``                                  |``Distance``                                     |``y < x ?                |pre: there exists a   |
-|                                           |                                                 |distance(y,Y(x))         |value ``n`` of        |
-|                                           |                                                 |: -distance(Y(x),y)``    |``Distance`` such that|   
+|``x - y``                                  |``Distance``                                     |``distance(y,Y(x))``     |pre: there exists a   |
+|                                           |                                                 |                         |value ``n`` of        |
+|                                           |                                                 |                         |``Distance`` such that|   
 |                                           |                                                 |                         |``y + n == x``.  ``x  | 
 |                                           |                                                 |                         |== y + (x - y)``.     |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
