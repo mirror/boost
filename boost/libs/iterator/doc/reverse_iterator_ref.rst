@@ -47,9 +47,9 @@ convertible to ``input_iterator_tag``.
 ``reverse_iterator`` models
 ...........................
 
-A specialization of ``reverse_iterator`` models the same standard
-traversal and access iterator concepts modeled by its ``Iterator``
-argument.  In addition, it models the old iterator concepts
+A specialization of ``reverse_iterator`` models the same iterator
+traversal and iterator access concepts modeled by its ``Iterator``
+argument.  In addition, it may model old iterator concepts
 specified in the following table:
 
 +---------------------------------------+-----------------------------------+
@@ -69,10 +69,9 @@ specified in the following table:
 +---------------------------------------+-----------------------------------+
 
 
-``reverse_iterator<X>`` is interoperable with ``reverse_iterator<Y>``
-if and only if iterator ``X`` is interoperable with iterator ``Y``.
-
-
+``reverse_iterator<X>`` is interoperable with
+``reverse_iterator<Y>`` if and only if ``X`` is interoperable with
+``Y``.
 
 ``reverse_iterator`` operations
 ...............................

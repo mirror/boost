@@ -103,8 +103,8 @@ If ``transform_iterator`` models Writable Lvalue Iterator then it is a
 mutable iterator (as defined in the old iterator requirements).
 
 ``transform_iterator<F1, X, R1, V1>`` is interoperable with
-``transform_iterator<F2, Y, R2, V2>`` if and only if iterator ``X`` is
-interoperable with iterator ``Y``.
+``transform_iterator<F2, Y, R2, V2>`` if and only if ``X`` is
+interoperable with ``Y``.
 
 
 

@@ -92,8 +92,8 @@ Otherwise, ``counting_iterator`` models the same iterator traversal
 concepts modeled by ``Incrementable``.
 
 ``counting_iterator<X,C1,D1>`` is interoperable with
-``counting_iterator<Y,C2,D2>`` if and only if iterator ``X`` is
-interoperable with iterator ``Y``.
+``counting_iterator<Y,C2,D2>`` if and only if ``X`` is
+interoperable with ``Y``.
 
 
 
