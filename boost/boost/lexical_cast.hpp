@@ -14,8 +14,8 @@
 
 #include <boost/config.hpp>
 
-// The GNU sstream implementation is broken for the purposes of lexical cast.
-# if defined(BOOST_NO_STRINGSTREAM) || (defined(__GNUC__) && !defined(__STL_USE_NEW_IOSTREAMS) || defined(__APPLE_CC__))
+// Some sstream implementations are broken for the purposes of lexical cast.
+# if defined(BOOST_NO_STRINGSTREAM)
 #  define BOOST_LEXICAL_CAST_USE_STRSTREAM
 # endif
 
@@ -61,13 +61,11 @@ namespace boost
     }
 }
 
-// Copyright Kevlin Henney, 2000. All rights reserved.
+// Copyright Kevlin Henney, 2000, 2001, 2002. All rights reserved.
 //
 // Permission to use, copy, modify, and distribute this software for any
 // purpose is hereby granted without fee, provided that this copyright and
-// permissions notice appear in all copies and derivatives, and that no
-// charge may be made for the software and its documentation except to cover
-// cost of distribution.
+// permissions notice appear in all copies and derivatives.
 //
 // This software is provided "as is" without express or implied warranty.
 
