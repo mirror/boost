@@ -117,12 +117,7 @@ bool A::operator<(const A &rhs) const
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
 
-// note: workaround what I believe is a bug in VC 7.1 implementation of
-// ADL. The load_construct_data is not found by ADL as I believe it should be.
-// Workaround this by putting the overloads in the boost::serialization namespace.
-
-#if defined(_MSC_VER) && (_MSC_VER == 1310) \
-|| defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 namespace boost { namespace serialization {
 #endif
 
@@ -147,8 +142,7 @@ inline void load_construct_data(
     ::new(a)A(i);
 }
 
-#if defined(_MSC_VER) && (_MSC_VER == 1310) \
-|| defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 }} // namespace boost::serialization
 #endif
 
