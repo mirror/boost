@@ -23,6 +23,7 @@
 // David Abrahams.
 
 // Revision history:
+// 2002 05 01 Hugo Duncan: Fix for Borland after Jaakko's previous changes
 // 2002 04 18 Jaakko: tuple element types can be void or plain function 
 //                    types, as long as no object is created.
 //                    Tuple objects can no hold even noncopyable types
@@ -226,7 +227,7 @@ template <class T> class non_storeable_type {
 
 template <class T> struct wrap_non_storeable_type {
   typedef typename IF<
-    boost::is_function<T>::value, non_storeable_type<T>, T
+    ::boost::is_function<T>::value, non_storeable_type<T>, T
   >::RET type;
 };
 template <> struct wrap_non_storeable_type<void> {
