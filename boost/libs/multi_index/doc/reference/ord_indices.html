@@ -17,8 +17,8 @@ Index reference
 <div class="up_link"><a href="index.html"><img src="../up.gif" alt="Boost.MultiIndex reference" border="0"><br>
 Boost.MultiIndex reference
 </a></div>
-<div class="next_link"><a href="seq_indices.html"><img src="../next.gif" alt="sequenced indices" border="0"><br>
-Sequenced indices
+<div class="next_link"><a href="hash_indices.html"><img src="../next.gif" alt="hashed indices" border="0"><br>
+Hashed indices
 </a></div><br clear="all" style="clear: all;">
 
 <hr>
@@ -60,7 +60,7 @@ Sequenced indices
 
 <span class=keyword>namespace</span> <span class=identifier>multi_index</span><span class=special>{</span>
 
-<span class=comment>// index specifiers unique and ordered_non_unique</span>
+<span class=comment>// index specifiers ordered_unique and ordered_non_unique</span>
 
 <span class=keyword>template</span><span class=special>&lt;</span><b>consult ordered_unique reference for arguments</b><span class=special>&gt;</span>
 <span class=keyword>struct</span> <span class=identifier>ordered_unique</span><span class=special>;</span>
@@ -81,7 +81,7 @@ Sequenced indices
 </pre></blockquote>
 
 <p>
-<code>index_fwd.hpp</code> provides forward declarations for index specifiers 
+<code>ordered_index_fwd.hpp</code> provides forward declarations for index specifiers 
 <a href="#unique_non_unique"><code>ordered_unique</code> and <code>ordered_non_unique</code></a> and
 their associated <a href="#ord_indices">ordered index</a> classes.
 </p>
@@ -96,7 +96,7 @@ their associated <a href="#ord_indices">ordered index</a> classes.
 
 <span class=keyword>namespace</span> <span class=identifier>multi_index</span><span class=special>{</span>
 
-<span class=comment>// index specifiers unique and ordered_non_unique</span>
+<span class=comment>// index specifiers ordered_unique and ordered_non_unique</span>
 
 <span class=keyword>template</span><span class=special>&lt;</span><b>consult ordered_unique reference for arguments</b><span class=special>&gt;</span>
 <span class=keyword>struct</span> <span class=identifier>ordered_unique</span><span class=special>;</span>
@@ -145,7 +145,7 @@ two different forms, according to whether a tag list for the index is provided o
 <blockquote><pre>
 <span class=keyword>template</span><span class=special>&lt;</span>
   <span class=keyword>typename</span> <span class=identifier>KeyFromValue</span><span class=special>,</span>
-  <span class=keyword>typename</span> <span class=identifier>Compare</span><span class=special>=</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>less</span><span class=special>&lt;</span><span class=identifier>KeyFromValue</span><span class=special>::</span><span class=identifier>result_type</span>
+  <span class=keyword>typename</span> <span class=identifier>Compare</span><span class=special>=</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>less</span><span class=special>&lt;</span><span class=identifier>KeyFromValue</span><span class=special>::</span><span class=identifier>result_type</span><span class=special>&gt;</span>
 <span class=special>&gt;</span>
 <span class=keyword>struct</span> <span class=special>(</span><span class=identifier>ordered_unique</span> <span class=special>|</span> <span class=identifier>ordered_non_unique</span><span class=special>)</span><span class=special>;</span>
 
@@ -527,7 +527,7 @@ of the index.</br>
 <b>Returns:</b> Number of elements deleted.<br>
 <b>Complexity:</b> <code>O(log(n) + m*D(n))</code>, where <code>m</code> is
 the number of elements deleted.<br>
-<b>Exception safety:</b> <code>nothrow</code>.<br>
+<b>Exception safety:</b> Basic.<br>
 </blockquote>
 
 <code>void erase(iterator first,iterator last);</code>
@@ -940,13 +940,13 @@ Index reference
 <div class="up_link"><a href="index.html"><img src="../up.gif" alt="Boost.MultiIndex reference" border="0"><br>
 Boost.MultiIndex reference
 </a></div>
-<div class="next_link"><a href="seq_indices.html"><img src="../next.gif" alt="sequenced indices" border="0"><br>
-Sequenced indices
+<div class="next_link"><a href="hash_indices.html"><img src="../next.gif" alt="hashed indices" border="0"><br>
+Hashed indices
 </a></div><br clear="all" style="clear: all;">
 
 <br>
 
-<p>Revised January 17th 2005</p>
+<p>Revised February 7th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
