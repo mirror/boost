@@ -82,11 +82,8 @@ Using <tt>std::vector</tt>, you can simulate N-dimensional arrays as
 interface is unwieldy and the memory overhead can be quite high. You can also
 use a native C++ arrays (i.e. <tt>int arr[2][2][2];</tt>), 
 or a dynamically allocated array of contigous data which you treat as
-a multidimensional array.  Using
-<a href="../../array_traits/index.html">array_traits</a>,
- you can extract from a statically defined C++ array 
-iterators over its dimensions.
-In either case, however, dimensional data may be lost if it is
+a multidimensional array.  
+However, dimensional data may be lost if it is
 passed to a function that is not properly specialized to accept
 it. Beyond the above, neither the <tt>std::vector</tt> nor C++ array-based
 solution provides a convenient method of honing in upon a specific
