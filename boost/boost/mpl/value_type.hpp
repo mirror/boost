@@ -35,6 +35,15 @@ struct value_type
 
 BOOST_MPL_AUX_NA_SPEC(2, value_type)
 
+#if BOOST_MPL_CFG_MSVC_60_ETI_BUG
+template<>
+struct value_type<int, int>
+{
+    typedef int type;
+};
+#endif
+
+    
 }}
 
 #endif // BOOST_MPL_VALUE_TYPE_HPP_INCLUDED

@@ -35,6 +35,14 @@ struct key_type
 
 BOOST_MPL_AUX_NA_SPEC(2, key_type)
 
+#if BOOST_MPL_CFG_MSVC_60_ETI_BUG
+template<>
+struct key_type<int, int>
+{
+    typedef int type;
+};
+#endif
+
 }}
 
 #endif // BOOST_MPL_KEY_TYPE_HPP_INCLUDED
