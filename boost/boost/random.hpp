@@ -207,12 +207,12 @@ private:
       l1 -= q * l2;           // this requires a signed IntType!
       p -= q * n;
       if(p == 0)
-	return (l2 < 1 ? l2 + m : l2);
+        return (l2 < 1 ? l2 + m : l2);
       IntType q2 = n / p;
       l2 -= q2 * l1;
       n -= q2 * p;
       if(n == 0)
-	return (l1 < 1 ? l1 + m : l1);
+        return (l1 < 1 ? l1 + m : l1);
     }
   }
 };
@@ -393,7 +393,7 @@ public:
 
   additive_combine() : _mlcg1(), _mlcg2() { }
   additive_combine(typename MLCG1::result_type seed1, 
-		   typename MLCG2::result_type seed2)
+                   typename MLCG2::result_type seed2)
     : _mlcg1(seed1), _mlcg2(seed2) { }
   result_type operator()() {
     result_type z = _mlcg1() - _mlcg2();
@@ -799,7 +799,7 @@ public:
   reference operator*() const { return value; }
 
   friend bool operator==(const generator_iterator<Generator>& x, 
-			 const generator_iterator<Generator>& y)
+                         const generator_iterator<Generator>& y)
   { return x.gen == y.gen; }
 private:
   Generator & gen;
@@ -1019,12 +1019,12 @@ inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
       // we have to concatenate several invocations of the base RNG
       result_type result = 0;
       for(result_type mult = 1;
-	  mult-1 <= _range;
-	  mult *= static_cast<result_type>(_brange)+1) {
-	result += (_rng() - _bmin) * mult;
+          mult-1 <= _range;
+          mult *= static_cast<result_type>(_brange)+1) {
+        result += (_rng() - _bmin) * mult;
       }
       if(result <= _range)
-	return result + _min;
+        return result + _min;
     }
   } else {                   // brange > range
     if(_brange / _range > 4 /* quantization_cutoff */ ) {
@@ -1034,11 +1034,11 @@ inline IntType uniform_int<UniformRandomNumberGenerator, IntType>::operator()()
     } else {
       // use rejection method to handle things like 0..5 -> 0..4
       for(;;) {
-	base_result result = _rng() - _bmin;
-	// result and range are non-negative, and result is possibly larger
-	// than range, so the cast is safe
-	if(result <= static_cast<base_result>(_range))
-	  return result + _min;
+        base_result result = _rng() - _bmin;
+        // result and range are non-negative, and result is possibly larger
+        // than range, so the cast is safe
+        if(result <= static_cast<base_result>(_range))
+          return result + _min;
       }
     }
   }
@@ -1170,7 +1170,7 @@ public:
   bernoulli_distribution(base_type & rng, double p) 
     : _rng(rng),
       _threshold(static_cast<base_result>
-		 (p * (_rng.max() - _rng.min())) + _rng.min())
+                 (p * (_rng.max() - _rng.min())) + _rng.min())
   {
     // for p == 0, we can only set _threshold = 0, which is not enough
     assert(p > 0);
@@ -1181,7 +1181,7 @@ public:
   result_type operator()() { return _rng() <= _threshold; }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const bernoulli_distribution& x, 
-			 const bernoulli_distribution& y)
+                         const bernoulli_distribution& y)
   { return x._threshold == y._threshold && x._rng == y._rng; }
 #else
   // Use a member function
@@ -1221,7 +1221,7 @@ public:
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const geometric_distribution& x, 
-			 const geometric_distribution& y)
+                         const geometric_distribution& y)
   { return x._log_p == y._log_p && x._rng == y._rng; }
 #else
   // Use a member function
@@ -1245,7 +1245,7 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
   triangle_distribution(base_type & rng, result_type a, result_type b,
-			result_type c)
+                        result_type c)
     : _rng(rng), _a(a), _b(b), _c(c),
       d1(_b-_a), d2(_c-_a), d3(_c-_b), q1(d1/d2), p1(d1*d2)
   {
@@ -1266,7 +1266,7 @@ public:
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const triangle_distribution& x, 
-			 const triangle_distribution& y)
+                         const triangle_distribution& y)
   { return x._a == y._a && x._b == y._b && x._c == y._c && x._rng == y._rng; }
 #else
   // Use a member function
@@ -1301,7 +1301,7 @@ public:
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const exponential_distribution& x, 
-			 const exponential_distribution& y)
+                         const exponential_distribution& y)
   { return x._lambda == y._lambda && x._rng == y._rng; }
 #else
   // Use a member function
@@ -1325,7 +1325,7 @@ public:
   typedef RealType result_type;
 
   cauchy_distribution(base_type & rng, result_type median = 0, 
-		      result_type sigma = 1)
+                      result_type sigma = 1)
     : _rng(rng), _median(median), _sigma(sigma) { iterator_init(); }
   // compiler-generated copy constructor is fine
   // uniform_01 cannot be assigned, neither can this class
@@ -1337,7 +1337,7 @@ public:
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const cauchy_distribution& x, 
-			 const cauchy_distribution& y)
+                         const cauchy_distribution& y)
   {
     return x._median == y._median && x._sigma == y._sigma && x._rng == y._rng; 
   }
@@ -1364,7 +1364,7 @@ public:
   typedef RealType result_type;
 
   explicit normal_distribution(base_type & rng, const result_type& mean = 0,
-			       const result_type& sigma = 1)
+                               const result_type& sigma = 1)
     : _rng(rng), _mean(mean), _sigma(sigma), _valid(false)
   { assert(sigma > 0); iterator_init(); }
   // compiler-generated copy constructor is fine
@@ -1389,7 +1389,7 @@ public:
   }
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const normal_distribution& x, 
-			 const normal_distribution& y)
+                         const normal_distribution& y)
   {
     return x._mean == y._mean && x._sigma == y._sigma && 
       x._valid == y._valid && x._rng == y._rng;
@@ -1418,9 +1418,9 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
   lognormal_distribution(base_type & rng, result_type mean, 
-			 result_type sigma)
+                         result_type sigma)
     : _rng(rng, std::log(mean*mean/std::sqrt(sigma*sigma + mean*mean)),
-	   std::sqrt(std::log(sigma*sigma/mean/mean+1)))
+           std::sqrt(std::log(sigma*sigma/mean/mean+1)))
   { 
     assert(mean > 0);
     iterator_init();
@@ -1435,7 +1435,7 @@ public:
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const lognormal_distribution& x, 
-			 const lognormal_distribution& y)
+                         const lognormal_distribution& y)
   { return x._rng == y._rng; }
 #else
   // Use a member function
@@ -1465,8 +1465,8 @@ public:
   {
     RealType sqsum = 0;
     for(typename Cont::iterator it = _container.begin();
-	it != _container.end();
-	++it) {
+        it != _container.end();
+        ++it) {
       RealType val = _rng();
       *it = val;
       sqsum += val * val;
@@ -1474,13 +1474,13 @@ public:
     using std::sqrt;
     // for all i: result[i] /= sqrt(sqsum)
     std::transform(_container.begin(), _container.end(), _container.begin(),
-		   std::bind2nd(std::divides<RealType>(), sqrt(sqsum)));
+                   std::bind2nd(std::divides<RealType>(), sqrt(sqsum)));
     return _container;
   }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
   friend bool operator==(const uniform_on_sphere& x, 
-			 const uniform_on_sphere& y)
+                         const uniform_on_sphere& y)
   { return x._dim == y._dim && x._rng == y._rng; }
 #else
   // Use a member function
