@@ -89,7 +89,7 @@ struct test_my_matrix_vector {
 
     void operator () (int) const {
 #ifdef USE_ADAPTOR
-        try {
+        {
             V v1 (N), v2 (N);
             M m1 (N, N);
             ublas::symmetric_adaptor<M> tam1 (m1);
