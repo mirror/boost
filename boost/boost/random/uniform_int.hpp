@@ -23,9 +23,11 @@
 #define BOOST_RANDOM_UNIFORM_INT_HPP
 
 #include <cassert>
+#include <iostream>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/random/uniform_smallint.hpp>
 #include <boost/random/detail/signed_unsigned_compare.hpp>
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS

@@ -21,6 +21,7 @@
 #ifndef BOOST_RANDOM_UNIFORM_01_HPP
 #define BOOST_RANDOM_UNIFORM_01_HPP
 
+#include <iostream>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>

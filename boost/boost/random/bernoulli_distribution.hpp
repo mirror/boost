@@ -22,6 +22,7 @@
 #define BOOST_RANDOM_BERNOULLI_DISTRIBUTION_HPP
 
 #include <cassert>
+#include <iostream>
 
 namespace boost {
 

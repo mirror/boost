@@ -23,6 +23,7 @@
 
 #include <cmath>          // std::log
 #include <cassert>
+#include <iostream>
 #include <boost/random/uniform_01.hpp>
 
 namespace boost {

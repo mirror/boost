@@ -27,6 +27,7 @@
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/random/linear_congruential.hpp>
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/detail/pass_through_engine.hpp>

@@ -23,6 +23,7 @@
 
 #include <cmath>
 #include <cassert>
+#include <iostream>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 

@@ -22,6 +22,7 @@
 #include <boost/config.hpp>
 
 // implementation details
+#include <boost/detail/workaround.hpp>
 #include <boost/random/uniform_01.hpp>
 #include <boost/random/detail/pass_through_engine.hpp>
 #include <boost/random/detail/uniform_int_float.hpp>

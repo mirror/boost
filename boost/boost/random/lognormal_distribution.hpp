@@ -23,6 +23,7 @@
 
 #include <cmath>      // std::exp, std::sqrt
 #include <cassert>
+#include <iostream>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/normal_distribution.hpp>

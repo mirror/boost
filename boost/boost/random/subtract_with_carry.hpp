@@ -28,6 +28,7 @@
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/random/linear_congruential.hpp>
 
 

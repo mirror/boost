@@ -23,6 +23,7 @@
 #define BOOST_RANDOM_UNIFORM_SMALLINT_HPP
 
 #include <cassert>
+#include <iostream>
 #include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>

@@ -22,6 +22,7 @@
 #define BOOST_RANDOM_CAUCHY_DISTRIBUTION_HPP
 
 #include <cmath>
+#include <iostream>
 #include <boost/limits.hpp>
 #include <boost/static_assert.hpp>
 
