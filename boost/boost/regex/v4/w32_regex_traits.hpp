@@ -548,8 +548,6 @@ boost::shared_ptr<w32_regex_traits_implementation<charT> > create_w32_regex_trai
 template <class charT>
 class w32_regex_traits
 {
-private:
-   typedef std::ctype<charT>             ctype_type;
 public:
    typedef charT                         char_type;
    typedef std::size_t                   size_type;

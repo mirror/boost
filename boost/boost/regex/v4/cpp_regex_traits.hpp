@@ -393,39 +393,7 @@ public:
    BOOST_STATIC_CONSTANT(char_class_type, mask_blank = 1u << 16);
    BOOST_STATIC_CONSTANT(char_class_type, mask_word = 1u << 17);
    BOOST_STATIC_CONSTANT(char_class_type, mask_unicode = 1u << 18);
-#ifdef __GNUC__
-   BOOST_STATIC_CONSTANT(native_mask_type, 
-      mask_base = 
-         static_cast<native_mask_type>(
-            std::ctype<charT>::alnum 
-            | std::ctype<charT>::alpha
-            | std::ctype<charT>::cntrl
-            | std::ctype<charT>::digit
-            | std::ctype<charT>::graph
-            | std::ctype<charT>::lower
-            | std::ctype<charT>::print
-            | std::ctype<charT>::punct
-            | std::ctype<charT>::space
-            | std::ctype<charT>::upper
-            | std::ctype<charT>::xdigit));
-#else
-   BOOST_STATIC_CONSTANT(char_class_type, 
-      mask_base = 
-         std::ctype<charT>::alnum 
-         | std::ctype<charT>::alpha
-         | std::ctype<charT>::cntrl
-         | std::ctype<charT>::digit
-         | std::ctype<charT>::graph
-         | std::ctype<charT>::lower
-         | std::ctype<charT>::print
-         | std::ctype<charT>::punct
-         | std::ctype<charT>::space
-         | std::ctype<charT>::upper
-         | std::ctype<charT>::xdigit);
 #endif
-#endif
-   //BOOST_STATIC_ASSERT(0 == (mask_base & (mask_word | mask_unicode)));
-
 
    typedef std::basic_string<charT> string_type;
    typedef charT char_type;
@@ -491,13 +459,6 @@ template <class charT>
 typename cpp_regex_traits_implementation<charT>::char_class_type const cpp_regex_traits_implementation<charT>::mask_word;
 template <class charT>
 typename cpp_regex_traits_implementation<charT>::char_class_type const cpp_regex_traits_implementation<charT>::mask_unicode;
-#ifdef __GNUC__
-template <class charT>
-typename cpp_regex_traits_implementation<charT>::native_mask_type const cpp_regex_traits_implementation<charT>::mask_base;
-#else
-template <class charT>
-typename cpp_regex_traits_implementation<charT>::char_class_type const cpp_regex_traits_implementation<charT>::mask_base;
-#endif
 
 #endif
 #endif
@@ -919,9 +880,24 @@ public:
    {
 #ifndef BOOST_REGEX_BUGGY_CTYPE_FACET
       typedef typename std::ctype<charT>::mask ctype_mask;
-      if((f & re_detail::cpp_regex_traits_implementation<charT>::mask_base) 
+
+      static const ctype_mask mask_base = 
+         static_cast<ctype_mask>(
+            std::ctype<charT>::alnum 
+            | std::ctype<charT>::alpha
+            | std::ctype<charT>::cntrl
+            | std::ctype<charT>::digit
+            | std::ctype<charT>::graph
+            | std::ctype<charT>::lower
+            | std::ctype<charT>::print
+            | std::ctype<charT>::punct
+            | std::ctype<charT>::space
+            | std::ctype<charT>::upper
+            | std::ctype<charT>::xdigit);
+
+      if((f & mask_base) 
          && (m_pimpl->m_pctype->is(
-            static_cast<ctype_mask>(f & re_detail::cpp_regex_traits_implementation<charT>::mask_base), c)))
+            static_cast<ctype_mask>(f & mask_base), c)))
          return true;
       else if((f & re_detail::cpp_regex_traits_implementation<charT>::mask_unicode) && re_detail::is_extended(c))
          return true;

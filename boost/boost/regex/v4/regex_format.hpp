@@ -243,7 +243,7 @@ void basic_regex_formatter<OutputIterator, Results, traits>::format_perl()
    default:
       // see if we have a number:
       {
-         std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), std::distance(m_position, m_end));
+         std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), ::boost::re_detail::distance(m_position, m_end));
          int v = m_traits.toi(m_position, m_position + len, 10);
          if(v < 0)
          {
@@ -327,7 +327,7 @@ void basic_regex_formatter<OutputIterator, Results, traits>::format_escape()
       }
       else
       {
-         std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), std::distance(m_position, m_end));
+         std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), ::boost::re_detail::distance(m_position, m_end));
          int val = m_traits.toi(m_position, m_position + len, 16);
          if(val < 0)
          {
@@ -398,7 +398,7 @@ void basic_regex_formatter<OutputIterator, Results, traits>::format_escape()
       {
          // octal ecape sequence:
          --m_position;
-         std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(4), std::distance(m_position, m_end));
+         std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(4), ::boost::re_detail::distance(m_position, m_end));
          v = m_traits.toi(m_position, m_position + len, 8);
          BOOST_ASSERT(v >= 0);
          put(static_cast<char_type>(v));
@@ -419,7 +419,7 @@ void basic_regex_formatter<OutputIterator, Results, traits>::format_conditional(
       put(static_cast<char_type>('?'));
       return;
    }
-   std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), std::distance(m_position, m_end));
+   std::ptrdiff_t len = (std::min)(static_cast<std::ptrdiff_t>(2), ::boost::re_detail::distance(m_position, m_end));
    int v = m_traits.toi(m_position, m_position + len, 10);
    if(v < 0)
    {
