@@ -15,7 +15,7 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 
-if defined __COMO__
+#if defined __COMO__
 #error - this test fails on comeau with disatrous results
 #endif
 
