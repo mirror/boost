@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        primary_transform.hpp
-  *   VERSION:     3.10
+  *   VERSION:     3.11
   *   DESCRIPTION: Heuristically determines the sort string format in use
   *                by the current locale.
   */

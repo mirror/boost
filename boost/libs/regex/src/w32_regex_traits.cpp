@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        w32_regex_traits.cpp
-  *   VERSION:     3.10
+  *   VERSION:     3.11
   *   DESCRIPTION: Implements the w32_regex_traits<charT> traits class
   */
 
@@ -37,7 +37,7 @@ namespace{
 //
 // character classes:
 
-jm_uintfast32_t re_char_class_id[] = {
+boost::uint_fast32_t re_char_class_id[] = {
    boost::re_detail::w32_traits_base::char_class_alnum,
    boost::re_detail::w32_traits_base::char_class_alpha,
    boost::re_detail::w32_traits_base::char_class_cntrl,
@@ -378,7 +378,7 @@ std::string w32_traits_base::error_string(unsigned id)
    return re_get_error_str(id);
 }
 
-jm_uintfast32_t BOOST_RE_CALL w32_traits_base::do_lookup_class(const char* p)
+boost::uint_fast32_t BOOST_RE_CALL w32_traits_base::do_lookup_class(const char* p)
 {
    BOOST_RE_GUARD_STACK
    unsigned int i;
@@ -645,7 +645,7 @@ w32_regex_traits<wchar_t>::~w32_regex_traits()
 #endif
 }
 
-bool BOOST_RE_CALL w32_regex_traits<wchar_t>::do_iswclass(wchar_t c, jm_uintfast32_t f)
+bool BOOST_RE_CALL w32_regex_traits<wchar_t>::do_iswclass(wchar_t c, boost::uint_fast32_t f)
 {
    BOOST_RE_GUARD_STACK
    if((c & ~0xFF) == 0)
@@ -756,7 +756,7 @@ int BOOST_RE_CALL w32_regex_traits<wchar_t>::toi(const wchar_t*& first, const wc
    return result;
 }
 
-jm_uintfast32_t BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
+boost::uint_fast32_t BOOST_RE_CALL w32_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)
 {
    std::basic_string<wchar_t> s(first, last);
    unsigned int len = strnarrow((char*)0, 0, s.c_str());

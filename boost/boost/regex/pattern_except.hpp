@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         pattern_except.cpp
-  *   VERSION      3.10
+  *   VERSION      3.11
   *   DESCRIPTION: Declares pattern-matching exception classes.
   */
 

@@ -111,16 +111,6 @@ AC_DEFINE_UNQUOTED(BOOST_RE_SIZEOF_INT, [$ac_cv_sizeof_int])
 AC_DEFINE_UNQUOTED(BOOST_RE_SIZEOF_LONG, [$ac_cv_sizeof_long])
 
 
-if test "$ac_cv_sizeof_int" -lt 4; then
-    if test "$ac_cv_sizeof_long" -ge 4; then
-      AC_DEFINE(BOOST_RE_INT32_LONG)
-    else
-      AC_MSG_ERROR(Cannot find any 32-bit integer type for your compiler)
-    fi
-  ac_ext=$use_ac_ext
-fi
-ac_ext=$use_ac_ext
-
 
 ac_ext=$use_ac_ext
 
@@ -191,37 +181,6 @@ void do_throw()
 [AC_MSG_RESULT(no)
 AC_MSG_ERROR(Sorry, without exception handling you can't compile this library)])
 
-
-AC_ARG_ENABLE(mutable, [--disable-mutable turns off mutable support])
-if test "$enable_mutable" = "no"; then
-AC_DEFINE(BOOST_RE_NO_MUTABLE, [])
-else
-
-AC_MSG_CHECKING(for mutable keyword)
-AC_TRY_COMPILE(
-[ 
-#include <stdlib.h>
-
-class foo
-{
- mutable int val;
- public:
- foo(int i) : val(i) {}
- void set(int i)const;
-};
-
-void foo::set(int i)const
-{
- val = i;
-}
-],
-[
- const foo f(4);
- f.set(3);
-],
-[AC_MSG_RESULT(yes)],
-[AC_DEFINE(BOOST_RE_NO_MUTABLE, []) AC_MSG_RESULT(no)])
-fi
 
 AC_MSG_CHECKING(for default template parameter support)
 AC_TRY_COMPILE(
@@ -304,44 +263,6 @@ int foo(const dummy<T>& )
 [AC_MSG_RESULT(yes)],
 [AC_DEFINE(BOOST_RE_NO_PARTIAL_FUNC_SPEC, []) AC_MSG_RESULT(no)])
 
-AC_MSG_CHECKING([for template friend functions])
-AC_TRY_COMPILE(
-[ 
-#include <stdlib.h>
-
-template <class T2>
-void foo(T2 t);
-
-template <class T>
-struct dummy
-{
-	template <class T2> friend void foo(T2);
-private:
-	void foo2();
-	void foo3()const;
-};
-
-template <class T2>
-void foo(T2 t)
-{
-	dummy<T2> d1;
-	d1.foo2();
-	d1.foo3();
-	dummy<int> d2;
-	d2.foo2();
-	d2.foo3();
-}
-
-
-],
-[
-	foo(3);
-	foo(2.345);
-],
-[AC_MSG_RESULT(yes)],
-[AC_DEFINE(BOOST_RE_NO_TEMPLATE_FRIEND, []) AC_MSG_RESULT(no)])
-
-
 
 AC_ARG_ENABLE(ms-windows, [--disable-ms-windows turns off native MS Windows support (when available)])
 AC_ARG_ENABLE(threads, [--disable-threads turns off multi-threading support (when available)])
@@ -362,7 +283,6 @@ AC_TRY_COMPILE(
  int i = GetVersion();
 ],
 [iswin="true"
-AC_DEFINE(BOOST_RE_PLATFORM_WINDOWS, []) 
 AC_MSG_RESULT(yes)],
 [AC_MSG_RESULT(no)
 enable_ms_windows="no"]
@@ -437,21 +357,6 @@ enable_ms_windows="no"
 
 fi
 
-
-if test "$iswin" != "true"; then
-
-AC_MSG_CHECKING(for MS DOS)
-AC_TRY_COMPILE(
-[ 
-#include <dos.h>
-],
-[
- int i = _doserrno;
-],
-[AC_DEFINE(BOOST_RE_PLATFORM_DOS, []) AC_MSG_RESULT(yes)],
-[AC_MSG_RESULT(no)])
-
-fi
 
 
 AC_MSG_CHECKING(for bool support)
@@ -570,7 +475,7 @@ fi
 
 AC_ARG_ENABLE(member-templates, [--disable-member-templates turns off member template class and function support])
 if test "$enable_member_templates" = "no"; then
-AC_DEFINE(BOOST_RE_NO_MEMBER_TEMPLATES, [])
+AC_DEFINE(BOOST_NO_MEMBER_TEMPLATES, [])
 else
 
 AC_MSG_CHECKING(for member template classes and functions)
@@ -608,7 +513,7 @@ public:
  fa = ia;
 ],
 [AC_MSG_RESULT(yes)],
-[AC_DEFINE(BOOST_RE_NO_MEMBER_TEMPLATES,[])
+[AC_DEFINE(BOOST_NO_MEMBER_TEMPLATES,[])
 AC_MSG_RESULT(no)])
 fi
 
@@ -765,100 +670,6 @@ AC_DEFINE(BOOST_RE_THREADS, [])],
 fi
 
 
-AC_ARG_ENABLE(nested-template-prefix, [--disable-nested-template-prefix turns off use of \"template\" as the nested template class access specifier.])
-if test "$enable_nested_template_prefix" = "no" || test "$enable_member_templates" = "no"; then
-AC_DEFINE(BOOST_RE_NESTED_TEMPLATE_DECL, [])
-else
-
-AC_MSG_CHECKING(for template nested class access)
-AC_TRY_COMPILE(
-[ 
-template <class T>
-class alloc
-{
-public:
- void* allocate(int);
- void deallocate(void*);
- alloc();
- alloc(const alloc&);
- template <class U>
- alloc(const alloc<U>&) {}
- alloc& operator=(const alloc&);
- template <class U>
- alloc& operator=(const alloc<U>&)
- { return *this; }
- 
- template <class U>
- struct rebind
- {
-  typedef alloc<U> other;
- };
-};
-
-],
-[
- alloc<int> ia;
- alloc<double> da(ia);
- alloc<float> fa;
- fa.allocate(5);
- fa = ia;
- alloc<int>::template rebind<double>::other da2(ia);
-],
-[
-AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_NESTED_TEMPLATE_DECL,template)
-],
-[
-AC_DEFINE(BOOST_RE_NESTED_TEMPLATE_DECL,[])
-AC_MSG_RESULT(no)
-])
-
-fi
-
-AC_MSG_CHECKING(for explicit template instantiation)
-AC_TRY_COMPILE(
-[ 
-#include "confdefs.h"
-#include <stdlib.h>
-
-template <class T>
-class factorial
-{
-public:
-	factorial();
-	T operator()(T);
-};
-
-template <class T>
-factorial<T>::factorial()
-{
-}
-
-template <class T>
-T factorial<T>::operator()(T t)
-{
-	T result = 1;
-	for(T i = 1; i <= t; ++i)
-	{
-		result *= i;
-	}
-	return result;
-}
-
-template class factorial<int>;
-template class factorial<short>;
-],
-[
-],
-[
-AC_MSG_RESULT(yes)
-],
-[
-AC_DEFINE(BOOST_RE_NO_TEMPLATE_INST,[])
-AC_MSG_RESULT(no)
-])
-
-
 AC_ARG_ENABLE(fastcall, [--disable-fastcall turns off use __fastcall and __stdcall.])
 if test "$enable_fastcall" = "no" || test "$enable_ms_windows" != "no"; then
 AC_DEFINE(BOOST_RE_CALL, [])
@@ -921,58 +732,6 @@ have_std_namespace="yes"
 [AC_MSG_RESULT(no - either STL is not present or in a non-standard namespace.)
 AC_MSG_ERROR([Sorry, you can't compile this library unless the standard library is in namespace std.])])
 
-AC_MSG_CHECKING(for <iterator>)
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-
-],
-[
-],
-[AC_MSG_RESULT(yes)
-],
-[AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_NO_ITERATOR_H, [])
-])
-
-AC_MSG_CHECKING(for <algorithm>)
-AC_TRY_COMPILE(
-[ 
-#include <algorithm>
-#include "confdefs.h"
-
-],
-[
-],
-[AC_MSG_RESULT(yes)
-],
-[AC_MSG_RESULT(no)
-need_algo="yes"
-])
-
-if test "$enable_stl" != "no" && test "$need_algo" = "yes"; then
-AC_MSG_CHECKING(for <algo>)
-AC_TRY_COMPILE(
-[ 
-#include <algo>
-
-],
-[
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_USE_ALGO, [])
-],
-[AC_MSG_RESULT(no - disabling STL support)
-AC_DEFINE(BOOST_RE_NO_STL, [])
-AC_DEFINE(BOOST_RE_NO_EXCEPTION_H, [])
-AC_DEFINE(BOOST_RE_NO_ITERATOR_H, [])
-AC_DEFINE(BOOST_RE_NO_MEMORY_H, [])
-AC_DEFINE(BOOST_RE_NO_LOCALE_H, [])
-AC_DEFINE(BOOST_RE_NO_STRING_H, [])
-enable_stl="no"
-])
-
-fi
 
 AC_MSG_CHECKING(for <memory>)
 AC_TRY_COMPILE(
@@ -983,7 +742,7 @@ AC_TRY_COMPILE(
 template <class A>
 struct tester
 {
-	typedef typename A::BOOST_RE_NESTED_TEMPLATE_DECL rebind<int> binder;
+	typedef typename A::template rebind<int> binder;
 	typedef typename binder::other alloc_type;
 	alloc_type a;
 	tester(A al): a(al) {}
@@ -994,7 +753,7 @@ std::allocator<double> d(a);
 
 typedef std::allocator<char> alloc_type;
 
-alloc_type::BOOST_RE_NESTED_TEMPLATE_DECL rebind<int>::other o(a);
+alloc_type::template rebind<int>::other o(a);
 
 tester<std::allocator<char> > t(a);
 ],
@@ -1003,7 +762,7 @@ tester<std::allocator<char> > t(a);
 [AC_MSG_RESULT(yes)
 ],
 [AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_NO_MEMORY_H, [])
+AC_DEFINE(BOOST_NO_STD_ALLOCATOR, [])
 ])
 
 
@@ -1112,211 +871,13 @@ AC_TRY_COMPILE(
  i = std::distance(j, k);
 ],
 [AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_DISTANCE_T_1)
 have_dist="yes"
 ],
-[])
-
-if test "$enable_stl" != "no" && test "$have_dist" != "yes"; then
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
 [
- int i, *j, *k;
- std::distance(j, k, i);
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_DISTANCE_T_2)
-have_dist="yes"
-],
-[AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_DISTANCE_T_0)
-have_dist="yes"])
+AC_MSG_RESULT(no)
+AC_DEFINE(BOOST_NO_STD_DISTANCE)
+])
 
-fi
-
-if test "$enable_stl" != "no" && test "$have_si" != "yes"; then
-AC_MSG_CHECKING(for standard iterator syntax)
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
-[
- std::iterator<std::output_iterator_tag, char, std::ptrdiff_t, char*, char&> oi;
- std::iterator<std::input_iterator_tag, char, std::ptrdiff_t, char*, char&> ii;
- std::iterator<std::forward_iterator_tag, char, std::ptrdiff_t, char*, char&> fi;
- std::iterator<std::bidirectional_iterator_tag, char, std::ptrdiff_t, char*, char&> bi;
- std::iterator<std::random_access_iterator_tag, char, std::ptrdiff_t, char*, char&> ri;
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_ITERATOR_T_1)
-have_si="yes"
-have_oi="yes"
-have_ii="yes"
-have_fi="yes"
-have_bi="yes"
-have_ri="yes"
-],
-[])
-
-fi
-
-if test "$enable_stl" != "no" && test "$have_si" != "yes"; then
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
-[
- std::iterator<std::output_iterator_tag, char, std::ptrdiff_t> oi;
- std::iterator<std::input_iterator_tag, char, std::ptrdiff_t> ii;
- std::iterator<std::forward_iterator_tag, char, std::ptrdiff_t> fi;
- std::iterator<std::bidirectional_iterator_tag, char, std::ptrdiff_t> bi;
- std::iterator<std::random_access_iterator_tag, char, std::ptrdiff_t> ri;
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_ITERATOR_T_2)
-have_si="yes"
-have_oi="yes"
-have_ii="yes"
-have_fi="yes"
-have_bi="yes"
-have_ri="yes"
-],
-[AC_MSG_RESULT(no)])
-AC_DEFINE(BOOST_RE_ITERATOR_T_0)
-
-fi
-
-
-if test "$have_oi" != "yes"; then
-AC_MSG_CHECKING(for output iterator syntax)
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
-[
- std::output_iterator oi;
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_OI_T_3)
-have_oi="yes"
-],
-[AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_OI_T_0)
-have_oi="yes"])
-
-fi
-
-if test "$enable_stl" != "no" && test "$have_ii" != "yes"; then
-AC_MSG_CHECKING(for input iterator syntax)
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
-[
- std::input_iterator<char, std::ptrdiff_t> oi;
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_II_T_3)
-have_ii="yes"
-],
-[])
-
-fi
-
-if test "$enable_stl" != "no" && test "$have_ii" != "yes"; then
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
-[
- std::input_iterator<char> oi;
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_II_T_4)
-have_ii="yes"
-],
-[AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_II_T_0)
-have_ii="yes"])
-
-fi
-
-if test "$enable_stl" != "no" && test "$have_fi" != "yes"; then
-AC_MSG_CHECKING(for forward iterator syntax)
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
-[
- std::forward_iterator<int, std::ptrdiff_t> oi;
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_FI_T_3)
-have_fi="yes"
-],
-[AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_FI_T_0)
-have_fi="yes"])
-
-fi
-
-if test "$enable_stl" != "no" && test "$have_bi" != "yes"; then
-AC_MSG_CHECKING(for bidirectional iterator syntax)
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
-[
- std::bidirectional_iterator<int, std::ptrdiff_t> oi;
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_BI_T_)
-have_bi="yes"
-],
-[AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_BI_T_0)
-have_bi="yes"])
-
-fi
-
-if test "$enable_stl" != "no" && test "$have_ri" != "yes"; then
-AC_MSG_CHECKING(for random access iterator syntax)
-AC_TRY_COMPILE(
-[ 
-#include <iterator>
-#include "confdefs.h"
-
-],
-[
- std::random_access_iterator<int, std::ptrdiff_t> oi;
-],
-[AC_MSG_RESULT(yes)
-AC_DEFINE(BOOST_RE_RI_T_3)
-have_ri="yes"
-],
-[AC_MSG_RESULT(no)
-AC_DEFINE(BOOST_RE_RI_T_0)
-have_ri="yes"])
-
-fi
 
 if test "$enable_stl" != "no"; then
 AC_MSG_CHECKING(for output iterator assignment)
@@ -1669,6 +1230,7 @@ cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 sed 's%\(#[ 	]*\)undef[ 	]%\1define %' ../../boost/regex/detail/regex_options.hpp > jm_opt.out
 cat jm_opt.out > ../../boost/regex/detail/regex_options.hpp
 rm -f jm_opt.out
+
 
 
 

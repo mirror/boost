@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        cregex.cpp
-  *   VERSION:     3.10
+  *   VERSION:     3.11
   *   DESCRIPTION: Implements high level class boost::RexEx
   */
 #include <boost/cregex.hpp>
@@ -170,7 +170,7 @@ RegEx& RegEx::operator=(const char* p)
 unsigned int RegEx::SetExpression(const char* p, bool icase)
 {
    BOOST_RE_GUARD_STACK
-   jm_uintfast32_t f = icase ? regbase::normal | regbase::use_except | regbase::icase : regbase::normal | regbase::use_except;
+   boost::uint_fast32_t f = icase ? regbase::normal | regbase::use_except | regbase::icase : regbase::normal | regbase::use_except;
    return pdata->e.set_expression(p, f);
 }
 

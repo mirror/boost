@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.h
-  *   VERSION  3.10
+  *   VERSION  3.11
   *
   * Function and data declarations for regress.
   *
@@ -129,7 +129,7 @@ public:
    typedef char         value_type;
 
 
-   #ifndef BOOST_RE_NO_MEMBER_TEMPLATES
+   #ifndef BOOST_NO_MEMBER_TEMPLATES
    template <class U>
    struct rebind
    {
@@ -187,7 +187,7 @@ public:
 // class debug_iterator
 //
 template <class T>
-struct debug_iterator : public BOOST_RE_RA_ITERATOR(T, std::ptrdiff_t)
+struct debug_iterator
 {
    typedef std::ptrdiff_t                    difference_type;
    typedef char_t                            value_type;
@@ -306,15 +306,42 @@ struct debug_iterator : public BOOST_RE_RA_ITERATOR(T, std::ptrdiff_t)
   }
 };
 
-#if defined(__SGI_STL_PORT) && (__SGI_STL_PORT >= 0x400)
+#if defined(__SGI_STL_PORT)
 namespace std{
 template <class T>
 inline random_access_iterator_tag __STL_CALL
+__ITERATOR_CATEGORY(const debug_iterator<T>&) {
+  return random_access_iterator_tag();
+}
+}
+#elif defined(__STL_CONFIG_H)
+namespace std{
+template <class T>
+inline random_access_iterator_tag 
+iterator_category(const debug_iterator<T>&) {
+  return random_access_iterator_tag();
+}
+}
+#endif
+#ifdef BOOST_MSVC
+namespace std{
+template <class T>
+inline random_access_iterator_tag __cdecl
+_Iter_cat(const debug_iterator<T>&) {
+  return random_access_iterator_tag();
+}
+}
+#endif
+#ifdef BOOST_RWSTD_VER
+namespace std{
+template <class T>
+inline random_access_iterator_tag
 __iterator_category(const debug_iterator<T>&) {
   return random_access_iterator_tag();
 }
 }
 #endif
+
 
 #ifdef BOOST_RE_TEST_LOCALE_W32
 typedef boost::reg_expression<char_t, boost::w32_regex_traits<char_t>, jm_debug_alloc> re_type;

@@ -30,13 +30,8 @@
 #define JM_CSTD std
 #define JM jm
 
-#define JM_RA_ITERATOR(a,b) BOOST_RE_RA_ITERATOR(a,b)
-
 #ifdef BOOST_RE_OLD_IOSTREAM
 #define JM_OLD_IOSTREAM
-#endif
-#ifdef BOOST_RE_NO_MEMBER_TEMPLATES
-#define JM_NO_MEMBER_TEMPLATES
 #endif
 
 #ifdef __cplusplus

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        posix_api.cpp
-  *   VERSION:     3.10
+  *   VERSION:     3.11
   *   DESCRIPTION: Implements the Posix API wrappers.
   */
 
@@ -49,7 +49,7 @@ BOOST_RE_IX_DECL int BOOST_RE_CCALL regcompA(regex_tA* expression, const char* p
       }
    }
    // set default flags:
-   jm_uintfast32_t flags = (f & REG_EXTENDED) ? regbase::extended : regbase::basic;
+   boost::uint_fast32_t flags = (f & REG_EXTENDED) ? regbase::extended : regbase::basic;
    expression->eflags = (f & REG_NEWLINE) ? match_not_dot_newline : 0;
    // and translate those that are actually set:
 
@@ -152,7 +152,7 @@ BOOST_RE_IX_DECL int BOOST_RE_CCALL regexecA(const regex_tA* expression, const c
 {
    BOOST_RE_GUARD_STACK
    bool result = false;
-   jm_uintfast32_t flags = match_default | expression->eflags;
+   boost::uint_fast32_t flags = match_default | expression->eflags;
    const char* end;
    const char* start;
    cmatch m;

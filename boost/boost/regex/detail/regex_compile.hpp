@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_compile.hpp
-  *   VERSION      3.10
+  *   VERSION      3.11
   *   DESCRIPTION: Declares reg_expression<> member functions.  This is
   *                an internal header file, do not include directly.
   */
@@ -644,7 +644,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 {
    re_detail::jstack<traits_string_type, Allocator> singles(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> ranges(64, data.allocator());
-   re_detail::jstack<jm_uintfast32_t, Allocator> classes(64, data.allocator());
+   re_detail::jstack<boost::uint_fast32_t, Allocator> classes(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> equivalents(64, data.allocator());
    classes.push(cls);
    if(dat)
@@ -660,7 +660,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 {
    re_detail::jstack<traits_string_type, Allocator> singles(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> ranges(64, data.allocator());
-   re_detail::jstack<jm_uintfast32_t, Allocator> classes(64, data.allocator());
+   re_detail::jstack<boost::uint_fast32_t, Allocator> classes(64, data.allocator());
    re_detail::jstack<traits_string_type, Allocator> equivalents(64, data.allocator());
    bool has_digraphs = false;
    jm_assert(traits_inst.syntax_type((traits_size_type)(traits_uchar_type)*first) == traits_type::syntax_open_set);
@@ -719,7 +719,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
                   fail(REG_ERANGE);
                   return 0;
                }
-               jm_uintfast32_t id = traits_inst.lookup_classname(base+2, first-2);
+               boost::uint_fast32_t id = traits_inst.lookup_classname(base+2, first-2);
                if(_flags & regbase::icase)
                {
                   if((id == traits_type::char_class_upper) || (id == traits_type::char_class_lower))
@@ -973,13 +973,13 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<jm_uintfast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_wide_type&)
+re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_wide_type&)
 {
    size_type base = data.size();
    data.extend(sizeof(re_detail::re_set_long));
    unsigned int csingles = 0;
    unsigned int cranges = 0;
-   jm_uintfast32_t cclasses = 0;
+   boost::uint_fast32_t cclasses = 0;
    unsigned int cequivalents = 0;
    bool nocollate_state = flags() & regbase::nocollate;
 
@@ -1011,7 +1011,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
          // be sure...
          // delay throw to later:
          #ifdef __BORLANDC__
-         jm_uintfast32_t f = _flags;
+         boost::uint_fast32_t f = _flags;
          _flags &= ~regbase::use_except;
          #endif
          fail(REG_ERANGE);
@@ -1052,7 +1052,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
 }
 
 template <class charT, class traits, class Allocator>
-re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<jm_uintfast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_narrow_type&)
+re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator>::compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_narrow_type&)
 {
    re_detail::re_set* dat = (re_detail::re_set*)data.extend(sizeof(re_detail::re_set));
    std::memset(dat, 0, sizeof(re_detail::re_set));
@@ -1084,7 +1084,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
          // be sure...
          // delay throw to later:
          #ifdef __BORLANDC__
-         jm_uintfast32_t f = _flags;
+         boost::uint_fast32_t f = _flags;
          _flags &= ~regbase::use_except;
          #endif
          fail(REG_ERANGE);
@@ -1117,7 +1117,7 @@ re_detail::re_syntax_base* BOOST_RE_CALL reg_expression<charT, traits, Allocator
       equivalents.pop();
    }
 
-   jm_uintfast32_t flags = 0;
+   boost::uint_fast32_t flags = 0;
    while(classes.empty() == false)
    {
       flags |= classes.peek();
@@ -1159,7 +1159,7 @@ inline
 template <class charT, class traits, class Allocator>
 void BOOST_RE_CALL reg_expression<charT, traits, Allocator>::fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces)
 {
-   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(bool, Allocator) b_alloc;
+   typedef typename boost::re_detail::rebind_allocator<bool, Allocator>::type b_alloc;
    
    register unsigned char* base = (unsigned char*)b;
    register re_detail::re_syntax_base* ptr = b;

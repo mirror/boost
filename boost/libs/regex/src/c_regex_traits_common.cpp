@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        c_regex_traits_common.cpp
-  *   VERSION:     3.10
+  *   VERSION:     3.11
   *   DESCRIPTION: Implements common code and data for the
   *                c_regex_traits<charT> traits classes.
   */

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_config.hpp
-  *   VERSION      3.10
+  *   VERSION      3.11
   *   DESCRIPTION: auto-configure options for regular expression code.
   */
 
@@ -50,6 +50,10 @@ full list of macros and their usage.
 #include <clocale>
 #include <string>
 #include <boost/smart_ptr.hpp>
+#ifdef __CYGWIN__
+#include <sys/types.h>
+#endif
+#include <boost/cstdint.hpp>
 #else
 //
 // C build,
@@ -85,23 +89,17 @@ full list of macros and their usage.
    #if __BORLANDC__ < 0x500
       #define BOOST_RE_NO_NAMESPACES
       #define BOOST_RE_NO_BOOL
-      #define BOOST_RE_NO_MUTABLE
    #endif
 
    // versions prior to 0x530 not supported:
    #if __BORLANDC__ < 0x540
-      #define BOOST_RE_NO_MEMBER_TEMPLATES
       // inline contructors exhibit strange behaviour
       // under Builder 3 and C++ 5.x when throwing exceptions
       #define INLINE_EXCEPTION_BUG
-      #define BOOST_RE_NESTED_TEMPLATE_DECL
       #define BOOST_RE_NO_PARTIAL_FUNC_SPEC
       #define BOOST_RE_NO_STRING_DEF_ARGS
       #define BOOST_RE_NO_TYPEINFO    // bad_cast etc not in namespace std.
    #endif
-   //
-   // Builder 4 seems to have broken template friend support:
-   #define BOOST_RE_NO_TEMPLATE_FRIEND
 
    #if (__BORLANDC__ == 0x550) || (__BORLANDC__ == 0x551)
       // problems with std::basic_string and dll RTL:
@@ -122,12 +120,6 @@ full list of macros and their usage.
       #error exception handling support required
    #endif
 
-   #ifdef _Windows
-      #define BOOST_RE_PLATFORM_WINDOWS
-   #else
-      #define BOOST_RE_PLATFORM_DOS
-   #endif
-
    #ifndef __WIN32__
       #define BOOST_RE_CALL
       #define BOOST_RE_CCALL
@@ -136,8 +128,6 @@ full list of macros and their usage.
       #define BOOST_RE_CCALL __stdcall
    #endif
 
-   #define BOOST_RE_INT64t __int64
-   #define BOOST_RE_IMM64(val) val##i64
    #define BOOST_RE_NO_CAT
    // broken wide character support:
    #define BOOST_RE_NO_SWPRINTF
@@ -180,15 +170,12 @@ full list of macros and their usage.
       #define BOOST_RE_NO_NAMESPACES
       #define BOOST_RE_NO_DEFAULT_PARAM
       #define BOOST_RE_NO_BOOL
-      #define BOOST_RE_NO_MUTABLE
       #define BOOST_RE_NO_WCSTRING
       #define BOOST_RE_NO_LOCALE_H
       #define BOOST_RE_NO_TEMPLATE_RETURNS
-      #define BOOST_RE_NO_INT64
    #endif
 
    #if BOOST_MSVC < 1200
-      #define BOOST_RE_NESTED_TEMPLATE_DECL
       #define BOOST_RE_NO_STRING_DEF_ARGS
    #endif
 
@@ -196,16 +183,11 @@ full list of macros and their usage.
       #error exception handling support required
    #endif
 
-   #define BOOST_RE_PLATFORM_WINDOWS
    //
    // no support for nested template classes yet....
    // although this part of VC6 is badly documented
-   #define BOOST_RE_NO_MEMBER_TEMPLATES
-   #define BOOST_RE_INT64t __int64
-   #define BOOST_RE_IMM64(val) val##i64
    #define BOOST_RE_NO_CAT
    #define BOOST_RE_NO_PARTIAL_FUNC_SPEC
-   #define BOOST_RE_NO_TEMPLATE_FRIEND
    #define BOOST_RE_NO_SWPRINTF
 
    #ifdef _MT
@@ -238,13 +220,8 @@ full list of macros and their usage.
 #ifdef __GNUC__
    #if (__GNUC__ < 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ < 91))
       #define BOOST_RE_NO_NAMESPACES
-      #define BOOST_RE_NO_MUTABLE
-      #define BOOST_RE_NO_MEMBER_TEMPLATES
       #define BOOST_RE_NO_PARTIAL_FUNC_SPEC
-      #define BOOST_RE_NO_TEMPLATE_FRIEND
    #endif
-   #define BOOST_RE_INT64t long long
-   #define BOOST_RE_IMM64(val) val##LL
 
    #ifdef _WIN32
       /* there seems to be a problem with <windows.h> in gcc */
@@ -254,7 +231,6 @@ full list of macros and their usage.
       #define BOOST_RE_NO_TEMPLATE_SWITCH_MERGE
    #endif
    #define BOOST_RE_NO_CAT
-   #define BOOST_RE_NESTED_TEMPLATE_DECL
    #define BOOST_RE_NO_SWPRINTF
    #include <string>
    #ifdef __BASTRING__
@@ -278,15 +254,9 @@ full list of macros and their usage.
 #ifdef __SUNPRO_CC
    #if (__SUNPRO_CC < 0x500)
       #define BOOST_RE_NO_NAMESPACES
-      #define BOOST_RE_NO_MUTABLE
-      #define BOOST_RE_NO_MEMBER_TEMPLATES
       #define BOOST_RE_OLD_IOSTREAM
    #endif
-   #define BOOST_RE_INT64t long long
-   #define BOOST_RE_IMM64(val) val##LL
-   #define BOOST_RE_NESTED_TEMPLATE_DECL
    #define BOOST_RE_NO_SWPRINTF
-   #define BOOST_RE_NO_TEMPLATE_FRIEND
    #define BOOST_RE_NO_LOCALE_H
 #endif
 
@@ -296,20 +266,13 @@ full list of macros and their usage.
 #   if (__HP_aCC < 31400)
    // non-conformant aCC:
    #define BOOST_RE_NO_NAMESPACES
-   #define BOOST_RE_NO_MUTABLE
    #define BOOST_RE_OLD_IOSTREAM
-   #define BOOST_RE_NESTED_TEMPLATE_DECL
-   #define BOOST_RE_NO_TEMPLATE_FRIEND
+   #define BOOST_NO_STD_ALLOCATOR
 #else
    #if !defined(_NAMESPACE_STD)
       #define BOOST_RE_OLD_IOSTREAM
    #endif
-   #define BOOST_RE_NESTED_TEMPLATE_DECL template
 #endif
-   #define BOOST_RE_NO_MEMBER_TEMPLATES
-   #define BOOST_RE_NO_MEMORY_H
-   #define BOOST_RE_INT64t long long
-   #define BOOST_RE_IMM64(val) val##LL
    #define BOOST_RE_NO_SWPRINTF
    #define BOOST_RE_NO_CAT
 #endif
@@ -360,20 +323,6 @@ full list of macros and their usage.
 #define BOOST_RE_MAYBE_ACCESS_SPEC ::
 #else
 #define BOOST_RE_MAYBE_ACCESS_SPEC 
-#endif
-
-#if !defined(BOOST_RE_INT64t) || !defined(BOOST_RE_IMM64)
-#define BOOST_RE_NO_INT64
-#endif
-
-#ifndef BOOST_RE_INT32_LONG
-typedef unsigned int jm_uintfast32_t;
-#else
-typedef unsigned long jm_uintfast32_t;
-#endif
-
-#ifndef BOOST_RE_NESTED_TEMPLATE_DECL
-#define BOOST_RE_NESTED_TEMPLATE_DECL template
 #endif
 
 #ifndef BOOST_RE_IX_DECL
@@ -432,7 +381,7 @@ typedef unsigned long jm_uintfast32_t;
       	#define BOOST_RE_NO_WCSTRING
       #endif
       #if !defined(__STL_MEMBER_TEMPLATE_CLASSES) ||  !defined(__STL_MEMBER_TEMPLATES)
-         #define BOOST_RE_NO_MEMBER_TEMPLATES
+         #define BOOST_NO_MEMBER_TEMPLATES
       #endif
       #define BOOST_RE_NO_TYPEINFO
 
@@ -449,30 +398,14 @@ typedef unsigned long jm_uintfast32_t;
 
       #define BOOST_RE_ALGO_INCLUDED
 
-      #define BOOST_RE_DISTANCE(i, j, n) do { n = 0; std::distance(i, j, n); } while(false)
-      #define BOOST_RE_OUTPUT_ITERATOR(T, D) std::output_iterator
-      #define BOOST_RE_INPUT_ITERATOR(T, D) std::input_iterator<T, D>
-      #define BOOST_RE_FWD_ITERATOR(T, D) std::forward_iterator<T, D>
-      #define BOOST_RE_BIDI_ITERATOR(T, D) std::bidirectional_iterator<T, D>
-      #define BOOST_RE_RA_ITERATOR(T, D) std::random_access_iterator<T, D>
+      #if !defined( __STL_CLASS_PARTIAL_SPECIALIZATION) || !defined(__SGI_STL_PORT)
+         #define BOOST_NO_STD_DISTANCE
+      #endif
 
       #if defined(__STL_USE_STD_ALLOCATORS) || (defined(__SGI_STL_PORT ) && !defined(__STL_MEMBER_TEMPLATE_CLASSES) && !defined(__STL_MEMBER_TEMPLATES))
-
          /* new style allocator's with nested template classes */
-         #undef BOOST_RE_NO_MEMBER_TEMPLATES
-         #define REBIND_INSTANCE(x, y, inst) y::BOOST_RE_NESTED_TEMPLATE_DECL rebind<x>::other(inst)
-         #define REBIND_TYPE(x, y) y::BOOST_RE_NESTED_TEMPLATE_DECL rebind<x>::other
-         #define BOOST_RE_DEF_ALLOC_PARAM(x) BOOST_RE_TRICKY_DEFAULT_PARAM( std::allocator<x> )
-         #define BOOST_RE_DEF_ALLOC(x) std::allocator<x>
-
       #else  /* __STL_USE_STD_ALLOCATORS */
-            #define BOOST_RE_OLD_ALLOCATORS
-            #define REBIND_INSTANCE(x, y, inst) BOOST_RE_MAYBE_ACCESS_SPEC boost::re_detail::re_alloc_binder<x, y>(inst)
-            #define REBIND_TYPE(x, y) BOOST_RE_MAYBE_ACCESS_SPEC re_alloc_binder<x, y>
-            #define BOOST_RE_DEF_ALLOC_PARAM(x) BOOST_RE_TRICKY_DEFAULT_PARAM( jm_def_alloc )
-            #define BOOST_RE_DEF_ALLOC(x) jm_def_alloc
-            #define BOOST_RE_NEED_BINDER
-            #define BOOST_RE_NEED_ALLOC
+            #define BOOST_NO_STD_ALLOCATOR
       #endif /* __STL_USE_STD_ALLOCATORS */
 
       #define BOOST_RE_STL_DONE
@@ -496,7 +429,7 @@ typedef unsigned long jm_uintfast32_t;
       #endif
 
       #if defined(RWSTD_NO_MEMBER_TEMPLATES) || defined(RWSTD_NO_MEM_CLASS_TEMPLATES)
-         #define BOOST_RE_NO_MEMBER_TEMPLATES
+         #define BOOST_NO_MEMBER_TEMPLATES
       #endif
       #ifdef _RWSTD_NO_TEMPLATE_ON_RETURN_TYPE
          #define BOOST_RE_NO_TEMPLATE_RETURNS
@@ -504,10 +437,6 @@ typedef unsigned long jm_uintfast32_t;
 
       #ifdef RWSTD_NO_EXCEPTIONS
          #error exception handling support required
-      #endif
-
-      #ifdef RWSTD_NO_MUTABLE
-         #define BOOST_RE_NO_MUTABLE
       #endif
 
       #ifdef RWSTD_NO_DEFAULT_TEMPLATES
@@ -525,57 +454,20 @@ typedef unsigned long jm_uintfast32_t;
          #define BOOST_RE_NO_BOOL
       #endif
 
-      #if BOOST_RWSTD_VER > 0x020000
-         #ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
-          #define BOOST_RE_DISTANCE(i, j, n) do { n = 0; std::distance(i, j, n); } while(false)
-         #else 
-          #define BOOST_RE_DISTANCE(i, j, n) (n = std::distance(i, j))
-         #endif
-         #define BOOST_RE_OUTPUT_ITERATOR(T, D) std::iterator<std::output_iterator_tag, T, D, T*, T&>
-         #define BOOST_RE_INPUT_ITERATOR(T, D) std::iterator<std::input_iterator_tag, T, D, T*, T&>
-         #define BOOST_RE_FWD_ITERATOR(T, D) std::iterator<std::forward_iterator_tag, T, D, T*, T&>
-         #define BOOST_RE_BIDI_ITERATOR(T, D) std::iterator<std::bidirectional_iterator_tag, T, D, T*, T&>
-         #define BOOST_RE_RA_ITERATOR(T, D) std::iterator<std::random_access_iterator_tag, T, D, T*, T&>
-      #else 
-         #define BOOST_RE_DISTANCE(i, j, n) std::distance(i, j, n)do { n = 0; std::distance(i, j, n); } while(false)
-         #define BOOST_RE_OUTPUT_ITERATOR(T, D) std::output_iterator
-         #if BOOST_RWSTD_VER >= 0x0200
-            #define BOOST_RE_INPUT_ITERATOR(T, D) std::input_iterator<T>
-         #else
-            #define BOOST_RE_INPUT_ITERATOR(T, D) std::input_iterator<T, D>
-         #endif
-         #define BOOST_RE_FWD_ITERATOR(T, D) std::forward_iterator<T, D>
-         #define BOOST_RE_BIDI_ITERATOR(T, D) std::bidirectional_iterator<T, D>
-         #define BOOST_RE_RA_ITERATOR(T, D) std::random_access_iterator<T, D>
+      #if (BOOST_RWSTD_VER < 0x020000) || defined(_RWSTD_NO_CLASS_PARTIAL_SPEC)
+          #define BOOST_NO_STD_DISTANCE
       #endif
 
       #include <memory>
 
-      #if defined(_RWSTD_ALLOCATOR) && !defined(BOOST_RE_NO_MEMORY_H) && !defined(BOOST_RE_NO_MEMBER_TEMPLATES)
-
-         /* new style allocator */
-
-         #define REBIND_INSTANCE(x, y, inst) y::BOOST_RE_NESTED_TEMPLATE_DECL rebind<x>::other(inst)
-         #define REBIND_TYPE(x, y) y::BOOST_RE_NESTED_TEMPLATE_DECL rebind<x>::other
-         #define BOOST_RE_DEF_ALLOC_PARAM(x) BOOST_RE_TRICKY_DEFAULT_PARAM( std::allocator<x> )
-         #define BOOST_RE_DEF_ALLOC(x)  std::allocator<x>
-
-      #else
+      #if !defined(_RWSTD_ALLOCATOR)
          /*
          // old style allocator
          // this varies a great deal between versions, and there is no way
          // that I can tell of differentiating between them, so use our
          // own default allocator...
          */
-         #define BOOST_RE_OLD_ALLOCATORS
-         #define REBIND_INSTANCE(x, y, inst) BOOST_RE_MAYBE_ACCESS_SPEC boost::re_detail::re_alloc_binder<x, y>(inst)
-         #define REBIND_TYPE(x, y) BOOST_RE_MAYBE_ACCESS_SPEC re_alloc_binder<x, y>
-         #define BOOST_RE_DEF_ALLOC_PARAM(x) BOOST_RE_TRICKY_DEFAULT_PARAM( jm_def_alloc )
-         #define BOOST_RE_DEF_ALLOC(x) jm_def_alloc
-
-         #define BOOST_RE_NEED_BINDER
-         #define BOOST_RE_NEED_ALLOC
-
+         #define BOOST_NO_STD_ALLOCATOR
       #endif
 
       #define BOOST_RE_STL_DONE
@@ -583,57 +475,14 @@ typedef unsigned long jm_uintfast32_t;
          #define BOOST_RE_NO_OI_ASSIGN
       #endif
 
-   #elif defined (ITERATOR_H)
-
-      /* HP STL */
-
-      #define BOOST_RE_NO_LOCALE_H
-
-      #include <algo.h>
-      #define BOOST_RE_ALGO_INCLUDED
-
-      #define BOOST_RE_DISTANCE(i, j, n) std::distance(i, j, n)do { n = 0; std::distance(i, j, n); } while(false)
-      #define BOOST_RE_OUTPUT_ITERATOR(T, D) std::output_iterator
-      #define BOOST_RE_INPUT_ITERATOR(T, D) std::input_iterator<T, D>
-      #define BOOST_RE_FWD_ITERATOR(T, D) std::forward_iterator<T, D>
-      #define BOOST_RE_BIDI_ITERATOR(T, D) std::bidirectional_iterator<T, D>
-      #define BOOST_RE_RA_ITERATOR(T, D) std::random_access_iterator<T, D>
-
-      /* old style allocator */
-      #define BOOST_RE_OLD_ALLOCATORS
-      #define REBIND_INSTANCE(x, y, inst) BOOST_RE_MAYBE_ACCESS_SPEC boost::re_detail::re_alloc_binder<x, y>(inst)
-      #define REBIND_TYPE(x, y) BOOST_RE_MAYBE_ACCESS_SPEC re_alloc_binder<x, y>
-      #define BOOST_RE_DEF_ALLOC_PARAM(x) BOOST_RE_TRICKY_DEFAULT_PARAM( jm_def_alloc )
-      #define BOOST_RE_DEF_ALLOC(x) jm_def_alloc
-
-      #define BOOST_RE_NEED_BINDER
-      #define BOOST_RE_NEED_ALLOC
-      #define BOOST_RE_NO_NOT_EQUAL
-
-      #define BOOST_RE_STL_DONE
-
    #elif (defined(BOOST_MSVC) || defined(__ICL)) && (defined(_YVALS) || defined(_CPPLIB_VER))
 
       /* VC6 or Intel C++, with Dinkum STL */
       #define BOOST_RE_NO_OI_ASSIGN
 
-      #define BOOST_RE_DISTANCE(i, j, n) n = std::distance(i, j)
-      #define BOOST_RE_OUTPUT_ITERATOR(T, D) std::iterator<std::output_iterator_tag, T, D>
-      #define BOOST_RE_INPUT_ITERATOR(T, D) std::iterator<std::input_iterator_tag, T, D>
-      #define BOOST_RE_FWD_ITERATOR(T, D) std::iterator<std::forward_iterator_tag, T, D>
-      #define BOOST_RE_BIDI_ITERATOR(T, D) std::iterator<std::bidirectional_iterator_tag, T, D>
-      #define BOOST_RE_RA_ITERATOR(T, D) std::iterator<std::random_access_iterator_tag, T, D>
-
       /* MS's allocators are rather ambiguous about their properties
       at least as far as MSDN is concerned, so play safe: */
-      #define BOOST_RE_OLD_ALLOCATORS
-      #define REBIND_INSTANCE(x, y, inst) BOOST_RE_MAYBE_ACCESS_SPEC boost::re_detail::re_alloc_binder<x, y>(inst)
-      #define REBIND_TYPE(x, y) BOOST_RE_MAYBE_ACCESS_SPEC re_alloc_binder<x, y>
-      #define BOOST_RE_DEF_ALLOC_PARAM(x) BOOST_RE_TRICKY_DEFAULT_PARAM( jm_def_alloc )
-      #define BOOST_RE_DEF_ALLOC(x) jm_def_alloc
-
-      #define BOOST_RE_NEED_BINDER
-      #define BOOST_RE_NEED_ALLOC
+      #define BOOST_NO_STD_ALLOCATOR
 
       #define BOOST_RE_STL_DONE
       #ifndef _CPPLIB_VER
@@ -650,59 +499,12 @@ typedef unsigned long jm_uintfast32_t;
       /* unknown STL version
        try the defaults: */
     
-      // dwa 10/05/00 Why were we assuming a broken distance in this case?
-      #define BOOST_RE_DISTANCE(i, j, n)  (n = std::distance(i, j))
-      /* these may be suspect for older libraries */
-      #define BOOST_RE_OUTPUT_ITERATOR(T, D) std::iterator<std::output_iterator_tag, T, D, T*, T&>
-      #define BOOST_RE_INPUT_ITERATOR(T, D) std::iterator<std::input_iterator_tag, T, D, T*, T&>
-      #define BOOST_RE_FWD_ITERATOR(T, D) std::iterator<std::forward_iterator_tag, T, D, T*, T&>
-      #define BOOST_RE_BIDI_ITERATOR(T, D) std::iterator<std::bidirectional_iterator_tag, T, D, T*, T&>
-      #define BOOST_RE_RA_ITERATOR(T, D) std::iterator<std::random_access_iterator_tag, T, D, T*, T&>
-
    #endif  /* <iterator> config */
-
-#else   /* no <iterator> at all */
-
-   #define BOOST_RE_DISTANCE(i, j, n) (n = j - i)
-   #define BOOST_RE_OUTPUT_ITERATOR(T, D) boost::re_detail::dummy_iterator_base<T>
-   #define BOOST_RE_INPUT_ITERATOR(T, D) boost::re_detail::dummy_iterator_base<T>
-   #define BOOST_RE_FWD_ITERATOR(T, D) boost::re_detail::dummy_iterator_base<T>
-   #define BOOST_RE_BIDI_ITERATOR(T, D) boost::re_detail::dummy_iterator_base<T>
-   #define BOOST_RE_RA_ITERATOR(T, D) boost::re_detail::dummy_iterator_base<T>
-
 
 #endif
 
 /* now do allocator if not already done */
 
-#ifndef BOOST_RE_STL_DONE
-
-   #ifdef BOOST_RE_NO_MEMORY_H
-
-      /* old style allocator */
-      
-      #define BOOST_RE_OLD_ALLOCATORS
-
-      #define REBIND_INSTANCE(x, y, inst) BOOST_RE_MAYBE_ACCESS_SPEC boost::re_detail::re_alloc_binder<x, y>(inst)
-      #define REBIND_TYPE(x, y) BOOST_RE_MAYBE_ACCESS_SPEC re_alloc_binder<x, y>
-      #define BOOST_RE_DEF_ALLOC_PARAM(x) BOOST_RE_TRICKY_DEFAULT_PARAM( jm_def_alloc )
-      #define BOOST_RE_DEF_ALLOC(x) jm_def_alloc
-
-      #define BOOST_RE_NEED_BINDER
-      #define BOOST_RE_NEED_ALLOC
-
-   #else
-
-      /* new style allocator's with nested template classes */
-
-      #define REBIND_INSTANCE(x, y, inst) y::BOOST_RE_NESTED_TEMPLATE_DECL rebind<x>::other(inst)
-      #define REBIND_TYPE(x, y) y::BOOST_RE_NESTED_TEMPLATE_DECL rebind<x>::other
-      #define BOOST_RE_DEF_ALLOC_PARAM(x) BOOST_RE_TRICKY_DEFAULT_PARAM( std::allocator<x> )
-      #define BOOST_RE_DEF_ALLOC(x) std::allocator<x>
-
-   #endif
-
-#endif
 #endif // BOOST_RE_AUTO_CONFIGURE
 
 
@@ -738,12 +540,6 @@ typedef unsigned long jm_uintfast32_t;
 
 /* compiler configuration goes here: */
 
-#ifdef BOOST_RE_NO_MUTABLE
-   #define BOOST_RE_MUTABLE
-#else
-   #define BOOST_RE_MUTABLE mutable
-#endif
-
 #if defined( BOOST_RE_NO_BOOL) && !defined(bool)
    #define bool int
    #define true 1
@@ -766,6 +562,9 @@ typedef unsigned long jm_uintfast32_t;
 #define BOOST_RE_NO_STRING_DEF_ARGS  
 #endif
 
+#if defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(BOOST_NO_STD_ALLOCATOR)
+#define BOOST_NO_STD_ALLOCATOR
+#endif
 
 
 /* add our class def's if they are needed: */
@@ -834,7 +633,7 @@ public:
 
    const Allocator& BOOST_RE_CALL instance()const { return *this; }
 
-#ifndef BOOST_RE_NO_MEMBER_TEMPLATES
+#ifndef BOOST_NO_MEMBER_TEMPLATES
 
    template <class U>
    struct rebind
@@ -887,7 +686,7 @@ public:
       ::operator delete(p);
    }
 
-#ifndef BOOST_RE_NO_MEMBER_TEMPLATES
+#ifndef BOOST_NO_MEMBER_TEMPLATES
    template <class U>
    struct rebind
    {
@@ -935,14 +734,38 @@ inline bool BOOST_RE_CALL boolify(I val)
  #endif
 #endif
 
+template <class T, class A>
+struct rebind_allocator
+{
+#ifdef BOOST_NO_STD_ALLOCATOR
+   typedef re_alloc_binder<T,A> type;
+#else
+   typedef typename A::template rebind<T> binder;
+   typedef typename binder::other type;
+#endif
+};
+
+#ifdef BOOST_NO_STD_DISTANCE
+template <class T>
+std::ptrdiff_t distance(const T& x, const T& y)
+{ return y - x; }
+#else
+using std::distance;
+#endif
+
 } // namespace re_detail
-#ifdef BOOST_RE_NEED_BINDER
-using re_detail::re_alloc_binder;
-#endif
-#ifdef BOOST_RE_NEED_ALLOC
-using re_detail::jm_def_alloc;
-#endif
+
 } // namespace boost
+
+#ifdef BOOST_NO_STD_ALLOCATOR
+#define BOOST_RE_DEF_ALLOC(T) boost::re_detail::jm_def_alloc
+#define BOOST_RE_DEF_ALLOC_PARAM(T) BOOST_RE_DEFAULT_PARAM(boost::re_detail::jm_def_alloc)
+#else
+#include <memory>
+#define BOOST_RE_DEF_ALLOC(T) std::allocator<T>
+#define BOOST_RE_DEF_ALLOC_PARAM(T) BOOST_RE_TRICKY_DEFAULT_PARAM(std::allocator<T>)
+#endif
+
 
 #ifdef __GNUC__
 #define INLINE_EXCEPTION_BUG
@@ -1022,11 +845,6 @@ public:
 
    #ifdef __BORLANDC__
       #pragma message "macro allocator: " BOOST_RE_DEF_ALLOC_PARAM(wchar_t)
-      #pragma message "macro jm_input_iterator: " BOOST_RE_INPUT_ITERATOR(char, std::ptrdiff_t)
-      #pragma message "macro jm_output_iterator: " BOOST_RE_OUTPUT_ITERATOR(char, std::ptrdiff_t)
-      #pragma message "macro jm_fwd_iterator: " BOOST_RE_FWD_ITERATOR(char, std::ptrdiff_t)
-      #pragma message "macro jm_bidi_iterator: " BOOST_RE_BIDI_ITERATOR(char, std::ptrdiff_t)
-      #pragma message "macro jm_ra_iterator: " BOOST_RE_RA_ITERATOR(char, std::ptrdiff_t)
       #ifdef BOOST_RE_LOCALE_CPP
          #pragma message "locale support enabled"
       #endif
@@ -1231,6 +1049,7 @@ namespace std{
 
 
 #endif  // BOOST_REGEX_CONFIG_HPP
+
 
 
 

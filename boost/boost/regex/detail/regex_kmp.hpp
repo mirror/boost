@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_kmp.hpp
-  *   VERSION      3.10
+  *   VERSION      3.11
   *   DESCRIPTION: Provides Knuth Morris Pratt search operations.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.
@@ -53,17 +53,17 @@ struct kmp_info
 template <class charT, class Allocator>
 void kmp_free(kmp_info<charT>* pinfo, const Allocator& a)
 {
-   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(char, Allocator) atype;
+   typedef typename boost::re_detail::rebind_allocator<char, Allocator>::type atype;
    atype(a).deallocate((char*)pinfo, pinfo->size);
 }
 
 template <class iterator, class charT, class Trans, class Allocator>
 kmp_info<charT>* kmp_compile(iterator first, iterator last, charT, Trans translate, const Allocator& a) 
 {    
-   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(char, Allocator) atype;
+   typedef typename boost::re_detail::rebind_allocator<char, Allocator>::type atype;
    int i, j, m;
    i = 0;
-   BOOST_RE_DISTANCE(first, last, m);
+   m = boost::re_detail::distance(first, last);
    ++m;
    unsigned int size = sizeof(kmp_info<charT>) + sizeof(int)*m + sizeof(charT)*m;
    --m;

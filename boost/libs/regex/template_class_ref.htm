@@ -21,7 +21,7 @@ content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
         </td>
         <td valign="top" width="50%"><h2 align="center">Regex++,
         Template Class and Algorithm Reference.</h2>
-        <p><i>(version 3.10, 18 April 2000)</i> </p>
+        <p><i>(version 3.11, 18 April 2000)</i> </p>
         <pre><i>Copyright (c) 1998-9
 Dr John Maddock
 
@@ -427,7 +427,7 @@ for a container of <i>charT</i>. </p>
 </i></font> <b>  typedef</b> Allocator allocator_type; 
 &nbsp;&nbsp; <b>typedef</b> Allocator alloc_type; 
 <font color="#000080">&nbsp;&nbsp; <i>// flag_type 
-</i></font>&nbsp;&nbsp; <b>typedef</b> jm_uintfast32_t flag_type; 
+</i></font>&nbsp;&nbsp; <b>typedef</b> boost::int_fast32_t flag_type; 
 <b>public</b>: 
 &nbsp;  <font color="#000080"><em>// constructors</em></font> 
 &nbsp;  <strong>explicit</strong> reg_expression(<b>const</b> Allocator&amp; a = Allocator()); 
@@ -550,7 +550,7 @@ member functions: <br>
         <td valign="top" width="45%"><font size="2"><b>template</b>
         &lt;class ST, class SA&gt; <br>
         reg_expression(<b>const</b> std::basic_string&lt;charT,
-        ST, SA&gt;&amp; p, jm_uintfast32_t f = regbase::normal, <b>const</b>
+        ST, SA&gt;&amp; p, boost::int_fast32_t f = regbase::normal, <b>const</b>
         Allocator&amp; a = Allocator());</font></td>
         <td valign="top" width="45%"><font size="2">&nbsp;Constructs
         an instance of reg_expression from the expression denoted

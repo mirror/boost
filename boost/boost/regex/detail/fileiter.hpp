@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         fileiter.hpp
-  *   VERSION      3.10
+  *   VERSION      3.11
   *   DESCRIPTION: Declares various platform independent file and
   *                directory iterators, plus binary file input in
   *                the form of class map_file.
@@ -196,7 +196,7 @@ public:
    friend class mapfile_iterator;
 };
 
-class BOOST_RE_IX_DECL mapfile_iterator : public BOOST_RE_RA_ITERATOR(char, long)
+class BOOST_RE_IX_DECL mapfile_iterator
 {
    typedef mapfile::pointer internal_pointer;
    internal_pointer* node;
@@ -325,7 +325,7 @@ struct file_iterator_ref
 };
 
 
-class BOOST_RE_IX_DECL file_iterator : public BOOST_RE_INPUT_ITERATOR(const char*, std::ptrdiff_t)
+class BOOST_RE_IX_DECL file_iterator 
 {
    char* _root;
    char* _path;
@@ -333,6 +333,12 @@ class BOOST_RE_IX_DECL file_iterator : public BOOST_RE_INPUT_ITERATOR(const char
    file_iterator_ref* ref;
 
 public:
+   typedef std::ptrdiff_t            difference_type;
+   typedef const char*               value_type;
+   typedef const char**              pointer;
+   typedef const char*&              reference;
+   typedef std::input_iterator_tag   category;
+
    file_iterator();
    file_iterator(const char* wild);
    ~file_iterator();
@@ -366,7 +372,7 @@ inline bool operator < (const file_iterator&, const file_iterator&)
 }
 
 
-class BOOST_RE_IX_DECL directory_iterator : public BOOST_RE_INPUT_ITERATOR(const char*, std::ptrdiff_t)
+class BOOST_RE_IX_DECL directory_iterator
 {
    char* _root;
    char* _path;
@@ -374,6 +380,12 @@ class BOOST_RE_IX_DECL directory_iterator : public BOOST_RE_INPUT_ITERATOR(const
    file_iterator_ref* ref;
 
 public:
+   typedef std::ptrdiff_t            difference_type;
+   typedef const char*               value_type;
+   typedef const char**              pointer;
+   typedef const char*&              reference;
+   typedef std::input_iterator_tag   category;
+
    directory_iterator();
    directory_iterator(const char* wild);
    ~directory_iterator();

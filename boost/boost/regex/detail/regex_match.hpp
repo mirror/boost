@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_match.hpp
-  *   VERSION      3.10
+  *   VERSION      3.11
   *   DESCRIPTION: Regular expression matching algorithms.
   *                Note this is an internal header file included
   *                by regex.hpp, do not include on its own.
@@ -150,8 +150,8 @@ template <class iterator, class Allocator>
 class _priv_match_data
 {
 public:
-   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(int, Allocator) i_alloc;
-   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(iterator, Allocator) it_alloc;
+   typedef typename boost::re_detail::rebind_allocator<int, Allocator>::type i_alloc;
+   typedef typename boost::re_detail::rebind_allocator<iterator, Allocator>::type it_alloc;
 
    match_results_base<iterator, Allocator> temp_match;
    // failure stacks:
@@ -209,12 +209,10 @@ void _priv_match_data<iterator, Allocator>::free()
 {
    if(caccumulators)
    {
-      //REBIND_INSTANCE(int, Allocator, temp_match.allocator()).deallocate(accumulators, caccumulators);
       i_alloc temp1(temp_match.allocator());
       temp1.deallocate(accumulators, caccumulators);
       for(unsigned i = 0; i < caccumulators; ++i)
          jm_destroy(loop_starts + i);
-      //REBIND_INSTANCE(iterator, Allocator, temp_match.allocator()).deallocate(loop_starts, caccumulators);
       it_alloc temp2(temp_match.allocator());
       temp2.deallocate(loop_starts, caccumulators);
    }

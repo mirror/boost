@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE:        c_regex_traits.cpp
-  *   VERSION:     3.10
+  *   VERSION:     3.11
   *   DESCRIPTION: Implements the cpp_regex_traits<charT> traits class
   */
 #include <clocale>
@@ -39,7 +39,7 @@ namespace{
    const unsigned int re_classes_max = 14;
    const unsigned int char_set_size = CHAR_MAX - CHAR_MIN + 1;
 
-jm_uintfast32_t re_char_class_id[] = {
+boost::uint_fast32_t re_char_class_id[] = {
    boost::re_detail::cpp_regex_traits_base::char_class_alnum,
    boost::re_detail::cpp_regex_traits_base::char_class_alpha,
    boost::re_detail::cpp_regex_traits_base::char_class_cntrl,
@@ -342,7 +342,7 @@ int BOOST_RE_CALL cpp_regex_traits<char>::toi(const char*& first, const char* la
       return 0;
 }
 
-jm_uintfast32_t BOOST_RE_CALL cpp_regex_traits<char>::lookup_classname(const char* first, const char* last)const
+boost::uint_fast32_t BOOST_RE_CALL cpp_regex_traits<char>::lookup_classname(const char* first, const char* last)const
 {
    BOOST_RE_GUARD_STACK
    unsigned int i;
@@ -708,7 +708,7 @@ int BOOST_RE_CALL cpp_regex_traits<wchar_t>::toi(const wchar_t*& first, const wc
       return 0;
 }
 
-jm_uintfast32_t BOOST_RE_CALL cpp_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)const
+boost::uint_fast32_t BOOST_RE_CALL cpp_regex_traits<wchar_t>::lookup_classname(const wchar_t* first, const wchar_t* last)const
 {
    BOOST_RE_GUARD_STACK
    unsigned int i;

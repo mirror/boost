@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.cpp
-  *   VERSION  3.10
+  *   VERSION  3.11
   *
   * main() and associated code for regress.
   *
@@ -38,6 +38,8 @@ using std::endl;
 #ifdef __BORLANDC__
 #pragma hrdstop
 #endif
+
+#include <boost/test/cpp_main.cpp>
 
 #include "regress.h"
 
@@ -72,7 +74,7 @@ void usage()
 
 }
 
-int main(int argc, char * argv[])
+int cpp_main(int argc, char * argv[])
 {
 #if defined(BOOST_MSVC) && defined(_DEBUG)
    // turn on heap reporting at program exit:
@@ -111,10 +113,6 @@ int main(int argc, char * argv[])
       }
       cout << line << " lines, " << tests << " tests completed in file " << argv[i] << endl;
    }
-   if(error_count)
-      cout << "There were " << error_count << " failures in total..." << endl;
-   else
-      cout << "No failures detected..." << endl;
 
    return error_count;
 }

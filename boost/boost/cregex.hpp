@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         cregex.cpp
-  *   VERSION      3.10
+  *   VERSION      3.11
   *   DESCRIPTION: Declares POSIX API functions
   *                + boost::RegEx high level wrapper.
   */

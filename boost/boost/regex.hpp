@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex.cpp
-  *   VERSION      3.10
+  *   VERSION      3.11
   *   DESCRIPTION: Declares boost::reg_expression<> and associated
   *                functions and classes. This header is the main
   *                entry point for the template regex code.
@@ -105,9 +105,9 @@ public:
    {
       return static_cast<const regex_traits<wchar_t>*>(this)->translate(c, true);
    }
-   jm_uintfast32_t BOOST_RE_CALL lookup_classname(const wchar_t* first, const wchar_t* last)const
+   boost::uint_fast32_t BOOST_RE_CALL lookup_classname(const wchar_t* first, const wchar_t* last)const
    {
-      jm_uintfast32_t result = static_cast<const regex_traits<wchar_t>*>(this)->lookup_classname(first, last);
+      boost::uint_fast32_t result = static_cast<const regex_traits<wchar_t>*>(this)->lookup_classname(first, last);
       if((result & base_type::char_class_upper) == base_type::char_class_upper)
          result |= base_type::char_class_alpha;
       return result;
@@ -242,7 +242,7 @@ struct re_literal : public re_syntax_base
 struct re_set_long : public re_syntax_base
 {
    unsigned int csingles, cranges, cequivalents;
-   jm_uintfast32_t cclasses;
+   boost::uint_fast32_t cclasses;
    bool isnot;
 };
 
@@ -523,7 +523,7 @@ public:
       set_expression(first, last, f | regbase::use_except);
       return *this;
    }
-#ifndef BOOST_RE_NO_MEMBER_TEMPLATES
+#ifndef BOOST_NO_MEMBER_TEMPLATES
 
    template <class ST, class SA>
    unsigned int BOOST_RE_CALL set_expression(const std::basic_string<charT, ST, SA>& p, flag_type f = regbase::normal)
@@ -671,8 +671,8 @@ private:
    void BOOST_RE_CALL fixup_apply(re_detail::re_syntax_base* b, unsigned cbraces);
    void BOOST_RE_CALL move_offsets(re_detail::re_syntax_base* j, unsigned size);
    re_detail::re_syntax_base* BOOST_RE_CALL compile_set(const charT*& first, const charT* last);
-   re_detail::re_syntax_base* BOOST_RE_CALL compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<jm_uintfast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_narrow_type&);
-   re_detail::re_syntax_base* BOOST_RE_CALL compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<jm_uintfast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_wide_type&);
+   re_detail::re_syntax_base* BOOST_RE_CALL compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_narrow_type&);
+   re_detail::re_syntax_base* BOOST_RE_CALL compile_set_aux(re_detail::jstack<traits_string_type, Allocator>& singles, re_detail::jstack<traits_string_type, Allocator>& ranges, re_detail::jstack<boost::uint_fast32_t, Allocator>& classes, re_detail::jstack<traits_string_type, Allocator>& equivalents, bool isnot, const re_detail::_wide_type&);
    re_detail::re_syntax_base* BOOST_RE_CALL compile_set_simple(re_detail::re_syntax_base* dat, unsigned long cls, bool isnot = false);
    unsigned int BOOST_RE_CALL parse_inner_set(const charT*& first, const charT* last);
 
@@ -740,8 +740,7 @@ struct sub_match
    operator std::basic_string<value_type> ()const
    {
       std::basic_string<value_type> result;
-      unsigned len;
-      BOOST_RE_DISTANCE((iterator)first, (iterator)second, len);
+      unsigned len = boost::re_detail::distance((iterator)first, (iterator)second);
       result.reserve(len);
       iterator i = first;
       while(i != second)
@@ -778,8 +777,7 @@ struct sub_match
 
    difference_type BOOST_RE_CALL length()const
    {
-      difference_type n;
-      BOOST_RE_DISTANCE((iterator)first, (iterator)second, n);
+      difference_type n = boost::re_detail::distance((iterator)first, (iterator)second);
       return n;
    }
 };
@@ -846,7 +844,7 @@ class match_results_base
 {
 public:
    typedef Allocator                                                 alloc_type;
-   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(iterator, Allocator)  iterator_alloc;
+   typedef typename boost::re_detail::rebind_allocator<iterator, Allocator>::type  iterator_alloc;
    typedef typename iterator_alloc::size_type                        size_type;
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
    typedef typename std::iterator_traits<iterator>::difference_type  difference_type;
@@ -859,7 +857,7 @@ public:
    typedef iterator                                                  iterator_type;
 
 protected:
-   typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(char, Allocator) c_alloc;
+   typedef typename boost::re_detail::rebind_allocator<char, Allocator>::type c_alloc;
    
    struct c_reference : public c_alloc
    {
@@ -929,8 +927,7 @@ public:
       const sub_match<iterator>& m = (*this)[sub];
       if(m.matched == false)
          return 0;
-      difference_type n;
-      BOOST_RE_DISTANCE((iterator)m.first, (iterator)m.second, n);
+      difference_type n = boost::re_detail::distance((iterator)m.first, (iterator)m.second);
       return n;
    }
 
@@ -950,8 +947,7 @@ public:
       const sub_match<iterator>& s = (*this)[sub];
       if(s.matched == false)
          return -1;
-      difference_type n;
-      BOOST_RE_DISTANCE((iterator)ref->base, (iterator)s.first, n);
+      difference_type n = boost::re_detail::distance((iterator)(ref->base), (iterator)(s.first));
       return n;
    }
 
@@ -1270,13 +1266,13 @@ void BOOST_RE_CALL match_results_base<iterator, Allocator>::maybe_assign(const m
    {
       //
       // leftmost takes priority over longest:
-      BOOST_RE_DISTANCE(base, p1->first, base1);
-      BOOST_RE_DISTANCE(base, p2->first, base2);
+      base1 = boost::re_detail::distance(base, p1->first);
+      base2 = boost::re_detail::distance(base, p2->first);
       if(base1 < base2) return;
       if(base2 < base1) break;
 
-      BOOST_RE_DISTANCE(p1->first, p1->second, len1);
-      BOOST_RE_DISTANCE(p2->first, p2->second, len2);
+      len1 = boost::re_detail::distance(p1->first, p1->second);
+      len2 = boost::re_detail::distance(p2->first, p2->second);
       if((len1 != len2) || ((p1->matched == false) && (p2->matched == true)))
          break;
       if((p1->matched == true) && (p2->matched == false))
