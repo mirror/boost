@@ -22,6 +22,15 @@
 # endif
 
 //
+// look for long long by looking for the appropriate macros in <climits>
+//
+#include <climits>
+# if !defined(BOOST_MSVC) && !defined(__BORLANDC__) \
+   && (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
+#  define BOOST_HAS_LONG_LONG
+#endif
+
+//
 // Assume any extensions are in namespace std:: unless stated otherwise:
 //
 #  ifndef BOOST_STD_EXTENSION_NAMESPACE
