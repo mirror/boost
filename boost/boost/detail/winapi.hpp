@@ -55,9 +55,40 @@ struct critical_section
     ulong_ptr_type SpinCount;
 };
 
+#if defined(_WIN64)
+
+// Intel 6.0 on Win64 version, posted by Tim Fenders to [boost-users]
+
+extern "C" long_type __cdecl _InterlockedIncrement(long_type volatile *);
+extern "C" long_type __cdecl _InterlockedDecrement(long_type volatile *);
+extern "C" long_type __cdecl _InterlockedExchange(long_type volatile *, long_type);
+
+#pragma intrinsic(_InterlockedIncrement)
+#pragma intrinsic(_InterlockedDecrement)
+#pragma intrinsic(_InterlockedExchange)
+
+inline long_type InterlockedIncrement(long_type volatile * lp)
+{ 
+    return _InterlockedIncrement(lp);
+}
+
+inline long_type InterlockedDecrement(long_type volatile* lp)
+{ 
+    return _InterlockedDecrement(lp);
+}
+
+inline long_type InterlockedExchange(long_type volatile* lp, long_type l)
+{
+    return _InterlockedExchange(lp, l);
+}
+
+#else
+
 extern "C" __declspec(dllimport) long_type __stdcall InterlockedIncrement(long_type volatile *);
 extern "C" __declspec(dllimport) long_type __stdcall InterlockedDecrement(long_type volatile *);
 extern "C" __declspec(dllimport) long_type __stdcall InterlockedExchange(long_type volatile *, long_type);
+
+#endif
 
 extern "C" __declspec(dllimport) void __stdcall Sleep(dword_type);
 
