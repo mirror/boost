@@ -80,13 +80,13 @@ void compressed_pair_tester<T1, T2>::test(first_param_type p1, second_param_type
    boost::compressed_pair<T1,T2> cp1;
    // first param construct:
    boost::compressed_pair<T1,T2> cp2(p1);
-   BOOST_TEST(cp2.first() == p1);
    cp2.second() = p2;
+   BOOST_TEST(cp2.first() == p1);
    BOOST_TEST(cp2.second() == p2);
    // second param construct:
    boost::compressed_pair<T1,T2> cp3(p2);
-   BOOST_TEST(cp3.second() == p2);
    cp3.first() = p1;
+   BOOST_TEST(cp3.second() == p2);
    BOOST_TEST(cp3.first() == p1);
    // both param construct:
    boost::compressed_pair<T1,T2> cp4(p1, p2);
@@ -161,8 +161,17 @@ void compressed_pair_reference_tester<T1, T2>::test(first_param_type p1, second_
    BOOST_TEST(cp6.first() == p1);
    BOOST_TEST(cp6.second() == p2);
    // assignment:
-   cp4.first() = cp5.first();
-   cp4.second() = cp5.second();
+   // VC6 bug:
+   // When second() is an empty class, VC6 performs the
+   // assignment by doing a memcpy - even though the empty
+   // class is really a zero sized base class, the result
+   // is that the memory of first() gets trampled over.
+   // Similar arguments apply to the case that first() is 
+   // an empty base class.
+   // Strangely the problem is dependent upon the compiler
+   // settings - some generate the problem others do not.
+   cp4.first() = p3;
+   cp4.second() = p4;
    BOOST_TEST(cp4.first() == p3);
    BOOST_TEST(cp4.second() == p4);
 }
@@ -187,8 +196,8 @@ void compressed_pair_reference1_tester<T1, T2>::test(first_param_type p1, second
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    // first param construct:
    boost::compressed_pair<T1,T2> cp2(p1);
-   BOOST_TEST(cp2.first() == p1);
    cp2.second() = p2;
+   BOOST_TEST(cp2.first() == p1);
    BOOST_TEST(cp2.second() == p2);
 #endif
 }
@@ -213,8 +222,8 @@ void compressed_pair_reference2_tester<T1, T2>::test(first_param_type p1, second
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    // second param construct:
    boost::compressed_pair<T1,T2> cp3(p2);
-   BOOST_TEST(cp3.second() == p2);
    cp3.first() = p1;
+   BOOST_TEST(cp3.second() == p2);
    BOOST_TEST(cp3.first() == p1);
 #endif
 }
@@ -242,8 +251,8 @@ void compressed_pair_array1_tester<T1, T2>::test(first_param_type p1, second_par
    boost::compressed_pair<T1,T2> cp1;
    // second param construct:
    boost::compressed_pair<T1,T2> cp3(p2);
-   BOOST_TEST(cp3.second() == p2);
    cp3.first()[0] = p1[0];
+   BOOST_TEST(cp3.second() == p2);
    BOOST_TEST(cp3.first()[0] == p1[0]);
    // check const members:
    const boost::compressed_pair<T1,T2>& cpr1 = cp3;
@@ -272,8 +281,8 @@ void compressed_pair_array2_tester<T1, T2>::test(first_param_type p1, second_par
    boost::compressed_pair<T1,T2> cp1;
    // first param construct:
    boost::compressed_pair<T1,T2> cp2(p1);
-   BOOST_TEST(cp2.first() == p1);
    cp2.second()[0] = p2[0];
+   BOOST_TEST(cp2.first() == p1);
    BOOST_TEST(cp2.second()[0] == p2[0]);
    // check const members:
    const boost::compressed_pair<T1,T2>& cpr1 = cp2;
@@ -301,8 +310,8 @@ void compressed_pair_array_tester<T1, T2>::test(first_param_type p1, second_para
    // default construct:
    boost::compressed_pair<T1,T2> cp1;
    cp1.first()[0] = p1[0];
-   BOOST_TEST(cp1.first()[0] == p1[0]);
    cp1.second()[0] = p2[0];
+   BOOST_TEST(cp1.first()[0] == p1[0]);
    BOOST_TEST(cp1.second()[0] == p2[0]);
    // check const members:
    const boost::compressed_pair<T1,T2>& cpr1 = cp1;
