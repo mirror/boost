@@ -64,6 +64,8 @@
   removed. Use the assignment operator instead.</li>
 </ul>
 
+<p> To aid in porting to the new syntax and removing the use of deprecated features, define the preprocessor macro <code>BOOST_FUNCTION_NO_DEPRECATED</code>. This macro makes all deprecated features unavailable. A program compiled with <code>BOOST_FUNCTION_NO_DEPRECATED</code> will likely be prepared when the deprecated features are removed.
+
 <h2><a name="vspointers">Boost.Function vs. Function Pointers</a></h2>
 <p>Boost.Function has several advantages over function pointers, namely:
 
