@@ -28,7 +28,7 @@
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;This&nbsp;software&nbsp;is&nbsp;provided&nbsp;"as&nbsp;is"&nbsp;without&nbsp;express&nbsp;or&nbsp;implied</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;warranty,&nbsp;and&nbsp;with&nbsp;no&nbsp;claim&nbsp;as&nbsp;to&nbsp;its&nbsp;suitability&nbsp;for&nbsp;any&nbsp;purpose.</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*</FONT></I><BR>
-&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;Jul&nbsp;31,&nbsp;2000</FONT></I><BR>
+&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*&nbsp;Sep&nbsp;29,&nbsp;2000</FONT></I><BR>
 &nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >*/</FONT></I><BR>
 #ifndef&nbsp;BOOST_ARRAY_HPP<BR>
 #define&nbsp;BOOST_ARRAY_HPP<BR>
@@ -38,10 +38,8 @@
 #include&nbsp;&lt;iterator&gt;<BR>
 #include&nbsp;&lt;algorithm&gt;<BR>
 <BR>
-<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;BUG-FIX&nbsp;for&nbsp;compilers&nbsp;that&nbsp;don't&nbsp;support</FONT></I><BR>
-<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;std::size_t&nbsp;and&nbsp;std::ptrdiff_t&nbsp;yet</FONT></I><BR>
-<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;(such&nbsp;as&nbsp;gcc)</FONT></I><BR>
-#include&nbsp;&lt;<A href="../../boost/config.hpp">boost/config.hpp</A>&gt;<BR>
+<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;FIXES&nbsp;for&nbsp;broken&nbsp;compilers</FONT></I><BR>
+#include&nbsp;&lt;<A href="./config.hpp.html"><A href="http://www.boost.org/boost/config.hpp">boost/config.hpp</A></A>&gt;<BR>
 <BR>
 namespace&nbsp;boost&nbsp;{<BR>
 <BR>
@@ -67,8 +65,15 @@ namespace&nbsp;boost&nbsp;{<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const_iterator&nbsp;end()&nbsp;const&nbsp;{&nbsp;return&nbsp;elems+N;&nbsp;}<BR>
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;reverse&nbsp;iterator&nbsp;support</FONT></I><BR>
+#if&nbsp;!defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;std::reverse_iterator&lt;iterator&gt;&nbsp;reverse_iterator;<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;std::reverse_iterator&lt;const_iterator&gt;&nbsp;const_reverse_iterator;<BR>
+#else<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;workaround&nbsp;for&nbsp;broken&nbsp;reverse_iterator&nbsp;implementations&nbsp;due&nbsp;to&nbsp;no&nbsp;partial&nbsp;specialization</FONT></I><BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;std::reverse_iterator&lt;iterator,T&gt;&nbsp;reverse_iterator;<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typedef&nbsp;std::reverse_iterator&lt;const_iterator,T&gt;&nbsp;const_reverse_iterator;<BR>
+#endif<BR>
+<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reverse_iterator&nbsp;rbegin()&nbsp;{&nbsp;return&nbsp;reverse_iterator(end());&nbsp;}<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const_reverse_iterator&nbsp;rbegin()&nbsp;const&nbsp;{<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;const_reverse_iterator(end());<BR>
@@ -98,7 +103,6 @@ namespace&nbsp;boost&nbsp;{<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;size_type&nbsp;max_size()&nbsp;{&nbsp;return&nbsp;N;&nbsp;}<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enum&nbsp;{&nbsp;static_size&nbsp;=&nbsp;N&nbsp;};<BR>
 <BR>
-&nbsp;&nbsp;public:<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;swap&nbsp;(note:&nbsp;linear&nbsp;complexity)</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;swap&nbsp;(array&lt;T,N&gt;&&nbsp;y)&nbsp;{<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::swap_ranges(begin(),end(),y.begin());<BR>
@@ -120,7 +124,9 @@ namespace&nbsp;boost&nbsp;{<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;std::fill_n(begin(),size(),value);<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<BR>
 <BR>
+#ifndef&nbsp;BOOST_NO_PRIVATE_IN_AGGREGATE<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;private:<BR>
+#endif<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<I><FONT face="Arial,Helvetica,sans-serif" color="0000FF" >//&nbsp;check&nbsp;range&nbsp;(may&nbsp;be&nbsp;private&nbsp;because&nbsp;it&nbsp;is&nbsp;static)</FONT></I><BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static&nbsp;void&nbsp;rangecheck&nbsp;(size_type&nbsp;i)&nbsp;{<BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(i&nbsp;&gt;=&nbsp;size())&nbsp;{&nbsp;throw&nbsp;std::range_error("array");&nbsp;}<BR>

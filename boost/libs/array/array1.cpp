@@ -39,7 +39,7 @@ int main()
 	          << std::endl;
     }
     else {
-        std::cout << "copy construction and copy assignment are OK"
+        std::cout << "copy construction and copy assignment FAILED"
 	          << std::endl;
     }
 }
