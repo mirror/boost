@@ -130,7 +130,8 @@ struct name                                                             \
             >                                                           \
         , name##1<Seq1,Seq2OrOperation,OperationOrInserter>             \
         , name##2<Seq1,Seq2OrOperation,OperationOrInserter,Inserter>    \
-        >::type type;                                                   \
+      >::type t1;                                                       \
+      typedef typename t1::type type;                                   \
 };                                                                      \
 BOOST_MPL_AUX_NA_SPEC(4, name)                                          \
 /**/
