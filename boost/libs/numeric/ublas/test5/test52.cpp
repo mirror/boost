@@ -178,7 +178,9 @@ void test_matrix_vector () {
                           ublas::triangular_matrix<std::complex<float>, ublas::lower, ublas::row_major, ublas::unbounded_array<std::complex<float> > >, 3> () ();
     test_my_matrix_vector<ublas::vector<std::complex<float>, ublas::unbounded_array<std::complex<float> > >,
                           ublas::triangular_matrix<std::complex<float>, ublas::lower, ublas::row_major, ublas::unbounded_array<std::complex<float> > >, 3> () (0);
+#endif
 
+#ifdef USE_DOUBLE
     std::cout << "std::complex<double>, unbounded_array" << std::endl;
     test_my_matrix_vector<ublas::vector<std::complex<double>, ublas::unbounded_array<std::complex<double> > >,
                           ublas::triangular_matrix<std::complex<double>, ublas::lower, ublas::row_major, ublas::unbounded_array<std::complex<double> > >, 3> () ();
