@@ -116,6 +116,17 @@ main()
   ptime t2(date(2002,7,14));
   check("One year of hours: 365*24=8760",  365*24 == ((t2-t1).hours()));
 
+  std::cout << to_simple_string(time_duration(20000 * 24, 0, 0, 0)) << std::endl;
+  std::cout << to_simple_string(time_duration(24855 * 24, 0, 0, 0)) << std::endl;
+  std::cout << to_simple_string(time_duration(24856 * 24, 0, 0, 0)) << std::endl;
+  std::cout << to_simple_string(time_duration(25000 * 24, 0, 0, 0)) << std::endl;
+  time_duration tdl1(25000*24, 0, 0, 0);
+  check("600000 hours", tdl1.hours() == 600000);
+  time_duration tdl2(2000000, 0, 0, 0);
+  check("2000000 hours", tdl2.hours() == 2000000);
+  std::cout << to_simple_string(time_duration(2000000, 0, 0, 0)) << std::endl;
+
+  
   return printTestStats();
 
 }
