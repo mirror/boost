@@ -40,12 +40,12 @@ namespace boost
 
 // Debug hooks
 
-#if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
 
-void shared_ptr_scalar_constructor_hook(void * p);
-void shared_ptr_array_constructor_hook(void * p);
-void shared_ptr_scalar_destructor_hook(void * p);
-void shared_ptr_array_destructor_hook(void * p);
+void sp_scalar_constructor_hook(void * p);
+void sp_array_constructor_hook(void * p);
+void sp_scalar_destructor_hook(void * p);
+void sp_array_destructor_hook(void * p);
 
 #endif
 
@@ -183,16 +183,16 @@ private:
 #endif
 };
 
-#if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
 
 template<class T> void cbi_call_constructor_hook(T * p, checked_deleter<T> const &, int)
 {
-    boost::shared_ptr_scalar_constructor_hook(p);
+    boost::sp_scalar_constructor_hook(p);
 }
 
 template<class T> void cbi_call_constructor_hook(T * p, checked_array_deleter<T> const &, int)
 {
-    boost::shared_ptr_array_constructor_hook(p);
+    boost::sp_array_constructor_hook(p);
 }
 
 template<class P, class D> void cbi_call_constructor_hook(P const &, D const &, long)
@@ -201,12 +201,12 @@ template<class P, class D> void cbi_call_constructor_hook(P const &, D const &, 
 
 template<class T> void cbi_call_destructor_hook(T * p, checked_deleter<T> const &, int)
 {
-    boost::shared_ptr_scalar_destructor_hook(p);
+    boost::sp_scalar_destructor_hook(p);
 }
 
 template<class T> void cbi_call_destructor_hook(T * p, checked_array_deleter<T> const &, int)
 {
-    boost::shared_ptr_array_destructor_hook(p);
+    boost::sp_array_destructor_hook(p);
 }
 
 template<class P, class D> void cbi_call_destructor_hook(P const &, D const &, long)
@@ -240,14 +240,14 @@ public:
 
     counted_base_impl(P p, D d): ptr(p), del(d)
     {
-#if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
         detail::cbi_call_constructor_hook(p, d, 0);
 #endif
     }
 
     virtual void dispose() // nothrow
     {
-#if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
         detail::cbi_call_destructor_hook(ptr, del, 0);
 #endif
         del(ptr);
@@ -436,7 +436,7 @@ public:
 
     long use_count() const // nothrow
     {
-        return pi_ != 0? pi_->use_count(): 804; // '804' is an example of 'unspecified'
+        return pi_ != 0? pi_->use_count(): 0;
     }
 
     friend inline bool operator==(weak_count const & a, weak_count const & b)
@@ -452,7 +452,14 @@ public:
 
 inline shared_count::shared_count(weak_count const & r): pi_(r.pi_)
 {
-    if(pi_ != 0) pi_->add_ref();
+    if(pi_ != 0)
+    {
+        pi_->add_ref();
+    }
+    else
+    {
+        boost::throw_exception(boost::bad_weak_ptr());
+    }
 }
 
 } // namespace detail
