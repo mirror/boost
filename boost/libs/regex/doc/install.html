@@ -132,25 +132,24 @@
          Microsoft's Compiler:</P>
       <UL>
          <LI>
-            There have been some reports of compiler-optimization bugs affecting this 
-            library, (particularly with VC6 versions prior to service patch 5) the 
-            workaround is to build the library using /Oityb1 rather than /O2. That is to 
-            use all optimization settings except /Oa. This problem is reported to affect 
-            some standard library code as well (in fact I'm not sure if the problem is with 
-            the regex code or the underlying standard library), so it's probably worthwhile 
-            applying this workaround in normal practice in any case.</LI>
+         There have been some reports of compiler-optimization bugs affecting this 
+         library, (particularly with VC6 versions prior to service patch 5) the 
+         workaround is to build the library using /Oityb1 rather than /O2. That is to 
+         use all optimization settings except /Oa. This problem is reported to affect 
+         some standard library code as well (in fact I'm not sure if the problem is with 
+         the regex code or the underlying standard library), so it's probably worthwhile 
+         applying this workaround in normal practice in any case.
          <LI>
-            If you have replaced the C++ standard library that comes with VC6, then when 
-            you build the library you must ensure that the environment variables "INCLUDE" 
-            and "LIB" have been updated to reflect the include and library paths for the 
-            new library - see vcvars32.bat (part of your Visual Studio installation) for 
-            more details.
-         </LI>
+         If you have replaced the C++ standard library that comes with VC6, then when 
+         you build the library you must ensure that the environment variables "INCLUDE" 
+         and "LIB" have been updated to reflect the include and library paths for the 
+         new library - see vcvars32.bat (part of your Visual Studio installation) for 
+         more details.
          <LI>
-            If you are building with the full STLPort v4.x, then use the vc6-stlport.mak 
-            file provided and set the environment variable STLPORT_PATH to point to the 
-            location of your STLPort installation (Note that the full STLPort libraries 
-            appear not to support single-thread static builds).</LI>
+         If you are building with the full STLPort v4.x, then use the vc6-stlport.mak 
+         file provided and set the environment variable STLPORT_PATH to point to the 
+         location of your STLPort installation (Note that the full STLPort libraries 
+         appear not to support single-thread static builds).
          <LI>
             If you are building your application with /Zc:wchar_t then you will need to 
             modify the makefile to add /Zc:wchar_t before building the library.
@@ -158,22 +157,23 @@
       </UL>
       <P><B><A name="gcc"></A>GCC(2.95 and 3.x)</B>
       </P>
-      <P>You can build with gcc using the normal boost Jamfile in 
-         &lt;boost&gt;/libs/regex/build, alternatively there is a conservative makefile 
-         for the g++ compiler. From the command prompt change to the 
-         &lt;boost&gt;/libs/regex/build directory and type:
+      <P>The best way to&nbsp;build with gcc is using the <A href="../../../more/getting_started.html">
+            normal boost Jamfile in &lt;boost&gt;/libs/regex/build</A>, alternatively 
+         there is a conservative makefile for the g++ compiler. From the command prompt 
+         change to the &lt;boost&gt;/libs/regex/build directory and type:
       </P>
       <PRE>make -fgcc.mak </PRE>
       <P>At the end of the build process you should have a gcc sub-directory containing 
-         release and debug versions of the library (libboost_regex.a and 
-         libboost_regex_debug.a). When you build projects that use regex++, you will 
-         need to add the boost install directory to your list of include paths and add 
-         &lt;boost&gt;/libs/regex/build/gcc/libboost_regex.a to your list of library 
-         files.
+         release and debug versions of the library (libboost_regex-gcc-1_32.a and 
+         libboost_regex-gcc-d-1_32.a). When you build projects that use regex++, you 
+         will need to add the boost install directory to your list of include paths and 
+         add &lt;boost&gt;/libs/regex/build/gcc/libboost_regex-gcc-1_32.a to your list 
+         of library files.
       </P>
       <P>There is also a makefile to build the library as a shared library:</P>
       <PRE>make -fgcc-shared.mak</PRE>
-      <P>which will build libboost_regex.so and libboost_regex_debug.so.</P>
+      <P>which will build&nbsp;libboost_regex-gcc-1_32.so and 
+         libboost_regex-gcc-d-1_32.so.</P>
       <P>Both of the these makefiles support the following environment variables:</P>
       <P>CXXFLAGS: extra compiler options - note that this applies to both the debug and 
          release builds.</P>
@@ -181,8 +181,8 @@
       <P>LDFLAGS: additional linker options.</P>
       <P>LIBS: additional library files.</P>
       <P>For the more adventurous there is a configure script in 
-         &lt;boost&gt;/libs/config; see the <A href="../../config/config.htm">config library 
-            documentation</A>.</P>
+         &lt;boost&gt;/libs/config; see the <A href="../../config/config.htm">config 
+            library documentation</A>.</P>
       <P><B><A name="sun"></A>Sun Workshop 6.1</B></P>
       <P>There is a makefile for the sun (6.1) compiler (C++ version 3.12). From the 
          command prompt change to the &lt;boost&gt;/libs/regex/build directory and type:
@@ -212,8 +212,8 @@
       ) provided in &lt;boost-root&gt;/libs/regex/build - see that makefile for 
       details of environment variables that need to be set before use.
       <P>
-         Alternatively you can using the <A href="../../../tools/build/index.html">Jam based 
-            build system</A>: cd into &lt;boost&gt;/libs/regex/build and run:<PRE>bjam -sTOOLS=mytoolset</PRE>
+         Alternatively you can using the <A href="../../../more/getting_started.html">Jam 
+            based build system</A>: cd into &lt;boost&gt;/libs/regex/build and run:<PRE>bjam -sTOOLS=mytoolset</PRE>
       <P>
          If you need to configure the library for your platform, then refer to the <A href="../../config/config.htm">
             config library documentation</A>
@@ -226,8 +226,7 @@
          24 Oct 2003 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
