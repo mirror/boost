@@ -53,11 +53,11 @@ namespace gregorian {
       : date_time::date<date, gregorian_calendar, date_duration>(ymd)
     {}
     //! Needed copy constructor
-    date(const date_int_type& rhs):
+    explicit date(const date_int_type& rhs):
       date_time::date<date,gregorian_calendar, date_duration>(rhs)
     {}
     //! Needed copy constructor
-    date(date_rep_type rhs):
+    explicit date(date_rep_type rhs):
       date_time::date<date,gregorian_calendar, date_duration>(rhs)
     {}
     //! Constructor for infinities, not a date, max and min date
