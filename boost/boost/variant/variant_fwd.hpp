@@ -39,20 +39,6 @@
     BOOST_MPL_LIMIT_LIST_SIZE
 
 ///////////////////////////////////////////////////////////////////////////////
-// macro BOOST_VARIANT_NO_REFERENCE_SUPPORT
-//
-// Defined if variant does not support references as bounded types.
-//
-// Compiler-specific rationales:
-//  * MSVC7 and below: Bounded type transform problem (see variant.hpp)
-//  * Metrowerks: Ambiguous construction problem for embedded variants.
-//
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
- || 0 // BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
-#   define BOOST_VARIANT_NO_REFERENCE_SUPPORT
-#endif
-
-///////////////////////////////////////////////////////////////////////////////
 // macro BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT
 //
 // Defined if variant does not support variant<Types> syntax (see below). 
