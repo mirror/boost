@@ -26,9 +26,9 @@
     };
 
 
-If the ``Diference`` argument is ``use_default`` then the
+If the ``Difference`` argument is ``use_default`` then the
 ``difference_type`` member is an implementation defined signed
-integral type.
+integral type. Otherwise ``difference_type`` is ``Difference``.
 
 If ``CategoryOrTraversal`` is not ``use_default`` then the member
 ``iterator_category`` is ``CategoryOrTraversal``.  Otherwise, if
@@ -40,7 +40,7 @@ type then ``iterator_category`` is
 
 
 [*Note:* implementers are encouraged to provide an implementation of
-  ``distance_to`` and a ``difference_type`` that avoids overflows in
+  ``operator-`` and a ``difference_type`` that avoids overflows in
   the cases when the ``Incrementable`` type is a numeric type.]
 
 
@@ -94,19 +94,18 @@ operations.
 
 ``counting_iterator();``
 
-:Returns: A default constructed instance of ``counting_iterator``.
+:Effects: Default construct the member ``m_inc``.
 
 
 ``counting_iterator(counting_iterator const& rhs);``
 
-:Returns: An instance of ``counting_iterator`` that is a copy of ``rhs``.
+:Effects: Construct member ``m_inc`` from ``rhs.m_inc``.
 
 
 
 ``explicit counting_iterator(Incrementable x);``
 
-:Returns: An instance of ``counting_iterator`` with ``m_inc``
-    constructed from ``x``.
+:Effects: Construct member ``m_inc`` from ``x``.
 
 
 ``reference operator*() const;``
