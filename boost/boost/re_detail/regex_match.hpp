@@ -1118,7 +1118,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
             else
             {
                need_init = false;
-               for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart);
+               for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
+                   {} // dwa 10/20/2000 - warning suppression for MWCW
                if(restart != last)
                   ++restart;
                _skip_and_inc(clines, last_line, first, restart);
@@ -1134,7 +1135,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
       }
       else
       {
-         for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart);
+         for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
+             {} // dwa 10/20/2000 - warning suppression for MWCW
          if(restart != last)
             ++restart;
          _skip_and_inc(clines, last_line, first, restart);
@@ -1207,7 +1209,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                }
                else
                {
-                  for(int k = 0; (restart != first) && (k < j); ++k, --restart);
+                  for(int k = 0; (restart != first) && (k < j); ++k, --restart)
+                      {} // dwa 10/20/2000 - warning suppression for MWCW
                   if(restart != last)
                      ++restart;
                   _skip_and_inc(clines, last_line, first, restart);
@@ -1250,7 +1253,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                   else
                   {
                      need_init = false;
-                     for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart);
+                     for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
+                         {} // dwa 10/20/2000 - warning suppression for MWCW
                      if(restart != last)
                         ++restart;
                      _skip_and_inc(clines, last_line, first, restart);
@@ -1267,7 +1271,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
             }
             else
             {
-               for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart);
+               for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
+                   {} // dwa 10/20/2000 - warning suppression for MWCW
                if(restart != last)
                   ++restart;
                _skip_and_inc(clines, last_line, first, restart);
@@ -1337,7 +1342,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                   else
                   {
                      need_init = false;
-                     for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart);
+                     for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
+                         {} // dwa 10/20/2000 - warning suppression for MWCW
                      if(restart != last)
                         ++restart;
                      _skip_and_inc(clines, last_line, first, restart);
@@ -1353,7 +1359,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
             }
             else
             {
-               for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart);
+               for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
+                   {} // dwa 10/20/2000 - warning suppression for MWCW
                if(restart != last)
                   ++restart;
                _skip_and_inc(clines, last_line, first, restart);
@@ -1411,7 +1418,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
                   else
                   {
                      need_init = false;
-                     for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart);
+                     for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
+                         {} // dwa 10/20/2000 - warning suppression for MWCW
                      if(restart != last)
                         ++restart;
                      _skip_and_inc(clines, last_line, first, restart);
@@ -1427,7 +1435,8 @@ unsigned int reg_grep2(Predicate foo, I first, I last, const reg_expression<char
             }
             else
             {
-               for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart);
+               for(unsigned int i = 0; (restart != first) && (i < access::leading_length(e)); ++i, --restart)
+                   {} // dwa 10/20/2000 - warning suppression for MWCW
                if(restart != last)
                   ++restart;
                _skip_and_inc(clines, last_line, first, restart);

@@ -28,17 +28,20 @@
 #include <map>
 #include <boost/cregex.hpp>
 #include "primary_transform.hpp"
+#include <locale> // dwa 10/20/2000 - needed for definition of std::messages
+#include <wchar.h> // dwa 10/20/2000 - needed for wcscpy
+
 
 #ifndef BOOST_RE_NO_LOCALE_H
 
-#ifdef BOOST_MSVC
-#pragma warning(disable:4786)
+# ifdef BOOST_MSVC
+#  pragma warning(disable:4786)
 namespace std
 { 
    using ::abs; 
    using ::mbstate_t;
 }
-#endif
+#  endif
 
 namespace{
    const unsigned int re_classes_max = 14;

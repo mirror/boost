@@ -29,6 +29,7 @@
 #include <boost/regex_traits.hpp>
 #include <boost/re_detail/regex_synch.hpp>
 #include <boost/re_detail/regex_cstring.hpp>
+#include <wchar.h> // dwa 10/20/2000 - needed for definition of wcslen()
 
 #include "primary_transform.hpp"
 
