@@ -114,7 +114,7 @@ private:
     have_int = std::numeric_limits<typename decorated_engine::result_type>::is_integer,
     want_int = std::numeric_limits<typename Distribution::input_type>::is_integer
   };
-  typedef typename random::detail::engine_helper<have_int, want_int>::impl<decorated_engine, typename Distribution::input_type>::type internal_engine_type;
+  typedef typename random::detail::engine_helper<have_int, want_int>::BOOST_NESTED_TEMPLATE impl<decorated_engine, typename Distribution::input_type>::type internal_engine_type;
 
   internal_engine_type _eng;
   distribution_type _dist;
