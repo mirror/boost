@@ -1,3 +1,6 @@
+#ifndef DATE_TIME_PARSE_FORMAT_BASE__
+#define DATE_TIME_PARSE_FORMAT_BASE__
+
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
