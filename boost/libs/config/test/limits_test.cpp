@@ -64,7 +64,7 @@ void test_integral_limits(const T &, const char * msg)
 {
   typedef std::numeric_limits<T> lim;
   std::cout << "Testing " << msg
-            << " (size " << sizeof(T) << ")" 
+            << " (size " << sizeof(T) << ")"
             << " min: " << make_char_numeric_for_streaming(lim::min())
             << ", max: " << make_char_numeric_for_streaming(lim::max())
             << std::endl;
@@ -98,7 +98,7 @@ void test_float_limits(const T &, const char * msg)
   BOOST_TEST(!lim::is_modulo);
   BOOST_TEST(!lim::is_integer);
   BOOST_TEST(lim::is_signed);
-  
+
   const T infinity = lim::infinity();
   const T qnan = lim::quiet_NaN();
   const T snan = lim::signaling_NaN();
@@ -135,8 +135,8 @@ void test_float_limits(const T &, const char * msg)
   } else {
     std::cout << "Does not have infinity" << std::endl;
   }
- 
-  if(lim::has_quiet_NaN) { 
+
+  if(lim::has_quiet_NaN) {
     // NaNs shall always compare "false" when compared for equality
     // If one of these fail, your compiler may be optimizing incorrectly,
     // or the standard library is incorrectly configured.
@@ -144,7 +144,7 @@ void test_float_limits(const T &, const char * msg)
     BOOST_TEST(! (qnan == qnan));
     BOOST_TEST(qnan != 42);
     BOOST_TEST(qnan != qnan);
-  
+
     // The following tests may cause arithmetic traps.
     // BOOST_TEST(! (qnan < 42));
     // BOOST_TEST(! (qnan > 42));
@@ -181,10 +181,10 @@ int test_main(int, char*[])
   test_integral_limits(unsigned_long_long(), "unsigned long long");
 #endif
 #ifdef BOOST_HAS_MS_INT64
-  typedef __int64 long_long;
-  test_integral_limits(long_long(), "__int64");
-  typedef unsigned __int64 unsigned_long_long;
-  test_integral_limits(unsigned_long_long(), "unsigned __int64");
+  typedef __int64 long_long2;
+  test_integral_limits(long_long2(), "__int64");
+  typedef unsigned __int64 unsigned_long_long2;
+  test_integral_limits(unsigned_long_long2(), "unsigned __int64");
 #endif
 
   test_float_limits(float(), "float");
@@ -195,4 +195,5 @@ int test_main(int, char*[])
   // warning here if "return 0;" is omitted.
   return 0;
 }
+
 
