@@ -17,8 +17,12 @@
 
 // ***
 
-#define C(D,X) BOOST_PP_LESS_EQUAL(X,4)
+#ifndef FOR_TEST_MAX
+#define FOR_TEST_MAX 50
+#endif
+
+#define C(D,X) BOOST_PP_LESS_EQUAL(X,FOR_TEST_MAX)
 #define F(D,X) BOOST_PP_INC(X)
 #define I(D,X) -X
 
-TEST(11 BOOST_PP_FOR(0,C,F,I))
+TEST((FOR_TEST_MAX*(FOR_TEST_MAX+1)/2)+1 BOOST_PP_FOR(0,C,F,I))
