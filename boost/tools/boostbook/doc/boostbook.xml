@@ -234,7 +234,7 @@ Cannot find function named 'next'</programlisting>
       </itemizedlist>
       </para>
 
-      <para>In the directory <code>tools/build/new</code> is a file
+      <para>In the directory <code>tools/build/v2</code> is a file
       named <filename>user-config.jam</filename>. Copy it to your home
       directory (or edit it in-place), and add a directive telling
       Boost.Build where to find the DocBook DTD and XSL stylesheets,
