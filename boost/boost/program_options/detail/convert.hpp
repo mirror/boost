@@ -13,7 +13,7 @@
 #include <stdexcept>
 
 #if BOOST_WORKAROUND(__ICL, <= 700)
-#include <wchar.t>
+#include <wchar.h>
 namespace std
 {
     using ::mbstate_t;
