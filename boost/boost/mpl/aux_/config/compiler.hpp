@@ -21,21 +21,19 @@
 #include "boost/config.hpp"
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1300
-#   define BOOST_MPL_COMPILER_CLASS msvc60
+#   define BOOST_MPL_COMPILER_DIR msvc60
 #elif defined(BOOST_MSVC) && BOOST_MSVC == 1300
-#   define BOOST_MPL_COMPILER_CLASS msvc70
+#   define BOOST_MPL_COMPILER_DIR msvc70
 #elif defined(__GNUC__)
-#   define BOOST_MPL_COMPILER_CLASS gcc
+#   define BOOST_MPL_COMPILER_DIR gcc
 #elif defined(__BORLANDC__)
-#   define BOOST_MPL_COMPILER_CLASS bcc
+#   define BOOST_MPL_COMPILER_DIR bcc
 #elif defined(__MWERKS__) && __MWERKS__ <= 0x3001
-#   define BOOST_MPL_COMPILER_CLASS mwcw
+#   define BOOST_MPL_COMPILER_DIR mwcw
 #elif defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-#   define BOOST_MPL_COMPILER_CLASS no_ctps
+#   define BOOST_MPL_COMPILER_DIR no_ctps
 #else
-#   define BOOST_MPL_COMPILER_CLASS plain
+#   define BOOST_MPL_COMPILER_DIR plain
 #endif
-
-#define BOOST_MPL_COMPILER_DIR BOOST_MPL_COMPILER_CLASS/
 
 #endif // BOOST_MPL_AUX_CONFIG_COMPILER_HPP_INCLUDED
