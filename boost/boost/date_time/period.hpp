@@ -337,8 +337,8 @@ namespace date_time {
   period<point_rep,duration_rep>::span(const period<point_rep,duration_rep>& other) const 
   {
     point_rep start((begin_ < other.begin_) ? begin() : other.begin());
-    point_rep end((last_  < other.last_)  ? other.end() : end());
-    return period<point_rep,duration_rep>(start, end);
+    point_rep newend((last_  < other.last_)  ? other.end() : this->end());
+    return period<point_rep,duration_rep>(start, newend);
   }
 
 
