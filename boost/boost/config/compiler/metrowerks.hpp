@@ -25,6 +25,7 @@
 
 #   if(__MWERKS__ <= 0x2407)  // 7.x
 #     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
+#     define BOOST_NO_UNREACHABLE_RETURN_DETECTION
 #   endif
 
 #   if(__MWERKS__ <= 0x3003)  // 8.x
