@@ -17,7 +17,7 @@ struct int_div {
 int
 main()
 {
-  boost::function<float, int, int> f;
+  boost::function<float (int, int)> f;
   f = int_div();
 
   std::cout << f(5, 3) << std::endl; // 1.66667

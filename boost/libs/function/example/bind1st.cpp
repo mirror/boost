@@ -23,7 +23,7 @@ struct X {
 int
 main()
 {
-  boost::function<int, int> f;
+  boost::function<int (int)> f;
   X x(7);
   f = std::bind1st(std::mem_fun(&X::foo), &x);
 

@@ -23,7 +23,7 @@ main()
 {
   // The second parameter should be int[], but some compilers (e.g., GCC)
   // complain about this
-  boost::function<void, int*, int, int&, float&> sum_avg;
+  boost::function<void (int*, int, int&, float&)> sum_avg;
 
   sum_avg = &do_sum_avg;
 
