@@ -104,10 +104,8 @@ struct iterator_facade_default_category
             mpl::and_<
                 is_convertible<Traversal, single_pass_traversal_tag>
                 
-              , mpl::or_< // check for readability
-                    is_same<ValueParam,use_default>
-                  , is_convertible<Reference, ValueParam>
-                >
+                // check for readability
+              , is_convertible<Reference, ValueParam>
             >
           , mpl::if_<
                 iterator_writability_disabled<ValueParam,Reference>
