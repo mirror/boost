@@ -14,6 +14,7 @@
 #define WAVE_CONFIG_HPP_F143F90A_A63F_4B27_AC41_9CA4F14F538D_INCLUDED
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/version.hpp>
 #include <boost/spirit/version.hpp>
 #include <boost/wave/wave_version.hpp>
@@ -131,6 +132,11 @@
 //
 #if !defined(BOOST_WAVE_STRINGTYPE)
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+// VC7 isn't able to compile the flex_string class, fallback to std::string 
+#define BOOST_WAVE_STRINGTYPE std::string
+
+#else
 // use the following, if you have a fast std::allocator<char>
 #define BOOST_WAVE_STRINGTYPE boost::wave::util::flex_string< \
         char, std::char_traits<char>, std::allocator<char>, \
@@ -169,6 +175,7 @@
 //#include <boost/const_string/io.hpp>
 //#include <boost/const_string/concatenation.hpp>
 
+#endif // BOOST_WORKAROUND(_MSC_VER, <= 1300)
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////

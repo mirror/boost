@@ -59,7 +59,9 @@ CHANGELOG
   the current BOOST_LIB_VERSION.
 - Diagnosed the attempt to redefine the alternative operators as and, or etc.
 - Improved error handling.
-
+- Disabled the flex_string class for VC7, enabled to fallback to std::string 
+  for this compiler.
+  
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
 - Fixed a bug where the complete set of C99 predefined macros were pre-defined
