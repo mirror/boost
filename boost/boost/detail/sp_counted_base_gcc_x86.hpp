@@ -32,13 +32,13 @@ namespace boost
 namespace detail
 {
 
-inline long atomic_exchange_and_add( long * pw, long dv )
+inline int atomic_exchange_and_add( int * pw, int dv )
 {
-    // long r = *pw;
+    // int r = *pw;
     // *pw += dv;
     // return r;
 
-    long r;
+    int r;
 
     __asm__ __volatile__
     (
@@ -52,7 +52,7 @@ inline long atomic_exchange_and_add( long * pw, long dv )
     return r;
 }
 
-inline void atomic_increment( long * pw )
+inline void atomic_increment( int * pw )
 {
     //atomic_exchange_and_add( pw, 1 );
 
@@ -66,13 +66,13 @@ inline void atomic_increment( long * pw )
     );
 }
 
-inline long atomic_conditional_increment( long * pw )
+inline int atomic_conditional_increment( int * pw )
 {
-    // long r = *pw;
+    // int r = *pw;
     // if( r != 0 ) ++*pw;
     // return r;
 
-    long r;
+    int r;
 
     __asm__
     (
@@ -80,7 +80,8 @@ inline long atomic_conditional_increment( long * pw )
         "0:\n\t"
         "test %%eax, %%eax\n\t"
         "je 1f\n\t"
-        "leal 1(%%eax), %%ebx\n\t"
+        "movl %%eax, %%ebx\n\t"
+        "incl %%ebx\n\t"
         "lock\n\t"
         "cmpxchgl %%ebx, %0\n\t"
         "jne 0b\n\t"
@@ -100,8 +101,8 @@ private:
     sp_counted_base( sp_counted_base const & );
     sp_counted_base & operator= ( sp_counted_base const & );
 
-    long use_count_;        // #shared
-    long weak_count_;       // #weak + (#shared != 0)
+    int use_count_;        // #shared
+    int weak_count_;       // #weak + (#shared != 0)
 
 public:
 
