@@ -33,8 +33,8 @@ int main(int, char*[])
 
   char mutable_characters[N];
   char* pointers_to_mutable_chars[N];
-  for (int i = 0; i < N; ++i)
-    pointers_to_mutable_chars[i] = &mutable_characters[i];
+  for (int j = 0; j < N; ++j)
+    pointers_to_mutable_chars[j] = &mutable_characters[j];
 
   PairGen::iterator mutable_indirect_first(pointers_to_mutable_chars),
     mutable_indirect_last(pointers_to_mutable_chars + N);
@@ -51,10 +51,12 @@ int main(int, char*[])
   
   // Example of using make_indirect_iterator()
 
+#ifndef BOOST_MSVC
   std::copy(boost::make_indirect_iterator(pointers_to_chars), 
 	    boost::make_indirect_iterator(pointers_to_chars + N),
 	    std::ostream_iterator<char>(std::cout, ","));
   std::cout << std::endl;
+#endif
   
   return 0;
 }
