@@ -42,7 +42,7 @@ void float_tests(T* = 0)
         BOOST_CHECK_EQUAL(x1(infinity), x1(infinity4));
 
         BOOST_CHECK_EQUAL(minus_infinity, minus_infinity2);
-        BOOST_CHECK_EQUAL(x1(minus_infinity), x1(infinity2));
+        BOOST_CHECK_EQUAL(x1(minus_infinity), x1(minus_infinity2));
         BOOST_CHECK_EQUAL(minus_infinity, minus_infinity3);
         BOOST_CHECK_EQUAL(x1(minus_infinity), x1(minus_infinity3));
 
