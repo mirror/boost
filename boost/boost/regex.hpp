@@ -49,7 +49,7 @@
 #include <boost/re_detail/regex_kmp.hpp>
 #include <boost/pattern_except.hpp>
 #include <boost/regex_traits.hpp>
-#include <boost/type_traits.hpp>
+#include <boost/type_traits/transform_traits.hpp>
 
 
 namespace boost{
@@ -427,6 +427,16 @@ struct def_alloc_param_traits
 {
    typedef typename regex_iterator_traits<I>::value_type const_value_type;
    typedef typename remove_cv<const_value_type>::type type;
+};
+template <>
+struct def_alloc_param_traits<const char*>
+{
+   typedef char type;
+};
+template <>
+struct def_alloc_param_traits<const wchar_t*>
+{
+   typedef wchar_t type;
 };
 
 }
