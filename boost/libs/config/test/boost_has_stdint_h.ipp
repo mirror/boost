@@ -13,7 +13,7 @@
 //                 presence; thus the default is not present, conforming
 //                 to the current C++ standard).
 
-#include <stdint.h>
+#include <boost/cstdint.h>
 
 namespace boost_has_stdint_h{
 
