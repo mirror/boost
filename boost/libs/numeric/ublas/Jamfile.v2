@@ -65,6 +65,6 @@ test-suite uBLAS
 
 	    <define>BOOST_UBLAS_USE_INTERVAL
       ]
-      [ run concepts.cpp
+      [ compile concepts.cpp
       ]
     ;
