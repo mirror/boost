@@ -35,8 +35,8 @@ namespace gregorian {
     {
       return date(not_a_date_time);
     }
-    std::string s = date_time::from_stream_type(beg, end,
-	typename std::iterator_traits<iterator_type>::value_type());
+    typedef typename std::iterator_traits<iterator_type>::value_type value_type;
+    std::string s = date_time::from_stream_type(beg, end, value_type());
     return date_time::parse_date<date>(s);
   }
 #endif //BOOST_NO_STD_ITERATOR_TRAITS
