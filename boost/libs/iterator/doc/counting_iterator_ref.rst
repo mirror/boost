@@ -45,9 +45,10 @@ algorithm:
             iterator_traversal<Incrementable>::type, 
             Incrementable, const Incrementable&)
         
-[*Note:* implementers are encouraged to provide an implementation
-of ``operator-`` and a default ``difference_type`` that avoid
-overflows when ``Incrementable`` is a numeric type.]
+[*Note:* implementers are encouraged to provide an implementation of
+  ``operator-`` and a ``difference_type`` that avoids overflows in
+  the cases where ``std::numeric_limits<Incrementable>::is_specialized``
+  is true.]
 
 ``counting_iterator`` requirements
 ..................................
