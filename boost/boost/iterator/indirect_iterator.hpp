@@ -18,7 +18,7 @@
 #include <boost/mpl/not.hpp>
 #include <boost/mpl/aux_/has_xxx.hpp>
 
-#ifdef BOOST_NO_MPL_AUX_HAS_XXX
+#ifdef BOOST_MPL_NO_AUX_HAS_XXX
 # include <boost/shared_ptr.hpp>
 # include <boost/scoped_ptr.hpp>
 # include <boost/mpl/bool.hpp>
@@ -44,7 +44,7 @@ namespace boost
     // can be used instead with something like
     // boost/python/pointee.hpp to find the value_type.
     //
-# ifndef BOOST_NO_MPL_AUX_HAS_XXX
+# ifndef BOOST_MPL_NO_AUX_HAS_XXX
     namespace aux
     {
       BOOST_MPL_HAS_XXX_TRAIT_DEF(element_type)

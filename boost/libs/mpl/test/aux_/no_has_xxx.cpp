@@ -32,7 +32,7 @@ struct a9 { typedef void (xxx_type)(); };
 
 //
 // This file tests that we have the right value for
-// BOOST_NO_MPL_AUX_HAS_XXX, and that has_xxx doesn't just fail to
+// BOOST_MPL_NO_AUX_HAS_XXX, and that has_xxx doesn't just fail to
 // compile arbitrarily.  Could be used as part of the config tests.
 //
 
@@ -40,7 +40,7 @@ struct a9 { typedef void (xxx_type)(); };
 #undef TRUE
 #define FALSE false
 
-#ifdef BOOST_NO_MPL_AUX_HAS_XXX
+#ifdef BOOST_MPL_NO_AUX_HAS_XXX
 # define TRUE FALSE
 #else
 # define TRUE true

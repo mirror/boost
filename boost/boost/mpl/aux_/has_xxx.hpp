@@ -154,7 +154,7 @@ template<> struct trait<T>                                  \
 #else 
 
 // agurt, 11/jan/03: signals a stub-only implementation
-#   define BOOST_NO_MPL_AUX_HAS_XXX
+#   define BOOST_MPL_NO_AUX_HAS_XXX
 
 #   define BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(trait, name, default_value)    \
 template< typename T >                                                      \

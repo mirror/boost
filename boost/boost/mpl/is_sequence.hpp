@@ -69,7 +69,7 @@ struct is_sequence
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_sequence,(T))
 };
 
-#elif defined(BOOST_NO_MPL_AUX_HAS_XXX)
+#elif defined(BOOST_MPL_NO_AUX_HAS_XXX)
 
 template<
       typename BOOST_MPL_AUX_VOID_SPEC_PARAM(T)
