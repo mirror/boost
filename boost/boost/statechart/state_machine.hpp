@@ -388,9 +388,14 @@ class state_machine : noncopyable
 
   protected:
     //////////////////////////////////////////////////////////////////////////
+    state_machine() : pOutermostState_( 0 ) {}
+
     // This destructor was only made virtual so that that
     // polymorphic_downcast can be used to cast to MostDerived.
-    virtual ~state_machine() {}
+    virtual ~state_machine()
+    {
+      terminate();
+    }
 
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -455,8 +460,12 @@ class state_machine : noncopyable
     void terminate( state_machine & )
     {
       pUnstableState_ = 0;
-      currentStates_.clear(); // this also empties the deferredMap_
-      // there is no longer any use for possibly remaining events
+
+      if ( pOutermostState_ != 0 )
+      {
+        terminate( *pOutermostState_ ); // this also empties deferredMap_
+      }
+
       eventQueue_.clear();
       shallowHistoryMap_.clear();
       deepHistoryMap_.clear();
@@ -500,16 +509,19 @@ class state_machine : noncopyable
 
 
     void add_inner_state(
-      detail::orthogonal_position_type position, state_base_type * )
+      detail::orthogonal_position_type position,
+      state_base_type * pOutermostState )
     {
       BOOST_ASSERT( position == 0 );
       detail::avoid_unused_warning( position );
+      pOutermostState_ = pOutermostState;
     }
 
     void remove_inner_state( detail::orthogonal_position_type position )
     {
       BOOST_ASSERT( position == 0 );
       detail::avoid_unused_warning( position );
+      pOutermostState_ = 0;
     }
 
     void release_events( const state_base_type * pForState )
@@ -929,6 +941,7 @@ class state_machine : noncopyable
     event_queue_type eventQueue_;
     deferred_map_type deferredMap_;
     state_list_type currentStates_;
+    state_base_type * pOutermostState_;
     state_base_ptr_type pUnstableState_;
     history_map_type shallowHistoryMap_;
     history_map_type deepHistoryMap_;
