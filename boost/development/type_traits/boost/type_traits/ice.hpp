@@ -51,15 +51,15 @@ struct ice_or<false, false, false, false, false, false, false>
    BOOST_DECL_MC(bool, value, false);
 };
 
-template <bool b1, bool b2, bool b3 = true, bool b4 = true, bool b5 = true>
+template <bool b1, bool b2, bool b3 = true, bool b4 = true, bool b5 = true, bool b6 = true, bool b7 = true>
 struct ice_and;
-template <bool b1, bool b2, bool b3, bool b4, bool b5>
+template <bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7>
 struct ice_and
 {
    BOOST_DECL_MC(bool, value, false);
 };
 template <>
-struct ice_and<true, true, true, true, true>
+struct ice_and<true, true, true, true, true, true, true>
 {
    BOOST_DECL_MC(bool, value, true);
 };

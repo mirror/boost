@@ -52,11 +52,27 @@ struct alignment_of
 // that a reference is just a special pointer:
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <class T>
-class alignment_of<T&>
+struct alignment_of<T&>
 {
 public:
    BOOST_DECL_MC(std::size_t, value, alignment_of<T*>::value);
 };
+#endif
+//
+// void has to be treated specially:
+template <>
+struct alignment_of<void>
+{ BOOST_DECL_MC(std::size_t, value, 0); };
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+template <>
+struct alignment_of<const void>
+{ BOOST_DECL_MC(std::size_t, value, 0); };
+template <>
+struct alignment_of<volatile void>
+{ BOOST_DECL_MC(std::size_t, value, 0); };
+template <>
+struct alignment_of<const volatile void>
+{ BOOST_DECL_MC(std::size_t, value, 0); };
 #endif
 
 } // namespace boost

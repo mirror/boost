@@ -109,6 +109,7 @@ template <typename T> struct is_POD
    BOOST_DECL_MC(bool, value,
       (::boost::type_traits::ice_or<
          ::boost::is_scalar<T>::value,
+         ::boost::is_void<T>::value,
          BOOST_IS_POD(T)
       >::value));
 };
@@ -282,17 +283,21 @@ template <typename T>
 struct is_empty
 { 
 private:
-   typedef detail::empty_helper_chooser<
-      !is_convertible<T,int>::value
-      & !is_convertible<T,double>::value
-      & !is_pointer<T>::value
-      & !is_member_pointer<T>::value
-      & !is_array<T>::value
-      & !is_convertible<T, const volatile void*>::value> chooser;
+   typedef ::boost::detail::empty_helper_chooser<
+      ::boost::type_traits::ice_and<
+         !::boost::is_convertible<T,int>::value,
+         !::boost::is_convertible<T,double>::value,
+         !::boost::is_pointer<T>::value,
+         !::boost::is_member_pointer<T>::value,
+         !::boost::is_array<T>::value,
+         !::boost::is_void<T>::value,
+         !::boost::is_convertible<T, const volatile void*>::value
+      >::value> chooser;
    typedef typename chooser::template rebind<T> bound_type;
    typedef typename bound_type::type eh_type;
 public:
-   enum{ value = eh_type::value | BOOST_IS_EMPTY(T) }; 
+   BOOST_DECL_MC(bool, value, 
+      (::boost::type_traits::ice_or<eh_type::value, BOOST_IS_EMPTY(T)>::value)); 
 };
 
 #else

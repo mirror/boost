@@ -43,6 +43,7 @@ int main(int argc, char* argv[])
    value_test(true, boost::is_array<UDT[2]>::value)
    value_test(false, boost::is_array<int(&)[2]>::value)
    value_test(false, boost::is_array<f1>::value)
+   value_test(false, boost::is_array<void>::value)
 
    value_test(false, boost::is_pointer<int>::value)
    value_test(false, boost::is_pointer<int&>::value)
@@ -60,6 +61,7 @@ int main(int argc, char* argv[])
    value_test(false, boost::is_pointer<int(&)[2]>::value)
    value_test(false, boost::is_pointer<int[2]>::value)
    value_test(false, boost::is_pointer<char[sizeof(void*)]>::value)
+   value_test(false, boost::is_pointer<void>::value)
 
    value_test(true, boost::is_pointer<f1>::value)
    value_test(true, boost::is_pointer<f2>::value)
@@ -78,6 +80,7 @@ int main(int argc, char* argv[])
    value_test(true, boost::is_reference<r_type>::value)
    value_test(true, boost::is_reference<cr_type>::value)
    value_test(true, boost::is_reference<const UDT&>::value)
+   value_test(false, boost::is_reference<void>::value)
 
    value_test(false, boost::is_member_pointer<f1>::value)
    value_test(false, boost::is_member_pointer<f2>::value)
@@ -87,11 +90,13 @@ int main(int argc, char* argv[])
    value_test(true, boost::is_member_pointer<mf2>::value)
    value_test(true, boost::is_member_pointer<mf3>::value)
    value_test(true, boost::is_member_pointer<mf4>::value)
+   value_test(false, boost::is_member_pointer<void>::value)
 
    value_test(false, boost::is_enum<int>::value)
    value_test(true, boost::is_enum<enum_UDT>::value)
    value_test(false, boost::is_enum<int_convertible>::value)
    value_test(false, boost::is_enum<int&>::value)
+   value_test(false, boost::is_enum<void>::value)
 
    return check_result(argc, argv);
 }
