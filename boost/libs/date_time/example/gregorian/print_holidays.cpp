@@ -13,6 +13,7 @@ Number Holidays: 7
 
 
 #include "boost/date_time/gregorian/gregorian.hpp"
+#include "boost/date_time/compiler_config.hpp"
 #include <algorithm>
 #include <functional>
 #include <vector>
@@ -56,7 +57,8 @@ main() {
   typedef std::set<date> date_set;
   date_set all_holidays;
   
-#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+//#if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
+#ifdef BOOST_DATE_TIME_NO_STD_TRANSFORM
   std::cout << "Sorry, this example temporarily disabled on VC 6.\n"
             << "The std::transform isn't accepted by the compiler\n"
             << "So if you hack up the example without std::transform\n"
