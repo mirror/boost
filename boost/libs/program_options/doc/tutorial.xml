@@ -9,7 +9,7 @@
 <section id="program_options.tutorial">
   <title>Tutorial</title>
   
-  <para>In this section, we'll take a look at the most common usage scenarious
+  <para>In this section, we'll take a look at the most common usage scenarios
   of the program_options library, starting with the simplest one. The examples
   show only the interesting code parts, but the complete programs can be found
   in the "example" directory. Through all the examples, we'll assume that the
@@ -118,9 +118,9 @@ desc.add_options()
     It's a good idea to have this option in all cases.</para>
 
   <para>The "optimization" option shows
-    two new features. First, we specify an address of variable. After 
+    two new features. First, we specify the address of variable. After 
     storing values, that variable will have the value of the option. Second,
-    we specify default value of 10, which will be used if not value is
+    we specify a default value of 10, which will be used if no value is
     specified by the user. 
   </para>
 
@@ -161,7 +161,7 @@ po::notify(vm);
   </para>
 
   <para>
-    The first two lines says that all positional options should be translated
+    The first two lines say that all positional options should be translated
     into "input-file" option. Also note that we use the
     &command_line_parser; class to parse the command
     line, not the &parse_command_line;
@@ -238,9 +238,9 @@ Optimization level is 4
       details. First, we declare several instances of the
       <code>options_description</code> class. The reason is that, in general,
       not all options are alike. Some options, like "input-file" above, should
-      not be presented in automatic help message. Some options make sense only
-      in config file. Finally, it nice to have some structure in help message,
-      not jump plain long list of options. Let's declare several option groups:
+      not be presented in an automatic help message. Some options make sense only
+      in the config file. Finally, it's nice to have some structure in the help message,
+      not jump a long list of options. Let's declare several option groups:
       <programlisting>
 // Declare a group of options that will be 
 // allowed only on command line
@@ -262,8 +262,8 @@ config.add_options()
          &quot;include path&quot;)
     ;
 
-// Hidden options, will be alled both on command line and
-// in config file, but will not be show to the user.
+// Hidden options will be allowed both on the command line and
+// in the config file, but will not be show to the user.
 po::options_description hidden(&quot;Hidden options&quot;);
 hidden.add_options()
     (&quot;input-file&quot;, po::value&lt; vector&lt;string&gt; &gt;(), &quot;input file&quot;)

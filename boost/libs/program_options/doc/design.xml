@@ -17,7 +17,7 @@
 
     <para>Unicode support was one of the features specifically requested
       during the formal review. For the remainder of this document we'll use
-      "Unicode support" as synonim for "wchar_t" support, that is assuming
+      "Unicode support" as a synonim for "wchar_t" support, that is assuming
       that "wchar_t" always use Unicode encoding. Also, when talking about
       "ascii" we'll not mean strict 7-bit ASCII encoding, but rather "char"
       strings in local 8-bit encoding.
@@ -36,7 +36,7 @@
         </listitem>
         <listitem>
           <para>For each option, it should be possible to specify if
-          convertion from string to value should use ascii or unicode.
+          conversion from string to value should use ascii or unicode.
           </para>
         </listitem>
         <listitem>
@@ -65,13 +65,13 @@
     <para>The important point is that it's possible to have some "ascii
       options" together with "unicode options". There are two reasons for
       this. First, for a given type you might not have a code to extract the
-      value from unicode string and it's not good to require to write such code.
+      value from unicode string and it's not good to require that such code be written.
       Second, imagine a reusable library which has some options and exposes
       options description in its interface. If <emphasis>all</emphasis>
       options are either ascii or unicode, and the library does not use any
       unicode strings, then the author will likely to use ascii options, which
       would make the library unusable inside unicode
-      applications. Essentially, it would be necessary to provide two version
+      applications. Essentially, it would be necessary to provide two versions
       of the library -- ascii and unicode.
     </para>
 
@@ -99,11 +99,11 @@
     </para>
 
     <para>The choice, mostly, is between code size and execution
-      speed. Templated solution would either link library code into every
+      speed. A templated solution would either link library code into every
       application that uses the library (thereby making shared library
       impossible), or provide explicit instantiations in the shared library
       (increasing its size). The solution based on internal encoding would
-      necessary make conversions in a number of places and will be somewhat slower.
+      necessarily make conversions in a number of places and will be somewhat slower.
       Since speed is generally not an issue for this library, the second
       solution looks more attractive, but we'll take a closer look at
       individual components.
@@ -124,7 +124,7 @@
           <para>Use and partly expose the internal encoding: same as above,
             but the strings in the &parsed_options; instance will be in the
             internal encoding. This might avoid a conversion if
-            &parsed_options; instance is passed directly to other component,
+            &parsed_options; instance is passed directly to other components,
             but can be also dangerous/confusing for a user.
           </para>
         </listitem>
@@ -140,8 +140,8 @@
     <para>For the options descriptions component, we don't have much
       choice. Since it's not desirable to have either all options use ascii or all
       of them use unicode, but rather have some ascii and some unicode options, the
-      interface of the &value_semantic; should works with both. The only way is
-      to pass additional flag telling if strings use ascii or internal encoding.
+      interface of the &value_semantic; should work with both. The only way is
+      to pass an additional flag telling if strings use ascii or internal encoding.
       The instance of &value_semantic; can then convert into some
       other encoding if needed.
     </para>
@@ -165,9 +165,9 @@
         </listitem>
         <listitem>
           <para>Code size: UTF-8 requires additional conversion code. However,
-            it allows to use existing parsers without converting them to
+            it allows one to use existing parsers without converting them to
             <code>std::wstring</code> and such conversion is likely to create a
-            number of new instantinations.
+            number of new instantiations.
           </para>
         </listitem>
           
@@ -176,22 +176,22 @@
       will be used.      
     </para>
 
-    <para>The reason why UTF-8 allows to use existing parsers is that
+    <para>The reason why UTF-8 allows the use existing parsers is that
       searching for 7-bit ascii characters is really simple. However, there are
       two subtle issues:
       <itemizedlist>
         <listitem>
           <para>We need to assume the character literals use ascii encoding
-          and that input use Unicode encoding.</para>
+          and that inputs use Unicode encoding.</para>
         </listitem>
         <listitem>
           <para>Unicode character (say '=') can be followed by 'composing
-          character' and the combination is not the same as just '=', so
+          character' and the combination is not the same as just '=', so a
           simple search for '=' might find the wrong character.
           </para>
         </listitem>
       </itemizedlist>
-      Neither of issues appear to be critical in practice, since ascii is
+      Neither of these issues appear to be critical in practice, since ascii is
       almost universal encoding and since composing characters on '=' (and
       other characters with special meaning to the library) are not likely.
     </para>

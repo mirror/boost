@@ -54,15 +54,15 @@
           </para>
         </listitem>
         <listitem>
-          <para>Error reporting is better. All problems with command line are
+          <para>Error reporting is better. All problems with the command line are
             reported, while hand-written code can just misparse the input. In
             addition, the usage message can be automatically generated, to
             avoid falling out of sync with the real list of options.</para>
         </listitem>
         <listitem>
-          <para>Options can be read from anywhere. Sooner or later command
+          <para>Options can be read from anywhere. Sooner or later the command
           line will be not enough for your users, and you'd want config files
-          or maybe even environment variables. This can be added without no 
+          or maybe even environment variables. These can be added without significanto 
           effort on your part.
           </para>
         </listitem>        
