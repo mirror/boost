@@ -313,6 +313,23 @@ namespace std {
 #  define BOOST_NESTED_TEMPLATE
 #endif
 
+// BOOST_DEDUCED_TYPENAME workaround ------------------------------------------//
+//
+// Some compilers don't support the use of `typename' for dependent
+// types in deduced contexts, e.g.
+//
+//     template <class T> void f(T, typename T::type);
+//                                  ^^^^^^^^
+// Replace these declarations with:
+//
+//     template <class T> void f(T, BOOST_DEDUCED_TYPENAME T::type);
+
+#ifndef BOOST_NO_DEDUCED_TYPENAME
+#  define BOOST_DEDUCED_TYPENAME typename
+#else 
+#  define BOOST_DEDUCED_TYPENAME
+#endif
+
 // ---------------------------------------------------------------------------//
 
 //
