@@ -30,7 +30,7 @@
 
 // specific workarounds. each header can define BOOS_IO_STD if it 
 // needs. (e.g. because of IO_NEEDS_USING_DECLARATION)
-#include <boost/format/detail/workarounds_gcc-2.95.hpp>
+#include <boost/format/detail/workarounds_gcc-2_95.hpp>
 #include <boost/format/detail/workarounds_stlport.hpp>
 
 #ifndef BOOST_IO_STD
