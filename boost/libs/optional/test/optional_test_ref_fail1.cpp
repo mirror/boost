@@ -17,8 +17,8 @@
 void optional_reference__test_no_converting_assignment()
 {
   boost::optional<int&> opt ;
-  short v = 1 ;
-  short& r = v ;
+  double v = 1 ;
+  double& r = v ;
   opt = r ;
 }
 

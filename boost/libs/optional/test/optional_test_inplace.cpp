@@ -60,11 +60,15 @@ int test_main( int, char* [] )
   BOOST_CHECK( opt2 == opt2 ) ;
   BOOST_CHECK( *opt2 == a0 ) ;
 
+#ifndef BOOST_OPTIONAL_WEAK_OVERLOAD_RESOLUTION
+
   opt2 = boost::in_place(a10,a11);
   BOOST_CHECK( *opt2 == a1 ) ;
 
   opt3 = boost::in_place<A>(a10,a11);
   BOOST_CHECK( *opt3 == a1 ) ;
+
+#endif
 
   return 0;
 }
