@@ -10,6 +10,7 @@
 #include <boost/program_options/config.hpp>
 #include <boost/program_options/errors.hpp>
 #include <boost/program_options/cmdline.hpp>
+#include <boost/detail/workaround.hpp>
 
 #include <boost/function.hpp>
 
@@ -202,6 +203,16 @@ namespace boost { namespace program_options { namespace detail {
             int index;
             properties_t properties;
         };
+
+        // The standard say that nested classes has no access to
+        // private member of enclosing class. However, most compilers
+        // allow that and it's likely be to allowed in future:
+        // http://std.dkuug.dk/jtc1/sc22/wg21/docs/cwg_defects.html#45  
+        // For Sun compiler, try using friend declaration.
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x560))
+        friend class option;
+#endif
+
         std::vector<option> options;
 
         void init(const std::vector<std::string>& args, int style,
