@@ -43,9 +43,13 @@
 // MSL standard lib:
 #  define BOOST_STDLIB_CONFIG "boost/config/stdlib/msl.hpp"
 
-#  elif defined(__IBMCPP__)
+#elif defined(__IBMCPP__)
 // take the default VACPP std lib
 #  define BOOST_STDLIB_CONFIG "boost/config/stdlib/vacpp.hpp"
+
+#elif defined(MSIPL_COMPILE_H)
+// Modena C++ standard library
+#  define BOOST_STDLIB_CONFIG "boost/config/stdlib/modena.hpp"
 
 #elif defined (BOOST_ASSERT_CONFIG)
 // this must come last - generate an error if we don't
