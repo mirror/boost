@@ -72,6 +72,7 @@ namespace boost_concepts {
       value_type v = r;
       value_type v2 = *i;
       boost::ignore_unused_variable_warning(v);
+      boost::ignore_unused_variable_warning(v2);
     }
     Iterator i;
   };
