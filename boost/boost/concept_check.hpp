@@ -14,10 +14,10 @@
 #include <boost/pending/limits.hpp>
 #include <boost/static_assert.hpp>
 
-#if (__GNUC__) || defined(__KCC) || defined(__ghs) || defined(__MWERKS__)
-#define BOOST_FPTR &
-#else
+#if defined(BOOST_MSVC) || defined(__BORLANDC__)
 #define BOOST_FPTR
+#else
+#define BOOST_FPTR &
 #endif
 
 namespace boost {
@@ -131,9 +131,10 @@ struct require_same { typedef T type; };
   struct UnsignedIntegerConcept {
     void constraints() { 
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-      errortype_must_be_an_unsigned_integer_type();
+      x.error_type_must_be_an_unsigned_integer_type();
 #endif      
     }
+    T x;
   };
 #if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   template <> struct UnsignedIntegerConcept<unsigned short>
