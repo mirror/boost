@@ -58,6 +58,10 @@
 
     <!-- Calculate the type -->
     <xsl:variable name="type">
+      <xsl:if test="@specifiers">
+        <xsl:value-of select="concat(@specifiers, ' ')"/>
+      </xsl:if>
+
       <xsl:choose>
         <!-- Conversion operators have an empty type, because the return
              type is part of the name -->
@@ -69,27 +73,15 @@
         <!-- Copy assignment operators return a reference to the class
              they are in, unless another type has been explicitly
              provided in the element. -->
-        <xsl:when test="$copy-assign-for and not(type) and not(@return-type)">
+        <xsl:when test="$copy-assign-for and not(type) and type">
           <xsl:value-of select="concat($copy-assign-for, '&amp; ')"/>
         </xsl:when>
 
         <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="type">
-              <xsl:apply-templates select="type" mode="annotation"/>
-            </xsl:when>
-            <xsl:when test="@return-type">
-              <xsl:value-of select="@return-type"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:message>
-                <xsl:text>Warning: no type for function '</xsl:text>
-                <xsl:value-of select="$name"/>
-                <xsl:text>'</xsl:text>
-              </xsl:message>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:text> </xsl:text>
+          <xsl:apply-templates select="type" mode="annotation"/>
+          <xsl:if test="type">
+            <xsl:text> </xsl:text>
+          </xsl:if>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
@@ -108,19 +100,7 @@
         </xsl:when>
         <xsl:when test="$name='conversion-operator'">
           <xsl:text>operator </xsl:text>
-          <xsl:choose>
-            <xsl:when test="type">
-              <xsl:apply-templates select="type" mode="annotation"/>
-            </xsl:when>
-            <xsl:when test="@return-type">
-              <xsl:value-of select="@return-type"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:message>
-                <xsl:text>Warning: no type for conversion operator</xsl:text>
-              </xsl:message>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:apply-templates select="type" mode="annotation"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$name"/>
@@ -994,7 +974,7 @@
   </xsl:template>
 
   <!-- Group member functions together under a category name (synopsis)-->
-  <xsl:template match="member-function-group" mode="synopsis">
+  <xsl:template match="method-group" mode="synopsis">
     <xsl:param name="indentation"/>
     <xsl:text>&#10;</xsl:text>
     <xsl:text>&#10;</xsl:text>
@@ -1015,7 +995,7 @@
   </xsl:template>
 
   <!-- Group member functions together under a category name (reference)-->
-  <xsl:template match="member-function-group" mode="reference">
+  <xsl:template match="method-group" mode="reference">
     <xsl:call-template name="member-documentation">
       <xsl:with-param name="name">
         <xsl:call-template name="anchor">

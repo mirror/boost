@@ -332,6 +332,11 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       </xsl:with-param>
     </xsl:call-template>
     
+    <xsl:if test="not(@name = '')">
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="@name"/>
+    </xsl:if>
+
     <xsl:text> = </xsl:text>
 
     <xsl:call-template name="source-highlight">
@@ -572,7 +577,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         
         <!-- Member functions -->
         <xsl:apply-templates 
-          select="member-function-group|method|overloaded-method" 
+          select="method-group|method|overloaded-method" 
           mode="synopsis">
           <xsl:with-param name="indentation" select="2"/>
         </xsl:apply-templates>
@@ -608,7 +613,7 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
 
         <xsl:call-template name="construct-copy-destruct-reference"/>
         <xsl:apply-templates 
-          select="member-function-group|method|overloaded-method"
+          select="method-group|method|overloaded-method"
           mode="reference"/>
         <xsl:apply-templates select="free-function-group" mode="reference">
           <xsl:with-param name="class" select="@name"/>

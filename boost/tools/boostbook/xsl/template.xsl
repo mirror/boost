@@ -19,7 +19,7 @@
       <xsl:when test="not(template)">
         0
       </xsl:when>
-      <xsl:when test="template/*/@comment|template/*/purpose">
+      <xsl:when test="template/*/purpose">
         <!-- TBD: The resulting value need only be greater than the number of
              columns. We chose to add 17 because it's funny for C++
              programmers. :) -->
@@ -193,7 +193,7 @@
     <xsl:param name="parameters" select="template-type-parameter|template-varargs|template-nontype-parameter"/>
 
     <xsl:choose>
-      <xsl:when test="$parameters/@comment|$parameters/purpose">
+      <xsl:when test="$parameters/purpose">
         <xsl:call-template name="template.reference.parameters.comments">
           <xsl:with-param name="indentation" select="$indentation"/>
           <xsl:with-param name="highlight" select="$highlight"/>
@@ -233,28 +233,18 @@
       </xsl:if>
 
       <!-- Display the comment -->
-      <xsl:if test="$parameter/@comment|$parameter/purpose">
+      <xsl:if test="$parameter/purpose">
         <xsl:call-template name="highlight-comment">
           <xsl:with-param name="text">
-            <xsl:choose>
-              <xsl:when test="@comment">
-                <xsl:message>
-                  <xsl:text>Warning: 'comment' attribute of template parameter is deprecated. Use 'purpose' element.</xsl:text>
-                  <xsl:call-template name="print.warning.context"/>
-                </xsl:message>
-                <xsl:value-of select="concat('  // ',$parameter/@comment)"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>  // </xsl:text>
-                <xsl:apply-templates select="purpose"/>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:text>  // </xsl:text>
+            <xsl:apply-templates 
+              select="$parameter/purpose/*|$parameter/purpose/text()"/>
           </xsl:with-param>
         </xsl:call-template>
       </xsl:if>
 
       <!-- Indent the next line -->
-      <xsl:if test="$parameter/@comment or $parameter/purpose or $rest">
+      <xsl:if test="$parameter/purpose or $rest">
         <xsl:text>&#10;</xsl:text>
         <xsl:call-template name="indent">
           <xsl:with-param name="indentation" select="$indentation"/>

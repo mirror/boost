@@ -16,12 +16,26 @@
     <p><xsl:apply-templates mode="boost.variablelist"/></p>
   </xsl:template>
 
+  <xsl:template match="variablelist">
+    <p><xsl:apply-templates mode="boost.variablelist"/></p>
+  </xsl:template>
+
   <xsl:template match="varlistentry" mode="boost.variablelist">
     <xsl:if test="position() &gt; 1">
       <br/>
     </xsl:if>
     <b><xsl:apply-templates select="term"/></b>:
-    <xsl:apply-templates select="listitem/*|listitem/text()"/>
-  </xsl:template>
 
+    <xsl:choose>
+      <xsl:when test="local-name(listitem/*[1])='simpara' or
+                      local-name(listitem/*[1])='para'">
+        <xsl:apply-templates 
+          select="listitem/*[1]/*|listitem/*[1]/text()"/>
+        <xsl:apply-templates select="(listitem/*|listitem/text())[position() &gt; 1]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="listitem/*|listitem/text()"/>        
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 </xsl:stylesheet>
