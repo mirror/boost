@@ -142,7 +142,7 @@ main()
     function_requires< InputIteratorConcept<Iter> >();
   }
   {
-    typedef output_iterator_archetype Iter;
+    typedef output_iterator_archetype<int> Iter;
     function_requires< OutputIteratorConcept<Iter, int> >();
   }
   {
@@ -173,13 +173,6 @@ main()
   //===========================================================================
   // Container Concepts
 
-  {
-    
-    function_requires< ContainerConcept< > >();
-  }
-  {
-    
-  }
 
   return 0;
 }

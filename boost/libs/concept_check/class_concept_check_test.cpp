@@ -23,7 +23,7 @@ class class_requires_test
 {
   BOOST_CLASS_REQUIRES(int, EqualityComparableConcept);
   typedef int* int_ptr; typedef const int* const_int_ptr;
-  BOOST_CLASS_REQUIRES2(int_ptr, const_int_ptr, Comparable2Concept);
+  BOOST_CLASS_REQUIRES2(int_ptr, const_int_ptr, EqualOpConcept);
   BOOST_CLASS_REQUIRES3(foo, bool, int, UnaryFunctionConcept);
   BOOST_CLASS_REQUIRES4(bar, bool, int, char, BinaryFunctionConcept);
 };

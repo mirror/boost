@@ -25,6 +25,9 @@
 #include <slist>
 #endif
 
+// Define this macro if you want to hide the expected error, that is,
+// error in the various C++ standard library implementations.
+//
 //#define BOOST_HIDE_EXPECTED_ERRORS
 
 int

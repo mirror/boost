@@ -25,7 +25,6 @@
 
 */
 
-#define BOOST_HIDE_EXPECTED_ERRORS
 
   // This is a special concept needed for std::swap_ranges.
   // It is mutually convertible, and also SGIAssignable
@@ -179,7 +178,7 @@ main()
       n = std::count(in, in, value);
     ignore_unused_variable_warning(n);
   }
-#if !defined(__KCC) && !defined(BOOST_HIDE_EXPECTED_ERRORS)
+#if !defined(__KCC)
   {
     typedef equal_op_first_archetype<> Left;
     typedef input_iterator_archetype<Left> InIter;
@@ -190,7 +189,7 @@ main()
   }
   {
     input_iterator_archetype< convertible_to_archetype<null_archetype<> > > in;
-    unary_predicate_archetype<null_archetype<> > pred;
+    unary_predicate_archetype<null_archetype<> > pred(dummy_cons);
     unsigned long n;
     std::count_if(in, in, pred, n);
   }
