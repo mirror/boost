@@ -46,12 +46,21 @@
 
 <pre>
   // Apply concept checks in class definitions.
+  BOOST_CLASS_REQUIRE(<i>type</i>, <i>namespace-of-concept</i>, <i>concept</i>);
+  BOOST_CLASS_REQUIRE2(<i>type1</i>, <i>type2</i>, <i>namespace-of-concept</i>, <i>concept</i>);
+  BOOST_CLASS_REQUIRE3(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>namespace-of-concept</i>, <i>concept</i>);
+  BOOST_CLASS_REQUIRE4(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>type4</i>, <i>namespace-of-concept</i>, <i>concept</i>);
+</pre>
+
+Deprecated macros:
+
+<pre>
+  // Apply concept checks in class definitions.
   BOOST_CLASS_REQUIRES(<i>type</i>, <i>concept</i>);
   BOOST_CLASS_REQUIRES2(<i>type1</i>, <i>type2</i>, <i>concept</i>);
   BOOST_CLASS_REQUIRES3(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>concept</i>);
   BOOST_CLASS_REQUIRES4(<i>type1</i>, <i>type2</i>, <i>type3</i>, <i>type4</i>, <i>concept</i>);
 </pre>
-
 
 <h3><a name="basic-concepts">Basic Concept Checking Classes</a></h3>
 

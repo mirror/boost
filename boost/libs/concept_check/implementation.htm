@@ -129,7 +129,7 @@ everything in a do-while loop to prevent name collisions.
 </pre>
 
 To check the type parameters of class templates, we provide the
-<tt>BOOST_CLASS_REQUIRES</tt> macro which can be used inside the body of a
+<tt>BOOST_CLASS_REQUIRE</tt> macro which can be used inside the body of a
 class definition (whereas <tt>function_requires()</tt> can only be used
 inside of a function body).  This macro declares a nested class
 template, where the template parameter is a function pointer. We then
@@ -139,22 +139,21 @@ of the constraint function as the template argument. We use the
 typedef names to help prevent name collisions.
 
 <pre>
-#define BOOST_CLASS_REQUIRES(type_var, concept) \
-  typedef void (concept &lt;type_var&gt;::* func##type_var##concept)(); \
+#define BOOST_CLASS_REQUIRE(type_var, ns, concept) \
+  typedef void (ns::concept &lt;type_var&gt;::* func##type_var##concept)(); \
   template &lt;func##type_var##concept _Tp1&gt; \
   struct concept_checking_##type_var##concept { }; \
   typedef concept_checking_##type_var##concept&lt; \
-    BOOST_FPTR concept &lt;type_var&gt;::constraints&gt; \
+    BOOST_FPTR ns::concept&lt;type_var&gt;::constraints&gt; \
     concept_checking_typedef_##type_var##concept
 </pre>
 
-In addition, there are versions of <tt>BOOST_CLASS_REQUIRES</tt> that
+In addition, there are versions of <tt>BOOST_CLASS_REQUIRE</tt> that
 take more arguments, to handle concepts that include interactions
-between two or more types.  <tt>BOOST_CLASS_REQUIRES</tt> was not used
-in the implementation of the BCCL concept checks because several
+between two or more types. <tt>BOOST_CLASS_REQUIRE</tt> was not used
+in the implementation of the BCCL concept checks because some
 compilers do not implement template parameters of function pointer
 type.
-
 
 <!-- We decided not to go with this version since it is easier to misuse
 

@@ -64,12 +64,12 @@ instantiate the concept checking class with the type and then find a
 way to get the compiler to compile the <tt>constraints()</tt> function
 without actually executing the function. The Boost Concept Checking
 Library defines two utilities that make this easy:
-<tt>function_requires()</tt> and <tt>BOOST_CLASS_REQUIRES</tt>.
+<tt>function_requires()</tt> and <tt>BOOST_CLASS_REQUIRE</tt>.
 
 <h4><tt>function_requires()</tt></h4>
 
 The <tt>function_requires()</tt> function can be used in function bodies
-and the <tt>BOOST_CLASS_REQUIRES</tt> macro can be used inside class
+and the <tt>BOOST_CLASS_REQUIRE</tt> macro can be used inside class
 bodies. The <tt>function_requires()</tt> function takes no arguments,
 but has a template parameter for the concept checking class. This
 means that the instantiated concept checking class must be given as an
@@ -97,9 +97,9 @@ explicit template argument, as shown below.
 </pre>
 
 
-<h4><tt>BOOST_CLASS_REQUIRES</tt></h4>
+<h4><tt>BOOST_CLASS_REQUIRE</tt></h4>
 
-The <tt>BOOST_CLASS_REQUIRES</tt> macro can be used inside a class
+The <tt>BOOST_CLASS_REQUIRE</tt> macro can be used inside a class
 definition to check whether some type models a concept. 
 
 <pre>
@@ -107,7 +107,7 @@ definition to check whether some type models a concept.
   template &lt;class T&gt;
   struct generic_library_class
   {
-    BOOST_CLASS_REQUIRES(T, EqualityComparableConcept);
+    BOOST_CLASS_REQUIRE(T, boost, EqualityComparableConcept);
     // ...
   };
 
@@ -179,7 +179,7 @@ type for the map.
 </pre>
 
 
-As an example of using <tt>BOOST_CLASS_REQUIRES</tt> we look at a concept
+As an example of using <tt>BOOST_CLASS_REQUIRE</tt> we look at a concept
 check that could be added to <tt>std::vector</tt>. One requirement
 that is placed on the element type is that it must be <a
 href="http://www.sgi.com/tech/stl/Assignable.html">Assignable</a>.
@@ -191,7 +191,7 @@ of the definition for <tt>std::vector</tt>.
   namespace std {
     template &lt;class T&gt;
     struct vector {
-      BOOST_CLASS_REQUIRES(T, AssignableConcept);
+      BOOST_CLASS_REQUIRE(T, boost, AssignableConcept);
       ...
     };
   }

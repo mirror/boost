@@ -48,6 +48,43 @@ inline void function_requires(type<Concept>* = 0)
 #endif
 }
 
+#define BOOST_CLASS_REQUIRE(type_var, ns, concept) \
+  typedef void (ns::concept <type_var>::* func##type_var##concept)(); \
+  template <func##type_var##concept _Tp1> \
+  struct concept_checking_##type_var##concept { }; \
+  typedef concept_checking_##type_var##concept< \
+    BOOST_FPTR ns::concept<type_var>::constraints> \
+    concept_checking_typedef_##type_var##concept
+
+#define BOOST_CLASS_REQUIRE2(type_var1, type_var2, ns, concept) \
+  typedef void (ns::concept <type_var1,type_var2>::* \
+     func##type_var1##type_var2##concept)(); \
+  template <func##type_var1##type_var2##concept _Tp1> \
+  struct concept_checking_##type_var1##type_var2##concept { }; \
+  typedef concept_checking_##type_var1##type_var2##concept< \
+    BOOST_FPTR ns::concept<type_var1,type_var2>::constraints> \
+    concept_checking_typedef_##type_var1##type_var2##concept
+
+#define BOOST_CLASS_REQUIRE3(tv1, tv2, tv3, ns, concept) \
+  typedef void (ns::concept <tv1,tv2,tv3>::* \
+     func##tv1##tv2##tv3##concept)(); \
+  template <func##tv1##tv2##tv3##concept _Tp1> \
+  struct concept_checking_##tv1##tv2##tv3##concept { }; \
+  typedef concept_checking_##tv1##tv2##tv3##concept< \
+    BOOST_FPTR ns::concept<tv1,tv2,tv3>::constraints> \
+    concept_checking_typedef_##tv1##tv2##tv3##concept
+
+#define BOOST_CLASS_REQUIRE4(tv1, tv2, tv3, tv4, ns, concept) \
+  typedef void (ns::concept <tv1,tv2,tv3,tv4>::* \
+     func##tv1##tv2##tv3##tv4##concept)(); \
+  template <func##tv1##tv2##tv3##tv4##concept _Tp1> \
+  struct concept_checking_##tv1##tv2##tv3##tv4##concept { }; \
+  typedef concept_checking_##tv1##tv2##tv3##tv4##concept< \
+    BOOST_FPTR ns::concept<tv1,tv2,tv3,tv4>::constraints> \
+    concept_checking_typedef_##tv1##tv2##tv3##tv4##concept
+
+// NOTE: The BOOST_CLASS_REQUIRES (with an 'S' at the end) is deprecated.
+
 // The BOOST_CLASS_REQUIRES macros use function pointers as
 // template parameters, which VC++ does not support.
 

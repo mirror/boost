@@ -18,11 +18,9 @@
 
 struct foo { };
 
-using namespace boost;
-
 class class_requires_test
 {
-  BOOST_CLASS_REQUIRES(foo, EqualityComparableConcept);
+  BOOST_CLASS_REQUIRE(foo, boost, EqualityComparableConcept);
 };
 
 int
