@@ -155,19 +155,41 @@ struct if_
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-BOOST_MPL_AUX_VOID_SPEC(3, if_)
+#ifndef __BORLANDC__
 
-/*
+BOOST_MPL_AUX_VOID_SPEC(3, if_)
+    
+#else // try explicit workaround for C++ Builder
+
+namespace aux_
+{
+  struct if_void_specialization
+  {
+      template< typename T1,typename T2,typename T3 , typename T4=void_,
+                typename T5=void_ >
+      struct apply
+          : if_< T1,T2,T3 > { };
+  };
+}
+
 template<>
 struct if_< void_,void_,void_ >
+    : aux_::if_void_specialization
 {
-   template< typename T1,typename T2,typename T3 , typename T4=void_, typename T5=void_ >
-   struct apply : if_< T1,T2,T3 > { };
 };
 
- namespace aux { template< typename T1,typename T2,typename T3 > struct template_arity< if_< T1,T2,T3 > > { static const int value = 3; };
- template<> struct template_arity< if_< void_,void_,void_ > > { static const int value = 3; }; }
-*/
+namespace aux
+{
+  template< typename T1,typename T2,typename T3 >
+  struct template_arity< if_< T1,T2,T3 > >
+  { static const int value = 3; };
+
+  template<>
+  struct template_arity< if_< void_,void_,void_ > >
+  { static const int value = 3; };
+}
+
+#endif 
 
 } // namespace mpl
 } // namespace boost
