@@ -1,110 +1,128 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/apply.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/apply.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/mpl/limits/arity.hpp"
-#include "boost/mpl/aux_/preprocessor/params.hpp"
-#include "boost/mpl/aux_/preprocessor/enum.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-#include "boost/preprocessor/repeat.hpp"
-#include "boost/preprocessor/comma_if.hpp"
-#include "boost/preprocessor/dec.hpp"
-#include "boost/preprocessor/if.hpp"
-#include "boost/preprocessor/cat.hpp"
+#include <boost/mpl/apply.hpp>
+#include <boost/mpl/lambda.hpp>
+#include <boost/mpl/plus.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-namespace mpl = boost::mpl;
 
-#define APPLY_0_FUNC_DEF(i) \
-    struct f0 { typedef char type; }; \
-/**/
+template< typename T > struct std_vector
+{
+#if defined(BOOST_MPL_CFG_NO_IMPLICIT_METAFUNCTIONS)
+    typedef std_vector type;
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(1, std_vector, (T))
+#endif
+};
 
-#define APPLY_N_FUNC_DEF(i) \
-    struct first##i \
-    { \
-        template< BOOST_MPL_PP_PARAMS(i, typename U) > \
-        struct apply { typedef U1 type; }; \
-    }; \
-    \
-    struct last##i \
-    { \
-        template< BOOST_MPL_PP_PARAMS(i, typename U) > \
-        struct apply { typedef BOOST_PP_CAT(U,i) type; }; \
-    }; \
-/**/
 
-#define APPLY_FUNC_DEF(z, i, unused) \
-    BOOST_PP_IF( \
-          i \
-        , APPLY_N_FUNC_DEF \
-        , APPLY_0_FUNC_DEF \
-        )(i) \
-/**/
+MPL_TEST_CASE()
+{
+    typedef plus<int_<2>,int_<3> > plus1;
+    typedef lambda<plus1>::type plus2;
+    MPL_ASSERT(( is_same< plus1,plus2 > ));
 
-namespace aux {
-BOOST_PP_REPEAT(
-      BOOST_MPL_METAFUNCTION_MAX_ARITY
-    , APPLY_FUNC_DEF
-    , unused
-    )
+    typedef lambda<std_vector<int> >::type v;
+    MPL_ASSERT(( is_same< v,std_vector<int> > ));
+
+    typedef lambda<std_vector<_1> >::type make_vector;
+    typedef apply_wrap1<make_vector,int>::type v_int;
+    MPL_ASSERT(( is_same< v_int,std_vector<int> > ));
 }
 
-#define APPLY_0_TEST(i, apply_) \
-    typedef mpl::apply_<aux::f##i>::type t; \
-    { BOOST_MPL_ASSERT_IS_SAME(t, char); } \
-/**/
-
-#define APPLY_N_TEST(i, apply_) \
-    typedef mpl::apply_< \
-          aux::first##i \
-        , char \
-        BOOST_PP_COMMA_IF(BOOST_PP_DEC(i)) \
-        BOOST_MPL_PP_ENUM(BOOST_PP_DEC(i), int) \
-        >::type t1; \
-    \
-    typedef mpl::apply_< \
-          aux::last##i \
-        , BOOST_MPL_PP_ENUM(BOOST_PP_DEC(i), int) \
-        BOOST_PP_COMMA_IF(BOOST_PP_DEC(i)) char \
-        >::type t2; \
-    { BOOST_MPL_ASSERT_IS_SAME(t1, char); } \
-    { BOOST_MPL_ASSERT_IS_SAME(t2, char); } \
-/**/
-
-#define APPLY_TEST(z, i, APPLY_NAME) \
-    BOOST_PP_IF( \
-          i \
-        , APPLY_N_TEST \
-        , APPLY_0_TEST \
-        )(i, APPLY_NAME(i)) \
-/**/
-
-#define MAKE_APPLY_N_NAME(i) apply##i
-#define MAKE_APPLY_NAME(i) apply
-
-int main()
+MPL_TEST_CASE()
 {
-    BOOST_PP_REPEAT(
-          BOOST_MPL_METAFUNCTION_MAX_ARITY
-        , APPLY_TEST
-        , MAKE_APPLY_N_NAME
-        )
+    typedef plus<_1,_2> plus_fun;
+    typedef apply2<plus_fun,int_<2>,int_<3> >::type res;
 
-#if defined(BOOST_MPL_HAS_APPLY)
-    BOOST_PP_REPEAT(
-          BOOST_MPL_METAFUNCTION_MAX_ARITY
-        , APPLY_TEST
-        , MAKE_APPLY_NAME
-        )
+    MPL_ASSERT_RELATION( res::value, ==, 5 );
+}
+
+MPL_TEST_CASE()
+{
+    typedef apply1<_1, plus<_1,_2> >::type plus_fun;
+    MPL_ASSERT(( is_same< plus_fun,plus<_1,_2> > ));
+
+    typedef apply2<plus_fun,int_<2>,int_<3> >::type res;
+    MPL_ASSERT_RELATION( res::value, ==, 5 );
+}
+
+MPL_TEST_CASE()
+{
+    typedef lambda< lambda<_1> >::type make_lambda;
+    typedef apply_wrap1< make_lambda,std_vector<int> >::type v;
+    MPL_ASSERT(( is_same< v,std_vector<int> > ));
+
+    typedef apply_wrap1< make_lambda,std_vector<_1> >::type make_vector;
+    typedef apply_wrap1< make_vector,int >::type v_int;
+    MPL_ASSERT(( is_same< v_int,std_vector<int> > ));
+}
+
+MPL_TEST_CASE()
+{
+    typedef apply1< _1, std_vector<int> >::type v;
+    MPL_ASSERT(( is_same< v,std_vector<int> > ));
+
+    typedef apply1< _1, std_vector<_1> >::type v_lambda;
+    typedef apply1<v_lambda,int>::type v_int;
+    MPL_ASSERT(( is_same< v,std_vector<int> > ));
+}
+
+MPL_TEST_CASE()
+{
+    typedef apply1< lambda<_1>, std_vector<int> >::type v;
+    MPL_ASSERT(( is_same< v,std_vector<int> > ));
+
+    typedef apply1< lambda<_1>, std_vector<_1> >::type make_vector;
+    typedef apply_wrap1< make_vector,int >::type v_int;
+    MPL_ASSERT(( is_same< v,std_vector<int> > ));
+}
+
+MPL_TEST_CASE()
+{
+    typedef apply1< lambda<_1>, plus<_1,_2> >::type plus_fun;
+    typedef apply_wrap2< plus_fun,int_<2>,int_<3> >::type res;
+
+    MPL_ASSERT_RELATION( res::value, ==, 5 );
+}
+
+MPL_TEST_CASE()
+{
+    typedef bind2<plus<>,_1,_1> b1;
+    typedef lambda<b1>::type b2;
+    MPL_ASSERT(( is_same< b1,b2 > ));
+}
+
+MPL_TEST_CASE()
+{
+#if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+    typedef lambda< lambda< bind2<plus<>,_1,_1> > >::type make_lambda;
+    typedef apply_wrap1< make_lambda::type, int_<5> >::type res;
+    MPL_ASSERT_RELATION( res::value, ==, 10 );
 #endif
-    return 0;
+}
+
+MPL_TEST_CASE()
+{
+    typedef apply1< bind2<plus<>,_1,_1>, int_<5> >::type res;
+    MPL_ASSERT_RELATION( res::value, ==, 10 );
+}
+
+MPL_TEST_CASE()
+{
+    typedef apply1<_1, lambda<plus<_1,_2> > >::type plus_fun;
+    typedef apply_wrap2< plus_fun::type, int_<2>,int_<3> >::type res;
+
+    MPL_ASSERT_RELATION( res::value, ==, 5 );
 }

@@ -61,7 +61,7 @@ template<
   BOOST_PP_ENUM_BINARY_PARAMS(
     BOOST_MULTI_INDEX_TAG_SIZE,
     typename T,
-    =mpl::void_ BOOST_PP_INTERCEPT) 
+    =mpl::na BOOST_PP_INTERCEPT) 
 >
 struct tag:private detail::tag_marker
 {

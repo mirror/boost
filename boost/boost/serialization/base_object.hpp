@@ -19,7 +19,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/type_traits/is_pointer.hpp>
@@ -54,7 +54,7 @@ namespace detail {
             }
         };
         static void invoke(){
-            mpl::apply_if<
+            mpl::eval_if<
                 BOOST_DEDUCED_TYPENAME type_info_implementation<Base>::type::is_polymorphic,
                 mpl::identity<reg<Base, Derived> >,
                 mpl::identity<nothing>

@@ -1,40 +1,29 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/front.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License,Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/front.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/list_c.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/front.hpp>
+#include <boost/mpl/range_c.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+template< typename Seq, int value > struct front_test
 {
-    typedef mpl::list<long>::type types1;
-    typedef mpl::list<int,long>::type types2;
-    typedef mpl::list<char,int,long>::type types3;
+    typedef typename front<Seq>::type t;
+    MPL_ASSERT_RELATION( t::value, ==, value );
+};
 
-    BOOST_MPL_ASSERT_IS_SAME(mpl::front<types1>::type, long);
-    BOOST_MPL_ASSERT_IS_SAME(mpl::front<types2>::type, int);
-    BOOST_MPL_ASSERT_IS_SAME(mpl::front<types3>::type, char);
-
-    typedef mpl::list_c<int,1>::type values1;
-    typedef mpl::list_c<int,2,1>::type values2;
-    typedef mpl::list_c<int,3,2,1>::type values3;
-
-    BOOST_STATIC_ASSERT(mpl::front<values1>::type::value == 1);
-    BOOST_STATIC_ASSERT(mpl::front<values2>::type::value == 2);
-    BOOST_STATIC_ASSERT(mpl::front<values3>::type::value == 3);
-
-    return 0;
+MPL_TEST_CASE()
+{
+    front_test< range_c<int,1,10>, 1 >();
+    front_test< range_c<int,2,10>, 2 >();
+    front_test< range_c<int,-1,0>, -1 >();
 }

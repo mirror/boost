@@ -99,6 +99,8 @@ struct minimum_category<mpl::_1,mpl::_2>
     template <class T1, class T2>
     struct apply : minimum_category<T1,T2>
     {};
+
+    BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(2,minimum_category,(mpl::_1,mpl::_2))
 };
 
 # if BOOST_WORKAROUND(BOOST_MSVC, == 1200) // ETI workaround

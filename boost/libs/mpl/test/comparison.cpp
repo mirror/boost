@@ -1,49 +1,64 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/comparison.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2001-2004
 //
-// Copyright (c) 2001-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/comparison.hpp"
-#include "boost/mpl/int.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/comparison.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+// make sure MSVC behaves nicely in presence of the following template
+template< typename T > struct value {};
+
+typedef int_<0> _0;
+typedef int_<10> _10;
+
+MPL_TEST_CASE()
 {
-    typedef mpl::int_<0> _0;
-    typedef mpl::int_<10> _10;
+    MPL_ASSERT_NOT(( equal_to<_0, _10> ));
+    MPL_ASSERT_NOT(( equal_to<_10, _0> ));
+    MPL_ASSERT(( equal_to<_10, _10> ));
+}
 
-    BOOST_STATIC_ASSERT((mpl::less<_0, _10>::value));
-    BOOST_STATIC_ASSERT((!mpl::less<_10, _0>::value));
-    BOOST_STATIC_ASSERT((!mpl::less<_10, _10>::value));
+MPL_TEST_CASE()
+{
+    MPL_ASSERT(( not_equal_to<_0, _10> ));
+    MPL_ASSERT(( not_equal_to<_10, _0> ));
+    MPL_ASSERT_NOT(( not_equal_to<_10, _10> ));
+}
 
-    BOOST_STATIC_ASSERT((mpl::less_equal<_0, _10>::value));
-    BOOST_STATIC_ASSERT((!mpl::less_equal<_10, _0>::value));
-    BOOST_STATIC_ASSERT((mpl::less_equal<_10, _10>::value));
+MPL_TEST_CASE()
+{
+    MPL_ASSERT(( less<_0, _10>  ));
+    MPL_ASSERT_NOT(( less<_10, _0> ));
+    MPL_ASSERT_NOT(( less<_10, _10> ));
+}
 
-    BOOST_STATIC_ASSERT((mpl::greater<_10, _0>::value));
-    BOOST_STATIC_ASSERT((!mpl::greater<_0, _10>::value));
-    BOOST_STATIC_ASSERT((!mpl::greater<_10, _10>::value));
+MPL_TEST_CASE()
+{
+    MPL_ASSERT(( less_equal<_0, _10> ));
+    MPL_ASSERT_NOT(( less_equal<_10, _0> ));
+    MPL_ASSERT(( less_equal<_10, _10> ));
+}
 
-    BOOST_STATIC_ASSERT((!mpl::greater_equal<_0, _10>::value));
-    BOOST_STATIC_ASSERT((mpl::greater_equal<_10, _0>::value));
-    BOOST_STATIC_ASSERT((mpl::greater_equal<_10, _10>::value));
+MPL_TEST_CASE()
+{
+    MPL_ASSERT(( greater<_10, _0> ));
+    MPL_ASSERT_NOT(( greater<_0, _10> ));
+    MPL_ASSERT_NOT(( greater<_10, _10> ));
+}
 
-    BOOST_STATIC_ASSERT((!mpl::equal_to<_0, _10>::value));
-    BOOST_STATIC_ASSERT((!mpl::equal_to<_10, _0>::value));
-    BOOST_STATIC_ASSERT((mpl::equal_to<_10, _10>::value));
-
-    BOOST_STATIC_ASSERT((mpl::not_equal_to<_0, _10>::value));
-    BOOST_STATIC_ASSERT((mpl::not_equal_to<_10, _0>::value));
-    BOOST_STATIC_ASSERT((!mpl::not_equal_to<_10, _10>::value));
-
-    return 0;
+MPL_TEST_CASE()
+{
+    MPL_ASSERT_NOT(( greater_equal<_0, _10> ));
+    MPL_ASSERT(( greater_equal<_10, _0> ));
+    MPL_ASSERT(( greater_equal<_10, _10> ));
 }

@@ -1,34 +1,30 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/single_view.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2001-2004
 //
-// Copyright (c) 2001-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License,Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/single_view.hpp"
-#include "boost/mpl/size.hpp"
-#include "boost/mpl/begin_end.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-using namespace boost::mpl;
+#include <boost/mpl/single_view.hpp>
+#include <boost/mpl/size.hpp>
+#include <boost/mpl/begin_end.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+MPL_TEST_CASE()
 {
     typedef single_view<int> view;
     typedef begin<view>::type first;
     typedef end<view>::type last;
 
-    BOOST_MPL_ASSERT_IS_SAME(first::type,int);
-    BOOST_MPL_ASSERT_IS_SAME(first::next,last);
-    BOOST_MPL_ASSERT_IS_SAME(last::prior,first);
+    MPL_ASSERT(( is_same<first::type,int> ));
+    MPL_ASSERT(( is_same<first::next,last> ));
+    MPL_ASSERT(( is_same<last::prior,first> ));
 
-    BOOST_STATIC_ASSERT(size<view>::type::value == 1);
-
-    return 0;
+    MPL_ASSERT_RELATION( size<view>::value, ==, 1 );
 }

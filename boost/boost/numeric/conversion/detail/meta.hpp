@@ -13,10 +13,11 @@
 #include "boost/type_traits/remove_cv.hpp"
 
 #include "boost/mpl/if.hpp"
-#include "boost/mpl/apply_if.hpp"
+#include "boost/mpl/eval_if.hpp"
 #include "boost/mpl/equal_to.hpp"
 #include "boost/mpl/not.hpp"
 #include "boost/mpl/and.hpp"
+#include "boost/mpl/bool.hpp"
 #include "boost/mpl/identity.hpp"
 
 namespace boost { namespace numeric { namespace convdetail
@@ -74,10 +75,10 @@ namespace boost { namespace numeric { namespace convdetail
     typedef equal_to<Value,Case2Val> is_case2 ;
 
     typedef mpl::if_<is_case2,Case2Type,DefaultType> choose_2_3Q ;
-    typedef mpl::apply_if<is_case1,Case1TypeQ,choose_2_3Q> choose_1_2_3Q ;
+    typedef mpl::eval_if<is_case1,Case1TypeQ,choose_2_3Q> choose_1_2_3Q ;
 
     typedef typename
-      mpl::apply_if<is_case0,Case0TypeQ,choose_1_2_3Q>::type
+      mpl::eval_if<is_case0,Case0TypeQ,choose_1_2_3Q>::type
         type ;
   } ;
 
@@ -107,9 +108,9 @@ namespace boost { namespace numeric { namespace convdetail
     typedef typename mpl::and_<not_expr0,expr1>::type caseFT ;
 
     typedef mpl::if_<caseFT,FT,FF>                    choose_FT_FF_Q ;
-    typedef mpl::apply_if<caseTF,TF_Q,choose_FT_FF_Q> choose_TF_FT_FF_Q ;
+    typedef mpl::eval_if<caseTF,TF_Q,choose_FT_FF_Q> choose_TF_FT_FF_Q ;
 
-    typedef typename mpl::apply_if<caseTT,TT_Q,choose_TF_FT_FF_Q>::type type ;
+    typedef typename mpl::eval_if<caseTT,TT_Q,choose_TF_FT_FF_Q>::type type ;
   } ;
 
 } } } // namespace boost::numeric::convdetail

@@ -21,11 +21,11 @@
 
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/identity.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/not.hpp>
-#include <boost/mpl/aux_/has_xxx.hpp>
+#include <boost/mpl/has_xxx.hpp>
 
-#ifdef BOOST_MPL_NO_AUX_HAS_XXX
+#ifdef BOOST_MPL_CFG_NO_HAS_XXX
 # include <boost/shared_ptr.hpp>
 # include <boost/scoped_ptr.hpp>
 # include <boost/mpl/bool.hpp>
@@ -55,7 +55,7 @@ namespace boost
           , Category
           , typename ia_dflt_help<
                 Reference
-              , mpl::apply_if<
+              , mpl::eval_if<
                     is_same<Value,use_default>
                   , indirect_reference<dereferenceable>
                   , add_reference<Value>

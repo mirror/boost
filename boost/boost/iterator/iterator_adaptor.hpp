@@ -159,7 +159,7 @@ namespace boost
     // DefaultNullaryFn, otherwise return T.
     template <class T, class DefaultNullaryFn>
     struct ia_dflt_help
-      : mpl::apply_if<
+      : mpl::eval_if<
             is_same<T, use_default>
           , DefaultNullaryFn
           , mpl::identity<T>
@@ -185,7 +185,7 @@ namespace boost
 # ifdef BOOST_ITERATOR_REF_CONSTNESS_KILLS_WRITABILITY
           , typename detail::ia_dflt_help<
                 Value
-              , mpl::apply_if<
+              , mpl::eval_if<
                     is_same<Reference,use_default>
                   , iterator_value<Base>
                   , remove_reference<Reference>
@@ -204,7 +204,7 @@ namespace boost
 
           , typename detail::ia_dflt_help<
                 Reference
-              , mpl::apply_if<
+              , mpl::eval_if<
                     is_same<Value,use_default>
                   , iterator_reference<Base>
                   , add_reference<Value>

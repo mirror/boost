@@ -31,6 +31,7 @@
 
 // Use boost/limits to work around missing limits headers on some compilers
 #include <boost/limits.hpp>
+#include <boost/config.hpp>
 
 #include <algorithm>
 

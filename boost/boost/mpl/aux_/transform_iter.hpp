@@ -1,25 +1,29 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/transform_iter.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_AUX_TRANSFORM_ITER_HPP_INCLUDED
 #define BOOST_MPL_AUX_TRANSFORM_ITER_HPP_INCLUDED
 
-#include "boost/mpl/apply.hpp"
-#include "boost/mpl/aux_/lambda_spec.hpp"
-#include "boost/mpl/aux_/config/ctps.hpp"
-#include "boost/type_traits/is_same.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-namespace boost {
-namespace mpl {
+// $Source$
+// $Date$
+// $Revision$
+
+#include <boost/mpl/apply.hpp>
+#include <boost/mpl/iterator_tags.hpp>
+#include <boost/mpl/next.hpp>
+#include <boost/mpl/deref.hpp>
+#include <boost/mpl/aux_/lambda_spec.hpp>
+#include <boost/mpl/aux_/config/ctps.hpp>
+#include <boost/type_traits/is_same.hpp>
+
+namespace boost { namespace mpl { 
+
 namespace aux {
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -32,12 +36,12 @@ template<
 struct transform_iter
 {
     typedef Iterator base;
-    typedef typename base::category category;
-    typedef transform_iter< typename base::next,LastIterator,F > next;
+    typedef forward_iterator_tag category;
+    typedef transform_iter< typename next<base>::type,LastIterator,F > next;
     
     typedef typename apply1<
           F
-        , typename base::type
+        , typename deref<base>::type
         >::type type;
 };
 
@@ -48,7 +52,7 @@ template<
 struct transform_iter< LastIterator,LastIterator,F >
 {
     typedef LastIterator base;
-    typedef typename base::category category;
+    typedef forward_iterator_tag category;
 };
 
 #else
@@ -71,14 +75,12 @@ struct transform_iter_impl
     struct result_
     {
         typedef Iterator base;
-        // agurt, 14/oct/02: have to use |Iterator| instead of |base| below
-        // to prevent |base| and |mpl::base| conflict on MSVC 6.0
-        typedef typename Iterator::category category;
-        typedef transform_iter< typename Iterator::next,LastIterator,F > next;
+        typedef forward_iterator_tag category;
+        typedef transform_iter< typename next<Iterator>::type,LastIterator,F > next;
         
         typedef typename apply1<
               F
-            , typename Iterator::type
+            , typename deref<Iterator>::type
             >::type type;
     };
 };
@@ -94,7 +96,7 @@ struct transform_iter_impl<true>
     struct result_
     {
         typedef Iterator base;
-        typedef typename Iterator::category category;
+        typedef forward_iterator_tag category;
     };
 };
 
@@ -116,7 +118,6 @@ struct transform_iter
 
 BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(3, aux::transform_iter)
 
-} // namespace mpl
-} // namespace boost
+}}
 
 #endif // BOOST_MPL_AUX_TRANSFORM_ITER_HPP_INCLUDED

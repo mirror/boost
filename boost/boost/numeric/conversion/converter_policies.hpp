@@ -17,6 +17,7 @@
 #include "boost/type_traits/is_arithmetic.hpp"
 
 #include "boost/mpl/if.hpp"
+#include "boost/mpl/integral_c.hpp"
 
 namespace boost { namespace numeric 
 {

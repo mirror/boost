@@ -47,7 +47,7 @@ namespace std{
 #include <boost/throw_exception.hpp>
 #include <boost/serialization/is_abstract.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/or.hpp>
@@ -244,7 +244,7 @@ struct load_non_pointer_type {
                 mpl::int_<boost::serialization::primitive_type>
             >::value
         ));
-        mpl::apply_if<
+        mpl::eval_if<
                 // if its primitive
                 mpl::equal_to<
                     boost::serialization::implementation_level<T>,
@@ -252,7 +252,7 @@ struct load_non_pointer_type {
                 >,
                 mpl::identity<load_primitive>,
             // else
-            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+            BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 mpl::and_<
                     // no class info / version
                     mpl::less<
@@ -329,7 +329,7 @@ struct load_pointer_type {
         // permits abstract base classes to be used - note: exception
         // virtual serialize functions used for plug-ins
         return 
-            mpl::apply_if<
+            mpl::eval_if<
                 is_abstract<T>,
                 mpl::identity<abstract<T> >,
                 mpl::identity<non_abstract<T> >    
@@ -420,13 +420,13 @@ instantiate_pointer_iserializer(
 template<class Archive, class T>
 inline void load(Archive &ar, T &t){
     typedef
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<is_pointer<T>,
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_pointer<T>,
             mpl::identity<detail::load_pointer_type<Archive, T> >
         ,//else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<is_array<T>,
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_array<T>,
             mpl::identity<detail::load_array_type<Archive, T> >
         ,//else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<is_enum<T>,
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_enum<T>,
             mpl::identity<detail::load_enum_type<Archive, T> >
         ,//else
             mpl::identity<detail::load_non_pointer_type<Archive, T> >

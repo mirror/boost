@@ -1,40 +1,29 @@
-//-----------------------------------------------------------------------------
-// boost mpl/sort_fwd.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2002-2003
-// Eric Friedman
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_SORT_FWD_HPP_INCLUDED
 #define BOOST_MPL_SORT_FWD_HPP_INCLUDED
 
-#include "boost/mpl/less.hpp"
-#include "boost/mpl/placeholders.hpp"
-#include "boost/mpl/aux_/void_spec.hpp"
+// Copyright Eric Friedman 2002-2003
+// Copyright Aleksey Gurtovoy 2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-namespace boost {
-namespace mpl {
+// $Source$
+// $Date$
+// $Revision$
 
-template< typename Tag > struct sort_traits;
+#include <boost/mpl/aux_/common_name_wknd.hpp>
 
-BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+namespace boost { namespace mpl {
 
-template <
-      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
-    , typename Predicate = less<_,_>
-    >
-struct sort;
+BOOST_MPL_AUX_COMMON_NAME_WKND(sort)
 
-BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+template< typename Tag > struct sort_impl;
+template< typename Sequence, typename Predicate > struct sort;
 
-BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(1, sort)
-
-} // namespace mpl
-} // namespace boost
+}}
 
 #endif // BOOST_MPL_SORT_FWD_HPP_INCLUDED

@@ -75,6 +75,7 @@ inline nvp<T> make_nvp(const char * name, T & t){
 template <class T>
 struct implementation_level<nvp<T> >
 {
+    typedef mpl::integral_c_tag tag;
     typedef mpl::int_<object_serializable> type;
     BOOST_STATIC_CONSTANT(int, value = implementation_level::type::value);
 };
@@ -83,6 +84,7 @@ struct implementation_level<nvp<T> >
 template<class T>
 struct tracking_level<nvp<T> >
 {
+    typedef mpl::integral_c_tag tag;
     typedef mpl::int_<track_never> type;
     BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
 };

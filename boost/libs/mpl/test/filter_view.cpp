@@ -1,28 +1,29 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/filter_view.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2001-2004
 //
-// Copyright (c) 2001-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License,Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/filter_view.hpp"
-#include "boost/mpl/transform_view.hpp"
-#include "boost/mpl/max_element.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/sizeof.hpp"
-#include "boost/type_traits/is_float.hpp"
-#include "boost/type_traits/is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
-using mpl::_;
+#include <boost/static_assert.hpp>
+#include <boost/mpl/filter_view.hpp>
+#include <boost/mpl/transform_view.hpp>
+#include <boost/mpl/max_element.hpp>
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/sizeof.hpp>
+#include <boost/mpl/deref.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+#include <boost/type_traits/is_float.hpp>
+#include <boost/type_traits/is_same.hpp>
+
+MPL_TEST_CASE()
 {
     typedef mpl::list<int,float,long,float,char[50],long double,char> types;
     typedef mpl::max_element<
@@ -32,6 +33,5 @@ int main()
             >
         >::type iter;
 
-    BOOST_STATIC_ASSERT((boost::is_same<iter::base::type,long double>::value));
-    return 0;
+    MPL_ASSERT((is_same<mpl::deref<iter::base>::type, long double>));
 }

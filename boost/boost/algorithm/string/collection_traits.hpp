@@ -25,7 +25,7 @@
 #include <boost/algorithm/string/config.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_pointer.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 
 // Implementation
 #include <boost/algorithm/string/detail/collection_traits.hpp>
@@ -74,13 +74,13 @@ namespace boost {
         struct collection_traits
         {
         private:
-            typedef BOOST_STRING_TYPENAME ::boost::mpl::apply_if< 
+            typedef BOOST_STRING_TYPENAME ::boost::mpl::eval_if< 
                     ::boost::algorithm::detail::is_pair<T>, 
                         detail::pair_container_traits_selector<T>,
-                        BOOST_STRING_TYPENAME ::boost::mpl::apply_if< 
+                        BOOST_STRING_TYPENAME ::boost::mpl::eval_if< 
                         ::boost::is_array<T>, 
                             detail::array_container_traits_selector<T>,
-                            BOOST_STRING_TYPENAME ::boost::mpl::apply_if<
+                            BOOST_STRING_TYPENAME ::boost::mpl::eval_if<
                             ::boost::is_pointer<T>,
                                 detail::pointer_container_traits_selector<T>,
                                 detail::default_container_traits_selector<T>

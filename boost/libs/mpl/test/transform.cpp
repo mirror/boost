@@ -1,51 +1,51 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/transform.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright David Abrahams 2003-2004
 //
-// Copyright (c) 2000-03
-// Aleksey Gurtovoy, Dave Abrahams
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/transform.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/list_c.hpp"
-#include "boost/mpl/equal.hpp"
-#include "boost/mpl/plus.hpp"
-#include "boost/type_traits/add_pointer.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/transform.hpp>
 
-int main()
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/list_c.hpp>
+#include <boost/mpl/equal.hpp>
+#include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/plus.hpp>
+#include <boost/mpl/aux_/test.hpp>
+#include <boost/mpl/aux_/config/gcc.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
+
+#include <boost/type_traits/add_pointer.hpp>
+
+
+MPL_TEST_CASE()
 {
-    using namespace mpl::placeholders;
+    typedef list<char,short,int,long,float,double> types;
+    typedef list<char*,short*,int*,long*,float*,double*> pointers;
     
-    {
-        typedef mpl::list<char,short,int,long,float,double> types;
-        typedef mpl::list<char*,short*,int*,long*,float*,double*> pointers;
+    typedef transform1< types,add_pointer<_1> >::type result;
+    MPL_ASSERT(( equal<result,pointers> ));
+}
 
-        typedef mpl::transform1< types,boost::add_pointer<_1> >::type result1;
-        BOOST_STATIC_ASSERT((mpl::equal<result1,pointers>::type::value));
-        
-        typedef mpl::transform< types,boost::add_pointer<_1> >::type result;
-        BOOST_STATIC_ASSERT((mpl::equal<result,pointers>::type::value));
-    }
-    
-    {
-        typedef mpl::list_c<long,0,2,4,6,8,10> evens;
-        typedef mpl::list_c<long,2,3,5,7,11,13> primes;
-        typedef mpl::list_c<long,2,5,9,13,19,23> sums;
+MPL_TEST_CASE()
+{
+    typedef list_c<long,0,2,4,6,8,10> evens;
+    typedef list_c<long,2,3,5,7,11,13> primes;
+    typedef list_c<long,2,5,9,13,19,23> sums;
 
-        typedef mpl::transform2< evens, primes, mpl::plus<> >::type result1;
-        BOOST_STATIC_ASSERT((mpl::equal<result1::type,sums::type>::type::value));
-        
-        typedef mpl::transform< evens, primes, mpl::plus<> >::type result;
-        BOOST_STATIC_ASSERT((mpl::equal<result::type,sums::type>::type::value));
-    }
-    
-    return 0;
+    typedef transform2< evens, primes, plus<> >::type result;
+    MPL_ASSERT(( equal< result,sums,equal_to<_1,_2> > ));
+
+#if !defined(BOOST_MPL_CFG_NO_HAS_XXX)
+    typedef transform< evens, primes, plus<> >::type result2;
+    MPL_ASSERT(( is_same<result2,result> ));
+#endif
 }

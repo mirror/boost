@@ -18,6 +18,8 @@
 
 #include "boost/type_traits/is_same.hpp"
 
+#include "boost/mpl/integral_c.hpp"
+
 namespace boost { namespace numeric { namespace convdetail
 {
   // Integral Constants representing rounding modes
@@ -542,7 +544,7 @@ namespace boost { namespace numeric { namespace convdetail
     typedef mpl::identity<UserRangeChecker> UserRangeCheckerQ ;
 
     typedef typename
-      mpl::apply_if<use_internal_RC,InternalRangeCheckerQ,UserRangeCheckerQ>::type
+      mpl::eval_if<use_internal_RC,InternalRangeCheckerQ,UserRangeCheckerQ>::type
         RangeChecker ;
 
     typedef non_rounding_converter<Traits,RangeChecker,RawConverter>              NonRounding ;
@@ -590,7 +592,7 @@ namespace boost { namespace numeric { namespace convdetail
 
     typedef typename Traits::trivial trivial ;
 
-    typedef typename mpl::apply_if<trivial,TrivialQ,NonTrivialQ>::type type ;
+    typedef typename mpl::eval_if<trivial,TrivialQ,NonTrivialQ>::type type ;
   } ;
 
 } } } // namespace boost::numeric::convdetail

@@ -12,10 +12,11 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/multi_index/detail/access_specifier.hpp>
 #include <boost/multi_index/detail/prevent_eti.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
+#include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/control/expr_if.hpp>
 #include <boost/preprocessor/list/at.hpp>
@@ -107,13 +108,13 @@ namespace detail{
  * Similar thing for nth_composite_key_greater.
  */
 
-template<typename CompositeKey,int N>
+template<typename CompositeKey,BOOST_MPL_AUX_NTTP_DECL(int, N)>
 struct nth_key_from_value
 {
   typedef typename CompositeKey::key_extractor_tuple key_extractor_tuple;
   typedef typename prevent_eti<
     tuples::element<N,key_extractor_tuple>,
-    typename mpl::apply_if_c<
+    typename mpl::eval_if_c<
       N<tuples::length<key_extractor_tuple>::value,
       tuples::element<N,key_extractor_tuple>,
       mpl::identity<tuples::null_type>
@@ -133,7 +134,7 @@ struct key_std_less<tuples::null_type>
   typedef tuples::null_type type;
 };
 
-template<typename CompositeKey,int N>
+template<typename CompositeKey,BOOST_MPL_AUX_NTTP_DECL(int, N)>
 struct nth_composite_key_less
 {
   typedef typename nth_key_from_value<CompositeKey,N>::type key_from_value;
@@ -152,7 +153,7 @@ struct key_std_greater<tuples::null_type>
   typedef tuples::null_type type;
 };
 
-template<typename CompositeKey,int N>
+template<typename CompositeKey,BOOST_MPL_AUX_NTTP_DECL(int, N)>
 struct nth_composite_key_greater
 {
   typedef typename nth_key_from_value<CompositeKey,N>::type key_from_value;

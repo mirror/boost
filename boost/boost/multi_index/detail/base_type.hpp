@@ -12,7 +12,7 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/bind.hpp>
-#include <boost/mpl/iter_fold_backward.hpp>
+#include <boost/mpl/reverse_iter_fold.hpp>
 #include <boost/multi_index_container_fwd.hpp>
 #include <boost/multi_index/detail/header_holder.hpp>
 #include <boost/multi_index/detail/index_base.hpp>
@@ -62,7 +62,7 @@ struct multi_index_base_type
 
   typedef typename prevent_eti<
     multi_index_container<Value,IndexSpecifierList,Allocator>,
-    typename mpl::iter_fold_backward<
+    typename mpl::reverse_iter_fold<
       IndexSpecifierList,
       index_base<Value,IndexSpecifierList,Allocator>,
       mpl::bind2<

@@ -1,75 +1,78 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/lambda.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2001-2004
 //
-// Copyright (c) 2001-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/logical.hpp"
-#include "boost/mpl/comparison.hpp"
-#include "boost/mpl/lambda.hpp"
-#include "boost/mpl/int.hpp"
-#include "boost/mpl/bool.hpp"
-#include "boost/mpl/sizeof.hpp"
-#include "boost/mpl/apply.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-#include "boost/type_traits/is_same.hpp"
-#include "boost/type_traits/is_float.hpp"
-#include "boost/static_assert.hpp"
+#include <boost/mpl/logical.hpp>
+#include <boost/mpl/comparison.hpp>
+#include <boost/mpl/lambda.hpp>
+#include <boost/mpl/size_t.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/sizeof.hpp>
+#include <boost/mpl/apply.hpp>
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/aux_/test.hpp>
+
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_float.hpp>
 
 struct my
 {
     char a[100];
 };
 
-int main()
+MPL_TEST_CASE()
 {
-    using namespace mpl::placeholders;
-
     // !(x == char) && !(x == double) && x convertible to int || sizeof(x) > 8
-    typedef mpl::lambda<
-        mpl::or_<
-              mpl::and_<
-                    mpl::not_< boost::is_same<_1, char> >
-                  , mpl::not_< boost::is_float<_1> >
+    typedef lambda<
+        or_<
+              and_<
+                    not_< boost::is_same<_1, char> >
+                  , not_< boost::is_float<_1> >
                   >
-            , mpl::greater< mpl::sizeof_<_1>, mpl::size_t<8> >
+            , greater< sizeof_<_1>, mpl::size_t<8> >
             >
-        >::type f1;
+        >::type f;
 
-    BOOST_STATIC_ASSERT((!mpl::apply1<f1,char>::type::value));
-    BOOST_STATIC_ASSERT((!mpl::apply1<f1,double>::type::value));
-    BOOST_STATIC_ASSERT((mpl::apply1<f1,long>::type::value));
-    BOOST_STATIC_ASSERT((mpl::apply1<f1,my>::type::value));
+    MPL_ASSERT_NOT(( apply_wrap1<f,char> ));
+    MPL_ASSERT_NOT(( apply_wrap1<f,double> ));
+    MPL_ASSERT(( apply_wrap1<f,long> ));
+    MPL_ASSERT(( apply_wrap1<f,my> ));
+}
 
+MPL_TEST_CASE()
+{
     // x == y || x == my || sizeof(x) == sizeof(y)
-    typedef mpl::lambda<
-        mpl::or_< 
+    typedef lambda<
+        or_< 
               boost::is_same<_1, _2>
             , boost::is_same<_2, my>
-            , mpl::equal_to< mpl::sizeof_<_1>, mpl::sizeof_<_2> >
+            , equal_to< sizeof_<_1>, sizeof_<_2> >
             >
-        >::type f2;
+        >::type f;
 
-    BOOST_STATIC_ASSERT((!mpl::apply2<f2,double,char>::type::value));
-    BOOST_STATIC_ASSERT((!mpl::apply2<f2,my,int>::type::value));
-    BOOST_STATIC_ASSERT((!mpl::apply2<f2,my,char[99]>::type::value));
-    BOOST_STATIC_ASSERT((mpl::apply2<f2,int,int>::type::value));
-    BOOST_STATIC_ASSERT((mpl::apply2<f2,my,my>::type::value));
-    BOOST_STATIC_ASSERT((mpl::apply2<f2,signed long, unsigned long>::type::value));
+    MPL_ASSERT_NOT(( apply_wrap2<f,double,char> ));
+    MPL_ASSERT_NOT(( apply_wrap2<f,my,int> ));
+    MPL_ASSERT_NOT(( apply_wrap2<f,my,char[99]> ));
+    MPL_ASSERT(( apply_wrap2<f,int,int> ));
+    MPL_ASSERT(( apply_wrap2<f,my,my> ));
+    MPL_ASSERT(( apply_wrap2<f,signed long, unsigned long> ));
+}
 
+MPL_TEST_CASE()
+{
     // bind <-> lambda interaction
-    typedef mpl::lambda< mpl::less<_1,_2> >::type pred;
-    typedef mpl::bind2< pred, _1, mpl::int_<4> > f3;
+    typedef lambda< less<_1,_2> >::type pred;
+    typedef bind2< pred, _1, int_<4> > f;
     
-    BOOST_STATIC_ASSERT((mpl::apply1< f3,mpl::int_<3> >::type::value));
-          
-    return 0;
+    MPL_ASSERT(( apply_wrap1< f,int_<3> > ));
 }

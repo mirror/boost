@@ -14,7 +14,6 @@
 #define BOOST_VARIANT_DETAIL_VISITATION_IMPL_HPP
 
 #include "boost/config.hpp"
-#include "boost/mpl/aux_/deref_wknd.hpp"
 
 #include "boost/variant/detail/backup_holder.hpp"
 #include "boost/variant/detail/cast_storage.hpp"
@@ -22,11 +21,12 @@
 #include "boost/variant/detail/generic_result_type.hpp"
 
 #include "boost/assert.hpp"
-#include "boost/mpl/apply_if.hpp"
+#include "boost/mpl/eval_if.hpp"
 #include "boost/mpl/bool.hpp"
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/next.hpp"
+#include "boost/mpl/deref.hpp"
 #include "boost/mpl/or.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/inc.hpp"
@@ -68,7 +68,7 @@ struct apply_visitor_unrolled {};
 template <typename Iter, typename LastIter>
 struct visitation_impl_step
 {
-    typedef typename BOOST_MPL_AUX_DEREF_WNKD(Iter) type;
+    typedef typename mpl::deref<Iter>::type type;
 
     typedef typename mpl::next<Iter>::type next_iter;
     typedef visitation_impl_step<
@@ -88,13 +88,13 @@ struct visitation_impl_step< LastIter,LastIter >
 template <typename Iter, typename LastIter>
 struct visitation_impl_step
 {
-    typedef typename mpl::apply_if<
+    typedef typename mpl::eval_if<
           is_same<Iter, LastIter>
         , mpl::identity<apply_visitor_unrolled>
         , Iter
         >::type type;
 
-    typedef typename mpl::apply_if<
+    typedef typename mpl::eval_if<
           is_same<type, apply_visitor_unrolled> //is_same<Iter, LastIter>
         , mpl::identity<LastIter>
         , mpl::next<Iter>

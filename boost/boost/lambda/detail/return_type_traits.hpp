@@ -12,7 +12,7 @@
 #ifndef BOOST_LAMBDA_RETURN_TYPE_TRAITS_HPP
 #define BOOST_LAMBDA_RETURN_TYPE_TRAITS_HPP
 
-#include "boost/mpl/aux_/has_xxx.hpp"
+#include "boost/mpl/has_xxx.hpp"
 
 #include <cstddef> // needed for the ptrdiff_t
 

@@ -16,6 +16,8 @@
 #include "boost/numeric/conversion/int_float_mixture_enum.hpp"
 #include "boost/numeric/conversion/detail/meta.hpp"
 
+#include "boost/mpl/integral_c.hpp"
+
 namespace boost { namespace numeric { namespace convdetail
 {
   // Integral Constants for 'IntFloatMixture'

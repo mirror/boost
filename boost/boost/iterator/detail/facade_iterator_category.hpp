@@ -11,7 +11,7 @@
 # include <boost/mpl/or.hpp>  // used in iterator_tag inheritance logic
 # include <boost/mpl/and.hpp>
 # include <boost/mpl/if.hpp>
-# include <boost/mpl/apply_if.hpp>
+# include <boost/mpl/eval_if.hpp>
 # include <boost/mpl/identity.hpp>
 
 # include <boost/type_traits/is_same.hpp>
@@ -86,12 +86,12 @@ struct iterator_writability_disabled
 //
 template <class Traversal, class ValueParam, class Reference>
 struct iterator_facade_default_category
-  : mpl::apply_if<
+  : mpl::eval_if<
         mpl::and_<
             is_reference<Reference>
           , is_convertible<Traversal,forward_traversal_tag>
         >
-      , mpl::apply_if<
+      , mpl::eval_if<
             is_convertible<Traversal,random_access_traversal_tag>
           , mpl::identity<std::random_access_iterator_tag>
           , mpl::if_<
@@ -100,7 +100,7 @@ struct iterator_facade_default_category
               , std::forward_iterator_tag
             >
         >
-      , typename mpl::apply_if<
+      , typename mpl::eval_if<
             mpl::and_<
                 is_convertible<Traversal, single_pass_traversal_tag>
                 
@@ -194,7 +194,7 @@ struct facade_iterator_category_impl
 //
 template <class CategoryOrTraversal, class ValueParam, class Reference>
 struct facade_iterator_category
-  : mpl::apply_if<
+  : mpl::eval_if<
         is_iterator_category<CategoryOrTraversal>
       , mpl::identity<CategoryOrTraversal> // old-style categories are fine as-is
       , facade_iterator_category_impl<CategoryOrTraversal,ValueParam,Reference>

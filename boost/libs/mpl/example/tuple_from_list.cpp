@@ -1,26 +1,26 @@
-//-----------------------------------------------------------------------------
-// boost mpl/example/tuple_from_list.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2002
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
-#include "boost/mpl/fold_backward.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/tuple/tuple.hpp"
+// Copyright Aleksey Gurtovoy 2002-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
+
+#include <boost/mpl/reverse_fold.hpp>
+#include <boost/mpl/list.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include <iostream>
 
 using namespace boost::mpl;
 
 template< typename Types > struct tuple_gen
-    : fold_backward<
+    : reverse_fold<
           Types
         , boost::tuples::null_type
         , boost::tuples::cons<_2,_1>

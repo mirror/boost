@@ -1,25 +1,32 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/identity.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License,Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/apply.hpp"
-#include "boost/mpl/identity.hpp"
-#include "boost/mpl/assert_is_same.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/apply.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+MPL_TEST_CASE()
 {
-    typedef mpl::apply1< mpl::identity<>, char >::type t1;
-    BOOST_MPL_ASSERT_IS_SAME(t1, char);
+    typedef apply1< identity<>, char >::type t1;
+    typedef apply1< identity<_1>, int >::type t2;
+    MPL_ASSERT(( is_same< t1, char > ));
+    MPL_ASSERT(( is_same< t2, int > ));
+}
 
-    return 0;
+MPL_TEST_CASE()
+{
+    typedef apply1< make_identity<>, char >::type t1;
+    typedef apply1< make_identity<_1>, int >::type t2;
+    MPL_ASSERT(( is_same< t1, identity<char> > ));
+    MPL_ASSERT(( is_same< t2, identity<int> > ));
 }

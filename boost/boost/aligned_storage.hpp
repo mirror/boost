@@ -20,7 +20,7 @@
 #include "boost/type_traits/alignment_of.hpp"
 #include "boost/type_traits/type_with_alignment.hpp"
 
-#include "boost/mpl/apply_if.hpp"
+#include "boost/mpl/eval_if.hpp"
 #include "boost/mpl/identity.hpp"
 
 namespace boost {
@@ -46,7 +46,7 @@ private: // representation
     {
         char buf[size_];
 
-        typename mpl::apply_if_c<
+        typename mpl::eval_if_c<
               alignment_ == std::size_t(-1)
             , mpl::identity<detail::max_align>
             , type_with_alignment<alignment_>

@@ -2,25 +2,26 @@
 #ifndef BOOST_MPL_AUX_PREPROCESSOR_TOKEN_EQUAL_HPP_INCLUDED
 #define BOOST_MPL_AUX_PREPROCESSOR_TOKEN_EQUAL_HPP_INCLUDED
 
-// + file: boost/mpl/aux_/preprocessor/token_equal.hpp
-// + last modified: 03/may/03
-
-// Copyright (c) 2003
-// Paul Mensonides, Aleksey Gurtovoy
+// Copyright Paul Mensonides 2003
+// Copyright Aleksey Gurtovoy 2003-2004
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/aux_/preprocessor/is_seq.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-#include "boost/preprocessor/if.hpp"
-#include "boost/preprocessor/logical/bitand.hpp"
-#include "boost/preprocessor/logical/compl.hpp"
-#include "boost/preprocessor/tuple/eat.hpp"
-#include "boost/preprocessor/cat.hpp"
+#include <boost/mpl/aux_/preprocessor/is_seq.hpp>
+
+#include <boost/preprocessor/if.hpp>
+#include <boost/preprocessor/logical/bitand.hpp>
+#include <boost/preprocessor/logical/compl.hpp>
+#include <boost/preprocessor/tuple/eat.hpp>
+#include <boost/preprocessor/cat.hpp>
 
 // compares tokens 'a' and 'b' for equality:
 //

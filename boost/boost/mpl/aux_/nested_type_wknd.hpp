@@ -1,41 +1,51 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/nested_type_wknd.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_AUX_NESTED_TYPE_WKND_HPP_INCLUDED
 #define BOOST_MPL_AUX_NESTED_TYPE_WKND_HPP_INCLUDED
 
-#include "boost/config.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#if defined(__GNUC__) && (__GNUC__ < 3 || __GNUC__ == 3 && __GNUC_MINOR__ <= 2 \
-    || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__BORLANDC__) && (__BORLANDC__ <= 0x561 || !defined(BOOST_STRICT_CONFIG)) \
- || defined(__SUNPRO_CC)
+// $Source$
+// $Date$
+// $Revision$
 
-namespace boost { namespace mpl { namespace aux {
+#include <boost/mpl/aux_/config/gcc.hpp>
+#include <boost/mpl/aux_/adl_barrier.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
 
-template< typename T >
-struct nested_type_wknd
+#if BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0302)) \
+    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
+    || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x530)) \
+    || BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))
+
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
+namespace aux {
+template< typename T > struct nested_type_wknd
     : T::type
 {
 };
+}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 
-}}} // namespace boost::mpl::aux
-
-#   define BOOST_MPL_AUX_NESTED_TYPE_WKND(T) ::boost::mpl::aux::nested_type_wknd<T>
-
+#if BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x840))
+#   define BOOST_MPL_AUX_NESTED_TYPE_WKND(T) \
+    aux::nested_type_wknd<T> \
+/**/
 #else
+#   define BOOST_MPL_AUX_NESTED_TYPE_WKND(T) \
+    ::BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::aux::nested_type_wknd<T> \
+/**/
+#endif
+
+#else // !BOOST_MPL_CFG_GCC et al.
 
 #   define BOOST_MPL_AUX_NESTED_TYPE_WKND(T) T::type
 
-#endif // __GNUC__
+#endif 
 
 #endif // BOOST_MPL_AUX_NESTED_TYPE_WKND_HPP_INCLUDED

@@ -3,10 +3,8 @@ subproject libs/mpl/test/aux_ ;
 # bring in rules for testing
 import testing ;
 
-compile debug_print.cpp ;
-compile has_rebind.cpp ;
-compile has_distance.cpp ;
-compile has_xxx.cpp ;
-compile no_has_xxx.cpp ;
-compile typeof.cpp ;
+compile preprocessor/is_seq.cpp ;
+compile preprocessor/token_equal.cpp ;
+compile largest_int.cpp ;
+compile msvc_is_class.cpp ;
 compile template_arity.cpp ;

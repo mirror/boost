@@ -1,28 +1,23 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/as_sequence.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2002-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/vector.hpp"
-#include "boost/mpl/as_sequence.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-using namespace boost::mpl;
+#include <boost/mpl/as_sequence.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-struct UDT {};
-
-int main()
+MPL_TEST_CASE()
 {
-    BOOST_STATIC_ASSERT(is_sequence< as_sequence<int>::type >::value);
-    BOOST_STATIC_ASSERT(is_sequence< as_sequence<UDT>::type >::value);
-    BOOST_STATIC_ASSERT(is_sequence< as_sequence< vector<> >::type >::value);
-
-    return 0;
+    MPL_ASSERT(( is_sequence< as_sequence<int>::type > ));
+    MPL_ASSERT(( is_sequence< as_sequence<UDT>::type > ));
+    MPL_ASSERT(( is_sequence< as_sequence< vector<> >::type > ));
 }

@@ -2,35 +2,20 @@
 #ifndef BOOST_MPL_AUX_TEST_TEST_CASE_HPP_INCLUDED
 #define BOOST_MPL_AUX_TEST_TEST_CASE_HPP_INCLUDED
 
-// + file: boost/mpl/aux_/test/test_case.hpp
-// + last modified: 04/may/03
-
-// Copyright (c) 2002-03
-// Aleksey Gurtovoy
+// Copyright Aleksey Gurtovoy 2002-2004
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/preprocessor/comma_if.hpp"
-#include "boost/preprocessor/seq/for_each_i.hpp"
-#include "boost/preprocessor/seq/enum.hpp" 
+// $Source$
+// $Date$
+// $Revision$
 
-#define CTT_AUX_PARAM_DEF(unused, prefix, i, elem) \
-    BOOST_PP_COMMA_IF(i) prefix elem \
-/**/
+#include <boost/preprocessor/cat.hpp>
 
-#define CTT_test_case( name, params_seq ) \
-template< \
-      BOOST_PP_SEQ_FOR_EACH_I( CTT_AUX_PARAM_DEF, typename, params_seq ) \
-    > \
-void name() \
-/**/
-
-#define CTT_test( test, params_seq ) \
-    test< BOOST_PP_SEQ_ENUM(params_seq) >() \
-/**/
+#define MPL_TEST_CASE() void BOOST_PP_CAT(test,__LINE__)()
 
 #endif // BOOST_MPL_AUX_TEST_TEST_CASE_HPP_INCLUDED

@@ -1,21 +1,25 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/joint_iter.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_AUX_JOINT_ITER_HPP_INCLUDED
 #define BOOST_MPL_AUX_JOINT_ITER_HPP_INCLUDED
 
-#include "boost/mpl/aux_/lambda_spec.hpp"
-#include "boost/mpl/aux_/config/ctps.hpp"
-#include "boost/type_traits/is_same.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
+
+#include <boost/mpl/next_prior.hpp>
+#include <boost/mpl/deref.hpp>
+#include <boost/mpl/iterator_tags.hpp>
+#include <boost/mpl/aux_/lambda_spec.hpp>
+#include <boost/mpl/aux_/config/ctps.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace mpl {
 
@@ -31,14 +35,14 @@ template<
 struct joint_iter
 {
     typedef Iterator1 base;
-    typedef typename base::category category;
+    typedef forward_iterator_tag category;
     typedef joint_iter<
-          typename base::next
+          typename next<base>::type
         , LastIterator1
         , Iterator2
         > next;
 
-    typedef typename base::type type;
+    typedef typename deref<base>::type type;
 };
 
 template<
@@ -48,14 +52,14 @@ template<
 struct joint_iter<LastIterator1,LastIterator1,Iterator2>
 {
     typedef Iterator2 base;
-    typedef typename base::category category;
+    typedef forward_iterator_tag category;
     typedef joint_iter<
           LastIterator1
         , LastIterator1
-        , typename base::next
+        , typename next<base>::type
         > next;
 
-    typedef typename base::type type;
+    typedef typename deref<base>::type type;
 };
 
 
@@ -79,16 +83,14 @@ template< bool > struct joint_iter_impl
     struct result_
     {
         typedef Iterator1 base;
-        // agurt, 16/nov/02: have to use 'Iterator1' instead of 'base' below
-        // to prevent 'base' and 'mpl::base' conflict on MSVC 6.0
-        typedef typename Iterator1::category category;
+        typedef forward_iterator_tag category;
         typedef joint_iter<
-              typename Iterator1::next
+              typename next<Iterator1>::type
             , LastIterator1
             , Iterator2
             > next;
 
-        typedef typename Iterator1::type type;
+        typedef typename deref<Iterator1>::type type;
     };
 };
 
@@ -102,14 +104,14 @@ template<> struct joint_iter_impl<true>
     struct result_
     {
         typedef Iterator2 base;
-        typedef typename Iterator2::category category;
+        typedef forward_iterator_tag category;
         typedef joint_iter<
               LastIterator1
             , LastIterator1
-            , typename Iterator2::next
+            , typename next<Iterator2>::type
             > next;
 
-        typedef typename Iterator2::type type;
+        typedef typename deref<Iterator2>::type type;
     };
 };
 
@@ -131,6 +133,6 @@ struct joint_iter
 
 BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(3, aux::joint_iter)
 
-}} // namespace boost::mpl
+}}
 
 #endif // BOOST_MPL_AUX_JOINT_ITER_HPP_INCLUDED

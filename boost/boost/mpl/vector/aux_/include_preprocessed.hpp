@@ -1,9 +1,11 @@
 
-// Copyright (c) 2001-04 Aleksey Gurtovoy
+// NO INCLUDE GUARDS, THE HEADER IS INTENDED FOR MULTIPLE INCLUSION
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Use, modification and distribution are subject to the Boost Software 
-// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy 
-// at http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
@@ -11,18 +13,17 @@
 // $Date$
 // $Revision$
 
-// no include guards, the header is intended for multiple inclusion!
+#include <boost/mpl/aux_/config/typeof.hpp>
+#include <boost/mpl/aux_/config/ctps.hpp>
+#include <boost/mpl/aux_/config/preprocessor.hpp>
 
-#include "boost/mpl/aux_/config/vector.hpp"
-#include "boost/mpl/aux_/config/ctps.hpp"
-#include "boost/mpl/aux_/config/preprocessor.hpp"
-#include "boost/preprocessor/cat.hpp"
-#include "boost/preprocessor/stringize.hpp"
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/stringize.hpp>
 
-#if defined(BOOST_MPL_TYPEOF_BASED_VECTOR_IMPL)
+#if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
 #   define AUX_VECTOR_INCLIDE_DIR typeof_based
 #elif defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-   || defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION)
+   || defined(BOOST_MPL_CFG_NO_NONTYPE_TEMPLATE_PARTIAL_SPEC)
 #   define AUX_VECTOR_INCLIDE_DIR no_ctps
 #else
 #   define AUX_VECTOR_INCLIDE_DIR plain

@@ -22,11 +22,11 @@
 #include "boost/variant/recursive_wrapper_fwd.hpp"
 
 #if !defined(BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE)
-#   include "boost/mpl/aux_/deref_wknd.hpp"
 #   include "boost/mpl/aux_/value_wknd.hpp"
 #   include "boost/mpl/int.hpp"
 #   include "boost/mpl/iter_fold.hpp"
 #   include "boost/mpl/next.hpp"
+#   include "boost/mpl/deref.hpp"
 #   include "boost/mpl/pair.hpp"
 #   include "boost/mpl/protect.hpp"
 #else
@@ -75,7 +75,7 @@ struct make_initializer_node
         {
         private: // helpers, for static functions (below)
 
-            typedef typename BOOST_MPL_AUX_DEREF_WNKD(Iterator)
+            typedef typename mpl::deref<Iterator>::type
                 recursive_enabled_T;
             typedef typename unwrap_recursive<recursive_enabled_T>::type
                 public_T;
@@ -183,7 +183,7 @@ public: // static functions
 
 };
 
-#   if defined(BOOST_MPL_MSVC_60_ETI_BUG)
+#   if defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
 
 #if !defined(BOOST_VARIANT_AUX_ECHO)
 #   define BOOST_VARIANT_AUX_ECHO(z,N,token) token
@@ -197,7 +197,7 @@ struct preprocessor_list_initializer<
 {
 };
 
-#   endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
+#   endif // BOOST_MPL_CFG_MSVC_60_ETI_BUG workaround
 
 #endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
 

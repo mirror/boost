@@ -19,7 +19,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 
 #include <boost/serialization/serialization.hpp>
@@ -70,7 +70,7 @@ inline void split_free(
     T & t, 
     const unsigned int file_version
 ){
-    mpl::apply_if<
+    mpl::eval_if<
         BOOST_DEDUCED_TYPENAME Archive::is_saving,
         mpl::identity</* detail:: */ free_saver<Archive, T> >, 
         mpl::identity</* detail:: */ free_loader<Archive, T> >

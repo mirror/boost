@@ -1,47 +1,78 @@
-// preprocessed version of 'boost/mpl/aux_/config/use_preprocessed.hpp' header
-// see the original for copyright information
 
-namespace boost {
-namespace mpl {
+// Copyright Aleksey Gurtovoy 2001-2003
+// Copyright Peter Dimov 2001-2003
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
 
+// Preprocessed version of "boost/mpl/placeholders.hpp" header
+// -- DO NOT modify by hand!
+
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 typedef arg< -1 > _;
 
-namespace placeholders {
-using boost::mpl::_;
-}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(_)
 
-// agurt, 17/mar/02: one more placeholder for the last 'apply#' 
-// specialization
+namespace boost { namespace mpl { namespace placeholders {
+using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_;
+}}}
+
+/// agurt, 17/mar/02: one more placeholder for the last 'apply#' 
+/// specialization
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 typedef arg<1> _1;
 
-namespace placeholders {
-using boost::mpl::_1;
-}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(_1)
+
+namespace boost { namespace mpl { namespace placeholders {
+using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_1;
+}}}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 typedef arg<2> _2;
 
-namespace placeholders {
-using boost::mpl::_2;
-}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(_2)
+
+namespace boost { namespace mpl { namespace placeholders {
+using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_2;
+}}}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 typedef arg<3> _3;
 
-namespace placeholders {
-using boost::mpl::_3;
-}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(_3)
+
+namespace boost { namespace mpl { namespace placeholders {
+using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_3;
+}}}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 typedef arg<4> _4;
 
-namespace placeholders {
-using boost::mpl::_4;
-}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(_4)
+
+namespace boost { namespace mpl { namespace placeholders {
+using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_4;
+}}}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 typedef arg<5> _5;
 
-namespace placeholders {
-using boost::mpl::_5;
-}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(_5)
+
+namespace boost { namespace mpl { namespace placeholders {
+using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_5;
+}}}
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 typedef arg<6> _6;
 
-namespace placeholders {
-using boost::mpl::_6;
-}
-} // namespace mpl
-} // namespace boost 
+BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
+BOOST_MPL_AUX_ADL_BARRIER_DECL(_6)
 
+namespace boost { namespace mpl { namespace placeholders {
+using BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE::_6;
+}}}

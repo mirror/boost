@@ -25,7 +25,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/identity.hpp>
 
@@ -120,9 +120,9 @@ namespace detail
   template <class Value, class AccessCategory, class TraversalCategory>
   struct operator_brackets
     : mpl::aux::msvc_eti_base<
-          typename mpl::apply_if<
+          typename mpl::eval_if<
               is_convertible<TraversalCategory, random_access_traversal_tag>
-            , mpl::apply_if<
+            , mpl::eval_if<
                   iterator_archetypes::has_access<
                       AccessCategory
                     , iterator_archetypes::writable_iterator_t
@@ -417,7 +417,7 @@ namespace detail
       
       typedef typename detail::facade_iterator_category<
           TraversalCategory
-        , typename mpl::apply_if<
+        , typename mpl::eval_if<
               iterator_archetypes::has_access<
                   AccessCategory, iterator_archetypes::writable_iterator_t
               >

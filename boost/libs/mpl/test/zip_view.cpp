@@ -1,56 +1,41 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/zip_view.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2002-2004
 //
-// Copyright (c) 2002
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/zip_view.hpp"
-#include "boost/mpl/transform_view.hpp"
-#include "boost/mpl/filter_view.hpp"
-#include "boost/mpl/range_c.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/at.hpp"
-#include "boost/mpl/equal.hpp"
-#include "boost/mpl/equal_to.hpp"
-#include "boost/mpl/math/is_even.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-using namespace boost::mpl;
+#include <boost/mpl/zip_view.hpp>
 
-template< typename BinaryOp >
-struct apply_two_args_seq
+#include <boost/mpl/transform_view.hpp>
+#include <boost/mpl/filter_view.hpp>
+#include <boost/mpl/range_c.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/at.hpp>
+#include <boost/mpl/equal.hpp>
+#include <boost/mpl/equal_to.hpp>
+#include <boost/mpl/unpack_args.hpp>
+#include <boost/mpl/math/is_even.hpp>
+
+#include <boost/mpl/aux_/test.hpp>
+
+
+MPL_TEST_CASE()
 {
-    template< typename Args > struct apply
-    {
-        typedef typename apply2<
-              BinaryOp
-            , typename at_c<Args,0>::type
-            , typename at_c<Args,1>::type
-            >::type type;
-    };
-};
-
-int main()
-{
-    typedef range_c<int,0,10> s1;
-    typedef range_c<int,10,20> s2;
-
     typedef transform_view<
-          zip_view< list<s1,s2> >
-        , apply_two_args_seq< plus<> >
+          zip_view< vector< range_c<int,0,10>, range_c<int,10,20> > >
+        , unpack_args< plus<> >
         > result;
 
-    BOOST_STATIC_ASSERT((equal< 
+    MPL_ASSERT(( equal< 
           result
-        , filter_view< range_c<int,10,30>, math::is_even<_> >
+        , filter_view< range_c<int,10,30>, is_even<_> >
         , equal_to<_,_>
-        >::type::value));
-
-    return 0;
+        > ));
 }

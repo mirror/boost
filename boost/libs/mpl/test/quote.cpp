@@ -1,21 +1,19 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/quote.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/quote.hpp"
-#include "boost/mpl/apply.hpp"
-#include "boost/type_traits/is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-using namespace boost::mpl;
+#include <boost/mpl/quote.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
 template< typename T > struct f1
 {
@@ -27,16 +25,18 @@ template<
     >
 struct f5
 {
+#if !defined(BOOST_MPL_CFG_NO_IMPLICIT_METAFUNCTIONS)
     // no 'type' member!
+#else
+    typedef f5 type;
+#endif
 };
 
-int main()
+MPL_TEST_CASE()
 {
-    typedef apply1< quote1<f1>,int >::type t1;
-    typedef apply5< quote5<f5>,char,short,int,long,float >::type t5;
+    typedef quote1<f1>::apply<int>::type t1;
+    typedef quote5<f5>::apply<char,short,int,long,float>::type t5;
     
-    BOOST_STATIC_ASSERT((boost::is_same< t1, int >::value));
-    BOOST_STATIC_ASSERT((boost::is_same< t5, f5<char,short,int,long,float> >::value));
-
-    return 0;
+    MPL_ASSERT(( boost::is_same< t1, int > ));
+    MPL_ASSERT(( boost::is_same< t5, f5<char,short,int,long,float> > ));
 }

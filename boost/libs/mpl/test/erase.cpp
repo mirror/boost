@@ -1,46 +1,45 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/erase.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License,Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/erase.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/list_c.hpp"
-#include "boost/mpl/find.hpp"
-#include "boost/mpl/size.hpp"
-#include "boost/mpl/integral_c.hpp"
-#include "boost/mpl/begin_end.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/erase.hpp>
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/list_c.hpp>
+#include <boost/mpl/find.hpp>
+#include <boost/mpl/size.hpp>
+#include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/begin_end.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+MPL_TEST_CASE()
 {
-    typedef mpl::list<int,char,long,short,char,long,double,long> types;
-    typedef mpl::list_c<int,1,0,5,1,7,5,0,5> values;
+    typedef list<int,char,long,short,char,long,double,long> types;
+    typedef find<types,short>::type iter;
+    
+    typedef erase<types, iter>::type result;
+    MPL_ASSERT_RELATION( size<result>::value, ==, 7 );
 
-    typedef mpl::find<types,short>::type types_iter;
-    typedef mpl::find< values, mpl::integral_c<int,7> >::type values_iter;
+    typedef find<result,short>::type result_iter;
+    MPL_ASSERT(( is_same< result_iter, end<result>::type > ));
+}
 
-    typedef mpl::erase<types, types_iter>::type result_types;
-    typedef mpl::erase<values, values_iter>::type result_values;
+MPL_TEST_CASE()
+{
+    typedef list_c<int,1,0,5,1,7,5,0,5> values;
+    typedef find< values, integral_c<int,7> >::type iter;
 
-    BOOST_STATIC_ASSERT(mpl::size<result_types>::type::value == 7);
-    BOOST_STATIC_ASSERT(mpl::size<result_values>::type::value == 7);
+    typedef erase<values, iter>::type result;
+    MPL_ASSERT_RELATION( size<result>::value, ==, 7 );
 
-    typedef mpl::find<result_types,short>::type result_types_iter;
-    typedef mpl::find<result_values, mpl::integral_c<int,7> >::type result_values_iter;
-
-    BOOST_MPL_ASSERT_IS_SAME(result_types_iter, mpl::end<result_types>::type);
-    BOOST_MPL_ASSERT_IS_SAME(result_values_iter, mpl::end<result_values>::type);
-
-    return 0;
+    typedef find<result, integral_c<int,7> >::type result_iter;
+    MPL_ASSERT(( is_same< result_iter, end<result>::type > ));
 }

@@ -1,41 +1,37 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/find.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License,Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/find.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/list_c.hpp"
-#include "boost/mpl/distance.hpp"
-#include "boost/mpl/begin_end.hpp"
-#include "boost/mpl/int.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/find.hpp>
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/list_c.hpp>
+#include <boost/mpl/distance.hpp>
+#include <boost/mpl/begin_end.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+MPL_TEST_CASE()
 {    
-    typedef mpl::list<int,char,long,short,char,long,double,long>::type types;
-    typedef mpl::list_c<int,1,0,5,1,7,5,0,5> values;
+    typedef list<int,char,long,short,char,long,double,long>::type types;
+    typedef list_c<int,1,0,5,1,7,5,0,5> values;
 
-    typedef mpl::find<types, short>::type types_iter;
-    typedef mpl::find< values, mpl::integral_c<int,7> >::type values_iter;
+    typedef find<types, short>::type types_iter;
+    typedef find< values, integral_c<int,7> >::type values_iter;
    
-    BOOST_MPL_ASSERT_IS_SAME(types_iter::type, short);
-    BOOST_STATIC_ASSERT(values_iter::type::value == 7);
+    MPL_ASSERT(( is_same<types_iter::type, short> ));
+    MPL_ASSERT_RELATION( values_iter::type::value, ==, 7 );
 
-    typedef mpl::begin<types>::type types_first;
-    typedef mpl::begin<values>::type values_first;
-    BOOST_STATIC_ASSERT((mpl::distance< types_first,types_iter >::type::value == 3));
-    BOOST_STATIC_ASSERT((mpl::distance< values_first,values_iter >::type::value == 4));
-
-    return 0;
+    typedef begin<types>::type types_first;
+    typedef begin<values>::type values_first;
+    MPL_ASSERT_RELATION( (mpl::distance< types_first,types_iter >::value), ==, 3 );
+    MPL_ASSERT_RELATION( (mpl::distance< values_first,values_iter >::value), ==, 4 );
 }

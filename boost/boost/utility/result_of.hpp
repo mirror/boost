@@ -14,7 +14,7 @@
 #include <boost/type.hpp>
 #include <boost/preprocessor.hpp>
 #include <boost/detail/workaround.hpp>
-#include <boost/mpl/aux_/has_xxx.hpp>
+#include <boost/mpl/has_xxx.hpp>
 
 #ifndef BOOST_RESULT_OF_NUM_ARGS
 #  define BOOST_RESULT_OF_NUM_ARGS 10

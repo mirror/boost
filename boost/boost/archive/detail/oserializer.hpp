@@ -40,7 +40,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/serialization/is_abstract.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/less.hpp>
 #include <boost/mpl/greater_equal.hpp>
@@ -246,7 +246,7 @@ struct save_non_pointer_type {
             >::value
         ));
         typedef 
-            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+            BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 // if its primitive
                 mpl::equal_to<
                     boost::serialization::implementation_level<T>,
@@ -254,7 +254,7 @@ struct save_non_pointer_type {
                 >,
                 mpl::identity<save_primitive>,
             // else
-            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+            BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 mpl::and_<
                     // no class info / version
                     mpl::less<
@@ -309,7 +309,7 @@ struct save_pointer_type {
         // virtual serialize functions used for plug-ins
         typedef BOOST_DEDUCED_TYPENAME remove_const<T>::type type;
         typedef 
-            BOOST_DEDUCED_TYPENAME mpl::apply_if<
+            BOOST_DEDUCED_TYPENAME mpl::eval_if<
                 is_abstract<T>,
                 mpl::identity<abstract<type> >,
                 mpl::identity<non_abstract<type> >       
@@ -413,7 +413,7 @@ struct save_pointer_type {
         const basic_pointer_oserializer * bpos_ptr
     ){
         typedef BOOST_DEDUCED_TYPENAME remove_const<T>::type typex;
-        mpl::apply_if<
+        mpl::eval_if<
             BOOST_DEDUCED_TYPENAME boost::serialization::
                 type_info_implementation<T>::type::is_polymorphic,
             mpl::identity<polymorphic<typex> >,
@@ -502,13 +502,13 @@ instantiate_pointer_oserializer(
 template<class Archive, class T>
 inline void save(Archive & ar, const T &t){
     typedef 
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<is_pointer<T>,
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_pointer<T>,
             mpl::identity<detail::save_pointer_type<Archive, T> >,
         //else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<is_enum<T>,
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_enum<T>,
             mpl::identity<detail::save_enum_type<Archive, T> >,
         //else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<is_array<T>,
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_array<T>,
             mpl::identity<detail::save_array_type<Archive, T> >,
         //else
             mpl::identity<detail::save_non_pointer_type<Archive, T> >

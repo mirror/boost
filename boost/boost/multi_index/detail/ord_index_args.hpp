@@ -10,7 +10,7 @@
 #define BOOST_MULTI_INDEX_DETAIL_ORD_INDEX_ARGS_HPP
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/multi_index/tag.hpp>
@@ -66,7 +66,7 @@ struct ordered_index_args
     full_form,
     Arg3,
     Arg2>::type                                      supplied_compare_type;
-  typedef typename mpl::apply_if<
+  typedef typename mpl::eval_if<
     is_same<supplied_compare_type,null_arg>,
     index_args_default_compare<key_from_value_type>,
     mpl::identity<supplied_compare_type>

@@ -1,39 +1,36 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/count_if.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/count_if.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/list_c.hpp"
-#include "boost/mpl/less.hpp"
-#include "boost/mpl/equal_to.hpp"
-#include "boost/type_traits/is_float.hpp"
-#include "boost/type_traits/is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/count_if.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/vector_c.hpp>
+#include <boost/mpl/comparison.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+#include <boost/type_traits/is_float.hpp>
+#include <boost/type_traits/is_same.hpp>
+
+MPL_TEST_CASE()
 {
-    using namespace mpl::placeholders;
-    typedef mpl::list<int,char&,long,short,char&,long,double,long> types;
-    typedef mpl::list_c<int,1,0,5,1,7,5,0,5> values;
+    typedef vector<int,char&,long,short,char&,long,double,long> types;
+    typedef vector_c<int,1,0,5,1,7,5,0,5> values;
     
-    BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_float<_> >::type::value == 1));
-    BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_same<_,char&> >::type::value == 2));
-    BOOST_STATIC_ASSERT((mpl::count_if< types, boost::is_same<_,void*> >::type::value == 0));
+    MPL_ASSERT_RELATION( (count_if< types, boost::is_float<_> >::value), ==, 1 );
+    MPL_ASSERT_RELATION( (count_if< types, boost::is_same<_,char&> >::value), ==, 2 );
+    MPL_ASSERT_RELATION( (count_if< types, boost::is_same<_,void*> >::value), ==, 0 );
 
-    BOOST_STATIC_ASSERT((mpl::count_if< values, mpl::lt<5> >::type::value == 4));
-    BOOST_STATIC_ASSERT((mpl::count_if< values, mpl::eq<0>  >::type::value == 2));
-    BOOST_STATIC_ASSERT((mpl::count_if< values, mpl::eq<-1> >::type::value == 0));
-    
-    return 0;
+    MPL_ASSERT_RELATION( (count_if< values, less<_,int_<5> > >::value), ==, 4 );
+    MPL_ASSERT_RELATION( (count_if< values, equal_to<int_<0>,_>  >::value), ==, 2 );
+    MPL_ASSERT_RELATION( (count_if< values, equal_to<int_<-1>,_> >::value), ==, 0 );
 }

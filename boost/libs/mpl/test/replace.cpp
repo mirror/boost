@@ -1,29 +1,27 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/replace.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright David Abrahams 2003-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy and John R. Bandela
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/replace.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/equal.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/replace.hpp>
 
-int main()
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/equal.hpp>
+#include <boost/mpl/aux_/test.hpp>
+
+MPL_TEST_CASE()
 {
-    typedef mpl::list<int,float,char,float,float,double>::type types;
-    typedef mpl::replace< types,float,double >::type result;
-
-    typedef mpl::list<int,double,char,double,double,double>::type answer;
-    BOOST_STATIC_ASSERT((mpl::equal< result,answer >::type::value));
-
-    return 0;
+    typedef list<int,float,char,float,float,double> types;
+    typedef replace< types,float,double >::type result;
+    typedef list<int,double,char,double,double,double> answer;
+    MPL_ASSERT(( equal< result,answer > ));
 }

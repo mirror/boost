@@ -87,4 +87,5 @@ void test_basic()
     std::sort(v.begin(),v.end(),less_by_employee_age());
     BOOST_CHECK(std::equal(i2.begin(),i2.end(),v.begin()));
   }
+
 }

@@ -27,7 +27,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/serialization/traits.hpp>
@@ -46,7 +46,7 @@ struct type_info_implementation {
         typedef BOOST_DEDUCED_TYPENAME U::type_info_implementation type;
     };
     typedef 
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
             boost::is_base_and_derived<basic_traits, T>,
             traits_class_typeinfo_implementation<T>,
         //else

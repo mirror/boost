@@ -1,41 +1,40 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/push_front.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/push_front.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/size.hpp"
-#include "boost/mpl/front.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/push_front.hpp>
+#include <boost/mpl/push_back.hpp>
+#include <boost/mpl/list/list10.hpp>
+#include <boost/mpl/size.hpp>
+#include <boost/mpl/front.hpp>
 
-int main()
+#include <boost/mpl/aux_/test.hpp>
+
+MPL_TEST_CASE()
 {
-    typedef mpl::list<>::type types1;
-    typedef mpl::list<long>::type types2;
-    typedef mpl::list<int,long>::type types3;
-
-    typedef mpl::push_front<types1,long>::type result1;
-    typedef mpl::push_front<types2,int>::type  result2;
-    typedef mpl::push_front<types3,char>::type result3;
+    typedef push_front<list0<>,long>::type res1;
+    typedef push_front<list1<long>,int>::type res2;
+    typedef push_front<list2<int,long>,char>::type res3;
     
-    BOOST_STATIC_ASSERT(mpl::size<result1>::type::value == 1);
-    BOOST_STATIC_ASSERT(mpl::size<result2>::type::value == 2);
-    BOOST_STATIC_ASSERT(mpl::size<result3>::type::value == 3);
+    MPL_ASSERT_RELATION( size<res1>::value, ==, 1 );
+    MPL_ASSERT_RELATION( size<res2>::value, ==, 2 );
+    MPL_ASSERT_RELATION( size<res3>::value, ==, 3 );
     
-    BOOST_MPL_ASSERT_IS_SAME(mpl::front<result1>::type, long);
-    BOOST_MPL_ASSERT_IS_SAME(mpl::front<result2>::type, int);
-    BOOST_MPL_ASSERT_IS_SAME(mpl::front<result3>::type, char);
+    MPL_ASSERT(( is_same< front<res1>::type, long > ));
+    MPL_ASSERT(( is_same< front<res2>::type, int > ));
+    MPL_ASSERT(( is_same< front<res3>::type, char > ));
+    
+    MPL_ASSERT(( has_push_front< list0<> > ));
+    MPL_ASSERT(( has_push_front< list1<long> > ));
 
-    return 0;
+    MPL_ASSERT_NOT(( has_push_back< list0<> > ));
 }

@@ -19,7 +19,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/remove_cv.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/fold.hpp>
@@ -241,13 +241,13 @@ namespace boost {
             struct array_traits_cv_selector
             {
                 typedef BOOST_STRING_TYPENAME 
-                    ::boost::mpl::apply_if< 
+                    ::boost::mpl::eval_if< 
                         ::boost::is_convertible<T,BaseT*>,
                         array_traits_impl_selector<T,BaseT>,
-                        ::boost::mpl::apply_if< 
+                        ::boost::mpl::eval_if< 
                             ::boost::is_convertible<T,const BaseT*>,
                                 array_traits_impl_selector<T, const BaseT>,
-                                ::boost::mpl::apply_if< 
+                                ::boost::mpl::eval_if< 
                                     ::boost::is_convertible<T, volatile BaseT*>,
                                     array_traits_impl_selector<T, volatile BaseT>,
                                     array_traits_impl_selector<T, const volatile BaseT>
@@ -263,7 +263,7 @@ namespace boost {
                 struct apply
                 {
                     typedef BOOST_STRING_TYPENAME
-                        ::boost::mpl::apply_if< 
+                        ::boost::mpl::eval_if< 
                             ::boost::is_convertible<T,const volatile T2*>,
                             array_traits_cv_selector<T,T2>,
                             ::boost::mpl::identity<T1> >::type type;

@@ -2,31 +2,34 @@
 #ifndef BOOST_MPL_SET_AUX_SET0_HPP_INCLUDED
 #define BOOST_MPL_SET_AUX_SET0_HPP_INCLUDED
 
-// + file: boost/mpl/aux_/set0.hpp
-// + last modified: 03/may/03
-
-// Copyright (c) 2002-03
-// David Abrahams, Aleksey Gurtovoy
+// Copyright Aleksey Gurtovoy 2003-2004
+// Copyright David Abrahams 2003-2004
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/void_fwd.hpp"
-#include "boost/mpl/set/aux_/tag.hpp"
-#include "boost/mpl/aux_/config/static_constant.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace boost {
-namespace mpl {
+#include <boost/mpl/long.hpp>
+#include <boost/mpl/void.hpp>
+#include <boost/mpl/set/aux_/tag.hpp>
+#include <boost/mpl/aux_/config/static_constant.hpp>
 
-template< int p_ = 0 > struct set0
+namespace boost { namespace mpl {
+
+template< int dummy_ = 0 > struct set0
 {
     typedef aux::set_tag    tag;
-    typedef void_           last_masked;
-    typedef void_           item;
-
+    typedef void_           last_masked_;
+    typedef void_           item_type_;
+    typedef item_type_      type;
+    typedef long_<0>        size;
+    
     BOOST_STATIC_CONSTANT(long, order = 0);
 };
 

@@ -1,28 +1,29 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/preprocessor/params.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_AUX_PREPROCESSOR_PARAMS_HPP_INCLUDED
 #define BOOST_MPL_AUX_PREPROCESSOR_PARAMS_HPP_INCLUDED
 
-#include "boost/mpl/aux_/config/preprocessor.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
+
+#include <boost/mpl/aux_/config/preprocessor.hpp>
 
 // BOOST_MPL_PP_PARAMS(0,T): <nothing>
 // BOOST_MPL_PP_PARAMS(1,T): T1
 // BOOST_MPL_PP_PARAMS(2,T): T1, T2
 // BOOST_MPL_PP_PARAMS(n,T): T1, T2, .., Tn
 
-#if !defined(BOOST_MPL_NO_OWN_PP_PRIMITIVES)
+#if !defined(BOOST_MPL_CFG_NO_OWN_PP_PRIMITIVES)
 
-#   include "boost/preprocessor/cat.hpp"
+#   include <boost/preprocessor/cat.hpp>
 
 #   define BOOST_MPL_PP_PARAMS(n,p) \
     BOOST_PP_CAT(BOOST_MPL_PP_PARAMS_,n)(p) \
@@ -41,10 +42,10 @@
 
 #else
 
-#   include "boost/preprocessor/comma_if.hpp"
-#   include "boost/preprocessor/repeat.hpp"
-#   include "boost/preprocessor/inc.hpp"
-#   include "boost/preprocessor/cat.hpp"
+#   include <boost/preprocessor/comma_if.hpp>
+#   include <boost/preprocessor/repeat.hpp>
+#   include <boost/preprocessor/inc.hpp>
+#   include <boost/preprocessor/cat.hpp>
 
 #   define BOOST_MPL_PP_AUX_PARAM_FUNC(unused, i, param) \
     BOOST_PP_COMMA_IF(i) \
@@ -52,13 +53,13 @@
     /**/
 
 #   define BOOST_MPL_PP_PARAMS(n, param) \
-    BOOST_PP_REPEAT_1( \
+    BOOST_PP_REPEAT( \
           n \
         , BOOST_MPL_PP_AUX_PARAM_FUNC \
         , param \
         ) \
     /**/
 
-#endif // BOOST_MPL_NO_OWN_PP_PRIMITIVES
+#endif 
 
 #endif // BOOST_MPL_AUX_PREPROCESSOR_PARAMS_HPP_INCLUDED

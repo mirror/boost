@@ -83,7 +83,7 @@ protected:
             serialization::not_serializable 
             !=  serialization::implementation_level<T>::value
         );
-        mpl::apply_if<
+        mpl::eval_if<
             #ifndef BOOST_NO_STD_WSTRING
                 mpl::or_<
                     mpl::equal_to<

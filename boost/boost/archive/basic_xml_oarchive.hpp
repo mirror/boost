@@ -90,7 +90,7 @@ protected:
 
     template<class T>
     void save_impl(const T & t){
-        mpl::apply_if<
+        mpl::eval_if<
             #ifndef BOOST_NO_STD_WSTRING
                  mpl::or_<
                     mpl::equal_to<

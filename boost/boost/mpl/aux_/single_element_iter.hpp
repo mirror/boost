@@ -1,27 +1,28 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/single_element_iter.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_AUX_SINGLE_ELEMENT_ITER_HPP_INCLUDED
 #define BOOST_MPL_AUX_SINGLE_ELEMENT_ITER_HPP_INCLUDED
 
-#include "boost/mpl/iterator_tag.hpp"
-#include "boost/mpl/plus.hpp"
-#include "boost/mpl/minus.hpp"
-#include "boost/mpl/int.hpp"
-#include "boost/mpl/aux_/value_wknd.hpp"
-#include "boost/mpl/aux_/iterator_names.hpp"
-#include "boost/mpl/aux_/lambda_spec.hpp"
-#include "boost/mpl/aux_/config/ctps.hpp"
-#include "boost/mpl/aux_/config/nttp.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
+
+#include <boost/mpl/iterator_tags.hpp>
+#include <boost/mpl/plus.hpp>
+#include <boost/mpl/minus.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/aux_/value_wknd.hpp>
+#include <boost/mpl/aux_/iterator_names.hpp>
+#include <boost/mpl/aux_/lambda_spec.hpp>
+#include <boost/mpl/aux_/config/ctps.hpp>
+#include <boost/mpl/aux_/nttp_decl.hpp>
 
 namespace boost { namespace mpl { 
 
@@ -34,7 +35,7 @@ struct single_element_iter;
 template< typename T, BOOST_MPL_AUX_NTTP_DECL(int, N) >
 struct single_iter_base
 {
-    typedef ra_iter_tag_ category;
+    typedef random_access_iterator_tag category;
     typedef mpl::int_<N> position;
 
     template< typename D >
@@ -112,8 +113,6 @@ struct single_element_iter
 
 } // namespace aux
 
-//BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(1, aux::single_element_iter)
-
-}} // namespace boost::mpl
+}}
 
 #endif // BOOST_MPL_AUX_SINGLE_ELEMENT_ITER_HPP_INCLUDED

@@ -16,7 +16,7 @@
 #include "boost/variant/bad_visit.hpp"
 #include "boost/variant/static_visitor.hpp"
 
-#include "boost/mpl/apply_if.hpp"
+#include "boost/mpl/eval_if.hpp"
 #include "boost/mpl/identity.hpp"
 #include "boost/type_traits/add_reference.hpp"
 #include "boost/type_traits/is_reference.hpp"
@@ -46,7 +46,7 @@ public: // typedefs
 
 private: // private typedefs
 
-    typedef typename mpl::apply_if<
+    typedef typename mpl::eval_if<
           is_reference<T>
         , mpl::identity<T>
         , add_reference<const T>

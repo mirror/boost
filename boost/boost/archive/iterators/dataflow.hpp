@@ -20,7 +20,7 @@
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/apply.hpp>

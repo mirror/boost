@@ -1,41 +1,58 @@
-//-----------------------------------------------------------------------------
-// boost mpl/copy.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_COPY_HPP_INCLUDED
 #define BOOST_MPL_COPY_HPP_INCLUDED
 
-#include "boost/mpl/fold.hpp"
-#include "boost/mpl/aux_/void_spec.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright David Abrahams 2003-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-namespace boost {
-namespace mpl {
+// $Source$
+// $Date$
+// $Revision$
 
-BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
+#include <boost/mpl/fold.hpp>
+#include <boost/mpl/reverse_fold.hpp>
+#include <boost/mpl/aux_/inserter_algorithm.hpp>
+
+namespace boost { namespace mpl {
+
+namespace aux {
 
 template<
-      typename BOOST_MPL_AUX_VOID_SPEC_PARAM(Sequence)
-    , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(State)
-    , typename BOOST_MPL_AUX_VOID_SPEC_PARAM(BinaryOp)
+      typename Sequence
+    , typename Inserter
     >
-struct copy
-    : fold< Sequence,State,BinaryOp >
+struct copy_impl
+    : fold< 
+          Sequence
+        , typename Inserter::state
+        , typename Inserter::operation
+        >
 {
 };
 
-BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
+template<
+      typename Sequence
+    , typename Inserter
+    >
+struct reverse_copy_impl
+    : reverse_fold<
+          Sequence
+        , typename Inserter::state
+        , typename Inserter::operation
+        >
+{
+};
 
-BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(3, copy)
+} // namespace aux
 
-} // namespace mpl
-} // namespace boost
+BOOST_MPL_AUX_INSERTER_ALGORITHM_DEF(2, copy)
+
+}}
 
 #endif // BOOST_MPL_COPY_HPP_INCLUDED

@@ -2,29 +2,29 @@
 #ifndef BOOST_MPL_SET_AUX_HAS_KEY_IMPL_HPP_INCLUDED
 #define BOOST_MPL_SET_AUX_HAS_KEY_IMPL_HPP_INCLUDED
 
-// + file: boost/mpl/aux_/has_key_impl.hpp
-// + last modified: 02/may/03
-
-// Copyright (c) 2002-03
-// David Abrahams, Aleksey Gurtovoy
+// Copyright Aleksey Gurtovoy 2003-2004
+// Copyright David Abrahams 2003-2004
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/set/aux_/tag.hpp"
-#include "boost/mpl/has_key_fwd.hpp"
-#include "boost/mpl/bool.hpp"
-#include "boost/mpl/aux_/static_cast.hpp"
-#include "boost/mpl/aux_/yes_no.hpp"
-#include "boost/mpl/aux_/type_wrapper.hpp"
-#include "boost/mpl/aux_/ptr_to_ref.hpp"
-#include "boost/mpl/aux_/config/workaround.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace boost {
-namespace mpl {
+#include <boost/mpl/set/aux_/tag.hpp>
+#include <boost/mpl/has_key_fwd.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/aux_/static_cast.hpp>
+#include <boost/mpl/aux_/yes_no.hpp>
+#include <boost/mpl/aux_/type_wrapper.hpp>
+#include <boost/mpl/aux_/ptr_to_ref.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
+
+namespace boost { namespace mpl {
 
 template<>
 struct has_key_impl< aux::set_tag >
@@ -45,7 +45,7 @@ struct has_key_impl< aux::set_tag >
         typedef bool_<value> type;
 #   endif
 
-#else
+#else // ISO98 C++
         : bool_< 
               ( sizeof( 
                   aux::ptr_to_ref(BOOST_MPL_AUX_STATIC_CAST(Set*, 0))

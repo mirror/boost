@@ -1,67 +1,97 @@
-//-----------------------------------------------------------------------------
-// boost mpl/vector/aux_/item.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_VECTOR_AUX_ITEM_HPP_INCLUDED
 #define BOOST_MPL_VECTOR_AUX_ITEM_HPP_INCLUDED
 
-#include "boost/mpl/integral_c.hpp"
-#include "boost/mpl/aux_/config/vector.hpp"
-#include "boost/mpl/aux_/config/ctps.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-namespace boost {
-namespace mpl {
+// $Source$
+// $Date$
+// $Revision$
 
-#if defined(BOOST_MPL_TYPEOF_BASED_VECTOR_IMPL)
+#include <boost/mpl/long.hpp>
+#include <boost/mpl/void.hpp>
+#include <boost/mpl/next_prior.hpp>
+#include <boost/mpl/aux_/type_wrapper.hpp>
+#include <boost/mpl/aux_/config/typeof.hpp>
+#include <boost/mpl/aux_/config/ctps.hpp>
 
-template< typename V, long N >
-struct vector_item
+namespace boost { namespace mpl {
+
+#if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
+
+template< 
+      typename T
+    , typename Base
+    , int at_front = 0
+    >
+struct v_item
+    : Base
 {
-    typedef __typeof__(V::item(integral_c<long,V::size::value - N - 1>())) wrapped_type_;
-    typedef typename wrapped_type_::type type;
+    typedef typename Base::upper_bound_                 index_;
+    typedef typename next<index_>::type                 upper_bound_;
+    typedef typename next<typename Base::size>::type    size;
+    typedef Base base;
+
+    using Base::item_;
+    static aux::type_wrapper<T> item_(index_);
 };
 
-#else
-
-// agurt, 29/sep/02: Borland 5.5.1 does a poor job on partial 
-// specialization here
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-    && !defined(BOOST_NO_NON_TYPE_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-// forward declaration
-template< typename T, long N >
-struct vector_item;
-
-#   else
-
-namespace aux {
-
-template< long N > struct vector_item_impl
+template<
+      typename T
+    , typename Base
+    >
+struct v_item<T,Base,1>
+    : Base
 {
-    template< typename V > struct result_;
+    typedef typename prior<typename Base::lower_bound_>::type   index_;
+    typedef index_                                              lower_bound_;
+    typedef typename next<typename Base::size>::type            size;
+    typedef Base base;
+
+    using Base::item_;
+    static aux::type_wrapper<T> item_(index_);
 };
 
-} // namespace aux
-
-template< typename T, long N >
-struct vector_item
-    : aux::vector_item_impl<N>::template result_<T>
+// "erasure" item
+template< 
+      typename Base
+    , int at_front
+    >
+struct v_mask
+    : Base
 {
+    typedef typename prior<typename Base::upper_bound_>::type   index_;
+    typedef index_                                              upper_bound_;
+    typedef typename prior<typename Base::size>::type           size;
+    typedef Base base;
+
+    using Base::item_;
+    static aux::type_wrapper<void_> item_(index_);
 };
 
-#   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+template< 
+      typename Base
+    >
+struct v_mask<Base,1>
+    : Base
+{
+    typedef typename Base::lower_bound_                 index_;
+    typedef typename next<index_>::type                 lower_bound_;
+    typedef typename prior<typename Base::size>::type   size;
+    typedef Base base;
 
-#endif // BOOST_MPL_TYPEOF_BASED_VECTOR_IMPL
+    using Base::item_;
+    static aux::type_wrapper<void_> item_(index_);
+};
 
-} // namespace mpl
-} // namespace boost
+#endif // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES
+
+}}
 
 #endif // BOOST_MPL_VECTOR_AUX_ITEM_HPP_INCLUDED

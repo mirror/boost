@@ -1,27 +1,24 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/contains.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2001-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/contains.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/contains.hpp>
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+MPL_TEST_CASE()
 {    
-    typedef mpl::list<int,char,long,short,char,long,double,long>::type types;
+    typedef vector<int,char,long,short,char,long,double,long>::type types;
 
-    BOOST_STATIC_ASSERT((mpl::contains< types,short >::type::value));
-    BOOST_STATIC_ASSERT((!mpl::contains< types,unsigned >::type::value));
-
-    return 0;
+    MPL_ASSERT(( contains< types,short > ));
+    MPL_ASSERT_NOT(( contains< types,unsigned > ));
 }

@@ -1,56 +1,47 @@
-//-----------------------------------------------------------------------------
-// libs mpl/test/stable_partition.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2004
+// Copyright Eric Friedman 2003
 //
-// Copyright (c) 2003
-// Eric Friedman
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/stable_partition.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-#include "boost/static_assert.hpp"
-#include "boost/mpl/list_c.hpp"
-#include "boost/mpl/equal.hpp"
+#include <boost/mpl/stable_partition.hpp>
 
-#include "boost/mpl/less.hpp"
-#include "boost/mpl/placeholders.hpp"
-#include "boost/mpl/int.hpp"
+#include <boost/mpl/vector_c.hpp>
+#include <boost/mpl/equal.hpp>
+#include <boost/mpl/comparison.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-namespace mpl = boost::mpl;
+typedef vector_c<int,3,4,0,-5,8,-1,7>::type numbers;
+typedef vector_c<int,0,-5,-1>::type manual_first;
+typedef vector_c<int,3,4,8,7>::type manual_second;
 
-int main()
+MPL_TEST_CASE()
 {
-    typedef mpl::list_c<int, 3, 4, 0, -5, 8, -1, 7>::type numbers;
-    typedef mpl::list_c<int, 0, -5, -1>::type manual_first;
-    typedef mpl::list_c<int, 3, 4, 8, 7>::type manual_second;
-
-    //////
-
-    typedef mpl::stable_partition<
+    typedef stable_partition<
           numbers
-        , mpl::less< mpl::_, mpl::int_<3> >
-        >::type result1;
+        , less< _, int_<3> >
+        >::type result;
 
-    typedef result1::first first1;
-    BOOST_STATIC_ASSERT((mpl::equal< first1,manual_first >::type::value));
-    typedef result1::second second1;
-    BOOST_STATIC_ASSERT((mpl::equal< second1,manual_second >::type::value));
+    MPL_ASSERT(( equal< result::first,manual_first > ));
+    MPL_ASSERT(( equal< result::second,manual_second > ));
+}
 
-    //////
-
-    typedef mpl::stable_partition<
+MPL_TEST_CASE()
+{
+    typedef stable_partition<
           numbers
-        , mpl::lt< 3 >
-        >::type result2;
+        , greater_equal< _, int_<3> >
+        >::type result;
 
-    typedef result2::first first2;
-    BOOST_STATIC_ASSERT((mpl::equal< first2,manual_first >::type::value));
-    typedef result2::second second2;
-    BOOST_STATIC_ASSERT((mpl::equal< second2,manual_second >::type::value));
-
-    return 0;
+    MPL_ASSERT(( equal< result::first,manual_second > ));
+    MPL_ASSERT(( equal< result::second,manual_first > ));
 }

@@ -1,16 +1,15 @@
 
-#  Copyright (c) 2001-03
-#  Aleksey Gurtovoy
+# Copyright Aleksey Gurtovoy 2001-2004
 #
-#  Permission to use, copy, modify, distribute and sell this software
-#  and its documentation for any purpose is hereby granted without fee, 
-#  provided that the above copyright notice appears in all copies and 
-#  that both the copyright notice and this permission notice appear in 
-#  supporting documentation. No representations are made about the 
-#  suitability of this software for any purpose. It is provided "as is" 
-#  without express or implied warranty.
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt)
 #
-#  See http://www.boost.org/libs/mpl for documentation.
+# See http://www.boost.org/libs/mpl for documentation.
+
+# $Source$
+# $Date$
+# $Revision$
 
 import shutil
 import os.path
@@ -22,7 +21,7 @@ def process( file, boost_root, dst_dir, mode ):
 
     os.system( "preprocess %s %s %s %s" % ( boost_root, mode, file, file_path ) )
     os.rename( file_path, "%s.tmp" % file_path )
-    os.system( "pp.py %s.tmp %s" % ( file_path, file_path ) )
+    os.system( "python pp.py %s.tmp %s" % ( file_path, file_path ) )
     os.remove( "%s.tmp" % file_path )
 
     filename = os.path.basename(file_path)
@@ -74,7 +73,7 @@ def main( all_modes, src_dir, dst_dir ):
 if __name__ == '__main__':
     
     main(
-          ["bcc", "bcc551", "gcc", "msvc60", "msvc70", "mwcw", "no_ctps", "no_ttp", "plain"]
+          ["bcc", "bcc551", "gcc", "msvc60", "msvc70", "mwcw", "dmc", "no_ctps", "no_ttp", "plain"]
         , "src"
         , "boost\\mpl\\aux_\\preprocessed"
         )

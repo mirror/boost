@@ -20,7 +20,7 @@
 #include <cassert>
 
 #include <boost/smart_cast.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 
 #include <boost/type_traits/is_polymorphic.hpp>

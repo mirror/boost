@@ -1,29 +1,24 @@
 
-// + file: libs/mpl/test/multiset.cpp
-// + last modified: 05/nov/03
-
-// Copyright Aleksey Gurtovoy 2003
+// Copyright Aleksey Gurtovoy 2003-2004
 //
-// Use, modification and distribution are subject to the Boost Software 
-// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy 
-// at http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/multiset/multiset0.hpp"
-#include "boost/mpl/insert.hpp"
-#include "boost/mpl/count.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-using namespace boost;
-using namespace boost::mpl;
+#include <boost/mpl/multiset/multiset0.hpp>
 
-struct abstract
-{
-    virtual ~abstract() = 0;
-};
+#include <boost/mpl/insert.hpp>
+#include <boost/mpl/count.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+
+MPL_TEST_CASE()
 {
     typedef multiset0<> s0;
     typedef insert<s0,int>::type s1;
@@ -31,13 +26,11 @@ int main()
     typedef insert<s2,int>::type s3;
     typedef insert<s3,abstract>::type s4;
     
-    BOOST_STATIC_ASSERT((count<s0,int>::value == 0));
-    BOOST_STATIC_ASSERT((count<s1,int>::value == 1));
-    BOOST_STATIC_ASSERT((count<s2,int>::value == 1));
-    BOOST_STATIC_ASSERT((count<s2,char&>::value == 1));
-    BOOST_STATIC_ASSERT((count<s3,int>::value == 2));
-    BOOST_STATIC_ASSERT((count<s3,char&>::value == 1));
-    BOOST_STATIC_ASSERT((count<s4,abstract>::value == 1));
-
-    return 0;
+    MPL_ASSERT_RELATION( (count<s0,int>::value), ==, 0 );
+    MPL_ASSERT_RELATION( (count<s1,int>::value), ==, 1 );
+    MPL_ASSERT_RELATION( (count<s2,int>::value), ==, 1 );
+    MPL_ASSERT_RELATION( (count<s2,char&>::value), ==, 1 );
+    MPL_ASSERT_RELATION( (count<s3,int>::value), ==, 2 );
+    MPL_ASSERT_RELATION( (count<s3,char&>::value), ==, 1 );
+    MPL_ASSERT_RELATION( (count<s4,abstract>::value), ==, 1 );
 }

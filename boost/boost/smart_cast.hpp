@@ -49,7 +49,7 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/remove_const.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/and.hpp>
@@ -92,7 +92,7 @@ namespace smart_cast_impl {
                     // cross casting will be selected this will work but will
                     // not be the most efficient method. This will conflict with
                     // the original smart_cast motivation.
-                    typedef BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                    typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
                             BOOST_DEDUCED_TYPENAME mpl::and_<
                                 mpl::not_<is_base_and_derived<
                                     BOOST_DEDUCED_TYPENAME remove_reference<T>::type,
@@ -120,7 +120,7 @@ namespace smart_cast_impl {
         };
         template<class U>
         static T cast(U & u){
-            return mpl::apply_if<
+            return mpl::eval_if<
                 boost::is_polymorphic<U>,
                 mpl::identity<polymorphic>,
                 mpl::identity<non_polymorphic>
@@ -164,7 +164,7 @@ namespace smart_cast_impl {
                     // not be the most efficient method. This will conflict with
                     // the original smart_cast motivation.
                     typedef
-                        BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                        BOOST_DEDUCED_TYPENAME mpl::eval_if<
                             BOOST_DEDUCED_TYPENAME mpl::and_<
                                 mpl::not_<is_base_and_derived<
                                     BOOST_DEDUCED_TYPENAME remove_pointer<T>::type,
@@ -193,7 +193,7 @@ namespace smart_cast_impl {
 
         template<class U>
         static T cast(U * u){
-            return mpl::apply_if<
+            return mpl::eval_if<
                 boost::is_polymorphic<U>,
                 mpl::identity<polymorphic>,
                 mpl::identity<non_polymorphic>
@@ -232,7 +232,7 @@ namespace smart_cast_impl {
 template<class T, class U>
 static T smart_cast(U u) {
     typedef
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
             BOOST_DEDUCED_TYPENAME mpl::or_<
                 boost::is_same<void *, U>,
                 boost::is_same<void *, T>,
@@ -241,10 +241,10 @@ static T smart_cast(U u) {
             >,
             mpl::identity<smart_cast_impl::void_pointer<T> >,
         // else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<boost::is_pointer<U>,
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<boost::is_pointer<U>,
             mpl::identity<smart_cast_impl::pointer<T> >,
         // else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<boost::is_reference<U>,
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<boost::is_reference<U>,
             mpl::identity<smart_cast_impl::reference<T> >,
         // else
             mpl::identity<smart_cast_impl::error<T>

@@ -25,7 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 
-#include <boost/mpl/aux_/has_xxx.hpp>
+#include <boost/mpl/has_xxx.hpp>
 
 #include <boost/type_traits/broken_compiler_spec.hpp>
 #include <vector>

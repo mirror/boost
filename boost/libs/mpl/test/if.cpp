@@ -1,32 +1,29 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/if.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License,Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/if.hpp"
-#include "boost/mpl/bool.hpp"
-#include "boost/mpl/assert_is_same.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+MPL_TEST_CASE()
 {
-    typedef mpl::if_<mpl::true_,char,long>::type t1;
-    typedef mpl::if_c<true,char,long>::type t2;
-    BOOST_MPL_ASSERT_IS_SAME(t1, char);
-    BOOST_MPL_ASSERT_IS_SAME(t2, char);
+    typedef if_<true_,char,long>::type t1;
+    typedef if_c<true,char,long>::type t2;
+    typedef if_<false_,char,long>::type t3;
+    typedef if_c<false,char,long>::type t4;
 
-    typedef mpl::if_<mpl::false_,char,long>::type t3;
-    typedef mpl::if_c<false,char,long>::type t4;
-    BOOST_MPL_ASSERT_IS_SAME(t3, long);
-    BOOST_MPL_ASSERT_IS_SAME(t4, long);
-
-    return 0;
+    MPL_ASSERT(( is_same<t1, char> ));
+    MPL_ASSERT(( is_same<t2, char> ));
+    MPL_ASSERT(( is_same<t3, long> ));
+    MPL_ASSERT(( is_same<t4, long> ));
 }

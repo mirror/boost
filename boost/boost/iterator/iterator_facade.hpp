@@ -24,7 +24,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_pod.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/and.hpp>
@@ -104,7 +104,7 @@ namespace boost
         
         typedef typename remove_const<ValueParam>::type value_type;
         
-        typedef typename mpl::apply_if<
+        typedef typename mpl::eval_if<
             detail::iterator_writability_disabled<ValueParam,Reference>
           , add_pointer<typename add_const<value_type>::type>
           , add_pointer<value_type>
@@ -267,7 +267,7 @@ namespace boost
     // *r also returns a proxy.
     template <class Iterator, class Value, class Reference, class CategoryOrTraversal>
     struct postfix_increment_result
-      : mpl::apply_if<
+      : mpl::eval_if<
             mpl::and_<
             // A proxy is only needed for readable iterators
             is_convertible<Reference,Value>
@@ -416,7 +416,7 @@ namespace boost
             , typename I2::difference_type
           >
 # else 
-          mpl::apply_if<
+          mpl::eval_if<
               is_convertible<I2,I1>
             , iterator_difference<I1>
             , iterator_difference<I2>

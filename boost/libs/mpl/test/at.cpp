@@ -1,35 +1,39 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/at.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/at.hpp"
-#include "boost/mpl/vector/vector10_c.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/at.hpp>
+#include <boost/mpl/vector/vector10_c.hpp>
+#include <boost/mpl/aux_/test.hpp>
 
-int main()
+template< typename Seq, int n > struct at_test
 {
-    typedef mpl::vector10_c<int,9,8,7,6,5,4,3,2,1,0> numbers;
+    typedef typename at_c<Seq,n>::type t;
+    MPL_ASSERT(( is_same< t, integral_c<int,9-n> > ));
+    MPL_ASSERT_RELATION( t::value, ==, 9 - n );
+};
 
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,0>::type::value == 9));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,1>::type::value == 8));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,2>::type::value == 7));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,3>::type::value == 6));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,4>::type::value == 5));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,5>::type::value == 4));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,6>::type::value == 3));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,7>::type::value == 2));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,8>::type::value == 1));
-    BOOST_STATIC_ASSERT((mpl::at_c<numbers,9>::type::value == 0));
-
-    return 0;
+MPL_TEST_CASE()
+{
+    typedef vector10_c<int,9,8,7,6,5,4,3,2,1,0> numbers;
+    
+    at_test< numbers, 0 >();
+    at_test< numbers, 1 >();
+    at_test< numbers, 2 >();
+    at_test< numbers, 3 >();
+    at_test< numbers, 4 >();
+    at_test< numbers, 5 >();
+    at_test< numbers, 6 >();
+    at_test< numbers, 7 >();
+    at_test< numbers, 8 >();
+    at_test< numbers, 9 >();
 }

@@ -79,6 +79,7 @@ namespace serialization {
     template <class T>
     struct implementation_level<optional<T> >
     {
+        typedef mpl::integral_c_tag tag;
         typedef mpl::int_<boost::serialization::object_serializable> type;
         BOOST_STATIC_CONSTANT(
             int , 
@@ -89,6 +90,7 @@ namespace serialization {
     template<class T>
     struct tracking_level<optional<T> >
     {
+        typedef mpl::integral_c_tag tag;
         typedef mpl::int_<boost::serialization::track_never> type;
         BOOST_STATIC_CONSTANT(
             int , 

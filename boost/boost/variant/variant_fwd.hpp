@@ -17,7 +17,7 @@
 
 #include "boost/blank_fwd.hpp"
 #include "boost/mpl/arg.hpp"
-#include "boost/mpl/void.hpp"
+#include "boost/mpl/aux_/na.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/preprocessor/enum.hpp"
 #include "boost/preprocessor/enum_params.hpp"
@@ -127,7 +127,7 @@ struct convert_void
 template <>
 struct convert_void< void_ >
 {
-    typedef mpl::void_ type;
+    typedef mpl::na type;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ struct convert_void< void_ >
 // (detail) tags voidNN -- NN defined on [0, BOOST_VARIANT_LIMIT_TYPES)
 //
 // Defines void types that are each unique and specializations of
-// convert_void that yields mpl::void_ for each voidNN type.
+// convert_void that yields mpl::na for each voidNN type.
 //
 
 #define BOOST_VARIANT_DETAIL_DEFINE_VOID_N(z,N,_)          \
@@ -151,7 +151,7 @@ struct convert_void< void_ >
     template <>                                            \
     struct convert_void< BOOST_PP_CAT(void,N) >            \
     {                                                      \
-        typedef mpl::void_ type;                           \
+        typedef mpl::na type;                              \
     };                                                     \
     /**/
 

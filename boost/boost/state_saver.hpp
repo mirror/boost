@@ -31,7 +31,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/type_traits/has_nothrow_copy.hpp>
 
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 
 namespace boost {
@@ -77,7 +77,7 @@ public:
     {}
     
     ~state_saver() {
-        mpl::apply_if<
+        mpl::eval_if<
             ::boost::has_nothrow_copy<T>,
             mpl::identity<restore>,
             mpl::identity<restore_with_exception>

@@ -1,30 +1,29 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/unique.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright David Abrahams 2003-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/unique.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/equal.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/unique.hpp>
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/equal.hpp>
+#include <boost/type_traits/is_same.hpp>
 
-int main()
+#include <boost/mpl/aux_/test.hpp>
+
+MPL_TEST_CASE()
 {
-    using namespace mpl::placeholders;
-    typedef mpl::list<int,float,float,char,int,int,int,double>::type types;
-    typedef mpl::unique<types>::type result;
+    typedef list<int,float,float,char,int,int,int,double> types;
+    typedef unique< types, is_same<_1,_2> >::type result;
 
-    typedef mpl::list<int,float,char,int,double>::type answer;
-    BOOST_STATIC_ASSERT((mpl::equal< result,answer >::type::value));
-
-    return 0;
+    typedef list<int,float,char,int,double>::type answer;
+    MPL_ASSERT(( equal< result,answer > ));
 }

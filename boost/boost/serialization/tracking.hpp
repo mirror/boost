@@ -18,7 +18,7 @@
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/equal_to.hpp>
@@ -39,12 +39,14 @@ struct tracking_level {
     struct traits_class_tracking {
         typedef BOOST_DEDUCED_TYPENAME U::tracking type;
     };
+    
+    typedef mpl::integral_c_tag tag;
     typedef
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
             is_base_and_derived<basic_traits, T>,
             traits_class_tracking<T>,
         //else
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
             // for primitives
             BOOST_DEDUCED_TYPENAME mpl::equal_to<
                 implementation_level<T>,
@@ -76,6 +78,7 @@ namespace serialization {                    \
 template<>                                   \
 struct tracking_level<T >                    \
 {                                            \
+    typedef mpl::integral_c_tag tag;         \
     typedef mpl::int_< E> type;              \
     BOOST_STATIC_CONSTANT(                   \
         int,                                 \

@@ -1,36 +1,24 @@
 
-// + file: libs/mpl/int.cpp
-// + last modified: 12/apr/03
-
-// Copyright (c) 2001-03
-// Aleksey Gurtovoy
+// Copyright Aleksey Gurtovoy 2001-2004
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/int.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/static_assert.hpp"
-#include "boost/preprocessor/repeat.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-#include <cassert>
+#include <boost/mpl/int.hpp>
+#include <boost/preprocessor/repeat.hpp>
 
-namespace mpl = boost::mpl;
+#include "integral_wrapper_test.hpp"
 
-#define INT_C_TEST(unused1, i, unused2) \
-    { BOOST_MPL_ASSERT_IS_SAME(mpl::int_<i>::value_type, int); } \
-    { BOOST_MPL_ASSERT_IS_SAME(mpl::int_<i>::type, mpl::int_<i>); } \
-    { BOOST_MPL_ASSERT_IS_SAME(mpl::int_<i>::next, mpl::int_<i+1>); } \
-    { BOOST_MPL_ASSERT_IS_SAME(mpl::int_<i>::prior, mpl::int_<i-1>); } \
-    { BOOST_STATIC_ASSERT(mpl::int_<i>::value == i); } \
-    assert(mpl::int_<i>() == i); \
-/**/
 
-int main()
+MPL_TEST_CASE()
 {
-    BOOST_PP_REPEAT(10, INT_C_TEST, unused)
-    return 0;
+#   define WRAPPER(T, i) int_<i>
+    BOOST_PP_REPEAT(10, INTEGRAL_WRAPPER_TEST, int)
 }

@@ -22,7 +22,7 @@
 #include "boost/mpl/aux_/lambda_arity_param.hpp"
 
 #if !defined(BOOST_VARIANT_NO_TYPE_SEQUENCE_SUPPORT)
-#   include "boost/mpl/apply_if.hpp"
+#   include "boost/mpl/eval_if.hpp"
 #   include "boost/mpl/identity.hpp"
 #   include "boost/mpl/protect.hpp"
 #   include "boost/mpl/transform.hpp"
@@ -85,7 +85,7 @@ struct substitute<
 
 private: // helpers, for metafunction result (below)
 
-    typedef typename mpl::apply_if<
+    typedef typename mpl::eval_if<
           ::boost::detail::variant::is_over_sequence<T0>
         , mpl::identity< T0 >
         , make_variant_list< BOOST_VARIANT_ENUM_PARAMS(T) >

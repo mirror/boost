@@ -17,7 +17,7 @@
 
 #include "boost/mpl/aux_/config/ctps.hpp"
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-#   include "boost/mpl/apply_if.hpp"
+#   include "boost/mpl/eval_if.hpp"
 #   include "boost/mpl/bool.hpp"
 #   include "boost/mpl/identity.hpp"
 #   include "boost/type.hpp"
@@ -127,7 +127,7 @@ struct unwrap_recursive< recursive_wrapper<T> >
 
 template <typename T>
 struct unwrap_recursive
-    : mpl::apply_if<
+    : mpl::eval_if<
           is_recursive_wrapper<T>
         , T
         , mpl::identity< T >

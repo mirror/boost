@@ -2,69 +2,120 @@
 #ifndef BOOST_MPL_AUX_VECTOR_ITERATOR_HPP_INCLUDED
 #define BOOST_MPL_AUX_VECTOR_ITERATOR_HPP_INCLUDED
 
-// + file: boost/mpl/aux_/vector/iterator.hpp
-// + last modified: 30/may/03
-
-// Copyright (c) 2000-03
-// Aleksey Gurtovoy
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/iterator_tag.hpp"
-#include "boost/mpl/plus.hpp"
-#include "boost/mpl/minus.hpp"
-#include "boost/mpl/vector/aux_/item.hpp"
-#include "boost/mpl/aux_/iterator_names.hpp"
-#include "boost/mpl/aux_/value_wknd.hpp"
-#include "boost/mpl/aux_/config/workaround.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace boost {
-namespace mpl {
+#include <boost/mpl/vector/aux_/at.hpp>
+#include <boost/mpl/iterator_tags.hpp>
+#include <boost/mpl/plus.hpp>
+#include <boost/mpl/minus.hpp>
+#include <boost/mpl/advance_fwd.hpp>
+#include <boost/mpl/distance_fwd.hpp>
+#include <boost/mpl/next.hpp>
+#include <boost/mpl/prior.hpp>
+#include <boost/mpl/aux_/iterator_names.hpp>
+#include <boost/mpl/aux_/nttp_decl.hpp>
+#include <boost/mpl/aux_/config/ctps.hpp>
+#include <boost/mpl/aux_/config/workaround.hpp>
+
+namespace boost { namespace mpl {
 
 template<
       typename Vector
-    , typename Pos
+    , BOOST_MPL_AUX_NTTP_DECL(long, n_)
     >
-struct vector_iterator
+struct v_iter
 {
-    typedef ra_iter_tag_ category;
-    typedef typename vector_item<
-          Vector
-        , BOOST_MPL_AUX_VALUE_WKND(Pos)::value
-        >::type type;
+    typedef aux::v_iter_tag tag;
+    typedef random_access_iterator_tag category;
+    typedef typename v_at<Vector,n_>::type type;
 
-    typedef Pos pos;
-    typedef vector_iterator<Vector,typename Pos::next> next;
-    typedef vector_iterator<Vector,typename Pos::prior> prior;
+    typedef Vector vector_;
+    typedef long_<n_> pos;
 
-    template< typename Distance >
-    struct BOOST_MPL_AUX_ITERATOR_ADVANCE
-    {
-        typedef vector_iterator<
-              Vector
-            , typename plus<Pos,Distance>::type
-            > type;
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+    enum { 
+          next_ = n_ + 1
+        , prior_ = n_ - 1
+        , pos_ = n_
     };
-
-    template< typename Other >
-    struct BOOST_MPL_AUX_ITERATOR_DISTANCE
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-        : minus<typename Other::pos,Pos>
-    {
-#else
-    {
-        typedef typename minus<typename Other::pos,Pos>::type type;
-        BOOST_STATIC_CONSTANT(typename Pos::value_type
-            , value = (minus<typename Other::pos,Pos>::value));
+    
+    typedef v_iter<Vector,next_> next;
+    typedef v_iter<Vector,prior_> prior;
 #endif
+
+};
+
+
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
+template<
+      typename Vector
+    , BOOST_MPL_AUX_NTTP_DECL(long, n_)
+    >
+struct next< v_iter<Vector,n_> >
+{
+    typedef v_iter<Vector,(n_ + 1)> type;
+};
+
+template<
+      typename Vector
+    , BOOST_MPL_AUX_NTTP_DECL(long, n_)
+    >
+struct prior< v_iter<Vector,n_> >
+{
+    typedef v_iter<Vector,(n_ - 1)> type;
+};
+
+template<
+      typename Vector
+    , BOOST_MPL_AUX_NTTP_DECL(long, n_)
+    , typename Distance
+    >
+struct advance< v_iter<Vector,n_>,Distance>
+{
+    typedef v_iter<
+          Vector
+        , (n_ + Distance::value)
+        > type;
+};
+
+template< 
+      typename Vector
+    , BOOST_MPL_AUX_NTTP_DECL(long, n_)
+    , BOOST_MPL_AUX_NTTP_DECL(long, m_)
+    > 
+struct distance< v_iter<Vector,n_>, v_iter<Vector,m_> >
+    : long_<(m_ - n_)>
+{
+};
+
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+template<> struct advance_impl<aux::v_iter_tag>
+{
+    template< typename Iterator, typename N > struct apply
+    {
+        enum { pos_ = Iterator::pos_, n_ = N::value };
+        typedef v_iter<
+              typename Iterator::vector_
+            , (pos_ + n_)
+            > type;
     };
 };
 
-} // namespace mpl
-} // namespace boost
+
+#endif
+
+}}
 
 #endif // BOOST_MPL_AUX_VECTOR_ITERATOR_HPP_INCLUDED

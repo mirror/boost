@@ -18,7 +18,7 @@
 
 #include <boost/config.hpp>
 #include <boost/mpl/int.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 
 #include <boost/serialization/traits.hpp>
@@ -36,8 +36,10 @@ struct version
     struct traits_class_version {
         typedef BOOST_DEDUCED_TYPENAME U::version type;
     };
+
+    typedef mpl::integral_c_tag tag;
     typedef
-        BOOST_DEDUCED_TYPENAME mpl::apply_if<
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<
             is_base_and_derived<basic_traits,T>,
             traits_class_version<T>,
             mpl::int_<0>
@@ -55,6 +57,7 @@ namespace serialization {                                              \
 template<>                                                             \
 struct version<T >                                                     \
 {                                                                      \
+    typedef mpl::integral_c_tag tag;                                   \
     typedef mpl::int_<N> type;                                         \
     BOOST_STATIC_CONSTANT(unsigned int, value = version::type::value); \
     /* require that class info saved when versioning is used */        \

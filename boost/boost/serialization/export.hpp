@@ -26,7 +26,7 @@
 
 #include <boost/static_assert.hpp>
 #include <boost/preprocessor/stringize.hpp>
-#include <boost/mpl/apply_if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/front.hpp>
@@ -86,11 +86,11 @@ namespace export_impl
                 Archive::is_loading::value || Archive::is_saving::value
             );
             #endif
-            mpl::apply_if<
+            mpl::eval_if<
                 BOOST_DEDUCED_TYPENAME Archive::is_saving,
                 mpl::identity<o>,
             // else
-            mpl::apply_if<
+            mpl::eval_if<
                 BOOST_DEDUCED_TYPENAME Archive::is_loading,
                 mpl::identity<i>,
             // else
@@ -107,7 +107,7 @@ namespace export_impl
     public:
         static void instantiate(){
             archive<head, T>::instantiate();
-            mpl::apply_if<
+            mpl::eval_if<
                 mpl::empty<tail>,
                 mpl::identity<nothing>,
                 mpl::identity<for_each_archive<tail, T> >
@@ -149,7 +149,7 @@ struct guid_initializer {
 
 template<class T, class ASeq>
 /* BOOST_DLLEXPORT */ guid_initializer<T, ASeq>::guid_initializer(const char *key){
-    typedef BOOST_DEDUCED_TYPENAME mpl::apply_if<
+    typedef BOOST_DEDUCED_TYPENAME mpl::eval_if<
         mpl::empty<ASeq>,
         mpl::identity<empty>,
         mpl::identity<non_empty>

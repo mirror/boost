@@ -1,34 +1,34 @@
-//-----------------------------------------------------------------------------
-// boost mpl/list/aux_/pop_front.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_LIST_AUX_POP_FRONT_HPP_INCLUDED
 #define BOOST_MPL_LIST_AUX_POP_FRONT_HPP_INCLUDED
 
-#include "boost/mpl/pop_front_fwd.hpp"
-#include "boost/mpl/list/aux_/tag.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-namespace boost {
-namespace mpl {
+// $Source$
+// $Date$
+// $Revision$
+
+#include <boost/mpl/pop_front_fwd.hpp>
+#include <boost/mpl/next_prior.hpp>
+#include <boost/mpl/list/aux_/tag.hpp>
+
+namespace boost { namespace mpl {
 
 template<>
-struct pop_front_traits< aux::list_tag >
+struct pop_front_impl< aux::list_tag >
 {
-    template< typename List > struct algorithm
+    template< typename List > struct apply
     {
-        typedef typename List::next type;
+        typedef typename next<List>::type type;
     };
 };
 
-} // namespace mpl
-} // namespace boost
+}}
 
 #endif // BOOST_MPL_LIST_AUX_POP_FRONT_HPP_INCLUDED

@@ -117,10 +117,10 @@ namespace boost { namespace numeric { namespace convdetail
 
       typedef mpl::less<T_mantisa,S_mantisa> T_smaller_mantisa ;
 
-      typedef mpl::apply_if<equal_exponents,T_smaller_mantisa,mpl::false_> not_bigger_exponent_case ;
+      typedef mpl::eval_if<equal_exponents,T_smaller_mantisa,mpl::false_> not_bigger_exponent_case ;
 
       typedef typename
-        mpl::apply_if<T_smaller_exponent,mpl::true_,not_bigger_exponent_case>::type
+        mpl::eval_if<T_smaller_exponent,mpl::true_,not_bigger_exponent_case>::type
           type ;
     } ;
 

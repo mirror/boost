@@ -22,6 +22,7 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/size.hpp>
+#include <boost/mpl/deref.hpp>
 #include <boost/multi_index_container_fwd.hpp>
 #include <boost/multi_index/detail/access_specifier.hpp>
 #include <boost/multi_index/detail/base_type.hpp>
@@ -267,10 +268,10 @@ public:
     >::type                                    iter;
 
     BOOST_STATIC_CONSTANT(
-      bool,index_found=!(is_same<iter,mpl::end<index_type_list> >::value));
+      bool,index_found=!(is_same<iter,typename mpl::end<index_type_list>::type >::value));
     BOOST_STATIC_ASSERT(index_found);
 
-    typedef typename iter::type                type;
+    typedef typename mpl::deref<iter>::type    type;
   };
 
   template<typename Tag>
@@ -605,10 +606,10 @@ struct index
   >::type                                      iter;
 
   BOOST_STATIC_CONSTANT(
-    bool,index_found=!(is_same<iter,mpl::end<index_type_list> >::value));
+    bool,index_found=!(is_same<iter,typename mpl::end<index_type_list>::type >::value));
   BOOST_STATIC_ASSERT(index_found);
 
-  typedef typename iter::type                  type;
+  typedef typename mpl::deref<iter>::type       type;
 };
 
 template<

@@ -1,41 +1,46 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/find_if.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License,Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/find_if.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/distance.hpp"
-#include "boost/mpl/assert_is_same.hpp"
-#include "boost/type_traits/is_float.hpp"
-#include "boost/type_traits/is_same.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/find_if.hpp>
 
-int main()
+#include <boost/mpl/vector.hpp>
+#include <boost/mpl/distance.hpp>
+#include <boost/mpl/size.hpp>
+#include <boost/mpl/aux_/test.hpp>
+
+#include <boost/type_traits/is_float.hpp>
+#include <boost/type_traits/is_same.hpp>
+
+typedef vector<int,char,long,short,char,long,double,float,char>::type types;
+typedef begin<types>::type first_;
+
+MPL_TEST_CASE()
 {
-    using namespace mpl::placeholders;
-    typedef mpl::list9<int,char,long,short,char,long,double,float,char>::type types;
+    typedef find_if< types, boost::is_float<_> >::type iter;
+    MPL_ASSERT(( is_same< iter::type, double > ));
+    MPL_ASSERT_RELATION( (mpl::distance<first_,iter>::value), ==, 6 );
+}
 
-    typedef mpl::find_if< types, boost::is_float<_> >::type iter1;
-    typedef mpl::find_if< types, boost::is_same<_,long> >::type iter2;
-    typedef mpl::find_if< types, boost::is_same<_,void> >::type iter3;
+MPL_TEST_CASE()
+{
+    typedef find_if< types, boost::is_same<_,long> >::type iter;
+    MPL_ASSERT(( is_same< iter::type, long > ));
+    MPL_ASSERT_RELATION( (mpl::distance<first_,iter>::value), ==, 2 );
+}
 
-    BOOST_MPL_ASSERT_IS_SAME(iter1::type, double);
-    BOOST_MPL_ASSERT_IS_SAME(iter2::type, long);
-    BOOST_MPL_ASSERT_IS_SAME(iter3, mpl::end<types>::type);
-
-    typedef mpl::begin<types>::type first;
-    BOOST_STATIC_ASSERT((mpl::distance<first,iter1>::type::value == 6));
-    BOOST_STATIC_ASSERT((mpl::distance<first,iter2>::type::value == 2));
-
-    return 0;
+MPL_TEST_CASE()
+{
+    typedef find_if< types, boost::is_same<_,void> >::type iter;
+    MPL_ASSERT(( is_same< iter, end<types>::type > ));
+    MPL_ASSERT_RELATION( (mpl::distance<first_,iter>::value), ==, size<types>::value );
 }

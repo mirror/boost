@@ -1,41 +1,37 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/distance.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/distance.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/range_c.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/distance.hpp>
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/range_c.hpp>
 
-void list_distance_test()
+#include <boost/mpl/aux_/test.hpp>
+
+
+MPL_TEST_CASE()
 {
-    typedef mpl::list<char,short,int,long>::type list;
-    typedef mpl::begin<list>::type first;
-    typedef mpl::end<list>::type last;
+    typedef list<char,short,int,long>::type list;
+    typedef begin<list>::type first;
+    typedef end<list>::type last;
     
-    BOOST_STATIC_ASSERT((mpl::distance<first,last>::type::value == 4));
+    MPL_ASSERT_RELATION( (mpl::distance<first,last>::value), ==, 4 );
 }
 
-void range_distance_test()
+MPL_TEST_CASE()
 {
-    typedef mpl::range_c<int,0,10>::type range;
-    typedef mpl::begin<range>::type first;
-    typedef mpl::end<range>::type last;
+    typedef range_c<int,0,10>::type range;
+    typedef begin<range>::type first;
+    typedef end<range>::type last;
     
-    BOOST_STATIC_ASSERT((mpl::distance<first,last>::type::value == 10));
-}
-
-int main()
-{
-    return 0;
+    MPL_ASSERT_RELATION( (mpl::distance<first,last>::value), ==, 10 );
 }

@@ -1,18 +1,25 @@
-// preprocessed version of 'boost/mpl/list/list10_c.hpp' header
-// see the original for copyright information
 
-namespace boost {
-namespace mpl {
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+
+// Preprocessed version of "boost/mpl/list/list10_c.hpp" header
+// -- DO NOT modify by hand!
+
+namespace boost { namespace mpl {
 
 template<
       typename T
     , T C0
     >
 struct list1_c
-    : list_node<
-          integral_c< long,1 >
+    : l_item<
+          long_<1>
         , integral_c< T,C0 >
-        , null_node
+        , l_end
         >
 {
     typedef list1_c type;
@@ -23,8 +30,8 @@ template<
     , T C0, T C1
     >
 struct list2_c
-    : list_node<
-          integral_c< long,2 >
+    : l_item<
+          long_<2>
         , integral_c< T,C0 >
         , list1_c< T,C1 >
         >
@@ -37,8 +44,8 @@ template<
     , T C0, T C1, T C2
     >
 struct list3_c
-    : list_node<
-          integral_c< long,3 >
+    : l_item<
+          long_<3>
         , integral_c< T,C0 >
         , list2_c< T,C1,C2 >
         >
@@ -51,8 +58,8 @@ template<
     , T C0, T C1, T C2, T C3
     >
 struct list4_c
-    : list_node<
-          integral_c< long,4 >
+    : l_item<
+          long_<4>
         , integral_c< T,C0 >
         , list3_c< T,C1,C2,C3 >
         >
@@ -65,8 +72,8 @@ template<
     , T C0, T C1, T C2, T C3, T C4
     >
 struct list5_c
-    : list_node<
-          integral_c< long,5 >
+    : l_item<
+          long_<5>
         , integral_c< T,C0 >
         , list4_c< T,C1,C2,C3,C4 >
         >
@@ -79,8 +86,8 @@ template<
     , T C0, T C1, T C2, T C3, T C4, T C5
     >
 struct list6_c
-    : list_node<
-          integral_c< long,6 >
+    : l_item<
+          long_<6>
         , integral_c< T,C0 >
         , list5_c< T,C1,C2,C3,C4,C5 >
         >
@@ -93,8 +100,8 @@ template<
     , T C0, T C1, T C2, T C3, T C4, T C5, T C6
     >
 struct list7_c
-    : list_node<
-          integral_c< long,7 >
+    : l_item<
+          long_<7>
         , integral_c< T,C0 >
         , list6_c< T,C1,C2,C3,C4,C5,C6 >
         >
@@ -107,8 +114,8 @@ template<
     , T C0, T C1, T C2, T C3, T C4, T C5, T C6, T C7
     >
 struct list8_c
-    : list_node<
-          integral_c< long,8 >
+    : l_item<
+          long_<8>
         , integral_c< T,C0 >
         , list7_c< T,C1,C2,C3,C4,C5,C6,C7 >
         >
@@ -121,8 +128,8 @@ template<
     , T C0, T C1, T C2, T C3, T C4, T C5, T C6, T C7, T C8
     >
 struct list9_c
-    : list_node<
-          integral_c< long,9 >
+    : l_item<
+          long_<9>
         , integral_c< T,C0 >
         , list8_c< T,C1,C2,C3,C4,C5,C6,C7,C8 >
         >
@@ -135,8 +142,8 @@ template<
     , T C0, T C1, T C2, T C3, T C4, T C5, T C6, T C7, T C8, T C9
     >
 struct list10_c
-    : list_node<
-          integral_c< long,10 >
+    : l_item<
+          long_<10>
         , integral_c< T,C0 >
         , list9_c< T,C1,C2,C3,C4,C5,C6,C7,C8,C9 >
         >
@@ -144,6 +151,4 @@ struct list10_c
     typedef list10_c type;
 };
 
-} // namespace mpl
-} // namespace boost
-
+}}

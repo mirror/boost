@@ -1,33 +1,32 @@
-//-----------------------------------------------------------------------------
-// boost mpl/aux_/sort_impl.hpp header file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2002-2003
-// Eric Friedman
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_MPL_AUX_SORT_IMPL_HPP_INCLUDED
 #define BOOST_MPL_AUX_SORT_IMPL_HPP_INCLUDED
 
-#include "boost/mpl/aux_/select1st_wknd.hpp"
-#include "boost/mpl/aux_/select2nd_wknd.hpp"
-#include "boost/mpl/apply.hpp"
-#include "boost/mpl/apply_if.hpp"
-#include "boost/mpl/copy_backward.hpp"
-#include "boost/mpl/empty.hpp"
-#include "boost/mpl/front.hpp"
-#include "boost/mpl/identity.hpp"
-#include "boost/mpl/partition.hpp"
-#include "boost/mpl/pop_front.hpp"
-#include "boost/mpl/push_front.hpp"
-#include "boost/mpl/aux_/traits_lambda_spec.hpp"
+// Copyright Eric Friedman 2002-2003
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-namespace boost {
-namespace mpl {
+// $Source$
+// $Date$
+// $Revision$
+
+#include <boost/mpl/apply.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/reverse_fold.hpp>
+#include <boost/mpl/empty.hpp>
+#include <boost/mpl/front.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/mpl/partition.hpp>
+#include <boost/mpl/pop_front.hpp>
+#include <boost/mpl/push_front.hpp>
+#include <boost/mpl/protect.hpp>
+#include <boost/mpl/aux_/traits_lambda_spec.hpp>
+
+namespace boost { namespace mpl {
 
 namespace aux {
 
@@ -58,15 +57,15 @@ private:
         >::type partitioned;
 
     typedef typename quick_sort<
-          typename BOOST_MPL_AUX_SELECT1ST_WKND(partitioned), Predicate
+          typename first<partitioned>::type, Predicate
         >::type first_part;
     typedef typename quick_sort<
-          typename BOOST_MPL_AUX_SELECT2ND_WKND(partitioned), Predicate
+          typename second<partitioned>::type, Predicate
         >::type second_part;
 
 public:
 
-    typedef typename copy_backward<
+    typedef typename reverse_fold<
           first_part
         , typename push_front< second_part,pivot_ >::type
         , push_front<_,_>
@@ -76,7 +75,7 @@ public:
 
 template <typename Sequence, typename Predicate>
 struct quick_sort
-    : apply_if<
+    : eval_if<
           empty<Sequence>
         , identity< Sequence >
         , quick_sort_impl< Sequence,Predicate >
@@ -87,10 +86,10 @@ struct quick_sort
 } // namespace aux
 
 template< typename Tag >
-struct sort_traits
+struct sort_impl
 {
     template< typename Sequence, typename Predicate >
-    struct algorithm
+    struct apply
     {
         typedef typename aux::quick_sort<
               Sequence, Predicate
@@ -98,9 +97,8 @@ struct sort_traits
     };
 };
 
-BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(2,sort_traits)
+BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(2,sort_impl)
 
-} // namespace mpl
-} // namespace boost
+}}
 
 #endif // BOOST_MPL_AUX_SORT_IMPL_HPP_INCLUDED

@@ -1,28 +1,26 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/size.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
+
+// Copyright Aleksey Gurtovoy 2000-2004
 //
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/size.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/static_assert.hpp"
+// $Source$
+// $Date$
+// $Revision$
 
-namespace mpl = boost::mpl;
+#include <boost/mpl/size.hpp>
 
-int main()
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/aux_/test.hpp>
+
+MPL_TEST_CASE()
 {
-    typedef mpl::list<> empty_list;
-    typedef mpl::list<char,short,int,long> list;
+    typedef list<> empty_list;
+    typedef list<char,short,int,long> list;
     
-    BOOST_STATIC_ASSERT((mpl::size<empty_list>::type::value == 0));
-    BOOST_STATIC_ASSERT((mpl::size<list>::type::value == 4));
-
-    return 0;
+    MPL_ASSERT_RELATION( size<empty_list>::value, ==, 0 );
+    MPL_ASSERT_RELATION( size<list>::value, ==, 4 );
 }

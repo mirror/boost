@@ -1,21 +1,23 @@
-//-----------------------------------------------------------------------------
-// boost mpl/test/for_each.cpp source file
-// See http://www.boost.org for updates, documentation, and revision history.
-//-----------------------------------------------------------------------------
-//
-// Copyright (c) 2000-02
-// Aleksey Gurtovoy
-//
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
 
-#include "boost/mpl/for_each.hpp"
-#include "boost/mpl/list.hpp"
-#include "boost/mpl/range_c.hpp"
-#include "boost/mpl/identity.hpp"
-#include "boost/mpl/lambda.hpp"
-#include "boost/bind.hpp"
+// Copyright Aleksey Gurtovoy 2000-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+// See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
+
+#include <boost/mpl/for_each.hpp>
+
+#include <boost/mpl/list.hpp>
+#include <boost/mpl/range_c.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/mpl/lambda.hpp>
+#include <boost/bind.hpp>
 
 #include <vector>
 #include <iostream>
@@ -24,7 +26,6 @@
 #include <cassert>
 
 namespace mpl = boost::mpl;
-using mpl::_;
 
 struct type_printer
 {
@@ -57,18 +58,18 @@ struct value_printer
 int main()
 {
     typedef mpl::list<char,short,int,long,float,double> types;
-    mpl::for_each< types,mpl::make_identity<_> >(type_printer(std::cout));
+    mpl::for_each< types,mpl::make_identity<mpl::_1> >(type_printer(std::cout));
 
     typedef mpl::range_c<int,0,10> numbers;
     std::vector<int> v;
 
-#if !defined(__BORLANDC__) && (__BORLANDC__ >= 0x561 && !defined(BOOST_STRICT_CONFIG))
-    mpl::for_each<numbers,mpl::_>(
+#if BOOST_WORKAROUND(__BORLANDC__, >= 0x561)
+    mpl::for_each<numbers>(
           boost::bind(&std::vector<int>::push_back, &v, _1)
         );    
 #else
     void (std::vector<int>::* push_back)(int const&) = &std::vector<int>::push_back;
-    mpl::for_each<numbers,mpl::_>(
+    mpl::for_each<numbers>(
           boost::bind(push_back, &v, _1)
         );
 #endif

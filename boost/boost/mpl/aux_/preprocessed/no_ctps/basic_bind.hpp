@@ -1,11 +1,16 @@
-// preprocessed version of 'boost/mpl/bind.hpp' header
-// see the original for copyright information
 
-namespace boost {
-namespace mpl {
+// Copyright Peter Dimov 2001
+// Copyright Aleksey Gurtovoy 2001-2004
+//
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
+// http://www.boost.org/LICENSE_1_0.txt)
+//
 
-BOOST_MPL_AUX_COMMON_NAME_WKND(bind1st)
-BOOST_MPL_AUX_COMMON_NAME_WKND(bind2nd)
+// Preprocessed version of "boost/mpl/bind.hpp" header
+// -- DO NOT modify by hand!
+
+namespace boost { namespace mpl {
 
 namespace aux {
 template< bool >
@@ -30,7 +35,10 @@ struct resolve_arg_impl<true>
         >
     struct result_
     {
-        typedef typename T::template apply< U1,U2,U3,U4,U5 >::type type;
+        typedef typename apply_wrap5<
+              T
+            , U1, U2, U3, U4, U5
+            >::type type;
     };
 };
 
@@ -41,24 +49,12 @@ template<
     , typename U5
     >
 struct resolve_bind_arg
-    : resolve_arg_impl< is_bind_template<T >::value >
+    : resolve_arg_impl< is_bind_template<T>::value >
             ::template result_< T,U1,U2,U3,U4,U5 >
 {
 };
 
-} // namespace aux
-
-template<
-      typename F, typename T1 = void_, typename T2 = void_
-    , typename T3 = void_, typename T4 = void_, typename T5 = void_
-    >
-struct bind;
-
-template< typename F, typename T > struct bind1st;
-template< typename F, typename T > struct bind2nd;
-
-namespace aux {
-template< int arity_ > struct bind_impl_chooser;
+template< int arity_ > struct bind_chooser;
 
 aux::no_tag is_bind_helper(...);
 template< typename T > aux::no_tag is_bind_helper(protect<T>*);
@@ -71,9 +67,6 @@ aux::yes_tag is_bind_helper(bind< F,T1,T2,T3,T4,T5 >*);
 
 template< int N >
 aux::yes_tag is_bind_helper(arg<N>*);
-
-template< typename F, typename T > aux::yes_tag is_bind_helper(bind1st< F,T >*);
-template< typename F, typename T > aux::yes_tag is_bind_helper(bind2nd< F,T >*);
 
 template< bool is_ref_ = true >
 struct is_bind_template_impl
@@ -105,22 +98,14 @@ template< typename T > struct is_bind_template
 
 } // namespace aux
 
-BOOST_MPL_AUX_ARITY_SPEC(
-      6
-    , bind
-    )
-
-BOOST_MPL_AUX_ARITY_SPEC(2, bind1st)
-BOOST_MPL_AUX_ARITY_SPEC(2, bind2nd)
-
 template<
       typename F
     >
 struct bind0
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1 = na, typename U2 = na, typename U3 = na
+        , typename U4 = na, typename U5 = na
         >
     struct apply
     {
@@ -128,7 +113,10 @@ struct bind0
         typedef typename aux::resolve_bind_arg< F,U1,U2,U3,U4,U5 >::type f_;
 
      public:
-        typedef typename f_::type type;
+        typedef typename apply_wrap0<
+              f_
+            >::type type;
+
     };
 };
 
@@ -147,7 +135,7 @@ BOOST_MPL_AUX_ARITY_SPEC(1, bind0)
 namespace aux {
 
 template<>
-struct bind_impl_chooser<0>
+struct bind_chooser<0>
 {
     template<
           typename F, typename T1, typename T2, typename T3, typename T4
@@ -167,17 +155,21 @@ template<
 struct bind1
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1 = na, typename U2 = na, typename U3 = na
+        , typename U4 = na, typename U5 = na
         >
     struct apply
     {
      private:
         typedef typename aux::resolve_bind_arg< F,U1,U2,U3,U4,U5 >::type f_;
-        typedef typename aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 >::type t1;
+        typedef aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 > t1;
 
      public:
-        typedef typename f_::template apply<t1>::type type;
+        typedef typename apply_wrap1<
+              f_
+            , typename t1::type
+            >::type type;
+
     };
 };
 
@@ -196,7 +188,7 @@ BOOST_MPL_AUX_ARITY_SPEC(2, bind1)
 namespace aux {
 
 template<>
-struct bind_impl_chooser<1>
+struct bind_chooser<1>
 {
     template<
           typename F, typename T1, typename T2, typename T3, typename T4
@@ -216,18 +208,22 @@ template<
 struct bind2
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1 = na, typename U2 = na, typename U3 = na
+        , typename U4 = na, typename U5 = na
         >
     struct apply
     {
      private:
         typedef typename aux::resolve_bind_arg< F,U1,U2,U3,U4,U5 >::type f_;
-        typedef typename aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 >::type t1;
-        typedef typename aux::resolve_bind_arg< T2,U1,U2,U3,U4,U5 >::type t2;
+        typedef aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 > t1;
+        typedef aux::resolve_bind_arg< T2,U1,U2,U3,U4,U5 > t2;
 
      public:
-        typedef typename f_::template apply< t1,t2 >::type type;
+        typedef typename apply_wrap2<
+              f_
+            , typename t1::type, typename t2::type
+            >::type type;
+
     };
 };
 
@@ -246,7 +242,7 @@ BOOST_MPL_AUX_ARITY_SPEC(3, bind2)
 namespace aux {
 
 template<>
-struct bind_impl_chooser<2>
+struct bind_chooser<2>
 {
     template<
           typename F, typename T1, typename T2, typename T3, typename T4
@@ -266,19 +262,23 @@ template<
 struct bind3
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1 = na, typename U2 = na, typename U3 = na
+        , typename U4 = na, typename U5 = na
         >
     struct apply
     {
      private:
         typedef typename aux::resolve_bind_arg< F,U1,U2,U3,U4,U5 >::type f_;
-        typedef typename aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 >::type t1;
-        typedef typename aux::resolve_bind_arg< T2,U1,U2,U3,U4,U5 >::type t2;
-        typedef typename aux::resolve_bind_arg< T3,U1,U2,U3,U4,U5 >::type t3;
+        typedef aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 > t1;
+        typedef aux::resolve_bind_arg< T2,U1,U2,U3,U4,U5 > t2;
+        typedef aux::resolve_bind_arg< T3,U1,U2,U3,U4,U5 > t3;
 
      public:
-        typedef typename f_::template apply< t1,t2,t3 >::type type;
+        typedef typename apply_wrap3<
+              f_
+            , typename t1::type, typename t2::type, typename t3::type
+            >::type type;
+
     };
 };
 
@@ -297,7 +297,7 @@ BOOST_MPL_AUX_ARITY_SPEC(4, bind3)
 namespace aux {
 
 template<>
-struct bind_impl_chooser<3>
+struct bind_chooser<3>
 {
     template<
           typename F, typename T1, typename T2, typename T3, typename T4
@@ -317,20 +317,25 @@ template<
 struct bind4
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1 = na, typename U2 = na, typename U3 = na
+        , typename U4 = na, typename U5 = na
         >
     struct apply
     {
      private:
         typedef typename aux::resolve_bind_arg< F,U1,U2,U3,U4,U5 >::type f_;
-        typedef typename aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 >::type t1;
-        typedef typename aux::resolve_bind_arg< T2,U1,U2,U3,U4,U5 >::type t2;
-        typedef typename aux::resolve_bind_arg< T3,U1,U2,U3,U4,U5 >::type t3;
-        typedef typename aux::resolve_bind_arg< T4,U1,U2,U3,U4,U5 >::type t4;
+        typedef aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 > t1;
+        typedef aux::resolve_bind_arg< T2,U1,U2,U3,U4,U5 > t2;
+        typedef aux::resolve_bind_arg< T3,U1,U2,U3,U4,U5 > t3;
+        typedef aux::resolve_bind_arg< T4,U1,U2,U3,U4,U5 > t4;
 
      public:
-        typedef typename f_::template apply< t1,t2,t3,t4 >::type type;
+        typedef typename apply_wrap4<
+              f_
+            , typename t1::type, typename t2::type, typename t3::type
+            , typename t4::type
+            >::type type;
+
     };
 };
 
@@ -349,7 +354,7 @@ BOOST_MPL_AUX_ARITY_SPEC(5, bind4)
 namespace aux {
 
 template<>
-struct bind_impl_chooser<4>
+struct bind_chooser<4>
 {
     template<
           typename F, typename T1, typename T2, typename T3, typename T4
@@ -370,21 +375,26 @@ template<
 struct bind5
 {
     template<
-          typename U1 = void_, typename U2 = void_, typename U3 = void_
-        , typename U4 = void_, typename U5 = void_
+          typename U1 = na, typename U2 = na, typename U3 = na
+        , typename U4 = na, typename U5 = na
         >
     struct apply
     {
      private:
         typedef typename aux::resolve_bind_arg< F,U1,U2,U3,U4,U5 >::type f_;
-        typedef typename aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 >::type t1;
-        typedef typename aux::resolve_bind_arg< T2,U1,U2,U3,U4,U5 >::type t2;
-        typedef typename aux::resolve_bind_arg< T3,U1,U2,U3,U4,U5 >::type t3;
-        typedef typename aux::resolve_bind_arg< T4,U1,U2,U3,U4,U5 >::type t4;
-        typedef typename aux::resolve_bind_arg< T5,U1,U2,U3,U4,U5 >::type t5;
+        typedef aux::resolve_bind_arg< T1,U1,U2,U3,U4,U5 > t1;
+        typedef aux::resolve_bind_arg< T2,U1,U2,U3,U4,U5 > t2;
+        typedef aux::resolve_bind_arg< T3,U1,U2,U3,U4,U5 > t3;
+        typedef aux::resolve_bind_arg< T4,U1,U2,U3,U4,U5 > t4;
+        typedef aux::resolve_bind_arg< T5,U1,U2,U3,U4,U5 > t5;
 
      public:
-        typedef typename f_::template apply< t1,t2,t3,t4,t5 >::type type;
+        typedef typename apply_wrap5<
+              f_
+            , typename t1::type, typename t2::type, typename t3::type
+            , typename t4::type, typename t5::type
+            >::type type;
+
     };
 };
 
@@ -404,7 +414,7 @@ BOOST_MPL_AUX_ARITY_SPEC(6, bind5)
 namespace aux {
 
 template<>
-struct bind_impl_chooser<5>
+struct bind_chooser<5>
 {
     template<
           typename F, typename T1, typename T2, typename T3, typename T4
@@ -427,7 +437,7 @@ struct is_bind_arg
 };
 
 template<>
-struct is_bind_arg<void_>
+struct is_bind_arg<na>
 {
     static bool const value = false;
 };
@@ -452,40 +462,15 @@ template<
     , typename T5
     >
 struct bind
-    : aux::bind_impl_chooser<
+    : aux::bind_chooser<
           aux::bind_count_args< T1,T2,T3,T4,T5 >::value
         >::template result_< F,T1,T2,T3,T4,T5 >::type
 {
 };
 
-template< typename F, typename T >
-struct bind1st
-{
-    template<
-          typename U
-        , typename U2 = void_, typename U3 = void_, typename U4 = void_
-        , typename U5 = void_
-        >
-    struct apply
-        : F::template apply< T,U >
-    {
-    };
-};
-
-template< typename F, typename T >
-struct bind2nd
-{
-    template<
-          typename U
-        , typename U2 = void_, typename U3 = void_, typename U4 = void_
-        , typename U5 = void_
-        >
-    struct apply
-        : F::template apply< U,T >
-    {
-    };
-};
-
-} // namespace mpl
-} // namespace boost
+BOOST_MPL_AUX_ARITY_SPEC(
+      6
+    , bind
+    )
+}}
 

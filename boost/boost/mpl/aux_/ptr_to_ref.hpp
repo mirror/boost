@@ -2,17 +2,17 @@
 #ifndef BOOST_MPL_AUX_PTR_TO_REF_HPP_INCLUDED
 #define BOOST_MPL_AUX_PTR_TO_REF_HPP_INCLUDED
 
-// + file: boost/mpl/aux_/ptr_to_ref.hpp
-// + last modified: 03/may/03
-
-// Copyright (c) 2002-03
-// Aleksey Gurtovoy
+// Copyright Aleksey Gurtovoy 2003-2004
 //
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0. 
+// (See accompanying file LICENSE_1_0.txt or copy at 
 // http://www.boost.org/LICENSE_1_0.txt)
 //
 // See http://www.boost.org/libs/mpl for documentation.
+
+// $Source$
+// $Date$
+// $Revision$
 
 namespace boost { namespace mpl { namespace aux {
 
