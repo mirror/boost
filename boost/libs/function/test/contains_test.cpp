@@ -31,23 +31,23 @@ bool operator==(const ReturnInt& x, const ReturnInt& y)
 bool operator!=(const ReturnInt& x, const ReturnInt& y)
 { return x.value != y.value; }
 
-static void contains_test()
+static void target_test()
 {
   boost::function0<int> f;
 
   f = &forty_two;
-  BOOST_TEST(*f.contains<int (*)()>() == &forty_two);
-  BOOST_TEST(!f.contains<Seventeen>());
+  BOOST_TEST(*f.target<int (*)()>() == &forty_two);
+  BOOST_TEST(!f.target<Seventeen>());
 
   f = Seventeen();
-  BOOST_TEST(!f.contains<int (*)()>());
-  BOOST_TEST(f.contains<Seventeen>());
+  BOOST_TEST(!f.target<int (*)()>());
+  BOOST_TEST(f.target<Seventeen>());
 
   Seventeen this_seventeen;
   f = boost::ref(this_seventeen);
-  BOOST_TEST(!f.contains<int (*)()>());
-  BOOST_TEST(f.contains<Seventeen>());
-  BOOST_TEST(f.contains<Seventeen>() == &this_seventeen);
+  BOOST_TEST(!f.target<int (*)()>());
+  BOOST_TEST(f.target<Seventeen>());
+  BOOST_TEST(f.target<Seventeen>() == &this_seventeen);
 }
 
 static void equal_test()
@@ -89,7 +89,7 @@ static void equal_test()
 
 int test_main(int, char*[])
 {
-  contains_test();
+  target_test();
   equal_test();
 
   return 0;

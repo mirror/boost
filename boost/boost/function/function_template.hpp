@@ -648,7 +648,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
                      Allocator>& f,
              Functor g)
   {
-    if (const Functor* fp = f.template contains<Functor>()) return *fp == g;
+    if (const Functor* fp = f.template target<Functor>()) return *fp == g;
     else return false;
   }
 
@@ -661,7 +661,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
                      BOOST_FUNCTION_TEMPLATE_ARGS ,
                      Allocator>& f)
   {
-    if (const Functor* fp = f.template contains<Functor>()) return g == *fp;
+    if (const Functor* fp = f.template target<Functor>()) return g == *fp;
     else return false;
   }
 
@@ -674,7 +674,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
                      Allocator>& f,
              Functor g)
   {
-    if (const Functor* fp = f.template contains<Functor>()) return *fp != g;
+    if (const Functor* fp = f.template target<Functor>()) return *fp != g;
     else return true;
   }
 
@@ -687,7 +687,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
                      BOOST_FUNCTION_TEMPLATE_ARGS ,
                      Allocator>& f)
   {
-    if (const Functor* fp = f.template contains<Functor>()) return g != *fp;
+    if (const Functor* fp = f.template target<Functor>()) return g != *fp;
     else return true;
   }
 #undef BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL

@@ -330,7 +330,7 @@ namespace boost {
         bool
         compare_equal(const Function& f, const Functor& g, mpl::bool_<false>)
         {
-          if (const Functor* fp = f.template contains<Functor>())
+          if (const Functor* fp = f.template target<Functor>())
             return *fp == g;
           else return false;
         }
@@ -340,7 +340,7 @@ namespace boost {
         compare_not_equal(const Function& f, const Functor& g,
                           mpl::bool_<false>)
         {
-          if (const Functor* fp = f.template contains<Functor>())
+          if (const Functor* fp = f.template target<Functor>())
             return *fp != g;
           else return true;
         }
@@ -366,7 +366,7 @@ public:
   bool empty() const { return !manager; }
 
   template<typename Functor>
-    Functor* contains()
+    Functor* target()
     {
       if (!manager) return 0;
 
@@ -381,7 +381,7 @@ public:
     }
 
   template<typename Functor>
-    const Functor* contains() const
+    const Functor* target() const
     {
       if (!manager) return 0;
 
