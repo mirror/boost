@@ -23,6 +23,8 @@
 // David Abrahams.
 
 // Revision history:
+// 2001 10 22 John Maddock
+//      Fixes for Borland C++
 // 2001 08 30 David Abrahams
 //      Added default constructor for cons<>.
 // ----------------------------------------------------------------- 
@@ -597,51 +599,54 @@ inline tuple<> make_tuple() {
 template<class T0>
 inline typename detail::make_tuple_mapper<T0>::type
 make_tuple(const T0& t0) {
-  return typename detail::make_tuple_mapper<T0>::type(t0); 
+  typedef typename detail::make_tuple_mapper<T0>::type t;
+  return t(t0);
 }
 
 template<class T0, class T1>
 inline typename detail::make_tuple_mapper<T0, T1>::type
 make_tuple(const T0& t0, const T1& t1) {
-  return typename detail::make_tuple_mapper<T0, T1>::type(t0, t1); 
+  typedef typename detail::make_tuple_mapper<T0, T1>::type t;
+  return t(t0, t1);
 }
 
 template<class T0, class T1, class T2>
 inline typename detail::make_tuple_mapper<T0, T1, T2>::type
 make_tuple(const T0& t0, const T1& t1, const T2& t2) {
-  return typename detail::make_tuple_mapper<T0, T1, T2>::type(t0, t1, t2); 
+  typedef typename detail::make_tuple_mapper<T0, T1, T2>::type t;
+  return t(t0, t1, t2);
 }
 
 template<class T0, class T1, class T2, class T3>
 inline typename detail::make_tuple_mapper<T0, T1, T2, T3>::type
 make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3) {
-  return typename detail::make_tuple_mapper<T0, T1, T2, T3>::type
-           (t0, t1, t2, t3); 
+  typedef typename detail::make_tuple_mapper<T0, T1, T2, T3>::type t;
+  return t(t0, t1, t2, t3);
 }
 
 template<class T0, class T1, class T2, class T3, class T4>
 inline typename detail::make_tuple_mapper<T0, T1, T2, T3, T4>::type
 make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4) {
-  return typename detail::make_tuple_mapper<T0, T1, T2, T3, T4>::type
-           (t0, t1, t2, t3, t4); 
+  typedef typename detail::make_tuple_mapper<T0, T1, T2, T3, T4>::type t;
+  return t(t0, t1, t2, t3, t4); 
 }
 
 template<class T0, class T1, class T2, class T3, class T4, class T5>
 inline typename detail::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type
 make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5) {
-  return typename detail::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type
-           (t0, t1, t2, t3, t4, t5); 
+  typedef typename detail::make_tuple_mapper<T0, T1, T2, T3, T4, T5>::type t;
+  return t(t0, t1, t2, t3, t4, t5); 
 }
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6>
 inline typename detail::make_tuple_mapper<T0, T1, T2, T3, T4, T5, T6>::type
 make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6) {
-  return typename detail::make_tuple_mapper
-           <T0, T1, T2, T3, T4, T5, T6>::type
-           (t0, t1, t2, t3, t4, t5, t6); 
+  typedef typename detail::make_tuple_mapper
+           <T0, T1, T2, T3, T4, T5, T6>::type t;
+  return t(t0, t1, t2, t3, t4, t5, t6);
 }
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
@@ -649,9 +654,9 @@ template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
 inline typename detail::make_tuple_mapper<T0, T1, T2, T3, T4, T5, T6, T7>::type
 make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7) {
-  return typename detail::make_tuple_mapper
-           <T0, T1, T2, T3, T4, T5, T6, T7>::type
-           (t0, t1, t2, t3, t4, t5, t6, t7); 
+  typedef typename detail::make_tuple_mapper
+           <T0, T1, T2, T3, T4, T5, T6, T7>::type t;
+  return t(t0, t1, t2, t3, t4, t5, t6, t7); 
 }
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
@@ -661,9 +666,9 @@ inline typename detail::make_tuple_mapper
 make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7,
                   const T8& t8) {
-  return typename detail::make_tuple_mapper
-           <T0, T1, T2, T3, T4, T5, T6, T7, T8>::type
-           (t0, t1, t2, t3, t4, t5, t6, t7, t8); 
+  typedef typename detail::make_tuple_mapper
+           <T0, T1, T2, T3, T4, T5, T6, T7, T8>::type t;
+  return t(t0, t1, t2, t3, t4, t5, t6, t7, t8); 
 }
 
 template<class T0, class T1, class T2, class T3, class T4, class T5, class T6,
@@ -673,9 +678,9 @@ inline typename detail::make_tuple_mapper
 make_tuple(const T0& t0, const T1& t1, const T2& t2, const T3& t3,
                   const T4& t4, const T5& t5, const T6& t6, const T7& t7,
                   const T8& t8, const T9& t9) {
-  return typename detail::make_tuple_mapper
-           <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>::type
-           (t0, t1, t2, t3, t4, t5, t6, t7, t8, t9); 
+  typedef typename detail::make_tuple_mapper
+           <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>::type t;
+  return t(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9); 
 }
 
 
