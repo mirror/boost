@@ -1,21 +1,22 @@
 
 #ifndef _DATE_TIME_DATE_PARSING_HPP___
 #define _DATE_TIME_DATE_PARSING_HPP___
-/* Copyright (c) 2002 CrystalClear Software, Inc.
+/* Copyright (c) 2002, 2003 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
  * Author: Jeff Garland 
  */
 
 #include "boost/tokenizer.hpp"
 #include "boost/lexical_cast.hpp"
-
+#include <iterator>
 
 namespace boost {
 
 namespace date_time {
 
-
   //! Generic function to parse a delimited date (eg: 2002-02-10)
+  /*! Accepted formats are: "2003-02-10" or " 2003-Feb-10" or
+   * "2003-Feburary-10" */
   template<class date_type>
   date_type
   parse_date(const std::string& s)
@@ -24,13 +25,46 @@ namespace date_time {
     int pos = 0;
     typename date_type::ymd_type ymd(year_type::min(),1,1);
     boost::tokenizer<boost::char_delimiters_separator<char> > tok(s);
-    for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg){
-      unsigned short i = boost::lexical_cast<unsigned short>(*beg);
+    for(boost::tokenizer<>::iterator beg=tok.begin(); beg!=tok.end();++beg)
+    {
+      unsigned short i =0; 
       switch(pos) {
-      case 0: ymd.year = i; break;
-      case 1: ymd.month = i; break;
-      case 2: ymd.day = i; break;
-      };
+        case 0:
+	{
+          i = boost::lexical_cast<unsigned short>(*beg);
+	  ymd.year = i; 
+	  break;
+	}
+        case 1:
+	{
+	  std::string s = *beg;
+	  if((s.at(0) >= '0') && (s.at(0) <= '9'))
+          {
+            i = boost::lexical_cast<unsigned short>(s);
+	  }
+	  else
+          {
+	    for(int j = 1; j <= 12; ++j)
+            {
+	      typedef gregorian::greg_month::month_enum month_enum;
+	      gregorian::greg_month m(static_cast<month_enum>(j));
+	      if(s == m.as_long_string() || s == m.as_short_string()) 
+              {
+		i = static_cast<unsigned short>(j);
+		break;
+	      }
+	    }
+	  }
+	  ymd.month = i; 
+	  break;
+	}
+        case 2:
+        {
+          i = boost::lexical_cast<unsigned short>(*beg);
+          ymd.day = i; 
+          break;
+        }
+      }; //switch
       pos++;
     }
     return date_type(ymd);
@@ -47,7 +81,7 @@ namespace date_time {
     typename date_type::ymd_type ymd(year_type::min(),1,1);
     boost::offset_separator osf(offsets, offsets+3); 
     boost::tokenizer<boost::offset_separator> tok(s, osf);
-    for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti){
+    for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti) {
       unsigned short i = boost::lexical_cast<unsigned short>(*ti);
       //      std::cout << i << std::endl;
       switch(pos) {
@@ -88,7 +122,7 @@ namespace date_time {
 
 
 
-/* Copyright (c) 2002
+/* Copyright (c) 2003
  * CrystalClear Software, Inc.
  *
  * Permission to use, copy, modify, distribute and sell this software
@@ -101,3 +135,4 @@ namespace date_time {
  */
 
 #endif
+
