@@ -61,6 +61,19 @@ template<>          struct assert<false> { typedef AUX778076_ASSERT_ARG(assert) 
 template< bool C >
 int assertion_failed( typename assert<C>::type );
 
+template <bool C>
+struct assertion
+{
+    static int failed(assert<false>);
+};
+
+template <>
+struct assertion<true>
+{
+    template <class T>
+    static int failed(T);
+};
+
 struct assert_
 {
 #if !defined(BOOST_MPL_CFG_NO_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
@@ -272,16 +285,18 @@ enum { \
 
 // BOOST_MPL_ASSERT_MSG( (pred<x,...>::value), USER_PROVIDED_MESSAGE, (types<x,...>) ) 
 
-#   define BOOST_MPL_ASSERT_MSG( c, msg, types ) \
+#   define BOOST_MPL_ASSERT_MSG( c, msg, types_ ) \
     struct msg; \
     typedef struct BOOST_PP_CAT(msg,__LINE__) : boost::mpl::assert_ \
     { \
-        static boost::mpl::failed **************** (msg::**************** assert_arg()) types \
+        using boost::mpl::assert_::types; \
+        enum { msg }; \
+        static boost::mpl::failed ************ (msg::************ assert_arg()) types_ \
         { return 0; } \
     } BOOST_PP_CAT(mpl_assert_arg,__LINE__); \
     enum { \
         BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
-              boost::mpl::assertion_failed<(c)>( BOOST_PP_CAT(mpl_assert_arg,__LINE__)::assert_arg() ) \
+            boost::mpl::assertion<(c)>::failed( BOOST_PP_CAT(mpl_assert_arg,__LINE__)::assert_arg() )    \
             ) \
     }\
 /**/
