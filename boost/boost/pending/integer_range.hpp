@@ -12,7 +12,7 @@
 #define BOOST_INTEGER_RANGE_HPP_
 
 #include <boost/config.hpp>
-#include <boost/counting_iterator.hpp>
+#include <boost/iterator/counting_iterator.hpp>
 
 namespace boost {
 
@@ -21,7 +21,7 @@ namespace boost {
 
 template <class IntegerType>
 struct integer_range {
-    typedef typename counting_iterator_generator<IntegerType>::type iterator;
+    typedef counting_iterator<IntegerType> iterator;
 
     typedef iterator const_iterator;
     typedef IntegerType value_type;

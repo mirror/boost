@@ -14,57 +14,63 @@
 #ifndef BOOST_ITERATOR_ADAPTOR_GENERATOR_ITERATOR_HPP
 #define BOOST_ITERATOR_ADAPTOR_GENERATOR_ITERATOR_HPP
 
-#include <boost/iterator_adaptors.hpp>
+#include <boost/iterator/iterator_facade.hpp>
 #include <boost/ref.hpp>
 
 namespace boost {
 
 template<class Generator>
-class generator_iterator_policies
+class generator_iterator
+  : public iterator_facade<
+        generator_iterator<Generator>
+      , typename Generator::result_type
+      , readable_lvalue_iterator_tag
+      , single_pass_traversal_tag
+    >
 {
-public:
-    generator_iterator_policies() { }
+    typedef iterator_facade<
+        generator_iterator<Generator>
+      , typename Generator::result_type
+      , readable_iterator_tag
+      , single_pass_traversal_tag
+    > super_t;
+    
+ public:
+    generator_iterator() {}
+    generator_iterator(Generator* g) : m_g(g), m_value((*m_g)()) {}
 
-    template<class Base>
-    void initialize(Base& base) {
-      m_value = (*base)();
+    void increment()
+    {
+        m_value = (*m_g)();
     }
 
-    // The Iter template argument is necessary for compatibility with a MWCW
-    // bug workaround
-    template <class IteratorAdaptor>
-    void increment(IteratorAdaptor& iter) {
-      m_value = (*iter.base())();
-    }
-
-    template <class IteratorAdaptor>
     const typename Generator::result_type&
-    dereference(const IteratorAdaptor&) const
-        { return m_value; }
+    dereference() const
+    {
+        return m_value;
+    }
 
-    template <class IteratorAdaptor1, class IteratorAdaptor2>
-    bool equal(const IteratorAdaptor1& x, const IteratorAdaptor2& y) const
-        { return x.base() == y.base() &&
-            x.policies().m_value == y.policies().m_value; }
+    bool equal(generator_iterator const& y) const
+    {
+        return this->m_g == y.m_g && this->m_value == y.m_value;
+    }
 
-private:
-  typename Generator::result_type m_value;
+ private:
+    Generator* m_g;
+    typename Generator::result_type m_value;
 };
 
 template<class Generator>
 struct generator_iterator_generator
 {
-  typedef iterator_adaptor<Generator*, generator_iterator_policies<Generator>,
-    typename Generator::result_type, const typename Generator::result_type&,
-    const typename Generator::result_type*, std::input_iterator_tag,
-    long>       type;
+  typedef generator_iterator<Generator> type;
 };
 
 template <class Generator>
-inline typename generator_iterator_generator<Generator>::type
+inline generator_iterator<Generator>
 make_generator_iterator(Generator & gen)
 {
-  typedef typename generator_iterator_generator<Generator>::type result_t;
+  typedef generator_iterator<Generator> result_t;
   return result_t(&gen);
 }
 
