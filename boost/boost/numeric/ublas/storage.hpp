@@ -68,7 +68,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
 
-    // Base class for the Barton Nackman trick
+    // Base class for Storage Arrays - see the Barton Nackman trick
     template<class E>
     class storage_array:
         private nonassignable {
@@ -90,8 +90,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const_pointer const_iterator;
         typedef pointer iterator;
+    private:
+        typedef unbounded_array<T, ALLOC> self_type;
 
-
+    public:
         // Construction and destruction
         explicit BOOST_UBLAS_INLINE
         unbounded_array (const ALLOC &a = ALLOC()):
@@ -102,11 +104,14 @@ namespace boost { namespace numeric { namespace ublas {
             alloc_(a), size_ (size) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
-                // ISSUE some compilers zero POD here
-                // FIXME array form fails on some compilers, is it standard conforming?
-                // new (data_) value_type[size_];
+                // ISSUE some compilers may zero POD here
+#ifdef BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
+                // array form fails on some compilers due to size cookie, is it standard conforming?
+                new (data_) value_type[size_];
+#else
                 for (pointer d = data_; d != data_ + size_; ++d)
                     new (d) value_type;
+#endif
             }
         }
         // No value initialised, but still be default constructed
@@ -120,6 +125,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         unbounded_array (const unbounded_array &c):
+            storage_array<self_type> (),
             alloc_ (c.alloc_), size_ (c.size_) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
@@ -167,11 +173,14 @@ namespace boost { namespace numeric { namespace ublas {
                         }
                     }
                     else {
-                        // ISSUE some compilers zero POD here
-                        // FIXME array form fails on some compilers, is it standard conforming?
-                        // new (data) value_type[size];
+                        // ISSUE some compilers may zero POD here
+#ifdef BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
+                        // array form fails on some compilers due to size cookie, is it standard conforming?
+                        new (data) value_type[size];
+#else
                         for (pointer d = data; d != data + size; ++d)
                             new (d) value_type;
+#endif
                     }                    
                 }
                 else
@@ -325,8 +334,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T *pointer;
         typedef const_pointer const_iterator;
         typedef pointer iterator;
+    private:
+        typedef bounded_array<T, N, ALLOC> self_type;
 
-
+    public:
         // Construction and destruction
         BOOST_UBLAS_INLINE
         bounded_array ():
@@ -349,6 +360,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         bounded_array (const bounded_array &c):
+            storage_array<self_type> (),
             size_ (c.size_)  {
             // ISSUE elements should be copy constructed here, but we must copy instead as already default constructed
             std::copy (c.data_, c.data_ + c.size_, data_);
@@ -485,7 +497,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
+        typedef array_adaptor<T> self_type;
 
+    public:
         // Construction and destruction
         BOOST_UBLAS_INLINE
         array_adaptor ():
@@ -505,6 +520,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (size), own_ (false), data_ (data) {}
         BOOST_UBLAS_INLINE
         array_adaptor (const array_adaptor &a):
+            storage_array<self_type> (),
             size_ (a.size_), own_ (true), data_ (new value_type [a.size_]) {
             *this = a;
         }
@@ -696,7 +712,6 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             result_type operator () (argument_type x) {}
         };
-
     public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
@@ -705,7 +720,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T &reference;
         typedef const T *const_pointer;
         typedef T *pointer;
+    private:
+        typedef shallow_array_adaptor<T> self_type;
 
+    public:
         // Construction and destruction
         BOOST_UBLAS_INLINE
         shallow_array_adaptor ():
@@ -726,6 +744,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         BOOST_UBLAS_INLINE
         shallow_array_adaptor (const shallow_array_adaptor &a):
+            storage_array<self_type> (),
             size_ (a.size_), own_ (a.own_), data_ (a.data_) {}
 
         BOOST_UBLAS_INLINE
@@ -1316,7 +1335,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename A::reference reference;
         typedef typename A::const_pointer const_pointer;
         typedef typename A::pointer pointer;
+    private:
+        typedef indirect_array<A> self_type;
 
+    public:
         // Construction and destruction
         BOOST_UBLAS_INLINE
         indirect_array ():
