@@ -52,7 +52,7 @@ class deep_history
       const context_ptr_type & pContext,
       outermost_context_type & outermostContext )
     {
-      outermostContext.construct_with_deep_history< DefaultState >(
+      outermostContext.template construct_with_deep_history< DefaultState >(
         pContext );
     }
 

@@ -38,7 +38,7 @@ namespace detail
 struct id_provider
 {
   const void * pCustomId_;
-  #if defined( BOOST_ENABLE_ASSERT_HANDLER ) || defined( _DEBUG )
+  #if defined( BOOST_ENABLE_ASSERT_HANDLER ) || !defined( NDEBUG )
   const std::type_info * pCustomIdType_;
   #endif
 };
@@ -167,7 +167,7 @@ struct rtti_policy
       template< class CustomId >
       static void custom_static_type_ptr( const CustomId * pCustomId )
       {
-        #if defined( BOOST_ENABLE_ASSERT_HANDLER ) || defined( _DEBUG )
+        #if defined( BOOST_ENABLE_ASSERT_HANDLER ) || !defined( NDEBUG )
         id_holder< MostDerived >::idProvider_.pCustomIdType_ =
           &typeid( CustomId );
         #endif
