@@ -146,8 +146,8 @@
 // ICC sometimes needs qualified type names.
 //#define BOOST_UBLAS_QUALIFIED_TYPENAME
 
-// ICC allows to use iterator_base_traits.
-#define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
+// ICC memory usage and time grows with this enabled
+//#define BOOST_UBLAS_USE_ITERATOR_BASE_TRAITS
 
 // Define swap for index_pair and triple.
 #if (BOOST_INTEL <= 800)
