@@ -28,8 +28,8 @@
 
 // The following #include is an implementation artifact; not part of interface.
 # ifdef __hpux
-// HP-UX has a nice <stdint.h> in a non-standard location
-#   include <sys/_inttypes.h>
+// HP-UX has a vaguely nice <stdint.h> in a non-standard location
+#   include <inttypes.h>
 #   ifdef __STDC_32_MODE__
       // this is triggered with GCC, because it defines __cplusplus < 199707L
 #     define BOOST_NO_INT64_T
@@ -147,8 +147,14 @@ namespace boost
 # if !defined(BOOST_MSVC) && !defined(__BORLANDC__) && \
    (!defined(__GLIBCPP__) || defined(_GLIBCPP_USE_LONG_LONG)) && \
    (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
-#    if (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615ULL) || (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615ULL) || (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615ULL)
+#    if defined(__hpux)
+     // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
+#    elif (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615ULL) || (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615ULL) || (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615ULL)
                                                                  // 2**64 - 1
+#    else
+#       error defaults not correct; you must hand modify boost/cstdint.hpp
+#    endif
+
      typedef long long            intmax_t;
      typedef unsigned long long   uintmax_t;
      typedef long long            int64_t;
@@ -157,9 +163,7 @@ namespace boost
      typedef unsigned long long   uint64_t;
      typedef unsigned long long   uint_least64_t;
      typedef unsigned long long   uint_fast64_t;
-#    else
-#       error defaults not correct; you must hand modify boost/cstdint.hpp
-#    endif
+
 # elif ULONG_MAX != 0xffffffff
 
 #    if ULONG_MAX == 18446744073709551615 // 2**64 - 1
@@ -268,15 +272,17 @@ BOOST_HAS_STDINT_H is defined (John Maddock).
 //  64-bit types + intmax_t and uintmax_t  ----------------------------------//
 
 #  if defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX)
+#    if defined(__hpux)
      // HP-UX's value of ULONG_LONG_MAX is unusable in preprocessor expressions
-#    if (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) ||  \
-        (defined(ULONG_LONG_MAX) && (defined(__hpux) || ULONG_LONG_MAX == 18446744073709551615U)) ||  \
+#    elif (defined(ULLONG_MAX) && ULLONG_MAX == 18446744073709551615U) ||  \
+        (defined(ULONG_LONG_MAX) && ULONG_LONG_MAX == 18446744073709551615U) ||  \
         (defined(ULONGLONG_MAX) && ULONGLONG_MAX == 18446744073709551615U)
-#       define INT64_C(value) value##LL
-#       define UINT64_C(value) value##uLL
+
 #    else
 #       error defaults not correct; you must hand modify boost/cstdint.hpp
 #    endif
+#    define INT64_C(value) value##LL
+#    define UINT64_C(value) value##uLL
 #  elif ULONG_MAX != 0xffffffff
 
 #    if ULONG_MAX == 18446744073709551615 // 2**64 - 1

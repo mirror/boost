@@ -7,8 +7,13 @@
 
 //  hpux specific config options:
 
-#define BOOST_PLATFORM "HP Unix"
-#define BOOST_HAS_STDINT_H
+#define BOOST_PLATFORM "HP-UX"
+
+// In principle, HP-UX has a nice <stdint.h> under the name <inttypes.h>
+// However, it has the following problem:
+// Use of UINT32_C(0) results in "0u l" for the preprocessed source
+// (verifyable with gcc 2.95.3, assumed for HP aCC)
+// #define BOOST_HAS_STDINT_H
 
 #define BOOST_NO_SWPRINTF 
 
