@@ -25,4 +25,4 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
                                               
-/tools/build $CVSROOT/CVSROOT/syncmail %{sVv} boost-build@lists.sourceforge.net
+/tools/build $CVSROOT/CVSROOT/syncmail -u %{sVv} boost-build@lists.sourceforge.net
