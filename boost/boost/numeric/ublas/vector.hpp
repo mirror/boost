@@ -248,17 +248,17 @@ namespace boost { namespace numeric { namespace ublas {
         void insert (size_type i, const_reference t) {
             // FIXME: only works for EqualityComparable value types.
             // BOOST_UBLAS_CHECK (data () [i] == value_type (), bad_index ());
-            // data ().insert (data ().begin () + i, t);
+            // Previously: data ().insert (data ().begin () + i, t);
             data () [i] = t;
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i) {
-            // data ().erase (data ().begin () + i);
+            // Previously: data ().erase (data ().begin () + i);
             data () [i] = value_type ();
         }
         BOOST_UBLAS_INLINE
         void clear () {
-            // data ().clear ();
+            // Previously: data ().clear ();
             std::fill (data ().begin (), data ().end (), value_type ());
         }
 
