@@ -49,13 +49,13 @@ namespace boost
         ++m_long_name_errors;
         error( library_name, full_path, "filename > 31 chars" );
       }
-/*
+
       if ( std::count( leaf.begin(), leaf.end(), '.' ) > 1 )
       {
         ++m_long_name_errors;
         error( library_name, full_path, "filename contains more than one dot character ('.')" );
       }
-*/
+
       if ( *leaf.rbegin() == '.' )
       {
         ++m_long_name_errors;

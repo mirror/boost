@@ -15,8 +15,7 @@ namespace fs = boost::filesystem;
 namespace
 {
   boost::regex url_regex(
-    "<\\s*"
-    "(?:A\\s+[^>]*HREF|FRAME\\s+SRC)" // A HREF or FRAME SRC
+    "<\\s*[^>]*\\s+(?:HREF|SRC)" // HREF or SRC
     "\\s*=\\s*\"([^\"]*)\"",
     boost::regbase::normal | boost::regbase::icase);
 
@@ -82,6 +81,7 @@ namespace boost
         || url.find( "https:" ) == 0
         || url.find( "ftp:" ) == 0
         || url.find( "news:" ) == 0
+        || url.find( "javascript:" ) == 0
         ) return;
 
       if ( url.find( "file:" ) == 0 )

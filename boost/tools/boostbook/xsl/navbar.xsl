@@ -30,8 +30,8 @@
 
    <xsl:param name = "boost.root"      select = "'../..'"/>
    <xsl:param name = "boost.image.src" 
-              select = "concat($boost.root, '/c++boost.gif')"/>
-   <xsl:param name = "boost.image.alt" select = "'c++boost.gif (8819 bytes)'"/>
+              select = "concat($boost.root, '/boost.png')"/>
+   <xsl:param name = "boost.image.alt" select = "'boost.png (6897 bytes)'"/>
    <xsl:param name = "boost.image.w"   select = "277"/>
    <xsl:param name = "boost.image.h"   select = "86"/>
    <xsl:param name = "boost.libraries" select = "'libraries.html'"/>

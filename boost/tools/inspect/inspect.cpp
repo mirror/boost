@@ -500,7 +500,7 @@ int cpp_main( int argc, char * argv[] )
           "<body bgcolor=\"#ffffff\" text=\"#000000\">\n"
           "<table border=\"0\">\n"
           "<tr>\n"
-          "<td><img border=\"0\" src=\"../c++boost.gif\" width=\"277\" "
+          "<td><img border=\"0\" src=\"../boost.png\" width=\"277\" "
           "height=\"86\"></td>\n"
           "<td align=\"center\">\n"
           "<h1>Boost Inspection Report</h1>\n"
