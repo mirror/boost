@@ -32,11 +32,11 @@ int main(){
   check("Abbrevs", nyc2.std_zone_abbrev() == std::string("EST"));
   check("Abbrevs", nyc1.dst_zone_abbrev() == std::string("EDT"));
   check("Abbrevs", nyc2.dst_zone_abbrev() == std::string("EDT"));
-  // names not available for posix_time_zone
-  //check("Names", nyc1.std_zone_name() == std::string("?"));
-  //check("Names", nyc2.std_zone_name() == std::string("?"));
-  //check("Names", nyc1.dst_zone_name() == std::string("?"));
-  //check("Names", nyc2.dst_zone_name() == std::string("?"));
+  // names not available for posix_time_zone, abbrevs used in their place
+  check("Names", nyc1.std_zone_name() == std::string("EST"));
+  check("Names", nyc2.std_zone_name() == std::string("EST"));
+  check("Names", nyc1.dst_zone_name() == std::string("EDT"));
+  check("Names", nyc2.dst_zone_name() == std::string("EDT"));
   td = hours(1);
   check("dst offset", nyc1.dst_offset() == td);
   check("dst offsets match", nyc1.dst_offset() == nyc2.dst_offset());
@@ -59,12 +59,13 @@ int main(){
   check("UTC offsets match", az1.base_utc_offset() == az2.base_utc_offset());
   check("Abbrevs", az1.std_zone_abbrev() == std::string("MST"));
   check("Abbrevs", az2.std_zone_abbrev() == std::string("MST"));
-  check("Abbrevs", az1.dst_zone_abbrev() == std::string("no-dst"));
-  check("Abbrevs", az2.dst_zone_abbrev() == std::string("no-dst"));
-  //check("Names", az1.std_zone_name() == std::string("?"));
-  //check("Names", az2.std_zone_name() == std::string("?"));
-  //check("Names", az1.dst_zone_name() == std::string("?"));
-  //check("Names", az2.dst_zone_name() == std::string("?"));
+  // non-dst zones default to empty strings for dst names & abbrevs
+  check("Abbrevs", az1.dst_zone_abbrev() == std::string(""));
+  check("Abbrevs", az2.dst_zone_abbrev() == std::string(""));
+  check("Names", az1.std_zone_name() == std::string("MST"));
+  check("Names", az2.std_zone_name() == std::string("MST"));
+  check("Names", az1.dst_zone_name() == std::string(""));
+  check("Names", az2.dst_zone_name() == std::string(""));
  
 
   // bizzar time zone spec to fully test parsing
