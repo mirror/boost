@@ -28,7 +28,7 @@ In general, the standard specifies thing like this as a bitmask type with a list
 and specifies neither the exact type nor the specific values. Is there a reason for iterator_access to 
 be more specific? 
 
-:Proposed resolution: The iterator_access enum will be removed, so
+:Proposed resolution: The ``iterator_access`` enum will be removed, so
    this is no longer an issue.  See the resolution to 9.15.
 
 
@@ -55,9 +55,11 @@ to be members or non-members.
 
 :Proposed resolution: Not a defect. 
 
-:Rationale: We are following the approach in the standard. Classes
-  such as reverse_iterator are specified by listing the function
-  prototypes for the various operators. Further, the prototype
+:Rationale: The standard uses valid expressions such as ``++iter`` in
+  requirements tables, such as for input iterator.
+  However, for classes, such as ``reverse_iterator``,
+  the standard uses function prototypes, as we have
+  done here for ``iterator_facade``. Further, the prototype
   specification does not prevent the implementor from using members
   or non-members.
 
@@ -240,9 +242,20 @@ Transform iterator has a two-part specification: it does this, in other words, i
 words" always means "I didn't say it right, so I'll try again." We need to say it once. 
 
 :Proposed resolution:
-  Changed the introduction to: The transform iterator adapts an iterator by modifying the
-  ``operator*`` to apply a function object to the result of
-  dereferencing the iterator and returning the result.
+  Change:
+
+    The transform iterator adapts an iterator by applying some function
+    object to the result of dereferencing the iterator. In other words,
+    the ``operator*`` of the transform iterator first dereferences the
+    base iterator, passes the result of this to the function object, and
+    then returns the result.
+
+  to:
+
+    The transform iterator adapts an iterator by modifying the
+    ``operator*`` to apply a function object to the result of
+    dereferencing the iterator and returning the result.
+
 
 9.12 Transform_iterator shouldn't mandate private member 
 ========================================================
@@ -252,9 +265,18 @@ words" always means "I didn't say it right, so I'll try again." We need to say i
 
 transform_iterator has a private member named 'm_f' which should be marked "exposition only." 
 
-:Proposed resolution: Mark the member m_f as exposition
-   only. Note/DWA: I think this is NAD because the user can't
-   detect it, though I'm happy to mark it exposition only.
+:Proposed resolution: Mark the member ``m_f`` as exposition
+  only. Note/DWA: I think this is NAD because the user can't
+  detect it, though I'm happy to mark it exposition only.
+
+  Change::
+
+    UnaryFunction m_f;
+
+  to::
+
+    UnaryFunction m_f;   // exposition only
+
 
 
 9.13 Unclear description of counting iterator 
@@ -884,8 +906,8 @@ c++std-lib-12636:
 
 
 
-Inheritance in iterator_adaptor and other adaptors is an overspecification
-==========================================================================
+9.37x Inheritance in iterator_adaptor and other adaptors is an overspecification
+================================================================================
 
 :Submitter: Pete Becker
 :Status: New 
@@ -910,8 +932,8 @@ provide rather than how they're implemented.
   iterator adaptors.
 
 
-Problem with specification of a->m in Readable Iterator
-=======================================================
+9.38x Problem with specification of a->m in Readable Iterator
+=============================================================
 
 :Submitter: Howard Hinnant
 :Status: New
@@ -944,8 +966,8 @@ instead of ``(*a).m`` ?
   conform to new iterator requirements.
 
 
-counting_iterator Traversal argument unspecified
-================================================
+9.39x counting_iterator Traversal argument unspecified
+======================================================
 
 :Submitter: Pete Becker
 
@@ -970,8 +992,8 @@ iterator_adaptor should be.
 
 
 
-indirect_iterator requirements muddled
-======================================
+9.40x indirect_iterator requirements muddled
+============================================
 
 :Submitter: Pete Becker
 
@@ -1012,8 +1034,8 @@ c++std-lib-12640:
 :Proposed resolution:   Resolved **Needs Language**
 
 
-Problem with transform_iterator requirements
-============================================
+9.41x Problem with transform_iterator requirements
+==================================================
 
 :Submitter: Pete Becker
 
@@ -1067,8 +1089,8 @@ all alike.
       ``value_type`` is ``Value``.
 
 
-filter_iterator details unspecified
-===================================
+9.42x filter_iterator details unspecified
+=========================================
 
 :Submitter: Pete Becker
 
@@ -1107,3 +1129,29 @@ Needs more.
       Iterator then ``iterator_category`` is convertible to
       ``std::forward_iterator_tag``. Otherwise ``iterator_category`` is
       convertible to ``std::input_iterator_tag``.
+
+
+9.43x transform_iterator interoperability too restrictive
+=========================================================
+
+We do not need to require that the function objects have the same
+type, just that they be convertible.
+
+:Proposed resolution:
+
+  Change::
+
+      template<class OtherIterator, class R2, class V2>
+      transform_iterator(
+            transform_iterator<UnaryFunction, OtherIterator, R2, V2> const& t
+          , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0 // exposition
+      );
+
+  to::
+
+      template<class F2, class I2, class R2, class V2>
+      transform_iterator(
+            transform_iterator<F2, I2, R2, V2> const& t
+          , typename enable_if_convertible<I2, Iterator>::type* = 0      // exposition only
+          , typename enable_if_convertible<F2, UnaryFunction>::type* = 0 // exposition only
+      );
