@@ -336,6 +336,12 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
     </computeroutput>
   </xsl:template>
 
+  <xsl:template match="bold">
+    <emphasis role="bold">
+      <xsl:apply-templates mode="annotation"/>
+    </emphasis>
+  </xsl:template>
+
   <xsl:template match="library">
     <xsl:if test="not(@html-only = 1) and
                   ($boost.include.libraries='' or

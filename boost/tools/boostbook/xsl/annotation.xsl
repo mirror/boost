@@ -332,6 +332,12 @@
     </computeroutput>
   </xsl:template>
 
+  <xsl:template match="bold" mode="annotation">
+    <emphasis role="bold">
+      <xsl:apply-templates mode="annotation"/>
+    </emphasis>
+  </xsl:template>
+
   <xsl:template match="node()" mode="annotation">
     <xsl:param name="highlight" select="false()"/>
     <xsl:element name="{name(.)}">
