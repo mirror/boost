@@ -364,9 +364,6 @@ EOF
 
 cat_conts=`cat user.hpp`
 
-fi
-
-
 AC_OUTPUT(
 [],
 [
@@ -388,6 +385,8 @@ EEEOF
 cat_conts="$cat_conts"
 ]
 )
+
+fi
 
 
 

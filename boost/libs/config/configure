@@ -1957,8 +1957,6 @@ EOF
 
 cat_conts=`cat user.hpp`
 
-fi
-
 ac_config_commands="$ac_config_commands default"
 
 test "x$prefix" = xNONE && prefix=$ac_default_prefix
@@ -2015,7 +2013,7 @@ rm -f confdef2opt.sed
 : ${CONFIG_STATUS=./config.status}
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files $CONFIG_STATUS"
-{ echo "$as_me:2018: creating $CONFIG_STATUS" >&5
+{ echo "$as_me:2016: creating $CONFIG_STATUS" >&5
 echo "$as_me: creating $CONFIG_STATUS" >&6;}
 cat >$CONFIG_STATUS <<_ACEOF
 #! $SHELL
@@ -2180,7 +2178,7 @@ cat >>$CONFIG_STATUS <<\EOF
     echo "$ac_cs_version"; exit 0 ;;
   --he | --h)
     # Conflict between --help and --header
-    { { echo "$as_me:2183: error: ambiguous option: $1
+    { { echo "$as_me:2181: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: ambiguous option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -2199,7 +2197,7 @@ Try \`$0 --help' for more information." >&2;}
     ac_need_defaults=false;;
 
   # This is an error.
-  -*) { { echo "$as_me:2202: error: unrecognized option: $1
+  -*) { { echo "$as_me:2200: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&5
 echo "$as_me: error: unrecognized option: $1
 Try \`$0 --help' for more information." >&2;}
@@ -2244,7 +2242,7 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "default" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default" ;;
-  *) { { echo "$as_me:2247: error: invalid argument: $ac_config_target" >&5
+  *) { { echo "$as_me:2245: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
   esac
@@ -2334,5 +2332,7 @@ if test "$no_create" != yes; then
   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
   # would make configure fail if this is the last instruction.
   $ac_cs_success || { (exit 1); exit 1; }
+fi
+
 fi
 
