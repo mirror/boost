@@ -17,14 +17,20 @@
 #  define BOOST_INTEL_CXX_VERSION __ICC
 #endif
 
-#if BOOST_INTEL_CXX_VERSION <= 600
-#  define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
-   // Intel C++ 5.0.1 uses EDG 2.45, but fails to activate Koenig lookup 
-   // in the frontend even in "strict" mode.  (reported by Kirk Klobe) 
-   // Intel C++ 6.0 (currently in Beta test) doesn't have any front-end 
-   // changes at all.  (reported by Kirk Klobe) 
-#  ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-#     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#if (BOOST_INTEL_CXX_VERSION <= 600) || !defined(BOOST_STRICT_CONFIG)
+//#  define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+
+#  if defined(_MSC_VER)
+      // Intel C++ 5.0.1 uses EDG 2.45, but fails to activate Koenig lookup
+      // in the frontend even in "strict" mode.  (reported by Kirk Klobe)
+      // Intel C++ 6.0 (currently in Beta test) doesn't have any front-end
+      // changes at all.  (reported by Kirk Klobe)
+#     ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#        define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#     endif
+#     define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+#     define BOOST_NO_SWPRINTF
+#     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #  endif
 
 #endif

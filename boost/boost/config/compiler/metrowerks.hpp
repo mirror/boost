@@ -15,7 +15,7 @@
 #   endif
 
 #   if __MWERKS__ <= 0x2401  // 6.2
-#     define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
+//#     define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 #   endif
 
 #   if(__MWERKS__ <= 0x2405) || !defined(BOOST_STRICT_CONFIG)  // 7

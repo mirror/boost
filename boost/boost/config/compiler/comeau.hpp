@@ -13,6 +13,8 @@
 #  define BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
 #  if defined(_MSC_VER) && _MSC_VER <= 1200
 #     define BOOST_NO_STDC_NAMESPACE
+#     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#     define BOOST_NO_SWPRINTF
 #  endif
 #endif
 

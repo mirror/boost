@@ -37,7 +37,7 @@
 // Assume no std::locale without own iostreams (this may be an
 // incorrect assumption in some cases):
 //
-#ifndef __SGI_STL_OWN_IOSTREAMS
+#if !defined(__SGI_STL_OWN_IOSTREAMS) && !defined(__STL_USE_NEW_IOSTREAMS)
 #  define BOOST_NO_STD_LOCALE
 #endif
 

@@ -1,3 +1,24 @@
+/*
+ *
+ * Copyright (c) 1998-2000
+ * Dr John Maddock
+ *
+ * Permission to use, copy, modify, distribute and sell this software
+ * and its documentation for any purpose is hereby granted without fee,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
+ * in supporting documentation.  Dr John Maddock makes no representations
+ * about the suitability of this software for any purpose.  
+ * It is provided "as is" without express or implied warranty.
+ *
+ */
+ 
+ /*
+  *   LOCATION:    see http://www.boost.org for most recent version.
+  *   FILE         config.hpp
+  *   VERSION      3.12
+  *   DESCRIPTION: regex extended config setup.
+  */
 
 #ifndef BOOST_REGEX_CONFIG_HPP
 #define BOOST_REGEX_CONFIG_HPP
@@ -502,4 +523,6 @@ inline void construct(T* p, const T& t)
 #endif
 
 #endif
+
+
 

@@ -15,7 +15,7 @@
  
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
-  *   FILE         regex.cpp
+  *   FILE         regex_traits.hpp
   *   VERSION      3.12
   *   DESCRIPTION: Declares regular expression traits classes.
   */
@@ -789,4 +789,5 @@ class regex_traits : public cpp_regex_traits<charT>
 } // namespace boost
 
 #endif // include
+
 

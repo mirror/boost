@@ -36,7 +36,7 @@
 #  define BOOST_WEAK_FUNCTION_TEMPLATE_ORDERING
 #  define BOOST_NO_USING_TEMPLATE
 #  define BOOST_NO_SWPRINTF
-#  define BOOST_NO_POINTER_TO_MEMBER_CONST
+//#  define BOOST_NO_POINTER_TO_MEMBER_CONST
    //
    // disable man/max macros if defined:
    //

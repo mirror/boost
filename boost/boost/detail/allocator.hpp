@@ -14,6 +14,13 @@
  */
 
 #include <boost/config.hpp>
+#include <cstdlib>
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{
+using ::ptrdiff_t;
+using ::size_t;
+}
+#endif
 
 #if !defined(BOOST_NO_STD_ALLOCATOR)
 
@@ -60,8 +67,8 @@ public:
    typedef const T*       const_pointer;
    typedef T&             reference;
    typedef const T&       const_reference;
-   typedef size_t         size_type;
-   typedef ptrdiff_t      difference_type;
+   typedef std::size_t    size_type;
+   typedef std::ptrdiff_t difference_type;
 
    template <class U>
    struct rebind
@@ -145,8 +152,8 @@ public:
    typedef void           value_type;
    typedef value_type *   pointer;
    typedef const void*    const_pointer;
-   typedef size_t         size_type;
-   typedef ptrdiff_t      difference_type;
+   typedef std::size_t    size_type;
+   typedef std::ptrdiff_t difference_type;
 
    simple_alloc(){}
    simple_alloc(const simple_alloc&){}
@@ -179,8 +186,8 @@ public:
    typedef T&             reference;
    typedef const T&       const_reference;
    typedef size_t         size_type;
-   typedef ptrdiff_t      difference_type;
-   typedef Base           base_type;
+   typedef std::ptrdiff_t difference_type;
+   typedef std::Base      base_type;
 
    allocator_adapter(){}
    allocator_adapter(const base_type& x) : Base(x){}

@@ -226,6 +226,8 @@ unsigned int expected_failures = 55;
 #elif defined(__GNUC__)
 // classes that are POD's, or empty:
 unsigned int expected_failures = 4;
+#elif defined(__MWERKS__)
+unsigned int expected_failures = 12;
 #elif defined(BOOST_MSVC)
 // can't handle classes that are POD's or arrays that are POD's
 unsigned int expected_failures = 19;

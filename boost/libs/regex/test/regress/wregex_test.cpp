@@ -25,6 +25,7 @@
 
 // disable automatic selection of support library:
 #define BOOST_REGEX_NO_LIB
+#define BOOST_REGEX_STATIC_LINK
 
 #if defined(_MSC_VER) && defined(__STL_DEBUG) && defined(_DLL)
 //
