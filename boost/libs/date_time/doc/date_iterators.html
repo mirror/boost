@@ -27,12 +27,13 @@
 
 <p>
 Date iterators provide a standard mechanism for iteration through dates. 
-Date iterators are a model of
-<a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a> 
+Date iterators are  are similar to <a href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">Bidirectional Iterators</a>
 and can be used to populate collections with dates and other date generation 
 tasks.  For example, the <a href="exp-print_month.html">print month</a> example iterates through all the days in a month and prints them.
 <p>
-All of the iterators here derive from boost::gregorian::date_iterator.
+All of the iterators here derive from boost::gregorian::date_iterator and provide a 
+various comparison operations against dates including equal, not equal, less, lees equal, 
+greater, and greater equal.
 
 <p>
 <h2><a name="header">Header</a></h2>
@@ -73,7 +74,7 @@ or
 
 <hr><address><small>
 <!-- hhmts start -->
-Last modified: Thu Sep  5 06:06:41 MST 2002
+Last modified: Sun Jan 18 14:32:56 MST 2004
 <!-- hhmts end -->
  by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
 </small></address>
