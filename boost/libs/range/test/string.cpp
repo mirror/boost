@@ -41,6 +41,21 @@ find( const Container& c, T value )
     return std::find( boost::begin( c ), boost::end( c ), value );
 }
 
+template< typename Container, typename T >
+BOOST_DEDUCED_TYPENAME boost::range_iterator<Container>::type
+find_mutable( Container& c,  T value )
+{
+    return std::find( boost::begin( c ), boost::end( c ), value );
+}
+
+template< typename Container, typename T >
+BOOST_DEDUCED_TYPENAME boost::range_const_iterator<Container>::type
+find_const( const Container& c, T value )
+{
+    return std::find( boost::begin( c ), boost::end( c ), value );
+}
+
+
 std::vector<char> 
 check_rvalue_return()
 {
@@ -102,9 +117,14 @@ void check_char()
     BOOST_CHECK_EQUAL( size( my_string ), std::char_traits<char>::length( my_string ) );
 
     char to_search = 'n';
-    BOOST_CHECK( find( char_s, to_search ) != end( char_s ) );
-    BOOST_CHECK( find( my_string, to_search ) != end( my_string ) );
-   
+    BOOST_CHECK( find_mutable( char_s, to_search ) != end( char_s ) );
+    BOOST_CHECK( find_const( char_s, to_search ) != end( char_s ) );
+
+    BOOST_CHECK( find_mutable( my_string, to_search ) != end( my_string ) );
+    BOOST_CHECK( find_const( my_string, to_search ) != end( my_string ) );
+
+    BOOST_CHECK( find_mutable( char_s2, to_search ) != end( char_s2 ) );   
+    BOOST_CHECK( find_const( char_s2, to_search ) != end( char_s2 ) );   
 }
 
 
