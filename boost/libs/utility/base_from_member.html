@@ -130,6 +130,10 @@ particular member type does not need to concern itself with the integer.</p>
 <h2><a name="synopsis">Synopsis</a></h2>
 
 <blockquote><pre>
+#ifndef BOOST_BASE_FROM_MEMBER_MAX_ARITY
+#define BOOST_BASE_FROM_MEMBER_MAX_ARITY  10
+#endif
+
 template &lt; typename MemberType, int UniqueID = 0 &gt;
 class boost::base_from_member
 {
@@ -170,6 +174,14 @@ the data member.  Since C++ does not allow any way to explicitly state
 the template parameters of a templated constructor, make sure that
 the arguments are already close as possible to the actual type used in
 the data member's desired constructor.</p>
+
+<p>The <var>BOOST_BASE_FROM_MEMBER_MAX_ARITY</var> macro constant specifies
+the maximum argument length for the constructor templates.  The constant
+may be overridden if more (or less) argument configurations are needed.  The
+constant may be read for code that is expandable like the class template and
+needs to maintain the same maximum size.  (Example code would be a class that
+uses this class template as a base class for a member with a flexible set of
+constructors.)</p>
 
 <h2><a name="usage">Usage</a></h2>
 
@@ -337,6 +349,11 @@ with the exact pointer type used in <code>switcher</code>'s constructor.</p>
 		<a href="http://www.informatik.uni-konstanz.de/~kuehl/c++/iostream/">IOStream
 		example classes</a>.
 
+	<dt>Jonathan Turkanis
+	<dd>Supplied an implementation of generating the constructor templates that
+		can be controlled and automated with macros.  The implementation uses
+		the <a href="../preprocessor/">Preprocessor library</a>.
+
 	<dt><a href="../../people/daryle_walker.html">Daryle Walker</a>
 	<dd>Started the library.  Contributed the test file <cite><a
 		href="base_from_member_test.cpp">base_from_member_test.cpp</a></cite>.
@@ -344,9 +361,9 @@ with the exact pointer type used in <code>switcher</code>'s constructor.</p>
 
 <hr>
 
-<p>Revised: 14 June 2003</p>
+<p>Revised: 28 August 2004</p>
 
-<p>Copyright 2001, 2003 Daryle Walker.  Use, modification, and distribution
+<p>Copyright 2001, 2003, 2004 Daryle Walker.  Use, modification, and distribution
 are subject to the Boost Software License, Version 1.0.  (See accompanying
 file <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or a copy at &lt;<a
 href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>&gt;.)</p>
