@@ -26,6 +26,37 @@
     "../../more/generic_programming.html#adaptors">adaptors</a> which apply
     specific useful behaviors to arbitrary base iterators.
 
+    <h2>Backward Compatibility Note</h2>
+
+    <p>The library's interface has changed since it was first released, breaking
+    backward compatibility:
+
+    <ol>
+
+    <li><a href="#policies">Policies classes</a> now operate on instances of the
+    whole <tt>iterator_adaptor</tt> object, rather than just operating on the
+    <tt>Base</tt> object. This change not only gives the policies class access
+    to both members of a pair of interacting iterators, but also eliminates the
+    need for the ugly <tt>type&lt;Reference&gt;</tt> and
+    <tt>type&lt;Difference&gt;</tt> parameters to various policy functions.
+
+    <li>The <a href="#named_template_parameters">Named Template Parameter</a>
+    interface has been made simpler, easier to use, and compatible with more
+    compilers.
+
+    </ol>
+
+    <h2>Other Documentation</h2>
+
+    <p><a href="iterator_adaptors.pdf">``Policy Adaptors and the Boost Iterator
+    Adaptor Library''</a> is a technical paper describing this library and the
+    powerful design pattern on which it is based. It was presented at the <a
+    href="http://www.oonumerics.org/tmpw01">C++ Template Workshop</a> at OOPSLA
+    2001; the slides from the talk are available <a
+    href="iterator_adaptors.ppt">here</a>. Please note that while the slides
+    incorporate the minor interface changes described in the previous section,
+    the paper does not.
+
     <h2>Table of Contents</h2>
 
     <ul>
@@ -183,7 +214,7 @@ struct iterator_adaptor;
         particular, the result type of <tt>operator*()</tt>.<br>
          <b>Default:</b> If <tt>Value</tt> is supplied, <tt>Value&amp;</tt> is
         used. Otherwise
-        <tt>std::iterator_traits&lt;BaseType&gt;::reference</tt> is used.
+        <tt>std::iterator_traits&lt;BaseType&gt;::reference</tt> is used. <a href="#7">[7]</a>
 
       <tr>
         <td><tt>Pointer</tt> 
@@ -191,7 +222,7 @@ struct iterator_adaptor;
         <td>The <tt>pointer</tt> type of the resulting iterator, and in
         particular, the result type of <tt>operator-&gt;()</tt>.<br>
          <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
-        otherwise <tt>std::iterator_traits&lt;BaseType&gt;::pointer</tt>.
+        otherwise <tt>std::iterator_traits&lt;BaseType&gt;::pointer</tt>. <a href="#7">[7]</a>
 
       <tr>
         <td><tt>Category</tt> 
@@ -385,40 +416,40 @@ typedef iterator_adaptor&lt;foo_iterator, foo_policies,
 <pre>
 struct <a name="default_iterator_policies">default_iterator_policies</a>
 {
-  template &lt;class BaseType&gt;
-  void initialize(BaseType&amp;)
-    { }
+    // Some of these members were defined static, but Borland got confused
+    // and thought they were non-const. Also, Sun C++ does not like static
+    // function templates.
 
-  template &lt;class Reference, class BaseType&gt;
-  Reference dereference(type&lt;Reference&gt;, const BaseType&amp; x) const
-    { return *x; }
+    template &lt;class Base&gt;
+    void initialize(Base&amp;)
+        { }
 
-  template &lt;class BaseType&gt;
-  void increment(BaseType&amp; x)
-    { ++x; }
+    template &lt;class IteratorAdaptor&gt;
+    typename IteratorAdaptor::reference dereference(const IteratorAdaptor&amp; x) const
+        { return *x.base(); }
 
-  template &lt;class BaseType1, class BaseType2&gt;
-  bool equal(const BaseType1&amp; x, const BaseType2&amp; y) const
-    { return x == y; }
+    template &lt;class IteratorAdaptor&gt;
+    void increment(IteratorAdaptor&amp; x)
+        { ++x.base(); }
 
-  template &lt;class BaseType&gt;
-  void decrement(BaseType&amp; x)
-    { --x; }
+    template &lt;class IteratorAdaptor&gt;
+    void decrement(IteratorAdaptor&amp; x)
+        { --x.base(); }
 
-  template &lt;class BaseType, class DifferenceType&gt;
-  void advance(BaseType&amp; x, DifferenceType n)
-    { x += n; }
+    template &lt;class IteratorAdaptor, class DifferenceType&gt;
+    void advance(IteratorAdaptor&amp; x, DifferenceType n)
+        { x.base() += n; }
 
-  template &lt;class Difference, class BaseType1, class BaseType2&gt;
-  Difference distance(type&lt;Difference&gt;, const BaseType1&amp; x, const BaseType2&amp; y) const
-    { return y - x; }
+    template &lt;class IteratorAdaptor1, class IteratorAdaptor2&gt;
+    typename IteratorAdaptor1::difference_type
+    distance(const IteratorAdaptor1&amp; x, const IteratorAdaptor2&amp; y) const
+        { return y.base() - x.base(); }
 
-  template &lt;class BaseType1, class BaseType2&gt;
-  bool less(const BaseType1&amp; x, const BaseType2&amp; y) const
-    { return x &lt; y; }
+    template &lt;class IteratorAdaptor1, class IteratorAdaptor2&gt;
+    bool equal(const IteratorAdaptor1&amp; x, const IteratorAdaptor2&amp; y) const
+        { return x.base() == y.base(); }
 };
-</pre>
-    </blockquote>
+</pre></blockquote>
 
     <p>Template member functions are used throughout
     <tt>default_iterator_policies</tt> so that it can be employed with a wide
@@ -451,7 +482,7 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
          iterator_adaptor(const
         iterator_adaptor&lt;B,Policies,V,R,P,Category,Distance&gt;&amp;)</tt>
         <br><br>
-         This constructor allows for conversion from non-<tt>const</tt> to
+         This constructor allows for conversion from mutable to
         constant adapted iterators. See <a href=
         "#iterator_interactions">below</a> for more details.<br>
          Requires: <tt>B</tt> is convertible to <tt>Base</tt>.
@@ -483,34 +514,31 @@ struct <a name="default_iterator_policies">default_iterator_policies</a>
 
     <p>To implement a transform iterator we will only change one of the base
     iterator's behaviors, so the <tt>transform_iterator_policies</tt> class can
-    inherit the rest from <tt>default_iterator_policies</tt>. We will define
-    the <tt>dereference()</tt> member function, which is used to implement
+    inherit the rest from <tt>default_iterator_policies</tt>. We will define the
+    <tt>dereference()</tt> member function, which is used to implement
     <tt>operator*()</tt> of the adapted iterator. The implementation will
-    dereference the base iterator and apply the function object. The
-    <tt>type&lt;Reference&gt;</tt> parameter is used to convey the appropriate
-    return type. The complete code for <tt>transform_iterator_policies</tt>
-    is:<br>
+    dereference the base iterator and apply the function object. The complete
+    code for <tt>transform_iterator_policies</tt> is:<br>
     <br>
 
-
-    <blockquote>
-<pre>
-  template &lt;class AdaptableUnaryFunction&gt;
-  struct transform_iterator_policies : public default_iterator_policies
-  {
+<blockquote><pre>
+template &lt;class AdaptableUnaryFunction&gt;
+struct transform_iterator_policies : public default_iterator_policies
+{
     transform_iterator_policies() { }
 
     transform_iterator_policies(const AdaptableUnaryFunction&amp; f)
-      : m_f(f) { }
-
-    template &lt;class Reference, class BaseIterator&gt;
-    Reference dereference(type&lt;Reference&gt;, const BaseIterator&amp; i) const
-      { return m_f(*i); }
+        : m_f(f) { }
+    
+    template &lt;class IteratorAdaptor&gt;
+    typename IteratorAdaptor::reference
+    dereference(const IteratorAdaptor&amp; iter) const
+        { return m_f(*iter.base()); }
 
     AdaptableUnaryFunction m_f;
-  };
-</pre>
-    </blockquote>
+};
+
+</pre></blockquote>
 
     <p>The next step is to use the <tt>iterator_adaptor</tt> template to
     construct the transform iterator type. The nicest way to package the
@@ -546,7 +574,7 @@ public:
 
     <p>As a finishing touch, we will create an <a href=
     "../../more/generic_programming.html#object_generator">object generator</a>
-    for the transform iterator. This is a function that makes it more
+    for the transform iterator. Our object generator makes it more
     convenient to create a transform iterator.<br>
     <br>
 
@@ -785,12 +813,12 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     <tt>reference</tt> types for all <a href=
     "http://www.sgi.com/tech/stl/ForwardIterator.html">Forward Iterators</a> are
     <tt>const T*</tt> and <tt>const T&amp;</tt>, respectively. Stripping the
-    <tt>const</tt>-ness of <tt>Value</tt> allows you to easily
-    make a <tt>const</tt> iterator adaptor by supplying a <tt>const</tt> type
-    for <tt>Value</tt>, and allowing the defaults for the <tt>Pointer</tt> and
-    <tt>Reference</tt> parameters to take effect. Although compilers that don't
-    support partial specialization won't strip <tt>const</tt> for you, having a
-    <tt>const value_type</tt> is often harmless in practice.
+    <tt>const</tt>-ness of <tt>Value</tt> allows you to easily make a constant
+    iterator by supplying a <tt>const</tt> type for <tt>Value</tt>, and allowing
+    the defaults for the <tt>Pointer</tt> and <tt>Reference</tt> parameters to
+    take effect. Although compilers that don't support partial specialization
+    won't strip <tt>const</tt> for you, having a <tt>const value_type</tt> is
+    often harmless in practice.
 
     <p><a name="2">[2]</a> If your compiler does not support partial
     specialization and the base iterator is a builtin pointer type, you
@@ -855,6 +883,14 @@ bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;,
     int i = 3;
     *x = i;
 </pre>
+
+    <p><a name="7">[7]</a>
+    If you are using a compiler that does not have a version of
+    <tt>std::iterator_traits</tt> that works for pointers (i.e., if your
+    compiler does not support partial specialization) then if the
+    <tt>Base</tt> type is a const pointer, then the correct defaults
+    for the <tt>reference</tt> and <tt>pointer</tt> types can not be
+    deduced. You must specify these types explicitly.
 
     <hr>
 
