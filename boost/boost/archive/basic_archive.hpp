@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/strong_typedef.hpp>
-#include <boost/utility.hpp>  // non-copyable
+#include <boost/noncopyable.hpp>
 
 namespace boost {
 namespace archive {

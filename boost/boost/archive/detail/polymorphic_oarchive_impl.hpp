@@ -18,7 +18,7 @@
 
 #include <string>
 #include <ostream>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/cstdint.hpp>
 #include <cstddef> // size_t
 

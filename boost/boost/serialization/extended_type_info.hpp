@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/config.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #define BOOST_SERIALIZATION_MAX_KEY_SIZE 128
 
