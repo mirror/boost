@@ -1175,8 +1175,7 @@ private: // helpers, for structors, cont. (below)
             );
     }
 
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) \
- && !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
 public: // structors, cont.
 
