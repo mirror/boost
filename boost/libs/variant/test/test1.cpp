@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------------
-// boost variant/get.hpp header file
+// boost-libs variant/test/test1.cpp header file
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
@@ -13,9 +13,6 @@
 // supporting documentation. No representations are made about the 
 // suitability of this software for any purpose. It is provided "as is" 
 // without express or implied warranty.
-
-
-//File: test1.cpp
 
 #include "boost/test/minimal.hpp"
 #include "boost/variant.hpp"
