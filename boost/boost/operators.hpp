@@ -1,6 +1,6 @@
 //  Boost operators.hpp header file  ----------------------------------------//
 
-//  (C) Copyright David Abrahams, Jeremy Siek, and Daryle Walker 1999-2001.
+//  (C) Copyright David Abrahams, Jeremy Siek, Daryle Walker 1999-2001.
 //  Permission to copy, use, modify, sell and distribute this software is
 //  granted provided this copyright notice appears in all copies.  This
 //  software is provided "as is" without express or implied warranty, and
