@@ -80,8 +80,8 @@ exe zero_vector
       <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 
-exe sparse_vector
-    : sparse_vector.cpp
+exe mapped_vector
+    : mapped_vector.cpp
     : <include>$(BOOST_ROOT)
       <sysinclude>$(BOOST_ROOT)
       <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
@@ -208,8 +208,8 @@ exe zero_matrix
       <kylix><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 
-exe sparse_matrix
-    : sparse_matrix.cpp
+exe mapped_matrix
+    : mapped_matrix.cpp
     : <include>$(BOOST_ROOT)
       <sysinclude>$(BOOST_ROOT)
       <borland><*><cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"

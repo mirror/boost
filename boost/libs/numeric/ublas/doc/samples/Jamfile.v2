@@ -46,8 +46,8 @@ exe zero_vector
     : zero_vector.cpp
     ;
 
-exe sparse_vector
-    : sparse_vector.cpp
+exe mapped_vector
+    : mapped_vector.cpp
     ;
 
 exe compressed_vector
@@ -110,8 +110,8 @@ exe zero_matrix
     : zero_matrix.cpp
     ;
 
-exe sparse_matrix
-    : sparse_matrix.cpp
+exe mapped_matrix
+    : mapped_matrix.cpp
     ;
 
 exe compressed_matrix

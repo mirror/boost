@@ -19,7 +19,7 @@
 
 int main () {
     using namespace boost::numeric::ublas;
-    sparse_vector<double> v (3, 3);
+    mapped_vector<double> v (3, 3);
     for (unsigned i = 0; i < v.size (); ++ i)
         v (i) = i;
     std::cout << v << std::endl;
