@@ -8,6 +8,8 @@
 
 #include <string>
 #include <locale>
+// for mbstate_t
+#include <cwchar>
 
 #include <stdexcept>
 
