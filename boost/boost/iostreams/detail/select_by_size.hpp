@@ -14,7 +14,7 @@
 //
 // This header may be included any number of times, with
 // BOOST_SELECT_BY_SIZE_MAX_CASE defined to be the largest N such that case_<N>
-// is needed for a particular application. It defaults to 2.
+// is needed for a particular application. It defaults to 20.
 //
 // This header depends only on Boost.Config and Boost.Preprocessor. Dependence
 // on Type Traits or MPL was intentionally avoided, to leave open the 
@@ -22,7 +22,7 @@
 //
 // Example usage:
 //
-//    #define BOOST_SELECT_BY_SIZE_MAX_CASE 7         // Needed for > 2 cases.
+//    #define BOOST_SELECT_BY_SIZE_MAX_CASE 7   // (Needed when default was 2)
 //    #include <boost/utility/select_by_size.hpp>
 //
 //    using namespace boost::utility;
@@ -62,13 +62,11 @@
 
 // The lowest N for which select_by_size< sizeof(case_<N>) > has not been
 // specialized.
-#define SELECT_BY_SIZE_MAX_SPECIALIZED 2
+#define SELECT_BY_SIZE_MAX_SPECIALIZED 20
 
 #include <boost/config.hpp>    // BOOST_STATIC_CONSTANT.
-#include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/repetition/repeat_from_to.hpp>
-#include <boost/preprocessor/repetition/repeat_from_to.hpp>
+#include <boost/preprocessor/iteration/local.hpp>
 
 /* Alternative implementation using max_align. 
 
@@ -122,9 +120,10 @@ template<unsigned Size> struct select_by_size;
 
 //--------------Default specializations of select_by_size---------------------//
 
-SELECT_BY_SIZE_SPEC(0) // select_by_size< sizeof(case<-1>) >
-SELECT_BY_SIZE_SPEC(1) // select_by_size< sizeof(case<0>) >
-SELECT_BY_SIZE_SPEC(2) // select_by_size< sizeof(case<1>) >
+#define BOOST_PP_LOCAL_MACRO(n) SELECT_BY_SIZE_SPEC(n)
+#define BOOST_PP_LOCAL_LIMITS (0, 20)
+#include BOOST_PP_LOCAL_ITERATE()
+#undef BOOST_PP_LOCAL_MACRO
 
 //--------------Definition of SELECT_BY_SIZE----------------------------------//
 
@@ -146,28 +145,15 @@ SELECT_BY_SIZE_SPEC(2) // select_by_size< sizeof(case<1>) >
 
 //----------Specializations of SELECT_BY_SIZE (outside main inclued guards)---//
 
-// Specialize select_by_size for sizeof(case_<N>) for each N less than
-// BOOST_SELECT_BY_SIZE_CASES for which this specialization has not already been
-// performed.
+#if BOOST_SELECT_BY_SIZE_MAX_CASE > SELECT_BY_SIZE_MAX_SPECIALIZED
 
-#if !BOOST_PP_IS_ITERATING //-------------------------------------------------//
-    #include <boost/preprocessor/iteration/iterate.hpp>
-    #if !defined(BOOST_SELECT_BY_SIZE_MAX_CASE) || \
-        (BOOST_SELECT_BY_SIZE_MAX_CASE < 2)
-        #undef BOOST_SELECT_BY_SIZE_MAX_CASE
-        #define BOOST_SELECT_BY_SIZE_MAX_CASE 2
-    #endif
+#define BOOST_PP_LOCAL_MACRO(n) SELECT_BY_SIZE_SPEC(n)
+#define BOOST_PP_LOCAL_LIMITS \
+    (SELECT_BY_SIZE_MAX_SPECIALIZED, BOOST_SELECT_BY_SIZE_MAX_CASE) \
+    /**/
+#include BOOST_PP_LOCAL_ITERATE()
+#undef BOOST_PP_LOCAL_MACRO
+#undef SELECT_BY_SIZE_MAX_SPECIALIZED
+#define SELECT_BY_SIZE_MAX_SPECIALIZED BOOST_SELECT_BY_SIZE_MAX_CASE
 
-    #if (BOOST_SELECT_BY_SIZE_MAX_CASE > SELECT_BY_SIZE_MAX_SPECIALIZED)
-        #define BOOST_PP_FILENAME_1 <boost/iostreams/detail/select_by_size.hpp>
-        #define BOOST_PP_ITERATION_LIMITS ( SELECT_BY_SIZE_MAX_SPECIALIZED, \
-                                            BOOST_SELECT_BY_SIZE_MAX_CASE )
-        #include BOOST_PP_ITERATE()
-        #undef SELECT_BY_SIZE_MAX_SPECIALIZED
-        #define SELECT_BY_SIZE_MAX_SPECIALIZED BOOST_SELECT_BY_SIZE_MAX_CASE
-    #endif // #if (BOOST_SELECT_BY_SIZE_CASES > SELECT_BY_SIZE_MAX_SPECIALIZED)
-
-    #undef BOOST_SELECT_BY_SIZE_MAX_CASE
-#else // #if !BOOST_PP_IS_ITERATING //----------------------------------------//
-    SELECT_BY_SIZE_SPEC(BOOST_PP_INC(BOOST_PP_ITERATION()))
-#endif // #if !BOOST_PP_IS_ITERATING //---------------------------------------//
+#endif
