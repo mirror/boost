@@ -21,6 +21,7 @@
 # include <boost/mpl/bool.hpp>
 # include <boost/mpl/or.hpp>
 # include <boost/mpl/and.hpp>
+# include <boost/mpl/aux_/lambda_support.hpp>
 
 # include <iterator>
 
@@ -322,7 +323,9 @@ namespace boost
               , error_type
             >
         >
-    {};
+    {
+        BOOST_MPL_AUX_LAMBDA_SUPPORT(2,minimum_category,(T1,T2))
+    };
     
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     // Deal with ETI
