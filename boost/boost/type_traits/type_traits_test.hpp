@@ -277,6 +277,13 @@ typedef int (UDT::*cmf)(int) const;
 #  pragma warning(push)
 #  pragma warning(disable: 21)
 # endif
+//
+// This is intentional:
+// r_type and cr_type should be the same type
+// but some compilers wrongly apply cv-qualifiers
+// to reference types (this may generate a warning
+// on some compilers):
+//
 typedef int& r_type;
 typedef const r_type cr_type;
 # ifdef BOOST_MSVC
@@ -391,6 +398,8 @@ struct incomplete_type;
 
 
 #endif // BOOST_TYPE_TRAITS_TEST_HPP
+
+
 
 
 
