@@ -1,7 +1,7 @@
 #ifndef DATE_TIME_HIGHRES_TIME_CLOCK_HPP___
 #define DATE_TIME_HIGHRES_TIME_CLOCK_HPP___
 
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -60,6 +60,13 @@ namespace date_time {
       return time_type(utc_time, tz_ptr);
     }
 
+
+  private:
+    // we want this enum available for both platforms yet still private
+    enum TZ_FOR_CREATE { LOCAL, GMT };
+    
+  public:
+
 #ifdef BOOST_HAS_GETTIMEOFDAY
     //! Return the local time based on computer clock settings
     static time_type local_time() {
@@ -73,18 +80,16 @@ namespace date_time {
     }
 
   private:
-    enum TZ_FOR_CREATE { LOCAL, GMT };
     static time_type create_time(TZ_FOR_CREATE tz) {
       timeval tv;
       gettimeofday(&tv, 0); //gettimeofday does not support TZ adjust on Linux.
-      time_t t = tv->tv_sec;
-      boost::uint32_t fs = tv->tv_usec;
-      //::std::time(&t);
+      time_t t = tv.tv_sec;
+      boost::uint32_t fs = tv.tv_usec;
       tm* curr = 0;
       if (tz == LOCAL) {
-        tm* curr = localtime(&t);
+        curr = localtime(&t);
       } else {
-        tm* curr = gmtime(&t);
+        curr = gmtime(&t);
       }
       date_type d(curr->tm_year + 1900,
                   curr->tm_mon + 1,
@@ -107,15 +112,20 @@ namespace date_time {
 #ifdef BOOST_HAS_FTIME
     //! Return the local time based on computer clock settings
     static time_type local_time() {
-      //SYSTEMTIME st;
-      //GetSystemTime(&st);
       FILETIME ft;
       GetSystemTimeAsFileTime(&ft);
-      return create_time(ft);
+      return create_time(ft, LOCAL);
+    }
+    
+    //! Return the UTC time based on computer settings
+    static time_type universal_time() {
+      FILETIME ft;
+      GetSystemTimeAsFileTime(&ft);
+      return create_time(ft, GMT);
     }
 
   private:
-    static time_type create_time(FILETIME& ft) {
+    static time_type create_time(FILETIME& ft, TZ_FOR_CREATE tz) {
       // offset is difference (in 100-nanoseconds) from
       // 1970-Jan-01 to 1601-Jan-01
       boost::uint64_t c1 = 27111902;
@@ -132,7 +142,13 @@ namespace date_time {
 
       time_t t;
       ::std::time(&t);
-      tm* curr = localtime(&t);
+      tm* curr = 0;
+      if (tz == LOCAL) {
+        curr = localtime(&t);
+      }
+      else {
+        curr = gmtime(&t);
+      }
       date_type d(curr->tm_year + 1900,
                   curr->tm_mon + 1,
                   curr->tm_mday);
