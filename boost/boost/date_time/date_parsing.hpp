@@ -67,7 +67,7 @@ namespace date_time {
         typename month_type::month_map_ptr_type ptr = month_type::get_month_map_ptr();
         typename month_type::month_map_type::iterator iter = ptr->find(s);
         if(iter != ptr->end()) { // required for STLport
-          return iter->second;
+	  return iter->second;
         }
       }
       return 13; // intentionally out of range - name not found
@@ -135,7 +135,6 @@ namespace date_time {
       boost::tokenizer<boost::offset_separator> tok(s, osf);
       for(boost::tokenizer<boost::offset_separator>::iterator ti=tok.begin(); ti!=tok.end();++ti) {
         unsigned short i = boost::lexical_cast<unsigned short>(*ti);
-        //      std::cout << i << std::endl;
         switch(pos) {
         case 0: ymd.year = i; break;
         case 1: ymd.month = i; break;
@@ -145,15 +144,14 @@ namespace date_time {
       }
       return date_type(ymd);
     }
-
-
+    
     //! Helper function for 'date gregorian::from_stream()'
     /*! Creates a string from the iterators that reference the
      * begining & end of a char[] or string. All elements are 
      * used in output string */
-    template<class iterator_type>
+    template<class date_type, class iterator_type>
     inline 
-    std::string 
+    date_type
     from_stream_type(iterator_type& beg, 
                      iterator_type& end,
                      char) 
@@ -162,20 +160,20 @@ namespace date_time {
       while(beg != end) {
         ss << *beg++;
       }
-      return ss.str();
+      return parse_date<date_type>(ss.str());
     }
  
     //! Helper function for 'date gregorian::from_stream()'
     /*! Returns the first string found in the stream referenced by the
      * begining & end iterators */
-    template<class iterator_type>
+    template<class date_type, class iterator_type>
     inline 
-    std::string 
+    date_type
     from_stream_type(iterator_type& beg, 
                      iterator_type& end,
                      std::string) 
     {
-      return *beg;
+      return parse_date<date_type>(*beg);
     }
 
     /* I believe the wchar stuff would be best elsewhere, perhaps in
@@ -184,25 +182,25 @@ namespace date_time {
     /*! Creates a string from the iterators that reference the
      * begining & end of a wstring. All elements are 
      * used in output string */
-    template<class iterator_type>
+    template<class date_type, class iterator_type>
     inline 
-    std::string from_stream_type(iterator_type& beg, 
-                                 iterator_type& end,
-                                 wchar_t) 
+    date_type from_stream_type(iterator_type& beg, 
+                               iterator_type& end,
+                               wchar_t) 
     {
       std::stringstream ss("");
       while(beg != end) {
         ss << ss.narrow(*beg++, 'X'); // 'X' will cause exception to be thrown
       }
-      return ss.str();
+      return parse_date<date_type>(ss.str());
     }
 #ifndef BOOST_NO_STD_WSTRING
     //! Helper function for 'date gregorian::from_stream()'
     /*! Creates a string from the first wstring found in the stream
      * referenced by the begining & end iterators */
-    template<class iterator_type>
+    template<class date_type, class iterator_type>
     inline 
-    std::string 
+    date_type
     from_stream_type(iterator_type& beg, 
                      iterator_type& end,
                      std::wstring) {
@@ -212,9 +210,35 @@ namespace date_time {
       while(wsb != wse) {
         ss << ss.narrow(*wsb++, 'X'); // 'X' will cause exception to be thrown
       }
-      return ss.str();
+      return parse_date<date_type>(ss.str());
     }
 #endif // BOOST_NO_STD_WSTRING
+#if (defined(_MSC_VER) && (_MSC_VER <= 1200))
+    // This function cannot be compiled with MSVC 6.0 due to internal compiler shorcomings
+#else
+    //! function called by wrapper functions: date_period_from_(w)string()
+    template<class date_type, class charT>
+    period<date_type, typename date_type::duration_type> 
+    from_simple_string_type(const std::basic_string<charT>& s){
+      typedef typename boost::char_separator<charT> char_separator;
+      typedef typename boost::tokenizer<char_separator, typename std::basic_string<charT>::const_iterator, 
+					  std::basic_string<charT> > tokenizer;
+      const charT sep_list[] = {'[','/',']','\0'};
+      char_separator sep(sep_list);
+      tokenizer tokens(s, sep);
+      typename tokenizer::iterator tok_it = tokens.begin(); 
+      std::basic_string<charT> date_string = *tok_it;
+      // get 2 string iterators and generate a date from them
+      typename std::basic_string<charT>::iterator date_string_start = date_string.begin(), 
+						  date_string_end = date_string.end(); 
+      typedef typename std::iterator_traits<typename std::basic_string<charT>::iterator>::value_type value_type;
+      date_type d1 = from_stream_type<date_type>(date_string_start, date_string_end, value_type());
+      date_string = *(++tok_it); // next token
+      date_string_start = date_string.begin(), date_string_end = date_string.end(); 
+      date_type d2 = from_stream_type<date_type>(date_string_start, date_string_end, value_type());
+      return period<date_type, typename date_type::duration_type>(d1, d2); 
+    }
+#endif // _MSC_VER <= 1200
     
 } } //namespace date_time
 

@@ -11,6 +11,7 @@
 
 #include "boost/date_time/gregorian/gregorian_types.hpp"
 #include "boost/date_time/date_formatting_locales.hpp" // sets BOOST_DATE_TIME_NO_LOCALE
+#include "boost/date_time/gregorian/parsers.hpp"
 #include <string>
 
 //This file is basically commented out if locales are not supported
@@ -196,6 +197,42 @@ namespace gregorian {
   {
     os << fkb.day_of_week() << " before"; 
     return os;
+  }
+
+  /**************** Input Streaming ******************/
+  
+  //! operator>> for gregorian::date
+  template<class charT>
+  inline 
+  std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is, date& d)
+  {
+    std::istream_iterator<std::basic_string<charT>, charT> beg(is), eos;
+    d = from_stream(beg, eos);
+    return is;
+  }
+
+  //! operator>> for gregorian::date_duration
+  template<class charT>
+  inline
+  std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is, 
+                                        date_duration& dd)
+  {
+    long v;
+    is >> v;
+    dd = date_duration(v);
+    return is;
+  }
+
+  //! operator>> for gregorian::date_period
+  template<class charT>
+  inline
+  std::basic_istream<charT>& operator>>(std::basic_istream<charT>& is,
+      					date_period& dp)
+  {
+    std::basic_string<charT> s;
+    is >> s;
+    dp = date_time::from_simple_string_type<date>(s);
+    return is;
   }
 
 } } //namespace gregorian
