@@ -174,9 +174,9 @@ void instantiate_all()
 
 #if !defined(BOOST_NO_INT64_T) && !defined(BOOST_NO_INTEGRAL_INT64_T)
   instantiate_urng("rand48", rand48(), 0);
-  rand48 rnd(5);
+  rand48 rnd(int32_t(5));
   rand48 rnd2(uint64_t(0x80000000) * 42);
-  rnd.seed(17);
+  rnd.seed(int32_t(17));
   rnd2.seed(uint64_t(0x80000000) * 49);
 #endif
 
