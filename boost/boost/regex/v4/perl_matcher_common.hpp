@@ -41,7 +41,13 @@ perl_matcher<BidiIterator, Allocator, traits, Allocator2>::perl_matcher(BidiIter
       next_count(&rep_obj), rep_obj(&next_count)
 { 
    typedef typename regex_iterator_traits<BidiIterator>::iterator_category category;
-
+   
+   if(e.empty())
+   {
+      // precondition failure: e is not a valid regex.
+      std::invalid_argument ex("Invalid regular expression object");
+      boost::throw_exception(ex);
+   }
    pstate = 0;
    m_match_flags = f;
    icase = re.flags() & regex_constants::icase;
