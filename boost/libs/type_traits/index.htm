@@ -452,7 +452,9 @@ has.</p>
     <tr>
         <td valign="top" width="5%">&nbsp;</td>
         <td valign="top" width="23%" bgcolor="#C0C0C0"><code>::boost::is_stateless&lt;T&gt;::value</code></td>
-        <td valign="top" width="28%" bgcolor="#C0C0C0">True if T is stateless, meaning that T has no storage and its constructors and destructors are trivial.</td>
+        <td valign="top" width="28%" bgcolor="#C0C0C0">True if T
+        is stateless, meaning that T has no storage and its
+        constructors and destructors are trivial.</td>
         <td valign="top" width="13%" bgcolor="#C0C0C0">&nbsp;</td>
         <td valign="top" width="25%" bgcolor="#C0C0C0"><p
         align="center">PC</p>
@@ -703,6 +705,15 @@ transformation to the template argument T:</p>
         volatile&quot; for all T.</td>
         <td valign="top" bgcolor="#C0C0C0">3.9.3</td>
         <td valign="top" bgcolor="#C0C0C0">&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td valign="top" bgcolor="#C0C0C0"><code>::boost::add_cv&lt;T&gt;::type</code></td>
+        <td valign="top" bgcolor="#C0C0C0">The same as &quot;T
+        const volatile&quot; for all T.</td>
+        <td valign="top" bgcolor="#C0C0C0">3.9.3</td>
+        <td bgcolor="#C0C0C0">&nbsp;</td>
         <td>&nbsp;</td>
     </tr>
 </table>
