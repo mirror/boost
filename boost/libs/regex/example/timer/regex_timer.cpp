@@ -215,7 +215,7 @@ int main(int argc, char**argv)
          // cache load:
          regex_search(s2, sm, ex);
 
-         // measure time interval for reg_expression<char>
+         // measure time interval for basic_regex<char>
          do{
             iters *= (tim > 0.001) ? (1.1/tim) : 100;
             t.restart();
@@ -283,7 +283,7 @@ int main(int argc, char**argv)
          }
 #endif
         
-         // measure time interval for reg_expression<char> using a deque
+         // measure time interval for basic_regex<char> using a deque
          iters = 10;
          tim = 1.1;
          // cache load:

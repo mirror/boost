@@ -17,7 +17,7 @@ namespace bl{
 
 double time_match(const std::string& re, const std::string& text, bool icase)
 {
-   boost::reg_expression<char, boost::cpp_regex_traits<char> > e(re, (icase ? boost::regex::perl | boost::regex::icase : boost::regex::perl));
+   boost::basic_regex<char, boost::cpp_regex_traits<char> > e(re, (icase ? boost::regex::perl | boost::regex::icase : boost::regex::perl));
    boost::smatch what;
    boost::timer tim;
    int iter = 1;
@@ -55,7 +55,7 @@ bool dummy_grep_proc(const boost::smatch&)
 
 double time_find_all(const std::string& re, const std::string& text, bool icase)
 {
-   boost::reg_expression<char, boost::cpp_regex_traits<char> > e(re, (icase ? boost::regex::perl | boost::regex::icase : boost::regex::perl));
+   boost::basic_regex<char, boost::cpp_regex_traits<char> > e(re, (icase ? boost::regex::perl | boost::regex::icase : boost::regex::perl));
    boost::smatch what;
    boost::timer tim;
    int iter = 1;
