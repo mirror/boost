@@ -135,8 +135,13 @@ private:
     assert(r < q);        // check that overflow cannot happen
 
     value = a*(value%q) - r*(value/q);
-    while(value <= 0)
+    // An optimizer bug in the SGI MIPSpro 7.3.1.x compiler requires this
+    // convoluted formulation of the loop (Synge Todo)
+    for(;;) {
+      if (value > 0)
+        break;
       value += m;
+    }
     return value;
   }
 
