@@ -10,6 +10,8 @@
 //#include <cstdlib> // for multi-byte converson routines
 
 #include <cassert>
+#include <cstddef>
+
 #include <boost/integer_traits.hpp>
 #include <boost/utf8_codecvt_facet.hpp>
 
@@ -200,7 +202,7 @@ unsigned int utf8_codecvt_facet_wchar_t::get_octet_count(
 }
 
 namespace {
-template<size_t s>
+template<std::size_t s>
 int get_cont_octet_out_count_impl(wchar_t word){
     if (word < 0x80) {
         return 0;

@@ -17,6 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <locale>
+#include <cstddef>
 
 #include <boost/config.hpp>
 
@@ -46,7 +47,7 @@ class codecvt_null<char> : public std::codecvt<char, char, std::mbstate_t>
         return true;    
     }
 public:
-    explicit codecvt_null(size_t no_locale_manage = 0) :
+    explicit codecvt_null(std::size_t no_locale_manage = 0) :
         std::codecvt<char, char, std::mbstate_t>(no_locale_manage)
     {}
 };
