@@ -39,6 +39,23 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
    [ run gregorian/testparse_date.cpp <lib>../build/boost_date_time : : : $(DATE_TIME_PROPERTIES) ]
  ;
 
+   test-suite date_time_gregorian_dll
+     : 
+   [ run gregorian/testdate.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testdate_dll ]
+   [ run gregorian/testdate_duration.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testdate_duration_dll ]
+   [ run gregorian/testperiod.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testperiod_dll ]
+   [ run gregorian/testdate_iterator.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testdate_iterator_dll ]
+   [ run gregorian/testfacet.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testfacet_dll ]
+   [ run gregorian/testformatters.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testformatters_dll ]
+   [ run gregorian/testgenerators.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testgenerators_dll ]
+   [ run gregorian/testgreg_cal.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testgreg_cal_dll ]
+   [ run gregorian/testgreg_day.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testgreg_day_dll ]     
+   [ run gregorian/testgreg_month.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testgreg_month_dll ]
+   [ run gregorian/testgreg_year.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testgreg_year_dll ]
+   # this next test is commented out because it crashes on VC6 (cause unknown):
+  # [ run gregorian/testparse_date.cpp <dll>../build/boost_date_time : : : <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic : testparse_date_dll ]
+ ;
+
    test-suite date_time_posixtime
      : 
    [ run posix_time/testlocal_adjustor.cpp

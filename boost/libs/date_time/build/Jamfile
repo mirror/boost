@@ -17,14 +17,30 @@ CPP_SOURCES =
 
 dll boost_date_time 
     : ../src/gregorian/$(CPP_SOURCES).cpp    
-    : <sysinclude>$(BOOST_ROOT) 
+    : 
+      <sysinclude>$(BOOST_ROOT) 
       $(DATE_TIME_PROPERTIES)       
       <runtime-link>dynamic
+      <define>BOOST_ALL_DYN_LINK=1
+      # the common names rule ensures that the library will
+      # be named according to the rules used by the install
+      # and auto-link features:
+      common-variant-tag 
     : debug release     ;
 
 lib boost_date_time : ../src/gregorian/$(CPP_SOURCES).cpp
-    : <sysinclude>$(BOOST_ROOT) $(DATE_TIME_PROPERTIES) <define>BOOST_DATE_TIME_STATIC_LINK
-    : debug release <runtime-link>static 
+    : 
+      <sysinclude>$(BOOST_ROOT) 
+      $(DATE_TIME_PROPERTIES) 
+      <define>BOOST_DATE_TIME_STATIC_LINK
+      # the common names rule ensures that the library will
+      # be named according to the rules used by the install
+      # and auto-link features:
+      common-variant-tag 
+    : 
+      debug 
+      release 
+      <runtime-link>static 
     ;
 
 install date_time lib
