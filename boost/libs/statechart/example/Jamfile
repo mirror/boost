@@ -4,6 +4,8 @@
 
 subproject libs/fsm/example ;
 
+local no-of-bits-list = 1 2 3 4 5 6 ;
+
 template fsm-common-options
   :
   : <include>$(BOOST_ROOT)
@@ -17,28 +19,50 @@ template fsm-common-options
     <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor
 ;
 
-rule fsm-st-example-build ( example-name : sources + )
+rule fsm-st-example-build (
+  target-name : directory : sources + : additional-options * )
 {
-  exe $(example-name)
-    : $(example-name)/$(sources).cpp <template>fsm-common-options
+  exe $(target-name)
+    : $(directory)/$(sources).cpp <template>fsm-common-options
     : <threading>single
+      $(additional-options)
   ;
 }
 
-rule fsm-mt-example-build ( example-name : sources + )
+rule fsm-mt-example-build (
+  target-name : directory : sources + : additional-options * )
 {
-  exe $(example-name)
-    : $(example-name)/$(sources).cpp
+  exe $(target-name)
+    : $(directory)/$(sources).cpp
       <dll>../../thread/build/boost_thread
       <template>fsm-common-options
     : <threading>multi
+      $(additional-options)
   ;
 }
 
-fsm-st-example-build BitMachine : BitMachine ;
-fsm-st-example-build Camera : Camera Configuring Main Shooting ;
-fsm-st-example-build Handcrafted : Handcrafted ;
-fsm-st-example-build Keyboard : Keyboard ;
-fsm-st-example-build PingPong : PingPong ;
-fsm-mt-example-build PingPong : PingPong ;
-fsm-st-example-build StopWatch : StopWatch ;
+rule fsm-bitmachine-build ( tag : no-of-bits-list + : additional-options * )
+{
+  for local no-of-bits in $(no-of-bits-list)
+  {
+    fsm-st-example-build BitMachine$(tag)$(no-of-bits)
+      : BitMachine : BitMachine
+      : <define>NO_OF_BITS=$(no-of-bits)
+        $(additional-options) ; 
+  }
+}
+
+fsm-bitmachine-build Normal : $(no-of-bits-list) ;
+fsm-bitmachine-build Custom : $(no-of-bits-list) :
+  <define>CUSTOMIZE_MEMORY_MANAGEMENT ;
+fsm-bitmachine-build Native : $(no-of-bits-list) :
+  <define>BOOST_FSM_USE_NATIVE_RTTI ;
+
+fsm-st-example-build Camera : Camera : Camera Configuring Main Shooting ;
+fsm-st-example-build Handcrafted : Handcrafted : Handcrafted ;
+fsm-st-example-build Keyboard : Keyboard : Keyboard ;
+fsm-st-example-build PingPongSingle : PingPong : PingPong ;
+fsm-mt-example-build PingPongMulti1 : PingPong : PingPong ;
+fsm-mt-example-build PingPongMulti2 : PingPong : PingPong
+  : <define>USE_TWO_THREADS ;
+fsm-st-example-build StopWatch : StopWatch : StopWatch ;
