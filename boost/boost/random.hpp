@@ -356,8 +356,9 @@ public:
   { return lcf == rhs.lcf; }
 #endif
 private:
-  random::linear_congruential<uint64_t, 0x5DEECE66DULL, 0xB,
-    uint64_t(1)<<48, /* unknown */ 0> lcf;
+  random::linear_congruential<uint64_t,
+    uint64_t(0xDEECE66DUL) | (uint64_t(0x5) << 32), // xxxxULL is not portable
+    0xB, uint64_t(1)<<48, /* unknown */ 0> lcf;
   static uint64_t cnv(int32_t x) 
   { return (static_cast<uint64_t>(x) << 16) | 0x330e;  }
 };

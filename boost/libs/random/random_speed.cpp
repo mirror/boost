@@ -187,9 +187,10 @@ int main(int argc, char*argv[])
 #if !defined(BOOST_NO_INT64_T) && \
     !defined(BOOST_NO_INCLASS_MEMBER_INITIALIZATION)
   run(iter, "rand48", boost::rand48());
-  linear_congruential<unsigned long long> lcg48(uint64_t(1)<<16 | 0x330e, 
-						0x5DEECE66DULL, 0xB, 
-						uint64_t(1)<<48);
+  linear_congruential<uint64_t>
+    lcg48(uint64_t(1)<<16 | 0x330e,
+	  uint64_t(0xDEECE66DUL) | (uint64_t(0x5) << 32), 0xB,
+	  uint64_t(1)<<48);
   timing(lcg48, iter, "lrand48 run-time", 0l);
 #endif
 
