@@ -38,12 +38,14 @@ class asynchronous_state_machine : public state_machine<
   typedef state_machine< MostDerived,
     InitialState, Allocator, ExceptionTranslator > machine_base;
   typedef detail::event_processor< Worker > processor_base;
-  public:
+  protected:
     //////////////////////////////////////////////////////////////////////////
     asynchronous_state_machine( Worker & myWorker ) :
       processor_base( myWorker )
     {
     }
+
+    virtual ~asynchronous_state_machine() {}
 
   public:
     //////////////////////////////////////////////////////////////////////////

@@ -48,8 +48,6 @@ class counted_base : private locked_base< NeedsLocking >
   typedef locked_base< NeedsLocking > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
-    virtual ~counted_base() {}
-
     bool ref_counted() const
     {
       return count_ != 0;
@@ -58,6 +56,7 @@ class counted_base : private locked_base< NeedsLocking >
   protected:
     //////////////////////////////////////////////////////////////////////////
     counted_base() : count_( 0 ) {}
+    virtual ~counted_base() {}
 
     // do nothing copy implementation is intentional (the number of
     // referencing pointers of the source and the destination is not changed

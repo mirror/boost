@@ -53,14 +53,12 @@ include:</p>
   <li>MSVC7.1 (the compiler coming with Visual Studio .NET 2003) with boost 
   distribution 1.30.2</li>
 </ul>
-<p>The library is almost functionally complete. However, the following is 
-still in the making:</p>
+<p>The library is functionally complete. However, the following is still in 
+the making:</p>
 <ol>
-  <li>A facility allowing users to attach arbitrary type information to states</li>
-  <li>A way to iterate over all current states of a machine.</li>
-  <li>Reference documentation</li>
+  <li>Finish reference documentation</li>
+  <li>gcc port</li>
   <li>Regression tests</li>
-  <li>Ports to other compilers</li>
   <li>Refactoring of the <code>state_machine</code> class template to reduce 
   code size in projects with many different state machines</li>
 </ol>
@@ -69,13 +67,23 @@ still in the making:</p>
 <h2>Contents</h2>
 <dl class="index">
   <dt><a href="tutorial.html">Tutorial</a></dt>
-  <dt><a href="rationale.html">Rationale</a></dt>
-  <dt><a href="definitions.html">Definitions</a></dt>
   <dt><a href="faq.html">Frequently Asked Questions (FAQs)</a></dt>
+  <dt><a href="configuration.html">Configuration</a></dt>
+  <dt><a href="definitions.html">Definitions</a></dt>
+  <dt><a href="reference.html">Reference</a></dt>
+  <dt><a href="rationale.html">Rationale</a></dt>
   <dt><a href="acknowledgments.html">Acknowledgments</a></dt>
 </dl>
 <hr>
 <h2>Change history</h2>
+<p>12 December 2003:</p>
+<ul>
+  <li><b>Thanks to Mitsuo Fukasawa the tutorial is now also available in 
+  Japanese!!!</b></li>
+  <li>Added reference (unfinished) and configuration documentation and updated 
+  other documents</li>
+  <li>Various code brush-ups (no breaking changes)</li>
+</ul>
 <p>12 October 2003:</p>
 <ul>
   <li><b>Breaking change</b>: Removed <code>rtti_policy&lt;&gt;</code> from the 
@@ -111,7 +119,7 @@ still in the making:</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 October, 2003<!--webbot bot="Timestamp" endspan i-checksum="38550" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38508" --></p>
 <p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003. All Rights Reserved.</i></p>
 

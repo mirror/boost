@@ -42,7 +42,8 @@
 <h2><a name="Does boost::fsm support polymorphic events">Does boost::fsm 
 support polymorphic events?</a></h2>
 <p>No. Although events can be derived from each other to write common code 
-only once, reactions can only be defined for most-derived events.</p>
+only once, <a href="definitions.html#Reaction">reactions</a> can only be 
+defined for most-derived events.</p>
 <p>Example:</p>
 <pre>template&lt; class MostDerived &gt;
 struct EvButtonPressed : fsm::event&lt; MostDerived &gt;
@@ -249,7 +250,7 @@ destructors of additional bases are called before recursion employed by state
 base destructors can alter the order of destruction.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 October, 2003<!--webbot bot="Timestamp" endspan i-checksum="38550" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->01 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38505" --></p>
 <p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a> 
 2003. All Rights Reserved.</i></p>
 

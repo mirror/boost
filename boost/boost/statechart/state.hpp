@@ -22,9 +22,9 @@ namespace fsm
 
 
 template< class MostDerived,
-          class Context, // either an outer state or a state_machine
+          class Context,
           class Reactions = no_reactions,
-          class InnerInitial = detail::empty_list, // initial inner state
+          class InnerInitial = detail::empty_list,
           history_mode historyMode = has_no_history >
 class state : public simple_state<
   MostDerived, Context, Reactions, InnerInitial, historyMode >
@@ -49,6 +49,8 @@ class state : public simple_state<
     {
       base_type::set_context( ctx.pContext_ );
     }
+
+    virtual ~state() {}
 
   public:
     //////////////////////////////////////////////////////////////////////////

@@ -11,6 +11,7 @@
 
 
 #include <boost/config.hpp>
+#include <boost/assert.hpp>
 
 #include <typeinfo> // std::type_info
 
@@ -34,28 +35,24 @@ namespace detail
 
 
 
-// #define BOOST_FSM_USE_NATIVE_RTTI
-
-#ifndef BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
-template< class MostDerived >
 struct id_provider
 {
-  static bool dummy_;
+  const void * pCustomId_;
+  #if defined( BOOST_ENABLE_ASSERT_HANDLER ) || defined( _DEBUG )
+  const std::type_info * pCustomIdType_;
+  #endif
 };
-
-template< class MostDerived >
-bool id_provider< MostDerived >::dummy_;
 
 template< class MostDerived >
 struct id_holder
 {
-  static void * pId_;
+  static id_provider idProvider_;
 };
 
 template< class MostDerived >
-void * id_holder< MostDerived >::pId_ = &id_provider< MostDerived >::dummy_;
-#endif
+id_provider id_holder< MostDerived >::idProvider_;
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -66,40 +63,31 @@ struct rtti_policy
   {
     public:
       ////////////////////////////////////////////////////////////////////////
-      id_type( const std::type_info & id ) : id_( id ) {}
+      explicit id_type( const std::type_info & id ) : id_( id ) {}
 
-      friend bool operator==( id_type left, id_type right )
+      bool operator==( id_type right ) const
       {
-        return left.id_ == right.id_ != 0;
+        return id_ == right.id_ != 0;
       }
-      friend bool operator!=( id_type left, id_type right )
-      {
-        return !( left == right );
-      }
+      bool operator!=( id_type right ) const { return !( *this == right ); }
 
-      friend bool operator<( id_type left, id_type right )
+      bool operator<( id_type right ) const
       {
-        return left.id_.before( right.id_ ) != 0;
+        return id_.before( right.id_ ) != 0;
       }
-      friend bool operator>( id_type left, id_type right )
-      {
-        return right < left;
-      }
-      friend bool operator>=( id_type left, id_type right )
-      {
-        return !( left < right );
-      }
-      friend bool operator<=( id_type left, id_type right )
-      {
-        return !( right < left );
-      }
+      bool operator>( id_type right ) const { return right < *this; }
+      bool operator>=( id_type right ) const { return !( *this < right ); }
+      bool operator<=( id_type right ) const { return !( right < *this ); }
 
     private:
       ////////////////////////////////////////////////////////////////////////
       const std::type_info & id_;
   };
+
+  typedef bool id_provider_type; // dummy
   #else
-  typedef void * id_type;
+  typedef const void * id_type;
+  typedef const id_provider & id_provider_type;
   #endif
 
   ////////////////////////////////////////////////////////////////////////////
@@ -111,22 +99,40 @@ struct rtti_policy
       id_type dynamic_type() const
       {
         #ifdef BOOST_FSM_USE_NATIVE_RTTI
-        return typeid( *this );
+        return id_type( typeid( *this ) );
         #else
-        return id_;
+        return &idProvider_;
         #endif
       }
 
+      #ifndef BOOST_FSM_USE_NATIVE_RTTI
+      template< typename CustomId >
+      const CustomId * custom_dynamic_type_ptr() const
+      {
+        BOOST_ASSERT(
+          ( idProvider_.pCustomIdType_ == 0 ) ||
+          ( *idProvider_.pCustomIdType_ == typeid( CustomId ) ) );
+        return static_cast< const CustomId * >( idProvider_.pCustomId_ );
+      }
+      #endif
+
     protected:
       ////////////////////////////////////////////////////////////////////////
+      virtual ~base_type() {}
+
     #ifdef BOOST_FSM_USE_NATIVE_RTTI
-      base_type( id_type ) {}
+      base_type( id_provider_type ) {}
     #else
-      base_type( id_type id ) : id_( id ) {}
+      base_type(
+        id_provider_type idProvider
+      ) :
+        idProvider_( idProvider )
+      {
+      }
 
     private:
       ////////////////////////////////////////////////////////////////////////
-      const id_type id_;
+      id_provider_type idProvider_;
     #endif
   };
 
@@ -139,15 +145,44 @@ struct rtti_policy
       static id_type static_type()
       {
         #ifdef BOOST_FSM_USE_NATIVE_RTTI
-        return typeid( const MostDerived );
+        return id_type( typeid( const MostDerived ) );
         #else
-        return id_holder< MostDerived >::pId_;
+        return &id_holder< MostDerived >::idProvider_;
         #endif
       }
 
+      #ifndef BOOST_FSM_USE_NATIVE_RTTI
+      template< class CustomId >
+      static const CustomId * custom_static_type_ptr()
+      {
+        BOOST_ASSERT(
+          ( id_holder< MostDerived >::idProvider_.pCustomIdType_ == 0 ) ||
+          ( *id_holder< MostDerived >::idProvider_.pCustomIdType_ ==
+            typeid( CustomId ) ) );
+        return static_cast< const CustomId * >(
+          id_holder< MostDerived >::idProvider_.pCustomId_ );
+      }
+
+      template< class CustomId >
+      static void custom_static_type_ptr( const CustomId * pCustomId )
+      {
+        #if defined( BOOST_ENABLE_ASSERT_HANDLER ) || defined( _DEBUG )
+        id_holder< MostDerived >::idProvider_.pCustomIdType_ =
+          &typeid( CustomId );
+        #endif
+        id_holder< MostDerived >::idProvider_.pCustomId_ = pCustomId;
+      }
+      #endif
+
     protected:
       ////////////////////////////////////////////////////////////////////////
-      derived_type() : Base( static_type() ) {}
+      virtual ~derived_type() {}
+
+      #ifdef BOOST_FSM_USE_NATIVE_RTTI
+      derived_type() : Base( false ) {}
+      #else
+      derived_type() : Base( id_holder< MostDerived >::idProvider_ ) {}
+      #endif
   };
 };
 

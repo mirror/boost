@@ -33,7 +33,10 @@ class node_state : public state_base< Allocator, RttiPolicy >
   typedef state_base< Allocator, RttiPolicy > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    node_state( typename RttiPolicy::id_type id ) : base_type( id )
+    node_state(
+      typename RttiPolicy::id_provider_type idProvider
+    ) :
+      base_type( idProvider )
     {
       for ( orthogonal_position_type pos = 0; 
             pos < noOfOrthogonalRegions; ++pos )
@@ -41,6 +44,8 @@ class node_state : public state_base< Allocator, RttiPolicy >
         pInnerStates[ pos ] = 0;
       }
     }
+
+    virtual ~node_state() {}
 
   public:
     //////////////////////////////////////////////////////////////////////////

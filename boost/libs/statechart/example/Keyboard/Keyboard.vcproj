@@ -87,6 +87,7 @@
 				DisableLanguageExtensions="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				WarnAsError="TRUE"
@@ -150,6 +151,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\event.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\fsm\event_base.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\fsm\exception_translator.hpp">

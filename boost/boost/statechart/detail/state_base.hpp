@@ -64,19 +64,30 @@ class state_base : private noncopyable, public RttiPolicy::base_type<
 {
   typedef typename RttiPolicy::base_type<
     counted_base< orthogonal_position_type, false > > base_type;
+
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    // Returns a pointer to the immediate outer state _if_ there is one,
+    // returns 0 otherwise (this is the outermost state then)
+    virtual const state_base * outer_state_ptr() const = 0;
+
   protected:
     //////////////////////////////////////////////////////////////////////////
-    // The following declarations should be private.
-    // They are only protected because many compilers lack template friends.
-    //////////////////////////////////////////////////////////////////////////
-    state_base( typename RttiPolicy::id_type id ) :
-      base_type( id ),
+    state_base( typename RttiPolicy::id_provider_type idProvider ) :
+      base_type( idProvider ),
       reactionEnabled_( false ),
       deferredEvents_( false ),
       terminationState_( false )
     {
     }
 
+    virtual ~state_base() {}
+
+  protected:
+    //////////////////////////////////////////////////////////////////////////
+    // The following declarations should be private.
+    // They are only protected because many compilers lack template friends.
+    //////////////////////////////////////////////////////////////////////////
     void enable_reaction()
     {
       reactionEnabled_ = true;
@@ -128,10 +139,6 @@ class state_base : private noncopyable, public RttiPolicy::base_type<
     virtual result react_impl(
       const event_base & evt,
       typename RttiPolicy::id_type eventType ) = 0;
-
-    // returns a pointer to the immediate outer state _if_ there is one,
-    // returns 0 otherwise (this is the outermost state then)
-    virtual state_base * outer_state_ptr() const = 0;
 
     typedef intrusive_ptr< state_base > state_base_ptr_type;
     typedef std::list<

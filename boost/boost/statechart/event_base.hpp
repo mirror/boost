@@ -1,5 +1,5 @@
-#ifndef BOOST_FSM_EVENT_HPP_INCLUDED
-#define BOOST_FSM_EVENT_HPP_INCLUDED
+#ifndef BOOST_FSM_EVENT_BASE_HPP_INCLUDED
+#define BOOST_FSM_EVENT_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
 // Copyright (c) 2002-2003 Andreas Huber Doenni, Switzerland
 // Permission to copy, use, modify, sell and distribute this software
@@ -10,8 +10,11 @@
 
 
 
-#include <boost/fsm/event_base.hpp>
 #include <boost/fsm/detail/rtti_policy.hpp>
+#include <boost/fsm/detail/counted_base.hpp>
+
+#include <boost/assert.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 
 
@@ -23,13 +26,25 @@ namespace fsm
 
 
 //////////////////////////////////////////////////////////////////////////////
-template< class MostDerived >
-class event : public detail::rtti_policy::derived_type<
-  MostDerived, event_base >
+class event_base : public detail::rtti_policy::base_type<
+  detail::counted_base< unsigned int > >
 {
+  typedef detail::rtti_policy::base_type<
+    detail::counted_base< unsigned int > > base_type;
+  public:
+    //////////////////////////////////////////////////////////////////////////
+    intrusive_ptr< const event_base > clone() const
+    {
+      BOOST_ASSERT( base_type::ref_counted() );
+      return intrusive_ptr< const event_base >( this );
+    }
+
   protected:
     //////////////////////////////////////////////////////////////////////////
-    event() {}
+    event_base( detail::rtti_policy::id_provider_type idProvider ) :
+      base_type( idProvider )
+    {
+    }
 };
 
 

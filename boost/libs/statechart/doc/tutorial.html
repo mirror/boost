@@ -24,9 +24,14 @@
   </tr>
 </table>
 <hr>
+<p>The Japanese translation of this tutorial can be found at
+<a href="http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf">
+http://prdownloads.sourceforge.jp/jyugem/7127/fsm-tutorial-jp.pdf</a>. Kindly 
+contributed by Mitsuo Fukasawa.</p>
 <h2>Contents</h2>
 <dl class="page-index">
   <dt><a href="#Introduction">Introduction</a></dt>
+  <dd><a href="#How to read this tutorial">How to read this tutorial</a></dd>
   <dt><a href="#Hello World!">Hello World!</a></dt>
   <dt><a href="#A stop watch">A stop watch</a></dt>
   <dd><a href="#Defining states and events">Defining states and events</a></dd>
@@ -38,8 +43,7 @@
   <dd><a href="#Spreading a state machine over multiple translation units">
   Spreading a state machine over multiple translation units</a></dd>
   <dd><a href="#Guards">Guards</a></dd>
-  <dd><a href="#In-state reactions (aka inner transitions)">In-state reactions 
-  (aka inner transitions)</a></dd>
+  <dd><a href="#In-state reactions">In-state reactions</a></dd>
   <dd><a href="#Transition actions">Transition actions</a></dd>
   <dt><a href="#Advanced topics">Advanced topics</a></dt>
   <dd><a href="#Reaction function reference">Reaction function reference</a></dd>
@@ -50,6 +54,8 @@
   <dd><a href="#Deferring events">Deferring events</a></dd>
   <dd><a href="#History">History</a></dd>
   <dd><a href="#Orthogonal states">Orthogonal states</a></dd>
+  <dd><a href="#State queries">State queries</a></dd>
+  <dd><a href="#State type information">State type information</a></dd>
   <dd><a href="#Exception handling">Exception handling</a></dd>
   <dd><a href="#Submachines & Parametrized States">Submachines &amp; Parametrized 
   States</a></dd>
@@ -72,6 +78,25 @@ The UML specifications can be found at
 http://www.omg.org/cgi-bin/doc?formal/03-03-01</a> (see chapters 2.12 and 
 3.74).</p>
 <p>All examples have been tested with MSVC7.1 and boost distribution 1.30.2.</p>
+<h3><a name="How to read this tutorial">How to read this tutorial</a></h3>
+<p>This tutorial was designed to be read linearly. First time users should 
+start reading right at the beginning and stop as soon as they know enough for 
+the task at hand. Specifically:</p>
+<ul>
+  <li>The tutorial starts out with the <a href="#Hello World!">Hello World!</a> 
+  and <a href="#A stop watch">stop watch</a> examples explaining the most 
+  basic features that all users of the library should understand. Small and 
+  simple machines with just a handful of states can be implemented reasonably 
+  well by using just these features.</li>
+  <li>Afterwards, the <a href="#A digital camera">digital camera</a> example 
+  explains the intermediate features most of which should be known by anyone 
+  wanting to build larger machines with up to roughly a dozen states.</li>
+  <li>Finally, users wanting to create even more complex machines and project 
+  architects evaluating boost::fsm should also read the
+  <a href="#Advanced topics">Advanced topics</a> section at the end. Moreover, 
+  reading the <a href="rationale.html#Limitations">Limitations</a> section in 
+  the Rationale is strongly suggested.</li>
+</ul>
 <h2><a name="Hello World!">Hello World!</a></h2>
 <p>We follow the tradition and use the simplest possible program to make our 
 first steps. We will implement the following state chart:</p>
@@ -109,9 +134,15 @@ is destroyed what automatically exits the <code>Greeting</code> state.</p>
   class template.</li>
   <li>The machine is not yet running after construction. We start it by 
   calling <code>initiate()</code>.</li>
-  <li>All states reside in a context. For the moment, this context is the 
-  state machine. That's why <code>Machine</code> is passed as the second 
-  template parameter of <code>Greeting</code>'s base.</li>
+  <li>Whenever the state machine enters a state it creates an object of the 
+  corresponding state class. The object is then kept alive as long as the 
+  machine remains in the state. Finally, the object is destroyed when the 
+  state machine exits the state. Therefore, a state entry action can be 
+  defined by adding a constructor and a state exit action can be defined by 
+  adding a destructor.</li>
+  <li>All states reside in a <a href="definitions.html#Context">context</a>. 
+  For the moment, this context is the state machine. That's why <code>Machine</code> 
+  is passed as the second template parameter of <code>Greeting</code>'s base.</li>
   <li>The state machine must be informed which state it has to enter when the 
   machine is initiated. That's why <code>Greeting</code> is passed as the 
   second template parameter of <code>Machine</code>'s base. We have to forward 
@@ -182,15 +213,16 @@ int main()
   <li>The <code>simple_state</code> class template accepts up to four 
   parameters.
   <ul>
-    <li>The third parameter specifies reactions (explained in due course). 
-    Because there aren't any yet, we pass <code>fsm::no_reactions</code>, 
-    which is also the default.</li>
+    <li>The third parameter specifies <a href="definitions.html#Reaction">
+    reactions</a> (explained in due course). Because there aren't any yet, we 
+    pass <code>fsm::no_reactions</code>, which is also the default.</li>
     <li>The fourth parameter specifies the inner initial state, if there is 
     one.</li>
   </ul>
   </li>
   <li>A state is defined as an inner state simply by passing its outer state 
-  as its context (where outermost states pass the state machine).</li>
+  as its context (where <a href="definitions.html#Outermost state">outermost 
+  states</a> pass the state machine).</li>
   <li>Because the context of a state must be a complete type (i.e. not forward 
   declared), a machine must be defined from &quot;outside to inside&quot;. That is, we 
   always start with the state machine, followed by outermost states, followed 
@@ -203,9 +235,8 @@ int main()
   declarations.</li>
 </ul>
 <h3><a name="Adding reactions">Adding reactions</a></h3>
-<p>A reaction is anything that happens as the result of the processing of an 
-event. For the moment we will use only one type of reaction: transitions. We
-<b>insert</b> the bold part of the following code:</p>
+<p>For the moment we will use only one type of reaction: transitions. We <b>
+insert</b> the bold parts of the following code:</p>
 <pre><b>#include &lt;boost/fsm/transition.hpp&gt;
 </b>
 // ...
@@ -229,7 +260,7 @@ int main()
 </b>  return 0;
 }</pre>
 <p>A state can define an arbitrary number of reactions. That's why we have to 
-put them into an <code>mpl::list&lt;&gt;</code> as soon as there is more than one of 
+put them into an <code>mpl::list</code> as soon as there is more than one of 
 them (see <a href="#Specifying multiple reactions for a state">Specifying 
 multiple reactions for a state</a>).<br>
 Now we have all the states and all the transitions in place and a number of 
@@ -397,7 +428,8 @@ limitations:</p>
   reactions have mutually exclusive guards. The interface we used above only 
   allows for at most one unguarded reaction for each event. Moreover, the UML 
   concepts junction and choice point are not directly supported.</li>
-  <li>There is no way to specify in-state reactions (aka inner transitions).</li>
+  <li>There is no way to specify <a href="definitions.html#In-state reaction">
+  in-state reactions</a>.</li>
 </ul>
 <p>All these limitations can be overcome with custom reactions. <b>Warning: It 
 is easy to abuse custom reactions up to the point of invoking undefined 
@@ -450,8 +482,8 @@ struct EvConfig : fsm::event&lt; EvConfig &gt; {};
 struct NotShooting;
 struct Camera : fsm::state_machine&lt; Camera, NotShooting &gt;
 {
-    bool IsMemoryAvailable() const { return true; }
-    bool IsBatteryLow() const { return false; }
+  bool IsMemoryAvailable() const { return true; }
+  bool IsBatteryLow() const { return false; }
 };
 
 struct Idle;
@@ -494,10 +526,10 @@ fsm::result Idle::react( const EvConfig &amp; )
 <p><b><font color="#FF0000">Caution: Any call to the <code>
 simple_state::transit&lt;&gt;()</code> or <code>simple_state::terminate()</code> 
 (see <a href="#Reaction function reference">Reaction function reference</a>) 
-member functions will inevitably destruct the current state object (similar to
-<code>delete this;</code>)! That is, code executed after any of these calls 
-may invoke undefined behavior!</font></b> That's why these functions should 
-only be called as part of a return statement.</p>
+member functions will inevitably destruct the state object (similar to <code>
+delete this;</code>)! That is, code executed after any of these calls may 
+invoke undefined behavior!</font></b> That's why these functions should only 
+be called as part of a return statement.</p>
 <h3><a name="Guards">Guards</a></h3>
 <p>The inner workings of the Shooting state could look as follows:</p>
 <p><img border="0" src="Camera2.gif" width="427" height="427"></p>
@@ -560,11 +592,10 @@ fsm::result NotShooting::react( const EvShutterHalf &amp; )
   }
 }
 // ...</pre>
-<h3><a name="In-state reactions (aka inner transitions)">In-state reactions (aka 
-inner transitions)</a></h3>
-<p>The self-transition of the Focused state could also be implemented as an 
-in-state reaction, which has the same effect as long as Focused does not have 
-any entry or exit actions:</p>
+<h3><a name="In-state reactions">In-state reactions</a></h3>
+<p>The self-transition of the Focused state could also be implemented as an
+<a href="definitions.html#In-state reaction">in-state reaction</a>, which has 
+the same effect as long as Focused does not have any entry or exit actions:</p>
 <p>Shooting.cpp:</p>
 <pre>// ...
 fsm::result Focused::react( const EvShutterFull &amp; )
@@ -577,7 +608,8 @@ fsm::result Focused::react( const EvShutterFull &amp; )
   {
     std::cout &lt;&lt; &quot;Cache memory full. Please wait...\n&quot;;
     // Indicate that the event can be discarded. So, the 
-    // dispatch algorithm will stop looking for a reaction.
+    // dispatch algorithm will stop looking for a reaction
+    // and the machine remains in the Focused state.
     <b>return discard_event();</b>
   }
 }
@@ -586,8 +618,9 @@ fsm::result Focused::react( const EvShutterFull &amp; )
 <p>As an effect of every transition, actions are executed in the following 
 order:</p>
 <ol>
-  <li>Starting from the innermost current state, all exit actions up to but 
-  excluding the innermost common outer state (aka LCA, least common ancestor).</li>
+  <li>Starting from the innermost active state, all exit actions up to but 
+  excluding the <a href="definitions.html#Innermost common outer state">
+  innermost common outer state</a>.</li>
   <li>The transition action (if present).</li>
   <li>Starting from the innermost common outer state, all entry actions down 
   to the target state followed by the entry actions of the initial states.</li>
@@ -653,7 +686,7 @@ member functions, which must return by calling <b>exactly one</b> function
   define a reaction for the event.</li>
   <li><code>simple_state::discard_event()</code>: The dispatch algorithm stops 
   searching for a reaction and the current event is discarded. Useful to 
-  implement in-state reactions.</li>
+  implement <a href="definitions.html#In-state reaction">in-state reactions</a>.</li>
   <li><code>simple_state::defer_event()</code>: The current event is pushed 
   into a separate queue and the dispatch algorithm stops searching for a 
   reaction. When the state is exited later, the separate queue is emptied into 
@@ -717,7 +750,7 @@ example of how to do this: </p>
 with <code>new</code>. The events in the queue are processed as soon as the 
 current reaction is completed. Events can be posted from inside <code>react</code> 
 functions, entry-, exit- and transition actions. However, posting from inside 
-entry actions is a bit more complicated (see e.g. <code>Focusing::Focusing</code> 
+entry actions is a bit more complicated (see e.g. <code>Focusing::Focusing()</code> 
 in <code>Shooting.cpp</code> in the Camera example): </p>
 <pre>struct Pumping : <b>fsm::state</b>&lt; Pumping, Purifier &gt;
 {
@@ -746,7 +779,7 @@ so this workaround should not uglify user code too much.</p>
 <h3><a name="Deferring events">Deferring events</a></h3>
 <p>To avoid a number of overheads, event deferral has one limitation: Only 
 events allocated with <code>new</code> <b>and</b> pointed to by a <code>
-boost::intrusive_ptr&lt;&gt;</code> can be deferred. Any attempt to defer a 
+boost::intrusive_ptr</code> can be deferred. Any attempt to defer a 
 differently allocated event will result in a failing runtime assert. Example:</p>
 <pre>struct Event : fsm::event&lt; Event &gt; {};
 struct Initial;
@@ -782,8 +815,9 @@ chart as follows:</p>
 <p><img border="0" src="CameraWithHistory1.gif" width="542" height="378"></p>
 <p>As mentioned earlier, the Configuring state contains a fairly complex and 
 deeply nested inner machine. Naturally, we'd like to restore the previous 
-state down to the innermost state(s) in Configuring, that's why we use a deep 
-history pseudo state. The associated code looks as follows:</p>
+state down to the <a href="definitions.html#Innermost state">innermost state</a>(s) 
+in Configuring, that's why we use a deep history pseudo state. The associated 
+code looks as follows:</p>
 <pre>// not part of the Camera example
 struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
   /* ... */, Idle, <b>fsm::has_deep_history</b> &gt; //
@@ -809,11 +843,11 @@ and the appropriate states entered. The former is expressed by passing either
 <code>fsm::has_full_history</code> (which combines shallow and deep history) 
 as the last parameter to the <code>simple_state</code> and <code>state</code> 
 templates. The latter is expressed by specifying either <code>
-fsm::shallow_history&lt;&gt;</code> or <code>fsm::deep_history&lt;&gt;</code> as a 
-transition destination or, as we'll see in an instant, as an inner initial 
-state. Because it is possible that a state containing a history pseudo state 
-has never been entered before a transition to history is made, both templates 
-demand a parameter specifying the default state to enter in such situations.</p>
+fsm::shallow_history</code> or <code>fsm::deep_history</code> as a transition 
+destination or, as we'll see in an instant, as an inner initial state. Because 
+it is possible that a state containing a history pseudo state has never been 
+entered before a transition to history is made, both class templates demand a 
+parameter specifying the default state to enter in such situations.</p>
 <p>The redundancy necessary for using history is checked for consistency at 
 compile time. That is, the state machine wouldn't have compiled had we 
 forgotten to pass <code>fsm::has_deep_history</code> to the base of <code>
@@ -835,10 +869,10 @@ struct NotShooting : fsm::simple_state&lt; NotShooting, Camera,
 // ...</pre>
 <p>Unfortunately, there is a small inconvenience due to some template-related 
 implementation details. When the inner initial state is a class template 
-instantiation we always have to put it into an <code>mpl::list&lt;&gt;</code>, 
+instantiation we always have to put it into an <code>mpl::list</code>, 
 although there is only one inner initial state. Moreover, the current deep 
-history implementation has some limitations. Please have a look at the
-<a href="rationale.html#Limitations">Limitations</a> chapter in the Rationale.</p>
+history implementation has some <a href="rationale.html#Limitations">
+limitations</a>.</p>
 <h3><a name="Orthogonal states">Orthogonal states</a></h3>
 <p><img border="0" src="OrthogonalStates.GIF" width="633" height="393"></p>
 <p>To implement this state chart you simply specify more than one inner 
@@ -904,17 +938,19 @@ struct CapsLockOn : fsm::simple_state&lt;
 struct CapsLockOff : fsm::simple_state&lt;
   CapsLockOff, Active<b>::</b>orthogonal&lt; <b>2</b> &gt;,
   fsm::transition&lt; EvCapsLockPressed, CapsLockOn &gt; &gt; {};</pre>
-<h4>State queries</h4>
-<p>Often reactions in a state machine depend on the current state in one or 
+<h3><a name="State queries">State queries</a></h3>
+<p>Often reactions in a state machine depend on the active state in one or 
 more orthogonal regions. This is because orthogonal regions are not completely 
 orthogonal or a certain reaction in an outer state can only take place if the 
-inner orthogonal regions are in particular states. For this purpose, the 
-previously introduced <code>state_cast&lt;&gt;()</code> function is also available 
-within states.</p>
-<p>As a somewhat far-fetched example, let's assume that our keyboard above 
-also accepts <code>EvRequestShutdown</code> events, the reception of which 
-makes the keyboard terminate only if all lock keys are in the off state. We 
-would then modify the <code>Active</code> state as follows: </p>
+inner orthogonal regions are in particular states. For this purpose, the <code>
+state_cast&lt;&gt;()</code> function introduced under
+<a href="#Getting state information out of the machine">Getting state 
+information out of the machine</a> is also available within states.</p>
+<p>As a somewhat far-fetched example, let's assume that our
+<a href="#Orthogonal states">keyboard</a> also accepts <code>EvRequestShutdown</code> 
+events, the reception of which makes the keyboard terminate only if all lock 
+keys are in the off state. We would then modify the Keyboard state machine as 
+follows: </p>
 <pre>struct EvRequestShutdown : fsm::event&lt; EvRequestShutdown &gt; {};
 
 struct NumLockOff;
@@ -938,16 +974,107 @@ struct Active: fsm::simple_state&lt;
     }
   }
 };</pre>
-<p>Just like <code>dynamic_cast</code>, passing a pointer type instead of 
-reference type results in 0 pointers being returned when the cast fails. Note 
-also the use of <code>state_downcast</code> instead of <code>state_cast</code>. 
-Similar to the differences between <code>boost::polymorphic_downcast</code> 
-and <code>dynamic_cast</code>, <code>state_downcast</code> is a much faster 
-variant of <code>state_cast</code> and can only be used when the passed type 
-is a most-derived type. <code>state_cast</code> should only be used if you 
-want to query an additional base, as under
-<a href="#Getting state information out of the machine">Getting state 
-information out of the machine</a>.</p>
+<p>Passing a pointer type instead of reference type results in 0 pointers 
+being returned instead of <code>std::bad_cast</code> being thrown when the 
+cast fails. Note also the use of <code>state_downcast&lt;&gt;()</code> instead of
+<code>state_cast&lt;&gt;()</code>. Similar to the differences between <code>
+boost::polymorphic_downcast&lt;&gt;()</code> and <code>dynamic_cast</code>, <code>
+state_downcast&lt;&gt;()</code> is a much faster variant of <code>state_cast&lt;&gt;()</code> 
+and can only be used when the passed type is a most-derived type. <code>
+state_cast&lt;&gt;()</code> should only be used if you want to query an additional 
+base.</p>
+<h4>Custom state queries</h4>
+<p>It is often desirable to find out exactly which state(s) a machine 
+currently resides in. To some extent this is already possible with <code>
+state_cast&lt;&gt;()</code> and <code>state_downcast&lt;&gt;()</code> but their utility is 
+rather limited because both only return a yes/no answer to the question &quot;Are 
+you in state X?&quot;. It is possible to ask more sophisticated questions when you 
+pass an additional base class rather than a state class to <code>state_cast&lt;&gt;()</code> 
+but this involves more work (all states need to derive from and implement the 
+additional base), is slow (under the hood <code>state_cast&lt;&gt;()</code> uses
+<code>dynamic_cast</code>), forces projects to compile with C++ RTTI turned on 
+and has a negative impact on state entry/exit speed.</p>
+<p>Especially for debugging it would be so much more useful being able to ask 
+&quot;In which state(s) are you?&quot;. For this purpose it is possible to iterate over 
+all active <b>innermost</b> states with <code>state_machine::state_begin()</code> 
+and <code>state_machine::state_end()</code>. Dereferencing the returned 
+iterator returns a reference to <code>const state_machine::state_base_type</code>, 
+the common base of all states. We can thus print the currently active state 
+configuration as follows (see the Keyboard example for the complete code):</p>
+<pre>void DisplayStateConfiguration( const Keyboard &amp; kbd )
+{
+  char region = 'a';
+
+  for (
+    Keyboard::state_iterator pLeafState = kbd.state_begin();
+    pLeafState != kbd.state_end(); ++pLeafState )
+  {
+    std::cout &lt;&lt; &quot;Orthogonal region &quot; &lt;&lt; region &lt;&lt; &quot;: &quot;;
+    std::cout &lt;&lt; typeid( *pLeafState ).name() &lt;&lt; &quot;\n&quot;;
+    ++region;
+  }
+}</pre>
+<p>If necessary, the outer states can be accessed with <code>
+state_machine::state_base_type::outer_state_ptr()</code>, which returns a 
+pointer to <code>const state_machine::state_base_type</code>. When called on 
+an outermost state this function simply returns 0.</p>
+<h3><a name="State type information">State type information</a></h3>
+<p>To cut down on executable size some applications must be compiled with C++ 
+RTTI turned off. This would render the ability to iterate over all active 
+states pretty much useless if it weren't for the following two functions:</p>
+<ul>
+  <li><code>static <i>unspecified_type</i> simple_state::static_type()</code></li>
+  <li><code><i>unspecified_type<br>
+  </i>&nbsp; state_machine::state_base_type::dynamic_type() const</code></li>
+</ul>
+<p>Both return a value that is comparable via <code>operator==()</code> and
+<code>std::less</code>. This alone would be enough to implement the <code>
+DisplayStateConfiguration()</code> function above without the help of <code>
+typeid</code> but it is still somewhat cumbersome as a map must be used to 
+associate the type information values with the state names.</p>
+<h4><a name="Custom state type information">Custom state type information</a></h4>
+<p>That's why the following functions are also provided (only available when
+<a href="configuration.html#Application Defined Macros">
+BOOST_FSM_USE_NATIVE_RTTI</a> is <b>not</b> defined):</p>
+<ul>
+  <li><code>template&lt; class T &gt;<br>
+  static void simple_state::custom_static_type_ptr( const T * );</code></li>
+  <li><code>template&lt; class T &gt;<br>
+  static const T * simple_state::custom_static_type_ptr();</code></li>
+  <li><code>template&lt; class T &gt;<br>
+  const T * state_machine::<br>
+&nbsp; state_base_type::custom_dynamic_type_ptr() const;</code></li>
+</ul>
+<p>These allow us to directly associate arbitrary state type information with 
+each state ...</p>
+<pre>// ...
+
+int main()
+{
+  NumLockOn::custom_static_type_ptr( &quot;NumLockOn&quot; );
+  NumLockOff::custom_static_type_ptr( &quot;NumLockOff&quot; );
+  CapsLockOn::custom_static_type_ptr( &quot;CapsLockOn&quot; );
+  CapsLockOff::custom_static_type_ptr( &quot;CapsLockOff&quot; );
+  ScrollLockOn::custom_static_type_ptr( &quot;ScrollLockOn&quot; );
+  ScrollLockOff::custom_static_type_ptr( &quot;ScrollLockOff&quot; );
+
+  // ...
+}</pre>
+<p>... and rewrite the display function as follows:</p>
+<pre>void DisplayStateConfiguration( const Keyboard &amp; kbd )
+{
+  char region = 'a';
+
+  for (
+    Keyboard::state_iterator pLeafState = kbd.state_begin();
+    pLeafState != kbd.state_end(); ++pLeafState )
+  {
+    std::cout &lt;&lt; &quot;Orthogonal region &quot; &lt;&lt; region &lt;&lt; &quot;: &quot;;
+    std::cout &lt;&lt;
+      pLeafState-&gt;custom_dynamic_type_ptr&lt; char &gt;() &lt;&lt; &quot;\n&quot;;
+    ++region;
+  }
+}</pre>
 <h3><a name="Exception handling">Exception handling</a></h3>
 <p>Exceptions can be propagated from all user code except from state exit 
 actions (mapped to destructors and destructors should virtually never throw in 
@@ -1115,12 +1242,12 @@ struct Off : fsm::simple_state&lt;
 <h3><a name="Asynchronous state machines">Asynchronous state machines</a></h3>
 <h4>Why asynchronous state machines are necessary</h4>
 <p>As the name suggests, a synchronous state machine processes each event 
-synchronously. This behavior is implemented by the <code>state_machine&lt;&gt;</code> 
+synchronously. This behavior is implemented by the <code>state_machine</code> 
 class template, whose <code>process_event()</code> only returns after having 
 executed all reactions (including the ones provoked by internal events that 
 actions might have posted). Moreover, this function is also strictly 
-non-reentrant (just like all other member functions, so <code>state_machine&lt;&gt;</code> 
-is not thread-safe). This makes it difficult for two <code>state_machine&lt;&gt;</code> 
+non-reentrant (just like all other member functions, so <code>state_machine</code> 
+is not thread-safe). This makes it difficult for two <code>state_machine</code> 
 subclasses to communicate via events in a bi-directional fashion correctly, <b>
 even in a single-threaded program</b>. For example, state machine <code>A</code> 
 is in the middle of processing an external event. Inside an action, it decides 
@@ -1134,20 +1261,20 @@ external event and as soon as <code>B</code> answers via the call-back, <code>
 A::process_event</code> is <b>unavoidably</b> reentered. This all really 
 happens in a single thread, that's why &quot;wait&quot; is in quotes.</p>
 <h4>How it works</h4>
-<p>In contrast to <code>state_machine&lt;&gt;</code>, <code>
-asynchronous_state_machine&lt;&gt;</code> does not have a member function <code>
-process_event()</code>. Instead, there is only <code>queue_event()</code>, 
-which returns immediately after pushing the event into a queue. A worker 
-thread will later pop the event out of the queue to have it processed. For 
-applications using the boost::thread library, the necessary locking, unlocking 
-and waiting logic is readily available in class <code>worker&lt;&gt;</code>.</p>
-<p>Applications will usually first create a <code>worker&lt;&gt;</code> object and 
-then create one or more <code>asynchronous_state_machine&lt;&gt;</code> subclass 
+<p>In contrast to <code>state_machine</code>, <code>asynchronous_state_machine</code> 
+does not have a member function <code>process_event()</code>. Instead, there 
+is only <code>queue_event()</code>, which returns immediately after pushing 
+the event into a queue. A worker thread will later pop the event out of the 
+queue to have it processed. For applications using the boost::thread library, 
+the necessary locking, unlocking and waiting logic is readily available in 
+class <code>worker</code>.</p>
+<p>Applications will usually first create a <code>worker</code> object and 
+then create one or more <code>asynchronous_state_machine</code> subclass 
 objects, passing the worker object to the constructor(s). Finally, <code>
 worker&lt;&gt;::operator()()</code> is either called directly to let the machine(s) 
 run in the current thread, or, a <code>boost::function</code> object 
 referencing <code>operator()</code> is passed to a new <code>boost::thread</code>. 
-I the following code, we are running one state machine in a new boost::thread 
+In the following code, we are running one state machine in a new boost::thread 
 and the other in the main thread (see the PingPong example for the full source 
 code):</p>
 <pre>// ...
@@ -1231,9 +1358,9 @@ exceptions that machines fail to handle. In this case all machines are
 terminated before the exception is propagated.</p>
 <p><b>Caution:</b></p>
 <ul>
-  <li><b><code>asynchronous_state_machine&lt;&gt;</code> subclass objects must not 
-  be destructed before <code>worker::operator()()</code> returns. Moreover, 
-  the <code>worker&lt;&gt;</code> object may be destructed only after all of the 
+  <li><b><code>asynchronous_state_machine</code> subclass objects must not be 
+  destructed before <code>worker::operator()()</code> returns. Moreover, the
+  <code>worker</code> object may be destructed only after all of the 
   registered state machines have been destructed. Violations of these rules 
   will result in failing runtime asserts. </b></li>
   <li><b>The interface of <code>asynchronous_state_machine</code> consists of 
@@ -1241,13 +1368,13 @@ terminated before the exception is propagated.</p>
   other functions like <code>initiate()</code>, <code>process_event()</code>, 
   etc. are nevertheless also publicly available, but it is not safe to call 
   these functions from any other thread than the worker (over which most users 
-  have no control). <font color="#FF0000"><code>asynchronous_state_machine&lt;&gt;::queue_event()</code> 
-  is the only function than can safely be called simultaneously from multiple 
-  threads.</font></b></li>
+  have no control). <font color="#FF0000"><code>
+  asynchronous_state_machine&lt;&gt;::queue_event()</code> is the only function than 
+  can safely be called simultaneously from multiple threads.</font></b></li>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 October, 2003<!--webbot bot="Timestamp" endspan i-checksum="38550" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38508" --></p>
 <p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. 
 All Rights Reserved.</i></p>
 

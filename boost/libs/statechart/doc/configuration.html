@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<title>The boost::fsm library - Configuration</title>
+</head>
+
+<body link="#0000ff" vlink="#800080">
+
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary="header">
+  <tr>
+    <td valign="top" width="300">
+    <h3><a href="../../../index.htm">
+    <img alt="C++ Boost" src="../../../c++boost.gif" border="0" width="277" height="86"></a></h3>
+    </td>
+    <td valign="top">
+    <h1 align="center">The boost::fsm library</h1>
+    <h2 align="center">Configuration</h2>
+    </td>
+  </tr>
+</table>
+<hr>
+<dl class="page-index">
+  <dt><a href="#Introduction">Introduction</a></dt>
+  <dt><a href="#Debug mode compilation options">Debug mode compilation options</a></dt>
+  <dt><a href="#Release mode compilation options">Release mode compilation 
+  options</a></dt>
+  <dt><a href="#Application Defined Macros">Application Defined Macros</a></dt>
+</dl>
+<h2><a name="Introduction">Introduction</a></h2>
+<p>The library uses several configuration macros in
+<a href="http://www.boost.org/libs/config/config.htm">&lt;boost/config.hpp&gt;</a>, 
+as well as one configuration macro meant to be supplied by the application. 
+Moreover, two commonly available compiler options also have an impact on the 
+available features.</p>
+<h2><a name="Debug mode compilation options">Debug mode compilation options</a></h2>
+<ul>
+  <li>C++ RTTI must be turned on (used by various asserts)</li>
+  <li>C++ exception handling can be turned on or off. When turned off, 
+  obviously the library's <a href="tutorial.html#Exception handling">error 
+  handling support</a> is no longer available</li>
+</ul>
+<h2><a name="Release mode compilation options">Release mode compilation 
+options</a></h2>
+<ul>
+  <li>C++ RTTI can be turned on or off. When turned off, the use of <code>
+  state_cast&lt;&gt;()</code> leads to a compile time error (<code>state_downcast&lt;&gt;()</code> 
+  is still available). Moreover, <code>BOOST_FSM_USE_NATIVE_RTTI</code> must 
+  not be defined simultaneously</li>
+  <li>C++ exception handling can be turned on or off. When turned off, 
+  obviously the library's <a href="tutorial.html#Exception handling">error 
+  handling support</a> is no longer available</li>
+</ul>
+<h2><a name="Application Defined Macros">Application Defined Macros</a></h2>
+<p>The following macro may be defined by an application using the library:</p>
+<table summary="application defined macros" width="100%" cellpadding="2" border="3">
+  <tr>
+    <td width="226"><b>Macro</b></td>
+    <td width="893"><b>Meaning</b></td>
+  </tr>
+  <tr>
+    <td width="226"><code>BOOST_FSM_USE_NATIVE_RTTI</code></td>
+    <td width="893">When defined, the library no longer uses its own 
+    speed-optimized RTTI implementation. Instead, native C++ RTTI is employed. 
+    This has the following effects:<ul>
+      <li>All states need to store one pointer less, leading to a best-case 
+      state machine memory footprint reduction of about 15%</li>
+      <li><a href="tutorial.html#Custom state type information">Custom state 
+      type information</a> is no longer available</li>
+      <li>Under most circumstances, dispatch speed degrades. This is because 
+      native C++ RTTI values are retrieved through an additional indirection 
+      on almost all platforms</li>
+    </ul>
+    </td>
+  </tr>
+</table>
+<hr>
+<p>Revised 
+      <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan -->30 November, 2003<!--webbot bot="Timestamp" endspan i-checksum="39354" -->
+</p>
+<p><i>© Copyright <a href="mailto:ah2003@gmx.net">Andreas Huber</a> 2003.</i></p>
+
+</body>
+
+</html>

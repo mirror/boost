@@ -1,0 +1,927 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<link rel="stylesheet" type="text/css" href="../../../boost.css">
+<title>The boost::fsm library - Tutorial</title>
+</head>
+
+<body link="#0000ff" vlink="#800080">
+
+<table border="0" cellpadding="7" cellspacing="0" width="100%" summary="header">
+  <tr>
+    <td valign="top" width="300">
+    <h3><a href="../../../index.htm">
+    <img alt="C++ Boost" src="../../../c++boost.gif" border="0" width="277" height="86"></a></h3>
+    </td>
+    <td valign="top">
+    <h1 align="center">The boost::fsm library</h1>
+    <h2 align="center">Reference</h2>
+    </td>
+  </tr>
+</table>
+<hr>
+<h2>Contents</h2>
+<dl class="page-index">
+  <dt><a href="#Concepts">Concepts</a></dt>
+  <dd><a href="#ExceptionTranslator">ExceptionTranslator</a></dd>
+  <dd><a href="#StateBase">StateBase</a></dd>
+  <dd><a href="#Worker">Worker</a></dd>
+  <dt><a href="#state_machine.hpp">state_machine.hpp</a></dt>
+  <dd><a href="#Class template state_machine">Class template <code>
+  state_machine</code></a></dd>
+  <dt><a href="#asynchronous_state_machine.hpp">asynchronous_state_machine.hpp</a></dt>
+  <dd><a href="#Class template asynchronous_state_machine">Class template
+  <code>asynchronous_state_machine</code></a></dd>
+  <dt><a href="#simple_state.hpp">simple_state.hpp</a></dt>
+  <dd><a href="#Typedef no_reactions">Typedef <code>no_reactions</code></a></dd>
+  <dd><a href="#Enum history_mode">Enum <code>history_mode</code></a></dd>
+  <dd><a href="#Class template simple_state">Class template <code>simple_state</code></a></dd>
+  <dt><a href="#state.hpp">state.hpp</a></dt>
+  <dd><a href="#Class template state">Class template <code>state</code></a></dd>
+</dl>
+<hr>
+<h1><a name="Concepts">Concepts</a></h1>
+<h2><a name="ExceptionTranslator">ExceptionTranslator</a> concept</h2>
+<p>An ExceptionTranslator type defines how C++ exceptions occurring during 
+state machine operation are translated to exception events. Every model of 
+this concept must provide an <code>operator()</code> with the following 
+signature:</p>
+<pre>template&lt; class Action, class ExceptionEventHandler &gt;
+result operator()(
+  Action action,
+  ExceptionEventHandler eventHandler,
+  result handlerSuccessResult );</pre>
+<p>For an ExceptionTranslator object <code>e</code> the following expression 
+must be well-formed and have the indicated results:</p>
+<table border="3" width="100%" id="AutoNumber1" cellpadding="2">
+  <tr>
+    <td width="292"><b>Expression</b></td>
+    <td width="50"><b>Type</b></td>
+    <td width="783"><b>Effects/Result</b></td>
+  </tr>
+  <tr>
+    <td width="292"><code>result action();<br>
+    bool exceptEventHandler(<br>
+&nbsp; const event_base &amp; );<br>
+    result<br>
+&nbsp; handlerSuccessResult;<br>
+    <br>
+    e(<br>
+&nbsp; &amp;action, <br>
+&nbsp; &amp;exceptEventHandler, <br>
+&nbsp; handlerSuccessResult );</code></td>
+    <td width="50"><code>result</code></td>
+    <td width="783">
+    <ol>
+      <li>Attempts to execute <code>action</code> and to return the result</li>
+      <li>Catches the exception propagated from <code>action</code>, if 
+      necessary</li>
+      <li>Translates the exception to a suitable <code>event</code> subclass 
+      and constructs an object of the event</li>
+      <li>Passes the event object to <code>exceptEventHandler</code></li>
+      <li>Rethrows the original exception if <code>exceptEventHandler</code> 
+      returns <code>false</code>, returns <code>handlerSuccessResult</code> 
+      otherwise</li>
+    </ol>
+    </td>
+  </tr>
+</table>
+<h2><a name="StateBase">StateBase</a> concept</h2>
+<p>A StateBase type is the common base of all states of a given state machine 
+type. <code>state_machine&lt;&gt;::state_base_type</code> is a model of the 
+StateBase concept.</p>
+<p>For a StateBase type <code>S</code> and a <code>const</code> object <code>
+cs</code> of that type the following expressions must be well-formed and have 
+the indicated results:</p>
+<table border="3" width="100%" id="AutoNumber1" cellpadding="2">
+  <tr>
+    <td width="26%"><b>Expression</b></td>
+    <td width="14%"><b>Type</b></td>
+    <td width="35%"><b>Result</b></td>
+  </tr>
+  <tr>
+    <td width="26%"><code>cs.outer_state_ptr()</code></td>
+    <td width="14%"><code>const S *</code></td>
+    <td width="35%"><code>0</code> if <code>cs</code> is an
+    <a href="definitions.html#Outermost state">outermost state</a>, a pointer 
+    to the outer state of <code>cs</code> otherwise</td>
+  </tr>
+  <tr>
+    <td width="25%"><code>cs.dynamic_type()</code></td>
+    <td width="14%"><code>S::id_type</code></td>
+    <td width="35%">A value unambiguously identifying the most-derived type of
+    <code>cs</code>. <code>S::id_type</code> values are comparable with <code>
+    operator==</code> and <code>operator!=</code>. An unspecified collating 
+    order can be established with <code>std::less&lt; S::id_type &gt;</code></td>
+  </tr>
+  <tr>
+    <td width="25%"><code>cs.custom_dynamic_type_ptr&lt;<br>
+&nbsp; Type &gt;()</code></td>
+    <td width="14%"><code>const Type *</code></td>
+    <td width="35%">A pointer to the custom type identifier or <code>0</code>. 
+    If <code>!= 0</code>, <code>Type</code> must match the type of the 
+    previously set pointer. The result is undefined if this is not the case.</td>
+  </tr>
+</table>
+<h2><a name="Worker">Worker</a> concept</h2>
+<p>todo</p>
+<h1>Header &lt;boost/fsm/<a name="state_machine.hpp">state_machine.hpp</a>&gt;</h1>
+<h2><a name="Class template state_machine">Class template <code>state_machine</code></a></h2>
+<p>This is the base class template of all synchronous state machines.</p>
+<h3>Class template <code>state_machine</code> parameters</h3>
+<table border="3" cellpadding="2" width="100%" id="AutoNumber2">
+  <tr>
+    <td width="15%"><b>Template parameter</b></td>
+    <td width="51%"><b>Requirements</b></td>
+    <td width="18%"><b>Semantics</b></td>
+    <td width="19%"><b>Default</b></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>MostDerived</code></td>
+    <td width="51%">The most-derived subclass of this class template</td>
+    <td width="18%">&nbsp;</td>
+    <td width="19%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="15%"><code>InitialState</code></td>
+    <td width="51%">A most-derived direct or indirect subclass of either the
+    <code>simple_state</code> or the <code>state</code> class template. The 
+    type that this class passes as <code>Context</code> to its base class 
+    template must be equal to <code>MostDerived</code>. That is, <code>
+    InitialState</code> must be an <a href="definitions.html#Outermost state">
+    outermost state</a> of this state machine</td>
+    <td width="18%">The state that is entered when <code>state_machine&lt;&gt;::<br>
+    initiate()</code> is called</td>
+    <td width="19%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="15%"><code>Allocator</code></td>
+    <td width="51%">A model of the standard Allocator concept</td>
+    <td width="18%">&nbsp;</td>
+    <td width="19%"><code>std::allocator&lt; void &gt;</code></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>ExceptionTranslator</code></td>
+    <td width="51%">A model of the ExceptionTranslator concept</td>
+    <td width="18%">see <a href="#ExceptionTranslator">ExceptionTranslator 
+    concept </a></td>
+    <td width="19%"><code>exception_translator&lt;&gt;</code></td>
+  </tr>
+</table>
+<h3>Class template <code>state_machine</code> synopsis</h3>
+<pre>namespace boost
+{
+namespace fsm
+{
+  template&lt;
+    class MostDerived,
+    class InitialState,
+    class Allocator = std::allocator&lt; void &gt;,
+    class ExceptionTranslator = exception_translator&lt;&gt; &gt;
+  class state_machine : noncopyable
+  {
+    public:
+      typedef MostDerived outermost_context_type;
+
+      bool <a href="#initiate">initiate</a>();
+      void <a href="#terminate">terminate</a>();
+      bool <a href="#terminated">terminated</a>() const;
+
+      bool <a href="#process_event">process_event</a>( const event_base &amp; );
+
+      template&lt; class Target &gt;
+      Target <a href="#state_cast">state_cast</a>() const;
+      template&lt; class Target &gt;
+      Target <a href="#state_downcast">state_downcast</a>() const;
+
+      // a model of the StateBase concept
+      typedef <i>implementation-defined</i> state_base_type;
+      // a model of the standard Forward Iterator concept
+      typedef <i>implementation-defined</i> state_iterator;
+
+      state_iterator <a href="#state_begin">state_begin</a>() const;
+      state_iterator <a href="#state_end">state_end</a>() const;
+
+    protected:
+      <a href="#state_machine">state_machine</a>();
+      <a href="#~state_machine">~state_machine</a>();
+  };
+}
+}</pre>
+<h3>Class template <code>state_machine</code> constructor and destructor</h3>
+<pre><a name="state_machine">state_machine</a>();</pre>
+<p><b>Effects</b>: Constructs a non-running state machine<br>
+<b>Postcondition:</b> <code>terminated()</code></p>
+<pre><a name="~state_machine">~state_machine</a>();</pre>
+<p><b>Effects</b>: <code>terminate();</code></p>
+<h3>Class template <code>state_machine</code> modifier functions</h3>
+<pre>bool <a name="initiate">initiate</a>();</pre>
+<p><b>Effects</b>:</p>
+<ol>
+  <li>Calls <code>terminate()</code></li>
+  <li>Constructs a function object <code>action</code> with a parameter-less
+  <code>operator()</code> returning <code>result</code> that<ol type="a">
+    <li>enters (constructs) the state specified with the <code>InitialState</code> 
+    template parameter</li>
+    <li>enters the tree formed by the direct and indirect inner initial states 
+    of <code>InitialState</code> depth first</li>
+  </ol>
+  </li>
+  <li>Constructs a function object <code>exceptionEventHandler</code> with an
+  <code>operator()</code> returning <code>bool</code> and accepting an 
+  exception event parameter that processes the passed exception event, with 
+  the following differences to the processing of normal events:<ul type="disc">
+    <li><a href="definitions.html#Reaction">Reaction</a> search always starts 
+    with the outermost <a href="definitions.html#Unstable state">unstable 
+    state</a></li>
+    <li>As for normal events, reaction search moves outward when the current 
+    state cannot handle the event. However, if there is no outer state (an
+    <a href="definitions.html#Outermost state">outermost state</a> has been 
+    reached) the reaction search is considered unsuccessful. That is, 
+    exception events will never be dispatched to orthogonal regions other than 
+    the one that caused the exception event</li>
+    <li>Should an exception be thrown during exception event reaction search 
+    or reaction execution then the exception is propagated out of the <code>
+    exceptionEventHandler</code> function object (that is, <code>
+    ExceptionTranslator</code> is not used to process exception events)</li>
+    <li>If no reaction could be found for the exception event or if the state 
+    machine is not stable after processing the exception event, <code>false</code> 
+    is returned from the <code>exceptionEventHandler</code> function object. 
+    Otherwise, <code>true</code> is returned</li>
+  </ul>
+  </li>
+  <li>Passes <code>action</code>, <code>exceptionEventHandler</code> and the
+  <code>result</code> value <code>handlerSuccessResult</code> to <code>
+  ExceptionTranslator::operator()</code>. If <code>
+  ExceptionTranslator::operator()</code> throws an exception, <code>
+  terminate()</code> is called and the exception is propagated to the caller. 
+  Continues with step 5 otherwise (the return value is discarded)</li>
+  <li>Processes all posted events (see <code>process_event</code>)</li>
+</ol>
+<p><b>Returns</b>: <code>terminated()</code><br>
+<b>Throws</b>: Any exceptions propagated from <code>
+ExceptionTranslator::operator()</code>. Exceptions never originate in the 
+library itself but only in code supplied through template parameters. That is,
+<code>std::bad_alloc</code> thrown by <code>Allocator::allocate</code> as well 
+as any exceptions thrown by user-supplied <code>react</code> functions, 
+transition-actions and entry-actions</p>
+<pre>void <a name="terminate">terminate</a>();</pre>
+<p><b>Effects</b>: The state machine exits (destructs) all currently active 
+states. <a href="definitions.html#Innermost state">Innermost states</a> are 
+exited first. Other states are exited as soon as all their direct and indirect 
+inner states have been exited<br>
+<b>Postcondition:</b> <code>terminated()</code></p>
+<pre>bool <a name="process_event">process_event</a>( const event_base &amp; );</pre>
+<p><b>Effects</b>:</p>
+<ol>
+  <li>Selects the passed event as the current event</li>
+  <li>Starts a new <a href="definitions.html#Reaction">reaction</a> search</li>
+  <li>Selects an arbitrary but in this reaction search not yet visited state 
+  from all the currently active <a href="definitions.html#Innermost state">
+  innermost states</a>. If no such state exists then continues with step 10</li>
+  <li>Constructs a function object <code>action</code> with a parameter-less
+  <code>operator()</code> returning <code>result</code> that does the 
+  following:<ol type="a">
+    <li>Searches a reaction suitable for the current event, starting with the 
+    current innermost state and moving outward until a state defining a 
+    reaction for the event is found. Returns <code>simple_state::forward_event()</code> 
+    if no reaction has been found.</li>
+    <li>Executes the found reaction. If the reaction result is equal to the 
+    return value of <code>simple_state::forward_event()</code> then resumes 
+    the reaction search (step a). Returns the reaction result otherwise</li>
+  </ol>
+  </li>
+  <li>Constructs a function object <code>exceptionEventHandler</code> with an
+  <code>operator()</code> accepting an exception event parameter and returning
+  <code>bool</code> that processes the passed exception event, with the 
+  following differences to the processing of normal events:<ul type="disc">
+    <li>If the state machine is stable when the exception event is processed 
+    then exception event reaction search starts with the innermost state that 
+    was last visited during the last normal event reaction search (the 
+    exception event was generated as a result of this normal reaction search)</li>
+    <li>If the state machine is
+    <a href="definitions.html#Unstable state machine">unstable</a> when the 
+    exception event is processed then exception event reaction search starts 
+    with the outermost <a href="definitions.html#Unstable state">unstable 
+    state</a></li>
+    <li>As for normal events, reaction search moves outward when the current 
+    state cannot handle the event. However, if there is no outer state (an
+    <a href="definitions.html#Outermost state">outermost state</a> has been 
+    reached) the reaction search is considered unsuccessful. That is, 
+    exception events will never be dispatched to orthogonal regions other than 
+    the one that caused the exception event</li>
+    <li>Should an exception be thrown during exception event reaction search 
+    or reaction execution then the exception is propagated out of the <code>
+    exceptionEventHandler</code> function object (that is, <code>
+    ExceptionTranslator</code> is <b>not</b> used to process exception events)</li>
+    <li>If no reaction could be found for the exception event or if the state 
+    machine is not stable after processing the exception event, <code>false</code> 
+    is returned from the <code>exceptionEventHandler</code> function object. 
+    Otherwise, <code>true</code> is returned</li>
+  </ul>
+  </li>
+  <li>Passes <code>action</code>, an <code>exceptionEventHandler</code> 
+  callback and the <code>fsm::result</code> value <code>handlerSuccessResult</code> 
+  to <code>ExceptionTranslator::operator()</code>. If <code>
+  ExceptionTranslator::operator()</code> throws an exception then calls <code>
+  terminate()</code> and propagates the exception to the caller</li>
+  <li>If the return value of <code>ExceptionTranslator::operator()</code> is 
+  equal to the one of <code>simple_state::forward_event()</code> then 
+  continues with step 3</li>
+  <li>If the return value of <code>ExceptionTranslator::operator()</code> is 
+  equal to the one of <code>simple_state::defer_event()</code> then the 
+  current event is stored in a state-specific queue. Continues with step 10</li>
+  <li>If <code>ExceptionTranslator::operator()</code> returns the previously 
+  passed <code>handlerSuccessResult</code> or if the return value is equal to 
+  the one of <code>simple_state::discard_event()</code> then continues with 
+  step 10</li>
+  <li>If the posted events queue is non-empty then dequeues the first event, 
+  selects it as the current event and continues with step 2. Returns to the 
+  caller otherwise</li>
+</ol>
+<p><b>Returns</b>: <code>false</code>, if the machine was terminated before 
+processing the event. Returns <code>terminated()</code> otherwise<br>
+<b>Throws</b>: Any exceptions propagated from <code>
+ExceptionTranslator::operator()</code>. Exceptions never originate in the 
+library itself but only in code supplied through template parameters. That is,
+<code>std::bad_alloc</code> thrown by <code>Allocator::allocate</code> as well 
+as any exceptions thrown by user-supplied reactions, transition-actions and 
+entry-actions</p>
+<h3>Class template <code>state_machine</code> observer functions</h3>
+<pre>bool <a name="terminated">terminated</a>() const;</pre>
+<p><b>Returns</b>: <code>true</code>, if the machine is terminated. Returns
+<code>false</code> otherwise<br>
+<b>Note</b>: Is equivalent to <code>state_begin</code><code>() == state_end()</code></p>
+<pre>template&lt; class Target &gt;
+Target <a name="state_cast">state_cast</a>() const;</pre>
+<p><b>Returns</b>: Depending on the form of <code>Target</code> either a 
+reference or a pointer to <code>const</code> if at least one of the currently 
+active states can successfully be <code>dynamic_cast</code> to <code>Target</code>. 
+Returns <code>0</code> for pointer targets and throws <code>std::bad_cast</code> 
+for reference targets otherwise. <code>Target</code> can take either of the 
+following forms: <code>const Class *</code> or <code>const Class &amp;</code><br>
+<b>Throws</b>: <code>std::bad_cast</code> if <code>Target</code> is a 
+reference type and none of the active states can be <code>dynamic_cast</code> 
+to Target<br>
+<b>Note</b>: The search sequence is the same as for event dispatch</p>
+<pre>template&lt; class Target &gt;
+Target <a name="state_downcast">state_downcast</a>() const;</pre>
+<p><b>Returns</b>: Depending on the form of <code>Target</code> either a 
+reference or a pointer to <code>const</code> if <code>Target</code> is equal 
+to the most-derived type of a currently active state. Returns <code>0</code> 
+for pointer targets and throws <code>std::bad_cast</code> for reference 
+targets otherwise. <code>Target</code> can take either of the following forms:
+<code>const Class *</code> or <code>const Class &amp;</code><br>
+<b>Throws</b>: <code>std::bad_cast</code> if <code>Target</code> is a 
+reference type and none of the active states has a most derived type equal to
+<code>Target</code><br>
+<b>Note</b>: The search sequence is the same as for event dispatch</p>
+<pre>state_iterator <a name="state_begin">state_begin</a>() const;</pre>
+<pre>state_iterator <a name="state_end">state_end</a>() const;</pre>
+<p><b>Return</b>: Iterator objects, the range [<code>state_begin()</code>,
+<code>state_end()</code>) refers to all currently active
+<a href="definitions.html#Innermost state">innermost states</a>. For an object
+<code>i</code> of type <code>state_iterator</code>, <code>*i</code> returns a
+<code>const state_base_type &amp;</code> and <code>i.operator-&gt;()</code> returns a
+<code>const state_base_type *</code><br>
+<b>Note</b>: The position of individual innermost states in the range is 
+undefined. Their position may change with each call to a modifier function. 
+Moreover, all iterators are invalidated when a modifier function is called</p>
+<h1>Header &lt;boost/fsm/<a name="asynchronous_state_machine.hpp">asynchronous_state_machine.hpp</a>&gt;</h1>
+<h2><a name="Class template asynchronous_state_machine">Class template <code>
+asynchronous_state_machine</code></a></h2>
+<p>This is the base class template of all asynchronous state machines.</p>
+<h3>Class template <code>asynchronous_state_machine</code> parameters</h3>
+<table border="3" cellpadding="2" width="100%" id="AutoNumber8">
+  <tr>
+    <td width="15%"><b>Template parameter</b></td>
+    <td width="51%"><b>Requirements</b></td>
+    <td width="18%"><b>Semantics</b></td>
+    <td width="19%"><b>Default</b></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>MostDerived</code></td>
+    <td width="51%">The most-derived subclass of this class template</td>
+    <td width="18%">&nbsp;</td>
+    <td width="19%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="15%"><code>InitialState</code></td>
+    <td width="51%">A most-derived direct or indirect subclass of either the
+    <code>simple_state</code> or the <code>state</code> class template. The 
+    type that this class passes as <code>Context</code> to its base class 
+    template must be equal to <code>MostDerived</code>. That is, <code>
+    InitialState</code> must be an <a href="definitions.html#Outermost state">
+    outermost state</a> of this state machine</td>
+    <td width="18%">The state that is entered when <code>Worker::<br>
+    operator()()</code> is called</td>
+    <td width="19%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="15%"><code>Worker</code></td>
+    <td width="51%">A model of the Worker concept</td>
+    <td width="18%">see <a href="#Worker">Worker concept </a></td>
+    <td width="19%"><code>worker&lt;&gt;</code></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>Allocator</code></td>
+    <td width="51%">A model of the standard Allocator concept</td>
+    <td width="18%">&nbsp;</td>
+    <td width="19%"><code>std::allocator&lt; void &gt;</code></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>ExceptionTranslator</code></td>
+    <td width="51%">A model of the ExceptionTranslator concept</td>
+    <td width="18%">see <a href="#ExceptionTranslator">ExceptionTranslator 
+    concept </a></td>
+    <td width="19%"><code>exception_translator&lt;&gt;</code></td>
+  </tr>
+</table>
+<h3>Class template <code>asynchronous_state_machine</code> synopsis</h3>
+<pre>template&lt;
+  class MostDerived,
+  class InitialState,
+  class Worker = worker&lt;&gt;,
+  class Allocator = std::allocator&lt; void &gt;,
+  class ExceptionTranslator = exception_translator&lt;&gt; &gt;
+class asynchronous_state_machine : <i>implementation-defined</i>
+{
+  public:
+    void queue_event( const intrusive_ptr&lt; event_base &gt; &amp; );
+
+  protected:
+    asynchronous_state_machine( Worker &amp; myWorker );
+    ~asynchronous_state_machine();  
+};</pre>
+<h3>Class template <code>asynchronous_state_machine</code> constructor and 
+destructor</h3>
+<pre>asynchronous_state_machine( Worker &amp; myWorker );</pre>
+<p><b>Precondition</b>:<b> </b>No thread of control is currently inside <code>
+myWorker.operator()</code><b><br>
+Effects</b>: Constructs a non-running asynchronous state machine and registers 
+it with the passed worker<br>
+<b>Throws</b>: Whatever <code>Allocator::allocate</code> (invoked by the 
+worker) throws</p>
+<pre>~asynchronous_state_machine();</pre>
+<p><b>Precondition</b>:<b> </b>No thread of control is currently inside <code>
+myWorker.operator()</code>. The worker object passed to the constructor has 
+not yet been destructed<b><br>
+Effects</b>: Terminates the state machine</p>
+<h3>Class template <code>asynchronous_state_machine</code> modifier functions</h3>
+<pre>void queue_event( const intrusive_ptr&lt; event_base &gt; &amp; );</pre>
+<p><b>Effects</b>: Pushes the passed event into the queue of the worker object 
+passed to the constructor<br>
+<b>Throws</b>: Whatever <code>Allocator::allocate</code> (invoked by the 
+worker) throws</p>
+<h1>Header &lt;boost/fsm/<a name="simple_state.hpp">simple_state.hpp</a>&gt;</h1>
+<h2><a name="Typedef no_reactions">Typedef <code>no_reactions</code></a></h2>
+<p>This is the default value for the <code>Reactions</code> parameter of the
+<code>simple_state</code> class template. Necessary for the rare cases when a 
+state without reactions has inner states.</p>
+<pre>namespace boost
+{
+namespace fsm
+{
+  typedef <i>implementation-defined</i> no_reactions;
+}
+}</pre>
+<h2><a name="Enum history_mode">Enum <code>history_mode</code></a></h2>
+<p>Defines the history type of a state.</p>
+<pre>namespace boost
+{
+namespace fsm
+{
+  enum history_mode
+  {
+    has_no_history,
+    has_shallow_history,
+    has_deep_history,
+    has_full_history // shallow &amp; deep
+  };
+}
+}</pre>
+<h2><a name="Class template simple_state">Class template <code>simple_state</code></a></h2>
+<p>The base class template of all states that do <b>not</b> need to call any 
+of the following <code>simple_state</code> member functions from their 
+constructors:</p>
+<pre>void post_event(
+  const intrusive_ptr&lt; const event_base &gt; &amp; );
+
+outermost_context_type &amp; outermost_context();
+const outermost_context_type &amp; outermost_context() const;
+
+template&lt; class OtherContext &gt;
+OtherContext &amp; context();
+template&lt; class OtherContext &gt;
+const OtherContext &amp; context() const;
+
+template&lt; class Target &gt;
+Target state_cast() const;
+template&lt; class Target &gt;
+Target state_downcast() const;</pre>
+<p>States that need to call any of these functions from their constructors 
+must derive from the <code>state</code> class template.</p>
+<h3>Class template <code>simple_state</code> parameters</h3>
+<table border="3" cellpadding="2" width="100%" id="AutoNumber5">
+  <tr>
+    <td width="15%"><b>Template parameter</b></td>
+    <td width="51%"><b>Requirements</b></td>
+    <td width="18%"><b>Semantics</b></td>
+    <td width="19%"><b>Default</b></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>MostDerived</code></td>
+    <td width="51%">The most-derived subclass of this class template</td>
+    <td width="18%">&nbsp;</td>
+    <td width="19%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="15%"><code>Context</code></td>
+    <td width="51%">A most-derived direct or indirect subclass of either the
+    <code>state_machine</code>, <code>asynchronous_state_machine</code>, <code>
+    simple_state</code> or <code>state</code> class templates or an 
+    instantiation of the <code>orthogonal</code> class template nested in the 
+    state base classes. Must be a complete type</td>
+    <td width="18%">Defines the states' position in the state hierarchy</td>
+    <td width="19%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="15%"><code>Reactions</code></td>
+    <td width="51%">An <code>mpl::list</code> containing instantiations of the
+    <code>custom_reaction</code>, <code>deferral</code>, <code>termination</code> 
+    or <code>transition</code> class templates. If there is only a single 
+    reaction then it can also be passed directly, without wrapping it into an
+    <code>mpl::list</code></td>
+    <td width="18%">Defines to which events a state can react</td>
+    <td width="19%"><code>no_reactions</code></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>InnerInitial</code></td>
+    <td width="51%">An <code>mpl::list</code> containing most-derived direct 
+    or indirect subclasses of either the <code>simple_state</code> or the
+    <code>state</code> class template or instantiations of either the <code>
+    shallow_history</code> or <code>deep_history</code> class templates. If 
+    there is only a single non-history inner initial state then it can also be 
+    passed directly, without wrapping it into an <code>mpl::list</code>. The 
+    type that each state in the list passes as <code>Context</code> to its 
+    base class template must correspond to the orthogonal region it belongs 
+    to. That is, the first state in the list must pass <code>
+    MostDerived::orthogonal&lt; 0 &gt;</code>, the second <code>
+    MostDerived::orthogonal&lt; 1 &gt;</code> and so forth. <code>
+    MostDerived::orthogonal&lt; 0 &gt;</code> and <code>MostDerived</code> are 
+    synonymous</td>
+    <td width="18%">Defines the inner initial state for each orthogonal 
+    region. By default, a state does not have inner states</td>
+    <td width="19%"><i><code>unspecified</code></i></td>
+  </tr>
+  <tr>
+    <td width="15%"><code>historyMode</code></td>
+    <td width="51%">One of the values defined in the <code>history_mode</code> 
+    enumeration</td>
+    <td width="18%">Defines whether the state saves shallow, deep or both 
+    histories upon exit</td>
+    <td width="19%"><code>has_no_history</code></td>
+  </tr>
+</table>
+<h3>Class template <code>simple_state</code> synopsis</h3>
+<pre>namespace boost
+{
+namespace fsm
+{
+  template&lt;
+    class MostDerived,
+    class Context,
+    class Reactions = no_reactions,
+    class InnerInitial = <i>unspecified</i>,
+    history_mode historyMode = has_no_history &gt;
+  class simple_state : <i>implementation-defined</i>
+  {
+    public:
+      // see template parameters
+      template&lt; <i>implementation-defined-unsigned-integer-type
+</i>        innerOrthogonalPosition &gt;
+      struct orthogonal
+      {
+        // <i>implementation-defined</i>
+      };
+
+      typedef typename Context::outermost_context_type
+        outermost_context_type;
+
+      outermost_context_type &amp; <a href="#outermost_context">outermost_context</a>();
+      const outermost_context_type &amp; <a href="#outermost_context() const">outermost_context</a>() const;
+
+      template&lt; class OtherContext &gt;
+      OtherContext &amp; <a href="#context">context</a>();
+      template&lt; class OtherContext &gt;
+      const OtherContext &amp; <a href="#context() const">context</a>() const;
+
+      template&lt; class Target &gt;
+      Target <a href="#simple_state::state_cast">state_cast</a>() const;
+      template&lt; class Target &gt;
+      Target <a href="#simple_state::state_downcast">state_downcast</a>() const;
+
+      void <a href="#post_event">post_event</a>(
+        const intrusive_ptr&lt; const event_base &gt; &amp; );
+
+      result <a href="#discard_event">discard_event</a>();
+      result <a href="#forward_event">forward_event</a>();
+      result <a href="#defer_event">defer_event</a>();
+      template&lt; class DestinationState &gt;
+      result <a href="#transit1">transit</a>();
+      template&lt;
+        class DestinationState,
+        class TransitionContext,
+        class Event &gt;
+      result <a href="#transit2">transit</a>(
+        void ( TransitionContext::* )( const Event &amp; ),
+        const Event &amp; );
+      result <a href="#simple_state::terminate">terminate</a>();
+
+      static id_type <a href="#static_type">static_type</a>();
+
+      template&lt; class CustomId &gt;
+      static const CustomId * <a href="#custom_static_type_ptr">custom_static_type_ptr</a>();
+
+      template&lt; class CustomId &gt;
+      static void <a href="#custom_static_type_ptr( const CustomId * )">custom_static_type_ptr</a>( const CustomId * );
+
+    protected:
+      <a href="#simple_state">simple_state</a>();
+      virtual <a href="#~simple_state">~simple_state</a>();
+  };
+}
+}</pre>
+<h3>Class template <code>simple_state</code> constructor and destructor</h3>
+<pre><a name="simple_state">simple_state</a>();</pre>
+<p><b>Effects</b>: Depending on the <code>historyMode</code> parameter, 
+reserves storage to store none, shallow, deep or both histories<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+(the template parameter passed to the base class of <code>
+outermost_context_type</code>)<br>
+<b>Note</b>: The constructors of all direct and indirect subclasses should be 
+exception-neutral</p>
+<pre>virtual <a name="~simple_state">~simple_state</a>();</pre>
+<p><b>Effects</b>: Depending on the <code>historyMode</code> parameter, stores 
+none, shallow, deep or both histories. Pushes all events deferred by the state 
+into the posted events queue</p>
+<h3>Class template <code>simple_state</code> modifier functions</h3>
+<pre>void <a name="post_event">post_event</a>(
+  const intrusive_ptr&lt; const event_base &gt; &amp; );</pre>
+<p><b>Effects</b>: Pushes the passed event into the state machine's posted 
+events queue<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate</code> 
+(the template parameter passed to the base class of <code>
+outermost_context_type</code>)<br>
+<b>Note</b>: Unless the direct subclass is the <code>state</code> class 
+template, this function must not be called from the constructors of direct and 
+indirect subclasses. All direct and indirect callers should be 
+exception-neutral</p>
+<pre>result <a name="discard_event">discard_event</a>();</pre>
+<p><b>Effects</b>: Instructs the state machine to discard the current event 
+and to continue with the processing of the remaining events (see <code>
+<a href="#process_event">state_machine::process_event</a></code> for details)<br>
+<b>Returns</b>: An unspecified value of the <code>result</code> enumeration. 
+The user-supplied <code>react</code> member function must return this value to 
+its caller<br>
+<b>Note</b>: Must only be called from within <code>react</code> member 
+functions, which are called by <code>custom_reaction</code> instantiations. 
+All direct and indirect callers should be exception-neutral</p>
+<pre>result <a name="forward_event">forward_event</a>();</pre>
+<p><b>Effects</b>: Instructs the state machine to forward the current event to 
+the next state (see <code><a href="#process_event">
+state_machine::process_event</a></code> for details)<br>
+<b>Returns</b>: An unspecified value of the <code>result</code> enumeration. 
+The user-supplied <code>react</code> member function must return this value to 
+its caller<br>
+<b>Note</b>: Must only be called from within <code>react</code> member 
+functions, which are called by <code>custom_reaction</code> instantiations. 
+All direct and indirect callers should be exception-neutral</p>
+<pre>result <a name="defer_event">defer_event</a>();</pre>
+<p><b>Effects</b>: Instructs the state machine to defer the current event and 
+to continue with the processing of the remaining events (see <code>
+<a href="#process_event">state_machine::process_event</a></code> for details)<br>
+<b>Returns</b>: An unspecified value of the <code>result</code> enumeration. 
+The user-supplied <code>react</code> member function must return this value to 
+its caller<br>
+<b>Note</b>: Must only be called from within <code>react</code> member 
+functions, which are called by <code>custom_reaction</code> instantiations. 
+All direct and indirect callers should be exception-neutral</p>
+<pre>template&lt; class DestinationState &gt;
+result <a name="transit1">transit</a>();</pre>
+<p><b>Effects</b>:</p>
+<ol>
+  <li>Exits (destructs) all currently active direct and indirect inner states 
+  of the innermost common outer state of this state and <code>DestinationState</code>. 
+  Innermost states are exited first. Other states are exited as soon as all 
+  their direct and indirect inner states have been exited</li>
+  <li>Enters (constructs) the state that is both a direct inner state of the 
+  innermost common outer state and either the <code>DestinationState</code> 
+  itself or a direct or indirect outer state of <code>DestinationState</code>
+  </li>
+  <li>Enters (constructs) the tree formed by the direct and indirect inner 
+  states of the previously entered state down to the <code>DestinationState</code> 
+  depth first</li>
+  <li>Enters (constructs) the tree formed by the direct and indirect inner 
+  initial states of <code>DestinationState</code> depth first</li>
+  <li>Instructs the state machine to discard the current event and to continue 
+  with the processing of the remaining events (see <code>
+  <a href="#process_event">state_machine::process_event</a></code> for 
+  details)</li>
+</ol>
+<p><b>Returns</b>: An unspecified value of the <code>result</code> 
+enumeration. The user-supplied <code>react</code> member function must return 
+this value to its caller<br>
+<b>Throws</b>: Any exceptions propagated from <code>operator new</code> (used 
+to allocate states), state constructors or <code>Allocator::allocate</code> 
+(the template parameter passed to the base class of <code>
+outermost_context_type</code>)<br>
+<b>Note</b>: Must only be called from within <code>react</code> member 
+functions, which are called by <code>custom_reaction</code> instantiations. 
+All direct and indirect callers should be exception-neutral<br>
+<b>Caution</b>: Inevitably exits (destructs) this state before returning to 
+the calling <code>react</code> member function, which must therefore not 
+attempt to access anything except stack objects before returning to its caller</p>
+<pre>template&lt;
+  class DestinationState,
+  class TransitionContext,
+  class Event &gt;
+result <a name="transit2">transit</a>(
+  void ( TransitionContext::* )( const Event &amp; ),
+  const Event &amp; );</pre>
+<p><b>Effects</b>:</p>
+<ol>
+  <li>Exits (destructs) all currently active direct and indirect inner states 
+  of the innermost common outer state of this state and <code>DestinationState</code>. 
+  Innermost states are exited first. Other states are exited as soon as all 
+  their direct and indirect inner states have been exited</li>
+  <li>Executes the passed transition action, forwarding the passed event</li>
+  <li>Enters (constructs) the state that is both a direct inner state of the 
+  innermost common outer state and either the <code>DestinationState</code> 
+  itself or a direct or indirect outer state of <code>DestinationState</code>
+  </li>
+  <li>Enters (constructs) the tree formed by the direct and indirect inner 
+  states of the previously entered state down to the <code>DestinationState</code> 
+  depth first</li>
+  <li>Enters (constructs) the tree formed by the direct and indirect inner 
+  initial states of <code>DestinationState</code> depth first</li>
+  <li>Instructs the state machine to discard the current event and to continue 
+  with the processing of the remaining events (see <code>
+  <a href="#process_event">state_machine::process_event</a></code> for 
+  details)</li>
+</ol>
+<p><b>Returns</b>: An unspecified value of the <code>result</code> 
+enumeration. The user-supplied <code>react</code> member function must return 
+this value to its caller<br>
+<b>Throws</b>: Any exceptions propagated from <code>operator new</code> (used 
+to allocate states), state constructors, the transition action or <code>
+Allocator::allocate</code> (the template parameter passed to the base class of
+<code>outermost_context_type</code>)<br>
+<b>Note</b>: Must only be called from within <code>react</code> member 
+functions, which are called by <code>custom_reaction</code> instantiations. 
+All direct and indirect callers should be exception-neutral<br>
+<b>Caution</b>: Inevitably exits (destructs) this state before returning to 
+the calling <code>react</code> member function, which must therefore not 
+attempt to access anything except stack objects before returning to its caller</p>
+<pre>result <a name="simple_state::terminate">terminate</a>();</pre>
+<p><b>Effects</b>: Terminates the state and instructs the state machine to 
+discard the current event and to continue with the processing of the remaining 
+events (see <code><a href="#process_event">state_machine::process_event</a></code> 
+for details)<br>
+<b>Returns</b>: An unspecified value of the <code>result</code> enumeration. 
+The user-supplied <code>react</code> member function must return this value to 
+its caller<br>
+<b>Note</b>: Must only be called from within <code>react</code> member 
+functions, which are called by <code>custom_reaction</code> instantiations. 
+All direct and indirect callers should be exception-neutral<br>
+<b>Caution</b>: Inevitably exits (destructs) this state before returning to 
+the calling <code>react</code> member function, which must therefore not 
+attempt to access anything except stack objects before returning to its caller</p>
+<h3>Class template <code>simple_state</code> observer functions</h3>
+<pre>outermost_context_type &amp; <a name="outermost_context">outermost_context</a>();</pre>
+<p><b>Returns</b>: A reference to the outermost context, which is always the 
+state machine this state belongs to<br>
+<b>Note</b>: Unless the direct subclass is the <code>state</code> class 
+template, this function must not be called from the constructors of direct and 
+indirect subclasses</p>
+<pre>const outermost_context_type &amp; <a name="outermost_context() const">outermost_context() const</a>;</pre>
+<p><b>Returns</b>: A reference to the const outermost context, which is always 
+the state machine this state belongs to<br>
+<b>Note</b>: Unless the direct subclass is the <code>state</code> class 
+template, this function must not be called from the constructors of direct and 
+indirect subclasses</p>
+<pre>template&lt; class OtherContext &gt;
+OtherContext &amp; <a name="context">context</a>();</pre>
+<p><b>Returns</b>: A reference to a direct or indirect context<br>
+<b>Note</b>: Unless the direct subclass is the <code>state</code> class 
+template, this function must not be called from the constructors of direct and 
+indirect subclasses</p>
+<pre>template&lt; class OtherContext &gt;
+const OtherContext &amp; <a name="context() const">context() const</a>;</pre>
+<p><b>Returns</b>: A reference to a const direct or indirect context<br>
+<b>Note</b>: Unless the direct subclass is the <code>state</code> class 
+template, this function must not be called from the constructors of direct and 
+indirect subclasses</p>
+<pre>template&lt; class Target &gt;
+Target <a name="simple_state::state_cast">state_cast</a>() const;</pre>
+<p><b>Returns</b>: Has exactly the same semantics as <code>
+<a href="#state_cast">state_machine::state_cast</a></code><br>
+<b>Note</b>: Unless the direct subclass is the <code>state</code> class 
+template, this function must not be called from the constructors of direct and 
+indirect subclasses. The result is <b>unspecified</b> if this function is 
+called when the machine is not stable</p>
+<pre>template&lt; class Target &gt;
+Target <a name="simple_state::state_downcast">state_downcast</a>() const;</pre>
+<p><b>Returns</b>: Has exactly the same semantics as <code>
+<a href="#state_downcast">state_machine::state_downcast</a></code><br>
+<b>Note</b>: Unless the direct subclass is the <code>state</code> class 
+template, this function must not be called from the constructors of direct and 
+indirect subclasses. The result is <b>unspecified</b> if this function is 
+called when the machine is not stable</p>
+<h3>Class template <code>simple_state</code> static functions</h3>
+<pre>static id_type <a name="static_type">static_type</a>();</pre>
+<p><b>Returns</b>: A value unambiguously identifying the type of <code>
+MostDerived</code>. <code>id_type</code> values are comparable with <code>
+operator==</code> and <code>operator!=</code>. An unspecified collating order 
+can be established with <code>std::less&lt; S::id_type &gt;</code></p>
+<pre>template&lt; class CustomId &gt;
+static const CustomId * <a name="custom_static_type_ptr">custom_static_type_ptr</a>();</pre>
+<p><b>Returns</b>: The pointer to the custom type identifier for <code>
+MostDerived</code> or 0. If <code>!= 0</code>, <code>CustomId</code> must 
+match the type of the previously set pointer. The result is undefined if this 
+is not the case<br>
+<b>Note</b>: This function is not available if
+<a href="configuration.html#Application Defined Macros"><code>
+BOOST_FSM_USE_NATIVE_RTTI</code></a> is defined</p>
+<pre>template&lt; class CustomId &gt;
+static void <a name="custom_static_type_ptr( const CustomId * )">custom_static_type_ptr( const CustomId * )</a>;</pre>
+<p><b>Effects</b>: Sets the pointer to the custom type identifier for <code>
+MostDerived</code><br>
+<b>Note</b>: This function is not available if
+<a href="configuration.html#Application Defined Macros"><code>
+BOOST_FSM_USE_NATIVE_RTTI</code></a> is defined</p>
+<h1>Header &lt;boost/fsm/<a name="state.hpp">state.hpp</a>&gt;</h1>
+<h2><a name="Class template state">Class template <code>state</code></a></h2>
+<p>This is the base class template of all states that need to call any of the 
+following <code>simple_state</code> member functions from their constructors:</p>
+<pre>void post_event(
+  const intrusive_ptr&lt; const event_base &gt; &amp; );
+
+outermost_context_type &amp; outermost_context();
+const outermost_context_type &amp; outermost_context() const;
+
+template&lt; class OtherContext &gt;
+OtherContext &amp; context();
+template&lt; class OtherContext &gt;
+const OtherContext &amp; context() const;
+
+template&lt; class Target &gt;
+Target state_cast() const;
+template&lt; class Target &gt;
+Target state_downcast() const;</pre>
+<p>States that do not need to call any of these functions from their 
+constructors should rather derive from the <code>simple_state</code> class 
+template, what saves the implementation of the forwarding constructor.</p>
+<h3>Class template <code>state</code> synopsis</h3>
+<pre>namespace boost
+{
+namespace fsm
+{
+  template&lt;
+    class MostDerived,
+    class Context,
+    class Reactions = no_reactions,
+    class InnerInitial = <i>unspecified</i>,
+    history_mode historyMode = has_no_history &gt;
+  class state : public simple_state&lt;
+    MostDerived, Context, Reactions, InnerInitial, historyMode &gt;
+  {
+    protected:
+      struct my_context
+      {
+        // <i>implementation-defined</i>
+      };
+
+      typedef state my_base;
+
+      state( my_context ctx );
+      virtual ~state();
+  };
+}
+}</pre>
+<p>Direct and indirect subclasses of <code>state</code> must provide a 
+constructor with the same signature as the <code>state</code> constructor, 
+forwarding the context parameter.</p>
+<hr>
+<p>Revised 
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38508" --></p>
+<p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. 
+All Rights Reserved.</i></p>
+
+</body>
+
+</html>

@@ -81,6 +81,7 @@
 				AdditionalIncludeDirectories="&quot;..\..\..\..\..\boost-sandbox&quot;;&quot;..\..\..\..\..\boost-1.30.2&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
+				ExceptionHandling="TRUE"
 				RuntimeLibrary="4"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"

@@ -174,9 +174,9 @@ enum history_mode
 
 //////////////////////////////////////////////////////////////////////////////
 template< class MostDerived,
-          class Context, // either an outer state or a state_machine
+          class Context,
           class Reactions = no_reactions,
-          class InnerInitial = detail::empty_list, // initial inner state
+          class InnerInitial = detail::empty_list,
           history_mode historyMode = has_no_history >
 class simple_state : public detail::simple_state_base_type< MostDerived,
   typename Context::inner_context_type, InnerInitial >::type
@@ -188,19 +188,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
   public:
     //////////////////////////////////////////////////////////////////////////
     typedef typename Context::inner_context_type context_type;
-    BOOST_STATIC_CONSTANT(
-      detail::orthogonal_position_type,
-      orthogonal_position = Context::inner_orthogonal_position );
-    typedef typename context_type::event_base_ptr_type event_base_ptr_type;
-
-    // If you receive a 
-    // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
-    // compiler error here then this state resides in a non-existent
-    // orthogonal region of the outer state. 
-    BOOST_STATIC_ASSERT(
-      orthogonal_position < context_type::no_of_orthogonal_regions );
-
-    typedef simple_state my_base;
 
     template< detail::orthogonal_position_type innerOrthogonalPosition >
     struct orthogonal
@@ -211,10 +198,21 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       typedef MostDerived inner_context_type;
     };
 
+    typedef typename context_type::outermost_context_type
+      outermost_context_type;
 
-    // Returns a reference to the context identified by the template
-    // parameter. This can either be _this_ object or one of its
-    // direct or indirect contexts
+    outermost_context_type & outermost_context()
+    {
+      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
+      return pContext_->outermost_context();
+    }
+
+    const outermost_context_type & outermost_context() const
+    {
+      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
+      return pContext_->outermost_context();
+    }
+
     template< class OtherContext >
     OtherContext & context()
     {
@@ -227,19 +225,12 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       return context_impl( static_cast< OtherContext * >( 0 ) );
     }
 
-    void post_event( const event_base_ptr_type & pEvent )
-    {
-      outermost_context().post_event( pEvent );
-    }
-
-    // see state_machine class for documentation
     template< class Target >
     Target state_cast() const
     {
       return outermost_context().template state_cast< Target >();
     }
 
-    // see state_machine class for documentation
     template< class Target >
     Target state_downcast() const
     {
@@ -247,6 +238,13 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     }
 
     
+    typedef typename context_type::event_base_ptr_type event_base_ptr_type;
+
+    void post_event( const event_base_ptr_type & pEvent )
+    {
+      outermost_context().post_event( pEvent );
+    }
+
     result discard_event()
     {
       state_base_type::reaction_initiated();
@@ -266,7 +264,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       return do_defer_event;
     }
     
-    // Initiates a transition to DestinationState (without transition action).
     template< class DestinationState >
     result transit()
     {
@@ -274,9 +271,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         detail::no_transition_function() );
     }
 
-    // Initiates a transition to DestinationState with a transition action.
-    // The transition action must be a member of the innermost common context
-    // or of one of its contexts.
     template< class DestinationState, class TransitionContext, class Event >
     result transit(
       void ( TransitionContext::*pTransitionAction )( const Event & ),
@@ -287,9 +281,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
           pTransitionAction, evt ) );
     }
 
-    // Terminates this state. Depending on whether there are other orthogonal
-    // states present this may or may not lead to the whole statemachine being
-    // terminated.
     result terminate()
     {
       state_base_type::reaction_initiated();
@@ -324,6 +315,17 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
+    BOOST_STATIC_CONSTANT(
+      detail::orthogonal_position_type,
+      orthogonal_position = Context::inner_orthogonal_position );
+
+    // If you receive a 
+    // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
+    // compiler error here then this state resides in a non-existent
+    // orthogonal region of the outer state. 
+    BOOST_STATIC_ASSERT(
+      orthogonal_position < context_type::no_of_orthogonal_regions );
+
     typedef MostDerived inner_context_type;
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,
@@ -393,29 +395,13 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       return reactionResult;
     }
 
-    virtual state_base_type * outer_state_ptr() const
+    virtual const state_base_type * outer_state_ptr() const
     {
       return outer_state_ptr_impl<
         is_same< outermost_context_type, context_type >::value >();
     }
 
 
-    outermost_context_type & outermost_context()
-    {
-      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
-      return pContext_->outermost_context();
-    }
-
-    const outermost_context_type & outermost_context() const
-    {
-      BOOST_ASSERT( get_pointer( pContext_ ) != 0 );
-      return pContext_->outermost_context();
-    }
-
-
-    // Returns a pointer to the direct or indirect context identified by the
-    // template parameter. In contrast to context(), this function cannot
-    // return a pointer to this object.
     template< class OtherContext >
     const typename OtherContext::inner_context_ptr_type & context_ptr() const
     {
@@ -423,20 +409,12 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     }
 
 
-    // Given a outermost context (i.e. a state machine), constructs this state
-    // with all its outer and inner initial states. Used for initial
-    // construction only.
-    // After each successful (non-throwing) construction the current state is
-    // reported back to the state machine.
     static void initial_deep_construct(
       outermost_context_type & outermostContext )
     {
       deep_construct( &outermostContext, outermostContext );
     }
 
-    // Constructs this state with all its inner initial states.
-    // After each successful (non-throwing) construction the current state is
-    // reported back to the state machine.
     static void deep_construct(
       const context_ptr_type & pContext,
       outermost_context_type & outermostContext )
@@ -593,9 +571,9 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
         common_context_type, DestinationState >::type context_list_type;
 
       // If you receive a 
-      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or similar
-      // compiler error here then you tried to make an invalid transition
-      // between different orthogonal regions.
+      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
+      // similar compiler error here then you tried to make an invalid
+      // transition between different orthogonal regions.
       BOOST_STATIC_ASSERT(
         termination_state_type::orthogonal_position ==
         mpl::front< context_list_type >::type::orthogonal_position );
@@ -633,13 +611,13 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
     }
 
     template< bool isOutermost >
-    state_base_type * outer_state_ptr_impl() const
+    const state_base_type * outer_state_ptr_impl() const
     {
       return get_pointer( pContext_ );
     }
 
     template<>
-    state_base_type * outer_state_ptr_impl< true >() const
+    const state_base_type * outer_state_ptr_impl< true >() const
     {
       return 0;
     }

@@ -121,8 +121,7 @@ class worker : noncopyable
 
     typedef detail::event_processor< worker > processor_type;
     typedef std::list< processor_type *, Allocator > processor_list_type;
-    typedef intrusive_ptr< const event_base >
-      event_ptr_type;
+    typedef intrusive_ptr< const event_base > event_ptr_type;
     typedef std::pair< processor_type *, event_ptr_type > queue_element;
     typedef std::list< queue_element, Allocator > event_queue_type;
 

@@ -159,9 +159,6 @@
 				RelativePath="..\..\..\..\boost\fsm\result.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\boost\fsm\rtti_policy.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\boost\fsm\simple_state.hpp">
 			</File>
 			<File

@@ -48,8 +48,8 @@
 are the result of the following requirements.</p>
 <p>boost::fsm should ...</p>
 <ol>
-  <li>be fully type-safe. Any type mismatches should be flagged with an error 
-  at compile-time</li>
+  <li>be fully type-safe. Whenever possible, type mismatches should be flagged 
+  with an error at compile-time</li>
   <li>not require the use of a code generator. A lot of the existing FSM 
   solutions force the developer to design the state machine either graphically 
   or in a specialized language. All or part of the code is then generated</li>
@@ -94,8 +94,11 @@ frameworks:</p>
   solution)<br>
   <a href="http://www.ilogix.com/products/rhapsody/rhap_incplus.cfm">
   http://www.ilogix.com/products/rhapsody/rhap_incplus.cfm<br>
-  </a>Fails to satisfy at least the requirements 2, 4, 5, 6, 8 (there is quite 
-  a bit of error checking before code generation, though).</li>
+  </a>This might look like comparing apples with oranges. However, there is no 
+  inherent reason why a code generator couldn't produce code that can easily 
+  be understood and modified by humans. Fails to satisfy at least the 
+  requirements 2, 4, 5, 6, 8 (there is quite a bit of error checking before 
+  code generation, though).</li>
   <li>The framework accompanying the article &quot;State Machine Design in C++&quot;<br>
   <a href="http://www.cuj.com/articles/2000/0005/0005f/0005f.htm?topic=articles">
   http://www.cuj.com/articles/2000/0005/0005f/0005f.htm?topic=articles<br>
@@ -150,8 +153,9 @@ However, due to its nature such a framework has a number of disadvantages when
 used to implement static machines:</p>
 <ul>
   <li>No compile-time optimizations and validations can be made. For example, 
-  boost::fsm determines the innermost common outer state (aka LCA, least 
-  common ancestor) of the transition-source and destination state at compile 
+  boost::fsm determines the
+  <a href="definitions.html#Innermost common outer state">innermost common 
+  outer state</a> of the transition-source and destination state at compile 
   time. Moreover, compile time checks ensure that the state machine is valid 
   (e.g. that there are no transitions between orthogonal states).</li>
   <li>Double dispatch must inevitably be implemented with some kind of a 
@@ -182,9 +186,9 @@ ignore the issue.&nbsp;</p>
 <p>Consider the following state configuration:</p>
 <p><img border="0" src="A.gif" width="230" height="170"></p>
 <p>Both states define entry actions (x() and y()). Whenever state A becomes 
-current, a call to x() will immediately be followed by a call to y(). y() 
-could depend on the side-effects of x(). Therefore, executing y() does not 
-make sense if x() fails. This is not an esoteric corner case but happens in 
+active, a call to x() will immediately be followed by a call to y(). y() could 
+depend on the side-effects of x(). Therefore, executing y() does not make 
+sense if x() fails. This is not an esoteric corner case but happens in 
 every-day state machines all the time. For example, x() could acquire memory 
 the contents of which is later modified by y(). There is a different but in 
 terms of error handling equally critical situation in the Tutorial under
@@ -229,11 +233,14 @@ code is simply boring and quite unnecessary.</p>
   <li>The processing logic is as follows:
   <ul>
     <li>Exception events resulting from failed <code>react</code> functions 
-    are sent to the current state.</li>
+    are sent to the <a href="definitions.html#Innermost state">innermost state</a> 
+    that was last visited during <a href="definitions.html#Reaction">reaction</a> 
+    search</li>
     <li>Exception events resulting from failed entry actions are sent to the 
-    immediate outer state.</li>
+    outer state of the state that the machine tried to enter</li>
     <li>Exception events resulting from failed transition actions are sent to 
-    the innermost common outer state.</li>
+    the <a href="definitions.html#Innermost common outer state">innermost 
+    common outer state</a></li>
   </ul>
   <p>In the last two cases the state-machine is not in a stable state when the 
   exception event is generated and leaving it there (e.g. by ignoring the 
@@ -245,25 +252,25 @@ code is simply boring and quite unnecessary.</p>
   rethrown. </li>
 </ul>
 <h2><a name="Asynchronous state machines">Asynchronous state machines</a></h2>
-<p>The design of the <code>asynchronous_state_machine&lt;&gt;</code> and <code>
-worker&lt;&gt;</code> class templates follow from the requirements:</p>
+<p>The design of the <code>asynchronous_state_machine</code> and <code>worker</code> 
+class templates follow from the requirements:</p>
 <ol>
   <li>The user must be able to specify in which thread a particular machine 
   will run:<br>
-  The <code>worker&lt;&gt;</code> class template is not associated with a particular 
+  The <code>worker</code> class template is not associated with a particular 
   thread. Instead, users can choose to either call <code>worker&lt;&gt;::operator()</code> 
   directly from the current thread or pass an appropriate function object to a 
   new thread.</li>
   <li>An arbitrary number of state machines might run in the same thread:<br>
   Multiple state machine objects can be constructed passing the same <code>
-  worker&lt;&gt;</code> object. The state machines will then share the same 
+  worker</code> object. The state machines will then share the same 
   thread-safe queue and event loop.</li>
   <li>Out of the box, the boost::thread library should be employed. However, 
   it should be possible to use any other threading library or run asynchronous 
   machines on OS-less systems:<br>
   In such cases, the locking and waiting logic can be fully customized by 
   implementing a new class template that is interface-compatible with <code>
-  worker&lt;&gt;</code>.</li>
+  worker</code>.</li>
 </ol>
 <h2><a name="User actions: Member functions vs. function objects">User 
 actions: Member functions vs. function objects</a></h2>
@@ -339,16 +346,18 @@ normally constitutes a bottleneck and the relative gap between handcrafted and
 boost::fsm machines also becomes much smaller than in the worst-case scenario.</p>
 <p>BitMachine measurements with more states and with different levels of 
 optimization:</p>
-<table border="3" cellspacing="1" style="border-collapse: collapse" width="100%" id="AutoNumber2">
+<table border="3" width="100%" id="AutoNumber2" cellpadding="2">
   <tr>
-    <td width="25%" rowspan="2">Machine configuration<br>
-    # states / # outgoing transitions per state</td>
-    <td width="75%" colspan="3">Event dispatch &amp; transition time [nanoseconds]</td>
+    <td width="25%" rowspan="2"><b>Machine configuration<br>
+    # states / # outgoing transitions per state</b></td>
+    <td width="75%" colspan="3"><b>Event dispatch &amp; transition time 
+    [nanoseconds]</b></td>
   </tr>
   <tr>
     <td width="25%">Out of the box</td>
     <td width="25%">Same as out of the box but with <code>
-    BOOST_FSM_USE_NATIVE_RTTI</code> defined</td>
+    <a href="configuration.html#Application Defined Macros">
+    BOOST_FSM_USE_NATIVE_RTTI</a></code> defined</td>
     <td width="25%">Same as out of the box but with customized memory 
     management</td>
   </tr>
@@ -450,7 +459,8 @@ Currently, there are exactly two options:</p>
 <ol>
   <li>By default, a speed-optimized internal implementation is employed</li>
   <li>The library can be instructed to use native C++ RTTI instead by defining
-  <code>BOOST_FSM_USE_NATIVE_RTTI</code></li>
+  <code><a href="configuration.html#Application Defined Macros">
+  BOOST_FSM_USE_NATIVE_RTTI</a></code></li>
 </ol>
 <p>Just about the only reason to favor 2 is the fact that state objects need 
 to store one pointer less, meaning that in the best case the memory footprint 
@@ -467,10 +477,11 @@ applications that ...</p>
 <h2><a name="Double dispatch">Double dispatch</a></h2>
 <p>At the heart of every state machine lies an implementation of double 
 dispatch. This is due to the fact that the incoming event <b>and</b> the 
-current state define exactly which reaction the state machine will produce. 
-For each event dispatch, one virtual call is followed by a linear search for 
-the appropriate reaction, using one RTTI comparison per reaction. The 
-following alternatives were considered but rejected:</p>
+active state define exactly which <a href="definitions.html#Reaction">reaction</a> 
+the state machine will produce. For each event dispatch, one virtual call is 
+followed by a linear search for the appropriate reaction, using one RTTI 
+comparison per reaction. The following alternatives were considered but 
+rejected:</p>
 <ul>
   <li><a href="http://www.objectmentor.com/resources/articles/acv.pdf">Acyclic 
   visitor</a>: This double-dispatch variant satisfies all scalability 
@@ -479,8 +490,9 @@ following alternatives were considered but rejected:</p>
   slows down construction and makes memory management customization 
   inefficient. In addition, C++ RTTI must inevitably be turned on, with 
   negative effects on executable size. boost::fsm originally employed acyclic 
-  visitor and was about 4 times slower than it is now. The speed might be 
-  better on other platforms but the other negative effects will remain.</li>
+  visitor and was about 4 times slower than it is now (MSVC7.1 on Intel 
+  Pentium M). The dispatch speed might be better on other platforms but the 
+  other negative effects will remain.</li>
   <li>
   <a href="http://www.isbiel.ch/~due/courses/c355/slides/patterns/visitor.pdf">
   GOF Visitor</a>: The GOF Visitor pattern inevitably makes the whole machine 
@@ -502,7 +514,7 @@ following alternatives were considered but rejected:</p>
 <h3>Memory</h3>
 <p>On a 32-bit box, one empty state typically needs less than 50 bytes of 
 memory. Even <b>very</b> complex machines will usually have less than 20 
-simultaneously current states so just about every machine should run with less 
+simultaneously active states so just about every machine should run with less 
 than one kilobyte of memory (not counting event queues). Obviously, the 
 per-machine memory footprint is offset by whatever state-local members the 
 user adds.</p>
@@ -510,29 +522,30 @@ user adds.</p>
 <p>The following ranking should give a rough picture of what feature will 
 consume how many cycles:</p>
 <ol>
-  <li><code>state_cast&lt;&gt;</code>: By far the most cycle-consuming feature. 
+  <li><code>state_cast&lt;&gt;()</code>: By far the most cycle-consuming feature. 
   Searches linearly for a suitable state, using one <code>dynamic_cast</code> 
   per visited state.</li>
   <li>State entry and exit: Profiling of the fully optimized 1-bit-BitMachine 
   suggested that about 100ns of the 210ns total are spent destructing the 
   exited state and constructing the entered state. Obviously, transitions 
-  where the innermost common outer state is &quot;far&quot; from the leaf states and/or 
-  with lots of orthogonal states can easily cause the destruction and 
-  construction of quite a few states leading to significant amounts of time 
-  spent for a transition.</li>
-  <li><code>state_downcast&lt;&gt;</code>: Searches linearly for the requested 
+  where the <a href="definitions.html#Innermost common outer state">innermost 
+  common outer state</a> is &quot;far&quot; from the leaf states and/or with lots of 
+  orthogonal states can easily cause the destruction and construction of quite 
+  a few states leading to significant amounts of time spent for a transition.</li>
+  <li><code>state_downcast&lt;&gt;()</code>: Searches linearly for the requested 
   state, using one virtual call and one RTTI comparison per visited state.</li>
   <li>History: For a state containing a history pseudo state a binary search 
   through the (usually small) history map must be performed on each entry and 
   exit. History slot allocation is performed exactly once, before first entry.</li>
   <li>Event dispatch: One virtual call followed by a linear search for a 
-  suitable reaction, using one RTTI comparison per visited reaction.</li>
+  suitable <a href="definitions.html#Reaction">reaction</a>, using one RTTI 
+  comparison per visited reaction.</li>
   <li>Orthogonal states: One additional virtual call for each exited state <b>
-  if</b> there is more than one current leaf state before a transition. It 
+  if</b> there is more than one active leaf state before a transition. It 
   should also be noted that the worst-case event dispatch time is multiplied 
   in the presence of orthogonal states. For example, if two orthogonal leaf 
-  states are added to a given current state configuration, the worst-case time 
-  is tripled.</li>
+  states are added to a given state configuration, the worst-case time is 
+  tripled.</li>
 </ol>
 <h2><a name="Limitations">Limitations</a></h2>
 <h4>Deferring and posting events</h4>
@@ -624,9 +637,9 @@ would consume more resources than the currently implemented limited deep
 history support. Moreover, full deep history behavior can easily be 
 implemented with shallow history:</p>
 <p><img border="0" src="DeepHistoryLimitation2.gif" width="332" height="347"></p>
-<p>Of course, this only works if D, E or any of their direct or indirect inner 
-states do not have orthogonal regions. If not so then this pattern has to be 
-applied recursively.</p>
+<p>Of course, this only works if C, D, E or any of their direct or indirect 
+inner states do not have orthogonal regions. If not so then this pattern has 
+to be applied recursively.</p>
 <h4>Synchronization (join and fork) bars</h4>
 <p><img border="0" src="JoinAndFork.gif" width="541" height="301"></p>
 <p>Synchronization bars are not supported, that is, a transition always 
@@ -636,22 +649,26 @@ emulated with guards. Fork bars are needed only rarely. Their support would
 complicate the implementation quite a bit.</p>
 <h4>Event dispatch to orthogonal regions</h4>
 <p>The boost::fsm event dispatch algorithm is different to the one specified 
-in David Harel's original paper and in the UML standard. Both mandate that 
-each event is dispatched to all orthogonal regions of a state machine. 
-Example:</p>
+in
+<a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
+David Harel's original paper</a> and in the
+<a href="http://www.omg.org/cgi-bin/doc?formal/03-03-01">UML standard</a>. 
+Both mandate that each event is dispatched to all orthogonal regions of a 
+state machine. Example:</p>
 <p><img border="0" src="EventDispatch.gif" width="436" height="211"></p>
 <p>Here the Harel/UML dispatch algorithm specifies that the machine must 
 transition from (B,D) to (C,E) when an EvX event is processed. Because of the 
-subtleties that Harel describes in chapter 7 of his paper, an implementation 
-of this algorithm is not only quite complex but also much slower than the 
-simplified version employed by boost::fsm, which stops searching for reactions 
-as soon as it has found one suitable for the current event. That is, had the 
-example been implemented with this library, the machine would have 
-transitioned non-deterministically from (B,D) to either (C,D) or (B,E). This 
-version was chosen because, in my experience, in real-world machines different 
-orthogonal regions often do not specify transitions for the same events. For 
-the rare cases when they do, the UML behavior can easily be emulated as 
-follows:</p>
+subtleties that Harel describes in chapter 7 of
+<a href="http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
+his paper</a>, an implementation of this algorithm is not only quite complex 
+but also much slower than the simplified version employed by boost::fsm, which 
+stops searching for <a href="definitions.html#Reaction">reactions</a> as soon 
+as it has found one suitable for the current event. That is, had the example 
+been implemented with this library, the machine would have transitioned 
+non-deterministically from (B,D) to either (C,D) or (B,E). This version was 
+chosen because, in my experience, in real-world machines different orthogonal 
+regions often do not specify transitions for the same events. For the rare 
+cases when they do, the UML behavior can easily be emulated as follows:</p>
 <p><img border="0" src="SimpleEventDispatch.gif" width="466" height="226"></p>
 <h4>Transitions across orthogonal regions</h4>
 <p>
@@ -664,7 +681,7 @@ situation where it would make any sense. If you need to make such transitions,
 please do let me know!</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 October, 2003<!--webbot bot="Timestamp" endspan i-checksum="38550" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->01 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38505" --></p>
 <p><i>Copyright © 2003 <a href="mailto:ah2003@gmx.net">Andreas Huber Dönni</a>. 
 All Rights Reserved.</i></p>
 

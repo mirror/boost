@@ -30,7 +30,14 @@ class leaf_state : public state_base< Allocator, RttiPolicy >
   typedef state_base< Allocator, RttiPolicy > base_type;
   protected:
     //////////////////////////////////////////////////////////////////////////
-    leaf_state( typename RttiPolicy::id_type id ) : base_type( id ) {}
+    leaf_state(
+      typename RttiPolicy::id_provider_type idProvider
+    ) :
+      base_type( idProvider )
+    {
+    }
+
+    virtual ~leaf_state() {}
 
   public:
     //////////////////////////////////////////////////////////////////////////

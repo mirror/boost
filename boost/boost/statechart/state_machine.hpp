@@ -42,6 +42,7 @@
 #include <memory>   // std::allocator
 #include <typeinfo> // std::bad_cast
 #include <functional> // std::less
+#include <iterator>
 
 
 
@@ -223,8 +224,6 @@ class history_key
 
 
 //////////////////////////////////////////////////////////////////////////////
-// Base class for all state machines
-// Some function names were derived from a state machine by Aleksey Gurtovoy.
 template< class MostDerived,
           class InitialState, 
           class Allocator = std::allocator< void >,
@@ -238,9 +237,6 @@ class state_machine : noncopyable
     typedef event_base event_base_type;
     typedef intrusive_ptr< const event_base_type > event_base_ptr_type;
 
-    // Initiates the state machine.
-    // Returns true if the state machine terminated as a direct or indirect
-    // result of entering the initial state.
     bool initiate()
     {
       terminate();
@@ -263,9 +259,6 @@ class state_machine : noncopyable
       return currentStates_.size() == 0;
     }
 
-    // Processes the passed event.
-    // Returns true if the state machine was running before and terminated
-    // after processing the event.
     bool process_event( const event_base_type & evt )
     {
       const bool running = !terminated();
@@ -274,16 +267,6 @@ class state_machine : noncopyable
       return terminated() && running;
     }
 
-    // Has semantics similar to dynamic_cast. Returns a pointer or a reference
-    // to a state with the specified type _if_ the machine is currently in
-    // such a state. Can _cross_ inheritance trees, e.g. if the machine is in
-    // state A, which derives from simple_state _and_ B then
-    // state_cast< const B & >() will return a reference to B and
-    // state_cast< const A & >() will return a reference to A.
-    // Target can take either of the following forms:
-    // - const X &: throws std::bad_cast if the machine is not currently in
-    //   state X
-    // - const X *: returns 0 if the machine is not currently in state X
     template< class Target >
     Target state_cast() const
     {
@@ -324,18 +307,6 @@ class state_machine : noncopyable
       return impl::not_found< Target >();
     }
 
-    // Typically much faster variant of state_cast. Returns a pointer or a
-    // reference to a state with the specified type _if_ the machine is
-    // currently in such a state.
-    // Does _not_ cross inheritance trees, i.e. Target must be a most-derived
-    // type, e.g. if the machine is in state A, which derives from
-    // simple_state _and_ B then state_downcast< const B & >() will not
-    // compile while state_downcast< const A & >() will return a reference to
-    // A.
-    // Target can take either of the following forms:
-    // - const X &: throws std::bad_cast if the machine is not currently in
-    //   state X
-    // - const X *: returns 0 if the machine is not currently in state X
     template< class Target >
     Target state_downcast() const
     {
@@ -368,6 +339,55 @@ class state_machine : noncopyable
       return impl::not_found< Target >();
     }
 
+    typedef detail::state_base< allocator_type, rtti_policy_type >
+      state_base_type;
+
+    class state_iterator : public std::iterator<
+      std::forward_iterator_tag,
+      state_base_type, std::ptrdiff_t, 
+      const state_base_type *, const state_base_type & >
+    {
+      public:
+        //////////////////////////////////////////////////////////////////////
+        explicit state_iterator(
+          state_base_type::state_list_type::const_iterator baseIterator
+        ) : baseIterator_( baseIterator ) {}
+
+        const state_base_type & operator*() const { return **baseIterator_; }
+        const state_base_type * operator->() const
+        {
+          return &**baseIterator_;
+        }
+
+        state_iterator & operator++() { ++baseIterator_; return *this; }
+        state_iterator operator++( int )
+        {
+          return state_iterator( baseIterator_++ );
+        }
+
+        bool operator==( const state_iterator & right ) const
+        {
+          return baseIterator_ == right.baseIterator_;
+        }
+        bool operator!=( const state_iterator & right ) const
+        {
+          return !( *this == right );
+        }
+
+      private:
+        state_base_type::state_list_type::const_iterator baseIterator_;
+    };
+
+    state_iterator state_begin() const
+    {
+      return state_iterator( currentStates_.begin() );
+    }
+
+    state_iterator state_end() const
+    {
+      return state_iterator( currentStates_.end() );
+    }
+
   protected:
     //////////////////////////////////////////////////////////////////////////
     state_machine() :
@@ -375,7 +395,7 @@ class state_machine : noncopyable
     {
     }
 
-    // This destructor was only made virtual, so that that
+    // This destructor was only made virtual so that that
     // polymorphic_downcast can be used to cast to MostDerived.
     virtual ~state_machine() {}
 
@@ -384,9 +404,6 @@ class state_machine : noncopyable
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
-    typedef detail::state_base< allocator_type, rtti_policy_type >
-      state_base_type;
-
     typedef MostDerived inner_context_type;
     BOOST_STATIC_CONSTANT(
       detail::orthogonal_position_type,

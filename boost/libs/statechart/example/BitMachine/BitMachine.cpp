@@ -10,7 +10,7 @@
 
 //////////////////////////////////////////////////////////////////////////////
 const unsigned int noOfBits = 6;
-// #define CUSTOMIZE_MEMORY_MANAGEMENT
+#define CUSTOMIZE_MEMORY_MANAGEMENT
 // #define BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
 // This program demonstrates the fact that measures must be taken to hide some
