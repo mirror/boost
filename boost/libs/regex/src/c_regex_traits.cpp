@@ -55,6 +55,17 @@ void c_regex_adopted_no_longer_needed_loop_shutter_upper() { }
 namespace{
 
 //
+// helper function to get the locale name,
+// works around possibly broken setlocale implementations:
+//
+const char* getlocale(int id)
+{
+   static const char* def = "Unknown";
+   const char* pl = std::setlocale(id, 0);
+   return pl ? pl : def;
+}
+
+//
 // character classes:
 //
 boost::uint_fast32_t re_char_class_id[] = {
@@ -237,9 +248,9 @@ void BOOST_REGEX_CALL re_free_classes()
 void BOOST_REGEX_CALL re_update_classes()
 {
    BOOST_RE_GUARD_STACK
-   if(*re_cls_name != std::setlocale(LC_CTYPE, 0))
+   if(*re_cls_name != getlocale(LC_CTYPE))
    {
-      *re_cls_name = std::setlocale(LC_CTYPE, 0);
+      *re_cls_name = getlocale(LC_CTYPE);
       char buf[256];
       unsigned int i;
       for(i = 0; i < re_classes_max; ++i)
@@ -286,9 +297,9 @@ void BOOST_REGEX_CALL re_free_collate()
 void BOOST_REGEX_CALL re_update_collate()
 {
    BOOST_RE_GUARD_STACK
-   if(*re_coll_name != std::setlocale(LC_COLLATE, 0))
+   if(*re_coll_name != getlocale(LC_COLLATE))
    {
-      *re_coll_name = std::setlocale(LC_COLLATE, 0);
+      *re_coll_name = getlocale(LC_COLLATE);
       char buf[256];
       unsigned int i = 400;
       re_get_message(buf, 256, i);
@@ -350,7 +361,7 @@ void BOOST_REGEX_CALL re_message_update()
    //
    // called whenever the global locale changes:
    //
-   std::string l(std::setlocale(LC_MESSAGES, 0));
+   std::string l(getlocale(LC_MESSAGES));
    if(*mess_locale != l)
    {
       *mess_locale = l;
@@ -641,15 +652,15 @@ void BOOST_REGEX_CALL c_regex_traits<char>::update()
    re_detail::cs_guard g(*re_detail::p_re_lock);
    #endif
    re_message_update();
-   if(*collate_name != std::setlocale(LC_COLLATE, 0))
+   if(*collate_name != getlocale(LC_COLLATE))
    {
       do_update_collate();
-      *collate_name = std::setlocale(LC_COLLATE, 0);
+      *collate_name = getlocale(LC_COLLATE);
    }
-   if(*ctype_name != std::setlocale(LC_CTYPE, 0))
+   if(*ctype_name != getlocale(LC_CTYPE))
    {
       do_update_ctype();
-      *ctype_name = std::setlocale(LC_CTYPE, 0);
+      *ctype_name = getlocale(LC_CTYPE);
    }
    sort_type = re_detail::find_sort_syntax(&i, &sort_delim);
 }
@@ -838,7 +849,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
    re_message_update();
    re_update_classes();
    re_update_collate();
-   std::string l(std::setlocale(LC_CTYPE, 0));
+   std::string l(getlocale(LC_CTYPE));
    if(*wlocale_name != l)
    {
       *wlocale_name = l;
