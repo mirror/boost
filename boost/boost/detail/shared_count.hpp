@@ -42,8 +42,10 @@ namespace boost
 
 #if defined(BOOST_ENABLE_SHARED_PTR_DEBUG_HOOKS)
 
-void shared_ptr_constructor_hook(void * p);
-void shared_ptr_destructor_hook(void * p);
+void shared_ptr_scalar_constructor_hook(void * p);
+void shared_ptr_array_constructor_hook(void * p);
+void shared_ptr_scalar_destructor_hook(void * p);
+void shared_ptr_array_destructor_hook(void * p);
 
 #endif
 
@@ -185,7 +187,12 @@ private:
 
 template<class T> void cbi_call_constructor_hook(T * p, checked_deleter<T> const &, int)
 {
-    boost::shared_ptr_constructor_hook(p);
+    boost::shared_ptr_scalar_constructor_hook(p);
+}
+
+template<class T> void cbi_call_constructor_hook(T * p, checked_array_deleter<T> const &, int)
+{
+    boost::shared_ptr_array_constructor_hook(p);
 }
 
 template<class P, class D> void cbi_call_constructor_hook(P const &, D const &, long)
@@ -194,7 +201,12 @@ template<class P, class D> void cbi_call_constructor_hook(P const &, D const &, 
 
 template<class T> void cbi_call_destructor_hook(T * p, checked_deleter<T> const &, int)
 {
-    boost::shared_ptr_destructor_hook(p);
+    boost::shared_ptr_scalar_destructor_hook(p);
+}
+
+template<class T> void cbi_call_destructor_hook(T * p, checked_array_deleter<T> const &, int)
+{
+    boost::shared_ptr_array_destructor_hook(p);
 }
 
 template<class P, class D> void cbi_call_destructor_hook(P const &, D const &, long)
