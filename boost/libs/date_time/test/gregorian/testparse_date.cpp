@@ -26,7 +26,6 @@ main()
   //bad lexical cast?
   try {
     boost::gregorian::date d(boost::gregorian::from_string(s));
-    std::cout << "here" << std::endl;
     check("check year",  d.year()  == 2001);
     check("check month", d.month() == 10);
     check("check day",   d.day()   == 5);
@@ -64,6 +63,43 @@ main()
     date d11 = from_us_string("feb 29 2000");
     check("american date with comma: feb 29 2000 ", d11 == d);
 
+    // I think the compilers defined by NO_WSTRING_CONV will all fail here
+#if !defined(BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS)
+//#if !((defined(__GNUC__) && (__GNUC__ < 3)) && !defined(_STLP_OWN_IOSTREAMS))
+    {
+      std::stringstream ss("2000-2-29");
+      ss >> d2;
+      check("2000-2-29 stream-in", d2 == d);
+    }
+    { 
+      std::stringstream ss("2000-FEB-29");
+      ss >> d2;
+      //std::cout << d2 << std::endl;
+      check("2000-FEB-29 stream-in (uppercase)", d2 == d);
+    }
+    {
+      std::stringstream ss("2000-february-29");
+      ss >> d2;
+      check("2000-february-29 stream-in (lowercase)", d2 == d);
+    }
+    // the removed (3) tests require a stream manipulator for date_order
+    // and date_separator (not yet implemented)
+    /*{
+      std::stringstream ss("Feb-29-2000");
+      ss >> d2;
+      check("date from month-day-year string stream-in", d2 == d);
+    }
+    {
+      std::stringstream ss("29-Feb-2000");
+      ss >> d2;
+      check("date from day-month-year string stream-in", d2 == d);
+    }
+    {
+      std::stringstream ss("Feb 29, 2000");
+      ss >> d2;
+      check("american date with comma: Feb 29, 2000 stream-in", d2 == d);
+    }*/
+#endif //BOOST_DATE_TIME_NO_WSTRING_CONVERSIONS
 
 
 

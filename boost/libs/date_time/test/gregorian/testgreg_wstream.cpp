@@ -24,10 +24,11 @@ int main(){
    * date_period, date_duration (also date_generators) */
   date_period dp(date(2003,Aug,21), date(2004,May,27));
  
+  
   // date
   wss << dp.begin();
   res = L"2003-Aug-21";
-  check("date op<<", wss.str() == res);
+  check("date operator<<", wss.str() == res);
   wss.str(L"");
   ws = to_simple_wstring(dp.begin());
   check("date to_simple_string", ws == res);
@@ -40,6 +41,14 @@ int main(){
   ws = to_sql_wstring(dp.begin());
   check("date to_sql_string", ws == res);
   wss.str(L"");
+  { 
+    res = L"2003-Aug-21";
+    std::wstringstream wss(L"2003-Aug-21");
+    date testdate(not_a_date_time);
+    wss >> testdate;
+    check("date operator>>", to_simple_wstring(testdate) == res);
+  }
+  
   // greg_month
   wss << dp.begin().month();
   res = L"08";
@@ -51,6 +60,13 @@ int main(){
   ws = dp.begin().month().as_long_wstring();
   res = L"August";
   check("greg_month as_long_wstring", ws == res);
+  /*{ 
+    std::wstringstream wss(L"August");
+    greg_month testmonth(not_a_date_time);
+    wss >> testmonth;
+    check("greg_month operator>>", to_simple_wstring(testmonth) == res);
+  }*/
+  
   // greg_day_of_week
   wss << dp.begin().day_of_week();
   res = L"Thu";
@@ -61,6 +77,13 @@ int main(){
   ws = dp.begin().day_of_week().as_long_wstring();
   res = L"Thursday";
   check("greg_day_of_week as_long_wstring", ws == res);
+  /*{ 
+    std::wstringstream wss(L"Thu");
+    greg_day_of_week testday(not_a_date_time);
+    wss >> testday;
+    check("greg_day_of_week operator>>", to_simple_wstring(testday) == res);
+  }*/
+  
   // date_period
   wss << dp;
   res = L"[2003-Aug-21/2004-May-26]";
@@ -71,11 +94,27 @@ int main(){
   res = L"20030821/20040526";
   ws = to_iso_wstring(dp);
   check("date_period to_iso_string", ws == res);
+  { 
+    std::wstringstream wss(L"[2003-Aug-21/2004-May-27]");
+    res = L"[2003-Aug-21/2004-May-26]";
+    // following line gives an ambiguous overload of op>>
+    //date_period testperiod(date(not_a_date_time),date_duration(not_a_date_time));
+    date_period testperiod(date(2003,Aug,21), date(2004,May,27));
+    wss >> testperiod;
+    check("date_period operator>>", to_simple_wstring(testperiod) == res);
+  }
+  
   // date_duration
   wss << dp.length();
   res = L"280";
   check("date_duration", wss.str() == res);
   wss.str(L"");
+  { 
+    std::wstringstream wss(L"280");
+    date_duration testduration(not_a_date_time);
+    wss >> testduration;
+    check("date_duration operator>>", testduration.days() == 280);
+  }
 
   // special values
   date sv_d(neg_infin);
@@ -84,14 +123,14 @@ int main(){
   // sv-date
   wss << sv_d;
   res = L"-infinity";
-  check("date op<< special value", wss.str() == res);
+  check("date operator<< special value", wss.str() == res);
   wss.str(L"");
   ws = to_simple_wstring(sv_d);
   check("date to_simple_string special value", ws == res);
   // sv-date_duration
   wss << sv_dd;
   res = L"+infinity";
-  check("date_duration op<< special value", wss.str() == res);
+  check("date_duration operator<< special value", wss.str() == res);
   wss.str(L"");
   // sv-date_period
   /*
