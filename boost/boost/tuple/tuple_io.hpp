@@ -86,9 +86,9 @@ public:
      // parentheses and space are the default manipulators
      if (!c) {
        switch(m) {
-         case open : c = '('; break;
-         case close : c = ')'; break;
-         case delimiter : c = ' '; break;
+         case detail::format_info::open : c = '('; break;
+         case detail::format_info::close : c = ')'; break;
+         case detail::format_info::delimiter : c = ' '; break;
        }
      }
      return c;
@@ -109,9 +109,9 @@ public:
      // parentheses and space are the default manipulators
      if (!c) {
        switch(m) {
-         case open :  c = i.widen('('); break;
-         case close : c = i.widen(')'); break;
-         case delimiter : c = i.widen(' '); break;
+         case detail::format_info::open :  c = i.widen('('); break;
+         case detail::format_info::close : c = i.widen(')'); break;
+         case detail::format_info::delimiter : c = i.widen(' '); break;
        }
      }
      return c;
