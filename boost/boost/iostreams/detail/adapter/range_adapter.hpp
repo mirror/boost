@@ -120,7 +120,7 @@ struct range_adapter_impl<random_access_traversal_tag> {
         ( Iter& cur, Iter& last, typename iterator_value<Iter>::type* s,
           std::streamsize n )
     {
-        n = std::min(static_cast<std::streamsize>(last - cur), n);
+        n = (std::min)(static_cast<std::streamsize>(last - cur), n);
         std::copy(cur, cur + n, s);
         cur += n;
         return n;
@@ -132,7 +132,7 @@ struct range_adapter_impl<random_access_traversal_tag> {
           const typename iterator_value<Iter>::type* s, std::streamsize n )
     {
         std::streamsize count =
-            std::min(static_cast<std::streamsize>(last - cur), n);
+            (std::min)(static_cast<std::streamsize>(last - cur), n);
         std::copy(s, s + count, cur);
         cur += count;
         if (count < n) throw write_area_exhausted();

@@ -97,7 +97,7 @@ std::streamsize random_access_container_adapter<Container, Mode>::read
     using namespace std;
     streamsize avail = 
         static_cast<streamsize>(cnt().size() - pimpl_->gptr());
-    streamsize result = std::min(n, avail);
+    streamsize result = (std::min)(n, avail);
     copy( cnt().begin() + pimpl_->gptr(), // Loop might be safer.
           cnt().begin() + pimpl_->gptr() + result, 
           s ); 
@@ -113,7 +113,7 @@ void random_access_container_adapter<Container, Mode>::write
     using namespace std;
     streamsize capacity = 
         static_cast<streamoff>(cnt().size() - pimpl_->pptr());
-    streamsize amt = std::min(n, capacity);
+    streamsize amt = (std::min)(n, capacity);
     copy(s, s + amt, cnt().begin() + pimpl_->pptr()); // Loop might be safer.
     pimpl_->pptr() += amt;
     if (amt < n) {

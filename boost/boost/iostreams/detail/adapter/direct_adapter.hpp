@@ -191,7 +191,7 @@ inline std::streamsize direct_adapter<Direct>::read
     pointers& get = ptrs_.first();
     streamsize avail = 
         static_cast<streamsize>(get.end - get.ptr);
-    streamsize result = std::min(n, avail);
+    streamsize result = (std::min)(n, avail);
     std::copy(get.ptr, get.ptr + result, s);
     get.ptr += result;
     return result;
@@ -205,7 +205,7 @@ inline void direct_adapter<Direct>::write
     pointers& put = ptrs_.second();
     streamsize capacity = 
         static_cast<streamsize>(put.end - put.ptr);
-    streamsize amt = std::min(n, capacity);
+    streamsize amt = (std::min)(n, capacity);
     std::copy(s, s + amt, put.ptr);
     put.ptr += amt;
 }
