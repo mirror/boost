@@ -87,10 +87,10 @@
 state machine operation are translated to exception events.</p>
 <p>For an ExceptionTranslator object <code>et</code>, a parameterless function 
 object <code>a</code> of arbitrary type returning <code>
-<a href="#Enum result">result</a></code>, a function object <code>eh</code> of 
+<a href="#Enum result">result</a></code> and a function object <code>eh</code> of 
 arbitrary type taking a <code>const <a href="#Class event_base">event_base</a> 
-&amp;</code> parameter and returning <code>bool</code> and a <code>result</code> 
-value <code>hsr</code> the following expression must be well-formed and have 
+&amp;</code> parameter and returning <code>
+<a href="#Enum result">result</a></code> the following expression must be well-formed and have 
 the indicated results:</p>
 <table border="3" width="100%" id="AutoNumber1" cellpadding="2">
   <tr>
@@ -99,18 +99,16 @@ the indicated results:</p>
     <td width="1129"><b>Effects/Result</b></td>
   </tr>
   <tr>
-    <td width="299"><code>et( a, eh, hsr );</code></td>
+    <td width="299"><code>et( a, eh );</code></td>
     <td width="101"><code>result</code></td>
     <td width="1129">
     <ol>
       <li>Attempts to execute <code>return a();</code></li>
 		<li>If <code>a()</code> propagates an exception, the exception is caught</li>
-      <li>Inside the catch block, translates the exception to a suitable <code>
-      <a href="#Class template event">event&lt;&gt;</a></code> subtype and 
-      constructs an object of the event <b>on the stack</b></li>
-      <li>Passes the <code>event&lt;&gt;</code> subtype object to <code>eh</code></li>
-      <li>Rethrows the original exception if <code>eh</code> returns <code>
-      false</code>, returns <code>hsr</code> otherwise</li>
+      <li>Inside the catch block calls <code>eh</code>, passing a suitable 
+		stack-allocated <code>
+      <a href="#Class template event">event&lt;&gt;</a></code> subtype object</li>
+      <li>Returns the result returned by <code>eh</code></li>
     </ol>
     </td>
   </tr>
@@ -1049,8 +1047,7 @@ namespace fsm
       template&lt; class Action, class ExceptionEventHandler &gt;
       fsm::result operator()(
         Action action,
-        ExceptionEventHandler eventHandler,
-        result handlerSuccessResult )
+        ExceptionEventHandler eventHandler )
       {
         try
         {
@@ -1058,12 +1055,7 @@ namespace fsm
         }
         catch( ... )
         {
-          if ( !eventHandler( ExceptionEvent() ) )
-          {
-            throw;
-          }
-
-          return handlerSuccessResult;
+          return eventHandler( ExceptionEvent() );
         }
       }
   };
@@ -1084,7 +1076,7 @@ namespace fsm
     public:
       template&lt; class Action, class ExceptionEventHandler &gt;
       fsm::result operator()(
-        Action action, ExceptionEventHandler, result )
+        Action action, ExceptionEventHandler )
       {
         return action();
       }
@@ -2109,7 +2101,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->16 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40411" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->19 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40417" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
