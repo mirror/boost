@@ -159,8 +159,8 @@ int utf8_codecvt_facet_wchar_t::do_length(
     const std::mbstate_t &,
     const char * from,
     const char * from_end, 
-    size_t max_limit
-) const throw()
+    std::size_t max_limit
+) const
 { 
     // RG - this code is confusing!  I need a better way to express it.
     // and test cases.
@@ -172,7 +172,7 @@ int utf8_codecvt_facet_wchar_t::do_length(
     // 3) from_next points to the octet 'last_octet_count' before the
     // last measured character.  
     int last_octet_count=0;
-    size_t char_count = 0;
+    std::size_t char_count = 0;
     const char* from_next = from;
     // Use "<" because the buffer may represent incomplete characters
     while (from_next+last_octet_count <= from_end && char_count <= max_limit) {
@@ -201,7 +201,7 @@ unsigned int utf8_codecvt_facet_wchar_t::get_octet_count(
 }}}
 
 namespace {
-template<size_t s>
+template<std::size_t s>
 int get_cont_octet_out_count_impl(wchar_t word){
     if (word < 0x80) {
         return 0;
@@ -312,7 +312,7 @@ int utf8_codecvt_facet_char::do_length(
     const std::mbstate_t & initial_state,
     const char * from_next,
     const char * from_end, 
-    size_t max_limit
+    std::size_t max_limit
 ) const
 {
     int total_length = 0;
@@ -332,7 +332,7 @@ int utf8_codecvt_facet_char::do_length(
             break;
 
         char carray[MB_LENGTH_MAX];
-        size_t count = wctomb(carray, w);
+        std::size_t count = wctomb(carray, w);
         if(count > max_limit)
             break;
 
