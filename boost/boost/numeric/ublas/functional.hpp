@@ -567,7 +567,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
         typedef typename type_traits<T>::real_type real_type;
-        typedef difference_type result_type;
+        typedef size_type result_type;
     };
 
     template<class T>
@@ -582,9 +582,8 @@ namespace boost { namespace numeric { namespace ublas {
         template<class E>
         BOOST_UBLAS_INLINE
         result_type operator () (const vector_expression<E> &e) const {
-            // Here we'd better guarantee a valid return value to achieve BLAS compatibility
-            // result_type i_norm_inf (-1);
-            result_type i_norm_inf (e ().size () == 0 ? -1 : 0);
+            // ISSUE For CBLAS compatibility return 0 index in empty case
+            result_type i_norm_inf (0);
             real_type t = real_type ();
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
@@ -600,9 +599,8 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (difference_type size, I it) const {
-            // Here we'd better guarantee a valid return value to achieve BLAS compatibility
-            // result_type i_norm_inf (-1);
-            result_type i_norm_inf (size == 0 ? -1 : 0);
+            // ISSUE For CBLAS compatibility return 0 index in empty case
+            result_type i_norm_inf (0);
             real_type t = real_type ();
             while (-- size >= 0) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
@@ -618,9 +616,8 @@ namespace boost { namespace numeric { namespace ublas {
         template<class I>
         BOOST_UBLAS_INLINE
         result_type operator () (I it, const I &it_end) const {
-            // Here we'd better guarantee a valid return value to achieve BLAS compatibility
-            // result_type i_norm_inf (-1);
-            result_type i_norm_inf (it ().size () == 0 ? -1 : 0);
+            // ISSUE For CBLAS compatibility return 0 index in empty case
+            result_type i_norm_inf (0);
             real_type t = real_type ();
             while (it != it_end) {
                 real_type u (type_traits<value_type>::norm_inf (*it));
