@@ -21,14 +21,18 @@
 // Template metaprogramming can be used for implementing similar
 // delays. Unfortunately template instantiation consumes memory,
 // therefore compilers usually fail to fully compile long template
-// based delays, because they run out of memory. This macro takes
-// only small (O(N)) amount of memory to preprocess.
+// based delays, because they run out of memory.
+//
+// On many compilers (e.g. g++, MSVC++), this macro takes only a
+// small amount of memory to preprocess. On some compilers (e.g.
+// MWCW), however, this macro seems to consume huge amounts of
+// memory.
 
 #ifndef DELAY_MAX
 #define DELAY_MAX 16
 #endif
 
-#define DELAY(N) BOOST_PP_IF(1,BOOST_PP_EMPTY,BOOST_PP_WHILE(DELAY_C,BOOST_PP_CAT(DELAY_F,N),BOOST_PP_DEC(N)))()
+#define DELAY(N) BOOST_PP_TUPLE_ELEM(2,0,(BOOST_PP_EMPTY,BOOST_PP_WHILE(DELAY_C,BOOST_PP_CAT(DELAY_F,N),BOOST_PP_DEC(N))))()
 #define DELAY_C(D,N) N
 #define DELAY_F0(D,N) BOOST_PP_IF(1,BOOST_PP_DEC(N),BOOST_PP_WHILE##D(DELAY_C,DELAY_F##N,BOOST_PP_DEC(N)))
 #define DELAY_F1(D,N) BOOST_PP_IF(1,BOOST_PP_DEC(N),BOOST_PP_WHILE##D(DELAY_C,DELAY_F##N,BOOST_PP_DEC(N)))
