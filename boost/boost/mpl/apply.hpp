@@ -188,7 +188,7 @@ struct apply0< arg<-1> >
 template<>
 struct apply0<int>
 {
-    typedef apply0 type;
+    typedef int type;
 };
 #endif
 
@@ -261,7 +261,7 @@ struct BOOST_PP_CAT(apply,i)
 template<>
 struct BOOST_PP_CAT(apply,i)<AUX_APPLY_N_SPEC_PARAMS(i, int)>
 {
-    typedef BOOST_PP_CAT(apply,i) type;
+    typedef int type;
 };
 #endif
 

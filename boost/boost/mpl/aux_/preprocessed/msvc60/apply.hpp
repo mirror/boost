@@ -22,7 +22,7 @@ struct apply0< arg<-1> >
 template<>
 struct apply0<int>
 {
-    typedef apply0 type;
+    typedef int type;
 };
 
 namespace aux {
@@ -61,7 +61,7 @@ struct apply1
 template<>
 struct apply1< int,int >
 {
-    typedef apply1 type;
+    typedef int type;
 };
 
 template<>
@@ -114,7 +114,7 @@ struct apply2
 template<>
 struct apply2< int,int,int >
 {
-    typedef apply2 type;
+    typedef int type;
 };
 
 template<>
@@ -167,7 +167,7 @@ struct apply3
 template<>
 struct apply3< int,int,int,int >
 {
-    typedef apply3 type;
+    typedef int type;
 };
 
 template<>
@@ -226,7 +226,7 @@ struct apply4
 template<>
 struct apply4< int,int,int,int,int >
 {
-    typedef apply4 type;
+    typedef int type;
 };
 
 template<>
@@ -288,7 +288,7 @@ struct apply5
 template<>
 struct apply5< int,int,int,int,int,int >
 {
-    typedef apply5 type;
+    typedef int type;
 };
 
 template<>
