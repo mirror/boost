@@ -345,7 +345,7 @@ namespace boost {
     typename std::iterator_traits<RAIter>::value_type,
     typename std::iterator_traits<RAIter>::reference,
     ID >
-  create_random_access_iter_pa(RAIter iter, ID id) {
+  make_iterator_property_map(RAIter iter, ID id) {
     typedef random_access_iterator_property_map<
     RAIter,
     typename std::iterator_traits<RAIter>::value_type,
@@ -353,9 +353,16 @@ namespace boost {
     ID >    PA;
     return PA(iter, id);
   }
-#else
-  // add VC++ workarounds...
 #endif
+  template <class RAIter, class Value, class ID>
+  inline random_access_iterator_property_map<
+    RAIter, Value, Value&, ID>
+  make_iterator_property_map(RAIter iter, ID id, Value) {
+    typedef random_access_iterator_property_map<
+      RAIter, Value, Value&, ID> PMap;
+    return PMap(iter, id);
+  }
+
 
   //=========================================================================
   // A property map that applies the identity function

@@ -22,7 +22,7 @@
 
 <H2><A NAME="sec:random-access-iterator-property-map"></A>
 <PRE>
-random_access_iterator_property_map&lt;Iterator,T,R,OffsetPMap&gt;
+random_access_iterator_property_map&lt;<a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>, T, R, OffsetMap&gt;
 </PRE>
 </H2>
 
@@ -30,7 +30,7 @@ random_access_iterator_property_map&lt;Iterator,T,R,OffsetPMap&gt;
 This property map is an adaptor that converts any random access
 iterator into a <a
 href="./LvaluePropertyMap.html">LvaluePropertyMap</a>.
-The <tt>OffsetPMap</tt> type is responsible for converting
+The <tt>OffsetMap</tt> type is responsible for converting
 key objects to integers that can be used as offsets with the
 random access iterator.
 
@@ -138,7 +138,7 @@ int main(int, char*[])
 </TR>
 
 <TR>
-<TD><TT>OffsetPMap</TT></TD> <TD>Must be a model of <a
+<TD><TT>OffsetMap</TT></TD> <TD>Must be a model of <a
 href="./ReadablePropertyMap.html">ReadablePropertyMap</a>
 and the value type must be convertible to the difference type of the
 iterator.</TD> <TD><TT>boost::identity_property_map</TT></TD>
@@ -154,45 +154,63 @@ In addition the methods and functions required by <a
 href="./LvaluePropertyMap.html">LvaluePropertyMap</a>, this
 class has the following members.
 
-<P>
- 
-<table border>
-<tr>
-<th>Member</th><th>Description</th>
-</tr>
+<hr>
 
-<tr>
-<td><tt>
-value_type
-</tt></td>
-<td>This will be the same type as
+<pre>
+property_traits&lt;random_access_iterator_property_map&gt;::value_type
+</pre>
+This is the same type as
 <TT>std::iterator_traits&lt;Iterator&gt;::value_type</TT>.
-</td>
-</tr>
 
-<tr>
-<td><tt>
+<hr>
+
+<pre>
 random_access_iterator_property_map(Iterator i)
-</tt></td>
-<td>
+</pre>
 Constructor.
-</td>
-</tr>
 
+<hr>
 
-<tr>
-<td><tt>
+<pre>
 reference operator[](difference_type v) const
-</tt></td>
-<td>
+</pre>
 The operator bracket for property access. The <TT>reference</TT> and
 <TT>difference_type</TT> types are from  
 <TT>std::iterator_traits&lt;Iterator&gt;</TT>.
-</td>
-</tr>
 
-</table>
+<hr>
 
+<h3>Non-Member functions</h3>
+
+<hr>
+
+<pre>
+  template &lt;class RAIter, class OffsetMap&gt;
+  random_access_iterator_property_map&lt;RAIter,
+    typename std::iterator_traits&lt;RAIter&gt;::value_type,
+    typename std::iterator_traits&lt;RAIter&gt;::reference,
+    OffsetMap&gt;
+  make_iterator_property_map(RAIter iter, OffsetMap omap)
+</pre>
+A function for conveniently creating an iterator map.
+
+
+<hr>
+
+<pre>
+  template &lt;class RAIter, class OffsetMap, class ValueType&gt;
+  random_access_iterator_property_map&lt;RAIter,
+    typename std::iterator_traits&lt;RAIter&gt;::value_type,
+    typename std::iterator_traits&lt;RAIter&gt;::reference,
+    OffsetMap&gt;
+  make_iterator_property_map(RAIter iter, OffsetMap omap, ValueType dummy_arg)
+</pre>
+Use this function instead of the 2-argument version if
+your compiler does not support partial specialization
+(like Visual C++).
+
+
+<hr>
 
 
 <br>
