@@ -28,7 +28,7 @@ template<class T> struct generate_error;
 }   
 // -- placeholders --------------------------------------------
 
-template <int I> class placeholder;
+template <int I> struct placeholder;
 
 // function_adaptors
 template <class Func> 
