@@ -57,7 +57,8 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
 
 		  // If this is not the Boost Software License (license 0), and the author hasn't given 
 		  // blanket permission, note this for the report.
-		  if (m_bsl_authors.find(name) == m_bsl_authors.end()) {
+		  if (has_non_bsl_license
+		      && m_bsl_authors.find(name) == m_bsl_authors.end()) {
 		    ++nonbsl_author_count;
 		    m_authors_for_bsl_migration.insert(name);
 		  }
