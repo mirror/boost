@@ -21,6 +21,7 @@
 #include "boost/mpl/apply.hpp"
 #include "boost/mpl/bool_c.hpp"
 #include "boost/mpl/lambda.hpp"
+#include "boost/mpl/identity.hpp"
 #include "boost/mpl/aux_/unwrap.hpp"
 
 #include "boost/type_traits/is_same.hpp"
@@ -72,7 +73,7 @@ struct for_each_impl<false>
         // dwa 2002/9/10 -- make sure not to invoke undefined behavior
         // when we pass arg.
         value_initialized<arg> x;
-        aux::unwrap(f, 0)(get(x));
+        aux::unwrap(f, 0)(boost::get(x));
         
         typedef typename Iterator::next iter;
         for_each_impl<boost::is_same<iter,LastIterator>::value>::execute(
@@ -98,6 +99,16 @@ void for_each(F f, Sequence* = 0, TransformOp* = 0)
 
     aux::for_each_impl< boost::is_same<first,last>::value >::execute(
         (first*)0, (last*)0, (transform_op*)0, f);
+}
+
+template<
+      typename Sequence
+    , typename F
+    >
+inline
+void for_each(F f, Sequence* = 0)
+{
+    for_each<Sequence, identity<> >(f);
 }
 
 } // namespace mpl
