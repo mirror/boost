@@ -354,6 +354,9 @@ namespace detail
 
         void constraints()
         {
+            boost::function_requires< SinglePassIteratorConcept<Iterator> >();
+            boost::function_requires< SinglePassIteratorConcept<ConstIterator> >();
+
             BOOST_STATIC_ASSERT(
                 (boost::is_same< difference_type, const_difference_type>::value)
             );
