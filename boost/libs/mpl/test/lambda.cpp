@@ -32,7 +32,7 @@ struct my
 
 MPL_TEST_CASE()
 {
-    // !(x == char) && !(x == double) && x convertible to int || sizeof(x) > 8
+    // !(x == char) && !(x == double) || sizeof(x) > 8
     typedef lambda<
         or_<
               and_<
