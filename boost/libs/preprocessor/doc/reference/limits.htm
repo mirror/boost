@@ -24,11 +24,12 @@ library.</P>
 <P>This is also the limit of the repetition primitives (<a href="enum.htm#BOOST_PP_ENUM">BOOST_PP_ENUM</a> family
 and <a href="repeat.htm#BOOST_PP_REPEAT">BOOST_PP_REPEAT</a> family).</P>
 
-<P>NOTES:</P>
+<H3>Note</H3>
 <UL>
   <LI>Only decimal integer literals in the range [0,<a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>]
       are supported.
-  <LI>All arithmetic operations (ADD,SUB,MUL,DIV) use saturation arithmetic.
+  <LI>All arithmetic operations (<a href="arithmetic_add.htm#BOOST_PP_ADD">BOOST_PP_ADD</a>(),<a href="arithmetic_sub.htm#BOOST_PP_SUB">BOOST_PP_SUB</a>(),<a href="arithmetic_mul.htm#BOOST_PP_MUL">BOOST_PP_MUL</a>(),
+      <a href="arithmetic_div.htm#BOOST_PP_DIV">BOOST_PP_DIV</a>(),...) use saturation arithmetic.
   <LI>The maximum repetition count supported by the library may not be reached
       due to compiler limitations.
 </UL>

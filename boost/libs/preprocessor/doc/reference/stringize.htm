@@ -9,32 +9,12 @@
 <hr>
 
 <H2><a name="BOOST_PP_STRINGIZE">#define BOOST_PP_STRINGIZE</a>(X)</H2>
- <P>Delays the stringization of X.</P>
+ <P>Stringizes X after it is macro expanded.</P>
 
-<P>For example,</P>
-
-<PRE>
-  #define NOTE(STR)\
-    message(__FILE__ "(" <a href="stringize.htm#BOOST_PP_STRINGIZE">BOOST_PP_STRINGIZE</a>(__LINE__) ") : " STR)
-
-  // ...
-
-  #pragma NOTE("TBD!")
-</PRE>
-
-<P>expands to:</P>
-
-<PRE>
-  #pragma message("examples.cpp" "(" "20" ") : " "TBD!")
-</PRE>
-
-<P>The use of <a href="stringize.htm#BOOST_PP_STRINGIZE">BOOST_PP_STRINGIZE</a>() above lets the PP expand the __LINE__
-before stringizing it. If # would be used directly, the code would
-expand to:</P>
-
-<PRE>
-  #pragma message("examples.cpp" "(" "__LINE__" ") : " "TBD!")
-</PRE>
+<H3>Example</H3>
+<UL>
+  <LI><a href="../../example/note.c">note.c</a>
+</UL>
 
 <hr>
 

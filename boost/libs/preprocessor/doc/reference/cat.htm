@@ -9,50 +9,12 @@
 <hr>
 
 <H2><a name="BOOST_PP_CAT">#define BOOST_PP_CAT</a>(X,Y)</H2>
- <P>Delays the catenation of X and Y.</P>
+ <P>Catenates X and Y after they are macro expanded.</P>
 
-<P>For example,</P>
-
-<PRE>
-  #define STATIC_ASSERT(EXPR)\
-    enum\
-    { <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(static_check_,__LINE__) = (EXPR) ? 1 : -1\
-    };\
-    typedef char\
-      <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(static_assert_,__LINE__)\
-      [ <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(static_check_,__LINE__)\
-      ]
-
-  // ...
-
-  STATIC_ASSERT(sizeof(int) <= sizeof(long));
-</PRE>
-
-<P>expands to:</P>
-
-<PRE>
-  enum
-  { static_check_152 = (sizeof(int) <= sizeof(long)) ? 1 : -1
-  };
-  typedef char
-    static_assert_152
-    [ static_check_152
-    ];
-</PRE>
-
-<P>Using <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>() above lets the PP expand the __LINE__. If the above
-code would use the ## operator directly then __LINE__ would not be expanded and
-the above would expand to:</P>
-
-<PRE>
-  enum
-  { static_check___LINE__ = (sizeof(int) <= sizeof(long)) ? 1 : -1
-  };
-  typedef char
-    static_assert___LINE__
-    [ static_check___LINE__
-    ];
-</PRE>
+<H3>Example</H3>
+<UL>
+  <LI><a href="../../example/static_assert.c">static_assert.c</a>
+</UL>
 
 <hr>
 

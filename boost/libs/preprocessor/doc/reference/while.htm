@@ -33,60 +33,22 @@
       D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion
       depth as the first parameter. This technique is necessary to avoid
       recursively expanding the same macro again, which is not permitted by the
-      C++ preprocessor.
+      C++ preprocessor. Note that the value of the D parameter may exceed
+      <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>.
 </UL>
 
-<P>NOTE: The value of the D parameter may exceed <a href="limits.htm#BOOST_PP_LIMIT_MAG">BOOST_PP_LIMIT_MAG</a>.</P>
-
-<H3>Caveat</H3>
+<H3>Note</H3>
 
 <P>Using <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>() is a bit tricky. This is due to the C++ preprocessor
 limitations. It is recommended to take a look at the implementations of the
-various PREPROCESSOR library primitives such as <a href="arithmetic_add.htm#BOOST_PP_ADD">BOOST_PP_ADD</a>() for additional
-examples.</P>
+various PREPROCESSOR library primitives such as <a href="arithmetic_add.htm#BOOST_PP_ADD">BOOST_PP_ADD</a>() for
+additional examples.</P>
 
 <H3>Example</H3>
 <UL>
   <LI><a href="../../example/count_down.c">count_down.c</a>
+  <LI><a hreF="../../example/linear_fib.c">linear_fib.c</a>
 </UL>
-
-<P>For a more complex example, let's take a look at an implementation of
-<a href="arithmetic_mul.htm#BOOST_PP_MUL">BOOST_PP_MUL</a>().</P>
-
-<PRE>
-  #define <a href="arithmetic_mul.htm#BOOST_PP_MUL">BOOST_PP_MUL</a>(X,Y) BOOST_PP_MUL_D(0,X,Y)
-  // Since the macro is implemented using WHILE, the actual implementation
-  // takes a depth as a parameter so that it can be called inside a WHILE.
-  // The above easy-to-use version simply uses 0 as the depth and can not be
-  // called inside a WHILE.
-
-  #define BOOST_PP_MUL_D(D,X,Y)\
-    <a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(3,0,<a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>##D(BOOST_PP_MUL_C,BOOST_PP_MUL_F,(0,X,Y)))
-  //                    ^^^               ^^^             ^^             ^^ ^^^^^^^
-  //                    #1                #2              #3             #3 #1
-  //
-  // #1) The state is a 3-tuple. After the iteration is finished, the first
-  // element of the tuple is the result.
-  //
-  // #2) The WHILE primitive is "invoked" directly. <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>(D,...)
-  // can't be used because it would not be expanded by the C++ preprocessor.
-  //
-  // #3) ???_C is the condition and ???_F is the iteration macro.
-
-  #define BOOST_PP_MUL_C(D,P)\
-    <a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(3,2,P)
-  // Iteration is finished when the counter reaches 0.
-
-  #define BOOST_PP_MUL_F(D,P)\
-    ( BOOST_PP_ADD_D(D,<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(3,0,P),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(3,1,P))\
-    , <a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(3,1,P)\
-    , <a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(3,2,P))\
-    )
-  // ( The result is increased by the multiplier.
-  // , The multiplier is retained without change.
-  // , The counter is decreased.
-  // )
-</PRE>
 
 <H3>Implementation rationale</H3>
 <UL>

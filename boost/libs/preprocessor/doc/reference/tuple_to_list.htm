@@ -11,9 +11,23 @@
 <H2><a name="BOOST_PP_TUPLE_TO_LIST">#define BOOST_PP_TUPLE_TO_LIST</a>(N,T)</H2>
  <P>Converts a tuple to a list.</P>
 
+<P>For example,</P>
+
+<PRE>
+  <a href="tuple_to_list.htm#BOOST_PP_TUPLE_TO_LIST">BOOST_PP_TUPLE_TO_LIST</a>(3,(A,B,C))
+</PRE>
+
+<P>expands to the same as</P>
+
+<PRE>
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(A,
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(B,
+  <a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>(C,
+  <a href="list_adt.htm#BOOST_PP_LIST_NIL">BOOST_PP_LIST_NIL</a>)))
+</PRE>
+
 <H3>See</H3>
 <UL>
-  <LI><a href="list_adt.htm#BOOST_PP_LIST_CONS">BOOST_PP_LIST_CONS</a>()
   <LI><a href="limits.htm#BOOST_PP_LIMIT_TUPLE">BOOST_PP_LIMIT_TUPLE</a>
 </UL>
 

@@ -15,8 +15,8 @@
   <li><a href="#Techniques">Preprocessor Metaprogramming Techniques</a> 
     <ul>
       <li><a href="#Local Macro">Use a Local Macro to avoid small scale repetition</a></li>
-      <li><a href="#UNUSED">Use BOOST_PP_EMPTY() as an unused parameter in Local Macro 
-        instantiations</a></li>
+      <li><a href="#UNUSED">Use BOOST_PP_EMPTY as an unused parameter in Local 
+        Macro instantiations</a></li>
       <li><a href="#CAT">Use BOOST_PP_CAT instead of ## when necessary</a></li>
       <li><a href="#STRINGIZE">Use BOOST_PP_STRINGIZE instead of # whenever necessary</a></li>
       <li><a href="#ENUM_PARAMS">Avoid O(N) repetition on lists in general</a></li>
@@ -154,21 +154,21 @@ the line continuation operator when they are aligned.</P>
   metaprogramming.</P>
 <HR>
 <P><B><a name="UNUSED"></a><a href="examples_preprocessed.htm#UNUSED">EXAMPLE</a>:</B> 
-  Use BOOST_PP_EMPTY() as an unused parameter in Local Macro instantiations</P>
+  Use BOOST_PP_EMPTY as an unused parameter in Local Macro instantiations</P>
 
 <blockquote> 
   <pre>#define BOOST_PP_DEF(CV)  \
   template&lt;class base&gt;    \
-  CV typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type&amp;\
+  CV() typename implement_subscript_using_begin_subscript&lt;base&gt;::value_type&amp;\
     implement_subscript_using_begin_subscript&lt;base&gt;::operator[]\
     ( index_type          \
         i                 \
-    ) CV                  \
+    ) CV()                \
 { return base::begin()[i];\
 }
 
-BOOST_PP_DEF(BOOST_PP_EMPTY())
-BOOST_PP_DEF(const)
+BOOST_PP_DEF(BOOST_PP_EMPTY)
+BOOST_PP_DEF(const BOOST_PP_EMPTY)
 #undef BOOST_PP_DEF
 </pre>
 </blockquote>
