@@ -492,9 +492,7 @@ test_zero_args()
 
   // Test construction from 0 and comparison to 0
   func_void_type v9(0);
-#if !defined(BOOST_MSVC) || BOOST_MSVC > 1300 || defined(BOOST_STRICT_CONFIG)
   BOOST_TEST(v9 == 0);
-#endif
 # if !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540 || defined(BOOST_STRICT_CONFIG)
   BOOST_TEST(0 == v9);
 #else
