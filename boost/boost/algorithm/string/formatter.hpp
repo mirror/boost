@@ -72,7 +72,7 @@ namespace boost {
         template<typename CollectionT>
         inline detail::empty_formatF< 
             BOOST_STRING_TYPENAME value_type_of<CollectionT>::type>
-        empty_formatter(const CollectionT& Input)
+        empty_formatter(const CollectionT&)
         {
             return detail::empty_formatF<
                 BOOST_STRING_TYPENAME value_type_of<CollectionT>::type>();

@@ -174,7 +174,7 @@ namespace boost {
                 typename FormatResultT >
             inline void find_format_impl2( 
                 InputT& Input,
-                FinderT Finder,
+                FinderT,
                 FormatterT Formatter,
                 const FindResultT& FindResult,
                 const FormatResultT& FormatResult)
