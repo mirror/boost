@@ -78,7 +78,10 @@ class pool_allocator
     static void construct(const pointer ptr, const value_type & t)
     { new (ptr) T(t); }
     static void destroy(const pointer ptr)
-    { ptr->~T(); }
+    {
+      ptr->~T();
+      (void) ptr; // avoid unused variable warning
+    }
 
     bool operator==(const pool_allocator &) const
     { return true; }
@@ -94,7 +97,7 @@ class pool_allocator
         throw std::bad_alloc();
       return ret;
     }
-    static pointer allocate(const size_type n, const pointer)
+    static pointer allocate(const size_type n, const void * const)
     { return allocate(n); }
     static void deallocate(const pointer ptr, const size_type n)
     {
@@ -158,7 +161,10 @@ class fast_pool_allocator
     void construct(const pointer ptr, const value_type & t)
     { new (ptr) T(t); }
     void destroy(const pointer ptr)
-    { ptr->~T(); }
+    {
+      ptr->~T();
+      (void) ptr; // avoid unused variable warning
+    }
 
     bool operator==(const fast_pool_allocator &) const
     { return true; }
@@ -178,7 +184,7 @@ class fast_pool_allocator
         throw std::bad_alloc();
       return ret;
     }
-    static pointer allocate(const size_type n, const pointer)
+    static pointer allocate(const size_type n, const void * const)
     { return allocate(n); }
     static pointer allocate()
     {
