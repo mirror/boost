@@ -6,9 +6,14 @@
 #ifndef TEST_INCLUDED
 #define TEST_INCLUDED
 
+#include <boost/config.hpp>
 #include <exception>
 #include <iostream>
-#include <strstream> // for out-of-the-box g++
+#ifdef BOOST_NO_STRINGSTREAM
+#include <strstream> // for out-of-the-box g++ pre-2.95.3
+#else
+#include <sstream>
+#endif
 #include <string>
 
 namespace test // test tuple comprises name and nullary function (object)
@@ -245,13 +250,19 @@ namespace test // tester is the driver class for a sequence of tests
                 {
                     unsigned long allocated   = allocations::instance().allocated();
                     unsigned long deallocated = allocations::instance().deallocated();
+#ifdef BOOST_NO_STRINGSTREAM
                     ostrstream report;
+#else
+                    ostringstream report;
+#endif
                     report << "new/delete ("
                            << allocated << " allocated, "
                            << deallocated << " deallocated)"
                            << ends;
-                    const char * text = report.str();
+                    const string text = report.str();
+#ifdef BOOST_NO_STRINGSTREAM
                     report.freeze(false);
+#endif
                     throw failure(text);
                 }
 
