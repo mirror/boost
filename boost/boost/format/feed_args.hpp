@@ -34,8 +34,7 @@ namespace  {
 
   template<class Tr, class Ch> inline
   void empty_buf(BOOST_IO_STD basic_ostringstream<Ch,Tr> & os) { 
-    static const std::basic_string<Ch, Tr> emptyStr;
-    os.str(emptyStr); 
+    os.str( std::basic_string<Ch, Tr>() );
   }
 
   template<class Ch, class Tr>

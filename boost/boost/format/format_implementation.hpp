@@ -33,9 +33,8 @@ basic_format<Ch, Tr> ::basic_format(const Ch* str)
       items_(), oss_(), exceptions_(io::all_error_bits)
 {
     state0_.set_by_stream(oss_);
-    string_t emptyStr;
-    if( !str) str = emptyStr.c_str();
-    parse( str );
+    if( str)
+      parse( str );
 }
 
 #ifndef BOOST_NO_STD_LOCALE
@@ -46,9 +45,7 @@ basic_format<Ch, Tr> ::basic_format(const Ch* str, const std::locale & loc)
 {
     oss_.imbue( loc );
     state0_.set_by_stream(oss_);
-    string_t emptyStr;
-    if( !str) str = emptyStr.c_str();
-    parse( str );
+    if(str) parse( str );
 }
 
 template< class Ch, class Tr>
