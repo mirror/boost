@@ -71,8 +71,8 @@ public:
     return (_rng1() << s1) ^ (_rng2() << s2);
   }
 
-  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { BOOST_USING_STD_MIN(); return min BOOST_PREVENT_MACRO_SUBSTITUTION((_rng1.min)(), (_rng2.min)()); }
-  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { BOOST_USING_STD_MAX(); return max BOOST_PREVENT_MACRO_SUBSTITUTION((_rng1.min)(), (_rng2.max)()); }
+  result_type min BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::min BOOST_PREVENT_MACRO_SUBSTITUTION((_rng1.min)(), (_rng2.min)()); }
+  result_type max BOOST_PREVENT_MACRO_SUBSTITUTION () const { return std::max BOOST_PREVENT_MACRO_SUBSTITUTION((_rng1.min)(), (_rng2.max)()); }
   static bool validation(result_type x) { return val == x; }
 
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
