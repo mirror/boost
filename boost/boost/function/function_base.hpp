@@ -34,6 +34,8 @@
 namespace boost {
   namespace detail {
     namespace function {
+      template<bool> struct truth {};
+
       /*
        * The IF implementation is temporary code. When a Boost metaprogramming
        * library is introduced, Boost.Function will use it instead. 
@@ -156,7 +158,7 @@ namespace boost {
       // The trivial manager does nothing but return the same pointer (if we
       // are cloning) or return the null pointer (if we are deleting).
       inline any_pointer trivial_manager(any_pointer f, 
-                                  functor_manager_operation_type op)
+					 functor_manager_operation_type op)
       {
         if (op == clone_functor_tag)
           return f;
@@ -176,7 +178,8 @@ namespace boost {
 
         // For function pointers, the manager is trivial
         static inline any_pointer
-        manager(any_pointer function_ptr, functor_manager_operation_type op,
+        manager(any_pointer function_ptr, 
+		functor_manager_operation_type op,
                 function_ptr_tag)
         {
           if (op == clone_functor_tag)
@@ -333,92 +336,20 @@ namespace boost {
 
   namespace detail {
     namespace function {
-      /**
-       * Determine if the given target is empty.
-       */
+      // The result is not a Boost.Function object, so we assume that this
+      // target is not empty
+      template<typename FunctionObj>
+      inline bool has_empty_target(const FunctionObj&, truth<false>)
+      {
+	return false;
+      }
 
-      // Fallback - assume target is not empty
-      inline bool has_empty_target(...) 
+      // The result is a Boost.Function object, so query whether it is empty
+      // or not
+      template<typename FunctionObj>
+      inline bool has_empty_target(const FunctionObj& f, truth<true>)
       { 
-        return false; 
-      }
-    
-      // If the target is a 'function', query the empty() method
-      inline bool has_empty_target(const function_base* af) 
-      { 
-        return af->empty();
-      }
-
-      // If the target is a 'function', query the empty() method
-      inline bool has_empty_target(const function_base& af) 
-      { 
-        return af.empty();
-      }
-    
-      // A function pointer is empty if it is null
-      template<typename R>
-      inline bool has_empty_target(R (*f)())
-      {
-        return f == 0;
-      }
-    
-      template<typename R, typename T1>
-      inline bool has_empty_target(R (*f)(T1))
-      {
-        return f == 0;
-      }
-    
-      template<typename R, typename T1, typename T2>
-      inline bool has_empty_target(R (*f)(T1, T2))
-      {
-        return f == 0;
-      }
-    
-      template<typename R, typename T1, typename T2, typename T3>
-      inline bool has_empty_target(R (*f)(T1, T2, T3))
-      {
-        return f == 0;
-      }
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4>
-      inline bool has_empty_target(R (*f)(T1, T2, T3, T4))
-      {
-        return f == 0;
-      }
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4, 
-               typename T5>
-      inline bool has_empty_target(R (*f)(T1, T2, T3, T4, T5))
-      {
-        return f == 0;
-      }
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4, 
-               typename T5, typename T6>
-      inline bool has_empty_target(R (*f)(T1, T2, T3, T4, T5, T6))
-      {
-        return f == 0;
-      }
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4, 
-               typename T5, typename T6, typename T7>
-      inline bool has_empty_target(R (*f)(T1, T2, T3, T4, T5, T6, T7))
-      {
-        return f == 0;
-      }
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4, 
-               typename T5, typename T6, typename T7, typename T8>
-      inline bool has_empty_target(R (*f)(T1, T2, T3, T4, T5, T6, T7, T8))
-      {
-        return f == 0;
-      }
-
-      template<typename R, typename T1, typename T2, typename T3, typename T4, 
-               typename T5, typename T6, typename T7, typename T8, typename T9>
-      inline bool has_empty_target(R (*f)(T1, T2, T3, T4, T5, T6, T7, T8, T9))
-      {
-        return f == 0;
+        return f.empty();
       }
     } // end namespace function
   } // end namespace detail
@@ -430,14 +361,18 @@ namespace boost {
     inline void postcall(const function_base*) {}
   };
 
-  // The default function mixin does nothing. The assignment and copy-construction operators
-  // are all defined because MSVC defines broken versions.
-  struct empty_function_mixin {
-    empty_function_mixin() {};
-    empty_function_mixin(const empty_function_mixin&) {};
+  // The default function mixin does nothing. The assignment and
+  // copy-construction operators are all defined because MSVC defines broken
+  // versions.
+  struct empty_function_mixin 
+  {
+    empty_function_mixin() {}
+    empty_function_mixin(const empty_function_mixin&) {}
 
     empty_function_mixin& operator=(const empty_function_mixin&) 
-    {return *this; }
+    {
+      return *this; 
+    }
   };
 }
 
