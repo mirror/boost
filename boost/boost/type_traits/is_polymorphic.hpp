@@ -17,7 +17,7 @@ namespace detail{
 template <class T>
 struct is_polymorphic_imp1
 {
-   typedef remove_cv<T>::type ncvT;
+   typedef typename remove_cv<T>::type ncvT;
    struct d1 : public ncvT
    {
       d1();
@@ -81,6 +81,3 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_polymorphic,T,::boost::detail::is_polymorphic_im
 #include "boost/type_traits/detail/bool_trait_undef.hpp"
 
 #endif
-
-
-
