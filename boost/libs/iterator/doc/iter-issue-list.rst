@@ -717,14 +717,17 @@ with the iterator_adaptor subobject copy constructed from x." The latter is the 
 it does not reach inside the base class for its semantics. So the default constructor shoudl return 
 "An instance of indirect_iterator with a default-constructed iterator_adaptor subobject." 
 
-:Proposed resolution: Change the specification of the default constructor to
+:Proposed resolution: 
 
-  ``indirect_iterator();``
+  Change:
 
-  :Requires: ``Iterator`` must be Default Constructible.
-  :Returns: An instance of ``indirect_iterator`` with 
-     a default-constructed ``m_iterator``.
+     :Returns: An instance of ``indirect_iterator`` with
+        a default constructed base object.
 
+  to:
+
+     :Returns: An instance of ``indirect_iterator`` with
+       a default-constructed ``m_iterator``.
 
 :Rationale: Inheritance from iterator_adaptor has been removed, so we instead
   give the semantics in terms of the (exposition only) member
@@ -1045,6 +1048,69 @@ provide rather than how they're implemented.
           ) iterator_category;
 
 
+  Add a models section after the requirements section with the following contents:
+
+    In addition to the concepts indicated by ``iterator_category``
+    and by ``iterator_traversal<indirect_iterator>::type``, a
+    specialization of ``indirect_iterator`` models the following
+    concepts, Where ``v`` is an object of
+    ``iterator_traits<Iterator>::value_type``:
+
+      * Readable Iterator if ``reference(*v)`` is convertible to
+        ``value_type``.
+
+      * Writable Iterator if ``reference(*v) = t`` is a valid
+        expression (where ``t`` is an object of type
+        ``indirect_iterator::value_type``)
+
+      * Lvalue Iterator if ``reference`` is a reference type.
+
+    ``indirect_iterator<X,V1,C1,R1,D1>`` is interoperable with
+    ``indirect_iterator<Y,V2,C2,R2,D2>`` if and only if ``X`` is
+    interoperable with ``Y``.
+
+
+  Before ``indirect_iterator();`` add:
+
+    In addition to the operations required by the concepts described
+    above, specializations of ``indirect_iterator`` provide the
+    following operations.
+
+  Change:
+
+    :Returns: An instance of ``indirect_iterator`` with
+      the ``iterator_adaptor`` subobject copy constructed from ``x``.
+
+  to:
+
+    :Returns: An instance of ``indirect_iterator`` with
+      ``m_iterator`` copy constructed from ``x``.
+
+
+  At the end of the indirect_iterator operations add:
+
+    ``Iterator const& base() const;``
+
+    :Returns: ``m_iterator``
+
+
+    ``reference operator*() const;``
+
+    :Returns:  ``**m_iterator``
+
+
+    ``indirect_iterator& operator++();``
+
+    :Effects: ``++m_iterator``
+    :Returns: ``*this``
+
+
+    ``indirect_iterator& operator--();``
+
+    :Effects: ``--m_iterator``
+    :Returns: ``*this``
+ 
+
   Change::
 
     class transform_iterator
@@ -1296,7 +1362,50 @@ c++std-lib-12640:
   to find a different way to say it.  If it's the latter we need to
   say so.
 
-:Proposed resolution:   Resolved **Needs Language**
+:Proposed resolution:
+
+  Change:
+
+    The ``value_type`` of the ``Iterator`` template parameter should
+    itself be dereferenceable. The return type of the ``operator*`` for
+    the ``value_type`` must be the same type as the ``Reference`` template
+    parameter. The ``Value`` template parameter will be the ``value_type``
+    for the ``indirect_iterator``, unless ``Value`` is const. If ``Value``
+    is ``const X``, then ``value_type`` will be *non-* ``const X``.  The
+    default for ``Value`` is::
+
+      iterator_traits< iterator_traits<Iterator>::value_type >::value_type
+
+    If the default is used for ``Value``, then there must be a valid
+    specialization of ``iterator_traits`` for the value type of the base
+    iterator.
+
+    The ``Reference`` parameter will be the ``reference`` type of the
+    ``indirect_iterator``. The default is ``Value&``.
+
+    The ``Access`` and ``Traversal`` parameters are passed unchanged to
+    the corresponding parameters of the ``iterator_adaptor`` base
+    class, and  the ``Iterator`` parameter is passed unchanged as the
+    ``Base`` parameter to the ``iterator_adaptor`` base class.
+
+  to:
+
+    The expression ``*v``, where ``v`` is an object of
+    ``iterator_traits<Iterator>::value_type``, shall be valid
+    expression and convertible to ``reference``.  ``Iterator`` shall
+    model the traversal concept indicated by ``iterator_category``.
+    ``Value``, ``Reference``, and ``Difference`` shall be chosen so
+    that ``value_type``, ``reference``, and ``difference_type`` meet
+    the requirements indicated by ``iterator_category``.
+
+   [Note: there are further requirements on the
+   ``iterator_traits<Iterator>::value_type`` if the ``Value``
+   parameter is not ``use_default``, as implied by the algorithm for
+   deducing the default for the ``value_type`` member.]
+
+
+:Rationale: Not included above is the specification of the ``value_type``, ``reference``,
+  etc., members, which is handled by the changes in 9.37x.
 
 
 9.41x Problem with transform_iterator requirements
