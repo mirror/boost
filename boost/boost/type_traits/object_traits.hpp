@@ -380,6 +380,36 @@ template <typename T> struct is_empty
 
 #endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
+template <class Base, class Derived>
+struct is_base_and_derived
+{
+   BOOST_STATIC_CONSTANT(bool, value =
+      (::boost::type_traits::ice_and<
+         ::boost::is_convertible<Derived*,Base*>::value,
+         ::boost::is_class<Derived>::value,
+         ::boost::is_class<Base>::value
+      >::value)
+   );
+};
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+template <class Base, class Derived>
+struct is_base_and_derived<Base&, Derived>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class Base, class Derived>
+struct is_base_and_derived<Base, Derived&>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+template <class Base, class Derived>
+struct is_base_and_derived<Base&, Derived&>
+{
+   BOOST_STATIC_CONSTANT(bool, value = false);
+};
+#endif
+
 } // namespace boost
 
 #endif // BOOST_OBJECT_TYPE_TRAITS_HPP

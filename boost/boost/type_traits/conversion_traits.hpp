@@ -25,6 +25,9 @@
 #ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #include <boost/type_traits/arithmetic_traits.hpp>
 #endif
+#ifndef BOOST_SAME_TRAITS_HPP
+#include <boost/type_traits/same_traits.hpp>
+#endif
 //
 // is one type convertable to another?
 //
@@ -230,41 +233,6 @@ struct is_convertible<void, void>
 
 #endif // is_convertible
 
-template <class Base, class Derived>
-struct is_base_and_derived
-{
-   BOOST_STATIC_CONSTANT(bool, value =
-      (::boost::type_traits::ice_and<
-         ::boost::is_convertible<Derived*,Base*>::value,
-         ::boost::type_traits::ice_not<
-            ::boost::is_void<Base>::value
-         >::value
-      >::value)
-   );
-};
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-template <class Base, class Derived>
-struct is_base_and_derived<Base&, Derived>
-{
-   BOOST_STATIC_CONSTANT(bool, value = false);
-};
-template <class Base, class Derived>
-struct is_base_and_derived<Base, Derived&>
-{
-   BOOST_STATIC_CONSTANT(bool, value = false);
-};
-template <class Base, class Derived>
-struct is_base_and_derived<Base&, Derived&>
-{
-   BOOST_STATIC_CONSTANT(bool, value = false);
-};
-template <class Base>
-struct is_base_and_derived<Base, void>
-{
-   BOOST_STATIC_CONSTANT(bool, value = false);
-};
-#endif
 
 } // namespace boost
 
