@@ -21,6 +21,8 @@
 #include <boost/numeric/ublas/matrix_expression.hpp>
 #include <boost/numeric/ublas/detail/matrix_assign.hpp>
 
+#include <algorithm>  // std::lower_bound, std::copy
+
 // Iterators based on ideas of Jeremy Siek
 
 namespace boost { namespace numeric { namespace ublas {
@@ -2524,9 +2526,34 @@ namespace boost { namespace numeric { namespace ublas {
             index1_data_ (m.index1_data_), index2_data_ (m.index2_data_), value_data_ (m.value_data_) {
             storage_invariants ();
         }
-        template<class AE>
+         
         BOOST_UBLAS_INLINE
-        compressed_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
+        compressed_matrix (const coordinate_matrix<T, L, IB, IA, TA> &m):
+            matrix_expression<self_type> (),
+            size1_ (m.size1()), size2_ (m.size2()),
+            index1_data_ (layout_type::size1 (size1_, size2_) + 1)
+        {
+            m.sort();
+            reserve(m.nnz(), false);
+            filled2_ = m.nnz();
+            const_subiterator_type  i_start = m.index1_data().begin();
+            const_subiterator_type  i_end   = (i_start + filled2_);
+            const_subiterator_type  i = i_start;
+            size_type r = 1;
+            for (; (r < layout_type::size1 (size1_, size2_)) && (i != i_end); ++r) {
+                i = std::lower_bound(i, i_end, r);
+                index1_data_[r] = k_based( i - i_start );
+            }
+            filled1_ = r + 1;
+            std::copy( m.index2_data().begin(), m.index2_data().begin() + filled2_, index2_data_.begin());
+            std::copy( m.value_data().begin(), m.value_data().begin() + filled2_, value_data_.begin());
+            index1_data_ [filled1_ - 1] = k_based(filled2_);
+            storage_invariants ();
+        }
+
+       template<class AE>
+       BOOST_UBLAS_INLINE
+       compressed_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
             matrix_expression<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), capacity_ (restrict_capacity (non_zeros)),
             filled1_ (1), filled2_ (0),
