@@ -590,7 +590,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
              Functor g)
   {
     typedef mpl::bool_<(is_integral<Functor>::value)> integral;
-    return detail::function::compare_equal(f, g, integral());
+    return detail::function::compare_equal(f, g, 0, integral());
   }
 
 template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
@@ -603,7 +603,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
                      Allocator>& f)
   {
     typedef mpl::bool_<(is_integral<Functor>::value)> integral;
-    return detail::function::compare_equal(f, g, integral());
+    return detail::function::compare_equal(f, g, 0, integral());
   }
 
 template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
@@ -616,7 +616,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
              Functor g)
   {
     typedef mpl::bool_<(is_integral<Functor>::value)> integral;
-    return detail::function::compare_not_equal(f, g, integral());
+    return detail::function::compare_not_equal(f, g, 0, integral());
   }
 
 template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
@@ -629,7 +629,7 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
                      Allocator>& f)
   {
     typedef mpl::bool_<(is_integral<Functor>::value)> integral;
-    return detail::function::compare_not_equal(f, g, integral());
+    return detail::function::compare_not_equal(f, g, 0, integral());
   }
 #else
 
@@ -688,6 +688,62 @@ template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
                      Allocator>& f)
   {
     if (const Functor* fp = f.template target<Functor>()) return g != *fp;
+    else return true;
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator==(const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f,
+             reference_wrapper<Functor> g)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return fp == g.get_pointer();
+    else return false;
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator==(reference_wrapper<Functor> g,
+             const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return g.get_pointer() == fp;
+    else return false;
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator!=(const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f,
+             reference_wrapper<Functor> g)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return fp != g.get_pointer();
+    else return true;
+  }
+
+template<typename R BOOST_FUNCTION_COMMA BOOST_FUNCTION_TEMPLATE_PARMS ,
+         typename Allocator, typename Functor>
+  BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL(Functor, bool)
+  operator!=(reference_wrapper<Functor> g,
+             const BOOST_FUNCTION_FUNCTION<
+                     R BOOST_FUNCTION_COMMA
+                     BOOST_FUNCTION_TEMPLATE_ARGS ,
+                     Allocator>& f)
+  {
+    if (const Functor* fp = f.template target<Functor>())
+      return g.get_pointer() != fp;
     else return true;
   }
 #undef BOOST_FUNCTION_ENABLE_IF_NOT_INTEGRAL

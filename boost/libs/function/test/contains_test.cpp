@@ -87,10 +87,68 @@ static void equal_test()
 #endif
 }
 
+static void ref_equal_test()
+{
+  {
+    ReturnInt ri(17);
+    boost::function0<int> f = boost::ref(ri);
+
+    // References and values are equal
+    BOOST_TEST(f == boost::ref(ri));
+    BOOST_TEST(f == ri);
+    BOOST_TEST(boost::ref(ri) == f);
+    BOOST_TEST(ri == f);
+    BOOST_TEST(!(f != boost::ref(ri)));
+    BOOST_TEST(!(f != ri));
+    BOOST_TEST(!(boost::ref(ri) != f));
+    BOOST_TEST(!(ri != f));
+
+    // Values equal, references inequal
+    ReturnInt ri2(17);
+    BOOST_TEST(f == ri2);
+    BOOST_TEST(f != boost::ref(ri2));
+    BOOST_TEST(ri2 == f);
+    BOOST_TEST(boost::ref(ri2) != f);
+    BOOST_TEST(!(f != ri2));
+    BOOST_TEST(!(f == boost::ref(ri2)));
+    BOOST_TEST(!(ri2 != f));
+    BOOST_TEST(!(boost::ref(ri2) == f));
+  }
+
+#if !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
+  {
+    ReturnInt ri(17);
+    boost::function<int(void)> f = boost::ref(ri);
+
+    // References and values are equal
+    BOOST_TEST(f == boost::ref(ri));
+    BOOST_TEST(f == ri);
+    BOOST_TEST(boost::ref(ri) == f);
+    BOOST_TEST(ri == f);
+    BOOST_TEST(!(f != boost::ref(ri)));
+    BOOST_TEST(!(f != ri));
+    BOOST_TEST(!(boost::ref(ri) != f));
+    BOOST_TEST(!(ri != f));
+
+    // Values equal, references inequal
+    ReturnInt ri2(17);
+    BOOST_TEST(f == ri2);
+    BOOST_TEST(f != boost::ref(ri2));
+    BOOST_TEST(ri2 == f);
+    BOOST_TEST(boost::ref(ri2) != f);
+    BOOST_TEST(!(f != ri2));
+    BOOST_TEST(!(f == boost::ref(ri2)));
+    BOOST_TEST(!(ri2 != f));
+    BOOST_TEST(!(boost::ref(ri2) == f));
+  }
+#endif
+}
+
 int test_main(int, char*[])
 {
   target_test();
   equal_test();
+  ref_equal_test();
 
   return 0;
 }

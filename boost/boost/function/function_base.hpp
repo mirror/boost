@@ -318,17 +318,19 @@ namespace boost {
       // for compilers that don't support SFINAE.
       template<typename Function, typename Functor>
         bool
-        compare_equal(const Function& f, const Functor&, mpl::bool_<true>)
+        compare_equal(const Function& f, const Functor&, int, mpl::bool_<true>)
         { return f.empty(); }
 
       template<typename Function, typename Functor>
         bool
-        compare_not_equal(const Function& f, const Functor&, mpl::bool_<true>)
+        compare_not_equal(const Function& f, const Functor&, int,
+                          mpl::bool_<true>)
         { return !f.empty(); }
 
       template<typename Function, typename Functor>
         bool
-        compare_equal(const Function& f, const Functor& g, mpl::bool_<false>)
+        compare_equal(const Function& f, const Functor& g, long,
+                      mpl::bool_<false>)
         {
           if (const Functor* fp = f.template target<Functor>())
             return *fp == g;
@@ -337,11 +339,32 @@ namespace boost {
 
       template<typename Function, typename Functor>
         bool
-        compare_not_equal(const Function& f, const Functor& g,
+        compare_equal(const Function& f, const reference_wrapper<Functor>& g,
+                      int, mpl::bool_<false>)
+        {
+          if (const Functor* fp = f.template target<Functor>())
+            return fp == g.get_pointer();
+          else return false;
+        }
+
+      template<typename Function, typename Functor>
+        bool
+        compare_not_equal(const Function& f, const Functor& g, long,
                           mpl::bool_<false>)
         {
           if (const Functor* fp = f.template target<Functor>())
             return *fp != g;
+          else return true;
+        }
+
+      template<typename Function, typename Functor>
+        bool
+        compare_not_equal(const Function& f,
+                          const reference_wrapper<Functor>& g, int,
+                          mpl::bool_<false>)
+        {
+          if (const Functor* fp = f.template target<Functor>())
+            return fp != g.get_pointer();
           else return true;
         }
 #endif // BOOST_NO_SFINAE
