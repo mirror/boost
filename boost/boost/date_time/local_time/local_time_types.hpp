@@ -20,7 +20,8 @@ namespace local_time {
 
   typedef date_time::time_itr<local_date_time> local_time_iterator;
 
-  //todo -- add clock definitions in here...
+  typedef boost::date_time::second_clock<local_date_time> local_sec_clock; 
+  typedef boost::date_time::microsec_clock<local_date_time> local_microsec_clock;
   
   //bring special enum values into the namespace
   using date_time::special_values;
