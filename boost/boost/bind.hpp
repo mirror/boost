@@ -28,6 +28,26 @@ namespace boost
 namespace _bi // implementation details
 {
 
+// result_traits
+
+template<class R, class F> struct result_traits
+{
+    typedef R type;
+};
+
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+
+struct unspecified {};
+
+template<class F> struct result_traits<unspecified, F>
+{
+    typedef typename F::result_type type;
+};
+
+#endif
+
+// bind_t forward declaration for listN
+
 template<class R, class F, class L> class bind_t;
 
 // value
@@ -69,9 +89,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & /* a */) const
     {
@@ -101,9 +121,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -137,9 +157,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -176,9 +196,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -218,9 +238,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -263,9 +283,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -311,9 +331,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -362,9 +382,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -416,9 +436,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -473,9 +493,9 @@ public:
 
     template<class T> T & operator[] (reference_wrapper<T> const & v) const { return v.get(); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> & b) const { return b.eval(*this); }
 
-    template<class R, class F, class L> R operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+    template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
     template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
     {
@@ -510,39 +530,13 @@ private:
     list9 & operator= (list9 const &);
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-
-// unspecified
-
-struct unspecified {};
-
-template<class R, class F> struct result_traits
-{
-    typedef R type;
-};
-
-template<class F> struct result_traits<unspecified, F>
-{
-    typedef typename F::result_type type;
-};
-
-#endif
-
 // bind_t
 
 template<class R, class F, class L> class bind_t
 {
 public:
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-
     typedef typename result_traits<R, F>::type result_type;
-
-#else
-
-    typedef R result_type;
-
-#endif
 
     bind_t(F f, L const & l): f_(f), l_(l) {}
 
