@@ -9,5 +9,8 @@
 
 #define BOOST_PLATFORM "sun"
 
+#define BOOST_HAS_GETTIMEOFDAY
+
+
 
 
