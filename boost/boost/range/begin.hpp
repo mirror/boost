@@ -83,7 +83,28 @@ namespace range_detail
     //////////////////////////////////////////////////////////////////////
     // string
     //////////////////////////////////////////////////////////////////////
-    
+
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3204 ) // up to 9.3
+    inline const char* begin( const char* s )
+    {
+        return s;
+    }
+
+    inline char* begin( char* s )
+    {
+        return s;
+    }
+
+    inline const wchar_t* begin( const wchar_t* s )
+    {
+        return s;
+    }
+
+    inline wchar_t* begin( wchar_t* s )
+    {
+        return s;
+    }
+#else
     inline const char* begin( const char*& s )
     {
         return s;
@@ -103,6 +124,7 @@ namespace range_detail
     {
         return s;
     }
+#endif    
 
 } // namespace 'range_detail'
 

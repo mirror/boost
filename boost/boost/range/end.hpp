@@ -83,7 +83,28 @@ namespace range_detail
         //////////////////////////////////////////////////////////////////////
         // string
         //////////////////////////////////////////////////////////////////////
-        
+
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3204 ) // up to 9.3        
+        inline char* end( char* s )
+        {
+            return range_detail::str_end( s );
+        }
+
+        inline wchar_t* end( wchar_t* s )
+        {
+            return range_detail::str_end( s );
+        }
+
+        inline const char* end( const char* s )
+        {
+            return range_detail::str_end( s );
+        }
+
+        inline const wchar_t* end( const wchar_t* s )
+        {
+            return range_detail::str_end( s );
+        }
+#else
         inline char* end( char*& s )
         {
             return range_detail::str_end( s );
@@ -103,6 +124,7 @@ namespace range_detail
         {
             return range_detail::str_end( s );
         }
+#endif
         
 } // namespace 'range_detail'
 
