@@ -30,22 +30,22 @@ unit lower triangular. The storage of triangular matrices is
 packed.</p>
 <h4>Example</h4>
 <pre>
-#include &lt;boost/numeric/ublas/triangular.hpp&gt;<br />
-#include &lt;boost/numeric/ublas/io.hpp&gt;<br />
-<br />
-int main () {<br />
-    using namespace boost::numeric::ublas;<br />
-    triangular_matrix&lt;double, lower&gt; ml (3, 3);<br />
-    for (unsigned i = 0; i &lt; ml.size1 (); ++ i)<br />
-        for (unsigned j = 0; j &lt;= i; ++ j)<br />
-            ml (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; ml &lt;&lt; std::endl;<br />
-    triangular_matrix&lt;double, upper&gt; mu (3, 3);<br />
-    for (unsigned i = 0; i &lt; mu.size1 (); ++ i)<br />
-        for (unsigned j = i; j &lt; mu.size2 (); ++ j)<br />
-            mu (i, j) = 3 * i + j;<br />
-    std::cout &lt;&lt; mu &lt;&lt; std::endl;<br />
-}<br />
+#include &lt;boost/numeric/ublas/triangular.hpp&gt;
+#include &lt;boost/numeric/ublas/io.hpp&gt;
+
+int main () {
+    using namespace boost::numeric::ublas;
+    triangular_matrix&lt;double, lower&gt; ml (3, 3);
+    for (unsigned i = 0; i &lt; ml.size1 (); ++ i)
+        for (unsigned j = 0; j &lt;= i; ++ j)
+            ml (i, j) = 3 * i + j;
+    std::cout &lt;&lt; ml &lt;&lt; std::endl;
+    triangular_matrix&lt;double, upper&gt; mu (3, 3);
+    for (unsigned i = 0; i &lt; mu.size1 (); ++ i)
+        for (unsigned j = i; j &lt; mu.size2 (); ++ j)
+            mu (i, j) = 3 * i + j;
+    std::cout &lt;&lt; mu &lt;&lt; std::endl;
+}
 </pre>
 <h4>Definition</h4>
 <p>Defined in the header triangular.hpp.</p>
