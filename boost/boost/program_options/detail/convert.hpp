@@ -10,8 +10,15 @@
 #include <locale>
 // for mbstate_t
 #include <cwchar>
-
 #include <stdexcept>
+
+#if BOOST_WORKAROUND(__ICL, <= 700)
+#include <wchar.t>
+namespace std
+{
+    using ::mbstate_t;
+}    
+#endif
 
 namespace boost {
 
