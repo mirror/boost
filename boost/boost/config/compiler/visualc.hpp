@@ -90,6 +90,10 @@
 #endif
 
 //
+// all versions support __declspec:
+//
+#define BOOST_HAS_DECLSPEC
+//
 // prefix and suffix headers:
 //
 #ifndef BOOST_ABI_PREFIX

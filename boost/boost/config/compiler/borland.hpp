@@ -97,6 +97,10 @@
 //
 #define BOOST_HAS_DIRENT_H
 //
+// all versions support __declspec:
+//
+#define BOOST_HAS_DECLSPEC
+//
 // ABI fixing headers:
 //
 #ifndef BOOST_ABI_PREFIX
