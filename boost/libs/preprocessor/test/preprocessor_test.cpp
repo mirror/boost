@@ -33,13 +33,17 @@ struct Container
 
 // ***
 
-TEST(BOOST_PP_IF(BOOST_PP_IF(1,1,1),true,false) &&
-  BOOST_PP_IF(BOOST_PP_IF(0,0,0),false,true))
+TEST_B BOOST_PP_IF(BOOST_PP_IF(1,1,1),true,false) &&
+  BOOST_PP_IF(BOOST_PP_IF(0,0,0),false,true) TEST_E
 
 // ***
 
-TEST(BOOST_PP_CAT(BOOST_PP_IF(1,tru,fals), e))
+TEST_B BOOST_PP_CAT(BOOST_PP_IF(1,tru,fals), MACRO MACRO_ARGS(e)) TEST_E
 
 // ***
 
-char stringize_test[4] = BOOST_PP_STRINGIZE(__LINE__);
+char stringize_test[2] = BOOST_PP_STRINGIZE(MACRO MACRO_ARGS(X));
+
+// ***
+
+TEST_B BOOST_PP_TUPLE_ELEM(2,0,(1,0)) TEST_E

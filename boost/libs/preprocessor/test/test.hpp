@@ -14,5 +14,13 @@
 
 #include <boost/preprocessor/cat.hpp>
 
-#define TEST(C) typedef int BOOST_PP_CAT(test_,__LINE__)[((C)==1) ? 1 : -1];
+// The TEST macro has been broken into two pieces to avoid
+// double expansion:
+// 1. as a macro argument
+// 2. rescan
+#define TEST_B typedef int BOOST_PP_CAT(test_,__LINE__)[((
+#define TEST_E )==1) ? 1 : -1];
+
+#define MACRO(X) X
+#define MACRO_ARGS(X) (X)
 #endif
