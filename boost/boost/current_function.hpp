@@ -27,13 +27,17 @@ namespace detail
 inline void current_function_helper()
 {
 
-#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000))
+#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600))
 
 # define BOOST_CURRENT_FUNCTION __PRETTY_FUNCTION__
 
 #elif defined(__FUNCSIG__)
 
 # define BOOST_CURRENT_FUNCTION __FUNCSIG__
+
+#elif defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)
+
+# define BOOST_CURRENT_FUNCTION __FUNCTION__
 
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
 
