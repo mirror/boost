@@ -492,7 +492,7 @@ namespace boost { namespace program_options {
             os << m_caption << ":\n";
 
         /* Find the maximum width of the option column */
-        unsigned width(24);
+        unsigned width(23);
         unsigned i; // vc6 has broken for loop scoping
         for (i = 0; i < options.size(); ++i)
         {
@@ -501,7 +501,10 @@ namespace boost { namespace program_options {
             ss << "  " << opt.format_name() << ' ' << opt.format_parameter();
             width = max(width, static_cast<unsigned>(ss.str().size()));            
         }
-
+        
+        /* add an additional space to improve readability */
+        ++width;
+            
         /* The options formatting style is stolen from Subversion. */
         for (i = 0; i < options.size(); ++i)
         {
