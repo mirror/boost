@@ -120,6 +120,8 @@ ac_ext=$use_ac_ext
 
 AC_LANG_CPLUSPLUS
 
+OLD_CXXFLAGS="$CXXFLAGS"
+
 if test $enable_test = 'yes'; then
    CXXFLAGS="-I$boost_base -I$boost_base/libs/config/test $CXXFLAGS"
 else
@@ -297,15 +299,21 @@ if test $enable_test = 'yes'; then
 
 if test "$required_defs" = ""; then
 echo no boost macros need to be defined
+echo no boost macros need to be defined >&5
 else
 echo the following macros need to be defined
 echo    $required_defs
+echo the following macros need to be defined >&5
+echo    $required_defs >&5
 fi
 if test "$required_undefs" = ""; then
 echo no boost macros need to be undefined
+echo no boost macros need to be undefined >&5
 else
 echo "the following macros need to be undef'ed"
 echo    $required_undefs
+echo "the following macros need to be undef'ed" >&5
+echo    $required_undefs >&5
 fi
 
 else
@@ -364,6 +372,20 @@ done
 
 cat_conts=`cat user.hpp`
 
+#
+# post configuration step:
+#   
+AC_MSG_CHECKING(original configuration )
+rm -f conftest$ac_exeext
+$CXX -I$boost_base $OLD_CXXFLAGS -DBOOST_NO_USER_CONFIG -o conftest$ac_exeext $LDFLAGS $boost_base/libs/config/test/config_info.cpp $LIBS >&5 2>&1
+./conftest >&5 2>&1
+AC_MSG_RESULT(done)
+AC_MSG_CHECKING(new configuration )
+rm -f conftest$ac_exeext
+$CXX -I$boost_base -I$boost_base/libs/config $OLD_CXXFLAGS -DBOOST_USER_CONFIG='"user.hpp"' -o conftest$ac_exeext $LDFLAGS $boost_base/libs/config/test/config_info.cpp $LIBS >&5 2>&1
+./conftest >&5 2>&1
+AC_MSG_RESULT(done)
+
 AC_OUTPUT(
 [],
 [
@@ -387,6 +409,9 @@ cat_conts="$cat_conts"
 )
 
 fi
+
+
+
 
 
 

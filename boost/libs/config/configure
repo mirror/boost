@@ -1792,6 +1792,8 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
+OLD_CXXFLAGS="$CXXFLAGS"
+
 if test $enable_test = 'yes'; then
    CXXFLAGS="-I$boost_base -I$boost_base/libs/config/test $CXXFLAGS"
 else
@@ -2311,15 +2313,21 @@ if test $enable_test = 'yes'; then
 
 if test "$required_defs" = ""; then
 echo no boost macros need to be defined
+echo no boost macros need to be defined >&5
 else
 echo the following macros need to be defined
 echo    $required_defs
+echo the following macros need to be defined >&5
+echo    $required_defs >&5
 fi
 if test "$required_undefs" = ""; then
 echo no boost macros need to be undefined
+echo no boost macros need to be undefined >&5
 else
 echo "the following macros need to be undef'ed"
 echo    $required_undefs
+echo "the following macros need to be undef'ed" >&5
+echo    $required_undefs >&5
 fi
 
 else
@@ -2377,6 +2385,24 @@ echo '#define '"$name" >> user.hpp
 done
 
 cat_conts=`cat user.hpp`
+
+#
+# post configuration step:
+#
+echo "$as_me:$LINENO: checking original configuration " >&5
+echo $ECHO_N "checking original configuration ... $ECHO_C" >&6
+rm -f conftest$ac_exeext
+$CXX -I$boost_base $OLD_CXXFLAGS -DBOOST_NO_USER_CONFIG -o conftest$ac_exeext $LDFLAGS $boost_base/libs/config/test/config_info.cpp $LIBS >&5 2>&1
+./conftest >&5 2>&1
+echo "$as_me:$LINENO: result: done" >&5
+echo "${ECHO_T}done" >&6
+echo "$as_me:$LINENO: checking new configuration " >&5
+echo $ECHO_N "checking new configuration ... $ECHO_C" >&6
+rm -f conftest$ac_exeext
+$CXX -I$boost_base -I$boost_base/libs/config $OLD_CXXFLAGS -DBOOST_USER_CONFIG='"user.hpp"' -o conftest$ac_exeext $LDFLAGS $boost_base/libs/config/test/config_info.cpp $LIBS >&5 2>&1
+./conftest >&5 2>&1
+echo "$as_me:$LINENO: result: done" >&5
+echo "${ECHO_T}done" >&6
 
           ac_config_commands="$ac_config_commands default"
 
@@ -3000,6 +3026,9 @@ fi
 
 
 fi
+
+
+
 
 
 
