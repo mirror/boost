@@ -1074,6 +1074,7 @@ This creates some asymmetry between the lambda functor and the original member f
 class A {
   int i; mutable int j;
 public:
+
   A(int ii, int jj) : i(ii), j(jj) {};
   void set_i(int x) { i = x; }; 
   void set_j(int x) const { j = x; }; 
@@ -1116,6 +1117,32 @@ Hence, the argument <literal>a</literal> is not copied in the calls to the two l
 bind(&A::set_i, _1, 1)(a); // a.i == 1
 bind(&A::set_j, _1, 1)(a); // a.j == 1]]>
 </programlisting>
+</para>
+</section>
+
+<section id="sect:members_variables_as_targets">
+<title>Member variables as targets</title>
+
+<para>
+A pointer to a member variable is not really a function, but 
+the first argument to the <literal>bind</literal> function can nevertheless
+be a pointer to a member variable.
+Invoking such a bind expression returns a reference to the data member.
+For example:
+
+<programlisting>
+<![CDATA[struct A { int data; };
+A a;
+bind(&A::data, _1)(a) = 1;     // a.data == 1]]>
+</programlisting>
+
+The cv-qualifiers of the object whose member is accessed are respected.
+For example, the following tries to write into a const location:
+<programlisting>
+<![CDATA[const A ca = a;
+bind(&A::data, _1)(ca) = 1;     // error]]>
+</programlisting>
+
 </para>
 </section>
 
