@@ -92,6 +92,14 @@ are directly supported.</p>
 #define BOOST_PP_REPEAT_AUTO_REC3(M,P) BOOST_PP_EXPAND(M P)
 
 #define BOOST_PP_REPEAT_1(C,M,D) BOOST_PP_REPEAT_AUTO_REC1(BOOST_PP_DETAIL_CAT2(BOOST_PP_R1_,C),(M,D))
+#define BOOST_PP_REPEAT_2(C,M,D) BOOST_PP_REPEAT_AUTO_REC2(BOOST_PP_DETAIL_CAT2(BOOST_PP_R2_,C),(M,D))
+#define BOOST_PP_REPEAT_3(C,M,D) BOOST_PP_REPEAT_AUTO_REC3(BOOST_PP_DETAIL_CAT2(BOOST_PP_R3_,C),(M,D))
+
+#if defined __EDG__ // unrolled repeats for EDG front end
+#include <boost/preprocessor/detail/repeat_edg.hpp>
+#else
+#error edg?
+
 #define BOOST_PP_R1_0(M,D)
 #define BOOST_PP_R1_1(M,D) M(0,D)
 #define BOOST_PP_R1_2(M,D) M(0,D) M(1,D)
@@ -222,7 +230,6 @@ are directly supported.</p>
 #define BOOST_PP_R1_127(M,D) BOOST_PP_R1_126(M,D) M(126,D)
 #define BOOST_PP_R1_128(M,D) BOOST_PP_R1_127(M,D) M(127,D)
 
-#define BOOST_PP_REPEAT_2(C,M,D) BOOST_PP_REPEAT_AUTO_REC2(BOOST_PP_DETAIL_CAT2(BOOST_PP_R2_,C),(M,D))
 #define BOOST_PP_R2_0(M,D)
 #define BOOST_PP_R2_1(M,D) M(0,D)
 #define BOOST_PP_R2_2(M,D) M(0,D) M(1,D)
@@ -353,7 +360,6 @@ are directly supported.</p>
 #define BOOST_PP_R2_127(M,D) BOOST_PP_R2_126(M,D) M(126,D)
 #define BOOST_PP_R2_128(M,D) BOOST_PP_R2_127(M,D) M(127,D)
 
-#define BOOST_PP_REPEAT_3(C,M,D) BOOST_PP_REPEAT_AUTO_REC3(BOOST_PP_DETAIL_CAT2(BOOST_PP_R3_,C),(M,D))
 #define BOOST_PP_R3_0(M,D)
 #define BOOST_PP_R3_1(M,D) M(0,D)
 #define BOOST_PP_R3_2(M,D) M(0,D) M(1,D)
@@ -483,6 +489,8 @@ are directly supported.</p>
 #define BOOST_PP_R3_126(M,D) BOOST_PP_R3_125(M,D) M(125,D)
 #define BOOST_PP_R3_127(M,D) BOOST_PP_R3_126(M,D) M(126,D)
 #define BOOST_PP_R3_128(M,D) BOOST_PP_R3_127(M,D) M(127,D)
+
+#endif // !__EDG__
 
 /** <p>Obsolete, just use BOOST_PP_REPEAT().</p> */
 #define BOOST_PP_REPEAT_2ND BOOST_PP_REPEAT
