@@ -218,9 +218,10 @@ namespace boost{
 
   //===========================================================================
   // The char_separator class breaks a sequence of characters into
-  // tokens based on the character delimiters. A delimiter character
-  // can either be kept or dropped. A kept delimiter shows up as an
-  // output token, whereas a dropped delimiter does not.
+  // tokens based on the character delimiters (very much like bad old
+  // strtok). A delimiter character can either be kept or dropped. A
+  // kept delimiter shows up as an output token, whereas a dropped
+  // delimiter does not.
 
   // This class replaces the char_delimiters_separator class. The
   // constructor for the char_delimiters_separator class was too
@@ -244,18 +245,23 @@ namespace boost{
     typedef std::basic_string<Char,Traits> string_type;
   public:
     explicit 
-    char_separator(const Char* dropped_delims = 0,
-									 const Char* kept_delims = 0,
+    char_separator(const Char* dropped_delims,
+                   const Char* kept_delims = "",
                    empty_token_policy empty_tokens = drop_empty_tokens)
-      : m_kept_delims(kept_delims ?
-                      kept_delims : string_type().c_str()),
-        m_dropped_delims(dropped_delims ?
-                         dropped_delims : string_type().c_str()),
-        m_use_ispunct(kept_delims == 0),
-        m_use_isspace(dropped_delims == 0),
+      : m_kept_delims(kept_delims),
+        m_dropped_delims(dropped_delims),
+        m_use_ispunct(false),
+        m_use_isspace(false),
         m_empty_tokens(empty_tokens),
         m_output_done(false) { }
-    
+
+ 		// use ispunct() for kept delimiters and isspace for dropped.
+    explicit
+    char_separator()
+      : m_use_ispunct(true), 
+        m_use_isspace(true), 
+        m_empty_tokens(drop_empty_tokens) { }
+
     void reset() { }
 
     template <typename InputIterator, typename Token>
@@ -263,58 +269,55 @@ namespace boost{
     {
       tok = Token();
 
-			//			std::cout << "*next: " << *next << std::endl;
-			//			std::cout << "m_output_done: " << m_output_done << std::endl;
-      
       // skip past all dropped_delims
       if (m_empty_tokens == drop_empty_tokens)
         for (; next != end  && is_dropped(*next); ++next)
           { }
       
-			if (m_empty_tokens == drop_empty_tokens) {
+      if (m_empty_tokens == drop_empty_tokens) {
 
-				if (next == end)
-					return false;
+        if (next == end)
+          return false;
 
-				// if we are on a kept_delims move past it and stop
-				if (is_kept(*next)) {
-					tok += *next;
-					++next;
-				} else
-					// append all the non delim characters
-					for (; next != end && !is_dropped(*next) && !is_kept(*next); ++next)
-						tok += *next;
-			} 
-			else { // m_empty_tokens == keep_empty_tokens
-				
-				// Handle empty token at the end
-				if (next == end)
-					if (m_output_done == false) {
-						m_output_done = true;
-						return true;
-					} else
-						return false;
+        // if we are on a kept_delims move past it and stop
+        if (is_kept(*next)) {
+          tok += *next;
+          ++next;
+        } else
+          // append all the non delim characters
+          for (; next != end && !is_dropped(*next) && !is_kept(*next); ++next)
+            tok += *next;
+      } 
+      else { // m_empty_tokens == keep_empty_tokens
+        
+        // Handle empty token at the end
+        if (next == end)
+          if (m_output_done == false) {
+            m_output_done = true;
+            return true;
+          } else
+            return false;
 
-				if (is_kept(*next)) {
-					if (m_output_done == false)
-						m_output_done = true;
-					else {
-						tok += *next;
-						++next;
-						m_output_done = false;
-					}
-				}	
-				else if (m_output_done == false && is_dropped(*next)) {
-					m_output_done = true;
-				} 
-				else {
-					if (is_dropped(*next))
-						++next;
-					for (; next != end && !is_dropped(*next) && !is_kept(*next); ++next)
-						tok += *next;
-					m_output_done = true;
-				}
-			}
+        if (is_kept(*next)) {
+          if (m_output_done == false)
+            m_output_done = true;
+          else {
+            tok += *next;
+            ++next;
+            m_output_done = false;
+          }
+        } 
+        else if (m_output_done == false && is_dropped(*next)) {
+          m_output_done = true;
+        } 
+        else {
+          if (is_dropped(*next))
+            ++next;
+          for (; next != end && !is_dropped(*next) && !is_kept(*next); ++next)
+            tok += *next;
+          m_output_done = true;
+        }
+      }
       return true;
     }
 
