@@ -34,7 +34,7 @@
 #include <boost/function.hpp>
 
 namespace boost {
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#ifndef BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
   namespace BOOST_SIGNALS_NAMESPACE {
     namespace detail {
       template<int Arity,
@@ -347,7 +347,7 @@ namespace boost {
     {
     }
   };
-#endif // ndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#endif // ndef BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX
 
 } // end namespace boost
 
