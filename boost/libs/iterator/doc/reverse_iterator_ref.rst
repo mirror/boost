@@ -40,7 +40,9 @@ convertible to ``input_iterator_tag``.
 ``reverse_iterator`` requirements
 .................................
 
-``Iterator`` must be a model of Bidirectional Traversal Iterator.
+``Iterator`` must be a model of Bidirectional Traversal Iterator.  The
+type ``iterator_traits<Iterator>::reference`` must be the type of
+``*i``, where ``i`` is an object of type ``Iterator``.
 
 
 
