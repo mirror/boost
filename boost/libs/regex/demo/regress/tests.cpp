@@ -236,7 +236,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
          begin_error();
          cout << "Expression did not compile using regex++ API" << endl;
       }
-      else if(recurse)
+      else if((recurse) && ((flags[3] & match_partial) == 0))
          cpp_eh_tests(e);
    }
    else if(flags[4] & REG_GREP)
@@ -299,7 +299,7 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
                (m[-1].first - x) << "," << (m[-1].second - x) << ") expected (0" <<
                "," << matches[0] << ")" << endl;
          }
-         if((m[-2].first != m[0].second) || (m[-2].second != y))
+         if(((m[-2].first != m[0].second) || (m[-2].second != y)) && ((flags[3] & match_partial) == 0))
          {
             begin_error();
             cout << "regex++ API result mismatch in $' (match -2), found (" <<
@@ -326,6 +326,26 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
             {
                begin_error();
                cout << "regex++ API result mismatch in regex_search(const std::string&, match_results&, const reg_expression&, int)" << endl;
+            }
+            //
+            // partial match should give same result as full match
+            // provided a full match is expected:
+            //
+            if(matches[0] > 0)
+            {
+               if(regex_search(x, y, m, e, flags[3] | boost::match_partial))
+               {
+                  if(compare_result(sm, m) == false)
+                  {
+                     begin_error();
+                     cout << "regex++ API result mismatch in regex_search when enabling match_partial" << endl;
+                  }
+               }
+               else
+               {
+                  begin_error();
+                  cout << "regex++ API result: match not found when match_partial specified" << endl;
+               }
             }
             if(s.find(char_t(0)) == std::basic_string<char_t>::npos)
             {
@@ -615,7 +635,7 @@ void run_tests()
 #if !defined(TEST_UNICODE)
    try
    {
-      if((flags[2] == regbase::normal) && (has_nulls(search_text.begin(), search_text.end()) == false))
+      if(((flags[3] & match_partial) == 0) && (flags[2] == regbase::normal) && (has_nulls(search_text.begin(), search_text.end()) == false))
       {
          RegEx e;
          e.SetExpression(expression.c_str(), flags[0] & REG_ICASE);

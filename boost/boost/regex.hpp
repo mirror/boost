@@ -898,7 +898,8 @@ public:
 
    size_type BOOST_RE_CALL size()const
    {
-      return (*this)[0].matched ? ref->cmatches : 0;
+      //return (*this)[0].matched ? ref->cmatches : 0;
+      return ref->cmatches;
    }
 
    const sub_match<iterator>& BOOST_RE_CALL operator[](int n) const

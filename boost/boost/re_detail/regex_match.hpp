@@ -263,7 +263,7 @@ bool query_match_aux(iterator first,
                      iterator last, 
                      match_results<iterator, Allocator>& m, 
                      const reg_expression<charT, traits, Allocator2>& e, 
-                     unsigned flags, 
+                     unsigned flags,
                      _priv_match_data<iterator, Allocator>& pd,
                      iterator* restart)
 {
@@ -287,6 +287,7 @@ bool query_match_aux(iterator first,
 
    const re_syntax_base* ptr = access::first(e);
    bool match_found = false;
+   bool have_partial_match = false;
    bool need_push_match = (e.mark_count() > 1);
    int cur_acc = -1;    // no active accumulator
    pd.set_accumulator_size(access::repeat_count(e));
@@ -748,7 +749,7 @@ bool query_match_aux(iterator first,
    //
    // if we get to here then we've run out of characters to match against,
    // we could however still have non-character regex items left
-   if(ptr->can_be_null == 0)
+   if((ptr->can_be_null == 0) && ((flags & match_partial) == 0))
       goto failure;
    while(true)
    {
@@ -838,7 +839,7 @@ bool query_match_aux(iterator first,
 
          // see if we can skip the repeat:
          if(((unsigned int)accumulators[cur_acc] >= ((re_repeat*)ptr)->min)
-            && (ptr->can_be_null & mask_skip))
+            && ((ptr->can_be_null & mask_skip) || (flags & match_partial)))
          {
             // don't push failure info, there's no point:
             ptr = ((re_repeat*)ptr)->alt.p;
@@ -847,7 +848,7 @@ bool query_match_aux(iterator first,
 
          // otherwise see if we can take the repeat:
          if(((unsigned int)accumulators[cur_acc] < ((re_repeat*)ptr)->max)
-               && ((ptr->can_be_null & (mask_take | mask_skip)) == (mask_take | mask_skip)))
+               && (((ptr->can_be_null & (mask_take | mask_skip)) == (mask_take | mask_skip))) || (flags & match_partial))
          {
             // move to next item in list:
             ++accumulators[cur_acc];
@@ -869,6 +870,18 @@ bool query_match_aux(iterator first,
    }
 
    failure:
+
+   //
+   // check for possible partial match:
+   //
+   if((flags & match_partial)
+      && !match_found          // no full match already
+      && (base != first)       // some charcters have been consumed
+      && (first == last))      // end of input has been reached
+   {
+      have_partial_match = true;
+      m.maybe_assign(temp_match);
+   }
 
    if(prev_record.empty() == false)
    {
@@ -931,7 +944,7 @@ bool query_match_aux(iterator first,
       }
    }
 
-   if(match_found)
+   if(match_found || have_partial_match)
       return true;
 
    // if we get to here then everything has failed

@@ -559,7 +559,7 @@ bool BOOST_RE_CALL c_regex_traits<wchar_t>::lookup_collatename(std::basic_string
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
    std::string t_out;
-   bool result = base_type::do_lookup_collate(t_out, buf.get());
+   bool result = do_lookup_collate(t_out, buf.get());
    if(t_out.size() == 0) result = false;
    if(result)
    {
@@ -990,7 +990,7 @@ jm_uintfast32_t BOOST_RE_CALL c_regex_traits<wchar_t>::lookup_classname(const wc
    unsigned int len = strnarrow((char*)NULL, 0, s.c_str());
    scoped_array<char> buf(new char[len]);
    strnarrow(buf.get(), len, s.c_str());
-   len =  base_type::do_lookup_class(buf.get());
+   len =  do_lookup_class(buf.get());
    return len;
 }
 

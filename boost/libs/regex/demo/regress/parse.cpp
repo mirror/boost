@@ -77,6 +77,7 @@ flag_info flag_data[] = {
                           { BOOST_RE_STR("match_any"), 9, match_any, 3 },
                           { BOOST_RE_STR("match_not_null"), 14, match_not_null, 3 },
                           { BOOST_RE_STR("match_continuous"), 16, match_continuous, 3 },
+                          { BOOST_RE_STR("match_partial"), 13, match_partial, 3 },
 
                           { BOOST_RE_STR("format_sed"), 10, format_sed, 3 },
                           { BOOST_RE_STR("format_perl"), 11, format_perl, 3 },

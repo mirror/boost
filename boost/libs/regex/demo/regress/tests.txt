@@ -850,6 +850,12 @@ abc|\w+? abcd 0 3
 (?:a+(b+)) xaaabbba 1 7 4 7
 a+(?#b+)b+ xaaabbba 1 7
 
+;
+; try some partial matches:
+- match_partial match_default normal REG_EXTENDED REG_NO_POSIX_TEST
+(xyz)(.*)abc xyzaaab -1 -1 0 3 3 7
+(xyz)(.*)abc xyz -1 -1 0 3 3 3
+(xyz)(.*)abc xy -1 -1 -1 -1 -1 -1
 
 
 

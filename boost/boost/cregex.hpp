@@ -171,7 +171,9 @@ enum match_flags
    match_not_null = match_any << 1,                  // string can't be null
    match_continuous = match_not_null << 1,           // each grep match must continue from
                                                      // uninterupted from the previous one
-   match_stop = match_continuous << 1,               // stop after first match (grep)
+   match_partial = match_continuous << 1,            // find partial matches
+   
+   match_stop = match_partial << 1,                  // stop after first match (grep)
    match_max = match_stop
 };
 
