@@ -30,6 +30,7 @@
 #include <iterator>
 #include <utility>
 #include <boost/config.hpp>
+#include <boost/pending/limits.hpp>
 
 #if defined(__GNUC__) || defined(__KCC) || defined(__ghs)
 #define BOOST_FPTR &
@@ -191,12 +192,26 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   };
 
   template <class TT>
+  struct Boolean_concept {
+    void constraints() {
+      b = x;
+      b = x || x;
+      b = x && x;
+    }
+    TT x;
+    bool b;
+  };
+
+  template <class TT>
   struct EqualityComparable_concept
   {
     void constraints() {
-      r = a == b;         // require equality operator
-      r = a != b;         // require inequality operator
+      require_boolean_return(a == b);
+      require_boolean_return(a != b);
     }
+    // Can't move the following outside, because it changes when
+    // the error message appears.
+    template <class B> void require_boolean_return(B) { REQUIRE(B, Boolean); }
     TT a, b;
     bool r;
   };
@@ -205,11 +220,15 @@ template <class T> void ignore_unused_variable_warning(const T&) { }
   struct LessThanComparable_concept
   {
     void constraints() {
-      // require comparison operators
-      r = a < b || a > b || a <= b || a >= b;
+      require_boolean_return(a < b);
+      require_boolean_return(a > b);
+      require_boolean_return(a <= b);
+      require_boolean_return(a >= b);
     }
+    // Can't move the following outside, because it changes when
+    // the error message appears.
+    template <class B> void require_boolean_return(B) { REQUIRE(B, Boolean); }
     TT a, b;
-    bool r;
   };
 
   //===========================================================================
