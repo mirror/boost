@@ -16,12 +16,14 @@
 #include <boost/preprocessor/expr_if.hpp>
 #include <boost/preprocessor/logical/not.hpp>
 
-/** <p>Expands to nothing if <code>C != 0</code> and to <code>MSG</code> if
-<code>C == 0</code>.</p>
+/** <p>Expands to nothing if <code>COND != 0</code> and to <code>MSG</code> if
+<code>COND == 0</code>.</p>
+
+<p><code>COND</code> must expand to an integer literal.</p>
 
 <p>For example, <code>BOOST_PP_ASSERT_MSG(1,A BUG!)</code> expands to <code>A BUG!</code>.</p>
 */
-#define BOOST_PP_ASSERT_MSG(C,MSG) BOOST_PP_EXPR_IF(BOOST_PP_NOT(C),MSG)
+#define BOOST_PP_ASSERT_MSG(COND,MSG) BOOST_PP_EXPR_IF(BOOST_PP_NOT(COND),MSG)
 
 /** <p>Obsolete. Use BOOST_PP_ASSERT_MSG().</p> */
 #define BOOST_PREPROCESSOR_ASSERT_MSG(C,MSG) BOOST_PP_ASSERT_MSG(C,MSG)

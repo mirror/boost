@@ -26,20 +26,20 @@
 
 <hr>
 
-<h2><a name="BOOST_PP_ENUM">#define BOOST_PP_ENUM</a>(N,F,P)</h2>
+<h2><a name="BOOST_PP_ENUM">#define BOOST_PP_ENUM</a>(COUNT,MACRO,DATA)</h2>
  <p>Generates a comma separated list.</p>
 
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  F(0,P), F(1,P), ..., F(<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(N),P)
+  MACRO(0,DATA), MACRO(1,DATA), ..., MACRO(<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(COUNT),DATA)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TYPED_PARAM(I,P)\
-    <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,P),I) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,P),I)
+  #define TYPED_PARAM(INDEX,DATA)\
+    <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,DATA),INDEX) <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,DATA),INDEX)
   <a href="enum.htm#BOOST_PP_ENUM">BOOST_PP_ENUM</a>(3,TYPED_PARAM,(X,x))
 </pre>
 

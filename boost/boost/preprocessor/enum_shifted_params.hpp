@@ -21,7 +21,7 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  BOOST_PP_CAT(P,1), BOOST_PP_CAT(P,2), ..., BOOST_PP_CAT(P,BOOST_PP_DEC(N))
+  BOOST_PP_CAT(PARAM,1), BOOST_PP_CAT(PARAM,2), ..., BOOST_PP_CAT(PARAM,BOOST_PP_DEC(COUNT))
 </pre>
 <p>For example,</p>
 
@@ -51,7 +51,7 @@
   <li><a href="../../test/repeat_2nd_test.cpp">repeat_2nd_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_ENUM_SHIFTED_PARAMS(N,P) BOOST_PP_ENUM_SHIFTED(N,BOOST_PP_ENUM_SHIFTED_PARAMS_F,P)
+#define BOOST_PP_ENUM_SHIFTED_PARAMS(COUNT,PARAM) BOOST_PP_ENUM_SHIFTED(COUNT,BOOST_PP_ENUM_SHIFTED_PARAMS_F,PARAM)
 
 #define BOOST_PP_ENUM_SHIFTED_PARAMS_F(I,P) BOOST_PP_CAT(P,I)
 

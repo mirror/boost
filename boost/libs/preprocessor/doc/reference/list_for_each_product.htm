@@ -26,9 +26,9 @@
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_FOR_EACH_PRODUCT">#define BOOST_PP_LIST_FOR_EACH_PRODUCT</a>(F,N,T_OF_L)</h2>
- <p>Repeats <code>F(R,X)</code> for each element <code>X</code> of the
-cartesian product of the lists of the <code>N</code>-tuple <code>T_OF_L</code>.</p>
+<h2><a name="BOOST_PP_LIST_FOR_EACH_PRODUCT">#define BOOST_PP_LIST_FOR_EACH_PRODUCT</a>(MACRO,SIZE_OF_TUPLE,TUPLE_OF_LISTS)</h2>
+ <p>Repeats <code>MACRO(R,X)</code> for each element <code>X</code> of the
+cartesian product of the lists of the <code>SIZE_OF_TUPLE</code>-tuple <code>TUPLE_OF_LISTS</code>.</p>
 
 <p>This macro is useful for generating code to avoid combinatorial
 explosion.</p>
@@ -70,7 +70,7 @@ explosion.</p>
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_FOR_EACH_PRODUCT_R">#define BOOST_PP_LIST_FOR_EACH_PRODUCT_R</a>(R,F,N,T_OF_L)</h2>
+<h2><a name="BOOST_PP_LIST_FOR_EACH_PRODUCT_R">#define BOOST_PP_LIST_FOR_EACH_PRODUCT_R</a>(R,MACRO,SIZE_OF_TUPLE,TUPLE_OF_LISTS)</h2>
  <p>Can be used inside <a href="for.htm#BOOST_PP_FOR">BOOST_PP_FOR</a>().</p> 
 <hr>
 

@@ -23,7 +23,7 @@
 
 <p>expands to <code>(C,B,A)</code>.</p>
 */
-#define BOOST_PP_TUPLE_REVERSE(N,T) BOOST_PP_TUPLE_REVERSE_DELAY(N,T)
+#define BOOST_PP_TUPLE_REVERSE(SIZE_OF_TUPLE,TUPLE) BOOST_PP_TUPLE_REVERSE_DELAY(SIZE_OF_TUPLE,TUPLE)
 
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 /* This is a workaround for a CodeWarrior PP bug. Strictly speaking

@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <p>Expands to the <code>I</code>:th element of an <code>N</code>-tuple.</p>
+/** <p>Expands to the <code>INDEX</code>:th element of an <code>SIZE_OF_TUPLE</code>-tuple.</p>
 
 <p>For example,</p>
 
@@ -28,7 +28,7 @@
   <li>BOOST_PP_LIMIT_TUPLE</li>
 </ul>
 */
-#define BOOST_PP_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM_DELAY(N,I,T)
+#define BOOST_PP_TUPLE_ELEM(SIZE_OF_TUPLE,INDEX,TUPLE) BOOST_PP_TUPLE_ELEM_DELAY(SIZE_OF_TUPLE,INDEX,TUPLE)
 
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 /* This is a workaround for a CodeWarrior PP bug. Strictly speaking

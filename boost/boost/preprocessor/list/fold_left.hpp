@@ -16,23 +16,23 @@
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/while.hpp>
 
-/** <p>Iterates <code>F(D,P,X)</code> for each element <code>X</code> of the
-list <code>L</code> (from the left or the start of the list).</p>
+/** <p>Iterates <code>OP(D,STATE,X)</code> for each element <code>X</code> of the
+list <code>LIST</code> (from the left or the start of the list).</p>
 
 <p>In other words, expands to:</p>
 
 <pre>
-  F
+  OP
   ( D
-  , ... F(D, F(D,P,BOOST_PP_LIST_AT(L,0)), BOOST_PP_LIST_AT(L,1)) ...
-  , BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L))
+  , ... OP(D, OP(D,STATE,BOOST_PP_LIST_AT(LIST,0)), BOOST_PP_LIST_AT(LIST,1)) ...
+  , BOOST_PP_LIST_AT(LIST,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(LIST))
   )
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(D,P,X) BOOST_PP_CAT(P,X)
+  #define TEST(D,STATE,X) BOOST_PP_CAT(STATE,X)
   BOOST_PP_LIST_FOLD_LEFT(TEST,_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
@@ -63,10 +63,10 @@ list <code>L</code> (from the left or the start of the list).</p>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_LIST_FOLD_LEFT(F,P,L) BOOST_PP_LIST_FOLD_LEFT_D(0,F,P,L)
+#define BOOST_PP_LIST_FOLD_LEFT(OP,STATE,LIST) BOOST_PP_LIST_FOLD_LEFT_D(0,OP,STATE,LIST)
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
-#define BOOST_PP_LIST_FOLD_LEFT_D(D,F,P,L) BOOST_PP_TUPLE_ELEM(3,1,BOOST_PP_WHILE##D(BOOST_PP_LIST_FOLD_LEFT_C,BOOST_PP_LIST_FOLD_LEFT_F,(F,P,L)))
+#define BOOST_PP_LIST_FOLD_LEFT_D(D,OP,STATE,LIST) BOOST_PP_TUPLE_ELEM(3,1,BOOST_PP_WHILE##D(BOOST_PP_LIST_FOLD_LEFT_C,BOOST_PP_LIST_FOLD_LEFT_F,(OP,STATE,LIST)))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 #  define BOOST_PP_LIST_FOLD_LEFT_C(D,X) BOOST_PP_TUPLE_ELEM(3,2,BOOST_PP_TUPLE_ELEM(3,2,X))
 #  define BOOST_PP_LIST_FOLD_LEFT_F(D,X) (BOOST_PP_TUPLE_ELEM(3,0,X),BOOST_PP_TUPLE_ELEM(3,0,X)(D,BOOST_PP_TUPLE_ELEM(3,1,X),BOOST_PP_TUPLE_ELEM(3,0,BOOST_PP_TUPLE_ELEM(3,2,X))),BOOST_PP_TUPLE_ELEM(3,1,BOOST_PP_TUPLE_ELEM(3,2,X)))

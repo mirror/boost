@@ -39,7 +39,7 @@ and BOOST_PP_REPEAT family).</p>
 */
 #define BOOST_PP_LIMIT_MAG 128
 
-/** <p>Expands to the maximum tuple length supported by the library.</p> */
+/** <p>Expands to the maximum tuple size supported by the library.</p> */
 #define BOOST_PP_LIMIT_TUPLE 16
 
 /** <p>Obsolete. Use BOOST_PP_LIMIT_DIM.</p> */

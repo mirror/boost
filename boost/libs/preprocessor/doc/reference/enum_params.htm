@@ -26,13 +26,13 @@
 
 <hr>
 
-<h2><a name="BOOST_PP_ENUM_PARAMS">#define BOOST_PP_ENUM_PARAMS</a>(N,P)</h2>
+<h2><a name="BOOST_PP_ENUM_PARAMS">#define BOOST_PP_ENUM_PARAMS</a>(COUNT,PARAM)</h2>
  <p>Generates a comma separated list of parameters.</p>
 
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(P,0), <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(P,1), ..., <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(P,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(N))
+  <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(PARAM,0), <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(PARAM,1), ..., <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(PARAM,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(COUNT))
 </pre>
 
 <p>For example,</p>

@@ -15,7 +15,9 @@
 
 #include <boost/preprocessor/logical/bool.hpp>
 
-/** <p>Expands to <code>E</code> if <code>C != 0</code> and to nothing if <code>C == 0</code>.</p>
+/** <p>Expands to <code>EXPR</code> if <code>COND != 0</code> and to nothing if <code>COND == 0</code>.</p>
+
+<p><code>COND</code> must expand to an integer literal.</p>
 
 <p>For example, <code>BOOST_PP_EXPR_IF(1,^)</code> expands to <code>^</code>.</p>
 
@@ -24,7 +26,7 @@
   <li>BOOST_PP_IF()</li>
 </ul>
 */
-#define BOOST_PP_EXPR_IF(C,E) BOOST_PP_EXPR_IF_BOOL(BOOST_PP_BOOL(C),E)
+#define BOOST_PP_EXPR_IF(COND,EXPR) BOOST_PP_EXPR_IF_BOOL(BOOST_PP_BOOL(COND),EXPR)
 
 #define BOOST_PP_EXPR_IF_BOOL(C,E) BOOST_PP_EXPR_IF_BOOL_DELAY(C,E)
 #define BOOST_PP_EXPR_IF_BOOL_DELAY(C,E) BOOST_PP_EXPR_IF_BOOL##C(E)

@@ -15,22 +15,22 @@
 
 #include <boost/preprocessor/list/for_each_i.hpp>
 
-/** <p>Repeats <code>F(R,P,BOOST_PP_LIST_AT(L,I))</code> for each I = [0,
-BOOST_PP_LIST_SIZE(L)[.</p>
+/** <p>Repeats <code>MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,INDEX))</code> for each INDEX = [0,
+BOOST_PP_LIST_SIZE(LIST)[.</p>
 
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  F(R,P,BOOST_PP_LIST_AT(L,0))
-  F(R,P,BOOST_PP_LIST_AT(L,1))
+  MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,0))
+  MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,1))
   ...
-  F(R,P,BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L))))
+  MACRO(R,DATA,BOOST_PP_LIST_AT(LIST,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(LIST))))
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(R,P,X) BOOST_PP_CAT(P,X)();
+  #define TEST(R,DATA,X) BOOST_PP_CAT(DATA,X)();
   BOOST_PP_LIST_FOR_EACH(TEST,prefix_,BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
 </pre>
 
@@ -56,9 +56,9 @@ BOOST_PP_LIST_SIZE(L)[.</p>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_LIST_FOR_EACH(F,P,L) BOOST_PP_LIST_FOR_EACH_R(0,F,P,L)
+#define BOOST_PP_LIST_FOR_EACH(MACRO,DATA,LIST) BOOST_PP_LIST_FOR_EACH_R(0,MACRO,DATA,LIST)
 
 /** <p>Can be used inside BOOST_PP_FOR().</p> */
-#define BOOST_PP_LIST_FOR_EACH_R(R,F,P,L) BOOST_PP_LIST_FOR_EACH_I_R(R,BOOST_PP_LIST_FOR_EACH_F,(F,P),L)
+#define BOOST_PP_LIST_FOR_EACH_R(R,MACRO,DATA,LIST) BOOST_PP_LIST_FOR_EACH_I_R(R,BOOST_PP_LIST_FOR_EACH_F,(MACRO,DATA),LIST)
 #define BOOST_PP_LIST_FOR_EACH_F(R,FP,I,X) BOOST_PP_TUPLE_ELEM(2,0,FP)(R,BOOST_PP_TUPLE_ELEM(2,1,FP),X)
 #endif

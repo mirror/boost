@@ -16,7 +16,7 @@
 #include <boost/preprocessor/list/fold_right.hpp>
 
 /** <p>Expands to a list containing all the elements <code>X</code> of the list
-for which <code>F(D,P,X)</code> is true.</p>
+for which <code>PRED(D,DATA,X)</code> is true.</p>
 
 <p>For example,</p>
 
@@ -41,10 +41,10 @@ for which <code>F(D,P,X)</code> is true.</p>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_LIST_FILTER(F,P,L) BOOST_PP_LIST_FILTER_D(0,F,P,L)
+#define BOOST_PP_LIST_FILTER(PRED,DATA,LIST) BOOST_PP_LIST_FILTER_D(0,PRED,DATA,LIST)
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
-#define BOOST_PP_LIST_FILTER_D(D,F,P,L) BOOST_PP_TUPLE_ELEM(3,2,BOOST_PP_LIST_FOLD_RIGHT_D(D,BOOST_PP_LIST_FILTER_F,L,(F,P,(_,_,0))))
+#define BOOST_PP_LIST_FILTER_D(D,PRED,DATA,LIST) BOOST_PP_TUPLE_ELEM(3,2,BOOST_PP_LIST_FOLD_RIGHT_D(D,BOOST_PP_LIST_FILTER_F,LIST,(PRED,DATA,(_,_,0))))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 #  define BOOST_PP_LIST_FILTER_F(D,H,P) (BOOST_PP_TUPLE_ELEM(3,0,P),BOOST_PP_TUPLE_ELEM(3,1,P),BOOST_PP_IF(BOOST_PP_TUPLE_ELEM(3,0,P)(D,BOOST_PP_TUPLE3_ELEM1 P,H),BOOST_PP_LIST_CONS,BOOST_PP_TUPLE2_ELEM1)(H,BOOST_PP_TUPLE_ELEM(3,2,P)))
 #elif !defined(BOOST_NO_COMPILER_CONFIG) && defined(_MSC_VER)

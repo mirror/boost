@@ -17,12 +17,14 @@
 #include <boost/preprocessor/empty.hpp>
 #include <boost/preprocessor/if.hpp>
 
-/** <p>Expands to a comma if <code>C != 0</code> and nothing if
-<code>C == 0</code>.</p>
+/** <p>Expands to a comma if <code>COND != 0</code> and nothing if
+<code>COND == 0</code>.</p>
+
+<p><code>COND</code> must expand to an integer literal.</p>
 
 <p>For example, <code>BOOST_PP_COMMA_IF(0)</code> expands to nothing.</p>
 */
-#define BOOST_PP_COMMA_IF(C) BOOST_PP_IF(C,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
+#define BOOST_PP_COMMA_IF(COND) BOOST_PP_IF(COND,BOOST_PP_COMMA,BOOST_PP_EMPTY)()
 
 /** <p>Obsolete. Use BOOST_PP_COMMA_IF().</p> */
 #define BOOST_PREPROCESSOR_COMMA_IF(C) BOOST_PP_COMMA_IF(C)

@@ -26,16 +26,16 @@
 
 <hr>
 
-<h2><a name="BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS">#define BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS</a>(N,P,D)</h2>
+<h2><a name="BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS">#define BOOST_PP_ENUM_PARAMS_WITH_DEFAULTS</a>(COUNT,PARAM,DEFAULT)</h2>
  <p>Generates a comma separated list of parameters with defaults.</p>
 
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(P,0) = <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(D,0),
-  <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(P,1) = <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(D,1),
+  <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(PARAM,0) = <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(DEFAULT,0),
+  <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(PARAM,1) = <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(DEFAULT,1),
   ...,
-  <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(P,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(N)) = <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(D,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(N))
+  <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(PARAM,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(COUNT)) = <a href="cat.htm#BOOST_PP_CAT">BOOST_PP_CAT</a>(DEFAULT,<a href="dec.htm#BOOST_PP_DEC">BOOST_PP_DEC</a>(COUNT))
 </pre>
 
 <p>For example,</p>

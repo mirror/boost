@@ -16,24 +16,24 @@
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
 
-/** <p>Repeats <code>I(R,X)</code> and iterates <code>F(R,X)</code> while
-<code>C(R,X)</code> is true.</p>
+/** <p>Repeats <code>MACRO(R,STATE)</code> and iterates <code>OP(R,STATE)</code> while
+<code>PRED(R,STATE)</code> is true.</p>
 
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  I(R,X)  I(R,F(R,X))  I(R,F(R,F(R,X)))  ...  I(R,F(R,F(...F(R,X)...)))
+  MACRO(R,STATE)  MACRO(R,OP(R,STATE))  MACRO(R,OP(R,OP(R,STATE)))  ...  MACRO(R,OP(R,OP(...OP(R,STATE)...)))
 </pre>
 
-<p>The length of the sequence is determined by <code>C(R,X)</code>.</p>
+<p>The length of the sequence is determined by <code>PRED(R,STATE)</code>.</p>
 
 <p>For example,</p>
 
 <pre>
-  #define C(R,X) BOOST_PP_LESS(BOOST_PP_TUPLE_ELEM(2,0,X),BOOST_PP_TUPLE_ELEM(2,1,X))
-  #define F(R,X) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,X)),BOOST_PP_TUPLE_ELEM(2,1,X))
-  #define I(R,X) BOOST_PP_TUPLE_ELEM(2,0,X)
-  BOOST_PP_FOR((0,3),C,F,I)
+  #define PRED(R,STATE) BOOST_PP_LESS(BOOST_PP_TUPLE_ELEM(2,0,STATE),BOOST_PP_TUPLE_ELEM(2,1,STATE))
+  #define OP(R,STATE) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,STATE)),BOOST_PP_TUPLE_ELEM(2,1,STATE))
+  #define MACRO(R,STATE) BOOST_PP_TUPLE_ELEM(2,0,STATE)
+  BOOST_PP_FOR((0,3),PRED,OP,MACRO)
 </pre>
 
 <p>expands to:</p>
@@ -44,19 +44,19 @@
 
 <h3>Legend</h3>
 <ul>
-  <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
-  <li><b>C</b> is the condition for iteration. It must expand to a decimal
+  <li><b>STATE</b> is the current state of iteration. The state is usually a tuple.</li>
+  <li><b>PRED</b> is the condition for iteration. It must expand to a decimal
       integer literal.</li>
-  <li><b>F</b> is the iterated macro. Note that if the state is a tuple, then
-      F(R,X) usually expands to a tuple of the same number of elements.</li>
-  <li><b>I</b> is the state instantiation macro.</li>
+  <li><b>OP</b> is the iterated macro. Note that if the state is a tuple, then
+      OP(R,STATE) usually expands to a tuple of the same number of elements.</li>
+  <li><b>MACRO</b> is the state instantiation macro.</li>
   <li><b>R</b> is the recursion depth and should only be used as a parameter to
       other macros using BOOST_PP_FOR() or for invoking BOOST_PP_FOR##R()
-      directly. For each macro using BOOST_PP_FOR(), there is a version of the
-      macro, distinguished by the R suffix, that accepts an additional
-      recursion depth as the first parameter. This technique is necessary to
-      avoid recursively expanding the same macro again, which is not permitted
-      by the C++ preprocessor.</li>
+      directly. For each macro using BOOST_PP_FOR(), e.g. BOOST_PP_LIST_FOR_EACH(),
+      there is a version of the macro, e.g. BOOST_PP_LIST_FOR_EACH_R(), distinguished
+      by the R suffix, that accepts an additional recursion depth as the first
+      parameter. This technique is necessary to avoid recursively expanding the same
+      macro again, which is not permitted by the C++ preprocessor.</li>
 </ul>
 
 <h3>BOOST_PP_REPEAT() vs BOOST_PP_FOR()</h3>
@@ -76,7 +76,7 @@ invoking BOOST_PP_FOR##R() directly.</p>
   <li><a href="../../test/for_test.cpp">for_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_FOR(X,C,F,I) BOOST_PP_FOR0(X,C,F,I)
+#define BOOST_PP_FOR(STATE,PRED,OP,MACRO) BOOST_PP_FOR0(STATE,PRED,OP,MACRO)
 
 #define BOOST_PP_FOR_C0(C,R,X,I) BOOST_PP_IF(C(R,X),I,BOOST_PP_TUPLE2_EAT)
 #define BOOST_PP_FOR_C1(C,R,X) BOOST_PP_IF(C(R,X),BOOST_PP_FOR##R,BOOST_PP_TUPLE4_EAT)

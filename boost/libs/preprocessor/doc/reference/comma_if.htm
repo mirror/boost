@@ -26,9 +26,11 @@
 
 <hr>
 
-<h2><a name="BOOST_PP_COMMA_IF">#define BOOST_PP_COMMA_IF</a>(C)</h2>
- <p>Expands to a comma if <code>C != 0</code> and nothing if
-<code>C == 0</code>.</p>
+<h2><a name="BOOST_PP_COMMA_IF">#define BOOST_PP_COMMA_IF</a>(COND)</h2>
+ <p>Expands to a comma if <code>COND != 0</code> and nothing if
+<code>COND == 0</code>.</p>
+
+<p><code>COND</code> must expand to an integer literal.</p>
 
 <p>For example, <code><a href="comma_if.htm#BOOST_PP_COMMA_IF">BOOST_PP_COMMA_IF</a>(0)</code> expands to nothing.</p>
 

@@ -16,8 +16,10 @@
 #include <boost/preprocessor/logical/bool.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
 
-/** <p>Expands to <code>T</code> if <code>C != 0</code> and <code>E</code> if
-<code>C == 0</code>.</p>
+/** <p>Expands to <code>THEN</code> if <code>COND != 0</code> and <code>ELSE</code> if
+<code>COND == 0</code>.</p>
+
+<p><code>COND</code> must expand to an integer literal.</p>
 
 <p>For example, <code>BOOST_PP_IF(0,1,2)</code> expands to <code>2</code>.</p>
 
@@ -31,7 +33,7 @@
   <li><a href="../../test/preprocessor_test.cpp">preprocessor_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_IF(C,T,E) BOOST_PP_IF_BOOL(BOOST_PP_BOOL(C))(E,T)
+#define BOOST_PP_IF(COND,THEN,ELSE) BOOST_PP_IF_BOOL(BOOST_PP_BOOL(COND))(ELSE,THEN)
 
 #define BOOST_PP_IF_BOOL(C) BOOST_PP_IF_BOOL_DELAY(C)
 #define BOOST_PP_IF_BOOL_DELAY(C) BOOST_PP_TUPLE2_ELEM##C

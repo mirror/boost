@@ -18,6 +18,8 @@
 /** <p>Expands to <code>1</code> if <code>X &gt;= Y</code> and <code>0</code>
 otherwise.</p>
 
+<p>Both <code>X</code> and <code>Y</code> must expand to integer literals.</p>
+
 <p>For example, <code>BOOST_PP_GREATER_EQUAL(1,3)</code> expands to <code>0</code>.</p>
 
 <h3>Uses</h3>

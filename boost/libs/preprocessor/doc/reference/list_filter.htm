@@ -26,9 +26,9 @@
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_FILTER">#define BOOST_PP_LIST_FILTER</a>(F,P,L)</h2>
+<h2><a name="BOOST_PP_LIST_FILTER">#define BOOST_PP_LIST_FILTER</a>(PRED,DATA,LIST)</h2>
  <p>Expands to a list containing all the elements <code>X</code> of the list
-for which <code>F(D,P,X)</code> is true.</p>
+for which <code>PRED(D,DATA,X)</code> is true.</p>
 
 <p>For example,</p>
 
@@ -55,7 +55,7 @@ for which <code>F(D,P,X)</code> is true.</p>
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_FILTER_D">#define BOOST_PP_LIST_FILTER_D</a>(D,F,P,L)</h2>
+<h2><a name="BOOST_PP_LIST_FILTER_D">#define BOOST_PP_LIST_FILTER_D</a>(D,PRED,DATA,LIST)</h2>
  <p>Can be used inside <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>().</p> 
 <hr>
 

@@ -17,8 +17,8 @@
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/while.hpp>
 
-/** <p>Expands to a list of all but the first <code>N</code> elements of the
-list <code>L</code>.</p>
+/** <p>Expands to a list of all but the first <code>COUNT</code> elements of the
+list <code>LIST</code>.</p>
 
 <p>For example,</p>
 
@@ -47,10 +47,10 @@ list <code>L</code>.</p>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_LIST_REST_N(N,L) BOOST_PP_LIST_REST_N_D(0,N,L)
+#define BOOST_PP_LIST_REST_N(COUNT,LIST) BOOST_PP_LIST_REST_N_D(0,COUNT,LIST)
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
-#define BOOST_PP_LIST_REST_N_D(D,N,L) BOOST_PP_TUPLE_ELEM(2,0,BOOST_PP_WHILE##D(BOOST_PP_LIST_REST_N_C,BOOST_PP_LIST_REST_N_F,(L,N)))
+#define BOOST_PP_LIST_REST_N_D(D,COUNT,LIST) BOOST_PP_TUPLE_ELEM(2,0,BOOST_PP_WHILE##D(BOOST_PP_LIST_REST_N_C,BOOST_PP_LIST_REST_N_F,(LIST,COUNT)))
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 #  define BOOST_PP_LIST_REST_N_C(D,X) BOOST_PP_TUPLE_ELEM(2,1,X)
 #  define BOOST_PP_LIST_REST_N_F(D,X) (BOOST_PP_TUPLE_ELEM(3,1,BOOST_PP_TUPLE_ELEM(2,0,X)),BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(2,1,X)))

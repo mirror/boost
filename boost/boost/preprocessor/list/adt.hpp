@@ -64,23 +64,23 @@ and BOOST_PP_LIST_FOLD_RIGHT_2ND():</p>
   )
 </pre>
 */
-#define BOOST_PP_LIST_CONS(H,T) (H,T,1)
+#define BOOST_PP_LIST_CONS(FIRST,REST) (FIRST,REST,1)
 
 /** <p>List nil constructor.</p> */
 #define BOOST_PP_LIST_NIL (_,_,0)
 
 /** <p>Expands to 1 if the list is not nil and 0 otherwise.</p> */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE_ELEM(3,2,L)
+#  define BOOST_PP_LIST_IS_CONS(LIST) BOOST_PP_TUPLE_ELEM(3,2,LIST)
 #else
-#  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE3_ELEM2 L
+#  define BOOST_PP_LIST_IS_CONS(LIST) BOOST_PP_TUPLE3_ELEM2 LIST
 #endif
 
 /** <p>Expands to 1 if the list is nil and 0 otherwise.</p> */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE_ELEM(3,2,L))
+#  define BOOST_PP_LIST_IS_NIL(LIST) BOOST_PP_NOT(BOOST_PP_TUPLE_ELEM(3,2,LIST))
 #else
-#  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE3_ELEM2 L)
+#  define BOOST_PP_LIST_IS_NIL(LIST) BOOST_PP_NOT(BOOST_PP_TUPLE3_ELEM2 LIST)
 #endif
 
 /** <p>Expands to the first element of the list. The list must not be nil.</p>
@@ -94,9 +94,9 @@ and BOOST_PP_LIST_FOLD_RIGHT_2ND():</p>
 <p>expands to 1.</p>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE_ELEM(3,0,L)
+#  define BOOST_PP_LIST_FIRST(LIST) BOOST_PP_TUPLE_ELEM(3,0,LIST)
 #else
-#  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE3_ELEM0 L
+#  define BOOST_PP_LIST_FIRST(LIST) BOOST_PP_TUPLE3_ELEM0 LIST
 #endif
 
 /** <p>Expands to a list of all but the first element of the list.</p>
@@ -116,8 +116,8 @@ and BOOST_PP_LIST_FOLD_RIGHT_2ND():</p>
 </pre>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
-#  define BOOST_PP_LIST_REST(L) BOOST_PP_TUPLE_ELEM(3,1,L)
+#  define BOOST_PP_LIST_REST(LIST) BOOST_PP_TUPLE_ELEM(3,1,LIST)
 #else
-#  define BOOST_PP_LIST_REST(L) BOOST_PP_TUPLE3_ELEM1 L
+#  define BOOST_PP_LIST_REST(LIST) BOOST_PP_TUPLE3_ELEM1 LIST
 #endif
 #endif

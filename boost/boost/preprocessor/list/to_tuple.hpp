@@ -41,8 +41,8 @@
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_LIST_TO_TUPLE(L) BOOST_PP_LIST_TO_TUPLE_R(0,L)
+#define BOOST_PP_LIST_TO_TUPLE(LIST) BOOST_PP_LIST_TO_TUPLE_R(0,LIST)
 
 /** <p>Can be used inside BOOST_PP_FOR().</p> */
-#define BOOST_PP_LIST_TO_TUPLE_R(R,L) (BOOST_PP_LIST_ENUM_R(R,L))
+#define BOOST_PP_LIST_TO_TUPLE_R(R,LIST) (BOOST_PP_LIST_ENUM_R(R,LIST))
 #endif

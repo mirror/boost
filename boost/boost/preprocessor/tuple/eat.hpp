@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <p>Expands to a macro that eats a tuple of the specified length.</p>
+/** <p>Expands to a macro that eats a tuple of the specified size.</p>
 
 <p>BOOST_PP_TUPLE_EAT() is designed to be used with BOOST_PP_IF() like
 BOOST_PP_EMPTY().</p>
@@ -26,7 +26,7 @@ BOOST_PP_EMPTY().</p>
 
 <p>expands to nothing.</p>
 */
-#define BOOST_PP_TUPLE_EAT(N) BOOST_PP_TUPLE_EAT_DELAY(N)
+#define BOOST_PP_TUPLE_EAT(SIZE_OF_TUPLE) BOOST_PP_TUPLE_EAT_DELAY(SIZE_OF_TUPLE)
 
 #define BOOST_PP_TUPLE_EAT_DELAY(N) BOOST_PP_TUPLE##N##_EAT
 #define BOOST_PP_TUPLE0_EAT()

@@ -39,9 +39,9 @@
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_LIST_REVERSE(L) BOOST_PP_LIST_REVERSE_D(0,L)
+#define BOOST_PP_LIST_REVERSE(LIST) BOOST_PP_LIST_REVERSE_D(0,LIST)
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
-#define BOOST_PP_LIST_REVERSE_D(D,L) BOOST_PP_LIST_FOLD_LEFT_D(D,BOOST_PP_LIST_REVERSE_F,(_,_,0),L)
+#define BOOST_PP_LIST_REVERSE_D(D,LIST) BOOST_PP_LIST_FOLD_LEFT_D(D,BOOST_PP_LIST_REVERSE_F,(_,_,0),LIST)
 #define BOOST_PP_LIST_REVERSE_F(D,P,H) (H,P,1)
 #endif

@@ -16,22 +16,22 @@
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
 
-/** <p>Iterates <code>F(D,X)</code> while <code>C(D,X)</code> is true.</p>
+/** <p>Iterates <code>OP(D,STATE)</code> while <code>PRED(D,STATE)</code> is true.</p>
 
 <p>In other words, expands to:</p>
 
 <pre>
-  F(D, ... F(D, F(D,X) ) ... )
+  OP(D, ... OP(D, OP(D,STATE) ) ... )
 </pre>
 
-<p>The depth of iteration is determined by <code>C(D,X)</code>.</p>
+<p>The depth of iteration is determined by <code>PRED(D,STATE)</code>.</p>
 
 <p>For example,</p>
 
 <pre>
-  #define C(D,X) BOOST_PP_LESS_D(D,BOOST_PP_TUPLE_ELEM(2,0,X),BOOST_PP_TUPLE_ELEM(2,1,X))
-  #define F(D,X) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,X)),BOOST_PP_TUPLE_ELEM(2,1,X))
-  BOOST_PP_WHILE(C,F,(0,3))
+  #define PRED(D,STATE) BOOST_PP_LESS_D(D,BOOST_PP_TUPLE_ELEM(2,0,STATE),BOOST_PP_TUPLE_ELEM(2,1,STATE))
+  #define OP(D,STATE) (BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(2,0,STATE)),BOOST_PP_TUPLE_ELEM(2,1,STATE))
+  BOOST_PP_WHILE(PRED,OP,(0,3))
 </pre>
 
 <p>expands to:</p>
@@ -42,11 +42,11 @@
 
 <h3>Legend</h3>
 <ul>
-  <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
-  <li><b>C</b> is the condition for iteration. It must expand to a decimal
+  <li><b>STATE</b> is the current state of iteration. The state is usually a tuple.</li>
+  <li><b>PRED</b> is the condition for iteration. It must expand to a decimal
       integer literal.</li>
-  <li><b>F</b> is the iterated macro. Note that if the state is a tuple, then
-      F(D,X) usually expands to a tuple of the same number of elements.</li>
+  <li><b>OP</b> is the iterated macro. Note that if the state is a tuple, then
+      OP(D,STATE) usually expands to a tuple of the same number of elements.</li>
   <li><b>D</b> is the recursion depth and should only be used as a parameter
       to other macros using BOOST_PP_WHILE(). Such macros include
       BOOST_PP_ADD() and other arithmetic operations. For each macro using
@@ -73,7 +73,7 @@
   <li><a href="../../example/delay.c">delay.c</a></li>
 </ul>
 */
-#define BOOST_PP_WHILE(C,F,X) BOOST_PP_WHILE_C(C(1,X),0,X)(C,F,F(1,X))
+#define BOOST_PP_WHILE(PRED,OP,STATE) BOOST_PP_WHILE_C(PRED(1,STATE),0,STATE)(PRED,OP,OP(1,STATE))
 
 #define BOOST_PP_WHILE_C(C,D,X) BOOST_PP_IF(C,BOOST_PP_WHILE##D,X BOOST_PP_TUPLE3_EAT)
 #define BOOST_PP_WHILE0(C,F,X) BOOST_PP_WHILE_C(C(2,X),1,X)(C,F,F(2,X))

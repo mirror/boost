@@ -20,7 +20,7 @@
   <li><a href="../../test/repeat_2nd_test.cpp">repeat_2nd_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_REPEAT_2ND(N,M,P) BOOST_PP_REPEAT_2ND_DELAY(N,M,P)
+#define BOOST_PP_REPEAT_2ND(COUNT,MACRO,DATA) BOOST_PP_REPEAT_2ND_DELAY(COUNT,MACRO,DATA)
 
 #define BOOST_PP_REPEAT_2ND_DELAY(N,M,P) BOOST_PP_REPEAT_2ND##N(M,P)
 #define BOOST_PP_REPEAT_2ND0(M,P)

@@ -13,18 +13,18 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <p>Repeats the macro <code>M(I,P)</code> for <code>I = [0,N[</code>.</p>
+/** <p>Repeats the macro <code>MACRO(INDEX,DATA)</code> for <code>INDEX = [0,COUNT[</code>.</p>
 
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  M(0,P) M(1,P) ... M(BOOST_PP_DEC(N),P)
+  MACRO(0,DATA) MACRO(1,DATA) ... MACRO(BOOST_PP_DEC(COUNT),DATA)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TEST(I,P) P(I);
+  #define TEST(INDEX,DATA) DATA(INDEX);
   BOOST_PP_REPEAT(3,TEST,X)
 </pre>
 
@@ -51,7 +51,7 @@ BOOST_PP_REPEAT_3RD() macros.</p>
   <li>BOOST_PP_LIMIT_MAG</li>
 </ul>
 */
-#define BOOST_PP_REPEAT(N,M,P) BOOST_PP_REPEAT_DELAY(N,M,P)
+#define BOOST_PP_REPEAT(COUNT,MACRO,DATA) BOOST_PP_REPEAT_DELAY(COUNT,MACRO,DATA)
 
 #define BOOST_PP_REPEAT_DELAY(N,M,P) BOOST_PP_REPEAT##N(M,P)
 #define BOOST_PP_REPEAT0(M,P)

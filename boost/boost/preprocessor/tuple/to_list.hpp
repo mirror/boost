@@ -37,7 +37,7 @@
   <li>BOOST_PP_LIMIT_TUPLE</li>
 </ul>
 */
-#define BOOST_PP_TUPLE_TO_LIST(N,T) BOOST_PP_TUPLE_TO_LIST_DELAY(N,T)
+#define BOOST_PP_TUPLE_TO_LIST(SIZE_OF_TUPLE,TUPLE) BOOST_PP_TUPLE_TO_LIST_DELAY(SIZE_OF_TUPLE,TUPLE)
 
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 /* This is a workaround for a CodeWarrior PP bug. Strictly speaking

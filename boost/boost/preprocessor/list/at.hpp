@@ -15,7 +15,7 @@
 
 #include <boost/preprocessor/list/rest_n.hpp>
 
-/** <p>Expands to the <code>I</code>:th element of the list <code>L</code>. The
+/** <p>Expands to the <code>INDEX</code>:th element of the list <code>LIST</code>. The
 first element is at index <code>0</code>.</p>
 
 <p>For example,</p>
@@ -36,8 +36,8 @@ first element is at index <code>0</code>.</p>
   <li><a href="../../test/list_test.cpp">list_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_LIST_AT(L,I) BOOST_PP_LIST_AT_D(0,L,I)
+#define BOOST_PP_LIST_AT(LIST,INDEX) BOOST_PP_LIST_AT_D(0,LIST,INDEX)
 
 /** <p>Can be used inside BOOST_PP_WHILE().</p> */
-#define BOOST_PP_LIST_AT_D(D,L,I) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N_D(D,I,L))
+#define BOOST_PP_LIST_AT_D(D,LIST,INDEX) BOOST_PP_LIST_FIRST(BOOST_PP_LIST_REST_N_D(D,INDEX,LIST))
 #endif

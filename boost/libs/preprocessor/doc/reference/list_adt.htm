@@ -34,7 +34,7 @@
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_CONS">#define BOOST_PP_LIST_CONS</a>(H,T)</h2>
+<h2><a name="BOOST_PP_LIST_CONS">#define BOOST_PP_LIST_CONS</a>(FIRST,REST)</h2>
  <p>List constructor.</p>
 
 <p>Lists are build using list constructors <a href="list_adt.htm#BOOST_PP_LIST_NIL">BOOST_PP_LIST_NIL</a> and
@@ -79,15 +79,15 @@ and <a href="list_fold_right_2nd.htm#BOOST_PP_LIST_FOLD_RIGHT_2ND">BOOST_PP_LIST
  <p>List nil constructor.</p> 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_IS_CONS">#define BOOST_PP_LIST_IS_CONS</a>(L)</h2>
+<h2><a name="BOOST_PP_LIST_IS_CONS">#define BOOST_PP_LIST_IS_CONS</a>(LIST)</h2>
  <p>Expands to 1 if the list is not nil and 0 otherwise.</p> 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_IS_NIL">#define BOOST_PP_LIST_IS_NIL</a>(L)</h2>
+<h2><a name="BOOST_PP_LIST_IS_NIL">#define BOOST_PP_LIST_IS_NIL</a>(LIST)</h2>
  <p>Expands to 1 if the list is nil and 0 otherwise.</p> 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_FIRST">#define BOOST_PP_LIST_FIRST</a>(L)</h2>
+<h2><a name="BOOST_PP_LIST_FIRST">#define BOOST_PP_LIST_FIRST</a>(LIST)</h2>
  <p>Expands to the first element of the list. The list must not be nil.</p>
 
 <p>For example,</p>
@@ -100,7 +100,7 @@ and <a href="list_fold_right_2nd.htm#BOOST_PP_LIST_FOLD_RIGHT_2ND">BOOST_PP_LIST
 
 <hr>
 
-<h2><a name="BOOST_PP_LIST_REST">#define BOOST_PP_LIST_REST</a>(L)</h2>
+<h2><a name="BOOST_PP_LIST_REST">#define BOOST_PP_LIST_REST</a>(LIST)</h2>
  <p>Expands to a list of all but the first element of the list.</p>
 
 <p>The list must not be nil.</p>

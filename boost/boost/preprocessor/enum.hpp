@@ -22,14 +22,14 @@
 <p>In other words, expands to the sequence:</p>
 
 <pre>
-  F(0,P), F(1,P), ..., F(BOOST_PP_DEC(N),P)
+  MACRO(0,DATA), MACRO(1,DATA), ..., MACRO(BOOST_PP_DEC(COUNT),DATA)
 </pre>
 
 <p>For example,</p>
 
 <pre>
-  #define TYPED_PARAM(I,P)\
-    BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,P),I) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,1,P),I)
+  #define TYPED_PARAM(INDEX,DATA)\
+    BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,0,DATA),INDEX) BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2,1,DATA),INDEX)
   BOOST_PP_ENUM(3,TYPED_PARAM,(X,x))
 </pre>
 
@@ -49,7 +49,7 @@
   <li><a href="../../test/repeat_test.cpp">repeat_test.cpp</a></li>
 </ul>
 */
-#define BOOST_PP_ENUM(N,F,P) BOOST_PP_REPEAT(N,BOOST_PP_ENUM_F,(F,P))
+#define BOOST_PP_ENUM(COUNT,MACRO,DATA) BOOST_PP_REPEAT(COUNT,BOOST_PP_ENUM_F,(MACRO,DATA))
 
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__)
 #  define BOOST_PP_ENUM_F(I,FP) BOOST_PP_COMMA_IF(I) BOOST_PP_TUPLE_ELEM(2,0,FP)(I,BOOST_PP_TUPLE_ELEM(2,1,FP))

@@ -26,23 +26,23 @@
 
 <hr>
 
-<h2><a name="BOOST_PP_WHILE">#define BOOST_PP_WHILE</a>(C,F,X)</h2>
- <p>Iterates <code>F(D,X)</code> while <code>C(D,X)</code> is true.</p>
+<h2><a name="BOOST_PP_WHILE">#define BOOST_PP_WHILE</a>(PRED,OP,STATE)</h2>
+ <p>Iterates <code>OP(D,STATE)</code> while <code>PRED(D,STATE)</code> is true.</p>
 
 <p>In other words, expands to:</p>
 
 <pre>
-  F(D, ... F(D, F(D,X) ) ... )
+  OP(D, ... OP(D, OP(D,STATE) ) ... )
 </pre>
 
-<p>The depth of iteration is determined by <code>C(D,X)</code>.</p>
+<p>The depth of iteration is determined by <code>PRED(D,STATE)</code>.</p>
 
 <p>For example,</p>
 
 <pre>
-  #define C(D,X) <a href="comparison_less.htm#BOOST_PP_LESS_D">BOOST_PP_LESS_D</a>(D,<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,X),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,X))
-  #define F(D,X) (<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,X)),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,X))
-  <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>(C,F,(0,3))
+  #define PRED(D,STATE) <a href="comparison_less.htm#BOOST_PP_LESS_D">BOOST_PP_LESS_D</a>(D,<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,STATE),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,STATE))
+  #define OP(D,STATE) (<a href="inc.htm#BOOST_PP_INC">BOOST_PP_INC</a>(<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,0,STATE)),<a href="tuple_elem.htm#BOOST_PP_TUPLE_ELEM">BOOST_PP_TUPLE_ELEM</a>(2,1,STATE))
+  <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>(PRED,OP,(0,3))
 </pre>
 
 <p>expands to:</p>
@@ -53,11 +53,11 @@
 
 <h3>Legend</h3>
 <ul>
-  <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
-  <li><b>C</b> is the condition for iteration. It must expand to a decimal
+  <li><b>STATE</b> is the current state of iteration. The state is usually a tuple.</li>
+  <li><b>PRED</b> is the condition for iteration. It must expand to a decimal
       integer literal.</li>
-  <li><b>F</b> is the iterated macro. Note that if the state is a tuple, then
-      F(D,X) usually expands to a tuple of the same number of elements.</li>
+  <li><b>OP</b> is the iterated macro. Note that if the state is a tuple, then
+      OP(D,STATE) usually expands to a tuple of the same number of elements.</li>
   <li><b>D</b> is the recursion depth and should only be used as a parameter
       to other macros using <a href="while.htm#BOOST_PP_WHILE">BOOST_PP_WHILE</a>(). Such macros include
       <a href="arithmetic_add.htm#BOOST_PP_ADD">BOOST_PP_ADD</a>() and other arithmetic operations. For each macro using
