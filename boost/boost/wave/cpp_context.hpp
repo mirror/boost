@@ -109,14 +109,16 @@ public:
     {
         macros.init_predefined_macros(fname);
         includes.init_initial_path();
-        includes.set_current_directory(filename.c_str());
     }
 
 // iterator interface
     iterator_type begin() 
     { 
-        return iterator_type(*this, first, last, position_type(filename.c_str()),
-            get_language()); 
+    boost::filesystem::path filepath = includes.complete_path(filename.c_str());
+
+        includes.set_current_directory(filename.c_str());
+        return iterator_type(*this, first, last, 
+            position_type(filepath.string().c_str()), get_language()); 
     }
     iterator_type end() const 
         { return iterator_type(); }
