@@ -632,6 +632,28 @@ test_ref()
   }
 }
 
+static void
+test_new_syntax()
+{
+  write_five_obj five;
+  function<void()> v2;
+
+  // Assignment
+  v2 = five;
+  BOOST_TEST(!v2.empty());
+
+  // Invocation
+  global_int = 0;
+  v2();
+
+  BOOST_TEST(global_int == 5);
+  function<string (const string& x, const string& y)> cat(&string_cat);
+  BOOST_TEST(cat("str", "ing") == "string");  
+
+  function<int (short lhs, short rhs)> sum(&sum_ints);
+  BOOST_TEST(sum(2, 3) == 5);
+}
+
 int test_main(int, char* [])
 {
   test_zero_args();
@@ -640,6 +662,7 @@ int test_main(int, char* [])
   test_emptiness();
   test_member_functions();
   test_ref();
+  test_new_syntax();
 
   return 0;
 }
