@@ -1090,6 +1090,7 @@ private: // helpers, for structors, below
 public: // structors, cont.
 
 #if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
+ && !BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(700)) \
  && !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 
     template <typename T>
