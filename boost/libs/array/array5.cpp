@@ -10,8 +10,8 @@ void test_static_size (const T& cont)
     for (unsigned i=0; i<T::static_size; ++i) {
         tmp[i] = int(cont[i]);
     }
-    for (unsigned i=0; i<T::static_size; ++i) {
-        std::cout << tmp[i] << ' ';
+    for (unsigned j=0; j<T::static_size; ++j) {
+        std::cout << tmp[j] << ' ';
     }
     std::cout << std::endl;
 }
