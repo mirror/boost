@@ -71,7 +71,7 @@ namespace boost
         struct range_end<char_array_>
         {
             template< typename T, std::size_t sz >
-            static std::size_t fun( T BOOST_RANGE_ARRAY_REF()[sz] )
+            static T* fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
                 return boost::range_detail::array_end( array );
             }
@@ -81,7 +81,7 @@ namespace boost
         struct range_end<wchar_t_array_>
         {
             template< typename T, std::size_t sz >
-            static std::size_t fun( T BOOST_RANGE_ARRAY_REF()[sz] )
+            static T* fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
                 return boost::range_detail::array_end( array );
             }

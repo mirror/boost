@@ -58,7 +58,7 @@ namespace boost
         struct range_begin<array_>
         {
             template< typename T, std::size_t sz >
-            static T* fun( T BOOST_ARRAY_REF[sz] )
+            static T* fun( T BOOST_RANGE_ARRAY_REF()[sz] )
             {
                 return array;
             }
