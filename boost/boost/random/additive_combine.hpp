@@ -87,7 +87,7 @@ private:
 typedef random::additive_combine<
     random::linear_congruential<int32_t, 40014, 0, 2147483563, 0>,
     random::linear_congruential<int32_t, 40692, 0, 2147483399, 0>,
-  /* unknown */ 0> ecuyer1988;
+  2060321752> ecuyer1988;
 
 } // namespace boost
 
