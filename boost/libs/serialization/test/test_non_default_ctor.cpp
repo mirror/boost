@@ -60,12 +60,6 @@ class A
         ar & BOOST_SERIALIZATION_NVP(w);
         ar & BOOST_SERIALIZATION_NVP(x);
     }
-
-    A() : // default constructor not actually used
-        i(0)
-    {
-         BOOST_ERROR("default constructor should never be used");
-    } 
 public:
     static int count;
     const int & get_i() const {
@@ -124,7 +118,13 @@ bool A::operator<(const A &rhs) const
 
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
+// note: workaround what I believe is a bug in VC 7.1 implementation of
+// ADL. The load_construct_data is not found by ADL as I believe it should be.
+// Workaround this by putting the overloads in the boost::serialization namespace.
+
+#if defined(_MSC_VER) && (_MSC_VER == 1310) \
+|| BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost { namespace serialization {
 #endif
 
@@ -149,7 +149,8 @@ inline void load_construct_data(
     ::new(a)A(i);
 }
 
-#ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#if defined(_MSC_VER) && (_MSC_VER == 1310) \
+|| BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 }} // namespace boost::serialization
 #endif
 
