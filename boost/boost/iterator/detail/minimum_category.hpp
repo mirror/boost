@@ -73,8 +73,14 @@ template <class T1 = mpl::_1, class T2 = mpl::_2>
 struct minimum_category
 {
     typedef minimum_category_impl< 
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200) // ETI workaround
+        is_same<T2,int>::value ||
+# endif 
         ::boost::is_convertible<T1,T2>::value
       , ::boost::is_convertible<T2,T1>::value
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200) // ETI workaround
+        || is_same<T1,int>::value
+# endif 
     > outer;
       
     typedef typename outer::template apply<T1,T2> inner;
@@ -91,7 +97,7 @@ struct minimum_category<mpl::_1,mpl::_2>
     {};
 };
     
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200) // ETI workaround
 template <>
 struct minimum_category<int,int>
 {
