@@ -48,7 +48,7 @@ public:
   bool operator()(const any& k1, const any& k2) const
   {
     if (k1.type() == typeid(front_type))
-      return k2.type() != typeid(front_type);
+      return !(k2.type() == typeid(front_type));
     if (k1.type() == typeid(back_type))
       return false;
     if (k2.type() == typeid(front_type))
