@@ -9,13 +9,18 @@
 
 #include "boost/config/compiler/common_edg.hpp"
 
-#ifdef __ICL
-#  define BOOST_COMPILER "Intel C++ version " BOOST_STRINGIZE(__ICL)
+#if defined(__INTEL_COMPILER)
+#  define BOOST_INTEL_CXX_VERSION __INTEL_COMPILER
+#elif defined(__ICL)
 #  define BOOST_INTEL_CXX_VERSION __ICL
-#else
-#  define BOOST_COMPILER "Intel C++ version " BOOST_STRINGIZE(__ICC)
+#elif defined(__ICC)
 #  define BOOST_INTEL_CXX_VERSION __ICC
+#elif defined(__ECC)
+#  define BOOST_INTEL_CXX_VERSION __ECC
 #endif
+
+#define BOOST_COMPILER "Intel C++ version " BOOST_STRINGIZE(BOOST_INTEL_CXX_VERSION)
+#define BOOST_INTEL BOOST_INTEL_CXX_VERSION
 
 #if (BOOST_INTEL_CXX_VERSION <= 500) && defined(_MSC_VER)
 #  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS

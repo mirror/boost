@@ -38,7 +38,7 @@
 //  Borland
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/borland.hpp"
 
-#elif defined(__ICL) || defined(__ICC)
+#elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC)
 //  Intel
 #   define BOOST_COMPILER_CONFIG "boost/config/compiler/intel.hpp"
 
