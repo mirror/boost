@@ -20,6 +20,11 @@
 # define BOOST_NO_TEMPLATE_CV_REF_OVERLOADS
 #endif
 
+// The following code might be put into some Boost.Config header in a later revision
+#ifdef __BORLANDC__
+# pragma option push -w-inl
+#endif
+
 // There are a few places in this file where the expression "this->m" is used.
 // This expression is used to force instantiation-time name lookup, which I am
 //   informed is required for strict Standard compliance.  It's only necessary
@@ -144,5 +149,10 @@ object_pool<T, UserAllocator>::~object_pool()
 }
 
 } // namespace boost
+
+// The following code might be put into some Boost.Config header in a later revision
+#ifdef __BORLANDC__
+# pragma option pop
+#endif
 
 #endif

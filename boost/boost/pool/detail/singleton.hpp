@@ -10,6 +10,11 @@
 #ifndef BOOST_POOL_SINGLETON_HPP
 #define BOOST_POOL_SINGLETON_HPP
 
+// The following code might be put into some Boost.Config header in a later revision
+#ifdef __BORLANDC__
+# pragma option push -w-inl
+#endif
+
 //
 // The following helper classes are placeholders for a generic "singleton"
 //  class.  The classes below support usage of singletons, including use in
@@ -94,5 +99,10 @@ singleton_default<T>::create_object;
 } // namespace details
 
 } // namespace boost
+
+// The following code might be put into some Boost.Config header in a later revision
+#ifdef __BORLANDC__
+# pragma option pop
+#endif
 
 #endif
