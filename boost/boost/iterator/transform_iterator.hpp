@@ -124,7 +124,7 @@ namespace boost
     transform_iterator(
          transform_iterator<OtherUnaryFunction, OtherIterator, OtherReference, OtherValue> const& t
        , typename enable_if_convertible<OtherIterator, Iterator>::type* = 0
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1310)
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1310)
        , typename enable_if_convertible<OtherUnaryFunction, UnaryFunction>::type* = 0
 #endif 
     )
@@ -158,9 +158,16 @@ namespace boost
   // function pointer in the iterator be 0, leading to a runtime
   // crash.
   template <class UnaryFunction, class Iterator>
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+  typename mpl::if_<
+#else 
   typename iterators::enable_if<
+#endif 
       is_class<UnaryFunction>   // We should probably find a cheaper test than is_class<>
     , transform_iterator<UnaryFunction, Iterator>
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    , int[3]
+#endif 
   >::type
   make_transform_iterator(Iterator it)
   {

@@ -102,7 +102,22 @@ namespace boost
   // false positives for user/library defined iterator types. See comments
   // on operator implementation for consequences.
   //
-#  if defined(BOOST_NO_IS_CONVERTIBLE) || defined(BOOST_NO_SFINAE)
+#  if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+  
+  template<typename From, typename To>
+  struct enable_if_convertible
+  {
+     typedef typename mpl::if_<
+         mpl::or_<
+             is_same<From,To>
+           , is_convertible<From, To>
+         >
+      , detail::enable_type
+      , int&
+     >::type type;
+  };
+  
+#  elif defined(BOOST_NO_IS_CONVERTIBLE) || defined(BOOST_NO_SFINAE)
   
   template <class From, class To>
   struct enable_if_convertible

@@ -56,7 +56,7 @@ namespace boost
             typedef bool type;
         };
     };
-    
+
     //
     // enable if for use in operator implementation.
     //
@@ -66,6 +66,18 @@ namespace boost
       , class Return
     >
     struct enable_if_interoperable
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    {
+        typedef typename mpl::if_<
+            mpl::or_<
+                is_convertible<Facade1, Facade2>
+              , is_convertible<Facade2, Facade1>
+            >
+          , Return
+          , int[3]
+        >::type type;
+    };        
+#else
       : ::boost::iterators::enable_if<
            mpl::or_<
                is_convertible<Facade1, Facade2>
@@ -73,8 +85,8 @@ namespace boost
            >
          , Return
         >
-    {
-    };
+    {};
+#endif 
 
     //
     // Generates associated types for an iterator_facade with the
