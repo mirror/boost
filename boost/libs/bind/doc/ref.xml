@@ -219,7 +219,7 @@
         <computeroutput>T</computeroutput> otherwise.</para>
       </description>
 
-      <typedef name="T"><type><emphasis>unspecified</emphasis></type></typedef>
+      <typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef>
     </class>
   </namespace>
 </header>
