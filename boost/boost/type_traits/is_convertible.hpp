@@ -128,7 +128,7 @@ struct is_convertible_impl
         == sizeof(::boost::type_traits::yes_type);
 };
 
-#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1310) && _MSC_FULL_VER > 13102215) \
+#elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1310) && _MSC_FULL_VER > 13102292) \
       || (defined(__EDG_VERSION__) && (__EDG_VERSION__ >= 245) && !defined(__ICL))
 //
 // This is *almost* an ideal world implementation as it doesn't rely
@@ -149,7 +149,7 @@ struct is_convertible_impl
 {
     static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(any_conversion ...);
     static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To, int);
-    static From _m_from;
+	    static From _m_from;
 
     BOOST_STATIC_CONSTANT(bool, value = 
         sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
