@@ -11,6 +11,9 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   13 Jan 01  SGI IRIX and Compaq Tru64 Unix compiler support added
+//              (Jens Maurer)
+//   13 Jan 01  BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP (Jens Maurer)
 //   17 Nov 00  BOOST_NO_AUTO_PTR (John Maddock)
 //    4 Oct 00  BOOST_NO_STD_MIN_MAX (Jeremy Siek)
 //   29 Sep 00  BOOST_NO_INTEGRAL_INT64_T (Jens Maurer)
@@ -52,6 +55,10 @@
 //  compilers do not require a lot of configuration flag macros.  It places the
 //  burden where it should be, on non-conforming compilers.  In the future,
 //  hopefully, less rather than more conformance flags will have to be defined.
+
+//  BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP: Compiler does not implement
+//  argument-dependent lookup (also named Koenig lookup); see std::3.4.2
+//  [basic.koenig.lookup]
 
 //  BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS: Template value
 //  parameters cannot have a dependent type, for example
@@ -207,6 +214,16 @@
 #   define BOOST_NO_SLIST
 #   define BOOST_NO_HASH
 
+//  SGI IRIX CC --------------------------------------------------------
+
+#elif defined __sgi
+#   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
+//  Compaq Tru64 Unix cxx ---------------------------------------------------
+
+#elif defined __DECCXX
+#   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+
 //  Greenhills C++ -----------------------------------------------------------//
 
 #elif defined __ghs
@@ -310,6 +327,7 @@
 #   if _MSC_VER <= 1200  // 1200 == VC++ 6.0
 #     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #     define BOOST_NO_PRIVATE_IN_AGGREGATE
+#     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 
 #     define BOOST_NO_INTEGRAL_INT64_T
 #     define BOOST_NO_INTRINSIC_WCHAR_T
