@@ -103,9 +103,9 @@ namespace boost {
      typename boost::add_reference<const tail_type>::type get_tail() const { return tail; }
   
 #if defined BOOST_MSVC
-      template<typename Tail>
+      template<typename T>
       explicit cons(const head_type& h /* = head_type() */, // causes MSVC 6.5 to barf.
-                    const Tail& t) : head(h), tail(t.head, t.tail)
+                    const T& t) : head(h), tail(t.head, t.tail)
       {
       }
 
@@ -115,6 +115,12 @@ namespace boost {
       }
 
 #else
+      template<typename T>
+      explicit cons(const head_type& h = head_type(), 
+                    const T& t) : head(h), tail(t.head, t.tail)
+      {
+      }
+
       explicit cons(const head_type& h = head_type(),
                     const tail_type& t = tail_type()) :
         head(h), tail(t)
