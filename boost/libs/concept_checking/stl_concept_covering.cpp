@@ -122,6 +122,9 @@ namespace power_stuff {
   }
 }
 
+struct tag1 { };
+struct tag2 { };
+
 int
 main()
 {
@@ -683,14 +686,14 @@ main()
     std::nth_element(ri, ri, ri, comp);
   }
   {
-#if defined(__KCC)
-    // The KAI version of this uses a one-argument less-than function
-    // object.
-    typedef less_than_comparable_archetype<> FT;
-    typedef convertible_to_archetype<FT> T;
-#else
+#if defined(__GNUC__)
     typedef less_than_op_first_archetype<> FT;
     typedef less_than_op_second_archetype<> T;
+#elif defined(__KCC)
+    // The KAI version of this uses a one-argument less-than function
+    // object.
+    typedef less_than_comparable_archetype<> T;
+    typedef convertible_to_archetype<T> FT;
 #endif
     forward_iterator_archetype<FT> fi;
     T value(dummy_cons);
@@ -708,13 +711,12 @@ main()
   }
   {
 #if defined(__GNUC__)
-    typedef less_than_op_first_archetype<
-      less_than_op_second_archetype<> > FT;
-    typedef less_than_op_second_archetype<
-      less_than_op_first_archetype<> > T;
-#else
-    typedef less_than_op_first_archetype<> FT;
-    typedef less_than_op_second_archetype<> T;
+    // Note, order of T,FT is flipped from lower_bound
+    typedef less_than_op_second_archetype<> FT;
+    typedef less_than_op_first_archetype<> T;
+#elif defined(__KCC)
+    typedef less_than_comparable_archetype<> T;
+    typedef convertible_to_archetype<T> FT;
 #endif
     forward_iterator_archetype<FT> fi;
     T value(dummy_cons);
@@ -723,15 +725,9 @@ main()
   {
     typedef null_archetype<int> Arg1;
     typedef null_archetype<char> Arg2;
-#if defined(__GNUC__)
-    typedef convertible_to_archetype<Arg1,
-      convertible_to_archetype<Arg2> > FT;
-    typedef convertible_to_archetype<Arg2,
-      convertible_to_archetype<Arg1> > T;
-#else
-    typedef convertible_to_archetype<Arg1> FT;
-    typedef convertible_to_archetype<Arg2> T;
-#endif
+    // Note, order of T,FT is flipped from lower_bound
+    typedef convertible_to_archetype<Arg1> T;
+    typedef convertible_to_archetype<Arg2> FT;
     forward_iterator_archetype<FT> fi;
     T value(dummy_cons);
     binary_predicate_archetype<Arg1, Arg2> comp(dummy_cons);
@@ -740,12 +736,12 @@ main()
   {
 #if defined(__GNUC__)
     typedef less_than_op_first_archetype<
-      less_than_op_second_archetype<> > FT;
+      less_than_op_second_archetype< null_archetype<>, optag2>, optag1> FT;
     typedef less_than_op_second_archetype<
-      less_than_op_first_archetype<> > T;
-#else
-    typedef less_than_op_first_archetype<> FT;
-    typedef less_than_op_second_archetype<> T;
+      less_than_op_first_archetype< null_archetype<>, optag2>, optag1> T;
+#elif defined(__KCC)
+    typedef less_than_comparable_archetype<> T;
+    typedef convertible_to_archetype<T> FT;
 #endif
     typedef forward_iterator_archetype<FT> FIter;
     FIter fi;
@@ -756,15 +752,10 @@ main()
   {
     typedef null_archetype<int> Arg1;
     typedef null_archetype<char> Arg2;
-#if defined(__GNUC__)
     typedef convertible_to_archetype<Arg1,
       convertible_to_archetype<Arg2> > FT;
     typedef convertible_to_archetype<Arg2,
       convertible_to_archetype<Arg1> > T;
-#else
-    typedef convertible_to_archetype<Arg1> FT;
-    typedef convertible_to_archetype<Arg2> T;
-#endif
     typedef forward_iterator_archetype<FT> FIter;
     FIter fi;
     T value(dummy_cons);
@@ -773,14 +764,14 @@ main()
     ignore_unused_variable_warning(p);
   }
   {
-#if defined(__KCC) || defined(__GNUC__)
+#if defined(__GNUC__)
     typedef less_than_op_first_archetype<
-      less_than_op_second_archetype<> > FT;
+      less_than_op_second_archetype<null_archetype<>, optag2>, optag1> FT;
     typedef less_than_op_second_archetype<
-      less_than_op_first_archetype<> > T;
-#else
-    typedef less_than_op_first_archetype<> FT;
-    typedef less_than_op_second_archetype<> T;
+      less_than_op_first_archetype<null_archetype<>, optag2>, optag1> T;
+#elif defined(__KCC)
+    typedef less_than_op_first_archetype< less_than_comparable_archetype<> > T;
+    typedef less_than_op_second_archetype< convertible_to_archetype<T> > FT;
 #endif
     forward_iterator_archetype<FT> fi;
     T value(dummy_cons);
@@ -795,9 +786,6 @@ main()
       convertible_to_archetype<Arg2> > FT;
     typedef convertible_to_archetype<Arg2,
       convertible_to_archetype<Arg1> > T;
-#else
-    typedef convertible_to_archetype<Arg1> FT;
-    typedef convertible_to_archetype<Arg2> T;
 #endif
     typedef forward_iterator_archetype<FT> FIter;
     FIter fi;
@@ -808,18 +796,13 @@ main()
   }
   {
     typedef null_archetype<> Tout;
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__KCC)
     typedef less_than_op_first_archetype<
       less_than_op_second_archetype<
-      convertible_to_archetype<Tout> > > Tin1;
+      convertible_to_archetype<Tout>, optag2>, optag1 > Tin1;
     typedef less_than_op_second_archetype<
       less_than_op_first_archetype<
-      convertible_to_archetype<Tout> > > Tin2;
-#else
-    typedef less_than_op_first_archetype<
-      convertible_to_archetype<Tout> > Tin1;
-    typedef less_than_op_second_archetype<
-      convertible_to_archetype<Tout> > Tin2;
+      convertible_to_archetype<Tout>, optag2> ,optag1> Tin2;
 #endif
     input_iterator_archetype<Tin1> in1;
     input_iterator_archetype<Tin2> in2;
@@ -834,18 +817,13 @@ main()
     typedef null_archetype<int> Arg1;
     typedef null_archetype<char> Arg2;
     typedef null_archetype<short> Tout;
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__KCC)
     typedef convertible_to_archetype<Tout,
       convertible_to_archetype<Arg1,
       convertible_to_archetype<Arg2> > > Tin1;
     typedef convertible_to_archetype<Tout,
       convertible_to_archetype<Arg2,
       convertible_to_archetype<Arg1> > > Tin2;
-#else
-    typedef convertible_to_archetype<Tout,
-      convertible_to_archetype<Arg1> > Tin1;
-    typedef convertible_to_archetype<Tout,
-      convertible_to_archetype<Arg2> > Tin2;
 #endif
     input_iterator_archetype<Tin1> in1;
     input_iterator_archetype<Tin2> in2;
@@ -872,14 +850,11 @@ main()
     std::inplace_merge(bi, bi, bi, comp);
   }
   {
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__KCC)
     typedef less_than_op_first_archetype<
-      less_than_op_second_archetype<> > Tin1;
+      less_than_op_second_archetype<null_archetype<>, optag1>, optag2> Tin1;
     typedef less_than_op_second_archetype<
-      less_than_op_first_archetype<> > Tin2;
-#else
-    typedef less_than_op_first_archetype<> Tin1;
-    typedef less_than_op_second_archetype<> Tin2;
+      less_than_op_first_archetype<null_archetype<>, optag1>, optag2> Tin2;
 #endif
     input_iterator_archetype<Tin1> in1;
     input_iterator_archetype<Tin2> in2;
@@ -895,14 +870,11 @@ main()
   {
     typedef null_archetype<int> Arg1;
     typedef null_archetype<char> Arg2;
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__KCC)
     typedef convertible_to_archetype<Arg1,
       convertible_to_archetype<Arg2> > Tin1;
     typedef convertible_to_archetype<Arg2,
       convertible_to_archetype<Arg1> > Tin2;
-#else
-    typedef convertible_to_archetype<Arg1> Tin1;
-    typedef convertible_to_archetype<Arg2> Tin2;
 #endif
     input_iterator_archetype<Tin1> in1;
     input_iterator_archetype<Tin2> in2;
@@ -917,7 +889,8 @@ main()
 #endif
   }
   {
-    typedef sgi_assignable_archetype< less_than_comparable_archetype<> > T;
+    typedef sgi_assignable_archetype<
+      less_than_comparable_archetype<> > T;
     random_access_iterator_archetype<T> ri;
     std::push_heap(ri, ri);
     std::pop_heap(ri, ri);

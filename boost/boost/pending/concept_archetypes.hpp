@@ -224,25 +224,42 @@ namespace boost {
   operator>=(const comparable_archetype<Base>&,
 	     const comparable_archetype<Base>&)
     { return boolean_archetype(dummy_cons); }
-  
+
+
+  // The purpose of the optags is so that one can specify
+  // exactly which types the operator< is defined between.
+  // This is useful for allowing the operations:
+  //
+  // A a; B b;
+  // a < b
+  // b < a
+  //
+  // without also allowing the combinations:
+  //
+  // a < a
+  // b < b
+  //
+  struct optag1 { };
+  struct optag2 { };
+  struct optag3 { };
 
 #define BOOST_DEFINE_BINARY_PREDICATE_ARCHETYPE(OP, NAME) \
-  template <class Base = null_archetype<> > \
+  template <class Base = null_archetype<>, class Tag = optag1 > \
   class NAME##_first_archetype : public Base { \
   public: \
     NAME##_first_archetype(detail::dummy_constructor x) : Base(x) { } \
   }; \
   \
-  template <class Base = null_archetype<> > \
+  template <class Base = null_archetype<>, class Tag = optag1 > \
   class NAME##_second_archetype : public Base { \
   public: \
     NAME##_second_archetype(detail::dummy_constructor x) : Base(x) { } \
   }; \
   \
-  template <class BaseFirst, class BaseSecond> \
+  template <class BaseFirst, class BaseSecond, class Tag> \
   boolean_archetype \
-  operator OP (const NAME##_first_archetype<BaseFirst>&, \
-               const NAME##_second_archetype<BaseSecond>&) \
+  operator OP (const NAME##_first_archetype<BaseFirst, Tag>&, \
+               const NAME##_second_archetype<BaseSecond, Tag>&) \
   { \
     return boolean_archetype(dummy_cons); \
   }
