@@ -656,7 +656,7 @@ struct iterator_adaptor :
         return policies().dereference(type<reference>(), iter());
     }
 
-#ifdef _MSC_VER
+#ifdef BOOST_MSVC
 # pragma warning(push)
 # pragma warning( disable : 4284 )
 #endif
@@ -665,7 +665,7 @@ struct iterator_adaptor :
     operator->() const
         { return detail::operator_arrow(*this, iterator_category()); }
 
-#ifdef _MSC_VER
+#ifdef BOOST_MSVC
 # pragma warning(pop)
 #endif
 
