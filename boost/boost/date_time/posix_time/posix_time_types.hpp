@@ -33,7 +33,7 @@ namespace posix_time {
    */
   typedef date_time::second_clock<ptime::date_type, ptime> second_clock;
 
-#ifdef BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
+#ifdef BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
   //! A time clock that has a resolution of one microsecond
   /*! \ingroup time_basics
    */

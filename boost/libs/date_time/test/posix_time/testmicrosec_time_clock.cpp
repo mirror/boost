@@ -13,7 +13,7 @@
 int
 main() 
 {
-#ifdef BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
+#ifdef BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
 
   using namespace boost::posix_time;
 
@@ -23,7 +23,13 @@ main()
   int max = 30;
   for (int i = 0; i<max; i++)
   {
-    for (int j=0; j<100000; j++);
+    for (int j=0; j<100000; j++)
+    {
+#if defined(BOOST_HAS_FTIME)
+      SYSTEMTIME st;
+      GetSystemTime(&st);
+#endif
+    }
 
     ptime t1 = second_clock::local_time();
     std::cout << to_simple_string(t1) << std::endl;
@@ -42,7 +48,7 @@ main()
     
   }
 #else
-  check("Get time of day micro second clock not supported due to inadequate compiler", false);
+  check("Get time of day micro second clock not supported due to inadequate compiler/platform", false);
 #endif
   return printTestStats();
 

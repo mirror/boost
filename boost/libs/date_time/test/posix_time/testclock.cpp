@@ -27,13 +27,13 @@ main()
   }
 #endif
 
-#ifdef BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
+#ifdef BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
    for (int i=0; i < 10; ++i) {
      //ptime t2 = high_precision_clock::local_time();
      ptime t2 = microsec_clock::local_time();
      std::cout << to_simple_string(t2) << std::endl;
    }
-#endif // BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
+#endif // BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
 
   return 0;
 

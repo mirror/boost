@@ -14,8 +14,8 @@
 
 //Set up a configuration parameter for platforms that have 
 //GetTimeOfDay
-#ifdef BOOST_HAS_GETTIMEOFDAY
-#define BOOST_DATE_TIME_HAS_GETTIMEOFDAY_HIGH_PRECISION_CLOCK
+#if defined(BOOST_HAS_GETTIMEOFDAY) || defined(BOOST_HAS_FTIME)
+#define BOOST_DATE_TIME_HAS_HIGH_PRECISION_CLOCK
 #endif
 
 // To Force no default constructors for date & ptime, un-comment following
