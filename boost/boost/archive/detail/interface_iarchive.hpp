@@ -66,7 +66,7 @@ public:
 
     // default processing - invoke serialization library
     template<class T>
-    void load_override(T & t, BOOST_PFTO int){
+    void load_override(T & t, /*BOOST_PFTO*/ int){
         archive::load(* this->This(), t);
     }
 
@@ -88,7 +88,10 @@ public:
     // the & operator 
     template<class T>
     Archive & operator&(T & t){
-        return * this >> t;
+        // see above
+        BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
+        this->This()->load_override(t, 0);
+        return * this->This();
     }
 
     // define the following pair in order to permit passing of const and non_const

@@ -41,7 +41,7 @@ namespace archive {
 template<class Archive>
 class basic_text_oarchive : public detail::common_oarchive<Archive>
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) \
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
 || BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x564))
 public:
 #elif defined(BOOST_MSVC)

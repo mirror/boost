@@ -60,7 +60,7 @@ struct tracking_type {
     }
 };
 
-struct class_name_type : boost::noncopyable {
+struct class_name_type : private boost::noncopyable {
     char *t;
     operator const char * & () const {
         return const_cast<const char * &>(t);

@@ -23,7 +23,7 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-class basic_serializer : boost::noncopyable
+class basic_serializer : private boost::noncopyable
 {
 protected:
     explicit basic_serializer(

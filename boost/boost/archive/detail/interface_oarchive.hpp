@@ -69,7 +69,7 @@ public:
 
     // default processing - invoke serialization library
     template<class T>
-    void save_override(T & t, BOOST_PFTO int){
+    void save_override(T & t, /*BOOST_PFTO*/ int){
         archive::save(* this->This(), t);
     }
 
@@ -84,7 +84,8 @@ public:
     // the & operator 
     template<class T>
     Archive & operator&(const T & t){
-        return * this << t;
+        this->This()->save_override(t, 0);
+        return * this->This();
     }
 
     // define operators for non-const arguments.  Don't depend one the const

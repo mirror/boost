@@ -30,8 +30,6 @@ namespace boost {
 namespace archive {
 namespace detail {
     class basic_oarchive;
-    class basic_oseriaiizer;
-    class basic_pointer_oseriaiizer;
 }
 
 class polymorphic_oarchive :
@@ -93,16 +91,12 @@ public:
     // utility function implemented by all legal archives
     virtual void save_binary(const void * t, size_t size) = 0;
 
-    // at least one compiler, borland (there might be others) won't pass 
-    // unmatched overrides to the base class - so do it explicitly here.
-	// note: at least one other compiler MSVC 6.0 chokes if you leave this in
-    // so leave it just for borland
-    #if ! defined(_MSC_VER) || _MSC_VER > 1300
+	// msvc and borland won't automatically pass these to the base class so
+	// make it explicit here
     template<class T>
     void save_override(const T & t, BOOST_PFTO int)
     {
-        detail::interface_oarchive<polymorphic_oarchive>::save_override(t, 0);
-		
+        archive::save(* this, t);
     }
     // special treatment for name-value pairs.
     template<class T>
@@ -112,7 +106,6 @@ public:
         archive::save(* this, t.value());
  		save_end(t.name());
     }
-    #endif
 };
 
 } // namespace archive
