@@ -326,7 +326,15 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     a.append(Block(1));
     a.append(Block(2));
     Block x[] = {3, 4, 5};
-    std::size_t sz = sizeof(x) / sizeof(x[0]);
+
+    const std::size_t sz
+#if defined __MWERKS__
+                        = 3; // MWCW 8.3 can't manage the calculation.
+                             // Maintain carefully! - gps
+#else
+                         = sizeof(x) / sizeof(x[0]);
+#endif
+
     std::vector<Block> blocks(x, x + sz);
     Tests::append_block_range(a, blocks);
   }
