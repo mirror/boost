@@ -6,10 +6,9 @@
    n1550_, the paper accepted by the LWG.
 
 :Author: David Abrahams, Jeremy Siek, Thomas Witt
-:Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@acm.org
-:organization: `Boost Consulting`_, Indiana University `Open
-               Systems Lab`_, University of Hanover `Institute for
-               Transport Railway Operation and Construction`_
+:Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@styleadvisor.com
+:organization: `Boost Consulting`_, Indiana University `Open Systems
+               Lab`_, `Zephyr Associates, Inc.`_
 :date: $Date$
 
 :Number: This is a revised version of n1550_\ =03-0133, which was
@@ -22,6 +21,7 @@
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu
+.. _`Zephyr Associates, Inc.`: http://www.styleadvisor.com
 
 .. _`Institute for Transport Railway Operation and Construction`:
    http://www.ive.uni-hannover.de 
