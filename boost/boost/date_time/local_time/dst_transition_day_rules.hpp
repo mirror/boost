@@ -10,7 +10,7 @@
 
 
 #include "boost/date_time/gregorian/gregorian_types.hpp"
-#include "boost/date_time/dst_transition_day_generators.hpp"
+#include "boost/date_time/dst_transition_generators.hpp"
 
 namespace boost {
 namespace local_time {
