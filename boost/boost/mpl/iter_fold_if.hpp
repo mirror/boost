@@ -17,6 +17,7 @@
 #ifndef BOOST_MPL_ITER_FOLD_IF_HPP_INCLUDED
 #define BOOST_MPL_ITER_FOLD_IF_HPP_INCLUDED
 
+#include "boost/mpl/aux_/config/workaround.hpp"
 #include "boost/mpl/aux_/iter_fold_if_impl.hpp"
 #include "boost/mpl/and.hpp"
 #include "boost/mpl/always.hpp"
