@@ -33,8 +33,10 @@ namespace boost {
     null_archetype& operator=(const null_archetype&) { return *this; }
   public:
     null_archetype(detail::dummy_constructor) { }
+#ifndef __MWERKS__
     template <class TT>
     friend void dummy_friend(); // just to avoid warnings
+#endif
   };
 
   // This is a helper class that provides a way to get a reference to
@@ -104,7 +106,7 @@ namespace boost {
   };
 
   struct default_archetype_base {
-    default_archetype_base(detail::dummy_constructor x) { }
+    default_archetype_base(detail::dummy_constructor) { }
   };
 
   // Careful, don't use same type for T and Base. That results in the
@@ -140,7 +142,7 @@ namespace boost {
   public:
     boolean_archetype(const boolean_archetype&) { }
     operator bool() const { return true; }
-    boolean_archetype(detail::dummy_constructor x) { }
+    boolean_archetype(detail::dummy_constructor) { }
   private:
     boolean_archetype() { }
     boolean_archetype& operator=(const boolean_archetype&) { return *this; }
@@ -576,7 +578,7 @@ namespace boost {
     self operator++(int) { return *this; }
     self& operator--() { return *this; }
     self operator--(int) { return *this; }
-    reference operator[](difference_type n) 
+    reference operator[](difference_type) 
       { return static_object<T>::get(); }
     self& operator+=(difference_type) { return *this; }
     self& operator-=(difference_type) { return *this; }
