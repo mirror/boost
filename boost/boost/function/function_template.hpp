@@ -559,7 +559,7 @@ namespace boost {
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION& operator=(const Functor& f)
     {
-      BOOST_FUNCTION_FUNCTION(f).swap(*this);
+      BOOST_FUNCTION_FUNCTION(f, static_cast<const Mixin&>(*this)).swap(*this);
       return *this;
     }
 
@@ -567,7 +567,7 @@ namespace boost {
     template<typename Functor>
     BOOST_FUNCTION_FUNCTION& operator=(Functor* f)
     {
-      BOOST_FUNCTION_FUNCTION(f).swap(*this);
+      BOOST_FUNCTION_FUNCTION(f, static_cast<const Mixin&>(*this)).swap(*this);
       return *this;
     }
 #endif // __BORLANDC__
@@ -575,14 +575,14 @@ namespace boost {
     template<typename Functor>
     void set(const Functor& f)
     {
-      BOOST_FUNCTION_FUNCTION(f).swap(*this);
+      BOOST_FUNCTION_FUNCTION(f, static_cast<const Mixin&>(*this)).swap(*this);
     }
 
 #ifdef __BORLANDC__
     template<typename Functor>
     void set(Functor* f)
     {
-      BOOST_FUNCTION_FUNCTION(f).swap(*this);
+      BOOST_FUNCTION_FUNCTION(f, static_cast<const Mixin&>(*this)).swap(*this);
     }
 #endif // __BORLANDC__
 
