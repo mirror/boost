@@ -1,3 +1,9 @@
+.. Version 1.2 of this ReStructuredText document corresponds to
+   n1530_, the paper accepted by the LWG for TR1.
+
+.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
+   rights reserved
+
 The ``iterator_adaptor`` class template adapts some ``Base`` [#base]_
 type to create a new iterator.  Instantiations of ``iterator_adaptor``
 are derived from a corresponding instantiation of ``iterator_facade``
@@ -19,7 +25,7 @@ interface functions of ``iterator_adaptor`` that have not been
 redefined in the user's derived class.
 
 Several of the template parameters of ``iterator_adaptor`` default
-to ``use_default`` (or ``use_default_access``). This allows the
+to ``use_default``. This allows the
 user to make use of a default parameter even when she wants to
 specify a parameter later in the parameter list.  Also, the
 defaults for the corresponding associated types are somewhat
@@ -28,6 +34,6 @@ complicated, so metaprogramming is required to compute them, and
 the identity of the ``use_default`` type is not left unspecified
 because specification helps to highlight that the ``Reference``
 template parameter may not always be identical to the iterator's
-``reference`` type, and will keep users making mistakes based on
+``reference`` type, and will keep users from making mistakes based on
 that assumption.
 

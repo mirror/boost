@@ -31,3 +31,5 @@ Reference
 ---------
 
 .. include:: iterator_facade_ref.rst
+
+.. _counting: counting_iterator.html

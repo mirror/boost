@@ -2,14 +2,23 @@
  New Iterator Concepts
 ++++++++++++++++++++++
 
+.. Version 1.25 of this ReStructuredText document is the same as
+   n1550_, the paper accepted by the LWG.
+
 :Author: David Abrahams, Jeremy Siek, Thomas Witt
 :Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@acm.org
 :organization: `Boost Consulting`_, Indiana University `Open
                Systems Lab`_, University of Hanover `Institute for
                Transport Railway Operation and Construction`_
 :date: $Date$
-:Number: N1550=03-0133
-:copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
+
+:Number: This is a revised version of n1550_\ =03-0133, which was
+         accepted for Technical Report 1 by the C++ standard
+         committee's library working group. This proposal is a
+         revision of paper n1297_, n1477_, and n1531_.
+
+:copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt
+         2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 .. _`Open Systems Lab`: http://www.osl.iu.edu
@@ -21,14 +30,14 @@
            access and positioning independently. This allows the
            concepts to more closely match the requirements
            of algorithms and provides better categorizations
-           of iterators that are used in practice. This proposal
-           is a revision of paper n1297_, n1477_, and n1531_.
+           of iterators that are used in practice. 
           
 .. contents:: Table of Contents
 
 .. _n1297: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2001/n1297.html
 .. _n1477: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1477.html
 .. _n1531: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1531.html
+.. _n1550: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1550.html
 
 ============
  Motivation
@@ -144,6 +153,12 @@ The algorithms in the standard library benefit from the new iterator
 concepts because the new concepts provide a more accurate way to
 express their type requirements. The result is algorithms that are
 usable in more situations and have fewer type requirements.
+
+Note that as currently specified, ``istreambuf_iterator`` doesn't
+meet the Readable Iterator requirements because its ``value_type``
+is not convertible to its ``reference`` type.  We believe this to
+be a defect in the standard; it should be fixed by changing its
+``reference`` type from ``value_type&`` to ``value_type const&``.
 
 Possible (but not proposed) Changes to the Working Paper
 ========================================================
@@ -374,7 +389,8 @@ Iterator Value Access Concepts [lib.iterator.value.access]
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 In the tables below, ``X`` is an iterator type, ``a`` is a constant
-object of type ``X``, ``T`` is
+object of type ``X``, ``R`` is
+``std::iterator_traits<X>::reference``, ``T`` is
 ``std::iterator_traits<X>::value_type``, and ``v`` is a constant
 object of type ``T``.
 
@@ -388,28 +404,29 @@ for the value type ``T`` if the following expressions are valid and
 respect the stated semantics. ``U`` is the type of any specified
 member of type ``T``.
 
-+-------------------------------------------------------------------------------------------------+
-|Readable Iterator Requirements (in addition to CopyConstructible)                                |
-+-----------------------------------+-----------------------------------+-------------------------+
-|Expression                         |Return Type                        |Note/Precondition        |
-+===================================+===================================+=========================+
-|``iterator_traits<X>::value_type`` |``T``                              |Any non-reference,       |
-|                                   |                                   |non-cv-qualified type    |
-+-----------------------------------+-----------------------------------+-------------------------+
-|``iterator_traits<X>::reference``  |Convertible to                     |                         |
-|                                   |``iterator_traits<X>::value_type`` |                         |
-+-----------------------------------+-----------------------------------+-------------------------+
-|``is_readable<X>::type``           |``true_type``                      |                         |
-+-----------------------------------+-----------------------------------+-------------------------+
-|``*a``                             |``iterator_traits<X>::reference``  |pre: ``a`` is            |
-|                                   |                                   |dereferenceable. If ``a  |
-|                                   |                                   |== b`` then ``*a`` is    |
-|                                   |                                   |equivalent to ``*b``     |
-+-----------------------------------+-----------------------------------+-------------------------+
-|``a->m``                           |``U&``                             |pre: ``(*a).m`` is       |
-|                                   |                                   |well-defined.  Equivalent|
-|                                   |                                   |to ``(*a).m``            |
-+-----------------------------------+-----------------------------------+-------------------------+
++--------------------------------------------------------------------------------------+
+|Readable Iterator Requirements (in addition to CopyConstructible)                     |
++-----------------------------------+------------------------+-------------------------+
+|Expression                         |Return Type             |Note/Precondition        |
++===================================+========================+=========================+
+|``iterator_traits<X>::value_type`` |``T``                   |Any non-reference,       |
+|                                   |                        |non-cv-qualified type    |
++-----------------------------------+------------------------+-------------------------+
+|``iterator_traits<X>::reference``  |``R``, Convertible to   |                         |
+|                                   |``T``                   |                         |
++-----------------------------------+------------------------+-------------------------+
+|``*a``                             |Convertible to ``R``,   |pre: ``a`` is            |
+|                                   |Convertible to ``T``    |dereferenceable. If ``a  |
+|                                   |                        |== b`` then ``*a`` is    |
+|                                   |                        |equivalent to ``*b``     |
++-----------------------------------+------------------------+-------------------------+
+|``static_cast<T>(                  |``T``                   |equivalent to            |
+|static_cast<R>(*a) )``             |                        |``static_cast<T>(*a)``   |
++-----------------------------------+------------------------+-------------------------+
+|``a->m``                           |``U&``                  |pre: ``(*a).m`` is       |
+|                                   |                        |well-defined.  Equivalent|
+|                                   |                        |to ``(*a).m``            |
++-----------------------------------+------------------------+-------------------------+
 
 
 .. _Writable Iterator:
@@ -428,8 +445,6 @@ output.
 +-------------------------+--------------+----------------------------+
 |Expression               |Return Type   |Precondition                |
 +=========================+==============+============================+
-|``is_writable<X>::type`` |``true_type`` |                            |
-+-------------------------+--------------+----------------------------+
 |``*a = o``               |              | pre: The type of ``o``     |
 |                         |              | is in the set of           |
 |                         |              | value types of ``X``       |
@@ -449,8 +464,6 @@ semantics.
 +-------------------------+-------------+-----------------------------+
 |Expression               |Return Type  |Postcondition                |
 +=========================+=============+=============================+
-|``is_swappable<X>::type``|``true_type``|                             |
-+-------------------------+-------------+-----------------------------+
 |``iter_swap(a, b)``      |``void``     |the pointed to values are    |
 |                         |             |exchanged                    |
 +-------------------------+-------------+-----------------------------+
@@ -511,7 +524,7 @@ semantics.
 |                                |                               | }                  |
 +--------------------------------+-------------------------------+--------------------+
 |``traversal_category<X>::type`` |Convertible to                 |                    |
-|                                |``incrementable_iterator_tag`` |                    |
+|                                |``incrementable_traversal_tag``|                    |
 +--------------------------------+-------------------------------+--------------------+
 
 
@@ -541,7 +554,7 @@ semantics.
 |``a != b``                      |convertible to ``bool``      |``!(a == b)``              |
 +--------------------------------+-----------------------------+---------------------------+
 |``traversal_category<X>::type`` |Convertible to               |                           |
-|                                |``single_pass_iterator_tag`` |                           |
+|                                |``single_pass_traversal_tag``|                           |
 +--------------------------------+-----------------------------+---------------------------+
 
 
@@ -572,7 +585,7 @@ semantics.
 |                                       |                                   |               |
 +---------------------------------------+-----------------------------------+---------------+
 |``traversal_category<X>::type``        |Convertible to                     |               |
-|                                       |``forward_traversal_iterator_tag`` |               |
+|                                       |``forward_traversal_tag``          |               |
 +---------------------------------------+-----------------------------------+---------------+
 
 
@@ -608,7 +621,7 @@ the stated semantics.
 |                                    |                                             | }                   |
 +------------------------------------+---------------------------------------------+---------------------+
 |``traversal_category<X>::type``     |Convertible to                               |                     |
-|                                    |``bidirectional_traversal_iterator_tag``     |                     |
+|                                    |``bidirectional_traversal_tag``              |                     |
 |                                    |                                             |                     |
 +------------------------------------+---------------------------------------------+---------------------+
 
@@ -674,7 +687,7 @@ constant object of type ``Distance``.
 |``a <= b``                                 |convertible to ``bool``                          |``!(a > b)``             |                      |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 |``traversal_category<X>::type``            |Convertible to                                   |                         |                      |
-|                                           |``random_access_traversal_iterator_tag``         |                         |                      |
+|                                           |``random_access_traversal_tag``                  |                         |                      |
 +-------------------------------------------+-------------------------------------------------+-------------------------+----------------------+
 
 
@@ -686,163 +699,59 @@ Addition to [lib.iterator.synopsis]
 ::
 
   // lib.iterator.traits, traits and tags
-  template <class Iterator> struct is_readable;
-  template <class Iterator> struct is_writable;
-  template <class Iterator> struct is_swappable;
-  template <class Iterator> struct traversal_category;
+  template <class Iterator> struct is_readable_iterator;
+  template <class Iterator> struct iterator_traversal;
 
-  enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
-      swappable_iterator = 4, lvalue_iterator = 8 };
-
-  template <unsigned int access_bits, class TraversalTag>
-  struct iterator_tag : /* appropriate old category or categories */ {
-    static const iterator_access access =
-      (iterator_access)access_bits & 
-        (readable_iterator | writable_iterator | swappable_iterator);
-    typedef TraversalTag traversal;
-  };
-
-  struct incrementable_iterator_tag { };
-  struct single_pass_iterator_tag : incrementable_iterator_tag { };
-  struct forward_traversal_tag : single_pass_iterator_tag { };
+  struct incrementable_traversal_tag { };
+  struct single_pass_traversal_tag : incrementable_traversal_tag { };
+  struct forward_traversal_tag : single_pass_traversal_tag { };
   struct bidirectional_traversal_tag : forward_traversal_tag { };
   struct random_access_traversal_tag : bidirectional_traversal_tag { };
-
-  struct null_category_tag { };
-  struct input_output_iterator_tag : input_iterator_tag, output_iterator_tag {};
 
 Addition to [lib.iterator.traits]
 =================================
 
-The ``iterator_tag`` class template is an iterator category tag that
-encodes the access enum and traversal tag in addition to being compatible
-with the original iterator tags.  The ``iterator_tag`` class inherits
-from one of the original iterator tags according to the following
-pseudo-code.
+The ``is_readable_iterator`` and ``iterator_traversal`` class
+templates satisfy the UnaryTypeTrait_ requirements.  
 
-::
+Given an iterator type ``X``, ``is_readable_iterator<X>::value``
+yields ``true`` if, for an object ``a`` of type ``X``, ``*a`` is
+convertible to ``iterator_traits<X>::value_type``, and ``false``
+otherwise.
 
-    inherit-category(access, traversal-tag) =
-         if ((access & readable_iterator) && (access & lvalue_iterator)) {
-             if (traversal-tag is convertible to random_access_traversal_tag)
-                 return random_access_iterator_tag;
-             else if (traversal-tag is convertible to bidirectional_traversal_tag)
-                 return bidirectional_iterator_tag;
-             else if (traversal-tag is convertible to forward_traversal_tag)
-                 return forward_iterator_tag;
-             else if (traversal-tag is convertible to single_pass_traversal_tag)
-                 if (access-tag is convertible to writable_iterator_tag)
-                     return input_output_iterator_tag;
-                 else
-                     return input_iterator_tag;
-             else
-                 return null_category_tag;
-         } else if ((access & readable_iterator) and (access & writable_iterator)
-                    and traversal-tag is convertible to single_pass_iterator_tag)
-             return input_output_iterator_tag;
-         else if (access & readable_iterator
-                  and traversal-tag is convertible to single_pass_iterator_tag)
-             return input_iterator_tag;
-         else if (access & writable_iterator
-                  and traversal-tag is convertible to incrementable_iterator_tag)
-             return output_iterator_tag;
-         else
-             return null_category_tag;
+``iterator_traversal<X>::value_type`` is defined to be:
 
-If the argument for ``TraversalTag`` is not convertible to
-``incrementable_iterator_tag`` then the program is ill-formed.
+.. parsed-literal::
 
-The ``is_readable``, ``is_writable``, ``is_swappable``, and
-``traversal_category`` class templates are traits classes. For
-iterators whose ``iterator_traits<Iter>::iterator_category`` type is
-``iterator_tag``, these traits obtain the ``access`` enum and
-``traversal`` member type from within ``iterator_tag``.  For iterators
-whose ``iterator_traits<Iter>::iterator_category`` type is not
-``iterator_tag`` and instead is a tag convertible to one of the
-original tags, the appropriate traversal tag and access bits are
-deduced.  The following pseudo-code describes the algorithm.
-
-::
-
-  is-readable(Iterator) = 
-      cat = iterator_traits<Iterator>::iterator_category;
-      if (cat == iterator_tag<Access,Traversal>)
-          return Access & readable_iterator;
-      else if (cat is convertible to input_iterator_tag)
-          return true;
-      else
-          return false;
-
-  is-writable(Iterator) =
-      cat = iterator_traits<Iterator>::iterator_category;
-      if (cat == iterator_tag<Access,Traversal>)
-          return Access & writable_iterator;
-      else if (cat is convertible to output_iterator_tag)
-           return true;
-      else if (
-           cat is convertible to forward_iterator_tag
-           and iterator_traits<Iterator>::reference is a 
-               mutable reference)
-          return true;
-      else
-          return false;
-
-  is-swappable(Iterator) =
-      cat = iterator_traits<Iterator>::iterator_category;
-      if (cat == iterator_tag<Access,Traversal>)
-          return Access & swappable_iterator;
-      else if (cat is convertible to forward_iterator_tag) {
-          if (iterator_traits<Iterator>::reference is a const reference)
-              return false;
-          else
-              return true;
-      } else 
-          return false;
-
-  traversal-category(Iterator) =
-      cat = iterator_traits<Iterator>::iterator_category;
-      if (cat == iterator_tag<Access,Traversal>)
-          return Traversal;
-      else if (cat is convertible to random_access_iterator_tag)
-          return random_access_traversal_tag;
-      else if (cat is convertible to bidirectional_iterator_tag)
-          return bidirectional_traversal_tag;
-      else if (cat is convertible to forward_iterator_tag)
-          return forward_traversal_tag;
-      else if (cat is convertible to input_iterator_tag)
-          return single_pass_iterator_tag;
-      else if (cat is convertible to output_iterator_tag)
-          return incrementable_iterator_tag;
-      else
-          return null_category_tag;
+   traversal-category(X) =
+       cat = iterator_traits<X>::iterator_category;
+       if (cat is convertible to incrementable_traversal_tag)
+           return cat;
+       else if (cat is convertible to random_access_iterator_tag)
+           return random_access_traversal_tag;
+       else if (cat is convertible to bidirectional_iterator_tag)
+           return bidirectional_traversal_tag;
+       else if (cat is convertible to forward_iterator_tag)
+           return forward_traversal_tag;
+       else if (cat is convertible to input_iterator_tag)
+           return single_pass_traversal_tag;
+       else if (cat is convertible to output_iterator_tag)
+           return incrementable_traversal_tag;
+       else
+           *the program is ill-formed*
 
 
-The following specializations provide the access and traversal
-category tags for pointer types.
+===========
+ Footnotes
+===========
 
-::
+.. _UnaryTypeTrait: n1519_
 
-  template <typename T>
-  struct is_readable<const T*> { typedef true_type type; };
-  template <typename T>
-  struct is_writable<const T*> { typedef false_type type; };
-  template <typename T>
-  struct is_swappable<const T*> { typedef false_type type; };
+The UnaryTypeTrait concept is defined in n1519_; the LWG added the
+requirement that specializations are derived from their nested
+``::type``.
 
-  template <typename T>
-  struct is_readable<T*> { typedef true_type type; };
-  template <typename T>
-  struct is_writable<T*> { typedef true_type type; };
-  template <typename T>
-  struct is_swappable<T*> { typedef true_type type; };
-
-  template <typename T>
-  struct traversal_category<T*>
-  {
-    typedef random_access_traversal_tag type;
-  };
-
-
+.. _n1519: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1519.htm
 
 ..
  LocalWords:  Abrahams Siek Witt const bool Sutter's WG int UL LI href Lvalue

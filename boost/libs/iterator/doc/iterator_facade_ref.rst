@@ -1,20 +1,26 @@
+.. Version 1.3 of this ReStructuredText document corresponds to
+   n1530_, the paper accepted by the LWG for TR1.
+
+.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
+   rights reserved
+
+
 .. parsed-literal::
 
   template <
       class Derived
     , class Value
-    , unsigned AccessCategory
-    , class TraversalCategory
-    , class Reference  = /* see below__ \*/
+    , class CategoryOrTraversal
+    , class Reference  = Value&
     , class Difference = ptrdiff_t
   >
   class iterator_facade {
   public:
-      typedef remove_cv<Value>::type value_type;
+      typedef remove_const<Value>::type value_type;
       typedef Reference reference;
-      typedef /* see `description of operator->`__ \*/ pointer;
+      typedef Value* pointer;
       typedef Difference difference_type;
-      typedef iterator_tag<AccessCategory, TraversalCategory> iterator_category;
+      typedef /* see below__ \*/ iterator_category;
 
       reference operator\*() const;
       /* see below__ \*/ operator->() const;
@@ -29,151 +35,185 @@
   };
 
   // Comparison operators
-  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1,
-            class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
   typename enable_if_interoperable<Dr1, Dr2, bool>::type // exposition
-  operator ==(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs);
+  operator ==(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
+              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
 
-  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1,
-            class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
   typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator !=(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs);
+  operator !=(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
+              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
 
-  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1,
-            class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
   typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator <(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs,
-             iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs);
+  operator <(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
+             iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
 
-  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1,
-            class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
   typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator <=(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs);
+  operator <=(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
+              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
 
-  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1,
-            class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
   typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator >(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs,
-             iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs);
+  operator >(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
+             iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
 
-  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1,
-            class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
   typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator >=(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs);
+  operator >=(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
+              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
 
-  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1,
-            class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
   typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator >=(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs,
-              iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs);
+  operator >=(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
+              iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
 
   // Iterator difference
-  template <class Dr1, class V1, class AC1, class TC1, class R1, class D1,
-            class Dr2, class V2, class AC2, class TC2, class R2, class D2>
+  template <class Dr1, class V1, class TC1, class R1, class D1,
+            class Dr2, class V2, class TC2, class R2, class D2>
   typename enable_if_interoperable<Dr1, Dr2, bool>::type
-  operator -(iterator_facade<Dr1, V1, AC1, TC1, R1, D1> const& lhs,
-             iterator_facade<Dr2, V2, AC2, TC2, R2, D2> const& rhs);
+  operator -(iterator_facade<Dr1, V1, TC1, R1, D1> const& lhs,
+             iterator_facade<Dr2, V2, TC2, R2, D2> const& rhs);
 
   // Iterator addition
-  template <class Derived, class V, class AC, class TC, class R, class D>
-  Derived operator+ (iterator_facade<Derived, V, AC, TC, R, D> const&,
+  template <class Derived, class V, class TC, class R, class D>
+  Derived operator+ (iterator_facade<Derived, V, TC, R, D> const&,
                      typename Derived::difference_type n)
 
 
-__ `iterator facade requirements`_
-
-__ `operator arrow`_
+__ `facade iterator category`_
 
 __ `operator arrow`_
 
 __ brackets_
 
-[*Note:* The ``enable_if_interoperable`` template used above is for exposition
-purposes. The member operators should be only be in an overload set
-provided the derived types ``Dr1`` and ``Dr2`` are interoperable, by
-which we mean they are convertible to each other.  The
+The ``enable_if_interoperable`` template used above is for exposition
+purposes.  The member operators should be only be in an overload set
+provided the derived types ``Dr1`` and ``Dr2`` are interoperable, 
+meaning that at least one of the types is convertible to the other.  The
 ``enable_if_interoperable`` approach uses SFINAE to take the operators
-out of the overload set when the types are not interoperable.]
+out of the overload set when the types are not interoperable.  
+The operators should behave *as-if* ``enable_if_interoperable``
+were defined to be::
+
+  template <bool, typename> enable_if_interoperable_impl
+  {};
+
+  template <typename T> enable_if_interoperable_impl<true,T>
+  { typedef T type; };
+
+  template<typename Dr1, typename Dr2, typename T>
+  struct enable_if_interoperable
+    : enable_if_interoperable_impl<
+          is_convertible<Dr1,Dr2>::value || is_convertible<Dr2,Dr1>::value
+        , T
+      >
+  {};
 
 
-.. we need a new label here because the presence of markup in the
-   title prevents an automatic link from being generated
+``iterator_facade`` usage
+.........................
 
-.. _iterator facade requirements:
+The following table describes the typical valid expressions on
+``iterator_facade``\ 's ``Derived`` parameter, depending on the
+iterator concept(s) it will model.  The operations in the first
+column must be made accessible to member functions of class
+``iterator_core_access``.
 
-``iterator_facade`` requirements
-................................
-
-Some of the constraints on template parameters to
-``iterator_facade`` are expressed in terms of resulting nested
-types and should be viewed in the context of their impact on
-``iterator_traits<Derived>``.
-
-The ``Derived`` template parameter must be a class derived from
-``iterator_facade``.
-
-The nested ``::value_type`` type will be the same as
-``remove_cv<Value>::type``, so the ``Value`` parameter must be
-an (optionally ``const``\ -qualified) non-reference type.
-
-``AccessCategory`` must be an unsigned value which uses no more
-bits than the greatest value of ``iterator_access``.
-
-The nested ``::reference`` will be the same as the ``Reference``
-parameter; it must be a suitable reference type for the resulting
-iterator.  The default for the ``Reference`` parameter is
-``Value&``.
-
-The following table describes the other requirements on the
-``Derived`` parameter.  Depending on the resulting iterator's
-``iterator_category``, a subset of the expressions listed in the table
-are required to be valid.  The operations in the first column must be
-accessible to member functions of class ``iterator_core_access``.
-
-In the table below, ``X`` is the derived iterator type, ``a`` is an
+In the table below, ``F`` is ``iterator_facade<X,V,C,R,D>``, ``a`` is an
 object of type ``X``, ``b`` and ``c`` are objects of type ``const X``,
-``n`` is an object of ``X::difference_type``, ``y`` is a constant
-object of a single pass iterator type interoperable with X, and ``z``
+``n`` is an object of ``F::difference_type``, ``y`` is a constant
+object of a single pass iterator type interoperable with ``X``, and ``z``
 is a constant object of a random access traversal iterator type
 interoperable with ``X``.
 
-+--------------------+-------------------+-------------------------------------+---------------------------+
-|Expression          |Return Type        |Assertion/Note                       |Required to implement      |
-|                    |                   |                                     |Iterator Concept(s)        |
-+====================+===================+=====================================+===========================+
-|``c.dereference()`` |``X::reference``   |                                     |Readable Iterator, Writable|
-|                    |                   |                                     |Iterator                   |
-+--------------------+-------------------+-------------------------------------+---------------------------+
-|``c.equal(b)``      |convertible to bool|true iff ``b`` and ``c`` are         |Single Pass Iterator       |
-|                    |                   |equivalent.                          |                           |
-+--------------------+-------------------+-------------------------------------+---------------------------+
-|``c.equal(y)``      |convertible to bool|true iff ``c`` and ``y`` refer to the|Single Pass Iterator       |
-|                    |                   |same position.  Implements ``c == y``|                           |
-|                    |                   |and ``c != y``.                      |                           |
-+--------------------+-------------------+-------------------------------------+---------------------------+
-|``a.advance(n)``    |unused             |                                     |Random Access Traversal    |
-|                    |                   |                                     |Iterator                   |
-+--------------------+-------------------+-------------------------------------+---------------------------+
-|``a.increment()``   |unused             |                                     |Incrementable Iterator     |
-+--------------------+-------------------+-------------------------------------+---------------------------+
-|``a.decrement()``   |unused             |                                     |Bidirectional Traversal    |
-|                    |                   |                                     |Iterator                   |
-+--------------------+-------------------+-------------------------------------+---------------------------+
-|``c.distance_to(b)``|convertible to     |equivalent to ``distance(c, b)``     |Random Access Traversal    |
-|                    |X::difference_type |                                     |Iterator                   |
-+--------------------+-------------------+-------------------------------------+---------------------------+
-|``c.distance_to(z)``|convertible to     |equivalent to ``distance(c, z)``.    |Random Access Traversal    |
-|                    |X::difference_type |Implements ``c - z``, ``c < z``, ``c |Iterator                   |
-|                    |                   |<= z``, ``c > z``, and ``c >= c``.   |                           |
-+--------------------+-------------------+-------------------------------------+---------------------------+
++--------------------+----------------------+-------------------------------------+---------------------------+
+|Expression          |Return Type           |Assertion/Note                       |Used to implement Iterator |
+|                    |                      |                                     |Concept(s)                 |
++====================+======================+=====================================+===========================+
+|``c.dereference()`` |``F::reference``      |                                     |Readable Iterator, Writable|
+|                    |                      |                                     |Iterator                   |
++--------------------+----------------------+-------------------------------------+---------------------------+
+|``c.equal(b)``      |convertible to bool   |true iff ``b`` and ``c`` are         |Single Pass Iterator       |
+|                    |                      |equivalent.                          |                           |
++--------------------+----------------------+-------------------------------------+---------------------------+
+|``c.equal(y)``      |convertible to bool   |true iff ``c`` and ``y`` refer to the|Single Pass Iterator       |
+|                    |                      |same position.  Implements ``c == y``|                           |
+|                    |                      |and ``c != y``.                      |                           |
++--------------------+----------------------+-------------------------------------+---------------------------+
+|``a.advance(n)``    |unused                |                                     |Random Access Traversal    |
+|                    |                      |                                     |Iterator                   |
++--------------------+----------------------+-------------------------------------+---------------------------+
+|``a.increment()``   |unused                |                                     |Incrementable Iterator     |
++--------------------+----------------------+-------------------------------------+---------------------------+
+|``a.decrement()``   |unused                |                                     |Bidirectional Traversal    |
+|                    |                      |                                     |Iterator                   |
++--------------------+----------------------+-------------------------------------+---------------------------+
+|``c.distance_to(b)``|convertible to        |equivalent to ``distance(c, b)``     |Random Access Traversal    |
+|                    |``F::difference_type``|                                     |Iterator                   |
++--------------------+----------------------+-------------------------------------+---------------------------+
+|``c.distance_to(z)``|convertible to        |equivalent to ``distance(c, z)``.    |Random Access Traversal    |
+|                    |``F::difference_type``|Implements ``c - z``, ``c < z``, ``c |Iterator                   |
+|                    |                      |<= z``, ``c > z``, and ``c >= c``.   |                           |
++--------------------+----------------------+-------------------------------------+---------------------------+
 
-.. We should explain more about how the
-   functions in the interface of iterator_facade
-   are there conditionally. -JGS
+.. _facade iterator category:
+
+``iterator_facade`` iterator category
+.....................................
+
+The ``iterator_category`` member of ``iterator_facade<X,V,R,C,D>``
+is a type which satisfies the following conditions:
+
+   * if ``C`` is convertible to ``std::input_iterator_tag`` or
+     ``C`` is convertible to ``std::output_iterator_tag``,
+     ``iterator_category`` is the same as ``C``.  
+
+   * Otherwise, if ``C`` is not convertible to
+     ``incrementable_traversal_tag``, the program is ill-formed 
+
+   * Otherwise:
+
+     - ``iterator_category`` is convertible to the iterator
+       category tag or tags given by the following algorithm, and
+       not to any more-derived iterator category tag or tags::
+
+         if (R is a reference type
+             && C is convertible to forward_traversal_tag)
+         {
+             if (C is convertible to random_access_traversal_tag)
+                 return random_access_iterator_tag
+             else if (C is convertible to bidirectional_traversal_tag)
+                 return bidirectional_iterator_tag
+             else
+                 return forward_traversal_tag
+         }
+         else
+         {
+             if (C is convertible to single_pass_traversal_tag
+                 && R is convertible to V)
+             {
+                 if (V is const)
+                     return input_iterator_tag
+                 else
+                     return input_iterator_tag and output_iterator_tag
+             }
+             else
+                 return output_iterator_tag
+         }
+
+     - ``iterator_traversal<X>::type`` is convertible to the most
+       derived traversal tag type to which ``C`` is also
+       convertible, and not to any more-derived traversal tag type.
 
 
 ``iterator_facade`` operations
@@ -192,27 +232,22 @@ through member functions of class ``iterator_core_access``.
 
 __ `operator arrow`_
 
-:Returns: If ``X::reference`` is a reference type, returns an object
-  of type ``X::pointer`` equal to::
+:Returns: If ``reference`` is a reference type, an object
+  of type ``pointer`` equal to::
 
     &static_cast<Derived const*>(this)->dereference()
 
-  Otherwise returns an object of unspecified type such that, given an
-  object ``a`` of type ``X``, ``a->m`` is equivalent to ``(w = *a,
-  w.m)`` for some temporary object ``w`` of type ``X::value_type``.
-
-  The type ``X::pointer`` is ``Value*`` if
-  ``is_writable_iterator<X>::value`` is ``true``, and
-  ``Value const*`` otherwise.
-
+  Otherwise returns an object of unspecified type such that, 
+  ``(*static_cast<Derived const*>(this))->m`` is equivalent to ``(w = **static_cast<Derived const*>(this),
+  w.m)`` for some temporary object ``w`` of type ``value_type``.
 
 .. _brackets:
 
 *unspecified* ``operator[](difference_type n) const;``
 
-:Returns: an object convertible to ``X::reference`` and holding a copy
-     *p* of ``a+n`` such that, for a constant object ``v`` of type
-     ``X::value_type``, ``X::reference(a[n] = v)`` is equivalent
+:Returns: an object convertible to ``reference`` and holding a copy
+     *p* of ``*static_cast<Derived const*>(this) + n`` such that, for a constant object ``v`` of type
+     ``value_type``, ``(*static_cast<Derived const*>(this))[n] = v`` is equivalent
      to ``p = v``.
 
 
@@ -224,14 +259,7 @@ __ `operator arrow`_
   ::
 
     static_cast<Derived*>(this)->increment();
-    return *this;
-
-.. I realize that the committee is moving away from specifying things
-   like this in terms of code, but I worried about the imprecision of
-   saying that a core interface function is invoked without describing
-   the downcast.  An alternative to what I did would be to mention it
-   above where we talk about accessibility.
-
+    return *static_cast<Derived*>(this);
 
 ``Derived operator++(int);``
 
@@ -251,7 +279,7 @@ __ `operator arrow`_
    ::
 
       static_cast<Derived*>(this)->decrement();
-      return *this;
+      return static_cast<Derived*>(this);
 
 
 ``Derived operator--(int);``
@@ -272,26 +300,27 @@ __ `operator arrow`_
   ::
 
       static_cast<Derived*>(this)->advance(n);
-      return *this;
+      return static_cast<Derived*>(this);
 
 
 ``Derived& operator-=(difference_type n);``
 
 :Effects:
-
-   ::
+ 
+  ::
 
       static_cast<Derived*>(this)->advance(-n);
-      return *this;
+      return static_cast<Derived*>(this);
 
 
 ``Derived operator-(difference_type n) const;``
 
-:Effects: 
+:Effects:
+
+  ::
 
    Derived tmp(static_cast<Derived const*>(this));
    return tmp -= n;
 
-:Returns: ``static_cast<Derived const*>(this)->advance(-n);``
 
 

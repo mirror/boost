@@ -1,5 +1,11 @@
-The ``iterator_adaptor`` is a base class template derived from an
-instantiation of ``iterator_facade``. The core interface functions
+.. Version 1.1 of this ReStructuredText document corresponds to
+   n1530_, the paper accepted by the LWG.
+
+.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
+   rights reserved
+
+Each specialization of the ``iterator_adaptor`` class template is derived from
+a specialization of ``iterator_facade``. The core interface functions
 expected by ``iterator_facade`` are implemented in terms of the
 ``iterator_adaptor``\ 's ``Base`` template parameter. A class derived
 from ``iterator_adaptor`` typically redefines some of the core

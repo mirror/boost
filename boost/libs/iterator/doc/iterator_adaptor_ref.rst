@@ -1,17 +1,21 @@
+.. Version 1.4 of this ReStructuredText document corresponds to
+   n1530_, the paper accepted by the LWG for TR1.
+
+.. Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
+   rights reserved.
+
 .. parsed-literal::
   
-  bool
   template <
       class Derived
     , class Base
-    , class Value      = use_default
-    , unsigned Access  = use_default_access
-    , class Traversal  = use_default
+    , class Value        = use_default
+    , class CategoryOrTraversal  = use_default
     , class Reference  = use_default
     , class Difference = use_default
   >
   class iterator_adaptor 
-    : public iterator_facade<Derived, /* see details__ ...\*/>
+    : public iterator_facade<Derived, *V*, *C*, *R*, *D*> // see details__
   {
       friend class iterator_core_access;
    public:
@@ -40,69 +44,55 @@
           iterator_adaptor<OtherDerived, OtherIterator, V, C, R, D> const& y) const;
 
    private:
-      Base m_iterator;
+      Base m_iterator; // exposition only
   };
 
-__ : THE LINK HERE IS MISSING!
+__ : 
 
-``iterator_adaptor`` requirements
----------------------------------
+``iterator_adaptor`` base class parameters
+------------------------------------------
 
-The ``Derived`` template parameter must be a derived class of
-``iterator_adaptor``. The ``Base`` type must implement the
-expressions involving ``m_iterator`` in the specifications of those
-private member functions of ``iterator_adaptor`` that are not
-redefined by the ``Derived`` class and that are needed to model the
-concept corresponding to
-``iterator_traits<Derived>::iterator_category`` according to the
-requirements of ``iterator_facade``.  The rest of the template
-parameters specify the types for the member typedefs in
-``iterator_facade``.  The following pseudo-code specifies the
-traits types for ``iterator_adaptor``.
+The *V*, *C*, *R*, and *D* parameters of the ``iterator_facade``
+used as a base class in the summary of ``iterator_adaptor``
+above are defined as follows:
 
-::
+.. parsed-literal::
 
-   if (Value != use_default)
-        value_type = remove_cv<Value>::type;
-   else
-        value_type = iterator_traits<Base>::value_type;
+   *V* = if (Value is use_default)
+             return iterator_traits<Base>::value_type
+         else
+             return Value
 
+   *C* = if (CategoryOrTraversal is use_default)
+             return iterator_traversal<Base>::type
+         else
+             return CategoryOrTraversal
 
-   if (Traversal != use_default)
-       traversal_category = Traversal
-   else
-       traversal_category = traversal_category< Base >::type
+   *R* = if (Reference is use_default)
+             if (Value is use_default)
+                 return iterator_traits<Base>::reference
+             else
+                 return Value&
+         else
+             return Reference
 
-   iterator_category = iterator_tag<
-                            access_category
-                          , traversal_category
-                        >
+   *D* = if (Difference is use_default)
+             return iterator_traits<Base>::difference_type
+         else
+             return Difference
 
-   if (Access != use_default)
-   {
-      access_category = Access
-   }
-   else
-   {
-      access_category
-        = access_category< Base >::value
+``iterator_adaptor`` usage
+--------------------------
 
-      if (is_const<Value>)
-          access_category &= ~writable_iterator;
-   }
-
-   iterator_category = iterator_tag<
-                            access_category
-                          , traversal_category
-                        >
-
-   if (Reference != use_default)
-       reference = Reference
-   else if (Value != use_default)
-       reference = Value&
-   else
-       reference = iterator_traits<Base>::reference
-
+The ``Derived`` template parameter must be a publicly derived from
+``iterator_adaptor``.  In order for ``Derived`` to model the
+iterator concepts corresponding to
+``iterator_traits<Derived>::iterator_category``, the expressions
+involving ``m_iterator`` in the specifications of those private
+member functions of ``iterator_adaptor`` that may be called by
+``iterator_facade<Derived, ``\ *V*\``, ``\ *C*\``, ``\ *R*\``, ``\
+*D*\``>`` in evaluating any valid expression involving ``Derived``
+in those concepts' requirements.
 
 ``iterator_adaptor`` public operations
 --------------------------------------

@@ -8,7 +8,16 @@
                Lab`_, University of Hanover `Institute for Transport
                Railway Operation and Construction`_
 :date: $Date$
-:Number: N1530=03-0113
+
+:Number: This is a revised version of N1530_\ =03-0113, which was
+         accepted for Technical Report 1 by the C++ standard
+         committee's library working group.  
+
+.. Version 1.9 of this ReStructuredText document corresponds to
+   n1530_, the paper accepted by the LWG.
+
+.. _n1530: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html
+
 :copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
@@ -124,15 +133,15 @@ Iterator Concepts
 =================
 
 This proposal is formulated in terms of the new ``iterator concepts``
-as proposed in `n1477`_, since user-defined and especially adapted
+as proposed in n1550_, since user-defined and especially adapted
 iterators suffer from the well known categorization problems that are
 inherent to the current iterator categories.
 
-.. _`n1477`: http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1477.html
+.. _n1550: http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html
 
-This proposal does not strictly depend on proposal `n1477`_, as there
+This proposal does not strictly depend on proposal n1550_, as there
 is a direct mapping between new and old categories. This proposal
-could be reformulated using this mapping if `n1477`_ was not accepted.
+could be reformulated using this mapping if n1550_ was not accepted.
 
 Interoperability
 ================
@@ -141,24 +150,24 @@ The question of iterator interoperability is poorly addressed in the
 current standard.  There are currently two defect reports that are
 concerned with interoperability issues.
 
-Issue `179`_ concerns the fact that mutable container iterator types
+Issue 179_ concerns the fact that mutable container iterator types
 are only required to be convertible to the corresponding constant
 iterator types, but objects of these types are not required to
 interoperate in comparison or subtraction expressions.  This situation
 is tedious in practice and out of line with the way built in types
 work.  This proposal implements the proposed resolution to issue
-`179`_, as most standard library implementations do nowadays. In other
+179_, as most standard library implementations do nowadays. In other
 words, if an iterator type A has an implicit or user defined
 conversion to an iterator type B, the iterator types are interoperable
 and the usual set of operators are available.
 
-Issue `280`_ concerns the current lack of interoperability between
+Issue 280_ concerns the current lack of interoperability between
 reverse iterator types. The proposed new reverse_iterator template
 fixes the issues raised in 280. It provides the desired
 interoperability without introducing unwanted overloads.
 
-.. _`179`: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-defects.html#179
-.. _`280`: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#280
+.. _179: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-defects.html#179
+.. _280: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#280
 
 
 Iterator Facade
@@ -195,7 +204,7 @@ which were easily implemented using ``iterator_adaptor``:
 * ``filter_iterator``, which provides a view of an iterator range in
   which some elements of the underlying range are skipped.
 
-.. _counting_iterator:
+.. _counting: 
 
 * ``counting_iterator``, which adapts any incrementable type
   (e.g. integers, iterators) so that incrementing/decrementing the
@@ -226,15 +235,13 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
 ::
 
   struct use_default;
-  const unsigned use_default_access = -1;
 
   struct iterator_core_access { /* implementation detail */ };
   
   template <
       class Derived
     , class Value
-    , unsigned AccessCategory
-    , class TraversalCategory
+    , class CategoryOrTraversal
     , class Reference  = Value&
     , class Difference = ptrdiff_t
   >
@@ -244,8 +251,7 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
       class Derived
     , class Base
     , class Value      = use_default
-    , unsigned Access  = use_default_access
-    , class Traversal  = use_default
+    , class CategoryOrTraversal  = use_default
     , class Reference  = use_default
     , class Difference = use_default
   >
@@ -254,8 +260,7 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
   template <
       class Iterator
     , class Value = use_default
-    , unsigned Access  = use_default_access
-    , class Traversal  = use_default
+    , class CategoryOrTraversal = use_default
     , class Reference = use_default
     , class Difference = use_default
   >
@@ -277,8 +282,7 @@ Header ``<iterator_helper>`` synopsis    [lib.iterator.helper.synopsis]
 
   template <
       class Incrementable
-    , unsigned Access  = use_default_access
-    , class Traversal  = use_default
+    , class CategoryOrTraversal  = use_default
     , class Difference = use_default
   >
   class counting_iterator
@@ -312,17 +316,35 @@ Class template ``iterator_adaptor``
 Specialized adaptors [lib.iterator.special.adaptors]
 ====================================================
 
-.. The requirements for all of these need to be written *much* more
-   formally -DWA
 
-
-[*Note:* The ``enable_if_convertible<X,Y>::type`` expression used in
+The ``enable_if_convertible<X,Y>::type`` expression used in
 this section is for exposition purposes. The converting constructors
 for specialized adaptors should be only be in an overload set provided
 that an object of type ``X`` is implicitly convertible to an object of
-type ``Y``.  The ``enable_if_convertible`` approach uses SFINAE to
+type ``Y``.  
+The signatures involving ``enable_if_convertible`` should behave
+*as-if* ``enable_if_convertible`` were defined to be::
+
+  template <bool> enable_if_convertible_impl
+  {};
+
+  template <> enable_if_convertible_impl<true>
+  { struct type; };
+
+  template<typename From, typename To>
+  struct enable_if_convertible
+    : enable_if_convertible_impl<is_convertible<From,To>::value>
+  {};
+
+If an expression other than the default argument is used to supply
+the value of a function parameter whose type is written in terms
+of ``enable_if_convertible``, the program is ill-formed, no
+diagnostic required.
+
+[*Note:* The ``enable_if_convertible`` approach uses SFINAE to
 take the constructor out of the overload set when the types are not
-implicitly convertible.]
+implicitly convertible.  
+]
 
 
 Indirect iterator
@@ -393,10 +415,9 @@ Class template ``function_output_iterator``
 
 
 
-..
- LocalWords:  Abrahams Siek Witt istream ostream iter MTL strided interoperate
- LocalWords:  CRTP metafunctions inlining lvalue JGS incrementable BGL LEDA cv
- LocalWords:  GraphBase struct ptrdiff UnaryFunction const int typename bool pp
- LocalWords:  lhs rhs SFINAE markup iff tmp OtherDerived OtherIterator DWA foo
- LocalWords:  dereferenceable subobject AdaptableUnaryFunction impl pre ifdef'd
- LocalWords:  OtherIncrementable Coplien
+.. LocalWords:  Abrahams Siek Witt istream ostream iter MTL strided interoperate
+   LocalWords:  CRTP metafunctions inlining lvalue JGS incrementable BGL LEDA cv
+   LocalWords:  GraphBase struct ptrdiff UnaryFunction const int typename bool pp
+   LocalWords:  lhs rhs SFINAE markup iff tmp OtherDerived OtherIterator DWA foo
+   LocalWords:  dereferenceable subobject AdaptableUnaryFunction impl pre ifdef'd
+   LocalWords:  OtherIncrementable Coplien
