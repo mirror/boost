@@ -24,3 +24,4 @@
 # character to interpose another module into the current module.  This
 # can be useful for creating a module that consists of many directories
 # spread out over the entire source repository.
+regex -a boost/c++boost.gif boost/boost/config.hpp boost/boost/cregex.hpp boost/boost/pattern_except.hpp boost/boost/regex.h boost/boost/regex.hpp boost/boost/regex_traits.hpp boost/boost/smart_ptr.hpp boost/boost/timer.hpp boost/boost/type_traits.hpp boost/boost/utility.hpp boost/boost/detail/type_traits.hpp boost/boost/detail/ob_type_traits.hpp boost/boost/re_detail boost/libs/regex boost/libs/timer/timer.cpp
