@@ -21,57 +21,50 @@ DEPENDS all : test ;
                 container_test.cpp
               : :
                 :
-                <cwpro8><*><runtime-link>static
-              	<cwpro9><*><runtime-link>static
+                std::locale-support
                 : container
             ]
           [ run 
                 trim_test.cpp
               : :
                 :
-                <cwpro8><*><runtime-link>static
-              	<cwpro9><*><runtime-link>static
+                std::locale-support
                 : trim
             ]
           [ run 
                 conv_test.cpp
               : :
                 :
-                <cwpro8><*><runtime-link>static
-              	<cwpro9><*><runtime-link>static
+                std::locale-support
                 : conv
             ]
           [ run 
                 predicate_test.cpp
               : :
                 :
-                <cwpro8><*><runtime-link>static
-              	<cwpro9><*><runtime-link>static
+                std::locale-support
                 : predicate
             ]
           [ run 
                 find_test.cpp
               : :
                 :
-                <cwpro8><*><runtime-link>static
-              	<cwpro9><*><runtime-link>static
+                std::locale-support
                 : find
             ]
           [ run
                 split_test.cpp
               : :
                 :
-                <cwpro8><*><runtime-link>static
-              	<cwpro9><*><runtime-link>static
-                : split
+                std::locale-support
+               : split
             ]
           [ run 
                 replace_test.cpp
               : :
                 :
-                <cwpro8><*><runtime-link>static
-              	<cwpro9><*><runtime-link>static
-                : replace
+                std::locale-support
+               : replace
             ]
           [ run 
                 regex_test.cpp
