@@ -9,9 +9,9 @@
   template <
       class Derived
     , class Base
-    , class Value        = use_default
-    , class CategoryOrTraversal  = use_default
-    , class Reference  = use_default
+    , class Value               = use_default
+    , class CategoryOrTraversal = use_default
+    , class Reference           = use_default
     , class Difference = use_default
   >
   class iterator_adaptor 
@@ -47,7 +47,19 @@
       Base m_iterator; // exposition only
   };
 
-__ base_parameters_
+
+__ requirements_
+
+.. _requirements:
+
+``iterator_adaptor`` requirements
+---------------------------------
+
+The ``Derived`` template argument must be a publicly derived from
+``iterator_adaptor``.
+
+The ``Base`` argument shall be Assignable and Copy Constructible.
+
 
 .. _base_parameters:
 
@@ -83,18 +95,17 @@ above are defined as follows:
          else
              return Difference
 
-``iterator_adaptor`` usage
---------------------------
+``iterator_adaptor`` models
+---------------------------
 
-The ``Derived`` template parameter must be a publicly derived from
-``iterator_adaptor``.  In order for ``Derived`` to model the
-iterator concepts corresponding to
-``iterator_traits<Derived>::iterator_category``, the expressions
-involving ``m_iterator`` in the specifications of those private
-member functions of ``iterator_adaptor`` that may be called by
-``iterator_facade<Derived, V, C, R, D>``
-in evaluating any valid expression involving ``Derived``
-in those concepts' requirements.
+In order for ``Derived`` to model the iterator concepts corresponding
+to ``iterator_traits<Derived>::iterator_category``, the expressions
+involving ``m_iterator`` in the specifications of those private member
+functions of ``iterator_adaptor`` that may be called by
+``iterator_facade<Derived, V, C, R, D>`` in evaluating any valid
+expression involving ``Derived`` in those concepts' requirements.
+
+.. The above is confusing and needs a rewrite. -JGS
 
 ``iterator_adaptor`` public operations
 --------------------------------------
