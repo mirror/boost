@@ -1,13 +1,14 @@
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
-
-// See http://www.boost.org for most recent version.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
 #include <boost/preprocessor/list.hpp>
 #include <boost/preprocessor/tuple/to_list.hpp>
@@ -17,7 +18,7 @@
 
 #include <libs/preprocessor/test/test.hpp>
 
-// ***
+/* *** */
 
 #define TEST_LIST BOOST_PP_TUPLE_TO_LIST(4,(4,1,5,2))
 

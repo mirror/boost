@@ -1,19 +1,20 @@
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
-
-// See http://www.boost.org for most recent version.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
 #include <boost/preprocessor/logical.hpp>
 
 #include <libs/preprocessor/test/test.hpp>
 
-// ***
+/* *** */
 
 #if !(!defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406)
 TEST_B BOOST_PP_NOT(MACRO MACRO_ARGS(0)) == 1 TEST_E

@@ -1,25 +1,27 @@
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
-
-// See http://www.boost.org for most recent version.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/enum_params.hpp>
 #include <boost/preprocessor/enum_params_with_a_default.hpp>
 #include <boost/preprocessor/enum_params_with_defaults.hpp>
 
-// ***
+/* *** */
 
-// RATIONALE:
-// - All forms of ENUM_PARAMS must be tested with 0 and n, where n is
-// sufficiently large to exceed imaginable usage like. 50 should be
-// suffient in this case. 
+/* RATIONALE:
+ * - All forms of ENUM_PARAMS must be tested with 0 and n, where n is
+ * sufficiently large to exceed imaginable usage like. 50 should be
+ * suffient in this case. 
+ */
 
 #ifndef ENUM_PARAMS_TEST_MAX
 #define ENUM_PARAMS_TEST_MAX 50

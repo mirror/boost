@@ -1,13 +1,14 @@
-// Copyright (C) 2001
-// Housemarque Oy
-// http://www.housemarque.com
-//
-// Permission to copy, use, modify, sell and distribute this software is
-// granted provided this copyright notice appears in all copies. This
-// software is provided "as is" without express or implied warranty, and
-// with no claim as to its suitability for any purpose.
-
-// See http://www.boost.org for most recent version.
+/* Copyright (C) 2001
+ * Housemarque Oy
+ * http://www.housemarque.com
+ *
+ * Permission to copy, use, modify, sell and distribute this software is
+ * granted provided this copyright notice appears in all copies. This
+ * software is provided "as is" without express or implied warranty, and
+ * with no claim as to its suitability for any purpose.
+ *
+ * See http://www.boost.org for most recent version.
+ */
 
 #include <boost/preprocessor/arithmetic.hpp>
 #include <boost/preprocessor/comparison.hpp>
@@ -17,7 +18,7 @@
 
 #include <libs/preprocessor/test/test.hpp>
 
-// ***
+/* *** */
 
 TEST_B BOOST_PP_ADD(2,3) == 5 TEST_E
 TEST_B BOOST_PP_ADD(21,BOOST_PP_SUB(BOOST_PP_LIMIT_MAG,20)) == BOOST_PP_LIMIT_MAG TEST_E
