@@ -107,33 +107,33 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector ():
             vector_expression<self_type> (),
-            size_ (0), data_ (0) {}
+            data_ (0) {}
         explicit BOOST_UBLAS_INLINE
         vector (size_type size):
             vector_expression<self_type> (),
-            size_ (size), data_ (0) {
+            data_ (0) {
             resize (size);
         }
         BOOST_UBLAS_INLINE
         vector (size_type size, const array_type &data):
             vector_expression<self_type> (),
-            size_ (size), data_ (data) {}
+            data_ (data) {}
         BOOST_UBLAS_INLINE
         vector (const vector &v):
             vector_expression<self_type> (),
-            size_ (v.size_), data_ (v.data_) {}
+            data_ (v.data_) {}
         template<class AE>
         BOOST_UBLAS_INLINE
         vector (const vector_expression<AE> &ae):
             vector_expression<self_type> (),
-            size_ (ae ().size ()), data_ (size_) {
+            data_ (ae ().size ()) {
             vector_assign (scalar_assign<reference, BOOST_UBLAS_TYPENAME AE::value_type> (), *this, ae);
         }
 
         // Accessors
         BOOST_UBLAS_INLINE
         size_type size () const {
-            return size_;
+            return data_.size ();
         }
         BOOST_UBLAS_INLINE
         const_array_type &data () const {
@@ -148,7 +148,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
             detail::resize (data (), size, preserve);
-            size_ = size;
         }
 
         // Element access
@@ -173,7 +172,6 @@ namespace boost { namespace numeric { namespace ublas {
         // Assignment
         BOOST_UBLAS_INLINE
         vector &operator = (const vector &v) {
-            size_ = v.size_;
             data () = v.data ();
             return *this;
         }
@@ -258,7 +256,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void swap (vector &v) {
             if (this != &v) {
-                std::swap (size_, v.size_);
                 data ().swap (v.data ());
             }
         }
@@ -429,7 +426,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_iterator end () const {
-            return find (size_);
+            return find (data_.size ());
         }
 
 #ifndef BOOST_UBLAS_USE_INDEXED_ITERATOR
@@ -528,7 +525,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         iterator end () {
-            return find (size_);
+            return find (data_.size ());
         }
 
         // Reverse iterator
@@ -564,7 +561,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        size_type size_;
         array_type data_;
     };
 
