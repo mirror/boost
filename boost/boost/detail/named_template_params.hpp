@@ -8,6 +8,7 @@
 #define BOOST_DETAIL_NAMED_TEMPLATE_PARAMS_HPP
 
 #include <boost/type_traits/conversion_traits.hpp>
+#include <boost/type_traits/composite_traits.hpp> // for is_reference
 #if defined(__BORLANDC__)
 #include <boost/type_traits/ice.hpp>
 #endif
@@ -87,9 +88,24 @@ namespace boost {
     // we use is_convertible<X, iter_traits_gen_base>.
     struct named_template_param_base { };
 
+    struct is_convertible_to_named_param {
+      template <class X> struct bind {
+	enum { value = is_convertible<X*, named_template_param_base*>::value };
+      };
+    };
+    struct not_named_param {
+      template <class X> struct bind {
+	enum { value = false };
+      };
+    };
+
     template <class X>
     struct is_named_param_list {
-      enum { value = is_convertible<X*, named_template_param_base*>::value };
+      // If X is a reference type, we can't form a pointer and use is_convertible<X*, ...>,
+      // but we know that if it is a reference, it isn't a named parameter.
+      typedef typename ct_if<is_reference<X>::value,
+	not_named_param, is_convertible_to_named_param>::type IsNamedParam;
+      enum { value  = IsNamedParam::template bind<X>::value };
     };
     
     struct choose_named_params {
