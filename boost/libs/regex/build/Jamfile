@@ -46,9 +46,6 @@ dll boost_regex : ../src/$(SOURCES).cpp <template>regex-dll-options
         debug release
     ;
     
-local version-tag = [ MATCH "^([^.]+).([^.]+)" : $(BOOST_VERSION) ] ;
-version-tag = $(version-tag:J="_") ;
-
 stage stage/lib : <lib>boost_regex <dll>boost_regex
     :
         <locate>$(BOOST_ROOT)
