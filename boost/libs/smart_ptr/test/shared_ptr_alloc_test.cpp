@@ -23,19 +23,24 @@ int const n = 1024 * 1024;
 
 template<class T> void test(T * = 0)
 {
-    std::vector< boost::shared_ptr<T> > v;
-
     std::clock_t t = std::clock();
+    std::clock_t t2;
 
-    for(int i = 0; i < n; ++i)
     {
-        boost::shared_ptr<T> pi(new T(i));
-        v.push_back(pi);
+        std::vector< boost::shared_ptr<T> > v;
+
+        for(int i = 0; i < n; ++i)
+        {
+            boost::shared_ptr<T> pi(new T(i));
+            v.push_back(pi);
+        }
+
+        t2 = std::clock();
     }
 
-    t = std::clock() - t;
+    std::clock_t t3 = std::clock();
 
-    std::cout << "   " << static_cast<double>(t) / CLOCKS_PER_SEC << " seconds.\n";
+    std::cout << "   " << static_cast<double>(t3 - t) / CLOCKS_PER_SEC << " seconds, " << static_cast<double>(t2 - t) / CLOCKS_PER_SEC << " + " << static_cast<double>(t3 - t2) / CLOCKS_PER_SEC << ".\n";
 }
 
 class X

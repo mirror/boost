@@ -23,7 +23,6 @@
 #include <boost/type_traits/type_with_alignment.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 
-#include <deque>
 #include <new>              // ::operator new, ::operator delete
 #include <cstddef>          // std::size_t
 
@@ -45,10 +44,27 @@ template<unsigned size, unsigned align> struct allocator_impl
 {
     typedef freeblock<size, align> block;
 
+    // It may seem odd to use such small pages.
+    //
+    // However, on a typical Windows implementation that uses
+    // the OS allocator, "normal size" pages interact with the
+    // "ordinary" operator new, slowing it down dramatically.
+    //
+    // 512 byte pages are handled by the small object allocator,
+    // and don't interfere with ::new.
+    //
+    // The other alternative is to use much bigger pages (1M.)
+
+    enum { items_per_page = 496 / size }; // 1048560 / size
+
+#ifdef BOOST_HAS_THREADS
     static lightweight_mutex mutex;
-    static std::deque<block> store;
+#endif
+
     static block * free;
-    
+    static block * page;
+    static unsigned last;
+
     static inline void * alloc()
     {
 #ifdef BOOST_HAS_THREADS
@@ -61,8 +77,15 @@ template<unsigned size, unsigned align> struct allocator_impl
         }
         else
         {
-            store.resize(store.size() + 1);
-            return &store.back();
+            if(last == items_per_page)
+            {
+                // "Listen to me carefully: there is no memory leak"
+                // -- Scott Meyers, Eff C++ 2nd Ed Item 10
+                page = ::new block[items_per_page];
+                last = 0;
+            }
+
+            return &page[last++];
         }
     }
 
@@ -84,8 +107,13 @@ template<unsigned size, unsigned align> struct allocator_impl
             }
             else
             {
-                store.resize(store.size() + 1);
-                return &store.back();
+                if(last == items_per_page)
+                {
+                    page = ::new block[items_per_page];
+                    last = 0;
+                }
+
+                return &page[last++];
             }
         }
     }
@@ -105,33 +133,35 @@ template<unsigned size, unsigned align> struct allocator_impl
 
     static inline void dealloc(void * pv, std::size_t n)
     {
-        if(pv != 0) // 18.4.1.1/13
+        if(n != size) // class-specific delete called for a derived object
         {
-            if(n != size) // class-specific delete called for a derived object
-            {
-                ::operator delete(pv);
-            }
-            else
-            {
+            ::operator delete(pv);
+        }
+        else if(pv != 0) // 18.4.1.1/13
+        {
 #ifdef BOOST_HAS_THREADS
-                lightweight_mutex::scoped_lock lock(mutex);
+            lightweight_mutex::scoped_lock lock(mutex);
 #endif
-                block * pb = static_cast<block *>(pv);
-                pb->next = free;
-                free = pb;
-            }
+            block * pb = static_cast<block *>(pv);
+            pb->next = free;
+            free = pb;
         }
     }
 };
 
+#ifdef BOOST_HAS_THREADS
 template<unsigned size, unsigned align>
   lightweight_mutex allocator_impl<size, align>::mutex;
-
-template<unsigned size, unsigned align>
-  std::deque< freeblock<size, align> > allocator_impl<size, align>::store;
+#endif
 
 template<unsigned size, unsigned align>
   freeblock<size, align> * allocator_impl<size, align>::free = 0;
+
+template<unsigned size, unsigned align>
+  freeblock<size, align> * allocator_impl<size, align>::page = 0;
+
+template<unsigned size, unsigned align>
+  unsigned allocator_impl<size, align>::last = allocator_impl<size, align>::items_per_page;
 
 template<class T>
 struct quick_allocator: public allocator_impl< sizeof(T), boost::alignment_of<T>::value >
