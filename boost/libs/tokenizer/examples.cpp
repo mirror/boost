@@ -26,20 +26,20 @@ int test_main(int, char*[])
   
   // Use tokenizer
   {
-		const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
-		string answer[] = { "Hello", "world",  "foo", "bar", "yow",  "baz" };
-		typedef tokenizer<char_separator<char> > Tok;
-		char_separator<char> sep("-;|");
-		Tok t(test_string, sep);
-    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));		
+                const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
+                string answer[] = { "Hello", "world",  "foo", "bar", "yow",  "baz" };
+                typedef tokenizer<char_separator<char> > Tok;
+                char_separator<char> sep("-;|");
+                Tok t(test_string, sep);
+    BOOST_CRITICAL_TEST(equal(t.begin(),t.end(),answer));               
   }
   {
-		const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
-		string answer[] = { "", "", "Hello", "|", "world", "|", "", "|", "",
-												"foo", "", "bar", "yow", "baz", "|", "" };
-		typedef tokenizer<char_separator<char> > Tok;
-		char_separator<char> sep("-;", "|", boost::keep_empty_tokens);
-		Tok t(test_string, sep);
+                const string test_string = ";;Hello|world||-foo--bar;yow;baz|";
+                string answer[] = { "", "", "Hello", "|", "world", "|", "", "|", "",
+                                                                                                "foo", "", "bar", "yow", "baz", "|", "" };
+                typedef tokenizer<char_separator<char> > Tok;
+                char_separator<char> sep("-;", "|", boost::keep_empty_tokens);
+                Tok t(test_string, sep);
     BOOST_CRITICAL_TEST(equal(t.begin(), t.end(), answer));
   }
   {
