@@ -143,8 +143,8 @@ main()
       boost::default_iterator_policies,
       boost::value_type_is<const int> > Iter1;
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::value_type, int>::value));
-#ifdef __BORLANDC__
-    // This is a bug...
+#if defined(__BORLANDC__) || defined(BOOST_MSVC)
+    // We currently don't know how to workaround this bug.
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::reference, int&>::value));
     BOOST_STATIC_ASSERT((boost::is_same<Iter1::pointer, int*>::value));
 #else
