@@ -137,6 +137,16 @@ void histograms()
             "normal");
   histogram(normal_distribution<PRNG>(rng, 0.5, 0.5), 100000, -3, 3,
             "normal(0.5, 0.5)");
+  histogram(poisson_distribution<PRNG>(rng, 1.5), 100000, 0, 5,
+            "poisson(1.5)");
+  histogram(poisson_distribution<PRNG>(rng, 10), 100000, 0, 20,
+            "poisson(10)");
+  histogram(gamma_distribution<PRNG>(rng, 0.5), 100000, 0, 0.5,
+            "gamma(0.5)");
+  histogram(gamma_distribution<PRNG>(rng, 1), 100000, 0, 3,
+            "gamma(1)");
+  histogram(gamma_distribution<PRNG>(rng, 2), 100000, 0, 6,
+            "gamma(2)");
 }
 
 
