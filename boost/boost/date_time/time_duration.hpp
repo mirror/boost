@@ -73,22 +73,22 @@ namespace date_time {
     //! Returns number of hours in the duration
     hour_type hours()   const
     {
-      return (ticks_ / (3600*ticks_per_second()));
+      return static_cast<hour_type>(ticks_ / (3600*ticks_per_second()));
     }
     //! Returns normalized number of minutes
     min_type minutes() const
     {
-      return ((ticks() / (60*ticks_per_second())) % 60);
+      return static_cast<min_type>((ticks() / (60*ticks_per_second())) % 60);
     }
     //! Returns normalized number of seconds (0..60)
     sec_type seconds() const
     {
-      return (ticks()/ticks_per_second()) % 60;
+      return static_cast<sec_type>(ticks()/ticks_per_second()) % 60;
     }
     //! Returns total number of seconds truncating any fractional seconds
     sec_type total_seconds() const
     {
-      return ticks_ / ticks_per_second();
+      return static_cast<sec_type>(ticks_ / ticks_per_second());
     }
     //! Returns total number of milliseconds truncating any fractional seconds
     tick_type total_milliseconds() const
