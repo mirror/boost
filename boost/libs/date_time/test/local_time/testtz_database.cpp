@@ -19,6 +19,12 @@ int main(){
   using namespace boost::posix_time;
   using namespace boost::local_time;
   
+  /* NOTE: The testlocal_time_facet tests required full names 
+   * be added to some of the date_time_zonespec.csv entries. The 
+   * tests here also use those full names. Those entries are:
+   * Chicago, Denver, Los_Angeles, New_Tork, and Phoenix
+   * have all had full names added */
+  
   try{
     tz_database tz_db;
     tz_db.load_from_file("missing_file.csv");
@@ -50,10 +56,10 @@ int main(){
   boost::shared_ptr<time_zone_base> nyc_test = tz_db.time_zone_from_region("America/New_York");
   check("nyc Valid pointer", nyc_test != 0 ); 
   check("nyc Abbreviations",nyc_test->std_zone_abbrev() == std::string("EST")); 
-  check("nyc Full Name", nyc_test->std_zone_name() == std::string("EST")); 
+  check("nyc Full Name", nyc_test->std_zone_name() == std::string("Eastern Standard Time")); 
   check("nyc Abbreviations",nyc_test->dst_zone_abbrev() == std::string("EDT")); 
   //std::cout << nyc_test->std_zone_name() << std::endl;
-  check("nyc Full Name", nyc_test->dst_zone_name() == std::string("EDT")); 
+  check("nyc Full Name", nyc_test->dst_zone_name() == std::string("Eastern Daylight Time")); 
   check("nyc GMT Offset", nyc_test->base_utc_offset() == hours(-5));
   check("nyc DST Offset", nyc_test->dst_offset() == hours(1));
   //std::cout << nyc_test->dst_local_start_time(2004) << std::endl;
@@ -64,7 +70,7 @@ int main(){
   boost::shared_ptr<time_zone_base> phx_test = tz_db.time_zone_from_region("America/Phoenix");
   check("az Valid pointer", phx_test != 0 ); 
   check("az Abbreviations",phx_test->std_zone_abbrev() == std::string("MST"));  
-  check("az Full Name", phx_test->std_zone_name() == std::string("MST"));  
+  check("az Full Name", phx_test->std_zone_name() == std::string("Mountain Standard Time"));  
   check("az Abbreviations", phx_test->dst_zone_abbrev() == std::string(""));  
   check("az Full Name", phx_test->dst_zone_name() == std::string(""));  
   check("az GMT Offset", phx_test->base_utc_offset() == hours(-7));
