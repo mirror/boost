@@ -43,6 +43,10 @@ public:
 
 class counted_base
 {
+private:
+
+    typedef detail::lightweight_mutex mutex_type;
+
 public:
 
     // pre: initial_use_count <= initial_weak_count
@@ -72,7 +76,7 @@ public:
     void add_ref()
     {
 #ifdef BOOST_HAS_THREADS
-        lightweight_mutex::scoped_lock lock(mtx_);
+        mutex_type::scoped_lock lock(mtx_);
 #endif
         if(use_count_ == 0 && weak_count_ != 0) throw use_count_is_zero();
         ++use_count_;
@@ -86,7 +90,7 @@ public:
 
         {
 #ifdef BOOST_HAS_THREADS
-            lightweight_mutex::scoped_lock lock(mtx_);
+            mutex_type::scoped_lock lock(mtx_);
 #endif
             new_use_count = --use_count_;
             new_weak_count = --weak_count_;
@@ -108,7 +112,7 @@ public:
     void weak_add_ref() // nothrow
     {
 #ifdef BOOST_HAS_THREADS
-        lightweight_mutex::scoped_lock lock(mtx_);
+        mutex_type::scoped_lock lock(mtx_);
 #endif
         ++weak_count_;
     }
@@ -119,7 +123,7 @@ public:
 
         {
 #ifdef BOOST_HAS_THREADS
-            lightweight_mutex::scoped_lock lock(mtx_);
+            mutex_type::scoped_lock lock(mtx_);
 #endif
             new_weak_count = --weak_count_;
         }
@@ -133,7 +137,7 @@ public:
     long use_count() const // nothrow
     {
 #ifdef BOOST_HAS_THREADS
-        lightweight_mutex::scoped_lock lock(mtx_);
+        mutex_type::scoped_lock lock(mtx_);
 #endif
         return use_count_;
     }
@@ -153,7 +157,7 @@ private:
     long use_count_;
     long weak_count_;
 #ifdef BOOST_HAS_THREADS
-    mutable lightweight_mutex mtx_;
+    mutable mutex_type mtx_;
 #endif
     void (*self_deleter_) (counted_base *);
 };

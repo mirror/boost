@@ -19,7 +19,7 @@
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
 # pragma warning(push)
 # pragma warning(disable:4284) // odd return type for operator->
-#endif    
+#endif
 
 namespace boost
 {
