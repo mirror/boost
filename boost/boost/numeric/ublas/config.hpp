@@ -321,7 +321,7 @@ bool disable_type_check<Dummy>::value = false;
 #ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
 // Sparse proxies prevent reference invalidation problems in expressions such as:
 // a [1] = a [0] = 1        Thanks to Marc Duflot for spotting this.
-// #define BOOST_UBLAS_STRICT_STORAGE_SPARSE
+// #define BOOST_UBLAS_STRICT_MAP_ARRAY
 #define BOOST_UBLAS_STRICT_VECTOR_SPARSE
 #define BOOST_UBLAS_STRICT_MATRIX_SPARSE
 // Hermitian matrices use element proxies to allow assignment to conjugate triangle

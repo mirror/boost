@@ -36,15 +36,16 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename M::size_type size_type;
         typedef typename M::value_type value_type;
         typedef const value_type &const_reference;
-        typedef value_type &reference;
         typedef value_type *pointer;
 
-        // Construction and destruction
+        /* FIXME Why was this function provided to generate a runtime error?
+         * without the incorrect conversion is a compiletime error!
         BOOST_UBLAS_INLINE
         sparse_matrix_element (const value_type &d):
             container_reference<matrix_type> (), i_ (), j_ (), d_ (d), dirty_ (false) {
             external_logic ().raise ();
-        }
+        }*/
+        // Construction and destruction
         BOOST_UBLAS_INLINE
         sparse_matrix_element (matrix_type &m, size_type i, size_type j):
             container_reference<matrix_type> (m), i_ (i), j_ (j), d_ (), dirty_ (false) {
@@ -245,12 +246,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef A array_type;
         typedef const T &const_reference;
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
-        typedef T &reference;
-#elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
+#ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
+        typedef BOOST_UBLAS_TYPENAME detail::map_traits<A>::reference reference;
+#else
         typedef sparse_matrix_element<sparse_matrix<T, F, A> > reference;
-#elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
-        typedef typename detail::map_traits<A>::reference reference;
 #endif
     private:
         typedef T &true_reference;
@@ -840,11 +839,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
                     return (*it_).second;
-#else
-                    return detail::make_reference ((*this) ().data (), it_);
-#endif
                 } else {
                     return (*this) ().at_element (i_, j_);
                 }
@@ -1149,11 +1144,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
                     return (*it_).second;
-#else
-                    return detail::make_reference ((*this) ().data (), it_);
-#endif
                 } else {
                     return (*this) ().at_element (i_, j_);
                 }
@@ -1322,12 +1313,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
         typedef const T &const_reference;
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
-        typedef T &reference;
-#elif defined (BOOST_UBLAS_STRICT_MATRIX_SPARSE)
-        typedef sparse_matrix_element<sparse_vector_of_sparse_vector<T, F, A> > reference;
-#elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
+#ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
         typedef typename detail::map_traits<typename A::data_value_type>::reference reference;
+#else
+        typedef sparse_matrix_element<sparse_vector_of_sparse_vector<T, F, A> > reference;
 #endif
     private:
         typedef T &true_reference;
@@ -1998,11 +1987,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
                     return (*it_).second;
-#else
-                    return detail::make_reference ((*itv_).second, it_);
-#endif
                 } else {
                     return (*this) ().at_element (i_, j_);
                 }
@@ -2343,11 +2328,7 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index1 () < (*this) ().size1 (), bad_index ());
                 BOOST_UBLAS_CHECK (index2 () < (*this) ().size2 (), bad_index ());
                 if (rank_ == 1) {
-#ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
                     return (*it_).second;
-#else
-                    return detail::make_reference ((*itv_).second, it_);
-#endif
                 } else {
                     return (*this) ().at_element (i_, j_);
                 }

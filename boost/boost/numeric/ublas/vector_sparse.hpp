@@ -35,7 +35,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::size_type size_type;
         typedef typename V::value_type value_type;
         typedef const value_type &const_reference;
-        typedef value_type &reference;
         typedef value_type *pointer;
 
         /* FIXME Why was this function provided to generate a runtime error?
@@ -242,12 +241,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef A array_type;
         typedef const value_type &const_reference;
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE) && ! defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
-        typedef T &reference;
-#elif defined (BOOST_UBLAS_STRICT_VECTOR_SPARSE)
+#ifndef BOOST_UBLAS_STRICT_VECTOR_SPARSE
+        typedef BOOST_UBLAS_TYPENAME detail::map_traits<A>::reference reference;
+#else
         typedef sparse_vector_element<sparse_vector<T, A> > reference;
-#elif defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
-        typedef typename map_traits<A>::reference reference;
 #endif
     private:
         typedef T &true_reference;
@@ -621,11 +618,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
-#if ! defined (BOOST_UBLAS_STRICT_STORAGE_SPARSE)
                 return (*it_).second;
-#else
-                return detail::make_reference ((*this) ().data (), it_);
-#endif
             }
 
             // Index
