@@ -219,21 +219,13 @@ the -d option when extracting). If you didn't do that when
 extracting, then you'd better stop reading this, delete the files
 you just extracted, and try again! </p>
 
-<p>Currently the library will automatically detect and configure
-itself for Borland, Microsoft, GNU, SGI, Kai, Compaq, Sun and HP
-compilers. The library will also detect the HP, SGI, Rogue Wave,
-or Microsoft STL implementations. If the STL type is detected,
-then the library will attempt to extract suitable compiler
-configuration options from the STL used. Otherwise the library
-will assume that the compiler is fully compliant with the C++
-standard: unless various options are defined to depreciate
-features not implemented by your compiler. These options are
-documented in &lt;boost/regex/detail/regex_options.hpp&gt;, if
-you want to add permanent configuration options add them to
-&lt;boost/regex/detail/regex_options.hpp&gt; which is provided
-for this purpose - this will allow you to keep your configuration
-options between library versions by retaining &lt;boost/regex/detail/regex_options.hpp&gt;.
-</p>
+<p>This library should not need configuring before use; most
+popular compilers/standard libraries/platforms are already
+supported &quot;as is&quot;. If you do experience configuration
+problems, or just want to test the configuration with your
+compiler, then the process is the same as for all of boost; see
+the <a href="../config/config.htm">configuration library
+documentation</a>.</p>
 
 <p>The library will encase all code inside namespace boost. </p>
 
@@ -293,7 +285,7 @@ in order to set this option permanently. <br>
 &nbsp; <br>
 &nbsp; </p>
 
-<p><b>Microsoft Visual C++ 6</b> </p>
+<p><b>Microsoft Visual C++ 6</b><strong> and 7</strong></p>
 
 <p>You need version 6 of MSVC to build this library. If you are
 using VC5 then you may want to look at one of the previous
@@ -336,20 +328,21 @@ automatically select the correct .lib file for your build mode
 and tell the linker to include it. </p>
 
 <p>Note that if you want to statically link to the regex library
-when using the dynamic C++ runtime, define BOOST_RE_STATIC_LIB
-when building your project (this only has an effect for release
-builds). If you want to add the source directly to your project
-then define BOOST_REGEX_NO_LIB to disable automatic library
-selection.</p>
+when using the dynamic C++ runtime, define
+BOOST_REGEX_STATIC_LINK when building your project (this only has
+an effect for release builds). If you want to add the source
+directly to your project then define BOOST_REGEX_NO_LIB to
+disable automatic library selection.</p>
 
 <p><strong><i>Important</i></strong><em>: there have been some
-reports of compiler-optimisation bugs affecting this library, the
-workaround is to build the library using /Oityb1 rather than /O2.
-That is to use all optimisation settings except /Oa. This problem
-is reported to affect some standard library code as well (in fact
-I'm not sure if the problem is with the regex code or the
-underlying standard library), so it's probably worthwhile
-applying this workaround in normal practice in any case.</em></p>
+reports of compiler-optimisation bugs affecting this library, (particularly
+with VC6 versions prior to service patch 5) the workaround is to
+build the library using /Oityb1 rather than /O2. That is to use
+all optimisation settings except /Oa. This problem is reported to
+affect some standard library code as well (in fact I'm not sure
+if the problem is with the regex code or the underlying standard
+library), so it's probably worthwhile applying this workaround in
+normal practice in any case.</em></p>
 
 <p>Note: if you have replaced the C++ standard library that comes
 with VC6, then when you build the library you must ensure that
@@ -403,10 +396,8 @@ both the debug and release builds.</p>
 <p>LIBS: additional library files.</p>
 
 <p>For the more adventurous there is a configure script in
-&lt;boost&gt;/libs/regex, this will enable things like
-multithreading/wide character/nls support if they are not enabled
-by default on your platform. When the configure script completes,
-run one of the makefiles described above.</p>
+&lt;boost&gt;/libs/config; see the <a href="../config/config.htm">config
+library documentation</a>.</p>
 
 <p><b>Sun Workshop 6.1</b></p>
 
@@ -451,49 +442,14 @@ libboost_regex_v9.a etc.</p>
 
 <p><b>Other compilers:</b> </p>
 
-<p>Run configure, this will set up the headers and generate
-makefiles: from the command prompt change to the &lt;boost&gt;/libs/regex
-directory and type: </p>
-
-<pre><tt>./configure
-make</tt></pre>
-
-<p>Other make options include: </p>
-
-<p>make jgrep: builds the jgrep demo. </p>
-
-<p>make test: builds and runs the regression tests. </p>
-
-<p>make timer: builds the timer demo program. </p>
-
-<p>Note that the configure generated makefiles produce only a
-static library, if you would prefer to build a shared library,
-then there is a generic.mak makefile in the &lt;boost&gt;/libs/regex/build
-directory. To use this you will need to set up a number of
-environment variables first (see the makefile for more details).
-Finally if you use one of the following compilers: Kai C++, SGI
-Irix C++, Compaq true64 C++, or Como C++, then you should not
-need to run the configure script to get the library to build,
-however doing so may enable optional features (multithreading
-support, and/or nls support).</p>
-
-<p><b>Troubleshooting:</b> </p>
-
-<p>If make fails after running configure, you may need to
-manually disable some options: configure uses simple tests to
-determine what features your compiler supports, it does not
-stress the compiler's internals to any degree as the actual regex++
-code can do. Other compiler features may be implemented (and
-therefore detected by configure) but known to be buggy, again in
-this case it may be necessary to disable the feature in order to
-compile regex++ to stable code. The output file from configure is
-&lt;boost&gt;/boost/regex/detail/regex_options.hpp, this file
-lists all the macros that can be defined to configure regex++
-along with a description to illustrate their usage, experiment
-changing options in regex_options.hpp one at a time until you
-achieve the effect you require. If you mail me questions about
-configure output, be sure to include both regex_options.hpp and
-config.log with your message. </p>
+<p>There is a generic makefile (<a href="build/generic.mak">generic.mak</a>)
+provided in &lt;boost-root&gt;/libs/regex/build - see that
+makefile for details of environment variables that need to be set
+before use. Alternatively you can using the <a
+href="../../tools/build/index.html">Jam based build system</a>.
+If you need to configure the library for your platform, then
+refer to the <a href="../config/config.htm">config library
+documentation</a>.</p>
 
 <hr>
 
