@@ -33,7 +33,7 @@ using std::endl;
 #  pragma hrdstop
 #endif
 
-#include <boost/regex/detail/fileiter.hpp>
+#include <boost/regex/v3/fileiter.hpp>
 
 #include "jgrep.h"
 
@@ -128,6 +128,7 @@ void process_grep(const char* file)
    {
    }
 }
+
 
 
 

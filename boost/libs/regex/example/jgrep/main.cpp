@@ -34,7 +34,7 @@ using std::endl;
 #  pragma hrdstop
 #endif
 
-#include <boost/regex/detail/fileiter.hpp>
+#include <boost/regex/v3/fileiter.hpp>
 #include "jgrep.h"
 
 #ifndef JM_ALGO_INCLUDED
@@ -275,6 +275,7 @@ int main(int argc, char * argv[])
       usage();
    return 0;
 }
+
 
 
 
