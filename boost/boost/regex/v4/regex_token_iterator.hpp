@@ -132,7 +132,7 @@ public:
       if(N+1 < (int)subs.size())
       {
          ++N;
-         result =((subs[N] == -1) ? value_type(what.prefix().str()) : value_type(what[subs[N]].str()));
+         result =((subs[N] == -1) ? value_type(what.prefix().first, what.prefix().second) : value_type(what[subs[N]].first, what[subs[N]].second));
          return true;
       }
       if(what.prefix().first != what[0].second)
@@ -141,7 +141,7 @@ public:
       if(regex_search(last_end, end, what, *pre, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags)))
       {
          N =0;
-         result =((subs[N] == -1) ? value_type(what.prefix().str()) : value_type(what[subs[N]].str()));
+         result =((subs[N] == -1) ? value_type(what.prefix().first, what.prefix().second) : value_type(what[subs[N]].first, what[subs[N]].second));
          return true;
       }
       else if((last_end != end) && (subs[0] == -1))
