@@ -101,7 +101,7 @@ class dynamic_bitset
 public:
     typedef Block <a href="#block_type">block_type</a>;
     typedef <i>implementation-defined</i> <a href="#size_type">size_type</a>;
-    enum { <a href="#block_size">block_size</a> = CHAR_BIT * sizeof(Block) };
+    enum { <a href="#bits_per_block">bits_per_block</a> = CHAR_BIT * sizeof(Block) };
 
     class <a href="#reference">reference</a>
     {
@@ -405,6 +405,14 @@ Some people prefer the name &quot;toggle&quot; to
   In fact, most of the function names for <tt>dynamic_bitset</tt> were chosen for
   this reason.</p>
 
+<p>
+<tt>dynamic_bitset</tt> does not throw exceptions when a precondition
+is violated (as is done in <tt>std::bitset</tt>). Instead
+<tt>assert</tt> is used. See the guidelines for <a
+href="../../more/error_handling.html">Error and
+Exception Handling</a> for the explanation.
+</p>
+
 
 <h3><a name="header-files">Header Files</a></h3>
 
@@ -531,7 +539,7 @@ The same type as the <tt>Block</tt> template parameter.
 <hr>
 
 <pre>
-<a name="block_size">dynamic_bitset::block_size</a>
+<a name="bits_per_block">dynamic_bitset::bits_per_block</a>
 </pre>
 The number of bits in a <tt>Block</tt>.
 
@@ -614,11 +622,11 @@ explicit
 <b>Effects:</b> Constructs a bitset based on a range of blocks.
 Let <tt>*first</tt> be block number 0, <tt>*++first</tt> block number
 1, etc. Block number <tt>b</tt> is used to initialize the bits of the
-dynamic_bitset in the position range <tt>[b, b + block_size)</tt>.  For
+dynamic_bitset in the position range <tt>[b, b + bits_per_block)</tt>.  For
 each block number <tt>b</tt> with value <tt>bval</tt>, the bit
 <tt>(bval >> i) &amp; 1</tt> corresponds to the bit at position <tt>(b *
-block_size + i)</tt> in the bitset (where <tt>i</tt> goes through the
-range <tt>[0, block_size)</tt>).<br>
+bits_per_block + i)</tt> in the bitset (where <tt>i</tt> goes through the
+range <tt>[0, bits_per_block)</tt>).<br>
 
 <b>Requires:</b> The type <tt>BlockInputIterator</tt> must be a model
 of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input
@@ -639,6 +647,10 @@ explicit
                const Allocator&amp; alloc = Allocator()) 
 </pre>
 
+<b>Precondition:</b> <tt>pos &lt;= s.size()</tt>
+and the  characters used to
+initialize the bits must be <tt>0</tt> or <tt>1</tt>.<br>
+
 <b>Effects:</b> Constructs a bitset from a string of 0's and 1's.  The
 first <tt>M</tt> bits are initialized to the corresponding characters
 in <tt>s</tt>, where <tt>M = min(s.size() - pos, n)</tt>.  Note that
@@ -648,11 +660,8 @@ corresponds to the least significant bit.  That is, character position
 example, <tt>dynamic_bitset(string(&quot;1101&quot;))</tt> is the same as
 <tt>dynamic_bitset(13ul)</tt>.<br>
 
-<b>Throws:</b> <tt>std::out_of_range</tt> if <tt>pos &gt; s.size()</tt>,
-and throws <tt>std::invalid_argument</tt> if any of the characters used to
-initialize the bits are anything other than <tt>0</tt> or <tt>1</tt>.
-Also, <tt>dynamic_bitset</tt> throws an allocation error if memory is exhausted
-(<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).<br>
+<b>Throws:</b> an allocation error if memory is exhausted
+(<tt>std::bad_alloc</tt> if <tt>Allocator=std::allocator</tt>).
 
 <hr>
 
@@ -749,8 +758,8 @@ void <a name="append1">append</a>(Block value);
 </pre>
 <b>Effects:</b> Appends the bits in <tt>value</tt> to the bitset
 (appends to the most-significant end).  This increases the size of the
-bitset by <tt>block_size</tt>.  Let <tt>s</tt> be the old size of the
-bitset, then for <tt>i</tt> in the range <tt>[0,block_size)</tt>, the
+bitset by <tt>bits_per_block</tt>.  Let <tt>s</tt> be the old size of the
+bitset, then for <tt>i</tt> in the range <tt>[0,bits_per_block)</tt>, the
 bit at position <tt>(s + i)</tt> is set to <tt>((value >> i) &
 1)</tt>.<br>
 
@@ -952,32 +961,30 @@ dynamic_bitset&amp; <a name="reset1">reset</a>()
 dynamic_bitset&amp; <a name="set2">set</a>(size_type n, bool val = true)
 </pre>
 
+<b>Precondition:</b> <tt>n &lt; this-&gt;size()</tt>.<br>
+
 <b>Effects:</b> Sets bit <tt>n</tt> if <tt>val</tt> is <tt>true</tt>,
  and clears bit <tt>n</tt> if <tt>val</tt> is <tt>false</tt>. <br>
 
-<b>Returns:</b> <tt>*this</tt><br>
-
-<b>Throws:</b> <tt>std::out_of_range</tt> if <tt>n &gt;=
-this-&gt;size()</tt>.
-
+<b>Returns:</b> <tt>*this</tt>
 
 <hr>
 
 <pre>
 dynamic_bitset&amp; <a name="reset2">reset</a>(size_type n)
 </pre>
+<b>Precondition:</b> <tt>n &lt; this-&gt;size()</tt>.<br>
 <b>Effects:</b> Clears bit <tt>n</tt>.<br>
-<b>Returns:</b> <tt>*this</tt><br>
-<b>Throws:</b> <tt>std::out_of_range</tt> if <tt>n &gt;= this-&gt;size()</tt>.
+<b>Returns:</b> <tt>*this</tt>
 
 <hr>
 
 <pre>
 dynamic_bitset&amp; <a name="flip2">flip</a>(size_type n)
 </pre>
+<b>Precondition:</b> <tt>n &lt; this-&gt;size()</tt>.<br>
 <b>Effects:</b> Flips bit <tt>n</tt>.<br>
-<b>Returns:</b> <tt>*this</tt><br>
-<b>Throws:</b> <tt>std::out_of_range</tt> if <tt>n &gt;= this-&gt;size()</tt>.
+<b>Returns:</b> <tt>*this</tt>
 
 <hr>
 
@@ -1017,10 +1024,11 @@ returns <tt>false</tt>.<br>
 <pre>
 bool <a name="test">test</a>(size_type n) const
 </pre>
-<b>Returns:</b> <tt>true</tt> if bit <tt>n</tt> is set and
-<tt>false</tt> is bit <tt>n</tt> is 0.<br>
+<b>Precondition:</b> <tt>n &lt; this-&gt;size()</tt>.<br>
 
-<b>Throws:</b> <tt>std::out_of_range</tt> if <tt>n &gt;= this-&gt;size()</tt>.
+<b>Returns:</b> <tt>true</tt> if bit <tt>n</tt> is set and
+<tt>false</tt> is bit <tt>n</tt> is 0.
+
 
 <hr>
 
@@ -1028,23 +1036,24 @@ bool <a name="test">test</a>(size_type n) const
 reference <a name="bracket">operator[]</a>(size_type n)
 </pre>
 </TD>
+<b>Precondition:</b> <tt>n &lt; this-&gt;size()</tt>.<br>
+
 <b>Returns:</b> a <tt>reference</tt> to bit <tt>n</tt>.  Note that
 <tt>reference</tt> is a proxy class with an assignment operator and a
 conversion to <tt>bool</tt>, which allows you to use
 <tt>operator[]</tt> for assignment.  That is, you can write both <tt>x
 = b[n]</tt> and <tt>b[n] = x</tt>. However, in many other respects the
-proxy is not the same as the true reference type <tt>bool&amp;</tt>.<br>
+proxy is not the same as the true reference type <tt>bool&amp;</tt>.
 
-<b>Throws:</b> <tt>std::out_of_range</tt> if <tt>n &gt;= this-&gt;size()</tt>.
 
 <hr>
 
 <pre>
 bool <a name="const-bracket">operator[]</a>(size_type n) const
 </pre>
-<b>Returns:</b> <tt>true</tt> if bit <tt>n</tt> is set. <br>
+<b>Precondition:</b> <tt>n &lt; this-&gt;size()</tt>.<br>
+<b>Returns:</b> <tt>true</tt> if bit <tt>n</tt> is set.
 
-<b>Throws:</b> <tt>std::out_of_range</tt> if <tt>n &gt;= this-&gt;size()</tt>.
 
 <hr>
 

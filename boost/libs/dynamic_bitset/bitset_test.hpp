@@ -54,14 +54,7 @@ struct bitset_test {
                           std::size_t n)
   {
     if (pos > str.size()) {
-      try {
-        Bitset b(str, pos, n);
-        BOOST_TEST(false); // constructor failed to throw
-      } catch (std::out_of_range) {
-        // Good!
-      } catch (...) {
-        BOOST_TEST(false); // constructor threw the wrong exception
-      }
+      // Not in range, doesn't satisfy precondition.
     } else {
       std::size_t rlen = std::min(n, str.size() - pos);
 
@@ -72,14 +65,7 @@ struct bitset_test {
         if (! (str[i] == '0' || str[i] == '1'))
           any_non_zero_or_one = true;
       if (any_non_zero_or_one) {
-        try {
-          Bitset b(str, pos, n);
-          BOOST_TEST(false); // constructor failed to throw
-        } catch (std::invalid_argument) {
-          // Good!
-        } catch (...) {
-          BOOST_TEST(false); // constructor threw the wrong exception
-        }
+	// Input does not satisfy precondition.
       } else {
         // Construct an object, initializing the first M bit position to
         // values determined from the corresponding characters in the
@@ -173,12 +159,6 @@ struct bitset_test {
     Bitset b(lhs);
     b.clear();
     BOOST_TEST(b.size() == 0);
-    try {
-      bool x = b[0];
-      b[0] = x;
-    } catch(std::out_of_range) {
-      // Good!
-    }
   }
 
   static void append_bit(const Bitset& lhs)
@@ -203,8 +183,8 @@ struct bitset_test {
     Bitset b(lhs);
     Block value(128);
     b.append(value);
-    BOOST_TEST(b.size() == lhs.size() + Bitset::block_size);
-    for (std::size_t i = 0; i < Bitset::block_size; ++i)
+    BOOST_TEST(b.size() == lhs.size() + Bitset::bits_per_block);
+    for (std::size_t i = 0; i < Bitset::bits_per_block; ++i)
       BOOST_TEST(b[lhs.size() + i] == bool((value >> i) & 1));
   }
   
@@ -395,13 +375,7 @@ struct bitset_test {
         if (I != pos)
           BOOST_TEST(lhs[I] == prev[I]);
     } else {
-      try {
-        lhs.set(pos, value);
-      } catch (std::out_of_range) {
-        // Good!
-      } catch (...) {
-        BOOST_TEST(false); // threw the wrong exception
-      }
+      // Not in range, doesn't satisfy precondition.
     }
   }
 
@@ -429,14 +403,7 @@ struct bitset_test {
         if (I != pos)
           BOOST_TEST(lhs[I] == prev[I]);
     } else {
-      try {
-        lhs.reset(pos);
-        BOOST_TEST(false); // It should have thrown and exception
-      } catch (std::out_of_range) {
-        // Good!
-      } catch (...) {
-        BOOST_TEST(false); // threw the wrong exception
-      }
+      // Not in range, doesn't satisfy precondition.
     }
   }
 
@@ -473,14 +440,7 @@ struct bitset_test {
         if (I != pos)
           BOOST_TEST(lhs[I] == prev[I]);
     } else {
-      try {
-        lhs.flip(pos);
-        BOOST_TEST(false); // It should have thrown and exception
-      } catch (std::out_of_range) {
-        // Good!
-      } catch (...) {
-        BOOST_TEST(false); // threw the wrong exception
-      }
+      // Not in range, doesn't satisfy precondition.
     }
   }
 
@@ -684,14 +644,7 @@ struct bitset_test {
     if (pos < N) {
       BOOST_TEST(lhs.test(pos) == lhs[pos]);
     } else {
-      try {
-        (void)lhs.test(pos);
-        BOOST_TEST(false); // It should have thrown and exception
-      } catch (std::out_of_range) {
-        // Good!
-      } catch (...) {
-        BOOST_TEST(false); // threw the wrong exception
-      }
+      // Not in range, doesn't satisfy precondition.
     }
   }
 
