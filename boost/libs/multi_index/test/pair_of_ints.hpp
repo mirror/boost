@@ -12,6 +12,7 @@
 #define BOOST_MULTI_INDEX_TEST_PAIR_OF_INTS_HPP
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
+#include <boost/serialization/nvp.hpp>
 #include <utility>
 
 typedef std::pair<int,int> pair_of_ints;
@@ -30,5 +31,20 @@ inline void increment_int(int& x)
 {
   ++x;
 }
+
+namespace boost{
+
+namespace serialization{
+
+template<class Archive>
+void serialize(Archive& ar,pair_of_ints& p,const unsigned int)
+{
+  ar&boost::serialization::make_nvp("first",p.first);
+  ar&boost::serialization::make_nvp("second",p.second);
+}
+
+} /* namespace serialization */
+
+} /* namespace boost*/
 
 #endif

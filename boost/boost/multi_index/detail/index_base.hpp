@@ -19,6 +19,11 @@
 #include <boost/tuple/tuple.hpp>
 #include <utility>
 
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+#include <boost/multi_index/detail/index_loader.hpp>
+#include <boost/multi_index/detail/index_saver.hpp>
+#endif
+
 namespace boost{
 
 namespace multi_index{
@@ -53,6 +58,16 @@ protected:
   typedef copy_map<
     final_node_type,
     final_allocator_type>                     copy_map_type;
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  typedef index_saver<
+    node_type,
+    final_allocator_type>                     index_saver_type;
+  typedef index_loader<
+    node_type,
+    final_node_type,
+    final_allocator_type>                     index_loader_type;
+#endif
 
 private:
   typedef typename call_traits<Value>::param_type value_param_type;
@@ -90,6 +105,16 @@ protected:
   }
 
   bool modify_(node_type*){return true;}
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  /* serialization */
+
+  template<typename Archive>
+  void save_(Archive&,const unsigned int,const index_saver_type&)const{}
+
+  template<typename Archive>
+  void load_(Archive&,const unsigned int,const index_loader_type&){}
+#endif
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)
   /* invariant stuff */

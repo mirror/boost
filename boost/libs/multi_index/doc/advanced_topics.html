@@ -38,6 +38,7 @@ Reference
     </ul>
   </li>
   <li><a href="#ctor_args_list">Use of <code>ctor_args_list</code></a></li>
+  <li><a href="#serialization">Serialization</a></li>
   <li><a href="#debugging_support">Debugging support</a>
     <ul>
       <li><a href="#safe_mode">Safe mode</a></li>
@@ -796,6 +797,67 @@ A program is provided in the <a href="examples.html#example3">examples section</
 puts in practise these concepts.
 </p>
 
+<h2><a name="serialization">Serialization</a></h2>
+
+<p>
+<code>multi_index_container</code>s can be archived and retrieved by means of the
+<a href="../../serialization/index.html">Boost Serialization Library</a>. Both regular
+and XML archives are supported. The usage is straightforward and does not
+differ from any ofher serializable type. For instance:
+</p>
+
+<blockquote><pre>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>archive</span><span class=special>/</span><span class=identifier>text_oarchive</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>archive</span><span class=special>/</span><span class=identifier>text_iarchive</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>fstream</span><span class=special>&gt;</span>
+
+<span class=special>...</span>
+
+<span class=identifier>employee_set</span> <span class=identifier>es</span><span class=special>;</span>
+<span class=special>...</span> <span class=comment>// fill it with data</span>
+<span class=identifier>std</span><span class=special>::</span><span class=identifier>ofstream</span> <span class=identifier>ofs</span><span class=special>(</span><span class=string>&quot;data&quot;</span><span class=special>);</span>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>archive</span><span class=special>::</span><span class=identifier>text_oarchive</span> <span class=identifier>oa</span><span class=special>(</span><span class=identifier>ofs</span><span class=special>);</span>
+<span class=identifier>oa</span><span class=special>&lt;&lt;</span><span class=identifier>es</span><span class=special>;</span>
+
+<span class=special>...</span>
+
+<span class=identifier>employee_set</span> <span class=identifier>restored_es</span><span class=special>;</span>
+<span class=identifier>std</span><span class=special>::</span><span class=identifier>ifstream</span> <span class=identifier>ifs</span><span class=special>(</span><span class=string>&quot;data&quot;</span><span class=special>);</span>
+<span class=identifier>boost</span><span class=special>::</span><span class=identifier>archive</span><span class=special>::</span><span class=identifier>text_iarchive</span> <span class=identifier>ia</span><span class=special>(</span><span class=identifier>ifs</span><span class=special>);</span>
+<span class=identifier>ia</span><span class=special>&gt;&gt;</span><span class=identifier>restored_es</span><span class=special>;</span>
+</pre></blockquote>
+
+<p>
+Serialization capabilities are automatically provided by just linking with
+the appropriate Boost.Serialization library module: it is not necessary
+to explicitly include any header from Boost.Serialization,
+apart from those declaring the type of archive used in the process. If not used,
+however, serialization support can be disabled by globally defining the macro
+<code>BOOST_MULTI_INDEX_DISABLE_SERIALIZATION</code>. Disabling serialization
+for Boost.MultiIndex can yield a small improvement in build times, and may
+be necessary in those defective compilers that fail to correctly process
+Boost.Serialization headers.
+</p>
+
+<p>
+When retrieving an archived <code>multi_index_container</code>, not only
+the elements are restored, but also the order they were arranged into for
+every index of the container. This is specially important with sequenced
+indices, whose ordering is not automatically fixed, as it happens for
+ordered unique indices. Ordered <i>non-unique</i> indices are an in-between
+case: elements with different keys are sorted in ascending order, but
+there is no implicit traversal order for elements with the same key.
+Serialization of <code>multi_index_container</code> addresses this issue,
+so that restored ordered non-unique indices are sorted in exactly the
+same way as their originals.
+</p>
+
+<p>
+<a href="examples.html#example8">Example 8</a> in the examples section shows
+the serialization capabilities of Boost.MultiIndex.
+</p>
+
+
 <h2><a name="debugging_support">Debugging support</a></h2>
 
 <p>
@@ -1302,7 +1364,7 @@ Reference
 
 <br>
 
-<p>Revised June 28th 2004</p>
+<p>Revised December 14th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

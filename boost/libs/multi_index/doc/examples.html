@@ -34,6 +34,7 @@ Tests
   <li><a href="#example5">Example 5: sequenced indices</a></li>
   <li><a href="#example6">Example 6: complex searches and foreign keys</a></li>
   <li><a href="#example7">Example 7: composite keys</a></li>
+  <li><a href="#example8">Example 8: serialization</a></li>
 </ul>
 
 <h2><a name="example1">Example 1: basic usage</a></h2>
@@ -287,9 +288,32 @@ The program exits when the user presses the Enter key at the command prompt.
 </p>
 
 <p>
-The reader is challenged to add more functionality to the program (for
-instance, implementation of the <code>cp</code> command and handling of
-absolute paths.)
+The reader is challenged to add more functionality to the program; for
+instance:
+<ul>
+  <li>Implement additional commands, like <code>cp</code>.</li>
+  <li>Add handling of absolute paths.</li>
+  <li>Use <a href="advanced_topics.html#serialization">serialization</a>
+    to store and retrieve the filesystem state between program runs.</li>
+</ul>
+</p>
+
+<h2><a name="example8">Example 8: serialization</a></h2>
+
+<p>
+See <a href="../example/serialization.cpp">source code</a>.
+</p>
+
+<p>
+A typical application of serialization capabilities allows a program to
+restore the user context between executions. The example program asks
+the user for words and keeps a record of the ten most recently entered
+ones, in the current or in previous sessions. The serialized data structure,
+sometimes called an <i>MRU (most recently used) list</i>, has some interest
+on its own: an MRU behaves as a regular FIFO queue, with the exception
+that, when inserting a preexistent entry, this does not appear twice, but
+instead the entry is moved to the front of the list. You can observe this
+behavior in many programs featuring a "Recent files" menu command.
 </p>
 
 <hr>
@@ -306,7 +330,7 @@ Tests
 
 <br>
 
-<p>Revised November 25th 2004</p>
+<p>Revised December 14th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

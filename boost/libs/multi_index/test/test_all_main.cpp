@@ -23,6 +23,7 @@
 #include "test_projection.hpp"
 #include "test_range.hpp"
 #include "test_safe_mode.hpp"
+#include "test_serialization.hpp"
 #include "test_set_ops.hpp"
 #include "test_special_list_ops.hpp"
 #include "test_special_set_ops.hpp"
@@ -44,6 +45,7 @@ int test_main(int,char *[])
   test_projection();
   test_range();
   test_safe_mode();
+  test_serialization();
   test_set_ops();
   test_special_list_ops();
   test_special_set_ops();

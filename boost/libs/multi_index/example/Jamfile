@@ -43,3 +43,9 @@ exe sequenced
     : sequenced.cpp
     : <include>$(BOOST_ROOT)
     ;
+
+exe serialization
+    : serialization.cpp
+	  <lib>../../serialization/build/boost_serialization
+    : <include>$(BOOST_ROOT)
+    ;

@@ -43,6 +43,7 @@ Sequenced indices
           <li><a href="#observers">Observers</a></li>
           <li><a href="#set_operations">Set operations</a></li>
           <li><a href="#range_operations">Range operations</a></li>
+          <li><a href="#serialization">Serialization</a></li>
         </ul>
       </li>
     </ul>
@@ -882,6 +883,36 @@ provided. This acts as a predicate which all values of type <code>key_type</code
 satisfy.<br>
 </blockquote>
 
+<h4><a name="serialization">Serialization</a></h4>
+
+<p>
+Indices cannot be serialized on their own, but only as part of the
+<code>multi_index_container</code> into which they are embedded. In describing
+the additional preconditions and guarantees associated to ordered indices
+with respect to serialization of their embedding containers, we
+use the concepts defined in the <code>multi_index_container</code>
+<a href="multi_index_container.html#serialization">serialization section</a>.
+</p>
+
+Operation: saving of a <code>multi_index_container</code> <code>m</code> to an
+output archive (XML archive) <code>ar</code>.
+
+<blockquote>
+<b>Requires:</b> No additional requirements to those imposed by the container.
+</blockquote>
+
+Operation: loading of a <code>multi_index_container</code> <code>m'</code> from an
+input archive (XML archive) <code>ar</code>.
+
+<blockquote>
+<b>Requires:</b> Additionally to the general requirements, <code>value_comp()</code>
+must be serialization-compatible with <code>m.get&lt;i&gt;().value_comp()</code>,
+where <code>i</code> is the position of the ordered index in the container.<br>
+<b>Postconditions:</b> On succesful loading, each of the elements of
+[<code>begin()</code>, <code>end()</code>) is a restored copy of the corresponding
+element in [<code>m.get&lt;i&gt;().begin()</code>, <code>m.get&lt;i&gt;().end()</code>).
+</blockquote>
+
 <hr>
 
 <div class="prev_link"><a href="indices.html"><img src="../prev.gif" alt="index reference" border="0"><br>
@@ -896,7 +927,7 @@ Sequenced indices
 
 <br>
 
-<p>Revised July 20th 2004</p>
+<p>Revised December 14th 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

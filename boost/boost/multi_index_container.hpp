@@ -38,6 +38,13 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/utility/base_from_member.hpp>
 
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+#include <boost/multi_index/detail/archive_constructed.hpp>
+#include <boost/serialization/nvp.hpp>
+#include <boost/serialization/split_member.hpp>
+#include <boost/throw_exception.hpp> 
+#endif
+
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)
 #include <boost/multi_index/detail/invariant_assert.hpp>
 #define BOOST_MULTI_INDEX_CHECK_INVARIANT                                    \
@@ -501,6 +508,54 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     }
     BOOST_CATCH_END
   }
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  /* serialization */
+
+  friend class boost::serialization::access;
+
+  BOOST_SERIALIZATION_SPLIT_MEMBER()
+
+  typedef typename super::index_saver_type        index_saver_type;
+  typedef typename super::index_loader_type       index_loader_type;
+
+  template<class Archive>
+  void save(Archive& ar,const unsigned int version)const
+  {
+    std::size_t s=size_();
+    ar<<serialization::make_nvp("count",s);
+    index_saver_type sm(bfm_allocator::member,s);
+
+    for(iterator it=super::begin(),it_end=super::end();it!=it_end;++it){
+      ar<<serialization::make_nvp("item",*it);
+      sm.add(it.get_node(),ar,version);
+    }
+    super::save_(ar,version,sm);
+  }
+
+  template<class Archive>
+  void load(Archive& ar,const unsigned int version)
+  {
+    BOOST_MULTI_INDEX_CHECK_INVARIANT;
+
+    clean_up(); 
+
+    std::size_t s;
+    ar>>serialization::make_nvp("count",s);
+    index_loader_type lm(bfm_allocator::member,s);
+
+    for(std::size_t n=0;n<s;++n){
+      detail::archive_constructed<Value> value("item",ar,version);
+      std::pair<node_type*,bool> p=insert_(
+        value.get(),super::end().get_node());
+      if(!p.second)throw_exception(
+        archive::archive_exception(
+          archive::archive_exception::other_exception));
+      lm.add(p.first,ar,version);
+    }
+    super::load_(ar,version,lm);
+  }
+#endif
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_INVARIANT_CHECKING)
   /* invariant stuff */
