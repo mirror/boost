@@ -146,7 +146,7 @@ template <class Container>
 void test_container(Container* = 0)  // default arg works around MSVC bug
 {
     Container c(1 + (unsigned)rand() % 1673);
-    
+
     const typename Container::iterator start = c.begin();
     
     // back off by 1 to leave room for dereferenceable value at the end
@@ -154,9 +154,9 @@ void test_container(Container* = 0)  // default arg works around MSVC bug
     std::advance(finish, c.size() - 1);
     
     test(start, finish);
-    
-    test(static_cast<typename Container::const_iterator>(start),
-         static_cast<typename Container::const_iterator>(finish));
+
+    typedef typename Container::const_iterator const_iterator;
+    test(const_iterator(start), const_iterator(finish));
 }
 
 int main()
@@ -176,7 +176,7 @@ int main()
     test_integer<long long>();
     test_integer<unsigned long long>();
 #endif
-    // Some tests on container iterators, to prove we handle a few different categories
+   // Some tests on container iterators, to prove we handle a few different categories
     test_container<std::vector<int> >();
     test_container<std::list<int> >();
 #ifndef BOOST_NO_SLIST
