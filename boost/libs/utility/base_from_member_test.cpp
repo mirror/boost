@@ -16,7 +16,7 @@
 
 #include <boost/config.hpp>   // for BOOST_NO_MEMBER_TEMPLATES
 #include <boost/cstdlib.hpp>  // for boost::exit_success
-#include <boost/utility.hpp>  // for boost::noncopyable
+#include <boost/noncopyable.hpp>  // for boost::noncopyable
 
 #include <boost/utility/base_from_member.hpp>  // for boost::base_from_member
 
