@@ -96,13 +96,9 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<float> {
         typedef type_traits<float> self_type;
         typedef float value_type;
-#ifndef BOOST_UBLAS_CONST_REFERENCE_AS_VALUE
-        typedef const float &const_reference;
-#else
-        typedef float const_reference;
-#endif
-        typedef float &reference;
-        typedef float real_type;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+        typedef value_type real_type;
         typedef double precision_type;
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
@@ -172,17 +168,13 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<double> {
         typedef type_traits<double> self_type;
         typedef double value_type;
-#ifndef BOOST_UBLAS_CONST_REFERENCE_AS_VALUE
-        typedef const double &const_reference;
-#else
-        typedef double const_reference;
-#endif
-        typedef double &reference;
-        typedef double real_type;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+        typedef value_type real_type;
 #ifndef BOOST_UBLAS_NO_LONG_DOUBLE
         typedef long double precision_type;
 #else
-        typedef double precision_type;
+        typedef value_type precision_type;
 #endif
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
@@ -253,14 +245,10 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<long double> {
         typedef type_traits<long double> self_type;
         typedef long double value_type;
-#ifndef BOOST_UBLAS_CONST_REFERENCE_AS_VALUE
-        typedef const long double &const_reference;
-#else
-        typedef long double const_reference;
-#endif
-        typedef long double &reference;
-        typedef long double real_type;
-        typedef long double precision_type;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+        typedef value_type real_type;
+        typedef value_type precision_type;
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
         BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
@@ -331,8 +319,8 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<std::complex<float> > {
         typedef type_traits<std::complex<float> > self_type;
         typedef std::complex<float> value_type;
-        typedef const std::complex<float> &const_reference;
-        typedef std::complex<float> &reference;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
         typedef float real_type;
         typedef std::complex<double> precision_type;
 
@@ -397,13 +385,13 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<std::complex<double> > {
         typedef type_traits<std::complex<double> > self_type;
         typedef std::complex<double> value_type;
-        typedef const std::complex<double> &const_reference;
-        typedef std::complex<double> &reference;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
         typedef double real_type;
 #ifndef BOOST_UBLAS_NO_LONG_DOUBLE
         typedef std::complex<long double> precision_type;
 #else
-        typedef std::complex<double> precision_type;
+        typedef value_type precision_type;
 #endif
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
@@ -468,10 +456,10 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<std::complex<long double> > {
         typedef type_traits<std::complex<long double> > self_type;
         typedef std::complex<long double> value_type;
-        typedef const std::complex<long double> &const_reference;
-        typedef std::complex<long double> &reference;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
         typedef long double real_type;
-        typedef std::complex<long double> precision_type;
+        typedef value_type precision_type;
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
         BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
@@ -537,9 +525,9 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<boost::numeric::interval<float> > {
         typedef type_traits<boost::numeric::interval<float> > self_type;
         typedef boost::numeric::interval<float> value_type;
-        typedef const boost::numeric::interval<float> &const_reference;
-        typedef boost::numeric::interval<float> &reference;
-        typedef boost::numeric::interval<float> real_type;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+        typedef value_type real_type;
         typedef boost::numeric::interval<double> precision_type;
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
@@ -601,13 +589,13 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<boost::numeric::interval<double> > {
         typedef type_traits<boost::numeric::interval<double> > self_type;
         typedef boost::numeric::interval<double> value_type;
-        typedef const boost::numeric::interval<double> &const_reference;
-        typedef boost::numeric::interval<double> &reference;
-        typedef boost::numeric::interval<double> real_type;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+        typedef value_type real_type;
 #ifndef BOOST_UBLAS_NO_LONG_DOUBLE
         typedef boost::numeric::interval<long double> precision_type;
 #else
-        typedef boost::numeric::interval<double> precision_type;
+        typedef value_type precision_type;
 #endif
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
@@ -670,10 +658,10 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<boost::numeric::interval<long double> > {
         typedef type_traits<boost::numeric::interval<long double> > self_type;
         typedef boost::numeric::interval<long double> value_type;
-        typedef const boost::numeric::interval<long double> &const_reference;
-        typedef boost::numeric::interval<long double> &reference;
-        typedef boost::numeric::interval<long double> real_type;
-        typedef boost::numeric::interval<long double> precision_type;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+        typedef value_type real_type;
+        typedef value_type precision_type;
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 1);
         BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 1);
@@ -737,10 +725,10 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<boost::complex<boost::numeric::interval<float> > > {
         typedef type_traits<boost::complex<boost::numeric::interval<float> > > self_type;
         typedef boost::complex<boost::numeric::interval<float> > value_type;
-        typedef const boost::complex<boost::numeric::interval<float> > &const_reference;
-        typedef boost::complex<boost::numeric::interval<float> > &reference;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
         typedef boost::numeric::interval<float> real_type;
-        typedef boost::complex<double> precision_type;
+        typedef boost::complex<boost::numeric::interval<double> > precision_type;
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
         BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
@@ -800,16 +788,16 @@ namespace boost { namespace numeric { namespace ublas {
         }
     };
     template<>
-    struct type_traits<boost::complex<double> > {
-        typedef type_traits<boost::complex<double> > self_type;
-        typedef boost::complex<double> value_type;
-        typedef const boost::complex<double> &const_reference;
-        typedef boost::complex<double> &reference;
-        typedef double real_type;
+    struct type_traits<boost::complex<boost::numeric::interval<double> > {
+        typedef type_traits<boost::complex<boost::numeric::interval<double> > self_type;
+        typedef boost::complex<boost::numeric::interval<double> > value_type;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
+        typedef boost::numeric::interval<double> real_type;
 #ifndef BOOST_UBLAS_NO_LONG_DOUBLE
-        typedef boost::complex<long double > precision_type;
+        typedef boost::complex<boost::numeric::interval<long double> > precision_type;
 #else
-        typedef boost::complex<double> precision_type;
+        typedef value_type precision_type;
 #endif
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
@@ -874,10 +862,10 @@ namespace boost { namespace numeric { namespace ublas {
     struct type_traits<boost::complex<boost::numeric::interval<long double> > > {
         typedef type_traits<boost::complex<boost::numeric::interval<long double> > > self_type;
         typedef boost::complex<boost::numeric::interval<long double> > value_type;
-        typedef const boost::complex<boost::numeric::interval<long double> > &const_reference;
-        typedef boost::complex<boost::numeric::interval<long double> > &reference;
+        typedef const value_type &const_reference;
+        typedef value_type &reference;
         typedef boost::numeric::interval<long double> real_type;
-        typedef boost::complex<boost::numeric::interval<long double> > precision_type;
+        typedef value_type precision_type;
 
         BOOST_STATIC_CONSTANT (std::size_t, plus_complexity = 2);
         BOOST_STATIC_CONSTANT (std::size_t, multiplies_complexity = 6);
