@@ -74,7 +74,17 @@ namespace date_time {
     {
       return time_system::get_time_of_day(time_);
     }
-    std::string zone_name() const
+    /*! Optional bool parameter will return time zone as an offset 
+     * (ie "+07:00"). Empty string is returned for classes that do 
+     * not use a time_zone */
+    std::string zone_name(bool as_offset=false) const
+    {
+      return time_system::zone_name(time_);
+    }
+    /*! Optional bool parameter will return time zone as an offset 
+     * (ie "+07:00"). Empty string is returned for classes that do 
+     * not use a time_zone */
+    std::string zone_abbrev(bool as_offset=false) const
     {
       return time_system::zone_name(time_);
     }

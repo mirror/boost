@@ -9,6 +9,11 @@
  * $Date$
  */
 
+#include <sstream>
+#include <string>
+#include <vector>
+#include <locale>
+
 namespace boost { namespace date_time {
 
 //! This function gathers up all the month strings from a std::locale

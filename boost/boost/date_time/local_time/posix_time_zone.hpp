@@ -37,16 +37,16 @@ namespace local_time{
   typedef boost::date_time::time_zone_base<boost::posix_time::ptime> time_zone_base;
 
   //! A time zone class constructed from a POSIX time zone string
-  /*! A POSIX time zone string takes to form of:<br>
+  /*! A POSIX time zone string takes the form of:<br>
    * "std offset dst [offset],start[/time],end[/time]" (w/no spaces)
    * 'std' specifies the abbrev of the time zone.<br> 
    * 'offset' is the offset from UTC.<br>
    * 'dst' specifies the abbrev of the time zone during daylight savings time.<br>
    * The second offset is how many hours changed during DST. Default=1<br>
-   * 'start' & 'end' are the dates when DST goes into (and out of) effect.<br>
+   * 'start' and'end' are the dates when DST goes into (and out of) effect.<br>
    * 'offset' takes the form of: [+|-]hh[:mm[:ss]] {h=0-23, m/s=0-59}<br>
    * 'time' and 'offset' take the same form. Time defaults=02:00:00<br>
-   * 'start' & 'end' can be one of three forms:<br>
+   * 'start' and 'end' can be one of three forms:<br>
    * Mm.w.d {month=1-12, week=1-5 (5 is always last), day=0-6}<br>
    * Jn {n=1-365 Feb29 is never counted}<br>
    * n  {n=0-365 Feb29 is counted in leap years}<br>
@@ -173,16 +173,16 @@ namespace local_time{
         // get duration
         while(!isalpha(*sit) && sit != obj.end()){
         ss << *sit++;
-    }
-    base_utc_offset_ = posix_time::duration_from_string(ss.str()); 
-    ss.str("");
+        }
+        base_utc_offset_ = posix_time::duration_from_string(ss.str()); 
+        ss.str("");
 
-    // base offset must be within range of -12 hours to +12 hours
-    if(base_utc_offset_ < time_duration_type(-12,0,0) ||
-        base_utc_offset_ > time_duration_type(12,0,0))
-    {
-        throw bad_offset(posix_time::to_simple_string(base_utc_offset_));
-    }
+        // base offset must be within range of -12 hours to +12 hours
+        if(base_utc_offset_ < time_duration_type(-12,0,0) ||
+            base_utc_offset_ > time_duration_type(12,0,0))
+        {
+            throw bad_offset(posix_time::to_simple_string(base_utc_offset_));
+        }
       }
 
       // get DST data if given
@@ -210,12 +210,12 @@ namespace local_time{
           dst_offsets_.dst_adjust_ = posix_time::hours(1);
         }
 
-    // adjustment must be within +|- 1 day
-    if(dst_offsets_.dst_adjust_ <= time_duration_type(-24,0,0) ||
-        dst_offsets_.dst_adjust_ >= time_duration_type(24,0,0))
-    {
-      throw bad_adjustment(posix_time::to_simple_string(dst_offsets_.dst_adjust_));
-    }
+        // adjustment must be within +|- 1 day
+        if(dst_offsets_.dst_adjust_ <= time_duration_type(-24,0,0) ||
+            dst_offsets_.dst_adjust_ >= time_duration_type(24,0,0))
+        {
+          throw bad_adjustment(posix_time::to_simple_string(dst_offsets_.dst_adjust_));
+        }
       }
       // full names not extracted so abbrevs used in their place
       zone_names_ = time_zone_names(std_zone_abbrev, std_zone_abbrev, dst_zone_abbrev, dst_zone_abbrev);
@@ -316,7 +316,7 @@ namespace local_time{
       }
       int em=1, ed=0;
       ed = lexical_cast<int>(e.substr(1)); // skip 'J'
-      while(ed >= calendar::end_of_month_day(year,em)){
+      while(ed > calendar::end_of_month_day(year,em)){
         ed -= calendar::end_of_month_day(year,em++);
       }
 
@@ -344,6 +344,19 @@ namespace local_time{
       );
     }
 
+    //! helper function used when throwing exceptions
+    static std::string td_as_string(const time_duration_type& td)
+    {
+      std::string s;
+#if defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
+      s = posix_time::to_simple_string(td);
+#else
+      std::stringstream ss;
+      ss << td;
+      s = ss.str();
+#endif
+      return s;
+    }
   };
 
 } } // namespace boost::local_time

@@ -1,7 +1,7 @@
 #ifndef POSIX_TIME_CONVERSION_HPP___
 #define POSIX_TIME_CONVERSION_HPP___
 
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002-2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -35,7 +35,23 @@ namespace posix_time {
     timetm.tm_hour = td.hours(); 
     timetm.tm_min = td.minutes(); 
     timetm.tm_sec = td.seconds();
-    timetm.tm_isdst = -1; //?
+    timetm.tm_isdst = -1; // -1 used when dst info is unknown 
+    return timetm;
+  }
+  //! Convert a time_duration to a tm structure truncating any fractional seconds and zeroing fields for date components 
+  inline
+  tm to_tm(const boost::posix_time::time_duration& td) {
+    tm timetm;
+    timetm.tm_year = 0;
+    timetm.tm_mon = 0;
+    timetm.tm_mday = 0;
+    timetm.tm_wday = 0;
+    timetm.tm_yday = 0;
+    
+    timetm.tm_hour = td.hours(); 
+    timetm.tm_min = td.minutes(); 
+    timetm.tm_sec = td.seconds();
+    timetm.tm_isdst = -1; // -1 used when dst info is unknown
     return timetm;
   }
 

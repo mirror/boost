@@ -31,6 +31,7 @@ namespace gregorian {
     typedef boost::date_time::weekdays weekday_enum;
   };
 
+#if defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
   //! Create the base facet type for gregorian::date
   typedef boost::date_time::date_names_put<greg_facet_config> greg_base_facet;
 
@@ -199,7 +200,7 @@ namespace gregorian {
     os << fkb.day_of_week() << " before"; 
     return os;
   }
-
+#endif // USE_DATE_TIME_PRE_1_33_FACET_IO
   /**************** Input Streaming ******************/
   
 #if !defined(BOOST_NO_STD_ITERATOR_TRAITS)

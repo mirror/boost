@@ -11,6 +11,7 @@
  */
 
 #include "boost/date_time/date_facet.hpp"
+#include <sstream>
 
 namespace boost {
 namespace date_time {
@@ -41,48 +42,68 @@ namespace date_time {
     typedef typename base_type::char_type   char_type;
     typedef typename base_type::period_formatter_type period_formatter_type;
     typedef typename base_type::special_values_formatter_type special_values_formatter_type;
+    typedef typename base_type::date_gen_formatter_type date_gen_formatter_type;
     static const char_type fractional_seconds_format[3];                // f
     static const char_type fractional_seconds_or_none_format[3];        // F
     static const char_type seconds_with_fractional_seconds_format[3];   // s
     static const char_type seconds_format[3];                           // S
-    // TODO: Our standard format currently includes a time sone abbreviation.
-    // we want it to be "+|-hh:mm"
     static const char_type standard_format[5];                          // c
     static const char_type zone_abbrev_format[3];                       // z
     static const char_type zone_name_format[3];                         // Z
+    static const char_type zone_iso_format[3];                          // q
+    static const char_type zone_iso_extended_format[3];                 // Q
+    //static const char_type duration_sign_specifier[3];                  // #
     static const char_type duration_seperator[2];
-    static const char_type iso_time_format_specifier[16];
-    static const char_type iso_time_format_extended_specifier[20];
-    static std::locale::id id;
-    
+    static const char_type iso_time_format_specifier[18];
+    static const char_type iso_time_format_extended_specifier[22];
 
+    // TODO: Our standard format currently includes a time zone abbreviation.
+    // we want it to be "+|-hh:mm"
+    //default ptime format is YYYY-Mon-DD HH:MM:SS[.fff...][ zzz]
+    static const char_type default_time_format[23]; 
+    //default time_duration format is HH:MM:SS[.fff...]
+    static const char_type default_time_duration_format[11];
+    static std::locale::id id;
+
+    //! sets default formats for ptime, local_date_time, and time_duration
     explicit time_facet(::size_t a_ref = 0) 
-      : base_type(standard_format),
+      //: base_type(standard_format),
+      : base_type(default_time_format), 
+        m_time_duration_format(default_time_duration_format),
         m_time_duration_seperator(duration_seperator)
 
     {
       set_duration_seperator_from_facet(); //todo fix this
     }
 
+    //TODO sets time_dur to default - change to a custom?
     explicit time_facet(const char_type* a_format,
                         period_formatter_type period_formatter = period_formatter_type(), 
                         const special_values_formatter_type& special_value_formatter = special_values_formatter_type(), 
+                        date_gen_formatter_type dg_formatter = date_gen_formatter_type(),
                          ::size_t a_ref = 0) 
       : base_type(a_format, 
                   period_formatter,
                   special_value_formatter, 
+                  dg_formatter, 
                   a_ref),
+        m_time_duration_format(default_time_duration_format),
         m_time_duration_seperator(duration_seperator)
     {}
 
-
+    //! Changes format for time_duration
+    void time_duration_format(const char_type* const format) {
+      m_time_duration_format = format;
+    }
     virtual void set_iso_format()
     {
       m_format = iso_time_format_specifier;
+      //TODO: set time_dur format to iso spec too?
     }
     virtual void set_iso_extended_format()
     {
       m_format = iso_time_format_extended_specifier;
+      //TODO: set time_dur format to iso_ext spec too?
     }
 
     OutItrT put(OutItrT a_next, 
@@ -110,14 +131,80 @@ namespace date_time {
                                       replace_string);
       }
       if (format.find(zone_name_format)) {
-        boost::algorithm::replace_all(format,
-                                      zone_name_format,
-                                      a_time.zone_name());
+        if(a_time.zone_name().empty()) {
+          /* TODO: this'll probably create problems if a user places 
+           * the zone_*_format flag in the format with a ptime. This 
+           * code removes the flag from the default formats */
+
+          // if zone_name() returns an empty string, we want to
+          // erase zone_name_format & one preceeding space
+          std::basic_stringstream<char_type> ss;
+          ss << ' ' << zone_name_format;
+          boost::algorithm::replace_all(format,
+                                        ss.str(),
+                                        "");
+        }
+        else{
+          boost::algorithm::replace_all(format,
+                                        zone_name_format,
+                                        a_time.zone_name());
+        }
       }
       if (format.find(zone_abbrev_format)) {
-        boost::algorithm::replace_all(format,
-                                      zone_abbrev_format,
-                                      a_time.zone_abbrev());
+        if(a_time.zone_abbrev(false).empty()) {
+          /* TODO: this'll probably create problems if a user places 
+           * the zone_*_format flag in the format with a ptime. This 
+           * code removes the flag from the default formats */
+
+          // if zone_abbrev() returns an empty string, we want to
+          // erase zone_abbrev_format & one preceeding space
+          std::basic_stringstream<char_type> ss;
+          ss << ' ' << zone_abbrev_format;
+          boost::algorithm::replace_all(format,
+                                        ss.str(),
+                                        "");
+        }
+        else{
+          boost::algorithm::replace_all(format,
+                                        zone_abbrev_format,
+                                        a_time.zone_abbrev(false));
+        }
+      }
+      if (format.find(zone_iso_extended_format)) {
+        if(a_time.zone_name(true).empty()) {
+          /* TODO: this'll probably create problems if a user places 
+           * the zone_*_format flag in the format with a ptime. This 
+           * code removes the flag from the default formats */
+
+          // if zone_name() returns an empty string, we want to
+          // erase zone_iso_extended_format from format
+          boost::algorithm::replace_all(format,
+                                        zone_iso_extended_format,
+                                        "");
+        }
+        else{
+          boost::algorithm::replace_all(format,
+                                        zone_iso_extended_format,
+                                        a_time.zone_name(true));
+        }
+      }
+      if (format.find(zone_iso_format)) {
+        if(a_time.zone_abbrev(true).empty()) {
+          /* TODO: this'll probably create problems if a user places 
+           * the zone_*_format flag in the format with a ptime. This 
+           * code removes the flag from the default formats */
+
+          // if zone_abbrev() returns an empty string, we want to
+          // erase zone_iso_format from format
+          boost::algorithm::replace_all(format,
+                                        zone_iso_format,
+                                        "");
+        }
+        else{
+          boost::algorithm::replace_all(format,
+                                        zone_iso_format,
+                                        a_time.zone_abbrev(true));
+        }
       }
       if (format.find(fractional_seconds_format)) {
         // replace %f with nnnnnnn
@@ -148,11 +235,71 @@ namespace date_time {
         }
       }
 
-      // trim format before put to remove empty whitespace
-      boost::algorithm::trim(format);
-
       return do_put_tm(a_next, a_ios, a_fill, 
                        to_tm(a_time), format);
+    }
+
+    //! put function for time_duration
+    OutItrT put(OutItrT a_next, 
+                std::ios_base& a_ios, 
+                char_type a_fill, 
+                const time_duration_type& a_time_dur) const 
+    {
+      /* TODO: Fix this
+      if (a_time_dur.is_special()) { 
+        return do_put_special(a_next, a_ios, a_fill, 
+                              a_time_dur.date().as_special());
+      }
+      */
+      string_type format(m_time_duration_format);
+      string_type frac_str;
+      if (format.find(seconds_with_fractional_seconds_format)) {
+        // replace %s with %S.nnn 
+        frac_str = 
+          fractional_seconds_as_string(a_time_dur, false);
+        char_type sep = std::use_facet<std::numpunct<char_type> >(a_ios.getloc()).decimal_point();
+        
+        string_type replace_string(seconds_format);
+        replace_string += sep;
+        replace_string += frac_str;
+        boost::algorithm::replace_all(format, 
+                                      seconds_with_fractional_seconds_format, 
+                                      replace_string);
+      }
+      if (format.find(fractional_seconds_format)) {
+        // replace %f with nnnnnnn
+        if (!frac_str.size()) {
+          frac_str = fractional_seconds_as_string(a_time_dur, false);
+        }
+        boost::algorithm::replace_all(format,
+                                      fractional_seconds_format, 
+                                      frac_str);
+      }
+
+      if (format.find(fractional_seconds_or_none_format)) {
+        // replace %F with nnnnnnn or nothing if fs == 0
+        frac_str = 
+          fractional_seconds_as_string(a_time_dur, true);
+        if (frac_str.size()) {
+          char_type sep = std::use_facet<std::numpunct<char_type> >(a_ios.getloc()).decimal_point();
+          string_type replace_string;
+          replace_string += sep;
+          replace_string += frac_str;
+          boost::algorithm::replace_all(format,
+                                        fractional_seconds_or_none_format, 
+                                        replace_string);
+        }
+        else {
+          boost::algorithm::erase_all(format,
+                                      fractional_seconds_or_none_format);
+        }
+      }
+
+      // trim format before put to remove empty whitespace
+      //boost::algorithm::trim(format);
+
+      return do_put_tm(a_next, a_ios, a_fill, 
+                       to_tm(a_time_dur), format);
     }
     
     OutItrT put(OutItrT next, std::ios_base& a_ios, 
@@ -200,6 +347,7 @@ namespace date_time {
     {
       //todo write this function
     }
+    string_type m_time_duration_format;
     string_type m_time_duration_seperator;
 
   };
@@ -231,6 +379,14 @@ namespace date_time {
 
   template <class time_type, class CharT, class OutItrT>  
   const typename time_facet<time_type, CharT, OutItrT>::char_type 
+  time_facet<time_type, CharT, OutItrT>::zone_iso_extended_format[3] ={'%','Q'};
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type 
+  time_facet<time_type, CharT, OutItrT>::zone_iso_format[3] =  {'%','q'};
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type 
   time_facet<time_type, CharT, OutItrT>::seconds_format[3] =  {'%','S'};
 
   template <class time_type, class CharT, class OutItrT>  
@@ -243,13 +399,26 @@ namespace date_time {
 
   template <class time_type, class CharT, class OutItrT>  
   const typename time_facet<time_type,CharT, OutItrT>::char_type 
-  time_facet<time_type,CharT, OutItrT>::iso_time_format_specifier[16] =  
-    {'%', 'Y', '%', 'm', '%', 'd', 'T', '%', 'H', '%', 'M', '%', 'S', '%', 'F'};
+  time_facet<time_type,CharT, OutItrT>::iso_time_format_specifier[18] =  
+    {'%', 'Y', '%', 'm', '%', 'd', 'T', 
+     '%', 'H', '%', 'M', '%', 'S', '%', 'F', '%','q' };
 
   template <class time_type, class CharT, class OutItrT>  
   const typename time_facet<time_type, CharT, OutItrT>::char_type 
-  time_facet<time_type, CharT, OutItrT>::iso_time_format_extended_specifier[20] =  
-    {'%', 'Y', '-', '%', 'm', '-', '%', 'd', ' ', '%', 'H', ':', '%', 'M', ':', '%', 'S', '%', 'F'};
+  time_facet<time_type, CharT, OutItrT>::iso_time_format_extended_specifier[22] =  
+    {'%', 'Y', '-', '%', 'm', '-', '%', 'd', ' ', 
+     '%', 'H', ':', '%', 'M', ':', '%', 'S', '%', 'F','%','Q'};
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type 
+  time_facet<time_type, CharT, OutItrT>::default_time_format[23] = 
+    {'%','Y','-','%','b','-','%','d',' ',
+      '%','H',':','%','M',':','%','S','%','F',' ','%','z'};
+
+  template <class time_type, class CharT, class OutItrT>  
+  const typename time_facet<time_type, CharT, OutItrT>::char_type 
+  time_facet<time_type, CharT, OutItrT>::default_time_duration_format[11] = 
+    {'%','H',':','%','M',':','%','S','%','F'};
 
 } }
 
