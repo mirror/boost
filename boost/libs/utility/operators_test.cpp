@@ -51,7 +51,14 @@ namespace
     class Wrapped1
         : boost::operators<Wrapped1<T> >
         , boost::shiftable<Wrapped1<T> >
-        , boost::bool_testable<Wrapped1<T> >
+        ,
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1300))                 \
+    || BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(3))                   \
+    || BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(800))  \
+    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
+          public
+#endif 
+          boost::bool_testable<Wrapped1<T> >
     {
     public:
         explicit Wrapped1( T v = T() ) : _value(v) {}
@@ -82,7 +89,9 @@ namespace
           { _value >>= x._value; return *this; }
         Wrapped1& operator++()               { ++_value; return *this; }
         Wrapped1& operator--()               { --_value; return *this; }
-        operator bool() const { return _value != 0; }
+        
+        typedef T (Wrapped1::*safe_bool)() const;
+        operator safe_bool () const { return _value ? &Wrapped1::value : 0; }
         
     private:
         T _value;
@@ -322,11 +331,20 @@ namespace
         test_multipliable_aux( x1, y1, x2, y2 );
         test_multipliable_aux( y1, x1, y2, x2 );
     }
-    
+
+  template <class A, class B>
+  void test_value_equality(A a, B b)
+  {
+      BOOST_TEST(a.value() == b);
+  }
+  
+#define TEST_OP_R(op) test_value_equality(x1 op y1, x2 op y2)
+#define TEST_OP_L(op) test_value_equality(y1 op x1, y2 op x2)
+  
     template <class X1, class Y1, class X2, class Y2>
     void test_addable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_TEST( (x1 + y1).value() == (x2 + y2) );
+        TEST_OP_R(+);
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -336,19 +354,19 @@ namespace
         test_addable_aux( x1, y1, x2, y2 );
         test_addable_aux( y1, x1, y2, x2 );
     }
-    
+
     template <class X1, class Y1, class X2, class Y2>
     void test_subtractable(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
         sanity_check( x1, y1, x2, y2 );
-        BOOST_TEST( (x1 - y1).value() == (x2 - y2) );
+        TEST_OP_R(-);
     }
 
     template <class X1, class Y1, class X2, class Y2>
     void test_subtractable_left(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
         sanity_check( x1, y1, x2, y2 );
-        BOOST_TEST( (y1 - x1).value() == (y2 - x2) );
+        TEST_OP_L(-);
     }
 
     template <class X1, class Y1, class X2, class Y2>
@@ -356,7 +374,7 @@ namespace
     {
         sanity_check( x1, y1, x2, y2 );
         if ( y2 != 0 )
-            BOOST_TEST( (x1 / y1).value() == (x2 / y2) );
+            TEST_OP_R(/);
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -364,7 +382,7 @@ namespace
     {
         sanity_check( x1, y1, x2, y2 );
         if ( x2 != 0 )
-            BOOST_TEST( (y1 / x1).value() == (y2 / x2) );
+            TEST_OP_L(/);
     }
 
     template <class X1, class Y1, class X2, class Y2>
@@ -372,7 +390,7 @@ namespace
     {
         sanity_check( x1, y1, x2, y2 );
         if ( y2 != 0 )
-            BOOST_TEST( (x1 % y1).value() == (x2 % y2) );
+            TEST_OP_R(%);
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -380,13 +398,13 @@ namespace
     {
         sanity_check( x1, y1, x2, y2 );
         if ( x2 != 0 )
-            BOOST_TEST( (y1 % x1).value() == (y2 % x2) );
+            TEST_OP_L(%);
     }
 
     template <class X1, class Y1, class X2, class Y2>
     void test_xorable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_TEST( (x1 ^ y1).value() == (x2 ^ y2) );
+        TEST_OP_R(^);
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -400,7 +418,7 @@ namespace
     template <class X1, class Y1, class X2, class Y2>
     void test_andable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_TEST( (x1 & y1).value() == (x2 & y2) );
+        TEST_OP_R(&);
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -414,7 +432,7 @@ namespace
     template <class X1, class Y1, class X2, class Y2>
     void test_orable_aux(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
-        BOOST_TEST( (x1 | y1).value() == (x2 | y2) );
+        TEST_OP_R(|);
     }
     
     template <class X1, class Y1, class X2, class Y2>
@@ -429,14 +447,14 @@ namespace
     void test_left_shiftable(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
         sanity_check( x1, y1, x2, y2 );
-        BOOST_TEST( (x1 << y1).value() == (x2 << y2) );
+        TEST_OP_R(<<);
     }
     
     template <class X1, class Y1, class X2, class Y2>
     void test_right_shiftable(X1 x1, Y1 y1, X2 x2, Y2 y2)
     {
         sanity_check( x1, y1, x2, y2 );
-        BOOST_TEST( (x1 >> y1).value() == (x2 >> y2) );
+        TEST_OP_R(>>);
     }
     
     template <class X1, class X2>

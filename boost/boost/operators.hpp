@@ -79,7 +79,7 @@
 
 #include <boost/config.hpp>
 #include <boost/iterator.hpp>
-#include <boost/preprocessor/seq/cat.hpp>
+#include <boost/detail/workaround.hpp>
 
 #if defined(__sgi) && !defined(__GNUC__)
 #   pragma set woff 1234
@@ -155,7 +155,7 @@ struct equality_comparable1 : B
 };
 
 // A macro which produces "name_2left" from "name".
-#define BOOST_OPERATOR2_LEFT(name) BOOST_PP_SEQ_CAT_S(1,(name)(2)(_)(left))
+#define BOOST_OPERATOR2_LEFT(name) name##2##_##left
 
 //  NRVO-friendly implementation (contributed by Daniel Frey) ---------------//
 
@@ -317,8 +317,16 @@ struct bool_testable : B
 {
     friend bool operator!(const T& t) { return !static_cast<bool>(t); }
 private:
+#if !BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 600)
     typedef signed char private_number_type;
+# if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1301))                \
+    || BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, BOOST_TESTED_AT(800))  \
+    || BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(3))                   \
+    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
+ public:
+# endif
     operator private_number_type() const;
+#endif 
 };
  
 //  More operator classes (contributed by Daryle Walker) --------------------//
