@@ -137,13 +137,8 @@ class pool: protected simple_segregated_storage<
     typedef typename UserAllocator::difference_type difference_type;
 
   private:
-#ifdef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-    enum { min_alloc_size =
-        ::boost::details::pool::ct_lcm<sizeof(void *), sizeof(size_type)>::value };
-#else
-    static const unsigned min_alloc_size =
-        ::boost::details::pool::ct_lcm<sizeof(void *), sizeof(size_type)>::value;
-#endif
+    BOOST_STATIC_CONSTANT(unsigned, min_alloc_size =
+        (::boost::details::pool::ct_lcm<sizeof(void *), sizeof(size_type)>::value) );
 
     // Returns 0 if out-of-memory
     // Called if malloc/ordered_malloc needs to resize the free list

@@ -32,15 +32,10 @@ struct ct_gcd_helper;
 template <unsigned A, unsigned B>
 struct ct_gcd_helper<A, B, false>
 {
-#ifdef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  enum { A_mod_B_ = A % B };
-  enum { value = ::boost::details::pool::details::ct_gcd_helper<B, A_mod_B_,
-      ::boost::type_traits::ice_eq<A_mod_B_, 0>::value>::value };
-#else
-  static const unsigned A_mod_B_ = A % B;
-  static const unsigned value = ::boost::details::pool::details::ct_gcd_helper<B, A_mod_B_,
-      ::boost::type_traits::ice_eq<A_mod_B_, 0>::value>::value;
-#endif
+  BOOST_STATIC_CONSTANT(unsigned, A_mod_B_ = A % B);
+  BOOST_STATIC_CONSTANT(unsigned, value =
+      (::boost::details::pool::details::ct_gcd_helper<B, A_mod_B_,
+          ::boost::type_traits::ice_eq<A_mod_B_, 0>::value>::value) );
 };
 template <unsigned A, unsigned B>
 struct ct_gcd_helper<A, B, true>
@@ -53,12 +48,8 @@ template <unsigned A, unsigned B>
 struct ct_gcd
 {
   BOOST_STATIC_ASSERT(A != 0 && B != 0);
-#ifdef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  enum { value = ::boost::details::pool::details::ct_gcd_helper<A, B, false>::value };
-#else
-  static const unsigned value =
-      ::boost::details::pool::details::ct_gcd_helper<A, B, false>::value;
-#endif
+  BOOST_STATIC_CONSTANT(unsigned, value =
+      (::boost::details::pool::details::ct_gcd_helper<A, B, false>::value) );
 };
 
 //
@@ -70,11 +61,8 @@ struct ct_gcd
 template <unsigned A, unsigned B>
 struct ct_lcm
 {
-#ifdef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-  enum { value = A / ::boost::details::pool::ct_gcd<A, B>::value * B };
-#else
-  static const unsigned value = A / ::boost::details::pool::ct_gcd<A, B>::value * B;
-#endif
+  BOOST_STATIC_CONSTANT(unsigned, value =
+      (A / ::boost::details::pool::ct_gcd<A, B>::value * B) );
 };
 
 } // namespace pool
