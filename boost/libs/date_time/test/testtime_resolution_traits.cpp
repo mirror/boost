@@ -64,8 +64,8 @@ main()
         nano_res::to_tick_count(1,0,0,0) == one_hour_nano);
 
 
-  printTestStats();
-  return 0;
+  return printTestStats();
+
 }
 
 /*

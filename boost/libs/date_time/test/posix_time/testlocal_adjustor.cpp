@@ -155,8 +155,8 @@ main()
 //   check("check dst offset",   adjustor.utc_offset(true)==hours(-6));
   
 
-  printTestStats();
-  return 0;
+  return printTestStats();
+
 }
 
 /*
