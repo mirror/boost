@@ -11,12 +11,13 @@
 // See http://www.boost.org/libs/tokenizer for documenation
 
 // Revision History:
-
+// 03 Jul 2003   John Bandela
+//      Converted to new iterator adapter
 // 02 Feb 2002   Jeremy Siek
 //      Removed tabs and a little cleanup.
 
-#ifndef BOOST_TOKENIZER_JRB051801_HPP_
-#define BOOST_TOKENIZER_JRB051801_HPP_
+#ifndef BOOST_TOKENIZER_JRB070303_HPP_
+#define BOOST_TOKENIZER_JRB070303_HPP_
 
 #include <boost/token_iterator.hpp>
 #include <cassert>
@@ -32,8 +33,6 @@ namespace boost {
   >
   class tokenizer {
   private:
-    typedef detail::tokenizer_policy<Type, TokenizerFunc> Pol;
-    typedef detail::token_iterator_base<Iterator> TBase;
     typedef token_iterator_generator<TokenizerFunc,Iterator,Type> TGen;
         
     // It seems that MSVC does not like the unqualified use of iterator,
@@ -86,8 +85,8 @@ namespace boost {
       assign(c.begin(),c.end(),f);
     }
     
-    iter begin() const { return iter(TBase(first_,last_),Pol(f_)); }
-    iter end() const { return iter(TBase(last_,last_),Pol(f_)); }
+    iter begin() const { return iter(f_,first_,last_); }
+    iter end() const { return iter(f_,last_,last_); }
         
   private:
     Iterator first_;
