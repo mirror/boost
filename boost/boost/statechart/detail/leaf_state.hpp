@@ -70,7 +70,7 @@ class leaf_state : public state_base< Allocator, RttiPolicy >
 
   private:
     //////////////////////////////////////////////////////////////////////////
-    typename state_list_type::iterator listPosition_;
+    typename base_type::state_list_type::iterator listPosition_;
 };
 
 

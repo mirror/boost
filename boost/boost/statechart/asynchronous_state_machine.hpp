@@ -44,7 +44,7 @@ class asynchronous_state_machine : public state_machine<
     //////////////////////////////////////////////////////////////////////////
     typedef asynchronous_state_machine my_base;
 
-    asynchronous_state_machine( my_context ctx ) :
+    asynchronous_state_machine( typename processor_base::my_context ctx ) :
       processor_base( ctx )
     {
     }

@@ -73,7 +73,7 @@ class processor_container : noncopyable
         const processor_handle handle_;
 
         friend class processor_container;
-        friend class processor_base_type;
+        friend class event_processor< Scheduler >;
     };
 
     template< class Processor >
