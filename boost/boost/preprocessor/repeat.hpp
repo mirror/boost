@@ -98,7 +98,6 @@ are directly supported.</p>
 #if defined __EDG__ // unrolled repeats for EDG front end
 #include <boost/preprocessor/detail/repeat_edg.hpp>
 #else
-#error edg?
 
 #define BOOST_PP_R1_0(M,D)
 #define BOOST_PP_R1_1(M,D) M(0,D)
