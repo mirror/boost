@@ -191,7 +191,7 @@ namespace detail{
 
 namespace detail
 {
-  template <bool is_ref = true, bool array>
+  template <bool is_ref, bool array>
   struct is_const_impl
       : ::boost::type_traits::false_unary_metafunction
   {};
@@ -257,7 +257,7 @@ struct is_const<const volatile void>
 
 namespace detail
 {
-  template <bool is_ref = true, bool array>
+  template <bool is_ref, bool array>
   struct is_volatile_impl
       : ::boost::type_traits::false_unary_metafunction
   {};
@@ -394,6 +394,7 @@ struct add_cv<T&>{ typedef T& type; };
 
 
 #endif // BOOST_CV_TYPE_TRAITS_HPP
+
 
 
 
