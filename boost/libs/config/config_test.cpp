@@ -7,7 +7,7 @@
 
 //  See http://www.boost.org for the most recent version.
 
-#include <boost\config.hpp>
+#include <boost/config.hpp>
 #include <iostream>
 
 using std::cout;
