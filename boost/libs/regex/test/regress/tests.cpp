@@ -22,7 +22,7 @@
   *
   */
 
-
+#include <cassert>
 #include <boost/regex.hpp>
 #include "regress.h"
 
@@ -261,11 +261,14 @@ void cpp_tests(const reg_expression<C, T, A>& e, bool recurse = true)
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
       if(!recurse)
       {
-         std::basic_string<char_t> s(search_text.begin(), search_text.end());
+         unsigned len = search_text.size();
+         const std::basic_string<char_t>& s = search_text;
          grep_test_predicate<std::basic_string<char_t>::const_iterator, allocator_type> oi2(s.begin(), s.end());
          regex_grep(oi2, s, e, flags[3]);
          grep_test_predicate<const char_t*, allocator_type> oi3(s.c_str(), s.c_str()+s.size());
          regex_grep(oi3, s.c_str(), e, flags[3]);
+         assert(s.size() == len);
+         assert(s.end() - s.begin() == len);
       }
 #endif
    }

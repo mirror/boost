@@ -21,11 +21,13 @@
   *                time check only.
   */
 
+#define UNICODE
+#define _UNICODE
+
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
 #include <wchar.h>
-#define UNICODE
 #include <boost/regex.h>
 
 #ifndef BOOST_NO_WREGEX
