@@ -205,10 +205,23 @@ namespace std {
     return  __a < __b ? __b : __a;
   }
 #     ifdef BOOST_MSVC
+  // Apparently, something in the Microsoft libraries requires the "long"
+  // overload, because it calls the min/max functions with arguments of
+  // slightly different type.  (If this proves to be incorrect, this
+  // whole "BOOST_MSVC" section can be removed.)
   inline long min(long __a, long __b) {
     return __b < __a ? __b : __a;
   }
   inline long max(long __a, long __b) {
+    return  __a < __b ? __b : __a;
+  }
+  // The "long double" overload is required, otherwise user code calling
+  // min/max for floating-point numbers will use the "long" overload.
+  // (SourceForge bug #495495)
+  inline long double min(long double __a, long double __b) {
+    return __b < __a ? __b : __a;
+  }
+  inline long double max(long double __a, long double __b) {
     return  __a < __b ? __b : __a;
   }
 #     endif
