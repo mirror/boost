@@ -29,7 +29,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     template<class T>
     struct scalar_expression:
-        private boost::nonassignable {
+        private nonassignable {
         typedef T value_type;
     };
 
@@ -92,7 +92,7 @@ namespace boost { namespace numeric { namespace ublas {
     // Base class for the Barton Nackman trick
     template<class E>
     struct vector_expression:
-        private boost::nonassignable {
+        private nonassignable {
         BOOST_STATIC_CONSTANT (int, complexity = 0);
         typedef E expression_type;
         typedef vector_tag type_category;

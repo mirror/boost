@@ -49,7 +49,7 @@ namespace boost { namespace numeric { namespace ublas {
    */
     template<class C>
     class container_const_reference:
-        private boost::nonassignable {
+        private nonassignable {
     public:
         typedef C container_type;
 
@@ -88,7 +88,7 @@ namespace boost { namespace numeric { namespace ublas {
    */
     template<class C>
     class container_reference:
-        private boost::nonassignable {
+        private nonassignable {
     public:
         typedef C container_type;
 

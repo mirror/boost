@@ -17,21 +17,24 @@
 #ifndef BOOST_UBLAS_FWD_H
 #define BOOST_UBLAS_FWD_H
 
-namespace boost {
+
+namespace boost { namespace numeric { namespace ublas {
 
     // Borrowed from Dave Abraham's noncopyable.
     // I believe this should be part of utility.hpp one day...
-    class nonassignable {
-    protected:
-        nonassignable(){}
-        ~nonassignable(){}
-    private:  // emphasize the following members are private
-        const nonassignable& operator=( const nonassignable& );
-    }; // nonassignable
+    namespace nonassignable_  // protection from unintended ADL
+    {
+        class nonassignable {
+        protected:
+            nonassignable(){}
+            ~nonassignable(){}
+        private:  // emphasize the following members are private
+            const nonassignable& operator=( const nonassignable& );
+        }; // nonassignable
+    }
+    
+    typedef nonassignable_::nonassignable nonassignable;
 
-}
-
-namespace boost { namespace numeric { namespace ublas {
 
     struct concrete_tag {};
     struct abstract_tag {};

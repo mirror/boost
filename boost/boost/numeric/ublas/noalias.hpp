@@ -14,16 +14,16 @@ namespace boost { namespace numeric { namespace ublas {
     // Provides temporary free assigment when LHS has no alias on RHS
     template<class C>
     class noalias_proxy:
-        private boost::nonassignable {
+        private nonassignable {
     public:
         typedef typename C::closure_type closure_type;
 
         BOOST_UBLAS_INLINE
         noalias_proxy (C& lval):
-            boost::nonassignable (), lval_ (lval) {}
+            nonassignable (), lval_ (lval) {}
         BOOST_UBLAS_INLINE
         noalias_proxy (const noalias_proxy& p):
-            boost::nonassignable (), lval_ (p.lval_) {}
+            nonassignable (), lval_ (p.lval_) {}
 
         template <class E>
         BOOST_UBLAS_INLINE
