@@ -40,10 +40,17 @@ typedef void (*function_ptr)();
 typedef int (alignment_dummy::*member_ptr);
 typedef int (alignment_dummy::*member_function_ptr)();
 
+#ifdef BOOST_HAS_LONG_LONG
+#define BOOST_TT_ALIGNMENT_BASE_TYPES BOOST_PP_TUPLE_TO_LIST( \
+        12, ( \
+        char, short, int, long, long long, float, double, long double \
+        , void*, function_ptr, member_ptr, member_function_ptr))
+#else
 #define BOOST_TT_ALIGNMENT_BASE_TYPES BOOST_PP_TUPLE_TO_LIST( \
         11, ( \
         char, short, int, long, float, double, long double \
         , void*, function_ptr, member_ptr, member_function_ptr))
+#endif
 
 #define BOOST_TT_HAS_ONE_T(D,Data,T) boost::detail::has_one_T<T>
 
