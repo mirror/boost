@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <boost/detail/binary_search.hpp>
 #include <boost/detail/workaround.hpp>
+#include <cstddef>
 
 #if defined(__SGI_STL_PORT) ? defined(__SGI_STL_OWN_IOSTREAMS) : (!defined(__GNUC__) || __GNUC__ > 2)
 # define USE_SSTREAM
