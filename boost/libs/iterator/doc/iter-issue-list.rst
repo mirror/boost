@@ -208,8 +208,10 @@ reverse iterator "flips the direction of the base iterator's motion". This needs
 as in the current standard. Something like: "iterates through the controlled sequence in the 
 opposite direction" 
 
-:Proposed resolution: **Needs work** (Jeremy)
-  We agree and need to find wording.
+:Proposed resolution:
+  Change the introduction to: The reverse iterator adaptor iterates
+  through the adapted iterator range in the opposite direction.
+
 
 9.10 'prior' is undefined 
 =========================
@@ -220,8 +222,16 @@ opposite direction"
 reverse_iterator::dereference is specified as calling a function named 'prior' which has no 
 specification. 
 
-:Proposed resolution: **Needs language** (Jeremy)
-  Replace use of prior with what it does.
+:Proposed resolution:
+  Change the specification to avoid using ``prior`` as follows.
+
+:Effects: 
+
+::
+
+    Iterator tmp = m_iterator;
+    return *--tmp;
+
 
 
 9.11 "In other words" is bad wording 
@@ -237,7 +247,7 @@ words" always means "I didn't say it right, so I'll try again." We need to say i
 
 Reword.
 
-9.12 Transform_iterator shouldn’t mandate private member 
+9.12 Transform_iterator shouldn't mandate private member 
 ========================================================
 
 :Submitter: Pete Becker 

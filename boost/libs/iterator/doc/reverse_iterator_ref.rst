@@ -31,10 +31,46 @@ Iterator and Readable Iterator.
 ``reverse_iterator`` models
 ...........................
 
-``reverse_iterator`` models Bidirectional Traversal Iterator and
-Readable Iterator.  In addition, ``reverse_iterator`` models the same
-standard iterator access concepts that the ``Iterator``
-argument models.
+The concepts that ``reverse_iterator`` models are dependent on what
+concepts the ``Iterator`` argument models, as specified in the
+following tables.
+
++----------------------------------+-------------------------------------+
+| If ``Iterator`` models           | then ``reverse_iterator`` models    |
++==================================+=====================================+
+| Bidirectional Traversal Iterator | Bidirectional Traversal Iterator    |
++----------------------------------+-------------------------------------+
+| Random Access Traversal Iterator | Random Access Traversal Iterator    |
++----------------------------------+-------------------------------------+
+
++--------------------------------+----------------------------------------------+
+| If ``Iterator`` models         | then ``reverse_iterator`` models             |
++================================+==============================================+
+| Readable Iterator              | Readable Iterator                            |
++--------------------------------+----------------------------------------------+
+| Writable Iterator              | Writable Iterator                            |
++--------------------------------+----------------------------------------------+
+| Lvalue Iterator                | Lvalue Iterator                              |
++--------------------------------+----------------------------------------------+
+
+
++-------------------------------------------------------+----------------------------------+
+| If ``Iterator`` models                                | then ``reverse_iterator`` models |
++=======================================================+==================================+
+| Readable Lvalue Iterator,                             | Bidirectional Iterator           |
+| Bidirectional Traversal Iterator                      |                                  |
++-------------------------------------------------------+----------------------------------+
+| Writable Lvalue Iterator,                             | Mutable Bidirectional Iterator   |
+| Bidirectional Traversal Iterator                      |                                  |
++-------------------------------------------------------+----------------------------------+
+| Readable Lvalue Iterator,                             | Random Access Iterator           |
+| Random Access Traversal Iterator                      |                                  |
++-------------------------------------------------------+----------------------------------+
+| Writable Lvalue Iterator,                             | Mutable Random Access Iterator   |
+| Random Access Traversal Iterator                      |                                  |
++-------------------------------------------------------+----------------------------------+
+
+
 
 
 
@@ -85,7 +121,7 @@ operations.
 ::
 
     Iterator tmp = m_iterator;
-    return *..tmp;
+    return *--tmp;
 
 
 ``reverse_iterator& operator++();``
