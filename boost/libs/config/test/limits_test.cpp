@@ -28,13 +28,19 @@
  * Therefore, avoid explicit function template instantiations.
  */
 
+template<typename T> inline T make_char_numeric_for_streaming(T x) { return x; }
+inline int make_char_numeric_for_streaming(char c) { return c; }
+inline int make_char_numeric_for_streaming(signed char c) { return c; }
+inline int make_char_numeric_for_streaming(unsigned char c) { return c; }
+
 template<class T>
 void test_integral_limits(const T &, const char * msg)
 {
   typedef std::numeric_limits<T> lim;
   std::cout << "Testing " << msg
             << " (size " << sizeof(T) << ")" 
-            << " min: " << lim::min() << ", max: " << lim::max()
+            << " min: " << make_char_numeric_for_streaming(lim::min())
+            << ", max: " << make_char_numeric_for_streaming(lim::max())
             << std::endl;
 
   BOOST_TEST(lim::is_specialized);
