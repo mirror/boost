@@ -17,6 +17,7 @@
 
 #include <fstream>
 #include <cstdio> // remove
+#include <cmath> // for fabs()
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
@@ -24,19 +25,45 @@ namespace std{
 }
 #endif
 
-#include <boost/test/floating_point_comparison.hpp>
+#if defined(_MSC_VER) && (_MSC_VER <= 1020)
+#  pragma warning (disable : 4786) // too long name, harmless warning
+#endif
+
 #include "test_tools.hpp"
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
-#include <boost/serialization/nvp.hpp>
 #include "throw_exception.hpp"
 #include <boost/archive/archive_exception.hpp>
 
+#include <boost/serialization/nvp.hpp>
+#include <boost/serialization/variant.hpp>
+
 #include "A.hpp"
 
-#include <boost/serialization/variant.hpp>
-#include <iostream>
+class are_equal
+    : public boost::static_visitor<bool>
+{
+public:
+    template <typename T, typename U>
+    bool operator()( const T &, const U & ) const 
+    {
+        return false; // cannot compare different types
+    }
+    template <typename T>
+    bool operator()( const T & lhs, const T & rhs ) const 
+    {
+        return lhs == rhs;
+    }
+    bool operator()( const float & lhs, const float & rhs ) const
+    {
+        return std::fabs(lhs- rhs) < std::numeric_limits<float>::round_error();
+    }
+    bool operator()( const double & lhs, const double & rhs ) const
+    {
+        return std::fabs(lhs - rhs) < std::numeric_limits<float>::round_error();
+    }
+};
 
 template <class T>
 void test_type(const T& gets_written){
@@ -54,7 +81,7 @@ void test_type(const T& gets_written){
       test_iarchive ia(is);
       ia >> boost::serialization::make_nvp("written", got_read);
    }
-   BOOST_CHECK_EQUAL(gets_written, got_read);
+   BOOST_CHECK(boost::apply_visitor(are_equal(), gets_written, got_read));
 
    std::remove(testfile);
 }
