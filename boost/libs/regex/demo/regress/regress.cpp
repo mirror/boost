@@ -41,6 +41,10 @@ using std::endl;
 
 #include "regress.h"
 
+#if defined(BOOST_MSVC) && defined(_DEBUG)
+#include <CRTDBG.H>
+#endif
+
 
 //
 // declare all our globals here:
@@ -70,6 +74,13 @@ void usage()
 
 int main(int argc, char * argv[])
 {
+#if defined(BOOST_MSVC) && defined(_DEBUG)
+   // turn on heap reporting at program exit:
+   int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
+   tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
+   tmpFlag &= ~_CRTDBG_CHECK_CRT_DF;
+   _CrtSetDbgFlag( tmpFlag );
+#endif
    if(argc < 2)
        usage();
    int i;
@@ -100,6 +111,7 @@ int main(int argc, char * argv[])
       }
       cout << line << " lines, " << tests << " tests completed in file " << argv[i] << endl;
    }
+
    return error_count;
 }
 
@@ -192,7 +204,7 @@ jm_debug_alloc::jm_debug_alloc(const jm_debug_alloc& d)
 }
 jm_debug_alloc& jm_debug_alloc::operator=(const jm_debug_alloc& d)
 {
-   free();
+   free_();
    blocks = d.blocks;
    count = d.count;
    ++(*count);
@@ -207,11 +219,11 @@ jm_debug_alloc::~jm_debug_alloc()
    }
    else
    {
-      free();
+      free_();
       guard = 0;
    }
 }
-void jm_debug_alloc::free()
+void jm_debug_alloc::free_()
 {
     if(--(*count) == 0)
     {

@@ -137,7 +137,7 @@ public:
    jm_debug_alloc& operator=(const jm_debug_alloc& d);
 
    ~jm_debug_alloc();
-   void free();
+   void free_();
    static pointer address(reference x)
    {
       return &x;
