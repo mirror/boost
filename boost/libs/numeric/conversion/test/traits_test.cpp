@@ -259,11 +259,14 @@ struct generate_expected_traits
 // in boost::numeric::conversion_traits<> with its corresponding field
 // in expected_traits<>
 //
+
 #define TEST_VALUE_FIELD(Name) \
-        BOOST_CHECK_MESSAGE ( ( traits::Name::value == expected::Name::value ) , \
+        typedef typename traits::Name   BOOST_PP_CAT(t,Name) ; \
+        typedef typename expected::Name BOOST_PP_CAT(x,Name) ; \
+        BOOST_CHECK_MESSAGE ( ( BOOST_PP_CAT(t,Name)::value == BOOST_PP_CAT(x,Name)::value ) , \
                               "conversion_traits<" << typeid(T).name() << "," << typeid(S).name() \
-                              << ">::" << #Name << " = " << to_string(traits::Name::value) \
-                              << ". Expected: "  << to_string(expected::Name::value) \
+                              << ">::" << #Name << " = " << to_string(BOOST_PP_CAT(t,Name)::value) \
+                              << ". Expected: "  << to_string(BOOST_PP_CAT(x,Name)::value) \
                             ) ;
 
 // This macro generates the code that compares a type field
@@ -271,10 +274,12 @@ struct generate_expected_traits
 // in expected_traits<>
 //
 #define TEST_TYPE_FIELD(Name) \
-        BOOST_CHECK_MESSAGE ( ( typeid( typename traits::Name) == typeid( typename expected::Name) ) , \
+        typedef typename traits::Name   BOOST_PP_CAT(t,Name) ; \
+        typedef typename expected::Name BOOST_PP_CAT(x,Name) ; \
+        BOOST_CHECK_MESSAGE ( ( typeid(BOOST_PP_CAT(t,Name)) == typeid(BOOST_PP_CAT(x,Name)) ) , \
                               "conversion_traits<" << typeid(T).name() << "," << typeid(S).name() \
-                              << ">::" << #Name << " = " <<  typeid( typename traits::Name).name() \
-                              << ". Expected: "  << typeid( typename expected::Name).name() \
+                              << ">::" << #Name << " = " <<  typeid(BOOST_PP_CAT(t,Name)).name() \
+                              << ". Expected: "  << typeid(BOOST_PP_CAT(x,Name)).name() \
                             ) ;
 
 //
