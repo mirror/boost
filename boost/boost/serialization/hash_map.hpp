@@ -20,7 +20,11 @@
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_HASH
 
+#ifdef __GLIBCPP__
+#include <ext/hash_map>
+#else
 #include <hash_map>
+#endif
 
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/collections_save_imp.hpp>

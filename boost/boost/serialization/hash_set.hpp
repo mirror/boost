@@ -19,8 +19,11 @@
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_HASH
 
+#ifdef __GLIBCPP__
+#include <ext/hash_set>
+#else
 #include <hash_set>
-#include <boost/config.hpp>
+#endif
 
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>

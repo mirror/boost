@@ -122,7 +122,9 @@ struct archive_input_assoc
         stack_construct<Archive, type> t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
-        s.insert(s.end(),t.reference());
+//        s.insert(s.end(),t.reference());
+//        s.insert(s.begin(),t.reference());
+        s.insert(t.reference());
     }
 };
 
