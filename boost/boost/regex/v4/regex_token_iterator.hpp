@@ -68,7 +68,8 @@ public:
       : end(last), pre(p), flags(f), subs(v){}
 #if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
       || BOOST_WORKAROUND(BOOST_MSVC, < 1300) \
-      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
+      || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(55500))
    template <class T>
    regex_token_iterator_implementation(const regex_type* p, BidirectionalIterator last, const T& submatches, match_flag_type f)
       : end(last), pre(p), flags(f)
@@ -197,7 +198,8 @@ public:
    }
 #if (BOOST_WORKAROUND(__BORLANDC__, >= 0x560) && BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)))\
       || BOOST_WORKAROUND(BOOST_MSVC, < 1300) \
-      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003))
+      || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
+      || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(55500))
    template <class T>
    regex_token_iterator(BidirectionalIterator a, BidirectionalIterator b, const regex_type& re,
                         const T& submatches, match_flag_type m = match_default)

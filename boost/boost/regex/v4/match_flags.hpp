@@ -88,11 +88,11 @@ inline match_flags operator^(match_flags m1, match_flags m2)
 inline match_flags operator~(match_flags m1)
 { return static_cast<match_flags>(~static_cast<boost::int32_t>(m1)); }
 inline match_flags& operator&=(match_flags& m1, match_flags m2)
-{ m1 = m1&m2; return m1; }
+{ m1 = static_cast<match_flags>(m1&m2); return m1; }
 inline match_flags& operator|=(match_flags& m1, match_flags m2)
-{ m1 = m1|m2; return m1; }
+{ m1 = static_cast<match_flags>(m1|m2); return m1; }
 inline match_flags& operator^=(match_flags& m1, match_flags m2)
-{ m1 = m1^m2; return m1; }
+{ m1 = static_cast<match_flags>(m1^m2); return m1; }
 #endif
 #endif
 
