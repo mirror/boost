@@ -31,7 +31,24 @@
 <h2><a name="intro">Introduction</a></h2>
 
 <p>
-The class boost::posix_time::time_duration the base type responsible for representing a length of time.  A duration can be either positive or negative.
+The class boost::posix_time::time_duration the base type responsible for 
+representing a length of time.  A duration can be either positive or 
+negative.  The general time_duration class provides a constructor that 
+takes a count of the number of hours, minutes, seconds, and fractional 
+seconds count as shown in the code fragment below.  The resolution
+of the time_duration is configureable at compile time.  See
+<a href="BuildInfo.html">Build-Compiler Information</a> for more 
+information.
+
+
+<div class="fragment"><pre>
+
+  <font class="keyword">using namespace</font> boost::posix_time;
+
+  time_duration td(1,2,3,4); <font class="comment">//01:02:03.000000004 when resolution is nano seconds</font>
+  time_duration td(1,2,3,4); <font class="comment">//01:02:03.000004 when resolution is micro seconds</font>
+</pre></div>
+
 <p>
 Several small helper classes that derive from a base time_duration, as
 shown below, to adjust for different resolutions.  These classes can 
@@ -43,15 +60,14 @@ shorten code and make the intent clearer.
 As an example:
 <div class="fragment"><pre>
 
-  <font class="keyword">using namespace</font> boost::gregorian;
   <font class="keyword">using namespace</font> boost::posix_time;
 
   time_duration td = hours(1) + seconds(10); <font class="comment">//01:00:01</font>
   td = hours(1) + nanosec(5); <font class="comment">//01:00:00.000000005</font>
 </pre></div>
 <p>
-Note that the existence of the higher resolution classes depends on 
-the installation of the library.  See 
+Note that the existence of the higher resolution classes (eg: nanosec) 
+depends on the installation of the library.  See 
 <a href="BuildInfo.html">Build-Compiler Information</a> for more 
 information.
 
@@ -90,10 +106,13 @@ or
         <td>Number of seconds</td>
 	<td>time_duration td = seconds(3);</td></tr>
 <tr><td>millisec(long)</td>
-        <td>Number of millisec</td>
+        <td>Number of milliseconds.</td>
 	<td>time_duration td = millisec(3);</td></tr>
+<tr><td>microsec(long)</td>
+        <td>Number of microseconds.</td>
+	<td>time_duration td = microsec(3);</td></tr>
 <tr><td>nanosec(long)</td>
-        <td>Number of nanosec</td>
+        <td>Number of nanoseconds.</td>
 	<td>time_duration td = nanosec(3);</td></tr>
 </table>
 
@@ -119,14 +138,19 @@ or
 <table border=1 cellspacing=3 cellpadding=3>
 <tr><td><b>Syntax</b></td><td><b>Description</b></td><td><b>Example</b></td></tr>
 <tr><td>long <font class="func">hours</font>() const</td>
-        <td>Get the number of hours.</td>
+        <td>Get the number of normalized hours.</td>
 	<td>time_duration td(1,2,3); td.hours() --> 1</td></tr>
 <tr><td>long <font class="func">minutes</font>() const</td>
-        <td>Get the number of minutes normalized.</td>
+        <td>Get the number of minutes normalized (0..59).</td>
 	<td>time_duration td(1,2,3); td.minutes() --> 2</td></tr>
 <tr><td>long <font class="func">seconds</font>() const</td>
-        <td>Get the number of seconds.</td>
+        <td>Get the normalized number of second (0..59).</td>
 	<td>time_duration td(1,2,3); td.seconds() --> 3</td></tr>
+<tr><td>long <font class="func">total_seconds</font>() const</td>
+        <td>Get the total number of seconds truncating 
+            any fractional seconds.</td>
+	<td>time_duration td(1,2,3,10); <br>
+            td.total_seconds() --> (1*3600) + (2*60) + 3 == 3723</td></tr>
 <tr><td>long <font class="func">fractional_seconds</font>() const</td>
         <td>Get the number of fractional seconds.</td>
 	<td>time_duration td(1,2,3, 1000); td.fractional_seconds() --> 1000</td></tr>
@@ -186,6 +210,14 @@ or
         <td>Subtract durations.</td>
 	<td>time_duration td1(hours(1)+nanosec(2)); <br>
 	    time_duration td2 = td1 - minutes(1);</td></tr>
+<tr><td>time_duration operator/(int) const</td>
+        <td>Divide the length of a duration by an integer value.  Discards
+            any remainder.</td>
+	<td>hours(3)/2 == time_duration(1,30,0);
+	    nanosec(3)/2 == nanosec(1)</td></tr>
+<tr><td>time_duration operator*(int) const</td>
+        <td>Multiply the length of a duration by an integer value. </td>
+	<td>hours(3)*2 == hours(6);</td></tr>
 
 </table>
 
@@ -195,9 +227,9 @@ or
 <hr>
 <address><small>
 <!-- hhmts start -->
-Last modified: Thu Feb 13 09:19:15 MST 2003
+Last modified: Sun Aug 10 16:17:58 MST 2003
 <!-- hhmts end -->
- by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2002
+ by <a href="mailto:jeff&#64;crystalclearsoftware.com">Jeff Garland</a> &copy; 2000-2003
 </small></address>
 </body>
 </html>
