@@ -18,6 +18,7 @@
   <xsl:param name="make.year.ranges" select="1"/>
   <xsl:param name="generate.manifest" select="1"/>
   <xsl:param name="generate.section.toc.level" select="3"/>
+  <xsl:param name="doc.standalone" select="true"/>
 
   <xsl:template name="header.navigation">
     <table border = "1" cellpadding = "2" width = "100%" class = "boost-head">
@@ -26,19 +27,30 @@
           <img src="../../c++boost.gif"
             alt="c++boost.gif (8819 bytes)" width="277" height="86"/>
         </td>
-        <td align = "center" class = "boost-headtd">
-          <a href="../../index.htm" class = "boost-headelem">Home</a>
-        </td><td align = "center" class = "boost-headtd">
-          <a href="libraries.html" class = "boost-headelem">Libraries</a>
-        </td><td align = "center" class = "boost-headtd">
-          <a href="../../people/people.htm" class = "boost-headelem">People</a>
-        </td><td align = "center" class = "boost-headtd">
-          <a href="../../more/faq.htm" class = "boost-headelem">FAQ</a>
-        </td><td align = "center" class = "boost-headtd">
-          <a href="../../more/index.htm" class = "boost-headelem">More</a>
+        <xsl:choose>
+           <xsl:when test = "$doc.standalone = 'true'">
+              <td align = "center" class = "boost-headtd">Home</td>
+              <td align = "center" class = "boost-headtd">Libraries</td>
+              <td align = "center" class = "boost-headtd">People</td>
+              <td align = "center" class = "boost-headtd">FAQ</td>
+              <td align = "center" class = "boost-headtd">More</td>
+           </xsl:when><xsl:otherwise>
+              <td align = "center" class = "boost-headtd">
+                 <a href="../../index.htm" class = "boost-headelem">Home</a>
+              </td><td align = "center" class = "boost-headtd">
+                 <a href="libraries.html" class = "boost-headelem">Libraries</a>
+              </td><td align = "center" class = "boost-headtd">
+                 <a href="../../people/people.htm" class = "boost-headelem">People</a>
+              </td><td align = "center" class = "boost-headtd">
+                 <a href="../../more/faq.htm" class = "boost-headelem">FAQ</a>
+              </td><td align = "center" class = "boost-headtd">
+                 <a href="../../more/index.htm" class = "boost-headelem">More</a>
         </td>
+           </xsl:otherwise>
+        </xsl:choose>
       </tr>
     </table>
+    <div class = "nav-top">[Nav Links: UNDER CONSTRUCTION]</div>
     <hr/>
   </xsl:template>
 
@@ -186,4 +198,11 @@
   <xsl:template match = "programlisting[ancestor::informaltable]">
      <pre class = "table-{name(.)}"><xsl:apply-templates/></pre>
   </xsl:template>
-</xsl:stylesheet>
+
+  <xsl:template match = "refsynopsisdiv">
+     <h2 class = "{name(.)}-title">Synopsis</h2>
+     <div class = "{name(.)}">
+        <xsl:apply-templates/>
+     </div>
+  </xsl:template>
+ </xsl:stylesheet>
