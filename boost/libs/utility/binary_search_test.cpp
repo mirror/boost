@@ -120,7 +120,7 @@ void random_sorted_sequence(std::list<std::string>& result)
 }
 #else
 template <>
-inline void sort_by_value(std::list<std::string>& l)
+void sort_by_value(std::list<std::string>& l)
 {
     l.sort(cmp());
 }
