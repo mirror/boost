@@ -12,6 +12,7 @@
 
 #include <boost/numeric/interval/detail/interval_prototype.hpp>
 #include <boost/numeric/interval/detail/bugs.hpp>
+#include <boost/numeric/interval/detail/test_input.hpp>
 #include <boost/numeric/interval/rounded_arith.hpp>
 #include <algorithm>
 
