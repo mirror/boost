@@ -86,6 +86,10 @@ int main()
         cout << "__ICC defined as " << __ICC << "\n";
 #   endif
 
+#   ifdef __ICL
+        cout << "__ICL defined as " << __ICL << "\n";
+#   endif
+
 #   ifdef __INTEL_COMPILER
         cout << "__INTEL_COMPILER defined as " << __INTEL_COMPILER << "\n";
 #   endif
