@@ -40,15 +40,33 @@
 			<pre>template &lt;class T&gt;
 T next(T x) { return ++x; }
 
-template &lt;class X&gt;
-T prior(T x) { return --x; }</pre>
+template &lt;class T, class Distance&gt;
+T next(T x, Distance n)
+{
+    std::advance(x, n);
+    return x;
+}
+
+template &lt;class T&gt;
+T prior(T x) { return --x; }
+
+template &lt;class T, class Distance&gt;
+T prior(T x, Distance n)
+{
+    std::advance(x, -n);
+    return x;
+}</pre>
 		</blockquote>
 		<p>Usage is simple:</p>
 		<blockquote>
 			<pre>const std::list&lt;T&gt;::iterator p = get_some_iterator();
-const std::list&lt;T&gt;::iterator prev = boost::prior(p);</pre>
+const std::list&lt;T&gt;::iterator prev = boost::prior(p);
+const std::list&lt;T&gt;::iterator next = boost::next(prev, 2);</pre>
 		</blockquote>
-		<p>Contributed by <a href="../../people/dave_abrahams.htm">Dave Abrahams</a>.</p>
+                <p>The distance from the given iterator should be supplied as an absolute value. For
+			example, the iterator four iterators prior to the given iterator <code>p</code>
+			may be obtained by <code>prior(p, 4)</code>.</p>
+		<p>Contributed by <a href="../../people/dave_abrahams.htm">Dave Abrahams</a>.  Two-argument versions by Daniel Walker.</p>
 		<h2><a name="Class_noncopyable">Class noncopyable</a></h2>
 		<p>Class <strong>noncopyable</strong> is a base class.&nbsp; Derive your own class 
 			from <strong>noncopyable</strong> when you want to prohibit copy construction 
@@ -122,7 +140,7 @@ void f() {
 		<p>See <a href="base_from_member.html">separate documentation</a>.</p>
 		<hr>
 		<p>Revised&nbsp; <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan
--->01 September, 2003<!--webbot bot="Timestamp" endspan i-checksum="38582"
+-->23 December, 2003<!--webbot bot="Timestamp" endspan i-checksum="38582"
 -->
 		</p>
 		<p>&copy; Copyright boost.org 1999-2003. Permission to copy, use, modify, sell and distribute 
