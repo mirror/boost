@@ -30,19 +30,20 @@ struct error_cant_deduce_type {};
     typedef char(&float_value_type)[2];
     typedef char(&double_value_type)[3];
     typedef char(&long_double_value_type)[4];
-    typedef char(&schar_value_type)[5];
-    typedef char(&uchar_value_type)[6];
-    typedef char(&short_value_type)[7];
-    typedef char(&ushort_value_type)[8];
-    typedef char(&int_value_type)[9];
-    typedef char(&uint_value_type)[10];
-    typedef char(&long_value_type)[11];
-    typedef char(&ulong_value_type)[12];
+    typedef char(&char_value_type)[5];
+    typedef char(&schar_value_type)[6];
+    typedef char(&uchar_value_type)[7];
+    typedef char(&short_value_type)[8];
+    typedef char(&ushort_value_type)[9];
+    typedef char(&int_value_type)[10];
+    typedef char(&uint_value_type)[11];
+    typedef char(&long_value_type)[12];
+    typedef char(&ulong_value_type)[13];
     
-    typedef char(&x_value_type)[13];
-    typedef char(&y_value_type)[14];
+    typedef char(&x_value_type)[14];
+    typedef char(&y_value_type)[15];
 
-    typedef char(&cant_deduce_type)[14];
+    typedef char(&cant_deduce_type)[16];
 
     template <typename T, typename PlainT = typename remove_cv<T>::type>
     struct is_basic
@@ -54,7 +55,8 @@ struct error_cant_deduce_type {};
             , is_same<PlainT, long double>
           > ::type,
           typename mpl::or_<
-              is_same<PlainT, signed char>
+              is_same<PlainT, char>
+            , is_same<PlainT, signed char>
             , is_same<PlainT, unsigned char>
             , is_same<PlainT, short>
             , is_same<PlainT, unsigned short>
@@ -88,6 +90,10 @@ struct error_cant_deduce_type {};
     template <typename X, typename Y>
     long_double_value_type
     test(long double const&);
+
+    template <typename X, typename Y>
+    char_value_type
+    test(char const&);
 
     template <typename X, typename Y>
     schar_value_type
@@ -146,11 +152,12 @@ struct error_cant_deduce_type {};
         typedef typename remove_reference<X>::type x_type;
         typedef typename remove_reference<Y>::type y_type;
 
-        typedef mpl::vector15<
+        typedef mpl::vector16<
             mpl::identity<bool>
           , mpl::identity<float>
           , mpl::identity<double>
           , mpl::identity<long double>
+          , mpl::identity<char>
           , mpl::identity<signed char>
           , mpl::identity<unsigned char>
           , mpl::identity<short>
