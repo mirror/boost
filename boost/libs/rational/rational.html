@@ -8,7 +8,38 @@
      align="center" WIDTH="277" HEIGHT="86">
 Rational Numbers</h1>
 
-<h2>Class rational synopsis</h2>
+<h2><a name="Contents">Contents</h2>
+
+<ol>
+    <li><a href="#Class rational synopsis">Class rational synopsis</a></li>
+    <li><a href="#Rationale">Rationale</a></li>
+    <li><a href="#Background">Background</a></li>
+    <li><a href="#Integer Type Requirements">Integer Type Requirements</a></li>
+    <li><a href="#Interface">Interface</a></li>
+    <ul>
+	<li><a href="#Utility functions">Utility functions</a></li>
+	<li><a href="#Constructors">Constructors</a></li>
+	<li><a href="#Arithmetic operations">Arithmetic operations</a></li>
+	<li><a href="#Input and Output">Input and Output</a></li>
+	<li><a href="#In-place assignment">In-place assignment</a></li>
+	<li><a href="#Conversions">Conversions</a></li>
+	<li><a href="#Numerator and Denominator">Numerator and Denominator</a></li>
+    </ul>
+    <li><a href="#Performance">Performance</a></li>
+    <li><a href="#Exceptions">Exceptions</a></li>
+    <li><a href="#Internal representation">Internal representation</a></li>
+    <li><a href="#Design notes">Design notes</a></li>
+    <ul>
+	<li><a href="#Limited-range integer types">Limited-range integer types</a></li>
+	<li><a href="#Conversion from floating point">Conversion from floating point</a></li>
+	<li><a href="#Absolute Value">Absolute Value</a></li>
+	<li><a href="#Swap operation">Swap operation</a></li>
+    </ul>
+    <li><a href="#References">References</a></li>
+    <li><a href="#History and Acknowledgements">History and Acknowledgements</a></li>
+</ol>
+
+<h2><a name="Class rational synopsis">Class rational synopsis</h2>
 <pre>
 #include &lt;boost/rational.hpp&gt;
 
@@ -90,7 +121,7 @@ template &lt;typename I&gt; std::ostream&amp; operator&lt;&lt; (std::ostream&amp
 template &lt;typename T, typename I&gt; T rational_cast (const rational&lt;I&gt;&amp; r);
 </pre>
 
-<h2>Rationale</h2>
+<h2><a name="Rationale">Rationale</h2>
 
 Numbers come in many different forms. The most basic forms are natural numbers
 (non-negative "whole" numbers), integers and real numbers.  These types are
@@ -105,7 +136,7 @@ providing the <b>complex</b> type.
 <p>The <b>rational</b> class is actually a implemented as a template, in a
 similar manner to the standard <b>complex</b> class.
 
-<h2>Background</h2>
+<h2><a name="Background">Background</h2>
 
 The mathematical concept of a rational number is what is commonly thought of
 as a fraction - that is, a number which can be represented as the ratio of two
@@ -135,7 +166,7 @@ overflow behaviour somewhat. If an unlimited precision integer type is
 available, rational numbers based on it will never overflow and will provide
 exact calculations in all circumstances.
 
-<h2><a name="Requirements">Integer Type Requirements</h2>
+<h2><a name="Integer Type Requirements">Integer Type Requirements</h2>
 
 <p> The rational type takes a single template type parameter I. This is the
 <em>underlying integer type</em> for the rational type. Any of the built-in
@@ -201,9 +232,9 @@ The input and output operators rely on the existence of corresponding input
 and output operators for type I.
 </ul>
 
-<h2>Interface</h2>
+<h2><a name="Interface">Interface</h2>
 
-<h3>Utility functions</h3>
+<h3><a name="Utility functions">Utility functions</h3>
 Two utility functions are provided, which work on any type I for which the
 following operations are defined: <tt>=, +=, *=, /=, %, &lt;</tt>, and a zero
 value accessible as I(0)
@@ -226,7 +257,7 @@ value accessible as I(0)
 <p><em>Note:</em> In the future, these functions may be moved into a separate
 boost utility library.
 
-<h3>Constructors</h3>
+<h3><a name="Constructors">Constructors</h3>
 Rationals can be constructed from a pair (numerator, denominator) of
 integers, or a single integer. There is also a default constructor, which
 initialises the rational to a value of zero.
@@ -244,7 +275,7 @@ initialises the rational to a value of zero.
 there is an implicit conversion from the underlying integer type to the
 rational type.
 
-<h3>Arithmetic operations</h3>
+<h3><a name="Arithmetic operations">Arithmetic operations</h3>
 All of the standard numeric operators are defined for the <b>rational</b>
 class. These include:
 <br>
@@ -260,7 +291,7 @@ class. These include:
     &lt;=   &gt;=
 </pre>
 
-<h3>Input and Output</h3>
+<h3><a name="Input and Output">Input and Output</h3>
 Input and output operators <tt>&lt;&lt;</tt> and <tt>&gt;&gt;</tt>
 are provided. The external representation of a rational is
 two integers, separated by a slash (<tt>/</tt>). On input, the format must be
@@ -269,14 +300,14 @@ followed (again with no intervening whitespace) by a second integer. The
 external representation of an integer is defined by the undelying integer
 type.
 
-<h3>In-place assignment</h3>
+<h3><a name="In-place assignment">In-place assignment</h3>
 For any <tt>rational&lt;I&gt; r</tt>, <tt>r.assign(n, m)</tt> provides a
 fast equivalent of <tt>r = rational&lt;I&gt;(n, m);</tt>, without the
 construction of a temporary. While this is probably unnecessary for rationals
 based on machine integer types, it could offer a saving for rationals based on
 unlimited-precision integers, for example.
 
-<h3>Conversions</h3>
+<h3><a name="Conversions">Conversions</h3>
 There are <em>no</em> implicit conversions from rationals to any other
 type. However, there is an explicit type-conversion function,
 <tt>rational_cast&lt;T&gt;(r)</tt>. This can be used as follows:
@@ -286,7 +317,7 @@ type. However, there is an explicit type-conversion function,
     double nearly_pi = boost::rational_cast&lt;double&gt;(r);
 </pre>
 
-<h3>Numerator and Denominator</h3>
+<h3><a name="Numerator and Denominator">Numerator and Denominator</h3>
 Finally, access to the internal representation of rationals is provided by
 the two member functions <tt>numerator()</tt> and <tt>denominator()</tt>.
 
@@ -294,8 +325,9 @@ the two member functions <tt>numerator()</tt> and <tt>denominator()</tt>.
 The rational class has been designed with the implicit assumption that the
 underlying integer type will act "like" the built in integer types. The
 behavioural aspects of this assumption have been explicitly described above,
-in the <a href="#Requirements">Requirements</a> section. However, in addition
-to behavioural assumptions, there are implicit performance assumptions.
+in the <a href="#Integer Type Requirements">Integer Type Requirements</a>
+section. However, in addition to behavioural assumptions, there are implicit
+performance assumptions.
 
 <p> No attempt will be made to provide detailed performance guarantees for the
 operations available on the rational class. While it is possible for such
@@ -366,7 +398,7 @@ cheap.
 particularly effective as the underlying integer type for the rational class.
 Specifically, it is likely that performance will be severely sub-optimal.
 
-<h2>Exceptions</h2>
+<h2><a name="Exceptions">Exceptions</h2>
 Rationals can never have a denominator of zero. (This library does not support
 representations for infinity or NaN). Should a rational result ever generate a
 denominator of zero, the exception <tt>boost::bad_rational</tt> (a subclass of
@@ -384,7 +416,7 @@ step.  The only exception to this rule is that the rational destructor will
 only throw exceptions which can be thrown by the destructor of the underlying
 integer type (usually none).
 
-<h2>Internal representation</h2>
+<h2><a name="Internal representation">Internal representation</h2>
 <em>Note:</em> This information is for information only. Programs should not
 be written in such a way as to rely on these implementation details.
 
@@ -393,8 +425,8 @@ of integers (whose type is specified as the template parameter for the
 rational type). Rationals are always stored in fully normalized form (ie,
 gcd(numerator,denominator) = 1, and the denominator is always positive).
 
-<h2>Design notes</h2>
-<h3>Limited-range integer types</h3>
+<h2><a name="Design notes">Design notes</h2>
+<h3><a name="Limited-range integer types">Limited-range integer types</h3>
 The rational number class is designed for use in conjunction with an
 unlimited precision integer class. With such a class, rationals are always
 exact, and no problems arise with precision loss, overflow or underflow.
@@ -424,7 +456,7 @@ However, it does not "feel" natural when using a rational number class.
 <p>It is up to the user of a rational type based on a limited-precision integer
 type to be aware of, and code in anticipation of, such issues.
 
-<h3>Conversion from floating point</h3>
+<h3><a name="Conversion from floating point">Conversion from floating point</h3>
 The library does not offer a conversion function from floating point to
 rational. A number of requests were received for such a conversion, but
 extensive discussions on the boost list reached the conclusion that there was
@@ -478,7 +510,7 @@ relatively complex and specialised, and are best implemented with a good
 understanding of the application requirements. All of these factors make such
 a function unsuitable for a general-purpose library such as this.
 
-<h3><a name="Abs">Absolute Value</h3>
+<h3><a name="Absolute Value">Absolute Value</h3>
 In the first instance, it seems logical to implement
 abs(rational&lt;IntType&gt;) in terms of abs(IntType).
 However, there are a number of issues which arise with doing so.
@@ -515,7 +547,7 @@ implementation with an inline implementation of abs() is used:
 <p>The same arguments imply that where the absolute value of an IntType is
 required elsewhere, the calculation is performed inline.
 
-<h3><a name="Swap">Swap operation</h3>
+<h3><a name="Swap operation">Swap operation</h3>
 Many user-defined types will implement a specialised swap operation, which is
 optimised for efficiency, and which can be guaranteed not to throw exceptions.
 Indeed, the std::swap() function is defined as the canonical form of such a
@@ -611,14 +643,14 @@ boost::rational&lt;IntType&gt;. (And it also precludes a useful
 implementation, for the same reasons as above, because we cannot find an
 appropriate swap() function for IntType).
 
-<h2>References</h2>
+<h2><a name="References">References</h2>
 <ul>
 <li>The rational number header itself: <a href="../../boost/rational.hpp">rational.hpp</a>
 <li>Some example code: <a href="rational_example.cpp">rational_example.cpp</a>
 <li>The regression test: <a href="rational_test.cpp">rational_test.cpp</a>
 </ul>
 
-<h2>History and Acknowledgements</h2>
+<h2><a name="History and Acknowledgements">History and Acknowledgements</h2>
 
 In December, 1999, I implemented the initial version of the rational number
 class, and submitted it to the <A HREF="http://www.boost.org/">boost.org</A>
@@ -645,8 +677,8 @@ with a user-defined integer type.
 operator-=.
 
 <p>Discussion of the issues surrounding Koenig lookup and std::swap, as
-covered in the rationale sections on <a href="#Abs">Absolute Value</a> and
-<a href="#Swap">Swap operation</a> above, took place on the boost list in
+covered in the rationale sections on <a href="#Absolute Value">Absolute Value</a>
+and <a href="#Swap Operation">Swap Operation</a> above, took place on the boost list in
 January 2001. 
 
 <p>Revised&nbsp; February 5, 2001</p>
