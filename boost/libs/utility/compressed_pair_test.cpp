@@ -1,3 +1,9 @@
+ // boost::compressed_pair test program   
+    
+ //  (C) Copyright John Maddock 2000. Permission to copy, use, modify, sell and   
+ //  distribute this software is granted provided this copyright notice appears   
+ //  in all copies. This software is provided "as is" without express or implied   
+ //  warranty, and with no claim as to its suitability for any purpose.   
 
 #include <iostream>
 #include <typeinfo>
@@ -140,6 +146,7 @@ template compressed_pair<double, int[2]>::compressed_pair(const double&);
 template compressed_pair<double, int[2]>::compressed_pair();
 #endif // __MWERKS__
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
 
 
 
