@@ -54,9 +54,9 @@ Iterates F(D,X) while C(D,X) is true.
 <p>
 <b>C</b> is the condition for iteration. It must expand to a decimal integer literal.
 <p>
-<b>F</b> is the iterated function. Note that if the state is a tuple, then F(D,X) usually expands to a tuple of the same number of elements.
+<b>F</b> is the iterated macro. Note that if the state is a tuple, then F(D,X) usually expands to a tuple of the same number of elements.
 <p>
-<b>D</b> is the recursion depth and should only be used as a parameter to other functions implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(). Such functions include <a class="el" href="add_8hpp.html#a0">BOOST_PP_ADD</a>() and other arithmetic operations. For each function implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(), there is a version of the function, distinguished by the _D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion depth as the first parameter. This technique is necessary to avoid recursively expanding the same macro again, which is not permitted by the C/C++ preprocessor.
+<b>D</b> is the recursion depth and should only be used as a parameter to other macros implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(). Such macros include <a class="el" href="add_8hpp.html#a0">BOOST_PP_ADD</a>() and other arithmetic operations. For each macro implemented using <a class="el" href="while_8hpp.html#a0">BOOST_PP_WHILE</a>(), there is a version of the macro, distinguished by the _D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion depth as the first parameter. This technique is necessary to avoid recursively expanding the same macro again, which is not permitted by the C/C++ preprocessor.
 <p>
 NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.
 <p>
@@ -69,13 +69,13 @@ Here is a trivial example that simply counts down from N to 0 ultimately expandi
 <p>
 <pre><div class="fragment"><pre>
   #define COUNT_DOWN(N) BOOST_PP_WHILE(COUNT_DOWN_C,COUNT_DOWN_F,N)
-  // Above is the function we are implementing using BOOST_PP_WHILE().
+  // Above is the macro we are implementing using BOOST_PP_WHILE().
 
   #define COUNT_DOWN_C(D,N) N
-  // Above is the Condition. It expands to the current N.
+  // Above is the condition. It expands to the current N.
 
   #define COUNT_DOWN_F(D,N) BOOST_PP_DEC(N)
-  // Above is the iteration Function. It decrements N.
+  // Above is the iteration macro. It decrements N.
 
   COUNT_DOWN(50)
   // The above expands to 0.
@@ -85,7 +85,7 @@ For a more complex example, let's take a look at an implementation of <a class="
 <p>
 <pre><div class="fragment"><pre>
   #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
-  // Since the function is implemented using WHILE, the actual implementation
+  // Since the macro is implemented using WHILE, the actual implementation
   // takes a depth as a parameter so that it can be called inside a WHILE.
   // The above easy-to-use version simply uses 0 as the depth and can not be
   // called inside a WHILE.
@@ -101,7 +101,7 @@ For a more complex example, let's take a look at an implementation of <a class="
   // #2) The WHILE primitive is "invoked" directly. BOOST_PP_WHILE(D,...)
   // can't be used because it would not be expanded by the C preprocessor.
   //
-  // #3) ???_C is the condition and ???_F is the iteration function.
+  // #3) ???_C is the condition and ???_F is the iteration macro.
 
   #define BOOST_PP_MUL_C(D,P)\
     BOOST_PP_TUPLE_ELEM(3,2,P)

@@ -3,5 +3,6 @@ please e-mail such suggestions to boost@yahoogroups.com, but also cc
 them to vesa.karvonen@housemarque.fi.
 
 Current R&D:
-- Faster arithmetic
 - Data structures (cons list)
+- Faster preprocessing
+- Faster arithmetic
