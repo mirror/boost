@@ -23,6 +23,8 @@
 #include "boost/mpl/plus.hpp"
 #include "boost/mpl/size_fwd.hpp"
 
+#include <boost/detail/workaround.hpp>
+
 namespace boost {
 namespace mpl {
 
@@ -48,8 +50,14 @@ template<
     >
 struct joint_view
 {
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
  private:
     friend struct size_traits< aux::joint_view_tag >;
+# if BOOST_WORKAROUND(BOOST_MSVC, >= 1301)
+    template <typename JointView>
+    friend struct size_traits< aux::joint_view_tag >::algorithm;
+# endif 
+#endif 
     typedef Sequence1_ sequence1;
     typedef Sequence2_ sequence2;
     
