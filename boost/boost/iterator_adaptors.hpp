@@ -579,10 +579,10 @@ template <class T> struct undefined;
 //      supplied, iterator_traits<Base>::difference_type is used.
 template <class Base, class Policies, 
     class Value = detail::default_argument,
-    class Reference = detail::default_argument,
-    class Pointer = detail::default_argument,
-    class Category = detail::default_argument,
-    class Distance = detail::default_argument
+    class Reference = typename detail::choose_default_argument<Value>::type,
+    class Pointer = typename detail::choose_default_argument<Reference>::type,
+    class Category = typename detail::choose_default_argument<Pointer>::type,
+    class Distance = typename detail::choose_default_argument<Category>::type
          >
 struct iterator_adaptor :
 #ifdef BOOST_RELOPS_AMBIGUITY_BUG
