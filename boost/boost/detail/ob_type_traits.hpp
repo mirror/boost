@@ -10,6 +10,8 @@
 //  support partial specialisation. (C) John Maddock 2000
 
 /* Release notes:
+   03 Oct 2000:
+      Added more fixes to is_pointer and is_array (JM).
    01st October 2000:
       Fixed is_pointer, is_reference, is_const, is_volatile, is_same, is_member_pointer
       using ideas suggested from "Generic<Programming>: Mappings between Types and Values" 
@@ -122,13 +124,16 @@ namespace detail{
    no_result is_same_helper(...);
 }
 
+template <typename T> struct is_reference; 
 template <typename T, typename U> struct is_same 
 { 
 private:
    static T t;
    static U u;
 public:
-   enum{ value = (sizeof(detail::yes_result) == sizeof(detail::is_same_helper(&t,&u))) }; 
+   enum{ value = (sizeof(detail::yes_result) == sizeof(detail::is_same_helper(&t,&u)))
+                 && (is_reference<T>::value == is_reference<U>::value)
+                 && (sizeof(T) == sizeof(U)) }; 
 };
 
 template <typename T> struct is_void{ enum{ value = false }; };
@@ -253,22 +258,31 @@ template <typename T> struct is_fundamental
 
 //* is a type T an array - is_array<T>
 namespace detail{
+   struct pointer_helper
+   {
+      pointer_helper(const volatile void*);
+   };
+   yes_result is_pointer_helper(pointer_helper);
+   double is_pointer_helper(...);
    template <class T>
-   yes_result is_array_helper(const volatile T*, const volatile T*);
-   double is_array_helper(...);
+   yes_result is_pointer_helper3(T (*)(void));
+   template <class T, class A1>
+   yes_result is_pointer_helper3(T (*)(A1));
+   template <class T, class A1, class A2>
+   yes_result is_pointer_helper3(T (*)(A1, A2));
+   double is_pointer_helper3(...);
 }
 template <typename T> struct is_array
 { 
 private:
    static T t;
 public:
-   enum{ value = (1 == sizeof(detail::is_array_helper(t, &t)))}; 
+   enum{ value = (1 == sizeof(detail::is_pointer_helper(t))) 
+                 && (sizeof(T) != sizeof(void*)) }; 
 };
 
 //* is a type T a pointer type (including function pointers) - is_pointer<T>
 namespace detail{
-   yes_result is_pointer_helper(const volatile void*const volatile);
-   double is_pointer_helper(...);
 }
 
 template <typename T> struct is_pointer 
@@ -276,9 +290,11 @@ template <typename T> struct is_pointer
 private:
    static T t;
 public:
-   enum{ value = !is_const<T>::value 
+   enum{ value = (!is_const<T>::value 
                  && !is_volatile<T>::value 
-                 && (1 == sizeof(detail::is_pointer_helper(t)))}; 
+                 && (sizeof(T) == sizeof(void*))
+                 && (1 == sizeof(detail::is_pointer_helper(t))))
+                 || (1 == sizeof(detail::is_pointer_helper3(t))) }; 
 };
 
 # ifdef BOOST_MSVC
@@ -438,8 +454,72 @@ public:
 };
 
 //*? is type T an empty composite type (allows cv-qual)
+#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES)
+
+namespace detail{
+
+template <typename T>
+struct empty_helper_t1 : public T
+{
+   int i[256];
+};
+struct empty_helper_t2 { int i[256]; };
+
+template <typename T>
+struct empty_helper_base
+{
+   enum{ value = (sizeof(empty_helper_t1<T>) == sizeof(empty_helper_t2)) };
+};
+
+template <typename T>
+struct empty_helper_nonbase
+{
+   enum{ value = false };
+};
+
+template <bool base>
+struct empty_helper_chooser
+{
+   template <class T>
+   struct rebind
+   {
+      typedef empty_helper_nonbase<T> type;
+   };
+};
+
+template <>
+struct empty_helper_chooser<true>
+{
+   template <class T>
+   struct rebind
+   {
+      typedef empty_helper_base<T> type;
+   };
+};
+
+} // namespace detail
+
+template <typename T> 
+struct is_empty
+{ 
+private:
+   typedef detail::empty_helper_chooser<
+      !is_convertible<T,int>::value
+      && !is_convertible<T,double>::value
+      && !is_pointer<T>::value
+      && !is_member_pointer<T>::value
+      && !is_array<T>::value
+      && !is_convertible<T, const volatile void*>::value> chooser;
+   typedef typename chooser::template rebind<T> bound_type;
+   typedef typename bound_type::type eh_type;
+public:
+   enum{ value = eh_type::value || BOOST_IS_EMPTY(T) }; 
+};
+
+#else
 template <typename T> struct is_empty
 { enum{ value = BOOST_IS_EMPTY(T) }; };
+#endif
 
 //*? T has trivial default constructor (allows cv-qual)
 template <typename T> struct has_trivial_constructor

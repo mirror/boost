@@ -10,6 +10,8 @@
 // see libs/utility/type_traits.htm
 
 /* Release notes:
+   03 Oct 2000:
+      Added gcc specific fixes for memeber pointers (JM).
    31st July 2000:
       Added is_convertable, alignment_of, modified is_empty.
    23rd July 2000:
@@ -330,6 +332,17 @@ template <typename T, std::size_t N> struct is_array<T[N]>
 //* is a type T a pointer type (including function pointers) - is_pointer<T>
 template <typename T> struct is_pointer { static const bool value = false; };
 template <typename T> struct is_pointer<T*> { static const bool value = true; };
+#ifdef __GNUC__
+// gcc workarounds: these partial specialisations should not be needed:
+template <typename T, typename U> struct is_pointer<U T::*>
+{ static const bool value = false; };
+template <typename T, typename U> struct is_pointer<U (T::*)(void)>
+{ static const bool value = false; };
+template <typename T, typename U, typename A1> struct is_pointer<U (T::*)(A1)>
+{ static const bool value = false; };
+template <typename T, typename U, typename A1, typename A2> struct is_pointer<U (T::*)(A1, A2)>
+{ static const bool value = false; };
+#endif
 
 //* is a type T a reference type - is_reference<T>
 template <typename T> struct is_reference { static const bool value = false; };
@@ -367,6 +380,15 @@ template <typename T> struct is_member_pointer
 { static const bool value = false; };
 template <typename T, typename U> struct is_member_pointer<U T::*>
 { static const bool value = true; };
+#ifdef __GNUC__
+// gcc workaround (JM 02 Oct 2000)
+template <typename T, typename U> struct is_member_pointer<U (T::*)(void)>
+{ static const bool value = true; };
+template <typename T, typename U, typename A1> struct is_member_pointer<U (T::*)(A1)>
+{ static const bool value = true; };
+template <typename T, typename U, typename A1, typename A2> struct is_member_pointer<U (T::*)(A1, A2)>
+{ static const bool value = true; };
+#endif
 
 //* is type T an object type (allows cv-qual)
 template <typename T> struct is_object

@@ -6,6 +6,8 @@
  //  warranty, and with no claim as to its suitability for any purpose.   
 
 // standalone test program for <boost/compressed_pair.hpp>
+// Revised 03 Oct 2000: 
+//    Enabled tests for VC6.
 
 #include <iostream>
 #include <typeinfo>
@@ -39,7 +41,6 @@ template <> struct is_POD<empty_POD_UDT>
 #endif
 }
 
-
 int main()
 {
    compressed_pair<int, double> cp1(1, 1.3);
@@ -61,7 +62,7 @@ int main()
    assert(cp3.first() ==1);
    compressed_pair<empty_UDT, empty_UDT> cp4;
    compressed_pair<empty_UDT, empty_POD_UDT> cp5;
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_MEMBER_TEMPLATES) || !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    int i = 0;
    compressed_pair<int&, int&> cp6(i,i);
    assert(cp6.first() == i);
@@ -120,7 +121,6 @@ template compressed_pair<double, int[2]>::compressed_pair(const double&);
 template compressed_pair<double, int[2]>::compressed_pair();
 #endif // __MWERKS__
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
 
 
 

@@ -20,6 +20,7 @@
 #include <typeinfo>
 
 #include <boost/type_traits.hpp>
+#include <boost/utility.hpp>
 #include "type_traits_test.hpp"
 
 using namespace boost;
@@ -162,13 +163,30 @@ struct VD : VB
 {
    ~VD(){};
 };
+//
+// struct non_pointer:
+// used to verify that is_pointer does not return
+// true for class types that implement operator void*()
+//
+struct non_pointer
+{
+   operator void*(){return this;}
+};
+//
+// struct non_empty:
+// used to verify that is_empty does not emit
+// spurious warnings or errors.
+//
+struct non_empty : boost::noncopyable
+{
+   int i;
+};
 
 
 // Steve: All comments that I (Steve Cleary) have added below are prefixed with
 //  "Steve:"  The failures that BCB4 has on the tests are due to Borland's
 //  not considering cv-qual's as a part of the type -- they are considered
 //  compiler hints only.  These failures should be fixed before long.
-
 
 int main()
 {
@@ -221,6 +239,8 @@ int main()
    value_test(false, (is_same<int*, const int*>::value))
    value_test(false, (is_same<int*, int*const>::value))
    value_test(false, (is_same<int, int[2]>::value))
+   value_test(false, (is_same<int*, int[2]>::value))
+   value_test(false, (is_same<int[4], int[2]>::value))
 
    value_test(false, is_const<int>::value)
    value_test(true, is_const<const int>::value)
@@ -379,12 +399,21 @@ int main()
    value_test(false, is_pointer<int>::value)
    value_test(false, is_pointer<int&>::value)
    value_test(true, is_pointer<int*>::value)
+   value_test(true, is_pointer<const int*>::value)
+   value_test(true, is_pointer<volatile int*>::value)
+   value_test(true, is_pointer<f1>::value)
+   value_test(true, is_pointer<f2>::value)
+   value_test(true, is_pointer<f3>::value)
+   value_test(true, is_pointer<non_pointer*>::value)
    // Steve: was 'true', should be 'false', via 3.9.2p3, 3.9.3p1
    value_test(false, is_pointer<int*const>::value)
    // Steve: was 'true', should be 'false', via 3.9.2p3, 3.9.3p1
    value_test(false, is_pointer<int*volatile>::value)
    // Steve: was 'true', should be 'false', via 3.9.2p3, 3.9.3p1
    value_test(false, is_pointer<int*const volatile>::value)
+   // JM 02 Oct 2000:
+   value_test(false, is_pointer<non_pointer>::value)
+
    value_test(true, is_pointer<f1>::value)
    value_test(true, is_pointer<f2>::value)
    value_test(true, is_pointer<f3>::value)
@@ -444,19 +473,29 @@ int main()
    value_test(false, is_empty<int>::value)
    value_test(false, is_empty<int*>::value)
    value_test(false, is_empty<int&>::value)
-#ifdef __MWERKS__
+#if defined(__MWERKS__) || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    // apparent compiler bug causes this to fail to compile:
    value_fail(false, is_empty<int[2]>::value)
 #else
    value_test(false, is_empty<int[2]>::value)
 #endif
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+   value_fail(false, is_empty<f1>::value)
+#else
    value_test(false, is_empty<f1>::value)
+#endif
    value_test(false, is_empty<mf1>::value)
    value_test(false, is_empty<UDT>::value)
    value_test(true, is_empty<empty_UDT>::value)
    value_test(true, is_empty<empty_POD_UDT>::value)
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+   value_fail(true, is_empty<empty_union_UDT>::value)
+#else
    value_test(true, is_empty<empty_union_UDT>::value)
+#endif
    value_test(false, is_empty<enum_UDT>::value)
+   value_test(true, is_empty<boost::noncopyable>::value)
+   value_test(false, is_empty<non_empty>::value)
 
    value_test(true, has_trivial_constructor<int>::value)
    value_test(true, has_trivial_constructor<int*>::value)
@@ -541,7 +580,7 @@ int main()
    value_test(false, (boost::is_convertible<Base,Deriverd>::value));
    value_test(true, (boost::is_convertible<Deriverd,Deriverd>::value));
    value_test(false, (boost::is_convertible<NonDerived,Base>::value));
-   //value_test(false, (boost::is_convertible<boost::noncopyable, boost::noncopyable>::value));
+   value_test(false, (boost::is_convertible<boost::noncopyable, int>::value));
    value_test(true, (boost::is_convertible<float,int>::value));
 #if defined(BOOST_MSVC6_MEMBER_TEMPLATES) || !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    value_test(false, (boost::is_convertible<float,void>::value));

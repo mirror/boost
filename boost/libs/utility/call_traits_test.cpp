@@ -6,6 +6,8 @@
  //  warranty, and with no claim as to its suitability for any purpose.   
 
 // standalone test program for <boost/call_traits.hpp>
+// 03 Oct 2000:
+//    Enabled extra tests for VC6.
 
 #include <cassert>
 #include <iostream>
