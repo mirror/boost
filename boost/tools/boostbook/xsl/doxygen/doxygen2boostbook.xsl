@@ -324,6 +324,37 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="memberdef" mode="toplevel">
+    <xsl:param name="with-namespace-refs"/>
+    <xsl:param name="in-file"/>
+
+    <xsl:if test="@kind='define'">
+      <macro>
+        <xsl:attribute name="name">
+          <xsl:value-of select="name/text()"/>
+        </xsl:attribute>
+
+        <xsl:if test="param">
+          <xsl:attribute name="kind">
+            <xsl:value-of select="'functionlike'"/>
+          </xsl:attribute>
+        </xsl:if>
+        
+        <xsl:for-each select="param">
+          <macro-parameter>
+            <xsl:attribute name="name">
+              <xsl:value-of select="defname/text()"/>
+            </xsl:attribute>
+          </macro-parameter>
+        </xsl:for-each>
+
+        <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+        <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+      </macro>
+    </xsl:if>
+  </xsl:template>
+
+
   <xsl:template match="innerclass">
     <xsl:param name="with-namespace-refs"/>
     <xsl:param name="in-file"/>
