@@ -251,18 +251,18 @@ namespace boost
   // Macros which describe the declarations of binary operators
 #  define BOOST_ITERATOR_FACADE_INTEROP_HEAD(prefix, op, result_type)       \
     template <                                                              \
-        class Derived1, class V1, class AC1, class TC1, class R1, class D1              \
-      , class Derived2, class V2, class AC2, class TC2, class R2, class D2              \
+        class Derived1, class V1, class AC1, class TC1, class R1, class D1  \
+      , class Derived2, class V2, class AC2, class TC2, class R2, class D2  \
     >                                                                       \
     prefix typename detail::enable_if_interoperable<                        \
         Derived1, Derived2, result_type                                     \
     >::type                                                                 \
     operator op(                                                            \
-        iterator_facade<Derived1, V1, AC1, TC1, R1, D1> const& lhs                \
+        iterator_facade<Derived1, V1, AC1, TC1, R1, D1> const& lhs          \
       , iterator_facade<Derived2, V2, AC2, TC2, R2, D2> const& rhs)
 
 #  define BOOST_ITERATOR_FACADE_PLUS_HEAD(prefix,args)                      \
-    template <class Derived, class V, class AC, class TC, class R, class D>        \
+    template <class Derived, class V, class AC, class TC, class R, class D> \
     prefix Derived operator+ args
 
   //
