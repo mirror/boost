@@ -48,8 +48,8 @@ namespace boost
 {
     template
     &lt;
-        typename T1,
-        typename T2,
+        typename T1 = boost::empty,
+        typename T2 = <em>implementation-defined</em>,
         ...
         typename T<i>n</i> = <em>implementation-defined</em>
     &gt;
@@ -163,8 +163,8 @@ each of the variant's <A HREF=#BoundedType">bounded types</A>, is a
         <h2><a name="variant"><code>boost::variant</code></a></h2>
         <pre>template
 &lt;
-    typename T1,
-    typename T2,
+    typename T1 = boost::empty,
+    typename T2 = <em>implementation-defined</em>,
     ...
     typename T<i>n</i> = <em>implementation-defined</em>
 &gt;
@@ -452,7 +452,7 @@ operator&lt;&lt;(BOOST_TEMPLATED_STREAM(ostream, E,T)&, const empty& );  // NOP
 A <code>variant</code> object holding a value of
 type <code>boost::empty</code> is considered to be empty.<br>
 This convention is acknowledged by <code>varinat::empty()</code>: Its
-return value is <code>true</code>, only if the held value is of type
+return value is <code>true</code>, if and only if the held value is of type
 <code>boost::empty</code>.<br>
 <br>
 Public interface
@@ -485,12 +485,12 @@ whose bounded types are <code>boost::empty</code> and
 <code>std::string</code>:
 <pre>typedef boost::variant&lt;boost::empty,std::string&gt; string_or_nothing;
 
-void print(string_or_nothing a)
+void print(const string_or_nothing& a)
 {
    if(a.empty())
       cout << "No string is specified" << endl;
    else
-      cout << boost::get&lt;std::string&gt;(a) << endl;
+      cout << boost::get&lt;const std::string&gt;(a) << endl;
 }
 
 int main()
