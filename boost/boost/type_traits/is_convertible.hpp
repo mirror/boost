@@ -78,7 +78,7 @@ struct is_convertible_impl
 {
 };
 
-#elif defined(__BORLANDC__)
+#elif defined(__BORLANDC__) && (__BORLANDC__ < 0x560)
 //
 // special version for Borland compilers
 // this version breaks when used for some
@@ -102,8 +102,9 @@ struct is_convertible_impl
 #pragma option pop
 };
 
-#elif defined(__GNUC__)
-// special version for gcc compiler
+#elif defined(__GNUC__) || defined(__BORLANDC__)
+// special version for gcc compiler + recent Borland versions
+// note that this does not pass UDT's through (...)
 
 struct any_conversion
 {
@@ -127,15 +128,21 @@ struct is_convertible_impl
 
 #else
 
+struct any_conversion
+{
+    template <typename T> any_conversion(const T&);
+    template <typename T> any_conversion(T&);
+};
+
 template <typename From, typename To>
 struct is_convertible_impl
 {
-    static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(...);
-    static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To);
+    static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(any_conversion ...);
+    static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To, int);
     static From _m_from;
 
     BOOST_STATIC_CONSTANT(bool, value = 
-        sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
+        sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
         );
 };
 
