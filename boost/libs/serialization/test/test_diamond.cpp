@@ -29,6 +29,7 @@ namespace std{
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/nvp.hpp>
+#include <boost/serialization/export.hpp>
 
 using namespace boost;
 
@@ -148,6 +149,8 @@ public:
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 };
 
+BOOST_CLASS_EXPORT(final)
+
 int
 test_main( int /* argc */, char* /* argv */[] )
 {
@@ -171,5 +174,32 @@ test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(1 == load_count);
     BOOST_CHECK(b2 == b);
     std::remove(testfile);
+
+    // do the same test with pointers
+    testfile = boost::archive::tmpnam(NULL);
+    BOOST_REQUIRE(NULL != testfile);
+
+    save_count = 0;
+    load_count = 0;
+
+    const base* bp = new final( 3 );
+    {
+        test_ostream ofs(testfile);    
+        test_oarchive oa(ofs);
+        oa << boost::serialization::make_nvp("bp", bp);
+    }
+
+    base* bp2;
+    {
+        test_istream ifs(testfile);
+        test_iarchive ia(ifs);
+        ia >> boost::serialization::make_nvp("bp2", bp2);
+    }
+
+    BOOST_ASSERT(1 == save_count);
+    BOOST_ASSERT(1 == load_count);
+    BOOST_ASSERT(*bp2 == *bp);
+    std::remove(testfile);
+
     return boost::exit_success;
 }
