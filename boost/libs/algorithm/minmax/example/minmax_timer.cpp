@@ -55,14 +55,14 @@ int repeats = 10;
   for (int i=0; i<repeats; ++i) { cmd ; } \
   std::cout << "    " << std::setprecision(4) \
             << (double)n*repeats/t.elapsed()/1.0E6 \
-	    << "M items/sec  " << cmdname << "\n"
+            << "M items/sec  " << cmdname << "\n"
 
 #define CTIMER( n, cmd , cmdname, count, opt ) \
   t.restart(); lc.reset(); \
   for (int i=0; i<repeats; ++i) { cmd ; } \
   std::cout << "    " << std::setprecision(4) \
             << (double)n*repeats/t.elapsed()/1.0E6 \
-	    << "M items/sec  " << cmdname \
+            << "M items/sec  " << cmdname \
             << " ("<< (count)/repeats << " vs " << opt << ")\n"
 
 template <class CIterator>
@@ -99,10 +99,10 @@ void test_minmax_element(CIterator first, CIterator last, int n, char* name)
   TIMER( n, boost::max_element_if(first, last, pred),
     "boost::max_element_if" << name << "");
   TIMER( n, std::min_element(boost::make_filter_iterator(first, last, pred),
-	                     boost::make_filter_iterator(last, last, pred)),
+                             boost::make_filter_iterator(last, last, pred)),
     "std::min_element_with_filter_iterator" << name << "");
   TIMER( n, std::max_element(boost::make_filter_iterator(first, last, pred),
-	                     boost::make_filter_iterator(last, last, pred)),
+                             boost::make_filter_iterator(last, last, pred)),
     "std::max_element_if_with_filter_iterator" << name << "");
   #undef pred
 

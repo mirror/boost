@@ -64,52 +64,52 @@ namespace boost {
       // if only one element
       ForwardIter second = first; ++second;
       if (second == last)
-	return std::make_pair(min_result, max_result);
+        return std::make_pair(min_result, max_result);
 
       // treat first pair separately (only one comparison for first two elements)
       ForwardIter potential_min_result = last;
       if (comp(first, second))
-	max_result = second;
+        max_result = second;
       else {
-	min_result = second;
-	potential_min_result = first;
+        min_result = second;
+        potential_min_result = first;
       }
 
       // then each element by pairs, with at most 3 comparisons per pair
       first = ++second; if (first != last) ++second;
       while (second != last) {
-	if (comp(first, second)) {
-	  if (comp(first, min_result)) {
-	    min_result = first;
-	    potential_min_result = last;
-	  }
-	  if (comp(max_result, second))
-	    max_result = second;
-	} else {
-	  if (comp(second, min_result)) {
-	    min_result = second;
-	    potential_min_result = first;
-	  }
-	  if (comp(max_result, first))
-	    max_result = first;
-	}
-	first = ++second;
-	if (first != last) ++second;
+        if (comp(first, second)) {
+          if (comp(first, min_result)) {
+            min_result = first;
+            potential_min_result = last;
+          }
+          if (comp(max_result, second))
+            max_result = second;
+        } else {
+          if (comp(second, min_result)) {
+            min_result = second;
+            potential_min_result = first;
+          }
+          if (comp(max_result, first))
+            max_result = first;
+        }
+        first = ++second;
+        if (first != last) ++second;
       }
 
       // if odd number of elements, treat last element
       if (first != last) { // odd number of elements
-	if (comp(first, min_result))
-	  min_result = first, potential_min_result = last;
-	else if (comp(max_result, first))
-	  max_result = first;
+        if (comp(first, min_result))
+          min_result = first, potential_min_result = last;
+        else if (comp(max_result, first))
+          max_result = first;
       }
 
       // resolve min_result being incorrect with one extra comparison
       // (in which case potential_min_result is necessarily the correct result)
       if (potential_min_result != last
-	&& !comp(min_result, potential_min_result))
-	min_result = potential_min_result;
+        && !comp(min_result, potential_min_result))
+        min_result = potential_min_result;
 
       return std::make_pair(min_result,max_result);
     }
@@ -352,23 +352,23 @@ namespace boost {
     while (second != last) {
       if (!comp(second, first)) {
         if (comp(first, min_result))
-       	  min_result = first;
+                 min_result = first;
         if (!comp(second, max_result))
-	  max_result = second;
+          max_result = second;
       } else {
         if (comp(second, min_result))
-	  min_result = second;
+          min_result = second;
         if (!comp(first, max_result))
-    	  max_result = first;
+              max_result = first;
       }
       first = ++second; if (first != last) ++second;
     }
 
     if (first != last) {
       if (comp(first, min_result))
- 	min_result = first;
+         min_result = first;
       else if (!comp(first, max_result))
-       	max_result = first;
+               max_result = first;
     }
 
     return std::make_pair(min_result, max_result);
@@ -448,15 +448,15 @@ namespace boost {
           min_result = first;
         if (!comp(second, max_result)) {
           max_result = second;
-	  potential_max_result = last;
-	}
+          potential_max_result = last;
+        }
       } else {
         if (!comp(min_result, second))
           min_result = second;
         if (!comp(first, max_result)) {
           max_result = first;
-	  potential_max_result = second;
-	}
+          potential_max_result = second;
+        }
       }
       first = ++second;
       if (first != last) ++second;
@@ -467,7 +467,7 @@ namespace boost {
         min_result = first;
       if (!comp(first, max_result)) {
         max_result = first;
-       	potential_max_result = last;
+               potential_max_result = last;
       }
     }
 
