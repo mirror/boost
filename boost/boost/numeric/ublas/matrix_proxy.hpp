@@ -227,7 +227,7 @@ namespace boost { namespace numeric { namespace ublas {
                 vector_swap (scalar_swap<value_type, value_type> (), *this, mr);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix_row &mr1, matrix_row &mr2) {
             mr1.swap (mr2);
@@ -755,7 +755,7 @@ namespace boost { namespace numeric { namespace ublas {
                 vector_swap (scalar_swap<value_type, value_type> (), *this, mc);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix_column &mc1, matrix_column &mc2) {
             mc1.swap (mc2);
@@ -1279,7 +1279,7 @@ namespace boost { namespace numeric { namespace ublas {
                 vector_swap (scalar_swap<value_type, value_type> (), *this, mvr);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix_vector_range &mvr1, matrix_vector_range &mvr2) {
             mvr1.swap (mvr2);
@@ -1779,7 +1779,7 @@ namespace boost { namespace numeric { namespace ublas {
                 vector_swap (scalar_swap<value_type, value_type> (), *this, mvs);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix_vector_slice &mvs1, matrix_vector_slice &mvs2) {
             mvs1.swap (mvs2);
@@ -2305,7 +2305,7 @@ namespace boost { namespace numeric { namespace ublas {
                 vector_swap (scalar_swap<value_type, value_type> (), *this, mvi);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix_vector_indirect &mvi1, matrix_vector_indirect &mvi2) {
             mvi1.swap (mvi2);
@@ -2819,7 +2819,7 @@ namespace boost { namespace numeric { namespace ublas {
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, mr);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix_range &mr1, matrix_range &mr2) {
             mr1.swap (mr2);
@@ -3739,7 +3739,7 @@ namespace boost { namespace numeric { namespace ublas {
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, ms);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix_slice &ms1, matrix_slice &ms2) {
             ms1.swap (ms2);
@@ -4649,7 +4649,7 @@ namespace boost { namespace numeric { namespace ublas {
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, mi);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix_indirect &mi1, matrix_indirect &mi2) {
             mi1.swap (mi2);

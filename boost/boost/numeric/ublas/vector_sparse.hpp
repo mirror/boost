@@ -411,7 +411,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (v.data ());
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (sparse_vector &v1, sparse_vector &v2) {
             v1.swap (v2);
@@ -942,7 +942,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data ().swap (v.value_data ());
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (compressed_vector &v1, compressed_vector &v2) {
             v1.swap (v2);
@@ -1524,7 +1524,7 @@ namespace boost { namespace numeric { namespace ublas {
                 value_data ().swap (v.value_data ());
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (coordinate_vector &v1, coordinate_vector &v2) {
             v1.swap (v2);

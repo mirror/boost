@@ -63,13 +63,10 @@
 #define BOOST_UBLAS_USING
 #define BOOST_UBLAS_EXPLICIT explicit
 
-// #ifdef BOOST_MSVC
 // With MSVC we could perform IO via basic_stream
 // #define BOOST_UBLAS_USE_BASIC_STREAM
-// #else
 // IO via streams
 #define BOOST_UBLAS_USE_STREAM
-// #endif
 
 // MSVC extensions seem to disable abs () overloads in <cmath>.
 #ifdef _MSC_EXTENSIONS
@@ -126,6 +123,7 @@
 #define BOOST_UBLAS_USE_STREAM
 
 #if __GNUC__ <= 2 && __GNUC_MINOR__ <= 95
+#define BOOST_UBLAS_NO_MEMBER_FRIENDS
 #define BOOST_UBLAS_NO_PROXY_SHORTCUTS
 #endif
 

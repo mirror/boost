@@ -219,7 +219,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (matrix &m1, matrix &m2) {
             m1.swap (m2);
@@ -1094,7 +1094,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (vector_of_vector &m1, vector_of_vector &m2) {
             m1.swap (m2);
@@ -1934,7 +1934,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size2_, m.size2_);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (identity_matrix &m1, identity_matrix &m2) {
             m1.swap (m2);
@@ -2385,7 +2385,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (size2_, m.size2_);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (zero_matrix &m1, zero_matrix &m2) {
             m1.swap (m2);
@@ -2813,7 +2813,7 @@ namespace boost { namespace numeric { namespace ublas {
                 std::swap (value_, m.value_);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (scalar_matrix &m1, scalar_matrix &m2) {
             m1.swap (m2);
@@ -3359,7 +3359,7 @@ namespace boost { namespace numeric { namespace ublas {
                     std::swap_ranges (data_ [i], data_ [i] + size2_, m.data_ [i]);
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (c_matrix &m1, c_matrix &m2) {
             m1.swap (m2);

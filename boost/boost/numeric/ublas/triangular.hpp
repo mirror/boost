@@ -243,7 +243,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().swap (m.data ());
             }
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (triangular_matrix &m1, triangular_matrix &m2) {
             m1.swap (m2);
@@ -1149,7 +1149,7 @@ namespace boost { namespace numeric { namespace ublas {
             if (this != &m)
                 matrix_swap (scalar_swap<value_type, value_type> (), *this, m); 
         }
-#if ! defined (BOOST_NO_MEMBER_TEMPLATE_FRIENDS) || defined (BOOST_MSVC6_MEMBER_TEMPLATES)
+#ifndef BOOST_UBLAS_NO_MEMBER_FRIENDS
         BOOST_UBLAS_INLINE
         friend void swap (triangular_adaptor &m1, triangular_adaptor &m2) {
             m1.swap (m2);
@@ -1816,7 +1816,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e2 (n) /= e1 () (n, n);
             if (t != value_type ()) {
@@ -1842,7 +1842,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e2 (n) /= e1 () (n, n);
             if (t != value_type ()) {
@@ -1871,7 +1871,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e2 (n) /= e1 () (n, n);
             if (t != value_type ()) {
@@ -1908,7 +1908,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e2 (n) /= e1 () (n, n);
             if (t != value_type ()) {
@@ -1934,7 +1934,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e2 (n) /= e1 () (n, n);
             if (t != value_type ()) {
@@ -1963,7 +1963,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e2 (n) /= e1 () (n, n);
             if (t != value_type ()) {
@@ -2018,7 +2018,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
 #else
             if (e2 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e1 (n) /= e2 () (n, n);
             if (t != value_type ()) {
@@ -2044,7 +2044,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
 #else
             if (e2 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e1 (n) /= e2 () (n, n);
             if (t != value_type ()) {
@@ -2075,7 +2075,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e2 () (n, n) != value_type (), singular ());
 #else
             if (e2 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e1 (n) /= e2 () (n, n);
             if (t != value_type ()) {
@@ -2112,7 +2112,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
 #else
             if (e2 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e1 (n) /= e2 (n, n);
             if (t != value_type ()) {
@@ -2138,7 +2138,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
 #else
             if (e2 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e1 (n) /= e2 (n, n);
             if (t != value_type ()) {
@@ -2167,7 +2167,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e2 (n, n) != value_type (), singular ());
 #else
             if (e2 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             value_type t = e1 (n) /= e2 (n, n);
             if (t != value_type ()) {
@@ -2233,7 +2233,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             for (size_type l = 0; l < size2; ++ l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
@@ -2262,7 +2262,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             for (size_type l = 0; l < size2; ++ l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
@@ -2294,7 +2294,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             for (size_type l = 0; l < size2; ++ l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
@@ -2334,7 +2334,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             for (difference_type l = size2 - 1; l >= 0; -- l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
@@ -2363,7 +2363,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             for (difference_type l = size2 - 1; l >= 0; -- l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
@@ -2395,7 +2395,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (e1 () (n, n) != value_type (), singular ());
 #else
             if (e1 () (n, n) == value_type ())
-                singular.raise ();
+                singular ().raise ();
 #endif
             for (difference_type l = size2 - 1; l >= 0; -- l) {
                 value_type t = e2 (n, l) /= e1 () (n, n);
