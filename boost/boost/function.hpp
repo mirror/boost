@@ -468,7 +468,7 @@ namespace boost {
     template<typename Functor>
     function& operator=(const Functor& f)
     {
-      this->assign_to(f);
+      function(f).swap(*this);
       return *this;
     }
 
@@ -476,45 +476,45 @@ namespace boost {
     template<typename Functor>
     function& operator=(Functor* f)
     {
-      this->assign_to(f);
+      function(f).swap(*this);
       return *this;
     }
 #endif // __BORLANDC__
 
     function& operator=(const base_type& f)
     {
-      this->assign_to_own(f);
+      function(f).swap(*this);
       return *this;
     }
 
     function& operator=(const function& f)                                  
     {   
-      this->assign_to_own(f);
+      function(f).swap(*this);
       return *this;                                                         
     }                                                           
 
     template<typename Functor>
     void set(const Functor& f)
     {
-      this->assign_to(f);
+      function(f).swap(*this);
     }
 
 #ifdef __BORLANDC__
     template<typename Functor>
     void set(Functor* f)
     {
-      this->assign_to(f);
+      function(f).swap(*this);
     }
 #endif // __BORLANDC__
  
     void set(const base_type& f)
     {
-      this->assign_to_own(f);
+      function(f).swap(*this);
     }
 
     void set(const function& f)                             
     {
-      this->assign_to_own(f);
+      function(f).swap(*this);
     }   
   };
 
