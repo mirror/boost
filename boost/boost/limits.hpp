@@ -90,10 +90,10 @@ namespace std
 #ifdef BOOST_HAS_MS_INT64
       static unsigned BOOST_LLT min(){ return 0ui64; }
       static unsigned BOOST_LLT max(){ return 0xFFFFFFFFFFFFFFFFui64; }
-#elif defined(ULLONG_MAX)
+#elif defined(ULLONG_MAX) && defined(ULLONG_MIN)
       static unsigned BOOST_LLT min(){ return ULLONG_MIN; }
       static unsigned BOOST_LLT max(){ return ULLONG_MAX; }
-#elif defined(ULONGLONG_MAX)
+#elif defined(ULONGLONG_MAX) && defined(ULONG_LONG_MIN)
       static unsigned BOOST_LLT min(){ return ULONGLONG_MIN; }
       static unsigned BOOST_LLT max(){ return ULONGLONG_MAX; }
 #else
