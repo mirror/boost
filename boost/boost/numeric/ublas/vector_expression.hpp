@@ -208,8 +208,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E::value_type value_type;
         typedef typename E::const_reference const_reference;
         typedef const_reference reference;
-        typedef typename E::const_pointer const_pointer;
-        typedef const_pointer pointer;
         typedef typename E::storage_category storage_category;
         typedef typename E::simd_category simd_category;
 
@@ -314,17 +312,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_REFERENCE_BASE_TYPEDEFS
         typedef typename E::const_reference const_reference;
         typedef typename E::reference reference;
-        typedef typename E::const_pointer const_pointer;
-        typedef typename E::pointer pointer;
 #else
         typedef typename E::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<E>,
                                           typename E::const_reference,
                                           typename E::reference>::type reference;
-        typedef typename E::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<E>,
-                                          typename E::const_pointer,
-                                          typename E::pointer>::type pointer;
 #endif
     private:
         typedef E expression_type;
@@ -551,9 +543,9 @@ namespace boost { namespace numeric { namespace ublas {
                                                          scalar_identity<value_type> >,
                                           typename E::reference,
                                           value_type>::type reference;
+    private:
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
-    private:
         typedef F functor_type;
         typedef typename boost::mpl::if_<boost::is_const<expression_type>,
                                           typename E::const_closure_type,
@@ -845,9 +837,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename F::result_type value_type;
         typedef value_type const_reference;
         typedef const_reference reference;
+    private:
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
-    private:
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
@@ -1239,9 +1231,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename F::result_type value_type;
         typedef value_type const_reference;
         typedef const_reference reference;
+    private:
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
-    private:
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
@@ -1486,9 +1478,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename F::result_type value_type;
         typedef value_type const_reference;
         typedef const_reference reference;
+    private:
         typedef const value_type *const_pointer;
         typedef const_pointer pointer;
-    private:
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;

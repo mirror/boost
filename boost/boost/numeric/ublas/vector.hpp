@@ -86,11 +86,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef typename type_traits<T>::const_reference const_reference;
         typedef T &reference;
+        typedef A array_type;
+    private:
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
-        typedef A array_type;
-        typedef const A const_array_type;
         typedef const vector<T, A> const_self_type;
         typedef vector<T, A> self_type;
     public:
@@ -111,8 +110,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit BOOST_UBLAS_INLINE
         vector (size_type size):
             vector_expression<self_type> (),
-            data_ (0) {
-            resize (size);
+            data_ (size) {
         }
         BOOST_UBLAS_INLINE
         vector (size_type size, const array_type &data):
@@ -136,7 +134,7 @@ namespace boost { namespace numeric { namespace ublas {
             return data_.size ();
         }
         BOOST_UBLAS_INLINE
-        const_array_type &data () const {
+        const array_type &data () const {
             return data_;
         }
         BOOST_UBLAS_INLINE
@@ -620,9 +618,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
+    private:
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
         typedef const unit_vector<T> const_self_type;
         typedef unit_vector<T> self_type;
     public:
@@ -878,9 +876,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
+    private:
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
         typedef const zero_vector<T> const_self_type;
         typedef zero_vector<T> self_type;
     public:
@@ -1091,9 +1089,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
+    private:
         typedef const T *const_pointer;
         typedef T *pointer;
-    private:
         typedef const scalar_vector<T> const_self_type;
         typedef scalar_vector<T> self_type;
     public:
@@ -1325,8 +1323,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
-        typedef const T *const_pointer;
+        typedef value_type array_type[N];
         typedef T *pointer;
+        typedef const T *const_pointer;
     private:
         typedef const c_vector<T, N> const_self_type;
         typedef c_vector<T, N> self_type;
@@ -1374,11 +1373,11 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         const_pointer data () const {
-            return reinterpret_cast<const_pointer> (data_);
+            return data_;
         }
         BOOST_UBLAS_INLINE
         pointer data () {
-            return reinterpret_cast<pointer> (data_);
+            return data_;
         }
 
         // Resizing
@@ -1805,7 +1804,7 @@ namespace boost { namespace numeric { namespace ublas {
 
     private:
         size_type size_;
-        value_type data_ [N];
+        array_type data_;
     };
 
 }}}

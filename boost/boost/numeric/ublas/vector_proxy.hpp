@@ -41,17 +41,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename V::const_reference const_reference;
         typedef typename V::reference reference;
-        typedef typename V::const_pointer const_pointer;
-        typedef typename V::pointer pointer;
 #else
         typedef typename V::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<V>,
                                           typename V::const_reference,
                                           typename V::reference>::type reference;
-        typedef typename V::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<V>,
-                                          typename V::const_pointer,
-                                          typename V::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename V::closure_type vector_closure_type;
@@ -573,17 +567,11 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename V::const_reference const_reference;
         typedef typename V::reference reference;
-        typedef typename V::const_pointer const_pointer;
-        typedef typename V::pointer pointer;
 #else
         typedef typename V::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<V>,
                                           typename V::const_reference,
                                           typename V::reference>::type reference;
-        typedef typename V::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<V>,
-                                          typename V::const_pointer,
-                                          typename V::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename V::closure_type vector_closure_type;
@@ -1121,17 +1109,11 @@ return true;
 #ifndef BOOST_UBLAS_CT_PROXY_BASE_TYPEDEFS
         typedef typename V::const_reference const_reference;
         typedef typename V::reference reference;
-        typedef typename V::const_pointer const_pointer;
-        typedef typename V::pointer pointer;
 #else
         typedef typename V::const_reference const_reference;
         typedef typename boost::mpl::if_<boost::is_const<V>,
                                           typename V::const_reference,
                                           typename V::reference>::type reference;
-        typedef typename V::const_pointer const_pointer;
-        typedef typename boost::mpl::if_<boost::is_const<V>,
-                                          typename V::const_pointer,
-                                          typename V::pointer>::type pointer;
 #endif
 #ifndef BOOST_UBLAS_CT_PROXY_CLOSURE_TYPEDEFS
         typedef typename V::closure_type vector_closure_type;
