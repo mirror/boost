@@ -36,6 +36,7 @@ unit-test for_each : for_each.cpp : <sysinclude>$(BOOST_ROOT) ;
 compile front.cpp ;
 compile identity.cpp ;
 compile if.cpp ;
+compile index_of.cpp ;
 compile inherit.cpp ;
 compile insert.cpp ;
 compile insert_range.cpp ;
