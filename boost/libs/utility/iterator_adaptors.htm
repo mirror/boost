@@ -193,17 +193,26 @@ struct iterator_adaptor;
 
         <th>Description
 
-      <tr>
-        <td><tt>BaseType</tt> 
+        <th>Requirements
 
-        <td>The type being wrapped.
+      <tr>
+        <td><tt>Base</tt> 
+
+        <td>The data type on which the resulting iterator is based. Do
+        not be misled by the name &quot;Base&quot;: this is not a base
+        class.
+
+        <td>
+        <a href="http://www.sgi.com/tech/stl/Assignable.html">Assignable</a>,
+        <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">Default&nbsp;Constructible</a>
 
       <tr>
         <td><tt>Policies</tt> 
 
         <td>A <a href="../../more/generic_programming.html#policy">policy
-        class</a> that supplies core functionality to the resulting iterator. A
-        detailed description can be found <a href="#policies">below</a>.
+        class</a> that supplies core functionality to the resulting iterator. 
+
+        <td>See table <a href="#policies">below</a>.
 
       <tr>
         <td><tt>Value</tt> 
@@ -214,7 +223,7 @@ struct iterator_adaptor;
         "#1">[1]</a>. If the <tt>value_type</tt> you wish to use is an abstract
         base class see note <a href="#5">[5]</a>.<br>
          <b>Default:</b>
-        <tt>std::iterator_traits&lt;BaseType&gt;::value_type</tt> <a href=
+        <tt>std::iterator_traits&lt;Base&gt;::value_type</tt> <a href=
         "#2">[2]</a>
 
       <tr>
@@ -224,29 +233,55 @@ struct iterator_adaptor;
         particular, the result type of <tt>operator*()</tt>.<br>
          <b>Default:</b> If <tt>Value</tt> is supplied, <tt>Value&amp;</tt> is
         used. Otherwise
-        <tt>std::iterator_traits&lt;BaseType&gt;::reference</tt> is used. <a href="#7">[7]</a>
+        <tt>std::iterator_traits&lt;Base&gt;::reference</tt> is used. <a href="#7">[7]</a>
+        
+        <td><a
+        href="http://www.sgi.com/tech/stl/ForwardIterator.html">ForwardIterators</a>,
+        <a
+        href="http://www.sgi.com/tech/stl/BidirectionalIterator.html">BidirectionalIterators</a>,
+        and <a
+        href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">RandomAccessIterators</a>
+        require that Reference is a true reference type (e.g. not a proxy).
 
       <tr>
         <td><tt>Pointer</tt> 
 
         <td>The <tt>pointer</tt> type of the resulting iterator, and in
         particular, the result type of <tt>operator-&gt;()</tt>.<br>
-         <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
-        otherwise <tt>std::iterator_traits&lt;BaseType&gt;::pointer</tt>. <a href="#7">[7]</a>
+         <b>Default:</b> If <tt>Value</tt> was supplied and
+        <code>iterator_category</code> is not
+        <code>input_iterator</code> then a class yielding
+        <tt>Value*</tt> when <code>operator-&gt;()</code> is applied,
+        otherwise if <tt>Value</tt> was supplied then
+        <tt>Value*</tt>, otherwise
+        <tt>std::iterator_traits&lt;Base&gt;::pointer</tt>. <a
+        href="#7">[7]</a>
+
+        <td><code>value_type*</code> or a
+        class which yields <code>value_type*</code> when
+        <code>operator-&gt;()</code> is applied.
 
       <tr>
         <td><tt>Category</tt> 
 
         <td>The <tt>iterator_category</tt> type for the resulting iterator.<br>
          <b>Default:</b>
-        <tt>std::iterator_traits&lt;BaseType&gt;::iterator_category</tt> 
+        <tt>std::iterator_traits&lt;Base&gt;::iterator_category</tt> 
+
+        <td>One of
+        <code>std::input_iterator_tag</code>,
+        <code>std::output_iterator_tag</code>,
+        <code>std::forward_iterator_tag</code>,
+        <code>std::bidirectional_iterator_tag</code>, or
+        <code>std::random_access_iterator_tag</code>.
 
       <tr>
         <td><tt>Distance</tt> 
 
         <td>The <tt>difference_type</tt> for the resulting iterator.<br>
          <b>Default:</b>
-        <tt>std::iterator_traits&lt;BaseType&gt;::difference_type</tt> 
+        <tt>std::iterator_traits&lt;Base&gt;::difference_type</tt> 
+        <td>A signed integral type
 
       <tr>
          <td><tt>NamedParam</tt>
