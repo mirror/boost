@@ -577,21 +577,6 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL put_mem_block(void*);
  *
  ****************************************************************************/
  
-//
-// this is a deliberate error, will be removed once it's diagnostics have been checked:
-//
-#if defined(BOOST_INTEL)
-#if BOOST_REGEX_DECL +0
-#error "Oops1"
-#endif
-#if BOOST_REGEX_CALL +0
-#error "Oops2"
-#endif
-#if BOOST_REGEX_CCALL +0
-#error "Oops3"
-#endif
-#endif
-
 #if defined(BOOST_REGEX_DIAG)
 #  pragma message ("BOOST_REGEX_DECL set as: " BOOST_STRINGIZE(BOOST_REGEX_DECL))
 #  pragma message ("BOOST_REGEX_CALL set as: " BOOST_STRINGIZE(BOOST_REGEX_CALL))
