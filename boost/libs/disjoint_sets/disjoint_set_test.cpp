@@ -4,7 +4,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/pending/disjoint_sets.hpp>
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>
 #include <boost/cstdlib.hpp>
 
 template <typename DisjointSet>
