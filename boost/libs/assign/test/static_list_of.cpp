@@ -59,20 +59,20 @@ void check_static_list_of()
 {
     using namespace boost::assign;
     
-    BOOST_CHECK( list_of<5>( 1 )( 2 )( 3 )( 4 ).size() == 4 );
+    BOOST_CHECK( cref_list_of<5>( 1 )( 2 )( 3 )( 4 ).size() == 4 );
     
     int a=1,b=5,c=3,d=4,e=2,f=9,g=0,h=7;
 
-    int& max = *max_element( list_of<8,int&>(a)(b)(c)(d)(e)(f)(g)(h) );
+    int& max = *max_element( ref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
     BOOST_CHECK_EQUAL( max, f );
     max = 8;
     BOOST_CHECK_EQUAL( f, 8 );
-    const int& const_max = *max_element( list_of<8,const int&>(a)(b)(c)(d)(e)(f)(g)(h) );
+    const int& const_max = *max_element( cref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
     BOOST_CHECK_EQUAL( max, const_max );
 
  //   print( list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
-    sort( list_of<8,int&>(a)(b)(c)(d)(e)(f)(g)(h) );
-    print( list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
+    sort( ref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
+    print( cref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
 
 }
 

@@ -18,6 +18,7 @@
 
 #include <boost/assign/assignment_exception.hpp>
 #include <boost/config.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_reference.hpp>
@@ -91,8 +92,6 @@ namespace assign_detail
     };
 
 
-    template< class T >
-    class generic_list;
     
     template< class Derived >
     class converter
@@ -110,7 +109,7 @@ namespace assign_detail
                                                       array_type_tag,
                                              default_type_tag >::type tag_type;
 
-            return convert( c, tag_type() );
+            return convert<Container>( c, tag_type() );
         }
 
         template< class Container >
@@ -260,6 +259,7 @@ namespace assign_detail
 #define BOOST_ASSIGN_PARAMS1(n) BOOST_PP_ENUM_PARAMS(n, class U)
 #define BOOST_ASSIGN_PARAMS2(n) BOOST_PP_ENUM_BINARY_PARAMS(n, U, u)
 #define BOOST_ASSIGN_PARAMS3(n) BOOST_PP_ENUM_PARAMS(n, u)
+#define BOOST_ASSIGN_PARAMS4(n) BOOST_PP_ENUM_PARAMS(n, U)
 
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
@@ -291,6 +291,18 @@ namespace assign_detail
                 this->push_back( fun() );
             return *this;
         }
+
+        /*
+        template< class Range >
+        generic_list& insert( const Range& r )
+        {
+            BOOST_DEDUCED_TYPENAME range_const_iterator<Range>::type 
+                            i = const_begin(r),
+                            e = const_end(r);
+            for( ; i != e ; ++i )
+                this->push_back( *i );
+        }
+        */
     };
 
     /////////////////////////////////////////////////////////////////////////
@@ -414,14 +426,19 @@ namespace assign
     }
 
     template< int N, class T >
-    inline assign_detail::static_generic_list<T,N>
-    list_of( T t )
+    inline assign_detail::static_generic_list<T&,N>
+    ref_list_of( T& t )
     {
-        // This version is on for reference arguments
-        //BOOST_STATIC_ASSERT(( boost::is_reference<T>::value && "only reference values allowed" ));
-        return assign_detail::static_generic_list<T,N>( t );
+        return assign_detail::static_generic_list<T&,N>( t );
     }
     
+    template< int N, class T >
+    inline assign_detail::static_generic_list<const T&,N>
+    cref_list_of( const T& t )
+    {
+        return assign_detail::static_generic_list<const T&,N>( t );
+    }
+
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
 #define BOOST_PP_LOCAL_MACRO(n) \
     template< class T, class U, BOOST_ASSIGN_PARAMS1(n) > \
@@ -429,6 +446,18 @@ namespace assign
     list_of(U u, BOOST_ASSIGN_PARAMS2(n) ) \
     { \
         return assign_detail::generic_list<T>()(u, BOOST_ASSIGN_PARAMS3(n)); \
+    } \
+    /**/
+    
+#include BOOST_PP_LOCAL_ITERATE()
+
+#define BOOST_PP_LOCAL_LIMITS (1, BOOST_ASSIGN_MAX_PARAMETERS)
+#define BOOST_PP_LOCAL_MACRO(n) \
+    template< class U, BOOST_ASSIGN_PARAMS1(n) > \
+    inline assign_detail::generic_list< tuple<U, BOOST_ASSIGN_PARAMS4(n)> > \
+    tuple_list_of(U u, BOOST_ASSIGN_PARAMS2(n) ) \
+    { \
+        return assign_detail::generic_list< tuple<U, BOOST_ASSIGN_PARAMS4(n)> >()( tuple<U,BOOST_ASSIGN_PARAMS4(n)>( u, BOOST_ASSIGN_PARAMS3(n) )); \
     } \
     /**/
     

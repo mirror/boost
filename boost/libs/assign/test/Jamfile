@@ -26,6 +26,7 @@ test-suite assign :
     [ assign-test std ]
     [ assign-test list_of ]
     [ assign-test static_list_of ]
+    [ assign-test tuple_list_of ]
     [ assign-test list_inserter ]
     [ assign-test list_of_workaround ]
     [ assign-test email_example ]
