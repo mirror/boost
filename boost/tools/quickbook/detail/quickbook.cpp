@@ -12,6 +12,7 @@
 #include "utils.hpp"
 #include "actions.hpp"
 #include <boost/spirit/iterator/position_iterator.hpp>
+#include <boost/program_options.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -20,6 +21,8 @@
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
 #endif
+
+#define QUICKBOOK_VERSION "Quickbook Version 1.1"
 
 namespace quickbook
 {
@@ -250,7 +253,7 @@ namespace quickbook
             return 1;
         }
 
-        // Turn of white space skipping on the stream
+        // Turn off white space skipping on the stream
         in.unsetf(ios::skipws);
 
         std::copy(
@@ -326,24 +329,67 @@ namespace quickbook
 int
 main(int argc, char* argv[])
 {
-    if (argc > 1)
+    try 
     {
-        std::string fileout;
-        if (argc == 2)
+        using boost::program_options::options_description;
+        using boost::program_options::variables_map;
+        using boost::program_options::store;
+        using boost::program_options::parse_command_line;
+        using boost::program_options::notify;
+
+        options_description desc("Allowed options");
+        desc.add_options()
+            ("help", "produce help message")
+            ("version,v", "print version string")
+        ;
+    
+        variables_map vm;
+        store(parse_command_line(argc, argv, desc), vm);
+        notify(vm);    
+    
+        if (vm.count("help")) 
         {
-            fileout = quickbook::detail::remove_extension(argv[1]);
-            fileout += ".xml";
+            std::cout << desc << "\n";
+            return 0;
+        }
+
+        if (vm.count("version"))
+        {
+            std::cout << QUICKBOOK_VERSION << std::endl;
+            return 0;
+        }
+
+        if (argc > 1)
+        {
+            std::string fileout;
+            if (argc == 2)
+            {
+                fileout = quickbook::detail::remove_extension(argv[1]);
+                fileout += ".xml";
+            }
+            else
+            {
+                fileout = argv[2];
+            }
+    
+            return quickbook::parse(argv[1], fileout.c_str());
         }
         else
         {
-            fileout = argv[2];
+            std::cerr << "Error: No filename given" << std::endl;
         }
-
-        return quickbook::parse(argv[1], fileout.c_str());
     }
-    else
+    
+    catch(std::exception& e) 
     {
-        std::cerr << "---NO FILENAME GIVEN---" << std::endl;
+        std::cerr << "Error: " << e.what() << "\n";
+        return 1;
     }
+
+    catch(...) 
+    {
+        std::cerr << "Error: Exception of unknown type caught\n";
+    }
+
     return 0;
 }

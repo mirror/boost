@@ -41,7 +41,7 @@
 
   </partinfo>
 
-  <title>quickbook 1.0</title>
+  <title>quickbook 1.1</title>
 
 
 
@@ -655,9 +655,9 @@ Quickbook has some predefined macros that you can already use.</para>
 <thead><row><entry>Macro</entry><entry>Meaning</entry><entry>Example</entry></row>
 </thead>
 <tbody>
-<row><entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Feb-04</entry></row>
-<row><entry>__TIME__</entry><entry>The current time</entry><entry>10:48:00 PM</entry></row>
-<row><entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>quickbook.qbk</entry></row>
+<row><entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Feb-14</entry></row>
+<row><entry>__TIME__</entry><entry>The current time</entry><entry>02:30:05 PM</entry></row>
+<row><entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</entry></row>
 </tbody>
 </tgroup>
 </informaltable>

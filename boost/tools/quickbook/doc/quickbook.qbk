@@ -1,5 +1,5 @@
 [part quickbook
-    [version 1.0]
+    [version 1.1]
     [authors [de Guzman, Joel], [Niebler, Eric]]
     [copyright 2002 2004 Joel de Guzman, Eric Niebler]
     [purpose WikiWiki style documentation tool]
@@ -13,9 +13,10 @@
     [last-revision $Date$]
 ]
 
-[/ QuickBook Document version 0.9 ]
+[/ QuickBook Document version 1.1 ]
 [/ Sept 24, 2002 ]
 [/ Sept 2, 2004 ]
+[/ Feb 14, 2005 ]
 
 [/ Some links]
 
