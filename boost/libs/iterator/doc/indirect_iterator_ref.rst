@@ -31,41 +31,23 @@
       );
   };
 
-  template <class Dereferenceable>
-  struct referent {
-    /* see below */
-  };
-
 
 The member types of ``indirect_iterator`` are defined according to the
 following pseudo-code.  We use the abbreviation
-``V=iterator_traits<Iterator>::value_type`` and ``v`` is an object of
-type ``V``.::
+``V=iterator_traits<Iterator>::value_type``.::
 
   if (Value is use_default) then
-      if (referent<V> has member type) then
-          typedef remove_const<referent<V>::type> value_type;
-      else
-          typedef iterator_traits<V>::value_type value_type;
+      typedef iterator_traits<V>::value_type value_type;
   else
       typedef remove_const<Value>::type value_type;
 
   if (Reference is use_default) then
-      if (Value is use_default) then
-         if (referent<V> has member type) then
-            typedef referent<V>::type& reference;
-         else
-            typedef iterator_traits<V>::value_type& reference;
-      else
-          typedef Value& reference;
+      typedef iterator_traits<V>::reference reference;
   else
       typedef Reference reference;
 
   if (Value is use_default) then
-     if (referent<V> has member type) then
-	typedef referent<V>::type* pointer;
-     else
-	typedef iterator_traits<V>::value_type* pointer;
+      typedef iterator_traits<V>::pointer pointer;
   else
       typedef Value* pointer;
 
@@ -77,39 +59,43 @@ type ``V``.::
 
 The member ``indirect_iterator::iterator_category`` is a type that
 satisfies the requirements of the concepts modeled by the indirect
-iterator as specified in the following requirements section.
-(Should replace this with detailed description. -JGS)
-
-If the ``Dereferenceable`` template argument to ``referent`` is a
-class and has member ``element_type`` then ``referent`` 
-contains the following typedef::
-
-    typedef Dereferenceable::element_type type;
+iterator as specified in the models section.
 
 
 ``indirect_iterator`` requirements
 ..................................
 
-The ``CategoryOrTraversal`` argument shall be one of the standard
-iterator tags or ``use_default``. If ``CategoryOrTraversal`` is an
-iterator tag, the template parameter ``Iterator`` argument shall meet
-the traversal requirements corresponding to the iterator tag and the
-requirements of Readable Iterator and ``indirect_iterator`` satisfies
-the requirements corresponding to the iterator tag.  If
-``CategoryOrTraversal`` is ``use_default`` then the ``Iterator``
-argument shall meet the requirements of Readable Iterator and
-``indirect_iterator`` satisfies the requirements of the most refined
-standard traversal concept that is satisfied by the ``Iterator``
-argument. In this case
+The ``Iterator`` argument shall meet the requirements of Readable
+Iterator. The ``CategoryOrTraversal`` argument shall be one of the
+standard iterator tags or ``use_default``. If ``CategoryOrTraversal``
+is an iterator tag, the template parameter ``Iterator`` argument shall
+meet the traversal requirements corresponding to the iterator tag.
 
 The expression ``*v``, where ``v`` is an object of type
 ``iterator_traits<Iterator>::value_type``, must be a valid expression
-and must be convertible to ``iterator_adaptor::reference``. Also,
-there are further requirements on the
+and must be convertible to ``indirect_iterator::reference``.  Also
+``indirect_iterator::reference`` must be convertible to
+``indirect_iterator::value``.  There are further requirements on the
 ``iterator_traits<Iterator>::value_type`` if the ``Value`` parameter
 is not ``use_default``, as implied by the algorithm for deducing the
 default for the ``value_type`` member.
 
+
+``indirect_iterator`` models
+............................
+
+If ``CategoryOrTraversal`` is a standard iterator tag,
+``indirect_iterator`` is a model of the iterator concept corresponding
+to the tag, otherwise ``indirect_iterator`` satisfies the requirements
+of the most refined standard traversal concept that is satisfied by
+the ``Iterator`` argument.
+
+``indirect_iterator`` models Readable Iterator.  If
+``indirect_iterator::reference(*v) = t`` is a valid expression (where
+``t`` is an object of type ``indirect_iterator::value_type``) then
+``indirect_iterator`` models Writable Iterator. If
+``indirect_iterator::reference`` is a reference then
+``indirect_iterator`` models Lvalue Iterator.
 
 
 ``indirect_iterator`` operations
