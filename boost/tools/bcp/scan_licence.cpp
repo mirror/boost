@@ -13,7 +13,7 @@
 
 static bool is_non_bsl_license(int index)
 {
-  return index != 0;
+  return index > 2;
 }
 
 void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)

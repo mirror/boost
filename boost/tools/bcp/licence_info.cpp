@@ -42,7 +42,7 @@ std::pair<const licence_info*, int> get_licences()
 
    static const licence_info licences[] = 
    {
-      licence_info( boost::regex("(subject\\W+to|distributed\\W+under)"
+      licence_info( boost::regex("distributed\\W+under"
          "(\\W+the)?\\W+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
@@ -52,7 +52,37 @@ std::pair<const licence_info*, int> get_licences()
          "Boost Software License, Version 1.0"
          ,
          "<P>Copyright (c) <I>Date</I> <I>Author</I></P>"
+         "<P>Distributed under the "
+         "Boost Software License, Version 1.0. (See accompanying file "
+         "LICENSE_1_0.txt or copy at <a href=\"http://www.boost.org/LICENSE_1_0.txt\">http://www.boost.org/LICENSE_1_0.txt)</a></P>"
+       )
+      ,
+      licence_info( boost::regex("Use\\W+\\modification\\W+and\\W+distribution(\\W+is|\\W+are)\\W+subject\\W+to"
+         "(\\W+the)?\\W+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "Boost Software License, Version 1.0 (variant #1)"
+         ,
+         "<P>Copyright (c) <I>Date</I> <I>Author</I></P>"
          "<P>Use, modification and distribution is subject to the "
+         "Boost Software License, Version 1.0. (See accompanying file "
+         "LICENSE_1_0.txt or copy at <a href=\"http://www.boost.org/LICENSE_1_0.txt\">http://www.boost.org/LICENSE_1_0.txt)</a></P>"
+       )
+      ,
+      licence_info( boost::regex("\\W+subject\\W+to"
+         "(\\W+the)?\\W+Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "Boost Software License, Version 1.0 (variant #2)"
+         ,
+         "<P>Copyright (c) <I>Date</I> <I>Author</I></P>"
+         "<P>Subject to the "
          "Boost Software License, Version 1.0. (See accompanying file "
          "LICENSE_1_0.txt or copy at <a href=\"http://www.boost.org/LICENSE_1_0.txt\">http://www.boost.org/LICENSE_1_0.txt)</a></P>"
        )
@@ -194,7 +224,7 @@ std::pair<const licence_info*, int> get_licences()
                      "\\W+You\\W+should\\W+have\\W+received\\W+a\\W+copy\\W+of\\W+the\\W+License\\W+Agreement\\W+for\\W+the"
                      "\\W+(Boost|Generic)\\W+Graph\\W+(Component\\W+)?Library\\W+along\\W+with\\W+the\\W+software;\\W+see\\W+the\\W+file\\W+LICENSE"
                      "(\\W+If\\W+not\\W+contact\\W+Office\\W+of\\W+Research\\W+University\\W+of\\W+Notre\\W+Dame\\W+Notre"
-                     "\\W+Dame\\W+IN\\W+46556|\\W+If\\W+not\\W+contact\\W+Office\\W+of\\W+Research\\W+Indiana\\W+University\\W+Bloomington\\W+IN\\W+47405)?"
+                     "\\W+Dame\\W+IN\\W+46556)?"
                      "\\W+Permission\\W+to\\W+modify\\W+the\\W+code\\W+and\\W+to\\W+distribute(\\W+modified|\\W+the)\\W+code\\W+is"
                      "\\W+granted\\W+provided\\W+the\\W+text\\W+of\\W+this\\W+NOTICE\\W+is\\W+retained\\W+a\\W+notice\\W+(that|if)"
                      "\\W+the\\W+code\\W+was\\W+modified\\W+is\\W+included\\W+with\\W+the\\W+above\\W+COPYRIGHT\\W+NOTICE\\W+and"
@@ -212,7 +242,7 @@ std::pair<const licence_info*, int> get_licences()
          ,
          generic_author_format
          ,
-         "Boost.Graph licence"
+         "Boost.Graph licence (Notre Dame)"
          ,
          "<P>Copyright <I>Date</I> University of Notre Dame.<BR>"
          "Authors: Andrew Lumsdaine, Lie-Quan Lee, Jeremy G. Siek</P>"
@@ -221,6 +251,49 @@ std::pair<const licence_info*, int> get_licences()
          "Boost Graph Library along with the software; see the file <A href=\"http://www.boost.org/libs/graph/LICENCE\">LICENSE</a>. "
          "If not, contact Office of Research, University of Notre Dame, Notre "
          "Dame, IN 46556.</P>"
+         "<P>Permission to modify the code and to distribute modified code is "
+         "granted, provided the text of this NOTICE is retained, a notice that "
+         "the code was modified is included with the above COPYRIGHT NOTICE and "
+         "with the COPYRIGHT NOTICE in the <A href=\"http://www.boost.org/libs/graph/LICENCE\">LICENSE</a> file, and that the <A href=\"http://www.boost.org/libs/graph/LICENCE\">LICENSE</a> "
+         "file is distributed with the modified code.</P>"
+         "<P>LICENSOR MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED.<BR> "
+         "By way of example, but not limitation, Licensor MAKES NO "
+         "REPRESENTATIONS OR WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY "
+         "PARTICULAR PURPOSE OR THAT THE USE OF THE LICENSED SOFTWARE COMPONENTS "
+         "OR DOCUMENTATION WILL NOT INFRINGE ANY PATENTS, COPYRIGHTS, TRADEMARKS "
+         "OR OTHER RIGHTS.</P>"
+       )
+      ,
+      licence_info( boost::regex("This\\W+file\\W+is\\W+part\\W+of\\W+the\\W+(Boost\\W+Graph|Generic\\W+Graph\\W+Component)\\W+Library"
+                     "\\W+You\\W+should\\W+have\\W+received\\W+a\\W+copy\\W+of\\W+the\\W+License\\W+Agreement\\W+for\\W+the"
+                     "\\W+(Boost|Generic)\\W+Graph\\W+(Component\\W+)?Library\\W+along\\W+with\\W+the\\W+software;\\W+see\\W+the\\W+file\\W+LICENSE"
+                     "(\\W+If\\W+not\\W+contact\\W+Office\\W+of\\W+Research\\W+Indiana\\W+University\\W+Bloomington\\W+IN\\W+47405)?"
+                     "\\W+Permission\\W+to\\W+modify\\W+the\\W+code\\W+and\\W+to\\W+distribute(\\W+modified|\\W+the)\\W+code\\W+is"
+                     "\\W+granted\\W+provided\\W+the\\W+text\\W+of\\W+this\\W+NOTICE\\W+is\\W+retained\\W+a\\W+notice\\W+(that|if)"
+                     "\\W+the\\W+code\\W+was\\W+modified\\W+is\\W+included\\W+with\\W+the\\W+above\\W+COPYRIGHT\\W+NOTICE\\W+and"
+                     "\\W+with\\W+the\\W+COPYRIGHT\\W+NOTICE\\W+in\\W+the\\W+LICENSE\\W+file\\W+and\\W+that\\W+the\\W+LICENSE"
+                     "\\W+file\\W+is\\W+distributed\\W+with\\W+the\\W+modified\\W+code\\W+"
+                     "\\W+LICENSOR\\W+MAKES\\W+NO\\W+REPRESENTATIONS\\W+OR\\W+WARRANTIES\\W+EXPRESS\\W+OR\\W+IMPLIED"
+                     "\\W+By\\W+way\\W+of\\W+example\\W+but\\W+not\\W+limitation\\W+Licensor\\W+MAKES\\W+NO"
+                     "\\W+REPRESENTATIONS\\W+OR\\W+WARRANTIES\\W+OF\\W+MERCHANTABILITY\\W+OR\\W+FITNESS\\W+FOR\\W+ANY"
+                     "\\W+PARTICULAR\\W+PURPOSE\\W+OR\\W+THAT\\W+THE\\W+USE\\W+OF\\W+THE\\W+LICENSED\\W+SOFTWARE\\W+COMPONENTS"
+                     "\\W+OR\\W+DOCUMENTATION\\W+WILL\\W+NOT\\W+INFRINGE\\W+ANY\\W+PATENTS\\W+COPYRIGHTS\\W+TRADEMARKS"
+                     "\\W+OR\\W+OTHER\\W+RIGHTS"
+            , boost::regex::perl | boost::regex::icase)
+         ,
+         boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
+         ,
+         generic_author_format
+         ,
+         "Boost.Graph licence (Indiana University)"
+         ,
+         "<P>Copyright <I>Date</I> Indiana University.<BR>"
+         "Authors: Andrew Lumsdaine, Lie-Quan Lee, Jeremy G. Siek</P>"
+         "<P>This file is part of the Boost Graph Library</P>"
+         "<P>You should have received a copy of the <A href=\"http://www.boost.org/libs/graph/LICENCE\">License Agreement</a> for the "
+         "Boost Graph Library along with the software; see the file <A href=\"http://www.boost.org/libs/graph/LICENCE\">LICENSE</a>. "
+         "If not, contact Office of Research, Indiana University, Bloomington,"
+         "IN 47404.</P>"
          "<P>Permission to modify the code and to distribute modified code is "
          "granted, provided the text of this NOTICE is retained, a notice that "
          "the code was modified is included with the above COPYRIGHT NOTICE and "
