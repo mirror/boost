@@ -24,7 +24,7 @@ namespace posix_time {
   ptime from_time_t(std::time_t t) 
   {
     ptime start(gregorian::date(1970,1,1));
-    return start + seconds(t);
+    return start + seconds(static_cast<long>(t));
   }
 
   //! Convert a time to a tm structure truncating any fractional seconds 
