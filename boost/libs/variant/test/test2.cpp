@@ -19,7 +19,7 @@
 #include <cassert>
 #include <iostream>
 #include <algorithm>
-
+#include <cstring>
 
 using boost::apply_visitor;
 
@@ -34,6 +34,10 @@ struct short_string
 
    short_string(const char* src) 
    {
+#ifndef BOOST_NO_STDC_NAMESPACE
+      using std::strlen;
+#endif // BOOST_NO_STDC_NAMESPACE
+
       size_t e_limit = this->e_limit; // avoid warnings on some compilers
       size_t src_len = strlen(src);
       
