@@ -1,8 +1,8 @@
 
 // (C) Copyright John Maddock 2000.
-// Permission to copy, use, modify, sell and distribute this software is 
+// Permission to copy, use, modify, sell and distribute this software is
 // granted provided this copyright notice appears in all copies. This software
-// is provided "as is" without express or implied warranty, and with no claim 
+// is provided "as is" without express or implied warranty, and with no claim
 // as to its suitability for any purpose.
 
 #ifndef BOOST_TT_ALIGNMENT_OF_HPP_INCLUDED
@@ -18,7 +18,7 @@
 #   pragma warning(push)
 #   pragma warning(disable: 4121) // alignment is sensitive to packing
 #endif
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x600)
 #pragma option push -Vx- -Ve-
 #endif
 
@@ -86,7 +86,7 @@ BOOST_TT_AUX_SIZE_T_TRAIT_SPEC1(alignment_of,void const volatile,0)
 
 } // namespace boost
 
-#ifdef __BORLANDC__
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x600)
 #pragma option pop
 #endif
 #ifdef BOOST_MSVC

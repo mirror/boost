@@ -3,13 +3,13 @@
 // Copyright (C) 2000 Jeremy Siek (jsiek@lsc.nd.edu)
 // Copyright (C) 1999, 2000 Jaakko J„rvi (jaakko.jarvi@cs.utu.fi)
 //
-// Permission to copy and use this software is granted, 
-// provided this copyright notice appears in all copies. 
-// Permission to modify the code and to distribute modified code is granted, 
-// provided this copyright notice appears in all copies, and a notice 
+// Permission to copy and use this software is granted,
+// provided this copyright notice appears in all copies.
+// Permission to modify the code and to distribute modified code is granted,
+// provided this copyright notice appears in all copies, and a notice
 // that the code was modified is included with the copyright notice.
 //
-// This software is provided "as is" without express or implied warranty, 
+// This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
 //
 
@@ -99,12 +99,12 @@ struct is_convertible_impl
     };
 
     static From _m_from;
-    static bool const value = sizeof( checker<To>::_m_check(_m_from) ) 
+    static bool const value = sizeof( checker<To>::_m_check(_m_from) )
         == sizeof(::boost::type_traits::yes_type);
 #pragma option pop
 };
 
-#elif defined(__GNUC__) || defined(__BORLANDC__)
+#elif defined(__GNUC__) || defined(__BORLANDC__) && (__BORLANDC__ < 0x600)
 // special version for gcc compiler + recent Borland versions
 // note that this does not pass UDT's through (...)
 
@@ -124,7 +124,7 @@ template <typename From, typename To>
 struct is_convertible_basic_impl
 {
     static From _m_from;
-    static bool const value = sizeof( detail::checker<To>::_m_check(_m_from, 0) ) 
+    static bool const value = sizeof( detail::checker<To>::_m_check(_m_from, 0) )
         == sizeof(::boost::type_traits::yes_type);
 };
 
@@ -152,7 +152,7 @@ struct is_convertible_basic_impl
     static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To, int);
        static From _m_from;
 
-    BOOST_STATIC_CONSTANT(bool, value = 
+    BOOST_STATIC_CONSTANT(bool, value =
         sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
         );
 };
@@ -160,7 +160,7 @@ struct is_convertible_basic_impl
 #else
 
 //
-// This version seems to work pretty well for a wide spectrum of compilers, 
+// This version seems to work pretty well for a wide spectrum of compilers,
 // however it does rely on undefined behaviour by passing UDT's through (...).
 //
 template <typename From, typename To>

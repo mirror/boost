@@ -55,7 +55,7 @@ TT_AUX_BOOL_TRAIT_HELPER_PARTIAL_SPEC(is_pointer_helper,T* const volatile,true)
 template< typename T >
 struct is_pointer_impl
 {
-    BOOST_STATIC_CONSTANT(bool, value = 
+    BOOST_STATIC_CONSTANT(bool, value =
         (::boost::type_traits::ice_and<
               ::boost::detail::is_pointer_helper<T>::value
             , ::boost::type_traits::ice_not<
@@ -69,7 +69,7 @@ struct is_pointer_impl
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_pointer,T,::boost::detail::is_pointer_impl<T>::value)
 
-#if defined(__BORLANDC__) && !defined(__COMO__)
+#if defined(__BORLANDC__) && !defined(__COMO__) && (__BORLANDC__ < 0x600)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T&,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& const,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_pointer,T& volatile,false)

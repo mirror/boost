@@ -36,7 +36,7 @@ namespace boost {
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_const,T,::boost::detail::cv_traits_imp<T*>::is_const)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T&,false)
 
-#if defined(__BORLANDC__)
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x600)
 // these are illegal specialisations; cv-qualifies applied to
 // references have no effect according to [8.3.2p1],
 // C++ Builder requires them though as it treats cv-qualified
@@ -78,7 +78,7 @@ struct is_const_helper<false,false>
         BOOST_STATIC_CONSTANT(bool, value = (
             sizeof(detail::yes_type) == sizeof(detail::is_const_tester(t))
             ));
-    };      
+    };
 };
 
 template <>
@@ -90,7 +90,7 @@ struct is_const_helper<false,true>
         BOOST_STATIC_CONSTANT(bool, value = (
             sizeof(detail::yes_type) == sizeof(detail::is_const_tester(&t))
             ));
-    };      
+    };
 };
 
 template <typename T>
@@ -99,7 +99,7 @@ struct is_const_impl
           is_reference<T>::value
         , is_array<T>::value
         >::template result_<T>
-{ 
+{
 };
 
 BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void,false)

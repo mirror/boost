@@ -32,11 +32,11 @@ namespace detail {
 template <typename T>
 struct is_class_or_union
 {
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1200) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570))// we simply can't detect it this way.
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200) || BOOST_WORKAROUND(__BORLANDC__, <= 0x570)// we simply can't detect it this way.
     BOOST_STATIC_CONSTANT(bool, value = false);
 # else
     template <class U> static ::boost::type_traits::yes_type is_class_or_union_tester(void(U::*)(void));
-    
+
 #  if BOOST_WORKAROUND(BOOST_MSVC, == 1300)                 \
     || BOOST_WORKAROUND(__MWERKS__, <= 0x3000) // no SFINAE
     static ::boost::type_traits::no_type is_class_or_union_tester(...);
@@ -47,8 +47,8 @@ struct is_class_or_union
     static ::boost::type_traits::no_type is_class_or_union_tester(...);
     BOOST_STATIC_CONSTANT(
         bool, value = sizeof(is_class_or_union_tester<T>(0)) == sizeof(::boost::type_traits::yes_type));
-#  endif 
-# endif 
+#  endif
+# endif
 };
 
 struct int_convertible
@@ -80,8 +80,8 @@ template <typename T> struct is_enum_impl
 {
    typedef ::boost::add_reference<T> ar_t;
    typedef typename ar_t::type r_type;
-       
-#if defined __GNUC__ 
+
+#if defined __GNUC__
    BOOST_STATIC_CONSTANT(bool, selector =
       (::boost::type_traits::ice_or<
            ::boost::is_arithmetic<T>::value
@@ -99,7 +99,7 @@ template <typename T> struct is_enum_impl
       >::value));
 #endif
 
-#ifdef __BORLANDC__
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
     typedef ::boost::detail::is_enum_helper<
           ::boost::detail::is_enum_impl<T>::selector
         > se_t;
@@ -125,7 +125,7 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_enum,T,::boost::detail::is_enum_impl<T>::value)
 
 #else // __BORLANDC__
 //
-// buggy is_convertible prevents working 
+// buggy is_convertible prevents working
 // implementation of is_enum:
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_enum,T,false)
 

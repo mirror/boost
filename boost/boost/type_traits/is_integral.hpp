@@ -1,8 +1,8 @@
 
 // (C) Copyright Steve Cleary, Beman Dawes, Howard Hinnant & John Maddock 2000.
-// Permission to copy, use, modify, sell and distribute this software is 
-// granted provided this copyright notice appears in all copies. This software 
-// is provided "as is" without express or implied warranty, and with no claim 
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This software
+// is provided "as is" without express or implied warranty, and with no claim
 // as to its suitability for any purpose.
 //
 // See http://www.boost.org for most recent version including documentation.
@@ -39,13 +39,19 @@ BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,char,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,wchar_t,true)
 #endif
 
-#if (defined(BOOST_MSVC) && (BOOST_MSVC == 1200)) || (defined(BOOST_INTEL_CXX_VERSION) && defined(_MSC_VER) && (BOOST_INTEL_CXX_VERSION <= 600))
+#if (defined(BOOST_MSVC) && (BOOST_MSVC == 1200)) \
+    || (defined(BOOST_INTEL_CXX_VERSION) && defined(_MSC_VER) && (BOOST_INTEL_CXX_VERSION <= 600)) \
+    || (defined(__BORLANDC__) && (__BORLANDC__ == 0x600) && (_MSC_VER == 1200))
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,unsigned __int8,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,__int8,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,unsigned __int16,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,__int16,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,unsigned __int32,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,__int32,true)
+#ifdef __BORLANDC__
+BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,unsigned __int64,true)
+BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,__int64,true)
+#endif
 #endif
 
 # if defined(BOOST_HAS_LONG_LONG)

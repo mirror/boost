@@ -1,8 +1,8 @@
 
 // (C) Copyright Rani Sharoni 2003.
-// Permission to copy, use, modify, sell and distribute this software is 
-// granted provided this copyright notice appears in all copies. This software 
-// is provided "as is" without express or implied warranty, and with no claim 
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This software
+// is provided "as is" without express or implied warranty, and with no claim
 // as to its suitability for any purpose.
 //
 // See http://www.boost.org for most recent version including documentation.
@@ -24,7 +24,7 @@ namespace boost {
 
 namespace detail {
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)) \
+#if !BOOST_WORKAROUND(__BORLANDC__, <= 0x570) \
  && !BOOST_WORKAROUND(__SUNPRO_CC , BOOST_TESTED_AT(0x540)) \
  && !BOOST_WORKAROUND(__EDG_VERSION__, <= 243)
                              // The EDG version number is a lower estimate.

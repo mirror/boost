@@ -13,7 +13,7 @@
 
 #include "boost/type_traits/config.hpp"
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__BORLANDC__)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 #   include "boost/type_traits/detail/is_mem_fun_pointer_impl.hpp"
 #else
 #   include "boost/type_traits/is_reference.hpp"
@@ -29,7 +29,7 @@
 
 namespace boost {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__BORLANDC__)
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(
       is_member_function_pointer
@@ -56,7 +56,7 @@ struct is_mem_fun_pointer_select<false>
     {
         static T& make_t;
         typedef result_<T> self_type;
-        
+
         BOOST_STATIC_CONSTANT(
             bool, value = (
                 1 == sizeof(::boost::type_traits::is_mem_fun_pointer_tester(self_type::make_t))

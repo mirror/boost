@@ -1,8 +1,8 @@
 
 // (C) Copyright Steve Cleary, Beman Dawes, Howard Hinnant & John Maddock 2000.
-// Permission to copy, use, modify, sell and distribute this software is 
-// granted provided this copyright notice appears in all copies. This software 
-// is provided "as is" without express or implied warranty, and with no claim 
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This software
+// is provided "as is" without express or implied warranty, and with no claim
 // as to its suitability for any purpose.
 //
 // See http://www.boost.org for most recent version including documentation.
@@ -19,7 +19,7 @@
 // it needs to be declared __cdecl to suppress compiler
 // warnings from MS and Borland compilers (this *must*
 // appear before we include is_same.hpp below):
-#if defined(BOOST_MSVC) || defined(__BORLANDC__)
+#if defined(BOOST_MSVC) || (defined(__BORLANDC__) && !defined(BOOST_DISABLE_WIN32))
 #   define BOOST_TT_DECL __cdecl
 #else
 #   define BOOST_TT_DECL /**/

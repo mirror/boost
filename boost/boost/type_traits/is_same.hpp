@@ -1,9 +1,9 @@
 
-// (C) Copyright Steve Cleary, Beman Dawes, Aleksey Gurtovoy, 
+// (C) Copyright Steve Cleary, Beman Dawes, Aleksey Gurtovoy,
 // Howard Hinnant & John Maddock 2000.
-// Permission to copy, use, modify, sell and distribute this software is 
-// granted provided this copyright notice appears in all copies. This 
-// software is provided "as is" without express or implied warranty, and 
+// Permission to copy, use, modify, sell and distribute this software is
+// granted provided this copyright notice appears in all copies. This
+// software is provided "as is" without express or implied warranty, and
 // with no claim as to its suitability for any purpose.
 //
 // See http://www.boost.org for most recent version including documentation.
@@ -26,7 +26,7 @@ namespace boost {
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_same,T,U,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename T,is_same,T,T,true)
-#ifdef __BORLANDC__
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 // without this, Borland's compiler gives the wrong answer for
 // references to arrays:
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(typename T,is_same,T&,T&,true)
