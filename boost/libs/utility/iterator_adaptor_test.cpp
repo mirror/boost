@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  30 Nov 01 Added permutation_iterator.(Toon Knapen)
 //  19 Nov 01 Added generator_iterator.  (Jens Maurer)
 //  04 Nov 01 Updated with respect to change in named parameters.
 //            (Jeremy Siek)
@@ -50,6 +51,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <numeric>
 
 #include <boost/iterator_adaptors.hpp>
 #include <boost/generator_iterator.hpp>
@@ -57,6 +59,7 @@
 #include <boost/pending/integer_range.hpp>
 #include <boost/concept_archetype.hpp>
 #include <boost/type_traits/same_traits.hpp>
+#include <boost/permutation_iterator.hpp>
 #include <stdlib.h>
 #include <vector>
 #include <deque>
@@ -402,6 +405,29 @@ main()
     ++gen;
     gen++;
     assert(*gen == 3);
+  }
+
+  {
+    // check permutation_iterator
+    typedef std::vector< int > element_range_type;
+    typedef std::list< int > index_type;
+    
+    static const int element_range_size = 10;
+    static const int index_size = 4;
+    
+    element_range_type elements( element_range_size );
+    std::iota( elements.begin(), elements.end(), 0 );
+    
+    index_type indices( index_size );
+    std::iota( indices.begin(), indices.end(), element_range_size - index_size );
+    std::reverse( indices.begin(), indices.end() );
+    
+    typedef boost::permutation_iterator_generator< element_range_type::iterator, index_type::iterator >::type permutation_type;
+    permutation_type begin = boost::make_permutation_iterator( elements.begin(), indices.begin() );
+    permutation_type end = boost::make_permutation_iterator( elements.begin(), indices.end() );
+
+    int expected_outcome[] = { 9, 8, 7, 6 };
+    assert( std::equal( begin, end, expected_outcome ) );
   }
 
   std::cout << "test successful " << std::endl;
