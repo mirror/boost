@@ -500,6 +500,89 @@ public: // metafunction result
 
 };
 
+//////////////////////////////////////////////////////////////////////////
+// (detail) function template cast_storage
+//
+// Casts the given storage to the specified type, but with qualification.
+//
+
+template <typename T>
+inline T& cast_storage(void* storage, T* = 0)
+{
+    return *static_cast<T*>(storage);
+}
+
+template <typename T>
+inline const T& cast_storage(const void* storage, T* = 0)
+{
+    return *static_cast<const T*>(storage);
+}
+
+//////////////////////////////////////////////////////////////////////////
+// (detail) function template apply_visitor_impl
+//
+// Invokes the given visitor on the type in the given variant storage.
+//
+
+template <
+      typename Which, typename T
+    , typename NI, typename LI
+    , typename Visitor, typename VoidPtrCV
+    >
+inline
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+          typename Visitor::result_type
+        )
+apply_visitor_impl(
+      const int var_which
+    , Visitor& visitor
+    , VoidPtrCV storage
+    , mpl::true_// next_is_last
+    , Which* = 0, T* = 0, NI* = 0, LI* = 0
+    )
+{
+    // No prior iterations matched, so variant content must be last type:
+    BOOST_ASSERT(var_which == Which::value);
+    return visitor( cast_storage<T>(storage) );
+}
+
+template <
+      typename Which, typename T
+    , typename NextIt, typename LastIt
+    , typename Visitor, typename VoidPtrCV
+    >
+inline
+    BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
+          typename Visitor::result_type
+        )
+apply_visitor_impl(
+      const int var_which
+    , Visitor& visitor
+    , VoidPtrCV storage
+    , mpl::false_// next_is_last
+    , Which* = 0, T* = 0, NextIt* = 0, LastIt* last_it = 0
+    )
+{
+    // If current iteration matches variant content...
+    if (var_which == Which::value)
+    {
+        // ...then apply visitor to the variant content:
+        return visitor( cast_storage<T>(storage) );
+    }
+
+    // Otherwise, tail recurse, checking next iteration:
+    typename mpl::next<Which>::type* next_which = 0;
+    typename BOOST_MPL_AUX_DEREF_WNKD(NextIt)* next_type = 0;
+    typedef typename mpl::next<NextIt>::type next_next_it_t;
+    next_next_it_t* next_next_it = 0;
+    typedef typename is_same<next_next_it_t, LastIt>::type next_next_is_last;
+
+    return apply_visitor_impl(
+          var_which, visitor, storage, next_next_is_last()
+        , next_which, next_type, next_next_it, last_it
+        );
+}
+
 }} // namespace detail::variant
 
 //////////////////////////////////////////////////////////////////////////
@@ -1298,79 +1381,6 @@ public: // queries
         return this->apply_visitor(visitor);
     }
 
-private: // helpers, for visitation support (below)
-
-    template <typename T>
-    static T& cast_storage(void* storage, T* = 0)
-    {
-        return *static_cast<T*>(storage);
-    }
-
-    template <typename T>
-    static const T& cast_storage(const void* storage, T* = 0)
-    {
-        return *static_cast<const T*>(storage);
-    }
-
-    template <
-          typename Which, typename T
-        , typename NextIt, typename LastIt
-        , typename Visitor, typename VoidPtrCV
-        >
-    static
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
-              typename Visitor::result_type
-            )
-    apply_visitor_impl(
-          const int var_which // [const-ness may aid in optimization by compiler]
-        , Visitor& visitor
-        , VoidPtrCV storage
-        , mpl::false_// next_is_last
-        , Which* = 0, T* type = 0, NextIt* = 0, LastIt* last_it = 0
-        )
-    {
-        // If current iteration matches variant content...
-        if (var_which == Which::value)
-        {
-            // ...then apply visitor to the variant content:
-            return visitor( cast_storage(storage, type) );
-        }
-
-        // Otherwise, tail recurse, checking next iteration:
-        typename mpl::next<Which>::type* next_which = 0;
-        typename BOOST_MPL_AUX_DEREF_WNKD(NextIt)* next_type = 0;
-        typedef typename mpl::next<NextIt>::type next_next_it_t;
-        next_next_it_t* next_next_it = 0;
-        typedef typename is_same<next_next_it_t, LastIt>::type next_next_is_last;
-
-        return apply_visitor_impl(
-              var_which, visitor, storage, next_next_is_last()
-            , next_which, next_type, next_next_it, last_it
-            );
-    }
-
-    template <
-          typename Which, typename T
-        , typename NI, typename LI
-        , typename Visitor, typename VoidPtrCV
-        >
-    static
-        BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
-              typename Visitor::result_type
-            )
-    apply_visitor_impl(
-          const int var_which
-        , Visitor& visitor
-        , VoidPtrCV storage
-        , mpl::true_// next_is_last
-        , Which* = 0, T* type = 0, NI* = 0, LI* = 0
-        )
-    {
-        // No prior iterations matched, so variant content must be last type:
-        BOOST_ASSERT(var_which == Which::value);
-        return visitor( cast_storage(storage, type) );
-    }
-
 // helpers, for visitation support (below) -- private when possible
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 
@@ -1397,7 +1407,7 @@ public:
         typename mpl::next<first_it>::type* next_it = 0;
         typename mpl::end<types>::type* last_it = 0;
 
-        return apply_visitor_impl(
+        return detail::variant::apply_visitor_impl(
               which(), visitor, active_storage(), mpl::false_()
             , first_which, first_type, next_it, last_it
             );
@@ -1415,7 +1425,7 @@ public:
         typename mpl::next<first_it>::type* next_it = 0;
         typename mpl::end<types>::type* last_it = 0;
 
-        return apply_visitor_impl(
+        return detail::variant::apply_visitor_impl(
               which(), visitor, active_storage(), mpl::false_()
             , first_which, first_type, next_it, last_it
             );
