@@ -13,69 +13,71 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>This header defines the fundamental list operations.</P>
+/** <p>This header defines the fundamental list operations.</p>
 
-<H3>Note</H3>
-<UL>
-  <LI>The internal representation of lists is hidden. Although there aren't
+<h3>Note</h3>
+<ul>
+  <li>The internal representation of lists is hidden. Although there aren't
       compelling reasons to change the representation, you should avoid
-      writing code that depends on the internal representation details.</P>
-</UL>
+      writing code that depends on the internal representation details.</li>
+</ul>
 */
 
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/logical/not.hpp>
 
-/** <P>List constructor.</P>
+/** <p>List constructor.</p>
 
-<P>Lists are build using list constructors BOOST_PP_LIST_NIL and
-BOOST_PP_LIST_CONS(). For example,</P>
+<p>Lists are build using list constructors BOOST_PP_LIST_NIL and
+BOOST_PP_LIST_CONS(). For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_CONS(1,
   BOOST_PP_LIST_CONS(2,
   BOOST_PP_LIST_CONS(3,
   BOOST_PP_LIST_CONS(4,
   BOOST_PP_LIST_CONS(5,
   BOOST_PP_LIST_NIL)))))
-</PRE>
+</pre>
 
-<P>Short lists can also be build from tuples:</P>
+<p>Short lists can also be build from tuples:</p>
 
-<PRE>
+<pre>
   BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5))
-</PRE>
+</pre>
 
-<P>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</P>
+<p>Both of the above lists contain 5 elements: 1, 2, 3, 4 and 5.</p>
+
+<p>Longer lists can be built with the help of BOOST_PP_LIST_APPEND().</p>
 */
 #define BOOST_PP_LIST_CONS(H,T) (H,T,1)
 
-/** <P>List nil constructor.</P> */
+/** <p>List nil constructor.</p> */
 #define BOOST_PP_LIST_NIL (_,_,0)
 
-/** <P>Expands to 1 if the list is not nil and 0 otherwise.</P> */
+/** <p>Expands to 1 if the list is not nil and 0 otherwise.</p> */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE_ELEM(3,2,L)
 #else
 #  define BOOST_PP_LIST_IS_CONS(L) BOOST_PP_TUPLE3_ELEM2 L
 #endif
 
-/** <P>Expands to 1 if the list is nil and 0 otherwise.</P> */
+/** <p>Expands to 1 if the list is nil and 0 otherwise.</p> */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE_ELEM(3,2,L))
 #else
 #  define BOOST_PP_LIST_IS_NIL(L) BOOST_PP_NOT(BOOST_PP_TUPLE3_ELEM2 L)
 #endif
 
-/** <P>Expands to the first element of the list. The list must not be nil.</P>
+/** <p>Expands to the first element of the list. The list must not be nil.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_FIRST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
-</PRE>
+</pre>
 
-<P>expands to 1.</P>
+<p>expands to 1.</p>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE_ELEM(3,0,L)
@@ -83,15 +85,21 @@ BOOST_PP_LIST_CONS(). For example,</P>
 #  define BOOST_PP_LIST_FIRST(L) BOOST_PP_TUPLE3_ELEM0 L
 #endif
 
-/** <P>Expands to a list of all but the first element of the list. The list must not be nil.</P>
+/** <p>Expands to a list of all but the first element of the list.</p>
 
-<P>For example,</P>
+<p>The list must not be nil.</p>
 
-<PRE>
+<p>For example,</p>
+
+<pre>
   BOOST_PP_LIST_REST(BOOST_PP_TUPLE_TO_LIST(5,(1,2,3,4,5)))
-</PRE>
+</pre>
 
-<P>expands to a list containing 2, 3, 4 and 5.</P>
+<p>expands to the same as:</p>
+
+<pre>
+  BOOST_PP_TUPLE_TO_LIST(4,(2,3,4,5))
+</pre>
 */
 #if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
 #  define BOOST_PP_LIST_REST(L) BOOST_PP_TUPLE_ELEM(3,1,L)

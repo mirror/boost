@@ -16,18 +16,18 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/enum.hpp>
 
-/** <P>Generates a comma separated list of parameters.</P>
+/** <p>Generates a comma separated list of parameters.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
-  P##0, P##1, ..., P##N-1
-</PRE>
+<pre>
+  BOOST_PP_CAT(P,0), BOOST_PP_CAT(P,1), ..., BOOST_PP_CAT(P,BOOST_PP_DEC(N))
+</pre>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_REPEAT()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_REPEAT()</li>
+</ul>
 */
 #define BOOST_PP_ENUM_PARAMS(N,P) BOOST_PP_ENUM(N,BOOST_PP_ENUM_PARAMS_F,P)
 
@@ -35,6 +35,6 @@
 #define BOOST_PP_ENUM_PARAMS_F(I,P) BOOST_PP_CAT(P,I)
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_ENUM_PARAMS().</P> */
+/** <p>Obsolete. Use BOOST_PP_ENUM_PARAMS().</p> */
 #define BOOST_PREPROCESSOR_ENUM_PARAMS(N,P) BOOST_PP_ENUM_PARAMS(N,P)
 #endif

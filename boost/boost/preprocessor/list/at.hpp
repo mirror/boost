@@ -15,20 +15,21 @@
 
 #include <boost/preprocessor/list/rest_n.hpp>
 
-/** <P>Expands to the I:th element of the list L. The first element is at index 0.</P>
+/** <p>Expands to the <code>I</code>:th element of the list <code>L</code>. The
+first element is at index <code>0</code>.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_AT(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)),1)
-</PRE>
+</pre>
 
-<P>expands to B.</P>
+<p>expands to <code>B</code>.</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_WHILE()</li>
+</ul>
 */
 #define BOOST_PP_LIST_AT(L,I) BOOST_PP_LIST_AT_D(0,L,I)
 

@@ -16,45 +16,45 @@
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
 
-/** <P>Repeats I(R,X) and iterates F(R,X) while C(R,X) is true.</P>
+/** <p>Repeats <code>I(R,X)</code> and iterates <code>F(R,X)</code> while
+<code>C(R,X)</code> is true.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
+<pre>
   I(R,X)  I(R,F(R,X))  I(R,F(R,F(R,X)))  ...  I(R,F(R,F(...F(R,X)...)))
-</PRE>
+</pre>
 
-<P>The length of the sequence is determined by C(R,X).</P>
+<p>The length of the sequence is determined by <code>C(R,X)</code>.</p>
 
-<H3>Legend</H3>
-<UL>
-  <LI><B>X</B> is the current state of iteration. The state is usually a tuple.
-  <LI><B>C</B> is the condition for iteration. It must expand to a decimal
-      integer literal.
-  <LI><B>F</B> is the iterated macro. Note that if the state is a tuple, then
-      F(R,X) usually expands to a tuple of the same number of elements.
-  <LI><B>I</B> is the state instantiation macro.
-  <LI><B>R</B> is the recursion depth and should only be used as a parameter to
+<h3>Legend</h3>
+<ul>
+  <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
+  <li><b>C</b> is the condition for iteration. It must expand to a decimal
+      integer literal.</li>
+  <li><b>F</b> is the iterated macro. Note that if the state is a tuple, then
+      F(R,X) usually expands to a tuple of the same number of elements.</li>
+  <li><b>I</b> is the state instantiation macro.</li>
+  <li><b>R</b> is the recursion depth and should only be used as a parameter to
       other macros using BOOST_PP_FOR() or for invoking BOOST_PP_FOR##R()
       directly. For each macro using BOOST_PP_FOR(), there is a version of the
       macro, distinguished by the R suffix, that accepts an additional
       recursion depth as the first parameter. This technique is necessary to
       avoid recursively expanding the same macro again, which is not permitted
-      by the C++ preprocessor.
-</UL>
+      by the C++ preprocessor.</li>
+</ul>
 
-<H3>BOOST_PP_REPEAT() vs BOOST_PP_FOR()</H3>
+<h3>BOOST_PP_REPEAT() vs BOOST_PP_FOR()</h3>
 
-<P>BOOST_PP_FOR() is a generalization of BOOST_PP_REPEAT(). This means that
-BOOST_PP_REPEAT() can be implemented using BOOST_PP_FOR(). Unfortunately,
-BOOST_PP_FOR() is slower than BOOST_PP_REPEAT(). In addition,
+<p>BOOST_PP_FOR() is a generalization of BOOST_PP_REPEAT(). This means that
+BOOST_PP_REPEAT() can be implemented using BOOST_PP_FOR(). However,
 BOOST_PP_REPEAT() was introduced earlier, is generally easier to use, and is
-still quite useful on its own.</P>
+still quite useful on its own.</p>
 
-<H3>2D and 3D repetition</H3>
+<h3>2D and 3D repetition</h3>
 
-<P>BOOST_PP_FOR() can be used for multidimensional repetition simply by
-invoking BOOST_PP_FOR##R() directly.</P>
+<p>BOOST_PP_FOR() can be used for multidimensional repetition simply by
+invoking BOOST_PP_FOR##R() directly.</p>
 */
 #define BOOST_PP_FOR(X,C,F,I) BOOST_PP_FOR0(X,C,F,I)
 

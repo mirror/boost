@@ -15,20 +15,24 @@
 
 #include <boost/preprocessor/list/fold_left.hpp>
 
-/** <P>List reversal.</P>
+/** <p>List reversal.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_REVERSE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
-</PRE>
+</pre>
 
-<P>expands to a list containing C, B and A.</P>
+<p>expands to the same as:</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<pre>
+  BOOST_PP_TUPLE_TO_LIST(3,(C,B,A))
+</pre>
+
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOLD_LEFT()</li>
+</ul>
 */
 #define BOOST_PP_LIST_REVERSE(L) BOOST_PP_LIST_REVERSE_D(0,L)
 

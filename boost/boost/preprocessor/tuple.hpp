@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Includes all tuple headers.</P> */
+/** <p>Includes all tuple headers.</p> */
 
 #include <boost/preprocessor/tuple/eat.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>

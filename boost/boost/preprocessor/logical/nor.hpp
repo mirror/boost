@@ -15,9 +15,9 @@
 
 #include <boost/preprocessor/logical/bool.hpp>
 
-/** <P>Expands to the logical NEITHER OR of the operands.</P>
+/** <p>Expands to the logical NEITHER OR of the operands.</p>
 
-<P>For example, BOOST_PP_NOR(0,5) expands to 0 (a single token).</P>
+<p>For example, <code>BOOST_PP_NOR(0,5)</code> expands to <code>0</code> (a single token).</p>
 */
 #define BOOST_PP_NOR(X,Y) BOOST_PP_NOR_BOOL(BOOST_PP_BOOL(X),BOOST_PP_BOOL(Y))
 
@@ -30,6 +30,6 @@
 #define BOOST_PP_NOR_BOOL11 0
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_NOR().</P> */
+/** <p>Obsolete. Use BOOST_PP_NOR().</p> */
 #define BOOST_PREPROCESSOR_NOR(X,Y) BOOST_PP_NOR(X,Y)
 #endif

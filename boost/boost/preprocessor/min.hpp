@@ -16,14 +16,15 @@
 #include <boost/preprocessor/comparison/less_equal.hpp>
 #include <boost/preprocessor/if.hpp>
 
-/** <P>Expands to the minimum of X and Y.</P>
+/** <p>Expands to the minimum of <code>X</code> and <code>Y</code>.</p>
 
-<P>For example, BOOST_PP_MIN(5,7) expands to 5 (a single token).</P>
+<p>For example, <code>BOOST_PP_MIN(5,7)</code> expands to <code>5</code> (a
+single token).</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_WHILE()</li>
+</ul>
 */
 #define BOOST_PP_MIN(X,Y) BOOST_PP_MIN_D(0,X,Y)
 
@@ -31,6 +32,6 @@
 #define BOOST_PP_MIN_D(D,X,Y) BOOST_PP_IF(BOOST_PP_LESS_EQUAL_D(D,Y,X),Y,X)
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_MIN().</P> */
+/** <p>Obsolete. Use BOOST_PP_MIN().</p> */
 #define BOOST_PREPROCESSOR_MIN(X,Y) BOOST_PP_MIN(X,Y)
 #endif

@@ -15,6 +15,6 @@
 
 #include <boost/preprocessor/identity.hpp>
 
-/** <P>Essentially macro expands the parameter X twice.</P> */
+/** <p>Essentially macro expands the parameter <code>X</code> twice.</p> */
 #define BOOST_PP_EXPAND(X) X
 #endif

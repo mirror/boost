@@ -16,26 +16,27 @@
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/for.hpp>
 
-/** <P>Repeats F(R,P,BOOST_PP_LIST_AT(L,I)) for each I = [0,BOOST_PP_LIST_SIZE(L)[.</P>
+/** <p>Repeats <code>F(R,P,BOOST_PP_LIST_AT(L,I))</code> for each I = [0,
+BOOST_PP_LIST_SIZE(L)[.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
+<pre>
   F(R,P,BOOST_PP_LIST_AT(L,0))
   F(R,P,BOOST_PP_LIST_AT(L,1))
   ...
   F(R,P,BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L))))
-</PRE>
+</pre>
 
-<H3>Example</H3>
-<UL>
-  <LI><a href="../../example/catch_builtin.cpp">catch_builtin.cpp</a>
-</UL>
+<h3>Example</h3>
+<ul>
+  <li><a href="../../example/catch_builtin.cpp">catch_builtin.cpp</a></li>
+</ul>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_FOR()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_FOR()</li>
+</ul>
 */
 #define BOOST_PP_LIST_FOR_EACH(F,P,L) BOOST_PP_LIST_FOR_EACH_R(0,F,P,L)
 

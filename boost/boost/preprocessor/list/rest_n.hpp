@@ -17,20 +17,30 @@
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/while.hpp>
 
-/** <P>Expands to a list of all but the first N elements of the list.</P>
+/** <p>Expands to a list of all but the first <code>N</code> elements of the
+list <code>L</code>.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_REST_N(2,BOOST_PP_TUPLE_TO_LIST(4,(+,-,*,/)))
-</PRE>
+</pre>
 
-<P>expands to a list containing * and /.</P>
+<p>expands to the same as:</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<pre>
+  BOOST_PP_TUPLE_TO_LIST(2,(*,/))
+</pre>
+
+<h3>See</h3>
+<ul>
+  <li>BOOST_PP_LIST_FIRST_N()</li>
+</ul>
+
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_WHILE()</li>
+</ul>
 */
 #define BOOST_PP_LIST_REST_N(N,L) BOOST_PP_LIST_REST_N_D(0,N,L)
 

@@ -13,15 +13,15 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Expands to a comma. Can be used with BOOST_PP_IF().</P>
+/** <p>Expands to a comma. Can be used with BOOST_PP_IF().</p>
 
-<H3>See</H3>
-<UL>
-  <LI>BOOST_PP_COMMA_IF()
-</UL>
+<h3>See</h3>
+<ul>
+  <li>BOOST_PP_COMMA_IF()</li>
+</ul>
 */
 #define BOOST_PP_COMMA() ,
 
-/** <P>Obsolete. Use BOOST_PP_COMMA().</P> */
+/** <p>Obsolete. Use BOOST_PP_COMMA().</p> */
 #define BOOST_PREPROCESSOR_COMMA() ,
 #endif

@@ -15,23 +15,27 @@
 
 #include <boost/preprocessor/list/fold_right.hpp>
 
-/** <P>Catenates two lists together.</P>
+/** <p>Catenates two lists together.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_APPEND
   ( BOOST_PP_TUPLE_TO_LIST(2,(1,2))
   , BOOST_PP_TUPLE_TO_LIST(2,(3,4))
   )
-</PRE>
+</pre>
 
-<P>produces a list containing 1, 2, 3 and 4.</P>
+<p>expands to the same as:</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<pre>
+  BOOST_PP_TUPLE_TO_LIST(4,(1,2,3,4))
+</pre>
+
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOLD_RIGHT()</li>
+</ul>
 */
 #define BOOST_PP_LIST_APPEND(L,P) BOOST_PP_LIST_APPEND_D(0,L,P)
 

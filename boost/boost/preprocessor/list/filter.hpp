@@ -15,20 +15,25 @@
 
 #include <boost/preprocessor/list/fold_right.hpp>
 
-/** <P>Expands to a list containing all the elements X of the list for which F(D,P,X) is true.</P>
+/** <p>Expands to a list containing all the elements <code>X</code> of the list
+for which <code>F(D,P,X)</code> is true.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_FILTER(BOOST_PP_NOT_EQUAL_D,2,BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
-</PRE>
+</pre>
 
-<P>expands to a list containing 1 and 3.</P>
+<p>expands to the same as:</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<pre>
+  BOOST_PP_TUPLE_TO_LIST(2,(1,3))
+</pre>
+
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOLD_RIGHT()</li>
+</ul>
 */
 #define BOOST_PP_LIST_FILTER(F,P,L) BOOST_PP_LIST_FILTER_D(0,F,P,L)
 

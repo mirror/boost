@@ -15,12 +15,12 @@
 
 #include <boost/preprocessor/logical/not.hpp>
 
-/** <P>Expands to the logical AND of the operands.</P>
+/** <p>Expands to the logical AND of the operands.</p>
 
-<P>For example, BOOST_PP_AND(0,5) expands to 0 (a single token).</P>
+<p>For example, <code>BOOST_PP_AND(0,5)</code> expands to <code>0</code> (a single token).</p>
 */
 #define BOOST_PP_AND(X,Y) BOOST_PP_NOR(BOOST_PP_NOT(X),BOOST_PP_NOT(Y))
 
-/** <P>Obsolete. Use BOOST_PP_AND().</P> */
+/** <p>Obsolete. Use BOOST_PP_AND().</p> */
 #define BOOST_PREPROCESSOR_AND(X,Y) BOOST_PP_AND(X,Y)
 #endif

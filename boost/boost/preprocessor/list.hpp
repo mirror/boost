@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Includes all list headers.</P> */
+/** <p>Includes all list headers.</p> */
 
 #include <boost/preprocessor/list/append.hpp>
 #include <boost/preprocessor/list/at.hpp>

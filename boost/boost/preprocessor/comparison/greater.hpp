@@ -15,12 +15,13 @@
 
 #include <boost/preprocessor/comparison/less.hpp>
 
-/** <P>Expands to 1 if X&gt;Y and 0 otherwise.</P>
+/** <p>Expands to <code>1</code> if <code>X &gt; Y</code> and <code>0</code>
+otherwise.</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_WHILE()</li>
+</ul>
 */
 #define BOOST_PP_GREATER(X,Y) BOOST_PP_GREATER_D(0,X,Y)
 
@@ -28,6 +29,6 @@
 #define BOOST_PP_GREATER_D(D,X,Y) BOOST_PP_LESS_D(D,Y,X)
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_GREATER().</P> */
+/** <p>Obsolete. Use BOOST_PP_GREATER().</p> */
 #define BOOST_PREPROCESSOR_GREATER(X,Y) BOOST_PP_GREATER(X,Y)
 #endif

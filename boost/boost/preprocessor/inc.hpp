@@ -13,15 +13,16 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Increments X expanding to a single token.</P>
+/** <p>Increments <code>X</code> expanding to a single token.</p>
 
-<P>For example, BOOST_PP_INC(3) expands to 4 (a single token).</P>
+<p>For example, <code>BOOST_PP_INC(3)</code> expands to <code>4</code> (a
+single token).</p>
 
-<P>BOOST_PP_INC() uses saturation arithmetic. Incrementing a
-BOOST_PP_LIMIT_MAG yields a BOOST_PP_LIMIT_MAG.</P>
+<p>BOOST_PP_INC() uses saturation arithmetic. Incrementing a
+BOOST_PP_LIMIT_MAG yields a BOOST_PP_LIMIT_MAG.</p>
 
-<P>Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG] are
-supported.</P>
+<p>Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG] are
+supported.</p>
 */
 #define BOOST_PP_INC(X) BOOST_PP_INC_DELAY(X)
 
@@ -158,6 +159,6 @@ supported.</P>
 #define BOOST_PP_INC128 128
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_INC().</P> */
+/** <p>Obsolete. Use BOOST_PP_INC().</p> */
 #define BOOST_PREPROCESSOR_INC(X) BOOST_PP_INC(X)
 #endif

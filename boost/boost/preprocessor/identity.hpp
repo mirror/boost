@@ -15,28 +15,25 @@
 
 #include <boost/preprocessor/empty.hpp>
 
-/** <P>Expands to X once invoked.</P>
+/** <p>Expands to <code>X</code> once invoked.</p>
 
-<P>Designed to be used with BOOST_PP_IF(), when one of the clauses need to be
-invoked.</P>
+<p>Designed to be used with BOOST_PP_IF(), when one of the clauses need to be
+invoked.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
-  BOOST_PP_IDENTITY(X)<B>()</B>
-</PRE>
+<pre>
+  BOOST_PP_IF(1,BOOST_PP_IDENTITY(X),BOOST_PP_EMPTY)<b>()</b>
+</pre>
 
-<P>expands to:</P>
+<p>expands to:</p>
 
-<PRE>
+<pre>
   X
-</PRE>
-
-<P>NOTE: If BOOST_PP_IDENTITY() is not invoked, the expansion will not be
-usable.</P>
+</pre>
 */
 #define BOOST_PP_IDENTITY(X) X BOOST_PP_EMPTY
 
-/** <P>Obsolete. Use BOOST_PP_IDENTITY().</P> */
+/** <p>Obsolete. Use BOOST_PP_IDENTITY().</p> */
 #define BOOST_PREPROCESSOR_IDENTITY(X) BOOST_PP_IDENTITY(X)
 #endif

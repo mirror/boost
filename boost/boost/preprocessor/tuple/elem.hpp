@@ -13,30 +13,30 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Expands to the I:th element of an N-tuple.</P>
+/** <p>Expands to the <code>I</code>:th element of an <code>N</code>-tuple.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_TUPLE_ELEM(2,1,(A,B))
-</PRE>
+</pre>
 
-<P>expands to B.</P>
+<p>expands to <code>B</code>.</p>
 
-<P>Tuples can be used for representing structured data.</P>
+<p>Tuples can be used for representing structured data.</p>
 
-<P>Examples of tuples:</P>
+<p>Examples of tuples:</p>
 
-<PRE>
+<pre>
   2-tuple: (A, B)
   3-tuple: (1, 2, 3)
   4-tuple: (A B C, D, EF, 34)
-</PRE>
+</pre>
 
-<H3>See</H3>
-<UL>
-  <LI>BOOST_PP_LIMIT_TUPLE
-</UL>
+<h3>See</h3>
+<ul>
+  <li>BOOST_PP_LIMIT_TUPLE</li>
+</ul>
 */
 #define BOOST_PP_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM_DELAY(N,I,T)
 
@@ -212,6 +212,6 @@
 #define BOOST_PP_TUPLE16_ELEM15(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P) P
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_TUPLE_ELEM().</P> */
+/** <p>Obsolete. Use BOOST_PP_TUPLE_ELEM().</p> */
 #define BOOST_PREPROCESSOR_TUPLE_ELEM(N,I,T) BOOST_PP_TUPLE_ELEM(N,I,T)
 #endif

@@ -15,12 +15,12 @@
 
 #include <boost/preprocessor/logical/not.hpp>
 
-/** <P>Expands to the logical OR of the operands.</P>
+/** <p>Expands to the logical OR of the operands.</p>
 
-<P>For example, BOOST_PP_OR(0,2) expands to 1 (a single token).</P>
+<p>For example, <code>BOOST_PP_OR(0,2)</code> expands to <code>1</code> (a single token).</p>
 */
 #define BOOST_PP_OR(X,Y) BOOST_PP_NOT(BOOST_PP_NOR(X,Y))
 
-/** <P>Obsolete. Use BOOST_PP_OR().</P> */
+/** <p>Obsolete. Use BOOST_PP_OR().</p> */
 #define BOOST_PREPROCESSOR_OR(X,Y) BOOST_PP_OR(X,Y)
 #endif

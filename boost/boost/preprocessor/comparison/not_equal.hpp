@@ -17,12 +17,13 @@
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/logical/bool.hpp>
 
-/** <P>Expands to 1 if X!=Y and 0 otherwise.</P>
+/** <p>Expands to <code>1</code> if <code>X != Y</code> and <code>0</code>
+otherwise.</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_WHILE()</li>
+</ul>
 */
 #define BOOST_PP_NOT_EQUAL(X,Y) BOOST_PP_NOT_EQUAL_D(0,X,Y)
 
@@ -30,6 +31,6 @@
 #define BOOST_PP_NOT_EQUAL_D(D,X,Y) BOOST_PP_BOOL(BOOST_PP_ADD_D(D,BOOST_PP_SUB_D(D,X,Y),BOOST_PP_SUB_D(D,Y,X)))
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_NOT_EQUAL().</P> */
+/** <p>Obsolete. Use BOOST_PP_NOT_EQUAL().</p> */
 #define BOOST_PREPROCESSOR_NOT_EQUAL(X,Y) BOOST_PP_NOT_EQUAL(X,Y)
 #endif

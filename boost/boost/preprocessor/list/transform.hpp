@@ -15,30 +15,35 @@
 
 #include <boost/preprocessor/list/fold_right.hpp>
 
-/** <P>Applies the macro F(D,P,X) to each element X of the list producing a new list.</P>
+/** <p>Applies the macro <code>F(D,P,X)</code> to each element <code>X</code>
+of the list producing a new list.</p>
 
-<P>In other words, BOOST_PP_LIST_TRANSFORM(F,P,L) expands to same as:</P>
+<p>In other words, expands to:</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_CONS(F(D,P,BOOST_PP_LIST_AT(L,0)),
   BOOST_PP_LIST_CONS(F(D,P,BOOST_PP_LIST_AT(L,1)),
   ...
   BOOST_PP_LIST_CONS(F(D,P,BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L)))),
   BOOST_PP_LIST_NIL) ... ))
-</PRE>
+</pre>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_TRANSFORM(BOOST_PP_ADD_D,2,BOOST_PP_TUPLE_TO_LIST(2,(1,2)))
-</PRE>
+</pre>
 
-<P>expands to a list containing 3 and 4.</P>
+<p>expands to the same as:</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<pre>
+  BOOST_PP_TUPLE_TO_LIST(2,(3,4))
+</pre>
+
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOLD_RIGHT()</li>
+</ul>
 */
 #define BOOST_PP_LIST_TRANSFORM(F,P,L) BOOST_PP_LIST_TRANSFORM_D(0,F,P,L)
 

@@ -13,40 +13,41 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Expands to the number of dimensions of repeat supported by the
-library.</P>
+/** <p>Expands to the number of dimensions of repeat supported by the
+library.</p>
 
-<P>The repeat macros are named BOOST_PP_REPEAT(), BOOST_PP_REPEAT_2ND(),
-BOOST_PP_REPEAT_3RD(), ...</P>
+<p>The repeat macros are named BOOST_PP_REPEAT(), BOOST_PP_REPEAT_2ND(),
+BOOST_PP_REPEAT_3RD(), ...</p>
 */
 #define BOOST_PP_LIMIT_DIM 3
 
-/** <P>Expands to the maximum straight numeric literal supported by the
-library.</P>
+/** <p>Expands to the maximum straight numeric literal supported by the
+library.</p>
 
-<P>This is also the limit of the repetition primitives (BOOST_PP_ENUM family
-and BOOST_PP_REPEAT family).</P>
+<p>This is also the limit of the repetition primitives (BOOST_PP_ENUM family
+and BOOST_PP_REPEAT family).</p>
 
-<P>NOTES:</P>
-<UL>
-  <LI>Only decimal integer literals in the range [0,BOOST_PP_LIMIT_MAG]
-      are supported.
-  <LI>All arithmetic operations (ADD,SUB,MUL,DIV) use saturation arithmetic.
-  <LI>The maximum repetition count supported by the library may not be reached
-      due to compiler limitations.
-</UL>
+<h3>Note</h3>
+<ul>
+  <li>Only decimal integer literals in the range [0, BOOST_PP_LIMIT_MAG]
+      are supported.</li>
+  <li>All arithmetic operations (BOOST_PP_ADD(), BOOST_PP_SUB(),
+      BOOST_PP_MUL(), BOOST_PP_DIV()) use saturation arithmetic.</li>
+  <li>The maximum repetition count supported by the library may not be reached
+      due to compiler limitations.</li>
+</ul>
 */
 #define BOOST_PP_LIMIT_MAG 128
 
-/** <P>Expands to the maximum tuple length supported by the library.</P> */
+/** <p>Expands to the maximum tuple length supported by the library.</p> */
 #define BOOST_PP_LIMIT_TUPLE 16
 
-/** <P>Obsolete. Use BOOST_PP_LIMIT_DIM.</P> */
+/** <p>Obsolete. Use BOOST_PP_LIMIT_DIM.</p> */
 #define BOOST_PREPROCESSOR_LIMIT_DIM BOOST_PP_LIMIT_DIM
 
-/** <P>Obsolete. Use BOOST_PP_LIMIT_MAG.</P> */
+/** <p>Obsolete. Use BOOST_PP_LIMIT_MAG.</p> */
 #define BOOST_PREPROCESSOR_LIMIT_MAG BOOST_PP_LIMIT_MAG
 
-/** <P>Obsolete. Use BOOST_PP_LIMIT_TUPLE.</P> */
+/** <p>Obsolete. Use BOOST_PP_LIMIT_TUPLE.</p> */
 #define BOOST_PREPROCESSOR_LIMIT_TUPLE BOOST_PP_LIMIT_TUPLE
 #endif

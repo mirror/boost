@@ -16,90 +16,48 @@
 #include <boost/preprocessor/if.hpp>
 #include <boost/preprocessor/tuple/eat.hpp>
 
-/** <P>Iterates F(D,X) while C(D,X) is true.</P>
+/** <p>Iterates <code>F(D,X)</code> while <code>C(D,X)</code> is true.</p>
 
-<P>In other words, expands to:</P>
+<p>In other words, expands to:</p>
 
-<PRE>
+<pre>
   F(D, ... F(D, F(D,X) ) ... )
-</PRE>
+</pre>
 
-<P>The depth of iteration is determined by C(D,X).</P>
+<p>The depth of iteration is determined by <code>C(D,X)</code>.</p>
 
-<H3>Legend</H3>
-<UL>
-  <LI><B>X</B> is the current state of iteration. The state is usually a tuple.
-  <LI><B>C</B> is the condition for iteration. It must expand to a decimal
-      integer literal.
-  <LI><B>F</B> is the iterated macro. Note that if the state is a tuple, then
-      F(D,X) usually expands to a tuple of the same number of elements.
-  <LI><B>D</B> is the recursion depth and should only be used as a parameter
+<h3>Legend</h3>
+<ul>
+  <li><b>X</b> is the current state of iteration. The state is usually a tuple.</li>
+  <li><b>C</b> is the condition for iteration. It must expand to a decimal
+      integer literal.</li>
+  <li><b>F</b> is the iterated macro. Note that if the state is a tuple, then
+      F(D,X) usually expands to a tuple of the same number of elements.</li>
+  <li><b>D</b> is the recursion depth and should only be used as a parameter
       to other macros using BOOST_PP_WHILE(). Such macros include
       BOOST_PP_ADD() and other arithmetic operations. For each macro using
       BOOST_PP_WHILE(), there is a version of the macro, distinguished by the
       D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion
       depth as the first parameter. This technique is necessary to avoid
       recursively expanding the same macro again, which is not permitted by the
-      C++ preprocessor.
-</UL>
+      C++ preprocessor.</li>
+</ul>
 
-<P>NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.</P>
+<h3>Note</h3>
+<ul>
+  <li>The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.</li>
+  <li>Using BOOST_PP_WHILE() is a bit tricky. This is due to the C++
+      preprocessor limitations. It is recommended to take a look at the
+      implementations of the various PREPROCESSOR library primitives such as
+      BOOST_PP_ADD() for additional examples.</li>
+</ul>
 
-<H3>Caveat</H3>
-
-<P>Using BOOST_PP_WHILE() is a bit tricky. This is due to the C++ preprocessor
-limitations. It is recommended to take a look at the implementations of the
-various PREPROCESSOR library primitives such as BOOST_PP_ADD() for additional
-examples.</P>
-
-<H3>Example</H3>
-<UL>
-  <LI><a href="../../example/count_down.c">count_down.c</a>
-</UL>
-
-<P>For a more complex example, let's take a look at an implementation of
-BOOST_PP_MUL().</P>
-
-<PRE>
-  #define BOOST_PP_MUL(X,Y) BOOST_PP_MUL_D(0,X,Y)
-  // Since the macro is implemented using WHILE, the actual implementation
-  // takes a depth as a parameter so that it can be called inside a WHILE.
-  // The above easy-to-use version simply uses 0 as the depth and can not be
-  // called inside a WHILE.
-
-  #define BOOST_PP_MUL_D(D,X,Y)\
-    BOOST_PP_TUPLE_ELEM(3,0,BOOST_PP_WHILE##D(BOOST_PP_MUL_C,BOOST_PP_MUL_F,(0,X,Y)))
-  //                    ^^^               ^^^             ^^             ^^ ^^^^^^^
-  //                    #1                #2              #3             #3 #1
-  //
-  // #1) The state is a 3-tuple. After the iteration is finished, the first
-  // element of the tuple is the result.
-  //
-  // #2) The WHILE primitive is "invoked" directly. BOOST_PP_WHILE(D,...)
-  // can't be used because it would not be expanded by the C++ preprocessor.
-  //
-  // #3) ???_C is the condition and ???_F is the iteration macro.
-
-  #define BOOST_PP_MUL_C(D,P)\
-    BOOST_PP_TUPLE_ELEM(3,2,P)
-  // Iteration is finished when the counter reaches 0.
-
-  #define BOOST_PP_MUL_F(D,P)\
-    ( BOOST_PP_ADD_D(D,BOOST_PP_TUPLE_ELEM(3,0,P),BOOST_PP_TUPLE_ELEM(3,1,P))\
-    , BOOST_PP_TUPLE_ELEM(3,1,P)\
-    , BOOST_PP_DEC(BOOST_PP_TUPLE_ELEM(3,2,P))\
-    )
-  // ( The result is increased by the multiplier.
-  // , The multiplier is retained without change.
-  // , The counter is decreased.
-  // )
-</PRE>
-
-<H3>Implementation rationale</H3>
-<UL>
-  <LI>The maximum iteration depth is greater than 2*BOOST_PP_LIMIT_MAG to make
-      it possible to compute N*N functions.
-</UL>
+<h3>Example</h3>
+<ul>
+  <li><a href="../../example/count_down.c">count_down.c</a></li>
+  <li><a href="../../example/linear_fib.c">linear_fib.c</a></li>
+  <li><a href="../../example/delay.c">delay.c</a></li>
+</ul>
 */
 #define BOOST_PP_WHILE(C,F,X) BOOST_PP_WHILE_C(C(1,X),0,X)(C,F,F(1,X))
 

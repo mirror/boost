@@ -15,12 +15,12 @@
 
 #include <boost/preprocessor/logical/nor.hpp>
 
-/** <P>Expands to the logical NOT of the operand.</P>
+/** <p>Expands to the logical NOT of the operand.</p>
 
-<P>For example, BOOST_PP_NOT(0) expands to 1 (a single token).</P>
+<p>For example, <code>BOOST_PP_NOT(0)</code> expands to <code>1</code> (a single token).</p>
 */
 #define BOOST_PP_NOT(X) BOOST_PP_NOR(X,X)
 
-/** <P>Obsolete. Use BOOST_PP_NOT().</P> */
+/** <p>Obsolete. Use BOOST_PP_NOT().</p> */
 #define BOOST_PREPROCESSOR_NOT(X) BOOST_PP_NOT(X)
 #endif

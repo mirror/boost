@@ -16,24 +16,24 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/enum_shifted.hpp>
 
-/** <P>Generates a comma separated list of shifted actual parameters.</P>
+/** <p>Generates a comma separated list of shifted actual parameters.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
-  P##1, P##2, ..., P##N-1
-</PRE>
+<pre>
+  BOOST_PP_CAT(P,1), BOOST_PP_CAT(P,2), ..., BOOST_PP_CAT(P,BOOST_PP_DEC(N))
+</pre>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_REPEAT()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_REPEAT()</li>
+</ul>
 
-<H3>Rationale</H3>
-<UL>
-  <LI>This macro facilitates a typical usage of the library. Shifted parameter
-      lists are common in template metaprograms.
-</UL>
+<h3>Rationale</h3>
+<ul>
+  <li>This macro facilitates a typical usage of the library. Shifted parameter
+      lists are common in template metaprograms.</li>
+</ul>
 */
 #define BOOST_PP_ENUM_SHIFTED_PARAMS(N,P) BOOST_PP_ENUM_SHIFTED(N,BOOST_PP_ENUM_SHIFTED_PARAMS_F,P)
 
@@ -41,6 +41,6 @@
 #define BOOST_PP_ENUM_SHIFTED_PARAMS_F(I,P) BOOST_PP_CAT(P,I)
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_ENUM_SHIFTED_PARAMS().</P> */
+/** <p>Obsolete. Use BOOST_PP_ENUM_SHIFTED_PARAMS().</p> */
 #define BOOST_PREPROCESSOR_ENUM_SHIFTED_PARAMS(N,P) BOOST_PP_ENUM_SHIFTED_PARAMS(N,P)
 #endif

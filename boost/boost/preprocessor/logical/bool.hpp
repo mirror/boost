@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Expands to 0 if X == 0 and 1 if X != 0.</P> */
+/** <p>Expands to <code>0</code> if <code>X == 0</code> and <code>1</code> if <code>X != 0</code>.</p> */
 #define BOOST_PP_BOOL(X) BOOST_PP_BOOL_DELAY(X)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -152,6 +152,6 @@
 #define BOOST_PP_BOOL128 1
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_BOOL().</P> */
+/** <p>Obsolete. Use BOOST_PP_BOOL().</p> */
 #define BOOST_PREPROCESSOR_BOOL(X) BOOST_PP_BOOL(X)
 #endif

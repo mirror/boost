@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Includes all arithmetic headers.</P> */
+/** <p>Includes all arithmetic headers.</p> */
 
 #include <boost/preprocessor/arithmetic/div.hpp>
 #include <boost/preprocessor/arithmetic/mod.hpp>

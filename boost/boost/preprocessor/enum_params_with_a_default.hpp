@@ -16,18 +16,18 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/enum.hpp>
 
-/** <P>Generates a comma separated list of parameters with a default.</P>
+/** <p>Generates a comma separated list of parameters with a default.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
-  P##0 = D, P##1 = D, ..., P##N-1 = D
-</PRE>
+<pre>
+  BOOST_PP_CAT(P,0) = D, BOOST_PP_CAT(P,1) = D, ..., BOOST_PP_CAT(P,BOOST_PP_DEC(N)) = D
+</pre>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_REPEAT()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_REPEAT()</li>
+</ul>
 */
 #define BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(N,P,D) BOOST_PP_ENUM(N,BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT_F,(P,D))
 
@@ -39,6 +39,6 @@
 #endif
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT().</P> */
+/** <p>Obsolete. Use BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT().</p> */
 #define BOOST_PREPROCESSOR_ENUM_PARAMS_WITH_A_DEFAULT(N,P,D) BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(N,P,D)
 #endif

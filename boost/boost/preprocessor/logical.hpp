@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Includes all logical headers.</P> */
+/** <p>Includes all logical headers.</p> */
 
 #include <boost/preprocessor/logical/or.hpp>
 #include <boost/preprocessor/logical/xor.hpp>

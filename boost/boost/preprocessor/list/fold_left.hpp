@@ -16,39 +16,34 @@
 #include <boost/preprocessor/list/adt.hpp>
 #include <boost/preprocessor/while.hpp>
 
-/** <P>Iterates F(D,P,X) for each element X of the list L (from the left or the start of the list).</P>
+/** <p>Iterates <code>F(D,P,X)</code> for each element <code>X</code> of the
+list <code>L</code> (from the left or the start of the list).</p>
 
-<P>In other words,</P>
+<p>In other words, expands to:</p>
 
-<PRE>
-  BOOST_PP_LIST_FOLD_LEFT(F,P,L)
-</PRE>
-
-<P>expands to:</P>
-
-<PRE>
+<pre>
   F
   ( D
   , ... F(D, F(D,P,BOOST_PP_LIST_AT(L,0)), BOOST_PP_LIST_AT(L,1)) ...
   , BOOST_PP_LIST_AT(L,BOOST_PP_DEC(BOOST_PP_LIST_SIZE(L))
   )
-</PRE>
+</pre>
 
-<H3>Note</H3>
-<UL>
-  <LI>Folding, or accumulation, is a very general pattern of computation.
-      Most list operations can be implemented in terms of folding.
-</UL>
+<h3>Note</h3>
+<ul>
+  <li>Folding, or accumulation, is a very general pattern of computation.
+      Most list operations can be implemented in terms of folding.</li>
+</ul>
 
-<H3>See</H3>
-<UL>
-  <LI>BOOST_PP_LIST_FOLD_RIGHT()
-</UL>
+<h3>See</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOLD_RIGHT()</li>
+</ul>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_WHILE()</li>
+</ul>
 */
 #define BOOST_PP_LIST_FOLD_LEFT(F,P,L) BOOST_PP_LIST_FOLD_LEFT_D(0,F,P,L)
 

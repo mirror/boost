@@ -17,14 +17,15 @@
 #include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/while.hpp>
 
-/** <P>Expands to the difference of X and Y.</P>
+/** <p>Expands to the difference of <code>X</code> and <code>Y</code>.</p>
 
-<P>For example, BOOST_PP_SUB(4,3) expands to 1 (a single token).</P>
+<p>For example, <code>BOOST_PP_SUB(4,3)</code> expands to <code>1</code> (a
+single token).</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_WHILE()</li>
+</ul>
 */
 #define BOOST_PP_SUB(X,Y) BOOST_PP_SUB_D(0,X,Y)
 
@@ -39,6 +40,6 @@
 #endif
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_SUB(X,Y).</P> */
+/** <p>Obsolete. Use BOOST_PP_SUB(X,Y).</p> */
 #define BOOST_PREPROCESSOR_SUB(X,Y) BOOST_PP_SUB(X,Y)
 #endif

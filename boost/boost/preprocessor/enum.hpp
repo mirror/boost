@@ -17,18 +17,18 @@
 #include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/tuple.hpp>
 
-/** <P>Generates a comma separated list.</P>
+/** <p>Generates a comma separated list.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
-  F(0,P), F(1,P), ..., F(N-1,P)
-</PRE>
+<pre>
+  F(0,P), F(1,P), ..., F(BOOST_PP_DEC(N),P)
+</pre>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_REPEAT()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_REPEAT()</li>
+</ul>
 */
 #define BOOST_PP_ENUM(N,F,P) BOOST_PP_REPEAT(N,BOOST_PP_ENUM_F,(F,P))
 

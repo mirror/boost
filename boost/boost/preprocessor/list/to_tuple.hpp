@@ -16,26 +16,26 @@
 #include <boost/preprocessor/comma_if.hpp>
 #include <boost/preprocessor/list/enum.hpp>
 
-/** <P>Converts the list to a tuple.</P>
+/** <p>Converts the list to a tuple.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_TO_TUPLE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
-</PRE>
+</pre>
 
-<P>expands to (A,B,C).</P>
+<p>expands to <code>(A,B,C)</code>.</p>
 
-<H3>Note</H3>
-<UL>
-  <LI>The supported size of the list being converted to a tuple is limited by
-      BOOST_PP_LIMIT_MAG rather than BOOST_PP_LIMIT_TUPLE.</P>
-</UL>
+<h3>Note</h3>
+<ul>
+  <li>The supported size of the list being converted to a tuple is limited by
+      BOOST_PP_LIMIT_MAG rather than BOOST_PP_LIMIT_TUPLE.</li>
+</ul>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_FOR()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOR_EACH()</li>
+</ul>
 */
 #define BOOST_PP_LIST_TO_TUPLE(L) BOOST_PP_LIST_TO_TUPLE_R(0,L)
 

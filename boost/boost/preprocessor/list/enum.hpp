@@ -16,24 +16,24 @@
 #include <boost/preprocessor/comma_if.hpp>
 #include <boost/preprocessor/list/for_each.hpp>
 
-/** <P>Converts the list to a comma separated list.</P>
+/** <p>Converts the list to a comma separated list.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_ENUM(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
-</PRE>
+</pre>
 
-<P>expands to:</P>
+<p>expands to:</p>
 
-<PRE>
-  A, B, C
-</PRE>
+<pre>
+  A,B,C
+</pre>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_FOR()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOR_EACH()</li>
+</ul>
 */
 #define BOOST_PP_LIST_ENUM(L) BOOST_PP_LIST_ENUM_R(0,L)
 

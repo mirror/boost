@@ -13,29 +13,29 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Repeats the macro M(I,P) for I = [0,N-1[.</P>
+/** <p>Repeats the macro <code>M(I,P)</code> for I = [0,N-1[.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
-  M(0,P) M(1,P) ... M(N-1,P)
-</PRE>
+<pre>
+  M(0,P) M(1,P) ... M(BOOST_PP_DEC(N),P)
+</pre>
 
-<H3>2D and 3D repetition</H3>
+<h3>2D and 3D repetition</h3>
 
-<P>2D and 3D repetition are supported with the BOOST_PP_REPEAT_2ND() and
-BOOST_PP_REPEAT_3RD() macros.</P>
+<p>2D and 3D repetition are supported with the BOOST_PP_REPEAT_2ND() and
+BOOST_PP_REPEAT_3RD() macros.</p>
 
-<H3>Example</H3>
-<UL>
-  <LI><a href="../../example/repeat_2d.c">repeat_2d.c</a>
-</UL>
+<h3>Example</h3>
+<ul>
+  <li><a href="../../example/repeat_2d.c">repeat_2d.c</a></li>
+</ul>
 
-<H3>See</H3>
-<UL>
-  <LI>BOOST_PP_FOR()
-  <LI>BOOST_PP_LIMIT_MAG
-</UL>
+<h3>See</h3>
+<ul>
+  <li>BOOST_PP_FOR()</li>
+  <li>BOOST_PP_LIMIT_MAG</li>
+</ul>
 */
 #define BOOST_PP_REPEAT(N,M,P) BOOST_PP_REPEAT_DELAY(N,M,P)
 
@@ -172,6 +172,6 @@ BOOST_PP_REPEAT_3RD() macros.</P>
 #define BOOST_PP_REPEAT128(M,P) BOOST_PP_REPEAT127(M,P) M(127,P)
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_REPEAT().</P> */
+/** <p>Obsolete. Use BOOST_PP_REPEAT().</p> */
 #define BOOST_PREPROCESSOR_REPEAT(N,M,P) BOOST_PP_REPEAT(N,M,P)
 #endif

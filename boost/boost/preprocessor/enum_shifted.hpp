@@ -17,18 +17,18 @@
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/inc.hpp>
 
-/** <P>Generates a comma separated shifted list.</P>
+/** <p>Generates a comma separated shifted list.</p>
 
-<P>In other words, expands to the sequence:</P>
+<p>In other words, expands to the sequence:</p>
 
-<PRE>
-  F(1,P), F(2,P), ..., F(N-1,P)
-</PRE>
+<pre>
+  F(1,P), F(2,P), ..., F(BOOST_PP_DEC(N),P)
+</pre>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_REPEAT()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_REPEAT()</li>
+</ul>
 */
 #define BOOST_PP_ENUM_SHIFTED(N,F,P) BOOST_PP_ENUM(BOOST_PP_DEC(N),BOOST_PP_ENUM_SHIFTED_F,(F,P))
 

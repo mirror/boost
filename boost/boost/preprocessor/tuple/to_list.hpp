@@ -15,27 +15,27 @@
 
 #include <boost/preprocessor/list/adt.hpp>
 
-/** <P>Converts a tuple to a list.</P>
+/** <p>Converts a tuple to a list.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_TUPLE_TO_LIST(3,(A,B,C))
-</PRE>
+</pre>
 
-<P>expands to the same as</P>
+<p>expands to the same as</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_CONS(A,
   BOOST_PP_LIST_CONS(B,
   BOOST_PP_LIST_CONS(C,
   BOOST_PP_LIST_NIL)))
-</PRE>
+</pre>
 
-<H3>See</H3>
-<UL>
-  <LI>BOOST_PP_LIMIT_TUPLE
-</UL>
+<h3>See</h3>
+<ul>
+  <li>BOOST_PP_LIMIT_TUPLE</li>
+</ul>
 */
 #define BOOST_PP_TUPLE_TO_LIST(N,T) BOOST_PP_TUPLE_TO_LIST_DELAY(N,T)
 

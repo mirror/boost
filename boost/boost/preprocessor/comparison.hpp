@@ -13,7 +13,7 @@
  * See http://www.boost.org for most recent version.
  */
 
-/** <P>Includes all comparison headers.</P> */
+/** <p>Includes all comparison headers.</p> */
 
 #include <boost/preprocessor/comparison/equal.hpp>
 #include <boost/preprocessor/comparison/greater.hpp>

@@ -16,20 +16,24 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/list/fold_left.hpp>
 
-/** <P>Catenates all elements of the list.</P>
+/** <p>Catenates all elements of the list.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_CAT(BOOST_PP_TUPLE_TO_LIST(3,(1,2,3)))
-</PRE>
+</pre>
 
-<P>expands to 123.</P>
+<p>expands to:</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<pre>
+  123
+</pre>
+
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOLD_LEFT()</li>
+</ul>
 */
 #define BOOST_PP_LIST_CAT(L) BOOST_PP_LIST_CAT_D(0,L)
 

@@ -16,10 +16,11 @@
 #include <boost/preprocessor/logical/bool.hpp>
 #include <boost/preprocessor/tuple/elem.hpp>
 
-/** <P>Expands to T if C != 0 and E if C == 0.</P>
+/** <p>Expands to <code>T</code> if <code>C != 0</code> and <code>E</code> if
+<code>C == 0</code>.</p>
 
-<P>BOOST_PP_IF() enables convenient generation of lists using
-BOOST_PP_REPEAT().</P>
+<p>BOOST_PP_IF() enables convenient generation of lists using
+BOOST_PP_REPEAT().</p>
 */
 #define BOOST_PP_IF(C,T,E) BOOST_PP_IF_BOOL(BOOST_PP_BOOL(C))(E,T)
 
@@ -28,6 +29,6 @@ BOOST_PP_REPEAT().</P>
 #define BOOST_PP_IF_BOOL_DELAY(C) BOOST_PP_TUPLE2_ELEM##C
 #endif
 
-/** <P>Obsolete. Use BOOST_PP_IF().</P> */
+/** <p>Obsolete. Use BOOST_PP_IF().</p> */
 #define BOOST_PREPROCESSOR_IF(C,T,E) BOOST_PP_IF(C,T,E)
 #endif

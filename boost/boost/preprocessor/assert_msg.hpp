@@ -16,9 +16,10 @@
 #include <boost/preprocessor/empty.hpp>
 #include <boost/preprocessor/if.hpp>
 
-/** <P>Expands to nothing if C != 0 and to MSG if C == 0.</P> */
+/** <p>Expands to nothing if <code>C != 0</code> and to <code>MSG</code> if
+<code>C == 0</code>.</p> */
 #define BOOST_PP_ASSERT_MSG(C,MSG) BOOST_PP_IF(C,BOOST_PP_EMPTY,MSG BOOST_PP_EMPTY)()
 
-/** <P>Obsolete. Use BOOST_PP_ASSERT_MSG().</P> */
+/** <p>Obsolete. Use BOOST_PP_ASSERT_MSG().</p> */
 #define BOOST_PREPROCESSOR_ASSERT_MSG(C,MSG) BOOST_PP_ASSERT_MSG(C,MSG)
 #endif

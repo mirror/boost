@@ -16,20 +16,20 @@
 #include <boost/preprocessor/list/fold_left.hpp>
 #include <boost/preprocessor/inc.hpp>
 
-/** <P>Expands to the number of elements in the list.</P>
+/** <p>Expands to the number of elements in the list.</p>
 
-<P>For example,</P>
+<p>For example,</p>
 
-<PRE>
+<pre>
   BOOST_PP_LIST_SIZE(BOOST_PP_TUPLE_TO_LIST(3,(A,B,C)))
-</PRE>
+</pre>
 
-<P>expands to 3.</P>
+<p>expands to <code>3</code>.</p>
 
-<H3>Uses</H3>
-<UL>
-  <LI>BOOST_PP_WHILE()
-</UL>
+<h3>Uses</h3>
+<ul>
+  <li>BOOST_PP_LIST_FOLD_LEFT()</li>
+</ul>
 */
 #define BOOST_PP_LIST_SIZE(L) BOOST_PP_LIST_SIZE_D(0,L)
 
