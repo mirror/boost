@@ -48,6 +48,8 @@
 // specialized on those types for this to work.
 
 #include <locale>
+// for mbstate_t
+#include <wchar.h>
 
 #include <boost/program_options/config.hpp>
 
