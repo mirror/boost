@@ -10,9 +10,9 @@ boost::regex e("<[^>]*>");
 // count how many:
 unsigned int tags = 0;
 // saved position of partial match:
-char* next_pos = 0;
+const char* next_pos = 0;
 
-bool grep_callback(const boost::match_results<char*>& m)
+bool grep_callback(const boost::match_results<const char*>& m)
 {
    if(m[0].matched == false)
    {
@@ -38,15 +38,16 @@ void search(std::istream& is)
       // copy forward whatever we have left:
       memmove(buf, next_pos, leftover);
       // fill the rest from the stream:
-      unsigned read = is.readsome(buf + leftover, size);
+      is.read(buf + leftover, size);
+      unsigned read = is.gcount();
       // check to see if we've run out of text:
       have_more = read == size;
       // reset next_pos:
       next_pos = buf + sizeof(buf);
       // and then grep:
-      boost::regex_grep(grep_callback,
-                        buf,
-                        buf + read + leftover,
+      boost::regex_grep<bool(*)(const boost::cmatch&), const char*>(grep_callback,
+                        static_cast<const char*>(buf),
+                        static_cast<const char*>(buf + read + leftover),
                         e,
                         boost::match_default | boost::match_partial);
    }

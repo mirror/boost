@@ -21,6 +21,8 @@
   *                using a C++ Builder closure as a callback.
   */
 
+#ifdef __BORLANDC__
+
 #include <string>
 #include <map>
 #include <boost/regex.hpp>
@@ -140,5 +142,13 @@ int main(int argc, const char** argv)
    return 0;
 }
 
+#else  // __BORLANDC__
 
+int main()
+{
+   return 0;
+};
+
+
+#endif
 

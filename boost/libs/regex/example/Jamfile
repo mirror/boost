@@ -21,7 +21,7 @@ exe jgrep : jgrep/jgrep.cpp jgrep/main.cpp
 		debug
 	;
 
-exe credit_card_example : snippets/credit_card_example.cpp
+unit-test credit_card_example : snippets/credit_card_example.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -32,7 +32,7 @@ exe credit_card_example : snippets/credit_card_example.cpp
 	;
 
 
-exe partial_regex_grep : snippets/partial_regex_grep.cpp
+unit-test partial_regex_grep : snippets/partial_regex_grep.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -40,6 +40,8 @@ exe partial_regex_grep : snippets/partial_regex_grep.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		../index.htm
 	;
 
 exe partial_regex_match : snippets/partial_regex_match.cpp
@@ -52,7 +54,7 @@ exe partial_regex_match : snippets/partial_regex_match.cpp
 		debug
 	;
 
-exe regex_grep_example_1 : snippets/regex_grep_example_1.cpp
+unit-test regex_grep_example_1 : snippets/regex_grep_example_1.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -60,9 +62,11 @@ exe regex_grep_example_1 : snippets/regex_grep_example_1.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		../../../boost/smart_ptr.hpp
 	;
 
-exe regex_grep_example_2 : snippets/regex_grep_example_2.cpp
+unit-test regex_grep_example_2 : snippets/regex_grep_example_2.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -70,9 +74,11 @@ exe regex_grep_example_2 : snippets/regex_grep_example_2.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		../../../boost/smart_ptr.hpp
 	;
 
-exe regex_grep_example_3 : snippets/regex_grep_example_3.cpp
+unit-test regex_grep_example_3 : snippets/regex_grep_example_3.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -80,9 +86,11 @@ exe regex_grep_example_3 : snippets/regex_grep_example_3.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		../../../boost/smart_ptr.hpp
 	;
 
-exe regex_grep_example_4 : snippets/regex_grep_example_4.cpp
+unit-test regex_grep_example_4 : snippets/regex_grep_example_4.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -90,6 +98,8 @@ exe regex_grep_example_4 : snippets/regex_grep_example_4.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		../../../boost/smart_ptr.hpp
 	;
 
 exe regex_match_example : snippets/regex_match_example.cpp
@@ -102,7 +112,7 @@ exe regex_match_example : snippets/regex_match_example.cpp
 		debug
 	;
 
-exe regex_merge_example : snippets/regex_merge_example.cpp
+unit-test regex_merge_example : snippets/regex_merge_example.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -110,9 +120,11 @@ exe regex_merge_example : snippets/regex_merge_example.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		../../../boost/smart_ptr.hpp
 	;
 
-exe regex_search_example : snippets/regex_search_example.cpp
+unit-test regex_search_example : snippets/regex_search_example.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -120,6 +132,8 @@ exe regex_search_example : snippets/regex_search_example.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		../../../boost/smart_ptr.hpp
 	;
 
 exe regex_split_example_1 : snippets/regex_split_example_1.cpp
@@ -132,7 +146,7 @@ exe regex_split_example_1 : snippets/regex_split_example_1.cpp
 		debug
 	;
 
-exe regex_split_example_2 : snippets/regex_split_example_2.cpp
+unit-test regex_split_example_2 : snippets/regex_split_example_2.cpp
    <lib>../build/libboost_regex$(SUFLIB) 
 	: 
 		<include>../../../
@@ -140,7 +154,10 @@ exe regex_split_example_2 : snippets/regex_split_example_2.cpp
 		<define>BOOST_REGEX_STATIC_LINK=1
 	: 
 		debug
+	:
+		../index.htm
 	;
+
 
 
 
