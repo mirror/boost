@@ -540,9 +540,15 @@ class X { ... };</pre>
         </td>
     </tr>
     <tr>
-        <td>BOOST_NO_EXCEPTIONS</td>
-        <td>Compiler</td>
-        <td>The compiler does not support exception handling.</td>
+        <td valign="top">BOOST_NO_EXCEPTIONS</td>
+        <td valign="top">Compiler</td>
+        <td>The compiler does not support exception handling (this
+        setting is typically required by many C++ compilers for
+        embedded platforms). Note that there is no requirement
+        for boost libraries to honor this configuration setting -
+        indeed doing so may be impossible in some cases. Those
+        libraries that do honor this will typically abort if a
+        critical error occurs - you have been warned!</td>
     </tr>
     <tr>
         <td valign="top" width="51%">BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS</td>
