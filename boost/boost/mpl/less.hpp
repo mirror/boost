@@ -32,8 +32,8 @@ struct less
 {
     enum
     { 
-        msvc71_wknd_ = ( BOOST_MPL_AUX_VALUE_WKND(T1)::value 
-                        < BOOST_MPL_AUX_VALUE_WKND(T2)::value )
+        msvc71_wknd_ = ( BOOST_MPL_AUX_VALUE_WKND(T2)::value 
+                        > BOOST_MPL_AUX_VALUE_WKND(T1)::value )
     };
 
     BOOST_STATIC_CONSTANT(bool, value = msvc71_wknd_);
