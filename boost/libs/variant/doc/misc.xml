@@ -76,13 +76,13 @@
               <code>variant&lt;T&amp;&gt;</code>
             </entry>
             <entry>
-              <link linkend="variant.tutorial.type-sequence-syntax">
-                <code>variant&lt;<emphasis>types</emphasis>&gt;</code>
+              <link linkend="variant.tutorial.over-sequence">
+                <code>make_variant_over</code>
               </link>
             </entry>
             <entry>
-              <link linkend="variant.tutorial.recursive-variant">
-                <code>recursive_variant</code>
+              <link linkend="variant.tutorial.recursive.recursive-variant">
+                <code>make_recursive_variant</code>
               </link>
             </entry>
           </row>
@@ -91,7 +91,7 @@
           <row>
             <entry>Borland C++ 5.5.1 and 5.6.4</entry>
             <entry>X</entry>
-            <entry></entry>
+            <entry>X</entry>
             <entry></entry>
             <entry></entry>
           </row>
@@ -126,7 +126,7 @@
           <row>
             <entry>Metrowerks CodeWarrior 8.3</entry>
             <entry>X</entry>
-            <entry>X</entry>
+            <entry></entry>
             <entry>X</entry>
             <entry>X</entry>
           </row>
