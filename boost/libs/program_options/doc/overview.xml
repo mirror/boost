@@ -372,9 +372,10 @@ notify(vm);
       which are available to all programs via the <code>getenv</code> function
       of C runtime library. The operating system allows to set initial values
       for a given user, and the values can be further changed on the command
-      line.  For example, on Windows one can use the the <filename>Control
-      Panel/System/Advanced/Environment Variables</filename> dialog, and on
-      Unix &#x2014;, the <filename>/etc/profile</filename>,
+      line.  For example, on Windows one can use the
+      <filename>autoexec.bat</filename> file or (on recent versions) the
+      <filename>Control Panel/System/Advanced/Environment Variables</filename>
+      dialog, and on Unix &#x2014;, the <filename>/etc/profile</filename>,
       <filename>~/profile</filename> and <filename>~/bash_profile</filename>
       files. Because environment variables can be set for the entire system,
       they are particularly suitable for options which apply to all programs.
@@ -382,7 +383,7 @@ notify(vm);
 
       <para>The environment variables can be parsed with the
       &parse_environment; function. The function have several overloaded
-      version. The first parameter is always an &options_description;
+      versions. The first parameter is always an &options_description;
       instance, and the second specifies what variables must be processed, and
       what option names must correspond to it. To describe the second
       parameter we need to consider naming conventions for environment
@@ -403,9 +404,9 @@ notify(vm);
       option <literal>proxy</literal>. 
       </para>
       
-      <para>Thet above logic is many cases, but it is also possible to pass,
-      as the second parameter of the &parse_environment; function, any
-      function taking an <code>std::string</code> and returning
+      <para>The above logic is sufficient in many cases, but it is also
+      possible to pass, as the second parameter of the &parse_environment;
+      function, any function taking a <code>std::string</code> and returning
       <code>std::string</code>. That function will be called for each
       environment variable and should return either the name of the option, or
       empty string if the variable should be ignored.
