@@ -13,15 +13,13 @@ struct apply;
 template< typename F >
 struct apply0 : F
 {
-};
-
-template<>
-struct apply0< arg<-1> >
-{
-    template< typename F > struct apply
-        : F
-    {
-    };
+    static int const arity = 1; typedef F arg1;
+ friend class apply0_rebind;
+ typedef apply0_rebind rebind;
+ };
+ class apply0_rebind { public: template< typename U1 > struct apply { typedef typename apply0<U1>::type type;
+ };
+ 
 };
 
 template<
@@ -143,20 +141,14 @@ struct apply1
         , T1
         >::type
 {
-};
-
-template<>
-struct apply1< arg<-1>,arg<-1> >
-{
-    template<
-          typename F, typename T1
-        >
-    struct apply
-        : F::template apply<
-              T1
-            >
-    {
-    };
+    static int const arity = 2; typedef F arg1;
+ typedef T1 arg2;
+ friend class apply1_rebind;
+ typedef apply1_rebind rebind;
+ };
+ class apply1_rebind { public: template< typename U1, typename U2 > struct apply { typedef typename apply1< U1,U2 >::type type;
+ };
+ 
 };
 
 template<
@@ -260,20 +252,15 @@ struct apply2
         , T1, T2
         >::type
 {
-};
-
-template<>
-struct apply2< arg<-1>,arg<-1>,arg<-1> >
-{
-    template<
-          typename F, typename T1, typename T2
-        >
-    struct apply
-        : F::template apply<
-              T1, T2
-            >
-    {
-    };
+    static int const arity = 3; typedef F arg1;
+ typedef T1 arg2;
+ typedef T2 arg3;
+ friend class apply2_rebind;
+ typedef apply2_rebind rebind;
+ };
+ class apply2_rebind { public: template< typename U1, typename U2, typename U3 > struct apply { typedef typename apply2< U1,U2,U3 >::type type;
+ };
+ 
 };
 
 template<
@@ -358,20 +345,16 @@ struct apply3
         , T1, T2, T3
         >::type
 {
-};
-
-template<>
-struct apply3< arg<-1>,arg<-1>,arg<-1>,arg<-1> >
-{
-    template<
-          typename F, typename T1, typename T2, typename T3
-        >
-    struct apply
-        : F::template apply<
-              T1, T2, T3
-            >
-    {
-    };
+    static int const arity = 4; typedef F arg1;
+ typedef T1 arg2;
+ typedef T2 arg3;
+ typedef T3 arg4;
+ friend class apply3_rebind;
+ typedef apply3_rebind rebind;
+ };
+ class apply3_rebind { public: template< typename U1, typename U2, typename U3, typename U4 > struct apply { typedef typename apply3< U1,U2,U3,U4 >::type type;
+ };
+ 
 };
 
 template<
@@ -437,20 +420,17 @@ struct apply4
         , T1, T2, T3, T4
         >::type
 {
-};
-
-template<>
-struct apply4< arg<-1>,arg<-1>,arg<-1>,arg<-1>,arg<-1> >
-{
-    template<
-          typename F, typename T1, typename T2, typename T3, typename T4
-        >
-    struct apply
-        : F::template apply<
-              T1, T2, T3, T4
-            >
-    {
-    };
+    static int const arity = 5; typedef F arg1;
+ typedef T1 arg2;
+ typedef T2 arg3;
+ typedef T3 arg4;
+ typedef T4 arg5;
+ friend class apply4_rebind;
+ typedef apply4_rebind rebind;
+ };
+ class apply4_rebind { public: template< typename U1, typename U2, typename U3, typename U4, typename U5 > struct apply { typedef typename apply4< U1,U2,U3,U4,U5 >::type type;
+ };
+ 
 };
 
 template<
@@ -500,21 +480,18 @@ struct apply5
         , T1, T2, T3, T4, T5
         >::type
 {
-};
-
-template<>
-struct apply5< arg<-1>,arg<-1>,arg<-1>,arg<-1>,arg<-1>,arg<-1> >
-{
-    template<
-          typename F, typename T1, typename T2, typename T3, typename T4
-        , typename T5
-        >
-    struct apply
-        : F::template apply<
-              T1, T2, T3, T4, T5
-            >
-    {
-    };
+    static int const arity = 6; typedef F arg1;
+ typedef T1 arg2;
+ typedef T2 arg3;
+ typedef T3 arg4;
+ typedef T4 arg5;
+ typedef T5 arg6;
+ friend class apply5_rebind;
+ typedef apply5_rebind rebind;
+ };
+ class apply5_rebind { public: template< typename U1, typename U2, typename U3, typename U4, typename U5, typename U6 > struct apply { typedef typename apply5< U1,U2,U3,U4,U5,U6 >::type type;
+ };
+ 
 };
 
 // primary template (not a specialization!)
