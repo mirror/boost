@@ -110,14 +110,14 @@ public:
 
     typename detail::shared_ptr_traits<T>::reference operator* () const // never throws
     {
-        T * p = get();
+        element_type * p = get();
         BOOST_ASSERT(p != 0);
         return *p;
     }
 
     T * operator-> () const // never throws
     {
-        T * p = get();
+        element_type * p = get();
         BOOST_ASSERT(p != 0);
         return p;
     }
