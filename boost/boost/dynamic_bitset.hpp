@@ -1106,7 +1106,7 @@ bool operator==(const dynamic_bitset<Block, Allocator>& a,
 {
     using namespace std;
     return (a.m_num_bits == b.m_num_bits) &&
-      ((a.m_num_bits == 0 /*&& b.m_num_bits == 0*/) ||
+      ((a.m_num_bits == 0) ||
         !memcmp(a.m_bits, b.m_bits, a.m_num_blocks * sizeof(a.m_bits[0])));
 }
 
