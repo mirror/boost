@@ -51,31 +51,31 @@
 
         <span class="comment">// general control function</span>
         template</span> &lt;<span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
-        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#expanding_function_like_macro">expanding_function_like_macro</a>(TokenT <span class="keyword">const</span> &amp;macrodef, 
+        <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#expanding_function_like_macro">expanding_function_like_macro</a>(TokenT <span class="keyword">const</span> &amp;macrodef, 
             <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, 
             ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, 
             <span class="keyword">std::vector</span>&lt;ContainerT&gt; <span class="keyword">const</span> &amp;arguments);
  
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
-        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#expanding_object_like_macro">expanding_object_like_macro</a>(TokenT <span class="keyword">const</span> &amp;macro, 
+        <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#expanding_object_like_macro">expanding_object_like_macro</a>(TokenT <span class="keyword">const</span> &amp;macro, 
             ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall);
  
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;
-        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#expanded_macro">expanded_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
+        <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#expanded_macro">expanded_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
  
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;
-        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#expanded_macro">rescanned_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
+        <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#expanded_macro">rescanned_macro</a>(ContainerT <span class="keyword">const</span> &amp;result);
 
         <span class="comment">// include file tracing functions</span>
-        <span class="keyword">void </span><a href="class_reference_tracepolicy.html#opened_include_file">opened_include_file</a>(std::string <span class="keyword">const</span> &amp;filename, 
+        <span class="keyword">void </span><a href="class_reference_contextpolicy.html#opened_include_file">opened_include_file</a>(std::string <span class="keyword">const</span> &amp;filename, 
             std::size_t include_depth, <span class="keyword">bool</span> is_system_include); 
 
-        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#returning_from_include_file">returning_from_include_file</a>();
+        <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#returning_from_include_file">returning_from_include_file</a>();
 
         <span class="comment">// interpretation of #pragma's of the form </span>
         <span class="comment">// 'wave option[(value)]'</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
-		bool <a href="class_reference_tracepolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
+		bool <a href="class_reference_contextpolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
             <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;option, 
             ContainerT <span class="keyword">const</span> &amp;values, 
             <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;pragma_token);
@@ -84,12 +84,12 @@
         <span class="keyword">template</span> &lt;
             <span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ParametersT, <span class="keyword">typename</span> DefinitionT
         &gt;
-        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#defined_macro">defined_macro</a>(TokenT <span class="keyword">const</span> &amp;name, <span class="keyword">bool</span> is_functionlike,
+        <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#defined_macro">defined_macro</a>(TokenT <span class="keyword">const</span> &amp;name, <span class="keyword">bool</span> is_functionlike,
             ParametersT <span class="keyword">const</span> &amp;parameters, DefinitionT <span class="keyword">const</span> &amp;definition,
             <span class="keyword">bool</span> is_predefined);
 
-        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> StringT&gt;
-        <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#undefined_macro">undefined_macro</a>(StringT <span class="keyword">const</span> &amp;name);
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
+        <span class="keyword">void</span> <a href="class_reference_contextpolicy.html#undefined_macro">undefined_macro</a>(TokenT<span class="keyword">const</span> &amp;name);
     };
 
 }}}   <span class="comment">// namespace boost::wave::context_policies</span></pre>
@@ -230,17 +230,17 @@
   <p>The parameter <tt>definition</tt> contains the token sequence given as the
   replacement sequence (definition part) of the newly defined macro.</p>
   <p>The parameter <tt>is_predefined</tt> is set to true for all macros predefined 
-      during the initialisation phase of the library.<br>
+      during the initialisation pahase of the library.<br>
   </p>
 </blockquote>
 <p><strong><a name="undefined_macro" id="undefined_macro"></a>undefined_macro</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> StringT&gt;
-    <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#undefined_macro">undefined_macro</a>(StringT <span class="keyword">const</span> &amp;name);
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
+    <span class="keyword">void</span> <a href="class_reference_tracepolicy.html#undefined_macro">undefined_macro</a>(TokenT<span class="keyword">const</span> &amp;name);
 </pre>
 <blockquote>
   <p>The function <tt>undefined_macro</tt> is called whenever a macro definition
     was removed successfully.</p>
-  <p>The parameter <tt>name</tt> holds the name of the macro which definition was removed.<br>
+  <p>The parameter <tt>name</tt> holds the token of the macro which definition was removed.<br>
   </p>
 </blockquote>
 <table border="0">
@@ -257,7 +257,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Thursday, February 17, 2005  9:21<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Monday, March 14, 2005  21:52<!-- #EndDate -->
 </span></p>
 </body>
 </html>

@@ -147,7 +147,14 @@ public:
         { return macros.is_defined(begin, end); }
     bool remove_macro_definition(typename token_type::string_type const &name, 
             bool even_predefined = false)
-        { return macros.remove_macro(name, even_predefined); }
+        { 
+            return macros.remove_macro(
+                token_type(T_IDENTIFIER, name, macros.get_main_pos()), 
+                even_predefined); 
+        }
+    bool remove_macro_definition(token_type const &token, 
+            bool even_predefined = false)
+        { return macros.remove_macro(token, even_predefined); }
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
@@ -271,9 +278,9 @@ public:
         trace.defined_macro(name, is_functionlike, parameters, definition, 
             is_predefined);
     }
-    void undefined_macro(typename token_type::string_type const &name)
+    void undefined_macro(token_type const &token)
     {
-        trace.undefined_macro(name);
+        trace.undefined_macro(token);
     }
     
 private:

@@ -95,7 +95,7 @@ public:
     bool is_defined(IteratorT const &begin, IteratorT const &end);
 
 //  Remove a macro name from the given macro scope
-    bool remove_macro(string_type const &name, bool even_predefined = false);
+    bool remove_macro(token_type const &token, bool even_predefined = false);
     
     template <typename IteratorT, typename ContainerT>
     token_type const &expand_tokensequence(IteratorT &first, 
@@ -341,9 +341,10 @@ macromap<ContextT>::is_defined(IteratorT const &begin,
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT>
 inline bool 
-macromap<ContextT>::remove_macro(string_type const &name, 
+macromap<ContextT>::remove_macro(token_type const &token, 
     bool even_predefined)
 {
+    string_type name (token.get_value());
     typename defined_macros_type::iterator it = current_macros->find(name);
     
     if (it != current_macros->end()) {
@@ -356,7 +357,7 @@ macromap<ContextT>::remove_macro(string_type const &name,
         current_macros->erase(it);
         
     // call the context supplied preprocessing hook function
-        ctx.undefined_macro(name);
+        ctx.undefined_macro(token);
         return true;
     }
     else if (impl::is_special_macroname(name)) {

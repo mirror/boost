@@ -195,9 +195,9 @@ struct default_preprocessing_hooks {
     //  removed.
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename StringT>
+    template <typename TokenT>
     void
-    undefined_macro(StringT const &macro_name)
+    undefined_macro(TokenT const &macro_name)
     {}
     
 };
