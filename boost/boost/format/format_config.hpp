@@ -15,13 +15,13 @@
 
 // STLport 4.5
 #if !defined(_STLP_OWN_IOSTREAMS) && defined(_STLP_USE_NAMESPACES) && defined(BOOST_NO_USING_TEMPLATE)
-#  define BOOST_IO_STD ""
+#  define BOOST_IO_STD 
 #  define BOOST_IO_NEEDS_USING_DECLARATION
 #endif
 
 // STLport 4.0
 #if !defined(__SGI_STL_OWN_IOSTREAMS) && defined(__STL_USE_OWN_NAMESPACE) && defined(BOOST_NO_USING_TEMPLATE)
-#  define BOOST_IO_STD ""
+#  define BOOST_IO_STD 
 #  define BOOST_IO_NEEDS_USING_DECLARATION
 #endif
 

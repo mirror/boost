@@ -41,7 +41,7 @@ namespace detail {
   template<class Res, class Ch, class Tr> inline
   Res str2int(const std::basic_string<Ch, Tr>& s, 
               typename std::basic_string<Ch, Tr>::size_type start, 
-              std::basic_ios<Ch,Tr> &os,
+              BOOST_IO_STD basic_ios<Ch,Tr> &os,
               const Res = Res(0)  ) 
     // Input : char string, with starting index
     //         a stream, so we can use its locale  and call narrow.
