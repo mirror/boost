@@ -1,4 +1,11 @@
+Version 331:
+FIXED:    All known current bugs.
+ADDED:    Support for default SGI allocator when available (even if it's not
+          standard conformant).
+
 Version 330:
+BUG:      Not all occurances of BOOST_RE_THREADS changed to use BOOST_HAS_THREADS
+
 CHANGED:  Completely redesigned config support (now fully integrated with boost).
 FIXED:    Support for building with _UNICODE defined.
 FIXED:    Bug when running on Windows XP (character classification bitmaps wrong).
@@ -231,6 +238,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 
