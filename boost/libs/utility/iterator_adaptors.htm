@@ -1,819 +1,511 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+    <meta name="generator" content="HTML Tidy, see www.w3.org">
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+    <meta name="ProgId" content="FrontPage.Editor.Document">
 
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
-<meta name="ProgId" content="FrontPage.Editor.Document">
-<title>Header boost/iterator_adaptors.hpp Documentation</title>
-</head>
+    <body bgcolor="#FFFFFF" text="#000000">
 
-<body bgcolor="#FFFFFF" text="#000000">
+    <title>Boost Iterator Adaptor Library</title>
 
-<img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)"
-align="center" width="277" height="86">
+    <img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" align=
+    "center" width="277" height="86"> 
 
-<h1>Header
-<a href="../../boost/pending/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a>
-and
-<a href="../../boost/pending/integer_range.hpp">boost/integer_range.hpp</a></h1>
+    <h1>Boost Iterator Adaptor Library</h1>
 
-<p>The file <tt>boost/iterator_adaptors.hpp</tt>
-includes the main <tt>iterator_adaptors</tt> class and several other classes
-for constructing commonly used iterator adaptors.</p>
+    <h2>Introduction</h2>
 
-<ul>
-  <li><a href="#iterator_adaptors"><tt>iterator_adaptors</tt></a>.
-  <li><a href="#iterator_adaptor"><tt>iterator_adaptor</tt></a>.
-  <li><a href="#transform_iterator"><tt>transform_iterator</tt></a>
-  <li><a href="#indirect_iterators"><tt>Indirect Iterator Adaptors</tt></a>
-  <li><a href="#projection_iterators"><tt>Projection Iterator Adaptors</tt></a>
-  <li><a href="#reverse_iterators"><tt>reverse_iterators</tt></a>
-</ul>
+    <p>The Iterator Adaptor library allows you transform an arbitrary
+    ``base'' type into a standard-conforming iterator with the
+    behaviors you choose.  Doing so is especially easy if the
+    ``base'' type is itself an iterator. The library also
+    supplies several example <a href=
+    "../../more/generic_programming.html#adaptors">adaptors</a> which
+    apply specific useful behaviors to arbitrary base iterators.
 
-<p>The file <tt>boost/integer_range.hpp</tt> includes a class that
-  uses iterator adaptors to create an iterator that increments over a
-  range of integers. The file also includes a &quot;container&quot; type
-  that creates a container-interface for the range of integers.
-<ul>
-  <li><a href="#integer_range"><tt>integer_range</tt></a>
-</ul>
+    <h2>Table of Contents</h2>
+
+    <ul>
+      <li>
+        Header <tt><a href=
+        "../../boost/iterator_adaptors.hpp">boost/iterator_adaptors.hpp</a></tt>
+        
+
+        <ul>
+          <li>Template class <tt><a href=
+          "#iterator_adaptor">iterator_adaptor</a></tt>
+
+          <li><a href="indirect_iterator.htm">Indirect Iterator Adaptor</a>
+
+          <li><a href="reverse_iterator.htm">Reverse Iterator Adaptor</a>
+
+          <li><a href="transform_iterator.htm">Transform Iterator Adaptor</a>
+
+          <li><a href="projection_iterator.htm">Projection Iterator Adaptor</a>
+
+          <li><a href="filter_iterator.htm">Filter Iterator Adaptor</a>
+        </ul>
+
+      <li>Header <tt><a href=
+      "../../boost/counting_iterator.hpp">boost/counting_iterator.hpp</a></tt><br>
+
+       <a href="counting_iterator.htm">Counting Iterator Adaptor</a>
+    </ul>
+
+<!-- not sure where this paragraph was going...
+    defines the <tt>iterator_adaptor</tt> class template and several <a href=
+    "../../more/generic_programming.html#type_generator">type generators</a>
+    and <a href="../../more/generic_programming.html#object_generator">object
+    generators</a> which allow you to easily create adapted iterator types. The
+    Iterator Adaptors 
+-->
+
+    <p><b><a href="http://www.boost.org/people/dave_abrahams.htm">Dave
+    Abrahams</a></b> started the library, applying <a href=
+    "../../more/generic_programming.html#policies">policies class</a> technique
+    and handling const/non-const iterator interactions. He also contributed the
+    <tt><a href="indirect_iterator.htm">indirect_</a></tt> and <tt><a href=
+    "reverse_iterator.htm">reverse_</a></tt> iterator generators, and expanded
+    <tt><a href="counting_iterator.htm">counting_iterator_generator</a></tt> to
+    cover all incrementable types.<br>
+     <b><a href="http://www.boost.org/people/jeremy_siek.htm">Jeremy
+    Siek</a></b> contributed the <a href="transform_iterator.htm">transform
+    iterator</a> adaptor, the integer-only version of <tt><a href=
+    "counting_iterator.htm">counting_iterator_generator</a></tt>, and most of
+    the documentation.<br>
+     <b><a href="http://www.boost.org/people/john_potter.htm">John
+    Potter</a></b> contributed the <tt><a href=
+    "projection_iterator.htm">projection_</a></tt> and <tt><a href=
+    "filter_iterator.htm">filter_</a></tt> iterator generators and made some
+    simplifications to the main <tt><a href=
+    "#iterator_adaptor">iterator_adaptor</a></tt> template.<br>
 
 
-<!-- put in something about Andrei Alexandrescu's contribution? -->
+    <h2><a name="iterator_adaptor">Template class</a>
+    <tt>iterator_adaptor</tt></h2>
+    Implementing standard conforming iterators is a non-trivial task. There are
+    some fine points such as the interactions between an iterator and its
+    corresponding const_iterator, and there are myriad operators that should be
+    implemented but are easily forgotten or mishandled, such as
+    <tt>operator-&gt;()</tt>. Using <tt>iterator_adaptor</tt>, you can easily
+    implement an iterator class, and even more easily extend and <a href=
+    "../../more/generic_programming.html#adaptors">adapt</a> existing iterator
+    types. Moreover, it is easy to make a pair of interoperable <tt>const</tt>
+    and <tt>non-const</tt> iterators. 
 
-<p><a href="http://www.boost.org/people/dave_abrahams.htm">Dave
-Abrahams</a> started the library, coming up with the idea to use
-policy classes and how to handle the const/non-const iterator
-interactions. He also contributed the <tt>indirect_iterators</tt> and
-<tt>reverse_iterators</tt> classes.<br>
-
-<a href="http://www.boost.org/people/jeremy_siek.htm">Jeremy Siek</a>
-contributed <tt>transform_iterator</tt>, <tt>integer_range</tt>,
-and this documentation.<br>
-
-<a href="http://www.boost.org/people/john_potter.htm">John Potter</a>
-contributed <tt>indirect_iterator</tt> and <tt>projection_iterator</tt>
-and made some simplifications to <tt>iterator_adaptor</tt>.
-
-<h3><a name="iterator_adaptors">The Iterator Adaptors Class</a></h3>
-
-Implementing standard conforming iterators is a non-trivial task.
-There are some fine-points such as iterator/const_iterator
-interactions and there are the myriad of operators that should be
-implemented but are easily forgotten such as
-<tt>operator-&gt;()</tt>. The purpose of the
-<tt>iterator_adaptors</tt> class is to make it easier to implement an
-iterator class, and even easier to extend and adapt existing iterator
-types. The <tt>iterator_adaptors</tt> class itself is not an adaptor
-class but a <i>type generator</i>. It generates a pair of adaptor classes,
-one class for the mutable iterator and one class for the const
-iterator. The definition of the <tt>iterator_adaptors</tt> class is as
-follows:
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class Iterator,
-          class ConstIterator,
-          class Traits = std::iterator_traits&lt;Iterator&gt;,
-          class ConstTraits = std::iterator_traits&lt;ConstIterator&gt;,
-          class Policies = default_iterator_policies&gt;
-struct iterator_adaptors
+    <h3>Synopsis</h3>
+<pre>
+template &lt;class Base, class Policies, 
+    class Value = typename std::iterator_traits&lt;Base&gt;::value_type,
+    class Reference = <i>...(see below)</i>,
+    class Pointer = <i>...(see below)</i>,
+    class Category = typename std::iterator_traits&lt;Base&gt;::iterator_category,
+    class Distance = typename std::iterator_traits&lt;Base&gt;::difference_type
+         &gt;
+struct iterator_adaptor;
 {
-  typedef ... iterator;
-  typedef ... const_iterator;
+    typedef Distance difference_type;
+    typedef typename boost::remove_const&lt;Value&gt;::type value_type;
+    typedef Pointer pointer;
+    typedef Reference reference;
+    typedef Category iterator_category;
+    typedef Base base_type;
+
+    iterator_adaptor();
+    iterator_adaptor(const Base&amp;, const Policies&amp; = Policies());
+
+    base_type base() const;
+
+    template &lt;class Iter2, class Value2, class Pointer2, class Reference2&gt;
+    iterator_adaptor (
+        const iterator_adaptor&lt;Iter2,Policies,Value2,Reference2,Pointer2,Category,Distance&gt;&amp;
+            : m_iter_p(src.iter(), src.policies());
+
+    reference operator*() const;
+    <i>operator_arrow_result_type</i> operator-&gt;() const; <a href="#2">[2]</a>
+    value_type operator[](difference_type n) const;
+
+    iterator_adaptor&amp; operator++();
+    iterator_adaptor&amp; operator++(int);
+    iterator_adaptor&amp; operator--();
+    iterator_adaptor&amp; operator--(int);
+
+    iterator_adaptor&amp; operator+=(difference_type n);
+    iterator_adaptor&amp; operator-=(difference_type n);
+
+    iterator_adaptor&amp; operator-(Distance x) const;
 };
-</PRE></TD></TABLE>
 
-<p>The <tt>Iterator</tt> and <tt>ConstIterator</tt> template parameters
-are the iterator types that you want to adapt. The <tt>Traits</tt> and
-<tt>ConstTraits</tt> must be iterator traits classes.  The traits
-parameters default to the specialization of the
-<tt>std::iterator_traits</tt> class for the adapted iterators. If you
-want the traits for your new iterator adaptor (<tt>value_type</tt>,
-<tt>iterator_category</tt>, etc.) to be the same as the adapted
-iterator then use the default, otherwise create your own traits
-classes and pass them in <a href="#1">[1]</a>. 
+template &lt;class B, class Policies, class V, class R, class P, 
+    class C, class D1, class D2&gt;
+iterator_adaptor&lt;B,Policies,V,R,P,C,D1&gt;
+operator+(iterator_adaptor&lt;B,P,V,R,P,C,D1&gt;, D2);
 
+template &lt;class B, class Policies, class V, class R, class P,
+    class C, class D1, class D2&gt;
+iterator_adaptor&lt;B,Policies,V,R,P,C,D1&gt;
+operator+(D2, iterator_adaptor&lt;B,P,V,R,P,C,D1&gt; p);
 
-<p>The <tt>Policies</tt> class that you pass in will become the heart of
-the iterator adaptor, supplying the core iterator operations that will determine how your new adaptor
-class will behave. The core iterator operations are:
-<ul>
-<li><code>dereference</code> - returns an element of the iterator's <code>reference</code> type
-<li><code>equal</code> - tests the iterator for equality
-<li><code>increment</code> - increments the iterator
-<li><code>decrement</code> - decrements bidirectional and random-access iterators
-<li><code>less</code> - imposes a strict weak ordering relation on random-access iterators
-<li><code>distance</code> - measures the distance between random-access iterators
-<li><code>advance</code> - adds an integer offset to random-access iterators
-</ul>
-The <tt>Policies</tt> class must implement three, four, or
-seven of the core iterator operations depending on whether you wish the
-new iterator adaptor class to be a
-<a href="http://www.sgi.com/Technology/STL/ForwardIterator.html">
-ForwardIterator</a>,
-<a href="http://www.sgi.com/Technology/STL/BidirectionalIterator.html">
-BidirectionalIterator</a>, or <a
-href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
-RandomAccessIterator</a>. The
-<tt>iterator_category</tt> type of the traits class you pass in
-must match the category of iterator that you want to create. The default
-policy class, <tt>default_iterator_policies</tt>, implements all 7 of
-the core operations in the usual way. If you wish to create an
-iterator adaptor that only changes a few of the iterator's behaviors,
-then you can have your new policy class inherit from
-<tt>default_iterator_policies</tt> to avoid retyping the usual
-behaviours. You should also look at <tt>default_iterator_policies</tt>
-as the &quot;boiler-plate&quot; for your own policy classes. The
-following is definition of the <tt>default_iterator_policies</tt>
-class:
+template &lt;class B1, class B2, class Policies, class V1, class V2,
+    class R1, class R2, class P1, class P2, class C, class D&gt;
+Distance operator-(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
+                   const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
 
+template &lt;class B1, class B2, class Policies, class V1, class V2,
+    class R1, class R2, class P1, class P2, class C, class D&gt;
+bool operator==(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
+                const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
+template &lt;class B1, class B2, class Policies, class V1, class V2,
+    class R1, class R2, class P1, class P2, class C, class D&gt;
+bool operator!=(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
+                const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
+
+template &lt;class B1, class B2, class Policies, class V1, class V2,
+    class R1, class R2, class P1, class P2, class C, class D&gt;
+bool operator&lt;(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
+                  const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
+
+template &lt;class B1, class B2, class Policies, class V1, class V2,
+    class R1, class R2, class P1, class P2, class C, class D&gt;
+bool operator&lt;=(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
+                   const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
+
+template &lt;class B1, class B2, class Policies, class V1, class V2,
+    class R1, class R2, class P1, class P2, class C, class D&gt;
+bool operator&gt;=(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
+                   const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
+
+template &lt;class B1, class B2, class Policies, class V1, class V2,
+    class R1, class R2, class P1, class P2, class C, class D&gt;
+bool operator&gt;(const iterator_adaptor&lt;B1,P,V1,R1,P1,C,D&gt;&amp;, 
+                  const iterator_adaptor&lt;B2,P,V2,R2,P2,C,D&gt;&amp;);
+</pre>
+
+    <h3>Example</h3>
+
+    <p>It is often useful to automatically apply some function to the
+    value returned by dereferencing (<tt>operator*()</tt>) an
+    iterator. The <a href="./transform_iterator.htm">transform
+    iterator</a> makes it easy to create an iterator adaptor that does
+    just that. Here we will show how easy it is to implement the
+    transform iterator using the <tt>iterator_adaptor</tt> class.</p>
+
+    <p>The main task in using <tt>iterator_adaptor</tt> is creating an
+    appropriate <tt>Policies</tt> class.
+
+    The <tt>Policies</tt> class that you pass in will become the heart of
+    the iterator adaptor, supplying the core iterator operations that will
+    determine how your new adaptor class will behave. The core iterator
+    operations are:
+
+    <ul>
+      <li><code>dereference</code> - returns an element of the iterator's
+      <code>reference</code> type
+
+      <li><code>equal</code> - tests the iterator for equality
+
+      <li><code>increment</code> - increments the iterator
+
+      <li><code>decrement</code> - decrements bidirectional and random-access
+      iterators
+
+      <li><code>less</code> - imposes a strict weak ordering relation on
+      random-access iterators
+
+      <li><code>distance</code> - measures the distance between random-access
+      iterators
+
+      <li><code>advance</code> - adds an integer offset to random-access
+      iterators
+    </ul>
+    The <tt>Policies</tt> class must implement three, four, or seven of the
+    core iterator operations depending on whether you wish the new iterator
+    adaptor class to be a <a href=
+    "http://www.sgi.com/Technology/STL/ForwardIterator.html">ForwardIterator</a>,
+    <a href=
+    "http://www.sgi.com/Technology/STL/BidirectionalIterator.html">BidirectionalIterator</a>,
+    or <a href=
+    "http://www.sgi.com/Technology/STL/RandomAccessIterator.html">RandomAccessIterator</a>.
+    The <tt>iterator_category</tt> type of the traits class you pass in must
+    match the category of iterator that you want to create. The default policy
+    class, <tt>default_iterator_policies</tt>, implements all 7 of the core
+    operations in the usual way. If you wish to create an iterator adaptor that
+    only changes a few of the iterator's behaviors, then you can have your new
+    policy class inherit from <tt>default_iterator_policies</tt> to avoid
+    retyping the usual behaviors. You should also look at
+    <tt>default_iterator_policies</tt> as the ``boiler-plate'' for your own
+    policy classes. The following is definition of the
+    <tt>default_iterator_policies</tt> class: 
+
+    <p>
+<blockquote>
+<pre>
 struct default_iterator_policies
 {
   // required for a ForwardIterator
   template &lt;class Reference, class Iterator&gt;
-  Reference dereference(type&lt;Reference&gt;, const Iterator& x) const
+  Reference dereference(type&lt;Reference&gt;, const Iterator&amp; x) const
     { return *x; }
 
   template &lt;class Iterator&gt;
-  static void increment(Iterator& x)
+  static void increment(Iterator&amp; x)
     { ++x; }
 
   template &lt;class Iterator1, class Iterator2&gt;
-  bool equal(Iterator1& x, Iterator2& y) const
+  bool equal(Iterator1&amp; x, Iterator2&amp; y) const
     { return x == y; }
 
   // required for a BidirectionalIterator
   template &lt;class Iterator&gt;
-  static void decrement(Iterator& x)
+  static void decrement(Iterator&amp; x)
     { --x; }
 
   // required for a RandomAccessIterator
   template &lt;class Iterator, class DifferenceType&gt;
-  static void advance(Iterator& x, DifferenceType n)
+  static void advance(Iterator&amp; x, DifferenceType n)
     { x += n; }
 
   template &lt;class Difference, class Iterator1, class Iterator2&gt;
-  Difference distance(type&lt;Difference&gt;, Iterator1& x, Iterator2& y) const
+  Difference distance(type&lt;Difference&gt;, Iterator1&amp; x, Iterator2&amp; y) const
     { return y - x; }
 
   template &lt;class Iterator1, class Iterator2&gt;
-  bool less(Iterator1& x, Iterator2& y) const
+  bool less(Iterator1&amp; x, Iterator2&amp; y) const
     { return x &lt; y; }
 };
-</PRE></TD></TABLE>
+</pre>
+</blockquote>
 
-<p>
-The generated iterator adaptor types will have the following
-constructors.
+    
+    To implement a transform iterator we will only change one of the
+    base iterator's behaviors, so the
+    <tt>transform_iterator_policies</tt> class will inherit the rest
+    from <tt>default_iterator_policies</tt>. In addition, we will need
+    a function object to apply, so the policies class will have a
+    template parameter for the function object and it will have a data
+    member of that type. The function will take one argument (the
+    value type of the base iterator) and we will need to know the
+    <tt>result_type</tt> of the function, so
+    <a href="http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html">
+    AdaptableUnaryFunction</a> is the correct concept (set of
+    requirements) to choose for the function object type.  Inside of
+    <tt>transform_iterator_policies</tt> we will implement the
+    <tt>dereference()</tt> member function. This member function will
+    dereference the base iterator (the second parameter of
+    <tt>dereference()</tt>) and apply the function object. The
+    <tt>type&lt;Reference&gt;</tt> class used below is there to convey
+    the reference type of the iterator, which is handy when writing
+    generic iterator adaptors such as this one.  The following is the
+    complete code for the <tt>transform_iterator_policies</tt> class.
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-<i>iterator</i>(const Iterator& i, const Policies& p = Policies())
-
-<i>const_iterator</i>(const ConstIterator& i, const Policies& p = Policies())
-</PRE></TD></TABLE>
-
-<h3><a name="iterator_adaptor">The Iterator Adaptor Class</a></h3>
-
-This is the class used inside of the <tt>iterator_adaptors</tt> type
-generator. Use this class directly (instead of using
-<tt>iterator_adaptors</tt>) when you are interested in creating only
-one of the iterator types (either const or non-const) or when there is
-no difference between the const and non-const versions of the iterator
-type (often this is because there is only a const (read-only) version
-of the iterator, as is the case for <tt>std::set</tt>'s iterators).
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class Iterator,
-          class Policies = default_iterator_policies,
-          class Traits = std::iterator_traits&lt;Iterator&gt; &gt;
-struct iterator_adaptor;
-</PRE></TD></TABLE>
-
-
-<p>
-Next we will look at some iterator adaptors that are examples of how
-to use the iterator adaptors class, and that are useful iterator
-adaptors in their own right.
-
-<h3><a name="transform_iterator">The Transform Iterator Class</a></h3>
-
-It is often useful to automatically apply some function to the value
-returned by dereferencing (<tt>operator*()</tt>) an iterator. The
-<tt>transform_iterators</tt> class makes it easy to create an iterator
-adaptor that does just that.
-
-First let us consider what the <tt>Policies</tt> class for the transform
-iterator should look like. We are only changing one of the iterator
-behaviours, so we will inherit from
-<tt>default_iterator_policies</tt>. In addition, we will need a
-function object to apply, so we will have a template parameter and a
-data member for the function object. The function will take one
-argument (the dereferenced value) and we will need to know the
-<tt>result_type</tt> of the function, so <a
-href="http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html">
-AdaptableUnaryFunction</a> is the corrent concept to choose for the
-function object type. Now for the heart of our iterator adaptor, we
-implement the <tt>dereference</tt> method, applying the function
-object to <tt>*i</tt>. The <tt>type&lt;Reference&gt;</tt> class is
-there to tell you what the reference type of the iterator is, which is
-handy when writing generic iterator adaptors such as this one <a
-href="#2">[2]</a>.
-
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
+    <p>
+<blockquote>
+<pre>
   template &lt;class AdaptableUnaryFunction&gt;
   struct transform_iterator_policies : public default_iterator_policies
   {
     transform_iterator_policies() { }
-    transform_iterator_policies(const AdaptableUnaryFunction& f) : m_f(f) { }
+    transform_iterator_policies(const AdaptableUnaryFunction&amp; f) : m_f(f) { }
 
-    template &lt;class Reference, class Iterator&gt;
-    Reference dereference(type&lt;Reference&gt;, const Iterator& i) const
+    template &lt;class Reference, class BaseIterator&gt;
+    Reference dereference(type&lt;Reference&gt;, const BaseIterator&amp; i) const
       { return m_f(*i); }
 
     AdaptableUnaryFunction m_f;
   };
-</PRE></TD></TABLE>
+</pre>
+</blockquote>
 
-Next we need to create the traits class for our new iterator.  In some
-situations you may need to create a separate traits class for the
-const and non-const iterator types, but here a single traits class
-will do. The <tt>value_type</tt> and <tt>reference</tt> type of our
-transform iterator will be the <tt>result_type</tt> of the function
-object.  The <tt>difference_type</tt> and <tt>iterator_category</tt>
-will be the same as the adapted iterator.
+    <p>
+    The next step is to use the <tt>iterator_adaptor</tt> class to
+    construct the transform iterator type.  The nicest way to package
+    up the construction of the transform iterator is to create a <a
+    href="../../more/generic_programming.html#type_generator">type
+    generator</a>, which is a class whose sole purpose is to
+    create a typedef for some new type based on several template
+    parameters. The first template parameter will be the type of the
+    function object and the second will be the base iterator
+    type. Inside the <tt>transform_iterators</tt> class we use the
+    <tt>iterator_adaptor</tt> class to create the transform iterator
+    type.
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-  template &lt;class AdaptableUnaryFunction, class IteratorTraits&gt;
-  struct transform_iterator_traits {
-    typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef value_type reference;
-    typedef value_type* pointer;
-    typedef typename IteratorTraits::difference_type difference_type;
-    typedef typename IteratorTraits::iterator_category iterator_category;
-  };
-</PRE></TD></TABLE>
-
-The final step is to use the <tt>iterator_adaptor</tt> class to
-construct our transform iterator. We will use the single iterator
-adaptor version because we will not need to create both a mutable and
-const version of the transform iterator. The transform iterator is
-inherently a read-only iterator.  The nicest way to package up our new
-transform iterator is to create a type generator similar to
-<tt>iterator_adaptor</tt>. The first template parameter will be the
-type of the function object. The second parameter will be the adapted
-iterator type. The third parameter is the trait class for
-the adapted iterator.  Inside the <tt>transform_iterators</tt> class
-we use the <tt>transform_iterator_traits</tt> class defined above to
-create the traits class for the new transform iterator. We then use
-the <tt>iterator_adaptor</tt> class to extract the generated
-iterator adaptor type.
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class AdaptableUnaryFunction,
-          class Iterator,
-          class Traits = std::iterator_traits&lt;Iterator&gt;
-         &gt;
-struct transform_iterator
+    <p>
+<blockquote>
+<pre>
+template &lt;class AdaptableUnaryFunction, class Iterator&gt;
+struct transform_iterator_generator
 {
-  typedef transform_iterator_traits&lt;AdaptableUnaryFunction,Traits&gt;
-    TransTraits;
-  typedef iterator_adaptor&lt;Iterator, TransTraits,
-    transform_iterator_policies&lt;AdaptableUnaryFunction&gt; &gt;::type type;
+    typedef typename AdaptableUnaryFunction::result_type value_type;
+public:
+    typedef iterator_adaptor&lt;Iterator, 
+        transform_iterator_policies&lt;AdaptableUnaryFunction&gt;,
+        value_type, value_type, value_type*, std::input_iterator_tag&gt;
+      type;
 };
-</PRE></TD></TABLE>
+</pre>
+</blockquote>
 
-<p>
-The following is a simple example of how to use the
-<tt>transform_iterators</tt> class to iterate through a range of
-numbers, multiplying each of them by 2 when they are dereferenced.
+    <p>As a finishing touch, we will create an <a
+    href="../../more/generic_programming.html#object_generator">object
+    generator</a> for the transform iterator. This is a function that
+    makes it more convenient to create a transform iterator. 
+    <p>
+<blockquote>
+<pre>
+template &lt;class AdaptableUnaryFunction, class Iterator&gt;
+typename transform_iterator_generator&lt;AdaptableUnaryFunction,Iterator&gt;::type
+make_transform_iterator(Iterator base,
+                        const AdaptableUnaryFunction&amp; f = AdaptableUnaryFunction())
+{
+    typedef typename transform_iterator_generator&lt;AdaptableUnaryFunction,
+      Iterator&gt;::type result_t;
+    return result_t(base, f);
+}
+</pre>
+</blockquote>
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
+    <p>The following is an example of how to use a transform iterator
+    to iterate through a range of numbers, multiplying each of them by
+    2 when they are dereferenced and printing the result to standard
+    output.
+
+    <p>
+<blockquote>
+<pre>
 #include &lt;functional&gt;
+#include &lt;algorithm&gt;
 #include &lt;iostream&gt;
 #include &lt;boost/iterator_adaptors.hpp&gt;
 
-int
-main(int, char*[])
+int main(int, char*[])
 {
   int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-
-  typedef std::binder1st&lt; std::multiplies&lt;int&gt; &gt; Function;
-  typedef boost::transform_iterator&lt;Function, int*, 
-    boost::iterator&lt;std::random_access_iterator_tag, int&gt;
-  &gt;::type doubling_iterator;
-
-  doubling_iterator i(x, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
-    i_end(x + sizeof(x)/sizeof(int), std::bind1st(std::multiplies&lt;int&gt;(), 2));
-
+  const int N = sizeof(x)/sizeof(int);
   std::cout &lt;&lt; "multiplying the array by 2:" &lt;&lt; std::endl;
-  while (i != i_end)
-    std::cout &lt;&lt; *i++ &lt;&lt; " ";
+  std::copy(boost::make_transform_iterator(x, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
+	    boost::make_transform_iterator(x + N, std::bind1st(std::multiplies&lt;int&gt;(), 2)),
+	    std::ostream_iterator&lt;int&gt;(std::cout, " "));
   std::cout &lt;&lt; std::endl;
-
   return 0;
 }
-</PRE></TD></TABLE>
+</pre>
+</blockquote>
 
 
-<h3><a name="indirect_iterators">The Indirect Iterator Adaptors</a></h3>
+    <h3>Template Parameters</h3>
 
-It is not all that uncommon to create data structures that consist of
-pointers to pointers. For such a structure it might be nice to have an
-iterator that applies a double-dereference inside the
-<tt>operator*()</tt>. The implementation of this is similar to the
-<tt>transform_iterators</tt><a href="#3">[3]</a>. When talking about a
-data structure of pointers to pointers (or more generally, iterators
-to iterators), we call the first level iterators the <i>outer</i>
-iterators and the second level iterators the <i>inner</i>
-iterators. For example, if the outer iterator type is <tt>T**</tt>
-then the inner iterator type is <tt>T*</tt>.
+    <table border>
+      <tr>
+        <th>Parameter
 
-To implement the indirect adaptors, we first create a policies class
-which does a double-dereference in the <tt>dereference()</tt> method.
+        <th>Description
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-struct indirect_iterator_policies : public default_iterator_policies
-{
-    template &lt;class Reference, class Iterator&gt;
-    Reference dereference(type&lt;Reference&gt;, const Iterator& x) const
-        { return **x; }
-};
-</PRE></TD></TABLE>
+      <tr>
+        <td><a href=
+        "http://www.sgi.com/tech/stl/Predicate.html"><tt>Predicate</tt></a>
 
-We then create a traits class, including a template parameter for both
-the inner and outer iterators and traits classes. The
-<tt>difference_type</tt> and <tt>iterator_category</tt> come from the
-outer iterator, while the <tt>value_type</tt>, <tt>pointer</tt>, and
-<tt>reference</tt> types come from the inner iterator.
+        <td>The function object that determines which elements are retained and
+        which elements are skipped.
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class OuterIterator, class InnerIterator,
-          class OuterTraits = std::iterator_traits&lt;OuterIterator&gt;,
-          class InnerTraits = std::iterator_traits&lt;InnerIterator&gt;
-         &gt;
-struct indirect_traits
-{
-    typedef typename OuterTraits::difference_type difference_type;
-    typedef typename InnerTraits::value_type value_type;
-    typedef typename InnerTraits::pointer pointer;
-    typedef typename InnerTraits::reference reference;
-    typedef typename OuterTraits::iterator_category iterator_category;
-};
-</PRE></TD></TABLE>
+      <tr>
+        <td><tt>BaseIterator</tt>
 
-Lastly we wrap this up in two type generators:
-<tt>indirect_iterator</tt> for creating a single indirect iterator
-type, and <tt>indirect_iterators</tt> for creating an const/non-const
-pair of indirect iterator types. We use the <tt>iterator_adaptor</tt>
-and <tt>iterator_adaptors</tt> classes here to do most of the work.
+        <td>The iterator type being wrapped. This type must at least be a model
+        of the <a href=
+        "http://www.sgi.com/tech/stl/InputIterator">InputIterator</a> concept.
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class OuterIterator, class InnerIterator,
-          class OuterTraits = std::iterator_traits&lt;OuterIterator&gt;,
-          class InnerTraits = std::iterator_traits&lt;InnerIterator&gt;
-         &gt;
-struct indirect_iterator
-{
-    typedef iterator_adaptor&lt;OuterIterator,
-        indirect_iterator_policies,
-        indirect_traits&lt;OuterIterator, InnerIterator,
-                        OuterTraits, InnerTraits&gt;
-    &gt; type;
-};
+      <tr>
+        <td><tt>Value</tt>
 
-template &lt;class OuterIterator,      // Mutable or Immutable, does not matter
-          class InnerIterator,      // Mutable
-          class ConstInnerIterator, // Immutable
-          class OuterTraits = std::iterator_traits&lt;OuterIterator&gt;,
-          class InnerTraits = std::iterator_traits&lt;InnerIterator&gt;,
-          class ConstInnerTraits = std::iterator_traits&lt;ConstInnerIterator&gt;
-         &gt;
-struct indirect_iterators
-{
-    typedef iterator_adaptors&lt;OuterIterator, OuterIterator,
-        indirect_traits&lt;OuterIterator, InnerIterator,
-                        OuterTraits, InnerTraits&gt;,
-        indirect_traits&lt;OuterIterator, ConstInnerIterator,
-                        OuterTraits, ConstInnerTraits&gt;,
-        indirect_iterator_policies
-        &gt; Adaptors;
-    typedef typename Adaptors::iterator iterator;
-    typedef typename Adaptors::const_iterator const_iterator;
-};
-</PRE></TD></TABLE>
+        <td>The <tt>value_type</tt> of the resulting iterator, unless const. If
+        const, a conforming compiler strips constness for the
+        <tt>value_type</tt>. Typically the default for this parameter is the
+        appropriate type<a href="#1">[1]</a>.<br>
+         <b>Default:</b>
+        <tt>std::iterator_traits&lt;BaseIterator&gt;::value_type</tt>
 
+      <tr>
+        <td><tt>Pointer</tt>
 
-<h3><a name="projection_iterators">The Projection Iterator Adaptors</a></h3>
+        <td>The <tt>pointer</tt> type of the resulting iterator, and in
+        particular, the result type of operator-&gt;(). Typically the default
+        for this parameter is the appropriate type.<br>
+        <b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
+        otherwise <tt>std::iterator_traits&lt;BaseIterator&gt;::pointer</tt>.
 
-The projection iterator adaptor is very similar to the transform
-iterator, except for a subtle difference in the return type: the
-tranform iterator returns the result of the unary function by value,
-whereas the projection iterator returns the result by reference.
-Therefore, these two adaptors cater to different kinds of unary
-functions. Transform iterator caters to functions that create new
-objects, whereas projection iterator caters to a function that somehow
-obtains a reference to an object that already exists. An example of a
-unary function that is suitable for use with the projection adaptor is
-<tt>select1st_</tt>:
+      <tr>
+        <td><tt>Reference</tt>
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class Pair&gt;
-struct select1st_ 
-  : public std::unary_function&lt;Pair, typename Pair::first_type&gt;
-{
-  const typename Pair::first_type& operator()(const Pair& x) const {
-    return x.first;
-  }
-  typename Pair::first_type& operator()(Pair& x) const {
-    return x.first;
-  }
-};
-</PRE></TD></TABLE>
+        <td>The <tt>reference</tt> type of the resulting iterator, and in
+        particular, the result type of operator*(). Typically the default for
+        this parameter is the appropriate type.<br>
+         <b>Default:</b> If <tt>Value</tt> is supplied, <tt>Value&amp;</tt> is
+        used. Otherwise
+        <tt>std::iterator_traits&lt;BaseIterator&gt;::reference</tt> is used.
 
-The implementation of projection iterator is as follows.  First, the
-policies class is the same as the transform iterator's policies class.
+      <tr>
+        <td><tt>Category</tt>
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class AdaptableUnaryFunction&gt;
-struct projection_iterator_policies : public default_iterator_policies
-{
-    projection_iterator_policies() { }
-    projection_iterator_policies(const AdaptableUnaryFunction& f) : m_f(f) { }
+        <td>The <tt>iterator_category</tt> type for the resulting iterator.
+        Typically the default for this parameter is the appropriate type. If
+        you override this parameter, do not use
+        <tt>bidirectional_iterator_tag</tt> because filter iterators can not go
+        in reverse.<br>
+        <b>Default:</b>
+        <tt>std::iterator_traits&lt;BaseIterator&gt;::iterator_category</tt>
 
-    template &lt;class Reference, class Iterator&gt;
-    Reference dereference (type&lt;Reference&gt;, Iterator const& iter) const {
-        return m_f(*iter);
-    }
+      <tr>
+        <td><tt>Distance</tt>
 
-    AdaptableUnaryFunction m_f;    
-};
-</PRE></TD></TABLE>
+        <td>The <tt>difference_type</tt> for the resulting iterator. Typically
+        the default for this parameter is the appropriate type.<br>
+        <b>Default:</b>
+        <tt>std::iterator_traits&lt;BaseIterator&gt;::difference_type</tt>
+    </table>
 
-Next we have two traits classes. We use <tt>value_type&</tt> for the
-reference type of the mutable projection iterator, and <tt>const
-value_type&</tt> for the immutable projection iterator.
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class AdaptableUnaryFunction, class Traits&gt;
-struct projection_iterator_traits {
-    typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef value_type& reference;
-    typedef value_type* pointer;
-    typedef typename Traits::difference_type difference_type;
-    typedef typename Traits::iterator_category iterator_category;
-};
-
-template &lt;class AdaptableUnaryFunction, class Traits&gt;
-struct const_projection_iterator_traits {
-    typedef typename AdaptableUnaryFunction::result_type value_type;
-    typedef value_type const& reference;
-    typedef value_type const* pointer;
-    typedef typename Traits::difference_type difference_type;
-    typedef typename Traits::iterator_category iterator_category;
-};
-</PRE></TD></TABLE>
-
-And to finish up, we create three generator classes that
-use <tt>iterator_adaptor</tt> to create the projection iterator
-types. The class <tt>projection_iterator</tt> creates a mutable
-projection iterator type. The class <tt>const_projection_iterator</tt>
-creates an immutable projection iterator type, and
-<tt>projection_iterators</tt> creates both mutable and immutable
-projection iterator types.
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class AdaptableUnaryFunction, class Iterator,
-          class Traits = std::iterator_traits&lt;Iterator&gt;
-         &gt;
-struct projection_iterator {
-    typedef projection_iterator_traits&lt;AdaptableUnaryFunction, Traits&gt;
-            Projection_Traits;
-    typedef iterator_adaptor&lt;Iterator,
-            projection_iterator_policies&lt;AdaptableUnaryFunction&gt;,
-            Projection_Traits&gt; type;
-};
-
-template &lt;class AdaptableUnaryFunction, class Iterator,
-          class Traits = std::iterator_traits&lt;Iterator&gt;
-         &gt;
-struct const_projection_iterator {
-    typedef const_projection_iterator_traits&lt;AdaptableUnaryFunction,
-            Traits&gt; Projection_Traits;
-    typedef iterator_adaptor&lt;Iterator,
-            projection_iterator_policies&lt;AdaptableUnaryFunction&gt;,
-            Projection_Traits&gt; type;
-};
-
-template &lt;class AdaptableUnaryFunction, class Iterator, class ConstIterator,
-          class Traits = std::iterator_traits&lt;Iterator&gt;,
-          class ConstTraits = std::iterator_traits&lt;ConstIterator&gt;
-         &gt;
-struct projection_iterators {
-    typedef projection_iterator_traits&lt;AdaptableUnaryFunction, Traits&gt;
-            Projection_Traits;
-    typedef const_projection_iterator_traits&lt;AdaptableUnaryFunction,
-            ConstTraits&gt; Const_Projection_Traits;
-    typedef iterator_adaptors&lt;Iterator, ConstIterator,
-            Projection_Traits, Const_Projection_Traits,
-            projection_iterator_policies&lt;AdaptableUnaryFunction&gt; &gt; Adaptors;
-    typedef typename Adaptors::iterator iterator;
-    typedef typename Adaptors::const_iterator const_iterator;
-};
-</PRE></TD></TABLE>
-
-
-<h3><a name="reverse_iterators">The Reverse Iterators Class</a></h3>
-
-<p>
-Yes, there is already a <tt>reverse_iterator</tt> adaptor class
-defined in the C++ Standard, but using the <tt>iterator_adaptors</tt>
-class we can re-implement this classic adaptor in a more succinct and
-elegant fashion. Also, this makes for a good example of using
-<tt>iterator_adaptors</tt> that is in familiar territory.
-
-<p>
-The first step is to create the <tt>Policies</tt> class. As in the
-<tt>std::reverse_iterator</tt> class, we need to flip all the
-operations of the iterator. Increment will become decrement, advancing
-by <tt>n</tt> will become retreating by <tt>n</tt>, etc. 
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-struct reverse_iterator_policies
-{
-  template &lt;class Reference, class Iterator&gt;
-  Reference dereference(type&lt;Reference&gt;, const Iterator& x) const
-    { return *boost::prior(x); }
-    // this is equivalent to { Iterator tmp = x; return *--tmp; }
     
-  template &lt;class Iterator&gt;
-  void increment(Iterator& x) const
-    { --x; }
-    
-  template &lt;class Iterator&gt;
-  void decrement(Iterator& x) const
-    { ++x; }
-    
-  template &lt;class Iterator, class DifferenceType&gt;
-  void advance(Iterator& x, DifferenceType n) const
-    { x -= n; }
-    
-  template &lt;class Difference, class Iterator1, class Iterator2&gt;
-  Difference distance(type&lt;Difference&gt;, Iterator1& x, Iterator2& y) const
-    { return x - y; }
-    
-  template &lt;class Iterator1, class Iterator2&gt;
-  bool equal(Iterator1& x, Iterator2& y) const
-    { return x == y; }
-    
-  template &lt;class Iterator1, class Iterator2&gt;
-  bool less(Iterator1& x, Iterator2& y) const
-    { return y &lt; x; }
-};
-</PRE></TD></TABLE>
+    <h3>Challenge</h3>
 
-Since the traits of the reverse iterator adaptor will be the same as
-the adapted iterator's traits, we do not need to create new traits
-classes as was the case for <tt>transform_iterator</tt>. We can skip to
-the final stage of creating a type generator class for our reverse
-iterators using the <tt>iterator_adaptor</tt> class.
+    <p>There is an unlimited number of ways the the
+    <tt>iterator_adaptors</tt> class can be used to create
+    iterators. One interesting exercise would be to re-implement the
+    iterators of <tt>std::list</tt> and <tt>std::slist</tt> using
+    <tt>iterator_adaptors</tt>, where the adapted <tt>Iterator</tt>
+    types would be node pointers.
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class Iterator, class ConstIterator,
-          class Traits = std::iterator_traits&lt;Iterator&gt;, 
-          class ConstTraits = std::iterator_traits&lt;ConstIterator&gt;
-         &gt;
-struct reverse_iterators
-{
-  typedef iterator_adaptors&lt;Iterator,ConstIterator,Traits,ConstTraits,
-    reverse_iterator_policies&gt; Adaptor;
-  typedef typename Adaptor::iterator iterator;
-  typedef typename Adaptor::const_iterator const_iterator;
-};
-</PRE></TD></TABLE>
+    <h3>Notes</h3>
 
-A typical use of the <tt>reverse_iterators</tt> class is in
-user-defined container types. You can use the
-<tt>reverse_iterators</tt> class to generate the reverse iterators for
-your container.
+    <p><a name="1">[1]</a> If your compiler does not support partial
+    specialization and the base iterator is a builtin pointer type,
+    then you will not be able to use the default for <tt>Value</tt>
+    and will need to explicitly specify this type.
 
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-class my_container {
-  ...
-  typedef ... iterator;
-  typedef ... const_iterator;
+    <p><a name="2">[2]</a> The result type for the <tt>operator->()</tt>
+     depends on the category and value type of the iterator and
+     is somewhat complicated to describe. But be assured, it works
+     in a stardard corforming fashion, providing access to members
+     of the objects pointed to by the iterator.
 
-  typedef reverse_iterators&lt;iterator, const_iterator&gt; RevIters;
-  typedef typename RevIters::iterator reverse_iterator;
-  typedef typename RevIters::const_iterator const_reverse_iterator;
-  ...
-};
-</PRE></TD></TABLE>
+    <hr>
 
+    <p>Revised 
+    <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10
+    Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" -->
 
-<h3><a name="integer_range">The Integer Range Class</a></h3>
+    <p>&copy; Copyright Jeremy Siek and Dave Abrahams 2001. Permission to copy, use, modify, sell
+    and distribute this document is granted provided this copyright notice
+    appears in all copies. This document is provided "as is" without express or
+    implied warranty, and with no claim as to its suitability for any purpose.
 
-The <tt>iterator_adaptors</tt> class can not only be used for adapting
-iterators, but it can also be used to take a non-iterator type and use
-it to build an iterator. An especially simple example of this is
-turning an integer type into an iterator, a counting iterator. The
-builtin integer types of C++ are almost iterators. They have
-<tt>operator++()</tt>, <tt>operator--()</tt>, etc. The one operator
-they are lacking is the <tt>operator*()</tt>, which we will want to
-simply return the current value of the integer. The following few
-lines of code implement the policy and traits class for the counting
-iterator.
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class IntegerType&gt;
-struct counting_iterator_policies : public default_iterator_policies
-{
-  IntegerType dereference(type&lt;IntegerType&gt;, const IntegerType& i) const
-    { return i; }
-};
-template &lt;class IntegerType&gt;
-struct counting_iterator_traits {
-  typedef IntegerType value_type;
-  typedef IntegerType reference;
-  typedef value_type* pointer;
-  typedef std::ptrdiff_t difference_type;
-  typedef std::random_access_iterator_tag iterator_category;
-};
-</PRE></TD></TABLE>
-
-Typically we will want to count the integers in some range, so a nice
-interface would be to have a fake container that represents the range
-of integers. The following is the definition of such a class called
-<tt>integer_range</tt>.
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-template &lt;class IntegerType&gt;
-struct integer_range {
-  typedef typename iterator_adaptor&lt;IntegerType, 
-                           counting_iterator_traits&lt;IntegerType&gt;,
-                           counting_iterator_policies &gt;::type iterator;
-  typedef iterator const_iterator;
-  typedef IntegerType value_type;
-  typedef std::ptrdiff_t difference_type;
-  typedef IntegerType reference;
-  typedef IntegerType* pointer;
-  typedef IntegerType size_type;
-
-  integer_range(IntegerType start, IntegerType finish)
-    : m_start(start), m_finish(finish) { }
-
-  iterator begin() const { return iterator(m_start); }
-  iterator end() const { return iterator(m_finish); }
-  size_type size() const { return m_finish - m_start; }
-  bool empty() const { return m_finish == m_start; }
-  void swap(integer_range& x) {
-    std::swap(m_start, x.m_start);
-    std::swap(m_finish, x.m_finish);
-  }
-protected:
-  IntegerType m_start, m_finish;
-};
-</PRE></TD></TABLE>
-
-<p>
-The following is an example of how to use the
-<tt>integer_range</tt> class to count from 0 to 4.
-
-<p>
-<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=2>
-<TR><TD WIDTH=30 VALIGN=TOP></TD><TD>
-<PRE>
-boost::integer_range&lt;int&gt; r(0,5);
-
-cout &lt;&lt; "counting to from 0 to 4:" &lt;&lt; endl;
-std::copy(r.begin(), r.end(), ostream_iterator&lt;int&gt;(cout, " "));
-cout &lt;&lt; endl;
-</PRE></TD></TABLE>
-
-<h3>Challenge</h3>
-
-<p>
-There is an unlimited number of ways the the
-<tt>iterator_adaptors</tt> class can be used to create iterators. One
-interesting exercise would be to re-implement the iterators of
-<tt>std::list</tt> and <tt>std::slist</tt> using
-<tt>iterator_adaptors</tt>, where the adapted <tt>Iterator</tt> types
-would be node pointers.
-
-
-<h3>Notes</h3>
-
-<p>
-<a name="1">[1]</a>
-If your compiler does not support partial specialization and hence
-does not have a working <tt>std::iterator_traits</tt> class, you will
-not be able to use the defaults and will need to supply your own
-<tt>Traits</tt> and <tt>ConstTraits</tt> classes.
-
-<p>
-<a name="2">[2]</a>
-The reference type could also be obtained from
-<tt>std::iterator_traits</tt>, but that is not portable on compilers
-that do not support partial specialization.
-
-<p>
-<a name="3">[3]</a>
-It would have been more elegant to implement <tt>indirect_iterators</tt>
-using <tt>transform_iterators</tt>, but for subtle reasons that would require
-the use of <tt>boost::remove_cv</tt> which is not portable.
-
-<h3>Implementation Notes</h3>
-
-The code is somewhat complicated because there are three iterator
-adaptor class: <tt>forward_iterator_adaptor</tt>,
-<tt>bidirectional_iterator_adaptor</tt>, and
-<tt>random_access_iterator_adaptor</tt>. The alternative would be to
-just have one iterator adaptor equivalent to the
-<tt>random_access_iterator_adaptor</tt>.  The reason for going with
-the three adaptors is that according to 14.5.3p5 in the C++ Standard,
-friend functions defined inside a template class body are instantiated
-when the template class is instantiated. This means that if we only
-used the one iterator adaptor, then if the adapted iterator did not
-meet all of the requirements for a
-<a href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
-RandomAccessIterator</a> then a compiler error should occur.  Many
-current compilers in fact do not instantiate the friend functions
-unless used, so we could get away with the one iterator adaptor in
-most cases. However, out of respect for the standard this implementation
-uses the three adaptors.
-
-
-
-<hr>
-<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %b %Y" startspan -->10 Feb 2001<!--webbot bot="Timestamp" endspan i-checksum="14373" --></p>
-<p>© Copyright Jeremy Siek 2000. Permission to copy, use,
-modify, sell and distribute this document is granted provided this copyright
-notice appears in all copies. This document is provided &quot;as is&quot;
-without express or implied warranty, and with no claim as to its suitability for
-any purpose.</p>
-
-</body>
-
-</html>
+    </body>
+<!--  LocalWords:  HTML html charset alt gif abrahams htm const incrementable
+ -->
+<!--  LocalWords:  siek mishandled interoperable typename struct Iter iter src
+ -->
+<!--  LocalWords:  int bool ForwardIterator BidirectionalIterator BaseIterator
+ -->
+<!--  LocalWords:  RandomAccessIterator DifferenceType AdaptableUnaryFunction
+ -->
+<!--  LocalWords:  iostream hpp sizeof InputIterator constness ConstIterator
+ -->
