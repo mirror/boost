@@ -102,142 +102,41 @@ inline void load_construct_data(
     access::construct(ar, t);
 }
 
-// note trick to be sure that operator new is using class specific
-// version if such exists. Due to Peter Dimov.
-// note: the following fails if T has no default constructor.
-// otherwise it would have been ideal
-//struct heap_allocator : public T 
-//{
-//    T * invoke(){
-//        return ::new(sizeof(T));
-//    }
-//}
-
-// note: this should really be a member of the load_ptr function
-// below but some compilers still complain about this.
-template<class T>
-struct heap_allocator
-{
-    #if 0
-        // note: this fails on msvc 7.0 and gcc 3.2
-        template <class U, U x> struct test;
-        typedef char* yes;
-        typedef int* no;
-        template <class U>
-        yes has_op_new(U*, test<void* (*)(std::size_t), &U::operator new>* = 0);
-        no has_op_new(...);
-
-        template<class U>
-        T * new_operator(U);
-
-        T * new_operator(yes){
-            return (T::operator new)(sizeof(T));
-        }
-        T * new_operator(no){
-            return static_cast<T *>(operator new(sizeof(T)));
-        }
-        static T * invoke(){
-            return new_operator(has_op_new(static_cast<T *>(NULL)));
-        }
-    #else
-        // while this doesn't handle operator new overload for class T
-        static T * invoke(){
-            return static_cast<T *>(operator new(sizeof(T)));
-        }
-    #endif
-};
-
-// due to Martin Ecker
-template <typename T>
-class auto_ptr_with_deleter
-{
-public:
-    explicit auto_ptr_with_deleter(T* p) :
-        m_p(p)
-    {}
-    ~auto_ptr_with_deleter(){
-        if (m_p)
-            access::destroy(m_p);
-    }
-    T* get() const {
-        return m_p;
-    }
-
-    T* release() {
-        T* p = m_p;
-        m_p = NULL;
-        return p;
-    }
-private:
-    T* m_p;
-};
-
-// undocmented overridable escape hatches with default implementation
-// may be necessary to permit usage of class factories or other
-// unforseen circumstances.
-template<class Archive, class T>
-void save_ptr(
-    Archive & ar, 
-    const T * t,
-    const BOOST_PFTO unsigned int file_version
-){
-    save_construct_data(
-        ar, 
-        t, 
-        static_cast<unsigned int >(file_version)
-    );
-    // when outputing data through a pointer, the name of the 
-    // pointer has already been specified so we don't need a
-    // name- value pair here.  We use a nvp with a null name
-    // in order to sneak past the archive code that requires
-    // names on all variable not primitives
-    static_cast<Archive &>(ar) << make_nvp(NULL, *t);
-}
-
-template<class Archive, class T>
-void load_ptr(
-    Archive & ar, 
-    T * & t, 
-    const BOOST_PFTO unsigned int file_version
-){
-    auto_ptr_with_deleter<T> ap(heap_allocator<T>::invoke());
-    if(NULL == ap.get())
-        boost::throw_exception(std::bad_alloc()) ;
-    t = ap.get();
-    load_construct_data(
-        ar, 
-        t, 
-        static_cast<unsigned int>(file_version)
-    );
-    ar >> make_nvp(NULL, * t);
-    ap.release();
-}
-
 /////////////////////////////////////////////////////////////////////////////
 // layer 3 - default implementation of non-intrusive serialization.
 //
 // trick to call serialize from within boost::serialization namspace
 // thus permitting serialize override to be in either of 3 namespace
-// 1) boost::serialization
-// 2) same namepace as Archive
-// 3) same namespace as T
+// 1) same namepace as Archive
+// 2) same namespace as T
+// 3) boost::serialization
 // Due to Martin Ecker
 
 template<class Archive, class T>
 inline void serialize_adl(
-    Archive & ar, T & t, const unsigned int file_version
+    Archive & ar, 
+    T & t, 
+    const unsigned int file_version
 ){
     serialize(ar, t, file_version);
 }
 
 template<class Archive, class T>
-inline void load_ptr_adl(Archive & ar, T * & t, const unsigned int file_version){
-    load_ptr(ar, t, file_version);
+inline void save_construct_data_adl(
+    Archive & ar, 
+    const T * t, 
+    const unsigned int file_version
+){
+    save_construct_data(ar, t, file_version);
 }
 
 template<class Archive, class T>
-inline void save_ptr_adl(Archive & ar, const T * t, const unsigned int file_version){
-    save_ptr(ar, t, file_version);
+inline void load_construct_data_adl(
+    Archive & ar, 
+    T * t, 
+    const unsigned int file_version
+){
+    load_construct_data(ar, t, file_version);
 }
 
 } // namespace serialization
