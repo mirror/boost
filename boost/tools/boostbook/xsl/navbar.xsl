@@ -1,8 +1,9 @@
-<?xml version = "1.0" encoding = "utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                version="1.0">
 
-<xsl:stylesheet version = "1.0"
-   xmlns:xsl = "http://www.w3.org/1999/XSL/Transform"
->
+<xsl:import href="relative-href.xsl"/>
+
    <!--
       how to render the Home | Libraries | ... | More contents
          none       - do not display ("standalone" mode)
@@ -55,9 +56,13 @@
             <xsl:if test = "$nav.border = 'Boost'">
                <xsl:attribute name = "style">background-color: white; width: 50%;</xsl:attribute>
             </xsl:if>
-            <img src = "{$boost.image.src}" alt = "{$boost.image.alt}"
-                 width = "{$boost.image.w}" height = "{$boost.image.h}"
-            />
+            <img alt="{$boost.image.alt}" width="{$boost.image.w}" height="{$boost.image.h}">
+                <xsl:attribute name="src">
+                    <xsl:call-template name="href.target.relative">
+                        <xsl:with-param name="target" select="$boost.image.src"/>
+                    </xsl:call-template>
+                </xsl:attribute>
+            </img>
          </td><xsl:choose>
             <xsl:when test = "$nav.layout = 'horizontal'">
                <xsl:call-template name = "header.navdata-horiz"/>
@@ -92,47 +97,88 @@
    </xsl:template>
 
    <xsl:template name = "header.navdata-horiz">
+      <xsl:variable name="home_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="concat( $boost.root, '/index.htm' )"/>
+         </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="libraries_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="$boost.libraries"/>
+         </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="people_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="concat( $boost.root, '/people/people.htm' )"/>
+         </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="faq_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="concat( $boost.root, '/more/faq.htm' )"/>
+         </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="more_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="concat( $boost.root, '/more/index.htm' )"/>
+         </xsl:call-template>
+      </xsl:variable>
+      
       <xsl:choose>
          <xsl:when test = "$nav.border = 'Boost'">
-            <td align = "center" class = "boost-headtd">
-               <a href = "{$boost.root}/index.htm" class = "boost-headelem">Home</a>
-            </td><td align = "center" class = "boost-headtd">
-               <a href = "{$boost.libraries}" class = "boost-headelem">Libraries</a>
-            </td><td align = "center" class = "boost-headtd">
-               <a href = "{$boost.root}/people/people.htm" class = "boost-headelem">People</a>
-            </td><td align = "center" class = "boost-headtd">
-               <a href = "{$boost.root}/more/faq.htm" class = "boost-headelem">FAQ</a>
-            </td><td align = "center" class = "boost-headtd">
-               <a href = "{$boost.root}/more/index.htm" class = "boost-headelem">More</a>
-            </td>
+            <td align = "center" class = "boost-headtd"><a href = "{$home_link}" class = "boost-headelem">Home</a></td>
+            <td align = "center" class = "boost-headtd"><a href = "{$libraries_link}" class = "boost-headelem">Libraries</a></td>
+            <td align = "center" class = "boost-headtd"><a href = "{$people_link}" class = "boost-headelem">People</a></td>
+            <td align = "center" class = "boost-headtd"><a href = "{$faq_link}" class = "boost-headelem">FAQ</a></td>
+            <td align = "center" class = "boost-headtd"><a href = "{$more_link}" class = "boost-headelem">More</a></td>
          </xsl:when><xsl:otherwise>
-            <td align = "center">
-               <a href = "{$boost.root}/index.htm">Home</a>
-            </td><td align = "center">
-               <a href = "{$boost.libraries}">Libraries</a>
-            </td><td align = "center">
-               <a href = "{$boost.root}/people/people.htm">People</a>
-            </td><td align = "center">
-               <a href = "{$boost.root}/more/faq.htm">FAQ</a>
-            </td><td align = "center">
-               <a href = "{$boost.root}/more/index.htm">More</a>
-            </td>
+            <td align = "center"><a href = "{$home_link}">Home</a></td>
+            <td align = "center"><a href = "{$libraries_link}">Libraries</a></td>
+            <td align = "center"><a href = "{$people_link}">People</a></td>
+            <td align = "center"><a href = "{$faq_link}">FAQ</a></td>
+            <td align = "center"><a href = "{$more_link}">More</a></td>
          </xsl:otherwise>
       </xsl:choose>
    </xsl:template>
 
    <xsl:template name = "header.navdata-vert">
+      <xsl:variable name="home_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="concat( $boost.root, '/index.htm' )"/>
+         </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="libraries_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="$boost.libraries"/>
+         </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="people_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="concat( $boost.root, '/people/people.htm' )"/>
+         </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="faq_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="concat( $boost.root, '/more/faq.htm' )"/>
+         </xsl:call-template>
+      </xsl:variable>
+      <xsl:variable name="more_link">
+         <xsl:call-template name="href.target.relative">
+            <xsl:with-param name="target" select="concat( $boost.root, '/more/index.htm' )"/>
+         </xsl:call-template>
+      </xsl:variable>
+
       <td><div>
          <xsl:if test = "$nav.border != 'Boost'">
             <xsl:attribute name = "class">boost-toc</xsl:attribute>
          </xsl:if>
-         <div><a href = "{$boost.root}/index.htm">Home</a></div>
-         <div><a href = "{$boost.libraries}">Libraries</a></div>
-         <div><a href = "{$boost.root}/people/people.htm">People</a></div>
-         <div><a href = "{$boost.root}/more/faq.htm">FAQ</a></div>
-         <div><a href = "{$boost.root}/more/index.htm">More</a></div>
+         <div><a href = "{$home_link}">Home</a></div>
+         <div><a href = "{$libraries_link}">Libraries</a></div>
+         <div><a href = "{$people_link}">People</a></div>
+         <div><a href = "{$faq_link}">FAQ</a></div>
+         <div><a href = "{$more_link}">More</a></div>
       </div></td>
    </xsl:template>
+
 
    <!-- footer -->
 

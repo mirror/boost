@@ -7,6 +7,7 @@
   <xsl:import
     href="http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"/>
 
+  <xsl:import href="chunk-common.xsl"/>
   <xsl:import href="docbook-layout.xsl"/>
   <xsl:import href="navbar.xsl"/>
 
