@@ -524,7 +524,7 @@ struct transform_iterator_traits {
     typedef value_type reference;
     typedef value_type* pointer;
     typedef typename IteratorTraits::difference_type difference_type;
-    typedef typename IteratorTraits::iterator_category iterator_category;
+    typedef std::input_iterator_tag iterator_category;
 };
   
 template <class AdaptableUnaryFunction,
