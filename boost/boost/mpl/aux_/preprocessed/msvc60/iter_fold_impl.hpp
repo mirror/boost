@@ -63,7 +63,7 @@ template<> struct iter_fold_chunk<1>
         typedef First iter0;
         typedef State state0;
         typedef typename apply2< ForwardOp,state0,iter0 >::type state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         
 
         typedef state1 state;
@@ -92,9 +92,9 @@ template<> struct iter_fold_chunk<2>
         typedef First iter0;
         typedef State state0;
         typedef typename apply2< ForwardOp,state0,iter0 >::type state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         typedef typename apply2< ForwardOp,state1,iter1 >::type state2;
-        typedef typename next<iter1>::type iter2;
+        typedef typename mpl::next<iter1>::type iter2;
         
 
         typedef state2 state;
@@ -123,11 +123,11 @@ template<> struct iter_fold_chunk<3>
         typedef First iter0;
         typedef State state0;
         typedef typename apply2< ForwardOp,state0,iter0 >::type state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         typedef typename apply2< ForwardOp,state1,iter1 >::type state2;
-        typedef typename next<iter1>::type iter2;
+        typedef typename mpl::next<iter1>::type iter2;
         typedef typename apply2< ForwardOp,state2,iter2 >::type state3;
-        typedef typename next<iter2>::type iter3;
+        typedef typename mpl::next<iter2>::type iter3;
         
 
         typedef state3 state;
@@ -156,13 +156,13 @@ template<> struct iter_fold_chunk<4>
         typedef First iter0;
         typedef State state0;
         typedef typename apply2< ForwardOp,state0,iter0 >::type state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         typedef typename apply2< ForwardOp,state1,iter1 >::type state2;
-        typedef typename next<iter1>::type iter2;
+        typedef typename mpl::next<iter1>::type iter2;
         typedef typename apply2< ForwardOp,state2,iter2 >::type state3;
-        typedef typename next<iter2>::type iter3;
+        typedef typename mpl::next<iter2>::type iter3;
         typedef typename apply2< ForwardOp,state3,iter3 >::type state4;
-        typedef typename next<iter3>::type iter4;
+        typedef typename mpl::next<iter3>::type iter4;
         
 
         typedef state4 state;
@@ -267,7 +267,7 @@ template<
 struct iter_fold_step
 {
     typedef iter_fold_chunk< -1 >::template result_<
-          typename next<First>::type
+          typename mpl::next<First>::type
         , Last
         , typename apply2< ForwardOp,State,First >::type
         , ForwardOp

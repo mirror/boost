@@ -67,7 +67,7 @@ template<> struct reverse_fold_chunk<1>
         typedef First iter0;
         typedef State fwd_state0;
         typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         
 
         typedef fwd_state1 bkwd_state1;
@@ -99,9 +99,9 @@ template<> struct reverse_fold_chunk<2>
         typedef First iter0;
         typedef State fwd_state0;
         typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         typedef typename apply2< ForwardOp, fwd_state1, typename deref<iter1>::type >::type fwd_state2;
-        typedef typename next<iter1>::type iter2;
+        typedef typename mpl::next<iter1>::type iter2;
         
 
         typedef fwd_state2 bkwd_state2;
@@ -136,11 +136,11 @@ template<> struct reverse_fold_chunk<3>
         typedef First iter0;
         typedef State fwd_state0;
         typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         typedef typename apply2< ForwardOp, fwd_state1, typename deref<iter1>::type >::type fwd_state2;
-        typedef typename next<iter1>::type iter2;
+        typedef typename mpl::next<iter1>::type iter2;
         typedef typename apply2< ForwardOp, fwd_state2, typename deref<iter2>::type >::type fwd_state3;
-        typedef typename next<iter2>::type iter3;
+        typedef typename mpl::next<iter2>::type iter3;
         
 
         typedef fwd_state3 bkwd_state3;
@@ -176,13 +176,13 @@ template<> struct reverse_fold_chunk<4>
         typedef First iter0;
         typedef State fwd_state0;
         typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         typedef typename apply2< ForwardOp, fwd_state1, typename deref<iter1>::type >::type fwd_state2;
-        typedef typename next<iter1>::type iter2;
+        typedef typename mpl::next<iter1>::type iter2;
         typedef typename apply2< ForwardOp, fwd_state2, typename deref<iter2>::type >::type fwd_state3;
-        typedef typename next<iter2>::type iter3;
+        typedef typename mpl::next<iter2>::type iter3;
         typedef typename apply2< ForwardOp, fwd_state3, typename deref<iter3>::type >::type fwd_state4;
-        typedef typename next<iter3>::type iter4;
+        typedef typename mpl::next<iter3>::type iter4;
         
 
         typedef fwd_state4 bkwd_state4;
@@ -220,13 +220,13 @@ struct reverse_fold_chunk
         typedef First iter0;
         typedef State fwd_state0;
         typedef typename apply2< ForwardOp, fwd_state0, typename deref<iter0>::type >::type fwd_state1;
-        typedef typename next<iter0>::type iter1;
+        typedef typename mpl::next<iter0>::type iter1;
         typedef typename apply2< ForwardOp, fwd_state1, typename deref<iter1>::type >::type fwd_state2;
-        typedef typename next<iter1>::type iter2;
+        typedef typename mpl::next<iter1>::type iter2;
         typedef typename apply2< ForwardOp, fwd_state2, typename deref<iter2>::type >::type fwd_state3;
-        typedef typename next<iter2>::type iter3;
+        typedef typename mpl::next<iter2>::type iter3;
         typedef typename apply2< ForwardOp, fwd_state3, typename deref<iter3>::type >::type fwd_state4;
-        typedef typename next<iter3>::type iter4;
+        typedef typename mpl::next<iter3>::type iter4;
         
 
         typedef reverse_fold_impl<
@@ -310,7 +310,7 @@ template<
 struct reverse_fold_step
 {
     typedef reverse_fold_chunk< -1 >::template result_<
-          typename next<First>::type
+          typename mpl::next<First>::type
         , Last
         , typename apply2<ForwardOp,State, typename deref<First>::type>::type
         , BackwardOp

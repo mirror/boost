@@ -25,7 +25,7 @@ struct pop_front_impl< aux::list_tag >
 {
     template< typename List > struct apply
     {
-        typedef typename next<List>::type type;
+        typedef typename mpl::next<List>::type type;
     };
 };
 

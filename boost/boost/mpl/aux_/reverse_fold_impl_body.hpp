@@ -34,7 +34,7 @@
         , BOOST_PP_CAT(fwd_state,n_) \
         , AUX778076_FOLD_IMPL_OP(BOOST_PP_CAT(iter,n_)) \
         >::type BOOST_PP_CAT(fwd_state,BOOST_PP_INC(n_)); \
-    typedef typename next<BOOST_PP_CAT(iter,n_)>::type \
+    typedef typename mpl::next<BOOST_PP_CAT(iter,n_)>::type \
         BOOST_PP_CAT(iter,BOOST_PP_INC(n_)); \
     /**/
 
@@ -137,7 +137,7 @@ struct AUX778076_FOLD_IMPL_NAME<-1,First,Last,State,BackwardOp,ForwardOp>
 {
     typedef AUX778076_FOLD_IMPL_NAME<
           -1
-        , typename next<First>::type
+        , typename mpl::next<First>::type
         , Last
         , typename apply2<ForwardOp,State,AUX778076_FOLD_IMPL_OP(First)>::type
         , BackwardOp
@@ -280,7 +280,7 @@ template<
 struct BOOST_PP_CAT(AUX778076_FOLD_IMPL_NAME_PREFIX,_step)
 {
     typedef AUX778076_FOLD_CHUNK_NAME<-1>::template result_<
-          typename next<First>::type
+          typename mpl::next<First>::type
         , Last
         , typename apply2<ForwardOp,State,AUX778076_FOLD_IMPL_OP(First)>::type
         , BackwardOp

@@ -34,7 +34,7 @@
         , BOOST_PP_CAT(state,i) \
         , AUX778076_FOLD_IMPL_OP(BOOST_PP_CAT(iter,i)) \
         >::type BOOST_PP_CAT(state,BOOST_PP_INC(i)); \
-    typedef typename next<BOOST_PP_CAT(iter,i)>::type \
+    typedef typename mpl::next<BOOST_PP_CAT(iter,i)>::type \
         BOOST_PP_CAT(iter,BOOST_PP_INC(i)); \
     /**/
 
@@ -106,7 +106,7 @@ template<
 struct AUX778076_FOLD_IMPL_NAME<-1,First,Last,State,ForwardOp>
     : AUX778076_FOLD_IMPL_NAME<
           -1
-        , typename next<First>::type
+        , typename mpl::next<First>::type
         , Last
         , typename apply2<ForwardOp,State,AUX778076_FOLD_IMPL_OP(First)>::type
         , ForwardOp
@@ -140,7 +140,7 @@ struct AUX778076_FOLD_IMPL_NAME
 {
     typedef AUX778076_FOLD_IMPL_NAME<
           -1
-        , typename next<First>::type
+        , typename mpl::next<First>::type
         , Last
         , typename apply2<ForwardOp,State,AUX778076_FOLD_IMPL_OP(First)>::type
         , ForwardOp
@@ -268,7 +268,7 @@ struct BOOST_PP_CAT(AUX778076_FOLD_IMPL_NAME_PREFIX,_step)
 {
     // can't inherit here - it breaks MSVC 7.0
     typedef AUX778076_FOLD_CHUNK_NAME<-1>::template result_<
-          typename next<First>::type
+          typename mpl::next<First>::type
         , Last
         , typename apply2<ForwardOp,State,AUX778076_FOLD_IMPL_OP(First)>::type
         , ForwardOp
