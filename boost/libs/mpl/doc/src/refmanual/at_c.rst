@@ -89,9 +89,9 @@ Example
 .. parsed-literal::
     
     typedef range_c<long,10,50> range;
-    BOOST_MPL_ASSERT_RELATION( (at_c< range,0 >::value), ==, 10 );
-    BOOST_MPL_ASSERT_RELATION( (at_c< range,10 >::value), ==, 20 );
-    BOOST_MPL_ASSERT_RELATION( (at_c< range,40 >::value), ==, 50 );
+    BOOST_MPL_ASSERT_RELATION( (at_c< range,0 >::type::value), ==, 10 );
+    BOOST_MPL_ASSERT_RELATION( (at_c< range,10 >::type::value), ==, 20 );
+    BOOST_MPL_ASSERT_RELATION( (at_c< range,40 >::type::value), ==, 50 );
 
 
 See also
