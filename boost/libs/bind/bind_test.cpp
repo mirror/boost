@@ -377,6 +377,11 @@ void member_function_test()
 
 void member_function_void_test()
 {
+// mem_fn void returns are temporarily disabled on MSVC 6
+// they cause internal compiler errors with debug info turned on
+
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+
     using namespace boost;
 
     V v;
@@ -463,6 +468,8 @@ void member_function_void_test()
     bind(&V::g8, ref(v), 1, 2, 3, 4, 5, 6, 7, 8)();
 
     BOOST_TEST( v.hash == 23558 );
+
+#endif
 }
 
 void nested_bind_test()

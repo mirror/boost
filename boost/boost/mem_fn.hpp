@@ -41,7 +41,10 @@ template<class T> T * get_pointer(shared_ptr<T> const & p)
     return p.get();
 }
 
-#ifdef BOOST_NO_VOID_RETURNS
+// Void return workaround temporarily disabled on MSVC 6
+// causes internal compiler errors with debug info enabled
+
+#if defined(BOOST_NO_VOID_RETURNS) && !defined(BOOST_MSVC)
 
 namespace _mfi // mem_fun_impl
 {
