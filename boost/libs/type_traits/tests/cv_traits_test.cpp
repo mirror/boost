@@ -36,7 +36,7 @@ int cpp_main(int argc, char* argv[])
    value_test(true, boost::is_const<const UDT>::value)
    value_test(true, boost::is_const<const volatile UDT>::value)
    value_test(false, boost::is_const<const int&>::value)
-#if !defined (__GNUC__) || (defined(__GNUC__) && __GNUC__==3 && __GNUC_MINOR__>=1)
+#if !defined(__GNUC__) || ( __GNUC__ > 3 ) || ( __GNUC__ ==3 && __GNUC_MINOR__ >=1)
    value_test(false, boost::is_const<cr_type>::value)
 #else
    value_fail(false, boost::is_const<cr_type>::value)
@@ -66,6 +66,7 @@ unsigned int expected_failures = 1;
 #else
 unsigned int expected_failures = 0;
 #endif
+
 
 
 
