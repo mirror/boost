@@ -339,50 +339,50 @@ Cannot handle template parameter with type <xsl:value-of select="string(type)"/>
     <xsl:choose>
       <xsl:when test="@kind='public-static-func'">
         <!-- TBD: pass on the fact that these are static functions -->
-        <member-function-group name="Public static functions">
+        <method-group name="public static functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
           </xsl:apply-templates>
-        </member-function-group>
+        </method-group>
       </xsl:when>
       <xsl:when test="@kind='protected-static-func'">
         <!-- TBD: pass on the fact that these are static functions -->
-        <member-function-group name="Protected static functions">
+        <method-group name="protected static functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
           </xsl:apply-templates>
-        </member-function-group>
+        </method-group>
       </xsl:when>
       <xsl:when test="@kind='private-static-func'">
         <!-- TBD: pass on the fact that these are static functions -->
-        <member-function-group name="Private static functions">
+        <method-group name="private static functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
           </xsl:apply-templates>
-        </member-function-group>
+        </method-group>
       </xsl:when>
       <xsl:when test="@kind='public-func'">
-        <member-function-group name="Public member functions">
+        <method-group name="public member functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
           </xsl:apply-templates>
-        </member-function-group>
+        </method-group>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='protected-func'">
-        <member-function-group name="Protected member functions">
+        <method-group name="protected member functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
           </xsl:apply-templates>
-        </member-function-group>
+        </method-group>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='private-func'">
-        <member-function-group name="Private member functions">
+        <method-group name="private member functions">
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
           </xsl:apply-templates>
-        </member-function-group>
+        </method-group>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='public-type'">
@@ -550,9 +550,9 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         </xsl:attribute>
         
         <!-- Return type -->
-        <xsl:attribute name="return-type">
+        <type>
           <xsl:value-of select="type"/>
-        </xsl:attribute>
+        </type>
 
         <xsl:call-template name="function.children"/>
       </function>
@@ -605,9 +605,9 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:if>
 
       <!-- Return type -->
-      <xsl:attribute name="return-type">
+      <type>
         <xsl:value-of select="type"/>
-      </xsl:attribute>
+      </type>
 
       <xsl:call-template name="function.children"/>
     </method>

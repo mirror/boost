@@ -734,7 +734,7 @@
 
   <!-- The "standardese" function requirements mode uses ordered lists -->
   <xsl:template name="function.requirements.standardese">
-    <orderedlist spacing="compact">
+    <orderedlist spacing="compact" numeration="arabic">
       <xsl:apply-templates 
         select="requires|effects|postconditions|returns|throws|complexity|
                 notes|rationale"
