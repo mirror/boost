@@ -18,14 +18,14 @@ namespace boost
     namespace range_detail
     {
         template< typename T >
-        struct collection_empty;
+        struct range_empty;
 
         //////////////////////////////////////////////////////////////////////
         // default
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_empty<std_container_>
+        struct range_empty<std_container_>
         {
             template< typename C >
             static bool fun( C& c )
@@ -39,7 +39,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_empty<std_pair_>
+        struct range_empty<std_pair_>
         {
             template< typename P >
             static bool fun( const P& p )
@@ -53,7 +53,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_empty<array_>
+        struct range_empty<array_>
         {
             template< typename T, std::size_t sz >
             static bool fun( T BOOST_ARRAY_REF[sz] )
@@ -69,7 +69,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_empty<char_ptr_>
+        struct range_empty<char_ptr_>
         {
             static bool fun( const char* s )
             {
@@ -78,7 +78,7 @@ namespace boost
         };
 
         template<>
-        struct collection_empty<const_char_ptr_>
+        struct range_empty<const_char_ptr_>
         {
             static bool fun( const char* s )
             {
@@ -87,7 +87,7 @@ namespace boost
         };
 
         template<>
-        struct collection_empty<wchar_t_ptr_>
+        struct range_empty<wchar_t_ptr_>
         {
             static bool fun( const wchar_t* s )
             {
@@ -96,7 +96,7 @@ namespace boost
         };
         
         template<>
-        struct collection_empty<const_wchar_t_ptr_>
+        struct range_empty<const_wchar_t_ptr_>
         {
             static bool fun( const wchar_t* s )
             {
@@ -111,7 +111,7 @@ namespace boost
     inline bool 
     empty( const C& c )
     {
-        return range_detail::collection_empty<  BOOST_RANGE_DEDUCED_TYPENAME range_detail::collection<C>::type >::fun( c );
+        return range_detail::range_empty<  BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type >::fun( c );
     }
 
 } // namespace 'boost'

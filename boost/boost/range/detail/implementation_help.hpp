@@ -116,13 +116,13 @@ namespace boost
         {
             return sz;
         }
-        
+       
         template< typename T, std::size_t sz >
         inline std::size_t array_size( const T BOOST_RANGE_ARRAY_REF()[sz], int )
         {
             return sz;
         }
-                
+
         template< typename T, std::size_t sz >
         inline std::size_t array_size( T BOOST_RANGE_ARRAY_REF()[sz], char_or_wchar_t_array_tag )
         {

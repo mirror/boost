@@ -105,13 +105,13 @@ namespace boost
             }
         };
 
-    } // namespace 'range_traits_detail'
+    } // namespace 'range_detail'
     
     template< typename C >
     inline BOOST_DEDUCED_TYPENAME result_iterator_of<C>::type 
     begin( C& c )
     {
-        return range_traits_detail::range_begin< BOOST_DEDUCED_TYPENAME range_traits_detail::range<C>::type >::fun( c );
+        return range_detail::range_begin< BOOST_DEDUCED_TYPENAME range_detail::range<C>::type >::fun( c );
     }
     
 } // namespace 'boost'

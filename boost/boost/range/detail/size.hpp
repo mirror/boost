@@ -22,14 +22,14 @@ namespace boost
     namespace range_detail
     {
         template< typename T >
-        struct collection_size;
+        struct range_size;
 
         //////////////////////////////////////////////////////////////////////
         // default
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_size<std_container_>
+        struct range_size<std_container_>
         {
             template< typename C >
             static BOOST_RANGE_DEDUCED_TYPENAME C::size_type fun( const C& c )
@@ -43,7 +43,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_size<std_pair_>
+        struct range_size<std_pair_>
         {
             template< typename P >
             static BOOST_RANGE_DEDUCED_TYPENAME size_type_of<P>::type fun( const P& p )
@@ -57,7 +57,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
         
         template<>
-        struct collection_size<array_>
+        struct range_size<array_>
         {
             template< typename T, std::size_t sz >
             static std::size_t fun( T BOOST_ARRAY_REF[sz] )
@@ -67,7 +67,7 @@ namespace boost
         };
         
         template<>
-        struct collection_size<char_array_>
+        struct range_size<char_array_>
         {
             template< typename T, std::size_t sz >
             static std::size_t fun( T BOOST_ARRAY_REF[sz] )
@@ -77,7 +77,7 @@ namespace boost
         };
         
         template<>
-        struct collection_size<wchar_t_array_>
+        struct range_size<wchar_t_array_>
         {
             template< typename T, std::size_t sz >
             static std::size_t fun( T BOOST_ARRAY_REF[sz] )
@@ -91,7 +91,7 @@ namespace boost
         //////////////////////////////////////////////////////////////////////
 
         template<>
-        struct collection_size<char_ptr_>
+        struct range_size<char_ptr_>
         {
             static std::size_t fun( const char* s )
             {
@@ -100,7 +100,7 @@ namespace boost
         };
 
         template<>
-        struct collection_size<const_char_ptr_>
+        struct range_size<const_char_ptr_>
         {
             static std::size_t fun( const char* s )
             {
@@ -109,7 +109,7 @@ namespace boost
         };
         
         template<>
-        struct collection_size<wchar_t_ptr_>
+        struct range_size<wchar_t_ptr_>
         {
             static std::size_t fun( const wchar_t* s )
             {
@@ -118,7 +118,7 @@ namespace boost
         };
 
         template<>
-        struct collection_size<const_wchar_t_ptr_>
+        struct range_size<const_wchar_t_ptr_>
         {
             static std::size_t fun( const wchar_t* s )
             {
@@ -133,7 +133,7 @@ namespace boost
     BOOST_RANGE_DEDUCED_TYPENAME size_type_of<C>::type 
     size( const C& c )
     {
-        return range_detail::collection_size<  BOOST_RANGE_DEDUCED_TYPENAME range_detail::collection<C>::type >::fun( c );
+        return range_detail::range_size<  BOOST_RANGE_DEDUCED_TYPENAME range_detail::range<C>::type >::fun( c );
     }
     
 } // namespace 'boost'

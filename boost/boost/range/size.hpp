@@ -58,13 +58,13 @@ namespace range
         template< typename T, std::size_t sz >
         inline std::size_t size( const T (&array)[sz] )
         {
-            return range_detail::array_size( array ); 
+            return range_detail::array_size<const T,sz>( array ); 
         }
         
         template< typename T, std::size_t sz >
         inline std::size_t size( T (&array)[sz] )
         {
-            return range_detail::array_size( array );
+            return boost::range_detail::array_size<T,sz>( array );
         }
         
         //////////////////////////////////////////////////////////////////////
