@@ -16,14 +16,21 @@ expression.)&nbsp;&nbsp; The object pointed to is guaranteed to be deleted,
 either on destruction of the <strong>scoped_ptr</strong>, or via an explicit <strong>scoped_ptr::reset()</strong>.&nbsp;
 See <a href="#scoped_ptr_example">example</a>.</p>
 <p>Class<strong> scoped_ptr</strong> is a simple solution for simple
-needs.&nbsp; It cannot be used in C++ Standard Library containers.&nbsp; See <a href="shared_ptr.htm"><strong>shared_ptr</strong></a>
+needs.&nbsp; It supplies a basic &quot;resource acquisition is
+initialization&quot; facility, without shared-ownership or transfer-of-ownership
+semantics.&nbsp; Both its name and enforcement of semantics (by being <a href="../utility/utility.htm#class noncopyable">noncopyable</a>)
+signal its intent to retain ownership solely within the current scope.&nbsp; By
+being <a href="../utility/utility.htm#class noncopyable">noncopyable</a>, it is
+safer than <b>shared_ptr</b> or std::auto_ptr for pointers which should not be
+copied.</p>
+<p>Because <strong>scoped_ptr</strong> is so simple, in its usual implementation
+every operation is as fast as for a built-in pointer and it has no more space overhead
+that a built-in pointer.</p>
+<p>Class<strong> scoped_ptr</strong> cannot be used in C++ Standard Library containers.&nbsp; See <a href="shared_ptr.htm"><strong>shared_ptr</strong></a>
 or std::auto_ptr if <strong>scoped_ptr</strong> does not meet your needs.</p>
 <p>Class<strong> scoped_ptr</strong> cannot correctly hold a pointer to a
 dynamically allocated array.&nbsp; See <a href="scoped_array.htm"><strong>scoped_array</strong></a>
 for that usage.</p>
-<p>Because <strong>scoped_ptr</strong> is so simple, in its usual implementation
-every operation is as fast as a built-in pointer and has no more space overhead
-that a built-in pointer.</p>
 <p>The class is a template parameterized on <tt>T</tt>, the type of the object
 pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">common
 requirements</a>.</p>
@@ -116,7 +123,7 @@ body</code> is not visible at the time scoped_ptr&lt;&gt; deletes it. See ISO
 5.3.5/5.&nbsp; Note that some compilers will issue a warning even though the
 above code is well defined.</p>
 <hr>
-<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->27 July 2000<!--webbot bot="Timestamp" endspan i-checksum="18770" --></p>
+<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->10 May 2001<!--webbot bot="Timestamp" endspan i-checksum="15101" --></p>
 <p>© Copyright Greg Colvin and Beman Dawes 1999. Permission to copy, use,
 modify, sell and distribute this document is granted provided this copyright
 notice appears in all copies. This document is provided &quot;as is&quot;

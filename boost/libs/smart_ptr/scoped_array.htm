@@ -15,16 +15,21 @@ allocated array. (Dynamically allocated arrays are allocated with the C++ <tt>ne
 expression.)&nbsp;&nbsp; The array pointed to is guaranteed to be deleted,
 either on destruction of the <strong>scoped_array</strong>, or via an explicit <strong>scoped_array::reset()</strong>.</p>
 <p>Class<strong> scoped_array</strong> is a simple solution for simple
-needs.&nbsp; It cannot be used in C++ Standard Library containers.&nbsp; See <a href="shared_array.htm"><strong>shared_array</strong></a>
+needs.&nbsp;It supplies a basic &quot;resource acquisition is
+initialization&quot; facility, without shared-ownership or transfer-of-ownership
+semantics.&nbsp; Both its name and enforcement of semantics (by being <a href="../utility/utility.htm#class noncopyable">noncopyable</a>)
+signal its intent to retain ownership solely within the current scope.&nbsp; By
+being <a href="../utility/utility.htm#class noncopyable">noncopyable</a>, it is
+safer than <b>shared_array</b> for pointers which should not be copied.</p>
+<p>Because <strong>scoped_array</strong> is so simple, in its usual
+implementation every operation is as fast as a built-in array pointer and it has no
+more space overhead that a built-in array pointer.</p>
+<p>It cannot be used in C++ Standard Library containers.&nbsp; See <a href="shared_array.htm"><strong>shared_array</strong></a>
 if <strong>scoped_array</strong> does not meet your needs.</p>
 <p>Class<strong> scoped_array</strong> cannot correctly hold a pointer to a
 single object.&nbsp; See <a href="scoped_ptr.htm"><strong>scoped_ptr</strong></a>
 for that usage.</p>
-<p>Because <strong>scoped_array</strong> is so simple, in its usual
-implementation every operation is as fast as a built-in array pointer and has no
-more space overhead that a built-in array pointer.</p>
-<p>A heavier duty alternative to a <strong>scoped_array</strong> is a <strong>scoped_ptr</strong>
-to a C++ Standard Library <strong>vector</strong>.</p>
+<p>A C++ Standard Library <strong>vector</strong> is a <strong> </strong>heavier duty alternative to a <strong>scoped_array</strong>.</p>
 <p>The class is a template parameterized on <tt>T</tt>, the type of the object
 pointed to.&nbsp;&nbsp; <tt>T</tt> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">common
 requirements</a>.</p>
