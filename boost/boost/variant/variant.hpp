@@ -993,10 +993,8 @@ public: // modifiers
 
     variant& operator=(const variant& rhs)
     {
-        //assign(rhs);
-        assign_into visitor(*this, operand.which());
-        operand.raw_apply_visitor(visitor);  
-
+        assign(rhs);
+        
         return *this;
     }
 
