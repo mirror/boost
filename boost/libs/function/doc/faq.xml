@@ -132,6 +132,25 @@ function objects with parameters that don't exactly match.</para>
       application a reference-counting allocator could be used.</para>
     </answer>
   </qandaentry>
+
+  <qandaentry>
+    <question><para>How much overhead does a call through <code><classname>boost::function</classname></code> incur?</para></question>
+    <answer>
+      <para>The cost of <code>boost::function</code> can be reasonably
+      consistently measured at around 20ns +/- 10 ns on a modern >2GHz
+      platform versus directly inlining the code.</para>
+
+      <para>However, the performance of your application may benefit
+      from or be disadvantaged by <code>boost::function</code>
+      depending on how your C++ optimiser optimises.  Similar to a
+      standard function pointer, differences of order of 10% have been
+      noted to the benefit or disadvantage of using
+      <code>boost::function</code> to call a function that contains a
+      tight loop depending on your compilation circumstances.</para>
+     
+      <para>[Answer provided by Matt Hurd. See <ulink url="http://article.gmane.org/gmane.comp.lib.boost.devel/33278"/>]</para>
+    </answer>
+  </qandaentry>
 </qandaset> 
 
 </section>
