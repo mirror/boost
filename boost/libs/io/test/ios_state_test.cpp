@@ -151,7 +151,7 @@ saver_tests_1
     boost::io::ios_iword_saver const      iis( output, my_index );
     boost::io::ios_pword_saver const      ipws( output, my_index );
 
-    locale  loc( locale(""), new backward_bool_names("") );
+    locale  loc( locale::classic(), new backward_bool_names("") );
 
     input.tie( &err );
     output.rdbuf( err.rdbuf() );
@@ -223,9 +223,8 @@ saver_tests_2
     output << test_num1 + test_num2;
     output.put( '\n' );
 
-    locale                             loc( locale(""),
+    locale                             loc( locale::classic(),
      new backward_bool_names("") );
-
     boost::io::ios_locale_saver const  ils( output, loc );
     output << '\t' << test_bool << '\n';
 
