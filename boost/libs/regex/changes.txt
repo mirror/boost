@@ -1,3 +1,11 @@
+FIXED:    Pathological regular expressions in snip4.cpp and in docs.
+FIXED:    Missing std:: prefixes in some headers.
+
+Version 302:
+FIXED:    STLPort debug problems.
+FIXED:    Compatibility with updated Dinkum libraries and VC6.
+ADDED:    Tentative support for partial matches (not yet documented).
+
 Version 301:
 First boost release version,
 CHANGED:  reg_match to match_results
@@ -183,6 +191,7 @@ BUG:      POSIX API functions can propagate C++ exceptions if the
           default allocator can throw exceptions.
 BUG:      character sets don't function correctly when regbase::char_classes
           is not set.
+
 
 
 

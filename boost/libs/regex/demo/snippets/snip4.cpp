@@ -88,14 +88,14 @@ extern const char* pre_format = "(?1&lt;)(?2&gt;)";
 
 
 const char* expression_text = // preprocessor directives: index 1
-                              "(^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*)|"
-                              // comment: index 3
-                              "(//[^\\n]*|/\\*([^*]|\\*+[^*/])*\\*+/)|"
-                              // literals: index 5
-                              "\\<([+-]?((0x[[:xdigit:]]+)|(([[:digit:]]*\\.)?[[:digit:]]+([eE][+-]?[[:digit:]]+)?))u?((int(8|16|32|64))|L)?)\\>|"
-                              // string literals: index 14
-                              "('([^\\\\']|\\\\.)*'|\"([^\\\\\"]|\\\\.)*\")|"
-                              // keywords: index 17
+                              "(^[[:blank:]]*#(?:[^\\\\\\n]|\\\\[^\\n[:punct:][:word:]]*[\\n[:punct:][:word:]])*)|"
+                              // comment: index 2
+                              "(//[^\\n]*|/\\*.*?\\*/)|"
+                              // literals: index 3
+                              "\\<([+-]?(?:(?:0x[[:xdigit:]]+)|(?:(?:[[:digit:]]*\\.)?[[:digit:]]+(?:[eE][+-]?[[:digit:]]+)?))u?(?:(?:int(?:8|16|32|64))|L)?)\\>|"
+                              // string literals: index 4
+                              "('(?:[^\\\\']|\\\\.)*'|\"(?:[^\\\\\"]|\\\\.)*\")|"
+                              // keywords: index 5
                               "\\<(__asm|__cdecl|__declspec|__export|__far16|__fastcall|__fortran|__import"
                               "|__pascal|__rtti|__stdcall|_asm|_cdecl|__except|_export|_far16|_fastcall"
                               "|__finally|_fortran|_import|_pascal|_stdcall|__thread|__try|asm|auto|bool"
@@ -108,16 +108,16 @@ const char* expression_text = // preprocessor directives: index 1
                               ;
 
 const char* format_string = "(?1<font color=\"#008040\">$&</font>)"
-                            "(?3<I><font color=\"#000080\">$&</font></I>)"
-                            "(?5<font color=\"#0000A0\">$&</font>)"
-                            "(?14<font color=\"#0000FF\">$&</font>)"
-                            "(?17<B>$&</B>)";
+                            "(?2<I><font color=\"#000080\">$&</font></I>)"
+                            "(?3<font color=\"#0000A0\">$&</font>)"
+                            "(?4<font color=\"#0000FF\">$&</font>)"
+                            "(?5<B>$&</B>)";
 
 const char* header_text = "<HTML>\n<HEAD>\n"
                           "<TITLE>Auto-generated html formated source</TITLE>\n"
                           "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=windows-1252\">\n"
                           "</HEAD>\n"
-                          "<BODY LINK=\"#0000ff\" VLINK=\"#800080\" BGCOLOR=\"#ffff99\">\n"
+                          "<BODY LINK=\"#0000ff\" VLINK=\"#800080\" BGCOLOR=\"#ffffff\">\n"
                           "<P> </P>\n<PRE>";
 
 const char* footer_text = "</PRE>\n</BODY>\n\n";

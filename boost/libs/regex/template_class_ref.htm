@@ -2053,7 +2053,7 @@ follows: <br>
 takes C/C++ source code as input, and outputs syntax highlighted
 HTML code. </p>
 
-<pre><font color="#008040">#include &lt;iostream&gt;</font>
+<pre>
 <font color="#008040">#include &lt;fstream&gt;</font>
 <font color="#008040">#include &lt;sstream&gt;</font>
 <font color="#008040">#include &lt;string&gt;</font>
@@ -2082,8 +2082,8 @@ boost::regex e1, e2;
    <b>while</b>(is.get(c))
    {
       <b>if</b>(s.capacity() == s.size())
-         s.reserve(s.capacity() * <font color="#000080">3</font>);
-      s.append(<font color="#000080">1</font>, c);
+         s.reserve(s.capacity() * <font color="#0000A0">3</font>);
+      s.append(<font color="#0000A0">1</font>, c);
    }
 }
 
@@ -2105,12 +2105,12 @@ color="#0000FF">&quot;.htm&quot;</font>));
       <font color="#000080"><i>// temporary string stream</i></font>
       std::ostringstream t(std::ios::out | std::ios::binary);
       std::ostream_iterator&lt;<b>char</b>, <b>char</b>&gt; oi(t);
-      regex_merge(oi, in.begin(), in.end(), e2, pre_format);
+      boost::regex_merge(oi, in.begin(), in.end(), e2, pre_format);
       <font color="#000080"><i>// then output to final output stream</i></font>
       <font color="#000080"><i>// adding syntax highlighting:</i></font>
       std::string s(t.str());
       std::ostream_iterator&lt;<b>char</b>, <b>char</b>&gt; out(os);
-      regex_merge(out, s.begin(), s.end(), e1, format_string);
+      boost::regex_merge(out, s.begin(), s.end(), e1, format_string);
       os &lt;&lt; footer_text;
    }
    <b>return</b> <font color="#0000A0">0</font>;
@@ -2123,14 +2123,14 @@ color="#0000FF">&quot;(?1&lt;)(?2&gt;)&quot;</font>;
 
 
 <b>const</b> <b>char</b>* expression_text = <font color="#000080"><i>// preprocessor directives: index 1</i></font>
-                              <font color="#0000FF">&quot;(^[[:blank:]]*#([^\\n]*\\\\[[:space:]]+)*[^\\n]*)|&quot;</font>
-                              <font color="#000080"><i>// comment: index 3</i></font>
-                              <font color="#0000FF">&quot;(//[^\\n]*|/\\*([^*]|\\*+[^*/])*\\*+/)|&quot;</font>
-                              <font color="#000080"><i>// literals: index 5</i></font>
-                              <font color="#0000FF">&quot;\\&lt;([+-]?((0x[[:xdigit:]]+)|(([[:digit:]]*\\.)?[[:digit:]]+([eE][+-]?[[:digit:]]+)?))u?((int(8|16|32|64))|L)?)\\&gt;|&quot;</font>
-                              <font color="#000080"><i>// string literals: index 14</i></font>
-                              <font color="#0000FF">&quot;('([^\\\\']|\\\\.)*'|\&quot;([^\\\\\&quot;]|\\\\.)*\&quot;)|&quot;</font>
-                              <font color="#000080"><i>// keywords: index 17</i></font>
+                              <font color="#0000FF">&quot;(^[[:blank:]]*#(?:[^\\\\\\n]|\\\\[^\\n[:punct:][:word:]]*[\\n[:punct:][:word:]])*)|&quot;</font>
+                              <font color="#000080"><i>// comment: index 2</i></font>
+                              <font color="#0000FF">&quot;(//[^\\n]*|/\\*.*?\\*/)|&quot;</font>
+                              <font color="#000080"><i>// literals: index 3</i></font>
+                              <font color="#0000FF">&quot;\\&lt;([+-]?(?:(?:0x[[:xdigit:]]+)|(?:(?:[[:digit:]]*\\.)?[[:digit:]]+(?:[eE][+-]?[[:digit:]]+)?))u?(?:(?:int(?:8|16|32|64))|L)?)\\&gt;|&quot;</font>
+                              <font color="#000080"><i>// string literals: index 4</i></font>
+                              <font color="#0000FF">&quot;('(?:[^\\\\']|\\\\.)*'|\&quot;(?:[^\\\\\&quot;]|\\\\.)*\&quot;)|&quot;</font>
+                              <font color="#000080"><i>// keywords: index 5</i></font>
                               <font color="#0000FF">&quot;\\&lt;(__asm|__cdecl|__declspec|__export|__far16|__fastcall|__fortran|__import&quot;</font>
                               <font color="#0000FF">&quot;|__pascal|__rtti|__stdcall|_asm|_cdecl|__except|_export|_far16|_fastcall&quot;</font>
                               <font color="#0000FF">&quot;|__finally|_fortran|_import|_pascal|_stdcall|__thread|__try|asm|auto|bool&quot;</font>
@@ -2143,16 +2143,16 @@ color="#0000FF">&quot;(?1&lt;)(?2&gt;)&quot;</font>;
                               ;
 
 <b>const</b> <b>char</b>* format_string = <font color="#0000FF">&quot;(?1&lt;font color=\&quot;#008040\&quot;&gt;$&amp;&lt;/font&gt;)&quot;</font>
-                            <font color="#0000FF">&quot;(?3&lt;I&gt;&lt;font color=\&quot;#000080\&quot;&gt;$&amp;&lt;/font&gt;&lt;/I&gt;)&quot;</font>
-                            <font color="#0000FF">&quot;(?5&lt;font color=\&quot;#0000A0\&quot;&gt;$&amp;&lt;/font&gt;)&quot;</font>
-                            <font color="#0000FF">&quot;(?14&lt;font color=\&quot;#0000FF\&quot;&gt;$&amp;&lt;/font&gt;)&quot;</font>
-                            <font color="#0000FF">&quot;(?17&lt;B&gt;$&amp;&lt;/B&gt;)&quot;</font>;
+                            <font color="#0000FF">&quot;(?2&lt;I&gt;&lt;font color=\&quot;#000080\&quot;&gt;$&amp;&lt;/font&gt;&lt;/I&gt;)&quot;</font>
+                            <font color="#0000FF">&quot;(?3&lt;font color=\&quot;#0000A0\&quot;&gt;$&amp;&lt;/font&gt;)&quot;</font>
+                            <font color="#0000FF">&quot;(?4&lt;font color=\&quot;#0000FF\&quot;&gt;$&amp;&lt;/font&gt;)&quot;</font>
+                            <font color="#0000FF">&quot;(?5&lt;B&gt;$&amp;&lt;/B&gt;)&quot;</font>;
 
 <b>const</b> <b>char</b>* header_text = <font color="#0000FF">&quot;&lt;HTML&gt;\n&lt;HEAD&gt;\n&quot;</font>
                           <font color="#0000FF">&quot;&lt;TITLE&gt;Auto-generated html formated source&lt;/TITLE&gt;\n&quot;</font>
                           <font color="#0000FF">&quot;&lt;META HTTP-EQUIV=\&quot;Content-Type\&quot; CONTENT=\&quot;text/html; charset=windows-1252\&quot;&gt;\n&quot;</font>
                           <font color="#0000FF">&quot;&lt;/HEAD&gt;\n&quot;</font>
-                          <font color="#0000FF">&quot;&lt;BODY LINK=\&quot;#0000ff\&quot; VLINK=\&quot;#800080\&quot; BGCOLOR=\&quot;#ffff99\&quot;&gt;\n&quot;</font>
+                          <font color="#0000FF">&quot;&lt;BODY LINK=\&quot;#0000ff\&quot; VLINK=\&quot;#800080\&quot; BGCOLOR=\&quot;#ffffff\&quot;&gt;\n&quot;</font>
                           <font color="#0000FF">&quot;&lt;P&gt; &lt;/P&gt;\n&lt;PRE&gt;&quot;</font>;
 
 <b>const</b> <b>char</b>* footer_text = <font color="#0000FF">&quot;&lt;/PRE&gt;\n&lt;/BODY&gt;\n\n&quot;</font>;
