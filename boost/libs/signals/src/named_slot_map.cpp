@@ -52,7 +52,7 @@ public:
 class named_slot_map_iterator::impl
 {
 public:
-  impl() {}
+  impl() : slot_assigned(false) {}
 
   impl(group_iterator group, group_iterator last_group)
     : group(group), last_group(last_group), slot_assigned(false)
@@ -91,8 +91,6 @@ public:
   group_iterator group;
   group_iterator last_group;
   slot_pair_iterator slot_;
-
-private:
   bool slot_assigned;
 };
 
@@ -197,12 +195,14 @@ named_slot_map::insert(const any& name, const connection& con, const any& slot,
   case at_back:
     group->second.push_back(connection_slot_pair(con, slot));
     it->slot_ = group->second.end();
+    it->slot_assigned = true;
     --(it->slot_);
     break;
 
   case at_front:
     group->second.push_front(connection_slot_pair(con, slot));
     it->slot_ = group->second.begin();
+    it->slot_assigned = true;
     break;
   }
   return iterator(it);
@@ -226,7 +226,8 @@ void named_slot_map::disconnect(const any& name)
 void named_slot_map::erase(iterator pos)
 {
   // Erase the slot
-  pos.impl_->group->second.erase(pos.impl_->slot_);
+  pos.impl_->slot_->first.disconnect();
+  //  pos.impl_->group->second.erase(pos.impl_->slot_); ?
 }
 
 void named_slot_map::remove_disconnected_slots()
