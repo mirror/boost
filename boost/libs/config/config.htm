@@ -911,6 +911,62 @@ void g() { return f(); }</pre>
                   x;</font> if the compiler requires a return, even when it can never be 
                reached.</td>
          </tr>
+
+
+         <tr>
+            <td>BOOST_EXPLICIT_TEMPLATE_TYPE(t)<br>
+                BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t, v)<br>
+
+                BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)<br>
+                BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)<br>
+            </td>
+            <td>Some compilers silently "fold" different function template
+                instantiations if some of the template parameters don't appear
+                in the function parameter list. For instance:
+<pre>
+  #include &lt;iostream&gt;
+  #include &lt;ostream&gt;
+  #include &lt;typeinfo&gt;
+
+  template &lt;int n&gt;
+  void f() { std::cout &lt;&lt; n &lt;&lt; ' '; }
+
+  template &lt;typename T>
+  void g() { std::cout &lt;&lt; typeid(T).name() &lt;&lt; ' '; }
+
+  int main() {
+    f&lt;1&gt;();
+    f&lt;2&gt;();
+
+    g&lt;int&gt;();
+    g&lt;double&gt;();
+  }
+</pre>
+                incorrectly outputs <tt>"2 2 double double "</tt> on VC++ 6.
+
+                These macros, to be used in the function parameter list, fix the
+                problem without effects on the calling syntax. For instance, in
+                the case above write:
+<pre>
+  template &lt;int n&gt;
+  void f(BOOST_EXPLICIT_TEMPLATE_NON_TYPE(int, n)) { ... }
+
+  template &lt;typename T&gt;
+  void g(BOOST_EXPLICIT_TEMPLATE_TYPE(T)) { ... }
+</pre>
+
+                Beware that they can declare (for affected compilers) a dummy <i>
+                defaulted</i> parameter, so they
+                <br><br>a) should be always invoked *at the end* of the parameter list
+                <br>    b) can't be used if your function template is multiply declared.
+                <br><br>
+
+                Furthermore, in order to add any needed comma separator, an "APPEND_*"
+                version must be used when the macro invocation appears after a normal
+                parameter declaration or after the invocation of another macro of this
+                same group. 
+            </td>
+         </tr>
          <tr>
             <td valign="top" width="50%">BOOST_USE_FACET(Type, loc)</td>
             <td valign="top" width="50%">When the standard library does not have a comforming 
