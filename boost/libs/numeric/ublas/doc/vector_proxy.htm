@@ -10,7 +10,7 @@
 <title>Vector Proxies</title>
 </head>
 <body>
-<h1><img src="../../../../boost.png" alt="boost.png" align="middle" />
+<h1><img src="c++boost.gif" alt="c++boost.gif" align="middle" />
 Vector Proxies</h1>
 <h2><a name="vector_range" id="vector_range"></a> Vector Range</h2>
 <h4>Description</h4>
@@ -19,6 +19,7 @@ addressing a sub-range of a vector's element.</p>
 <h4>Example</h4>
 <pre>
 #include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/vector_proxy.hpp&gt;
 #include &lt;boost/numeric/ublas/io.hpp&gt;
 
 int main () {
@@ -48,7 +49,7 @@ int main () {
 </tbody>
 </table>
 <h4>Model of</h4>
-<p><a href="expression.htm#vector_expressio">Vector Expression</a>
+<p><a href="expression_concept.htm#vector_expressio">Vector Expression</a>
 .</p>
 <p>If the specified range falls outside that of the index range of
 the vector, then the <code>vector_range</code> is not a well formed
@@ -56,7 +57,7 @@ Vector Expression. That is, access to an element which is outside
 of index range of the vector is <i>undefined</i>.</p>
 <h4>Type requirements</h4>
 <p>None, except for those imposed by the requirements of <a href=
-"expression.htm#vector_expression">Vector Expression</a> .</p>
+"expression_concept.htm#vector_expression">Vector Expression</a> .</p>
 <h4>Public base classes</h4>
 <p><code>vector_expression&lt;vector_range&lt;V&gt; &gt;</code></p>
 <h4>Members</h4>
@@ -208,30 +209,33 @@ the reversed <code>vector_range</code>.</td>
 </tbody>
 </table>
 <h3>Projections</h3>
+<h4>Description</h4>
+<p>The free <code>project</code> functions support the construction
+of vector ranges. Existing <code>matrix_rang</code>'s can be composed with a further range. The resulting range is computed using this existing range's <code>compose</code> function.</p>
 <h4>Prototypes</h4>
-<pre>
-<code>template&lt;class V&gt;
+<pre><code>
+    template&lt;class V&gt;
     vector_range&lt;V&gt; project (V &amp;data, const range &amp;r);
     template&lt;class V&gt;
     const vector_range&lt;const V&gt; project (const V &amp;data, const range &amp;r);
     template&lt;class V&gt;
-    vector_range&lt;V&gt; project (const vector_range&lt;V&gt; &amp;data, const range &amp;r);</code>
-</pre>
-<h4>Description</h4>
-<p>The free <code>project</code> functions support the construction
-of vector ranges.</p>
+    vector_range&lt;V&gt; project (vector_range&lt;V&gt; &amp;data, const range &amp;r);
+    template&lt;class V&gt;
+    const vector_range&lt;V&gt; project (const vector_range&lt;V&gt; &amp;data, const range &amp;r);
+</code></pre>
 <h4>Definition</h4>
 <p>Defined in the header vector_proxy.hpp.</p>
 <h4>Type requirements</h4>
 <ul>
 <li><code>V</code> is a model of <a href=
-"expression.htm#vector_expression">Vector Expression</a> .</li>
+"expression_concept.htm#vector_expression">Vector Expression</a> .</li>
 </ul>
 <h4>Complexity</h4>
 <p>Linear depending from the size of the range.</p>
 <h4>Examples</h4>
 <pre>
 #include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/vector_proxy.hpp&gt;
 #include &lt;boost/numeric/ublas/io.hpp&gt;
 
 int main () {
@@ -249,6 +253,7 @@ addressing a slice of a vector.</p>
 <h4>Example</h4>
 <pre>
 #include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/vector_proxy.hpp&gt;
 #include &lt;boost/numeric/ublas/io.hpp&gt;
 
 int main () {
@@ -278,7 +283,7 @@ int main () {
 </tbody>
 </table>
 <h4>Model of</h4>
-<p><a href="expression.htm#vector_expression">Vector Expression</a>
+<p><a href="expression_concept.htm#vector_expression">Vector Expression</a>
 .</p>
 <p>If the specified slice falls outside that of the index range of
 the vector, then the <code>vector_slice</code> is not a well formed
@@ -286,7 +291,7 @@ Vector Expression. That is, access to an element which is outside
 of index range of the vector is <i>undefined</i>.</p>
 <h4>Type requirements</h4>
 <p>None, except for those imposed by the requirements of <a href=
-"expression.htm#vector_expression">Vector Expression</a> .</p>
+"expression_concept.htm#vector_expression">Vector Expression</a> .</p>
 <h4>Public base classes</h4>
 <p><code>vector_expression&lt;vector_slice&lt;V&gt; &gt;</code></p>
 <h4>Members</h4>
@@ -434,32 +439,37 @@ the reversed <code>vector_slice</code>.</td>
 </tbody>
 </table>
 <h3>Projections</h3>
+<h4>Description</h4>
+<p>The free <code>project</code> functions support the construction
+of vector slices. Existing <code>vector_slice</code>'s can be composed with a further range or slices. The resulting slice is computed using this existing slices's <code>compose</code> function.</p>
 <h4>Prototypes</h4>
-<pre>
-<code>template&lt;class V&gt;
-    vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const range &amp;r);
+<pre><code>
     template&lt;class V&gt;
     vector_slice&lt;V&gt; project (V &amp;data, const slice &amp;s);
     template&lt;class V&gt;
     const vector_slice&lt;const V&gt; project (const V &amp;data, const slice &amp;s);
     template&lt;class V&gt;
-    vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const slice &amp;s);</code>
-</pre>
-<h4>Description</h4>
-<p>The free <code>project</code> functions support the construction
-of vector slices.</p>
+    vector_slice&lt;V&gt; project (vector_slice&lt;V&gt; &amp;data, const range &amp;r);
+    template&lt;class V&gt;
+    const vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const range &amp;r);
+    template&lt;class V&gt;
+    vector_slice&lt;V&gt; project (vector_slice&lt;V&gt; &amp;data, const slice &amp;s);</code>
+    template&lt;class V&gt;
+    const vector_slice&lt;V&gt; project (const vector_slice&lt;V&gt; &amp;data, const slice &amp;s);
+</code></pre>
 <h4>Definition</h4>
 <p>Defined in the header vector_proxy.hpp.</p>
 <h4>Type requirements</h4>
 <ul>
 <li><code>V</code> is a model of <a href=
-"expression.htm#vector_expression">Vector Expression</a> .</li>
+"expression_concept.htm#vector_expression">Vector Expression</a> .</li>
 </ul>
 <h4>Complexity</h4>
 <p>Linear depending from the size of the slice.</p>
 <h4>Examples</h4>
 <pre>
 #include &lt;boost/numeric/ublas/vector.hpp&gt;
+#include &lt;boost/numeric/ublas/vector_proxy.hpp&gt;
 #include &lt;boost/numeric/ublas/io.hpp&gt;
 
 int main () {
