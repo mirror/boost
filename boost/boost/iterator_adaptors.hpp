@@ -578,19 +578,11 @@ template <class T> struct undefined;
 //   Distance - the difference_type of the resulting iterator. If not
 //      supplied, iterator_traits<Base>::difference_type is used.
 template <class Base, class Policies, 
-#if 0
-    class Value = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::value_type,
-    class Reference = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Base,Value>::reference,
-    class Pointer = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_defaults<Base,Value>::pointer,
-    class Category = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::iterator_category,
-    class Distance = BOOST_ARG_DEPENDENT_TYPENAME boost::detail::iterator_traits<Base>::difference_type
-#else
     class Value = detail::default_argument,
     class Reference = detail::default_argument,
     class Pointer = detail::default_argument,
     class Category = detail::default_argument,
     class Distance = detail::default_argument
-#endif
          >
 struct iterator_adaptor :
 #ifdef BOOST_RELOPS_AMBIGUITY_BUG
@@ -621,19 +613,15 @@ struct iterator_adaptor :
              || boost::is_convertible<iterator_category*,std::output_iterator_tag*>::value));
 
     // Iterators should satisfy one of the known categories
-#if 0
     BOOST_STATIC_ASSERT(is_input_or_output_iter);
-#endif
 
     // Iterators >= ForwardIterator must produce real references.
-#if 0
     BOOST_STATIC_CONSTANT(bool, forward_iter_with_real_reference =
            (!boost::is_convertible<iterator_category*,std::forward_iterator_tag*>::value
            || boost::is_same<reference,value_type&>::value
            || boost::is_same<reference,const value_type&>::value));
     
     BOOST_STATIC_ASSERT(forward_iter_with_real_reference);
-#endif    
  public:
     iterator_adaptor() { }
 
