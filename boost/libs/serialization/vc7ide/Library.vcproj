@@ -415,6 +415,9 @@
 				RelativePath="..\..\..\boost\strong_typedef.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\tmpdir.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\wcslen.hpp">
 			</File>
 		</Filter>
