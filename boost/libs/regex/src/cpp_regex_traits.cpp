@@ -145,6 +145,7 @@ parser_buf<charT, traits>::seekoff(off_type off, ::std::ios_base::seekdir way, :
       else
          this->setg(g, g + newpos, g + size);
    }
+   default: ;
    }
    return static_cast<pos_type>(this->gptr() - this->eback());
 }
@@ -864,4 +865,5 @@ std::size_t BOOST_REGEX_CALL cpp_regex_traits<wchar_t>::strwiden(wchar_t *s1, st
 } // namespace boost
 
 #endif
+
 
