@@ -1619,12 +1619,12 @@ namespace boost { namespace numeric { namespace ublas {
                                           E,
                                           const E>::type expression_type;
         typedef F functor_type;
-        typedef typename boost::mpl::if_<boost::is_const<expression_type>,
-                                          typename E::const_closure_type,
-                                          typename E::closure_type>::type expression_closure_type;
         typedef const matrix_unary2<E, F> const_self_type;
         typedef matrix_unary2<E, F> self_type;
     public:
+        typedef typename boost::mpl::if_<boost::is_const<expression_type>,
+                                          typename E::const_closure_type,
+                                          typename E::closure_type>::type expression_closure_type;
         typedef const_self_type const_closure_type;
         typedef self_type closure_type;
         // typedef typename E::orientation_category orientation_category;
@@ -4549,11 +4549,11 @@ namespace boost { namespace numeric { namespace ublas {
         typedef E1 expression1_type;
         typedef E2 expression2_type;
         typedef F functor_type;
-        typedef typename E1::const_closure_type expression1_closure_type;
-        typedef typename E2::const_closure_type expression2_closure_type;
         typedef const matrix_matrix_binary<E1, E2, F> const_self_type;
         typedef matrix_matrix_binary<E1, E2, F> self_type;
     public:
+        typedef typename E1::const_closure_type expression1_closure_type;
+        typedef typename E2::const_closure_type expression2_closure_type;
         typedef const_self_type const_closure_type;
         typedef const_closure_type closure_type;
         typedef unknown_orientation_tag orientation_category;
