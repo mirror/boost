@@ -9,7 +9,6 @@ subproject libs/regex/build ;
 template regex-options
    : # sources
    : # requirements
-     <define>BOOST_REGEX_NO_LIB=1        
      <debug><define>BOOST_REGEX_CONFIG_INFO=1
      <sysinclude>$(BOOST_ROOT)
      <native-wchar_t>on
@@ -63,3 +62,5 @@ stage stage/lib : <lib>boost_regex <dll>boost_regex
 install regex lib
     : <dll>boost_regex <lib>boost_regex
     ;
+
+
