@@ -58,7 +58,7 @@ struct peekable_tag : virtual any_tag { };        // Deivec.
 struct closable_tag : virtual any_tag { };
 struct localizable_tag : virtual any_tag { };
 struct direct_tag : virtual any_tag { };          // Devices.
-struct multichar_tag : virtual any_tag { }; // Filters.
+struct multichar_tag : virtual any_tag { };       // Filters.
 
 struct source_tag : device_tag, input { };
 struct sink_tag : device_tag, output { };
@@ -124,12 +124,6 @@ struct stringbuf_tag
       device_tag,
       std_io_tag
     { };
-
-    //
-    // Tags for iterators.
-    //
-
-struct insert_iterator_tag : sink_tag { }; 
 
 } } // End namespaces iostreams, boost.
 
