@@ -48,6 +48,7 @@ rule run-invoke ( test-name : sources * : defn * )
         : # args
         : # input files
         : # requirements
+            std::locale-support
             # <threading>single
             # <runtime-link>static
             <stlport-iostream>on 
@@ -74,6 +75,7 @@ rule run-invoke ( test-name : sources * : defn * )
             : # args
             : # input files
             : # requirements
+                std::locale-support
                 # <threading>single
                 # <runtime-link>static
                 <stlport-iostream>on 
