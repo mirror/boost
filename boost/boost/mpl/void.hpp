@@ -27,7 +27,7 @@ namespace mpl {
 //  instantiated so that it can be passed in as an object that can be
 //  used to select an overloaded function. Possible use includes signaling
 //  a zero arity functor evaluation call.
-struct void_ {};
+struct void_ { typedef void_ type; };
 
 template< typename T >
 struct is_void_

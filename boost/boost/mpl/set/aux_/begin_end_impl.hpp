@@ -1,8 +1,8 @@
 
-#ifndef BOOST_MPL_SET_AUX_SET0_HPP_INCLUDED
-#define BOOST_MPL_SET_AUX_SET0_HPP_INCLUDED
+#ifndef BOOST_MPL_SET_AUX_BEGIN_END_IMPL_HPP_INCLUDED
+#define BOOST_MPL_SET_AUX_BEGIN_END_IMPL_HPP_INCLUDED
 
-// + file: boost/mpl/aux_/set0.hpp
+// + file: boost/mpl/aux_/begin_end_impl.hpp
 // + last modified: 03/may/03
 
 // Copyright (c) 2002-03
@@ -18,20 +18,29 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/void.hpp"
-#include "boost/mpl/set/aux_/tag.hpp"
-#include "boost/mpl/aux_/config/static_constant.hpp"
+#include "boost/mpl/begin_end_fwd.hpp"
+#include "boost/mpl/set/aux_/iterator.hpp"
 
-namespace boost {
-namespace mpl {
+namespace boost { namespace mpl {
 
-template< int p_ = 0 > struct set0
+template<>
+struct begin_traits< aux::set_tag >
 {
-    typedef aux::set_tag tag;
-    typedef void_ item;
-    BOOST_STATIC_CONSTANT(long, order = 0);
+    template< typename Set > struct algorithm
+    {
+        typedef set_iter<Set,Set> type;
+    };
+};
+
+template<>
+struct end_traits< aux::set_tag >
+{
+    template< typename Set > struct algorithm
+    {
+        typedef set_iter< Set,set0<> > type;
+    };
 };
 
 }}
 
-#endif // BOOST_MPL_SET_AUX_SET0_HPP_INCLUDED
+#endif // BOOST_MPL_SET_AUX_BEGIN_END_IMPL_HPP_INCLUDED

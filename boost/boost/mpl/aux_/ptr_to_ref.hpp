@@ -1,12 +1,12 @@
 
-#ifndef BOOST_MPL_SET_AUX_SET0_HPP_INCLUDED
-#define BOOST_MPL_SET_AUX_SET0_HPP_INCLUDED
+#ifndef BOOST_MPL_AUX_PTR_TO_REF_HPP_INCLUDED
+#define BOOST_MPL_AUX_PTR_TO_REF_HPP_INCLUDED
 
-// + file: boost/mpl/aux_/set0.hpp
+// + file: boost/mpl/aux_/ptr_to_ref.hpp
 // + last modified: 03/may/03
 
 // Copyright (c) 2002-03
-// David Abrahams, Aleksey Gurtovoy
+// Aleksey Gurtovoy
 //
 // Permission to use, copy, modify, distribute and sell this software
 // and its documentation for any purpose is hereby granted without fee, 
@@ -18,20 +18,10 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-#include "boost/mpl/void.hpp"
-#include "boost/mpl/set/aux_/tag.hpp"
-#include "boost/mpl/aux_/config/static_constant.hpp"
+namespace boost { namespace mpl { namespace aux {
 
-namespace boost {
-namespace mpl {
+template< typename T > static T const& ptr_to_ref(T*);
 
-template< int p_ = 0 > struct set0
-{
-    typedef aux::set_tag tag;
-    typedef void_ item;
-    BOOST_STATIC_CONSTANT(long, order = 0);
-};
+}}}
 
-}}
-
-#endif // BOOST_MPL_SET_AUX_SET0_HPP_INCLUDED
+#endif // BOOST_MPL_AUX_PTR_TO_REF_HPP_INCLUDED
