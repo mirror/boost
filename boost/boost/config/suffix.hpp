@@ -208,6 +208,17 @@
 #endif
 
 //
+// Turn threading detail macros off if we don't (want to) use threading
+//
+#ifndef BOOST_HAS_THREADS
+#  undef BOOST_HAS_PTHREADS
+#  undef BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
+#  undef BOOST_HAS_WINTHREADS
+#  undef BOOST_HAS_BETHREADS
+#  undef BOOST_HAS_MPTASKS
+#endif
+
+//
 // If the compiler claims to be C99 conformant, then it had better
 // have a <stdint.h>:
 //
