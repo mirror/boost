@@ -1322,3 +1322,17 @@ the specification, even though it's present in the Boost
 specification
 
 :Proposed resolution: Add ``pointee`` and ``indirect_reference``
+
+9.45y N1530: Typos in proposal text (not standardese)
+=====================================================
+
+:Submitter: Dave Abrahams
+
+1. "because specification helps to highlight that the ``Reference``
+   template parameter may not always be identical to the iterator's
+   ``reference`` type, and will keep users making mistakes based on
+   that assumption."
+
+   :Proposed resolution: add "from" before "making"
+
+
