@@ -40,7 +40,14 @@
 #define BOOST_PP_TUPLE_TO_LIST(N,T) BOOST_PP_TUPLE_TO_LIST_DELAY(N,T)
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-#define BOOST_PP_TUPLE_TO_LIST_DELAY(N,T) BOOST_PP_TUPLE##N##_TO_LIST T
+#if !defined(BOOST_NO_COMPILER_CONFIG) && defined(__MWERKS__) && __MWERKS__ <= 0x2406
+/* This is a workaround for a CodeWarrior PP bug. Strictly speaking
+ * this workaround invokes undefined behavior, but it works as desired.
+ */
+#  define BOOST_PP_TUPLE_TO_LIST_DELAY(N,T) BOOST_PP_TUPLE##N##_TO_LIST##T
+#else
+#  define BOOST_PP_TUPLE_TO_LIST_DELAY(N,T) BOOST_PP_TUPLE##N##_TO_LIST T
+#endif
 #define BOOST_PP_TUPLE0_TO_LIST() (_,_,0)
 #define BOOST_PP_TUPLE1_TO_LIST(A) (A,(_,_,0),1)
 #define BOOST_PP_TUPLE2_TO_LIST(A,B) (A,(B,(_,_,0),1),1)
