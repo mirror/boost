@@ -52,6 +52,11 @@ test_main(int, char*[])
   int strides[] = { 9, 3, 1 };
   size_type num_elements = 27;
 
+  // Default multi_array constructor
+  {
+    boost::multi_array<double, 3> A;
+  }
+
   // Constructor 1, default storage order and allocator
   {
     boost::multi_array<double, 3> A(sizes);

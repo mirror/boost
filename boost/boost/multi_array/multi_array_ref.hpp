@@ -296,6 +296,17 @@ public:
     return !(*this < rhs);
   }
 
+protected:
+  // This is only supplied to support multi_array's default constructor
+  explicit const_multi_array_ref(TPtr base) :
+    base_(base), storage_(c_storage_order()) {
+    index_base_list_.assign(0);
+    boost::array<size_type,NumDims> filler;
+    filler.assign(0);
+    init_multi_array_ref(filler.begin());
+  }
+
+
 // This ensures that const_multi_array_ref types with different TPtr 
 // types can convert to each other
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -366,8 +377,9 @@ private:
     // Calculate the array size
     num_elements_ = std::accumulate(extent_list_.begin(),extent_list_.end(),
                             1,std::multiplies<index>());
+#if 0
     assert(num_elements_ != 0);
-
+#endif
     this->compute_strides(stride_list_,extent_list_,storage_);
 
     origin_offset_ =
@@ -588,6 +600,14 @@ public:
   const_reverse_iterator rend() const {
     return super_type::rend();
   }
+
+protected:
+  // This is only supplied to support multi_array's default constructor
+  explicit multi_array_ref(T* base) :
+    super_type(base) {
+  }
+
+
 };
 
 } // namespace boost

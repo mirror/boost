@@ -232,7 +232,9 @@ public: // should be protected
     // Calculate the array size
     num_elements_ = std::accumulate(extent_list_.begin(),extent_list_.end(),
                             size_type(1),std::multiplies<size_type>());
+#if 0
     assert(num_elements_ != 0);
+#endif
   }
 
   typedef boost::array<size_type,NumDims> size_list;

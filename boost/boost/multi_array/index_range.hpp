@@ -53,7 +53,7 @@ namespace multi_array {
 
     explicit index_range(index start, index finish, index stride=1)
       : start_(start), finish_(finish), stride_(stride),
-        degenerate_(start_ == finish_)
+        degenerate_(false)
     { }
 
 

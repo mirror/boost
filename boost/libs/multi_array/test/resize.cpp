@@ -66,4 +66,10 @@ int main() {
 
   assert(std::equal(A_resize,A_resize+(4*3*2),A.data()));
 
+
+  {
+    marray defaultA;
+    defaultA.resize(boost::extents[2][3][4]);
+    assert(std::accumulate(defaultA.data(),defaultA.data()+(2*3*4),0) == 0);
+  }
 }
