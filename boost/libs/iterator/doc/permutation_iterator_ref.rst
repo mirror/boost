@@ -3,15 +3,11 @@
   template< class ElementIterator
 	  , class IndexIterator
 	  , class ValueT        = use_default
-      , unsigned access     = use_default_access
-	  , class Traversal     = use_default
+	  , class CategoryT     = use_default
 	  , class ReferenceT    = use_default
 	  , class DifferenceT   = use_default >
   class permutation_iterator
-    : public iterator_adaptor<...>
   {
-    typedef iterator_adaptor<...>
-    friend class iterator_core_access;
   public:
     permutation_iterator();
     explicit permutation_iterator(ElementIterator x, IndexIterator y);
@@ -23,6 +19,10 @@
 	, typename enable_if_convertible<OIIter, IndexIterator>::type* = 0
 	);
   };
+
+  template <class ElementIterator, class IndexIterator>
+  permutation_iterator<ElementIterator, IndexIterator> 
+  make_permutation_iterator( ElementIterator e, IndexIterator i);
 
 
 
@@ -53,3 +53,14 @@ will take linear time in case the IndexIterator is a model of
 ForwardIterator instead of amortized constant time.
 
 __ http://www.sgi.com/tech/stl/RandomAccessIterator.html
+
+
+::
+
+  template <class ElementIterator, class IndexIterator>
+  permutation_iterator<ElementIterator, IndexIterator> 
+  make_permutation_iterator(ElementIterator e, IndexIterator i);
+
+:Returns: An instance of ``permutation_iterator<ElementIterator, IndexIterator>``
+  that views the range of elements starting at ``e` in the order given
+  by ``i``.

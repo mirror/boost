@@ -29,3 +29,9 @@ Reference
 =========
 
 .. include:: permutation_iterator_ref.rst
+
+
+Example
+=======
+
+.. include:: permutation_iterator_eg.rst
