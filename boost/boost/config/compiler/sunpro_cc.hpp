@@ -57,7 +57,7 @@
 #      define BOOST_NO_INTEGRAL_INT64_T
 #    endif
 
-#    if (__SUNPRO_CC <= 0x570) 
+#    if (__SUNPRO_CC < 0x570) 
 #      define BOOST_NO_TEMPLATE_TEMPLATES
        // see http://lists.boost.org/MailArchives/boost/msg47184.php
        // and http://lists.boost.org/MailArchives/boost/msg47220.php
