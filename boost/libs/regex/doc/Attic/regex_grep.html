@@ -42,7 +42,7 @@
                          iterator first,
                          iterator last,
                          <b>const</b> basic_regex&lt;charT, traits, Allocator&gt;&amp; e,
-                         <b>unsigned</b> flags = match_default)
+                         boost::match_flag_type flags = match_default)
 </pre>
       <p>The library also defines the following convenience versions, which take either 
          a const charT*, or a const std::basic_string&lt;&gt;&amp; in place of a pair of 
@@ -53,13 +53,13 @@
 <b>unsigned</b> <b>int</b> regex_grep(Predicate foo, 
               <b>const</b> charT* str, 
               <b>const</b> basic_regex&lt;charT, traits, Allocator&gt;&amp; e, 
-              <b>unsigned</b> flags = match_default);
+              boost::match_flag_type flags = match_default);
 
 <b>template</b> &lt;<b>class</b> Predicate, <b>class</b> ST, <b>class</b> SA, <b>class</b> Allocator, <b>class</b> charT, <b>class</b> traits&gt;
 <b>unsigned</b> <b>int</b> regex_grep(Predicate foo, 
               <b>const</b> std::basic_string&lt;charT, ST, SA&gt;&amp; s, 
               <b>const</b> basic_regex&lt;charT, traits, Allocator&gt;&amp; e, 
-              <b>unsigned</b> flags = match_default);
+              boost::match_flag_type flags = match_default);
 </pre>
       <p>The parameters for the primary version of regex_grep have the following 
          meanings:&nbsp;</p>
@@ -370,11 +370,10 @@ index[std::string(what[5].first, what[5].second) + std::string(what[6].first, wh
       <hr>
       <p>Revised 
          <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B, %Y" startspan --> 
-         24 Oct 2003 
+         04 Feb 2004 
          <!--webbot bot="Timestamp" endspan i-checksum="39359" --></p>
       <p><i>© Copyright John Maddock&nbsp;1998- 
-            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan --> 
-            2003<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
+            <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y" startspan -->  2004<!--webbot bot="Timestamp" endspan i-checksum="39359" --></i></p>
       <P><I>Use, modification and distribution are subject to the Boost Software License, 
             Version 1.0. (See accompanying file <A href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</A>
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
