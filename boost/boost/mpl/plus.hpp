@@ -58,7 +58,7 @@ struct plus
         , BOOST_MPL_AUX_MSVC_VALUE_WKND(T3)::value
         , BOOST_MPL_AUX_MSVC_VALUE_WKND(T4)::value
         , BOOST_MPL_AUX_MSVC_VALUE_WKND(T5)::value
-        >
+    >::type
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(5, plus, (T1,T2,T3,T4,T5))
 };
