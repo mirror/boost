@@ -52,8 +52,9 @@
 #   define BOOST_MPL_AUX_LAMBDA_SUPPORT(i, name, params) \
     BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(i, name, params) \
 }; \
-struct BOOST_PP_CAT(name,_rebind) \
+class BOOST_PP_CAT(name,_rebind) \
 { \
+ public: \
     template< BOOST_MPL_PP_PARAMS(i,typename U) > struct apply \
         : name< BOOST_MPL_PP_PARAMS(i,U) > \
     { \
@@ -63,8 +64,9 @@ struct BOOST_PP_CAT(name,_rebind) \
 #   define BOOST_MPL_AUX_LAMBDA_SUPPORT(i, name, params) \
     BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(i, name, params) \
 }; \
-struct BOOST_PP_CAT(name,_rebind) \
+class BOOST_PP_CAT(name,_rebind) \
 { \
+ public: \
     template< BOOST_MPL_PP_PARAMS(i,typename U) > struct apply \
     { \
         typedef typename name< BOOST_MPL_PP_PARAMS(i,U) >::type type; \
