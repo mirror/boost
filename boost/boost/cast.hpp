@@ -9,6 +9,7 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  19 Oct 00  Fix numeric_cast for floating-point types (Dave Abrahams)
 //  15 Jul 00  Suppress numeric_cast warnings for GCC, Borland and MSVC (Dave Abrahams)
 //  30 Jun 00  More MSVC6 wordarounds.  See comments below.  (Dave Abrahams)
 //  28 Jun 00  Removed implicit_cast<>.  See comment below. (Beman Dawes)
@@ -124,7 +125,43 @@ namespace boost
 #endif
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-  // less_than_type_min -
+  
+    namespace detail
+    {
+       template <bool is_signed> struct numeric_min_select;
+    
+       template<>
+       struct numeric_min_select<true>
+       {
+           template <class T>
+           struct limits : std::numeric_limits<T>
+           {
+               static inline T min()
+               {
+                   return std::numeric_limits<T>::min() >= 0
+                       // unary minus causes integral promotion, thus the static_cast<>
+                       ? static_cast<T>(-std::numeric_limits<T>::max())
+                       : std::numeric_limits<T>::min();
+               }
+           };
+       };
+       
+       template<>
+       struct numeric_min_select<false>
+       {
+           template <class T>
+           struct limits : std::numeric_limits<T> {};
+       };
+       
+       // Move to namespace boost in utility.hpp?
+       template <class T>
+       struct fixed_numeric_limits
+           : public numeric_min_select<std::numeric_limits<T>::is_signed>::limits<T>
+       {
+       };
+    }
+  
+// less_than_type_min -
   //    x_is_signed should be numeric_limits<X>::is_signed
   //    y_is_signed should be numeric_limits<Y>::is_signed
   //    y_min should be numeric_limits<Y>::min()
@@ -204,6 +241,30 @@ namespace boost
         static inline bool check(X x, Y)
             { return static_cast<X>(static_cast<Y>(x)) != x; }
     };
+  
+#else // use #pragma hacks if available
+
+  namespace detail {
+# if BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4018)
+#  pragma warning(disable : 4146)
+# endif
+       // Move to namespace boost in utility.hpp?
+       template <class T>
+       struct fixed_numeric_limits : public std::numeric_limits<T>
+       {
+           static inline T min()
+           {
+               return std::numeric_limits<T>::is_signed && std::numeric_limits<T>::min() >= 0
+                   ? -std::numeric_limits<T>::max() : std::numeric_limits<T>::min();
+           }
+       };
+# if BOOST_MSVC
+#  pragma warning(pop)
+# endif
+  }
+  
 #endif
   
     template<typename Target, typename Source>
@@ -211,7 +272,7 @@ namespace boost
     {
         // typedefs abbreviating respective trait classes
         typedef std::numeric_limits<Source> arg_traits;
-        typedef std::numeric_limits<Target> result_traits;
+        typedef detail::fixed_numeric_limits<Target> result_traits;
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
         // typedefs that act as compile time assertions
@@ -234,10 +295,9 @@ namespace boost
 #  pragma warning(push)
 #  pragma warning(disable : 4018)
 # endif
-        if ( (arg < 0 && !result_traits::is_signed) ||  // loss of negative range
-              (arg_traits::is_signed &&
-                 arg < result_traits::min()) ||        // underflow
-               arg > result_traits::max() )            // overflow
+        if ((arg < 0 && !result_traits::is_signed)  // loss of negative range
+             || (arg_traits::is_signed && arg < result_traits::min())  // underflow
+             || arg > result_traits::max())            // overflow
 # if BOOST_MSVC
 #  pragma warning(pop)
 # endif
@@ -272,4 +332,3 @@ namespace boost
 } // namespace boost
 
 #endif  // BOOST_CAST_HPP
-
