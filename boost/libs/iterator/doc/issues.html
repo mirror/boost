@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<title>Issues With N1550 and N1530</title>
+<style type="text/css"><!--
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:date: $Date$
+:version: $Revision$
+:copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+*/
+
+.first {
+  margin-top: 0 }
+
+.last {
+  margin-bottom: 0 }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+dd {
+  margin-bottom: 0.5em }
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.attention, div.caution, div.danger, div.error, div.hint,
+div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.hint p.admonition-title, div.important p.admonition-title,
+div.note p.admonition-title, div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em }
+
+div.footer, div.header {
+  font-size: smaller }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr {
+  width: 75% }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.line-block {
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option-argument {
+  font-style: italic }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+table {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.citation {
+  border-left: solid thin gray ;
+  padding-left: 0.5ex }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.footnote {
+  border-left: solid thin black ;
+  padding-left: 0.5ex }
+
+td, th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+th.docinfo-name, th.field-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap }
+
+h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
+  font-size: 100% }
+
+tt {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+--></style>
+</head>
+<body>
+<div class="document" id="issues-with-n1550-and-n1530">
+<h1 class="title">Issues With <a class="reference" href="http://www.boost-consulting.com/writing/n1550.html">N1550</a> and <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html">N1530</a></h1>
+<table class="field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">David Abrahams</td>
+</tr>
+<tr class="field"><th class="field-name">Contact:</th><td class="field-body"><a class="reference" href="mailto:dave&#64;boost-consulting.com">dave&#64;boost-consulting.com</a></td>
+</tr>
+<tr class="field"><th class="field-name">Organization:</th><td class="field-body"><a class="reference" href="http://www.boost-consulting.com">Boost Consulting</a></td>
+</tr>
+<tr class="field"><th class="field-name">date:</th><td class="field-body">$Date$</td>
+</tr>
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Copyright David Abrahams 2003. Use, modification and
+distribution is subject to the Boost Software License,
+Version 1.0. (See accompanying file LICENSE_1_0.txt or copy
+at <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="table-of-contents">
+<p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="#introduction" id="id3" name="id3">Introduction</a></li>
+<li><a class="reference" href="#the-issues" id="id4" name="id4">The Issues</a><ul>
+<li><a class="reference" href="#non-uniformity-of-the-lvalue-iterator-bit" id="id5" name="id5">Non-Uniformity of the &quot;<tt class="literal"><span class="pre">lvalue_iterator</span></tt> Bit&quot;</a></li>
+<li><a class="reference" href="#redundancy-of-some-explicit-access-category-flags" id="id6" name="id6">Redundancy of Some Explicit Access Category Flags</a></li>
+<li><a class="reference" href="#new-access-traits-templates-wrong-for-some-iterators" id="id7" name="id7">New Access Traits Templates Wrong For Some Iterators</a><ul>
+<li><a class="reference" href="#is-writable-iterator" id="id8" name="id8"><tt class="literal"><span class="pre">is_writable_iterator</span></tt></a></li>
+<li><a class="reference" href="#is-swappable-iterator" id="id9" name="id9"><tt class="literal"><span class="pre">is_swappable_iterator</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference" href="#no-use-cases-for-some-access-traits" id="id10" name="id10">No Use Cases for Some Access Traits</a><ul>
+<li><a class="reference" href="#id1" id="id11" name="id11"><tt class="literal"><span class="pre">is_swappable_iterator</span></tt></a></li>
+<li><a class="reference" href="#id2" id="id12" name="id12"><tt class="literal"><span class="pre">is_writable_iterator</span></tt></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#proposed-solution" id="id13" name="id13">Proposed Solution</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id3" name="introduction">Introduction</a></h1>
+<p>Several issues with <a class="reference" href="http://www.boost-consulting.com/writing/n1550.html">N1550</a> (New Iterator Concepts) were raised in
+the run-up before the fall 2003 C++ Committee meeting, in a thread
+beginning with John Maddock's posting <tt class="literal"><span class="pre">c++std-lib-12187</span></tt>.  In
+looking at those issues, several other problems came up.  This
+document addresses those issues and discusses some potential
+solutions and their impact on <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html">N1530</a> (Iterator Facade and Adaptor).</p>
+</div>
+<div class="section" id="the-issues">
+<h1><a class="toc-backref" href="#id4" name="the-issues">The Issues</a></h1>
+<div class="section" id="non-uniformity-of-the-lvalue-iterator-bit">
+<h2><a class="toc-backref" href="#id5" name="non-uniformity-of-the-lvalue-iterator-bit">Non-Uniformity of the &quot;<tt class="literal"><span class="pre">lvalue_iterator</span></tt> Bit&quot;</a></h2>
+<p>The proposed <tt class="literal"><span class="pre">iterator_tag</span></tt> class template accepts an &quot;access
+bits&quot; parameter which includes a bit to indicate the iterator's
+<em>lvalueness</em> (whether its dereference operator returns a reference
+to its <tt class="literal"><span class="pre">value_type</span></tt>.  The relevant part of <a class="reference" href="http://www.boost-consulting.com/writing/n1550.html">N1550</a> says:</p>
+<blockquote>
+The purpose of the <tt class="literal"><span class="pre">lvalue_iterator</span></tt> part of the
+<tt class="literal"><span class="pre">iterator_access</span></tt> enum is to communicate to <tt class="literal"><span class="pre">iterator_tag</span></tt>
+whether the reference type is an lvalue so that the appropriate
+old category can be chosen for the base class. The
+<tt class="literal"><span class="pre">lvalue_iterator</span></tt> bit is not recorded in the
+<tt class="literal"><span class="pre">iterator_tag::access</span></tt> data member.</blockquote>
+<p>The <tt class="literal"><span class="pre">lvalue_iterator</span></tt> bit is not recorded because <a class="reference" href="http://www.boost-consulting.com/writing/n1550.html">N1550</a> aims to
+improve orthogonality of the iterator concepts, and a new-style
+iterator's lvalueness is detectable by examining its <tt class="literal"><span class="pre">reference</span></tt>
+type.  This inside/outside difference is awkward and confusing.</p>
+</div>
+<div class="section" id="redundancy-of-some-explicit-access-category-flags">
+<h2><a class="toc-backref" href="#id6" name="redundancy-of-some-explicit-access-category-flags">Redundancy of Some Explicit Access Category Flags</a></h2>
+<p>Shortly after <a class="reference" href="http://www.boost-consulting.com/writing/n1550.html">N1550</a> was accepted, we discovered that an iterator's
+lvalueness can be determined knowing only its <tt class="literal"><span class="pre">value_type</span></tt>.  This
+predicate can be calculated even for old-style iterators (on whose
+<tt class="literal"><span class="pre">reference</span></tt> type the standard places few requirements).  A trait
+in the Boost iterator library does it by relying on the compiler's
+unwillingness to bind an rvalue to a <tt class="literal"><span class="pre">T&amp;</span></tt> function template
+parameter.  Similarly, it is possible to detect an iterator's
+readability knowing only its <tt class="literal"><span class="pre">value_type</span></tt>. Thus, any interface
+which asks the <em>user</em> to explicitly describe an iterator's
+lvalue-ness or readability seems to introduce needless complexity.</p>
+</div>
+<div class="section" id="new-access-traits-templates-wrong-for-some-iterators">
+<h2><a class="toc-backref" href="#id7" name="new-access-traits-templates-wrong-for-some-iterators">New Access Traits Templates Wrong For Some Iterators</a></h2>
+<div class="section" id="is-writable-iterator">
+<h3><a class="toc-backref" href="#id8" name="is-writable-iterator"><tt class="literal"><span class="pre">is_writable_iterator</span></tt></a></h3>
+<p>The part of the <tt class="literal"><span class="pre">is_writable_iterator</span></tt> trait definition which
+applies to old-style iterators is:</p>
+<pre class="literal-block">
+if (cat is convertible to output_iterator_tag)
+         return true;
+    else if (
+         cat is convertible to forward_iterator_tag
+         and iterator_traits&lt;Iterator&gt;::reference is a 
+             mutable reference)
+        return true;
+    else
+        return false;
+</pre>
+<p>The current forward iterator requirements place no constraints on
+the iterator's <tt class="literal"><span class="pre">reference</span></tt> type, so the logic above will give
+false negatives for some otherwise-writable forward iterators whose
+<tt class="literal"><span class="pre">reference</span></tt> type is not a mutable reference.  Also, it will
+report false positives for any forward, bidirectional, or random
+access iterator whose <tt class="literal"><span class="pre">reference</span></tt> is a mutable reference but
+whose <tt class="literal"><span class="pre">value_type</span></tt> is not assignable.</p>
+</div>
+<div class="section" id="is-swappable-iterator">
+<h3><a class="toc-backref" href="#id9" name="is-swappable-iterator"><tt class="literal"><span class="pre">is_swappable_iterator</span></tt></a></h3>
+<p>Similarly, the part of <tt class="literal"><span class="pre">is_swappable_iterator</span></tt> which applies to
+old-style iterators is:</p>
+<pre class="literal-block">
+else if (cat is convertible to forward_iterator_tag) {
+    if (iterator_traits&lt;Iterator&gt;::reference is a const reference)
+        return false;
+    else
+        return true;
+} else 
+    return false;
+</pre>
+<p>In this case false positives are possible for non-writable forward
+iterators whose <tt class="literal"><span class="pre">reference</span></tt> type is not a reference, or as above,
+any forward, bidirectional, or random access iterator whose
+<tt class="literal"><span class="pre">reference</span></tt> is not a constant reference but whose <tt class="literal"><span class="pre">value_type</span></tt>
+is not assignable (e.g., because it has a private assignment
+operator).</p>
+<p>False negatives can be &quot;reasoned away&quot;: since it is part of a
+writable iterator's concept definition that
+<tt class="literal"><span class="pre">is_writable&lt;I&gt;::value</span></tt> is <tt class="literal"><span class="pre">true</span></tt>, any iterator for which
+it is <tt class="literal"><span class="pre">false</span></tt> is by definition not writable.  This seems like a
+perverse use of logic, though.</p>
+<p>It might be reasonable to conclude that it is a defect that the
+standard allows forward iterators with a <tt class="literal"><span class="pre">reference</span></tt> type other
+than <tt class="literal"><span class="pre">value_type</span></tt> <em>cv</em><tt class="literal"><span class="pre">&amp;</span></tt>, but that still leaves the problem
+of old-style iterators whose <tt class="literal"><span class="pre">value_type</span></tt> is not assignable.  It
+is not possible to correctly compute writability and swappability
+for those old-style iterators without intervention
+(specializations of <tt class="literal"><span class="pre">is_writable_iterator</span></tt> and
+<tt class="literal"><span class="pre">is_swappable_iterator</span></tt>) from a user.</p>
+</div>
+</div>
+<div class="section" id="no-use-cases-for-some-access-traits">
+<h2><a class="toc-backref" href="#id10" name="no-use-cases-for-some-access-traits">No Use Cases for Some Access Traits</a></h2>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id11" name="id1"><tt class="literal"><span class="pre">is_swappable_iterator</span></tt></a></h3>
+<p><tt class="literal"><span class="pre">is_swappable_iterator&lt;I&gt;</span></tt> is supposed to yield true if
+<tt class="literal"><span class="pre">iter_swap(x,y)</span></tt> is valid for instances <tt class="literal"><span class="pre">x</span></tt> and <tt class="literal"><span class="pre">y</span></tt> of type
+<tt class="literal"><span class="pre">I</span></tt>.  The only argument we have heard for
+<tt class="literal"><span class="pre">is_swappable_iterator</span></tt> goes something like this:</p>
+<blockquote>
+<em>&quot;If</em> <tt class="literal"><span class="pre">is_swappable_iterator</span></tt> <em>yields</em> <tt class="literal"><span class="pre">false</span></tt><em>, you
+could fall back to using copy construction and assignment on
+the</em> <tt class="literal"><span class="pre">value_type</span></tt> <em>instead.&quot;</em></blockquote>
+<p>This line of reasoning, however, falls down when closely examined.
+To achieve the same effect using copy construction and assignment
+on the iterator's <tt class="literal"><span class="pre">value_type</span></tt>, the iterator must be readable and
+writable, and its <tt class="literal"><span class="pre">value_type</span></tt> must be copy-constructible.  But
+then, <tt class="literal"><span class="pre">iter_swap</span></tt> must work in that case, because its default
+implementation just calls <tt class="literal"><span class="pre">swap</span></tt> on the dereferenced iterators.
+The only purpose for the swappable concept is to represent
+iterators which do not fulfill the properties listed above, but
+which are nonetheless swappable because the user has provided an
+overload or specialization of <tt class="literal"><span class="pre">iter_swap</span></tt>.  In other words,
+generic code which wants to swap the referents of two iterators
+should <em>always</em> call <tt class="literal"><span class="pre">iter_swap</span></tt> instead of doing the
+assignments.</p>
+</div>
+<div class="section" id="id2">
+<h3><a class="toc-backref" href="#id12" name="id2"><tt class="literal"><span class="pre">is_writable_iterator</span></tt></a></h3>
+<p>Try to imagine a case where <tt class="literal"><span class="pre">is_writable_iterator</span></tt> can be used to
+choose behavior.  Since the only requirement on a writable iterator
+is that we can assign into its referent, the only use for
+<tt class="literal"><span class="pre">is_writable_iterator</span></tt> in selecting behavior is to modify a
+sequence when the sequence is mutable, and to not modify it
+otherwise.</p>
+<p>There is no precedent for generic functions which modify their
+arguments only if the arguments are non-const reference, and with
+good reason: the simple fact that data is mutable does not mean
+that a user <em>intends</em> it to be mutated.  We provide <tt class="literal"><span class="pre">const</span></tt> and
+non-<tt class="literal"><span class="pre">const</span></tt> overloads for functions like <tt class="literal"><span class="pre">operator[]</span></tt>, but
+these do not modify data; they merely return a reference to data
+which preserves the object's mutability properties.  We can do the
+same with iterators using their <tt class="literal"><span class="pre">reference</span></tt> types; the
+accessibility of an assignment operator on the <tt class="literal"><span class="pre">value_type</span></tt>,
+which determines writability, does not change that.</p>
+<p>The one plausible argument we can imagine for
+<tt class="literal"><span class="pre">is_writable_iterator</span></tt> and <tt class="literal"><span class="pre">is_swappable_iterator</span></tt> is to remove
+algorithms from an overload set using a SFINAE technique like
+<a class="reference" href="http://tinyurl.com/tsr7">enable_if</a>, but that seems to be too small a gain for the
+requirements imposed on iterator implementors by the need to report
+writability and swappability, especially since it can't be done
+correctly for all existing iterators.</p>
+</div>
+</div>
+</div>
+<div class="section" id="proposed-solution">
+<h1><a class="toc-backref" href="#id13" name="proposed-solution">Proposed Solution</a></h1>
+<p>(incomplete)</p>
+<p>Change <tt class="literal"><span class="pre">iterator_traits</span></tt> as follows:</p>
+<pre class="literal-block">
+iterator_traits&lt;I&gt;::iterator_category
+  = if (I::iterator_category is a type) // use mpl::has_xxx (SFINAE)
+       return I::iterator_category
+
+    if (iterator_value_type&lt;I&gt;::type is void
+        || iterator_difference_type&lt;I&gt;::type is void
+    )
+       return std::output_iterator_tag
+
+    t = iterator_traversal&lt;I&gt;::type
+    
+    if (is_lvalue_iterator&lt;I&gt;::value)
+    {
+       if (t is convertible to random_access_traversal_tag)
+          return std::random_access_iterator_tag
+       if (t is convertible to bidirectional_traversal_tag)
+          return std::bidirectional_iterator_tag
+       else if (t is convertible to forward_traversal_tag)
+          return std::forward_iterator_tag
+    }
+
+    if (t is convertible to single_pass_traversal_tag
+        &amp;&amp; is_readable_iterator&lt;I&gt;::value
+    )
+       return input_output_iterator_tag // (**)
+    else
+       return std::output_iterator_tag
+</pre>
+</div>
+</div>
+<hr class="footer" />
+<div class="footer">
+<a class="reference" href="issues.rst">View document source</a>.
+Generated on: 2003-11-05 21:37 UTC.
+Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
+</div>
+</body>
+</html>

@@ -20,6 +20,8 @@ test-suite iterator
 
     # These tests should work for just about everything.
     [ compile is_lvalue_iterator.cpp ]
+    [ compile is_readable_iterator.cpp ]
+      
     [ run unit_tests.cpp ]
     [ run concept_tests.cpp ]
     [ run iterator_adaptor_cc.cpp ]

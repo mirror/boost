@@ -9,6 +9,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/type_traits/broken_compiler_spec.hpp>
 #include <boost/iterator/is_lvalue_iterator.hpp>
+#include <boost/iterator.hpp>
 
 // Last, for BOOST_NO_LVALUE_RETURN_DETECTION
 #include <boost/iterator/detail/config_def.hpp>
