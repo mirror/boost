@@ -105,7 +105,8 @@ namespace BOOST_SIGNALS_NAMESPACE {
       {
         // Take the address of this object, because the object itself may be
         // trackable
-        typedef truth<(is_base_and_derived<trackable, T>::value)> is_trackable;
+        typedef truth<(is_base_and_derived<const trackable, T>::value)>
+          is_trackable;
         add_if_trackable(&t, is_trackable());
       }
 
