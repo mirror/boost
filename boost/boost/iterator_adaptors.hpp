@@ -289,7 +289,7 @@ inline bool operator<(const iterator_comparisons<D1,Base1>& xb,
 {
     const D1& x = static_cast<const D1&>(xb);
     const D2& y = static_cast<const D2&>(yb);
-    return x.policies().distance(x, y) > 0;
+    return x.policies().distance(y, x) < 0;
 }
 
 template <class D1, class D2, class Base1, class Base2>
@@ -307,7 +307,7 @@ inline bool operator>=(const iterator_comparisons<D1,Base1>& xb,
 {
     const D1& x = static_cast<const D1&>(xb);
     const D2& y = static_cast<const D2&>(yb);
-    return !(x.policies().distance(x, y) > 0);
+    return x.policies().distance(y, x) >= 0;
 }
 
 template <class D1, class D2, class Base1, class Base2>
@@ -316,7 +316,7 @@ inline bool operator<=(const iterator_comparisons<D1,Base1>& xb,
 {
     const D1& x = static_cast<const D1&>(xb);
     const D2& y = static_cast<const D2&>(yb);
-    return !(x.policies().distance(y, x) > 0);
+    return x.policies().distance(y, x) <= 0;
 }
 #endif
 
@@ -943,7 +943,7 @@ operator<(
     const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
     const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
 {
-    return x.policies().distance(x, y) > 0;
+    return x.policies().distance(y, x) < 0;
 }
 
 template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
@@ -965,7 +965,7 @@ operator>=(
     const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
     const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
 {
-    return !(x.policies().distance(x, y) > 0);
+    return x.policies().distance(y, x) >= 0;
 }
 
 template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
@@ -976,7 +976,7 @@ operator<=(
     const iterator_adaptor<Iterator1,Policies,Value1,Reference1,Pointer1,Category,Distance>& x,
     const iterator_adaptor<Iterator2,Policies,Value2,Reference2,Pointer2,Category,Distance>& y)
 {
-    return !(x.policies().distance(y, x) > 0);
+    return x.policies().distance(y, x) <= 0;
 }
 
 template <class Iterator1, class Iterator2, class Policies, class Value1, class Value2,
