@@ -356,10 +356,10 @@ void deleter2(int * p)
 
 struct deleter3
 {
-	void operator()(incomplete * p)
-	{
-		BOOST_TEST(p == 0);
-	}
+    void operator()(incomplete * p)
+    {
+        BOOST_TEST(p == 0);
+    }
 };
 
 // Borland C++ 5.5.1 fails on static_cast<incomplete*>(0)
@@ -706,8 +706,29 @@ void copy_constructor()
 
 void weak_ptr_constructor()
 {
-    boost::shared_ptr<Y> p(new Y);
+    {
+        boost::weak_ptr<Y> wp;
 
+        try
+        {
+            boost::shared_ptr<Y> p2(wp);
+            BOOST_ERROR("shared_ptr<Y> p2(wp) failed to throw");
+        }
+        catch(boost::bad_weak_ptr)
+        {
+        }
+
+        try
+        {
+            boost::shared_ptr<X> p3(wp);
+            BOOST_ERROR("shared_ptr<X> p3(wp) failed to throw");
+        }
+        catch(boost::bad_weak_ptr)
+        {
+        }
+    }
+
+    boost::shared_ptr<Y> p(new Y);
     boost::weak_ptr<Y> wp(p);
 
     {
@@ -1110,323 +1131,323 @@ long Y::instances = 0;
 
 void copy_assignment()
 {
-	{
-		boost::shared_ptr<incomplete> p1;
+    {
+        boost::shared_ptr<incomplete> p1;
 
-		p1 = p1;
-
-        BOOST_TEST(p1 == p1);
-        BOOST_TEST(p1? false: true);
-        BOOST_TEST(!p1);
-        BOOST_TEST(p1.get() == 0);
-
-		boost::shared_ptr<incomplete> p2;
-
-		p1 = p2;
-
-        BOOST_TEST(p1 == p2);
-        BOOST_TEST(p1? false: true);
-        BOOST_TEST(!p1);
-        BOOST_TEST(p1.get() == 0);
-
-		boost::shared_ptr<incomplete> p3(p1);
-
-		p1 = p3;
-
-        BOOST_TEST(p1 == p3);
-        BOOST_TEST(p1? false: true);
-        BOOST_TEST(!p1);
-        BOOST_TEST(p1.get() == 0);
-	}
-
-	{
-		boost::shared_ptr<void> p1;
-
-		p1 = p1;
+        p1 = p1;
 
         BOOST_TEST(p1 == p1);
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
 
-		boost::shared_ptr<void> p2;
+        boost::shared_ptr<incomplete> p2;
 
-		p1 = p2;
+        p1 = p2;
 
         BOOST_TEST(p1 == p2);
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
 
-		boost::shared_ptr<void> p3(p1);
+        boost::shared_ptr<incomplete> p3(p1);
 
-		p1 = p3;
+        p1 = p3;
+
+        BOOST_TEST(p1 == p3);
+        BOOST_TEST(p1? false: true);
+        BOOST_TEST(!p1);
+        BOOST_TEST(p1.get() == 0);
+    }
+
+    {
+        boost::shared_ptr<void> p1;
+
+        p1 = p1;
+
+        BOOST_TEST(p1 == p1);
+        BOOST_TEST(p1? false: true);
+        BOOST_TEST(!p1);
+        BOOST_TEST(p1.get() == 0);
+
+        boost::shared_ptr<void> p2;
+
+        p1 = p2;
+
+        BOOST_TEST(p1 == p2);
+        BOOST_TEST(p1? false: true);
+        BOOST_TEST(!p1);
+        BOOST_TEST(p1.get() == 0);
+
+        boost::shared_ptr<void> p3(p1);
+
+        p1 = p3;
 
         BOOST_TEST(p1 == p3);
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
 
-		boost::shared_ptr<void> p4(new int);
-		BOOST_TEST(p4.use_count() == 1);
+        boost::shared_ptr<void> p4(new int);
+        BOOST_TEST(p4.use_count() == 1);
 
-		p1 = p4;
+        p1 = p4;
 
         BOOST_TEST(p1 == p4);
         BOOST_TEST(!(p1 < p4 || p4 < p1));
-		BOOST_TEST(p1.use_count() == 2);
-		BOOST_TEST(p4.use_count() == 2);
+        BOOST_TEST(p1.use_count() == 2);
+        BOOST_TEST(p4.use_count() == 2);
 
-		p1 = p3;
+        p1 = p3;
 
         BOOST_TEST(p1 == p3);
-		BOOST_TEST(p4.use_count() == 1);
-	}
+        BOOST_TEST(p4.use_count() == 1);
+    }
 
-	{
-		boost::shared_ptr<X> p1;
+    {
+        boost::shared_ptr<X> p1;
 
-		p1 = p1;
+        p1 = p1;
 
         BOOST_TEST(p1 == p1);
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
 
-		boost::shared_ptr<X> p2;
+        boost::shared_ptr<X> p2;
 
-		p1 = p2;
+        p1 = p2;
 
         BOOST_TEST(p1 == p2);
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
 
-		boost::shared_ptr<X> p3(p1);
+        boost::shared_ptr<X> p3(p1);
 
-		p1 = p3;
+        p1 = p3;
 
         BOOST_TEST(p1 == p3);
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
 
-		BOOST_TEST(X::instances == 0);
+        BOOST_TEST(X::instances == 0);
 
-		boost::shared_ptr<X> p4(new X);
+        boost::shared_ptr<X> p4(new X);
 
-		BOOST_TEST(X::instances == 1);
+        BOOST_TEST(X::instances == 1);
 
-		p1 = p4;
+        p1 = p4;
 
-		BOOST_TEST(X::instances == 1);
+        BOOST_TEST(X::instances == 1);
 
         BOOST_TEST(p1 == p4);
         BOOST_TEST(!(p1 < p4 || p4 < p1));
 
-		BOOST_TEST(p1.use_count() == 2);
+        BOOST_TEST(p1.use_count() == 2);
 
-		p1 = p2;
+        p1 = p2;
 
         BOOST_TEST(p1 == p2);
-		BOOST_TEST(X::instances == 1);
+        BOOST_TEST(X::instances == 1);
 
-		p4 = p3;
+        p4 = p3;
 
         BOOST_TEST(p4 == p3);
-		BOOST_TEST(X::instances == 0);
-	}
+        BOOST_TEST(X::instances == 0);
+    }
 }
 
 void conversion_assignment()
 {
-	{
-		boost::shared_ptr<void> p1;
+    {
+        boost::shared_ptr<void> p1;
 
-		boost::shared_ptr<incomplete> p2;
+        boost::shared_ptr<incomplete> p2;
 
-		p1 = p2;
-
-        BOOST_TEST(p1 == p2);
-        BOOST_TEST(p1? false: true);
-        BOOST_TEST(!p1);
-        BOOST_TEST(p1.get() == 0);
-
-		boost::shared_ptr<int> p4(new int);
-		BOOST_TEST(p4.use_count() == 1);
-
-		boost::shared_ptr<void> p5(p4);
-		BOOST_TEST(p4.use_count() == 2);
-
-		p1 = p4;
-
-        BOOST_TEST(p1 == p4);
-        BOOST_TEST(!(p1 < p5 || p5 < p1));
-		BOOST_TEST(p1.use_count() == 3);
-		BOOST_TEST(p4.use_count() == 3);
-
-		p1 = p2;
-
-        BOOST_TEST(p1 == p2);
-		BOOST_TEST(p4.use_count() == 2);
-	}
-
-	{
-		boost::shared_ptr<X> p1;
-
-		boost::shared_ptr<Y> p2;
-
-		p1 = p2;
+        p1 = p2;
 
         BOOST_TEST(p1 == p2);
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
 
-		BOOST_TEST(X::instances == 0);
-		BOOST_TEST(Y::instances == 0);
+        boost::shared_ptr<int> p4(new int);
+        BOOST_TEST(p4.use_count() == 1);
 
-		boost::shared_ptr<Y> p4(new Y);
+        boost::shared_ptr<void> p5(p4);
+        BOOST_TEST(p4.use_count() == 2);
 
-		BOOST_TEST(X::instances == 1);
-		BOOST_TEST(Y::instances == 1);
-		BOOST_TEST(p4.use_count() == 1);
+        p1 = p4;
 
-		boost::shared_ptr<X> p5(p4);
-		BOOST_TEST(p4.use_count() == 2);
+        BOOST_TEST(p1 == p4);
+        BOOST_TEST(!(p1 < p5 || p5 < p1));
+        BOOST_TEST(p1.use_count() == 3);
+        BOOST_TEST(p4.use_count() == 3);
 
-		p1 = p4;
+        p1 = p2;
 
-		BOOST_TEST(X::instances == 1);
-		BOOST_TEST(Y::instances == 1);
+        BOOST_TEST(p1 == p2);
+        BOOST_TEST(p4.use_count() == 2);
+    }
+
+    {
+        boost::shared_ptr<X> p1;
+
+        boost::shared_ptr<Y> p2;
+
+        p1 = p2;
+
+        BOOST_TEST(p1 == p2);
+        BOOST_TEST(p1? false: true);
+        BOOST_TEST(!p1);
+        BOOST_TEST(p1.get() == 0);
+
+        BOOST_TEST(X::instances == 0);
+        BOOST_TEST(Y::instances == 0);
+
+        boost::shared_ptr<Y> p4(new Y);
+
+        BOOST_TEST(X::instances == 1);
+        BOOST_TEST(Y::instances == 1);
+        BOOST_TEST(p4.use_count() == 1);
+
+        boost::shared_ptr<X> p5(p4);
+        BOOST_TEST(p4.use_count() == 2);
+
+        p1 = p4;
+
+        BOOST_TEST(X::instances == 1);
+        BOOST_TEST(Y::instances == 1);
 
         BOOST_TEST(p1 == p4);
         BOOST_TEST(!(p1 < p5 || p5 < p1));
 
-		BOOST_TEST(p1.use_count() == 3);
-		BOOST_TEST(p4.use_count() == 3);
+        BOOST_TEST(p1.use_count() == 3);
+        BOOST_TEST(p4.use_count() == 3);
 
-		p1 = p2;
+        p1 = p2;
 
         BOOST_TEST(p1 == p2);
-		BOOST_TEST(X::instances == 1);
-		BOOST_TEST(Y::instances == 1);
-		BOOST_TEST(p4.use_count() == 2);
+        BOOST_TEST(X::instances == 1);
+        BOOST_TEST(Y::instances == 1);
+        BOOST_TEST(p4.use_count() == 2);
 
-		p4 = p2;
-		p5 = p2;
+        p4 = p2;
+        p5 = p2;
 
         BOOST_TEST(p4 == p2);
-		BOOST_TEST(X::instances == 0);
-		BOOST_TEST(Y::instances == 0);
-	}
+        BOOST_TEST(X::instances == 0);
+        BOOST_TEST(Y::instances == 0);
+    }
 }
 
 void auto_ptr_assignment()
 {
-	{
-		boost::shared_ptr<int> p1;
+    {
+        boost::shared_ptr<int> p1;
 
-		std::auto_ptr<int> p2;
+        std::auto_ptr<int> p2;
 
-		p1 = p2;
+        p1 = p2;
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
-		BOOST_TEST(p1.use_count() == 1);
+        BOOST_TEST(p1.use_count() == 1);
 
-		int * p = new int;
-		std::auto_ptr<int> p3(p);
+        int * p = new int;
+        std::auto_ptr<int> p3(p);
 
-		p1 = p3;
-		BOOST_TEST(p1.get() == p);
-		BOOST_TEST(p1.use_count() == 1);
+        p1 = p3;
+        BOOST_TEST(p1.get() == p);
+        BOOST_TEST(p1.use_count() == 1);
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
         BOOST_TEST(p3.get() == 0);
 #endif
 
-		p1 = p2;
+        p1 = p2;
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
-		BOOST_TEST(p1.use_count() == 1);
-	}
+        BOOST_TEST(p1.use_count() == 1);
+    }
 
-	{
-		boost::shared_ptr<void> p1;
+    {
+        boost::shared_ptr<void> p1;
 
-		std::auto_ptr<int> p2;
+        std::auto_ptr<int> p2;
 
-		p1 = p2;
+        p1 = p2;
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
-		BOOST_TEST(p1.use_count() == 1);
+        BOOST_TEST(p1.use_count() == 1);
 
-		int * p = new int;
-		std::auto_ptr<int> p3(p);
+        int * p = new int;
+        std::auto_ptr<int> p3(p);
 
-		p1 = p3;
-		BOOST_TEST(p1.get() == p);
-		BOOST_TEST(p1.use_count() == 1);
+        p1 = p3;
+        BOOST_TEST(p1.get() == p);
+        BOOST_TEST(p1.use_count() == 1);
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
         BOOST_TEST(p3.get() == 0);
 #endif
 
-		p1 = p2;
+        p1 = p2;
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
-		BOOST_TEST(p1.use_count() == 1);
-	}
+        BOOST_TEST(p1.use_count() == 1);
+    }
 
 
-	{
-		boost::shared_ptr<X> p1;
+    {
+        boost::shared_ptr<X> p1;
 
-		std::auto_ptr<Y> p2;
+        std::auto_ptr<Y> p2;
 
-		p1 = p2;
+        p1 = p2;
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
-		BOOST_TEST(p1.use_count() == 1);
-		BOOST_TEST(X::instances == 0);
-		BOOST_TEST(Y::instances == 0);
+        BOOST_TEST(p1.use_count() == 1);
+        BOOST_TEST(X::instances == 0);
+        BOOST_TEST(Y::instances == 0);
 
-		Y * p = new Y;
-		std::auto_ptr<Y> p3(p);
+        Y * p = new Y;
+        std::auto_ptr<Y> p3(p);
 
-		BOOST_TEST(X::instances == 1);
-		BOOST_TEST(Y::instances == 1);
+        BOOST_TEST(X::instances == 1);
+        BOOST_TEST(Y::instances == 1);
 
-		p1 = p3;
-		BOOST_TEST(p1.get() == p);
-		BOOST_TEST(p1.use_count() == 1);
-		BOOST_TEST(X::instances == 1);
-		BOOST_TEST(Y::instances == 1);
+        p1 = p3;
+        BOOST_TEST(p1.get() == p);
+        BOOST_TEST(p1.use_count() == 1);
+        BOOST_TEST(X::instances == 1);
+        BOOST_TEST(Y::instances == 1);
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
         BOOST_TEST(p3.get() == 0);
 #endif
 
-		p1 = p2;
+        p1 = p2;
         BOOST_TEST(p1? false: true);
         BOOST_TEST(!p1);
         BOOST_TEST(p1.get() == 0);
-		BOOST_TEST(p1.use_count() == 1);
-		BOOST_TEST(X::instances == 0);
-		BOOST_TEST(Y::instances == 0);
-	}
+        BOOST_TEST(p1.use_count() == 1);
+        BOOST_TEST(X::instances == 0);
+        BOOST_TEST(Y::instances == 0);
+    }
 }
 
 void test()
 {
-	copy_assignment();
-	conversion_assignment();
-	auto_ptr_assignment();
+    copy_assignment();
+    conversion_assignment();
+    auto_ptr_assignment();
 }
 
 } // namespace n_assignment
@@ -1448,9 +1469,9 @@ void deleter_reset()
 
 void test()
 {
-	plain_reset();
-	pointer_reset();
-	deleter_reset();
+    plain_reset();
+    pointer_reset();
+    deleter_reset();
 }
 
 } // namespace n_reset
@@ -1690,7 +1711,7 @@ void test()
         BOOST_TEST(!(px != px));
         BOOST_TEST(!(px < px));
 
-		boost::shared_ptr<X> px2;
+        boost::shared_ptr<X> px2;
 
         BOOST_TEST(px.get() == px2.get());
         BOOST_TEST(px == px2);
@@ -1702,7 +1723,7 @@ void test()
         boost::shared_ptr<X> px;
         boost::shared_ptr<X> px2(px);
 
-		BOOST_TEST(px2 == px2);
+        BOOST_TEST(px2 == px2);
         BOOST_TEST(!(px2 != px2));
         BOOST_TEST(!(px2 < px2));
 
@@ -1716,7 +1737,7 @@ void test()
         boost::shared_ptr<X> px;
         boost::shared_ptr<X> px2(new X);
 
-		BOOST_TEST(px2 == px2);
+        BOOST_TEST(px2 == px2);
         BOOST_TEST(!(px2 != px2));
         BOOST_TEST(!(px2 < px2));
 
@@ -1742,7 +1763,7 @@ void test()
         boost::shared_ptr<X> px(new X);
         boost::shared_ptr<X> px2(px);
 
-		BOOST_TEST(px2 == px2);
+        BOOST_TEST(px2 == px2);
         BOOST_TEST(!(px2 != px2));
         BOOST_TEST(!(px2 < px2));
 
@@ -1767,7 +1788,7 @@ void test()
 
         boost::shared_ptr<void> pvx(px);
 
-		BOOST_TEST(pvx == pvx);
+        BOOST_TEST(pvx == pvx);
         BOOST_TEST(!(pvx != pvx));
         BOOST_TEST(!(pvx < pvx));
 
@@ -1778,16 +1799,16 @@ void test()
         BOOST_TEST(pvx < pvz || pvz < pvx);
         BOOST_TEST(pvy < pvz || pvz < pvy);
 
-		BOOST_TEST(!(pvx < pvy && pvy < pvx));
-		BOOST_TEST(!(pvx < pvz && pvz < pvx));
-		BOOST_TEST(!(pvy < pvz && pvz < pvy));
+        BOOST_TEST(!(pvx < pvy && pvy < pvx));
+        BOOST_TEST(!(pvx < pvz && pvz < pvx));
+        BOOST_TEST(!(pvy < pvz && pvz < pvy));
     }
 
     {
         boost::shared_ptr<Z> pz(new Z);
         boost::shared_ptr<X> px(pz);
 
-		BOOST_TEST(px == px);
+        BOOST_TEST(px == px);
         BOOST_TEST(!(px != px));
         BOOST_TEST(!(px < px));
 
@@ -2602,9 +2623,9 @@ class X
 {
 public:
 
-	X()
-	{
-	}
+    X()
+    {
+    }
 
 private:
 
@@ -2639,8 +2660,131 @@ void test()
 namespace n_spt_another_sp
 {
 
+template<class T> class another_ptr: private boost::shared_ptr<T>
+{
+private:
+
+    typedef boost::shared_ptr<T> base_type;
+
+public:
+
+    explicit another_ptr(T * p = 0): base_type(p)
+    {
+    }
+
+    void reset()
+    {
+        base_type::reset();
+    }
+
+    T * get() const
+    {
+        return base_type::get();
+    }
+};
+
+class event_handler
+{
+public:
+
+    virtual ~event_handler() {}
+    virtual void begin() = 0;
+    virtual void handle(int event) = 0;
+    virtual void end() = 0;
+};
+
+int begin_called = 0;
+int handle_called = 0;
+int end_called = 0;
+
+class event_handler_impl: public event_handler
+{
+public:
+
+    virtual void begin()
+    {
+        ++begin_called;
+    }
+
+    virtual void handle(int event)
+    {
+        handle_called = event;
+    }
+
+    virtual void end()
+    {
+        ++end_called;
+    }
+};
+
+another_ptr<event_handler> get_event_handler()
+{
+    another_ptr<event_handler> p(new event_handler_impl);
+    return p;
+}
+
+boost::shared_ptr<event_handler> current_handler;
+
+void install_event_handler(boost::shared_ptr<event_handler> p)
+{
+    p->begin();
+    current_handler = p;
+}
+
+void handle_event(int event)
+{
+    current_handler->handle(event);
+}
+
+void remove_event_handler()
+{
+    current_handler->end();
+    current_handler.reset();
+}
+
+template<class P> class smart_pointer_deleter
+{
+private:
+
+    P p_;
+
+public:
+
+    smart_pointer_deleter(P const & p): p_(p)
+    {
+    }
+
+    void operator()(void const *)
+    {
+        p_.reset();
+    }
+};
+
 void test()
 {
+    another_ptr<event_handler> p = get_event_handler();
+
+    boost::shared_ptr<event_handler> q(p.get(), smart_pointer_deleter< another_ptr<event_handler> >(p));
+
+    p.reset();
+
+    BOOST_TEST(begin_called == 0);
+
+    install_event_handler(q);
+
+    BOOST_TEST(begin_called == 1);
+
+    BOOST_TEST(handle_called == 0);
+
+    handle_event(17041);
+
+    BOOST_TEST(handle_called == 17041);
+
+    BOOST_TEST(end_called == 0);
+
+    remove_event_handler();
+
+    BOOST_TEST(end_called == 1);
 }
 
 } // namespace n_spt_another_sp
