@@ -130,7 +130,7 @@ CopyConstructible, so we can even use references and arrays:
       <tbody>
         <row>
 <entry>
-<programlisting name="function.tutorial.sum_avg_decl.portable"><classname alt="functionN">boost::function4</classname>&lt;void, int[], int, int&amp;, float&amp;&gt; sum_avg;</programlisting>
+<programlisting name="function.tutorial.sum_avg_decl.portable"><classname alt="functionN">boost::function4</classname>&lt;void, int*, int, int&amp;, float&amp;&gt; sum_avg;</programlisting>
 </entry>
           </row>
         </tbody>

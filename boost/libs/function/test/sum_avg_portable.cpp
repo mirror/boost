@@ -21,7 +21,7 @@ void do_sum_avg(int values[], int n, int& sum, float& avg)
 }
 int main()
 {
-    boost::function4<void, int[], int, int&, float&> sum_avg;
+    boost::function4<void, int*, int, int&, float&> sum_avg;
     sum_avg = &do_sum_avg;
 
     return 0;
