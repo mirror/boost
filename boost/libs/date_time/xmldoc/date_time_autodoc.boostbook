@@ -185,13 +185,10 @@
   </header>
   <header name="boost/date_time/c_time.hpp">
     <para>Provide workarounds related to the ctime header</para>
+    <namespace name="std"/>
   </header>
   <header name="boost/date_time/compiler_config.hpp">
-    <macro name="BOOST_DATE_TIME_OPTIONAL_GREGORIAN_TYPES"/>
-    <macro name="INT64_C" kind="functionlike">
-      <macro-parameter name="value"/>
-    </macro>
-    <macro name="BOOST_LIB_NAME"/>
+    <namespace name="std"/>
   </header>
   <header name="boost/date_time/constrained_value.hpp">
     <namespace name="boost">
@@ -2452,192 +2449,7 @@
       </namespace>
     </namespace>
   </header>
-  <header name="boost/date_time/date_parsing.hpp">
-    <namespace name="boost">
-      <namespace name="date_time">
-        <function name="convert_to_lower">
-          <type>std::string</type>
-          <parameter name="inp">
-            <paramtype>const std::string &amp;</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>A function to replace the std::transform( , , ,tolower) construct. </simpara>
-          </purpose>
-          <description>
-            <para>This function simply takes a string, and changes all the characters in that string to lowercase (according to the default system locale). In the event that a compiler does not support locales, the old C style tolower() is used. </para>
-          </description>
-        </function>
-        <function name="month_str_to_ushort">
-          <type>unsigned short</type>
-          <template>
-          <template-type-parameter name="month_type"/>
-        </template>
-          <parameter name="s">
-            <paramtype>std::string</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Helper function for parse_date. </simpara>
-          </purpose>
-        </function>
-        <function name="find_match">
-          <type>short</type>
-          <template>
-          <template-type-parameter name="charT"/>
-        </template>
-          <parameter name="short_names">
-            <paramtype>const charT *const *</paramtype>
-          </parameter>
-          <parameter name="long_names">
-            <paramtype>const charT *const *</paramtype>
-          </parameter>
-          <parameter name="limit">
-            <paramtype>const int</paramtype>
-          </parameter>
-          <parameter name="s">
-            <paramtype>const std::basic_string&lt; charT &gt; &amp;</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Find index of a string in either of 2 arrays. </simpara>
-          </purpose>
-          <description>
-            <para>find_match searches both arrays for a match to 's'. Indexing of the arrays is from 0 to 'limit'. The index of the match is returned. Ex. "Jan" returns 0, "Dec" returns 11, "Tue" returns 2. 'limit' can be sent in with: greg_month::max(), greg_weekday::max() or date_time::NumSpecialValues </para>
-          </description>
-        </function>
-        <function name="parse_date">
-          <type>date_type</type>
-          <template>
-          <template-type-parameter name="date_type"/>
-        </template>
-          <parameter name="s">
-            <paramtype>const std::string &amp;</paramtype>
-          </parameter>
-          <parameter name="order_spec">
-            <paramtype>int</paramtype>
-            <default>ymd_order_iso</default>
-          </parameter>
-          <purpose>
-            <simpara>Generic function to parse a delimited date (eg: 2002-02-10). </simpara>
-          </purpose>
-          <description>
-            <para>Accepted formats are: "2003-02-10" or " 2003-Feb-10" or "2003-Feburary-10" The order in which the Month, Day, &amp; Year appear in the argument string can be accomodated by passing in the appropriate ymd_order_spec </para>
-          </description>
-        </function>
-        <function name="parse_undelimited_date">
-          <type>date_type</type>
-          <template>
-          <template-type-parameter name="date_type"/>
-        </template>
-          <parameter name="s">
-            <paramtype>const std::string &amp;</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Generic function to parse undelimited date (eg: 20020201). </simpara>
-          </purpose>
-        </function>
-        <function name="from_stream_type">
-          <type>date_type</type>
-          <template>
-          <template-type-parameter name="date_type"/>
-          <template-type-parameter name="iterator_type"/>
-        </template>
-          <parameter name="beg">
-            <paramtype>iterator_type &amp;</paramtype>
-          </parameter>
-          <parameter name="end">
-            <paramtype>iterator_type &amp;</paramtype>
-          </parameter>
-          <parameter name="">
-            <paramtype>char</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Helper function for 'date gregorian::from_stream()'. </simpara>
-          </purpose>
-          <description>
-            <para>Creates a string from the iterators that reference the begining &amp; end of a char[] or string. All elements are used in output string </para>
-          </description>
-        </function>
-        <function name="from_stream_type">
-          <type>date_type</type>
-          <template>
-          <template-type-parameter name="date_type"/>
-          <template-type-parameter name="iterator_type"/>
-        </template>
-          <parameter name="beg">
-            <paramtype>iterator_type &amp;</paramtype>
-          </parameter>
-          <parameter name="end">
-            <paramtype>iterator_type &amp;</paramtype>
-          </parameter>
-          <parameter name="">
-            <paramtype>std::string</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Helper function for 'date gregorian::from_stream()'. </simpara>
-          </purpose>
-          <description>
-            <para>Returns the first string found in the stream referenced by the begining &amp; end iterators </para>
-          </description>
-        </function>
-        <function name="from_stream_type">
-          <type>date_type</type>
-          <template>
-          <template-type-parameter name="date_type"/>
-          <template-type-parameter name="iterator_type"/>
-        </template>
-          <parameter name="beg">
-            <paramtype>iterator_type &amp;</paramtype>
-          </parameter>
-          <parameter name="end">
-            <paramtype>iterator_type &amp;</paramtype>
-          </parameter>
-          <parameter name="">
-            <paramtype>wchar_t</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Helper function for 'date gregorian::from_stream()'. </simpara>
-          </purpose>
-          <description>
-            <para>Creates a string from the iterators that reference the begining &amp; end of a wstring. All elements are used in output string </para>
-          </description>
-        </function>
-        <function name="from_stream_type">
-          <type>date_type</type>
-          <template>
-          <template-type-parameter name="date_type"/>
-          <template-type-parameter name="iterator_type"/>
-        </template>
-          <parameter name="beg">
-            <paramtype>iterator_type &amp;</paramtype>
-          </parameter>
-          <parameter name="end">
-            <paramtype>iterator_type &amp;</paramtype>
-          </parameter>
-          <parameter name="">
-            <paramtype>std::wstring</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Helper function for 'date gregorian::from_stream()'. </simpara>
-          </purpose>
-          <description>
-            <para>Creates a string from the first wstring found in the stream referenced by the begining &amp; end iterators </para>
-          </description>
-        </function>
-        <function name="from_simple_string_type">
-          <type><classname>period</classname>&lt; date_type, typename date_type::duration_type &gt;</type>
-          <template>
-          <template-type-parameter name="date_type"/>
-          <template-type-parameter name="charT"/>
-        </template>
-          <parameter name="s">
-            <paramtype>const std::basic_string&lt; charT &gt; &amp;</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>function called by wrapper functions: date_period_from_(w)string() </simpara>
-          </purpose>
-        </function>
-      </namespace>
-    </namespace>
-  </header>
+  <header name="boost/date_time/date_parsing.hpp"/>
   <header name="boost/date_time/dst_rules.hpp">
     <para>Contains template class to provide static dst rule calculations</para>
     <namespace name="boost">
@@ -3044,6 +2856,25 @@
   </header>
   <header name="boost/date_time/filetime_functions.hpp">
     <para>Function(s) for converting between a FILETIME structure and a time object. This file is only available on systems that have BOOST_HAS_FTIME defined.</para>
+    <namespace name="boost">
+      <namespace name="date_time">
+        <function name="time_from_ftime">
+          <type>time_type</type>
+          <template>
+          <template-type-parameter name="time_type"/>
+        </template>
+          <parameter name="ft">
+            <paramtype>const FILETIME &amp;</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Create a time object from an initialized FILETIME struct. </simpara>
+          </purpose>
+          <description>
+            <para>Create a time object from an initialized FILETIME struct. A FILETIME struct holds 100-nanosecond units (0.0000001). When built with microsecond resolution the FILETIME's sub second value will be truncated. Nanosecond resolution has no truncation. </para>
+          </description>
+        </function>
+      </namespace>
+    </namespace>
   </header>
   <header name="boost/date_time/gregorian_calendar.hpp">
     <namespace name="boost">
@@ -4009,11 +3840,61 @@ The logic is as follows. Starting with UTC time use the offset to create a label
       </namespace>
     </namespace>
   </header>
-  <header name="boost/date_time/locale_config.hpp">
-    <macro name="DATE_TIME_LOCALE_CONFIG_HPP____"/>
-  </header>
+  <header name="boost/date_time/locale_config.hpp"/>
   <header name="boost/date_time/microsec_time_clock.hpp">
     <para>This file contains a high resolution time clock implementation.</para>
+    <namespace name="boost">
+      <namespace name="date_time">
+        <class name="microsec_clock">
+          <template>
+      <template-type-parameter name="time_type"/>
+    </template>
+          <purpose>
+            <simpara>A clock providing microsecond level resolution. </simpara>
+          </purpose>
+          <description>
+            <para>A high precision clock that measures the local time at a resolution up to microseconds and adjusts to the resolution of the time system. For example, for the a library configuration with nano second resolution, the last 3 places of the fractional seconds will always be 000 since there are 1000 nano-seconds in a micro second. </para>
+          </description>
+          <typedef name="date_type">
+            <type>time_type::date_type</type>
+          </typedef>
+          <typedef name="time_duration_type">
+            <type>time_type::time_duration_type</type>
+          </typedef>
+          <typedef name="resolution_traits_type">
+            <type>time_duration_type::rep_type</type>
+          </typedef>
+          <method-group name="public static functions">
+            <method name="local_time" cv="">
+              <type>time_type</type>
+              <purpose>
+                <simpara>Return the local time based on computer clock settings. </simpara>
+              </purpose>
+            </method>
+          </method-group>
+          <method-group name="private static functions">
+            <method name="create_time" cv="">
+              <type>time_type</type>
+              <parameter name="tv">
+                <paramtype>timeval *</paramtype>
+              </parameter>
+            </method>
+            <method name="local_time" cv="">
+              <type>time_type</type>
+              <purpose>
+                <simpara>Return the local time based on computer clock settings. </simpara>
+              </purpose>
+            </method>
+            <method name="create_time" cv="">
+              <type>time_type</type>
+              <parameter name="ft">
+                <paramtype>FILETIME &amp;</paramtype>
+              </parameter>
+            </method>
+          </method-group>
+        </class>
+      </namespace>
+    </namespace>
   </header>
   <header name="boost/date_time/parse_format_base.hpp">
     <namespace name="boost">
@@ -5066,8 +4947,9 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           <template>
       <template-type-parameter name="frac_sec_type"/>
       <template-nontype-parameter name="res"><type>time_resolutions</type></template-nontype-parameter>
-      <template-nontype-parameter name="resolution_adjust"><type>typename frac_sec_type::int_type</type></template-nontype-parameter>
-      <template-nontype-parameter name="frac_digits"><type>unsigned short</type></template-nontype-parameter>
+      <template-nontype-parameter name="resolution_adjust"><type>#if(defined(BOOST_MSVC)&amp;&amp;(_MSC_VER&lt;=1200)) boost::int64_t</type></template-nontype-parameter>
+      <template-nontype-parameter name="resolution_adjust"><type>#else typename frac_sec_type::int_type</type></template-nontype-parameter>
+      <template-nontype-parameter name="frac_digits"><type>#endif unsigned short</type></template-nontype-parameter>
       <template-type-parameter name="v_type"><default>boost::int32_t</default></template-type-parameter>
     </template>
           <typedef name="fractional_seconds_type">
@@ -5497,6 +5379,7 @@ The logic is as follows. Starting with UTC time use the offset to create a label
         <class name="split_timedate_system">
           <template>
       <template-type-parameter name="config"/>
+      <template-nontype-parameter name="ticks_per_second"><type>boost::int32_t</type></template-nontype-parameter>
     </template>
           <purpose>
             <simpara>An unadjusted time system implementation. </simpara>
@@ -5518,6 +5401,9 @@ The logic is as follows. Starting with UTC time use the offset to create a label
           </typedef>
           <typedef name="resolution_traits">
             <type>config::resolution_traits</type>
+          </typedef>
+          <typedef name="wrap_int_type">
+            <type><classname>date_time::wrapping_int</classname>&lt; int_type, INT64_C(86400)*ticks_per_second</type>
           </typedef>
           <typedef name="wrap_int_type">
             <type><classname>date_time::wrapping_int</classname>&lt; int_type, ticks_per_day &gt;</type>

@@ -21,7 +21,7 @@
     By default the posix_time system uses a 64 bit integer and a 32 bit integer internally to provide nano-second level resolutions. As an alternative, a single 64 bit integer can be used to provide a microsecond level resolution. This alternative implementation may provide better performance and more compact memory usage for many applications that do not require nano-second resolutions. 
   </para>
   <para>
-    To use the alternate resolution (64 bit microsecond) the variable BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG must be defined in the library users project files (ie Makefile, Jamfile, etc). This macro is not used by the gregorian system and therfore has no effect when building the library.
+    To use the alternate resolution (64 bit microsecond) the variable BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG must be defined in the library users project files (ie Makefile, Jamfile, etc). This macro is not used by the Gregorian system and therefore has no effect when building the library.
   </para>
 
   <anchor id="portability" />
@@ -53,11 +53,11 @@
     The directory tree has the following structure:
     <programlisting>
       /boost/date_time                    -- common headers and template code
-      /boost/date_time/gregoran           -- gregorian calendar system header files
+      /boost/date_time/gregoran           -- Gregorian calendar system header files
       /boost/date_time/posix_time         -- posix time system headers
       /libs/date_time/build               -- build files and output directory
       /libs/date_time/test                -- test battery for generic code
-      /libs/date_time/test/gregorian      -- test battery for the gregorian system
+      /libs/date_time/test/gregorian      -- test battery for the Gregorian system
       /libs/date_time/test/posix_time     -- test battery for the posix_time system
       /libs/date_time/examples/posix_time -- time example programs
       /libs/date_time/examples/gregorian  -- nifty example programs

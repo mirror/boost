@@ -15,6 +15,22 @@
             <simpara>Function that converts a time_t into a ptime. </simpara>
           </purpose>
         </function>
+        <function name="from_ftime">
+          <type>time_type</type>
+          <template>
+          <template-type-parameter name="time_type"/>
+        </template>
+          <parameter name="ft">
+            <paramtype>const FILETIME &amp;</paramtype>
+          </parameter>
+          <purpose>
+            <simpara>Function to create a time object from an initialized FILETIME struct. </simpara>
+          </purpose>
+          <description>
+            <para>Function to create a time object from an initialized FILETIME struct. A FILETIME struct holds 100-nanosecond units (0.0000001). When built with microsecond resolution the FILETIME's sub second value will be truncated. Nanosecond resolution has no truncation.</para>
+            <para>Note ftime is part of the Win32 API, so it is not portable to non-windows platforms. </para>
+          </description>
+        </function>
       </namespace>
     </namespace>
   </header>
@@ -180,6 +196,87 @@
             </method>
           </method-group>
         </class>
+        <class name="posix_time_system_config">
+          <typedef name="time_rep_type">
+            <type>
+              <classname>simple_time_rep</classname>
+            </type>
+          </typedef>
+          <typedef name="date_type">
+            <type>gregorian::date</type>
+          </typedef>
+          <typedef name="date_duration_type">
+            <type>gregorian::date_duration</type>
+          </typedef>
+          <typedef name="time_duration_type">
+            <type>
+              <classname>time_duration</classname>
+            </type>
+          </typedef>
+          <typedef name="int_type">
+            <type>time_res_traits::tick_type</type>
+          </typedef>
+          <typedef name="resolution_traits">
+            <type>time_res_traits</type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="BOOST_STATIC_CONSTANT" cv="">
+              <type/>
+              <parameter name="">
+                <paramtype>boost::int64_t</paramtype>
+              </parameter>
+              <parameter name="">
+                <paramtype>tick_per_second</paramtype>
+                <default>1000000000</default>
+              </parameter>
+            </method>
+          </method-group>
+        </class>
+        <struct name="simple_time_rep">
+          <purpose>
+            <simpara>Simple implementation for the time rep. </simpara>
+          </purpose>
+          <typedef name="date_type">
+            <type>gregorian::date</type>
+          </typedef>
+          <typedef name="time_duration_type">
+            <type>
+              <classname>time_duration</classname>
+            </type>
+          </typedef>
+          <method-group name="public member functions">
+            <method name="is_special" cv="const">
+              <type>bool</type>
+            </method>
+            <method name="is_pos_infinity" cv="const">
+              <type>bool</type>
+            </method>
+            <method name="is_neg_infinity" cv="const">
+              <type>bool</type>
+            </method>
+            <method name="is_not_a_date_time" cv="const">
+              <type>bool</type>
+            </method>
+          </method-group>
+          <constructor>
+            <parameter name="d">
+              <paramtype>date_type</paramtype>
+            </parameter>
+            <parameter name="tod">
+              <paramtype>
+                <classname>time_duration_type</classname>
+              </paramtype>
+            </parameter>
+          </constructor>
+          <data-member name="day">
+            <type>date_type</type>
+          </data-member>
+          <data-member name="time_of_day">
+            <type>
+              <classname>time_duration_type</classname>
+            </type>
+          </data-member>
+        </struct>
         <class name="time_duration">
           <purpose>
             <simpara>Base time duration type. </simpara>
@@ -241,12 +338,10 @@
           </constructor>
         </class>
         <typedef name="time_res_traits">
-          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::micro, 1000000, 6 &gt;</type>
+          <type>date_time::time_resolution_traits&lt; boost::date_time::time_resolution_traits_adapted64_impl, boost::date_time::nano, 1000000000, 9 &gt;</type>
         </typedef>
       </namespace>
     </namespace>
-    <macro name="BOOST_DATE_TIME_HAS_MILLISECONDS"/>
-    <macro name="BOOST_DATE_TIME_HAS_MICROSECONDS"/>
   </header>
   <header name="boost/date_time/posix_time/posix_time_duration.hpp">
     <namespace name="boost">
@@ -305,17 +400,26 @@
         <typedef name="microseconds">
           <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000 &gt;</type>
         </typedef>
+        <typedef name="nanosec">
+          <purpose>
+            <simpara>Allows expression of durations as nano seconds. </simpara>
+          </purpose>
+          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000000 &gt;</type>
+        </typedef>
+        <typedef name="nanoseconds">
+          <type>date_time::subsecond_duration&lt; <classname>time_duration</classname>, 1000000000 &gt;</type>
+        </typedef>
       </namespace>
     </namespace>
   </header>
   <header name="boost/date_time/posix_time/posix_time_system.hpp">
     <namespace name="boost">
       <namespace name="posix_time">
+        <typedef name="posix_time_system">
+          <type>date_time::split_timedate_system&lt; posix_time_system_config, 1000000000 &gt;</type>
+        </typedef>
         <typedef name="int64_time_rep">
           <type>date_time::counted_time_rep&lt; millisec_posix_time_system_config &gt;</type>
-        </typedef>
-        <typedef name="posix_time_system">
-          <type>date_time::counted_time_system&lt; int64_time_rep &gt;</type>
         </typedef>
       </namespace>
     </namespace>
@@ -334,6 +438,12 @@
             <simpara>A time clock that has a resolution of one second. </simpara>
           </purpose>
           <type>date_time::second_clock&lt; ptime::date_type, <classname>ptime</classname> &gt;</type>
+        </typedef>
+        <typedef name="microsec_clock">
+          <purpose>
+            <simpara>A time clock that has a resolution of one microsecond. </simpara>
+          </purpose>
+          <type>date_time::microsec_clock&lt; <classname>ptime</classname> &gt;</type>
         </typedef>
         <typedef name="no_dst">
           <purpose>
@@ -751,172 +861,5 @@
       </namespace>
     </namespace>
   </header>
-  <header name="boost/date_time/posix_time/time_serialize.hpp">
-    <namespace name="boost">
-      <namespace name="serialization">
-        <function name="save">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="td">
-            <paramtype>const <classname>posix_time::time_duration</classname> &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Function to save posix_time::time_duration objects using serialization lib. </simpara>
-          </purpose>
-          <description>
-            <para>time_duration objects are broken down into 4 parts for serialization: types are hour_type, min_type, sec_type, and fractional_seconds_type as defined in the time_duration class </para>
-          </description>
-        </function>
-        <function name="load">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="td">
-            <paramtype><classname>posix_time::time_duration</classname> &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Function to load posix_time::time_duration objects using serialization lib. </simpara>
-          </purpose>
-          <description>
-            <para>time_duration objects are broken down into 4 parts for serialization: types are hour_type, min_type, sec_type, and fractional_seconds_type as defined in the time_duration class </para>
-          </description>
-        </function>
-        <function name="save">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="pt">
-            <paramtype>const <classname>posix_time::ptime</classname> &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Function to save posix_time::ptime objects using serialization lib. </simpara>
-          </purpose>
-          <description>
-            <para>ptime objects are broken down into 2 parts for serialization: a date object and a time_duration onject </para>
-          </description>
-        </function>
-        <function name="load">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="pt">
-            <paramtype><classname>posix_time::ptime</classname> &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Function to load posix_time::ptime objects using serialization lib. </simpara>
-          </purpose>
-          <description>
-            <para>ptime objects are broken down into 2 parts for serialization: a date object and a time_duration onject </para>
-          </description>
-        </function>
-        <function name="load_construct_data">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="pt">
-            <paramtype><classname>posix_time::ptime</classname> *</paramtype>
-          </parameter>
-          <parameter name="file_version">
-            <paramtype>const unsigned int</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>override needed b/c no default constructor </simpara>
-          </purpose>
-        </function>
-        <function name="save">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="tp">
-            <paramtype>const posix_time::time_period &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Function to save posix_time::time_period objects using serialization lib. </simpara>
-          </purpose>
-          <description>
-            <para>time_period objects are broken down into 2 parts for serialization: a begining ptime object and an ending ptime object </para>
-          </description>
-        </function>
-        <function name="load">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="tp">
-            <paramtype>boost::posix_time::time_period &amp;</paramtype>
-          </parameter>
-          <parameter name="version">
-            <paramtype>unsigned int</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>Function to load posix_time::time_period objects using serialization lib. </simpara>
-          </purpose>
-          <description>
-            <para>time_period objects are broken down into 2 parts for serialization: a begining ptime object and an ending ptime object </para>
-          </description>
-        </function>
-        <function name="load_construct_data">
-          <type>void</type>
-          <template>
-          <template-type-parameter name="Archive"/>
-        </template>
-          <parameter name="ar">
-            <paramtype>Archive &amp;</paramtype>
-          </parameter>
-          <parameter name="tp">
-            <paramtype>boost::posix_time::time_period *</paramtype>
-          </parameter>
-          <parameter name="file_version">
-            <paramtype>const unsigned int</paramtype>
-          </parameter>
-          <purpose>
-            <simpara>override needed b/c no default constructor </simpara>
-          </purpose>
-        </function>
-      </namespace>
-    </namespace>
-  </header>
+  <header name="boost/date_time/posix_time/time_serialize.hpp"/>
 </section>
