@@ -37,22 +37,23 @@ struct type {};
 struct default_iterator_policies
 {
     // Some of these members were defined static, but Borland got confused
-    // and thought they were non-const.
+    // and thought they were non-const. Also, Sun C++ does not like static
+    // function templates.
 
     template <class Reference, class Iterator>
     Reference dereference(type<Reference>, const Iterator& x) const
         { return *x; }
 
     template <class Iterator>
-    static void increment(Iterator& x)
+    void increment(Iterator& x)
         { ++x; }
 
     template <class Iterator>
-    static void decrement(Iterator& x)
+    void decrement(Iterator& x)
         { --x; }
 
     template <class Iterator, class DifferenceType>
-    static void advance(Iterator& x, DifferenceType n)
+    void advance(Iterator& x, DifferenceType n)
         { x += n; }
 
     template <class Difference, class Iterator1, class Iterator2>
@@ -350,6 +351,9 @@ public:
 
 //=============================================================================
 // Transform Iterator Adaptor
+//
+// Upon deference, apply some unary function object and return the
+// result by value.
 
 template <class AdaptableUnaryFunction>
 struct transform_iterator_policies : public default_iterator_policies
@@ -358,8 +362,8 @@ struct transform_iterator_policies : public default_iterator_policies
     transform_iterator_policies(const AdaptableUnaryFunction& f) : m_f(f) { }
     
     template <class Reference, class Iterator>
-    Reference dereference(type<Reference>, const Iterator& x) const
-        { return m_f(*x); }
+    Reference dereference(type<Reference>, const Iterator& iter) const
+        { return m_f(*iter); }
 
     AdaptableUnaryFunction m_f;
 };
@@ -394,7 +398,16 @@ struct transform_iterator
 //=============================================================================
 // Indirect Iterators Adaptor
 
-// Tried implementing this with transform_iterator, but that required
+// Given a pointer to pointers (or iterator to iterators),
+// apply a double dereference inside operator*().
+//
+// We use the term "outer" to refer to the first level iterator type
+// and "inner" to refer to the second level iterator type.  For
+// example, given T**, T* is the inner iterator type and T** is the
+// outer iterator type. Also, const T* would be the const inner
+// iterator.
+
+// We tried to implement this with transform_iterator, but that required
 // using boost::remove_ref, which is not compiler portable.
 
 struct indirect_iterator_policies : public default_iterator_policies
@@ -422,7 +435,9 @@ struct indirect_traits
     typedef typename OuterTraits::iterator_category iterator_category;
 };
 
-template <class OuterIterator, class InnerIterator,
+template <class OuterIterator,      // Mutable or Immutable, does not matter
+          class InnerIterator,      // Mutable -> mutable indirect iterator
+                                    // Immutable -> immutable indirect iterator
 #ifdef BOOST_NO_STD_ITERATOR_TRAITS
           class OuterTraits,
           class InnerTraits
@@ -549,13 +564,19 @@ struct reverse_iterators
 // Projection Iterators Adaptor
 
 template <class AdaptableUnaryFunction>
-struct projection_iterator_policies :
-        public default_iterator_policies {
+struct projection_iterator_policies : public default_iterator_policies
+{
+    projection_iterator_policies() { }
+    projection_iterator_policies(const AdaptableUnaryFunction& f) : m_f(f) { }
+
     template <class Reference, class Iterator>
-    Reference dereference (type<Reference>, Iterator const& it) const {
-        return AdaptableUnaryFunction()(*it);
+    Reference dereference (type<Reference>, Iterator const& iter) const {
+        return m_f(*iter);
     }
+
+    AdaptableUnaryFunction m_f;    
 };
+
 template <class AdaptableUnaryFunction, class Traits>
 struct projection_iterator_traits {
     typedef typename AdaptableUnaryFunction::result_type value_type;
@@ -564,6 +585,7 @@ struct projection_iterator_traits {
     typedef typename Traits::difference_type difference_type;
     typedef typename Traits::iterator_category iterator_category;
 };
+
 template <class AdaptableUnaryFunction, class Traits>
 struct const_projection_iterator_traits {
     typedef typename AdaptableUnaryFunction::result_type value_type;
@@ -572,6 +594,7 @@ struct const_projection_iterator_traits {
     typedef typename Traits::difference_type difference_type;
     typedef typename Traits::iterator_category iterator_category;
 };
+
 template <class AdaptableUnaryFunction, class Iterator,
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
         class Traits = std::iterator_traits<Iterator>
@@ -586,6 +609,7 @@ struct projection_iterator {
             projection_iterator_policies<AdaptableUnaryFunction>,
             Projection_Traits> type;
 };
+
 template <class AdaptableUnaryFunction, class Iterator,
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
         class Traits = std::iterator_traits<Iterator>
@@ -600,6 +624,7 @@ struct const_projection_iterator {
             projection_iterator_policies<AdaptableUnaryFunction>,
             Projection_Traits> type;
 };
+
 template <class AdaptableUnaryFunction, class Iterator, class ConstIterator,
 #ifndef BOOST_NO_STD_ITERATOR_TRAITS
         class Traits = std::iterator_traits<Iterator>,

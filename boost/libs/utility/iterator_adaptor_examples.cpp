@@ -7,7 +7,8 @@
 #include <functional>
 #include <algorithm>
 #include <iostream>
-#include <boost/iterator_adaptors.hpp>
+#include <boost/pending/iterator_adaptors.hpp>
+#include <boost/pending/integer_range.hpp>
 
 int
 main(int, char*[])
@@ -15,6 +16,7 @@ main(int, char*[])
   // This is a simple example of using the transform_iterators class to
   // generate iterators that multiply the value returned by dereferencing
   // the iterator. In this case we are multiplying by 2.
+  // Would be cooler to use lambda library in this example.
 
   int x[] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 

@@ -32,14 +32,14 @@
 
 namespace boost {
 
-  struct representative_with_path_halving {
+  struct find_with_path_halving {
     template <class ParentPA, class Vertex>
     Vertex operator()(ParentPA p, Vertex v) { 
       return detail::find_representative_with_path_halving(pc, v);
     }
   };
 
-  struct representative_with_full_path_compression {
+  struct find_with_full_path_compression {
     template <class ParentPA, class Vertex>
     Vertex operator()(ParentPA p, Vertex v){
       return detail::find_representative_with_full_compression(p, v);
@@ -59,7 +59,7 @@ namespace boost {
   // (preferably the size_type associated with Vertex). The ParentPA
   // must map Vertex to Vertex.
   template <class RankPA, class ParentPA,
-    class FindCompress = representative_with_full_path_compression
+    class FindCompress = find_with_full_path_compression
     >
   class disjoint_sets {
     typedef disjoint_sets self;
@@ -137,7 +137,7 @@ namespace boost {
 
   template <class ID = identity_property_map,
             class InverseID = identity_property_map,
-            class FindCompress = representative_with_full_path_compression
+            class FindCompress = find_with_full_path_compression
             >
   class disjoint_sets_with_storage
   {

@@ -170,6 +170,28 @@ denotes the address of <tt>u</tt>
 <LI><tt>std::pair</tt>
 </UL>
 
+<h3>Concept Checking Class</h3>
+
+<pre>
+  template &lt;class T&gt;
+  struct CopyConstructibleConcept
+  {
+    void constraints() {
+      T a(b);            // require copy constructor
+      T* ptr = &amp;a;       // require address of operator
+      const_constraints(a);
+      ignore_unused_variable_warning(ptr);
+    }
+    void const_constraints(const T&amp; a) {
+      T c(a);            // require const copy constructor
+      const T* ptr = &amp;a; // require const address of operator
+      ignore_unused_variable_warning(c);
+      ignore_unused_variable_warning(ptr);
+    }
+    T b;
+  };
+</pre>
+
 <h3>See also</h3>
 <A
 href="http://www.sgi.com/Technology/STL/DefaultConstructible.html">DefaultConstructible</A>
