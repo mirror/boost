@@ -23,6 +23,7 @@
 #include "boost/mpl/aux_/void_spec.hpp"
 #include "boost/mpl/aux_/lambda_support.hpp"
 #include "boost/mpl/aux_/config/workaround.hpp"
+#include "boost/mpl/aux_/config/use_preprocessed.hpp"
 #include "boost/config.hpp"
 
 #if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
@@ -141,7 +142,8 @@ BOOST_MPL_AUX_AGLORITHM_NAMESPACE_END
 BOOST_MPL_AUX_ALGORITHM_VOID_SPEC(3, if_)
 
 
-#if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
+#if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT) \
+    && !defined(BOOST_MPL_NO_PREPROCESSED_HEADERS)
 
 // Aleksey, check it out: lazy if_ evaluation in lambdas!
 // I think this doesn't handle the case of
@@ -229,6 +231,7 @@ struct bind3<quote3<if_, void_>, T1, T2, T3>
         typedef typename f_::type type;
     };
 };
+
 #endif
 
 } // namespace mpl
