@@ -234,6 +234,8 @@ namespace assign_detail
     class generic_list : 
         public converter< generic_list< BOOST_DEDUCED_TYPENAME assign_decay<T>::type > >
     {
+        typedef converter< generic_list< BOOST_DEDUCED_TYPENAME assign_decay<T>::type > >
+                                                             base_type;
         typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
         typedef std::deque<Ty>  impl_type;
         mutable impl_type       values_;
@@ -325,6 +327,12 @@ namespace assign_detail
         {
             return range( boost::begin(r), boost::end(r) );
         }
+
+        template< class Container >
+        operator Container() const
+        {
+            return (Container)static_cast<const base_type&>(*this);
+        }
     };
 
     /////////////////////////////////////////////////////////////////////////
@@ -382,6 +390,7 @@ namespace assign_detail
         public converter< static_generic_list<T,N> >
     {
     private:
+        typedef converter< static_generic_list<T,N> >  base_class;
         //typedef BOOST_DEDUCED_TYPENAME assign_decay<T>::type Ty;
         //typedef BOOST_DEDUCED_TYPENAME 
         //    remove_reference<Ty>::type                internal_value_type; 
@@ -440,6 +449,12 @@ namespace assign_detail
         static_generic_list& range( const ForwardRange& r )
         {
             return range( boost::begin(r), boost::end(r) );
+        }
+
+        template< class Container >
+        operator Container() const
+        {
+            return (Container)static_cast<const base_class&>( *this );
         }
 
     private:
