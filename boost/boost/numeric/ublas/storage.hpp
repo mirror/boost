@@ -68,9 +68,6 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
 
 
-    // No initialise - tag parameter specified to disable construction of array value_types's
-    struct no_init {};
-
     // Unbounded array - with allocator
     template<class T, class ALLOC>
     class unbounded_array {
@@ -96,10 +93,7 @@ namespace boost { namespace numeric { namespace ublas {
             alloc_(a), size_ (size) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
-                const iterator i_end = end ();
-                for (iterator i = begin (); i != i_end; ++i) {
-                    iterator_default_construct (i) ;
-                }
+                new (data_) value_type[size_];
             }
         }
         // No value initialised, but still be default constructed
@@ -108,10 +102,7 @@ namespace boost { namespace numeric { namespace ublas {
             alloc_ (a), size_ (size) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
-                const iterator i_end = end ();
-                for (iterator i = begin (); i != i_end; ++i) {
-                    iterator_construct (i, init); 
-                }
+                std::uninitialized_fill (begin(), end(), init);
             }
         }
         BOOST_UBLAS_INLINE
@@ -119,12 +110,7 @@ namespace boost { namespace numeric { namespace ublas {
             alloc_ (c.alloc_), size_ (c.size_) {
             if (size_) {
                 data_ = alloc_.allocate (size_ BOOST_UBLAS_ALLOCATOR_HINT);
-                const_iterator ci = c.begin();
-                const iterator i_end = end();
-                for (iterator i = begin (); i != i_end; ++i) {
-                    iterator_construct (i, *ci);
-                    ++ci;
-                }
+                std::uninitialized_copy (c.begin(), c.end(), begin());
             }
             else
                 data_ = 0;
@@ -315,15 +301,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        // Handle explict construct/destroy on a (possibily indexed) iterator
-        BOOST_UBLAS_INLINE
-        void static iterator_construct (iterator &i, const value_type &v) {
-            new (&(*i)) value_type(v);
-        }
-        BOOST_UBLAS_INLINE
-        void static iterator_default_construct (iterator &i) {
-            new (&(*i)) value_type;
-        }
+        // Handle explict destroy on a (possibily indexed) iterator
         BOOST_UBLAS_INLINE
         void static iterator_destroy (iterator &i) {
             (&(*i)) -> ~value_type();
@@ -366,7 +344,7 @@ namespace boost { namespace numeric { namespace ublas {
             size_ (size) /*, data_ ()*/ {
             if (size_ > N)
                 bad_size ().raise ();
-            // ISSUE elements should be value constructed here, but we must fill instead as already constructed
+            // ISSUE elements should be value constructed here, but we must fill instead as already default constructed
             std::fill (begin(), end(), init) ;
         }
         BOOST_UBLAS_INLINE
@@ -522,6 +500,10 @@ namespace boost { namespace numeric { namespace ublas {
         size_type size_;
         BOOST_UBLAS_BOUNDED_ARRAY_ALIGN value_type data_ [N];
     };
+
+
+    // No initialise - tag parameter specified to disable construction of array value_types's
+    struct no_init {};
 
     // Array adaptor with normal deep copy semantics of elements
     template<class T>
