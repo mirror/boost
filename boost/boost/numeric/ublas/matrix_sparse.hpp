@@ -72,12 +72,12 @@ namespace boost { namespace numeric { namespace ublas {
             d_ = p.d_;
             return *this;
         }
-        // template<class OM>
-        // BOOST_UBLAS_INLINE
-        // sparse_matrix_element &operator = (const sparse_matrix_element<OM> &p) {
-        //     d_ = value_type (p);
-        //     return *this;
-        // }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        sparse_matrix_element &operator = (const sparse_matrix_element<OM> &p) {
+            d_ = value_type (p);
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_matrix_element &operator += (const D &d) {
@@ -89,12 +89,12 @@ namespace boost { namespace numeric { namespace ublas {
             d_ += p.d_;
             return *this;
         }
-        // template<class OM>
-        // BOOST_UBLAS_INLINE
-        // sparse_matrix_element &operator += (const sparse_matrix_element<OM> &p) {
-        //     d_ += value_type (p);
-        //     return *this;
-        // }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        sparse_matrix_element &operator += (const sparse_matrix_element<OM> &p) {
+            d_ += value_type (p);
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_matrix_element &operator -= (const D &d) {
@@ -106,12 +106,12 @@ namespace boost { namespace numeric { namespace ublas {
             d_ -= p.d_;
             return *this;
         }
-        // template<class OM>
-        // BOOST_UBLAS_INLINE
-        // sparse_matrix_element &operator -= (const sparse_matrix_element<OM> &p) {
-        //     d_ -= value_type (p);
-        //     return *this;
-        // }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        sparse_matrix_element &operator -= (const sparse_matrix_element<OM> &p) {
+            d_ -= value_type (p);
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_matrix_element &operator *= (const D &d) {
@@ -123,12 +123,12 @@ namespace boost { namespace numeric { namespace ublas {
             d_ *= p.d_;
             return *this;
         }
-        // template<class OM>
-        // BOOST_UBLAS_INLINE
-        // sparse_matrix_element &operator *= (const sparse_matrix_element<OM> &p) {
-        //     d_ *= value_type (p);
-        //     return *this;
-        // }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        sparse_matrix_element &operator *= (const sparse_matrix_element<OM> &p) {
+            d_ *= value_type (p);
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_matrix_element &operator /= (const D &d) {
@@ -140,19 +140,21 @@ namespace boost { namespace numeric { namespace ublas {
             d_ /= p.d_;
             return *this;
         }
-        // template<class OM>
-        // BOOST_UBLAS_INLINE
-        // sparse_matrix_element &operator /= (const sparse_matrix_element<OM> &p) {
-        //     d_ /= value_type (p);
-        //     return *this;
-        // }
+        template<class OM>
+        BOOST_UBLAS_INLINE
+        sparse_matrix_element &operator /= (const sparse_matrix_element<OM> &p) {
+            d_ /= value_type (p);
+            return *this;
+        }
 
         // Conversion
-        // FIXME: GCC 3.1 warn's, if enabled
-        // BOOST_UBLAS_INLINE
-        // operator const_reference () const {
-        //     return d_;
-        // }
+        // FIXME: GCC 3.1 warns, if enabled
+#ifndef __GNUC__
+        BOOST_UBLAS_INLINE
+        operator const_reference () const {
+            return d_;
+        }
+#endif
         BOOST_UBLAS_INLINE
         operator reference () {
             return d_;
@@ -2387,6 +2389,10 @@ namespace boost { namespace numeric { namespace ublas {
             return non_zeros_;
         }
         BOOST_UBLAS_INLINE
+        size_type filled () const {
+            return filled2_;
+        }
+        BOOST_UBLAS_INLINE
         const index_array_type &index1_data () const {
             return index1_data_;
         }
@@ -2674,31 +2680,29 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void pop_back () {
+            BOOST_UBLAS_CHECK (filled1_ > 0 && filled2_ > 0, external_logic ());
             BOOST_UBLAS_CHECK (index1_data () [filled1_ - 1] == k_based (filled2_), internal_logic ());
-            if (filled2_ > zero_based (index1_data () [filled1_ - 2])) {
-                -- filled2_;
-                while (index1_data () [filled1_ - 2] > k_based (filled2_)) {
-                    index1_data () [filled1_ - 1] = 0;
-                    -- filled1_;
-                }
-	        BOOST_UBLAS_CHECK (index1_data () [filled1_ - 1] == k_based (filled2_), internal_logic ());
-                return;
+            -- filled2_;
+            while (index1_data () [filled1_ - 2] > k_based (filled2_)) {
+                index1_data () [filled1_ - 1] = 0;
+                -- filled1_;
             }
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
-            external_logic ().raise ();
+            -- index1_data () [filled1_ - 1];
+            BOOST_UBLAS_CHECK (index1_data () [filled1_ - 1] == k_based (filled2_), internal_logic ());
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i, size_type j) {
             BOOST_UBLAS_CHECK (index1_data () [filled1_ - 1] == k_based (filled2_), internal_logic ());
             size_type element1 = functor_type::element1 (i, size1_, j, size2_);
             size_type element2 = functor_type::element2 (i, size1_, j, size2_);
+            if (element1 + 1 > filled1_)
+                return;
             vector_iterator_type itv (index1_data ().begin () + element1);
             iterator_type it_begin (index2_data ().begin () + zero_based (*itv));
             iterator_type it_end (index2_data ().begin () + zero_based (*(itv + 1)));
             iterator_type it (detail::lower_bound (it_begin, it_end, k_based (element2), std::less<size_type> ()));
-            difference_type n = it - index2_data ().begin ();
-            if (filled2_ > size_type (n) && *it == k_based (element2)) {
+            if (it != it_end && *it == k_based (element2)) {
+                difference_type n = it - index2_data ().begin ();
                 std::copy (it + 1, index2_data ().begin () + filled2_, it);
                 typename value_array_type::iterator itt (value_data ().begin () + n);
                 std::copy (itt + 1, value_data ().begin () + filled2_, itt);
@@ -3624,6 +3628,10 @@ namespace boost { namespace numeric { namespace ublas {
             return non_zeros_;
         }
         BOOST_UBLAS_INLINE
+        size_type filled () const {
+            return filled_;
+        }
+        BOOST_UBLAS_INLINE
         const index_array_type &index1_data () const {
             return index1_data_;
         }
@@ -3922,13 +3930,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void pop_back () {
-            if (filled_ > 0) {
-                -- filled_;
-                return;
-            }
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
-            external_logic ().raise ();
+            BOOST_UBLAS_CHECK (filled_ > 0, external_logic ());
+            -- filled_;
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i, size_type j) {
@@ -3937,13 +3940,11 @@ namespace boost { namespace numeric { namespace ublas {
             sort ();
             vector_iterator_type itv_begin (detail::lower_bound (index1_data ().begin (), index1_data ().begin () + filled_, k_based (element1), std::less<size_type> ()));
             vector_iterator_type itv_end (detail::upper_bound (index1_data ().begin (), index1_data ().begin () + filled_, k_based (element1), std::less<size_type> ()));
-            if (itv_begin == itv_end)
-                return;
             iterator_type it_begin (index2_data ().begin () + (itv_begin - index1_data ().begin ()));
             iterator_type it_end (index2_data ().begin () + (itv_end - index1_data ().begin ()));
             iterator_type it (detail::lower_bound (it_begin, it_end, k_based (element2), std::less<size_type> ()));
-            difference_type n = it - index2_data ().begin ();
-            if (filled_ > size_type (n) && *it == k_based (element2)) {
+            if (it != it_end && *it == k_based (element2)) {
+                difference_type n = it - index2_data ().begin ();
                 vector_iterator_type itv (index1_data ().begin () + n);
                 std::copy (itv + 1, index1_data ().begin () + filled_, itv);
                 std::copy (it + 1, index2_data ().begin () + filled_, it);

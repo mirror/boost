@@ -72,12 +72,12 @@ namespace boost { namespace numeric { namespace ublas {
             d_ = p.d_;
             return *this;
         }
-        // template<class OV>
-        // BOOST_UBLAS_INLINE
-        // sparse_vector_element &operator = (const sparse_vector_element<OV> &p) {
-        //     d_ = p.d_;
-        //     return *this;
-        // }
+        template<class OV>
+        BOOST_UBLAS_INLINE
+        sparse_vector_element &operator = (const sparse_vector_element<OV> &p) {
+            d_ = p.d_;
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator += (const D &d) {
@@ -89,12 +89,12 @@ namespace boost { namespace numeric { namespace ublas {
             d_ += p.d_;
             return *this;
         }
-        // template<class OV>
-        // BOOST_UBLAS_INLINE
-        // sparse_vector_element &operator += (const sparse_vector_element<OV> &p) {
-        //     d_ += p.d_;
-        //     return *this;
-        // }
+        template<class OV>
+        BOOST_UBLAS_INLINE
+        sparse_vector_element &operator += (const sparse_vector_element<OV> &p) {
+            d_ += p.d_;
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator -= (const D &d) {
@@ -106,12 +106,12 @@ namespace boost { namespace numeric { namespace ublas {
             d_ -= p.d_;
             return *this;
         }
-        // template<class OV>
-        // BOOST_UBLAS_INLINE
-        // sparse_vector_element &operator -= (const sparse_vector_element<OV> &p) {
-        //     d_ -= p.d_;
-        //     return *this;
-        // }
+        template<class OV>
+        BOOST_UBLAS_INLINE
+        sparse_vector_element &operator -= (const sparse_vector_element<OV> &p) {
+            d_ -= p.d_;
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator *= (const D &d) {
@@ -123,12 +123,12 @@ namespace boost { namespace numeric { namespace ublas {
             d_ *= p.d_;
             return *this;
         }
-        // template<class OV>
-        // BOOST_UBLAS_INLINE
-        // sparse_vector_element &operator *= (const sparse_vector_element<OV> &p) {
-        //     d_ *= p.d_;
-        //     return *this;
-        // }
+        template<class OV>
+        BOOST_UBLAS_INLINE
+        sparse_vector_element &operator *= (const sparse_vector_element<OV> &p) {
+            d_ *= p.d_;
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_vector_element &operator /= (const D &d) {
@@ -140,19 +140,21 @@ namespace boost { namespace numeric { namespace ublas {
             d_ /= p.d_;
             return *this;
         }
-        // template<class OV>
-        // BOOST_UBLAS_INLINE
-        // sparse_vector_element &operator /= (const sparse_vector_element<OV> &p) {
-        //     d_ /= p.d_;
-        //     return *this;
-        // }
+        template<class OV>
+        BOOST_UBLAS_INLINE
+        sparse_vector_element &operator /= (const sparse_vector_element<OV> &p) {
+            d_ /= p.d_;
+            return *this;
+        }
 
         // Conversion
-        // FIXME: GCC 3.1 warn's, if enabled
-        // BOOST_UBLAS_INLINE
-        // operator const const_reference () const {
-        //     return d_;
-        // }
+        // FIXME: GCC 3.1 warns, if enabled
+#ifndef __GNUC__
+        BOOST_UBLAS_INLINE
+        operator const const_reference () const {
+            return d_;
+        }
+#endif
         BOOST_UBLAS_INLINE
         operator reference () {
             return d_;
@@ -727,6 +729,10 @@ namespace boost { namespace numeric { namespace ublas {
             return non_zeros_;
         }
         BOOST_UBLAS_INLINE
+        size_type filled () const {
+            return filled_;
+        }
+        BOOST_UBLAS_INLINE
         const index_array_type &index_data () const {
             return index_data_;
         }
@@ -953,13 +959,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void pop_back () {
-            if (filled_ > 0) {
-                -- filled_;
-                return;
-            }
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
-            external_logic ().raise ();
+            BOOST_UBLAS_CHECK (filled_ > 0, external_logic ());
+            -- filled_;
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i) {
@@ -1296,6 +1297,10 @@ namespace boost { namespace numeric { namespace ublas {
             return non_zeros_;
         }
         BOOST_UBLAS_INLINE
+        size_type filled () const {
+            return filled_;
+        }
+        BOOST_UBLAS_INLINE
         const index_array_type &index_data () const {
             return index_data_;
         }
@@ -1541,13 +1546,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         void pop_back () {
-            if (filled_ > 0) {
-                -- filled_;
-                return;
-            }
-            // Raising exceptions abstracted as requested during review.
-            // throw external_logic ();
-            external_logic ().raise ();
+            BOOST_UBLAS_CHECK (filled_ > 0, external_logic ());
+            -- filled_;
         }
         BOOST_UBLAS_INLINE
         void erase (size_type i) {

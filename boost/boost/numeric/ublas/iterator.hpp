@@ -495,12 +495,14 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
             // Comeau recommends...
-            return this->base ().begin ();
+            iterator_type tmp (this->base ());
+            return (-- tmp).begin ();
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
             // Comeau recommends...
-            return this->base ().end ();
+            iterator_type tmp (this->base ());
+            return (-- tmp).end ();
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
@@ -606,12 +608,14 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
             // Comeau recommends...
-            return this->base ().begin ();
+            iterator_type tmp (this->base ());
+            return (-- tmp).begin ();
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
             // Comeau recommends...
-            return this->base ().end ();
+            iterator_type tmp (this->base ());
+            return (-- tmp).end ();
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
@@ -869,12 +873,14 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
             // Comeau recommends...
-            return this->base ().begin ();
+            iterator_type tmp (this->base ());
+            return (-- tmp).begin ();
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
             // Comeau recommends...
-            return this->base ().end ();
+            iterator_type tmp (this->base ());
+            return (-- tmp).end ();
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {
@@ -1005,12 +1011,14 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         dual_iterator_type begin () const {
             // Comeau recommends...
-            return this->base ().begin ();
+            iterator_type tmp (this->base ());
+            return (-- tmp).begin ();
         }
         BOOST_UBLAS_INLINE
         dual_iterator_type end () const {
             // Comeau recommends...
-            return this->base ().end ();
+            iterator_type tmp (this->base ());
+            return (-- tmp).end ();
         }
         BOOST_UBLAS_INLINE
         dual_reverse_iterator_type rbegin () const {

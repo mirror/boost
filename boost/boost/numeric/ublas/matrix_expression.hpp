@@ -4200,7 +4200,7 @@ namespace boost { namespace numeric { namespace ublas {
                                                                   BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E2::value_type>::precision_type, E2>::storage_category storage_category;
         typedef BOOST_UBLAS_TYPENAME matrix_vector_binary2_traits<BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E1::value_type>::precision_type, E1,
                                                                   BOOST_UBLAS_TYPENAME type_traits<BOOST_UBLAS_TYPENAME E2::value_type>::precision_type, E2>::orientation_category orientation_category;
-        return prod (e1, e2, storage_category (), orientation_category ());
+        return prec_prod (e1, e2, storage_category (), orientation_category ());
     }
 
     template<class V, class E1, class E2>

@@ -1128,17 +1128,17 @@ namespace boost { namespace numeric { namespace ublas {
                         // Thanks to Michael Stevens for suggesting this.
                         size_type index1 (it1.index1 ()), index2 (it1.index2 ());
                         functor_type () (m (index1, index2), e () (index1, index2));
-                        restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag () ());
+                        restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
                         // The proxies could reference the same container.
-                        restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag () ());
+                        restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
                     } else if (compare > 0) {
                         // Sparse proxies don't need to be conformant.
                         // Thanks to Michael Stevens for suggesting this.
                         size_type index1 (it1e.index1 ()), index2 (it1e.index2 ());
                         functor_type () (m (index1, index2), e () (index1, index2));
-                        restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag () ());
+                        restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
                         // The proxies could reference the same container.
-                        restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag () ());
+                        restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
                     }
                 }
                 while (it1e != it1e_end) {
@@ -1147,8 +1147,8 @@ namespace boost { namespace numeric { namespace ublas {
                     size_type index1 (it1e.index1 ()), index2 (it1e.index2 ());
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
-                    restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag () ());
-                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag () ());
+                    restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
+                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
                 }
                 while (it1 != it1_end) {
                     // Sparse proxies don't need to be conformant.
@@ -1156,8 +1156,8 @@ namespace boost { namespace numeric { namespace ublas {
                     size_type index1 (it1.index1 ()), index2 (it1.index2 ());
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
-                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag () ());
-                    restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag () ());
+                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
+                    restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
                 }
                 ++ it2, ++ it2e;
             } else if (compare < 0) {
@@ -1169,7 +1169,7 @@ namespace boost { namespace numeric { namespace ublas {
                     size_type index1 (it1.index1 ()), index2 (it1.index2 ());
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
-                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag () ());
+                    restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
                 }
                 ++ it2;
             } else if (compare > 0) {
@@ -1181,7 +1181,7 @@ namespace boost { namespace numeric { namespace ublas {
                     size_type index1 (it1e.index1 ()), index2 (it1e.index2 ());
                     functor_type () (m (index1, index2), e () (index1, index2));
                     // The proxies could reference the same container.
-                    restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag () ());
+                    restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
                 }
                 ++ it2e;
             }
@@ -1195,7 +1195,7 @@ namespace boost { namespace numeric { namespace ublas {
                 size_type index1 (it1e.index1 ()), index2 (it1e.index2 ());
                 functor_type () (m (index1, index2), e () (index1, index2));
                 // The proxies could reference the same container.
-                restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag () ());
+                restart (e, index1, index2, it2e, it2e_end, it1e, it1e_end, column_major_tag ());
             }
             ++ it2e;
         }
@@ -1208,7 +1208,7 @@ namespace boost { namespace numeric { namespace ublas {
                 size_type index1 (it1.index1 ()), index2 (it1.index2 ());
                 functor_type () (m (index1, index2), e () (index1, index2));
                 // The proxies could reference the same container.
-                restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag () ());
+                restart (m, index1, index2, it2, it2_end, it1, it1_end, column_major_tag ());
             }
             ++ it2;
         }
