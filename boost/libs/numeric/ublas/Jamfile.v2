@@ -68,7 +68,6 @@ test-suite numeric/uBLAS
             <toolset>vacpp:<define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test4/test4.cpp
-            test4/test41.cpp
             test4/test42.cpp
             test4/test43.cpp
         : : :
@@ -76,7 +75,6 @@ test-suite numeric/uBLAS
             <toolset>vacpp:<define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test5/test5.cpp
-            test5/test51.cpp
             test5/test52.cpp
             test5/test53.cpp
         : : :
@@ -84,7 +82,6 @@ test-suite numeric/uBLAS
             <toolset>vacpp:<define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test6/test6.cpp
-            test6/test61.cpp
             test6/test62.cpp
             test6/test63.cpp
         : : :

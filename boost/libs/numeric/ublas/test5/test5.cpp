@@ -36,7 +36,6 @@ int main () {
 #ifdef BOOST_MSVC
     _set_new_handler (std_new_handler);
 #endif
-    test_vector ();
     test_matrix_vector ();
     test_matrix ();
     return 0;

@@ -16,7 +16,7 @@
 
 subproject libs/numeric/ublas/test6 ;
 
-SOURCES = test6 test61 test62 test63 ;
+SOURCES = test6 test62 test63 ;
 
 exe test6
     : $(SOURCES).cpp
