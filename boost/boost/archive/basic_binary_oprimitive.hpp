@@ -77,27 +77,40 @@ public:
         save_binary(& t, sizeof(T));
     }
 
-    void save(const char * t);
-    void save(const wchar_t * t);
-    void save(const std::string &s);
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    void save(const std::wstring &ws);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save(const std::wstring &ws);
     #endif
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save(const char * t);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save(const wchar_t * t);
 
-    void init();
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    init();
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     basic_binary_oprimitive(OStream & os, bool no_codecvt);
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     ~basic_binary_oprimitive();
 public:
     void save_binary(const void *address, std::size_t count);
 };
 
 template<class Archive, class OStream>
-inline void basic_binary_oprimitive<Archive, OStream>::save_binary(
+inline void 
+basic_binary_oprimitive<Archive, OStream>::save_binary(
     const void *address, 
     std::size_t count
 ){
     assert(
-        static_cast<std::size_t>(std::numeric_limits<std::streamsize>::max()) >= count
+        static_cast<std::size_t>((std::numeric_limits<std::streamsize>::max)()) >= count
     );
     // note: if the following assertions fail
     // a likely cause is that the output stream is set to "text"

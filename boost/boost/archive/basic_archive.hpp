@@ -19,6 +19,9 @@
 #include <boost/strong_typedef.hpp>
 #include <boost/noncopyable.hpp>
 
+#include <boost/archive/detail/auto_link_archive.hpp>
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
 namespace boost {
 namespace archive {
 
@@ -84,13 +87,15 @@ enum archive_flags {
     no_xml_tag_checking = 4 // suppress checking of xml tags
 };
 
-extern const class_id_type null_pointer_tag;
+#define NULL_POINTER_TAG class_id_type(-1)
 
-extern const char * ARCHIVE_SIGNATURE;
-extern const version_type ARCHIVE_VERSION;
+BOOST_DECL_ARCHIVE const char * ARCHIVE_SIGNATURE();
+BOOST_DECL_ARCHIVE unsigned int ARCHIVE_VERSION();
 
 }// namespace archive
 }// namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #include <boost/serialization/level.hpp>
 
@@ -115,5 +120,6 @@ BOOST_CLASS_IMPLEMENTATION(boost::archive::tracking_type, primitive_type)
 #ifdef BOOST_SERIALIZATION_EXPORT_HPP
 #error "export.hpp must not be included before any archive header"
 #endif
+
 
 #endif //BOOST_ARCHIVE_BASIC_ARCHIVE_HPP

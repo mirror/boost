@@ -34,7 +34,6 @@
 #include <locale>
 #include <cstddef> // size_t
 
-#include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::size_t;
@@ -49,8 +48,10 @@ namespace std{
 #include <boost/scoped_ptr.hpp>
 #include <boost/throw_exception.hpp>
 
+#include <boost/archive/detail/decl.hpp>
 #include <boost/archive/archive_exception.hpp>
-#include <boost/archive/codecvt_null.hpp>
+
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
 namespace archive {
@@ -62,13 +63,15 @@ class save_access;
 template<class OStream>
 class basic_text_oprimitive
 {
+#ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 protected:
+#else
+public:
+#endif
     OStream &os;
     io::ios_flags_saver flags_saver;
     io::ios_precision_saver precision_saver;
     boost::scoped_ptr<std::locale> archive_locale;
-//    boost::scoped_ptr<codecvt_null<BOOST_DEDUCED_TYPENAME OStream::char_type> >
-//        archive_codecvt;
     io::basic_ios_locale_saver<
         BOOST_DEDUCED_TYPENAME OStream::char_type, BOOST_DEDUCED_TYPENAME OStream::traits_type
     > locale_saver;
@@ -139,13 +142,19 @@ public:
             os.put(*s++);
     }
 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     basic_text_oprimitive(OStream & os, bool no_codecvt);
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     ~basic_text_oprimitive();
 public:
-    void save_binary(const void *address, std::size_t count);
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_binary(const void *address, std::size_t count);
 };
 
 } //namespace boost 
 } //namespace archive 
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_BASIC_TEXT_OPRIMITIVE_HPP

@@ -38,13 +38,16 @@
 
 #include <boost/serialization/string.hpp>
 
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
 namespace boost { 
 namespace archive {
 
 /////////////////////////////////////////////////////////////////////////
 // class basic_binary_iarchive - read serialized objects from a input binary stream
 template<class Archive>
-class basic_binary_iarchive : public detail::common_iarchive<Archive>
+class basic_binary_iarchive : 
+    public detail::common_iarchive<Archive>
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 public:
@@ -106,23 +109,19 @@ protected:
         t = (0 != x);
     }
 
-    void load_override(class_name_type & t, int){
-        std::string cn;
-        cn.reserve(BOOST_SERIALIZATION_MAX_KEY_SIZE);
-        load_override(cn, 0);
-        if(cn.size() > (BOOST_SERIALIZATION_MAX_KEY_SIZE - 1))
-            boost::throw_exception(
-                archive_exception(archive_exception::invalid_class_name)
-           );
-        std::memcpy(t, cn.data(), cn.size());
-        // .t is a borland tweak
-        t.t[cn.size()] = '\0';
-    }
-
-    basic_binary_iarchive() {}
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    load_override(class_name_type & t, int);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    init();
+   
+    basic_binary_iarchive(){}
 };
 
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_BASIC_BINARY_IARCHIVE_HPP

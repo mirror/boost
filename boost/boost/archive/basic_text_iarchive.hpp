@@ -33,13 +33,16 @@
 
 #include <boost/serialization/string.hpp>
 
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
 namespace boost {
 namespace archive {
 
 /////////////////////////////////////////////////////////////////////////
 // class basic_text_iarchive - read serialized objects from a input text stream
 template<class Archive>
-class basic_text_iarchive : public detail::common_iarchive<Archive>
+class basic_text_iarchive : 
+    public detail::common_iarchive<Archive>
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 public:
@@ -61,13 +64,25 @@ protected:
     }
     // text file don't include the optional information 
     void load_override(class_id_optional_type & /*t*/, int){}
-    void load_override(class_name_type & t, int);
+
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    load_override(class_name_type & t, int);
+
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    init(void);
+
     basic_text_iarchive() : 
         detail::common_iarchive<Archive>()
     {}
+
+    ~basic_text_iarchive(){}
 };
 
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_BASIC_TEXT_IARCHIVE_HPP

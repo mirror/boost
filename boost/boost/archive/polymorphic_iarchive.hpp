@@ -93,10 +93,6 @@ public:
     virtual void load_end(const char * name) = 0;
     virtual void register_basic_serializer(const detail::basic_iserializer & bis) = 0;
 
-    // utility function implemented by all legal archives
-    virtual unsigned int library_version() const = 0;
-    virtual void load_binary(void * t, std::size_t size) = 0;
-
     virtual void delete_created_pointers() = 0;
 
     // msvc and borland won't automatically pass these to the base class so
@@ -106,7 +102,6 @@ public:
     {
         archive::load(* this, t);
     }
-
     // special treatment for name-value pairs.
     template<class T>
     void load_override(boost::serialization::nvp<T> & t, int)
@@ -116,6 +111,10 @@ public:
         load_end(t.name());
     }
 public:
+    // utility function implemented by all legal archives
+    virtual unsigned int library_version() const = 0;
+    virtual void load_binary(void * t, std::size_t size) = 0;
+
     // these are used by the serialization library implementation.
     virtual void load_object(
         void *t, 

@@ -95,8 +95,6 @@ public:
 
     virtual unsigned int library_version() const = 0;
     virtual void end_preamble() = 0;
-    // utility function implemented by all legal archives
-    virtual void save_binary(const void * t, std::size_t size) = 0;
 
     // msvc and borland won't automatically pass these to the base class so
     // make it explicit here
@@ -114,6 +112,9 @@ public:
         save_end(t.name());
     }
 public:
+    // utility function implemented by all legal archives
+    virtual void save_binary(const void * t, std::size_t size) = 0;
+
     virtual void save_object(
         const void *x, 
         const detail::basic_oserializer & bos

@@ -16,17 +16,17 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <string>
-
 #include <boost/config.hpp>
 #include <boost/pfto.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <boost/archive/detail/interface_iarchive.hpp>
+//#include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 
 #include <boost/serialization/nvp.hpp>
-#include <boost/serialization/string.hpp> // makes strings prmitive
+#include <boost/serialization/string.hpp>
+
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
 namespace archive {
@@ -34,7 +34,8 @@ namespace archive {
 /////////////////////////////////////////////////////////////////////////
 // class xml_iarchive - read serialized objects from a input text stream
 template<class Archive>
-class basic_xml_iarchive : public detail::common_iarchive<Archive>
+class basic_xml_iarchive : 
+    public detail::common_iarchive<Archive>
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 public:
@@ -50,8 +51,12 @@ protected:
     bool header;
     bool no_checking;
     unsigned int depth;
-    void load_start(const char *name);
-    void load_end(const char *name);
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    load_start(const char *name);
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    load_end(const char *name);
 
     // Anything not an attribute and not a name-value pair is an
     // should be trapped here.
@@ -83,23 +88,33 @@ protected:
     // it otherwise it will be loaded as a normal primitive w/o tag and
     // leaving the archive in an undetermined state
     void load_override(class_id_optional_type & /* t */, int){}
-    void load_override(object_id_type & t, int);
-    void load_override(version_type & t, int);
-    void load_override(class_id_type & t, int);
-    void load_override(tracking_type & t, int);
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    load_override(object_id_type & t, int);
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    load_override(version_type & t, int);
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    load_override(class_id_type & t, int);
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    load_override(tracking_type & t, int);
     // class_name_type can't be handled here as it depends upon the
     // char type used by the stream.  So require the derived implementation
     // handle this.
     // void load_override(class_name_type & t, int);
 
-    basic_xml_iarchive(unsigned int flags = 0) :
-        header(false),
-        no_checking(false),
-        depth(0)
-    {}
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    basic_xml_iarchive(unsigned int flags = 0);
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    ~basic_xml_iarchive();
 };
 
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_BASIC_XML_IARCHIVE_HPP

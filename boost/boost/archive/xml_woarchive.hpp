@@ -21,10 +21,20 @@
 #error "wide char i/o not supported on this platform"
 #else
 
+#include <cstddef> // size_t
+#if defined(BOOST_NO_STDC_NAMESPACE)
+namespace std{ 
+    using ::size_t; 
+} // namespace std
+#endif
+
 #include <ostream>
 
+#include <boost/archive/detail/auto_link_warchive.hpp>
 #include <boost/archive/basic_text_oprimitive.hpp>
 #include <boost/archive/basic_xml_oarchive.hpp>
+
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost {
 namespace archive {
@@ -49,15 +59,17 @@ protected:
     void save(const T & t){
         basic_text_oprimitive<std::wostream>::save(t);
     }
-    void save(const char * t);
+    void BOOST_DECL_WARCHIVE save(const char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    void save(const wchar_t * t);
+    void BOOST_DECL_WARCHIVE save(const wchar_t * t);
     #endif
-    void save(const std::string &s);
+    void BOOST_DECL_WARCHIVE save(const std::string &s);
     #ifndef BOOST_NO_STD_WSTRING
-    void save(const std::wstring &ws);
+    void BOOST_DECL_WARCHIVE save(const std::wstring &ws);
     #endif
+    BOOST_DECL_WARCHIVE 
     xml_woarchive_impl(std::wostream & os, unsigned int flags = 0);
+    ~xml_woarchive_impl(){}
 public:
     void save_binary(const void *address, std::size_t count){
         this->end_preamble();
@@ -86,6 +98,7 @@ public:
     xml_woarchive(std::wostream & os, unsigned int flags = 0) :
         xml_woarchive_impl<xml_woarchive>(os, flags)
     {}
+    ~xml_woarchive(){}
 };
 
 } // namespace archive
@@ -95,5 +108,7 @@ public:
 // partial template specialization
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::xml_woarchive)
 
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
+
 #endif // BOOST_NO_STD_WSTREAMBUF
-#endif // BOOST_ARCHIVE_XML_OWARCHIVE_HPP
+#endif // BOOST_ARCHIVE_XML_OARCHIVE_HPP

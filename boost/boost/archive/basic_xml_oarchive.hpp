@@ -25,13 +25,16 @@
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/string.hpp>
 
+#include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
 namespace boost { 
 namespace archive {
         
 //////////////////////////////////////////////////////////////////////
 // class xml_oarchive - write serialized objects to a xml output stream
 template<class Archive>
-class basic_xml_oarchive : public detail::common_oarchive<Archive>
+class basic_xml_oarchive : 
+    public detail::common_oarchive<Archive>
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 public:
@@ -49,21 +52,35 @@ protected:
     bool indent_next;
     bool pending_preamble;
     bool header;
-    void indent();
-    void init();
-    void write_attribute(
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    indent();
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    init();
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    write_attribute(
         const char *attribute_name, 
         int t,
         const char *conjunction = "=\""
     );
-    void write_attribute(
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    write_attribute(
         const char *attribute_name, 
         const char *key
     );
     // helpers used below
-    void save_start(const char *name);
-    void save_end(const char *name);
-    void end_preamble();
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_start(const char *name);
+    void     
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_end(const char *name);
+    void
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    end_preamble();
 
     // Anything not an attribute and not a name-value pair is an
     // error and should be trapped here.
@@ -87,20 +104,40 @@ protected:
 
     // specific overrides for attributes - not name value pairs so we
     // want to trap them before the above "fall through"
-    void save_override(const object_id_type & t, int);
-    void save_override(const object_reference_type & t, int);
-    void save_override(const version_type & t, int);
-    void save_override(const class_id_type & t, int);
-    void save_override(const class_id_optional_type & t, int);
-    void save_override(const class_id_reference_type & t, int);
-    void save_override(const class_name_type & t, int);
-    void save_override(const tracking_type & t, int);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_override(const object_id_type & t, int);
+    void     
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_override(const object_reference_type & t, int);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_override(const version_type & t, int);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_override(const class_id_type & t, int);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_override(const class_id_optional_type & t, int);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_override(const class_id_reference_type & t, int);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_override(const class_name_type & t, int);
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    save_override(const tracking_type & t, int);
 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     basic_xml_oarchive(unsigned int flags = 0);
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
     ~basic_xml_oarchive();
 };
 
 } // namespace archive
 } // namespace boost
+
+#include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 
 #endif // BOOST_ARCHIVE_BASIC_XML_OARCHIVE_HPP

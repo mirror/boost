@@ -47,7 +47,8 @@ namespace archive {
 /////////////////////////////////////////////////////////////////////////
 // class basic_text_iarchive - read serialized objects from a input text stream
 template<class Archive>
-class basic_binary_oarchive : public detail::common_oarchive<Archive>
+class basic_binary_oarchive : 
+    public detail::common_oarchive<Archive>
 {
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 public:
@@ -106,7 +107,11 @@ protected:
         * this->This() << std::string(static_cast<const char *>(t));
     }
 
-    basic_binary_oarchive(unsigned int flags = 0){}
+    void 
+    BOOST_DECL_ARCHIVE_OR_WARCHIVE 
+    init();
+
+    basic_binary_oarchive(){}
 };
 
 } // namespace archive
