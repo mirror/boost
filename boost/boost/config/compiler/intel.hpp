@@ -51,7 +51,7 @@
 #endif
 
 #if _MSC_VER+0 >= 1000
-#  ifndef _NATIVE_WCHAR_T_DEFINED
+#  ifndef _WCHAR_T_DEFINED
 #     define BOOST_NO_INTRINSIC_WCHAR_T
 #  endif
 #  if _MSC_VER >= 1200
@@ -60,6 +60,10 @@
 #  define BOOST_NO_SWPRINTF
 #elif defined(_WIN32)
 #  define BOOST_DISABLE_WIN32
+#endif
+
+#ifndef _CPPUNWIND
+#  define BOOST_NO_EXCEPTIONS
 #endif
 
 // I checked version 6.0 build 020312Z, it implements the NRVO.
