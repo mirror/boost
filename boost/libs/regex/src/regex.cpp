@@ -45,7 +45,7 @@ regbase::regbase(const regbase& b)
 
 } // namespace boost
 
-#if defined(BOOST_RE_USE_VCL) && defined(BOOST_RE_BUILD_DLL)
+#if defined(BOOST_RE_USE_VCL) && defined(BOOST_REGEX_BUILD_DLL)
 
 int WINAPI DllEntryPoint(HINSTANCE , unsigned long , void*)
 {

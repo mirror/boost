@@ -381,7 +381,7 @@ void BOOST_REGEX_CALL re_message_free()
 const char* BOOST_REGEX_CALL re_get_error_str(unsigned int id)
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    boost::re_detail::cs_guard g(*boost::re_detail::p_re_lock);
 #endif
    if(re_custom_error_messages[id] == 0)
@@ -576,7 +576,7 @@ c_regex_traits<char> c_regex_traits<char>::i;
 void BOOST_REGEX_CALL c_regex_traits<char>::init()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    re_detail::re_init_threads();
    re_detail::cs_guard g(*re_detail::p_re_lock);
 #endif
@@ -602,7 +602,7 @@ void BOOST_REGEX_CALL c_regex_traits<char>::init()
 void BOOST_REGEX_CALL c_regex_traits<char>::update()
 {
    BOOST_RE_GUARD_STACK
-   #ifdef BOOST_RE_THREADS
+   #ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
    #endif
    re_message_update();
@@ -622,7 +622,7 @@ void BOOST_REGEX_CALL c_regex_traits<char>::update()
 void BOOST_REGEX_CALL c_regex_traits<char>::m_free()
 {
    BOOST_RE_GUARD_STACK
-   #ifdef BOOST_RE_THREADS
+   #ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
    #endif
    re_message_free();
@@ -634,7 +634,7 @@ void BOOST_REGEX_CALL c_regex_traits<char>::m_free()
       delete ctype_name;
       delete collate_name;
    }
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    g.acquire(false);
    re_detail::re_free_threads();
 #endif
@@ -746,7 +746,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::init()
 {
    BOOST_RE_GUARD_STACK
    re_detail::re_init_threads();
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
 #endif
    re_message_init();
@@ -790,7 +790,7 @@ bool BOOST_REGEX_CALL c_regex_traits<wchar_t>::do_lookup_collate(std::basic_stri
 void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
 #endif
    re_message_update();
@@ -841,7 +841,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::update()
 void BOOST_REGEX_CALL c_regex_traits<wchar_t>::m_free()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
 #endif
    --nlsw_count;
@@ -854,7 +854,7 @@ void BOOST_REGEX_CALL c_regex_traits<wchar_t>::m_free()
       delete wlocale_name;
       delete syntax;
    }
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    g.acquire(false);
    re_detail::re_free_threads();
 #endif

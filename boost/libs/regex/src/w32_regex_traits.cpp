@@ -199,7 +199,7 @@ unsigned int BOOST_REGEX_CALL _re_get_message(char* buf, unsigned int len, unsig
 const char* BOOST_REGEX_CALL re_get_error_str(unsigned int id)
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    boost::re_detail::cs_guard g(*boost::re_detail::p_re_lock);
 #endif
    if(re_custom_error_messages[id] == 0)
@@ -441,7 +441,7 @@ bool BOOST_REGEX_CALL w32_traits_base::do_lookup_collate(std::string& buf, const
 std::string BOOST_REGEX_CALL w32_traits_base::set_message_catalogue(const std::string& l)
 {
    BOOST_RE_GUARD_STACK
-   #ifdef BOOST_RE_THREADS
+   #ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
    #endif
    if(sizeof(regex_message_catalogue) <= l.size())
@@ -462,7 +462,7 @@ w32_regex_traits<char> w32_regex_traits<char>::i;
 void BOOST_REGEX_CALL w32_regex_traits<char>::update()
 {
    BOOST_RE_GUARD_STACK
-   #ifdef BOOST_RE_THREADS
+   #ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
    #endif
    do_init();
@@ -471,7 +471,7 @@ void BOOST_REGEX_CALL w32_regex_traits<char>::update()
 w32_regex_traits<char>::w32_regex_traits()
 {
    BOOST_RE_GUARD_STACK
-   #ifdef BOOST_RE_THREADS
+   #ifdef BOOST_HAS_THREADS
    re_detail::re_init_threads();
    re_detail::cs_guard g(*re_detail::p_re_lock);
    #endif
@@ -481,12 +481,12 @@ w32_regex_traits<char>::w32_regex_traits()
 w32_regex_traits<char>::~w32_regex_traits()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
 #endif
    if(--entry_count == 0)
       do_free();
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    g.acquire(false);
    re_detail::re_free_threads();
 #endif
@@ -629,7 +629,7 @@ bool BOOST_REGEX_CALL w32_regex_traits<wchar_t>::do_lookup_collate(std::basic_st
 void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::update()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
 #endif
    do_init();
@@ -638,7 +638,7 @@ void BOOST_REGEX_CALL w32_regex_traits<wchar_t>::update()
 w32_regex_traits<wchar_t>::w32_regex_traits()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    re_detail::re_init_threads();
    re_detail::cs_guard g(*re_detail::p_re_lock);
 #endif
@@ -648,12 +648,12 @@ w32_regex_traits<wchar_t>::w32_regex_traits()
 w32_regex_traits<wchar_t>::~w32_regex_traits()
 {
    BOOST_RE_GUARD_STACK
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    re_detail::cs_guard g(*re_detail::p_re_lock);
 #endif
    if(--entry_count == 0)
       do_free();
-#ifdef BOOST_RE_THREADS
+#ifdef BOOST_HAS_THREADS
    g.acquire(false);
    re_detail::re_free_threads();
 #endif

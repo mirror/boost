@@ -25,7 +25,7 @@
 
 #include <boost/cregex.hpp>
 #include <boost/regex.hpp>
-#if !defined(BOOST_RE_NO_STRING_H)
+#if !defined(BOOST_NO_STD_STRING)
 #include <map>
 #include <list>
 #include <boost/regex/detail/fileiter.hpp>
