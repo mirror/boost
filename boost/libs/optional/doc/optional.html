@@ -223,7 +223,7 @@ them. The problem resides in the shallow-copy of pointer semantics: if you need 
   a builtin or small POD, this technique is very poor in terms of required resources.
   Optional objects are essentially values so it is very convenient to be able to use automatic
   storage and deep-copy semantics to manipulate optional values just as we do with ordinary
-  values. Pointers do not have this semantics, so are unapprorpiate for the initialization and
+  values. Pointers do not have this semantics, so are unappropriate for the initialization and
   transport of optional values, yet are quite convenient for handling the access to the
   possible undefined value because of the idiomatic aid present in the OptionalPointee
   concept incarnated by pointers. <br>
@@ -805,7 +805,7 @@ class Fred
 <HR>
 
 <H2><A NAME="bool">A note about optional&lt;bool&gt;</A></H2>
-<p><code>optional&ltbool&gt</code> should be used with special caution and consideration.</p>
+<p><code>optional&lt;bool&gt;</code> should be used with special caution and consideration.</p>
 <p>First, it is functionally similar to a tristate boolean (false,maybe,true)
 -such as <u>boost::tribool</u> (not yet formally in boost)-,
 except that in a tristate boolean, the <i>maybe</i> state
