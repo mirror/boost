@@ -52,7 +52,7 @@ namespace io {
         string_type cur_str() const { return string_type(str(), 0, pcount()); } 
 
         // publicize those functions (protected in stringbuf) :
-        std::streamsize pcount() const { return buff_t::pcount(); }
+        std::streamsize pcount() const { return pptr() - pbase(); }
         const Ch * pbase() const { return buff_t::pbase(); } 
         const Ch * pptr()  const { return buff_t::pptr(); } 
         const Ch * epptr() const { return buff_t::epptr(); }
@@ -73,11 +73,11 @@ namespace io {
         basic_outsstream() : pbase_type(),
                              std::basic_ostream<Ch,Tr>( & sb() ) {}
         // buffer access via strings
-        string_type str()     const { return sb.str(); }  // [begin, end[
-        string_type cur_str() const { return string_type(sb().str(), 0,pcount());} // [begin, cur[
+        string_type str()     const { return sb().str(); }     // [begin, end[
+        string_type cur_str() const { return sb().cur_str(); } // [begin, cur[
             
         // copy-less access (note the pointers can be invalidated when modifying the stream)
-        std::streamsize pcount() const { return cur() - begin(); }
+        std::streamsize pcount() const { return sb().pcount(); }
         const Ch * begin() const { return sb().pbase(); } 
         const Ch * cur()   const { return sb().pptr(); } 
         const Ch * end()   const { return sb().epptr(); }

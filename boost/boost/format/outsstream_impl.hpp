@@ -23,7 +23,7 @@ void steal_basic_stringbuf<Ch, Tr> :: clear_buffer() {
     const Ch * b = pbase();
     if(p != NULL && p != b) {
       typedef typename Tr::pos_type pos_type;
-      pos_type pos = seekpos(0, std::ios_base::out); 
+      pos_type pos = buff_t::seekpos(0, std::ios_base::out); 
       BOOST_ASSERT( pos != pos_type(std::streamoff(-1)) ); 
     }
 }
