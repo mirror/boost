@@ -9,6 +9,12 @@
 #
 # /* See http://www.boost.org for most recent version. */
 #
+# include <boost/preprocessor/config/config.hpp>
+#
+# if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_DMC()
+#     include <boost/preprocessor/detail/dmc/auto_rec.hpp>
+# else
+#
 # ifndef BOOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
 # define BOOST_PREPROCESSOR_DETAIL_AUTO_REC_HPP
 #
@@ -283,4 +289,5 @@
 #                            define BOOST_PP_NODE_253(p) BOOST_PP_IIF(p(253), 253, 254)
 #                            define BOOST_PP_NODE_255(p) BOOST_PP_IIF(p(255), 255, 256)
 #
+# endif
 # endif

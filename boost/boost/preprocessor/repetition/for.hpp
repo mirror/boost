@@ -37,6 +37,8 @@
 #    include <boost/preprocessor/repetition/detail/edg/for.hpp>
 # elif BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
 #    include <boost/preprocessor/repetition/detail/msvc/for.hpp>
+# elif BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_DMC()
+#    include <boost/preprocessor/repetition/detail/dmc/for.hpp>
 # else
 #    include <boost/preprocessor/repetition/detail/for.hpp>
 # endif

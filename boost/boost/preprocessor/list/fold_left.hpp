@@ -36,6 +36,8 @@
 #
 # if BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_EDG()
 #    include <boost/preprocessor/list/detail/edg/fold_left.hpp>
+# elif BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_DMC()
+#    include <boost/preprocessor/list/detail/dmc/fold_left.hpp>
 # else
 #    include <boost/preprocessor/list/detail/fold_left.hpp>
 # endif

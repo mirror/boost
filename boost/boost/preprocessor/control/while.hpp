@@ -43,6 +43,8 @@
 #    include <boost/preprocessor/control/detail/edg/while.hpp>
 # elif BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_MSVC()
 #    include <boost/preprocessor/control/detail/msvc/while.hpp>
+# elif BOOST_PP_CONFIG_FLAGS() & BOOST_PP_CONFIG_DMC()
+#    include <boost/preprocessor/control/detail/dmc/while.hpp>
 # else
 #    include <boost/preprocessor/control/detail/while.hpp>
 # endif
