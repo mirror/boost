@@ -39,7 +39,7 @@ public:
 template <typename Container>
 shared_container_iterator<Container>
 make_shared_container_iterator(typename Container::iterator iter,
-			       boost::shared_ptr<Container> const& container) {
+                               boost::shared_ptr<Container> const& container) {
   typedef shared_container_iterator<Container> iterator;
   return iterator(iter,container);
 }

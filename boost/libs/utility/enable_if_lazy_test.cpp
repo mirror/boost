@@ -29,7 +29,7 @@ template <class T>
 struct is_int_or_double {
   BOOST_STATIC_CONSTANT(bool, 
     value = (boost::is_same<T, int>::value || 
-	     boost::is_same<T, double>::value));
+             boost::is_same<T, double>::value));
 };
 
 template <class T>

@@ -133,7 +133,7 @@ test-suite regex
       ]
       
      [ run
-	# sources
+    # sources
     captures/captures_test.cpp
     <template>../build/regex-options
     # dependencies

@@ -37,7 +37,7 @@ struct xstring
 {
   template <class It>
   xstring(It begin, It end, typename 
-	 disable_if<is_arithmetic<It> >::type* = 0)
+          disable_if<is_arithmetic<It> >::type* = 0)
     : data(end-begin) {}
   
   int data;

@@ -46,7 +46,7 @@ test-suite regex-examples :
 [ regex-test-run snippets/regex_iterator_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 
 [ run
-	# sources
+    # sources
     snippets/captures_example.cpp
     <template>../build/regex-options
     # dependencies

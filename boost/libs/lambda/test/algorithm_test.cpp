@@ -39,13 +39,13 @@ void test_foreach() {
   int sum = 0;
 
   std::for_each(a, a + 10, 
-		bind(ll::for_each(), _1, _1 + 20, 
-		     protect((_1 = var(sum), ++var(sum)))));
+                bind(ll::for_each(), _1, _1 + 20, 
+                     protect((_1 = var(sum), ++var(sum)))));
 
   sum = 0;
   std::for_each(a, a + 10, 
-		bind(ll::for_each(), _1, _1 + 20, 
-		     protect((sum += _1))));
+                bind(ll::for_each(), _1, _1 + 20, 
+                     protect((sum += _1))));
 
   BOOST_TEST(sum == (199 + 1)/ 2 * 199);
 }
