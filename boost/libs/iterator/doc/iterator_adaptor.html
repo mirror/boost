@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.2.8: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
 <title>Iterator Adaptor</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
@@ -57,20 +57,21 @@ core interface functions of <tt class="literal"><span class="pre">iterator_facad
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#introduction" id="id3" name="id3">Introduction</a></li>
-<li><a class="reference" href="#reference" id="id4" name="id4">Reference</a><ul>
-<li><a class="reference" href="#iterator-adaptor-requirements" id="id5" name="id5"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></li>
-<li><a class="reference" href="#iterator-adaptor-base-class-parameters" id="id6" name="id6"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></li>
-<li><a class="reference" href="#iterator-adaptor-models" id="id7" name="id7"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> models</a></li>
-<li><a class="reference" href="#iterator-adaptor-public-operations" id="id8" name="id8"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></li>
-<li><a class="reference" href="#iterator-adaptor-protected-member-functions" id="id9" name="id9"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></li>
-<li><a class="reference" href="#iterator-adaptor-private-member-functions" id="id10" name="id10"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></li>
+<li><a class="reference" href="#overview" id="id6" name="id6">Overview</a></li>
+<li><a class="reference" href="#reference" id="id7" name="id7">Reference</a><ul>
+<li><a class="reference" href="#iterator-adaptor-requirements" id="id8" name="id8"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></li>
+<li><a class="reference" href="#iterator-adaptor-base-class-parameters" id="id9" name="id9"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></li>
+<li><a class="reference" href="#iterator-adaptor-models" id="id10" name="id10"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> models</a></li>
+<li><a class="reference" href="#iterator-adaptor-public-operations" id="id11" name="id11"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></li>
+<li><a class="reference" href="#iterator-adaptor-protected-member-functions" id="id12" name="id12"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></li>
+<li><a class="reference" href="#iterator-adaptor-private-member-functions" id="id13" name="id13"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></li>
 </ul>
 </li>
+<li><a class="reference" href="#tutorial-example" id="id14" name="id14">Tutorial Example</a></li>
 </ul>
 </div>
-<div class="section" id="introduction">
-<h1><a class="toc-backref" href="#id3" name="introduction">Introduction</a></h1>
+<div class="section" id="overview">
+<h1><a class="toc-backref" href="#id6" name="overview">Overview</a></h1>
 <!-- Version 1.2 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -84,7 +85,7 @@ instance of the <tt class="literal"><span class="pre">Base</span></tt> type, whi
 <table class="footnote" frame="void" id="base" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1" name="base">[1]</a></td><td>The term &quot;Base&quot; here does not refer to a base class and is
+<tr><td class="label"><a name="base">[1]</a></td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> The term &quot;Base&quot; here does not refer to a base class and is
 not meant to imply the use of derivation. We have followed the lead
 of the standard library, which provides a base() function to access
 the underlying iterator object of a <tt class="literal"><span class="pre">reverse_iterator</span></tt> adaptor.</td></tr>
@@ -111,7 +112,7 @@ template parameter may not always be identical to the iterator's
 that assumption.</p>
 </div>
 <div class="section" id="reference">
-<h1><a class="toc-backref" href="#id4" name="reference">Reference</a></h1>
+<h1><a class="toc-backref" href="#id7" name="reference">Reference</a></h1>
 <!-- Version 1.4 of this ReStructuredText document corresponds to
 n1530_, the paper accepted by the LWG for TR1. -->
 <!-- Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All
@@ -159,13 +160,13 @@ class iterator_adaptor
 };
 </pre>
 <a class="target" id="requirements" name="requirements"></a><div class="section" id="iterator-adaptor-requirements">
-<h2><a class="toc-backref" href="#id5" name="iterator-adaptor-requirements"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></h2>
+<h2><a class="toc-backref" href="#id8" name="iterator-adaptor-requirements"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></h2>
 <p>The <tt class="literal"><span class="pre">Derived</span></tt> template argument must be a publicly derived from
 <tt class="literal"><span class="pre">iterator_adaptor</span></tt>.</p>
 <p>The <tt class="literal"><span class="pre">Base</span></tt> argument shall be Assignable and Copy Constructible.</p>
 <a class="target" id="base-parameters" name="base-parameters"></a></div>
 <div class="section" id="iterator-adaptor-base-class-parameters">
-<h2><a class="toc-backref" href="#id6" name="iterator-adaptor-base-class-parameters"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h2>
+<h2><a class="toc-backref" href="#id9" name="iterator-adaptor-base-class-parameters"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h2>
 <p>The <em>V</em>, <em>C</em>, <em>R</em>, and <em>D</em> parameters of the <tt class="literal"><span class="pre">iterator_facade</span></tt>
 used as a base class in the summary of <tt class="literal"><span class="pre">iterator_adaptor</span></tt>
 above are defined as follows:</p>
@@ -195,7 +196,7 @@ above are defined as follows:</p>
 </pre>
 </div>
 <div class="section" id="iterator-adaptor-models">
-<h2><a class="toc-backref" href="#id7" name="iterator-adaptor-models"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> models</a></h2>
+<h2><a class="toc-backref" href="#id10" name="iterator-adaptor-models"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> models</a></h2>
 <p>In order for <tt class="literal"><span class="pre">Derived</span></tt> to model the iterator concepts corresponding
 to <tt class="literal"><span class="pre">iterator_traits&lt;Derived&gt;::iterator_category</span></tt>, the expressions
 involving <tt class="literal"><span class="pre">m_iterator</span></tt> in the specifications of those private member
@@ -205,7 +206,7 @@ expression involving <tt class="literal"><span class="pre">Derived</span></tt> i
 <!-- The above is confusing and needs a rewrite. -JGS -->
 </div>
 <div class="section" id="iterator-adaptor-public-operations">
-<h2><a class="toc-backref" href="#id8" name="iterator-adaptor-public-operations"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></h2>
+<h2><a class="toc-backref" href="#id11" name="iterator-adaptor-public-operations"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> public operations</a></h2>
 <p><tt class="literal"><span class="pre">iterator_adaptor();</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -239,7 +240,7 @@ expression involving <tt class="literal"><span class="pre">Derived</span></tt> i
 </table>
 </div>
 <div class="section" id="iterator-adaptor-protected-member-functions">
-<h2><a class="toc-backref" href="#id9" name="iterator-adaptor-protected-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></h2>
+<h2><a class="toc-backref" href="#id12" name="iterator-adaptor-protected-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> protected member functions</a></h2>
 <p><tt class="literal"><span class="pre">Base</span> <span class="pre">const&amp;</span> <span class="pre">base_reference()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -260,7 +261,7 @@ expression involving <tt class="literal"><span class="pre">Derived</span></tt> i
 </table>
 </div>
 <div class="section" id="iterator-adaptor-private-member-functions">
-<h2><a class="toc-backref" href="#id10" name="iterator-adaptor-private-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></h2>
+<h2><a class="toc-backref" href="#id13" name="iterator-adaptor-private-member-functions"><tt class="literal"><span class="pre">iterator_adaptor</span></tt> private member functions</a></h2>
 <p><tt class="literal"><span class="pre">typename</span> <span class="pre">iterator_adaptor::reference</span> <span class="pre">dereference()</span> <span class="pre">const;</span></tt></p>
 <table class="field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -328,11 +329,114 @@ typename iterator_adaptor::difference_type distance_to(
 </table>
 </div>
 </div>
+<div class="section" id="tutorial-example">
+<h1><a class="toc-backref" href="#id14" name="tutorial-example">Tutorial Example</a></h1>
+<!-- Copyright David Abrahams 2004. Use, modification and distribution is -->
+<!-- subject to the Boost Software License, Version 1.0. (See accompanying -->
+<!-- file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) -->
+<p>In this section we'll further refine the <tt class="literal"><span class="pre">node_iter</span></tt> class
+template we developed in the <a class="reference" href="iterator_facade.html#tutorial-example"><tt class="literal"><span class="pre">iterator_facade</span></tt> tutorial</a>.  If you haven't already
+read that material, you should go back now and check it out because
+we're going to pick up right where it left off.</p>
+<div class="sidebar">
+<p class="sidebar-title"><tt class="literal"><span class="pre">node_base*</span></tt> really <em>is</em> an iterator</p>
+<p>It's not really a very interesting iterator, since <tt class="literal"><span class="pre">node_base</span></tt>
+is an abstract class: a pointer to a <tt class="literal"><span class="pre">node_base</span></tt> just points
+at some base subobject of an instance of some other class, and
+incrementing a <tt class="literal"><span class="pre">node_base*</span></tt> moves it past this base subobject
+to who-knows-where?  The most we can do with that incremented
+position is to compare another <tt class="literal"><span class="pre">node_base*</span></tt> to it.  In other
+words, the original iterator traverses a one-element array.</p>
 </div>
-<hr class="footer"/>
+<p>You probably didn't think of it that way, but the <tt class="literal"><span class="pre">node_base*</span></tt>
+object which underlies <tt class="literal"><span class="pre">node_iterator</span></tt> is itself an iterator,
+just like all other pointers.  If we examine that pointer closely
+from an iterator perspective, we can see that it has much in common
+with the <tt class="literal"><span class="pre">node_iterator</span></tt> we're building.  First, they share most
+of the same associated types (<tt class="literal"><span class="pre">value_type</span></tt>, <tt class="literal"><span class="pre">reference</span></tt>,
+<tt class="literal"><span class="pre">pointer</span></tt>, and <tt class="literal"><span class="pre">difference_type</span></tt>).  Second, even much of the
+core functionality is the same: <tt class="literal"><span class="pre">operator*</span></tt> and <tt class="literal"><span class="pre">operator==</span></tt> on
+the <tt class="literal"><span class="pre">node_iterator</span></tt> just return the result of invoking the same
+operations on the underlying pointer, via the <tt class="literal"><span class="pre">node_iterator</span></tt>'s
+<a class="reference" href="iterator_facade.html#implementing-the-core-operations"><tt class="literal"><span class="pre">dereference</span></tt> and <tt class="literal"><span class="pre">equal</span></tt> member functions</a>)</p>
+<p>It turns out that the pattern of building an iterator on another
+iterator-like type (the <tt class="literal"><span class="pre">Base</span></tt> <a class="footnote-reference" href="#base" id="id3" name="id3"><sup>1</sup></a> type) while modifying
+just a few aspects of the underlying type's behavior is an
+extremely common one, and it's the pattern addressed by
+<tt class="literal"><span class="pre">iterator_adaptor</span></tt>.  Using <tt class="literal"><span class="pre">iterator_adaptor</span></tt> is very much like
+using <tt class="literal"><span class="pre">iterator_facade</span></tt>, but because iterator_adaptor tries to
+mimic as much of the <tt class="literal"><span class="pre">Base</span></tt> type's behavior as possible, we
+neither have to supply a <tt class="literal"><span class="pre">Value</span></tt> argument, nor implement any core
+behaviors other than <tt class="literal"><span class="pre">increment</span></tt>.  The implementation of
+<tt class="literal"><span class="pre">node_iter</span></tt> is thus reduced to:</p>
+<pre class="literal-block">
+template &lt;class Value&gt;
+class node_iter
+  : public boost::iterator_adaptor&lt;
+        node_iter&lt;Value&gt;                // Derived
+      , Value*                          // Base
+      , boost::use_default              // Value
+      , boost::forward_traversal_tag    // CategoryOrTraversal
+    &gt;
+{
+ private:
+    struct enabler {};  // a private type avoids misuse
+
+    typedef boost::iterator_adaptor&lt;
+        node_iter&lt;Value&gt;, Value*, boost::use_default, boost::forward_traversal_tag
+    &gt; super_t;
+
+ public:
+    node_iter()
+      : super_t(0) {}
+
+    explicit node_iter(Value* p)
+      : super_t(p) {}
+
+    template &lt;class OtherValue&gt;
+    node_iter(
+        node_iter&lt;OtherValue&gt; const&amp; other
+      , typename boost::enable_if&lt;
+            boost::is_convertible&lt;OtherValue*,Value*&gt;
+          , enabler
+        &gt;::type = enabler()
+    )
+      : super_t(other.base()) {}
+
+ private:
+    friend class boost::iterator_core_access;
+    void increment() { this-&gt;base_reference() = this-&gt;base()-&gt;next(); }
+};
+</pre>
+<p>You can see an example program which exercises this version of the
+node iterators <a class="reference" href="../example/node_iterator3.cpp">here</a>.</p>
+<p>In the case of <tt class="literal"><span class="pre">node_iter</span></tt>, it's not very compelling to pass
+<tt class="literal"><span class="pre">boost::use_default</span></tt> as <tt class="literal"><span class="pre">iterator_adaptor</span></tt>'s <tt class="literal"><span class="pre">Value</span></tt>
+argument; we could have just passed <tt class="literal"><span class="pre">node_iter</span></tt>'s <tt class="literal"><span class="pre">Value</span></tt>
+along to <tt class="literal"><span class="pre">iterator_adaptor</span></tt>, and that'd even be shorter!  Most
+iterator class templates built with <tt class="literal"><span class="pre">iterator_adaptor</span></tt> are
+parameterized on another iterator type, rather than on its
+<tt class="literal"><span class="pre">value_type</span></tt>.  For example, <tt class="literal"><span class="pre">boost::reverse_iterator</span></tt> takes an
+iterator type argument and reverses its direction of traversal,
+since the original iterator and the reversed one have all the same
+associated types, <tt class="literal"><span class="pre">iterator_adaptor</span></tt>'s delegation of default
+types to its <tt class="literal"><span class="pre">Base</span></tt> saves the implementor of
+<tt class="literal"><span class="pre">boost::reverse_iterator</span></tt> from writing</p>
+<pre class="literal-block">
+std::iterator_traits&lt;Iterator&gt;::<em>some-associated-type</em>
+</pre>
+<p>at least four times.</p>
+<p>We urge you to review the documentation and implementations of
+<a class="reference" href="reverse_iterator.html"><tt class="literal"><span class="pre">reverse_iterator</span></tt></a> and the other Boost <a class="reference" href="index.html#specialized-adaptors">specialized iterator
+adaptors</a> to get an idea of the sorts of things you can do with
+<tt class="literal"><span class="pre">iterator_adaptor</span></tt>.  In particular, have a look at
+<a class="reference" href="counting_iterator.html"><tt class="literal"><span class="pre">counting_iterator</span></tt></a>, which demonstrates that <tt class="literal"><span class="pre">iterator_adaptor</span></tt>'s <tt class="literal"><span class="pre">Base</span></tt> type needn't be an iterator.</p>
+</div>
+</div>
+<hr class="footer" />
 <div class="footer">
 <a class="reference" href="iterator_adaptor.rst">View document source</a>.
-Generated on: 2004-01-12 18:05 UTC.
+Generated on: 2004-01-12 20:28 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>

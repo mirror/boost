@@ -212,8 +212,8 @@ Our ``node_iterator`` then becomes::
    really concerned with efficiency, we could've written the
    default constructor to leave ``m_node`` uninitialized.
 
-Core Operations
-...............
+Implementing the Core Operations
+................................
 
 The last step is to implement the `core operations`_ required by
 the concepts we want our iterator to model.  Referring to the
@@ -474,6 +474,11 @@ In fact, that sort of magic is possible using
 |enable_if|__.  By rewriting the converting constructor as
 follows, we can remove it from the overload set when it's not
 appropriate::
+
+  #include <boost/type_traits/is_convertible.hpp>
+  #include <boost/utility/enable_if.hpp>
+
+    ...
 
     template <class OtherValue>
     node_iter(

@@ -20,8 +20,8 @@
 
 .. contents:: Table of Contents
 
-Introduction
-============
+Overview
+========
 
 .. include:: iterator_adaptor_body.rst
 
@@ -30,3 +30,8 @@ Reference
 =========
 
 .. include:: iterator_adaptor_ref.rst
+
+Tutorial Example
+================
+
+.. include:: iterator_adaptor_tutorial.rst

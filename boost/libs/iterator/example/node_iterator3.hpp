@@ -1,8 +1,8 @@
 // Copyright David Abrahams 2004. Use, modification and distribution is
 // subject to the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-#ifndef NODE_ITERATOR2_DWA2004110_HPP
-# define NODE_ITERATOR2_DWA2004110_HPP
+#ifndef NODE_ITERATOR3_DWA2004110_HPP
+# define NODE_ITERATOR3_DWA2004110_HPP
 
 # include "node.hpp"
 # include <boost/iterator/iterator_adaptor.hpp>
@@ -49,10 +49,10 @@ class node_iter
 
  private:
     friend class boost::iterator_core_access;
-    void increment() { m_node = m_node->next(); }
+    void increment() { this->base_reference() = this->base()->next(); }
 };
 
 typedef node_iter<node_base> node_iterator;
 typedef node_iter<node_base const> node_const_iterator;
 
-#endif // NODE_ITERATOR2_DWA2004110_HPP
+#endif // NODE_ITERATOR3_DWA2004110_HPP

@@ -9,4 +9,5 @@ test-suite iterator_examples
   : [ run reverse_iterator.cpp ]
     [ run node_iterator1.cpp ]
     [ run node_iterator2.cpp ]
+    [ run node_iterator3.cpp ]
       ;
