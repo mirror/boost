@@ -146,13 +146,46 @@ namespace {
         if (pos1 != std::string::npos) {
             do {
                 switch(expected[pos1+1]) {
-                case 'F':
+                case 'F':       // insert base file name
                     full_result = full_result + 
                         expected.substr(pos, pos1-pos) + escape_lit(filename);
                     pos1 = expected.find_first_of ("$", pos = pos1 + 2);
                     break;
 
-                case 'V':
+                case 'P':       // insert full path
+                    {
+                        fs::path fullpath = fs::complete(
+                            fs::path(filename, fs::native), 
+                            fs::current_path());
+                        if ('(' == expected[pos1+2]) {
+                        // the $P(basename) syntax is used
+                            size_t p = expected.find_first_of(")", pos1+1);
+                            if (std::string::npos == p) {
+                                std::cerr 
+                                    << "testwave: unmatched parenthesis in $P"
+                                       " directive" << std::endl;
+                                return false;
+                            }
+                            std::string base = expected.substr(pos1+3, p-pos1-3);
+                            fullpath = fullpath.branch_path() / 
+                                fs::path(base, fs::native);
+                            full_result = full_result + 
+                                expected.substr(pos, pos1-pos) + 
+                                escape_lit(fullpath.native_file_string());
+                            pos1 = expected.find_first_of ("$", 
+                                pos = pos1 + 4 + base.size());
+                        }
+                        else {
+                        // the $P is used on its own
+                            full_result = full_result + 
+                                expected.substr(pos, pos1-pos) + 
+                                escape_lit(fullpath.native_file_string());
+                            pos1 = expected.find_first_of ("$", pos = pos1 + 2);
+                        }
+                    }
+                    break;
+                    
+                case 'V':       // insert Boost version
                     full_result = full_result + 
                         expected.substr(pos, pos1-pos) + BOOST_LIB_VERSION;
                     pos1 = expected.find_first_of ("$", pos = pos1 + 2);

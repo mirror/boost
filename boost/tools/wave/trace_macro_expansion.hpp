@@ -317,7 +317,7 @@ public:
         if (option.get_value() == "stop") {
         // stop the execution and output the argument
             BOOST_WAVE_THROW(preprocess_exception, error_directive,
-                boost::wave::util::impl::as_string(values), 
+                boost::wave::util::impl::as_string(values).c_str(), 
                 act_token.get_position());
         }
         return false;
@@ -401,7 +401,7 @@ protected:
                 option_str += ")";
             }
             BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option,
-                option_str, act_token.get_position());
+                option_str.c_str(), act_token.get_position());
         }
         return true;
     }
@@ -429,7 +429,7 @@ protected:
         
             error_str += native_cmd;
             BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option,
-                error_str, act_token.get_position());
+                error_str.c_str(), act_token.get_position());
         }
         
     // rescan the content of the stdout_file and insert it as the 

@@ -54,8 +54,6 @@ namespace impl {
         switch (static_cast<unsigned int>(prev)) {
         case T_IDENTIFIER:
         case T_NONREPLACABLE_IDENTIFIER:
-        case T_INTLIT:
-        case T_FLOATLIT:
         case T_COMPL_ALT:
         case T_OR_ALT:
         case T_AND_ALT:
@@ -68,6 +66,10 @@ namespace impl {
         case T_FIXEDPOINTLIT:
             return true;
 
+        case T_FLOATLIT:
+        case T_INTLIT:
+            return (value.size() > 1 || (value[0] != 'e' && value[0] != 'E'));
+            
          // avoid constructing universal characters (\u1234)
         case TOKEN_FROM_ID('\\', UnknownTokenType):
             return would_form_universal_char(value);

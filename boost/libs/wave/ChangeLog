@@ -61,7 +61,9 @@ CHANGELOG
 - Improved error handling.
 - Disabled the flex_string class for VC7, enabled to fallback to std::string 
   for this compiler.
-  
+- Renamed files to comply with the Boost rules.
+- Added the first part of the MCPP validation suite to the Wave unit tests.
+
 Tue Mar 22 14:52:45 WEST 2005
 Version 1.1.15
 - Fixed a bug where the complete set of C99 predefined macros were pre-defined
