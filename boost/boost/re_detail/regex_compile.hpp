@@ -1603,7 +1603,8 @@ unsigned int BOOST_RE_CALL reg_expression<charT, traits, Allocator>::set_express
             //unsigned pos = (char*)dat - (char*)data.data();
 
             // add the trailing jump:
-            add_simple(dat, re_detail::syntax_element_jump, re_detail::re_jump_size);
+            dat = add_simple(dat, re_detail::syntax_element_jump, re_detail::re_jump_size);
+            ((re_detail::re_jump*)dat)->alt.i = 0;
 
             // now insert the leading repeater:
             dat = (re_detail::re_syntax_base*)data.insert(offset, re_detail::re_repeater_size);
