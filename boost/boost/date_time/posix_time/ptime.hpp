@@ -46,7 +46,7 @@ namespace posix_time {
       date_time::base_time<time_type,time_system_type>(rhs)
     {}
     //! Construct from special value
-    ptime(const special_values sv) : date_time::base_time<time_type,time_system_type>(gregorian::date(sv), time_duration_type(sv))
+    ptime(const special_values sv) : date_time::base_time<time_type,time_system_type>(sv)
     {}
 #if !defined(DATE_TIME_NO_DEFAULT_CONSTRUCTOR)
     // Default constructor constructs to not_a_date_time
