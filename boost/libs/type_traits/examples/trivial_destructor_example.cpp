@@ -64,7 +64,7 @@ void do_destroy_array(T* first, T* last)
    }
 }
 
-}; // namespace detail
+} // namespace detail
 
 template <class T>
 inline void destroy_array(T* p1, T* p2)
@@ -156,6 +156,7 @@ int cpp_main(int argc, char* argv[])
 
    return 0;
 }
+
 
 
 
