@@ -62,6 +62,7 @@
 #include "boost/mpl/apply_if.hpp"
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/bool.hpp"
+#include "boost/mpl/contains.hpp"
 #include "boost/mpl/distance.hpp"
 #include "boost/mpl/find.hpp"
 #include "boost/mpl/find_if.hpp"
@@ -69,6 +70,7 @@
 #include "boost/mpl/identity.hpp"
 #include "boost/mpl/int.hpp"
 #include "boost/mpl/is_sequence.hpp"
+#include "boost/mpl/iterator_range.hpp"
 #include "boost/mpl/logical.hpp"
 #include "boost/mpl/max_element.hpp"
 #include "boost/mpl/protect.hpp"
@@ -133,26 +135,43 @@ public: // metafunction result
 // Provides a fallback (i.e., nothrow default-constructible) type from the
 // specified sequence, or no_fallback_type if not found.
 //
+// This implementation is designed to prefer boost::empty over other potential
+// fallback types, regardless of its position in the specified sequence.
+//
 
 class no_fallback_type;
+
+template <typename FallbackFirst, typename Last>
+struct find_empty
+    : mpl::apply_if<
+          typename mpl::contains<
+              mpl::iterator_range<FallbackFirst,Last>, boost::empty
+            >::type
+        , mpl::identity< boost::empty >
+        , FallbackFirst // dereference
+        >
+{
+};
 
 template <typename Types>
 struct find_fallback_type
 {
 private: // helpers, for metafunction result (below)
 
-    typedef typename mpl::end<Types>::type not_found;
+    typedef typename mpl::end<Types>::type end_it;
 
     typedef typename mpl::find_if<
           Types, has_nothrow_constructor<mpl::_1>
-        >::type fallback_type_it_;
+        >::type fallback_type_it;
 
 public: // metafunction result
 
     typedef typename mpl::apply_if<
-          is_same<fallback_type_it_, not_found>
+          is_same< fallback_type_it, end_it >
         , mpl::identity< no_fallback_type >
-        , fallback_type_it_ // dereference
+        , find_empty<
+              fallback_type_it, end_it
+            >
         >::type type;
 
 };
@@ -162,8 +181,7 @@ public: // metafunction result
 template<>
 struct find_fallback_type<int>
 {
-    typedef mpl::pair< mpl::false_, no_fallback_type >
-        type;
+    typedef no_fallback_type type;
 };
 
 #endif // BOOST_MPL_MSVC_60_ETI_BUG workaround
