@@ -18,6 +18,13 @@
 #ifndef BOOST_TUPLE_HPP
 #define BOOST_TUPLE_HPP
 
+#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730
+// Work around a compiler bug.
+// boost::python::tuple has to be seen by the compiler before the
+// boost::tuple class template.
+namespace boost { namespace python { class tuple; }}
+#endif
+
 #include "boost/config.hpp"
 #include "boost/static_assert.hpp"
 
