@@ -111,7 +111,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         static
         BOOST_UBLAS_INLINE
-        real_type imag (const_reference t) {
+        real_type imag (const_reference /*t*/) {
                 return 0;
         }
         static
@@ -187,7 +187,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         static
         BOOST_UBLAS_INLINE
-        real_type imag (const_reference t) {
+        real_type imag (const_reference /*t*/) {
                 return 0;
         }
         static
@@ -260,7 +260,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         static
         BOOST_UBLAS_INLINE
-        real_type imag (const_reference t) {
+        real_type imag (const_reference /*t*/) {
                 return 0;
         }
         static
