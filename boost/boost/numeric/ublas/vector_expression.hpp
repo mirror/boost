@@ -1768,6 +1768,12 @@ namespace boost { namespace numeric { namespace ublas {
             return e_;
         }
 
+        BOOST_UBLAS_INLINE
+        operator value_type () const {
+            return evaluate (iterator_category ());
+        }
+
+    private:
         // Dense random access specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (dense_random_access_iterator_tag) const {
@@ -1795,11 +1801,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         value_type evaluate (sparse_bidirectional_iterator_tag) const {
             return functor_type () (e_.begin (), e_.end ());
-        }
-
-        BOOST_UBLAS_INLINE
-        operator value_type () const {
-            return evaluate (iterator_category ());
         }
 
     private:
@@ -1903,6 +1904,12 @@ namespace boost { namespace numeric { namespace ublas {
             return e2_;
         }
 
+        BOOST_UBLAS_INLINE
+        operator value_type () const {
+            return evaluate (iterator_category ());
+        }
+
+    private:
         // Dense random access specialization
         BOOST_UBLAS_INLINE
         value_type evaluate (dense_random_access_iterator_tag) const {
@@ -1930,11 +1937,6 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         value_type evaluate (sparse_bidirectional_iterator_tag) const {
             return functor_type () (e1_.begin (), e1_.end (), e2_.begin (), e2_.end (), sparse_bidirectional_iterator_tag ());
-        }
-
-        BOOST_UBLAS_INLINE
-        operator value_type () const {
-            return evaluate (iterator_category ());
         }
 
     private:
