@@ -512,6 +512,19 @@ void test_different_number_of_catch_blocks() {
   BOOST_TEST(ecount == 9);
 }
 
+void test_empty_catch_blocks() {
+  try_catch(
+    bind(throw_AX, _1), 
+    catch_exception<A1>()
+  )(make_const(1));
+
+  try_catch(
+    bind(throw_AX, _1), 
+    catch_all()
+  )(make_const(1));
+
+}
+
 
 void return_type_matching() {
 
@@ -576,6 +589,7 @@ int test_main(int, char *[]) {
   {
     test_different_number_of_catch_blocks();
     return_type_matching();
+    test_empty_catch_blocks();
   }
   catch (int x)
   {
