@@ -106,7 +106,7 @@ public:
     typedef T * pointer;
     typedef typename detail::shared_ptr_traits<T>::reference reference;
 
-    shared_ptr(): px(0), pn()
+    shared_ptr(): px(0), pn() // never throws in 1.30+
     {
     }
 
@@ -211,7 +211,7 @@ public:
 
 #endif
 
-    void reset()
+    void reset() // never throws in 1.30+
     {
         this_type().swap(*this);
     }
@@ -252,6 +252,8 @@ public:
     {
         return px == 0? 0: &this_type::get;
     }
+
+    // operator! is redundant, but some compilers need it
 
     bool operator! () const // never throws
     {
