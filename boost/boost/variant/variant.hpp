@@ -1651,6 +1651,20 @@ public: // comparison operators
         }
     }
 
+    template <typename U>
+    void operator==(const U&) const
+    {
+        // force static assertion failure:
+        BOOST_STATIC_ASSERT( false && sizeof(U) );
+    }
+
+    template <typename U>
+    void operator<(const U&) const
+    {
+        // force static assertion failure:
+        BOOST_STATIC_ASSERT( false && sizeof(U) );
+    }
+
 // helpers, for visitation support (below) -- private when possible
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 
