@@ -13,7 +13,7 @@
 // see as much of this file compile as possible.
 //
 
-#include <boost/pending/concept_checks.hpp>
+#include <boost/pending/concept_check.hpp>
 
 #include <iterator>
 #include <set>

@@ -21,9 +21,9 @@
 
 <H1>
 <A NAME="sec:concept-checking"></A>
-header <a href="../../boost/pending/concept_checks.hpp">
-<tt>boost/concept_checks.hpp</tt></a> and <a href="../../boost/pending/concept_archetypes.hpp">
-<tt>boost/concept_archetypes.hpp</tt></a>
+header <a href="../../boost/pending/concept_check.hpp">
+<tt>boost/concept_check.hpp</tt></a> and <a href="../../boost/pending/concept_archetype.hpp">
+<tt>boost/concept_archetype.hpp</tt></a>
 </H1>
 
 <p>
@@ -183,14 +183,14 @@ informative message (and is in fact what the Boost Concept Checking
 Library produces):
 
 <pre>
-concept_checks.hpp: In method `void LessThanComparable_concept
+concept_check.hpp: In method `void LessThanComparable_concept
   &lt;_List_iterator&lt;foo,foo &,foo *> >::constraints()':
-concept_checks.hpp:334:   instantiated from `RandomAccessIterator_concept
+concept_check.hpp:334:   instantiated from `RandomAccessIterator_concept
   &lt;_List_iterator&lt;foo,foo &,foo *> >::constraints()'
 bad_error_eg.cpp:9:   instantiated from `stable_sort&lt;_List_iterator
   &lt;foo,foo &,foo *> >(_List_iterator&lt;foo,foo &,foo *>, 
   _List_iterator&lt;foo,foo &,foo *>)'
-concept_checks.hpp:209: no match for `_List_iterator&lt;foo,foo &,foo *> &
+concept_check.hpp:209: no match for `_List_iterator&lt;foo,foo &,foo *> &
   &lt; _List_iterator&lt;foo,foo &,foo *> &'
 </pre>
 
@@ -206,7 +206,7 @@ href="http://www.sgi.com/Technology/STL/RandomAccessIterator.html">
 RandomAccessIterator</a>).
 <LI> The error message is now much shorter and does not reveal
   internal STL functions.
-<LI> The presence of <tt>concept_checks.hpp</tt> and
+<LI> The presence of <tt>concept_check.hpp</tt> and
   <tt>constraints()</tt> in the error message alerts the user to the
   fact that the error lies in the user code and not in the library
   implementation.
