@@ -28,8 +28,8 @@ include:</para>
     <code><functionname>boost::apply_visitor</functionname></code>.</listitem>
   <listitem>Run-time checked explicit value retrieval via
     <code><functionname>boost::get</functionname></code>.</listitem>
-  <listitem>Support for incomplete types and recursive variant
-    types via <code><classname>boost::incomplete</classname></code>.</listitem>
+  <listitem>Support for recursive variant types via
+    <code><classname>boost::recursive_variant</classname></code>.</listitem>
   <listitem>Efficient, stack-based implementation.</listitem>
 </itemizedlist>
 
