@@ -146,9 +146,9 @@ bool include_pathes::find_include_file (std::string &s,
     // with the directory in the search path after the one where the current
     // file was found.
 
+        fs::path file_path (current_file, fs::native);
         for (/**/; it != include_pathes_end; ++it) {
             fs::path currpath ((*it).string(), fs::native);
-            fs::path file_path (current_file, fs::native);
 	          if (std::equal(currpath.begin(), currpath.end(), file_path.begin())) 
 	          {
                 ++it;     // start searching with the next directory
