@@ -116,7 +116,7 @@ namespace boost { namespace numeric { namespace ublas {
                 data ().resize (functor1_type::packed_size (size1_, size2_));
         }
         BOOST_UBLAS_INLINE
-        void resize_packed_preserve (size_type size) {
+        void resize_packed_preserve (size_type size1, size_type size2) {
             size1_ = size1;
             size2_ = size2;
             data ().resize (functor1_type::packed_size (size1_, size2_), value_type (0));
