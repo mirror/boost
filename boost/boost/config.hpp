@@ -263,7 +263,13 @@
 #     endif
 #   endif
 
-//  Kai C++ ------------------------------------------------------------------//
+//  Intel on Linux ---------------------------------------------------------
+
+#elif defined __ICC
+#   define BOOST_NO_SLIST
+#   define BOOST_NO_HASH
+
+//  Kai C++ ----------------------------------------------------------------
 
 #elif defined __KCC
 #   define BOOST_NO_SLIST
@@ -329,7 +335,7 @@
 #   define BOOST_NO_CV_SPECIALIZATIONS
 #   define BOOST_NO_CV_VOID_SPECIALIZATIONS
 
-//  Intel  -------------------------------------------------------------------//
+//  Intel on Windows --------------------------------------------------------//
 
 # elif defined __ICL
 #   include <iterator>  // not sure this is the right way to do this -JGS
