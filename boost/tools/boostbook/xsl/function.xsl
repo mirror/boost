@@ -19,7 +19,7 @@
        and any storage specifiers is greater than this length, they will be
        placed on a separate line from the function name and parameters
        unless everything fits on a single line. -->
-  <xsl:param name="boost.short.result.type">6</xsl:param>
+  <xsl:param name="boost.short.result.type">12</xsl:param>
 
   <!-- Display a function declaration -->
   <xsl:template name="function">
@@ -192,18 +192,18 @@
         </xsl:call-template>
       </xsl:when>
 
-      <!-- Check if we can put the entire declaration on a single line -->
-      <xsl:when test="not($end-column &gt; $max-columns)">
+      <!-- Check if we can put the entire declaration on a single line, and
+           the entire line will be a link.-->
+      <xsl:when test="not($end-column &gt; $max-columns) 
+                      and not($suppress-template)">
         <xsl:call-template name="link-or-anchor">
           <xsl:with-param name="to" select="$link-to"/>
           <xsl:with-param name="text">
-            <xsl:if test="not($suppress-template)">
-              <xsl:apply-templates select="template" mode="synopsis">
-                <xsl:with-param name="indentation" select="$indentation"/>
-                <xsl:with-param name="wrap" select="false()"/>
-                <xsl:with-param name="highlight" select="false()"/>
-              </xsl:apply-templates>
-            </xsl:if>
+            <xsl:apply-templates select="template" mode="synopsis">
+              <xsl:with-param name="indentation" select="$indentation"/>
+              <xsl:with-param name="wrap" select="false()"/>
+              <xsl:with-param name="highlight" select="false()"/>
+            </xsl:apply-templates>
             <xsl:value-of select="$type"/>
             <xsl:value-of select="$function-name"/>
             <xsl:text>(</xsl:text>
@@ -219,6 +219,44 @@
           </xsl:with-param>
           <xsl:with-param name="link-type" select="$link-type"/>
           <xsl:with-param name="highlight" select="true()"/>
+        </xsl:call-template>
+        <xsl:text>;</xsl:text>    
+      </xsl:when>
+
+      <!-- Check if we can put the entire declaration on a single
+           line, but only highlight the name. -->
+      <xsl:when test="not($end-column &gt; $max-columns)">
+        <xsl:if test="not($suppress-template)">
+          <xsl:apply-templates select="template" mode="synopsis">
+            <xsl:with-param name="indentation" select="$indentation"/>
+            <xsl:with-param name="wrap" select="false()"/>
+            <xsl:with-param name="highlight" select="false()"/>
+          </xsl:apply-templates>
+        </xsl:if>
+
+        <xsl:call-template name="source-highlight">
+          <xsl:with-param name="text" select="$type"/>
+        </xsl:call-template>
+
+        <xsl:call-template name="link-or-anchor">
+          <xsl:with-param name="to" select="$link-to"/>
+          <xsl:with-param name="text" select="$function-name"/>
+          <xsl:with-param name="link-type" select="$link-type"/>
+          <xsl:with-param name="highlight" select="true()"/>
+        </xsl:call-template>
+
+        <xsl:text>(</xsl:text>
+        <xsl:call-template name="function-parameters">
+          <xsl:with-param name="include-names" select="$include-names"/>
+          <xsl:with-param name="indentation" 
+            select="$indentation + $template-length + string-length($type)
+                    + string-length($function-name) + 1"/>
+          <xsl:with-param name="final" select="true()"/>
+        </xsl:call-template>                
+        <xsl:text>)</xsl:text>
+
+        <xsl:call-template name="source-highlight">
+          <xsl:with-param name="text" select="$postdeclarator"/>
         </xsl:call-template>
         <xsl:text>;</xsl:text>    
       </xsl:when>
