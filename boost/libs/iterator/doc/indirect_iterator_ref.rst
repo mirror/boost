@@ -67,9 +67,9 @@ following pseudo-code.  We use the abbreviation
       typedef Difference difference_type;
 
 
-The member ``indirect_iterator::iterator_category`` is a type that
-satisfies the requirements of the concepts modeled by the indirect
-iterator as specified in the models section.
+The member ``iterator_category`` is a type that satisfies the
+requirements of the concepts modeled by the ``indirect_iterator`` as
+specified in the models section.
 
 
 ``indirect_iterator`` requirements

@@ -271,7 +271,11 @@ The description of Counting iterator is unclear. "The counting iterator adaptor 
 dereference by returning a reference to the base object. The other operations are implemented by 
 the base m_iterator, as per the inheritance from iterator_adaptor." 
 
-:Proposed resolution:   **Needs work** (Jeremy) Reword.
+:Proposed resolution:
+  Change the introduction to: ``counting_iterator`` adapts an
+  arithmetic type, such as ``int``, by adding an ``operator*`` that
+  returns the current value of the object.
+
 
 
 9.14 Counting_iterator's difference type 
@@ -290,8 +294,11 @@ I'm not sure what this means. The user provides a template argument named Differ
 there's no difference_type. I assume this is just a glitch in the wording. But if implementors are 
 encouraged to ignore this argument if it won't work right, why is it there? 
 
-:Proposed resolution: **Needs work** (Jeremy)
-  Reword.
+:Proposed resolution:
+  The ``difference_type`` was inherited from ``iterator_adaptor``.
+  However, we've removed the explicit inheritance, so explicit typedefs have
+  been added.
+
 
 
 9.15 How to detect lvalueness? 
