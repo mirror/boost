@@ -10,8 +10,8 @@
 //  remove_reference, add_reference, remove_bounds, remove_pointer.
 //
 
-#ifndef TRANSFORM_TRAITS_HPP
-#define TRANSFORM_TRAITS_HPP
+#ifndef BOOST_TRANSFORM_TRAITS_HPP
+#define BOOST_TRANSFORM_TRAITS_HPP
 
 #ifndef BOOST_ICE_TYPE_TRAITS_HPP
 #include <boost/type_traits/ice.hpp>
@@ -19,7 +19,7 @@
 #ifndef BOOST_FWD_TYPE_TRAITS_HPP
 #include <boost/type_traits/fwd.hpp>
 #endif
-#if !defined(COMPOSITE_TYPE_TRAITS_HPP) && defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_COMPOSITE_TYPE_TRAITS_HPP) && defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #include <boost/type_traits/composite_traits.hpp>
 #endif
 
@@ -179,7 +179,7 @@ public:
 #define BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(x)
 #endif
 
-#endif // TRANSFORM_TRAITS_HPP
+#endif // BOOST_TRANSFORM_TRAITS_HPP
  
 
 

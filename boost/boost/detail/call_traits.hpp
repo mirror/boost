@@ -23,10 +23,10 @@
 #include <boost/config.hpp>
 #endif
 
-#ifndef ARITHMETIC_TYPE_TRAITS_HPP
+#ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #include <boost/type_traits/arithmetic_traits.hpp>
 #endif
-#ifndef COMPOSITE_TYPE_TRAITS_HPP
+#ifndef BOOST_COMPOSITE_TYPE_TRAITS_HPP
 #include <boost/type_traits/composite_traits.hpp>
 #endif
 

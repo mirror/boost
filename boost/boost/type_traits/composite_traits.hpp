@@ -17,8 +17,8 @@
 //    All rights reserved.).
 //    Fixes for is_array are based on a newgroup posting by Jonathan Lundquist.
 
-#ifndef COMPOSITE_TYPE_TRAITS_HPP
-#define COMPOSITE_TYPE_TRAITS_HPP
+#ifndef BOOST_COMPOSITE_TYPE_TRAITS_HPP
+#define BOOST_COMPOSITE_TYPE_TRAITS_HPP
 
 #ifndef BOOST_ICE_TYPE_TRAITS_HPP
 #include <boost/type_traits/ice.hpp>
@@ -29,10 +29,10 @@
 #ifndef BOOST_CONVERSION_TYPE_TRAITS_HPP
 #include <boost/type_traits/conversion_traits.hpp>
 #endif
-#ifndef CV_TYPE_TRAITS_HPP
+#ifndef BOOST_CV_TYPE_TRAITS_HPP
 #include <boost/type_traits/cv_traits.hpp>
 #endif
-#ifndef ARITHMETIC_TYPE_TRAITS_HPP
+#ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #include <boost/type_traits/arithmetic_traits.hpp>
 #endif
 
@@ -45,15 +45,15 @@ namespace boost{
  **********************************************/
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <typename T> struct is_array
-{ BOOST_DECL_MC(bool, value, false); };
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
 template <typename T, std::size_t N> struct is_array<T[N]>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T, std::size_t N> struct is_array<const T[N]>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T, std::size_t N> struct is_array<volatile T[N]>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T, std::size_t N> struct is_array<const volatile T[N]>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 namespace detail{
    struct pointer_helper
@@ -83,30 +83,35 @@ struct is_array
 private:
    static T t;
 public:
-   BOOST_DECL_MC(bool, value, (1 == sizeof(detail::is_array_helper(&t, t)))
-                 & !is_reference<T>::value
-                 & !(1 == sizeof(detail::is_pointer_helper3(t))) );
+   BOOST_STATIC_CONSTANT(bool, value = 
+      (::boost::type_traits::ice_and<
+         (1 == sizeof(detail::is_array_helper(&t, t))),
+         ::boost::type_traits::ice_not<
+            ::boost::is_reference<T>::value>::value,
+         ::boost::type_traits::ice_not<
+            (1 == sizeof(detail::is_pointer_helper3(t)))>::value
+      >::value));
 };
 template <> 
 struct is_array<void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 template <> 
 struct is_array<const void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 template <> 
 struct is_array<volatile void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 template <> 
 struct is_array<const volatile void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #endif
 
@@ -120,18 +125,18 @@ struct is_array<const volatile void>
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 namespace detail{
 template <typename T> struct is_pointer_helper
-{ BOOST_DECL_MC(bool, value, false); };
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
 template <typename T> struct is_pointer_helper<T*>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T> struct is_pointer_helper<T*const>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T> struct is_pointer_helper<T*volatile>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T> struct is_pointer_helper<T*const volatile>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 } // namespace detail
 template <typename T> struct is_pointer
-{ BOOST_DECL_MC(bool, value, (::boost::type_traits::ice_and< ::boost::detail::is_pointer_helper<T>::value, ::boost::type_traits::ice_not< ::boost::is_member_pointer<T>::value >::value >::value)); };
+{ BOOST_STATIC_CONSTANT(bool, value = (::boost::type_traits::ice_and< ::boost::detail::is_pointer_helper<T>::value, ::boost::type_traits::ice_not< ::boost::is_member_pointer<T>::value >::value >::value)); };
 #else
 template <typename T>
 struct is_pointer 
@@ -139,36 +144,40 @@ struct is_pointer
 private:
    static T t;
 public:
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
                 (::boost::type_traits::ice_and<
-                    !::boost::is_reference<T>::value,
-                    !::boost::is_array<T>::value,
-                    (::boost::type_traits::ice_or<
+                  ::boost::type_traits::ice_not<
+                     ::boost::is_reference<T>::value
+                  >::value,
+                  ::boost::type_traits::ice_not<
+                     ::boost::is_array<T>::value
+                  >::value,
+                  (::boost::type_traits::ice_or<
                        (1 == sizeof(detail::is_pointer_helper(t))),
                        (1 == sizeof(detail::is_pointer_helper3(t)))
-                    >::value)
+                  >::value)
                 >::value ) );
 };
 template <>
 struct is_pointer <void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 template <>
 struct is_pointer <const void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 template <>
 struct is_pointer <volatile void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 template <>
 struct is_pointer <const volatile void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #endif
 #endif
@@ -180,20 +189,20 @@ struct is_pointer <const volatile void>
  **********************************************/
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <typename T> struct is_reference 
-{ BOOST_DECL_MC(bool, value, false); };
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
 template <typename T> struct is_reference<T&> 
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 #if defined(__BORLANDC__)
 // these are illegal specialisations; cv-qualifies applied to
 // references have no effect according to [8.3.2p1],
 // C++ Builder requires them though as it treats cv-qualified
 // references as distinct types...
 template <typename T> struct is_reference<T&const> 
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T> struct is_reference<T&volatile> 
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T> struct is_reference<T&const volatile> 
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 #endif
 #else
 # ifdef BOOST_MSVC
@@ -205,19 +214,26 @@ template <typename T> struct is_reference
 private:
    typedef T const volatile cv_t;
 public:
-   BOOST_DECL_MC(bool, value, (::boost::type_traits::ice_or<!::boost::is_const<cv_t>::value, !::boost::is_volatile<cv_t>::value>::value));
+   BOOST_STATIC_CONSTANT(bool, value = 
+      (::boost::type_traits::ice_or<
+      ::boost::type_traits::ice_not<
+         ::boost::is_const<cv_t>::value
+      >::value, 
+      ::boost::type_traits::ice_not<
+         ::boost::is_volatile<cv_t>::value>::value
+      >::value));
 };
 template <> struct is_reference<void>
 {
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 template <> struct is_reference<const void>
-{ BOOST_DECL_MC(bool, value, false); };
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
 template <> struct is_reference<volatile void>
-{ BOOST_DECL_MC(bool, value, false); };
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
 template <> struct is_reference<const volatile void>
-{ BOOST_DECL_MC(bool, value, false); };
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
 #endif
 
 # ifdef BOOST_MSVC
@@ -235,7 +251,7 @@ template <typename T> struct is_union
 private:
    typedef typename remove_cv<T>::type cvt;
 public:
-   BOOST_DECL_MC(bool, value, BOOST_IS_UNION(cvt));
+   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_UNION(cvt));
 };
 
 /**********************************************
@@ -252,7 +268,7 @@ struct int_convertible
 #ifndef __BORLANDC__
 template <typename T> struct is_enum
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
          ::boost::type_traits::ice_not< ::boost::is_arithmetic<T>::value>::value,
          ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
@@ -266,7 +282,7 @@ template <typename T> struct is_enum
 template <typename T> struct is_enum
 {
 public:
-   BOOST_DECL_MC(bool, value, BOOST_IS_ENUM(T));
+   BOOST_STATIC_CONSTANT(bool, value = BOOST_IS_ENUM(T));
 };
 #endif
 
@@ -277,23 +293,23 @@ public:
  **********************************************/
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <typename T> struct is_member_pointer
-{ BOOST_DECL_MC(bool, value, false); };
+{ BOOST_STATIC_CONSTANT(bool, value = false); };
 template <typename T, typename U> struct is_member_pointer<U T::*>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 #ifdef __GNUC__
 // gcc workaround (JM 02 Oct 2000)
 template <typename T, typename U> struct is_member_pointer<U (T::*)(void)>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T, typename U, typename A1> struct is_member_pointer<U (T::*)(A1)>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T, typename U, typename A1, typename A2> struct is_member_pointer<U (T::*)(A1, A2)>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T, typename U, typename A1, typename A2, typename A3> struct is_member_pointer<U (T::*)(A1, A2, A3)>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T, typename U, typename A1, typename A2, typename A3, typename A4> struct is_member_pointer<U (T::*)(A1, A2, A3, A4)>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 template <typename T, typename U, typename A1, typename A2, typename A3, typename A4, typename A5> struct is_member_pointer<U (T::*)(A1, A2, A3, A4, A5)>
-{ BOOST_DECL_MC(bool, value, true); };
+{ BOOST_STATIC_CONSTANT(bool, value = true); };
 #endif
 #else
 namespace detail{
@@ -319,28 +335,28 @@ struct is_member_pointer
 private:
    static T t;
 public:
-   BOOST_DECL_MC(bool, value, (1 == sizeof(detail::is_member_pointer_helper(t))) );
+   BOOST_STATIC_CONSTANT(bool, value = (1 == sizeof(detail::is_member_pointer_helper(t))) );
 };
 template <> 
 struct is_member_pointer<void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 template <> 
 struct is_member_pointer<const void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 template <> 
 struct is_member_pointer<volatile void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 template <> 
 struct is_member_pointer<const volatile void>
 { 
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #endif
 
@@ -349,7 +365,7 @@ struct is_member_pointer<const volatile void>
 
 } // namespace boost
 
-#endif // COMPOSITE_TYPE_TRAITS_HPP
+#endif // BOOST_COMPOSITE_TYPE_TRAITS_HPP
  
 
 

@@ -21,7 +21,7 @@
 #ifndef BOOST_FWD_TYPE_TRAITS_HPP
 #include <boost/type_traits/fwd.hpp>
 #endif
-#ifndef ARITHMETIC_TYPE_TRAITS_HPP
+#ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #include <boost/type_traits/arithmetic_traits.hpp>
 #endif
 //
@@ -193,7 +193,7 @@ private:
    static type_traits::yes_type check(To);
    static From from;
 public:
-   BOOST_DECL_MC(bool, value, sizeof( check(from) ) == sizeof(type_traits::yes_type));
+   BOOST_STATIC_CONSTANT(bool, value = sizeof( check(from) ) == sizeof(type_traits::yes_type));
    void foo(); // avoid warning about all members being private
 };
 
@@ -201,19 +201,19 @@ public:
 template <class From>
 struct is_convertible<From, void>
 {
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
 template <class To>
 struct is_convertible<void, To>
 {
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 
 template <>
 struct is_convertible<void, void>
 {
-   BOOST_DECL_MC(bool, value, true);
+   BOOST_STATIC_CONSTANT(bool, value = true);
 };
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

@@ -10,8 +10,8 @@
 //  is_const, is_volatile, remove_const, remove_volatile, remove_cv.
 //
 
-#ifndef CV_TYPE_TRAITS_HPP
-#define CV_TYPE_TRAITS_HPP
+#ifndef BOOST_CV_TYPE_TRAITS_HPP
+#define BOOST_CV_TYPE_TRAITS_HPP
 
 #ifndef BOOST_ICE_TYPE_TRAITS_HPP
 #include <boost/type_traits/ice.hpp>
@@ -33,32 +33,32 @@ struct cv_traits_imp{};
 template <class T>
 struct cv_traits_imp<T*>
 {
-   BOOST_DECL_MC(bool, is_const, false);
-   BOOST_DECL_MC(bool, is_volatile, false);
+   BOOST_STATIC_CONSTANT(bool, is_const = false);
+   BOOST_STATIC_CONSTANT(bool, is_volatile = false);
    typedef T unqualified_type;
 };
 
 template <class T>
 struct cv_traits_imp<const T*>
 {
-   BOOST_DECL_MC(bool, is_const, true);
-   BOOST_DECL_MC(bool, is_volatile, false);
+   BOOST_STATIC_CONSTANT(bool, is_const = true);
+   BOOST_STATIC_CONSTANT(bool, is_volatile = false);
    typedef T unqualified_type;
 };
 
 template <class T>
 struct cv_traits_imp<volatile T*>
 {
-   BOOST_DECL_MC(bool, is_const, false);
-   BOOST_DECL_MC(bool, is_volatile, true);
+   BOOST_STATIC_CONSTANT(bool, is_const = false);
+   BOOST_STATIC_CONSTANT(bool, is_volatile = true);
    typedef T unqualified_type;
 };
 
 template <class T>
 struct cv_traits_imp<const volatile T*>
 {
-   BOOST_DECL_MC(bool, is_const, true);
-   BOOST_DECL_MC(bool, is_volatile, true);
+   BOOST_STATIC_CONSTANT(bool, is_const = true);
+   BOOST_STATIC_CONSTANT(bool, is_volatile = true);
    typedef T unqualified_type;
 };
 
@@ -116,14 +116,14 @@ template <typename T> struct remove_cv<T&>{ typedef T& type; };
 template <typename T>
 struct is_const
 {
-   BOOST_DECL_MC(bool, value, detail::cv_traits_imp<T*>::is_const);
+   BOOST_STATIC_CONSTANT(bool, value = detail::cv_traits_imp<T*>::is_const);
 };
 
 //* is a type T declared volatile - is_volatile<T>
 template <typename T>
 struct is_volatile
 {
-   BOOST_DECL_MC(bool, value, detail::cv_traits_imp<T*>::is_volatile);
+   BOOST_STATIC_CONSTANT(bool, value = detail::cv_traits_imp<T*>::is_volatile);
 };
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -147,29 +147,29 @@ struct is_const
 private:
    static T t;
 public:
-   BOOST_DECL_MC(bool, value, (sizeof(detail::yes_type) == sizeof(detail::is_const_helper(&t))));
+   BOOST_STATIC_CONSTANT(bool, value = (sizeof(detail::yes_type) == sizeof(detail::is_const_helper(&t))));
 };
 
 template <>
 struct is_const<void>
 {
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 template <>
 struct is_const<const void>
 {
-   BOOST_DECL_MC(bool, value, true);
+   BOOST_STATIC_CONSTANT(bool, value = true);
 };
 template <>
 struct is_const<volatile void>
 {
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 template <>
 struct is_const<const volatile void>
 {
-   BOOST_DECL_MC(bool, value, true);
+   BOOST_STATIC_CONSTANT(bool, value = true);
 };
 #endif
 
@@ -179,29 +179,29 @@ struct is_volatile
 private:
    static T t;
 public:
-   BOOST_DECL_MC(bool, value, (sizeof(detail::yes_type) == sizeof(detail::is_volatile_helper(&t))));
+   BOOST_STATIC_CONSTANT(bool, value = (sizeof(detail::yes_type) == sizeof(detail::is_volatile_helper(&t))));
 };
 
 template <>
 struct is_volatile<void>
 {
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 template <>
 struct is_volatile<const void>
 {
-   BOOST_DECL_MC(bool, value, false);
+   BOOST_STATIC_CONSTANT(bool, value = false);
 };
 template <>
 struct is_volatile<volatile void>
 {
-   BOOST_DECL_MC(bool, value, true);
+   BOOST_STATIC_CONSTANT(bool, value = true);
 };
 template <>
 struct is_volatile<const volatile void>
 {
-   BOOST_DECL_MC(bool, value, true);
+   BOOST_STATIC_CONSTANT(bool, value = true);
 };
 #endif
 
@@ -209,6 +209,6 @@ struct is_volatile<const volatile void>
 } // namespace boost
 
 
-#endif // CV_TYPE_TRAITS_HPP
+#endif // BOOST_CV_TYPE_TRAITS_HPP
 
 

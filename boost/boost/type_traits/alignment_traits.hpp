@@ -32,7 +32,7 @@ struct alignment_of_hack
 template <unsigned A, unsigned S>
 struct alignment_logic
 {
-   BOOST_DECL_MC(std::size_t, value, A < S ? A : S);
+   BOOST_STATIC_CONSTANT(std::size_t, value = A < S ? A : S);
 };
 
 } // namespace detail
@@ -40,7 +40,7 @@ struct alignment_logic
 template <class T>
 struct alignment_of
 {
-   BOOST_DECL_MC(std::size_t, value,
+   BOOST_STATIC_CONSTANT(std::size_t, value =
       (::boost::detail::alignment_logic<
          sizeof(detail::alignment_of_hack<T>) - sizeof(T),
          sizeof(T)
@@ -55,24 +55,24 @@ template <class T>
 struct alignment_of<T&>
 {
 public:
-   BOOST_DECL_MC(std::size_t, value, alignment_of<T*>::value);
+   BOOST_STATIC_CONSTANT(std::size_t, value = alignment_of<T*>::value);
 };
 #endif
 //
 // void has to be treated specially:
 template <>
 struct alignment_of<void>
-{ BOOST_DECL_MC(std::size_t, value, 0); };
+{ BOOST_STATIC_CONSTANT(std::size_t, value = 0); };
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 template <>
 struct alignment_of<const void>
-{ BOOST_DECL_MC(std::size_t, value, 0); };
+{ BOOST_STATIC_CONSTANT(std::size_t, value = 0); };
 template <>
 struct alignment_of<volatile void>
-{ BOOST_DECL_MC(std::size_t, value, 0); };
+{ BOOST_STATIC_CONSTANT(std::size_t, value = 0); };
 template <>
 struct alignment_of<const volatile void>
-{ BOOST_DECL_MC(std::size_t, value, 0); };
+{ BOOST_STATIC_CONSTANT(std::size_t, value = 0); };
 #endif
 
 } // namespace boost

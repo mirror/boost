@@ -12,8 +12,8 @@
 //  has_trivial_destructor, is_empty.
 //
 
-#ifndef OBJECT_TYPE_TRAITS_HPP
-#define OBJECT_TYPE_TRAITS_HPP
+#ifndef BOOST_OBJECT_TYPE_TRAITS_HPP
+#define BOOST_OBJECT_TYPE_TRAITS_HPP
 
 #ifndef BOOST_ICE_TYPE_TRAITS_HPP
 #include <boost/type_traits/ice.hpp>
@@ -21,10 +21,10 @@
 #ifndef BOOST_FWD_TYPE_TRAITS_HPP
 #include <boost/type_traits/fwd.hpp>
 #endif
-#ifndef COMPOSITE_TYPE_TRAITS_HPP
+#ifndef BOOST_COMPOSITE_TYPE_TRAITS_HPP
 #include <boost/type_traits/composite_traits.hpp>
 #endif
-#ifndef ARITHMETIC_TYPE_TRAITS_HPP
+#ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
 #include <boost/type_traits/arithmetic_traits.hpp>
 #endif
 
@@ -38,7 +38,7 @@ namespace boost{
 template <typename T>
 struct is_object
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
          ::boost::type_traits::ice_not< ::boost::is_reference<T>::value>::value,
          ::boost::type_traits::ice_not< ::boost::is_void<T>::value>::value
@@ -53,7 +53,7 @@ struct is_object
 template <typename T>
 struct is_scalar
 { 
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
          ::boost::is_arithmetic<T>::value,
          ::boost::is_enum<T>::value,
@@ -70,7 +70,7 @@ struct is_scalar
 template <typename T>
 struct is_class
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
          ::boost::type_traits::ice_not< ::boost::is_union<T>::value >::value,
          ::boost::type_traits::ice_not< ::boost::is_scalar<T>::value >::value,
@@ -87,7 +87,7 @@ struct is_class
  **********************************************/
 template <typename T> struct is_compound
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
          ::boost::is_array<T>::value,
          ::boost::is_pointer<T>::value,
@@ -106,7 +106,7 @@ template <typename T> struct is_compound
  **********************************************/
 template <typename T> struct is_POD
 { 
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
          ::boost::is_scalar<T>::value,
          ::boost::is_void<T>::value,
@@ -117,7 +117,7 @@ template <typename T> struct is_POD
 template <typename T, std::size_t sz>
 struct is_POD<T[sz]>
 {
-   BOOST_DECL_MC(bool, value, ::boost::is_POD<T>::value);
+   BOOST_STATIC_CONSTANT(bool, value = ::boost::is_POD<T>::value);
 };
 #endif
 
@@ -129,7 +129,7 @@ struct is_POD<T[sz]>
 template <typename T>
 struct has_trivial_constructor
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
          ::boost::is_POD<T>::value,
          BOOST_HAS_TRIVIAL_CONSTRUCTOR(T)
@@ -144,7 +144,7 @@ struct has_trivial_constructor
 template <typename T>
 struct has_trivial_copy
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
          ::boost::type_traits::ice_or<
             ::boost::is_POD<T>::value,
@@ -162,7 +162,7 @@ struct has_trivial_copy
 template <typename T>
 struct has_trivial_assign
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_and<
          ::boost::type_traits::ice_or<
             ::boost::is_POD<T>::value,
@@ -181,7 +181,7 @@ struct has_trivial_assign
 template <typename T>
 struct has_trivial_destructor
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
          ::boost::is_POD<T>::value,
          BOOST_HAS_TRIVIAL_DESTRUCTOR(T)
@@ -207,12 +207,12 @@ struct empty_helper_t1 : public T
 struct empty_helper_t2 { int i[256]; };
 
 template <typename T, bool b, bool b2>
-struct empty_helper{ BOOST_DECL_MC(bool, value, false); };
+struct empty_helper{ BOOST_STATIC_CONSTANT(bool, value = false); };
 
 template <typename T>
 struct empty_helper<T, true, false>
 {
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (sizeof(empty_helper_t1<T>) == sizeof(empty_helper_t2)));
 };
 }
@@ -223,7 +223,7 @@ struct is_empty
 private:
    typedef typename remove_cv<T>::type cvt;
 public:
-   BOOST_DECL_MC(bool, value,
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<
          ::boost::detail::empty_helper<T,
             ::boost::is_class<T>::value ,
@@ -285,18 +285,25 @@ struct is_empty
 private:
    typedef ::boost::detail::empty_helper_chooser<
       ::boost::type_traits::ice_and<
-         !::boost::is_convertible<T,int>::value,
-         !::boost::is_convertible<T,double>::value,
-         !::boost::is_pointer<T>::value,
-         !::boost::is_member_pointer<T>::value,
-         !::boost::is_array<T>::value,
-         !::boost::is_void<T>::value,
-         !::boost::is_convertible<T, const volatile void*>::value
+         ::boost::type_traits::ice_not< 
+            ::boost::is_convertible<T,int>::value>::value,
+         ::boost::type_traits::ice_not< 
+            ::boost::is_convertible<T,double>::value>::value,
+         ::boost::type_traits::ice_not< 
+            ::boost::is_pointer<T>::value>::value,
+         ::boost::type_traits::ice_not< 
+            ::boost::is_member_pointer<T>::value>::value,
+         ::boost::type_traits::ice_not< 
+            ::boost::is_array<T>::value>::value,
+         ::boost::type_traits::ice_not< 
+            ::boost::is_void<T>::value>::value,
+         ::boost::type_traits::ice_not< 
+            ::boost::is_convertible<T, const volatile void*>::value>::value
       >::value> chooser;
    typedef typename chooser::template rebind<T> bound_type;
    typedef typename bound_type::type eh_type;
 public:
-   BOOST_DECL_MC(bool, value, 
+   BOOST_STATIC_CONSTANT(bool, value =
       (::boost::type_traits::ice_or<eh_type::value, BOOST_IS_EMPTY(T)>::value)); 
 };
 
@@ -309,7 +316,7 @@ template <typename T> struct is_empty
 
 } // namespace boost
 
-#endif // OBJECT_TYPE_TRAITS_HPP
+#endif // BOOST_OBJECT_TYPE_TRAITS_HPP
 
 
 
