@@ -14,8 +14,10 @@
 #include "boost/limits.hpp"
 #include "boost/config.hpp"
 
-// Codewarrior 8.3 for Windows fails without this
-#ifdef __MWERKS__
+#include "boost/detail/workaround.hpp"
+// Codewarrior 8.3 for Win fails without this.
+// Thanks Howard Hinnant ;)
+#if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) // 8.x
 #pragma parse_func_templ off
 #endif
 
