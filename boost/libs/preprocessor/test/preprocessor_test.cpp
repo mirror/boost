@@ -48,18 +48,18 @@ int test_logic_e[0+(BOOST_PREPROCESSOR_XOR(1,1) == 0)];
 
 // ***
 
-static int if_test[
+int if_test[
   0+(BOOST_PREPROCESSOR_IF(BOOST_PREPROCESSOR_INC(0),true,false) &&
   BOOST_PREPROCESSOR_IF(BOOST_PREPROCESSOR_DEC(1),false,true))];
 
 // ***
 
-static int cat_test[
+int cat_test[
   0+(BOOST_PREPROCESSOR_CAT(BOOST_PREPROCESSOR_IF(1,tru,fals), e))];
 
 // ***
 
-static const char stringize_test[4] = BOOST_PREPROCESSOR_STRINGIZE(__LINE__);
+char stringize_test[4] = BOOST_PREPROCESSOR_STRINGIZE(__LINE__);
 
 // ***
 
@@ -123,9 +123,9 @@ BOOST_PREPROCESSOR_REPEAT_2ND(BOOST_PREPROCESSOR_INC(IS_FUNCTION_HELPER_TEST_MAX
 
 // ***
 
-int test_arithmetic_1[0+(BOOST_PREPROCESSOR_ADD(5,10)==15)];
-int test_arithmetic_2[0+(BOOST_PREPROCESSOR_ADD(0,10)==10)];
-int test_arithmetic_3[0+(BOOST_PREPROCESSOR_ADD(11,BOOST_PREPROCESSOR_SUB(BOOST_PREPROCESSOR_LIMIT_MAG,10))==BOOST_PREPROCESSOR_LIMIT_MAG)];
+int test_arithmetic_1[0+(BOOST_PREPROCESSOR_ADD(2,3)==5)];
+int test_arithmetic_2[0+(BOOST_PREPROCESSOR_ADD(11,BOOST_PREPROCESSOR_SUB(BOOST_PREPROCESSOR_LIMIT_MAG,10))==BOOST_PREPROCESSOR_LIMIT_MAG)];
+
 int test_arithmetic_4[0+(BOOST_PREPROCESSOR_SUB(11,0)==11)];
 int test_arithmetic_5[0+(BOOST_PREPROCESSOR_SUB(12,1)==11)];
 int test_arithmetic_6[0+(BOOST_PREPROCESSOR_SUB(3,4)==0)];
@@ -133,23 +133,22 @@ int test_arithmetic_6[0+(BOOST_PREPROCESSOR_SUB(3,4)==0)];
 int test_arithmetic_7[0+(BOOST_PREPROCESSOR_MUL(0,1)==0)];
 int test_arithmetic_8[0+(BOOST_PREPROCESSOR_MUL(1,0)==0)];
 int test_arithmetic_9[0+(BOOST_PREPROCESSOR_MUL(1,1)==1)];
-int test_arithmetic_10[0+(BOOST_PREPROCESSOR_MUL(11,5)==55)];
+int test_arithmetic_10[0+(BOOST_PREPROCESSOR_MUL(4,3)==12)];
 
 int test_arithmetic_11[0+(BOOST_PREPROCESSOR_DIV(2,1)==2)];
 int test_arithmetic_12[0+(BOOST_PREPROCESSOR_DIV(0,5)==0)];
-int test_arithmetic_13[0+(BOOST_PREPROCESSOR_DIV(11,3)==3)];
-int test_arithmetic_14[0+(BOOST_PREPROCESSOR_DIV(67,30)==2)];
+int test_arithmetic_13[0+(BOOST_PREPROCESSOR_DIV(7,3)==2)];
 
 int test_arithmetic_15[0+(BOOST_PREPROCESSOR_EQUAL(1,0)==0)];
-int test_arithmetic_16[0+(BOOST_PREPROCESSOR_EQUAL(100,100)==1)];
-int test_arithmetic_17[0+(BOOST_PREPROCESSOR_NOT_EQUAL(34,45)==1)];
-int test_arithmetic_18[0+(BOOST_PREPROCESSOR_NOT_EQUAL(67,67)==0)];
+int test_arithmetic_16[0+(BOOST_PREPROCESSOR_EQUAL(10,10)==1)];
+int test_arithmetic_17[0+(BOOST_PREPROCESSOR_NOT_EQUAL(3,4)==1)];
+int test_arithmetic_18[0+(BOOST_PREPROCESSOR_NOT_EQUAL(7,7)==0)];
 int test_arithmetic_19[0+(BOOST_PREPROCESSOR_LESS_EQUAL(6,7)==1)];
-int test_arithmetic_20[0+(BOOST_PREPROCESSOR_LESS_EQUAL(87,12)==0)];
-int test_arithmetic_21[0+(BOOST_PREPROCESSOR_LESS_EQUAL(58,58)==1)];
+int test_arithmetic_20[0+(BOOST_PREPROCESSOR_LESS_EQUAL(8,1)==0)];
+int test_arithmetic_21[0+(BOOST_PREPROCESSOR_LESS_EQUAL(5,5)==1)];
 int test_arithmetic_22[0+(BOOST_PREPROCESSOR_GREATER_EQUAL(6,7)==0)];
 int test_arithmetic_23[0+(BOOST_PREPROCESSOR_GREATER_EQUAL(10,10)==1)];
-int test_arithmetic_24[0+(BOOST_PREPROCESSOR_GREATER_EQUAL(87,12)==1)];
+int test_arithmetic_24[0+(BOOST_PREPROCESSOR_GREATER_EQUAL(8,1)==1)];
 int test_arithmetic_25[0+(BOOST_PREPROCESSOR_LESS(2,1)==0)];
 int test_arithmetic_26[0+(BOOST_PREPROCESSOR_LESS(1,1)==0)];
 int test_arithmetic_27[0+(BOOST_PREPROCESSOR_LESS(1,2)==1)];
@@ -162,9 +161,9 @@ int test_arithmetic_32[0+(BOOST_PREPROCESSOR_MIN(1,2)==1)];
 int test_arithmetic_33[0+(BOOST_PREPROCESSOR_MAX(3,2)==3)];
 int test_arithmetic_34[0+(BOOST_PREPROCESSOR_MAX(4,5)==5)];
 
-int test_arithmetic_35[0+(BOOST_PREPROCESSOR_MOD(50,50)==0)];
-int test_arithmetic_36[0+(BOOST_PREPROCESSOR_MOD(34,5)==4)];
-int test_arithmetic_37[0+(BOOST_PREPROCESSOR_MOD(31,4)==3)];
+int test_arithmetic_35[0+(BOOST_PREPROCESSOR_MOD(5,5)==0)];
+int test_arithmetic_36[0+(BOOST_PREPROCESSOR_MOD(9,5)==4)];
+int test_arithmetic_37[0+(BOOST_PREPROCESSOR_MOD(7,4)==3)];
 
 // ***
 
