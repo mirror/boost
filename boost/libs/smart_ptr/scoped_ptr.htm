@@ -22,9 +22,9 @@
 		<p>Because <b>scoped_ptr</b> is simple, in its usual implementation every operation 
 			is as fast as for a built-in pointer and it has no more space overhead that a 
 			built-in pointer.</p>
-		<p><STRONG>scoped_ptr</STRONG> cannot be used in C++ Standard Library 
-			containers. Use <a href="shared_ptr.htm"><b>shared_ptr</b></a> if you need 
-			a smart pointer that can.</p>
+		<p><STRONG>scoped_ptr</STRONG> cannot be used in C++ Standard Library containers. 
+			Use <a href="shared_ptr.htm"><b>shared_ptr</b></a> if you need a smart pointer 
+			that can.</p>
 		<p><STRONG>scoped_ptr</STRONG> cannot correctly hold a pointer to a dynamically 
 			allocated array. See <a href="scoped_array.htm"><b>scoped_array</b></a> for 
 			that usage.</p>
@@ -160,10 +160,10 @@ Buckle my shoe</pre>
 		<p><b>Q</b>. Why doesn't <b>scoped_ptr</b> have a release() member?<br>
 			<b>A</b>. When reading source code, it is valuable to be able to draw 
 			conclusions about program behavior based on the types being used. If <STRONG>scoped_ptr</STRONG>
-			had a release() member, it would become possible to transfer ownership out of 
-			its scope, weakening its role as a way of limiting resource lifetime to a given 
-			scope. Use <STRONG>std::auto_ptr</STRONG> where transfer of ownership is 
-			required. (supplied by Dave Abrahams)</p>
+			had a release() member, it would become possible to transfer ownership of the 
+			held pointer, weakening its role as a way of limiting resource lifetime to a 
+			given context. Use <STRONG>std::auto_ptr</STRONG> where transfer of ownership 
+			is required. (supplied by Dave Abrahams)</p>
 		<hr>
 		<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->
 			17 September 2002<!--webbot bot="Timestamp" endspan i-checksum="15110" --></p>
