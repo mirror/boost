@@ -70,12 +70,24 @@ int main()
 
   // compilers
 
+#   ifdef __COMO__
+        cout << "__COMO__ defined as " << __COMO__ << "\n";
+#   endif
+
+#   ifdef __COMO_VERSION__
+        cout << "__COMO_VERSION__ defined as " << __COMO_VERSION__ << "\n";
+#   endif
+
 #   ifdef __GNUC__
         cout << "__GNUC__ defined as " << __GNUC__ << "\n";
 #   endif
 
 #   ifdef __GNUC_MINOR__
         cout << "__GNUC_MINOR__ defined as " << __GNUC_MINOR__ << "\n";
+#   endif
+
+#   ifdef __EDG__
+        cout << "__EDG__ defined as " << __EDG__ << "\n";
 #   endif
 
 #   ifdef __EDG_VERSION__
