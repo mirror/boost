@@ -45,13 +45,10 @@ main()
         nano_res::to_tick_count(0,0,0,1) == 1);
   check("nano tick calculations",  
         nano_res::to_tick_count(0,0,1,1) == 1000000001);
-#if ((defined(__GNUC__) && (__GNUC__ < 3)) || defined(__IBMCPP__))
+  boost::int64_t one_minute_nano = 60*1000*1000;
+  one_minute_nano = one_minute_nano*1000;
   check("nano tick calculations",  
-        nano_res::to_tick_count(0,1,0,0) == 60000000000LL);
-#else
-  check("nano tick calculations",  
-        nano_res::to_tick_count(0,1,0,0) == 60000000000);
-#endif
+        nano_res::to_tick_count(0,1,0,0) == one_minute_nano);
 
   //skip io on VC6 b/c of lack of operator<< for int64
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
