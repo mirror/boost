@@ -32,12 +32,12 @@ element is skipped over.
 
 <pre>
 namespace boost {
-  template &lt;class Predicate, class Iterator, ...&gt;
+  template &lt;class Predicate, class BaseIterator, ...&gt;
   class filter_iterator_generator;
 
-  template &lt;class Predicate, class Iterator&gt;
-  typename filter_iterator_generator&lt;Predicate, Iterator&gt;::type
-  make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate());
+  template &lt;class Predicate, class BaseIterator&gt;
+  typename filter_iterator_generator&lt;Predicate, BaseIterator&gt;::type
+  make_filter_iterator(BaseIterator first, BaseIterator last, const Predicate& p = Predicate());
 }
 </pre>
 
@@ -48,25 +48,20 @@ Generator</a></h2>
 The class <tt>filter_iterator_generator</tt> is a helper class who's
 purpose is to construct a filter iterator adaptor type.  The template
 parameters for this class are the <tt>Predicate</tt> function object
-type and the <tt>Iterator</tt> type that is being wrapped.  In most
+type and the <tt>BaseIterator</tt> type that is being wrapped.  In most
 cases the associated types for the wrapped iterator can be deduced
 from <tt>std::iterator_traits</tt>, but in some situations the user
 may want to override these types, so there are also template
 parameters for each of the iterator's associated types.
 
 <pre>
-template &lt;class Predicate, 
-          class Iterator,
-          class Value = std::iterator_traits&lt;Iterator&gt;::value_type,
-          class Pointer = std::iterator_traits&lt;Iterator&gt;::pointer,
-          class Reference = std::iterator_traits&lt;Iterator&gt;::reference,
-          class Category = std::iterator_traits&lt;Iterator&gt;::iterator_category,
-          class Distance = std::iterator_traits&lt;Iterator&gt;::difference_type,
+template &lt;class Predicate, class BaseIterator,
+          class Value, class Pointer, class Reference, class Category, class Distance>
 class filter_iterator_generator
 {
 public:
-  typedef ... type;          // the filter <a href="./iterator_adaptor.htm"><tt>iterator_adaptor</tt></a> type
-  typedef ... policies_type; // the filter policies type
+  typedef ... type;          // the resulting filter <a href="./iterator_adaptor.htm"><tt>iterator_adaptor</tt></a> type
+  typedef ... policies_type; // the policies type for the iterator adaptor
 }
 </pre>
 
@@ -113,48 +108,57 @@ The output is:
 </TR>
 
 <TR>
-<TD><tt>Iterator</tt></TD>
+<TD><tt>BaseIterator</tt></TD>
 <TD>The iterator type being wrapped. This type must at least be a model
  of the <a href="http://www.sgi.com/tech/stl/InputIterator">InputIterator</a> concept.</TD>
 </TR>
 
 <TR>
 <TD><tt>Value</tt></TD>
-<TD>The <tt>value_type</tt> for the iterator adaptor. Typically the default for
-this parameter is the appropriate type<a href="#1">[1]</a>.<br>
-<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::value_type</TD>
+<TD>The <tt>value_type</tt> of the resulting iterator,
+unless const. If const, a conforming compiler strips constness for the
+<tt>value_type</tt>. Typically the default for this parameter is the
+appropriate type<a href="#1">[1]</a>.<br> <b>Default:</b>
+<tt>std::iterator_traits&lt;BaseIterator&gt;::value_type</TD>
 </TR>
 
 <TR>
 <TD><tt>Pointer</tt></TD>
-<TD>The <tt>pointer</tt> type for the iterator adaptor. Typically the default for
+<TD>The <tt>pointer</tt> type of the resulting iterator, and in
+ particular, the result type of operator->(). 
+ Typically the default for
 this parameter is the appropriate type.<br>
-<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::pointer</TD>
+<b>Default:</b> If <tt>Value</tt> was supplied, then <tt>Value*</tt>,
+otherwise <tt>std::iterator_traits&lt;BaseIterator&gt;::pointer</tt>.</TD>
 </TR>
 
 <TR>
 <TD><tt>Reference</tt></TD>
-<TD>The <tt>reference</tt> type for the iterator adaptor. Typically the default for
-this parameter is the appropriate type.<br>
-<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::reference</TD>
+
+<TD>The <tt>reference</tt> type of the resulting iterator, and in
+particular, the result type of operator*(). Typically the default for
+this parameter is the appropriate type.<br> <b>Default:</b> If
+<tt>Value</tt> is supplied, <tt>Value&amp;</tt> is used. Otherwise
+<tt>std::iterator_traits&lt;BaseIterator&gt;::reference</tt> is
+used.</TD>
 </TR>
 
 <TR>
 <TD><tt>Category</tt></TD>
 
-<TD>The <tt>iterator_category</tt> type for the iterator adaptor.
+<TD>The <tt>iterator_category</tt> type for the resulting iterator.
 Typically the
 default for this parameter is the appropriate type. If you override
 this parameter, do not use <tt>bidirectional_iterator_tag</tt>
 because filter iterators can not go in reverse.<br>
-<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::iterator_category</TD>
+<b>Default:</b> <tt>std::iterator_traits&lt;BaseIterator&gt;::iterator_category</tt></TD>
 </TR>
 
 <TR>
 <TD><tt>Distance</tt></TD>
-<TD>The <tt>difference_type</tt> for the iterator adaptor. Typically the default for
+<TD>The <tt>difference_type</tt> for the resulting iterator. Typically the default for
 this parameter is the appropriate type.<br>
-<b>Default:</b> <tt>std::iterator_traits&lt;Iterator&gt;::difference_type</TD>
+<b>Default:</b> <tt>std::iterator_traits&lt;BaseIterator&gt;::difference_type</TD>
 </TR>
 
 </table>
@@ -176,9 +180,9 @@ depending on the adapted iterator type.
 <h2><a name="make_filter_iterator">The Make Filter Iterator Function</a></h2>
 
 <pre>
-template &lt;class Predicate, class Iterator&gt;
-typename detail::filter_generator&lt;Predicate, Iterator&gt;::type
-make_filter_iterator(Iterator first, Iterator last, const Predicate& p = Predicate())
+template &lt;class Predicate, class BaseIterator&gt;
+typename detail::filter_generator&lt;Predicate, BaseIterator&gt;::type
+make_filter_iterator(BaseIterator first, BaseIterator last, const Predicate& p = Predicate())
 </pre>
 
 This function provides a convenient way to create filter iterators.
