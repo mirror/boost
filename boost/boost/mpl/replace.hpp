@@ -20,10 +20,13 @@
 #include "boost/mpl/replace_if.hpp"
 #include "boost/mpl/protect.hpp"
 #include "boost/mpl/same_as.hpp"
+#include "boost/mpl/aux_/common_name_wknd.hpp"
 #include "boost/mpl/aux_/void_spec.hpp"
 
 namespace boost {
 namespace mpl {
+
+BOOST_MPL_AUX_COMMON_NAME_WKND(replace)
 
 BOOST_MPL_AUX_AGLORITHM_NAMESPACE_BEGIN
 
