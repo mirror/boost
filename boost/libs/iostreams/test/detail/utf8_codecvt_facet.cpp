@@ -131,12 +131,14 @@ std::codecvt_base::result utf8_codecvt_facet_wchar_t::do_out(
 
     while (from != from_end && to != to_end) {
 
+#define BOOST_NULL // Prevent macro expansion
         // Check for invalid UCS-4 character
-        if (*from  > std::numeric_limits<wchar_t>::max()) {
+        if (*from  > std::numeric_limits<wchar_t>::max BOOST_NULL ()) {
             from_next = from;
             to_next = to;
             return std::codecvt_base::error;
         }
+#undef BOOST_NULL
 
         int cont_octet_count = get_cont_octet_out_count(*from);
 
