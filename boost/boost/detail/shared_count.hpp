@@ -41,9 +41,6 @@ public:
     }
 };
 
-namespace detail
-{
-
 class counted_base
 {
 public:
@@ -77,7 +74,7 @@ public:
 #ifdef BOOST_HAS_THREADS
         lightweight_mutex::scoped_lock lock(mtx_);
 #endif
-        if(use_count_ == 0) throw use_count_is_zero();
+        if(use_count_ == 0 && weak_count_ != 0) throw use_count_is_zero();
         ++use_count_;
         ++weak_count_;
     }
@@ -161,6 +158,19 @@ private:
     void (*self_deleter_) (counted_base *);
 };
 
+inline void intrusive_ptr_add_ref(counted_base * p)
+{
+    if(p != 0) p->add_ref();
+}
+
+inline void intrusive_ptr_release(counted_base * p)
+{
+    if(p != 0) p->release();
+}
+
+namespace detail
+{
+
 template<class P, class D> class counted_base_impl: public counted_base
 {
 private:
@@ -200,6 +210,11 @@ public:
 
     shared_count(): pi_(new counted_base(1, 1))
     {
+    }
+
+    explicit shared_count(counted_base * pi): pi_(pi) // never throws
+    {
+        pi_->add_ref();
     }
 
     template<class P, class D> shared_count(P p, D d): pi_(0)

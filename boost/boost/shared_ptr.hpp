@@ -68,6 +68,7 @@ template<> struct shared_ptr_traits<void>
 //
 
 template<typename T> class weak_ptr;
+template<typename T> class intrusive_ptr;
 
 template<typename T> class shared_ptr
 {
@@ -107,6 +108,11 @@ public:
 
     template<typename Y>
     shared_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+    {
+    }
+
+    template<typename Y>
+    shared_ptr(intrusive_ptr<Y> const & r): px(r.get()), pn(r.get()) // never throws
     {
     }
 
