@@ -1,6 +1,4 @@
 //File: varout.h
-
-
 #ifndef _VAROUTH_INC_
 #define _VAROUTH_INC_
 
@@ -18,19 +16,17 @@ struct to_text : boost::static_visitor<std::string>
       
       return ost.str();
    }
-
-}; //to_text
+};
 
 
 template<typename T0, typename T1, typename T2, typename T3>
-std::ostream& operator<<(std::ostream& out, 
-   const boost::variant<T0, T1, T2, T3>& a)
+inline std::ostream& operator<<(
+      std::ostream& out
+    , const boost::variant<T0, T1, T2, T3>& a
+    )
 {
    out << boost::apply_visitor(to_text(), a);
    return out;
 }
 
-
-
 #endif //_VAROUTH_INC_
-
