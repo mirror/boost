@@ -20,16 +20,21 @@
 //
 //     (BOOST_MSVC) != 0 && (BOOST_MSVC) <= 1200
 //
-// When used for workarounds on the latest known version of a
-// compiler, the following convention should be observed:
+// When used for workarounds that apply to the latest known version 
+// and all earlier versions of a compiler, the following convention 
+// should be observed:
 //
 //     #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1301))
 //
 // The version number in this case corresponds to the last version in
-// which the workaround was known to have been required.  It only has
-// value as a comment unless BOOST_DETECT_OUTDATED_WORKAROUNDS is
-// defined, in which case a compiler warning or error will be issued
-// when the compiler version exceeds the argument to BOOST_TESTED_AT
+// which the workaround was known to have been required. When
+// BOOST_DETECT_OUTDATED_WORKAROUNDS is not the defined, the macro
+// BOOST_TESTED_AT(x) expands to "!= 0", which effectively activates
+// the workaround for any version of the compiler. When
+// BOOST_DETECT_OUTDATED_WORKAROUNDS is defined, a compiler warning or
+// error will be issued if the compiler version exceeds the argument
+// to BOOST_TESTED_AT().  This can be used to locate workarounds which
+// may be obsoleted by newer versions.
 
 # ifndef BOOST_STRICT_CONFIG
 
@@ -48,9 +53,9 @@
 // When "test" is BOOST_TESTED_AT(x) and
 // BOOST_DETECT_OUTDATED_WORKAROUNDS is #defined,
 //
-//      symbol test              =>   1 if symbol <= x, -1 otherwise
-//      (symbol test) + 1        =>   2 if symbol <= x, 0 otherwise
-//      1 % ((symbol test) + 1)  =>   1 if symbol <= x, zero divide otherwise
+//      symbol test              =>   if symbol <= x then 1 else -1
+//      (symbol test) + 1        =>   if symbol <= x then 2 else 0
+//      1 % ((symbol test) + 1)  =>   if symbol <= x then 1 else divide-by-zero
 //
 
 #  ifdef BOOST_DETECT_OUTDATED_WORKAROUNDS
