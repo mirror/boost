@@ -29,6 +29,7 @@
                          // and gives using for string and path.
 #include "copyright_check.hpp"
 #include "crlf_check.hpp"
+#include "license_check.hpp"
 #include "link_check.hpp"
 #include "long_name_check.hpp"
 #include "tab_check.hpp"
@@ -320,6 +321,7 @@ int cpp_main( int argc, char * argv[] )
 
   inspector_list inspectors;
 
+  inspectors.push_back( inspector_element( new boost::inspect::license_check ) );
   inspectors.push_back( inspector_element( new boost::inspect::copyright_check ) );
   inspectors.push_back( inspector_element( new boost::inspect::crlf_check ) );
   inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
