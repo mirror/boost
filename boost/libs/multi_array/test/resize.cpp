@@ -2,6 +2,7 @@
 // resize.cpp - Test of resizing multi_arrays
 //
 
+#include "boost/test/test_tools.hpp"
 #include "boost/multi_array.hpp"
 #include <iostream>
 using namespace std;
@@ -64,12 +65,13 @@ int main() {
     0,0
   };
 
-  assert(std::equal(A_resize,A_resize+(4*3*2),A.data()));
+  BOOST_TEST(std::equal(A_resize,A_resize+(4*3*2),A.data()));
 
 
   {
     marray defaultA;
     defaultA.resize(boost::extents[2][3][4]);
-    assert(std::accumulate(defaultA.data(),defaultA.data()+(2*3*4),0) == 0);
+    BOOST_TEST(std::accumulate(defaultA.data(),
+                               defaultA.data()+(2*3*4),0) == 0);
   }
 }
