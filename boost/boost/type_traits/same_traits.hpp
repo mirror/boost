@@ -8,6 +8,9 @@
 //
 //  defines is_same:
 
+// Revision History
+// 19 Feb 2001 Fixed for MSVC (David Abrahams)
+
 #ifndef BOOST_SAME_TRAITS_HPP
 #define BOOST_SAME_TRAITS_HPP
 
@@ -53,7 +56,9 @@ struct is_same_part_1 {
 } // namespace detail
 
 template<class T1, class T2>
-struct is_same : detail::is_same_part_1<T1>::template part_2<T2> {};
+struct is_same {
+    enum { value = detail::is_same_part_1<T1>::template part_2<T2>::value };
+};
 
 #else // BOOST_MSVC
 
