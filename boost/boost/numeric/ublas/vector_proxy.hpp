@@ -51,7 +51,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_range<size_type, difference_type> range_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        //typedef typename V::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -534,7 +533,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_slice<size_type, difference_type> slice_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename V::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -626,7 +624,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_slice &operator = (const vector_slice &vs) {
             // ISSUE need a temporary, proxy can be overlaping alias
-            vector_assign<scalar_assign> (*this, vector_temporary_type (vs));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<V>::type (vs));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -638,7 +636,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator = (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<V>::type (ae));
             return *this;
         }
         template<class AE>
@@ -650,7 +648,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator += (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (*this + ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<V>::type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -662,7 +660,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         vector_slice &operator -= (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (*this - ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<V>::type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1004,6 +1002,11 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #endif
 
+    /// Specialization of temporary_traits
+    template <class V>
+    struct vector_temporary_traits< vector_slice<V> >
+    : vector_temporary_traits< V > {} ;
+
     // Vector based indirection class
     // Contributed by Toon Knapen.
     // Extended and optimized by Kresimir Fresl.
@@ -1034,7 +1037,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_slice<size_type, difference_type> slice_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        //typedef typename V::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename V::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -1511,6 +1513,11 @@ return true;
     const vector_indirect<V, indirect_array<A> > project (const vector_indirect<V, indirect_array<A> > &data, const indirect_array<A> &ia) {
         return data.project (ia);
     }
+
+    /// Specialization of temporary_traits
+    template <class V>
+    struct vector_temporary_traits< vector_indirect<V> >
+    : vector_temporary_traits< V > {} ;
 
 }}}
 

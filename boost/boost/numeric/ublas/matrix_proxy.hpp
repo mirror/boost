@@ -48,7 +48,6 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        //typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef abstract_tag simd_category;
@@ -506,7 +505,6 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        //typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef abstract_tag simd_category;
@@ -964,7 +962,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_range<size_type, difference_type> range_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef abstract_tag simd_category;
@@ -1041,7 +1038,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator = (const matrix_vector_range &mvr) {
             // ISSUE need a temporary, proxy can be overlaping alias
-            vector_assign<scalar_assign> (*this, vector_temporary_type (mvr));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (mvr));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1053,7 +1050,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator = (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (ae));
             return *this;
         }
         template<class AE>
@@ -1065,7 +1062,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator += (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (*this + ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -1077,7 +1074,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator -= (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (*this - ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1386,6 +1383,11 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     typename matrix_vector_range<M>::matrix_type matrix_vector_range<M>::nil_;
 
+    // Specialize temporary
+    template <class M>
+    struct vector_temporary_traits< matrix_vector_range<M> >
+    : vector_temporary_traits< M > {} ;
+
     // Matrix based vector slice class
     template<class M>
     class matrix_vector_slice:
@@ -1411,7 +1413,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_slice<size_type, difference_type> slice_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef abstract_tag simd_category;
@@ -1495,7 +1496,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator = (const matrix_vector_slice &mvs) {
             // ISSUE need a temporary, proxy can be overlaping alias
-            vector_assign<scalar_assign> (*this, vector_temporary_type (mvs));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (mvs));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1507,7 +1508,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator = (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (ae));
             return *this;
         }
         template<class AE>
@@ -1519,7 +1520,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator += (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (*this + ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -1531,7 +1532,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator -= (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (*this - ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1842,6 +1843,11 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M>
     typename matrix_vector_slice<M>::matrix_type matrix_vector_slice<M>::nil_;
 
+    // Specialize temporary
+    template <class M>
+    struct vector_temporary_traits< matrix_vector_slice<M> >
+    : vector_temporary_traits< M > {} ;
+
     // Matrix based vector indirection class
     template<class M, class IA>
     class matrix_vector_indirect:
@@ -1866,7 +1872,6 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -1949,7 +1954,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator = (const matrix_vector_indirect &mvi) {
             // ISSUE need a temporary, proxy can be overlaping alias
-            vector_assign<scalar_assign> (*this, vector_temporary_type (mvi));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (mvi));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1961,7 +1966,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator = (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (ae));
             return *this;
         }
         template<class AE>
@@ -1973,7 +1978,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator += (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (*this + ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -1985,7 +1990,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator -= (const vector_expression<AE> &ae) {
-            vector_assign<scalar_assign> (*this, vector_temporary_type (*this - ae));
+            vector_assign<scalar_assign> (*this, typename vector_temporary_traits<M>::type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -2296,6 +2301,11 @@ namespace boost { namespace numeric { namespace ublas {
     template<class M, class IA>
     typename matrix_vector_indirect<M, IA>::matrix_type matrix_vector_indirect<M, IA>::nil_;
 
+    // Specialize temporary
+    template <class M, class IA>
+    struct vector_temporary_traits< matrix_vector_indirect<M,IA> >
+    : vector_temporary_traits< M > {} ;
+
     // Matrix based range class
     template<class M>
     class matrix_range:
@@ -2320,8 +2330,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_range<size_type, difference_type> range_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        //typedef typename M::vector_temporary_type vector_temporary_type;
-        //typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -3196,8 +3204,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_slice<size_type, difference_type> slice_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        //typedef typename M::vector_temporary_type vector_temporary_type;
-        //typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -4109,8 +4115,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef basic_slice<size_type, difference_type> slice_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
-        //typedef typename M::vector_temporary_type vector_temporary_type;
-        //typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
