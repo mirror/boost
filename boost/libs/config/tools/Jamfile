@@ -1,0 +1,11 @@
+# Copyright John Maddock.
+
+subproject libs/config/tools ;
+# bring in the rules for testing
+import testing  ;
+
+run generate.cpp 
+   <lib>../../regex/build/boost_regex 
+   <lib>../../filesystem/build/boost_filesystem
+   : : $(BOOST_ROOT)  ;
+

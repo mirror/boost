@@ -20,8 +20,8 @@ int test()
 {
    int i = 0;
    int j = 2;
-   if(std::min(i,j) != 0) return -1;
-   if(std::max(i,j) != 2) return -1;
+   if((std::min)(i,j) != 0) return -1;
+   if((std::max)(i,j) != 2) return -1;
 
    return 0;
 }

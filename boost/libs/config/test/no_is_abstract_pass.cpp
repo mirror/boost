@@ -7,10 +7,10 @@
 
 //  See http://www.boost.org/libs/config for the most recent version.
 
-// Test file for macro BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+// Test file for macro BOOST_NO_IS_ABSTRACT
 // This file should compile, if it does not then
-// BOOST_NO_FUNCTION_TEMPLATE_ORDERING should be defined.
-// See file boost_no_func_tmp_order.ipp for details
+// BOOST_NO_IS_ABSTRACT should be defined.
+// See file boost_no_is_abstract.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -21,14 +21,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-#include "boost_no_func_tmp_order.ipp"
+#ifndef BOOST_NO_IS_ABSTRACT
+#include "boost_no_is_abstract.ipp"
 #else
-namespace boost_no_function_template_ordering = empty_boost;
+namespace boost_no_is_abstract = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_function_template_ordering::test();
+   return boost_no_is_abstract::test();
 }
 

@@ -557,6 +557,14 @@ f(&amp;bar); // should choose #2.</pre>
                whether it is appropriate to explicitly specialize a template on wchar_t if 
                there is already a specialization for other integer types.</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="51%">BOOST_NO_IS_ABSTRACT</TD>
+            <TD vAlign="top" width="16%">Compiler</TD>
+            <TD vAlign="top" width="33%">The C++ compiler does not support SFINAE with 
+               abstract types, this is covered by <A href="http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_defects.html#337">
+                  Core Language DR337</A>, but is not part of the current standard.&nbsp; 
+               Fortunately most compilers that support SFINAE also support this DR.</TD>
+         </TR>
          <tr>
             <td valign="top" width="51%">BOOST_NO_LIMITS</td>
             <td valign="top" width="16%">Standard library</td>
