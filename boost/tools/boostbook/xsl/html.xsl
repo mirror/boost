@@ -127,22 +127,27 @@
     <table width="100%">
       <tr>
         <td align="left">
-          <small>
-            <xsl:variable name="revision-nodes" 
-              select="ancestor-or-self::*
-                        [not (attribute::rev:last-revision='')]"/>
-            <xsl:if test="count($revision-nodes)">
-              <xsl:variable name="revision-node"
-                select="$revision-nodes[last()]"/>
-              <p>
-                <xsl:text>Last revised: </xsl:text>
-                <xsl:call-template name="format.cvs.revision">
-                  <xsl:with-param name="text"
-                  select="string($revision-node/attribute::rev:last-revision)"/>
-                </xsl:call-template>
-	      </p>
+          <xsl:variable name="revision-nodes" 
+            select="ancestor-or-self::*
+                    [not (attribute::rev:last-revision='')]"/>
+          <xsl:if test="count($revision-nodes) &gt; 0">
+            <xsl:variable name="revision-node"
+              select="$revision-nodes[last()]"/>
+            <xsl:variable name="revision-text">
+              <xsl:value-of 
+                select="normalize-space($revision-node/attribute::rev:last-revision)"/>
+            </xsl:variable>
+            <xsl:if test="string-length($revision-text) &gt; 0">
+              <small>
+                <p>
+                  <xsl:text>Last revised: </xsl:text>
+                  <xsl:call-template name="format.cvs.revision">
+                    <xsl:with-param name="text" select="$revision-text"/>
+                  </xsl:call-template>
+                </p>
+              </small>
             </xsl:if>
-          </small>
+          </xsl:if>
         </td>
         <td align="right">
           <small>
