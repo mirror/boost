@@ -11,22 +11,27 @@
 import testing ;
 
 project
-    : source-location $(BOOST_ROOT) ;
-
+    : source-location .
+    : requirements
+        <hardcode-dll-paths>true
+        <library>../../test/build//boost_test_exec_monitor
+        <library>../build//boost_signals
+        <define>BOOST_SIGNALS_STATIC_LINK
+    ;
 {
   test-suite signals
     : 
-  [ run libs/signals/test/dead_slot_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run dead_slot_test.cpp  ]
 
-  [ run libs/signals/test/deletion_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run deletion_test.cpp   ]
 
-  [ run libs/signals/test/ordering_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run ordering_test.cpp   ]
 
-  [ run libs/signals/test/signal_n_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run signal_n_test.cpp   ]
 
-  [ run libs/signals/test/signal_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run signal_test.cpp     ]
 
-  [ run libs/signals/test/trackable_test.cpp ../../../libs/test/build//boost_test_exec_monitor ../../../libs/signals/build//boost_signals :  :  : <define>BOOST_SIGNALS_STATIC_LINK :  ]
+  [ run trackable_test.cpp  ]
  ;
 }
       
