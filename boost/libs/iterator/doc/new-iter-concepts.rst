@@ -6,7 +6,7 @@
 :Contact: dave@boost-consulting.com, jsiek@osl.iu.edu, witt@acm.org
 :organization: `Boost Consulting`_, Indiana University `Open Systems Lab`_, University of Hanover `Institute for Transport Railway Operation and Construction`_
 :date: $Date$
-:Number: **This document is a revised version of the official** N1477=03-0060 
+:Number: N1531=03-0114 
 :copyright: Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
@@ -18,11 +18,12 @@
            concepts to more closely match the requirements
            of algorithms and provides better categorizations
            of iterators that are used in practice. This proposal
-           is a revision of paper n1297_.
+           is a revision of paper n1297_ and n1477_.
           
 .. contents:: Table of Contents
 
 .. _n1297: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2001/n1297.html
+.. _n1477: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1477.html
 
 ============
  Motivation
@@ -144,7 +145,7 @@ Forward Iterator -> Forward Traversal Iterator and Readable Iterator
   lower_bound, upper_bound, equal_range, binary_search,
   min_element, max_element``
 
-Forward Iterator (1) -> Single Pass Iterator and Readable Iterator
+Forward Iterator (1) -> Single Pass Iterator and Readable Iterator,
 Forward Iterator (2) -> Forward Traversal Iterator and Readable Iterator
 
   ``find_first_of``
@@ -161,7 +162,7 @@ Forward Iterator -> Forward Traversal Iterator and Swappable Iterator
 
   ``rotate``
 
-Forward Iterator (1) -> Swappable Iterator and Single Pass Iterator
+Forward Iterator (1) -> Swappable Iterator and Single Pass Iterator,
 Forward Iterator (2) -> Swappable Iterator and  Incrementable Iterator
 
   ``swap_ranges``
@@ -244,34 +245,34 @@ given in the following diagram.
 
 .. image:: oldeqnew.png
 
-As in the existing library, we provide tags for purposes of
-dispatching. There are two hierarchies of tags, one for the access
-concepts and one for the traversal concepts. The tags are related via
+Like the old iterator requirements, we provide tags for purposes of
+dispatching based on the traversal concepts.  The tags are related via
 inheritance so that a tag is convertible to another tag if the concept
 associated with the first tag is a refinement of the second tag.
-There is not a tag for Lvalue Iterator because one can easily deduce
-whether an iterator is an Lvalue Iterator by checking whether
-``iterator_traits<Iterator>::reference`` is a real reference.
-
+Since the access concepts are not related via refinment, but instead
+cover orthogonal issues, we do not use tags for the access concepts,
+but instead use the equivalent of a bitfield.
 
 We provide an access mechanism for mapping iterator types to the new
-tags. Our design reuses ``iterator_traits<Iter>::iterator_category``
-as the access mechanism. To that end, a pair of access and
-traversal tags are combined into a single type using the following
-`iterator_tag` class.
+traversal tags and access bitfield. Our design reuses
+``iterator_traits<Iter>::iterator_category`` as the access
+mechanism. To that end, a pair of access and traversal tags are
+combined into a single type using the following `iterator_tag` class.
 
 ::
 
-  template <class AccessTag, class Reference, class TraversalTag>
-  struct iterator_tag : /* appropriate old category or categories */
-  {
-    typedef AccessTag access;
+  enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
+      swappable_iterator = 4, lvalue_iterator = 8 };
+
+  template <iterator_access x, class TraversalTag>
+  struct iterator_tag : /* appropriate old category or categories */ {
+    static const iterator_access access = x;
     typedef TraversalTag traversal;
   };
 
 The ``iterator_tag`` class template is derived from the appropriate
 iterator tag or tags from the old requirements based on the new-style
-tags passed as template parameters. The algorithm for determining the
+tags passed as template parameters.  The algorithm for determining the
 old tag or tags from the new tags picks the least-refined old concepts
 that include all of the requirements of the access and traversal
 concepts (that is, the closest fit), if any such category exists.  For
@@ -280,16 +281,22 @@ always be derived from ``input_iterator_tag``, while the category tag
 for a Single Pass Iterator that is both Readable and Writable will be
 derived from both ``input_iterator_tag`` and ``output_iterator_tag``.
 
-We also provide two helper classes that make it convenient to obtain
-the access and traversal tags of an iterator. These helper classes
-work both for iterators whose ``iterator_category`` is
+We also provide several helper classes that make it convenient to
+obtain the access and traversal characteristics of an iterator. These
+helper classes work both for iterators whose ``iterator_category`` is
 ``iterator_tag`` and also for iterators using the original iterator
 categories.
 
 ::
-
-  template <class Iterator> struct access_category { typedef ... type; };
+  template <class Iterator> struct is_readable  { typedef ... type; };
+  template <class Iterator> struct is_writable { typedef ... type; };
+  template <class Iterator> struct is_swappable { typedef ... type; };
   template <class Iterator> struct traversal_category { typedef ... type; };
+
+
+We do not include a helper class ``is_lvalue_iterator`` because that
+can easily be deduced by checking whether
+``iterator_traits<Iterator>::reference`` is a real reference.
 
 
 The most difficult design decision concerned the ``operator[]``. The

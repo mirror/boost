@@ -3,204 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.0: http://docutils.sourceforge.net/" />
 <title>New Iterator Concepts</title>
 <meta name="author" content="David Abrahams, Jeremy Siek, Thomas Witt" />
 <meta name="organization" content="Boost Consulting, Indiana University Open Systems Lab, University of Hanover Institute for Transport Railway Operation and Construction" />
 <meta name="date" content="2003-09-22" />
 <meta name="copyright" content="Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved" />
-<style type="text/css"><!--
-
-/*
-:Author: David Goodger
-:Contact: goodger@users.sourceforge.net
-:date: $Date$
-:version: $Revision$
-:copyright: This stylesheet has been placed in the public domain.
-
-Default cascading style sheet for the HTML output of Docutils.
-*/
-
-.first {
-  margin-top: 0 }
-
-.last {
-  margin-bottom: 0 }
-
-a.toc-backref {
-  text-decoration: none ;
-  color: black }
-
-dd {
-  margin-bottom: 0.5em }
-
-div.abstract {
-  margin: 2em 5em }
-
-div.abstract p.topic-title {
-  font-weight: bold ;
-  text-align: center }
-
-div.attention, div.caution, div.danger, div.error, div.hint,
-div.important, div.note, div.tip, div.warning {
-  margin: 2em ;
-  border: medium outset ;
-  padding: 1em }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title {
-  color: red ;
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.hint p.admonition-title, div.important p.admonition-title,
-div.note p.admonition-title, div.tip p.admonition-title {
-  font-weight: bold ;
-  font-family: sans-serif }
-
-div.dedication {
-  margin: 2em 5em ;
-  text-align: center ;
-  font-style: italic }
-
-div.dedication p.topic-title {
-  font-weight: bold ;
-  font-style: normal }
-
-div.figure {
-  margin-left: 2em }
-
-div.footer, div.header {
-  font-size: smaller }
-
-div.system-messages {
-  margin: 5em }
-
-div.system-messages h1 {
-  color: red }
-
-div.system-message {
-  border: medium outset ;
-  padding: 1em }
-
-div.system-message p.system-message-title {
-  color: red ;
-  font-weight: bold }
-
-div.topic {
-  margin: 2em }
-
-h1.title {
-  text-align: center }
-
-h2.subtitle {
-  text-align: center }
-
-hr {
-  width: 75% }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em }
-
-ol.arabic {
-  list-style: decimal }
-
-ol.loweralpha {
-  list-style: lower-alpha }
-
-ol.upperalpha {
-  list-style: upper-alpha }
-
-ol.lowerroman {
-  list-style: lower-roman }
-
-ol.upperroman {
-  list-style: upper-roman }
-
-p.caption {
-  font-style: italic }
-
-p.credits {
-  font-style: italic ;
-  font-size: smaller }
-
-p.label {
-  white-space: nowrap }
-
-p.topic-title {
-  font-weight: bold }
-
-pre.address {
-  margin-bottom: 0 ;
-  margin-top: 0 ;
-  font-family: serif ;
-  font-size: 100% }
-
-pre.line-block {
-  font-family: serif ;
-  font-size: 100% }
-
-pre.literal-block, pre.doctest-block {
-  margin-left: 2em ;
-  margin-right: 2em ;
-  background-color: #eeeeee }
-
-span.classifier {
-  font-family: sans-serif ;
-  font-style: oblique }
-
-span.classifier-delimiter {
-  font-family: sans-serif ;
-  font-weight: bold }
-
-span.interpreted {
-  font-family: sans-serif }
-
-span.option-argument {
-  font-style: italic }
-
-span.pre {
-  white-space: pre }
-
-span.problematic {
-  color: red }
-
-table {
-  margin-top: 0.5em ;
-  margin-bottom: 0.5em }
-
-table.citation {
-  border-left: solid thin gray ;
-  padding-left: 0.5ex }
-
-table.docinfo {
-  margin: 2em 4em }
-
-table.footnote {
-  border-left: solid thin black ;
-  padding-left: 0.5ex }
-
-td, th {
-  padding-left: 0.5em ;
-  padding-right: 0.5em ;
-  vertical-align: top }
-
-th.docinfo-name, th.field-name {
-  font-weight: bold ;
-  text-align: left ;
-  white-space: nowrap }
-
-h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt {
-  font-size: 100% }
-
-tt {
-  background-color: #eeeeee }
-
-ul.auto-toc {
-  list-style-type: none }
-
---></style>
+<link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="new-iterator-concepts">
@@ -217,7 +26,7 @@ ul.auto-toc {
 <td><a class="first reference" href="http://www.boost-consulting.com">Boost Consulting</a>, Indiana University <a class="reference" href="http://www.osl.iu.edu">Open Systems Lab</a>, University of Hanover <a class="last reference" href="http://www.ive.uni-hannover.de">Institute for Transport Railway Operation and Construction</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
 <td>2003-09-22</td></tr>
-<tr class="field"><th class="docinfo-name">Number:</th><td class="field-body"><strong>This document is a revised version of the official</strong> N1477=03-0060</td>
+<tr class="field"><th class="docinfo-name">Number:</th><td class="field-body">N1531=03-0114</td>
 </tr>
 <tr><th class="docinfo-name">Copyright:</th>
 <td>Copyright David Abrahams, Jeremy Siek, and Thomas Witt 2003. All rights reserved</td></tr>
@@ -232,7 +41,7 @@ access and positioning independently. This allows the
 concepts to more closely match the requirements
 of algorithms and provides better categorizations
 of iterators that are used in practice. This proposal
-is a revision of paper <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2001/n1297.html">n1297</a>.</td>
+is a revision of paper <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2001/n1297.html">n1297</a> and <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1477.html">n1477</a>.</td>
 </tr>
 </tbody>
 </table>
@@ -374,7 +183,7 @@ algorithms.</p>
 <tt class="literal"><span class="pre">find_end,</span> <span class="pre">adjacent_find,</span> <span class="pre">search,</span> <span class="pre">search_n,</span> <span class="pre">rotate_copy,</span>
 <span class="pre">lower_bound,</span> <span class="pre">upper_bound,</span> <span class="pre">equal_range,</span> <span class="pre">binary_search,</span>
 <span class="pre">min_element,</span> <span class="pre">max_element</span></tt></blockquote>
-<p>Forward Iterator (1) -&gt; Single Pass Iterator and Readable Iterator
+<p>Forward Iterator (1) -&gt; Single Pass Iterator and Readable Iterator,
 Forward Iterator (2) -&gt; Forward Traversal Iterator and Readable Iterator</p>
 <blockquote>
 <tt class="literal"><span class="pre">find_first_of</span></tt></blockquote>
@@ -387,7 +196,7 @@ Forward Iterator (2) -&gt; Forward Traversal Iterator and Readable Iterator</p>
 <p>Forward Iterator -&gt; Forward Traversal Iterator and Swappable Iterator</p>
 <blockquote>
 <tt class="literal"><span class="pre">rotate</span></tt></blockquote>
-<p>Forward Iterator (1) -&gt; Swappable Iterator and Single Pass Iterator
+<p>Forward Iterator (1) -&gt; Swappable Iterator and Single Pass Iterator,
 Forward Iterator (2) -&gt; Swappable Iterator and  Incrementable Iterator</p>
 <blockquote>
 <tt class="literal"><span class="pre">swap_ranges</span></tt></blockquote>
@@ -457,30 +266,31 @@ matches with the original input and output iterator requirements.</p>
 <p>The relationship between the new iterator concepts and the old are
 given in the following diagram.</p>
 <p><img alt="oldeqnew.png" src="oldeqnew.png" /></p>
-<p>As in the existing library, we provide tags for purposes of
-dispatching. There are two hierarchies of tags, one for the access
-concepts and one for the traversal concepts. The tags are related via
+<p>Like the old iterator requirements, we provide tags for purposes of
+dispatching based on the traversal concepts.  The tags are related via
 inheritance so that a tag is convertible to another tag if the concept
 associated with the first tag is a refinement of the second tag.
-There is not a tag for Lvalue Iterator because one can easily deduce
-whether an iterator is an Lvalue Iterator by checking whether
-<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::reference</span></tt> is a real reference.</p>
+Since the access concepts are not related via refinment, but instead
+cover orthogonal issues, we do not use tags for the access concepts,
+but instead use the equivalent of a bitfield.</p>
 <p>We provide an access mechanism for mapping iterator types to the new
-tags. Our design reuses <tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt>
-as the access mechanism. To that end, a pair of access and
-traversal tags are combined into a single type using the following
-<cite>iterator_tag</cite> class.</p>
+traversal tags and access bitfield. Our design reuses
+<tt class="literal"><span class="pre">iterator_traits&lt;Iter&gt;::iterator_category</span></tt> as the access
+mechanism. To that end, a pair of access and traversal tags are
+combined into a single type using the following <cite>iterator_tag</cite> class.</p>
 <pre class="literal-block">
-template &lt;class AccessTag, class Reference, class TraversalTag&gt;
-struct iterator_tag : /* appropriate old category or categories */
-{
-  typedef AccessTag access;
+enum iterator_access { readable_iterator = 1, writable_iterator = 2, 
+    swappable_iterator = 4, lvalue_iterator = 8 };
+
+template &lt;iterator_access x, class TraversalTag&gt;
+struct iterator_tag : /* appropriate old category or categories */ {
+  static const iterator_access access = x;
   typedef TraversalTag traversal;
 };
 </pre>
 <p>The <tt class="literal"><span class="pre">iterator_tag</span></tt> class template is derived from the appropriate
 iterator tag or tags from the old requirements based on the new-style
-tags passed as template parameters. The algorithm for determining the
+tags passed as template parameters.  The algorithm for determining the
 old tag or tags from the new tags picks the least-refined old concepts
 that include all of the requirements of the access and traversal
 concepts (that is, the closest fit), if any such category exists.  For
@@ -488,15 +298,22 @@ example, a the category tag for a Readable Single Pass Iterator will
 always be derived from <tt class="literal"><span class="pre">input_iterator_tag</span></tt>, while the category tag
 for a Single Pass Iterator that is both Readable and Writable will be
 derived from both <tt class="literal"><span class="pre">input_iterator_tag</span></tt> and <tt class="literal"><span class="pre">output_iterator_tag</span></tt>.</p>
-<p>We also provide two helper classes that make it convenient to obtain
-the access and traversal tags of an iterator. These helper classes
-work both for iterators whose <tt class="literal"><span class="pre">iterator_category</span></tt> is
+<p>We also provide several helper classes that make it convenient to
+obtain the access and traversal characteristics of an iterator. These
+helper classes work both for iterators whose <tt class="literal"><span class="pre">iterator_category</span></tt> is
 <tt class="literal"><span class="pre">iterator_tag</span></tt> and also for iterators using the original iterator
 categories.</p>
-<pre class="literal-block">
-template &lt;class Iterator&gt; struct access_category { typedef ... type; };
-template &lt;class Iterator&gt; struct traversal_category { typedef ... type; };
-</pre>
+<dl>
+<dt>::</dt>
+<dd><p class="last">template &lt;class Iterator&gt; struct is_readable  { typedef ... type; };
+template &lt;class Iterator&gt; struct is_writable { typedef ... type; };
+template &lt;class Iterator&gt; struct is_swappable { typedef ... type; };
+template &lt;class Iterator&gt; struct traversal_category { typedef ... type; };</p>
+</dd>
+</dl>
+<p>We do not include a helper class <tt class="literal"><span class="pre">is_lvalue_iterator</span></tt> because that
+can easily be deduced by checking whether
+<tt class="literal"><span class="pre">iterator_traits&lt;Iterator&gt;::reference</span></tt> is a real reference.</p>
 <p>The most difficult design decision concerned the <tt class="literal"><span class="pre">operator[]</span></tt>. The
 direct approach for specifying <tt class="literal"><span class="pre">operator[]</span></tt> would have a return type
 of <tt class="literal"><span class="pre">reference</span></tt>; the same as <tt class="literal"><span class="pre">operator*</span></tt>. However, going in this
@@ -1135,12 +952,6 @@ LocalWords:  incrementable xxx min prev inplace png oldeqnew AccessTag struct
 LocalWords:  TraversalTag typename lvalues DWA Hmm JGS -->
 </div>
 </div>
-</div>
-<hr class="footer" />
-<div class="footer">
-<a class="reference" href="new-iter-concepts.rst">View document source</a>.
-Generated on: 2003-09-22 15:08 UTC.
-Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 </div>
 </body>
 </html>
