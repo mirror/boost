@@ -34,6 +34,8 @@ namespace boost {
         /*!
             This predicate holds when the test collection is a prefix of the Input.
             In other word, if the input starts with the test.
+			When optional predicate is specified, it is used for character-wise
+			comparison.
 
             \param Input An input sequence
             \param Test A test sequence
@@ -69,13 +71,8 @@ namespace boost {
 
         //! 'Starts with' predicate
         /*!
-            This predicate holds when the test container is a prefix of the Input.
-            In other words, if the input starts with the test.
-
-            \param Input An input sequence
-            \param Test A test sequence
-            \return A result of the test
-        */
+			\overload
+		*/
         template<typename Collection1T, typename Collection2T>
         inline bool starts_with( 
             const Collection1T& Input, 
@@ -111,6 +108,9 @@ namespace boost {
         /*!
             This predicate holds when the test container is a suffix of the Input.
             In other word, if the input ends with the test.
+			When optional predicate is specified, it is used for character-wise
+			comparison.
+
 
             \param Input An input sequence
             \param Test A test sequence
@@ -141,12 +141,7 @@ namespace boost {
 
         //! 'Ends with' predicate
         /*!
-            This predicate holds when the test container is a suffix of the Input.
-            In other word, if the input ends with the test.
-
-            \param Input An input sequence
-            \param Test A test sequence
-            \return A result of the test
+			\overload
         */
         template<typename Collection1T, typename Collection2T>
         inline bool ends_with( 
@@ -181,7 +176,9 @@ namespace boost {
         //! 'Contains' predicate
         /*!
             This predicate holds when the test container is contained in the Input.
-            
+            When optional predicate is specified, it is used for character-wise
+			comparison.
+
             \param Input An input sequence
             \param Test A test sequence
             \param Comp An element comparison predicate
@@ -204,12 +201,8 @@ namespace boost {
 
         //! 'Contains' predicate
         /*!
-            This predicate holds when the test container is contained in the Input.
-            
-            \param Input An input sequence
-            \param Test A test sequence
-            \return A result of the test
-        */
+			\overload
+		*/
         template<typename Collection1T, typename Collection2T>
         inline bool contains( 
             const Collection1T& Input, 
@@ -243,11 +236,15 @@ namespace boost {
         /*!
             This predicate holds when the test container is equal to the
             input container i.e. all elements in both containers are same.
-            
+            When optional predicate is specified, it is used for character-wise
+			comparison.
+
             \param Input An input sequence
             \param Test A test sequence
             \param Comp An element comparison predicate
             \return A result of the test
+
+            \note This is two-way version of \c std::equal algorithm
         */
         template<typename Collection1T, typename Collection2T, typename PredicateT>
         inline bool equals( 
@@ -278,14 +275,7 @@ namespace boost {
 
         //! 'Equals' predicate
         /*!
-            This predicate holds when the test container is equal to the
-            input container i.e. all elements in both containers are same.
-            
-            \param Input An input sequence
-            \param Test A test sequence
-            \return A result of the test
-
-            \note This is two-way version of \c std::equal algorithm
+			\overload
         */
         template<typename Collection1T, typename Collection2T>
         inline bool equals( 

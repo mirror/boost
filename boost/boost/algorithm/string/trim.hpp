@@ -38,12 +38,15 @@ namespace boost {
         /*!
             Remove all leading spaces from the input. Supplied predicate
             is used to determine which character is a space.
-            The result is copied to the given output iterator.
+			The result is a trimmed copy if the input. It is returned as a sequence 
+			or copied to an output iterator
 
             \param Output A output iterator to which the result will be copied
             \param Input An input collection
             \param IsSpace An unary predicate identifying spaces
-            \return An output iterator pointing just after last inserted character
+            \return 
+				An output iterator pointing just after last inserted character or
+				a copy of the input
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_left_copy_if( 
@@ -64,14 +67,8 @@ namespace boost {
 
         //! Left trim - parametric
         /*!
-            Remove all leading spaces from the input. Supplied predicate
-            is used to determine which character is a space.
-            The result is a trimmed copy if the input
-
-            \param Input An input sequence
-            \param IsSpace An unary predicate identifying spaces
-            \return A trimmed copy if the input
-        */
+			\overload
+		*/
         template<typename SequenceT, typename PredicateT>
         inline SequenceT trim_left_copy_if(const SequenceT& Input, PredicateT IsSpace)
         {
@@ -86,7 +83,7 @@ namespace boost {
         //! Left trim - parametric
         /*!
             Remove all leading spaces from the input. 
-            The result is a trimmed copy if the input
+            The result is a trimmed copy if the input.
 
             \param Input An input sequence
             \param Loc a locale used for 'space' classification
@@ -143,12 +140,15 @@ namespace boost {
         /*!
             Remove all trailing spaces from the input. Supplied predicate
             is used to determine which character is a space.
-            The result is copied to the given output iterator.
+			The result is a trimmed copy if the input. It is returned as a sequence 
+			or copied to an output iterator
 
             \param Output A output iterator to which the result will be copied
             \param Input An input collection
             \param IsSpace An unary predicate identifying spaces
-            \return An output iterator pointing just after last inserted character
+            \return 
+				An output iterator pointing just after last inserted character or
+				a copy of the input
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_right_copy_if( 
@@ -169,14 +169,8 @@ namespace boost {
 
         //! Right trim - parametric
         /*!
-            Remove all trailing spaces from the input. Supplied predicate
-            is used to determine which character is a space.
-            The result is a trimmed copy if the input
-
-            \param Input An input Sequence
-            \param IsSpace An unary predicate identifying spaces
-            \return A trimmed copy if the input
-        */
+			\overload
+         */
         template<typename SequenceT, typename PredicateT>
         inline SequenceT trim_right_copy_if(const SequenceT& Input, PredicateT IsSpace)
         {
@@ -252,12 +246,15 @@ namespace boost {
         /*!
             Remove all trailing and leading spaces from the input. 
             Supplied predicate is used to determine which character is a space.
-            The result is copied to the given output iterator.
+			The result is a trimmed copy if the input. It is returned as a sequence 
+			or copied to an output iterator
 
             \param Output A output iterator to which the result will be copied
             \param Input An input collection
             \param IsSpace An unary predicate identifying spaces
-            \return An output iterator pointing just after last inserted character
+            \return 
+				An output iterator pointing just after last inserted character or
+				a copy of the input
         */
         template<typename OutputIteratorT, typename CollectionT, typename PredicateT>
         inline OutputIteratorT trim_copy_if( 
@@ -284,14 +281,8 @@ namespace boost {
 
         //! Trim - parametric
         /*!
-            Remove all leading and trailing spaces from the input. 
-            Supplied predicate is used to determine which character is a space.
-            The result is a trimmed copy if the input
-
-            \param Input An input sequence
-            \param IsSpace An unary predicate identifying spaces
-            \return A trimmed copy if the input
-        */
+			\overload
+         */
         template<typename SequenceT, typename PredicateT>
         inline SequenceT trim_copy_if(const SequenceT& Input, PredicateT IsSpace)
         {

@@ -31,12 +31,15 @@ namespace boost {
         //! Convert to lower case
         /*!
             Each element of the input sequence is converted to lower
-            case. The result is copied to the given output iterator.
+            case. The result is a copy of the input converted to lower case.
+			It is returned as a sequence or copied to an output iterator.
 
             \param Output A output iterator to which the result will be copied
             \param Input An input collection
             \param Loc A locale used for conversion
-            \return An output iterator pointing just after last inserted character
+            \return 
+				An output iterator pointing just after last inserted character or
+				a copy of the input
         */
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT 
@@ -55,13 +58,8 @@ namespace boost {
 
         //! Convert to lower case
         /*!
-            Each element of the input sequence is converted to lower
-            case. The result is a copy of the input converted to lower case.
-
-            \param Input An input sequence
-            \param Loc a locale used for conversion
-            \return A copy of the input converted to lower case
-        */
+			\overload
+		*/
         template<typename SequenceT>
         inline SequenceT to_lower_copy( 
             const SequenceT& Input, 
@@ -104,12 +102,15 @@ namespace boost {
         //! Convert to upper case
         /*!
             Each element of the input sequence is converted to upper
-            case. The result is copied to the given output iterator.
+            case. The result is a copy of the input converted to upper case.
+			It is returned as a sequence or copied to an output iterator
 
             \param Output A output iterator to which the result will be copied
             \param Input An input collection
-            \param Loc a locale used for conversion
-            \return An output iterator pointing just after last inserted character
+            \param Loc A locale used for conversion
+            \return 
+				An output iterator pointing just after last inserted character or
+				a copy of the input
         */
         template<typename OutputIteratorT, typename CollectionT>
         inline OutputIteratorT 
@@ -128,13 +129,8 @@ namespace boost {
 
         //! Convert to upper case
         /*!
-            Each element of the input sequence is converted to upper
-            case. The result is a copy if the input converted to upper case.
-
-            \param Input An input sequence
-            \param Loc a locale used for conversion
-            \return A copy of the input converted to upper case
-        */
+			\overload
+		*/
         template<typename SequenceT>
         inline SequenceT to_upper_copy( 
             const SequenceT& Input, 
