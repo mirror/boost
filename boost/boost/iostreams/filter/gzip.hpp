@@ -15,7 +15,7 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>               // BOOST_STATIC_CONSTANT.
+#include <boost/config.hpp>               // STATIC_CONSTANT, STDC_NAMESPACE.
 #include <algorithm>                      // min.
 #include <cstdio>                         // EOF.
 #include <ctime>                          // std::time_t.
@@ -30,6 +30,10 @@
 #if defined(BOOST_MSVC)
 # pragma warning(push)
 # pragma warning(disable: 4309)    // Truncation of constant value.
+#endif
+
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std { using ::time_t; }
 #endif
 
 namespace boost { namespace iostreams {
