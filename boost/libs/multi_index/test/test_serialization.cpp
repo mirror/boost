@@ -114,8 +114,7 @@ namespace boost{
 namespace serialization{
 
 template<class Archive>
-inline void load_construct_data(
-  Archive& ar,container_holder* p, const unsigned int)
+inline void load_construct_data(Archive& ar,container_holder* p,unsigned int)
 {
   ::new(p)container_holder(container_holder::multi_index_t());
 }
