@@ -195,7 +195,7 @@ The policies type has only one public function, which is its constructor:
 
 <pre>
 template &lt;class Predicate, class BaseIterator&gt;
-typename detail::filter_generator&lt;Predicate, BaseIterator&gt;::type
+typename filter_generator&lt;Predicate, BaseIterator&gt;::type
 make_filter_iterator(BaseIterator first, BaseIterator last, const Predicate& p = Predicate())
 </pre>
 
