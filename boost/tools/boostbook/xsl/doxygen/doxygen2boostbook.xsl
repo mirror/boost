@@ -933,8 +933,11 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="computeroutput" mode="passthrough">
-    <computeroutput><xsl:apply-templates mode="passthrough"/></computeroutput>
+  <xsl:template match="computeroutput|orderedlist|itemizedlist|listitem" 
+    mode="passthrough">
+    <xsl:element name="{name(.)}">
+      <xsl:apply-templates mode="passthrough"/>
+    </xsl:element>
   </xsl:template>
   <xsl:template match="parameterlist" mode="passthrough"/>
 
