@@ -8,17 +8,17 @@
 // For more information, see http://www.boost.org/libs/assign/
 //
 
-#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x564) )
 #  pragma warn -8091 // supress warning in Boost.Test
 #  pragma warn -8057 // unused argument argc/argv in Boost.Test
 #endif
 
 #include <boost/assign/list_of.hpp>
+#include <boost/array.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_tools.hpp>
-#include <boost/array.hpp>
 #include <iostream>
 #include <algorithm>
 #include <iterator>

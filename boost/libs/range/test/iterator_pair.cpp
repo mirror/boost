@@ -8,7 +8,7 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 
-#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 #  pragma warn -8091 // supress warning in Boost.Test
