@@ -56,7 +56,7 @@
 			versions of the smart pointer implementation.</p>
 		<p>A page on <a href="smarttests.htm">smart pointer timings</a> will be of interest 
 			to those curious about performance issues.</p>
-		<h2><a name="Common requirements">Common Requirements</a></h2>
+		<h2><a name="common_requirements">Common Requirements</a></h2>
 		<p>These smart pointer class templates have a template parameter, <b>T</b>, which 
 			specifies the type of the object pointed to by the smart pointer. The behavior 
 			of the smart pointer templates is undefined if the destructor or <b>operator delete</b>
@@ -87,7 +87,7 @@
 			which resulted in the exception being thrown. This amounts to a guarantee that 
 			there are no detectable side effects. Other functions never throw exceptions. 
 			The only exception ever thrown by functions which do throw (assuming <b>T</b> meets 
-			the <a href="#Common requirements">common requirements</a>) is <b>std::bad_alloc</b>, 
+			the <a href="#common_requirements">common requirements</a>) is <b>std::bad_alloc</b>, 
 			and that is thrown only by functions which are explicitly documented as 
 			possibly throwing <b>std::bad_alloc</b>.</p>
 		<h2>Exception-specifications</h2>
@@ -99,7 +99,7 @@
 				// never throws</code>.
 		</p>
 		<p>Functions which destroy objects of the pointed to type are prohibited from 
-			throwing exceptions by the <a href="#Common requirements">common requirements</a>.</p>
+			throwing exceptions by the <a href="#common_requirements">common requirements</a>.</p>
 		<h2>History and Acknowledgements</h2>
 		<p>January 2002. Peter Dimov reworked all four classes, adding features, fixing 
 			bugs, and splitting them into four separate headers, and added <b>weak_ptr</b>. 
@@ -156,7 +156,7 @@
 			users", and in the end we choose to supply only the direct implementation.</p>
 		<hr>
 		<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan
---> 
+-->
 			4 February 2002<!--webbot bot="Timestamp" endspan i-checksum="40737"
 --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 

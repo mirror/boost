@@ -29,7 +29,7 @@
 			allocated array. See <a href="scoped_array.htm"><b>scoped_array</b></a> for 
 			that usage.</p>
 		<p>The class template is parameterized on <b>T</b>, the type of the object pointed 
-			to. <b>T</b> must meet the smart pointer <a href="smart_ptr.htm#Common requirements">
+			to. <b>T</b> must meet the smart pointer <a href="smart_ptr.htm#common_requirements">
 				common requirements</a>.</p>
 		<h2>Synopsis</h2>
 		<pre>namespace boost {
@@ -62,7 +62,7 @@
 		<pre>explicit scoped_ptr(T * p = 0); // never throws</pre>
 		<p>Constructs a <b>scoped_ptr</b>, storing a copy of <b>p</b>, which must have been 
 			allocated via a C++ <b>new</b> expression or be 0. <b>T</b> is not required be 
-			a complete type. See the smart pointer <a href="smart_ptr.htm#Common requirements">common 
+			a complete type. See the smart pointer <a href="smart_ptr.htm#common_requirements">common 
 				requirements</a>.</p>
 		<h3><a name="destructor">destructor</a></h3>
 		<pre>~scoped_ptr(); // never throws</pre>
@@ -71,15 +71,15 @@
 		<P>
 			The guarantee that this does not throw exceptions depends on the requirement 
 			that the deleted object's destructor does not throw exceptions. See the smart 
-			pointer <a href="smart_ptr.htm#Common requirements">common requirements</a>.</P>
+			pointer <a href="smart_ptr.htm#common_requirements">common requirements</a>.</P>
 		<h3><a name="reset">reset</a></h3>
 		<pre>void reset(T * p = 0); // never throws</pre>
-		<p>If p is not equal to the stored pointer, deletes the object pointed to by the 
-			stored pointer and then stores a copy of p, which must have been allocated via 
-			a C++ <b>new</b> expression or be 0. The guarantee that this does not throw 
-			exceptions depends on the requirement that the deleted object's destructor does 
-			not throw exceptions. See the smart pointer <a href="smart_ptr.htm#Common requirements">
-				common requirements</a>.</p>
+		<p>
+			Deletes the object pointed to by the stored pointer and then stores a copy of 
+			p, which must have been allocated via a C++ <b>new</b> expression or be 0. The 
+			guarantee that this does not throw exceptions depends on the requirement that 
+			the deleted object's destructor does not throw exceptions. See the smart 
+			pointer <a href="smart_ptr.htm#common_requirements">common requirements</a>.</p>
 		<h3><a name="indirection">indirection</a></h3>
 		<pre>T &amp; operator*() const; // never throws</pre>
 		<p>Returns a reference to the object pointed to by the stored pointer. Behavior is 
@@ -89,11 +89,11 @@
 		<h3><a name="get">get</a></h3>
 		<pre>T * get() const; // never throws</pre>
 		<p>Returns the stored pointer. <b>T</b> need not be a complete type. See the smart 
-			pointer <a href="smart_ptr.htm#Common requirements">common requirements</a>.</p>
+			pointer <a href="smart_ptr.htm#common_requirements">common requirements</a>.</p>
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(scoped_ptr &amp; b); // never throws</pre>
 		<p>Exchanges the contents of the two smart pointers. <b>T</b> need not be a 
-			complete type. See the smart pointer <a href="smart_ptr.htm#Common requirements">common 
+			complete type. See the smart pointer <a href="smart_ptr.htm#common_requirements">common 
 				requirements</a>.</p>
 		<h2><a name="functions">Free Functions</a></h2>
 		<h3><a name="free-swap">swap</a></h3>

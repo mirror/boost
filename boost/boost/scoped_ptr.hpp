@@ -9,7 +9,7 @@
 //  This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 //
-//  See http://www.boost.org/libs/smart_ptr/scoped_ptr.htm for documentation.
+//  http://www.boost.org/libs/smart_ptr/scoped_ptr.htm
 //
 
 #include <boost/assert.hpp>
@@ -21,6 +21,15 @@
 
 namespace boost
 {
+
+// Debug hooks
+
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+
+void sp_scalar_constructor_hook(void * p);
+void sp_scalar_destructor_hook(void * p);
+
+#endif
 
 //  scoped_ptr mimics a built-in pointer except that it guarantees deletion
 //  of the object pointed to, either on destruction of the scoped_ptr or via
@@ -44,27 +53,34 @@ public:
 
     explicit scoped_ptr(T * p = 0): ptr(p) // never throws
     {
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        boost::sp_scalar_constructor_hook(ptr);
+#endif
     }
 
 #ifndef BOOST_NO_AUTO_PTR
 
     explicit scoped_ptr(std::auto_ptr<T> p): ptr(p.release()) // never throws
     {
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        boost::sp_scalar_constructor_hook(ptr);
+#endif
     }
 
 #endif
 
     ~scoped_ptr() // never throws
     {
-        checked_delete(ptr);
+#if defined(BOOST_ENABLE_SP_DEBUG_HOOKS)
+        boost::sp_scalar_destructor_hook(ptr);
+#endif
+        boost::checked_delete(ptr);
     }
 
     void reset(T * p = 0) // never throws
     {
-        if(ptr != p)
-        {
-            this_type(p).swap(*this);
-        }
+        BOOST_ASSERT(p == 0 || p != ptr); // catch self-reset errors
+        this_type(p).swap(*this);
     }
 
     T & operator*() const // never throws
