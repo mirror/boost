@@ -64,4 +64,4 @@ The output is::
 
 The source code for this example can be found `here`__.
 
-__ ../example/permutation_iterator_example.cpp
+__ ../example/permutation_iter_example.cpp
