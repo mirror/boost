@@ -10,7 +10,8 @@
 
 namespace
 {
-  boost::regex license_regex( "boost\\ssoftware\\slicense",
+  boost::regex license_regex(
+    "boost(\\s+|\\s+#\\s*|\\s+//\\s*)software(\\s+|\\s+#\\s*|\\s+//\\s*)license",
     boost::regbase::normal | boost::regbase::icase);
 
 } // unnamed namespace
