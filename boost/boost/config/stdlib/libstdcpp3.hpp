@@ -21,6 +21,21 @@
 #  define BOOST_NO_STD_WSTRING
 #  define BOOST_NO_STD_WSTREAMBUF
 #endif
+
+#ifdef __GLIBCXX__ // gcc 3.4 and greater:
+#  ifdef _GLIBCXX_HAVE_GTHR_DEFAULT
+      // 
+      // If the std lib has thread support turned on, then turn it on in Boost
+      // as well.  We do this because some gcc-3.4 std lib headers define _REENTANT
+      // while others do not...
+      // 
+#     define BOOST_HAS_THREADS
+#     warning "Boost threading support turned on, you may need to link against -lpthread unless you define BOOST_DISABLE_THREADS when building."
+#  else
+#     define BOOST_DISABLE_THREADS
+#  endif
+#endif
+
  
 #if !defined(_GLIBCPP_USE_LONG_LONG) \
     && !defined(_GLIBCXX_USE_LONG_LONG)\
