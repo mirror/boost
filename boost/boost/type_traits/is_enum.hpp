@@ -32,7 +32,7 @@ namespace detail {
 template <typename T>
 struct is_class_or_union
 {
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1200) // we simply can't detect it this way.
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1200) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570))// we simply can't detect it this way.
     BOOST_STATIC_CONSTANT(bool, value = false);
 # else
     template <class U> static ::boost::type_traits::yes_type is_class_or_union_tester(void(U::*)(void));
