@@ -23,16 +23,26 @@
 // Iterators based on ideas of Jeremy Siek
 
 namespace boost { namespace numeric { namespace ublas {
+namespace detail {
+
+	// Weak equality check - useful to compare equality two arbitary vector expression results.
+	// Since the actual expressions are unknown, we check for and arbitary error bound
+	// on the relative error.
+	// For a linear expression the infinity norm makes sense as we do not know how the elements will be
+	// combined in the expression. False positive results are inevitable for arbirary expressions!
+    template<class E1, class E2, class S>
+    BOOST_UBLAS_INLINE
+    bool equals (const vector_expression<E1> &e1, const vector_expression<E2> &e2, S epsilon, S min_norm) {
+        return norm_inf (e1 - e2) < epsilon *
+               std::max<S> (std::max<S> (norm_inf (e1), norm_inf (e2)), min_norm);
+    }
 
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
-    bool equals (const vector_expression<E1> &e1, const vector_expression<E2> &e2) {
+    bool expression_type_check (const vector_expression<E1> &e1, const vector_expression<E2> &e2) {
         typedef typename type_traits<typename promote_traits<typename E1::value_type,
                                      typename E2::value_type>::promote_type>::real_type real_type;
-        return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-               std::max<real_type> (std::max<real_type> (norm_inf (e1),
-                                                         norm_inf (e2)),
-                                    BOOST_UBLAS_TYPE_CHECK_MIN);
+    	return equals (e1, e2, BOOST_UBLAS_TYPE_CHECK_EPSILON, BOOST_UBLAS_TYPE_CHECK_MIN);
     }
 
 
@@ -87,6 +97,9 @@ namespace boost { namespace numeric { namespace ublas {
         for (size_type k = 0; k < index.size (); ++ k)
             v (index [k]) = value_type/*zero*/();
     }
+
+}//namespace detail
+
 
     // Explicitly iterating
     template<template <class T1, class T2> class F, class V, class T>
@@ -286,13 +299,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::value_type value_type;
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign<scalar_assign> (cv, v);
         indexing_vector_assign<F> (cv, e);
-#else
-        indexing_vector_assign<scalar_assign> (cv, v);
-        indexing_vector_assign<F> (cv, e);
-#endif
 #endif
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
@@ -333,7 +341,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
+            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), external_logic ());
 #endif
     }
     // Sparse case
@@ -346,13 +354,8 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::value_type value_type;
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_vector_assign<scalar_assign> (cv, v);
         indexing_vector_assign<F> (cv, e);
-#else
-        indexing_vector_assign<scalar_assign> (cv, v);
-        indexing_vector_assign<F> (cv, e);
-#endif
 #endif
         v.clear ();
         typename E::const_iterator ite (e ().begin ());
@@ -365,7 +368,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
+            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), external_logic ());
 #endif
     }
     // Sparse proxy or functional case
@@ -380,15 +383,10 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::reference reference;
 #if BOOST_UBLAS_TYPE_CHECK
         vector<value_type> cv (v.size ());
-#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
-        indexing_vector_assign<scalar_assign> (cv, v);
-        indexing_vector_assign<F> (cv, e);
-#else
         indexing_vector_assign<scalar_assign> (cv, v);
         indexing_vector_assign<F> (cv, e);
 #endif
-#endif
-        make_conformant (v, e);
+        detail::make_conformant (v, e);
 
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());
@@ -436,7 +434,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (equals (v, cv), external_logic ());
+            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), external_logic ());
 #endif
     }
 
@@ -517,8 +515,9 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename V::difference_type difference_type;
         typedef typename V::value_type value_type;
 
-        make_conformant (v, e);
-        make_conformant (e (), v);
+        detail::make_conformant (v, e);
+        // FIXME should be a seperate restriction for E
+        detail::make_conformant (e (), v);
 
         typename V::iterator it (v.begin ());
         typename V::iterator it_end (v.end ());

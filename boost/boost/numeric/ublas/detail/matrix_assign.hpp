@@ -23,16 +23,26 @@
 // Iterators based on ideas of Jeremy Siek
 
 namespace boost { namespace numeric { namespace ublas {
+namespace detail {
+	
+	// Weak equality check - useful to compare equality two arbitary matrix expression results.
+	// Since the actual expressions are unknown, we check for and arbitary error bound
+	// on the relative error.
+	// For a linear expression the infinity norm makes sense as we do not know how the elements will be
+	// combined in the expression. False positive results are inevitable for arbirary expressions!
+    template<class E1, class E2, class S>
+    BOOST_UBLAS_INLINE
+    bool equals (const matrix_expression<E1> &e1, const matrix_expression<E2> &e2, S epsilon, S min_norm) {
+        return norm_inf (e1 - e2) < epsilon *
+               std::max<S> (std::max<S> (norm_inf (e1), norm_inf (e2)), min_norm);
+    }
 
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
-    bool equals (const matrix_expression<E1> &e1, const matrix_expression<E2> &e2) {
+    bool expression_type_check (const matrix_expression<E1> &e1, const matrix_expression<E2> &e2) {
         typedef typename type_traits<typename promote_traits<typename E1::value_type,
                                      typename E2::value_type>::promote_type>::real_type real_type;
-        return norm_inf (e1 - e2) < BOOST_UBLAS_TYPE_CHECK_EPSILON *
-               std::max<real_type> (std::max<real_type> (norm_inf (e1),
-                                                         norm_inf (e2)),
-                                     BOOST_UBLAS_TYPE_CHECK_MIN);
+    	return equals (e1, e2, BOOST_UBLAS_TYPE_CHECK_EPSILON, BOOST_UBLAS_TYPE_CHECK_MIN);
     }
 
 
@@ -243,6 +253,9 @@ namespace boost { namespace numeric { namespace ublas {
         for (size_type k = 0; k < index.size (); ++ k)
             m (index [k].first, index [k].second) = value_type/*zero*/();
     }
+
+}//namespace detail
+
 
     // Explicitly iterating row major
     template<template <class T1, class T2> class F, class M, class T>
@@ -635,13 +648,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_matrix_assign<scalar_assign> (cm, m, row_major_tag ());
         indexing_matrix_assign<F> (cm, e, row_major_tag ());
-#else
-        indexing_matrix_assign<scalar_assign> (cm, m, row_major_tag ());
-        indexing_matrix_assign<F>(cm, e, row_major_tag ());
-#endif
 #endif
         typename M::iterator1 it1 (m.begin1 ());
         typename M::iterator1 it1_end (m.end1 ());
@@ -754,7 +762,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+            BOOST_UBLAS_CHECK (detail::expression_type_check (m, cm), external_logic ());
 #endif
     }
     // Packed (proxy) column major case
@@ -769,13 +777,8 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
         indexing_matrix_assign<scalar_assign> (cm, m, column_major_tag ());
         indexing_matrix_assign<F> (cm, e, column_major_tag ());
-#else
-        indexing_matrix_assign<scalar_assign> (cm, m, column_major_tag ());
-        indexing_matrix_assign<F> (cm, e, column_major_tag ());
-#endif
 #endif
         typename M::iterator2 it2 (m.begin2 ());
         typename M::iterator2 it2_end (m.end2 ());
@@ -888,7 +891,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+            BOOST_UBLAS_CHECK (detail::expression_type_check (m, cm), external_logic ());
 #endif
     }
     // Sparse row major case
@@ -968,15 +971,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, row_major> cm (m.size1 (), m.size2 ());
-#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
-        indexing_matrix_assign<scalar_assign> (cm, m, row_major_tag ());
-        indexing_matrix_assign<F> (cm, e, row_major_tag ());
-#else
         indexing_matrix_assign<scalar_assign> (cm, m, row_major_tag ());
         indexing_matrix_assign<F> (cm, e, row_major_tag ());
 #endif
-#endif
-        make_conformant (m, e, row_major_tag (), conformant_restrict_type ());
+        detail::make_conformant (m, e, row_major_tag (), conformant_restrict_type ());
 
         typename M::iterator1 it1 (m.begin1 ());
         typename M::iterator1 it1_end (m.end1 ());
@@ -1077,7 +1075,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+            BOOST_UBLAS_CHECK (detail::expression_type_check (m, cm), external_logic ());
 #endif
     }
     // Sparse proxy or functional column major case
@@ -1093,15 +1091,10 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
 #if BOOST_UBLAS_TYPE_CHECK
         matrix<value_type, column_major> cm (m.size1 (), m.size2 ());
-#ifndef BOOST_UBLAS_NO_ELEMENT_PROXIES
-        indexing_matrix_assign<scalar_assign> (cm, m, column_major_tag ());
-        indexing_matrix_assign<F> (cm, e, column_major_tag ());
-#else
         indexing_matrix_assign<scalar_assign> (cm, m, column_major_tag ());
         indexing_matrix_assign<F> (cm, e, column_major_tag ());
 #endif
-#endif
-        make_conformant (m, e, column_major_tag (), conformant_restrict_type ());
+        detail::make_conformant (m, e, column_major_tag (), conformant_restrict_type ());
 
         typename M::iterator2 it2 (m.begin2 ());
         typename M::iterator2 it2_end (m.end2 ());
@@ -1202,7 +1195,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (equals (m, cm), external_logic ());
+            BOOST_UBLAS_CHECK (detail::expression_type_check (m, cm), external_logic ());
 #endif
     }
 
@@ -1367,9 +1360,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
 
-        make_conformant (m, e, row_major_tag (), conformant_restrict_type ());
+        detail::make_conformant (m, e, row_major_tag (), conformant_restrict_type ());
         // FIXME should be a seperate restriction for E
-        make_conformant (e (), m, row_major_tag (), conformant_restrict_type ());
+        detail::make_conformant (e (), m, row_major_tag (), conformant_restrict_type ());
 
         typename M::iterator1 it1 (m.begin1 ());
         typename M::iterator1 it1_end (m.end1 ());
@@ -1492,9 +1485,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_CHECK (m.size1 () == e ().size1 (), bad_size ());
         BOOST_UBLAS_CHECK (m.size2 () == e ().size2 (), bad_size ());
 
-        make_conformant (m, e, column_major_tag (), conformant_restrict_type ());
+        detail::make_conformant (m, e, column_major_tag (), conformant_restrict_type ());
         // FIXME should be a seperate restriction for E
-        make_conformant (e (), m, column_major_tag (), conformant_restrict_type ());
+        detail::make_conformant (e (), m, column_major_tag (), conformant_restrict_type ());
 
         typename M::iterator2 it2 (m.begin2 ());
         typename M::iterator2 it2_end (m.end2 ());
