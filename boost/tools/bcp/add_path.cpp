@@ -59,6 +59,8 @@ void bcp_implementation::add_directory(const fs::path& p)
       std::string s(i->string());
       if(m_boost_path.string().size())
          s.erase(0, m_boost_path.string().size() + 1);
+      if(!m_dependencies.count(fs::path(s))) 
+         m_dependencies[fs::path(s)] = p; // set up dependency tree
       add_path(fs::path(s));
       ++i;
    }
@@ -122,6 +124,8 @@ void bcp_implementation::add_file(const fs::path& p)
             // only concatonate if it's a relative path
             // rather than a URL:
             fs::path dep(p.branch_path() / s);
+            if(!m_dependencies.count(dep)) 
+               m_dependencies[dep] = p; // set up dependency tree
             add_path(dep);
          }
          ++i;
@@ -137,16 +141,28 @@ void bcp_implementation::add_file(const fs::path& p)
          std::pair<fs::path, fs::path>("tools/build/allyourbase.jam", "Jamrules"),
          std::pair<fs::path, fs::path>("tools/build/allyourbase.jam", "project-root.jam"),
          std::pair<fs::path, fs::path>("tools/build/allyourbase.jam", "boost-build.jam"),
+         std::pair<fs::path, fs::path>("boost/preprocessor/iterate.hpp", "boost/preprocessor/iteration"),
+         std::pair<fs::path, fs::path>("boost/function.hpp", "boost/function/detail"),
+         std::pair<fs::path, fs::path>("boost/regex/config.hpp", "boost/regex/user.hpp"),
+         std::pair<fs::path, fs::path>("boost/signals/signal_template.hpp", "boost/function"),
+         std::pair<fs::path, fs::path>("boost/mpl/list.hpp", "boost/mpl/list"),
+         std::pair<fs::path, fs::path>("boost/mpl/list_c.hpp", "boost/mpl/list"),
+         std::pair<fs::path, fs::path>("boost/mpl/vector.hpp", "boost/mpl/vector"),
+         std::pair<fs::path, fs::path>("boost/mpl/vector_c.hpp", "boost/mpl/vector"),
       };
    for(unsigned int n = 0; n < (sizeof(specials)/sizeof(specials[0])); ++n)
    {
       if(0 == compare_paths(specials[n].first, p))
+      {
+         if(!m_dependencies.count(specials[n].second)) 
+            m_dependencies[specials[n].second] = p; // set up dependency tree
          add_path(specials[n].second);
+      }
    }
 
 }
 
-void bcp_implementation::add_dependent_lib(const std::string& libname)
+void bcp_implementation::add_dependent_lib(const std::string& libname, const fs::path& p)
 {
    //
    // if the boost library libname has source associated with it
@@ -154,9 +170,15 @@ void bcp_implementation::add_dependent_lib(const std::string& libname)
    //
    if(fs::exists(m_boost_path / "libs" / libname / "src"))
    {
+      if(!m_dependencies.count(fs::path("libs") / libname / "src")) 
+         m_dependencies[fs::path("libs") / libname / "src"] = p; // set up dependency tree
       add_path(fs::path("libs") / libname / "src");
       if(fs::exists(m_boost_path / "libs" / libname / "build"))
+      {
+         if(!m_dependencies.count(fs::path("libs") / libname / "build")) 
+            m_dependencies[fs::path("libs") / libname / "build"] = p; // set up dependency tree
          add_path(fs::path("libs") / libname / "build");
+      }
    }
 }
 
@@ -166,7 +188,16 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       "^[[:blank:]]*#[[:blank:]]*include[[:blank:]]*[\"<]([^\">]+)[\">]"
       );
 
-   fileview view(scanfile ? p : (m_boost_path / p));
+   if(!m_dependencies.count(p)) 
+      m_dependencies[p] = p; // set terminal dependency
+
+   fileview view;
+   if(scanfile)
+      view.open(p);
+   else
+      view.open(m_boost_path / p);
+   if(m_licence_mode && !scanfile)
+      scan_licence(p, view);
    boost::regex_token_iterator<const char*> i(view.begin(), view.end(), e, 1);
    boost::regex_token_iterator<const char*> j;
    while(i != j)
@@ -188,9 +219,17 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
          continue;
       }
       if(fs::exists(m_boost_path / p.branch_path() / include_file))
+      {
+         if(!m_dependencies.count(p.branch_path() / include_file)) 
+            m_dependencies[p.branch_path() / include_file] = p;
          add_path(p.branch_path() / include_file);
+      }
       else if(fs::exists(m_boost_path / include_file))
+      {
+         if(!m_dependencies.count(include_file)) 
+            m_dependencies[include_file] = p;
          add_path(include_file);
+      }
       ++i;
    }
    //
@@ -202,7 +241,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
    boost::cmatch what;
    if(boost::regex_search(view.begin(), view.end(), what, m))
    {
-      add_dependent_lib("test");
+      add_dependent_lib("test", p);
    }
    //
    // grab the name of the library to which the header belongs, 
@@ -215,7 +254,7 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
    boost::smatch swhat;
    if(boost::regex_match(p.string(), swhat, lib1))
    {
-      add_dependent_lib(swhat.str(1));
+      add_dependent_lib(swhat.str(1), p);
    }
    //
    // and this one catches boost/x/y/whatever (for example numeric/ublas):
@@ -223,6 +262,6 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
    static const boost::regex lib2("boost/([^/]+/[^/]+)/.*");
    if(boost::regex_match(p.string(), swhat, lib2))
    {
-      add_dependent_lib(swhat.str(1));
+      add_dependent_lib(swhat.str(1), p);
    }
 }

@@ -47,6 +47,11 @@ void bcp_implementation::enable_scan_mode()
    m_scan_mode = true;
 }
 
+void bcp_implementation::enable_licence_mode()
+{
+   m_licence_mode = true;
+}
+
 void bcp_implementation::enable_unix_lines()
 {
    m_unix_lines = true;
@@ -72,7 +77,7 @@ int bcp_implementation::run()
    //
    // check output path is OK:
    //
-   if(!m_list_mode && !fs::exists(m_dest_path))
+   if(!m_list_mode && !m_licence_mode && !fs::exists(m_dest_path))
    {
       std::string msg("Destination path does not exist: ");
       msg.append(m_dest_path.native_file_string());
@@ -93,24 +98,54 @@ int bcp_implementation::run()
    std::list<std::string>::const_iterator j = m_module_list.end();
    while(i != j)
    {
+      //
+      // convert *i to a path - could be native or portable:
+      //
+      fs::path module;
+      fs::path exmodule;
+      try{
+         module = fs::path(*i);
+         exmodule = fs::path(*i + ".hpp");
+      }
+      catch(...)
+      {
+         module = fs::path(*i, fs::native);
+         exmodule = fs::path(*i + ".hpp", fs::native);
+      }
+      
       if(m_scan_mode)
       {
          // in scan mode each module must be a real file:
-         fs::path p(*i, fs::native);
-         add_file_dependencies(p, true);
+         add_file_dependencies(module, true);
       }
       else
       {
-         if(fs::exists(m_boost_path / "tools" / *i))
-            add_path(fs::path("tools") / *i);
-         if(fs::exists(m_boost_path / "libs" / *i))
-            add_path(fs::path("libs") / *i);
-         if(fs::exists(m_boost_path / "boost" / *i))
-            add_path(fs::path("boost") / *i);
-         if(fs::exists(m_boost_path / "boost" / (*i + ".hpp")))
-            add_path(fs::path("boost") / (*i + ".hpp"));
-         if(fs::exists(m_boost_path / *i))
-            add_path(fs::path(*i));
+         int count = 0;
+         if(fs::exists(m_boost_path / "tools" / module))
+         {
+            add_path(fs::path("tools") / module);
+            ++count;
+         }
+         if(fs::exists(m_boost_path / "libs" / module))
+         {
+            add_path(fs::path("libs") / module);
+            ++count;
+         }
+         if(fs::exists(m_boost_path / "boost" / module))
+         {
+            add_path(fs::path("boost") / module);
+            ++count;
+         }
+         if(fs::exists(m_boost_path / "boost" / exmodule))
+         {
+            add_path(fs::path("boost") / exmodule);
+            ++count;
+         }
+         if(fs::exists(m_boost_path / module))
+         {
+            add_path(module);
+            ++count;
+         }
       }
       ++i;
    }
@@ -120,14 +155,19 @@ int bcp_implementation::run()
    std::set<fs::path, path_less>::iterator m, n;
    m = m_copy_paths.begin();
    n = m_copy_paths.end();
-   while(m != n)
+   if(!m_licence_mode)
    {
-      if(m_list_mode)
-         std::cout << m->string() << "\n";
-      else
-         copy_path(*m);
-      ++m;
+      while(m != n)
+      {
+         if(m_list_mode)
+            std::cout << m->string() << "\n";
+         else
+            copy_path(*m);
+         ++m;
+      }
    }
+   else
+      output_licence_info();
    return 0;
 }
 

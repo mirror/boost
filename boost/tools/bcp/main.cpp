@@ -31,6 +31,7 @@ void show_usage()
    std::cout <<
       "Usage:\n"
       "   bcp --list [options] module-list\n"
+      "   bcp --report [options] module-list html-file\n"
       "   bcp [options] module-list output-path\n"
       "\n"
       "Options:\n"
@@ -41,6 +42,7 @@ void show_usage()
       "   --unix-lines   make sure that all copied files use Unix style line endings\n"
       "\n"
       "module-list:      a list of boost files or library names to copy\n"
+      "html-file:        the name of a html file to which the report will be written\n"
       "output-path:      the path to which files will be copied\n";
 }
 
@@ -75,6 +77,10 @@ int cpp_main(int argc, char* argv[])
       {
          list_mode = true;
          papp->enable_list_mode();
+      }
+      else if(0 == std::strcmp("--report", argv[i]))
+      {
+         papp->enable_licence_mode();
       }
       else if(0 == std::strcmp("--cvs", argv[i]))
       {

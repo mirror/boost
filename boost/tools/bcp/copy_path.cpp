@@ -26,7 +26,13 @@
 void bcp_implementation::copy_path(const fs::path& p)
 {
    assert(!fs::is_directory(m_boost_path / p));
-   std::cout << "Copying file: " << p.string() << "\n";
+   if(fs::exists(m_dest_path / p))
+   {
+      std::cout << "Copying (and overwriting) file: " << p.string() << "\n";
+	  fs::remove(m_dest_path / p);
+   }
+   else
+      std::cout << "Copying file: " << p.string() << "\n";
    //
    // create the path to the new file if it doesn't already exist:
    //
