@@ -109,7 +109,7 @@ namespace posix_time {
     typedef time_res_traits resolution_traits;
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
 #else
-    static const boost::int64_t tick_per_second =  1000000000;
+    BOOST_STATIC_CONSTANT(boost::int64_t, tick_per_second = 1000000000);
 #endif
   };
 
@@ -126,7 +126,7 @@ namespace posix_time {
     typedef time_res_traits resolution_traits;
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
 #else
-    static const boost::int64_t tick_per_second =  1000000;
+    BOOST_STATIC_CONSTANT(boost::int64_t, tick_per_second = 1000000);
 #endif
   };
 

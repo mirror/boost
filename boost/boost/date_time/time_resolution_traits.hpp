@@ -29,7 +29,8 @@ namespace date_time {
     typedef v_type  sec_type;
 
     //Would like this to be frac_sec_type, but some compilers complain
-    static const boost::int32_t ticks_per_second = resolution_adjust;
+    BOOST_STATIC_CONSTANT(int, ticks_per_second = resolution_adjust);
+    //    static const boost::int32_t ticks_per_second = resolution_adjust;
 
     static time_resolutions resolution()
     {
