@@ -51,6 +51,9 @@
 // for mbstate_t
 #include <cwchar>
 
+#include <boost/program_options/config.hpp>
+#define DECL BOOST_PROGRAM_OPTIONS_DECL
+
 #include <boost/detail/workaround.hpp>
 
 #if BOOST_WORKAROUND(__ICL, <= 700) || BOOST_WORKAROUND(_MSC_VER, <= 1200)
@@ -67,7 +70,7 @@ namespace std
 
 namespace boost { namespace program_options { namespace detail {
 
-struct utf8_codecvt_facet_wchar_t :
+struct DECL utf8_codecvt_facet_wchar_t :
     public std::codecvt<wchar_t, char, std::mbstate_t>  
 {
 public:
@@ -192,7 +195,7 @@ struct utf8_codecvt_facet
 {};
 
 template<>
-struct utf8_codecvt_facet<wchar_t, char>
+struct DECL utf8_codecvt_facet<wchar_t, char>
     : public utf8_codecvt_facet_wchar_t
 {};
 

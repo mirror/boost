@@ -62,7 +62,7 @@ namespace boost { namespace program_options {
     }
 #endif
 
-    string arg("arg");
+    DECL string arg("arg");
 
     std::string
     untyped_value::name() const
@@ -103,8 +103,8 @@ namespace boost { namespace program_options {
         Case is ignored. Regardless of name passed, parameter will always
         be optional.
     */
-    void validate(any& v, const vector<string>& xs,
-                  bool*, int)
+    DECL void validate(any& v, const vector<string>& xs,
+                       bool*, int)
     {
         check_first_occurence(v);
         string s(get_single_string(xs, true));
@@ -124,7 +124,7 @@ namespace boost { namespace program_options {
     // since wstring can't be constructed/compared with char*. We'd need to
     // create auxilliary 'widen' routine to convert from char* into 
     // needed string type, and that's more work.
-    void validate(any& v, const vector<wstring>& xs, bool*, int)
+    DECL void validate(any& v, const vector<wstring>& xs, bool*, int)
     {
         check_first_occurence(v);
         wstring s(get_single_string(xs, true));
@@ -140,7 +140,7 @@ namespace boost { namespace program_options {
             throw validation_error("invalid bool value");
     }
 
-    void validate(any& v, const vector<string>& xs, std::string*, int)
+    DECL void validate(any& v, const vector<string>& xs, std::string*, int)
     {
         check_first_occurence(v);
         string s(get_single_string(xs));
@@ -151,7 +151,7 @@ namespace boost { namespace program_options {
             v = any(s);
     }
 
-    void validate(any& v, const vector<wstring>& xs, std::string*, int)
+    DECL void validate(any& v, const vector<wstring>& xs, std::string*, int)
     {
         check_first_occurence(v);
         wstring s(get_single_string(xs));
@@ -165,7 +165,7 @@ namespace boost { namespace program_options {
 
     namespace validators {
 
-        void check_first_occurence(const boost::any& value)
+        DECL void check_first_occurence(const boost::any& value)
         {
             if (!value.empty())
                 throw multiple_occurences("multiple_occurences");

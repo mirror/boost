@@ -142,7 +142,7 @@ namespace boost { namespace program_options {
     /** Parse a config file. 
     */
     template<class charT>
-    DECL basic_parsed_options<charT>
+    basic_parsed_options<charT>
     parse_config_file(std::basic_istream<charT>&, const options_description&);
 
     /** Parse environment. 

@@ -10,6 +10,7 @@
 #include <cstdlib> // for multi-byte converson routines
 
 #include <cassert>
+#define BOOST_PROGRAM_OPTIONS_SOURCE
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 
 namespace boost { namespace program_options { namespace detail {

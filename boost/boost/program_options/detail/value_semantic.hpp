@@ -8,7 +8,7 @@
 
 namespace boost { namespace program_options { 
 
-    extern std::string arg;
+    extern DECL std::string arg;
     
     template<class T, class charT>
     std::string
@@ -57,7 +57,7 @@ namespace boost { namespace program_options {
         }
 
         /* Throws multiple_occurences if 'value' is not empty. */
-        void check_first_occurence(const boost::any& value);
+        DECL void check_first_occurence(const boost::any& value);
     }
 
     using namespace validators;
@@ -85,15 +85,15 @@ namespace boost { namespace program_options {
         }
     }
 
-    void validate(boost::any& v, 
-                  const std::vector<std::string>& xs, 
-                  bool*,
-                  int);
+    DECL void validate(boost::any& v, 
+                       const std::vector<std::string>& xs, 
+                       bool*,
+                       int);
 
-    void validate(boost::any& v, 
-                  const std::vector<std::wstring>& xs, 
-                  bool*,
-                  int);
+    DECL void validate(boost::any& v, 
+                       const std::vector<std::wstring>& xs, 
+                       bool*,
+                       int);
 
     // For some reason, this declaration, which is require by the standard,
     // cause gcc 3.2 to not generate code to specialization defined in
@@ -102,15 +102,15 @@ namespace boost { namespace program_options {
           BOOST_WORKAROUND(__GNUC_MINOR__, < 3) ) || \
         ( BOOST_WORKAROUND(BOOST_MSVC, == 1310) ) \
       ) 
-    void validate(boost::any& v, 
-                  const std::vector<std::string>& xs,
-                  std::string*,
-                  int);
+    DECL void validate(boost::any& v, 
+                       const std::vector<std::string>& xs,
+                       std::string*,
+                       int);
 
-    void validate(boost::any& v, 
-                  const std::vector<std::wstring>& xs,
-                  std::string*,
-                  int);
+    DECL void validate(boost::any& v, 
+                       const std::vector<std::wstring>& xs,
+                       std::string*,
+                       int);
 #endif
 
     /** Validates sequences. Allows multiple values per option occurence
