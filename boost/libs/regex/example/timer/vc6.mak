@@ -3,7 +3,7 @@
 #
 CXX=cl
 CXXFLAGS=/Oityb1 /GF /Gy -GX -DSTRICT -I../../../../ -I./ 
-LIBS=/link /LIBPATH:..\..\build\vc6 kernel32.lib user32.lib 
+LIBS=/link /LIBPATH:..\..\build\vc6
 EXE=.exe
 OBJ=.obj
 
@@ -17,6 +17,7 @@ regex_timer$(OBJ) : regex_timer.cpp $(LIBDEP)
 
 timer$(OBJ) : ../../../timer/timer.cpp $(LIBDEP)
 	$(CXX) -c $(CXXFLAGS) ../../../timer/timer.cpp
+
 
 
 

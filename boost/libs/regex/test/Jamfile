@@ -1,0 +1,65 @@
+subproject libs/regex/test ;
+
+
+exe regress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
+   <lib>../build/libboost_regex$(SUFLIB) 
+	: 
+		<include>$(BOOST_ROOT)
+		<define>BOOST_RE_NO_LIB=1
+	: 
+		debug
+      <runtime-link>dynamic
+	;
+
+exe wregress : regress/parse.cpp regress/regress.cpp regress/tests.cpp
+   <lib>../build/libboost_regex$(SUFLIB) 
+	: 
+		<include>$(BOOST_ROOT)
+		<define>BOOST_RE_NO_LIB=1
+		<define>TEST_UNICODE=1
+	: 
+		debug
+      <runtime-link>dynamic
+	;
+
+exe posix_api_check_c : c_compiler_checks/posix_api_check.c
+   <lib>../build/libboost_regex$(SUFLIB) 
+	: 
+		<include>$(BOOST_ROOT)
+		<define>BOOST_RE_NO_LIB=1
+	: 
+		debug
+      <runtime-link>dynamic
+	;
+
+exe wide_posix_api_check_c : c_compiler_checks/wide_posix_api_check.c
+   <lib>../build/libboost_regex$(SUFLIB) 
+	: 
+		<include>$(BOOST_ROOT)
+		<define>BOOST_RE_NO_LIB=1
+	: 
+		debug
+      <runtime-link>dynamic
+	;
+
+exe posix_api_check : c_compiler_checks/posix_api_check.cpp
+   <lib>../build/libboost_regex$(SUFLIB) 
+	: 
+		<include>$(BOOST_ROOT)
+		<define>BOOST_RE_NO_LIB=1
+	: 
+		debug
+      <runtime-link>dynamic
+	;
+
+exe wide_posix_api_check : c_compiler_checks/wide_posix_api_check.cpp
+   <lib>../build/libboost_regex$(SUFLIB) 
+	: 
+		<include>$(BOOST_ROOT)
+		<define>BOOST_RE_NO_LIB=1
+	: 
+		debug
+      <runtime-link>dynamic
+	;
+
+
