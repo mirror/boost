@@ -473,16 +473,17 @@ Note that more than one element can be causing insertion not to be allowed.<br>
 <b>Exception safety:</b> Strong.
 </blockquote>
 
-<code>iterator insert(iterator position,const value_type&amp; x);</code>
+<code>std::pair&lt;iterator,bool> insert(iterator position,const value_type&amp; x);</code>
 
 <blockquote>
 <b>Requires:</b> <code>position</code> is a valid iterator of the index.</br>
 <b>Effects:</b> Inserts <code>x</code> before <code>position</code> if insertion
 is allowed by all other indices of the <code>multi_index_container</code>.<br>
-<b>Returns:</b> On successful insertion, an iterator to the newly inserted
-element. Otherwise, an iterator to an element that caused the insertion to be
-banned. Note that more than one element can be causing insertion not to be
-allowed.<br>
+<b>Returns:</b> The return value is a pair <code>p</code>. <code>p.second</code>
+is <code>true</code> if and only if insertion took place. On successful
+insertion, <code>p.first</code> points to the element inserted; otherwise,
+<code>p.first</code> points to an element that caused the insertion to be banned.
+Note that more than one element can be causing insertion not to be allowed.<br>
 <b>Complexity:</b> <code>O(I(n))</code>.<br>
 <b>Exception safety:</b> Strong.
 </blockquote>
