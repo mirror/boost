@@ -23,7 +23,7 @@ main()
 
 
 
-#ifdef BOOST_GDTL_HAS_MILLISECONDS
+#ifdef BOOST_DATE_TIME_HAS_MILLISECONDS
 
   if (time_duration::resolution() == boost::date_time::milli) {
     ptime t4(d1,hours(1)+minutes(2)+seconds(3)+millisec(4));
@@ -34,23 +34,23 @@ main()
 
 #endif
 
-#ifdef BOOST_GDTL_HAS_MICROSECONDS
+#ifdef BOOST_DATE_TIME_HAS_MICROSECONDS
 
   if (time_duration::resolution() == boost::date_time::micro) {
     ptime t3(d1,hours(1)+minutes(2)+seconds(3)+microsec(4));
     std::string result = to_simple_string(t3);
-    check("simple subsecond: "+result , 
+    check("microsecond: "+result , 
           std::string("2002-Jan-01 01:02:03.000004") == to_simple_string(t3));
     
     time_duration td2 =  hours(-12)+minutes(4)+seconds(2)+microsec(1);
     //  time_duration td2 =  hours(-12)+minutes(4)+seconds(2)+millisec(1);
     std::string r2 = to_simple_string(td2);
-    check("neg subsecond duration: "+r2 , 
+    check("microseond neg subsecond duration: "+r2 , 
           std::string("-11:55:57.999999") == r2);
   }
 #endif
 
-#ifdef BOOST_GDTL_HAS_NANOSECONDS
+#ifdef BOOST_DATE_TIME_HAS_NANOSECONDS
 
   if (time_duration::resolution() == boost::date_time::nano) {
     ptime t2(d1,hours(12) + minutes(5) + seconds(1));
