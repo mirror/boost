@@ -22,8 +22,7 @@
 #pragma hdrstop
 #endif
 
-#define BOOST_INCLUDE_MAIN
-#include "boost/test/test_tools.hpp"
+#include "boost/test/minimal.hpp"
 
 //
 // Sample POD type
