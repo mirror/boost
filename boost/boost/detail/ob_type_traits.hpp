@@ -10,6 +10,11 @@
 //  support partial specialisation. (C) John Maddock 2000
 
 /* Release notes:
+   20 Jan 2001:
+      Fixed is_same<T,U> so it would work with T == void or U == void
+      Suppressed some warnings in from_not_void_conversion<> for MSVC
+      Fixed a spelling error
+      (David Abrahams)
 	07 Oct 2000:
 		Added more fixes for is_array (based on a newgroup posting by Jonathan Lundquist).
    03 Oct 2000:
@@ -22,7 +27,7 @@
       on the boost list (Copyright 2000 Adobe Systems Incorporated and others. 
       All rights reserved.).
    31st July 2000:
-      Added is_convertable, alignment_of.
+      Added is_convertible, alignment_of.
    23rd July 2000:
       Fixed is_void specialization. (JM)
 */
@@ -42,9 +47,10 @@
 // This software is provided "as is" without express or implied warranty,
 // and with no claim as to its suitability for any purpose.
 
-
 #ifndef BOOST_OB_TYPE_TRAITS_HPP
 #define BOOST_OB_TYPE_TRAITS_HPP
+
+#include <boost/type.hpp>
 
 #ifndef BOOST_TYPE_TRAITS_HPP
 #error Internal header file: This header must be included by <boost/type_traits.hpp> only.
@@ -124,18 +130,30 @@ namespace detail{
    template <class T>
    yes_result is_same_helper(T*, T*);
    no_result is_same_helper(...);
+
+   template <class T>
+   struct size_of
+   {
+       enum { value = sizeof(T) };
+   };
+
+   template <>
+   struct size_of<void>
+   {
+       enum { value = 0 };
+   };
 }
 
 template <typename T> struct is_reference;
 template <typename T, typename U> struct is_same
 {
 private:
-   static T t;
-   static U u;
+   static type<T> t;
+   static type<U> u;
 public:
    enum{ value = (sizeof(detail::yes_result) == sizeof(detail::is_same_helper(&t,&u)))
                  & (is_reference<T>::value == is_reference<U>::value)
-                 & (sizeof(T) == sizeof(U)) };
+                 & (detail::size_of<T>::value == detail::size_of<U>::value) };
 };
 
 template <typename T> struct is_void{ enum{ value = false }; };
@@ -413,7 +431,14 @@ namespace detail{
     public:
       void foo(); // avoid warning about all members being private
       static From from;
+# ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable:4244 4245 4135 4136 4051 4134) // disable all conversion warnings
+# endif
       enum { exists = sizeof( check(from) ) == sizeof(yes_result) };
+# ifdef BOOST_MSVC
+#  pragma warning(pop)
+# endif
     };
   };
   struct from_is_void_conversion {
