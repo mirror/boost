@@ -16,8 +16,7 @@
 
 // test using BLL and boost::function
 
-//#include <boost/test/minimal.hpp>    // see "Header Implementation Option"
-#include <boost/test/test_tools.hpp>
+#include <boost/test/minimal.hpp>    // see "Header Implementation Option"
 
 #include "boost/lambda/lambda.hpp"
 #include "boost/lambda/bind.hpp"
