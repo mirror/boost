@@ -50,7 +50,11 @@ namespace ba = boost::assign;
 template< class C >
 void test_sequence_list_of_string()
 {
+#if BOOST_WORKAROUND(BOOST_MSVC, <=1300)
+    const C c = ba::list_of( "foo" )( "bar" ).to_container( c );   
+#else
     const C c = ba::list_of( "foo" )( "bar" );   
+#endif
     BOOST_CHECK_EQUAL( c.size(), 2u );
 }
 
@@ -58,7 +62,21 @@ template< class C >
 void test_sequence_list_of_int()
 {
     using namespace std;
-    const C c  = ba::list_of(1)(2)(3)(4);
+#if BOOST_WORKAROUND(BOOST_MSVC, <=1300)
+
+    const C c = ba::list_of<int>(1)(2)(3)(4).to_container( c );
+    const C c2 = (ba::list_of(1),2,3,4).to_container( c2 );
+    BOOST_CHECK_EQUAL( c.size(), 4u );
+    BOOST_CHECK_EQUAL( c2.size(), 4u );
+    C c3 = ba::list_of(1).repeat( 1, 2 )(3).to_container( c3 );
+    BOOST_CHECK_EQUAL( c3.size(), 3u );
+        
+    c3 = ba::list_of(1).repeat_fun( 10, &rand )(2)(3).to_container( c3 );
+    BOOST_CHECK_EQUAL( c3.size(), 13u );
+
+#else
+
+    const C c = ba::list_of<int>(1)(2)(3)(4);
     const C c2 = (ba::list_of(1),2,3,4);
     BOOST_CHECK_EQUAL( c.size(), 4u );
     BOOST_CHECK_EQUAL( c2.size(), 4u );
@@ -76,6 +94,9 @@ void test_sequence_list_of_int()
     c3 = ba::list_of(1).repeat_fun( 10, &rand )(2)(3);
     BOOST_CHECK_EQUAL( c3.size(), 13u );
 #endif
+
+#endif
+	
 }
 
 template< class C >
@@ -93,7 +114,7 @@ void test_vector_matrix()
     using namespace boost::assign;
     using namespace std;
 
-#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) || _MSC_VER <= 1300   
+#if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)  || BOOST_WORKAROUND(BOOST_MSVC, <=1300)
 #else    
       
     const int              sz = 3;
@@ -196,7 +217,9 @@ void check_list_of()
     test_sequence_list_of_int< std::set<int> >();
     test_sequence_list_of_int< std::multiset<int> >();
     test_sequence_list_of_int< std::vector<float> >();
+	
     test_sequence_list_of_string< std::vector<std::string> >();
+	
     test_map_list_of< std::map<std::string,int> >();
     test_map_list_of< std::multimap<std::string,int> >();
     
@@ -204,6 +227,7 @@ void check_list_of()
     test_list_of();
     
     test_vector_matrix();
+	
 }
 
 

@@ -115,7 +115,7 @@ namespace assign_detail
         }
         
         template< class U >
-        generic_list& operator()( const U u )
+        generic_list& operator()( U u )
         {
             this->push_back( u );
             return *this;

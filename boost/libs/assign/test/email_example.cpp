@@ -94,7 +94,7 @@ public:
     ba::list_inserter< add_to_vector, bcc_type >
     add_bcc( const bcc_type& bcc )
     {
-        return ba::make_list_inserter( add_to_vector( bcc_list ) )( bcc );     
+        return ba::make_list_inserter( add_to_vector( bcc_list ) )( bcc );
     }
     
     address_option
