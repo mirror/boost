@@ -1109,7 +1109,7 @@ public: // structors, cont.
 
 #if !BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3003)) \
  && !BOOST_WORKAROUND(BOOST_INTEL, BOOST_TESTED_AT(700)) \
- && !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
+ && !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
     template <typename T>
     variant(const T& operand)
@@ -1157,7 +1157,7 @@ public: // structors, cont.
         convert_construct(operand, 1L);
     }
 
-#endif // CW8 and MSVC6 workarounds
+#endif // CW8 and MSVC7 (and below) workarounds
 
 public: // structors, cont.
 
