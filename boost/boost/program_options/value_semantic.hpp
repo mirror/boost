@@ -100,11 +100,12 @@ namespace boost { namespace program_options {
                    const std::vector<std::string>& new_tokens,
                    bool utf8) const;
     protected: // interface for derived classes.
+#if !defined(BOOST_NO_STD_WSTRING)
         virtual void xparse(boost::any& value_store, 
                             const std::vector<std::wstring>& new_tokens) 
             const = 0;
+#endif
     };
-
     /** Class which specify handling of value for which user did not specified
         anything. */    
     class BOOST_PROGRAM_OPTIONS_DECL 

@@ -8,6 +8,8 @@
 
 #include <boost/program_options/config.hpp>
 
+#if !defined(BOOST_NO_STD_WSTRING)
+
 #include <boost/detail/workaround.hpp>
 
 #include <string>
@@ -84,4 +86,22 @@ namespace boost {
   
 }
 
+#else
+#include <vector>
+#include <string>
+namespace boost{
+   namespace program_options{
+        BOOST_PROGRAM_OPTIONS_DECL std::string to_internal(const std::string&);
+
+        template<class T>
+        std::vector<std::string> to_internal(const std::vector<T>& s)
+        {
+            std::vector<std::string> result;
+            for (unsigned i = 0; i < s.size(); ++i)
+                result.push_back(to_internal(s[i]));            
+            return result;
+        }
+   }
+}
+#endif
 #endif

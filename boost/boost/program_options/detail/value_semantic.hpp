@@ -90,11 +90,12 @@ namespace boost { namespace program_options {
                        bool*,
                        int);
 
+#if !defined(BOOST_NO_STD_WSTRING)
     BOOST_PROGRAM_OPTIONS_DECL void validate(boost::any& v, 
                        const std::vector<std::wstring>& xs, 
                        bool*,
                        int);
-
+#endif
     // For some reason, this declaration, which is require by the standard,
     // cause gcc 3.2 to not generate code to specialization defined in
     // value_semantic.cpp
@@ -107,10 +108,12 @@ namespace boost { namespace program_options {
                        std::string*,
                        int);
 
+#if !defined(BOOST_NO_STD_WSTRING)
     BOOST_PROGRAM_OPTIONS_DECL void validate(boost::any& v, 
                        const std::vector<std::wstring>& xs,
                        std::string*,
                        int);
+#endif
 #endif
 
     /** Validates sequences. Allows multiple values per option occurence

@@ -123,6 +123,7 @@ namespace boost { namespace program_options {
     // since wstring can't be constructed/compared with char*. We'd need to
     // create auxilliary 'widen' routine to convert from char* into 
     // needed string type, and that's more work.
+#if !defined(BOOST_NO_STD_WSTRING)
     BOOST_PROGRAM_OPTIONS_DECL 
     void validate(any& v, const vector<wstring>& xs, bool*, int)
     {
@@ -139,7 +140,7 @@ namespace boost { namespace program_options {
         else
             throw validation_error("invalid bool value");
     }
-
+#endif
     BOOST_PROGRAM_OPTIONS_DECL 
     void validate(any& v, const vector<string>& xs, std::string*, int)
     {
@@ -152,6 +153,7 @@ namespace boost { namespace program_options {
             v = any(s);
     }
 
+#if !defined(BOOST_NO_STD_WSTRING)
     BOOST_PROGRAM_OPTIONS_DECL 
     void validate(any& v, const vector<wstring>& xs, std::string*, int)
     {
@@ -163,7 +165,7 @@ namespace boost { namespace program_options {
         else
             v = any(s);
     }
-
+#endif
 
     namespace validators {
 
