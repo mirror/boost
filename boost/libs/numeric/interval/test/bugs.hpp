@@ -2,17 +2,11 @@
  * Handles namespace resolution quirks in older compilers and braindead
  * warnings [Herve, June 3rd 2003]
  *
- * Copyright Herve Bronnimann2002-2003
- * Permission to use, copy, modify, sell, and distribute this software
- * is hereby granted without fee provided that the above copyright
- * notice appears in all copies and that both that copyright notice and
- * this permission notice appear in supporting documentation.
+ * Copyright 2002-2003 Hervé Brönnimann
  *
- * None of the above authors nor Polytechnic University make any
- * representation about the suitability of this software for any
- * purpose. It is provided "as is" without express or implied warranty.
- *
- * $Id$
+ * Distributed under the Boost Software License, Version 1.0.
+ * (See accompanying file LICENSE_1_0.txt or
+ * copy at http://www.boost.org/LICENSE_1_0.txt)
  */
 
 #include <boost/config.hpp>
