@@ -1,0 +1,6 @@
+<section id="date_time.gregorian.day_clock_class">
+  <title>Class day_clock</title>
+  <link linkend="date_construct_from_clock">Class day_clock</link>
+  <!-- day_clock is documented as part of the date class. 
+  This file serves as a link generator for day_clock -->
+</section>

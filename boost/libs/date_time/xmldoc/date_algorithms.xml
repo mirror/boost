@@ -1,0 +1,99 @@
+<section id="date_time.gregorian.date_algorithms">
+  <title>Date Generators/Algorithms</title>
+
+  <link linkend="algo_intro">Introduction</link> --
+  <link linkend="algo_header">Header</link> --
+  <link linkend="algo_overview">Overview</link>
+
+  <anchor id="algo_intro" />
+  <bridgehead renderas="sect3">Introduction</bridgehead>
+  <para> 
+    Date algorithms or generators are tools for generating other dates or schedules of dates. A generator function starts with some part of a date such as a month and day and is supplied another part to then generate a concrete date. This allows the programmer to represent concepts such as "The first Sunday in February" and then create a concrete set of dates when provided with one or more years. 
+  </para>
+  <programlisting>
+    using namespace boost::gregorian; 
+    typedef boost::date_time::nth_kday_of_month&lt;date> nkday;
+    nkday ldgen(nkday::first, Monday, Sep)); //US labor day
+    date labor_day = ldgen.get_date(2002); //Calculate labor day for 2002
+  </programlisting>
+  <para> 
+    The <link linkend="date_time.examples.print_holidays">print holidays</link> example shows a detailed usage example. 
+  </para>
+
+  <anchor id="algo_header" />
+  <bridgehead renderas="sect3">Header</bridgehead>
+  <para>
+    #include "boost/date_time/date_generators.hpp" 
+  </para>
+
+  <anchor id="algo_overview" />
+  <bridgehead renderas="sect3">Overview</bridgehead>
+  <informaltable frame="all">
+    <tgroup cols="4">
+      <thead>
+	<row>
+	  <entry>Class</entry>
+	  <entry>Construction Parameters</entry>
+	  <entry>get_date Parameter</entry>
+	  <entry>Description</entry>
+	  <entry>Example</entry>
+	</row>
+      </thead>
+      <tbody>
+	<row>
+	  <entry>first_kday_after</entry>
+	  <entry> greg_day_of_week day_of_week</entry>
+	  <entry>date start_day</entry>
+	  <entry>Calculate something like First Sunday after Jan 1,2002</entry>
+	  <entry>
+	    first_kday_after fkaf(Monday);
+	    date d = fkaf.get_date(date(2002,Jan,1));//2002-Jan-07
+	  </entry>
+	</row>
+	<row>
+	  <entry>first_kday_before</entry>
+	  <entry> greg_day_of_week day_of_week</entry>
+	  <entry>date start_day</entry>
+	  <entry>Calculate something like First Monday before Feb 1,2002</entry>
+	  <entry>
+	    first_kday_before fkbf(Monday);
+	    date d = fkbf.get_date(date(2002,Feb,1));//2002-Jan-28
+	  </entry>
+	</row>
+	<row>
+	  <entry>last_kday_of_month</entry>
+	  <entry>greg_day_of_week day_of_week greg_month month</entry>
+	  <entry>greg_year year</entry>
+	  <entry>Calculate something like last Monday of January</entry>
+	  <entry>
+	    last_kday_of_month lkm(Monday,Jan);
+	    date d = lkm.get_date(2002);//2002-Jan-28
+	  </entry>
+	</row>
+	<row>
+	  <entry>first_kday_of_month</entry>
+	  <entry>greg_day_of_week day_of_week greg_month month</entry>
+	  <entry>greg_year year</entry>
+	  <entry>Calculate something like first Monday of January</entry>
+	  <entry>
+	    first_kday_of_month fkm(Monday,Jan);
+	    date d = fkm.get_date(2002);//2002-Jan-07
+	  </entry>
+	</row>
+	<row>
+	  <entry>partial_date</entry>
+	  <entry>greg_day day_of_month greg_month month</entry>
+	  <entry>greg_year year</entry>
+	  <entry>Generates a date by applying the year to the given month and day.</entry>
+	  <entry>
+	    partial_date pd(1,Jan);
+	    date d = pd.get_date(2002);//2002-Jan-01
+	  </entry>
+	</row>
+      </tbody>
+    </tgroup>
+  </informaltable>
+
+
+  <link linkend="top">top</link>
+</section>

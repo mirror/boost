@@ -1,0 +1,13 @@
+<section id="date_time.tests">
+  <title>Tests</title>
+
+  <para>
+    The library provides a large number of tests in the 
+    <programlisting>
+      libs/date_time/test
+      libs/date_time/test/gregorian
+      libs/date_time/test/posix_time
+    </programlisting>
+    directories. Building and executing these tests assures that the installation is correct and that the library is functioning correctly. In addition, these tests facilitate the porting to new compilers. Finally, the tests provide examples of many functions not explicitly described in the usage examples. 
+  </para>
+</section>

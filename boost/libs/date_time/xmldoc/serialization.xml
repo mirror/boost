@@ -1,0 +1,77 @@
+<section id="date_time.serialization">
+  <title>Serialization</title>
+
+  <para>
+    The boost::date_time library is compatible with the boost::serialization library (currently in review for final acceptance into boost). The list of classes that are serializable are:
+  </para>
+  
+  <bridgehead renderas="sect3">boost::gregorian</bridgehead>
+
+  <informaltable frame="all" pgwide="1">
+    <tgroup cols="3">
+      <tbody>
+	<row>
+	  <entry>date</entry> 
+	  <entry>date_duration</entry> 
+	  <entry>date_period</entry> 
+	</row> 
+	<row>
+	  <entry>partial_date</entry> 
+	  <entry>nth_day_of_week_in_month</entry> 
+	  <entry>first_day_of_week_in_month</entry> 
+	</row> 
+	<row>
+	  <entry>last_day_of_week_in_month</entry> 
+	  <entry>first_day_of_week_before</entry> 
+	  <entry>first_day_of_week_after</entry> 
+	</row> 
+	<row>
+	  <entry>greg_month</entry> 
+	  <entry>greg_day</entry> 
+	  <entry>greg_weekday</entry> 
+	</row> 
+      </tbody>
+    </tgroup>
+  </informaltable>
+  
+  <bridgehead renderas="sect3">boost::posix_time</bridgehead>
+
+  <informaltable frame="all" pgwide="1">
+    <tgroup cols="3">
+      <tbody>
+	<row>
+	  <entry>ptime</entry> 
+	  <entry>time_duration</entry> 
+	  <entry>time_period</entry> 
+	</row> 
+      </tbody>
+    </tgroup>
+  </informaltable>
+      
+  <para>
+    Note* These classes have been tested with text_archives. The serialization routines were written with xml archives in mind, however, no tests are currently available (at time of writing xml archives were not parsed correctly). Xml archive tests will be added as soon as the problem is resolved.
+  </para>
+
+  <para>
+    No extra steps are required to build the date_time library for serialization use.
+  </para>
+
+  <para>
+    To use the date_time serialization code, the proper header files must be explicitly included. The header files are:
+    <programlisting>
+      boost/date_time/gregorian/greg_serialize.hpp
+    </programlisting>
+    and
+    <programlisting>
+      boost/date_time/posix_time/time_serialize.hpp
+    </programlisting>
+  </para>
+
+  <para>
+    Tests exist for serialization of the above mentioned classes but are not run by default. To run these test suites a global variable must be set on the command line.
+    <programlisting>
+      bjam “-sBOOST_DATE_TIME_SERIALIZATION=true” ...
+    </programlisting>
+    This will run the date_time_serialization suite along with the rest of the date_time tests.
+  </para>
+</section>

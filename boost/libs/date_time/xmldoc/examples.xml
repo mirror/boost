@@ -1,0 +1,20 @@
+<section id="date_time.examples" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Examples</title>
+
+  <!-- gregorian examples -->
+  <xi:include href="usage_examples.xml"/>
+
+  <xi:include href="ex_dates_as_strings.xml"/>
+  <xi:include href="ex_days_alive.xml"/>
+  <xi:include href="ex_days_between_new_years.xml"/>
+  <xi:include href="ex_end_of_month_day.xml"/>
+  <xi:include href="ex_localization.xml"/>
+  <xi:include href="ex_date_period_calc.xml"/>
+  <xi:include href="ex_print_holidays.xml"/>
+  <xi:include href="ex_print_month.xml"/>
+  <!-- posix_time examples -->
+  <xi:include href="ex_time_math.xml"/>
+  <xi:include href="ex_print_hours.xml"/>
+  <xi:include href="ex_local_utc_conversion.xml"/>
+  <xi:include href="ex_time_periods.xml"/>
+</section>

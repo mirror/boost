@@ -1,0 +1,18 @@
+
+import toolset ;
+toolset.using doxygen ;
+
+boostbook date_time : date_time.xml ;
+
+doxygen date_time_autodoc :
+	[ glob ../../../boost/date_time/*.hpp ] 
+	;
+
+doxygen date_time_gregorian_autodoc :
+	[ glob ../../../boost/date_time/gregorian/*.hpp ] 
+#	[ glob ../../../boost/date_time/local_time/*.hpp ] 
+	;
+
+doxygen date_time_posix_time_autodoc :
+	[ glob ../../../boost/date_time/posix_time/*.hpp ] 
+	;

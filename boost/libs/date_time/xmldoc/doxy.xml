@@ -1,0 +1,26 @@
+<section id="date_time.doxy" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>Doxygen Generated Library Reference</title>
+  
+  <para>
+    We added doxygen generated documentation. &lt;Reword this&gt;
+  </para>
+
+  <!--<ulink url="../../boost/date_time/html/index.html">Doxy docs</ulink>-->
+  
+  <!-- 
+  <link linkend="dt">Date_time</link>  
+  <link linkend="gt">Gregorian_time</link>  
+  <link linkend="pt">Posix_time</link> 
+
+  <anchor id="dt"/>
+  <xi:include href="date_time_autodoc.boostbook"/>
+  <anchor id="gt"/>
+  <xi:include href="date_time_gregorian_autodoc.boostbook"/>
+  <anchor id="pt"/>
+  <xi:include href="date_time_posix_time_autodoc.boostbook"/>
+  -->
+  <xi:include href="date_time_autodoc.boostbook"/>
+  <xi:include href="date_time_gregorian_autodoc.boostbook"/>
+  <xi:include href="date_time_posix_time_autodoc.boostbook"/>
+</section>
+
