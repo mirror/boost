@@ -160,16 +160,17 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         // Assignment
+        BOOST_UBLAS_INLINE
+        sparse_storage_element &operator = (const sparse_storage_element &p) {
+            // Overide the implict copy assignment
+            d_ = p.d_;
+            dirty_ = true;
+            return *this;
+        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator = (const D &d) {
             d_ = d;
-            dirty_ = true;
-            return *this;
-        }
-        BOOST_UBLAS_INLINE
-        sparse_storage_element &operator = (const sparse_storage_element &p) {
-            d_ = p.d_;
             dirty_ = true;
             return *this;
         }
@@ -180,22 +181,10 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
-        BOOST_UBLAS_INLINE
-        sparse_storage_element &operator += (const sparse_storage_element &p) {
-            d_ += p.d_;
-            dirty_ = true;
-            return *this;
-        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator -= (const D &d) {
             d_ -= d;
-            dirty_ = true;
-            return *this;
-        }
-        BOOST_UBLAS_INLINE
-        sparse_storage_element &operator -= (const sparse_storage_element &p) {
-            d_ -= p.d_;
             dirty_ = true;
             return *this;
         }
@@ -206,12 +195,6 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
-        BOOST_UBLAS_INLINE
-        sparse_storage_element &operator *= (const sparse_storage_element &p) {
-            d_ *= p.d_;
-            dirty_ = true;
-            return *this;
-        }
         template<class D>
         BOOST_UBLAS_INLINE
         sparse_storage_element &operator /= (const D &d) {
@@ -219,11 +202,17 @@ namespace boost { namespace numeric { namespace ublas {
             dirty_ = true;
             return *this;
         }
+
+        // Comparison
+        template<class D>
         BOOST_UBLAS_INLINE
-        sparse_storage_element &operator /= (const sparse_storage_element &p) {
-            d_ /= p.d_;
-            dirty_ = true;
-            return *this;
+        bool operator == (const D &d) const {
+            return d_ == d;
+        }
+        template<class D>
+        BOOST_UBLAS_INLINE
+        bool operator != (const D &d) const {
+            return d_ != d;
         }
 
         // Conversion
@@ -269,8 +258,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef std::ptrdiff_t difference_type;
         typedef I index_type;
         typedef T data_value_type;
-        // typedef const T &data_const_reference;
-        typedef typename type_traits<T>::const_reference data_const_reference;
+        typedef const T &data_const_reference;
 #ifndef BOOST_UBLAS_STRICT_STORAGE_SPARSE
         typedef T &data_reference;
 #else
