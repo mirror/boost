@@ -470,7 +470,7 @@ namespace std{
    using ::abs;
    using ::setlocale;
 #  ifndef BOOST_NO_WREGEX
-#     ifndef BOOST_RE_NO_SWPRINTF
+#     ifndef BOOST_NO_SWPRINTF
    using ::swprintf;
 #     endif
    using ::wcslen;
