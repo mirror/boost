@@ -48,13 +48,12 @@ struct bidirectional_seekable
 
 struct device_tag : virtual any_tag { };
 struct filter_tag : virtual any_tag { };
-namespace detail { struct smart_tag : virtual any_tag { };  }
 
     // 
     // Tags for optional behavior.
     //
 
-struct peekable_tag : virtual any_tag { };        // Deivec.
+struct peekable_tag : virtual any_tag { };        // Devices.
 struct closable_tag : virtual any_tag { };
 struct localizable_tag : virtual any_tag { };
 struct direct_tag : virtual any_tag { };          // Devices.
@@ -82,7 +81,7 @@ struct multichar_bidirectional_filter_tag
     : multichar_tag, 
       bidirectional_filter_tag 
     { };
-struct multichar_bidirectional_filter_tag_seekable_filter_tag 
+struct multichar_seekable_filter_tag 
     : multichar_tag, 
       seekable_filter_tag 
     { };
