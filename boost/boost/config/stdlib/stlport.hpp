@@ -92,13 +92,11 @@
 #  endif
 #endif
 //
-// std::reverse_iterate behaves like VC6's under some circumstances:
+// std::iterator behaves like VC6's under some circumstances:
 //
 #if defined (_STLP_USE_OLD_HP_ITERATOR_QUERIES)  || defined (__STL_USE_OLD_HP_ITERATOR_QUERIES)\
  || (!defined ( _STLP_CLASS_PARTIAL_SPECIALIZATION ) && !defined ( __STL_CLASS_PARTIAL_SPECIALIZATION ))
-// disable this for now, it causes too many problems, we need a better
-// fix for broken reverse iterators:
-// #  define BOOST_MSVC_STD_ITERATOR
+#  define BOOST_MSVC_STD_ITERATOR
 #endif
 
 //
@@ -129,6 +127,7 @@
 
 
 #define BOOST_STDLIB "STLPort standard library version " BOOST_STRINGIZE(__SGI_STL_PORT)
+
 
 
 
