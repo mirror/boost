@@ -16,7 +16,9 @@
 TT_TEST_BEGIN(tricky_abstract_type_test)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_empty<test_abc1>::value, false);
+#ifndef TEST_STD
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_stateless<test_abc1>::value, false);
+#endif
 
 TT_TEST_END
 

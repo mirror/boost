@@ -54,10 +54,10 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<char&>::value, ALIGNOF(void*));
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<char (&)(int)>::value, ALIGNOF(void*));
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<char(&)[4]>::value, ALIGNOF(void*));
 
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<Base&,Derived>::value), false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<Base&,Derived&>::value), false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<Base,Derived&>::value), false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<Base,void>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base&,Derived>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base&,Derived&>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,Derived&>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,void>::value), false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same<void, int>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same<void, void>::value), true);

@@ -20,7 +20,7 @@
 #  include <boost/type_traits/has_trivial_assign.hpp>
 #  include <boost/type_traits/has_trivial_destructor.hpp>
 #  include <boost/type_traits/is_compound.hpp>
-#  include <boost/type_traits/is_base_and_derived.hpp>
+#  include <boost/type_traits/is_base_of.hpp>
 #  include <boost/type_traits/is_convertible.hpp>
 #endif
 
@@ -39,7 +39,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_constructor<foo0_t>::value, fals
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<foo0_t>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_destructor<foo0_t>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_and_derived<foo0_t, foo0_t>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<foo0_t, foo0_t>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<foo0_t, int>::value), false);
 
 
