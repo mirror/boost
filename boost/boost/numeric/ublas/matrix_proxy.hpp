@@ -33,7 +33,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_row<M> >::operator ();
 #endif
-        typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -55,13 +54,11 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        // FIXME build vector_temp_type from base type of all closures
-        typedef vector<value_type> vector_temp_type;
-        typedef const matrix_row<matrix_type> const_self_type;
         typedef matrix_row<matrix_type> self_type;
     public:
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef abstract_tag simd_category;
@@ -131,7 +128,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_row &operator = (const matrix_row &mr) {
             // FIXME: the rows could be differently sized.
             // std::copy (mr.begin (), mr.end (), begin ());
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (mr));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (mr));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -144,7 +141,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_row &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (ae));
             return *this;
         }
         template<class AE>
@@ -156,7 +153,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_row &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this + ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -168,7 +165,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_row &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this - ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -544,7 +541,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_column<M> >::operator ();
 #endif
-        typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -566,13 +562,11 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        // FIXME build vector_temp_type from base type of all closures
-        typedef vector<value_type> vector_temp_type;
-        typedef const matrix_column<matrix_type> const_self_type;
         typedef matrix_column<matrix_type> self_type;
     public:
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef abstract_tag simd_category;
@@ -642,7 +636,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_column &operator = (const matrix_column &mc) {
             // FIXME: the columns could be differently sized.
             // std::copy (mc.begin (), mc.end (), begin ());
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (mc));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (mc));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -655,7 +649,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_column &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (ae));
             return *this;
         }
         template<class AE>
@@ -667,7 +661,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_column &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this + ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -679,7 +673,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_column &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this - ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1055,7 +1049,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_range<M> >::operator ();
 #endif
-        typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1077,14 +1070,12 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        // FIXME build vector_temp_type from base type of all closures
-        typedef vector<value_type> vector_temp_type;
-        typedef const matrix_vector_range<matrix_type> const_self_type;
         typedef matrix_vector_range<matrix_type> self_type;
     public:
         typedef basic_range<size_type, difference_type> range_type;
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef abstract_tag simd_category;
@@ -1162,7 +1153,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_vector_range &operator = (const matrix_vector_range &mvr) {
             // FIXME: the ranges could be differently sized.
             // std::copy (mvr.begin (), mvr.end (), begin ());
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (mvr));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (mvr));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1175,7 +1166,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (ae));
             return *this;
         }
         template<class AE>
@@ -1187,7 +1178,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this + ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -1199,7 +1190,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_range &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this - ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1346,6 +1337,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -1453,6 +1445,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -1555,7 +1548,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_slice<M> >::operator ();
 #endif
-        typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -1577,15 +1569,13 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        // FIXME build vector_temp_type from base type of all closures
-        typedef vector<value_type> vector_temp_type;
-        typedef const matrix_vector_slice<matrix_type> const_self_type;
         typedef matrix_vector_slice<matrix_type> self_type;
     public:
         typedef basic_range<size_type, difference_type> range_type;
         typedef basic_slice<size_type, difference_type> slice_type;
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef abstract_tag simd_category;
@@ -1670,7 +1660,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_vector_slice &operator = (const matrix_vector_slice &mvs) {
             // FIXME: the slices could be differently sized.
             // std::copy (mvs.begin (), mvs.end (), begin ());
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (mvs));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (mvs));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -1683,7 +1673,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (ae));
             return *this;
         }
         template<class AE>
@@ -1695,7 +1685,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this + ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -1707,7 +1697,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_slice &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this - ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -1856,6 +1846,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -1963,6 +1954,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -2065,7 +2057,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<matrix_vector_indirect<M, IA> >::operator ();
 #endif
-        typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef const IA const_indirect_array_type;
         typedef IA indirect_array_type;
@@ -2089,13 +2080,11 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        // FIXME build vector_temp_type from base type of all closures
-        typedef vector<value_type> vector_temp_type;
-        typedef const matrix_vector_indirect<matrix_type, indirect_array_type> const_self_type;
         typedef matrix_vector_indirect<matrix_type, indirect_array_type> self_type;
     public:
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
 
@@ -2179,7 +2168,7 @@ namespace boost { namespace numeric { namespace ublas {
         matrix_vector_indirect &operator = (const matrix_vector_indirect &mvi) {
             // FIXME: the indirects could be differently sized.
             // std::copy (mvi.begin (), mvi.end (), begin ());
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (mvi));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (mvi));
             return *this;
         }
         BOOST_UBLAS_INLINE
@@ -2192,7 +2181,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator = (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (ae));
             return *this;
         }
         template<class AE>
@@ -2204,7 +2193,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator += (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this + ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -2216,7 +2205,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_vector_indirect &operator -= (const vector_expression<AE> &ae) {
-            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, value_type> (), *this, vector_temp_type (*this - ae));
+            vector_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator::reference, BOOST_UBLAS_TYPENAME vector_temporary_type::value_type> (), *this, vector_temporary_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -2365,6 +2354,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -2472,6 +2462,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -2574,7 +2565,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_range<M> >::operator ();
 #endif
-        typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -2596,14 +2586,13 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        // FIXME build matrix_temp_type from base type of all closures
-        typedef typename matrix_closure_type::expression_type matrix_temp_type;
-        typedef const matrix_range<matrix_type> const_self_type;
         typedef matrix_range<matrix_type> self_type;
     public:
         typedef basic_range<size_type, difference_type> range_type;
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
+        typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -2696,7 +2685,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_range &operator = (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (ae));
             return *this;
         }
         template<class AE>
@@ -2708,7 +2697,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_range& operator += (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (*this + ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -2720,7 +2709,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_range& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (*this - ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -3505,7 +3494,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_slice<M> >::operator ();
 #endif
-        typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef typename M::size_type size_type;
         typedef typename M::difference_type difference_type;
@@ -3527,15 +3515,14 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        // FIXME build matrix_temp_type from base type of all closures
-        typedef typename matrix_closure_type::expression_type matrix_temp_type;
-        typedef const matrix_slice<matrix_type> const_self_type;
         typedef matrix_slice<matrix_type> self_type;
     public:
         typedef basic_range<size_type, difference_type> range_type;
         typedef basic_slice<size_type, difference_type> slice_type;
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
+        typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -3640,7 +3627,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_slice &operator = (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (ae));
             return *this;
         }
         template<class AE>
@@ -3652,7 +3639,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_slice& operator += (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (*this + ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -3664,7 +3651,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_slice& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (*this - ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -3800,7 +3787,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename M::const_iterator1::iterator_category iterator_category;
             typedef typename M::const_iterator1::value_type value_type;
             typedef typename M::const_iterator1::difference_type difference_type;
-            typedef typename M::const_iterator1::reference reference;
+            typedef typename M::const_reference reference;    //FIXME due to indexing access
             typedef typename M::const_iterator1::pointer pointer;
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -3847,6 +3834,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -3943,7 +3931,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename M::iterator1::iterator_category iterator_category;
             typedef typename M::iterator1::value_type value_type;
             typedef typename M::iterator1::difference_type difference_type;
-            typedef typename M::iterator1::reference reference;
+            typedef typename M::reference reference;    //FIXME due to indexing access
             typedef typename M::iterator1::pointer pointer;
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
@@ -3987,6 +3975,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -4085,7 +4074,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename M::const_iterator2::iterator_category iterator_category;
             typedef typename M::const_iterator2::value_type value_type;
             typedef typename M::const_iterator2::difference_type difference_type;
-            typedef typename M::const_iterator2::reference reference;
+            typedef typename M::const_reference reference;    //FIXME due to indexing access
             typedef typename M::const_iterator2::pointer pointer;
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -4132,6 +4121,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -4228,7 +4218,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename M::iterator2::iterator_category iterator_category;
             typedef typename M::iterator2::value_type value_type;
             typedef typename M::iterator2::difference_type difference_type;
-            typedef typename M::iterator2::reference reference;
+            typedef typename M::reference reference;    //FIXME due to indexing access
             typedef typename M::iterator2::pointer pointer;
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;
@@ -4272,6 +4262,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -4429,6 +4420,7 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE was: return matrix_slice<M> (const_cast<M &> (data), s1, s2);
         return matrix_slice<const M> (data, s1, s2);
     }
+#ifndef BOOST_UBLAS_MSVC71_FUNCTION_TEMPLATE_ORDERING
     template<class M>
     BOOST_UBLAS_INLINE
     matrix_slice<M> project (matrix_slice<M> &data, const typename matrix_slice<M>::range_type &r1, const typename matrix_slice<M>::range_type &r2) {
@@ -4439,6 +4431,7 @@ namespace boost { namespace numeric { namespace ublas {
     const matrix_slice<M> project (const matrix_slice<M> &data, const typename matrix_slice<M>::range_type &r1, const typename matrix_slice<M>::range_type &r2) {
         return data.project (r1, r2);
     }
+#endif
     template<class M>
     BOOST_UBLAS_INLINE
     matrix_slice<M> project (matrix_slice<M> &data, const typename matrix_slice<M>::slice_type &s1, const typename matrix_slice<M>::slice_type &s2) {
@@ -4461,7 +4454,6 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix_indirect<M, IA> >::operator ();
 #endif
-        typedef const M const_matrix_type;
         typedef M matrix_type;
         typedef const IA const_indirect_array_type;
         typedef IA indirect_array_type;
@@ -4485,15 +4477,14 @@ namespace boost { namespace numeric { namespace ublas {
                                           typename M::closure_type>::type matrix_closure_type;
 #endif
     private:
-        // FIXME build matrix_temp_type from base type of all closures
-        typedef typename matrix_closure_type::expression_type matrix_temp_type;
-        typedef const matrix_indirect<matrix_type, indirect_array_type> const_self_type;
         typedef matrix_indirect<matrix_type, indirect_array_type> self_type;
     public:
         typedef basic_range<size_type, difference_type> range_type;
         typedef basic_slice<size_type, difference_type> slice_type;
-        typedef const_self_type const_closure_type;
+        typedef const self_type const_closure_type;
         typedef self_type closure_type;
+        typedef typename M::vector_temporary_type vector_temporary_type;
+        typedef typename M::matrix_temporary_type matrix_temporary_type;
         typedef typename storage_restrict_traits<typename M::storage_category,
                                                  dense_proxy_tag>::storage_category storage_category;
         typedef typename M::orientation_category orientation_category;
@@ -4592,7 +4583,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_indirect &operator = (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (ae));
             return *this;
         }
         template<class AE>
@@ -4604,7 +4595,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_indirect& operator += (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (*this + ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (*this + ae));
             return *this;
         }
         template<class AE>
@@ -4616,7 +4607,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class AE>
         BOOST_UBLAS_INLINE
         matrix_indirect& operator -= (const matrix_expression<AE> &ae) {
-            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, value_type> (), *this, matrix_type (*this - ae));
+            matrix_assign (scalar_assign<BOOST_UBLAS_TYPENAME iterator1::reference, BOOST_UBLAS_TYPENAME matrix_temporary_type::value_type> (), *this, matrix_temporary_type (*this - ae));
             return *this;
         }
         template<class AE>
@@ -4751,7 +4742,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename M::const_iterator1::iterator_category iterator_category;
             typedef typename M::const_iterator1::value_type value_type;
             typedef typename M::const_iterator1::difference_type difference_type;
-            typedef typename M::const_iterator1::reference reference;
+            typedef typename M::const_reference reference;    //FIXME due to indexing access
             typedef typename M::const_iterator1::pointer pointer;
             typedef const_iterator2 dual_iterator_type;
             typedef const_reverse_iterator2 dual_reverse_iterator_type;
@@ -4798,6 +4789,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -4894,7 +4886,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename M::iterator1::iterator_category iterator_category;
             typedef typename M::iterator1::value_type value_type;
             typedef typename M::iterator1::difference_type difference_type;
-            typedef typename M::iterator1::reference reference;
+            typedef typename M::reference reference;    //FIXME due to indexing access
             typedef typename M::iterator1::pointer pointer;
             typedef iterator2 dual_iterator_type;
             typedef reverse_iterator2 dual_reverse_iterator_type;
@@ -4938,6 +4930,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -5036,7 +5029,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename M::const_iterator2::iterator_category iterator_category;
             typedef typename M::const_iterator2::value_type value_type;
             typedef typename M::const_iterator2::difference_type difference_type;
-            typedef typename M::const_iterator2::reference reference;
+            typedef typename M::const_reference reference;    //FIXME due to indexing access
             typedef typename M::const_iterator2::pointer pointer;
             typedef const_iterator1 dual_iterator_type;
             typedef const_reverse_iterator1 dual_reverse_iterator_type;
@@ -5083,6 +5076,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
@@ -5179,7 +5173,7 @@ namespace boost { namespace numeric { namespace ublas {
             typedef typename M::iterator2::iterator_category iterator_category;
             typedef typename M::iterator2::value_type value_type;
             typedef typename M::iterator2::difference_type difference_type;
-            typedef typename M::iterator2::reference reference;
+            typedef typename M::reference reference;    //FIXME due to indexing access
             typedef typename M::iterator2::pointer pointer;
             typedef iterator1 dual_iterator_type;
             typedef reverse_iterator1 dual_reverse_iterator_type;
@@ -5223,6 +5217,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Dereference
             BOOST_UBLAS_INLINE
             reference operator * () const {
+                // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
 
