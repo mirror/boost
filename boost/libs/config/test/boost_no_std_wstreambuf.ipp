@@ -29,8 +29,9 @@ protected:
    typename parser_buf<charT, traits>::pos_type seekpos(pos_type sp, ::std::ios_base::openmode which);
    typename parser_buf<charT, traits>::pos_type seekoff(off_type off, ::std::ios_base::seekdir way, ::std::ios_base::openmode which);
 private:
-   parser_buf& operator=(const parser_buf&);
-   parser_buf(const parser_buf&);
+   parser_buf& operator=(const parser_buf&)
+   { return *this; };
+   parser_buf(const parser_buf&){};
 };
 
 template<class charT, class traits>
