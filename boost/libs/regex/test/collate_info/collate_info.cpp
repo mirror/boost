@@ -170,6 +170,23 @@ void print_sort_syntax(const traits& pt, const char* name)
       break;
    }
    std::cout << std::endl;
+
+   typedef typename traits::string_type string_type;
+   typedef typename traits::char_type char_type;
+
+   char_type c[5] = { 'a', 'A', ';', '{', '}', };
+   for(int i = 0; i < 5; ++i)
+   {
+      string_type s(1, c[i]);
+      string_type sk = pt.transform(s.c_str(), s.c_str() + s.size());
+      string_type skp = pt.transform_primary(s.c_str(), s.c_str() + s.size());
+      print_string(s);
+      std::cout << "   ";
+      print_string(sk);
+      std::cout << "   ";
+      print_string(skp);
+      std::cout << std::endl;
+   }
 }
 
 #ifndef BOOST_NO_STD_LOCALE
