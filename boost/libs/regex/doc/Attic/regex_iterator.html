@@ -63,6 +63,13 @@ public:
    regex_iterator <A href="#o7">operator</A>++(int);
 };
 
+typedef regex_iterator&lt;const char*&gt;                  cregex_iterator;
+typedef regex_iterator&lt;std::string::const_iterator&gt;  sregex_iterator;
+#ifndef BOOST_NO_WREGEX
+typedef regex_iterator&lt;const wchar_t*&gt;               wcregex_iterator;
+typedef regex_iterator&lt;std::wstring::const_iterator&gt; wsregex_iterator;
+#endif
+
 </pre>
       <h3><a name="description"></a>Description</h3>
       <p>A regex_iterator is constructed from a pair of iterators, and enumerates all 

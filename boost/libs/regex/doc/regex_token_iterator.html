@@ -71,6 +71,13 @@ public:
    regex_token_iterator&amp; <A href="#o6">operator</A>++();
    regex_token_iterator <A href="#o7">operator</A>++(int);
 };
+
+typedef regex_token_iterator&lt;const char*&gt;                   cregex_token_iterator;
+typedef regex_token_iterator&lt;std::string::const_iterator&gt;   sregex_token_iterator;
+#ifndef BOOST_NO_WREGEX
+typedef regex_token_iterator&lt;const wchar_t*&gt;                wcregex_token_iterator;
+typedef regex_token_iterator<&lt;std::wstring::const_iterator&gt; wsregex_token_iterator;
+#endif
 </PRE>
       <H3><A name="description"></A>Description</H3>
       <PRE><A name=c1></A>regex_token_iterator();</PRE>
