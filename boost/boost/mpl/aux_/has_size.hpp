@@ -17,47 +17,10 @@
 #ifndef BOOST_MPL_AUX_HAS_SIZE_HPP_INCLUDED
 #define BOOST_MPL_AUX_HAS_SIZE_HPP_INCLUDED
 
-#include "boost/mpl/aux_/type_wrapper.hpp"
-#include "boost/mpl/aux_/yes_no.hpp"
-#include "boost/mpl/aux_/config/msvc_typename.hpp"
-#include "boost/mpl/aux_/config/overload_resolution.hpp"
-#include "boost/config.hpp"
+#include "boost/mpl/aux_/has_xxx.hpp"
 
-namespace boost {
-namespace mpl {
-namespace aux {
-
-#if !defined(BOOST_MPL_BROKEN_OVERLOAD_RESOLUTION)
-
-// the implementation below is based on a USENET newsgroup posting by  
-// Rani Sharoni (comp.lang.c++.moderated, 2002-03-17 07:45:09 PST)
-
-template< typename T >
-yes_tag has_size_helper(type_wrapper<T>*, BOOST_MSVC_TYPENAME T::size*);
-
-template< typename T >
-no_tag has_size_helper(type_wrapper<T>*, ...);
-
-template< typename T >
-struct has_size
-{
-     BOOST_STATIC_CONSTANT(bool, value = 
-        sizeof(has_size_helper((type_wrapper<T>*)0, 0)) == sizeof(yes_tag)
-        );
-};
-
-#else
-
-template< typename T >
-struct has_size
-{
-     BOOST_STATIC_CONSTANT(bool, value = false);
-};
-
-#endif
-
-} // namespace aux
-} // namespace mpl
-} // namespace boost
+namespace boost { namespace mpl { namespace aux {
+BOOST_MPL_HAS_XXX_TRAIT_DEF(size)
+}}}
 
 #endif // BOOST_MPL_AUX_HAS_SIZE_HPP_INCLUDED
