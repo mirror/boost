@@ -17,6 +17,7 @@
 
 #include <boost/checked_delete.hpp>
 #include <boost/utility/base_from_member.hpp>  
+#include <boost/utility/addressof.hpp>
 
 namespace boost
 {

@@ -22,6 +22,7 @@
     checked_array_delete()</a></li>
   <li>Function templates <a href="#functions next">next() and prior()</a></li>
   <li>Class <a href="#Class noncopyable">noncopyable</a></li>
+  <li>Function template <a href="#addressof">addressof()</a></li>
   <li>Function template <a href="tie.html">tie()</a> and supporting class tied.</li>
 </ul>
 <h2> Function templates <a name="checked_delete">checked_delete</a>() and
@@ -133,6 +134,48 @@ emphasize that it is to be used only as a base class.&nbsp; Dave Abrahams notes
 concern about the effect on compiler optimization of adding (even trivial inline)
 destructor declarations. He says &quot;Probably this concern is misplaced, because
 noncopyable will be used mostly for classes which own resources and thus have non-trivial destruction semantics.&quot;</p>
+<h2><a name="addressof">Function template addressof()</a></h2>
+<p>Function <strong>addressof()</strong> returns the address of an object.</p>
+
+<blockquote>
+<pre>
+template &lt;typename T&gt; inline T*                addressof(T& v);
+template &lt;typename T&gt; inline const T*          addressof(const T& v);
+template &lt;typename T&gt; inline volatile T*       addressof(volatile T& v);
+template &lt;typename T&gt; inline const volatile T* addressof(const volatile T& v);
+</pre>
+</blockquote>
+
+
+<p>C++ allows programmers to replace the unary
+<strong>operator&()</strong> class member used to get the address of
+an object.  Getting the real address of an object requires ugly
+casting tricks to avoid invoking the overloaded
+<strong>operator&()</strong>.  Function <strong>addressof()</strong>
+provides a wrapper around the necessary code to make it easy to get an
+object's real address.
+</p>
+
+<p>The program <a href="addressof_test.cpp">addressof_test.cpp</a> can be
+used to verify that <b>addressof()</b> works as expected.</p>
+
+<p>Contributed by Brad King based on ideas from discussion with Doug Gregor.</p>
+<h3>Example</h3>
+<blockquote>
+<pre>#include &lt;boost/utility.hpp&gt;
+
+struct useless_type {};
+class nonaddressable {
+  useless_type operator&() const;
+};
+
+void f() {
+  nonaddressable x;
+  nonaddressable* xp = boost::addressof(x);
+  // nonaddressable* xpe = &amp;x; /* error */
+}</pre>
+</blockquote>
+
 <h2>Class templates for the Base-from-Member Idiom</h2>
 <p>See <a href="base_from_member.html">separate documentation</a>.</p>
 <h2>Function template tie()</h2>
