@@ -1,7 +1,7 @@
 //
 //  bind/bind_cc.hpp - support for different calling conventions
 //
-//	Do not include this header directly.
+//  Do not include this header directly.
 //
 //  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
 //
