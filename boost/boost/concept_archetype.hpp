@@ -423,7 +423,7 @@ namespace boost {
   };
 } // namespace boost
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_STD_ITERATOR_TRAITS)
 namespace std {
   template <class T>
   struct iterator_traits< boost::trivial_iterator_archetype<T> >
