@@ -235,6 +235,11 @@
 #   define BOOST_NO_SLIST
 #   define BOOST_NO_HASH
 
+#   if __KCC_VERSION <= 4001
+      // at least on Sun, the contents of <cwchar> is not in namespace std
+#     define BOOST_NO_STDC_NAMESPACE
+#   endif
+
 //  SGI MIPSpro C++ --------------------------------------------------------
 
 #elif defined __sgi
