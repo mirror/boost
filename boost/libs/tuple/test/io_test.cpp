@@ -33,7 +33,8 @@ typedef istringstream useThisIStringStream;
 #endif
 
 int test_main(int argc, char * argv[] ) {
-
+   (void)argc;
+   (void)argv;
    using boost::tuples::set_close;
    using boost::tuples::set_open;
    using boost::tuples::set_delimiter;
@@ -94,7 +95,7 @@ int test_main(int argc, char * argv[] ) {
   useThisIStringStream is("(100 200 300)"); 
    
   tuple<int, int, int> ti; 
-  BOOST_TEST(is >> ti);
+  BOOST_TEST(bool(is >> ti));
   BOOST_TEST(ti == make_tuple(100, 200, 300));
    
 
