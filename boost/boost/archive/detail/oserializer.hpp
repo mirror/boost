@@ -246,37 +246,68 @@ struct save_non_pointer_type {
                 mpl::int_<boost::serialization::primitive_type>
             >::value
         ));
-        typedef 
-            BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                // if its primitive
-                mpl::equal_to<
-                    boost::serialization::implementation_level<T>,
-                    mpl::int_<boost::serialization::primitive_type>
-                >,
-                mpl::identity<save_primitive>,
-            // else
-            BOOST_DEDUCED_TYPENAME mpl::eval_if<
-                mpl::and_<
-                    // no class info / version
-                    mpl::less<
-                        boost::serialization::implementation_level<T>,
-                        mpl::int_<boost::serialization::object_class_info>
-                    >,
-                    // and no tracking
+        #if defined(__BORLANDC__)
+            return mpl::eval_if<
+                    // if its primitive
                     mpl::equal_to<
-                        boost::serialization::tracking_level<T>,
-                        mpl::int_<boost::serialization::track_never>
-                    >
-                >,
-                // do a fast save
-                mpl::identity<save_only>,
-            // else
-                // do standard save
-                mpl::identity<save>
-            >
-        >::type typex; 
-        // note: the invokeX keeps borland from getting confused
-        typex::invokex(ar, t);
+                        boost::serialization::implementation_level<T>,
+                        mpl::int_<boost::serialization::primitive_type>
+                    >,
+                    mpl::identity<save_primitive>,
+                // else
+                BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                    mpl::and_<
+                        // no class info / version
+                        mpl::less<
+                            boost::serialization::implementation_level<T>,
+                            mpl::int_<boost::serialization::object_class_info>
+                        >,
+                        // and no tracking
+                        mpl::equal_to<
+                            boost::serialization::tracking_level<T>,
+                            mpl::int_<boost::serialization::track_never>
+                        >
+                    >,
+                    // do a fast save
+                    mpl::identity<save_only>,
+                // else
+                    // do standard save
+                    mpl::identity<save>
+                >
+            >::type::invokex(ar, t);
+        #else
+            typedef 
+                BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                    // if its primitive
+                    mpl::equal_to<
+                        boost::serialization::implementation_level<T>,
+                        mpl::int_<boost::serialization::primitive_type>
+                    >,
+                    mpl::identity<save_primitive>,
+                // else
+                BOOST_DEDUCED_TYPENAME mpl::eval_if<
+                    mpl::and_<
+                        // no class info / version
+                        mpl::less<
+                            boost::serialization::implementation_level<T>,
+                            mpl::int_<boost::serialization::object_class_info>
+                        >,
+                        // and no tracking
+                        mpl::equal_to<
+                            boost::serialization::tracking_level<T>,
+                            mpl::int_<boost::serialization::track_never>
+                        >
+                    >,
+                    // do a fast save
+                    mpl::identity<save_only>,
+                // else
+                    // do standard save
+                    mpl::identity<save>
+                >
+            >::type typex; 
+            // note: the invokeX keeps borland from getting confused
+            typex::invokex(ar, t);
+        #endif
     }
 };
 
