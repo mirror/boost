@@ -49,6 +49,7 @@
 // See http://www.boost.org for most recent version including documentation.
 
 // Revision History
+// 11 Feb 2001 - Use BOOST_STATIC_CONSTANT (David Abrahams)
 // 11 Feb 2001 - Rolled back ineffective Borland-specific code
 //               (David Abrahams)
 // 10 Feb 2001 - Rolled in supposed Borland fixes from John Maddock, but
@@ -83,9 +84,9 @@ namespace boost { namespace detail {
   struct is_signed
   {
 #if defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS) || defined(BOOST_MSVC)
-    enum { value = (Number(-1) < Number(0)) };
+    BOOST_STATIC_CONSTANT(bool, value = (Number(-1) < Number(0)));
 #else
-    enum { value = std::numeric_limits<Number>::is_signed };
+    BOOST_STATIC_CONSTANT(bool, value = std::numeric_limits<Number>::is_signed);
 #endif
   };
 
@@ -100,7 +101,7 @@ namespace boost { namespace detail {
   {
       template <class T> struct traits
       {
-          enum { digits = std::numeric_limits<T>::digits };
+          BOOST_STATIC_CONSTANT(int, digits = std::numeric_limits<T>::digits);
       };
   };
 
@@ -109,9 +110,10 @@ namespace boost { namespace detail {
   {
       template <class T> struct traits
       {
-          enum { digits = sizeof(T) * std::numeric_limits<unsigned char>::digits
-                         - (is_signed<T>::value ? 1 : 0)
-          };
+          BOOST_STATIC_CONSTANT(int, digits = (
+              sizeof(T) * std::numeric_limits<unsigned char>::digits
+              - (is_signed<T>::value ? 1 : 0))
+              );
       };
   };
 
@@ -121,9 +123,7 @@ namespace boost { namespace detail {
       typedef digit_traits_select<
                 ::std::numeric_limits<T>::is_specialized> selector;
       typedef typename selector::template traits<T> traits;
-      enum {
-          digits = traits::digits
-      };
+      BOOST_STATIC_CONSTANT(int, digits = traits::digits);
   };
 #endif
 
@@ -140,10 +140,9 @@ namespace boost { namespace detail {
 #   ifdef BOOST_MSVC
       // for some reason, MSVC asserts when it shouldn't unless we make these
       // local definitions
-      enum {
-          is_integer = x::is_integer,
-          is_specialized = x::is_specialized
-      };
+      BOOST_STATIC_CONSTANT(bool, is_integer = x::is_integer);
+      BOOST_STATIC_CONSTANT(bool, is_specialized = x::is_specialized);
+      
       BOOST_STATIC_ASSERT(is_integer);
       BOOST_STATIC_ASSERT(is_specialized);
 #   endif
