@@ -327,10 +327,10 @@ BOOST_DECL_TRANSFORM_TEST(add_pointer_test_11, ::boost::add_pointer, volatile*, 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_5, ::boost::add_pointer, const &, const*)
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_6, ::boost::add_pointer, &, *)
-BOOST_DECL_TRANSFORM_TEST(add_pointer_test_8, ::boost::add_pointer, const [2], const *)
+BOOST_DECL_TRANSFORM_TEST(add_pointer_test_8, ::boost::add_pointer, const [2], const (*)[2])
 BOOST_DECL_TRANSFORM_TEST(add_pointer_test_9, ::boost::add_pointer, const &, const*)
-BOOST_DECL_TRANSFORM_TEST(add_pointer_test_12, ::boost::add_pointer, const[2][3], const (*)[3])
-BOOST_DECL_TRANSFORM_TEST(add_pointer_test_13, ::boost::add_pointer, (&)[2], *)
+BOOST_DECL_TRANSFORM_TEST(add_pointer_test_12, ::boost::add_pointer, const[2][3], const (*)[2][3])
+BOOST_DECL_TRANSFORM_TEST(add_pointer_test_13, ::boost::add_pointer, (&)[2], (*)[2])
 #endif
 
 void check_add_pointer()
