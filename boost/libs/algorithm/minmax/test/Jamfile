@@ -23,5 +23,11 @@ DEPENDS all : test ;
                 :
                 : minmax_element
             ]
+          [ run
+                minmax_test.cpp
+              : :
+                :
+                : minmax
+            ]
   ;
 }
