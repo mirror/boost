@@ -9,8 +9,11 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//  29 Nov 00  Remove nested namespace cast, cleanup spacing before Formal
+//             Review (Beman Dawes)
 //  19 Oct 00  Fix numeric_cast for floating-point types (Dave Abrahams)
-//  15 Jul 00  Suppress numeric_cast warnings for GCC, Borland and MSVC (Dave Abrahams)
+//  15 Jul 00  Suppress numeric_cast warnings for GCC, Borland and MSVC
+//             (Dave Abrahams)
 //  30 Jun 00  More MSVC6 wordarounds.  See comments below.  (Dave Abrahams)
 //  28 Jun 00  Removed implicit_cast<>.  See comment below. (Beman Dawes)
 //  27 Jun 00  More MSVC6 workarounds 
@@ -49,16 +52,13 @@
 
 namespace boost
 {
-  namespace detail {
+  namespace detail
+  {
     template <class T> struct type_wrapper {};
   }
-#if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1200) // 1200 = VC6
-  namespace cast
-  {
-#endif
 
 //  See the documentation for descriptions of how to choose between
-//  static_cast<>, dynamic_cast<>, polymorphic_cast<>. and down_cast<>
+//  static_cast<>, dynamic_cast<>, polymorphic_cast<> and polymorphic_downcast<>
 
 //  polymorphic_cast  --------------------------------------------------------//
 
@@ -136,10 +136,10 @@ namespace boost
        template<>
        struct numeric_min_select<true>
        {
-           template <class T>
-           struct limits : std::numeric_limits<T>
-           {
-    	     static inline T min()
+         template <class T>
+         struct limits : std::numeric_limits<T>
+         {
+    	   static inline T min()
 # ifndef __GNUC__ // bug workaround courtesy Jens Maurer
              {
                  return std::numeric_limits<T>::min() >= 0
@@ -161,25 +161,25 @@ namespace boost
                // unary minus causes integral promotion, thus the static_cast<>
                ? static_cast<T>(-std::numeric_limits<T>::max())
                : std::numeric_limits<T>::min();
-       }
+      }
 # endif
     
-       template<>
-       struct numeric_min_select<false>
-       {
-           template <class T>
-           struct limits : std::numeric_limits<T> {};
-       };
-       
-       // Move to namespace boost in utility.hpp?
-       template <class T>
-       struct fixed_numeric_limits
-           : public numeric_min_select<
-                        std::numeric_limits<T>::is_signed 
-                    >::template limits<T>
-       {
-       };
-    }
+      template<>
+      struct numeric_min_select<false>
+      {
+          template <class T>
+          struct limits : std::numeric_limits<T> {};
+      };
+      
+      // Move to namespace boost in utility.hpp?
+      template <class T>
+      struct fixed_numeric_limits
+          : public numeric_min_select<
+                       std::numeric_limits<T>::is_signed 
+                   >::template limits<T>
+      {
+      };
+    } // namespace detail
   
 // less_than_type_min -
   //    x_is_signed should be numeric_limits<X>::is_signed
@@ -264,7 +264,8 @@ namespace boost
   
 #else // use #pragma hacks if available
 
-  namespace detail {
+  namespace detail
+  {
 # if BOOST_MSVC
 #  pragma warning(push)
 #  pragma warning(disable : 4018)
@@ -287,7 +288,7 @@ namespace boost
 #elif defined(__BORLANDC__)
 #pragma option pop
 # endif
-  }
+  } // namespace detail
   
 #endif
   
@@ -334,25 +335,7 @@ namespace boost
             throw bad_numeric_cast();
         }
         return static_cast<Target>(arg);
-    }
-
-//  Visual C++ workarounds  --------------------------------------------------//
-
-#  if !(defined(BOOST_MSVC) && BOOST_MSVC <= 1200) // 1200 = VC6
-  } // namespace cast
-
-  using ::boost::cast::polymorphic_cast;
-  using ::boost::cast::polymorphic_downcast;
-  using ::boost::cast::bad_numeric_cast;
-  using ::boost::cast::numeric_cast;
-#  else
-  namespace cast {
-    using ::boost::polymorphic_cast;
-    using ::boost::polymorphic_downcast;
-    using ::boost::bad_numeric_cast;
-    using ::boost::numeric_cast;
-  }
-#  endif
+    } // numeric_cast
 
 #  undef BOOST_EXPLICIT_DEFAULT_TARGET
 #  undef BOOST_EXPLICIT_TARGET
