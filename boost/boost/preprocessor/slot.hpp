@@ -16,7 +16,13 @@
 #
 # define BOOST_PP_SLOT_LIMIT 5
 #
-# define BOOST_PP_ASSIGN_SLOT(i) BOOST_PP_DETAIL_CAT4(<boost/preprocessor/detail/slot/slot, i, ., hpp>)
+# define BOOST_PP_ASSIGN_SLOT(i) BOOST_PP_DETAIL_CAT2(BOOST_PP_ASSIGN_SLOT_, i)
+# define BOOST_PP_ASSIGN_SLOT_1 <boost/preprocessor/detail/slot/slot1.hpp>
+# define BOOST_PP_ASSIGN_SLOT_2 <boost/preprocessor/detail/slot/slot2.hpp>
+# define BOOST_PP_ASSIGN_SLOT_3 <boost/preprocessor/detail/slot/slot3.hpp>
+# define BOOST_PP_ASSIGN_SLOT_4 <boost/preprocessor/detail/slot/slot4.hpp>
+# define BOOST_PP_ASSIGN_SLOT_5 <boost/preprocessor/detail/slot/slot5.hpp>
+#
 # define BOOST_PP_SLOT(i) BOOST_PP_DETAIL_CAT2(BOOST_PP_SLOT_, i)
 #
 # endif
