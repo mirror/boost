@@ -99,10 +99,13 @@ void test_int()
   i = int_type::not_a_number();
   check("+inf * integer", (l * 2) == l);
   check("+inf / integer", (l / 2) == l);
+  check("+inf \% -integer", (l % -2) == j);
+  check("+inf \% integer", (l % 2) == l);
   check("+inf / -integer", (l / -2) == j);
   check("+inf * -integer", (l * -2) == j);
   check("+inf * -inf", (l * j) == j);
   check("+inf / +inf", (l / l) == i);
+  check("+inf \% +inf", (l % l) == i);
   check("+inf * zero", (l * 0) == i);
   check("is special_value (nan)", i.is_special());
   check("as_special convert", boost::date_time::not_a_date_time == i.as_special() );
@@ -110,8 +113,11 @@ void test_int()
   check("sub not a number",      (i - 2) == int_type::not_a_number());
   check("sub from infin",        (l - 2) == int_type::pos_infinity());
   i = 5;
+  h = 3;
   check("add zero ",             (i + 0) == 5);
   check("sub from 5-2 ",         (i - 2) == 3);
+  check("remainder from 5/2 ",   (i % 2) == 1);
+  check("remainder from 5/3 ",   (i % h) == 2);
   //  std::cout << i.as_number() << std::endl;
   check("from special ", 
         int_type::from_special(boost::date_time::pos_infin) == int_type::pos_infinity());
