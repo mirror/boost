@@ -8,6 +8,8 @@
 
 // should pass compilation and execution
 
+#include <algorithm>
+#include <vector>
 #include <fstream>
 
 #include <cstdio> // remove
@@ -29,8 +31,7 @@ namespace std{
 
 #include "A.hpp"
 
-// some borland/stlport versions need this
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564 )
+#if defined(__COMO__) || (defined(__BORLANDC__) && defined(__SGI_STL_PORT))
 namespace std {
     template<>
     struct less<A>
@@ -103,8 +104,16 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("ahash_set", ahash_set1);
     }
-    bool result = (ahash_set == ahash_set1);
-    BOOST_CHECK(ahash_set == ahash_set1);
+    // at least one library - MSL notes: it doesn't make much sense
+    // to implement the == operator for hash collections - but goes ahead
+    // does it anyway even though it doesn't seem to work.  So sort into
+    // vectors and then compare.
+    std::vector<A> tvec, tvec1;
+    std::copy(ahash_set.begin(), ahash_set.end(), std::back_inserter(tvec));
+    std::sort(tvec.begin(), tvec.end());
+    std::copy(ahash_set1.begin(), ahash_set1.end(), std::back_inserter(tvec1));
+    std::sort(tvec1.begin(), tvec1.end());
+    BOOST_CHECK(tvec == tvec1);
     
     BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<A> ahash_multiset;
     ahash_multiset.insert(A());
@@ -120,9 +129,20 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("ahash_multiset", ahash_multiset1);
     }
-    BOOST_CHECK(ahash_multiset == ahash_multiset1);
+    // at least one library - MSL notes: it doesn't make much sense
+    // to implement the == operator for hash collections - but goes ahead
+    // does it anyway even though it doesn't seem to work.  So sort into
+    // vectors and then compare.
+    tvec.clear();
+    tvec1.clear();
+    std::copy(ahash_multiset.begin(), ahash_multiset.end(), std::back_inserter(tvec));
+    std::sort(tvec.begin(), tvec.end());
+    std::copy(ahash_multiset1.begin(), ahash_multiset1.end(), std::back_inserter(tvec1));
+    std::sort(tvec1.begin(), tvec1.end());
+    BOOST_CHECK(tvec == tvec1);
     
-#endif
+    #endif
+
     std::remove(testfile);
     return boost::exit_success;
 }
