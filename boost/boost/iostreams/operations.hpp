@@ -368,7 +368,7 @@ void close(T& t, std::ios::openmode which)
                 >,
                 mpl::identity<any_tag>
             >::type tag;
-    return detail::close_impl<tag>::close(detail::unwrap(t), which);
+    detail::close_impl<tag>::close(detail::unwrap(t), which);
 }
 
 template<typename T, typename Source>
