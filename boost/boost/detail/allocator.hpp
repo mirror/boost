@@ -187,7 +187,7 @@ public:
    typedef const T&       const_reference;
    typedef size_t         size_type;
    typedef std::ptrdiff_t difference_type;
-   typedef std::Base      base_type;
+   typedef Base      base_type;
 
    allocator_adapter(){}
    allocator_adapter(const base_type& x) : Base(x){}
