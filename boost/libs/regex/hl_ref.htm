@@ -92,10 +92,13 @@ are allowed. </p>
 </i>&nbsp;&nbsp; <i>// 
 </i></font>&nbsp;&nbsp; <b>unsigned</b> <b>int</b> Position(<b>int</b> i = 0)<b>const</b>; 
 &nbsp;&nbsp; <b>unsigned</b> <b>int</b> Length(<b>int</b> i = 0)<b>const</b>; 
+   <strong>bool</strong> Matched(<strong>int</strong> i = 0)<strong>const</strong>;
 &nbsp;&nbsp; <b>unsigned</b> <b>int</b> Line()<b>const</b>; 
 &nbsp;&nbsp; <b>unsigned int</b> Marks() const; 
 &nbsp;&nbsp; std::string What(<b>int</b> i)<b>const</b>; 
 &nbsp;&nbsp; std::string <b>operator</b>[](<b>int</b> i)<b>const</b> ; 
+
+   <strong>static const unsigned int</strong> npos;
 }; &nbsp; &nbsp; </pre>
 
 <p>Member functions for class RegEx are defined as follows: <br>
@@ -495,8 +498,8 @@ are allowed. </p>
         Position(<b>int</b> i = 0)<b>const</b>;</td>
         <td valign="top" width="42%">Returns the position of what
         matched sub-expression <i>i</i>. If <i>i = 0</i> then
-        returns the position of the whole match. Returns -1 if
-        the supplied index is invalid, or if the specified sub-expression
+        returns the position of the whole match. Returns RegEx::npos
+        if the supplied index is invalid, or if the specified sub-expression
         did not participate in the match.</td>
         <td valign="top" width="7%">&nbsp;</td>
     </tr>
@@ -506,10 +509,18 @@ are allowed. </p>
         Length(<b>int</b> i = 0)<b>const</b>;</td>
         <td valign="top" width="42%">Returns the length of what
         matched sub-expression <i>i</i>. If <i>i = 0</i> then
-        returns the length of the whole match. Returns -1 if the
-        supplied index is invalid, or if the specified sub-expression
+        returns the length of the whole match. Returns RegEx::npos
+        if the supplied index is invalid, or if the specified sub-expression
         did not participate in the match.</td>
         <td valign="top" width="7%">&nbsp;</td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+        <td><strong>bool</strong> Matched(<strong>int</strong> i
+        = 0)<strong>const</strong>;</td>
+        <td>Returns true if sub-expression <em>i</em> was
+        matched, false otherwise.</td>
+        <td>&nbsp;</td>
     </tr>
     <tr>
         <td valign="top" width="7%">&nbsp;</td>
@@ -517,7 +528,7 @@ are allowed. </p>
         Line()<b>const</b>;</td>
         <td valign="top" width="42%">Returns the line on which
         the match occurred, indexes start from 1 not zero, if no
-        match occurred then returns (unsigned)-1.</td>
+        match occurred then returns RegEx::npos.</td>
         <td valign="top" width="7%">&nbsp;</td>
     </tr>
     <tr>

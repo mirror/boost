@@ -465,18 +465,18 @@ unsigned int RegEx::Position(int i)const
    switch(pdata->t)
    {
    case re_detail::RegExData::type_pc:
-      return pdata->m[i].matched ? pdata->m[i].first - pdata->pbase : (unsigned int)-1;
+      return pdata->m[i].matched ? pdata->m[i].first - pdata->pbase : RegEx::npos;
    case re_detail::RegExData::type_pf:
-      return pdata->fm[i].matched ? pdata->fm[i].first - pdata->fbase : (unsigned int)-1;
+      return pdata->fm[i].matched ? pdata->fm[i].first - pdata->fbase : RegEx::npos;
    case re_detail::RegExData::type_copy:
       {
       std::map<int, int, std::less<int> >::iterator pos = pdata->positions.find(i);
       if(pos == pdata->positions.end())
-         return (unsigned int)-1;
+         return RegEx::npos;
       return (*pos).second;
       }
    }
-   return (unsigned int)-1;
+   return RegEx::npos;
 }
 
 unsigned int RegEx::Line()const
@@ -485,15 +485,15 @@ unsigned int RegEx::Line()const
    switch(pdata->t)
    {
    case re_detail::RegExData::type_pc:
-      return pdata->m[0].matched ? pdata->m.line() : (unsigned int)-1;
+      return pdata->m[0].matched ? pdata->m.line() : RegEx::npos;
    case re_detail::RegExData::type_pf:
-      return pdata->fm[0].matched ? pdata->fm.line() : (unsigned int)-1;
+      return pdata->fm[0].matched ? pdata->fm.line() : RegEx::npos;
    case re_detail::RegExData::type_copy:
       {
          return pdata->line;
       }
    }
-   return (unsigned int)-1;
+   return RegEx::npos;
 }
 
 unsigned int RegEx::Marks()const
@@ -509,19 +509,40 @@ unsigned int RegEx::Length(int i)const
    switch(pdata->t)
    {
    case re_detail::RegExData::type_pc:
-      return pdata->m[i].matched ? pdata->m[i].second - pdata->m[i].first : (unsigned)-1;
+      return pdata->m[i].matched ? pdata->m[i].second - pdata->m[i].first : RegEx::npos;
    case re_detail::RegExData::type_pf:
-      return pdata->fm[i].matched ? pdata->fm[i].second - pdata->fm[i].first : (unsigned)-1;
+      return pdata->fm[i].matched ? pdata->fm[i].second - pdata->fm[i].first : RegEx::npos;
    case re_detail::RegExData::type_copy:
       {
       std::map<int, std::string, std::less<int> >::iterator pos = pdata->strings.find(i);
       if(pos == pdata->strings.end())
-         return (unsigned)-1;
+         return RegEx::npos;
       return (*pos).second.size();
       }
    }
-   return (unsigned)-1;
+   return RegEx::npos;
 }
+
+bool RegEx::Matched(int i)const
+{
+   BOOST_RE_GUARD_STACK
+   switch(pdata->t)
+   {
+   case re_detail::RegExData::type_pc:
+      return pdata->m[i].matched;
+   case re_detail::RegExData::type_pf:
+      return pdata->fm[i].matched;
+   case re_detail::RegExData::type_copy:
+      {
+      std::map<int, std::string, std::less<int> >::iterator pos = pdata->strings.find(i);
+      if(pos == pdata->strings.end())
+         return false;
+      return true;
+      }
+   }
+   return false;
+}
+
 
 std::string RegEx::What(int i)const
 {
@@ -547,6 +568,8 @@ std::string RegEx::What(int i)const
    }
    return result;
 }
+
+const unsigned int RegEx::npos = ~0u;
 
 
 } // namespace boost

@@ -189,8 +189,19 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
 {
    is.imbue(l);
 #ifndef BOOST_NO_STD_MESSAGES
-   const std::messages<char>* pm = &BOOST_USE_FACET(std::messages<char>, l);
-   std::messages<char>::catalog cat = regex_message_catalogue.size() ? pm->open(regex_message_catalogue, l) : -1;
+
+   const std::messages<char>* pm = 0;
+   std::messages<char>::catalog cat = -1;
+   if(regex_message_catalogue.size())
+   {
+      pm = &BOOST_USE_FACET(std::messages<char>, l);
+      cat = pm->open(regex_message_catalogue, l);
+      if(cat < 0)
+      {
+         std::string m("Unable to open message catalog: ");
+         throw std::runtime_error(m + regex_message_catalogue);
+      }
+   } 
 #endif
    std::memset(syntax_map, cpp_regex_traits<char>::syntax_char, 256);
    unsigned int i;
@@ -222,39 +233,26 @@ message_data<char>::message_data(const std::locale& l, const std::string& regex_
    std::string c1, c2;
    i = 400;
    if((int)cat >= 0)
-      c2 = pm->get(cat, 0, i, c1);
-   while(c2.size())
    {
-      const char* p1, *p2, *p3, *p4;;
-      p1 = c2.c_str();
-      while(*p1 && std::isspace((char)*p1, l))++p1;
-      p2 = p1;
-      while(*p2 && !std::isspace((char)*p2, l))++p2;
-      p3 = p2;
-      while(*p3 && std::isspace((char)*p3, l))++p3;
-      p4 = p3;
-      while(*p4 && !std::isspace((char)*p4, l))++p4;
-      collating_elements[std::string(p1, p2)] = std::string(p3, p4);
-      
-      ++i;
       c2 = pm->get(cat, 0, i, c1);
+      while(c2.size())
+      {
+         const char* p1, *p2, *p3, *p4;;
+         p1 = c2.c_str();
+         while(*p1 && std::isspace((char)*p1, l))++p1;
+         p2 = p1;
+         while(*p2 && !std::isspace((char)*p2, l))++p2;
+         p3 = p2;
+         while(*p3 && std::isspace((char)*p3, l))++p3;
+         p4 = p3;
+         while(*p4 && !std::isspace((char)*p4, l))++p4;
+         collating_elements[std::string(p1, p2)] = std::string(p3, p4);
+
+         ++i;
+         c2 = pm->get(cat, 0, i, c1);
+      }
    }
 #endif
-/*
-   std::string n("zero");
-   std::map<std::string, std::string, std::less<std::string > >::const_iterator pos = collating_elements.find(n);
-   if(pos != collating_elements.end())
-      _zero = *(*pos).second.c_str();
-   else
-      _zero = '0';
-
-   n = "ten";
-   pos = collating_elements.find(n);
-   if(pos != collating_elements.end())
-      _ten = *(*pos).second.c_str();
-   else
-      _ten = 'a';
-*/
    std::string m;
    std::string s;
 #ifndef BOOST_NO_STD_MESSAGES
@@ -562,7 +560,16 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    const cvt_type& cvt = BOOST_USE_FACET(cvt_type, l);
 #ifndef BOOST_NO_STD_MESSAGES
    const std::messages<wchar_t>& msgs = BOOST_USE_FACET(std::messages<wchar_t>, l);
-   std::messages<wchar_t>::catalog cat = regex_message_catalogue.size() ? msgs.open(regex_message_catalogue, l) : -1;
+   std::messages<wchar_t>::catalog cat = -1;
+   if(regex_message_catalogue.size())
+   {
+      cat = msgs.open(regex_message_catalogue, l);
+      if(cat < 0)
+      {
+         std::string m("Unable to open message catalog: ");
+         throw std::runtime_error(m + regex_message_catalogue);
+      }
+   }
 #endif
    scoped_array<char> a;
    unsigned array_size = 0;
@@ -602,22 +609,24 @@ message_data<wchar_t>::message_data(const std::locale& l, const std::string& reg
    string_type c1, c2;
    i = 400;
    if((int)cat >= 0)
-      c2 = msgs.get(cat, 0, i, c1);
-   while(c2.size())
    {
-      const wchar_t* p1, *p2, *p3, *p4;;
-      p1 = c2.c_str();
-      while(*p1 && std::isspace((wchar_t)*p1, l))++p1;
-      p2 = p1;
-      while(*p2 && !std::isspace((wchar_t)*p2, l))++p2;
-      p3 = p2;
-      while(*p3 && std::isspace((wchar_t)*p3, l))++p3;
-      p4 = p3;
-      while(*p4 && !std::isspace((wchar_t)*p4, l))++p4;
-      collating_elements[std::basic_string<wchar_t>(p1, p2)] = std::basic_string<wchar_t>(p3, p4);
-      
-      ++i;
       c2 = msgs.get(cat, 0, i, c1);
+      while(c2.size())
+      {
+         const wchar_t* p1, *p2, *p3, *p4;;
+         p1 = c2.c_str();
+         while(*p1 && std::isspace((wchar_t)*p1, l))++p1;
+         p2 = p1;
+         while(*p2 && !std::isspace((wchar_t)*p2, l))++p2;
+         p3 = p2;
+         while(*p3 && std::isspace((wchar_t)*p3, l))++p3;
+         p4 = p3;
+         while(*p4 && !std::isspace((wchar_t)*p4, l))++p4;
+         collating_elements[std::basic_string<wchar_t>(p1, p2)] = std::basic_string<wchar_t>(p3, p4);
+
+         ++i;
+         c2 = msgs.get(cat, 0, i, c1);
+      }
    }
 
    if((int)cat >= 0)

@@ -342,7 +342,14 @@ void BOOST_REGEX_CALL re_message_update()
          message_cat = (nl_catd)-1;
       }
       if(*boost::re_detail::c_traits_base::get_catalogue())
+      {
          message_cat = catopen(boost::re_detail::c_traits_base::get_catalogue(), 0);
+         if(message_cat == (nl_catd)-1)
+         {
+            std::string m("Unable to open message catalog: ");
+            throw std::runtime_error(m + boost::re_detail::c_traits_base::get_catalogue());
+         }
+      }
 #endif
       for(int i = 0; i < boost::REG_E_UNKNOWN; ++i)
       {

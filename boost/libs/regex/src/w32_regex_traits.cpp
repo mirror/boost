@@ -230,10 +230,17 @@ void BOOST_REGEX_CALL w32_traits_base::do_init()
    if(is_init == 0)
    {
       //
-      // upadte the messages first:
+      // update the messages first:
       is_init = true;
       if(*regex_message_catalogue)
+      {
          hresmod = LoadLibraryA(regex_message_catalogue);
+         if(hresmod == NULL)
+         {
+            std::string s("Unable to open dll: ");
+            throw std::runtime_error(s + regex_message_catalogue);
+         }
+      }
       unsigned int i;
       for(i = 0; i < REG_E_UNKNOWN; ++i)
       {
