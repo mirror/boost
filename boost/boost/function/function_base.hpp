@@ -47,6 +47,9 @@ namespace boost { namespace python { namespace objects {
 #if defined(__GNUC__) && __GNUC__ < 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ <= 2 ) && !(BOOST_NO_CONFIG)
 #  define BOOST_FUNCTION_NO_ENABLE_IF
 #endif
+#if defined(__sgi) && defined(_COMPILER_VERSION) && _COMPILER_VERSION <= 730 && !defined(BOOST_NO_CONFIG)
+#  define BOOST_FUNCTION_NO_ENABLE_IF
+#endif
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 namespace boost {
