@@ -26,11 +26,7 @@ template < typename MemberType, int UniqueID = 0 >
 
 class noncopyable;
 
-template < class A, class B >
-    class tied;
-
 // Also has a few function templates
-
 
 }  // namespace boost
 
