@@ -18,15 +18,11 @@
 #define BOOST_DETAIL_COMPRESSED_PAIR_HPP
 
 #include <algorithm>
-#ifndef BOOST_OBJECT_TYPE_TRAITS_HPP
-#include <boost/type_traits/object_traits.hpp>
-#endif
-#ifndef BOOST_SAME_TRAITS_HPP
-#include <boost/type_traits/same_traits.hpp>
-#endif
-#ifndef BOOST_CALL_TRAITS_HPP
+
+#include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/is_empty.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/call_traits.hpp>
-#endif
 
 namespace boost
 {

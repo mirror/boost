@@ -22,12 +22,8 @@
 #include <boost/config.hpp>
 #endif
 
-#ifndef BOOST_ARITHMETIC_TYPE_TRAITS_HPP
-#include <boost/type_traits/arithmetic_traits.hpp>
-#endif
-#ifndef BOOST_COMPOSITE_TYPE_TRAITS_HPP
-#include <boost/type_traits/composite_traits.hpp>
-#endif
+#include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 
 namespace boost{
 
@@ -124,7 +120,7 @@ struct call_traits<T&const volatile>
    typedef T& param_type;  // hh removed const
 };
 #endif
-#ifndef __SUNPRO_CC
+#if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 template <typename T, std::size_t N>
 struct call_traits<T [N]>
 {
