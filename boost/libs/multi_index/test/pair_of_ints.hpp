@@ -37,7 +37,7 @@ namespace boost{
 namespace serialization{
 
 template<class Archive>
-void serialize(Archive& ar,pair_of_ints& p,const unsigned int)
+void serialize(Archive& ar,pair_of_ints& p,unsigned int)
 {
   ar&boost::serialization::make_nvp("first",p.first);
   ar&boost::serialization::make_nvp("second",p.second);
