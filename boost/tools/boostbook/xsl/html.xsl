@@ -181,4 +181,8 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-</xsl:stylesheet>
+  
+  <!-- We don't want refentry's to show up in the TOC because they
+       will merely be redundant with the synopsis. -->
+  <xsl:template match="refentry" mode="toc"/>
+ </xsl:stylesheet>
