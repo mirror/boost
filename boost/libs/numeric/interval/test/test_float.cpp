@@ -17,6 +17,10 @@
 #include <boost/numeric/interval.hpp>
 #include <boost/test/test_tools.hpp>
 
+/* All the following tests should be BOOST_CHECK; however, if a test fails,
+   the probability is high that hundreds of other tests will fail, so it is
+   replaced by BOOST_REQUIRE to avoid flooding the logs. */
+
 template<class T, class F>
 void test_unary() {
   typedef typename F::I I;
@@ -25,9 +29,9 @@ void test_unary() {
     I rI = F::f_I(a);
     T rT1 = F::f_T(a.lower()), rT2 = F::f_T(a.upper()),
       rT3 = F::f_T(median(a));
-    BOOST_CHECK(in(rT1, rI));
-    BOOST_CHECK(in(rT2, rI));
-    BOOST_CHECK(in(rT3, rI));
+    BOOST_REQUIRE(in(rT1, rI));
+    BOOST_REQUIRE(in(rT2, rI));
+    BOOST_REQUIRE(in(rT3, rI));
   }
 }
 
@@ -43,18 +47,18 @@ void test_binary() {
       I rTI1 = F::f_TI(al, b), rTI2 = F::f_TI(au, b);
       T rTT1 = F::f_TT(al, bl), rTT2 = F::f_TT(al, bu),
         rTT3 = F::f_TT(au, bl), rTT4 = F::f_TT(au, bu);
-      BOOST_CHECK(in(rTT1, rIT1));
-      BOOST_CHECK(in(rTT3, rIT1));
-      BOOST_CHECK(in(rTT2, rIT2));
-      BOOST_CHECK(in(rTT4, rIT2));
-      BOOST_CHECK(in(rTT1, rTI1));
-      BOOST_CHECK(in(rTT2, rTI1));
-      BOOST_CHECK(in(rTT3, rTI2));
-      BOOST_CHECK(in(rTT4, rTI2));
-      BOOST_CHECK(subset(rIT1, rII));
-      BOOST_CHECK(subset(rIT2, rII));
-      BOOST_CHECK(subset(rTI1, rII));
-      BOOST_CHECK(subset(rTI2, rII));
+      BOOST_REQUIRE(in(rTT1, rIT1));
+      BOOST_REQUIRE(in(rTT3, rIT1));
+      BOOST_REQUIRE(in(rTT2, rIT2));
+      BOOST_REQUIRE(in(rTT4, rIT2));
+      BOOST_REQUIRE(in(rTT1, rTI1));
+      BOOST_REQUIRE(in(rTT2, rTI1));
+      BOOST_REQUIRE(in(rTT3, rTI2));
+      BOOST_REQUIRE(in(rTT4, rTI2));
+      BOOST_REQUIRE(subset(rIT1, rII));
+      BOOST_REQUIRE(subset(rIT2, rII));
+      BOOST_REQUIRE(subset(rTI1, rII));
+      BOOST_REQUIRE(subset(rTI2, rII));
     }
   }
 }
