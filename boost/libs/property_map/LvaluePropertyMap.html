@@ -91,13 +91,12 @@ otherwise.
 
 <h3>Concept Checking Class</h3>
 
-<pre>
-  template &lt;class PMap, class Key&gt;
+<pre>  template &lt;class PMap, class Key&gt;
   struct LvaluePropertyMapConcept
   {
     typedef typename property_traits&lt;PMap&gt;::category Category;
     typedef boost::lvalue_property_map_tag LvalueTag;
-    typedef const typename property_traits&lt;PMap&gt;::value_type& const_reference;
+    typedef const typename property_traits&lt;PMap&gt;::value_type&amp; const_reference;
     void constraints() {
       function_requires&lt; ReadWritePropertyMapConcept&lt;PMap, Key&gt; &gt;();
       function_requires&lt; ConvertibleConcept&lt;Category, LvalueTag&gt; &gt;();
@@ -113,7 +112,7 @@ otherwise.
   {
     typedef typename property_traits&lt;PMap&gt;::category Category;
     typedef boost::lvalue_property_map_tag LvalueTag;
-    typedef typename property_traits&lt;PMap&gt;::value_type& reference;
+    typedef typename property_traits&lt;PMap&gt;::value_type&amp; reference;
     void constraints() { 
       function_requires&lt; ReadWritePropertyMapConcept&lt;PMap, Key&gt; &gt;();
       function_requires&lt;ConvertibleConcept&lt;Category, LvalueTag&gt; &gt;();
@@ -122,8 +121,7 @@ otherwise.
     }
     PMap pmap;
     Key k;
-  };
-</pre>
+  };</pre>
 
 <h3>See Also</h3>
 

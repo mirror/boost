@@ -24,8 +24,7 @@
 ReadablePropertyMap
 </H2>
 
-A ReadablePropertyMap provides read-access to the value object
-associted with a given key via a call to the <tt>get()</tt> function.
+A ReadablePropertyMap provides read-access to the value object associated with a given key via a call to the <tt>get()</tt> function.
 The <tt>get()</tt> function returns a copy of the value object.
 
 <h3>Refinement of</h3>
@@ -99,8 +98,7 @@ The category of the property: a type convertible to
 
 <h3>Concept Checking Class</h3>
 
-<pre>
-  template &lt;class PMap, class Key&gt;
+<pre>  template &lt;class PMap, class Key&gt;
   struct ReadablePropertyMapConcept
   {
     typedef typename property_traits&lt;PMap&gt;::key_type key_type;
@@ -114,8 +112,7 @@ The category of the property: a type convertible to
     PMap pmap;
     Key k;
     typename property_traits&lt;PMap&gt;::value_type val;
-  };
-</pre>
+  };</pre>
 
 <h3>See Also</h3>
 

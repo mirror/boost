@@ -11,7 +11,9 @@
   -- purpose.  It is provided "as is" without express or implied warranty.
   -->
 <Head>
-<Title>Concept Checking</Title>
+<Title>Concept Check Library</Title>
+</head>
+
 <BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
         ALINK="#ff0000"> 
 <IMG SRC="../../c++boost.gif" 
@@ -19,7 +21,7 @@
 
 <BR Clear>
 
-<H1>The Boost Concept Checking Library (BCCL)</H1>
+<H1>The Boost Concept Check Library (BCCL)</H1>
 
 <h2>
 <A NAME="sec:concept-checking"></A>
@@ -40,7 +42,7 @@ required concept as a hint to the user and to state the concept
 requirements in the documentation. However, often times the
 requirements are vague, incorrect, or nonexistent, which is quite a
 problem for the user, since he or she will not know exactly what kind
-of input is expected by the template. Furthemore, the following
+of input is expected by the template. Furthermore, the following
 problems occur:
 
 <ul>
@@ -84,7 +86,7 @@ overhead. The main cost of using the mechanism is in compile-time.
 <p>
 Any programmer writing class or function templates ought to make
 concept checking a normal part of their code-writing routine. A
-concept check should be inserted for each template paramter in a
+concept check should be inserted for each template parameter in a
 component's public interface. If the concept is one of the ones from
 the Standard Library, then simply use the matching concept checking
 class in the BCCL. If not, then write a new concept checking class -
@@ -102,9 +104,9 @@ The documentation is organized into the following sections.
 <LI><a href="#publications">Publications</a></LI>
 <LI><a href="#acknowledgements">Acknowledgements</a></LI>
 <LI><a href="./using_concept_check.htm">Using Concept Checks</a></LI>
-<LI><a href="./creating_concept_checks.htm">Creating Concept Checking Classes</a></LI>
+<LI><a href="creating_concepts.htm">Creating Concept Checking Classes</a></LI>
 <LI><a href="./concept_covering.htm">Concept Covering and Archetypes</a></LI>
-<LI><a href="./prog_with_concepts.htm"">Programming With Concepts</a></LI>
+<LI><a href="./prog_with_concepts.htm" ">Programming With Concepts</a></LI>
 <LI><a href="./implementation.htm">Implementation</a></LI>
 <LI><a href="./reference.htm">Reference</a></LI>
 </OL>
@@ -157,9 +159,9 @@ We present a simple example to illustrate incorrect usage of a
 template library and the resulting error messages.  In the code below,
 the generic <tt>std::stable_sort()</tt> algorithm from the Standard
 Template Library (STL)[<a
-href="bibliography.html#austern99:_gener_progr_stl">3</a>, <a
-href="bibliography.html#IB-H965502">4</a>,<a
-href="bibliography.html#stepa.lee-1994:the.s:TR">5</a>] is applied to
+href="bibliography.htm#austern99:_gener_progr_stl">3</a>, <a
+href="bibliography.htm#IB-H965502">4</a>,<a
+href="bibliography.htm#stepa.lee-1994:the.s:TR">5</a>] is applied to
 a linked list.
 
 <pre>
@@ -168,7 +170,7 @@ a linked list.
    2  #include &lt;algorithm&gt;
    3
    4  struct foo {
-   5    bool operator&lt;(const foo&) const { return false; }
+   5    bool operator&lt;(const foo&amp;) const { return false; }
    6  };
    7  int main(int, char*[]) {
    8    std::list&lt;foo&gt; v;
@@ -190,18 +192,18 @@ Appendix.
 
 <pre>
 stl_algo.h: In function `void __merge_sort_loop&lt;_List_iterator
-  &lt;foo,foo &,foo *&gt;, foo *, int&gt;(_List_iterator&lt;foo,foo &,foo *&gt;,
-  _List_iterator&lt;foo,foo &,foo *&gt;, foo *, int)':
+  &lt;foo,foo &amp;,foo *&gt;, foo *, int&gt;(_List_iterator&lt;foo,foo &amp;,foo *&gt;,
+  _List_iterator&lt;foo,foo &amp;,foo *&gt;, foo *, int)':
 stl_algo.h:1448:   instantiated from `__merge_sort_with_buffer
-  &lt;_List_iterator&lt;foo,foo &,foo *&gt;, foo *, int&gt;(
-   _List_iterator&lt;foo,foo &,foo *&gt;, _List_iterator&lt;foo,foo &,foo *&gt;,
+  &lt;_List_iterator&lt;foo,foo &amp;,foo *&gt;, foo *, int&gt;(
+   _List_iterator&lt;foo,foo &amp;,foo *&gt;, _List_iterator&lt;foo,foo &amp;,foo *&gt;,
    foo *, int *)'
 stl_algo.h:1485:   instantiated from `__stable_sort_adaptive&lt;
-  _List_iterator&lt;foo,foo &,foo *&gt;, foo *, int&gt;(_List_iterator
-  &lt;foo,foo &,foo *&gt;, _List_iterator&lt;foo,foo &,foo *&gt;, foo *, int)'
+  _List_iterator&lt;foo,foo &amp;,foo *&gt;, foo *, int&gt;(_List_iterator
+  &lt;foo,foo &amp;,foo *&gt;, _List_iterator&lt;foo,foo &amp;,foo *&gt;, foo *, int)'
 stl_algo.h:1524:   instantiated from here
-stl_algo.h:1377: no match for `_List_iterator&lt;foo,foo &,foo *&gt; & -
-  _List_iterator&lt;foo,foo &,foo *&gt; &'
+stl_algo.h:1377: no match for `_List_iterator&lt;foo,foo &amp;,foo *&gt; &amp; -
+  _List_iterator&lt;foo,foo &amp;,foo *&gt; &amp;'
 </pre>
 
 In this case, the fundamental error is that
@@ -239,14 +241,14 @@ Library produces):
 
 <pre>
 boost/concept_check.hpp: In method `void LessThanComparableConcept
-  &lt;_List_iterator&lt;foo,foo &,foo *> >::constraints()':
+  &lt;_List_iterator&lt;foo,foo &amp;,foo *&gt; &gt;::constraints()':
 boost/concept_check.hpp:334:   instantiated from `RandomAccessIteratorConcept
-  &lt;_List_iterator&lt;foo,foo &,foo *> >::constraints()'
+  &lt;_List_iterator&lt;foo,foo &amp;,foo *&gt; &gt;::constraints()'
 bad_error_eg.cpp:9:   instantiated from `stable_sort&lt;_List_iterator
-  &lt;foo,foo &,foo *> >(_List_iterator&lt;foo,foo &,foo *>, 
-  _List_iterator&lt;foo,foo &,foo *>)'
-boost/concept_check.hpp:209: no match for `_List_iterator&lt;foo,foo &,foo *> &
-  &lt; _List_iterator&lt;foo,foo &,foo *> &'
+  &lt;foo,foo &amp;,foo *&gt; &gt;(_List_iterator&lt;foo,foo &amp;,foo *&gt;, 
+  _List_iterator&lt;foo,foo &amp;,foo *&gt;)'
+boost/concept_check.hpp:209: no match for `_List_iterator&lt;foo,foo &amp;,foo *&gt; &amp;
+  &lt; _List_iterator&lt;foo,foo &amp;,foo *&gt; &amp;'
 </pre>
 
 This message rectifies several of the shortcomings of the standard
@@ -290,7 +292,7 @@ The idea to use function pointers to cause instantiation is due to
 Alexander Stepanov. I am not sure of the origin of the idea to use
 expressions to do up-front checking of templates, but it did appear in
 D&amp;E[
-<a href="bibliography.html#stroustrup94:_design_evolution">2</a>].
+<a href="bibliography.htm#stroustrup94:_design_evolution">2</a>].
 Thanks to Matt Austern for his excellent documentation and
 organization of the STL concepts, upon which these concept checks
 are based. Thanks to Boost members for helpful comments and

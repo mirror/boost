@@ -76,7 +76,7 @@ and the key and value type the same as the set's element type.</TD>
 <P>
 A typical usage pattern for <TT>disjoint_sets</TT> can be seen in the
 <a
-href="../graph/docs/kruskal_min_spanning_tree.html"><TT>kruskal_minimum_spanning_tree()</TT></a>
+href="../graph/doc/kruskal_min_spanning_tree.html"><TT>kruskal_minimum_spanning_tree()</TT></a>
 algorithm.  In this example, we call <TT>link()</TT> instead of
 <TT>union_set()</TT> because <TT>u</TT> and <TT>v</TT> were obtained
 from <TT>find_set()</TT> and therefore are already the representatives
@@ -211,7 +211,7 @@ disjoint-set operations (<TT>make_set()</TT>, <TT>find_set()</TT>, and
 
 <h3>See Also</h3>
 
-<a href="../graph/docs/dynamic_components.html"><tt>dynamic_connected_components()</tt></a>
+<a href="../graph/doc/dynamic_components.html"><tt>dynamic_connected_components()</tt></a>
 
 
 <hr>
@@ -229,7 +229,7 @@ hence the requirement for the <TT>ID</TT> and <TT>InverseID</TT>
 functors.  The rank and parent properties are initialized during
 construction so the each element is in a set by itself (so it is not
 necessary to initialize objects of this class with the <a
-href="../graph/docs/dynamic_components.html#sec:initialize-dynamic-components"><TT>initialize_dynamic_components()</TT></a>
+href="../graph/doc/dynamic_components.html#sec:initialize-dynamic-components"><TT>initialize_dynamic_components()</TT></a>
 function). This class is especially useful when computing the
 (dynamic) connected components of an <TT>edge_list</TT> graph which
 does not provide a place to store vertex properties.

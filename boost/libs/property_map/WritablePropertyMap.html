@@ -114,19 +114,16 @@ Assign <TT>val</TT> to the property associated with <TT>k</TT>.
 <tt>std::set</tt> class when using a compiler (Microsoft Visual C++)
 with non-standard name lookup rules. The following example demonstrates
 the problem. 
-<pre>
-#include &lt;set&gt;
+<pre>#include &lt;set&gt;
 using namespace std;
 namespace boost {
   void set() { }
-}
-</pre>
+}</pre>
 
 
 <h3>Concept Checking Class</h3>
 
-<pre>
-  template &lt;class PMap, class Key&gt;
+<pre>  template &lt;class PMap, class Key&gt;
   struct WritablePropertyMapConcept
   {
     typedef typename property_traits&lt;PMap&gt;::key_type key_type;
@@ -139,8 +136,7 @@ namespace boost {
     PMap pmap;
     Key k;
     typename property_traits&lt;PMap&gt;::value_type val;
-  };
-</pre>
+  };</pre>
 
 <h3>See Also</h3>
 

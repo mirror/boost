@@ -24,7 +24,8 @@
 Property Map Concepts
 </H1>
 
-The property map interface consists of a set of concept that
+The property map interface consists of a set of concepts (see <a href="../concept_check/concept_check.htm#introduction">&quot;concept&quot;
+definition</a>) that
 define a general purpose mechanism for mapping key objects to
 corresponding value objects, thereby hiding the details of how the
 mapping is implemented from algorithms that use property maps.
@@ -38,8 +39,7 @@ property maps consists of three functions: <tt>get()</tt>,
 shows how the three functions could be used to access the addresses
 associated with various people.
 
-<pre>
-template &lt;class AddressMap&gt;
+<pre>template &lt;class AddressMap&gt;
 void foo(AddressMap address)
 {
   typedef typename boost::property_traits&lt;AddressMap&gt;::value_type value_type;
@@ -52,16 +52,15 @@ void foo(AddressMap address)
   put(address, fred, new_address);
 
   key_type joe = &quot;Joe&quot;;
-  value_type& joes_address = address[joe];
+  value_type&amp; joes_address = address[joe];
   joes_address = &quot;325 Cushing Avenue&quot;;
-}
-</pre>
+}</pre>
 
 <p>
 For each property map object there is a set of <i>valid keys</i>
 for which the mapping to value objects is defined.  Invoking a
 property map function on an <i>invalid</i> key results in
-undefined behaviour. The property map concepts do not specify how
+undefined behavior. The property map concepts do not specify how
 this set of valid keys is created or modified. A function that uses a
 property map must specify the expected set of valid keys in its
 preconditions.
@@ -129,9 +128,7 @@ There is a tag struct for each of the categories of property
 maps, which is defined in the header
 <tt>&lt;boost/property_map.hpp&gt;</tt>.
 
-<P>
-<PRE>
-namespace boost {
+<PRE>namespace boost {
 
   struct readable_property_map_tag { };
 
@@ -144,8 +141,7 @@ namespace boost {
   struct lvalue_property_map_tag : 
     public read_write_property_map_tag { };
 
-}
-</PRE>
+}</PRE>
 
 <P>
 Similar to the <TT>std::iterator_traits</TT> class of the STL, there
@@ -157,9 +153,7 @@ property map objects. In addition, the property map
 functions are overloaded for pointers. These traits classes and
 functions are defined in <tt>&lt;boost/property_map.hpp&gt;</tt>.
 
-<P>
-<PRE>
-namespace boost {
+<PRE>namespace boost {
 
   template &lt;class PropertyMap&gt;
   struct property_traits {
@@ -177,14 +171,13 @@ namespace boost {
   };
 
   // overloads of the property map functions for pointers
-  template <class T>
-  void put(T* pmap, std::ptrdiff_t k, const T& val) { pmap[k] = val;  }
+  template&lt;&gt;
+  void put(T* pmap, std::ptrdiff_t k, const T&amp; val) { pmap[k] = val;  }
 
-  template <class T>
-  const T& get(const T* pmap, std::ptrdiff_t k) { return pmap[k]; }
+  template&lt;&gt;
+  const T&amp; get(const T* pmap, std::ptrdiff_t k) { return pmap[k]; }
 
-}
-</PRE>
+}</PRE>
 
 
 <h3>Notes to Implementors</h3>
