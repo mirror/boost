@@ -9,6 +9,12 @@
   class transform_iterator
   {
   public:
+      typedef /* see below */ value_type;
+      typedef /* see below */ reference;
+      typedef /* see below */ pointer;
+      typedef iterator_traits<Iterator>::difference_type difference_type;
+      typedef /* see below */ iterator_category;
+
     transform_iterator();
     transform_iterator(Iterator const& x, UnaryFunction f);
 
@@ -29,6 +35,14 @@
   };
 
 
+The ``reference`` type of ``transform_iterator`` is
+``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
+The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
+The ``iterator_category`` member is a type convertible to the tags
+corresponding to each standard concept modeled by
+``transform_iterator``, as described in the models section.
+
+
 ``transform_iterator`` requirements
 ...................................
 
@@ -38,7 +52,7 @@ type ``UnaryFunction``, ``i`` is an object of type ``Iterator``, and
 where the type of ``f(*i)`` must be
 ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
 
-The type ``Iterator`` must at least model Readable Iterator.  
+The argument ``Iterator`` shall model Readable Iterator.  
 
 
 ``transform_iterator`` models
@@ -47,20 +61,33 @@ The type ``Iterator`` must at least model Readable Iterator.
 The resulting ``transform_iterator`` models the most refined of the
 following options that is also modeled by ``Iterator``.
 
-  * Writable Lvalue Iterator if ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type`` is a non-const reference. 
+  * Writable Lvalue Iterator if ``transform_iterator::reference`` is a non-const reference. 
 
-  * Readable Lvalue Iterator if ``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type`` is a const
-    reference.
+  * Readable Lvalue Iterator if ``transform_iterator::reference`` is a const reference.
 
   * Readable Iterator otherwise. 
 
-
 The ``transform_iterator`` models the most refined standard traversal
-concept that is modeled by ``Iterator``.
+concept that is modeled by the ``Iterator`` argument.
 
-The ``reference`` type of ``transform_iterator`` is
-``result_of<UnaryFunction(iterator_traits<Iterator>::reference)>::type``.
-The ``value_type`` is ``remove_cv<remove_reference<reference> >::type``.
+If ``transform_iterator`` is a model of Readable Lvalue Iterator then
+it models the following original iterator concepts depending on what
+the ``Iterator`` argument models.
+
++-----------------------------------+---------------------------------+
+| If ``Iterator`` models            | then ``filter_iterator`` models |
++===================================+=================================+
+| Single Pass Iterator              | Input Iterator                  |
++-----------------------------------+---------------------------------+
+| Forward Traversal Iterator        | Forward Iterator                |
++-----------------------------------+---------------------------------+
+| Bidirectional Traversal Iterator  | Bidirectional Iterator          |
++-----------------------------------+---------------------------------+
+| Random Access Traversal Iterator  | Random Access Iterator          |
++-----------------------------------+---------------------------------+
+
+If ``transform_iterator`` models Writable Lvalue Iterator then it is a
+mutable iterator (as defined in the old iterator requirements).
 
 
 ``transform_iterator`` operations
