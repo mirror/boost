@@ -14,7 +14,7 @@
 #   GeNeSys mbH & Co. KG in producing this work.
 #
 
-subproject libs/numeric/ublas ;
+subproject libs/numeric/ublas/test ;
 # bring in rules for testing
 import testing ;
 
