@@ -60,7 +60,7 @@ struct mult_functor {
 
 template <class Pair>
 struct select1st_ 
-  : public unary_function<Pair, typename Pair::first_type>
+  : public std::unary_function<Pair, typename Pair::first_type>
 {
   const typename Pair::first_type& operator()(const Pair& x) const {
     return x.first;
@@ -139,7 +139,7 @@ main()
     boost::random_access_iterator_test(i, N, array);
 
     Projection::const_iterator j = pair_array;
-    boost::random_access_iterator_test(i, N, array);
+    boost::random_access_iterator_test(j, N, array);
 
     boost::const_nonconst_iterator_test(i, ++j);
   }
