@@ -99,6 +99,13 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_enum,T,::boost::detail::is_enum_impl<T>::value)
 BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_enum,float,false)
 BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_enum,double,false)
 BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_enum,long double,false)
+// these help on compilers with no partial specialization support:
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_enum,void,false)
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_enum,void const,false)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_enum,void volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_enum,void const volatile,false)
+#endif
 
 #else // __BORLANDC__
 //

@@ -53,7 +53,7 @@ BOOST_TT_AUX_TEMPLATE_ARITY_SPEC(2,trait) \
 /**/
 
 #define BOOST_TT_AUX_BOOL_TRAIT_SPEC1(trait,sp,C) \
-template<> struct trait<sp> \
+template<> struct trait< sp > \
     : mpl::bool_c< C > \
 { \
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
@@ -62,7 +62,7 @@ template<> struct trait<sp> \
 /**/
 
 #define BOOST_TT_AUX_BOOL_TRAIT_SPEC2(trait,sp1,sp2,C) \
-template<> struct trait<sp1,sp2> \
+template<> struct trait< sp1,sp2 > \
     : mpl::bool_c< C > \
 { \
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
@@ -71,7 +71,7 @@ template<> struct trait<sp1,sp2> \
 /**/
 
 #define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(param,trait,sp,C) \
-template< param > struct trait<sp> \
+template< param > struct trait< sp > \
     : mpl::bool_c< C > \
 { \
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
@@ -79,7 +79,7 @@ template< param > struct trait<sp> \
 /**/
 
 #define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(param1,param2,trait,sp,C) \
-template< param1, param2 > struct trait<sp> \
+template< param1, param2 > struct trait< sp > \
     : mpl::bool_c< C > \
 { \
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
@@ -87,7 +87,7 @@ template< param1, param2 > struct trait<sp> \
 /**/
 
 #define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1(param,trait,sp1,sp2,C) \
-template< param > struct trait<sp1,sp2> \
+template< param > struct trait< sp1,sp2 > \
     : mpl::bool_c< C > \
 { \
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
@@ -96,7 +96,7 @@ template< param > struct trait<sp1,sp2> \
 /**/
 
 #define BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2(param1,param2,trait,sp1,sp2,C) \
-template< param1, param2 > struct trait<sp1,sp2> \
+template< param1, param2 > struct trait< sp1,sp2 > \
     : mpl::bool_c< C > \
 { \
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \

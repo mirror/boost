@@ -116,6 +116,15 @@ template <typename T> struct is_POD_impl
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_POD,T,::boost::detail::is_POD_impl<T>::value)
 
+// the following help compilers without partial specialization support:
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void,true)
+
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void const,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void volatile,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,void const volatile,true)
+#endif
+
 } // namespace boost
 
 #include "boost/type_traits/detail/bool_trait_undef.hpp"

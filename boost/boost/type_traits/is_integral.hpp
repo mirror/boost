@@ -39,6 +39,15 @@ BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,char,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,wchar_t,true)
 #endif
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC == 1200)
+BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,unsigned __int8,true)
+BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,__int8,true)
+BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,unsigned __int16,true)
+BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,__int16,true)
+BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,unsigned __int32,true)
+BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,__int32,true)
+#endif
+
 # if defined(BOOST_HAS_LONG_LONG)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,unsigned long long,true)
 BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(is_integral,long long,true)

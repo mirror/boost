@@ -43,6 +43,13 @@ BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T& volatile,true
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T& const volatile,true)
 #endif
 
+#ifdef __GNUC__
+// these allow us to work around illegally cv-qualified reference types.
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T const ,::boost::is_reference<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T volatile ,::boost::is_reference<T>::value)
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_reference,T const volatile ,::boost::is_reference<T>::value)
+#endif
+
 #else
 
 #ifdef BOOST_MSVC

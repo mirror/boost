@@ -36,6 +36,15 @@ struct is_scalar_impl
       >::value));
 };
 
+// these specializations are only really needed for compilers 
+// without partial specialization support:
+template <> struct is_scalar_impl<void>{ BOOST_STATIC_CONSTANT(bool, value = false ); };
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+template <> struct is_scalar_impl<void const>{ BOOST_STATIC_CONSTANT(bool, value = false ); };
+template <> struct is_scalar_impl<void volatile>{ BOOST_STATIC_CONSTANT(bool, value = false ); };
+template <> struct is_scalar_impl<void const volatile>{ BOOST_STATIC_CONSTANT(bool, value = false ); };
+#endif
+
 } // namespace detail
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_scalar,T,::boost::detail::is_scalar_impl<T>::value)

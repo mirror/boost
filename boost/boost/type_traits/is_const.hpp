@@ -15,6 +15,9 @@
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #   include "boost/type_traits/detail/cv_traits_impl.hpp"
+#   ifdef __GNUC__
+#       include <boost/type_traits/is_reference.hpp>
+#   endif
 #else
 #   include "boost/type_traits/is_reference.hpp"
 #   include "boost/type_traits/is_array.hpp"
@@ -41,6 +44,13 @@ BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T&,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T& const,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T& volatile,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T& const volatile,false)
+#endif
+
+#ifdef __GNUC__
+// special case for gcc where illegally cv-qualified reference types can be
+// generated in some corner cases:
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T const,!(::boost::is_reference<T>::value))
+BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T volatile const,!(::boost::is_reference<T>::value))
 #endif
 
 #else

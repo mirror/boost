@@ -13,8 +13,12 @@
 #include "boost/preprocessor/tuple/to_list.hpp"
 #include "boost/preprocessor/cat.hpp"
 #include "boost/type_traits/alignment_of.hpp"
+#include "boost/type_traits/is_pod.hpp"
 #include "boost/static_assert.hpp"
 #include "boost/config.hpp"
+
+// should be the last #include
+#include "boost/type_traits/detail/bool_trait_def.hpp"
 
 #include <cstddef>
 
@@ -24,6 +28,8 @@
 #endif
 
 namespace boost {
+
+#ifndef __BORLANDC__
 
 namespace detail {
 
@@ -76,6 +82,16 @@ struct is_aligned
 
 } // namespace detail
 
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::detail::max_align,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,detail::lower_alignment<1> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::detail::lower_alignment<2> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::detail::lower_alignment<4> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::detail::lower_alignment<8> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::detail::lower_alignment<10> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::detail::lower_alignment<16> ,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::detail::lower_alignment<32> ,true)
+
+
 // This alignment method originally due to Brian Parker, implemented by David
 // Abrahams, and then ported here by Doug Gregor. 
 template <int Align>
@@ -90,12 +106,53 @@ class type_with_alignment
 
     BOOST_STATIC_CONSTANT(std::size_t, found = alignment_of<align_t>::value);
 
+#ifndef __BORLANDC__
     BOOST_STATIC_ASSERT(found >= Align);
     BOOST_STATIC_ASSERT(found % Align == 0);
+#else
+    BOOST_STATIC_ASSERT(::boost::type_with_alignment<Align>::found >= Align);
+    BOOST_STATIC_ASSERT(::boost::type_with_alignment<Align>::found % Align == 0);
+#endif
 
  public:
     typedef align_t type;
 };
+
+#else
+
+//
+// Borland specific version, we have this for two reasons:
+// 1) The version above doesn't always compile (with the new test cases for example)
+// 2) Because of Borlands #pragma option we can create types with alignments that are
+//    greater that the largest aligned builtin type.
+
+namespace align{
+#pragma option push -a16
+struct a2{ short s; };
+struct a4{ int s; };
+struct a8{ double s; };
+struct a16{ long double s; };
+#pragma option pop
+}
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::align::a2,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::align::a4,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::align::a8,true)
+BOOST_TT_AUX_BOOL_TRAIT_SPEC1(is_POD,::boost::align::a16,true)
+
+template <std::size_t N> struct type_with_alignment
+{
+   // We should never get to here, but if we do use the maximally
+   // aligned type:
+   // BOOST_STATIC_ASSERT(0);
+   typedef align::a16 type;
+};
+template <> struct type_with_alignment<1>{ typedef char type; };
+template <> struct type_with_alignment<2>{ typedef align::a2 type; };
+template <> struct type_with_alignment<4>{ typedef align::a4 type; };
+template <> struct type_with_alignment<8>{ typedef align::a8 type; };
+template <> struct type_with_alignment<16>{ typedef align::a16 type; };
+
+#endif
 
 } // namespace boost
 
@@ -103,4 +160,7 @@ class type_with_alignment
 #   pragma warning(pop)
 #endif
 
+#include "boost/type_traits/detail/bool_trait_undef.hpp"
+
 #endif // BOOST_TT_TYPE_WITH_ALIGNMENT_INCLUDED
+
