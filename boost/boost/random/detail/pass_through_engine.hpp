@@ -49,28 +49,29 @@ public:
 
   result_type operator()() { return base()(); }
 
-#ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
-  template<class CharT, class Traits>
-  friend std::basic_ostream<CharT,Traits>&
-  operator<<(std::basic_ostream<CharT,Traits>& os, const pass_through_engine& ud)
-  {
-    os << helper_type::ref(ud._rng);
-    return os;
-  }
-
-  template<class CharT, class Traits>
-  friend std::basic_istream<CharT,Traits>&
-  operator>>(std::basic_istream<CharT,Traits>& is, pass_through_engine& ud)
-  {
-    is >> helper_type::ref(ud._rng);
-    return is;
-  }
-#endif
-
 private:
   UniformRandomNumberGenerator _rng;
 };
 
+template<class UniformRandomNumberGenerator, class CharT, class Traits>
+std::basic_ostream<CharT,Traits>&
+operator<<(
+    std::basic_ostream<CharT,Traits>& os
+    , const pass_through_engine<UniformRandomNumberGenerator>& ud
+    )
+{
+    return os << ud.base();
+}
+
+template<class UniformRandomNumberGenerator, class CharT, class Traits>
+std::basic_istream<CharT,Traits>&
+operator>>(
+    std::basic_istream<CharT,Traits>& is
+    , const pass_through_engine<UniformRandomNumberGenerator>& ud
+    )
+{
+    return is >> ud.base();
+}
 
 } // namespace detail
 } // namespace random
