@@ -15,7 +15,7 @@
  
  /*
   *   FILE     jgrep.h
-  *   VERSION  3.12
+  *   VERSION  see <boost/version.hpp>
   */
 
 #ifndef _JGREP_H

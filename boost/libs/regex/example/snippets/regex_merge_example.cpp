@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_merge_example.cpp
-  *   VERSION      3.00
+  *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: regex_merge example:
   *                converts a C++ file to syntax highlighted HTML.
   */

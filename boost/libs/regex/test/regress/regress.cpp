@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.cpp
-  *   VERSION  3.12
+  *   VERSION  see <boost/version.hpp>
   *
   * main() and associated code for regress.
   *

@@ -15,7 +15,7 @@
  
  /*
   *   FILE     jgrep.cpp
-  *   VERSION  3.12
+  *   VERSION  see <boost/version.hpp>
   */
 
 #include <stdio.h>

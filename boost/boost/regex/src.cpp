@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         src.cpp
-  *   VERSION      3.11
+  *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: Includes all the regex source files, include this
   *                file only if you need to build the regex library
   *                as a single file.  Before including this file you

@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     regress.h
-  *   VERSION  3.12
+  *   VERSION  see <boost/version.hpp>
   *
   * Function and data declarations for regress.
   *

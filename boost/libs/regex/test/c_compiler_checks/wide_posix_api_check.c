@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         wide_posix_api_compiler_check.c
-  *   VERSION      3.01
+  *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: Verify that POSIX API calls compile: note this is a compile
   *                time check only.
   */

@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         credit_card_example.cpp
-  *   VERSION      3.00
+  *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: Credit card number formatting code.
   */
 

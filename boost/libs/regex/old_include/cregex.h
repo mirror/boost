@@ -15,7 +15,7 @@
 
  /*
   *   FILE     cregex.h
-  *   VERSION  2.21
+  *   VERSION  see <boost/version.hpp>
   *   deprecated regular expression matching algorithms
   */
 

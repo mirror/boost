@@ -16,7 +16,7 @@
  /*
   *
   *   FILE     parse.cpp
-  *   VERSION  3.12
+  *   VERSION  see <boost/version.hpp>
   *
   * Input parsing functions for regress.
   *

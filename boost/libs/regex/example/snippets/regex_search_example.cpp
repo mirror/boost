@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_search_example.cpp
-  *   VERSION      3.00
+  *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: regex_search example: searches a cpp file for class definitions.
   */
   

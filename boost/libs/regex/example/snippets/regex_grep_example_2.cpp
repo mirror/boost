@@ -16,7 +16,7 @@
  /*
   *   LOCATION:    see http://www.boost.org for most recent version.
   *   FILE         regex_grep_example_2.cpp
-  *   VERSION      3.00
+  *   VERSION      see <boost/version.hpp>
   *   DESCRIPTION: regex_grep example 2: searches a cpp file for class definitions,
   *                using a global callback function.
   */
