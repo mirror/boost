@@ -14,6 +14,14 @@
 #include <boost/program_options/detail/utf8_codecvt_facet.hpp>
 
 #include <boost/limits.hpp>
+#include <boost/config.hpp>
+
+// If we don't have wstring, then Unicode support 
+// is not available anyway, so we don't need to even
+// compiler this file. This also fixes the problem
+// with mingw, which can compile this file, but will
+// generate link error when building DLL.
+#ifndef BOOST_NO_STD_WSTRING
 
 namespace boost { namespace program_options { namespace detail {
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
@@ -346,4 +354,7 @@ int utf8_codecvt_facet_char::do_length(
     return total_length;
 }
 }
+
+#endif
+
 #endif
