@@ -20,6 +20,15 @@ project ublastest
       <toolset>kylix:<cxxflags>"-w-8026 -w-8027 -w-8057 -w-8084 -w-8092"
     ;
 
+build-project test1 ;
+build-project test2 ;
+build-project test3 ;
+build-project test4 ;
+build-project test5 ;
+build-project test6 ;
+build-project test7 ;
+
+
 test-suite "uBLAS"
        : [ compile concepts.cpp ]
          [ run test1 ]
