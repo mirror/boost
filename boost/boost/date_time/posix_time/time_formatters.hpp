@@ -169,7 +169,7 @@ namespace posix_time {
     std::string ts = gregorian::to_iso_string(t.date());// + "T";
     if(!t.time_of_day().is_special())
     {
-      return "T" + ts + to_iso_string(t.time_of_day());
+      return ts + "T" + to_iso_string(t.time_of_day());
     }
     else{
       return ts;
@@ -183,7 +183,7 @@ namespace posix_time {
     std::string ts = gregorian::to_iso_extended_string(t.date());// + "T";
     if(!t.time_of_day().is_special())
     {
-      return "T" + ts + to_simple_string(t.time_of_day());
+      return ts + "T" + to_simple_string(t.time_of_day());
     }
     else{
       return ts;
