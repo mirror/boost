@@ -25,8 +25,8 @@ SEARCH on testing.jam = \$(BOOST_BUILD_PATH) ;
 include testing.jam ;
 
 run config_info.cpp ;
-run config_test.cpp <lib>../../test/build/test_exec_monitor ;
-run limits_test.cpp <lib>../../test/build/test_exec_monitor ;
+run config_test.cpp <lib>../../test/build/boost_test_exec_monitor ;
+run limits_test.cpp <lib>../../test/build/boost_test_exec_monitor ;
 
 EOF
 
@@ -172,11 +172,11 @@ EOF
 
    # output regression tests:
    echo "run libs/config/test/$basename""_pass.cpp" >> ../test/regression.cfg
-   echo "link-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
+   echo "compile-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
    
    echo 'test-suite "'$macroname'" : ' >> ../test/Jamfile
    echo "[ run $basename""_pass.cpp <lib>../../test/build/prg_exec_monitor ]" >> ../test/Jamfile
-   echo "[ link-fail $basename""_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;" >> ../test/Jamfile
+   echo "[ compile-fail $basename""_fail.cpp <lib>../../test/build/boost_prg_exec_monitor ] ;" >> ../test/Jamfile
    
 done
 
@@ -296,11 +296,11 @@ EOF
 
    # output regression tests:
    echo "run libs/config/test/$basename""_pass.cpp" >> ../test/regression.cfg
-   echo "link-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
+   echo "compile-fail libs/config/test/$basename""_fail.cpp" >> ../test/regression.cfg
    
    echo 'test-suite "'$macroname'" : ' >> ../test/Jamfile
    echo "[ run $basename""_pass.cpp <lib>../../test/build/prg_exec_monitor ]" >> ../test/Jamfile
-   echo "[ link-fail $basename""_fail.cpp <lib>../../test/build/prg_exec_monitor ] ;" >> ../test/Jamfile
+   echo "[ compile-fail $basename""_fail.cpp <lib>../../test/build/boost_prg_exec_monitor ] ;" >> ../test/Jamfile
 
 done
 
@@ -336,6 +336,8 @@ EOF
 echo "updating configure script..."
 autoconf ../tools/configure.in > ../configure
 echo
+
+
 
 
 
