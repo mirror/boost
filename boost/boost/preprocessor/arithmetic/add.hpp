@@ -19,7 +19,7 @@
 
 #include <boost/preprocessor/dec.hpp>
 #include <boost/preprocessor/inc.hpp>
-#include <boost/preprocessor/tuple.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/while.hpp>
 
 //! Expands to the sum of X and Y.

@@ -18,7 +18,7 @@
 */
 
 #include <boost/preprocessor/dec.hpp>
-#include <boost/preprocessor/tuple.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/while.hpp>
 
 //! Expands to the difference of X and Y.
