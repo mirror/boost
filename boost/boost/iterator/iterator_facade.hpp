@@ -36,7 +36,7 @@ namespace boost
   // indicate "use the default", this can also be passed by users
   // explicitly in order to specify that the default should be used.
   struct use_default;
-  
+
 # ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   // the incompleteness of use_default causes massive problems for
   // is_convertible (naturally).  This workaround is fortunately not
@@ -44,15 +44,15 @@ namespace boost
   template<class To>
   struct is_convertible<use_default,To>
     : mpl::false_ {};
-# endif 
-  
+# endif
+
   namespace detail
   {
     //
     // enable if for use in operator implementation.
     //
     // enable_if_interoperable falls back to always enabled for compilers
-    // that don't support enable_if or is_convertible. 
+    // that don't support enable_if or is_convertible.
     //
     template <
         class Facade1
@@ -68,11 +68,11 @@ namespace boost
            >
          , Return
         >
-#endif 
+#endif
     {
 #ifdef BOOST_NO_STRICT_ITERATOR_INTEROPERABILITY
         typedef Return type;
-#endif 
+#endif
     };
 
 
@@ -110,13 +110,13 @@ namespace boost
     struct iterator_facade_types
     {
         typedef iterator_tag<AccessCategory, TraversalCategory> iterator_category;
-        
+
         typedef typename remove_cv<Value>::type value_type;
-        
+
         typedef Difference difference_type;
-        
+
         typedef typename const_qualified_ptr<Value, AccessCategory>::type pointer;
-        
+
         // The use_default support is needed for iterator_adaptor.
         // For practical reasons iterator_adaptor needs to specify
         // a fixed number of template arguments of iterator_facade.
@@ -133,25 +133,25 @@ namespace boost
         || BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, BOOST_TESTED_AT(310)))     \
     || BOOST_WORKAROUND(BOOST_RWSTD_VER, BOOST_TESTED_AT(0x20101))              \
     || BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, <= 310)
-        
+
         // To interoperate with some broken library/compiler
         // combinations, user-defined iterators must be derived from
         // std::iterator.  It is possible to implement a standard
         // library for broken compilers without this limitation.
 #  define BOOST_ITERATOR_FACADE_NEEDS_ITERATOR_BASE 1
-        
+
         typedef
            iterator<iterator_category, value_type, difference_type, pointer, reference>
         base;
-# endif 
+# endif
     };
 
-    
+
     // operator->() needs special support for input iterators to strictly meet the
     // standard's requirements. If *i is not a reference type, we must still
     // produce a (constant) lvalue to which a pointer can be formed. We do that by
     // returning an instantiation of this special proxy class template.
-    
+
     template <class T>
     struct operator_arrow_proxy
     {
@@ -177,13 +177,13 @@ namespace boost
           , Pointer
           , operator_arrow_proxy<Value>
         >::type type;
-    
+
         static type make(Reference x)
         {
             return type(&x);
         }
     };
-    
+
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
     // Deal with ETI
     template<>
@@ -218,7 +218,7 @@ namespace boost
             *m_iter = val;
             return *this;
         }
-      
+
      private:
         Iterator m_iter;
     };
@@ -227,13 +227,13 @@ namespace boost
     struct operator_brackets_result
     {
         typedef typename access_category_tag<Category,Reference>::type access_category;
-        
+
         typedef is_tag<writable_iterator_tag, access_category> use_proxy;
 
-        typedef typename mpl::if_< 
+        typedef typename mpl::if_<
             use_proxy
           , operator_brackets_proxy<Iterator>
-          , ValueType 
+          , ValueType
         >::type type;
     };
 
@@ -286,7 +286,7 @@ namespace boost
       // to work in the absence of member template friends.
    public:
 # else
-      
+
     template <class I, class V, class AC, class TC, class R, class D> friend class iterator_facade;
 
 #  define BOOST_ITERATOR_FACADE_RELATION(op)     \
@@ -306,21 +306,21 @@ namespace boost
       ;
 
       BOOST_ITERATOR_FACADE_PLUS_HEAD(
-          friend                                
+          friend
           , (iterator_facade<Derived, V, AC, TC, R, D> const&
            , typename Derived::difference_type)
       )
       ;
 
       BOOST_ITERATOR_FACADE_PLUS_HEAD(
-          friend                           
+          friend
         , (typename Derived::difference_type
            , iterator_facade<Derived, V, AC, TC, R, D> const&)
       )
       ;
-      
+
 # endif
-      
+
       template <class Facade>
       static typename Facade::reference dereference(Facade const& f)
       {
@@ -372,7 +372,7 @@ namespace boost
     , class Value
     , class AccessCategory
     , class TraversalCategory
-    , class Reference   = BOOST_DEDUCED_TYPENAME detail::const_qualified_ref<Value, AccessCategory>::type
+    , class Reference   = BOOST_DEDUCED_TYPENAME ::boost::detail::const_qualified_ref<Value, AccessCategory>::type
     , class Difference  = std::ptrdiff_t
   >
   class iterator_facade
@@ -381,7 +381,7 @@ namespace boost
          Value, AccessCategory, TraversalCategory, Reference, Difference
       >::base
 #  undef BOOST_ITERATOR_FACADE_NEEDS_ITERATOR_BASE
-# endif 
+# endif
   {
    private:
       typedef typename
@@ -392,13 +392,13 @@ namespace boost
       // Curiously Recursive Template interface.
       //
       typedef Derived derived_t;
-      
+
       Derived& derived()
       {
           return static_cast<Derived&>(*this);
       }
 
-      Derived const& derived() const 
+      Derived const& derived() const
       {
           return static_cast<Derived const&>(*this);
       }
@@ -429,14 +429,14 @@ namespace boost
             , pointer
           >::make(*this->derived());
       }
-        
+
       typename detail::operator_brackets_result<Derived,value_type,iterator_category,reference>::type
       operator[](difference_type n) const
       {
           typedef typename
               detail::operator_brackets_result<Derived,value_type,iterator_category,reference>::use_proxy
           use_proxy;
-          
+
           return detail::make_operator_brackets_result<Derived>(this->derived() + n, use_proxy());
       }
 
@@ -452,32 +452,32 @@ namespace boost
           ++*this;
           return tmp;
       }
-  
+
       Derived& operator--()
       {
           iterator_core_access::decrement(this->derived());
           return this->derived();
       }
-  
+
       Derived operator--(int)
       {
           Derived tmp(this->derived());
           --*this;
           return tmp;
       }
-  
+
       Derived& operator+=(difference_type n)
       {
           iterator_core_access::advance(this->derived(), n);
           return this->derived();
       }
-  
+
       Derived& operator-=(difference_type n)
       {
           iterator_core_access::advance(this->derived(), -n);
           return this->derived();
       }
-  
+
       Derived operator-(difference_type x) const
       {
           Derived result(this->derived());
@@ -494,11 +494,11 @@ namespace boost
       {
           return *this;
       }
-# endif 
+# endif
   };
 
   //
-  // Operator implementation. The library supplied operators 
+  // Operator implementation. The library supplied operators
   // enables the user to provide fully interoperable constant/mutable
   // iterator types. I.e. the library provides all operators
   // for all mutable/constant iterator combinations.
@@ -507,12 +507,12 @@ namespace boost
   // iterators is not required by the standard for container iterators.
   // All the standard asks for is a conversion mutable -> constant.
   // Most standard library implementations nowadays provide fully interoperable
-  // iterator implementations, but there are still heavily used implementations 
-  // that do not provide them. (Actually it's even worse, they do not provide 
+  // iterator implementations, but there are still heavily used implementations
+  // that do not provide them. (Actually it's even worse, they do not provide
   // them for only a few iterators.)
   //
   // ?? Maybe a BOOST_ITERATOR_NO_FULL_INTEROPERABILITY macro should
-  //    enable the user to turn off mixed type operators 
+  //    enable the user to turn off mixed type operators
   //
   // The library takes care to provide only the right operator overloads.
   // I.e.
@@ -530,7 +530,7 @@ namespace boost
   // deficiencies result in less strict error checking and more obscure
   // error messages, functionality is not affected.
   //
-  // For full operation compiler support for "Substitution Failure Is Not An Error" 
+  // For full operation compiler support for "Substitution Failure Is Not An Error"
   // (aka. enable_if) and boost::is_convertible is required.
   //
   // The following problems occur if support is lacking.
@@ -549,7 +549,7 @@ namespace boost
   // // false overloads from the templated conversion constructor
   // // of AdaptorA.
   //
-  // a1 == a2; 
+  // a1 == a2;
   // ----------------
   //
   // AdaptorA<Iterator> a;
@@ -574,7 +574,7 @@ namespace boost
       ));                                                                                   \
       return_prefix iterator_core_access::base_op(                                          \
           static_cast<Derived2 const&>(rhs), static_cast<Derived1 const&>(lhs));            \
-  } 
+  }
 
 # define BOOST_ITERATOR_FACADE_RELATION(op, return_prefix, base_op) \
   BOOST_ITERATOR_FACADE_INTEROP(                                    \
@@ -606,7 +606,7 @@ namespace boost
     , distance_to )
 # undef BOOST_ITERATOR_FACADE_INTEROP
 # undef BOOST_ITERATOR_FACADE_INTEROP_HEAD
-      
+
 # define BOOST_ITERATOR_FACADE_PLUS(args)           \
   BOOST_ITERATOR_FACADE_PLUS_HEAD(inline, args)     \
   {                                                 \
@@ -625,7 +625,7 @@ BOOST_ITERATOR_FACADE_PLUS((
 ))
 # undef BOOST_ITERATOR_FACADE_PLUS
 # undef BOOST_ITERATOR_FACADE_PLUS_HEAD
-    
+
 } // namespace boost
 
 #include <boost/iterator/detail/config_undef.hpp>
