@@ -72,9 +72,13 @@ namespace boost {
             typedef IteratorT const_iterator;
             //! iterator type
             typedef IteratorT iterator;
-           
+
+            //! Empty constructor
+            iterator_range() : 
+                m_Begin(), m_End() {}
+
             //! Constructor from a pair of iterators
-            iterator_range( iterator Begin=iterator(), iterator End=iterator() ) : 
+            iterator_range( iterator Begin, iterator End ) : 
                 m_Begin(Begin), m_End(End) {}
 
             //! Constructor from a std::pair
