@@ -143,4 +143,15 @@ inline range_const_iterator<const wchar_t*>::type end<const wchar_t*>( const wch
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
+
+namespace boost
+{
+    template< class T >
+    inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type
+    const_end( const T& r )
+    {
+        return end( r );
+    }
+}
+
 #endif

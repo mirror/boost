@@ -54,6 +54,13 @@ rbegin( const C& c )
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
+template< class T >
+inline BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<T>::type
+const_rbegin( const T& r )
+{
+    return rbegin( r );
 }
+
+} // namespace 'boost'
 
 #endif

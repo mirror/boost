@@ -54,6 +54,13 @@ rend( const C& c )
 
 #endif
 
+template< class T >
+inline BOOST_DEDUCED_TYPENAME range_const_reverse_iterator<T>::type
+const_rend( const T& r )
+{
+    return rend( r );
+}
+
 } // namespace 'boost'
 
 #endif

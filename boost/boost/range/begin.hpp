@@ -123,4 +123,14 @@ inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type begin( const T& r )
 
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING    
 
+namespace boost
+{
+    template< class T >
+    inline BOOST_DEDUCED_TYPENAME range_const_iterator<T>::type
+    const_begin( const T& r )
+    {
+        return begin( r );
+    }
+}
+
 #endif

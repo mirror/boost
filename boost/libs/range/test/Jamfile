@@ -72,12 +72,12 @@ test-suite range
         :
         : reversible_range_test
        ] 
-#     [ run
-#             compat1.cpp    
-#            : :
-#        :
-#        : compat1_test
-#       ] 
+     [ run
+             const_ranges.cpp    
+            : :
+        :
+        : const_ranges
+       ] 
 #     [ run
 #             compat3.cpp    
 #            : :
