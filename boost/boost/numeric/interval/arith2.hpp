@@ -91,7 +91,7 @@ interval<T, Policies> multiplicative_inverse(const interval<T, Policies>& x)
   T one = static_cast<T>(1);
   typename Policies::rounding rnd;
   if (in_zero(x)) {
-    typedef typename I::checking checking;
+    typedef typename Policies::checking checking;
     if (!detail::is_zero(x.lower()))
       if (!detail::is_zero(x.upper()))
 	return I::whole();

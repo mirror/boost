@@ -62,7 +62,7 @@ interval<T, Policies> div_positive(const interval<T, Policies>& x, const T& yu)
   typedef interval<T, Policies> I;
   const T& xl = x.lower();
   const T& xu = x.upper();
-  typedef typename I::checking checking;
+  typedef typename Policies::checking checking;
   const T& inf = checking::inf();
   if (is_neg(xu))
     return I(-inf, rnd.div_up(xu, yu), true);
@@ -79,7 +79,7 @@ interval<T, Policies> div_positive(const T& x, const T& yu)
   typedef interval<T, Policies> I;
   if (is_zero(x)) return I(0, 0, true);
   typename Policies::rounding rnd;
-  typedef typename I::checking checking;
+  typedef typename Policies::checking checking;
   const T& inf = checking::inf();
   if (is_neg(x))
     return I(-inf, rnd.div_up(x, yu), true);
@@ -97,7 +97,7 @@ interval<T, Policies> div_negative(const interval<T, Policies>& x, const T& yl)
   typedef interval<T, Policies> I;
   const T& xl = x.lower();
   const T& xu = x.upper();
-  typedef typename I::checking checking;
+  typedef typename Policies::checking checking;
   const T& inf = checking::inf();
   if (is_neg(xu))
     return I(rnd.div_down(xu, yl), inf, true);
@@ -114,7 +114,7 @@ interval<T, Policies> div_negative(const T& x, const T& yl)
   typedef interval<T, Policies> I;
   if (is_zero(x)) return I(0, 0, true);
   typename Policies::rounding rnd;
-  typedef typename I::checking checking;
+  typedef typename Policies::checking checking;
   const T& inf = checking::inf();
   if (is_neg(x))
     return I(rnd.div_down(x, yl), inf, true);
