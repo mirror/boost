@@ -150,7 +150,7 @@ struct guid_initializer {
 };
 
 template<class T, class ASeq>
-const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance;
+const guid_initializer<T, ASeq> guid_initializer<T, ASeq>::instance(NULL);
 
 template<class T, class ASeq>
 BOOST_FORCE_INCLUDE const guid_initializer<T, ASeq> & 

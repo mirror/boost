@@ -41,7 +41,7 @@ template<class Archive, class T>
 void load(Archive &ar, T & t, const unsigned int);
 #endif
 
-namespace detail {
+//namespace detail {
 template<class Archive, class T>
 struct free_saver {
     static void invoke(
@@ -49,7 +49,8 @@ struct free_saver {
         const  T & t, 
         const unsigned int file_version
     ){
-        boost::serialization::save(ar, t, file_version);
+        //boost::serialization::
+        save(ar, t, file_version);
     }
 };
 template<class Archive, class T>
@@ -59,10 +60,11 @@ struct free_loader {
         T & t, 
         const unsigned int file_version
     ){
-        boost::serialization::load(ar, t, file_version);
+        //boost::serialization::
+        load(ar, t, file_version);
     }
 };
-} // namespace detail
+//} // namespace detail
 
 template<class Archive, class T>
 inline void split_free(
@@ -72,8 +74,8 @@ inline void split_free(
 ){
     mpl::apply_if<
         BOOST_DEDUCED_TYPENAME Archive::is_saving,
-        mpl::identity<detail::free_saver<Archive, T> >, 
-        mpl::identity<detail::free_loader<Archive, T> >
+        mpl::identity</* detail:: */ free_saver<Archive, T> >, 
+        mpl::identity</* detail:: */ free_loader<Archive, T> >
     >::type::invoke(ar, t, file_version);
 }
 
