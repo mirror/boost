@@ -1,22 +1,17 @@
-/*
-The following is a simple example that shows conversion of dates to and 
-from a std::string.
-
-Expected output:
-2001-Oct-09
-2001-10-09
-Tuesday October 9, 2001
-An expected exception is next: 
-  Exception: Month number is out of range 1..12
-
-*/
+/* The following is a simple example that shows conversion of dates 
+ * to and from a std::string.
+ * 
+ * Expected output:
+ * 2001-Oct-09
+ * 2001-10-09
+ * Tuesday October 9, 2001
+ * An expected exception is next: 
+ * Exception: Month number is out of range 1..12
+ */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
-#include "boost/date_time/date_parsing.hpp"
 #include <iostream>
 #include <string>
- 
-
 
 int
 main() 
@@ -26,8 +21,8 @@ main()
 
   try {
     // The following date is in ISO 8601 extended format (CCYY-MM-DD)
-    std::string s("2001-10-9"); //2001-October-05
-    date d(from_string(s));
+    std::string s("2001-10-9"); //2001-October-09
+    date d(from_simple_string(s));
     std::cout << to_simple_string(d) << std::endl;
     
     //Read ISO Standard(CCYYMMDD) and output ISO Extended
@@ -43,13 +38,12 @@ main()
               << ymd.day << ", " << ymd.year
               << std::endl;
 
-
     //Let's send in month 25 by accident and create an exception
     std::string bad_date("20012509"); //2001-??-09
     std::cout << "An expected exception is next: " << std::endl;
     date wont_construct(from_undelimited_string(bad_date));
     //use wont_construct so compiler doesn't complain, but you wont get here!
-    std::cout << "oh oh, you should reach this line: " 
+    std::cout << "oh oh, you shouldn't reach this line: " 
               << to_iso_string(wont_construct) << std::endl;
   }
   catch(std::exception& e) {

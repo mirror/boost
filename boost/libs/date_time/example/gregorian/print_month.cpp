@@ -1,18 +1,17 @@
-/*
-This example prints all the dates in a month. It demonstrates
-the use of iterators as well as functions of the gregorian_calendar
-
-Output:
-Enter Year: 2002
-Enter Month(1..12): 2
-2002-Feb-01 [Fri]
-2002-Feb-02 [Sat]
-2002-Feb-03 [Sun]
-2002-Feb-04 [Mon]
-2002-Feb-05 [Tue]
-2002-Feb-06 [Wed]
-2002-Feb-07 [Thu]
-*/
+/* This example prints all the dates in a month. It demonstrates
+ * the use of iterators as well as functions of the gregorian_calendar
+ * 
+ * Output:
+ * Enter Year: 2002
+ * Enter Month(1..12): 2
+ * 2002-Feb-01 [Fri]
+ * 2002-Feb-02 [Sat]
+ * 2002-Feb-03 [Sun]
+ * 2002-Feb-04 [Mon]
+ * 2002-Feb-05 [Tue]
+ * 2002-Feb-06 [Wed]
+ * 2002-Feb-07 [Thu]
+ */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include <iostream>
@@ -41,7 +40,8 @@ main()
 #else
       std::cout << *ditr << " ["
 #endif
-                << ditr->day_of_week() << "]"
+                << ditr->day_of_week() << " week: "
+                << ditr->week_number() << "]"
                 << std::endl; 
     }
   }

@@ -1,34 +1,62 @@
-/*
-The following shows the creation of a facet for the output of 
-dates in German (please forgive me for any errors in my German --
-I'm not a native speaker).
-
-
-
-*/
+/* The following shows the creation of a facet for the output of 
+ * dates in German (please forgive me for any errors in my German --
+ * I'm not a native speaker).
+ */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include <iostream>
 
-//Define a series of char arrays for short and long name strings to be 
-//associated with date output.
-const char* const de_short_month_names[]={"Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez", "NAM"};
+/* Define a series of char arrays for short and long name strings to be 
+ * associated with date output. */
+const char* const de_short_month_names[] = 
+{
+  "Jan", "Feb", "Mar", "Apr", "Mai", "Jun",
+  "Jul", "Aug", "Sep", "Okt", "Nov", "Dez", "NAM" 
+};
+const char* const de_long_month_names[] =
+{
+  "Januar", "Februar", "Marz", "April", "Mai",
+  "Juni", "Juli", "August", "September", "Oktober",
+  "November", "Dezember", "NichtDerMonat"
+};
+const char* const de_special_value_names[] =
+{
+  "NichtDatumzeit", "-unbegrenztheit", "+unbegrenztheit"
+};
+const char* const de_long_weekday_names[] = 
+{
+  "Sonntag", "Montag", "Dienstag", "Mittwoch",
+  "Donnerstag", "Freitag", "Samstag"
+};
+const char* const de_short_weekday_names[] =
+{
+  "Son", "Mon", "Die","Mit", "Don", "Fre", "Sam"
+};
 
-const char* const de_long_month_names[]={"Januar","Februar","Marz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember","NichtDerMonat"};
-const char* const de_special_value_names[]={"NichtDatumzeit","-unbegrenztheit", "+unbegrenztheit"};
- 
-const char* const de_long_weekday_names[]={"Sonntag", "Montag", "Dienstag","Mittwoch", "Donnerstag", "Freitag", "Samstag"};
-
-const char* const de_short_weekday_names[]={"Son", "Mon", "Die","Mit", "Don", "Fre", "Sam"};
-
-const char* const us_short_month_names[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec", "NAD"};
-
-const char* const us_long_month_names[]={"January","February","March","April","May","June","July","August","September","October","November","December","Not-A-Date"};
-const char* const us_special_value_names[]={"Not-A-Date","-infinity", "+infinity"};
- 
-const char* const us_long_weekday_names[]={"Sunday", "Monday", "Tuesday","Wenesday", "Thursday", "Friday", "Saturday"};
-
-const char* const us_short_weekday_names[]={"Sun", "Mon", "Tue","Wed", "Thu", "Fri", "Sat"};
+const char* const us_short_month_names[] = 
+{
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "NAD"
+};
+const char* const us_long_month_names[] =
+{
+  "January", "February", "March", "April", "May",
+  "June", "July", "August", "September", "October",
+  "November", "December", "Not-A-Date"
+};
+const char* const us_special_value_names[] =
+{ 
+  "Not-A-Date", "-infinity", "+infinity"
+};
+const char* const us_long_weekday_names[] =
+{
+  "Sunday", "Monday", "Tuesday", "Wenesday", 
+  "Thursday", "Friday", "Saturday"
+};
+const char* const us_short_weekday_names[] =
+{
+  "Sun", "Mon", "Tue","Wed", "Thu", "Fri", "Sat"
+};
 
 
 int

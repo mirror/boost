@@ -1,10 +1,10 @@
-//Some simple examples of constructing and calculating with times
-//Returns:
-//[2002-Feb-01 00:00:00/2002-Feb-01 23:59:59.999999999] contains 2002-Feb-01 03:00:05
-//[2002-Feb-01 00:00:00/2002-Feb-01 23:59:59.999999999] intersected with
-//[2002-Feb-01 00:00:00/2002-Feb-01 03:00:04.999999999] is 
-//[2002-Feb-01 00:00:00/2002-Feb-01 03:00:04.999999999]
-
+/* Some simple examples of constructing and calculating with times
+ * Returns:
+ * [2002-Feb-01 00:00:00/2002-Feb-01 23:59:59.999999999] contains 2002-Feb-01 03:00:05
+ * [2002-Feb-01 00:00:00/2002-Feb-01 23:59:59.999999999] intersected with
+ * [2002-Feb-01 00:00:00/2002-Feb-01 03:00:04.999999999] is 
+ * [2002-Feb-01 00:00:00/2002-Feb-01 03:00:04.999999999]
+ */
 
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <iostream>

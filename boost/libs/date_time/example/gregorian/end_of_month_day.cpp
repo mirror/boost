@@ -1,13 +1,15 @@
-// Simple program that uses the gregorian calendar to find the last
-// day of the month.
+/* Simple program that uses the gregorian calendar to find the last
+ * day of the month and then display the last day of every month left 
+ * in the year.
+ */
 
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include <iostream>
 
-
 int
 main()
 {
+  using namespace boost::gregorian;
   
   std::cout << "   Enter Year(ex: 2002): ";
   int year, month;
@@ -15,16 +17,15 @@ main()
   std::cout << "   Enter Month(1..12): ";
   std::cin >> month;
   try {
-    int day = boost::gregorian::gregorian_calendar::end_of_month_day(year,month);
-    boost::gregorian::date endOfMonth(year,month,day);
-    std::cout << boost::gregorian::to_simple_string(endOfMonth) << std::endl;
+    int day = gregorian_calendar::end_of_month_day(year,month);
+    date end_of_month(year,month,day);
 
     //Iterate thru by months --
-    boost::gregorian::month_iterator mitr(endOfMonth,1);
-    boost::gregorian::date startOfNextYear(year+1,1,1);
+    month_iterator mitr(end_of_month,1);
+    date start_of_next_year(year+1, Jan, 1);
     //loop thru the days and print each one
-    while (mitr < startOfNextYear){
-      std::cout << boost::gregorian::to_simple_string(*mitr) << std::endl;
+    while (mitr < start_of_next_year){
+      std::cout << to_simple_string(*mitr) << std::endl;
       ++mitr;
     }
 
