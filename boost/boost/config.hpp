@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   29 Mar 01  BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS (Daryle Walker)
 //   16 Mar 01  Added BOOST_VERSION (Jens Maurer)
 //   06 Mar 01  Refactored EDG checks for Intel C++ (Dave Abrahams)
 //   04 Mar 01  Factored EDG checks, added BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
@@ -86,6 +87,9 @@
 //  BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS: Template value
 //  parameters cannot have a dependent type, for example
 //  "template<class T, typename T::type value> class X { ... };"
+
+//  BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS: Can only use deduced
+//  template arguments when calling function template instantiations.
 
 //  BOOST_NO_INCLASS_MEMBER_INITIALIZATION: Compiler violates std::9.4.2/4. 
 
@@ -362,7 +366,7 @@
 #     define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 #     define BOOST_NO_STD_ALLOCATOR
 #     define BOOST_NO_STD_MIN_MAX
-#   endif
+##   endif
 #   define BOOST_NO_INTRINSIC_WCHAR_T // tentative addition - required for VC6 compatibility? (added by JM 19 Feb 2001)
 
 //  Metrowerks CodeWarrior  --------------------------------------------------//
@@ -371,7 +375,7 @@
 #   if __MWERKS__ <= 0x2401  // 6.2
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #   endif
-#   if __MWERKS__ <= 0x2301  // 5.3?
+#   if __MWERKS__ <= 0x2301  // 5.3
 #     define BOOST_NO_POINTER_TO_MEMBER_CONST
 #     define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #   endif
@@ -441,6 +445,7 @@
 #     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 #     define BOOST_NO_PRIVATE_IN_AGGREGATE
 #     define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#     define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
 #     define BOOST_NO_INTEGRAL_INT64_T
 #     define BOOST_NO_INTRINSIC_WCHAR_T
