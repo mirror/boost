@@ -231,7 +231,7 @@ void check_uniform_int(Generator & gen, int iter)
   // use a different variable name "k", because MSVC has broken "for" scoping
   for(int k = 0; k < range; k++)
     sum += bucket[k];
-  int avg = sum/range;
+  double avg = static_cast<double>(sum)/range;
   double threshold = 2*avg/std::sqrt(static_cast<double>(iter));
   for(int i = 0; i < range; i++) {
     if(std::fabs(bucket[i] - avg) > threshold) {
