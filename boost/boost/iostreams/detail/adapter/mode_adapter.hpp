@@ -24,12 +24,13 @@
 
 namespace boost { namespace iostreams { namespace detail {
 
-template<typename T, typename Mode>
+template<typename Mode, typename T>
 class mode_adapter {
 private:
     struct empty_base { };
 public:
-    typedef BOOST_IOSTREAMS_CHAR_TYPE(T)                        char_type;
+    typedef typename wrapped_type<T>::type  policy_type;
+    typedef BOOST_IOSTREAMS_CHAR_TYPE(T)    char_type;
     struct io_category 
         : Mode, 
           device_tag,
@@ -38,7 +39,7 @@ public:
           closable_tag,
           localizable_tag
         { };
-    mode_adapter(T t) : t_(t) { }
+    mode_adapter(const policy_type& t) : t_(t) { }
 
         // Device member functions.
 
@@ -80,26 +81,26 @@ public:
     void imbue(const Locale& loc)
     { return iostreams::imbue(t_, loc); }
 private:
-    T t_;
+    policy_type t_;
 };
                     
 //------------------Implementation of mode_adapter----------------------------//
 
-template<typename T, typename Mode>
-std::streamsize mode_adapter<T, Mode>::read(char_type* s, std::streamsize n)
+template<typename Mode, typename T>
+std::streamsize mode_adapter<Mode, T>::read(char_type* s, std::streamsize n)
 { return boost::iostreams::read(t_, s, n); }
 
-template<typename T, typename Mode>
-void mode_adapter<T, Mode>::write(const char_type* s, std::streamsize n)
+template<typename Mode, typename T>
+void mode_adapter<Mode, T>::write(const char_type* s, std::streamsize n)
 { boost::iostreams::write(t_, s, n); }
 
-template<typename T, typename Mode>
-std::streamoff mode_adapter<T, Mode>::seek
+template<typename Mode, typename T>
+std::streamoff mode_adapter<Mode, T>::seek
     (std::streamoff off, std::ios::seekdir way, std::ios::openmode which)
 { return boost::iostreams::seek(t_, off, way, which); }
 
-template<typename T, typename Mode>
-void mode_adapter<T, Mode>::close(std::ios::openmode which) 
+template<typename Mode, typename T>
+void mode_adapter<Mode, T>::close(std::ios::openmode which) 
 { iostreams::close(t_, which); }
 
 } } } // End namespaces detail, iostreams, boost.
