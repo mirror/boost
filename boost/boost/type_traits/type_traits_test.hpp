@@ -82,7 +82,7 @@ struct typify{};
 template <class T, class U>
 struct type_checker
 {
-   static void check(const char* TT, const char* TU, const char* expression)
+   static void check(const char* TT, const char*, const char* expression)
    {
       ++test_count;
       if(typeid(typify<T>) != typeid(typify<U>))
