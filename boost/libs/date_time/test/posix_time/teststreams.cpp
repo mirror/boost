@@ -81,6 +81,10 @@ main()
   check("check time period output - german: "+ ss.str(), 
         ss.str() == std::string("[01.Mai.2002 12:10:05/01.Mai.2002 23:00:00]"));
 
+  /* Input streaming is only available for compilers that  
+   * do not have BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS defined */
+#ifndef BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS
+  
   /****** test streaming in for time classes ******/
   {
     std::istringstream iss("01:02:03.000004 garbage");
@@ -119,7 +123,7 @@ main()
     check("Stream in time_period", tp == result);
   }
 
-#if !(defined(BOOST_NO_STD_WSTRING) || defined(BOOST_NO_CWCHAR))
+#if !defined(BOOST_NO_STD_WSTRING)
   /*** wide streaming ***/
   {
     std::wistringstream wiss1(L"01:02:03");//.000004");
@@ -141,13 +145,17 @@ main()
   }
 #else
   check("Wide streaming not available for this compiler", false);
-#endif // BOOST_NO_STD_WSTRING || BOOST_NO_CWCHAR
+#endif // BOOST_NO_STD_WSTRING
 
 #else  // BOOST_NO_STD_ITERATOR_TRAITS
   check("Streaming in of alphabetic dates (Ex: 2003-Aug-21) \
       not supported by this compiler", false);
 #endif // BOOST_NO_STD_ITERATOR_TRAITS
 
+#else // BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS
+  check("Streaming in of time classes not supported by this compiler", false);
+#endif // BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS
+  
 #else  //BOOST_DATE_TIME_NO_LOCALE
   check("No tests executed - Locales not supported by this compiler", false);
 #endif //BOOST_DATE_TIME_NO_LOCALE
