@@ -129,7 +129,12 @@ namespace date_time {
       {
         return split_timedate_system::get_time_rep(base.day, -td);
       }
+      if (td.is_negative()) {
+        time_duration_type td1 = td.invert_sign();
+        return add_time_duration(base,td1);
+      }
 
+      //std::cout << td.ticks() << std::endl;
       wrap_int_type  day_offset(base.time_of_day.ticks());
       date_duration_type day_overflow(static_cast<int_type>(day_offset.subtract(td.ticks())));
 //       std::cout << "sub: " << base.time_of_day.ticks() << "|"
