@@ -82,7 +82,7 @@ public:
 
 #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
 template <class I>
-bool is_random_access_iterator<I>::value;
+const bool is_random_access_iterator<I>::value;
 #endif
 
 }
