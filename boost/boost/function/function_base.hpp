@@ -23,6 +23,7 @@
 #include <typeinfo>
 #include <boost/config.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/mem_fn.hpp>
 
 namespace boost {
   namespace detail {
@@ -119,9 +120,23 @@ namespace boost {
         retrieve_type_info
       };
 
-      // Tags used to decide between function and function object pointers.
+      // Tags used to decide between different types of functions
       struct function_ptr_tag {};
       struct function_obj_tag {};
+      struct member_ptr_tag {};
+
+      template<typename F>
+      class get_function_tag
+      {
+	typedef typename IF<(is_pointer<F>::value),
+                            function_ptr_tag,
+                            function_obj_tag>::type ptr_or_obj_tag;
+
+      public:
+	typedef typename IF<(is_member_pointer<F>::value),
+			    member_ptr_tag,
+			    ptr_or_obj_tag>::type type;
+      };
 
 #ifndef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       /**

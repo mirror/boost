@@ -664,9 +664,7 @@ namespace boost {
     {
       assert(typeid(To) != typeid(void));
       assert(typeid(To) == this->target_type());
-      typedef typename detail::function::IF<(is_pointer<To>::value),
-                         detail::function::function_ptr_tag,
-                         detail::function::function_obj_tag>::type tag;
+      typedef typename detail::function::get_function_tag<To>::type tag;
 
 #ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       impl_type* i = reinterpret_cast<impl_type*>(impl);
@@ -681,9 +679,7 @@ namespace boost {
     {
       assert(typeid(To) != typeid(void));
       assert(typeid(To) == this->target_type());
-      typedef typename detail::function::IF<(is_pointer<To>::value),
-                         detail::function::function_ptr_tag,
-                         detail::function::function_obj_tag>::type tag;
+      typedef typename detail::function::get_function_tag<To>::type tag;
 
 #ifdef BOOST_FUNCTION_USE_VIRTUAL_FUNCTIONS
       impl_type* i = reinterpret_cast<impl_type*>(impl);
@@ -727,10 +723,14 @@ namespace boost {
     template<typename Functor>
     void assign_to(const Functor& f)
     {
-      typedef typename detail::function::IF<(is_pointer<Functor>::value),
-                         detail::function::function_ptr_tag,
-                         detail::function::function_obj_tag>::type tag;
+      typedef typename detail::function::get_function_tag<Functor>::type tag;
       this->assign_to(f, tag());
+    }
+
+    template<typename MemberPtr>
+    void assign_to(MemberPtr f, detail::function::member_ptr_tag)
+    {
+      this->assign_to(mem_fn(f));
     }
 
     template<typename FunctionPtr>
