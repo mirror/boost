@@ -18,17 +18,11 @@
 
 #include <boost/test/test_tools.hpp>
 
-#include <typeinfo>
-#include <string>
-#include <vector>
-#include <iostream>
-#include <sstream>
-#include <algorithm>
-
 
 
 namespace fsm = boost::fsm;
 namespace mpl = boost::mpl;
+
 
 
 template< class T >
