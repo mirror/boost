@@ -672,8 +672,8 @@ range of indices.  To specify ranges, <literal>index_range</literal>
 supports a set of constructors, mutating member functions, and a novel 
 specification involving inequality operators.  Using inequality
 operators,  a half open range [5,10) can be specified as follows:
-<programlisting>5 &lt;= range() &lt; 10;</programlisting> or
-<programlisting>4 &lt; range() &lt;= 9;</programlisting> and so on.
+<programlisting>5 &lt;= index_range() &lt; 10;</programlisting> or
+<programlisting>4 &lt; index_range() &lt;= 9;</programlisting> and so on.
 
 The following describes the
 <literal>index_range</literal> interface.
