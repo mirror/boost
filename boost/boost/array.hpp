@@ -50,8 +50,15 @@ namespace boost {
         const_iterator end() const { return elems+N; }
 
         // reverse iterator support
+# if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
         typedef std::reverse_iterator<iterator> reverse_iterator;
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+# else
+        // workaround for broken reverse_iterator implementations due to no partial specialization
+        typedef std::reverse_iterator<iterator,T> reverse_iterator;
+        typedef std::reverse_iterator<const_iterator,T> const_reverse_iterator;
+# endif
+
         reverse_iterator rbegin() { return reverse_iterator(end()); }
         const_reverse_iterator rbegin() const {
             return const_reverse_iterator(end());
@@ -103,8 +110,10 @@ namespace boost {
             std::fill_n(begin(),size(),value);
         }
 
+# ifndef BOOST_NO_PRIVATE_IN_AGGREGATE
       private:
-        // check range (may be private because it is static)
+# endif
+        // private member functions are allowed in aggregates [ISO 8.5.1]
         static void rangecheck (size_type i) {
             if (i >= size()) { throw std::range_error("array"); }
         }
