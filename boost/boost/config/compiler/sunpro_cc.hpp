@@ -43,6 +43,9 @@
 
        // integral constant expressions with 64 bit numbers fail
 #      define BOOST_NO_INTEGRAL_INT64_T
+#    endif
+
+#    if (__SUNPRO_CC <= 0x540) || !defined(BOOST_STRICT_CONFIG)
 #      define BOOST_NO_TEMPLATE_TEMPLATES
 #    endif
 
