@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//   25 Sep 00  BOOST_NO_STD_ALLOCATOR (Jeremy Siek)
 //   18 SEP 00  BOOST_NO_SLIST, BOOST_NO_HASH, 
 //              BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
 //              BOOST_NO_LIMITS (Jeremy Siek)
@@ -150,6 +151,8 @@
 //  decide whether it is appropriate to explicitly specialize a template on
 //  wchar_t if there is already a specialization for other integer types.
 
+//  BOOST_NO_STD_ALLOCATOR: The C++ standard library does not provide
+//  a standards conforming std::allocator.
 
 //  Compilers are listed in alphabetic order (except VC++ last - see below)---//
 
@@ -217,6 +220,7 @@
 #     define BOOST_NO_SLIST
 #     define BOOST_NO_HASH
 #     define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
+#     define BOOST_NO_STD_ALLOCATOR
 #   endif
 
 
@@ -279,6 +283,7 @@
 #       define BOOST_NO_SLIST
 #       define BOOST_NO_HASH
 #       define BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
+#       define BOOST_NO_STD_ALLOCATOR
 #     endif
 #     define BOOST_NO_STD_ITERATOR_TRAITS
 
