@@ -31,6 +31,17 @@ You should read the
 for an introduction and the definition of the basic concepts.  For a
 quick start, it may be sufficient to have a look at <a
 href="random_demo.cpp">random_demo.cpp</a>.
+<p>
+For a very quick start, here's an example:
+<pre>
+  boost::mt19937 rng;                 // produces randomness out of thin air
+                                      // see pseudo-random number generators
+  boost::uniform_int&lt;> six(1,6)       // distribution that maps to 1..6
+                                      // see random number distributions
+  boost::variate_generator&lt;boost::mt19937, boost::uniform_int&lt;> >
+           die(rng, six);             // glues randomness with mapping
+  int x = die();                      // simulate rolling a die
+</pre>
 
 <h2>Library Organization</h2>
 
