@@ -27,6 +27,8 @@
 <code>random::inversive_congruential</code></a>
 <li><a href="#mersenne_twister">Class template
 <code>random::mersenne_twister</code></a>
+<li><a href="#lagged_fibonacci">Class template
+<code>random::lagged_fibonacci</code></a>
 <li><a href="#performance">Performance</a>
 </ul>
 
@@ -121,6 +123,78 @@ measure, higher numbers mean faster random number generation.
 <td>good uniform distribution in up to 623 dimensions</td>
 </tr>
 
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci607</a></code></td>
+<td>approx. 2<sup>32000</sup></td>
+<td><code>607*sizeof(double)</code></td>
+<td>150</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci1279</a></code></td>
+<td>approx. 2<sup>67000</sup></td>
+<td><code>1279*sizeof(double)</code></td>
+<td>150</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci2281</a></code></td>
+<td>approx. 2<sup>120000</sup></td>
+<td><code>2281*sizeof(double)</code></td>
+<td>150</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci3217</a></code></td>
+<td>approx. 2<sup>170000</sup></td>
+<td><code>3217*sizeof(double)</code></td>
+<td>150</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci4423</a></code></td>
+<td>approx. 2<sup>230000</sup></td>
+<td><code>4423*sizeof(double)</code></td>
+<td>150</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci9689</a></code></td>
+<td>approx. 2<sup>510000</sup></td>
+<td><code>9689*sizeof(double)</code></td>
+<td>150</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci19937</a></code></td>
+<td>approx. 2<sup>1050000</sup></td>
+<td><code>19937*sizeof(double)</code></td>
+<td>150</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci23209</a></code></td>
+<td>approx. 2<sup>1200000</sup></td>
+<td><code>23209*sizeof(double)</code></td>
+<td>140</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td><code><a href="#lagged_fibonacci_spec">lagged_fibonacci44497</a></code></td>
+<td>approx. 2<sup>2300000</sup></td>
+<td><code>44497*sizeof(double)</code></td>
+<td>60</td>
+<td>-</td>
+</tr>
+
 </table>
 
 <p>
@@ -136,11 +210,11 @@ confidence in the results.
 
 If the names of the generators don't ring any bell and you have no
 idea which generator to use, it is reasonable to employ
-<code>mt19937</code> for a start: It is fast and usually has
-acceptable quality.
+<code>mt19937</code> for a start: It is fast and has acceptable
+quality.
 
 <p>
-<em>Note:</em> These random number generators are not indended for use
+<em>Note:</em> These random number generators are not intended for use
 in applications where non-deterministic random numbers are required.
 See <a href="nondet_random.html">nondet_random.html</a> for a choice
 of (hopefully) non-deterministic random number generators.
@@ -151,7 +225,7 @@ in detail which are already defined in the
 <a href="random-concepts.html">concept documentation</a>.
 
 
-<h2><a name="synopsis">Synopsis of the generators</a> in header
+<h2><a name="synopsis">Synopsis of the generators</a> available from header
 <code>&lt;boost/random.hpp&gt;</code></h2>
 
 <pre>
@@ -173,6 +247,20 @@ namespace boost {
   }
   typedef random::mersenne_twister&lt; /* ... */ &gt; mt11213b;
   typedef random::mersenne_twister&lt; /* ... */ &gt; mt19937;
+
+  namespace random {
+    template&lt;class FloatType, unsigned int  p, unsigned int q&gt;
+    class lagged_fibonacci;
+  }
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci607;
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci1279;
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci2281;
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci3217;
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci4423;
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci9689;
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci19937;
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci23209;
+  typedef random::lagged_fibonacci&lt; /* ... */ &gt; lagged_fibonacci44497;  
 } // namespace boost
 </pre>
 
@@ -250,6 +338,8 @@ mult_add(IntType x)</pre>
 <h3>Synopsis</h3>
 
 <pre>
+#include &lt;<a href="../../boost/random/linear_congruential.hpp">boost/random/linear_congruential.hpp</a>&gt;
+
 template&lt;class IntType, IntType a, IntType c, IntType m&gt;
 class linear_congruential
 {
@@ -339,6 +429,8 @@ No. 10, October 1988, pp. 1192-1201
 
 <h3>Synopsis</h3>
 <pre>
+#include &lt;<a href="../../boost/random/linear_congruential.hpp">boost/random/linear_congruential.hpp</a>&gt;
+
 class rand48 
 {
 public:
@@ -400,6 +492,8 @@ generator to <code>x0</code>.
 <h3>Synopsis</h3>
 
 <pre>
+#include &lt;<a href="../../boost/random/additive_combine.hpp">boost/random/additive_combine.hpp</a>&gt;
+
 template&lt;class MLCG1, class MLCG2, typename MLCG1::result_type val&gt;
 class random::additive_combine
 {
@@ -475,6 +569,8 @@ paper.
 <h3>Synopsis</h3>
 
 <pre>
+#include &lt;<a href="../../boost/random/shuffle_output.hpp">boost/random/shuffle_output.hpp</a>&gt;
+
 template&lt;class UniformRandomNumberGenerator, int k, 
   class IntType = typename UniformRandomNumberGenerator::result_type,
   typename UniformRandomNumberGenerator::result_type val = 0&gt;
@@ -584,6 +680,8 @@ Computer Science Series)", Wolfgang Kreutzer, Addison-Wesley, December
 <h3>Synopsis</h3>
 
 <pre>
+#include &lt;<a href="../../boost/random/inversive_congruential.hpp">boost/random/inversive_congruential.hpp</a>&gt;
+
 template&lt;class IntType, IntType a, IntType b, IntType p&gt;
 class random::inversive_congruential
 {
@@ -662,6 +760,8 @@ above paper.
 <h3>Synopsis</h3>
 
 <pre>
+#include &lt;<a href="../../boost/random/mersenne_twister.hpp">boost/random/mersenne_twister.hpp</a>&gt;
+
 template&lt;class DataType, int n, int m, int r, DataType a, int u,
 int s, DataType b, int t, DataType c, int l, IntType val&gt;
 class random::mersenne_twister
@@ -767,6 +867,108 @@ invocations of <code>gen</code>.
 The specializations <code>mt11213b</code> and <code>mt19937</code> are
 from the paper cited above.
 
+<h2><a name="lagged_fibonacci">Class template
+<code>random::lagged_fibonacci</code></a></h2>
+
+<h3>Synopsis</h3>
+
+<pre>
+#include &lt;<a href="../../boost/random/lagged_fibonacci.hpp">boost/random/lagged_fibonacci.hpp</a>&gt;
+
+template&lt;class FloatType, unsigned int p, unsigned int q&gt;
+class lagged_fibonacci
+{
+public:
+  typedef FloatType result_type;
+  static const bool has_fixed_range = false;
+  static const unsigned int long_lag = p;
+  static const unsigned int short_lag = q;
+  result_type min() const { return 0.0; }
+  result_type max() const { return 1.0; }
+  lagged_fibonacci();
+  explicit lagged_fibonacci(uint32_t value);
+  template&lt;class Generator&gt;
+  explicit lagged_fibonacci(Generator & gen);
+  // compiler-generated copy ctor and assignment operator are fine
+  void seed(uint32_t value = 331u);
+  template&lt;class Generator&gt; void seed(Generator & gen);
+  result_type operator()();
+  bool validation(result_type x) const;
+};
+
+typedef random::lagged_fibonacci&lt;double, 607, 273&gt; lagged_fibonacci607;
+typedef random::lagged_fibonacci&lt;double, 1279, 418&gt; lagged_fibonacci1279;
+typedef random::lagged_fibonacci&lt;double, 2281, 1252&gt; lagged_fibonacci2281;
+typedef random::lagged_fibonacci&lt;double, 3217, 576&gt; lagged_fibonacci3217;
+typedef random::lagged_fibonacci&lt;double, 4423, 2098&gt; lagged_fibonacci4423;
+typedef random::lagged_fibonacci&lt;double, 9689, 5502&gt; lagged_fibonacci9689;
+typedef random::lagged_fibonacci&lt;double, 19937, 9842&gt; lagged_fibonacci19937;
+typedef random::lagged_fibonacci&lt;double, 23209, 13470&gt; lagged_fibonacci23209;
+typedef random::lagged_fibonacci&lt;double, 44497, 21034&gt; lagged_fibonacci44497;
+</pre>
+
+<h3>Description</h3>
+
+Instantiations of class template <code>lagged_fibonacci</code> model a
+<a href="random-concepts.html#pseudo-rng">pseudo-random number
+generator</a>.  It uses a lagged Fibonacci algorithm with two lags p
+and q, evaluated in floating-point arithmetic:  x(i) = x(i-p) + x(i-q)
+(mod 1) with p > q.  See
+
+<blockquote>
+"Uniform random number generators for supercomputers", Richard Brent,
+Proc. of Fifth Australian Supercomputer Conference, Melbourne,
+Dec. 1992, pp. 704-706.
+</blockquote>
+
+<p>
+<em>Note:</em> The quality of the generator crucially depends on the
+choice of the parameters.  User code should employ one of the sensibly
+parameterized generators such as <code>lagged_fibonacci607</code>
+instead.
+<br>
+The generator requires considerable amounts of memory for the storage
+of its state array.  For example, <code>lagged_fibonacci607</code>
+requires about 4856 bytes and <code>lagged_fibonacci44497</code>
+requires about 350 KBytes.
+
+<h3>Constructors</h3>
+
+<pre>lagged_fibonacci()</pre>
+<strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
+generator and calls <code>seed()</code>.
+
+<pre>explicit lagged_fibonacci(uint32_t value)</pre>
+<strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
+generator and calls <code>seed(value)</code>.
+
+<pre>template&lt;class Generator&gt; explicit lagged_fibonacci(Generator &amp; gen)</pre>
+<strong>Effects:</strong> Constructs a <code>lagged_fibonacci</code>
+generator and calls <code>seed(gen)</code>.
+
+<h3>Seeding</h3>
+
+<pre>void seed()</pre>
+<strong>Effects:</strong> Calls <code>seed(331u)</code>.
+
+<pre>void seed(uint32_t value)</pre>
+<strong>Effects:</strong> Constructs a <code>minstd_rand0</code>
+generator with the constructor parameter <code>value</code> and calls
+<code>seed</code> with it.
+
+<pre>template&lt;class Generator&gt; void seed(Generator &amp; gen)</pre>
+<strong>Effects:</strong> Sets the state of this
+<code>lagged_fibonacci</code> to the values returned by <code>p</code>
+invocations of <code>uniform_01&lt;gen, FloatType&gt;</code>.
+<br>
+<strong>Complexity:</strong> Exactly <code>p</code> invocations of
+<code>gen</code>.
+
+<h3><a name="lagged_fibonacci_spec"></a>Specializations</h3>
+The specializations <code>lagged_fibonacci607</code>
+... <code>lagged_fibonacci44497</code> (see above) use well tested
+lags. (References will be added later.)
+
 
 <h2><a name="performance">Performance</a></h2>
 
@@ -790,6 +992,11 @@ Pentium Pro 200 MHz with gcc 2.95.2, Linux 2.2.13, glibc 2.1.2.
 <tr><td>mt11213b</td><td>0.165</td></tr>
 <tr><td>mt19937</td><td>0.165</td></tr>
 <tr><td>mt19937 original</td><td>0.185</td></tr>
+<tr><td>lagged_fibonacci607</td><td>0.111</td></tr>
+<tr><td>lagged_fibonacci4423</td><td>0.112</td></tr>
+<tr><td>lagged_fibonacci19937</td><td>0.113</td></tr>
+<tr><td>lagged_fibonacci23209</td><td>0.122</td></tr>
+<tr><td>lagged_fibonacci44497</td><td>0.263</td></tr>
 </table>
 
 <p>
@@ -797,7 +1004,7 @@ The measurement error is estimated at +/- 10 nsec.
 
 <p>
 <hr>
-Jens Maurer, 2000-10-01
+Jens Maurer, 2001-04-15
 
 </body>
 </html>

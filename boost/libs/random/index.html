@@ -12,8 +12,8 @@
   <tr>
     <td bgcolor="#FFFFFF"><img src="../../c++boost.gif" alt="c++boost.gif (8819 bytes)" width="277" height="86"></td>
     <td><a href="../../index.htm"><font face="Arial,Helvetica" color="#FFFFFF"><big>Home</big></font></a></td>
-    <td><a href="../libraries.htm"><font face="Arial,Helvetica" color="#FFFFFF"><big>Libraries</big></font></a></td>
-    <td><a href="../../people/people.htm"><font face="Arial,Helvetica" color="#FFFFFF"><big>People</big></font></a></td>
+    <td><a href="../../libraries.htm"><font face="Arial,Helvetica" color="#FFFFFF"><big>Libraries</big></font></a></td>
+    <td><a href="../../people.htm"><font face="Arial,Helvetica" color="#FFFFFF"><big>People</big></font></a></td>
     <td><a href="../../more/faq.htm"><font face="Arial,Helvetica" color="#FFFFFF"><big>FAQ</big></font></a></td>
     <td><a href="../../more/index.htm"><font face="Arial,Helvetica" color="#FFFFFF"><big>More</big></font></a></td>
   </tr>
@@ -21,49 +21,72 @@
 
 <h1>Boost Random Number Library</h1>
 
-By <a href="../../people/jens_maurer.htm">Jens Maurer</a>
-
+Random numbers are useful in a variety of applications.  The Boost
+Random Number Library (Boost.Random for short) provides a vast variety
+of generators and distributions to produce random numbers having
+useful properties, such as uniform distribution.  
 <p>
 You should read the
-<a href="random-concepts.html">concepts documentation</a> before
-moving on.
+<a href="random-concepts.html">concepts documentation</a>
+for an introduction and the definition of the basic concepts.  For a
+quick start, it may be sufficient to have a look at <a
+href="random_demo.cpp">random_demo.cpp</a>.
 
+<h2>Library Organization</h2>
+
+The library is separated into several header files, all within the
+<code>boost/random/</code> directory.  Additionally, a convenience
+header file which includes all other headers in
+<code>boost/random/</code> is available as
+<code><a href="../../boost/random.hpp">boost/random.hpp</a></code>.
 <p>
-For a quick start, it may be sufficient to have a look at
-<a href="random_demo.cpp">random_demo.cpp</a>.
 
-<p>
+Several random number generators are available in the following
+header files; please read the
+<a href="random-generators.html">documentation</a> about these.
 
-<table border="1" cellpadding="5">
-<tr>
-<td align="center"><b><i>Header</i></b></td>
-<td align="center"><b><i>Contents</i></b></td>
-</tr>
+<ul>
+<li><code><a href="../../boost/random/linear_congruential.hpp">boost/random/linear_congruential.hpp</a></code>
+<li><code><a href="../../boost/random/additive_combine.hpp">boost/random/additive_combine.hpp</a></code>
+<li><code><a href="../../boost/random/inversive_congruential.hpp">boost/random/inversive_congruential.hpp</a></code>
+<li><code><a href="../../boost/random/shuffle_output.hpp">boost/random/shuffle_output.hpp</a></code>
+<li><code><a href="../../boost/random/mersenne_twister.hpp">boost/random/mersenne_twister.hpp</a></code>
+<li><code><a href="../../boost/random/lagged_fibonacci.hpp">boost/random/lagged_fibonacci.hpp</a></code>
+</ul>
 
-<tr>
-<td align="center"><code><a href="../../boost/random.hpp">&lt;boost/random.hpp&gt;</a></code>
-<p><a href="random-generators.html">documentation for generators</a><br>
-<a href="random-distributions.html">documentation for distributions</a><br>
-<a href="random-misc.html">documentation for miscellaneous classes</a></td>
-<td>Pseudo-random number generators (linear congruential, inversive
-congruential, and others), distribution functions (uniform, normal,
-exponential, and others) and miscellaneous decorator classes such as
-<strong>random_number_generator</strong> for use in simulations,
-games, and testing.</td>
-</tr>
-<tr>
-<td align="center"><code><a href="../../boost/nondet_random.hpp">&lt;boost/nondet_random.hpp&gt;</a></code>
-<p><a href="nondet_random.html">documentation</a></td>
-<td>Non-deterministic random number generators.</td>
-</tr>
-</table>
 
-<p>
+Similarly, several random number distributions are available in the
+following header files; please read the
+<a href="random-distributions.html">documentation</a> about these.
+
+<ul>
+<li><code><a href="../../boost/random/uniform_smallint.hpp">boost/random/uniform_smallint.hpp</a></code>
+<li><code><a href="../../boost/random/uniform_int.hpp">boost/random/uniform_int.hpp</a></code>
+<li><code><a href="../../boost/random/uniform_01.hpp">boost/random/uniform_01.hpp</a></code>
+<li><code><a href="../../boost/random/uniform_real.hpp">boost/random/uniform_real.hpp</a></code>
+<li><code><a href="../../boost/random/triangle_distribution.hpp">boost/random/triangle_distribution.hpp</a></code>
+<li><code><a href="../../boost/random/bernoulli_distribution.hpp">boost/random/bernoulli_distribution.hpp</a></code>
+<li><code><a href="../../boost/random/cauchy_distribution.hpp">boost/random/cauchy_distribution.hpp</a></code>
+<li><code><a href="../../boost/random/exponential_distribution.hpp">boost/random/exponential_distribution.hpp</a></code>
+<li><code><a href="../../boost/random/geometric_distribution.hpp">boost/random/geometric_distribution.hpp</a></code>
+<li><code><a href="../../boost/random/normal_distribution.hpp">boost/random/normal_distribution.hpp</a></code>
+<li><code><a href="../../boost/random/lognormal_distribution.hpp">boost/random/lognormal_distribution.hpp</a></code>
+<li><code><a href="../../boost/random/uniform_on_sphere.hpp">boost/random/uniform_on_sphere.hpp</a></code>
+</ul>
+
+Additionally, non-deterministic random number generators are available
+in the header 
+<code><a href="../../boost/nondet_random.hpp">&lt;boost/nondet_random.hpp&gt;</a></code>.
+<a href="nondet_random.html">Documentation</a> is also available.
+
+<h2>Tests</h2>
 
 An extensive test suite for the pseudo-random number generators and
 distributions is available as
 <a href="random_test.cpp">random_test.cpp</a>.
-
+<p>
+Some <a href="random-performance.html">performance results</a> obtained
+using <a href="random_speed.cpp">random_speed.cpp</a> are also available.
 
 <h2>Rationale</h2>
 
@@ -99,12 +122,15 @@ reviewed version became an official part of boost on 17 June 2000.
 Gary Powell contributed suggestions for code cleanliness.  Dave
 Abrahams and Howard Hinnant suggested to move the basic generator
 templates from namespace <code>boost::detail</code> to
-<code>boost::random</code>.  Ed Brey pointed out how to avoid two
-superfluous warnings.  Andreas Scherer tested with MSVC.
-
+<code>boost::random</code>.
+<p>
+Ed Brey asked to remove superfluous warnings and helped with
+<code>uint64_t</code> handling.  Andreas Scherer tested with MSVC.
+Matthias Troyer contributed a lagged Fibonacci generator.
 <p>
 <hr>
-Jens Maurer, 2000-12-04
+<a href="../../people/jens_maurer.htm">Jens Maurer</a>,
+2001-04-15
 
 </body>
 </html>
