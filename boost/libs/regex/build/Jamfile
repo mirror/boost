@@ -23,9 +23,73 @@ dll boost_regex : ../src/$(SOURCES).cpp
     ;
 
 
+rule boost-regex-stage-tag ( toolset variant : properties * )
+{
+    local lib-thread-opt = s ;
+    if <threading>multi in $(properties)
+    {
+        lib-thread-opt = m ;
+    }
+    
+    local lib-rt-opt = s ;
+    if <runtime-link>dynamic in $(properties)
+    {
+        lib-rt-opt = d ;
+    }
+    
+    local lib-link-opt = s ;
+    if <target-type>DLL in $(properties)
+    {
+        lib-link-opt = i ;
+    }
+    
+    local lib-debug-opt = "" ;
+    if [ MATCH .*(debug).* : $(variant) ]
+    {
+        lib-debug-opt = d ;
+    }
+    
+    local lib-toolset = $(toolset) ;
+    
+    local warning-var = regex.$(toolset)-warning-issued ;
+    local warning ;
+    
+    switch $(toolset)
+    {
+        
+     case borland :
+        if ! ( BORLAND_VERSION) in 4 5 6 )
+        {
+            BORLAND_VERSION = 5 ; # chose default version
+            warning = "BORLAND_VERSION not set to 4, 5, or 6
+         staged Boost.Regex library will be named appropriately for version" $(BORLAND_VERSION) ;
+        }
+        lib-toolset = bcb$(BORLAND_VERSION) ;
+     
+     case msvc :
+        warning = "msvc toolset builds Boost.Regex library for vc6; use vc7 or vc7.1 toolsets for other versions" ;
+        lib-toolset = vc6 ;
+     
+     case msvc-stlport :
+        warning = "msvc-stlport toolset only builds Boost.Regex library for use with vc6" ;
+        lib-toolset = vc6-stlport ;
+        if <runtime-build>debug in $(properties)
+        {
+            lib-debug-opt = dd ;
+        }
+    }
+    
+    if $(warning) && ! $($(warning-var))
+    {
+        ECHO Warning: $(warning) ;
+        $(warning-var) = issued ;
+    }
+    return $(properties) <tag><$(variant)>_$(lib-toolset)_$(lib-thread-opt)$(lib-rt-opt)$(lib-link-opt)$(lib-debug-opt) ;
+}
+      
 stage bin-stage : <lib>boost_regex <dll>boost_regex
     :
-        <tag><debug>"_debug"
+        boost-regex-stage-tag
     :
         debug release
     ;
