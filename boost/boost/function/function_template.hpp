@@ -549,7 +549,9 @@ namespace boost {
     f1.swap(f2);
   }
 
-#if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)
+#if !defined (BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)                         \
+ && !defined(BOOST_BCB_PARTIAL_SPECIALIZATION_BUG)                              \
+ && (BOOST_STRICT_CONFIG || !defined(__SUNPRO_CC) || __SUNPRO_CC > 0x540)
 
 #if BOOST_FUNCTION_NUM_ARGS == 0
 #define BOOST_FUNCTION_PARTIAL_SPEC R (void)
@@ -579,7 +581,7 @@ public:
   function(Functor f
 #ifndef BOOST_FUNCTION_NO_ENABLE_IF
            ,typename detail::function::enable_if<
-                       (::boost::type_traits::ice_not<
+                            (::boost::type_traits::ice_not<
                           (is_same<Functor, int>::value)>::value),
                        int>::type = 0
 #endif
@@ -605,7 +607,7 @@ public:
   template<typename Functor>
 #ifndef BOOST_FUNCTION_NO_ENABLE_IF
   typename detail::function::enable_if<
-                      (::boost::type_traits::ice_not<
+                            (::boost::type_traits::ice_not<
                          (is_same<Functor, int>::value)>::value),
                       self_type&>::type
 #else
