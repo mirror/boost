@@ -30,7 +30,14 @@ int main()
    // don't bother testing as it doesn't work:
 #if !BOOST_WORKAROUND(_MSC_VER, < 1310)
    typedef boost::bidirectional_iterator_archetype<char> iterator_type;
+   typedef boost::input_iterator_archetype<char> input_iterator_type;
+   input_iterator_type i, j;
+#if!defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
+   boost::regex r(i, j);
+   r.assign(i, j);
+#else
    boost::regex r;
+#endif
    iterator_type a, b;
    boost::detail::dummy_constructor dummy;
    boost::output_iterator_archetype<char> out(dummy);
