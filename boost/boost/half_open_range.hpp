@@ -99,17 +99,17 @@ struct half_open_range
 
  public:
     typedef iter_t const_iterator;
-    typedef typename counting_iterator_traits<Incrementable>::value_type value_type;
-    typedef typename counting_iterator_traits<Incrementable>::difference_type difference_type;
-    typedef typename counting_iterator_traits<Incrementable>::reference reference;
-    typedef typename counting_iterator_traits<Incrementable>::reference const_reference;
-    typedef typename counting_iterator_traits<Incrementable>::pointer pointer;
-    typedef typename counting_iterator_traits<Incrementable>::pointer const_pointer;
+    typedef typename iterator::value_type value_type;
+    typedef typename iterator::difference_type difference_type;
+    typedef typename iterator::reference reference;
+    typedef typename iterator::reference const_reference;
+    typedef typename iterator::pointer pointer;
+    typedef typename iterator::pointer const_pointer;
     
     // It would be nice to select an unsigned type, but this is appropriate
     // since the library makes an attempt to select a difference_type which can
     // hold the difference between any two iterators.
-    typedef typename counting_iterator_traits<Incrementable>::difference_type size_type;
+    typedef typename iterator::difference_type size_type;
 
     half_open_range(Incrementable start, Incrementable finish)
         : m_start(start),
