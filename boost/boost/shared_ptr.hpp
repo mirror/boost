@@ -88,7 +88,7 @@ template<class T, class Y> void sp_enable_shared_from_this(boost::enable_shared_
     if(pe != 0) pe->_internal_weak_this._internal_assign(px, pn);
 }
 
-inline void sp_enable_shared_from_this(void const *, void const *, shared_count const &)
+inline void sp_enable_shared_from_this(void const volatile *, void const volatile *, shared_count const &)
 {
 }
 

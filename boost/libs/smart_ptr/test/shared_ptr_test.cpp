@@ -123,10 +123,31 @@ private:
 
 long Y::instances = 0;
 
+template<class T> void pc0_test(T * p)
+{
+    BOOST_TEST(p == 0);
+    boost::shared_ptr<T> pt(p);
+    BOOST_TEST(pt? false: true);
+    BOOST_TEST(!pt);
+    BOOST_TEST(pt.get() == 0);
+    BOOST_TEST(pt.use_count() == 1);
+    BOOST_TEST(pt.unique());
+}
+
 void pointer_constructor()
 {
+    pc0_test(static_cast<int*>(0));
+
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+
+    pc0_test(static_cast<int const*>(0));
+    pc0_test(static_cast<int volatile*>(0));
+    pc0_test(static_cast<int const volatile*>(0));
+
+#endif
+
     {
-        boost::shared_ptr<int> pi(static_cast<int*>(0));
+        boost::shared_ptr<int const> pi(static_cast<int*>(0));
         BOOST_TEST(pi? false: true);
         BOOST_TEST(!pi);
         BOOST_TEST(pi.get() == 0);
@@ -135,7 +156,7 @@ void pointer_constructor()
     }
 
     {
-        boost::shared_ptr<int const> pi(static_cast<int*>(0));
+        boost::shared_ptr<int volatile> pi(static_cast<int*>(0));
         BOOST_TEST(pi? false: true);
         BOOST_TEST(!pi);
         BOOST_TEST(pi.get() == 0);
@@ -161,14 +182,10 @@ void pointer_constructor()
         BOOST_TEST(pv.unique());
     }
 
-    {
-        boost::shared_ptr<X> px(static_cast<X*>(0));
-        BOOST_TEST(px? false: true);
-        BOOST_TEST(!px);
-        BOOST_TEST(px.get() == 0);
-        BOOST_TEST(px.use_count() == 1);
-        BOOST_TEST(px.unique());
-    }
+    pc0_test(static_cast<X*>(0));
+    pc0_test(static_cast<X const*>(0));
+    pc0_test(static_cast<X volatile*>(0));
+    pc0_test(static_cast<X const volatile*>(0));
 
     {
         boost::shared_ptr<X const> px(static_cast<X*>(0));
