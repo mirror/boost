@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/config
 
 //  Revision History (excluding minor changes for specific compilers)
+//    1 Sep 00  BOOST_NO_PRIVATE_IN_AGGREGATE added. (Mark Rodgers)
 //   23 Jul 00  Fixed spelling of BOOST_NO_INCLASS_MEMBER_INITIALIZATION in
 //              comment (Dave Abrahams). 
 //   10 Jul 00  BOOST_NO_POINTER_TO_MEMBER_CONST added (Mark Rodgers)
@@ -68,7 +69,10 @@
 
 //  BOOST_NO_POINTER_TO_MEMBER_CONST: The compiler does not correctly handle
 //  pointers to const member functions, preventing use of these in overloaded 
-//  function templates.  See boost/functional.hpp for example. 
+//  function templates.  See boost/functional.hpp for example.
+
+//  BOOST_NO_PRIVATE_IN_AGGREGATE: The compiler misreads 8.5.1, treating classes
+//  as non-aggregate if they contain private or protected member functions. 
 
 //  BOOST_NO_STD_ITERATOR: The C++ implementation fails to provide the
 //  std::iterator class.
@@ -152,6 +156,7 @@
 // Borland C++ Builder 4 and 5:
 #   define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #   define BOOST_NO_USING_TEMPLATE
+#   define BOOST_NO_PRIVATE_IN_AGGREGATE
 #     if __BORLANDC__ == 0x0550
 // Borland C++ Builder 5, command-line compiler 5.5:
 #       define BOOST_NO_OPERATORS_IN_NAMESPACE
@@ -214,6 +219,7 @@
 #   define BOOST_MSVC _MSC_VER
 #   if _MSC_VER <= 1200  // 1200 == VC++ 6.0
 #     define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+#     define BOOST_NO_PRIVATE_IN_AGGREGATE
 
 //    VC++ 6.0 has member templates but they have numerous problems including
 //    cases of silent failure, so for safety we define:
