@@ -9,66 +9,216 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   23 Sept 00 Added INTXX_C constant macro support + int64_t support (John Maddock).
 //   28 Jun 00  Initial version
-
-#include <boost/cstdint.hpp>
 #include <cassert>
 #include <iostream>
+#include <boost/cstdint.hpp>
+//
+// macros should not be defined by default:
+//
+#ifdef INT8_C
+#error header incorrectly implemented
+#endif
+//
+// now define the macros:
+//
+#define __STDC_CONSTANT_MACROS
+#include <boost/cstdint.hpp>
 
 #ifdef NDEBUG
 #error This test makes no sense with NDEBUG defined
 #endif
 
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+//
+// the following class is designed to verify
+// that the various INTXX_C macros can be used
+// in integral constant expressions:
+//
+struct integral_constant_checker
+{
+  static const boost::int8_t          int8          = INT8_C(-127);
+  static const boost::int_least8_t    int_least8    = INT8_C(-127);
+  static const boost::int_fast8_t     int_fast8     = INT8_C(-127);
+
+  static const boost::uint8_t         uint8         = UINT8_C(255);
+  static const boost::uint_least8_t   uint_least8   = UINT8_C(255);
+  static const boost::uint_fast8_t    uint_fast8    = UINT8_C(255);
+
+  static const boost::int16_t         int16         = INT16_C(-32767);
+  static const boost::int_least16_t   int_least16   = INT16_C(-32767);
+  static const boost::int_fast16_t    int_fast16    = INT16_C(-32767);
+
+  static const boost::uint16_t        uint16         = UINT16_C(65535);
+  static const boost::uint_least16_t  uint_least16   = UINT16_C(65535);
+  static const boost::uint_fast16_t   uint_fast16    = UINT16_C(65535);
+
+  static const boost::int32_t         int32         = INT32_C(-2147483647);
+  static const boost::int_least32_t   int_least32   = INT32_C(-2147483647);
+  static const boost::int_fast32_t    int_fast32    = INT32_C(-2147483647);
+
+  static const boost::uint32_t        uint32        = UINT32_C(4294967295);
+  static const boost::uint_least32_t  uint_least32  = UINT32_C(4294967295);
+  static const boost::uint_fast32_t   uint_fast32   = UINT32_C(4294967295);
+
+  static void check();
+};
+
+void integral_constant_checker::check()
+{
+  assert( int8 == -127 );
+  assert( int_least8 == -127 );
+  assert( int_fast8 == -127 );
+  assert( uint8 == 255u );
+  assert( uint_least8 == 255u );
+  assert( uint_fast8 == 255u );
+  assert( int16 == -32767 );
+  assert( int_least16 == -32767 );
+  assert( int_fast16 == -32767 );
+  assert( uint16 == 65535u );
+  assert( uint_least16 == 65535u );
+  assert( uint_fast16 == 65535u );
+  assert( int32 == -2147483647 );
+  assert( int_least32 == -2147483647 );
+  assert( int_fast32 == -2147483647 );
+  assert( uint32 == 4294967295u );
+  assert( uint_least32 == 4294967295u );
+  assert( uint_fast32 == 4294967295u );
+}
+#endif
+
+//
+// the following function simply verifies that the type
+// of an integral constant is correctly defined:
+//
+#ifdef __BORLANDC__
+#pragma option -w-8008
+#pragma option -w-8066
+#endif
+template <class T1, class T2>
+void integral_constant_type_check(T1, T2)
+{
+   //
+   // the types T1 and T2 may not be exactly
+   // the same type, but they should be the
+   // same size and signedness. We could use
+   // numeric_limits to verify this, but
+   // numeric_limits implementations currently
+   // vary too much, or are incomplete or missing.
+   //
+   assert(sizeof(T1) == sizeof(T2));
+   T1 t1 = -1;
+   T2 t2 = -1;
+   assert(t1 == t2);
+   if(t1 >= 0)assert(t2 >= 0);
+   else assert(t2 < 0);
+}
+
+
 int main()
 {
-  boost::int8_t          int8          = -127;        
-  boost::int_least8_t    int_least8    = -127;    
-  boost::int_fast8_t     int_fast8     = -127;
+#ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
+  integral_constant_checker::check();
+#endif
+  //
+  // verify the types of the integral constants:
+  //
+  integral_constant_type_check(int8_t(0), INT8_C(0));
+  integral_constant_type_check(uint8_t(0), UINT8_C(0));
+  integral_constant_type_check(int16_t(0), INT16_C(0));
+  integral_constant_type_check(uint16_t(0), UINT16_C(0));
+  integral_constant_type_check(int32_t(0), INT32_C(0));
+  integral_constant_type_check(uint32_t(0), UINT32_C(0));
+#ifndef BOOST_NO_INT64_T
+  integral_constant_type_check(int64_t(0), INT64_C(0));
+  integral_constant_type_check(uint64_t(0), UINT64_C(0));
+#endif
+  //
+  boost::int8_t          int8          = INT8_C(-127);
+  boost::int_least8_t    int_least8    = INT8_C(-127);
+  boost::int_fast8_t     int_fast8     = INT8_C(-127);
 
-  boost::uint8_t         uint8         = 255;       
-  boost::uint_least8_t   uint_least8   = 255; 
-  boost::uint_fast8_t    uint_fast8    = 255;
-  
-  boost::int16_t         int16         = -32767;       
-  boost::int_least16_t   int_least16   = -32767; 
-  boost::int_fast16_t    int_fast16    = -32767;
-  
-  boost::uint16_t        uint16         = 65535;       
-  boost::uint_least16_t  uint_least16   = 65535; 
-  boost::uint_fast16_t   uint_fast16    = 65535;
-  
-  boost::int32_t         int32         = -2147483647;       
-  boost::int_least32_t   int_least32   = -2147483647; 
-  boost::int_fast32_t    int_fast32    = -2147483647;
-  
-  boost::uint32_t        uint32        = 4294967295;      
-  boost::uint_least32_t  uint_least32  = 4294967295;
-  boost::uint_fast32_t   uint_fast32   = 4294967295; 
+  boost::uint8_t         uint8         = UINT8_C(255);
+  boost::uint_least8_t   uint_least8   = UINT8_C(255);
+  boost::uint_fast8_t    uint_fast8    = UINT8_C(255);
 
-  boost::intmax_t        intmax        = -2147483647; 
-  boost::uintmax_t       uintmax       = 4294967295;
+  boost::int16_t         int16         = INT16_C(-32767);
+  boost::int_least16_t   int_least16   = INT16_C(-32767);
+  boost::int_fast16_t    int_fast16    = INT16_C(-32767);
+
+  boost::uint16_t        uint16         = UINT16_C(65535);
+  boost::uint_least16_t  uint_least16   = UINT16_C(65535);
+  boost::uint_fast16_t   uint_fast16    = UINT16_C(65535);
+
+  boost::int32_t         int32         = INT32_C(-2147483647);
+  boost::int_least32_t   int_least32   = INT32_C(-2147483647);
+  boost::int_fast32_t    int_fast32    = INT32_C(-2147483647);
+
+  boost::uint32_t        uint32        = UINT32_C(4294967295);
+  boost::uint_least32_t  uint_least32  = UINT32_C(4294967295);
+  boost::uint_fast32_t   uint_fast32   = UINT32_C(4294967295);
+
+#ifndef BOOST_NO_INT64_T
+  boost::int64_t         int64         = INT64_C(-9223372036854775807);
+  boost::int_least64_t   int_least64   = INT64_C(-9223372036854775807);
+  boost::int_fast64_t    int_fast64    = INT64_C(-9223372036854775807);
+
+  boost::uint64_t        uint64        = UINT64_C(18446744073709551615);
+  boost::uint_least64_t  uint_least64  = UINT64_C(18446744073709551615);
+  boost::uint_fast64_t   uint_fast64   = UINT64_C(18446744073709551615);
+
+  boost::intmax_t        intmax        = INTMAX_C(-9223372036854775807);
+  boost::uintmax_t       uintmax       = UINTMAX_C(18446744073709551615);
+#else
+  boost::intmax_t        intmax        = INTMAX_C(-2147483647);
+  boost::uintmax_t       uintmax       = UINTMAX_C(4294967295);
+#endif
 
   assert( int8 == -127 );
   assert( int_least8 == -127 );
   assert( int_fast8 == -127 );
-  assert( uint8 == 255 );
-  assert( uint_least8 == 255 );
-  assert( uint_fast8 == 255 );
+  assert( uint8 == 255u );
+  assert( uint_least8 == 255u );
+  assert( uint_fast8 == 255u );
   assert( int16 == -32767 );
   assert( int_least16 == -32767 );
   assert( int_fast16 == -32767 );
-  assert( uint16 == 65535 );
-  assert( uint_least16 == 65535 );
-  assert( uint_fast16 == 65535 );
+  assert( uint16 == 65535u );
+  assert( uint_least16 == 65535u );
+  assert( uint_fast16 == 65535u );
   assert( int32 == -2147483647 );
   assert( int_least32 == -2147483647 );
   assert( int_fast32 == -2147483647 );
-  assert( uint32 == 4294967295 );
-  assert( uint_least32 == 4294967295 );
-  assert( uint_fast32 == 4294967295 );
+  assert( uint32 == 4294967295u );
+  assert( uint_least32 == 4294967295u );
+  assert( uint_fast32 == 4294967295u );
+
+#ifndef BOOST_NO_INT64_T
+  assert( int64 == INT64_C(-9223372036854775807) );
+  assert( int_least64 == INT64_C(-9223372036854775807) );
+  assert( int_fast64 == INT64_C(-9223372036854775807) );
+  assert( uint64 == UINT64_C(18446744073709551615) );
+  assert( uint_least64 == UINT64_C(18446744073709551615) );
+  assert( uint_fast64 == UINT64_C(18446744073709551615) );
+  assert( intmax == INT64_C(-9223372036854775807) );
+  assert( uintmax == UINT64_C(18446744073709551615) );
+#else
   assert( intmax == -2147483647 );
-  assert( uintmax == 4294967295 );
+  assert( uintmax == 4294967295u );
+#endif
+
 
   std::cout << "OK\n";
   return 0;
 }
+
+//
+// now verify that constant macros get undef'ed correctly:
+//
+#undef __STDC_CONSTANT_MACROS
+#include <boost/cstdint.hpp>
+
+#ifdef INT8_C
+#error stdint.h not correctly defined
+#endif

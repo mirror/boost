@@ -70,7 +70,9 @@ int main()
   runtest("long", long());
   typedef unsigned long unsigned_long;
   runtest("unsigned long", unsigned_long());
-#ifndef BOOST_NO_INT64_T
+#if !defined(BOOST_NO_INT64_T) && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
+  //
+  // MS/Borland compilers can't support 64-bit member constants
   runtest("int64_t (possibly long long)", boost::int64_t());
   runtest("uint64_t (possibly unsigned long long)", boost::uint64_t());
 #endif

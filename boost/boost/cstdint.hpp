@@ -9,16 +9,20 @@
 //  See http://www.boost.org for most recent version including documentation.
 
 //  Revision History
+//   23 Sep 00  Added INTXX_C macro support (John Maddock).
 //   22 Sep 00  Better 64-bit support (John Maddock)
 //   29 Jun 00  Reimplement to avoid including stdint.h within namespace boost
 //    8 Aug 99  Initial version (Beman Dawes)
+
+//
+// this has to go before the include guard (JM):
+#include <boost/stdint.h>
 
 #ifndef BOOST_CSTDINT_HPP
 #define BOOST_CSTDINT_HPP
 
 #include <limits.h> // implementation artifact; not part of interface
 
-#include <boost/stdint.h>
 
 namespace boost
 {
@@ -61,3 +65,4 @@ namespace boost
 } // namespace boost
 
 #endif
+
