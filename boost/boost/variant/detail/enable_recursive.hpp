@@ -46,8 +46,9 @@
 #include "boost/mpl/bool_fwd.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/or.hpp"
-#include "boost/type_traits/is_same.hpp"
 #include "boost/type_traits/is_pointer.hpp"
+#include "boost/type_traits/is_reference.hpp"
+#include "boost/type_traits/is_same.hpp"
 
 #include "boost/incomplete.hpp"
 
@@ -102,17 +103,26 @@ BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_SUBSTITUTE_TAG(const volatile)
 //
 // pointer specializations
 //
-template <typename T, typename RecursiveVariant>
-struct enable_recursive_impl<
-      T*
-    , RecursiveVariant
-      BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>)
-    >
-{
-    typedef typename enable_recursive_impl<
-          T, RecursiveVariant
-        >::type * type;
-};
+#define BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(CV_) \
+    template <typename T, typename RecursiveVariant> \
+    struct enable_recursive_impl< \
+          T * CV_ \
+        , RecursiveVariant \
+        BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(mpl::int_<-1>) \
+        > \
+    { \
+        typedef typename enable_recursive_impl< \
+            T, RecursiveVariant \
+            >::type * CV_ type; \
+    }; \
+    /**/
+
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER( BOOST_PP_EMPTY() )
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(const)
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(volatile)
+BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER(const volatile)
+
+#undef BOOST_VARIANT_AUX_ENABLE_RECURSIVE_IMPL_HANDLE_POINTER
 
 //
 // reference specializations
@@ -180,7 +190,8 @@ struct enable_recursive_impl
 // (detail) metafunction enable_recursive
 //
 // Attempts recursive variant substitution and wraps with boost::incomplete
-// if substituion occurs w/ non-pointer result *and* NoWrapper is false_.
+// if substituion occurs w/ non-indirect result (i.e., not a reference or
+// pointer) *and* NoWrapper is false_.
 //
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -204,6 +215,7 @@ public: // metafunction result
     typedef typename mpl::if_<
           mpl::or_<
               is_same< t_,T >
+            , is_reference<t_>
             , is_pointer<t_>
             >
         , t_
@@ -228,6 +240,7 @@ public: // metafunction result
           mpl::or_<
               NoWrapper
             , is_same< t_,T >
+            , is_reference<t_>
             , is_pointer<t_>
             >
         , t_
