@@ -68,7 +68,8 @@ int main()
 	  const dummyT
 	, boost::iterator_archetypes::readable_iterator_t
 	, boost::single_pass_traversal_tag
-      > Iter;      
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::InputIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::SinglePassIteratorConcept<Iter> >();
@@ -78,7 +79,8 @@ int main()
 	  dummyT
 	, boost::iterator_archetypes::readable_writable_iterator_t
 	, boost::single_pass_traversal_tag
-      > Iter;      
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::InputIteratorConcept<Iter> >();
       boost::function_requires< boost::OutputIteratorConcept<Iter, dummyT> >();
       boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
@@ -90,7 +92,8 @@ int main()
 	  const dummyT
 	, boost::iterator_archetypes::readable_iterator_t
 	, boost::forward_traversal_tag
-      > Iter;      
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::InputIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
@@ -100,17 +103,19 @@ int main()
 	  dummyT
 	, boost::iterator_archetypes::readable_writable_iterator_t
 	, boost::forward_traversal_tag
-      > Iter;      
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost_concepts::ReadableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::WritableIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
     }
     {
       typedef boost::iterator_archetype<
-	  dummyT
+	  const dummyT
 	, boost::iterator_archetypes::readable_lvalue_iterator_t
 	, boost::forward_traversal_tag
-      > Iter;      
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::ForwardIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ReadableLvalueIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
@@ -120,7 +125,8 @@ int main()
 	  dummyT
 	, boost::iterator_archetypes::writable_lvalue_iterator_t
 	, boost::forward_traversal_tag
-      > Iter;
+      > BaseIter;
+      typedef boost::filter_iterator<one_or_four, BaseIter> Iter;
       boost::function_requires< boost::Mutable_ForwardIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::WritableLvalueIteratorConcept<Iter> >();
       boost::function_requires< boost_concepts::ForwardTraversalConcept<Iter> >();
