@@ -11,7 +11,7 @@
 
     explicit function_output_iterator(const UnaryFunction& f = UnaryFunction());
 
-    /* implementation defined */ operator*();
+    /* see below */ operator*();
     function_output_iterator& operator++();
     function_output_iterator& operator++(int);
   private:
@@ -23,7 +23,7 @@
 ``function_output_iterator`` requirements
 .........................................
 
-The ``UnaryFunction`` must be Assignable, Copy Constructible.  
+``UnaryFunction`` must be Assignable and Copy Constructible.  
 
 
 
@@ -44,12 +44,10 @@ Incrementable Iterator concepts.
   ``m_f`` constructed from ``f``.
 
 
-``/* implementation defined */ operator*();``
+``operator*();``
 
-:Returns: An object ``r`` of implementation defined type
-  such that if ``f(t)`` is a valid expression for
-  some object ``t`` then ``r = t`` is a valid expression.
-  ``r = t`` will have the same effect as ``f(t)``.
+:Returns: An object ``r`` of unspecified type such that ``r = t``
+  is equivalent to ``m_f(t)`` for all ``t``.
   
 
 ``function_output_iterator& operator++();``
