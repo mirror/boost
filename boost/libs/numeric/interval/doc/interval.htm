@@ -751,7 +751,9 @@ singleton interval; and the same problem arises with <code>cereq</code> and
 <p>Another misleading interpretation of the comparison is: you cannot always
 expect [a,b] &lt; [c,d] to be !([a,b] &gt;= [c,d]) since the comparison is
 not necessarily total. Equality and less comparison should be seen as two
-distincts relational operators.</p>
+distincts relational operators. However the default comparison operators do
+respect this property since they throw an exception whenever [a,b] and [c,d]
+overlap.</p>
 
 <h4>Interval values and references</h4>
 
@@ -789,7 +791,8 @@ rationale is the format of this class template.</p>
 double. Or to follow <code>std::complex</code> and allow only specializations
 for <code>float</code>, <code>double</code>, and <code>long double</code>. We
 decided not to do this to allow intervals on custom types, e.g.
-fixed-precision bigfloat library types (MPFR, etc.)</p>
+fixed-precision bigfloat library types (MPFR, etc), rational numbers, and so
+on.</p>
 
 <p><strong>Policy design.</strong> Although it was tempting to make it a
 class template with only one template argument, the diversity of uses for an
@@ -855,6 +858,26 @@ and the user needs to include them explicitely if she wants to benefit from
 these mixed operators. Another point, there is no mixed comparison operators
 due to the technical way they are defined.</p>
 
+<p><strong>Interval-aware functions.</strong> All the functions defined by
+the library are obviously aware they manipulate intervals and they do it
+accordingly to general interval arithmetic principles. Consequently they may
+have a different behavior than the one commonly encountered with functions
+not interval-aware. For example, <code>max</code> is defined by canonical set
+extension and the result is not always one of the two arguments (if the
+intervals do not overlap, then the result is one of the two intervals).</p>
+
+<p>This behavior is different from <code>std::max</code> which returns a
+reference on one of its arguments. So if the user expects a reference to be
+returned, she should use <code>std::max</code> since it is exactly what this
+function does. Please note that <code>std::max</code> will throw an exception
+when the intervals overlap. This behavior does not predate the one described
+by the C++ standard since the arguments are not "equivalent" and it allows to
+have an equivalence between <code>a &lt;= b</code> and <code>&amp;b ==
+&amp;std::max(a,b)</code>(some particular cases may be
+implementation-defined). However it is different from the one described by
+SGI since it does not return the first argument even if "neither is greater
+than the other".</p>
+
 <h2 id="acks">History and Acknowledgments</h2>
 
 <p>This library was mostly inspired by previous work from Jens Maurer. Some
@@ -868,13 +891,19 @@ Sparc platforms.</p>
 <p>Guillaume Melquiond, Hervé Brönnimann and Sylvain Pion started from the
 library left by Jens and added the policy design. Guillaume and Sylvain
 worked hard on the code, especially the porting and mostly tuning of the
-rounding modes to the different architectures. Guillaume mostly did most of
-the coding, while Sylvain and Hervé have provided some useful comments in
-order for this library to be written. Hervé reorganized and wrote chapters of
-the documentation based on Guillaume's great starting point.</p>
+rounding modes to the different architectures. Guillaume did most of the
+coding, while Sylvain and Hervé have provided some useful comments in order
+for this library to be written. Hervé reorganized and wrote chapters of the
+documentation based on Guillaume's great starting point.</p>
+
+<p>This material is partly based upon work supported by the National Science
+Foundation under NSF CAREER Grant CCR-0133599. Any opinions, findings and
+conclusions or recommendations expressed in this material are those of the
+author(s) and do not necessarily reflect the views of the National Science
+Foundation (NSF).</p>
 <hr>
 
-<p>Revised: 2004-02-17<br>
+<p>Revised: 2004-03-11<br>
 Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
 Polytechnic University.<br>
 Copyright (c) Guillaume Melquiond, 2003-2004. ENS Lyon.</p>
