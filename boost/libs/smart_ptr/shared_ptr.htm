@@ -96,8 +96,8 @@ void bad()
 
       typedef T <A href="#element_type" >element_type</A>;
 
-      <A href="#constructors" >shared_ptr</A> ();
-      template&lt;typename Y&gt; explicit <A href="#constructors" >shared_ptr</A> (Y * p);
+      <A href="#constructors" >shared_ptr</A>();
+      template&lt;typename Y&gt; explicit <A href="#constructors" >shared_ptr</A>(Y * p);
       template&lt;typename Y, typename D&gt; <A href="#constructors" >shared_ptr</A>(Y * p, D d);
       <A href="#destructor" >~shared_ptr</A>(); // never throws
 
@@ -248,9 +248,9 @@ void bad()
 				to a statically allocated object.</EM></P>
 		<P><EM>The support for custom deallocators does not impose significant overhead. Other <STRONG>
 					shared_ptr</STRONG> features still require a deallocator to be kept.</EM></P>
-		<P><EM>The requirement that the copy constructor of <b>D</b> does not throw is too strong.
-					It will be removed when some core language issues are resolved (cv-qualified
-					function types, partial ordering clarifications.)]</EM></P>
+		<P><EM>The requirement that the copy constructor of <b>D</b> does not throw is too 
+				strong. It will be removed when some core language issues are resolved 
+				(cv-qualified function types, partial ordering clarifications.)]</EM></P>
 		<pre>shared_ptr(shared_ptr const &amp; r); // never throws
 template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // never throws</pre>
 		<blockquote>
@@ -286,8 +286,7 @@ template&lt;typename Y&gt; shared_ptr(shared_ptr&lt;Y&gt; const &amp; r); // nev
 		<pre>template&lt;typename Y&gt; shared_ptr(std::auto_ptr&lt;Y&gt; &amp; r);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Constructs a <B>shared_ptr</B>, as if by storing a copy of <STRONG>r.release()</STRONG>.</P>
-			<P><B>Postconditions:</B> <A href="#use_count">use count</A> for all copies is 
-				increased by one.</P>
+			<P><B>Postconditions:</B> <A href="#use_count">use count</A> is 1.</P>
 			<P><B>Throws:</B> <B>std::bad_alloc</B>.</P>
 			<P><B>Exception safety:</B> If an exception is thrown, the constructor has no 
 				effect.</P>
