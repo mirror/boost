@@ -42,7 +42,7 @@ std::pair<const licence_info*, int> get_licences()
 
    static const licence_info licences[] = 
    {
-      licence_info( boost::regex("Use\\W+modification\\W+and\\W+distribution\\W+(?:is|are)\\W+subject\\W+to\\W+the\\W+"
+      licence_info( boost::regex("(subject\\W+to\\W+(the\\W+)?|distributed\\W+under\\W+(the\\W+)?)"
          "Boost\\W+Software\\W+License\\W+Version\\W+1.0", boost::regex::perl | boost::regex::icase)
          ,
          boost::regex(generic_author_sig, boost::regex::perl | boost::regex::icase)
@@ -182,9 +182,9 @@ std::pair<const licence_info*, int> get_licences()
                      "\\W+You\\W+should\\W+have\\W+received\\W+a\\W+copy\\W+of\\W+the\\W+License\\W+Agreement\\W+for\\W+the"
                      "\\W+(Boost|Generic)\\W+Graph\\W+(Component\\W+)?Library\\W+along\\W+with\\W+the\\W+software;\\W+see\\W+the\\W+file\\W+LICENSE"
                      "(\\W+If\\W+not\\W+contact\\W+Office\\W+of\\W+Research\\W+University\\W+of\\W+Notre\\W+Dame\\W+Notre"
-                     "\\W+Dame\\W+IN\\W+46556)?"
-                     "\\W+Permission\\W+to\\W+modify\\W+the\\W+code\\W+and\\W+to\\W+distribute\\W+modified\\W+code\\W+is"
-                     "\\W+granted\\W+provided\\W+the\\W+text\\W+of\\W+this\\W+NOTICE\\W+is\\W+retained\\W+a\\W+notice\\W+that"
+                     "\\W+Dame\\W+IN\\W+46556|\\W+If\\W+not\\W+contact\\W+Office\\W+of\\W+Research\\W+Indiana\\W+University\\W+Bloomington\\W+IN\\W+47405)?"
+                     "\\W+Permission\\W+to\\W+modify\\W+the\\W+code\\W+and\\W+to\\W+distribute(\\W+modified|\\W+the)\\W+code\\W+is"
+                     "\\W+granted\\W+provided\\W+the\\W+text\\W+of\\W+this\\W+NOTICE\\W+is\\W+retained\\W+a\\W+notice\\W+(that|if)"
                      "\\W+the\\W+code\\W+was\\W+modified\\W+is\\W+included\\W+with\\W+the\\W+above\\W+COPYRIGHT\\W+NOTICE\\W+and"
                      "\\W+with\\W+the\\W+COPYRIGHT\\W+NOTICE\\W+in\\W+the\\W+LICENSE\\W+file\\W+and\\W+that\\W+the\\W+LICENSE"
                      "\\W+file\\W+is\\W+distributed\\W+with\\W+the\\W+modified\\W+code\\W+"

@@ -11,6 +11,11 @@
 #include "bcp_imp.hpp"
 #include "fileview.hpp"
 
+static bool is_non_bsl_license(int index)
+{
+  return index != 0;
+}
+
 void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
 {
    std::pair<const licence_info*, int> licences = get_licences();
@@ -25,7 +30,7 @@ void bcp_implementation::scan_licence(const fs::path& p, const fileview& v)
    {
       if(boost::regex_search(v.begin(), v.end(), licences.first[i].licence_signature))
       {
-	 if (i != 0) has_non_bsl_license = true;
+ 	 if (is_non_bsl_license(i)) has_non_bsl_license = true;
 
          // add this licence to the list:
          m_licence_data[i].files.insert(p);
