@@ -2,6 +2,15 @@
 // sample_userType.cc :  example usage of format with a user-defined type
 // ----------------------------------------------------------------------------
 
+//  Copyright Samuel Krempp 2003. Use, modification, and distribution are
+//  subject to the Boost Software License, Version 1.0. (See accompanying
+//  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+//  See http://www.boost.org/libs/format for library home page
+
+// ----------------------------------------------------------------------------
+
+
 #include <iostream>
 #include <iomanip>
 #include "boost/format.hpp"
