@@ -1,0 +1,5 @@
+subproject libs/format ;
+
+# please order by name to ease maintenance
+subinclude libs/format/example ;
+subinclude libs/format/test ;

@@ -1,0 +1,23 @@
+subproject libs/format/example ;
+
+exe sample_formats
+    : sample_formats.cpp
+    : <include>$(BOOST_ROOT)
+    ;
+
+exe sample_advanced
+    : sample_advanced.cpp
+    : <include>$(BOOST_ROOT)
+    ;
+
+exe sample_new_features
+    : sample_new_features.cpp
+    : <include>$(BOOST_ROOT)
+    ;
+
+exe sample_userType
+    : sample_userType.cpp
+    : <include>$(BOOST_ROOT)
+    ;
+
+
