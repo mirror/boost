@@ -482,6 +482,7 @@ struct iterator_adaptor :
     typedef Reference reference;
     typedef Category iterator_category;
     typedef Base base_type;
+    typedef Policies policies_type;
 
  private:
     BOOST_STATIC_CONSTANT(bool, is_input_or_output_iter
@@ -580,7 +581,6 @@ struct iterator_adaptor :
     self operator-(Distance x) const
         { self result(*this); return result -= x; }
 private:
-    typedef Policies policies_type;
     compressed_pair<Base,Policies> m_iter_p;
 
 public: // implementation details (too many compilers have trouble when these are private).
@@ -1015,8 +1015,8 @@ class filter_iterator_generator {
 #ifndef BOOST_MSVC // I don't have any idea why this occurs, but it doesn't seem to hurt too badly.
     BOOST_STATIC_ASSERT(!is_bidirectional);
 #endif
- public:
     typedef filter_iterator_policies<Predicate,Iterator> policies_type;
+ public:
     typedef iterator_adaptor<Iterator,policies_type,
         Value,Reference,Pointer,Category,Distance> type;
 };
