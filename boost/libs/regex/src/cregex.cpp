@@ -505,18 +505,18 @@ unsigned int RegEx::Length(int i)const
    switch(pdata->t)
    {
    case re_detail::RegExData::type_pc:
-      return pdata->m[i].matched ? pdata->m[i].second - pdata->m[i].first : 0;
+      return pdata->m[i].matched ? pdata->m[i].second - pdata->m[i].first : (unsigned)-1;
    case re_detail::RegExData::type_pf:
-      return pdata->fm[i].matched ? pdata->fm[i].second - pdata->fm[i].first : 0;
+      return pdata->fm[i].matched ? pdata->fm[i].second - pdata->fm[i].first : (unsigned)-1;
    case re_detail::RegExData::type_copy:
       {
       std::map<int, std::string, std::less<int> >::iterator pos = pdata->strings.find(i);
       if(pos == pdata->strings.end())
-         return 0;
+         return (unsigned)-1;
       return (*pos).second.size();
       }
    }
-   return 0;
+   return (unsigned)-1;
 }
 
 std::string RegEx::What(int i)const

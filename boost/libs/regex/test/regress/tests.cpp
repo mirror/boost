@@ -535,7 +535,8 @@ void cpp_hl_tests(RegEx& e, bool recurse = true)
          unsigned int j = 0;
          while(matches[j] != -2)
          {
-            if( (matches[j] != (int)e.Position(i)) || (matches[j+1] - matches[j] != (int)e.Length(i)) )
+            if( (matches[j] != (int)e.Position(i))
+               || ((matches[j] != -1) && ((matches[j+1] - matches[j] != (int)e.Length(i)))) )
             {
                begin_error();
                cout << "RegEx::Search error in subexpression " << i << ": found [" << e.Position(i) << "," << (e.Position(i) + e.Length(i)) << "] expected [" << matches[j] << "," << matches[j+1] << "]" << endl;
@@ -559,7 +560,8 @@ void cpp_hl_tests(RegEx& e, bool recurse = true)
          unsigned int j = 0;
          while(matches[j] != -2)
          {
-            if( (matches[j] != (int)e.Position(i)) || (matches[j+1] - matches[j] != (int)e.Length(i)) )
+            if( (matches[j] != (int)e.Position(i))
+               || ((matches[j] != -1) && ((matches[j+1] - matches[j] != (int)e.Length(i)))) )
             {
                begin_error();
                cout << "RegEx::Match error in subexpression " << i << ": found [" << e.Position(i) << "," << (e.Position(i) + e.Length(i)) << "] expected [" << matches[j] << "," << matches[j+1] << "]" << endl;

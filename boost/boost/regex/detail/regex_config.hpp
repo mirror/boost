@@ -154,14 +154,16 @@ full list of macros and their usage.
    #endif
    //
    // import export options:
-   #ifdef _RTLDLL
+   #if defined(_RTLDLL) && !defined(BOOST_RE_NO_LIB)
       #ifdef BOOST_RE_BUILD_DLL
          #define BOOST_RE_IX_DECL __declspec( dllexport )
       #elif !defined(BOOST_REGEX_LIBRARY_INCLUDE_HPP) && !defined(BOOST_RE_NO_LIB)
          #define BOOST_RE_IX_DECL __declspec( dllimport )
       #endif
    #endif
+   #ifndef BOOST_RE_NO_LIB
    #include <boost/regex/detail/regex_library_include.hpp>
+   #endif
 
 #include <cwchar>
 #include <cwctype>
