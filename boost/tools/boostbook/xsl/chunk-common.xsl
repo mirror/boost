@@ -85,21 +85,27 @@
             <xsl:value-of select="."/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:variable name="target_uri">
-                <xsl:call-template name="relative-uri">
-                    <xsl:with-param name="destdir">
-                        <xsl:call-template name="dbhtml-dir">
-                            <xsl:with-param name="context" select=".."/>
-                        </xsl:call-template>
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:variable>
             <xsl:call-template name="href.target.relative">
-                <xsl:with-param name="target" select="$target_uri"/>
+                <xsl:with-param name="target" select="."/>
                 <xsl:with-param name="context" select=".."/>
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+
+<xsl:template match="@url">
+    <xsl:choose>
+        <xsl:when test="contains(., ':')">
+            <xsl:value-of select="."/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>XXX</xsl:text>
+            <xsl:value-of select="."/>
+            <xsl:text>XXX</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 </xsl:stylesheet>

@@ -415,34 +415,34 @@ return a value based on these results to be printed:</para>
         <row>
           <entry>
 <programlisting>
-float compute_product(float x, float y) { return x*y; }
-float compute_quotient(float x, float y) { return x/y; }
-float compute_sum(float x, float y) { return x+y; }
-float compute_difference(float x, float y) { return x-y; }
+float product(float x, float y) { return x*y; }
+float quotient(float x, float y) { return x/y; }
+float sum(float x, float y) { return x+y; }
+float difference(float x, float y) { return x-y; }
 
 <classname>boost::signal</classname>&lt;float (float x, float y)&gt; sig;
 
-sig.<methodname>connect</methodname>(&amp;compute_product);
-sig.<methodname>connect</methodname>(&amp;compute_quotient);
-sig.<methodname>connect</methodname>(&amp;compute_sum);
-sig.<methodname>connect</methodname>(&amp;compute_difference);
+sig.<methodname>connect</methodname>(&amp;product);
+sig.<methodname>connect</methodname>(&amp;quotient);
+sig.<methodname>connect</methodname>(&amp;sum);
+sig.<methodname>connect</methodname>(&amp;difference);
 
 std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
 </programlisting>
 </entry>
 <entry>
 <programlisting>
-float compute_product(float x, float y) { return x*y; }
-float compute_quotient(float x, float y) { return x/y; }
-float compute_sum(float x, float y) { return x+y; }
-float compute_difference(float x, float y) { return x-y; }
+float product(float x, float y) { return x*y; }
+float quotient(float x, float y) { return x/y; }
+float sum(float x, float y) { return x+y; }
+float difference(float x, float y) { return x-y; }
 
 <classname alt="boost::signalN">boost::signal2</classname>&lt;float, float, float&gt; sig;
 
-sig.<methodname>connect</methodname>(&amp;compute_product);
-sig.<methodname>connect</methodname>(&amp;compute_quotient);
-sig.<methodname>connect</methodname>(&amp;compute_sum);
-sig.<methodname>connect</methodname>(&amp;compute_difference);
+sig.<methodname>connect</methodname>(&amp;product);
+sig.<methodname>connect</methodname>(&amp;quotient);
+sig.<methodname>connect</methodname>(&amp;sum);
+sig.<methodname>connect</methodname>(&amp;difference);
 
 std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
 </programlisting>
@@ -530,10 +530,10 @@ follows the signal's calling signature:</para>
 <para>Now we can connect slots that perform arithmetic functions and
 use the signal:</para>
 <programlisting>
-sig.<methodname>connect</methodname>(&amp;compute_quotient);
-sig.<methodname>connect</methodname>(&amp;compute_product);
-sig.<methodname>connect</methodname>(&amp;compute_sum);
-sig.<methodname>connect</methodname>(&amp;compute_difference);
+sig.<methodname>connect</methodname>(&amp;quotient);
+sig.<methodname>connect</methodname>(&amp;product);
+sig.<methodname>connect</methodname>(&amp;sum);
+sig.<methodname>connect</methodname>(&amp;difference);
 
 std::cout &lt;&lt; sig(5, 3) &lt;&lt; std::endl;
 </programlisting>
@@ -573,31 +573,31 @@ Again, we can create a signal with this new combiner:
           <entry>
 <programlisting>
 <classname>boost::signal</classname>&lt;float (float, float), 
-              aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt; sig;
+    aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt; sig;
 
-sig.<methodname>connect</methodname>(&amp;compute_quotient);
-sig.<methodname>connect</methodname>(&amp;compute_product);
-sig.<methodname>connect</methodname>(&amp;compute_sum);
-sig.<methodname>connect</methodname>(&amp;compute_difference);
+sig.<methodname>connect</methodname>(&amp;quotient);
+sig.<methodname>connect</methodname>(&amp;product);
+sig.<methodname>connect</methodname>(&amp;sum);
+sig.<methodname>connect</methodname>(&amp;difference);
 
 std::vector&lt;float&gt; results = sig(5, 3);
 std::copy(results.begin(), results.end(), 
-          std::ostream_iterator&lt;float&gt;(cout, " "));
+    std::ostream_iterator&lt;float&gt;(cout, " "));
 </programlisting>
 </entry>
 <entry>
 <programlisting>
 <classname alt="boost::signalN">boost::signal2</classname>&lt;float, float, float,
-               aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt; sig;
+    aggregate_values&lt;std::vector&lt;float&gt; &gt; &gt; sig;
 
-sig.<methodname>connect</methodname>(&amp;compute_quotient);
-sig.<methodname>connect</methodname>(&amp;compute_product);
-sig.<methodname>connect</methodname>(&amp;compute_sum);
-sig.<methodname>connect</methodname>(&amp;compute_difference);
+sig.<methodname>connect</methodname>(&amp;quotient);
+sig.<methodname>connect</methodname>(&amp;product);
+sig.<methodname>connect</methodname>(&amp;sum);
+sig.<methodname>connect</methodname>(&amp;difference);
 
 std::vector&lt;float&gt; results = sig(5, 3);
 std::copy(results.begin(), results.end(), 
-          std::ostream_iterator&lt;float&gt;(cout, " "));
+    std::ostream_iterator&lt;float&gt;(cout, " "));
 </programlisting>
 </entry>
             </row>
@@ -719,7 +719,8 @@ signal&lt;void()&gt; sig;
 sig.connect(&amp;foo);
 sig.connect(&amp;bar);
 
-sig.disconnect(&amp;foo); // disconnects foo, but not bar
+// disconnects foo, but not bar
+sig.disconnect(&amp;foo);
 </programlisting>
 </entry>
 <entry>
@@ -732,7 +733,8 @@ signal0&lt;void&gt; sig;
 sig.connect(&amp;foo);
 sig.connect(&amp;bar);
 
-sig.disconnect(&amp;foo); // disconnects foo, but not bar
+// disconnects foo, but not bar
+sig.disconnect(&amp;foo);
 </programlisting>
 </entry>
             </row>
@@ -764,7 +766,7 @@ service may be constructed like this: </para>
 <programlisting>
 class NewsItem { /* ... */ };
 
-boost::signal&lt;void (const NewsItem&amp; latestNews)&gt; deliverNews;
+boost::signal&lt;void (const NewsItem&amp;)&gt; deliverNews;
 </programlisting>
 </entry>
 <entry>
@@ -888,7 +890,9 @@ private:
   OnClick onClick;
 };
 
-void Button::doOnClick(const OnClick::slot_type&amp; slot)
+void Button::doOnClick(
+      const OnClick::slot_type&amp; slot
+    )
 {
   onClick.<methodname>connect</methodname>(slot);
 }
@@ -908,7 +912,7 @@ void f(Button&amp; button)
 <programlisting>
 class Button 
 {
-  typedef <classname alt="boost::signalN">boost::signal2</classname>&lt;void, int x, int y&gt; OnClick;
+  typedef <classname alt="boost::signalN">boost::signal2</classname>&lt;void,int,int&gt; OnClick;
 
 public:
   void doOnClick(const OnClick::slot_type&amp; slot);
@@ -917,7 +921,9 @@ private:
   OnClick onClick;
 };
 
-void Button::doOnClick(const OnClick::slot_type&amp; slot)
+void Button::doOnClick(
+      const OnClick::slot_type&amp; slot
+    )
 {
   onClick.<methodname>connect</methodname>(slot);
 }

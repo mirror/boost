@@ -65,25 +65,27 @@ void test ( T const& y, T const& z )
 {
   boost::value_initialized<T> x ;
   BOOST_TEST ( y == x ) ;
-  BOOST_TEST ( y == get(x) ) ;
+  BOOST_TEST ( y == boost::get(x) ) ;
   static_cast<T&>(x) = z ;
-  get(x) = z ;
+  boost::get(x) = z ;
   BOOST_TEST ( x == z ) ;
 
   boost::value_initialized<T> const x_c ;
   BOOST_TEST ( y == x_c ) ;
-  BOOST_TEST ( y == get(x_c) ) ;
+  BOOST_TEST ( y == boost::get(x_c) ) ;
   T& x_c_ref = x_c ;
   x_c_ref = z ;
   BOOST_TEST ( x_c == z ) ;
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
   boost::value_initialized<T const> cx ;
   BOOST_TEST ( y == cx ) ;
-  BOOST_TEST ( y == get(cx) ) ;
+  BOOST_TEST ( y == boost::get(cx) ) ;
 
   boost::value_initialized<T const> const cx_c ;
   BOOST_TEST ( y == cx_c ) ;
-  BOOST_TEST ( y == get(cx_c) ) ;
+  BOOST_TEST ( y == boost::get(cx_c) ) ;
+#endif
 }
 
 int test_main(int, char **)

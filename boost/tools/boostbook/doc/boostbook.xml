@@ -316,6 +316,16 @@ using boostbook : DOCBOOK_XSL_DIR
       the <command>doxygen</command> executable (with full path
       name). If the right <command>doxygen</command> executable can be
       found via the path, this parameter can be omitted.</para>
+      
+      <important>
+        <para>The relative order of declarations in 
+        <filename>user-config.jam</filename> / <filename>site-config.jam</filename>
+        files is significant. In particular, <literal>using doxygen</literal> 
+        line should come <emphasis>after</emphasis> the
+        <literal>using boostbook</literal> declaration.
+        </para>
+      </important>
+      
 
       <para>Generating of documentation from source files using
       Doxygen requires two steps. The first step involves identifying
@@ -348,8 +358,23 @@ boostbook any : any.doxygen ;</programlisting>
         <listitem><simpara>Further transformations may generate HTML, FO, PDF, etc. from <filename>any.docbook</filename>.</simpara></listitem>
       </orderedlist>
     </section>
-  </chapter>
 
+    <section id="boostbook.troubleshooting">
+      <title>Troubleshooting</title>
+    
+      <para>The Boost documentation tools are still in their early phase of 
+      development, and some things don't work as seamlessly as we would like 
+      them to, yet. In particular, error messages can be somewhat 
+      uninformative at times. If you find yourself in the situation when 
+      you have double checked everything, and yet things still don't work as 
+      expected, consider helping the tools by deleting 
+      <literal>bin.v2</literal> build directory.
+      </para>
+ 
+    </section>
+
+  </chapter>
+    
   <xi:include href="documenting.xml"/>
   <xi:include href="together.xml"/>
   <xi:include href="reference.xml"/>

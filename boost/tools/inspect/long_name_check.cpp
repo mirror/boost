@@ -8,6 +8,7 @@
 #include "long_name_check.hpp"
 
 #include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/exception.hpp>
 #include <boost/bind.hpp>
 #include <boost/next_prior.hpp>
 
@@ -61,7 +62,7 @@ namespace boost
         ++m_long_name_errors;
         error( library_name, full_path, "filename ends with the dot character ('.')" );
       }
-
+      
       path const relative_path( relative_to( full_path, filesystem::initial_path() ), &filesystem::no_check );
 
       if ( std::find_if( relative_path.begin(), relative_path.end(), boost::bind( &aux::starts_with_nonalpha, _1 ) )
@@ -88,6 +89,16 @@ namespace boost
       {
         ++m_long_name_errors;
         error( library_name, full_path, "file path will be > 100 chars if placed on a CD" );
+      }
+
+      try
+      {
+        path const check_portability( relative_path.string(), &filesystem::portable_name );
+      }
+      catch ( filesystem::filesystem_error const& )
+      {
+        ++m_long_name_errors;
+        error( library_name, full_path, "nonportable path" );
       }
 
     }

@@ -11,6 +11,7 @@
   <xsl:import href="docbook-layout.xsl"/>
   <xsl:import href="navbar.xsl"/>
   <xsl:import href="admon.xsl"/>
+  <xsl:import href="xref.xsl"/>
   <xsl:import href="relative-href.xsl"/>
 
   <xsl:param name="html.stylesheet" select="'boostbook.css'"/>
