@@ -19,6 +19,7 @@
 
 // Only forward definition required to define stream operations
 #include <iosfwd>
+#include <boost/numeric/ublas/matrix_expression.hpp>
 
 namespace boost { namespace numeric { namespace ublas {
 

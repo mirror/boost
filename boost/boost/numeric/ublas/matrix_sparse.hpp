@@ -20,6 +20,7 @@
 #include <boost/numeric/ublas/config.hpp>
 #include <boost/numeric/ublas/storage_sparse.hpp>
 #include <boost/numeric/ublas/vector_sparse.hpp>
+#include <boost/numeric/ublas/matrix.hpp>
 
 // Iterators based on ideas of Jeremy Siek
 
