@@ -210,10 +210,7 @@ desc.add_options()
         will compute the indentation for options's description. Each of the
         paragraph is output as a separate line with that intentation. If 
         a paragraph does not fit on one line it is spanned over multiple
-        lines (which will have the same intentation).
->!!!!!!!!!! The library tries to prevent chopped words and leading spaces in new lines.
->!!!!!!! Words are chopped only if longer than half the available space. Leading
-> spaces are only skipped if not followed by a space.
+        lines (which will have the same indentation).
         </para>
 
         <para>You may specify additional indent for the first specified by
