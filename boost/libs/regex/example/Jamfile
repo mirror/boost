@@ -26,7 +26,7 @@ rule regex-test-run ( sources + : input * )
 
 test-suite regex-examples :
 
-[ regex-test-run timer/regex_timer.cpp : $(BOOST_ROOT)/libs/regex/example/timer/input_script.txt ]
+[ regex-test-run timer/regex_timer.cpp <template>../build/msvc-stlport-tricky : $(BOOST_ROOT)/libs/regex/example/timer/input_script.txt ]
 [ regex-test-run jgrep/jgrep.cpp jgrep/main.cpp : -n boost/ $(BOOST_ROOT)/boost/regex.hpp ]
 [ regex-test-run snippets/credit_card_example.cpp ]
 [ regex-test-run snippets/partial_regex_grep.cpp : $(BOOST_ROOT)/libs/regex/index.htm ]
@@ -46,6 +46,8 @@ test-suite regex-examples :
 [ regex-test-run snippets/regex_iterator_example.cpp : $(BOOST_ROOT)/boost/rational.hpp ]
 
 ;
+
+
 
 
 

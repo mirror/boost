@@ -71,6 +71,7 @@ test-suite regex
 
       [ regex-test regex_wide_regress
           : <template>regression     # sources
+            <template>../build/msvc-stlport-tricky
           : <define>TEST_UNICODE=1   # requirements
           : regress/tests.txt        # input files
       ]
@@ -120,6 +121,7 @@ test-suite regex
 
       [ regex-test regex_wide_regress_dll
           : <template>regression-dll     # sources
+            <template>../build/msvc-stlport-tricky
           : <define>TEST_UNICODE=1   # requirements
           : regress/tests.txt        # input files
       ]
@@ -129,6 +131,9 @@ test-suite regex
       [ compile concepts/wide_concept_check.cpp
       ]
 ;
+
+
+
 
 
 
