@@ -12,6 +12,9 @@
 //
 // Revision History:
 
+// 07 Jan 2001   David Abrahams
+//      Choose proxy for operator->() only if the reference type is not a reference.
+//      Updated workarounds for __MWERKS__ == 0x2406
 // 20 Dec 2001   David Abrahams
 //      Adjusted is_convertible workarounds for __MWERKS__ == 0x2406
 // 03 Nov 2001   Jeremy Siek
@@ -352,17 +355,14 @@ namespace detail {
     return &(*i);
   }
 
-  template <class Category, class Value, class Pointer>
+  template <class Value, class Reference, class Pointer>
   struct operator_arrow_result_generator
   {
       typedef operator_arrow_proxy<Value> proxy;
       // Borland chokes unless it's an actual enum (!)
-      enum { is_input_iter
-            = (boost::is_convertible<Category*,std::input_iterator_tag*>::value
-               & !boost::is_convertible<Category*,std::forward_iterator_tag*>::value)
-      };
+      enum { use_proxy = !boost::is_reference<Reference>::value };
       
-      typedef typename boost::detail::if_true<(is_input_iter)>::template
+      typedef typename boost::detail::if_true<(use_proxy)>::template
       then<
         proxy,
    // else
@@ -851,7 +851,7 @@ struct iterator_adaptor :
 # pragma warning( disable : 4284 )
 #endif
 
-    typename boost::detail::operator_arrow_result_generator<iterator_category,value_type,pointer>::type
+    typename boost::detail::operator_arrow_result_generator<value_type,reference,pointer>::type
     operator->() const
         { return detail::operator_arrow(*this, iterator_category()); }
 
@@ -1335,7 +1335,7 @@ namespace detail {
   template <class Iterator>
   struct non_bidirectional_category
   {
-# if !defined(__MWERKS__) || __MWERKS__ > 0x2405
+# if !defined(__MWERKS__) || __MWERKS__ > 0x2406
       typedef typename reduce_to_base_class<
               std::forward_iterator_tag,
                    typename iterator_traits<Iterator>::iterator_category
