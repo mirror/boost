@@ -90,10 +90,10 @@ namespace boost {
       token_iterator():valid_(false),begin_(),end_(),tok_() { }
 
       token_iterator(TokenizerFunc f, Iterator begin, Iterator end = Iterator())
-          : begin_(begin), f_(f), end_(end),valid_(false),tok_(){ initialize(); }
+          : f_(f),begin_(begin),end_(end),valid_(false),tok_(){ initialize(); }
 
       token_iterator(Iterator begin, Iterator end = Iterator())
-            : begin_(begin), f_(), end_(end),valid_(false),tok_() {initialize();}
+            : f_(),begin_(begin),end_(end),valid_(false),tok_() {initialize();}
 
       Iterator base(){return begin_;}
 
