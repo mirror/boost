@@ -59,8 +59,8 @@ bool check(int32_t x, const boost::minstd_rand&) { return x == 399268537; }
 // by experiment from lrand48()
 bool check(int32_t x, const boost::rand48&) { return x == 1993516219; }
 
-// no information available
-bool check(int32_t x, const boost::taus88&) { return false; }
+// ????
+bool check(int32_t x, const boost::taus88&) { return x == 3535848941; }
 
 // ????
 bool check(int32_t x, const boost::ecuyer1988&) { return x == 2060321752; }
@@ -70,9 +70,14 @@ bool check(int32_t x, const boost::kreutzer1986&) { return x == 139726; }
 
 bool check(double x, const boost::lagged_fibonacci607&) { return x == 0.4293817707235914; }
 
-bool check(uint32_t x, const boost::ranlux_4&) { return false; }
-bool check(uint32_t x, const boost::ranlux_7&) { return false; }
-bool check(uint32_t x, const boost::ranlux_14&) { return false; }
+// principal operation validated with CLHEP, values by experiment
+bool check(uint32_t x, const boost::ranlux3&) { return x == 5957620; }
+bool check(uint32_t x, const boost::ranlux4&) { return x == 8587295; }
+
+bool check(float x, const boost::ranlux3_01&)
+{ return std::abs(x-5957620/std::pow(2.0f,24)) < 1e-6; }
+bool check(float x, const boost::ranlux4_01&)
+{ return std::abs(x-8587295/std::pow(2.0f,24)) < 1e-6; }
 
 template<class PRNG>
 void validate(const std::string & name, const PRNG &)
@@ -103,9 +108,10 @@ void validate_all()
   validate("mt11213b", mt11213b());
   validate("mt19937", mt19937());
   validate("kreutzer1986", kreutzer1986());
-  validate("ranlux_4", ranlux_4());
-  validate("ranlux_7", ranlux_7());
-  validate("ranlux_14", ranlux_14());
+  validate("ranlux3", ranlux3());
+  validate("ranlux4", ranlux4());
+  validate("ranlux3_01", ranlux3_01());
+  validate("ranlux4_01", ranlux4_01());
   validate("taus88", taus88());
   validate("lagged_fibonacci607", lagged_fibonacci607());
 }
@@ -249,13 +255,11 @@ void instantiate_all()
                    0u);
   instantiate_urng("lagged_fibonacci607", lagged_fibonacci607(), 0.0);
 
-  instantiate_urng("ranlux_4", ranlux_4(), 0u);
-  instantiate_urng("ranlux_7", ranlux_7(), 0u);
-  instantiate_urng("ranlux_14", ranlux_14(), 0u);
+  instantiate_urng("ranlux3", ranlux3(), 0u);
+  instantiate_urng("ranlux4", ranlux4(), 0u);
 
-  instantiate_urng("ranlux_4_01", ranlux_4_01(), 0.0);
-  instantiate_urng("ranlux_7_01", ranlux_7_01(), 0.0);
-  instantiate_urng("ranlux_14_01", ranlux_14_01(), 0.0);
+  instantiate_urng("ranlux3_01", ranlux3_01(), 0.0f);
+  instantiate_urng("ranlux4_01", ranlux4_01(), 0.0f);
 
   instantiate_urng("taus88", taus88(), 0u);
 }
