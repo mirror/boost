@@ -127,8 +127,8 @@ public:
 
 //  generated copy constructor, assignment, destructor are fine...
 
-//  except on Borland C++ 5.5.1
-#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+//  except on Borland C++ 5.5.1 (and 5.6)
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x560)
 
     shared_ptr & operator=(shared_ptr const & r) // never throws
     {
