@@ -1,7 +1,7 @@
 #ifndef _DATE_TIME_TIME_PARSING_HPP___
 #define _DATE_TIME_TIME_PARSING_HPP___
 
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003,2005 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -34,9 +34,14 @@ namespace date_time {
   
   //! Creates a time_duration object from a delimited string
   /*! Expected format for string is "[-]h[h][:mm][:ss][.fff]".
+   * If the number of fractional digits provided is greater than the 
+   * precision of the time duration type then the extra digits are 
+   * truncated.
+   *
    * A negative duration will be created if the first character in
    * string is a '-', all other '-' will be treated as delimiters.
-   * Accepted delimiters are "-:,.". */
+   * Accepted delimiters are "-:,.". 
+   */
   template<class time_duration>
   inline
   time_duration
@@ -65,20 +70,33 @@ namespace date_time {
         break;
       };
       case 3: {
+        int digits = static_cast<int>(beg->length());
         //Works around a bug in MSVC 6 library that does not support
         //operator>> thus meaning lexical_cast will fail to compile.
 #if (defined(BOOST_MSVC) && (_MSC_VER <= 1200))  // 1200 == VC++ 6.0
-        fs = _atoi64(beg->c_str());
         // msvc wouldn't compile 'time_duration::num_fractional_digits()' 
         // (required template argument list) as a workaround a temp 
         // time_duration object was used
         time_duration td(hour,min,sec,fs);
         int precision = td.num_fractional_digits();
+        // _atoi64 is an MS specific function
+        if(digits >= precision) {
+          // drop excess digits
+          fs = _atoi64(beg->substr(0, precision).c_str());
+        }
+        else {
+          fs = _atoi64(beg->c_str());
+        }
 #else
-        fs = boost::lexical_cast<boost::int64_t>(*beg);
         int precision = time_duration::num_fractional_digits();
+        if(digits >= precision) {
+          // drop excess digits
+          fs = boost::lexical_cast<boost::int64_t>(beg->substr(0, precision));
+        }
+        else {
+          fs = boost::lexical_cast<boost::int64_t>(*beg);
+        }
 #endif
-        int digits = static_cast<int>(beg->length());
         if(digits < precision){
           // leading zeros get dropped from the string, 
           // "1:01:01.1" would yield .000001 instead of .100000

@@ -118,7 +118,7 @@ namespace date_time {
       unsigned short year(0), month(0), day(0);
       
       typedef boost::tokenizer<boost::char_separator<char>,
-                               typename std::basic_string<char>::const_iterator,
+                               std::basic_string<char>::const_iterator,
                                std::basic_string<char> > tokenizer;
       typedef boost::tokenizer<boost::char_separator<char>,
                                std::basic_string<char>::const_iterator,
