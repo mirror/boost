@@ -248,14 +248,11 @@ struct iterator_adaptor;
 
         <td>The <tt>pointer</tt> type of the resulting iterator, and in
         particular, the result type of <tt>operator-&gt;()</tt>.<br>
-         <b>Default:</b> If <tt>Value</tt> was supplied and
-        <code>iterator_category</code> is not
-        <code>input_iterator</code> then a class yielding
-        <tt>Value*</tt> when <code>operator-&gt;()</code> is applied,
-        otherwise if <tt>Value</tt> was supplied then
-        <tt>Value*</tt>, otherwise
-        <tt>std::iterator_traits&lt;Base&gt;::pointer</tt>. <a
-        href="#7">[7]</a>
+         <b>Default:</b> If <tt>Value</tt> was not supplied, <tt>std::iterator_traits&lt;Base&gt;::pointer</tt>. <a
+        href="#7">[7]</a> Otherwise, if <code>iterator_category</code> is
+        <code>input_iterator</code>, then a class yielding
+        <tt>Value*</tt> when <code>operator-&gt;()</code> is applied.
+        Otherwise, <tt>Value*</tt>.
 
         <td><code>value_type*</code> or a
         class which yields <code>value_type*</code> when
