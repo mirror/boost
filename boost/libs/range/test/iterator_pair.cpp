@@ -31,7 +31,7 @@ void check_iterator_pair()
     pair_t                   pair       = std::make_pair( begin( vec ), end( vec ) );
     const_pair_t             const_pair = std::make_pair( begin( vec ), end( vec ) );
     const_pair_tt            constness_pair( pair );
-	
+    
 
     BOOST_STATIC_ASSERT(( is_same< value_type_of<pair_t>::type, 
                           detail::iterator_traits<pair_t::first_type>::value_type>::value ));

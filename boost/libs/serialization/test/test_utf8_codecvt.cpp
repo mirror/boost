@@ -105,13 +105,13 @@ test_main(int /* argc */, char * /* argv */[]) {
         ofs.open("test.dat", std::ios::binary);
         std::copy(
             td::utf8_encoding,
-			#if ! defined(__BORLANDC__)
+            #if ! defined(__BORLANDC__)
                 // borland 5.60 complains about this
-				td::utf8_encoding + sizeof(td::utf8_encoding) / sizeof(unsigned char),
-			#else
-				// so use this instead
-				td::utf8_encoding + 12,
-			#endif
+                td::utf8_encoding + sizeof(td::utf8_encoding) / sizeof(unsigned char),
+            #else
+                // so use this instead
+                td::utf8_encoding + 12,
+            #endif
             boost::archive::iterators::ostream_iterator<utf8_t>(ofs)
         );
     }
@@ -138,13 +138,13 @@ test_main(int /* argc */, char * /* argv */[]) {
     }
 
     // compare the data read back in with the orginal
-	#if ! defined(__BORLANDC__)
+    #if ! defined(__BORLANDC__)
         // borland 5.60 complains about this
         BOOST_TEST(from_file.size() == sizeof(td::wchar_encoding)/sizeof(wchar_t));
-	#else
-		// so use this instead
+    #else
+        // so use this instead
         BOOST_TEST(from_file.size() == 6);
-	#endif
+    #endif
 
     BOOST_TEST(std::equal(from_file.begin(), from_file.end(), td::wchar_encoding));
   

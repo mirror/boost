@@ -274,8 +274,8 @@ public:
   // that
   typedef typename detail::IF<
     detail::has_result_type<plain_Func>::value,
-	detail::get_result_type<plain_Func>,
-	detail::get_sig<plain_Func, Args>
+    detail::get_result_type<plain_Func>,
+    detail::get_sig<plain_Func, Args>
   >::RET::type type;
 };
 

@@ -53,7 +53,7 @@ private:
         }
     };
 
- 	struct restore_with_exception {
+    struct restore_with_exception {
         static void invoke(T & previous_ref, const T & previous_value){
             #ifndef BOOST_NO_EXCEPTIONS
                 try{

@@ -55,7 +55,7 @@ void check_char()
     BOOST_STATIC_ASSERT(( is_same<  iterator_of<char_iterator_t>::type, char_iterator_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  const_iterator_of<char_iterator_t>::type, const char* >::value ));
     BOOST_STATIC_ASSERT(( is_same<  difference_type_of<char_iterator_t>::type,                           
-		                            ::std::ptrdiff_t >::value ));
+                                    ::std::ptrdiff_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  size_type_of<char_iterator_t>::type, std::size_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<char_iterator_t>::type, char_iterator_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<const char*>::type, const char* >::value ));
@@ -68,19 +68,19 @@ void check_char()
     BOOST_STATIC_ASSERT(( is_same<  iterator_of<char_array_t>::type, char* >::value ));
     BOOST_STATIC_ASSERT(( is_same<  const_iterator_of<char_array_t>::type, const char* >::value ));
     BOOST_STATIC_ASSERT(( is_same<  difference_type_of<char_array_t>::type,                           
-		                            ::std::ptrdiff_t >::value ));
+                                    ::std::ptrdiff_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  size_type_of<char_array_t>::type, std::size_t >::value ));
     BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<char_array_t>::type, char* >::value ));
     BOOST_STATIC_ASSERT(( is_same<  result_iterator_of<const char_array_t>::type, const char* >::value ));
 
     BOOST_CHECK_EQUAL( begin( char_s ), char_s );
-	const char* end1 = begin( char_s ) + size( char_s );
+    const char* end1 = begin( char_s ) + size( char_s );
     BOOST_CHECK_EQUAL( end( char_s ), end1 );
     BOOST_CHECK_EQUAL( empty( char_s ), (char_s == 0 || char_s[0] == char()) );
     BOOST_CHECK_EQUAL( size( char_s ), std::char_traits<char>::length( char_s ) );
     
-	BOOST_CHECK_EQUAL( begin( my_string ), my_string );
-	const char* end2 = begin( my_string ) + size( my_string );
+    BOOST_CHECK_EQUAL( begin( my_string ), my_string );
+    const char* end2 = begin( my_string ) + size( my_string );
     BOOST_CHECK_EQUAL( end( my_string ), end2 );
     BOOST_CHECK_EQUAL( empty( my_string ), (my_string == 0 || my_string[0] == char()) );
     BOOST_CHECK_EQUAL( size( my_string ), my_string_length );
@@ -127,7 +127,7 @@ void check_string()
 #endif  
     
     find( check_rvalue_return(), 'n' );
-	
+    
 }
 
 

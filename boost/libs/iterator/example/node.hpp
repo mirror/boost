@@ -10,7 +10,7 @@
 
 struct node_base
 {
-	node_base() : m_next(0) {}
+    node_base() : m_next(0) {}
 
     virtual ~node_base()
     {
@@ -34,7 +34,7 @@ struct node_base
     }
     
  private:
-	node_base* m_next;
+    node_base* m_next;
 };
 
 inline std::ostream& operator<<(std::ostream& s, node_base const& n)

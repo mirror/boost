@@ -8,71 +8,71 @@ DEPENDS all : test ;
 test-suite range
     : [ run
             array.cpp
-	    : :
-	    :
-	    : array_test
+        : :
+        :
+        : array_test
        ]         
      [ run
             iterator_pair.cpp
-    	    : :
-	    :
-	    : iterator_pair_test
+            : :
+        :
+        : iterator_pair_test
        ]         
      [ run
             std_container.cpp
-    	    : :
-	    :
-	    : std_container_test
+            : :
+        :
+        : std_container_test
        ]         
      [ run            
-	    string.cpp
-    	    : :
-	    :
-	    : string_test
+        string.cpp
+            : :
+        :
+        : string_test
        ]         
      [ run            
-	    iterator_range.cpp
-    	    : :
-	    :
-	    : iterator_range
+        iterator_range.cpp
+            : :
+        :
+        : iterator_range
        ]         
 
      [ run
-            partial_workaround.cpp	
-    	    : :
-	    :
-	    : workaround_test
+            partial_workaround.cpp    
+            : :
+        :
+        : workaround_test
        ]
      [ run
-     	    algorithm_example.cpp	
-    	    : :
-	    :
-	    : example_test
+             algorithm_example.cpp    
+            : :
+        :
+        : example_test
        ]
        
      [ run
-     	    reversible_range.cpp	
-    	    : :
-	    :
-	    : reversible_range_test
+             reversible_range.cpp    
+            : :
+        :
+        : reversible_range_test
        ] 
      [ run
-     	    compat1.cpp	
-    	    : :
-	    :
-	    : compat1_test
+             compat1.cpp    
+            : :
+        :
+        : compat1_test
        ] 
      [ run
-     	    compat2.cpp	
-    	    : :
-	    :
-	    : compat2_test
+             compat2.cpp    
+            : :
+        :
+        : compat2_test
        ] 
      [ run
-     	    compat3.cpp	
-    	    : :
-	    :
-	    : compat3_test
+             compat3.cpp    
+            : :
+        :
+        : compat3_test
        ] 
-	;
+    ;
 }

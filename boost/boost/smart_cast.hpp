@@ -64,65 +64,65 @@ namespace smart_cast_impl {
 
         struct polymorphic {
 
-        	struct linear {
-        		template<class U>
- 				static T cast(U & u){
-					return static_cast<T>(u);
-        		}
-        	};
+            struct linear {
+                template<class U>
+                 static T cast(U & u){
+                    return static_cast<T>(u);
+                }
+            };
 
-        	struct cross {
-         		template<class U>
-        		static T cast(U & u){
-        			return dynamic_cast<T>(u);
-        		}
-        	};
+            struct cross {
+                 template<class U>
+                static T cast(U & u){
+                    return dynamic_cast<T>(u);
+                }
+            };
 
-        	template<class U>
- 			static T cast(U & u){
-        		// if we're in debug mode
-        		#if ! defined(NDEBUG) || defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
-        			// do a checked dynamic cast
-        			return cross::cast(u);
-        		#else
-				    // borland 5.51 chokes here so we can't use it
-        			// note: if remove_reference isn't function for these types
-        			// cross casting will be selected this will work but will
-        			// not be the most efficient method. This will conflict with
-        			// the original smart_cast motivation.
-        			typedef BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        					BOOST_DEDUCED_TYPENAME mpl::and_<
-        						mpl::not_<is_base_and_derived<
-        							BOOST_DEDUCED_TYPENAME remove_reference<T>::type,
-        							U
-        						> >,
-        						mpl::not_<is_base_and_derived<
-        							U,
-        							BOOST_DEDUCED_TYPENAME remove_reference<T>::type
-        						> >
-        					>,
-							// borland chokes w/o full qualification here
-							mpl::identity<cross>,
-        					mpl::identity<linear>
-					>::type typex;
-					return typex::cast(u);
-        		#endif
-        	}
+            template<class U>
+             static T cast(U & u){
+                // if we're in debug mode
+                #if ! defined(NDEBUG) || defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+                    // do a checked dynamic cast
+                    return cross::cast(u);
+                #else
+                    // borland 5.51 chokes here so we can't use it
+                    // note: if remove_reference isn't function for these types
+                    // cross casting will be selected this will work but will
+                    // not be the most efficient method. This will conflict with
+                    // the original smart_cast motivation.
+                    typedef BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                            BOOST_DEDUCED_TYPENAME mpl::and_<
+                                mpl::not_<is_base_and_derived<
+                                    BOOST_DEDUCED_TYPENAME remove_reference<T>::type,
+                                    U
+                                > >,
+                                mpl::not_<is_base_and_derived<
+                                    U,
+                                    BOOST_DEDUCED_TYPENAME remove_reference<T>::type
+                                > >
+                            >,
+                            // borland chokes w/o full qualification here
+                            mpl::identity<cross>,
+                            mpl::identity<linear>
+                    >::type typex;
+                    return typex::cast(u);
+                #endif
+            }
         };
 
         struct non_polymorphic {
             template<class U>
- 		    static T cast(U & u){
+             static T cast(U & u){
                 return static_cast<T>(u);
-        	}
+            }
         };
         template<class U>
         static T cast(U & u){
-        	return mpl::apply_if<
-        		boost::is_polymorphic<U>,
-        		mpl::identity<polymorphic>,
-        		mpl::identity<non_polymorphic>
-        	>::type::cast(u);
+            return mpl::apply_if<
+                boost::is_polymorphic<U>,
+                mpl::identity<polymorphic>,
+                mpl::identity<non_polymorphic>
+            >::type::cast(u);
         }
     };
 
@@ -131,71 +131,71 @@ namespace smart_cast_impl {
 
         struct polymorphic {
 
-        	struct linear {
-        		template<class U>
- 				static T cast(U * u){
-					return static_cast<T>(u);
-        		}
-        	};
+            struct linear {
+                template<class U>
+                 static T cast(U * u){
+                    return static_cast<T>(u);
+                }
+            };
 
-        	struct cross {
-         		template<class U>
-        		static T cast(U * u){
-        			T tmp = dynamic_cast<T>(u);
-        			#ifndef NDEBUG
-        				if ( tmp == 0 ) throw std::bad_cast();
-        			#endif
-        			return tmp;
-        		}
-        	};
+            struct cross {
+                 template<class U>
+                static T cast(U * u){
+                    T tmp = dynamic_cast<T>(u);
+                    #ifndef NDEBUG
+                        if ( tmp == 0 ) throw std::bad_cast();
+                    #endif
+                    return tmp;
+                }
+            };
 
-        	template<class U>
- 			static T cast(U * u){
-        		// if we're in debug mode
-        		#if ! defined(NDEBUG) || defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
-        			// do a checked dynamic cast
-        			return cross::cast(u);
-        		#else
-				    // borland 5.51 chokes here so we can't use it
-        			// note: if remove_pointer isn't function for these types
-        			// cross casting will be selected this will work but will
-        			// not be the most efficient method. This will conflict with
-        			// the original smart_cast motivation.
-        			typedef
-        				BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        					BOOST_DEDUCED_TYPENAME mpl::and_<
-        						mpl::not_<is_base_and_derived<
-        							BOOST_DEDUCED_TYPENAME remove_pointer<T>::type,
-        							U
-        						> >,
-        						mpl::not_<is_base_and_derived<
-        							U,
-        							BOOST_DEDUCED_TYPENAME remove_pointer<T>::type
-        						> >
-        					>,
-							// borland chokes w/o full qualification here
-							mpl::identity<cross>,
-							mpl::identity<linear>
-        				>::type typex;
-        			return typex::cast(u);
-        		#endif
-        	}
+            template<class U>
+             static T cast(U * u){
+                // if we're in debug mode
+                #if ! defined(NDEBUG) || defined(__BORLANDC__) && (__BORLANDC__ <= 0x551)
+                    // do a checked dynamic cast
+                    return cross::cast(u);
+                #else
+                    // borland 5.51 chokes here so we can't use it
+                    // note: if remove_pointer isn't function for these types
+                    // cross casting will be selected this will work but will
+                    // not be the most efficient method. This will conflict with
+                    // the original smart_cast motivation.
+                    typedef
+                        BOOST_DEDUCED_TYPENAME mpl::apply_if<
+                            BOOST_DEDUCED_TYPENAME mpl::and_<
+                                mpl::not_<is_base_and_derived<
+                                    BOOST_DEDUCED_TYPENAME remove_pointer<T>::type,
+                                    U
+                                > >,
+                                mpl::not_<is_base_and_derived<
+                                    U,
+                                    BOOST_DEDUCED_TYPENAME remove_pointer<T>::type
+                                > >
+                            >,
+                            // borland chokes w/o full qualification here
+                            mpl::identity<cross>,
+                            mpl::identity<linear>
+                        >::type typex;
+                    return typex::cast(u);
+                #endif
+            }
         };
 
         struct non_polymorphic {
-        	template<class U>
- 			static T cast(U * u){
-        		return static_cast<T>(u);
-        	}
+            template<class U>
+             static T cast(U * u){
+                return static_cast<T>(u);
+            }
         };
 
-		template<class U>
+        template<class U>
         static T cast(U * u){
-        	return mpl::apply_if<
-        		boost::is_polymorphic<U>,
-        		mpl::identity<polymorphic>,
-        		mpl::identity<non_polymorphic>
-        	>::type::cast(u);
+            return mpl::apply_if<
+                boost::is_polymorphic<U>,
+                mpl::identity<polymorphic>,
+                mpl::identity<non_polymorphic>
+            >::type::cast(u);
         }
 
     };
@@ -204,7 +204,7 @@ namespace smart_cast_impl {
     struct void_pointer {
         template<class UPtr>
         static TPtr cast(UPtr uptr){
-        	return static_cast<TPtr>(uptr);
+            return static_cast<TPtr>(uptr);
         }
     };
 
@@ -215,8 +215,8 @@ namespace smart_cast_impl {
         // specialization
         template<class U>
         static T cast(U u){
-        	BOOST_STATIC_ASSERT(sizeof(T)==0);
-        	return * static_cast<T *>(NULL);
+            BOOST_STATIC_ASSERT(sizeof(T)==0);
+            return * static_cast<T *>(NULL);
         }
     };
 
@@ -231,21 +231,21 @@ template<class T, class U>
 static T smart_cast(U u) {
     typedef
         BOOST_DEDUCED_TYPENAME mpl::apply_if<
-        	BOOST_DEDUCED_TYPENAME mpl::or_<
-        		boost::is_same<void *, U>,
-        		boost::is_same<void *, T>,
-        		boost::is_same<const void *, U>,
-        		boost::is_same<const void *, T>
-        	>,
-        	mpl::identity<smart_cast_impl::void_pointer<T> >,
+            BOOST_DEDUCED_TYPENAME mpl::or_<
+                boost::is_same<void *, U>,
+                boost::is_same<void *, T>,
+                boost::is_same<const void *, U>,
+                boost::is_same<const void *, T>
+            >,
+            mpl::identity<smart_cast_impl::void_pointer<T> >,
         // else
         BOOST_DEDUCED_TYPENAME mpl::apply_if<boost::is_pointer<U>,
-        	mpl::identity<smart_cast_impl::pointer<T> >,
+            mpl::identity<smart_cast_impl::pointer<T> >,
         // else
         BOOST_DEDUCED_TYPENAME mpl::apply_if<boost::is_reference<U>,
-        	mpl::identity<smart_cast_impl::reference<T> >,
+            mpl::identity<smart_cast_impl::reference<T> >,
         // else
-        	mpl::identity<smart_cast_impl::error<T>
+            mpl::identity<smart_cast_impl::error<T>
         >
         >
         >

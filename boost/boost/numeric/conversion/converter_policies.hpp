@@ -48,7 +48,7 @@ struct RoundEven
   static source_type nearbyint ( argument_type s )
   {
     // Algorithm contributed by Guillaume Melquiond
-     	 
+    
     using std::floor ;
     using std::ceil  ;
     

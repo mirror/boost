@@ -303,12 +303,12 @@ namespace boost{
     template <typename InputIterator, typename Token>
     bool operator()(InputIterator& next, InputIterator end, Token& tok)
     {
-			typedef tokenizer_detail::assign_or_plus_equal<
+      typedef tokenizer_detail::assign_or_plus_equal<
 #if     !defined(BOOST_MSVC) || BOOST_MSVC > 1300
         typename
 #endif
-				tokenizer_detail::get_iterator_category<
-				InputIterator>::iterator_category> assigner;
+        tokenizer_detail::get_iterator_category<
+        InputIterator>::iterator_category> assigner;
 
 
       assert(!offsets_.empty());
@@ -329,9 +329,9 @@ namespace boost{
       int i = 0;
       for (; i < c; ++i) {
         if (next == end)break;
-				assigner::plus_equal(tok,*next++);
+        assigner::plus_equal(tok,*next++);
       }
-			assigner::assign(start,next,tok);
+      assigner::assign(start,next,tok);
     
       if (!return_partial_last_)
         if (i < (c-1) )
@@ -398,12 +398,12 @@ namespace boost{
     template <typename InputIterator, typename Token>
     bool operator()(InputIterator& next, InputIterator end, Token& tok)
     {
-			typedef tokenizer_detail::assign_or_plus_equal<
+      typedef tokenizer_detail::assign_or_plus_equal<
 #if     !defined(BOOST_MSVC) || BOOST_MSVC > 1300
         typename
 #endif
-				tokenizer_detail::get_iterator_category<
-				InputIterator>::iterator_category> assigner;
+        tokenizer_detail::get_iterator_category<
+        InputIterator>::iterator_category> assigner;
 
       assigner::clear(tok);
 
@@ -422,12 +422,12 @@ namespace boost{
 
         // if we are on a kept_delims move past it and stop
         if (is_kept(*next)) {
-					assigner::plus_equal(tok,*next);
+          assigner::plus_equal(tok,*next);
           ++next;
         } else
           // append all the non delim characters
           for (; next != end && !is_dropped(*next) && !is_kept(*next); ++next)
-						assigner::plus_equal(tok,*next);
+            assigner::plus_equal(tok,*next);
       } 
       else { // m_empty_tokens == keep_empty_tokens
         
@@ -460,7 +460,7 @@ namespace boost{
           m_output_done = true;
         }
       }
-			assigner::assign(start,next,tok);
+      assigner::assign(start,next,tok);
       return true;
     }
 

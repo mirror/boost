@@ -50,9 +50,9 @@ namespace
 int main()
 {
     const int N = 5;                     
-	int v[] = { 1,2,3,4,5,6,6,7,8,9 };
+    int v[] = { 1,2,3,4,5,6,6,7,8,9 };
     std::vector<int> my_vector;
-	my_vector.assign( boost::begin( v ), boost::end( v ) );
+    my_vector.assign( boost::begin( v ), boost::end( v ) );
     typedef std::vector<int>::iterator iterator;
     std::pair<iterator,iterator>       my_view( boost::begin( my_vector ), 
                                                 boost::begin( my_vector ) + N );
@@ -61,5 +61,5 @@ int main()
     std::cout << my_generic_replace( my_vector, 4, 2 )
               << my_generic_replace( my_view, 4, 2 )
               << my_generic_replace( str, 'a', 'b' );
-	return 0;
+    return 0;
 }

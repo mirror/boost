@@ -45,7 +45,7 @@ namespace boost
             };
         };
 
-		template<>
+        template<>
         struct range_value_type_<array_>
         { 
             template< typename T >

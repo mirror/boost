@@ -49,7 +49,7 @@ static double clock_overhead()
 
     unsigned long r = 0;
     while ((k = clock()) < limit)
-	++r;
+        ++r;
 
     return double(k - start) / r;
 }
@@ -78,29 +78,29 @@ void measure_aux(F f, vector<double>& mv)
 
     // Do 2*factor measurements
     for (int i = 2*factor; i; --i) {
-	unsigned long count = 0, limit = 1, tcount = 0;
-	const clock_t clocklimit = start + CLOCKS_PER_SEC/100;
-	clock_t t;
+        unsigned long count = 0, limit = 1, tcount = 0;
+        const clock_t clocklimit = start + CLOCKS_PER_SEC/100;
+        clock_t t;
 
-	do {
-	    while (count < limit) {
-		f();
-		++count;
-	    }
-	    limit *= 2;
-	    ++tcount;
-	} while ((t = clock()) < clocklimit);
+        do {
+            while (count < limit) {
+                f();
+                ++count;
+            }
+            limit *= 2;
+            ++tcount;
+        } while ((t = clock()) < clocklimit);
 
-	// Wait for the clock to tick again;
-	clock_t t2;
-	do ++tcount;
-	while ((t2 = clock()) == t);
+        // Wait for the clock to tick again;
+        clock_t t2;
+        do ++tcount;
+        while ((t2 = clock()) == t);
 
-	// Append the measurement to the vector
-	mv.push_back(((t2 - start) - (tcount * ovhd)) / count);
+        // Append the measurement to the vector
+        mv.push_back(((t2 - start) - (tcount * ovhd)) / count);
 
-	// Establish a new starting point
-	start = t2;
+        // Establish a new starting point
+        start = t2;
     }
 }
 
@@ -112,22 +112,22 @@ double measure(F f)
 {
     vector<double> mv;
 
-    int n = 0;			// iteration counter
+    int n = 0;                        // iteration counter
     do {
-	++n;
+        ++n;
 
-	// Try 2*factor measurements
-	measure_aux(f, mv);
-	assert(mv.size() == 2*n*factor);
+        // Try 2*factor measurements
+        measure_aux(f, mv);
+        assert(mv.size() == 2*n*factor);
 
-	// Compute the median.  We know the size is even, so we cheat.
-	sort(mv.begin(), mv.end());
-	double median = (mv[n*factor] + mv[n*factor-1])/2;
+        // Compute the median.  We know the size is even, so we cheat.
+        sort(mv.begin(), mv.end());
+        double median = (mv[n*factor] + mv[n*factor-1])/2;
 
-	// If the extrema are within threshold of the median, we're done
-	if (mv[n] > (median * (100-percent))/100 &&
-	    mv[mv.size() - n - 1] < (median * (100+percent))/100)
-	    return median;
+        // If the extrema are within threshold of the median, we're done
+        if (mv[n] > (median * (100-percent))/100 &&
+            mv[mv.size() - n - 1] < (median * (100+percent))/100)
+            return median;
 
     } while (mv.size() < factor * 200);
 

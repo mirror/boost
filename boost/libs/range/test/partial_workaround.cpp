@@ -64,22 +64,22 @@ void check_partial_workaround()
     BOOST_STATIC_ASSERT( sizeof( yes_type ) == sizeof( is_const_wchar_t_ptr_impl( w_ptr ) ) );
     BOOST_STATIC_ASSERT( sizeof( yes_type ) == sizeof( is_const_wchar_t_ptr_impl( cw_ptr ) ) );
 
-	BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::std_container_, 
-		                  boost::range_detail::range< vector<int> >::type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::std_container_, 
+                          boost::range_detail::range< vector<int> >::type >::value ));
     BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::std_pair_, 
-		                  boost::range_detail::range< pair<int,int> >::type >::value ));
-	BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::array_, 
-		                  boost::range_detail::range< int[42] >::type >::value ));
-	BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::char_ptr_, 
-		                  boost::range_detail::range< char* >::type >::value ));
-	BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::const_char_ptr_, 
-		                  boost::range_detail::range< const char* >::type >::value ));
-	BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::wchar_t_ptr_, 
-		                  boost::range_detail::range< wchar_t* >::type >::value ));
-	BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::const_wchar_t_ptr_,
-		                  boost::range_detail::range< const wchar_t* >::type >::value ));
-	BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::std_container_, 
-		                  boost::range_detail::range< vector<int> >::type >::value ));
+                          boost::range_detail::range< pair<int,int> >::type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::array_, 
+                          boost::range_detail::range< int[42] >::type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::char_ptr_, 
+                          boost::range_detail::range< char* >::type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::const_char_ptr_, 
+                          boost::range_detail::range< const char* >::type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::wchar_t_ptr_, 
+                          boost::range_detail::range< wchar_t* >::type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::const_wchar_t_ptr_,
+                          boost::range_detail::range< const wchar_t* >::type >::value ));
+    BOOST_STATIC_ASSERT(( boost::is_same< boost::range_detail::std_container_, 
+                          boost::range_detail::range< vector<int> >::type >::value ));
 
 }
 
