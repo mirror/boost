@@ -262,22 +262,12 @@ main()
     std::stringstream german("Okt");
     german.imbue(global2);
     greg_month m(3);
-    try {
-      ss1 >> m;
-      check("Stream in month", m == greg_month(Jan));
-    }
-    catch(...) {
-      check("Caught unexpected exception during Stream in greg_month", false);
-    }
+    ss1 >> m;
+    check("Stream in month", m == greg_month(Jan));
 #ifndef BOOST_NO_STD_WSTRING
     std::wstringstream ws1(L"Dec");
-    try {
-      ws1 >> m;
-      check("Wide Stream in month", m == greg_month(Dec));
-    }
-    catch(...) {
-      check("Caught unexpected exception during Stream in greg_month -- wide streams", false);
-    }
+    ws1 >> m;
+    check("Wide Stream in month", m == greg_month(Dec));
 #else
     check("Wide Stream in not supported by this compiler", false);
 #endif // BOOST_NO_STD_WSTRING
@@ -285,6 +275,7 @@ main()
     check("Stream in German month", m == greg_month(Oct));
     try{
       ss2 >> m; // misspelled
+      check("Bad month exception NOT thrown (misspelled name)", false);
     }catch(bad_month){
       check("Bad month exception caught (misspelled name)", true);
     }catch(...){
@@ -299,24 +290,13 @@ main()
     std::stringstream ss2("Wensday"); // misspelled
     std::stringstream german("Mittwoch"); // Wednesday
     german.imbue(global2);
-    greg_weekday wd(1);
-    try {
-      ss1 >> wd;
-      check("Stream in weekday", wd == greg_weekday(Sunday));
-    }
-    catch(...) {
-      check("Caught unexpected exception during Stream in greg_weekday", false);
-    }
+    greg_weekday wd(Friday); //something not Sunday...
+    ss1 >> wd;
+    check("Stream in weekday", wd == greg_weekday(Sunday));
 #ifndef BOOST_NO_STD_WSTRING
     std::wstringstream ws1(L"Saturday");
-    try {
-      ws1 >> wd;
-      check("Wide Stream in weekday", wd == greg_weekday(Saturday));
-    }
-    catch(...) {
-      check("Caught unexpected exception during Stream in greg_weekday -- wide stream", false);
-    }
-
+    ws1 >> wd;
+    check("Wide Stream in weekday", wd == greg_weekday(Saturday));
 #else
     check("Wide Stream in not supported by this compiler", false);
 #endif // BOOST_NO_STD_WSTRING
@@ -324,6 +304,7 @@ main()
     check("Stream in German weekday", wd == greg_weekday(Wednesday));
     try{
       ss2 >> wd;
+      check("Bad weekday exception NOT thrown (misspelled name)", false);
     }catch(bad_weekday){
       check("Bad weekday exception caught (misspelled name)", true);
     }catch(...){
