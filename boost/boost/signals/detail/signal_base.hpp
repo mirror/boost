@@ -180,6 +180,7 @@ namespace boost {
 
         typedef signal_base_impl::slot_iterator slot_iterator;
         typedef signal_base_impl::stored_slot_type stored_slot_type;
+        typedef signal_base_impl::slot_container_type::iterator iterator;
 
         shared_ptr<signal_base_impl> impl;
       };

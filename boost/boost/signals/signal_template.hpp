@@ -22,6 +22,8 @@
 #  include <boost/last_value.hpp>
 #  include <boost/signals/detail/signal_base.hpp>
 #  include <boost/signals/detail/slot_call_iterator.hpp>
+#  include <boost/mpl/bool.hpp>
+#  include <boost/type_traits/is_convertible.hpp>
 #  include <cassert>
 #  include <functional>
 #  include <memory>
@@ -200,11 +202,31 @@ namespace boost {
     BOOST_SIGNALS_NAMESPACE::connection connect(const slot_type&);
     BOOST_SIGNALS_NAMESPACE::connection connect(const group_type&, const slot_type&);
 
+    template<typename T>
+    void disconnect(const T& t)
+    {
+      typedef mpl::bool_<(is_convertible<T, group_type>::value)> is_group;
+      return this->do_disconnect(t, is_group());
+    }
+
+  private:
     // Disconnect a named slot
-    void disconnect(const group_type& group)
+    void do_disconnect(const group_type& group, mpl::bool_<true>)
     {
       impl->disconnect(group);
     }
+
+    template<typename Function>
+    void do_disconnect(const Function& f, mpl::bool_<false>)
+    {
+      for (iterator i = impl->slots_.begin(); i != impl->slots_.end(); ++i) {
+        slot_function_type& s =
+          *any_cast<slot_function_type>(&i->second.second);
+        if (s == f) i->second.first.disconnect();
+      }
+    }
+
+  public:
 
     // Emit the signal
     result_type operator()(BOOST_SIGNALS_PARMS);

@@ -34,6 +34,9 @@ struct remove_connection {
   int idx;
 };
 
+bool operator==(const remove_connection& x, const remove_connection& y)
+{ return x.value == y.value && x.idx == y.idx; }
+
 static void
 test_remove_self()
 {
@@ -208,11 +211,35 @@ test_bloodbath()
   BOOST_TEST(test_output == "3");
 }
 
+static void
+test_disconnect_equal()
+{
+  boost::signal0<void> s0;
+
+  connections[0] = s0.connect(remove_connection(0));
+  connections[1] = s0.connect(remove_connection(1));
+  connections[2] = s0.connect(remove_connection(2));
+  connections[3] = s0.connect(remove_connection(3));
+
+  std::cout << "Deleting 2" << std::endl;
+
+  test_output = "";
+  s0(); std::cout << std::endl;
+  BOOST_TEST(test_output == "0123");
+
+  s0.disconnect(remove_connection(2));
+
+  test_output = "";
+  s0(); std::cout << std::endl;
+  BOOST_TEST(test_output == "013");
+}
+
 int test_main(int, char* [])
 {
   test_remove_self();
   test_remove_prior();
   test_remove_after();
   test_bloodbath();
+  test_disconnect_equal();
   return 0;
 }

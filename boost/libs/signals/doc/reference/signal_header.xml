@@ -142,22 +142,38 @@
           immediately.</simpara></notes>
         </overloaded-method>
 
-        <method name="disconnect">
-          <type>void</type>
-          <parameter name="group">
-            <paramtype>const group_type&amp;</paramtype>
-          </parameter>
+        <overloaded-method name="disconnect">
+          <signature>
+            <type>void</type>
+            <parameter name="group">
+              <paramtype>const group_type&amp;</paramtype>
+            </parameter>
+          </signature>
+          <signature>
+            <template>
+              <template-type-parameter name="Slot"/>
+            </template>
+            <type>void</type>
+            <parameter name="slot">
+              <paramtype>const Slot&amp;</paramtype>
+            </parameter>
+          </signature>
 
-          <effects><simpara>Any slots in the given group are disconnected.</simpara></effects>
+          <effects><simpara>If the parameter is (convertible to) a
+          group name, any slots in the given group are
+          disconnected. Otherwise, any slots equal to the given slot
+          are disconnected.</simpara></effects>
 
-          <throws><simpara>Will not throw unless a user destructor throws. If a
-          user destructor throws, not all slots in this group may be
-          disconnected.</simpara></throws>
+          <throws><simpara>Will not throw unless a user destructor or
+          equality operator <code>==</code> throws. If either throws,
+          not all slots may be disconnected.</simpara></throws>
 
-          <complexity><simpara>O(lg n) + k where n is the number of slots known
-          to the signal and k is the number of slots in the
-          group.</simpara></complexity>
-        </method>
+          <complexity><simpara>If a group is given, O(lg n) + k where
+          n is the number of slots known to the signal and k is the
+          number of slots in the group. Otherwise, linear in the
+          number of slots connected to the
+          signal.</simpara></complexity>
+        </overloaded-method>
  
         <method name="disconnect_all_slots">
           <type>void</type>

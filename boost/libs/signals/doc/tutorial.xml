@@ -680,13 +680,13 @@ returns a connection object, which can be used to determine if the
 connection still exists or to disconnect the signal and slot.</para>
 <programlisting>
 boost::signals::connection c = sig.<methodname>connect</methodname>(HelloWorld());
-if (c.<methodname>connect</methodname>ed()) {
+if (c.<methodname>connected</methodname>()) {
 <emphasis>// c is still connected to the signal</emphasis>
   sig(); <emphasis>// Prints "Hello, World!"</emphasis>
 }
 
 c.disconnect(); <emphasis>// Disconnect the HelloWorld object</emphasis>
-assert(!c.<methodname>connect</methodname>ed()); <emphasis>c isn't connected any more</emphasis>
+assert(!c.<methodname>connected</methodname>()); <emphasis>c isn't connected any more</emphasis>
 
 sig(); <emphasis>// Does nothing: there are no connected slots</emphasis>
 </programlisting>
@@ -705,6 +705,57 @@ e.g.,</para>
 }
 sig(); <emphasis>// ShortLived function object no longer connected to sig</emphasis>
 </programlisting>
+</section>
+
+<section><title>Disconnecting equivalent slots (Intermediate)</title>
+<para>One can disconnect slots that are equivalent to a given function
+object using a form of the
+<code><methodname>disconnect</methodname></code> method, so long as
+the type of the function object has an accessible <code>==</code>
+operator. For instance:
+
+</para>
+  <informaltable>
+    <tgroup cols="2" align="left">
+      <thead>
+        <row>
+          <entry>Preferred syntax</entry>
+          <entry>Portable syntax</entry>
+        </row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>
+<programlisting>
+void foo();
+void bar();
+
+signal&lt;void()&gt; sig;
+
+sig.connect(&amp;foo);
+sig.connect(&amp;bar);
+
+sig.disconnect(&amp;foo); // disconnects foo, but not bar
+</programlisting>
+</entry>
+<entry>
+<programlisting>
+void foo();
+void bar();
+
+signal0&lt;void&gt; sig;
+
+sig.connect(&amp;foo);
+sig.connect(&amp;bar);
+
+sig.disconnect(&amp;foo); // disconnects foo, but not bar
+</programlisting>
+</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+
 </section>
 
 <section><title>Automatic connection management (Intermediate)</title>
