@@ -1340,6 +1340,7 @@ namespace boost { namespace numeric { namespace ublas {
                 } else /* if (current_ == 1 && it.current_ == 1) */ {
                     return it2_ - it.it2_;
                 }
+                return 0; /* avoid compiler warnings */
             }
 
             // Dereference
@@ -1778,6 +1779,7 @@ namespace boost { namespace numeric { namespace ublas {
                 } else /* if (current_ == 1 && it.current_ == 1) */ {
                     return it2_ - it.it2_;
                 }
+                return 0; /* avoid compiler warnings */
             }
 
             // Dereference
