@@ -23,15 +23,21 @@
 
 # include <boost/detail/sp_counted_base_nt.hpp>
 
+#elif defined( BOOST_SP_USE_PTHREADS )
+
+# include <boost/detail/sp_counted_base_pt.hpp>
+
 #elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 
 # include <boost/detail/sp_counted_base_gcc_x86.hpp>
 
-//#elif defined( __GNUC__ ) && defined( __powerpc__ )
-//# include <boost/detail/sp_counted_base_gcc_ppc.hpp>
+#elif defined( __MWERKS__ ) && defined( __POWERPC__ )
 
-//#elif defined( __MWERKS__ ) && defined( __POWERPC__ )
-//# include <boost/detail/sp_counted_base_cw_ppc.hpp>
+# include <boost/detail/sp_counted_base_cw_ppc.hpp>
+
+#elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) )
+
+# include <boost/detail/sp_counted_base_gcc_ppc.hpp>
 
 #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ )
 
