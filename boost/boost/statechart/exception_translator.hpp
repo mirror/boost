@@ -35,10 +35,7 @@ class exception_translator
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     template< class Action, class ExceptionEventHandler >
-    result operator()(
-      Action action,
-      ExceptionEventHandler eventHandler,
-      result handlerSuccessResult )
+    result operator()( Action action, ExceptionEventHandler eventHandler )
     {
       try
       {
@@ -46,12 +43,7 @@ class exception_translator
       }
       catch ( ... )
       {
-        if ( !eventHandler( ExceptionEvent() ) )
-        {
-          throw;
-        }
-
-        return handlerSuccessResult;
+        return eventHandler( ExceptionEvent() );
       }
     }
 };

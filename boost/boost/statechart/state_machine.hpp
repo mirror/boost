@@ -250,8 +250,7 @@ class state_machine : noncopyable
         terminator guard( *this );
         translator_(
           initial_construct_function( *this ),
-          exception_event_handler( *this ),
-          do_discard_event );
+          exception_event_handler( *this ) );
         guard.dismiss();
       }
 
@@ -263,8 +262,7 @@ class state_machine : noncopyable
       terminator guard( *this );
       translator_(
         terminate_function( *this ),
-        exception_event_handler( *this ),
-        do_discard_event );
+        exception_event_handler( *this ) );
       guard.dismiss();
     }
 
@@ -728,14 +726,14 @@ class state_machine : noncopyable
     friend class terminate_function;
 
     template< class ExceptionEvent >
-    bool handle_exception_event(
+    result handle_exception_event(
       const ExceptionEvent & exceptionEvent,
       state_base_type * pCurrentState )
     {
       if ( terminated() )
       {
         // there is no state that could handle the exception -> bail out
-        return false;
+        throw;
       }
 
       // If we are stable, an event handler has thrown.
@@ -765,8 +763,13 @@ class state_machine : noncopyable
       // scope guard further up in the call stack will take care of this.
       performFullExit_ = true;
 
-      return ( reactionResult == do_discard_event ) &&
-        ( get_pointer( pOutermostUnstableState_ ) == 0 );
+      if ( ( reactionResult != do_discard_event ) ||
+        ( get_pointer( pOutermostUnstableState_ ) != 0 ) )
+      {
+        throw;
+      }
+
+      return do_discard_event;
     }
 
     class exception_event_handler
@@ -783,7 +786,7 @@ class state_machine : noncopyable
         }
 
         template< class ExceptionEvent >
-        bool operator()( const ExceptionEvent & exceptionEvent )
+        result operator()( const ExceptionEvent & exceptionEvent )
         {
           return machine_.handle_exception_event(
             exceptionEvent, pCurrentState_ );
@@ -832,8 +835,7 @@ class state_machine : noncopyable
         reactionResult = translator_( detail::send_function<
           state_base_type, event_base_type, rtti_policy_type::id_type >(
             **pState, evt, eventType ),
-          exception_event_handler( *this, get_pointer( *pState ) ),
-          do_discard_event );
+          exception_event_handler( *this, get_pointer( *pState ) ) );
       }
 
       guard.dismiss();

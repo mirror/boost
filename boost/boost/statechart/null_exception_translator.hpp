@@ -28,7 +28,7 @@ class null_exception_translator
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
     template< class Action, class ExceptionEventHandler >
-    result operator()( Action action, ExceptionEventHandler, result )
+    result operator()( Action action, ExceptionEventHandler )
     {
       return action();
     }
