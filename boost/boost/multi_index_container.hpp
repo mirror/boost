@@ -53,7 +53,7 @@ namespace multi_index{
 
 template<typename Value,typename IndexSpecifierList,typename Allocator>
 class multi_index_container:
-  private base_from_member<
+  private ::boost::base_from_member<
     typename boost::detail::allocator::rebind_to<
       Allocator,
       typename detail::multi_index_node_type<
@@ -85,7 +85,7 @@ private:
 
   typedef typename detail::multi_index_base_type<
       Value,IndexSpecifierList,Allocator>::type   super;
-  typedef base_from_member<
+  typedef ::boost::base_from_member<
     typename boost::detail::allocator::rebind_to<
       Allocator,
       typename super::node_type
