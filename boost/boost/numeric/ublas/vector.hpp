@@ -89,8 +89,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING vector_expression<vector<T, A> >::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef T value_type;
         typedef typename type_traits<T>::const_reference const_reference;
         typedef T &reference;
@@ -562,16 +562,18 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, std::size_t N>
     class bounded_vector:
         public vector<T, bounded_array<T, N> > {
-    public:
-        BOOST_STATIC_CONSTANT (std::size_t,  max_size = N);
+
         typedef vector<T, bounded_array<T, N> > vector_type;
+    public:
+        typedef typename vector_type::size_type size_type;
+        BOOST_STATIC_CONSTANT (size_type,  max_size = N);
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
         bounded_vector ():
             vector_type (N) {}
         BOOST_UBLAS_INLINE
-        bounded_vector (std::size_t size):
+        bounded_vector (size_type size):
             vector_type (size) {}
         BOOST_UBLAS_INLINE
         bounded_vector (const bounded_vector &v):

@@ -36,7 +36,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void matrix_resize_preserve (M& m, M& temporary, BOOST_UBLAS_TYPENAME M::size_type size1, BOOST_UBLAS_TYPENAME M::size_type size2) {
             typedef F functor_type;
-            typedef BOOST_UBLAS_TYPENAME M::size_type size_type;
+            typedef typename M::size_type size_type;
             // Common elements to preserve
             const size_type size1_min = (std::min) (size1, m.size1_);
             const size_type size2_min = (std::min) (size2, m.size2_);
@@ -62,8 +62,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<matrix<T, F, A> >::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -962,17 +962,19 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, std::size_t M, std::size_t N, class F>
     class bounded_matrix:
         public matrix<T, F, bounded_array<T, M * N> > {
-    public:
-        BOOST_STATIC_CONSTANT (std::size_t, max_size1 = M);
-        BOOST_STATIC_CONSTANT (std::size_t, max_size2 = N);
+
         typedef matrix<T, F, bounded_array<T, M * N> > matrix_type;
+    public:
+        typedef typename matrix_type::size_type size_type;
+        BOOST_STATIC_CONSTANT (size_type, max_size1 = M);
+        BOOST_STATIC_CONSTANT (size_type, max_size2 = N);
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
         bounded_matrix ():
             matrix_type (M, N) {}
         BOOST_UBLAS_INLINE
-        bounded_matrix (std::size_t size1, std::size_t size2):
+        bounded_matrix (size_type size1, size_type size2):
             matrix_type (size1, size2) {}
         BOOST_UBLAS_INLINE
         bounded_matrix (const bounded_matrix &m):
@@ -1018,8 +1020,8 @@ namespace boost { namespace numeric { namespace ublas {
 #ifndef BOOST_UBLAS_NO_PROXY_SHORTCUTS
         BOOST_UBLAS_USING matrix_expression<vector_of_vector<T, F, A> >::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename A::size_type size_type;
+        typedef typename A::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
