@@ -311,17 +311,20 @@ namespace assign_detail
             return *this;
         }
 
-        /*
-        template< class Range >
-        generic_list& insert( const Range& r )
+        template< class SinglePassIterator >
+        generic_list& range( SinglePassIterator first, 
+                              SinglePassIterator last )
         {
-            BOOST_DEDUCED_TYPENAME range_const_iterator<Range>::type 
-                            i = const_begin(r),
-                            e = const_end(r);
-            for( ; i != e ; ++i )
-                this->push_back( *i );
+            for( ; first != last; ++first )
+                this->push_back( *first );
+            return *this;
         }
-        */
+        
+        template< class SinglePassRange >
+        generic_list& range( const SinglePassRange& r )
+        {
+            return range( boost::begin(r), boost::end(r) );
+        }
     };
 
     /////////////////////////////////////////////////////////////////////////
@@ -400,8 +403,7 @@ namespace assign_detail
 
         static_generic_list& operator()( T& r )
         {
-            refs_[current_] = r;
-            ++current_;
+            insert( r );
             return *this;
         }
 
@@ -424,8 +426,29 @@ namespace assign_detail
         {
             return false;
         }
-        
+
+        template< class ForwardIterator >
+        static_generic_list& range( ForwardIterator first, 
+                                    ForwardIterator last )
+        {
+            for( ; first != last; ++first )
+                this->insert( *first );
+            return *this;
+        }
+
+        template< class ForwardRange >
+        static_generic_list& range( const ForwardRange& r )
+        {
+            return range( boost::begin(r), boost::end(r) );
+        }
+
     private:
+        void insert( T& r )
+        {
+            refs_[current_] = r;
+            ++current_;
+        }
+        
         static_generic_list();
         
         mutable assign_reference<internal_value_type> refs_[N];

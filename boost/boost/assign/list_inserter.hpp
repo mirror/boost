@@ -245,6 +245,20 @@ namespace assign
             return *this;
         }
 
+        template< class SinglePassIterator >
+        list_inserter& range( SinglePassIterator first, 
+                              SinglePassIterator last )
+        {
+            for( ; first != last; ++first )
+                insert_( *first );
+            return *this;
+        }
+        
+        template< class SinglePassRange >
+        list_inserter& range( const SinglePassRange& r )
+        {
+            return range( boost::begin(r), boost::end(r) );
+        }
         
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
 
