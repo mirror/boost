@@ -30,14 +30,10 @@
 #   include "boost/preprocessor/stringize.hpp"
 
 #   define MPL_AUX_VECTOR_HEADER \
-    BOOST_PP_STRINGIZE( \
-        BOOST_PP_CAT( \
-              BOOST_PP_CAT(boost/mpl/vector/vector, BOOST_MPL_LIMIT_VECTOR_SIZE) \
-            ,.##hpp) \
-        ) \
+    BOOST_PP_CAT(vector, BOOST_MPL_LIMIT_VECTOR_SIZE).hpp \
     /**/
 
-#   include MPL_AUX_VECTOR_HEADER
+#   include BOOST_PP_STRINGIZE(boost/mpl/vector/MPL_AUX_VECTOR_HEADER)
 #   undef MPL_AUX_VECTOR_HEADER
 #endif
 
@@ -52,9 +48,9 @@
 #else
 
 #   include "boost/mpl/limits/vector.hpp"
-#   include "boost/mpl/aux_/preprocessor/project1st.hpp"
 
 #   include "boost/preprocessor/arithmetic/sub.hpp"
+#   include "boost/preprocessor/tuple/elem.hpp"
 #   include "boost/preprocessor/enum_params_with_a_default.hpp"
 #   include "boost/preprocessor/enum_params.hpp"
 #   include "boost/preprocessor/enum.hpp"
@@ -91,7 +87,7 @@ namespace mpl {
     BOOST_PP_COMMA_IF(n) \
     BOOST_PP_ENUM( \
           BOOST_PP_SUB_D(1,BOOST_MPL_LIMIT_VECTOR_SIZE,n) \
-        , BOOST_MPL_PP_PROJECT2ND \
+        , BOOST_PP_TUPLE_ELEM_3_2 \
         , def \
         ) \
     /**/
