@@ -47,19 +47,24 @@
       <h4>The <a href="../../boost/config.hpp">&lt;boost/config.hpp&gt;</a> <a name="header">
             header</a></h4>
       <p>Boost library implementations access configuration macros via <code>#include 
-            &lt;boost/config.hpp&gt;</code>.
+            &lt;boost/config.hpp&gt;</code>.&nbsp;&nbsp;
       </p>
-      <p>Boost library users are never required to <code>#include &lt;boost/config.hpp&gt;</code>
-         directly, unless they are using the Boost <A href="#info_macros">informational</A>
-         or <A href="#helpers">helper</A> macros&nbsp;which are designed for use by 
-         Boost users as well as for our own internal use.&nbsp; However, note that while 
-         all the Boost configuration macros are documented here, the <A href="#features">feature 
-            test</A> and <A href="#defects">defect test</A> macros are designed for 
-         internal use by Boost libraries.&nbsp; If you write code that depends upon 
-         these you should be aware that they are subject to the needs of 
-         Boost&nbsp;library developers, and while we will try to avoid gratuitous 
-         changes, subtle breaking changes are not entirely unknown.
-      </p>
+      <P>While Boost library users are not required to include that file directly, or 
+         use those configuration macros, such use is acceptable.&nbsp; The configuration 
+         macros are documented as to their purpose, usage, and limitations which makes 
+         them usable by both Boost library and user code.
+      </P>
+      <P>Boost <A href="#info_macros">informational</A> or <A href="#helpers">helper</A> 
+         macros&nbsp;are designed for use by Boost users as well as for our own internal 
+         use.&nbsp; Note however, that the <A href="#features">feature test</A> and <A href="#defects">
+            defect test</A> macros were designed for internal use by Boost libraries, 
+         not user code, so they can change at any time (though no gratuitous changes are 
+         made to them). Boost library problems resulting from changes to the 
+         configuration macros are caught by the Boost regression tests, so the Boost 
+         libraries are updated to account for those changes. By contrast, Boost library 
+         user code can be adversely affected by changes to the macros without warning. 
+         The best way to keep abreast of changes to the macros used in user code is to 
+         monitor the discussions on the Boost developers list.</P>
       <h4><a name="config_script">Using the configure script</a></h4>
       <p>If you know that boost is incorrectly configured for your particular setup, and 
          you are on a UNIX like platform, then you may want to try and improve things by 
