@@ -23,7 +23,7 @@
 //#     define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #   endif
 
-#   if(__MWERKS__ <= 0x2405) || !defined(BOOST_STRICT_CONFIG)  // 7.0
+#   if(__MWERKS__ <= 0x2406) || !defined(BOOST_STRICT_CONFIG)  // 7.0 & 7.1
 #     define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #   endif
 
@@ -41,8 +41,8 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 0x2405:
-#if (__MWERKS__ > 0x2405)
+// last known and checked version is 0x2406:
+#if (__MWERKS__ > 0x2406)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
