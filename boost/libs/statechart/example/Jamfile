@@ -27,6 +27,8 @@ rule fsm-st-example-build (
     : <threading>single
       $(additional-options)
   ;
+
+  return <exe>$(target-name) ;
 }
 
 rule fsm-mt-example-build (
@@ -39,30 +41,40 @@ rule fsm-mt-example-build (
     : <threading>multi
       $(additional-options)
   ;
+
+  return <exe>$(target-name) <dll>../../thread/build/boost_thread ;
 }
 
 rule fsm-bitmachine-build ( tag : no-of-bits-list + : additional-options * )
 {
+  local result ;
+
   for local no-of-bits in $(no-of-bits-list)
   {
-    fsm-st-example-build BitMachine$(tag)$(no-of-bits)
-      : BitMachine : BitMachine
-      : <define>NO_OF_BITS=$(no-of-bits)
-        $(additional-options) ; 
+    result +=
+    [
+      fsm-st-example-build BitMachine$(tag)$(no-of-bits)
+        : BitMachine : BitMachine
+        : <define>NO_OF_BITS=$(no-of-bits)
+          $(additional-options)
+    ] ;
   }
+
+  return $(result) ;
 }
 
-fsm-bitmachine-build Normal : $(no-of-bits-list) ;
-fsm-bitmachine-build Custom : $(no-of-bits-list) :
-  <define>CUSTOMIZE_MEMORY_MANAGEMENT ;
-fsm-bitmachine-build Native : $(no-of-bits-list) :
-  <define>BOOST_FSM_USE_NATIVE_RTTI ;
-
-fsm-st-example-build Camera : Camera : Camera Configuring Main Shooting ;
-fsm-st-example-build Handcrafted : Handcrafted : Handcrafted ;
-fsm-st-example-build Keyboard : Keyboard : Keyboard ;
-fsm-st-example-build PingPongSingle : PingPong : PingPong ;
-fsm-mt-example-build PingPongMulti1 : PingPong : PingPong ;
-fsm-mt-example-build PingPongMulti2 : PingPong : PingPong
-  : <define>USE_TWO_THREADS ;
-fsm-st-example-build StopWatch : StopWatch : StopWatch ;
+stage run
+  : [ fsm-bitmachine-build Normal : $(no-of-bits-list) ]
+    [ fsm-bitmachine-build Custom : $(no-of-bits-list) : <define>CUSTOMIZE_MEMORY_MANAGEMENT ]
+    [ fsm-bitmachine-build Native : $(no-of-bits-list) : <define>BOOST_FSM_USE_NATIVE_RTTI ]
+    [ fsm-st-example-build Camera : Camera : Camera Configuring Main Shooting ]
+    [ fsm-st-example-build Handcrafted : Handcrafted : Handcrafted ]
+    [ fsm-st-example-build Keyboard : Keyboard : Keyboard ]
+    [ fsm-st-example-build PingPongSingle : PingPong : PingPong ]
+    [ fsm-mt-example-build PingPongMulti1 : PingPong : PingPong ]
+    [ fsm-mt-example-build PingPongMulti2 : PingPong : PingPong : <define>USE_TWO_THREADS ]
+    [ fsm-st-example-build StopWatch : StopWatch : StopWatch ]
+  : common-variant-tag
+    <target>stage
+    <target>all
+;
