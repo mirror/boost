@@ -81,15 +81,15 @@ void remove_signal(signal_type* sig)
 void random_remove_signal(minstd_rand& rand_gen);
 
 struct tracking_bridge {
+  tracking_bridge(const tracking_bridge& other) 
+    : sig(other.sig), rand_gen(other.rand_gen)
+  { ++bridge_count; }
+
   tracking_bridge(signal_type* s, minstd_rand& rg) : sig(s), rand_gen(rg) 
-  {
-    ++bridge_count;
-  }
+  { ++bridge_count; }
 
   ~tracking_bridge()
-  {
-    --bridge_count;
-  }
+  { --bridge_count; }
 
   void operator()(int cur_dist, int max_dist, double deletion_prob,
                   int& deletions_left) const
@@ -415,6 +415,15 @@ int test_main(int argc, char* argv[])
     }
   }
 
+  for (signal_graph_type::vertex_iterator v = vertices(signal_graph).first;
+       v != vertices(signal_graph).second;
+       ++v) {
+    delete get(signal_tag(), signal_graph, *v);
+  }
+
   BOOST_TEST(tracking_bridge::bridge_count == 0);
+  if (tracking_bridge::bridge_count != 0) {
+    std::cerr << tracking_bridge::bridge_count << " connections remain.\n";
+  }
   return 0;
 }
