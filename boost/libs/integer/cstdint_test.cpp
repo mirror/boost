@@ -13,9 +13,9 @@
 //   12 Nov 00  Adapted to merged <boost/cstdint.hpp>
 //   23 Sep 00  Added INTXX_C constant macro support + int64_t support (John Maddock).
 //   28 Jun 00  Initial version
+#define __STDC_CONSTANT_MACROS
 #include <cassert>
 #include <iostream>
-#define __STDC_CONSTANT_MACROS
 #include <boost/cstdint.hpp>
 
 #ifdef NDEBUG
