@@ -53,6 +53,7 @@ test-suite numeric/uBLAS
         : # input files
         : # requirements
             <define>$(UBLAS_TESTSET)
+            <intel-linux><*><cxxflags>"-fpstkchk"	# Try and pick up runtime failures
             <vacpp><*><define>"BOOST_UBLAS_NO_ELEMENT_PROXIES"
       ]
       [ run test2/test2.cpp
