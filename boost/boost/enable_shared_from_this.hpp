@@ -60,7 +60,7 @@ public:
     }
 
     typedef T _internal_element_type; // for bcc 5.5.1
-    weak_ptr<_internal_element_type> _internal_weak_this;
+    mutable weak_ptr<_internal_element_type> _internal_weak_this;
 };
 
 } // namespace boost

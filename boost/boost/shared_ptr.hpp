@@ -83,9 +83,9 @@ template<> struct shared_ptr_traits<void const volatile>
 
 // enable_shared_from_this support
 
-template<class T, class Y> void sp_enable_shared_from_this(boost::enable_shared_from_this<T> * pe, Y * px, shared_count const & pn)
+template<class T, class Y> void sp_enable_shared_from_this(boost::enable_shared_from_this<T> const * pe, Y const * px, shared_count const & pn)
 {
-    if(pe != 0) pe->_internal_weak_this._internal_assign(px, pn);
+    if(pe != 0) pe->_internal_weak_this._internal_assign(const_cast<Y*>(px), pn);
 }
 
 inline void sp_enable_shared_from_this(void const volatile *, void const volatile *, shared_count const &)
