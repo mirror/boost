@@ -103,10 +103,9 @@ the indicated results:</p>
     <td width="101"><code>result</code></td>
     <td width="1129">
     <ol>
-      <li>Attempts to call <code>operator()()</code> on <code>a</code> and to 
-      return the result</li>
-      <li>Catches the exception propagated from <code>a</code>, if necessary</li>
-      <li>Translates the exception to a suitable <code>
+      <li>Attempts to execute <code>return a();</code></li>
+		<li>If <code>a()</code> propagates an exception, the exception is caught</li>
+      <li>Inside the catch block, translates the exception to a suitable <code>
       <a href="#Class template event">event&lt;&gt;</a></code> subtype and 
       constructs an object of the event <b>on the stack</b></li>
       <li>Passes the <code>event&lt;&gt;</code> subtype object to <code>eh</code></li>
@@ -1496,7 +1495,7 @@ soon as all their direct and indirect inner states have been exited. The inner
 states of each state are exited according to the number of their orthogonal 
 region. The state in the orthogonal region with the highest number is always 
 exited first, then the state in the region with the second-highest number and 
-so on<br>
+so on.<br>
 The process of exiting a state consists of the following steps:</p>
 <ol>
   <li>If there is an exception pending that has not yet been handled 
@@ -2108,7 +2107,7 @@ namespace fsm
 }</pre>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->06 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40410" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 February, 2005<!--webbot bot="Timestamp" endspan i-checksum="40399" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <b><font color="#FF0000">Please remove the words spam and trap from 
 the email address behind the link</font></b></i></p>
