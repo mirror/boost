@@ -29,6 +29,14 @@
 #endif
 
 //
+// FreeBSD 3.x has pthreads support, but defines _POSIX_THREADS in <pthread.h>
+// and not in <unistd.h>
+//
+#if defined(__FreeBSD__) && (__FreeBSD__ <= 3)
+#  define BOOST_HAS_PTHREADS
+#endif
+
+//
 // No wide character support in the BSD header files:
 //
 #define BOOST_NO_CWCHAR
