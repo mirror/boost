@@ -41,8 +41,8 @@
 
 #include "boost/detail/reference_content.hpp"
 #include "boost/aligned_storage.hpp"
+#include "boost/blank.hpp"
 #include "boost/compressed_pair.hpp"
-#include "boost/empty.hpp"
 #include "boost/utility/addressof.hpp"
 #include "boost/static_assert.hpp"
 #include "boost/preprocessor/cat.hpp"
@@ -63,9 +63,7 @@
 #include "boost/mpl/begin_end.hpp"
 #include "boost/mpl/bool.hpp"
 #include "boost/mpl/contains.hpp"
-#include "boost/mpl/distance.hpp"
 #include "boost/mpl/empty.hpp"
-#include "boost/mpl/find.hpp"
 #include "boost/mpl/find_if.hpp"
 #include "boost/mpl/front.hpp"
 #include "boost/mpl/identity.hpp"
@@ -75,7 +73,6 @@
 #include "boost/mpl/is_sequence.hpp"
 #include "boost/mpl/iterator_range.hpp"
 #include "boost/mpl/logical.hpp"
-#include "boost/mpl/list/list10.hpp"
 #include "boost/mpl/max_element.hpp"
 #include "boost/mpl/protect.hpp"
 #include "boost/mpl/push_front.hpp"
@@ -139,19 +136,19 @@ public: // metafunction result
 // Provides a fallback (i.e., nothrow default-constructible) type from the
 // specified sequence, or no_fallback_type if not found.
 //
-// This implementation is designed to prefer boost::empty over other potential
+// This implementation is designed to prefer boost::blank over other potential
 // fallback types, regardless of its position in the specified sequence.
 //
 
 class no_fallback_type;
 
 template <typename FallbackFirst, typename Last>
-struct find_empty
+struct find_blank
     : mpl::apply_if<
           typename mpl::contains<
-              mpl::iterator_range<FallbackFirst,Last>, boost::empty
+              mpl::iterator_range<FallbackFirst,Last>, boost::blank
             >::type
-        , mpl::identity< boost::empty >
+        , mpl::identity< boost::blank >
         , FallbackFirst // dereference
         >
 {
@@ -173,7 +170,7 @@ public: // metafunction result
     typedef typename mpl::apply_if<
           is_same< fallback_type_it, end_it >
         , mpl::identity< no_fallback_type >
-        , find_empty<
+        , find_blank<
               fallback_type_it, end_it
             >
         >::type type;
@@ -918,16 +915,16 @@ private: // helpers, for typedefs (below)
 
     typedef typename mpl::apply_if<
           is_sequence_based_
-        , mpl::if_<
-              mpl::empty<unwrapped_T0_>
-            , mpl::list1< boost::empty >
-            , unwrapped_T0_
-            >
+        , mpl::identity< unwrapped_T0_ >
         , detail::variant::make_variant_list<
               unwrapped_T0_
             , BOOST_VARIANT_ENUM_SHIFTED_PARAMS(T)
             >
         >::type specified_types;
+
+    BOOST_STATIC_ASSERT((
+          ::boost::mpl::not_< mpl::empty<specified_types> >::value
+        ));
 
     typedef typename mpl::apply_if<
           is_recursive_
@@ -1619,11 +1616,7 @@ public: // queries
 
     bool empty() const
     {
-        typedef typename mpl::index_of<
-              internal_types, boost::empty
-            >::type empty_index;
-
-        return which() == empty_index::value;
+        return false;
     }
 
     const std::type_info& type() const

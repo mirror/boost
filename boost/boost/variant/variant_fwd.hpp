@@ -19,12 +19,12 @@
 
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
-#include "boost/empty_fwd.hpp"
+#include "boost/blank_fwd.hpp"
 #include "boost/mpl/arg.hpp"
 #include "boost/mpl/void.hpp"
 #include "boost/preprocessor/cat.hpp"
+#include "boost/preprocessor/enum.hpp"
 #include "boost/preprocessor/enum_params.hpp"
-#include "boost/preprocessor/enum_shifted.hpp"
 #include "boost/preprocessor/enum_shifted_params.hpp"
 #include "boost/preprocessor/repeat.hpp"
 
@@ -178,8 +178,7 @@ BOOST_PP_REPEAT(
 #endif // BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE workaround
 
 #define BOOST_VARIANT_AUX_DECLARE_PARAMS \
-      typename T0 = boost::empty \
-    , BOOST_PP_ENUM_SHIFTED( \
+    BOOST_PP_ENUM( \
           BOOST_VARIANT_LIMIT_TYPES \
         , BOOST_VARIANT_AUX_DECLARE_PARAMS_IMPL \
         , T \
@@ -199,8 +198,6 @@ BOOST_PP_REPEAT(
 //   variant<types>    (where types is a type-sequence)
 // or
 //   variant<T0,T1,...,Tn>  (where T0 is NOT a type-sequence)
-// or
-//   variant<>, which is variant<boost::empty>
 //
 template < BOOST_VARIANT_AUX_DECLARE_PARAMS > class variant;
 
