@@ -11,13 +11,6 @@
 namespace boost {
 namespace date_time {
 
-  //! Simple function to calculate absolute value of a numeric type
-  template <typename T> // JDG [7/6/02 made a template]
-  inline T absolute_value(T x)
-  {
-    return x < 0 ? -x : x;
-  }
-
   
   //! Represents some amount of elapsed time measure to a given resolution
   /*! This class represents a standard set of capabilities for all
@@ -67,6 +60,11 @@ namespace date_time {
     {
       return duration_type(0,0,0,1);
     }
+    //! Return the number of ticks in a second
+    static tick_type ticks_per_second()
+    {
+      return rep_type::res_adjust();
+    }
     //! Provide the resolution of this duration type
     static time_resolutions resolution()
     {
@@ -75,27 +73,51 @@ namespace date_time {
     //! Returns number of hours in the duration
     hour_type hours()   const
     {
-      return (ticks_ / (3600*rep_type::res_adjust()));
+      return (ticks_ / (3600*ticks_per_second()));
     }
     //! Returns normalized number of minutes
     min_type minutes() const
     {
-      return absolute_value(((ticks() / (60*rep_type::res_adjust())) % 60));
+      return ((ticks() / (60*ticks_per_second())) % 60);
     }
     //! Returns normalized number of seconds (0..60)
     sec_type seconds() const
     {
-      return absolute_value((ticks()/rep_type::res_adjust()) % 60);
+      return (ticks()/ticks_per_second()) % 60;
     }
     //! Returns total number of seconds truncating any fractional seconds
     sec_type total_seconds() const
     {
-      return ticks_ / rep_type::res_adjust();
+      return ticks_ / ticks_per_second();
+    }
+    //! Returns total number of milliseconds truncating any fractional seconds
+    tick_type total_milliseconds() const
+    {
+      if (ticks_per_second() < 1000) {
+        return ticks_ * (1000 / ticks_per_second());
+      }
+      return ticks_ / (ticks_per_second() / static_cast<tick_type>(1000)) ;
+    }
+    //! Returns total number of nanoseconds truncating any sub millisecond values
+    tick_type total_nanoseconds() const
+    {
+      if (ticks_per_second() < 1000000000) {
+        return ticks_ * (static_cast<tick_type>(1000000000) / ticks_per_second());
+      }
+      return ticks_ / (ticks_per_second() / static_cast<tick_type>(1000000000)) ;
+    }
+    //! Returns total number of microseconds truncating any sub microsecond values
+    tick_type total_microseconds() const
+    {
+      if (ticks_per_second() < 1000000) {
+        return ticks_ * (static_cast<tick_type>(1000000) / ticks_per_second());
+      }
+      return ticks_ / (ticks_per_second() / static_cast<tick_type>(1000000)) ;
     }
     //! Returns count of fractional seconds at given resolution
     fractional_seconds_type fractional_seconds() const
     {
-      return absolute_value((ticks()%rep_type::res_adjust()));
+      return (ticks_ % ticks_per_second());
     }
     //! Returns number of possible digits in fractional seconds
     static unsigned short num_fractional_digits()
