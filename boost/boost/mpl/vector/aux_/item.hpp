@@ -38,8 +38,10 @@ struct v_item
     typedef typename next<typename Base::size>::type size;
     typedef Base base;
 
-    using Base::item_;
+    // agurt 10/sep/04: MWCW <= 9.3 workaround here and below; the compiler
+    // breaks if using declaration comes _before_ the new overload
     static aux::type_wrapper<T> item_(index_);
+    using Base::item_;
 };
 
 template<
@@ -54,8 +56,8 @@ struct v_item<T,Base,1>
     typedef typename next<typename Base::size>::type size;
     typedef Base base;
 
-    using Base::item_;
     static aux::type_wrapper<T> item_(index_);
+    using Base::item_;
 };
 
 // "erasure" item
@@ -71,8 +73,8 @@ struct v_mask
     typedef typename prior<typename Base::size>::type size;
     typedef Base base;
 
-    using Base::item_;
     static aux::type_wrapper<void_> item_(index_);
+    using Base::item_;
 };
 
 template< 
@@ -86,8 +88,8 @@ struct v_mask<Base,1>
     typedef typename prior<typename Base::size>::type size;
     typedef Base base;
 
-    using Base::item_;
     static aux::type_wrapper<void_> item_(index_);
+    using Base::item_;
 };
 
 #endif // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES
