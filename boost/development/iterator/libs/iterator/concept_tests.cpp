@@ -5,7 +5,7 @@ struct new_iterator
   : public boost::iterator<std::random_access_iterator_tag, int>,
     public boost::new_iterator_base
 {
-  typedef boost::random_access_iterator_tag traversal_category;
+  typedef boost::random_access_traversal_tag traversal_category;
   typedef boost::mutable_lvalue_iterator_tag return_category;
 
   int& operator*() const { return *m_x; }
@@ -44,9 +44,6 @@ struct old_iterator
   int* m_x;
 };
 old_iterator operator+(std::ptrdiff_t, old_iterator x) { return x; }
-
-struct bar { };
-void foo(bar) { }
 
 int
 main()
