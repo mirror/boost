@@ -23,16 +23,6 @@
 #endif
 
 //
-// STLPort's <limits> header #defines ULONGLONG_MAX in this case,
-// which can cause us confusion later if we don't accept its word that
-// long long is available. Note that #include <limits.h> may not be
-// sufficient to see the definition.
-//
-#ifdef _STLP_LONG_LONG
-#  define BOOST_HAS_LONG_LONG
-#endif
-
-//
 // If STLport thinks that there is no partial specialisation, then there is no
 // std::iterator traits:
 //
