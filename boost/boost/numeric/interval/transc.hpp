@@ -65,7 +65,7 @@ interval<T, Policies> cos(const interval<T, Policies>& x)
   const R pi2 = interval_lib::pi_twice<R>();
   R tmp = fmod((const R&)x, pi2);
   if (width(tmp) >= pi2.lower())
-    return I(-1, 1, true); // we are covering a full period
+    return I(static_cast<T>(-1), static_cast<T>(1), true); // we are covering a full period
   if (tmp.lower() >= interval_lib::constants::pi_upper<T>())
     return -cos(tmp - interval_lib::pi<R>());
   T l = tmp.lower();
@@ -77,9 +77,9 @@ interval<T, Policies> cos(const interval<T, Policies>& x)
   if (u <= interval_lib::constants::pi_lower<T>())
     return I(rnd.cos_down(u), rnd.cos_up(l), true);
   else if (u <= pi2.lower())
-    return I(-1, rnd.cos_up(min(rnd.sub_down(pi2.lower(), u), l)), true);
+    return I(static_cast<T>(-1), rnd.cos_up(min(rnd.sub_down(pi2.lower(), u), l)), true);
   else
-    return I(-1, 1, true);
+    return I(static_cast<T>(-1), static_cast<T>(1), true);
 }
 
 template<class T, class Policies> inline
@@ -141,7 +141,7 @@ interval<T, Policies> acos(const interval<T, Policies>& x)
     return I::empty();
   typename Policies::rounding rnd;
   T l = (x.upper() >= static_cast<T>(1) )
-          ? 0
+          ? static_cast<T>(0)
           : rnd.acos_down(x.upper());
   T u = (x.lower() <= static_cast<T>(-1))
           ? interval_lib::constants::pi_upper<T>()
@@ -181,7 +181,7 @@ interval<T, Policies> cosh(const interval<T, Policies>& x)
   else if (!interval_lib::detail::is_neg(x.lower()))
     return I(rnd.cosh_down(x.lower()), rnd.cosh_up(x.upper()), true);
   else
-    return I(0, rnd.cosh_up(-x.lower() > x.upper() ? x.lower() : x.upper()), true);
+    return I(static_cast<T>(0), rnd.cosh_up(-x.lower() > x.upper() ? x.lower() : x.upper()), true);
 }
 
 template<class T, class Policies> inline
@@ -211,7 +211,7 @@ interval<T, Policies> acosh(const interval<T, Policies>& x)
   if (interval_lib::detail::test_input(x) || x.upper() < static_cast<T>(1))
     return I::empty();
   typename Policies::rounding rnd;
-  T l = x.lower() <= static_cast<T>(1) ? 0 : rnd.acosh_down(x.lower());
+  T l = x.lower() <= static_cast<T>(1) ? static_cast<T>(0) : rnd.acosh_down(x.lower());
   return I(l, rnd.acosh_up(x.upper()), true);
 }
 
