@@ -182,7 +182,7 @@ void test_environment()
 #ifdef _WIN32
     _putenv("PO_TEST_FOO=1");
 #else
-    setenv("PO_TEST_FOO", "1", 1);
+    putenv("PO_TEST_FOO=1");
 #endif
     parsed_options p = parse_environment(desc, "PO_TEST_");
 
