@@ -126,7 +126,7 @@ struct is_convertible_impl
 };
 
 #elif (defined(BOOST_MSVC) && (BOOST_MSVC >= 1310))\
-      (defined(__EDG_VERSION__) && (__EDG_VERSION__ >= 245) && !defined(__ICL))
+      || (defined(__EDG_VERSION__) && (__EDG_VERSION__ >= 245) && !defined(__ICL))
 //
 // This is *almost* an ideal world implementation as it doesn't rely
 // on undefined behaviour by passing UDT's through (...).
