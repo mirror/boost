@@ -142,9 +142,9 @@ Its not called when archive book keeping data is saved.  This is used by XML arc
 to determine  when to inject a "&gt;" character at end of XML header. XML output archives 
 keep their own internal flag indicating that data being written is header data. This
 internal flag is reset when an object start tag is written. When 
-<code>void end_preamble()</code> is invoked and this internal flag is set
+<code style="white-space: normal">void end_preamble()</code> is invoked and this internal flag is set
 a "&gt;" character is appended to the output and the internal flag is reset. The default
-implementation for <code>void end_preamble()</code> is a no-op there by permitting it
+implementation for <code style="white-space: normal">void end_preamble()</code> is a no-op there by permitting it
 to be optimised away for archive classes that don't use it.
 </dd>
 <p>
