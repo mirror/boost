@@ -31,12 +31,16 @@ struct integral_c
 
     // have to #ifdef here: some compilers don't like the 'N + 1' form (MSVC),
     // while some other don't like 'value + 1' (Borland)
-#if defined(__BORLANDC__) || defined(__IBMCPP__)
-    typedef integral_c<T, N + 1> next;
-    typedef integral_c<T, N - 1> prior;
+#if defined(__BORLANDC__) || defined(__IBMCPP__) || defined(__EDG_VERSION__) && __EDG_VERSION__ <= 241
+    BOOST_STATIC_CONSTANT(T, next_value = (N + 1));
+    BOOST_STATIC_CONSTANT(T, prior_value = (N - 1));
+    typedef integral_c<T, next_value> next;
+    typedef integral_c<T, prior_value> prior;
 #else
-    typedef integral_c<T, value + 1> next;
-    typedef integral_c<T, value - 1> prior;
+    BOOST_STATIC_CONSTANT(T, next_value = (value + 1));
+    BOOST_STATIC_CONSTANT(T, prior_value = (value - 1));
+    typedef integral_c<T, next_value> next;
+    typedef integral_c<T, prior_value> prior;
 #endif
 
     // enables uniform function call syntax for families of overloaded 

@@ -10,7 +10,7 @@
 //
 // This is included from within the individual compiler mini-configs.
 
-#ifndef __EDG_VERSION__
+#ifndef  __EDG_VERSION__
 #  error This file requires that __EDG_VERSION__ be defined.
 #endif
 
@@ -25,6 +25,10 @@
 #if (__EDG_VERSION__ <= 241) && !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 #   define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 #endif
+
+#if (__EDG_VERSION__ <= 245) && !defined(BOOST_NO_TEMPLATE_TEMPLATES)
+#   define BOOST_NO_TEMPLATE_TEMPLATES
+#endif 
 
 # if !defined(__EXCEPTIONS)
 #     define BOOST_NO_EXCEPTIONS
