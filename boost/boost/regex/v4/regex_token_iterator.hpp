@@ -44,9 +44,6 @@ namespace boost{
 #  pragma warning(disable:4700)
 #endif
 
-// testing
-#define TEST_BECKER_INTERFACE
-
 template <class BidirectionalIterator,
           class charT,
           class traits,
@@ -54,7 +51,7 @@ template <class BidirectionalIterator,
 class regex_token_iterator_implementation 
 {
    typedef basic_regex<charT, traits, Allocator> regex_type;
-#ifdef TEST_BECKER_INTERFACE
+#if 1
    typedef sub_match<BidirectionalIterator>      value_type;
 #else
    typedef std::basic_string<charT>              value_type;
@@ -106,7 +103,7 @@ public:
       if(regex_search(first, end, what, *pre, flags) == true)
       {
          N = 0;
-#ifdef TEST_BECKER_INTERFACE
+#if 1
          result = ((subs[N] == -1) ? what.prefix() : what[(int)subs[N]]);
 #else
          result = ((subs[N] == -1) ? value_type(what.prefix().str()) : value_type(what[(int)subs[N]].str()));
@@ -115,10 +112,10 @@ public:
       }
       else if((subs[N] == -1) && (first != end))
       {
-#ifdef TEST_BECKER_INTERFACE
+#if 1
          result.first = first;
          result.second = end;
-         result.matched = true;
+         result.matched = (first != end);
 #else
          result = value_type(first, end);
 #endif
@@ -145,8 +142,8 @@ public:
       if(N+1 < (int)subs.size())
       {
          ++N;
-#ifdef TEST_BECKER_INTERFACE
-         result =((subs[N] == -1) ? what.prefix().first : what[subs[N]]);
+#if 1
+         result =((subs[N] == -1) ? what.prefix() : what[subs[N]]);
 #else
          result =((subs[N] == -1) ? value_type(what.prefix().first, what.prefix().second) : value_type(what[subs[N]].first, what[subs[N]].second));
 #endif
@@ -158,7 +155,7 @@ public:
       if(regex_search(last_end, end, what, *pre, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags)))
       {
          N =0;
-#ifdef TEST_BECKER_INTERFACE
+#if 1
          result =((subs[N] == -1) ? what.prefix() : what[subs[N]]);
 #else
          result =((subs[N] == -1) ? value_type(what.prefix().first, what.prefix().second) : value_type(what[subs[N]].first, what[subs[N]].second));
@@ -168,10 +165,10 @@ public:
       else if((last_end != end) && (subs[0] == -1))
       {
          N =-1;
-#ifdef TEST_BECKER_INTERFACE
+#if 1
          result.first = last_end;
          result.second = end;
-         result.matched = true;
+         result.matched = (last_end != end);
 #else
          result = value_type(last_end, end);
 #endif
@@ -192,7 +189,7 @@ private:
    typedef shared_ptr<impl> pimpl;
 public:
    typedef          basic_regex<charT, traits, Allocator>                   regex_type;
-#ifdef TEST_BECKER_INTERFACE
+#if 1
    typedef          sub_match<BidirectionalIterator>                        value_type;
 #else
    typedef          std::basic_string<charT>                                value_type;
@@ -297,6 +294,7 @@ private:
 } // namespace boost
 
 #endif // BOOST_REGEX_V4_REGEX_TOKEN_ITERATOR_HPP
+
 
 
 
