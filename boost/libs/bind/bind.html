@@ -600,35 +600,6 @@ This is an implementation detail, not an inherent limitation of the
 design.
 </p>
 
-<h3>Void returns</h3>
-
-<p>
-The following C++ code:
-</p>
-
-<pre>
-void f();
-
-void g()
-{
-    return f();
-}
-</pre>
-
-<p>
-is legal; in fact it was deliberately made legal in order to support
-forwarding functions that return <b>void</b>.
-</p>
-
-<p>
-Unfortunately, some compilers have not caught up with the C++ Standard yet
-and do not allow void returns. This implementation of <b>bind</b> will not
-work for function pointers, member function pointers or function objects that
-return <b>void</b> if the compiler does not support the feature. A possible
-workaround is to change the return type of the function object in question
-from <b>void</b> to <b>int</b> and return a dummy value of 0.
-</p>
-
 <h3>__stdcall support</h3>
 
 <p>
@@ -766,6 +737,11 @@ The precise semantics of <b>bind</b> were refined in discussions with Jaakko J&a
 <p>
 Dave Abrahams fixed a MSVC-specific conflict between <b>bind</b> and the
 <a href="../utility\iterator_adaptors.htm">iterator adaptors library</a>.
+</p>
+
+<p>
+Dave Abrahams modified <b>bind</b> and <b>mem_fn</b> to support void returns
+on deficient compilers.
 </p>
 
 <p><br><br><br><small>Copyright &copy; 2001 by Peter Dimov and Multi Media

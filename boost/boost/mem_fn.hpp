@@ -1141,6 +1141,11 @@ struct mf<void>
     };
 };
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(push)
+#pragma warning(disable: 4097) // typedef name 'mf0_' used as a synonym for class
+#endif
+
 template<class R, class T, class F = R (T::*) ()>
 class mf0: public mf<R>::template mf0_<T, F>
 {
@@ -1285,15 +1290,17 @@ class cmf8: public mf<R>::template cmf8_<T, A1, A2, A3, A4, A5, A6, A7, A8, F>
     explicit cmf8(F f): cmf8_(f) {}
 };
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(pop)
+#endif
+
 } // namespace _mfi
 
 // mem_fn
 
-#if (defined(_WIN32) || defined(__WIN32__)) && defined(__MWERKS__)
-# define BOOST_MEM_FN_ENABLE_STDCALL
-#endif
+// MSVC 7.0 and Metrowerks 7.1 can't handle the "main line"
 
-#if defined(BOOST_MEM_FN_ENABLE_STDCALL) || (defined(BOOST_MSVC) && BOOST_MSVC <= 1300)
+#if defined(BOOST_MEM_FN_ENABLE_STDCALL) || (defined(BOOST_MSVC) && BOOST_MSVC <= 1300) || (defined(__MWERKS__) && (__MWERKS__ <= 0x2406))
 
 #if defined(BOOST_MEM_FN_ENABLE_STDCALL)
 #define BOOST_MEM_FN_CC __stdcall

@@ -1088,13 +1088,24 @@ private:
   };
 };
 
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(push)
+#pragma warning(disable: 4097) // typedef name 'base' used as a synonym for class
+#endif
+
 template<class R, class F, class L> class bind_t
   : public bind_t_generator<R>::template implementation<F, L>
 {
     typedef typename bind_t_generator<R>::template implementation<F, L> base;
  public:
     bind_t(F f, L const & l): base(f, l) {}
+ private:
+    bind_t & operator= (bind_t const &);
 };
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(pop)
+#endif
 
 // add_value
 

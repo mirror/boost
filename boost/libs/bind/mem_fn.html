@@ -27,7 +27,8 @@
 <ul>
 <li><a href="../../boost/mem_fn.hpp">mem_fn.hpp</a> (implementation)
 <li><a href="mem_fn_test.cpp">mem_fn_test.cpp</a> (test)
-<li><a href="mem_fn_stdcall_test.cpp">mem_fn_stdcall_test.cpp</a> (test with __stdcall member functions)
+<li><a href="mem_fn_stdcall_test.cpp">mem_fn_stdcall_test.cpp</a> (test for __stdcall)
+<li><a href="mem_fn_void_test.cpp">mem_fn_void_test.cpp</a> (test for void returns)
 </ul>
 
 <h2>Purpose</h2>
@@ -285,6 +286,11 @@ was Darin Adler.
 
 <p>
 Steve Anichini pointed out that COM interfaces use <b>__stdcall</b>.
+</p>
+
+<p>
+Dave Abrahams modified <b>bind</b> and <b>mem_fn</b> to support void returns
+on deficient compilers.
 </p>
 
 <p><br><br><br><small>Copyright &copy; 2001 by Peter Dimov and Multi Media

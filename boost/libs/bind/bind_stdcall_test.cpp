@@ -19,7 +19,16 @@
 #define BOOST_BIND_ENABLE_STDCALL
 
 #include <boost/bind.hpp>
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(push, 3)
+#endif
+
 #include <iostream>
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(pop)
+#endif
 
 #define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>

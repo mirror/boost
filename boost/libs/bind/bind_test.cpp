@@ -8,8 +8,6 @@
 //
 //  bind_test.cpp - monolithic test for bind.hpp
 //
-//  Version 1.00.0002 (2001-09-02)
-//
 //  Copyright (c) 2001 Peter Dimov and Multi Media Ltd.
 //  Copyright (c) 2001 David Abrahams
 //
@@ -21,7 +19,17 @@
 
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(push, 3)
+#endif
+
 #include <iostream>
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#pragma warning(pop)
+#endif
+
 
 #define BOOST_INCLUDE_MAIN
 #include <boost/test/test_tools.hpp>
@@ -273,93 +281,184 @@ struct V
     void g8(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8) const { g7(a1, a2, a3, a4, a5, a6, a7); g1(a8); }
 };
 
-template <class T>
-void member_function_test(T x)
+void member_function_test()
 {
     using namespace boost;
 
+    X x;
+
     // 0
 
-    bind(&T::f0, &x)();
-    bind(&T::f0, ref(x))();
+    bind(&X::f0, &x)();
+    bind(&X::f0, ref(x))();
 
-    bind(&T::g0, &x)();
-    bind(&T::g0, x)();
-    bind(&T::g0, ref(x))();
+    bind(&X::g0, &x)();
+    bind(&X::g0, x)();
+    bind(&X::g0, ref(x))();
 
     // 1
 
-    bind(&T::f1, &x, 1)();
-    bind(&T::f1, ref(x), 1)();
+    bind(&X::f1, &x, 1)();
+    bind(&X::f1, ref(x), 1)();
 
-    bind(&T::g1, &x, 1)();
-    bind(&T::g1, x, 1)();
-    bind(&T::g1, ref(x), 1)();
+    bind(&X::g1, &x, 1)();
+    bind(&X::g1, x, 1)();
+    bind(&X::g1, ref(x), 1)();
 
     // 2
 
-    bind(&T::f2, &x, 1, 2)();
-    bind(&T::f2, ref(x), 1, 2)();
+    bind(&X::f2, &x, 1, 2)();
+    bind(&X::f2, ref(x), 1, 2)();
 
-    bind(&T::g2, &x, 1, 2)();
-    bind(&T::g2, x, 1, 2)();
-    bind(&T::g2, ref(x), 1, 2)();
+    bind(&X::g2, &x, 1, 2)();
+    bind(&X::g2, x, 1, 2)();
+    bind(&X::g2, ref(x), 1, 2)();
 
     // 3
 
-    bind(&T::f3, &x, 1, 2, 3)();
-    bind(&T::f3, ref(x), 1, 2, 3)();
+    bind(&X::f3, &x, 1, 2, 3)();
+    bind(&X::f3, ref(x), 1, 2, 3)();
 
-    bind(&T::g3, &x, 1, 2, 3)();
-    bind(&T::g3, x, 1, 2, 3)();
-    bind(&T::g3, ref(x), 1, 2, 3)();
+    bind(&X::g3, &x, 1, 2, 3)();
+    bind(&X::g3, x, 1, 2, 3)();
+    bind(&X::g3, ref(x), 1, 2, 3)();
 
     // 4
 
-    bind(&T::f4, &x, 1, 2, 3, 4)();
-    bind(&T::f4, ref(x), 1, 2, 3, 4)();
+    bind(&X::f4, &x, 1, 2, 3, 4)();
+    bind(&X::f4, ref(x), 1, 2, 3, 4)();
 
-    bind(&T::g4, &x, 1, 2, 3, 4)();
-    bind(&T::g4, x, 1, 2, 3, 4)();
-    bind(&T::g4, ref(x), 1, 2, 3, 4)();
+    bind(&X::g4, &x, 1, 2, 3, 4)();
+    bind(&X::g4, x, 1, 2, 3, 4)();
+    bind(&X::g4, ref(x), 1, 2, 3, 4)();
 
     // 5
 
-    bind(&T::f5, &x, 1, 2, 3, 4, 5)();
-    bind(&T::f5, ref(x), 1, 2, 3, 4, 5)();
+    bind(&X::f5, &x, 1, 2, 3, 4, 5)();
+    bind(&X::f5, ref(x), 1, 2, 3, 4, 5)();
 
-    bind(&T::g5, &x, 1, 2, 3, 4, 5)();
-    bind(&T::g5, x, 1, 2, 3, 4, 5)();
-    bind(&T::g5, ref(x), 1, 2, 3, 4, 5)();
+    bind(&X::g5, &x, 1, 2, 3, 4, 5)();
+    bind(&X::g5, x, 1, 2, 3, 4, 5)();
+    bind(&X::g5, ref(x), 1, 2, 3, 4, 5)();
 
     // 6
 
-    bind(&T::f6, &x, 1, 2, 3, 4, 5, 6)();
-    bind(&T::f6, ref(x), 1, 2, 3, 4, 5, 6)();
+    bind(&X::f6, &x, 1, 2, 3, 4, 5, 6)();
+    bind(&X::f6, ref(x), 1, 2, 3, 4, 5, 6)();
 
-    bind(&T::g6, &x, 1, 2, 3, 4, 5, 6)();
-    bind(&T::g6, x, 1, 2, 3, 4, 5, 6)();
-    bind(&T::g6, ref(x), 1, 2, 3, 4, 5, 6)();
+    bind(&X::g6, &x, 1, 2, 3, 4, 5, 6)();
+    bind(&X::g6, x, 1, 2, 3, 4, 5, 6)();
+    bind(&X::g6, ref(x), 1, 2, 3, 4, 5, 6)();
 
     // 7
 
-    bind(&T::f7, &x, 1, 2, 3, 4, 5, 6, 7)();
-    bind(&T::f7, ref(x), 1, 2, 3, 4, 5, 6, 7)();
+    bind(&X::f7, &x, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&X::f7, ref(x), 1, 2, 3, 4, 5, 6, 7)();
 
-    bind(&T::g7, &x, 1, 2, 3, 4, 5, 6, 7)();
-    bind(&T::g7, x, 1, 2, 3, 4, 5, 6, 7)();
-    bind(&T::g7, ref(x), 1, 2, 3, 4, 5, 6, 7)();
+    bind(&X::g7, &x, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&X::g7, x, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&X::g7, ref(x), 1, 2, 3, 4, 5, 6, 7)();
 
     // 8
 
-    bind(&T::f8, &x, 1, 2, 3, 4, 5, 6, 7, 8)();
-    bind(&T::f8, ref(x), 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&X::f8, &x, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&X::f8, ref(x), 1, 2, 3, 4, 5, 6, 7, 8)();
 
-    bind(&T::g8, &x, 1, 2, 3, 4, 5, 6, 7, 8)();
-    bind(&T::g8, x, 1, 2, 3, 4, 5, 6, 7, 8)();
-    bind(&T::g8, ref(x), 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&X::g8, &x, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&X::g8, x, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&X::g8, ref(x), 1, 2, 3, 4, 5, 6, 7, 8)();
 
     BOOST_TEST( x.hash == 23558 );
+}
+
+void member_function_void_test()
+{
+    using namespace boost;
+
+    V v;
+
+    // 0
+
+    bind(&V::f0, &v)();
+    bind(&V::f0, ref(v))();
+
+    bind(&V::g0, &v)();
+    bind(&V::g0, v)();
+    bind(&V::g0, ref(v))();
+
+    // 1
+
+    bind(&V::f1, &v, 1)();
+    bind(&V::f1, ref(v), 1)();
+
+    bind(&V::g1, &v, 1)();
+    bind(&V::g1, v, 1)();
+    bind(&V::g1, ref(v), 1)();
+
+    // 2
+
+    bind(&V::f2, &v, 1, 2)();
+    bind(&V::f2, ref(v), 1, 2)();
+
+    bind(&V::g2, &v, 1, 2)();
+    bind(&V::g2, v, 1, 2)();
+    bind(&V::g2, ref(v), 1, 2)();
+
+    // 3
+
+    bind(&V::f3, &v, 1, 2, 3)();
+    bind(&V::f3, ref(v), 1, 2, 3)();
+
+    bind(&V::g3, &v, 1, 2, 3)();
+    bind(&V::g3, v, 1, 2, 3)();
+    bind(&V::g3, ref(v), 1, 2, 3)();
+
+    // 4
+
+    bind(&V::f4, &v, 1, 2, 3, 4)();
+    bind(&V::f4, ref(v), 1, 2, 3, 4)();
+
+    bind(&V::g4, &v, 1, 2, 3, 4)();
+    bind(&V::g4, v, 1, 2, 3, 4)();
+    bind(&V::g4, ref(v), 1, 2, 3, 4)();
+
+    // 5
+
+    bind(&V::f5, &v, 1, 2, 3, 4, 5)();
+    bind(&V::f5, ref(v), 1, 2, 3, 4, 5)();
+
+    bind(&V::g5, &v, 1, 2, 3, 4, 5)();
+    bind(&V::g5, v, 1, 2, 3, 4, 5)();
+    bind(&V::g5, ref(v), 1, 2, 3, 4, 5)();
+
+    // 6
+
+    bind(&V::f6, &v, 1, 2, 3, 4, 5, 6)();
+    bind(&V::f6, ref(v), 1, 2, 3, 4, 5, 6)();
+
+    bind(&V::g6, &v, 1, 2, 3, 4, 5, 6)();
+    bind(&V::g6, v, 1, 2, 3, 4, 5, 6)();
+    bind(&V::g6, ref(v), 1, 2, 3, 4, 5, 6)();
+
+    // 7
+
+    bind(&V::f7, &v, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&V::f7, ref(v), 1, 2, 3, 4, 5, 6, 7)();
+
+    bind(&V::g7, &v, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&V::g7, v, 1, 2, 3, 4, 5, 6, 7)();
+    bind(&V::g7, ref(v), 1, 2, 3, 4, 5, 6, 7)();
+
+    // 8
+
+    bind(&V::f8, &v, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&V::f8, ref(v), 1, 2, 3, 4, 5, 6, 7, 8)();
+
+    bind(&V::g8, &v, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&V::g8, v, 1, 2, 3, 4, 5, 6, 7, 8)();
+    bind(&V::g8, ref(v), 1, 2, 3, 4, 5, 6, 7, 8)();
+
+    BOOST_TEST( v.hash == 23558 );
 }
 
 void nested_bind_test()
@@ -386,11 +485,13 @@ int test_main(int, char * [])
 {
     function_test();
     function_object_test();
+
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     adaptable_function_object_test();
 #endif
-    member_function_test(X());
-    member_function_test(V());
+
+    member_function_test();
+    member_function_void_test();
     nested_bind_test();
 
     return 0;
