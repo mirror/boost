@@ -837,7 +837,7 @@ class match_results_base
 public:
    typedef Allocator                                                 alloc_type;
    typedef BOOST_RE_MAYBE_TYPENAME REBIND_TYPE(iterator, Allocator)  iterator_alloc;
-   typedef iterator_alloc::size_type                                 size_type;
+   typedef typename iterator_alloc::size_type                        size_type;
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    typedef typename std::iterator_traits<iterator>::difference_type  difference_type;
    typedef typename std::iterator_traits<iterator>::value_type       char_type;

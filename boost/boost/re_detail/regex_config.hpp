@@ -290,8 +290,8 @@ Do not change this file unless you really really have to, add options to
    //
    // for now we'll always define these
    // unless we know that the platform can cope
-   // with woide character strings:
-   #if !defined(linux)
+   // with wide character strings:
+   #if !defined(linux) 
    	#define BOOST_RE_NO_WCTYPE_H
    	#define BOOST_RE_NO_WCSTRING
    #endif
