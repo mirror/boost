@@ -21,6 +21,7 @@
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/if.hpp>
@@ -68,7 +69,8 @@ namespace boost_concepts {
         boost::DefaultConstructibleConcept<Iterator> >();
 
       reference r = *i; // or perhaps read(x)
-      value_type v(r);
+      value_type v = r;
+      value_type v2 = *i;
       boost::ignore_unused_variable_warning(v);
     }
     Iterator i;
