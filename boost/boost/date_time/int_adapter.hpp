@@ -257,11 +257,11 @@ public:
       }
       if (rhs.is_pos_infinity(rhs.as_number())) 
       {
-        return int_adapter::pos_infinity();
+        return int_adapter::neg_infinity();
       }
       if (rhs.is_neg_infinity(rhs.as_number())) 
       {
-        return int_adapter::neg_infinity();
+        return int_adapter::pos_infinity();
       }
     }
     return int_adapter<int_type>(value_ - rhs.as_number());
