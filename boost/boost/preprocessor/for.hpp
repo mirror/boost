@@ -40,12 +40,11 @@ literal.
 F(R,X) usually expands to a tuple of the same number of elements.
 - <B>I</B> is the state instantiation macro.
 - <B>R</B> is the recursion depth and should only be used as a parameter to
-other macros implemented using BOOST_PP_FOR() or for invoking
-BOOST_PP_FOR##R() directly. For each macro implemented using BOOST_PP_FOR(),
-there is a version of the macro, distinguished by the R suffix, that accepts
-an additional recursion depth as the first parameter. This technique is
-necessary to avoid recursively expanding the same macro again, which is not
-permitted by the C++ preprocessor.
+other macros using BOOST_PP_FOR() or for invoking BOOST_PP_FOR##R() directly.
+For each macro using BOOST_PP_FOR(), there is a version of the macro,
+distinguished by the R suffix, that accepts an additional recursion depth as
+the first parameter. This technique is necessary to avoid recursively
+expanding the same macro again, which is not permitted by the C++ preprocessor.
 
 <H3>BOOST_PP_REPEAT() vs BOOST_PP_FOR()</H3>
 

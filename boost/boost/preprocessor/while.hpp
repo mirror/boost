@@ -39,13 +39,12 @@ integer literal.
 - <B>F</B> is the iterated macro. Note that if the state is a tuple, then
 F(D,X) usually expands to a tuple of the same number of elements.
 - <B>D</B> is the recursion depth and should only be used as a parameter
-to other macros implemented using BOOST_PP_WHILE(). Such macros include
-BOOST_PP_ADD() and other arithmetic operations. For each macro implemented
-using BOOST_PP_WHILE(), there is a version of the macro, distinguished by
-the D suffix (e.g. BOOST_PP_ADD_D()), that accepts an additional recursion
-depth as the first parameter. This technique is necessary to avoid
-recursively expanding the same macro again, which is not permitted by the
-C++ preprocessor.
+to other macros using BOOST_PP_WHILE(). Such macros include BOOST_PP_ADD()
+and other arithmetic operations. For each macro using BOOST_PP_WHILE(),
+there is a version of the macro, distinguished by the D suffix (e.g.
+BOOST_PP_ADD_D()), that accepts an additional recursion depth as the first
+parameter. This technique is necessary to avoid recursively expanding the
+same macro again, which is not permitted by the C++ preprocessor.
 
 NOTE: The value of the D parameter may exceed BOOST_PP_LIMIT_MAG.
 
