@@ -36,7 +36,14 @@ namespace std {
     struct less<A>
     {
         bool operator()(const A & lhs, const A & rhs) {
-            return lhs.operator<(rhs);
+            return lhs < rhs;
+        }
+    };
+    template<>
+    struct equal_to<A>
+    {
+        bool operator()(const A & lhs, const A & rhs) {
+            return lhs == rhs;
         }
     };
 }

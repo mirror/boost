@@ -51,7 +51,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(alist == alist1);
     
     #ifdef BOOST_HAS_SLIST
-    std::slist<A> aslist;
+    BOOST_STD_EXTENSION_NAMESPACE::slist<A> aslist;
     aslist.push_front(A());
     aslist.push_front(A());
     {   
@@ -59,7 +59,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("aslist", aslist);
     }
-    std::slist<A> aslist1;{
+    BOOST_STD_EXTENSION_NAMESPACE::slist<A> aslist1;{
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("aslist", aslist1);
