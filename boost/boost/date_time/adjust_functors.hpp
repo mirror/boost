@@ -2,7 +2,7 @@
 #define _DATE_TIME_ADJUST_FUNCTORS_HPP___
 /* Copyright (c) 2001 CrystalClear Software, Inc.
  * Disclaimer & Full Copyright at end of file
- * Author: Jeff Garland 
+ * Author: Jeff Garland, Bart Garst
  */
 
 #include "boost/date_time/date.hpp"
@@ -22,6 +22,10 @@ namespace date_time {
     duration_type get_offset(const date_type& d) const 
     {
       return duration_type(f_);
+    }
+    duration_type get_neg_offset(const date_type& d) const 
+    {
+      return duration_type(-f_);
     }
   private:
     int f_;
@@ -58,10 +62,38 @@ namespace date_time {
         }
       }
       date_time::wrapping_int2<short,1,12> wi(ymd.month);
-      unsigned long year = wi.add(f_); //calc the year wrap around
-      year += ymd.year; //now add in the current year
+      //calc the year wrap around, add() returns 0 or 1 if wrapped
+      unsigned long year = wi.add(f_); 
+      year += ymd.year; //calculate resulting year
 //       std::cout << "trace wi: " << wi.as_int() << std::endl;
 //       std::cout << "trace year: " << year << std::endl;
+      //find the last day for the new month
+      day_type resultingEndOfMonthDay(cal_type::end_of_month_day(year, wi.as_int()));
+      //original was the end of month -- force to last day of month
+      if (origDayOfMonth_ == -1) {
+        return date_type(year, wi.as_int(), resultingEndOfMonthDay) - d;
+      }
+      day_type dayOfMonth = origDayOfMonth_;
+      if (dayOfMonth > resultingEndOfMonthDay) {
+        dayOfMonth = resultingEndOfMonthDay;
+      }
+      return date_type(year, wi.as_int(), dayOfMonth) - d;
+    }
+    //! Returns a negative duration_type
+    duration_type get_neg_offset(const date_type& d) const 
+    {
+      ymd_type ymd(d.year_month_day());
+      if (origDayOfMonth_ == 0) {
+        origDayOfMonth_ = ymd.day;
+        day_type endOfMonthDay(cal_type::end_of_month_day(ymd.year,ymd.month));
+        if (endOfMonthDay == ymd.day) {
+          origDayOfMonth_ = -1; //force the value to the end of month
+        }
+      }
+      date_time::wrapping_int2<short,1,12> wi(ymd.month);
+      //calc the year wrap around, add() returns 0 or 1 if wrapped
+      unsigned long year = wi.subtract(f_); 
+      year += ymd.year; //calculate resulting year
       //find the last day for the new month
       day_type resultingEndOfMonthDay(cal_type::end_of_month_day(year, wi.as_int()));
       //original was the end of month -- force to last day of month
@@ -92,6 +124,10 @@ namespace date_time {
     {
       return duration_type(f_*calendar_type::days_in_week());
     }
+    duration_type get_neg_offset(const date_type& d) const 
+    {
+      return duration_type(-f_*calendar_type::days_in_week());
+    }
   private:
     int f_;
   };
@@ -110,6 +146,11 @@ namespace date_time {
     duration_type get_offset(const date_type& d) const 
     {
       date_type new_date(d.year()+f_, d.month(), d.day());
+      return new_date-d;
+    }
+    duration_type get_neg_offset(const date_type& d) const 
+    {
+      date_type new_date(d.year()-f_, d.month(), d.day());
       return new_date-d;
     }
   private:
@@ -133,3 +174,4 @@ namespace date_time {
  */
 
 #endif
+
