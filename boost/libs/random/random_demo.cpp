@@ -40,7 +40,9 @@ void experiment(base_generator_type & generator)
 int main()
 {
   // initialize by reproducible seed
-  base_generator_type generator(42);
+  // Make sure it's unsigned, otherwise the wrong overload may be selected
+  // with mt19937.
+  base_generator_type generator(42u);
 
   std::cout << "10 samples of a uniform distribution in [0..1):\n";
   boost::uniform_01<base_generator_type> uni(generator);
@@ -52,11 +54,13 @@ int main()
 
   // change seed to something else
   // Note: this is not the preferred way of hacking around missing std::
-  generator.seed(
+  // Make sure the seed is unsigned, otherwise the wrong overload may be
+  // selected with mt19937.
+  generator.seed( static_cast<unsigned int>( 
 #ifndef BOOST_NO_STDC_NAMESPACE
 		 std::
 #endif
-		 time(0));
+		 time(0)));
 
   std::cout << "\nexperiment: roll a die 10 times:\n";
   base_generator_type saved_generator = generator;
