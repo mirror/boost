@@ -14,26 +14,26 @@
 #   if !defined(BOOST_PP_FILENAME_4)
 #      error BOOST_PP:  depth #4 filename is not defined
 #   endif
-#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(0, (BOOST_PP_ITERATION_LIMITS))
-#   include BOOST_PP_SET_ITERATION_START()
-#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(1, (BOOST_PP_ITERATION_LIMITS))
-#   include BOOST_PP_SET_ITERATION_FINISH()
-#   if BOOST_PP_ARRAY_SIZE((BOOST_PP_ITERATION_LIMITS)) >= 3
-#      define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(2, (BOOST_PP_ITERATION_LIMITS))
-#      include BOOST_PP_SET_ITERATION_FLAGS()
+#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(0, BOOST_PP_ITERATION_LIMITS)
+#   include <boost/preprocessor/detail/iterate/lower4.hpp>
+#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(1, BOOST_PP_ITERATION_LIMITS)
+#   include <boost/preprocessor/detail/iterate/upper4.hpp>
+#   if BOOST_PP_ARRAY_SIZE(BOOST_PP_ITERATION_LIMITS) >= 3
+#      define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(2, BOOST_PP_ITERATION_LIMITS)
+#      include <boost/preprocessor/detail/iterate/flags4.hpp>
 #   else
 #      define BOOST_PP_ITERATION_FLAGS_4 0
 #   endif
 #   undef BOOST_PP_ITERATION_LIMITS
 # elif defined(BOOST_PP_ITERATION_PARAMS_4)
-#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(0, (BOOST_PP_ITERATION_PARAMS_4))
-#   include BOOST_PP_SET_ITERATION_START()
-#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(1, (BOOST_PP_ITERATION_PARAMS_4))
-#   include BOOST_PP_SET_ITERATION_FINISH()
-#   define BOOST_PP_FILENAME_4 BOOST_PP_ARRAY_ELEM(2, (BOOST_PP_ITERATION_PARAMS_4))
-#   if BOOST_PP_ARRAY_SIZE((BOOST_PP_ITERATION_PARAMS_4)) >= 4
-#      define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(3, (BOOST_PP_ITERATION_PARAMS_4))
-#      include BOOST_PP_SET_ITERATION_FLAGS()
+#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(0, BOOST_PP_ITERATION_PARAMS_4)
+#   include <boost/preprocessor/detail/iterate/lower4.hpp>
+#   define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(1, BOOST_PP_ITERATION_PARAMS_4)
+#   include <boost/preprocessor/detail/iterate/upper4.hpp>
+#   define BOOST_PP_FILENAME_4 BOOST_PP_ARRAY_ELEM(2, BOOST_PP_ITERATION_PARAMS_4)
+#   if BOOST_PP_ARRAY_SIZE(BOOST_PP_ITERATION_PARAMS_4) >= 4
+#      define BOOST_PP_VALUE BOOST_PP_ARRAY_ELEM(3, BOOST_PP_ITERATION_PARAMS_4)
+#      include <boost/preprocessor/detail/iterate/flags4.hpp>
 #   else
 #      define BOOST_PP_ITERATION_FLAGS_4 0
 #   endif
