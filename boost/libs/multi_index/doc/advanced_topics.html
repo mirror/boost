@@ -453,8 +453,9 @@ that do not properly support pointers to members as non-type
 template arguments. The following compilers have been confirmed not
 to work correctly with <code>member</code>:
 <ul>
-  <li>MSVC++ 6.0/7.0, 
-  <li>Intel C++ 7.0/7.1 for Windows.
+  <li>MSVC++ 6.0/7.0,</li>
+  <li>Intel C++ 7.0/7.1 for Windows,</li>
+  <li>VisualAge 6.0 for AIX.</li>
 </ul>
 In these cases, a replacement utility
 <a href="reference/key_extraction.html#member_offset"><code>member_offset</code></a>
@@ -547,8 +548,9 @@ which has been proposed for inclusion in the
 <a href="../../../libs/config/config.htm">Boost Configuration Library</a>.
 Until the defect macro is accepted, Boost.MultiIndex treats it as if defined for 
 <ul>
-  <li>MSVC++ 7.0 or lower,
-  <li>Intel C++ 7.1 or lower for Windows.
+  <li>MSVC++ 7.0 or lower,</li>
+  <li>Intel C++ 7.1 or lower for Windows,</li>
+  <li>VisualAge 6.0 or lower.</li>
 </ul>
 If you detect this defect in a compiler other than these, you can take
 advantage of <code>BOOST_MULTI_INDEX_MEMBER</code> by manually defining
@@ -827,7 +829,7 @@ Boost.MultiIndex provides two distinct debugging modes:
   <li><i>Safe mode</i> checks preconditions on the invocations to the
     facilities of the library,</li>
   <li><i>invariant-checking mode</i> performs post-execution checks aimed
-    at ensuring that the internal consistency of the library is preserved.
+    at ensuring that the internal consistency of the library is preserved.</li>
 </ul>
 These two modes are independent of each other and can be set on or off
 individually. It is important to note that errors detected by safe mode are
@@ -1308,7 +1310,7 @@ Reference
 
 <br>
 
-<p>Revised June 1st 2004</p>
+<p>Revised June 21st 2004</p>
 
 <p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
