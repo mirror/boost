@@ -559,7 +559,7 @@ namespace detail {
   struct find_param;
 
   struct find_param_continue {
-    template <class AssocList, class Key2> struct bind {
+    template <class AssocList, class Key2> struct select {
       typedef typename AssocList::first_type Head;
       typedef typename Head::first_type Key1;
       typedef typename Head::second_type Value;
@@ -571,7 +571,7 @@ namespace detail {
   };
   struct find_param_end {
     template <class AssocList, class Key>
-    struct bind { typedef detail::default_argument type; };
+    struct select { typedef detail::default_argument type; };
   };
   template <class AssocList> struct find_param_helper1
   { typedef find_param_continue type; };
@@ -581,7 +581,7 @@ namespace detail {
   template <class AssocList, class Key>
   struct find_param {
     typedef typename find_param_helper1<AssocList>::type select1;
-    typedef typename select1::template bind<AssocList, Key>::type type;
+    typedef typename select1::template select<AssocList, Key>::type type;
   };
 #else
   template <class AssocList, class Key> struct find_param;
@@ -604,18 +604,32 @@ namespace detail {
 
   struct make_named_arg {
     template <class Key, class Value>
-    struct bind { typedef typename Value::type type; };
+    struct select { typedef typename Value::type type; };
   };
   struct make_key_value {
     template <class Key, class Value>
-    struct bind { typedef detail::cons_type<Key, Value> type; };
+    struct select { typedef detail::cons_type<Key, Value> type; };
   };
+
+  template <class Value>
+  struct is_named_parameter
+  {
+      enum { value = is_convertible<Value, named_template_param_base>::value };
+  };
+
+#if defined(__MWERKS__) && __MWERKS__ <= 0x2405 // workaround for broken is_convertible implementation
+  template <class T> struct is_named_parameter<value_type_is<T> > { enum { value = true }; };
+  template <class T> struct is_named_parameter<reference_is<T> > { enum { value = true }; };
+  template <class T> struct is_named_parameter<pointer_is<T> > { enum { value = true }; };
+  template <class T> struct is_named_parameter<difference_type_is<T> > { enum { value = true }; };
+  template <class T> struct is_named_parameter<iterator_category_is<T> > { enum { value = true }; };
+#endif
 
   template <class Key, class Value>
   struct make_arg {
-    enum { is_named = is_convertible<Value, named_template_param_base>::value };
+    enum { is_named = is_named_parameter<Value>::value };
     typedef typename ct_if<is_named, make_named_arg, make_key_value>::type Make;
-    typedef typename Make::template bind<Key, Value>::type type;
+    typedef typename Make::template select<Key, Value>::type type;
   };
 
   // Mechanism for resolving the default argument for a template parameter.
@@ -626,14 +640,14 @@ namespace detail {
 
   struct choose_default {
     template <class Arg, class DefaultGen, class Base, class Traits>
-    struct bind {
+    struct select {
       typedef typename default_generator<DefaultGen>::type Gen;
       typedef typename Gen::template select<Base,Traits>::type type;
     };
   };
   struct choose_arg {
     template <class Arg, class DefaultGen, class Base, class Traits>
-    struct bind {
+    struct select {
       typedef Arg type;
     };
   };
@@ -650,7 +664,7 @@ namespace detail {
       Selector;
   public:
     typedef typename Selector
-      ::template bind<Arg, DefaultGen, Base, Traits>::type type;
+      ::template select<Arg, DefaultGen, Base, Traits>::type type;
   };
 
   template <class Base, class Value, class Reference, class Pointer,
@@ -784,6 +798,7 @@ struct iterator_adaptor :
     // Iterators should satisfy one of the known categories
     BOOST_STATIC_ASSERT(is_input_or_output_iter);
 
+#if !defined(BOOST_MSVC)
     // Iterators >= ForwardIterator must produce real references
     // as required by the C++ standard requirements in Table 74.
     BOOST_STATIC_CONSTANT(bool, forward_iter_with_real_reference =
@@ -791,7 +806,6 @@ struct iterator_adaptor :
            || boost::is_same<reference,value_type&>::value
            || boost::is_same<reference,const value_type&>::value));
     
-#if !defined(BOOST_MSVC)
     // This check gives incorrect results in iter_traits_gen_test.cpp
     BOOST_STATIC_ASSERT(forward_iter_with_real_reference);
 #endif
