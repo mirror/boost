@@ -52,6 +52,10 @@
 // IBM
 #  define BOOST_PLATFORM_CONFIG "boost/config/platform/aix.hpp"
 
+#elif defined(__amigaos__)
+// AmigaOS
+#  define BOOST_PLATFORM_CONFIG "boost/config/platform/amigaos.hpp"
+
 #else
 
 #  if defined(unix) \
