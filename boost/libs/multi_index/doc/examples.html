@@ -34,7 +34,8 @@ Tests
   <li><a href="#example5">Example 5: sequenced indices</a></li>
   <li><a href="#example6">Example 6: complex searches and foreign keys</a></li>
   <li><a href="#example7">Example 7: composite keys</a></li>
-  <li><a href="#example8">Example 8: serialization</a></li>
+  <li><a href="#example8">Example 8: hashed indices</a></li>
+  <li><a href="#example9">Example 9: serialization and MRU lists</a></li>
 </ul>
 
 <h2><a name="example1">Example 1: basic usage</a></h2>
@@ -298,7 +299,21 @@ instance:
 </ul>
 </p>
 
-<h2><a name="example8">Example 8: serialization</a></h2>
+<h2><a name="example8">Example 8: hashed indices</a></h2>
+
+<p>
+See <a href="../example/hashed.cpp">source code</a>.
+</p>
+
+<p>
+Hashed indices can be used as an alternative to ordered indices when
+fast lookup is needed and sorting information is of no interest. The
+example features a word counter where duplicate entries are checked
+by means of a hashed index. Confront the word counting algorithm with
+that of <a href="#example5">example 5</a>.
+</p>
+
+<h2><a name="example9">Example 9: serialization and MRU lists</a></h2>
 
 <p>
 See <a href="../example/serialization.cpp">source code</a>.
@@ -310,10 +325,12 @@ restore the user context between executions. The example program asks
 the user for words and keeps a record of the ten most recently entered
 ones, in the current or in previous sessions. The serialized data structure,
 sometimes called an <i>MRU (most recently used) list</i>, has some interest
-on its own: an MRU behaves as a regular FIFO queue, with the exception
+on its own: an MRU list behaves as a regular FIFO queue, with the exception
 that, when inserting a preexistent entry, this does not appear twice, but
 instead the entry is moved to the front of the list. You can observe this
-behavior in many programs featuring a "Recent files" menu command.
+behavior in many programs featuring a "Recent files" menu command. This
+data structure is implemented with <code>multi_index_container</code> by
+combining a sequenced index and an index of type <code>hashed_unique</code>.
 </p>
 
 <hr>
@@ -330,9 +347,9 @@ Tests
 
 <br>
 
-<p>Revised December 14th 2004</p>
+<p>Revised March 8th 2005</p>
 
-<p>&copy; Copyright 2003-2004 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
