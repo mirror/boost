@@ -105,31 +105,27 @@ namespace boost {
         // front() and back()
         reference front() 
         { 
-            BOOST_ASSERT( N > 0 && "logic error" );
             return elems[0]; 
         }
         
         const_reference front() const 
         {
-            BOOST_ASSERT( N > 0 && "logic error" );
             return elems[0];
         }
         
         reference back() 
         { 
-            BOOST_ASSERT( N > 0 && "logic error" );
             return elems[N-1]; 
         }
         
         const_reference back() const 
         { 
-            BOOST_ASSERT( N > 0 && "logic error" );
             return elems[N-1]; 
         }
 
         // size is constant
         static size_type size() { return N; }
-        static bool empty() { return N == 0; }
+        static bool empty() { return false; }
         static size_type max_size() { return N; }
         enum { static_size = N };
 
