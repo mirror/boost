@@ -23,12 +23,16 @@
 
 #ifndef BOOST_TT_IS_ABSTRACT_CLASS_HPP
 #if    defined(__GNUC__) && (34 <= _GNUC__ * 10 + __GNU_MINOR)  \
-    || defined(__MSVC_VER) && (1310 <= __MSVC_VER)              \
+    || defined(_MSC_VER) && (1310 <= _MSC_VER)                  \
     || defined(__EDG_VERSION__)                                 \
     /**/
     #include <boost/type_traits/is_abstract.hpp>
 #else
 // default to false if not supported
+
+// supplant boost/type_traits/is_abstract.hpp
+#   define BOOST_TT_IS_ABSTRACT_CLASS_HPP
+
     namespace boost {
     template<class T>
     struct is_abstract {
