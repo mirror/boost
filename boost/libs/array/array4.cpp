@@ -32,5 +32,6 @@ int main()
     std::cout << "last element of last array: "
               << seasons_i18n[seasons_i18n.size()-1][seasons_i18n[0].size()-1]
 	      << std::endl;
+    return 0;
 }
 

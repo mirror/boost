@@ -29,5 +29,6 @@ int main()
               a.begin(),            // destination
               negate<int>());       // operation
     PRINT_ELEMENTS(a);
+    return 0;
 }
 

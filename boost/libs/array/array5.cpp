@@ -60,5 +60,6 @@ int main()
     DArray da;
     da = ia;
     da.assign(42);
+    return 0;
 }
 

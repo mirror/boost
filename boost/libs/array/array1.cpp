@@ -42,5 +42,6 @@ int main()
         std::cout << "copy construction and copy assignment FAILED"
 	          << std::endl;
     }
+    return 0;
 }
 

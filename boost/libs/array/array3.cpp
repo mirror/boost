@@ -35,6 +35,7 @@ int main()
         std::cout << " " << *pos;
     }
     std::cout << std::endl;
+    return 0;
 }
 
 template <class T>
