@@ -22,11 +22,11 @@ namespace date_time {
   //! A clock providing time level services based on C time_t capabilities
   /*! This clock provides resolution to the 1 second level
    */
-  template<class date_type, class time_type> 
+  template<class time_type> 
   class second_clock
   {
   public:
-    //    typedef typename time_type::date_type date_type;
+    typedef typename time_type::date_type date_type;
     typedef typename time_type::time_duration_type time_duration_type;
 
     static time_type local_time() 
@@ -37,6 +37,7 @@ namespace date_time {
       return create_time(curr);
     }
 
+
     //! Get the current day in universal date as a ymd_type
     static time_type universal_time() 
     {
@@ -46,6 +47,15 @@ namespace date_time {
       ::std::tm* curr= ::std::gmtime(&t);
       return create_time(curr);
     }
+
+    template<class time_zone_type>
+    static time_type local_time(boost::shared_ptr<time_zone_type> tz_ptr)
+    {
+      typedef typename time_type::utc_time_type utc_time_type;
+      utc_time_type utc_time = second_clock<utc_time_type>::universal_time();
+      return time_type(utc_time, tz_ptr);
+    }
+
 
   private:
     static time_type create_time(::std::tm* current)
