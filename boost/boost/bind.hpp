@@ -160,12 +160,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A &)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A &)
     {
         return unwrap(f, 0)();
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A &) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A &) const
     {
         return unwrap(f, 0)();
     }
@@ -210,12 +210,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_]);
     }
@@ -268,12 +268,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_], a[a2_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_]);
     }
@@ -330,12 +330,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
     }
@@ -396,12 +396,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
@@ -468,12 +468,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
@@ -544,12 +544,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
@@ -624,12 +624,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
@@ -709,12 +709,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
@@ -798,12 +798,12 @@ public:
 
     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a)
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a)
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
 
-    template<class R, class F, class A> R operator()(type<R>, F f, A & a) const
+    template<class R, class F, class A> R operator()(type<R>, F & f, A & a) const
     {
         return unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
@@ -858,7 +858,7 @@ private:
 template <class R> struct evaluator0
 {
     template<class L, class F, class A>
-    static R eval(L &, F f, A &)
+    static R eval(L &, F & f, A &)
     {
         return unwrap(f, 0)();
     }
@@ -867,7 +867,7 @@ template <class R> struct evaluator0
 template <> struct evaluator0<void>
 {
     template<class L, class F, class A>
-    static void eval(L &, F f, A &)
+    static void eval(L &, F & f, A &)
     {
         unwrap(f, 0)();
     }
@@ -876,7 +876,7 @@ template <> struct evaluator0<void>
 template <class R> struct evaluator1
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_]);
     }
@@ -885,7 +885,7 @@ template <class R> struct evaluator1
 template <> struct evaluator1<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_]);
     }
@@ -894,7 +894,7 @@ template <> struct evaluator1<void>
 template <class R> struct evaluator2
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_]);
     }
@@ -903,7 +903,7 @@ template <class R> struct evaluator2
 template <> struct evaluator2<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_]);
     }
@@ -912,7 +912,7 @@ template <> struct evaluator2<void>
 template <class R> struct evaluator3
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_]);
     }
@@ -921,7 +921,7 @@ template <class R> struct evaluator3
 template <> struct evaluator3<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_]);
     }
@@ -930,7 +930,7 @@ template <> struct evaluator3<void>
 template <class R> struct evaluator4
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_]);
     }
@@ -939,7 +939,7 @@ template <class R> struct evaluator4
 template <> struct evaluator4<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_]);
     }
@@ -948,7 +948,7 @@ template <> struct evaluator4<void>
 template <class R> struct evaluator5
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_]);
     }
@@ -957,7 +957,7 @@ template <class R> struct evaluator5
 template <> struct evaluator5<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_]);
     }
@@ -966,7 +966,7 @@ template <> struct evaluator5<void>
 template <class R> struct evaluator6
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_]);
     }
@@ -975,7 +975,7 @@ template <class R> struct evaluator6
 template <> struct evaluator6<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_]);
     }
@@ -984,7 +984,7 @@ template <> struct evaluator6<void>
 template <class R> struct evaluator7
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_]);
     }
@@ -993,7 +993,7 @@ template <class R> struct evaluator7
 template <> struct evaluator7<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_]);
     }
@@ -1002,7 +1002,7 @@ template <> struct evaluator7<void>
 template <class R> struct evaluator8
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_]);
     }
@@ -1011,7 +1011,7 @@ template <class R> struct evaluator8
 template <> struct evaluator8<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_]);
     }
@@ -1020,7 +1020,7 @@ template <> struct evaluator8<void>
 template <class R> struct evaluator9
 {
     template<class L, class F, class A>
-    static R eval(L & l, F f, A & a)
+    static R eval(L & l, F & f, A & a)
     {
         return unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_], a[l.a9_]);
     }
@@ -1029,7 +1029,7 @@ template <class R> struct evaluator9
 template <> struct evaluator9<void>
 {
     template<class L, class F, class A>
-    static void eval(L & l, F f, A & a)
+    static void eval(L & l, F & f, A & a)
     {
         unwrap(f, 0)(a[l.a1_], a[l.a2_], a[l.a3_], a[l.a4_], a[l.a5_], a[l.a6_], a[l.a7_], a[l.a8_], a[l.a9_]);
     }
