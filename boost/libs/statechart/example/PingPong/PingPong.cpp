@@ -48,6 +48,7 @@
 #include <boost/bind.hpp>
 
 #ifdef BOOST_MSVC
+#  pragma warning( push )
 #  pragma warning( disable: 4127 ) // conditional expression is constant
 #  pragma warning( disable: 4251 ) // class needs to have dll-interface
 #  pragma warning( disable: 4275 ) // non-dll class used as base for dll class
@@ -67,6 +68,10 @@
 #    define BOOST_NO_MT
 #  endif
 #  include <boost/pool/pool_alloc.hpp>
+#endif
+
+#ifdef BOOST_MSVC
+#  pragma warning( pop )
 #endif
 
 #include <iostream>

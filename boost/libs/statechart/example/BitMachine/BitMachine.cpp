@@ -8,7 +8,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////
-const unsigned int noOfBits = 1;
+const unsigned int noOfBits = 6;
 #define CUSTOMIZE_MEMORY_MANAGEMENT
 // #define BOOST_FSM_USE_NATIVE_RTTI
 //////////////////////////////////////////////////////////////////////////////
@@ -33,16 +33,25 @@ const unsigned int noOfBits = 1;
 // NOTE: Due to the fact that the amount of generated code more than
 // *doubles* each time noOfBits is *incremented*, build times soar when
 // noOfBits > 6.
-
+//
 // Compiler      | max. noOfBits b | max. states s  | max. transitions t
 // --------------|-----------------|----------------|-------------------
 // MSVC 7.1      |      b < 7      |  64 < s < 128  |  384 < t <  896
 // GCC 3.2 *     |      b < 8      | 128 < s < 256  |  896 < t < 2048
+// Intel 8.0 **  |      b < 9      | 256 < s < 512  | 2048 < t < 4608
 //
 // * ICE for b = 8
+// ** This is a practical rather than a hard limit, caused by a compiler
+//    memory footprint that was significantly larger than the 1GB physical
+//    memory installed in the test machine. The resulting frequent swapping
+//    led to compilation times of hours rather than minutes.
 //////////////////////////////////////////////////////////////////////////////
 
 
+
+#ifdef CUSTOMIZE_MEMORY_MANAGEMENT
+#  include "UniqueObject.hpp"
+#endif
 
 #include <boost/fsm/event.hpp>
 #include <boost/fsm/simple_state.hpp>
@@ -59,9 +68,10 @@ const unsigned int noOfBits = 1;
 #include <boost/mpl/range_c.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <boost/config.hpp>
-#include <boost/assert.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 #ifdef BOOST_MSVC
+#  pragma warning( push )
 #  pragma warning( disable: 4127 ) // conditional expression is constant
 #  pragma warning( disable: 4800 ) // forcing value to bool 'true' or 'false'
 #endif
@@ -71,13 +81,13 @@ const unsigned int noOfBits = 1;
 #  include <boost/pool/pool_alloc.hpp>
 #endif
 
+#ifdef BOOST_MSVC
+#  pragma warning( pop )
+#endif
+
 #include <iostream>
 #include <iomanip>
 #include <ctime>
-
-#ifdef CUSTOMIZE_MEMORY_MANAGEMENT
-#  include "UniqueObject.hpp"
-#endif
 
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
@@ -142,7 +152,20 @@ namespace
   }
 
   ////////////////////////////////////////////////////////////////////////////
-  const fsm::event_base * pFlipBitEvents[ 10 ] = { 0 };
+  boost::intrusive_ptr< const fsm::event_base > pFlipBitEvents[ noOfBits ];
+
+  ////////////////////////////////////////////////////////////////////////////
+  template< unsigned int arraySize >
+  void FillEventArray()
+  {
+    pFlipBitEvents[ arraySize - 1 ] =
+      boost::intrusive_ptr< const fsm::event_base >(
+        new EvFlipBit< arraySize - 1 >() );
+    FillEventArray< arraySize - 1 >();
+  }
+
+  template<>
+  void FillEventArray< 0 >() {}
 
   ////////////////////////////////////////////////////////////////////////////
   template< unsigned int msb, bool display >
@@ -152,12 +175,19 @@ namespace
     bitMachine.process_event( *pFlipBitEvents[ msb ] );
     ++eventsSentTotal;
 
-    bool false_ = false; // avoid conditional expression is constant warning
+    #ifdef BOOST_MSVC
+    #  pragma warning( push )
+    #  pragma warning( disable: 4127 ) // conditional expression is constant
+    #endif
 
-    if ( display || false_ )
+    if ( display )
     {
       DisplayMachineState( bitMachine );
     }
+
+    #ifdef BOOST_MSVC
+    #  pragma warning( pop )
+    #endif
 
     VisitAllStates< msb - 1, display >( bitMachine );
   }
@@ -246,29 +276,7 @@ struct BitState :
 //////////////////////////////////////////////////////////////////////////////
 int main()
 {
-  BOOST_ASSERT( noOfBits <= 10 );
-
-  const EvFlipBit< 0 > flip0;
-  const EvFlipBit< 1 > flip1;
-  const EvFlipBit< 2 > flip2;
-  const EvFlipBit< 3 > flip3;
-  const EvFlipBit< 4 > flip4;
-  const EvFlipBit< 5 > flip5;
-  const EvFlipBit< 6 > flip6;
-  const EvFlipBit< 7 > flip7;
-  const EvFlipBit< 8 > flip8;
-  const EvFlipBit< 9 > flip9;
-
-  pFlipBitEvents[ 0 ] = &flip0;
-  pFlipBitEvents[ 1 ] = &flip1;
-  pFlipBitEvents[ 2 ] = &flip2;
-  pFlipBitEvents[ 3 ] = &flip3;
-  pFlipBitEvents[ 4 ] = &flip4;
-  pFlipBitEvents[ 5 ] = &flip5;
-  pFlipBitEvents[ 6 ] = &flip6;
-  pFlipBitEvents[ 7 ] = &flip7;
-  pFlipBitEvents[ 8 ] = &flip8;
-  pFlipBitEvents[ 9 ] = &flip9;
+  FillEventArray< noOfBits >();
 
   std::cout << "boost::fsm BitMachine example\n";
   std::cout << "Machine configuration: " << noOfStates <<

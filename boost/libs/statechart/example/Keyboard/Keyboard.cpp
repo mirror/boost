@@ -27,13 +27,15 @@
 #include <iostream>
 #include <iomanip>
 
-namespace fsm = boost::fsm;
-namespace mpl = boost::mpl;
-
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
 #  pragma warning( disable: 981 ) // operands are evaluated in unspecified order
 #endif
+
+
+
+namespace fsm = boost::fsm;
+namespace mpl = boost::mpl;
 
 
 

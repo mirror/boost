@@ -11,8 +11,22 @@
 
 #include <boost/fsm/detail/avoid_unused_warning.hpp>
 
+#include <boost/config.hpp>
+
+#ifdef BOOST_MSVC
+#  pragma warning( push )
+#  pragma warning( disable: 4511 ) // copy constructor could not be generated
+#  pragma warning( disable: 4512 ) // assignment operator could not be generated
+#endif
+
 #include <boost/type_traits/alignment_of.hpp>
+
+#ifdef BOOST_MSVC
+#  pragma warning( pop )
+#endif
+
 #include <boost/type_traits/type_with_alignment.hpp>
+#include <boost/assert.hpp>
 
 #include <cstddef> // size_t
 
