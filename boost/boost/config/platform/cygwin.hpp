@@ -16,11 +16,13 @@
 // Threading API:
 // See if we have POSIX threads, if we do use them, otherwise
 // revert to native Win threads.
+#define BOOST_HAS_UNISTD_H
 #include <unistd.h>
 #if defined(_POSIX_THREADS) && (_POSIX_THREADS+0 >= 0) && !defined(BOOST_HAS_WINTHREADS)
 #  define BOOST_HAS_PTHREADS
 #  define BOOST_HAS_SCHED_YIELD
 #  define BOOST_HAS_GETTIMEOFDAY
+#  define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 #else
 #  define BOOST_HAS_WINTHREADS
 #  define BOOST_HAS_FTIME
