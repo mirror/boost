@@ -311,26 +311,27 @@ void bcp_implementation::output_licence_info()
       dep = m_dependencies.find(*fi);
       last_dep = m_dependencies.end();
       std::set<fs::path, path_less> seen_deps;
-      while(true)
-      {
-         os << " -> ";
-         if(fs::exists(m_boost_path / dep->second))
-            os << split_path(m_boost_path, dep->second);
-         else if(fs::exists(dep->second))
-            os << split_path(fs::path(), dep->second);
-         else
-            os << dep->second.string();
-         if(seen_deps.find(dep->second) != seen_deps.end())
-         {
-            os << " <I>(Circular dependency!)</I>";
-            break; // circular dependency!!!
-         }
-         seen_deps.insert(dep->second);
-         last_dep = dep;
-         dep = m_dependencies.find(dep->second);
-         if((dep == m_dependencies.end()) || (0 == compare_paths(dep->second, last_dep->second)))
-            break;
-      }
+      if (dep != last_dep) 
+        while(true)
+          {
+            os << " -> ";
+            if(fs::exists(m_boost_path / dep->second))
+              os << split_path(m_boost_path, dep->second);
+            else if(fs::exists(dep->second))
+              os << split_path(fs::path(), dep->second);
+            else
+              os << dep->second.string();
+            if(seen_deps.find(dep->second) != seen_deps.end())
+              {
+                os << " <I>(Circular dependency!)</I>";
+                break; // circular dependency!!!
+              }
+            seen_deps.insert(dep->second);
+            last_dep = dep;
+            dep = m_dependencies.find(dep->second);
+            if((dep == m_dependencies.end()) || (0 == compare_paths(dep->second, last_dep->second)))
+              break;
+          }
       os << "\n";
       ++fi;
    }
