@@ -66,10 +66,23 @@ namespace boost
             void_ptr_iterator( VoidIter r ) : iter_(r)
             { }
 
+            template< class MutableIterator, class MutableT >
+            void_ptr_iterator( void_ptr_iterator<MutableIterator,MutableT> r )
+             : iter_(r.base())
+            { }
+
             VoidIter base() const
             {
                 return iter_;
             }
+
+            /*
+            template< class MutableIterator, class MutableT >
+            void_ptr_iterator& operator=( void_ptr_iterator<MutableIterator,MutableT> r )
+            { 
+                iter_ = r.base();
+            }
+            */
             
         private:
             friend class boost::iterator_core_access;
