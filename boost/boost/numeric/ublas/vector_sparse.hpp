@@ -38,12 +38,14 @@ namespace boost { namespace numeric { namespace ublas {
         typedef value_type *pointer;
         typedef value_type &reference;
 
-        // Construction and destruction
+        /* FIXME Why was this function provided to generate a runtime error?
+         * without the incorrect conversion is a compiletime error!
         BOOST_UBLAS_INLINE
         sparse_vector_element (const value_type &d):
             container_reference<vector_type> (), i_ (), d_ (d), dirty_ (false) {
             external_logic ().raise ();
-        }
+        }*/
+        // Construction and destruction
         sparse_vector_element (vector_type &v, size_type i):
             container_reference<vector_type> (v), i_ (i), d_ (), dirty_ (false) {
             pointer it = (*this) ().find_element (i_);
