@@ -67,7 +67,7 @@ int main()
   date_period r2(date(2000,Jan,7), date(2000,Jan,10));
   check("intersect case3", i1.intersection(i4) == r2);
   check("intersect case3", i4.intersection(i1) == r2);
-  //case 4    [5-10) interset [6-9)  -> [6-9)
+  //case 4    [5-10) intersect [6-9)  -> [6-9)
   date_period i5(date(2000,Jan,6), date(2000,Jan,9));
   check("intersect case4", i1.intersection(i5) == i5);
   check("intersect case4", i5.intersection(i1) == i5);
@@ -81,6 +81,20 @@ int main()
   check("[1 -7)  merge [7-10) ->  null",  i2.merge(i4).is_null());
   date_period r4(date(2000,Jan,5), date(2000,Jan,10));
   check("[5 -10) merge [6-9)  -> [5-10)", i1.merge(i5) == r4);
+
+  check("[5-10) merge_inclusive [1-7)  -> [1-10)", 
+        i1.merge_inclusive(i2) == r3);
+  check("[1-7)  merge_inclusive [7-10) -> [1-10)", 
+        i2.merge_inclusive(i4) == r3);
+  check("[7-10)  merge_inclusive [1-7) -> [1-10)", 
+        i4.merge_inclusive(i2) == r3);
+  check("[1-15)  merge_inclusive [1-7) -> [1-15)", 
+        i3.merge_inclusive(i2) == i3);
+  date_period i6(date(2000,Jan,1), date(2000,Jan,2));
+  check("[1-2)  merge_inclusive [7-10) -> [1-10)", 
+        i6.merge_inclusive(i4) == r3);
+  check("[7-10)  merge_inclusive [1-2) -> [1-10)", 
+        i4.merge_inclusive(i6) == r3);
   
 
   date bf_start(2000,Jan,5);
